@@ -1,4 +1,4 @@
-License:GPLv2
+License:GPLv2+
 Web Site:http://f-droid.org
 Source Code:http://gitorious.org/f-droid/fdroidclient
 Issue Tracker:
