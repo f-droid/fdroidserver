@@ -1,0 +1,10 @@
+License:GPLv3
+Web Site:http://ichi2.net/anki/wiki/AnkiDroid
+Source Code:http://github.com/nicolas-raoul/Anki-Android/
+Issue Tracker:http://code.google.com/p/ankidroid/issues
+Summary:A flashcard-based study aid
+Description:
+Anki is a program which makes remembering things easy. Because it is a lot more
+efficient than traditional study methods, you can either greatly decrease your time
+spent studying, or greatly increase the amount you learn. AnkiDroid is the Android
+port of Anki, and is compatible with Anki data.

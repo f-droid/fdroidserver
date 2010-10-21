@@ -1,0 +1,8 @@
+License:Apache2
+Web Site:http://code.google.com/p/mytracks/
+Source Code:http://code.google.com/p/mytracks/source/checkout
+Issue Tracker:http://code.google.com/p/mytracks/issues/list
+Summary:A GPS logger.
+Description:
+MyTracks is a GPS logger.
+.

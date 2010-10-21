@@ -1,0 +1,8 @@
+License:GPLv2
+Web Site:http://code.google.com/p/moonblink/wiki/Audalyzer
+Source Code:http://code.google.com/p/moonblink/source/checkout
+Issue Tracker:http://code.google.com/p/moonblink/issues/list
+Summary:Audio analyser
+Description:
+Realtime spectrum analysis of audio (via the microphone).
+.

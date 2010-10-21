@@ -1,0 +1,9 @@
+License:GPLv3
+Web Site:http://abrantix.org/3.php
+Source Code:http://github.com/fabrantes/rockonnggl
+Issue Tracker:http://github.com/fabrantes/rockonnggl/issues
+Summary:Music player
+Description:
+A music player. Cubed, also known as ³, has possibly the silliest choice of application
+name ever.
+.

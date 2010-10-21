@@ -1,0 +1,11 @@
+License:Apache2
+Web Site:http://www.replicaisland.net/
+Source Code:http://code.google.com/p/replicaisland/source/checkout
+Issue Tracker:http://code.google.com/p/replicaisland/issues/list
+Summary:Side-scrolling platform game
+Description:
+Guide the Android robot through 40 action-packed platforming levels on a quest to
+discover a secret power source on a mysterious island. With a retro style and
+unique, challenging game play, Replica Island is a new take on the classic
+platformer genre. 
+.

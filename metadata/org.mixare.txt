@@ -1,0 +1,8 @@
+License:GPLv3
+Web Site:http://www.mixare.org/
+Source Code:http://github.com/mixare/mixare
+Issue Tracker:http://code.google.com/p/mixare/issues/list
+Summary:Augmented reality browser
+Description:
+An augmented reality browser.
+.

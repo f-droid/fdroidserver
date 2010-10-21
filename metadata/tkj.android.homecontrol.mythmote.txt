@@ -1,0 +1,8 @@
+License:GPLv2
+Web Site:http://code.google.com/p/mythmote/
+Source Code:http://code.google.com/p/mythmote/source/checkout
+Issue Tracker:http://code.google.com/p/mythmote/issues/list
+Summary:Remote control for MythTV
+Description:
+A network remote control for MythTV.
+.

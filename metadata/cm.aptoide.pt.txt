@@ -1,0 +1,8 @@
+License:GPLv2
+Web Site:http://www.aptoide.com/
+Source Code:http://aptoide.org/trac
+Issue Tracker:http://aptoide.org/trac
+Summary:A package installer.
+Description:
+Aptoide is a simple repository and package installer. F-Droid was originally
+based on Aptoide!

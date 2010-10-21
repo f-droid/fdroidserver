@@ -1,0 +1,9 @@
+License:GPLv3
+Web Site:https://launchpad.net/opensatnav
+Source Code:https://code.launchpad.net/opensatnav
+Issue Tracker:https://bugs.launchpad.net/opensatnav
+Summary:Satellite Navigation
+Description:
+Satellite Navitation using OpenStreetMat data. Supports car, bicycle and
+pedestrian modes of transport.
+.

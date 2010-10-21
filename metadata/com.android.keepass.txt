@@ -1,0 +1,8 @@
+License:GPLv2
+Web Site:http://www.keepassdroid.com/
+Source Code:http://github.com/bpellin/keepassdroid
+Issue Tracker:http://code.google.com/p/keepassdroid/issues/list
+Summary:KeePass-compatible password safe
+Description:
+A password safe, compatible with KeePass.
+.

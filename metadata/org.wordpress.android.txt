@@ -1,0 +1,10 @@
+License:GPLv2
+Web Site:http://android.wordpress.org/
+Source Code:https://android.trac.wordpress.org/browser
+Issue Tracker:http://android.trac.wordpress.org/
+Summary:WordPress client
+Description:
+A client for WordPress blogs, which allows post creation and editing, and comment
+viewing, replying and moderation. Supports multiple blogs, both wordpress-hosted
+(wordpress.com) and self-hosted.
+.

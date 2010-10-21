@@ -1,0 +1,8 @@
+License:Unknown
+Web Site:http://github.com/rndmcnlly/iteration
+Source Code:http://github.com/rndmcnlly/iteration
+Issue Tracker:
+Summary:Generative art
+Description:
+Generative art (pretty pictures of mathematical origin).
+.

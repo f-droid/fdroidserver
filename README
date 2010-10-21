@@ -1,0 +1,17 @@
+Basic instructions:
+
+1. Copy config.sample.py to config.py and edit the path within accordingly
+   to point to the Android tools
+2. Make a repo directory and put APK files in it
+3. Run update.py
+4. If it reports that any metadata files are missing, you can create them
+   in the metadata directory and run it again.
+5. To ease creation of metadata files, run update.py with the -c option. It
+   will create 'skeleton' metadata files that are missing, and you can then
+   just edit them and fill in the details.
+6. Then, if you've changed things, run update.py again.
+7. Running update.py adds an Icons directory into the repo directory, and
+   also creates the repository index (index.xml).
+8. Transfer the repo directory to the appropriate http server. The script
+   in upload.sh is an example of how to do this.
+

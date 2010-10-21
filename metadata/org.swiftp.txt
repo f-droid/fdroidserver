@@ -1,0 +1,9 @@
+License:GPLv3
+Web Site:http://code.google.com/p/swiftp/
+Source Code:http://code.google.com/p/swiftp/source/checkout
+Issue Tracker:http://code.google.com/p/swiftp/issues/list
+Summary:FTP server
+Description:
+An FTP server allowing remote access to files on your SD card (or any files on the
+device, optionally, if you have root access).
+.

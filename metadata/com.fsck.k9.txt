@@ -1,0 +1,10 @@
+License:Apache2
+Web Site:http://code.google.com/p/k9mail/
+Source Code:http://code.google.com/p/k9mail/source/checkout
+Issue Tracker:http://code.google.com/p/k9mail/issues/list
+Summary:Full-featured email client
+Description:
+Email client supporting multiple accounts, POP3, IMAP, Push IMAP. Packed with
+features and highly configurable.
+.
+

@@ -1,0 +1,8 @@
+License:GPLv3
+Web Site:http://github.com/nexes/Android-File-Manager
+Source Code:http://github.com/nexes/Android-File-Manager
+Issue Tracker:http://github.com/nexes/Android-File-Manager/issues
+Summary:A simple file browser and manager
+Description:
+A simple file browser and manager.
+.

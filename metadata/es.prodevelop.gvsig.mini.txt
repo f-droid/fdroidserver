@@ -1,0 +1,8 @@
+License:GPLv2
+Web Site:https://confluence.prodevelop.es/display/GVMN/Home
+Source Code:
+Issue Tracker:
+Summary:Tile-based map viewer
+Description:
+A tile-based map viewer with support for maps from many sources.
+.

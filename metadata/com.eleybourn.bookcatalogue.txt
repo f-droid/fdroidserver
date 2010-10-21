@@ -1,0 +1,9 @@
+License:GPLv3
+Web Site:http://github.com/eleybourn/Book-Catalogue/wiki
+Source Code:http://github.com/eleybourn/Book-Catalogue
+Issue Tracker:http://github.com/eleybourn/Book-Catalogue/issues
+Summary:Book cataloguing application
+Description:
+This is a simple book catalogue application, to store a list of your books. Books can be added either manually, by ISBN, or by barcode.
+.
+
