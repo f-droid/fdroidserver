@@ -5,6 +5,6 @@ Source Code:http://github.com/TomTasche/SayMyName
 Issue Tracker:http://code.google.com/p/roadtoadc/issues/list
 Summary:Text to speech on incoming caller name
 Description:
-SayMyName reads out loud the name saved in your adressbook and tells you who's calling.
-Also works with SMS and K9-Mail.
+SayMyName reads out loud the name saved in your address book and tells you
+who's calling. Also works with incoming SMS and email via K-9 Mail.
 .
