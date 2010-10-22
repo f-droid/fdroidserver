@@ -1,0 +1,10 @@
+Disabled:Issues with a) Google Analytics usage tracking, b) ads
+License:GPLv2
+Web Site:http://tomtasche.at/p/SayMyName
+Source Code:http://github.com/TomTasche/SayMyName
+Issue Tracker:http://code.google.com/p/roadtoadc/issues/list
+Summary:Text to speech on incoming caller name
+Description:
+SayMyName reads out loud the name saved in your adressbook and tells you who's calling.
+Also works with SMS and K9-Mail.
+.

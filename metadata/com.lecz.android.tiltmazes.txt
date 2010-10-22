@@ -1,0 +1,11 @@
+License:BSD
+Web Site:http://code.google.com/p/tiltmazes/
+Source Code:http://code.google.com/p/tiltmazes/source/checkout
+Issue Tracker:http://code.google.com/p/tiltmazes/issues/list
+Summary:Logical puzzle game
+Description:
+A ball sits in a flat tray containing one or more squares (goals). The challenge is
+to guide the ball around the tray and collect all the squares. Tilt the tray to,
+literally, start the ball rolling. The ball rolls in a straight line until it hits
+a wall, you can then tilt again. 
+.
