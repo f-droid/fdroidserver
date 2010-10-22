@@ -113,6 +113,7 @@ for metafile in glob.glob(os.path.join('metadata','*.txt')):
     thisinfo['web'] = ''
     thisinfo['source'] = ''
     thisinfo['tracker'] = ''
+    thisinfo['disabled'] = None
     f = open(metafile, 'r')
     mode = 0
     for line in f.readlines():
@@ -138,6 +139,8 @@ for metafile in glob.glob(os.path.join('metadata','*.txt')):
                 thisinfo['web'] = value
             elif field == 'Issue Tracker':
                 thisinfo['tracker'] = value
+            elif field == 'Disabled':
+                thisinfo['disabled'] = value
             else:
                 print "Unrecognised field " + field
                 sys.exit(1)
@@ -211,28 +214,36 @@ def addElement(name, value, doc, parent):
 root = doc.createElement("fdroid")
 doc.appendChild(root)
 
+apps_inrepo = 0
+apps_disabled = 0
+
 for app in apps:
-    apel = doc.createElement("application")
-    root.appendChild(apel)
 
-    addElement('id', app['id'], doc, apel)
-    addElement('name', app['name'], doc, apel)
-    addElement('summary', app['summary'], doc, apel)
-    addElement('icon', app['icon'], doc, apel)
-    addElement('description', app['description'], doc, apel)
-    addElement('license', app['license'], doc, apel)
-    addElement('web', app['web'], doc, apel)
-    addElement('source', app['source'], doc, apel)
-    addElement('tracker', app['tracker'], doc, apel)
+    if app['disabled'] is None:
+        apps_inrepo += 1
+        apel = doc.createElement("application")
+        root.appendChild(apel)
 
-    for apk in apks:
-        if apk['id'] == app['id']:
-            apkel = doc.createElement("package")
-            apel.appendChild(apkel)
-            addElement('version', apk['version'], doc, apkel)
-            addElement('versioncode', apk['versioncode'], doc, apkel)
-            addElement('apkname', apk['apkname'], doc, apkel)
-            addElement('hash', apk['md5'], doc, apkel)
+        addElement('id', app['id'], doc, apel)
+        addElement('name', app['name'], doc, apel)
+        addElement('summary', app['summary'], doc, apel)
+        addElement('icon', app['icon'], doc, apel)
+        addElement('description', app['description'], doc, apel)
+        addElement('license', app['license'], doc, apel)
+        addElement('web', app['web'], doc, apel)
+        addElement('source', app['source'], doc, apel)
+        addElement('tracker', app['tracker'], doc, apel)
+
+        for apk in apks:
+            if apk['id'] == app['id']:
+                apkel = doc.createElement("package")
+                apel.appendChild(apkel)
+                addElement('version', apk['version'], doc, apkel)
+                addElement('versioncode', apk['versioncode'], doc, apkel)
+                addElement('apkname', apk['apkname'], doc, apkel)
+                addElement('hash', apk['md5'], doc, apkel)
+    else:
+        apps_disabled += 1
 
 of = open(os.path.join('repo','index.xml'), 'wb')
 output = doc.toxml()
@@ -240,5 +251,6 @@ of.write(output)
 of.close()
 
 print "Finished."
-
+print str(apps_inrepo) + " apps in repo"
+print str(apps_disabled) + " disabled"
 
