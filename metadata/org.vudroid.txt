@@ -1,0 +1,8 @@
+License:GPLv3
+Web Site:http://code.google.com/p/vudroid/
+Source Code:http://code.google.com/p/vudroid/source/checkout
+Issue Tracker:http://code.google.com/p/vudroid/issues/list
+Summary:DjVu and PDF document reader
+Description:
+A document reader for DjVu and PDF files.
+.
