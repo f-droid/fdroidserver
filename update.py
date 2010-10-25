@@ -34,6 +34,8 @@ execfile('config.py')
 parser = OptionParser()
 parser.add_option("-c", "--createmeta", action="store_true", default=False,
                   help="Create skeleton metadata files that are missing")
+parser.add_option("-v", "--verbose", action="store_true", default=False,
+                  help="Spew out even more information than normal")
 (options, args) = parser.parse_args()
 
 
@@ -53,12 +55,16 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
     print "Processing " + apkfilename
     thisinfo = {}
     thisinfo['apkname'] = apkfilename
+    thisinfo['size'] = os.path.getsize(apkfile)
+    thisinfo['permissions'] = []
+    thisinfo['features'] = []
     p = subprocess.Popen([aapt_path,'dump','badging',
        apkfile], stdout=subprocess.PIPE)
     output = p.communicate()[0]
-    if p.returncode != 0:
-        print "Failed to get apk information"
+    if options.verbose:
         print output
+    if p.returncode != 0:
+        print "ERROR: Failed to get apk information"
         sys.exit(1)
     for line in output.splitlines():
         if line.startswith("package:"):
@@ -73,6 +79,28 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
             thisinfo['name'] = re.match(pat, line).group(1)
             pat = re.compile(".*icon='([^']*)'.*")
             thisinfo['iconsrc'] = re.match(pat, line).group(1)
+        if line.startswith("sdkVersion:"):
+            pat = re.compile(".*'([0-9]*)'.*")
+            thisinfo['sdkversion'] = re.match(pat, line).group(1)
+        if line.startswith("native-code:"):
+            pat = re.compile(".*'([^']*)'.*")
+            thisinfo['nativecode'] = re.match(pat, line).group(1)
+        if line.startswith("uses-permission:"):
+            pat = re.compile(".*'([^']*)'.*")
+            perm = re.match(pat, line).group(1)
+            if perm.startswith("android.permission."):
+                perm = perm[19:]
+            thisinfo['permissions'].append(perm)
+        if line.startswith("uses-feature:"):
+            pat = re.compile(".*'([^']*)'.*")
+            perm = re.match(pat, line).group(1)
+            if perm.startswith("android.feature."):
+                perm = perm[16:]
+            thisinfo['features'].append(perm)
+
+    if not thisinfo.has_key('sdkversion'):
+        print "  WARNING: no SDK version information found"
+        thisinfo['sdkversion'] = 0
 
     # Calculate the md5...
     m = md5.new()
@@ -242,6 +270,23 @@ for app in apps:
                 addElement('versioncode', apk['versioncode'], doc, apkel)
                 addElement('apkname', apk['apkname'], doc, apkel)
                 addElement('hash', apk['md5'], doc, apkel)
+                addElement('size', str(apk['size']), doc, apkel)
+                addElement('sdkver', str(apk['sdkversion']), doc, apkel)
+                perms = ""
+                for p in apk['permissions']:
+                    if len(perms) > 0:
+                        perms += ","
+                    perms += p
+                if len(perms) > 0:
+                    addElement('permissions', perms, doc, apkel)
+                features = ""
+                for f in apk['features']:
+                    if len(features) > 0:
+                        features += ","
+                    features += f
+                if len(features) > 0:
+                    addElement('features', features, doc, apkel)
+
     else:
         apps_disabled += 1
 
