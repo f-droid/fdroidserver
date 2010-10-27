@@ -52,16 +52,66 @@ class test {
 
                 @Override
                     public void onResult(ResponseContext contex, Object oresp) {
-                        AppsResponse response = (AppsResponse)oresp;
-                        if(response.getAppCount() != 1) {
-                            System.out.println("Not in market, or multiple results");
-                        } else {
-                            App app = response.getAppList().get(0);
-                            System.out.println("  Package:" + app.getPackageName());
-                            System.out.println("  Version Code:" + app.getVersionCode());
-                            System.out.println("  Version:" + app.getVersion());
+                        try {
+                            AppsResponse response = (AppsResponse)oresp;
+                            if(response.getAppCount() != 1) {
+                                System.out.println("Not in market, or multiple results");
+                            } else {
+                                App app = response.getAppList().get(0);
+                                String filespec = "../metadata/" + app.getPackageName() + ".txt";
+                                FileInputStream fi = new FileInputStream(filespec);
+                                BufferedInputStream bi = new BufferedInputStream(fi);
+                                DataInputStream di = new DataInputStream(bi);
+                                StringBuilder output = new StringBuilder();
+                                boolean changed = false;
+                                boolean vercodefound = false;
+                                boolean versionfound = false;
+                                String line, newline;
+                                while (di.available() != 0) {
+                                    line = di.readLine();
+                                    if (line.startsWith("Market Version:")) {
+                                        versionfound = true;
+                                        newline="Market Version:" + app.getVersion();
+                                        if (!newline.equals(line)) {
+                                            changed = true;
+                                            line = newline;
+                                        }
+                                    } else if (line.startsWith("Market Version Code:")) {
+                                        vercodefound = true;
+                                        newline="Market Version Code:" + app.getVersionCode();
+                                        if (!newline.equals(line)) {
+                                            changed = true;
+                                            line = newline;
+                                        }
+                                    }
+                                    output.append(line + "\n");
+                                }
+                                di.close();
+                                bi.close();
+                                fi.close();
+                                if(!versionfound) {
+                                    changed = true;
+                                    output.append("Market Version:" + app.getVersion() + "\n");
+                                }
+                                if(!vercodefound) {
+                                    changed = true;
+                                    output.append("Market Version Code:" + app.getVersionCode() + "\n");
+                                }
+
+                                if (changed) { 
+                                    System.out.println("..updating");
+                                    File of = new File(filespec);
+                                    BufferedWriter wi = new BufferedWriter(new FileWriter(of));
+                                    wi.write(output.toString());
+                                    wi.close();
+                                }
+
+                            }
+                        } catch (Exception ex) {
+                            System.out.println("...Exception!");
                         }
                     }
+
             };
 
             for(String pkg : apps) {
