@@ -1,0 +1,8 @@
+License:GPLv3
+Web Site:http://sipdroid.org/
+Source Code:http://code.google.com/p/sipdroid/source/checkout
+Issue Tracker:http://code.google.com/p/sipdroid/issues/list
+Summary:A SIP (VOIP) client
+Description:
+A SIP (VOIP) client with video calling capabilities.
+.

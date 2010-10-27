@@ -1,0 +1,8 @@
+License:GPLv3
+Web Site:http://code.google.com/p/csipsimple/
+Source Code:http://code.google.com/p/csipsimple/source/checkout
+Issue Tracker:http://code.google.com/p/csipsimple/issues/list
+Summary:SIP (VOIP) client
+Description:
+A SIP (VOIP) client.
+.
