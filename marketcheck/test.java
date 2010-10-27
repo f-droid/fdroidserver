@@ -1,5 +1,6 @@
 
-import java.io.FileOutputStream;
+import java.io.*;
+import java.util.*;
 
 import com.gc.android.market.api.MarketSession.Callback;
 import com.gc.android.market.api.MarketSession;
@@ -19,27 +20,33 @@ class test {
      */
     public static void main(String[] args) {
         try {
-            if(args.length < 3) {
+            if(args.length < 2) {
                 System.out.println("Parameters :\n" +
-                        "email password package");
+                        "email password");
                 return;
             }
-
-
             String login = args[0];
             String password = args[1];
-            String query = args.length > 2 ? args[2] : "Test";
+
+            // Get a list of apps we want to check - i.e. those that
+            // we have metadata files for...
+            File dir = new File("../metadata");
+            List<String> apps = new ArrayList<String>();
+            String[] metafiles = dir.list();
+            for (int i=0; i<metafiles.length; i++) {
+                String metafile = metafiles[i];
+                if(metafile.endsWith(".txt")) {
+                    String pkg = metafile.substring(0,
+                           metafile.length() - 4);
+                    apps.add(pkg);
+                }
+            }
+            System.out.println("Apps to check: " + apps.size());
 
             MarketSession session = new MarketSession();
             System.out.println("Login...");
             session.login(login,password);
             System.out.println("Login done");
-
-            AppsRequest appsRequest = AppsRequest.newBuilder()
-                .setQuery(query)
-                .setStartIndex(0).setEntriesCount(10)
-                .setWithExtendedInfo(true)
-                .build();
 
             MarketSession.Callback callback = new MarketSession.Callback() {
 
@@ -50,14 +57,27 @@ class test {
                             System.out.println("Not in market, or multiple results");
                         } else {
                             App app = response.getAppList().get(0);
-                            System.out.println("Version Code:" + app.getVersionCode());
-                            System.out.println("Version:" + app.getVersion());
+                            System.out.println("  Package:" + app.getPackageName());
+                            System.out.println("  Version Code:" + app.getVersionCode());
+                            System.out.println("  Version:" + app.getVersion());
                         }
                     }
-
             };
-            session.append(appsRequest, callback);
-            session.flush();
+
+            for(String pkg : apps) {
+                System.out.println("Checking: " + pkg);
+                AppsRequest appsRequest = AppsRequest.newBuilder()
+                    .setQuery("pname:" + pkg)
+                    .setStartIndex(0).setEntriesCount(10)
+                    .setWithExtendedInfo(true)
+                    .build();
+                session.append(appsRequest, callback);
+                session.flush();
+
+                // Pause to avoid rate limit...
+                Thread.sleep(5000);
+            }
+
         } catch(Exception ex) {
             ex.printStackTrace();
         }
