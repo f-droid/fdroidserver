@@ -1,0 +1,8 @@
+License:Apache2
+Web Site:http://telecapoland.github.com/jamendo-android/
+Source Code:http://github.com/telecapoland/jamendo-android
+Issue Tracker:http://github.com/telecapoland/jamendo-android/issues
+Summary:Jamendo (FaiF music) player
+Description:
+A music player tied to the Jamendo site, a large resource of FaiF music.
+.
