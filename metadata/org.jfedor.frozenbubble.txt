@@ -7,3 +7,5 @@ Description:
 A bubble shooting game. Knock the bubbles down by forming clusters of three
 or more bubbles.
 .
+Market Version:1.7
+Market Version Code:8

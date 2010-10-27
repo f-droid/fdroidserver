@@ -5,3 +5,5 @@ Issue Tracker:
 Summary:Client for Libre.fm
 Description:
 A streaming radio player client for Libre.fm.
+Market Version:1.4
+Market Version Code:4

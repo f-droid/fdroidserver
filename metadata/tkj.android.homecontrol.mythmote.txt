@@ -6,3 +6,5 @@ Summary:Remote control for MythTV
 Description:
 A network remote control for MythTV.
 .
+Market Version:1.4.0
+Market Version Code:8

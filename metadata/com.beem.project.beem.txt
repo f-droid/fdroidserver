@@ -6,3 +6,5 @@ Summary:XMPP client
 Description:
 Beem is an XMPP (Jabber) client.
 .
+Market Version:0.1.4
+Market Version Code:5

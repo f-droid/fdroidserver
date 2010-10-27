@@ -6,3 +6,5 @@ Summary:SSH client
 Description:
 An SSH client.
 .
+Market Version:1.7.1
+Market Version Code:323

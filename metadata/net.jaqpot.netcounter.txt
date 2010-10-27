@@ -8,3 +8,5 @@ NetCounter keeps track of your bandwidth usage (both cell and Wi-Fi) and display
 to you in an easy to read format. It can also alert you when you reach a predefined
 limit.
 .
+Market Version:0.14.1
+Market Version Code:22

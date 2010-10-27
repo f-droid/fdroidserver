@@ -7,3 +7,5 @@ Description:
 An e-book reader.
 .
 
+Market Version:0.7.11
+Market Version Code:711

@@ -6,3 +6,5 @@ Summary:A simple file browser and manager
 Description:
 A simple file browser and manager.
 .
+Market Version:1.1.2
+Market Version Code:3

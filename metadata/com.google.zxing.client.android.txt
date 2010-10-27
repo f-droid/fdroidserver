@@ -7,3 +7,5 @@ Description:
 Barcode scanner from ZXing.
 .
 
+Market Version:3.5
+Market Version Code:62

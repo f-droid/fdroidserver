@@ -6,3 +6,5 @@ Summary:SMS and call log backup/restore
 Description:
 A simple backup and restore of your SMS and call logs.
 .
+Market Version:1.0
+Market Version Code:3

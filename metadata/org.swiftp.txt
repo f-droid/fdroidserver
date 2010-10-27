@@ -7,3 +7,5 @@ Description:
 An FTP server allowing remote access to files on your SD card (or any files on the
 device, optionally, if you have root access).
 .
+Market Version:1.24
+Market Version Code:17

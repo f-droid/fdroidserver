@@ -7,3 +7,5 @@ Description:
 A game in the style of the classic Missile Command. Defend your cities from incoming
 enemy missiles.
 .
+Market Version:0.5.1
+Market Version Code:6

@@ -6,3 +6,5 @@ Summary:IRC client
 Description:
 Yaaic (Yet Another Android IRC Client) is an Internet Relay Chat (IRC) client.
 .
+Market Version:0.5
+Market Version Code:6

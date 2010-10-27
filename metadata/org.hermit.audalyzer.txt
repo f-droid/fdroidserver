@@ -6,3 +6,5 @@ Summary:Audio analyser
 Description:
 Realtime spectrum analysis of audio (via the microphone).
 .
+Market Version:1.14
+Market Version Code:15

@@ -6,3 +6,5 @@ Summary:SIP (VOIP) client
 Description:
 A SIP (VOIP) client.
 .
+Market Version:0.00-15
+Market Version Code:15

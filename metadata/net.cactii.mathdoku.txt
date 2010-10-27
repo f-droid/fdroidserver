@@ -6,3 +6,5 @@ Summary:Sudoku-like game based on KenKen(TM)
 Description:
 A sudoku-like game with a mathematical twist. Based on KenKen(TM).
 .
+Market Version:1.5
+Market Version Code:6

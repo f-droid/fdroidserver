@@ -6,3 +6,5 @@ Summary:Custom desktop label widgets
 Description:
 Allows you to add custom widgets to your 'desktop' to label things.
 .
+Market Version:1.3.0
+Market Version Code:6

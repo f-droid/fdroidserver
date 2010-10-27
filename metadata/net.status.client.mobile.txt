@@ -6,3 +6,5 @@ Summary:Official StatusNet client
 Description:
 The official client for StatusNet microblogging (which includes identi.ca).
 .
+Market Version:1.0.2
+Market Version Code:2

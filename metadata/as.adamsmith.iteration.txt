@@ -6,3 +6,5 @@ Summary:Generative art
 Description:
 Generative art (pretty pictures of mathematical origin).
 .
+Market Version:3.15
+Market Version Code:25

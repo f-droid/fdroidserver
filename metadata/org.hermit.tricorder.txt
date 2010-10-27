@@ -6,3 +6,5 @@ Summary:Fully functional Star Trek style Tricorder
 Description:
 Turns your Android device into a functional Tricorder in the style of Star Trek.
 .
+Market Version:5.11
+Market Version Code:40

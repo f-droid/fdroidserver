@@ -7,3 +7,5 @@ Description:
 Simple way to back up (and restore) a list of installed applications to a file
 on your SD card.
 .
+Market Version:1.0
+Market Version Code:2
