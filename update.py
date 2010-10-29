@@ -142,6 +142,8 @@ for metafile in glob.glob(os.path.join('metadata','*.txt')):
     thisinfo['source'] = ''
     thisinfo['tracker'] = ''
     thisinfo['disabled'] = None
+    thisinfo['marketversion'] = ''
+    thisinfo['marketvercode'] = '0'
     f = open(metafile, 'r')
     mode = 0
     for line in f.readlines():
@@ -169,6 +171,10 @@ for metafile in glob.glob(os.path.join('metadata','*.txt')):
                 thisinfo['tracker'] = value
             elif field == 'Disabled':
                 thisinfo['disabled'] = value
+            elif field == 'Market Version':
+                thisinfo['marketversion'] = value
+            elif field == 'Market Version Code':
+                thisinfo['marketvercode'] = value
             else:
                 print "Unrecognised field " + field
                 sys.exit(1)
@@ -261,9 +267,15 @@ for app in apps:
         addElement('web', app['web'], doc, apel)
         addElement('source', app['source'], doc, apel)
         addElement('tracker', app['tracker'], doc, apel)
+        addElement('marketversion', app['marketversion'], doc, apel)
+        addElement('marketvercode', app['marketvercode'], doc, apel)
+
+        gotmarketver = False
 
         for apk in apks:
             if apk['id'] == app['id']:
+                if apk['versioncode'] == app['marketvercode']:
+                    gotmarketver = True
                 apkel = doc.createElement("package")
                 apel.appendChild(apkel)
                 addElement('version', apk['version'], doc, apkel)
@@ -286,6 +298,9 @@ for app in apps:
                     features += f
                 if len(features) > 0:
                     addElement('features', features, doc, apkel)
+
+        if not gotmarketver and app['marketvercode'] != '0':
+            print "WARNING: Don't have market version (" + app['marketversion'] + ") of " + app['name']
 
     else:
         apps_disabled += 1
