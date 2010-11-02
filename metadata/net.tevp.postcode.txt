@@ -7,5 +7,5 @@ Description:
 A simple way to retrieve the postcode for your current location. Only works in the UK
 currently.
 .
-Market Version:1.0
-Market Version Code:1
+Market Version:1.1
+Market Version Code:2
