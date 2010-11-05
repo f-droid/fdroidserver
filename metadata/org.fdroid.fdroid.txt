@@ -1,7 +1,7 @@
 License:GPLv2+
-Web Site:http://f-droid.org
+Web Site:http://f-droid.org/repository
 Source Code:http://gitorious.org/f-droid/fdroidclient
-Issue Tracker:
+Issue Tracker:http://f-droid.org/issues
 Summary:FOSS application repository
 Description:
 FDroid is a... wait a minute. You're running it, how can you not know what
