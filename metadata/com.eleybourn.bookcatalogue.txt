@@ -7,5 +7,5 @@ Description:
 This is a simple book catalogue application, to store a list of your books. Books can be added either manually, by ISBN, or by barcode.
 .
 
-Market Version:3.0
-Market Version Code:35
+Market Version:3.0.1
+Market Version Code:37
