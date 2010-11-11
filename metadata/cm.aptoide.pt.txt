@@ -6,5 +6,6 @@ Summary:A package installer.
 Description:
 Aptoide is a simple repository and package installer. F-Droid was originally
 based on Aptoide!
-Market Version:1.2.0
-Market Version Code:85
+.
+Market Version:2.0
+Market Version Code:126
