@@ -30,6 +30,8 @@ from optparse import OptionParser
 #Read configuration...
 execfile('config.py')
 
+execfile('metadata.py')
+
 # Parse command line...
 parser = OptionParser()
 parser.add_option("-v", "--verbose", action="store_true", default=False,
@@ -37,79 +39,7 @@ parser.add_option("-v", "--verbose", action="store_true", default=False,
 (options, args) = parser.parse_args()
 
 # Get all apps...
-apps = []
-
-for metafile in glob.glob(os.path.join('metadata','*.txt')):
-
-    thisinfo = {}
-
-    # Get metadata...
-    thisinfo['id'] = metafile[9:-4]
-    print "Reading metadata for " + thisinfo['id']
-    thisinfo['description'] = ''
-    thisinfo['summary'] = ''
-    thisinfo['license'] = 'Unknown'
-    thisinfo['web'] = ''
-    thisinfo['source'] = ''
-    thisinfo['tracker'] = ''
-    thisinfo['disabled'] = None
-    thisinfo['marketversion'] = ''
-    thisinfo['marketvercode'] = '0'
-    thisinfo['repotype'] = ''
-    thisinfo['repo'] = ''
-    f = open(metafile, 'r')
-    mode = 0
-    for line in f.readlines():
-        line = line.rstrip('\r\n')
-        if len(line) == 0:
-            pass
-        elif mode == 0:
-            index = line.find(':')
-            if index == -1:
-                print "Invalid metadata in " + metafile + " at:" + line
-                sys.exit(1)
-            field = line[:index]
-            value = line[index+1:]
-            if field == 'Description':
-                mode = 1
-            elif field == 'Summary':
-                thisinfo['summary'] = value
-            elif field == 'Source Code':
-                thisinfo['source'] = value
-            elif field == 'License':
-                thisinfo['license'] = value
-            elif field == 'Web Site':
-                thisinfo['web'] = value
-            elif field == 'Issue Tracker':
-                thisinfo['tracker'] = value
-            elif field == 'Disabled':
-                thisinfo['disabled'] = value
-            elif field == 'Market Version':
-                thisinfo['marketversion'] = value
-            elif field == 'Market Version Code':
-                thisinfo['marketvercode'] = value
-            elif field == 'Repo Type':
-                thisinfo['repotype'] = value
-            elif field == 'Repo':
-                thisinfo['repo'] = value
-            else:
-                print "Unrecognised field " + field
-                sys.exit(1)
-        elif mode == 1:
-            if line == '.':
-                mode = 0
-            else:
-                if len(line) == 0:
-                    thisinfo['description'] += '\n\n'
-                else:
-                    if (not thisinfo['description'].endswith('\n') and
-                        len(thisinfo['description']) > 0):
-                        thisinfo['description'] += ' '
-                    thisinfo['description'] += line
-    if len(thisinfo['description']) == 0:
-        thisinfo['description'] = 'No description available'
-
-    apps.append(thisinfo)
+apps = read_metadata()
 
 unsigned_dir = 'unsigned'
 if os.path.exists(unsigned_dir):
@@ -137,35 +67,70 @@ for app in apps:
             print "Invalid repo type " + app['repotype'] + " in " + app['id']
             sys.exit(1)
 
-        # Generate (or update) the ant build file, build.xml...
-        if subprocess.call(['android','update','project','-p','.'],
-                cwd=build_dir) != 0:
-            print "Failed to update project"
-            sys.exit(1)
+        for thisbuild in app['builds']:
 
-        # If the app has ant set up to sign the release, we need to switch
-        # that off, because we want the unsigned apk...
-        if os.path.exists(os.path.join(build_dir, 'build.properties')):
-            if subprocess.call(['sed','-i','s/^key.store/#/',
-                'build.properties'], cwd=build_dir) !=0:
-                print "Failed to amend build.properties"
+            print "Building version " + thisbuild['version']
+
+            if app['repotype'] == 'git':
+                if subprocess.call(['git','checkout',thisbuild['commit']],
+                        cwd=build_dir) != 0:
+                    print "Git checkout failed"
+                    sys.exit(1)
+            else:
+                print "Invalid repo type " + app['repotype']
                 sys.exit(1)
 
-        # Build the release...
-        p = subprocess.Popen(['ant','release'], cwd=build_dir, 
-                stdout=subprocess.PIPE)
-        output = p.communicate()[0]
-        print output
-        if p.returncode != 0:
-            print "Build failed"
-            sys.exit(1)
+            # Generate (or update) the ant build file, build.xml...
+            if subprocess.call(['android','update','project','-p','.'],
+                    cwd=build_dir) != 0:
+                print "Failed to update project"
+                sys.exit(1)
 
-        # Find the apk name in the output...
-        src = re.match(r".*^.*Creating (\S+) for release.*$.*", output,
-                re.S|re.M).group(1)
-        dest = os.path.join(unsigned_dir, app['id'] + '.apk')
-        shutil.copyfile(os.path.join( os.path.join(build_dir, 'bin'),
-            src), dest)
+            # If the app has ant set up to sign the release, we need to switch
+            # that off, because we want the unsigned apk...
+            if os.path.exists(os.path.join(build_dir, 'build.properties')):
+                if subprocess.call(['sed','-i','s/^key.store/#/',
+                    'build.properties'], cwd=build_dir) !=0:
+                    print "Failed to amend build.properties"
+                    sys.exit(1)
+
+            # Build the release...
+            p = subprocess.Popen(['ant','release'], cwd=build_dir, 
+                    stdout=subprocess.PIPE)
+            output = p.communicate()[0]
+            print output
+            if p.returncode != 0:
+                print "Build failed"
+                sys.exit(1)
+
+            # Find the apk name in the output...
+            src = re.match(r".*^.*Creating (\S+) for release.*$.*", output,
+                    re.S|re.M).group(1)
+            src = os.path.join(os.path.join(build_dir, 'bin'), src)
+
+            # By way of a sanity check, make sure the version and version
+            # code in our new apk match what we expect...
+            p = subprocess.Popen([aapt_path,'dump','badging',
+               src], stdout=subprocess.PIPE)
+            output = p.communicate()[0]
+            vercode = None
+            version = None
+            for line in output.splitlines():
+                if line.startswith("package:"):
+                    pat = re.compile(".*versionCode='([0-9]*)'.*")
+                    vercode = re.match(pat, line).group(1)
+                    pat = re.compile(".*versionName='([^']*)'.*")
+                    version = re.match(pat, line).group(1)
+            if (version != thisbuild['version'] or
+                    vercode != thisbuild['vercode']):
+                print "Unexpected version/version code in output"
+                sys.exit(1)
+
+            # Copy the unsigned apk to our 'unsigned' directory to be
+            # dealt with later...
+            dest = os.path.join(unsigned_dir, app['id'] + '_' +
+                    thisbuild['vercode'] + '.apk')
+            shutil.copyfile(src, dest)
 
 print "Finished."
 

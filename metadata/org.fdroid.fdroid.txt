@@ -9,3 +9,6 @@ it is?
 .
 Repo Type:git
 Repo:git://gitorious.org/f-droid/fdroidclient.git
+Build Version:0.12,3,651696a49be2cd7db5ce6a2fa8185e31f9a20035
+Build Version:0.13,4,4f677285cc2cf0b7e7feb5c9acf61791bec15fbc
+

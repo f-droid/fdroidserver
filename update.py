@@ -30,6 +30,8 @@ from optparse import OptionParser
 #Read configuration...
 execfile('config.py')
 
+execfile('metadata.py')
+
 # Parse command line...
 parser = OptionParser()
 parser.add_option("-c", "--createmeta", action="store_true", default=False,
@@ -126,70 +128,7 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
     apks.append(thisinfo)
 
 # Get all apps...
-apps = []
-
-for metafile in glob.glob(os.path.join('metadata','*.txt')):
-
-    thisinfo = {}
-
-    # Get metadata...
-    thisinfo['id'] = metafile[9:-4]
-    print "Reading metadata for " + thisinfo['id']
-    thisinfo['description'] = ''
-    thisinfo['summary'] = ''
-    thisinfo['license'] = 'Unknown'
-    thisinfo['web'] = ''
-    thisinfo['source'] = ''
-    thisinfo['tracker'] = ''
-    thisinfo['disabled'] = None
-    thisinfo['marketversion'] = ''
-    thisinfo['marketvercode'] = '0'
-    f = open(metafile, 'r')
-    mode = 0
-    for line in f.readlines():
-        line = line.rstrip('\r\n')
-	if len(line) == 0:
-            pass
-        elif mode == 0:
-            index = line.find(':')
-            if index == -1:
-                print "Invalid metadata in " + metafile + " at:" + line
-                sys.exit(1)
-            field = line[:index]
-            value = line[index+1:]
-            if field == 'Description':
-                mode = 1
-            elif field == 'Summary':
-                thisinfo['summary'] = value
-            elif field == 'Source Code':
-                thisinfo['source'] = value
-            elif field == 'License':
-                thisinfo['license'] = value
-            elif field == 'Web Site':
-                thisinfo['web'] = value
-            elif field == 'Issue Tracker':
-                thisinfo['tracker'] = value
-            elif field == 'Disabled':
-                thisinfo['disabled'] = value
-            elif field == 'Market Version':
-                thisinfo['marketversion'] = value
-            elif field == 'Market Version Code':
-                thisinfo['marketvercode'] = value
-        elif mode == 1:
-            if line == '.':
-                mode = 0
-            else:
-                if len(line) == 0:
-                    thisinfo['description'] += '\n\n'
-                else:
-                    if (not thisinfo['description'].endswith('\n') and
-                        len(thisinfo['description']) > 0):
-                        thisinfo['description'] += ' '
-                    thisinfo['description'] += line
-    if len(thisinfo['description']) == 0:
-        thisinfo['description'] = 'No description available'
-
-    apps.append(thisinfo)
+apps = read_metadata()
 
 # Some information from the apks needs to be applied up to the application
 # level. When doing this, we use the info from the most recent version's apk.
