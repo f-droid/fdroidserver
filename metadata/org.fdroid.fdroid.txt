@@ -7,4 +7,5 @@ Description:
 FDroid is a... wait a minute. You're running it, how can you not know what
 it is?
 .
-
+Repo Type:git
+Repo:git://gitorious.org/f-droid/fdroidclient.git

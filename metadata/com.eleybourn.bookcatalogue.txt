@@ -9,3 +9,5 @@ This is a simple book catalogue application, to store a list of your books. Book
 
 Market Version:3.0.1
 Market Version Code:37
+Repo Type:git
+Repo:git://github.com/eleybourn/Book-Catalogue.git

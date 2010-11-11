@@ -175,9 +175,6 @@ for metafile in glob.glob(os.path.join('metadata','*.txt')):
                 thisinfo['marketversion'] = value
             elif field == 'Market Version Code':
                 thisinfo['marketvercode'] = value
-            else:
-                print "Unrecognised field " + field
-                sys.exit(1)
         elif mode == 1:
             if line == '.':
                 mode = 0

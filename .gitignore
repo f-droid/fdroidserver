@@ -1,3 +1,5 @@
 config.py
 repo/
+unsigned/
+build_*/
 
