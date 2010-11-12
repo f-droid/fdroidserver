@@ -1,4 +1,4 @@
-Disabled:Issues with a) Google Analytics usage tracking, b) ads
+Disabled:Issues with a) Google Analytics usage tracking, b) ads, c) vague licensing
 License:GPLv2
 Web Site:http://tomtasche.at/p/SayMyName
 Source Code:http://github.com/TomTasche/SayMyName
