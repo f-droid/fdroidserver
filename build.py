@@ -60,8 +60,12 @@ for app in apps:
 
         # Get the source code...
         if app['repotype'] == 'git':
-            if subprocess.call(['git','clone',app['repo'],build_dir]) != 0:
+            if subprocess.call(['git', 'clone',app['repo'], build_dir]) != 0:
                 print "Git clone failed"
+                sys.exit(1)
+        elif app['repotype'] == 'svn':
+            if subprocess.call(['svn', 'checkout', app['repo'], build_dir]) != 0:
+                print "Svn checkout failed"
                 sys.exit(1)
         else:
             print "Invalid repo type " + app['repotype'] + " in " + app['id']
@@ -71,42 +75,57 @@ for app in apps:
 
             print "Building version " + thisbuild['version']
 
+            # Optionally, the actual app source can be in a subdirectory...
+            if thisbuild.has_key('subdir'):
+                root_dir = os.path.join(build_dir, thisbuild['subdir'])
+            else:
+                root_dir = build_dir
+
             if app['repotype'] == 'git':
-                if subprocess.call(['git','checkout',thisbuild['commit']],
+                if subprocess.call(['git', 'checkout', thisbuild['commit']],
                         cwd=build_dir) != 0:
                     print "Git checkout failed"
+                    sys.exit(1)
+            elif app['repotype'] == 'svn':
+                if subprocess.call(['svn', 'update', '-r', thisbuild['commit']],
+                        cwd=build_dir) != 0:
+                    print "Svn update failed"
                     sys.exit(1)
             else:
                 print "Invalid repo type " + app['repotype']
                 sys.exit(1)
 
             # Generate (or update) the ant build file, build.xml...
-            if subprocess.call(['android','update','project','-p','.'],
-                    cwd=build_dir) != 0:
+            parms = ['android','update','project','-p','.']
+            parms.append('--subprojects')
+            if thisbuild.has_key('target'):
+                parms.append('-t')
+                parms.append(thisbuild['target'])
+            if subprocess.call(parms, cwd=root_dir) != 0:
                 print "Failed to update project"
                 sys.exit(1)
 
             # If the app has ant set up to sign the release, we need to switch
             # that off, because we want the unsigned apk...
-            if os.path.exists(os.path.join(build_dir, 'build.properties')):
+            if os.path.exists(os.path.join(root_dir, 'build.properties')):
                 if subprocess.call(['sed','-i','s/^key.store/#/',
                     'build.properties'], cwd=build_dir) !=0:
                     print "Failed to amend build.properties"
                     sys.exit(1)
 
             # Build the release...
-            p = subprocess.Popen(['ant','release'], cwd=build_dir, 
+            p = subprocess.Popen(['ant','release'], cwd=root_dir, 
                     stdout=subprocess.PIPE)
             output = p.communicate()[0]
-            print output
             if p.returncode != 0:
+                print output
                 print "Build failed"
                 sys.exit(1)
 
             # Find the apk name in the output...
             src = re.match(r".*^.*Creating (\S+) for release.*$.*", output,
                     re.S|re.M).group(1)
-            src = os.path.join(os.path.join(build_dir, 'bin'), src)
+            src = os.path.join(os.path.join(root_dir, 'bin'), src)
 
             # By way of a sanity check, make sure the version and version
             # code in our new apk match what we expect...

@@ -7,5 +7,15 @@ Description:
 An FTP server allowing remote access to files on your SD card (or any files on the
 device, optionally, if you have root access).
 .
+
 Market Version:1.24
 Market Version Code:17
+Repo Type:svn
+Repo:http://swiftp.googlecode.com/svn/trunk/
+
+#Can't build this version - see http://code.google.com/p/swiftp/issues/detail?id=128
+#Build Version:1.24,17,69,target=android-3
+
+#Can't build this version - res/values/strings.xml:117: error: Apostrophe not preceded by \
+#Build Version:1.23,15,66,target=android-3
+

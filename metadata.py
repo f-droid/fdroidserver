@@ -42,62 +42,70 @@ def read_metadata():
         f = open(metafile, 'r')
         mode = 0
         for line in f.readlines():
-            line = line.rstrip('\r\n')
-            if len(line) == 0:
-                pass
-            elif mode == 0:
-                index = line.find(':')
-                if index == -1:
-                    print "Invalid metadata in " + metafile + " at:" + line
-                    sys.exit(1)
-                field = line[:index]
-                value = line[index+1:]
-                if field == 'Description':
-                    mode = 1
-                elif field == 'Summary':
-                    thisinfo['summary'] = value
-                elif field == 'Source Code':
-                    thisinfo['source'] = value
-                elif field == 'License':
-                    thisinfo['license'] = value
-                elif field == 'Web Site':
-                    thisinfo['web'] = value
-                elif field == 'Issue Tracker':
-                    thisinfo['tracker'] = value
-                elif field == 'Disabled':
-                    thisinfo['disabled'] = value
-                elif field == 'Market Version':
-                    thisinfo['marketversion'] = value
-                elif field == 'Market Version Code':
-                    thisinfo['marketvercode'] = value
-                elif field == 'Repo Type':
-                    thisinfo['repotype'] = value
-                elif field == 'Repo':
-                    thisinfo['repo'] = value
-                elif field == 'Build Version':
-                    parts = value.split(",")
-                    if len(parts) != 3:
-                        print "Invalid build format: " + value
+            if not line.startswith("#"):
+                line = line.rstrip('\r\n')
+                if len(line) == 0:
+                    pass
+                elif mode == 0:
+                    index = line.find(':')
+                    if index == -1:
+                        print "Invalid metadata in " + metafile + " at:" + line
                         sys.exit(1)
-                    thisbuild = {}
-                    thisbuild['version'] = parts[0]
-                    thisbuild['vercode'] = parts[1]
-                    thisbuild['commit'] = parts[2]
-                    thisinfo['builds'].append(thisbuild)
-                else:
-                    print "Unrecognised field " + field
-                    sys.exit(1)
-            elif mode == 1:
-                if line == '.':
-                    mode = 0
-                else:
-                    if len(line) == 0:
-                        thisinfo['description'] += '\n\n'
+                    field = line[:index]
+                    value = line[index+1:]
+                    if field == 'Description':
+                        mode = 1
+                    elif field == 'Summary':
+                        thisinfo['summary'] = value
+                    elif field == 'Source Code':
+                        thisinfo['source'] = value
+                    elif field == 'License':
+                        thisinfo['license'] = value
+                    elif field == 'Web Site':
+                        thisinfo['web'] = value
+                    elif field == 'Issue Tracker':
+                        thisinfo['tracker'] = value
+                    elif field == 'Disabled':
+                        thisinfo['disabled'] = value
+                    elif field == 'Market Version':
+                        thisinfo['marketversion'] = value
+                    elif field == 'Market Version Code':
+                        thisinfo['marketvercode'] = value
+                    elif field == 'Repo Type':
+                        thisinfo['repotype'] = value
+                    elif field == 'Repo':
+                        thisinfo['repo'] = value
+                    elif field == 'Build Version':
+                        parts = value.split(",")
+                        if len(parts) < 3:
+                            print "Invalid build format: " + value
+                            sys.exit(1)
+                        thisbuild = {}
+                        thisbuild['version'] = parts[0]
+                        thisbuild['vercode'] = parts[1]
+                        thisbuild['commit'] = parts[2]
+                        for p in parts[3:]:
+                            pp = p.split('=')
+                            thisbuild[pp[0]] = pp[1]
+                        thisinfo['builds'].append(thisbuild)
                     else:
-                        if (not thisinfo['description'].endswith('\n') and
-                            len(thisinfo['description']) > 0):
-                            thisinfo['description'] += ' '
-                        thisinfo['description'] += line
+                        print "Unrecognised field " + field
+                        sys.exit(1)
+                elif mode == 1:
+                    if line == '.':
+                        mode = 0
+                    else:
+                        if len(line) == 0:
+                            thisinfo['description'] += '\n\n'
+                        else:
+                            if (not thisinfo['description'].endswith('\n') and
+                                len(thisinfo['description']) > 0):
+                                thisinfo['description'] += ' '
+                            thisinfo['description'] += line
+
+        if mode == 1:
+            print "Description not terminated"
+            sys.exit(1)
         if len(thisinfo['description']) == 0:
             thisinfo['description'] = 'No description available'
 

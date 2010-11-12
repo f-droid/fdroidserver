@@ -8,5 +8,13 @@ Anki is a program which makes remembering things easy. Because it is a lot more
 efficient than traditional study methods, you can either greatly decrease your time
 spent studying, or greatly increase the amount you learn. AnkiDroid is the Android
 port of Anki, and is compatible with Anki data.
+.
+
 Market Version:0.4.2
 Market Version Code:12
+
+Repo Type:git
+Repo:git://github.com/nicolas-raoul/Anki-Android.git
+
+Build Version:0.4.2,12,v0.4.2
+
