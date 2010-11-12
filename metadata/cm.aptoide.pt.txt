@@ -1,3 +1,4 @@
+Disabled:Source apparently no longer available.
 License:GPLv2
 Web Site:http://www.aptoide.com/
 Source Code:http://aptoide.org/trac
