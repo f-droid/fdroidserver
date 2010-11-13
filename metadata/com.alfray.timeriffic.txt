@@ -1,0 +1,17 @@
+License:GPLv3
+Web Site:http://code.google.com/p/timeriffic/
+Source Code:http://code.google.com/p/timeriffic/source/checkout
+Summary:Auto-control ring, volume, brightness, etc on a schedule
+Description:
+Allows you to set multiple schedules to control mute, vibrate, brightness, 
+WiFi and airplane mode.
+.
+
+Repo Type:svn
+Repo:http://timeriffic.googlecode.com/svn/trunk/
+
+Build Version:1.09.03,10903,45,subdir=Timeriffic,oldsdkloc=yes
+
+
+Market Version:1.09.03 // Changes: Now supports System + Voice Call Volume. Fixed volume slider in landscape. Fixed time widget. Removed unused permissions.
+Market Version Code:10903
