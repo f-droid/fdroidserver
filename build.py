@@ -113,9 +113,24 @@ for app in apps:
             # that off, because we want the unsigned apk...
             if os.path.exists(os.path.join(root_dir, 'build.properties')):
                 if subprocess.call(['sed','-i','s/^key.store/#/',
-                    'build.properties'], cwd=build_dir) !=0:
+                    'build.properties'], cwd=root_dir) !=0:
                     print "Failed to amend build.properties"
                     sys.exit(1)
+
+            # Fix old-fashioned 'sdk-location' in local.properties by copying
+            # from sdk.dir, if necessary...
+            if (thisbuild.has_key('oldsdkloc') and
+                    thisbuild['oldsdkloc'] == "yes"):
+                locprops = os.path.join(root_dir, 'local.properties')
+                f = open(locprops, 'r')
+                props = f.read()
+                f.close()
+                sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
+                    re.S|re.M).group(1)
+                props += "\nsdk-location=" + sdkloc + "\n"
+                f = open(locprops, 'w')
+                f.write(props)
+                f.close()
 
             # Build the release...
             p = subprocess.Popen(['ant','release'], cwd=root_dir, 
@@ -144,6 +159,15 @@ for app in apps:
                     vercode = re.match(pat, line).group(1)
                     pat = re.compile(".*versionName='([^']*)'.*")
                     version = re.match(pat, line).group(1)
+
+            # Some apps (e.g. Timeriffic) have had the bonkers idea of
+            # including the entire changelog in the version number. Remove
+            # it so we can compare. (TODO: might be better to remove it
+            # before we compile, in fact)
+            index = version.find(" //")
+            if index != -1:
+                version = version[:index]
+
             if (version != thisbuild['version'] or
                     vercode != thisbuild['vercode']):
                 print "Unexpected version/version code in output"
