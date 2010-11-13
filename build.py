@@ -36,6 +36,8 @@ execfile('metadata.py')
 parser = OptionParser()
 parser.add_option("-v", "--verbose", action="store_true", default=False,
                   help="Spew out even more information than normal")
+parser.add_option("-p", "--package", default=None,
+                  help="Build only the specified package")
 (options, args) = parser.parse_args()
 
 # Get all apps...
@@ -48,7 +50,9 @@ os.mkdir(unsigned_dir)
 
 for app in apps:
 
-    if app['disabled'] is None and app['repo'] != '' and app['repotype'] != '':
+    if (app['disabled'] is None and app['repo'] != '' 
+            and app['repotype'] != '' and (options.package is None or
+            options.package == app['id'])):
 
         print "About to build " + app['id']
 
