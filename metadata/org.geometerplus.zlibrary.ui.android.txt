@@ -7,5 +7,5 @@ Description:
 An e-book reader.
 .
 
-Market Version:0.7.16
-Market Version Code:716
+Market Version:0.7.17
+Market Version Code:717
