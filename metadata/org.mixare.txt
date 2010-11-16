@@ -6,5 +6,5 @@ Summary:Augmented reality browser
 Description:
 An augmented reality browser.
 .
-Market Version:0.5
-Market Version Code:7
+Market Version:0.6
+Market Version Code:8

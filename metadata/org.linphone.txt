@@ -1,0 +1,9 @@
+License:GPLv3
+Web Site:http://www.linphone.org
+Source Code:http://www.linphone.org/eng/download/git.html
+Summary:SIP (VOIP) client
+Description:
+A SIP (VOIP) client.
+.
+Market Version:1.0.16
+Market Version Code:1016
