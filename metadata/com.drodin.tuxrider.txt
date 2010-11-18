@@ -1,3 +1,4 @@
+Disabled:Ads
 License:GPLv2+
 Web Site:http://tuxrider.drodin.com/
 Source Code:https://github.com/drodin/TuxRider
