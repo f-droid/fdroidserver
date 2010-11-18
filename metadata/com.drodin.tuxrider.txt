@@ -1,0 +1,16 @@
+License:GPLv2+
+Web Site:http://tuxrider.drodin.com/
+Source Code:https://github.com/drodin/TuxRider
+Issue Tracker:https://github.com/drodin/TuxRider/issues
+Summary:Racing Game
+Description:
+A Tux Racer clone.
+.
+Repo Type:git
+Repo:git://github.com/drodin/TuxRider.git
+
+Build Version:1.0.4 beta,6,67bce39cda321c225bc5
+
+
+Market Version:1.0.4 beta
+Market Version Code:6
