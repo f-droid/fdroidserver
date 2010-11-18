@@ -70,7 +70,7 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
         sys.exit(1)
     for line in output.splitlines():
         if line.startswith("package:"):
-            pat = re.compile(".*name='([a-z0-9.]*)'.*")
+            pat = re.compile(".*name='([a-zA-Z0-9.]*)'.*")
             thisinfo['id'] = re.match(pat, line).group(1)
             pat = re.compile(".*versionCode='([0-9]*)'.*")
             thisinfo['versioncode'] = re.match(pat, line).group(1)
