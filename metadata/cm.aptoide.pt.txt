@@ -1,4 +1,4 @@
-Disabled:Source apparently no longer available.
+Disabled:Source incomplete
 License:GPLv2
 Web Site:http://www.aptoide.com/
 Source Code:http://aptoide.org/trac
@@ -10,3 +10,9 @@ based on Aptoide!
 .
 Market Version:2.0
 Market Version Code:126
+
+Repo Type:svn
+Repo:http://aptoide.org/repo
+
+Build Version:2.0,126,45,subdir=aptoide-client/v2.0
+
