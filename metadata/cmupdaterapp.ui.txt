@@ -1,0 +1,9 @@
+License:GPLv2
+Web Site:http://code.google.com/p/cyanogen-updater/
+Source Code:http://code.google.com/p/cyanogen-updater/source/checkout
+Issue Tracker:http://code.google.com/p/cyanogen-updater/issues/list
+Summary:Updater for CyanogenMod
+Description:
+An over-the-air updater for the CyanogenMod series of custom ROMs. Root
+access is required.
+.

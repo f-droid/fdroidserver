@@ -1,0 +1,14 @@
+License:Apache2
+Web Site:https://github.com/jberkel/sms-backup-plus#readme
+Source Code:https://github.com/jberkel/sms-backup-plus#readme
+Issue Tracker:https://github.com/jberkel/sms-backup-plus/issues
+Summary:Backup SMS and call logs to IMAP
+Description:
+Backups up SMS and call log data from the device to an IMAP server, or
+Gmail.
+.
+
+
+
+Market Version:1.2
+Market Version Code:1200
