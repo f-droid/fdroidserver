@@ -1,0 +1,14 @@
+License:GPL
+Web Site:http://xwords.sourceforge.net/android.php
+Source Code:http://xwords.sourceforge.net/source.php
+Issue Tracker:
+Summary:A Scrabble-like game
+Description:
+An implementation of a game with the same rules as Scrabble.
+.
+Repo Type:git
+Repo:git://xwords.git.sourceforge.net/gitroot/xwords/xwords
+Build Version:4.4 beta 18,11,android_beta_18,subdir=xwords4/android/XWords4
+
+Market Version:4.4 beta 18
+Market Version Code:11

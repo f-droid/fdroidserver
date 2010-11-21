@@ -7,3 +7,5 @@ Description:
 An over-the-air updater for the CyanogenMod series of custom ROMs. Root
 access is required.
 .
+Market Version:5.0.1
+Market Version Code:501
