@@ -1,0 +1,11 @@
+License:GPLv3
+Web Site:http://code.google.com/p/httpmon/
+Source Code:http://code.google.com/p/httpmon/source/checkout
+Issue Tracker:http://code.google.com/p/httpmon/issues/list
+Summary:HTTP monitor
+Description:
+A simple HTTP monitoring application. Get notified when remote web sites are
+down.
+.
+Market Version:0.4.6
+Market Version Code:23
