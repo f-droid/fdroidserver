@@ -44,6 +44,7 @@ class test {
             System.out.println("Apps to check: " + apps.size());
 
             MarketSession session = new MarketSession();
+            session.getContext().setAndroidId("87548757565689");
             System.out.println("Login...");
             session.login(login,password);
             System.out.println("Login done");
@@ -108,7 +109,8 @@ class test {
 
                             }
                         } catch (Exception ex) {
-                            System.out.println("...Exception!");
+                            System.out.println("...Exception");
+                            ex.printStackTrace();
                         }
                     }
 
