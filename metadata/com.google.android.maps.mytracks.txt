@@ -6,5 +6,5 @@ Summary:A GPS logger.
 Description:
 MyTracks is a GPS logger.
 .
-Market Version:1.0.19
-Market Version Code:20
+Market Version:1.0.21
+Market Version Code:22
