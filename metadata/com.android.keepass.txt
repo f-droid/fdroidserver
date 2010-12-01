@@ -7,7 +7,7 @@ Description:
 A password safe, compatible with KeePass.
 .
 Market Version:1.8.5.1
-Market Version Code:66
+Market Version Code:68
 
 Repo Type:git
 Repo:git://github.com/bpellin/keepassdroid.git
