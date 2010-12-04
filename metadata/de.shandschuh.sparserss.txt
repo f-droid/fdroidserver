@@ -1,0 +1,10 @@
+License:MIT
+Web Site:http://code.google.com/p/sparserss/
+Source Code:http://code.google.com/p/sparserss/source/checkout
+Issue Tracker:http://code.google.com/p/sparserss/issues/list
+Summary:Simple feed reader
+Description:
+A simple and lightweight feed reader with automatic background update and
+notifications. Automatically discovers feeds given just a site URL. Provides
+OPML import and export.
+.
