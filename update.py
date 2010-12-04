@@ -238,6 +238,14 @@ for app in apps:
         if not gotmarketver and app['marketvercode'] != '0':
             print "WARNING: Don't have market version (" + app['marketversion'] + ") of " + app['name']
             print "         (" + app['id'] + ")"
+            if options.verbose:
+                # A bit of extra debug info, basically for diagnosing
+                # app developer mistakes:
+                print "         Market vercode:" + app['marketvercode']
+                print "         Got:"
+                for apk in apks:
+                    if apk['id'] == app['id']:
+                        print "           " + apk['versioncode'] + " - " + apk['version']
 
     else:
         apps_disabled += 1
