@@ -237,6 +237,7 @@ for app in apps:
 
         if not gotmarketver and app['marketvercode'] != '0':
             print "WARNING: Don't have market version (" + app['marketversion'] + ") of " + app['name']
+            print "         (" + app['id'] + ")"
 
     else:
         apps_disabled += 1
