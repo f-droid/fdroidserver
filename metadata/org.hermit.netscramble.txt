@@ -8,3 +8,5 @@ A puzzle game where the player is given a network diagram with the parts of
 the network randomly rotated and must rotate them to connect all the terminals
 to the server. A port of the KDE game "knetwalk".
 .
+Market Version:5.0
+Market Version Code:26

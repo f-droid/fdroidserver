@@ -7,8 +7,8 @@ Description:
 This is a simple book catalogue application, to store a list of your books. Books can be added either manually, by ISBN, or by barcode.
 .
 
-Market Version:3.1
-Market Version Code:39
+Market Version:3.1.2
+Market Version Code:41
 Repo Type:git
 Repo:git://github.com/eleybourn/Book-Catalogue.git
 Build Version:3.0.1,36,b876c6df82c7e195ec5d
