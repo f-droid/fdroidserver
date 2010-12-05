@@ -68,7 +68,8 @@ class FDroid
 
 	// Handler for the 'fdroidrepo' shortcode.
 	//  $attribs - shortcode attributes
-	//  $content - optional content enclosed between the starting and ending shortcode
+	//  $content - optional content enclosed between the starting and
+	//             ending shortcode
 	// Returns the generated content.
 	function do_shortcode($attribs,$content=null) {
 		global $wp_query,$wp_rewrite;
@@ -100,6 +101,7 @@ class FDroid
 
 			$attrs=$app->attributes();
 			if($attrs['id']==$id) {
+				$apks=array();;
 				foreach($app->children() as $el) {
 					switch($el->getName()) {
 						case "name":
@@ -111,24 +113,78 @@ class FDroid
 						case "summary":
 							$summary=$el;
 							break;
+						case "description":
+							$desc=$el;
+							break;
 						case "license":
 							$license=$el;
 							break;
 						case "source":
 							$source=$el;
 							break;
-						case "issues":
+						case "tracker":
 							$issues=$el;
 							break;
 						case "web":
 							$web=$el;
 							break;
+						case "package":
+							$thisapk=array();
+							foreach($el->children() as $pel) {
+								switch($pel->getName()) {
+								case "version":
+									$thisapk['version']=$pel;
+									break;
+								case "vercode":
+									$thisapk['vercode']=$pel;
+									break;
+								case "apkname":
+									$thisapk['apkname']=$pel;
+									break;
+								case "hash":
+									$thisapk['hash']=$pel;
+									break;
+								case "size":
+									$thisapk['size']=$pel;
+									break;
+								case "sdkver":
+									$thisapk['sdkver']=$pel;
+									break;
+								case "permissions":
+									$thisapk['permissions']=$pel;
+									break;
+								}
+							}
+							$apks[]=$thisapk;
+
 					}
 				}
 				$out="<h2>".$name."</h2>";
 				$out.='<p><img src="http://f-droid.org/repo/icons/'.$icon.'" width=40>';
 				$out.=$summary;
 				$out.="</p>";
+
+				$out.="<p>".$desc."</p>";
+
+				$out.="<p><b>License:</b> ".$license."</p>";
+
+				$out.="<p><b>Links:</b> ";
+				if(strlen($web)>0)
+					$out.='<a href="'.$web.'">Website</a> ';
+				if(strlen($issues)>0)
+					$out.='<a href="'.$issues.'">Issue Tracker</a> ';
+				if(strlen($source)>0)
+					$out.='<a href="'.$source.'">Source Code</a>';
+				$out.="</p>";
+
+				$out.="<h3>Packages</h3>";
+				foreach($apks as $apk) {
+					$out.="<p><b>Version ".$apk['version']."</b> - ";
+					$out.='<a href="http://f-droid.org/repo/'.$apk['apkname'].'">download</a> ';
+					$out.=$apk['size']." bytes";
+					$out.="</p>";
+				}
+
 				return $out;
 			}
 		}
