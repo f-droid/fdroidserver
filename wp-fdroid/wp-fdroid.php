@@ -113,6 +113,24 @@ class FDroid
 					case "name":
 						$name=$el;
 						break;
+					case "icon":
+						$icon=$el;
+						break;
+					case "summary":
+						$summary=$el;
+						break;
+					case "license":
+						$license=$el;
+						break;
+					case "source":
+						$source=$el;
+						break;
+					case "issues":
+						$issues=$el;
+						break;
+					case "web":
+						$web=$el;
+						break;
 				}
 			}
 
@@ -120,7 +138,10 @@ class FDroid
 				if($skipped<($page-1)*$perpage) {
 					$skipped++;
 				} else if($got<$perpage) {
-					$out.="<p>".$name."</p>";
+					$out.="<h2>".$name."</h2>";
+					$out.='<p><img src="http://f-droid.org/repo/icons/'.$icon.'" width=40>';
+					$out.=$summary;
+					$out.="</p>";
 					$got++;
 				}
 				$total++;
