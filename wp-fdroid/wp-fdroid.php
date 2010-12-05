@@ -81,15 +81,59 @@ class FDroid
 				$page=1;
 		}
 
-		$filter=null;
-		if(isset($wp_query->query_vars['fdfilter']))
-			$filter=$wp_query->query_vars['fdfilter'];
+		$filter=$wp_query->query_vars['fdfilter'];
+		$fdid=$wp_query->query_vars['fdid'];
 
-		$out=$this->get_apps($page,$filter);
+		if($fdid!==null)
+			$out=$this->get_app($fdid);
+		else
+			$out=$this->get_apps($page,$filter);
 		return $out;
 
 	}
 
+
+	function get_app($id) {
+
+		$xml = simplexml_load_file("/home/fdroid/public_html/repo/index.xml");
+		foreach($xml->children() as $app) {
+
+			$attrs=$app->attributes();
+			if($attrs['id']==$id) {
+				foreach($app->children() as $el) {
+					switch($el->getName()) {
+						case "name":
+							$name=$el;
+							break;
+						case "icon":
+							$icon=$el;
+							break;
+						case "summary":
+							$summary=$el;
+							break;
+						case "license":
+							$license=$el;
+							break;
+						case "source":
+							$source=$el;
+							break;
+						case "issues":
+							$issues=$el;
+							break;
+						case "web":
+							$web=$el;
+							break;
+					}
+				}
+				$out="<h2>".$name."</h2>";
+				$out.='<p><img src="http://f-droid.org/repo/icons/'.$icon.'" width=40>';
+				$out.=$summary;
+				$out.="</p>";
+				return $out;
+			}
+		}
+		return "<p>Application not found</p>";
+	}
 
 
 	function get_apps($page,$filter=null) {
@@ -108,6 +152,8 @@ class FDroid
 		$xml = simplexml_load_file("/home/fdroid/public_html/repo/index.xml");
 		foreach($xml->children() as $app) {
 
+			$attrs=$app->attributes();
+			$id=$attrs['id'];
 			foreach($app->children() as $el) {
 				switch($el->getName()) {
 					case "name":
@@ -122,15 +168,6 @@ class FDroid
 					case "license":
 						$license=$el;
 						break;
-					case "source":
-						$source=$el;
-						break;
-					case "issues":
-						$issues=$el;
-						break;
-					case "web":
-						$web=$el;
-						break;
 				}
 			}
 
@@ -141,6 +178,9 @@ class FDroid
 					$out.="<h2>".$name."</h2>";
 					$out.='<p><img src="http://f-droid.org/repo/icons/'.$icon.'" width=40>';
 					$out.=$summary;
+					$out.='<br><a href="';
+					$out.=$this->makelink("fdid=".$id);
+					$out.='">Details...</a>';
 					$out.="</p>";
 					$got++;
 				}
