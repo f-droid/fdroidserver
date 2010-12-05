@@ -192,6 +192,7 @@ for app in apps:
     if app['disabled'] is None:
         apps_inrepo += 1
         apel = doc.createElement("application")
+        apel.setAttribute("id", app['id'])
         root.appendChild(apel)
 
         addElement('id', app['id'], doc, apel)
