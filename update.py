@@ -173,6 +173,9 @@ for apk in apks:
             print "WARNING: " + apk['apkname'] + " (" + apk['id'] + ") has no metadata"
             print "       " + apk['name'] + " - " + apk['version']  
 
+#Sort the app list by name, then the web site doesn't have to by default:
+apps = sorted(apps, key=lambda app: app['name'])
+
 # Create the index
 doc = Document()
 
