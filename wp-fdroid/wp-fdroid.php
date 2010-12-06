@@ -159,10 +159,12 @@ class FDroid
 
 					}
 				}
-				$out="<h2>".$name."</h2>";
-				$out.='<p><img src="http://f-droid.org/repo/icons/'.$icon.'" width=40>';
-				$out.=$summary;
-				$out.="</p>";
+
+				$out='<div id="appheader">';
+				$out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$icon.'" width=48></div>';
+				$out.='<p><span style="font-size:20px">'.$name."</span>";
+				$out.="<br>".$summary."</p>";
+				$out.="</div>";
 
 				$out.="<p>".$desc."</p>";
 
@@ -184,6 +186,8 @@ class FDroid
 					$out.=$apk['size']." bytes";
 					$out.="</p>";
 				}
+
+				$out.='<hr><p><a href="'.$this->makelink("").'">Index</a></p>';
 
 				return $out;
 			}
@@ -231,13 +235,24 @@ class FDroid
 				if($skipped<($page-1)*$perpage) {
 					$skipped++;
 				} else if($got<$perpage) {
-					$out.="<h2>".$name."</h2>";
-					$out.='<p><img src="http://f-droid.org/repo/icons/'.$icon.'" width=40>';
-					$out.=$summary;
-					$out.='<br><a href="';
+
+					$out.="<hr>";
+					$out.='<div id="appheader">';
+
+					$out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$icon.'" width=48></div>';
+
+					$out.='<div style="float:right;">';
+					$out.='<p><a href="';
 					$out.=$this->makelink("fdid=".$id);
 					$out.='">Details...</a>';
 					$out.="</p>";
+					$out.="</div>";
+
+					$out.='<p><span style="font-size:20px">'.$name."</span>";
+					$out.="<br>".$summary."</p>";
+
+					$out.="</div>";
+
 					$got++;
 				}
 				$total++;
@@ -247,7 +262,7 @@ class FDroid
 
 		$numpages=ceil((float)$total/$perpage);
 
-		$out.='<p>';
+		$out.='<hr><p>';
 		if($page==1) {
 			$out.="&lt;&lt;first ";
 			$out.="&lt;prev ";
