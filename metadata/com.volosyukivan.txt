@@ -6,5 +6,5 @@ Summary:Remote WiFi keyboard
 Description:
 Use a remote browser over WiFi as a keyboard for the Android device.
 .
-Market Version:2.0
-Market Version Code:18
+Market Version:2.0.1
+Market Version Code:19
