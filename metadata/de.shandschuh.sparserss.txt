@@ -8,5 +8,5 @@ A simple and lightweight feed reader with automatic background update and
 notifications. Automatically discovers feeds given just a site URL. Provides
 OPML import and export.
 .
-Market Version:0.7.1
-Market Version Code:32
+Market Version:0.7.2
+Market Version Code:34

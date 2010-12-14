@@ -8,5 +8,5 @@ Description:
 SayMyName reads out loud the name saved in your address book and tells you
 who's calling. Also works with incoming SMS and email via K-9 Mail.
 .
-Market Version:2.5.4.5 (http://goo.gl/N10G)
-Market Version Code:130
+Market Version:2.5.4.6 (http://goo.gl/N10G)
+Market Version Code:131
