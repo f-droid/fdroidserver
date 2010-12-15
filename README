@@ -1,4 +1,4 @@
-Basic instructions:
+=Basic instructions=
 
 1. Copy config.sample.py to config.py and edit the path within accordingly
    to point to the Android tools
@@ -14,4 +14,98 @@ Basic instructions:
    also creates the repository index (index.xml).
 8. Transfer the repo directory to the appropriate http server. The script
    in upload.sh is an example of how to do this.
+
+=MetaData=
+
+Information used by update.py to compile the public index comes from two
+sources, 1) the APK files in the repo directory, and 2) the metadata files
+in the metadata directory.
+
+The metadata files are simple, easy to edit text files, always named as the
+application's package ID with '.txt' appended. Within the file, the following
+fields are recognised:
+
+==License==
+
+The license for the application.
+
+Common values: GPLv2, GPLv2+, GPLv3, Apache2, MIT, BSD
+
+==Web Site==
+
+The URL for the application's web site.
+
+==Source Code==
+
+The URL to view or obtain the application's source code. This should be
+something human-friendly. Machine-readable source-code is covered in the
+'Repo' field.
+
+==Issue Tracker==
+
+The URL for the application's issue tracker. Optional, since not all
+applications have one.
+
+==Summary==
+
+A brief summary of what the application is.
+
+==Description==
+
+A full description of the application. This can span multiple lines, and is
+terminated by a line containing a single '.'.
+
+==Repo Type==
+
+The type of repository - for automatic building from source. If this is not
+specified, automatic building is disabled for this application. Possible
+values are:
+
+  git, svn
+
+==Repo==
+
+The repository location. Usually a git: or svn: URL.
+
+==Build Version==
+
+Any number of these fields can be present, each specifying a version to
+automatically build from source. The value is a comma-separated list.
+For example:
+
+    Build Version:0.12,3,651696a49be2cd7db5ce6a2fa8185e31f9a20035
+
+The above specifies to build version 0.12, which has a version code of 3.
+The third parameter specifies the tag, commit or revision number from
+which to build it in the source repository.
+
+In addition to the three, always required, parameters described above,
+further parameters can be added (in name=value format) to apply further
+configuration to the build. These are:
+
+ subdir=<path>   - specifies to build from a subdirectory of the checked out
+                   source code
+ oldsdkloc=yes   - the sdk location in the repo is in an old format
+ target=<target> - specifies a particular SDK target, when the source doesn't
+
+Another example, using extra parameters:
+
+    Build Version:1.09.03,10903,45,subdir=Timeriffic,oldsdkloc=yes
+
+==AntiFeatures==
+
+This is optional - if present, it contains a comma-separated list of any of
+the following values, describing an AntiFeature the application has:
+
+  "Ads" - the application contains advertising
+  "Tracking" - the application tracks and reports your activity to somewhere
+  "NonFreeNet" - the application promotes a non-Free network service
+  "NonFreeAdd" - the application promotes non-Free add-ons
+
+==Disabled==
+
+If this field is present, the application does not get put into the public
+index. This allows metadata to be retained while an application is temporarily
+disabled from being published. The value should be a description of why the
+application is disabled.
 
