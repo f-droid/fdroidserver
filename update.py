@@ -209,6 +209,8 @@ for app in apps:
         addElement('tracker', app['tracker'], doc, apel)
         addElement('marketversion', app['marketversion'], doc, apel)
         addElement('marketvercode', app['marketvercode'], doc, apel)
+        if not (app['antifeatures'] is None):
+            addElement('antifeatures', app['antifeatures'], doc, apel)
 
         gotmarketver = False
 

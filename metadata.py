@@ -34,6 +34,7 @@ def read_metadata():
         thisinfo['source'] = ''
         thisinfo['tracker'] = ''
         thisinfo['disabled'] = None
+        thisinfo['antifeatures'] = None
         thisinfo['marketversion'] = ''
         thisinfo['marketvercode'] = '0'
         thisinfo['repotype'] = ''
@@ -67,6 +68,16 @@ def read_metadata():
                         thisinfo['tracker'] = value
                     elif field == 'Disabled':
                         thisinfo['disabled'] = value
+                    elif field == 'AntiFeatures':
+                        parts = value.split(",")
+                        for part in parts:
+                            if (part != "Ads" and
+                                part != "Tracking" and
+                                part != "NonFreeNet" and
+                                part != "NonFreeAdd"):
+                                print "Unrecognised antifeature '" + part + "'"
+                                sys.exit(1)
+                        thisinfo['antifeatures'] = value
                     elif field == 'Market Version':
                         thisinfo['marketversion'] = value
                     elif field == 'Market Version Code':
