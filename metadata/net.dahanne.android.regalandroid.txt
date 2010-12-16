@@ -1,0 +1,9 @@
+License:GPLv3
+Web Site:http://code.google.com/p/regalandroid/
+Source Code:https://github.com/anthonydahanne/ReGalAndroid
+Issue Tracker:http://code.google.com/p/regalandroid/issues/list
+Summary:Gallery client for G2/3 and Piwigo
+Description:
+A gallery client with support for G2 and G3 (also known as Menalto Gallery) and
+Piwigo.
+.
