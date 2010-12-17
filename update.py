@@ -28,6 +28,10 @@ from xml.dom.minidom import Document
 from optparse import OptionParser
 
 #Read configuration...
+repo_name = None
+repo_description = None
+repo_icon = None
+repo_url = None
 execfile('config.py')
 
 execfile('metadata.py')
@@ -47,6 +51,13 @@ icon_dir=os.path.join('repo','icons')
 if os.path.exists(icon_dir):
     shutil.rmtree(icon_dir)
 os.mkdir(icon_dir)
+
+#Make sure we have the repository description...
+if (repo_url is None or repo_name is None or
+        repo_icon is None or repo_description is None):
+    print "Repository description fields are required in config.py"
+    print "See config.sample.py for details"
+    sys.exit(1)
 
 # Gather information about all the apk files in the repo directory...
 apks = []
@@ -187,6 +198,13 @@ def addElement(name, value, doc, parent):
 root = doc.createElement("fdroid")
 doc.appendChild(root)
 
+repoel = doc.createElement("repo")
+repoel.setAttribute("name", repo_name)
+repoel.setAttribute("icon", repo_icon)
+repoel.setAttribute("url", repo_url)
+addElement('description', repo_description, doc, repoel)
+root.appendChild(repoel)
+
 apps_inrepo = 0
 apps_disabled = 0
 
@@ -260,6 +278,10 @@ of = open(os.path.join('repo','index.xml'), 'wb')
 output = doc.toxml()
 of.write(output)
 of.close()
+
+#Copy the repo icon into the repo directory...
+iconfilename = os.path.join(icon_dir, repo_icon)
+shutil.copyfile(repo_icon, iconfilename)
 
 print "Finished."
 print str(apps_inrepo) + " apps in repo"
