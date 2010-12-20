@@ -8,5 +8,5 @@ Email client supporting multiple accounts, POP3, IMAP, Push IMAP. Packed with
 features and highly configurable.
 .
 
-Market Version:3.400
-Market Version Code:11033
+Market Version:3.403
+Market Version Code:11036
