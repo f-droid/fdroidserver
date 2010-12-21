@@ -207,7 +207,7 @@ class FDroid
 			$out="<p>Applications matching ".$filter;
 		$out.="</p>";
 
-		$perpage=10;
+		$perpage=30;
 		$skipped=0;
 		$got=0;
 		$total=0;
@@ -215,6 +215,7 @@ class FDroid
 		$xml = simplexml_load_file($this->site_path."/repo/index.xml");
 		foreach($xml->children() as $app) {
 
+			if($app->getName() == 'repo') continue;
 			$attrs=$app->attributes();
 			$id=$attrs['id'];
 			foreach($app->children() as $el) {
@@ -239,22 +240,22 @@ class FDroid
 					$skipped++;
 				} else if($got<$perpage) {
 
-					$out.="<hr>";
+					$out.="<hr>\n";
 					$out.='<div id="appheader">';
 
-					$out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$icon.'" width=48></div>';
+					$out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$icon.'" style="width:48px;"></div>';
 
 					$out.='<div style="float:right;">';
 					$out.='<p><a href="';
 					$out.=$this->makelink("fdid=".$id);
 					$out.='">Details...</a>';
 					$out.="</p>";
-					$out.="</div>";
+					$out.="</div>\n";
 
 					$out.='<p><span style="font-size:20px">'.$name."</span>";
-					$out.="<br>".$summary."</p>";
+					$out.="<br>".$summary."</p>\n";
 
-					$out.="</div>";
+					$out.="</div>\n";
 
 					$got++;
 				}
