@@ -18,7 +18,6 @@ class FDroid
 	// Our text domain, for internationalisation
 	var $textdom='wp-fdroid';
 
-        var $site_url = "http://localhost/fdroid";
         var $site_path = "/var/www/fdroid";
 
 	// Constructor
