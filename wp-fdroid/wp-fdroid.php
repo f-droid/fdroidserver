@@ -18,6 +18,9 @@ class FDroid
 	// Our text domain, for internationalisation
 	var $textdom='wp-fdroid';
 
+        var $site_url = "http://localhost/fdroid";
+        var $site_path = "/var/www/fdroid";
+
 	// Constructor
 	function FDroid() {
 		// Add filters etc here!
@@ -96,7 +99,7 @@ class FDroid
 
 	function get_app($id) {
 
-		$xml = simplexml_load_file("/home/fdroid/public_html/repo/index.xml");
+		$xml = simplexml_load_file($this->site_path."/repo/index.xml");
 		foreach($xml->children() as $app) {
 
 			$attrs=$app->attributes();
@@ -209,7 +212,7 @@ class FDroid
 		$got=0;
 		$total=0;
 
-		$xml = simplexml_load_file("/home/fdroid/public_html/repo/index.xml");
+		$xml = simplexml_load_file($this->site_path."/repo/index.xml");
 		foreach($xml->children() as $app) {
 
 			$attrs=$app->attributes();
