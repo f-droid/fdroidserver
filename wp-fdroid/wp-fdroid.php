@@ -173,13 +173,13 @@ class FDroid
 
 				$out.="<p><b>License:</b> ".$license."</p>";
 
-				$out.="<p><b>Links:</b> ";
+				$out.="<p>";
 				if(strlen($web)>0)
-					$out.='<a href="'.$web.'">Website</a> ';
+					$out.='<b>Website:</b> <a href="'.$web.'">'.$web.'</a><br />';
 				if(strlen($issues)>0)
-					$out.='<a href="'.$issues.'">Issue Tracker</a> ';
+					$out.='<b>Issue Tracker:</b> <a href="'.$issues.'">'.$issues.'</a><br />';
 				if(strlen($source)>0)
-					$out.='<a href="'.$source.'">Source Code</a>';
+					$out.='<b>Source Code:</b> <a href="'.$source.'">'.$source.'</a><br />';
 				$out.="</p>";
 
 				$out.="<h3>Packages</h3>";
