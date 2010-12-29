@@ -1,0 +1,9 @@
+License:GPLv3
+Web Site:http://code.google.com/p/filexpert/
+Source Code:http://filexpert.googlecode.com/svn/trunk/
+Issue Tracker:http://code.google.com/p/filexpert/issues/list
+Summary:File Expert
+Description:File sharing and management
+A powerful file sharing and management package that includes a file manager, FTP and
+HTTP servers and an SMB client.
+.
