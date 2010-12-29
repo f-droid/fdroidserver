@@ -261,7 +261,7 @@ for app in apps:
 
         if not gotmarketver and app['marketvercode'] != '0':
             print "WARNING: Don't have market version (" + app['marketversion'] + ") of " + app['name']
-            print "         (" + app['id'] + ")"
+            print "         (" + app['id'] + ") " + app['web']
             if options.verbose:
                 # A bit of extra debug info, basically for diagnosing
                 # app developer mistakes:
