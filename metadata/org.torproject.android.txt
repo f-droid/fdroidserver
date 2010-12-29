@@ -1,0 +1,11 @@
+License:BSD
+Web Site:http://www.torproject.org/docs/android.html.en
+Source Code:https://svn.torproject.org/svn/projects/android/
+Issue Tracker:https://trac.torproject.org/projects/tor
+Summary:Tor client
+Description:
+A Tor client allowing private internet access via a local SOCKS or HTTP proxy. On a rooted
+device, the proxying can be completely transparent.
+.
+Market Version:1.0.4
+Market Version Code:11

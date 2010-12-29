@@ -8,5 +8,5 @@ APG is a port of OpenPGP for Android. Use it to encrypt and decrypt files, and i
 conjunction with K-9 Mail, to seamlessly add support for encyrpting and decrypting
 emails, as well as adding and verifying digital signatures.
 .
-Market Version:1.0.7
-Market Version Code:21
+Market Version:1.0.8
+Market Version Code:10899

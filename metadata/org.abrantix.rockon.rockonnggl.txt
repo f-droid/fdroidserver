@@ -4,8 +4,8 @@ Source Code:http://github.com/fabrantes/rockonnggl
 Issue Tracker:http://github.com/fabrantes/rockonnggl/issues
 Summary:Music player
 Description:
-A music player. Cubed, also known as ÃÂÃÂ³, has possibly the silliest choice of application
+A music player. Cubed, also known as ÃÂÃÂÃÂÃÂ³, has possibly the silliest choice of application
 name ever.
 .
-Market Version:1.0.74
-Market Version Code:75
+Market Version:1.0.76
+Market Version Code:77

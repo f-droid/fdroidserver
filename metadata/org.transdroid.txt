@@ -9,5 +9,5 @@ server or home computer. Currently Transmission, uTorrent, Bittorrent, Deluge, V
 and rTorrent are supported. It can show the active torrents, pause, resume or remove
 them and new torrents can be added via URL, RSS feed or using the integrated search.
 .
-Market Version:0.22.2
-Market Version Code:126
+Market Version:0.22.3
+Market Version Code:127
