@@ -18,6 +18,8 @@ class FDroid
 	// Our text domain, for internationalisation
 	var $textdom='wp-fdroid';
 
+        var $site_path = "/var/www/fdroid";
+
 	// Constructor
 	function FDroid() {
 		// Add filters etc here!
@@ -96,7 +98,7 @@ class FDroid
 
 	function get_app($id) {
 
-		$xml = simplexml_load_file("/home/fdroid/public_html/repo/index.xml");
+		$xml = simplexml_load_file($this->site_path."/repo/index.xml");
 		foreach($xml->children() as $app) {
 
 			$attrs=$app->attributes();
@@ -170,13 +172,13 @@ class FDroid
 
 				$out.="<p><b>License:</b> ".$license."</p>";
 
-				$out.="<p><b>Links:</b> ";
+				$out.="<p>";
 				if(strlen($web)>0)
-					$out.='<a href="'.$web.'">Website</a> ';
+					$out.='<b>Website:</b> <a href="'.$web.'">'.$web.'</a><br />';
 				if(strlen($issues)>0)
-					$out.='<a href="'.$issues.'">Issue Tracker</a> ';
+					$out.='<b>Issue Tracker:</b> <a href="'.$issues.'">'.$issues.'</a><br />';
 				if(strlen($source)>0)
-					$out.='<a href="'.$source.'">Source Code</a>';
+					$out.='<b>Source Code:</b> <a href="'.$source.'">'.$source.'</a><br />';
 				$out.="</p>";
 
 				$out.="<h3>Packages</h3>";
@@ -204,14 +206,15 @@ class FDroid
 			$out="<p>Applications matching ".$filter;
 		$out.="</p>";
 
-		$perpage=10;
+		$perpage=30;
 		$skipped=0;
 		$got=0;
 		$total=0;
 
-		$xml = simplexml_load_file("/home/fdroid/public_html/repo/index.xml");
+		$xml = simplexml_load_file($this->site_path."/repo/index.xml");
 		foreach($xml->children() as $app) {
 
+			if($app->getName() == 'repo') continue;
 			$attrs=$app->attributes();
 			$id=$attrs['id'];
 			foreach($app->children() as $el) {
@@ -236,22 +239,22 @@ class FDroid
 					$skipped++;
 				} else if($got<$perpage) {
 
-					$out.="<hr>";
+					$out.="<hr>\n";
 					$out.='<div id="appheader">';
 
-					$out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$icon.'" width=48></div>';
+					$out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$icon.'" style="width:48px;"></div>';
 
 					$out.='<div style="float:right;">';
 					$out.='<p><a href="';
 					$out.=$this->makelink("fdid=".$id);
 					$out.='">Details...</a>';
 					$out.="</p>";
-					$out.="</div>";
+					$out.="</div>\n";
 
 					$out.='<p><span style="font-size:20px">'.$name."</span>";
-					$out.="<br>".$summary."</p>";
+					$out.="<br>".$summary."</p>\n";
 
-					$out.="</div>";
+					$out.="</div>\n";
 
 					$got++;
 				}
