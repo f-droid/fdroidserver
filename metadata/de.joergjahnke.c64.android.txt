@@ -1,0 +1,9 @@
+License:GPL
+Name:Mobile C64
+Web Site:http://jmec64.sourceforge.net/
+Source Code:http://sourceforge.net/projects/jmec64/develop
+Issue Tracker:http://sourceforge.net/tracker/?group_id=171310
+Summary:Commodore 64 Emulator
+Description:
+A Commodore 64 (C64) emulator.
+.

@@ -28,6 +28,7 @@ def read_metadata():
         thisinfo['id'] = metafile[9:-4]
         print "Reading metadata for " + thisinfo['id']
         thisinfo['description'] = ''
+        thisinfo['name'] = None
         thisinfo['summary'] = ''
         thisinfo['license'] = 'Unknown'
         thisinfo['web'] = ''
@@ -56,6 +57,8 @@ def read_metadata():
                     value = line[index+1:]
                     if field == 'Description':
                         mode = 1
+                    elif field == 'Name':
+                        thisinfo['name'] = value
                     elif field == 'Summary':
                         thisinfo['summary'] = value
                     elif field == 'Source Code':

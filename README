@@ -31,6 +31,13 @@ The license for the application.
 
 Common values: GPLv2, GPLv2+, GPLv3, Apache2, MIT, BSD
 
+==Name==
+
+The name of the application. Normally, this field should not be present since the
+application's correct name is retrieved from the APK file. However, in a situation
+where an APK contains a bad or missing application name, it can be overridden
+using this.
+
 ==Web Site==
 
 The URL for the application's web site.

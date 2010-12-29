@@ -152,11 +152,13 @@ for app in apps:
                 bestapk = apk
 
     if bestver == 0:
-        app['name'] = app['id']
+        if app['name'] is None:
+            app['name'] = app['id']
         app['icon'] = ''
         print "WARNING: Application " + app['id'] + " has no packages"
     else:
-        app['name'] = bestapk['name']
+        if app['name'] is None:
+            app['name'] = bestapk['name']
         app['icon'] = bestapk['icon']
 
 # Generate warnings for apk's with no metadata (or create skeleton
