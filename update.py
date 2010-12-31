@@ -42,6 +42,8 @@ parser.add_option("-c", "--createmeta", action="store_true", default=False,
                   help="Create skeleton metadata files that are missing")
 parser.add_option("-v", "--verbose", action="store_true", default=False,
                   help="Spew out even more information than normal")
+parser.add_option("-b", "--buildreport", action="store_true", default=False,
+                  help="Report on build data status")
 (options, args) = parser.parse_args()
 
 
@@ -209,6 +211,7 @@ root.appendChild(repoel)
 
 apps_inrepo = 0
 apps_disabled = 0
+warnings = 0
 
 for app in apps:
 
@@ -261,9 +264,27 @@ for app in apps:
                 if len(features) > 0:
                     addElement('features', features, doc, apkel)
 
+        if options.buildreport:
+            if len(app['builds']) == 0:
+                print ("WARNING: No builds defined for " + app['id'] +
+                        " Source: " + app['source'])
+                warnings += 1
+            else:
+                if app['marketvercode'] != '0':
+                    gotbuild = False
+                    for build in app['builds']:
+                        if build['vercode'] == app['marketvercode']:
+                            gotbuild = True
+                    if not gotbuild:
+                        print ("WARNING: No build data for market version of "
+                                + app['id'] + " (" + app['marketversion']
+                                + ") " + app['source'])
+                        warnings += 1
+
         if not gotmarketver and app['marketvercode'] != '0':
             print "WARNING: Don't have market version (" + app['marketversion'] + ") of " + app['name']
             print "         (" + app['id'] + ") " + app['web']
+            warnings += 1
             if options.verbose:
                 # A bit of extra debug info, basically for diagnosing
                 # app developer mistakes:
@@ -288,4 +309,5 @@ shutil.copyfile(repo_icon, iconfilename)
 print "Finished."
 print str(apps_inrepo) + " apps in repo"
 print str(apps_disabled) + " disabled"
+print str(warnings) + " warnings"
 
