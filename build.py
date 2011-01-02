@@ -68,9 +68,10 @@ for app in apps:
                 print "Git clone failed"
                 sys.exit(1)
         elif app['repotype'] == 'svn':
-            if subprocess.call(['svn', 'checkout', app['repo'], build_dir]) != 0:
-                print "Svn checkout failed"
-                sys.exit(1)
+            if not app['repo'].endswith("*"):
+                if subprocess.call(['svn', 'checkout', app['repo'], build_dir]) != 0:
+                    print "Svn checkout failed"
+                    sys.exit(1)
         else:
             print "Invalid repo type " + app['repotype'] + " in " + app['id']
             sys.exit(1)
@@ -81,7 +82,15 @@ for app in apps:
 
             # Optionally, the actual app source can be in a subdirectory...
             if thisbuild.has_key('subdir'):
-                root_dir = os.path.join(build_dir, thisbuild['subdir'])
+                if app['repotype'] == 'svn' and app['repo'].endswith("*"):
+                    root_dir = build_dir
+                    if subprocess.call(['svn', 'checkout',
+                            app['repo'][:-1] + thisbuild['subdir'],
+                            build_dir]) != 0:
+                        print "Svn checkout failed"
+                        sys.exit(1)
+                else:
+                    root_dir = os.path.join(build_dir, thisbuild['subdir'])
             else:
                 root_dir = build_dir
 

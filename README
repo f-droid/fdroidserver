@@ -74,6 +74,13 @@ values are:
 
 The repository location. Usually a git: or svn: URL.
 
+Normally the repository is checked out once for the application, then moved
+to a particular revision/commit/tag for each build version. For an SVN
+repository though, this behaviour can be changed by appending a * to the
+repository URL - in this case the repository is checked out once per build
+version, with the subdir parameter in place of the *. This can be beneficial
+when dealing with very large SVN repositories.
+
 ==Build Version==
 
 Any number of these fields can be present, each specifying a version to
@@ -90,10 +97,13 @@ In addition to the three, always required, parameters described above,
 further parameters can be added (in name=value format) to apply further
 configuration to the build. These are:
 
- subdir=<path>   - specifies to build from a subdirectory of the checked out
-                   source code
- oldsdkloc=yes   - the sdk location in the repo is in an old format
- target=<target> - specifies a particular SDK target, when the source doesn't
+ subdir=<path>   - Specifies to build from a subdirectory of the checked out
+                   source code. Normally this directory is changed to before
+		   building, but there is a special case for SVN repositories
+		   where the URL is specified with a * at the end. See the
+		   documentation for the Repo field for more information.
+ oldsdkloc=yes   - The sdk location in the repo is in an old format
+ target=<target> - Specifies a particular SDK target, when the source doesn't
 
 Another example, using extra parameters:
 
