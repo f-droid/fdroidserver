@@ -9,3 +9,9 @@ or more bubbles.
 .
 Market Version:1.8
 Market Version Code:9
+
+Repo Type:svn
+Repo:http://frozenbubbleandroid.googlecode.com/svn/
+
+Build Version:1.7,8,15
+Build Version:1.8,9,16
