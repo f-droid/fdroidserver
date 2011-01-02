@@ -104,6 +104,10 @@ configuration to the build. These are:
 		   documentation for the Repo field for more information.
  oldsdkloc=yes   - The sdk location in the repo is in an old format
  target=<target> - Specifies a particular SDK target, when the source doesn't
+ rm=<relpath>    - Specifies the relative path of file to delete before the
+ 		   build is done. The path is relative to the base of the
+		   build directory - i.e. the directory that contains
+		   AndroidManifest.xml.
 
 Another example, using extra parameters:
 

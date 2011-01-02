@@ -141,6 +141,10 @@ for app in apps:
                 f.write(props)
                 f.close()
 
+            #Delete unwanted file...
+            if thisbuild.has_key('rm'):
+                os.remove(os.path.join(root_dir, thisbuild['rm']))
+
             # Build the release...
             p = subprocess.Popen(['ant','release'], cwd=root_dir, 
                     stdout=subprocess.PIPE)
