@@ -8,3 +8,8 @@ A network remote control for MythTV.
 .
 Market Version:1.4.0
 Market Version Code:8
+
+Repo Type:svn
+Repo:http://mythmote.googlecode.com/svn/trunk/
+
+Build Version:1.4.0,8,126,rm=src/tkj/android/homecontrol/mythmote/R.java
