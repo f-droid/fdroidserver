@@ -54,6 +54,8 @@ if os.path.exists(icon_dir):
     shutil.rmtree(icon_dir)
 os.mkdir(icon_dir)
 
+warnings = 0
+
 #Make sure we have the repository description...
 if (repo_url is None or repo_name is None or
         repo_icon is None or repo_description is None):
@@ -133,9 +135,13 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
     thisinfo['icon'] = (thisinfo['id'] + '.' +
         thisinfo['versioncode'] + '.png')
     iconfilename = os.path.join(icon_dir, thisinfo['icon'])
-    iconfile = open(iconfilename, 'wb')
-    iconfile.write(apk.read(thisinfo['iconsrc']))
-    iconfile.close()
+    try:
+        iconfile = open(iconfilename, 'wb')
+        iconfile.write(apk.read(thisinfo['iconsrc']))
+        iconfile.close()
+    except:
+        print "WARNING: Error retrieving icon file"
+        warnings += 1
     apk.close()
 
     apks.append(thisinfo)
@@ -211,7 +217,6 @@ root.appendChild(repoel)
 
 apps_inrepo = 0
 apps_disabled = 0
-warnings = 0
 
 for app in apps:
 
