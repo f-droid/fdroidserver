@@ -23,6 +23,7 @@ import glob
 import subprocess
 import re
 import zipfile
+import tarfile
 import md5
 from xml.dom.minidom import Document
 from optparse import OptionParser
@@ -144,6 +145,13 @@ for app in apps:
             #Delete unwanted file...
             if thisbuild.has_key('rm'):
                 os.remove(os.path.join(root_dir, thisbuild['rm']))
+
+            #Build the source tarball right before we build the relase...
+            tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
+            tarball = tarfile.open(os.path.join(unsigned_dir,
+                tarname + '.tar.gz'), "w:gz")
+            tarball.add(build_dir, tarname)
+            tarball.close()
 
             # Build the release...
             p = subprocess.Popen(['ant','release'], cwd=root_dir, 
