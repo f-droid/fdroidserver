@@ -163,9 +163,13 @@ for app in apps:
                 sys.exit(1)
 
             # Find the apk name in the output...
+            if thisbuild.has_key('bindir'):
+                bindir = os.path.join(build_dir, thisbuild['bindir'])
+            else:
+                bindir = os.path.join(root_dir, 'bin')
             src = re.match(r".*^.*Creating (\S+) for release.*$.*", output,
                     re.S|re.M).group(1)
-            src = os.path.join(os.path.join(root_dir, 'bin'), src)
+            src = os.path.join(bindir, src)
 
             # By way of a sanity check, make sure the version and version
             # code in our new apk match what we expect...

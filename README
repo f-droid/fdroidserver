@@ -102,6 +102,10 @@ configuration to the build. These are:
 		   building, but there is a special case for SVN repositories
 		   where the URL is specified with a * at the end. See the
 		   documentation for the Repo field for more information.
+ bindir=<path>   - Normally the build output (apk) is expected to be in the
+ 		   bin subdirectory below the ant build files. If the project
+		   is configured to put it elsewhere, that can be specified
+		   here, relative to the base of the checked out repo..
  oldsdkloc=yes   - The sdk location in the repo is in an old format
  target=<target> - Specifies a particular SDK target, when the source doesn't
  rm=<relpath>    - Specifies the relative path of file to delete before the
