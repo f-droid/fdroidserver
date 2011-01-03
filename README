@@ -68,7 +68,7 @@ The type of repository - for automatic building from source. If this is not
 specified, automatic building is disabled for this application. Possible
 values are:
 
-  git, svn
+  git, svn, hg
 
 ==Repo==
 

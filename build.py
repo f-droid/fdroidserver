@@ -65,7 +65,7 @@ for app in apps:
 
         # Get the source code...
         if app['repotype'] == 'git':
-            if subprocess.call(['git', 'clone',app['repo'], build_dir]) != 0:
+            if subprocess.call(['git', 'clone', app['repo'], build_dir]) != 0:
                 print "Git clone failed"
                 sys.exit(1)
         elif app['repotype'] == 'svn':
@@ -73,6 +73,10 @@ for app in apps:
                 if subprocess.call(['svn', 'checkout', app['repo'], build_dir]) != 0:
                     print "Svn checkout failed"
                     sys.exit(1)
+        elif app['repotype'] == 'hg':
+            if subprocess.call(['hg', 'clone', app['repo'], build_dir]) !=0:
+                print "Hg clone failed"
+                sys.exit(1)
         else:
             print "Invalid repo type " + app['repotype'] + " in " + app['id']
             sys.exit(1)
@@ -105,6 +109,12 @@ for app in apps:
                         cwd=build_dir) != 0:
                     print "Svn update failed"
                     sys.exit(1)
+            elif app['repotype'] == 'hg':
+                if subprocess.call(['hg', 'checkout', thisbuild['commit']],
+                        cwd=build_dir) != 0:
+                    print "Hg checkout failed"
+                    sys.exit(1)
+
             else:
                 print "Invalid repo type " + app['repotype']
                 sys.exit(1)
