@@ -9,3 +9,8 @@ adb logcat from the SDK tools.
 .
 Market Version:2.1.6
 Market Version Code:34
+
+Repo Type:svn
+Repo:http://alogcat.googlecode.com/svn/trunk
+
+Build Version:2.1.6,34,28

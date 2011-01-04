@@ -8,3 +8,10 @@ Use a remote browser over WiFi as a keyboard for the Android device.
 .
 Market Version:2.0.1
 Market Version Code:19
+
+Repo Type:hg
+Repo:https://wifikeyboard.googlecode.com/hg/
+
+#Build error...
+#Build Version:1.2.1,14,b3c5c579d0
+
