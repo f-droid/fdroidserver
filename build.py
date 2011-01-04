@@ -214,5 +214,58 @@ for app in apps:
                     thisbuild['vercode'] + '.apk')
             shutil.copyfile(src, dest)
 
+            # Figure out the key alias name we'll use. Only the first 8
+            # characters are significant, so we'll use the first 8 from
+            # the MD5 of the app's ID and hope there are no collisions.
+            # If a collision does occur later, we're going to have to
+            # come up with a new alogrithm, AND rename all existing keys
+            # in the keystore!
+            m = md5.new()
+            m.update(app['id'])
+            keyalias = m.hexdigest()[:8]
+            print "Key alias: " + keyalias
+
+            # See if we already have a key for this application, and
+            # if not generate one...
+            p = subprocess.Popen(['keytool', '-list',
+                '-alias', keyalias, '-keystore', keystore,
+                '-storepass', keystorepass], stdout=subprocess.PIPE)
+            output = p.communicate()[0]
+            if p.returncode !=0:
+                print "Key does not exist - generating..."
+                p = subprocess.Popen(['keytool', '-genkey',
+                    '-keystore', keystore, '-alias', keyalias,
+                    '-keyalg', 'RSA', '-keysize', '2048',
+                    '-validity', '10000',
+                    '-storepass', keystorepass, '-keypass', keypass,
+                    '-dname', keydname], stdout=subprocess.PIPE)
+                output = p.communicate()[0]
+                print output
+                if p.returncode != 0:
+                    print "Failed to generate key"
+                    sys.exit(1)
+
+            # Sign the application...
+            p = subprocess.Popen(['jarsigner', '-keystore', keystore,
+                   '-storepass', keystorepass, '-keypass', keypass,
+                    dest, keyalias], stdout=subprocess.PIPE)
+            output = p.communicate()[0]
+            print output
+            if p.returncode != 0:
+                print "Failed to sign application"
+                sys.exit(1)
+
+            # Zipalign it...
+            tmpfile = dest + ".tmp"
+            os.rename(dest, tmpfile)
+            p = subprocess.Popen(['zipalign', '-v', '4',
+                    tmpfile, dest], stdout=subprocess.PIPE)
+            output = p.communicate()[0]
+            print output
+            if p.returncode != 0:
+                print "Failed to align application"
+                sys.exit(1)
+            os.remove(tmpfile)
+
 print "Finished."
 

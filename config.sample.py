@@ -12,3 +12,17 @@ The official FDroid repository. Applications in this repository are official
 binaries built by the original application developers.
 """
 
+#The keystore to use for release keys when building. This needs to be
+#somewhere safe and secure, and backed up!
+keystore = "/home/me/somewhere/my.keystore"
+
+#The password for the keystore.
+keystorepass = "foo"
+
+#The password for keys - the same is used for each auto-generated key.
+keypass = "foo2"
+
+#THe distinguished name used for all keys.
+keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"
+"
+
