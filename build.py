@@ -220,9 +220,13 @@ for app in apps:
             # If a collision does occur later, we're going to have to
             # come up with a new alogrithm, AND rename all existing keys
             # in the keystore!
-            m = md5.new()
-            m.update(app['id'])
-            keyalias = m.hexdigest()[:8]
+            if keyaliases.has_key(app['id']):
+                # For this particular app, the key alias is overridden...
+                keyalias = keyaliases[app['id']]
+            else:
+                m = md5.new()
+                m.update(app['id'])
+                keyalias = m.hexdigest()[:8]
             print "Key alias: " + keyalias
 
             # See if we already have a key for this application, and

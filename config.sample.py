@@ -22,7 +22,12 @@ keystorepass = "foo"
 #The password for keys - the same is used for each auto-generated key.
 keypass = "foo2"
 
-#THe distinguished name used for all keys.
+#The distinguished name used for all keys.
 keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"
-"
+
+#Use this to override the auto-generated key aliases with specific ones
+#for particular applications. Normally, just leave it empty.
+keyaliases = {}
+keyaliases['com.example.app'] = 'example'
+
 
