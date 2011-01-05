@@ -41,6 +41,7 @@ def read_metadata():
         thisinfo['repotype'] = ''
         thisinfo['repo'] = ''
         thisinfo['builds'] = []
+        thisinfo['usebuilt'] = False
         f = open(metafile, 'r')
         mode = 0
         for line in f.readlines():
@@ -102,6 +103,9 @@ def read_metadata():
                             pp = p.split('=')
                             thisbuild[pp[0]] = pp[1]
                         thisinfo['builds'].append(thisbuild)
+                    elif field == "Use Built":
+                        if value == "Yes":
+                            thisinfo['usebuilt'] = True
                     else:
                         print "Unrecognised field " + field
                         sys.exit(1)

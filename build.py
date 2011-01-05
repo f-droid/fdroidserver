@@ -174,7 +174,7 @@ for app in apps:
 
                     #Delete unwanted file...
                     if thisbuild.has_key('rm'):
-                        os.remove(os.path.join(root_dir, thisbuild['rm']))
+                        os.remove(os.path.join(build_dir, thisbuild['rm']))
 
                     #Build the source tarball right before we build the relase...
                     tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'

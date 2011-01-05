@@ -63,6 +63,18 @@ if (repo_url is None or repo_name is None or
     print "See config.sample.py for details"
     sys.exit(1)
 
+# Get all apps...
+apps = read_metadata()
+
+# Copy apks and source tarballs for stuff we've built from source that
+# is flagged to be included in the repo...
+for app in apps:
+    if app['usebuilt']:
+        print "Copying built files for " + app['id']
+        src = os.path.join('built', app['id'] + "_*")
+        for file in glob.glob(src):
+            shutil.copy(file, 'repo/')
+
 # Gather information about all the apk files in the repo directory...
 apks = []
 for apkfile in glob.glob(os.path.join('repo','*.apk')):
@@ -145,9 +157,6 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
     apk.close()
 
     apks.append(thisinfo)
-
-# Get all apps...
-apps = read_metadata()
 
 # Some information from the apks needs to be applied up to the application
 # level. When doing this, we use the info from the most recent version's apk.
