@@ -8,5 +8,5 @@ Description:File sharing and management
 A powerful file sharing and management package that includes a file manager, FTP and
 HTTP servers and an SMB client.
 .
-Market Version:2.5.4
-Market Version Code:79
+Market Version:2.5.5
+Market Version Code:80

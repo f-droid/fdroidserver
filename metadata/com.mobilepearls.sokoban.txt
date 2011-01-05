@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPL
 Web Site:http://mobilepearls.com
 Source Code:https://github.com/mobilepearls/com.mobilepearls.sokoban
@@ -10,3 +11,5 @@ Repo Type:git
 Repo:https://github.com/mobilepearls/com.mobilepearls.sokoban.git
 Build Version:1.11,12,48e1976f9d9881adb70e
 
+Market Version:1.11
+Market Version Code:12

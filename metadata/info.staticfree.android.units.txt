@@ -1,0 +1,16 @@
+Use Built:Yes
+License:GPLv3
+Web Site:http://staticfree.info/projects/units/
+Source Code:http://staticfree.info/projects/units/
+Issue Tracker:
+Summary:Powerful unit converter
+Description:
+A powerful unit-aware calculator and converter inspired by GNU Units.
+.
+Repo Type:git
+Repo:git://staticfree.info/git/Units/
+Build Version:0.8,7,8be8c10c67152783b6871a70d077a0758e5086ba
+
+
+Market Version:0.8
+Market Version Code:7
