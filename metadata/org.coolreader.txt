@@ -1,7 +1,7 @@
 Use Built:Yes
 
 License:GPLv2
-Web Site:8be8c10c67152783b6871a70d077a0758e5086ba
+Web Site:http://crengine.sourceforge.net/a
 Source Code:http://sourceforge.net/scm/?type=git&group_id=191284
 Issue Tracker:http://sourceforge.net/tracker/?group_id=191284
 Summary:E-book reader.
@@ -13,7 +13,8 @@ Repo:git://crengine.git.sourceforge.net/gitroot/crengine/crengine
 
 #Has a conflicting (and invalid) target in build.properties - remove it
 Build Version:3.0.39-35,60,68ad007ac1272ef322fd61cb6591618723422380,subdir=android,rm=android/build.properties
+Build Version:3.0.40-1,64,cr3.0.40-1,subdir=android,rm=android/build.properties
 
 
-Market Version:3.0.39-35
-Market Version Code:60
+Market Version:3.0.40-1
+Market Version Code:64
