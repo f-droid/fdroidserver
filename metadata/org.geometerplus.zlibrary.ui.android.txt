@@ -7,5 +7,5 @@ Description:
 An e-book reader.
 .
 
-Market Version:0.99.2
-Market Version Code:9902
+Market Version:0.99.3
+Market Version Code:9903

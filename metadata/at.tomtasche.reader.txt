@@ -12,5 +12,5 @@ Repo:https://github.com/TomTasche/OpenOffice-Document-Reader.git
 Build Version:1.1.9,11,243eba4f441b3601de96
 
 
-Market Version:1.1.8
-Market Version Code:10
+Market Version:1.2
+Market Version Code:12
