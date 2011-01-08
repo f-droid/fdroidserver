@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv3
 Web Site:http://code.google.com/p/alogcat/
 Source Code:http://code.google.com/p/alogcat/source/checkout
