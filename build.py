@@ -25,6 +25,7 @@ import re
 import zipfile
 import tarfile
 import md5
+import shlex
 from xml.dom.minidom import Document
 from optparse import OptionParser
 
@@ -125,38 +126,45 @@ for app in apps:
 
 
                     # Optionally, the actual app source can be in a subdirectory...
+                    doupdate = True
                     if thisbuild.has_key('subdir'):
                         if app['repotype'] == 'svn' and repo.endswith("*"):
                             root_dir = build_dir
                             if subprocess.call(['svn', 'checkout',
                                     repo[:-1] + thisbuild['subdir'],
+                                    '-r', thisbuild['commit'],
                                     build_dir] + repouserargs) != 0:
                                 print "Svn checkout failed"
                                 sys.exit(1)
+                            # Because we're checking out for every version we build,
+                            # we've already checked out the repo at the correct revision
+                            # and don't need to update to it...
+                            doupdate = False
                         else:
                             root_dir = os.path.join(build_dir, thisbuild['subdir'])
                     else:
                         root_dir = build_dir
 
-                    if app['repotype'] == 'git':
-                        if subprocess.call(['git', 'checkout', thisbuild['commit']],
-                                cwd=build_dir) != 0:
-                            print "Git checkout failed"
-                            sys.exit(1)
-                    elif app['repotype'] == 'svn':
-                        if subprocess.call(['svn', 'update', '-r', thisbuild['commit']],
-                                cwd=build_dir) != 0:
-                            print "Svn update failed"
-                            sys.exit(1)
-                    elif app['repotype'] == 'hg':
-                        if subprocess.call(['hg', 'checkout', thisbuild['commit']],
-                                cwd=build_dir) != 0:
-                            print "Hg checkout failed"
-                            sys.exit(1)
+                    if doupdate:
+                        if app['repotype'] == 'git':
+                            if subprocess.call(['git', 'checkout', thisbuild['commit']],
+                                    cwd=build_dir) != 0:
+                                print "Git checkout failed"
+                                sys.exit(1)
+                        elif app['repotype'] == 'svn':
+                            if subprocess.call(['svn', 'update', '-r', thisbuild['commit']],
+                                    cwd=build_dir) != 0:
+                                print "Svn update failed"
+                                sys.exit(1)
+                        elif app['repotype'] == 'hg':
+                            if subprocess.call(['hg', 'checkout', thisbuild['commit']],
+                                    cwd=build_dir) != 0:
+                                print "Hg checkout failed"
+                                sys.exit(1)
 
-                    else:
-                        print "Invalid repo type " + app['repotype']
-                        sys.exit(1)
+                        else:
+                            print "Invalid repo type " + app['repotype']
+                            sys.exit(1)
 
                     # Generate (or update) the ant build file, build.xml...
                     parms = ['android','update','project','-p','.']
@@ -176,7 +184,7 @@ for app in apps:
                             print "Failed to amend build.properties"
                             sys.exit(1)
 
-                    #Update the local.properties file...
+                    # Update the local.properties file...
                     locprops = os.path.join(root_dir, 'local.properties')
                     f = open(locprops, 'r')
                     props = f.read()
@@ -194,11 +202,32 @@ for app in apps:
                     f.write(props)
                     f.close()
 
-                    #Delete unwanted file...
+                    # Insert version code and number into the manifest if necessary...
+                    if thisbuild.has_key('insertversion'):
+                        if subprocess.call(['sed','-i','s/' + thisbuild['insertversion'] +
+                            '/' + thisbuild['version'] +'/g',
+                            'AndroidManifest.xml'], cwd=root_dir) !=0:
+                            print "Failed to amend manifest"
+                            sys.exit(1)
+                    if thisbuild.has_key('insertvercode'):
+                        if subprocess.call(['sed','-i','s/' + thisbuild['insertvercode'] +
+                            '/' + thisbuild['vercode'] +'/g',
+                            'AndroidManifest.xml'], cwd=root_dir) !=0:
+                            print "Failed to amend manifest"
+                            sys.exit(1)
+
+                    # Delete unwanted file...
                     if thisbuild.has_key('rm'):
                         os.remove(os.path.join(build_dir, thisbuild['rm']))
 
-                    #Build the source tarball right before we build the relase...
+                    # Run a pre-build command if one is required...
+                    if thisbuild.has_key('prebuild'):
+                        if subprocess.call(shlex.split(thisbuild['prebuild']),
+                                cwd=root_dir) != 0:
+                            print "Error running pre-build command"
+                            sys.exit(1)
+
+                    # Build the source tarball right before we build the release...
                     tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
                     tarball = tarfile.open(os.path.join(built_dir,
                         tarname + '.tar.gz'), "w:gz")

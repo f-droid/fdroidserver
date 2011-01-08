@@ -118,6 +118,10 @@ configuration to the build. These are:
 		   AndroidManifest.xml.
  antcommand=xxx  - Specify an alternate ant command (target) instead of the
  		   default 'release'.
+ insertversion=x - If specified, the pattern 'x' in the AndroidManifest.xml is
+                   replaced with the version number for the build.
+ insertvercode=x - If specified, the pattern 'x' in the AndroidManifest.xml is
+                   replaced with the version code for the build.
 
 Another example, using extra parameters:
 
