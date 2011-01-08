@@ -81,6 +81,10 @@ repository URL - in this case the repository is checked out once per build
 version, with the subdir parameter in place of the *. This can be beneficial
 when dealing with very large SVN repositories.
 
+For a Subversion repo that requires authentication, you can precede the repo
+URL with username:password@ and those parameters will be passed as --username
+and --password to the SVN checkout command.
+
 ==Build Version==
 
 Any number of these fields can be present, each specifying a version to
@@ -112,6 +116,8 @@ configuration to the build. These are:
  		   build is done. The path is relative to the base of the
 		   build directory - i.e. the directory that contains
 		   AndroidManifest.xml.
+ antcommand=xxx  - Specify an alternate ant command (target) instead of the
+ 		   default 'release'.
 
 Another example, using extra parameters:
 

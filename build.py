@@ -86,18 +86,37 @@ for app in apps:
                     if os.path.exists(build_dir):
                         shutil.rmtree(build_dir)
 
+                    # Strip username/password out of repo address if specified (relevant
+                    # only for SVN) and store for use later.
+                    repo = app['repo']
+                    index = repo.find('@')
+                    if index != -1:
+                        username = repo[:index]
+                        repo = repo[index+1:]
+                        index = username.find(':')
+                        if index == -1:
+                            print "Password required with username"
+                            sys.exit(1)
+                        password = username[index+1:]
+                        username = username[:index]
+                        repouserargs = ['--username', username, 
+                                '--password', password, '--non-interactive']
+                    else:
+                        repouserargs = []
+
                     # Get the source code...
                     if app['repotype'] == 'git':
-                        if subprocess.call(['git', 'clone', app['repo'], build_dir]) != 0:
+                        if subprocess.call(['git', 'clone', repo, build_dir]) != 0:
                             print "Git clone failed"
                             sys.exit(1)
                     elif app['repotype'] == 'svn':
-                        if not app['repo'].endswith("*"):
-                            if subprocess.call(['svn', 'checkout', app['repo'], build_dir]) != 0:
+                        if not repo.endswith("*"):
+                            if subprocess.call(['svn', 'checkout', repo, build_dir] +
+                                    repouserargs) != 0:
                                 print "Svn checkout failed"
                                 sys.exit(1)
                     elif app['repotype'] == 'hg':
-                        if subprocess.call(['hg', 'clone', app['repo'], build_dir]) !=0:
+                        if subprocess.call(['hg', 'clone', repo, build_dir]) !=0:
                             print "Hg clone failed"
                             sys.exit(1)
                     else:
@@ -107,11 +126,11 @@ for app in apps:
 
                     # Optionally, the actual app source can be in a subdirectory...
                     if thisbuild.has_key('subdir'):
-                        if app['repotype'] == 'svn' and app['repo'].endswith("*"):
+                        if app['repotype'] == 'svn' and repo.endswith("*"):
                             root_dir = build_dir
                             if subprocess.call(['svn', 'checkout',
-                                    app['repo'][:-1] + thisbuild['subdir'],
-                                    build_dir]) != 0:
+                                    repo[:-1] + thisbuild['subdir'],
+                                    build_dir] + repouserargs) != 0:
                                 print "Svn checkout failed"
                                 sys.exit(1)
                         else:
@@ -157,20 +176,23 @@ for app in apps:
                             print "Failed to amend build.properties"
                             sys.exit(1)
 
-                    # Fix old-fashioned 'sdk-location' in local.properties by copying
+                    #Update the local.properties file...
+                    locprops = os.path.join(root_dir, 'local.properties')
+                    f = open(locprops, 'r')
+                    props = f.read()
+                    f.close()
+                    # Fix old-fashioned 'sdk-location' by copying
                     # from sdk.dir, if necessary...
                     if (thisbuild.has_key('oldsdkloc') and
                             thisbuild['oldsdkloc'] == "yes"):
-                        locprops = os.path.join(root_dir, 'local.properties')
-                        f = open(locprops, 'r')
-                        props = f.read()
-                        f.close()
                         sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
                             re.S|re.M).group(1)
                         props += "\nsdk-location=" + sdkloc + "\n"
-                        f = open(locprops, 'w')
-                        f.write(props)
-                        f.close()
+                    # Add ndk location...
+                    props+= "\nndk.dir=" + ndk_path + "\n"
+                    f = open(locprops, 'w')
+                    f.write(props)
+                    f.close()
 
                     #Delete unwanted file...
                     if thisbuild.has_key('rm'):
@@ -184,7 +206,11 @@ for app in apps:
                     tarball.close()
 
                     # Build the release...
-                    p = subprocess.Popen(['ant','release'], cwd=root_dir, 
+                    if thisbuild.has_key('antcommand'):
+                        antcommand = thisbuild['antcommand']
+                    else:
+                        antcommand = 'release'
+                    p = subprocess.Popen(['ant', antcommand], cwd=root_dir, 
                             stdout=subprocess.PIPE)
                     output = p.communicate()[0]
                     if p.returncode != 0:

@@ -4,6 +4,8 @@
 
 aapt_path = "/path/to/android-sdk-linux_86/platforms/android-4/tools/aapt"
 
+ndk_path = "/path/to/android-ndk-r5"
+
 repo_url = "http://f-droid.org/repo"
 repo_name = "FDroid"
 repo_icon = "fdroid-icon.png"
