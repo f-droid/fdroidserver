@@ -125,46 +125,46 @@ for app in apps:
                         sys.exit(1)
 
 
-                    # Optionally, the actual app source can be in a subdirectory...
-                    doupdate = True
-                    if thisbuild.has_key('subdir'):
-                        if app['repotype'] == 'svn' and repo.endswith("*"):
-                            root_dir = build_dir
-                            if subprocess.call(['svn', 'checkout',
-                                    repo[:-1] + thisbuild['subdir'],
-                                    '-r', thisbuild['commit'],
-                                    build_dir] + repouserargs) != 0:
-                                print "Svn checkout failed"
-                                sys.exit(1)
-                            # Because we're checking out for every version we build,
-                            # we've already checked out the repo at the correct revision
-                            # and don't need to update to it...
-                            doupdate = False
-                        else:
-                            root_dir = os.path.join(build_dir, thisbuild['subdir'])
-                    else:
+                # Optionally, the actual app source can be in a subdirectory...
+                doupdate = True
+                if thisbuild.has_key('subdir'):
+                    if app['repotype'] == 'svn' and repo.endswith("*"):
                         root_dir = build_dir
-
-                    if doupdate:
-                        if app['repotype'] == 'git':
-                            if subprocess.call(['git', 'checkout', thisbuild['commit']],
-                                    cwd=build_dir) != 0:
-                                print "Git checkout failed"
-                                sys.exit(1)
-                        elif app['repotype'] == 'svn':
-                            if subprocess.call(['svn', 'update', '-r', thisbuild['commit']],
-                                    cwd=build_dir) != 0:
-                                print "Svn update failed"
-                                sys.exit(1)
-                        elif app['repotype'] == 'hg':
-                            if subprocess.call(['hg', 'checkout', thisbuild['commit']],
-                                    cwd=build_dir) != 0:
-                                print "Hg checkout failed"
-                                sys.exit(1)
-
-                        else:
-                            print "Invalid repo type " + app['repotype']
+                        if subprocess.call(['svn', 'checkout',
+                                repo[:-1] + thisbuild['subdir'],
+                                '-r', thisbuild['commit'],
+                                build_dir] + repouserargs) != 0:
+                            print "Svn checkout failed"
                             sys.exit(1)
+                        # Because we're checking out for every version we build,
+                        # we've already checked out the repo at the correct revision
+                        # and don't need to update to it...
+                        doupdate = False
+                    else:
+                        root_dir = os.path.join(build_dir, thisbuild['subdir'])
+                else:
+                    root_dir = build_dir
+
+                if doupdate:
+                    if app['repotype'] == 'git':
+                        if subprocess.call(['git', 'checkout', thisbuild['commit']],
+                                cwd=build_dir) != 0:
+                            print "Git checkout failed"
+                            sys.exit(1)
+                    elif app['repotype'] == 'svn':
+                        if subprocess.call(['svn', 'update', '-r', thisbuild['commit']],
+                                cwd=build_dir) != 0:
+                            print "Svn update failed"
+                            sys.exit(1)
+                    elif app['repotype'] == 'hg':
+                        if subprocess.call(['hg', 'checkout', thisbuild['commit']],
+                                cwd=build_dir) != 0:
+                            print "Hg checkout failed"
+                            sys.exit(1)
+
+                    else:
+                        print "Invalid repo type " + app['repotype']
+                        sys.exit(1)
 
                     # Generate (or update) the ant build file, build.xml...
                     if (not thisbuild.has_key('update')) or thisbuild['update'] == 'yes':
