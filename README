@@ -15,6 +15,22 @@
 8. Transfer the repo directory to the appropriate http server. The script
    in upload.sh is an example of how to do this.
 
+=Build System Requirements=
+
+To be able to auto-build packages, you're going to need:
+
+*Linux
+*Python
+*A fully functional Android SDK with all SDK platforms and tools
+*The Android NDK
+*Ant
+*Ant Contrib Tasks (Debian package ant-contrib)
+*JavaCC (Debian package javacc)
+*A keystore for holding release keys. (Safe, secure and well backed up!)
+
+You then need to create a config.py (copy config.sample.py and follow the
+instructions) to specify the locations of some of these things.
+
 =MetaData=
 
 Information used by update.py to compile the public index comes from two
@@ -111,7 +127,11 @@ configuration to the build. These are:
 		   is configured to put it elsewhere, that can be specified
 		   here, relative to the base of the checked out repo..
  oldsdkloc=yes   - The sdk location in the repo is in an old format
- target=<target> - Specifies a particular SDK target, when the source doesn't
+ target=<target> - Specifies a particular SDK target, when the source doesn't.
+                   This is likely to cause the whole build.xml to be rewritten,
+		   which is fine if it's a 'standard' android file or doesn't
+		   already exist, but not a good idea if it's heavily
+		   customised.
  rm=<relpath>    - Specifies the relative path of file to delete before the
  		   build is done. The path is relative to the base of the
 		   build directory - i.e. the directory that contains
@@ -122,6 +142,11 @@ configuration to the build. These are:
                    replaced with the version number for the build.
  insertvercode=x - If specified, the pattern 'x' in the AndroidManifest.xml is
                    replaced with the version code for the build.
+ update=no	   By default, 'android update project' is used to generate or
+ 		   update the build.xml file. Specifying update=no bypasses
+		   that.
+ initfun=yes	   Enables a selection of mad hacks to make com.funambol.android
+                   build. Probably not useful for any other application.
 
 Another example, using extra parameters:
 

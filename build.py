@@ -167,14 +167,15 @@ for app in apps:
                             sys.exit(1)
 
                     # Generate (or update) the ant build file, build.xml...
-                    parms = ['android','update','project','-p','.']
-                    parms.append('--subprojects')
-                    if thisbuild.has_key('target'):
-                        parms.append('-t')
-                        parms.append(thisbuild['target'])
-                    if subprocess.call(parms, cwd=root_dir) != 0:
-                        print "Failed to update project"
-                        sys.exit(1)
+                    if (not thisbuild.has_key('update')) or thisbuild['update'] == 'yes':
+                        parms = ['android','update','project','-p','.']
+                        parms.append('--subprojects')
+                        if thisbuild.has_key('target'):
+                            parms.append('-t')
+                            parms.append(thisbuild['target'])
+                        if subprocess.call(parms, cwd=root_dir) != 0:
+                            print "Failed to update project"
+                            sys.exit(1)
 
                     # If the app has ant set up to sign the release, we need to switch
                     # that off, because we want the unsigned apk...
@@ -186,21 +187,22 @@ for app in apps:
 
                     # Update the local.properties file...
                     locprops = os.path.join(root_dir, 'local.properties')
-                    f = open(locprops, 'r')
-                    props = f.read()
-                    f.close()
-                    # Fix old-fashioned 'sdk-location' by copying
-                    # from sdk.dir, if necessary...
-                    if (thisbuild.has_key('oldsdkloc') and
-                            thisbuild['oldsdkloc'] == "yes"):
-                        sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
-                            re.S|re.M).group(1)
-                        props += "\nsdk-location=" + sdkloc + "\n"
-                    # Add ndk location...
-                    props+= "\nndk.dir=" + ndk_path + "\n"
-                    f = open(locprops, 'w')
-                    f.write(props)
-                    f.close()
+                    if os.path.exists(locprops):
+                        f = open(locprops, 'r')
+                        props = f.read()
+                        f.close()
+                        # Fix old-fashioned 'sdk-location' by copying
+                        # from sdk.dir, if necessary...
+                        if (thisbuild.has_key('oldsdkloc') and
+                                thisbuild['oldsdkloc'] == "yes"):
+                            sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
+                                re.S|re.M).group(1)
+                            props += "\nsdk-location=" + sdkloc + "\n"
+                        # Add ndk location...
+                        props+= "\nndk.dir=" + ndk_path + "\n"
+                        f = open(locprops, 'w')
+                        f.write(props)
+                        f.close()
 
                     # Insert version code and number into the manifest if necessary...
                     if thisbuild.has_key('insertversion'):
@@ -227,6 +229,94 @@ for app in apps:
                             print "Error running pre-build command"
                             sys.exit(1)
 
+                    # Special case init functions for funambol...
+                    if (thisbuild.has_key('initfun') and
+                            thisbuild['initfun'] == "yes"):
+
+                        if subprocess.call(['sed','-i','s@' +
+                            '<taskdef resource="net/sf/antcontrib/antcontrib.properties" />' +
+                            '@' +
+                            '<taskdef resource="net/sf/antcontrib/antcontrib.properties">' +
+                            '<classpath>' +
+                            '<pathelement location="/usr/share/java/ant-contrib.jar"/>' +
+                            '</classpath>' +
+                            '</taskdef>' +
+                            '@g',
+                            'build.xml'], cwd=root_dir) !=0:
+                            print "Failed to amend build.xml"
+                            sys.exit(1)
+
+                        if subprocess.call(['sed','-i','s@' +
+                            '\${user.home}/funambol/build/android/build.properties' +
+                            '@' +
+                            'build.properties' +
+                            '@g',
+                            'build.xml'], cwd=root_dir) !=0:
+                            print "Failed to amend build.xml"
+                            sys.exit(1)
+
+                        buildxml = os.path.join(root_dir, 'build.xml')
+                        f = open(buildxml, 'r')
+                        xml = f.read()
+                        f.close()
+                        xmlout = ""
+                        mode = 0
+                        for line in xml.splitlines():
+                            if mode == 0:
+                                if line.find("jarsigner") != -1:
+                                    mode = 1
+                                else:
+                                    xmlout += line + "\n"
+                            else:
+                                if line.find("/exec") != -1:
+                                    mode += 1
+                                    if mode == 3:
+                                        mode =0
+                        f = open(buildxml, 'w')
+                        f.write(xmlout)
+                        f.close()
+
+                        if subprocess.call(['sed','-i','s@' +
+                            'platforms/android-2.0' +
+                            '@' +
+                            'platforms/android-8' +
+                            '@g',
+                            'build.xml'], cwd=root_dir) !=0:
+                            print "Failed to amend build.xml"
+                            sys.exit(1)
+
+                        shutil.copyfile(
+                                os.path.join(root_dir, "build.properties.example"),
+                                os.path.join(root_dir, "build.properties"))
+
+                        if subprocess.call(['sed','-i','s@' +
+                            'javacchome=.*'+
+                            '@' +
+                            'javacchome=' + javacc_path +
+                            '@g',
+                            'build.properties'], cwd=root_dir) !=0:
+                            print "Failed to amend build.properties"
+                            sys.exit(1)
+
+                        if subprocess.call(['sed','-i','s@' +
+                            'sdk-folder=.*'+
+                            '@' +
+                            'sdk-folder=' + sdk_path +
+                            '@g',
+                            'build.properties'], cwd=root_dir) !=0:
+                            print "Failed to amend build.properties"
+                            sys.exit(1)
+
+                        if subprocess.call(['sed','-i','s@' +
+                            'android.sdk.version.*'+
+                            '@' +
+                            'android.sdk.version=2.0' +
+                            '@g',
+                            'build.properties'], cwd=root_dir) !=0:
+                            print "Failed to amend build.properties"
+                            sys.exit(1)
+
+
                     # Build the source tarball right before we build the release...
                     tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
                     tarball = tarfile.open(os.path.join(built_dir,
@@ -252,7 +342,12 @@ for app in apps:
                         bindir = os.path.join(build_dir, thisbuild['bindir'])
                     else:
                         bindir = os.path.join(root_dir, 'bin')
-                    src = re.match(r".*^.*Creating (\S+) for release.*$.*", output,
+                    if thisbuild.has_key('initfun') and thisbuild['initfun'] == "yes":
+                        # Special case (again!) for funambol...
+                        src = ("funambol-android-sync-client-" +
+                                thisbuild['version'] + "-unsigned.apk")
+                    else:
+                        src = re.match(r".*^.*Creating (\S+) for release.*$.*", output,
                             re.S|re.M).group(1)
                     src = os.path.join(bindir, src)
 

@@ -3,8 +3,11 @@
 #your system configuration.
 
 aapt_path = "/path/to/android-sdk-linux_86/platforms/android-4/tools/aapt"
-
+sdk_path = "/path/to/android-sdk-linux_86"
 ndk_path = "/path/to/android-ndk-r5"
+
+#You probably don't need to change this...
+javacc_path = "/usr/share/java"
 
 repo_url = "http://f-droid.org/repo"
 repo_name = "FDroid"
