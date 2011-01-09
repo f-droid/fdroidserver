@@ -1,0 +1,16 @@
+Use Built:Yes
+License:AGPL
+Web Site:
+Source Code:
+Issue Tracker:
+Summary:FOSS application repository
+Description:Sync Client
+Funambol sync client.
+.
+Repo Type:svn
+Repo:guest:x@https://android-client.forge.funambol.org/svn/android-client/*
+
+Build Version:9.0.1,9,1437,subdir=tags/9.0.1,update=no,initfun=yes
+
+
+
