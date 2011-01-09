@@ -3,7 +3,7 @@ License:AGPL
 Web Site:
 Source Code:
 Issue Tracker:
-Summary:FOSS application repository
+Summary:Funambol sync client
 Description:Sync Client
 Funambol sync client.
 .
