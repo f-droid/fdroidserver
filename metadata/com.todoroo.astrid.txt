@@ -10,4 +10,4 @@ It comes with features like reminders, tagging and widgets.
 Repo Type:git
 Repo:git://gitorious.org/astrid-foss/astrid-foss.git
 Build Version:3.6.4,170,692ed969d4ed923887b106b9e89af7eceb0f51dd
-
+Disabled:Submission in progress
