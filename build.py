@@ -120,6 +120,10 @@ for app in apps:
                         if subprocess.call(['hg', 'clone', repo, build_dir]) !=0:
                             print "Hg clone failed"
                             sys.exit(1)
+                    elif app['repotype'] == 'bzr':
+                        if subprocess.call(['bzr', 'branch', repo, build_dir]) !=0:
+                            print "Bzr branch failed"
+                            sys.exit(1)
                     else:
                         print "Invalid repo type " + app['repotype'] + " in " + app['id']
                         sys.exit(1)
@@ -163,7 +167,11 @@ for app in apps:
                                 cwd=build_dir) != 0:
                             print "Hg checkout failed"
                             sys.exit(1)
-
+                    elif app['repotype'] == 'bzr':
+                        if subprocess.call(['bzr', 'revert', '-r', thisbuild['commit']],
+                                cwd=build_dir) != 0:
+                            print "Bzr revert failed"
+                            sys.exit(1)
                     else:
                         print "Invalid repo type " + app['repotype']
                         sys.exit(1)

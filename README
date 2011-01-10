@@ -26,6 +26,7 @@ To be able to auto-build packages, you're going to need:
 *Ant
 *Ant Contrib Tasks (Debian package ant-contrib)
 *JavaCC (Debian package javacc)
+*VCS clients: svn, git, hg, bzr
 *A keystore for holding release keys. (Safe, secure and well backed up!)
 
 You then need to create a config.py (copy config.sample.py and follow the
@@ -84,7 +85,7 @@ The type of repository - for automatic building from source. If this is not
 specified, automatic building is disabled for this application. Possible
 values are:
 
-  git, svn, hg
+  git, svn, hg, bzr
 
 ==Repo==
 
