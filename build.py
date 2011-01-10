@@ -326,6 +326,17 @@ for app in apps:
                 tarball.add(build_dir, tarname)
                 tarball.close()
 
+                # Build native stuff if required...
+                if thisbuild.has_key('buildjni') and thisbuild['buildjni'] == 'yes':
+                    ndkbuild = os.path.join(ndk_path, "ndk-build")
+                    p = subprocess.Popen([ndkbuild], cwd=root_dir,
+                            stdout=subprocess.PIPE)
+                    output = p.communicate()[0]
+                    if p.returncode != 0:
+                        print output
+                        print "NDK build failed"
+                        sys.exit(1)
+
                 # Build the release...
                 if thisbuild.has_key('antcommand'):
                     antcommand = thisbuild['antcommand']
@@ -338,6 +349,7 @@ for app in apps:
                     print output
                     print "Build failed"
                     sys.exit(1)
+                print "Build successful"
 
                 # Find the apk name in the output...
                 if thisbuild.has_key('bindir'):

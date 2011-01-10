@@ -147,6 +147,8 @@ configuration to the build. These are:
 		   that.
  initfun=yes	   Enables a selection of mad hacks to make com.funambol.android
                    build. Probably not useful for any other application.
+ buildjni=yes      Enables building of native code via the ndk-build script before
+ 		   doing the main ant build.
 
 Another example, using extra parameters:
 
