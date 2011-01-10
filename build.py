@@ -124,12 +124,14 @@ for app in apps:
                         print "Invalid repo type " + app['repotype'] + " in " + app['id']
                         sys.exit(1)
 
-
                 # Optionally, the actual app source can be in a subdirectory...
                 doupdate = True
                 if thisbuild.has_key('subdir'):
                     if app['repotype'] == 'svn' and repo.endswith("*"):
                         root_dir = build_dir
+                        # Remove the build directory if it already exists...
+                        if os.path.exists(build_dir):
+                            shutil.rmtree(build_dir)
                         if subprocess.call(['svn', 'checkout',
                                 repo[:-1] + thisbuild['subdir'],
                                 '-r', thisbuild['commit'],
@@ -147,9 +149,9 @@ for app in apps:
 
                 if doupdate:
                     if app['repotype'] == 'git':
-                        if subprocess.call(['git', 'checkout', thisbuild['commit']],
+                        if subprocess.call(['git', 'reset', '--hard', thisbuild['commit']],
                                 cwd=build_dir) != 0:
-                            print "Git checkout failed"
+                            print "Git reset failed"
                             sys.exit(1)
                     elif app['repotype'] == 'svn':
                         if subprocess.call(['svn', 'update', '-r', thisbuild['commit']],
@@ -166,276 +168,276 @@ for app in apps:
                         print "Invalid repo type " + app['repotype']
                         sys.exit(1)
 
-                    # Generate (or update) the ant build file, build.xml...
-                    if (not thisbuild.has_key('update')) or thisbuild['update'] == 'yes':
-                        parms = ['android','update','project','-p','.']
-                        parms.append('--subprojects')
-                        if thisbuild.has_key('target'):
-                            parms.append('-t')
-                            parms.append(thisbuild['target'])
-                        if subprocess.call(parms, cwd=root_dir) != 0:
-                            print "Failed to update project"
-                            sys.exit(1)
-
-                    # If the app has ant set up to sign the release, we need to switch
-                    # that off, because we want the unsigned apk...
-                    if os.path.exists(os.path.join(root_dir, 'build.properties')):
-                        if subprocess.call(['sed','-i','s/^key.store/#/',
-                            'build.properties'], cwd=root_dir) !=0:
-                            print "Failed to amend build.properties"
-                            sys.exit(1)
-
-                    # Update the local.properties file...
-                    locprops = os.path.join(root_dir, 'local.properties')
-                    if os.path.exists(locprops):
-                        f = open(locprops, 'r')
-                        props = f.read()
-                        f.close()
-                        # Fix old-fashioned 'sdk-location' by copying
-                        # from sdk.dir, if necessary...
-                        if (thisbuild.has_key('oldsdkloc') and
-                                thisbuild['oldsdkloc'] == "yes"):
-                            sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
-                                re.S|re.M).group(1)
-                            props += "\nsdk-location=" + sdkloc + "\n"
-                        # Add ndk location...
-                        props+= "\nndk.dir=" + ndk_path + "\n"
-                        f = open(locprops, 'w')
-                        f.write(props)
-                        f.close()
-
-                    # Insert version code and number into the manifest if necessary...
-                    if thisbuild.has_key('insertversion'):
-                        if subprocess.call(['sed','-i','s/' + thisbuild['insertversion'] +
-                            '/' + thisbuild['version'] +'/g',
-                            'AndroidManifest.xml'], cwd=root_dir) !=0:
-                            print "Failed to amend manifest"
-                            sys.exit(1)
-                    if thisbuild.has_key('insertvercode'):
-                        if subprocess.call(['sed','-i','s/' + thisbuild['insertvercode'] +
-                            '/' + thisbuild['vercode'] +'/g',
-                            'AndroidManifest.xml'], cwd=root_dir) !=0:
-                            print "Failed to amend manifest"
-                            sys.exit(1)
-
-                    # Delete unwanted file...
-                    if thisbuild.has_key('rm'):
-                        os.remove(os.path.join(build_dir, thisbuild['rm']))
-
-                    # Run a pre-build command if one is required...
-                    if thisbuild.has_key('prebuild'):
-                        if subprocess.call(shlex.split(thisbuild['prebuild']),
-                                cwd=root_dir) != 0:
-                            print "Error running pre-build command"
-                            sys.exit(1)
-
-                    # Special case init functions for funambol...
-                    if (thisbuild.has_key('initfun') and
-                            thisbuild['initfun'] == "yes"):
-
-                        if subprocess.call(['sed','-i','s@' +
-                            '<taskdef resource="net/sf/antcontrib/antcontrib.properties" />' +
-                            '@' +
-                            '<taskdef resource="net/sf/antcontrib/antcontrib.properties">' +
-                            '<classpath>' +
-                            '<pathelement location="/usr/share/java/ant-contrib.jar"/>' +
-                            '</classpath>' +
-                            '</taskdef>' +
-                            '@g',
-                            'build.xml'], cwd=root_dir) !=0:
-                            print "Failed to amend build.xml"
-                            sys.exit(1)
-
-                        if subprocess.call(['sed','-i','s@' +
-                            '\${user.home}/funambol/build/android/build.properties' +
-                            '@' +
-                            'build.properties' +
-                            '@g',
-                            'build.xml'], cwd=root_dir) !=0:
-                            print "Failed to amend build.xml"
-                            sys.exit(1)
-
-                        buildxml = os.path.join(root_dir, 'build.xml')
-                        f = open(buildxml, 'r')
-                        xml = f.read()
-                        f.close()
-                        xmlout = ""
-                        mode = 0
-                        for line in xml.splitlines():
-                            if mode == 0:
-                                if line.find("jarsigner") != -1:
-                                    mode = 1
-                                else:
-                                    xmlout += line + "\n"
-                            else:
-                                if line.find("/exec") != -1:
-                                    mode += 1
-                                    if mode == 3:
-                                        mode =0
-                        f = open(buildxml, 'w')
-                        f.write(xmlout)
-                        f.close()
-
-                        if subprocess.call(['sed','-i','s@' +
-                            'platforms/android-2.0' +
-                            '@' +
-                            'platforms/android-8' +
-                            '@g',
-                            'build.xml'], cwd=root_dir) !=0:
-                            print "Failed to amend build.xml"
-                            sys.exit(1)
-
-                        shutil.copyfile(
-                                os.path.join(root_dir, "build.properties.example"),
-                                os.path.join(root_dir, "build.properties"))
-
-                        if subprocess.call(['sed','-i','s@' +
-                            'javacchome=.*'+
-                            '@' +
-                            'javacchome=' + javacc_path +
-                            '@g',
-                            'build.properties'], cwd=root_dir) !=0:
-                            print "Failed to amend build.properties"
-                            sys.exit(1)
-
-                        if subprocess.call(['sed','-i','s@' +
-                            'sdk-folder=.*'+
-                            '@' +
-                            'sdk-folder=' + sdk_path +
-                            '@g',
-                            'build.properties'], cwd=root_dir) !=0:
-                            print "Failed to amend build.properties"
-                            sys.exit(1)
-
-                        if subprocess.call(['sed','-i','s@' +
-                            'android.sdk.version.*'+
-                            '@' +
-                            'android.sdk.version=2.0' +
-                            '@g',
-                            'build.properties'], cwd=root_dir) !=0:
-                            print "Failed to amend build.properties"
-                            sys.exit(1)
-
-
-                    # Build the source tarball right before we build the release...
-                    tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
-                    tarball = tarfile.open(os.path.join(built_dir,
-                        tarname + '.tar.gz'), "w:gz")
-                    tarball.add(build_dir, tarname)
-                    tarball.close()
-
-                    # Build the release...
-                    if thisbuild.has_key('antcommand'):
-                        antcommand = thisbuild['antcommand']
-                    else:
-                        antcommand = 'release'
-                    p = subprocess.Popen(['ant', antcommand], cwd=root_dir, 
-                            stdout=subprocess.PIPE)
-                    output = p.communicate()[0]
-                    if p.returncode != 0:
-                        print output
-                        print "Build failed"
+                # Generate (or update) the ant build file, build.xml...
+                if (not thisbuild.has_key('update')) or thisbuild['update'] == 'yes':
+                    parms = ['android','update','project','-p','.']
+                    parms.append('--subprojects')
+                    if thisbuild.has_key('target'):
+                        parms.append('-t')
+                        parms.append(thisbuild['target'])
+                    if subprocess.call(parms, cwd=root_dir) != 0:
+                        print "Failed to update project"
                         sys.exit(1)
 
-                    # Find the apk name in the output...
-                    if thisbuild.has_key('bindir'):
-                        bindir = os.path.join(build_dir, thisbuild['bindir'])
-                    else:
-                        bindir = os.path.join(root_dir, 'bin')
-                    if thisbuild.has_key('initfun') and thisbuild['initfun'] == "yes":
-                        # Special case (again!) for funambol...
-                        src = ("funambol-android-sync-client-" +
-                                thisbuild['version'] + "-unsigned.apk")
-                    else:
-                        src = re.match(r".*^.*Creating (\S+) for release.*$.*", output,
+                # If the app has ant set up to sign the release, we need to switch
+                # that off, because we want the unsigned apk...
+                if os.path.exists(os.path.join(root_dir, 'build.properties')):
+                    if subprocess.call(['sed','-i','s/^key.store/#/',
+                        'build.properties'], cwd=root_dir) !=0:
+                        print "Failed to amend build.properties"
+                        sys.exit(1)
+
+                # Update the local.properties file...
+                locprops = os.path.join(root_dir, 'local.properties')
+                if os.path.exists(locprops):
+                    f = open(locprops, 'r')
+                    props = f.read()
+                    f.close()
+                    # Fix old-fashioned 'sdk-location' by copying
+                    # from sdk.dir, if necessary...
+                    if (thisbuild.has_key('oldsdkloc') and
+                            thisbuild['oldsdkloc'] == "yes"):
+                        sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
                             re.S|re.M).group(1)
-                    src = os.path.join(bindir, src)
+                        props += "\nsdk-location=" + sdkloc + "\n"
+                    # Add ndk location...
+                    props+= "\nndk.dir=" + ndk_path + "\n"
+                    f = open(locprops, 'w')
+                    f.write(props)
+                    f.close()
 
-                    # By way of a sanity check, make sure the version and version
-                    # code in our new apk match what we expect...
-                    p = subprocess.Popen([aapt_path,'dump','badging',
-                       src], stdout=subprocess.PIPE)
-                    output = p.communicate()[0]
-                    vercode = None
-                    version = None
-                    for line in output.splitlines():
-                        if line.startswith("package:"):
-                            pat = re.compile(".*versionCode='([0-9]*)'.*")
-                            vercode = re.match(pat, line).group(1)
-                            pat = re.compile(".*versionName='([^']*)'.*")
-                            version = re.match(pat, line).group(1)
-
-                    # Some apps (e.g. Timeriffic) have had the bonkers idea of
-                    # including the entire changelog in the version number. Remove
-                    # it so we can compare. (TODO: might be better to remove it
-                    # before we compile, in fact)
-                    index = version.find(" //")
-                    if index != -1:
-                        version = version[:index]
-
-                    if (version != thisbuild['version'] or
-                            vercode != thisbuild['vercode']):
-                        print "Unexpected version/version code in output"
+                # Insert version code and number into the manifest if necessary...
+                if thisbuild.has_key('insertversion'):
+                    if subprocess.call(['sed','-i','s/' + thisbuild['insertversion'] +
+                        '/' + thisbuild['version'] +'/g',
+                        'AndroidManifest.xml'], cwd=root_dir) !=0:
+                        print "Failed to amend manifest"
+                        sys.exit(1)
+                if thisbuild.has_key('insertvercode'):
+                    if subprocess.call(['sed','-i','s/' + thisbuild['insertvercode'] +
+                        '/' + thisbuild['vercode'] +'/g',
+                        'AndroidManifest.xml'], cwd=root_dir) !=0:
+                        print "Failed to amend manifest"
                         sys.exit(1)
 
-                    # Copy the unsigned apk to our 'built' directory for further
-                    # processing...
-                    shutil.copyfile(src, dest_unsigned)
+                # Delete unwanted file...
+                if thisbuild.has_key('rm'):
+                    os.remove(os.path.join(build_dir, thisbuild['rm']))
 
-                    # Figure out the key alias name we'll use. Only the first 8
-                    # characters are significant, so we'll use the first 8 from
-                    # the MD5 of the app's ID and hope there are no collisions.
-                    # If a collision does occur later, we're going to have to
-                    # come up with a new alogrithm, AND rename all existing keys
-                    # in the keystore!
-                    if keyaliases.has_key(app['id']):
-                        # For this particular app, the key alias is overridden...
-                        keyalias = keyaliases[app['id']]
-                    else:
-                        m = md5.new()
-                        m.update(app['id'])
-                        keyalias = m.hexdigest()[:8]
-                    print "Key alias: " + keyalias
+                # Run a pre-build command if one is required...
+                if thisbuild.has_key('prebuild'):
+                    if subprocess.call(shlex.split(thisbuild['prebuild']),
+                            cwd=root_dir) != 0:
+                        print "Error running pre-build command"
+                        sys.exit(1)
 
-                    # See if we already have a key for this application, and
-                    # if not generate one...
-                    p = subprocess.Popen(['keytool', '-list',
-                        '-alias', keyalias, '-keystore', keystore,
-                        '-storepass', keystorepass], stdout=subprocess.PIPE)
-                    output = p.communicate()[0]
-                    if p.returncode !=0:
-                        print "Key does not exist - generating..."
-                        p = subprocess.Popen(['keytool', '-genkey',
-                            '-keystore', keystore, '-alias', keyalias,
-                            '-keyalg', 'RSA', '-keysize', '2048',
-                            '-validity', '10000',
-                            '-storepass', keystorepass, '-keypass', keypass,
-                            '-dname', keydname], stdout=subprocess.PIPE)
-                        output = p.communicate()[0]
-                        print output
-                        if p.returncode != 0:
-                            print "Failed to generate key"
-                            sys.exit(1)
+                # Special case init functions for funambol...
+                if (thisbuild.has_key('initfun') and
+                        thisbuild['initfun'] == "yes"):
 
-                    # Sign the application...
-                    p = subprocess.Popen(['jarsigner', '-keystore', keystore,
-                           '-storepass', keystorepass, '-keypass', keypass,
-                            dest_unsigned, keyalias], stdout=subprocess.PIPE)
+                    if subprocess.call(['sed','-i','s@' +
+                        '<taskdef resource="net/sf/antcontrib/antcontrib.properties" />' +
+                        '@' +
+                        '<taskdef resource="net/sf/antcontrib/antcontrib.properties">' +
+                        '<classpath>' +
+                        '<pathelement location="/usr/share/java/ant-contrib.jar"/>' +
+                        '</classpath>' +
+                        '</taskdef>' +
+                        '@g',
+                        'build.xml'], cwd=root_dir) !=0:
+                        print "Failed to amend build.xml"
+                        sys.exit(1)
+
+                    if subprocess.call(['sed','-i','s@' +
+                        '\${user.home}/funambol/build/android/build.properties' +
+                        '@' +
+                        'build.properties' +
+                        '@g',
+                        'build.xml'], cwd=root_dir) !=0:
+                        print "Failed to amend build.xml"
+                        sys.exit(1)
+
+                    buildxml = os.path.join(root_dir, 'build.xml')
+                    f = open(buildxml, 'r')
+                    xml = f.read()
+                    f.close()
+                    xmlout = ""
+                    mode = 0
+                    for line in xml.splitlines():
+                        if mode == 0:
+                            if line.find("jarsigner") != -1:
+                                mode = 1
+                            else:
+                                xmlout += line + "\n"
+                        else:
+                            if line.find("/exec") != -1:
+                                mode += 1
+                                if mode == 3:
+                                    mode =0
+                    f = open(buildxml, 'w')
+                    f.write(xmlout)
+                    f.close()
+
+                    if subprocess.call(['sed','-i','s@' +
+                        'platforms/android-2.0' +
+                        '@' +
+                        'platforms/android-8' +
+                        '@g',
+                        'build.xml'], cwd=root_dir) !=0:
+                        print "Failed to amend build.xml"
+                        sys.exit(1)
+
+                    shutil.copyfile(
+                            os.path.join(root_dir, "build.properties.example"),
+                            os.path.join(root_dir, "build.properties"))
+
+                    if subprocess.call(['sed','-i','s@' +
+                        'javacchome=.*'+
+                        '@' +
+                        'javacchome=' + javacc_path +
+                        '@g',
+                        'build.properties'], cwd=root_dir) !=0:
+                        print "Failed to amend build.properties"
+                        sys.exit(1)
+
+                    if subprocess.call(['sed','-i','s@' +
+                        'sdk-folder=.*'+
+                        '@' +
+                        'sdk-folder=' + sdk_path +
+                        '@g',
+                        'build.properties'], cwd=root_dir) !=0:
+                        print "Failed to amend build.properties"
+                        sys.exit(1)
+
+                    if subprocess.call(['sed','-i','s@' +
+                        'android.sdk.version.*'+
+                        '@' +
+                        'android.sdk.version=2.0' +
+                        '@g',
+                        'build.properties'], cwd=root_dir) !=0:
+                        print "Failed to amend build.properties"
+                        sys.exit(1)
+
+
+                # Build the source tarball right before we build the release...
+                tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
+                tarball = tarfile.open(os.path.join(built_dir,
+                    tarname + '.tar.gz'), "w:gz")
+                tarball.add(build_dir, tarname)
+                tarball.close()
+
+                # Build the release...
+                if thisbuild.has_key('antcommand'):
+                    antcommand = thisbuild['antcommand']
+                else:
+                    antcommand = 'release'
+                p = subprocess.Popen(['ant', antcommand], cwd=root_dir, 
+                        stdout=subprocess.PIPE)
+                output = p.communicate()[0]
+                if p.returncode != 0:
+                    print output
+                    print "Build failed"
+                    sys.exit(1)
+
+                # Find the apk name in the output...
+                if thisbuild.has_key('bindir'):
+                    bindir = os.path.join(build_dir, thisbuild['bindir'])
+                else:
+                    bindir = os.path.join(root_dir, 'bin')
+                if thisbuild.has_key('initfun') and thisbuild['initfun'] == "yes":
+                    # Special case (again!) for funambol...
+                    src = ("funambol-android-sync-client-" +
+                            thisbuild['version'] + "-unsigned.apk")
+                else:
+                    src = re.match(r".*^.*Creating (\S+) for release.*$.*", output,
+                        re.S|re.M).group(1)
+                src = os.path.join(bindir, src)
+
+                # By way of a sanity check, make sure the version and version
+                # code in our new apk match what we expect...
+                p = subprocess.Popen([aapt_path,'dump','badging',
+                   src], stdout=subprocess.PIPE)
+                output = p.communicate()[0]
+                vercode = None
+                version = None
+                for line in output.splitlines():
+                    if line.startswith("package:"):
+                        pat = re.compile(".*versionCode='([0-9]*)'.*")
+                        vercode = re.match(pat, line).group(1)
+                        pat = re.compile(".*versionName='([^']*)'.*")
+                        version = re.match(pat, line).group(1)
+
+                # Some apps (e.g. Timeriffic) have had the bonkers idea of
+                # including the entire changelog in the version number. Remove
+                # it so we can compare. (TODO: might be better to remove it
+                # before we compile, in fact)
+                index = version.find(" //")
+                if index != -1:
+                    version = version[:index]
+
+                if (version != thisbuild['version'] or
+                        vercode != thisbuild['vercode']):
+                    print "Unexpected version/version code in output"
+                    sys.exit(1)
+
+                # Copy the unsigned apk to our 'built' directory for further
+                # processing...
+                shutil.copyfile(src, dest_unsigned)
+
+                # Figure out the key alias name we'll use. Only the first 8
+                # characters are significant, so we'll use the first 8 from
+                # the MD5 of the app's ID and hope there are no collisions.
+                # If a collision does occur later, we're going to have to
+                # come up with a new alogrithm, AND rename all existing keys
+                # in the keystore!
+                if keyaliases.has_key(app['id']):
+                    # For this particular app, the key alias is overridden...
+                    keyalias = keyaliases[app['id']]
+                else:
+                    m = md5.new()
+                    m.update(app['id'])
+                    keyalias = m.hexdigest()[:8]
+                print "Key alias: " + keyalias
+
+                # See if we already have a key for this application, and
+                # if not generate one...
+                p = subprocess.Popen(['keytool', '-list',
+                    '-alias', keyalias, '-keystore', keystore,
+                    '-storepass', keystorepass], stdout=subprocess.PIPE)
+                output = p.communicate()[0]
+                if p.returncode !=0:
+                    print "Key does not exist - generating..."
+                    p = subprocess.Popen(['keytool', '-genkey',
+                        '-keystore', keystore, '-alias', keyalias,
+                        '-keyalg', 'RSA', '-keysize', '2048',
+                        '-validity', '10000',
+                        '-storepass', keystorepass, '-keypass', keypass,
+                        '-dname', keydname], stdout=subprocess.PIPE)
                     output = p.communicate()[0]
                     print output
                     if p.returncode != 0:
-                        print "Failed to sign application"
+                        print "Failed to generate key"
                         sys.exit(1)
 
-                    # Zipalign it...
-                    p = subprocess.Popen(['zipalign', '-v', '4',
-                            dest_unsigned, dest], stdout=subprocess.PIPE)
-                    output = p.communicate()[0]
-                    print output
-                    if p.returncode != 0:
-                        print "Failed to align application"
-                        sys.exit(1)
-                    os.remove(dest_unsigned)
+                # Sign the application...
+                p = subprocess.Popen(['jarsigner', '-keystore', keystore,
+                       '-storepass', keystorepass, '-keypass', keypass,
+                        dest_unsigned, keyalias], stdout=subprocess.PIPE)
+                output = p.communicate()[0]
+                print output
+                if p.returncode != 0:
+                    print "Failed to sign application"
+                    sys.exit(1)
+
+                # Zipalign it...
+                p = subprocess.Popen(['zipalign', '-v', '4',
+                        dest_unsigned, dest], stdout=subprocess.PIPE)
+                output = p.communicate()[0]
+                print output
+                if p.returncode != 0:
+                    print "Failed to align application"
+                    sys.exit(1)
+                os.remove(dest_unsigned)
 
 print "Finished."
 
