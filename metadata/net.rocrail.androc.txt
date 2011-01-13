@@ -12,3 +12,5 @@ Repo Type:bzr
 Repo:lp:rocrail/androc
 Build Version:1.1.219,219,219
 
+Market Version:1.1.219
+Market Version Code:219
