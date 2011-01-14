@@ -1,0 +1,15 @@
+License:GPL3
+Web Site:https://github.com/talklittle/reddit-is-fun
+Source Code:https://github.com/talklittle/reddit-is-fun
+Issue Tracker:https://github.com/talklittle/reddit-is-fun/issues
+Summary:Reddit app
+Description:
+An app for the social news website Reddit.
+.
+
+
+Repo Type:git
+Repo:https://github.com/talklittle/reddit-is-fun.git
+
+Build Version:1.1.2a,67,d507af7facaf46323804,prebuild=rsync -r lib/ libs
+
