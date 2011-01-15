@@ -1,4 +1,4 @@
-Disabled:What's the latest version? 0.7.4 is very old and there's no consistent source repo version for it
+Use Built:Yes
 License:GPLv2
 Web Site:http://yaxim.org
 Source Code:https://github.com/pfleidi/yaxim
@@ -8,6 +8,6 @@ Description:
 An XMPP client.
 .
 Repo Type:git
-Repo:https://github.com/pfleidi/yaxim.git
-Build Version:0.7.4,4,hmmm
+Repo:https://github.com/ge0rg/yaxim.git
+Build Version:0.7.4,5,0.7.4,oldsdkloc=yes
 
