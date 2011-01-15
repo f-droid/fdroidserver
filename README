@@ -128,7 +128,12 @@ configuration to the build. These are:
  		   bin subdirectory below the ant build files. If the project
 		   is configured to put it elsewhere, that can be specified
 		   here, relative to the base of the checked out repo..
- oldsdkloc=yes   - The sdk location in the repo is in an old format
+ oldsdkloc=yes   - The sdk location in the repo is in an old format, or the
+                   build.xml is expecting such. The 'new' format is sdk.dir
+		   while the VERY OLD format is sdk-location. Typically, if
+		   you get a message along the lines of:
+		        "com.android.ant.SetupTask cannot be found"
+		   when trying to build, then try enabling this option.
  target=<target> - Specifies a particular SDK target, when the source doesn't.
                    This is likely to cause the whole build.xml to be rewritten,
 		   which is fine if it's a 'standard' android file or doesn't
