@@ -156,6 +156,9 @@ configuration to the build. These are:
                    build. Probably not useful for any other application.
  buildjni=yes      Enables building of native code via the ndk-build script before
  		   doing the main ant build.
+ submodules=yes    Use if the project (git only) has submodules - causes git
+ 		   submodule init and update to be executed after the source is
+		   cloned.
 
 Another example, using extra parameters:
 

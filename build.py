@@ -176,6 +176,18 @@ for app in apps:
                         print "Invalid repo type " + app['repotype']
                         sys.exit(1)
 
+                # Initialise submodules if requred...
+                if (thisbuild.has_key('submodules') and
+                        thisbuild['submodules'] == "yes"):
+                        if subprocess.call(['git', 'submodule', 'init'],
+                                cwd=build_dir) != 0:
+                            print "Git submodule init failed"
+                            sys.exit(1)
+                        if subprocess.call(['git', 'submodule', 'update'],
+                                cwd=build_dir) != 0:
+                            print "Git submodule update failed"
+                            sys.exit(1)
+
                 # Generate (or update) the ant build file, build.xml...
                 if (not thisbuild.has_key('update')) or thisbuild['update'] == 'yes':
                     parms = ['android','update','project','-p','.']
