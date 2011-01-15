@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPL3
 Web Site:https://github.com/talklittle/reddit-is-fun
 Source Code:https://github.com/talklittle/reddit-is-fun
