@@ -9,5 +9,6 @@ widgets, but without Astrid features such as ads and proprietary add-ons.
 .
 Repo Type:git
 Repo:git://gitorious.org/astrid-foss/astrid-foss.git
-Build Version:3.6.4,170,692ed969d4ed923887b106b9e89af7eceb0f51dd
+Build Version:3.6.4,170,692ed969d4ed923887b106b9e89af7eceb0f51dd,submodules=yes,prebuild=sed -i "s@\.\./astridApi@astridApi@" default.properties
 Disabled:Submission in progress
+
