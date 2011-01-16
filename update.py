@@ -142,6 +142,17 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
     thisinfo['md5'] = m.hexdigest()
     f.close()
 
+    # Get the signature (or md5 of, to be precise)...
+    p = subprocess.Popen(['java', 'getsig', os.path.join('..', apkfile)]
+            , cwd='getsig', stdout=subprocess.PIPE)
+    output = p.communicate()[0]
+    if options.verbose:
+        print output
+    if p.returncode != 0 or not output.startswith('Result:'):
+        print "ERROR: Failed to get apk signature"
+        sys.exit(1)
+    thisinfo['sig'] = output[7:].strip()
+
     # Extract the icon file...
     apk = zipfile.ZipFile(apkfile, 'r')
     thisinfo['icon'] = (thisinfo['id'] + '.' +
@@ -261,6 +272,7 @@ for app in apps:
                 addElement('versioncode', apk['versioncode'], doc, apkel)
                 addElement('apkname', apk['apkname'], doc, apkel)
                 addElement('hash', apk['md5'], doc, apkel)
+                addElement('sig', apk['sig'], doc, apkel)
                 addElement('size', str(apk['size']), doc, apkel)
                 addElement('sdkver', str(apk['sdkversion']), doc, apkel)
                 perms = ""
