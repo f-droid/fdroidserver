@@ -215,7 +215,7 @@ for apk in apks:
             print "       " + apk['name'] + " - " + apk['version']  
 
 #Sort the app list by name, then the web site doesn't have to by default:
-apps = sorted(apps, key=lambda app: app['name'])
+apps = sorted(apps, key=lambda app: app['name'].upper())
 
 # Create the index
 doc = Document()
@@ -324,7 +324,7 @@ for app in apps:
         apps_disabled += 1
 
 of = open(os.path.join('repo','index.xml'), 'wb')
-output = doc.toxml()
+output = doc.toprettyxml(' ')
 of.write(output)
 of.close()
 
