@@ -9,5 +9,5 @@ discover a secret power source on a mysterious island. With a retro style and
 unique, challenging game play, Replica Island is a new take on the classic
 platformer genre. 
 .
-Market Version:1.3
-Market Version Code:13
+Market Version:1.4
+Market Version Code:14

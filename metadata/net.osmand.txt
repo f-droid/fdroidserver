@@ -7,5 +7,5 @@ Description:
 Navigation and routing based on OpenStreetMap, including the ability for
 OSM contributors to edit directly.
 .
-Market Version:0.5.1
-Market Version Code:24
+Market Version:0.5.2
+Market Version Code:25

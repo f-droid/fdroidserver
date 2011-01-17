@@ -10,5 +10,5 @@ Gmail.
 
 
 
-Market Version:1.3.7
-Market Version Code:1307
+Market Version:1.4.0
+Market Version Code:1400

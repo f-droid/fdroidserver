@@ -1,0 +1,15 @@
+Use Built:Yes
+License:GPLv3
+Web Site:https://launchpad.net/tomdroid
+Source Code:https://code.launchpad.net/~tomdroid-maintainers/tomdroid/main
+Issue Tracker:https://bugs.launchpad.net/tomdroid
+Summary:Note taker
+Description:
+A note taking application. A port of the popular desktop application Tomboy.
+.
+Repo Type:bzr
+Repo:lp:tomdroid
+Build Version:0.4.1,6,214
+
+Market Version:0.4.1
+Market Version Code:6

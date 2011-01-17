@@ -7,8 +7,8 @@ Description:
 An e-book reader.
 .
 
-Market Version:0.99.3
-Market Version Code:9903
+Market Version:0.99.4
+Market Version Code:9904
 
 Repo Type:git
 Repo:https://github.com/geometer/FBReaderJ.git
