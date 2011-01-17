@@ -324,7 +324,7 @@ for app in apps:
         apps_disabled += 1
 
 of = open(os.path.join('repo','index.xml'), 'wb')
-output = doc.toprettyxml(' ')
+output = doc.toxml()
 of.write(output)
 of.close()
 
