@@ -6,6 +6,8 @@ Issue Tracker:https://bugs.launchpad.net/tomdroid
 Summary:Note taker
 Description:
 A note taking application. A port of the popular desktop application Tomboy.
+
+This is an early release, and does not yet have editing support!
 .
 Repo Type:bzr
 Repo:lp:tomdroid
