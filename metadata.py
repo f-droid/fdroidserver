@@ -34,6 +34,7 @@ def read_metadata():
         thisinfo['web'] = ''
         thisinfo['source'] = ''
         thisinfo['tracker'] = ''
+        thisinfo['donate'] = ''
         thisinfo['disabled'] = None
         thisinfo['antifeatures'] = None
         thisinfo['marketversion'] = ''
@@ -70,6 +71,8 @@ def read_metadata():
                         thisinfo['web'] = value
                     elif field == 'Issue Tracker':
                         thisinfo['tracker'] = value
+                    elif field == 'Donate':
+                        thisinfo['donate'] = value
                     elif field == 'Disabled':
                         thisinfo['disabled'] = value
                     elif field == 'AntiFeatures':

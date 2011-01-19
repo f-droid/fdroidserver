@@ -2,6 +2,7 @@ License:GPLv2+
 Web Site:http://www.fbreader.org/FBReaderJ/
 Source Code:http://www.fbreader.org/FBReaderJ/
 Issue Tracker:
+Donate:http://www.fbreader.org/donation/make.php
 Summary:An e-book reader
 Description:
 An e-book reader.

@@ -71,6 +71,11 @@ something human-friendly. Machine-readable source-code is covered in the
 The URL for the application's issue tracker. Optional, since not all
 applications have one.
 
+==Donate==
+
+The URL to donate to the project. This could be the project's donate page
+if it has one, or perhaps even a direct PayPal link.
+
 ==Summary==
 
 A brief summary of what the application is.
