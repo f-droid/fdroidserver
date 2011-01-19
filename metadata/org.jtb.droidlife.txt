@@ -6,5 +6,11 @@ Summary:Conway's Game of Life
 Description:
 An implementation of Conway's Game of Life.
 .
+
+Repo Type:svn
+Repo:http://droidlife.googlecode.com/svn/trunk/
+
+Build Version:2.4.1,21,22
+
 Market Version:2.4.1
 Market Version Code:21
