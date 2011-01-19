@@ -1,4 +1,4 @@
-License:GPLv3
+License:GPLv3+
 Web Site:http://www.kirit.com/Missile%20intercept
 Source Code:http://www.kirit.com/Missile%20intercept
 Issue Tracker:http://support.felspar.com/Project:/Missile%20intercept

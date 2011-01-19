@@ -1,5 +1,5 @@
 Use Built:Yes
-License:GPLv3
+License:GPLv3+
 Web Site:http://staticfree.info/projects/units/
 Source Code:http://staticfree.info/projects/units/
 Issue Tracker:

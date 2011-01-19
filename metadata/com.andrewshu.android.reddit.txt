@@ -1,5 +1,5 @@
 Use Built:Yes
-License:GPL3
+License:GPLv3+
 Web Site:https://github.com/talklittle/reddit-is-fun
 Source Code:https://github.com/talklittle/reddit-is-fun
 Issue Tracker:https://github.com/talklittle/reddit-is-fun/issues

@@ -1,4 +1,4 @@
-License:GPLv3
+License:GPLv3+
 Web Site:http://github.com/eleybourn/Book-Catalogue/wiki
 Source Code:http://github.com/eleybourn/Book-Catalogue
 Issue Tracker:http://github.com/eleybourn/Book-Catalogue/issues

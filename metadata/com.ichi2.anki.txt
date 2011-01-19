@@ -1,4 +1,4 @@
-License:GPLv3
+License:GPLv3+
 Web Site:http://ichi2.net/anki/wiki/AnkiDroid
 Source Code:http://github.com/nicolas-raoul/Anki-Android/
 Issue Tracker:http://code.google.com/p/ankidroid/issues
