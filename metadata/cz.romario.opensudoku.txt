@@ -1,0 +1,16 @@
+Use Built:Yes
+License:GPLv3
+Web Site:http://code.google.com/p/opensudoku-android/
+Source Code:http://code.google.com/p/opensudoku-android/source/checkout
+Issue Tracker:http://code.google.com/p/opensudoku-android/issues/list
+Summary:Sudoku game
+Description:
+OpenSudoku is a simple open source sudoku game. It's designed to be controlled both
+by finger and keyboard. It's preloaded with 90 puzzles in 3 difficulty levels. More
+puzzles can be downloaded from the web and it also allows you to enter your own.
+.
+Repo Type:svn
+Repo:http://opensudoku-android.googlecode.com/svn/trunk/OpenSudoku
+
+Build Version:1.1.4,1104,409
+
