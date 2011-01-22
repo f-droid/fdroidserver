@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv3
 Web Site:http://code.google.com/p/mathdoku/
 Source Code:http://code.google.com/p/mathdoku/source/checkout
@@ -6,5 +7,11 @@ Summary:Sudoku-like game based on KenKen(TM)
 Description:
 A sudoku-like game with a mathematical twist. Based on KenKen(TM).
 .
-Market Version:1.7
-Market Version Code:56
+
+Repo Type:svn
+Repo:http://mathdoku.googlecode.com/svn/trunk/
+
+Build Version:1.8,70,70
+
+Market Version:1.8
+Market Version Code:70

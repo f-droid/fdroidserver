@@ -1,3 +1,4 @@
+Disabled:Still various non-free issues to be resolved
 Use Built:Yes
 License:GPLv2
 Web Site:http://gitorious.org/astrid-foss

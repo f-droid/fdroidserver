@@ -18,5 +18,8 @@ Build Version:3.0.40-6,69,cr3.0.40-6,subdir=android,rm=android/build.properties,
 Build Version:3.0.41-3,75,cr3.0.41-3,subdir=android,rm=android/build.properties,buildjni=yes
 Build Version:3.0.41-9,81,cr3.0.41-9,subdir=android,rm=android/build.properties,buildjni=yes
 
-Market Version:3.0.41-9
-Market Version Code:81
+#Note: 3.0.42-3 is untagged in the repo, and the source does not compile at what would
+#appear to be the corresponding commit.
+
+Market Version:3.0.42-3
+Market Version Code:83
