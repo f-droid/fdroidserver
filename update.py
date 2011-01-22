@@ -255,6 +255,8 @@ for app in apps:
         addElement('web', app['web'], doc, apel)
         addElement('source', app['source'], doc, apel)
         addElement('tracker', app['tracker'], doc, apel)
+        if app['donate'] != None:
+            addElement('donate', app['donate'], doc, apel)
         addElement('marketversion', app['marketversion'], doc, apel)
         addElement('marketvercode', app['marketvercode'], doc, apel)
         if not (app['antifeatures'] is None):

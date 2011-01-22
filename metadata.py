@@ -34,7 +34,7 @@ def read_metadata():
         thisinfo['web'] = ''
         thisinfo['source'] = ''
         thisinfo['tracker'] = ''
-        thisinfo['donate'] = ''
+        thisinfo['donate'] = None
         thisinfo['disabled'] = None
         thisinfo['antifeatures'] = None
         thisinfo['marketversion'] = ''

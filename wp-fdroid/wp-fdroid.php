@@ -18,7 +18,7 @@ class FDroid
     // Our text domain, for internationalisation
     var $textdom='wp-fdroid';
 
-        var $site_path = "/var/www/fdroid";
+    var $site_path = "/home/fdroid/public_html";
 
     // Constructor
     function FDroid() {
@@ -127,6 +127,9 @@ class FDroid
                         case "tracker":
                             $issues=$el;
                             break;
+                        case "donate":
+                            $donate=$el;
+                            break;
                         case "web":
                             $web=$el;
                             break;
@@ -179,6 +182,8 @@ class FDroid
                     $out.='<b>Issue Tracker:</b> <a href="'.$issues.'">'.$issues.'</a><br />';
                 if(strlen($source)>0)
                     $out.='<b>Source Code:</b> <a href="'.$source.'">'.$source.'</a><br />';
+                if($donate && strlen($donate)>0)
+                    $out.='<b>Donate:</b> <a href="'.$donate.'">'.$donate.'</a><br />';
                 $out.="</p>";
 
                 $out.="<h3>Packages</h3>";
