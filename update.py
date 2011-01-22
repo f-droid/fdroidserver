@@ -100,7 +100,7 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
             pat = re.compile(".*name='([a-zA-Z0-9.]*)'.*")
             thisinfo['id'] = re.match(pat, line).group(1)
             pat = re.compile(".*versionCode='([0-9]*)'.*")
-            thisinfo['versioncode'] = re.match(pat, line).group(1)
+            thisinfo['versioncode'] = int(re.match(pat, line).group(1))
             pat = re.compile(".*versionName='([^']*)'.*")
             thisinfo['version'] = re.match(pat, line).group(1)
         if line.startswith("application:"):
@@ -156,7 +156,7 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
     # Extract the icon file...
     apk = zipfile.ZipFile(apkfile, 'r')
     thisinfo['icon'] = (thisinfo['id'] + '.' +
-        thisinfo['versioncode'] + '.png')
+        str(thisinfo['versioncode']) + '.png')
     iconfilename = os.path.join(icon_dir, thisinfo['icon'])
     try:
         iconfile = open(iconfilename, 'wb')
@@ -262,33 +262,42 @@ for app in apps:
 
         gotmarketver = False
 
+        # Get a list of the apks for this app...
+        apklist = []
         for apk in apks:
             if apk['id'] == app['id']:
-                if apk['versioncode'] == app['marketvercode']:
+                if str(apk['versioncode']) == app['marketvercode']:
                     gotmarketver = True
-                apkel = doc.createElement("package")
-                apel.appendChild(apkel)
-                addElement('version', apk['version'], doc, apkel)
-                addElement('versioncode', apk['versioncode'], doc, apkel)
-                addElement('apkname', apk['apkname'], doc, apkel)
-                addElement('hash', apk['md5'], doc, apkel)
-                addElement('sig', apk['sig'], doc, apkel)
-                addElement('size', str(apk['size']), doc, apkel)
-                addElement('sdkver', str(apk['sdkversion']), doc, apkel)
-                perms = ""
-                for p in apk['permissions']:
-                    if len(perms) > 0:
-                        perms += ","
-                    perms += p
+                apklist.append(apk)
+
+        # Sort the apk list into version order, just so the web site
+        # doesn't have to do any work by default...
+        apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
+
+        for apk in apklist:
+            apkel = doc.createElement("package")
+            apel.appendChild(apkel)
+            addElement('version', apk['version'], doc, apkel)
+            addElement('versioncode', str(apk['versioncode']), doc, apkel)
+            addElement('apkname', apk['apkname'], doc, apkel)
+            addElement('hash', apk['md5'], doc, apkel)
+            addElement('sig', apk['sig'], doc, apkel)
+            addElement('size', str(apk['size']), doc, apkel)
+            addElement('sdkver', str(apk['sdkversion']), doc, apkel)
+            perms = ""
+            for p in apk['permissions']:
                 if len(perms) > 0:
-                    addElement('permissions', perms, doc, apkel)
-                features = ""
-                for f in apk['features']:
-                    if len(features) > 0:
-                        features += ","
-                    features += f
+                    perms += ","
+                perms += p
+            if len(perms) > 0:
+                addElement('permissions', perms, doc, apkel)
+            features = ""
+            for f in apk['features']:
                 if len(features) > 0:
-                    addElement('features', features, doc, apkel)
+                    features += ","
+                features += f
+            if len(features) > 0:
+                addElement('features', features, doc, apkel)
 
         if options.buildreport:
             if len(app['builds']) == 0:
@@ -318,7 +327,7 @@ for app in apps:
                 print "         Got:"
                 for apk in apks:
                     if apk['id'] == app['id']:
-                        print "           " + apk['versioncode'] + " - " + apk['version']
+                        print "           " + str(apk['versioncode']) + " - " + apk['version']
 
     else:
         apps_disabled += 1
