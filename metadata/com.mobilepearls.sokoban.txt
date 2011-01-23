@@ -1,5 +1,5 @@
 Use Built:Yes
-License:GPL
+License:GPLv2
 Web Site:http://mobilepearls.com
 Source Code:https://github.com/mobilepearls/com.mobilepearls.sokoban
 Issue Tracker:https://github.com/mobilepearls/com.mobilepearls.sokoban/issues

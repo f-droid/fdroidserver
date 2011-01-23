@@ -1,4 +1,4 @@
-License:GPLv3
+License:GPLv2+
 Web Site:http://www.linphone.org
 Source Code:http://www.linphone.org/eng/download/git.html
 Summary:SIP (VOIP) client

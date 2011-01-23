@@ -1,6 +1,6 @@
 Disabled:Sends device info and other data to a web server without permission
 Use Built:Yes
-License:GPLv3
+License:GPLv3+
 Web Site:http://tomtasche.at/p/OpenOffice%20Document%20Reader
 Source Code:https://github.com/TomTasche/OpenOffice-Document-Reader
 Issue Tracker:https://github.com/TomTasche/OpenOffice-Document-Reader/issues

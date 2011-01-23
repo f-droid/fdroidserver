@@ -1,4 +1,4 @@
-License:GPLv3
+License:GPLv3+
 Web Site:http://code.google.com/p/swiftp/
 Source Code:http://code.google.com/p/swiftp/source/checkout
 Issue Tracker:http://code.google.com/p/swiftp/issues/list
