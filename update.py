@@ -244,6 +244,7 @@ for app in apps:
     if app['disabled'] is None:
 
         # Get a list of the apks for this app...
+        gotmarketver = False
         apklist = []
         for apk in apks:
             if apk['id'] == app['id']:
@@ -274,8 +275,6 @@ for app in apps:
             addElement('marketvercode', app['marketvercode'], doc, apel)
             if not (app['antifeatures'] is None):
                 addElement('antifeatures', app['antifeatures'], doc, apel)
-
-            gotmarketver = False
 
             # Sort the apk list into version order, just so the web site
             # doesn't have to do any work by default...
