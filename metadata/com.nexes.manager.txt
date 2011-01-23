@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv3
 Web Site:http://github.com/nexes/Android-File-Manager
 Source Code:http://github.com/nexes/Android-File-Manager
@@ -6,5 +7,11 @@ Summary:A simple file browser and manager
 Description:
 A simple file browser and manager.
 .
+
+Repo Type:git
+Repo:https://github.com/nexes/Android-File-Manager.git
+
+Build Version:2.0.0,4,f55ed171435570fa8d72
+
 Market Version:2.0.0
 Market Version Code:4
