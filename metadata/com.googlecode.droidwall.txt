@@ -6,6 +6,8 @@ Issue Tracker:http://code.google.com/p/droidwall/issues/list
 Summary:Firewall
 Description:
 A Firewall frontend based on iptables
+
+NOTE: Root access is required to use this application.
 .
 
 
