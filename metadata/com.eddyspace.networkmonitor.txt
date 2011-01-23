@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv3+
 Web Site:http://anetmon.sourceforge.net/
 Source Code:http://sourceforge.net/projects/anetmon/develop
@@ -9,3 +10,6 @@ CSV file to assist in troubleshooting.
 .
 Repo Type:svn
 Repo:https://anetmon.svn.sourceforge.net/svnroot/anetmon/
+
+Build Version:0.2-beta,2,17
+
