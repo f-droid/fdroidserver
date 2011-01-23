@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv3
 Web Site:http://code.google.com/p/droidwall/
 Source Code:http://code.google.com/p/droidwall/source/
@@ -10,6 +11,6 @@ A Firewall frontend based on iptables
 
 Repo Type:svn
 Repo:http://droidwall.googlecode.com/svn/trunk/
-Use Built:yes
+
 Build Version:1.4.6,146,144
 
