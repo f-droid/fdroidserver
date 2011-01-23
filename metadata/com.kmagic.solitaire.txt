@@ -10,3 +10,5 @@ undo, animated card movement, and statistic/score tracking.
 .
 Repo Type:svn
 Repo:http://solitaire-for-android.googlecode.com/svn/trunk/
+Market Version:1.12.2
+Market Version Code:450

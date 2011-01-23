@@ -8,3 +8,5 @@ A tiny widget that displays battery level both numerically and graphically.
 .
 Repo Type:svn
 Repo:http://quick-settings.googlecode.com/svn/trunk/quick-battery/
+Market Version:0.8.2
+Market Version Code:201010020

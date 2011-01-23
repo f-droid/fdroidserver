@@ -9,3 +9,5 @@ support for bookmarks and easy navigation.
 .
 Repo Type:git
 Repo:https://github.com/tcoxon/XkcdViewer.git
+Market Version:2.1.2
+Market Version Code:15

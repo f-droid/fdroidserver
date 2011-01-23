@@ -11,3 +11,5 @@ week.
 .
 Repo Type:svn
 Repo:http://app-soundmanager.googlecode.com/svn/trunk/
+Market Version:2.0.0
+Market Version Code:18

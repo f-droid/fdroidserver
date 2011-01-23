@@ -10,3 +10,5 @@ are also supported.
 .
 Repo Type:svn
 Repo:http://andless.googlecode.com/svn/trunk/
+Market Version:1.2.3
+Market Version Code:5

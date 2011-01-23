@@ -10,3 +10,5 @@ controls.
 .
 Repo Type:svn
 Repo:http://quick-settings.googlecode.com/svn/trunk/quick-settings/
+Market Version:1.9.8 p2
+Market Version Code:201012061
