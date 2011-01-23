@@ -1,0 +1,10 @@
+License:GPLv3+
+Web Site:http://code.google.com/p/andblock/
+Source Code:https://github.com/felixb/adBlock
+Issue Tracker:http://code.google.com/p/andblock/issues/list
+Summary:Ad-blocking HTTP proxy
+Description:
+Blocks advertisements on the web by filtering requests by URL.
+.
+Repo Type:git
+Repo:https://github.com/felixb/adBlock.git

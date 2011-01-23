@@ -1,0 +1,11 @@
+License:GPLv3+
+Web Site:http://anetmon.sourceforge.net/
+Source Code:http://sourceforge.net/projects/anetmon/develop
+Issue Tracker:http://sourceforge.net/tracker/?group_id=288036
+Summary:Network event logger
+Description:
+Shows various network status information and optionally logs it to a
+CSV file to assist in troubleshooting.
+.
+Repo Type:svn
+Repo:https://anetmon.svn.sourceforge.net/svnroot/anetmon/

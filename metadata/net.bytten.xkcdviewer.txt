@@ -1,0 +1,11 @@
+License:GPLv2+
+Web Site:https://github.com/tcoxon/XkcdViewer
+Source Code:https://github.com/tcoxon/XkcdViewer
+Issue Tracker:https://github.com/tcoxon/XkcdViewer/issues
+Summary:Viewer for the xkcd.com webcomic
+Description:
+Shows comics from xkcd.com, including alt-text. Also provides
+support for bookmarks and easy navigation.
+.
+Repo Type:git
+Repo:https://github.com/tcoxon/XkcdViewer.git

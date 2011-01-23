@@ -1,0 +1,7 @@
+License:Apache2
+Web Site:http://gorry.haun.org/android/aicia/
+Source Code:http://gorry.haun.org/android/aicia/dist/old/
+Summary:IRC client
+Description:
+Internet Relay Chat client with a twin-pane view.
+.
