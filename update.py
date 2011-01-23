@@ -237,32 +237,11 @@ root.appendChild(repoel)
 
 apps_inrepo = 0
 apps_disabled = 0
+apps_nopkg = 0
 
 for app in apps:
 
     if app['disabled'] is None:
-        apps_inrepo += 1
-        apel = doc.createElement("application")
-        apel.setAttribute("id", app['id'])
-        root.appendChild(apel)
-
-        addElement('id', app['id'], doc, apel)
-        addElement('name', app['name'], doc, apel)
-        addElement('summary', app['summary'], doc, apel)
-        addElement('icon', app['icon'], doc, apel)
-        addElement('description', app['description'], doc, apel)
-        addElement('license', app['license'], doc, apel)
-        addElement('web', app['web'], doc, apel)
-        addElement('source', app['source'], doc, apel)
-        addElement('tracker', app['tracker'], doc, apel)
-        if app['donate'] != None:
-            addElement('donate', app['donate'], doc, apel)
-        addElement('marketversion', app['marketversion'], doc, apel)
-        addElement('marketvercode', app['marketvercode'], doc, apel)
-        if not (app['antifeatures'] is None):
-            addElement('antifeatures', app['antifeatures'], doc, apel)
-
-        gotmarketver = False
 
         # Get a list of the apks for this app...
         apklist = []
@@ -272,34 +251,60 @@ for app in apps:
                     gotmarketver = True
                 apklist.append(apk)
 
-        # Sort the apk list into version order, just so the web site
-        # doesn't have to do any work by default...
-        apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
+        if len(apklist) == 0:
+            apps_nopkg += 1
+        else:
+            apps_inrepo += 1
+            apel = doc.createElement("application")
+            apel.setAttribute("id", app['id'])
+            root.appendChild(apel)
 
-        for apk in apklist:
-            apkel = doc.createElement("package")
-            apel.appendChild(apkel)
-            addElement('version', apk['version'], doc, apkel)
-            addElement('versioncode', str(apk['versioncode']), doc, apkel)
-            addElement('apkname', apk['apkname'], doc, apkel)
-            addElement('hash', apk['md5'], doc, apkel)
-            addElement('sig', apk['sig'], doc, apkel)
-            addElement('size', str(apk['size']), doc, apkel)
-            addElement('sdkver', str(apk['sdkversion']), doc, apkel)
-            perms = ""
-            for p in apk['permissions']:
+            addElement('id', app['id'], doc, apel)
+            addElement('name', app['name'], doc, apel)
+            addElement('summary', app['summary'], doc, apel)
+            addElement('icon', app['icon'], doc, apel)
+            addElement('description', app['description'], doc, apel)
+            addElement('license', app['license'], doc, apel)
+            addElement('web', app['web'], doc, apel)
+            addElement('source', app['source'], doc, apel)
+            addElement('tracker', app['tracker'], doc, apel)
+            if app['donate'] != None:
+                addElement('donate', app['donate'], doc, apel)
+            addElement('marketversion', app['marketversion'], doc, apel)
+            addElement('marketvercode', app['marketvercode'], doc, apel)
+            if not (app['antifeatures'] is None):
+                addElement('antifeatures', app['antifeatures'], doc, apel)
+
+            gotmarketver = False
+
+            # Sort the apk list into version order, just so the web site
+            # doesn't have to do any work by default...
+            apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
+
+            for apk in apklist:
+                apkel = doc.createElement("package")
+                apel.appendChild(apkel)
+                addElement('version', apk['version'], doc, apkel)
+                addElement('versioncode', str(apk['versioncode']), doc, apkel)
+                addElement('apkname', apk['apkname'], doc, apkel)
+                addElement('hash', apk['md5'], doc, apkel)
+                addElement('sig', apk['sig'], doc, apkel)
+                addElement('size', str(apk['size']), doc, apkel)
+                addElement('sdkver', str(apk['sdkversion']), doc, apkel)
+                perms = ""
+                for p in apk['permissions']:
+                    if len(perms) > 0:
+                        perms += ","
+                    perms += p
                 if len(perms) > 0:
-                    perms += ","
-                perms += p
-            if len(perms) > 0:
-                addElement('permissions', perms, doc, apkel)
-            features = ""
-            for f in apk['features']:
+                    addElement('permissions', perms, doc, apkel)
+                features = ""
+                for f in apk['features']:
+                    if len(features) > 0:
+                        features += ","
+                    features += f
                 if len(features) > 0:
-                    features += ","
-                features += f
-            if len(features) > 0:
-                addElement('features', features, doc, apkel)
+                    addElement('features', features, doc, apkel)
 
         if options.buildreport:
             if len(app['builds']) == 0:
@@ -346,5 +351,6 @@ shutil.copyfile(repo_icon, iconfilename)
 print "Finished."
 print str(apps_inrepo) + " apps in repo"
 print str(apps_disabled) + " disabled"
+print str(apps_nopkg) + " with no packages"
 print str(warnings) + " warnings"
 
