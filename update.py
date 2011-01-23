@@ -183,7 +183,8 @@ for app in apps:
         if app['name'] is None:
             app['name'] = app['id']
         app['icon'] = ''
-        print "WARNING: Application " + app['id'] + " has no packages"
+        if app['disabled'] is None:
+            print "WARNING: Application " + app['id'] + " has no packages"
     else:
         if app['name'] is None:
             app['name'] = bestapk['name']
