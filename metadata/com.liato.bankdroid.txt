@@ -1,0 +1,11 @@
+License:Apache2
+Web Site:http://www.swedroid.se/forum/showthread.php?t=11108
+Source Code:https://github.com/liato/android-bankdroid
+Issue Tracker:https://github.com/liato/android-bankdroid/issues
+Summary:Banking application for Swedish banks
+Description:
+Checks your account balance at any of the major Swedish banks and can
+display notifications on changes. Includes a widget.
+.
+Repo Type:git
+Repo:https://github.com/liato/android-bankdroid.git
