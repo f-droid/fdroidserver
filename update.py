@@ -83,11 +83,14 @@ apks = []
 for apkfile in glob.glob(os.path.join('repo','*.apk')):
 
     apkfilename = apkfile[5:]
+    srcfilename = apkfilename[:-4] + "_src.tar.gz"
 
     if not options.quiet:
         print "Processing " + apkfilename
     thisinfo = {}
     thisinfo['apkname'] = apkfilename
+    if os.path.exists(os.path.join('repo', srcfilename)):
+        thisinfo['srcname'] = srcfilename
     thisinfo['size'] = os.path.getsize(apkfile)
     thisinfo['permissions'] = []
     thisinfo['features'] = []
@@ -291,6 +294,8 @@ for app in apps:
                 addElement('version', apk['version'], doc, apkel)
                 addElement('versioncode', str(apk['versioncode']), doc, apkel)
                 addElement('apkname', apk['apkname'], doc, apkel)
+                if apk.has_key('srcname'):
+                    addElement('srcname', apk['srcname'], doc, apkel)
                 addElement('hash', apk['md5'], doc, apkel)
                 addElement('sig', apk['sig'], doc, apkel)
                 addElement('size', str(apk['size']), doc, apkel)
