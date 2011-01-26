@@ -222,6 +222,9 @@ for app in apps:
                         props += "\nsdk-location=" + sdkloc + "\n"
                     # Add ndk location...
                     props+= "\nndk.dir=" + ndk_path + "\n"
+                    # Add java.encoding if necessary...
+                    if thisbuild.has_key('encoding'):
+                        props += "\njava.encoding=" + thisbuild['encoding'] + "\n"
                     f = open(locprops, 'w')
                     f.write(props)
                     f.close()
@@ -246,8 +249,8 @@ for app in apps:
 
                 # Run a pre-build command if one is required...
                 if thisbuild.has_key('prebuild'):
-                    if subprocess.call(shlex.split(thisbuild['prebuild']),
-                            cwd=root_dir) != 0:
+                    if subprocess.call(thisbuild['prebuild'],
+                            cwd=root_dir, shell=True) != 0:
                         print "Error running pre-build command"
                         sys.exit(1)
 

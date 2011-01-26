@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-def read_metadata():
+def read_metadata(verbose=False):
 
     apps = []
 
@@ -26,7 +26,8 @@ def read_metadata():
 
         # Get metadata...
         thisinfo['id'] = metafile[9:-4]
-        print "Reading metadata for " + thisinfo['id']
+        if verbose:
+            print "Reading metadata for " + thisinfo['id']
         thisinfo['description'] = ''
         thisinfo['name'] = None
         thisinfo['summary'] = ''
@@ -82,7 +83,7 @@ def read_metadata():
                                 part != "Tracking" and
                                 part != "NonFreeNet" and
                                 part != "NonFreeAdd"):
-                                print "Unrecognised antifeature '" + part + "'"
+                                print "Unrecognised antifeature '" + part + "' in "+ metafile
                                 sys.exit(1)
                         thisinfo['antifeatures'] = value
                     elif field == 'Market Version':
@@ -96,7 +97,7 @@ def read_metadata():
                     elif field == 'Build Version':
                         parts = value.split(",")
                         if len(parts) < 3:
-                            print "Invalid build format: " + value
+                            print "Invalid build format: " + value + " in " + metafile
                             sys.exit(1)
                         thisbuild = {}
                         thisbuild['version'] = parts[0]
@@ -110,7 +111,7 @@ def read_metadata():
                         if value == "Yes":
                             thisinfo['usebuilt'] = True
                     else:
-                        print "Unrecognised field " + field
+                        print "Unrecognised field " + field + " in " + metafile
                         sys.exit(1)
                 elif mode == 1:
                     if line == '.':
@@ -125,7 +126,7 @@ def read_metadata():
                             thisinfo['description'] += line
 
         if mode == 1:
-            print "Description not terminated"
+            print "Description not terminated in " + metafile
             sys.exit(1)
         if len(thisinfo['description']) == 0:
             thisinfo['description'] = 'No description available'

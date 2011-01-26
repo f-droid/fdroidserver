@@ -164,6 +164,11 @@ configuration to the build. These are:
  submodules=yes    Use if the project (git only) has submodules - causes git
  		   submodule init and update to be executed after the source is
 		   cloned.
+ encoding=xxxx     Adds a java.encoding property to local.properties with the given
+                   value. Generally the value will be 'utf-8'. This is picked up by
+		   the SDK's ant rules, and forces the Java compiler to interpret
+		   source files with this encoding. If you receive warnings during
+		   the compile about character encodings, you probably need this.
 
 Another example, using extra parameters:
 

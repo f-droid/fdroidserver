@@ -42,6 +42,8 @@ parser.add_option("-c", "--createmeta", action="store_true", default=False,
                   help="Create skeleton metadata files that are missing")
 parser.add_option("-v", "--verbose", action="store_true", default=False,
                   help="Spew out even more information than normal")
+parser.add_option("-q", "--quiet", action = "store_true", default=False,
+                  help="No output, except for warnings and errors")
 parser.add_option("-b", "--buildreport", action="store_true", default=False,
                   help="Report on build data status")
 (options, args) = parser.parse_args()
@@ -64,13 +66,14 @@ if (repo_url is None or repo_name is None or
     sys.exit(1)
 
 # Get all apps...
-apps = read_metadata()
+apps = read_metadata(verbose=options.verbose)
 
 # Copy apks and source tarballs for stuff we've built from source that
 # is flagged to be included in the repo...
 for app in apps:
     if app['usebuilt']:
-        print "Copying built files for " + app['id']
+        if not options.quiet:
+            print "Copying built files for " + app['id']
         src = os.path.join('built', app['id'] + "_*")
         for file in glob.glob(src):
             shutil.copy(file, 'repo/')
@@ -81,7 +84,8 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
 
     apkfilename = apkfile[5:]
 
-    print "Processing " + apkfilename
+    if not options.quiet:
+        print "Processing " + apkfilename
     thisinfo = {}
     thisinfo['apkname'] = apkfilename
     thisinfo['size'] = os.path.getsize(apkfile)
