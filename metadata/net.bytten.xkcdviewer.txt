@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv2+
 Web Site:https://github.com/tcoxon/XkcdViewer
 Source Code:https://github.com/tcoxon/XkcdViewer
@@ -9,5 +10,8 @@ support for bookmarks and easy navigation.
 .
 Repo Type:git
 Repo:https://github.com/tcoxon/XkcdViewer.git
+
+Build Version:2.1.2,15,20ceb28d4360b11d2bfd
+
 Market Version:2.1.2
 Market Version Code:15
