@@ -146,6 +146,9 @@ class FDroid
                                 case "apkname":
                                     $thisapk['apkname']=$pel;
                                     break;
+                                case "srcname":
+                                    $thisapk['srcname']=$pel;
+                                    break;
                                 case "hash":
                                     $thisapk['hash']=$pel;
                                     break;
@@ -191,6 +194,8 @@ class FDroid
                     $out.="<p><b>Version ".$apk['version']."</b> - ";
                     $out.='<a href="http://f-droid.org/repo/'.$apk['apkname'].'">download</a> ';
                     $out.=$apk['size']." bytes";
+                    if($apk['srcname'])
+                        $out.='<br><a href="http://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a>';
                     $out.="</p>";
                 }
 
