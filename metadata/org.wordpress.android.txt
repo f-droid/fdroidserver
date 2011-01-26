@@ -1,4 +1,3 @@
-Disabled:Malware, reports personal info (including your phone number) without even asking
 Use Built:Yes
 License:GPLv2
 Web Site:http://android.wordpress.org/
@@ -9,12 +8,16 @@ Description:
 A client for WordPress blogs, which allows post creation and editing, and comment
 viewing, replying and moderation. Supports multiple blogs, both wordpress-hosted
 (wordpress.com) and self-hosted.
+
+This version is patched to remove privacy violations - the official build periodically,
+and without permission, sends tracking details, including a unique identifier for your
+phone, and information about your mobile network, to the developer's server.
 .
 
 Repo Type:svn
 Repo:http://android.svn.wordpress.org/trunk/
 
-Build Version:1.3.9,31,202,prebuild=mv *.jar libs,encoding=utf-8
+Build Version:1.3.9,31,202,prebuild=mkdir libs && mv *.jar libs && sed -i "s@checkStats(accounts.size());@// MY PRIVACY > YOUR STATS@" src/org/wordpress/android/wpAndroid.java,encoding=utf-8
 
 Market Version:1.3.9
 Market Version Code:31
