@@ -359,6 +359,8 @@ for app in apps:
                         print output
                         print "NDK build failed"
                         sys.exit(1)
+                    elif options.verbose:
+                        print output
 
                 # Build the release...
                 if thisbuild.has_key('antcommand'):
@@ -372,6 +374,8 @@ for app in apps:
                     print output
                     print "Build failed"
                     sys.exit(1)
+                elif options.verbose:
+                    print output
                 print "Build successful"
 
                 # Find the apk name in the output...
