@@ -1,0 +1,13 @@
+License:GPLv3+
+Web Site:http://android.trafikinfo.nu/
+Source Code:http://code.google.com/p/trafikinfoandroid/source/checkout
+Issue Tracker:http://code.google.com/p/trafikinfoandroid/issues/list
+Summary:Show Swedish traffic information
+Description:
+This application shows traffic information received from Trafikverket,
+the Swedish Transport Administration.
+.
+Repo Type:svn
+Repo:http://trafikinfoandroid.googlecode.com/svn/trunk
+Build Version:0.9,12,628,encoding=utf-8
+Use Built:Yes

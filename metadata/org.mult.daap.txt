@@ -1,0 +1,13 @@
+License:GPLv2+
+Web Site:http://code.google.com/p/daap-client/
+Source Code:http://code.google.com/p/daap-client/source/checkout
+Issue Tracker:http://code.google.com/p/daap-client/issues/list
+Summary:DAAP Client
+Description:
+Client for DAAP (Digital Audio Access Protocol) servers. Supports streaming,
+queuing, playlists, and searching.
+.
+Repo Type:svn
+Repo:http://daap-client.googlecode.com/svn/trunk
+Build Version:.9.1,30,62
+Use Built:Yes

@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 #
 # build.py - part of the FDroid server tools
 # Copyright (C) 2010, Ciaran Gultnieks, ciaran@ciarang.com
