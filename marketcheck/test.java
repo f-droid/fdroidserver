@@ -61,15 +61,15 @@ class test {
                                 App app = response.getAppList().get(0);
                                 String filespec = "../metadata/" + app.getPackageName() + ".txt";
                                 FileInputStream fi = new FileInputStream(filespec);
-                                BufferedInputStream bi = new BufferedInputStream(fi);
-                                DataInputStream di = new DataInputStream(bi);
+                                InputStreamReader isr = new InputStreamReader(fi, "UTF-8");
+                                BufferedReader br = new BufferedReader(isr);
                                 StringBuilder output = new StringBuilder();
                                 boolean changed = false;
                                 boolean vercodefound = false;
                                 boolean versionfound = false;
                                 String line, newline;
-                                while (di.available() != 0) {
-                                    line = di.readLine();
+                                while (br.ready()) {
+                                    line = br.readLine();
                                     if (line.startsWith("Market Version:")) {
                                         versionfound = true;
                                         newline="Market Version:" + app.getVersion();
@@ -87,8 +87,8 @@ class test {
                                     }
                                     output.append(line + "\n");
                                 }
-                                di.close();
-                                bi.close();
+                                br.close();
+                                isr.close();
                                 fi.close();
                                 if(!versionfound) {
                                     changed = true;
