@@ -16,3 +16,5 @@ Repo:https://github.com/paulmach/Text-Edit-for-Android.git
 
 Build Version:1.3.3,12,1d724fc9d0fde2cc5426,target=android-8
 
+Market Version:1.3.3
+Market Version Code:12
