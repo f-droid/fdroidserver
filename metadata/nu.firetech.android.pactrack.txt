@@ -12,3 +12,5 @@ Repo Type:git
 Repo:https://github.com/firetech/PactrackDroid.git
 Build Version:1.3.1,1310,a2722a4062afbef38ec91e9af41908c9548d7a76
 Use Built:Yes
+Market Version:1.3.1
+Market Version Code:1310

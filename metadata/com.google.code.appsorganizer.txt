@@ -13,3 +13,5 @@ Repo Type:svn
 Repo:http://appsorganizer.googlecode.com/svn/trunk
 Build Version:1.5.14,162,184,subdir=AppsOrganizer
 Use Built:Yes
+Market Version:1.5.14
+Market Version Code:162

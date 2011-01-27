@@ -13,3 +13,5 @@ Repo Type:svn
 Repo:http://and-bookworm.googlecode.com/svn/trunk
 Build Version:1.0.17,18,570
 Use Built:Yes
+Market Version:1.0.17
+Market Version Code:18

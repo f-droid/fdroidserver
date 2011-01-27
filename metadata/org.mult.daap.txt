@@ -11,3 +11,5 @@ Repo Type:svn
 Repo:http://daap-client.googlecode.com/svn/trunk
 Build Version:.9.1,30,62
 Use Built:Yes
+Market Version:.9.1
+Market Version Code:30

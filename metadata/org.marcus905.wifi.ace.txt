@@ -11,3 +11,5 @@ Repo Type:svn
 Repo:http://android-wifi-ace.googlecode.com/svn/trunk/WiFiACE
 Build Version:0.10,20100924,13
 Use Built:Yes
+Market Version:0.10
+Market Version Code:20100924

@@ -11,3 +11,5 @@ Repo Type:svn
 Repo:http://trafikinfoandroid.googlecode.com/svn/trunk
 Build Version:0.9,12,628,encoding=utf-8
 Use Built:Yes
+Market Version:0.9
+Market Version Code:12
