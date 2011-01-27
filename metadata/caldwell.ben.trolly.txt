@@ -1,0 +1,17 @@
+License:GPLv3
+Web Site:http://sites.google.com/site/caldwellcode/
+Source Code:http://code.google.com/p/trolly/source/checkout
+Issue Tracker:http://code.google.com/p/trolly/issues/list
+Summary:Shopping list application
+Description:
+Trolly is a shopping list application with the aim of being a very simple
+app with no annoying or complicated features. It exposes intent filters to
+allow other apps to automatically add items to the shopping list.
+.
+Repo Type:svn
+Repo:http://trolly.googlecode.com/svn/trunk
+
+# It needs a file from OpenIntents, so let's get it from Subversion...
+Build Version:1.4,6,40,target=android-4,prebuild=mkdir -p src/org/openintents/intents && svn cat -r 3070 http://openintents.googlecode.com/svn/trunk/shoppinglist/ShoppingList/src/org/openintents/intents/ShoppingListIntents.java >src/org/openintents/intents/ShoppingListIntents.java
+
+Use Built:Yes

@@ -1,0 +1,15 @@
+License:Apache2
+Web Site:http://code.google.com/p/and-bookworm/
+Source Code:http://code.google.com/p/and-bookworm/source/checkout
+Issue Tracker:http://code.google.com/p/and-bookworm/issues/list
+Summary:Book collection manager
+Description:
+BookWorm allows you to keep track of books you have read and those you
+intend to read. You can enter books by scanning them (product codes),
+searching for them, or direct form entry. You can rate and comment on each
+book. Once you have your book list, you can sort and filter it.
+.
+Repo Type:svn
+Repo:http://and-bookworm.googlecode.com/svn/trunk
+Build Version:1.0.17,18,570
+Use Built:Yes
