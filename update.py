@@ -333,8 +333,12 @@ for app in apps:
                         warnings += 1
 
         if not gotmarketver and app['marketvercode'] != '0':
+            if app['usebuilt']:
+                addr = app['source']
+            else:
+                addr = app['web']
             print "WARNING: Don't have market version (" + app['marketversion'] + ") of " + app['name']
-            print "         (" + app['id'] + ") " + app['web']
+            print "         (" + app['id'] + ") " + addr
             warnings += 1
             if options.verbose:
                 # A bit of extra debug info, basically for diagnosing
