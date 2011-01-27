@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv3+
 Web Site:http://github.com/eleybourn/Book-Catalogue/wiki
 Source Code:http://github.com/eleybourn/Book-Catalogue
