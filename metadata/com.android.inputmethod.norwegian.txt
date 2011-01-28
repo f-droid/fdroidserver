@@ -6,7 +6,7 @@ Summary:Keyboard for Scandinavian languages
 Description:
 A modified version of the standard onscreen keyboard in Android
 with support for Norwegian, Swedish, Danish, Faroese, German,
-Icelandic and Northern SÃ¡mi keyboard layouts.
+Icelandic and Northern Sámi keyboard layouts.
 .
 Repo Type:svn
 Repo:http://scandinavian-keyboard.googlecode.com/svn/trunk
