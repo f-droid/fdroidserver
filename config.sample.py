@@ -17,6 +17,15 @@ The official FDroid repository. Applications in this repository are official
 binaries built by the original application developers.
 """
 
+#The key (from the keystore defined below) to be used for signing the
+#repository itself. Can be none for an unsigned repository.
+repo_keyalias = None
+
+#If you're building a signed repository, you need the public key here. You
+#can get the public key in the correct format by using 'getsig -f x.jar" where
+#x.jar is any jar you have signed with it.
+repo_pubkey = 'not set'
+
 #The keystore to use for release keys when building. This needs to be
 #somewhere safe and secure, and backed up!
 keystore = "/home/me/somewhere/my.keystore"

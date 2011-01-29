@@ -240,6 +240,8 @@ repoel = doc.createElement("repo")
 repoel.setAttribute("name", repo_name)
 repoel.setAttribute("icon", repo_icon)
 repoel.setAttribute("url", repo_url)
+if repo_keyalias != None:
+    repoel.setAttribute("pubkey", repo_pubkey)
 addElement('description', repo_description, doc, repoel)
 root.appendChild(repoel)
 
@@ -356,6 +358,33 @@ of = open(os.path.join('repo','index.xml'), 'wb')
 output = doc.toxml()
 of.write(output)
 of.close()
+
+if repo_keyalias != None:
+
+    if not options.quiet:
+        print "Creating signed index."
+    
+    #Create a jar of the index...
+    p = subprocess.Popen(['jar', 'cf', 'index.jar', 'index.xml'],
+        cwd='repo', stdout=subprocess.PIPE)
+    output = p.communicate()[0]
+    if options.verbose:
+        print output
+    if p.returncode != 0:
+        print "ERROR: Failed to create jar file"
+        sys.exit(1)
+
+    # Sign the index...
+    p = subprocess.Popen(['jarsigner', '-keystore', keystore,
+        '-storepass', keystorepass, '-keypass', keypass,
+        os.path.join('repo', 'index.jar') , repo_keyalias], stdout=subprocess.PIPE)
+    output = p.communicate()[0]
+    if p.returncode != 0:
+        print "Failed to sign index"
+        print output
+        sys.exit(1)
+    if options.verbose:
+        print output
 
 #Copy the repo icon into the repo directory...
 iconfilename = os.path.join(icon_dir, repo_icon)

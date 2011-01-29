@@ -13,12 +13,22 @@ public class getsig {
  
     public static void main(String[] args) {
 
-        if (args.length != 1) {
+        String apkPath = null;
+        boolean full = false;
+
+        if(args.length == 1) {
+            apkPath = args[0];
+        } else if (args.length == 2) {
+            if(!args[0].equals("-f")) {
+                System.out.println("Only -f is supported");
+                System.exit(1);
+            }
+            apkPath = args[1];
+            full = true;
+        } else {
             System.out.println("Specify the APK file to get the signature from!");
             System.exit(1);
         }
- 
-        String apkPath = args[0];
  
         try {
 
@@ -64,17 +74,24 @@ public class getsig {
                 csig[j*2+1] = (byte)(d >= 10 ? ('a' + d - 10) : ('0' + d));
             }
 
-            // Get the MD5 sum of that...
-            MessageDigest md;
-            md = MessageDigest.getInstance("MD5");
-            byte[] md5sum = new byte[32];
-            md.update(csig);
-            md5sum = md.digest();
-            BigInteger bigInt = new BigInteger(1, md5sum);
-            String md5hash = bigInt.toString(16);
-            while (md5hash.length() < 32)
-                md5hash = "0" + md5hash;
-            System.out.println("Result:" + md5hash);
+            String result;
+            if(full) {
+                result = new String(csig);
+            } else {
+                // Get the MD5 sum...
+                MessageDigest md;
+                md = MessageDigest.getInstance("MD5");
+                byte[] md5sum = new byte[32];
+                md.update(csig);
+                md5sum = md.digest();
+                BigInteger bigInt = new BigInteger(1, md5sum);
+                String md5hash = bigInt.toString(16);
+                while (md5hash.length() < 32)
+                    md5hash = "0" + md5hash;
+                result = md5hash;
+            }
+
+            System.out.println("Result:" + result);
             System.exit(0);
 
         } catch (Exception e) {
