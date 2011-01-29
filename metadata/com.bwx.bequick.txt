@@ -1,3 +1,4 @@
+Use Built:Yes
 License:Apache2
 Web Site:http://code.google.com/p/quick-settings/
 Source Code:http://code.google.com/p/quick-settings/source/checkout
@@ -10,5 +11,9 @@ controls.
 .
 Repo Type:svn
 Repo:http://quick-settings.googlecode.com/svn/trunk/quick-settings/
+
+#Don't know why the market version has a slightly different version code...
+Build Version:1.9.8 p2,201012060,184,target=android-8
+
 Market Version:1.9.8 p2
 Market Version Code:201012061

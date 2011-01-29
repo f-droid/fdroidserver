@@ -10,3 +10,6 @@ and for Tor via Orbot.
 .
 Repo Type:git
 Repo:https://github.com/guardianproject/OtRChat.git
+
+Disabled: Seems to early in the development cycle to build a release
+
