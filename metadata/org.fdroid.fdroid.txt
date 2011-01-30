@@ -17,3 +17,6 @@ Repo:git://gitorious.org/f-droid/fdroidclient.git
 #Build Version:0.16,7,78325dad91a263437ca4ea1210bd494446c4d003
 
 Build Version:0.17,8,c626ce5f6d3e10ae15942f01ff028be310cc695a
+Build Version:0.18,9,a6c9ed8d06b19315df9ba9041324f78139f7d238
+Build Version:0.19,10,540b7d0522f4d67a4896697f7342e4c75b4cbf59
+
