@@ -126,49 +126,56 @@ configuration to the build. These are:
 
  subdir=<path>   - Specifies to build from a subdirectory of the checked out
                    source code. Normally this directory is changed to before
-		   building, but there is a special case for SVN repositories
-		   where the URL is specified with a * at the end. See the
-		   documentation for the Repo field for more information.
+                   building, but there is a special case for SVN repositories
+                   where the URL is specified with a * at the end. See the
+                   documentation for the Repo field for more information.
  bindir=<path>   - Normally the build output (apk) is expected to be in the
- 		   bin subdirectory below the ant build files. If the project
-		   is configured to put it elsewhere, that can be specified
-		   here, relative to the base of the checked out repo..
+                   bin subdirectory below the ant build files. If the project
+                   is configured to put it elsewhere, that can be specified
+                   here, relative to the base of the checked out repo..
  oldsdkloc=yes   - The sdk location in the repo is in an old format, or the
                    build.xml is expecting such. The 'new' format is sdk.dir
-		   while the VERY OLD format is sdk-location. Typically, if
-		   you get a message along the lines of:
-		        "com.android.ant.SetupTask cannot be found"
-		   when trying to build, then try enabling this option.
+                   while the VERY OLD format is sdk-location. Typically, if
+                   you get a message along the lines of:
+                      "com.android.ant.SetupTask cannot be found"
+                   when trying to build, then try enabling this option.
  target=<target> - Specifies a particular SDK target, when the source doesn't.
                    This is likely to cause the whole build.xml to be rewritten,
-		   which is fine if it's a 'standard' android file or doesn't
-		   already exist, but not a good idea if it's heavily
-		   customised.
+                   which is fine if it's a 'standard' android file or doesn't
+                   already exist, but not a good idea if it's heavily
+                   customised.
  rm=<relpath>    - Specifies the relative path of file to delete before the
- 		   build is done. The path is relative to the base of the
-		   build directory - i.e. the directory that contains
-		   AndroidManifest.xml.
+                   build is done. The path is relative to the base of the
+                   build directory - i.e. the directory that contains
+                   AndroidManifest.xml.
  antcommand=xxx  - Specify an alternate ant command (target) instead of the
- 		   default 'release'.
+                   default 'release'.
  insertversion=x - If specified, the pattern 'x' in the AndroidManifest.xml is
                    replaced with the version number for the build.
  insertvercode=x - If specified, the pattern 'x' in the AndroidManifest.xml is
                    replaced with the version code for the build.
  update=no	   By default, 'android update project' is used to generate or
- 		   update the build.xml file. Specifying update=no bypasses
-		   that.
+                   update the build.xml file. Specifying update=no bypasses
+                   that.
  initfun=yes	   Enables a selection of mad hacks to make com.funambol.android
                    build. Probably not useful for any other application.
  buildjni=yes      Enables building of native code via the ndk-build script before
- 		   doing the main ant build.
+                   doing the main ant build.
  submodules=yes    Use if the project (git only) has submodules - causes git
- 		   submodule init and update to be executed after the source is
-		   cloned.
+                   submodule init and update to be executed after the source is
+                   cloned.
  encoding=xxxx     Adds a java.encoding property to local.properties with the given
                    value. Generally the value will be 'utf-8'. This is picked up by
-		   the SDK's ant rules, and forces the Java compiler to interpret
-		   source files with this encoding. If you receive warnings during
-		   the compile about character encodings, you probably need this.
+                   the SDK's ant rules, and forces the Java compiler to interpret
+                   source files with this encoding. If you receive warnings during
+                   the compile about character encodings, you probably need this.
+ prebuild=xxxx     Specifies a shell command (or commands - chain with &&) to run
+                   before the build takes place - the only proviso being that you
+                   can't use , or = characters.
+ novcheck=yes      Don't check that the version name and code in the resulting apk
+                   are correct by looking at the build output - assume the metadata
+                   is correct. This takes away a useful level of sanity checking, and
+                   should only be used if the values can't be extracted.
 
 Another example, using extra parameters:
 

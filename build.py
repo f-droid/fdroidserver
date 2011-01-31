@@ -397,17 +397,21 @@ for app in apps:
                 p = subprocess.Popen([aapt_path,'dump','badging',
                    src], stdout=subprocess.PIPE)
                 output = p.communicate()[0]
-                vercode = None
-                version = None
-                for line in output.splitlines():
-                    if line.startswith("package:"):
-                        pat = re.compile(".*versionCode='([0-9]*)'.*")
-                        vercode = re.match(pat, line).group(1)
-                        pat = re.compile(".*versionName='([^']*)'.*")
-                        version = re.match(pat, line).group(1)
-                if version == None or versioncode == None:
-                    print "Could not find version information in build in output"
-                    sys.exit(1)
+                if thisbuild.has_key('novcheck') and thisbuild['novcheck'] == "yes":
+                    vercode = thisbuild['vercode']
+                    version = thisbuild['version']
+                else:
+                    vercode = None
+                    version = None
+                    for line in output.splitlines():
+                        if line.startswith("package:"):
+                            pat = re.compile(".*versionCode='([0-9]*)'.*")
+                            vercode = re.match(pat, line).group(1)
+                            pat = re.compile(".*versionName='([^']*)'.*")
+                            version = re.match(pat, line).group(1)
+                    if version == None or versioncode == None:
+                        print "Could not find version information in build in output"
+                        sys.exit(1)
 
                 # Some apps (e.g. Timeriffic) have had the bonkers idea of
                 # including the entire changelog in the version number. Remove
