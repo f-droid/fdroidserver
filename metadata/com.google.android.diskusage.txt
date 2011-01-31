@@ -1,0 +1,14 @@
+Use Built:Yes
+License:GPLv2
+Web Site:http://diskusage.googlecode.com/
+Source Code:http://diskusage.googlecode.com/svn/trunk/
+Issue Tracker:http://code.google.com/p/diskusage/issues/list
+Summary:Visual disk usage explorer
+Description:
+Visually explore used and free space on internal and external storage.
+.
+Repo Type:svn
+Repo:http://diskusage.googlecode.com/svn/trunk/
+
+Build Version:2.0.4,2004,61,prebuild=mkdir libs && cp extra/system.jar libs/
+
