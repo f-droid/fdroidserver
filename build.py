@@ -405,6 +405,9 @@ for app in apps:
                         vercode = re.match(pat, line).group(1)
                         pat = re.compile(".*versionName='([^']*)'.*")
                         version = re.match(pat, line).group(1)
+                if version == None or versioncode == None:
+                    print "Could not find version information in build in output"
+                    sys.exit(1)
 
                 # Some apps (e.g. Timeriffic) have had the bonkers idea of
                 # including the entire changelog in the version number. Remove
