@@ -1,0 +1,4 @@
+Disabled:No license - it's "Open Source" whatever that means
+Web Site:http://gluegadget.com/hndroid/
+Source Code:https://github.com/amir/HNdroid
+

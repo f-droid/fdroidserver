@@ -1,0 +1,16 @@
+Disabled:Needs the 'multiple string subsitutions' fix to compile
+Use Built:Yes
+License:BSD
+Web Site:http://code.google.com/p/android-notifier/
+Source Code:http://code.google.com/p/android-notifier/source/checkout
+Issue Tracker:http://code.google.com/p/android-notifier/issues/list
+Summary:Notifications from device to desktop
+Description:
+Sends notifications (for example, phone ringing) from the device to a desktop machine
+running the dedicated client software. Get the desktop application from the web site.
+.
+Repo Type:svn
+Repo:http://android-notifier.googlecode.com/svn/trunk/AndroidNotifier
+
+Build Version:0.2.8,11,315
+

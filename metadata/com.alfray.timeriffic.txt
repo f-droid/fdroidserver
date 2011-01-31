@@ -7,11 +7,13 @@ Allows you to set multiple schedules to control mute, vibrate, brightness,
 WiFi and airplane mode.
 .
 
-Repo Type:svn
-Repo:http://timeriffic.googlecode.com/svn/trunk/
+Repo Type:hg
+Repo:https://timeriffic.googlecode.com/hg/
 
-Build Version:1.09.03,10903,45,subdir=Timeriffic,oldsdkloc=yes
+#This previous version was svn from http://timeriffic.googlecode.com/svn/trunk/
+#Build Version:1.09.03,10903,45,subdir=Timeriffic,oldsdkloc=yes
 
+Build Version:1.09.05,10905,fc40dccbb9,subdir=Timeriffic,oldsdkloc=yes,novcheck=yes,bindir=Timeriffic/bin2
 
-Market Version:1.09.04
-Market Version Code:10904
+Market Version:1.09.05
+Market Version Code:10905
