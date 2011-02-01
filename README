@@ -176,6 +176,11 @@ configuration to the build. These are:
                    are correct by looking at the build output - assume the metadata
                    is correct. This takes away a useful level of sanity checking, and
                    should only be used if the values can't be extracted.
+ fixtrans=yes      Modifies any instances of string resources that use multiple
+                   formatting arguments, but don't use positional notation. For
+                   example, "Hello %s, %d" becomes "Hello %1$s, %2$d". Newer versions
+                   of the Android platform tools enforce this sensible standard. If you
+                   get error messages relating to that, you need to enable this.
 
 Another example, using extra parameters:
 

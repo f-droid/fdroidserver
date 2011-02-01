@@ -247,6 +247,45 @@ for app in apps:
                 if thisbuild.has_key('rm'):
                     os.remove(os.path.join(build_dir, thisbuild['rm']))
 
+                # Fix translation files if necessary...
+                if thisbuild.has_key('fixtrans') and thisbuild['fixtrans'] == 'yes':
+                    for root, dirs, files in os.walk(os.path.join(root_dir,'res')):
+                        for filename in files:
+                            if filename.endswith('.xml'):
+                                f = open(os.path.join(root, filename))
+                                changed = False
+                                outlines = []
+                                for line in f:
+                                    num = 1
+                                    index = 0
+                                    oldline = line
+                                    while True:
+                                        index = line.find("%", index)
+                                        if index == -1:
+                                            break
+                                        next = line[index+1:index+2]
+                                        if next == "s" or next == "d":
+                                            line = (line[:index+1] +
+                                                    str(num) + "$" +
+                                                    line[index+1:])
+                                            num += 1
+                                            index += 3
+                                        else:
+                                            index += 1
+                                    # We only want to insert the positional arguments
+                                    # when there is more than one argument...
+                                    if oldline != line:
+                                        if num > 2:
+                                            changed = True
+                                        else:
+                                            line = oldline
+                                    outlines.append(line)
+                                f.close()
+                                if changed:
+                                    f = open(os.path.join(root, filename), 'w')
+                                    f.writelines(outlines)
+                                    f.close()
+
                 # Run a pre-build command if one is required...
                 if thisbuild.has_key('prebuild'):
                     if subprocess.call(thisbuild['prebuild'],
@@ -409,7 +448,7 @@ for app in apps:
                             vercode = re.match(pat, line).group(1)
                             pat = re.compile(".*versionName='([^']*)'.*")
                             version = re.match(pat, line).group(1)
-                    if version == None or versioncode == None:
+                    if version == None or vercode == None:
                         print "Could not find version information in build in output"
                         sys.exit(1)
 
