@@ -1,4 +1,3 @@
-Disabled:Needs the 'multiple string subsitutions' fix to compile
 Use Built:Yes
 License:BSD
 Web Site:http://code.google.com/p/android-notifier/
@@ -12,5 +11,5 @@ running the dedicated client software. Get the desktop application from the web 
 Repo Type:svn
 Repo:http://android-notifier.googlecode.com/svn/trunk/AndroidNotifier
 
-Build Version:0.2.8,11,315
+Build Version:0.2.8,11,315,fixtrans=yes,prebuild=mkdir libs && mv lib/locale_platform.jar libs/
 

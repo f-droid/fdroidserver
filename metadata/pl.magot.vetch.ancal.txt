@@ -1,0 +1,14 @@
+Use Built:Yes
+License:MIT
+Web Site:http://code.google.com/p/ancal/
+Source Code:http://code.google.com/p/ancal/source/checkout
+Issue Tracker:http://code.google.com/p/ancal/issues/list
+Summary:Calendar
+Description:
+A calendar application.
+.
+Repo Type:svn
+Repo:http://ancal.googlecode.com/svn/trunk/
+
+Build Version:1.6,32,23,fixtrans=yes
+

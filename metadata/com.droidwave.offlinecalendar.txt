@@ -1,0 +1,15 @@
+Disabled:No release available
+Use Built:Yes
+License:MIT
+Web Site:https://bitbucket.org/giszmo/offline-calendar/overview
+Source Code:https://bitbucket.org/giszmo/offline-calendar/src
+Issue Tracker:https://bitbucket.org/giszmo/offline-calendar/issues?status=new&status=open
+Summary:Calendar
+Description:
+A calendar application.
+.
+Repo Type:hg
+Repo:https://bitbucket.org/giszmo/offline-calendar
+
+#There don't seem to be any developer releases yet
+
