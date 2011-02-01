@@ -1,3 +1,4 @@
+Disabled:Conflicting copyright message, see http://code.google.com/p/ancal/issues/detail?id=8
 Use Built:Yes
 License:MIT
 Web Site:http://code.google.com/p/ancal/
