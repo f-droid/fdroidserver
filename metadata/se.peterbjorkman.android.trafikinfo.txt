@@ -10,6 +10,7 @@ the Swedish Transport Administration.
 Repo Type:svn
 Repo:http://trafikinfoandroid.googlecode.com/svn/trunk
 Build Version:0.9,12,628,encoding=utf-8
+Build Version:0.9.1,13,630,encoding=utf-8
 Use Built:Yes
-Market Version:0.9
-Market Version Code:12
+Market Version:0.9.1
+Market Version Code:13
