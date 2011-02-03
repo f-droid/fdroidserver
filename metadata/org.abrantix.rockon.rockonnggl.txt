@@ -2,10 +2,27 @@ License:GPLv3
 Web Site:http://abrantix.org/3.php
 Source Code:http://github.com/fabrantes/rockonnggl
 Issue Tracker:http://github.com/fabrantes/rockonnggl/issues
+Donate:http://abrantix.org/cubed-donate.php
 Summary:Music player
 Description:
-A music player. Cubed, also known as ³, has possibly the silliest choice of application
-name ever.
+A music player. Cubed is also known as ³.
+
+Note: There are more recent binary versions of this application available in
+the Google Market, but the author does not want to publish the source code
+for those (yet?).
 .
+
+Repo Type:git
+Repo:https://github.com/fabrantes/rockonnggl.git
+
+#Source for latest version isn't in the repo:
+# https://github.com/fabrantes/rockonnggl/issues/issue/125
+
+#Note: the prebuild command here prevents it from using Google NAnalytics,
+#but need to check that's still the case in upgrades. It would be better
+#to remove the library and associated code entirely.
+Build Version:1.0.79,80,2a567bd9632032c1f58c,prebuild=sed -i "s@config_isMarketVersion\">true</bool>@config_isMarketVersion\">false</bool>@" res/values/config.xml
+
 Market Version:1.0.82
 Market Version Code:83
+
