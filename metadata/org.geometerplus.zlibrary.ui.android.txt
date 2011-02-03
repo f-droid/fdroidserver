@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv2+
 Web Site:http://www.fbreader.org/FBReaderJ/
 Source Code:https://github.com/geometer/FBReaderJ
@@ -14,6 +15,6 @@ Market Version Code:9911
 Repo Type:git
 Repo:https://github.com/geometer/FBReaderJ.git
 
-Build Version:0.99.3,9903,79cf4985a1faa4c80064,antcommand=package
+#Build Version:0.99.3,9903,79cf4985a1faa4c80064,antcommand=package
 Build Version:0.99.11,9911,0.99.11,antcommand=package
 
