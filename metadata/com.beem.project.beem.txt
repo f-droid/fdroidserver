@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv3+
 Web Site:http://www.beem-project.com/
 Source Code:http://www.beem-project.com/projects/beem/repository
@@ -6,5 +7,11 @@ Summary:XMPP client
 Description:
 Beem is an XMPP (Jabber) client.
 .
+
+Repo Type:hg
+Repo:http://www.beem-project.com/hg/trunk/
+
+Build Version:0.1.5,7,0.1.5
+
 Market Version:0.1.5
 Market Version Code:7
