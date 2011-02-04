@@ -1,0 +1,14 @@
+Use Built:Yes
+License:GPL
+Web Site:http://fosdem.org
+Source Code:
+Issue Tracker:
+Summary:FOSDEM schedule
+Description:
+FOSDEM schedule application.
+.
+Repo Type:svn
+Repo:http://fosdem-android.svn.sourceforge.net/svnroot/fosdem-android
+
+Build Version:1.0.2,4,117
+
