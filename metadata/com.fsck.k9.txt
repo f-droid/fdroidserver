@@ -8,8 +8,8 @@ Email client supporting multiple accounts, POP3, IMAP, Push IMAP. Packed with
 features and highly configurable.
 .
 
-Market Version:3.404
-Market Version Code:11037
+Market Version:3.600
+Market Version Code:12053
 
 Repo Type:svn
 Repo:http://k9mail.googlecode.com/svn/k9mail/*
