@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv3+
 Web Site:http://ichi2.net/anki/wiki/AnkiDroid
 Source Code:http://github.com/nicolas-raoul/Anki-Android/
@@ -10,11 +11,12 @@ spent studying, or greatly increase the amount you learn. AnkiDroid is the Andro
 port of Anki, and is compatible with Anki data.
 .
 
-Market Version:0.5
-Market Version Code:18
+Market Version:0.5.1
+Market Version Code:19
 
 Repo Type:git
 Repo:git://github.com/nicolas-raoul/Anki-Android.git
 
-Build Version:0.4.2,12,v0.4.2
+#Build Version:0.4.2,12,v0.4.2
+Build Version:0.5,18,v0.5
 

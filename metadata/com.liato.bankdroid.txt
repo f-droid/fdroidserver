@@ -9,5 +9,5 @@ display notifications on changes. Includes a widget.
 .
 Repo Type:git
 Repo:https://github.com/liato/android-bankdroid.git
-Market Version:1.6.2
-Market Version Code:101
+Market Version:1.6.3
+Market Version Code:102

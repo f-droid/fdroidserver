@@ -6,8 +6,8 @@ Summary:Remote control for MythTV
 Description:
 A network remote control for MythTV.
 .
-Market Version:1.4.0
-Market Version Code:8
+Market Version:1.5.0
+Market Version Code:9
 
 Repo Type:svn
 Repo:http://mythmote.googlecode.com/svn/trunk/

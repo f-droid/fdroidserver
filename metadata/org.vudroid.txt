@@ -6,5 +6,5 @@ Summary:DjVu and PDF document reader
 Description:
 A document reader for DjVu and PDF files.
 .
-Market Version:1.3
-Market Version Code:4
+Market Version:1.4
+Market Version Code:5

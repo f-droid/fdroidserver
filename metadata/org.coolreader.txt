@@ -21,7 +21,8 @@ Build Version:3.0.41-9,81,cr3.0.41-9,subdir=android,rm=android/build.properties,
 #appear to be the corresponding commit.
 Build Version:3.0.42-6,86,cr3.0.42-6,subdir=android,rm=android/build.properties,buildjni=yes
 Build Version:3.0.43-4,94,cr3.0.43-4,subdir=android,rm=android/build.properties,buildjni=yes
+Build Version:3.0.43-6,96,cr3.0.43-6,subdir=android,rm=android/build.properties,buildjni=yes
 
-Market Version:3.0.43-4
-Market Version Code:94
+Market Version:3.0.43-6
+Market Version Code:96
 

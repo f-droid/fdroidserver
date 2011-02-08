@@ -23,6 +23,6 @@ Repo:https://github.com/fabrantes/rockonnggl.git
 #to remove the library and associated code entirely.
 Build Version:1.0.79,80,2a567bd9632032c1f58c,prebuild=sed -i "s@config_isMarketVersion\">true</bool>@config_isMarketVersion\">false</bool>@" res/values/config.xml
 
-Market Version:1.0.82
-Market Version Code:83
+Market Version:1.0.84
+Market Version Code:85
 

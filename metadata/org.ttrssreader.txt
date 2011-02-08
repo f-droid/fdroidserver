@@ -12,5 +12,5 @@ Repo:http://ttrss-reader-fork.googlecode.com/svn/tags/*
 
 Build Version:0.8.1,807,310,subdir=0.8.1_1/ttrss-reader
 
-Market Version:0.8.3
-Market Version Code:830
+Market Version:0.8.4
+Market Version Code:840
