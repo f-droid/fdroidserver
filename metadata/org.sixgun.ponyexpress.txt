@@ -13,4 +13,5 @@ Repo Type:git
 Repo:git://gitorious.org/ponyexpress/mainline.git
 
 Build Version:0.4.1,5,d64eace51a0c053fc8356ddd6b54a1372617a470
+Build Version:0.4.2,8,38eb1f2141225a95c8a96fedfbdfcf34beeeeb9b
 

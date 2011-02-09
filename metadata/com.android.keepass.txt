@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv2
 Web Site:http://www.keepassdroid.com/
 Source Code:http://github.com/bpellin/keepassdroid
@@ -12,8 +13,8 @@ Market Version Code:77
 Repo Type:git
 Repo:git://github.com/bpellin/keepassdroid.git
 
-Build Version:1.8.5,65,2c401b23c11693cd192b
-Build Version:1.8.4,64,8700924ffad7bddd5b65
+#Build Version:1.8.5,65,2c401b23c11693cd192b
+#Build Version:1.8.4,64,8700924ffad7bddd5b65
 Build Version:1.9,76,v1.9
 Build Version:1.9.1,77,v1.9.1-2
 

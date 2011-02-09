@@ -2,7 +2,8 @@ License:GPLv3
 Web Site:http://abrantix.org/3.php
 Source Code:http://github.com/fabrantes/rockonnggl
 Issue Tracker:http://github.com/fabrantes/rockonnggl/issues
-Donate:http://abrantix.org/cubed-donate.php
+#Don't want to encourage donating when the source is no longer available.
+#Donate:http://abrantix.org/cubed-donate.php
 Summary:Music player
 Description:
 A music player. Cubed is also known as ³.
@@ -23,6 +24,6 @@ Repo:https://github.com/fabrantes/rockonnggl.git
 #to remove the library and associated code entirely.
 Build Version:1.0.79,80,2a567bd9632032c1f58c,prebuild=sed -i "s@config_isMarketVersion\">true</bool>@config_isMarketVersion\">false</bool>@" res/values/config.xml
 
-Market Version:1.0.84
-Market Version Code:85
+Market Version:1.0.87
+Market Version Code:88
 

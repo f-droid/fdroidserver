@@ -10,7 +10,7 @@ An offline reader that works with the Tiny Tiny RSS web-based feed reader/aggreg
 Repo Type:svn
 Repo:http://ttrss-reader-fork.googlecode.com/svn/tags/*
 
-Build Version:0.8.1,807,310,subdir=0.8.1_1/ttrss-reader
+Build Version:0.8.4,840,338,subdir=0.8.4/ttrss-reader
 
 Market Version:0.8.4
 Market Version Code:840
