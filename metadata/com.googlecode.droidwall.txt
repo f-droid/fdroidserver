@@ -1,7 +1,7 @@
 Use Built:Yes
 License:GPLv3
 Web Site:http://code.google.com/p/droidwall/
-Source Code:http://code.google.com/p/droidwall/source/
+Source Code:http://code.google.com/p/droidwall/source/checkout
 Issue Tracker:http://code.google.com/p/droidwall/issues/list
 Summary:Firewall
 Description:
@@ -15,6 +15,7 @@ Repo Type:svn
 Repo:http://droidwall.googlecode.com/svn/trunk/
 
 Build Version:1.4.6,146,144
+Build Version:1.4.8,148,156
 
 Market Version:1.4.3
 Market Version Code:143
