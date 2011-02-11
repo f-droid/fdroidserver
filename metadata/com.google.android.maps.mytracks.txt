@@ -1,3 +1,4 @@
+Use Built:Yes
 License:Apache2
 Web Site:http://code.google.com/p/mytracks/
 Source Code:http://code.google.com/p/mytracks/source/checkout
@@ -6,5 +7,12 @@ Summary:A GPS logger.
 Description:
 MyTracks is a GPS logger.
 .
+
+Repo Type:hg
+Repo:https://mytracks.googlecode.com/hg/
+
+#Note: There is a tag for v1.1.0, but it's pointing to the wrong commit.
+Build Version:1.1.0,23,a86a640f2d,subdir=MyTracks
+
 Market Version:1.1.0
 Market Version Code:23

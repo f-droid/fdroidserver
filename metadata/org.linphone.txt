@@ -5,5 +5,5 @@ Summary:SIP (VOIP) client
 Description:
 A SIP (VOIP) client.
 .
-Market Version:1.0.16
-Market Version Code:1016
+Market Version:1.1.0
+Market Version Code:1100

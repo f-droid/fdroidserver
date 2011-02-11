@@ -13,7 +13,8 @@ Repo:https://github.com/Zanshinmu/Wifi-Fixer.git
 
 Build Version:0.7.0.3.3,620,a3c0dfd8507a7778c1a3,subdir=wififixer,prebuild=sed -i s/android-1/android-8/ build.properties
 Build Version:0.8.0,758,d1278bb9b2cddb66a617,subdir=wififixer,target=android-8
+Build Version:0.8.0.1,759,55394716804479e76d5f,subdir=wififixer,target=android-8
 
 
-Market Version:0.8.0
-Market Version Code:758
+Market Version:0.8.0.1
+Market Version Code:759

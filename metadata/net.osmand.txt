@@ -1,3 +1,4 @@
+Use Built:Yes
 License:LGPL
 Web Site:http://code.google.com/p/osmand/
 Source Code:http://code.google.com/p/osmand/source/checkout
@@ -7,5 +8,13 @@ Description:
 Navigation and routing based on OpenStreetMap, including the ability for
 OSM contributors to edit directly.
 .
+
+Repo Type:hg
+Repo:https://osmand.googlecode.com/hg/
+
+#Need to figure out where the 'assets' directory is meant to come from,
+#and look at the sub-project OsmDataExtraction...
+#Build Version:0.5.2,25,9e343ad5a8,subdir=OsmAnd,encoding=utf-8
+
 Market Version:0.5.2
 Market Version Code:25
