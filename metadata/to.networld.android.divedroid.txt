@@ -1,0 +1,19 @@
+License:GPLv3
+Web Site:http://divedroid.android.networld.to
+Source Code:git://networld.to/var/scm/android/DiveDroid.git
+Summary:Scuba Dive Logbook
+Description:
+Android Dive Logbook. Based on http://scubadive.networld.to
+
+With graph support for
+
+        * Tank Pressure
+        * Temperature
+        * Depth
+
+Detailed Dive and Buddy Information.
+Portable data through the use of RDFS Ontology.
+.
+Repo Type:git
+Repo:git://networld.to/var/scm/android/DiveDroid.git
+
