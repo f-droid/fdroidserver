@@ -6,3 +6,5 @@ Summary:Simple Android application that provides widgets to have notes at hand
 Description:
 Simple Android application that provides widgets to have notes at hand
 .
+Market Version:1.0
+Market Version Code:1
