@@ -1,0 +1,12 @@
+License:GPLv3
+Web Site:http://foafviewer.android.networld.to
+Source Code:git://networld.to/var/scm/android/FOAFViewer.git
+Summary:FOAF (Friend Of A Friend) Viewer
+Description:
+FOAF (Friend Of A Friend) Viewer with support for recursive
+following of friend relation and caching mechanism for offline
+view.
+.
+Repo Type:git
+Repo:git://networld.to/var/scm/android/FOAFViewer.git
+
