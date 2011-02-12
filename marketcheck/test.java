@@ -44,7 +44,9 @@ class test {
             System.out.println("Apps to check: " + apps.size());
 
             MarketSession session = new MarketSession();
+
             session.getContext().setAndroidId("87548757565689");
+            session.getContext().setDeviceAndSdkVersion("crespo:8");
             System.out.println("Login...");
             session.login(login,password);
             System.out.println("Login done");
