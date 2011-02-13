@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv3
 Web Site:http://github.com/atd/HandyNotes
 Source Code:http://github.com/atd/HandyNotes
@@ -6,5 +7,12 @@ Summary:Simple Android application that provides widgets to have notes at hand
 Description:
 Simple Android application that provides widgets to have notes at hand
 .
+
+Repo Type:git
+Repo:https://github.com/atd/HandyNotes.git
+
+Build Version:1.0,1,bd33550beaf014ebbe8d,target=android-8
+
+
 Market Version:1.0
 Market Version Code:1

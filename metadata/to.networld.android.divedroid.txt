@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv3
 Web Site:http://divedroid.android.networld.to
 Source Code:git://networld.to/var/scm/android/DiveDroid.git
@@ -14,6 +15,13 @@ With graph support for
 Detailed Dive and Buddy Information.
 Portable data through the use of RDFS Ontology.
 .
+
 Repo Type:git
 Repo:git://networld.to/var/scm/android/DiveDroid.git
+
+Build Version:0.6,1,c50b1e638253cedf32dce49ef836fd30ba6071f9,encoding=utf-8,prebuild=mkdir libs && cd libs && wget http://dist.codehaus.org/jaxen/distributions/jaxen-1.1.3.zip && unzip -j jaxen-1.1.3.zip jaxen-1.1.3/jaxen-1.1.3.jar && rm *.zip && wget -O org.dom4j.jar http://sourceforge.net/projects/dom4j/files/dom4j-2.0.0-ALPHA-2/dom4j-2.0.0-ALPHA-2.jar/download && wget http://achartengine.googlecode.com/files/achartengine-0.5.0.jar && cd ..
+
+
+
+
 

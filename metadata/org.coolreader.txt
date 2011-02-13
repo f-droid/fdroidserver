@@ -4,6 +4,7 @@ License:GPLv2
 Web Site:http://crengine.sourceforge.net
 Source Code:http://sourceforge.net/scm/?type=git&group_id=191284
 Issue Tracker:http://sourceforge.net/tracker/?group_id=191284
+Donate:http://sourceforge.net/project/project_donations.php?group_id=191284
 Summary:E-book reader.
 Description:
 An e-book reader. Supported formats: FB2, TXT, RTF, TCR, HTML, EPUB, CHM.
@@ -22,6 +23,7 @@ Build Version:3.0.41-9,81,cr3.0.41-9,subdir=android,rm=android/build.properties,
 Build Version:3.0.42-6,86,cr3.0.42-6,subdir=android,rm=android/build.properties,buildjni=yes
 Build Version:3.0.43-4,94,cr3.0.43-4,subdir=android,rm=android/build.properties,buildjni=yes
 Build Version:3.0.43-6,96,cr3.0.43-6,subdir=android,rm=android/build.properties,buildjni=yes
+Build Version:3.0.44-03,103,cr3.0.44-3,subdir=android,rm=android/build.properties,buildjni=yes
 
 Market Version:3.0.44-03
 Market Version Code:103

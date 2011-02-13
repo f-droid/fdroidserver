@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv3+
 Web Site:http://sites.google.com/site/appsorganizer/
 Source Code:http://code.google.com/p/appsorganizer/source/checkout
@@ -9,9 +10,12 @@ Apps Organizer allows you to organize installed applications using
 labels. You can associate labels to applications, uninstall
 applications and create "label shortcuts" on the home screen.
 .
+
 Repo Type:svn
 Repo:http://appsorganizer.googlecode.com/svn/trunk
+
 Build Version:1.5.14,162,184,subdir=AppsOrganizer
-Use Built:Yes
+Build Version:1.5.15,163,185,subdir=AppsOrganizer
+
 Market Version:1.5.15
 Market Version Code:163
