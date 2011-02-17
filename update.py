@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #
 # update.py - part of the FDroid server tools
@@ -34,7 +35,7 @@ repo_icon = None
 repo_url = None
 execfile('config.py')
 
-execfile('metadata.py')
+import common
 
 # Parse command line...
 parser = OptionParser()
@@ -66,7 +67,7 @@ if (repo_url is None or repo_name is None or
     sys.exit(1)
 
 # Get all apps...
-apps = read_metadata(verbose=options.verbose)
+apps = common.read_metadata(verbose=options.verbose)
 
 # Copy apks and source tarballs for stuff we've built from source that
 # is flagged to be included in the repo...
@@ -150,8 +151,10 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
     f.close()
 
     # Get the signature (or md5 of, to be precise)...
-    p = subprocess.Popen(['java', 'getsig', os.path.join('..', apkfile)]
-            , cwd='getsig', stdout=subprocess.PIPE)
+    p = subprocess.Popen(['java', 'getsig',
+                          os.path.join(os.getcwd(), apkfile)],
+                         cwd=os.path.join(sys.path[0], 'getsig'),
+                         stdout=subprocess.PIPE)
     output = p.communicate()[0]
     if options.verbose:
         print output

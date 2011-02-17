@@ -4,7 +4,7 @@ Web Site:http://learnmusicnotes.sourceforge.net/
 Source Code:http://learnmusicnotes.sourceforge.net/
 Issue Tracker:http://sourceforge.net/tracker/?group_id=371992
 Donate:
-Summary:Musi sight reading training game
+Summary:Music sight reading training game
 Description:
 A simple game to assist with music sight reading training.
 .

@@ -103,10 +103,13 @@ class test {
 
                                 if (changed) { 
                                     System.out.println("..updating");
-                                    File of = new File(filespec);
-                                    BufferedWriter wi = new BufferedWriter(new FileWriter(of));
+                                    FileOutputStream fo = new FileOutputStream(filespec);
+                                    OutputStreamWriter osr = new OutputStreamWriter(fo, "UTF-8");
+                                    BufferedWriter wi = new BufferedWriter(osr);
                                     wi.write(output.toString());
                                     wi.close();
+                                    osr.close();
+                                    fo.close();
                                 }
 
                             }

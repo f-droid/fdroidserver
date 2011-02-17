@@ -3,3 +3,4 @@ repo/
 built/
 build_*/
 *~
+*.pyc

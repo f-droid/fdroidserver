@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# metadata.py - part of the FDroid server tools
+# common.py - part of the FDroid server tools
 # Copyright (C) 2010, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,6 +15,8 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import glob, os, sys
 
 def read_metadata(verbose=False):
 
