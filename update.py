@@ -151,8 +151,10 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
     f.close()
 
     # Get the signature (or md5 of, to be precise)...
-    p = subprocess.Popen(['java', 'getsig', os.path.join('..', apkfile)]
-            , cwd='getsig', stdout=subprocess.PIPE)
+    p = subprocess.Popen(['java', 'getsig',
+                          os.path.join(os.getcwd(), apkfile)],
+                         cwd=os.path.join(sys.path[0], 'getsig'),
+                         stdout=subprocess.PIPE)
     output = p.communicate()[0]
     if options.verbose:
         print output
