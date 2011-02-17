@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #
 # build.py - part of the FDroid server tools
@@ -19,7 +20,6 @@
 import sys
 import os
 import shutil
-import glob
 import subprocess
 import re
 import zipfile
@@ -29,10 +29,11 @@ import shlex
 from xml.dom.minidom import Document
 from optparse import OptionParser
 
+import common
+
 #Read configuration...
 execfile('config.py')
 
-execfile('metadata.py')
 
 # Parse command line...
 parser = OptionParser()
@@ -45,7 +46,7 @@ parser.add_option("-c", "--clean", action="store_true", default=False,
 (options, args) = parser.parse_args()
 
 # Get all apps...
-apps = read_metadata()
+apps = common.read_metadata()
 
 #Clear and/or create the 'built' directory, depending on mode:
 built_dir = 'built'
