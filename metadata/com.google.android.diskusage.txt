@@ -12,5 +12,5 @@ Repo:http://diskusage.googlecode.com/svn/trunk/
 
 Build Version:2.0.4,2004,61,prebuild=mkdir libs && cp extra/system.jar libs/
 
-Market Version:2.0.4
-Market Version Code:2004
+Market Version:2.0.5
+Market Version Code:2005

@@ -14,6 +14,6 @@ Build Version:1.1.9,11,243eba4f441b3601de96
 Build Version:1.2,12,d174bed05a6026ddb5db
 Build Version:1.2.3,15,8fe022fd67e5bb62c6d8
 
-Market Version:1.2.9
-Market Version Code:21
+Market Version:1.3.0
+Market Version Code:22
 

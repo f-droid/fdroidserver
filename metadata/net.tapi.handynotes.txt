@@ -12,7 +12,8 @@ Repo Type:git
 Repo:https://github.com/atd/HandyNotes.git
 
 Build Version:1.0,1,bd33550beaf014ebbe8d,target=android-8
+Build Version:1.2,3,v1.2,target=android-8
 
 
-Market Version:1.0
-Market Version Code:1
+Market Version:1.2
+Market Version Code:3
