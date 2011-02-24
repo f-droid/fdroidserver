@@ -16,5 +16,5 @@ Build Version:0.8.4,840,338,subdir=ttrss-reader
 #Build Version:0.8.5,851,346,subdir=0.8.5/ttrss-reader
 Build Version:0.8.6,860,350,subdir=ttrss-reader
 
-Market Version:0.8.6
-Market Version Code:860
+Market Version:0.8.7
+Market Version Code:871
