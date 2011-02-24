@@ -9,11 +9,11 @@ The official remote control for XBMC Media Center.
 .
 
 Repo Type:svn
-Repo:http://android-xbmcremote.googlecode.com/svn/trunk/
+Repo:http://android-xbmcremote.googlecode.com/svn/trunk/XBMC%20Remote
 
 #Sticking the 'lib-src' into the 'src' directory is the simplest way to
 #get the 'android update project' to automatically incorporate it.
-Build Version:0.8.5-beta1,730,730,subdir=XBMC Remote,encoding=utf-8,prebuild=mv lib libs && mv lib-src/org/codehaus src/org/
+Build Version:0.8.5-beta1,730,730,encoding=utf-8,prebuild=mv lib libs && mv lib-src/org/codehaus src/org/
 
 Market Version:0.8.5-beta1
 Market Version Code:730
