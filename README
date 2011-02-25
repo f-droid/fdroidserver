@@ -171,7 +171,7 @@ configuration to the build. These are:
                    the compile about character encodings, you probably need this.
  prebuild=xxxx     Specifies a shell command (or commands - chain with &&) to run
                    before the build takes place - the only proviso being that you
-                   can't use , or = characters.
+                   can't use commas in the command.
  novcheck=yes      Don't check that the version name and code in the resulting apk
                    are correct by looking at the build output - assume the metadata
                    is correct. This takes away a useful level of sanity checking, and

@@ -106,8 +106,8 @@ def read_metadata(verbose=False):
                         thisbuild['vercode'] = parts[1]
                         thisbuild['commit'] = parts[2]
                         for p in parts[3:]:
-                            pp = p.split('=')
-                            thisbuild[pp[0]] = pp[1]
+                            pk, pv = p.split('=', 1)
+                            thisbuild[pk] = pv
                         thisinfo['builds'].append(thisbuild)
                     elif field == "Use Built":
                         if value == "Yes":
