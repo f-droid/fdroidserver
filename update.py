@@ -241,7 +241,7 @@ doc.appendChild(root)
 
 repoel = doc.createElement("repo")
 repoel.setAttribute("name", repo_name)
-repoel.setAttribute("icon", repo_icon)
+repoel.setAttribute("icon", os.path.basename(repo_icon))
 repoel.setAttribute("url", repo_url)
 if repo_keyalias != None:
     repoel.setAttribute("pubkey", repo_pubkey)
@@ -390,7 +390,7 @@ if repo_keyalias != None:
         print output
 
 #Copy the repo icon into the repo directory...
-iconfilename = os.path.join(icon_dir, repo_icon)
+iconfilename = os.path.join(icon_dir, os.path.basename(repo_icon))
 shutil.copyfile(repo_icon, iconfilename)
 
 print "Finished."
