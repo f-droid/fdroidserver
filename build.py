@@ -202,11 +202,12 @@ for app in apps:
 
                 # If the app has ant set up to sign the release, we need to switch
                 # that off, because we want the unsigned apk...
-                if os.path.exists(os.path.join(root_dir, 'build.properties')):
-                    if subprocess.call(['sed','-i','s/^key.store/#/',
-                        'build.properties'], cwd=root_dir) !=0:
-                        print "Failed to amend build.properties"
-                        sys.exit(1)
+                for propfile in ('build.properties', 'default.properties'):
+                    if os.path.exists(os.path.join(root_dir, propfile)):
+                        if subprocess.call(['sed','-i','s/^key.store/#/',
+                                            propfile], cwd=root_dir) !=0:
+                            print "Failed to amend %s" % propfile
+                            sys.exit(1)
 
                 # Update the local.properties file...
                 locprops = os.path.join(root_dir, 'local.properties')
