@@ -15,6 +15,9 @@ Repo:https://timeriffic.googlecode.com/hg/
 #Build Version:1.09.03,10903,45,subdir=Timeriffic,oldsdkloc=yes
 
 Build Version:1.09.05,10905,fc40dccbb9,subdir=Timeriffic,oldsdkloc=yes,novcheck=yes,bindir=Timeriffic/bin2
+#NOTE: Far from obvious which commit corresponds to version 1.09.09. Also
+#note the source tree re-org, which means some of the settings above need
+#to change, and also the switch to android-11 as a target.
 
-Market Version:1.09.05
-Market Version Code:10905
+Market Version:1.09.09
+Market Version Code:10909

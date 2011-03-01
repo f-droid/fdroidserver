@@ -16,7 +16,8 @@ Repo Type:svn
 Repo:https://rehearsalassist.svn.sourceforge.net/svnroot/rehearsalassist/android/trunk
 
 Build Version:0.8.2,22,90,target=android-8,prebuild=mkdir -p gen/urbanstew/RehearsalAssistant && aidl aidl/urbanstew/RehearsalAssistant/IRecordService.aidl gen/urbanstew/RehearsalAssistant/IRecordService.java
-
+#Note- source for 0.9 is missing. See:
+# https://sourceforge.net/tracker/index.php?func=detail&aid=3196094&group_id=226240&atid=1067598
 
 Market Version:0.9
 Market Version Code:26

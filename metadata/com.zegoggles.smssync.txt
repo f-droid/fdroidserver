@@ -1,3 +1,4 @@
+Use Built:Yes
 License:Apache2
 Web Site:https://github.com/jberkel/sms-backup-plus#readme
 Source Code:https://github.com/jberkel/sms-backup-plus#readme
@@ -8,7 +9,10 @@ Backups up SMS and call log data from the device to an IMAP server, or
 Gmail.
 .
 
+Repo Type:git
+Repo:https://github.com/jberkel/sms-backup-plus.git
 
+Build Version:1.4.3,1404,1.4.3
 
 Market Version:1.4.3
 Market Version Code:1404

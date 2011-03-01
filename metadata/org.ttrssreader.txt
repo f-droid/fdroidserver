@@ -7,14 +7,18 @@ Summary:An RSS reader for Tiny Tiny RSS
 Description:
 An offline reader that works with the Tiny Tiny RSS web-based feed reader/aggregator..
 .
-Repo Type:svn
-Repo:http://ttrss-reader-fork.googlecode.com/svn/trunk
+Repo Type:hg
+Repo:https://ttrss-reader-fork.googlecode.com/hg/
 
 Build Version:0.8.4,840,338,subdir=ttrss-reader
 
 #This has the wrong version code in the repo (850 instead of 851)
 #Build Version:0.8.5,851,346,subdir=0.8.5/ttrss-reader
-Build Version:0.8.6,860,350,subdir=ttrss-reader
 
-Market Version:0.8.7
-Market Version Code:871
+#This was svn, from http://ttrss-reader-fork.googlecode.com/svn/trunk 
+#Build Version:0.8.6,860,350,subdir=ttrss-reader
+
+Build Version:0.8.8,880,5faddbaaf7,subdir=ttrss-reader
+
+Market Version:0.8.8
+Market Version Code:880

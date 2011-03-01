@@ -15,6 +15,7 @@ Build Version:0.7.0.3.3,620,a3c0dfd8507a7778c1a3,subdir=wififixer,prebuild=sed -
 Build Version:0.8.0,758,d1278bb9b2cddb66a617,subdir=wififixer,target=android-8
 Build Version:0.8.0.1,759,55394716804479e76d5f,subdir=wififixer,target=android-8
 Build Version:0.8.0.2,760,ff612a31874fc89cb124,subdir=wififixer,target=android-8
+#NOTE: Version 0.8.0.3 - there is no version code 769 in the source repo
 
-Market Version:0.8.0.2
-Market Version Code:760
+Market Version:0.8.0.3
+Market Version Code:769

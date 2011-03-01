@@ -14,5 +14,5 @@ Repo:https://mytracks.googlecode.com/hg/
 #Note: There is a tag for v1.1.0, but it's pointing to the wrong commit.
 Build Version:1.1.0,23,a86a640f2d,subdir=MyTracks
 
-Market Version:1.1.1
-Market Version Code:24
+Market Version:1.1.2
+Market Version Code:25
