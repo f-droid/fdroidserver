@@ -169,14 +169,12 @@ configuration to the build. These are:
                    the SDK's ant rules, and forces the Java compiler to interpret
                    source files with this encoding. If you receive warnings during
                    the compile about character encodings, you probably need this.
-
  prebuild=xxxx     Specifies a shell command (or commands - chain with &&) to
                    run before the build takes place. Backslash can be used
                    as an escape character to insert literal commas, or as the
                    last character on a line to join that line with the next.
-                   They have no special meaning in other contexts; in
-                   particular, literal backslashes should not be escaped.
-
+                   It have no special meaning in other contexts; in particular,
+                   literal backslashes should not be escaped.
  novcheck=yes      Don't check that the version name and code in the resulting apk
                    are correct by looking at the build output - assume the metadata
                    is correct. This takes away a useful level of sanity checking, and
