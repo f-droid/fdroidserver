@@ -19,5 +19,5 @@ Build Version:1.09.05,10905,fc40dccbb9,subdir=Timeriffic,oldsdkloc=yes,novcheck=
 #note the source tree re-org, which means some of the settings above need
 #to change, and also the switch to android-11 as a target.
 
-Market Version:1.09.09
-Market Version Code:10909
+Market Version:1.09.11
+Market Version Code:10911

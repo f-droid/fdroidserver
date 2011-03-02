@@ -8,5 +8,5 @@ Modular car navigation system with GPS tracking, realtime routing engine and
 support for various vector map formats. This is a beta version which may not
 work very well!
 .
-Market Version:0.5.0-4237
-Market Version Code:1
+Market Version:0.5.0-4281
+Market Version Code:2
