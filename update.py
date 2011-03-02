@@ -337,6 +337,15 @@ for app in apps:
                                 + ") " + app['source'])
                         warnings += 1
 
+        # If we don't have the market version, check if there is a build
+        # with a commit ID starting with '!' - this means we can't build it
+        # for some reason, and don't want hassling about it...
+        if not gotmarketver and app['marketvercode'] != '0':
+            for build in app['builds']:
+                if build['vercode'] == app['marketvercode']:
+                    gotmarketver = True
+
+        # Output a message of harassment if we don't have the market version:
         if not gotmarketver and app['marketvercode'] != '0':
             if app['usebuilt']:
                 addr = app['source']

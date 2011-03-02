@@ -76,9 +76,12 @@ for app in apps:
             dest_unsigned = dest + "_unsigned"
 
             if os.path.exists(dest):
-                print "Version " + thisbuild['version'] + " already exists"
+                print "..version " + thisbuild['version'] + " already exists"
+            elif thisbuild['commit'].startswith('!'):
+                print ("..skipping version " + thisbuild['version'] + " - " +
+                        thisbuild['commit'][1:])
             else:
-                print "Building version " + thisbuild['version']
+                print "..building version " + thisbuild['version']
 
                 if not got_source:
 

@@ -120,6 +120,12 @@ The above specifies to build version 0.12, which has a version code of 3.
 The third parameter specifies the tag, commit or revision number from
 which to build it in the source repository.
 
+If the commit version starts with a !, that version is not built. Instead,
+everything after the ! is used as a reason why it can't be built. The
+purpose of this feature is to allow non-buildable releases (e.g. the source
+is not published) to be flagged, so the scripts don't generate repeated
+messages about them. (And also to record the information for review later).
+
 In addition to the three, always required, parameters described above,
 further parameters can be added (in name=value format) to apply further
 configuration to the build. These are:
