@@ -1,0 +1,14 @@
+License:GPLv2
+Web Site:http://code.google.com/p/droid-atomix/
+Source Code:http://code.google.com/p/droid-atomix/source/checkout
+Issue Tracker:http://code.google.com/p/droid-atomix/issues/list
+Summary:Puzzle game
+Description:
+This is a puzzle game to build molecules from individual atoms. Atoms can
+move left, right, up or down, and will continue to slide until they hit any
+obstacle.
+.
+Repo Type:hg
+Repo:https://droid-atomix.googlecode.com/hg/
+Use Built:Yes
+Build Version:1.0.1,2,ea2086d1f9fe759866008f6fe5187fc1cc97bd1d,target=android-4

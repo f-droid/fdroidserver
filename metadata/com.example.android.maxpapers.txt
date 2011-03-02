@@ -1,0 +1,17 @@
+License:EPL
+Web Site:http://code.google.com/p/lcarswallpaper/
+Source Code:http://code.google.com/p/lcarswallpaper/source/checkout
+Issue Tracker:http://code.google.com/p/lcarswallpaper/issues/list
+Summary:LCARS live wallpaper
+Description:
+Star Trek LCARS themed live wallpaper for Android 2.1+ devices that shows
+various system information.
+.
+Repo Type:svn
+Repo:http://lcarswallpaper.googlecode.com/svn/trunk/lcarswallpaper
+Use Built:Yes
+
+# The manifest has no version code, so let's use the SVN revision number.
+Build Version:1.0.2,35,35,\
+prebuild=sed -i -r 's/(android:versionName)/android:versionCode="35" \1/' \
+ AndroidManifest.xml
