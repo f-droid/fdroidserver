@@ -1,0 +1,31 @@
+Use Built:Yes
+License:GPLv3
+Web Site:http://code.google.com/p/mythdroid/
+Source Code:http://code.google.com/p/mythdroid/source/checkout
+Issue Tracker:http://code.google.com/p/mythdroid/issues/list
+Donate:
+Summary:MythTV remote control system
+Description:
+A remote control system for MythTV featuring:
+*Support MythTV 0.21 - 0.24 and trunk
+*Standard and 'gesture' remote control interfaces
+*Browse, schedule, delete and play recordings
+*Stream recordings and videos to the android device
+*Music remote with album art
+*Video browsing / playback
+*Backend status viewer
+*Program guide viewer
+*UPnP backend auto location
+*Supports multiple frontends
+*Hardware keyboard 'passthru'
+*Frontend Wake On Lan
+*Call / SMS info display on MythTV OSD
+*Run arbitrary commands on frontends (e.g. 'sleep') via MDD
+*Wake and unlock on movement whilst in remotes 
+.
+
+Repo Type:svn
+Repo:http://mythdroid.googlecode.com/svn/trunk/
+
+Build Version:0.4.3,4,244,prebuild=mv lib libs
+
