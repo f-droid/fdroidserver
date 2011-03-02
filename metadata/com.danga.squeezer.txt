@@ -12,8 +12,10 @@ Repo:https://github.com/bradfitz/android-squeezer.git
 Use Built:Yes
 
 Build Version:0.5,5,df0ffda7ae6370f22847ea9e764d81802eeaf545,\
-prebuild=sed -r -i 's/(minSdkVersion=)"[^"]+"/\1"4"/' AndroidManifest.xml,\
-oldsdkloc=yes
+prebuild=sed -r -i \
+ 's/(android:)min(SdkVersion)(="[^"]")/\1min\2\3 \1target\2="4"/' \
+ AndroidManifest.xml,\
+oldsdkloc=yes,target=android-4
 
 Market Version:0.5
 Market Version Code:5

@@ -19,5 +19,5 @@ Build Version:2.1.0,15,639549fda2111cb800fabe468b4a64bf4ae27003,\
 buildjni=yes,subdir=src/android/project,target=android-8,\
 insertversion=2.1.0[^"]*
 
-Market Version:2.1.0 (Fix Starpack loader, add modules to play queue, fix pause button state)
+Market Version:2.1.0
 Market Version Code:15

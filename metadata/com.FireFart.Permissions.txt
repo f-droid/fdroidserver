@@ -1,5 +1,5 @@
 License:Apache2
-Web Site:
+Web Site:http://code.google.com/p/androidpermissions/
 Source Code:http://code.google.com/p/androidpermissions/source/checkout
 Issue Tracker:http://code.google.com/p/androidpermissions/issues/list
 Summary:Lists application permissions
