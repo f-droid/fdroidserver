@@ -192,7 +192,7 @@ for app in apps:
                             sys.exit(1)
 
                 # Generate (or update) the ant build file, build.xml...
-                if thisbuild.get('update', 'yes') != 'yes':
+                if thisbuild.get('update', 'yes') == 'yes':
                     parms = ['android','update','project','-p','.']
                     parms.append('--subprojects')
                     if thisbuild.has_key('target'):
