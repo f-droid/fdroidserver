@@ -1,3 +1,4 @@
+Use Built:Yes
 License:Apache2
 Web Site:http://www.replicaisland.net/
 Source Code:http://code.google.com/p/replicaisland/source/checkout
@@ -9,5 +10,11 @@ discover a secret power source on a mysterious island. With a retro style and
 unique, challenging game play, Replica Island is a new take on the classic
 platformer genre. 
 .
+
+Repo Type:svn
+Repo:http://replicaisland.googlecode.com/svn/trunk/
+
+Build Version:1.4,14,7
+
 Market Version:1.4
 Market Version Code:14

@@ -19,6 +19,7 @@ Build Version:0.8.4,840,338,subdir=ttrss-reader
 #Build Version:0.8.6,860,350,subdir=ttrss-reader
 
 Build Version:0.8.8,880,5faddbaaf7,subdir=ttrss-reader
+Build Version:0.8.8,881,!Same as 880 just different code in repo
 
 Market Version:0.8.8
 Market Version Code:881

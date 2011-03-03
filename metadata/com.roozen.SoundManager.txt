@@ -1,3 +1,4 @@
+Use Built:Yes
 License:Apache2
 Web Site:http://sites.google.com/site/roozenandroidapps/home/sound-manager
 Source Code:http://code.google.com/p/app-soundmanager/source/checkout
@@ -10,6 +11,10 @@ automatically change volumes at set times on any given day of the
 week.
 .
 Repo Type:svn
-Repo:http://app-soundmanager.googlecode.com/svn/trunk/
+Repo:http://app-soundmanager.googlecode.com/svn/tags/*
+
+Build Version:2.0.0,18,127,subdir=SoundManager-2.0.0,target=android-8,fixapos=yes
+
 Market Version:2.0.0
 Market Version Code:18
+
