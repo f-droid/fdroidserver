@@ -181,8 +181,7 @@ for app in apps:
                         sys.exit(1)
 
                 # Initialise submodules if requred...
-                if (thisbuild.has_key('submodules') and
-                        thisbuild['submodules'] == "yes"):
+                if thisbuild.get('submodules', 'no')  == 'yes':
                         if subprocess.call(['git', 'submodule', 'init'],
                                 cwd=build_dir) != 0:
                             print "Git submodule init failed"
@@ -193,7 +192,7 @@ for app in apps:
                             sys.exit(1)
 
                 # Generate (or update) the ant build file, build.xml...
-                if (not thisbuild.has_key('update')) or thisbuild['update'] == 'yes':
+                if thisbuild.get('update', 'yes') != 'yes':
                     parms = ['android','update','project','-p','.']
                     parms.append('--subprojects')
                     if thisbuild.has_key('target'):
@@ -220,8 +219,7 @@ for app in apps:
                     f.close()
                     # Fix old-fashioned 'sdk-location' by copying
                     # from sdk.dir, if necessary...
-                    if (thisbuild.has_key('oldsdkloc') and
-                            thisbuild['oldsdkloc'] == "yes"):
+                    if thisbuild.get('oldsdkloc', 'no') == "yes":
                         sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
                             re.S|re.M).group(1)
                         props += "\nsdk-location=" + sdkloc + "\n"
@@ -311,8 +309,7 @@ for app in apps:
                         sys.exit(1)
 
                 # Special case init functions for funambol...
-                if (thisbuild.has_key('initfun') and
-                        thisbuild['initfun'] == "yes"):
+                if thisbuild.get('initfun', 'no')  == "yes":
 
                     if subprocess.call(['sed','-i','s@' +
                         '<taskdef resource="net/sf/antcontrib/antcontrib.properties" />' +
@@ -406,7 +403,7 @@ for app in apps:
                 tarball.close()
 
                 # Build native stuff if required...
-                if thisbuild.has_key('buildjni') and thisbuild['buildjni'] == 'yes':
+                if thisbuild.get('buildjni', 'no') == 'yes':
                     ndkbuild = os.path.join(ndk_path, "ndk-build")
                     p = subprocess.Popen([ndkbuild], cwd=root_dir,
                             stdout=subprocess.PIPE)
@@ -439,7 +436,7 @@ for app in apps:
                     bindir = os.path.join(build_dir, thisbuild['bindir'])
                 else:
                     bindir = os.path.join(root_dir, 'bin')
-                if thisbuild.has_key('initfun') and thisbuild['initfun'] == "yes":
+                if thisbuild.get('initfun', 'no')  == "yes":
                     # Special case (again!) for funambol...
                     src = ("funambol-android-sync-client-" +
                             thisbuild['version'] + "-unsigned.apk")
@@ -453,7 +450,7 @@ for app in apps:
                 p = subprocess.Popen([aapt_path,'dump','badging',
                    src], stdout=subprocess.PIPE)
                 output = p.communicate()[0]
-                if thisbuild.has_key('novcheck') and thisbuild['novcheck'] == "yes":
+                if thisbuild.get('novcheck', 'no') == "yes":
                     vercode = thisbuild['vercode']
                     version = thisbuild['version']
                 else:
