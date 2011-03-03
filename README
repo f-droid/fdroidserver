@@ -165,31 +165,36 @@ configuration to the build. These are:
                    that.
  initfun=yes	   Enables a selection of mad hacks to make com.funambol.android
                    build. Probably not useful for any other application.
- buildjni=yes      Enables building of native code via the ndk-build script before
-                   doing the main ant build.
+ buildjni=yes      Enables building of native code via the ndk-build script
+                   before doing the main ant build.
  submodules=yes    Use if the project (git only) has submodules - causes git
                    submodule init and update to be executed after the source is
                    cloned.
- encoding=xxxx     Adds a java.encoding property to local.properties with the given
-                   value. Generally the value will be 'utf-8'. This is picked up by
-                   the SDK's ant rules, and forces the Java compiler to interpret
-                   source files with this encoding. If you receive warnings during
-                   the compile about character encodings, you probably need this.
+ encoding=xxxx     Adds a java.encoding property to local.properties with the
+                   given value. Generally the value will be 'utf-8'. This is
+                   picked up by the SDK's ant rules, and forces the Java
+                   compiler to interpret source files with this encoding. If
+                   you receive warnings during the compile about character
+                   encodings, you probably need this.
  prebuild=xxxx     Specifies a shell command (or commands - chain with &&) to
                    run before the build takes place. Backslash can be used
                    as an escape character to insert literal commas, or as the
                    last character on a line to join that line with the next.
                    It have no special meaning in other contexts; in particular,
                    literal backslashes should not be escaped.
- novcheck=yes      Don't check that the version name and code in the resulting apk
-                   are correct by looking at the build output - assume the metadata
-                   is correct. This takes away a useful level of sanity checking, and
-                   should only be used if the values can't be extracted.
+ novcheck=yes      Don't check that the version name and code in the resulting
+                   apk are correct by looking at the build output - assume the
+                   metadata is correct. This takes away a useful level of
+                   sanity checking, and should only be used if the values can't
+                   be extracted.
  fixtrans=yes      Modifies any instances of string resources that use multiple
                    formatting arguments, but don't use positional notation. For
-                   example, "Hello %s, %d" becomes "Hello %1$s, %2$d". Newer versions
-                   of the Android platform tools enforce this sensible standard. If you
-                   get error messages relating to that, you need to enable this.
+                   example, "Hello %s, %d" becomes "Hello %1$s, %2$d". Newer
+                   versions of the Android platform tools enforce this sensible
+                   standard. If you get error messages relating to that, you
+                   need to enable this.
+ fixapos=yes       Like fixtrans, but deals with an even older issue relating
+                   to 'unescaped apostrophes' in translation strings.
 
 Another example, using extra parameters:
 

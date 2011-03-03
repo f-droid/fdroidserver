@@ -252,8 +252,20 @@ for app in apps:
                 if thisbuild.has_key('rm'):
                     os.remove(os.path.join(build_dir, thisbuild['rm']))
 
+                # Fix apostrophes translation files if necessary...
+                if thisbuild.get('fixapos', 'no') == 'yes':
+                    for root, dirs, files in os.walk(os.path.join(root_dir,'res')):
+                        for filename in files:
+                            if filename.endswith('.xml'):
+                                if subprocess.call(['sed','-i','s@' +
+                                    r"\([^\\]\)'@\1\\'" +
+                                    '@g',
+                                    os.path.join(root, filename)]) != 0:
+                                    print "Failed to amend " + filename
+                                    sys.exit(1)
+
                 # Fix translation files if necessary...
-                if thisbuild.has_key('fixtrans') and thisbuild['fixtrans'] == 'yes':
+                if thisbuild.get('fixtrans', 'no') == 'yes':
                     for root, dirs, files in os.walk(os.path.join(root_dir,'res')):
                         for filename in files:
                             if filename.endswith('.xml'):
