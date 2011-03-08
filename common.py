@@ -57,6 +57,7 @@ def parse_metadata(metafile, **kw):
     thisinfo['repo'] = ''
     thisinfo['builds'] = []
     thisinfo['usebuilt'] = False
+    thisinfo['requiresroot'] = False
     mode = 0
     buildline = []
     for line in metafile:
@@ -118,6 +119,9 @@ def parse_metadata(metafile, **kw):
             elif field == "Use Built":
                 if value == "Yes":
                     thisinfo['usebuilt'] = True
+            elif field == "Requires Root":
+                if value == "Yes":
+                    thisinfo['requiresroot'] = True
             else:
                 print "Unrecognised field " + field + " in " + metafile.name
                 sys.exit(1)

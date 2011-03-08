@@ -288,6 +288,8 @@ for app in apps:
             addElement('marketvercode', app['marketvercode'], doc, apel)
             if not (app['antifeatures'] is None):
                 addElement('antifeatures', app['antifeatures'], doc, apel)
+            if app['requiresroot']:
+                addElement('requirements', 'root', doc, apel)
 
             # Sort the apk list into version order, just so the web site
             # doesn't have to do any work by default...

@@ -11,6 +11,8 @@ NOTE: Root access is required to use this application.
 .
 
 
+Requires Root:Yes
+
 Repo Type:svn
 Repo:http://droidwall.googlecode.com/svn/trunk/
 

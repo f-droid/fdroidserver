@@ -223,3 +223,8 @@ index. This allows metadata to be retained while an application is temporarily
 disabled from being published. The value should be a description of why the
 application is disabled.
 
+==Requires Root==
+
+Set this optional field to "Yes" if the application requires root
+privileges to be usable. This lets the client filter it out if the
+user so desires.
