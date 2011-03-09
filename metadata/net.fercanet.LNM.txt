@@ -13,5 +13,5 @@ Repo:https://learnmusicnotes.svn.sourceforge.net/svnroot/learnmusicnotes/trunk
 
 Build Version:1.2,3,16
 
-Market Version:1.2
-Market Version Code:3
+Market Version:1.3
+Market Version Code:4

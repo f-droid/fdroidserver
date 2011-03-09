@@ -6,11 +6,13 @@ Summary:Remote WiFi keyboard
 Description:
 Use a remote browser over WiFi as a keyboard for the Android device.
 .
-Market Version:2.2.1
-Market Version Code:23
+Market Version:2.3.1
+Market Version Code:25
 
 Repo Type:hg
 Repo:https://wifikeyboard.googlecode.com/hg/
 
 Build Version:2.2.1,23,b40d511cf0,encoding=utf-8,prebuild=mv html/key.html res/raw
+Build Version:2.3.1,25,!No source - http://code.google.com/p/wifikeyboard/issues/detail?id=30
+
 Use Built:Yes
