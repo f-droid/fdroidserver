@@ -1,0 +1,16 @@
+Use Built:Yes
+License:AGPL
+Web Site:http://blog.webworxshop.com/projects/swallowcatcher
+Source Code:http://gitorious.org/swallowcatcher
+Issue Tracker:
+Donate:
+Summary:Podcast client
+Description:
+A podcatcher.
+.
+
+Repo Type:git
+Repo:git://gitorious.org/swallowcatcher/swallowcatcher.git
+
+Build Version:0.1.2,5,1528089ae926c6424f9017b46940616cf1164820
+
