@@ -3,7 +3,7 @@ License:GPLv3
 Web Site:http://github.com/atd/HandyNotes
 Source Code:http://github.com/atd/HandyNotes
 Issue Tracker:http://github.com/atd/HandyNotes/issues
-Summary:Simple Android application that provides widgets to have notes at hand
+Summary:Sticky notes widget
 Description:
 Simple Android application that provides widgets to have notes at hand
 .
