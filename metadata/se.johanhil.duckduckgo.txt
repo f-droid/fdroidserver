@@ -1,0 +1,19 @@
+Use Built:Yes
+License:Apache2
+Web Site:https://github.com/johanhil/ddg-android
+Source Code:https://github.com/johanhil/ddg-android
+Issue Tracker:https://github.com/johanhil/ddg-android/issues
+Donate:
+Summary:Duck Duck Go search provider
+Description:
+Integrates the search engine Duck Duck Go with the Android OS. It adds
+another web search provider to the system and some neat suggestions
+for the user.
+.
+Repo Type:git
+Repo:https://github.com/johanhil/ddg-android.git
+
+Build Version:0.1,1,5a8b23c01eff6560bb9f5a815187c389f421b2b2,target=android-4
+
+Market Version:0.1
+Market Version Code:1
