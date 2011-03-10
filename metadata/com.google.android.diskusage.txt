@@ -12,5 +12,8 @@ Repo:http://diskusage.googlecode.com/svn/trunk/
 
 Build Version:2.0.4,2004,61,prebuild=mkdir libs && cp extra/system.jar libs/
 
+#Note - version name/code is wrong in the repo - we replace it
+Build Version:2.0.5,2005,62,prebuild=mkdir libs && cp extra/system.jar libs/,insertversion=2.0.4,insertvercode=2004
+
 Market Version:2.0.5
 Market Version Code:2005

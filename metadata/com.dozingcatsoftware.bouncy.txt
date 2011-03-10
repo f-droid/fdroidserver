@@ -1,0 +1,15 @@
+Use Built:Yes
+License:GPLv3
+Web Site:https://github.com/dozingcat/Vector-Pinball
+Source Code:https://github.com/dozingcat/Vector-Pinball
+Issue Tracker:https://github.com/dozingcat/Vector-Pinball/issues
+Donate:
+Summary:Pinball game
+Description:
+Vector Pinball is a pinball game.
+.
+Repo Type:git
+Repo:https://github.com/dozingcat/Vector-Pinball.git
+Build Version:1.1,4,45b5218594320ffb4b37
+
+
