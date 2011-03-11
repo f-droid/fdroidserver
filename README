@@ -180,7 +180,7 @@ configuration to the build. These are:
                    run before the build takes place. Backslash can be used
                    as an escape character to insert literal commas, or as the
                    last character on a line to join that line with the next.
-                   It have no special meaning in other contexts; in particular,
+                   It has no special meaning in other contexts; in particular,
                    literal backslashes should not be escaped.
  novcheck=yes      Don't check that the version name and code in the resulting
                    apk are correct by looking at the build output - assume the
