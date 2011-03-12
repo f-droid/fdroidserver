@@ -9,8 +9,8 @@ Description:
 An e-book reader.
 .
 
-Market Version:0.99.13
-Market Version Code:9913
+Market Version:0.99.15
+Market Version Code:9915
 
 Repo Type:git
 Repo:https://github.com/geometer/FBReaderJ.git
@@ -18,4 +18,5 @@ Repo:https://github.com/geometer/FBReaderJ.git
 #Build Version:0.99.3,9903,79cf4985a1faa4c80064,antcommand=package
 Build Version:0.99.11,9911,0.99.11,antcommand=package
 Build Version:0.99.12,9912,0.99.12,antcommand=package
+Build Version:0.99.15,9915,0.99.15,antcommand=package
 
