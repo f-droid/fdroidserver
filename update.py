@@ -24,7 +24,7 @@ import glob
 import subprocess
 import re
 import zipfile
-import md5
+import hashlib
 from xml.dom.minidom import Document
 from optparse import OptionParser
 
@@ -139,15 +139,18 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
         print "  WARNING: no SDK version information found"
         thisinfo['sdkversion'] = 0
 
-    # Calculate the md5...
-    m = md5.new()
+    # Calculate the md5 and sha256...
+    m = hashlib.md5()
+    sha = hashlib.sha256()
     f = open(apkfile, 'rb')
     while True:
         t = f.read(1024)
         if len(t) == 0:
             break
         m.update(t)
+        sha.update(t)
     thisinfo['md5'] = m.hexdigest()
+    thisinfo['sha256'] = sha.hexdigest()
     f.close()
 
     # Get the signature (or md5 of, to be precise)...
@@ -303,7 +306,13 @@ for app in apps:
                 addElement('apkname', apk['apkname'], doc, apkel)
                 if apk.has_key('srcname'):
                     addElement('srcname', apk['srcname'], doc, apkel)
-                addElement('hash', apk['md5'], doc, apkel)
+                for hash_type in ('sha256', 'md5'):
+                    if not hash_type in apk:
+                        continue
+                    hashel = doc.createElement("hash")
+                    hashel.setAttribute("type", hash_type)
+                    hashel.appendChild(doc.createTextNode(apk[hash_type]))
+                    apkel.appendChild(hashel)
                 addElement('sig', apk['sig'], doc, apkel)
                 addElement('size', str(apk['size']), doc, apkel)
                 addElement('sdkver', str(apk['sdkversion']), doc, apkel)
