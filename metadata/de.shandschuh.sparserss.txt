@@ -1,3 +1,5 @@
+Use Built:Yes
+
 License:MIT
 Web Site:http://code.google.com/p/sparserss/
 Source Code:http://code.google.com/p/sparserss/source/checkout
@@ -8,5 +10,11 @@ A simple and lightweight feed reader with automatic background update and
 notifications. Automatically discovers feeds given just a site URL. Provides
 OPML import and export.
 .
+
+Repo Type:svn
+Repo:http://sparserss.googlecode.com/svn/trunk/
+
+Build Version:0.8.4,47,105,target=android-8
+
 Market Version:0.8.4
 Market Version Code:47
