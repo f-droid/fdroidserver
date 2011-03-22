@@ -16,6 +16,6 @@ Build Version:3.3,47,50379da3ee1f7e95679a
 Build Version:3.3.1,48,!No source - see https://github.com/eleybourn/Book-Catalogue/issues/162/#issue/162/comment/821843
 Build Version:3.4,49,ef03c165bdc34e6be1f6
 
-Market Version:3.4
-Market Version Code:49
+Market Version:3.4.1
+Market Version Code:50
 

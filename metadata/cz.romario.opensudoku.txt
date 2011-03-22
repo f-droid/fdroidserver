@@ -14,5 +14,5 @@ Repo:http://opensudoku-android.googlecode.com/svn/trunk/OpenSudoku
 
 Build Version:1.1.4,1104,409
 
-Market Version:1.1.4
-Market Version Code:1104
+Market Version:1.1.5
+Market Version Code:1105
