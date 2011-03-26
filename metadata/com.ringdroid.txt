@@ -8,5 +8,5 @@ An application for editing and creating your own ringtones, alarms, and notifica
 sounds.
 .
 
-Market Version:2.4
-Market Version Code:20400
+Market Version:2.5
+Market Version Code:20500

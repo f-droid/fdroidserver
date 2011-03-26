@@ -6,5 +6,5 @@ Summary:GPS Logger
 Description:
 A GPS logging application.
 .
-Market Version:1.1
-Market Version Code:41
+Market Version:1.1.1
+Market Version Code:42
