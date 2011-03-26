@@ -1,3 +1,4 @@
+Use Built:Yes
 License:Apache2
 Web Site:http://code.google.com/p/ringdroid/
 Source Code:http://code.google.com/p/ringdroid/source/checkout
@@ -7,6 +8,11 @@ Description:
 An application for editing and creating your own ringtones, alarms, and notification
 sounds.
 .
+
+Repo Type:svn
+Repo:http://ringdroid.googlecode.com/svn/trunk/
+
+Build Version:2.5,20500,64,target=android-8
 
 Market Version:2.5
 Market Version Code:20500
