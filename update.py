@@ -247,7 +247,18 @@ repoel.setAttribute("name", repo_name)
 repoel.setAttribute("icon", os.path.basename(repo_icon))
 repoel.setAttribute("url", repo_url)
 if repo_keyalias != None:
-    repoel.setAttribute("pubkey", repo_pubkey)
+    def extract_pubkey():
+        p = subprocess.Popen(['keytool', '-exportcert',
+                              '-alias', repo_keyalias,
+                              '-keystore', keystore,
+                              '-storepass', keystorepass],
+                             stdout=subprocess.PIPE)
+        cert = p.communicate()[0]
+        if p.returncode != 0:
+            print "ERROR: Failed to get repo pubkey"
+            sys.exit(1)
+        return "".join("%02x" % ord(b) for b in cert)
+    repoel.setAttribute("pubkey", extract_pubkey())
 addElement('description', repo_description, doc, repoel)
 root.appendChild(repoel)
 
