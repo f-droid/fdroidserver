@@ -1,0 +1,17 @@
+Use Built:Yes
+License:GPLv3
+Web Site:http://acal.me
+Source Code:http://gitorious.org/acal
+Issue Tracker:
+Donate:
+Summary:Calendar - CalDAV client
+Description:
+A CalDAV client, allowing you to directly access a calendar on a CalDAV
+server.
+.
+
+Repo Type:git
+Repo:git://gitorious.org/acal/acal.git
+
+Build Version:1.05,14,r1.05
+
