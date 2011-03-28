@@ -246,7 +246,18 @@ repoel = doc.createElement("repo")
 repoel.setAttribute("name", repo_name)
 repoel.setAttribute("icon", os.path.basename(repo_icon))
 repoel.setAttribute("url", repo_url)
+
 if repo_keyalias != None:
+
+    # Generate a certificate fingerprint the same way keytool does it
+    # (but with slightly different formatting)
+    def cert_fingerprint(data):
+        digest = hashlib.sha1(data).digest()
+        ret = []
+        for i in range(4):
+            ret.append(":".join("%02X" % ord(b) for b in digest[i*5:i*5+5]))
+        return " ".join(ret)
+
     def extract_pubkey():
         p = subprocess.Popen(['keytool', '-exportcert',
                               '-alias', repo_keyalias,
@@ -257,8 +268,12 @@ if repo_keyalias != None:
         if p.returncode != 0:
             print "ERROR: Failed to get repo pubkey"
             sys.exit(1)
+        global repo_pubkey_fingerprint
+        repo_pubkey_fingerprint = cert_fingerprint(cert)
         return "".join("%02x" % ord(b) for b in cert)
+
     repoel.setAttribute("pubkey", extract_pubkey())
+
 addElement('description', repo_description, doc, repoel)
 root.appendChild(repoel)
 
@@ -397,6 +412,7 @@ if repo_keyalias != None:
 
     if not options.quiet:
         print "Creating signed index."
+        print "Key fingerprint:", repo_pubkey_fingerprint
     
     #Create a jar of the index...
     p = subprocess.Popen(['jar', 'cf', 'index.jar', 'index.xml'],
