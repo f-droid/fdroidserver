@@ -13,5 +13,5 @@ Repo:https://github.com/ge0rg/yaxim.git
 Build Version:0.7.4,5,0.7.4,oldsdkloc=yes
 Build Version:0.7.5,6,0.7.5,oldsdkloc=yes,submodules=yes,fixtrans=yes
 
-Market Version:0.7.5
-Market Version Code:6
+Market Version:0.7.6
+Market Version Code:7
