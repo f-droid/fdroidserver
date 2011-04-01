@@ -162,10 +162,12 @@ for app in apps:
                             print "Git reset failed"
                             sys.exit(1)
                     elif app['repotype'] == 'svn':
-                        if subprocess.call(['svn', 'update', '-r', thisbuild['commit']],
-                                cwd=build_dir) != 0:
-                            print "Svn update failed"
-                            sys.exit(1)
+                        for svncommand in (['svn', 'update', '--force',
+                                            '-r', thisbuild['commit']],
+                                           ['svn', 'revert', '-R', '.']):
+                            if subprocess.call(svncommand, cwd=build_dir) != 0:
+                                print "Svn update failed"
+                                sys.exit(1)
                     elif app['repotype'] == 'hg':
                         if subprocess.call(['hg', 'checkout', thisbuild['commit']],
                                 cwd=build_dir) != 0:
