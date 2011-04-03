@@ -6,5 +6,5 @@ Summary:Tile-based map viewer
 Description:
 A tile-based map viewer with support for maps from many sources.
 .
-Market Version:1.2.2
-Market Version Code:456
+Market Version:1.2.3
+Market Version Code:457
