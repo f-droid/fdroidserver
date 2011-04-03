@@ -1,3 +1,5 @@
+Use Built:Yes
+
 License:GPLv3+
 Web Site:http://www.yaaic.org
 Source Code:http://github.com/pocmo/Yaaic/
@@ -6,10 +8,15 @@ Summary:IRC client
 Description:
 Yaaic (Yet Another Android IRC Client) is an Internet Relay Chat (IRC) client.
 .
-Market Version:0.7
-Market Version Code:9
 
 Repo Type:git
 Repo:https://github.com/pocmo/Yaaic.git
 
-Build Version:0.6.1,8,4d04ca810df9f859d8e5,subdir=application,bindir=builds/ant
+#Last binary version...
+#Build Version:0.6.1,8,4d04ca810df9f859d8e5,subdir=application,bindir=builds/ant
+
+Build Version:0.7,9,v0.7,subdir=application,bindir=builds/ant
+
+Market Version:0.7
+Market Version Code:9
+
