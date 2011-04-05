@@ -1,0 +1,15 @@
+Use Built:Yes
+License:Expat
+Web Site:http://remembeer.info
+Source Code:https://code.discordians.net/projects/remembeer/repository
+Issue Tracker:https://code.discordians.net/projects/remembeer/issues
+Summary:Track and rate the beers you drink.
+Description:
+Remembeer lets you track and rate the beers you drink. No more trying
+to remember the name of that microbrew from last night, quickly check
+your log and see what you thought.
+.
+Repo Type:git
+Repo:git://code.discordians.net/srv/git/remembeer.git
+Build Version:1.2.2,48,c9d64e35964e9c445749aa02e470354b5788d8b4,target=android-4,subdir=android,prebuild=mv lib libs
+AntiFeatures:NonFreeNet
