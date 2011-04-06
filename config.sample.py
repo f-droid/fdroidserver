@@ -2,7 +2,6 @@
 #Copy this file to config.py, then amend the settings below according to
 #your system configuration.
 
-aapt_path = "/path/to/android-sdk-linux_86/platform-tools/aapt"
 sdk_path = "/path/to/android-sdk-linux_86"
 ndk_path = "/path/to/android-ndk-r5"
 

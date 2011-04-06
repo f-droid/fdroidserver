@@ -195,7 +195,8 @@ for app in apps:
 
                 # Generate (or update) the ant build file, build.xml...
                 if thisbuild.get('update', 'yes') == 'yes':
-                    parms = ['android','update','project','-p','.']
+                    parms = [os.path.join(sdk_path, 'tools', 'android'),
+                             'update', 'project', '-p', '.']
                     parms.append('--subprojects')
                     if thisbuild.has_key('target'):
                         parms.append('-t')
@@ -449,8 +450,10 @@ for app in apps:
 
                 # By way of a sanity check, make sure the version and version
                 # code in our new apk match what we expect...
-                p = subprocess.Popen([aapt_path,'dump','badging',
-                   src], stdout=subprocess.PIPE)
+                p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools',
+                                                   'aapt'),
+                                      'dump', 'badging', src],
+                                     stdout=subprocess.PIPE)
                 output = p.communicate()[0]
                 if thisbuild.get('novcheck', 'no') == "yes":
                     vercode = thisbuild['vercode']
@@ -531,8 +534,9 @@ for app in apps:
                     sys.exit(1)
 
                 # Zipalign it...
-                p = subprocess.Popen(['zipalign', '-v', '4',
-                        dest_unsigned, dest], stdout=subprocess.PIPE)
+                p = subprocess.Popen([os.path.join(sdk_path,'tools','zipalign'),
+                                      '-v', '4', dest_unsigned, dest],
+                                     stdout=subprocess.PIPE)
                 output = p.communicate()[0]
                 print output
                 if p.returncode != 0:

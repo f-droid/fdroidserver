@@ -31,7 +31,6 @@ To be able to auto-build packages, you're going to need:
 
 You then need to create a config.py (copy config.sample.py and follow the
 instructions) to specify the locations of some of these things.
-Also make sure the SDK tools - found in $SDK/tools/ - are in your $PATH.
 
 =MetaData=
 

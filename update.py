@@ -95,8 +95,9 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
     thisinfo['size'] = os.path.getsize(apkfile)
     thisinfo['permissions'] = []
     thisinfo['features'] = []
-    p = subprocess.Popen([aapt_path,'dump','badging',
-       apkfile], stdout=subprocess.PIPE)
+    p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools', 'aapt'),
+                          'dump', 'badging', apkfile],
+                         stdout=subprocess.PIPE)
     output = p.communicate()[0]
     if options.verbose:
         print output
