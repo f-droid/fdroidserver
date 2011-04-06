@@ -6,5 +6,5 @@ Summary:Jamendo (FaiF music) player
 Description:
 A music player tied to the Jamendo site, a large resource of FaiF music.
 .
-Market Version:0.9.10
-Market Version Code:28
+Market Version:0.9.10.1
+Market Version Code:29

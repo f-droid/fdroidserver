@@ -15,6 +15,7 @@ Repo Type:svn
 Repo:http://sparserss.googlecode.com/svn/trunk/
 
 Build Version:0.8.4,47,105,target=android-8
+Build Version:0.8.5,50,109,target=android-8
 
 Market Version:0.8.5
 Market Version Code:50
