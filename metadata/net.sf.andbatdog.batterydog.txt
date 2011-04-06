@@ -3,7 +3,7 @@ Web Site:http://andbatdog.sourceforge.net/
 Source Code:http://sourceforge.net/projects/andbatdog/develop
 Summary:Battery level logger
 Description:
-Android Battery Dog is a watchdog application for to support long time
+Android Battery Dog is a watchdog application to facilitate long term
 analysis of the battery level. In addition to showing a graph of this
 information, the file “/sdcard/BatteryDog/battery.csv” is created containing
 the recorded battery levels together with a timestamp.
