@@ -25,12 +25,12 @@ repo_keyalias = None
 #somewhere safe and secure, and backed up!
 keystore = "/home/me/somewhere/my.keystore"
 
-#The password for the keystore.
-keystorepass = "foo"
+#The password for the keystore (at least 6 characters).
+keystorepass = "password1"
 
 #The password for keys - the same is used for each auto-generated key
 #as well as for the repository key.
-keypass = "foo2"
+keypass = "password2"
 
 #The distinguished name used for all keys.
 keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"
