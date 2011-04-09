@@ -12,3 +12,5 @@ Repo Type:hg
 Repo:https://mp3tunes.googlecode.com/hg/
 Build Version:3.7,89,ba4550305733,target=android-4,fixapos=yes
 AntiFeatures:NonFreeNet
+Market Version:3.7
+Market Version Code:89
