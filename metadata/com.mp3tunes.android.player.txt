@@ -10,5 +10,5 @@ This is the official Android client for accessing the service.
 .
 Repo Type:hg
 Repo:https://mp3tunes.googlecode.com/hg/
-Build Version:3.6,87,3ac4877c8690,target=android-4,prebuild=sed -i -e s/Haven\'t/"Haven\\\'t"/ res/values/strings.xml && sed -i -e s/don\'t/"don\\\'t"/ res/values/strings.xml
+Build Version:3.6,87,3ac4877c8690,target=android-4,fixapos=yes
 AntiFeatures:NonFreeNet
