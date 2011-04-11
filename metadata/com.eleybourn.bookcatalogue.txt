@@ -17,6 +17,6 @@ Build Version:3.3.1,48,!No source - see https://github.com/eleybourn/Book-Catalo
 Build Version:3.4,49,ef03c165bdc34e6be1f6
 Build Version:3.4.2,51,f802cfb067684b78f195
 
-Market Version:3.4.2
-Market Version Code:51
+Market Version:3.5.1
+Market Version Code:53
 

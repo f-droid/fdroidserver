@@ -7,8 +7,8 @@ Description:
 A bubble shooting game. Knock the bubbles down by forming clusters of three
 or more bubbles.
 .
-Market Version:1.8
-Market Version Code:9
+Market Version:1.9
+Market Version Code:10
 
 Repo Type:svn
 Repo:http://frozenbubbleandroid.googlecode.com/svn/

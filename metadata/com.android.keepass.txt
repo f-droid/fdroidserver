@@ -7,8 +7,8 @@ Summary:KeePass-compatible password safe
 Description:
 A password safe, compatible with KeePass.
 .
-Market Version:1.9.1
-Market Version Code:77
+Market Version:1.9.2
+Market Version Code:78
 
 Repo Type:git
 Repo:git://github.com/bpellin/keepassdroid.git

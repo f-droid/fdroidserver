@@ -14,5 +14,5 @@ Repo:http://quickdroid.googlecode.com/svn/trunk
 Build Version:2.9.4,31,65,subdir=Quickdroid,target=android-7
 Build Version:3.0,37,75,subdir=Quickdroid,target=android-9
 Use Built:Yes
-Market Version:3.0
-Market Version Code:37
+Market Version:3.0.1
+Market Version Code:38

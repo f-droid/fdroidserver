@@ -17,5 +17,5 @@ Build Version:1.05,14,r1.05
 Build Version:1.06,15,r1.06
 Build Version:1.07,16,r1.07
 
-Market Version:1.07
-Market Version Code:16
+Market Version:1.1
+Market Version Code:17
