@@ -16,6 +16,7 @@ Repo:git://gitorious.org/acal/acal.git
 Build Version:1.05,14,r1.05
 Build Version:1.06,15,r1.06
 Build Version:1.07,16,r1.07
+Build Version:1.11,18,r1.11
 
-Market Version:1.1
-Market Version Code:17
+Market Version:1.11
+Market Version Code:18

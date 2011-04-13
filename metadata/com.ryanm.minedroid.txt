@@ -1,0 +1,17 @@
+Use Built:Yes
+License:New BSD
+Web Site:http://code.google.com/p/minedroid/
+Source Code:http://code.google.com/p/minedroid/source/checkout
+Issue Tracker:http://code.google.com/p/minedroid/issues/list
+Donate:
+Summary:Experimental Minecraft Client
+Description:
+An experimental Minecraft client.
+.
+
+Repo Type:svn
+Repo:http://minedroid.googlecode.com/svn/trunk/
+
+#Needs DroidRUGL to build.
+#Build Version:Extra lucky bugfix edition,13,47,subdir=MineDroid
+
