@@ -13,6 +13,7 @@ Repo:lp:rocrail/androc
 Build Version:1.1.219,219,219
 Build Version:1.1.221,221,221
 Build Version:1.2.224,224,!No source for this version in repo
+Build Version:1.2.228,228,228
 
 Market Version:1.2.228
 Market Version Code:228
