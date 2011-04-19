@@ -47,6 +47,9 @@ parser.add_option("-q", "--quiet", action = "store_true", default=False,
                   help="No output, except for warnings and errors")
 parser.add_option("-b", "--buildreport", action="store_true", default=False,
                   help="Report on build data status")
+parser.add_option("-u", "--update", default=None,
+                  help="Run the specified command for each metadata file "+
+                       "that needs updating")
 (options, args) = parser.parse_args()
 
 
@@ -400,6 +403,9 @@ for app in apps:
                 for apk in apks:
                     if apk['id'] == app['id']:
                         print "           " + str(apk['versioncode']) + " - " + apk['version']
+            if options.update != None:
+                subprocess.call([options.update, os.path.join('metadata',
+                    app['id'] + '.txt')])
 
     else:
         apps_disabled += 1
