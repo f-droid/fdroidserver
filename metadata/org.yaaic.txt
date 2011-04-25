@@ -16,6 +16,7 @@ Repo:https://github.com/pocmo/Yaaic.git
 #Build Version:0.6.1,8,4d04ca810df9f859d8e5,subdir=application,bindir=builds/ant
 
 Build Version:0.7,9,v0.7,subdir=application,bindir=builds/ant
+Build Version:0.8,10,v0.8,subdir=application,bindir=builds/ant
 
 Market Version:0.8
 Market Version Code:10

@@ -15,5 +15,5 @@ Repo:http://android-xbmcremote.googlecode.com/svn/trunk/XBMC%20Remote
 #get the 'android update project' to automatically incorporate it.
 Build Version:0.8.5-beta1,730,730,encoding=utf-8,prebuild=mv lib libs && mv lib-src/org/codehaus src/org/
 
-Market Version:0.8.5-beta1
-Market Version Code:730
+Market Version:0.8.6-beta1
+Market Version Code:768

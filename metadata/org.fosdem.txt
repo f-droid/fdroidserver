@@ -11,7 +11,7 @@ Repo Type:svn
 Repo:http://fosdem-android.svn.sourceforge.net/svnroot/fosdem-android
 
 Build Version:1.0.2,4,117
-#There is a 1.0.3 in the market - source code doesn't seem to be in the repo
+Build Version:1.0.3,5,!Source for this market version not in repo
 
 Market Version:1.0.3
 Market Version Code:5

@@ -17,5 +17,6 @@ Repo:git://github.com/bpellin/keepassdroid.git
 #Build Version:1.8.4,64,8700924ffad7bddd5b65
 Build Version:1.9,76,v1.9
 Build Version:1.9.1,77,v1.9.1-2
+Build Version:1.9.2,78,v1.9.2
 
 

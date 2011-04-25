@@ -16,5 +16,5 @@ Repo:https://osmand.googlecode.com/hg/
 #and look at the sub-project OsmDataExtraction...
 #Build Version:0.5.2,25,9e343ad5a8,subdir=OsmAnd,encoding=utf-8
 
-Market Version:0.5.2
-Market Version Code:25
+Market Version:0.5.3
+Market Version Code:26

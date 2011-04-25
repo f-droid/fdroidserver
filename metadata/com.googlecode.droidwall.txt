@@ -16,6 +16,7 @@ Requires Root:Yes
 Repo Type:svn
 Repo:http://droidwall.googlecode.com/svn/trunk/
 
+Build Version:1.4.3,143,!Old version in market - not bothering with it
 Build Version:1.4.6,146,144
 Build Version:1.4.8,148,156
 

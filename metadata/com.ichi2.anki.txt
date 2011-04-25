@@ -17,7 +17,8 @@ Repo:git://github.com/nicolas-raoul/Anki-Android.git
 #Build Version:0.4.2,12,v0.4.2
 Build Version:0.5,18,v0.5
 Build Version:0.5.1,19,!There is a v0.5.1 tag but the version code is not right
+Build Version:0.6,20,f26b7662ae9db9a92d21
 
-Market Version:0.5.1
-Market Version Code:19
+Market Version:0.6
+Market Version Code:20
 
