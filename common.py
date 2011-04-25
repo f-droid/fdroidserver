@@ -154,5 +154,7 @@ def parse_metadata(metafile, **kw):
 def read_metadata(verbose=False):
     apps = []
     for metafile in glob.glob(os.path.join('metadata', '*.txt')):
+        if verbose:
+            print "Reading " + metafile
         apps.append(parse_metadata(metafile, verbose=verbose))
     return apps

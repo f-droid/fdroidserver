@@ -46,7 +46,7 @@ parser.add_option("-c", "--clean", action="store_true", default=False,
 (options, args) = parser.parse_args()
 
 # Get all apps...
-apps = common.read_metadata()
+apps = common.read_metadata(options.verbose)
 
 #Clear and/or create the 'built' directory, depending on mode:
 built_dir = 'built'
