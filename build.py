@@ -194,7 +194,8 @@ for app in apps:
                             sys.exit(1)
 
                 # Generate (or update) the ant build file, build.xml...
-                if thisbuild.get('update', 'yes') == 'yes':
+                if (thisbuild.get('update', 'yes') == 'yes' and
+                       not thisbuild.has_key('maven')):
                     parms = [os.path.join(sdk_path, 'tools', 'android'),
                              'update', 'project', '-p', '.']
                     parms.append('--subprojects')
@@ -419,12 +420,17 @@ for app in apps:
                         print output
 
                 # Build the release...
-                if thisbuild.has_key('antcommand'):
-                    antcommand = thisbuild['antcommand']
+                if thisbuild.has_key('maven'):
+                    p = subprocess.Popen(['mvn', 'clean', 'install',
+                        '-Dandroid.sdk.path=' + sdk_path],
+                        cwd=root_dir, stdout=subprocess.PIPE)
                 else:
-                    antcommand = 'release'
-                p = subprocess.Popen(['ant', antcommand], cwd=root_dir, 
-                        stdout=subprocess.PIPE)
+                    if thisbuild.has_key('antcommand'):
+                        antcommand = thisbuild['antcommand']
+                    else:
+                        antcommand = 'release'
+                    p = subprocess.Popen(['ant', antcommand], cwd=root_dir, 
+                            stdout=subprocess.PIPE)
                 output = p.communicate()[0]
                 if p.returncode != 0:
                     print output
@@ -443,10 +449,15 @@ for app in apps:
                     # Special case (again!) for funambol...
                     src = ("funambol-android-sync-client-" +
                             thisbuild['version'] + "-unsigned.apk")
+                elif thisbuild.has_key('maven'):
+                    src = re.match(r".*^\[INFO\] Installing /.*/([^/]*)\.apk",
+                            output, re.S|re.M).group(1)
+                    src = os.path.join(bindir, src) + '.apk'
+#[INFO] Installing /home/ciaran/fdroidserver/tmp/mainline/application/target/callerid-1.0-SNAPSHOT.apk
                 else:
                     src = re.match(r".*^.*Creating (\S+) for release.*$.*", output,
                         re.S|re.M).group(1)
-                src = os.path.join(bindir, src)
+                    src = os.path.join(bindir, src)
 
                 # By way of a sanity check, make sure the version and version
                 # code in our new apk match what we expect...
