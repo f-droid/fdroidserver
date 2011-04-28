@@ -25,6 +25,6 @@ Build Version:1.0.79,80,2a567bd9632032c1f58c,prebuild=sed -i "s@config_isMarketV
 Build Version:1.0.88,89,!No source for anything after 1.0.79 - see https://github.com/fabrantes/rockonnggl/issues/issue/125
 
 
-Market Version:1.0.90
-Market Version Code:91
+Market Version:1.0.91
+Market Version Code:92
 

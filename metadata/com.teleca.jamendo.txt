@@ -1,3 +1,4 @@
+Use Built:Yes
 License:Apache2
 Web Site:http://telecapoland.github.com/jamendo-android/
 Source Code:http://github.com/telecapoland/jamendo-android
@@ -6,5 +7,11 @@ Summary:Jamendo (FaiF music) player
 Description:
 A music player tied to the Jamendo site, a large resource of FaiF music.
 .
-Market Version:0.9.10.2
-Market Version Code:30
+
+Repo Type:git
+Repo:https://github.com/telecapoland/jamendo-android.git
+
+Build Version:1.0 [BETA],31,v1.0.0b
+
+Market Version:1.0 [BETA]
+Market Version Code:31
