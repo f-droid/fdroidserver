@@ -7,4 +7,4 @@ Description:
 Allows you to import iCalender files to your calender without using google synchronization services.
 .
 Market Version:1.5
-Market Version Code:48
+Market Version Code:51

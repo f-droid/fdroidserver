@@ -6,5 +6,5 @@ Summary:arxiv.org client
 Description:
 Official arxiv.org client with widget
 .
-Market Version:2.0.0-RC5
-Market Version Code:82
+Market Version:2.0.4
+Market Version Code:90

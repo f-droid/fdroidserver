@@ -6,5 +6,5 @@ Summary:Compass
 Description:
 Uses the magnetic sensor to show the orientation.
 .
-Market Version:1.2.4
-Market Version Code:10
+Market Version:2.3
+Market Version Code:20
