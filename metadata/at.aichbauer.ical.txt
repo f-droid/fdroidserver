@@ -1,0 +1,10 @@
+License:GPL3
+Web Site:https://code.google.com/p/ical-import-export/
+Source Code:https://code.google.com/p/ical-import-export/source/checkout
+Issue Tracker:https://code.google.com/p/ical-import-export/issues/list
+Summary:handles .ics files
+Description:
+Allows you to import iCalender files to your calender without using google synchronization services.
+.
+Market Version:1.5
+Market Version Code:48

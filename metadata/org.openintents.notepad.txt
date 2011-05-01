@@ -1,0 +1,10 @@
+License:Apache2
+Web Site:http://www.openintents.org/en/notepad
+Source Code:https://code.google.com/p/openintents/source/checkout
+Issue Tracker:https://code.google.com/p/openintents/issues/list
+Summary:Notepad
+Description:
+OI Notepad allows to create, edit, send, and delete notes.
+.
+Market Version:1.2.2
+Market Version Code:10063

@@ -1,0 +1,10 @@
+License:GPL2
+Web Site:https://launchpad.net/arxivdroid
+Source Code:http://bazaar.launchpad.net/~jdeslip/arxivdroid/trunk/files
+Issue Tracker:
+Summary:arxiv.org client
+Description:
+Official arxiv.org client with widget
+.
+Market Version:2.0.0-RC5
+Market Version Code:82
