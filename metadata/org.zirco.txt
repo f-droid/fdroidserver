@@ -1,0 +1,25 @@
+Use Built:Yes
+License:GPLv3
+Web Site:http://code.google.com/p/zirco-browser
+Source Code:http://code.google.com/p/zirco-browser/source/checkout
+Issue Tracker:http://code.google.com/p/zirco-browser/issues/list
+Donate:
+Summary:Web browser with ad blocker
+Description:
+A web browser featuring:
+*Basic browser features (bookmarks, history, downloads...);
+*Unlimited tabs;
+*Easy bookmarks access;
+*Easy tabs opening and closing;
+*Bookmarks import from legacy Android browser;
+*Can be set as default browser;
+*Ad-blocker
+.
+
+Repo Type:svn
+Repo:http://zirco-browser.googlecode.com/svn/tags/*
+
+Build Version:0.3.6,10,315,subdir=0.3.6
+
+Market Version:0.3.7
+Market Version Code:11
