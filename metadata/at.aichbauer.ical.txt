@@ -1,10 +1,18 @@
-License:GPL3
+Use Built:Yes
+License:GPLv3
 Web Site:https://code.google.com/p/ical-import-export/
 Source Code:https://code.google.com/p/ical-import-export/source/checkout
 Issue Tracker:https://code.google.com/p/ical-import-export/issues/list
-Summary:handles .ics files
+Summary:iCal (.ics) file importer
 Description:
-Allows you to import iCalender files to your calender without using google synchronization services.
+Allows you to import iCalendar files to your calendar without using Google
+synchronization services.
 .
+
+Repo Type:svn
+Repo:http://ical-import-export.googlecode.com/svn/trunk/
+
+Build Version:1.5,51,!11 but needs AndroidTools compiling too,subdir=iCalImportExport,target=android-9
+
 Market Version:1.5
 Market Version Code:51

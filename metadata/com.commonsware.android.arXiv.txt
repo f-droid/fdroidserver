@@ -1,4 +1,5 @@
-License:GPL2
+Use Built:Yes
+License:GPLv2
 Web Site:https://launchpad.net/arxivdroid
 Source Code:http://bazaar.launchpad.net/~jdeslip/arxivdroid/trunk/files
 Issue Tracker:
@@ -6,5 +7,11 @@ Summary:arxiv.org client
 Description:
 Official arxiv.org client with widget
 .
+
+Repo Type:bzr
+Repo:lp:arxivdroid
+
+Build Version:2.0.4,90,!94 but doesn't compile due to apparently missing resource,target=android-11
+
 Market Version:2.0.4
 Market Version Code:90
