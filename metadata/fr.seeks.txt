@@ -1,0 +1,16 @@
+Use Built:Yes
+License:GPLv3
+Web Site:http://www.seeks-project.info/site/
+Source Code:https://github.com/sileht/SeeksWidget
+Issue Tracker:http://redmine.seeks-project.info/projects/seeks
+Donate:
+Summary:Widget for Seeks web service
+Description:
+A widget for the Seeks web service.
+.
+
+Repo Type:git
+Repo:https://github.com/sileht/SeeksWidget.git
+
+Build Version:1.2,4,1.2
+
