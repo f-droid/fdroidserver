@@ -8,10 +8,9 @@ Description:
 A VNC ('remote desktop') client.
 .
 Repo Type:svn
-Repo:http://android-vnc-viewer.googlecode.com/svn/trunk
+Repo:http://android-vnc-viewer.googlecode.com/svn/branches/antlersoft
 
-#Need to figure out the missing dependency
-#Build Version:0.5.0,13,197,subdir=androidVNC
+Build Version:0.5.0,13,197,subdir=androidVNC
 
 Market Version:0.5.0
 Market Version Code:13

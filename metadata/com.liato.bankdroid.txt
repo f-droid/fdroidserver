@@ -29,6 +29,8 @@ Build Version:1.7.2,110,fec08e34a157a3e0b455,encoding=utf-8,prebuild=mkdir libs 
     rm *.zip && \
     cd ..
 
+Build Version:1.7.3,115,!a08cab7e66c70e7b0f5c but wrong version code in repo
+
 Market Version:1.7.3
 Market Version Code:115
 
