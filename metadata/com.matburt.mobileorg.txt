@@ -16,5 +16,5 @@ Repo:https://github.com/matburt/mobileorg-android.git
 
 #Build Version:0.5.2,51,38dfe967ee99c71b12b8
 
-Market Version:0.5.2
-Market Version Code:52
+Market Version:0.5.5
+Market Version Code:55

@@ -16,5 +16,5 @@ Repo:https://github.com/tstein/AndroSS.git
 Build Version:0.2,6,9649313a5f5300878e9f,buildjni=yes
 Build Version:0.2.1,7,v0.2.1,buildjni=yes,target=android-8
 
-Market Version:0.2.1
-Market Version Code:7
+Market Version:0.2.2
+Market Version Code:8
