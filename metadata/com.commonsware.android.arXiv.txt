@@ -13,5 +13,5 @@ Repo:lp:arxivdroid
 
 Build Version:2.0.4,90,!94 but doesn't compile due to apparently missing resource,target=android-11
 
-Market Version:2.0.4
-Market Version Code:90
+Market Version:2.0.6
+Market Version Code:92

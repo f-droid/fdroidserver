@@ -6,5 +6,5 @@ Summary:arxiv.org client
 Description:
 Browse papers released on arxiv.org
 .
-Market Version:0.2
-Market Version Code:2
+Market Version:0.3
+Market Version Code:3

@@ -13,5 +13,5 @@ Repo:https://github.com/guardianproject/OtRChat.git
 
 Disabled: Seems to early in the development cycle to build a release
 
-Market Version:0.0.3.20110304b
-Market Version Code:12
+Market Version:0.0.3.20110306-dev-debug
+Market Version Code:13
