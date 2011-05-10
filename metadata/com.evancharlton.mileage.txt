@@ -1,0 +1,14 @@
+License:Apache2
+Web Site:http://evancharlton.com/projects/mileage/
+Source Code:http://evancharlton.com/projects/mileage/source/
+Summary:A Mileage tracker
+Description:
+A Mileage tracker for an Android-based phone. Allows importing and
+exporting of data in various formats, so it is easy to sync with
+your existing logs.
+.
+
+Repo Type:hg
+Repo:http://hg.evancharlton.com/mileage
+
+Build Version:3.0.0,3000,0766c4f352a5,subdir=trunk,oldsdkloc=yes
