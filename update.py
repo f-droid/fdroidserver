@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # update.py - part of the FDroid server tools
-# Copyright (C) 2010, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-11, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -327,6 +327,14 @@ for app in apps:
             # Sort the apk list into version order, just so the web site
             # doesn't have to do any work by default...
             apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
+
+            # Check for duplicates - they will make the client unhappy...
+            for i in range(len(apklist) - 1):
+                if apklist[i]['versioncode'] == apklist[i+1]['versioncode']:
+                    print "ERROR - duplicate versions"
+                    print apklist[i]['apkname']
+                    print apklist[i+1]['apkname']
+                    sys.exit(1)
 
             for apk in apklist:
                 apkel = doc.createElement("package")
