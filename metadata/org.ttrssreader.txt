@@ -26,5 +26,5 @@ Build Version:0.9.1,911,0.9.1,subdir=ttrss-reader,target=android-8
 Build Version:0.9.3,931,93412751548f,subdir=ttrss-reader,target=android-8
 Build Version:0.9.7,973,0.9.7 (3),subdir=ttrss-reader,target=android-8
 
-Market Version:0.9.7
-Market Version Code:973
+Market Version:1.0
+Market Version Code:1000
