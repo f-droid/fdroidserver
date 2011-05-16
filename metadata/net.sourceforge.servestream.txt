@@ -14,6 +14,7 @@ Repo Type:svn
 Repo:https://servestream.svn.sourceforge.net/svnroot/servestream/trunk
 
 Build Version:0.1,35,374,prebuild=mv lib/ libs/
+Build Version:0.2.5,40,!source has wrong version code at r442,prebuild=mv lib/ libs/
 
 Market Version:0.2.5
 Market Version Code:40
