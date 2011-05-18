@@ -1,3 +1,4 @@
+Use Built:Yes
 License:Apache2
 Web Site:http://evancharlton.com/projects/mileage/
 Source Code:http://evancharlton.com/projects/mileage/source/
