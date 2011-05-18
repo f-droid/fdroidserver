@@ -13,5 +13,5 @@ Repo:https://github.com/telecapoland/jamendo-android.git
 
 Build Version:1.0 [BETA],31,v1.0.0b
 
-Market Version:1.0 [BETA]
-Market Version Code:31
+Market Version:1.0.1 [BETA]
+Market Version Code:32

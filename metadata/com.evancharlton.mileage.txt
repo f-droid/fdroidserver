@@ -12,3 +12,5 @@ Repo Type:hg
 Repo:http://hg.evancharlton.com/mileage
 
 Build Version:3.0.0,3000,0766c4f352a5,subdir=trunk,oldsdkloc=yes
+Market Version:3.0.8
+Market Version Code:3080
