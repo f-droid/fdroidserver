@@ -29,6 +29,6 @@ Build Version:3.0.45-04,114,!tag points to wrong version,subdir=android,rm=andro
 Build Version:3.0.45-09,119,!tag points to wrong version,subdir=android,rm=android/build.properties,buildjni=yes
 Build Version:3.0.45-11,121,6c42a9b65090da9640ccb6ee317bb32de24201fb,subdir=android,rm=android/build.properties,buildjni=yes
 
-Market Version:3.0.45-11
-Market Version Code:121
+Market Version:3.0.45-14
+Market Version Code:124
 

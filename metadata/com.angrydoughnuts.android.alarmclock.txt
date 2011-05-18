@@ -6,5 +6,5 @@ Summary:An alarm clock
 Description:
 An alarm clock.
 .
-Market Version:1.6
-Market Version Code:7
+Market Version:1.7
+Market Version Code:8
