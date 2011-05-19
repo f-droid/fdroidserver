@@ -12,6 +12,7 @@ Repo Type:bzr
 Repo:lp:arxivdroid
 
 Build Version:2.0.4,90,!94 but doesn't compile due to apparently missing resource,target=android-11
+Build Version:2.0.6,92,95,target=android-11
 
 Market Version:2.0.6
 Market Version Code:92

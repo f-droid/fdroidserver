@@ -1,3 +1,4 @@
+Use Built:Yes
 License:Apache2
 Web Site:https://code.google.com/p/kraigsandroid/
 Source Code:https://code.google.com/p/kraigsandroid/source/checkout
@@ -6,5 +7,11 @@ Summary:An alarm clock
 Description:
 An alarm clock.
 .
+
+Repo Type:svn
+Repo:http://kraigsandroid.googlecode.com/svn/tags/*
+
+Build Version:1.7,8,378,subdir=alarmclock-1.7/android/alarmclock
+
 Market Version:1.7
 Market Version Code:8
