@@ -21,6 +21,7 @@ Repo:http://zirco-browser.googlecode.com/svn/tags/*
 
 Build Version:0.3.6,10,315,subdir=0.3.6
 Build Version:0.3.7,11,329,subdir=0.3.7
+Build Version:0.3.8,12,339,subdir=0.3.8
 
 Market Version:0.3.8
 Market Version Code:12
