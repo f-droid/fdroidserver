@@ -1,3 +1,4 @@
+Disabled:See license
 License:Unknown
 Web Site:http://github.com/rndmcnlly/iteration
 Source Code:http://github.com/rndmcnlly/iteration
