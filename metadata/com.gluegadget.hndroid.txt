@@ -2,5 +2,5 @@ Disabled:No license - it's "Open Source" whatever that means
 Web Site:http://gluegadget.com/hndroid/
 Source Code:https://github.com/amir/HNdroid
 
-Market Version:0.2
-Market Version Code:2
+Market Version:0.3
+Market Version Code:4
