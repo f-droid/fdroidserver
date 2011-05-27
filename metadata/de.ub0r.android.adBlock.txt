@@ -13,3 +13,5 @@ Repo:https://github.com/felixb/adBlock.git
 
 Build Version:0.5,5,v0.5,oldsdkloc=yes
 
+Market Version:0.5
+Market Version Code:5

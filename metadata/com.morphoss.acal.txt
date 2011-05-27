@@ -19,6 +19,7 @@ Build Version:1.07,16,r1.07
 Build Version:1.11,18,r1.11
 Build Version:1.20,27,r1.20
 Build Version:1.21,28,c0fbf54b2b94bbcadf010741c34947f9f3198e60
+Build Version:1.23,30,fae3e5f0f54fe5a2f46480481b39f9566ee9c67b
 
-Market Version:1.21
-Market Version Code:28
+Market Version:1.23
+Market Version Code:30
