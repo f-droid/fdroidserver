@@ -8,5 +8,5 @@ Summary:Commodore 64 Emulator
 Description:
 A Commodore 64 (C64) emulator.
 .
-Market Version:1.5
-Market Version Code:10500
+Market Version:1.5.1
+Market Version Code:10501

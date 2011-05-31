@@ -12,6 +12,7 @@ Repo Type:hg
 Repo:http://www.beem-project.com/hg/trunk/
 
 Build Version:0.1.5,7,0.1.5
+Build Version:0.1.6,9,0.1.6
 
 Market Version:0.1.6
 Market Version Code:9

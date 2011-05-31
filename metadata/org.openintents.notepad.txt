@@ -6,5 +6,5 @@ Summary:Notepad
 Description:
 OI Notepad allows to create, edit, send, and delete notes.
 .
-Market Version:1.2.2
-Market Version Code:10063
+Market Version:1.2.3
+Market Version Code:10065
