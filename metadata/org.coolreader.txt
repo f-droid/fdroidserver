@@ -29,6 +29,7 @@ Build Version:3.0.45-04,114,!tag points to wrong version,subdir=android,rm=andro
 Build Version:3.0.45-09,119,!tag points to wrong version,subdir=android,rm=android/build.properties,buildjni=yes
 Build Version:3.0.45-11,121,6c42a9b65090da9640ccb6ee317bb32de24201fb,subdir=android,rm=android/build.properties,buildjni=yes
 Build Version:3.0.45-14,124,cr3.0.45-14,subdir=android,rm=android/build.properties,buildjni=yes
+Build Version:3.0.46-1,131,cr3.0.46-1,subdir=android,rm=android/build.properties,buildjni=yes
 
 Market Version:3.0.46-1
 Market Version Code:131

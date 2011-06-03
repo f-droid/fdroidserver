@@ -8,9 +8,13 @@ Description:
 MP3tunes is a music storage service, where users can upload their music files and stream them from anywhere. 
 This is the official Android client for accessing the service.
 .
+
 Repo Type:hg
 Repo:https://mp3tunes.googlecode.com/hg/
+
 Build Version:3.7,89,ba4550305733,target=android-4,fixapos=yes
+
 AntiFeatures:NonFreeNet
+
 Market Version:5.1
 Market Version Code:92
