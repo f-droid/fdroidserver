@@ -33,6 +33,6 @@ Build Version:3.0.46-1,131,cr3.0.46-1,subdir=android,rm=android/build.properties
 Build Version:3.0.46-1,131,cr3.0.46-1,subdir=android,rm=android/build.properties,buildjni=yes
 Build Version:3.0.46-5,135,cr3.0.46-5,subdir=android,rm=android/build.properties,buildjni=yes
 
-Market Version:3.0.46-5
-Market Version Code:135
+Market Version:3.0.46-7
+Market Version Code:137
 

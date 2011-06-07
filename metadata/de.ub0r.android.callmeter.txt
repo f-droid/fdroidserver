@@ -6,5 +6,5 @@ Summary:keep track of calls, messages and data transfer
 Description:
 CallMeter is an Android application summing up your call and text logs. Different billing modes and periods are take into account on summing. 
 .
-Market Version:3.0rc10
-Market Version Code:2827
+Market Version:3.0rc11
+Market Version Code:2828
