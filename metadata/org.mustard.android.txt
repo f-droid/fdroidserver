@@ -9,5 +9,5 @@ Mustard is the first full-featured statusnet (like identica) client application 
 It has many features like attachments, geolocation and avatar update. It supports tags, groups and public timelines, favor/disfavor notices, subscribe/unsubscribe users and multiple accounts.
 .
 
-Market Version:0.1.12f
-Market Version Code:99
+Market Version:0.1.14b
+Market Version Code:103
