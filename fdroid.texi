@@ -1,0 +1,500 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename fdroid.info
+@settitle FDroid Server Manual, version 1.0
+@c %**end of header
+
+@copying
+This manual is for the FDroid server program.
+
+Copyright @copyright{} 2010, 2011 Ciaran Gultnieks
+Copyright @copyright{} 2011 Henrik Tunedal, Michael Haas, John Sullivan
+
+@quotation
+Permission is granted to ...
+@end quotation
+@end copying
+
+@titlepage
+@title FDroid Server Manual
+@author Ciaran Gultnieks and the FDroid project
+
+@c  The following two commands
+@c  start the copyright page.
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+
+Published by ...
+@end titlepage
+
+@c So the toc is printed at the start.
+@contents
+
+@ifnottex
+@node Top
+@comment  node-name, next,      previous,  up
+@top FDroid Server
+
+This manual is for the FDroid server, version version.
+@end ifnottex
+
+@menu
+* Basic instructions::
+* Build System Requirements::
+* MetaData::
+* Index::
+@end menu
+
+@node Basic instructions, Build System Requirements, Top, Top
+@comment  node-name, next,      previous,  up
+@chapter Basic instructions
+
+@cindex instructions, basic
+@cindex installation
+
+
+@enumerate
+
+@item
+Copy config.sample.py to config.py and edit the path within accordingly
+to point to the Android tools
+
+@item
+Make a repo directory and put APK files in it
+
+@item
+Run update.py
+
+@item
+If it reports that any metadata files are missing, you can create them
+in the metadata directory and run it again.
+
+@item
+To ease creation of metadata files, run update.py with the -c option. It
+will create 'skeleton' metadata files that are missing, and you can then
+just edit them and fill in the details.
+
+@item
+Then, if you've changed things, run update.py again.
+
+@item
+Running update.py adds an Icons directory into the repo directory, and
+also creates the repository index (index.xml).
+
+@item
+Transfer the repo directory to the appropriate http server. The script
+in upload.sh is an example of how to do this.
+
+@end enumerate
+
+@node Build System Requirements, MetaData, Basic instructions, Top
+@comment  node-name, next,      previous,  up
+@chapter Build System Requirements
+
+@cindex requirements, build system
+
+To be able to auto-build packages, you're going to need:
+
+@itemize @bullet
+
+@item
+GNU/Linux
+
+@item
+Python
+
+@item
+A fully functional Android SDK with all SDK platforms and tools
+
+@item
+The Android NDK
+
+@item
+Ant
+
+@item
+Ant Contrib Tasks (Debian package ant-contrib)
+
+@item
+Maven (Debian package maven2)
+
+@item
+JavaCC (Debian package javacc)
+
+@item
+VCS clients: svn, git, hg, bzr
+
+@item
+A keystore for holding release keys. (Safe, secure and well backed up!)
+
+@end itemize
+
+You then need to create a config.py (copy config.sample.py and follow the
+instructions) to specify the locations of some of these things.
+
+@node MetaData, Index, Build System Requirements, Top
+@comment  node-name, next,      previous,  up
+@chapter MetaData
+
+@cindex metadata
+
+Information used by update.py to compile the public index comes from two
+sources, 1) the APK files in the repo directory, and 2) the metadata files
+in the metadata directory.
+
+The metadata files are simple, easy to edit text files, always named as the
+application's package ID with '.txt' appended. Within the file, the following
+fields are recognised:
+
+@menu 
+
+* License::
+* Name::
+* Web Site::
+* Source Code::
+* Issue Tracker::
+* Donate::
+* Summary::
+* Description::
+* Repo Type::
+* Repo::
+* Build Version::
+* Use Built::
+* AntiFeatures::
+* Disabled::
+* Requires Root::
+
+@end menu
+
+@node License, Name, MetaData, MetaData
+@comment  node-name, next,      previous,  up
+@section License
+
+@cindex license
+
+The license for the application.
+
+Common values: 
+
+@itemize @bullet
+
+@item
+@samp{GPLv2}
+
+@item
+@samp{GPLv2+}
+
+@item
+@samp{GPLv3}
+
+@item
+@samp{Apache2}
+
+@item
+@samp{MIT}
+
+@item
+@samp{BSD}
+
+@end itemize
+
+@node Name, Web Site, License, MetaData
+@comment  node-name, next,      previous,  up
+@section Name
+
+@cindex Name
+
+The name of the application. Normally, this field should not be present since the
+application's correct name is retrieved from the APK file. However, in a situation
+where an APK contains a bad or missing application name, it can be overridden
+using this.
+
+@node Web Site, Source Code, Name, MetaData
+@comment  node-name, next,      previous,  up
+@section Web Site
+
+@cindex Web Site
+
+The URL for the application's web site.
+
+@node Source Code, Issue Tracker, Web Site, MetaData
+@comment  node-name, next,      previous,  up
+@section Source Code
+
+@cindex Source Code
+
+The URL to view or obtain the application's source code. This should be
+something human-friendly. Machine-readable source-code is covered in the
+'Repo' field.
+
+@node Issue Tracker, Donate, Source Code, MetaData
+@comment  node-name, next,      previous,  up
+@section Issue Tracker
+
+@cindex Issue Tracker
+
+The URL for the application's issue tracker. Optional, since not all
+applications have one.
+
+@node Donate, Summary, Issue Tracker, MetaData
+@comment  node-name, next,      previous,  up
+@section Donate
+
+@cindex Donate
+
+The URL to donate to the project. This could be the project's donate page
+if it has one, or perhaps even a direct PayPal link.
+
+@node Summary, Description, Donate, MetaData
+@comment  node-name, next,      previous,  up
+@section Summary
+
+@cindex Summary
+
+A brief summary of what the application is.
+
+@node Description, Repo Type, Summary, MetaData
+@comment  node-name, next,      previous,  up
+@section Description
+
+@cindex Description
+
+A full description of the application. This can span multiple lines, and is
+terminated by a line containing a single '.'.
+
+@node Repo Type, Repo, Description, MetaData
+@comment  node-name, next,      previous,  up
+@section Repo Type
+
+@cindex Repo Type
+
+The type of repository - for automatic building from source. If this is not
+specified, automatic building is disabled for this application. Possible
+values are:
+
+@itemize @bullet
+
+@item
+@samp{git}
+
+@item
+@samp{svn}
+
+@item
+@samp{hg}
+
+@item
+@samp{bzr}
+
+@end itemize
+
+@node Repo, Build Version, Repo Type, MetaData
+@comment  node-name, next,      previous,  up
+@section Repo
+
+@cindex Repo
+
+The repository location. Usually a git: or svn: URL.
+
+Normally the repository is checked out once for the application, then moved
+to a particular revision/commit/tag for each build version. For an SVN
+repository though, this behaviour can be changed by appending a * to the
+repository URL - in this case the repository is checked out once per build
+version, with the subdir parameter in place of the *. This can be beneficial
+when dealing with very large SVN repositories.
+
+For a Subversion repo that requires authentication, you can precede the repo
+URL with username:password@ and those parameters will be passed as @option{--username}
+and @option{--password} to the SVN checkout command.
+
+@node Build Version, Use Built, Repo, MetaData
+@comment  node-name, next,      previous,  up
+@section Build Version
+
+@cindex Build Version
+
+Any number of these fields can be present, each specifying a version to
+automatically build from source. The value is a comma-separated list.
+For example:
+
+@samp{Build Version:0.12,3,651696a49be2cd7db5ce6a2fa8185e31f9a20035}
+
+The above specifies to build version 0.12, which has a version code of 3.
+The third parameter specifies the tag, commit or revision number from
+which to build it in the source repository.
+
+If the commit version starts with a !, that version is not built. Instead,
+everything after the ! is used as a reason why it can't be built. The
+purpose of this feature is to allow non-buildable releases (e.g. the source
+is not published) to be flagged, so the scripts don't generate repeated
+messages about them. (And also to record the information for review later).
+
+In addition to the three, always required, parameters described above,
+further parameters can be added (in name=value format) to apply further
+configuration to the build. These are:
+
+@table @code
+
+@item subdir=<path>
+Specifies to build from a subdirectory of the checked out source code.
+Normally this directory is changed to before building, but there is a
+special case for SVN repositories where the URL is specified with a *
+at the end. See the documentation for the Repo field for more
+information.
+
+@item bindir=<path>
+Normally the build output (apk) is expected to be in the bin
+subdirectory below the ant build files. If the project is configured
+to put it elsewhere, that can be specified here, relative to the base
+of the checked out repo.
+
+@item oldsdkloc=yes
+The sdk location in the repo is in an old format, or the build.xml is
+expecting such. The 'new' format is sdk.dir while the VERY OLD format
+is sdk-location. Typically, if you get a message along the lines of:
+"com.android.ant.SetupTask cannot be found" when trying to build, then
+try enabling this option.
+
+@item target=<target>
+Specifies a particular SDK target, when the source doesn't. This is
+likely to cause the whole build.xml to be rewritten, which is fine if
+it's a 'standard' android file or doesn't already exist, but not a
+good idea if it's heavily customised.
+
+@item rm=<relpath>
+Specifies the relative path of file to delete before the build is
+done. The path is relative to the base of the build directory - i.e.
+the directory that contains AndroidManifest.xml.
+
+@item antcommand=xxx
+Specify an alternate ant command (target) instead of the default
+'release'.
+
+@item insertversion=x
+If specified, the pattern 'x' in the AndroidManifest.xml is replaced
+with the version number for the build.
+
+@item insertvercode=x
+If specified, the pattern 'x' in the AndroidManifest.xml is replaced
+with the version code for the build.
+
+@item update=no
+By default, 'android update project' is used to generate or update the
+build.xml file. Specifying update=no bypasses that.
+
+@item initfun=yes
+Enables a selection of mad hacks to make com.funambol.android build.
+Probably not useful for any other application.
+
+@item buildjni=yes
+Enables building of native code via the ndk-build script before doing
+the main ant build.
+
+@item submodules=yes
+Use if the project (git only) has submodules - causes git submodule
+init and update to be executed after the source is cloned.
+
+@item encoding=xxxx
+Adds a java.encoding property to local.properties with the given
+value. Generally the value will be 'utf-8'. This is picked up by the
+SDK's ant rules, and forces the Java compiler to interpret source
+files with this encoding. If you receive warnings during the compile
+about character encodings, you probably need this.
+
+@item prebuild=xxxx
+Specifies a shell command (or commands - chain with &&) to run before
+the build takes place. Backslash can be used as an escape character to
+insert literal commas, or as the last character on a line to join that
+line with the next. It has no special meaning in other contexts; in
+particular, literal backslashes should not be escaped.
+
+@item novcheck=yes 
+Don't check that the version name and code in the resulting apk are
+correct by looking at the build output - assume the metadata is
+correct. This takes away a useful level of sanity checking, and should
+only be used if the values can't be extracted.
+
+@item fixtrans=yes
+Modifies any instances of string resources that use multiple
+formatting arguments, but don't use positional notation. For example,
+"Hello %s, %d" becomes "Hello %1$s, %2$d". Newer versions of the
+Android platform tools enforce this sensible standard. If you get
+error messages relating to that, you need to enable this.
+
+@item fixapos=yes
+Like fixtrans, but deals with an even older issue relating to
+'unescaped apostrophes' in translation strings.
+
+@item maven=yes
+Build with maven instead of ant
+
+@end table
+
+Another example, using extra parameters:
+
+@samp{Build Version:1.09.03,10903,45,subdir=Timeriffic,oldsdkloc=yes}
+
+@node Use Built, AntiFeatures, Build Version, MetaData
+@comment  node-name, next,      previous,  up
+@section Use Built
+
+@cindex Use Built
+
+Set this to "Yes" to use built versions of the application for the repository.
+Currently, this just triggers update.py to copy the relevant apks and tarballs
+from the 'built' directory before updating the repo index.
+
+@node AntiFeatures, Disabled, Use Built, MetaData
+@comment  node-name, next,      previous,  up
+@section AntiFeatures
+
+@cindex AntiFeatures
+
+This is optional - if present, it contains a comma-separated list of any of
+the following values, describing an AntiFeature the application has:
+
+@itemize @bullet
+
+@item
+@samp{Ads} - the application contains advertising
+
+@item
+@samp{Tracking} - the application tracks and reports your activity to somewhere
+
+@item
+@samp{NonFreeNet} - the application promotes a non-Free network service
+
+@item
+@samp{NonFreeAdd} - the application promotes non-Free add-ons
+
+@end itemize
+
+@node Disabled, Requires Root, AntiFeatures, MetaData
+@comment  node-name, next,      previous,  up
+@section Disabled
+
+@cindex Disabled
+
+If this field is present, the application does not get put into the public
+index. This allows metadata to be retained while an application is temporarily
+disabled from being published. The value should be a description of why the
+application is disabled.
+
+@node Requires Root,, Disabled, MetaData
+@comment  node-name, next,      previous,  up
+@section Requires Root
+
+@cindex Requires Root
+
+Set this optional field to "Yes" if the application requires root
+privileges to be usable. This lets the client filter it out if the
+user so desires.
+
+@node Index,, MetaData, Top
+@comment  node-name, next,      previous,  up
+@unnumbered Index
+
+@printindex cp
+
+@bye
