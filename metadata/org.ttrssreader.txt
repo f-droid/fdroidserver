@@ -10,19 +10,19 @@ An offline reader that works with the Tiny Tiny RSS web-based feed reader/aggreg
 Repo Type:hg
 Repo:https://ttrss-reader-fork.googlecode.com/hg/
 
-Build Version:0.8.4,840,338,subdir=ttrss-reader
+Build Version:0.8.4,840,v0.8.4,subdir=ttrss-reader
 
 #This has the wrong version code in the repo (850 instead of 851)
-#Build Version:0.8.5,851,346,subdir=0.8.5/ttrss-reader
+Build Version:0.8.5,850,v0.8.5,subdir=ttrss-reader
 
-#This was svn, from http://ttrss-reader-fork.googlecode.com/svn/trunk 
-#Build Version:0.8.6,860,350,subdir=ttrss-reader
+Build Version:0.8.6,860,v0.8.6,subdir=ttrss-reader
 
 Build Version:0.8.8,880,5faddbaaf7,subdir=ttrss-reader
 Build Version:0.8.8,881,!Same as 880 just different code in repo
 
 Build Version:0.8.9,892,9ba20fcfb6,subdir=ttrss-reader,target=android-8
 Build Version:0.9.1,911,0.9.1,subdir=ttrss-reader,target=android-8
+# Tag is hosed for 0.9.3
 Build Version:0.9.3,931,93412751548f,subdir=ttrss-reader,target=android-8
 Build Version:0.9.7,973,0.9.7 (3),subdir=ttrss-reader,target=android-8
 Build Version:1.0,1000,1efaebb5678f,subdir=ttrss-reader,target=android-8
