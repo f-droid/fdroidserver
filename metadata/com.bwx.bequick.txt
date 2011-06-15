@@ -16,5 +16,5 @@ Repo:http://quick-settings.googlecode.com/svn/trunk/quick-settings/
 Build Version:1.9.8 p2,201012061,!Different market code
 Build Version:1.9.8 p2,201012060,184,target=android-8
 
-Market Version:1.9.8 p2
-Market Version Code:201012061
+Market Version:1.9.9 p1
+Market Version Code:201106141

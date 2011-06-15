@@ -7,5 +7,5 @@ Description:
 Piwik is an open-source web analytics package. Piwik Mobile is a client that gives
 you access to your statistics.
 .
-Market Version:1.3.0
-Market Version Code:5
+Market Version:1.4.0
+Market Version Code:6
