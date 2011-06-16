@@ -334,6 +334,16 @@ for app in apps:
                         print "Error running pre-build command"
                         sys.exit(1)
 
+                # Apply patches if any
+                if 'patch' in thisbuild:
+                    for patch in thisbuild['patch'].split(';'):
+                        print "Applying " + patch
+                        patch_path = os.path.join('metadata', app['id'], patch)
+                        if subprocess.call(['patch', '-p1',
+                                        '-i', os.path.abspath(patch_path)], cwd=root_dir) != 0:
+                            print "Failed to apply patch %s" % patch_path
+                            sys.exit(1)
+
                 # Special case init functions for funambol...
                 if thisbuild.get('initfun', 'no')  == "yes":
 
