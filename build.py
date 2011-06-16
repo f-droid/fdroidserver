@@ -56,6 +56,9 @@ if options.clean:
 if not os.path.exists(built_dir):
     os.mkdir(built_dir)
 
+if not os.path.isdir('build'):
+    os.makedirs('build')
+
 for app in apps:
 
     if app['disabled']:
@@ -69,7 +72,7 @@ for app in apps:
 
         print "Processing " + app['id']
 
-        build_dir = 'build_' + app['id']
+        build_dir = 'build/' + app['id']
 
         got_source = False
 
