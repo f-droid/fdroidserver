@@ -58,6 +58,11 @@ if not os.path.exists(built_dir):
 
 for app in apps:
 
+    if app['disabled']:
+        print "Skipping %s: disabled" % app['id']
+    elif not app['builds']:
+        print "Skipping %s: no builds specified" % app['id']
+
     if (app['disabled'] is None and app['repo'] != '' 
             and app['repotype'] != '' and (options.package is None or
             options.package == app['id']) and len(app['builds']) > 0):
@@ -414,7 +419,7 @@ for app in apps:
                     output = p.communicate()[0]
                     if p.returncode != 0:
                         print output
-                        print "NDK build failed"
+                        print "NDK build failed for %s:%s" % (app['id'], thisbuild['version'])
                         sys.exit(1)
                     elif options.verbose:
                         print output
@@ -434,7 +439,7 @@ for app in apps:
                 output = p.communicate()[0]
                 if p.returncode != 0:
                     print output
-                    print "Build failed"
+                    print "Build failed for %s:%s" % (app['id'], thisbuild['version'])
                     sys.exit(1)
                 elif options.verbose:
                     print output
