@@ -8,9 +8,12 @@ An implementation of a game with the same rules as Scrabble.
 .
 Repo Type:git
 Repo:git://xwords.git.sourceforge.net/gitroot/xwords/xwords
-Build Version:4.4 beta 18,11,android_beta_18,subdir=xwords4/android/XWords4
-Build Version:4.4 beta 23,16,!Translation files are not valid
-Build Version:4.4 beta 26,19,!Missing resources? android_beta_26,subdir=xwords4/android/XWords4
+
+#Can't build this with latest sdk tools. Amongst other things, positional formatting needs
+#sorting out in the resources, but our sorter-outer can't handler multiple line strings.
+#Build Version:4.4 beta 18,11,android_beta_18,subdir=xwords4/android/XWords4,fixtrans=yes
+#Build Version:4.4 beta 23,16,!Translation files are not valid
+#Build Version:4.4 beta 26,19,!Missing resources? android_beta_26,subdir=xwords4/android/XWords4
 
 Market Version:4.4 beta 28
 Market Version Code:21
