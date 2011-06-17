@@ -1,6 +1,7 @@
 config.py
 repo/
 built/
+build/
 build_*/
 *~
 *.pyc
