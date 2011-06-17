@@ -161,11 +161,17 @@ for app in apps:
                                 cwd=build_dir) != 0:
                             print "Git reset failed"
                             sys.exit(1)
+                        if subprocess.call(['git', 'clean', '-dfx'],
+                                cwd=build_dir) != 0:
+                            print "Git clean failed"
+                            sys.exit(1)
                     elif app['repotype'] == 'svn':
-                        for svncommand in (['svn', 'update', '--force',
-                                            '-r', thisbuild['commit']],
-                                           ['svn', 'revert', '-R', '.']):
-                            if subprocess.call(svncommand, cwd=build_dir) != 0:
+                        for svncommand in (
+                        'svn revert -R .',
+                        r"svn status | awk '/\?/ {print $2}' | xargs rm -rf",
+                        'svn update --force -r '+thisbuild['commit'],):
+                            if subprocess.call(svncommand, cwd=build_dir,
+                                    shell=True) != 0:
                                 print "Svn update failed"
                                 sys.exit(1)
                     elif app['repotype'] == 'hg':
@@ -173,8 +179,16 @@ for app in apps:
                                 cwd=build_dir) != 0:
                             print "Hg checkout failed"
                             sys.exit(1)
+                        if subprocess.call('hg status -u -0 | xargs rm -rf',
+                                cwd=build_dir, shell=True) != 0:
+                            print "Hg clean failed"
+                            sys.exit(1)
                     elif app['repotype'] == 'bzr':
                         if subprocess.call(['bzr', 'revert', '-r', thisbuild['commit']],
+                                cwd=build_dir) != 0:
+                            print "Bzr revert failed"
+                            sys.exit(1)
+                        if subprocess.call(['bzr', 'clean-tree', '--unknown', '--ignored'],
                                 cwd=build_dir) != 0:
                             print "Bzr revert failed"
                             sys.exit(1)
