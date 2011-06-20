@@ -471,6 +471,7 @@ for app in apps:
                     # Special case (again!) for funambol...
                     src = ("funambol-android-sync-client-" +
                             thisbuild['version'] + "-unsigned.apk")
+                    src = os.path.join(bindir, src)
                 elif thisbuild.has_key('maven'):
                     src = re.match(r".*^\[INFO\] Installing /.*/([^/]*)\.apk",
                             output, re.S|re.M).group(1)
@@ -483,6 +484,7 @@ for app in apps:
 
                 # By way of a sanity check, make sure the version and version
                 # code in our new apk match what we expect...
+                print "Checking " + src
                 p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools',
                                                    'aapt'),
                                       'dump', 'badging', src],
