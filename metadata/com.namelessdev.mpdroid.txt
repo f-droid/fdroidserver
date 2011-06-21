@@ -14,5 +14,5 @@ Repo:https://github.com/dreamteam69/dmix.git
 
 Build Version:0.6.9,17,b506537426065d7da6f0,subdir=MPDroid
 
-Market Version:0.6.9
-Market Version Code:17
+Market Version:0.7
+Market Version Code:18

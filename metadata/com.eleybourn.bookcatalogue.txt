@@ -10,8 +10,9 @@ This is a simple book catalogue application, to store a list of your books. Book
 
 Repo Type:git
 Repo:git://github.com/eleybourn/Book-Catalogue.git
-Build Version:3.0.1,36,b876c6df82c7e195ec5d
-Build Version:3.0,35,448858bad8b397974db7
+Build Version:3.0.1,36,b876c6df82c7e195ec5d,prebuild=sed -i "s/<string name=\"help_text_editbooksanthology5\">/<string name=\"help_text_editbooksanthology5\" formatted=\"false\">/" res/values/strings.xml
+Build Version:3.0,35,448858bad8b397974db7,prebuild=sed -i "s/<string name=\"help_text_editbooksanthology5\">/<string name=\"help_text_editbooksanthology5\" formatted=\"false\">/" res/values/strings.xml
+
 Build Version:3.3,47,50379da3ee1f7e95679a
 Build Version:3.3.1,48,!No source - see https://github.com/eleybourn/Book-Catalogue/issues/162/#issue/162/comment/821843
 Build Version:3.4,49,ef03c165bdc34e6be1f6
