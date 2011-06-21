@@ -196,7 +196,7 @@ for app in apps:
                                 cwd=build_dir) != 0:
                             print "Bzr revert failed"
                             sys.exit(1)
-                        if subprocess.call(['bzr', 'clean-tree', '--unknown', '--ignored'],
+                        if subprocess.call(['bzr', 'clean-tree', '--force', '--unknown', '--ignored'],
                                 cwd=build_dir) != 0:
                             print "Bzr revert failed"
                             sys.exit(1)
