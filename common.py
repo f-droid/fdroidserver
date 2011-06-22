@@ -278,6 +278,8 @@ def parse_metadata(metafile, **kw):
                 thisinfo['source'] = value
             elif field == 'License':
                 thisinfo['license'] = value
+            elif field == 'Category':
+                thisinfo['category'] = value
             elif field == 'Web Site':
                 thisinfo['web'] = value
             elif field == 'Issue Tracker':
