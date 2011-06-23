@@ -5,5 +5,5 @@ Summary:IRC client
 Description:
 Internet Relay Chat client with a twin-pane view.
 .
-Market Version:2011.0613.1
-Market Version Code:201106131
+Market Version:2011.0622.1
+Market Version Code:201106221
