@@ -54,9 +54,12 @@ class test {
             MarketSession.Callback callback = new MarketSession.Callback() {
 
                 @Override
-                    public void onResult(ResponseContext contex, Object oresp) {
+                    public void onResult(ResponseContext context, Object oresp) {
                         try {
                             AppsResponse response = (AppsResponse)oresp;
+                            if(response == null) {
+                                System.out.println("No response");
+                            }
                             if(response.getAppCount() != 1) {
                                 System.out.println("Not in market, or multiple results");
                             } else {
