@@ -12,8 +12,7 @@ OSM contributors to edit directly.
 Repo Type:hg
 Repo:https://osmand.googlecode.com/hg/
 
-Build Version:0.5.2,25,9e343ad5a8,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir assets && mkdir raw
-Build Version:0.5.3,26,!no source for this in repo
+Build Version:0.6.5,34,7fa55dfce796,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir assets && mkdir raw
 
-Market Version:0.5.3
-Market Version Code:26
+Market Version:0.6.5
+Market Version Code:34
