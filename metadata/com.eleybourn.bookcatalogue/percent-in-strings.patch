@@ -1,0 +1,13 @@
+diff --git a/res/values/strings.xml b/res/values/strings.xml
+index 4940e53..fb4969a 100644
+--- a/res/values/strings.xml
++++ b/res/values/strings.xml
+@@ -170,7 +170,7 @@
+ <string name="help_text_editbooksanthology3a">Each new title will appear at the bottom of the list, though using the</string>
+ <string name="help_text_editbooksanthology3b">buttons you can move a title up or down in the list. If you want to edit a title, just click on it and it will appear in the fields at the bottom, and the “Add” button will change to a “Save” button. To delete a title, just long click on it and a context menu will appear with the delete option.</string>
+ <string name="help_text_editbooksanthology4">There is an experimental function to try and automatically populate the anthology titles. Simply click on the menu button and the option will appear.</string>
+-<string name="help_text_editbooksanthology5">This will only work about 50% of the time, and may not be 100% correct in that case. If it finds any it will confirm the titles before they get saved into the database.</string>
++<string name="help_text_editbooksanthology5" formatted="false">This will only work about 50% of the time, and may not be 100% correct in that case. If it finds any it will confirm the titles before they get saved into the database.</string>
+ <string name="help_title_admin">Help and Admin</string>
+ <string name="help_text_admin1a">In the main menu (on the book list screen) you can select</string>
+ <string name="help_text_admin1b">to goto the administration screen. There are 4 tabs available Help (this information), Administration, Donate and About this App.</string>
