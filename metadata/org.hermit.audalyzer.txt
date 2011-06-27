@@ -6,12 +6,14 @@ Summary:Audio analyser
 Description:
 Realtime spectrum analysis of audio (via the microphone).
 .
-Market Version:1.15
-Market Version Code:16
 
 Repo Type:svn
 Repo:http://moonblink.googlecode.com/svn/trunk/
 
-#Build error...
+#Need to build the associated (in the repo) libraries first...
 #Build Version:1.14,15,774,subdir=Audalyzer
+#Build Version:1.15,16,954,subdir=Audalyzer
+
+Market Version:1.15
+Market Version Code:16
 
