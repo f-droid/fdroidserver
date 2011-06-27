@@ -43,13 +43,15 @@ parser.add_option("-c", "--createmeta", action="store_true", default=False,
                   help="Create skeleton metadata files that are missing")
 parser.add_option("-v", "--verbose", action="store_true", default=False,
                   help="Spew out even more information than normal")
-parser.add_option("-q", "--quiet", action = "store_true", default=False,
+parser.add_option("-q", "--quiet", action="store_true", default=False,
                   help="No output, except for warnings and errors")
 parser.add_option("-b", "--buildreport", action="store_true", default=False,
                   help="Report on build data status")
-parser.add_option("-u", "--update", default=None,
-                  help="Run the specified command for each metadata file "+
-                       "that needs updating")
+parser.add_option("-i", "--interactive", default=False, action="store_true",
+                  help="Interactively ask about things that need updating.")
+parser.add_option("-e", "--editor", default="/etc/alternatives/editor",
+                  help="Specify editor to use in interactive mode. Default "+
+                      "is /etc/alternatives/editor")
 (options, args) = parser.parse_args()
 
 
@@ -411,10 +413,19 @@ for app in apps:
                 for apk in apks:
                     if apk['id'] == app['id']:
                         print "           " + str(apk['versioncode']) + " - " + apk['version']
-            if options.update != None:
-                subprocess.call([options.update, os.path.join('metadata',
-                    app['id'] + '.txt')])
-
+            if options.interactive:
+                print "Build data out of date for " + app['id']
+                while True:
+                    answer = raw_input("[I]gnore, [E]dit or [Q]uit?").lower()
+                    if answer == 'i':
+                        break
+                    elif answer == 'e':
+                        subprocess.call([options.editor,
+                            os.path.join('metadata',
+                            app['id'] + '.txt')])
+                        break
+                    elif answer == 'q':
+                        sys.exit(0)
     else:
         apps_disabled += 1
 
