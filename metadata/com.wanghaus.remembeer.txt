@@ -9,9 +9,14 @@ Remembeer lets you track and rate the beers you drink. No more trying
 to remember the name of that microbrew from last night, quickly check
 your log and see what you thought.
 .
+
 Repo Type:git
 Repo:git://code.discordians.net/srv/git/remembeer.git
+
 Build Version:1.2.2,48,c9d64e35964e9c445749aa02e470354b5788d8b4,target=android-4,subdir=android,prebuild=mv lib libs
+Build Version:1.3.0,50,319231627d207cf7fb1d2ac23ada0ffdd486230c,target=android-4,subdir=android,prebuild=mv lib libs
+
 AntiFeatures:NonFreeNet
+
 Market Version:1.3.0
 Market Version Code:50
