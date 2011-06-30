@@ -14,5 +14,5 @@ Repo:https://github.com/nexes/Android-File-Manager.git
 Build Version:2.0.0,4,f55ed171435570fa8d72
 Build Version:2.1.2,212,7bca6266be731085ac92
 
-Market Version:2.1.4
-Market Version Code:214
+Market Version:2.1.6
+Market Version Code:216
