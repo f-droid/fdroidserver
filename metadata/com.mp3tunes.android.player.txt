@@ -13,6 +13,7 @@ Repo Type:hg
 Repo:https://mp3tunes.googlecode.com/hg/
 
 Build Version:3.7,89,ba4550305733,target=android-4,fixapos=yes
+Build Version:5.1,92,!No source in repo
 
 AntiFeatures:NonFreeNet
 
