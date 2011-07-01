@@ -1,0 +1,21 @@
+Use Built:Yes
+License:Apache2
+Name:Hacker's Keyboard
+Web Site:http://code.google.com/p/hackerskeyboard/
+Source Code:http://code.google.com/p/hackerskeyboard/source/checkout
+Issue Tracker:http://code.google.com/p/hackerskeyboard/issues/list
+Donate:
+Summary:5-row keyboard
+Description:
+A five row soft-keyboard with additional punctuation, and tab and ctrl keys.
+.
+
+
+Repo Type:hg
+Repo:https://hackerskeyboard.googlecode.com/hg/
+
+Build Version:v1.18,1018,8298cd8728c2,subdir=java,target=android-11
+Build Version:v1.20,1020,!No source in repo - see http://code.google.com/p/hackerskeyboard/issues/detail?id=47
+
+Market Version:v1.20
+Market Version Code:1020
