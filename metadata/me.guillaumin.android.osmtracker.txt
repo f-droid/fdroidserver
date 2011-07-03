@@ -1,0 +1,22 @@
+Use Built:Yes
+License:GPLv3
+Web Site:https://code.google.com/p/osmtracker-android/
+Source Code:https://code.google.com/p/osmtracker-android/source/checkout
+Issue Tracker:https://code.google.com/p/osmtracker-android/issues/list
+Donate:
+Summary:GPS Track Recorder
+Description:
+OSMTracker allows you to track your journey and mark significant way points.
+Way points can be marked with a tag using a button, with a quick voice record,
+a text note or by taking a picture. The various button pages and layouts can
+be customized to suit your OpenStreetMap activities. You can view your current
+track on top of an OpenStreetMap background.
+.
+
+Repo Type:svn
+Repo:http://osmtracker-android.googlecode.com/svn/trunk/
+
+Build Version:0.5.5,20,324,prebuild=mkdir libs && mv lib/* libs
+
+Market Version:0.5.5
+Market Version Code:20
