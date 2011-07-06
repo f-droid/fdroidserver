@@ -3,11 +3,12 @@ License:GPLv2
 Web Site:http://code.google.com/p/anstop/
 Source Code:http://code.google.com/p/anstop/source/checkout
 Issue Tracker:http://code.google.com/p/anstop/issues/list
-Summary:A simple stopping watch for Android
-Description:A simple stopping watch for Android, that also supports lap timing and a countdown timer.
+Summary:A simple stopwatch
+Description:A simple stopwatch, that also supports lap timing and a countdown
+timer.
 .
 
 Repo Type:svn
-Repo:http://anstop.googlecode.com/svn/tags/v1.4/
+Repo:http://anstop.googlecode.com/svn/trunk
 
 Build Version:1.4,9,34
