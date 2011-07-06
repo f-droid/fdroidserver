@@ -18,5 +18,5 @@ Build Version:1.5.14,162,184,subdir=AppsOrganizer
 Build Version:1.5.15,163,185,subdir=AppsOrganizer
 Build Version:1.5.16,164,187,subdir=AppsOrganizer
 
-Market Version:1.5.17
-Market Version Code:165
+Market Version:1.5.18
+Market Version Code:166
