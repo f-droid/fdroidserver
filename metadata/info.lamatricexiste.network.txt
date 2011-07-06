@@ -1,0 +1,16 @@
+Use Built:Yes
+License:GPLv2
+Web Site:http://rorist.github.com/android-network-discovery/
+Source Code:http://rorist.github.com/android-network-discovery/
+Issue Tracker:https://github.com/rorist/android-network-discovery/issues
+Donate:
+Summary:Network discovery tool
+Description:
+Discover network (WiFi/3G) hosts, scan ports, etc.
+.
+
+Repo Type:git
+Repo:https://github.com/rorist/android-network-discovery.git
+
+Build Version:0.3.4,42,32bffddce7e37a3c12f8,oldsdkloc=yes
+
