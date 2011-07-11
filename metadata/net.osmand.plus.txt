@@ -15,5 +15,5 @@ Repo:https://osmand.googlecode.com/hg/
 
 Build Version:0.6.5,34,7fa55dfce796,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir assets && mkdir raw
 
-Market Version:0.6.5
-Market Version Code:34
+Market Version:0.6.6
+Market Version Code:36

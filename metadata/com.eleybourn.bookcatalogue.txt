@@ -20,6 +20,6 @@ Build Version:3.4.2,51,f802cfb067684b78f195
 Build Version:3.5.1,53,52ba5015693ae0b2696e
 Build Version:3.5.6,57,!version code incorrect in source repo - 57 does not exist
 
-Market Version:3.5.6
-Market Version Code:57
+Market Version:3.6
+Market Version Code:59
 

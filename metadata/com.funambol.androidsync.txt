@@ -17,5 +17,5 @@ Build Version:10.0.4,14,2162,subdir=tags/10.0.4,update=no,initfun=yes
 
 
 
-Market Version:10.0.4
-Market Version Code:14
+Market Version:10.0.5
+Market Version Code:15

@@ -18,4 +18,4 @@ Build Version:0.8.0.2,760,ff612a31874fc89cb124,subdir=wififixer,target=android-8
 Build Version:0.8.0.3.1,770,59b8e66a0409a5d4c6a6,subdir=wififixer,target=android-8
 
 Market Version:0.8.0.4.1
-Market Version Code:803
+Market Version Code:804
