@@ -1,0 +1,9 @@
+License:MPL
+Web Site:http://www.firefox.com
+Source Code:http://hg.mozilla.org/
+Issue Tracker:
+Summary:Firefox Mobile
+Description:
+Firefox Mobile web browser.
+.
+
