@@ -22,6 +22,7 @@ Build Version:1.0.11,10013,1.0.11,antcommand=package
 Build Version:1.0.12,10014,fd349108eff9caa9152a,antcommand=package
 Build Version:1.1.0,10100,5eb993e1fac2898d2361,antcommand=package
 Build Version:1.1.1,10101,1.1.1,antcommand=package
+Build Version:1.1.2,10102,1.1.2,antcommand=package
 
 Market Version:1.1.2
 Market Version Code:10102

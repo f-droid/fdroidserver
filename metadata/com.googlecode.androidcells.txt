@@ -1,22 +1,20 @@
 
 Use Built:Yes
 License:GPLv3
-Web Site:http://code.google.com/p/androidcells
-Source Code:http://code.google.com/p/androidcells/source/checkout
-Issue Tracker:http://code.google.com/p/androidcells/issues/list
+Web Site:http://openbmap.org
+Source Code:http://sourceforge.net/scm/?type=git&group_id=218065
+Issue Tracker:http://sourceforge.net/tracker/?group_id=218065
 Donate:
 Summary:OpenBMap Data Contribution
 Description:
 Provides the ability to record cellular and WiFi locations and upload them
 to the OpenBMap database. See http://openbmap.org.
-
-Note: This is an early version and may not function correctly.
 .
 
-Repo Type:svn
-Repo:http://androidcells.googlecode.com/svn/trunk/
+Repo Type:git
+Repo:git://myposition.git.sourceforge.net/gitroot/myposition/AndroidClient
 
-Build Version:1.0,1,16,subdir=AndroidCells,prebuild=mkdir libs && mv lib/* libs
+Build Version:0.4.96,9,bc15ce80024d7f53897fd10e6ea0cc914d0ba226,prebuild=mv lib libs,target=android-9
 
 Market Version:0.4.991
 Market Version Code:13
