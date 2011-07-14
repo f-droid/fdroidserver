@@ -1,0 +1,18 @@
+Use Built: Yes
+License: MIT
+Source Code: https://github.com/handschuh/Slight-backup
+Summary: A very simple backup program.
+Description:
+A very simple program that can be used to backup
+- SMS
+- call-logs
+- bookmarks
+- user dictionaries
+unscheduled.
+.
+
+Repo Type: git
+Repo: https://github.com/handschuh/Slight-backup.git
+
+Build Version:0.2,6,94715551ab863b20df3d
+
