@@ -1,3 +1,4 @@
+Use Built:Yes
 License:GPLv3
 Web Site:http://www.mixare.org/
 Source Code:http://github.com/mixare/mixare
@@ -6,5 +7,11 @@ Summary:Augmented reality browser
 Description:
 An augmented reality browser.
 .
+
+Repo Type:git
+Repo:https://github.com/mixare/mixare.git
+
+Build Version:0.6.6,14,v0.6.6
+
 Market Version:0.6.6
 Market Version Code:14
