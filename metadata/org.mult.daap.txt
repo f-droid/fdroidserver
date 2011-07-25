@@ -14,5 +14,5 @@ Repo:http://daap-client.googlecode.com/svn/trunk
 Build Version:.9.1,30,62
 Build Version:.9.2,31,!Repo code is missing at least one file update - the manifest
 
-Market Version:.9.2
-Market Version Code:31
+Market Version:.9.5
+Market Version Code:32
