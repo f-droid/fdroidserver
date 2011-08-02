@@ -15,6 +15,9 @@ Repo:https://servestream.svn.sourceforge.net/svnroot/servestream/trunk
 
 Build Version:0.1,35,374,prebuild=mv lib/ libs/
 Build Version:0.2.5,40,!source has wrong version code at r442,prebuild=mv lib/ libs/
+#The following is a guess at the correct revision. Most of the commits in
+#this project don't even have any comment at all!?
+Build Version:0.2.11,46,614,prebuild=mv lib/ libs/
 
 Market Version:0.2.11
 Market Version Code:46

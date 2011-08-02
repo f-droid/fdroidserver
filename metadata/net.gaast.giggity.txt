@@ -15,5 +15,5 @@ Repo:http://wilmer.gaa.st/giggity/
 Build Version:0.8.1,4,133
 #There is a 0.8.2 in the market, but the repo source doesn't seem to correspond
 
-Market Version:0.9.2
-Market Version Code:9
+Market Version:0.9.4
+Market Version Code:11
