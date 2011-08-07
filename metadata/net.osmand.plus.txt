@@ -2,7 +2,7 @@ Use Built:Yes
 License:LGPL
 Name:OsmAnd+
 Web Site:http://code.google.com/p/osmand/
-Source Code:http://code.google.com/p/osmand/source/checkout
+Source Code:https://github.com/osmandapp/Osmand
 Issue Tracker:http://code.google.com/p/osmand/issues/list
 Summary:OpenStreetMap navigation & routing
 Description:
@@ -10,11 +10,11 @@ Navigation and routing based on OpenStreetMap, including the ability for
 OSM contributors to edit directly.
 .
 
-Repo Type:hg
-Repo:https://osmand.googlecode.com/hg/
+Repo Type:git
+Repo:https://github.com/osmandapp/Osmand.git
 
-Build Version:0.6.5,34,7fa55dfce796,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir assets && mkdir raw
-Build Version:0.6.6,36,!No matching source in repo
+Build Version:0.6.5,34,v0.6.5,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir assets && mkdir raw
+Build Version:0.6.6,36,v0.6.6_2,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir raw
 
 Market Version:0.6.6
 Market Version Code:36
