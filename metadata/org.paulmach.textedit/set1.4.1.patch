@@ -1,0 +1,22 @@
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+index 6974579..10a5a5a 100644
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -1,8 +1,8 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+       package="org.paulmach.textedit"
+-      android:versionCode="12"
+-      android:versionName="1.3.3"
++      android:versionCode="14"
++      android:versionName="1.4.1"
+ 	  android:installLocation="auto">
+ 
+     <uses-sdk android:minSdkVersion="7" />
+@@ -50,4 +50,4 @@
+  			android:name=".SearchSuggestions"
+ 			android:authorities="org.paulmach.authority" />
+     </application>
+-</manifest>
+\ No newline at end of file
++</manifest>
