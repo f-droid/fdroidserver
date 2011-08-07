@@ -74,7 +74,10 @@ for app in apps:
 
         build_dir = 'build/' + app['id']
 
-        got_source = False
+        # Set up vcs interface and make sure we have the latest code...
+        vcs = common.getvcs(app['repotype'], app['repo'], build_dir)
+
+        refreshed_source = False
 
 
         for thisbuild in app['builds']:
@@ -91,129 +94,22 @@ for app in apps:
             else:
                 print "..building version " + thisbuild['version']
 
-                if not got_source:
-
-                    got_source = True
-
-                    # Remove the build directory if it already exists...
-                    if os.path.exists(build_dir):
-                        shutil.rmtree(build_dir)
-
-                    # Strip username/password out of repo address if specified (relevant
-                    # only for SVN) and store for use later.
-                    repo = app['repo']
-                    index = repo.find('@')
-                    if index != -1:
-                        username = repo[:index]
-                        repo = repo[index+1:]
-                        index = username.find(':')
-                        if index == -1:
-                            print "Password required with username"
-                            sys.exit(1)
-                        password = username[index+1:]
-                        username = username[:index]
-                        repouserargs = ['--username', username, 
-                                '--password', password, '--non-interactive']
-                    else:
-                        repouserargs = []
-
-                    # Get the source code...
-                    if app['repotype'] == 'git':
-                        if subprocess.call(['git', 'clone', repo, build_dir]) != 0:
-                            print "Git clone failed"
-                            sys.exit(1)
-                    elif app['repotype'] == 'svn':
-                        if not repo.endswith("*"):
-                            if subprocess.call(['svn', 'checkout', repo, build_dir] +
-                                    repouserargs) != 0:
-                                print "Svn checkout failed"
-                                sys.exit(1)
-                    elif app['repotype'] == 'hg':
-                        if subprocess.call(['hg', 'clone', repo, build_dir]) !=0:
-                            print "Hg clone failed"
-                            sys.exit(1)
-                    elif app['repotype'] == 'bzr':
-                        if subprocess.call(['bzr', 'branch', repo, build_dir]) !=0:
-                            print "Bzr branch failed"
-                            sys.exit(1)
-                    else:
-                        print "Invalid repo type " + app['repotype'] + " in " + app['id']
-                        sys.exit(1)
+                if not refreshed_source:
+                    vcs.refreshlocal()
+                    refreshed_source = True
 
                 # Optionally, the actual app source can be in a subdirectory...
-                doupdate = True
                 if thisbuild.has_key('subdir'):
-                    if app['repotype'] == 'svn' and repo.endswith("*"):
-                        root_dir = build_dir
-                        # Remove the build directory if it already exists...
-                        if os.path.exists(build_dir):
-                            shutil.rmtree(build_dir)
-                        if subprocess.call(['svn', 'checkout',
-                                repo[:-1] + thisbuild['subdir'],
-                                '-r', thisbuild['commit'],
-                                build_dir] + repouserargs) != 0:
-                            print "Svn checkout failed"
-                            sys.exit(1)
-                        # Because we're checking out for every version we build,
-                        # we've already checked out the repo at the correct revision
-                        # and don't need to update to it...
-                        doupdate = False
-                    else:
-                        root_dir = os.path.join(build_dir, thisbuild['subdir'])
+                    root_dir = os.path.join(build_dir, thisbuild['subdir'])
                 else:
                     root_dir = build_dir
 
-                if doupdate:
-                    if app['repotype'] == 'git':
-                        if subprocess.call(['git', 'reset', '--hard', thisbuild['commit']],
-                                cwd=build_dir) != 0:
-                            print "Git reset failed"
-                            sys.exit(1)
-                        if subprocess.call(['git', 'clean', '-dfx'],
-                                cwd=build_dir) != 0:
-                            print "Git clean failed"
-                            sys.exit(1)
-                    elif app['repotype'] == 'svn':
-                        for svncommand in (
-                        'svn revert -R .',
-                        r"svn status | awk '/\?/ {print $2}' | xargs rm -rf",
-                        'svn update --force -r '+thisbuild['commit'],):
-                            if subprocess.call(svncommand, cwd=build_dir,
-                                    shell=True) != 0:
-                                print "Svn update failed"
-                                sys.exit(1)
-                    elif app['repotype'] == 'hg':
-                        if subprocess.call(['hg', 'checkout', thisbuild['commit']],
-                                cwd=build_dir) != 0:
-                            print "Hg checkout failed"
-                            sys.exit(1)
-                        if subprocess.call('hg status -u -0 | xargs rm -rf',
-                                cwd=build_dir, shell=True) != 0:
-                            print "Hg clean failed"
-                            sys.exit(1)
-                    elif app['repotype'] == 'bzr':
-                        if subprocess.call(['bzr', 'revert', '-r', thisbuild['commit']],
-                                cwd=build_dir) != 0:
-                            print "Bzr revert failed"
-                            sys.exit(1)
-                        if subprocess.call(['bzr', 'clean-tree', '--force', '--unknown', '--ignored'],
-                                cwd=build_dir) != 0:
-                            print "Bzr revert failed"
-                            sys.exit(1)
-                    else:
-                        print "Invalid repo type " + app['repotype']
-                        sys.exit(1)
+                # Get a working copy of the right revision...
+                vcs.reset(thisbuild['commit'])
 
                 # Initialise submodules if requred...
                 if thisbuild.get('submodules', 'no')  == 'yes':
-                        if subprocess.call(['git', 'submodule', 'init'],
-                                cwd=build_dir) != 0:
-                            print "Git submodule init failed"
-                            sys.exit(1)
-                        if subprocess.call(['git', 'submodule', 'update'],
-                                cwd=build_dir) != 0:
-                            print "Git submodule update failed"
-                            sys.exit(1)
+                    vcs.initsubmodules()
 
                 # Generate (or update) the ant build file, build.xml...
                 if (thisbuild.get('update', 'yes') == 'yes' and

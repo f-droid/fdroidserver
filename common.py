@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # common.py - part of the FDroid server tools
-# Copyright (C) 2010, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-11, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -17,6 +17,201 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import glob, os, sys, re
+import subprocess
+
+
+def getvcs(vcstype, remote, local):
+    if vcstype == 'git':
+        return vcs_git(remote, local)
+    elif vcstype == 'svn':
+        return vcs_svn(remote, local)
+    elif vcstype == 'hg':
+        return vcs_hg(remote,local)
+    elif vcstype == 'bzr':
+        return vcs_bzr(remote,local)
+    print "Invalid vcs type " + vcstype
+    sys.exit(1)
+
+class vcs:
+    def __init__(self, remote, local):
+
+        # It's possible to sneak a username and password in with
+        # the remote address... (this really only applies to svn
+        # and we should probably be more specific!)
+        index = remote.find('@')
+        if index != -1:
+            self.username = remote[:index]
+            remote = remote[index+1:]
+            index = self.username.find(':')
+            if index == -1:
+                print "Password required with username"
+                sys.exit(1)
+            self.password = self.username[index+1:]
+            self.username = self.username[:index]
+        else:
+            self.username = None
+
+        self.remote = remote
+        self.local = local
+                    
+    # Refresh the local repository - i.e. get the latest code. This
+    # works either by updating if a local copy already exists, or by
+    # cloning from scratch if it doesn't.
+    def refreshlocal(self):
+        if not os.path.exists(self.local):
+            self.clone()
+        else:
+            self.reset()
+            self.pull()
+
+    # Clone the remote repository. It must not already exist locally.
+    def clone(self):
+        assert False    # Must be defined in child
+
+    # Reset the local repository. Remove changes, untracked files, etc.
+    # Put the working tree to either the given revision, or to the HEAD
+    # if not specified.
+    def reset(self, rev=None):
+        assert False    # Must be defined in child
+
+    # Get new commits from the remote repository. Local must be clean.
+    def pull(self):
+        assert False    # Must be defined in child
+
+    # Initialise and update submodules
+    def initsubmodules(self):
+        assert False    # Not supported unless overridden
+
+class vcs_git(vcs):
+
+    def clone(self):
+        if subprocess.call(['git', 'clone', self.remote, self.local]) != 0:
+            print "Git clone failed"
+            sys.exit(1)
+
+    def reset(self, rev=None):
+        if rev is None:
+            rev = 'HEAD'
+        if subprocess.call(['git', 'reset', '--hard', rev],
+                cwd=self.local) != 0:
+            print "Git reset failed"
+            sys.exit(1)
+        if subprocess.call(['git', 'clean', '-dfx'],
+                cwd=self.local) != 0:
+            print "Git clean failed"
+            sys.exit(1)
+
+    def pull(self):
+        if subprocess.call(['git', 'pull', 'origin'],
+                cwd=self.local) != 0:
+            print "Git pull failed"
+            sys.exit(1)
+
+    def initsubmodules(self):
+        if subprocess.call(['git', 'submodule', 'init'],
+                cwd=self.local) != 0:
+            print "Git submodule init failed"
+            sys.exit(1)
+        if subprocess.call(['git', 'submodule', 'update'],
+                cwd=self.local) != 0:
+            print "Git submodule update failed"
+            sys.exit(1)
+
+
+
+class vcs_svn(vcs):
+
+    def userargs(self):
+        if self.username is None:
+            return []
+        return ['--username', self.username, 
+                '--password', self.password,
+                '--non-interactive']
+
+    def clone(self):
+        if subprocess.call(['svn', 'checkout', self.remote, self.local] +
+                self.userargs()) != 0:
+            print "Svn checkout failed"
+            sys.exit(1)
+
+    def reset(self, rev=None):
+        if rev is None:
+            revargs = []
+        else:
+            revargs = [' -r ', rev]
+        for svncommand in (
+                'svn revert -R .',
+                r"svn status | awk '/\?/ {print $2}' | xargs rm -rf"):
+            if subprocess.call(svncommand, cwd=self.local,
+                    shell=True) != 0:
+                print "Svn reset failed"
+                sys.exit(1)
+        if subprocess.call(['svn', 'update', '--force'] + revargs +
+                self.userargs(), cwd=self.local) != 0:
+            print "Svn update failed"
+            sys.exit(1)
+
+    def pull(self):
+        if subprocess.call(['svn', 'update'] +
+                self.userargs(), cwd=self.local) != 0:
+            print "Svn update failed"
+            sys.exit(1)
+
+class vcs_hg(vcs):
+
+    def clone(self):
+        if subprocess.call(['hg', 'clone', self.remote, self.local]) !=0:
+            print "Hg clone failed"
+            sys.exit(1)
+
+    def reset(self, rev=None):
+        if rev is None:
+            revargs = []
+        else:
+            revargs = [rev]
+        if subprocess.call('hg status -u | xargs rm -rf',
+                cwd=self.local, shell=True) != 0:
+            print "Hg clean failed"
+            sys.exit(1)
+        if subprocess.call(['hg', 'checkout', '-C'] + revargs,
+                cwd=self.local) != 0:
+            print "Hg checkout failed"
+            sys.exit(1)
+
+    def pull(self):
+        if subprocess.call(['hg', 'pull'],
+                cwd=self.local) != 0:
+            print "Hg pull failed"
+            sys.exit(1)
+
+class vcs_bzr(vcs):
+
+    def clone(self):
+        if subprocess.call(['bzr', 'branch', self.remote, self.local]) !=0:
+            print "Bzr branch failed"
+            sys.exit(1)
+
+    def reset(self, rev=None):
+        if rev is None:
+            revargs = []
+        else:
+            revargs = ['-r', rev]
+        if subprocess.call(['bzr', 'clean-tree', '--force',
+                '--unknown', '--ignored'], cwd=self.local) != 0:
+            print "Bzr revert failed"
+            sys.exit(1)
+        if subprocess.call(['bzr', 'revert'] + revargs,
+                cwd=self.local) != 0:
+            print "Bzr revert failed"
+            sys.exit(1)
+
+    def pull(self):
+        if subprocess.call(['bzr', 'update'],
+                cwd=self.local) != 0:
+            print "Bzr update failed"
+            sys.exit(1)
+
+
 
 def parse_metadata(metafile, **kw):
 
