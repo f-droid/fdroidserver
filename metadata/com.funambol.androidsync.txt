@@ -8,7 +8,7 @@ Description:Sync Client
 Funambol sync client.
 .
 Repo Type:svn
-Repo:guest:x@https://android-client.forge.funambol.org/svn/android-client/*
+Repo:guest:x@https://android-client.forge.funambol.org/svn/android-client/
 
 Build Version:8.7.3,8,1032,subdir=tags/8.7.3,update=no,initfun=yes
 Build Version:9.0.1,9,1437,subdir=tags/9.0.1,update=no,initfun=yes

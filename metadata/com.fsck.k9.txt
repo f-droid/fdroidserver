@@ -12,7 +12,7 @@ Market Version:3.802
 Market Version Code:13022
 
 Repo Type:svn
-Repo:http://k9mail.googlecode.com/svn/k9mail/*
+Repo:http://k9mail.googlecode.com/svn/k9mail/tags
 
-Build Version:3.404,11037,3026,subdir=tags/3.404
+Build Version:3.404,11037,3026,subdir=3.404
 

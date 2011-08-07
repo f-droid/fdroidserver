@@ -11,7 +11,7 @@ automatically change volumes at set times on any given day of the
 week.
 .
 Repo Type:svn
-Repo:http://app-soundmanager.googlecode.com/svn/tags/*
+Repo:http://app-soundmanager.googlecode.com/svn/tags/
 
 Build Version:2.0.0,18,127,subdir=SoundManager-2.0.0,target=android-8,fixapos=yes
 

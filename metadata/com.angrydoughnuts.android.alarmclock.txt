@@ -9,7 +9,7 @@ An alarm clock.
 .
 
 Repo Type:svn
-Repo:http://kraigsandroid.googlecode.com/svn/tags/*
+Repo:http://kraigsandroid.googlecode.com/svn/tags/
 
 Build Version:1.7,8,378,subdir=alarmclock-1.7/android/alarmclock
 

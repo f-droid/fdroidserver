@@ -16,5 +16,5 @@ Repo:git://gitorious.org/callerid-for-android/mainline.git
 #Disabled pending figuring out how to stop it zipaligning....
 #Build Version:1.0,1,e6d5a9ac4bb24ae3866a0782f2b23d1f18eb2266,subdir=application,maven=yes,bindir=application/target,prebuild=wget http://osmdroid.googlecode.com/files/osmdroid-android-3.0.3.jar && mvn install:install-file -DgroupId=org.osmdroid -DartifactId=osmdroid -Dversion=3.0.3 -Dpackaging=jar -Dfile=osmdroid-android-3.0.3.jar
 
-Market Version:1.1
-Market Version Code:2
+Market Version:1.2
+Market Version Code:3
