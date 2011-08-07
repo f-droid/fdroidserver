@@ -429,6 +429,12 @@ Like fixtrans, but deals with an even older issue relating to
 @item maven=yes
 Build with maven instead of ant
 
+@item patch=x
+Apply patch(es). 'x' names one (or more - comma-seperated)
+files within a directory below the metadata, with the same
+name as the metadata file but without the extension. Each of
+these patches is applied to the code in turn.
+
 @end table
 
 Another example, using extra parameters:
