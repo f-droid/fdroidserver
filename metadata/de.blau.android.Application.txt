@@ -1,0 +1,17 @@
+
+Use Built:Yes
+License:Apache2
+Web Site:https://code.google.com/p/osmeditor4android
+Source Code:https://code.google.com/p/osmeditor4android/source/checkout
+Issue Tracker:https://code.google.com/p/osmeditor4android/issues/list
+Donate:
+Summary:OSM Editor
+Description:
+OpenStreemMap editor.
+.
+
+Repo Type:svn
+Repo:http://osmeditor4android.googlecode.com/svn
+
+Build Version:0.7.0,14,201,subdir=tags/Version_0.7.0
+
