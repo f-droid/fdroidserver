@@ -297,13 +297,6 @@ values are:
 
 The repository location. Usually a git: or svn: URL.
 
-Normally the repository is checked out once for the application, then moved
-to a particular revision/commit/tag for each build version. For an SVN
-repository though, this behaviour can be changed by appending a * to the
-repository URL - in this case the repository is checked out once per build
-version, with the subdir parameter in place of the *. This can be beneficial
-when dealing with very large SVN repositories.
-
 For a Subversion repo that requires authentication, you can precede the repo
 URL with username:password@ and those parameters will be passed as @option{--username}
 and @option{--password} to the SVN checkout command.
