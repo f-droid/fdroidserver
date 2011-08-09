@@ -206,7 +206,7 @@ class vcs_bzr(vcs):
             sys.exit(1)
 
     def pull(self):
-        if subprocess.call(['bzr', 'update'],
+        if subprocess.call(['bzr', 'pull'],
                 cwd=self.local) != 0:
             print "Bzr update failed"
             sys.exit(1)
