@@ -15,6 +15,7 @@ Repo:https://github.com/talklittle/reddit-is-fun.git
 Build Version:1.1.2a,67,d507af7facaf46323804,prebuild=rsync -r lib/ libs
 Build Version:1.1.3,68,b302eaa24a975060f7fb,prebuild=rsync -r lib/ libs
 Build Version:1.1.4,69,9372d0ab3a16125e9045,prebuild=rsync -r lib/ libs
+Build Version:1.2.0,70,442e604760506e25e6c9,prebuild=rsync -r lib/ libs
 
 Market Version:1.2.0
 Market Version Code:70
