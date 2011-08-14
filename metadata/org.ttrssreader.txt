@@ -31,6 +31,7 @@ Build Version:1.02,1023,87f123514c11,subdir=ttrss-reader,target=android-8
 Build Version:1.03,1032,c374163ba16f,subdir=ttrss-reader,target=android-8
 Build Version:1.04,1040,1.04,subdir=ttrss-reader,target=android-8
 Build Version:1.05,1050,bb0bbb042e7c,subdir=ttrss-reader,target=android-8
+Build Version:1.07,1074,1.07 (3),subdir=ttrss-reader,target=android-8
 
-Market Version:1.05
-Market Version Code:1050
+Market Version:1.07
+Market Version Code:1071
