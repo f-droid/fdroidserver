@@ -12,3 +12,5 @@ Repo Type:git
 Repo:https://github.com/bagilevi/android-pedometer.git
 
 Build Version:1.4.1,6,1.4.1
+Market Version:1.4.1
+Market Version Code:6

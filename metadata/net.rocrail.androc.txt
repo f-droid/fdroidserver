@@ -24,5 +24,5 @@ Build Version:1.4.284,284,284
 Build Version:1.4.286,286,286
 Build Version:1.4.289,289,289
 
-Market Version:1.4.289
-Market Version Code:289
+Market Version:1.4.294
+Market Version Code:294
