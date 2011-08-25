@@ -1,0 +1,16 @@
+Use Built:Yes
+License:GPLv3
+Web Site:http://blokish.scoutant.org/
+Source Code:https://github.com/scoutant/blokish
+Issue Tracker:https://github.com/scoutant/blokish/issues
+Donate:
+Summary:Board game
+Description:
+A strategy board game.
+.
+
+Repo Type:git
+Repo:git://github.com/scoutant/blokish.git
+
+Build Version:0.5,1,ca2e9096c6d5140c14e7,target=android-9
+

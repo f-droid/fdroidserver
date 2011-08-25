@@ -14,5 +14,5 @@ Market Version Code:145
 Repo Type:svn
 Repo:http://aptoide.org/repo
 
-Build Version:2.0,126,45,subdir=aptoide-client/v2.0
+#Build Version:2.0,126,45,subdir=aptoide-client/v2.0
 

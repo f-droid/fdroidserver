@@ -17,6 +17,7 @@ Build Version:0.8.4,47,105,target=android-8
 Build Version:0.8.5,50,109,target=android-8
 Build Version:0.8.7,53,!No corresponding source in repo,target=android-8
 Build Version:0.9.2,57,136,target=android-8
+Build Version:1.1.1,65,177,target=android-8
 
-Market Version:1.0.2
-Market Version Code:63
+Market Version:1.1.1
+Market Version Code:65

@@ -1,7 +1,3 @@
-
-#Can't build without a dropbox consumer key.
-Use Built:No
-
 License:GPLv2
 Web Site:https://github.com/matburt/mobileorg-android/wiki
 Issue Tracker:https://github.com/matburt/mobileorg-android/issues
@@ -14,6 +10,7 @@ TODO/task management based on emacs org-mode files.
 Repo Type:git
 Repo:https://github.com/matburt/mobileorg-android.git
 
+#Needs dropbox consumer key
 #Build Version:0.5.2,51,38dfe967ee99c71b12b8
 
 Market Version:0.6.1

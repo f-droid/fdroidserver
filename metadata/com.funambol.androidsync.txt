@@ -15,6 +15,7 @@ Build Version:9.0.1,9,1437,subdir=tags/9.0.1,update=no,initfun=yes
 Build Version:9.0.3,10,1546,subdir=tags/9.0.3,update=no,initfun=yes
 Build Version:10.0.4,14,2162,subdir=tags/10.0.4,update=no,initfun=yes
 Build Version:10.0.5,15,2211,subdir=tags/10.0.5,update=no,initfun=yes
+Build Version:10.0.6,16,2337,subdir=tags/10.0.6,update=no,initfun=yes
 
 
 

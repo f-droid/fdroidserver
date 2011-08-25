@@ -12,4 +12,4 @@ Market Version Code:10
 Repo Type:svn
 Repo:http://mythmote.googlecode.com/svn/trunk/
 
-Build Version:1.4.0,8,126,rm=src/tkj/android/homecontrol/mythmote/R.java
+#Build Version:1.4.0,8,126,rm=src/tkj/android/homecontrol/mythmote/R.java
