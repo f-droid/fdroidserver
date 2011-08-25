@@ -251,7 +251,6 @@ def parse_metadata(metafile, **kw):
     thisinfo['repotype'] = ''
     thisinfo['repo'] = ''
     thisinfo['builds'] = []
-    thisinfo['usebuilt'] = False
     thisinfo['requiresroot'] = False
     mode = 0
     buildline = []
@@ -286,6 +285,8 @@ def parse_metadata(metafile, **kw):
                 thisinfo['donate'] = value
             elif field == 'Disabled':
                 thisinfo['disabled'] = value
+            elif field == 'Use Built':
+                pass  #Ignoring this - will be removed
             elif field == 'AntiFeatures':
                 parts = value.split(",")
                 for part in parts:
@@ -311,9 +312,6 @@ def parse_metadata(metafile, **kw):
                     buildline = [value[:-1]]
                 else:
                     thisinfo['builds'].append(parse_buildline(value))
-            elif field == "Use Built":
-                if value == "Yes":
-                    thisinfo['usebuilt'] = True
             elif field == "Requires Root":
                 if value == "Yes":
                     thisinfo['requiresroot'] = True

@@ -74,16 +74,6 @@ if (repo_url is None or repo_name is None or
 # Get all apps...
 apps = common.read_metadata(verbose=options.verbose)
 
-# Copy apks and source tarballs for stuff we've built from source that
-# is flagged to be included in the repo...
-for app in apps:
-    if app['usebuilt']:
-        if not options.quiet:
-            print "Copying built files for " + app['id']
-        src = os.path.join('built', app['id'] + "_*")
-        for file in glob.glob(src):
-            shutil.copy(file, 'repo/')
-
 # Gather information about all the apk files in the repo directory...
 apks = []
 for apkfile in glob.glob(os.path.join('repo','*.apk')):
@@ -398,10 +388,7 @@ for app in apps:
 
         # Output a message of harassment if we don't have the market version:
         if not gotmarketver and app['marketvercode'] != '0':
-            if app['usebuilt']:
-                addr = app['source']
-            else:
-                addr = app['web']
+            addr = app['source']
             print "WARNING: Don't have market version (" + app['marketversion'] + ") of " + app['name']
             print "         (" + app['id'] + ") " + addr
             warnings += 1

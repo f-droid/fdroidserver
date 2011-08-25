@@ -198,12 +198,6 @@ Another example, using extra parameters:
 
     Build Version:1.09.03,10903,45,subdir=Timeriffic,oldsdkloc=yes
 
-==Use Built==
-
-Set this to "Yes" to use built versions of the application for the repository.
-Currently, this just triggers update.py to copy the relevant apks and tarballs
-from the 'built' directory before updating the repo index.
-
 ==AntiFeatures==
 
 This is optional - if present, it contains a comma-separated list of any of

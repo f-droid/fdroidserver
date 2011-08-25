@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # build.py - part of the FDroid server tools
-# Copyright (C) 2010, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-11, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -41,20 +41,15 @@ parser.add_option("-v", "--verbose", action="store_true", default=False,
                   help="Spew out even more information than normal")
 parser.add_option("-p", "--package", default=None,
                   help="Build only the specified package")
-parser.add_option("-c", "--clean", action="store_true", default=False,
-                  help="Clean mode - build everything from scratch")
 (options, args) = parser.parse_args()
 
 # Get all apps...
 apps = common.read_metadata(options.verbose)
 
-#Clear and/or create the 'built' directory, depending on mode:
-built_dir = 'built'
-if options.clean:
-    if os.path.exists(built_dir):
-        shutil.rmtree(built_dir)
-if not os.path.exists(built_dir):
-    os.mkdir(built_dir)
+output_dir = "repo"
+tmp_dir = "tmp"
+if not os.path.isdir('tmp'):
+    os.makedirs('tmp')
 
 if not os.path.isdir('build'):
     os.makedirs('build')
@@ -82,9 +77,10 @@ for app in apps:
 
         for thisbuild in app['builds']:
 
-            dest = os.path.join(built_dir, app['id'] + '_' +
+            dest = os.path.join(output_dir, app['id'] + '_' +
                     thisbuild['vercode'] + '.apk')
-            dest_unsigned = dest + "_unsigned"
+            dest_unsigned = os.path.join(tmp_dir, app['id'] + '_' +
+                    thisbuild['vercode'] + '_unsigned.apk')
 
             if os.path.exists(dest):
                 print "..version " + thisbuild['version'] + " already exists"
@@ -329,7 +325,7 @@ for app in apps:
 
                 # Build the source tarball right before we build the release...
                 tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
-                tarball = tarfile.open(os.path.join(built_dir,
+                tarball = tarfile.open(os.path.join(output_dir,
                     tarname + '.tar.gz'), "w:gz")
                 tarball.add(build_dir, tarname)
                 tarball.close()
@@ -425,7 +421,7 @@ for app in apps:
                     print "Unexpected version/version code in output"
                     sys.exit(1)
 
-                # Copy the unsigned apk to our 'built' directory for further
+                # Copy the unsigned apk to our temp directory for further
                 # processing...
                 shutil.copyfile(src, dest_unsigned)
 
