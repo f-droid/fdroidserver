@@ -15,5 +15,5 @@ Repo:git://xwords.git.sourceforge.net/gitroot/xwords/xwords
 #Build Version:4.4 beta 23,16,!Translation files are not valid
 #Build Version:4.4 beta 26,19,!Missing resources? android_beta_26,subdir=xwords4/android/XWords4
 
-Market Version:4.4 beta 32
-Market Version Code:25
+Market Version:4.4 beta 33
+Market Version Code:26

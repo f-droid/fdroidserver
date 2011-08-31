@@ -14,3 +14,5 @@ Repo:git://github.com/scoutant/blokish.git
 
 Build Version:0.5,1,ca2e9096c6d5140c14e7,target=android-9
 
+Market Version:1.4
+Market Version Code:7
