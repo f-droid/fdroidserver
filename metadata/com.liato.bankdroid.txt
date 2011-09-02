@@ -31,6 +31,15 @@ Build Version:1.7.2,110,fec08e34a157a3e0b455,encoding=utf-8,prebuild=mkdir libs 
 
 Build Version:1.7.3,115,!a08cab7e66c70e7b0f5c but wrong version code in repo
 
+Build Version:1.8.0,120,899e4b957e512bf55254,encoding=utf-8,prebuild=mkdir libs && \
+    cd libs && \
+    wget http://mirror.fubra.com/ftp.apache.org//commons/io/binaries/commons-io-2.0.1-bin.zip && \
+    unzip -j commons-io-2.0.1-bin.zip commons-io-2.0.1/commons-io-2.0.1.jar && \
+    wget http://guava-libraries.googlecode.com/files/guava-r08.zip && \
+    unzip -j guava-r08.zip guava-r08/guava-r08.jar && \
+    rm *.zip && \
+    cd ..
+
 Market Version:1.8.0
 Market Version Code:120
 
