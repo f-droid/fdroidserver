@@ -14,8 +14,8 @@ A five row soft-keyboard with additional punctuation, and tab and ctrl keys.
 Repo Type:hg
 Repo:https://hackerskeyboard.googlecode.com/hg/
 
-Build Version:v1.18,1018,8298cd8728c2,subdir=java,target=android-11
-Build Version:v1.20,1020,e703fa82a4c3,subdir=java,target=android-11
+Build Version:v1.18,1018,8298cd8728c2,subdir=java,target=android-11,buildjni=yes
+Build Version:v1.20,1020,e703fa82a4c3,subdir=java,target=android-11,buildjni=yes
 
 Market Version:v1.20
 Market Version Code:1020
