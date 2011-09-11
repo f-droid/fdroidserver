@@ -25,6 +25,6 @@ Repo:https://github.com/fabrantes/rockonnggl.git
 Build Version:1.0.93,94,!No source for anything after 1.0.79 - see https://github.com/fabrantes/rockonnggl/issues/issue/125
 
 
-Market Version:1.0.94
-Market Version Code:95
+Market Version:1.0.95
+Market Version Code:96
 

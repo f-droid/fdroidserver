@@ -26,5 +26,5 @@ prebuild=sed -ri 's/(debuggable)="true"/\1="false"/' AndroidManifest.xml
 Build Version:1.36.4,110,161,\
 prebuild=sed -ri 's/(debuggable)="true"/\1="false"/' AndroidManifest.xml
 
-Market Version:1.37.1
-Market Version Code:128
+Market Version:1.37.3
+Market Version Code:131

@@ -13,5 +13,5 @@ Repo Type:git
 Repo:https://github.com/rtyley/agit.git
 
 #No builds yet - another 'need to figure out how to make maven work' scenario
-Market Version:1.24
-Market Version Code:110802200
+Market Version:1.25
+Market Version Code:110900321
