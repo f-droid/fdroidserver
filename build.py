@@ -232,7 +232,7 @@ for app in apps:
                         print "Applying " + patch
                         patch_path = os.path.join('metadata', app['id'], patch)
                         if subprocess.call(['patch', '-p1',
-                                        '-i', os.path.abspath(patch_path)], cwd=root_dir) != 0:
+                                        '-i', os.path.abspath(patch_path)], cwd=build_dir) != 0:
                             print "Failed to apply patch %s" % patch_path
                             sys.exit(1)
 
