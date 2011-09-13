@@ -15,6 +15,8 @@ Repo:https://github.com/osmandapp/Osmand.git
 
 Build Version:0.6.5,34,v0.6.5,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir assets && mkdir raw
 Build Version:0.6.6,36,v0.6.6_2,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir raw
+Build Version:0.6.7,37,v0.6.7,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir raw,patch=code37.patch
+
 
 Market Version:0.6.7
 Market Version Code:37
