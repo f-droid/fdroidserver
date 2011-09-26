@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv3
+Category:Multimedia
 Web Site:http://wiki.sixgun.org/ponyexpress/start
 Source Code:http://gitorious.org/ponyexpress
 Issue Tracker:

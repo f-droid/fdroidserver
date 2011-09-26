@@ -1,4 +1,5 @@
 License:GPLv3
+Category:Navigation
 Web Site:https://launchpad.net/opensatnav
 Source Code:https://code.launchpad.net/opensatnav
 Issue Tracker:https://bugs.launchpad.net/opensatnav
