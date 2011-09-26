@@ -304,6 +304,8 @@ for app in apps:
             addElement('icon', app['icon'], doc, apel)
             addElement('description', app['description'], doc, apel)
             addElement('license', app['license'], doc, apel)
+            if 'category' in app:
+                addElement('category', app['category'], doc, apel)
             addElement('web', app['web'], doc, apel)
             addElement('source', app['source'], doc, apel)
             addElement('tracker', app['tracker'], doc, apel)
