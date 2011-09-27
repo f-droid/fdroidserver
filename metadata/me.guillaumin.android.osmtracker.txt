@@ -1,7 +1,7 @@
 Use Built:Yes
 License:GPLv3
 Web Site:https://code.google.com/p/osmtracker-android/
-Source Code:https://code.google.com/p/osmtracker-android/source/checkout
+Source Code:https://github.com/nguillaumin/osmtracker-android
 Issue Tracker:https://code.google.com/p/osmtracker-android/issues/list
 Donate:
 Summary:GPS Track Recorder
@@ -13,10 +13,8 @@ be customized to suit your OpenStreetMap activities. You can view your current
 track on top of an OpenStreetMap background.
 .
 
-Repo Type:svn
-Repo:http://osmtracker-android.googlecode.com/svn/trunk/
+Repo Type:git
+Repo:https://github.com/nguillaumin/osmtracker-android.git
 
-Build Version:0.5.5,20,324,prebuild=mkdir libs && mv lib/* libs
+Build Version:0.5.6,21,0.5.6,target=android-8
 
-Market Version:0.5.5
-Market Version Code:20
