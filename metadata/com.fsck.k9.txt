@@ -1,4 +1,5 @@
 License:Apache2
+Category:Internet
 Web Site:http://code.google.com/p/k9mail/
 Source Code:http://code.google.com/p/k9mail/source/checkout
 Issue Tracker:http://code.google.com/p/k9mail/issues/list

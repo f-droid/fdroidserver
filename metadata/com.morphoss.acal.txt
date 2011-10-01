@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv3
+Category:Office
 Web Site:http://acal.me
 Source Code:http://gitorious.org/acal
 Issue Tracker:

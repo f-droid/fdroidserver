@@ -1,6 +1,7 @@
 # There is no license notice in the source, probably because any
 # such notice would be longer than the code itself.
 License:
+Category:System
 Web Site:https://github.com/johanhil/copy-to-clipboard
 Source Code:https://github.com/johanhil/copy-to-clipboard
 Issue Tracker:https://github.com/johanhil/copy-to-clipboard/issues

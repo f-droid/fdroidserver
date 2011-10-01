@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv3+
+Category:Internet
 Web Site:http://www.beem-project.com/
 Source Code:http://www.beem-project.com/projects/beem/repository
 Issue Tracker:http://www.beem-project.com/projects/beem/issues

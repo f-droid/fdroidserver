@@ -1,4 +1,5 @@
 License:Apache2
+Category:Internet
 Web Site:http://gorry.haun.org/android/aicia/
 Source Code:http://gorry.haun.org/android/aicia/dist/old/
 Summary:IRC client

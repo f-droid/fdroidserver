@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv3
+Category:Development
 Web Site:https://github.com/rtyley/agit
 Source Code:https://github.com/rtyley/agit
 Issue Tracker:https://github.com/rtyley/agit/issues

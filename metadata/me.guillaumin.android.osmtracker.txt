@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv3
+Category:Navigation
 Web Site:https://code.google.com/p/osmtracker-android/
 Source Code:https://code.google.com/p/osmtracker-android/source/checkout
 Issue Tracker:https://code.google.com/p/osmtracker-android/issues/list

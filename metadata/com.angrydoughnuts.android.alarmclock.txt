@@ -1,5 +1,6 @@
 Use Built:Yes
 License:Apache2
+Category:Office
 Web Site:https://code.google.com/p/kraigsandroid/
 Source Code:https://code.google.com/p/kraigsandroid/source/checkout
 Issue Tracker:https://code.google.com/p/kraigsandroid/issues/list

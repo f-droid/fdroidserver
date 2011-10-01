@@ -1,4 +1,5 @@
 License:GPLv3+
+Category:Multimedia
 Web Site:http://libre.fm
 Source Code:http://gitorious.org/foocorp/gnu-fm/trees/master/clients/libredroid
 Issue Tracker:

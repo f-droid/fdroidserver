@@ -1,5 +1,6 @@
 Disabled: Talks to last.fm to retrieve cover data.
 License:Apache2
+Category:Multimedia
 Web Site:https://github.com/dreamteam69/dmix
 Source Code:https://github.com/dreamteam69/dmix
 Issue Tracker:https://github.com/dreamteam69/dmix/issues

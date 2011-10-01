@@ -1,4 +1,5 @@
 License:GPL
+Category:System
 Web Site:http://android.moparisthebest.org/index.php/apps/appbak
 Source Code:http://android.moparisthebest.org/src/AppBak_v1.0.7z
 Issue Tracker:

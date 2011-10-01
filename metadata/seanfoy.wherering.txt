@@ -1,4 +1,5 @@
 License:GPLv3
+Category:Navigation
 Web Site:http://code.google.com/p/wherering/
 Source Code:http://code.google.com/p/wherering/source/checkout
 Issue Tracker:http://code.google.com/p/wherering/issues/list

@@ -1,4 +1,5 @@
 License:GPLv3
+Category:System
 Web Site:http://www.jaqpot.net/netcounter/
 Source Code:http://www.jaqpot.net/netcounter/
 Issue Tracker:

@@ -1,4 +1,5 @@
 License:Apache2
+Category:Office
 Source Code:https://github.com/pakerfeldt/aGiro
 Summary:OCR scanner for Swedish bills
 Description:

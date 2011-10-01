@@ -1,6 +1,7 @@
 Disabled:Issues with a) Google Analytics usage tracking, b) ads, c) vague licensing
 AntiFeatures:Ads,Tracking
 License:GPLv2
+Category:Office
 Web Site:http://tomtasche.at/p/SayMyName
 Source Code:http://github.com/TomTasche/SayMyName
 Issue Tracker:http://code.google.com/p/roadtoadc/issues/list

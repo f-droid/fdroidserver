@@ -1,4 +1,5 @@
 License:GPLv3+
+Category:Multimedia
 Source Code:https://github.com/kreed/vanilla
 Summary:Simple and streamlined music player
 Description:

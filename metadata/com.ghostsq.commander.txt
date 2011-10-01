@@ -1,4 +1,5 @@
 License:GPLv3
+Category:System
 Web Site:http://sites.google.com/site/ghostcommander1/
 Source Code:http://sourceforge.net/projects/ghostcommander/develop
 Issue Tracker:http://sourceforge.net/tracker/?group_id=311417

@@ -1,4 +1,5 @@
 License:GPLv3
+Category:Internet
 Web Site:http://mustard.macno.org
 Source Code:http://gitorious.org/~macno/mustard/macnos-clone/
 Issue Tracker:https://bugs.launchpad.net/mustardroid

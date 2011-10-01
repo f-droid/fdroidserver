@@ -1,4 +1,5 @@
 Use Built:Yes
+Category:Internet
 License:GPLv3+
 Web Site:https://github.com/talklittle/reddit-is-fun
 Source Code:https://github.com/talklittle/reddit-is-fun

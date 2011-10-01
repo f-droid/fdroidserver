@@ -1,4 +1,5 @@
 License:Apache2
+Category:Office
 Web Site:http://www.openintents.org/en/notepad
 Source Code:https://code.google.com/p/openintents/source/checkout
 Issue Tracker:https://code.google.com/p/openintents/issues/list

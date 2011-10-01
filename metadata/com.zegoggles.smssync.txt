@@ -1,5 +1,6 @@
 Use Built:Yes
 License:Apache2
+Category:System
 Web Site:https://github.com/jberkel/sms-backup-plus#readme
 Source Code:https://github.com/jberkel/sms-backup-plus#readme
 Issue Tracker:https://github.com/jberkel/sms-backup-plus/issues

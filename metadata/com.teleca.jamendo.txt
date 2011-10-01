@@ -1,5 +1,6 @@
 Use Built:Yes
 License:Apache2
+Category:Multimedia
 Web Site:http://telecapoland.github.com/jamendo-android/
 Source Code:http://github.com/telecapoland/jamendo-android
 Issue Tracker:http://github.com/telecapoland/jamendo-android/issues

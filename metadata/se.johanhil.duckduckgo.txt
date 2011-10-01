@@ -1,5 +1,6 @@
 Use Built:Yes
 License:Apache2
+Category:Internet
 Web Site:https://github.com/johanhil/ddg-android
 Source Code:https://github.com/johanhil/ddg-android
 Issue Tracker:https://github.com/johanhil/ddg-android/issues

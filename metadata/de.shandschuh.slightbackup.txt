@@ -1,5 +1,6 @@
 Use Built:Yes
 License:MIT
+Category:System
 Source Code:https://github.com/handschuh/Slight-backup
 Summary:A very simple backup program.
 Description:

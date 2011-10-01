@@ -1,4 +1,5 @@
 License:Apache2
+Category:Internet
 Web Site:http://status.net/wiki/Client
 Source Code:http://www.gitorious.org/statusnet-client
 Issue Tracker:

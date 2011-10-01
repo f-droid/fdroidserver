@@ -1,5 +1,6 @@
 Disabled:See license
 License:Unknown
+Category:Games
 Web Site:http://github.com/rndmcnlly/iteration
 Source Code:http://github.com/rndmcnlly/iteration
 Issue Tracker:

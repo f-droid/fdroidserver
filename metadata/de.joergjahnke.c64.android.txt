@@ -1,5 +1,6 @@
 Disabled:Field-of-use restriction issues with included ROM binary
 License:GPL
+Category:Games
 Name:Mobile C64
 Web Site:http://jmec64.sourceforge.net/
 Source Code:http://sourceforge.net/projects/jmec64/develop

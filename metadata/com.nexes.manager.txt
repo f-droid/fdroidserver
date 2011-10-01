@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv3+
+Category:System
 Web Site:http://github.com/nexes/Android-File-Manager
 Source Code:http://github.com/nexes/Android-File-Manager
 Issue Tracker:http://github.com/nexes/Android-File-Manager/issues

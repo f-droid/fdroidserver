@@ -1,4 +1,5 @@
 License:GPLv3
+Category:Internet
 Web Site:http://piwik.org/
 Source Code:http://dev.piwik.org/trac/browser/mobile
 Issue Tracker:

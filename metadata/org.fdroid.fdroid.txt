@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv2+
+Category:System
 Web Site:http://f-droid.org/repository
 Source Code:http://gitorious.org/f-droid/fdroidclient
 Issue Tracker:http://f-droid.org/issues

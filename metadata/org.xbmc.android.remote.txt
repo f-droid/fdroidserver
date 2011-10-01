@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv2
+Category:Multimedia
 Web Site:http://code.google.com/p/android-xbmcremote/
 Source Code:http://code.google.com/p/android-xbmcremote/source/checkout
 Issue Tracker:http://code.google.com/p/android-xbmcremote/issues/list

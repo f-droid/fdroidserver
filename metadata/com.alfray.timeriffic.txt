@@ -1,4 +1,5 @@
 Use Built:Yes
+Category:Office
 License:GPLv3
 Web Site:http://code.google.com/p/timeriffic/
 Source Code:http://code.google.com/p/timeriffic/source/checkout

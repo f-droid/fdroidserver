@@ -1,4 +1,5 @@
 License:BSD
+Category:Games
 Web Site:http://code.google.com/p/tiltmazes/
 Source Code:http://code.google.com/p/tiltmazes/source/checkout
 Issue Tracker:http://code.google.com/p/tiltmazes/issues/list
