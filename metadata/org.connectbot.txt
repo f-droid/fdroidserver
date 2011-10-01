@@ -3,9 +3,10 @@ Category:System
 Web Site:http://code.google.com/p/connectbot/
 Source Code:http://github.com/kruton/connectbot/
 Issue Tracker:http://code.google.com/p/connectbot/issues/list
-Summary:SSH client
+Summary:SSH and local shell client
 Description:
-An SSH client.
+An SSH and telnet client, and terminal emulator for local shell.
+Supports multiple sessions, including running them concurrently.
 .
 Market Version:1.7.1
 Market Version Code:323
