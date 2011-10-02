@@ -101,6 +101,8 @@ for app in apps:
                     root_dir = build_dir
 
                 # Get a working copy of the right revision...
+                if options.verbose:
+                    print "Resetting repository to " + thisbuild['commit']
                 vcs.reset(thisbuild['commit'])
 
                 # Initialise submodules if requred...
@@ -419,6 +421,9 @@ for app in apps:
                 if (version != thisbuild['version'] or
                         vercode != thisbuild['vercode']):
                     print "Unexpected version/version code in output"
+                    print "APK:" + version + " / " + str(vercode)
+                    print ("Expected: " + thisbuild['version'] + " / " +
+                            str(thisbuild['vercode']))
                     sys.exit(1)
 
                 # Copy the unsigned apk to our temp directory for further
