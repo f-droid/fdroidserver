@@ -19,6 +19,8 @@ Repo:http://droidwall.googlecode.com/svn/trunk/
 Build Version:1.4.3,143,!Old version in market - not bothering with it
 Build Version:1.4.6,146,144
 Build Version:1.4.8,148,156
+Build Version:1.5.3,153,219
 
-Market Version:1.4.3
-Market Version Code:143
+
+Market Version:1.5.3
+Market Version Code:153
