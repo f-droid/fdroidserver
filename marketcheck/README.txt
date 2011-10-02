@@ -1,7 +1,7 @@
 
 =Libraries=
 
-androidmarketapi-0.3.jar is Apache 2.0 licensed - source from:
+androidmarketapi-x.x.jar is Apache 2.0 licensed - source from:
 
   http://code.google.com/p/android-market-api/
 
