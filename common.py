@@ -138,7 +138,7 @@ class vcs_svn(vcs):
         if rev is None:
             revargs = []
         else:
-            revargs = [' -r ', rev]
+            revargs = ['-r', rev]
         for svncommand in (
                 'svn revert -R .',
                 r"svn status | awk '/\?/ {print $2}' | xargs rm -rf"):
