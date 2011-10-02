@@ -11,5 +11,6 @@ features and highly configurable.
 Repo Type:git
 Repo:https://github.com/k9mail/k-9.git
 
-Build Version:3.906,14006,3.906,oldsdkloc=yes,patch=target9to10.patch,target=android-10
+#Note - k9 is currently developer's binary only
+#Build Version:3.906,14006,3.906,oldsdkloc=yes,patch=target9to10.patch,target=android-10
 
