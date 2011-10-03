@@ -1,5 +1,6 @@
 Use Built:Yes
 License:Expat
+Category:Office
 Web Site:http://remembeer.info
 Source Code:https://code.discordians.net/projects/remembeer/repository
 Issue Tracker:https://code.discordians.net/projects/remembeer/issues

@@ -1,6 +1,6 @@
 Use Built:Yes
 License:GPLv2
-Category:PIM
+Category:Office
 Web Site:http://www.keepassdroid.com/
 Source Code:http://github.com/bpellin/keepassdroid
 Issue Tracker:http://code.google.com/p/keepassdroid/issues/list

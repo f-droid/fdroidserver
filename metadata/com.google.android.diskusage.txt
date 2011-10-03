@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv2
+Category:System
 Web Site:http://diskusage.googlecode.com/
 Source Code:http://code.google.com/p/diskusage/source/checkout
 Issue Tracker:http://code.google.com/p/diskusage/issues/list

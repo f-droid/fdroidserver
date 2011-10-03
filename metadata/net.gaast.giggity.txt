@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv2
+Category:Office
 Web Site:http://wilmer.gaa.st/main.php/giggity.html
 Source Code:http://wilmer.gaa.st/main.php/giggity.html
 Issue Tracker:

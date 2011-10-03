@@ -1,5 +1,6 @@
 Disabled:Can't identify release
 Use Built:Yes
+Category:Games
 Web Site:https://github.com/thibault/OpenQOTD
 Source Code:https://github.com/thibault/OpenQOTD
 Issue Tracker:https://github.com/thibault/OpenQOTD/issues

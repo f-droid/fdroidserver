@@ -1,5 +1,6 @@
 Disabled: Need to deal with possible trademark issues due us forking the project.
 License:GPLv3
+Category:Internet
 Web Site:http://code.google.com/p/feeddroid/
 Source Code:http://gitorious.org/feeddroid/feeddroid
 Issue Tracker:

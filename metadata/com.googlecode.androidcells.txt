@@ -1,6 +1,7 @@
 
 Use Built:Yes
 License:GPLv3
+Category:Internet
 Web Site:http://openbmap.org
 Source Code:http://sourceforge.net/scm/?type=git&group_id=218065
 Issue Tracker:http://sourceforge.net/tracker/?group_id=218065

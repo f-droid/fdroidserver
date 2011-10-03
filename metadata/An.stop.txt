@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv2
+Category:Office
 Web Site:http://code.google.com/p/anstop/
 Source Code:http://code.google.com/p/anstop/source/checkout
 Issue Tracker:http://code.google.com/p/anstop/issues/list

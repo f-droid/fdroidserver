@@ -1,5 +1,6 @@
 Use Built:Yes
 License:Apache2
+Category:System
 Web Site:http://wififixer.wordpress.com
 Source Code:https://github.com/Zanshinmu/Wifi-Fixer
 Issue Tracker:https://github.com/Zanshinmu/Wifi-Fixer/issues

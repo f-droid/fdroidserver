@@ -1,4 +1,5 @@
 License:LGPL
+Category:System
 Web Site:http://code.google.com/p/talkmyphone/
 Source Code:http://code.google.com/p/talkmyphone/source/checkout
 Issue Tracker:http://code.google.com/p/talkmyphone/issues/list

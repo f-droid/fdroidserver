@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv3
+Category:Navigation
 Web Site:http://www.mixare.org/
 Source Code:http://github.com/mixare/mixare
 Issue Tracker:http://code.google.com/p/mixare/issues/list

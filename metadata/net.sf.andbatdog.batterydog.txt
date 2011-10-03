@@ -1,4 +1,5 @@
 License:GPLv2+
+Category:System
 Web Site:http://andbatdog.sourceforge.net/
 Source Code:http://sourceforge.net/projects/andbatdog/develop
 Summary:Battery level logger

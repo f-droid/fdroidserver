@@ -1,4 +1,5 @@
 License:MPL
+Category:Internet
 Web Site:http://www.firefox.com
 Source Code:http://hg.mozilla.org/
 Issue Tracker:

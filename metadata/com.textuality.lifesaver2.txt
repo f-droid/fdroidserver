@@ -1,4 +1,5 @@
 License:Apache2
+Category:System
 Web Site:http://www.tbray.org/ongoing/When/201x/2010/04/25/LifeSaver-Lessons
 Source Code:http://code.google.com/p/lifesaver/
 Issue Tracker:http://code.google.com/p/lifesaver/issues/list

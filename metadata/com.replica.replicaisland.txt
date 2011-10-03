@@ -1,5 +1,6 @@
 Use Built:Yes
 License:Apache2
+Category:Games
 Web Site:http://www.replicaisland.net/
 Source Code:http://code.google.com/p/replicaisland/source/checkout
 Issue Tracker:http://code.google.com/p/replicaisland/issues/list

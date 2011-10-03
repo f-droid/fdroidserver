@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv3
+Category:Navigation
 Web Site:https://code.google.com/p/pedometer/
 Source Code:https://github.com/bagilevi/android-pedometer
 Issue Tracker:https://code.google.com/p/pedometer/issues/list

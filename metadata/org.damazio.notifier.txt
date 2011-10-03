@@ -1,5 +1,6 @@
 Use Built:Yes
 License:BSD
+Category:System
 Web Site:http://code.google.com/p/android-notifier/
 Source Code:http://code.google.com/p/android-notifier/source/checkout
 Issue Tracker:http://code.google.com/p/android-notifier/issues/list

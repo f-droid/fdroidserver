@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv3
+Category:Office
 Web Site:http://foafviewer.android.networld.to
 Source Code:git://networld.to/var/scm/android/FOAFViewer.git
 Summary:FOAF (Friend Of A Friend) Viewer

@@ -1,4 +1,5 @@
 License:GPL3+
+Category:System
 Web Site:https://code.google.com/p/callmeter/
 Source Code:http://github.com/felixb/callmeter
 Issue Tracker:https://code.google.com/p/callmeter/issues/list

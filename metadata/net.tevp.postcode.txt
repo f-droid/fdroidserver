@@ -1,4 +1,5 @@
 License:GPLv3
+Category:Navigation
 Web Site:http://www.lshift.net/blog/2010/09/26/android-postcode-app
 Source Code:http://github.com/palfrey/postcode
 Issue Tracker:

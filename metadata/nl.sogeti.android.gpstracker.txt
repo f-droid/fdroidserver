@@ -1,4 +1,5 @@
 License:GPLv3
+Category:Navigation
 Web Site:http://code.google.com/p/open-gpstracker/
 Source Code:http://code.google.com/p/open-gpstracker/source/checkout
 Issue Tracker:http://code.google.com/p/open-gpstracker/issues/list

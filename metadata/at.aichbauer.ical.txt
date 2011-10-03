@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv3
+Category:Office
 Web Site:https://code.google.com/p/ical-import-export/
 Source Code:https://code.google.com/p/ical-import-export/source/checkout
 Issue Tracker:https://code.google.com/p/ical-import-export/issues/list

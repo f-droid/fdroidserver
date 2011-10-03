@@ -1,4 +1,5 @@
 License:GPLv3
+Category:Games
 Web Site:http://code.google.com/p/droidlife/
 Source Code:http://code.google.com/p/droidlife/source/checkout
 Issue Tracker:http://code.google.com/p/droidlife/issues/list

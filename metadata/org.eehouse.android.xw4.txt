@@ -1,4 +1,5 @@
 License:GPLv2
+Category:Games
 Web Site:http://xwords.sourceforge.net/android.php
 Source Code:http://xwords.sourceforge.net/source.php
 Issue Tracker:
