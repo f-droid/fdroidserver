@@ -1,4 +1,5 @@
 Use Built:Yes
+Category:System
 License:GPLv3
 Web Site:http://candrews.integralblue.com/2011/04/my-first-android-app-callerid/
 Source Code:https://gitorious.org/callerid-for-android

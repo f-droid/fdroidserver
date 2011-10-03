@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv3
+Category:Office
 Web Site:http://github.com/atd/HandyNotes
 Source Code:http://github.com/atd/HandyNotes
 Issue Tracker:http://github.com/atd/HandyNotes/issues

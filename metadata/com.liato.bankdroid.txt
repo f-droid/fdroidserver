@@ -1,4 +1,5 @@
 Use Built:Yes
+Category:Office
 License:Apache2
 Web Site:http://www.swedroid.se/forum/showthread.php?t=11108
 Source Code:https://github.com/liato/android-bankdroid

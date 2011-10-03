@@ -1,4 +1,5 @@
 License:GPLv2
+Category:Navigation
 Web Site:https://confluence.prodevelop.es/display/GVMN/Home
 Source Code:https://svn.prodevelop.es/public/gvsigmini/
 Issue Tracker:

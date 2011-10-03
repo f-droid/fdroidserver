@@ -1,6 +1,7 @@
 Disabled:Ads
 AntiFeatures:Ads
 License:GPLv2+
+Category:Games
 Web Site:http://tuxrider.drodin.com/
 Source Code:https://github.com/drodin/TuxRider
 Issue Tracker:https://github.com/drodin/TuxRider/issues

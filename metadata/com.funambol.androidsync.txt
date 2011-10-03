@@ -1,5 +1,6 @@
 Use Built:Yes
 License:AGPLv3
+Category:Office
 Web Site:http://www.funambol.com
 Source Code:https://android-client.forge.funambol.org/source/browse/android-client/
 Issue Tracker:

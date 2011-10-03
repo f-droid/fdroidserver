@@ -1,5 +1,6 @@
 Use Built:Yes
 License:MIT
+Category:Internet
 Web Site:https://github.com/jberkel/gist-it#readme
 Source Code:https://github.com/jberkel/gist-it
 Issue Tracker:https://github.com/jberkel/gist-it/issues

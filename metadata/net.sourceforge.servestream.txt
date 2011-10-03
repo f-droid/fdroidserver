@@ -1,6 +1,7 @@
 
 Use Built:Yes
 License:Apache2
+Category:Internet
 Web Site:http://sourceforge.net/projects/servestream/
 Source Code:http://servestream.svn.sourceforge.net/viewvc/servestream/
 Issue Tracker:http://sourceforge.net/tracker/?group_id=361303

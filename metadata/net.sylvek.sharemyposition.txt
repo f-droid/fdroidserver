@@ -1,5 +1,6 @@
 Use Built:Yes
 License:
+Category:Navigation
 Web Site:http://code.google.com/p/sharemyposition
 Source Code:http://code.google.com/p/sharemyposition/source/checkout
 Issue Tracker:http://code.google.com/p/sharemyposition/issues/list

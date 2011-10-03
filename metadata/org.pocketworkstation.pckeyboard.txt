@@ -1,5 +1,6 @@
 Use Built:Yes
 License:Apache2
+Category:System
 Name:Hacker's Keyboard
 Web Site:http://code.google.com/p/hackerskeyboard/
 Source Code:http://code.google.com/p/hackerskeyboard/source/checkout

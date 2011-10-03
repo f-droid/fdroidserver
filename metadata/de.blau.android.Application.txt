@@ -1,6 +1,7 @@
 
 Use Built:Yes
 License:Apache2
+Category:Navigation
 Web Site:https://code.google.com/p/osmeditor4android
 Source Code:https://code.google.com/p/osmeditor4android/source/checkout
 Issue Tracker:https://code.google.com/p/osmeditor4android/issues/list

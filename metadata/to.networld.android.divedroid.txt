@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv3
+Category:Office
 Web Site:http://divedroid.android.networld.to
 Source Code:git://networld.to/var/scm/android/DiveDroid.git
 Summary:Scuba Dive Logbook

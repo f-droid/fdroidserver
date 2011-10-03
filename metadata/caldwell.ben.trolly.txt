@@ -1,4 +1,5 @@
 License:GPLv3
+Category:Office
 Web Site:http://sites.google.com/site/caldwellcode/
 Source Code:http://code.google.com/p/trolly/source/checkout
 Issue Tracker:http://code.google.com/p/trolly/issues/list

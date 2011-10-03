@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv2
+Category:Internet
 Web Site:http://android.wordpress.org/
 Source Code:https://android.trac.wordpress.org/browser
 Issue Tracker:http://android.trac.wordpress.org/

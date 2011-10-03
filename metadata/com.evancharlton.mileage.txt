@@ -1,5 +1,6 @@
 Use Built:Yes
 License:Apache2
+Category:Office
 Web Site:http://evancharlton.com/projects/mileage/
 Source Code:http://evancharlton.com/projects/mileage/source/
 Donate:http://evancharlton.com/donate/

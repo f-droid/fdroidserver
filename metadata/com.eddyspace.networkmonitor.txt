@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv3+
+Category:System
 Web Site:http://anetmon.sourceforge.net/
 Source Code:http://sourceforge.net/projects/anetmon/develop
 Issue Tracker:http://sourceforge.net/tracker/?group_id=288036

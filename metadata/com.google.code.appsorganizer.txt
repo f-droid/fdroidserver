@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv3+
+Category:System
 Web Site:http://sites.google.com/site/appsorganizer/
 Source Code:http://code.google.com/p/appsorganizer/source/checkout
 Issue Tracker:http://code.google.com/p/appsorganizer/issues/list

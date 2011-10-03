@@ -1,5 +1,6 @@
 Disabled:See license
 License:Unknown
+Category:Games
 Web Site:http://github.com/martynhaigh/Tiny-Open-Source-Violin
 Source Code:http://github.com/martynhaigh/Tiny-Open-Source-Violin
 Issue Tracker:http://github.com/martynhaigh/Tiny-Open-Source-Violin

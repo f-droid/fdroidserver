@@ -1,4 +1,5 @@
 License:GPLv3+
+Category:Navigation
 Web Site:http://android.trafikinfo.nu/
 Source Code:http://code.google.com/p/trafikinfoandroid/source/checkout
 Issue Tracker:http://code.google.com/p/trafikinfoandroid/issues/list

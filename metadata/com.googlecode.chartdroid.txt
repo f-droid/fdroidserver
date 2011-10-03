@@ -1,4 +1,5 @@
 License:Apache2
+Category:Multimedia
 Web Site:http://code.google.com/p/chartdroid/
 Source Code:http://code.google.com/p/chartdroid/source/checkout
 Issue Tracker:http://code.google.com/p/chartdroid/issues/list

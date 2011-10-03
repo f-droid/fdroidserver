@@ -1,4 +1,5 @@
 License:GPLv2
+Category:Office
 Web Site:https://github.com/matburt/mobileorg-android/wiki
 Issue Tracker:https://github.com/matburt/mobileorg-android/issues
 Source Code:https://github.com/matburt/mobileorg-android

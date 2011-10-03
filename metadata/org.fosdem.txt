@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPL
+Category:Office
 Web Site:http://fosdem.org
 Source Code:http://sourceforge.net/projects/fosdem-android/develop
 Issue Tracker:http://sourceforge.net/tracker/?group_id=283580

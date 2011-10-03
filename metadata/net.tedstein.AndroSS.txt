@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv2
+Category:System
 Web Site:https://github.com/tstein/AndroSS
 Source Code:https://github.com/tstein/AndroSS
 Issue Tracker:https://github.com/tstein/AndroSS/issues

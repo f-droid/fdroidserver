@@ -1,5 +1,6 @@
 Use Built:Yes
 License:Apache2
+Category:Multimedia
 Web Site:http://sites.google.com/site/roozenandroidapps/home/sound-manager
 Source Code:http://code.google.com/p/app-soundmanager/source/checkout
 Issue Tracker:http://code.google.com/p/app-soundmanager/issues/list

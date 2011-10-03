@@ -1,5 +1,6 @@
 Use Built:Yes
 License:GPLv2
+Category:Internet
 Web Site:https://launchpad.net/arxivdroid
 Source Code:http://bazaar.launchpad.net/~jdeslip/arxivdroid/trunk/files
 Issue Tracker:
