@@ -1,6 +1,6 @@
 Use Built:Yes
-License:GPLv3+
-Web Site:http://ichi2.net/anki/wiki/AnkiDroid
+License:GPLv3
+Web Site:https://code.google.com/p/ankidroid/wiki/Index
 Source Code:http://github.com/nicolas-raoul/Anki-Android/
 Issue Tracker:http://code.google.com/p/ankidroid/issues
 Summary:A flashcard-based study aid
@@ -15,10 +15,11 @@ Repo Type:git
 Repo:git://github.com/nicolas-raoul/Anki-Android.git
 
 #Build Version:0.4.2,12,v0.4.2
-Build Version:0.5,18,v0.5
-Build Version:0.5.1,19,!There is a v0.5.1 tag but the version code is not right
+#Build Version:0.5,18,v0.5
+#Build Version:0.5.1,19,!There is a v0.5.1 tag but the version code is not right
 Build Version:0.6,20,f26b7662ae9db9a92d21
+Build Version:0.7,21,v0.7
 
-Market Version:0.6
-Market Version Code:20
+Market Version:0.7
+Market Version Code:21
 
