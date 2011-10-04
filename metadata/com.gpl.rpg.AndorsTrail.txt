@@ -3,14 +3,21 @@ License:GPLv2
 Web Site:http://andors.techby2guys.com/
 Source Code:http://code.google.com/p/andors-trail/
 Issue Tracker:http://code.google.com/p/andors-trail/issues/list
+Category:Games
 Summary:Quest-driven Roguelike fantasy dungeon crawler RPG.
 Description:
-Quest-driven Roguelike fantasy dungeon crawler RPG with a powerful story. Uncover the truths about your home village and the disappearance of your brother.
+Quest-driven Roguelike fantasy dungeon crawler RPG with a powerful story.
+Uncover the truths about your home village and the disappearance of your
+brother.
 
-Battle fierce monsters, gain experience and levels. Solve quests, find hidden treasures and improve your equipment.
+Battle fierce monsters, gain experience and levels. Solve quests, find
+hidden treasures and improve your equipment.
 
-Please note that this is a work in progress, which means that all maps are not yet done. This is mainly a version for bug-hunting and compatibility testing. Please give feedback in Market or on the project page.
+Please note that this is a work in progress, which means that all maps
+are not yet done. This is mainly a version for bug-hunting and
+compatibility testing. Please give feedback on the project page.
 .
+
 Repo Type:svn
 Repo:http://andors-trail.googlecode.com/svn/trunk/
 
