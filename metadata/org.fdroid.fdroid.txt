@@ -1,15 +1,26 @@
-License:
-Web Site:http://www.f-droid.org
-Source Code:https://gitorious.org/f-droid/fdroidclient
-Issue Tracker:
-Donate:
-Summary:
+Use Built:Yes
+License:GPLv2+
+Category:System
+Web Site:http://f-droid.org/repository
+Source Code:http://gitorious.org/f-droid/fdroidclient
+Issue Tracker:http://f-droid.org/issues
+Summary:FOSS application repository
 Description:
-
+FDroid is a... wait a minute. You're running it, how can you not know what
+it is?
 .
-
 Repo Type:git
-Repo:https://git.gitorious.org/f-droid/fdroidclient.git
+Repo:git://gitorious.org/f-droid/fdroidclient.git
 
-Build Version:20111003,20111003,0ee3407
+#These ones are already in the repo as binaries...
+#Build Version:0.12,3,651696a49be2cd7db5ce6a2fa8185e31f9a20035
+#Build Version:0.13,4,4f677285cc2cf0b7e7feb5c9acf61791bec15fbc
+#Build Version:0.16,7,78325dad91a263437ca4ea1210bd494446c4d003
+
+Build Version:0.17,8,c626ce5f6d3e10ae15942f01ff028be310cc695a
+Build Version:0.18,9,a6c9ed8d06b19315df9ba9041324f78139f7d238
+Build Version:0.19,10,540b7d0522f4d67a4896697f7342e4c75b4cbf59
+Build Version:0.20,11,ddacfb856ad66c1c367e20c9cbecbfb15fe00813
+Build Version:0.21,12,49fa56aa6626a190f2d711120b69e435e9e615b1
+Build Version:0.22,13,a6a33c942495cc4c74a7cb6e968efe0e00815e68
 
