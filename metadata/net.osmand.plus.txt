@@ -19,5 +19,5 @@ Build Version:0.6.6,36,v0.6.6_2,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir raw
 Build Version:0.6.7,37,v0.6.7,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir raw,patch=code37.patch
 
 
-Market Version:0.6.7
-Market Version Code:37
+Market Version:0.6.8'
+Market Version Code:41

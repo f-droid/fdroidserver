@@ -14,3 +14,5 @@ Repo:http://boardgamegeek.googlecode.com/svn/trunk/
 
 Build Version:3.3,20,r416,subdir=BoardGameGeek,target=android-8
 
+Market Version:3.2
+Market Version Code:19

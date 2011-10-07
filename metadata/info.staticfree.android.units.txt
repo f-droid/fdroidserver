@@ -14,5 +14,5 @@ Build Version:0.8,7,8be8c10c67152783b6871a70d077a0758e5086ba
 Build Version:0.9,8,3cde1f8d6b822ddcee23f984fab53e7bad3817df
 
 
-Market Version:0.9
-Market Version Code:8
+Market Version:1.0
+Market Version Code:9

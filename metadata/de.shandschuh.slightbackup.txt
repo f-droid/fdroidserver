@@ -18,5 +18,5 @@ Repo:https://github.com/handschuh/Slight-backup.git
 Build Version:0.2,6,94715551ab863b20df3d,target=android-9
 Build Version:0.4.2,12,843c7eecef6ac3602728,target=android-9
 
-Market Version:0.4.2
-Market Version Code:12
+Market Version:0.4.3
+Market Version Code:13

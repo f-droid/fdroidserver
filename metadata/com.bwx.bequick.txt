@@ -19,5 +19,5 @@ Build Version:1.9.8 p2,201012060,184,target=android-8
 Build Version:1.9.9.2,201106160,213,target=android-8
 Build Version:1.9.9.3,201107260,220,target=android-8
 
-Market Version:1.9.9.4
-Market Version Code:201108300
+Market Version:1.9.9.5
+Market Version Code:201110061

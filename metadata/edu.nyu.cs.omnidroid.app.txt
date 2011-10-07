@@ -18,3 +18,5 @@ Repo:http://omnidroid.googlecode.com/svn/trunk/
 
 Build Version:0.2.1,6,861,subdir=omnidroid,fixtrans=yes
 
+Market Version:0.2.2
+Market Version Code:7
