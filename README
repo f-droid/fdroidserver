@@ -207,6 +207,7 @@ the following values, describing an AntiFeature the application has:
   "Tracking" - the application tracks and reports your activity to somewhere
   "NonFreeNet" - the application promotes a non-Free network service
   "NonFreeAdd" - the application promotes non-Free add-ons
+  "NonFreeDep" - the application depends on another non-Free application (e.g. Google Maps)
 
 ==Disabled==
 
