@@ -14,3 +14,5 @@ Repo:https://code.google.com/p/external-ip/
 
 Build Version:1.2,3,431da48bfb10,target=android-8
 
+Market Version:1.2
+Market Version Code:3

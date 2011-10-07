@@ -15,6 +15,9 @@ Build Version:0.9,8,3cde1f8d6b822ddcee23f984fab53e7bad3817df
 Build Version:1.0,9,1db6cd055203bd2f15eaffd7a780db2ee22974af,target=android-10
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 Market Version:1.0
 Market Version Code:9
