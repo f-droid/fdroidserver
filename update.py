@@ -127,9 +127,12 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
         if line.startswith("uses-feature:"):
             pat = re.compile(".*'([^']*)'.*")
             perm = re.match(pat, line).group(1)
-            if perm.startswith("android.feature."):
-                perm = perm[16:]
-            thisinfo['features'].append(perm)
+            #Filter out this, it's only added with the latest SDK tools and
+            #causes problems for lots of apps.
+            if perm != "android.hardware.screen.portrait":
+                if perm.startswith("android.feature."):
+                    perm = perm[16:]
+                thisinfo['features'].append(perm)
 
     if not thisinfo.has_key('sdkversion'):
         print "  WARNING: no SDK version information found"
