@@ -295,6 +295,7 @@ def parse_metadata(metafile, **kw):
                     if (part != "Ads" and
                         part != "Tracking" and
                         part != "NonFreeNet" and
+                        part != "NonFreeDep" and
                         part != "NonFreeAdd"):
                         print "Unrecognised antifeature '" + part + "' in " \
                             + metafile.name

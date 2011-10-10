@@ -12,7 +12,7 @@ Repo Type:git
 Repo:git://staticfree.info/git/Units/
 Build Version:0.8,7,8be8c10c67152783b6871a70d077a0758e5086ba
 Build Version:0.9,8,3cde1f8d6b822ddcee23f984fab53e7bad3817df
-
+Build Version:1.0,9,1db6cd055203bd2f15eaffd7a780db2ee22974af
 
 Market Version:1.0
 Market Version Code:9

@@ -1,4 +1,5 @@
 License:GPLv3
+Category:Internet
 Web Site:https://code.google.com/p/external-ip/
 Source Code:https://code.google.com/p/external-ip/source/checkout
 Issue Tracker:https://code.google.com/p/external-ip/issues/list
