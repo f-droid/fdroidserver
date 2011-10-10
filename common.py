@@ -187,7 +187,7 @@ class vcs_hg(vcs):
 class vcs_bzr(vcs):
 
     def clone(self):
-        if subprocess.call(['bzr', 'branch', self.remote, self.local]) !=0:
+        if subprocess.call(['bzr', 'branch', self.remote, self.local]) != 0:
             print "Bzr branch failed"
             sys.exit(1)
 
