@@ -16,6 +16,9 @@ Build Version:2.0.4,90,!94 but doesn't compile due to apparently missing resourc
 Build Version:2.0.6,92,95,target=android-11
 Build Version:2.0.10,96,!No source in repo,target=android-11
 Build Version:2.0.14,100,!No source in repo,target=android-11
+Build Version:2.0.16,102,!No source in repo,target=android-11
+#No source added to repo for a long time. Question here....
+#https://answers.launchpad.net/arxivdroid/+question/173825
 
 Market Version:2.0.16
 Market Version Code:102

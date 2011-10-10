@@ -18,12 +18,13 @@ A web browser featuring:
 .
 
 Repo Type:svn
-Repo:http://zirco-browser.googlecode.com/svn/tags/
+Repo:http://zirco-browser.googlecode.com/svn/trunk/
 
-Build Version:0.3.6,10,315,subdir=0.3.6
-Build Version:0.3.7,11,329,subdir=0.3.7
-Build Version:0.3.8,12,339,subdir=0.3.8
-Build Version:0.3.9,13,367,subdir=0.3.9
+Build Version:0.3.6,10,315
+Build Version:0.3.7,11,329
+Build Version:0.3.8,12,339
+Build Version:0.3.9,13,367
+Build Version:0.4.1,15,407
 
 Market Version:0.4.1
 Market Version Code:15

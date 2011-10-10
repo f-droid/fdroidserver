@@ -4,9 +4,10 @@ Web Site:https://code.google.com/p/boardgamegeek/
 Source Code:https://code.google.com/p/boardgamegeek/source/checkout
 Issue Tracker:https://code.google.com/p/boardgamegeek/issues/list
 Donate:
-Summary:BoardGameGeek application for Android
+Summary:BoardGameGeek application
 Description:
-This app searches the boardgame data from boardgamegeek.com. It's not a game itself - it's a reference tool that provides information about board games. 
+This app searches the board game data from boardgamegeek.com. It's not a game
+itself - it's a reference tool that provides information about board games. 
 .
 
 Repo Type:svn

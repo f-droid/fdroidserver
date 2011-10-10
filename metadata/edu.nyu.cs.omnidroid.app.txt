@@ -17,6 +17,7 @@ Repo Type:svn
 Repo:http://omnidroid.googlecode.com/svn/trunk/
 
 Build Version:0.2.1,6,861,subdir=omnidroid,fixtrans=yes
+Build Version:0.2.2,7,!Apparently no source code exists for this
 
 Market Version:0.2.2
 Market Version Code:7
