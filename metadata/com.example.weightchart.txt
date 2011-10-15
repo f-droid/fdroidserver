@@ -1,0 +1,17 @@
+Use Built:Yes
+License:GPLv3
+Category:Office
+Web Site:https://launchpad.net/weightchart
+Source Code:https://code.launchpad.net/~rheo/weightchart/trunk
+Issue Tracker:https://bugs.launchpad.net/weightchart
+Summary:Logs your body weight
+Disabled: Doesn't built at the moment.
+Description:
+Keep a personal log of body weight and display as a chart.
+
+.
+Repo Type:bzr
+Repo:lp:weightchart
+Build Version:1,1,1,target=8
+
+
