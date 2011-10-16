@@ -37,5 +37,5 @@ Build Version:1.07,1075,1.07 (4),subdir=ttrss-reader,target=android-8
 #This is not building - No resource identifier found for attribute 'marginRight' in package 'android'
 #Build Version:1.08,1080,1.08,subdir=ttrss-reader,target=android-8
 
-Market Version:1.1
-Market Version Code:1100
+Market Version:1.12
+Market Version Code:1120
