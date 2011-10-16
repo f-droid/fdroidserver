@@ -1,4 +1,3 @@
-Disabled: Talks to last.fm to retrieve cover data.
 License:Apache2
 Category:Multimedia
 Web Site:https://github.com/dreamteam69/dmix
@@ -13,7 +12,7 @@ An MPD client which supports streaming. Can fetch cover art from last.fm.
 Repo Type:git
 Repo:https://github.com/dreamteam69/dmix.git
 
-#Build Version:0.6.9,17,b506537426065d7da6f0,subdir=MPDroid
+Build Version:1.0,20,63a363a2ccc13232f4d80f5f857ab19b40fb5469,subdir=MPDroid,target=8,prebuild=\
+cd ../JMPDComm/ && ant && mkdir ../MPDroid/libs/ && cp ../JMPDComm/JMPDComm.jar ../MPDroid/libs/ && cd ../MPDroid \
+&& mv lib/android-support-v4.jar libs/ && cp -r ../lastfm-java/src/net/ src/;
 
-Market Version:0.7
-Market Version Code:18
