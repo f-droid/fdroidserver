@@ -1,3 +1,6 @@
+Disabled:Doesn't build for me
+#build/com.namelessdev.mpdroid/MPDroid/res/values/styles.xml:18: error: Error retrieving parent for item: No resource found that matches the given name '@android:style/Widget.Holo.ActionBar'.
+
 License:Apache2
 Category:Multimedia
 Web Site:https://github.com/dreamteam69/dmix
