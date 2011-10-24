@@ -13,3 +13,5 @@ Repo Type:bzr
 Repo:lp:~rheo/pushupbuddy/trunk
 Build Version:1.0,1,1,bindir=bin/,oldsdkloc=yes
 
+Market Version:1.0
+Market Version Code:1

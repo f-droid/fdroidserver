@@ -19,3 +19,5 @@ Build Version:1.0,20,63a363a2ccc13232f4d80f5f857ab19b40fb5469,subdir=MPDroid,tar
 cd ../JMPDComm/ && ant && mkdir ../MPDroid/libs/ && cp ../JMPDComm/JMPDComm.jar ../MPDroid/libs/ && cd ../MPDroid \
 && mv lib/android-support-v4.jar libs/ && cp -r ../lastfm-java/src/net/ src/;
 
+Market Version:0.7
+Market Version Code:18

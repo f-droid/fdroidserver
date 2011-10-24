@@ -23,5 +23,5 @@ Repo:http://andors-trail.googlecode.com/svn/trunk/
 
 Build Version:0.6.9,20,118,subdir=AndorsTrail
 
-Market Version:0.6.9
-Market Version Code:20
+Market Version:0.6.10
+Market Version Code:25
