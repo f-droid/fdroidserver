@@ -13,6 +13,8 @@ Blocks advertisements via the /etc/hosts file. Supports automatic updates.
 Repo Type:git
 Repo:git://gitorious.org/adaway/adaway.git
 
-Build Version:1.12,13,ea5378a94ee0dc1d99d2cec95fae7e6d81afb2b9,subdir=org_adaway/,buildjni=yes
 Requires Root:yes
+
+Build Version:1.12,13,ea5378a94ee0dc1d99d2cec95fae7e6d81afb2b9,subdir=org_adaway/,buildjni=yes
+Build Version:1.15,16,4128e59da2eac5c2904c7c7568d298ca51e79540,subdir=org_adaway/,buildjni=yes,patch=defprop.patch
 

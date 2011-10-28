@@ -1,0 +1,14 @@
+commit 64761c4e1e874cbe48d650be5c63e0b36d6819b2
+Author: Ciaran Gultnieks <ciaran@ciarang.com>
+Date:   Fri Oct 28 18:02:58 2011 +0100
+
+    Add default.properties for actionbarsherlock
+
+diff --git a/com_actionbarsherlock/default.properties b/com_actionbarsherlock/default.properties
+new file mode 100644
+index 0000000..60a2779
+--- /dev/null
++++ b/com_actionbarsherlock/default.properties
+@@ -0,0 +1,2 @@
++target=android-13
++android.library=true
