@@ -129,7 +129,8 @@ for apkfile in glob.glob(os.path.join('repo','*.apk')):
             perm = re.match(pat, line).group(1)
             #Filter out this, it's only added with the latest SDK tools and
             #causes problems for lots of apps.
-            if perm != "android.hardware.screen.portrait":
+            if (perm != "android.hardware.screen.portrait" and
+                perm != "android.hardware.screen.landscape"):
                 if perm.startswith("android.feature."):
                     perm = perm[16:]
                 thisinfo['features'].append(perm)
