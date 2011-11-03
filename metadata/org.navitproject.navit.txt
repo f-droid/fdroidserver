@@ -2,7 +2,7 @@ License:GPLv2
 Category:Navigation
 Web Site:http://sourceforge.net/projects/navit/
 Source Code:http://navit.svn.sourceforge.net/viewvc/navit
-Issue Tracker:http://sourceforge.net/tracker/?group_id=153410
+Issue Tracker:http://trac.navit-project.org/
 Summary:Car navigation system
 Description:
 Modular car navigation system with GPS tracking, realtime routing engine and
