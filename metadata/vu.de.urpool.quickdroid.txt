@@ -19,5 +19,5 @@ Build Version:2.9.4,31,65,subdir=Quickdroid,target=android-7
 Build Version:3.0,37,75,subdir=Quickdroid,target=android-9
 Build Version:3.0.1,38,76,subdir=Quickdroid,target=android-9
 
-Market Version:3.0.1
-Market Version Code:38
+Market Version:4.0.1
+Market Version Code:41

@@ -20,5 +20,5 @@ Build Version:10.0.6,16,2337,subdir=tags/10.0.6,update=no,initfun=yes
 
 
 
-Market Version:10.0.6
-Market Version Code:16
+Market Version:10.0.7
+Market Version Code:17

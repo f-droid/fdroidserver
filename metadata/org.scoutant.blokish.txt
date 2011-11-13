@@ -15,5 +15,5 @@ Repo:git://github.com/scoutant/blokish.git
 Build Version:0.5,1,ca2e9096c6d5140c14e7,target=android-9
 Build Version:1.4,7,!No source - https://github.com/scoutant/blokish/issues/2
 
-Market Version:1.4
-Market Version Code:7
+Market Version:1.5
+Market Version Code:8

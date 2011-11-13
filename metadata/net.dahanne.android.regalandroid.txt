@@ -8,5 +8,5 @@ Description:
 A gallery client with support for G2 and G3 (also known as Menalto Gallery) and
 Piwigo.
 .
-Market Version:1.1.0
-Market Version Code:3
+Market Version:1.1.2
+Market Version Code:5

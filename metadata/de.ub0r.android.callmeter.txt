@@ -10,5 +10,5 @@ CallMeter is an Android application summing up your call and text logs. Differen
 
 AntiFeatures:Ads
 
-Market Version:3.0rc15
-Market Version Code:2834
+Market Version:3.0
+Market Version Code:2836

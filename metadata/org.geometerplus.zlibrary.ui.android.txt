@@ -28,8 +28,8 @@ Build Version:1.1.8,101081,1.1.8,antcommand=package
 Build Version:1.1.9,101091,1.1.9,antcommand=package
 Build Version:1.1.10,101101,13ee5d79431815dd694e,antcommand=package
 
-Market Version:1.1.10
-Market Version Code:101101
+Market Version:1.2.2
+Market Version Code:102021
 
 
 

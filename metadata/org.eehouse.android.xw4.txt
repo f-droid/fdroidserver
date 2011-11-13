@@ -17,5 +17,5 @@ Repo:git://xwords.git.sourceforge.net/gitroot/xwords/xwords
 #Build Version:4.4 beta 26,19,!Missing resources? android_beta_26,subdir=xwords4/android/XWords4
 Build Version:4.4 beta 33,26,android_beta_33,subdir=xwords4/android/XWords4
 
-Market Version:4.4 beta 33
-Market Version Code:26
+Market Version:4.4 beta 38
+Market Version Code:30
