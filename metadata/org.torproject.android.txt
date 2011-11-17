@@ -8,5 +8,5 @@ Description:
 A Tor client allowing private internet access via a local SOCKS or HTTP proxy. On a rooted
 device, the proxying can be completely transparent.
 .
-Market Version:0.2.2.25-orbot-alpha-1.0.5.2
-Market Version Code:14
+Market Version:0.2.3.7-alpha-orbot-1.0.6
+Market Version Code:21
