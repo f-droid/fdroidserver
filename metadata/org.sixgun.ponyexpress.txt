@@ -17,6 +17,7 @@ Build Version:0.4.1,5,d64eace51a0c053fc8356ddd6b54a1372617a470
 Build Version:0.4.2,8,38eb1f2141225a95c8a96fedfbdfcf34beeeeb9b
 Build Version:0.4.3,9,0.4.3
 Build Version:1.0,11,efc427322038febb25d6ca909bf8c4157f685839
+Build Version:1.1,12,1.1,target=android-9
 
-Market Version:1.0
-Market Version Code:11
+Market Version:1.1
+Market Version Code:12

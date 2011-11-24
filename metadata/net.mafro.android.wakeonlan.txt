@@ -14,3 +14,5 @@ Repo:https://github.com/mafrosis/Wake-On-Lan.git
 
 Build Version:1.4.2,12,468312845057e78a70f7b6260f2b116042571c42
 
+Market Version:1.4.2
+Market Version Code:12
