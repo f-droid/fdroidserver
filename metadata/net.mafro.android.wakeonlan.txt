@@ -1,5 +1,5 @@
 Use Built:Yes
-License:GPLv3+
+License:BSD
 Category:System
 Web Site:http://android.mafro.net/
 Source Code:https://github.com/mafrosis/Wake-On-Lan
