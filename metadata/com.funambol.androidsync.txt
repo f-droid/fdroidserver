@@ -18,6 +18,10 @@ Build Version:10.0.4,14,2162,subdir=tags/10.0.4,update=no,initfun=yes
 Build Version:10.0.5,15,2211,subdir=tags/10.0.5,update=no,initfun=yes
 Build Version:10.0.6,16,2337,subdir=tags/10.0.6,update=no,initfun=yes
 
+#Source inaccessible for the last few days:
+# svn: Can't open file 'branches/us6260v87/src/com/funambol/android/source/pim/.svn/lock': No space left on device
+#
+#Build Version:10.0.7,17,2671,subdir=tags/10.0.7,update=no,initfun=yes
 
 
 Market Version:10.0.7
