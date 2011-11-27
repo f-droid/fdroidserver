@@ -14,6 +14,7 @@ Repo Type:git
 Repo:https://github.com/jberkel/sms-backup-plus.git
 
 Build Version:1.4.3,1404,1.4.3
+Build Version:1.4.4,1405,1.4.4,target=android-9,prebuild=mv lib libs
 
-Market Version:1.4.3
-Market Version Code:1404
+Market Version:1.4.4
+Market Version Code:1405
