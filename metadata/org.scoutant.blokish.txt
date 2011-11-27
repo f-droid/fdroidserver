@@ -1,5 +1,5 @@
-Use Built:Yes
 License:GPLv3
+Category:Games
 Web Site:http://blokish.scoutant.org/
 Source Code:https://github.com/scoutant/blokish
 Issue Tracker:https://github.com/scoutant/blokish/issues

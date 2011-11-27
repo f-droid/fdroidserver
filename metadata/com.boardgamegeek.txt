@@ -1,5 +1,5 @@
-
 License:GPLv3
+Category:Games
 Web Site:https://code.google.com/p/boardgamegeek/
 Source Code:https://code.google.com/p/boardgamegeek/source/checkout
 Issue Tracker:https://code.google.com/p/boardgamegeek/issues/list

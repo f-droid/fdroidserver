@@ -1,4 +1,3 @@
-Use Built:Yes
 License:GPLv2+
 Category:Multimedia
 Web Site:http://www.fbreader.org/FBReaderJ/
