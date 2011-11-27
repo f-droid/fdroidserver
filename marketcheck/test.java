@@ -45,7 +45,7 @@ class test {
 
             MarketSession session = new MarketSession();
 
-            session.getContext().setAndroidId("87548757565689");
+            session.getContext().setAndroidId("353027030727248");
             session.getContext().setDeviceAndSdkVersion("sapphire:7");
             System.out.println("Login...");
             session.login(login,password);
