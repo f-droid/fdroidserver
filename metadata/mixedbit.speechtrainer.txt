@@ -1,0 +1,18 @@
+License:GPLv3
+Category:Multimedia
+Web Site:http://mixedbit.org/
+Source Code:https://github.com/wrr/speech_trainer
+Issue Tracker:
+Donate:
+Summary:Speech training
+Description:
+Gives immediate feedback on the sound of your voice for training pronunciation,
+articulation and diction. A useful aid for learning foreign languages or
+treating speech disorders.
+.
+
+Repo Type:git
+Repo:git://github.com/wrr/speech_trainer.git
+
+Build Version:1.01,2,109eba6da3eac93c6e0d445f488433452387f815,subdir=app,target=android-9
+
