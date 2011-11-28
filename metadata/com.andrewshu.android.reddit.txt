@@ -18,6 +18,7 @@ Build Version:1.1.3,68,b302eaa24a975060f7fb,prebuild=rsync -r lib/ libs
 Build Version:1.1.4,69,9372d0ab3a16125e9045,prebuild=rsync -r lib/ libs
 Build Version:1.2.0,70,442e604760506e25e6c9,prebuild=rsync -r lib/ libs
 Build Version:1.2.0a,71,e37439e12d11ff17a841,prebuild=rsync -r lib/ libs
+Build Version:1.2.1,73,e35fd128c954d41e24abf91b71f301740f6ca483,prebuild=rsync -r lib/ libs
 
-Market Version:1.2.0b
-Market Version Code:72
+Market Version:1.2.1
+Market Version Code:73
