@@ -1,17 +1,21 @@
 License:GPLv3
-Category:Office
+Category:Multimedia
 Web Site:http://code.google.com/p/droidseries/
 Source Code:http://gitorious.org/droidseries
 Issue Tracker:http://code.google.com/p/droidseries/issues/list
+
 Summary:TV series browser and tracker
 Description:
 DroidSeries is a TV Series/TV Shows browser and tracker application for
 Android. It helps you manage your favorite TV shows and keep track of
 the episodes that you have or have not seen.
 .
+
 Repo Type:git
 Repo:git://gitorious.org/droidseries/droidseries.git
-Use Built:Yes
+
 Build Version:0.1.5-5,12,6aedbf31da874605b65eea6bbe3d4740f373672d
+Build Version:0.1.5-6,13,a72bc0a
+
 Market Version:0.1.5-6
 Market Version Code:13
