@@ -1,0 +1,17 @@
+License:GPLv3
+Category:System
+Web Site:https://code.google.com/p/tuiodroid/
+Source Code:https://code.google.com/p/tuiodroid/source/checkout
+Issue Tracker:https://code.google.com/p/tuiodroid/issues/list
+Donate:
+Summary:TUIO tracker
+Description:
+A TUIO tracker which allows multi-touch control input, which is sent to a
+remote address using the TUIO protocol.
+.
+
+Repo Type:svn
+Repo:http://tuiodroid.googlecode.com/svn/trunk/
+
+Build Version:1.0,4,28,subdir=TUIOdroid,prebuild=rm -rf bin && rm -rf gen,target=android-11
+
