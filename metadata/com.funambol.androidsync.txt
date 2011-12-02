@@ -20,7 +20,8 @@ Build Version:10.0.6,16,2337,subdir=tags/10.0.6,update=no,initfun=yes
 
 #Source inaccessible for the last few days:
 # svn: Can't open file 'branches/us6260v87/src/com/funambol/android/source/pim/.svn/lock': No space left on device
-#
+#Source is now accessible, but the build is failing without an obvious error.
+#Need to look at this again.
 #Build Version:10.0.7,17,2671,subdir=tags/10.0.7,update=no,initfun=yes
 
 
