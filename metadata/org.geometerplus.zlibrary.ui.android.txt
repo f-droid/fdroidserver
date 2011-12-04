@@ -29,9 +29,10 @@ Build Version:1.1.10,101101,13ee5d79431815dd694e,antcommand=package
 
 Build Version:1.2.2,102021,e63c553aeb032da828b270a735f0171d8d22c54c,buildjni=yes,target=android-9,prebuild=mkdir res/drawable && find icons -iname "*.*" -exec cp {} res/drawable \;
 Build Version:1.2.3,102031,46d83bb4351c2f6ec51e0d9aa6202c86c1297e7f,buildjni=yes,target=android-9,prebuild=mkdir res/drawable && find icons -iname "*.*" -exec cp {} res/drawable \;
+Build Version:1.2.4,102041,6426bcf131d4,buildjni=yes,target=android-9,prebuild=mkdir res/drawable && find icons -iname "*.*" -exec cp {} res/drawable \;
 
-Market Version:1.2.3
-Market Version Code:102030
+Market Version:1.2.4
+Market Version Code:102040
 
 
 
