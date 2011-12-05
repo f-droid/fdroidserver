@@ -15,3 +15,5 @@ Repo:https://asqlitemanager.svn.sourceforge.net/svnroot/asqlitemanager
 
 Build Version:2.6,7,190,subdir=aSQLiteManager
 
+Market Version:2.6
+Market Version Code:8

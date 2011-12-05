@@ -20,6 +20,7 @@ Build Version:1.2.0,70,442e604760506e25e6c9,prebuild=rsync -r lib/ libs
 Build Version:1.2.0a,71,e37439e12d11ff17a841,prebuild=rsync -r lib/ libs
 Build Version:1.2.1,73,e35fd128c954d41e24abf91b71f301740f6ca483,prebuild=rsync -r lib/ libs
 Build Version:1.2.1.2,75,28c98a7,prebuild=rsync -r lib/ libs,target=android-9
+Build Version:1.2.1.3,76,143892b558,prebuild=rsync -r lib/ libs,target=android-9
 
-Market Version:1.2.1.2
-Market Version Code:75
+Market Version:1.2.1.3
+Market Version Code:76
