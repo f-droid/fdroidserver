@@ -1,0 +1,17 @@
+
+License:EUPL
+Category:System
+Web Site:http://aaa.andsen.dk/aSQLiteManager.html
+Source Code:http://sourceforge.net/scm/?type=svn&group_id=362274
+Issue Tracker:http://sourceforge.net/tracker/?group_id=362274
+Donate:
+Summary:SQLite Frontend
+Description:
+Front end allowing management of SQLite databases.
+.
+
+Repo Type:svn
+Repo:https://asqlitemanager.svn.sourceforge.net/svnroot/asqlitemanager
+
+Build Version:2.6,7,190,subdir=aSQLiteManager
+
