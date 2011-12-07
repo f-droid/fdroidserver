@@ -14,3 +14,5 @@ Repo:http://hotdeath.googlecode.com/svn/trunk/
 
 Build Version:1.0.2,3,26
 
+Market Version:1.0.2
+Market Version Code:3
