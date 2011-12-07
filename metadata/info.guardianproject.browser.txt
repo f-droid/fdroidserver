@@ -4,8 +4,8 @@ Web Site:https://guardianproject.info/apps/orweb/
 Source Code:https://github.com/guardianproject/orweb
 Issue Tracker:https://github.com/guardianproject/orweb/issues
 Donate:
-Summary:
-Description:Proxy + Privacy Browser
+Summary:Proxy + Privacy Browser
+Description:
 Orweb is a companion browser for Orbot, the port of Tor to Android. Orweb provides anonymous and uncensored access to the web from Android devices.
 .
 
