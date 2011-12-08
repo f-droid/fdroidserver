@@ -18,8 +18,8 @@ Build Version:0.6.5,34,v0.6.5,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir assets
 Build Version:0.6.6,36,v0.6.6_2,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir raw
 Build Version:0.6.7,37,v0.6.7,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir raw,patch=code37.patch
 Build Version:0.6.8,39,v0.6.8,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir raw
-
 Build Version:0.6.8',41,!No corresponding source for whatever this is
+Build Version:0.6.9,42,v0.6.9,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir raw
 
-Market Version:0.6.8'
-Market Version Code:41
+Market Version:0.6.9
+Market Version Code:42
