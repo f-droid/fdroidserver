@@ -106,6 +106,11 @@ class vcs_git(vcs):
                 cwd=self.local) != 0:
             print "Git pull failed"
             sys.exit(1)
+        # Might need tags that aren't on a branch.
+        if subprocess.call(['git', 'fetch', '--tags', 'origin'],
+                cwd=self.local) != 0:
+            print "Git fetch failed"
+            sys.exit(1)
 
     def initsubmodules(self):
         if subprocess.call(['git', 'submodule', 'init'],
