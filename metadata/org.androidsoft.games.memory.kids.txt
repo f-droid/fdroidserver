@@ -1,0 +1,17 @@
+
+License:GPLv3+
+Category:Games
+Web Site:http://androidsoft.org
+Source Code:http://androidsoft.googlecode.com/svn/trunk/memory/
+Issue Tracker:
+Donate:
+Summary:Memory game for kids
+Description:
+A memory game for kids.
+.
+
+Repo Type:svn
+Repo:http://androidsoft.googlecode.com/svn/trunk/memory/
+
+Build Version:1.8.0,13,44,prebuild=rm -rf releases && rm libs/androidsoft-credits-1.0.0.jar,target=android-11
+
