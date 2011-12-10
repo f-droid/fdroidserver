@@ -20,4 +20,5 @@ Repo Type:git
 Repo:https://github.com/guardianproject/cacert.git
 
 Build Version:0.0.2-20110906,3,0.0.2,target=android-8,subdir=app
+Build Version:0.0.2.20111012,4,212187e9c398e46fda87fe2335ee48bb693caca0,target=android-8,subdir=app
 
