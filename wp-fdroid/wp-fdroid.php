@@ -16,9 +16,10 @@ class FDroid
 {
 
     // Our text domain, for internationalisation
-    var $textdom='wp-fdroid';
+    private $textdom='wp-fdroid';
 
-    var $site_path = "/home/fdroid/public_html";
+    // TODO: Fix site path...
+	private $site_path = "/home/hansemil/MyDocuments/f-droid";
 
     // Constructor
     function FDroid() {
@@ -34,6 +35,7 @@ class FDroid
         $qvars[]='fdfilter';
         $qvars[]='fdid';
         $qvars[]='fdpage';
+        $qvars[]='fdstyle';
         return $qvars;
     }
 
@@ -55,19 +57,6 @@ class FDroid
         return $wp_query->query_vars[$name];
     }
 
-    // Make a link to this page, with the given query parameter string added
-    function makelink($params) {
-        $link=get_permalink();
-        if(strlen($params)==0)
-            return $link;
-        if(strpos($link,'?')===false)
-            $link.='?';
-        else
-            $link.='&';
-        $link.=$params;
-        return $link;
-    }
-
     // Handler for the 'fdroidrepo' shortcode.
     //  $attribs - shortcode attributes
     //  $content - optional content enclosed between the starting and
@@ -77,32 +66,37 @@ class FDroid
         global $wp_query,$wp_rewrite;
         $this->lazyinit();
 
-        $page=1;
-        if(isset($wp_query->query_vars['fdpage'])) {
-            $page=(int)$wp_query->query_vars['fdpage'];
-            if($page==0)
-                $page=1;
-        }
+		
+		// Init local query vars
+		foreach($this->queryvars(array()) as $qv) {
+			if(array_key_exists($qv,$wp_query->query_vars)) {
+				$query_vars[$qv] = $wp_query->query_vars[$qv];
+			} else {
+				$query_vars[$qv] = null;
+			}
+		}
+	
+		// Santiy check query vars
+		if(!isset($query_vars['fdpage']) || !is_numeric($query_vars['fdpage']) || $query_vars['fdpage'] <= 0) {
+			$query_vars['fdpage'] = 1;
+		}
 
-        $filter=$wp_query->query_vars['fdfilter'];
-        $fdid=$wp_query->query_vars['fdid'];
-
-        if($fdid!==null)
-            $out=$this->get_app($fdid);
+        if($query_vars['fdid']!==null)
+            $out=$this->get_app($query_vars);
         else
-            $out=$this->get_apps($page,$filter);
+            $out=$this->get_apps($query_vars);
         return $out;
 
     }
 
 
-    function get_app($id) {
+    function get_app($query_vars) {
 
         $xml = simplexml_load_file($this->site_path."/repo/index.xml");
         foreach($xml->children() as $app) {
 
             $attrs=$app->attributes();
-            if($attrs['id']==$id) {
+            if($attrs['id']==$query_vars['fdid']) {
                 $apks=array();;
                 foreach($app->children() as $el) {
                     switch($el->getName()) {
@@ -199,7 +193,7 @@ class FDroid
                     $out.="</p>";
                 }
 
-                $out.='<hr><p><a href="'.$this->makelink("").'">Index</a></p>';
+                $out.='<hr><p><a href="'.makelink($query_vars,array('fdid'=>null)).'">Index</a></p>';
 
                 return $out;
             }
@@ -208,88 +202,42 @@ class FDroid
     }
 
 
-    function get_apps($page,$filter=null) {
+    function get_apps($query_vars) {
 
-        if($filter===null)
-            $out="<p>All applications";
+		$out='';
+
+		$out.='<div style="float:left;">';
+        if($query_vars['fdfilter']===null)
+            $out.="All applications";
         else
-            $out="<p>Applications matching ".$filter;
-        $out.="</p>";
+            $out.="Applications matching ".$query_vars['fdfilter'];
+        $out.="</div>";
 
-        $perpage=30;
-        $skipped=0;
-        $got=0;
-        $total=0;
+		$out.='<div style="float:right;">';
+            $out.='<a href="'.makelink($query_vars, array('fdstyle'=>'list','fdpage'=>'1')).'">List</a> | ';
+            $out.='<a href="'.makelink($query_vars, array('fdstyle'=>'grid','fdpage'=>'1')).'">Grid</a>';
+        $out.='</div>';
+
+        $out.='<br break="all"/>';
 
         $xml = simplexml_load_file($this->site_path."/repo/index.xml");
-        foreach($xml->children() as $app) {
-
-            if($app->getName() == 'repo') continue;
-            $attrs=$app->attributes();
-            $id=$attrs['id'];
-            foreach($app->children() as $el) {
-                switch($el->getName()) {
-                    case "name":
-                        $name=$el;
-                        break;
-                    case "icon":
-                        $icon=$el;
-                        break;
-                    case "summary":
-                        $summary=$el;
-                        break;
-                    case "license":
-                        $license=$el;
-                        break;
-                }
-            }
-
-            if($filter===null || stristr($name,$filter)) {
-                if($skipped<($page-1)*$perpage) {
-                    $skipped++;
-                } else if($got<$perpage) {
-
-                    $out.="<hr>\n";
-                    $out.='<div id="appheader">';
-
-                    $out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$icon.'" style="width:48px;"></div>';
-
-                    $out.='<div style="float:right;">';
-                    $out.='<p><a href="';
-                    $out.=$this->makelink("fdid=".$id);
-                    $out.='">Details...</a>';
-                    $out.="</p>";
-                    $out.="</div>\n";
-
-                    $out.='<p><span style="font-size:20px">'.$name."</span>";
-                    $out.="<br>".$summary."</p>\n";
-
-                    $out.="</div>\n";
-
-                    $got++;
-                }
-                $total++;
-            }
-
-        }
-
-        $numpages=ceil((float)$total/$perpage);
+		$out.=$this->show_apps($xml,$query_vars,$numpages);
 
         $out.='<hr><p>';
-        if($page==1) {
+        if($query_vars['fdpage']==1) {
             $out.="&lt;&lt;first ";
             $out.="&lt;prev ";
         } else {
-            $out.='<a href="'.$this->makelink("fdpage=1").'">&lt;&lt;first</a> ';
-            $out.='<a href="'.$this->makelink("fdpage=".($page-1)).'">&lt;&lt;prev</a> ';
+            $out.='<a href="'.makelink($query_vars, array('fdpage'=>1)).'">&lt;&lt;first</a> ';
+            $out.='<a href="'.makelink($query_vars, array('fdpage'=>($query_vars['fdpage']-1))).'">&lt;&lt;prev</a> ';
         }
-        $out.=" Page $page of $numpages ";
-        if($page==$numpages) {
+        $out.=' Page '.$query_vars['fdpage'].' of '.$numpages.' ';
+        if($query_vars['fdpage']==$numpages) {
             $out.="next&gt; ";
             $out.="last&gt;&gt; ";
         } else {
-            $out.='<a href="'.$this->makelink("fdpage=".($page+1)).'">next&gt;</a> ';
-            $out.='<a href="'.$this->makelink("fdpage=".$numpages).'">last&gt;&gt;</a> ';
+            $out.='<a href="'.makelink($query_vars, array('fdpage'=>($query_vars['fdpage']+1))).'">next&gt;</a> ';
+            $out.='<a href="'.makelink($query_vars, array('fdpage'=>$numpages)).'">last&gt;&gt;</a> ';
         }
         $out.='</p>';
 
@@ -297,8 +245,173 @@ class FDroid
     }
 
 
+    function show_apps($xml,$query_vars,&$numpages) {
+	
+        $skipped=0;
+        $got=0;
+        $total=0;
 
+		if($query_vars['fdstyle']=='grid') {
+			$outputter = new FDOutGrid();
+		} else {
+			$outputter = new FDOutList();
+		}
+		
+		$out = "";
+		
+		$out.=$outputter->outputStart();
+		
+        foreach($xml->children() as $app) {
+
+            if($app->getName() == 'repo') continue;
+            $appinfo['attrs']=$app->attributes();
+            $appinfo['id']=$appinfo['attrs']['id'];
+            foreach($app->children() as $el) {
+                switch($el->getName()) {
+                    case "name":
+                        $appinfo['name']=$el;
+                        break;
+                    case "icon":
+                        $appinfo['icon']=$el;
+                        break;
+                    case "summary":
+                        $appinfo['summary']=$el;
+                        break;
+                    case "license":
+                        $appinfo['license']=$el;
+                        break;
+                }
+            }
+
+            if($query_vars['fdfilter']===null || stristr($appinfo['name'],$query_vars['fdfilter'])) {
+                if($skipped<($query_vars['fdpage']-1)*$outputter->perpage) {
+                    $skipped++;
+                } else if($got<$outputter->perpage) {
+
+					$out.=$outputter->outputEntry($query_vars, $appinfo);
+                    $got++;
+                }
+                $total++;
+            }
+
+        }
+		
+		$out.=$outputter->outputEnd();
+		
+		$numpages = ceil((float)$total/$outputter->perpage);
+		
+		return $out;
+	}
 }
+
+// Class to output app entries in a detailed list format
+class FDOutList
+{
+	var $perpage=30;
+
+	function FDOutList() {
+	}
+
+	function outputStart() {
+		return '';
+	}
+	
+	function outputEntry($query_vars, $appinfo) {
+		$out="";
+		$out.="<hr>\n";
+		$out.='<div id="appheader">';
+
+		$out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$appinfo['icon'].'" style="width:48px;"></div>';
+
+		$out.='<div style="float:right;">';
+		$out.='<p><a href="';
+		$out.=makelink($query_vars, array('fdid'=>$appinfo['id']));
+		$out.='">Details...</a>';
+		$out.="</p>";
+		$out.="</div>\n";
+
+		$out.='<p><span style="font-size:20px">'.$appinfo['name']."</span>";
+		$out.="<br>".$appinfo['summary']."</p>\n";
+
+		$out.="</div>\n";
+		
+		return $out;
+	}
+
+	function outputEnd() {
+		return '';
+	}
+}
+
+// Class to output app entries in a compact grid format
+class FDOutGrid
+{
+	var $perpage=80;
+
+	var $itemCount = 0;
+
+	function FDOutGrid() {
+	}
+
+	function outputStart() {
+		return "\n".'<table border="0" width="100%"><tr>'."\n";
+	}
+	
+	function outputEntry($query_vars, $appinfo) {
+		$link=makelink($query_vars, array('fdid'=>$appinfo['id']));
+
+		$out='';
+
+		if($this->itemCount%4 == 0 && $this->itemCount > 0)
+		{
+			$out.='</tr><tr>'."\n";
+		}
+
+		$out.='<td align="center" valign="top" style="background-color:#F8F8F8;">';
+		$out.='<p>';
+		$out.='<div id="appheader" style="text-align:center;width:110px;">';
+
+		$out.='<a href="'.$link.'" style="border-bottom-style:none;">';
+		$out.='<img src="http://f-droid.org/repo/icons/'.$appinfo['icon'].'" style="width:48px;border-width:0;padding-top:5px;padding-bottom:5px;"><br/>';
+		$out.=$appinfo['name'].'<br/>';
+		$out.='</a>';
+
+		$out.="</div>";
+		$out.='</p>';
+		$out.="</td>\n";
+		
+		$this->itemCount++;
+		return $out;
+	}
+
+	function outputEnd() {
+		return '</tr></table>'."\n";
+	}
+}
+
+// Make a link to this page, with the current query vars attached and desired params added/modified
+function makelink($query_vars, $params=array()) {
+	$link=get_permalink();
+	$vars=linkify(array_merge($query_vars, $params));
+	if(strlen($vars)==0)
+		return $link;
+	if(strpos($link,'?')===false)
+		$link.='?';
+	else
+		$link.='&';
+	return $link.$vars;
+}
+
+// Return the key value pairs in http-get-parameter format as a string
+function linkify($vars) {
+	$retvar = '';
+	foreach($vars as $k => $v) {
+		if($k!==null && $v!==null && $v!='')
+			$retvar .= $k.'='.$v.'&';
+	}
+	return substr($retvar,0,-1);
+}
+
 
 $wp_fdroid = new FDroid();
 
