@@ -18,8 +18,7 @@ class FDroid
     // Our text domain, for internationalisation
     private $textdom='wp-fdroid';
 
-    // TODO: Fix site path...
-	private $site_path = "/home/hansemil/MyDocuments/f-droid";
+	private $site_path;
 
     // Constructor
     function FDroid() {
@@ -27,6 +26,7 @@ class FDroid
         add_shortcode('fdroidrepo',array($this, 'do_shortcode'));
         add_filter('query_vars',array($this, 'queryvars'));
         $this->inited=false;
+        $this->site_path=getenv('DOCUMENT_ROOT');
     }
 
 
