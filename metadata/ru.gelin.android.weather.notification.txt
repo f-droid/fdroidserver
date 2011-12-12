@@ -14,3 +14,5 @@ Repo:https://code.google.com/p/weather-notification-android/
 
 Build Version:0.2-beta2,23,253d9dc3022a,target=android-4
 
+Market Version:0.2-beta2
+Market Version Code:23
