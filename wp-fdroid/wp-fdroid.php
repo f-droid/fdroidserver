@@ -81,10 +81,20 @@ class FDroid
 			$query_vars['fdpage'] = 1;
 		}
 
-        if($query_vars['fdid']!==null)
-            $out=$this->get_app($query_vars);
-        else
-            $out=$this->get_apps($query_vars);
+		$out = '';
+
+		if(isset($attribs['search']) && $query_vars['fdfilter']===null) {
+			$query_vars['fdfilter'] = '';
+		}
+
+		if($query_vars['fdid']!==null) {
+            $out.=$this->get_app($query_vars);
+		} else {
+			if($query_vars['fdfilter'] !== null)
+				$out.=$this->show_search($query_vars);
+
+            $out.=$this->get_apps($query_vars);
+		}
         return $out;
 
     }
@@ -204,46 +214,74 @@ class FDroid
 
     function get_apps($query_vars) {
 
+	    $xml = simplexml_load_file($this->site_path."/repo/index.xml");
+		$matches = $this->show_apps($xml,$query_vars,$numpages);
+	
 		$out='';
 
-		$out.='<div style="float:left;">';
-        if($query_vars['fdfilter']===null)
-            $out.="All applications";
-        else
-            $out.="Applications matching ".$query_vars['fdfilter'];
-        $out.="</div>";
+		if(($query_vars['fdfilter']===null || $query_vars['fdfilter']!='') && $numpages>0)
+		{
+			$out.='<div style="float:left;">';
+			if($query_vars['fdfilter']===null)
+				$out.="All applications";
+			else
+				$out.='Applications matching "'.$query_vars['fdfilter'].'"';
+			$out.="</div>";
 
-		$out.='<div style="float:right;">';
-            $out.='<a href="'.makelink($query_vars, array('fdstyle'=>'list','fdpage'=>'1')).'">List</a> | ';
-            $out.='<a href="'.makelink($query_vars, array('fdstyle'=>'grid','fdpage'=>'1')).'">Grid</a>';
-        $out.='</div>';
+			$out.='<div style="float:right;">';
+				$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'list','fdpage'=>'1')).'">List</a> | ';
+				$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'grid','fdpage'=>'1')).'">Grid</a>';
+			$out.='</div>';
 
-        $out.='<br break="all"/>';
-
-        $xml = simplexml_load_file($this->site_path."/repo/index.xml");
-		$out.=$this->show_apps($xml,$query_vars,$numpages);
-
-        $out.='<hr><p>';
-        if($query_vars['fdpage']==1) {
-            $out.="&lt;&lt;first ";
-            $out.="&lt;prev ";
-        } else {
-            $out.='<a href="'.makelink($query_vars, array('fdpage'=>1)).'">&lt;&lt;first</a> ';
-            $out.='<a href="'.makelink($query_vars, array('fdpage'=>($query_vars['fdpage']-1))).'">&lt;&lt;prev</a> ';
-        }
-        $out.=' Page '.$query_vars['fdpage'].' of '.$numpages.' ';
-        if($query_vars['fdpage']==$numpages) {
-            $out.="next&gt; ";
-            $out.="last&gt;&gt; ";
-        } else {
-            $out.='<a href="'.makelink($query_vars, array('fdpage'=>($query_vars['fdpage']+1))).'">next&gt;</a> ';
-            $out.='<a href="'.makelink($query_vars, array('fdpage'=>$numpages)).'">last&gt;&gt;</a> ';
-        }
-        $out.='</p>';
+			$out.='<br break="all"/>';
+		} 
+		
+		if($numpages>0) {
+			$out.=$matches;
+			
+			$out.='<hr><p>';
+			if($query_vars['fdpage']==1) {
+				$out.="&lt;&lt;first ";
+				$out.="&lt;prev ";
+			} else {
+				$out.='<a href="'.makelink($query_vars, array('fdpage'=>1)).'">&lt;&lt;first</a> ';
+				$out.='<a href="'.makelink($query_vars, array('fdpage'=>($query_vars['fdpage']-1))).'">&lt;&lt;prev</a> ';
+			}
+			$out.=' Page '.$query_vars['fdpage'].' of '.$numpages.' ';
+			if($query_vars['fdpage']==$numpages) {
+				$out.="next&gt; ";
+				$out.="last&gt;&gt; ";
+			} else {
+				$out.='<a href="'.makelink($query_vars, array('fdpage'=>($query_vars['fdpage']+1))).'">next&gt;</a> ';
+				$out.='<a href="'.makelink($query_vars, array('fdpage'=>$numpages)).'">last&gt;&gt;</a> ';
+			}
+			$out.='</p>';
+		} else if($query_vars['fdfilter']!='') {
+			$out.='<p>No matches</p>';
+		}
 
         return $out;
     }
 
+	
+    function show_search($query_vars) {
+
+		$out='';
+		$out.='<form name="searchform" action="" method="get">';
+		$out.='<p><input name="fdfilter" type="text" value="'.$query_vars['fdfilter'].'" size="30"> ';
+		$out.='<input type="submit" value="Search"></p>';
+
+		$out.='<input type="hidden" name="page_id" value="'.get_query_var('page_id').'">';
+		foreach($query_vars as $name => $value) {
+			if($value !== null && $name != 'fdfilter')
+				$out.='<input type="hidden" name="'.$name.'" value="'.$value.'">';
+		}
+		
+		$out.='</form>'."\n";
+		
+        return $out;
+    }
+	
 
     function show_apps($xml,$query_vars,&$numpages) {
 	
@@ -283,11 +321,10 @@ class FDroid
                 }
             }
 
-            if($query_vars['fdfilter']===null || stristr($appinfo['name'],$query_vars['fdfilter'])) {
+            if($query_vars['fdfilter']===null || $query_vars['fdfilter']!='' && (stristr($appinfo['name'],$query_vars['fdfilter']) || stristr($appinfo['summary'],$query_vars['fdfilter']))) {
                 if($skipped<($query_vars['fdpage']-1)*$outputter->perpage) {
                     $skipped++;
                 } else if($got<$outputter->perpage) {
-
 					$out.=$outputter->outputEntry($query_vars, $appinfo);
                     $got++;
                 }
