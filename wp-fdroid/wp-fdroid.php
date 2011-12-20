@@ -18,7 +18,7 @@ class FDroid
     // Our text domain, for internationalisation
     private $textdom='wp-fdroid';
 
-	private $site_path;
+        private $site_path;
 
     // Constructor
     function FDroid() {
@@ -66,35 +66,35 @@ class FDroid
         global $wp_query,$wp_rewrite;
         $this->lazyinit();
 
-		
-		// Init local query vars
-		foreach($this->queryvars(array()) as $qv) {
-			if(array_key_exists($qv,$wp_query->query_vars)) {
-				$query_vars[$qv] = $wp_query->query_vars[$qv];
-			} else {
-				$query_vars[$qv] = null;
-			}
-		}
-	
-		// Santiy check query vars
-		if(!isset($query_vars['fdpage']) || !is_numeric($query_vars['fdpage']) || $query_vars['fdpage'] <= 0) {
-			$query_vars['fdpage'] = 1;
-		}
+                
+                // Init local query vars
+                foreach($this->queryvars(array()) as $qv) {
+                        if(array_key_exists($qv,$wp_query->query_vars)) {
+                                $query_vars[$qv] = $wp_query->query_vars[$qv];
+                        } else {
+                                $query_vars[$qv] = null;
+                        }
+                }
+        
+                // Santiy check query vars
+                if(!isset($query_vars['fdpage']) || !is_numeric($query_vars['fdpage']) || $query_vars['fdpage'] <= 0) {
+                        $query_vars['fdpage'] = 1;
+                }
 
-		$out = '';
+                $out = '';
 
-		if(isset($attribs['search']) && $query_vars['fdfilter']===null) {
-			$query_vars['fdfilter'] = '';
-		}
+                if(isset($attribs['search']) && $query_vars['fdfilter']===null) {
+                        $query_vars['fdfilter'] = '';
+                }
 
-		if($query_vars['fdid']!==null) {
+                if($query_vars['fdid']!==null) {
             $out.=$this->get_app($query_vars);
-		} else {
-			if($query_vars['fdfilter'] !== null)
-				$out.=$this->show_search($query_vars);
+                } else {
+                        if($query_vars['fdfilter'] !== null)
+                                $out.=$this->show_search($query_vars);
 
             $out.=$this->get_apps($query_vars);
-		}
+                }
         return $out;
 
     }
@@ -214,91 +214,91 @@ class FDroid
 
     function get_apps($query_vars) {
 
-	    $xml = simplexml_load_file($this->site_path."/repo/index.xml");
-		$matches = $this->show_apps($xml,$query_vars,$numpages);
-	
-		$out='';
+            $xml = simplexml_load_file($this->site_path."/repo/index.xml");
+                $matches = $this->show_apps($xml,$query_vars,$numpages);
+        
+                $out='';
 
-		if(($query_vars['fdfilter']===null || $query_vars['fdfilter']!='') && $numpages>0)
-		{
-			$out.='<div style="float:left;">';
-			if($query_vars['fdfilter']===null)
-				$out.="All applications";
-			else
-				$out.='Applications matching "'.$query_vars['fdfilter'].'"';
-			$out.="</div>";
+                if(($query_vars['fdfilter']===null || $query_vars['fdfilter']!='') && $numpages>0)
+                {
+                        $out.='<div style="float:left;">';
+                        if($query_vars['fdfilter']===null)
+                                $out.="All applications";
+                        else
+                                $out.='Applications matching "'.$query_vars['fdfilter'].'"';
+                        $out.="</div>";
 
-			$out.='<div style="float:right;">';
-				$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'list','fdpage'=>'1')).'">List</a> | ';
-				$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'grid','fdpage'=>'1')).'">Grid</a>';
-			$out.='</div>';
+                        $out.='<div style="float:right;">';
+                                $out.='<a href="'.makelink($query_vars, array('fdstyle'=>'list','fdpage'=>'1')).'">List</a> | ';
+                                $out.='<a href="'.makelink($query_vars, array('fdstyle'=>'grid','fdpage'=>'1')).'">Grid</a>';
+                        $out.='</div>';
 
-			$out.='<br break="all"/>';
-		} 
-		
-		if($numpages>0) {
-			$out.=$matches;
-			
-			$out.='<hr><p>';
-			if($query_vars['fdpage']==1) {
-				$out.="&lt;&lt;first ";
-				$out.="&lt;prev ";
-			} else {
-				$out.='<a href="'.makelink($query_vars, array('fdpage'=>1)).'">&lt;&lt;first</a> ';
-				$out.='<a href="'.makelink($query_vars, array('fdpage'=>($query_vars['fdpage']-1))).'">&lt;&lt;prev</a> ';
-			}
-			$out.=' Page '.$query_vars['fdpage'].' of '.$numpages.' ';
-			if($query_vars['fdpage']==$numpages) {
-				$out.="next&gt; ";
-				$out.="last&gt;&gt; ";
-			} else {
-				$out.='<a href="'.makelink($query_vars, array('fdpage'=>($query_vars['fdpage']+1))).'">next&gt;</a> ';
-				$out.='<a href="'.makelink($query_vars, array('fdpage'=>$numpages)).'">last&gt;&gt;</a> ';
-			}
-			$out.='</p>';
-		} else if($query_vars['fdfilter']!='') {
-			$out.='<p>No matches</p>';
-		}
+                        $out.='<br break="all"/>';
+                } 
+                
+                if($numpages>0) {
+                        $out.=$matches;
+                        
+                        $out.='<hr><p>';
+                        if($query_vars['fdpage']==1) {
+                                $out.="&lt;&lt;first ";
+                                $out.="&lt;prev ";
+                        } else {
+                                $out.='<a href="'.makelink($query_vars, array('fdpage'=>1)).'">&lt;&lt;first</a> ';
+                                $out.='<a href="'.makelink($query_vars, array('fdpage'=>($query_vars['fdpage']-1))).'">&lt;&lt;prev</a> ';
+                        }
+                        $out.=' Page '.$query_vars['fdpage'].' of '.$numpages.' ';
+                        if($query_vars['fdpage']==$numpages) {
+                                $out.="next&gt; ";
+                                $out.="last&gt;&gt; ";
+                        } else {
+                                $out.='<a href="'.makelink($query_vars, array('fdpage'=>($query_vars['fdpage']+1))).'">next&gt;</a> ';
+                                $out.='<a href="'.makelink($query_vars, array('fdpage'=>$numpages)).'">last&gt;&gt;</a> ';
+                        }
+                        $out.='</p>';
+                } else if($query_vars['fdfilter']!='') {
+                        $out.='<p>No matches</p>';
+                }
 
         return $out;
     }
 
-	
+        
     function show_search($query_vars) {
 
-		$out='';
-		$out.='<form name="searchform" action="" method="get">';
-		$out.='<p><input name="fdfilter" type="text" value="'.$query_vars['fdfilter'].'" size="30"> ';
-		$out.='<input type="submit" value="Search"></p>';
+                $out='';
+                $out.='<form name="searchform" action="" method="get">';
+                $out.='<p><input name="fdfilter" type="text" value="'.$query_vars['fdfilter'].'" size="30"> ';
+                $out.='<input type="submit" value="Search"></p>';
 
-		$out.='<input type="hidden" name="page_id" value="'.get_query_var('page_id').'">';
-		foreach($query_vars as $name => $value) {
-			if($value !== null && $name != 'fdfilter')
-				$out.='<input type="hidden" name="'.$name.'" value="'.$value.'">';
-		}
-		
-		$out.='</form>'."\n";
-		
+                $out.='<input type="hidden" name="page_id" value="'.get_query_var('page_id').'">';
+                foreach($query_vars as $name => $value) {
+                        if($value !== null && $name != 'fdfilter')
+                                $out.='<input type="hidden" name="'.$name.'" value="'.$value.'">';
+                }
+                
+                $out.='</form>'."\n";
+                
         return $out;
     }
-	
+        
 
     function show_apps($xml,$query_vars,&$numpages) {
-	
+        
         $skipped=0;
         $got=0;
         $total=0;
 
-		if($query_vars['fdstyle']=='grid') {
-			$outputter = new FDOutGrid();
-		} else {
-			$outputter = new FDOutList();
-		}
-		
-		$out = "";
-		
-		$out.=$outputter->outputStart();
-		
+                if($query_vars['fdstyle']=='grid') {
+                        $outputter = new FDOutGrid();
+                } else {
+                        $outputter = new FDOutList();
+                }
+                
+                $out = "";
+                
+                $out.=$outputter->outputStart();
+                
         foreach($xml->children() as $app) {
 
             if($app->getName() == 'repo') continue;
@@ -325,128 +325,128 @@ class FDroid
                 if($skipped<($query_vars['fdpage']-1)*$outputter->perpage) {
                     $skipped++;
                 } else if($got<$outputter->perpage) {
-					$out.=$outputter->outputEntry($query_vars, $appinfo);
+                                        $out.=$outputter->outputEntry($query_vars, $appinfo);
                     $got++;
                 }
                 $total++;
             }
 
         }
-		
-		$out.=$outputter->outputEnd();
-		
-		$numpages = ceil((float)$total/$outputter->perpage);
-		
-		return $out;
-	}
+                
+                $out.=$outputter->outputEnd();
+                
+                $numpages = ceil((float)$total/$outputter->perpage);
+                
+                return $out;
+        }
 }
 
 // Class to output app entries in a detailed list format
 class FDOutList
 {
-	var $perpage=30;
+        var $perpage=30;
 
-	function FDOutList() {
-	}
+        function FDOutList() {
+        }
 
-	function outputStart() {
-		return '';
-	}
-	
-	function outputEntry($query_vars, $appinfo) {
-		$out="";
-		$out.="<hr>\n";
-		$out.='<div id="appheader">';
+        function outputStart() {
+                return '';
+        }
+        
+        function outputEntry($query_vars, $appinfo) {
+                $out="";
+                $out.="<hr>\n";
+                $out.='<div id="appheader">';
 
-		$out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$appinfo['icon'].'" style="width:48px;"></div>';
+                $out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$appinfo['icon'].'" style="width:48px;"></div>';
 
-		$out.='<div style="float:right;">';
-		$out.='<p><a href="';
-		$out.=makelink($query_vars, array('fdid'=>$appinfo['id']));
-		$out.='">Details...</a>';
-		$out.="</p>";
-		$out.="</div>\n";
+                $out.='<div style="float:right;">';
+                $out.='<p><a href="';
+                $out.=makelink($query_vars, array('fdid'=>$appinfo['id']));
+                $out.='">Details...</a>';
+                $out.="</p>";
+                $out.="</div>\n";
 
-		$out.='<p><span style="font-size:20px">'.$appinfo['name']."</span>";
-		$out.="<br>".$appinfo['summary']."</p>\n";
+                $out.='<p><span style="font-size:20px">'.$appinfo['name']."</span>";
+                $out.="<br>".$appinfo['summary']."</p>\n";
 
-		$out.="</div>\n";
-		
-		return $out;
-	}
+                $out.="</div>\n";
+                
+                return $out;
+        }
 
-	function outputEnd() {
-		return '';
-	}
+        function outputEnd() {
+                return '';
+        }
 }
 
 // Class to output app entries in a compact grid format
 class FDOutGrid
 {
-	var $perpage=80;
+        var $perpage=80;
 
-	var $itemCount = 0;
+        var $itemCount = 0;
 
-	function FDOutGrid() {
-	}
+        function FDOutGrid() {
+        }
 
-	function outputStart() {
-		return "\n".'<table border="0" width="100%"><tr>'."\n";
-	}
-	
-	function outputEntry($query_vars, $appinfo) {
-		$link=makelink($query_vars, array('fdid'=>$appinfo['id']));
+        function outputStart() {
+                return "\n".'<table border="0" width="100%"><tr>'."\n";
+        }
+        
+        function outputEntry($query_vars, $appinfo) {
+                $link=makelink($query_vars, array('fdid'=>$appinfo['id']));
 
-		$out='';
+                $out='';
 
-		if($this->itemCount%4 == 0 && $this->itemCount > 0)
-		{
-			$out.='</tr><tr>'."\n";
-		}
+                if($this->itemCount%4 == 0 && $this->itemCount > 0)
+                {
+                        $out.='</tr><tr>'."\n";
+                }
 
-		$out.='<td align="center" valign="top" style="background-color:#F8F8F8;">';
-		$out.='<p>';
-		$out.='<div id="appheader" style="text-align:center;width:110px;">';
+                $out.='<td align="center" valign="top" style="background-color:#F8F8F8;">';
+                $out.='<p>';
+                $out.='<div id="appheader" style="text-align:center;width:110px;">';
 
-		$out.='<a href="'.$link.'" style="border-bottom-style:none;">';
-		$out.='<img src="http://f-droid.org/repo/icons/'.$appinfo['icon'].'" style="width:48px;border-width:0;padding-top:5px;padding-bottom:5px;"><br/>';
-		$out.=$appinfo['name'].'<br/>';
-		$out.='</a>';
+                $out.='<a href="'.$link.'" style="border-bottom-style:none;">';
+                $out.='<img src="http://f-droid.org/repo/icons/'.$appinfo['icon'].'" style="width:48px;border-width:0;padding-top:5px;padding-bottom:5px;"><br/>';
+                $out.=$appinfo['name'].'<br/>';
+                $out.='</a>';
 
-		$out.="</div>";
-		$out.='</p>';
-		$out.="</td>\n";
-		
-		$this->itemCount++;
-		return $out;
-	}
+                $out.="</div>";
+                $out.='</p>';
+                $out.="</td>\n";
+                
+                $this->itemCount++;
+                return $out;
+        }
 
-	function outputEnd() {
-		return '</tr></table>'."\n";
-	}
+        function outputEnd() {
+                return '</tr></table>'."\n";
+        }
 }
 
 // Make a link to this page, with the current query vars attached and desired params added/modified
 function makelink($query_vars, $params=array()) {
-	$link=get_permalink();
-	$vars=linkify(array_merge($query_vars, $params));
-	if(strlen($vars)==0)
-		return $link;
-	if(strpos($link,'?')===false)
-		$link.='?';
-	else
-		$link.='&';
-	return $link.$vars;
+        $link=get_permalink();
+        $vars=linkify(array_merge($query_vars, $params));
+        if(strlen($vars)==0)
+                return $link;
+        if(strpos($link,'?')===false)
+                $link.='?';
+        else
+                $link.='&';
+        return $link.$vars;
 }
 
 // Return the key value pairs in http-get-parameter format as a string
 function linkify($vars) {
-	$retvar = '';
-	foreach($vars as $k => $v) {
-		if($k!==null && $v!==null && $v!='')
-			$retvar .= $k.'='.$v.'&';
-	}
-	return substr($retvar,0,-1);
+        $retvar = '';
+        foreach($vars as $k => $v) {
+                if($k!==null && $v!==null && $v!='')
+                        $retvar .= $k.'='.$v.'&';
+        }
+        return substr($retvar,0,-1);
 }
 
 
