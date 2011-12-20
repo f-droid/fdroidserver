@@ -91,7 +91,7 @@ class vcs_git(vcs):
 
     def reset(self, rev=None):
         if rev is None:
-            rev = 'HEAD'
+            rev = 'origin'
         if subprocess.call(['git', 'reset', '--hard', rev],
                 cwd=self.local) != 0:
             print "Git reset failed"
