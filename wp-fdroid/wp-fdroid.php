@@ -193,14 +193,39 @@ class FDroid
                     $out.='<b>Donate:</b> <a href="'.$donate.'">'.$donate.'</a><br />';
                 $out.="</p>";
 
+				$out.='<script type="text/javascript">';
+				$out.='function showHidePermissions(id) {';
+				$out.='  if(document.getElementById(id).style.display==\'none\')';
+				$out.='    document.getElementById(id).style.display=\'block\';';
+				$out.='  else';
+				$out.='    document.getElementById(id).style.display=\'none\';';
+				$out.='  return false;';
+				$out.='}';
+				$out.='</script>';
+				
                 $out.="<h3>Packages</h3>";
+				$i=0;
                 foreach($apks as $apk) {
                     $out.="<p><b>Version ".$apk['version']."</b> - ";
                     $out.='<a href="http://f-droid.org/repo/'.$apk['apkname'].'">download</a> ';
                     $out.=$apk['size']." bytes";
                     if($apk['srcname'])
                         $out.='<br><a href="http://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a>';
-                    $out.="</p>";
+					
+					if($i==0)
+						$divStyleDisplay='block';
+					else
+						$divStyleDisplay='none';
+					$divId='permissions'.$i;
+					$out.='<p><a href="javascript:void(0);" onClick="showHidePermissions(\''.$divId.'\');">Permissions</a><br/>';
+					$out.='<div style="display:'.$divStyleDisplay.';" id="'.$divId.'">';
+					$permissions = explode(',',$apk['permissions']);
+					foreach($permissions as $permission)
+						$out.=$permission.'<br>';
+					$out.='</div></p>';
+						
+                    $out.='</p>';
+					$i++;
                 }
 
                 $out.='<hr><p><a href="'.makelink($query_vars,array('fdid'=>null)).'">Index</a></p>';
