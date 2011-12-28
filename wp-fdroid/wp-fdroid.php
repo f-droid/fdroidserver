@@ -12,6 +12,8 @@ Revision history
 
 */
 
+include('android-permissions.php');
+
 class FDroid
 {
 
@@ -101,8 +103,9 @@ class FDroid
 
 
     function get_app($query_vars) {
+		$permissions_data = get_android_permissions_array($this->site_path.'/repo/AndroidManifest.xml', $this->site_path.'/repo/strings.xml');
 
-        $xml = simplexml_load_file($this->site_path."/repo/index.xml");
+        $xml = simplexml_load_file($this->site_path.'/repo/index.xml');
         foreach($xml->children() as $app) {
 
             $attrs=$app->attributes();
@@ -220,8 +223,42 @@ class FDroid
 					$out.='<p><a href="javascript:void(0);" onClick="showHidePermissions(\''.$divId.'\');">Permissions</a><br/>';
 					$out.='<div style="display:'.$divStyleDisplay.';" id="'.$divId.'">';
 					$permissions = explode(',',$apk['permissions']);
-					foreach($permissions as $permission)
-						$out.=$permission.'<br>';
+					usort($permissions,
+					
+					
+						function ($a, $b) use (&$permissions_data) {
+
+							$aProtectionLevel = $permissions_data['permission'][$a]['protectionLevel'];
+							$bProtectionLevel = $permissions_data['permission'][$b]['protectionLevel'];
+
+							if($aProtectionLevel != $bProtectionLevel) {
+								return strcmp($aProtectionLevel, $bProtectionLevel);
+							}
+						
+							$aGroup = $permissions_data['permission'][$a]['permissionGroup'];
+							$bGroup = $permissions_data['permission'][$b]['permissionGroup'];
+							
+							return strcmp($aGroup, $bGroup);
+						}
+
+					
+					
+					);
+					
+					$permission_group_last = '';
+					foreach($permissions as $permission) {
+						$permission_group = $permissions_data['permission'][$permission]['permissionGroup'];
+						if($permission_group != $permission_group_last) {
+							$out.='<strong>'.strtoupper($permissions_data['permission-group'][$permission_group]['label']).'</strong><br/>';
+							$permission_group_last = $permission_group;
+						}
+					
+						$out.='('.strtoupper(substr($permissions_data['permission'][$permission]['protectionLevel'],0,1)).') - ';
+						$out.='<strong>'.$permissions_data['permission'][$permission]['label'].'</strong> [<code>'.$permission.'</code>]<br/>';
+						$out.=$permissions_data['permission'][$permission]['description'].'<br/>';
+						//$out.=$permissions_data['permission'][$permission]['comment'].'<br/>';
+						$out.='<br/>';
+					}
 					$out.='</div></p>';
 						
                     $out.='</p>';
