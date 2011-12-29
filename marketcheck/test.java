@@ -20,13 +20,14 @@ class test {
      */
     public static void main(String[] args) {
         try {
-            if(args.length < 2) {
+            if(args.length < 3) {
                 System.out.println("Parameters :\n" +
-                        "email password");
+                        "email password deviceid");
                 return;
             }
             String login = args[0];
             String password = args[1];
+            String deviceid = args[2];
 
             // Get a list of apps we want to check - i.e. those that
             // we have metadata files for...
@@ -45,7 +46,7 @@ class test {
 
             MarketSession session = new MarketSession();
 
-            session.getContext().setAndroidId("353027030727248");
+            session.getContext().setAndroidId(deviceid);
             session.getContext().setDeviceAndSdkVersion("sapphire:7");
             System.out.println("Login...");
             session.login(login,password);

@@ -66,7 +66,6 @@ class FDroid
         global $wp_query,$wp_rewrite;
         $this->lazyinit();
 
-		
 		// Init local query vars
 		foreach($this->queryvars(array()) as $qv) {
 			if(array_key_exists($qv,$wp_query->query_vars)) {
@@ -95,6 +94,7 @@ class FDroid
 
             $out.=$this->get_apps($query_vars);
 		}
+
         return $out;
 
     }
@@ -330,9 +330,8 @@ class FDroid
                 }
                 $total++;
             }
+		}
 
-        }
-		
 		$out.=$outputter->outputEnd();
 		
 		$numpages = ceil((float)$total/$outputter->perpage);

@@ -39,4 +39,9 @@ keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"
 keyaliases = {}
 keyaliases['com.example.app'] = 'example'
 
+#For the market checker, which is used only to determine a 'current' version
+#that the developer recommends, for those apps that are there.
+market_user = ""
+market_password = ""
+market_deviceid = ""
 

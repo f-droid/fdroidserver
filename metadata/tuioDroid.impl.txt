@@ -15,3 +15,5 @@ Repo:http://tuiodroid.googlecode.com/svn/trunk/
 
 Build Version:1.0,4,28,subdir=TUIOdroid,prebuild=rm -rf bin && rm -rf gen,target=android-11
 
+Market Version:1.0
+Market Version Code:4
