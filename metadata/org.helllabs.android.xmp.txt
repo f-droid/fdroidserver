@@ -20,5 +20,5 @@ Build Version:2.1.0,15,639549fda2111cb800fabe468b4a64bf4ae27003,\
 buildjni=yes,subdir=src/android/project,target=android-8,\
 insertversion=2.1.0[^"]*
 
-Market Version:2.3.0
-Market Version Code:19
+Market Version:2.4.0
+Market Version Code:20

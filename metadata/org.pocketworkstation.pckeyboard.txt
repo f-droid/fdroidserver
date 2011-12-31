@@ -19,5 +19,5 @@ Build Version:v1.18,1018,8298cd8728c2,subdir=java,target=android-11,buildjni=yes
 Build Version:v1.20,1020,e703fa82a4c3,subdir=java,target=android-11,buildjni=yes
 Build Version:v1.22,1022,154e21230e81,subdir=java,target=android-11,buildjni=yes
 
-Market Version:v1.22
-Market Version Code:1022
+Market Version:v1.27
+Market Version Code:1027

@@ -7,5 +7,5 @@ Summary:A SIP (VOIP) client
 Description:
 A SIP (VOIP) client with video calling capabilities.
 .
-Market Version:2.4 beta
+Market Version:2.4
 Market Version Code:87

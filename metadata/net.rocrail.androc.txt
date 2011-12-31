@@ -27,6 +27,7 @@ Build Version:1.4.289,289,289
 Build Version:1.5.315,315,315
 Build Version:1.5.317,317,!wrong version code
 Build Version:1.5.324,324,324
+Build Version:1.5.324,324,324
 
-Market Version:338
-Market Version Code:338
+Market Version:339
+Market Version Code:339

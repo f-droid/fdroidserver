@@ -19,6 +19,7 @@ Build Version:2.0.14,100,!No source in repo,target=android-11
 Build Version:2.0.16,102,!No source in repo,target=android-11
 #No source added to repo for a long time. Question here....
 #https://answers.launchpad.net/arxivdroid/+question/173825
+Build Version:2.0.20,106,!No source in repo
 
-Market Version:2.0.16
-Market Version Code:102
+Market Version:2.0.20
+Market Version Code:106

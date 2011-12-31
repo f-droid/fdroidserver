@@ -1,3 +1,4 @@
+Disabled:Needs google maps API key, and some build problems resolving
 Use Built:Yes
 License:Apache2
 AntiFeatures:NonFreeDep
@@ -21,5 +22,5 @@ Build Version:1.1.3,26,!Doesn't build - needs dependencies building now I think
 #Still doesn't build...
 #Build Version:1.1.9,22,v1.1.9,subdir=MyTracks,encoding=utf-8,target=android-13
 
-Market Version:1.1.11
-Market Version Code:34
+Market Version:1.1.13
+Market Version Code:36
