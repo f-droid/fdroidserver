@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # build.py - part of the FDroid server tools
@@ -48,13 +48,20 @@ parser.add_option("-p", "--package", default=None,
 # Get all apps...
 apps = common.read_metadata(options.verbose)
 
-output_dir = "repo"
-tmp_dir = "tmp"
-if not os.path.isdir('tmp'):
-    os.makedirs('tmp')
+output_dir = 'repo'
+if not os.path.isdir(output_dir):
+    print "Creating output directory"
+    os.makedirs(output_dir)
 
-if not os.path.isdir('build'):
-    os.makedirs('build')
+tmp_dir = 'tmp'
+if not os.path.isdir(tmp_dir):
+    print "Creating temporary directory"
+    os.makedirs(tmp_dir)
+
+build_dir = 'build'
+if not os.path.isdir(build_dir):
+    print "Creating build directory"
+    os.makedirs(build_dir)
 
 for app in apps:
 
