@@ -24,7 +24,7 @@ import re
 import urllib
 import time
 from optparse import OptionParser
-
+import HTMLParser
 import common
 
 #Read configuration...
@@ -39,6 +39,8 @@ parser.add_option("-v", "--verbose", action="store_true", default=False,
 
 # Get all apps...
 apps = common.read_metadata(options.verbose)
+
+html_parser = HTMLParser.HTMLParser()
 
 for app in apps:
 
@@ -55,15 +57,15 @@ for app in apps:
 
         m = re.search('<dd itemprop="softwareVersion">([^>]+)</dd>', page)
         if m:
-            version = m.group(1)
+            version = html_parser.unescape(m.group(1))
 
         m = re.search('data-paramValue="(\d+)"><div class="goog-menuitem-content">Latest Version<', page)
         if m:
             vercode = m.group(1)
 
-        if vercode is None:
+        if not vercode:
             print "...couldn't find version code"
-        elif version is None:
+        elif not version:
             print "...couldn't find version"
         elif vercode == app['marketvercode'] and version == app['marketversion']:
             print "...up to date"
