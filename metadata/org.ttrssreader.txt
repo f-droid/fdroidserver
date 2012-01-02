@@ -4,6 +4,7 @@ Category:Internet
 Web Site:http://code.google.com/p/ttrss-reader-fork/
 Source Code:http://code.google.com/p/ttrss-reader-fork/source/checkout
 Issue Tracker:http://code.google.com/p/ttrss-reader-fork/issues/list
+Donate:http://code.google.com/p/ttrss-reader-fork/wiki/Donations
 Summary:An RSS reader for Tiny Tiny RSS
 Description:
 An offline reader that works with the Tiny Tiny RSS web-based feed reader/aggregator..
@@ -38,6 +39,7 @@ Build Version:1.07,1075,1.07 (4),subdir=ttrss-reader,target=android-8
 #Build Version:1.08,1080,1.08,subdir=ttrss-reader,target=android-8
 
 Build Version:1.21,1210,1.21,subdir=ttrss-reader,target=android-8
+Build Version:1.22,1220,1.22,subdir=ttrss-reader,target=android-8
 
 Market Version:1.22
 Market Version Code:1220
