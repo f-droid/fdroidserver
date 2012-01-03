@@ -96,7 +96,6 @@ class FDroid
 		}
 
 		return $out;
-
 	}
 
 
@@ -315,13 +314,16 @@ class FDroid
 					case "summary":
 						$appinfo['summary']=$el;
 						break;
+					case "description":
+						$appinfo['description']=$el;
+						break;
 					case "license":
 						$appinfo['license']=$el;
 						break;
 				}
 			}
 
-			if($query_vars['fdfilter']===null || $query_vars['fdfilter']!='' && (stristr($appinfo['name'],$query_vars['fdfilter']) || stristr($appinfo['summary'],$query_vars['fdfilter']))) {
+			if($query_vars['fdfilter']===null || $query_vars['fdfilter']!='' && (stristr($appinfo['name'],$query_vars['fdfilter']) || stristr($appinfo['summary'],$query_vars['fdfilter']) || stristr($appinfo['description'],$query_vars['fdfilter']))) {
 				if($skipped<($query_vars['fdpage']-1)*$outputter->perpage) {
 					$skipped++;
 				} else if($got<$outputter->perpage) {
@@ -330,6 +332,7 @@ class FDroid
 				}
 				$total++;
 			}
+
 		}
 
 		$out.=$outputter->outputEnd();
