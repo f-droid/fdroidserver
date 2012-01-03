@@ -1,0 +1,18 @@
+License:GPLv3
+Category:System
+Web Site:http://www.sparkleshare.org
+Source Code:https://github.com/NewProggie/SparkleShare-Android
+Issue Tracker:https://github.com/NewProggie/SparkleShare-Android/issues
+Summary:distributed collaboration and sharing tool
+Description:
+SparkleShare is a collaboration and sharing tool that is designed to keep
+things simple and to stay out of your way.
+
+Setup your own cloud with SparkleShare (http://sparkleshare.org/) and
+browse your files right from your Android device.
+.
+
+Repo Type:git
+Repo:https://github.com/NewProggie/SparkleShare-Android.git
+
+Build Version:1.0,1,a9e23f0f9ae6161a786bf48cb48ab3dec20110c9,prebuild=rm -rf gen/ && rm -rf bin/,target=android-7

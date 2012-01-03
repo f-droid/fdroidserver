@@ -29,8 +29,7 @@ def getvcs(vcstype, remote, local):
         return vcs_hg(remote,local)
     elif vcstype == 'bzr':
         return vcs_bzr(remote,local)
-    print "Invalid vcs type " + vcstype
-    sys.exit(1)
+    raise VCSException("Invalid vcs type " + vcstype)
 
 class vcs:
     def __init__(self, remote, local):
@@ -44,8 +43,7 @@ class vcs:
             remote = remote[index+1:]
             index = self.username.find(':')
             if index == -1:
-                print "Password required with username"
-                sys.exit(1)
+                raise VCSException("Password required with username")
             self.password = self.username[index+1:]
             self.username = self.username[:index]
         else:
@@ -86,41 +84,34 @@ class vcs_git(vcs):
 
     def clone(self):
         if subprocess.call(['git', 'clone', self.remote, self.local]) != 0:
-            print "Git clone failed"
-            sys.exit(1)
+            raise VCSException("Git clone failed")
 
     def reset(self, rev=None):
         if rev is None:
             rev = 'origin'
         if subprocess.call(['git', 'reset', '--hard', rev],
                 cwd=self.local) != 0:
-            print "Git reset failed"
-            sys.exit(1)
+            raise VCSException("Git reset failed")
         if subprocess.call(['git', 'clean', '-dfx'],
                 cwd=self.local) != 0:
-            print "Git clean failed"
-            sys.exit(1)
+            raise VCSException("Git clean failed")
 
     def pull(self):
         if subprocess.call(['git', 'pull', 'origin'],
                 cwd=self.local) != 0:
-            print "Git pull failed"
-            sys.exit(1)
+            raise VCSException("Git pull failed")
         # Might need tags that aren't on a branch.
         if subprocess.call(['git', 'fetch', '--tags', 'origin'],
                 cwd=self.local) != 0:
-            print "Git fetch failed"
-            sys.exit(1)
+            raise VCSException("Git fetch failed")
 
     def initsubmodules(self):
         if subprocess.call(['git', 'submodule', 'init'],
                 cwd=self.local) != 0:
-            print "Git submodule init failed"
-            sys.exit(1)
+            raise VCSException("Git submodule init failed")
         if subprocess.call(['git', 'submodule', 'update'],
                 cwd=self.local) != 0:
-            print "Git submodule update failed"
-            sys.exit(1)
+            raise VCSException("Git submodule update failed")
 
 
 
@@ -128,7 +119,7 @@ class vcs_svn(vcs):
 
     def userargs(self):
         if self.username is None:
-            return []
+            return ['--non-interactive']
         return ['--username', self.username, 
                 '--password', self.password,
                 '--non-interactive']
@@ -136,8 +127,7 @@ class vcs_svn(vcs):
     def clone(self):
         if subprocess.call(['svn', 'checkout', self.remote, self.local] +
                 self.userargs()) != 0:
-            print "Svn checkout failed"
-            sys.exit(1)
+            raise VCSException("Svn checkout failed")
 
     def reset(self, rev=None):
         if rev is None:
@@ -149,25 +139,21 @@ class vcs_svn(vcs):
                 r"svn status | awk '/\?/ {print $2}' | xargs rm -rf"):
             if subprocess.call(svncommand, cwd=self.local,
                     shell=True) != 0:
-                print "Svn reset failed"
-                sys.exit(1)
+                raise VCSException("Svn reset failed")
         if subprocess.call(['svn', 'update', '--force'] + revargs +
                 self.userargs(), cwd=self.local) != 0:
-            print "Svn update failed"
-            sys.exit(1)
+            raise VCSException("Svn update failed")
 
     def pull(self):
         if subprocess.call(['svn', 'update'] +
                 self.userargs(), cwd=self.local) != 0:
-            print "Svn update failed"
-            sys.exit(1)
+            raise VCSException("Svn update failed")
 
 class vcs_hg(vcs):
 
     def clone(self):
         if subprocess.call(['hg', 'clone', self.remote, self.local]) !=0:
-            print "Hg clone failed"
-            sys.exit(1)
+            raise VCSException("Hg clone failed")
 
     def reset(self, rev=None):
         if rev is None:
@@ -176,25 +162,21 @@ class vcs_hg(vcs):
             revargs = [rev]
         if subprocess.call('hg status -u | xargs rm -rf',
                 cwd=self.local, shell=True) != 0:
-            print "Hg clean failed"
-            sys.exit(1)
+            raise VCSException("Hg clean failed")
         if subprocess.call(['hg', 'checkout', '-C'] + revargs,
                 cwd=self.local) != 0:
-            print "Hg checkout failed"
-            sys.exit(1)
+            raise VCSException("Hg checkout failed")
 
     def pull(self):
         if subprocess.call(['hg', 'pull'],
                 cwd=self.local) != 0:
-            print "Hg pull failed"
-            sys.exit(1)
+            raise VCSException("Hg pull failed")
 
 class vcs_bzr(vcs):
 
     def clone(self):
         if subprocess.call(['bzr', 'branch', self.remote, self.local]) != 0:
-            print "Bzr branch failed"
-            sys.exit(1)
+            raise VCSException("Bzr branch failed")
 
     def reset(self, rev=None):
         if rev is None:
@@ -203,18 +185,15 @@ class vcs_bzr(vcs):
             revargs = ['-r', rev]
         if subprocess.call(['bzr', 'clean-tree', '--force',
                 '--unknown', '--ignored'], cwd=self.local) != 0:
-            print "Bzr revert failed"
-            sys.exit(1)
+            raise VCSException("Bzr revert failed")
         if subprocess.call(['bzr', 'revert'] + revargs,
                 cwd=self.local) != 0:
-            print "Bzr revert failed"
-            sys.exit(1)
+            raise VCSException("Bzr revert failed")
 
     def pull(self):
         if subprocess.call(['bzr', 'pull'],
                 cwd=self.local) != 0:
-            print "Bzr update failed"
-            sys.exit(1)
+            raise VCSException("Bzr update failed")
 
 
 
@@ -224,8 +203,7 @@ def parse_metadata(metafile, **kw):
         parts = [p.replace("\\,", ",")
                  for p in re.split(r"(?<!\\),", value)]
         if len(parts) < 3:
-            print "Invalid build format: " + value + " in " + metafile.name
-            sys.exit(1)
+            raise MetaDataException("Invalid build format: " + value + " in " + metafile.name)
         thisbuild = {}
         thisbuild['version'] = parts[0]
         thisbuild['vercode'] = parts[1]
@@ -268,8 +246,7 @@ def parse_metadata(metafile, **kw):
                 continue
             index = line.find(':')
             if index == -1:
-                print "Invalid metadata in " + metafile.name + " at: " + line
-                sys.exit(1)
+                raise MetaDataException("Invalid metadata in " + metafile.name + " at: " + line)
             field = line[:index]
             value = line[index+1:]
             if field == 'Description':
@@ -302,9 +279,8 @@ def parse_metadata(metafile, **kw):
                         part != "NonFreeNet" and
                         part != "NonFreeDep" and
                         part != "NonFreeAdd"):
-                        print "Unrecognised antifeature '" + part + "' in " \
-                            + metafile.name
-                        sys.exit(1)
+                        raise MetaDataException("Unrecognised antifeature '" + part + "' in " \
+                            + metafile.name)
                 thisinfo['antifeatures'] = value
             elif field == 'Market Version':
                 thisinfo['marketversion'] = value
@@ -324,8 +300,7 @@ def parse_metadata(metafile, **kw):
                 if value == "Yes":
                     thisinfo['requiresroot'] = True
             else:
-                print "Unrecognised field " + field + " in " + metafile.name
-                sys.exit(1)
+                raise MetaDataException("Unrecognised field " + field + " in " + metafile.name)
         elif mode == 1:       # multi-line description
             if line == '.':
                 mode = 0
@@ -346,8 +321,7 @@ def parse_metadata(metafile, **kw):
                     parse_buildline("".join(buildline)))
                 mode = 0
     if mode == 1:
-        print "Description not terminated in " + metafile.name
-        sys.exit(1)
+        raise MetaDataException("Description not terminated in " + metafile.name)
     if len(thisinfo['description']) == 0:
         thisinfo['description'] = 'No description available'
     return thisinfo
@@ -359,3 +333,25 @@ def read_metadata(verbose=False):
             print "Reading " + metafile
         apps.append(parse_metadata(metafile, verbose=verbose))
     return apps
+
+class BuildException(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
+
+class VCSException(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
+
+class MetaDataException(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
+

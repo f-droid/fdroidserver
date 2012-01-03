@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # build.py - part of the FDroid server tools
@@ -30,6 +30,8 @@ from xml.dom.minidom import Document
 from optparse import OptionParser
 
 import common
+from common import BuildException
+from common import VCSException
 
 #Read configuration...
 execfile('config.py')
@@ -46,13 +48,23 @@ parser.add_option("-p", "--package", default=None,
 # Get all apps...
 apps = common.read_metadata(options.verbose)
 
-output_dir = "repo"
-tmp_dir = "tmp"
-if not os.path.isdir('tmp'):
-    os.makedirs('tmp')
+failed_apps = {}
+build_succeeded = []
 
-if not os.path.isdir('build'):
-    os.makedirs('build')
+output_dir = 'repo'
+if not os.path.isdir(output_dir):
+    print "Creating output directory"
+    os.makedirs(output_dir)
+
+tmp_dir = 'tmp'
+if not os.path.isdir(tmp_dir):
+    print "Creating temporary directory"
+    os.makedirs(tmp_dir)
+
+build_dir = 'build'
+if not os.path.isdir(build_dir):
+    print "Creating build directory"
+    os.makedirs(build_dir)
 
 for app in apps:
 
@@ -76,415 +88,413 @@ for app in apps:
 
 
         for thisbuild in app['builds']:
+            try:
+                dest = os.path.join(output_dir, app['id'] + '_' +
+                        thisbuild['vercode'] + '.apk')
+                dest_unsigned = os.path.join(tmp_dir, app['id'] + '_' +
+                        thisbuild['vercode'] + '_unsigned.apk')
 
-            dest = os.path.join(output_dir, app['id'] + '_' +
-                    thisbuild['vercode'] + '.apk')
-            dest_unsigned = os.path.join(tmp_dir, app['id'] + '_' +
-                    thisbuild['vercode'] + '_unsigned.apk')
-
-            if os.path.exists(dest):
-                print "..version " + thisbuild['version'] + " already exists"
-            elif thisbuild['commit'].startswith('!'):
-                print ("..skipping version " + thisbuild['version'] + " - " +
-                        thisbuild['commit'][1:])
-            else:
-                print "..building version " + thisbuild['version']
-
-                if not refreshed_source:
-                    vcs.refreshlocal()
-                    refreshed_source = True
-
-                # Optionally, the actual app source can be in a subdirectory...
-                if thisbuild.has_key('subdir'):
-                    root_dir = os.path.join(build_dir, thisbuild['subdir'])
+                if os.path.exists(dest):
+                    print "..version " + thisbuild['version'] + " already exists"
+                elif thisbuild['commit'].startswith('!'):
+                    print ("..skipping version " + thisbuild['version'] + " - " +
+                            thisbuild['commit'][1:])
                 else:
-                    root_dir = build_dir
+                    print "..building version " + thisbuild['version']
 
-                # Get a working copy of the right revision...
-                if options.verbose:
-                    print "Resetting repository to " + thisbuild['commit']
-                vcs.reset(thisbuild['commit'])
+                    if not refreshed_source:
+                        vcs.refreshlocal()
+                        refreshed_source = True
 
-                # Initialise submodules if requred...
-                if thisbuild.get('submodules', 'no')  == 'yes':
-                    vcs.initsubmodules()
+                    # Optionally, the actual app source can be in a subdirectory...
+                    if thisbuild.has_key('subdir'):
+                        root_dir = os.path.join(build_dir, thisbuild['subdir'])
+                    else:
+                        root_dir = build_dir
 
-                # Generate (or update) the ant build file, build.xml...
-                if (thisbuild.get('update', 'yes') == 'yes' and
-                       not thisbuild.has_key('maven')):
-                    parms = [os.path.join(sdk_path, 'tools', 'android'),
-                             'update', 'project', '-p', '.']
-                    parms.append('--subprojects')
-                    if thisbuild.has_key('target'):
-                        parms.append('-t')
-                        parms.append(thisbuild['target'])
-                    if subprocess.call(parms, cwd=root_dir) != 0:
-                        print "Failed to update project"
-                        sys.exit(1)
+                    # Get a working copy of the right revision...
+                    if options.verbose:
+                        print "Resetting repository to " + thisbuild['commit']
+                    vcs.reset(thisbuild['commit'])
 
-                # If the app has ant set up to sign the release, we need to switch
-                # that off, because we want the unsigned apk...
-                for propfile in ('build.properties', 'default.properties'):
-                    if os.path.exists(os.path.join(root_dir, propfile)):
-                        if subprocess.call(['sed','-i','s/^key.store/#/',
-                                            propfile], cwd=root_dir) !=0:
-                            print "Failed to amend %s" % propfile
-                            sys.exit(1)
+                    # Initialise submodules if requred...
+                    if thisbuild.get('submodules', 'no')  == 'yes':
+                        vcs.initsubmodules()
 
-                # Update the local.properties file...
-                locprops = os.path.join(root_dir, 'local.properties')
-                if os.path.exists(locprops):
-                    f = open(locprops, 'r')
-                    props = f.read()
-                    f.close()
-                    # Fix old-fashioned 'sdk-location' by copying
-                    # from sdk.dir, if necessary...
-                    if thisbuild.get('oldsdkloc', 'no') == "yes":
-                        sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
-                            re.S|re.M).group(1)
-                        props += "\nsdk-location=" + sdkloc + "\n"
-                    # Add ndk location...
-                    props+= "\nndk.dir=" + ndk_path + "\n"
-                    # Add java.encoding if necessary...
-                    if thisbuild.has_key('encoding'):
-                        props += "\njava.encoding=" + thisbuild['encoding'] + "\n"
-                    f = open(locprops, 'w')
-                    f.write(props)
-                    f.close()
+                    # Generate (or update) the ant build file, build.xml...
+                    if (thisbuild.get('update', 'yes') == 'yes' and
+                        not thisbuild.has_key('maven')):
+                        parms = [os.path.join(sdk_path, 'tools', 'android'),
+                                'update', 'project', '-p', '.']
+                        parms.append('--subprojects')
+                        if thisbuild.has_key('target'):
+                            parms.append('-t')
+                            parms.append(thisbuild['target'])
+                        if subprocess.call(parms, cwd=root_dir) != 0:
+                            raise BuildException("Failed to update project")
 
-                # Insert version code and number into the manifest if necessary...
-                if thisbuild.has_key('insertversion'):
-                    if subprocess.call(['sed','-i','s/' + thisbuild['insertversion'] +
-                        '/' + thisbuild['version'] +'/g',
-                        'AndroidManifest.xml'], cwd=root_dir) !=0:
-                        print "Failed to amend manifest"
-                        sys.exit(1)
-                if thisbuild.has_key('insertvercode'):
-                    if subprocess.call(['sed','-i','s/' + thisbuild['insertvercode'] +
-                        '/' + thisbuild['vercode'] +'/g',
-                        'AndroidManifest.xml'], cwd=root_dir) !=0:
-                        print "Failed to amend manifest"
-                        sys.exit(1)
+                    # If the app has ant set up to sign the release, we need to switch
+                    # that off, because we want the unsigned apk...
+                    for propfile in ('build.properties', 'default.properties'):
+                        if os.path.exists(os.path.join(root_dir, propfile)):
+                            if subprocess.call(['sed','-i','s/^key.store/#/',
+                                                propfile], cwd=root_dir) !=0:
+                                raise BuildException("Failed to amend %s" % propfile)
 
-                # Delete unwanted file...
-                if thisbuild.has_key('rm'):
-                    os.remove(os.path.join(build_dir, thisbuild['rm']))
+                    # Update the local.properties file...
+                    locprops = os.path.join(root_dir, 'local.properties')
+                    if os.path.exists(locprops):
+                        f = open(locprops, 'r')
+                        props = f.read()
+                        f.close()
+                        # Fix old-fashioned 'sdk-location' by copying
+                        # from sdk.dir, if necessary...
+                        if thisbuild.get('oldsdkloc', 'no') == "yes":
+                            sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
+                                re.S|re.M).group(1)
+                            props += "\nsdk-location=" + sdkloc + "\n"
+                        # Add ndk location...
+                        props+= "\nndk.dir=" + ndk_path + "\n"
+                        # Add java.encoding if necessary...
+                        if thisbuild.has_key('encoding'):
+                            props += "\njava.encoding=" + thisbuild['encoding'] + "\n"
+                        f = open(locprops, 'w')
+                        f.write(props)
+                        f.close()
 
-                # Fix apostrophes translation files if necessary...
-                if thisbuild.get('fixapos', 'no') == 'yes':
-                    for root, dirs, files in os.walk(os.path.join(root_dir,'res')):
-                        for filename in files:
-                            if filename.endswith('.xml'):
-                                if subprocess.call(['sed','-i','s@' +
-                                    r"\([^\\]\)'@\1\\'" +
-                                    '@g',
-                                    os.path.join(root, filename)]) != 0:
-                                    print "Failed to amend " + filename
-                                    sys.exit(1)
+                    # Insert version code and number into the manifest if necessary...
+                    if thisbuild.has_key('insertversion'):
+                        if subprocess.call(['sed','-i','s/' + thisbuild['insertversion'] +
+                            '/' + thisbuild['version'] +'/g',
+                            'AndroidManifest.xml'], cwd=root_dir) !=0:
+                            raise BuildException("Failed to amend manifest")
+                    if thisbuild.has_key('insertvercode'):
+                        if subprocess.call(['sed','-i','s/' + thisbuild['insertvercode'] +
+                            '/' + thisbuild['vercode'] +'/g',
+                            'AndroidManifest.xml'], cwd=root_dir) !=0:
+                            raise BuildException("Failed to amend manifest")
 
-                # Fix translation files if necessary...
-                if thisbuild.get('fixtrans', 'no') == 'yes':
-                    for root, dirs, files in os.walk(os.path.join(root_dir,'res')):
-                        for filename in files:
-                            if filename.endswith('.xml'):
-                                f = open(os.path.join(root, filename))
-                                changed = False
-                                outlines = []
-                                for line in f:
-                                    num = 1
-                                    index = 0
-                                    oldline = line
-                                    while True:
-                                        index = line.find("%", index)
-                                        if index == -1:
-                                            break
-                                        next = line[index+1:index+2]
-                                        if next == "s" or next == "d":
-                                            line = (line[:index+1] +
-                                                    str(num) + "$" +
-                                                    line[index+1:])
-                                            num += 1
-                                            index += 3
-                                        else:
-                                            index += 1
-                                    # We only want to insert the positional arguments
-                                    # when there is more than one argument...
-                                    if oldline != line:
-                                        if num > 2:
-                                            changed = True
-                                        else:
-                                            line = oldline
-                                    outlines.append(line)
-                                f.close()
-                                if changed:
-                                    f = open(os.path.join(root, filename), 'w')
-                                    f.writelines(outlines)
+                    # Delete unwanted file...
+                    if thisbuild.has_key('rm'):
+                        os.remove(os.path.join(build_dir, thisbuild['rm']))
+
+                    # Fix apostrophes translation files if necessary...
+                    if thisbuild.get('fixapos', 'no') == 'yes':
+                        for root, dirs, files in os.walk(os.path.join(root_dir,'res')):
+                            for filename in files:
+                                if filename.endswith('.xml'):
+                                    if subprocess.call(['sed','-i','s@' +
+                                        r"\([^\\]\)'@\1\\'" +
+                                        '@g',
+                                        os.path.join(root, filename)]) != 0:
+                                        raise BuildException("Failed to amend " + filename)
+
+                    # Fix translation files if necessary...
+                    if thisbuild.get('fixtrans', 'no') == 'yes':
+                        for root, dirs, files in os.walk(os.path.join(root_dir,'res')):
+                            for filename in files:
+                                if filename.endswith('.xml'):
+                                    f = open(os.path.join(root, filename))
+                                    changed = False
+                                    outlines = []
+                                    for line in f:
+                                        num = 1
+                                        index = 0
+                                        oldline = line
+                                        while True:
+                                            index = line.find("%", index)
+                                            if index == -1:
+                                                break
+                                            next = line[index+1:index+2]
+                                            if next == "s" or next == "d":
+                                                line = (line[:index+1] +
+                                                        str(num) + "$" +
+                                                        line[index+1:])
+                                                num += 1
+                                                index += 3
+                                            else:
+                                                index += 1
+                                        # We only want to insert the positional arguments
+                                        # when there is more than one argument...
+                                        if oldline != line:
+                                            if num > 2:
+                                                changed = True
+                                            else:
+                                                line = oldline
+                                        outlines.append(line)
                                     f.close()
+                                    if changed:
+                                        f = open(os.path.join(root, filename), 'w')
+                                        f.writelines(outlines)
+                                        f.close()
 
-                # Run a pre-build command if one is required...
-                if thisbuild.has_key('prebuild'):
-                    if subprocess.call(thisbuild['prebuild'],
-                            cwd=root_dir, shell=True) != 0:
-                        print "Error running pre-build command"
-                        sys.exit(1)
+                    # Run a pre-build command if one is required...
+                    if thisbuild.has_key('prebuild'):
+                        if subprocess.call(thisbuild['prebuild'],
+                                cwd=root_dir, shell=True) != 0:
+                            raise BuildException("Error running pre-build command")
 
-                # Apply patches if any
-                if 'patch' in thisbuild:
-                    for patch in thisbuild['patch'].split(';'):
-                        print "Applying " + patch
-                        patch_path = os.path.join('metadata', app['id'], patch)
-                        if subprocess.call(['patch', '-p1',
-                                        '-i', os.path.abspath(patch_path)], cwd=build_dir) != 0:
-                            print "Failed to apply patch %s" % patch_path
-                            sys.exit(1)
+                    # Apply patches if any
+                    if 'patch' in thisbuild:
+                        for patch in thisbuild['patch'].split(';'):
+                            print "Applying " + patch
+                            patch_path = os.path.join('metadata', app['id'], patch)
+                            if subprocess.call(['patch', '-p1',
+                                            '-i', os.path.abspath(patch_path)], cwd=build_dir) != 0:
+                                raise BuildException("Failed to apply patch %s" % patch_path)
 
-                # Special case init functions for funambol...
-                if thisbuild.get('initfun', 'no')  == "yes":
+                    # Special case init functions for funambol...
+                    if thisbuild.get('initfun', 'no')  == "yes":
 
-                    if subprocess.call(['sed','-i','s@' +
-                        '<taskdef resource="net/sf/antcontrib/antcontrib.properties" />' +
-                        '@' +
-                        '<taskdef resource="net/sf/antcontrib/antcontrib.properties">' +
-                        '<classpath>' +
-                        '<pathelement location="/usr/share/java/ant-contrib.jar"/>' +
-                        '</classpath>' +
-                        '</taskdef>' +
-                        '@g',
-                        'build.xml'], cwd=root_dir) !=0:
-                        print "Failed to amend build.xml"
-                        sys.exit(1)
+                        if subprocess.call(['sed','-i','s@' +
+                            '<taskdef resource="net/sf/antcontrib/antcontrib.properties" />' +
+                            '@' +
+                            '<taskdef resource="net/sf/antcontrib/antcontrib.properties">' +
+                            '<classpath>' +
+                            '<pathelement location="/usr/share/java/ant-contrib.jar"/>' +
+                            '</classpath>' +
+                            '</taskdef>' +
+                            '@g',
+                            'build.xml'], cwd=root_dir) !=0:
+                            raise BuildException("Failed to amend build.xml")
 
-                    if subprocess.call(['sed','-i','s@' +
-                        '\${user.home}/funambol/build/android/build.properties' +
-                        '@' +
-                        'build.properties' +
-                        '@g',
-                        'build.xml'], cwd=root_dir) !=0:
-                        print "Failed to amend build.xml"
-                        sys.exit(1)
+                        if subprocess.call(['sed','-i','s@' +
+                            '\${user.home}/funambol/build/android/build.properties' +
+                            '@' +
+                            'build.properties' +
+                            '@g',
+                            'build.xml'], cwd=root_dir) !=0:
+                            raise BuildException("Failed to amend build.xml")
 
-                    buildxml = os.path.join(root_dir, 'build.xml')
-                    f = open(buildxml, 'r')
-                    xml = f.read()
-                    f.close()
-                    xmlout = ""
-                    mode = 0
-                    for line in xml.splitlines():
-                        if mode == 0:
-                            if line.find("jarsigner") != -1:
-                                mode = 1
+                        buildxml = os.path.join(root_dir, 'build.xml')
+                        f = open(buildxml, 'r')
+                        xml = f.read()
+                        f.close()
+                        xmlout = ""
+                        mode = 0
+                        for line in xml.splitlines():
+                            if mode == 0:
+                                if line.find("jarsigner") != -1:
+                                    mode = 1
+                                else:
+                                    xmlout += line + "\n"
                             else:
-                                xmlout += line + "\n"
+                                if line.find("/exec") != -1:
+                                    mode += 1
+                                    if mode == 3:
+                                        mode =0
+                        f = open(buildxml, 'w')
+                        f.write(xmlout)
+                        f.close()
+
+                        if subprocess.call(['sed','-i','s@' +
+                            'platforms/android-2.0' +
+                            '@' +
+                            'platforms/android-8' +
+                            '@g',
+                            'build.xml'], cwd=root_dir) !=0:
+                            raise BuildException("Failed to amend build.xml")
+
+                        shutil.copyfile(
+                                os.path.join(root_dir, "build.properties.example"),
+                                os.path.join(root_dir, "build.properties"))
+
+                        if subprocess.call(['sed','-i','s@' +
+                            'javacchome=.*'+
+                            '@' +
+                            'javacchome=' + javacc_path +
+                            '@g',
+                            'build.properties'], cwd=root_dir) !=0:
+                            raise BuildException("Failed to amend build.properties")
+
+                        if subprocess.call(['sed','-i','s@' +
+                            'sdk-folder=.*'+
+                            '@' +
+                            'sdk-folder=' + sdk_path +
+                            '@g',
+                            'build.properties'], cwd=root_dir) !=0:
+                            raise BuildException("Failed to amend build.properties")
+
+                        if subprocess.call(['sed','-i','s@' +
+                            'android.sdk.version.*'+
+                            '@' +
+                            'android.sdk.version=2.0' +
+                            '@g',
+                            'build.properties'], cwd=root_dir) !=0:
+                            raise BuildException("Failed to amend build.properties")
+
+
+                    # Build the source tarball right before we build the release...
+                    tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
+                    tarball = tarfile.open(os.path.join(output_dir,
+                        tarname + '.tar.gz'), "w:gz")
+                    tarball.add(build_dir, tarname)
+                    tarball.close()
+
+                    # Build native stuff if required...
+                    if thisbuild.get('buildjni', 'no') == 'yes':
+                        ndkbuild = os.path.join(ndk_path, "ndk-build")
+                        p = subprocess.Popen([ndkbuild], cwd=root_dir,
+                                stdout=subprocess.PIPE)
+                        output = p.communicate()[0]
+                        if p.returncode != 0:
+                            print output
+                            raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']))
+                        elif options.verbose:
+                            print output
+
+                    # Build the release...
+                    if thisbuild.has_key('maven'):
+                        p = subprocess.Popen(['mvn', 'clean', 'install',
+                            '-Dandroid.sdk.path=' + sdk_path],
+                            cwd=root_dir, stdout=subprocess.PIPE)
+                    else:
+                        if thisbuild.has_key('antcommand'):
+                            antcommand = thisbuild['antcommand']
                         else:
-                            if line.find("/exec") != -1:
-                                mode += 1
-                                if mode == 3:
-                                    mode =0
-                    f = open(buildxml, 'w')
-                    f.write(xmlout)
-                    f.close()
-
-                    if subprocess.call(['sed','-i','s@' +
-                        'platforms/android-2.0' +
-                        '@' +
-                        'platforms/android-8' +
-                        '@g',
-                        'build.xml'], cwd=root_dir) !=0:
-                        print "Failed to amend build.xml"
-                        sys.exit(1)
-
-                    shutil.copyfile(
-                            os.path.join(root_dir, "build.properties.example"),
-                            os.path.join(root_dir, "build.properties"))
-
-                    if subprocess.call(['sed','-i','s@' +
-                        'javacchome=.*'+
-                        '@' +
-                        'javacchome=' + javacc_path +
-                        '@g',
-                        'build.properties'], cwd=root_dir) !=0:
-                        print "Failed to amend build.properties"
-                        sys.exit(1)
-
-                    if subprocess.call(['sed','-i','s@' +
-                        'sdk-folder=.*'+
-                        '@' +
-                        'sdk-folder=' + sdk_path +
-                        '@g',
-                        'build.properties'], cwd=root_dir) !=0:
-                        print "Failed to amend build.properties"
-                        sys.exit(1)
-
-                    if subprocess.call(['sed','-i','s@' +
-                        'android.sdk.version.*'+
-                        '@' +
-                        'android.sdk.version=2.0' +
-                        '@g',
-                        'build.properties'], cwd=root_dir) !=0:
-                        print "Failed to amend build.properties"
-                        sys.exit(1)
-
-
-                # Build the source tarball right before we build the release...
-                tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
-                tarball = tarfile.open(os.path.join(output_dir,
-                    tarname + '.tar.gz'), "w:gz")
-                tarball.add(build_dir, tarname)
-                tarball.close()
-
-                # Build native stuff if required...
-                if thisbuild.get('buildjni', 'no') == 'yes':
-                    ndkbuild = os.path.join(ndk_path, "ndk-build")
-                    p = subprocess.Popen([ndkbuild], cwd=root_dir,
-                            stdout=subprocess.PIPE)
+                            antcommand = 'release'
+                        p = subprocess.Popen(['ant', antcommand], cwd=root_dir, 
+                                stdout=subprocess.PIPE)
                     output = p.communicate()[0]
                     if p.returncode != 0:
                         print output
-                        print "NDK build failed for %s:%s" % (app['id'], thisbuild['version'])
-                        sys.exit(1)
+                        raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']))
                     elif options.verbose:
                         print output
+                    print "Build successful"
 
-                # Build the release...
-                if thisbuild.has_key('maven'):
-                    p = subprocess.Popen(['mvn', 'clean', 'install',
-                        '-Dandroid.sdk.path=' + sdk_path],
-                        cwd=root_dir, stdout=subprocess.PIPE)
-                else:
-                    if thisbuild.has_key('antcommand'):
-                        antcommand = thisbuild['antcommand']
+                    # Find the apk name in the output...
+                    if thisbuild.has_key('bindir'):
+                        bindir = os.path.join(build_dir, thisbuild['bindir'])
                     else:
-                        antcommand = 'release'
-                    p = subprocess.Popen(['ant', antcommand], cwd=root_dir, 
-                            stdout=subprocess.PIPE)
-                output = p.communicate()[0]
-                if p.returncode != 0:
-                    print output
-                    print "Build failed for %s:%s" % (app['id'], thisbuild['version'])
-                    sys.exit(1)
-                elif options.verbose:
-                    print output
-                print "Build successful"
-
-                # Find the apk name in the output...
-                if thisbuild.has_key('bindir'):
-                    bindir = os.path.join(build_dir, thisbuild['bindir'])
-                else:
-                    bindir = os.path.join(root_dir, 'bin')
-                if thisbuild.get('initfun', 'no')  == "yes":
-                    # Special case (again!) for funambol...
-                    src = ("funambol-android-sync-client-" +
-                            thisbuild['version'] + "-unsigned.apk")
-                    src = os.path.join(bindir, src)
-                elif thisbuild.has_key('maven'):
-                    src = re.match(r".*^\[INFO\] Installing /.*/([^/]*)\.apk",
-                            output, re.S|re.M).group(1)
-                    src = os.path.join(bindir, src) + '.apk'
+                        bindir = os.path.join(root_dir, 'bin')
+                    if thisbuild.get('initfun', 'no')  == "yes":
+                        # Special case (again!) for funambol...
+                        src = ("funambol-android-sync-client-" +
+                                thisbuild['version'] + "-unsigned.apk")
+                        src = os.path.join(bindir, src)
+                    elif thisbuild.has_key('maven'):
+                        src = re.match(r".*^\[INFO\] Installing /.*/([^/]*)\.apk",
+                                output, re.S|re.M).group(1)
+                        src = os.path.join(bindir, src) + '.apk'
 #[INFO] Installing /home/ciaran/fdroidserver/tmp/mainline/application/target/callerid-1.0-SNAPSHOT.apk
-                else:
-                    src = re.match(r".*^.*Creating (\S+) for release.*$.*", output,
-                        re.S|re.M).group(1)
-                    src = os.path.join(bindir, src)
+                    else:
+                        src = re.match(r".*^.*Creating (\S+) for release.*$.*", output,
+                            re.S|re.M).group(1)
+                        src = os.path.join(bindir, src)
 
-                # By way of a sanity check, make sure the version and version
-                # code in our new apk match what we expect...
-                print "Checking " + src
-                p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools',
-                                                   'aapt'),
-                                      'dump', 'badging', src],
-                                     stdout=subprocess.PIPE)
-                output = p.communicate()[0]
-                if thisbuild.get('novcheck', 'no') == "yes":
-                    vercode = thisbuild['vercode']
-                    version = thisbuild['version']
-                else:
-                    vercode = None
-                    version = None
-                    for line in output.splitlines():
-                        if line.startswith("package:"):
-                            pat = re.compile(".*versionCode='([0-9]*)'.*")
-                            vercode = re.match(pat, line).group(1)
-                            pat = re.compile(".*versionName='([^']*)'.*")
-                            version = re.match(pat, line).group(1)
-                    if version == None or vercode == None:
-                        print "Could not find version information in build in output"
-                        sys.exit(1)
+                    # By way of a sanity check, make sure the version and version
+                    # code in our new apk match what we expect...
+                    print "Checking " + src
+                    p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools',
+                                                    'aapt'),
+                                        'dump', 'badging', src],
+                                        stdout=subprocess.PIPE)
+                    output = p.communicate()[0]
+                    if thisbuild.get('novcheck', 'no') == "yes":
+                        vercode = thisbuild['vercode']
+                        version = thisbuild['version']
+                    else:
+                        vercode = None
+                        version = None
+                        for line in output.splitlines():
+                            if line.startswith("package:"):
+                                pat = re.compile(".*versionCode='([0-9]*)'.*")
+                                vercode = re.match(pat, line).group(1)
+                                pat = re.compile(".*versionName='([^']*)'.*")
+                                version = re.match(pat, line).group(1)
+                        if version == None or vercode == None:
+                            raise BuildException("Could not find version information in build in output")
 
-                # Some apps (e.g. Timeriffic) have had the bonkers idea of
-                # including the entire changelog in the version number. Remove
-                # it so we can compare. (TODO: might be better to remove it
-                # before we compile, in fact)
-                index = version.find(" //")
-                if index != -1:
-                    version = version[:index]
+                    # Some apps (e.g. Timeriffic) have had the bonkers idea of
+                    # including the entire changelog in the version number. Remove
+                    # it so we can compare. (TODO: might be better to remove it
+                    # before we compile, in fact)
+                    index = version.find(" //")
+                    if index != -1:
+                        version = version[:index]
 
-                if (version != thisbuild['version'] or
-                        vercode != thisbuild['vercode']):
-                    print "Unexpected version/version code in output"
-                    print "APK:" + version + " / " + str(vercode)
-                    print ("Expected: " + thisbuild['version'] + " / " +
-                            str(thisbuild['vercode']))
-                    sys.exit(1)
+                    if (version != thisbuild['version'] or
+                            vercode != thisbuild['vercode']):
+                        raise BuildException(("Unexpected version/version code in output"
+                                             "APK: %s / %s"
+                                             "Expected: %s / %s")
+                                            ) % (version, str(vercode), thisbuild['version'], str(thisbuild['vercode']))
 
-                # Copy the unsigned apk to our temp directory for further
-                # processing...
-                shutil.copyfile(src, dest_unsigned)
+                    # Copy the unsigned apk to our temp directory for further
+                    # processing...
+                    shutil.copyfile(src, dest_unsigned)
 
-                # Figure out the key alias name we'll use. Only the first 8
-                # characters are significant, so we'll use the first 8 from
-                # the MD5 of the app's ID and hope there are no collisions.
-                # If a collision does occur later, we're going to have to
-                # come up with a new alogrithm, AND rename all existing keys
-                # in the keystore!
-                if keyaliases.has_key(app['id']):
-                    # For this particular app, the key alias is overridden...
-                    keyalias = keyaliases[app['id']]
-                else:
-                    m = md5.new()
-                    m.update(app['id'])
-                    keyalias = m.hexdigest()[:8]
-                print "Key alias: " + keyalias
+                    # Figure out the key alias name we'll use. Only the first 8
+                    # characters are significant, so we'll use the first 8 from
+                    # the MD5 of the app's ID and hope there are no collisions.
+                    # If a collision does occur later, we're going to have to
+                    # come up with a new alogrithm, AND rename all existing keys
+                    # in the keystore!
+                    if keyaliases.has_key(app['id']):
+                        # For this particular app, the key alias is overridden...
+                        keyalias = keyaliases[app['id']]
+                    else:
+                        m = md5.new()
+                        m.update(app['id'])
+                        keyalias = m.hexdigest()[:8]
+                    print "Key alias: " + keyalias
 
-                # See if we already have a key for this application, and
-                # if not generate one...
-                p = subprocess.Popen(['keytool', '-list',
-                    '-alias', keyalias, '-keystore', keystore,
-                    '-storepass', keystorepass], stdout=subprocess.PIPE)
-                output = p.communicate()[0]
-                if p.returncode !=0:
-                    print "Key does not exist - generating..."
-                    p = subprocess.Popen(['keytool', '-genkey',
-                        '-keystore', keystore, '-alias', keyalias,
-                        '-keyalg', 'RSA', '-keysize', '2048',
-                        '-validity', '10000',
+                    # See if we already have a key for this application, and
+                    # if not generate one...
+                    p = subprocess.Popen(['keytool', '-list',
+                        '-alias', keyalias, '-keystore', keystore,
+                        '-storepass', keystorepass], stdout=subprocess.PIPE)
+                    output = p.communicate()[0]
+                    if p.returncode !=0:
+                        print "Key does not exist - generating..."
+                        p = subprocess.Popen(['keytool', '-genkey',
+                            '-keystore', keystore, '-alias', keyalias,
+                            '-keyalg', 'RSA', '-keysize', '2048',
+                            '-validity', '10000',
+                            '-storepass', keystorepass, '-keypass', keypass,
+                            '-dname', keydname], stdout=subprocess.PIPE)
+                        output = p.communicate()[0]
+                        print output
+                        if p.returncode != 0:
+                            raise BuildException("Failed to generate key")
+
+                    # Sign the application...
+                    p = subprocess.Popen(['jarsigner', '-keystore', keystore,
                         '-storepass', keystorepass, '-keypass', keypass,
-                        '-dname', keydname], stdout=subprocess.PIPE)
+                            dest_unsigned, keyalias], stdout=subprocess.PIPE)
                     output = p.communicate()[0]
                     print output
                     if p.returncode != 0:
-                        print "Failed to generate key"
-                        sys.exit(1)
+                        raise BuildException("Failed to sign application")
 
-                # Sign the application...
-                p = subprocess.Popen(['jarsigner', '-keystore', keystore,
-                       '-storepass', keystorepass, '-keypass', keypass,
-                        dest_unsigned, keyalias], stdout=subprocess.PIPE)
-                output = p.communicate()[0]
-                print output
-                if p.returncode != 0:
-                    print "Failed to sign application"
-                    sys.exit(1)
+                    # Zipalign it...
+                    p = subprocess.Popen([os.path.join(sdk_path,'tools','zipalign'),
+                                        '-v', '4', dest_unsigned, dest],
+                                        stdout=subprocess.PIPE)
+                    output = p.communicate()[0]
+                    print output
+                    if p.returncode != 0:
+                        raise BuildException("Failed to align application")
+                    os.remove(dest_unsigned)
+            except BuildException as be:
+                print "Could not build app %s due to BuildException: %s" % (app['id'], be)
+                failed_apps[app['id']] = be
+            except VCSException as vcse:
+                print "VCS error while building app %s: %s" % (app['id'], vcse)
+                failed_apps[app['id']] = vcse
+            except Exception as e:
+                print "Could not build app %s due to unknown error: %s" % (app['id'], e)
+                failed_apps[app['id']] = e
+            build_succeeded.append(app)
 
-                # Zipalign it...
-                p = subprocess.Popen([os.path.join(sdk_path,'tools','zipalign'),
-                                      '-v', '4', dest_unsigned, dest],
-                                     stdout=subprocess.PIPE)
-                output = p.communicate()[0]
-                print output
-                if p.returncode != 0:
-                    print "Failed to align application"
-                    sys.exit(1)
-                os.remove(dest_unsigned)
+for app in build_succeeded:
+    print "success: %s" % (app['id'])
+
+for fa in failed_apps:
+    print "Build for app %s failed: %s" % (fa, failed_apps[fa])
 
 print "Finished."
+if len(failed_apps) > 0:
+    print str(len(failed_apps)) + 'builds failed'
 

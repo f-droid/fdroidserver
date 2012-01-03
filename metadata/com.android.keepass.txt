@@ -19,7 +19,8 @@ Build Version:1.9.1,77,v1.9.1-2
 Build Version:1.9.2,78,v1.9.2
 Build Version:1.9.3.1,80,v1.9.3.1
 Build Version:1.9.5,82,v1.9.5
+Build Version:1.9.6,83,v1.9.6
 
-Market Version:1.9.5
-Market Version Code:82
+Market Version:1.9.6
+Market Version Code:83
 

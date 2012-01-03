@@ -12,5 +12,5 @@ this Android app.
 
 Repo Type:git
 Repo:https://github.com/jberkel/gist-it.git
-Market Version:0.1.2
-Market Version Code:3
+Market Version:0.1.4
+Market Version Code:5

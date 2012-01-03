@@ -15,5 +15,5 @@ Repo:git://github.com/drodin/TuxRider.git
 #Build Version:1.0.4 beta,6,67bce39cda321c225bc5
 
 
-Market Version:1.0.9 beta
+Market Version:1.0.9
 Market Version Code:11

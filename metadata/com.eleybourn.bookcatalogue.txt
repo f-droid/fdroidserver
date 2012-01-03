@@ -25,7 +25,8 @@ Build Version:3.6.1,61,75e2f8328ff9a2602fe1,target=android-9
 Build Version:3.6.2,62,da37baecb2c90aa2b306,target=android-9
 Build Version:3.7,68,514799b45d18cf6dbc42065adf08abbdc9e2f16f,target=android-9
 Build Version:3.8,69,bb85065cb6045df773cd681ac8bad55a6818d48a,target=android-9
+Build Version:3.8.1,70,890b6affe8a64,target=android-9
 
-Market Version:3.8
-Market Version Code:69
+Market Version:3.8.1
+Market Version Code:70
 
