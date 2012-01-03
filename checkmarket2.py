@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # checkmarket2.py - part of the FDroid server tools
-# Copyright (C) 2010-11, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -44,49 +44,45 @@ html_parser = HTMLParser.HTMLParser()
 
 for app in apps:
 
-    if app['disabled']:
-        print "Skipping %s: disabled" % app['id']
+    print "Processing " + app['id']
+    url = 'http://market.android.com/details?id=' + app['id']
+    page = urllib.urlopen(url).read()
+
+    version = None
+    vercode = None
+
+    m = re.search('<dd itemprop="softwareVersion">([^>]+)</dd>', page)
+    if m:
+        version = html_parser.unescape(m.group(1))
+
+    m = re.search('data-paramValue="(\d+)"><div class="goog-menuitem-content">Latest Version<', page)
+    if m:
+        vercode = m.group(1)
+
+    if not vercode:
+        print "...couldn't find version code"
+    elif not version:
+        print "...couldn't find version"
+    elif vercode == app['marketvercode'] and version == app['marketversion']:
+        print "...up to date"
     else:
+        print '...updating to version:' + version + ' vercode:' + vercode
+        newdata = ''
+        metafile = os.path.join('metadata', app['id'] + '.txt')
+        mf = open(metafile, 'r')
+        for line in mf:
+            if line.startswith('Market Version:'):
+                newdata += 'Market Version:' + version + '\n'
+            elif line.startswith('Market Version Code:'):
+                newdata += 'Market Version Code:' + vercode + '\n'
+            else:
+                newdata += line
+        mf.close()
+        mf = open(metafile, 'w')
+        mf.write(newdata)
+        mf.close()
 
-        print "Processing " + app['id']
-        url = 'http://market.android.com/details?id=' + app['id']
-        page = urllib.urlopen(url).read()
-
-        version = None
-        vercode = None
-
-        m = re.search('<dd itemprop="softwareVersion">([^>]+)</dd>', page)
-        if m:
-            version = html_parser.unescape(m.group(1))
-
-        m = re.search('data-paramValue="(\d+)"><div class="goog-menuitem-content">Latest Version<', page)
-        if m:
-            vercode = m.group(1)
-
-        if not vercode:
-            print "...couldn't find version code"
-        elif not version:
-            print "...couldn't find version"
-        elif vercode == app['marketvercode'] and version == app['marketversion']:
-            print "...up to date"
-        else:
-            print '...updating to version:' + version + ' vercode:' + vercode
-            newdata = ''
-            metafile = os.path.join('metadata', app['id'] + '.txt')
-            mf = open(metafile, 'r')
-            for line in mf:
-                if line.startswith('Market Version:'):
-                    newdata += 'Market Version:' + version + '\n'
-                elif line.startswith('Market Version Code:'):
-                    newdata += 'Market Version Code:' + vercode + '\n'
-                else:
-                    newdata += line
-            mf.close()
-            mf = open(metafile, 'w')
-            mf.write(newdata)
-            mf.close()
-
-        time.sleep(5)
+    time.sleep(5)
 
 print "Finished."
 
