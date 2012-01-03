@@ -488,11 +488,13 @@ for app in apps:
                 failed_apps[app['id']] = e
             build_succeeded.append(app)
 
-for fa in failed_apps:
-    print "Build for app %s failed: %s" % (fa, failed_apps[fa])
-
 for app in build_succeeded:
     print "success: %s" % (app['id'])
 
+for fa in failed_apps:
+    print "Build for app %s failed: %s" % (fa, failed_apps[fa])
+
 print "Finished."
+if len(failed_apps) > 0:
+    print str(len(failed_apps)) + 'builds failed'
 
