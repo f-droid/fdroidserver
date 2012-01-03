@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # scanner.py - part of the FDroid server tools
@@ -27,6 +27,8 @@ import subprocess
 from optparse import OptionParser
 import HTMLParser
 import common
+from common import BuildException
+from common import VCSException
 
 #Read configuration...
 execfile('config.py')
@@ -57,83 +59,48 @@ for app in apps:
 
         print "Processing " + app['id']
 
-        build_dir = 'build/' + app['id']
+        try:
 
-        # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app['repotype'], app['repo'], build_dir)
+            build_dir = 'build/' + app['id']
 
-        refreshed_source = False
+            # Set up vcs interface and make sure we have the latest code...
+            vcs = common.getvcs(app['repotype'], app['repo'], build_dir)
+
+            refreshed_source = False
 
 
-        for thisbuild in app['builds']:
+            for thisbuild in app['builds']:
 
-            if thisbuild['commit'].startswith('!'):
-                print ("..skipping version " + thisbuild['version'] + " - " +
-                        thisbuild['commit'][1:])
-            else:
-                print "..scanning version " + thisbuild['version']
+                if thisbuild['commit'].startswith('!'):
+                    print ("..skipping version " + thisbuild['version'] + " - " +
+                            thisbuild['commit'][1:])
+                else:
+                    print "..scanning version " + thisbuild['version']
 
-                if not refreshed_source:
-                    vcs.refreshlocal()
+                    # Prepare the source code...
+                    root_dir = common.prepare_source(vcs, app, thisbuild,
+                            build_dir, sdk_path, ndk_path,
+                            not refreshed_source)
                     refreshed_source = True
 
-                # Optionally, the actual app source can be in a subdirectory...
-                if thisbuild.has_key('subdir'):
-                    root_dir = os.path.join(build_dir, thisbuild['subdir'])
-                else:
-                    root_dir = build_dir
+                    # Scan for common known non-free blobs:
+                    usual_suspects = ['flurryagent.jar', 'paypal_mpl.jar']
+                    for r,d,f in os.walk(build_dir):
+                        for curfile in f:
+                            if curfile.lower() in usual_suspects:
+                                msg = 'Found probable non-free blob ' + os.path.join(r,file)
+                                msg += ' in ' + app['id'] + ' ' + thisbuild['version']
+                                problems.append(msg)
 
-                # Get a working copy of the right revision...
-                if options.verbose:
-                    print "Resetting repository to " + thisbuild['commit']
-                vcs.reset(thisbuild['commit'])
-
-                # Initialise submodules if requred...
-                if thisbuild.get('submodules', 'no')  == 'yes':
-                    vcs.initsubmodules()
-
-                # Generate (or update) the ant build file, build.xml...
-                if (thisbuild.get('update', 'yes') == 'yes' and
-                       not thisbuild.has_key('maven')):
-                    parms = [os.path.join(sdk_path, 'tools', 'android'),
-                             'update', 'project', '-p', '.']
-                    parms.append('--subprojects')
-                    if thisbuild.has_key('target'):
-                        parms.append('-t')
-                        parms.append(thisbuild['target'])
-                    if subprocess.call(parms, cwd=root_dir) != 0:
-                        print "Failed to update project"
-                        sys.exit(1)
-
-                # Delete unwanted file...
-                if thisbuild.has_key('rm'):
-                    os.remove(os.path.join(build_dir, thisbuild['rm']))
-
-                # Run a pre-build command if one is required...
-                if thisbuild.has_key('prebuild'):
-                    if subprocess.call(thisbuild['prebuild'],
-                            cwd=root_dir, shell=True) != 0:
-                        print "Error running pre-build command"
-                        sys.exit(1)
-
-                # Apply patches if any
-                if 'patch' in thisbuild:
-                    for patch in thisbuild['patch'].split(';'):
-                        print "Applying " + patch
-                        patch_path = os.path.join('metadata', app['id'], patch)
-                        if subprocess.call(['patch', '-p1',
-                                        '-i', os.path.abspath(patch_path)], cwd=build_dir) != 0:
-                            print "Failed to apply patch %s" % patch_path
-                            sys.exit(1)
-
-                # Scan for common known non-free blobs:
-                usual_suspects = ['flurryagent.jar', 'paypal_mpl.jar']
-                for r,d,f in os.walk(build_dir):
-                    for curfile in f:
-                        if curfile.lower() in usual_suspects:
-                            msg = 'Found probable non-free blob ' + os.path.join(r,file)
-                            msg += ' in ' + app['id'] + ' ' + thisbuild['version']
-                            problems.append(msg)
+        except BuildException as be:
+            msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
+            problems.append(msg)
+        except VCSException as vcse:
+            msg = "VCS error while scanning app %s: %s" % (app['id'], vcse)
+            problems.append(msg)
+        except Exception as e:
+            msg = "Could not scan app %s due to unknown error: %s" % (app['id'], e)
+            problems.append(msg)
 
 print "Finished:"
 for problem in problems:

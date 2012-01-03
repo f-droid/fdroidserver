@@ -355,3 +355,238 @@ class MetaDataException(Exception):
     def __str__(self):
         return repr(self.value)
 
+
+# Prepare the source code for a particular build
+#  'vcs'       - the appropriate vcs object for the application
+#  'app'       - the application details from the metadata
+#  'build'     - the build details from the metadata
+#  'build_dir' - the path to the build directory
+#  'sdk_path'  - the path to the Android SDK
+#  'ndk_path'  - the path to the Android NDK
+#  'refresh'   - True to refresh from the remote repo
+# Returns the root directory, which may be the same as 'build_dir' or may
+# be a subdirectory of it.
+def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, refresh):
+
+    if refresh:
+        vcs.refreshlocal()
+
+    # Optionally, the actual app source can be in a subdirectory...
+    if build.has_key('subdir'):
+        root_dir = os.path.join(build_dir, build['subdir'])
+    else:
+        root_dir = build_dir
+
+    # Get a working copy of the right revision...
+    if options.verbose:
+        print "Resetting repository to " + build['commit']
+    vcs.reset(build['commit'])
+
+    # Initialise submodules if requred...
+    if build.get('submodules', 'no')  == 'yes':
+        vcs.initsubmodules()
+
+    # Generate (or update) the ant build file, build.xml...
+    if (build.get('update', 'yes') == 'yes' and
+        not build.has_key('maven')):
+        parms = [os.path.join(sdk_path, 'tools', 'android'),
+                'update', 'project', '-p', '.']
+        parms.append('--subprojects')
+        if build.has_key('target'):
+            parms.append('-t')
+            parms.append(build['target'])
+        if subprocess.call(parms, cwd=root_dir) != 0:
+            raise BuildException("Failed to update project")
+
+    # If the app has ant set up to sign the release, we need to switch
+    # that off, because we want the unsigned apk...
+    for propfile in ('build.properties', 'default.properties'):
+        if os.path.exists(os.path.join(root_dir, propfile)):
+            if subprocess.call(['sed','-i','s/^key.store/#/',
+                                propfile], cwd=root_dir) !=0:
+                raise BuildException("Failed to amend %s" % propfile)
+
+    # Update the local.properties file...
+    locprops = os.path.join(root_dir, 'local.properties')
+    if os.path.exists(locprops):
+        f = open(locprops, 'r')
+        props = f.read()
+        f.close()
+        # Fix old-fashioned 'sdk-location' by copying
+        # from sdk.dir, if necessary...
+        if build.get('oldsdkloc', 'no') == "yes":
+            sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
+                re.S|re.M).group(1)
+            props += "\nsdk-location=" + sdkloc + "\n"
+        # Add ndk location...
+        props+= "\nndk.dir=" + ndk_path + "\n"
+        # Add java.encoding if necessary...
+        if build.has_key('encoding'):
+            props += "\njava.encoding=" + build['encoding'] + "\n"
+        f = open(locprops, 'w')
+        f.write(props)
+        f.close()
+
+    # Insert version code and number into the manifest if necessary...
+    if build.has_key('insertversion'):
+        if subprocess.call(['sed','-i','s/' + build['insertversion'] +
+            '/' + build['version'] +'/g',
+            'AndroidManifest.xml'], cwd=root_dir) !=0:
+            raise BuildException("Failed to amend manifest")
+    if build.has_key('insertvercode'):
+        if subprocess.call(['sed','-i','s/' + build['insertvercode'] +
+            '/' + build['vercode'] +'/g',
+            'AndroidManifest.xml'], cwd=root_dir) !=0:
+            raise BuildException("Failed to amend manifest")
+
+    # Delete unwanted file...
+    if build.has_key('rm'):
+        os.remove(os.path.join(build_dir, build['rm']))
+
+    # Fix apostrophes translation files if necessary...
+    if build.get('fixapos', 'no') == 'yes':
+        for root, dirs, files in os.walk(os.path.join(root_dir,'res')):
+            for filename in files:
+                if filename.endswith('.xml'):
+                    if subprocess.call(['sed','-i','s@' +
+                        r"\([^\\]\)'@\1\\'" +
+                        '@g',
+                        os.path.join(root, filename)]) != 0:
+                        raise BuildException("Failed to amend " + filename)
+
+    # Fix translation files if necessary...
+    if build.get('fixtrans', 'no') == 'yes':
+        for root, dirs, files in os.walk(os.path.join(root_dir,'res')):
+            for filename in files:
+                if filename.endswith('.xml'):
+                    f = open(os.path.join(root, filename))
+                    changed = False
+                    outlines = []
+                    for line in f:
+                        num = 1
+                        index = 0
+                        oldline = line
+                        while True:
+                            index = line.find("%", index)
+                            if index == -1:
+                                break
+                            next = line[index+1:index+2]
+                            if next == "s" or next == "d":
+                                line = (line[:index+1] +
+                                        str(num) + "$" +
+                                        line[index+1:])
+                                num += 1
+                                index += 3
+                            else:
+                                index += 1
+                        # We only want to insert the positional arguments
+                        # when there is more than one argument...
+                        if oldline != line:
+                            if num > 2:
+                                changed = True
+                            else:
+                                line = oldline
+                        outlines.append(line)
+                    f.close()
+                    if changed:
+                        f = open(os.path.join(root, filename), 'w')
+                        f.writelines(outlines)
+                        f.close()
+
+    # Run a pre-build command if one is required...
+    if build.has_key('prebuild'):
+        if subprocess.call(build['prebuild'],
+                cwd=root_dir, shell=True) != 0:
+            raise BuildException("Error running pre-build command")
+
+    # Apply patches if any
+    if 'patch' in build:
+        for patch in build['patch'].split(';'):
+            print "Applying " + patch
+            patch_path = os.path.join('metadata', app['id'], patch)
+            if subprocess.call(['patch', '-p1',
+                            '-i', os.path.abspath(patch_path)], cwd=build_dir) != 0:
+                raise BuildException("Failed to apply patch %s" % patch_path)
+
+    # Special case init functions for funambol...
+    if build.get('initfun', 'no')  == "yes":
+
+        if subprocess.call(['sed','-i','s@' +
+            '<taskdef resource="net/sf/antcontrib/antcontrib.properties" />' +
+            '@' +
+            '<taskdef resource="net/sf/antcontrib/antcontrib.properties">' +
+            '<classpath>' +
+            '<pathelement location="/usr/share/java/ant-contrib.jar"/>' +
+            '</classpath>' +
+            '</taskdef>' +
+            '@g',
+            'build.xml'], cwd=root_dir) !=0:
+            raise BuildException("Failed to amend build.xml")
+
+        if subprocess.call(['sed','-i','s@' +
+            '\${user.home}/funambol/build/android/build.properties' +
+            '@' +
+            'build.properties' +
+            '@g',
+            'build.xml'], cwd=root_dir) !=0:
+            raise BuildException("Failed to amend build.xml")
+
+        buildxml = os.path.join(root_dir, 'build.xml')
+        f = open(buildxml, 'r')
+        xml = f.read()
+        f.close()
+        xmlout = ""
+        mode = 0
+        for line in xml.splitlines():
+            if mode == 0:
+                if line.find("jarsigner") != -1:
+                    mode = 1
+                else:
+                    xmlout += line + "\n"
+            else:
+                if line.find("/exec") != -1:
+                    mode += 1
+                    if mode == 3:
+                        mode =0
+        f = open(buildxml, 'w')
+        f.write(xmlout)
+        f.close()
+
+        if subprocess.call(['sed','-i','s@' +
+            'platforms/android-2.0' +
+            '@' +
+            'platforms/android-8' +
+            '@g',
+            'build.xml'], cwd=root_dir) !=0:
+            raise BuildException("Failed to amend build.xml")
+
+        shutil.copyfile(
+                os.path.join(root_dir, "build.properties.example"),
+                os.path.join(root_dir, "build.properties"))
+
+        if subprocess.call(['sed','-i','s@' +
+            'javacchome=.*'+
+            '@' +
+            'javacchome=' + javacc_path +
+            '@g',
+            'build.properties'], cwd=root_dir) !=0:
+            raise BuildException("Failed to amend build.properties")
+
+        if subprocess.call(['sed','-i','s@' +
+            'sdk-folder=.*'+
+            '@' +
+            'sdk-folder=' + sdk_path +
+            '@g',
+            'build.properties'], cwd=root_dir) !=0:
+            raise BuildException("Failed to amend build.properties")
+
+        if subprocess.call(['sed','-i','s@' +
+            'android.sdk.version.*'+
+            '@' +
+            'android.sdk.version=2.0' +
+            '@g',
+            'build.properties'], cwd=root_dir) !=0:
+            raise BuildException("Failed to amend build.properties")
+
+    return root_dir
+
