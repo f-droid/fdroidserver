@@ -48,6 +48,9 @@ parser.add_option("-p", "--package", default=None,
 # Get all apps...
 apps = common.read_metadata(options.verbose)
 
+failed_apps = {}
+build_succeeded = []
+
 output_dir = 'repo'
 if not os.path.isdir(output_dir):
     print "Creating output directory"
@@ -476,10 +479,20 @@ for app in apps:
                     os.remove(dest_unsigned)
             except BuildException as be:
                 print "Could not build app %s due to BuildException: %s" % (app['id'], be)
+                failed_apps[app['id']] = be
             except VCSException as vcse:
                 print "VCS error while building app %s: %s" % (app['id'], vcse)
+                failed_apps[app['id']] = vcse
             except Exception as e:
                 print "Could not build app %s due to unknown error: %s" % (app['id'], e)
+                failed_apps[app['id']] = e
+            build_succeeded.append(app)
+
+for fa in failed_apps:
+    print "Build for app %s failed: %s" % (fa, failed_apps[fa])
+
+for app in build_succeeded:
+    print "success: %s" % (app['id'])
 
 print "Finished."
 
