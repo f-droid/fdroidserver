@@ -241,30 +241,32 @@ class FDroid
 			
 			$out.='<hr><p>';
 
-			$out.='<div style="float:left;">';
+			$out.='<div style="width:20%; float:left; text-align:left;">';
 			$out.=' Page '.$query_vars['fdpage'].' of '.$numpages.' ';
 			$out.='</div>';
 
-			$out.='<div style="float:right;">';
+			$out.='<div style="width:60%; float:left; text-align:center;">';
+			if($numpages>1) {
+				for($i=1;$i<=$numpages;$i++) {
+					if($i == $query_vars['fdpage']) {
+						$out.='<b>'.$i.'</b>';
+					} else {
+						$out.='<a href="'.makelink($query_vars, array('fdpage'=>$i)).'">';
+						$out.=$i;
+						$out.='</a>';
+					}
+					$out.=' ';
+				}
+				$out.=' ';
+			}
+			$out.='</div>';
+
+			$out.='<div style="width:20%; float:left; text-align:right;">';
 			if($query_vars['fdpage']!=$numpages) {
 				$out.='<a href="'.makelink($query_vars, array('fdpage'=>($query_vars['fdpage']+1))).'">next&gt;</a> ';
 			}
 			$out.='</div>';
-
-			$out.='<div style="text-align:center;">';
-			for($i=1;$i<=$numpages;$i++) {
-				if($i == $query_vars['fdpage']) {
-					$out.='<b>'.$i.'</b>';
-				} else {
-					$out.='<a href="'.makelink($query_vars, array('fdpage'=>$i)).'">';
-					$out.=$i;
-					$out.='</a>';
-				}
-				$out.=' ';
-			}
-			$out.=' ';
-			$out.='</div>';
-
+			
 			$out.='</p>';
 		} else if($query_vars['fdfilter']!='') {
 			$out.='<p>No matches</p>';
