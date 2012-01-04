@@ -1,3 +1,4 @@
+Disabled:Non-free blob
 Use Built:Yes
 License:Apache2
 Category:System
@@ -8,10 +9,6 @@ Summary:Backup SMS and call logs to IMAP
 Description:
 Backups up SMS and call log data from the device to an IMAP server, or
 Gmail.
-
-There are newer versions of this application avaiable elsewhere, but
-these include non-free software components and are not available via
-F-Droid.
 .
 
 Repo Type:git
@@ -19,7 +16,7 @@ Repo:https://github.com/jberkel/sms-backup-plus.git
 
 Build Version:1.4.3,1404,1.4.3
 Build Version:1.4.4,1405,1.4.4,target=android-9,prebuild=mv lib libs
-Build Version:1.4.5,1406,!Non-free blob now included
+Build Version:1.4.5,1406,1.4.5,target=android-9,prebuild=mv lib libs
 
 Market Version:1.4.5
 Market Version Code:1406
