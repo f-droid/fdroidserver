@@ -427,6 +427,13 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, 
         if build.has_key('target'):
             parms.append('-t')
             parms.append(build['target'])
+            # Newer versions of the platform tools don't replace the build.xml
+            # file as they always did previously, they spew out a nanny-like
+            # warning and tell you to do it manually. The following emulates
+            # the original behaviour...
+            buildxml = os.path.join(root_dir, 'build.xml')
+            if os.path.exists(buildxml):
+                os.remove(buildxml)
         if subprocess.call(parms, cwd=root_dir) != 0:
             raise BuildException("Failed to update project")
 
