@@ -104,7 +104,7 @@ for app in apps:
 
                     # Prepare the source code...
                     root_dir = common.prepare_source(vcs, app, thisbuild,
-                            build_dir, sdk_path, ndk_path,
+                            build_dir, sdk_path, ndk_path, javacc_path,
                             not refreshed_source)
                     refreshed_source = True
 
@@ -112,7 +112,11 @@ for app in apps:
                     tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
                     tarball = tarfile.open(os.path.join(output_dir,
                         tarname + '.tar.gz'), "w:gz")
-                    tarball.add(build_dir, tarname)
+                    def tarexc(f):
+                        if f in ['.svn', '.git', '.hg', '.bzr']:
+                            return True
+                        return False
+                    tarball.add(build_dir, tarname, exclude=tarexc)
                     tarball.close()
 
                     # Build native stuff if required...

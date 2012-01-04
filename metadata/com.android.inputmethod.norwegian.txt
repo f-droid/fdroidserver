@@ -9,7 +9,7 @@ A modified version of the standard onscreen keyboard in Android
 with support for Norwegian, Swedish, Danish, Faroese, German,
 Icelandic and Northern Sámi keyboard layouts.
 .
-Repo Type:svn
+Repo Type:git-svn
 Repo:http://scandinavian-keyboard.googlecode.com/svn/trunk
 Build Version:1.4.4,13,15,target=android-4
 Build Version:1.4.6,15,17,target=android-4

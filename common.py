@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import glob, os, sys, re
+import shutil
 import subprocess
 
 
@@ -25,6 +26,8 @@ def getvcs(vcstype, remote, local):
         return vcs_git(remote, local)
     elif vcstype == 'svn':
         return vcs_svn(remote, local)
+    elif vcstype == 'git-svn':
+        return vcs_gitsvn(remote, local)
     elif vcstype == 'hg':
         return vcs_hg(remote,local)
     elif vcstype == 'bzr':
@@ -113,6 +116,33 @@ class vcs_git(vcs):
                 cwd=self.local) != 0:
             raise VCSException("Git submodule update failed")
 
+
+class vcs_gitsvn(vcs):
+
+    def clone(self):
+        if subprocess.call(['git', 'svn', 'clone', self.remote, self.local]) != 0:
+            raise VCSException("Git clone failed")
+
+    def reset(self, rev=None):
+        if rev is None:
+            rev = 'HEAD'
+        else:
+            p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev],
+                cwd=self.local, stdout=subprocess.PIPE)
+            rev = p.communicate()[0].rstrip()
+            if p.returncode != 0:
+                raise VCSException("Failed to get git treeish from svn rev")
+        if subprocess.call(['git', 'reset', '--hard', rev],
+                cwd=self.local) != 0:
+            raise VCSException("Git reset failed")
+        if subprocess.call(['git', 'clean', '-dfx'],
+                cwd=self.local) != 0:
+            raise VCSException("Git clean failed")
+
+    def pull(self):
+        if subprocess.call(['git', 'svn', 'rebase'],
+                cwd=self.local) != 0:
+            raise VCSException("Git svn rebase failed")
 
 
 class vcs_svn(vcs):
@@ -357,16 +387,17 @@ class MetaDataException(Exception):
 
 
 # Prepare the source code for a particular build
-#  'vcs'       - the appropriate vcs object for the application
-#  'app'       - the application details from the metadata
-#  'build'     - the build details from the metadata
-#  'build_dir' - the path to the build directory
-#  'sdk_path'  - the path to the Android SDK
-#  'ndk_path'  - the path to the Android NDK
-#  'refresh'   - True to refresh from the remote repo
+#  'vcs'         - the appropriate vcs object for the application
+#  'app'         - the application details from the metadata
+#  'build'       - the build details from the metadata
+#  'build_dir'   - the path to the build directory
+#  'sdk_path'    - the path to the Android SDK
+#  'ndk_path'    - the path to the Android NDK
+#  'javacc_path' - the path to javacc
+#  'refresh'     - True to refresh from the remote repo
 # Returns the root directory, which may be the same as 'build_dir' or may
 # be a subdirectory of it.
-def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, refresh):
+def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, refresh):
 
     if refresh:
         vcs.refreshlocal()
@@ -374,12 +405,13 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, refresh):
     # Optionally, the actual app source can be in a subdirectory...
     if build.has_key('subdir'):
         root_dir = os.path.join(build_dir, build['subdir'])
+        if not os.path.exists(root_dir):
+            raise BuildException('Missing subdir ' + root_dir)
     else:
         root_dir = build_dir
 
     # Get a working copy of the right revision...
-    if options.verbose:
-        print "Resetting repository to " + build['commit']
+    print "Resetting repository to " + build['commit']
     vcs.reset(build['commit'])
 
     # Initialise submodules if requred...
@@ -445,7 +477,7 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, refresh):
 
     # Fix apostrophes translation files if necessary...
     if build.get('fixapos', 'no') == 'yes':
-        for root, dirs, files in os.walk(os.path.join(root_dir,'res')):
+        for root, dirs, files in os.walk(os.path.join(root_dir, 'res')):
             for filename in files:
                 if filename.endswith('.xml'):
                     if subprocess.call(['sed','-i','s@' +
@@ -456,7 +488,7 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, refresh):
 
     # Fix translation files if necessary...
     if build.get('fixtrans', 'no') == 'yes':
-        for root, dirs, files in os.walk(os.path.join(root_dir,'res')):
+        for root, dirs, files in os.walk(os.path.join(root_dir, 'res')):
             for filename in files:
                 if filename.endswith('.xml'):
                     f = open(os.path.join(root, filename))

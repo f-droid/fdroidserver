@@ -9,7 +9,7 @@ Description:A simple stopwatch, that also supports lap timing and a countdown
 timer.
 .
 
-Repo Type:svn
+Repo Type:git-svn
 Repo:http://anstop.googlecode.com/svn/trunk
 
 Build Version:1.4,9,34

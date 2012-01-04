@@ -24,6 +24,7 @@ import re
 import urllib
 import time
 import subprocess
+import traceback
 from optparse import OptionParser
 import HTMLParser
 import common
@@ -38,6 +39,8 @@ execfile('config.py')
 parser = OptionParser()
 parser.add_option("-v", "--verbose", action="store_true", default=False,
                   help="Spew out even more information than normal")
+parser.add_option("-p", "--package", default=None,
+                  help="Scan only the specified package")
 (options, args) = parser.parse_args()
 
 # Get all apps...
@@ -49,13 +52,17 @@ problems = []
 
 for app in apps:
 
-    if app['disabled']:
+    skip = False
+    if options.package and app['id'] != options.package:
+        skip = True
+    elif app['disabled']:
         print "Skipping %s: disabled" % app['id']
+        skip = True
     elif not app['builds']:
         print "Skipping %s: no builds specified" % app['id']
+        skip = True
 
-    if (app['disabled'] is None and app['repo'] != '' 
-            and app['repotype'] != '' and len(app['builds']) > 0):
+    if not skip:
 
         print "Processing " + app['id']
 
@@ -79,16 +86,18 @@ for app in apps:
 
                     # Prepare the source code...
                     root_dir = common.prepare_source(vcs, app, thisbuild,
-                            build_dir, sdk_path, ndk_path,
+                            build_dir, sdk_path, ndk_path, javacc_path,
                             not refreshed_source)
                     refreshed_source = True
 
                     # Scan for common known non-free blobs:
-                    usual_suspects = ['flurryagent.jar', 'paypal_mpl.jar']
+                    usual_suspects = ['flurryagent.jar',
+                                      'paypal_mpl.jar',
+                                      'admob-sdk-android.jar']
                     for r,d,f in os.walk(build_dir):
                         for curfile in f:
                             if curfile.lower() in usual_suspects:
-                                msg = 'Found probable non-free blob ' + os.path.join(r,file)
+                                msg = 'Found probable non-free blob ' + os.path.join(r, curfile)
                                 msg += ' in ' + app['id'] + ' ' + thisbuild['version']
                                 problems.append(msg)
 
@@ -98,8 +107,8 @@ for app in apps:
         except VCSException as vcse:
             msg = "VCS error while scanning app %s: %s" % (app['id'], vcse)
             problems.append(msg)
-        except Exception as e:
-            msg = "Could not scan app %s due to unknown error: %s" % (app['id'], e)
+        except Exception:
+            msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
             problems.append(msg)
 
 print "Finished:"

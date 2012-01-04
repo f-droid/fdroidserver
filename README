@@ -91,7 +91,11 @@ The type of repository - for automatic building from source. If this is not
 specified, automatic building is disabled for this application. Possible
 values are:
 
-  git, svn, hg, bzr
+  git, git-svn, svn, hg, bzr
+ 
+The git-svn option connects to an SVN repository, and you specify the URL in
+exactly the same way, but git is used as a back-end. This is preferable for
+performance reasons.
 
 ==Repo==
 
@@ -99,7 +103,7 @@ The repository location. Usually a git: or svn: URL.
 
 For a Subversion repo that requires authentication, you can precede the repo
 URL with username:password@ and those parameters will be passed as --username
-and --password to the SVN checkout command.
+and --password to the SVN checkout command. (Doesn't work for git-svn).
 
 ==Build Version==
 
@@ -125,9 +129,7 @@ configuration to the build. These are:
 
  subdir=<path>   - Specifies to build from a subdirectory of the checked out
                    source code. Normally this directory is changed to before
-                   building, but there is a special case for SVN repositories
-                   where the URL is specified with a * at the end. See the
-                   documentation for the Repo field for more information.
+                   building.
  bindir=<path>   - Normally the build output (apk) is expected to be in the
                    bin subdirectory below the ant build files. If the project
                    is configured to put it elsewhere, that can be specified

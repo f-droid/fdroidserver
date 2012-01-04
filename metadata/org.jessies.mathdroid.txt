@@ -10,10 +10,10 @@ Description:
 A calculator with full on-screen history and many functions.
 .
 
-Repo Type:svn
+Repo Type:git-svn
 Repo:http://enh.googlecode.com/svn/trunk
 
-Build Version:2.5,25,525,oldsdkloc=yes,target=android-9,subdir=mathdroid,prebuild=rm src/org/jessies/test && mkdir src/org/jessies/test && wget http://software.jessies.org/svn/salma-hayek/trunk/src/org/jessies/test/Assert.java -O src/org/jessies/test/Assert.java && wget http://software.jessies.org/svn/salma-hayek/trunk/src/org/jessies/test/Test.java -O src/org/jessies/test/Test.java && wget http://software.jessies.org/svn/salma-hayek/trunk/src/org/jessies/test/TestHelper.java -O src/org/jessies/test/TestHelper.java
+Build Version:2.5,25,525,oldsdkloc=yes,target=android-9,subdir=mathdroid,prebuild=rm -rf src/org/jessies/test && mkdir src/org/jessies/test && wget http://software.jessies.org/svn/salma-hayek/trunk/src/org/jessies/test/Assert.java -O src/org/jessies/test/Assert.java && wget http://software.jessies.org/svn/salma-hayek/trunk/src/org/jessies/test/Test.java -O src/org/jessies/test/Test.java && wget http://software.jessies.org/svn/salma-hayek/trunk/src/org/jessies/test/TestHelper.java -O src/org/jessies/test/TestHelper.java
 
 Market Version:2.5
 Market Version Code:25
