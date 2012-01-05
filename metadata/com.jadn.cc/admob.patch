@@ -1,0 +1,105 @@
+diff --git a/cc/AndroidManifest.xml b/cc/AndroidManifest.xml
+index d2a8dc2..a81106b 100644
+--- a/cc/AndroidManifest.xml
++++ b/cc/AndroidManifest.xml
+@@ -10,16 +10,6 @@
+ 				<category android:name="android.intent.category.LAUNCHER" />
+ 			</intent-filter>
+ 		</activity>
+-		<activity android:name="com.admob.android.ads.AdMobActivity"
+-			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+-			android:configChanges="orientation|keyboard|keyboardHidden" />
+-
+-		<receiver android:name="com.admob.android.ads.analytics.InstallReceiver"
+-			android:exported="true">
+-			<intent-filter>
+-				<action android:name="com.android.vending.INSTALL_REFERRER" />
+-			</intent-filter>
+-		</receiver>
+ 
+ 		<activity android:name=".ui.AudioRecorder"></activity>
+ 		<activity android:name=".ui.Downloader"
+diff --git a/cc/res/layout-land/player.xml b/cc/res/layout-land/player.xml
+index 0c2e9ed..f9ef3a3 100644
+--- a/cc/res/layout-land/player.xml
++++ b/cc/res/layout-land/player.xml
+@@ -4,11 +4,6 @@
+ 	android:layout_width="fill_parent" android:background="#000"
+ 	android:layout_height="fill_parent" android:padding="0dip">
+ 
+-	<com.admob.android.ads.AdView android:id="@+id/ad"
+-	android:layout_width="fill_parent" android:layout_height="48dip"
+-	myapp:backgroundColor="#FF0000" myapp:primaryTextColor="#FFFFFF"
+-		myapp:secondaryTextColor="#CCCCCC" android:layout_alignParentTop="true"/>
+-
+ 	<ImageButton android:id="@+id/previous"
+ 		android:layout_height="43dip" android:layout_width="65dip"
+ 		android:src="@drawable/player_65_previous" android:layout_alignParentLeft="true"
+@@ -59,7 +54,7 @@
+ 		android:layout_width="fill_parent" android:singleLine="true"
+ 		android:ellipsize="none" android:textColor="#000" android:layout_x="0dip"
+ 		android:text="" android:background="#c7cbd7"
+-		android:layout_below="@id/ad" android:layout_height="35dip" />
++		android:layout_alignParentTop="true" android:layout_height="35dip" />
+ 
+ 	<TextView android:textSize="20dp" android:id="@+id/title"
+ 		android:layout_width="fill_parent" android:layout_height="110dip"
+diff --git a/cc/res/layout/player.xml b/cc/res/layout/player.xml
+index 0cbcda3..ff7ecc9 100644
+--- a/cc/res/layout/player.xml
++++ b/cc/res/layout/player.xml
+@@ -4,11 +4,6 @@
+ 	android:layout_width="fill_parent" android:background="#000"
+ 	android:layout_height="fill_parent" android:padding="0dip">
+ 
+-	<com.admob.android.ads.AdView android:id="@+id/ad"
+-	android:layout_width="fill_parent" android:layout_height="48dip"
+-	myapp:backgroundColor="#FF0000" myapp:primaryTextColor="#FFFFFF"
+-		myapp:secondaryTextColor="#CCCCCC" android:layout_alignParentTop="true"/>
+-
+ 	<ImageButton android:id="@+id/previous"
+ 		android:layout_height="70dip" android:layout_width="64dip"
+ 		android:src="@drawable/player_65_previous" android:layout_alignParentLeft="true"
+@@ -62,7 +57,7 @@
+ 		android:layout_width="fill_parent" android:singleLine="true"
+ 		android:ellipsize="none" android:textColor="#000" android:layout_x="0dip"
+ 		android:text="" android:background="#c7cbd7"
+-		android:layout_below="@id/ad" android:layout_height="35dip" />
++		android:layout_alignParentTop="true" android:layout_height="35dip" />
+ 
+ 	<TextView android:textSize="20dp" android:id="@+id/title"
+ 		android:layout_width="fill_parent" android:layout_height="110dip"
+diff --git a/cc/res/values/attrs.xml b/cc/res/values/attrs.xml
+index 20298af..045e125 100644
+--- a/cc/res/values/attrs.xml
++++ b/cc/res/values/attrs.xml
+@@ -1,10 +1,3 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+-	<declare-styleable name="com.admob.android.ads.AdView">
+-		<attr name="backgroundColor" format="color" />
+-		<attr name="primaryTextColor" format="color" />
+-		<attr name="secondaryTextColor" format="color" />
+-		<attr name="keywords" format="string" />
+-		<attr name="refreshInterval" format="integer" />
+-	</declare-styleable>
+ </resources>
+diff --git a/cc/res/xml/settings.xml b/cc/res/xml/settings.xml
+index 11e40e5..38be7a4 100644
+--- a/cc/res/xml/settings.xml
++++ b/cc/res/xml/settings.xml
+@@ -34,10 +34,10 @@
+ 		android:key="canCollectData" 
+ 		android:title="Allow data collection" 
+ 		android:summary="Data helps us improve" 
+-		android:defaultValue="true" />
++		android:defaultValue="false" />
+ 	<CheckBoxPreference 
+ 		android:key="emailSecret" 
+ 		android:title="Keep email address secret" 
+ 		android:summary="Used for internal tracking only" 
+-		android:defaultValue="false" />
+-</PreferenceScreen>
+\ No newline at end of file
++		android:defaultValue="true" />
++</PreferenceScreen>
