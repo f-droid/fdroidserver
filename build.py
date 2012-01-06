@@ -265,6 +265,7 @@ for app in apps:
                     if p.returncode != 0:
                         raise BuildException("Failed to align application")
                     os.remove(dest_unsigned)
+                    build_succeeded.append(app)
             except BuildException as be:
                 print "Could not build app %s due to BuildException: %s" % (app['id'], be)
                 failed_apps[app['id']] = be
@@ -274,7 +275,6 @@ for app in apps:
             except Exception as e:
                 print "Could not build app %s due to unknown error: %s" % (app['id'], e)
                 failed_apps[app['id']] = e
-            build_succeeded.append(app)
 
 for app in build_succeeded:
     print "success: %s" % (app['id'])
