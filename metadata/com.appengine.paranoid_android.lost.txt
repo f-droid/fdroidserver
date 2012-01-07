@@ -1,0 +1,14 @@
+License:LGPL
+Category:System
+Web Site:https://sites.google.com/site/paranoidandroidproject/ContactOwner
+Source Code:https://code.google.com/p/contactowner/source/browse/
+Issue Tracker:https://code.google.com/p/contactowner/issues/list
+Summary:displays contact information on the "lock screen", so that if you happen to lose it the finder knows how to contact you
+Description:Contact Owner is an Android app that displays your (or a friend's) contact information on the "lock screen" of your Android device, so that if you happen to lose it the finder will know how to contact you. Select yourself (or your friend) from your list of contacts, then select which information you want shown and (optionally) customize your message. Contact Owner is a "fire and forget" tool: once you set it up, your contact information will keep being displayed even after restarting your device, as long as the application is installed.
+.
+
+Repo Type:svn
+Repo:http://contactowner.googlecode.com/svn/branches/v2next/
+
+Build Version:2.2,12,44,target=4
+
