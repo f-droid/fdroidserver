@@ -1,5 +1,5 @@
 License:MIT
-Category:
+Category:Multimedia
 Web Site:http://jadn.com/carcast/
 Source Code:http://github.com/bherrmann7/Car-Cast/
 Issue Tracker:https://github.com/bherrmann7/Car-Cast/issues
