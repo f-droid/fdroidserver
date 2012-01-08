@@ -145,8 +145,7 @@ for app in apps:
                                 stdout=subprocess.PIPE)
                     output = p.communicate()[0]
                     if p.returncode != 0:
-                        print output
-                        raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']))
+                        raise BuildException("Build failed for %s:%s (%s)" % (app['id'], thisbuild['version'], output.strip()))
                     elif options.verbose:
                         print output
                     print "Build successful"
