@@ -1,0 +1,19 @@
+License:GPLv2
+Category:System
+Web Site:https://code.google.com/p/moonblink/wiki/Dazzle
+Source Code:https://moonblink.googlecode.com/svn/trunk/Dazzle/
+Issue Tracker:https://code.google.com/p/moonblink/issues/list
+Summary:configurable switcher widget for WiFi, Bluetooth, GPS, airplane mode, and brightness controls
+Description:
+Dazzle is a configurable switcher widget for Android devices; it allows you to create one or more switcher widgets, in four sizes, with your choice of controls. You can choose from WiFi, Bluetooth, GPS, airplane mode, and brightness controls; on supported devices, brightness lets you toggle between auto and manual modes.
+.
+
+Repo Type:svn
+Repo:http://moonblink.googlecode.com/svn/trunk
+
+# Build fails, probably also needs to build ../HermitLibrary
+#Build Version:2.9,12,907,subdir=Dazzle,target=android-4,prebuild=\
+#	cp build.xml local.properties ../HermitAndroid/ && \
+#	cd ../HermitAndroid/ && \
+#	cp default.properties project.properties
+

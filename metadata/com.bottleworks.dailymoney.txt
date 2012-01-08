@@ -1,0 +1,25 @@
+License:GPLv2
+Category:Office
+Web Site:https://code.google.com/p/daily-money/
+Source Code:https://code.google.com/p/daily-money/source/browse/
+Issue Tracker:https://code.google.com/p/daily-money/issues/list
+Summary:A simple & easy financial android application
+Description:
+Features:
+* Record your daily expense, income, asset and liability
+* Show and count the details
+* Export/Import to CSV
+* Pie and time chart of balance
+.
+
+AntiFeatures:Tracking
+
+Repo Type:svn
+Repo:https://daily-money.googlecode.com/svn/trunk/
+
+# Does not build yet
+#Build Version:0.9.7-0702-freshly,2011070200,218,subdir=dailymoney-surface/,target=android-7,prebuild=\
+#	cp build.xml local.properties ../dailymoney/ && \
+#	cd ../dailymoney/ && \
+#	cp default.properties project.properties
+
