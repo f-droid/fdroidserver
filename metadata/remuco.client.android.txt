@@ -4,16 +4,24 @@ Web Site:https://code.google.com/p/remuco/
 Source Code:https://code.google.com/p/remuco/source/browse/
 Issue Tracker:https://code.google.com/p/remuco/wiki/Issues?tm=3
 Donate:http://flattr.com/thing/141543/Remuco
-Summary:Wireless remote control for Linux media players
-Description:Remuco is a duplex remote control system for Linux media players and mobile phones equipped with Bluetooth or WiFi.
+Summary:Remote control for Linux media players
+Description:
+Remuco is a duplex remote control system for Linux media players and mobile
+phones equipped with Bluetooth or WiFi.
 
-With Remuco, you can remotely control your favorite media player. You can switch to the next, previous, or any other media within the current playlist, browse your media library and activate other playlists, rate your media, adjust volume, and more. On the mobile phone it displays information about the current media, including cover art.
+With Remuco, you can remotely control your favorite media player. You can
+switch to the next, previous, or any other media within the current playlist,
+browse your media library and activate other playlists, rate your media,
+adjust volume, and more. On the mobile phone it displays information about
+the current media, including cover art.
 
-Remuco can be used with Amarok, Audacious, Banshee, Clementine, Exaile, gmusicbrowser, MPD, MPlayer, Rhythmbox, Songbird, Totem, TVtime, VLC and XMMS2. 
+Remuco can be used with Amarok, Audacious, Banshee, Clementine, Exaile,
+gmusicbrowser, MPD, MPlayer, Rhythmbox, Songbird, Totem, TVtime, VLC and
+XMMS2. 
 .
 
 Repo Type:hg
 Repo:https://code.google.com/p/remuco/
 
-Build Version:0.9.6,1,0.9.6,subdir=client/android,prebuild=cp -R ../common/src .,target=4
+Build Version:0.9.6,1,0.9.6,subdir=client/android,prebuild=cp -R ../common/src .,target=android-10
 

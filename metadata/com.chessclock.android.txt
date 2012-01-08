@@ -3,13 +3,10 @@ Category:Games
 Web Site:https://code.google.com/p/simplechessclock/
 Source Code:https://code.google.com/p/simplechessclock/source/browse/
 Issue Tracker:https://code.google.com/p/simplechessclock/issues/list
-Summary:a simple clock for chess
-Description:Simple Chess Clock does what it says! It is designed for touchscreen Android devices, and provides a simple, clear interface and easy interaction. Planned features include:
-
-    - Configurable player times
-    - Delays, Fischer Time
-    - Sound alerts
-    - ...and more! 
+Summary:Simple chess clock
+Description:
+Simple Chess Clock does what it says! It is designed for touchscreen Android
+devices, and provides a simple, clear interface and easy interaction.
 .
 
 Repo Type:hg

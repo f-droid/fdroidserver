@@ -3,8 +3,9 @@ Category:Multimedia
 Web Site:http://united-coders.com/gpodroid
 Source Code:https://github.com/gpodder/GpodRoid
 Issue Tracker:https://github.com/gpodder/GpodRoid/issues
-Summary:a gpodder.net podcasting client
-Description:gpodder.net client
+Summary:gpodder.net client
+Description:
+A gpodder.net podcasting client.
 .
 
 Repo Type:git
