@@ -207,7 +207,8 @@ for app in apps:
                         raise BuildException(("Unexpected version/version code in output"
                                              "APK: %s / %s"
                                              "Expected: %s / %s")
-                                            ) % (version, str(vercode), thisbuild['version'], str(thisbuild['vercode']))
+                                             % (version, str(vercode), thisbuild['version'], str(thisbuild['vercode']))
+                                            )
 
                     # Copy the unsigned apk to our temp directory for further
                     # processing...
