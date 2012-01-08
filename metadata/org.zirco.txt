@@ -17,8 +17,8 @@ A web browser featuring:
 *Ad-blocker
 .
 
-Repo Type:svn
-Repo:http://zirco-browser.googlecode.com/svn/trunk/
+Repo Type:git-svn
+Repo:http://zirco-browser.googlecode.com/svn/trunk
 
 Build Version:0.3.6,10,315
 Build Version:0.3.7,11,329
@@ -26,6 +26,7 @@ Build Version:0.3.8,12,339
 Build Version:0.3.9,13,367
 Build Version:0.4.1,15,407
 Build Version:0.4.2,16,438,target=android-9
+Build Version:0.4.3,17,443,target=android-9
 
-Market Version:0.4.2
-Market Version Code:16
+Market Version:0.4.3
+Market Version Code:17
