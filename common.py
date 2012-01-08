@@ -130,10 +130,10 @@ class vcs_git(vcs):
 class vcs_gitsvn(vcs):
 
     def checkrepo(self):
-        p = subprocess.Popen('git', 'rev-parse', '--show-toplevel',
-                stdout=subprocess.PIPE)
+        p = subprocess.Popen(['git', 'rev-parse', '--show-toplevel'],
+                stdout=subprocess.PIPE, cwd=self.local)
         result = p.communicate()[0].rstrip()
-        if not self.local.endswith(result):
+        if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
 
     def clone(self):
