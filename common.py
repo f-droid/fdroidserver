@@ -85,11 +85,19 @@ class vcs:
 
 class vcs_git(vcs):
 
+    def checkrepo(self):
+        p = subprocess.Popen('git', 'rev-parse', '--show-toplevel',
+                stdout=subprocess.PIPE)
+        result = p.communicate()[0].rstrip()
+        if not self.local.endswith(result):
+            raise VCSException('Repository mismatch')
+
     def clone(self):
         if subprocess.call(['git', 'clone', self.remote, self.local]) != 0:
             raise VCSException("Git clone failed")
 
     def reset(self, rev=None):
+        self.checkrepo()
         if rev is None:
             rev = 'origin'
         if subprocess.call(['git', 'reset', '--hard', rev],
@@ -100,6 +108,7 @@ class vcs_git(vcs):
             raise VCSException("Git clean failed")
 
     def pull(self):
+        self.checkrepo()
         if subprocess.call(['git', 'pull', 'origin'],
                 cwd=self.local) != 0:
             raise VCSException("Git pull failed")
@@ -109,6 +118,7 @@ class vcs_git(vcs):
             raise VCSException("Git fetch failed")
 
     def initsubmodules(self):
+        self.checkrepo()
         if subprocess.call(['git', 'submodule', 'init'],
                 cwd=self.local) != 0:
             raise VCSException("Git submodule init failed")
@@ -119,11 +129,19 @@ class vcs_git(vcs):
 
 class vcs_gitsvn(vcs):
 
+    def checkrepo(self):
+        p = subprocess.Popen('git', 'rev-parse', '--show-toplevel',
+                stdout=subprocess.PIPE)
+        result = p.communicate()[0].rstrip()
+        if not self.local.endswith(result):
+            raise VCSException('Repository mismatch')
+
     def clone(self):
         if subprocess.call(['git', 'svn', 'clone', self.remote, self.local]) != 0:
             raise VCSException("Git clone failed")
 
     def reset(self, rev=None):
+        self.checkrepo()
         if rev is None:
             rev = 'HEAD'
         else:
@@ -140,6 +158,7 @@ class vcs_gitsvn(vcs):
             raise VCSException("Git clean failed")
 
     def pull(self):
+        self.checkrepo()
         if subprocess.call(['git', 'svn', 'rebase'],
                 cwd=self.local) != 0:
             raise VCSException("Git svn rebase failed")
