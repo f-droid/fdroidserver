@@ -14,7 +14,7 @@ Repo:https://github.com/tcoxon/XkcdViewer.git
 
 Build Version:2.1.2,15,20ceb28d4360b11d2bfd
 Build Version:2.2.1,17,8ee6381d565db4d1b6a4
-Build Version:3.0.2,21,v3.0.2,target=android-9
+Build Version:3.0.2,21,v3.0.2,target=android-10
 
 Market Version:3.0.2
 Market Version Code:21

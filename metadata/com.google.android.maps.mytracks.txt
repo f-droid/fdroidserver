@@ -17,7 +17,7 @@ Repo:https://mytracks.googlecode.com/hg/
 Build Version:1.1.0,23,a86a640f2d,subdir=MyTracks
 
 Build Version:1.1.3,26,!Doesn't build - needs dependencies building now I think
-#Build Version:1.1.3,26,62821d45032d,subdir=MyTracks,target=android-9,encoding=utf-8
+#Build Version:1.1.3,26,62821d45032d,subdir=MyTracks,target=android-10,encoding=utf-8
 
 #Still doesn't build...
 #Build Version:1.1.9,22,v1.1.9,subdir=MyTracks,encoding=utf-8,target=android-13

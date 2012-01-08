@@ -13,7 +13,7 @@ synchronization services.
 Repo Type:svn
 Repo:http://ical-import-export.googlecode.com/svn/trunk/
 
-Build Version:1.5,51,!11 but needs AndroidTools compiling too,subdir=iCalImportExport,target=android-9
+Build Version:1.5,51,!11 but needs AndroidTools compiling too,subdir=iCalImportExport,target=android-10
 
 Market Version:1.5
 Market Version Code:51

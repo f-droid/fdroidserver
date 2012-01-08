@@ -54,7 +54,7 @@ Build Version:1.8.0,120,899e4b957e512bf55254,encoding=utf-8,prebuild=mkdir libs 
 
 #Build fails on this version, same as previous version:
 # res/values/styles.xml:62: error: Error retrieving parent for item: No resource found that matches the given name 'android:WindowTitleBackground'
-#Build Version:1.8.1,121,9f626b0dedb01cb90a16fb127a041c5f3dd1c579,target=android-9,encoding=utf-8,prebuild=mkdir libs && \
+#Build Version:1.8.1,121,9f626b0dedb01cb90a16fb127a041c5f3dd1c579,target=android-10,encoding=utf-8,prebuild=mkdir libs && \
 #    cd libs && \
 #    wget http://archive.apache.org/dist/commons/io/binaries/commons-io-2.0.1-bin.zip && \
 #    unzip -j commons-io-2.0.1-bin.zip commons-io-2.0.1/commons-io-2.0.1.jar && \

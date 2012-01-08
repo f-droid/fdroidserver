@@ -20,12 +20,12 @@ Build Version:3.4,49,ef03c165bdc34e6be1f6
 Build Version:3.4.2,51,f802cfb067684b78f195
 Build Version:3.5.1,53,52ba5015693ae0b2696e
 Build Version:3.5.6,57,!version code incorrect in source repo - 57 does not exist
-Build Version:3.6,59,0f22f87a308190d74fab,target=android-9
-Build Version:3.6.1,61,75e2f8328ff9a2602fe1,target=android-9
-Build Version:3.6.2,62,da37baecb2c90aa2b306,target=android-9
-Build Version:3.7,68,514799b45d18cf6dbc42065adf08abbdc9e2f16f,target=android-9
-Build Version:3.8,69,bb85065cb6045df773cd681ac8bad55a6818d48a,target=android-9
-Build Version:3.8.1,70,890b6affe8a64,target=android-9
+Build Version:3.6,59,0f22f87a308190d74fab,target=android-10
+Build Version:3.6.1,61,75e2f8328ff9a2602fe1,target=android-10
+Build Version:3.6.2,62,da37baecb2c90aa2b306,target=android-10
+Build Version:3.7,68,514799b45d18cf6dbc42065adf08abbdc9e2f16f,target=android-10
+Build Version:3.8,69,bb85065cb6045df773cd681ac8bad55a6818d48a,target=android-10
+Build Version:3.8.1,70,890b6affe8a64,target=android-10
 
 Market Version:3.8.1
 Market Version Code:70

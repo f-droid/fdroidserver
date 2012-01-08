@@ -18,7 +18,7 @@ Build Version:1.5.14,162,184,subdir=AppsOrganizer
 Build Version:1.5.15,163,185,subdir=AppsOrganizer
 Build Version:1.5.16,164,187,subdir=AppsOrganizer
 Build Version:1.5.18,166,190,subdir=AppsOrganizer
-Build Version:1.5.19,167,191,subdir=AppsOrganizer,target=android-9
+Build Version:1.5.19,167,191,subdir=AppsOrganizer,target=android-10
 
 Market Version:1.5.19
 Market Version Code:167

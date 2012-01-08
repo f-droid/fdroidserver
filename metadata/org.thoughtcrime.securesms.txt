@@ -16,5 +16,5 @@ with someone else also using TextSecure.
 Repo Type:git
 Repo:https://github.com/WhisperSystems/TextSecure.git
 
-Build Version:0.5.7,21,6a30867fd481474e8634b508d524863bc8a6b565,target=android-9
+Build Version:0.5.7,21,6a30867fd481474e8634b508d524863bc8a6b565,target=android-10
 

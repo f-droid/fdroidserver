@@ -15,7 +15,7 @@ to the OpenBMap database. See http://openbmap.org.
 Repo Type:git
 Repo:git://myposition.git.sourceforge.net/gitroot/myposition/AndroidClient
 
-Build Version:0.4.96,9,bc15ce80024d7f53897fd10e6ea0cc914d0ba226,prebuild=mv lib libs,target=android-9
+Build Version:0.4.96,9,bc15ce80024d7f53897fd10e6ea0cc914d0ba226,prebuild=mv lib libs,target=android-10
 Build Version:0.4.991,13,!Source is not there - see https://sourceforge.net/tracker/?func=detail&aid=3374951&group_id=218065&atid=1043257
 
 Market Version:0.4.991
