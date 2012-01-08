@@ -284,5 +284,5 @@ for fa in failed_apps:
 
 print "Finished."
 if len(failed_apps) > 0:
-    print str(len(failed_apps)) + 'builds failed'
+    print str(len(failed_apps)) + ' builds failed'
 
