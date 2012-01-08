@@ -36,13 +36,14 @@ from common import VCSException
 #Read configuration...
 execfile('config.py')
 
-
 # Parse command line...
 parser = OptionParser()
 parser.add_option("-v", "--verbose", action="store_true", default=False,
                   help="Spew out even more information than normal")
 parser.add_option("-p", "--package", default=None,
                   help="Build only the specified package")
+parser.add_option("-s", "--stop", action="store_true", default=False,
+                  help="Make the build stop on exceptions")
 (options, args) = parser.parse_args()
 
 # Get all apps...
@@ -50,6 +51,11 @@ apps = common.read_metadata(options.verbose)
 
 failed_apps = {}
 build_succeeded = []
+
+log_dir = 'logs'
+if not os.path.isdir(log_dir):
+    print "Creating log directory"
+    os.makedirs(log_dir)
 
 output_dir = 'repo'
 if not os.path.isdir(output_dir):
@@ -135,17 +141,17 @@ for app in apps:
                     if thisbuild.has_key('maven'):
                         p = subprocess.Popen(['mvn', 'clean', 'install',
                             '-Dandroid.sdk.path=' + sdk_path],
-                            cwd=root_dir, stdout=subprocess.PIPE)
+                            cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                     else:
                         if thisbuild.has_key('antcommand'):
                             antcommand = thisbuild['antcommand']
                         else:
                             antcommand = 'release'
                         p = subprocess.Popen(['ant', antcommand], cwd=root_dir, 
-                                stdout=subprocess.PIPE)
-                    output = p.communicate()[0]
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    output, error = p.communicate()
                     if p.returncode != 0:
-                        raise BuildException("Build failed for %s:%s (%s)" % (app['id'], thisbuild['version'], output.strip()))
+                        raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
                     elif options.verbose:
                         print output
                     print "Build successful"
@@ -267,12 +273,21 @@ for app in apps:
                     os.remove(dest_unsigned)
                     build_succeeded.append(app)
             except BuildException as be:
+                if options.stop:
+                    raise
                 print "Could not build app %s due to BuildException: %s" % (app['id'], be)
+                logfile = open(os.path.join(log_dir, app['id'] + '.log'), 'a+')
+                logfile.write(str(be))
+                logfile.close
                 failed_apps[app['id']] = be
             except VCSException as vcse:
+                if options.stop:
+                    raise
                 print "VCS error while building app %s: %s" % (app['id'], vcse)
                 failed_apps[app['id']] = vcse
             except Exception as e:
+                if options.stop:
+                    raise
                 print "Could not build app %s due to unknown error: %s" % (app['id'], e)
                 failed_apps[app['id']] = e
 
@@ -280,9 +295,11 @@ for app in build_succeeded:
     print "success: %s" % (app['id'])
 
 for fa in failed_apps:
-    print "Build for app %s failed: %s" % (fa, failed_apps[fa])
+    print "Build for app %s failed:\n%s" % (fa, failed_apps[fa])
 
 print "Finished."
+if len(build_succeeded) > 0:
+    print str(len(failed_apps)) + ' builds succeeded'
 if len(failed_apps) > 0:
     print str(len(failed_apps)) + ' builds failed'
 
