@@ -19,5 +19,5 @@ Build Version:0.8.0,9,0.8.0,oldsdkloc=yes,submodules=yes,fixtrans=yes,target=and
 Build Version:0.8.1,10,0.8.1,oldsdkloc=yes,submodules=yes,fixtrans=yes,target=android-10
 Build Version:0.8.2,11,0.8.2,oldsdkloc=yes,submodules=yes,fixtrans=yes,target=android-10
 
-Market Version:0.8.2
-Market Version Code:11
+Market Version:0.8.3
+Market Version Code:12
