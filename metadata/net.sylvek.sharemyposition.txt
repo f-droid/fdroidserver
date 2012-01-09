@@ -22,5 +22,5 @@ Repo:http://sharemyposition.googlecode.com/svn/trunk/
 
 Build Version:1.0.11,16,64,subdir=ShareMyPosition-android
 
-Market Version:1.0.11
-Market Version Code:16
+Market Version:1.1.0-beta1
+Market Version Code:18

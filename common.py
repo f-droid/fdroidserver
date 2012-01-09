@@ -54,7 +54,7 @@ class vcs:
 
         self.remote = remote
         self.local = local
-                    
+
     # Refresh the local repository - i.e. get the latest code. This
     # works either by updating if a local copy already exists, or by
     # cloning from scratch if it doesn't.
@@ -384,11 +384,18 @@ def read_metadata(verbose=False):
     return apps
 
 class BuildException(Exception):
-    def __init__(self, value):
+    def __init__(self, value, stdout = None, stderr = None):
         self.value = value
+        self.stdout = stdout
+        self.stderr = stderr
 
     def __str__(self):
-        return repr(self.value)
+        ret = repr(self.value)
+        if self.stdout:
+            ret = ret + "\n==== stdout begin ====\n" + str(self.stdout) + "\n==== stdout end ===="
+        if self.stderr:
+            ret = ret + "\n==== stderr begin ====\n" + str(self.stderr) + "\n==== stderr end ===="
+        return ret
 
 class VCSException(Exception):
     def __init__(self, value):

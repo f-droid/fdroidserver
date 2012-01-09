@@ -17,5 +17,5 @@ Repo:http://android-xbmcremote.googlecode.com/svn/trunk/XBMC%20Remote
 Build Version:0.8.5-beta1,730,730,encoding=utf-8,prebuild=mv lib libs && mv lib-src/org/codehaus src/org/
 Build Version:0.8.6-beta1,768,768,encoding=utf-8,prebuild=mv lib libs && mv lib-src/org/codehaus src/org/
 
-Market Version:0.8.7-beta1
-Market Version Code:807
+Market Version:0.8.8-beta1
+Market Version Code:808

@@ -14,5 +14,5 @@ Repo:https://github.com/matburt/mobileorg-android.git
 #Needs dropbox consumer key
 #Build Version:0.5.2,51,38dfe967ee99c71b12b8
 
-Market Version:0.6.2
-Market Version Code:62
+Market Version:0.7.1
+Market Version Code:71

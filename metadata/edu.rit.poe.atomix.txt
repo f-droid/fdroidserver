@@ -12,4 +12,4 @@ obstacle.
 Repo Type:hg
 Repo:https://droid-atomix.googlecode.com/hg/
 Use Built:Yes
-Build Version:1.0.1,2,ea2086d1f9fe759866008f6fe5187fc1cc97bd1d,target=android-4
+Build Version:1.0.1,2,ea2086d1f9fe759866008f6fe5187fc1cc97bd1d,target=android-4,prebuild=sed -i -e "/key\.alias.*/d" -e "/key\.store.*/d" *.properties
