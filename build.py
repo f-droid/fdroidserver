@@ -299,7 +299,7 @@ for fa in failed_apps:
 
 print "Finished."
 if len(build_succeeded) > 0:
-    print str(len(failed_succeeded)) + ' builds succeeded'
+    print str(len(build_succeeded)) + ' builds succeeded'
 if len(failed_apps) > 0:
     print str(len(failed_apps)) + ' builds failed'
 
