@@ -5,9 +5,9 @@ Web Site:https://github.com/johanhil/ddg-android
 Source Code:https://github.com/johanhil/ddg-android
 Issue Tracker:https://github.com/johanhil/ddg-android/issues
 Donate:
-Summary:Duck Duck Go search provider
+Summary:DuckDuckGo search provider
 Description:
-Integrates the search engine Duck Duck Go with the Android OS. It adds
+Integrates the search engine DuckDuckGo with the Android OS. It adds
 another web search provider to the system and some neat suggestions
 for the user.
 .
