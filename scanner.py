@@ -55,7 +55,7 @@ for app in apps:
     skip = False
     if options.package and app['id'] != options.package:
         skip = True
-    elif app['disabled']:
+    elif app['Disabled']:
         print "Skipping %s: disabled" % app['id']
         skip = True
     elif not app['builds']:
@@ -71,7 +71,7 @@ for app in apps:
             build_dir = 'build/' + app['id']
 
             # Set up vcs interface and make sure we have the latest code...
-            vcs = common.getvcs(app['repotype'], app['repo'], build_dir)
+            vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
 
             refreshed_source = False
 
