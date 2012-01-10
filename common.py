@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # common.py - part of the FDroid server tools
-# Copyright (C) 2010-11, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -245,15 +245,53 @@ class vcs_bzr(vcs):
             raise VCSException("Bzr update failed")
 
 
+# Get the type expected for a given metadata field.
+def metafieldtype(name):
+    if name == 'Description':
+        return 'multiline'
+    if name == 'Requires Root':
+        return 'flag'
+    if name == 'Build Version':
+        return 'build'
+    if name == 'Use Built':
+        return 'obsolete'
+    return 'string'
 
+
+# Parse metadata for a single application.
+#
+#  'metafile' - the filename to read. The package id for the application comes
+#               from this filename.
+#
+# Returns a dictionary containing all the details of the application. There are
+# two major kinds of information in the dictionary. Keys beginning with capital
+# letters correspond directory to identically named keys in the metadata file.
+# Keys beginning with lower case letters are generated in one way or another,
+# and are not found verbatim in the metadata.
+#
+# Known keys not originating from the metadata are:
+#
+#  'id'               - the application's package ID
+#  'builds'           - a list of dictionaries containing build information
+#                       for each defined build
+#  'comments'         - a list of comments from the metadata file. Each is
+#                       a tuple of the form (field, comment) where field is
+#                       the name of the field it preceded in the metadata
+#                       file
+#  'name'             - the application's name, as displayed. This will
+#                       always be None on return from this parser. The name
+#                       is discovered from built APK files.
+#
 def parse_metadata(metafile, **kw):
 
-    def parse_buildline(value):
+    def parse_buildline(lines):
+        value = "".join(lines)
         parts = [p.replace("\\,", ",")
                  for p in re.split(r"(?<!\\),", value)]
         if len(parts) < 3:
             raise MetaDataException("Invalid build format: " + value + " in " + metafile.name)
         thisbuild = {}
+        thisbuild['origlines'] = lines
         thisbuild['version'] = parts[0]
         thisbuild['vercode'] = parts[1]
         thisbuild['commit'] = parts[2]
@@ -268,29 +306,37 @@ def parse_metadata(metafile, **kw):
     thisinfo['id'] = metafile.name[9:-4]
     if kw.get("verbose", False):
         print "Reading metadata for " + thisinfo['id']
-    thisinfo['description'] = ''
-    thisinfo['name'] = None
-    thisinfo['summary'] = ''
-    thisinfo['license'] = 'Unknown'
-    thisinfo['web'] = ''
-    thisinfo['source'] = ''
-    thisinfo['tracker'] = ''
-    thisinfo['donate'] = None
-    thisinfo['disabled'] = None
-    thisinfo['antifeatures'] = None
-    thisinfo['marketversion'] = ''
-    thisinfo['marketvercode'] = '0'
-    thisinfo['repotype'] = ''
-    thisinfo['repo'] = ''
+
+    # Defaults for fields that come from metadata...
+    thisinfo['Description'] = ''
+    thisinfo['Summary'] = ''
+    thisinfo['License'] = 'Unknown'
+    thisinfo['Web Site'] = ''
+    thisinfo['Source Code'] = ''
+    thisinfo['Issue Tracker'] = ''
+    thisinfo['Donate'] = None
+    thisinfo['Disabled'] = None
+    thisinfo['AntiFeatures'] = None
+    thisinfo['Market Version'] = ''
+    thisinfo['Market Version Code'] = '0'
+    thisinfo['Repo Type'] = ''
+    thisinfo['Repo'] = ''
+    thisinfo['Requires Root'] = False
+
+    # General defaults...
     thisinfo['builds'] = []
-    thisinfo['requiresroot'] = False
+    thisinfo['name'] = None
+    thisinfo['comments'] = []
+
     mode = 0
-    buildline = []
+    buildlines = []
+    curcomments = []
+
     for line in metafile:
         line = line.rstrip('\r\n')
         if line.startswith("#"):
-            continue
-        if mode == 0:
+            curcomments.append(line)
+        elif mode == 0:
             if len(line) == 0:
                 continue
             index = line.find(':')
@@ -298,82 +344,76 @@ def parse_metadata(metafile, **kw):
                 raise MetaDataException("Invalid metadata in " + metafile.name + " at: " + line)
             field = line[:index]
             value = line[index+1:]
-            if field == 'Description':
+
+            for comment in curcomments:
+                thisinfo['comments'].append((field,comment))
+
+            fieldtype = metafieldtype(field)
+            if fieldtype == 'multiline':
                 mode = 1
-            elif field == 'Name':
-                thisinfo['name'] = value
-            elif field == 'Summary':
-                thisinfo['summary'] = value
-            elif field == 'Source Code':
-                thisinfo['source'] = value
-            elif field == 'License':
-                thisinfo['license'] = value
-            elif field == 'Category':
-                thisinfo['category'] = value
-            elif field == 'Web Site':
-                thisinfo['web'] = value
-            elif field == 'Issue Tracker':
-                thisinfo['tracker'] = value
-            elif field == 'Donate':
-                thisinfo['donate'] = value
-            elif field == 'Disabled':
-                thisinfo['disabled'] = value
-            elif field == 'Use Built':
-                pass  #Ignoring this - will be removed
-            elif field == 'AntiFeatures':
-                parts = value.split(",")
-                for part in parts:
-                    if (part != "Ads" and
-                        part != "Tracking" and
-                        part != "NonFreeNet" and
-                        part != "NonFreeDep" and
-                        part != "NonFreeAdd"):
-                        raise MetaDataException("Unrecognised antifeature '" + part + "' in " \
-                            + metafile.name)
-                thisinfo['antifeatures'] = value
-            elif field == 'Market Version':
-                thisinfo['marketversion'] = value
-            elif field == 'Market Version Code':
-                thisinfo['marketvercode'] = value
-            elif field == 'Repo Type':
-                thisinfo['repotype'] = value
-            elif field == 'Repo':
-                thisinfo['repo'] = value
-            elif field == 'Build Version':
+                if len(value) > 0:
+                    raise MetaDataException("Unexpected text on same line as " + field + " in " + metafile.name)
+            elif fieldtype == 'string':
+                thisinfo[field] = value
+            elif fieldtype == 'flag':
+                if value == 'Yes':
+                    thisinfo[field] = True
+                elif value == 'No':
+                    thisinfo[field] = False
+                else:
+                    raise MetaDataException("Expected Yes or No for " + field + " in " + metafile.name)
+            elif fieldtype == 'build':
                 if value.endswith("\\"):
                     mode = 2
-                    buildline = [value[:-1]]
+                    buildlines = [value[:-1]]
                 else:
-                    thisinfo['builds'].append(parse_buildline(value))
-            elif field == "Requires Root":
-                if value == "Yes":
-                    thisinfo['requiresroot'] = True
+                    thisinfo['builds'].append(parse_buildline([value]))
+            elif fieldtype == 'obsolete':
+                pass        # Just throw it away!
             else:
-                raise MetaDataException("Unrecognised field " + field + " in " + metafile.name)
-        elif mode == 1:       # multi-line description
+                raise MetaDataException("Unrecognised field type for " + field + " in " + metafile.name)
+        elif mode == 1:     # Multiline field
             if line == '.':
                 mode = 0
             else:
                 if len(line) == 0:
-                    thisinfo['description'] += '\n\n'
+                    thisinfo[field] += '\n\n'
                 else:
-                    if (not thisinfo['description'].endswith('\n') and
-                        len(thisinfo['description']) > 0):
-                        thisinfo['description'] += ' '
-                    thisinfo['description'] += line
-        elif mode == 2:       # line continuation
+                    if (not thisinfo[field].endswith('\n') and
+                        len(thisinfo[field]) > 0):
+                        thisinfo[field] += ' '
+                    thisinfo[field] += line
+        elif mode == 2:     # Line continuation mode in Build Version
             if line.endswith("\\"):
-                buildline.append(line[:-1])
+                buildlines.append(line[:-1])
             else:
-                buildline.append(line)
+                buildlines.append(line)
                 thisinfo['builds'].append(
-                    parse_buildline("".join(buildline)))
+                    parse_buildline(buildlines))
                 mode = 0
+
     if mode == 1:
-        raise MetaDataException("Description not terminated in " + metafile.name)
-    if len(thisinfo['description']) == 0:
-        thisinfo['description'] = 'No description available'
+        raise MetaDataException(field + " not terminated in " + metafile.name)
+    elif mode == 2:
+        raise MetaDataException("Unterminated continuation in " + metafile.name)
+
+    if len(thisinfo['Description']) == 0:
+        thisinfo['Description'] = 'No description available'
+
+    # Ensure all AntiFeatures are recognised...
+    if thisinfo['AntiFeatures']:
+        parts = thisinfo['AntiFeatures'].split(",")
+        for part in parts:
+            if (part != "Ads" and
+                part != "Tracking" and
+                part != "NonFreeNet" and
+                part != "NonFreeDep" and
+                part != "NonFreeAdd"):
+                raise MetaDataException("Unrecognised antifeature '" + part + "' in " \
+                            + metafile.name)
+
     return thisinfo
+
 
 def read_metadata(verbose=False):
     apps = []

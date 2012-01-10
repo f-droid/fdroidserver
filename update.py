@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # update.py - part of the FDroid server tools
-# Copyright (C) 2010-11, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -196,7 +196,7 @@ for app in apps:
         if app['name'] is None:
             app['name'] = app['id']
         app['icon'] = ''
-        if app['disabled'] is None:
+        if app['Disabled'] is None:
             print "WARNING: Application " + app['id'] + " has no packages"
     else:
         if app['name'] is None:
@@ -283,14 +283,14 @@ apps_nopkg = 0
 
 for app in apps:
 
-    if app['disabled'] is None:
+    if app['Disabled'] is None:
 
         # Get a list of the apks for this app...
         gotmarketver = False
         apklist = []
         for apk in apks:
             if apk['id'] == app['id']:
-                if str(apk['versioncode']) == app['marketvercode']:
+                if str(apk['versioncode']) == app['Market Version Code']:
                     gotmarketver = True
                 apklist.append(apk)
 
@@ -304,22 +304,22 @@ for app in apps:
 
             addElement('id', app['id'], doc, apel)
             addElement('name', app['name'], doc, apel)
-            addElement('summary', app['summary'], doc, apel)
+            addElement('summary', app['Summary'], doc, apel)
             addElement('icon', app['icon'], doc, apel)
-            addElement('description', app['description'], doc, apel)
-            addElement('license', app['license'], doc, apel)
-            if 'category' in app:
-                addElement('category', app['category'], doc, apel)
-            addElement('web', app['web'], doc, apel)
-            addElement('source', app['source'], doc, apel)
-            addElement('tracker', app['tracker'], doc, apel)
-            if app['donate'] != None:
-                addElement('donate', app['donate'], doc, apel)
-            addElement('marketversion', app['marketversion'], doc, apel)
-            addElement('marketvercode', app['marketvercode'], doc, apel)
-            if not (app['antifeatures'] is None):
-                addElement('antifeatures', app['antifeatures'], doc, apel)
-            if app['requiresroot']:
+            addElement('description', app['Description'], doc, apel)
+            addElement('license', app['License'], doc, apel)
+            if 'Category' in app:
+                addElement('category', app['Category'], doc, apel)
+            addElement('web', app['Web Site'], doc, apel)
+            addElement('source', app['Source Code'], doc, apel)
+            addElement('tracker', app['Issue Tracker'], doc, apel)
+            if app['Donate'] != None:
+                addElement('donate', app['Donate'], doc, apel)
+            addElement('marketversion', app['Market Version'], doc, apel)
+            addElement('marketvercode', app['Market Version Code'], doc, apel)
+            if not (app['AntiFeatures'] is None):
+                addElement('antifeatures', app['AntiFeatures'], doc, apel)
+            if app['Requires Root']:
                 addElement('requirements', 'root', doc, apel)
 
             # Sort the apk list into version order, just so the web site
@@ -370,38 +370,38 @@ for app in apps:
         if options.buildreport:
             if len(app['builds']) == 0:
                 print ("WARNING: No builds defined for " + app['id'] +
-                        " Source: " + app['source'])
+                        " Source: " + app['Source Code'])
                 warnings += 1
             else:
-                if app['marketvercode'] != '0':
+                if app['Market Version Code'] != '0':
                     gotbuild = False
                     for build in app['builds']:
-                        if build['vercode'] == app['marketvercode']:
+                        if build['vercode'] == app['Market Version Code']:
                             gotbuild = True
                     if not gotbuild:
                         print ("WARNING: No build data for market version of "
-                                + app['id'] + " (" + app['marketversion']
-                                + ") " + app['source'])
+                                + app['id'] + " (" + app['Market Version']
+                                + ") " + app['Source Code'])
                         warnings += 1
 
         # If we don't have the market version, check if there is a build
         # with a commit ID starting with '!' - this means we can't build it
         # for some reason, and don't want hassling about it...
-        if not gotmarketver and app['marketvercode'] != '0':
+        if not gotmarketver and app['Market Version Code'] != '0':
             for build in app['builds']:
-                if build['vercode'] == app['marketvercode']:
+                if build['vercode'] == app['Market Version Code']:
                     gotmarketver = True
 
         # Output a message of harassment if we don't have the market version:
-        if not gotmarketver and app['marketvercode'] != '0':
-            addr = app['source']
-            print "WARNING: Don't have market version (" + app['marketversion'] + ") of " + app['name']
+        if not gotmarketver and app['Market Version Code'] != '0':
+            addr = app['Source Code']
+            print "WARNING: Don't have market version (" + app['Market Version'] + ") of " + app['name']
             print "         (" + app['id'] + ") " + addr
             warnings += 1
             if options.verbose:
                 # A bit of extra debug info, basically for diagnosing
                 # app developer mistakes:
-                print "         Market vercode:" + app['marketvercode']
+                print "         Market vercode:" + app['Market Version Code']
                 print "         Got:"
                 for apk in apks:
                     if apk['id'] == app['id']:

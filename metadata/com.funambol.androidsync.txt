@@ -5,7 +5,7 @@ Web Site:http://www.funambol.com
 Source Code:https://android-client.forge.funambol.org/source/browse/android-client/
 Issue Tracker:
 Summary:Funambol sync client
-Description:Sync Client
+Description:
 Funambol sync client.
 .
 Repo Type:svn

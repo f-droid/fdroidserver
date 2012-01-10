@@ -74,13 +74,13 @@ if not os.path.isdir(build_dir):
 
 for app in apps:
 
-    if app['disabled']:
+    if app['Disabled']:
         print "Skipping %s: disabled" % app['id']
     elif not app['builds']:
         print "Skipping %s: no builds specified" % app['id']
 
-    if (app['disabled'] is None and app['repo'] != '' 
-            and app['repotype'] != '' and (options.package is None or
+    if (app['Disabled'] is None and app['Repo'] != '' 
+            and app['Repo Type'] != '' and (options.package is None or
             options.package == app['id']) and len(app['builds']) > 0):
 
         print "Processing " + app['id']
@@ -88,7 +88,7 @@ for app in apps:
         build_dir = 'build/' + app['id']
 
         # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app['repotype'], app['repo'], build_dir)
+        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
 
         refreshed_source = False
 

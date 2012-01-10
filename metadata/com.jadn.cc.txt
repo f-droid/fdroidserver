@@ -5,7 +5,8 @@ Source Code:http://github.com/bherrmann7/Car-Cast/
 Issue Tracker:https://github.com/bherrmann7/Car-Cast/issues
 Donate:https://market.android.com/details?id=com.jadn.ccpro
 Summary:A podcast downloader and player.
-Description:Car Cast is a simple audio podcast downloader and player.
+Description:
+Car Cast is a simple audio podcast downloader and player.
 Optimized for use in a daily commute, it features big buttons, large text, remembers last played location.
 
 1. Subscribe to podcasts

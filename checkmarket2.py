@@ -63,7 +63,7 @@ for app in apps:
         print "...couldn't find version code"
     elif not version:
         print "...couldn't find version"
-    elif vercode == app['marketvercode'] and version == app['marketversion']:
+    elif vercode == app['Market Version Code'] and version == app['Market Version']:
         print "...up to date"
     else:
         print '...updating to version:' + version + ' vercode:' + vercode
