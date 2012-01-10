@@ -9,3 +9,6 @@ Description:
 Firefox Mobile web browser.
 .
 
+Market Version:9.0
+Market Version Code:2011121613
+

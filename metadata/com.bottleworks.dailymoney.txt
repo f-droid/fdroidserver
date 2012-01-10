@@ -18,6 +18,9 @@ Features:
 Repo Type:svn
 Repo:https://daily-money.googlecode.com/svn/trunk/
 
+Market Version:0.9.7-0702-freshly
+Market Version Code:2011070200
+
 # Does not build yet
 #Build Version:0.9.7-0702-freshly,2011070200,218,subdir=dailymoney-surface/,target=android-7,prebuild=\
 #	cp build.xml local.properties ../dailymoney/ && \

@@ -20,3 +20,6 @@ Repo:http://contactowner.googlecode.com/svn/branches/v2next/
 
 Build Version:2.2,12,44,target=android-4
 
+Market Version:2.2
+Market Version Code:22
+
