@@ -193,14 +193,14 @@ for app in apps:
                 bestapk = apk
 
     if bestver == 0:
-        if app['name'] is None:
-            app['name'] = app['id']
+        if app['Name'] is None:
+            app['Name'] = app['id']
         app['icon'] = ''
         if app['Disabled'] is None:
             print "WARNING: Application " + app['id'] + " has no packages"
     else:
-        if app['name'] is None:
-            app['name'] = bestapk['name']
+        if app['Name'] is None:
+            app['Name'] = bestapk['name']
         app['icon'] = bestapk['icon']
 
 # Generate warnings for apk's with no metadata (or create skeleton
@@ -229,7 +229,7 @@ for apk in apks:
             print "       " + apk['name'] + " - " + apk['version']  
 
 #Sort the app list by name, then the web site doesn't have to by default:
-apps = sorted(apps, key=lambda app: app['name'].upper())
+apps = sorted(apps, key=lambda app: app['Name'].upper())
 
 # Create the index
 doc = Document()
@@ -303,10 +303,11 @@ for app in apps:
             root.appendChild(apel)
 
             addElement('id', app['id'], doc, apel)
-            addElement('name', app['name'], doc, apel)
+            addElement('name', app['Name'], doc, apel)
             addElement('summary', app['Summary'], doc, apel)
             addElement('icon', app['icon'], doc, apel)
-            addElement('description', app['Description'], doc, apel)
+            addElement('description',
+                    common.parse_description(app['Description']), doc, apel)
             addElement('license', app['License'], doc, apel)
             if 'Category' in app:
                 addElement('category', app['Category'], doc, apel)
@@ -395,7 +396,7 @@ for app in apps:
         # Output a message of harassment if we don't have the market version:
         if not gotmarketver and app['Market Version Code'] != '0':
             addr = app['Source Code']
-            print "WARNING: Don't have market version (" + app['Market Version'] + ") of " + app['name']
+            print "WARNING: Don't have market version (" + app['Market Version'] + ") of " + app['Name']
             print "         (" + app['id'] + ") " + addr
             warnings += 1
             if options.verbose:

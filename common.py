@@ -277,10 +277,11 @@ def metafieldtype(name):
 #  'comments'         - a list of comments from the metadata file. Each is
 #                       a tuple of the form (field, comment) where field is
 #                       the name of the field it preceded in the metadata
-#                       file
-#  'name'             - the application's name, as displayed. This will
-#                       always be None on return from this parser. The name
-#                       is discovered from built APK files.
+#                       file. Where field is None, the comment goes at the
+#                       end of the file. Alternatively, 'build:version' is
+#                       for a comment before a particular build version.
+#  'descriptionlines' - original lines of description as formatted in the
+#                       metadata file.
 #
 def parse_metadata(metafile, **kw):
 
@@ -300,6 +301,11 @@ def parse_metadata(metafile, **kw):
             thisbuild[pk] = pv
         return thisbuild
 
+    def add_comments(key):
+        for comment in curcomments:
+            thisinfo['comments'].append((key, comment))
+        del curcomments[:]
+
     if not isinstance(metafile, file):
         metafile = open(metafile, "r")
     thisinfo = {}
@@ -308,7 +314,9 @@ def parse_metadata(metafile, **kw):
         print "Reading metadata for " + thisinfo['id']
 
     # Defaults for fields that come from metadata...
-    thisinfo['Description'] = ''
+    thisinfo['Name'] = None
+    thisinfo['Category'] = 'None'
+    thisinfo['Description'] = []
     thisinfo['Summary'] = ''
     thisinfo['License'] = 'Unknown'
     thisinfo['Web Site'] = ''
@@ -325,7 +333,6 @@ def parse_metadata(metafile, **kw):
 
     # General defaults...
     thisinfo['builds'] = []
-    thisinfo['name'] = None
     thisinfo['comments'] = []
 
     mode = 0
@@ -334,10 +341,11 @@ def parse_metadata(metafile, **kw):
 
     for line in metafile:
         line = line.rstrip('\r\n')
-        if line.startswith("#"):
-            curcomments.append(line)
-        elif mode == 0:
+        if mode == 0:
             if len(line) == 0:
+                continue
+            if line.startswith("#"):
+                curcomments.append(line)
                 continue
             index = line.find(':')
             if index == -1:
@@ -345,12 +353,13 @@ def parse_metadata(metafile, **kw):
             field = line[:index]
             value = line[index+1:]
 
-            for comment in curcomments:
-                thisinfo['comments'].append((field,comment))
 
             fieldtype = metafieldtype(field)
+            if fieldtype != 'build':
+                add_comments(field)
             if fieldtype == 'multiline':
                 mode = 1
+                thisinfo[field] = []
                 if len(value) > 0:
                     raise MetaDataException("Unexpected text on same line as " + field + " in " + metafile.name)
             elif fieldtype == 'string':
@@ -368,6 +377,7 @@ def parse_metadata(metafile, **kw):
                     buildlines = [value[:-1]]
                 else:
                     thisinfo['builds'].append(parse_buildline([value]))
+                    add_comments('build:' + thisinfo['builds'][-1]['version'])
             elif fieldtype == 'obsolete':
                 pass        # Just throw it away!
             else:
@@ -376,13 +386,7 @@ def parse_metadata(metafile, **kw):
             if line == '.':
                 mode = 0
             else:
-                if len(line) == 0:
-                    thisinfo[field] += '\n\n'
-                else:
-                    if (not thisinfo[field].endswith('\n') and
-                        len(thisinfo[field]) > 0):
-                        thisinfo[field] += ' '
-                    thisinfo[field] += line
+                thisinfo[field].append(line)
         elif mode == 2:     # Line continuation mode in Build Version
             if line.endswith("\\"):
                 buildlines.append(line[:-1])
@@ -390,15 +394,18 @@ def parse_metadata(metafile, **kw):
                 buildlines.append(line)
                 thisinfo['builds'].append(
                     parse_buildline(buildlines))
+                add_comments('build:' + thisinfo['builds'][-1]['version'])
                 mode = 0
+    add_comments(None)
 
+    # Mode at end of file should always be 0...
     if mode == 1:
         raise MetaDataException(field + " not terminated in " + metafile.name)
     elif mode == 2:
         raise MetaDataException("Unterminated continuation in " + metafile.name)
 
     if len(thisinfo['Description']) == 0:
-        thisinfo['Description'] = 'No description available'
+        thisinfo['Description'].append('No description available')
 
     # Ensure all AntiFeatures are recognised...
     if thisinfo['AntiFeatures']:
@@ -414,7 +421,67 @@ def parse_metadata(metafile, **kw):
 
     return thisinfo
 
+# Write a metadata file.
+#
+# 'dest'    - The path to the output file
+# 'app'     - The app data
+def write_metadata(dest, app):
 
+    def writecomments(key):
+        for pf, comment in app['comments']:
+            if pf == key:
+                mf.write(comment + '\n')
+
+    def writefield(field, value=None):
+        writecomments(field)
+        if value is None:
+            value = app[field]
+        mf.write(field + ':' + value + '\n')
+
+    mf = open(dest, 'w')
+    if app['Disabled']:
+        writefield('Disabled')
+    if app['AntiFeatures']:
+        writefield('AntiFeatures')
+    writefield('Category')
+    writefield('License')
+    writefield('Web Site')
+    writefield('Source Code')
+    writefield('Issue Tracker')
+    if app['Donate']:
+        writefield('Donate')
+    mf.write('\n')
+    if app['Name']:
+        writefield('Name')
+    writefield('Summary')
+    writefield('Description', '')
+    for line in app['Description']:
+        mf.write(line + '\n')
+    mf.write('.\n')
+    mf.write('\n')
+    if app['Requires Root']:
+        writefield('Requires Root', 'Yes')
+        mf.write('\n')
+    if len(app['Repo Type']) > 0:
+        writefield('Repo Type')
+        writefield('Repo')
+        mf.write('\n')
+    for build in app['builds']:
+        writecomments('build:' + build['version'])
+        mf.write('Build Version:')
+        mf.write('\\\n'.join(build['origlines']) + '\n')
+    if len(app['builds']) > 0:
+        mf.write('\n')
+    if len(app['Market Version']) > 0:
+        writefield('Market Version')
+        writefield('Market Version Code')
+        mf.write('\n')
+    writecomments(None)
+    mf.close()
+
+
+# Read all metadata. Returns a list of 'app' objects (which are dictionaries as
+# returned by the parse_metadata function.
 def read_metadata(verbose=False):
     apps = []
     for metafile in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
@@ -422,6 +489,21 @@ def read_metadata(verbose=False):
             print "Reading " + metafile
         apps.append(parse_metadata(metafile, verbose=verbose))
     return apps
+
+
+# Parse multiple lines of description as written in a metadata file, returning
+# a single string.
+def parse_description(lines):
+    text = ''
+    for line in lines:
+        if len(line) == 0:
+            text += '\n\n'
+        else:
+            if not text.endswith('\n') and len(text) > 0:
+                text += ' '
+            text += line
+    return ''
+
 
 class BuildException(Exception):
     def __init__(self, value, stdout = None, stderr = None):
