@@ -67,20 +67,10 @@ for app in apps:
         print "...up to date"
     else:
         print '...updating to version:' + version + ' vercode:' + vercode
-        newdata = ''
+        app['Market Version'] = version
+        app['Market Version Code'] = vercode
         metafile = os.path.join('metadata', app['id'] + '.txt')
-        mf = open(metafile, 'r')
-        for line in mf:
-            if line.startswith('Market Version:'):
-                newdata += 'Market Version:' + version + '\n'
-            elif line.startswith('Market Version Code:'):
-                newdata += 'Market Version Code:' + vercode + '\n'
-            else:
-                newdata += line
-        mf.close()
-        mf = open(metafile, 'w')
-        mf.write(newdata)
-        mf.close()
+        common.write_metadata(metafile, app)
 
     time.sleep(5)
 
