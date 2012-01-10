@@ -1,9 +1,9 @@
-Use Built:Yes
-License:GPLv3
 Category:Navigation
+License:GPLv3
 Web Site:http://www.mixare.org/
 Source Code:http://github.com/mixare/mixare
 Issue Tracker:http://code.google.com/p/mixare/issues/list
+
 Summary:Augmented reality browser
 Description:
 An augmented reality browser.
@@ -16,3 +16,4 @@ Build Version:0.6.6,14,v0.6.6
 
 Market Version:0.7.3
 Market Version Code:20
+

@@ -1,9 +1,9 @@
-License:GPLv3
 Category:Cryptography
+License:GPLv3
 Web Site:http://www.whispersys.com/
 Source Code:https://github.com/WhisperSystems/TextSecure
 Issue Tracker:
-Donate:
+
 Summary:SMS Encryption
 Description:
 TextSecure is a drop-in replacement for the standard text messaging application,

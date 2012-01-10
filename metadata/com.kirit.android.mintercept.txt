@@ -1,12 +1,15 @@
-License:GPLv3+
 Category:Games
+License:GPLv3+
 Web Site:http://www.kirit.com/Missile%20intercept
 Source Code:http://www.kirit.com/Missile%20intercept
 Issue Tracker:http://support.felspar.com/Project:/Missile%20intercept
+
 Summary:Missile Command style game
 Description:
 A game in the style of the classic Missile Command. Defend your cities from incoming
 enemy missiles.
 .
+
 Market Version:0.5.1
 Market Version Code:6
+

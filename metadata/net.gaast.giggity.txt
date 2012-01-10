@@ -1,20 +1,22 @@
-Use Built:Yes
-License:GPLv2
 Category:Office
+License:GPLv2
 Web Site:http://wilmer.gaa.st/main.php/giggity.html
 Source Code:http://wilmer.gaa.st/main.php/giggity.html
 Issue Tracker:
+
 Summary:Schedule viewer
 Description:
 An application that loads xcal/Pentabarf XML files (that contain schedules of
 conferences/festivals/other events) and lets you browse them in various convenient
 formats. Preloaded with data for FOSDEM.
 .
+
 Repo Type:bzr
 Repo:http://wilmer.gaa.st/giggity/
 
 Build Version:0.8.1,4,133
-#There is a 0.8.2 in the market, but the repo source doesn't seem to correspond
 
+#There is a 0.8.2 in the market, but the repo source doesn't seem to correspond
 Market Version:0.9.8
 Market Version Code:16
+

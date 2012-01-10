@@ -1,8 +1,9 @@
-Use Built:Yes
 Category:Office
 License:GPLv3
 Web Site:http://code.google.com/p/timeriffic/
 Source Code:http://code.google.com/p/timeriffic/source/checkout
+Issue Tracker:
+
 Summary:Auto-control settings on a schedule
 Description:
 Allows you to set multiple schedules to control mute, vibrate, brightness, 
@@ -14,15 +15,13 @@ Repo:https://timeriffic.googlecode.com/hg/
 
 #This previous version was svn from http://timeriffic.googlecode.com/svn/trunk/
 #Build Version:1.09.03,10903,45,subdir=Timeriffic,oldsdkloc=yes
-
 Build Version:1.09.05,10905,fc40dccbb9,subdir=Timeriffic,oldsdkloc=yes,novcheck=yes,bindir=Timeriffic/bin2
-
 #NOTE: Far from obvious which commit corresponds to version 1.09.09. Also
 #note the source tree re-org, which means some of the settings above need
 #to change, and also the switch to android-11 as a target.
 Build Version:1.09.11,10911,!Can't find correct commit. See metadata notes too.
-
 Build Version:1.09.12,10912,!No source for this in the repo
 
 Market Version:1.09.12
 Market Version Code:10912
+

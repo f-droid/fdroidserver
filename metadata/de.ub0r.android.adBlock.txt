@@ -1,9 +1,9 @@
-Use Built:Yes
-License:GPLv3+
 Category:System
+License:GPLv3+
 Web Site:http://code.google.com/p/andblock/
 Source Code:https://github.com/felixb/adBlock
 Issue Tracker:http://code.google.com/p/andblock/issues/list
+
 Summary:Ad-blocking HTTP proxy
 Description:
 Blocks advertisements on the web by filtering requests by URL.
@@ -16,3 +16,4 @@ Build Version:0.5,5,v0.5,oldsdkloc=yes
 
 Market Version:0.5
 Market Version Code:5
+

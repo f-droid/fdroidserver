@@ -1,9 +1,11 @@
 Disabled:Non-free blob
-License:GPLv2
+AntiFeatures:Tracking
 Category:Office
+License:GPLv2
 Web Site:https://code.google.com/p/daily-money/
 Source Code:https://code.google.com/p/daily-money/source/browse/
 Issue Tracker:https://code.google.com/p/daily-money/issues/list
+
 Summary:Simple Finance Manager
 Description:
 Features:
@@ -13,8 +15,6 @@ Features:
 * Pie and time chart of balance
 .
 
-AntiFeatures:Tracking
-
 Repo Type:svn
 Repo:https://daily-money.googlecode.com/svn/trunk/
 
@@ -23,4 +23,3 @@ Repo:https://daily-money.googlecode.com/svn/trunk/
 #	cp build.xml local.properties ../dailymoney/ && \
 #	cd ../dailymoney/ && \
 #	cp default.properties project.properties
-

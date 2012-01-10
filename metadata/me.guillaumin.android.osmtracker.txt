@@ -1,10 +1,9 @@
-Use Built:Yes
-License:GPLv3
 Category:Navigation
+License:GPLv3
 Web Site:https://code.google.com/p/osmtracker-android/
 Source Code:https://github.com/nguillaumin/osmtracker-android
 Issue Tracker:https://code.google.com/p/osmtracker-android/issues/list
-Donate:
+
 Summary:GPS Track Recorder
 Description:
 OSMTracker allows you to track your journey and mark significant way points.
@@ -21,3 +20,4 @@ Build Version:0.5.6,21,0.5.6,target=android-8
 
 Market Version:0.5.6
 Market Version Code:21
+

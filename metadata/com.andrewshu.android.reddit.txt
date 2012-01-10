@@ -1,14 +1,13 @@
-Use Built:Yes
 Category:Internet
 License:GPLv3+
 Web Site:https://github.com/talklittle/reddit-is-fun
 Source Code:https://github.com/talklittle/reddit-is-fun
 Issue Tracker:https://github.com/talklittle/reddit-is-fun/issues
+
 Summary:Reddit app
 Description:
 An app for the social news website Reddit.
 .
-
 
 Repo Type:git
 Repo:https://github.com/talklittle/reddit-is-fun.git
@@ -25,3 +24,4 @@ Build Version:1.2.1.5,78,!more dependency shuffling required and watch out for t
 
 Market Version:1.2.2a
 Market Version Code:81
+

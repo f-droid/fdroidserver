@@ -1,11 +1,14 @@
-License:Apache2
 Category:Navigation
+License:Apache2
 Web Site:http://www.pierrox.net/cmsms/open-source/marine-compass-2.html
 Source Code:http://svn.pierrox.net/mcompass/trunk
 Issue Tracker:
+
 Summary:Compass
 Description:
 Uses the magnetic sensor to show the orientation.
 .
+
 Market Version:2.5.1
 Market Version Code:23
+

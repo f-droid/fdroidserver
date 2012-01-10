@@ -1,10 +1,9 @@
-
-License:GPLv3
 Category:Office
+License:GPLv3
 Web Site:https://code.google.com/p/enh/wiki/Mathdroid
 Source Code:https://code.google.com/p/enh/source/checkout
 Issue Tracker:
-Donate:
+
 Summary:Calculator
 Description:
 A calculator with full on-screen history and many functions.
@@ -17,3 +16,4 @@ Build Version:2.5,25,525,oldsdkloc=yes,target=android-10,subdir=mathdroid,prebui
 
 Market Version:2.5
 Market Version Code:25
+

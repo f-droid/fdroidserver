@@ -1,17 +1,21 @@
-License:Apache2
 Category:Office
+License:Apache2
 Web Site:http://code.google.com/p/shelves/
 Source Code:http://code.google.com/p/shelves/source/checkout
 Issue Tracker:http://code.google.com/p/shelves/issues/list
+
 Summary:Book collection manager
 Description:
 Shelves lets you manage and search your collection of books from your phone.
 You can add books by scanning their barcodes, using Web searches or entering
 information manually.
 .
+
 Repo Type:svn
 Repo:http://shelves.googlecode.com/svn/trunk/Shelves
+
 Build Version:1.0,1,26,oldsdkloc=yes
-Use Built:Yes
+
 Market Version:1.5
 Market Version Code:2
+

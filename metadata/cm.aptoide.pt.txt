@@ -1,18 +1,20 @@
 Disabled:Source incomplete
+Category:None
 License:GPLv2+
 Web Site:http://www.aptoide.com/
 Source Code:http://aptoide.org/trac
 Issue Tracker:http://aptoide.org/trac
+
 Summary:A package installer.
 Description:
 Aptoide is a simple repository and package installer. F-Droid was originally
 based on Aptoide!
 .
-Market Version:2.0.1
-Market Version Code:145
 
 Repo Type:svn
 Repo:http://aptoide.org/repo
 
-#Build Version:2.0,126,45,subdir=aptoide-client/v2.0
+Market Version:2.0.1
+Market Version Code:145
 
+#Build Version:2.0,126,45,subdir=aptoide-client/v2.0

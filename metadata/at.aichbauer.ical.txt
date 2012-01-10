@@ -1,9 +1,9 @@
-Use Built:Yes
-License:GPLv3
 Category:Office
+License:GPLv3
 Web Site:https://code.google.com/p/ical-import-export/
 Source Code:https://code.google.com/p/ical-import-export/source/checkout
 Issue Tracker:https://code.google.com/p/ical-import-export/issues/list
+
 Summary:iCal (.ics) file importer
 Description:
 Allows you to import iCalendar files to your calendar without using Google
@@ -17,3 +17,4 @@ Build Version:1.5,51,!11 but needs AndroidTools compiling too,subdir=iCalImportE
 
 Market Version:1.5
 Market Version Code:51
+

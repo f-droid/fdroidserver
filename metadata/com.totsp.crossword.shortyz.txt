@@ -1,9 +1,9 @@
-License:GPLv3
 Category:Games
+License:GPLv3
 Web Site:http://code.google.com/p/shortyz/
 Source Code:http://code.google.com/p/shortyz/source/checkout
 Issue Tracker:http://code.google.com/p/shortyz/issues/list
-Donate:
+
 Summary:Crossword game
 Description:
 Crossword game that downloads puzzles from a variety of internet locations.

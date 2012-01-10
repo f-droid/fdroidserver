@@ -1,14 +1,15 @@
 Disabled:Conflicting copyright message, see http://code.google.com/p/ancal/issues/detail?id=8
-Use Built:Yes
-License:MIT
 Category:Office
+License:MIT
 Web Site:http://code.google.com/p/ancal/
 Source Code:http://code.google.com/p/ancal/source/checkout
 Issue Tracker:http://code.google.com/p/ancal/issues/list
+
 Summary:Calendar
 Description:
 A calendar application.
 .
+
 Repo Type:svn
 Repo:http://ancal.googlecode.com/svn/trunk/
 
@@ -16,3 +17,4 @@ Build Version:1.6,32,23,fixtrans=yes
 
 Market Version:1.5
 Market Version Code:31
+

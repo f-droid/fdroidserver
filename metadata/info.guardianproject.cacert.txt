@@ -1,10 +1,9 @@
 Category:System
-Requires Root:Yes
 License:GPLv3
 Web Site:https://guardianproject.info/2011/09/05/cacertman-app-to-address-diginotar-other-bad-cas/
 Source Code:https://github.com/guardianproject/cacert
 Issue Tracker:https://github.com/guardianproject/cacert/issues
-Donate:
+
 Summary:A slightly more vetted version of the Android CACert keystore
 Description:
 A slightly more vetted version of the Android CACert keystore
@@ -15,6 +14,8 @@ This application requires root, as well as a device that has the ‘grep’ comm
 If the ‘save’ doesn’t work, then you will need to use ‘RootExplorer’ to make you /system partition read-write.
 ***
 .
+
+Requires Root:Yes
 
 Repo Type:git
 Repo:https://github.com/guardianproject/cacert.git

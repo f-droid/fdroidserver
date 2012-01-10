@@ -1,7 +1,9 @@
-License:GPLv2+
 Category:Multimedia
+License:GPLv2+
 Web Site:http://xmp.sourceforge.net/
 Source Code:http://sourceforge.net/projects/xmp/develop
+Issue Tracker:
+
 Summary:Tracker module player
 Description:
 The Extended Module Player, or xmp, is a portable module player. Xmp plays
@@ -10,9 +12,9 @@ Apple IIgs and PC. This is an experimental port built with the Android NDK
 and a Java interface. All module formats are supported, but external file
 compressors are not.
 .
+
 Repo Type:git
 Repo:git://xmp.git.sourceforge.net/gitroot/xmp/xmp
-Use Built:Yes
 
 # This is one of those projects that put the changelog in the version
 # number, so fix that with insertversion.
@@ -22,3 +24,4 @@ insertversion=2.1.0[^"]*
 
 Market Version:2.4.0
 Market Version Code:20
+

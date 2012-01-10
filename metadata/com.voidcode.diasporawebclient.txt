@@ -1,10 +1,9 @@
-
-License:GPLv3
 Category:Internet
+License:GPLv3
 Web Site:https://github.com/voidcode/Diaspora-Webclient
 Source Code:https://github.com/voidcode/Diaspora-Webclient
 Issue Tracker:
-Donate:
+
 Summary:Diaspora Client
 Description:
 Client for the Diaspora social network.

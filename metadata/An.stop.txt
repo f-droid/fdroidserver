@@ -1,9 +1,9 @@
-Use Built:Yes
-License:GPLv2
 Category:Office
+License:GPLv2
 Web Site:http://code.google.com/p/anstop/
 Source Code:http://code.google.com/p/anstop/source/checkout
 Issue Tracker:http://code.google.com/p/anstop/issues/list
+
 Summary:A simple stopwatch
 Description:
 A simple stopwatch, that also supports lap timing and a countdown
@@ -14,3 +14,4 @@ Repo Type:git-svn
 Repo:http://anstop.googlecode.com/svn/trunk
 
 Build Version:1.4,9,34
+

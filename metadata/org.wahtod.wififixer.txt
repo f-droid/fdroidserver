@@ -1,14 +1,15 @@
-Use Built:Yes
-License:Apache2
 Category:System
+License:Apache2
 Web Site:http://wififixer.wordpress.com
 Source Code:https://github.com/Zanshinmu/Wifi-Fixer
 Issue Tracker:https://github.com/Zanshinmu/Wifi-Fixer/issues
 Donate:http://wififixer.wordpress.com/donate/
+
 Summary:Resets broken WiFi connections
 Description:
 Detects and resets a broken WiFi connection.
 .
+
 Repo Type:git
 Repo:https://github.com/Zanshinmu/Wifi-Fixer.git
 
@@ -23,3 +24,4 @@ Build Version:0.9.0.1,915,!commit 7155ca938dc1 but can't compile for some reason
 
 Market Version:0.9.0.1
 Market Version Code:915
+

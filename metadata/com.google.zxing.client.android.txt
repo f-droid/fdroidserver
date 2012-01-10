@@ -1,8 +1,9 @@
-License:Apache2
 Category:Multimedia
+License:Apache2
 Web Site:http://code.google.com/p/zxing/
 Source Code:http://code.google.com/p/zxing/source/checkout
 Issue Tracker:http://code.google.com/p/zxing/issues/list
+
 Summary:Barcode scanner
 Description:
 Barcode scanner from ZXing.
@@ -10,3 +11,4 @@ Barcode scanner from ZXing.
 
 Market Version:3.72
 Market Version Code:76
+

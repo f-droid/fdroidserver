@@ -1,9 +1,9 @@
-License:GPLv3
 Category:Games
+License:GPLv3
 Web Site:http://blokish.scoutant.org/
 Source Code:https://github.com/scoutant/blokish
 Issue Tracker:https://github.com/scoutant/blokish/issues
-Donate:
+
 Summary:Board game
 Description:
 A strategy board game.
@@ -19,3 +19,4 @@ Build Version:1.6,9,ebd1b966b70e,target=android-10
 
 Market Version:1.6
 Market Version Code:9
+

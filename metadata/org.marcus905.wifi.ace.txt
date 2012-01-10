@@ -1,16 +1,20 @@
-License:Apache2
 Category:System
+License:Apache2
 Web Site:http://code.google.com/p/android-wifi-ace/
 Source Code:http://code.google.com/p/android-wifi-ace/source/checkout
 Issue Tracker:http://code.google.com/p/android-wifi-ace/issues/list
+
 Summary: WiFi Advanced Configuration Editor
 Description:
 WiFi ACE lets you fine tune the settings of your configured wireless
 networks, such as BSSID, ciphers, WEP keys and various WPA options.
 .
+
 Repo Type:svn
 Repo:http://android-wifi-ace.googlecode.com/svn/trunk/WiFiACE
+
 Build Version:0.10,20100924,13
-Use Built:Yes
+
 Market Version:0.10
 Market Version Code:20100924
+

@@ -1,13 +1,14 @@
-Use Built:Yes
-License:GPLv3
 Category:Multimedia
+License:GPLv3
 Web Site:http://code.google.com/p/vudroid/
 Source Code:http://code.google.com/p/vudroid/source/checkout
 Issue Tracker:http://code.google.com/p/vudroid/issues/list
+
 Summary:DjVu and PDF document reader
 Description:
 A document reader for DjVu and PDF files.
 .
+
 Repo Type:svn
 Repo:http://vudroid.googlecode.com/svn/trunk/
 
@@ -17,3 +18,4 @@ Build Version:1.4,5,56,buildjni=yes,target=android-8
 
 Market Version:1.4
 Market Version Code:5
+

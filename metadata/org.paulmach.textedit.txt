@@ -1,9 +1,9 @@
-Use Built:Yes
-License:GPLv3
 Category:Office
+License:GPLv3
 Web Site:http://textedit.paulmach.com/
 Source Code:https://github.com/paulmach/Text-Edit-for-Android
 Issue Tracker:https://github.com/paulmach/Text-Edit-for-Android/issues
+
 Summary:A text editor
 Description:
 Text Edit is a simple notepad application. It opens, edits and saves text files on the
@@ -12,6 +12,7 @@ SD card.
 Unfortunately, this app is not recommended for large files. This is a limitation of the
 text display mechanism in the Android OS.
 .
+
 Repo Type:git
 Repo:https://github.com/paulmach/Text-Edit-for-Android.git
 
@@ -20,3 +21,4 @@ Build Version:1.4.1,14,cddfa34997bf3da10586,target=android-8,patch=set1.4.1.patc
 
 Market Version:1.5
 Market Version Code:15
+

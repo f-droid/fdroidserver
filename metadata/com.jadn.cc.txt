@@ -1,9 +1,10 @@
-License:MIT
 Category:Multimedia
+License:MIT
 Web Site:http://jadn.com/carcast/
 Source Code:http://github.com/bherrmann7/Car-Cast/
 Issue Tracker:https://github.com/bherrmann7/Car-Cast/issues
 Donate:https://market.android.com/details?id=com.jadn.ccpro
+
 Summary:A podcast downloader and player.
 Description:
 Car Cast is a simple audio podcast downloader and player.

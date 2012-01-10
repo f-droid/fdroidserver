@@ -1,13 +1,14 @@
-Use Built:Yes
-License:GPLv2
 Category:Internet
+License:GPLv2
 Web Site:http://yaxim.org
 Source Code:https://github.com/ge0rg/yaxim
 Issue Tracker:https://github.com/pfleidi/yaxim/issues
+
 Summary:XMPP client
 Description:
 An XMPP client.
 .
+
 Repo Type:git
 Repo:https://github.com/ge0rg/yaxim.git
 
@@ -21,3 +22,4 @@ Build Version:0.8.2,11,0.8.2,oldsdkloc=yes,submodules=yes,fixtrans=yes,target=an
 
 Market Version:0.8.3
 Market Version Code:12
+

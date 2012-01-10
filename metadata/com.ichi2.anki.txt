@@ -3,6 +3,7 @@ License:GPLv3
 Web Site:https://code.google.com/p/ankidroid/wiki/Index
 Source Code:http://github.com/nicolas-raoul/Anki-Android/
 Issue Tracker:http://code.google.com/p/ankidroid/issues
+
 Summary:A flashcard-based study aid
 Description:
 Anki is a program which makes remembering things easy. Because it is a lot more

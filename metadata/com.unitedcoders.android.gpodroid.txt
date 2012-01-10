@@ -1,8 +1,9 @@
-License:EPLv1
 Category:Multimedia
+License:EPLv1
 Web Site:http://united-coders.com/gpodroid
 Source Code:https://github.com/gpodder/GpodRoid
 Issue Tracker:https://github.com/gpodder/GpodRoid/issues
+
 Summary:gpodder.net client
 Description:
 A gpodder.net podcasting client.

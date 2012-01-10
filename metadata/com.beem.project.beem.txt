@@ -1,9 +1,9 @@
-Use Built:Yes
-License:GPLv3+
 Category:Internet
+License:GPLv3+
 Web Site:http://www.beem-project.com/
 Source Code:http://www.beem-project.com/projects/beem/repository
 Issue Tracker:http://www.beem-project.com/projects/beem/issues
+
 Summary:XMPP client
 Description:
 Beem is an XMPP (Jabber) client.
@@ -17,3 +17,4 @@ Build Version:0.1.6,9,0.1.6
 
 Market Version:0.1.6
 Market Version Code:9
+

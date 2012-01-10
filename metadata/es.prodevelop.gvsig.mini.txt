@@ -1,11 +1,14 @@
-License:GPLv2
 Category:Navigation
+License:GPLv2
 Web Site:https://confluence.prodevelop.es/display/GVMN/Home
 Source Code:https://svn.prodevelop.es/public/gvsigmini/
 Issue Tracker:
+
 Summary:Tile-based map viewer
 Description:
 A tile-based map viewer with support for maps from many sources.
 .
+
 Market Version:1.2.3
 Market Version Code:457
+
