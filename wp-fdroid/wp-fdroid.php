@@ -103,7 +103,7 @@ class FDroid
 
 
     function get_app($query_vars) {
-		$permissions_data = get_android_permissions_array($this->site_path.'/repo/AndroidManifest.xml', $this->site_path.'/repo/strings.xml');
+		$permissions_data = get_android_permissions_array($this->site_path.'/repo/AndroidManifest.xml', $this->site_path.'/repo/strings.xml', $this->site_path.'/repo/android-permissions.cache');
 
         $xml = simplexml_load_file($this->site_path.'/repo/index.xml');
         foreach($xml->children() as $app) {

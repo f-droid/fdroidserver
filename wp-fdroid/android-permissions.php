@@ -4,9 +4,37 @@ $android_manifest_file_path = 'AndroidManifest.xml';
 // Path to the strings.xml-file from the Android source. Get it from https://raw.github.com/android/platform_frameworks_base/master/core/res/res/values/strings.xml for example.
 $android_strings_file_path = 'strings.xml';
 
-// Returns an associative array with android permissions and data about them
-function get_android_permissions_array($android_manifest_file_path, $android_strings_file_path) {
+$cache_file_path = 'android-permissions.cache';
 
+// Returns an associative array with android permissions and data about them
+function get_android_permissions_array($android_manifest_file_path, $android_strings_file_path, $cache_file_path) {
+
+	// Check status of cache
+	$android_manifest_file_stat = stat($android_manifest_file_path);
+	$android_manifest_file_mtime = $android_manifest_file_stat['mtime'];
+	$android_strings_file_stat = stat($android_strings_file_path);
+	$android_strings_file_mtime = $android_strings_file_stat['mtime'];
+	$cache_file_mtime = 0;
+	if(file_exists($cache_file_path)) {
+		$cache_file_stat = stat($cache_file_path);
+		$cache_file_mtime = $cache_file_stat['mtime'];
+	}
+	
+	// If the cache is fresh, use it instead
+	if($android_manifest_file_mtime < $cache_file_mtime && $android_strings_file_mtime < $cache_file_mtime ) {
+		$cache_file_handle = fopen($cache_file_path, 'r');
+		$cache_file_content = fread($cache_file_handle, filesize($cache_file_path));
+		fclose($cache_file_handle);
+		
+		$permissions = unserialize($cache_file_content);
+		
+		return $permissions;
+	}
+
+	// We are updating the cache, touch the file (note: race condition possible between stating the cache file above and this line...)
+	touch($cache_file_path);
+	
+	// Get permission raw data from XML
 	$manifestDoc = new DOMDocument;
 	$manifestDoc->load($android_manifest_file_path);
 	$manifestXpath = new DOMXPath($manifestDoc);
@@ -64,6 +92,11 @@ function get_android_permissions_array($android_manifest_file_path, $android_str
 			$comment = '';
 		}
 	}
+
+	// Update cache with serialized permissions
+	$cache_file_handle = fopen($cache_file_path, 'w');
+	fwrite($cache_file_handle, serialize($permissions));
+	fclose($cache_file_handle);
 	
 	return $permissions;
 }
