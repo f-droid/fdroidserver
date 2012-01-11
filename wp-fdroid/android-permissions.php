@@ -68,9 +68,9 @@ function get_android_permissions_array($android_manifest_file_path, $android_str
 				$descriptionString = ucfirst($descriptionStringObject->item(0)->nodeValue);
 			}
 			
-			$permissions[$node->nodeName][$name]['label'] = $labelString;
-			$permissions[$node->nodeName][$name]['description'] = $descriptionString;
-			$permissions[$node->nodeName][$name]['comment'] = str_replace(array("\r\n", "\r", "\n", "\t", '  '), '', $comment);
+			$permissions[$node->nodeName][$name]['label'] = stripslashes($labelString);
+			$permissions[$node->nodeName][$name]['description'] = stripslashes($descriptionString);
+			$permissions[$node->nodeName][$name]['comment'] = stripslashes(str_replace(array("\r\n", "\r", "\n", "\t", '  '), '', $comment));
 			
 			if($node->nodeName == 'permission') {
 				$permissionGroupObject = $node->attributes->getNamedItem('permissionGroup');
