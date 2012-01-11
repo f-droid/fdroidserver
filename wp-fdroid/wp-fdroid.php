@@ -209,18 +209,18 @@ class FDroid
                 $out.="<h3>Packages</h3>";
 				$i=0;
                 foreach($apks as $apk) {
-                    $out.="<p><b>Version ".$apk['version']."</b> - ";
-                    $out.='<a href="http://f-droid.org/repo/'.$apk['apkname'].'">download</a> ';
+                    $out.="<p><b>Version ".$apk['version']."</b><br />";
+                    $out.='<a href="http://f-droid.org/repo/'.$apk['apkname'].'">download apk</a> ';
                     $out.=$apk['size']." bytes";
                     if($apk['srcname'])
                         $out.='<br><a href="http://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a>';
 					
-					if($i==0)
+					/*if($i==0)
 						$divStyleDisplay='block';
-					else
+					else*/
 						$divStyleDisplay='none';
 					$divId='permissions'.$i;
-					$out.='<p><a href="javascript:void(0);" onClick="showHidePermissions(\''.$divId.'\');">Permissions</a><br/>';
+					$out.='<br /><a href="javascript:void(0);" onClick="showHidePermissions(\''.$divId.'\');">view permissions</a><br/>';
 					$out.='<div style="display:'.$divStyleDisplay.';" id="'.$divId.'">';
 					$permissions = explode(',',$apk['permissions']);
 					usort($permissions,
@@ -253,13 +253,13 @@ class FDroid
 							$permission_group_last = $permission_group;
 						}
 					
-						$out.='('.strtoupper(substr($permissions_data['permission'][$permission]['protectionLevel'],0,1)).') - ';
+						$out.=$this->get_permission_protection_level_icon($permissions_data['permission'][$permission]['protectionLevel']).' ';
 						$out.='<strong>'.$permissions_data['permission'][$permission]['label'].'</strong> [<code>'.$permission.'</code>]<br/>';
 						$out.=$permissions_data['permission'][$permission]['description'].'<br/>';
 						//$out.=$permissions_data['permission'][$permission]['comment'].'<br/>';
 						$out.='<br/>';
 					}
-					$out.='</div></p>';
+					$out.='</div>';
 						
                     $out.='</p>';
 					$i++;
@@ -273,6 +273,20 @@ class FDroid
         return "<p>Application not found</p>";
     }
 
+	private function get_permission_protection_level_icon($protection_level) {
+		if($protection_level=='dangerous')
+		{
+			return '<span style="color:#DD9900;font-size:150%;">&#x26a0;</span>';
+		}
+		elseif($protection_level=='normal')
+		{
+			return '<span style="color:#6666FF;font-size:110%;">&#x24D8;</span>';
+		}
+		else
+		{
+			return '<em>!</em>';
+		}
+	}	
 
     function get_apps($query_vars) {
 
