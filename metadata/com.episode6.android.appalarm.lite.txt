@@ -1,0 +1,20 @@
+Category:System
+License:GPLv2
+Web Site:http://episode6.wordpress.com/2010/03/27/appalarm/
+Source Code:https://github.com/ghackett/AppAlarm
+Issue Tracker:https://github.com/ghackett/AppAlarm/issues
+
+Summary:App Alarm
+Description:
+Turn any app into an Alarm Clock.
+Schedule any app for anytime.
+.
+
+Repo Type:git
+Repo:https://github.com/ghackett/AppAlarm
+
+Build Version:1.2.6,30,af9d89993212c67bfc510ed082381afc7abcd95a
+
+Market Version:1.2.6
+Market Version Code:30
+
