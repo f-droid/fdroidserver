@@ -1,3 +1,6 @@
+Disabled:C2DM API key required
+#NonFreeDep because it requires the Market app to be installed, for C2DM
+AntiFeatures:NonFreeNet,NonFreeDep
 Category:System
 License:GPLv3
 Web Site:http://preyproject.com
@@ -20,8 +23,8 @@ Prey lets you keep track of all your devices easily on one place. Supports:
 Repo Type:git
 Repo:https://github.com/prey/prey-android-client
 
-Build Version:0.5,34,8934cda82af81580a26cf4de233da15feaab1dfd,prebuild=echo "ask-for-password=true\nprey-minor-version=0\nprey-versionon=0.5\nprey-subdomain=control\nprey-domain=preyproject.com\n#c2dm\nc2dm-mail=\nc2dm-action=\nc2dm-message-sync=" > res/raw/config
 # TODO: c2dm (aka "push API") seems to require an API key from Google, see http://code.google.com/android/c2dm/index.html
+Build Version:0.5,34,8934cda82af81580a26cf4de233da15feaab1dfd,prebuild=echo "ask-for-password=true\nprey-minor-version=0\nprey-versionon=0.5\nprey-subdomain=control\nprey-domain=preyproject.com\n#c2dm\nc2dm-mail=\nc2dm-action=\nc2dm-message-sync=" > res/raw/config
 
 Market Version:0.5
 Market Version Code:34
