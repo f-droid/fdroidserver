@@ -1,8 +1,9 @@
-License:Apache2
 Category:Internet
+License:Apache2
 Web Site:http://code.google.com/p/k9mail/
 Source Code:https://github.com/k9mail/k-9
 Issue Tracker:http://code.google.com/p/k9mail/issues/list
+
 Summary:Full-featured email client
 Description:
 Email client supporting multiple accounts, POP3, IMAP, Push IMAP. Packed with
@@ -14,6 +15,6 @@ Repo:https://github.com/k9mail/k-9.git
 
 #Note - k9 is currently developer's binary only
 #Build Version:3.906,14006,3.906,oldsdkloc=yes,patch=target9to10.patch,target=android-10
-
 Market Version:4.002
 Market Version Code:14020
+

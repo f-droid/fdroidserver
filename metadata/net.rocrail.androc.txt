@@ -1,9 +1,9 @@
-Use Built:Yes
-License:GPLv3+
 Category:Games
+License:GPLv3+
 Web Site:http://wiki.rocrail.net/doku.php?id=androc-intro-en
 Source Code:https://code.launchpad.net/~rocrail-project/rocrail/androc
 Issue Tracker:https://bugs.launchpad.net/rocrail
+
 Summary:Model railway controller client
 Description:
 A controller client for RocRail, a model railway controller.
@@ -11,6 +11,7 @@ A controller client for RocRail, a model railway controller.
 
 Repo Type:bzr
 Repo:lp:rocrail/androc
+
 Build Version:1.1.219,219,219
 Build Version:1.1.221,221,221
 Build Version:1.2.224,224,!No source for this version in repo
@@ -31,3 +32,4 @@ Build Version:1.5.324,324,324
 
 Market Version:339
 Market Version Code:339
+

@@ -1,11 +1,14 @@
-License:GPLv3+
 Category:Office
+License:GPLv3+
 Web Site:http://code.google.com/p/desktoplabel/
 Source Code:http://code.google.com/p/desktoplabel/source/checkout
 Issue Tracker:http://code.google.com/p/desktoplabel/issues/list
+
 Summary:Custom desktop label widgets
 Description:
 Allows you to add custom widgets to your 'desktop' to label things.
 .
+
 Market Version:1.3.0
 Market Version Code:6
+

@@ -1,13 +1,16 @@
-License:Apache2
 Category:Internet
+License:Apache2
 Web Site:http://code.google.com/p/android-privacy-guard/
 Source Code:http://code.google.com/p/android-privacy-guard/source/checkout
 Issue Tracker:http://code.google.com/p/android-privacy-guard/issues/list
+
 Summary:OpenPGP port - encrypt email and files
 Description:
 APG is a port of OpenPGP for Android. Use it to encrypt and decrypt files, and in
 conjunction with K-9 Mail, to seamlessly add support for encyrpting and decrypting
 emails, as well as adding and verifying digital signatures.
 .
+
 Market Version:1.0.8
 Market Version Code:10899
+

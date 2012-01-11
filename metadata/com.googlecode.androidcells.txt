@@ -1,11 +1,9 @@
-
-Use Built:Yes
-License:GPLv3
 Category:Internet
+License:GPLv3
 Web Site:http://openbmap.org
 Source Code:http://sourceforge.net/scm/?type=git&group_id=218065
 Issue Tracker:http://sourceforge.net/tracker/?group_id=218065
-Donate:
+
 Summary:OpenBMap Data Contribution
 Description:
 Provides the ability to record cellular and WiFi locations and upload them
@@ -20,3 +18,4 @@ Build Version:0.4.991,13,!Source is not there - see https://sourceforge.net/trac
 
 Market Version:0.4.991
 Market Version Code:13
+

@@ -1,10 +1,10 @@
-Use Built:Yes
 Category:Navigation
 License:LGPL
-Name:OsmAnd+
 Web Site:http://code.google.com/p/osmand/
 Source Code:https://github.com/osmandapp/Osmand
 Issue Tracker:http://code.google.com/p/osmand/issues/list
+
+Name:OsmAnd+
 Summary:OpenStreetMap navigation & routing
 Description:
 Navigation and routing based on OpenStreetMap, including the ability for
@@ -24,3 +24,4 @@ Build Version:0.6.9',43,!No corresponding source for whatever this is
 
 Market Version:0.6.9'
 Market Version Code:43
+

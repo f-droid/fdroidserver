@@ -1,15 +1,16 @@
-Use Built:Yes
-License:GPLv3
 Category:Multimedia
+License:GPLv3
 Web Site:http://wiki.sixgun.org/ponyexpress/start
 Source Code:http://gitorious.org/ponyexpress
 Issue Tracker:
+
 Summary:SixGun Productions mobile application
 Description:
 Mobile application for SixGun Productions - producers of the Linux Outlaws podcast
 and more. Download and play podcasts and join identi.ca conversations about them
 direct from this application.
 .
+
 Repo Type:git
 Repo:git://gitorious.org/ponyexpress/mainline.git
 
@@ -21,3 +22,4 @@ Build Version:1.1,12,1.1,target=android-10
 
 Market Version:1.1
 Market Version Code:12
+

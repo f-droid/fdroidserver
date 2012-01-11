@@ -1,18 +1,20 @@
 Disabled:No release available
-Use Built:Yes
+Category:None
 License:MIT
 Web Site:https://bitbucket.org/giszmo/offline-calendar/overview
 Source Code:https://bitbucket.org/giszmo/offline-calendar/src
 Issue Tracker:https://bitbucket.org/giszmo/offline-calendar/issues?status=new&status=open
+
 Summary:Calendar
 Description:
 A calendar application.
 .
+
 Repo Type:hg
 Repo:https://bitbucket.org/giszmo/offline-calendar
 
 #There don't seem to be any developer releases yet
 #There is now a 1.1 in the android market, but no source for it in the repository
-
 Market Version:1.1
 Market Version Code:2
+

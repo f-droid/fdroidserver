@@ -1,9 +1,9 @@
-Use Built:Yes
-License:GPLv3+
 Category:System
+License:GPLv3+
 Web Site:http://github.com/nexes/Android-File-Manager
 Source Code:http://github.com/nexes/Android-File-Manager
 Issue Tracker:http://github.com/nexes/Android-File-Manager/issues
+
 Summary:A simple file browser and manager
 Description:
 A simple file browser and manager.
@@ -18,3 +18,4 @@ Build Version:2.1.8,218,edf793a782861ae31648
 
 Market Version:2.1.8
 Market Version Code:218
+

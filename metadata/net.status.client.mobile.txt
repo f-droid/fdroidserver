@@ -1,11 +1,14 @@
-License:Apache2
 Category:Internet
+License:Apache2
 Web Site:http://status.net/wiki/Client
 Source Code:http://www.gitorious.org/statusnet-client
 Issue Tracker:
+
 Summary:Official StatusNet client
 Description:
 The official client for StatusNet microblogging (which includes identi.ca).
 .
+
 Market Version:1.0.4
 Market Version Code:3
+

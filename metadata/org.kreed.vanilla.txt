@@ -1,6 +1,9 @@
-License:GPLv3+
 Category:Multimedia
+License:GPLv3+
+Web Site:
 Source Code:https://github.com/kreed/vanilla
+Issue Tracker:
+
 Summary:Simple and streamlined music player
 Description:
 Vanilla Music Player is designed to be simple and streamlined. The playback
@@ -8,11 +11,12 @@ screen is clean and minimal. Music is played from a continuous stream of
 random songs from your music library with the ability for you to enqueue
 songs of your choosing.
 .
+
 Repo Type:git
 Repo:https://github.com/kreed/vanilla.git
-Use Built:Yes
 
 Build Version:0.1,16,4169dd05b3ac321555bb8436fd2a90f93e52b49d
 
 Market Version:0.1
 Market Version Code:16
+

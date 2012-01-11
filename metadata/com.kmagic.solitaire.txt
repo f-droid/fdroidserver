@@ -1,15 +1,16 @@
-Use Built:Yes
 Category:Games
 License:Apache2
 Web Site:http://code.google.com/p/solitaire-for-android/
 Source Code:http://code.google.com/p/solitaire-for-android/source/checkout
 Issue Tracker:http://code.google.com/p/solitaire-for-android/issues/list
+
 Summary:Solitaire collection
 Description:
 Solitaire Collection of Klondike (Regular solitaire), Spider Solitaire,
 and Freecell using the touchscreen interface. Features include multi-level
 undo, animated card movement, and statistic/score tracking.
 .
+
 Repo Type:svn
 Repo:http://solitaire-for-android.googlecode.com/svn/trunk/
 
@@ -17,3 +18,4 @@ Build Version:1.12.2,450,30,target=android-8
 
 Market Version:1.12.2
 Market Version Code:450
+

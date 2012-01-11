@@ -1,8 +1,9 @@
-License:Apache2
 Category:Multimedia
+License:Apache2
 Web Site:http://code.google.com/p/chartdroid/
 Source Code:http://code.google.com/p/chartdroid/source/checkout
 Issue Tracker:http://code.google.com/p/chartdroid/issues/list
+
 Summary:Chart engine
 Description:
 ChartDroid is an Intent-based "library application" for static chart and
@@ -10,9 +11,12 @@ graph generation on Android. Other applications can use it to
 graph/plot/display numerical data in many representations by implementing a
 ContentProvider.
 .
+
 Repo Type:svn
 Repo:http://chartdroid.googlecode.com/svn/trunk/core
+
 Build Version:2.0.0,18,294
-Use Built:Yes
+
 Market Version:2.0.0
 Market Version Code:18
+

@@ -1,13 +1,16 @@
-License:GPLv2
 Category:Games
+License:GPLv2
 Web Site:http://code.google.com/p/moonblink/wiki/ScrambledNet
 Source Code:http://code.google.com/p/moonblink/source/checkout
 Issue Tracker:http://code.google.com/p/moonblink/issues/list
+
 Summary:Puzzle game
 Description:
 A puzzle game where the player is given a network diagram with the parts of
 the network randomly rotated and must rotate them to connect all the terminals
 to the server. A port of the KDE game "knetwalk".
 .
+
 Market Version:5.0.2
 Market Version Code:28
+

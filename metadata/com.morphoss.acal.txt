@@ -1,10 +1,10 @@
-Use Built:Yes
-License:GPLv3
 Category:Office
+License:GPLv3
 Web Site:http://acal.me
 Source Code:http://gitorious.org/acal
 Issue Tracker:
 Donate:http://acal.me/wiki/Donating
+
 Summary:Calendar - CalDAV client
 Description:
 A CalDAV client, allowing you to directly access a calendar on a CalDAV
@@ -27,5 +27,6 @@ Build Version:1.32,34,r1.32,target=android-8
 Build Version:1.33,35,r1.33,target=android-8
 Build Version:1.34,36,r1.34,target=android-8
 
-Market Version:1.34
-Market Version Code:36
+Market Version:1.35
+Market Version Code:37
+

@@ -1,19 +1,19 @@
 Disabled: Need to deal with possible trademark issues due us forking the project.
-License:GPLv3
 Category:Internet
+License:GPLv3
 Web Site:http://code.google.com/p/feeddroid/
 Source Code:http://gitorious.org/feeddroid/feeddroid
 Issue Tracker:
+
 Summary:RSS feed reader/podcatcher
 Description:
 An RSS feed reader and podcatcher with audio and video support.
 .
 
-
 Repo Type:git
 Repo:http://git.gitorious.org/feeddroid/feeddroid.git
 
 #Build Version:1.1.1,37,db5077bf1ef792d8d5f6154198b7200a50d963df,subdir=FeedDroid
-
 Market Version:1.1.1
 Market Version Code:37
+

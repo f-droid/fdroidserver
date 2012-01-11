@@ -1,9 +1,10 @@
-License:GPLv3
 Category:Internet
+License:GPLv3
 Web Site:http://code.google.com/p/csipsimple/
 Source Code:http://code.google.com/p/csipsimple/source/checkout
 Issue Tracker:http://code.google.com/p/csipsimple/issues/list
 Donate:http://code.google.com/p/csipsimple/wiki/Donate
+
 Summary:SIP (VOIP) client
 Description:
 A SIP (VOIP) client.
@@ -11,6 +12,6 @@ A SIP (VOIP) client.
 
 #Note : build needs a customised ndk, as described at:
 #  http://code.google.com/p/csipsimple/wiki/HowToBuild
-
 Market Version:0.03-01
 Market Version Code:1108
+

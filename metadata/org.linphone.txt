@@ -1,10 +1,14 @@
-License:GPLv2+
 Category:Internet
+License:GPLv2+
 Web Site:http://www.linphone.org
 Source Code:http://www.linphone.org/eng/download/git.html
+Issue Tracker:
+
 Summary:SIP (VOIP) client
 Description:
 A SIP (VOIP) client.
 .
+
 Market Version:1.2.2
 Market Version Code:1220
+

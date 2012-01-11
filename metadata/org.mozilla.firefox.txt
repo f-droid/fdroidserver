@@ -1,10 +1,14 @@
-License:MPL
 Category:Internet
+License:MPL
 Web Site:http://www.firefox.com
 Source Code:http://hg.mozilla.org/
 Issue Tracker:
+
 Summary:Firefox Mobile
 Description:
 Firefox Mobile web browser.
 .
+
+Market Version:9.0
+Market Version Code:2011121613
 

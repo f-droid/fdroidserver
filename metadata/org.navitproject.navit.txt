@@ -1,13 +1,16 @@
-License:GPLv2
 Category:Navigation
+License:GPLv2
 Web Site:http://sourceforge.net/projects/navit/
 Source Code:http://navit.svn.sourceforge.net/viewvc/navit
 Issue Tracker:http://trac.navit-project.org/
+
 Summary:Car navigation system
 Description:
 Modular car navigation system with GPS tracking, realtime routing engine and
 support for various vector map formats. This is a beta version which may not
 work very well!
 .
+
 Market Version:navit 0.5.0
 Market Version Code:4785
+

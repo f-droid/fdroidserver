@@ -1,19 +1,20 @@
-License:GPLv3+
 Category:Multimedia
+License:GPLv3+
 Web Site:http://libre.fm
 Source Code:http://gitorious.org/foocorp/gnu-fm/trees/master/clients/libredroid
 Issue Tracker:
+
 Summary:Client for Libre.fm
 Description:
 A streaming radio player client for Libre.fm.
 .
-
-Market Version:1.4
-Market Version Code:4
 
 Repo Type:git
 Repo:git://gitorious.org/foocorp/gnu-fm.git
 
 Build Version:1.4,4,926fde6d208190a1fffef12a47bb231f908125e8,subdir=clients/libredroid
 Build Version:1.2,3,4ebfcf224745ca443a308463721e4f8001293f15,subdir=clients/libredroid
+
+Market Version:1.4
+Market Version Code:4
 

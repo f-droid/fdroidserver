@@ -1,9 +1,9 @@
-Use Built:Yes
-License:Apache2
 Category:Games
+License:Apache2
 Web Site:http://www.replicaisland.net/
 Source Code:http://code.google.com/p/replicaisland/source/checkout
 Issue Tracker:http://code.google.com/p/replicaisland/issues/list
+
 Summary:Side-scrolling platform game
 Description:
 Guide the Android robot through 40 action-packed platforming levels on a quest to
@@ -19,3 +19,4 @@ Build Version:1.4,14,7
 
 Market Version:1.4
 Market Version Code:14
+

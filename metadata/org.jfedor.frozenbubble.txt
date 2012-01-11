@@ -1,16 +1,14 @@
-Use Built:Yes
-License:GPLv2
 Category:Games
+License:GPLv2
 Web Site:http://code.google.com/p/frozenbubbleandroid/
 Source Code:http://code.google.com/p/frozenbubbleandroid/source/checkout
 Issue Tracker:http://code.google.com/p/frozenbubbleandroid/issues/list
+
 Summary:Bubble shooting game
 Description:
 A bubble shooting game. Knock the bubbles down by forming clusters of three
 or more bubbles.
 .
-Market Version:1.12
-Market Version Code:13
 
 Repo Type:svn
 Repo:http://frozenbubbleandroid.googlecode.com/svn/
@@ -19,4 +17,7 @@ Build Version:1.7,8,15
 Build Version:1.8,9,16
 Build Version:1.10,11,18
 Build Version:1.11,12,r19
+
+Market Version:1.12
+Market Version Code:13
 

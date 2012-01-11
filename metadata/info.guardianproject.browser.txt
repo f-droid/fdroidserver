@@ -1,9 +1,9 @@
-License:GPLv2
 Category:Internet
+License:GPLv2
 Web Site:https://guardianproject.info/apps/orweb/
 Source Code:https://github.com/guardianproject/orweb
 Issue Tracker:https://github.com/guardianproject/orweb/issues
-Donate:
+
 Summary:Proxy + Privacy Browser
 Description:
 Orweb is a companion browser for Orbot, the port of Tor to Android. Orweb provides anonymous and uncensored access to the web from Android devices.
@@ -14,6 +14,6 @@ Repo:git://github.com/guardianproject/Orweb.git
 
 Build Version:0.2.2,3,460a5a92bc5a426f7ff710f03bc1341359a17d4b
 
-
 Market Version:0.2.2
 Market Version Code:4
+

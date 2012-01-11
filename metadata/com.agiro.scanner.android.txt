@@ -1,6 +1,9 @@
-License:Apache2
 Category:Office
+License:Apache2
+Web Site:
 Source Code:https://github.com/pakerfeldt/aGiro
+Issue Tracker:
+
 Summary:OCR scanner for Swedish bills
 Description:
 Scans bills sent through Bankgiro or Plusgiro and send the result to a
@@ -12,8 +15,8 @@ Repo Type:git
 Repo:https://github.com/pakerfeldt/aGiro.git
 
 Build Version:alpha 2,2,!repo moved and renamed 20bd0f021dd852afcc9aa9008ee713419ae8e05c
-#Use Built:Yes
 
+#Use Built:Yes
 # The closest thing to a web site or issue tracker is this thread:
 # http://www.swedroid.se/forum/showthread.php?t=16305
 #Web Site:

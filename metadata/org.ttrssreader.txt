@@ -1,27 +1,24 @@
-Use Built:Yes
-License:GPLv3
 Category:Internet
+License:GPLv3
 Web Site:http://code.google.com/p/ttrss-reader-fork/
 Source Code:http://code.google.com/p/ttrss-reader-fork/source/checkout
 Issue Tracker:http://code.google.com/p/ttrss-reader-fork/issues/list
 Donate:http://code.google.com/p/ttrss-reader-fork/wiki/Donations
+
 Summary:An RSS reader for Tiny Tiny RSS
 Description:
 An offline reader that works with the Tiny Tiny RSS web-based feed reader/aggregator..
 .
+
 Repo Type:hg
 Repo:https://ttrss-reader-fork.googlecode.com/hg/
 
 Build Version:0.8.4,840,v0.8.4,subdir=ttrss-reader
-
 #This has the wrong version code in the repo (850 instead of 851)
 Build Version:0.8.5,850,v0.8.5,subdir=ttrss-reader
-
 Build Version:0.8.6,860,v0.8.6,subdir=ttrss-reader
-
 Build Version:0.8.8,880,5faddbaaf7,subdir=ttrss-reader
 Build Version:0.8.8,881,!Same as 880 just different code in repo
-
 Build Version:0.8.9,892,9ba20fcfb6,subdir=ttrss-reader,target=android-8
 Build Version:0.9.1,911,0.9.1,subdir=ttrss-reader,target=android-8
 # Tag is hosed for 0.9.3
@@ -34,12 +31,11 @@ Build Version:1.03,1032,c374163ba16f,subdir=ttrss-reader,target=android-8
 Build Version:1.04,1040,1.04,subdir=ttrss-reader,target=android-8
 Build Version:1.05,1050,bb0bbb042e7c,subdir=ttrss-reader,target=android-8
 Build Version:1.07,1075,1.07 (4),subdir=ttrss-reader,target=android-8
-
 #This is not building - No resource identifier found for attribute 'marginRight' in package 'android'
 #Build Version:1.08,1080,1.08,subdir=ttrss-reader,target=android-8
-
 Build Version:1.21,1210,1.21,subdir=ttrss-reader,target=android-8
 Build Version:1.22,1220,1.22,subdir=ttrss-reader,target=android-8
 
 Market Version:1.22
 Market Version Code:1220
+

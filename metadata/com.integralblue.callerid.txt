@@ -1,10 +1,9 @@
-Use Built:Yes
 Category:System
 License:GPLv3
 Web Site:http://candrews.integralblue.com/2011/04/my-first-android-app-callerid/
 Source Code:https://gitorious.org/callerid-for-android
 Issue Tracker:
-Donate:
+
 Summary:Provides caller ID
 Description:
 Uses a web service to provide information about an incoming caller based on
@@ -16,6 +15,6 @@ Repo:git://gitorious.org/callerid-for-android/mainline.git
 
 #Disabled pending figuring out how to stop it zipaligning....
 #Build Version:1.0,1,e6d5a9ac4bb24ae3866a0782f2b23d1f18eb2266,subdir=application,maven=yes,bindir=application/target,prebuild=wget http://osmdroid.googlecode.com/files/osmdroid-android-3.0.3.jar && mvn install:install-file -DgroupId=org.osmdroid -DartifactId=osmdroid -Dversion=3.0.3 -Dpackaging=jar -Dfile=osmdroid-android-3.0.3.jar
-
 Market Version:1.3
 Market Version Code:4
+

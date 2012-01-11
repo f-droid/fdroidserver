@@ -1,13 +1,14 @@
-Use Built:Yes
-License:AGPLv3
 Category:Office
+License:AGPLv3
 Web Site:http://www.funambol.com
 Source Code:https://android-client.forge.funambol.org/source/browse/android-client/
 Issue Tracker:
+
 Summary:Funambol sync client
 Description:
 Funambol sync client.
 .
+
 Repo Type:svn
 Repo:guest:x@https://android-client.forge.funambol.org/svn/android-client/
 
@@ -23,7 +24,6 @@ Build Version:10.0.6,16,2337,subdir=tags/10.0.6,update=no,initfun=yes
 #Source is now accessible, but the build is failing without an obvious error.
 #Need to look at this again.
 #Build Version:10.0.7,17,2671,subdir=tags/10.0.7,update=no,initfun=yes
-
-
 Market Version:10.0.7
 Market Version Code:17
+
