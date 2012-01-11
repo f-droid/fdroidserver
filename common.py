@@ -502,7 +502,7 @@ def parse_description(lines):
             if not text.endswith('\n') and len(text) > 0:
                 text += ' '
             text += line
-    return ''
+    return text
 
 
 class BuildException(Exception):

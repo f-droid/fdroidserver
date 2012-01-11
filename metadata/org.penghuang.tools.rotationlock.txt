@@ -1,0 +1,22 @@
+Category:System
+License:GPLv2
+Web Site:https://market.android.com/details?id=org.penghuang.tools.rotationlock
+Source Code:https://github.com/phuang/RotationLock
+Issue Tracker:https://github.com/phuang/RotationLock/issues
+
+Summary:Rotation Lock
+Description:
+Turn on/off Auto-rotate screen quickly by long pressing search button.
+
+When you are lying on bed. The screen changes to landscape. Have to open system settings to disable Auto-rotate screen. Did you find it is really inconvenient? This app provides a super easy way for switching this setting.
+And it provides a state icon to indicate the current setting.
+.
+
+Repo Type:git
+Repo:https://github.com/phuang/RotationLock
+
+Build Version:1.4,5,7c5d43c2ed17a9329abf6b6af07f150e7d0cbd5b,target=android-4
+
+Market Version:1.4
+Market Version Code:5
+
