@@ -1,11 +1,14 @@
-License:GPLv2
 Category:Games
+License:GPLv2
 Web Site:http://code.google.com/p/moonblink/wiki/Tricorder
 Source Code:http://code.google.com/p/moonblink/source/checkout
 Issue Tracker:http://code.google.com/p/moonblink/issues/list
+
 Summary:Fully functional Star Trek style Tricorder
 Description:
 Turns your Android device into a functional Tricorder in the style of Star Trek.
 .
+
 Market Version:5.12
 Market Version Code:41
+

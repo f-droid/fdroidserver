@@ -1,9 +1,10 @@
-Use Built:Yes
-License:Apache2
 Category:Office
+License:Apache2
 Web Site:http://evancharlton.com/projects/mileage/
 Source Code:http://evancharlton.com/projects/mileage/source/
+Issue Tracker:
 Donate:http://evancharlton.com/donate/
+
 Summary:A Mileage tracker
 Description:
 A Mileage tracker for an Android-based phone. Allows importing and
@@ -17,6 +18,6 @@ Repo:http://hg.evancharlton.com/mileage
 Build Version:3.0.0,3000,0766c4f352a5,subdir=trunk,oldsdkloc=yes
 Build Version:3.0.8,3080,!No source in repo
 
-
 Market Version:3.0.8
 Market Version Code:3080
+

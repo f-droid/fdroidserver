@@ -1,20 +1,21 @@
-License:Apache2
 Category:System
+License:Apache2
 Web Site:http://code.google.com/p/connectbot/
 Source Code:http://github.com/kruton/connectbot/
 Issue Tracker:http://code.google.com/p/connectbot/issues/list
+
 Summary:SSH and local shell client
 Description:
 An SSH and telnet client, and terminal emulator for local shell.
 Supports multiple sessions, including running them concurrently.
 .
-Market Version:1.7.1
-Market Version Code:323
+
 Repo Type:git
 Repo:git://github.com/kruton/connectbot.git
 
+Market Version:1.7.1
+Market Version Code:323
 
 #Can't build these versions with SDK tools r7 due to build.xml issues
 #Build Version:1.7.1,323,19fbcefef5251cdfac97
 #Build Version:1.7.0,314,5fbae7cc763edf1056c4
-

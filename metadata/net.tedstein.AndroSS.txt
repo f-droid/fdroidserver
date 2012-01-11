@@ -1,14 +1,14 @@
-Use Built:Yes
-License:GPLv2
 Category:System
+License:GPLv2
 Web Site:https://github.com/tstein/AndroSS
 Source Code:https://github.com/tstein/AndroSS
 Issue Tracker:https://github.com/tstein/AndroSS/issues
-Donate:
+
 Summary:Screenshot application
 Description:
 Screenshot application.
 .
+
 Requires Root:Yes
 
 Repo Type:git
@@ -22,3 +22,4 @@ Build Version:0.3.2,13,v0.3.2,buildjni=yes,target=android-8
 
 Market Version:0.4.2
 Market Version Code:16
+

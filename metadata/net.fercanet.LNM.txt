@@ -1,14 +1,14 @@
-Use Built:Yes
-License:GPLv3
 Category:Games
+License:GPLv3
 Web Site:http://learnmusicnotes.sourceforge.net/
 Source Code:http://sourceforge.net/projects/learnmusicnotes/develop
 Issue Tracker:http://sourceforge.net/tracker/?group_id=371992
-Donate:
+
 Summary:Music sight reading training game
 Description:
 A simple game to assist with music sight reading training.
 .
+
 Repo Type:svn
 Repo:https://learnmusicnotes.svn.sourceforge.net/svnroot/learnmusicnotes/trunk
 
@@ -17,3 +17,4 @@ Build Version:1.4,5,!No source for this version in the repo
 
 Market Version:1.4
 Market Version Code:5
+

@@ -1,14 +1,15 @@
-Use Built:Yes
-License:GPLv2+
 Category:Internet
+License:GPLv2+
 Web Site:https://github.com/tcoxon/XkcdViewer
 Source Code:https://github.com/tcoxon/XkcdViewer
 Issue Tracker:https://github.com/tcoxon/XkcdViewer/issues
+
 Summary:Viewer for the xkcd.com webcomic
 Description:
 Shows comics from xkcd.com, including alt-text. Also provides
 support for bookmarks and easy navigation.
 .
+
 Repo Type:git
 Repo:https://github.com/tcoxon/XkcdViewer.git
 
@@ -18,3 +19,4 @@ Build Version:3.0.2,21,v3.0.2,target=android-10
 
 Market Version:3.0.2
 Market Version Code:21
+

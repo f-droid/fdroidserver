@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# checkmarket2.py - part of the FDroid server tools
+# rewritemeta.py - part of the FDroid server tools
 # Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
@@ -40,39 +40,9 @@ parser.add_option("-v", "--verbose", action="store_true", default=False,
 # Get all apps...
 apps = common.read_metadata(options.verbose)
 
-html_parser = HTMLParser.HTMLParser()
-
 for app in apps:
-
-    print "Processing " + app['id']
-    url = 'http://market.android.com/details?id=' + app['id']
-    page = urllib.urlopen(url).read()
-
-    version = None
-    vercode = None
-
-    m = re.search('<dd itemprop="softwareVersion">([^>]+)</dd>', page)
-    if m:
-        version = html_parser.unescape(m.group(1))
-
-    m = re.search('data-paramValue="(\d+)"><div class="goog-menuitem-content">Latest Version<', page)
-    if m:
-        vercode = m.group(1)
-
-    if not vercode:
-        print "...couldn't find version code"
-    elif not version:
-        print "...couldn't find version"
-    elif vercode == app['Market Version Code'] and version == app['Market Version']:
-        print "...up to date"
-    else:
-        print '...updating to version:' + version + ' vercode:' + vercode
-        app['Market Version'] = version
-        app['Market Version Code'] = vercode
-        metafile = os.path.join('metadata', app['id'] + '.txt')
-        common.write_metadata(metafile, app)
-
-    time.sleep(5)
+    print "Writing " + app['id']
+    common.write_metadata(os.path.join('metadata', app['id']) + '.txt', app)
 
 print "Finished."
 

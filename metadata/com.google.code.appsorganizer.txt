@@ -1,9 +1,10 @@
-License:GPLv3+
 Category:System
+License:GPLv3+
 Web Site:http://sites.google.com/site/appsorganizer/
 Source Code:http://code.google.com/p/appsorganizer/source/checkout
 Issue Tracker:http://code.google.com/p/appsorganizer/issues/list
 Donate:http://sites.google.com/site/appsorganizer/donate
+
 Summary:Organize applications using labels
 Description:
 Apps Organizer allows you to organize installed applications using
@@ -22,3 +23,4 @@ Build Version:1.5.19,167,191,subdir=AppsOrganizer,target=android-10
 
 Market Version:1.5.19
 Market Version Code:167
+

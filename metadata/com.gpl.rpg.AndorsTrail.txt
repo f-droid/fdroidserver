@@ -1,9 +1,10 @@
-Name:Andor's Trail
+Category:Games
 License:GPLv2
 Web Site:http://andors.techby2guys.com/
 Source Code:http://code.google.com/p/andors-trail/
 Issue Tracker:http://code.google.com/p/andors-trail/issues/list
-Category:Games
+
+Name:Andor's Trail
 Summary:Quest-driven Roguelike fantasy dungeon crawler RPG.
 Description:
 Quest-driven Roguelike fantasy dungeon crawler RPG with a powerful story.
@@ -26,3 +27,4 @@ Build Version:0.6.10,25,192,subdir=AndorsTrail
 
 Market Version:0.6.10
 Market Version Code:25
+

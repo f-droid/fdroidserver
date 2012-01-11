@@ -1,14 +1,15 @@
-License:GPL3+
+AntiFeatures:Ads
 Category:System
+License:GPL3+
 Web Site:https://code.google.com/p/callmeter/
 Source Code:http://github.com/felixb/callmeter
 Issue Tracker:https://code.google.com/p/callmeter/issues/list
+
 Summary:keep track of calls, messages and data transfer
 Description:
 CallMeter is an Android application summing up your call and text logs. Different billing modes and periods are take into account on summing. 
 .
 
-AntiFeatures:Ads
-
 Market Version:3.0
 Market Version Code:2836
+

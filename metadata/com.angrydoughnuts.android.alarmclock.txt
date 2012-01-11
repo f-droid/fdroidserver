@@ -1,9 +1,9 @@
-Use Built:Yes
-License:Apache2
 Category:Office
+License:Apache2
 Web Site:https://code.google.com/p/kraigsandroid/
 Source Code:https://code.google.com/p/kraigsandroid/source/checkout
 Issue Tracker:https://code.google.com/p/kraigsandroid/issues/list
+
 Summary:An alarm clock
 Description:
 An alarm clock.
@@ -16,3 +16,4 @@ Build Version:1.7,8,378
 
 Market Version:1.7
 Market Version Code:8
+

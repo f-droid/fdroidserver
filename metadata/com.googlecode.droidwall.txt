@@ -1,16 +1,15 @@
-Use Built:Yes
 Category:System
 License:GPLv3
 Web Site:http://code.google.com/p/droidwall/
 Source Code:http://code.google.com/p/droidwall/source/checkout
 Issue Tracker:http://code.google.com/p/droidwall/issues/list
+
 Summary:Firewall
 Description:
 A Firewall frontend based on iptables
 
 NOTE: Root access is required to use this application.
 .
-
 
 Requires Root:Yes
 
@@ -23,6 +22,6 @@ Build Version:1.4.8,148,156
 Build Version:1.5.3,153,219
 Build Version:1.5.6,156,245,target=android-8
 
-
 Market Version:1.5.6
 Market Version Code:156
+

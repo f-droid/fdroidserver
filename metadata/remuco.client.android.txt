@@ -1,9 +1,10 @@
-License:GPLv3
 Category:Multimedia
+License:GPLv3
 Web Site:https://code.google.com/p/remuco/
 Source Code:https://code.google.com/p/remuco/source/browse/
 Issue Tracker:https://code.google.com/p/remuco/wiki/Issues?tm=3
 Donate:http://flattr.com/thing/141543/Remuco
+
 Summary:Remote control for Linux media players
 Description:
 Remuco is a duplex remote control system for Linux media players and mobile

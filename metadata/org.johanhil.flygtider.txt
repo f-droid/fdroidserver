@@ -1,16 +1,17 @@
-License:Apache2
 Category:Office
+License:Apache2
 Web Site:http://code.google.com/p/flygtider/
 Source Code:http://code.google.com/p/flygtider/source/checkout
 Issue Tracker:http://code.google.com/p/flygtider/issues/list
+
 Summary:Flight status info for Swedish airports
 Description:
 Flygtider is an Android application that lists information about flights
 arriving to/departing from most Swedish airports.
 .
+
 Repo Type:svn
 Repo:http://flygtider.googlecode.com/svn/trunk
-Use Built:Yes
 
 # Several versions, including the one available in the market, are
 # missing from the Subversion repository.
@@ -19,3 +20,4 @@ Build Version:0.61,8,!This version was never committed
 
 Market Version:0.61
 Market Version Code:8
+

@@ -1,10 +1,14 @@
-License:Apache2
 Category:Internet
+License:Apache2
 Web Site:http://gorry.haun.org/android/aicia/
 Source Code:http://gorry.haun.org/android/aicia/dist/old/
+Issue Tracker:
+
 Summary:IRC client
 Description:
 Internet Relay Chat client with a twin-pane view.
 .
+
 Market Version:2011.0622.1
 Market Version Code:201106221
+

@@ -1,12 +1,15 @@
-License:GPLv3
 Category:Games
+License:GPLv3
 Web Site:http://code.google.com/p/mandelbrot/
 Source Code:http://code.google.com/p/mandelbrot/source/checkout
 Issue Tracker:
+
 Summary:Mandelbrot set viewer
 Description:
 Mandelbrot set viewer that works in the style of a map viewer - i.e. scroll around
 and zoom in/out.
 .
+
 Market Version:0.13
 Market Version Code:13
+

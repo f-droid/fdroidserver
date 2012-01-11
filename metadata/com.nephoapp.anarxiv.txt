@@ -1,11 +1,14 @@
-License:Apache2
 Category:Internet
+License:Apache2
 Web Site:http://www.nephoapp.com/
 Source Code:https://github.com/nephoapp/anarxiv
 Issue Tracker:
+
 Summary:arxiv.org client
 Description:
 Browse papers released on arxiv.org
 .
+
 Market Version:0.3
 Market Version Code:3
+

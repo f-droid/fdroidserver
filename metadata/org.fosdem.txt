@@ -1,13 +1,14 @@
-Use Built:Yes
-License:GPL
 Category:Office
+License:GPL
 Web Site:http://fosdem.org
 Source Code:http://sourceforge.net/projects/fosdem-android/develop
 Issue Tracker:http://sourceforge.net/tracker/?group_id=283580
+
 Summary:FOSDEM schedule
 Description:
 FOSDEM schedule application.
 .
+
 Repo Type:svn
 Repo:http://fosdem-android.svn.sourceforge.net/svnroot/fosdem-android
 
@@ -16,3 +17,4 @@ Build Version:1.0.3,5,!Source for this market version not in repo
 
 Market Version:1.0.3
 Market Version Code:5
+

@@ -1,8 +1,9 @@
-Use Built:Yes
-License:MIT
 Category:System
+License:MIT
 Web Site:https://github.com/handschuh/Slight-backup
 Source Code:https://github.com/handschuh/Slight-backup
+Issue Tracker:
+
 Summary:A very simple backup program.
 Description:
 A very simple program that can be used to backup
@@ -22,3 +23,4 @@ Build Version:0.4.3,13,093cf46438b95cc379139792f7093739dcdfc2a7,target=android-1
 
 Market Version:0.4.3
 Market Version Code:13
+

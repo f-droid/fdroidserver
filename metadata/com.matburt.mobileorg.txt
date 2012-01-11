@@ -1,8 +1,9 @@
-License:GPLv2
 Category:Office
+License:GPLv2
 Web Site:https://github.com/matburt/mobileorg-android/wiki
-Issue Tracker:https://github.com/matburt/mobileorg-android/issues
 Source Code:https://github.com/matburt/mobileorg-android
+Issue Tracker:https://github.com/matburt/mobileorg-android/issues
+
 Summary:TODO/task management application
 Description:
 TODO/task management based on emacs org-mode files.
@@ -13,6 +14,6 @@ Repo:https://github.com/matburt/mobileorg-android.git
 
 #Needs dropbox consumer key
 #Build Version:0.5.2,51,38dfe967ee99c71b12b8
-
 Market Version:0.7.1
 Market Version Code:71
+

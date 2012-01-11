@@ -1,9 +1,9 @@
-License:GPLv3
 Category:Internet
+License:GPLv3
 Web Site:http://www.seeks-project.info/site/
 Source Code:https://github.com/sileht/SeeksWidget
 Issue Tracker:http://redmine.seeks-project.info/projects/seeks
-Donate:
+
 Summary:Widget for Seeks web service
 Description:
 A widget for the Seeks web service, a decentralised search engine.
@@ -16,3 +16,4 @@ Build Version:1.2,4,1.2
 
 Market Version:1.2
 Market Version Code:4
+

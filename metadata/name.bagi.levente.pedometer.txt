@@ -1,9 +1,9 @@
-Use Built:Yes
-License:GPLv3
 Category:Navigation
+License:GPLv3
 Web Site:https://code.google.com/p/pedometer/
 Source Code:https://github.com/bagilevi/android-pedometer
 Issue Tracker:https://code.google.com/p/pedometer/issues/list
+
 Summary:Pedometer
 Description:
 A step counter with speed, distance, steps-per-minute and text-to-speech.
@@ -13,5 +13,7 @@ Repo Type:git
 Repo:https://github.com/bagilevi/android-pedometer.git
 
 Build Version:1.4.1,6,1.4.1
+
 Market Version:1.4.1
 Market Version Code:6
+

@@ -1,8 +1,9 @@
-License:GPLv2
 Category:Office
+License:GPLv2
 Web Site:http://financisto.com/
 Source Code:http://bazaar.launchpad.net/~financisto-dev/financisto/trunk/files
 Issue Tracker:https://bugs.launchpad.net/financisto
+
 Summary:Personal finance manager
 Description:
 Personal finance manager
@@ -19,6 +20,8 @@ Personal finance manager
 Repo Type:bzr
 Repo:lp:financisto
 
+Market Version:1.5.4u1
+Market Version Code:59
+
 # Build fails, wrong path to GreenDroid library
 #Build Version:1.5.4,57,303,target=android-4
-
