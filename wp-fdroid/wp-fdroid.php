@@ -17,58 +17,58 @@ include('android-permissions.php');
 class FDroid
 {
 
-    // Our text domain, for internationalisation
-    private $textdom='wp-fdroid';
+	// Our text domain, for internationalisation
+	private $textdom='wp-fdroid';
 
 	private $site_path;
 
-    // Constructor
-    function FDroid() {
-        // Add filters etc here!
-        add_shortcode('fdroidrepo',array($this, 'do_shortcode'));
-        add_filter('query_vars',array($this, 'queryvars'));
-        $this->inited=false;
-        $this->site_path=getenv('DOCUMENT_ROOT');
-    }
+	// Constructor
+	function FDroid() {
+		// Add filters etc here!
+		add_shortcode('fdroidrepo',array($this, 'do_shortcode'));
+		add_filter('query_vars',array($this, 'queryvars'));
+		$this->inited=false;
+		$this->site_path=getenv('DOCUMENT_ROOT');
+	}
 
 
-    // Register additional query variables. (Handler for the 'query_vars' filter)
-    function queryvars($qvars) {
-        $qvars[]='fdfilter';
-        $qvars[]='fdid';
-        $qvars[]='fdpage';
-        $qvars[]='fdstyle';
-        return $qvars;
-    }
+	// Register additional query variables. (Handler for the 'query_vars' filter)
+	function queryvars($qvars) {
+		$qvars[]='fdfilter';
+		$qvars[]='fdid';
+		$qvars[]='fdpage';
+		$qvars[]='fdstyle';
+		return $qvars;
+	}
 
 
-    // Lazy initialise. All non-trivial members should call this before doing anything else.
-    function lazyinit() {
-        if(!$this->inited) {
-            load_plugin_textdomain($this->textdom, PLUGINDIR.'/'.dirname(plugin_basename(__FILE__)), dirname(plugin_basename(__FILE__)));
+	// Lazy initialise. All non-trivial members should call this before doing anything else.
+	function lazyinit() {
+		if(!$this->inited) {
+			load_plugin_textdomain($this->textdom, PLUGINDIR.'/'.dirname(plugin_basename(__FILE__)), dirname(plugin_basename(__FILE__)));
 
-            $this->inited=true;
-        }
-    }
+			$this->inited=true;
+		}
+	}
 
-    // Gets a required query parameter by name.
-    function getrequiredparam($name) {
-        global $wp_query;
-        if(!isset($wp_query->query_vars[$name]))
-            wp_die("Missing parameter ".$name,"Error");
-        return $wp_query->query_vars[$name];
-    }
+	// Gets a required query parameter by name.
+	function getrequiredparam($name) {
+		global $wp_query;
+		if(!isset($wp_query->query_vars[$name]))
+			wp_die("Missing parameter ".$name,"Error");
+		return $wp_query->query_vars[$name];
+	}
 
-    // Handler for the 'fdroidrepo' shortcode.
-    //  $attribs - shortcode attributes
-    //  $content - optional content enclosed between the starting and
-    //             ending shortcode
-    // Returns the generated content.
-    function do_shortcode($attribs,$content=null) {
-        global $wp_query,$wp_rewrite;
-        $this->lazyinit();
+	// Handler for the 'fdroidrepo' shortcode.
+	//  $attribs - shortcode attributes
+	//  $content - optional content enclosed between the starting and
+	//			 ending shortcode
+	// Returns the generated content.
+	function do_shortcode($attribs,$content=null) {
+		global $wp_query,$wp_rewrite;
+		$this->lazyinit();
 
-		
+
 		// Init local query vars
 		foreach($this->queryvars(array()) as $qv) {
 			if(array_key_exists($qv,$wp_query->query_vars)) {
@@ -77,7 +77,7 @@ class FDroid
 				$query_vars[$qv] = null;
 			}
 		}
-	
+
 		// Santiy check query vars
 		if(!isset($query_vars['fdpage']) || !is_numeric($query_vars['fdpage']) || $query_vars['fdpage'] <= 0) {
 			$query_vars['fdpage'] = 1;
@@ -90,131 +90,131 @@ class FDroid
 		}
 
 		if($query_vars['fdid']!==null) {
-            $out.=$this->get_app($query_vars);
+			$out.=$this->get_app($query_vars);
 		} else {
 			if($query_vars['fdfilter'] !== null)
 				$out.=$this->show_search($query_vars);
 
-            $out.=$this->get_apps($query_vars);
+			$out.=$this->get_apps($query_vars);
 		}
-        return $out;
+		return $out;
 
-    }
+	}
 
 
-    function get_app($query_vars) {
+	function get_app($query_vars) {
 		$permissions_data = get_android_permissions_array($this->site_path.'/repo/AndroidManifest.xml', $this->site_path.'/repo/strings.xml', $this->site_path.'/repo/android-permissions.cache');
 
-        $xml = simplexml_load_file($this->site_path.'/repo/index.xml');
-        foreach($xml->children() as $app) {
+		$xml = simplexml_load_file($this->site_path.'/repo/index.xml');
+		foreach($xml->children() as $app) {
 
-            $attrs=$app->attributes();
-            if($attrs['id']==$query_vars['fdid']) {
-                $apks=array();;
-                foreach($app->children() as $el) {
-                    switch($el->getName()) {
-                        case "name":
-                            $name=$el;
-                            break;
-                        case "icon":
-                            $icon=$el;
-                            break;
-                        case "summary":
-                            $summary=$el;
-                            break;
-                        case "description":
-                            $desc=$el;
-                            break;
-                        case "license":
-                            $license=$el;
-                            break;
-                        case "source":
-                            $source=$el;
-                            break;
-                        case "tracker":
-                            $issues=$el;
-                            break;
-                        case "donate":
-                            $donate=$el;
-                            break;
-                        case "web":
-                            $web=$el;
-                            break;
-                        case "package":
-                            $thisapk=array();
-                            foreach($el->children() as $pel) {
-                                switch($pel->getName()) {
-                                case "version":
-                                    $thisapk['version']=$pel;
-                                    break;
-                                case "vercode":
-                                    $thisapk['vercode']=$pel;
-                                    break;
-                                case "apkname":
-                                    $thisapk['apkname']=$pel;
-                                    break;
-                                case "srcname":
-                                    $thisapk['srcname']=$pel;
-                                    break;
-                                case "hash":
-                                    $thisapk['hash']=$pel;
-                                    break;
-                                case "size":
-                                    $thisapk['size']=$pel;
-                                    break;
-                                case "sdkver":
-                                    $thisapk['sdkver']=$pel;
-                                    break;
-                                case "permissions":
-                                    $thisapk['permissions']=$pel;
-                                    break;
-                                }
-                            }
-                            $apks[]=$thisapk;
+			$attrs=$app->attributes();
+			if($attrs['id']==$query_vars['fdid']) {
+				$apks=array();;
+				foreach($app->children() as $el) {
+					switch($el->getName()) {
+						case "name":
+							$name=$el;
+							break;
+						case "icon":
+							$icon=$el;
+							break;
+						case "summary":
+							$summary=$el;
+							break;
+						case "description":
+							$desc=$el;
+							break;
+						case "license":
+							$license=$el;
+							break;
+						case "source":
+							$source=$el;
+							break;
+						case "tracker":
+							$issues=$el;
+							break;
+						case "donate":
+							$donate=$el;
+							break;
+						case "web":
+							$web=$el;
+							break;
+						case "package":
+							$thisapk=array();
+							foreach($el->children() as $pel) {
+								switch($pel->getName()) {
+								case "version":
+									$thisapk['version']=$pel;
+									break;
+								case "vercode":
+									$thisapk['vercode']=$pel;
+									break;
+								case "apkname":
+									$thisapk['apkname']=$pel;
+									break;
+								case "srcname":
+									$thisapk['srcname']=$pel;
+									break;
+								case "hash":
+									$thisapk['hash']=$pel;
+									break;
+								case "size":
+									$thisapk['size']=$pel;
+									break;
+								case "sdkver":
+									$thisapk['sdkver']=$pel;
+									break;
+								case "permissions":
+									$thisapk['permissions']=$pel;
+									break;
+								}
+							}
+							$apks[]=$thisapk;
 
-                    }
-                }
+					}
+				}
 
-                $out='<div id="appheader">';
-                $out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$icon.'" width=48></div>';
-                $out.='<p><span style="font-size:20px">'.$name."</span>";
-                $out.="<br>".$summary."</p>";
-                $out.="</div>";
+				$out='<div id="appheader">';
+				$out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$icon.'" width=48></div>';
+				$out.='<p><span style="font-size:20px">'.$name."</span>";
+				$out.="<br>".$summary."</p>";
+				$out.="</div>";
 
-                $out.="<p>".$desc."</p>";
+				$out.="<p>".$desc."</p>";
 
-                $out.="<p><b>License:</b> ".$license."</p>";
+				$out.="<p><b>License:</b> ".$license."</p>";
 
-                $out.="<p>";
-                if(strlen($web)>0)
-                    $out.='<b>Website:</b> <a href="'.$web.'">'.$web.'</a><br />';
-                if(strlen($issues)>0)
-                    $out.='<b>Issue Tracker:</b> <a href="'.$issues.'">'.$issues.'</a><br />';
-                if(strlen($source)>0)
-                    $out.='<b>Source Code:</b> <a href="'.$source.'">'.$source.'</a><br />';
-                if($donate && strlen($donate)>0)
-                    $out.='<b>Donate:</b> <a href="'.$donate.'">'.$donate.'</a><br />';
-                $out.="</p>";
+				$out.="<p>";
+				if(strlen($web)>0)
+					$out.='<b>Website:</b> <a href="'.$web.'">'.$web.'</a><br />';
+				if(strlen($issues)>0)
+					$out.='<b>Issue Tracker:</b> <a href="'.$issues.'">'.$issues.'</a><br />';
+				if(strlen($source)>0)
+					$out.='<b>Source Code:</b> <a href="'.$source.'">'.$source.'</a><br />';
+				if($donate && strlen($donate)>0)
+					$out.='<b>Donate:</b> <a href="'.$donate.'">'.$donate.'</a><br />';
+				$out.="</p>";
 
 				$out.='<script type="text/javascript">';
 				$out.='function showHidePermissions(id) {';
 				$out.='  if(document.getElementById(id).style.display==\'none\')';
-				$out.='    document.getElementById(id).style.display=\'block\';';
+				$out.='	document.getElementById(id).style.display=\'block\';';
 				$out.='  else';
-				$out.='    document.getElementById(id).style.display=\'none\';';
+				$out.='	document.getElementById(id).style.display=\'none\';';
 				$out.='  return false;';
 				$out.='}';
 				$out.='</script>';
-				
-                $out.="<h3>Packages</h3>";
+
+				$out.="<h3>Packages</h3>";
 				$i=0;
-                foreach($apks as $apk) {
-                    $out.="<p><b>Version ".$apk['version']."</b><br />";
-                    $out.='<a href="http://f-droid.org/repo/'.$apk['apkname'].'">download apk</a> ';
-                    $out.=$apk['size']." bytes";
-                    if($apk['srcname'])
-                        $out.='<br><a href="http://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a>';
-					
+				foreach($apks as $apk) {
+					$out.="<p><b>Version ".$apk['version']."</b><br />";
+					$out.='<a href="http://f-droid.org/repo/'.$apk['apkname'].'">download apk</a> ';
+					$out.=$apk['size']." bytes";
+					if($apk['srcname'])
+						$out.='<br><a href="http://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a>';
+
 					/*if($i==0)
 						$divStyleDisplay='block';
 					else*/
@@ -235,10 +235,10 @@ class FDroid
 
 								return strcmp($aProtectionLevel, $bProtectionLevel);
 							}
-						
+
 							$aGroup = $permissions_data['permission'][$a]['permissionGroup'];
 							$bGroup = $permissions_data['permission'][$b]['permissionGroup'];
-							
+
 							if($aGroup != $bGroup) {
 								return strcmp($aGroup, $bGroup);
 							}
@@ -246,7 +246,7 @@ class FDroid
 							return strcmp($a, $b);
 						}
 					);
-					
+
 					$permission_group_last = '';
 					foreach($permissions as $permission) {
 						$permission_group = $permissions_data['permission'][$permission]['permissionGroup'];
@@ -256,7 +256,7 @@ class FDroid
 							$out.='<strong>'.strtoupper($permission_group_label).'</strong><br/>';
 							$permission_group_last = $permission_group;
 						}
-					
+
 						$out.=$this->get_permission_protection_level_icon($permissions_data['permission'][$permission]['protectionLevel']).' ';
 						$out.='<strong>'.$permissions_data['permission'][$permission]['label'].'</strong> [<code>'.$permission.'</code>]<br/>';
 						if($permissions_data['permission'][$permission]['description']) $out.=$permissions_data['permission'][$permission]['description'].'<br/>';
@@ -264,18 +264,18 @@ class FDroid
 						$out.='<br/>';
 					}
 					$out.='</div>';
-						
-                    $out.='</p>';
+
+					$out.='</p>';
 					$i++;
-                }
+				}
 
-                $out.='<hr><p><a href="'.makelink($query_vars,array('fdid'=>null)).'">Index</a></p>';
+				$out.='<hr><p><a href="'.makelink($query_vars,array('fdid'=>null)).'">Index</a></p>';
 
-                return $out;
-            }
-        }
-        return "<p>Application not found</p>";
-    }
+				return $out;
+			}
+		}
+		return "<p>Application not found</p>";
+	}
 
 	private function get_permission_protection_level_icon($protection_level) {
 		if($protection_level=='dangerous')
@@ -290,13 +290,13 @@ class FDroid
 		{
 			return '<span style="color:#33AA33;font-size:130%;">&#x2699;</span>';
 		}
-	}	
+	}
 
-    function get_apps($query_vars) {
+	function get_apps($query_vars) {
 
-	    $xml = simplexml_load_file($this->site_path."/repo/index.xml");
+		$xml = simplexml_load_file($this->site_path."/repo/index.xml");
 		$matches = $this->show_apps($xml,$query_vars,$numpages);
-	
+
 		$out='';
 
 		if(($query_vars['fdfilter']===null || $query_vars['fdfilter']!='') && $numpages>0)
@@ -314,11 +314,11 @@ class FDroid
 			$out.='</div>';
 
 			$out.='<br break="all"/>';
-		} 
-		
+		}
+
 		if($numpages>0) {
 			$out.=$matches;
-			
+
 			$out.='<hr><p>';
 			if($query_vars['fdpage']==1) {
 				$out.="&lt;&lt;first ";
@@ -340,11 +340,11 @@ class FDroid
 			$out.='<p>No matches</p>';
 		}
 
-        return $out;
-    }
+		return $out;
+	}
 
-	
-    function show_search($query_vars) {
+
+	function show_search($query_vars) {
 
 		$out='';
 		$out.='<form name="searchform" action="" method="get">';
@@ -356,67 +356,67 @@ class FDroid
 			if($value !== null && $name != 'fdfilter')
 				$out.='<input type="hidden" name="'.$name.'" value="'.$value.'">';
 		}
-		
-		$out.='</form>'."\n";
-		
-        return $out;
-    }
-	
 
-    function show_apps($xml,$query_vars,&$numpages) {
-	
-        $skipped=0;
-        $got=0;
-        $total=0;
+		$out.='</form>'."\n";
+
+		return $out;
+	}
+
+
+	function show_apps($xml,$query_vars,&$numpages) {
+
+		$skipped=0;
+		$got=0;
+		$total=0;
 
 		if($query_vars['fdstyle']=='grid') {
 			$outputter = new FDOutGrid();
 		} else {
 			$outputter = new FDOutList();
 		}
-		
+
 		$out = "";
-		
+
 		$out.=$outputter->outputStart();
-		
-        foreach($xml->children() as $app) {
 
-            if($app->getName() == 'repo') continue;
-            $appinfo['attrs']=$app->attributes();
-            $appinfo['id']=$appinfo['attrs']['id'];
-            foreach($app->children() as $el) {
-                switch($el->getName()) {
-                    case "name":
-                        $appinfo['name']=$el;
-                        break;
-                    case "icon":
-                        $appinfo['icon']=$el;
-                        break;
-                    case "summary":
-                        $appinfo['summary']=$el;
-                        break;
-                    case "license":
-                        $appinfo['license']=$el;
-                        break;
-                }
-            }
+		foreach($xml->children() as $app) {
 
-            if($query_vars['fdfilter']===null || $query_vars['fdfilter']!='' && (stristr($appinfo['name'],$query_vars['fdfilter']) || stristr($appinfo['summary'],$query_vars['fdfilter']))) {
-                if($skipped<($query_vars['fdpage']-1)*$outputter->perpage) {
-                    $skipped++;
-                } else if($got<$outputter->perpage) {
+			if($app->getName() == 'repo') continue;
+			$appinfo['attrs']=$app->attributes();
+			$appinfo['id']=$appinfo['attrs']['id'];
+			foreach($app->children() as $el) {
+				switch($el->getName()) {
+					case "name":
+						$appinfo['name']=$el;
+						break;
+					case "icon":
+						$appinfo['icon']=$el;
+						break;
+					case "summary":
+						$appinfo['summary']=$el;
+						break;
+					case "license":
+						$appinfo['license']=$el;
+						break;
+				}
+			}
+
+			if($query_vars['fdfilter']===null || $query_vars['fdfilter']!='' && (stristr($appinfo['name'],$query_vars['fdfilter']) || stristr($appinfo['summary'],$query_vars['fdfilter']))) {
+				if($skipped<($query_vars['fdpage']-1)*$outputter->perpage) {
+					$skipped++;
+				} else if($got<$outputter->perpage) {
 					$out.=$outputter->outputEntry($query_vars, $appinfo);
-                    $got++;
-                }
-                $total++;
-            }
+					$got++;
+				}
+				$total++;
+			}
 
-        }
-		
+		}
+
 		$out.=$outputter->outputEnd();
-		
+
 		$numpages = ceil((float)$total/$outputter->perpage);
-		
+
 		return $out;
 	}
 }
@@ -432,7 +432,7 @@ class FDOutList
 	function outputStart() {
 		return '';
 	}
-	
+
 	function outputEntry($query_vars, $appinfo) {
 		$out="";
 		$out.="<hr>\n";
@@ -451,7 +451,7 @@ class FDOutList
 		$out.="<br>".$appinfo['summary']."</p>\n";
 
 		$out.="</div>\n";
-		
+
 		return $out;
 	}
 
@@ -473,7 +473,7 @@ class FDOutGrid
 	function outputStart() {
 		return "\n".'<table border="0" width="100%"><tr>'."\n";
 	}
-	
+
 	function outputEntry($query_vars, $appinfo) {
 		$link=makelink($query_vars, array('fdid'=>$appinfo['id']));
 
@@ -496,7 +496,7 @@ class FDOutGrid
 		$out.="</div>";
 		$out.='</p>';
 		$out.="</td>\n";
-		
+
 		$this->itemCount++;
 		return $out;
 	}

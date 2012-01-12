@@ -19,21 +19,21 @@ function get_android_permissions_array($android_manifest_file_path, $android_str
 		$cache_file_stat = stat($cache_file_path);
 		$cache_file_mtime = $cache_file_stat['mtime'];
 	}
-	
+
 	// If the cache is fresh, use it instead
 	if($android_manifest_file_mtime < $cache_file_mtime && $android_strings_file_mtime < $cache_file_mtime ) {
 		$cache_file_handle = fopen($cache_file_path, 'r');
 		$cache_file_content = fread($cache_file_handle, filesize($cache_file_path));
 		fclose($cache_file_handle);
-		
+
 		$permissions = unserialize($cache_file_content);
-		
+
 		return $permissions;
 	}
 
 	// We are updating the cache, touch the file (note: race condition possible between stating the cache file above and this line...)
 	touch($cache_file_path);
-	
+
 	// Get permission raw data from XML
 	$manifestDoc = new DOMDocument;
 	$manifestDoc->load($android_manifest_file_path);
@@ -42,7 +42,7 @@ function get_android_permissions_array($android_manifest_file_path, $android_str
 	$stringsDoc = new DOMDocument;
 	$stringsDoc->load($android_strings_file_path);
 	$stringsXpath = new DOMXPath($stringsDoc);
-	
+
 	$comment = '';
 	foreach ($manifestXpath->query('node()') as $node) {
 		// Save permissions and permission groups from tags
@@ -67,18 +67,18 @@ function get_android_permissions_array($android_manifest_file_path, $android_str
 				$descriptionStringObject = $stringsXpath->query('//string[@name="'.$descriptionName.'"]');
 				$descriptionString = ucfirst($descriptionStringObject->item(0)->nodeValue);
 			}
-			
+
 			$permissions[$node->nodeName][$name]['label'] = stripslashes($labelString);
 			$permissions[$node->nodeName][$name]['description'] = stripslashes($descriptionString);
 			$permissions[$node->nodeName][$name]['comment'] = stripslashes(str_replace(array("\r\n", "\r", "\n", "\t", '  '), '', $comment));
-			
+
 			if($node->nodeName == 'permission') {
 				$permissionGroupObject = $node->attributes->getNamedItem('permissionGroup');
 				$permissionGroup = 'none';
 				if($permissionGroupObject !== NULL) {
 					$permissionGroup = substr(strrchr($permissionGroupObject->value,'.'), 1);
 				}
-				
+
 				$permissions[$node->nodeName][$name]['permissionGroup'] = $permissionGroup;
 				$permissions[$node->nodeName][$name]['protectionLevel'] = $node->attributes->getNamedItem('protectionLevel')->value;
 			}
@@ -97,7 +97,7 @@ function get_android_permissions_array($android_manifest_file_path, $android_str
 	$cache_file_handle = fopen($cache_file_path, 'w');
 	fwrite($cache_file_handle, serialize($permissions));
 	fclose($cache_file_handle);
-	
+
 	return $permissions;
 }
 ?>
