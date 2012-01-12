@@ -1,0 +1,16 @@
+Category:Games
+License:GPLv3
+Web Site:https://gitorious.org/chesswalk
+Source Code:https://gitorious.org/chesswalk
+Issue Tracker:
+
+Summary:Chess game and FICS client
+Description:
+Play chess offline, or play online at FICS.
+.
+
+Repo Type:git
+Repo:https://git.gitorious.org/chesswalk/chesswalk.git
+
+Build Version:1.5,7,4007173d
+
