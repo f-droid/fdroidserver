@@ -1,0 +1,19 @@
+Category:System
+License:GPLv3
+Web Site:https://code.google.com/p/droid-notify/
+Source Code:https://code.google.com/p/droid-notify/source/browse/
+Issue Tracker:https://code.google.com/p/droid-notify/issues/list
+Donate:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=43V2NJQH5BQAA
+
+Summary:Notification management tool
+Description:
+This application will display a popup window for Missed Calls, Text Messages, Calendar Events and Emails (K-9 email).
+It is extremely customizable with many options to suit your needs and style.
+.
+
+Repo Type:svn
+Repo:http://droid-notify.googlecode.com/svn/trunk
+
+# Doesn't build and includes (proprietary?) libraries
+#Build Version:2.19,26,692
+
