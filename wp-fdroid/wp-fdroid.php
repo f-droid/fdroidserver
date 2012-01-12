@@ -224,38 +224,42 @@ class FDroid
 					$out.='<div style="display:'.$divStyleDisplay.';" id="'.$divId.'">';
 					$permissions = explode(',',$apk['permissions']);
 					usort($permissions,
-					
-					
 						function ($a, $b) use (&$permissions_data) {
 
 							$aProtectionLevel = $permissions_data['permission'][$a]['protectionLevel'];
 							$bProtectionLevel = $permissions_data['permission'][$b]['protectionLevel'];
 
 							if($aProtectionLevel != $bProtectionLevel) {
+								if(strlen($aProtectionLevel)==0) return 1;
+								if(strlen($bProtectionLevel)==0) return -1;
+
 								return strcmp($aProtectionLevel, $bProtectionLevel);
 							}
 						
 							$aGroup = $permissions_data['permission'][$a]['permissionGroup'];
 							$bGroup = $permissions_data['permission'][$b]['permissionGroup'];
 							
-							return strcmp($aGroup, $bGroup);
-						}
+							if($aGroup != $bGroup) {
+								return strcmp($aGroup, $bGroup);
+							}
 
-					
-					
+							return strcmp($a, $b);
+						}
 					);
 					
 					$permission_group_last = '';
 					foreach($permissions as $permission) {
 						$permission_group = $permissions_data['permission'][$permission]['permissionGroup'];
 						if($permission_group != $permission_group_last) {
-							$out.='<strong>'.strtoupper($permissions_data['permission-group'][$permission_group]['label']).'</strong><br/>';
+							$permission_group_label = $permissions_data['permission-group'][$permission_group]['label'];
+							if($permission_group_label=='') $permission_group_label = 'Extra/Custom';
+							$out.='<strong>'.strtoupper($permission_group_label).'</strong><br/>';
 							$permission_group_last = $permission_group;
 						}
 					
 						$out.=$this->get_permission_protection_level_icon($permissions_data['permission'][$permission]['protectionLevel']).' ';
 						$out.='<strong>'.$permissions_data['permission'][$permission]['label'].'</strong> [<code>'.$permission.'</code>]<br/>';
-						$out.=$permissions_data['permission'][$permission]['description'].'<br/>';
+						if($permissions_data['permission'][$permission]['description']) $out.=$permissions_data['permission'][$permission]['description'].'<br/>';
 						//$out.=$permissions_data['permission'][$permission]['comment'].'<br/>';
 						$out.='<br/>';
 					}
@@ -284,7 +288,7 @@ class FDroid
 		}
 		else
 		{
-			return '<em>!</em>';
+			return '<span style="color:#33AA33;font-size:130%;">&#x2699;</span>';
 		}
 	}	
 
