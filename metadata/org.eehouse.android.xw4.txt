@@ -17,9 +17,9 @@ Repo:git://xwords.git.sourceforge.net/gitroot/xwords/xwords
 #Build Version:4.4 beta 18,11,android_beta_18,subdir=xwords4/android/XWords4,fixtrans=yes
 #Build Version:4.4 beta 23,16,!Translation files are not valid
 #Build Version:4.4 beta 26,19,!Missing resources? android_beta_26,subdir=xwords4/android/XWords4
-Build Version:4.4 beta 33,26,android_beta_33,subdir=xwords4/android/XWords4
-Build Version:4.4 beta 38,30,android_beta_38,subdir=xwords4/android/XWords4
-Build Version:4.4 beta 39,31,android_beta_39,subdir=xwords4/android/XWords4,target=android-8,prebuild=cd .. && ./scripts/genvers.sh >ant_out.txt
+Build Version:4.4 beta 33,26,android_beta_33,subdir=xwords4/android/XWords4,buildjni=yes
+Build Version:4.4 beta 38,30,android_beta_38,subdir=xwords4/android/XWords4,buildjni=yes
+Build Version:4.4 beta 39,31,android_beta_39,subdir=xwords4/android/XWords4,buildjni=yes,target=android-8,prebuild=cd .. && ./scripts/genvers.sh >ant_out.txt
 
 Market Version:4.4
 Market Version Code:33
