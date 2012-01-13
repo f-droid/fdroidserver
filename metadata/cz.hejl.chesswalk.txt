@@ -12,5 +12,5 @@ Play chess offline, or play online at FICS.
 Repo Type:git
 Repo:https://git.gitorious.org/chesswalk/chesswalk.git
 
-Build Version:1.5,7,4007173d
+Build Version:1.5,7,4007173d,buildjni=yes
 
