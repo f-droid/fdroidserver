@@ -12,9 +12,12 @@ TODO/task management based on emacs org-mode files.
 Repo Type:git
 Repo:https://github.com/matburt/mobileorg-android.git
 
-Update Check Mode:Market
 #Needs dropbox consumer key
 #Build Version:0.5.2,51,38dfe967ee99c71b12b8
+#Build Version:0.7.1,71,ac21586a40da6d7c643e1b12023b59aa05d13c14
+
+Update Check Mode:Market
 Current Version:0.7.2
 Current Version Code:72
+
 
