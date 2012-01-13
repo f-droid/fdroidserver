@@ -325,6 +325,7 @@ def parse_metadata(metafile, **kw):
     thisinfo['Donate'] = None
     thisinfo['Disabled'] = None
     thisinfo['AntiFeatures'] = None
+    thisinfo['Update Check Mode'] = 'Market'
     thisinfo['Market Version'] = ''
     thisinfo['Market Version Code'] = '0'
     thisinfo['Repo Type'] = ''
