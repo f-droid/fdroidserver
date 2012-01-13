@@ -12,7 +12,9 @@ A network remote control for MythTV.
 Repo Type:svn
 Repo:http://mythmote.googlecode.com/svn/trunk/
 
-Market Version:1.5.1
-Market Version Code:10
-
 #Build Version:1.4.0,8,126,rm=src/tkj/android/homecontrol/mythmote/R.java
+
+Update Check Mode:Market
+Market Version:1.6.0
+Market Version Code:11
+
