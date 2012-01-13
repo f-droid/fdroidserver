@@ -473,10 +473,11 @@ def write_metadata(dest, app):
         mf.write('\\\n'.join(build['origlines']) + '\n')
     if len(app['builds']) > 0:
         mf.write('\n')
+    writefield('Update Check Mode')
     if len(app['Market Version']) > 0:
         writefield('Market Version')
         writefield('Market Version Code')
-        mf.write('\n')
+    mf.write('\n')
     writecomments(None)
     mf.close()
 
