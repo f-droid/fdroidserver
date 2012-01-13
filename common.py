@@ -555,14 +555,17 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, 
     # Optionally, the actual app source can be in a subdirectory...
     if build.has_key('subdir'):
         root_dir = os.path.join(build_dir, build['subdir'])
-        if not os.path.exists(root_dir):
-            raise BuildException('Missing subdir ' + root_dir)
     else:
         root_dir = build_dir
 
     # Get a working copy of the right revision...
     print "Resetting repository to " + build['commit']
     vcs.reset(build['commit'])
+
+    # Check that a subdir (if we're using one) exists. This has to happen
+    # after the checkout, since it might not exist elsewhere...
+    if not os.path.exists(root_dir):
+        raise BuildException('Missing subdir ' + root_dir)
 
     # Initialise submodules if requred...
     if build.get('submodules', 'no')  == 'yes':
