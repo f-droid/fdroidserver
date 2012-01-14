@@ -211,9 +211,11 @@ class FDroid
 				foreach($apks as $apk) {
 					$out.="<p><b>Version ".$apk['version']."</b><br />";
 					$out.='<a href="http://f-droid.org/repo/'.$apk['apkname'].'">download apk</a> ';
-					$out.=$apk['size']." bytes";
-					if($apk['srcname'])
-						$out.='<br><a href="http://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a>';
+					$out.=$this->human_readable_size($apk['size']);
+					if($apk['srcname']) {
+						$out.='<br /><a href="http://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a> ';
+						$out.=$this->human_readable_size(filesize($this->site_path.'/repo/'.$apk['srcname']));
+					}
 
 					if(isset($apk['permissions'])) {
 						/*if($i==0)
@@ -292,6 +294,17 @@ class FDroid
 		else {
 			return '<span style="color:#33AA33;font-size:130%;">&#x2699;</span>';
 		}
+	}
+	
+	private function human_readable_size($size) {
+		$si_prefix = array('bytes','kB','MB');
+		$div = 1000;
+		
+		for($i=0;$size > $div && $i < count($si_prefix);$i++) {
+			$size /= $div;
+		}
+
+		return round($size,max(0,$i-1)).' '.$si_prefix[$i];
 	}
 
 	function get_apps($query_vars) {
