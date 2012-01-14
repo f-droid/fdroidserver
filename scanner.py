@@ -102,6 +102,14 @@ for app in apps:
                                 msg += ' in ' + app['id'] + ' ' + thisbuild['version']
                                 problems.append(msg)
 
+                    # Presence of a jni directory without buildjni=yes might
+                    # indicate a problem...
+                    if (os.path.exists(os.path.join(root_dir, 'jni')) and 
+                            thisbuild.get('buildjni', 'no') != 'yes'):
+                        msg = 'Found jni directory, but buildjni is not enabled'
+                        msg += ' in ' + app['id'] + ' ' + thisbuild['version']
+                        problems.append(msg)
+
         except BuildException as be:
             msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
             problems.append(msg)

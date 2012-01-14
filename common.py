@@ -325,6 +325,7 @@ def parse_metadata(metafile, **kw):
     thisinfo['Donate'] = None
     thisinfo['Disabled'] = None
     thisinfo['AntiFeatures'] = None
+    thisinfo['Update Check Mode'] = 'Market'
     thisinfo['Market Version'] = ''
     thisinfo['Market Version Code'] = '0'
     thisinfo['Repo Type'] = ''
@@ -472,10 +473,11 @@ def write_metadata(dest, app):
         mf.write('\\\n'.join(build['origlines']) + '\n')
     if len(app['builds']) > 0:
         mf.write('\n')
+    writefield('Update Check Mode')
     if len(app['Market Version']) > 0:
         writefield('Market Version')
         writefield('Market Version Code')
-        mf.write('\n')
+    mf.write('\n')
     writecomments(None)
     mf.close()
 
@@ -553,14 +555,17 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, 
     # Optionally, the actual app source can be in a subdirectory...
     if build.has_key('subdir'):
         root_dir = os.path.join(build_dir, build['subdir'])
-        if not os.path.exists(root_dir):
-            raise BuildException('Missing subdir ' + root_dir)
     else:
         root_dir = build_dir
 
     # Get a working copy of the right revision...
     print "Resetting repository to " + build['commit']
     vcs.reset(build['commit'])
+
+    # Check that a subdir (if we're using one) exists. This has to happen
+    # after the checkout, since it might not exist elsewhere...
+    if not os.path.exists(root_dir):
+        raise BuildException('Missing subdir ' + root_dir)
 
     # Initialise submodules if requred...
     if build.get('submodules', 'no')  == 'yes':
