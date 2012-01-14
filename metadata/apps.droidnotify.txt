@@ -14,6 +14,6 @@ It is extremely customizable with many options to suit your needs and style.
 Repo Type:svn
 Repo:http://droid-notify.googlecode.com/svn/trunk
 
-# Doesn't build and includes (proprietary?) libraries
-#Build Version:2.19,26,692
+# Doesn't build, missing facebook library and error for others
+#Build Version:2.20,27,707
 
