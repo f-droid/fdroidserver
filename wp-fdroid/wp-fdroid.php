@@ -215,55 +215,60 @@ class FDroid
 					if($apk['srcname'])
 						$out.='<br><a href="http://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a>';
 
-					/*if($i==0)
-						$divStyleDisplay='block';
-					else*/
-						$divStyleDisplay='none';
-					$divId='permissions'.$i;
-					$out.='<br /><a href="javascript:void(0);" onClick="showHidePermissions(\''.$divId.'\');">view permissions</a><br/>';
-					$out.='<div style="display:'.$divStyleDisplay.';" id="'.$divId.'">';
-					$permissions = explode(',',$apk['permissions']);
-					usort($permissions,
-						function ($a, $b) use (&$permissions_data) {
+					if(isset($apk['permissions'])) {
+						/*if($i==0)
+							$divStyleDisplay='block';
+						else*/
+							$divStyleDisplay='none';
+						$divId='permissions'.$i;
+						$out.='<br /><a href="javascript:void(0);" onClick="showHidePermissions(\''.$divId.'\');">view permissions</a><br/>';
+						$out.='<div style="display:'.$divStyleDisplay.';" id="'.$divId.'">';
+						$permissions = explode(',',$apk['permissions']);
+						usort($permissions,
+							function ($a, $b) use (&$permissions_data) {
 
-							$aProtectionLevel = $permissions_data['permission'][$a]['protectionLevel'];
-							$bProtectionLevel = $permissions_data['permission'][$b]['protectionLevel'];
+								$aProtectionLevel = $permissions_data['permission'][$a]['protectionLevel'];
+								$bProtectionLevel = $permissions_data['permission'][$b]['protectionLevel'];
 
-							if($aProtectionLevel != $bProtectionLevel) {
-								if(strlen($aProtectionLevel)==0) return 1;
-								if(strlen($bProtectionLevel)==0) return -1;
+								if($aProtectionLevel != $bProtectionLevel) {
+									if(strlen($aProtectionLevel)==0) return 1;
+									if(strlen($bProtectionLevel)==0) return -1;
 
-								return strcmp($aProtectionLevel, $bProtectionLevel);
+									return strcmp($aProtectionLevel, $bProtectionLevel);
+								}
+
+								$aGroup = $permissions_data['permission'][$a]['permissionGroup'];
+								$bGroup = $permissions_data['permission'][$b]['permissionGroup'];
+
+								if($aGroup != $bGroup) {
+									return strcmp($aGroup, $bGroup);
+								}
+
+								return strcmp($a, $b);
+							}
+						);
+
+						$permission_group_last = '';
+						foreach($permissions as $permission) {
+							$permission_group = $permissions_data['permission'][$permission]['permissionGroup'];
+							if($permission_group != $permission_group_last) {
+								$permission_group_label = $permissions_data['permission-group'][$permission_group]['label'];
+								if($permission_group_label=='') $permission_group_label = 'Extra/Custom';
+								$out.='<strong>'.strtoupper($permission_group_label).'</strong><br/>';
+								$permission_group_last = $permission_group;
 							}
 
-							$aGroup = $permissions_data['permission'][$a]['permissionGroup'];
-							$bGroup = $permissions_data['permission'][$b]['permissionGroup'];
-
-							if($aGroup != $bGroup) {
-								return strcmp($aGroup, $bGroup);
-							}
-
-							return strcmp($a, $b);
+							$out.=$this->get_permission_protection_level_icon($permissions_data['permission'][$permission]['protectionLevel']).' ';
+							$out.='<strong>'.$permissions_data['permission'][$permission]['label'].'</strong> [<code>'.$permission.'</code>]<br/>';
+							if($permissions_data['permission'][$permission]['description']) $out.=$permissions_data['permission'][$permission]['description'].'<br/>';
+							//$out.=$permissions_data['permission'][$permission]['comment'].'<br/>';
+							$out.='<br/>';
 						}
-					);
-
-					$permission_group_last = '';
-					foreach($permissions as $permission) {
-						$permission_group = $permissions_data['permission'][$permission]['permissionGroup'];
-						if($permission_group != $permission_group_last) {
-							$permission_group_label = $permissions_data['permission-group'][$permission_group]['label'];
-							if($permission_group_label=='') $permission_group_label = 'Extra/Custom';
-							$out.='<strong>'.strtoupper($permission_group_label).'</strong><br/>';
-							$permission_group_last = $permission_group;
-						}
-
-						$out.=$this->get_permission_protection_level_icon($permissions_data['permission'][$permission]['protectionLevel']).' ';
-						$out.='<strong>'.$permissions_data['permission'][$permission]['label'].'</strong> [<code>'.$permission.'</code>]<br/>';
-						if($permissions_data['permission'][$permission]['description']) $out.=$permissions_data['permission'][$permission]['description'].'<br/>';
-						//$out.=$permissions_data['permission'][$permission]['comment'].'<br/>';
-						$out.='<br/>';
+						$out.='</div>';
 					}
-					$out.='</div>';
+					else {
+						$out.='<br /><span style="color:#999999;">no permissions</span><br />';
+					}
 
 					$out.='</p>';
 					$i++;
@@ -278,16 +283,13 @@ class FDroid
 	}
 
 	private function get_permission_protection_level_icon($protection_level) {
-		if($protection_level=='dangerous')
-		{
+		if($protection_level=='dangerous') {
 			return '<span style="color:#DD9900;font-size:150%;">&#x26a0;</span>';
 		}
-		elseif($protection_level=='normal')
-		{
+		elseif($protection_level=='normal') {
 			return '<span style="color:#6666FF;font-size:110%;">&#x24D8;</span>';
 		}
-		else
-		{
+		else {
 			return '<span style="color:#33AA33;font-size:130%;">&#x2699;</span>';
 		}
 	}
