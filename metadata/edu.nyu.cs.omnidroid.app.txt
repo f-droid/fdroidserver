@@ -1,9 +1,9 @@
-
+Category:System
 License:Apache2
 Web Site:http://code.google.com/p/omnidroid/
 Source Code:http://code.google.com/p/omnidroid/source/checkout
 Issue Tracker:http://code.google.com/p/omnidroid/issues/list
-Category:System
+
 Summary:Automated Event Handler
 Description:
 Omnidroid is an automated event/action manager that allows users to automate
@@ -21,3 +21,4 @@ Build Version:0.2.2,7,!Apparently no source code exists for this
 
 Market Version:0.2.2
 Market Version Code:7
+

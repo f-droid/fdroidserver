@@ -1,13 +1,15 @@
-License:GPLv2
 Category:Multimedia
+License:GPLv2
 Web Site:http://crengine.sourceforge.net
 Source Code:http://sourceforge.net/scm/?type=git&group_id=191284
 Issue Tracker:http://sourceforge.net/tracker/?group_id=191284
 Donate:http://sourceforge.net/project/project_donations.php?group_id=191284
+
 Summary:E-book reader.
 Description:
 An e-book reader. Supported formats: FB2, TXT, RTF, TCR, HTML, EPUB, CHM.
 .
+
 Repo Type:git
 Repo:git://crengine.git.sourceforge.net/gitroot/crengine/crengine
 
@@ -48,6 +50,11 @@ Build Version:3.0.53-19,264,cr3.0.53-19,subdir=android,rm=android/build.properti
 Build Version:3.0.54-5,275,cr3.0.54-5,subdir=android,rm=android/build.properties,buildjni=yes
 Build Version:3.0.54-9,279,cr3.0.54-9,subdir=android,rm=android/build.properties,buildjni=yes
 Build Version:3.0.54-33,303,cr3.0.54-33,subdir=android,rm=android/build.properties,buildjni=yes
+Build Version:3.0.54-38,308,cr3.0.54-38,subdir=android,rm=android/build.properties,buildjni=yes
+Build Version:3.0.54-47,447,cr3.0.54-47,subdir=android,rm=android/build.properties,buildjni=yes
+Build Version:3.0.55-5,505,cr3.0.55-5,subdir=android,rm=android/build.properties,buildjni=yes
 
-Market Version:3.0.54-33
-Market Version Code:303
+Update Check Mode:Market
+Market Version:3.0.55-5
+Market Version Code:505
+

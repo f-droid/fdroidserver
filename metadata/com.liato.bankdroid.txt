@@ -1,14 +1,15 @@
-Use Built:Yes
 Category:Office
 License:Apache2
 Web Site:http://www.swedroid.se/forum/showthread.php?t=11108
 Source Code:https://github.com/liato/android-bankdroid
 Issue Tracker:https://github.com/liato/android-bankdroid/issues
+
 Summary:Banking application for Swedish banks
 Description:
 Checks your account balance at any of the major Swedish banks and can
 display notifications on changes. Includes a widget.
 .
+
 Repo Type:git
 Repo:https://github.com/liato/android-bankdroid.git
 
@@ -20,7 +21,6 @@ Build Version:1.6.3,102,612aae755a82008f44a6,encoding=utf-8,prebuild=mkdir libs 
     unzip -j guava-r08.zip guava-r08/guava-r08.jar && \
     rm *.zip && \
     cd ..
-
 Build Version:1.7.2,110,fec08e34a157a3e0b455,encoding=utf-8,prebuild=mkdir libs && \
     cd libs && \
     wget http://archive.apache.org/dist/commons/io/binaries/commons-io-2.0.1-bin.zip && \
@@ -29,9 +29,7 @@ Build Version:1.7.2,110,fec08e34a157a3e0b455,encoding=utf-8,prebuild=mkdir libs 
     unzip -j guava-r08.zip guava-r08/guava-r08.jar && \
     rm *.zip && \
     cd ..
-
 Build Version:1.7.3,115,!a08cab7e66c70e7b0f5c but wrong version code in repo
-
 Build Version:1.8.0,120,899e4b957e512bf55254,encoding=utf-8,prebuild=mkdir libs && \
     cd libs && \
     wget http://archive.apache.org/dist/commons/io/binaries/commons-io-2.0.1-bin.zip && \
@@ -51,10 +49,9 @@ Build Version:1.8.0,120,899e4b957e512bf55254,encoding=utf-8,prebuild=mkdir libs 
 #    unzip -j guava-r08.zip guava-r08/guava-r08.jar && \
 #    rm *.zip && \
 #    cd ..
-
 #Build fails on this version, same as previous version:
 # res/values/styles.xml:62: error: Error retrieving parent for item: No resource found that matches the given name 'android:WindowTitleBackground'
-#Build Version:1.8.1,121,9f626b0dedb01cb90a16fb127a041c5f3dd1c579,target=android-9,encoding=utf-8,prebuild=mkdir libs && \
+#Build Version:1.8.1,121,9f626b0dedb01cb90a16fb127a041c5f3dd1c579,target=android-10,encoding=utf-8,prebuild=mkdir libs && \
 #    cd libs && \
 #    wget http://archive.apache.org/dist/commons/io/binaries/commons-io-2.0.1-bin.zip && \
 #    unzip -j commons-io-2.0.1-bin.zip commons-io-2.0.1/commons-io-2.0.1.jar && \
@@ -62,7 +59,6 @@ Build Version:1.8.0,120,899e4b957e512bf55254,encoding=utf-8,prebuild=mkdir libs 
 #    unzip -j guava-r08.zip guava-r08/guava-r08.jar && \
 #    rm *.zip && \
 #    cd ..
-
 Market Version:1.8.4
 Market Version Code:125
 

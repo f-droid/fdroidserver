@@ -1,12 +1,15 @@
-License:GPLv3
 Category:Internet
+License:GPLv3
 Web Site:http://piwik.org/
 Source Code:http://dev.piwik.org/trac/browser/mobile
 Issue Tracker:
+
 Summary:Client for Piwik
 Description:
 Piwik is an open-source web analytics package. Piwik Mobile is a client that gives
 you access to your statistics.
 .
+
 Market Version:1.6.2
 Market Version Code:10
+

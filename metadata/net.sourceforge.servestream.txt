@@ -1,11 +1,9 @@
-
-Use Built:Yes
-License:Apache2
 Category:Internet
+License:Apache2
 Web Site:http://sourceforge.net/projects/servestream/
 Source Code:http://servestream.svn.sourceforge.net/viewvc/servestream/
 Issue Tracker:http://sourceforge.net/tracker/?group_id=361303
-Donate:
+
 Summary:Media server browser/stream player.
 Description:
 HTTP media server browser and stream player. For use with streaming media servers such as GNUMP3d.
@@ -22,5 +20,6 @@ Build Version:0.2.11,46,614,prebuild=mv lib/ libs/
 #Still guessing, see previous comment
 Build Version:0.3.1,48,659,prebuild=mv lib/ libs/
 
-Market Version:0.4.1
-Market Version Code:51
+Market Version:0.4.3
+Market Version Code:53
+

@@ -1,8 +1,9 @@
-License:GPLv3
 Category:Internet
+License:GPLv3
 Web Site:https://code.google.com/p/external-ip/
 Source Code:https://code.google.com/p/external-ip/source/checkout
 Issue Tracker:https://code.google.com/p/external-ip/issues/list
+
 Summary:Android application to display IP addresses
 Description:
 Simple application to display IP addresses in form that you can copy&paste them.
@@ -17,3 +18,4 @@ Build Version:1.2,3,431da48bfb10,target=android-8
 
 Market Version:1.2
 Market Version Code:3
+

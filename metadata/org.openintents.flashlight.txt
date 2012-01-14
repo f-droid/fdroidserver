@@ -1,0 +1,21 @@
+Disabled:Build problem
+Category:Office
+License:Apache2
+Web Site:http://code.google.com/p/openintents
+Source Code:http://code.google.com/p/openintents/source/browse/#svn%2Ftrunk%2Fflashlight%2FFlashlight
+Issue Tracker:http://code.google.com/p/openintents/issues
+
+Summary:A flashlight to see in the dark
+Description:
+A flashlight with color settings.
+It can use the phone's screen, or the flash of the phone's camera if there is one.
+.
+
+Repo Type:svn
+Repo:http://openintents.googlecode.com/svn/trunk/flashlight/Flashlight
+
+Build Version:1.1,10011,3971,target=android-15
+
+Market Version:1.1
+Market Version Code:10011
+

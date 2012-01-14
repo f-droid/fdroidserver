@@ -1,11 +1,12 @@
-Use Built:Yes
-License:GPLv3
 Category:Office
+License:GPLv3
 Web Site:http://solidsushi.com/lab/teatimer
 Source Code:http://github.com/ralphleon/TeaTimer
 Issue Tracker:https://github.com/ralphleon/TeaTimer/issues
-Summary:A Simple Tea Timer for Android
-Description:A straight-forward tea timer
+
+Summary:Simple Tea Timer
+Description:
+A straight-forward tea timer
 .
 
 Repo Type:git
@@ -16,3 +17,4 @@ Build Version:1.7,10,!No source in repo
 
 Market Version:1.7
 Market Version Code:10
+

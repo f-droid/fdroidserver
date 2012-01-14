@@ -1,8 +1,9 @@
-License:GPLv3
 Category:System
+License:GPLv3
 Web Site:http://sites.google.com/site/ghostcommander1/
 Source Code:http://sourceforge.net/projects/ghostcommander/develop
 Issue Tracker:http://sourceforge.net/tracker/?group_id=311417
+
 Summary:Dual-panel file manager
 Description:
 Dual panel file manager, like Norton Commander, Midnight Commander or
@@ -14,18 +15,18 @@ files to/from FTP servers and SMB network shares (with plug-in). It
 given root privileges, it offers additional functionality, such as
 remounting filesystems.
 .
+
 Repo Type:svn
 Repo:https://ghostcommander.svn.sourceforge.net/svnroot/ghostcommander
-Use Built:Yes
 
 Build Version:1.35.1b5,97,141,\
 prebuild=sed -ri 's/(debuggable)="true"/\1="false"/' AndroidManifest.xml
-
 # All commit messages are empty, so I'm just guessing the revision.
 Build Version:1.35,94,131,\
 prebuild=sed -ri 's/(debuggable)="true"/\1="false"/' AndroidManifest.xml
 Build Version:1.36.4,110,161,\
 prebuild=sed -ri 's/(debuggable)="true"/\1="false"/' AndroidManifest.xml
 
-Market Version:1.39.2
-Market Version Code:152
+Market Version:1.39.3
+Market Version Code:154
+

@@ -1,9 +1,9 @@
-Use Built:Yes
-License:GPLv3
 Category:Office
+License:GPLv3
 Web Site:http://github.com/atd/HandyNotes
 Source Code:http://github.com/atd/HandyNotes
 Issue Tracker:http://github.com/atd/HandyNotes/issues
+
 Summary:Sticky notes widget
 Description:
 Simple Android application that provides widgets to have notes at hand
@@ -15,6 +15,6 @@ Repo:https://github.com/atd/HandyNotes.git
 Build Version:1.0,1,bd33550beaf014ebbe8d,target=android-8
 Build Version:1.2,3,v1.2,target=android-8
 
-
 Market Version:1.2
 Market Version Code:3
+

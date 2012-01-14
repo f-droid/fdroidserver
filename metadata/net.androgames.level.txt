@@ -1,0 +1,27 @@
+Category:None
+License:GPLv3
+Web Site:https://code.google.com/p/androgames-sample/
+Source Code:http://code.google.com/p/androgames-sample/source/browse/#svn/Market-apps/Level/trunk
+Issue Tracker:
+Donate:https://market.android.com/details?id=net.androgames.level.donate
+
+Summary:A spirit level
+Description:
+Hold any of the phone's four sides against an object to test it for level or plumb, or lay it down on a flat surface for a 360° level.
+- Calibrate
+- Show angle or inclination
+- Sound effects
+- Install on SD
+- Orientation locking
+- Roof pitch
+.
+
+Repo Type:svn
+Repo:http://androgames-sample.googlecode.com/svn/Market-apps/Level/trunk/
+
+Build Version:1.8.0,27,75
+
+Update Check Mode:Market
+Market Version:1.8.0
+Market Version Code:27
+

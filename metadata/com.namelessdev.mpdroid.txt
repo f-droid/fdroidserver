@@ -1,16 +1,15 @@
 Disabled:Doesn't build for me
-#build/com.namelessdev.mpdroid/MPDroid/res/values/styles.xml:18: error: Error retrieving parent for item: No resource found that matches the given name '@android:style/Widget.Holo.ActionBar'.
-
-License:Apache2
 Category:Multimedia
+#build/com.namelessdev.mpdroid/MPDroid/res/values/styles.xml:18: error: Error retrieving parent for item: No resource found that matches the given name '@android:style/Widget.Holo.ActionBar'.
+License:Apache2
 Web Site:https://github.com/dreamteam69/dmix
 Source Code:https://github.com/dreamteam69/dmix
 Issue Tracker:https://github.com/dreamteam69/dmix/issues
+
 Summary:MPD client
 Description:
 An MPD client which supports streaming. Can fetch cover art from last.fm.
 .
-
 
 Repo Type:git
 Repo:https://github.com/dreamteam69/dmix.git
@@ -21,3 +20,4 @@ cd ../JMPDComm/ && ant && mkdir ../MPDroid/libs/ && cp ../JMPDComm/JMPDComm.jar 
 
 Market Version:0.7
 Market Version Code:18
+

@@ -1,5 +1,6 @@
 config.py
 repo/
+logs/
 built/
 build/
 build_*/

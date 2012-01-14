@@ -1,17 +1,19 @@
-Use Built:Yes
-License:GPLv2+
 Category:System
+License:GPLv2+
 Web Site:http://code.google.com/p/android-vnc-viewer/
 Source Code:http://code.google.com/p/android-vnc-viewer/source/checkout
 Issue Tracker:http://code.google.com/p/android-vnc-viewer/issues/list
+
 Summary:VNC viewer
 Description:
 A VNC ('remote desktop') client.
 .
-Repo Type:svn
+
+Repo Type:git-svn
 Repo:http://android-vnc-viewer.googlecode.com/svn/branches/antlersoft
 
 Build Version:0.5.0,13,197,subdir=androidVNC
 
 Market Version:0.5.0
 Market Version Code:13
+

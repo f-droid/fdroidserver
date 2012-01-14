@@ -1,13 +1,14 @@
-Use Built:Yes
-License:GPLv2
 Category:System
+License:GPLv2
 Web Site:http://diskusage.googlecode.com/
 Source Code:http://code.google.com/p/diskusage/source/checkout
 Issue Tracker:http://code.google.com/p/diskusage/issues/list
+
 Summary:Visual disk usage explorer
 Description:
 Visually explore used and free space on internal and external storage.
 .
+
 Repo Type:svn
 Repo:http://diskusage.googlecode.com/svn/trunk/
 
@@ -22,3 +23,4 @@ Build Version:3.2,3020,69,prebuild=mkdir libs && cp extra/system.jar libs/
 
 Market Version:3.2
 Market Version Code:3020
+

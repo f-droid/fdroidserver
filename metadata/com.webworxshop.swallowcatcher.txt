@@ -1,10 +1,9 @@
-Use Built:Yes
-License:AGPL
 Category:Internet
+License:AGPL
 Web Site:http://blog.webworxshop.com/projects/swallowcatcher
 Source Code:http://gitorious.org/swallowcatcher
 Issue Tracker:
-Donate:
+
 Summary:Podcast client
 Description:
 A podcatcher.

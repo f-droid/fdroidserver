@@ -1,0 +1,20 @@
+Category:Games
+License:GPLv3
+Web Site:https://code.google.com/p/simplechessclock/
+Source Code:https://code.google.com/p/simplechessclock/source/browse/
+Issue Tracker:https://code.google.com/p/simplechessclock/issues/list
+
+Summary:Simple chess clock
+Description:
+Simple Chess Clock does what it says! It is designed for touchscreen Android
+devices, and provides a simple, clear interface and easy interaction.
+.
+
+Repo Type:hg
+Repo:https://code.google.com/p/simplechessclock/
+
+Build Version:1.2.0,8,379155447bff,subdir=simplechessclock,target=android-8
+
+Market Version:1.2.0
+Market Version Code:8
+

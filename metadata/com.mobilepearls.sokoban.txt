@@ -1,16 +1,19 @@
-Use Built:Yes
-License:GPLv2
 Category:Games
+License:GPLv2
 Web Site:http://mobilepearls.com
 Source Code:https://github.com/mobilepearls/com.mobilepearls.sokoban
 Issue Tracker:https://github.com/mobilepearls/com.mobilepearls.sokoban/issues
+
 Summary:A Sokoban game for Android
 Description:
 A puzzle game.
 .
+
 Repo Type:git
 Repo:https://github.com/mobilepearls/com.mobilepearls.sokoban.git
+
 Build Version:1.11,12,48e1976f9d9881adb70e
 
 Market Version:1.11
 Market Version Code:12
+

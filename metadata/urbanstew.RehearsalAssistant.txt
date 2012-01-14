@@ -1,9 +1,9 @@
-Use Built:Yes
-License:GPL
 Category:Office
+License:GPL
 Web Site:http://urbanstew.org/rehearsalassistant/
 Source Code:http://sourceforge.net/projects/rehearsalassist/develop
 Issue Tracker:http://sourceforge.net/tracker/?group_id=226240
+
 Summary:A voice/sound recording tool
 Description:
 A voice / sound recording utility with two modes of operation:
@@ -13,6 +13,7 @@ A voice / sound recording utility with two modes of operation:
 
 Either mode allows you to review and e-mail the recordings afterward.
 .
+
 Repo Type:svn
 Repo:https://rehearsalassist.svn.sourceforge.net/svnroot/rehearsalassist/android/trunk
 
@@ -21,3 +22,4 @@ Build Version:0.9,26,!Source missing - see https://sourceforge.net/tracker/index
 
 Market Version:0.9
 Market Version Code:26
+

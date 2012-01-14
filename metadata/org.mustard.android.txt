@@ -1,9 +1,10 @@
-License:GPLv3
 Category:Internet
+License:GPLv3
 Web Site:http://mustard.macno.org
 Source Code:http://gitorious.org/~macno/mustard/macnos-clone/
 Issue Tracker:https://bugs.launchpad.net/mustardroid
 Donate:http://mustard.macno.org/donate
+
 Summary:Microblogging client for StatusNet/identi.ca
 Description:
 Mustard is the first full-featured statusnet (like identica) client application for android.
@@ -12,3 +13,4 @@ It has many features like attachments, geolocation and avatar update. It support
 
 Market Version:0.3.0
 Market Version Code:126
+

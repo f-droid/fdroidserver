@@ -1,10 +1,9 @@
-
-License:GPLv3
 Category:Internet
+License:GPLv3
 Web Site:https://github.com/voidcode/Diaspora-Webclient
 Source Code:https://github.com/voidcode/Diaspora-Webclient
 Issue Tracker:
-Donate:
+
 Summary:Diaspora Client
 Description:
 Client for the Diaspora social network.
@@ -13,5 +12,8 @@ Client for the Diaspora social network.
 Repo Type:git
 Repo:https://github.com/voidcode/Diaspora-Webclient.git
 
-Build Version:1.3,3,26d7120fea1af5835a17537bebeef6df523d57e6,prebuild=rm -rf gen/ && rm -rf bin/,target=android-9
+Build Version:1.3,3,26d7120fea1af5835a17537bebeef6df523d57e6,prebuild=rm -rf gen/ && rm -rf bin/,target=android-10
+
+Market Version:1.5
+Market Version Code:6
 

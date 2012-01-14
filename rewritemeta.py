@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# checkmarket.py - part of the FDroid server tools
-# Copyright (C) 2011, Ciaran Gultnieks, ciaran@ciarang.com
+# rewritemeta.py - part of the FDroid server tools
+# Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -17,16 +17,32 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import subprocess
+import sys
+import os
+import shutil
+import re
+import urllib
+import time
+from optparse import OptionParser
+import HTMLParser
+import common
 
 #Read configuration...
-repo_name = None
-repo_description = None
-repo_icon = None
-repo_url = None
 execfile('config.py')
 
-subprocess.call('./run.sh ' + market_user + ' ' + market_password
-    + ' ' + market_deviceid,
-    cwd='marketcheck', shell=True)
+
+# Parse command line...
+parser = OptionParser()
+parser.add_option("-v", "--verbose", action="store_true", default=False,
+                  help="Spew out even more information than normal")
+(options, args) = parser.parse_args()
+
+# Get all apps...
+apps = common.read_metadata(options.verbose)
+
+for app in apps:
+    print "Writing " + app['id']
+    common.write_metadata(os.path.join('metadata', app['id']) + '.txt', app)
+
+print "Finished."
 

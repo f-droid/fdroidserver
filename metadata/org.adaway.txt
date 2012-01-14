@@ -1,23 +1,26 @@
-Use Built:Yes
-License:GPLv3
 Category:System
+License:GPLv3
 Web Site:http://code.google.com/p/ad-away/
 Source Code:https://gitorious.org/adaway/
 Issue Tracker:http://code.google.com/p/ad-away/issues/list
 Donate:http://flattr.com/thing/369138/AdAway-Ad-blocker-for-Android
+
 Summary:Ad blocking via hosts file
 Description:
 Blocks advertisements via the /etc/hosts file. Supports automatic updates.
 .
 
+Requires Root:Yes
+
 Repo Type:git
 Repo:git://gitorious.org/adaway/adaway.git
-
-Requires Root:yes
 
 Build Version:1.12,13,ea5378a94ee0dc1d99d2cec95fae7e6d81afb2b9,subdir=org_adaway/,buildjni=yes
 Build Version:1.15,16,4128e59da2eac5c2904c7c7568d298ca51e79540,subdir=org_adaway/,buildjni=yes,patch=defprop.patch
 Build Version:1.18,19,0b9985398b9eef7baf6aadd0dbb12002bc199d2e,subdir=org_adaway/,buildjni=yes,patch=defprop.patch
+Build Version:1.19,20,ab27f4dab5f3ea5e228cfb4a6b0e1fbf53695f22,subdir=org_adaway/,buildjni=yes,patch=defprop.patch
+Build Version:1.20,21,695e3801e4081026c8f7213a2345fc451d5eb89c,subdir=org_adaway/,buildjni=yes,patch=defprop.patch
 
-Market Version:1.18
-Market Version Code:19
+Market Version:1.20
+Market Version Code:21
+

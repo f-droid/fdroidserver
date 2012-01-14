@@ -1,9 +1,9 @@
-Use Built:Yes
-License:GPLv2
 Category:Internet
+License:GPLv2
 Web Site:http://android.wordpress.org/
 Source Code:https://android.trac.wordpress.org/browser
 Issue Tracker:http://android.trac.wordpress.org/
+
 Summary:WordPress client
 Description:
 A client for WordPress blogs, which allows post creation and editing, and comment
@@ -21,5 +21,6 @@ Repo:http://android.svn.wordpress.org/trunk/
 Build Version:1.3.9,31,202,prebuild=mkdir libs && mv *.jar libs && sed -i "s@checkStats(accounts.size());@// MY PRIVACY > YOUR STATS@" src/org/wordpress/android/wpAndroid.java,encoding=utf-8
 Build Version:1.4.1,33,228,prebuild=mkdir libs && mv *.jar libs && sed -i "s@checkStats(accounts.size());@// MY PRIVACY > YOUR STATS@" src/org/wordpress/android/wpAndroid.java,encoding=utf-8
 
-Market Version:2.0.1
-Market Version Code:39
+Market Version:2.0.3
+Market Version Code:42
+

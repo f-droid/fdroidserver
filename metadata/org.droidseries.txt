@@ -1,5 +1,5 @@
-License:GPLv3
 Category:Multimedia
+License:GPLv3
 Web Site:http://code.google.com/p/droidseries/
 Source Code:http://gitorious.org/droidseries
 Issue Tracker:http://code.google.com/p/droidseries/issues/list
@@ -19,3 +19,4 @@ Build Version:0.1.5-6,13,a72bc0a
 
 Market Version:0.1.5-6
 Market Version Code:13
+

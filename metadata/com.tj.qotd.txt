@@ -1,15 +1,18 @@
 Disabled:Can't identify release
-Use Built:Yes
 Category:Games
+License:Unknown
 Web Site:https://github.com/thibault/OpenQOTD
 Source Code:https://github.com/thibault/OpenQOTD
 Issue Tracker:https://github.com/thibault/OpenQOTD/issues
+
 Summary:Widget to display random quotes
 Description:
 A simple widget that displays random quotes in English or French.
 .
+
 Repo Type:git
 Repo:https://github.com/thibault/OpenQOTD.git
 
 Market Version:1.0.1
 Market Version Code:2
+

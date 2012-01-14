@@ -1,10 +1,9 @@
-Use Built:Yes
-License:GPLv3
 Category:Development
+License:GPLv3
 Web Site:https://github.com/rtyley/agit
 Source Code:https://github.com/rtyley/agit
 Issue Tracker:https://github.com/rtyley/agit/issues
-Donate:
+
 Summary:A git client
 Description:
 A git client - currently read-only.
@@ -16,3 +15,4 @@ Repo:https://github.com/rtyley/agit.git
 #No builds yet - another 'need to figure out how to make maven work' scenario
 Market Version:1.25
 Market Version Code:110900321
+

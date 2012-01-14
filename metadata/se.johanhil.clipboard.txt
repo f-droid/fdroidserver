@@ -1,11 +1,11 @@
+Category:System
 # There is no license notice in the source, probably because any
 # such notice would be longer than the code itself.
 License:
-Category:System
 Web Site:https://github.com/johanhil/copy-to-clipboard
 Source Code:https://github.com/johanhil/copy-to-clipboard
 Issue Tracker:https://github.com/johanhil/copy-to-clipboard/issues
-Donate:
+
 Summary:Copy to clipboard via the share menu
 Description:
 Copy to Clipboard integrates in to the Share menu, allowing you to
@@ -15,9 +15,12 @@ SMS/e-mail/tweet/etc.
 This is useful when you want to share text to an application that does
 not implement the regular "send to" functionality, such as GTalk.
 .
+
 Repo Type:git
 Repo:https://github.com/johanhil/copy-to-clipboard.git
-Use Built:Yes
+
 Build Version:1.0,2,c6c466770fb7215d957118216c2414ae69ca1bc8,target=4
+
 Market Version:1.0
 Market Version Code:2
+

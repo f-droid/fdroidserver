@@ -1,12 +1,15 @@
-License:GPLv3
 Category:Navigation
+License:GPLv3
 Web Site:http://code.google.com/p/wherering/
 Source Code:http://code.google.com/p/wherering/source/checkout
 Issue Tracker:http://code.google.com/p/wherering/issues/list
+
 Summary:Automatically change ring mode by location
 Description:
 Automatically changes the phone's ring mode (silent, vibrate, etc) according to your
 current location.
 .
+
 Market Version:1.99.0
 Market Version Code:99
+

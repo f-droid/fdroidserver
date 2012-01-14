@@ -1,8 +1,9 @@
-License:Apache2
 Category:System
+License:Apache2
 Web Site:http://code.google.com/p/androidpermissions/
 Source Code:http://code.google.com/p/androidpermissions/source/checkout
 Issue Tracker:http://code.google.com/p/androidpermissions/issues/list
+
 Summary:Lists application permissions
 Description:
 This application shows all the available permissions on your phone in a big
@@ -10,9 +11,12 @@ list, highlighting those it considers dangerous. You can expand any of the
 entries in the list to see what applications are using that particular
 permission.
 .
+
 Repo Type:svn
 Repo:http://androidpermissions.googlecode.com/svn/trunk
+
 Build Version:1.1,2,16
-Use Built:Yes
+
 Market Version:1.1
 Market Version Code:2
+

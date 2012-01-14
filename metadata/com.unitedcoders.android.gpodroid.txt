@@ -1,0 +1,16 @@
+Category:Multimedia
+License:EPLv1
+Web Site:http://united-coders.com/gpodroid
+Source Code:https://github.com/gpodder/GpodRoid
+Issue Tracker:https://github.com/gpodder/GpodRoid/issues
+
+Summary:gpodder.net client
+Description:
+A gpodder.net podcasting client.
+.
+
+Repo Type:git
+Repo:git://github.com/gpodder/GpodRoid.git
+
+Build Version:0.4.7,12,0.4.7,target=android-7,prebuild=mv jars libs
+

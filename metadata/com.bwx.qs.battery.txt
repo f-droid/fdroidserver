@@ -1,13 +1,14 @@
-Use Built:Yes
-License:Apache2
 Category:System
+License:Apache2
 Web Site:http://code.google.com/p/quick-settings/
 Source Code:http://code.google.com/p/quick-settings/source/checkout
 Issue Tracker:http://code.google.com/p/quick-settings/issues/list
+
 Summary:Battery widget
 Description:
 A tiny widget that displays battery level both numerically and graphically.
 .
+
 Repo Type:svn
 Repo:http://quick-settings.googlecode.com/svn/trunk/quick-battery/
 
@@ -15,3 +16,4 @@ Build Version:0.8.2,201010020,153,target=android-8
 
 Market Version:0.8.2
 Market Version Code:201010020
+

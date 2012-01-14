@@ -1,9 +1,10 @@
-Use Built:Yes
-License:GPLv3+
+AntiFeatures:NonFreeNet
 Category:Multimedia
+License:GPLv3+
 Web Site:http://code.google.com/p/mp3tunes/
 Source Code:http://code.google.com/p/mp3tunes/source/browse/
 Issue Tracker:http://androidmp3.uservoice.com/
+
 Summary:Client for listening to music stored in an MP3tunes locker
 Description:
 MP3tunes is a music storage service, where users can upload their music files and stream them from anywhere. 
@@ -16,7 +17,6 @@ Repo:https://mp3tunes.googlecode.com/hg/
 Build Version:3.7,89,ba4550305733,target=android-4,fixapos=yes
 Build Version:5.1,92,!No source in repo
 
-AntiFeatures:NonFreeNet
-
 Market Version:5.1
 Market Version Code:92
+

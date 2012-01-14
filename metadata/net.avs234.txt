@@ -1,16 +1,22 @@
-License:GPLv2+
 Category:Multimedia
+License:GPLv2+
 Web Site:http://code.google.com/p/andless/
 Source Code:http://code.google.com/p/andless/source/checkout
 Issue Tracker:http://code.google.com/p/andless/issues/list
+
 Summary:Audio player for lossless files
 Description:
 Audio player that plays lossless files (FLAC/APE/MPC/WV) as well as
 any formats natively supported by Android. CUE sheets and playlists
 are also supported.
 .
-Repo Type:svn
+
+Repo Type:git-svn
 Repo:http://andless.googlecode.com/svn/trunk/
 
+#Can't build this without modifying the NDK - http://code.google.com/p/andless/wiki/Building
+#Binary of this version in the repo
+#Build Version:1.3.3,10,91,buildjni=yes
 Market Version:1.3.3
 Market Version Code:10
+

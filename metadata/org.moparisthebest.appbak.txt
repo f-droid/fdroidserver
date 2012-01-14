@@ -1,12 +1,15 @@
-License:GPL
 Category:System
+License:GPL
 Web Site:http://android.moparisthebest.org/index.php/apps/appbak
 Source Code:http://android.moparisthebest.org/src/AppBak_v1.0.7z
 Issue Tracker:
+
 Summary:Back up list of installed apps
 Description:
 Simple way to back up (and restore) a list of installed applications to a file
 on your SD card.
 .
+
 Market Version:1.0
 Market Version Code:2
+

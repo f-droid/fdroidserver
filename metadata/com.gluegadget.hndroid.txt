@@ -1,7 +1,15 @@
 Disabled:No license - it's "Open Source" whatever that means
+Category:Internet
+License:Unknown
 Web Site:http://gluegadget.com/hndroid/
 Source Code:https://github.com/amir/HNdroid
-Category:Internet
+Issue Tracker:
+
+Summary:
+Description:
+No description available
+.
 
 Market Version:0.4
 Market Version Code:5
+

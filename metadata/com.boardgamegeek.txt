@@ -1,9 +1,9 @@
-License:GPLv3
 Category:Games
+License:GPLv3
 Web Site:https://code.google.com/p/boardgamegeek/
 Source Code:https://code.google.com/p/boardgamegeek/source/checkout
 Issue Tracker:https://code.google.com/p/boardgamegeek/issues/list
-Donate:
+
 Summary:BoardGameGeek application
 Description:
 This app searches the board game data from boardgamegeek.com. It's not a game
@@ -18,3 +18,4 @@ Build Version:3.4,21,r525,subdir=BoardGameGeek,target=android-8
 
 Market Version:3.4
 Market Version Code:21
+

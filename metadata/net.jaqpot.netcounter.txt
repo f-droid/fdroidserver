@@ -1,13 +1,16 @@
-License:GPLv3
 Category:System
+License:GPLv3
 Web Site:http://www.jaqpot.net/netcounter/
 Source Code:http://www.jaqpot.net/netcounter/
 Issue Tracker:
+
 Summary:Bandwidth usage tracker
 Description:
 NetCounter keeps track of your bandwidth usage (both cell and Wi-Fi) and displays it
 to you in an easy to read format. It can also alert you when you reach a predefined
 limit.
 .
+
 Market Version:0.14.1
 Market Version Code:22
+

@@ -1,8 +1,9 @@
-Use Built:Yes
-License:MIT
 Category:System
+License:MIT
 Web Site:https://github.com/handschuh/Slight-backup
 Source Code:https://github.com/handschuh/Slight-backup
+Issue Tracker:
+
 Summary:A very simple backup program.
 Description:
 A very simple program that can be used to backup
@@ -16,9 +17,10 @@ unscheduled.
 Repo Type:git
 Repo:https://github.com/handschuh/Slight-backup.git
 
-Build Version:0.2,6,94715551ab863b20df3d,target=android-9
-Build Version:0.4.2,12,843c7eecef6ac3602728,target=android-9
-Build Version:0.4.3,13,093cf46438b95cc379139792f7093739dcdfc2a7,target=android-9
+Build Version:0.2,6,94715551ab863b20df3d,target=android-10
+Build Version:0.4.2,12,843c7eecef6ac3602728,target=android-10
+Build Version:0.4.3,13,093cf46438b95cc379139792f7093739dcdfc2a7,target=android-10
 
 Market Version:0.4.3
 Market Version Code:13
+

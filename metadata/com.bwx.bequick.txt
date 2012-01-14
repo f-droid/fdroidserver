@@ -1,23 +1,23 @@
-Use Built:Yes
-License:Apache2
 Category:System
+License:Apache2
 Web Site:http://code.google.com/p/quick-settings/
 Source Code:http://code.google.com/p/quick-settings/source/checkout
 Issue Tracker:http://code.google.com/p/quick-settings/issues/list
+
 Summary:System settings tool
 Description:
 Quick Settings provides quick access to various Android system
 settings, such as WiFi, GPS, brightness and all the various volume
 controls.
 .
+
 Repo Type:svn
 Repo:http://quick-settings.googlecode.com/svn/trunk/quick-settings/
 
-#Don't know why the market version has a slightly different version code...
-Build Version:1.9.8 p2,201012061,!Different market code
 Build Version:1.9.8 p2,201012060,184,target=android-8
 Build Version:1.9.9.2,201106160,213,target=android-8
 Build Version:1.9.9.3,201107260,220,target=android-8
 
 Market Version:1.9.9.5
 Market Version Code:201110061
+

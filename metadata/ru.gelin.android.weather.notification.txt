@@ -1,11 +1,13 @@
-License:GPLv2
 Category:Internet
+License:GPLv2
 Web Site:https://code.google.com/p/weather-notification-android/
 Source Code:https://code.google.com/p/weather-notification-android/source/browse/
 Issue Tracker:https://code.google.com/p/weather-notification-android/issues/list
-Summary: Displays the air temperature and other weather conditions in the Android notification bar. 
-Description:Simple application which displays the air temperature
-and other weather conditions in the Android notification bar.
+
+Summary:Weather info in notification bar
+Description:
+Simple application which displays the air temperature
+and other weather conditions in the notification bar.
 The air temperature is always visible like a system clock. 
 .
 
@@ -16,3 +18,4 @@ Build Version:0.2-beta2,23,253d9dc3022a,target=android-4
 
 Market Version:0.2-beta2
 Market Version Code:23
+
