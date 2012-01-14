@@ -12,6 +12,8 @@ Revision history
 
 */
 
+include('android-permissions.php');
+
 class FDroid
 {
 
@@ -100,8 +102,10 @@ class FDroid
 
 
 	function get_app($query_vars) {
+		$permissions_object = new AndroidPermissions($this->site_path.'/repo/AndroidManifest.xml', $this->site_path.'/repo/strings.xml', $this->site_path.'/repo/android-permissions.cache');
+		$permissions_data = $permissions_object->get_permissions_array();
 
-		$xml = simplexml_load_file($this->site_path."/repo/index.xml");
+		$xml = simplexml_load_file($this->site_path.'/repo/index.xml');
 		foreach($xml->children() as $app) {
 
 			$attrs=$app->attributes();
@@ -192,14 +196,77 @@ class FDroid
 					$out.='<b>Donate:</b> <a href="'.$donate.'">'.$donate.'</a><br />';
 				$out.="</p>";
 
+				$out.='<script type="text/javascript">';
+				$out.='function showHidePermissions(id) {';
+				$out.='  if(document.getElementById(id).style.display==\'none\')';
+				$out.='	document.getElementById(id).style.display=\'block\';';
+				$out.='  else';
+				$out.='	document.getElementById(id).style.display=\'none\';';
+				$out.='  return false;';
+				$out.='}';
+				$out.='</script>';
+
 				$out.="<h3>Packages</h3>";
+				$i=0;
 				foreach($apks as $apk) {
-					$out.="<p><b>Version ".$apk['version']."</b> - ";
-					$out.='<a href="http://f-droid.org/repo/'.$apk['apkname'].'">download</a> ';
+					$out.="<p><b>Version ".$apk['version']."</b><br />";
+					$out.='<a href="http://f-droid.org/repo/'.$apk['apkname'].'">download apk</a> ';
 					$out.=$apk['size']." bytes";
 					if($apk['srcname'])
 						$out.='<br><a href="http://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a>';
-					$out.="</p>";
+
+					/*if($i==0)
+						$divStyleDisplay='block';
+					else*/
+						$divStyleDisplay='none';
+					$divId='permissions'.$i;
+					$out.='<br /><a href="javascript:void(0);" onClick="showHidePermissions(\''.$divId.'\');">view permissions</a><br/>';
+					$out.='<div style="display:'.$divStyleDisplay.';" id="'.$divId.'">';
+					$permissions = explode(',',$apk['permissions']);
+					usort($permissions,
+						function ($a, $b) use (&$permissions_data) {
+
+							$aProtectionLevel = $permissions_data['permission'][$a]['protectionLevel'];
+							$bProtectionLevel = $permissions_data['permission'][$b]['protectionLevel'];
+
+							if($aProtectionLevel != $bProtectionLevel) {
+								if(strlen($aProtectionLevel)==0) return 1;
+								if(strlen($bProtectionLevel)==0) return -1;
+
+								return strcmp($aProtectionLevel, $bProtectionLevel);
+							}
+
+							$aGroup = $permissions_data['permission'][$a]['permissionGroup'];
+							$bGroup = $permissions_data['permission'][$b]['permissionGroup'];
+
+							if($aGroup != $bGroup) {
+								return strcmp($aGroup, $bGroup);
+							}
+
+							return strcmp($a, $b);
+						}
+					);
+
+					$permission_group_last = '';
+					foreach($permissions as $permission) {
+						$permission_group = $permissions_data['permission'][$permission]['permissionGroup'];
+						if($permission_group != $permission_group_last) {
+							$permission_group_label = $permissions_data['permission-group'][$permission_group]['label'];
+							if($permission_group_label=='') $permission_group_label = 'Extra/Custom';
+							$out.='<strong>'.strtoupper($permission_group_label).'</strong><br/>';
+							$permission_group_last = $permission_group;
+						}
+
+						$out.=$this->get_permission_protection_level_icon($permissions_data['permission'][$permission]['protectionLevel']).' ';
+						$out.='<strong>'.$permissions_data['permission'][$permission]['label'].'</strong> [<code>'.$permission.'</code>]<br/>';
+						if($permissions_data['permission'][$permission]['description']) $out.=$permissions_data['permission'][$permission]['description'].'<br/>';
+						//$out.=$permissions_data['permission'][$permission]['comment'].'<br/>';
+						$out.='<br/>';
+					}
+					$out.='</div>';
+
+					$out.='</p>';
+					$i++;
 				}
 
 				$out.='<hr><p><a href="'.makelink($query_vars,array('fdid'=>null)).'">Index</a></p>';
@@ -210,6 +277,20 @@ class FDroid
 		return "<p>Application not found</p>";
 	}
 
+	private function get_permission_protection_level_icon($protection_level) {
+		if($protection_level=='dangerous')
+		{
+			return '<span style="color:#DD9900;font-size:150%;">&#x26a0;</span>';
+		}
+		elseif($protection_level=='normal')
+		{
+			return '<span style="color:#6666FF;font-size:110%;">&#x24D8;</span>';
+		}
+		else
+		{
+			return '<span style="color:#33AA33;font-size:130%;">&#x2699;</span>';
+		}
+	}
 
 	function get_apps($query_vars) {
 
