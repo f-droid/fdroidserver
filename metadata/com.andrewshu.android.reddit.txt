@@ -21,7 +21,9 @@ Build Version:1.2.1,73,e35fd128c954d41e24abf91b71f301740f6ca483,prebuild=rsync -
 Build Version:1.2.1.2,75,28c98a7,prebuild=rsync -r lib/ libs,target=android-10
 Build Version:1.2.1.3,76,143892b558,prebuild=rsync -r lib/ libs,target=android-10
 Build Version:1.2.1.5,78,!more dependency shuffling required and watch out for the proguard config
+Build Version:1.3.0,83,v1.3.0,target=android-11,prebuild=mkdir lib && mv libs-dependencies/* lib && rm -r libs-dependencies && mv libs/* lib && rm -r libs && git checkout proguard.cfg
 
-Market Version:1.2.2b
-Market Version Code:82
+Update Check Mode:Market
+Market Version:1.3.0
+Market Version Code:83
 

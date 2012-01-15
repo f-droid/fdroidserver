@@ -16,7 +16,9 @@ Repo:https://hackerskeyboard.googlecode.com/hg/
 Build Version:v1.18,1018,8298cd8728c2,subdir=java,target=android-11,buildjni=yes
 Build Version:v1.20,1020,e703fa82a4c3,subdir=java,target=android-11,buildjni=yes
 Build Version:v1.22,1022,154e21230e81,subdir=java,target=android-11,buildjni=yes
+Build Version:v1.29,1029,1.29,subdir=java,target=android-11,buildjni=yes,prebuild=./AutoVersion.sh
 
-Market Version:v1.27
-Market Version Code:1027
+Update Check Mode:Market
+Market Version:v1.29
+Market Version Code:1029
 
