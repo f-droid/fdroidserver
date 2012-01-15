@@ -1,0 +1,18 @@
+Category:Internet
+License:Apache2
+Web Site:http://andstatus.org/
+Source Code:https://github.com/andstatus/andstatus
+Issue Tracker:https://github.com/andstatus/andstatus/issues
+Donate:
+
+Summary:a light-weight Twitter alternative
+Description:
+It allows you to read tweets, send Status updates, create Favorites etc. even when you are offline. 
+.
+
+Repo Type:git
+Repo:git://github.com/andstatus/andstatus.git
+
+# needs to adapt src/org/andstatus/app/net/OAuthKeys.java
+#Build Version:1.2.4,48,9dba38c8d77fe8068564b88c197fb60ec64b60a3,target=android-3
+
