@@ -14,6 +14,8 @@ It is extremely customizable with many options to suit your needs and style.
 Repo Type:svn
 Repo:http://droid-notify.googlecode.com/svn/trunk
 
-# Doesn't build, missing facebook library and error for others
-#Build Version:2.20,27,707
+# builds only when
+# https://github.com/facebook/facebook-android-sdk/tree/master/facebook
+# is added as ../com_facebook_android
+Build Version:2.20,27,707,prebuild=mv lib/ libs/
 
