@@ -1,0 +1,17 @@
+Category:System
+License:GPLv3
+Web Site:http://code.google.com/p/notification-plus/
+Source Code:https://code.google.com/p/notification-plus/source/browse/
+Issue Tracker:https://code.google.com/p/notification-plus/issues/list
+Donate:
+
+Summary:provides recurring acustic notifications
+Description:
+Delivers recurring notifications via the phone's vibrator or notification ringtone. This is especially useful for phones which lack a notification LED, such as the Nexus S, and at least two of the Galaxy S variants.
+.
+
+Repo Type:hg
+Repo:https://code.google.com/p/notification-plus/
+
+Build Version:1.1,2,396686558905
+
