@@ -5,9 +5,11 @@ Source Code:https://code.google.com/p/notification-plus/source/browse/
 Issue Tracker:https://code.google.com/p/notification-plus/issues/list
 Donate:
 
-Summary:provides recurring acustic notifications
+Summary:Recurring acoustic notifications
 Description:
-Delivers recurring notifications via the phone's vibrator or notification ringtone. This is especially useful for phones which lack a notification LED, such as the Nexus S, and at least two of the Galaxy S variants.
+Delivers recurring notifications via the phone's vibrator or notification
+ringtone. This is especially useful for phones which lack a notification LED,
+such as the Nexus S, and at least two of the Galaxy S variants.
 .
 
 Repo Type:hg
