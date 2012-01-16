@@ -22,5 +22,5 @@ Repo:git://github.com/thasmin/Podax.git
 #Build Version:1.3,9,e44055a50fe5f4457f17c70666e3683bd7818fc1,target=android-7
 #Build Version:2.0,10,7141fee3933a580556121a01c60da04e9f37f7ac,target=android-7
 #Build Version:2.1,11,ab60ff786c0e050c94979f4801330c4f226e26d7,target=android-7
-Build Version:2.11,12,e93f913713147b524172ca052be687695d0346f8,target=android-7
+Build Version:2.11,12,13d0e30198d96b4cd7b1a87065a1b8cf3ed578f4,target=android-7
 
