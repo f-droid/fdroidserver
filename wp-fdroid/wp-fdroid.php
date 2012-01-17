@@ -105,6 +105,7 @@ class FDroid
 		$permissions_object = new AndroidPermissions($this->site_path.'/repo/AndroidManifest.xml', $this->site_path.'/repo/strings.xml', $this->site_path.'/repo/android-permissions.cache');
 		$permissions_data = $permissions_object->get_permissions_array();
 
+		// Get app data
 		$xml = simplexml_load_file($this->site_path.'/repo/index.xml');
 		foreach($xml->children() as $app) {
 
@@ -174,7 +175,16 @@ class FDroid
 
 					}
 				}
+				
+				// Generate app diff data
+				foreach(array_reverse($apks, true) as $key=>$apk) {
+					if(isset($previous)) {
+							$apks[$key]['diff']['size'] = $apk['size']-$previous['size'];
+					}
+					$previous = $apk;
+				}
 
+				// Output app information
 				$out='<div id="appheader">';
 				$out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$icon.'" width=48></div>';
 				$out.='<p><span style="font-size:20px">'.$name."</span>";
@@ -212,6 +222,12 @@ class FDroid
 					$out.="<p><b>Version ".$apk['version']."</b><br />";
 					$out.='<a href="http://f-droid.org/repo/'.$apk['apkname'].'">download apk</a> ';
 					$out.=$this->human_readable_size($apk['size']);
+					$diffSize = $apk['diff']['size'];
+					if(abs($diffSize) > 500) {
+						$out.=' <span style="color:#AAAAAA;">(';
+						$out.=$diffSize>0?'+':'';
+						$out.=$this->human_readable_size($diffSize, 1).')</span>';
+					}
 					if($apk['srcname']) {
 						$out.='<br /><a href="http://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a> ';
 						$out.=$this->human_readable_size(filesize($this->site_path.'/repo/'.$apk['srcname']));
@@ -296,11 +312,11 @@ class FDroid
 		}
 	}
 	
-	private function human_readable_size($size) {
+	private function human_readable_size($size, $minDiv=0) {
 		$si_prefix = array('bytes','kB','MB');
 		$div = 1000;
 		
-		for($i=0;$size > $div && $i < count($si_prefix);$i++) {
+		for($i=0;(abs($size) > $div && $i < count($si_prefix)) || $i<$minDiv;$i++) {
 			$size /= $div;
 		}
 
