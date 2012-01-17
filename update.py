@@ -460,6 +460,12 @@ if repo_keyalias != None:
 iconfilename = os.path.join(icon_dir, os.path.basename(repo_icon))
 shutil.copyfile(repo_icon, iconfilename)
 
+#Update known apks info...
+knownapks = common.KnownApks()
+for apk in apks:
+    knownapks.recordapk(apk['apkname'], apk['id'])
+knownapks.writeifchanged()
+
 print "Finished."
 print str(apps_inrepo) + " apps in repo"
 print str(apps_disabled) + " disabled"
