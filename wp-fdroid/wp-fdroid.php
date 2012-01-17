@@ -102,6 +102,7 @@ class FDroid
 
 
 	function get_app($query_vars) {
+		global $permissions_data;
 		$permissions_object = new AndroidPermissions($this->site_path.'/repo/AndroidManifest.xml', $this->site_path.'/repo/strings.xml', $this->site_path.'/repo/android-permissions.cache');
 		$permissions_data = $permissions_object->get_permissions_array();
 
@@ -226,29 +227,7 @@ class FDroid
 						$out.='<br /><a href="javascript:void(0);" onClick="showHidePermissions(\''.$divId.'\');">view permissions</a><br/>';
 						$out.='<div style="display:'.$divStyleDisplay.';" id="'.$divId.'">';
 						$permissions = explode(',',$apk['permissions']);
-						usort($permissions,
-							function ($a, $b) use (&$permissions_data) {
-
-								$aProtectionLevel = $permissions_data['permission'][$a]['protectionLevel'];
-								$bProtectionLevel = $permissions_data['permission'][$b]['protectionLevel'];
-
-								if($aProtectionLevel != $bProtectionLevel) {
-									if(strlen($aProtectionLevel)==0) return 1;
-									if(strlen($bProtectionLevel)==0) return -1;
-
-									return strcmp($aProtectionLevel, $bProtectionLevel);
-								}
-
-								$aGroup = $permissions_data['permission'][$a]['permissionGroup'];
-								$bGroup = $permissions_data['permission'][$b]['permissionGroup'];
-
-								if($aGroup != $bGroup) {
-									return strcmp($aGroup, $bGroup);
-								}
-
-								return strcmp($a, $b);
-							}
-						);
+						usort($permissions, "permissions_cmp");
 
 						$permission_group_last = '';
 						foreach($permissions as $permission) {
@@ -534,6 +513,29 @@ class FDOutGrid
 	function outputEnd() {
 		return '</tr></table>'."\n";
 	}
+}
+
+function permissions_cmp($a, $b) {
+	global $permissions_data;
+
+	$aProtectionLevel = $permissions_data['permission'][$a]['protectionLevel'];
+	$bProtectionLevel = $permissions_data['permission'][$b]['protectionLevel'];
+
+	if($aProtectionLevel != $bProtectionLevel) {
+		if(strlen($aProtectionLevel)==0) return 1;
+		if(strlen($bProtectionLevel)==0) return -1;
+
+		return strcmp($aProtectionLevel, $bProtectionLevel);
+	}
+
+	$aGroup = $permissions_data['permission'][$a]['permissionGroup'];
+	$bGroup = $permissions_data['permission'][$b]['permissionGroup'];
+
+	if($aGroup != $bGroup) {
+		return strcmp($aGroup, $bGroup);
+	}
+
+	return strcmp($a, $b);
 }
 
 // Make a link to this page, with the current query vars attached and desired params added/modified
