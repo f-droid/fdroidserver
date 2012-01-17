@@ -22,6 +22,7 @@ Build Version:0.6.8',41,!No corresponding source for whatever this is
 Build Version:0.6.9,42,v0.6.9,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir raw
 Build Version:0.6.9',43,!No corresponding source for whatever this is
 
-Market Version:0.6.9'
-Market Version Code:43
+Update Check Mode:Market
+Market Version:0.7.0
+Market Version Code:45
 

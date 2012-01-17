@@ -11,6 +11,7 @@ Description:
 A Commodore 64 (C64) emulator.
 .
 
-Market Version:1.5.13
-Market Version Code:10513
+Update Check Mode:Market
+Market Version:1.6
+Market Version Code:10600
 
