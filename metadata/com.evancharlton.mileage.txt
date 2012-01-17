@@ -1,8 +1,8 @@
 Category:Office
 License:Apache2
-Web Site:http://evancharlton.com/projects/mileage/
-Source Code:http://evancharlton.com/projects/mileage/source/
-Issue Tracker:
+Web Site:http://evancharlton.com/projects/mileage/source
+Source Code:http://code.google.com/p/android-mileage/source/checkout
+Issue Tracker:http://code.google.com/p/android-mileage/issues/list
 Donate:http://evancharlton.com/donate/
 
 Summary:A Mileage tracker
@@ -12,11 +12,11 @@ exporting of data in various formats, so it is easy to sync with
 your existing logs.
 .
 
-Repo Type:hg
-Repo:http://hg.evancharlton.com/mileage
+Repo Type:git
+Repo:https://code.google.com/p/android-mileage/
 
 Build Version:3.0.0,3000,0766c4f352a5,subdir=trunk,oldsdkloc=yes
-Build Version:3.0.8,3080,!No source in repo
+Build Version:3.0.8,3080,16b397029a76,subdir=trunk,oldsdkloc=yes
 
 Market Version:3.0.8
 Market Version Code:3080
