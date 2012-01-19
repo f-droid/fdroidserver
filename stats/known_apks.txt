@@ -88,8 +88,7 @@ ReplicaIsland_1.3.apk com.replica.replicaisland
 Ringdroid-2.3.apk com.ringdroid
 Ringdroid-2.4-rc2.apk com.ringdroid
 SayMyName_2.5.3.2.apk org.mailboxer.saymyname
-Scrambled Net-5.0.apk
-Scrambled Net-5.0.apk org.hermit.netscramble
+Scrambled_Net-5.0.apk org.hermit.netscramble
 Sipdroid-1.6.1.apk org.sipdroid.sipua
 Sipdroid-2.0.1.apk org.sipdroid.sipua
 Sipdroid-2.1.apk org.sipdroid.sipua
