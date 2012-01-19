@@ -272,6 +272,7 @@ edu.nyu.cs.omnidroid.app_6.apk edu.nyu.cs.omnidroid.app 2011-10-04
 edu.rit.poe.atomix_2.apk edu.rit.poe.atomix
 fennec-5.0.multi.eabi-arm.apk org.mozilla.firefox
 fennec-6.0.multi.eabi-arm.apk org.mozilla.firefox
+fennec-9.0.multi.android-arm.apk org.mozilla.firefox 2012-01-19
 fm.libre.droid_3.apk fm.libre.droid
 fm.libre.droid_4.apk fm.libre.droid
 fr.seeks_4.apk fr.seeks
