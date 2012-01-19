@@ -782,3 +782,33 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, 
 
     return root_dir
 
+
+class KnownApks:
+
+    def __init__(self):
+        self.path = os.path.join('stats', 'known_apks.txt')
+        self.apks = {}
+        if os.path.exists(self.path):
+            for line in file( self.path):
+                t = line.rstrip().split(' ')
+                self.apks[t[0]] = t[1]
+        self.changed = False
+
+    def writeifchanged(self):
+        if self.changed:
+            if not os.path.exists('stats'):
+                os.mkdir('stats')
+            f = open(self.path, 'w')
+            for apk, app in self.apks.iteritems():
+                f.write(apk + ' ' + app + '\n')
+            f.close()
+
+    def recordapk(self, apk, app):
+        if not apk in self.apks:
+            self.apks[apk] = app
+            self.changed = True
+
+    def getapp(self, apkname):
+        if apkname in self.apks:
+            return self.apks[apkname]
+        return None
