@@ -79,6 +79,9 @@ apks = []
 for apkfile in glob.glob(os.path.join('repo','*.apk')):
 
     apkfilename = apkfile[5:]
+    if apkfilename.find(' ') != -1:
+        print "No spaces in APK filenames!"
+        sys.exit(1)
     srcfilename = apkfilename[:-4] + "_src.tar.gz"
 
     if not options.quiet:
@@ -459,6 +462,12 @@ if repo_keyalias != None:
 #Copy the repo icon into the repo directory...
 iconfilename = os.path.join(icon_dir, os.path.basename(repo_icon))
 shutil.copyfile(repo_icon, iconfilename)
+
+#Update known apks info...
+knownapks = common.KnownApks()
+for apk in apks:
+    knownapks.recordapk(apk['apkname'], apk['id'])
+knownapks.writeifchanged()
 
 print "Finished."
 print str(apps_inrepo) + " apps in repo"
