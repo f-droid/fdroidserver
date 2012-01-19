@@ -103,7 +103,9 @@ class FDroid
 
 	function get_app($query_vars) {
 		global $permissions_data;
-		$permissions_object = new AndroidPermissions($this->site_path.'/repo/AndroidManifest.xml', $this->site_path.'/repo/strings.xml', $this->site_path.'/repo/android-permissions.cache');
+		$permissions_object = new AndroidPermissions($this->site_path.'/wp-content/plugins/wp-fdroid/AndroidManifest.xml',
+			$this->site_path.'/wp-content/plugins/wp-fdroid/strings.xml',
+			sys_get_temp_dir().'/android-permissions.cache');
 		$permissions_data = $permissions_object->get_permissions_array();
 
 		$xml = simplexml_load_file($this->site_path.'/repo/index.xml');
