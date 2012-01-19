@@ -112,10 +112,11 @@ for logfile in glob.glob(os.path.join(logsdir,'access-*.log')):
                 _, apkname = os.path.split(uri)
                 app = knownapks.getapp(apkname)
                 if app:
-                    if app in apps:
-                        apps[app] += 1
+                    appid, _ = app
+                    if appid in apps:
+                        apps[appid] += 1
                     else:
-                        apps[app] = 1
+                        apps[appid] = 1
                 else:
                     if not apkname in unknownapks:
                         unknownapks.append(apkname)

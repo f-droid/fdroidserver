@@ -19,7 +19,7 @@
 import glob, os, sys, re
 import shutil
 import subprocess
-
+import time
 
 def getvcs(vcstype, remote, local):
     if vcstype == 'git':
@@ -791,7 +791,10 @@ class KnownApks:
         if os.path.exists(self.path):
             for line in file( self.path):
                 t = line.rstrip().split(' ')
-                self.apks[t[0]] = t[1]
+                if len(t) == 2:
+                    self.apks[t[0]] = (t[1], None)
+                else:
+                    self.apks[t[0]] = (t[1], time.strptime(t[2], '%Y-%m-%d'))
         self.changed = False
 
     def writeifchanged(self):
@@ -801,14 +804,18 @@ class KnownApks:
             f = open(self.path, 'w')
             lst = []
             for apk, app in self.apks.iteritems():
-                lst.append(apk + ' ' + app)
+                appid, added = app
+                line = apk + ' ' + appid
+                if added:
+                    line += ' ' + time.strftime('%Y-%m-%d', added)
+                lst.append(line)
             for line in sorted(lst):
                 f.write(line + '\n')
             f.close()
 
     def recordapk(self, apk, app):
         if not apk in self.apks:
-            self.apks[apk] = app
+            self.apks[apk] = (app, time.gmtime(time.time()))
             self.changed = True
 
     def getapp(self, apkname):
