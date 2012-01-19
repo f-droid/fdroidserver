@@ -799,8 +799,11 @@ class KnownApks:
             if not os.path.exists('stats'):
                 os.mkdir('stats')
             f = open(self.path, 'w')
+            lst = []
             for apk, app in self.apks.iteritems():
-                f.write(apk + ' ' + app + '\n')
+                lst.append(apk + ' ' + app)
+            for line in sorted(lst):
+                f.write(line + '\n')
             f.close()
 
     def recordapk(self, apk, app):
