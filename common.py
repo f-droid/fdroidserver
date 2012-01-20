@@ -76,6 +76,8 @@ class vcs:
         assert False    # Must be defined in child
 
     # Get new commits from the remote repository. Local must be clean.
+    # Fetch would really be a better name, as this doesn't necessarily
+    # (depending on the vcs) affect the local source tree or HEAD!
     def pull(self):
         assert False    # Must be defined in child
 
@@ -109,11 +111,8 @@ class vcs_git(vcs):
 
     def pull(self):
         self.checkrepo()
-        if subprocess.call(['git', 'pull', 'origin'],
-                cwd=self.local) != 0:
-            raise VCSException("Git pull failed")
         # Might need tags that aren't on a branch.
-        if subprocess.call(['git', 'fetch', '--tags', 'origin'],
+        if subprocess.call(['git', 'fetch', '--all', '--tags', 'origin'],
                 cwd=self.local) != 0:
             raise VCSException("Git fetch failed")
 
