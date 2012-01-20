@@ -112,7 +112,7 @@ class vcs_git(vcs):
     def pull(self):
         self.checkrepo()
         # Might need tags that aren't on a branch.
-        if subprocess.call(['git', 'fetch', '--all', '--tags', 'origin'],
+        if subprocess.call(['git', 'fetch', '--tags', 'origin'],
                 cwd=self.local) != 0:
             raise VCSException("Git fetch failed")
 
