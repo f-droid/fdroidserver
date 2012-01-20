@@ -14,8 +14,9 @@ It is extremely customizable with many options to suit your needs and style.
 Repo Type:svn
 Repo:http://droid-notify.googlecode.com/svn/trunk
 
-# builds only when
-# https://github.com/facebook/facebook-android-sdk/tree/master/facebook
-# is added as ../com_facebook_android
-Build Version:2.20,27,707,prebuild=mv lib/ libs/
+Build Version:2.20,27,707,patch=facebook.patch,prebuild=mv lib/ libs/ \
+	&& git clone git://github.com/facebook/facebook-android-sdk.git \
+	&& cp facebook-android-sdk/facebook/default.properties facebook-android-sdk/facebook/project.properties \
+	&& cp build.xml facebook-android-sdk/facebook/ \
+	&& cp local.properties facebook-android-sdk/facebook/
 
