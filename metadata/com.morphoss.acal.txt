@@ -5,10 +5,12 @@ Source Code:http://gitorious.org/acal
 Issue Tracker:
 Donate:http://acal.me/wiki/Donating
 
-Summary:Calendar - CalDAV client
+Summary:CalDAV Calendar & Tasks client
 Description:
 A CalDAV client, allowing you to directly access a calendar on a CalDAV
-server.
+server. aCal includes support for VEVENT & VTODO (Events and Tasks) and
+can also synchronize your contacts from an addressbook collection on a
+CardDAV server.
 .
 
 Repo Type:git
