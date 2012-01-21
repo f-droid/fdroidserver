@@ -227,6 +227,7 @@ com.morphoss.acal_34.apk com.morphoss.acal 2011-12-12
 com.morphoss.acal_35.apk com.morphoss.acal 2012-01-03
 com.morphoss.acal_36.apk com.morphoss.acal 2012-01-09
 com.morphoss.acal_37.apk com.morphoss.acal 2012-01-15
+com.morphoss.acal_38.apk com.morphoss.acal 2012-01-20
 com.mp3tunes.android.player_89.apk com.mp3tunes.android.player 2011-04-09
 com.nexes.manager_212.apk com.nexes.manager 2011-03-09
 com.nexes.manager_218.apk com.nexes.manager 2011-07-22
