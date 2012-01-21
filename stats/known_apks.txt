@@ -112,6 +112,7 @@ alogcat-2.1.4.apk org.jtb.alogcat
 andLess_05202011.apk net.avs234 2011-05-20
 android.androidVNC_13.apk android.androidVNC 2011-04-06
 androidVNC_build20100725.apk android.androidVNC
+apps.droidnotify_27.apk apps.droidnotify 2012-01-21
 at.tomtasche.reader_11.apk at.tomtasche.reader 2011-01-05
 at.tomtasche.reader_12.apk at.tomtasche.reader 2011-01-10
 at.tomtasche.reader_15.apk at.tomtasche.reader 2011-01-13
@@ -143,6 +144,7 @@ com.android.keepass_83.apk com.android.keepass 2011-12-31
 com.android.keepass_84.apk com.android.keepass 2012-01-19
 com.angrydoughnuts.android.alarmclock_8.apk com.angrydoughnuts.android.alarmclock 2011-05-19
 com.appengine.paranoid_android.lost_12.apk com.appengine.paranoid_android.lost 2012-01-08
+com.axelby.podax_12.apk com.axelby.podax 2012-01-21
 com.beem.project.beem_10.apk com.beem.project.beem 2012-01-20
 com.beem.project.beem_7.apk com.beem.project.beem 2011-02-03
 com.beem.project.beem_9.apk com.beem.project.beem 2012-01-10
@@ -189,6 +191,7 @@ com.google.android.diskusage_2103.apk com.google.android.diskusage 2011-05-16
 com.google.android.diskusage_3010.apk com.google.android.diskusage 2011-08-09
 com.google.android.diskusage_3020.apk com.google.android.diskusage 2011-12-08
 com.google.android.maps.mytracks_23.apk com.google.android.maps.mytracks 2011-02-11
+com.google.android.stardroid_1112.apk com.google.android.stardroid 2012-01-21
 com.google.code.appsorganizer_162.apk com.google.code.appsorganizer 2011-01-27
 com.google.code.appsorganizer_163.apk com.google.code.appsorganizer 2011-02-13
 com.google.code.appsorganizer_164.apk com.google.code.appsorganizer 2011-04-19
@@ -346,6 +349,7 @@ net.osmand.plus_39.apk net.osmand.plus 2011-10-07
 net.osmand.plus_42.apk net.osmand.plus 2011-12-08
 net.osmand_25.apk net.osmand 2011-02-11
 net.osmand_26.apk net.osmand 2011-06-24
+net.pierrox.mcompass_10.apk net.pierrox.mcompass 2012-01-21
 net.rocrail.androc_219.apk net.rocrail.androc 2011-01-10
 net.rocrail.androc_221.apk net.rocrail.androc 2011-03-01
 net.rocrail.androc_228.apk net.rocrail.androc 2011-04-19
@@ -572,6 +576,7 @@ transdroid-1.1.0-beta.apk org.transdroid 2011-10-21
 tuioDroid.impl_4.apk tuioDroid.impl 2011-11-28
 tuxrider_1.0.4.apk com.drodin.tuxrider
 urbanstew.RehearsalAssistant_22.apk urbanstew.RehearsalAssistant 2011-02-19
+us.lindanrandy.cidrcalculator_115.apk us.lindanrandy.cidrcalculator 2012-01-21
 vu.de.urpool.quickdroid_31.apk vu.de.urpool.quickdroid 2011-01-27
 vu.de.urpool.quickdroid_37.apk vu.de.urpool.quickdroid 2011-03-10
 vu.de.urpool.quickdroid_38.apk vu.de.urpool.quickdroid 2011-05-16
