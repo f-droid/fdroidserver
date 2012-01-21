@@ -178,12 +178,20 @@ class FDroid
 
 					}
 				}
-				
+
 				// Generate app diff data
 				foreach(array_reverse($apks, true) as $key=>$apk) {
 					if(isset($previous)) {
-							$apks[$key]['diff']['size'] = $apk['size']-$previous['size'];
+						// Apk size
+						$apks[$key]['diff']['size'] = $apk['size']-$previous['size'];
 					}
+
+					// Permissions
+					$permissions = explode(',',$apk['permissions']);
+					$permissionsPrevious = isset($previous['permissions'])?explode(',',$previous['permissions']):array();
+					$apks[$key]['diff']['permissions']['added'] = array_diff($permissions, $permissionsPrevious);
+					$apks[$key]['diff']['permissions']['removed'] = array_diff($permissionsPrevious, $permissions);
+
 					$previous = $apk;
 				}
 
@@ -222,6 +230,7 @@ class FDroid
 				$out.="<h3>Packages</h3>";
 				$i=0;
 				foreach($apks as $apk) {
+					$first = $i+1==count($apks);
 					$out.="<p><b>Version ".$apk['version']."</b><br />";
 					$out.='<a href="http://f-droid.org/repo/'.$apk['apkname'].'">download apk</a> ';
 					$out.=$this->human_readable_size($apk['size']);
@@ -237,36 +246,67 @@ class FDroid
 					}
 
 					if(isset($apk['permissions'])) {
+						// Permissions diff link
+						if($first == false) {
+							$permissionsAddedCount = count($apk['diff']['permissions']['added']);
+							$permissionsRemovedCount = count($apk['diff']['permissions']['removed']);
+							$divIdDiff='permissionsDiff'.$i;
+							if($permissionsAddedCount || $permissionsRemovedCount) {
+								$out.='<br /><a href="javascript:void(0);" onClick="showHidePermissions(\''.$divIdDiff.'\');">permissions diff</a>';
+								$out.=' <span style="color:#AAAAAA;">(';
+								if($permissionsAddedCount)
+									$out.='+'.$permissionsAddedCount;
+								if($permissionsAddedCount && $permissionsRemovedCount)
+									$out.='/';
+								if($permissionsRemovedCount)
+									$out.='-'.$permissionsRemovedCount;
+								$out.=')</span>';
+							}
+							else
+							{
+								$out.='<br /><span style="color:#999999;">no permission changes</span>';
+							}
+						}
+
+						// Permissions list link
+						$permissionsListString = $this->get_permission_list_string(explode(',',$apk['permissions']), $permissions_data, $summary);
 						/*if($i==0)
 							$divStyleDisplay='block';
 						else*/
 							$divStyleDisplay='none';
 						$divId='permissions'.$i;
-						$out.='<br /><a href="javascript:void(0);" onClick="showHidePermissions(\''.$divId.'\');">view permissions</a><br/>';
-						$out.='<div style="display:'.$divStyleDisplay.';" id="'.$divId.'">';
-						$permissions = explode(',',$apk['permissions']);
-						usort($permissions, "permissions_cmp");
+						$out.='<br /><a href="javascript:void(0);" onClick="showHidePermissions(\''.$divId.'\');">view permissions</a>';
+						$out.=' <span style="color:#AAAAAA;">['.$summary.']</span>';
+						$out.='<br/>';
 
-						$permission_group_last = '';
-						foreach($permissions as $permission) {
-							$permission_group = $permissions_data['permission'][$permission]['permissionGroup'];
-							if($permission_group != $permission_group_last) {
-								$permission_group_label = $permissions_data['permission-group'][$permission_group]['label'];
-								if($permission_group_label=='') $permission_group_label = 'Extra/Custom';
-								$out.='<strong>'.strtoupper($permission_group_label).'</strong><br/>';
-								$permission_group_last = $permission_group;
+						// Permissions list
+						$out.='<div style="display:'.$divStyleDisplay.';" id="'.$divId.'">';
+						$out.=$permissionsListString;
+						$out.='</div>';
+
+						// Permissions diff
+						{
+							$out.='<div style="display:'.$divStyleDisplay.';" id="'.$divIdDiff.'">';
+							$permissionsRemoved = $apk['diff']['permissions']['removed'];
+							usort($permissionsRemoved, "permissions_cmp");
+
+							// Added permissions
+							if($permissionsAddedCount) {
+								$out.='<h5>ADDED</h5><br />';
+								$out.=$this->get_permission_list_string($apk['diff']['permissions']['added'], $permissions_data, $summary);
 							}
 
-							$out.=$this->get_permission_protection_level_icon($permissions_data['permission'][$permission]['protectionLevel']).' ';
-							$out.='<strong>'.$permissions_data['permission'][$permission]['label'].'</strong> [<code>'.$permission.'</code>]<br/>';
-							if($permissions_data['permission'][$permission]['description']) $out.=$permissions_data['permission'][$permission]['description'].'<br/>';
-							//$out.=$permissions_data['permission'][$permission]['comment'].'<br/>';
-							$out.='<br/>';
+							// Removed permissions
+							if($permissionsRemovedCount) {
+								$out.='<h5>REMOVED</h5><br />';
+								$out.=$this->get_permission_list_string($apk['diff']['permissions']['removed'], $permissions_data, $summary);
+							}
+
+							$out.='</div>';
 						}
-						$out.='</div>';
 					}
 					else {
-						$out.='<br /><span style="color:#999999;">no permissions</span><br />';
+						$out.='<br /><span style="color:#999999;">no extra permissions needed</span><br />';
 					}
 
 					$out.='</p>';
@@ -281,22 +321,68 @@ class FDroid
 		return "<p>Application not found</p>";
 	}
 
-	private function get_permission_protection_level_icon($protection_level) {
+	private function get_permission_list_string($permissions, $permissions_data, &$summary) {
+		$out='';
+		usort($permissions, "permissions_cmp");
+		$permission_group_last = '';
+		foreach($permissions as $permission) {
+			$permission_group = $permissions_data['permission'][$permission]['permissionGroup'];
+			if($permission_group != $permission_group_last) {
+				$permission_group_label = $permissions_data['permission-group'][$permission_group]['label'];
+				if($permission_group_label=='') $permission_group_label = 'Extra/Custom';
+				$out.='<strong>'.strtoupper($permission_group_label).'</strong><br/>';
+				$permission_group_last = $permission_group;
+			}
+
+			$out.=$this->get_permission_protection_level_icon($permissions_data['permission'][$permission]['protectionLevel']).' ';
+			$out.='<strong>'.$permissions_data['permission'][$permission]['label'].'</strong> [<code>'.$permission.'</code>]<br/>';
+			if($permissions_data['permission'][$permission]['description']) $out.=$permissions_data['permission'][$permission]['description'].'<br/>';
+			//$out.=$permissions_data['permission'][$permission]['comment'].'<br/>';
+			$out.='<br/>';
+
+			if(!isset($summaryCount[$permissions_data['permission'][$permission]['protectionLevel']]))
+				$summaryCount[$permissions_data['permission'][$permission]['protectionLevel']] = 0;
+			$summaryCount[$permissions_data['permission'][$permission]['protectionLevel']]++;
+		}
+
+		$summary = '';
+		foreach($summaryCount as $protectionLevel => $count) {
+			$summary .= $this->get_permission_protection_level_icon($protectionLevel, 'regular').' '.$count;
+			$summary .= ', ';
+		}
+		$summary = substr($summary,0,-2);
+
+		return $out;
+	}
+
+	private function get_permission_protection_level_icon($protection_level, $size='adjusted') {
+		$iconString = '';
 		if($protection_level=='dangerous') {
-			return '<span style="color:#DD9900;font-size:150%;">&#x26a0;</span>';
+			$iconString .= '<span style="color:#DD9900;';
+			if($size=='adjusted')
+				$iconString .= 'font-size:150%;';
+			$iconString .= '">&#x26a0;</span>';
 		}
 		elseif($protection_level=='normal') {
-			return '<span style="color:#6666FF;font-size:110%;">&#x24D8;</span>';
+			$iconString .= '<span style="color:#6666FF;';
+			if($size=='adjusted')
+				$iconString .= 'font-size:110%;';
+			$iconString .= '">&#x24D8;</span>';
 		}
 		else {
-			return '<span style="color:#33AA33;font-size:130%;">&#x2699;</span>';
+			$iconString .= '<span style="color:#33AA33';
+			if($size=='adjusted')
+				$iconString .= ';font-size:130%;';
+			$iconString .= '">&#x2699;</span>';
 		}
+
+		return $iconString;
 	}
-	
+
 	private function human_readable_size($size, $minDiv=0) {
 		$si_prefix = array('bytes','kB','MB');
 		$div = 1000;
-		
+
 		for($i=0;(abs($size) > $div && $i < count($si_prefix)) || $i<$minDiv;$i++) {
 			$size /= $div;
 		}
