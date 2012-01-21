@@ -54,8 +54,9 @@ Build Version:3.0.54-38,308,cr3.0.54-38,subdir=android,rm=android/build.properti
 Build Version:3.0.54-47,447,cr3.0.54-47,subdir=android,rm=android/build.properties,buildjni=yes
 Build Version:3.0.55-5,505,cr3.0.55-5,subdir=android,rm=android/build.properties,buildjni=yes
 Build Version:3.0.55-9,509,cr3.0.55-9,subdir=android,rm=android/build.properties,buildjni=yes
+Build Version:3.0.55-14,514,cr3.0.55-14,subdir=android,rm=android/build.properties,buildjni=yes
 
 Update Check Mode:Market
-Market Version:3.0.55-9
-Market Version Code:509
+Market Version:3.0.55-14
+Market Version Code:514
 

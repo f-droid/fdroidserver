@@ -19,7 +19,7 @@
 import glob, os, sys, re
 import shutil
 import subprocess
-
+import time
 
 def getvcs(vcstype, remote, local):
     if vcstype == 'git':
@@ -76,6 +76,8 @@ class vcs:
         assert False    # Must be defined in child
 
     # Get new commits from the remote repository. Local must be clean.
+    # Fetch would really be a better name, as this doesn't necessarily
+    # (depending on the vcs) affect the local source tree or HEAD!
     def pull(self):
         assert False    # Must be defined in child
 
@@ -109,9 +111,6 @@ class vcs_git(vcs):
 
     def pull(self):
         self.checkrepo()
-        if subprocess.call(['git', 'pull', 'origin'],
-                cwd=self.local) != 0:
-            raise VCSException("Git pull failed")
         # Might need tags that aren't on a branch.
         if subprocess.call(['git', 'fetch', '--tags', 'origin'],
                 cwd=self.local) != 0:
@@ -791,7 +790,10 @@ class KnownApks:
         if os.path.exists(self.path):
             for line in file( self.path):
                 t = line.rstrip().split(' ')
-                self.apks[t[0]] = t[1]
+                if len(t) == 2:
+                    self.apks[t[0]] = (t[1], None)
+                else:
+                    self.apks[t[0]] = (t[1], time.strptime(t[2], '%Y-%m-%d'))
         self.changed = False
 
     def writeifchanged(self):
@@ -799,13 +801,20 @@ class KnownApks:
             if not os.path.exists('stats'):
                 os.mkdir('stats')
             f = open(self.path, 'w')
+            lst = []
             for apk, app in self.apks.iteritems():
-                f.write(apk + ' ' + app + '\n')
+                appid, added = app
+                line = apk + ' ' + appid
+                if added:
+                    line += ' ' + time.strftime('%Y-%m-%d', added)
+                lst.append(line)
+            for line in sorted(lst):
+                f.write(line + '\n')
             f.close()
 
     def recordapk(self, apk, app):
         if not apk in self.apks:
-            self.apks[apk] = app
+            self.apks[apk] = (app, time.gmtime(time.time()))
             self.changed = True
 
     def getapp(self, apkname):

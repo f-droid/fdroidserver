@@ -27,6 +27,7 @@ import zipfile
 import hashlib
 from xml.dom.minidom import Document
 from optparse import OptionParser
+import time
 
 #Read configuration...
 repo_name = None
@@ -79,6 +80,9 @@ apks = []
 for apkfile in glob.glob(os.path.join('repo','*.apk')):
 
     apkfilename = apkfile[5:]
+    if apkfilename.find(' ') != -1:
+        print "No spaces in APK filenames!"
+        sys.exit(1)
     srcfilename = apkfilename[:-4] + "_src.tar.gz"
 
     if not options.quiet:
@@ -464,6 +468,32 @@ shutil.copyfile(repo_icon, iconfilename)
 knownapks = common.KnownApks()
 for apk in apks:
     knownapks.recordapk(apk['apkname'], apk['id'])
+
+    app, added = knownapks.getapp(apk['apkname'])
+    if not added:
+        print 'Need a date for ' + apk['apkname']
+        p = subprocess.Popen('git log --format="%ci" metadata/' + apk['id'] + '.txt | tail -n 1',
+                shell=True, stdout = subprocess.PIPE)
+        d = p.communicate()[0][:10]
+        if len(d) == 0:
+            print "...didn't find a metadata commit"
+        else:
+            print '...metadata committed:' + d
+            if apk['apkname'].startswith(apk['id']):
+                vercode = int(apk['apkname'][len(apk['id'])+1:-4])
+                print '...built vercode:' + str(vercode)
+                expr = 'Build Version:[^,]+,' + str(vercode) + ',.*'
+                p = subprocess.Popen('git log --format="%ci" -S"' + expr + '" --pickaxe-regex metadata/' + apk['id'] + '.txt | tail -n 1',
+                    shell=True, stdout = subprocess.PIPE)
+                d = p.communicate()[0][:10]
+                if len(d) > 0:
+                    print '...build line added:' + d
+                    print '...using that!'
+                    knownapks.apks[apk['apkname']] = (apk['id'], time.strptime(d, '%Y-%m-%d'))
+                    knownapks.changed = True
+                else:
+                    print "...didn't find addition of build line"
+
 knownapks.writeifchanged()
 
 print "Finished."
