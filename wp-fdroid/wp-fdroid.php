@@ -231,7 +231,7 @@ class FDroid
 						$out.=$diffSize>0?'+':'';
 						$out.=$this->human_readable_size($diffSize, 1).')</span>';
 					}
-					if($apk['srcname']) {
+					if(isset($apk['srcname']) && file_exists($this->site_path.'/repo/'.$apk['srcname'])) {
 						$out.='<br /><a href="http://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a> ';
 						$out.=$this->human_readable_size(filesize($this->site_path.'/repo/'.$apk['srcname']));
 					}
