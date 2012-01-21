@@ -1,0 +1,9 @@
+Index: res/values-v13/styles.xml
+===================================================================
+19,20c19,21
+<     <style name="Theme.Light.NoTitleBar" parent="android:style/Theme.Holo.Light.NoActionBar"/>
+<     <style name="Theme.Translucent" parent="android:style/Theme.Holo.Light.NoActionBar">
+---
+>     <style name="Theme.Light.NoTitleBar" parent="@android:style/Theme.Holo.Light"/>
+>     <style name="Theme.Translucent" parent="@android:style/Theme.Holo.Light">
+>         <item name="android:windowActionBar">false</item>
