@@ -20,8 +20,9 @@ Personal finance manager
 Repo Type:bzr
 Repo:lp:financisto
 
-Market Version:1.5.4u1
-Market Version Code:59
+Update Check Mode:Market
+Market Version:1.5.5
+Market Version Code:60
 
 # Build fails, wrong path to GreenDroid library
 #Build Version:1.5.4,57,303,target=android-4

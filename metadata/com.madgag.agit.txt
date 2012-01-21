@@ -12,7 +12,8 @@ A git client - currently read-only.
 Repo Type:git
 Repo:https://github.com/rtyley/agit.git
 
+Update Check Mode:Market
 #No builds yet - another 'need to figure out how to make maven work' scenario
-Market Version:1.25
-Market Version Code:110900321
+Market Version:1.27
+Market Version Code:120101721
 

@@ -21,8 +21,9 @@ Build Version:1.18,19,0b9985398b9eef7baf6aadd0dbb12002bc199d2e,subdir=org_adaway
 Build Version:1.19,20,ab27f4dab5f3ea5e228cfb4a6b0e1fbf53695f22,subdir=org_adaway/,buildjni=yes,patch=defprop.patch
 Build Version:1.20,21,695e3801e4081026c8f7213a2345fc451d5eb89c,subdir=org_adaway/,buildjni=yes,patch=defprop.patch
 Build Version:1.21,22,65138c11cc8b6affd28b68e125fbc1dff0886a4e,subdir=org_adaway/,buildjni=yes,patch=defprop.patch
+Build Version:1.23,24,!no source in repo
 
-
-Market Version:1.21
-Market Version Code:22
+Update Check Mode:Market
+Market Version:1.23
+Market Version Code:24
 

@@ -5,10 +5,12 @@ Source Code:http://gitorious.org/acal
 Issue Tracker:
 Donate:http://acal.me/wiki/Donating
 
-Summary:Calendar - CalDAV client
+Summary:CalDAV Calendar & Tasks client
 Description:
 A CalDAV client, allowing you to directly access a calendar on a CalDAV
-server.
+server. aCal includes support for VEVENT & VTODO (Events and Tasks) and
+can also synchronize your contacts from an addressbook collection on a
+CardDAV server.
 .
 
 Repo Type:git
@@ -27,7 +29,9 @@ Build Version:1.32,34,r1.32,target=android-8
 Build Version:1.33,35,r1.33,target=android-8
 Build Version:1.34,36,r1.34,target=android-8
 Build Version:1.35,37,r1.35,target=android-8
+Build Version:1.36,38,r1.36,target=android-8
 
-Market Version:1.35
-Market Version Code:37
+Update Check Mode:Market
+Market Version:1.36
+Market Version Code:38
 

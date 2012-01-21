@@ -19,7 +19,9 @@ Build Version:0.2.5,40,!source has wrong version code at r442,prebuild=mv lib/ l
 Build Version:0.2.11,46,614,prebuild=mv lib/ libs/
 #Still guessing, see previous comment
 Build Version:0.3.1,48,659,prebuild=mv lib/ libs/
+Build Version:0.4.4,54,957,prebuild=mv lib/ libs/
 
-Market Version:0.4.3
-Market Version Code:53
+Update Check Mode:Market
+Market Version:0.4.4
+Market Version Code:54
 
