@@ -121,6 +121,7 @@ for logfile in glob.glob(os.path.join(logsdir,'access-*.log')):
                     if not apkname in unknownapks:
                         unknownapks.append(apkname)
 
+# Calculate and write stats for total downloads...
 f = open('stats/total_downloads_app.txt', 'w')
 lst = []
 alldownloads = 0
@@ -131,6 +132,13 @@ lst.append("ALL " + str(alldownloads))
 f.write('# Total downloads by application, since October 2011\n')
 for line in sorted(lst):
     f.write(line + '\n')
+f.close()
+
+# Write list of latest apps added to the repo...
+latest = knownapks.getlatest(10)
+f = open('stats/latestapps.txt', 'w')
+for app in latest:
+    f.write(app + '\n')
 f.close()
 
 if len(unknownapks) > 0:

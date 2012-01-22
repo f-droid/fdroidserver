@@ -20,6 +20,7 @@ import glob, os, sys, re
 import shutil
 import subprocess
 import time
+import operator
 
 def getvcs(vcstype, remote, local):
     if vcstype == 'git':
@@ -821,3 +822,20 @@ class KnownApks:
         if apkname in self.apks:
             return self.apks[apkname]
         return None
+
+    def getlatest(self, num):
+        apps = {}
+        for apk, app in self.apks.iteritems():
+            appid, added = app
+            if added:
+                if appid in apps:
+                    if apps[appid] > added:
+                        apps[appid] = added
+                else:
+                    apps[appid] = added
+        sortedapps = sorted(apps.iteritems(), key=operator.itemgetter(1))[-num:]
+        lst = []
+        for app, added in sortedapps:
+            lst.append(app)
+        return lst
+
