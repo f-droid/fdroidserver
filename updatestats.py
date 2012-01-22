@@ -121,8 +121,17 @@ for logfile in glob.glob(os.path.join(logsdir,'access-*.log')):
                     if not apkname in unknownapks:
                         unknownapks.append(apkname)
 
+f = open('stats/total_downloads_app.txt', 'w')
+lst = []
+alldownloads = 0
 for app, count in apps.iteritems():
-    print app + " " + str(count)
+    lst.append(app + " " + str(count))
+    alldownloads += count
+lst.append("ALL " + str(alldownloads))
+f.write('# Total downloads by application, since October 2011\n')
+for line in sorted(lst):
+    f.write(line + '\n')
+f.close()
 
 if len(unknownapks) > 0:
     print '\nUnknown apks:'

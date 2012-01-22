@@ -583,3 +583,7 @@ vu.de.urpool.quickdroid_38.apk vu.de.urpool.quickdroid 2011-05-16
 yaaic-0.5.apk org.yaaic
 yaaic-0.6.1.apk org.yaaic
 yaaic-0.6.apk org.yaaic
+FDroid.apk org.fdroid.fdroid
+com.zegoggles.smssync_1405.apk com.zegoggles.smssync
+Scrambled%20Net-5.0.apk org.hermit.netscramble
+com.zegoggles.smssync_1404.apk com.zegoggles.smssync
