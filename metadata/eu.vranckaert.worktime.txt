@@ -1,3 +1,4 @@
+Disabled:Build problems
 Category:Office
 License:Apache2
 Web Site:https://code.google.com/p/worktime/
