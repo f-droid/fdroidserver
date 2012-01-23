@@ -144,6 +144,8 @@ class FDroid
 						case "web":
 							$web=$el;
 							break;
+						case "antifeatures";
+							$antifeatures=$el;
 						case "package":
 							$thisapk=array();
 							foreach($el->children() as $pel) {
@@ -203,6 +205,15 @@ class FDroid
 				$out.="</div>";
 
 				$out.="<p>".$desc."</p>";
+
+				if(isset($antifeatures)) {
+					$antifeaturesArray = explode(',',$antifeatures);
+					foreach($antifeaturesArray as $antifeature) {
+						$antifeatureDesctiption = $this->get_antifeature_description($antifeature);
+						$out.='<p style="border:3px solid #CC0000;background-color:#FFDDDD;padding:5px;"><strong>'.$antifeatureDesctiption['name'].'</strong><br />';
+						$out.=$antifeatureDesctiption['description'].'</p>';
+					}
+				}
 
 				$out.="<p><b>License:</b> ".$license."</p>";
 
@@ -389,6 +400,23 @@ class FDroid
 
 		return round($size,max(0,$i-1)).' '.$si_prefix[$i];
 	}
+
+	private function get_antifeature_description($antifeature) {
+		// Anti feature names and descriptions
+		$antifeatureDesctiption['ads']['name'] = 'Advertising';
+		$antifeatureDesctiption['ads']['description'] = 'This application contains advertising';
+		$antifeatureDesctiption['tracking']['name'] = 'Tracks You';
+		$antifeatureDesctiption['tracking']['description'] = 'This application tracks and reports your activity to somewhere';
+		$antifeatureDesctiption['nonfreenet']['name'] = 'Non-Free Network Services';
+		$antifeatureDesctiption['nonfreenet']['description'] = 'This application promotes a non-Free network service';
+		$antifeatureDesctiption['nonfreeadd']['name'] = 'Non-Free Addons';
+		$antifeatureDesctiption['nonfreeadd']['description'] = 'This application promotes non-Free add-ons';
+		$antifeatureDesctiption['nonfreedep']['name'] = 'Non-Free Dependencies';
+		$antifeatureDesctiption['nonfreedep']['description'] = 'This application depends on another non-Free application';
+
+		return $antifeatureDesctiption[strtolower($antifeature)];
+	}
+
 
 	function get_apps($query_vars) {
 
