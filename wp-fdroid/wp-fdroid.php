@@ -590,21 +590,20 @@ class FDOutList
 	function outputEntry($query_vars, $appinfo) {
 		$out="";
 		$out.="<hr>\n";
+		$out.='<a href="'.makelink($query_vars, array('fdid'=>$appinfo['id'])).'">';
 		$out.='<div id="appheader">';
 
-		$out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$appinfo['icon'].'" style="width:48px;"></div>';
+		$out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$appinfo['icon'].'" style="width:48px;border:none;"></div>';
 
 		$out.='<div style="float:right;">';
-		$out.='<p><a href="';
-		$out.=makelink($query_vars, array('fdid'=>$appinfo['id']));
-		$out.='">Details...</a>';
-		$out.="</p>";
+		$out.='<p>Details...</p>';
 		$out.="</div>\n";
 
-		$out.='<p><span style="font-size:20px">'.$appinfo['name']."</span>";
+		$out.='<p style="color:#000000;"><span style="font-size:20px;">'.$appinfo['name']."</span>";
 		$out.="<br>".$appinfo['summary']."</p>\n";
 
 		$out.="</div>\n";
+		$out.='</a>';
 
 		return $out;
 	}
