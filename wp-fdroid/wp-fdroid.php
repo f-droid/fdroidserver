@@ -147,6 +147,9 @@ class FDroid
 						case "antifeatures";
 							$antifeatures=$el;
 							break;
+						case "requirements";
+							$requirements=$el;
+							break;
 						case "package":
 							$thisapk=array();
 							foreach($el->children() as $pel) {
@@ -216,7 +219,12 @@ class FDroid
 					}
 				}
 
-				$out.="<p><b>License:</b> ".$license."</p>";
+				$out.="<p>";
+				$out.="<b>License:</b> ".$license;
+				if(isset($requirements)) {
+					$out.='<br /><b>Additional requirements:</b> '.$requirements;
+				}
+				$out.="</p>";
 
 				$out.="<p>";
 				if(strlen($web)>0)
