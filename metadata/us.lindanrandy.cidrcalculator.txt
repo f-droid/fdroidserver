@@ -3,7 +3,6 @@ License:Apache2
 Web Site:https://code.google.com/p/cidrcalculator/
 Source Code:https://code.google.com/p/cidrcalculator/source/browse/
 Issue Tracker:https://code.google.com/p/cidrcalculator/issues/list
-Donate:
 
 Summary:utility for CIDR/subnet calculation.
 Description:
@@ -14,4 +13,8 @@ Repo Type:svn
 Repo:http://cidrcalculator.googlecode.com/svn/trunk/
 
 Build Version:1.13,115,31,target=android-8
+
+Update Check Mode:Market
+Market Version:1.14
+Market Version Code:116
 

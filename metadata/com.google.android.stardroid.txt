@@ -1,9 +1,10 @@
+# libs/libGoogleAnalytics.jar
+AntiFeatures:Tracking
 Category:None
 License:Apache2
 Web Site:https://code.google.com/p/stardroid/
 Source Code:https://code.google.com/p/stardroid/source/browse/
 Issue Tracker:https://code.google.com/p/stardroid/issues/list
-Donate:
 
 Summary:Sky Map to explore the skies
 Description:
@@ -15,5 +16,7 @@ Repo:http://stardroid.googlecode.com/svn/trunk/app
 
 Build Version:1.6.4,1112,3
 
-# libs/libGoogleAnalytics.jar
-AntiFeatures:Tracking
+Update Check Mode:Market
+Market Version:1.6.4
+Market Version Code:1112
+

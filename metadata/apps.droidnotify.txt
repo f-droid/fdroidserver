@@ -20,3 +20,7 @@ Build Version:2.20,27,707,patch=facebook.patch,prebuild=mv lib/ libs/ \
 	&& cp build.xml facebook-android-sdk/facebook/ \
 	&& cp local.properties facebook-android-sdk/facebook/
 
+Update Check Mode:Market
+Market Version:2.21
+Market Version Code:28
+
