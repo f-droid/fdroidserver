@@ -633,7 +633,9 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, 
 
     # Delete unwanted file...
     if build.has_key('rm'):
-        os.remove(os.path.join(build_dir, build['rm']))
+        dest = os.path.join(build_dir, build['rm'])
+        if os.path.exists(dest):
+            os.remove(dest)
 
     # Fix apostrophes translation files if necessary...
     if build.get('fixapos', 'no') == 'yes':
