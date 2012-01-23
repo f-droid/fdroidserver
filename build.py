@@ -74,15 +74,14 @@ if not os.path.isdir(build_dir):
 
 for app in apps:
 
-    if app['Disabled']:
+    if options.package and options.package != app['id']:
+        # Silent skip...
+        pass
+    elif app['Disabled']:
         print "Skipping %s: disabled" % app['id']
-    elif not app['builds']:
+    elif (not app['builds']) or app['Repo Type'] =='' or len(app['builds']) == 0:
         print "Skipping %s: no builds specified" % app['id']
-
-    if (app['Disabled'] is None and app['Repo'] != '' 
-            and app['Repo Type'] != '' and (options.package is None or
-            options.package == app['id']) and len(app['builds']) > 0):
-
+    else:
         print "Processing " + app['id']
 
         build_dir = 'build/' + app['id']

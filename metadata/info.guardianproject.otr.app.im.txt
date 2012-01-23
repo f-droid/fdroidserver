@@ -1,9 +1,8 @@
-Disabled: Seems to early in the development cycle to build a release
 Category:Internet
 License:Apache2
 Web Site:https://guardianproject.info/apps/gibber/
-Source Code:https://github.com/guardianproject/OtRChat
-Issue Tracker:https://github.com/guardianproject/OtRChat/issues
+Source Code:https://github.com/guardianproject/Gibberbot
+Issue Tracker:https://github.com/guardianproject/Gibberbot/issues
 
 Summary:XMPP client with OTR support
 Description:
@@ -13,7 +12,9 @@ and for Tor via Orbot.
 .
 
 Repo Type:git
-Repo:https://github.com/guardianproject/OtRChat.git
+Repo:https://github.com/guardianproject/Gibberbot.git
+
+Build Version:0.0.7-RC1,25,e17dbbcf338af00466cabc5178634cd0d5ffded8,target=android-4
 
 Market Version:0.0.5-RC5
 Market Version Code:21

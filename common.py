@@ -20,6 +20,7 @@ import glob, os, sys, re
 import shutil
 import subprocess
 import time
+import operator
 
 def getvcs(vcstype, remote, local):
     if vcstype == 'git':
@@ -54,39 +55,26 @@ class vcs:
 
         self.remote = remote
         self.local = local
+        self.refreshed = False
 
-    # Refresh the local repository - i.e. get the latest code. This
-    # works either by updating if a local copy already exists, or by
-    # cloning from scratch if it doesn't.
-    def refreshlocal(self):
-        if not os.path.exists(self.local):
-            self.clone()
-        else:
-            self.reset()
-            self.pull()
-
-    # Clone the remote repository. It must not already exist locally.
-    def clone(self):
-        assert False    # Must be defined in child
-
-    # Reset the local repository. Remove changes, untracked files, etc.
-    # Put the working tree to either the given revision, or to the HEAD
-    # if not specified.
-    def reset(self, rev=None):
-        assert False    # Must be defined in child
-
-    # Get new commits from the remote repository. Local must be clean.
-    # Fetch would really be a better name, as this doesn't necessarily
-    # (depending on the vcs) affect the local source tree or HEAD!
-    def pull(self):
-        assert False    # Must be defined in child
+    # Take the local repository to a clean version of the given revision, which
+    # is specificed in the VCS's native format. Beforehand, the repository can
+    # be dirty, or even non-existent. If the repository does already exist
+    # locally, it will be updated from the origin, but only once in the
+    # lifetime of the vcs object.
+    def gotorevision(self, rev):
+        raise VCSException("This VCS type doesn't define gotorevision")
 
     # Initialise and update submodules
     def initsubmodules(self):
-        assert False    # Not supported unless overridden
+        raise VCSException('Submodules not supported for this vcs type')
 
 class vcs_git(vcs):
 
+    # If the local directory exists, but is somehow not a git repository, git
+    # will traverse up the directory tree until it finds one that is (i.e.
+    # fdroidserver) and then we'll proceed to destory it! This is called as
+    # a safety check.
     def checkrepo(self):
         p = subprocess.Popen(['git', 'rev-parse', '--show-toplevel'],
                 stdout=subprocess.PIPE, cwd=self.local)
@@ -94,27 +82,33 @@ class vcs_git(vcs):
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
 
-    def clone(self):
-        if subprocess.call(['git', 'clone', self.remote, self.local]) != 0:
-            raise VCSException("Git clone failed")
-
-    def reset(self, rev=None):
-        self.checkrepo()
-        if rev is None:
-            rev = 'origin'
-        if subprocess.call(['git', 'reset', '--hard', rev],
-                cwd=self.local) != 0:
-            raise VCSException("Git reset failed")
-        if subprocess.call(['git', 'clean', '-dfx'],
-                cwd=self.local) != 0:
+    def gotorevision(self, rev):
+        if not os.path.exists(self.local):
+            # Brand new checkout...
+            if subprocess.call(['git', 'clone', self.remote, self.local]) != 0:
+                raise VCSException("Git clone failed")
+            self.checkrepo()
+        else:
+            self.checkrepo()
+            # Discard any working tree changes...
+            if subprocess.call(['git', 'reset', '--hard'], cwd=self.local) != 0:
+                raise VCSException("Git reset failed")
+            # Remove untracked files now, in case they're tracked in the target
+            # revision (it happens!)...
+            if subprocess.call(['git', 'clean', '-dfx'], cwd=self.local) != 0:
+                raise VCSException("Git clean failed")
+            if not self.refreshed:
+                # Get latest commits and tags from remote...
+                if subprocess.call(['git', 'fetch', '--tags', 'origin'],
+                        cwd=self.local) != 0:
+                    raise VCSException("Git fetch failed")
+                self.refreshed = True
+        # Check out the appropriate revision...
+        if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
+            raise VCSException("Git checkout failed")
+        # Get rid of any uncontrolled files left behind...
+        if subprocess.call(['git', 'clean', '-dfx'], cwd=self.local) != 0:
             raise VCSException("Git clean failed")
-
-    def pull(self):
-        self.checkrepo()
-        # Might need tags that aren't on a branch.
-        if subprocess.call(['git', 'fetch', '--tags', 'origin'],
-                cwd=self.local) != 0:
-            raise VCSException("Git fetch failed")
 
     def initsubmodules(self):
         self.checkrepo()
@@ -128,6 +122,10 @@ class vcs_git(vcs):
 
 class vcs_gitsvn(vcs):
 
+    # If the local directory exists, but is somehow not a git repository, git
+    # will traverse up the directory tree until it finds one that is (i.e.
+    # fdroidserver) and then we'll proceed to destory it! This is called as
+    # a safety check.
     def checkrepo(self):
         p = subprocess.Popen(['git', 'rev-parse', '--show-toplevel'],
                 stdout=subprocess.PIPE, cwd=self.local)
@@ -135,33 +133,39 @@ class vcs_gitsvn(vcs):
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
 
-    def clone(self):
-        if subprocess.call(['git', 'svn', 'clone', self.remote, self.local]) != 0:
-            raise VCSException("Git clone failed")
-
-    def reset(self, rev=None):
-        self.checkrepo()
-        if rev is None:
-            rev = 'HEAD'
+    def gotorevision(self, rev):
+        if not os.path.exists(self.local):
+            # Brand new checkout...
+            if subprocess.call(['git', 'svn', 'clone', self.remote, self.local]) != 0:
+                raise VCSException("Git clone failed")
+            self.checkrepo()
         else:
-            p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev],
-                cwd=self.local, stdout=subprocess.PIPE)
-            rev = p.communicate()[0].rstrip()
-            if p.returncode != 0:
-                raise VCSException("Failed to get git treeish from svn rev")
-        if subprocess.call(['git', 'reset', '--hard', rev],
-                cwd=self.local) != 0:
-            raise VCSException("Git reset failed")
-        if subprocess.call(['git', 'clean', '-dfx'],
-                cwd=self.local) != 0:
+            self.checkrepo()
+            # Discard any working tree changes...
+            if subprocess.call(['git', 'reset', '--hard'], cwd=self.local) != 0:
+                raise VCSException("Git reset failed")
+            # Remove untracked files now, in case they're tracked in the target
+            # revision (it happens!)...
+            if subprocess.call(['git', 'clean', '-dfx'], cwd=self.local) != 0:
+                raise VCSException("Git clean failed")
+            if not self.refreshed:
+                # Get new commits and tags from repo...
+                if subprocess.call(['git', 'svn', 'rebase'],
+                        cwd=self.local) != 0:
+                    raise VCSException("Git svn rebase failed")
+                self.refreshed = True
+        # Figure out the git commit id corresponding to the svn revision...
+        p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev],
+            cwd=self.local, stdout=subprocess.PIPE)
+        rev = p.communicate()[0].rstrip()
+        if p.returncode != 0:
+            raise VCSException("Failed to get git treeish from svn rev")
+        # Check out the appropriate revision...
+        if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
+            raise VCSException("Git checkout failed")
+        # Get rid of any uncontrolled files left behind...
+        if subprocess.call(['git', 'clean', '-dfx'], cwd=self.local) != 0:
             raise VCSException("Git clean failed")
-
-    def pull(self):
-        self.checkrepo()
-        if subprocess.call(['git', 'svn', 'rebase'],
-                cwd=self.local) != 0:
-            raise VCSException("Git svn rebase failed")
-
 
 class vcs_svn(vcs):
 
@@ -172,76 +176,69 @@ class vcs_svn(vcs):
                 '--password', self.password,
                 '--non-interactive']
 
-    def clone(self):
-        if subprocess.call(['svn', 'checkout', self.remote, self.local] +
-                self.userargs()) != 0:
-            raise VCSException("Svn checkout failed")
-
-    def reset(self, rev=None):
-        if rev is None:
-            revargs = []
+    def gotorevision(self, rev):
+        if not os.path.exists(self.local):
+            if subprocess.call(['svn', 'checkout', self.remote, self.local] +
+                    self.userargs()) != 0:
+                raise VCSException("Svn checkout failed")
         else:
-            revargs = ['-r', rev]
-        for svncommand in (
-                'svn revert -R .',
-                r"svn status | awk '/\?/ {print $2}' | xargs rm -rf"):
-            if subprocess.call(svncommand, cwd=self.local,
-                    shell=True) != 0:
-                raise VCSException("Svn reset failed")
+            for svncommand in (
+                    'svn revert -R .',
+                    r"svn status | awk '/\?/ {print $2}' | xargs rm -rf"):
+                if subprocess.call(svncommand, cwd=self.local,
+                        shell=True) != 0:
+                    raise VCSException("Svn reset failed")
+            if not self.refreshed:
+                if subprocess.call(['svn', 'update'] +
+                        self.userargs(), cwd=self.local) != 0:
+                    raise VCSException("Svn update failed")
+                self.refreshed = True
+        revargs = ['-r', rev]
         if subprocess.call(['svn', 'update', '--force'] + revargs +
                 self.userargs(), cwd=self.local) != 0:
             raise VCSException("Svn update failed")
 
-    def pull(self):
-        if subprocess.call(['svn', 'update'] +
-                self.userargs(), cwd=self.local) != 0:
-            raise VCSException("Svn update failed")
 
 class vcs_hg(vcs):
 
-    def clone(self):
-        if subprocess.call(['hg', 'clone', self.remote, self.local]) !=0:
-            raise VCSException("Hg clone failed")
-
-    def reset(self, rev=None):
-        if rev is None:
-            revargs = []
+    def gotorevision(self, rev):
+        if not os.path.exists(self.local):
+            if subprocess.call(['hg', 'clone', self.remote, self.local]) !=0:
+                raise VCSException("Hg clone failed")
         else:
-            revargs = [rev]
-        if subprocess.call('hg status -u | xargs rm -rf',
-                cwd=self.local, shell=True) != 0:
-            raise VCSException("Hg clean failed")
+            if subprocess.call('hg status -u | xargs rm -rf',
+                    cwd=self.local, shell=True) != 0:
+                raise VCSException("Hg clean failed")
+            if not self.refreshed:
+                if subprocess.call(['hg', 'pull'],
+                        cwd=self.local) != 0:
+                    raise VCSException("Hg pull failed")
+                self.refreshed = True
+        revargs = [rev]
         if subprocess.call(['hg', 'checkout', '-C'] + revargs,
                 cwd=self.local) != 0:
             raise VCSException("Hg checkout failed")
 
-    def pull(self):
-        if subprocess.call(['hg', 'pull'],
-                cwd=self.local) != 0:
-            raise VCSException("Hg pull failed")
 
 class vcs_bzr(vcs):
 
-    def clone(self):
-        if subprocess.call(['bzr', 'branch', self.remote, self.local]) != 0:
-            raise VCSException("Bzr branch failed")
-
-    def reset(self, rev=None):
-        if rev is None:
-            revargs = []
+    def gotorevision(self, rev):
+        if not os.path.exists(self.local):
+            if subprocess.call(['bzr', 'branch', self.remote, self.local]) != 0:
+                raise VCSException("Bzr branch failed")
         else:
-            revargs = ['-r', rev]
-        if subprocess.call(['bzr', 'clean-tree', '--force',
-                '--unknown', '--ignored'], cwd=self.local) != 0:
-            raise VCSException("Bzr revert failed")
+            if subprocess.call(['bzr', 'clean-tree', '--force',
+                    '--unknown', '--ignored'], cwd=self.local) != 0:
+                raise VCSException("Bzr revert failed")
+            if not self.refreshed:
+                if subprocess.call(['bzr', 'pull'],
+                        cwd=self.local) != 0:
+                    raise VCSException("Bzr update failed")
+                self.refreshed = True
+        revargs = ['-r', rev]
         if subprocess.call(['bzr', 'revert'] + revargs,
                 cwd=self.local) != 0:
             raise VCSException("Bzr revert failed")
-
-    def pull(self):
-        if subprocess.call(['bzr', 'pull'],
-                cwd=self.local) != 0:
-            raise VCSException("Bzr update failed")
 
 
 # Get the type expected for a given metadata field.
@@ -548,9 +545,6 @@ class MetaDataException(Exception):
 # be a subdirectory of it.
 def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, refresh):
 
-    if refresh:
-        vcs.refreshlocal()
-
     # Optionally, the actual app source can be in a subdirectory...
     if build.has_key('subdir'):
         root_dir = os.path.join(build_dir, build['subdir'])
@@ -558,8 +552,8 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, 
         root_dir = build_dir
 
     # Get a working copy of the right revision...
-    print "Resetting repository to " + build['commit']
-    vcs.reset(build['commit'])
+    print "Getting source for revision " + build['commit']
+    vcs.gotorevision(build['commit'])
 
     # Check that a subdir (if we're using one) exists. This has to happen
     # after the checkout, since it might not exist elsewhere...
@@ -632,7 +626,9 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, 
 
     # Delete unwanted file...
     if build.has_key('rm'):
-        os.remove(os.path.join(build_dir, build['rm']))
+        dest = os.path.join(build_dir, build['rm'])
+        if os.path.exists(dest):
+            os.remove(dest)
 
     # Fix apostrophes translation files if necessary...
     if build.get('fixapos', 'no') == 'yes':
@@ -821,3 +817,20 @@ class KnownApks:
         if apkname in self.apks:
             return self.apks[apkname]
         return None
+
+    def getlatest(self, num):
+        apps = {}
+        for apk, app in self.apks.iteritems():
+            appid, added = app
+            if added:
+                if appid in apps:
+                    if apps[appid] > added:
+                        apps[appid] = added
+                else:
+                    apps[appid] = added
+        sortedapps = sorted(apps.iteritems(), key=operator.itemgetter(1))[-num:]
+        lst = []
+        for app, added in sortedapps:
+            lst.append(app)
+        return lst
+

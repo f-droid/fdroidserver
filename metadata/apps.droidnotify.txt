@@ -1,0 +1,26 @@
+Category:System
+License:GPLv3
+Web Site:https://code.google.com/p/droid-notify/
+Source Code:https://code.google.com/p/droid-notify/source/browse/
+Issue Tracker:https://code.google.com/p/droid-notify/issues/list
+Donate:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=43V2NJQH5BQAA
+
+Summary:Notification management tool
+Description:
+This application will display a popup window for Missed Calls, Text Messages, Calendar Events and Emails (K-9 email).
+It is extremely customizable with many options to suit your needs and style.
+.
+
+Repo Type:svn
+Repo:http://droid-notify.googlecode.com/svn/trunk
+
+Build Version:2.20,27,707,patch=facebook.patch,prebuild=mv lib/ libs/ \
+	&& git clone git://github.com/facebook/facebook-android-sdk.git \
+	&& cp facebook-android-sdk/facebook/default.properties facebook-android-sdk/facebook/project.properties \
+	&& cp build.xml facebook-android-sdk/facebook/ \
+	&& cp local.properties facebook-android-sdk/facebook/
+
+Update Check Mode:Market
+Market Version:2.21
+Market Version Code:28
+
