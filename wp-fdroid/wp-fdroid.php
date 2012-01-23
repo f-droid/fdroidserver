@@ -146,6 +146,7 @@ class FDroid
 							break;
 						case "antifeatures";
 							$antifeatures=$el;
+							break;
 						case "package":
 							$thisapk=array();
 							foreach($el->children() as $pel) {
