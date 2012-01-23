@@ -414,7 +414,11 @@ class FDroid
 		$antifeatureDesctiption['nonfreedep']['name'] = 'Non-Free Dependencies';
 		$antifeatureDesctiption['nonfreedep']['description'] = 'This application depends on another non-Free application';
 
-		return $antifeatureDesctiption[strtolower($antifeature)];
+		$antifeatureLower = strtolower($antifeature);
+		if(isset($antifeatureDesctiption[$antifeatureLower])) {
+			return $antifeatureDesctiption[$antifeatureLower];
+		}
+		return array('name'=>$antifeature);
 	}
 
 
