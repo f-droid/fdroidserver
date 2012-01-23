@@ -589,7 +589,7 @@ class FDOutList
 
 	function outputEntry($query_vars, $appinfo) {
 		$out="";
-		$out.="<hr>\n";
+		$out.='<hr style="clear:both;" />'."\n";
 		$out.='<a href="'.makelink($query_vars, array('fdid'=>$appinfo['id'])).'">';
 		$out.='<div id="appheader">';
 
