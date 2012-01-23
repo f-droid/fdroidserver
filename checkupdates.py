@@ -63,6 +63,8 @@ def check_market(app):
 parser = OptionParser()
 parser.add_option("-v", "--verbose", action="store_true", default=False,
                   help="Spew out even more information than normal")
+parser.add_option("-p", "--package", default=None,
+                  help="Build only the specified package")
 (options, args) = parser.parse_args()
 
 # Get all apps...
@@ -72,28 +74,32 @@ html_parser = HTMLParser.HTMLParser()
 
 for app in apps:
 
-    print "Processing " + app['id'] + '...'
-
-    mode = app['Update Check Mode']
-    if mode == 'Market':
-        (version, vercode) = check_market(app)
-    elif mode == 'None':
-        version = None
-        vercode = 'Checking disabled'
+    if options.package and options.package != app['id']:
+        # Silent skip...
+        pass
     else:
-        version = None
-        vercode = 'Invalid update check method'
+        print "Processing " + app['id'] + '...'
 
-    if not version:
-        print "..." + vercode
-    elif vercode == app['Market Version Code'] and version == app['Market Version']:
-        print "...up to date"
-    else:
-        print '...updating to version:' + version + ' vercode:' + vercode
-        app['Market Version'] = version
-        app['Market Version Code'] = vercode
-        metafile = os.path.join('metadata', app['id'] + '.txt')
-        common.write_metadata(metafile, app)
+        mode = app['Update Check Mode']
+        if mode == 'Market':
+            (version, vercode) = check_market(app)
+        elif mode == 'None':
+            version = None
+            vercode = 'Checking disabled'
+        else:
+            version = None
+            vercode = 'Invalid update check method'
+
+        if not version:
+            print "..." + vercode
+        elif vercode == app['Market Version Code'] and version == app['Market Version']:
+            print "...up to date"
+        else:
+            print '...updating to version:' + version + ' vercode:' + vercode
+            app['Market Version'] = version
+            app['Market Version Code'] = vercode
+            metafile = os.path.join('metadata', app['id'] + '.txt')
+            common.write_metadata(metafile, app)
 
 print "Finished."
 
