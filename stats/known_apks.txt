@@ -144,6 +144,7 @@ com.android.keepass_80.apk com.android.keepass 2011-06-29
 com.android.keepass_82.apk com.android.keepass 2011-07-22
 com.android.keepass_83.apk com.android.keepass 2011-12-31
 com.android.keepass_84.apk com.android.keepass 2012-01-19
+com.android.keepass_85.apk com.android.keepass 2012-01-24
 com.angrydoughnuts.android.alarmclock_8.apk com.angrydoughnuts.android.alarmclock 2011-05-19
 com.appengine.paranoid_android.lost_12.apk com.appengine.paranoid_android.lost 2012-01-08
 com.axelby.podax_12.apk com.axelby.podax 2012-01-21
@@ -185,6 +186,7 @@ com.funambol.androidsync_16.apk com.funambol.androidsync 2011-08-25
 com.funambol.androidsync_8.apk com.funambol.androidsync 2011-01-10
 com.funambol.androidsync_9.apk com.funambol.androidsync 2011-01-09
 com.ghostsq.commander_110.apk com.ghostsq.commander 2011-05-18
+com.ghostsq.commander_160.apk com.ghostsq.commander 2012-01-24
 com.ghostsq.commander_94.apk com.ghostsq.commander 2011-04-02
 com.ghostsq.commander_97.apk com.ghostsq.commander 2011-04-02
 com.google.android.diskusage_2004.apk com.google.android.diskusage 2011-01-31
@@ -242,6 +244,7 @@ com.replica.replicaisland_14.apk com.replica.replicaisland 2011-03-03
 com.ringdroid_20500.apk com.ringdroid 2011-03-26
 com.roozen.SoundManager_18.apk com.roozen.SoundManager 2011-03-03
 com.smorgasbork.hotdeath_3.apk com.smorgasbork.hotdeath 2011-12-06
+com.smorgasbork.hotdeath_6.apk com.smorgasbork.hotdeath 2012-01-24
 com.teleca.jamendo_31.apk com.teleca.jamendo 2011-04-28
 com.teleca.jamendo_32.apk com.teleca.jamendo 2011-06-03
 com.teleca.jamendo_33.apk com.teleca.jamendo 2011-06-04
@@ -390,6 +393,7 @@ org.adaway_19.apk org.adaway 2011-11-14
 org.adaway_20.apk org.adaway 2012-01-10
 org.adaway_21.apk org.adaway 2012-01-11
 org.adaway_22.apk org.adaway 2012-01-15
+org.adaway_25.apk org.adaway 2012-01-24
 org.adw.launcher_34.apk org.adw.launcher 2011-12-05
 org.androidsoft.games.memory.kids_13.apk org.androidsoft.games.memory.kids 2011-12-08
 org.coolreader_103.apk org.coolreader 2011-02-13
