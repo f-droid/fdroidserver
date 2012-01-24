@@ -16,6 +16,7 @@ Repo:http://alogcat.googlecode.com/svn/trunk
 Build Version:2.1.6,34,28
 Build Version:2.3,36,30
 Build Version:2.3.2,38,31,prebuild=find . -type f -name \*.java -print0 | xargs -0 sed -i "s/^import org\.jtb\.alogcat\.donate\.R;$/import org.jtb.alogcat.R;/g" && sed -i "s/org.jtb.alogcat.donate/org.jtb.alogcat/" AndroidManifest.xml
+Build Version:2.4,39,37
 
 Market Version:2.4
 Market Version Code:39
