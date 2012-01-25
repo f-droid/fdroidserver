@@ -18,5 +18,5 @@ Build Version:0.5.3,26,8e9d76ea685ea75d6c08,subdir=OsmAnd,encoding=utf-8,prebuil
 
 Update Check Mode:Market
 Market Version:0.7.0
-Market Version Code:45
+Market Version Code:46
 

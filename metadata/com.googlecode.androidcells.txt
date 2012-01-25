@@ -1,4 +1,4 @@
-Disabled:Pending query regarding unidentified jars at https://sourceforge.net/tracker/?func=detail&aid=3479542&group_id=218065&atid=1043257
+Disabled:Missing current source for library - 1.0 available, 1.4 used - https://sourceforge.net/tracker/?func=detail&aid=3479542&group_id=218065&atid=1043257
 Category:Internet
 License:GPLv3
 Web Site:http://openbmap.org
