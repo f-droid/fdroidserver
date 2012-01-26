@@ -1,0 +1,17 @@
+Category:Internet
+License:GPLv2
+Web site: http://meta.wikimedia.org/wiki/Mobile_Projects
+Issue tracker: https://bugzilla.wikimedia.org/
+Source code: https://github.com/wikimedia/WikipediaMobile
+Donate:
+
+Summary:Wikipedia Application
+Description:
+Official Wikipedia application.
+.
+
+Repo Type:git
+Repo:https://github.com/wikimedia/WikipediaMobile.git
+
+Build Version:1.0,1,v1.0-android
+
