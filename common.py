@@ -840,5 +840,6 @@ class KnownApks:
         lst = []
         for app, added in sortedapps:
             lst.append(app)
+        lst.reverse()
         return lst
 
