@@ -1,0 +1,21 @@
+
+Category:Office
+License:GPLv3
+Web Site:http://projects.ciarang.com/p/tallyphant/
+Source Code:http://projects.ciarang.com/p/tallyphant/source/tree/master/
+Issue Tracker:http://projects.ciarang.com/p/tallyphant/issues/
+Donate:
+
+Summary:Counter
+Description:
+A simple counting application. Count any number of items simultanously,
+either up or down. Can be set to vibrate, beep or speak when the values
+change.
+.
+
+Repo Type:git
+Repo:git://git.ciarang.com/tallyphant.git
+
+Build Version:0.1,2,065a77a8d508746c6838b6892f68d7b35ac10608
+
+Version Check Mode:None
