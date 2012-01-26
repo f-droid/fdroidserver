@@ -28,7 +28,8 @@ class FDroid
 		add_shortcode('fdroidrepo',array($this, 'do_shortcode'));
 		add_filter('query_vars',array($this, 'queryvars'));
 		$this->inited=false;
-		$this->site_path=getenv('DOCUMENT_ROOT');
+                $this->site_path=getenv('DOCUMENT_ROOT');
+                register_sidebar_widget('FDroid Latest', 'widget_fdroidlatest');
 	}
 
 
@@ -705,6 +706,13 @@ function linkify($vars) {
 	return substr($retvar,0,-1);
 }
 
+function widget_fdroidlatest($args) {
+	extract($args);
+	echo $before_widget;
+	echo $before_title . 'Latest Apps' . $after_title;
+	readfile(getenv('DOCUMENT_ROOT').'/repo/latestapps.html');
+	echo $after_widget;
+}
 
 $wp_fdroid = new FDroid();
 

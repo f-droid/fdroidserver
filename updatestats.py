@@ -135,7 +135,7 @@ for line in sorted(lst):
 f.close()
 
 # Write list of latest apps added to the repo...
-latest = knownapks.getlatest(10)
+latest = knownapks.getlatest(5)
 f = open('stats/latestapps.txt', 'w')
 for app in latest:
     f.write(app + '\n')

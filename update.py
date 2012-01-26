@@ -469,7 +469,7 @@ if repo_keyalias != None:
 iconfilename = os.path.join(icon_dir, os.path.basename(repo_icon))
 shutil.copyfile(repo_icon, iconfilename)
 
-#Update known apks info...
+# Update known apks info...
 knownapks = common.KnownApks()
 for apk in apks:
     knownapks.recordapk(apk['apkname'], apk['id'])
@@ -500,6 +500,22 @@ for apk in apks:
                     print "...didn't find addition of build line"
 
 knownapks.writeifchanged()
+
+# Generate latest apps HTML for widget
+html = '<p>'
+for line in file(os.path.join('stats', 'latestapps.txt')):
+    appid = line.rstrip()
+    html += '<a href="/repository/browse/?fdid=' + appid + '">'
+    for app in apps:
+        if app['id'] == appid:
+            html += app['Name'] + '</a><br>'
+            break
+html += '</p>'
+f = open('repo/latestapps.html', 'w')
+f.write(html)
+f.close()
+
+
 
 print "Finished."
 print str(apps_inrepo) + " apps in repo"
