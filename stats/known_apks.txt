@@ -149,6 +149,7 @@ com.angrydoughnuts.android.alarmclock_8.apk com.angrydoughnuts.android.alarmcloc
 com.appengine.paranoid_android.lost_12.apk com.appengine.paranoid_android.lost 2012-01-08
 com.axelby.podax_12.apk com.axelby.podax 2012-01-21
 com.beem.project.beem_10.apk com.beem.project.beem 2012-01-20
+com.beem.project.beem_11.apk com.beem.project.beem 2012-01-25
 com.beem.project.beem_7.apk com.beem.project.beem 2011-02-03
 com.beem.project.beem_9.apk com.beem.project.beem 2012-01-10
 com.boardgamegeek_20.apk com.boardgamegeek 2011-09-26
@@ -158,6 +159,7 @@ com.bwx.bequick_201106160.apk com.bwx.bequick 2011-06-29
 com.bwx.bequick_201107260.apk com.bwx.bequick 2011-08-09
 com.bwx.qs.battery_201010020.apk com.bwx.qs.battery 2011-01-24
 com.chessclock.android_8.apk com.chessclock.android 2012-01-08
+com.ciarang.tallyphant_2.apk com.ciarang.tallyphant 2012-01-26
 com.commonsware.android.arXiv_92.apk com.commonsware.android.arXiv 2011-05-19
 com.danga.squeezer_5.apk com.danga.squeezer 2011-03-02
 com.dozingcatsoftware.bouncy_10.apk com.dozingcatsoftware.bouncy 2011-08-04
@@ -278,6 +280,7 @@ de.shandschuh.sparserss_68.apk de.shandschuh.sparserss 2011-10-02
 de.shandschuh.sparserss_69.apk de.shandschuh.sparserss 2011-11-03
 de.shandschuh.sparserss_70.apk de.shandschuh.sparserss 2011-12-12
 de.ub0r.android.adBlock_5.apk de.ub0r.android.adBlock 2011-01-23
+dk.andsen.asqlitemanager_10.apk dk.andsen.asqlitemanager 2012-01-26
 dk.andsen.asqlitemanager_7.apk dk.andsen.asqlitemanager 2011-12-05
 dk.andsen.asqlitemanager_9.apk dk.andsen.asqlitemanager 2011-12-08
 edu.nyu.cs.omnidroid.app_6.apk edu.nyu.cs.omnidroid.app 2011-10-04
@@ -372,6 +375,7 @@ net.rocrail.androc_286.apk net.rocrail.androc 2011-08-09
 net.rocrail.androc_289.apk net.rocrail.androc 2011-08-14
 net.rocrail.androc_315.apk net.rocrail.androc 2011-08-25
 net.rocrail.androc_324.apk net.rocrail.androc 2011-10-10
+net.rocrail.androc_339.apk net.rocrail.androc 2012-01-25
 net.sf.andbatdog.batterydog_11.apk net.sf.andbatdog.batterydog 2011-04-02
 net.sourceforge.servestream_35.apk net.sourceforge.servestream 2011-03-30
 net.sourceforge.servestream_46.apk net.sourceforge.servestream 2011-08-02
@@ -383,6 +387,7 @@ net.tapi.handynotes_1.apk net.tapi.handynotes 2011-02-13
 net.tapi.handynotes_3.apk net.tapi.handynotes 2011-02-19
 net.tedstein.AndroSS_10.apk net.tedstein.AndroSS 2011-06-27
 net.tedstein.AndroSS_13.apk net.tedstein.AndroSS 2011-07-12
+net.tedstein.AndroSS_16.apk net.tedstein.AndroSS 2012-01-25
 net.tedstein.AndroSS_6.apk net.tedstein.AndroSS 2011-03-29
 net.tedstein.AndroSS_7.apk net.tedstein.AndroSS 2011-04-19
 net.tedstein.AndroSS_8.apk net.tedstein.AndroSS 2011-05-05
@@ -481,6 +486,7 @@ org.johanhil.flygtider_9.apk org.johanhil.flygtider 2011-04-02
 org.jtb.alogcat_34.apk org.jtb.alogcat 2011-01-04
 org.jtb.alogcat_36.apk org.jtb.alogcat 2011-03-09
 org.jtb.alogcat_38.apk org.jtb.alogcat 2011-03-10
+org.jtb.alogcat_39.apk org.jtb.alogcat 2012-01-24
 org.jtb.droidlife_21.apk org.jtb.droidlife 2011-11-27
 org.kost.externalip_3.apk org.kost.externalip 2011-09-26
 org.kreed.vanilla_16.apk org.kreed.vanilla 2011-04-02
@@ -539,6 +545,8 @@ org.wahtod.wififixer_760.apk org.wahtod.wififixer 2011-02-13
 org.wahtod.wififixer_770.apk org.wahtod.wififixer 2011-03-03
 org.wahtod.wififixer_822.apk org.wahtod.wififixer 2011-08-07
 org.wahtod.wififixer_838.apk org.wahtod.wififixer 2011-09-02
+org.wikipedia_1.apk org.wikipedia 2012-01-26
+org.wikipedia_3.apk org.wikipedia 2012-01-26
 org.wordpress.android_31.apk org.wordpress.android 2011-01-26
 org.wordpress.android_33.apk org.wordpress.android 2011-07-01
 org.xbmc.android.remote_730.apk org.xbmc.android.remote 2011-02-24
@@ -575,6 +583,7 @@ sms-backup-plus-v1.3.3.apk com.zegoggles.smssync
 sms-backup-plus-v1.3.4.apk com.zegoggles.smssync
 sms-backup-plus-v1.3.7.apk com.zegoggles.smssync
 sms-backup-plus-v1.4.0.apk com.zegoggles.smssync
+stericson.busybox.donate_103.apk stericson.busybox.donate 2012-01-26
 talkmyphone-2.06-beta.apk com.googlecode.talkmyphone
 to.networld.android.divedroid_1.apk to.networld.android.divedroid 2011-02-13
 transdroid-0.22.0.apk org.transdroid

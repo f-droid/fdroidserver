@@ -1,10 +1,5 @@
-org.eehouse.android.xw4
-aarddict.android
-org.jmoyer.NotificationPlus
-org.mozilla.firefox
-apps.droidnotify
-com.axelby.podax
-com.google.android.stardroid
-us.lindanrandy.cidrcalculator
-net.pierrox.mcompass
+stericson.busybox.donate
+com.ciarang.tallyphant
+org.wikipedia
 info.guardianproject.otr.app.im
+net.pierrox.mcompass
