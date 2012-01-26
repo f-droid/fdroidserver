@@ -1,8 +1,8 @@
 Category:Internet
 License:GPLv2
-Web Site:
-Source Code:
-Issue Tracker:
+Web Site: http://meta.wikimedia.org/wiki/Mobile_Projects
+Source Code: https://github.com/wikimedia/WikipediaMobile
+Issue Tracker: https://bugzilla.wikimedia.org/
 
 Summary:Wikipedia Application
 Description:
@@ -13,6 +13,9 @@ Repo Type:git
 Repo:https://github.com/wikimedia/WikipediaMobile.git
 
 Build Version:1.0,1,v1.0-android
+Build Version:1.0.2,3,a1dc1d87ac85351f44babbb9101e2311e89924b3
 
 Update Check Mode:Market
+Current Version:1.0.2
+Current Version Code:3
 
