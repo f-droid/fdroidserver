@@ -21,6 +21,7 @@ Build Version:1.5.16,164,187,subdir=AppsOrganizer
 Build Version:1.5.18,166,190,subdir=AppsOrganizer
 Build Version:1.5.19,167,191,subdir=AppsOrganizer,target=android-10
 
-Market Version:1.5.19
-Market Version Code:167
+Update Check Mode:Market
+Current Version:1.5.19
+Current Version Code:167
 

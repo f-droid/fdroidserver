@@ -19,6 +19,6 @@ Build Version:0.4.991,13,!Source is not there - see https://sourceforge.net/trac
 Build Version:0.4.999,14,3ed4e59fff30555325f9affa8c0021ee033fc72f,prebuild=mv lib libs,target=android-10
 
 Update Check Mode:Market
-Market Version:0.4.999
-Market Version Code:14
+Current Version:0.4.999
+Current Version Code:14
 

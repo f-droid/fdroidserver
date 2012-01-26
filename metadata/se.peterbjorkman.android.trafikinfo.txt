@@ -16,6 +16,7 @@ Repo:http://trafikinfoandroid.googlecode.com/svn/trunk
 Build Version:0.9,12,628,encoding=utf-8
 Build Version:0.9.1,13,630,encoding=utf-8
 
-Market Version:0.9.1
-Market Version Code:13
+Update Check Mode:Market
+Current Version:0.9.1
+Current Version Code:13
 

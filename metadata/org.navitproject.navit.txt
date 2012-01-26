@@ -11,6 +11,7 @@ support for various vector map formats. This is a beta version which may not
 work very well!
 .
 
-Market Version:navit 0.5.0
-Market Version Code:4785
+Update Check Mode:Market
+Current Version:navit 0.5.0
+Current Version Code:4785
 

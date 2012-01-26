@@ -13,6 +13,7 @@ A simple widget that displays random quotes in English or French.
 Repo Type:git
 Repo:https://github.com/thibault/OpenQOTD.git
 
-Market Version:1.0.1
-Market Version Code:2
+Update Check Mode:Market
+Current Version:1.0.1
+Current Version Code:2
 

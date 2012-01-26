@@ -16,6 +16,7 @@ Repo:http://openintents.googlecode.com/svn/trunk/flashlight/Flashlight
 
 Build Version:1.1,10011,3971,target=android-15
 
-Market Version:1.1
-Market Version Code:10011
+Update Check Mode:Market
+Current Version:1.1
+Current Version Code:10011
 

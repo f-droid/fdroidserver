@@ -16,6 +16,6 @@ Repo:http://android-wifi-ace.googlecode.com/svn/trunk/WiFiACE
 Build Version:0.10,20100924,13
 
 Update Check Mode:Market
-Market Version:0.11
-Market Version Code:20120115
+Current Version:0.11
+Current Version Code:20120115
 

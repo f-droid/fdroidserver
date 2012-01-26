@@ -10,6 +10,7 @@ Automatically changes the phone's ring mode (silent, vibrate, etc) according to 
 current location.
 .
 
-Market Version:1.99.0
-Market Version Code:99
+Update Check Mode:Market
+Current Version:1.99.0
+Current Version Code:99
 

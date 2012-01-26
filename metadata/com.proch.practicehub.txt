@@ -15,6 +15,7 @@ Repo:https://code.google.com/p/music-practice-tools/
 
 Build Version:1.0,1,109c0bddf346
 
-Market Version:1.0
-Market Version Code:1
+Update Check Mode:Market
+Current Version:1.0
+Current Version Code:1
 

@@ -17,6 +17,7 @@ Repo:http://androidpermissions.googlecode.com/svn/trunk
 
 Build Version:1.1,2,16
 
-Market Version:1.1
-Market Version Code:2
+Update Check Mode:Market
+Current Version:1.1
+Current Version Code:2
 

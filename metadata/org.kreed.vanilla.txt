@@ -17,6 +17,7 @@ Repo:https://github.com/kreed/vanilla.git
 
 Build Version:0.1,16,4169dd05b3ac321555bb8436fd2a90f93e52b49d
 
-Market Version:0.1
-Market Version Code:16
+Update Check Mode:Market
+Current Version:0.1
+Current Version Code:16
 

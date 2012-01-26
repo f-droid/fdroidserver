@@ -17,6 +17,7 @@ Repo:http://app-soundmanager.googlecode.com/svn/tags/
 
 Build Version:2.0.0,18,127,subdir=SoundManager-2.0.0,target=android-8,fixapos=yes
 
-Market Version:2.0.0
-Market Version Code:18
+Update Check Mode:Market
+Current Version:2.0.0
+Current Version Code:18
 

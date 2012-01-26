@@ -30,3 +30,5 @@ Repo:http://mythdroid.googlecode.com/svn/trunk/
 Build Version:0.4.3,4,244,prebuild=mv lib libs
 Build Version:0.5.3,53,572,prebuild=mv lib libs,target=android-11
 
+Update Check Mode:Market
+

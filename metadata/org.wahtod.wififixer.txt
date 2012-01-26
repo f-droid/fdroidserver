@@ -22,6 +22,7 @@ Build Version:0.8.0.5,822,846b5c057e886f8436eb,subdir=wififixer,target=android-8
 Build Version:0.8.0.6,838,81e9557f73d8529755cd,subdir=wififixer,target=android-8
 Build Version:0.9.0.1,915,!commit 7155ca938dc1 but can't compile for some reason
 
-Market Version:0.9.0.1
-Market Version Code:915
+Update Check Mode:Market
+Current Version:0.9.0.1
+Current Version Code:915
 

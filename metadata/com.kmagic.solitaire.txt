@@ -16,6 +16,7 @@ Repo:http://solitaire-for-android.googlecode.com/svn/trunk/
 
 Build Version:1.12.2,450,30,target=android-8
 
-Market Version:1.12.2
-Market Version Code:450
+Update Check Mode:Market
+Current Version:1.12.2
+Current Version Code:450
 

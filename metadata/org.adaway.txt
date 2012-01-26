@@ -25,6 +25,6 @@ Build Version:1.23,24,!no source in repo
 Build Version:1.24,25,f811e53e1e1d2ee047b18715fd7d2072b90ae76b,subdir=org_adaway/,buildjni=yes,prebuild=android update project -p ../com_actionbarsherlock
 
 Update Check Mode:Market
-Market Version:1.24
-Market Version Code:25
+Current Version:1.24
+Current Version Code:25
 

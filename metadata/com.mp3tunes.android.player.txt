@@ -17,6 +17,7 @@ Repo:https://mp3tunes.googlecode.com/hg/
 Build Version:3.7,89,ba4550305733,target=android-4,fixapos=yes
 Build Version:5.1,92,!No source in repo
 
-Market Version:5.1
-Market Version Code:92
+Update Check Mode:Market
+Current Version:5.1
+Current Version Code:92
 

@@ -15,7 +15,8 @@ Requires Root:Yes
 Repo Type:svn
 Repo:http://androhid.googlecode.com/svn/trunk/
 
+Update Check Mode:Market
+
 # needs libbluetooth-dev to build
 #Build Version:0.6,6,34,buildjni=yes
 #,patch=jni.patch
-

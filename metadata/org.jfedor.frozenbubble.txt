@@ -18,6 +18,7 @@ Build Version:1.8,9,16
 Build Version:1.10,11,18
 Build Version:1.11,12,r19
 
-Market Version:1.12
-Market Version Code:13
+Update Check Mode:Market
+Current Version:1.12
+Current Version Code:13
 

@@ -18,6 +18,7 @@ Repo:https://github.com/NewProggie/SparkleShare-Android.git
 
 Build Version:1.0,1,a9e23f0f9ae6161a786bf48cb48ab3dec20110c9,prebuild=rm -rf gen/ && rm -rf bin/,target=android-7
 
-Market Version:1.0
-Market Version Code:1
+Update Check Mode:Market
+Current Version:1.0
+Current Version Code:1
 

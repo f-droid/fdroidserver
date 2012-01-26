@@ -9,6 +9,7 @@ Description:
 A SIP (VOIP) client.
 .
 
-Market Version:1.2.2
-Market Version Code:1220
+Update Check Mode:Market
+Current Version:1.2.2
+Current Version Code:1220
 

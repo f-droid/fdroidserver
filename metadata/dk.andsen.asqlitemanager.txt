@@ -15,6 +15,7 @@ Repo:https://asqlitemanager.svn.sourceforge.net/svnroot/asqlitemanager
 Build Version:2.6,7,190,subdir=aSQLiteManager
 Build Version:2.7,9,204,subdir=aSQLiteManager,target=android-10
 
-Market Version:2.7
-Market Version Code:9
+Update Check Mode:Market
+Current Version:2.7
+Current Version Code:9
 

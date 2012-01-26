@@ -20,6 +20,7 @@ Repo:https://rehearsalassist.svn.sourceforge.net/svnroot/rehearsalassist/android
 Build Version:0.8.2,22,90,target=android-8,prebuild=mkdir -p gen/urbanstew/RehearsalAssistant && aidl aidl/urbanstew/RehearsalAssistant/IRecordService.aidl gen/urbanstew/RehearsalAssistant/IRecordService.java
 Build Version:0.9,26,!Source missing - see https://sourceforge.net/tracker/index.php?func=detail&aid=3196094&group_id=226240&atid=1067598
 
-Market Version:0.9
-Market Version Code:26
+Update Check Mode:Market
+Current Version:0.9
+Current Version Code:26
 

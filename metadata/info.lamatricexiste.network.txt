@@ -14,6 +14,7 @@ Repo:https://github.com/rorist/android-network-discovery.git
 
 Build Version:0.3.4,42,32bffddce7e37a3c12f8,oldsdkloc=yes
 
-Market Version:0.3.4
-Market Version Code:42
+Update Check Mode:Market
+Current Version:0.3.4
+Current Version Code:42
 

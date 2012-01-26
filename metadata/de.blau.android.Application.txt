@@ -14,3 +14,5 @@ Repo:http://osmeditor4android.googlecode.com/svn
 
 Build Version:0.7.0,14,201,subdir=tags/Version_0.7.0
 
+Update Check Mode:Market
+

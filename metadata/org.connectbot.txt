@@ -13,8 +13,9 @@ Supports multiple sessions, including running them concurrently.
 Repo Type:git
 Repo:git://github.com/kruton/connectbot.git
 
-Market Version:1.7.1
-Market Version Code:323
+Update Check Mode:Market
+Current Version:1.7.1
+Current Version Code:323
 
 #Can't build these versions with SDK tools r7 due to build.xml issues
 #Build Version:1.7.1,323,19fbcefef5251cdfac97

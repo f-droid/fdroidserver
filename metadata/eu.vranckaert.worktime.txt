@@ -4,7 +4,6 @@ License:Apache2
 Web Site:https://code.google.com/p/worktime/
 Source Code:https://code.google.com/p/worktime/source/browse/
 Issue Tracker:https://code.google.com/p/worktime/wiki/Issues?tm=3
-Donate:
 
 Summary:tracks your work time
 Description:
@@ -19,4 +18,6 @@ Repo:http://worktime.googlecode.com/svn/branches/1.1.2-f/android-app
 # Doesn't build, yet
 #Build Version:1.1.2.f,104,268,target=android-11,patch=style.patch
 Build Version:1.1.3.a - UNSTABLE,107,273,target=android-11,patch=style.patch
+
+Update Check Mode:Market
 

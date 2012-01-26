@@ -9,6 +9,7 @@ Description:
 Browse papers released on arxiv.org
 .
 
-Market Version:0.3
-Market Version Code:3
+Update Check Mode:Market
+Current Version:0.3
+Current Version Code:3
 

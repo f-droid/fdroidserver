@@ -15,6 +15,7 @@ Repo:http://ancal.googlecode.com/svn/trunk/
 
 Build Version:1.6,32,23,fixtrans=yes
 
-Market Version:1.5
-Market Version Code:31
+Update Check Mode:Market
+Current Version:1.5
+Current Version Code:31
 

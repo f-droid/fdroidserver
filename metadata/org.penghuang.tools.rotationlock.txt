@@ -17,6 +17,7 @@ Repo:https://github.com/phuang/RotationLock
 
 Build Version:1.4,5,7c5d43c2ed17a9329abf6b6af07f150e7d0cbd5b,target=android-4
 
-Market Version:1.4
-Market Version Code:5
+Update Check Mode:Market
+Current Version:1.4
+Current Version Code:5
 

@@ -14,6 +14,7 @@ Repo:http://svn.pierrox.net/mcompass/trunk/
 
 Build Version:1.2.4,10,32
 
-Market Version:2.5.1
-Market Version Code:23
+Update Check Mode:Market
+Current Version:2.5.1
+Current Version Code:23
 

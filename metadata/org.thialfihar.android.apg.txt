@@ -11,6 +11,7 @@ conjunction with K-9 Mail, to seamlessly add support for encyrpting and decrypti
 emails, as well as adding and verifying digital signatures.
 .
 
-Market Version:1.0.8
-Market Version Code:10899
+Update Check Mode:Market
+Current Version:1.0.8
+Current Version Code:10899
 

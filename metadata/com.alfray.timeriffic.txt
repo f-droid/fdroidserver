@@ -22,6 +22,7 @@ Build Version:1.09.05,10905,fc40dccbb9,subdir=Timeriffic,oldsdkloc=yes,novcheck=
 Build Version:1.09.11,10911,!Can't find correct commit. See metadata notes too.
 Build Version:1.09.12,10912,!No source for this in the repo
 
-Market Version:1.09.12
-Market Version Code:10912
+Update Check Mode:Market
+Current Version:1.09.12
+Current Version Code:10912
 

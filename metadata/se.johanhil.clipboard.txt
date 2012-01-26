@@ -21,6 +21,7 @@ Repo:https://github.com/johanhil/copy-to-clipboard.git
 
 Build Version:1.0,2,c6c466770fb7215d957118216c2414ae69ca1bc8,target=4
 
-Market Version:1.0
-Market Version Code:2
+Update Check Mode:Market
+Current Version:1.0
+Current Version Code:2
 

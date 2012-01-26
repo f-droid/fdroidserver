@@ -15,6 +15,7 @@ Repo:https://github.com/dozingcat/Vector-Pinball.git
 Build Version:1.1,4,45b5218594320ffb4b37
 Build Version:1.3,10,1210949b1e373916d096
 
-Market Version:1.3.1
-Market Version Code:11
+Update Check Mode:Market
+Current Version:1.3.1
+Current Version Code:11
 

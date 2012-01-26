@@ -32,6 +32,6 @@ Build Version:1.35,37,r1.35,target=android-8
 Build Version:1.36,38,r1.36,target=android-8
 
 Update Check Mode:Market
-Market Version:1.36
-Market Version Code:38
+Current Version:1.36
+Current Version Code:38
 

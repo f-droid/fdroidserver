@@ -17,6 +17,7 @@ Repo:http://replicaisland.googlecode.com/svn/trunk/
 
 Build Version:1.4,14,7
 
-Market Version:1.4
-Market Version Code:14
+Update Check Mode:Market
+Current Version:1.4
+Current Version Code:14
 

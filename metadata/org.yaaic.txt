@@ -18,6 +18,7 @@ Build Version:0.7,9,v0.7,subdir=application,bindir=builds/ant
 Build Version:0.8,10,v0.8,subdir=application,bindir=builds/ant
 Build Version:0.9,11,v0.9,subdir=application,bindir=builds/ant
 
-Market Version:0.9
-Market Version Code:11
+Update Check Mode:Market
+Current Version:0.9
+Current Version Code:11
 

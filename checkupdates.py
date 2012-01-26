@@ -92,12 +92,12 @@ for app in apps:
 
         if not version:
             print "..." + vercode
-        elif vercode == app['Market Version Code'] and version == app['Market Version']:
+        elif vercode == app['Current Version Code'] and version == app['Current Version']:
             print "...up to date"
         else:
             print '...updating to version:' + version + ' vercode:' + vercode
-            app['Market Version'] = version
-            app['Market Version Code'] = vercode
+            app['Current Version'] = version
+            app['Current Version Code'] = vercode
             metafile = os.path.join('metadata', app['id'] + '.txt')
             common.write_metadata(metafile, app)
 

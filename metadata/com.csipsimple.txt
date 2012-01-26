@@ -10,8 +10,9 @@ Description:
 A SIP (VOIP) client.
 .
 
+Update Check Mode:Market
 #Note : build needs a customised ndk, as described at:
 #  http://code.google.com/p/csipsimple/wiki/HowToBuild
-Market Version:0.03-01
-Market Version Code:1108
+Current Version:0.03-01
+Current Version Code:1108
 

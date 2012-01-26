@@ -18,6 +18,7 @@ Repo:https://github.com/nguillaumin/osmtracker-android.git
 
 Build Version:0.5.6,21,0.5.6,target=android-8
 
-Market Version:0.5.6
-Market Version Code:21
+Update Check Mode:Market
+Current Version:0.5.6
+Current Version Code:21
 

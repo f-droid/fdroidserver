@@ -13,9 +13,10 @@ a Starbucks WLAN.
 Repo Type:hg
 Repo:https://code.google.com/p/sbautologin/
 
+Update Check Mode:Market
 #Temporarily disabled - won't build on the build server due to lack of
 #org.junit (but it's installed!)
 #Build Version:1.6,7,62
-Market Version:1.5
-Market Version Code:6
+Current Version:1.5
+Current Version Code:6
 

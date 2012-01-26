@@ -10,6 +10,6 @@ Internet Relay Chat client with a twin-pane view.
 .
 
 Update Check Mode:Market
-Market Version:2012.0117.1
-Market Version Code:201201171
+Current Version:2012.0117.1
+Current Version Code:201201171
 

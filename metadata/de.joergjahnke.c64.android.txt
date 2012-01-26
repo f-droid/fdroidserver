@@ -12,6 +12,6 @@ A Commodore 64 (C64) emulator.
 .
 
 Update Check Mode:Market
-Market Version:1.6
-Market Version Code:10600
+Current Version:1.6
+Current Version Code:10600
 

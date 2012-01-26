@@ -20,6 +20,7 @@ Repo:git://github.com/bherrmann7/Car-Cast.git
 
 Build Version:1.0.129,129,7a879c6bfa51b5d80401b84e031bf4ff2981bb8c,subdir=cc,target=android-8,rm=cc/libs/admob-sdk-android.jar,patch=admob.patch
 
-Market Version:1.0.129
-Market Version Code:129
+Update Check Mode:Market
+Current Version:1.0.129
+Current Version Code:129
 

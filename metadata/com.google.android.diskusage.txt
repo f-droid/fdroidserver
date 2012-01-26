@@ -21,6 +21,7 @@ Build Version:3.0alpha3,3005,!no source in repo,prebuild=mkdir libs && cp extra/
 Build Version:3.1,3010,68,prebuild=mkdir libs && cp extra/system.jar libs/
 Build Version:3.2,3020,69,prebuild=mkdir libs && cp extra/system.jar libs/
 
-Market Version:3.2
-Market Version Code:3020
+Update Check Mode:Market
+Current Version:3.2
+Current Version Code:3020
 

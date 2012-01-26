@@ -15,6 +15,6 @@ Repo:http://cidrcalculator.googlecode.com/svn/trunk/
 Build Version:1.13,115,31,target=android-8
 
 Update Check Mode:Market
-Market Version:1.14
-Market Version Code:116
+Current Version:1.14
+Current Version Code:116
 

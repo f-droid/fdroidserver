@@ -21,6 +21,7 @@ Build Version:4.4 beta 33,26,android_beta_33,subdir=xwords4/android/XWords4,buil
 Build Version:4.4 beta 38,30,android_beta_38,subdir=xwords4/android/XWords4,buildjni=yes
 Build Version:4.4 beta 39,31,android_beta_39,subdir=xwords4/android/XWords4,buildjni=yes,target=android-8,prebuild=cd .. && ./scripts/genvers.sh >ant_out.txt
 
-Market Version:4.4
-Market Version Code:33
+Update Check Mode:Market
+Current Version:4.4
+Current Version Code:33
 

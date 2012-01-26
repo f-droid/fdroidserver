@@ -16,6 +16,7 @@ Repo:git://github.com/wrr/speech_trainer.git
 
 Build Version:1.01,2,109eba6da3eac93c6e0d445f488433452387f815,subdir=app,target=android-10
 
-Market Version:1.01
-Market Version Code:2
+Update Check Mode:Market
+Current Version:1.01
+Current Version Code:2
 

@@ -14,6 +14,7 @@ Repo:http://androidsoft.googlecode.com/svn/trunk/memory/
 
 Build Version:1.8.0,13,44,prebuild=rm -rf releases && rm libs/androidsoft-credits-1.0.0.jar,target=android-11
 
-Market Version:1.8.0
-Market Version Code:13
+Update Check Mode:Market
+Current Version:1.8.0
+Current Version Code:13
 

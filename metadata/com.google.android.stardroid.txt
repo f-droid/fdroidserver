@@ -17,6 +17,6 @@ Repo:http://stardroid.googlecode.com/svn/trunk/app
 Build Version:1.6.4,1112,3
 
 Update Check Mode:Market
-Market Version:1.6.4
-Market Version Code:1112
+Current Version:1.6.4
+Current Version Code:1112
 

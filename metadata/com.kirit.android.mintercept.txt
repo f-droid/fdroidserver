@@ -10,6 +10,7 @@ A game in the style of the classic Missile Command. Defend your cities from inco
 enemy missiles.
 .
 
-Market Version:0.5.1
-Market Version Code:6
+Update Check Mode:Market
+Current Version:0.5.1
+Current Version Code:6
 

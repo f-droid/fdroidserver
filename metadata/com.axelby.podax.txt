@@ -25,6 +25,6 @@ Repo:git://github.com/thasmin/Podax.git
 Build Version:2.11,12,13d0e30198d96b4cd7b1a87065a1b8cf3ed578f4,target=android-7
 
 Update Check Mode:Market
-Market Version:2.11
-Market Version Code:12
+Current Version:2.11
+Current Version Code:12
 

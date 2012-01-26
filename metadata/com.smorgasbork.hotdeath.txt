@@ -16,6 +16,6 @@ Build Version:1.0.2,3,26
 Build Version:1.0.5,6,34
 
 Update Check Mode:Market
-Market Version:1.0.5
-Market Version Code:6
+Current Version:1.0.5
+Current Version Code:6
 

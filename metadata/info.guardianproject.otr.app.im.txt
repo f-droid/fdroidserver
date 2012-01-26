@@ -16,6 +16,7 @@ Repo:https://github.com/guardianproject/Gibberbot.git
 
 Build Version:0.0.7-RC1,25,e17dbbcf338af00466cabc5178634cd0d5ffded8,target=android-4
 
-Market Version:0.0.5-RC5
-Market Version Code:21
+Update Check Mode:Market
+Current Version:0.0.5-RC5
+Current Version Code:21
 

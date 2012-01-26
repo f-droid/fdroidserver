@@ -10,6 +10,7 @@ A simple HTTP monitoring application. Get notified when remote web sites are
 down.
 .
 
-Market Version:0.4.10
-Market Version Code:27
+Update Check Mode:Market
+Current Version:0.4.10
+Current Version Code:27
 

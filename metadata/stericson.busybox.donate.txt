@@ -3,7 +3,6 @@ License:Apache 2.0
 Web Site:http://code.google.com/p/busybox-android/
 Source Code:http://code.google.com/p/busybox-android/source/checkout
 Issue Tracker:http://code.google.com/p/busybox-android/issues/list
-Donate:
 
 Summary:BusyBox installer
 Description:
@@ -26,4 +25,6 @@ rm -rf gen &&\
 cd src/stericson &&\
 svn co -r 133 http://roottools.googlecode.com/svn/trunk/Developmental/RootTools_sdk3_generic/src/com/stericson/RootTools &&\
 cd ../..
+
+Update Check Mode:Market
 

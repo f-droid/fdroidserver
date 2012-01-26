@@ -14,8 +14,9 @@ device, optionally, if you have root access).
 Repo Type:svn
 Repo:http://swiftp.googlecode.com/svn/trunk/
 
-Market Version:1.24
-Market Version Code:17
+Update Check Mode:Market
+Current Version:1.24
+Current Version Code:17
 
 #Can't build this version - see http://code.google.com/p/swiftp/issues/detail?id=128
 #Build Version:1.24,17,69,target=android-3

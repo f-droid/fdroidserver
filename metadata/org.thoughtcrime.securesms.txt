@@ -18,6 +18,7 @@ Repo:https://github.com/WhisperSystems/TextSecure.git
 
 Build Version:0.5.7,21,6a30867fd481474e8634b508d524863bc8a6b565,target=android-10
 
-Market Version:0.5.7
-Market Version Code:21
+Update Check Mode:Market
+Current Version:0.5.7
+Current Version Code:21
 

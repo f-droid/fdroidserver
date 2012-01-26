@@ -16,6 +16,7 @@ Repo:lp:tomdroid
 
 Build Version:0.4.1,6,214
 
-Market Version:0.4.1
-Market Version Code:6
+Update Check Mode:Market
+Current Version:0.4.1
+Current Version Code:6
 

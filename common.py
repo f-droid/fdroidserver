@@ -325,8 +325,8 @@ def parse_metadata(metafile, **kw):
     thisinfo['Disabled'] = None
     thisinfo['AntiFeatures'] = None
     thisinfo['Update Check Mode'] = 'Market'
-    thisinfo['Market Version'] = ''
-    thisinfo['Market Version Code'] = '0'
+    thisinfo['Current Version'] = ''
+    thisinfo['Current Version Code'] = '0'
     thisinfo['Repo Type'] = ''
     thisinfo['Repo'] = ''
     thisinfo['Requires Root'] = False
@@ -353,6 +353,11 @@ def parse_metadata(metafile, **kw):
             field = line[:index]
             value = line[index+1:]
 
+            # Translate obsolete fields...
+            if field == 'Market Version':
+                field = 'Current Version'
+            if field == 'Market Version Code':
+                field = 'Current Version Code'
 
             fieldtype = metafieldtype(field)
             if fieldtype != 'build':
@@ -473,9 +478,9 @@ def write_metadata(dest, app):
     if len(app['builds']) > 0:
         mf.write('\n')
     writefield('Update Check Mode')
-    if len(app['Market Version']) > 0:
-        writefield('Market Version')
-        writefield('Market Version Code')
+    if len(app['Current Version']) > 0:
+        writefield('Current Version')
+        writefield('Current Version Code')
     mf.write('\n')
     writecomments(None)
     mf.close()

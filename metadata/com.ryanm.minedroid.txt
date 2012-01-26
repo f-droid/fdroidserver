@@ -12,5 +12,7 @@ An experimental Minecraft client.
 Repo Type:svn
 Repo:http://minedroid.googlecode.com/svn/trunk/
 
+Update Check Mode:Market
+
 #Needs DroidRUGL to build.
 #Build Version:Extra lucky bugfix edition,13,47,subdir=MineDroid

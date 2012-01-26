@@ -290,12 +290,12 @@ for app in apps:
     if app['Disabled'] is None:
 
         # Get a list of the apks for this app...
-        gotmarketver = False
+        gotcurrentver = False
         apklist = []
         for apk in apks:
             if apk['id'] == app['id']:
-                if str(apk['versioncode']) == app['Market Version Code']:
-                    gotmarketver = True
+                if str(apk['versioncode']) == app['Current Version Code']:
+                    gotcurrentver = True
                 apklist.append(apk)
 
         if len(apklist) == 0:
@@ -320,8 +320,13 @@ for app in apps:
             addElement('tracker', app['Issue Tracker'], doc, apel)
             if app['Donate'] != None:
                 addElement('donate', app['Donate'], doc, apel)
-            addElement('marketversion', app['Market Version'], doc, apel)
-            addElement('marketvercode', app['Market Version Code'], doc, apel)
+
+            # These elements actually refer to the current version (i.e. which
+            # one is recommended. They are historically mis-named, and need
+            # changing, but stay like this for now to support existing clients.
+            addElement('marketversion', app['Current Version'], doc, apel)
+            addElement('marketvercode', app['Current Version Code'], doc, apel)
+
             if not (app['AntiFeatures'] is None):
                 addElement('antifeatures', app['AntiFeatures'], doc, apel)
             if app['Requires Root']:
@@ -378,35 +383,35 @@ for app in apps:
                         " Source: " + app['Source Code'])
                 warnings += 1
             else:
-                if app['Market Version Code'] != '0':
+                if app['Current Version Code'] != '0':
                     gotbuild = False
                     for build in app['builds']:
-                        if build['vercode'] == app['Market Version Code']:
+                        if build['vercode'] == app['Current Version Code']:
                             gotbuild = True
                     if not gotbuild:
-                        print ("WARNING: No build data for market version of "
-                                + app['id'] + " (" + app['Market Version']
+                        print ("WARNING: No build data for current version of "
+                                + app['id'] + " (" + app['Current Version']
                                 + ") " + app['Source Code'])
                         warnings += 1
 
-        # If we don't have the market version, check if there is a build
+        # If we don't have the current version, check if there is a build
         # with a commit ID starting with '!' - this means we can't build it
         # for some reason, and don't want hassling about it...
-        if not gotmarketver and app['Market Version Code'] != '0':
+        if not gotcurrentver and app['Current Version Code'] != '0':
             for build in app['builds']:
-                if build['vercode'] == app['Market Version Code']:
-                    gotmarketver = True
+                if build['vercode'] == app['Current Version Code']:
+                    gotcurrentver = True
 
-        # Output a message of harassment if we don't have the market version:
-        if not gotmarketver and app['Market Version Code'] != '0':
+        # Output a message of harassment if we don't have the current version:
+        if not gotcurrentver and app['Current Version Code'] != '0':
             addr = app['Source Code']
-            print "WARNING: Don't have market version (" + app['Market Version'] + ") of " + app['Name']
+            print "WARNING: Don't have current version (" + app['Current Version'] + ") of " + app['Name']
             print "         (" + app['id'] + ") " + addr
             warnings += 1
             if options.verbose:
                 # A bit of extra debug info, basically for diagnosing
                 # app developer mistakes:
-                print "         Market vercode:" + app['Market Version Code']
+                print "         Current vercode:" + app['Current Version Code']
                 print "         Got:"
                 for apk in apks:
                     if apk['id'] == app['id']:

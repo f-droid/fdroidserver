@@ -17,6 +17,6 @@ Build Version:0.5.2,25,efc0e83a,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir asse
 Build Version:0.5.3,26,8e9d76ea685ea75d6c08,subdir=OsmAnd,encoding=utf-8,prebuild=mkdir assets && mkdir raw
 
 Update Check Mode:Market
-Market Version:0.7.0
-Market Version Code:46
+Current Version:0.7.0
+Current Version Code:46
 

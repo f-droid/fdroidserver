@@ -16,3 +16,5 @@ Repo:lp:weightchart
 
 Build Version:1,1,1,target=8
 
+Update Check Mode:Market
+

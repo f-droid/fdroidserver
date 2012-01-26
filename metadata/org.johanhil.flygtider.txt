@@ -18,6 +18,7 @@ Repo:http://flygtider.googlecode.com/svn/trunk
 Build Version:0.7,9,23
 Build Version:0.61,8,!This version was never committed
 
-Market Version:0.61
-Market Version Code:8
+Update Check Mode:Market
+Current Version:0.61
+Current Version Code:8
 

@@ -21,6 +21,7 @@ Build Version:0.3.-1,10,v0.3.-1,buildjni=yes,target=android-8
 Build Version:0.3.2,13,v0.3.2,buildjni=yes,target=android-8
 Build Version:0.4.2,16,4a9161b6f94d07e3da030a66c0a24fda06f3a53d,buildjni=yes,target=android-8
 
-Market Version:0.4.2
-Market Version Code:16
+Update Check Mode:Market
+Current Version:0.4.2
+Current Version Code:16
 

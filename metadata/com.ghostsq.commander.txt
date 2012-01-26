@@ -30,6 +30,6 @@ Build Version:1.40,160,302,\
 prebuild=sed -ri 's/(debuggable)="true"/\1="false"/' AndroidManifest.xml
 
 Update Check Mode:Market
-Market Version:1.40
-Market Version Code:160
+Current Version:1.40
+Current Version Code:160
 

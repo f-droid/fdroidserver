@@ -18,6 +18,7 @@ Build Version:1.0.2 [BETA],33,641656d8811cdbe47b86
 Build Version:1.0.2 [BETA],33,!No source in repo
 Build Version:1.0.3 [BETA],34,!No source in repo
 
-Market Version:1.0.4 [BETA]
-Market Version Code:35
+Update Check Mode:Market
+Current Version:1.0.4 [BETA]
+Current Version Code:35
 
