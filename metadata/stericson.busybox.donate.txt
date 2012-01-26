@@ -1,0 +1,29 @@
+Category:System
+License:Apache 2.0
+Web Site:http://code.google.com/p/busybox-android/
+Source Code:http://code.google.com/p/busybox-android/source/checkout
+Issue Tracker:http://code.google.com/p/busybox-android/issues/list
+Donate:
+
+Summary:BusyBox installer
+Description:
+Installs and updates BusyBox on a rooted device.
+
+BusyBox combines tiny versions of many common UNIX utilities into a single
+small executable. It provides replacements for most of the utilities you
+usually find in GNU fileutils, shellutils, etc. See the BusyBox web site at
+http://www.busybox.net for more information. BusyBox itself is GPLv2
+licensed.
+.
+
+Requires Root:Yes
+
+Repo Type:git-svn
+Repo:http://busybox-android.googlecode.com/svn/trunk/
+
+Build Version:7.1,103,3,target=android-8,prebuild=\
+rm -rf gen &&\
+cd src/stericson &&\
+svn co -r 133 http://roottools.googlecode.com/svn/trunk/Developmental/RootTools_sdk3_generic/src/com/stericson/RootTools &&\
+cd ../..
+
