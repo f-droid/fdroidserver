@@ -93,7 +93,7 @@ for app in apps:
                     # Scan for common known non-free blobs:
                     usual_suspects = ['flurryagent.jar',
                                       'paypal_mpl.jar',
-                                      'libhoogleanalytics.jar',
+                                      'libgoogleanalytics.jar',
                                       'admob-sdk-android.jar',
                                       'googleadview.jar']
                     for r,d,f in os.walk(build_dir):
