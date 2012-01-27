@@ -19,7 +19,7 @@ prebuild=sed -r -i \
  AndroidManifest.xml,\
 oldsdkloc=yes,target=android-4
 
-Update Check Mode:Market
+Update Check Mode:None
 Current Version:0.5
 Current Version Code:5
 

@@ -383,6 +383,7 @@ net.sourceforge.servestream_48.apk net.sourceforge.servestream 2011-08-14
 net.sourceforge.servestream_54.apk net.sourceforge.servestream 2012-01-19
 net.sylvek.sharemyposition_16.apk net.sylvek.sharemyposition 2011-02-03
 net.sylvek.sharemyposition_20.apk net.sylvek.sharemyposition 2012-01-10
+net.sylvek.sharemyposition_24.apk net.sylvek.sharemyposition 2012-01-27
 net.tapi.handynotes_1.apk net.tapi.handynotes 2011-02-13
 net.tapi.handynotes_3.apk net.tapi.handynotes 2011-02-19
 net.tedstein.AndroSS_10.apk net.tedstein.AndroSS 2011-06-27
@@ -470,6 +471,7 @@ org.geometerplus.zlibrary.ui.android_102021.apk org.geometerplus.zlibrary.ui.and
 org.geometerplus.zlibrary.ui.android_102031.apk org.geometerplus.zlibrary.ui.android 2011-11-25
 org.geometerplus.zlibrary.ui.android_102041.apk org.geometerplus.zlibrary.ui.android 2011-12-04
 org.geometerplus.zlibrary.ui.android_102061.apk org.geometerplus.zlibrary.ui.android 2012-01-06
+org.geometerplus.zlibrary.ui.android_103031.apk org.geometerplus.zlibrary.ui.android 2012-01-27
 org.geometerplus.zlibrary.ui.android_9903.apk org.geometerplus.zlibrary.ui.android 2011-01-08
 org.geometerplus.zlibrary.ui.android_9911.apk org.geometerplus.zlibrary.ui.android 2011-02-02
 org.geometerplus.zlibrary.ui.android_9912.apk org.geometerplus.zlibrary.ui.android 2011-02-10

@@ -27,4 +27,6 @@ svn co -r 133 http://roottools.googlecode.com/svn/trunk/Developmental/RootTools_
 cd ../..
 
 Update Check Mode:Market
+Current Version:7.2
+Current Version Code:104
 

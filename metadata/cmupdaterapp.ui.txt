@@ -17,7 +17,7 @@ Repo:http://cyanogen-updater.googlecode.com/svn/trunk/
 
 Build Version:5.0.1,501,626
 
-Update Check Mode:Market
+Update Check Mode:None
 Current Version:5.0.1
 Current Version Code:501
 

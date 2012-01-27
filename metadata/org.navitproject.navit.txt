@@ -12,6 +12,6 @@ work very well!
 .
 
 Update Check Mode:Market
-Current Version:navit 0.5.0
+Current Version:navit
 Current Version Code:4785
 

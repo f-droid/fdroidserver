@@ -60,6 +60,6 @@ Update Check Mode:Market
 #    unzip -j guava-r08.zip guava-r08/guava-r08.jar && \
 #    rm *.zip && \
 #    cd ..
-Current Version:1.8.4
-Current Version Code:125
+Current Version:1.8.5
+Current Version Code:128
 
