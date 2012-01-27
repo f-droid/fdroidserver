@@ -4,7 +4,7 @@ License:GPLv3
 Web Site:http://projects.ciarang.com/p/tallyphant/
 Source Code:http://projects.ciarang.com/p/tallyphant/source/tree/master/
 Issue Tracker:http://projects.ciarang.com/p/tallyphant/issues/
-Donate:
+Donate:http://projects.ciarang.com/p/tallyphant/page/Donate/
 
 Summary:Counter
 Description:
