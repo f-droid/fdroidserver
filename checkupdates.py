@@ -37,7 +37,12 @@ execfile('config.py')
 def check_market(app):
     time.sleep(5)
     url = 'http://market.android.com/details?id=' + app['id']
-    page = urllib.urlopen(url).read()
+    req = urllib.urlopen(url)
+    if req.getcode() == 404:
+        return (None, 'Not in market')
+    elif req.getcode() != 200:
+        return (None, 'Return code ' + str(req.getcode()))
+    page = req.read()
 
     version = None
     vercode = None
@@ -45,6 +50,9 @@ def check_market(app):
     m = re.search('<dd itemprop="softwareVersion">([^>]+)</dd>', page)
     if m:
         version = html_parser.unescape(m.group(1))
+
+    if version == 'Varies with device':
+        return (None, 'Device-variable version, cannot use this method')
 
     m = re.search('data-paramValue="(\d+)"><div class="goog-menuitem-content">Latest Version<', page)
     if m:
