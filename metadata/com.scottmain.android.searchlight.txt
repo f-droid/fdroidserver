@@ -1,0 +1,16 @@
+Category:System
+License:Apache2
+Web Site:http://code.google.com/p/search-light/
+Source Code:http://code.google.com/p/search-light/source/checkout
+Issue Tracker:http://code.google.com/p/search-light/issues/list
+
+Summary:LED Flashlight
+Description:
+Uses your camera's LED as a flashlight.
+.
+
+Repo Type:git-svn
+Repo:http://search-light.googlecode.com/svn/trunk/
+
+Build Version:1.0,1,2
+
