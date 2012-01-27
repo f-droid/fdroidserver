@@ -22,7 +22,7 @@ Repo:http://sharemyposition.googlecode.com/svn/trunk/
 
 Build Version:1.0.11,16,64,subdir=ShareMyPosition-android
 Build Version:1.1.0-beta3,20,70,subdir=ShareMyPosition-android,target=android-11,prebuild=mv lib libs
-Build Version:1.1.2,24,!No source - http://code.google.com/p/sharemyposition/issues/detail?id=9
+Build Version:1.1.2,24,75,subdir=ShareMyPosition-android,target=android-11,prebuild=mv lib libs
 
 Update Check Mode:Market
 Current Version:1.1.2
