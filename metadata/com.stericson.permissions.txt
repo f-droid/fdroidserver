@@ -1,0 +1,21 @@
+Category:System
+License:GPLv3
+Web Site:https://code.google.com/p/android-permissions/
+Source Code:https://code.google.com/p/android-permissions/source/checkout
+Issue Tracker:https://code.google.com/p/android-permissions/issues/list
+
+Summary:Control permissions of installed apps
+Description:
+Permissions allows you to somewhat control the permissions an app is requesting
+on your Android device. While it is not a perfect system, it does work
+(although perhaps not on all devices). You do have to reboot the device before
+the changes take place.
+.
+
+Requires Root:Yes
+
+Repo Type:git-svn
+Repo:http://android-permissions.googlecode.com/svn/trunk/
+
+Build Version:1.3,4,9,prebuild=rm -rf bin/ && rm -rf gen/ && mkdir libs && mv RootTools-1.0-sdk3-generic.jar libs
+
