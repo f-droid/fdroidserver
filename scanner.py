@@ -50,6 +50,8 @@ html_parser = HTMLParser.HTMLParser()
 
 problems = []
 
+extlib_dir = os.path.join('build', 'extlib')
+
 for app in apps:
 
     skip = False
@@ -86,7 +88,7 @@ for app in apps:
 
                     # Prepare the source code...
                     root_dir = common.prepare_source(vcs, app, thisbuild,
-                            build_dir, sdk_path, ndk_path, javacc_path,
+                            build_dir, extlib_dir, sdk_path, ndk_path, javacc_path,
                             not refreshed_source)
                     refreshed_source = True
 

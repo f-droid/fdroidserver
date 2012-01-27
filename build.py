@@ -44,6 +44,8 @@ parser.add_option("-p", "--package", default=None,
                   help="Build only the specified package")
 parser.add_option("-s", "--stop", action="store_true", default=False,
                   help="Make the build stop on exceptions")
+parser.add_option("-t", "--test", action="store_true", default=False,
+                  help="Test mode - put output in the tmp directory only.")
 (options, args) = parser.parse_args()
 
 # Get all apps...
@@ -57,21 +59,36 @@ if not os.path.isdir(log_dir):
     print "Creating log directory"
     os.makedirs(log_dir)
 
-output_dir = 'repo'
-if not os.path.isdir(output_dir):
-    print "Creating output directory"
-    os.makedirs(output_dir)
-
 tmp_dir = 'tmp'
 if not os.path.isdir(tmp_dir):
     print "Creating temporary directory"
     os.makedirs(tmp_dir)
 
+if options.test:
+    output_dir = tmp_dir
+else:
+    output_dir = 'repo'
+    if not os.path.isdir(output_dir):
+        print "Creating output directory"
+        os.makedirs(output_dir)
+
 build_dir = 'build'
 if not os.path.isdir(build_dir):
     print "Creating build directory"
     os.makedirs(build_dir)
+extlib_dir = os.path.join(build_dir, 'extlib')
 
+# Update extlib directory...
+if False:  # Don't need this yet!
+    greendroid_dir = os.path.join(extlib_dir, 'GreenDroid')
+    greendroid_vcs = common.getvcs('git',
+            'https://github.com/cyrilmottier/GreenDroid.git', greendroid_dir)
+    greendroid_vcs.gotorevision('5f92227c959d51e1d7220199135c2c239eabd4d2')
+    subprocess.call(['android', 'update', 'project', '-p',
+        os.path.join(greendroid_dir, 'GreenDroid')])
+
+
+# Build applications...
 for app in apps:
 
     if options.package and options.package != app['id']:
@@ -109,13 +126,13 @@ for app in apps:
 
                     # Prepare the source code...
                     root_dir = common.prepare_source(vcs, app, thisbuild,
-                            build_dir, sdk_path, ndk_path, javacc_path,
-                            not refreshed_source)
+                            build_dir, extlib_dir, sdk_path, ndk_path,
+                            javacc_path, not refreshed_source)
                     refreshed_source = True
 
                     # Build the source tarball right before we build the release...
                     tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
-                    tarball = tarfile.open(os.path.join(output_dir,
+                    tarball = tarfile.open(os.path.join(tmp_dir,
                         tarname + '.tar.gz'), "w:gz")
                     def tarexc(f):
                         if f in ['.svn', '.git', '.hg', '.bzr']:
@@ -270,6 +287,12 @@ for app in apps:
                     if p.returncode != 0:
                         raise BuildException("Failed to align application")
                     os.remove(dest_unsigned)
+
+                    # Move the source tarball into the output directory...
+                    if output_dir != tmp_dir:
+                        shutil.movefile(os.path.join(tmp_dir, tarname + '.tar.gz'),
+                            os.path.join(output_dir, tarname + '.tar.gz'))
+
                     build_succeeded.append(app)
             except BuildException as be:
                 if options.stop:

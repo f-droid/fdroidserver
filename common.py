@@ -544,14 +544,17 @@ class MetaDataException(Exception):
 #  'vcs'         - the appropriate vcs object for the application
 #  'app'         - the application details from the metadata
 #  'build'       - the build details from the metadata
-#  'build_dir'   - the path to the build directory
+#  'build_dir'   - the path to the build directory, usually
+#                   'build/app.id'
+#  'extlib_dir'  - the path to the external libraries directory, usually
+#                   'build/extlib'
 #  'sdk_path'    - the path to the Android SDK
 #  'ndk_path'    - the path to the Android NDK
 #  'javacc_path' - the path to javacc
 #  'refresh'     - True to refresh from the remote repo
 # Returns the root directory, which may be the same as 'build_dir' or may
 # be a subdirectory of it.
-def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, refresh):
+def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, javacc_path, refresh):
 
     # Optionally, the actual app source can be in a subdirectory...
     if build.has_key('subdir'):
@@ -687,6 +690,17 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, 
                         f = open(os.path.join(root, filename), 'w')
                         f.writelines(outlines)
                         f.close()
+
+    # Add required external libraries...
+    if build.has_key('extlibs'):
+        libsdir = os.path.join(root_dir, 'libs')
+        if not os.path.exists(libsdir):
+            os.mkdir(libsdir)
+        libs = build['extlibs'].split(';')
+        for lib in libs:
+            libf = os.path.basename(lib)
+            shutil.copyfile(os.path.join(extlib_dir, lib),
+                    os.path.join(libsdir, libf))
 
     # Run a pre-build command if one is required...
     if build.has_key('prebuild'):
