@@ -382,19 +382,31 @@ class FDroid
 			$iconString .= '<span style="color:#DD9900;';
 			if($size=='adjusted')
 				$iconString .= 'font-size:150%;';
-			$iconString .= '">&#x26a0;</span>';
+			$iconString .= '">&#x26a0;</span>';	// WARNING SIGN
 		}
 		elseif($protection_level=='normal') {
 			$iconString .= '<span style="color:#6666FF;';
 			if($size=='adjusted')
 				$iconString .= 'font-size:110%;';
-			$iconString .= '">&#x24D8;</span>';
+			$iconString .= '">&#x24D8;</span>';	// CIRCLED LATIN SMALL LETTER I
+		}
+		elseif($protection_level=='signature') {
+			$iconString .= '<span style="color:#33AAAA;';
+			if($size=='adjusted')
+				$iconString .= 'font-size:140%;';
+			$iconString .= '">&#x273D;</span>';	// HEAVY TEARDROP-SPOKED ASTERISK
+		}
+		elseif($protection_level=='signatureOrSystem') {
+			$iconString .= '<span style="color:#DD66DD;';
+			if($size=='adjusted')
+				$iconString .= 'font-size:140%;';
+			$iconString .= '">&#x269B;</span>';	// ATOM SYMBOL
 		}
 		else {
 			$iconString .= '<span style="color:#33AA33';
 			if($size=='adjusted')
 				$iconString .= ';font-size:130%;';
-			$iconString .= '">&#x2699;</span>';
+			$iconString .= '">&#x2699;</span>';	// GEAR
 		}
 
 		return $iconString;
