@@ -563,6 +563,18 @@ def getsrclib(spec, extlib_dir):
             raise BuildException('Error updating ActionBarSherlock project')
         return libdir
 
+    if name == 'FacebookSDK':
+        sdir = os.path.join(extlib_dir, 'FacebookSDK')
+        vcs = getvcs('git',
+                'git://github.com/facebook/facebook-android-sdk.git', sdir)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'facebook')
+        if subprocess.call(['android', 'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating FacebookSDK project')
+        return libdir
+
+
     raise BuildException('Unknown srclib ' + name)
 
 

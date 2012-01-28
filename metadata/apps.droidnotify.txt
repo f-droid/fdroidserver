@@ -14,13 +14,10 @@ It is extremely customizable with many options to suit your needs and style.
 Repo Type:svn
 Repo:http://droid-notify.googlecode.com/svn/trunk
 
-Build Version:2.20,27,707,patch=facebook.patch,prebuild=mv lib/ libs/ \
-	&& git clone git://github.com/facebook/facebook-android-sdk.git \
-	&& cp facebook-android-sdk/facebook/default.properties facebook-android-sdk/facebook/project.properties \
-	&& cp build.xml facebook-android-sdk/facebook/ \
-	&& cp local.properties facebook-android-sdk/facebook/
+Build Version:2.20,27,707,srclibs=FacebookSDK@c58af0b,prebuild=sed -i 's@\(android.library.reference.1=\).*@\1$$FacebookSDK$$@' project.properties && mv lib/ libs/
+Build Version:2.22,29,759,srclibs=FacebookSDK@c58af0b,prebuild=sed -i 's@\(android.library.reference.1=\).*@\1$$FacebookSDK$$@' project.properties && mv lib/ libs/
 
 Update Check Mode:Market
-Current Version:2.21
-Current Version Code:28
+Current Version:2.22
+Current Version Code:29
 
