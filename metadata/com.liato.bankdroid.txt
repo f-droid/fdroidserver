@@ -29,6 +29,7 @@ Build Version:1.8.1,121,b5f637bbb301aa2fe997c9f3367cfb144d158633,encoding=utf-8,
 
 Build Version:1.8.1,121,9f626b0dedb01cb90a16fb127a041c5f3dd1c579,target=android-10,encoding=utf-8,extlibs=commons-io/commons-io-2.0.1.jar;guava-r08/guava-r08.jar,prebuild=sed -i "s@parent=\"android:WindowTitleBackground\"@@" res/values/styles.xml
 
+Build Version:1.8.5,128,263023cd883da7b12c94cb46b9d3fdd23068446c,target=android-11,encoding=utf-8,prebuild=mv lib libs
 
 Update Check Mode:Market
 Current Version:1.8.5

@@ -6,13 +6,16 @@ Issue Tracker:https://code.google.com/p/cidrcalculator/issues/list
 
 Summary:utility for CIDR/subnet calculation.
 Description:
-CIDR Calculator is a simple IP subnet calculator for network engineers to quickly determine what the address range is of a subnet. 
+CIDR Calculator is a simple IP subnet calculator for network engineers to
+quickly determine what the address range is of a subnet. 
 .
 
 Repo Type:svn
 Repo:http://cidrcalculator.googlecode.com/svn/trunk/
 
 Build Version:1.13,115,31,target=android-8
+Build Version:1.14,116,!No source available
+Build Version:1.16,118,32,target=android-11
 
 Update Check Mode:Market
 Current Version:1.14
