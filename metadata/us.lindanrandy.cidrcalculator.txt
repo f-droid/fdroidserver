@@ -18,6 +18,6 @@ Build Version:1.14,116,!No source available
 Build Version:1.16,118,32,target=android-11
 
 Update Check Mode:Market
-Current Version:1.14
-Current Version Code:116
+Current Version:1.16
+Current Version Code:118
 

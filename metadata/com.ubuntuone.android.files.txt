@@ -14,7 +14,10 @@ File synchronisation client for Ubuntu One.
 Repo Type:bzr
 Repo:lp:ubuntuone-android-files
 
+Update Check Mode:Market
+Current Version:1.0.5.2
+Current Version Code:295
+
 #Need more dependencies for this too, but pointless since at least one is proprietary.
 #The others will need to be checked carefully too.
 #Build Version:1.0.5.2,295,296,prebuild=sed -i "s@\.\./GreenDroid@extlib/GreenDroid@" project.properties
-

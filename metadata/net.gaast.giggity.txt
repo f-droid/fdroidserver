@@ -15,9 +15,10 @@ Repo Type:bzr
 Repo:http://wilmer.gaa.st/giggity/
 
 Build Version:0.8.1,4,133
+Build Version:0.9.8,16,238
+Build Version:0.9.9,17,!No source in repo
 
 Update Check Mode:Market
-#There is a 0.8.2 in the market, but the repo source doesn't seem to correspond
-Current Version:0.9.8
-Current Version Code:16
+Current Version:0.9.9
+Current Version Code:17
 

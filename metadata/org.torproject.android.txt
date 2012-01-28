@@ -11,6 +11,6 @@ device, the proxying can be completely transparent.
 .
 
 Update Check Mode:Market
-Current Version:0.2.3.7-orbot-1.0.7-INTERIM
-Current Version Code:27
+Current Version:0.2.3.10-alpha-1.0.7-FINAL
+Current Version Code:32
 
