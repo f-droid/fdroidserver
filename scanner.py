@@ -97,7 +97,8 @@ for app in apps:
                                       'paypal_mpl.jar',
                                       'libgoogleanalytics.jar',
                                       'admob-sdk-android.jar',
-                                      'googleadview.jar']
+                                      'googleadview.jar',
+                                      'googleadmobadssdk-4.3.1.jar']
                     for r,d,f in os.walk(build_dir):
                         for curfile in f:
                             if curfile.lower() in usual_suspects:
