@@ -1,3 +1,4 @@
+Disabled:Proprietary binary - GoogleAdMobAdsSdk-4.3.1.jar
 AntiFeatures:Ads
 Category:System
 License:GPL3+
