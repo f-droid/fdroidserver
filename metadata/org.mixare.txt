@@ -13,6 +13,7 @@ Repo Type:git
 Repo:https://github.com/mixare/mixare.git
 
 Build Version:0.6.6,14,v0.6.6
+Build Version:0.7.3,20,v0.7.3
 
 Update Check Mode:Market
 Current Version:0.7.3

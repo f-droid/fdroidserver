@@ -13,6 +13,8 @@ Repo Type:svn
 Repo:http://mythmote.googlecode.com/svn/trunk/
 
 #Build Version:1.4.0,8,126,rm=src/tkj/android/homecontrol/mythmote/R.java
+Build Version:1.6.2,1304,241,rm=src/tkj/android/homecontrol/mythmote/R.java
+
 Update Check Mode:Market
 Current Version:1.6.0
 Current Version Code:11
