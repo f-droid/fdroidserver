@@ -540,6 +540,32 @@ class MetaDataException(Exception):
         return repr(self.value)
 
 
+# Get the specified source library.
+# Returns the path to it.
+def getsrclib(spec, extlib_dir):
+    name, ref = spec.split('@')
+
+    if name == 'GreenDroid':
+        sdir = os.path.join(extlib_dir, 'GreenDroid')
+        vcs = getvcs('git',
+            'https://github.com/cyrilmottier/GreenDroid.git', sdir)
+        vcs.gotorevision(ref)
+        return os.path.join(sdir, 'GreenDroid')
+
+    if name == 'ActionBarSherlock':
+        sdir = os.path.join(extlib_dir, 'ActionBarSherlock')
+        vcs = getvcs('git',
+            'https://github.com/JakeWharton/ActionBarSherlock.git', sdir)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'library')
+        if subprocess.call(['android', 'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating ActionBarSherlock project')
+        return libdir
+
+    raise BuildException('Unknown srclib ' + name)
+
+
 # Prepare the source code for a particular build
 #  'vcs'         - the appropriate vcs object for the application
 #  'app'         - the application details from the metadata
@@ -696,16 +722,26 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
         libsdir = os.path.join(root_dir, 'libs')
         if not os.path.exists(libsdir):
             os.mkdir(libsdir)
-        libs = build['extlibs'].split(';')
-        for lib in libs:
+        for lib in build['extlibs'].split(';'):
             libf = os.path.basename(lib)
             shutil.copyfile(os.path.join(extlib_dir, lib),
                     os.path.join(libsdir, libf))
 
+    # Get required source libraries...
+    srclibpaths = []
+    if build.has_key('srclibs'):
+        for lib in build['srclibs'].split(';'):
+            name, _ = lib.split('@')
+            srclibpaths.append((name, getsrclib(lib, extlib_dir)))
+
     # Run a pre-build command if one is required...
     if build.has_key('prebuild'):
-        if subprocess.call(build['prebuild'],
-                cwd=root_dir, shell=True) != 0:
+        prebuild = build['prebuild']
+        # Substitute source library paths into prebuild commands...
+        for name, libpath in srclibpaths:
+            libpath = os.path.relpath(libpath, root_dir)
+            prebuild = prebuild.replace('$$' + name + '$$', libpath)
+        if subprocess.call(prebuild, cwd=root_dir, shell=True) != 0:
             raise BuildException("Error running pre-build command")
 
     # Apply patches if any

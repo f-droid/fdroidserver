@@ -78,16 +78,6 @@ if not os.path.isdir(build_dir):
     os.makedirs(build_dir)
 extlib_dir = os.path.join(build_dir, 'extlib')
 
-# Update extlib directory...
-if False:  # Don't need this yet!
-    greendroid_dir = os.path.join(extlib_dir, 'GreenDroid')
-    greendroid_vcs = common.getvcs('git',
-            'https://github.com/cyrilmottier/GreenDroid.git', greendroid_dir)
-    greendroid_vcs.gotorevision('5f92227c959d51e1d7220199135c2c239eabd4d2')
-    subprocess.call(['android', 'update', 'project', '-p',
-        os.path.join(greendroid_dir, 'GreenDroid')])
-
-
 # Build applications...
 for app in apps:
 
@@ -290,7 +280,7 @@ for app in apps:
 
                     # Move the source tarball into the output directory...
                     if output_dir != tmp_dir:
-                        shutil.movefile(os.path.join(tmp_dir, tarname + '.tar.gz'),
+                        shutil.move(os.path.join(tmp_dir, tarname + '.tar.gz'),
                             os.path.join(output_dir, tarname + '.tar.gz'))
 
                     build_succeeded.append(app)

@@ -204,6 +204,16 @@ configuration to the build. These are:
                    files within a directory below the metadata, with the same
                    name as the metadata file but without the extension. Each of
                    these patches is applied to the code in turn.
+ extlibs=a;b;c     Specifies a list of external libraries (jar files) from the
+                   build/extlib library, which will be placed in the libs
+		   directory of the project. Separate items with semicolons.
+ srclibs=a@r;b@r1  Specifies a list of source libraries (kept up to date using
+                   version control) from a predefined set. Separate items with
+		   semicolons, and each item is of the form name@rev where name
+		   is the predefined source library name and rev is the
+		   revision in source control to use. You can then also use
+		   $$name$$ in the prebuild command to substitute the relative
+		   path to the library directory.
 
 Another example, using extra parameters:
 
