@@ -498,6 +498,16 @@ for apk in apks:
                     knownapks.changed = True
                 else:
                     print "...didn't find addition of build line"
+            else:
+                oldestvercode = 99999999
+                for apk2 in apks:
+                    if apk2['id'] == apk['id']:
+                        if apk2['versioncode'] < oldestvercode:
+                            oldestvercode = apk2['versioncode']
+                if oldestvercode == apk['versioncode']:
+                    print '...oldest non-built apk - using metadata commit date'
+                    knownapks.apks[apk['apkname']] = (apk['id'], time.strptime(d, '%Y-%m-%d'))
+                    knownapks.changed = True
 
 knownapks.writeifchanged()
 
