@@ -107,6 +107,7 @@ Timeriffic_v1.09.04_20101120a.apk com.alfray.timeriffic
 Tricorder_5.11.apk org.hermit.tricorder
 WhereRing_1.99.0.apk seanfoy.wherering
 WiFiKeyboard.apk com.volosyukivan
+XCSoar.apk org.xcsoar 2012-01-28
 XCSoar6.2.4.apk org.xcsoar 2011-12-24
 XWords4_android_beta_18.apk org.eehouse.android.xw4
 aarddict.android_10.apk aarddict.android 2012-01-13
@@ -115,6 +116,7 @@ andLess_05202011.apk net.avs234 2011-05-20
 android.androidVNC_13.apk android.androidVNC 2011-04-06
 androidVNC_build20100725.apk android.androidVNC
 apps.droidnotify_27.apk apps.droidnotify 2012-01-21
+apps.droidnotify_29.apk apps.droidnotify 2012-01-28
 at.tomtasche.reader_11.apk at.tomtasche.reader 2011-01-05
 at.tomtasche.reader_12.apk at.tomtasche.reader 2011-01-10
 at.tomtasche.reader_15.apk at.tomtasche.reader 2011-01-13
@@ -162,6 +164,7 @@ com.chessclock.android_8.apk com.chessclock.android 2012-01-08
 com.ciarang.tallyphant_2.apk com.ciarang.tallyphant 2012-01-26
 com.commonsware.android.arXiv_92.apk com.commonsware.android.arXiv 2011-05-19
 com.danga.squeezer_5.apk com.danga.squeezer 2011-03-02
+com.digitallizard.nicecompass_6.apk com.digitallizard.nicecompass 2012-01-28
 com.dozingcatsoftware.bouncy_10.apk com.dozingcatsoftware.bouncy 2011-08-04
 com.dozingcatsoftware.bouncy_4.apk com.dozingcatsoftware.bouncy 2011-03-10
 com.eddyspace.networkmonitor_2.apk com.eddyspace.networkmonitor 2011-01-23
@@ -219,9 +222,12 @@ com.ichi2.anki_21.apk com.ichi2.anki 2011-10-03
 com.ichi2.anki_22.apk com.ichi2.anki 2011-11-27
 com.jadn.cc_129.apk com.jadn.cc 2012-01-07
 com.kmagic.solitaire_450.apk com.kmagic.solitaire 2011-01-23
+com.leinardi.kitchentimer_116.apk com.leinardi.kitchentimer 2012-01-28
 com.liato.bankdroid_102.apk com.liato.bankdroid 2011-03-03
 com.liato.bankdroid_110.apk com.liato.bankdroid 2011-04-19
 com.liato.bankdroid_120.apk com.liato.bankdroid 2011-09-02
+com.liato.bankdroid_121.apk com.liato.bankdroid 2012-01-28
+com.liato.bankdroid_128.apk com.liato.bankdroid 2012-01-28
 com.mobilepearls.sokoban_12.apk com.mobilepearls.sokoban 2011-01-05
 com.morphoss.acal_14.apk com.morphoss.acal 2011-03-27
 com.morphoss.acal_15.apk com.morphoss.acal 2011-03-29
@@ -245,16 +251,20 @@ com.proch.practicehub_1.apk com.proch.practicehub 2011-11-25
 com.replica.replicaisland_14.apk com.replica.replicaisland 2011-03-03
 com.ringdroid_20500.apk com.ringdroid 2011-03-26
 com.roozen.SoundManager_18.apk com.roozen.SoundManager 2011-03-03
+com.scottmain.android.searchlight_1.apk com.scottmain.android.searchlight 2012-01-27
 com.smorgasbork.hotdeath_3.apk com.smorgasbork.hotdeath 2011-12-06
 com.smorgasbork.hotdeath_6.apk com.smorgasbork.hotdeath 2012-01-24
+com.stericson.permissions_4.apk com.stericson.permissions 2012-01-27
 com.teleca.jamendo_31.apk com.teleca.jamendo 2011-04-28
 com.teleca.jamendo_32.apk com.teleca.jamendo 2011-06-03
 com.teleca.jamendo_33.apk com.teleca.jamendo 2011-06-04
+com.teleca.jamendo_35.apk com.teleca.jamendo 2012-01-28
 com.totsp.bookworm_18.apk com.totsp.bookworm 2011-01-27
 com.totsp.bookworm_19.apk com.totsp.bookworm 2011-05-04
 com.totsp.crossword.shortyz_30100.apk com.totsp.crossword.shortyz 2012-01-08
 com.unitedcoders.android.gpodroid_12.apk com.unitedcoders.android.gpodroid 2012-01-08
 com.voidcode.diasporawebclient_3.apk com.voidcode.diasporawebclient 2011-12-08
+com.voidcode.diasporawebclient_6.apk com.voidcode.diasporawebclient 2012-01-28
 com.volosyukivan_23.apk com.volosyukivan 2011-01-30
 com.volosyukivan_25.apk com.volosyukivan 2011-03-09
 com.volosyukivan_26.apk com.volosyukivan 2011-09-02
@@ -322,6 +332,7 @@ k9-3.605-release.apk com.fsck.k9
 k9-3.800-release.apk com.fsck.k9 2011-05-25
 k9-4.001-release.apk com.fsck.k9 2011-12-28
 k9-4.003-release.apk com.fsck.k9 2012-01-08
+k9-4.005-release.apk com.fsck.k9 2012-01-28
 linphone-android-1.0.15.apk org.linphone
 linphone-android-1.1.6.apk org.linphone
 linphone-android-1.2.1.apk org.linphone 2011-09-29
@@ -351,6 +362,7 @@ net.bytten.xkcdviewer_17.apk net.bytten.xkcdviewer 2011-04-06
 net.bytten.xkcdviewer_21.apk net.bytten.xkcdviewer 2011-07-22
 net.cactii.mathdoku_70.apk net.cactii.mathdoku 2011-01-22
 net.fercanet.LNM_3.apk net.fercanet.LNM 2011-01-20
+net.gaast.giggity_16.apk net.gaast.giggity 2012-01-28
 net.gaast.giggity_4.apk net.gaast.giggity 2011-02-04
 net.mafro.android.wakeonlan_12.apk net.mafro.android.wakeonlan 2011-11-24
 net.osmand.plus_34.apk net.osmand.plus 2011-06-24
@@ -481,6 +493,7 @@ org.helllabs.android.xmp_15.apk org.helllabs.android.xmp 2011-03-02
 org.jessies.mathdroid_25.apk org.jessies.mathdroid 2011-12-06
 org.jfedor.frozenbubble_11.apk org.jfedor.frozenbubble 2011-04-26
 org.jfedor.frozenbubble_12.apk org.jfedor.frozenbubble 2011-10-10
+org.jfedor.frozenbubble_13.apk org.jfedor.frozenbubble 2012-01-28
 org.jfedor.frozenbubble_8.apk org.jfedor.frozenbubble 2011-01-02
 org.jfedor.frozenbubble_9.apk org.jfedor.frozenbubble 2011-01-02
 org.jmoyer.NotificationPlus_2.apk org.jmoyer.NotificationPlus 2012-01-15
@@ -494,6 +507,7 @@ org.kost.externalip_3.apk org.kost.externalip 2011-09-26
 org.kreed.vanilla_16.apk org.kreed.vanilla 2011-04-02
 org.marcus905.wifi.ace_20100924.apk org.marcus905.wifi.ace 2011-01-27
 org.mixare_14.apk org.mixare 2011-07-22
+org.mixare_20.apk org.mixare 2012-01-28
 org.mult.daap_30.apk org.mult.daap 2011-01-27
 org.mult.daap_39.apk org.mult.daap 2012-01-19
 org.mythdroid_4.apk org.mythdroid 2011-03-02
@@ -587,6 +601,7 @@ sms-backup-plus-v1.3.7.apk com.zegoggles.smssync
 sms-backup-plus-v1.4.0.apk com.zegoggles.smssync
 stericson.busybox.donate_103.apk stericson.busybox.donate 2012-01-26
 talkmyphone-2.06-beta.apk com.googlecode.talkmyphone
+tkj.android.homecontrol.mythmote_1304.apk tkj.android.homecontrol.mythmote 2012-01-28
 to.networld.android.divedroid_1.apk to.networld.android.divedroid 2011-02-13
 transdroid-0.22.0.apk org.transdroid
 transdroid-0.22.2.apk org.transdroid
@@ -597,6 +612,7 @@ tuioDroid.impl_4.apk tuioDroid.impl 2011-11-28
 tuxrider_1.0.4.apk com.drodin.tuxrider
 urbanstew.RehearsalAssistant_22.apk urbanstew.RehearsalAssistant 2011-02-19
 us.lindanrandy.cidrcalculator_115.apk us.lindanrandy.cidrcalculator 2012-01-21
+us.lindanrandy.cidrcalculator_118.apk us.lindanrandy.cidrcalculator 2012-01-28
 vu.de.urpool.quickdroid_31.apk vu.de.urpool.quickdroid 2011-01-27
 vu.de.urpool.quickdroid_37.apk vu.de.urpool.quickdroid 2011-03-10
 vu.de.urpool.quickdroid_38.apk vu.de.urpool.quickdroid 2011-05-16

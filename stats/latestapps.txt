@@ -1,3 +1,8 @@
+com.leinardi.kitchentimer
+tkj.android.homecontrol.mythmote
+com.digitallizard.nicecompass
+com.stericson.permissions
+com.scottmain.android.searchlight
 stericson.busybox.donate
 com.ciarang.tallyphant
 org.wikipedia
