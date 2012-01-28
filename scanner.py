@@ -114,6 +114,15 @@ for app in apps:
                         msg += ' in ' + app['id'] + ' ' + thisbuild['version']
                         problems.append(msg)
 
+                    # Presence of these is not a problem as such, but they
+                    # shouldn't be there and mess up our source tarballs...
+                    if os.path.exists(os.path.join(root_dir, 'bin')):
+                        msg = "There shouldn't be a bin directory"
+                        problems.append(msg)
+                    if os.path.exists(os.path.join(root_dir, 'gen')):
+                        msg = "There shouldn't be a gen directory"
+                        problems.append(msg)
+
         except BuildException as be:
             msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
             problems.append(msg)
