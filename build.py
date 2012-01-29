@@ -85,11 +85,12 @@ for app in apps:
         # Silent skip...
         pass
     elif app['Disabled']:
-        print "Skipping %s: disabled" % app['id']
+        if options.verbose:
+            print "Skipping %s: disabled" % app['id']
     elif (not app['builds']) or app['Repo Type'] =='' or len(app['builds']) == 0:
-        print "Skipping %s: no builds specified" % app['id']
+        if options.verbose:
+            print "Skipping %s: no builds specified" % app['id']
     else:
-        print "Processing " + app['id']
 
         build_dir = 'build/' + app['id']
 
@@ -107,12 +108,18 @@ for app in apps:
                         thisbuild['vercode'] + '_unsigned.apk')
 
                 if os.path.exists(dest):
-                    print "..version " + thisbuild['version'] + " already exists"
+                    if options.verbose:
+                        print "..version " + thisbuild['version'] + " already exists"
                 elif thisbuild['commit'].startswith('!'):
-                    print ("..skipping version " + thisbuild['version'] + " - " +
+                    if options.verbose:
+                        print ("..skipping version " + thisbuild['version'] + " - " +
                             thisbuild['commit'][1:])
                 else:
-                    print "..building version " + thisbuild['version']
+                    if options.verbose:
+                        mstart = '.. building version '
+                    else:
+                        mstart = 'Building version '
+                    print mstart + thisbuild['version'] + ' of ' + app['id']
 
                     # Prepare the source code...
                     root_dir = common.prepare_source(vcs, app, thisbuild,
