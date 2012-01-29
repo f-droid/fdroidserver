@@ -1,10 +1,8 @@
-Disabled:Doesn't build for me
 Category:Multimedia
-#build/com.namelessdev.mpdroid/MPDroid/res/values/styles.xml:18: error: Error retrieving parent for item: No resource found that matches the given name '@android:style/Widget.Holo.ActionBar'.
 License:Apache2
-Web Site:https://github.com/dreamteam69/dmix
-Source Code:https://github.com/dreamteam69/dmix
-Issue Tracker:https://github.com/dreamteam69/dmix/issues
+Web Site:https://github.com/abarisain/dmix
+Source Code:https://github.com/abarisain/dmix
+Issue Tracker:https://github.com/abarisain/dmix/issues
 
 Summary:MPD client
 Description:
@@ -12,13 +10,17 @@ An MPD client which supports streaming. Can fetch cover art from last.fm.
 .
 
 Repo Type:git
-Repo:https://github.com/dreamteam69/dmix.git
+Repo:https://github.com/abarisain/dmix.git
 
-Build Version:1.0,20,63a363a2ccc13232f4d80f5f857ab19b40fb5469,subdir=MPDroid,target=8,prebuild=\
-cd ../JMPDComm/ && ant && mkdir ../MPDroid/libs/ && cp ../JMPDComm/JMPDComm.jar ../MPDroid/libs/ && cd ../MPDroid \
-&& mv lib/android-support-v4.jar libs/ && cp -r ../lastfm-java/src/net/ src/;
+Build Version:1.0,20,63a363a2ccc13232f4d80f5f857ab19b40fb5469,subdir=MPDroid,target=android-13,prebuild=mv lib/ libs/ && \
+cd ../JMPDComm/ && \
+ant && \
+cp JMPDComm.jar ../MPDroid/libs/ && \
+cd ../MPDroid && \
+cp -r ../lastfm-java/src/net/ src/
 
-Update Check Mode:Market
-Current Version:0.7
-Current Version Code:18
+# No longer updated in Google's Market, which has 0.7.
+Update Check Mode:None
+Current Version:1.0
+Current Version Code:20
 
