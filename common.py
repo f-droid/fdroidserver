@@ -95,7 +95,7 @@ class vcs_git(vcs):
                 raise VCSException("Git reset failed")
             # Remove untracked files now, in case they're tracked in the target
             # revision (it happens!)...
-            if subprocess.call(['git', 'clean', '-dfx'], cwd=self.local) != 0:
+            if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
                 raise VCSException("Git clean failed")
             if not self.refreshed:
                 # Get latest commits and tags from remote...
@@ -110,7 +110,7 @@ class vcs_git(vcs):
         if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
             raise VCSException("Git checkout failed")
         # Get rid of any uncontrolled files left behind...
-        if subprocess.call(['git', 'clean', '-dfx'], cwd=self.local) != 0:
+        if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
             raise VCSException("Git clean failed")
 
     def initsubmodules(self):
@@ -149,7 +149,7 @@ class vcs_gitsvn(vcs):
                 raise VCSException("Git reset failed")
             # Remove untracked files now, in case they're tracked in the target
             # revision (it happens!)...
-            if subprocess.call(['git', 'clean', '-dfx'], cwd=self.local) != 0:
+            if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
                 raise VCSException("Git clean failed")
             if not self.refreshed:
                 # Get new commits and tags from repo...
@@ -167,7 +167,7 @@ class vcs_gitsvn(vcs):
         if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
             raise VCSException("Git checkout failed")
         # Get rid of any uncontrolled files left behind...
-        if subprocess.call(['git', 'clean', '-dfx'], cwd=self.local) != 0:
+        if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
             raise VCSException("Git clean failed")
 
 class vcs_svn(vcs):
