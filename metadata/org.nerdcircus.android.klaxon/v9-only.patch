@@ -1,0 +1,11 @@
+diff --git a/res/values-v9/styles.xml b/res/values-v9/styles.xml
+deleted file mode 100644
+index e75befc..0000000
+--- a/res/values-v9/styles.xml
++++ /dev/null
+@@ -1,5 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<resources>
+-    <style name="NotificationFont" parent="@android:style/TextAppearance.StatusBar.EventContent.Title">
+-    </style>
+-</resources>

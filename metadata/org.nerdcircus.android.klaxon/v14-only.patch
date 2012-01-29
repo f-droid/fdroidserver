@@ -1,0 +1,10 @@
+diff --git a/res/values-v14/themes.xml b/res/values-v14/themes.xml
+deleted file mode 100644
+index aeee472..0000000
+--- a/res/values-v14/themes.xml
++++ /dev/null
+@@ -1,4 +0,0 @@
+-<resources>
+-    <style name="SelectorTheme" parent="@android:style/Theme.DeviceDefault">
+-    </style>
+-</resources>
