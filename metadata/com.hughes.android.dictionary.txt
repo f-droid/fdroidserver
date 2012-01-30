@@ -22,3 +22,7 @@ cd .. && \
 cp -r Util/src . && \
 rm -rf Util/
 
+Update Check Mode:Market
+Current Version:3.0.1
+Current Version Code:15
+

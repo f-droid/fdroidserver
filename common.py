@@ -30,9 +30,11 @@ def getvcs(vcstype, remote, local):
     elif vcstype == 'git-svn':
         return vcs_gitsvn(remote, local)
     elif vcstype == 'hg':
-        return vcs_hg(remote,local)
+        return vcs_hg(remote, local)
     elif vcstype == 'bzr':
-        return vcs_bzr(remote,local)
+        return vcs_bzr(remote, local)
+    elif vcstype == 'srclib':
+        return vcs_srclib(remote, local)
     raise VCSException("Invalid vcs type " + vcstype)
 
 class vcs:
@@ -56,6 +58,7 @@ class vcs:
         self.remote = remote
         self.local = local
         self.refreshed = False
+        self.srclib = None
 
     # Take the local repository to a clean version of the given revision, which
     # is specificed in the VCS's native format. Beforehand, the repository can
@@ -68,6 +71,11 @@ class vcs:
     # Initialise and update submodules
     def initsubmodules(self):
         raise VCSException('Submodules not supported for this vcs type')
+
+    # Returns the srclib (name, path) used in setting up the current
+    # revision, or None.
+    def getsrclib(self):
+        return self.srclib
 
 class vcs_git(vcs):
 
@@ -242,6 +250,28 @@ class vcs_bzr(vcs):
         if subprocess.call(['bzr', 'revert'] + revargs,
                 cwd=self.local) != 0:
             raise VCSException("Bzr revert failed")
+
+class vcs_srclib(vcs):
+
+    def gotorevision(self, rev):
+
+        # Yuk...
+        extlib_dir = 'build/extlib'
+
+        if os.path.exists(self.local):
+            shutil.rmtree(self.local)
+
+        if self.remote.find(':') != -1:
+            srclib, path = self.remote.split(':')
+        else:
+            srclib = self.remote
+            path = None
+        libdir = getsrclib(srclib + '@' + rev, extlib_dir)
+        self.srclib = (srclib, libdir)
+        if path:
+            libdir = os.path.join(libdir, path)
+        shutil.copytree(libdir, self.local)
+        return self.local
 
 
 # Get the type expected for a given metadata field.
@@ -542,6 +572,8 @@ class MetaDataException(Exception):
 
 # Get the specified source library.
 # Returns the path to it.
+# TODO: These are currently just hard-coded in this method. It will be a
+# metadata-driven system eventually, but not yet.
 def getsrclib(spec, extlib_dir):
     name, ref = spec.split('@')
 
@@ -574,6 +606,12 @@ def getsrclib(spec, extlib_dir):
             raise BuildException('Error updating FacebookSDK project')
         return libdir
 
+    if name == 'OI':
+        sdir = os.path.join(extlib_dir, 'OI')
+        vcs = getvcs('git-svn',
+                'http://openintents.googlecode.com/svn/trunk/', sdir)
+        vcs.gotorevision(ref)
+        return sdir
 
     raise BuildException('Unknown srclib ' + name)
 
@@ -745,6 +783,10 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
         for lib in build['srclibs'].split(';'):
             name, _ = lib.split('@')
             srclibpaths.append((name, getsrclib(lib, extlib_dir)))
+    basesrclib = vcs.getsrclib()
+    # If one was used for the main source, add that too.
+    if basesrclib:
+        srclibpaths.append(basesrclib)
 
     # Run a pre-build command if one is required...
     if build.has_key('prebuild'):

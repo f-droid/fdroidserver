@@ -18,6 +18,6 @@ Build Version:0.1.7_rc1,10,0.1.7_rc1,target=android-8
 Build Version:0.1.7_rc2,11,0.1.7_rc2,target=android-8
 
 Update Check Mode:Market
-Current Version:0.1.7_rc1
-Current Version Code:10
+Current Version:0.1.7_rc2
+Current Version Code:11
 
