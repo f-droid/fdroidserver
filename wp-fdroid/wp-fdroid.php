@@ -29,7 +29,7 @@ class FDroid
 		add_filter('query_vars',array($this, 'queryvars'));
 		$this->inited=false;
                 $this->site_path=getenv('DOCUMENT_ROOT');
-                register_sidebar_widget('FDroid Latest', 'widget_fdroidlatest');
+                wp_register_sidebar_widget('fdroid_latest', 'FDroid Latest', 'widget_fdroidlatest');
 	}
 
 
