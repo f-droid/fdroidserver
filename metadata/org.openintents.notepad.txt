@@ -1,3 +1,4 @@
+Disabled:Apparently non-free binary OINotepadMyBackupPro.jar
 Category:Office
 License:Apache2
 Web Site:http://www.openintents.org/en/notepad
@@ -8,6 +9,9 @@ Summary:Notepad
 Description:
 OI Notepad allows to create, edit, send, and delete notes.
 .
+
+Repo Type:srclib
+Repo:OI:notepad
 
 Update Check Mode:Market
 Current Version:1.2.3
