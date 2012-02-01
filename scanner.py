@@ -93,18 +93,19 @@ for app in apps:
                     refreshed_source = True
 
                     # Scan for common known non-free blobs:
-                    usual_suspects = ['flurryagent.jar',
-                                      'paypal_mpl.jar',
-                                      'libgoogleanalytics.jar',
-                                      'admob-sdk-android.jar',
-                                      'googleadview.jar',
-                                      'googleadmobadssdk-4.3.1.jar']
+                    usual_suspects = ['flurryagent',
+                                      'paypal_mpl',
+                                      'libgoogleanalytics',
+                                      'admob-sdk-android',
+                                      'googleadview',
+                                      'googleadmobadssdk']
                     for r,d,f in os.walk(build_dir):
                         for curfile in f:
-                            if curfile.lower() in usual_suspects:
-                                msg = 'Found probable non-free blob ' + os.path.join(r, curfile)
-                                msg += ' in ' + app['id'] + ' ' + thisbuild['version']
-                                problems.append(msg)
+                            for suspect in usual_suspects:
+                                if curfile.lower().find(suspect) != -1:
+                                    msg = 'Found probable non-free blob ' + os.path.join(r, curfile)
+                                    msg += ' in ' + app['id'] + ' ' + thisbuild['version']
+                                    problems.append(msg)
 
                     # Presence of a jni directory without buildjni=yes might
                     # indicate a problem...
@@ -118,9 +119,11 @@ for app in apps:
                     # shouldn't be there and mess up our source tarballs...
                     if os.path.exists(os.path.join(root_dir, 'bin')):
                         msg = "There shouldn't be a bin directory"
+                        msg += ' in ' + app['id'] + ' ' + thisbuild['version']
                         problems.append(msg)
                     if os.path.exists(os.path.join(root_dir, 'gen')):
                         msg = "There shouldn't be a gen directory"
+                        msg += ' in ' + app['id'] + ' ' + thisbuild['version']
                         problems.append(msg)
 
         except BuildException as be:
