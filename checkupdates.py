@@ -35,7 +35,7 @@ execfile('config.py')
 # Returns (None, "a message") if this didn't work, or (version, vercode) for
 # the details of the current version.
 def check_market(app):
-    time.sleep(5)
+    time.sleep(10)
     url = 'http://market.android.com/details?id=' + app['id']
     req = urllib.urlopen(url)
     if req.getcode() == 404:
