@@ -24,8 +24,6 @@ import subprocess
 import re
 import zipfile
 import tarfile
-import md5
-import shlex
 from xml.dom.minidom import Document
 from optparse import OptionParser
 
@@ -67,10 +65,12 @@ if not os.path.isdir(tmp_dir):
 if options.test:
     output_dir = tmp_dir
 else:
-    output_dir = 'repo'
+    output_dir = 'unsigned'
     if not os.path.isdir(output_dir):
         print "Creating output directory"
         os.makedirs(output_dir)
+
+repo_dir = 'repo'
 
 build_dir = 'build'
 if not os.path.isdir(build_dir):
@@ -104,10 +104,10 @@ for app in apps:
             try:
                 dest = os.path.join(output_dir, app['id'] + '_' +
                         thisbuild['vercode'] + '.apk')
-                dest_unsigned = os.path.join(tmp_dir, app['id'] + '_' +
-                        thisbuild['vercode'] + '_unsigned.apk')
+                dest_repo = os.path.join(repo_dir, app['id'] + '_' +
+                        thisbuild['vercode'] + '.apk')
 
-                if os.path.exists(dest):
+                if os.path.exists(dest) or os.path.exists(dest_repo):
                     if options.verbose:
                         print "..version " + thisbuild['version'] + " already exists"
                 elif thisbuild['commit'].startswith('!'):
@@ -228,67 +228,15 @@ for app in apps:
                                              % (version, str(vercode), thisbuild['version'], str(thisbuild['vercode']))
                                             )
 
-                    # Copy the unsigned apk to our temp directory for further
-                    # processing...
-                    shutil.copyfile(src, dest_unsigned)
-
-                    # Figure out the key alias name we'll use. Only the first 8
-                    # characters are significant, so we'll use the first 8 from
-                    # the MD5 of the app's ID and hope there are no collisions.
-                    # If a collision does occur later, we're going to have to
-                    # come up with a new alogrithm, AND rename all existing keys
-                    # in the keystore!
-                    if keyaliases.has_key(app['id']):
-                        # For this particular app, the key alias is overridden...
-                        keyalias = keyaliases[app['id']]
-                    else:
-                        m = md5.new()
-                        m.update(app['id'])
-                        keyalias = m.hexdigest()[:8]
-                    print "Key alias: " + keyalias
-
-                    # See if we already have a key for this application, and
-                    # if not generate one...
-                    p = subprocess.Popen(['keytool', '-list',
-                        '-alias', keyalias, '-keystore', keystore,
-                        '-storepass', keystorepass], stdout=subprocess.PIPE)
-                    output = p.communicate()[0]
-                    if p.returncode !=0:
-                        print "Key does not exist - generating..."
-                        p = subprocess.Popen(['keytool', '-genkey',
-                            '-keystore', keystore, '-alias', keyalias,
-                            '-keyalg', 'RSA', '-keysize', '2048',
-                            '-validity', '10000',
-                            '-storepass', keystorepass, '-keypass', keypass,
-                            '-dname', keydname], stdout=subprocess.PIPE)
-                        output = p.communicate()[0]
-                        print output
-                        if p.returncode != 0:
-                            raise BuildException("Failed to generate key")
-
-                    # Sign the application...
-                    p = subprocess.Popen(['jarsigner', '-keystore', keystore,
-                        '-storepass', keystorepass, '-keypass', keypass,
-                            dest_unsigned, keyalias], stdout=subprocess.PIPE)
-                    output = p.communicate()[0]
-                    print output
-                    if p.returncode != 0:
-                        raise BuildException("Failed to sign application")
-
-                    # Zipalign it...
-                    p = subprocess.Popen([os.path.join(sdk_path,'tools','zipalign'),
-                                        '-v', '4', dest_unsigned, dest],
-                                        stdout=subprocess.PIPE)
-                    output = p.communicate()[0]
-                    print output
-                    if p.returncode != 0:
-                        raise BuildException("Failed to align application")
-                    os.remove(dest_unsigned)
+                    # Copy the unsigned apk to our destination directory for further
+                    # processing (by publish.py)...
+                    shutil.copyfile(src, dest)
 
                     # Move the source tarball into the output directory...
                     if output_dir != tmp_dir:
-                        shutil.move(os.path.join(tmp_dir, tarname + '.tar.gz'),
-                            os.path.join(output_dir, tarname + '.tar.gz'))
+                        tarfilename = tarname + '.tar.gz'
+                        shutil.move(os.path.join(tmp_dir, tarfilename),
+                            os.path.join(output_dir, tarfilename))
 
                     build_succeeded.append(app)
             except BuildException as be:
