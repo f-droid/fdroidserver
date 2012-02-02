@@ -127,6 +127,15 @@ for app in apps:
                             javacc_path, not refreshed_source)
                     refreshed_source = True
 
+                    # Scan before building...
+                    buildprobs = common.scan_source(build_dir)
+                    if len(buildprobs) > 0:
+                        print 'Scanner found ' + str(len(buildprobs)) + ' problems:'
+                        for problem in buildprobs:
+                            print '...' + problem
+                        raise BuildException("Can't build due to " +
+                                str(len(buildprobs)) + " scanned problems")
+
                     # Build the source tarball right before we build the release...
                     tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
                     tarball = tarfile.open(os.path.join(tmp_dir,

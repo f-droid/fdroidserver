@@ -92,39 +92,11 @@ for app in apps:
                             not refreshed_source)
                     refreshed_source = True
 
-                    # Scan for common known non-free blobs:
-                    usual_suspects = ['flurryagent',
-                                      'paypal_mpl',
-                                      'libgoogleanalytics',
-                                      'admob-sdk-android',
-                                      'googleadview',
-                                      'googleadmobadssdk']
-                    for r,d,f in os.walk(build_dir):
-                        for curfile in f:
-                            for suspect in usual_suspects:
-                                if curfile.lower().find(suspect) != -1:
-                                    msg = 'Found probable non-free blob ' + os.path.join(r, curfile)
-                                    msg += ' in ' + app['id'] + ' ' + thisbuild['version']
-                                    problems.append(msg)
-
-                    # Presence of a jni directory without buildjni=yes might
-                    # indicate a problem...
-                    if (os.path.exists(os.path.join(root_dir, 'jni')) and 
-                            thisbuild.get('buildjni', 'no') != 'yes'):
-                        msg = 'Found jni directory, but buildjni is not enabled'
-                        msg += ' in ' + app['id'] + ' ' + thisbuild['version']
-                        problems.append(msg)
-
-                    # Presence of these is not a problem as such, but they
-                    # shouldn't be there and mess up our source tarballs...
-                    if os.path.exists(os.path.join(root_dir, 'bin')):
-                        msg = "There shouldn't be a bin directory"
-                        msg += ' in ' + app['id'] + ' ' + thisbuild['version']
-                        problems.append(msg)
-                    if os.path.exists(os.path.join(root_dir, 'gen')):
-                        msg = "There shouldn't be a gen directory"
-                        msg += ' in ' + app['id'] + ' ' + thisbuild['version']
-                        problems.append(msg)
+                    # Do the scan...
+                    buildprobs = common.scan_source(build_dir)
+                    for problem in buildprobs:
+                        problems.append(problem + 
+                            ' in ' + app['id'] + ' ' + thisbuild['version'])
 
         except BuildException as be:
             msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
