@@ -892,7 +892,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
 
 # Scan the source code in the given directory (and all subdirectories)
 # and return a list of potential problems.
-def scan_source(source_dir):
+def scan_source(build_dir, root_dir, thisbuild):
 
     problems = []
 

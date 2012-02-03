@@ -6,3 +6,4 @@ tmp/
 build_*/
 *~
 *.pyc
+buildserver.box

@@ -93,7 +93,7 @@ for app in apps:
                     refreshed_source = True
 
                     # Do the scan...
-                    buildprobs = common.scan_source(build_dir)
+                    buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
                     for problem in buildprobs:
                         problems.append(problem + 
                             ' in ' + app['id'] + ' ' + thisbuild['version'])
