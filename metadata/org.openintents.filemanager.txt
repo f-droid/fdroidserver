@@ -1,0 +1,22 @@
+Category:System
+License:Apache2
+Web Site:http://www.openintents.org
+Source Code:http://code.google.com/p/openintents/source/checkout
+Issue Tracker:http://code.google.com/p/openintents/issues/list
+Donate:http://www.openintents.org/en/contribute
+
+Summary:File Manager
+Description:
+The OpenIntents file manager allows you to browse your SD card, create directories, rename, move,
+and delete files. It also acts as an extension to other applications to display "Open" and "Save"
+dialogs.
+
+Note that this is included in Cyanogenmod as a system application, so if you are running that
+you will not be able to upgrade without first manually removing (as root) the existing version.
+.
+
+Repo Type:srclib
+Repo:OI:filemanager
+
+Build Version:1.2-rc1,18,4106,subdir=FileManager,target=android-11,buildjni=yes,prebuild=sed -i 's@\(android.library.reference.1=\).*@\1$$OI$$/distribution/DistributionLibrary@' project.properties && android update project -p $$OI$$/distribution/DistributionLibrary -t android-11
+
