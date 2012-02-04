@@ -22,7 +22,16 @@ cd .. && \
 cp -r Util/src . && \
 rm -rf Util/
 
+Build Version:3.1,16,64d2b5,prebuild=mkdir libs && \
+mv jars/*.jar libs/ && \
+git clone https://code.google.com/p/quickdic-dictionary.util/ Util && \
+cd Util && \
+git checkout c8f5ba9eac5f110d574ef8b443a205051026688c && \
+cd .. && \
+cp -r Util/src . && \
+rm -rf Util/
+
 Update Check Mode:Market
-Current Version:3.0.1
-Current Version Code:15
+Current Version:3.1
+Current Version Code:16
 

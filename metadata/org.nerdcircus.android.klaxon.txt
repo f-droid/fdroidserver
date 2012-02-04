@@ -1,3 +1,4 @@
+Name:Klaxon
 Category:Office
 License:Apache2
 Web Site:http://code.google.com/p/klaxon/
