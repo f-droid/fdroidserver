@@ -1,10 +1,10 @@
+org.nerdcircus.android.klaxon
+org.openintents.filemanager
+net.nightwhistler.pageturner
+org.openintents.newsreader
 com.hughes.android.dictionary
 com.namelessdev.mpdroid
 com.leinardi.kitchentimer
 com.digitallizard.nicecompass
 com.stericson.permissions
 com.scottmain.android.searchlight
-stericson.busybox.donate
-com.ciarang.tallyphant
-org.wikipedia
-info.guardianproject.otr.app.im
