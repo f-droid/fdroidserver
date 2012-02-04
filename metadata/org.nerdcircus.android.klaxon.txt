@@ -6,13 +6,15 @@ Issue Tracker:http://code.google.com/p/klaxon/issues/list
 
 Summary:SMS-based pager
 Description:
-Klaxon is a tool designed for on-call personnel, that repeatedly notifies the user (by means of a ringtone, vibration or both) when a page is received until the user looks at it. A page to Klaxon is an SMS message, optionally meeting filtering criteria set by the user.
+Klaxon is a tool designed for on-call personnel, that repeatedly notifies the user (by means of a
+ringtone, vibration or both) when a page is received until the user looks at it. A page to Klaxon
+is an SMS message, optionally meeting filtering criteria set by the user.
 .
 
 Repo Type:git-svn
 Repo:http://klaxon.googlecode.com/svn/trunk/
 
-Build Version:0.27,27,144,target=android-8,patch=project-name.patch;v9-only.patch;v11-only.patch;v14-only.patch
+Build Version:0.27,27,144,target=android-14
 
 Update Check Mode:Market
 Current Version:0.27
