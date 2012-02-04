@@ -186,6 +186,8 @@ configuration to the build. These are:
                    last character on a line to join that line with the next.
                    It has no special meaning in other contexts; in particular,
                    literal backslashes should not be escaped.
+ init=xxxx	   As for 'prebuild', but runs on the source code BEFORE any
+ 		   other processing takes place.
  novcheck=yes      Don't check that the version name and code in the resulting
                    apk are correct by looking at the build output - assume the
                    metadata is correct. This takes away a useful level of

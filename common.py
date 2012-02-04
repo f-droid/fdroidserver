@@ -651,6 +651,12 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
     if build.get('submodules', 'no')  == 'yes':
         vcs.initsubmodules()
 
+    # Run an init command if one is required...
+    if build.has_key('init'):
+        init = build['init']
+        if subprocess.call(init, cwd=root_dir, shell=True) != 0:
+            raise BuildException("Error running init command")
+
     # Generate (or update) the ant build file, build.xml...
     if (build.get('update', 'yes') == 'yes' and
         not build.has_key('maven')):
