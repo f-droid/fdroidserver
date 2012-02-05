@@ -14,8 +14,9 @@ Repo:http://hotdeath.googlecode.com/svn/trunk/
 
 Build Version:1.0.2,3,26
 Build Version:1.0.5,6,34
+Build Version:1.0.6,7,36
 
 Update Check Mode:Market
-Current Version:1.0.5
-Current Version Code:6
+Current Version:1.0.6
+Current Version Code:7
 

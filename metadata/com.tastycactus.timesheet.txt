@@ -19,4 +19,6 @@ Repo:https://github.com/ambrice/timesheet.git
 Build Version:1.4,5,b6fca7587d7340cf6f433362d9e30a732349d857
 
 Update Check Mode:Market
+Current Version:1.4
+Current Version Code:5
 
