@@ -65,6 +65,8 @@ class vcs:
     # be dirty, or even non-existent. If the repository does already exist
     # locally, it will be updated from the origin, but only once in the
     # lifetime of the vcs object.
+    # None is acceptable for 'rev' if you know you are cloning a clean copy of
+    # the repo - otherwise it must specify a valid revision.
     def gotorevision(self, rev):
         raise VCSException("This VCS type doesn't define gotorevision")
 
@@ -115,8 +117,9 @@ class vcs_git(vcs):
                     raise VCSException("Git fetch failed")
                 self.refreshed = True
         # Check out the appropriate revision...
-        if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
-            raise VCSException("Git checkout failed")
+        if rev:
+            if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
+                raise VCSException("Git checkout failed")
         # Get rid of any uncontrolled files left behind...
         if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
             raise VCSException("Git clean failed")
@@ -165,15 +168,16 @@ class vcs_gitsvn(vcs):
                         cwd=self.local) != 0:
                     raise VCSException("Git svn rebase failed")
                 self.refreshed = True
-        # Figure out the git commit id corresponding to the svn revision...
-        p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev],
-            cwd=self.local, stdout=subprocess.PIPE)
-        rev = p.communicate()[0].rstrip()
-        if p.returncode != 0:
-            raise VCSException("Failed to get git treeish from svn rev")
-        # Check out the appropriate revision...
-        if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
-            raise VCSException("Git checkout failed")
+        if rev:
+            # Figure out the git commit id corresponding to the svn revision...
+            p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev],
+                cwd=self.local, stdout=subprocess.PIPE)
+            rev = p.communicate()[0].rstrip()
+            if p.returncode != 0:
+                raise VCSException("Failed to get git treeish from svn rev")
+            # Check out the appropriate revision...
+            if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
+                raise VCSException("Git checkout failed")
         # Get rid of any uncontrolled files left behind...
         if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
             raise VCSException("Git clean failed")
@@ -204,10 +208,11 @@ class vcs_svn(vcs):
                         self.userargs(), cwd=self.local) != 0:
                     raise VCSException("Svn update failed")
                 self.refreshed = True
-        revargs = ['-r', rev]
-        if subprocess.call(['svn', 'update', '--force'] + revargs +
-                self.userargs(), cwd=self.local) != 0:
-            raise VCSException("Svn update failed")
+        if ref:
+            revargs = ['-r', rev]
+            if subprocess.call(['svn', 'update', '--force'] + revargs +
+                    self.userargs(), cwd=self.local) != 0:
+                raise VCSException("Svn update failed")
 
 
 class vcs_hg(vcs):
@@ -225,10 +230,11 @@ class vcs_hg(vcs):
                         cwd=self.local) != 0:
                     raise VCSException("Hg pull failed")
                 self.refreshed = True
-        revargs = [rev]
-        if subprocess.call(['hg', 'checkout', '-C'] + revargs,
-                cwd=self.local) != 0:
-            raise VCSException("Hg checkout failed")
+        if rev:
+            revargs = [rev]
+            if subprocess.call(['hg', 'checkout', '-C'] + revargs,
+                    cwd=self.local) != 0:
+                raise VCSException("Hg checkout failed")
 
 
 class vcs_bzr(vcs):
@@ -246,10 +252,11 @@ class vcs_bzr(vcs):
                         cwd=self.local) != 0:
                     raise VCSException("Bzr update failed")
                 self.refreshed = True
-        revargs = ['-r', rev]
-        if subprocess.call(['bzr', 'revert'] + revargs,
-                cwd=self.local) != 0:
-            raise VCSException("Bzr revert failed")
+        if rev:
+            revargs = ['-r', rev]
+            if subprocess.call(['bzr', 'revert'] + revargs,
+                    cwd=self.local) != 0:
+                raise VCSException("Bzr revert failed")
 
 class vcs_srclib(vcs):
 
@@ -290,7 +297,7 @@ def metafieldtype(name):
 # Parse metadata for a single application.
 #
 #  'metafile' - the filename to read. The package id for the application comes
-#               from this filename.
+#               from this filename. Pass None to get a blank entry.
 #
 # Returns a dictionary containing all the details of the application. There are
 # two major kinds of information in the dictionary. Keys beginning with capital
@@ -335,12 +342,15 @@ def parse_metadata(metafile, **kw):
             thisinfo['comments'].append((key, comment))
         del curcomments[:]
 
-    if not isinstance(metafile, file):
-        metafile = open(metafile, "r")
     thisinfo = {}
-    thisinfo['id'] = metafile.name[9:-4]
-    if kw.get("verbose", False):
-        print "Reading metadata for " + thisinfo['id']
+    if metafile:
+        if not isinstance(metafile, file):
+            metafile = open(metafile, "r")
+        thisinfo['id'] = metafile.name[9:-4]
+        if kw.get("verbose", False):
+            print "Reading metadata for " + thisinfo['id']
+    else:
+        thisinfo['id'] = None
 
     # Defaults for fields that come from metadata...
     thisinfo['Name'] = None
@@ -364,6 +374,9 @@ def parse_metadata(metafile, **kw):
     # General defaults...
     thisinfo['builds'] = []
     thisinfo['comments'] = []
+
+    if metafile is None:
+        return thisinfo
 
     mode = 0
     buildlines = []
