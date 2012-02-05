@@ -1,0 +1,21 @@
+Category:System
+License:GPLv3
+Web Site:http://szym.net/barnacle
+Source Code:https://github.com/szym/barnacle
+Issue Tracker:https://github.com/szym/barnacle/issues
+Donate:http://szym.net/barnacle/#donate
+
+Summary:Ad-hoc WiFi Access Point
+Description:
+Turn your device into a wireless ad-hoc access point.
+.
+
+Requires Root:Yes
+
+Repo Type:git
+Repo:https://github.com/szym/barnacle.git
+
+Build Version:0.6.7 (evo),39,3a922c0260dea065b871b17127fa76d1bb21017c,buildjni=yes,fixtrans=yes,prebuild=sed -i 's@name="paypalUrl"@name="paypalUrl" formatted="false"@' res/values/strings.xml
+
+Update Check Mode:Market
+
