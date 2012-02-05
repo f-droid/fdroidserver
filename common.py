@@ -208,7 +208,7 @@ class vcs_svn(vcs):
                         self.userargs(), cwd=self.local) != 0:
                     raise VCSException("Svn update failed")
                 self.refreshed = True
-        if ref:
+        if rev:
             revargs = ['-r', rev]
             if subprocess.call(['svn', 'update', '--force'] + revargs +
                     self.userargs(), cwd=self.local) != 0:
