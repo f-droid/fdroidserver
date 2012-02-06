@@ -15,6 +15,7 @@ Repo:https://code.google.com/p/shortyz/
 Build Version:3.1.0,30100,1ce970a00083,subdir=shortyz,target=android-11,prebuild=\
 	cd ../puzlib && mvn package && mv target/*.jar ../shortyz/libs && rm -rf target &&\
 	cd ../shortyz
+Build Version:3.1.7,30107,!No source code apparently
 
 Update Check Mode:Market
 Current Version:3.1.7

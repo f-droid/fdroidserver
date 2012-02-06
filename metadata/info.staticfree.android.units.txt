@@ -14,11 +14,11 @@ Repo:git://staticfree.info/git/Units/
 
 Build Version:0.8,7,8be8c10c67152783b6871a70d077a0758e5086ba
 Build Version:0.9,8,3cde1f8d6b822ddcee23f984fab53e7bad3817df
-
-Update Check Mode:Market
 #Commenting the following out because it doesn't build....
 #src/info/staticfree/android/units/Units.java:32: package org.jared.commons.ui does not exist
-#Build Version:1.0,9,1db6cd055203bd2f15eaffd7a780db2ee22974af
+#Build Version:1.0,9,1db6cd055203bd2f15eaffd7a780db2ee22974af,rm Units.apk && rm extra/*.jar && rm -rf libs/ && mv lib/ libs/
+
+Update Check Mode:Market
 Current Version:1.0
 Current Version Code:9
 

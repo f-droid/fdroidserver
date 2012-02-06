@@ -22,6 +22,7 @@ Build Version:1.1.1,65,177,target=android-8
 Build Version:1.2.2,68,183,target=android-8
 Build Version:1.3,69,197,target=android-8
 Build Version:1.3.1,70,210,target=android-10
+Build Version:1.3.2,71,217,target=android-10,prebuild=rm -rf bin/
 
 Update Check Mode:Market
 Current Version:1.3.2

@@ -14,6 +14,7 @@ Repo Type:svn
 Repo:http://android-wifi-ace.googlecode.com/svn/trunk/WiFiACE
 
 Build Version:0.10,20100924,13
+Build Version:0.11,20120115,14
 
 Update Check Mode:Market
 Current Version:0.11
