@@ -11,11 +11,15 @@ Description:
 A simple counting application. Count any number of items simultanously,
 either up or down. Can be set to vibrate, beep or speak when the values
 change.
+
+Live data can also be send via UDP to a networked computer, and results
+can be shared via email, etc.
 .
 
 Repo Type:git
 Repo:git://git.ciarang.com/tallyphant.git
 
 Build Version:0.1,2,065a77a8d508746c6838b6892f68d7b35ac10608
+Build Version:0.2,3,38c8d82a1b19c7313aea5cdaae9f93a95fcaac32
 
 Update Check Mode:None
