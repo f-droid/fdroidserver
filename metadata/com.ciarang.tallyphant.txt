@@ -21,5 +21,7 @@ Repo:git://git.ciarang.com/tallyphant.git
 
 Build Version:0.1,2,065a77a8d508746c6838b6892f68d7b35ac10608
 Build Version:0.2,3,38c8d82a1b19c7313aea5cdaae9f93a95fcaac32
+Build Version:0.3,4,cbe9aa47adb5ac24244b4e80484fee3eb356cf8b
+Build Version:0.4,5,f207fbd7d2d7a682ba71c4fa7c446cc636401cba
 
 Update Check Mode:None
