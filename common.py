@@ -685,6 +685,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
             # the original behaviour...
             buildxml = os.path.join(root_dir, 'build.xml')
             if os.path.exists(buildxml):
+                print 'Force-removing old build.xml'
                 os.remove(buildxml)
         if subprocess.call(parms, cwd=root_dir) != 0:
             raise BuildException("Failed to update project")

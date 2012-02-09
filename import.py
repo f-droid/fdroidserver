@@ -22,6 +22,7 @@ import os
 import shutil
 import subprocess
 import re
+import urllib
 from optparse import OptionParser
 
 #Read configuration...
@@ -61,12 +62,36 @@ if url.startswith('https://github.com'):
     repo = url + '.git'
     repotype = 'git'
     sourcecode = url
+elif url.startswith('http://code.google.com/p/'):
+    if not url.endswith('/'):
+        print "Expected format for googlecode url is http://code.google.com/p/PROJECT/"
+        sys.exit(1)
+    projecttype = 'googlecode'
+    sourcecode = url + 'source/checkout'
+    req = urllib.urlopen(sourcecode)
+    if req.getcode() != 200:
+        print 'Unable to find source at ' + sourcecode + ' - return code ' + str(req.getcode())
+        sys.exit(1)
+    page = req.read()
+    index = page.find('hg clone')
+    if index != -1:
+        repotype = 'hg'
+        repo = page[index + 9:]
+        index = repo.find('<')
+        if index == -1:
+            print "Error while getting repo address"
+            sys.exit(1)
+        repo = repo[:index]
+    else:
+        print "Unable to determine vcs type"
+        sys.exit(1)
 
 if not projecttype:
     print "Unable to determine the project type."
     sys.exit(1)
 
 # Get a copy of the source so we can extract some info...
+print 'Getting source from ' + repotype + ' repo at ' + repo
 src_dir = os.path.join(tmp_dir, 'importer')
 if os.path.exists(tmp_dir):
     shutil.rmtree(tmp_dir)
