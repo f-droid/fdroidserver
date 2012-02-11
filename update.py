@@ -502,7 +502,8 @@ for line in file(os.path.join('stats', 'latestapps.txt')):
     for app in apps:
         if app['id'] == appid:
             data += app['Name'] + "\t"
-			data += app['icon'] + "\n"
+            data += app['icon'] + "\t"
+            data += app['License'] + "\n"
             break
 f = open('repo/latestapps.dat', 'w')
 f.write(data)

@@ -728,10 +728,13 @@ function widget_fdroidlatest($args) {
 		while (($buffer = fgets($handle, 4096)) !== false) {
 			$app = explode("\t", $buffer);
 			echo '<a href="/repository/browse/?fdid='.$app[0].'">';
-			if(trim($app[2])) {
+			if(isset($app[2]) && trim($app[2])) {
 				echo '<img src="http://f-droid.org/repo/icons/'.$app[2].'" style="width:32px;border:none;float:right;" />';
 			}
 			echo $app[1].'<br />';
+			if(isset($app[3]) && trim($app[3])) {
+				echo '<span style="color:#BBBBBB;">'.$app[3].'</span>';
+			}
 			echo '</a><br style="clear:both;" />';
 		}
 		fclose($handle);
