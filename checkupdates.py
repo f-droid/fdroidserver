@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# checkmarket2.py - part of the FDroid server tools
+# checkupdates.py - part of the FDroid server tools
 # Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify

@@ -517,7 +517,16 @@ def write_metadata(dest, app):
     for build in app['builds']:
         writecomments('build:' + build['version'])
         mf.write('Build Version:')
-        mf.write('\\\n'.join(build['origlines']) + '\n')
+        if build.has_key('origlines'):
+            # Keeping the original formatting if we loaded it from a file...
+            mf.write('\\\n'.join(build['origlines']) + '\n')
+        else:
+            mf.write(build['version'] + ',' + build['vercode'] + ',' + 
+                    build['commit'])
+            for key,value in build.iteritems():
+                if key not in ['version', 'vercode', 'commit']:
+                    mf.write(',' + key + '=' + value)
+            mf.write('\n')
     if len(app['builds']) > 0:
         mf.write('\n')
     writefield('Update Check Mode')
