@@ -494,18 +494,18 @@ for apk in apks:
     knownapks.recordapk(apk['apkname'], apk['id'])
 knownapks.writeifchanged()
 
-# Generate latest apps HTML for widget
-html = '<p>'
+# Generate latest apps data for widget
+data = ''
 for line in file(os.path.join('stats', 'latestapps.txt')):
     appid = line.rstrip()
-    html += '<a href="/repository/browse/?fdid=' + appid + '">'
+    data += appid + "\t"
     for app in apps:
         if app['id'] == appid:
-            html += app['Name'] + '</a><br>'
+            data += app['Name'] + "\t"
+			data += app['icon'] + "\n"
             break
-html += '</p>'
-f = open('repo/latestapps.html', 'w')
-f.write(html)
+f = open('repo/latestapps.dat', 'w')
+f.write(data)
 f.close()
 
 

@@ -722,7 +722,21 @@ function widget_fdroidlatest($args) {
 	extract($args);
 	echo $before_widget;
 	echo $before_title . 'Latest Apps' . $after_title;
-	readfile(getenv('DOCUMENT_ROOT').'/repo/latestapps.html');
+	
+	$handle = fopen(getenv('DOCUMENT_ROOT').'/repo/latestapps.dat', 'r');
+	if ($handle) {
+		while (($buffer = fgets($handle, 4096)) !== false) {
+			$app = explode("\t", $buffer);
+			echo '<a href="/repository/browse/?fdid='.$app[0].'">';
+			if(trim($app[2])) {
+				echo '<img src="http://f-droid.org/repo/icons/'.$app[2].'" style="width:32px;border:none;float:right;" />';
+			}
+			echo $app[1].'<br />';
+			echo '</a><br style="clear:both;" />';
+		}
+		fclose($handle);
+	}
+	
 	echo $after_widget;
 }
 
