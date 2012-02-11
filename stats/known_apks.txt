@@ -18,6 +18,7 @@ BarcodeScanner3.53.apk com.google.zxing.client.android
 BarcodeScanner3.6.apk com.google.zxing.client.android
 BarcodeScanner3.7.apk com.google.zxing.client.android 2011-11-01
 BarcodeScanner3.72.apk com.google.zxing.client.android 2011-11-15
+BarcodeScanner4.0.apk com.google.zxing.client.android 2012-02-06
 Beem_0.1.4.apk com.beem.project.beem 2010-10-21
 CSipSimple-0.01-01.apk com.csipsimple
 CSipSimple-0.02-01.apk com.csipsimple
@@ -95,6 +96,7 @@ Sipdroid-1.6.1.apk org.sipdroid.sipua 2010-10-27
 Sipdroid-2.0.1.apk org.sipdroid.sipua
 Sipdroid-2.1.apk org.sipdroid.sipua
 Sipdroid-2.3.apk org.sipdroid.sipua
+Sipdroid-2.4.apk org.sipdroid.sipua 2012-02-08
 SparseRSS_0.6.2.apk de.shandschuh.sparserss 2010-12-04
 SparseRSS_0.7.1.apk de.shandschuh.sparserss
 SparseRSS_0.7.2.apk de.shandschuh.sparserss
@@ -118,9 +120,12 @@ androidVNC_build20100725.apk android.androidVNC 2010-11-18
 apps.droidnotify_27.apk apps.droidnotify 2012-01-21
 apps.droidnotify_29.apk apps.droidnotify 2012-01-28
 apps.droidnotify_30.apk apps.droidnotify 2012-02-02
+arity.calculator_27.apk arity.calculator 2012-02-11
 at.tomtasche.reader_11.apk at.tomtasche.reader 2011-01-05
 at.tomtasche.reader_12.apk at.tomtasche.reader 2011-01-10
 at.tomtasche.reader_15.apk at.tomtasche.reader 2011-01-13
+at.tomtasche.reader_22.apk at.tomtasche.reader 2012-02-10
+at.tomtasche.reader_24.apk at.tomtasche.reader 2012-02-10
 caldwell.ben.trolly_6.apk caldwell.ben.trolly 2011-01-27
 cmupdaterapp.ui_501.apk cmupdaterapp.ui 2011-07-12
 com.FireFart.Permissions_2.apk com.FireFart.Permissions 2011-03-02
@@ -150,6 +155,8 @@ com.android.keepass_84.apk com.android.keepass 2012-01-19
 com.android.keepass_85.apk com.android.keepass 2012-01-24
 com.angrydoughnuts.android.alarmclock_8.apk com.angrydoughnuts.android.alarmclock 2011-05-19
 com.appengine.paranoid_android.lost_12.apk com.appengine.paranoid_android.lost 2012-01-08
+com.ath0.rpn_10.apk com.ath0.rpn 2012-02-11
+com.ath0.rpn_9.apk com.ath0.rpn 2012-02-10
 com.axelby.podax_12.apk com.axelby.podax 2012-01-21
 com.beem.project.beem_10.apk com.beem.project.beem 2012-01-20
 com.beem.project.beem_11.apk com.beem.project.beem 2012-01-25
@@ -163,6 +170,9 @@ com.bwx.bequick_201107260.apk com.bwx.bequick 2011-08-09
 com.bwx.qs.battery_201010020.apk com.bwx.qs.battery 2011-01-24
 com.chessclock.android_8.apk com.chessclock.android 2012-01-08
 com.ciarang.tallyphant_2.apk com.ciarang.tallyphant 2012-01-26
+com.ciarang.tallyphant_3.apk com.ciarang.tallyphant 2012-02-07
+com.ciarang.tallyphant_4.apk com.ciarang.tallyphant 2012-02-07
+com.ciarang.tallyphant_5.apk com.ciarang.tallyphant 2012-02-08
 com.commonsware.android.arXiv_92.apk com.commonsware.android.arXiv 2011-05-19
 com.danga.squeezer_5.apk com.danga.squeezer 2011-03-02
 com.digitallizard.nicecompass_6.apk com.digitallizard.nicecompass 2012-01-28
@@ -193,6 +203,7 @@ com.funambol.androidsync_8.apk com.funambol.androidsync 2011-01-10
 com.funambol.androidsync_9.apk com.funambol.androidsync 2011-01-09
 com.ghostsq.commander_110.apk com.ghostsq.commander 2011-05-18
 com.ghostsq.commander_160.apk com.ghostsq.commander 2012-01-24
+com.ghostsq.commander_163.apk com.ghostsq.commander 2012-02-06
 com.ghostsq.commander_94.apk com.ghostsq.commander 2011-04-02
 com.ghostsq.commander_97.apk com.ghostsq.commander 2011-04-02
 com.google.android.diskusage_2004.apk com.google.android.diskusage 2011-01-31
@@ -223,6 +234,7 @@ com.ichi2.anki_18.apk com.ichi2.anki 2011-02-08
 com.ichi2.anki_20.apk com.ichi2.anki 2011-04-26
 com.ichi2.anki_21.apk com.ichi2.anki 2011-10-03
 com.ichi2.anki_22.apk com.ichi2.anki 2011-11-27
+com.ihunda.android.binauralbeat_24.apk com.ihunda.android.binauralbeat 2012-02-11
 com.jadn.cc_129.apk com.jadn.cc 2012-01-07
 com.kmagic.solitaire_450.apk com.kmagic.solitaire 2011-01-23
 com.leinardi.kitchentimer_116.apk com.leinardi.kitchentimer 2012-01-28
@@ -231,6 +243,7 @@ com.liato.bankdroid_110.apk com.liato.bankdroid 2011-04-19
 com.liato.bankdroid_120.apk com.liato.bankdroid 2011-09-02
 com.liato.bankdroid_121.apk com.liato.bankdroid 2012-01-28
 com.liato.bankdroid_128.apk com.liato.bankdroid 2012-01-28
+com.liato.bankdroid_131.apk com.liato.bankdroid 2012-02-06
 com.mobilepearls.sokoban_12.apk com.mobilepearls.sokoban 2011-01-05
 com.morphoss.acal_14.apk com.morphoss.acal 2011-03-27
 com.morphoss.acal_15.apk com.morphoss.acal 2011-03-29
@@ -258,7 +271,9 @@ com.roozen.SoundManager_18.apk com.roozen.SoundManager 2011-03-03
 com.scottmain.android.searchlight_1.apk com.scottmain.android.searchlight 2012-01-27
 com.smorgasbork.hotdeath_3.apk com.smorgasbork.hotdeath 2011-12-06
 com.smorgasbork.hotdeath_6.apk com.smorgasbork.hotdeath 2012-01-24
+com.smorgasbork.hotdeath_7.apk com.smorgasbork.hotdeath 2012-02-05
 com.stericson.permissions_4.apk com.stericson.permissions 2012-01-27
+com.tastycactus.timesheet_5.apk com.tastycactus.timesheet 2012-02-05
 com.teleca.jamendo_31.apk com.teleca.jamendo 2011-04-28
 com.teleca.jamendo_32.apk com.teleca.jamendo 2011-06-03
 com.teleca.jamendo_33.apk com.teleca.jamendo 2011-06-04
@@ -293,6 +308,7 @@ de.shandschuh.sparserss_65.apk de.shandschuh.sparserss 2011-08-25
 de.shandschuh.sparserss_68.apk de.shandschuh.sparserss 2011-10-02
 de.shandschuh.sparserss_69.apk de.shandschuh.sparserss 2011-11-03
 de.shandschuh.sparserss_70.apk de.shandschuh.sparserss 2011-12-12
+de.shandschuh.sparserss_71.apk de.shandschuh.sparserss 2012-02-06
 de.ub0r.android.adBlock_5.apk de.ub0r.android.adBlock 2011-01-23
 dk.andsen.asqlitemanager_10.apk dk.andsen.asqlitemanager 2012-01-26
 dk.andsen.asqlitemanager_7.apk dk.andsen.asqlitemanager 2011-12-05
@@ -344,6 +360,7 @@ linphone-android-1.1.6.apk org.linphone
 linphone-android-1.2.1.apk org.linphone 2011-09-29
 me.guillaumin.android.osmtracker_20.apk me.guillaumin.android.osmtracker 2011-07-03
 me.guillaumin.android.osmtracker_21.apk me.guillaumin.android.osmtracker 2011-10-02
+me.guillaumin.android.osmtracker_22.apk me.guillaumin.android.osmtracker 2012-02-05
 mixare-0061.apk org.mixare
 mixare-0062.apk org.mixare
 mixare-0063.apk org.mixare
@@ -370,6 +387,7 @@ net.cactii.mathdoku_70.apk net.cactii.mathdoku 2011-01-22
 net.fercanet.LNM_3.apk net.fercanet.LNM 2011-01-20
 net.gaast.giggity_16.apk net.gaast.giggity 2012-01-28
 net.gaast.giggity_4.apk net.gaast.giggity 2011-02-04
+net.healeys.lexic_41.apk net.healeys.lexic 2012-02-09
 net.mafro.android.wakeonlan_12.apk net.mafro.android.wakeonlan 2011-11-24
 net.nightwhistler.pageturner_1.apk net.nightwhistler.pageturner 2012-02-03
 net.nightwhistler.pageturner_2.apk net.nightwhistler.pageturner 2012-02-04
@@ -404,6 +422,7 @@ net.sourceforge.servestream_54.apk net.sourceforge.servestream 2012-01-19
 net.sylvek.sharemyposition_16.apk net.sylvek.sharemyposition 2011-02-03
 net.sylvek.sharemyposition_20.apk net.sylvek.sharemyposition 2012-01-10
 net.sylvek.sharemyposition_24.apk net.sylvek.sharemyposition 2012-01-27
+net.szym.barnacle_39.apk net.szym.barnacle 2012-02-05
 net.tapi.handynotes_1.apk net.tapi.handynotes 2011-02-13
 net.tapi.handynotes_3.apk net.tapi.handynotes 2011-02-19
 net.tedstein.AndroSS_10.apk net.tedstein.AndroSS 2011-06-27
@@ -517,6 +536,7 @@ org.jtb.droidlife_21.apk org.jtb.droidlife 2011-11-27
 org.kost.externalip_3.apk org.kost.externalip 2011-09-26
 org.kreed.vanilla_16.apk org.kreed.vanilla 2011-04-02
 org.marcus905.wifi.ace_20100924.apk org.marcus905.wifi.ace 2011-01-27
+org.marcus905.wifi.ace_20120115.apk org.marcus905.wifi.ace 2012-02-06
 org.mixare_14.apk org.mixare 2011-07-22
 org.mixare_20.apk org.mixare 2012-01-28
 org.mult.daap_30.apk org.mult.daap 2011-01-27
@@ -529,6 +549,7 @@ org.openintents.filemanager_18.apk org.openintents.filemanager 2012-02-03
 org.openintents.newsreader_65549.apk org.openintents.newsreader 2012-01-30
 org.paulmach.textedit_12.apk org.paulmach.textedit 2011-01-27
 org.paulmach.textedit_14.apk org.paulmach.textedit 2011-08-04
+org.paulmach.textedit_15.apk org.paulmach.textedit 2012-02-06
 org.penghuang.tools.rotationlock_5.apk org.penghuang.tools.rotationlock 2012-01-11
 org.penghuang.tools.rotationlock_6.apk org.penghuang.tools.rotationlock 2012-02-04
 org.pocketworkstation.pckeyboard_1018.apk org.pocketworkstation.pckeyboard 2011-07-01
