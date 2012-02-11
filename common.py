@@ -626,6 +626,14 @@ def getsrclib(spec, extlib_dir):
         vcs.gotorevision(ref)
         return sdir
 
+    if name == 'JOpenDocument':
+        sdir = os.path.join(extlib_dir, 'JOpenDocument')
+        vcs = getvcs('git',
+                'https://github.com/andiwand/JOpenDocument.git', sdir)
+        vcs.gotorevision(ref)
+        shutil.rmtree(os.path.join(sdir, 'bin'))
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
