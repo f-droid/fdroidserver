@@ -36,6 +36,7 @@ class FDroid
 	// Register additional query variables. (Handler for the 'query_vars' filter)
 	function queryvars($qvars) {
 		$qvars[]='fdfilter';
+		$qvars[]='fdcategory';
 		$qvars[]='fdid';
 		$qvars[]='fdpage';
 		$qvars[]='fdstyle';
@@ -89,11 +90,20 @@ class FDroid
 			$query_vars['fdfilter'] = '';
 		}
 
+		if($query_vars['fdcategory'] == 'All applications') {
+			unset($query_vars['fdcategory']);
+		}
+		
 		if($query_vars['fdid']!==null) {
 			$out.=$this->get_app($query_vars);
 		} else {
-			if($query_vars['fdfilter'] !== null)
-				$out.=$this->show_search($query_vars);
+			if($query_vars['fdfilter'] !== null) {
+				$out.='<form name="searchform" action="" method="get">';
+				$out.='<p><input name="fdfilter" type="text" value="'.$query_vars['fdfilter'].'" size="30"> ';
+				$out.='<input type="submit" value="Search"></p>';
+				$out.=$this->makeformdata($query_vars);
+				$out.='</form>'."\n";
+			}
 
 			$out.=$this->get_apps($query_vars);
 		}
@@ -454,15 +464,31 @@ class FDroid
 		if(($query_vars['fdfilter']===null || $query_vars['fdfilter']!='') && $numpages>0)
 		{
 			$out.='<div style="float:left;">';
-			if($query_vars['fdfilter']===null)
-				$out.="All applications";
-			else
+			if($query_vars['fdfilter']===null) {
+				$categories = array('All applications','Games','Internet','Multimedia','Navigation','Office','System');
+
+				$out.='<form name="categoryform" action="" method="get">';
+				$out.=$this->makeformdata($query_vars);
+				
+				$out.='<select name="fdcategory" style="color:#333333;" onChange="document.categoryform.submit();">';
+				foreach($categories as $category) {
+					$out.='<option';
+					if(isset($query_vars['fdcategory']) && $category==$query_vars['fdcategory'])
+						$out.=' selected';
+					$out.='>'.$category.'</option>';
+				}
+				$out.='</select>';
+				
+				$out.='</form>'."\n";
+			}
+			else {
 				$out.='Applications matching "'.$query_vars['fdfilter'].'"';
+			}
 			$out.="</div>";
 
 			$out.='<div style="float:right;">';
-				$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'list','fdpage'=>'1')).'">List</a> | ';
-				$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'grid','fdpage'=>'1')).'">Grid</a>';
+			$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'list','fdpage'=>'1')).'">List</a> | ';
+			$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'grid','fdpage'=>'1')).'">Grid</a>';
 			$out.='</div>';
 
 			$out.='<br break="all"/>';
@@ -508,20 +534,15 @@ class FDroid
 	}
 
 
-	function show_search($query_vars) {
+	function makeformdata($query_vars) {
 
 		$out='';
-		$out.='<form name="searchform" action="" method="get">';
-		$out.='<p><input name="fdfilter" type="text" value="'.$query_vars['fdfilter'].'" size="30"> ';
-		$out.='<input type="submit" value="Search"></p>';
 
 		$out.='<input type="hidden" name="page_id" value="'.get_query_var('page_id').'">';
 		foreach($query_vars as $name => $value) {
 			if($value !== null && $name != 'fdfilter')
 				$out.='<input type="hidden" name="'.$name.'" value="'.$value.'">';
 		}
-
-		$out.='</form>'."\n";
 
 		return $out;
 	}
@@ -565,10 +586,13 @@ class FDroid
 					case "license":
 						$appinfo['license']=$el;
 						break;
+					case "category":
+						$appinfo['category']=$el;
+						break;
 				}
 			}
 
-			if($query_vars['fdfilter']===null || $query_vars['fdfilter']!='' && (stristr($appinfo['name'],$query_vars['fdfilter']) || stristr($appinfo['summary'],$query_vars['fdfilter']) || stristr($appinfo['description'],$query_vars['fdfilter']))) {
+			if(($query_vars['fdfilter']===null || $query_vars['fdfilter']!='' && (stristr($appinfo['name'],$query_vars['fdfilter']) || stristr($appinfo['summary'],$query_vars['fdfilter']) || stristr($appinfo['description'],$query_vars['fdfilter']))) && (!isset($query_vars['fdcategory']) || $query_vars['fdcategory'] && $query_vars['fdcategory']==$appinfo['category'])) {
 				if($skipped<($query_vars['fdpage']-1)*$outputter->perpage) {
 					$skipped++;
 				} else if($got<$outputter->perpage) {
