@@ -113,6 +113,7 @@ XCSoar.apk org.xcsoar 2012-01-28
 XCSoar6.2.4.apk org.xcsoar 2011-12-24
 XWords4_android_beta_18.apk org.eehouse.android.xw4 2010-11-21
 aarddict.android_10.apk aarddict.android 2012-01-13
+aarddict.android_12.apk aarddict.android 2012-02-12
 alogcat-2.1.4.apk org.jtb.alogcat 2010-11-21
 andLess_05202011.apk net.avs234 2011-05-20
 android.androidVNC_13.apk android.androidVNC 2011-04-06
@@ -120,6 +121,7 @@ androidVNC_build20100725.apk android.androidVNC 2010-11-18
 apps.droidnotify_27.apk apps.droidnotify 2012-01-21
 apps.droidnotify_29.apk apps.droidnotify 2012-01-28
 apps.droidnotify_30.apk apps.droidnotify 2012-02-02
+apps.droidnotify_31.apk apps.droidnotify 2012-02-12
 arity.calculator_27.apk arity.calculator 2012-02-11
 at.tomtasche.reader_11.apk at.tomtasche.reader 2011-01-05
 at.tomtasche.reader_12.apk at.tomtasche.reader 2011-01-10
