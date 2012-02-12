@@ -15,4 +15,6 @@ Repo:https://github.com/lpar/RPN.git
 Build Version:1.8.1,10,199a87f7319b685e59d6847f1ff2417613f69c6e
 
 Update Check Mode:Market
+Current Version:1.8
+Current Version Code:9
 

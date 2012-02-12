@@ -391,6 +391,7 @@ net.healeys.lexic_41.apk net.healeys.lexic 2012-02-09
 net.mafro.android.wakeonlan_12.apk net.mafro.android.wakeonlan 2011-11-24
 net.nightwhistler.pageturner_1.apk net.nightwhistler.pageturner 2012-02-03
 net.nightwhistler.pageturner_2.apk net.nightwhistler.pageturner 2012-02-04
+net.nightwhistler.pageturner_3.apk net.nightwhistler.pageturner 2012-02-11
 net.osmand.plus_34.apk net.osmand.plus 2011-06-24
 net.osmand.plus_36.apk net.osmand.plus 2011-07-12
 net.osmand.plus_37.apk net.osmand.plus 2011-09-26
@@ -528,6 +529,7 @@ org.jfedor.frozenbubble_8.apk org.jfedor.frozenbubble 2011-01-02
 org.jfedor.frozenbubble_9.apk org.jfedor.frozenbubble 2011-01-02
 org.jmoyer.NotificationPlus_2.apk org.jmoyer.NotificationPlus 2012-01-15
 org.johanhil.flygtider_9.apk org.johanhil.flygtider 2011-04-02
+org.jsharkey.sky_1.apk org.jsharkey.sky 2012-02-12
 org.jtb.alogcat_34.apk org.jtb.alogcat 2011-01-04
 org.jtb.alogcat_36.apk org.jtb.alogcat 2011-03-09
 org.jtb.alogcat_38.apk org.jtb.alogcat 2011-03-10
@@ -535,6 +537,7 @@ org.jtb.alogcat_39.apk org.jtb.alogcat 2012-01-24
 org.jtb.droidlife_21.apk org.jtb.droidlife 2011-11-27
 org.kost.externalip_3.apk org.kost.externalip 2011-09-26
 org.kreed.vanilla_16.apk org.kreed.vanilla 2011-04-02
+org.liberty.android.fantastischmemo_135.apk org.liberty.android.fantastischmemo 2012-02-12
 org.marcus905.wifi.ace_20100924.apk org.marcus905.wifi.ace 2011-01-27
 org.marcus905.wifi.ace_20120115.apk org.marcus905.wifi.ace 2012-02-06
 org.mixare_14.apk org.mixare 2011-07-22
@@ -649,6 +652,7 @@ transdroid-1.0.4.apk org.transdroid 2011-05-24
 transdroid-1.1.0-beta.apk org.transdroid 2011-10-21
 tuioDroid.impl_4.apk tuioDroid.impl 2011-11-28
 tuxrider_1.0.4.apk com.drodin.tuxrider 2010-11-18
+uk.co.jarofgreen.JustADamnCompass_2.apk uk.co.jarofgreen.JustADamnCompass 2012-02-12
 urbanstew.RehearsalAssistant_22.apk urbanstew.RehearsalAssistant 2011-02-19
 us.lindanrandy.cidrcalculator_115.apk us.lindanrandy.cidrcalculator 2012-01-21
 us.lindanrandy.cidrcalculator_118.apk us.lindanrandy.cidrcalculator 2012-01-28

@@ -94,6 +94,26 @@ elif url.startswith('http://code.google.com/p/'):
                 sys.exit(1)
             repo = repo[:index]
     if not repotype:
+        index=page.find('svn checkout')
+        if index != -1:
+            repotype = 'git-svn'
+            repo = page[index + 13:]
+            prefix = '<strong><em>http</em></strong>'
+            if not repo.startswith(prefix):
+                print "Unexpected checkout instructions format"
+                sys.exit(1)
+            repo = 'http' + repo[len(prefix):]
+            index = repo.find('<')
+            if index == -1:
+                print "Error while getting repo address - no end tag? '" + repo + "'"
+                sys.exit(1)
+            repo = repo[:index]
+            index = repo.find(' ')
+            if index == -1:
+                print "Error while getting repo address - no space? '" + repo + "'"
+                sys.exit(1)
+            repo = repo[:index]
+    if not repotype:
         print "Unable to determine vcs type"
         sys.exit(1)
 

@@ -15,4 +15,6 @@ Repo:https://code.google.com/p/arity-calculator/
 Build Version:1.27,27,ad8847de5df0,target=android-8
 
 Update Check Mode:Market
+Current Version:1.27
+Current Version Code:27
 
