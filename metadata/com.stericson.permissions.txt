@@ -10,6 +10,9 @@ Permissions allows you to somewhat control the permissions an app is requesting
 on your Android device. While it is not a perfect system, it does work
 (although perhaps not on all devices). You do have to reboot the device before
 the changes take place.
+
+Note that there are newer versions of this application available elsewhere, but
+these are proprietary software.
 .
 
 Requires Root:Yes
@@ -18,9 +21,8 @@ Repo Type:git-svn
 Repo:http://android-permissions.googlecode.com/svn/trunk/
 
 Build Version:1.3,4,9,prebuild=rm -rf bin/ && rm -rf gen/ && mkdir libs && mv RootTools-1.0-sdk3-generic.jar libs
-Build Version:2.8,18,!Source not available
 
-Update Check Mode:Market
-Current Version:2.8
-Current Version Code:18
+Update Check Mode:None
+Current Version:1.3
+Current Version Code:4
 

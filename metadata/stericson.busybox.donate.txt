@@ -25,10 +25,10 @@ rm -rf gen &&\
 cd src/stericson &&\
 svn co -r 133 http://roottools.googlecode.com/svn/trunk/Developmental/RootTools_sdk3_generic/src/com/stericson/RootTools &&\
 cd ../..
-
 Build Version:7.2,104,!No source available
+Build Version:7.5,105,!No source available
 
 Update Check Mode:Market
-Current Version:7.2
-Current Version Code:104
+Current Version:7.5
+Current Version Code:105
 
