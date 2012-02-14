@@ -1,6 +1,6 @@
 Category:Internet
 License:GPLv2
-Web Site:http://yaxim.org
+Web Site:http://andfhem.klass.li/
 Source Code:https://github.com/klassm/andFHEM
 Issue Tracker:https://github.com/klassm/andFHEM/issues
 
