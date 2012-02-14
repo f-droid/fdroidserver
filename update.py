@@ -75,6 +75,12 @@ if (repo_url is None or repo_name is None or
 # Get all apps...
 apps = common.read_metadata(verbose=options.verbose)
 
+# Generate a list of categories...
+categories = []
+for app in apps:
+    if app['Category'] not in categories:
+        categories.append(app['Category'])
+
 # Gather information about all the apk files in the repo directory...
 apks = []
 for apkfile in glob.glob(os.path.join('repo','*.apk')):
@@ -465,9 +471,17 @@ if repo_keyalias != None:
     if options.verbose:
         print output
 
-#Copy the repo icon into the repo directory...
+# Copy the repo icon into the repo directory...
 iconfilename = os.path.join(icon_dir, os.path.basename(repo_icon))
 shutil.copyfile(repo_icon, iconfilename)
+
+# Write a category list in the repo to allow quick access...
+catdata = ''
+for cat in categories:
+    catdata += cat + '\n'
+f = open('repo/categories.txt', 'w')
+f.write(catdata)
+f.close()
 
 # Update known apks info...
 knownapks = common.KnownApks()
