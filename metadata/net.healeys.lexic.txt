@@ -16,4 +16,6 @@ Repo:https://code.google.com/p/lexic/
 Build Version:0.8.1,41,5ffa6d7ee6a4,target=android-8,subdir=trunk
 
 Update Check Mode:Market
+Current Version:0.8.1
+Current Version Code:42
 

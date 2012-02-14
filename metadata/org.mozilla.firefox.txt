@@ -10,6 +10,6 @@ Firefox Mobile web browser.
 .
 
 Update Check Mode:Market
-Current Version:10.0
-Current Version Code:2012012903
+Current Version:10.0.1
+Current Version Code:2012020807
 
