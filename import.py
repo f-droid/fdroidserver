@@ -57,6 +57,8 @@ apps = common.read_metadata()
 
 # Figure out what kind of project it is...
 projecttype = None
+issuetracker = None
+license = None
 if url.startswith('https://github.com'):
     projecttype = 'github'
     repo = url + '.git'
@@ -68,6 +70,9 @@ elif url.startswith('http://code.google.com/p/'):
         sys.exit(1)
     projecttype = 'googlecode'
     sourcecode = url + 'source/checkout'
+    issuetracker = url + 'issues/list'
+
+    # Figure out the repo type and adddress...
     req = urllib.urlopen(sourcecode)
     if req.getcode() != 200:
         print 'Unable to find source at ' + sourcecode + ' - return code ' + str(req.getcode())
@@ -115,6 +120,38 @@ elif url.startswith('http://code.google.com/p/'):
             repo = repo[:index]
     if not repotype:
         print "Unable to determine vcs type"
+        sys.exit(1)
+
+    # Figure out the license...
+    req = urllib.urlopen(url)
+    if req.getcode() != 200:
+        print 'Unable to find project page at ' + sourcecode + ' - return code ' + str(req.getcode())
+        sys.exit(1)
+    page = req.read()
+    index = page.find('Code license')
+    if index == -1:
+        print "Couldn't find license data"
+        sys.exit(1)
+    ltext = page[index:]
+    lprefix = 'rel="nofollow">'
+    index = ltext.find(lprefix)
+    if index == -1:
+        print "Couldn't find license text"
+        sys.exit(1)
+    ltext = ltext[index + len(lprefix):]
+    index = ltext.find('<')
+    if index == -1:
+        print "License text not formatted as expected"
+        sys.exit(1)
+    ltext = ltext[:index]
+    if ltext == 'GNU GPL v3':
+        license = 'GPLv3'
+    elif ltext == 'GNU GPL v2':
+        license = 'GPLv2'
+    elif ltext == 'Apache License 2.0':
+        license = 'Apache2'
+    else:
+        print "License " + ltext + " is not recognised"
         sys.exit(1)
 
 if not projecttype:
@@ -180,6 +217,10 @@ app = common.parse_metadata(None)
 app['id'] = package
 app['Web Site'] = url
 app['Source Code'] = sourcecode
+if issuetracker:
+    app['Issue Tracker'] = issuetracker
+if license:
+    app['License'] = license
 app['Repo Type'] = repotype
 app['Repo'] = repo
 
