@@ -1,3 +1,4 @@
+Disabled:Missing current source for library - 1.0 available, 1.4 used - https://sourceforge.net/tracker/?func=detail&aid=3479542&group_id=218065&atid=1043257
 Category:Internet
 License:GPLv3
 Web Site:http://openbmap.org
@@ -15,7 +16,9 @@ Repo:git://myposition.git.sourceforge.net/gitroot/myposition/AndroidClient
 
 Build Version:0.4.96,9,bc15ce80024d7f53897fd10e6ea0cc914d0ba226,prebuild=mv lib libs,target=android-10
 Build Version:0.4.991,13,!Source is not there - see https://sourceforge.net/tracker/?func=detail&aid=3374951&group_id=218065&atid=1043257
+Build Version:0.4.999,14,3ed4e59fff30555325f9affa8c0021ee033fc72f,prebuild=mv lib libs,target=android-10
 
-Market Version:0.4.991
-Market Version Code:13
+Update Check Mode:Market
+Current Version:0.4.999
+Current Version Code:14
 

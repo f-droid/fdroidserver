@@ -13,52 +13,21 @@ display notifications on changes. Includes a widget.
 Repo Type:git
 Repo:https://github.com/liato/android-bankdroid.git
 
-Build Version:1.6.3,102,612aae755a82008f44a6,encoding=utf-8,prebuild=mkdir libs && \
-    cd libs && \
-    wget http://archive.apache.org/dist/commons/io/binaries/commons-io-2.0.1-bin.zip && \
-    unzip -j commons-io-2.0.1-bin.zip commons-io-2.0.1/commons-io-2.0.1.jar && \
-    wget http://guava-libraries.googlecode.com/files/guava-r08.zip && \
-    unzip -j guava-r08.zip guava-r08/guava-r08.jar && \
-    rm *.zip && \
-    cd ..
-Build Version:1.7.2,110,fec08e34a157a3e0b455,encoding=utf-8,prebuild=mkdir libs && \
-    cd libs && \
-    wget http://archive.apache.org/dist/commons/io/binaries/commons-io-2.0.1-bin.zip && \
-    unzip -j commons-io-2.0.1-bin.zip commons-io-2.0.1/commons-io-2.0.1.jar && \
-    wget http://guava-libraries.googlecode.com/files/guava-r08.zip && \
-    unzip -j guava-r08.zip guava-r08/guava-r08.jar && \
-    rm *.zip && \
-    cd ..
+# In all the following builds, removing the attempted parent inheritance. This
+# doesn't work with platform tools newer than 6 anyway, and apparently wouldn't
+# work on devices anyway, it would inherit either nothing, or the wrong thing!
+# Ref: http://groups.google.com/group/android-developers/browse_thread/thread/550fce9670530d9b
+Build Version:1.6.3,102,612aae755a82008f44a6,encoding=utf-8,extlibs=commons-io/commons-io-2.0.1.jar;guava-r08/guava-r08.jar,prebuild=sed -i "s@parent=\"android:WindowTitleBackground\"@@" res/values/styles.xml
+Build Version:1.7.2,110,fec08e34a157a3e0b455,encoding=utf-8,extlibs=commons-io/commons-io-2.0.1.jar;guava-r08/guava-r08.jar,prebuild=sed -i "s@parent=\"android:WindowTitleBackground\"@@" res/values/styles.xml
 Build Version:1.7.3,115,!a08cab7e66c70e7b0f5c but wrong version code in repo
-Build Version:1.8.0,120,899e4b957e512bf55254,encoding=utf-8,prebuild=mkdir libs && \
-    cd libs && \
-    wget http://archive.apache.org/dist/commons/io/binaries/commons-io-2.0.1-bin.zip && \
-    unzip -j commons-io-2.0.1-bin.zip commons-io-2.0.1/commons-io-2.0.1.jar && \
-    wget http://guava-libraries.googlecode.com/files/guava-r08.zip && \
-    unzip -j guava-r08.zip guava-r08/guava-r08.jar && \
-    rm *.zip && \
-    cd ..
+Build Version:1.8.0,120,899e4b957e512bf55254,encoding=utf-8,extlibs=commons-io/commons-io-2.0.1.jar;guava-r08/guava-r08.jar,prebuild=sed -i "s@parent=\"android:WindowTitleBackground\"@@" res/values/styles.xml
+Build Version:1.8.1,121,b5f637bbb301aa2fe997c9f3367cfb144d158633,encoding=utf-8,extlibs=commons-io/commons-io-2.0.1.jar;guava-r08/guava-r08.jar,prebuild=sed -i "s@parent=\"android:WindowTitleBackground\"@@" res/values/styles.xml
+Build Version:1.8.1,121,9f626b0dedb01cb90a16fb127a041c5f3dd1c579,target=android-10,encoding=utf-8,extlibs=commons-io/commons-io-2.0.1.jar;guava-r08/guava-r08.jar,prebuild=sed -i "s@parent=\"android:WindowTitleBackground\"@@" res/values/styles.xml
+Build Version:1.8.5,128,263023cd883da7b12c94cb46b9d3fdd23068446c,target=android-11,encoding=utf-8,prebuild=mv lib libs
+Build Version:1.8.5,128,e6582cc4249e2d6ba6a8630322a5dc26e54d35ff,target=android-11,encoding=utf-8,prebuild=mv lib libs
+Build Version:1.8.7,131,e6582cc4249e2d6ba6a8630322a5dc26e54d35ff,target=android-11,encoding=utf-8,prebuild=mv lib libs
 
-#Build fails on this version:
-# res/values/styles.xml:62: error: Error retrieving parent for item: No resource found that matches the given name 'android:WindowTitleBackground'
-#Build Version:1.8.1,121,b5f637bbb301aa2fe997c9f3367cfb144d158633,encoding=utf-8,prebuild=mkdir libs && \
-#    cd libs && \
-#    wget http://archive.apache.org/dist/commons/io/binaries/commons-io-2.0.1-bin.zip && \
-#    unzip -j commons-io-2.0.1-bin.zip commons-io-2.0.1/commons-io-2.0.1.jar && \
-#   wget http://guava-libraries.googlecode.com/files/guava-r08.zip && \
-#    unzip -j guava-r08.zip guava-r08/guava-r08.jar && \
-#    rm *.zip && \
-#    cd ..
-#Build fails on this version, same as previous version:
-# res/values/styles.xml:62: error: Error retrieving parent for item: No resource found that matches the given name 'android:WindowTitleBackground'
-#Build Version:1.8.1,121,9f626b0dedb01cb90a16fb127a041c5f3dd1c579,target=android-10,encoding=utf-8,prebuild=mkdir libs && \
-#    cd libs && \
-#    wget http://archive.apache.org/dist/commons/io/binaries/commons-io-2.0.1-bin.zip && \
-#    unzip -j commons-io-2.0.1-bin.zip commons-io-2.0.1/commons-io-2.0.1.jar && \
-#   wget http://guava-libraries.googlecode.com/files/guava-r08.zip && \
-#    unzip -j guava-r08.zip guava-r08/guava-r08.jar && \
-#    rm *.zip && \
-#    cd ..
-Market Version:1.8.4
-Market Version Code:125
+Update Check Mode:Market
+Current Version:1.8.7
+Current Version Code:131
 

@@ -12,9 +12,10 @@ Realtime spectrum analysis of audio (via the microphone).
 Repo Type:svn
 Repo:http://moonblink.googlecode.com/svn/trunk/
 
+Update Check Mode:Market
 #Need to build the associated (in the repo) libraries first...
 #Build Version:1.14,15,774,subdir=Audalyzer
 #Build Version:1.15,16,954,subdir=Audalyzer
-Market Version:1.15
-Market Version Code:16
+Current Version:1.15
+Current Version Code:16
 

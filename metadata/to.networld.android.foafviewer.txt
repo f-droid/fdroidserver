@@ -17,6 +17,8 @@ Repo:git://networld.to/var/scm/android/FOAFViewer.git
 
 Build Version:0.11,3,FOAFViewer_v0.11,prebuild=mkdir libs && cd libs && wget http://dist.codehaus.org/jaxen/distributions/jaxen-1.1.3.zip && unzip -j jaxen-1.1.3.zip jaxen-1.1.3/jaxen-1.1.3.jar && rm *.zip && wget -O org.dom4j.jar http://sourceforge.net/projects/dom4j/files/dom4j-2.0.0-ALPHA-2/dom4j-2.0.0-ALPHA-2.jar/download && cd ..
 
+Update Check Mode:Market
+
 #
 # Dependencies resolved I think (see above), but there is still a build error:
 #

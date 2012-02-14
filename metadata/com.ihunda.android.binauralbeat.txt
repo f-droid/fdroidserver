@@ -1,0 +1,28 @@
+Category:Multimedia
+License:GPLv3
+Web Site:http://binauralbeatstherapy.wordpress.com/
+Source Code:https://github.com/GiorgioRegni/Binaural-Beats
+Issue Tracker:https://github.com/GiorgioRegni/Binaural-Beats/issues
+
+Summary:Auditory brainwave mangler
+Description:
+Stimulate your brain to produce subtle changes though entraiment of brainwaves.
+
+Binaural beats stimulates your brain by sending special auditory artifacts
+directly into your headphones to produce subtle changes in behavior though
+entraiment of brainwaves frequency.
+
+This app can help induce relaxation, creativity and many other desirable mental
+states.
+.
+
+Repo Type:git
+Repo:https://github.com/GiorgioRegni/Binaural-Beats.git
+
+Build Version:1.2,24,85160b47e80d1cac025d02756f642f3c8f667191
+Build Version:1.3,25,!No source in repo
+
+Update Check Mode:Market
+Current Version:1.3
+Current Version Code:25
+

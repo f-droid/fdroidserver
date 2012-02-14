@@ -1,0 +1,24 @@
+Category:Office
+License:GPLv2
+Web Site:http://tastycactus.com/projects/timesheet/
+Source Code:https://github.com/ambrice/timesheet
+Issue Tracker:https://github.com/ambrice/timesheet/issues
+
+Summary:Time Tracker
+Description:
+Timesheet is an application designed primarily for contractors and freelancers to track the time
+spent on different tasks.
+
+You can add billable tasks and unbillable tasks (such as "Lunch") and get a daily or weekly
+report of time spent on each.
+.
+
+Repo Type:git
+Repo:https://github.com/ambrice/timesheet.git
+
+Build Version:1.4,5,b6fca7587d7340cf6f433362d9e30a732349d857
+
+Update Check Mode:Market
+Current Version:1.4
+Current Version Code:5
+

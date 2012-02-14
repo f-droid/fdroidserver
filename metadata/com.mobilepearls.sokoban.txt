@@ -14,6 +14,7 @@ Repo:https://github.com/mobilepearls/com.mobilepearls.sokoban.git
 
 Build Version:1.11,12,48e1976f9d9881adb70e
 
-Market Version:1.11
-Market Version Code:12
+Update Check Mode:Market
+Current Version:1.11
+Current Version Code:12
 

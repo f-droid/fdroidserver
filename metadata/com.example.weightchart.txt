@@ -1,4 +1,4 @@
-Disabled: Doesn't built at the moment.
+Disabled: Doesn't build at the moment.
 Category:Office
 License:GPLv3
 Web Site:https://launchpad.net/weightchart
@@ -15,4 +15,6 @@ Repo Type:bzr
 Repo:lp:weightchart
 
 Build Version:1,1,1,target=8
+
+Update Check Mode:None
 

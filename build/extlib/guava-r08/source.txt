@@ -1,0 +1,1 @@
+http://guava-libraries.googlecode.com/files/guava-r08.zip

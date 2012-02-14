@@ -17,7 +17,9 @@ Build Version:1.0.1 [BETA],32,16425d6dde3bd2e18d4f
 Build Version:1.0.2 [BETA],33,641656d8811cdbe47b86
 Build Version:1.0.2 [BETA],33,!No source in repo
 Build Version:1.0.3 [BETA],34,!No source in repo
+Build Version:1.0.4 [BETA],35,63dceec70d59132b6311289c62edd0acb795ab27,target=android-11
 
-Market Version:1.0.4 [BETA]
-Market Version Code:35
+Update Check Mode:Market
+Current Version:1.0.4 [BETA]
+Current Version Code:35
 

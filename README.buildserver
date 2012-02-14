@@ -1,0 +1,17 @@
+
+Setting up a build server:
+
+1. Install VirtualBox, vagrant and vagrant-snap
+2. In the buildserver directory, run 'vagrant up'. Will take a long time.
+3. Log in with 'vagrant ssh'
+4. Check it all looks ok, then 'sudo shutdown -h now'
+5. Back in the main directory, run 'VBoxManage listvms' look for
+   buildserver_xxxx
+6. Run 'vagrant package --base buildserver_xxxx --output buildserver.box'.
+   Will take a while.
+7. You should now have a new 'buildserver.box'
+
+You should now be able to use the --server option on build.py and builds will
+take place in the clean, secure, isolated environment of a fresh virtual
+machine for each app built.
+

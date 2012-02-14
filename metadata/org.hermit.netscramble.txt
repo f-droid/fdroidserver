@@ -11,6 +11,7 @@ the network randomly rotated and must rotate them to connect all the terminals
 to the server. A port of the KDE game "knetwalk".
 .
 
-Market Version:5.0.2
-Market Version Code:28
+Update Check Mode:Market
+Current Version:5.0.2
+Current Version Code:28
 

@@ -15,13 +15,14 @@ and without permission, sends tracking details, including a unique identifier fo
 phone, and information about your mobile network, to the developer's server.
 .
 
-Repo Type:svn
-Repo:http://android.svn.wordpress.org/trunk/
+Repo Type:git-svn
+Repo:http://android.svn.wordpress.org/
 
-Build Version:1.3.9,31,202,prebuild=mkdir libs && mv *.jar libs && sed -i "s@checkStats(accounts.size());@// MY PRIVACY > YOUR STATS@" src/org/wordpress/android/wpAndroid.java,encoding=utf-8
-Build Version:1.4.1,33,228,prebuild=mkdir libs && mv *.jar libs && sed -i "s@checkStats(accounts.size());@// MY PRIVACY > YOUR STATS@" src/org/wordpress/android/wpAndroid.java,encoding=utf-8
+Build Version:1.3.9,31,202,subdir=trunk,prebuild=mkdir libs && mv *.jar libs && sed -i "s@checkStats(accounts.size());@// MY PRIVACY > YOUR STATS@" src/org/wordpress/android/wpAndroid.java,encoding=utf-8
+Build Version:1.4.1,33,228,subdir=trunk,prebuild=mkdir libs && mv *.jar libs && sed -i "s@checkStats(accounts.size());@// MY PRIVACY > YOUR STATS@" src/org/wordpress/android/wpAndroid.java,encoding=utf-8
+Build Version:2.0.6,45,642,subdir=branches/2.0.6,encoding=utf-8
 
 Update Check Mode:Market
-Market Version:2.0.4
-Market Version Code:43
+Current Version:2.0.6
+Current Version Code:45
 

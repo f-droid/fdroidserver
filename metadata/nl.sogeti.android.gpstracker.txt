@@ -10,6 +10,7 @@ Description:
 A GPS logging application.
 .
 
-Market Version:1.3-cupcake
-Market Version Code:64
+Update Check Mode:Market
+Current Version:1.3-cupcake
+Current Version Code:64
 

@@ -20,6 +20,7 @@ Build Version:0.4.3,9,0.4.3
 Build Version:1.0,11,efc427322038febb25d6ca909bf8c4157f685839
 Build Version:1.1,12,1.1,target=android-10
 
-Market Version:1.1
-Market Version Code:12
+Update Check Mode:Market
+Current Version:1.1
+Current Version Code:12
 

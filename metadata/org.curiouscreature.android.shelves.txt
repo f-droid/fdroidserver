@@ -15,7 +15,9 @@ Repo Type:svn
 Repo:http://shelves.googlecode.com/svn/trunk/Shelves
 
 Build Version:1.0,1,26,oldsdkloc=yes
+Build Version:1.5,2,!No source code apparently
 
-Market Version:1.5
-Market Version Code:2
+Update Check Mode:Market
+Current Version:1.5
+Current Version Code:2
 

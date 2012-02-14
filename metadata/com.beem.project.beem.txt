@@ -15,8 +15,9 @@ Repo:http://www.beem-project.com/hg/trunk/
 Build Version:0.1.5,7,0.1.5
 Build Version:0.1.6,9,0.1.6
 Build Version:0.1.7_rc1,10,0.1.7_rc1,target=android-8
+Build Version:0.1.7_rc2,11,0.1.7_rc2,target=android-8
 
 Update Check Mode:Market
-Market Version:0.1.7_rc1
-Market Version Code:10
+Current Version:0.1.7_rc2
+Current Version Code:11
 

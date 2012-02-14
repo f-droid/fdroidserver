@@ -1,0 +1,18 @@
+Disabled:Proprietary EULA. Also, possible build problem - force closes on startup.
+Category:Internet
+License:Apache2
+Web Site:http://www.openintents.org/en/newsreader
+Source Code:http://code.google.com/p/openintents/source/checkout
+Issue Tracker:http://code.google.com/p/openintents/issues/list
+Donate:http://www.openintents.org/en/contribute
+
+Summary:Feed reader
+Description:
+A feed reader, with offline support.
+.
+
+Repo Type:srclib
+Repo:OI:newsreader
+
+Build Version:1.1.1,65549,3272,subdir=NewsReader,target=android-3
+

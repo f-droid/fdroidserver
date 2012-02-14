@@ -11,6 +11,7 @@ You can also receive information, such as incoming calls and SMS, and
 battery state.
 .
 
-Market Version:2.06-beta
-Market Version Code:17
+Update Check Mode:Market
+Current Version:2.06-beta
+Current Version Code:17
 

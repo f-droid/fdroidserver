@@ -12,6 +12,7 @@ and rTorrent are supported. It can show the active torrents, pause, resume or re
 them and new torrents can be added via URL, RSS feed or using the integrated search.
 .
 
-Market Version:1.0.4
-Market Version Code:136
+Update Check Mode:Market
+Current Version:1.0.4
+Current Version Code:136
 

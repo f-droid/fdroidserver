@@ -2,7 +2,7 @@ Category:System
 License:GPLv2+
 Web Site:http://f-droid.org/repository
 Source Code:http://gitorious.org/f-droid/fdroidclient
-Issue Tracker:http://f-droid.org/issues
+Issue Tracker:http://f-droid.org/repository/issues
 
 Summary:FOSS application repository
 Description:

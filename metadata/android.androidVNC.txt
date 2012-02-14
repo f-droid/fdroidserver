@@ -14,6 +14,7 @@ Repo:http://android-vnc-viewer.googlecode.com/svn/branches/antlersoft
 
 Build Version:0.5.0,13,197,subdir=androidVNC
 
-Market Version:0.5.0
-Market Version Code:13
+Update Check Mode:Market
+Current Version:0.5.0
+Current Version Code:13
 

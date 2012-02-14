@@ -50,6 +50,8 @@ html_parser = HTMLParser.HTMLParser()
 
 problems = []
 
+extlib_dir = os.path.join('build', 'extlib')
+
 for app in apps:
 
     skip = False
@@ -86,29 +88,15 @@ for app in apps:
 
                     # Prepare the source code...
                     root_dir = common.prepare_source(vcs, app, thisbuild,
-                            build_dir, sdk_path, ndk_path, javacc_path,
+                            build_dir, extlib_dir, sdk_path, ndk_path, javacc_path,
                             not refreshed_source)
                     refreshed_source = True
 
-                    # Scan for common known non-free blobs:
-                    usual_suspects = ['flurryagent.jar',
-                                      'paypal_mpl.jar',
-                                      'libGoogleAnalytics.jar',
-                                      'admob-sdk-android.jar']
-                    for r,d,f in os.walk(build_dir):
-                        for curfile in f:
-                            if curfile.lower() in usual_suspects:
-                                msg = 'Found probable non-free blob ' + os.path.join(r, curfile)
-                                msg += ' in ' + app['id'] + ' ' + thisbuild['version']
-                                problems.append(msg)
-
-                    # Presence of a jni directory without buildjni=yes might
-                    # indicate a problem...
-                    if (os.path.exists(os.path.join(root_dir, 'jni')) and 
-                            thisbuild.get('buildjni', 'no') != 'yes'):
-                        msg = 'Found jni directory, but buildjni is not enabled'
-                        msg += ' in ' + app['id'] + ' ' + thisbuild['version']
-                        problems.append(msg)
+                    # Do the scan...
+                    buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
+                    for problem in buildprobs:
+                        problems.append(problem + 
+                            ' in ' + app['id'] + ' ' + thisbuild['version'])
 
         except BuildException as be:
             msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)

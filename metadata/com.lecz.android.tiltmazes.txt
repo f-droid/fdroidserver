@@ -12,6 +12,7 @@ literally, start the ball rolling. The ball rolls in a straight line until it hi
 a wall, you can then tilt again. 
 .
 
-Market Version:1.2
-Market Version Code:3
+Update Check Mode:Market
+Current Version:1.2
+Current Version Code:3
 

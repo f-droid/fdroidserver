@@ -29,7 +29,9 @@ Build Version:1.5.315,315,315
 Build Version:1.5.317,317,!wrong version code
 Build Version:1.5.324,324,324
 Build Version:1.5.324,324,324
+Build Version:339,339,339
 
-Market Version:339
-Market Version Code:339
+Update Check Mode:Market
+Current Version:339
+Current Version Code:339
 

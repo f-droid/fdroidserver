@@ -16,6 +16,7 @@ Build Version:2.2.1,23,b40d511cf0,encoding=utf-8,prebuild=mv html/key.html res/r
 Build Version:2.3.1,25,e14cdd438d00,encoding=utf-8,prebuild=mv html/key.html res/raw
 Build Version:2.3.2,26,887fc89874c5,encoding=utf-8,prebuild=mv html/key.html res/raw
 
-Market Version:2.3.2
-Market Version Code:26
+Update Check Mode:Market
+Current Version:2.3.2
+Current Version Code:26
 

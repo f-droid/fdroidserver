@@ -17,6 +17,6 @@ Repo:https://code.google.com/p/notification-plus/
 Build Version:1.1,2,396686558905
 
 Update Check Mode:Market
-Market Version:1.1
-Market Version Code:2
+Current Version:1.1
+Current Version Code:2
 

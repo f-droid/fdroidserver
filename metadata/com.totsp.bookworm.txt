@@ -18,6 +18,7 @@ Repo:http://and-bookworm.googlecode.com/svn/trunk
 Build Version:1.0.17,18,570
 Build Version:1.0.18,19,574
 
-Market Version:1.0.18
-Market Version Code:19
+Update Check Mode:Market
+Current Version:1.0.18
+Current Version Code:19
 

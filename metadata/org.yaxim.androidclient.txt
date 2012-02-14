@@ -21,6 +21,7 @@ Build Version:0.8.1,10,0.8.1,oldsdkloc=yes,submodules=yes,fixtrans=yes,target=an
 Build Version:0.8.2,11,0.8.2,oldsdkloc=yes,submodules=yes,fixtrans=yes,target=android-10
 Build Version:0.8.3,12,!can't find corresponding source code
 
-Market Version:0.8.3
-Market Version Code:12
+Update Check Mode:Market
+Current Version:0.8.3
+Current Version Code:12
 

@@ -9,6 +9,7 @@ Description:
 Map viewer using OpenStreetMap tiles.
 .
 
-Market Version:2.0.0
-Market Version Code:3
+Update Check Mode:Market
+Current Version:2.0.0
+Current Version Code:3
 

@@ -10,6 +10,7 @@ Description:
 No description available
 .
 
-Market Version:0.4
-Market Version Code:5
+Update Check Mode:Market
+Current Version:0.4
+Current Version Code:5
 

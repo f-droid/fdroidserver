@@ -15,6 +15,7 @@ Repo:http://android-notifier.googlecode.com/svn/trunk/AndroidNotifier
 
 Build Version:0.2.8,11,315,fixtrans=yes,prebuild=mkdir libs && mv lib/locale_platform.jar libs/
 
-Market Version:0.2.8
-Market Version Code:11
+Update Check Mode:Market
+Current Version:0.2.8
+Current Version Code:11
 

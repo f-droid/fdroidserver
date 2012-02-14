@@ -15,6 +15,7 @@ Repo:https://code.google.com/p/simplechessclock/
 
 Build Version:1.2.0,8,379155447bff,subdir=simplechessclock,target=android-8
 
-Market Version:1.2.0
-Market Version Code:8
+Update Check Mode:Market
+Current Version:1.2.0
+Current Version Code:8
 

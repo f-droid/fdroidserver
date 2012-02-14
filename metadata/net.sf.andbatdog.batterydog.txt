@@ -19,6 +19,7 @@ Repo:https://andbatdog.svn.sourceforge.net/svnroot/andbatdog/trunk/AndroidBatter
 Build Version:0.1.1,11,22,encoding=iso-8859-1
 Build Version:0.1.3,13,!No source for 0.1.2 and newer
 
-Market Version:0.1.3
-Market Version Code:13
+Update Check Mode:Market
+Current Version:0.1.3
+Current Version Code:13
 

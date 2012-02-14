@@ -18,3 +18,5 @@ Build Version:1.0.2,35,35,\
 prebuild=sed -i -r 's/(android:versionName)/android:versionCode="35" \1/' \
  AndroidManifest.xml
 
+Update Check Mode:None
+

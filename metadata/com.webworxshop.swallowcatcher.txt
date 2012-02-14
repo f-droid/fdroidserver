@@ -16,3 +16,5 @@ Build Version:0.1.2,5,1528089ae926c6424f9017b46940616cf1164820
 Build Version:0.1.3,6,96660ce659e830f1ac18d4187948a3ac227e2225
 Build Version:0.2.0,7,cb4dd3114342b41ae63fe050628bb4811efa8beb
 
+Update Check Mode:Market
+

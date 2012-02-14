@@ -26,7 +26,12 @@ Build Version:1.35,94,131,\
 prebuild=sed -ri 's/(debuggable)="true"/\1="false"/' AndroidManifest.xml
 Build Version:1.36.4,110,161,\
 prebuild=sed -ri 's/(debuggable)="true"/\1="false"/' AndroidManifest.xml
+Build Version:1.40,160,302,\
+prebuild=sed -ri 's/(debuggable)="true"/\1="false"/' AndroidManifest.xml
+Build Version:1.40.1,163,307
+Build Version:1.40.2,164,314,prebuild=rm -rf gen/
 
-Market Version:1.39.3
-Market Version Code:154
+Update Check Mode:Market
+Current Version:1.40.2
+Current Version Code:164
 

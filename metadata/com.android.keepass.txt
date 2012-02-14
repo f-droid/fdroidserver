@@ -21,8 +21,9 @@ Build Version:1.9.3.1,80,v1.9.3.1
 Build Version:1.9.5,82,v1.9.5
 Build Version:1.9.6,83,v1.9.6
 Build Version:1.9.7,84,v1.9.7,target=android-8
+Build Version:1.9.8,85,v1.9.8,target=android-8
 
 Update Check Mode:Market
-Market Version:1.9.7
-Market Version Code:84
+Current Version:1.9.8
+Current Version Code:85
 

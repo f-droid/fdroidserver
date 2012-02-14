@@ -9,6 +9,7 @@ Description:
 A simple backup and restore of your SMS and call logs.
 .
 
-Market Version:1.0
-Market Version Code:3
+Update Check Mode:Market
+Current Version:1.0
+Current Version Code:3
 

@@ -10,6 +10,7 @@ A simple way to retrieve the postcode for your current location. Only works in t
 currently.
 .
 
-Market Version:1.1
-Market Version Code:2
+Update Check Mode:Market
+Current Version:1.1
+Current Version Code:2
 

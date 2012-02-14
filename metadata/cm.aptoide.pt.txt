@@ -14,7 +14,8 @@ based on Aptoide!
 Repo Type:svn
 Repo:http://aptoide.org/repo
 
-Market Version:2.0.1
-Market Version Code:145
+Update Check Mode:Market
+Current Version:2.0.1
+Current Version Code:145
 
 #Build Version:2.0,126,45,subdir=aptoide-client/v2.0

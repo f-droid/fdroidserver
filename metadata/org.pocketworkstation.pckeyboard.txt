@@ -19,6 +19,6 @@ Build Version:v1.22,1022,154e21230e81,subdir=java,target=android-11,buildjni=yes
 Build Version:v1.29,1029,1.29,subdir=java,target=android-11,buildjni=yes,prebuild=./AutoVersion.sh
 
 Update Check Mode:Market
-Market Version:v1.29
-Market Version Code:1029
+Current Version:v1.29
+Current Version Code:1029
 

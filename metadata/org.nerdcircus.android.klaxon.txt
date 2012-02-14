@@ -1,0 +1,22 @@
+Name:Klaxon
+Category:Office
+License:Apache2
+Web Site:http://code.google.com/p/klaxon/
+Source Code:http://code.google.com/p/klaxon/source/checkout
+Issue Tracker:http://code.google.com/p/klaxon/issues/list
+
+Summary:SMS-based pager
+Description:
+Klaxon is a tool designed for on-call personnel, that repeatedly notifies the user (by means of a
+ringtone, vibration or both) when a page is received until the user looks at it. A page to Klaxon
+is an SMS message, optionally meeting filtering criteria set by the user.
+.
+
+Repo Type:git-svn
+Repo:http://klaxon.googlecode.com/svn/trunk/
+
+Build Version:0.27,27,144,target=android-14
+
+Update Check Mode:Market
+Current Version:0.27
+Current Version Code:27

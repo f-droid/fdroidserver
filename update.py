@@ -75,6 +75,12 @@ if (repo_url is None or repo_name is None or
 # Get all apps...
 apps = common.read_metadata(verbose=options.verbose)
 
+# Generate a list of categories...
+categories = []
+for app in apps:
+    if app['Category'] not in categories:
+        categories.append(app['Category'])
+
 # Gather information about all the apk files in the repo directory...
 apks = []
 for apkfile in glob.glob(os.path.join('repo','*.apk')):
@@ -290,12 +296,12 @@ for app in apps:
     if app['Disabled'] is None:
 
         # Get a list of the apks for this app...
-        gotmarketver = False
+        gotcurrentver = False
         apklist = []
         for apk in apks:
             if apk['id'] == app['id']:
-                if str(apk['versioncode']) == app['Market Version Code']:
-                    gotmarketver = True
+                if str(apk['versioncode']) == app['Current Version Code']:
+                    gotcurrentver = True
                 apklist.append(apk)
 
         if len(apklist) == 0:
@@ -320,8 +326,13 @@ for app in apps:
             addElement('tracker', app['Issue Tracker'], doc, apel)
             if app['Donate'] != None:
                 addElement('donate', app['Donate'], doc, apel)
-            addElement('marketversion', app['Market Version'], doc, apel)
-            addElement('marketvercode', app['Market Version Code'], doc, apel)
+
+            # These elements actually refer to the current version (i.e. which
+            # one is recommended. They are historically mis-named, and need
+            # changing, but stay like this for now to support existing clients.
+            addElement('marketversion', app['Current Version'], doc, apel)
+            addElement('marketvercode', app['Current Version Code'], doc, apel)
+
             if not (app['AntiFeatures'] is None):
                 addElement('antifeatures', app['AntiFeatures'], doc, apel)
             if app['Requires Root']:
@@ -378,35 +389,35 @@ for app in apps:
                         " Source: " + app['Source Code'])
                 warnings += 1
             else:
-                if app['Market Version Code'] != '0':
+                if app['Current Version Code'] != '0':
                     gotbuild = False
                     for build in app['builds']:
-                        if build['vercode'] == app['Market Version Code']:
+                        if build['vercode'] == app['Current Version Code']:
                             gotbuild = True
                     if not gotbuild:
-                        print ("WARNING: No build data for market version of "
-                                + app['id'] + " (" + app['Market Version']
+                        print ("WARNING: No build data for current version of "
+                                + app['id'] + " (" + app['Current Version']
                                 + ") " + app['Source Code'])
                         warnings += 1
 
-        # If we don't have the market version, check if there is a build
+        # If we don't have the current version, check if there is a build
         # with a commit ID starting with '!' - this means we can't build it
         # for some reason, and don't want hassling about it...
-        if not gotmarketver and app['Market Version Code'] != '0':
+        if not gotcurrentver and app['Current Version Code'] != '0':
             for build in app['builds']:
-                if build['vercode'] == app['Market Version Code']:
-                    gotmarketver = True
+                if build['vercode'] == app['Current Version Code']:
+                    gotcurrentver = True
 
-        # Output a message of harassment if we don't have the market version:
-        if not gotmarketver and app['Market Version Code'] != '0':
+        # Output a message of harassment if we don't have the current version:
+        if not gotcurrentver and app['Current Version Code'] != '0':
             addr = app['Source Code']
-            print "WARNING: Don't have market version (" + app['Market Version'] + ") of " + app['Name']
+            print "WARNING: Don't have current version (" + app['Current Version'] + ") of " + app['Name']
             print "         (" + app['id'] + ") " + addr
             warnings += 1
             if options.verbose:
                 # A bit of extra debug info, basically for diagnosing
                 # app developer mistakes:
-                print "         Market vercode:" + app['Market Version Code']
+                print "         Current vercode:" + app['Current Version Code']
                 print "         Got:"
                 for apk in apks:
                     if apk['id'] == app['id']:
@@ -460,41 +471,39 @@ if repo_keyalias != None:
     if options.verbose:
         print output
 
-#Copy the repo icon into the repo directory...
+# Copy the repo icon into the repo directory...
 iconfilename = os.path.join(icon_dir, os.path.basename(repo_icon))
 shutil.copyfile(repo_icon, iconfilename)
 
-#Update known apks info...
+# Write a category list in the repo to allow quick access...
+catdata = ''
+for cat in categories:
+    catdata += cat + '\n'
+f = open('repo/categories.txt', 'w')
+f.write(catdata)
+f.close()
+
+# Update known apks info...
 knownapks = common.KnownApks()
 for apk in apks:
     knownapks.recordapk(apk['apkname'], apk['id'])
-
-    app, added = knownapks.getapp(apk['apkname'])
-    if not added:
-        print 'Need a date for ' + apk['apkname']
-        p = subprocess.Popen('git log --format="%ci" metadata/' + apk['id'] + '.txt | tail -n 1',
-                shell=True, stdout = subprocess.PIPE)
-        d = p.communicate()[0][:10]
-        if len(d) == 0:
-            print "...didn't find a metadata commit"
-        else:
-            print '...metadata committed:' + d
-            if apk['apkname'].startswith(apk['id']):
-                vercode = int(apk['apkname'][len(apk['id'])+1:-4])
-                print '...built vercode:' + str(vercode)
-                expr = 'Build Version:[^,]+,' + str(vercode) + ',.*'
-                p = subprocess.Popen('git log --format="%ci" -S"' + expr + '" --pickaxe-regex metadata/' + apk['id'] + '.txt | tail -n 1',
-                    shell=True, stdout = subprocess.PIPE)
-                d = p.communicate()[0][:10]
-                if len(d) > 0:
-                    print '...build line added:' + d
-                    print '...using that!'
-                    knownapks.apks[apk['apkname']] = (apk['id'], time.strptime(d, '%Y-%m-%d'))
-                    knownapks.changed = True
-                else:
-                    print "...didn't find addition of build line"
-
 knownapks.writeifchanged()
+
+# Generate latest apps HTML for widget
+html = '<p>'
+for line in file(os.path.join('stats', 'latestapps.txt')):
+    appid = line.rstrip()
+    html += '<a href="/repository/browse/?fdid=' + appid + '">'
+    for app in apps:
+        if app['id'] == appid:
+            html += app['Name'] + '</a><br>'
+            break
+html += '</p>'
+f = open('repo/latestapps.html', 'w')
+f.write(html)
+f.close()
+
+
 
 print "Finished."
 print str(apps_inrepo) + " apps in repo"

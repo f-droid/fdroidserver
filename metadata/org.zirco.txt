@@ -27,6 +27,7 @@ Build Version:0.4.1,15,407
 Build Version:0.4.2,16,438,target=android-10
 Build Version:0.4.3,17,443,target=android-10
 
-Market Version:0.4.3
-Market Version Code:17
+Update Check Mode:Market
+Current Version:0.4.3
+Current Version Code:17
 

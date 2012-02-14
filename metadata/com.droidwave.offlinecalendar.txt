@@ -13,8 +13,9 @@ A calendar application.
 Repo Type:hg
 Repo:https://bitbucket.org/giszmo/offline-calendar
 
+Update Check Mode:Market
 #There don't seem to be any developer releases yet
 #There is now a 1.1 in the android market, but no source for it in the repository
-Market Version:1.1
-Market Version Code:2
+Current Version:1.1
+Current Version Code:2
 

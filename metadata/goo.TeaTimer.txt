@@ -15,6 +15,7 @@ Repo:https://github.com/ralphleon/TeaTimer.git
 Build Version:1.6,9,c92a936
 Build Version:1.7,10,!No source in repo
 
-Market Version:1.7
-Market Version Code:10
+Update Check Mode:Market
+Current Version:1.7
+Current Version Code:10
 

@@ -21,8 +21,8 @@ Repo Type:bzr
 Repo:lp:financisto
 
 Update Check Mode:Market
-Market Version:1.5.5
-Market Version Code:60
+Current Version:1.5.5
+Current Version Code:60
 
 # Build fails, wrong path to GreenDroid library
 #Build Version:1.5.4,57,303,target=android-4

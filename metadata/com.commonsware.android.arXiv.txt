@@ -21,6 +21,7 @@ Build Version:2.0.16,102,!No source in repo,target=android-11
 #https://answers.launchpad.net/arxivdroid/+question/173825
 Build Version:2.0.20,106,!No source in repo
 
-Market Version:2.0.20
-Market Version Code:106
+Update Check Mode:Market
+Current Version:2.0.20
+Current Version Code:106
 

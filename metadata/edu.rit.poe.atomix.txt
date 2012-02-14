@@ -16,6 +16,7 @@ Repo:https://droid-atomix.googlecode.com/hg/
 
 Build Version:1.0.1,2,ea2086d1f9fe759866008f6fe5187fc1cc97bd1d,target=android-4,prebuild=sed -i -e "/key\.alias.*/d" -e "/key\.store.*/d" *.properties
 
-Market Version:1.0.1
-Market Version Code:2
+Update Check Mode:Market
+Current Version:1.0.1
+Current Version Code:2
 

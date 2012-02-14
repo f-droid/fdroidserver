@@ -70,22 +70,22 @@ if options.download:
 
         ftp.chdir('logs')
         files = ftp.listdir()
-        for file in files:
-            if file.startswith('access-') and file.endswith('.log'):
+        for f in files:
+            if f.startswith('access-') and f.endswith('.log'):
 
-                destpath = os.path.join(logsdir, file)
-                archivepath = os.path.join(logsarchivedir, file + '.gz')
+                destpath = os.path.join(logsdir, f)
+                archivepath = os.path.join(logsarchivedir, f + '.gz')
                 if os.path.exists(archivepath):
                     if os.path.exists(destpath):
                         # Just in case we have it archived but failed to remove
                         # the original...
                         os.remove(destpath)
                 else:
-                    destsize = ftp.stat(file).st_size
+                    destsize = ftp.stat(f).st_size
                     if (not os.path.exists(destpath) or
                             os.path.getsize(destpath) != destsize):
-                        print "...retrieving " + file
-                        ftp.get(file, destpath)
+                        print "...retrieving " + f
+                        ftp.get(f, destpath)
     except Exception as e:
         traceback.print_exc()
         sys.exit(1)

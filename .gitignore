@@ -2,7 +2,9 @@ config.py
 repo/
 logs/
 built/
-build/
+tmp/
 build_*/
 *~
 *.pyc
+buildserver.box
+unsigned/

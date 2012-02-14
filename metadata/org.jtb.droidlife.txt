@@ -14,6 +14,7 @@ Repo:http://droidlife.googlecode.com/svn/trunk/
 
 Build Version:2.4.1,21,22
 
-Market Version:2.4.1
-Market Version Code:21
+Update Check Mode:Market
+Current Version:2.4.1
+Current Version Code:21
 

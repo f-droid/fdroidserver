@@ -16,6 +16,6 @@ Repo:https://github.com/k9mail/k-9.git
 #Note - k9 is currently developer's binary only
 #Build Version:3.906,14006,3.906,oldsdkloc=yes,patch=target9to10.patch,target=android-10
 Update Check Mode:Market
-Market Version:4.003
-Market Version Code:14021
+Current Version:4.005
+Current Version Code:14023
 

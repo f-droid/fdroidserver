@@ -9,6 +9,7 @@ Description:
 Allows you to add custom widgets to your 'desktop' to label things.
 .
 
-Market Version:1.3.0
-Market Version Code:6
+Update Check Mode:Market
+Current Version:1.3.0
+Current Version Code:6
 

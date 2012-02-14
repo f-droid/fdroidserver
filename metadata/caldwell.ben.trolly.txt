@@ -17,6 +17,7 @@ Repo:http://trolly.googlecode.com/svn/trunk
 # It needs a file from OpenIntents, so let's get it from Subversion...
 Build Version:1.4,6,40,target=android-4,prebuild=mkdir -p src/org/openintents/intents && svn cat -r 3070 http://openintents.googlecode.com/svn/trunk/shoppinglist/ShoppingList/src/org/openintents/intents/ShoppingListIntents.java >src/org/openintents/intents/ShoppingListIntents.java
 
-Market Version:1.4
-Market Version Code:6
+Update Check Mode:Market
+Current Version:1.4
+Current Version Code:6
 

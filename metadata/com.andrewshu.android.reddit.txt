@@ -24,6 +24,6 @@ Build Version:1.2.1.5,78,!more dependency shuffling required and watch out for t
 Build Version:1.3.0,83,v1.3.0,target=android-11,prebuild=mkdir lib && mv libs-dependencies/* lib && rm -r libs-dependencies && mv libs/* lib && rm -r libs && git checkout proguard.cfg
 
 Update Check Mode:Market
-Market Version:1.3.0
-Market Version Code:83
+Current Version:1.3.0
+Current Version Code:83
 

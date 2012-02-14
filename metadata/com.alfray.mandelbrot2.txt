@@ -10,6 +10,7 @@ Mandelbrot set viewer that works in the style of a map viewer - i.e. scroll arou
 and zoom in/out.
 .
 
-Market Version:0.13
-Market Version Code:13
+Update Check Mode:Market
+Current Version:0.13
+Current Version Code:13
 

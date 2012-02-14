@@ -13,7 +13,8 @@ An RSS feed reader and podcatcher with audio and video support.
 Repo Type:git
 Repo:http://git.gitorious.org/feeddroid/feeddroid.git
 
+Update Check Mode:None
 #Build Version:1.1.1,37,db5077bf1ef792d8d5f6154198b7200a50d963df,subdir=FeedDroid
-Market Version:1.1.1
-Market Version Code:37
+Current Version:1.1.1
+Current Version Code:37
 

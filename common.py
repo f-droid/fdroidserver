@@ -30,9 +30,11 @@ def getvcs(vcstype, remote, local):
     elif vcstype == 'git-svn':
         return vcs_gitsvn(remote, local)
     elif vcstype == 'hg':
-        return vcs_hg(remote,local)
+        return vcs_hg(remote, local)
     elif vcstype == 'bzr':
-        return vcs_bzr(remote,local)
+        return vcs_bzr(remote, local)
+    elif vcstype == 'srclib':
+        return vcs_srclib(remote, local)
     raise VCSException("Invalid vcs type " + vcstype)
 
 class vcs:
@@ -56,18 +58,26 @@ class vcs:
         self.remote = remote
         self.local = local
         self.refreshed = False
+        self.srclib = None
 
     # Take the local repository to a clean version of the given revision, which
     # is specificed in the VCS's native format. Beforehand, the repository can
     # be dirty, or even non-existent. If the repository does already exist
     # locally, it will be updated from the origin, but only once in the
     # lifetime of the vcs object.
+    # None is acceptable for 'rev' if you know you are cloning a clean copy of
+    # the repo - otherwise it must specify a valid revision.
     def gotorevision(self, rev):
         raise VCSException("This VCS type doesn't define gotorevision")
 
     # Initialise and update submodules
     def initsubmodules(self):
         raise VCSException('Submodules not supported for this vcs type')
+
+    # Returns the srclib (name, path) used in setting up the current
+    # revision, or None.
+    def getsrclib(self):
+        return self.srclib
 
 class vcs_git(vcs):
 
@@ -95,19 +105,23 @@ class vcs_git(vcs):
                 raise VCSException("Git reset failed")
             # Remove untracked files now, in case they're tracked in the target
             # revision (it happens!)...
-            if subprocess.call(['git', 'clean', '-dfx'], cwd=self.local) != 0:
+            if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
                 raise VCSException("Git clean failed")
             if not self.refreshed:
                 # Get latest commits and tags from remote...
+                if subprocess.call(['git', 'fetch', 'origin'],
+                        cwd=self.local) != 0:
+                    raise VCSException("Git fetch failed")
                 if subprocess.call(['git', 'fetch', '--tags', 'origin'],
                         cwd=self.local) != 0:
                     raise VCSException("Git fetch failed")
                 self.refreshed = True
         # Check out the appropriate revision...
-        if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
-            raise VCSException("Git checkout failed")
+        if rev:
+            if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
+                raise VCSException("Git checkout failed")
         # Get rid of any uncontrolled files left behind...
-        if subprocess.call(['git', 'clean', '-dfx'], cwd=self.local) != 0:
+        if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
             raise VCSException("Git clean failed")
 
     def initsubmodules(self):
@@ -146,7 +160,7 @@ class vcs_gitsvn(vcs):
                 raise VCSException("Git reset failed")
             # Remove untracked files now, in case they're tracked in the target
             # revision (it happens!)...
-            if subprocess.call(['git', 'clean', '-dfx'], cwd=self.local) != 0:
+            if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
                 raise VCSException("Git clean failed")
             if not self.refreshed:
                 # Get new commits and tags from repo...
@@ -154,17 +168,18 @@ class vcs_gitsvn(vcs):
                         cwd=self.local) != 0:
                     raise VCSException("Git svn rebase failed")
                 self.refreshed = True
-        # Figure out the git commit id corresponding to the svn revision...
-        p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev],
-            cwd=self.local, stdout=subprocess.PIPE)
-        rev = p.communicate()[0].rstrip()
-        if p.returncode != 0:
-            raise VCSException("Failed to get git treeish from svn rev")
-        # Check out the appropriate revision...
-        if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
-            raise VCSException("Git checkout failed")
+        if rev:
+            # Figure out the git commit id corresponding to the svn revision...
+            p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev],
+                cwd=self.local, stdout=subprocess.PIPE)
+            rev = p.communicate()[0].rstrip()
+            if p.returncode != 0:
+                raise VCSException("Failed to get git treeish from svn rev")
+            # Check out the appropriate revision...
+            if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
+                raise VCSException("Git checkout failed")
         # Get rid of any uncontrolled files left behind...
-        if subprocess.call(['git', 'clean', '-dfx'], cwd=self.local) != 0:
+        if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
             raise VCSException("Git clean failed")
 
 class vcs_svn(vcs):
@@ -193,10 +208,11 @@ class vcs_svn(vcs):
                         self.userargs(), cwd=self.local) != 0:
                     raise VCSException("Svn update failed")
                 self.refreshed = True
-        revargs = ['-r', rev]
-        if subprocess.call(['svn', 'update', '--force'] + revargs +
-                self.userargs(), cwd=self.local) != 0:
-            raise VCSException("Svn update failed")
+        if rev:
+            revargs = ['-r', rev]
+            if subprocess.call(['svn', 'update', '--force'] + revargs +
+                    self.userargs(), cwd=self.local) != 0:
+                raise VCSException("Svn update failed")
 
 
 class vcs_hg(vcs):
@@ -214,10 +230,11 @@ class vcs_hg(vcs):
                         cwd=self.local) != 0:
                     raise VCSException("Hg pull failed")
                 self.refreshed = True
-        revargs = [rev]
-        if subprocess.call(['hg', 'checkout', '-C'] + revargs,
-                cwd=self.local) != 0:
-            raise VCSException("Hg checkout failed")
+        if rev:
+            revargs = [rev]
+            if subprocess.call(['hg', 'checkout', '-C'] + revargs,
+                    cwd=self.local) != 0:
+                raise VCSException("Hg checkout failed")
 
 
 class vcs_bzr(vcs):
@@ -235,10 +252,33 @@ class vcs_bzr(vcs):
                         cwd=self.local) != 0:
                     raise VCSException("Bzr update failed")
                 self.refreshed = True
-        revargs = ['-r', rev]
-        if subprocess.call(['bzr', 'revert'] + revargs,
-                cwd=self.local) != 0:
-            raise VCSException("Bzr revert failed")
+        if rev:
+            revargs = ['-r', rev]
+            if subprocess.call(['bzr', 'revert'] + revargs,
+                    cwd=self.local) != 0:
+                raise VCSException("Bzr revert failed")
+
+class vcs_srclib(vcs):
+
+    def gotorevision(self, rev):
+
+        # Yuk...
+        extlib_dir = 'build/extlib'
+
+        if os.path.exists(self.local):
+            shutil.rmtree(self.local)
+
+        if self.remote.find(':') != -1:
+            srclib, path = self.remote.split(':')
+        else:
+            srclib = self.remote
+            path = None
+        libdir = getsrclib(srclib + '@' + rev, extlib_dir)
+        self.srclib = (srclib, libdir)
+        if path:
+            libdir = os.path.join(libdir, path)
+        shutil.copytree(libdir, self.local)
+        return self.local
 
 
 # Get the type expected for a given metadata field.
@@ -257,7 +297,7 @@ def metafieldtype(name):
 # Parse metadata for a single application.
 #
 #  'metafile' - the filename to read. The package id for the application comes
-#               from this filename.
+#               from this filename. Pass None to get a blank entry.
 #
 # Returns a dictionary containing all the details of the application. There are
 # two major kinds of information in the dictionary. Keys beginning with capital
@@ -302,12 +342,15 @@ def parse_metadata(metafile, **kw):
             thisinfo['comments'].append((key, comment))
         del curcomments[:]
 
-    if not isinstance(metafile, file):
-        metafile = open(metafile, "r")
     thisinfo = {}
-    thisinfo['id'] = metafile.name[9:-4]
-    if kw.get("verbose", False):
-        print "Reading metadata for " + thisinfo['id']
+    if metafile:
+        if not isinstance(metafile, file):
+            metafile = open(metafile, "r")
+        thisinfo['id'] = metafile.name[9:-4]
+        if kw.get("verbose", False):
+            print "Reading metadata for " + thisinfo['id']
+    else:
+        thisinfo['id'] = None
 
     # Defaults for fields that come from metadata...
     thisinfo['Name'] = None
@@ -322,8 +365,8 @@ def parse_metadata(metafile, **kw):
     thisinfo['Disabled'] = None
     thisinfo['AntiFeatures'] = None
     thisinfo['Update Check Mode'] = 'Market'
-    thisinfo['Market Version'] = ''
-    thisinfo['Market Version Code'] = '0'
+    thisinfo['Current Version'] = ''
+    thisinfo['Current Version Code'] = '0'
     thisinfo['Repo Type'] = ''
     thisinfo['Repo'] = ''
     thisinfo['Requires Root'] = False
@@ -331,6 +374,9 @@ def parse_metadata(metafile, **kw):
     # General defaults...
     thisinfo['builds'] = []
     thisinfo['comments'] = []
+
+    if metafile is None:
+        return thisinfo
 
     mode = 0
     buildlines = []
@@ -350,6 +396,11 @@ def parse_metadata(metafile, **kw):
             field = line[:index]
             value = line[index+1:]
 
+            # Translate obsolete fields...
+            if field == 'Market Version':
+                field = 'Current Version'
+            if field == 'Market Version Code':
+                field = 'Current Version Code'
 
             fieldtype = metafieldtype(field)
             if fieldtype != 'build':
@@ -466,13 +517,22 @@ def write_metadata(dest, app):
     for build in app['builds']:
         writecomments('build:' + build['version'])
         mf.write('Build Version:')
-        mf.write('\\\n'.join(build['origlines']) + '\n')
+        if build.has_key('origlines'):
+            # Keeping the original formatting if we loaded it from a file...
+            mf.write('\\\n'.join(build['origlines']) + '\n')
+        else:
+            mf.write(build['version'] + ',' + build['vercode'] + ',' + 
+                    build['commit'])
+            for key,value in build.iteritems():
+                if key not in ['version', 'vercode', 'commit']:
+                    mf.write(',' + key + '=' + value)
+            mf.write('\n')
     if len(app['builds']) > 0:
         mf.write('\n')
     writefield('Update Check Mode')
-    if len(app['Market Version']) > 0:
-        writefield('Market Version')
-        writefield('Market Version Code')
+    if len(app['Current Version']) > 0:
+        writefield('Current Version')
+        writefield('Current Version Code')
     mf.write('\n')
     writecomments(None)
     mf.close()
@@ -532,18 +592,75 @@ class MetaDataException(Exception):
         return repr(self.value)
 
 
+# Get the specified source library.
+# Returns the path to it.
+# TODO: These are currently just hard-coded in this method. It will be a
+# metadata-driven system eventually, but not yet.
+def getsrclib(spec, extlib_dir):
+    name, ref = spec.split('@')
+
+    if name == 'GreenDroid':
+        sdir = os.path.join(extlib_dir, 'GreenDroid')
+        vcs = getvcs('git',
+            'https://github.com/cyrilmottier/GreenDroid.git', sdir)
+        vcs.gotorevision(ref)
+        return os.path.join(sdir, 'GreenDroid')
+
+    if name == 'ActionBarSherlock':
+        sdir = os.path.join(extlib_dir, 'ActionBarSherlock')
+        vcs = getvcs('git',
+            'https://github.com/JakeWharton/ActionBarSherlock.git', sdir)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'library')
+        if subprocess.call(['android', 'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating ActionBarSherlock project')
+        return libdir
+
+    if name == 'FacebookSDK':
+        sdir = os.path.join(extlib_dir, 'FacebookSDK')
+        vcs = getvcs('git',
+                'git://github.com/facebook/facebook-android-sdk.git', sdir)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'facebook')
+        if subprocess.call(['android', 'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating FacebookSDK project')
+        return libdir
+
+    if name == 'OI':
+        sdir = os.path.join(extlib_dir, 'OI')
+        vcs = getvcs('git-svn',
+                'http://openintents.googlecode.com/svn/trunk/', sdir)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'JOpenDocument':
+        sdir = os.path.join(extlib_dir, 'JOpenDocument')
+        vcs = getvcs('git',
+                'https://github.com/andiwand/JOpenDocument.git', sdir)
+        vcs.gotorevision(ref)
+        shutil.rmtree(os.path.join(sdir, 'bin'))
+        return sdir
+
+    raise BuildException('Unknown srclib ' + name)
+
+
 # Prepare the source code for a particular build
 #  'vcs'         - the appropriate vcs object for the application
 #  'app'         - the application details from the metadata
 #  'build'       - the build details from the metadata
-#  'build_dir'   - the path to the build directory
+#  'build_dir'   - the path to the build directory, usually
+#                   'build/app.id'
+#  'extlib_dir'  - the path to the external libraries directory, usually
+#                   'build/extlib'
 #  'sdk_path'    - the path to the Android SDK
 #  'ndk_path'    - the path to the Android NDK
 #  'javacc_path' - the path to javacc
 #  'refresh'     - True to refresh from the remote repo
 # Returns the root directory, which may be the same as 'build_dir' or may
 # be a subdirectory of it.
-def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, refresh):
+def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, javacc_path, refresh):
 
     # Optionally, the actual app source can be in a subdirectory...
     if build.has_key('subdir'):
@@ -564,6 +681,12 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, 
     if build.get('submodules', 'no')  == 'yes':
         vcs.initsubmodules()
 
+    # Run an init command if one is required...
+    if build.has_key('init'):
+        init = build['init']
+        if subprocess.call(init, cwd=root_dir, shell=True) != 0:
+            raise BuildException("Error running init command")
+
     # Generate (or update) the ant build file, build.xml...
     if (build.get('update', 'yes') == 'yes' and
         not build.has_key('maven')):
@@ -579,6 +702,7 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, 
             # the original behaviour...
             buildxml = os.path.join(root_dir, 'build.xml')
             if os.path.exists(buildxml):
+                print 'Force-removing old build.xml'
                 os.remove(buildxml)
         if subprocess.call(parms, cwd=root_dir) != 0:
             raise BuildException("Failed to update project")
@@ -680,10 +804,35 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, 
                         f.writelines(outlines)
                         f.close()
 
+    # Add required external libraries...
+    if build.has_key('extlibs'):
+        libsdir = os.path.join(root_dir, 'libs')
+        if not os.path.exists(libsdir):
+            os.mkdir(libsdir)
+        for lib in build['extlibs'].split(';'):
+            libf = os.path.basename(lib)
+            shutil.copyfile(os.path.join(extlib_dir, lib),
+                    os.path.join(libsdir, libf))
+
+    # Get required source libraries...
+    srclibpaths = []
+    if build.has_key('srclibs'):
+        for lib in build['srclibs'].split(';'):
+            name, _ = lib.split('@')
+            srclibpaths.append((name, getsrclib(lib, extlib_dir)))
+    basesrclib = vcs.getsrclib()
+    # If one was used for the main source, add that too.
+    if basesrclib:
+        srclibpaths.append(basesrclib)
+
     # Run a pre-build command if one is required...
     if build.has_key('prebuild'):
-        if subprocess.call(build['prebuild'],
-                cwd=root_dir, shell=True) != 0:
+        prebuild = build['prebuild']
+        # Substitute source library paths into prebuild commands...
+        for name, libpath in srclibpaths:
+            libpath = os.path.relpath(libpath, root_dir)
+            prebuild = prebuild.replace('$$' + name + '$$', libpath)
+        if subprocess.call(prebuild, cwd=root_dir, shell=True) != 0:
             raise BuildException("Error running pre-build command")
 
     # Apply patches if any
@@ -778,6 +927,45 @@ def prepare_source(vcs, app, build, build_dir, sdk_path, ndk_path, javacc_path, 
     return root_dir
 
 
+# Scan the source code in the given directory (and all subdirectories)
+# and return a list of potential problems.
+def scan_source(build_dir, root_dir, thisbuild):
+
+    problems = []
+
+    # Scan for common known non-free blobs:
+    usual_suspects = ['flurryagent',
+                      'paypal_mpl',
+                      'libgoogleanalytics',
+                      'admob-sdk-android',
+                      'googleadview',
+                      'googleadmobadssdk']
+    for r,d,f in os.walk(build_dir):
+        for curfile in f:
+            for suspect in usual_suspects:
+                if curfile.lower().find(suspect) != -1:
+                    msg = 'Found probable non-free blob ' + os.path.join(r, curfile)
+                    problems.append(msg)
+
+    # Presence of a jni directory without buildjni=yes might
+    # indicate a problem...
+    if (os.path.exists(os.path.join(root_dir, 'jni')) and 
+            thisbuild.get('buildjni', 'no') != 'yes'):
+        msg = 'Found jni directory, but buildjni is not enabled'
+        problems.append(msg)
+
+    # Presence of these is not a problem as such, but they
+    # shouldn't be there and mess up our source tarballs...
+    if os.path.exists(os.path.join(root_dir, 'bin')):
+        msg = "There shouldn't be a bin directory"
+        problems.append(msg)
+    if os.path.exists(os.path.join(root_dir, 'gen')):
+        msg = "There shouldn't be a gen directory"
+        problems.append(msg)
+
+    return problems
+
+
 class KnownApks:
 
     def __init__(self):
@@ -832,5 +1020,6 @@ class KnownApks:
         lst = []
         for app, added in sortedapps:
             lst.append(app)
+        lst.reverse()
         return lst
 
