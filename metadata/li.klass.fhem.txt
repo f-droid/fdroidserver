@@ -10,14 +10,8 @@ An android client for the FHEM software for home automation.
 .
 
 Repo Type:git
-# remove ant.properties which forces a keystore
-# needs sdk.dir/tools in $PATH
 Repo:https://github.com/klassm/andFHEM.git
 
-Build Version:1.5.0,51,b7dbf11a18ca66f20e2489d2904773689b2bc24a,init=rm ant.properties,prebuild=cd .. && git clone https://github.com/JakeWharton/ActionBarSherlock.git JakeWharton-ActionBarSherlock-436230d && \
-cd JakeWharton-ActionBarSherlock-436230d/library && \
-android update project -p . && \
-ant debug && \
-cd ../../li.klass.fhem
+Build Version:1.5.0,51,b7dbf11a18ca66f20e2489d2904773689b2bc24a,init=rm ant.properties,srclibs=ActionBarSherlock@436230d,prebuild=sed -i 's@\(android.library.reference.1=\).*@\1$$ActionBarSherlock$$@' project.properties
 
 
