@@ -736,7 +736,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
         f.write(props)
         f.close()
 
-    # Insert version code and number into the manifest if necessary...
+    # deprecated, use forceversion/forcevercode instead
     if build.has_key('insertversion'):
         if subprocess.call(['sed','-i','s/' + build['insertversion'] +
             '/' + build['version'] +'/g',
@@ -745,6 +745,18 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
     if build.has_key('insertvercode'):
         if subprocess.call(['sed','-i','s/' + build['insertvercode'] +
             '/' + build['vercode'] +'/g',
+            'AndroidManifest.xml'], cwd=root_dir) !=0:
+            raise BuildException("Failed to amend manifest")
+
+    # Insert version code and number into the manifest if necessary...
+    if build.has_key('forceversion'):
+        if subprocess.call(['sed','-r','-i',
+            's/android:versionName="[^"]+"/android:versionName="' + build['version'] + '"/g',
+            'AndroidManifest.xml'], cwd=root_dir) !=0:
+            raise BuildException("Failed to amend manifest")
+    if build.has_key('forcevercode'):
+        if subprocess.call(['sed','-r','-i',
+            's/android:versionCode="[^"]+"/android:versionCode="' + build['vercode'] + '"/g',
             'AndroidManifest.xml'], cwd=root_dir) !=0:
             raise BuildException("Failed to amend manifest")
 
