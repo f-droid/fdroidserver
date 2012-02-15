@@ -53,6 +53,8 @@ parser.add_option("-i", "--interactive", default=False, action="store_true",
 parser.add_option("-e", "--editor", default="/etc/alternatives/editor",
                   help="Specify editor to use in interactive mode. Default "+
                       "is /etc/alternatives/editor")
+parser.add_option("", "--pretty", action="store_true", default=False,
+                  help="Produce human-readable index.xml")
 (options, args) = parser.parse_args()
 
 
@@ -439,7 +441,10 @@ for app in apps:
         apps_disabled += 1
 
 of = open(os.path.join('repo','index.xml'), 'wb')
-output = doc.toxml()
+if options.pretty:
+    output = doc.toprettyxml()
+else:
+    output = doc.toxml()
 of.write(output)
 of.close()
 
