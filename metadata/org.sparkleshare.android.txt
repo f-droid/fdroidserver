@@ -1,10 +1,10 @@
-Category:System
+Category:Internet
 License:GPLv3
 Web Site:http://www.sparkleshare.org
 Source Code:https://github.com/NewProggie/SparkleShare-Android
 Issue Tracker:https://github.com/NewProggie/SparkleShare-Android/issues
 
-Summary:distributed collaboration and sharing tool
+Summary:Distributed collaboration and sharing tool
 Description:
 SparkleShare is a collaboration and sharing tool that is designed to keep
 things simple and to stay out of your way.
