@@ -16,7 +16,7 @@ browse your files right from your Android device.
 Repo Type:git
 Repo:https://github.com/NewProggie/SparkleShare-Android.git
 
-Build Version:1.0,1,a9e23f0f9ae6161a786bf48cb48ab3dec20110c9,target=android-7
+Build Version:1.0,1,a9e23f0f9ae6161a786bf48cb48ab3dec20110c9,patch=uses-feature.patch,target=android-7
 
 Update Check Mode:Market
 Current Version:1.0
