@@ -17,7 +17,7 @@ Repo:http://droid-notify.googlecode.com/svn/trunk
 Build Version:2.20,27,707,srclibs=FacebookSDK@c58af0b,prebuild=sed -i 's@\(android.library.reference.1=\).*@\1$$FacebookSDK$$@' project.properties && mv lib/ libs/
 Build Version:2.22,29,759,srclibs=FacebookSDK@c58af0b,prebuild=sed -i 's@\(android.library.reference.1=\).*@\1$$FacebookSDK$$@' project.properties && mv lib/ libs/
 Build Version:2.23,30,760,encoding=utf-8,srclibs=FacebookSDK@c58af0b,prebuild=sed -i 's@\(android.library.reference.1=\).*@\1$$FacebookSDK$$@' project.properties && mv lib/ libs/
-Build Version:2.24,31,781,encoding=utf-8,srclibs=FacebookSDK@c58af0b,prebuild=sed -i 's@\(android.library.reference.1=\).*@\1$$FacebookSDK$$@' project.properties && mv lib/ libs/ && rm -rf gen/ && rm -rf bin/
+Build Version:2.24,31,781,encoding=utf-8,srclibs=FacebookSDK@c58af0b,prebuild=sed -i 's@\(android.library.reference.1=\).*@\1$$FacebookSDK$$@' project.properties && mv lib/ libs/
 
 Update Check Mode:Market
 Current Version:2.24
