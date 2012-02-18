@@ -156,6 +156,7 @@ com.android.keepass_83.apk com.android.keepass 2011-12-31
 com.android.keepass_84.apk com.android.keepass 2012-01-19
 com.android.keepass_85.apk com.android.keepass 2012-01-24
 com.angrydoughnuts.android.alarmclock_8.apk com.angrydoughnuts.android.alarmclock 2011-05-19
+com.anoshenko.android.mahjongg_14.apk com.anoshenko.android.mahjongg 2012-02-12
 com.appengine.paranoid_android.lost_12.apk com.appengine.paranoid_android.lost 2012-01-08
 com.ath0.rpn_10.apk com.ath0.rpn 2012-02-11
 com.ath0.rpn_9.apk com.ath0.rpn 2012-02-10
@@ -206,6 +207,7 @@ com.funambol.androidsync_9.apk com.funambol.androidsync 2011-01-09
 com.ghostsq.commander_110.apk com.ghostsq.commander 2011-05-18
 com.ghostsq.commander_160.apk com.ghostsq.commander 2012-01-24
 com.ghostsq.commander_163.apk com.ghostsq.commander 2012-02-06
+com.ghostsq.commander_164.apk com.ghostsq.commander 2012-02-15
 com.ghostsq.commander_94.apk com.ghostsq.commander 2011-04-02
 com.ghostsq.commander_97.apk com.ghostsq.commander 2011-04-02
 com.google.android.diskusage_2004.apk com.google.android.diskusage 2011-01-31
@@ -317,6 +319,7 @@ dk.andsen.asqlitemanager_7.apk dk.andsen.asqlitemanager 2011-12-05
 dk.andsen.asqlitemanager_9.apk dk.andsen.asqlitemanager 2011-12-08
 edu.nyu.cs.omnidroid.app_6.apk edu.nyu.cs.omnidroid.app 2011-10-04
 edu.rit.poe.atomix_2.apk edu.rit.poe.atomix 2011-03-02
+fennec-10.0.1.multi.android-arm.apk org.mozilla.firefox 2012-02-14
 fennec-10.0.multi.android-arm.apk org.mozilla.firefox 2012-02-01
 fennec-5.0.multi.eabi-arm.apk org.mozilla.firefox
 fennec-6.0.multi.eabi-arm.apk org.mozilla.firefox
@@ -338,6 +341,7 @@ info.lamatricexiste.network_42.apk info.lamatricexiste.network 2011-07-06
 info.lamatricexiste.network_43.apk info.lamatricexiste.network 2012-02-04
 info.staticfree.android.units_7.apk info.staticfree.android.units 2011-01-05
 info.staticfree.android.units_8.apk info.staticfree.android.units 2011-01-17
+info.staticfree.android.units_9.apk info.staticfree.android.units 2012-02-16
 k9-3.200-release.apk com.fsck.k9 2010-10-21
 k9-3.202-release.apk com.fsck.k9
 k9-3.204-release.apk com.fsck.k9
@@ -357,6 +361,7 @@ k9-3.800-release.apk com.fsck.k9 2011-05-25
 k9-4.001-release.apk com.fsck.k9 2011-12-28
 k9-4.003-release.apk com.fsck.k9 2012-01-08
 k9-4.005-release.apk com.fsck.k9 2012-01-28
+li.klass.fhem_51.apk li.klass.fhem 2012-02-15
 linphone-android-1.0.15.apk org.linphone 2010-11-16
 linphone-android-1.1.6.apk org.linphone
 linphone-android-1.2.1.apk org.linphone 2011-09-29
@@ -391,6 +396,7 @@ net.gaast.giggity_16.apk net.gaast.giggity 2012-01-28
 net.gaast.giggity_4.apk net.gaast.giggity 2011-02-04
 net.healeys.lexic_41.apk net.healeys.lexic 2012-02-09
 net.mafro.android.wakeonlan_12.apk net.mafro.android.wakeonlan 2011-11-24
+net.micode.compass_1.apk net.micode.compass 2012-02-15
 net.nightwhistler.pageturner_1.apk net.nightwhistler.pageturner 2012-02-03
 net.nightwhistler.pageturner_2.apk net.nightwhistler.pageturner 2012-02-04
 net.nightwhistler.pageturner_3.apk net.nightwhistler.pageturner 2012-02-11
@@ -443,6 +449,7 @@ org.adaway_20.apk org.adaway 2012-01-10
 org.adaway_21.apk org.adaway 2012-01-11
 org.adaway_22.apk org.adaway 2012-01-15
 org.adaway_25.apk org.adaway 2012-01-24
+org.adaway_26.apk org.adaway 2012-02-15
 org.adw.launcher_34.apk org.adw.launcher 2011-12-05
 org.androidsoft.games.memory.kids_13.apk org.androidsoft.games.memory.kids 2011-12-08
 org.coolreader_103.apk org.coolreader 2011-02-13
@@ -517,6 +524,7 @@ org.geometerplus.zlibrary.ui.android_102031.apk org.geometerplus.zlibrary.ui.and
 org.geometerplus.zlibrary.ui.android_102041.apk org.geometerplus.zlibrary.ui.android 2011-12-04
 org.geometerplus.zlibrary.ui.android_102061.apk org.geometerplus.zlibrary.ui.android 2012-01-06
 org.geometerplus.zlibrary.ui.android_103031.apk org.geometerplus.zlibrary.ui.android 2012-01-27
+org.geometerplus.zlibrary.ui.android_103061.apk org.geometerplus.zlibrary.ui.android 2012-02-14
 org.geometerplus.zlibrary.ui.android_9903.apk org.geometerplus.zlibrary.ui.android 2011-01-08
 org.geometerplus.zlibrary.ui.android_9911.apk org.geometerplus.zlibrary.ui.android 2011-02-02
 org.geometerplus.zlibrary.ui.android_9912.apk org.geometerplus.zlibrary.ui.android 2011-02-10
@@ -572,6 +580,7 @@ org.sixgun.ponyexpress_8.apk org.sixgun.ponyexpress 2011-02-09
 org.sixgun.ponyexpress_9.apk org.sixgun.ponyexpress 2011-03-26
 org.sparkleshare.android_1.apk org.sparkleshare.android 2012-01-02
 org.thoughtcrime.securesms_21.apk org.thoughtcrime.securesms 2012-01-02
+org.tof_17.apk org.tof 2012-02-12
 org.tomdroid_6.apk org.tomdroid 2011-01-17
 org.ttrssreader_1000.apk org.ttrssreader 2011-05-16
 org.ttrssreader_1002.apk org.ttrssreader 2011-05-19
@@ -609,6 +618,8 @@ org.wikipedia_3.apk org.wikipedia 2012-01-26
 org.wikipedia_4.apk org.wikipedia 2012-02-03
 org.wordpress.android_31.apk org.wordpress.android 2011-01-26
 org.wordpress.android_33.apk org.wordpress.android 2011-07-01
+org.wordpress.android_45.apk org.wordpress.android 2012-02-15
+org.wordpress.android_46.apk org.wordpress.android 2012-02-16
 org.xbmc.android.remote_730.apk org.xbmc.android.remote 2011-02-24
 org.xbmc.android.remote_768.apk org.xbmc.android.remote 2011-05-18
 org.yaaic_10.apk org.yaaic 2011-04-26

@@ -1,10 +1,10 @@
+net.micode.compass
+li.klass.fhem
+org.jsharkey.sky
+uk.co.jarofgreen.JustADamnCompass
+org.tof
+com.anoshenko.android.mahjongg
+org.liberty.android.fantastischmemo
 com.ihunda.android.binauralbeat
 arity.calculator
 com.ath0.rpn
-net.healeys.lexic
-net.szym.barnacle
-com.tastycactus.timesheet
-org.nerdcircus.android.klaxon
-org.openintents.filemanager
-net.nightwhistler.pageturner
-org.openintents.newsreader
