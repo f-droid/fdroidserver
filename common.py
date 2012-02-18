@@ -709,7 +709,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
 
     # If the app has ant set up to sign the release, we need to switch
     # that off, because we want the unsigned apk...
-    for propfile in ('build.properties', 'default.properties'):
+    for propfile in ('build.properties', 'default.properties', 'ant.properties'):
         if os.path.exists(os.path.join(root_dir, propfile)):
             if subprocess.call(['sed','-i','s/^key.store/#/',
                                 propfile], cwd=root_dir) !=0:
