@@ -825,6 +825,13 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
     if basesrclib:
         srclibpaths.append(basesrclib)
 
+    # There should never be gen or bin directories in the source, so just get
+    # rid of them...
+    for baddir in ['gen', 'bin']:
+        badpath = os.path.join(root_dir, 'gen')
+        if os.path.exists(badpath):
+            shutil.rmtree(badpath)
+
     # Run a pre-build command if one is required...
     if build.has_key('prebuild'):
         prebuild = build['prebuild']
@@ -952,15 +959,6 @@ def scan_source(build_dir, root_dir, thisbuild):
     if (os.path.exists(os.path.join(root_dir, 'jni')) and 
             thisbuild.get('buildjni', 'no') != 'yes'):
         msg = 'Found jni directory, but buildjni is not enabled'
-        problems.append(msg)
-
-    # Presence of these is not a problem as such, but they
-    # shouldn't be there and mess up our source tarballs...
-    if os.path.exists(os.path.join(root_dir, 'bin')):
-        msg = "There shouldn't be a bin directory"
-        problems.append(msg)
-    if os.path.exists(os.path.join(root_dir, 'gen')):
-        msg = "There shouldn't be a gen directory"
         problems.append(msg)
 
     return problems
