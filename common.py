@@ -688,7 +688,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
             raise BuildException("Error running init command")
 
     # Generate (or update) the ant build file, build.xml...
-    if (build.get('update', 'yes') == 'yes' and
+    if (build.get('update', 'yes') != 'no' and
         not build.has_key('maven')):
         parms = [os.path.join(sdk_path, 'tools', 'android'),
                 'update', 'project', '-p', '.']
@@ -696,10 +696,8 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
         if build.has_key('target'):
             parms.append('-t')
             parms.append(build['target'])
-            # Newer versions of the platform tools don't replace the build.xml
-            # file as they always did previously, they spew out a nanny-like
-            # warning and tell you to do it manually. The following emulates
-            # the original behaviour...
+        # Force build.xml update if necessary...
+        if build.get('update', 'yes') == 'force' or build.has_key('target'):
             buildxml = os.path.join(root_dir, 'build.xml')
             if os.path.exists(buildxml):
                 print 'Force-removing old build.xml'

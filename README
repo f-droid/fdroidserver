@@ -167,9 +167,12 @@ configuration to the build. These are:
  forcevercode=yes - If specified, the package vercode in the AndroidManifest.xml is
                    replaced with the version code for the build. See also
                    forceversion.
- update=no	   By default, 'android update project' is used to generate or
+ update=xxx	   By default, 'android update project' is used to generate or
                    update the build.xml file. Specifying update=no bypasses
-                   that.
+                   that. Specifiying update=force forces rebuilding of the
+		   build.xml file at the same time - this is frequently needed
+		   with r14 of the Android platform tools. Be aware of any
+		   customisations in build.xml when using update=force.
  initfun=yes	   Enables a selection of mad hacks to make com.funambol.android
                    build. Probably not useful for any other application.
  buildjni=yes      Enables building of native code via the ndk-build script
