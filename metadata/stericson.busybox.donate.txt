@@ -1,3 +1,4 @@
+Disabled:Can't build the binaries without patching c libraries
 Category:System
 License:Apache 2.0
 Web Site:http://code.google.com/p/busybox-android/
@@ -29,6 +30,6 @@ Build Version:7.2,104,!No source available
 Build Version:7.5,105,!No source available
 
 Update Check Mode:Market
-Current Version:7.5
-Current Version Code:105
+Current Version:7.5.1
+Current Version Code:106
 
