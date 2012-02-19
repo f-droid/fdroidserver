@@ -22,7 +22,6 @@ Repo Type:git-svn
 Repo:http://busybox-android.googlecode.com/svn/trunk/
 
 Build Version:7.1,103,3,target=android-8,prebuild=\
-rm -rf gen &&\
 cd src/stericson &&\
 svn co -r 133 http://roottools.googlecode.com/svn/trunk/Developmental/RootTools_sdk3_generic/src/com/stericson/RootTools &&\
 cd ../..
