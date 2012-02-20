@@ -33,8 +33,9 @@ Build Version:1.21,22,65138c11cc8b6affd28b68e125fbc1dff0886a4e,subdir=org_adaway
 Build Version:1.23,24,!no source in repo
 Build Version:1.24,25,f811e53e1e1d2ee047b18715fd7d2072b90ae76b,subdir=org_adaway/,buildjni=yes,prebuild=android update project -p ../com_actionbarsherlock
 Build Version:1.25,26,ff97932761cdee68638dc2550751a64b2cbe18e7,subdir=org_adaway/,buildjni=yes,prebuild=android update project -p ../com_actionbarsherlock
+Build Version:1.26,27,33d4d80998f30bafc88c04c80cbae00b03916f99,subdir=org_adaway/,buildjni=yes,prebuild=android update project -p ../com_actionbarsherlock
 
 Update Check Mode:Market
-Current Version:1.25
-Current Version Code:26
+Current Version:1.26
+Current Version Code:27
 
