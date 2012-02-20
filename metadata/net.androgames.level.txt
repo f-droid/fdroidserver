@@ -20,8 +20,11 @@ Repo Type:svn
 Repo:http://androgames-sample.googlecode.com/svn/Market-apps/Level/trunk/
 
 Build Version:1.8.0,27,75
+Build Version:1.9.0,29,79
+Build Version:1.9.1,30,!No source in repo
+
 
 Update Check Mode:Market
-Current Version:1.8.0
-Current Version Code:27
+Current Version:1.9.1
+Current Version Code:30
 

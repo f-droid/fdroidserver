@@ -147,15 +147,18 @@ for app in apps:
 
                         # Load and parse the SSH config...
                         sshconfig = paramiko.SSHConfig()
-                        sshconfig.parse('builder/sshconfig')
+                        sshf = open('builder/sshconfig', 'r')
+                        sshconfig.parse(sshf)
+                        sshf.close()
                         sshconfig = sshconfig.lookup(vagranthost)
 
                         # Open SSH connection...
                         ssh = paramiko.SSHClient()
-                        ssh.set_missing_host_key_policy(paramiko.AcceptPolicy)
-                        ssh.connect(sshconfig['HostName'], username=sshconfig['Username'],
-                            port=sshconfig['Port'], timeout=10, look_for_keys=False,
-                            key_filename=sshconfig['IdentityFile'])
+                        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+                        print sshconfig
+                        ssh.connect(sshconfig['hostname'], username=sshconfig['user'],
+                            port=int(sshconfig['port']), timeout=10, look_for_keys=False,
+                            key_filename=sshconfig['identityfile'])
 
                         # Get an SFTP connection...
                         ftp = ssh.open_sftp()
@@ -178,7 +181,7 @@ for app in apps:
                                 lastdir = r
                                 for ff in f:
                                     ftp.put(os.path.join(r, ff), ff)
-                        ftp.send_dir(app['id'])
+                        send_dir(app['id'])
                         # TODO: send relevant extlib directories too
                         ftp.chdir('/home/vagrant')
 

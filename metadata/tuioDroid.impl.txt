@@ -13,7 +13,7 @@ remote address using the TUIO protocol.
 Repo Type:svn
 Repo:http://tuiodroid.googlecode.com/svn/trunk/
 
-Build Version:1.0,4,28,subdir=TUIOdroid,prebuild=rm -rf bin && rm -rf gen,target=android-11
+Build Version:1.0,4,28,subdir=TUIOdroid,target=android-11
 
 Update Check Mode:Market
 Current Version:1.0

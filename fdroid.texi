@@ -364,13 +364,15 @@ the directory that contains AndroidManifest.xml.
 Specify an alternate ant command (target) instead of the default
 'release'.
 
-@item insertversion=x
-If specified, the pattern 'x' in the AndroidManifest.xml is replaced
-with the version number for the build.
+@item forceversion=yes
+If specified, the package version in AndroidManifest.xml is replaced
+with the version number for the build as specified in recipe. Useful
+for cases when upstream repo missed to update it for specific tag,
+or to build an arbitrary revision.
 
-@item insertvercode=x
-If specified, the pattern 'x' in the AndroidManifest.xml is replaced
-with the version code for the build.
+@item forcevercode=yes
+If specified, the package vercode in the AndroidManifest.xml is replaced
+with the version code for the build. See also forceversion.
 
 @item update=no
 By default, 'android update project' is used to generate or update the

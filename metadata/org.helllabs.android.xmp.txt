@@ -17,10 +17,10 @@ Repo Type:git
 Repo:git://xmp.git.sourceforge.net/gitroot/xmp/xmp
 
 # This is one of those projects that put the changelog in the version
-# number, so fix that with insertversion.
+# number, so fix that with forceversion.
 Build Version:2.1.0,15,639549fda2111cb800fabe468b4a64bf4ae27003,\
 buildjni=yes,subdir=src/android/project,target=android-8,\
-insertversion=2.1.0[^"]*
+forceversion=yes
 
 Update Check Mode:Market
 Current Version:2.4.0

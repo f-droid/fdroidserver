@@ -688,7 +688,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
             raise BuildException("Error running init command")
 
     # Generate (or update) the ant build file, build.xml...
-    if (build.get('update', 'yes') == 'yes' and
+    if (build.get('update', 'yes') != 'no' and
         not build.has_key('maven')):
         parms = [os.path.join(sdk_path, 'tools', 'android'),
                 'update', 'project', '-p', '.']
@@ -696,10 +696,8 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
         if build.has_key('target'):
             parms.append('-t')
             parms.append(build['target'])
-            # Newer versions of the platform tools don't replace the build.xml
-            # file as they always did previously, they spew out a nanny-like
-            # warning and tell you to do it manually. The following emulates
-            # the original behaviour...
+        # Force build.xml update if necessary...
+        if build.get('update', 'yes') == 'force' or build.has_key('target'):
             buildxml = os.path.join(root_dir, 'build.xml')
             if os.path.exists(buildxml):
                 print 'Force-removing old build.xml'
@@ -709,7 +707,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
 
     # If the app has ant set up to sign the release, we need to switch
     # that off, because we want the unsigned apk...
-    for propfile in ('build.properties', 'default.properties'):
+    for propfile in ('build.properties', 'default.properties', 'ant.properties'):
         if os.path.exists(os.path.join(root_dir, propfile)):
             if subprocess.call(['sed','-i','s/^key.store/#/',
                                 propfile], cwd=root_dir) !=0:
@@ -737,14 +735,14 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
         f.close()
 
     # Insert version code and number into the manifest if necessary...
-    if build.has_key('insertversion'):
-        if subprocess.call(['sed','-i','s/' + build['insertversion'] +
-            '/' + build['version'] +'/g',
+    if build.has_key('forceversion'):
+        if subprocess.call(['sed','-r','-i',
+            's/android:versionName="[^"]+"/android:versionName="' + build['version'] + '"/g',
             'AndroidManifest.xml'], cwd=root_dir) !=0:
             raise BuildException("Failed to amend manifest")
-    if build.has_key('insertvercode'):
-        if subprocess.call(['sed','-i','s/' + build['insertvercode'] +
-            '/' + build['vercode'] +'/g',
+    if build.has_key('forcevercode'):
+        if subprocess.call(['sed','-r','-i',
+            's/android:versionCode="[^"]+"/android:versionCode="' + build['vercode'] + '"/g',
             'AndroidManifest.xml'], cwd=root_dir) !=0:
             raise BuildException("Failed to amend manifest")
 
@@ -824,6 +822,13 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
     # If one was used for the main source, add that too.
     if basesrclib:
         srclibpaths.append(basesrclib)
+
+    # There should never be gen or bin directories in the source, so just get
+    # rid of them...
+    for baddir in ['gen', 'bin']:
+        badpath = os.path.join(root_dir, baddir)
+        if os.path.exists(badpath):
+            shutil.rmtree(badpath)
 
     # Run a pre-build command if one is required...
     if build.has_key('prebuild'):
@@ -952,15 +957,6 @@ def scan_source(build_dir, root_dir, thisbuild):
     if (os.path.exists(os.path.join(root_dir, 'jni')) and 
             thisbuild.get('buildjni', 'no') != 'yes'):
         msg = 'Found jni directory, but buildjni is not enabled'
-        problems.append(msg)
-
-    # Presence of these is not a problem as such, but they
-    # shouldn't be there and mess up our source tarballs...
-    if os.path.exists(os.path.join(root_dir, 'bin')):
-        msg = "There shouldn't be a bin directory"
-        problems.append(msg)
-    if os.path.exists(os.path.join(root_dir, 'gen')):
-        msg = "There shouldn't be a gen directory"
         problems.append(msg)
 
     return problems

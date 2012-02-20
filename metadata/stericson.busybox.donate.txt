@@ -1,3 +1,4 @@
+Disabled:Can't build the binaries without patching c libraries
 Category:System
 License:Apache 2.0
 Web Site:http://code.google.com/p/busybox-android/
@@ -21,7 +22,6 @@ Repo Type:git-svn
 Repo:http://busybox-android.googlecode.com/svn/trunk/
 
 Build Version:7.1,103,3,target=android-8,prebuild=\
-rm -rf gen &&\
 cd src/stericson &&\
 svn co -r 133 http://roottools.googlecode.com/svn/trunk/Developmental/RootTools_sdk3_generic/src/com/stericson/RootTools &&\
 cd ../..
@@ -29,6 +29,6 @@ Build Version:7.2,104,!No source available
 Build Version:7.5,105,!No source available
 
 Update Check Mode:Market
-Current Version:7.5
-Current Version Code:105
+Current Version:7.5.1
+Current Version Code:106
 

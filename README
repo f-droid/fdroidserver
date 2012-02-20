@@ -160,13 +160,19 @@ configuration to the build. These are:
                    AndroidManifest.xml.
  antcommand=xxx  - Specify an alternate ant command (target) instead of the
                    default 'release'.
- insertversion=x - If specified, the pattern 'x' in the AndroidManifest.xml is
-                   replaced with the version number for the build.
- insertvercode=x - If specified, the pattern 'x' in the AndroidManifest.xml is
-                   replaced with the version code for the build.
- update=no	   By default, 'android update project' is used to generate or
+ forceversion=yes - If specified, the package version in AndroidManifest.xml is
+                   replaced with the version number for the build as specified
+                   in recipe. Useful for cases when upstream repo missed to
+                   update it for specific tag, or to build an arbitrary revision.
+ forcevercode=yes - If specified, the package vercode in the AndroidManifest.xml is
+                   replaced with the version code for the build. See also
+                   forceversion.
+ update=xxx	   By default, 'android update project' is used to generate or
                    update the build.xml file. Specifying update=no bypasses
-                   that.
+                   that. Specifiying update=force forces rebuilding of the
+		   build.xml file at the same time - this is frequently needed
+		   with r14 of the Android platform tools. Be aware of any
+		   customisations in build.xml when using update=force.
  initfun=yes	   Enables a selection of mad hacks to make com.funambol.android
                    build. Probably not useful for any other application.
  buildjni=yes      Enables building of native code via the ndk-build script

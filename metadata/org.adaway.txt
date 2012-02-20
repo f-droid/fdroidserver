@@ -5,16 +5,15 @@ Source Code:https://gitorious.org/adaway/
 Issue Tracker:http://code.google.com/p/ad-away/issues/list
 Donate:http://flattr.com/thing/369138/AdAway-Ad-blocker-for-Android
 
-Summary:Ad blocking via hosts file
+Summary:Ad blocker
 Description:
-AdAway is an open source ad blocker for Android using the hosts file.
-
+An ad blocker using the hosts file.
 
 Permissions:
-- Root access: To write hosts file to system partition
-- Internet access: To download hosts files
-- Modify/delete SD card content: To export lists to sd card
-- Wakelock: Wake up phone when AdAway updates in background
+*Root access: To write hosts file to system partition
+*Internet access: To download hosts files
+*Modify/delete SD card content: To export lists to sd card
+*Wakelock: Wake up phone when AdAway updates in background
 
 Translations:
 Help translating AdAway on https://www.transifex.net/projects/p/adaway
