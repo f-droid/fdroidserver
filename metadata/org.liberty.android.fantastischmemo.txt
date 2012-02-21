@@ -14,8 +14,9 @@ Repo Type:git
 Repo:https://github.com/helloworld1/AnyMemo.git
 
 Build Version:8.3.0,135,a591497118fe2cae101027add50d835c7fe6ed27,target=android-13,prebuild=rm -rf jni/
+Build Version:8.3.1,136,!No source in repo
 
 Update Check Mode:Market
-Current Version:8.3.0
-Current Version Code:135
+Current Version:8.3.1
+Current Version Code:136
 

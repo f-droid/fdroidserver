@@ -9,7 +9,10 @@ Description:
 Firefox Mobile web browser.
 .
 
+#Binaries in repo for now, build process is large and complex. They are very
+#well hidden - Mozilla appear very keen to force use of the proprietary market.
+#They come from here: http://ftp.mozilla.org/pub/mozilla.org/mobile/releases/latest/android/multi/
 Update Check Mode:Market
-Current Version:10.0.1
-Current Version Code:2012020807
+Current Version:10.0.2
+Current Version Code:2012021523
 

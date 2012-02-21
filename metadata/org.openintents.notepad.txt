@@ -14,6 +14,6 @@ Repo Type:srclib
 Repo:OI:notepad
 
 Update Check Mode:Market
-Current Version:1.2.3
-Current Version Code:10065
+Current Version:1.3
+Current Version Code:10068
 

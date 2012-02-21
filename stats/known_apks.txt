@@ -114,6 +114,7 @@ XCSoar6.2.4.apk org.xcsoar 2011-12-24
 XWords4_android_beta_18.apk org.eehouse.android.xw4 2010-11-21
 aarddict.android_10.apk aarddict.android 2012-01-13
 aarddict.android_12.apk aarddict.android 2012-02-12
+aarddict.android_13.apk aarddict.android 2012-02-21
 alogcat-2.1.4.apk org.jtb.alogcat 2010-11-21
 andLess_05202011.apk net.avs234 2011-05-20
 android.androidVNC_13.apk android.androidVNC 2011-04-06
@@ -163,6 +164,7 @@ com.ath0.rpn_9.apk com.ath0.rpn 2012-02-10
 com.axelby.podax_12.apk com.axelby.podax 2012-01-21
 com.beem.project.beem_10.apk com.beem.project.beem 2012-01-20
 com.beem.project.beem_11.apk com.beem.project.beem 2012-01-25
+com.beem.project.beem_12.apk com.beem.project.beem 2012-02-21
 com.beem.project.beem_7.apk com.beem.project.beem 2011-02-03
 com.beem.project.beem_9.apk com.beem.project.beem 2012-01-10
 com.boardgamegeek_20.apk com.boardgamegeek 2011-09-26
@@ -320,6 +322,7 @@ dk.andsen.asqlitemanager_9.apk dk.andsen.asqlitemanager 2011-12-08
 edu.nyu.cs.omnidroid.app_6.apk edu.nyu.cs.omnidroid.app 2011-10-04
 edu.rit.poe.atomix_2.apk edu.rit.poe.atomix 2011-03-02
 fennec-10.0.1.multi.android-arm.apk org.mozilla.firefox 2012-02-14
+fennec-10.0.2.multi.android-arm.apk org.mozilla.firefox 2012-02-21
 fennec-10.0.multi.android-arm.apk org.mozilla.firefox 2012-02-01
 fennec-5.0.multi.eabi-arm.apk org.mozilla.firefox
 fennec-6.0.multi.eabi-arm.apk org.mozilla.firefox
@@ -387,6 +390,8 @@ mythmote-1.5.1.apk tkj.android.homecontrol.mythmote
 name.bagi.levente.pedometer_6.apk name.bagi.levente.pedometer 2011-08-14
 navit-0.2.0.apk org.navitproject.navit 2011-01-02
 net.androgames.level_27.apk net.androgames.level 2012-01-11
+net.androgames.level_29.apk net.androgames.level 2012-02-21
+net.androgames.level_31.apk net.androgames.level 2012-02-21
 net.bytten.xkcdviewer_15.apk net.bytten.xkcdviewer 2011-01-26
 net.bytten.xkcdviewer_17.apk net.bytten.xkcdviewer 2011-04-06
 net.bytten.xkcdviewer_21.apk net.bytten.xkcdviewer 2011-07-22
@@ -428,6 +433,7 @@ net.sourceforge.servestream_35.apk net.sourceforge.servestream 2011-03-30
 net.sourceforge.servestream_46.apk net.sourceforge.servestream 2011-08-02
 net.sourceforge.servestream_48.apk net.sourceforge.servestream 2011-08-14
 net.sourceforge.servestream_54.apk net.sourceforge.servestream 2012-01-19
+net.sourceforge.servestream_56.apk net.sourceforge.servestream 2012-02-21
 net.sylvek.sharemyposition_16.apk net.sylvek.sharemyposition 2011-02-03
 net.sylvek.sharemyposition_20.apk net.sylvek.sharemyposition 2012-01-10
 net.sylvek.sharemyposition_24.apk net.sylvek.sharemyposition 2012-01-27

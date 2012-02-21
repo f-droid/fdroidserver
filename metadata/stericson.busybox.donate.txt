@@ -29,6 +29,6 @@ Build Version:7.2,104,!No source available
 Build Version:7.5,105,!No source available
 
 Update Check Mode:Market
-Current Version:7.5.1
-Current Version Code:106
+Current Version:7.6
+Current Version Code:111
 

@@ -35,6 +35,6 @@ Build Version:1.24,25,f811e53e1e1d2ee047b18715fd7d2072b90ae76b,subdir=org_adaway
 Build Version:1.25,26,ff97932761cdee68638dc2550751a64b2cbe18e7,subdir=org_adaway/,buildjni=yes,prebuild=android update project -p ../com_actionbarsherlock
 
 Update Check Mode:Market
-Current Version:1.25
-Current Version Code:26
+Current Version:1.26
+Current Version Code:27
 

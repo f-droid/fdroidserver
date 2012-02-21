@@ -19,12 +19,11 @@ Hold any of the phone's four sides against an object to test it for level or plu
 Repo Type:svn
 Repo:http://androgames-sample.googlecode.com/svn/Market-apps/Level/trunk/
 
-Build Version:1.8.0,27,75
-Build Version:1.9.0,29,79
-Build Version:1.9.1,30,!No source in repo
-
+Build Version:1.8.0,27,75,update=force
+Build Version:1.9.0,29,79,update=force,target=android-11
+Build Version:1.9.2,31,81,target=android-11
 
 Update Check Mode:Market
-Current Version:1.9.1
-Current Version Code:30
+Current Version:1.9.2
+Current Version Code:31
 
