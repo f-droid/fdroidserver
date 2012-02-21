@@ -1,5 +1,5 @@
 Disabled:No release available
-Category:None
+Category:Office
 License:MIT
 Web Site:https://bitbucket.org/giszmo/offline-calendar/overview
 Source Code:https://bitbucket.org/giszmo/offline-calendar/src

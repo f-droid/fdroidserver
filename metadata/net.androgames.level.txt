@@ -1,4 +1,4 @@
-Category:None
+Category:Games
 License:GPLv3
 Web Site:https://code.google.com/p/androgames-sample/
 Source Code:http://code.google.com/p/androgames-sample/source/browse/#svn/Market-apps/Level/trunk

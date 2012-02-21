@@ -1,5 +1,5 @@
 Disabled:Still various non-free issues to be resolved
-Category:None
+Category:Office
 License:GPLv2
 Web Site:http://gitorious.org/astrid-foss
 Source Code:http://gitorious.org/astrid-foss
