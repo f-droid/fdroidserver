@@ -1,15 +1,14 @@
 
+Integrating the build server setup into the main scripts is a work in progress. Some things may
+not work properly yet. Talk to CiaranG if you're trying to use this and have problems.
+
 Setting up a build server:
 
 1. Install VirtualBox, vagrant and vagrant-snap
-2. In the buildserver directory, run 'vagrant up'. Will take a long time.
-3. Log in with 'vagrant ssh'
-4. Check it all looks ok, then 'sudo shutdown -h now'
-5. Back in the main directory, run 'VBoxManage listvms' look for
-   buildserver_xxxx
-6. Run 'vagrant package --base buildserver_xxxx --output buildserver.box'.
-   Will take a while.
-7. You should now have a new 'buildserver.box'
+2. Create (or get - ask CiaranG, or wait until I replace this with a download link!) a standard
+   Debian Squeeze vagrant-compatible base box called 'debian6-32'
+3. Run makebuildserver.sh. This will take a long time. The end result is a new base box called
+   'buildserver'.
 
 You should now be able to use the --server option on build.py and builds will
 take place in the clean, secure, isolated environment of a fresh virtual

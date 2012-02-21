@@ -75,9 +75,6 @@ for app in apps:
             # Set up vcs interface and make sure we have the latest code...
             vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
 
-            refreshed_source = False
-
-
             for thisbuild in app['builds']:
 
                 if thisbuild['commit'].startswith('!'):
@@ -88,9 +85,7 @@ for app in apps:
 
                     # Prepare the source code...
                     root_dir = common.prepare_source(vcs, app, thisbuild,
-                            build_dir, extlib_dir, sdk_path, ndk_path, javacc_path,
-                            not refreshed_source)
-                    refreshed_source = True
+                            build_dir, extlib_dir, sdk_path, ndk_path, javacc_path)
 
                     # Do the scan...
                     buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
