@@ -657,10 +657,9 @@ def getsrclib(spec, extlib_dir):
 #  'sdk_path'    - the path to the Android SDK
 #  'ndk_path'    - the path to the Android NDK
 #  'javacc_path' - the path to javacc
-#  'refresh'     - True to refresh from the remote repo
 # Returns the root directory, which may be the same as 'build_dir' or may
 # be a subdirectory of it.
-def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, javacc_path, refresh):
+def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, javacc_path):
 
     # Optionally, the actual app source can be in a subdirectory...
     if build.has_key('subdir'):

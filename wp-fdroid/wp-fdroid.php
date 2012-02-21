@@ -253,7 +253,7 @@ class FDroid
 				foreach($apks as $apk) {
 					$first = $i+1==count($apks);
 					$out.="<p><b>Version ".$apk['version']."</b><br />";
-					$out.='<a href="http://f-droid.org/repo/'.$apk['apkname'].'">download apk</a> ';
+					$out.='<a href="https://f-droid.org/repo/'.$apk['apkname'].'">download apk</a> ';
 					$out.=$this->human_readable_size($apk['size']);
 					$diffSize = $apk['diff']['size'];
 					if(abs($diffSize) > 500) {
@@ -262,7 +262,7 @@ class FDroid
 						$out.=$this->human_readable_size($diffSize, 1).')</span>';
 					}
 					if(isset($apk['srcname']) && file_exists($this->site_path.'/repo/'.$apk['srcname'])) {
-						$out.='<br /><a href="http://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a> ';
+						$out.='<br /><a href="https://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a> ';
 						$out.=$this->human_readable_size(filesize($this->site_path.'/repo/'.$apk['srcname']));
 					}
 

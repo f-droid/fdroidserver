@@ -32,6 +32,220 @@ import common
 from common import BuildException
 from common import VCSException
 
+
+# Do a build on the build server.
+def build_server(app, thisbuild, build_dir, output_dir):
+    import paramiko
+
+    # Destroy the builder vm if it already exists...
+    # TODO: need to integrate the snapshot stuff so it doesn't have to
+    # keep wasting time doing this unnecessarily.
+    if os.path.exists(os.path.join('builder', '.vagrant')):
+        if subprocess.call(['vagrant', 'destroy'], cwd='builder') != 0:
+            raise BuildException("Failed to destroy build server")
+
+    # Start up the virtual maachine...
+    if subprocess.call(['vagrant', 'up'], cwd='builder') != 0:
+        # Not a very helpful message yet!
+        raise BuildException("Failed to set up build server")
+    # Get SSH configuration settings for us to connect...
+    subprocess.call('vagrant ssh-config >sshconfig',
+            cwd='builder', shell=True)
+    vagranthost = 'default' # Host in ssh config file
+
+    # Load and parse the SSH config...
+    sshconfig = paramiko.SSHConfig()
+    sshf = open('builder/sshconfig', 'r')
+    sshconfig.parse(sshf)
+    sshf.close()
+    sshconfig = sshconfig.lookup(vagranthost)
+
+    # Open SSH connection...
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    print sshconfig
+    ssh.connect(sshconfig['hostname'], username=sshconfig['user'],
+        port=int(sshconfig['port']), timeout=10, look_for_keys=False,
+        key_filename=sshconfig['identityfile'])
+
+    # Get an SFTP connection...
+    ftp = ssh.open_sftp()
+    ftp.get_channel().settimeout(15)
+
+    # Put all the necessary files in place...
+    ftp.chdir('/home/vagrant')
+    ftp.put('build.py', 'build.py')
+    ftp.put('common.py', 'common.py')
+    ftp.put('config.buildserver.py', 'config.py')
+    ftp.mkdir('metadata')
+    ftp.chdir('metadata')
+    ftp.put(os.path.join('metadata', app['id'] + '.txt'),
+            app['id'] + '.txt')
+    ftp.chdir('..')
+    ftp.mkdir('build')
+    ftp.chdir('build')
+    ftp.mkdir('extlib')
+    ftp.mkdir(app['id'])
+    ftp.chdir('..')
+    def send_dir(path):
+        lastdir = path
+        for r, d, f in os.walk(path):
+            ftp.chdir(r)
+            for dd in d:
+                ftp.mkdir(dd)
+            for ff in f:
+                ftp.put(os.path.join(r, ff), ff)
+            for i in range(len(r.split('/'))):
+                ftp.chdir('..')
+    send_dir(build_dir)
+    # TODO: send relevant extlib and srclib directories too
+
+    # Execute the build script...
+    ssh.exec_command('python build.py --on-server -p ' +
+            app['id'] + ' --vercode ' + thisbuild['vercode'])
+
+    # Retrieve the built files...
+    apkfile = app['id'] + '_' + thisbuild['vercode'] + '.apk'
+    tarball = app['id'] + '_' + thisbuild['vercode'] + '_src' + '.tar.gz'
+    ftp.chdir('/home/vagrant/unsigned')
+    ftp.get(apkfile, os.path.join(output_dir, apkfile))
+    ftp.get(tarball, os.path.join(output_dir, tarball))
+
+    # Get rid of the virtual machine...
+    if subprocess.call(['vagrant', 'destroy'], cwd='builder') != 0:
+        # Not a very helpful message yet!
+        raise BuildException("Failed to destroy")
+
+
+# Do a build locally.
+def build_local(app, thisbuild, build_dir, output_dir):
+
+    # Prepare the source code...
+    root_dir = common.prepare_source(vcs, app, thisbuild,
+            build_dir, extlib_dir, sdk_path, ndk_path,
+            javacc_path)
+
+    # Scan before building...
+    buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
+    if len(buildprobs) > 0:
+        print 'Scanner found ' + str(len(buildprobs)) + ' problems:'
+        for problem in buildprobs:
+            print '...' + problem
+        raise BuildException("Can't build due to " +
+                str(len(buildprobs)) + " scanned problems")
+
+    # Build the source tarball right before we build the release...
+    tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
+    tarball = tarfile.open(os.path.join(tmp_dir,
+        tarname + '.tar.gz'), "w:gz")
+    def tarexc(f):
+        if f in ['.svn', '.git', '.hg', '.bzr']:
+            return True
+        return False
+    tarball.add(build_dir, tarname, exclude=tarexc)
+    tarball.close()
+
+    # Build native stuff if required...
+    if thisbuild.get('buildjni', 'no') == 'yes':
+        ndkbuild = os.path.join(ndk_path, "ndk-build")
+        p = subprocess.Popen([ndkbuild], cwd=root_dir,
+                stdout=subprocess.PIPE)
+        output = p.communicate()[0]
+        if p.returncode != 0:
+            print output
+            raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']))
+        elif options.verbose:
+            print output
+
+    # Build the release...
+    if thisbuild.has_key('maven'):
+        p = subprocess.Popen(['mvn', 'clean', 'install',
+            '-Dandroid.sdk.path=' + sdk_path],
+            cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    else:
+        if thisbuild.has_key('antcommand'):
+            antcommand = thisbuild['antcommand']
+        else:
+            antcommand = 'release'
+        p = subprocess.Popen(['ant', antcommand], cwd=root_dir, 
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output, error = p.communicate()
+    if p.returncode != 0:
+        raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
+    elif options.verbose:
+        print output
+    print "Build successful"
+
+    # Find the apk name in the output...
+    if thisbuild.has_key('bindir'):
+        bindir = os.path.join(build_dir, thisbuild['bindir'])
+    else:
+        bindir = os.path.join(root_dir, 'bin')
+    if thisbuild.get('initfun', 'no')  == "yes":
+        # Special case (again!) for funambol...
+        src = ("funambol-android-sync-client-" +
+                thisbuild['version'] + "-unsigned.apk")
+        src = os.path.join(bindir, src)
+    elif thisbuild.has_key('maven'):
+        src = re.match(r".*^\[INFO\] Installing /.*/([^/]*)\.apk",
+                output, re.S|re.M).group(1)
+        src = os.path.join(bindir, src) + '.apk'
+#[INFO] Installing /home/ciaran/fdroidserver/tmp/mainline/application/target/callerid-1.0-SNAPSHOT.apk
+    else:
+        src = re.match(r".*^.*Creating (\S+) for release.*$.*", output,
+            re.S|re.M).group(1)
+        src = os.path.join(bindir, src)
+
+    # By way of a sanity check, make sure the version and version
+    # code in our new apk match what we expect...
+    print "Checking " + src
+    p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools',
+                                    'aapt'),
+                        'dump', 'badging', src],
+                        stdout=subprocess.PIPE)
+    output = p.communicate()[0]
+    if thisbuild.get('novcheck', 'no') == "yes":
+        vercode = thisbuild['vercode']
+        version = thisbuild['version']
+    else:
+        vercode = None
+        version = None
+        for line in output.splitlines():
+            if line.startswith("package:"):
+                pat = re.compile(".*versionCode='([0-9]*)'.*")
+                vercode = re.match(pat, line).group(1)
+                pat = re.compile(".*versionName='([^']*)'.*")
+                version = re.match(pat, line).group(1)
+        if version == None or vercode == None:
+            raise BuildException("Could not find version information in build in output")
+
+    # Some apps (e.g. Timeriffic) have had the bonkers idea of
+    # including the entire changelog in the version number. Remove
+    # it so we can compare. (TODO: might be better to remove it
+    # before we compile, in fact)
+    index = version.find(" //")
+    if index != -1:
+        version = version[:index]
+
+    if (version != thisbuild['version'] or
+            vercode != thisbuild['vercode']):
+        raise BuildException(("Unexpected version/version code in output"
+                             "APK: %s / %s"
+                             "Expected: %s / %s")
+                             % (version, str(vercode), thisbuild['version'], str(thisbuild['vercode']))
+                            )
+
+    # Copy the unsigned apk to our destination directory for further
+    # processing (by publish.py)...
+    shutil.copyfile(src, dest)
+
+    # Move the source tarball into the output directory...
+    if output_dir != tmp_dir:
+        tarfilename = tarname + '.tar.gz'
+        shutil.move(os.path.join(tmp_dir, tarfilename),
+            os.path.join(output_dir, tarfilename))
+
+
 #Read configuration...
 execfile('config.py')
 
@@ -41,6 +255,8 @@ parser.add_option("-v", "--verbose", action="store_true", default=False,
                   help="Spew out even more information than normal")
 parser.add_option("-p", "--package", default=None,
                   help="Build only the specified package")
+parser.add_option("-c", "--vercode", default=None,
+                  help="Build only the specified version code")
 parser.add_option("-s", "--stop", action="store_true", default=False,
                   help="Make the build stop on exceptions")
 parser.add_option("-t", "--test", action="store_true", default=False,
@@ -89,13 +305,18 @@ if not os.path.isdir(build_dir):
     os.makedirs(build_dir)
 extlib_dir = os.path.join(build_dir, 'extlib')
 
+# Filter apps and build versions according to command-line options...
+if options.package:
+    apps = [app for app in apps if app['id'] == options.package]
+if options.vercode:
+    for app in apps:
+        app['builds'] = [b for b in app['builds']
+                if str(b['vercode']) == options.vercode]
+
 # Build applications...
 for app in apps:
 
-    if options.package and options.package != app['id']:
-        # Silent skip...
-        pass
-    elif app['Disabled'] and not options.force:
+    if app['Disabled'] and not options.force:
         if options.verbose:
             print "Skipping %s: disabled" % app['id']
     elif (not app['builds']) or app['Repo Type'] =='' or len(app['builds']) == 0:
@@ -107,9 +328,6 @@ for app in apps:
 
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
-
-        refreshed_source = False
-
 
         for thisbuild in app['builds']:
             try:
@@ -133,201 +351,9 @@ for app in apps:
                     print mstart + thisbuild['version'] + ' of ' + app['id']
 
                     if options.server:
-
-                        import paramiko
-
-                        # Start up the virtual maachine...
-                        if subprocess.call(['vagrant', 'up'], cwd='builder') != 0:
-                            # Not a very helpful message yet!
-                            raise BuildException("Failed to set up build server")
-                        # Get SSH configuration settings for us to connect...
-                        subprocess.call('vagrant ssh-config >sshconfig',
-                                cwd='builder', shell=True)
-                        vagranthost = 'default' # Host in ssh config file
-
-                        # Load and parse the SSH config...
-                        sshconfig = paramiko.SSHConfig()
-                        sshf = open('builder/sshconfig', 'r')
-                        sshconfig.parse(sshf)
-                        sshf.close()
-                        sshconfig = sshconfig.lookup(vagranthost)
-
-                        # Open SSH connection...
-                        ssh = paramiko.SSHClient()
-                        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-                        print sshconfig
-                        ssh.connect(sshconfig['hostname'], username=sshconfig['user'],
-                            port=int(sshconfig['port']), timeout=10, look_for_keys=False,
-                            key_filename=sshconfig['identityfile'])
-
-                        # Get an SFTP connection...
-                        ftp = ssh.open_sftp()
-                        ftp.get_channel().settimeout(15)
-
-                        # Put all the necessary files in place...
-                        ftp.chdir('/home/vagrant')
-                        ftp.put('build.py', 'build.py')
-                        ftp.put('common.py', 'common.py')
-                        ftp.put('config.buildserver.py', 'config.py')
-                        ftp.mkdir('build')
-                        ftp.chdir('build')
-                        ftp.mkdir('extlib')
-                        def send_dir(path):
-                            lastdir = path
-                            for r, d, f in os.walk(base):
-                                while lastdir != os.path.commonprefix([lastdir, root]):
-                                    ftp.chdir('..')
-                                    lastdir = os.path.split(lastdir)[0]
-                                lastdir = r
-                                for ff in f:
-                                    ftp.put(os.path.join(r, ff), ff)
-                        send_dir(app['id'])
-                        # TODO: send relevant extlib directories too
-                        ftp.chdir('/home/vagrant')
-
-                        # Execute the build script...
-                        ssh.exec_command('python build.py --on-server -p ' +
-                                app['id'])
-
-                        # Retrieve the built files...
-                        apkfile = app['id'] + '_' + thisbuild['vercode'] + '.apk'
-                        tarball = app['id'] + '_' + thisbuild['vercode'] + '_src' + '.tar.gz'
-                        ftp.chdir('unsigned')
-                        ftp.get(apkfile, os.path.join(output_dir, apkfile))
-                        ftp.get(tarball, os.path.join(output_dir, tarball))
-
-                        # Get rid of the virtual machine...
-                        if subprocess.call(['vagrant', 'destroy'], cwd='builder') != 0:
-                            # Not a very helpful message yet!
-                            raise BuildException("Failed to destroy")
-
+                        build_server(app, thisbuild, build_dir, output_dir)
                     else:
-
-                        # Prepare the source code...
-                        root_dir = common.prepare_source(vcs, app, thisbuild,
-                                build_dir, extlib_dir, sdk_path, ndk_path,
-                                javacc_path, not refreshed_source)
-                        refreshed_source = True
-
-                        # Scan before building...
-                        buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
-                        if len(buildprobs) > 0:
-                            print 'Scanner found ' + str(len(buildprobs)) + ' problems:'
-                            for problem in buildprobs:
-                                print '...' + problem
-                            raise BuildException("Can't build due to " +
-                                    str(len(buildprobs)) + " scanned problems")
-
-                        # Build the source tarball right before we build the release...
-                        tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
-                        tarball = tarfile.open(os.path.join(tmp_dir,
-                            tarname + '.tar.gz'), "w:gz")
-                        def tarexc(f):
-                            if f in ['.svn', '.git', '.hg', '.bzr']:
-                                return True
-                            return False
-                        tarball.add(build_dir, tarname, exclude=tarexc)
-                        tarball.close()
-
-                        # Build native stuff if required...
-                        if thisbuild.get('buildjni', 'no') == 'yes':
-                            ndkbuild = os.path.join(ndk_path, "ndk-build")
-                            p = subprocess.Popen([ndkbuild], cwd=root_dir,
-                                    stdout=subprocess.PIPE)
-                            output = p.communicate()[0]
-                            if p.returncode != 0:
-                                print output
-                                raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']))
-                            elif options.verbose:
-                                print output
-
-                        # Build the release...
-                        if thisbuild.has_key('maven'):
-                            p = subprocess.Popen(['mvn', 'clean', 'install',
-                                '-Dandroid.sdk.path=' + sdk_path],
-                                cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                        else:
-                            if thisbuild.has_key('antcommand'):
-                                antcommand = thisbuild['antcommand']
-                            else:
-                                antcommand = 'release'
-                            p = subprocess.Popen(['ant', antcommand], cwd=root_dir, 
-                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                        output, error = p.communicate()
-                        if p.returncode != 0:
-                            raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
-                        elif options.verbose:
-                            print output
-                        print "Build successful"
-
-                        # Find the apk name in the output...
-                        if thisbuild.has_key('bindir'):
-                            bindir = os.path.join(build_dir, thisbuild['bindir'])
-                        else:
-                            bindir = os.path.join(root_dir, 'bin')
-                        if thisbuild.get('initfun', 'no')  == "yes":
-                            # Special case (again!) for funambol...
-                            src = ("funambol-android-sync-client-" +
-                                    thisbuild['version'] + "-unsigned.apk")
-                            src = os.path.join(bindir, src)
-                        elif thisbuild.has_key('maven'):
-                            src = re.match(r".*^\[INFO\] Installing /.*/([^/]*)\.apk",
-                                    output, re.S|re.M).group(1)
-                            src = os.path.join(bindir, src) + '.apk'
-#[INFO] Installing /home/ciaran/fdroidserver/tmp/mainline/application/target/callerid-1.0-SNAPSHOT.apk
-                        else:
-                            src = re.match(r".*^.*Creating (\S+) for release.*$.*", output,
-                                re.S|re.M).group(1)
-                            src = os.path.join(bindir, src)
-
-                        # By way of a sanity check, make sure the version and version
-                        # code in our new apk match what we expect...
-                        print "Checking " + src
-                        p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools',
-                                                        'aapt'),
-                                            'dump', 'badging', src],
-                                            stdout=subprocess.PIPE)
-                        output = p.communicate()[0]
-                        if thisbuild.get('novcheck', 'no') == "yes":
-                            vercode = thisbuild['vercode']
-                            version = thisbuild['version']
-                        else:
-                            vercode = None
-                            version = None
-                            for line in output.splitlines():
-                                if line.startswith("package:"):
-                                    pat = re.compile(".*versionCode='([0-9]*)'.*")
-                                    vercode = re.match(pat, line).group(1)
-                                    pat = re.compile(".*versionName='([^']*)'.*")
-                                    version = re.match(pat, line).group(1)
-                            if version == None or vercode == None:
-                                raise BuildException("Could not find version information in build in output")
-
-                        # Some apps (e.g. Timeriffic) have had the bonkers idea of
-                        # including the entire changelog in the version number. Remove
-                        # it so we can compare. (TODO: might be better to remove it
-                        # before we compile, in fact)
-                        index = version.find(" //")
-                        if index != -1:
-                            version = version[:index]
-
-                        if (version != thisbuild['version'] or
-                                vercode != thisbuild['vercode']):
-                            raise BuildException(("Unexpected version/version code in output"
-                                                 "APK: %s / %s"
-                                                 "Expected: %s / %s")
-                                                 % (version, str(vercode), thisbuild['version'], str(thisbuild['vercode']))
-                                                )
-
-                        # Copy the unsigned apk to our destination directory for further
-                        # processing (by publish.py)...
-                        shutil.copyfile(src, dest)
-
-                        # Move the source tarball into the output directory...
-                        if output_dir != tmp_dir:
-                            tarfilename = tarname + '.tar.gz'
-                            shutil.move(os.path.join(tmp_dir, tarfilename),
-                                os.path.join(output_dir, tarfilename))
+                        build_local(app, thisbuild, build_dir, output_dir)
 
                     build_succeeded.append(app)
             except BuildException as be:
