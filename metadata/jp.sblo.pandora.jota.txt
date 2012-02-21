@@ -1,0 +1,22 @@
+Disabled:Build problem, uses Android private API
+Category:Office
+License:Apache2
+Web Site:https://sites.google.com/site/aquamarinepandora/home/jota-text-editor
+Source Code:http://code.google.com/p/jota-text-editor/source/checkout
+Issue Tracker:http://code.google.com/p/jota-text-editor/issues/list
+
+Summary:Jota text editor
+Description:
+Text editor designed for long text files, up to 1 million characters.
+Auto-Detect many character codes, especially Asian ones.
+Search/replace sith regular expression, undo/redo, syntax highlight, customization.
+.
+
+Repo Type:svn
+Repo:http://jota-text-editor.googlecode.com/svn/trunk/
+
+Build Version:0.2.07,57,86,buildjni=yes,target=android-11
+
+Update Check Mode:Market
+Current Version:0.2.07
+Current Version Code:57
