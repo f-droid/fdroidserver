@@ -1,0 +1,25 @@
+Category:Office
+License:Apache2
+Web Site:https://github.com/wargoth/Sketcher
+Source Code:https://github.com/wargoth/Sketcher
+Issue Tracker:https://github.com/wargoth/Sketcher/issues
+Donate:https://sites.google.com/site/sketcherapp/
+
+Summary:Sketcher Lite
+Description:
+A fun procedural drawing tool.
+- 11 brushes + eraser
+- undo/redo
+- color picker
+.
+
+# To make it compile I had to tweak a bit, using my own fork until the pull request is merged. See https://github.com/wargoth/Sketcher/pull/42
+Repo Type:git
+Repo:https://github.com/nicolas-raoul/Sketcher.git
+
+Build Version:1.1.7nicolas-raoul-1,25,7c3697421dcd5d9f9825058e4ea2457ae75a21ec
+
+Update Check Mode:Market
+Current Version:1.1.8
+Current Version Code:24 # Actually I don't know, source code for 1.1.8 is not available, see https://github.com/wargoth/Sketcher/issues/41
+
