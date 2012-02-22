@@ -19,7 +19,7 @@
 
 To be able to auto-build packages, you're going to need:
 
-*Linux
+*GNU/Linux
 *Python
 *Android SDK with all SDK platforms (for all API versions) and tools
 *Android NDK
