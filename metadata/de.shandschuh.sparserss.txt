@@ -11,7 +11,7 @@ notifications. Automatically discovers feeds given just a site URL. Provides
 OPML import and export.
 .
 
-Repo Type:svn
+Repo Type:git-svn
 Repo:http://sparserss.googlecode.com/svn/trunk/
 
 Build Version:0.8.4,47,105,target=android-8
