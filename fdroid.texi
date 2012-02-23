@@ -1,53 +1,52 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
 @setfilename fdroid.info
-@settitle FDroid Server Manual, version 1.0
+@settitle F-Droid Server Manual
 @c %**end of header
 
 @copying
-This manual is for the FDroid server program.
+This manual is for the F-Droid repository server tools.
 
 Copyright @copyright{} 2010, 2011 Ciaran Gultnieks
 Copyright @copyright{} 2011 Henrik Tunedal, Michael Haas, John Sullivan
 
 @quotation
-Permission is granted to ...
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of the license is included in the section entitled "GNU
+Free Documentation License".
 @end quotation
 @end copying
 
 @titlepage
-@title FDroid Server Manual
-@author Ciaran Gultnieks and the FDroid project
-
-@c  The following two commands
-@c  start the copyright page.
+@title F-Droid Server Manual
+@author Ciaran Gultnieks and the F-Droid project
 @page
 @vskip 0pt plus 1filll
 @insertcopying
 
-Published by ...
 @end titlepage
 
-@c So the toc is printed at the start.
 @contents
 
 @ifnottex
 @node Top
-@comment  node-name, next,      previous,  up
-@top FDroid Server
+@top F-Droid Server
 
-This manual is for the FDroid server, version version.
+@insertcopying
 @end ifnottex
 
 @menu
 * Basic instructions::
-* Build System Requirements::
+* Build System::
 * MetaData::
+* GNU Free Documentation License::
 * Index::
 @end menu
 
-@node Basic instructions, Build System Requirements, Top, Top
-@comment  node-name, next,      previous,  up
+@node Basic instructions
 @chapter Basic instructions
 
 @cindex instructions, basic
@@ -88,8 +87,7 @@ in upload.sh is an example of how to do this.
 
 @end enumerate
 
-@node Build System Requirements, MetaData, Basic instructions, Top
-@comment  node-name, next,      previous,  up
+@node Build System
 @chapter Build System Requirements
 
 @cindex requirements, build system
@@ -133,8 +131,7 @@ A keystore for holding release keys. (Safe, secure and well backed up!)
 You then need to create a config.py (copy config.sample.py and follow the
 instructions) to specify the locations of some of these things.
 
-@node MetaData, Index, Build System Requirements, Top
-@comment  node-name, next,      previous,  up
+@node MetaData
 @chapter MetaData
 
 @cindex metadata
@@ -144,11 +141,10 @@ sources, 1) the APK files in the repo directory, and 2) the metadata files
 in the metadata directory.
 
 The metadata files are simple, easy to edit text files, always named as the
-application's package ID with '.txt' appended. Within the file, the following
-fields are recognised:
+application's package ID with '.txt' appended. The following sections describe
+the fields recogognised within the file.
 
-@menu 
-
+@menu
 * License::
 * Name::
 * Web Site::
@@ -164,11 +160,9 @@ fields are recognised:
 * AntiFeatures::
 * Disabled::
 * Requires Root::
-
 @end menu
 
-@node License, Name, MetaData, MetaData
-@comment  node-name, next,      previous,  up
+@node License
 @section License
 
 @cindex license
@@ -199,8 +193,7 @@ Common values:
 
 @end itemize
 
-@node Name, Web Site, License, MetaData
-@comment  node-name, next,      previous,  up
+@node Name
 @section Name
 
 @cindex Name
@@ -210,16 +203,14 @@ application's correct name is retrieved from the APK file. However, in a situati
 where an APK contains a bad or missing application name, it can be overridden
 using this.
 
-@node Web Site, Source Code, Name, MetaData
-@comment  node-name, next,      previous,  up
+@node Web Site
 @section Web Site
 
 @cindex Web Site
 
 The URL for the application's web site.
 
-@node Source Code, Issue Tracker, Web Site, MetaData
-@comment  node-name, next,      previous,  up
+@node Source Code
 @section Source Code
 
 @cindex Source Code
@@ -228,8 +219,7 @@ The URL to view or obtain the application's source code. This should be
 something human-friendly. Machine-readable source-code is covered in the
 'Repo' field.
 
-@node Issue Tracker, Donate, Source Code, MetaData
-@comment  node-name, next,      previous,  up
+@node Issue Tracker
 @section Issue Tracker
 
 @cindex Issue Tracker
@@ -237,8 +227,7 @@ something human-friendly. Machine-readable source-code is covered in the
 The URL for the application's issue tracker. Optional, since not all
 applications have one.
 
-@node Donate, Summary, Issue Tracker, MetaData
-@comment  node-name, next,      previous,  up
+@node Donate
 @section Donate
 
 @cindex Donate
@@ -246,16 +235,14 @@ applications have one.
 The URL to donate to the project. This could be the project's donate page
 if it has one, or perhaps even a direct PayPal link.
 
-@node Summary, Description, Donate, MetaData
-@comment  node-name, next,      previous,  up
+@node Summary
 @section Summary
 
 @cindex Summary
 
 A brief summary of what the application is.
 
-@node Description, Repo Type, Summary, MetaData
-@comment  node-name, next,      previous,  up
+@node Description
 @section Description
 
 @cindex Description
@@ -263,8 +250,7 @@ A brief summary of what the application is.
 A full description of the application. This can span multiple lines, and is
 terminated by a line containing a single '.'.
 
-@node Repo Type, Repo, Description, MetaData
-@comment  node-name, next,      previous,  up
+@node Repo Type
 @section Repo Type
 
 @cindex Repo Type
@@ -289,8 +275,7 @@ values are:
 
 @end itemize
 
-@node Repo, Build Version, Repo Type, MetaData
-@comment  node-name, next,      previous,  up
+@node Repo
 @section Repo
 
 @cindex Repo
@@ -301,8 +286,7 @@ For a Subversion repo that requires authentication, you can precede the repo
 URL with username:password@ and those parameters will be passed as @option{--username}
 and @option{--password} to the SVN checkout command.
 
-@node Build Version, Use Built, Repo, MetaData
-@comment  node-name, next,      previous,  up
+@node Build Version
 @section Build Version
 
 @cindex Build Version
@@ -436,8 +420,7 @@ Another example, using extra parameters:
 
 @samp{Build Version:1.09.03,10903,45,subdir=Timeriffic,oldsdkloc=yes}
 
-@node Use Built, AntiFeatures, Build Version, MetaData
-@comment  node-name, next,      previous,  up
+@node Use Built
 @section Use Built
 
 @cindex Use Built
@@ -446,8 +429,7 @@ Set this to "Yes" to use built versions of the application for the repository.
 Currently, this just triggers update.py to copy the relevant apks and tarballs
 from the 'built' directory before updating the repo index.
 
-@node AntiFeatures, Disabled, Use Built, MetaData
-@comment  node-name, next,      previous,  up
+@node AntiFeatures
 @section AntiFeatures
 
 @cindex AntiFeatures
@@ -471,8 +453,7 @@ the following values, describing an AntiFeature the application has:
 
 @end itemize
 
-@node Disabled, Requires Root, AntiFeatures, MetaData
-@comment  node-name, next,      previous,  up
+@node Disabled
 @section Disabled
 
 @cindex Disabled
@@ -482,8 +463,7 @@ index. This allows metadata to be retained while an application is temporarily
 disabled from being published. The value should be a description of why the
 application is disabled.
 
-@node Requires Root,, Disabled, MetaData
-@comment  node-name, next,      previous,  up
+@node Requires Root
 @section Requires Root
 
 @cindex Requires Root
@@ -492,8 +472,12 @@ Set this optional field to "Yes" if the application requires root
 privileges to be usable. This lets the client filter it out if the
 user so desires.
 
-@node Index,, MetaData, Top
-@comment  node-name, next,      previous,  up
+@node GNU Free Documentation License
+@appendix GNU Free Documentation License
+
+@include fdl.texi
+
+@node Index
 @unnumbered Index
 
 @printindex cp
