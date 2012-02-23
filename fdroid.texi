@@ -7,7 +7,7 @@
 @copying
 This manual is for the F-Droid repository server tools.
 
-Copyright @copyright{} 2010, 2011 Ciaran Gultnieks
+Copyright @copyright{} 2010, 2011, 2012 Ciaran Gultnieks
 Copyright @copyright{} 2011 Henrik Tunedal, Michael Haas, John Sullivan
 
 @quotation
@@ -39,100 +39,198 @@ Free Documentation License".
 @end ifnottex
 
 @menu
-* Basic instructions::
-* Build System::
-* MetaData::
+* Overview::
+* System Requirements::
+* Setup::
+* Simple Binary Repository::
+* Building Applications::
+* Metadata::
 * GNU Free Documentation License::
 * Index::
 @end menu
 
-@node Basic instructions
-@chapter Basic instructions
+@node Overview
+@chapter Overview
 
-@cindex instructions, basic
+The F-Droid server tools provide various scripts, tools and data that are used
+to maintain the main F-Droid application repository. You can use these same
+tools to create your own additional or alternative repository for publishing,
+or to assist in creating, testing and submitting metadata to the main
+repository.
+
+
+@node System Requirements
+@chapter System Requirements
+
 @cindex installation
 
-
-@enumerate
-
-@item
-Copy config.sample.py to config.py and edit the path within accordingly
-to point to the Android tools
-
-@item
-Make a repo directory and put APK files in it
-
-@item
-Run update.py
-
-@item
-If it reports that any metadata files are missing, you can create them
-in the metadata directory and run it again.
-
-@item
-To ease creation of metadata files, run update.py with the -c option. It
-will create 'skeleton' metadata files that are missing, and you can then
-just edit them and fill in the details.
-
-@item
-Then, if you've changed things, run update.py again.
-
-@item
-Running update.py adds an Icons directory into the repo directory, and
-also creates the repository index (index.xml).
-
-@item
-Transfer the repo directory to the appropriate http server. The script
-in upload.sh is an example of how to do this.
-
-@end enumerate
-
-@node Build System
-@chapter Build System Requirements
-
-@cindex requirements, build system
-
-To be able to auto-build packages, you're going to need:
+The system requirements for using the tools will vary depending on your
+intended usage. At the very least, you'll need:
 
 @itemize @bullet
-
 @item
 GNU/Linux
-
 @item
-Python
-
+Python 2.x
 @item
-A fully functional Android SDK with all SDK platforms and tools
-
-@item
-The Android NDK
-
-@item
-Ant
-
-@item
-Ant Contrib Tasks (Debian package ant-contrib)
-
-@item
-Maven (Debian package maven2)
-
-@item
-JavaCC (Debian package javacc)
-
-@item
-VCS clients: svn, git, hg, bzr
-
-@item
-A keystore for holding release keys. (Safe, secure and well backed up!)
-
+The Android SDK
 @end itemize
 
-You then need to create a config.py (copy config.sample.py and follow the
-instructions) to specify the locations of some of these things.
+If you intend to build applications from source you'll also need most, if not
+all, of the following:
 
-@node MetaData
-@chapter MetaData
+@itemize @bullet
+@item
+All available SDK platforms and tools installed in the Android SDK, but *not*
+the proprietary components.
+@item
+The Android NDK
+@item
+Ant
+@item
+Ant Contrib Tasks (Debian package ant-contrib)
+@item
+Maven (Debian package maven2)
+@item
+JavaCC (Debian package javacc)
+@item
+VCS clients: svn, git, hg, bzr
+@item
+A keystore for holding release keys. (Safe, secure and well backed up!)
+@end itemize
+
+If you intend to use the 'Build Server' system, for secure and clean builds
+(highly recommended), you will also need:
+
+@itemize @bullet
+@item
+VirtualBox (debian package virtualbox-ose)
+@item
+Ruby
+@item
+Vagrant and Vagrant-snap
+@item
+Paramiko (debian package python-paramiko)
+@end itemize
+
+
+@node Setup
+@chapter Setup
+
+@cindex setup, installation
+
+Because the tools and data will always change rapidly, you will almost
+certainly want to work from a git clone of the tools, which are designed to
+work in this way, with all associated data in a pre-defined directory
+structure below the main one. To get started:
+
+@example
+git clone git://gitorious.org/f-droid/fdroidserver.git
+cd fdroidserver
+@end example
+
+You will now be in the root directory of the tools. All the tasks associated
+with managing the repository and data are done from here.
+
+Regardless of the intended usage of the tools, you will always need to set
+up some basic configuration details. This is done by creating a file called
+@code{config.py} which you should do by copying from @code{config.sample.py}
+and then editing according to the instructions within.
+
+
+@node Simple Binary Repository
+@chapter Simple Binary Repository
+
+@cindex binary
+
+If you want to maintain a simple repository hosting only binary APKs obtained
+and compiled elsewhere, the process is quite simple:
+
+@enumerate
+@item
+Make a repo directory and put APK files in it.
+@item
+Run @code{update.py}.
+@item
+If it reports that any metadata files are missing, you can create them
+in the @code{metadata} directory and run it again.
+@item
+To ease creation of metadata files, run @code{update.py} with the @code{-c}
+option. It will create 'skeleton' metadata files that are missing, and you can
+then just edit them and fill in the details.
+@item
+Then, if you've changed things, run @code{update.py} again.
+@item
+Running @code{update.py} adds an Icons directory into the repo directory, and
+also creates the repository index (index.xml, and also index.jar if you've
+configured the system to use a signed index).
+@end enumerate
+
+Following the above process will result in a @code{repo} directory, which you
+simply need to push to any HTTP (or preferably HTTPS) server to make it
+accessible.
+
+While some information about the applications (and versions thereof) is
+retrieved directly from the APK files, most comes from the corresponding file
+in the @code{metadata} directory. The metadata file covering ALL versions of a
+particular application is named @code{package.id.txt} where package.id is the
+unique identifier for that package.
+
+See the Metadata chapter for details of what goes in the metadata file. All
+fields are relevant for binary APKs, EXCEPT for 'Build Version' entries, which
+should be omitted.
+
+
+@node Building Applications
+@chapter Building Applications
+
+Instead of (or as well as) including binary APKs from external sources in a
+repository, you can build them directly from the source code.
+
+Using this method, it is is possible to verify that the application builds
+correctly, corresponds to the source code, and contains only free software.
+Unforunately, in the Android world, it seems to be very common for an
+application supplied as a binary APK to present itself as Free Software
+when in fact some or all of the following are true:
+
+@enumerate
+@item
+The source code (either for a particular version, or even all versions!) is
+unavailable or incomplete.
+@item
+The source code is not capable of producing the actual binary supplied.
+@item
+The 'source code' contains binary files of unknown origin, or with proprietary
+licenses.
+@end enumerate
+
+For this reason, source-built applications are the preferred method for the
+main F-Droid repository, although occasionally for technical or historical
+reasons, exceptions are made to this policy.
+
+When building applications from source, it should be noted that you will be
+signing them (all APK files must be signed to be installable on Android) with
+your own key. When an application is already installed on a device, it is not
+possible to upgrade it in place to a new version signed with a different key
+without first uninstalling the original. This may present an inconvenience to
+users, as the process of uninstalling loses any data associated with the
+previous installation.
+
+The process for managing a repository for built-from-source applications is
+very similar to that described in the Simple Binary Repository chapter,
+except now you need to:
+
+@enumerate
+@item
+Include Build Version entries in the metadata files.
+@item
+Run build.py to build any applications that are not already built.
+@item
+Run publish.py to finalise packaging and sign any APKs that have been built.
+@end enumerate
+
+@node Metadata
+@chapter Metadata
 
 @cindex metadata
 
@@ -142,7 +240,7 @@ in the metadata directory.
 
 The metadata files are simple, easy to edit text files, always named as the
 application's package ID with '.txt' appended. The following sections describe
-the fields recogognised within the file.
+the fields recognised within the file.
 
 @menu
 * License::
