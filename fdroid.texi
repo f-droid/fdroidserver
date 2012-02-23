@@ -94,6 +94,8 @@ Maven (Debian package maven2)
 @item
 JavaCC (Debian package javacc)
 @item
+JDK (Debian package openjdk-6-jdk)
+@item
 VCS clients: svn, git, hg, bzr
 @item
 A keystore for holding release keys. (Safe, secure and well backed up!)
@@ -229,6 +231,38 @@ Run build.py to build any applications that are not already built.
 Run publish.py to finalise packaging and sign any APKs that have been built.
 @end enumerate
 
+To build a single version of a single application, you could run the
+following:
+
+@example
+./build.py -p org.fdroid.fdroid -c 16
+@end example
+
+This attempts to build version code 16 (which is version 0.25) of the F-Droid
+client. If the build was succesful, two files will have been placed in the
+@code{unsigned} directory:
+
+@example
+org.fdroid.fdroid_16.apk
+org.fdroid.fdroid_16_src.tar.gz
+@end example
+
+The first is the (unsigned) APK. You could sign this with a debug key and push
+it direct to your device or an emulator for testing. The second is a source
+tarball containing exactly the source that was used to generate the binary.
+
+If you were intending to publish these files, you could then run:
+
+@example
+./publish.py
+@end example
+
+The source tarball would move to the @code{repo} directory (which is the
+directory you would push to your web server). A signed and zip-aligned version
+of the APK would also appear there, and both files would be removed from the
+@code{unsigned} directory.
+
+
 @node Metadata
 @chapter Metadata
 
@@ -254,7 +288,6 @@ the fields recognised within the file.
 * Repo Type::
 * Repo::
 * Build Version::
-* Use Built::
 * AntiFeatures::
 * Disabled::
 * Requires Root::
@@ -358,31 +391,35 @@ specified, automatic building is disabled for this application. Possible
 values are:
 
 @itemize @bullet
-
 @item
 @samp{git}
-
 @item
 @samp{svn}
-
+@item
+@samp{git-svn}
 @item
 @samp{hg}
-
 @item
 @samp{bzr}
-
 @end itemize
-
 @node Repo
 @section Repo
 
 @cindex Repo
 
-The repository location. Usually a git: or svn: URL.
+The repository location. Usually a git: or svn: URL, for example.
+
+The git-svn option connects to an SVN repository, and you specify the URL in
+exactly the same way, but git is used as a back-end. This is preferable for
+performance reasons, and also because a local copy of the entire history is
+available in case the upstream repository disappears. (It happens!)
 
 For a Subversion repo that requires authentication, you can precede the repo
 URL with username:password@ and those parameters will be passed as @option{--username}
-and @option{--password} to the SVN checkout command.
+and @option{--password} to the SVN checkout command. (This works only for
+plain svn and not for git-svn - one of the very few cases where using svn is
+advisable).
+
 
 @node Build Version
 @section Build Version
@@ -413,10 +450,7 @@ configuration to the build. These are:
 
 @item subdir=<path>
 Specifies to build from a subdirectory of the checked out source code.
-Normally this directory is changed to before building, but there is a
-special case for SVN repositories where the URL is specified with a *
-at the end. See the documentation for the Repo field for more
-information.
+Normally this directory is changed to before building,
 
 @item bindir=<path>
 Normally the build output (apk) is expected to be in the bin
@@ -448,17 +482,24 @@ Specify an alternate ant command (target) instead of the default
 
 @item forceversion=yes
 If specified, the package version in AndroidManifest.xml is replaced
-with the version number for the build as specified in recipe. Useful
-for cases when upstream repo missed to update it for specific tag,
-or to build an arbitrary revision.
+with the version name for the build as specified in the metadata.
+
+This is useful for cases when upstream repo failed to update it for
+specific tag, or to build an arbitrary revision.
 
 @item forcevercode=yes
-If specified, the package vercode in the AndroidManifest.xml is replaced
-with the version code for the build. See also forceversion.
+If specified, the package version code in the AndroidManifest.xml is
+replaced with the version code for the build. See also forceversion.
 
-@item update=no
+@item update=xxx
 By default, 'android update project' is used to generate or update the
 build.xml file. Specifying update=no bypasses that.
+
+Specifiying update=force forces rebuilding of the build.xml file at the
+same time - this is frequently needed with r14 of the Android platform
+tools.
+
+Be aware of any customisations in build.xml when using update=force.
 
 @item initfun=yes
 Enables a selection of mad hacks to make com.funambol.android build.
@@ -486,6 +527,10 @@ insert literal commas, or as the last character on a line to join that
 line with the next. It has no special meaning in other contexts; in
 particular, literal backslashes should not be escaped.
 
+@item init=xxxx
+As for 'prebuild', but runs on the source code BEFORE any other processing
+takes place.
+
 @item novcheck=yes 
 Don't check that the version name and code in the resulting apk are
 correct by looking at the build output - assume the metadata is
@@ -512,20 +557,26 @@ files within a directory below the metadata, with the same
 name as the metadata file but without the extension. Each of
 these patches is applied to the code in turn.
 
+@item extlibs=a;b;c
+Specifies a list of external libraries (jar files) from the
+@code{build/extlib} library, which will be placed in the @code{libs} directory
+of the project. Separate items with semicolons.
+
+@item srclibs=a@@r;b@@r1;
+Specifies a list of source libraries (kept up to date using version control)
+from a predefined set. Separate items with semicolons, and each item is of
+the form name@@rev where name is the predefined source library name and rev is
+the revision in source control to use. You can then also use $$name$$ in the
+prebuild command to substitute the relative path to the library directory.
+
+The available source libraries are current hard-coded in common.py. This will
+later be data-driven.
+
 @end table
 
 Another example, using extra parameters:
 
 @samp{Build Version:1.09.03,10903,45,subdir=Timeriffic,oldsdkloc=yes}
-
-@node Use Built
-@section Use Built
-
-@cindex Use Built
-
-Set this to "Yes" to use built versions of the application for the repository.
-Currently, this just triggers update.py to copy the relevant apks and tarballs
-from the 'built' directory before updating the repo index.
 
 @node AntiFeatures
 @section AntiFeatures
@@ -538,16 +589,22 @@ the following values, describing an AntiFeature the application has:
 @itemize @bullet
 
 @item
-@samp{Ads} - the application contains advertising
+@samp{Ads} - the application contains advertising.
 
 @item
-@samp{Tracking} - the application tracks and reports your activity to somewhere
+@samp{Tracking} - the application tracks and reports your activity to
+somewhere without your consent.
 
 @item
-@samp{NonFreeNet} - the application promotes a non-Free network service
+@samp{NonFreeNet} - the application promotes a non-Free network service.
 
 @item
-@samp{NonFreeAdd} - the application promotes non-Free add-ons
+@samp{NonFreeAdd} - the application promotes non-Free add-ons.
+
+@item
+@samp{NonFreeDep} - the application depends on a non-Free application (e.g.
+Google Maps) - i.e. it requires it to be installed on the device, but does not
+include it.
 
 @end itemize
 
