@@ -1,0 +1,22 @@
+Category:Office
+License:GPLv3
+Web Site:http://code.google.com/p/addi/
+Source Code:http://code.google.com/p/addi/source/checkout
+Issue Tracker:http://code.google.com/p/addi/issues/list
+Donate:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4JELWYF6CNHVU&lc=US&item_name=Corbin%20Champion%20Designs&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
+
+Summary:Matlab/Octave clone, a math system
+Description:
+This is a mathematic computing environment like Matlab and Octave,
+but made to work on Android devices.
+
+The goal is for 100% compliance with how Octave works including
+a compatibility mode that makes the behavior more similar to Matlab
+(already very similar).
+.
+
+Repo Type:git-svn
+Repo:http://addi.googlecode.com/svn/Addi/
+
+Build Version:1.88,37,179
+Build Version:1.91,40,189,buildjni=yes
