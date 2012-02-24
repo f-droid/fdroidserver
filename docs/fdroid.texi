@@ -45,6 +45,7 @@ Free Documentation License".
 * Simple Binary Repository::
 * Building Applications::
 * Metadata::
+* Build Server::
 * GNU Free Documentation License::
 * Index::
 @end menu
@@ -672,6 +673,78 @@ application is disabled.
 Set this optional field to "Yes" if the application requires root
 privileges to be usable. This lets the client filter it out if the
 user so desires.
+
+
+@node Build Server
+@chapter Build Server
+
+The Build Server system isolates the builds for each package within a clean,
+isolated and secure throwaway virtual machine environment.
+
+@section Rationale
+
+Building applications in this manner on a large scale, especially with the
+involvement of automated and/or unattended processes, could be considered
+a dangerous pastime from a security perspective. This is even more the case
+when the products of the build are also distributed widely and in a
+semi-automated ("you have updates available") fashion.
+
+Assume that an upstream source repository is compromised. A small selection
+of things that an attacker could do in such a situation:
+
+@enumerate
+@item
+Use custom ant build steps to execute virtually anything as the user doing
+the build.
+@item
+Access the keystore.
+@item
+Modify the built apk files or source tarballs for other applications in the
+repository.
+@item
+Modify the metadata (which includes build scripts, which again, also includes
+the ability to execute anything) for other applications in the repository.
+@end enumerate
+
+Through complete isolation, the repurcussions are at least limited to the
+application in question.
+
+Aside from security issues, there are some applications which have strange
+requirements such as custom versions of the NDK. It would be impractical (or
+at least extremely messy) to start modifying and restoring the SDK on a
+multi-purpose system, but within the confines of a throwaway single-use
+virtual machine, anything is possible.
+
+@section Setting up a build server
+
+Integrating the build server setup into the main scripts is a work in progress.
+Some things may not work properly yet. Talk to CiaranG if you're trying to use
+this and have problems.
+
+In addition to the basic setup sets previously described, you will also need
+a Vagrant-compatible Debian Squeeze base box called 'debian6-32'. You can
+create one of these for yourself from standard Debian installation media, as
+the specification for what's required to be Vagrant-compatible is very well
+defined. This is the sensible and secure way to do it, since you know what's
+in it. If you insist on taking a shortcut, ask CiaranG for his on the forum
+or in IRC.
+
+With this base box installed, you can then do:
+
+@example
+./makebuildserver.sh
+@end example
+
+This will take a long time - most of it spent installing the necessary parts
+of the Android SDK for all the various platforms. Luckily you only need to
+do it occasionally.
+
+Once it's complete you'll have a new base box called 'buildserver' which is
+what's used for the actual builds. You can then build packages as normal,
+but with the addition of the @code{--server} flag to @code{build.py} to
+instruct it to do all the hard work within the virtual machine, which is
+reset to a completely clean state for every package built.
+
 
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License

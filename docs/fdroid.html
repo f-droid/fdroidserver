@@ -63,6 +63,11 @@ Copyright (C) 2011 Henrik Tunedal, Michael Haas, John Sullivan
 <li><a href="#Disabled">6.13 Disabled</a>
 <li><a href="#Requires-Root">6.14 Requires Root</a>
 </li></ul>
+<li><a name="toc_Build-Server" href="#Build-Server">7 Build Server</a>
+<ul>
+<li><a href="#Build-Server">7.1 Rationale</a>
+<li><a href="#Build-Server">7.2 Setting up a build server</a>
+</li></ul>
 <li><a name="toc_GNU-Free-Documentation-License" href="#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a>
 <li><a name="toc_Index" href="#Index">Index</a>
 </li></ul>
@@ -101,8 +106,9 @@ Free Documentation License".
 <li><a accesskey="4" href="#Simple-Binary-Repository">Simple Binary Repository</a>
 <li><a accesskey="5" href="#Building-Applications">Building Applications</a>
 <li><a accesskey="6" href="#Metadata">Metadata</a>
-<li><a accesskey="7" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>
-<li><a accesskey="8" href="#Index">Index</a>
+<li><a accesskey="7" href="#Build-Server">Build Server</a>
+<li><a accesskey="8" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>
+<li><a accesskey="9" href="#Index">Index</a>
 </ul>
 
 <div class="node">
@@ -339,7 +345,7 @@ where normally it would be completely ignored.
 <div class="node">
 <a name="Metadata"></a>
 <p><hr>
-Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Next:&nbsp;<a rel="next" accesskey="n" href="#Build-Server">Build Server</a>,
 Previous:&nbsp;<a rel="previous" accesskey="p" href="#Building-Applications">Building Applications</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
 
@@ -784,10 +790,82 @@ privileges to be usable. This lets the client filter it out if the
 user so desires.
 
 <div class="node">
+<a name="Build-Server"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#GNU-Free-Documentation-License">GNU Free Documentation License</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Metadata">Metadata</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">7 Build Server</h2>
+
+<p>The Build Server system isolates the builds for each package within a clean,
+isolated and secure throwaway virtual machine environment.
+
+<h3 class="section">7.1 Rationale</h3>
+
+<p>Building applications in this manner on a large scale, especially with the
+involvement of automated and/or unattended processes, could be considered
+a dangerous pastime from a security perspective. This is even more the case
+when the products of the build are also distributed widely and in a
+semi-automated ("you have updates available") fashion.
+
+   <p>Assume that an upstream source repository is compromised. A small selection
+of things that an attacker could do in such a situation:
+
+     <ol type=1 start=1>
+<li>Use custom ant build steps to execute virtually anything as the user doing
+the build. 
+<li>Access the keystore. 
+<li>Modify the built apk files or source tarballs for other applications in the
+repository. 
+<li>Modify the metadata (which includes build scripts, which again, also includes
+the ability to execute anything) for other applications in the repository.
+        </ol>
+
+   <p>Through complete isolation, the repurcussions are at least limited to the
+application in question.
+
+   <p>Aside from security issues, there are some applications which have strange
+requirements such as custom versions of the NDK. It would be impractical (or
+at least extremely messy) to start modifying and restoring the SDK on a
+multi-purpose system, but within the confines of a throwaway single-use
+virtual machine, anything is possible.
+
+<h3 class="section">7.2 Setting up a build server</h3>
+
+<p>Integrating the build server setup into the main scripts is a work in progress. 
+Some things may not work properly yet. Talk to CiaranG if you're trying to use
+this and have problems.
+
+   <p>In addition to the basic setup sets previously described, you will also need
+a Vagrant-compatible Debian Squeeze base box called 'debian6-32'. You can
+create one of these for yourself from standard Debian installation media, as
+the specification for what's required to be Vagrant-compatible is very well
+defined. This is the sensible and secure way to do it, since you know what's
+in it. If you insist on taking a shortcut, ask CiaranG for his on the forum
+or in IRC.
+
+   <p>With this base box installed, you can then do:
+
+<pre class="example">     ./makebuildserver.sh
+</pre>
+   <p>This will take a long time - most of it spent installing the necessary parts
+of the Android SDK for all the various platforms. Luckily you only need to
+do it occasionally.
+
+   <p>Once it's complete you'll have a new base box called 'buildserver' which is
+what's used for the actual builds. You can then build packages as normal,
+but with the addition of the <code>--server</code> flag to <code>build.py</code> to
+instruct it to do all the hard work within the virtual machine, which is
+reset to a completely clean state for every package built.
+
+<div class="node">
 <a name="GNU-Free-Documentation-License"></a>
 <p><hr>
 Next:&nbsp;<a rel="next" accesskey="n" href="#Index">Index</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="#Metadata">Metadata</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Build-Server">Build Server</a>,
 Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
 
 </div>
