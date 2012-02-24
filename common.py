@@ -829,6 +829,15 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
         if os.path.exists(badpath):
             shutil.rmtree(badpath)
 
+    # Apply patches if any
+    if 'patch' in build:
+        for patch in build['patch'].split(';'):
+            print "Applying " + patch
+            patch_path = os.path.join('metadata', app['id'], patch)
+            if subprocess.call(['patch', '-p1',
+                            '-i', os.path.abspath(patch_path)], cwd=build_dir) != 0:
+                raise BuildException("Failed to apply patch %s" % patch_path)
+
     # Run a pre-build command if one is required...
     if build.has_key('prebuild'):
         prebuild = build['prebuild']
@@ -838,15 +847,6 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
             prebuild = prebuild.replace('$$' + name + '$$', libpath)
         if subprocess.call(prebuild, cwd=root_dir, shell=True) != 0:
             raise BuildException("Error running pre-build command")
-
-    # Apply patches if any
-    if 'patch' in build:
-        for patch in build['patch'].split(';'):
-            print "Applying " + patch
-            patch_path = os.path.join('metadata', app['id'], patch)
-            if subprocess.call(['patch', '-p1',
-                            '-i', os.path.abspath(patch_path)], cwd=build_dir) != 0:
-                raise BuildException("Failed to apply patch %s" % patch_path)
 
     # Special case init functions for funambol...
     if build.get('initfun', 'no')  == "yes":
