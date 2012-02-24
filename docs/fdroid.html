@@ -613,8 +613,14 @@ tools.
      <br><dt><code>initfun=yes</code><dd>Enables a selection of mad hacks to make com.funambol.android build. 
 Probably not useful for any other application.
 
-     <br><dt><code>buildjni=yes</code><dd>Enables building of native code via the ndk-build script before doing
-the main ant build.
+     <br><dt><code>buildjni=[no|yes|force]</code><dd>Enables building of native code via the ndk-build script before doing
+the main ant build. The default is <code>no</code>.
+
+     <p>The build and scan processes will complain (refuse to build) if this is set
+to <code>no</code>, but there is a <code>jni</code> directory present. If the native code
+is being built by other means, you can specify <code>manual</code> here to avoid
+that. However, if the native code is actually not required, remove the
+directory instead.
 
      <br><dt><code>submodules=yes</code><dd>Use if the project (git only) has submodules - causes git submodule
 init and update to be executed after the source is cloned.

@@ -505,9 +505,15 @@ Be aware of any customisations in build.xml when using update=force.
 Enables a selection of mad hacks to make com.funambol.android build.
 Probably not useful for any other application.
 
-@item buildjni=yes
+@item buildjni=[no|yes|force]
 Enables building of native code via the ndk-build script before doing
-the main ant build.
+the main ant build. The default is @code{no}.
+
+The build and scan processes will complain (refuse to build) if this is set
+to @code{no}, but there is a @code{jni} directory present. If the native code
+is being built by other means, you can specify @code{manual} here to avoid
+that. However, if the native code is actually not required, remove the
+directory instead.
 
 @item submodules=yes
 Use if the project (git only) has submodules - causes git submodule

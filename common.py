@@ -954,7 +954,7 @@ def scan_source(build_dir, root_dir, thisbuild):
     # Presence of a jni directory without buildjni=yes might
     # indicate a problem...
     if (os.path.exists(os.path.join(root_dir, 'jni')) and 
-            thisbuild.get('buildjni', 'no') != 'yes'):
+            thisbuild.get('buildjni', 'no') == 'no'):
         msg = 'Found jni directory, but buildjni is not enabled'
         problems.append(msg)
 
