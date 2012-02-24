@@ -43,6 +43,9 @@ Copyright (C) 2011 Henrik Tunedal, Michael Haas, John Sullivan
 <li><a name="toc_Setup" href="#Setup">3 Setup</a>
 <li><a name="toc_Simple-Binary-Repository" href="#Simple-Binary-Repository">4 Simple Binary Repository</a>
 <li><a name="toc_Building-Applications" href="#Building-Applications">5 Building Applications</a>
+<ul>
+<li><a href="#Building-Applications">5.1 More about build.py</a>
+</li></ul>
 <li><a name="toc_Metadata" href="#Metadata">6 Metadata</a>
 <ul>
 <li><a href="#License">6.1 License</a>
@@ -287,13 +290,24 @@ except now you need to:
 <li>Run publish.py to finalise packaging and sign any APKs that have been built.
         </ol>
 
+<h3 class="section">5.1 More about build.py</h3>
+
+<p>When run without any parameters, build.py will build any and all versions of
+applications that you don't already have in the <code>repo</code> directory (or more
+accurately, the <code>unsigned</code> directory. There are various other things you
+can do. As with all the tools, the <code>--help</code> option is your friend, but a
+few annotated examples and discussion of the more common usage modes follows:
+
    <p>To build a single version of a single application, you could run the
 following:
 
-<pre class="example">     ./build.py -p org.fdroid.fdroid -c 16
+<pre class="example">     ./build.py --package=org.fdroid.fdroid --vercode 16
 </pre>
    <p>This attempts to build version code 16 (which is version 0.25) of the F-Droid
-client. If the build was succesful, two files will have been placed in the
+client. Many of the tools recognise this <code>--package</code> parameter, allowing
+their activity to be limited to just a single package.
+
+   <p>If the build above was succesful, two files will have been placed in the
 <code>unsigned</code> directory:
 
 <pre class="example">     org.fdroid.fdroid_16.apk
@@ -312,6 +326,16 @@ directory you would push to your web server). A signed and zip-aligned version
 of the APK would also appear there, and both files would be removed from the
 <code>unsigned</code> directory.
 
+   <p>If you're building purely for the purposes of testing, and not intending to
+push the results to a repository, at least yet, the <code>--test</code> option can be
+used to direct output to the <code>tmp</code> directory instead of <code>unsigned</code>. 
+A similar effect could by achieved by simply deleting the output files from
+<code>unsigned</code> after the build, but with the risk of forgetting to do so!
+
+   <p>Along similar lines (and only in conjunction with <code>--test</code>, you can use
+<code>--force</code> to force a build of a Disabled application for test purposes,
+where normally it would be completely ignored.
+
 <div class="node">
 <a name="Metadata"></a>
 <p><hr>
@@ -325,12 +349,28 @@ Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
 
 <p><a name="index-metadata-4"></a>
 Information used by update.py to compile the public index comes from two
-sources, 1) the APK files in the repo directory, and 2) the metadata files
-in the metadata directory.
+sources:
+
+     <ol type=1 start=1>
+<li>the APK files in the repo directory, and
+<li>the metadata files in the metadata directory.
+        </ol>
 
    <p>The metadata files are simple, easy to edit text files, always named as the
-application's package ID with '.txt' appended. The following sections describe
-the fields recognised within the file.
+application's package ID with '.txt' appended.
+
+   <p>Note that although the metadata files are designed to be easily read and
+writable by humans, they are also processed and written by various scripts. 
+They are capable of rewriting the entire file when necessary. Even so,
+the structure and comments will be preserved correctly, although the order
+of fields will be standardised. (In the event that the original file was
+in a different order, comments are considered as being attached to the field
+following them). In fact, you can standardise all the metadata in a single
+command, without changing the functional content, by running:
+
+<pre class="example">     ./rewritemetadata.py
+</pre>
+   <p>The following sections describe the fields recognised within the file.
 
 <ul class="menu">
 <li><a accesskey="1" href="#License">License</a>

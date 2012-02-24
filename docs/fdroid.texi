@@ -231,15 +231,26 @@ Run build.py to build any applications that are not already built.
 Run publish.py to finalise packaging and sign any APKs that have been built.
 @end enumerate
 
+@section More about build.py
+
+When run without any parameters, build.py will build any and all versions of
+applications that you don't already have in the @code{repo} directory (or more
+accurately, the @code{unsigned} directory. There are various other things you
+can do. As with all the tools, the @code{--help} option is your friend, but a
+few annotated examples and discussion of the more common usage modes follows:
+
 To build a single version of a single application, you could run the
 following:
 
 @example
-./build.py -p org.fdroid.fdroid -c 16
+./build.py --package=org.fdroid.fdroid --vercode 16
 @end example
 
 This attempts to build version code 16 (which is version 0.25) of the F-Droid
-client. If the build was succesful, two files will have been placed in the
+client. Many of the tools recognise this @code{--package} parameter, allowing
+their activity to be limited to just a single package.
+
+If the build above was succesful, two files will have been placed in the
 @code{unsigned} directory:
 
 @example
@@ -262,6 +273,15 @@ directory you would push to your web server). A signed and zip-aligned version
 of the APK would also appear there, and both files would be removed from the
 @code{unsigned} directory.
 
+If you're building purely for the purposes of testing, and not intending to
+push the results to a repository, at least yet, the @code{--test} option can be
+used to direct output to the @code{tmp} directory instead of @code{unsigned}.
+A similar effect could by achieved by simply deleting the output files from
+@code{unsigned} after the build, but with the risk of forgetting to do so!
+
+Along similar lines (and only in conjunction with @code{--test}, you can use
+@code{--force} to force a build of a Disabled application for test purposes,
+where normally it would be completely ignored.
 
 @node Metadata
 @chapter Metadata
@@ -269,12 +289,32 @@ of the APK would also appear there, and both files would be removed from the
 @cindex metadata
 
 Information used by update.py to compile the public index comes from two
-sources, 1) the APK files in the repo directory, and 2) the metadata files
-in the metadata directory.
+sources:
+
+@enumerate
+@item
+the APK files in the repo directory, and
+@item
+the metadata files in the metadata directory.
+@end enumerate
 
 The metadata files are simple, easy to edit text files, always named as the
-application's package ID with '.txt' appended. The following sections describe
-the fields recognised within the file.
+application's package ID with '.txt' appended.
+
+Note that although the metadata files are designed to be easily read and
+writable by humans, they are also processed and written by various scripts.
+They are capable of rewriting the entire file when necessary. Even so,
+the structure and comments will be preserved correctly, although the order
+of fields will be standardised. (In the event that the original file was
+in a different order, comments are considered as being attached to the field
+following them). In fact, you can standardise all the metadata in a single
+command, without changing the functional content, by running:
+
+@example
+./rewritemetadata.py
+@end example
+
+The following sections describe the fields recognised within the file.
 
 @menu
 * License::
