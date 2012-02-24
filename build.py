@@ -139,8 +139,9 @@ def build_local(app, thisbuild, build_dir, output_dir):
     tarball = tarfile.open(os.path.join(tmp_dir,
         tarname + '.tar.gz'), "w:gz")
     def tarexc(f):
-        if f in ['.svn', '.git', '.hg', '.bzr']:
-            return True
+        for vcs_dir in ['.svn', '.git', '.hg', '.bzr']:
+            if f.endswith(vcs_dir):
+                return True
         return False
     tarball.add(build_dir, tarname, exclude=tarexc)
     tarball.close()
