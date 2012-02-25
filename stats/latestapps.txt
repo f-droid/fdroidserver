@@ -1,3 +1,6 @@
+com.addi
+com.everysoft.autoanswer
+org.fastergps
 net.micode.compass
 li.klass.fhem
 org.jsharkey.sky
@@ -5,6 +8,3 @@ uk.co.jarofgreen.JustADamnCompass
 org.tof
 com.anoshenko.android.mahjongg
 org.liberty.android.fantastischmemo
-com.ihunda.android.binauralbeat
-arity.calculator
-com.ath0.rpn
