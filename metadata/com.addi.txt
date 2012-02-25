@@ -3,7 +3,7 @@ License:GPLv3
 Web Site:http://code.google.com/p/addi/
 Source Code:http://code.google.com/p/addi/source/checkout
 Issue Tracker:http://code.google.com/p/addi/issues/list
-Donate:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4JELWYF6CNHVU&lc=US&item_name=Corbin%20Champion%20Designs&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
+Donate:http://code.google.com/p/addi/wiki/Donate
 
 Summary:Matlab/Octave clone, a math system
 Description:
