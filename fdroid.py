@@ -22,11 +22,12 @@ import sys
 commands = [
         "build",
         "update",
+        "publish",
         "checkupdates",
         "import",
         "rewritemeta",
         "scanner",
-        "statsupdate"]
+        "stats"]
 
 def main():
 
