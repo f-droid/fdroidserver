@@ -33,8 +33,9 @@ from common import BuildException
 from common import VCSException
 
 
-# Do a build on the build server.
 def build_server(app, thisbuild, build_dir, output_dir):
+    """Do a build on the build server."""
+
     import paramiko
 
     # Destroy the builder vm if it already exists...
@@ -117,8 +118,8 @@ def build_server(app, thisbuild, build_dir, output_dir):
         raise BuildException("Failed to destroy")
 
 
-# Do a build locally.
 def build_local(app, thisbuild, build_dir, output_dir):
+    """Do a build locally."""
 
     # Prepare the source code...
     root_dir = common.prepare_source(vcs, app, thisbuild,
@@ -164,11 +165,13 @@ def build_local(app, thisbuild, build_dir, output_dir):
             '-Dandroid.sdk.path=' + sdk_path],
             cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-        if thisbuild.has_key('antcommand'):
-            antcommand = thisbuild['antcommand']
+        if options.install:
+            antcommands = ['debug',' install']
+        elif thisbuild.has_key('antcommand'):
+            antcommands = [thisbuild['antcommand']]
         else:
-            antcommand = 'release'
-        p = subprocess.Popen(['ant', antcommand], cwd=root_dir, 
+            antcommands = ['release']
+        p = subprocess.Popen(['ant'] + antcommands, cwd=root_dir, 
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = p.communicate()
     if p.returncode != 0:
@@ -247,83 +250,130 @@ def build_local(app, thisbuild, build_dir, output_dir):
             os.path.join(output_dir, tarfilename))
 
 
-#Read configuration...
-execfile('config.py')
+def trybuild(app, thisbuild, build_dir, output_dir, repo_dir, vcs, test):
+    """
+    Build a particular version of an application, if it needs building.
 
-# Parse command line...
-parser = OptionParser()
-parser.add_option("-v", "--verbose", action="store_true", default=False,
-                  help="Spew out even more information than normal")
-parser.add_option("-p", "--package", default=None,
-                  help="Build only the specified package")
-parser.add_option("-c", "--vercode", default=None,
-                  help="Build only the specified version code")
-parser.add_option("-s", "--stop", action="store_true", default=False,
-                  help="Make the build stop on exceptions")
-parser.add_option("-t", "--test", action="store_true", default=False,
-                  help="Test mode - put output in the tmp directory only.")
-parser.add_option("--server", action="store_true", default=False,
-                  help="Use build server")
-parser.add_option("--on-server", action="store_true", default=False,
-                  help="Specify that we're running on the build server")
-parser.add_option("-f", "--force", action="store_true", default=False,
-                  help="Force build of disabled app. Only allowed in test mode.")
-(options, args) = parser.parse_args()
+    Returns True if the build was done, False if it wasn't necessary.
+    """
 
-if options.force and not options.test:
-    print "Force is only allowed in test mode"
-    sys.exit(1)
+    dest = os.path.join(output_dir, app['id'] + '_' +
+            thisbuild['vercode'] + '.apk')
+    dest_repo = os.path.join(repo_dir, app['id'] + '_' +
+            thisbuild['vercode'] + '.apk')
 
-# Get all apps...
-apps = common.read_metadata(options.verbose)
+    if os.path.exists(dest) or (not test and os.path.exists(dest_repo)):
+        return False
 
-failed_apps = {}
-build_succeeded = []
+    if thisbuild['commit'].startswith('!'):
+        return False
 
-log_dir = 'logs'
-if not os.path.isdir(log_dir):
-    print "Creating log directory"
-    os.makedirs(log_dir)
-
-tmp_dir = 'tmp'
-if not os.path.isdir(tmp_dir):
-    print "Creating temporary directory"
-    os.makedirs(tmp_dir)
-
-if options.test:
-    output_dir = tmp_dir
-else:
-    output_dir = 'unsigned'
-    if not os.path.isdir(output_dir):
-        print "Creating output directory"
-        os.makedirs(output_dir)
-
-repo_dir = 'repo'
-
-build_dir = 'build'
-if not os.path.isdir(build_dir):
-    print "Creating build directory"
-    os.makedirs(build_dir)
-extlib_dir = os.path.join(build_dir, 'extlib')
-
-# Filter apps and build versions according to command-line options...
-if options.package:
-    apps = [app for app in apps if app['id'] == options.package]
-if options.vercode:
-    for app in apps:
-        app['builds'] = [b for b in app['builds']
-                if str(b['vercode']) == options.vercode]
-
-# Build applications...
-for app in apps:
-
-    if app['Disabled'] and not options.force:
-        if options.verbose:
-            print "Skipping %s: disabled" % app['id']
-    elif (not app['builds']) or app['Repo Type'] =='' or len(app['builds']) == 0:
-        if options.verbose:
-            print "Skipping %s: no builds specified" % app['id']
+    if options.verbose:
+        mstart = '.. building version '
     else:
+        mstart = 'Building version '
+    print mstart + thisbuild['version'] + ' of ' + app['id']
+
+    if options.server:
+        build_server(app, thisbuild, build_dir, output_dir)
+    else:
+        build_local(app, thisbuild, build_dir, output_dir)
+    return True
+
+
+def parse_commandline():
+    """Parse the command line. Returns options, args."""
+
+    parser = OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    parser.add_option("-p", "--package", default=None,
+                      help="Build only the specified package")
+    parser.add_option("-c", "--vercode", default=None,
+                      help="Build only the specified version code")
+    parser.add_option("-s", "--stop", action="store_true", default=False,
+                      help="Make the build stop on exceptions")
+    parser.add_option("-t", "--test", action="store_true", default=False,
+                      help="Test mode - put output in the tmp directory only.")
+    parser.add_option("--server", action="store_true", default=False,
+                      help="Use build server")
+    parser.add_option("--on-server", action="store_true", default=False,
+                      help="Specify that we're running on the build server")
+    parser.add_option("-f", "--force", action="store_true", default=False,
+                      help="Force build of disabled app. Only allowed in test mode.")
+    parser.add_option("--install", action="store_true", default=False,
+                      help="Use 'ant debug install' to build and install a " +
+                      "debug version on your device or emulator. " +
+                      "Implies --force and --test")
+    options, args = parser.parse_args()
+
+    if options.force and not options.test:
+        print "Force is only allowed in test mode"
+        sys.exit(1)
+
+    # The --install option implies --test and --force...
+    if options.install:
+        options.force = True
+        options.test = True
+
+    return options, args
+
+
+def main():
+
+    # Read configuration...
+    execfile('config.py')
+    options, args = parse_commandline()
+
+    # Get all apps...
+    apps = common.read_metadata(options.verbose)
+
+    log_dir = 'logs'
+    if not os.path.isdir(log_dir):
+        print "Creating log directory"
+        os.makedirs(log_dir)
+
+    tmp_dir = 'tmp'
+    if not os.path.isdir(tmp_dir):
+        print "Creating temporary directory"
+        os.makedirs(tmp_dir)
+
+    if options.test:
+        output_dir = tmp_dir
+    else:
+        output_dir = 'unsigned'
+        if not os.path.isdir(output_dir):
+            print "Creating output directory"
+            os.makedirs(output_dir)
+
+    repo_dir = 'repo'
+
+    build_dir = 'build'
+    if not os.path.isdir(build_dir):
+        print "Creating build directory"
+        os.makedirs(build_dir)
+    extlib_dir = os.path.join(build_dir, 'extlib')
+
+    # Filter apps and build versions according to command-line options, etc...
+    if options.package:
+        apps = [app for app in apps if app['id'] == options.package]
+        if len(apps) == 0:
+            print "No such package"
+            sys.exit(1)
+    apps = [app for app in apps if not app['Disabled'] and app['builds'] and
+            len(app['Repo Type']) > 0 and len(app['builds']) > 0]
+    if len(apps) == 0:
+        print "Nothing to do - all apps are disabled or have no builds defined."
+        sys.exit(1)
+    if options.vercode:
+        for app in apps:
+            app['builds'] = [b for b in app['builds']
+                    if str(b['vercode']) == options.vercode]
+
+    # Build applications...
+    failed_apps = {}
+    build_succeeded = []
+    for app in apps:
 
         build_dir = 'build/' + app['id']
 
@@ -332,30 +382,8 @@ for app in apps:
 
         for thisbuild in app['builds']:
             try:
-                dest = os.path.join(output_dir, app['id'] + '_' +
-                        thisbuild['vercode'] + '.apk')
-                dest_repo = os.path.join(repo_dir, app['id'] + '_' +
-                        thisbuild['vercode'] + '.apk')
-
-                if os.path.exists(dest) or (not options.test and os.path.exists(dest_repo)):
-                    if options.verbose:
-                        print "..version " + thisbuild['version'] + " already exists"
-                elif thisbuild['commit'].startswith('!'):
-                    if options.verbose:
-                        print ("..skipping version " + thisbuild['version'] + " - " +
-                            thisbuild['commit'][1:])
-                else:
-                    if options.verbose:
-                        mstart = '.. building version '
-                    else:
-                        mstart = 'Building version '
-                    print mstart + thisbuild['version'] + ' of ' + app['id']
-
-                    if options.server:
-                        build_server(app, thisbuild, build_dir, output_dir)
-                    else:
-                        build_local(app, thisbuild, build_dir, output_dir)
-
+                if trybuild(app, thisbuild, build_dir, output_dir, repo_dir,
+                        vcs, options.test):
                     build_succeeded.append(app)
             except BuildException as be:
                 if options.stop:
@@ -376,15 +404,19 @@ for app in apps:
                 print "Could not build app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
                 failed_apps[app['id']] = e
 
-for app in build_succeeded:
-    print "success: %s" % (app['id'])
+    for app in build_succeeded:
+        print "success: %s" % (app['id'])
 
-for fa in failed_apps:
-    print "Build for app %s failed:\n%s" % (fa, failed_apps[fa])
+    for fa in failed_apps:
+        print "Build for app %s failed:\n%s" % (fa, failed_apps[fa])
 
-print "Finished."
-if len(build_succeeded) > 0:
-    print str(len(build_succeeded)) + ' builds succeeded'
-if len(failed_apps) > 0:
-    print str(len(failed_apps)) + ' builds failed'
+    print "Finished."
+    if len(build_succeeded) > 0:
+        print str(len(build_succeeded)) + ' builds succeeded'
+    if len(failed_apps) > 0:
+        print str(len(failed_apps)) + ' builds failed'
+
+
+if __name__ == "__main__":
+    main()
 
