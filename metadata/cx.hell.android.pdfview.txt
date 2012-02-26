@@ -1,0 +1,26 @@
+Category:Readers
+License:GPLv3
+Web Site:http://code.google.com/p/apv/
+Source Code:http://code.google.com/p/apv/source/checkout
+Issue Tracker:http://code.google.com/p/apv/issues/list
+Donate:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LKB59NTKW9QLS
+
+Summary:Android PDF Viewer
+Description:
+Native Android PDF Viewer based on MuPDF library
+
+Features:
+
+* Textual search support
+
+* Flexible key/button/gesture configuration
+
+* Different color schemes for comfortable reading
+
+* Optimizations for eInk
+.
+
+Repo Type:hg
+Repo:https://code.google.com/p/apv/
+
+Build Version:0.3.2,32000,ff030f8b49e6,subdir=pdfview,buildjni=yes,patch=fdroid-ndk-build.patch,prebuild=scripts/build-native.sh
