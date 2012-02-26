@@ -27,9 +27,6 @@ from optparse import OptionParser
 import HTMLParser
 import common
 
-#Read configuration...
-execfile('config.py')
-
 
 # Check for a new version by looking at the Google market.
 # Returns (None, "a message") if this didn't work, or (version, vercode) for
@@ -66,48 +63,55 @@ def check_market(app):
 
 
 
+def main():
 
-# Parse command line...
-parser = OptionParser()
-parser.add_option("-v", "--verbose", action="store_true", default=False,
-                  help="Spew out even more information than normal")
-parser.add_option("-p", "--package", default=None,
-                  help="Build only the specified package")
-(options, args) = parser.parse_args()
+    #Read configuration...
+    execfile('config.py')
 
-# Get all apps...
-apps = common.read_metadata(options.verbose)
+    # Parse command line...
+    parser = OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    parser.add_option("-p", "--package", default=None,
+                      help="Build only the specified package")
+    (options, args) = parser.parse_args()
 
-html_parser = HTMLParser.HTMLParser()
+    # Get all apps...
+    apps = common.read_metadata(options.verbose)
 
-for app in apps:
+    html_parser = HTMLParser.HTMLParser()
 
-    if options.package and options.package != app['id']:
-        # Silent skip...
-        pass
-    else:
-        print "Processing " + app['id'] + '...'
+    for app in apps:
 
-        mode = app['Update Check Mode']
-        if mode == 'Market':
-            (version, vercode) = check_market(app)
-        elif mode == 'None':
-            version = None
-            vercode = 'Checking disabled'
+        if options.package and options.package != app['id']:
+            # Silent skip...
+            pass
         else:
-            version = None
-            vercode = 'Invalid update check method'
+            print "Processing " + app['id'] + '...'
 
-        if not version:
-            print "..." + vercode
-        elif vercode == app['Current Version Code'] and version == app['Current Version']:
-            print "...up to date"
-        else:
-            print '...updating to version:' + version + ' vercode:' + vercode
-            app['Current Version'] = version
-            app['Current Version Code'] = vercode
-            metafile = os.path.join('metadata', app['id'] + '.txt')
-            common.write_metadata(metafile, app)
+            mode = app['Update Check Mode']
+            if mode == 'Market':
+                (version, vercode) = check_market(app)
+            elif mode == 'None':
+                version = None
+                vercode = 'Checking disabled'
+            else:
+                version = None
+                vercode = 'Invalid update check method'
 
-print "Finished."
+            if not version:
+                print "..." + vercode
+            elif vercode == app['Current Version Code'] and version == app['Current Version']:
+                print "...up to date"
+            else:
+                print '...updating to version:' + version + ' vercode:' + vercode
+                app['Current Version'] = version
+                app['Current Version Code'] = vercode
+                metafile = os.path.join('metadata', app['id'] + '.txt')
+                common.write_metadata(metafile, app)
+
+    print "Finished."
+
+if __name__ == "__main__":
+    main()
 

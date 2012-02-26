@@ -27,22 +27,26 @@ from optparse import OptionParser
 import HTMLParser
 import common
 
-#Read configuration...
-execfile('config.py')
+def main():
 
+    #Read configuration...
+    execfile('config.py')
 
-# Parse command line...
-parser = OptionParser()
-parser.add_option("-v", "--verbose", action="store_true", default=False,
-                  help="Spew out even more information than normal")
-(options, args) = parser.parse_args()
+    # Parse command line...
+    parser = OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    (options, args) = parser.parse_args()
 
-# Get all apps...
-apps = common.read_metadata(options.verbose)
+    # Get all apps...
+    apps = common.read_metadata(options.verbose)
 
-for app in apps:
-    print "Writing " + app['id']
-    common.write_metadata(os.path.join('metadata', app['id']) + '.txt', app)
+    for app in apps:
+        print "Writing " + app['id']
+        common.write_metadata(os.path.join('metadata', app['id']) + '.txt', app)
 
-print "Finished."
+    print "Finished."
+
+if __name__ == "__main__":
+    main()
 

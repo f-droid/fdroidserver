@@ -30,121 +30,125 @@ import HTMLParser
 import paramiko
 import common
 
-#Read configuration...
-execfile('config.py')
+def main():
+
+    # Read configuration...
+    execfile('config.py')
+
+    # Parse command line...
+    parser = OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    parser.add_option("-d", "--download", action="store_true", default=False,
+                      help="Download logs we don't have")
+    (options, args) = parser.parse_args()
 
 
-# Parse command line...
-parser = OptionParser()
-parser.add_option("-v", "--verbose", action="store_true", default=False,
-                  help="Spew out even more information than normal")
-parser.add_option("-d", "--download", action="store_true", default=False,
-                  help="Download logs we don't have")
-(options, args) = parser.parse_args()
+    statsdir = 'stats'
+    logsdir = os.path.join(statsdir, 'logs')
+    logsarchivedir = os.path.join(logsdir, 'archive')
+    datadir = os.path.join(statsdir, 'data')
+    if not os.path.exists(statsdir):
+        os.mkdir(statsdir)
+    if not os.path.exists(logsdir):
+        os.mkdir(logsdir)
+    if not os.path.exists(datadir):
+        os.mkdir(datadir)
 
+    if options.download:
+        # Get any access logs we don't have...
+        ssh = None
+        ftp = None
+        try:
+            print 'Retrieving logs'
+            ssh = paramiko.SSHClient()
+            ssh.load_system_host_keys()
+            ssh.connect('f-droid.org', username='fdroid', timeout=10,
+                    key_filename=webserver_keyfile)
+            ftp = ssh.open_sftp()
+            ftp.get_channel().settimeout(15)
+            print "...connected"
 
-statsdir = 'stats'
-logsdir = os.path.join(statsdir, 'logs')
-logsarchivedir = os.path.join(logsdir, 'archive')
-datadir = os.path.join(statsdir, 'data')
-if not os.path.exists(statsdir):
-    os.mkdir(statsdir)
-if not os.path.exists(logsdir):
-    os.mkdir(logsdir)
-if not os.path.exists(datadir):
-    os.mkdir(datadir)
+            ftp.chdir('logs')
+            files = ftp.listdir()
+            for f in files:
+                if f.startswith('access-') and f.endswith('.log'):
 
-if options.download:
-    # Get any access logs we don't have...
-    ssh = None
-    ftp = None
-    try:
-        print 'Retrieving logs'
-        ssh = paramiko.SSHClient()
-        ssh.load_system_host_keys()
-        ssh.connect('f-droid.org', username='fdroid', timeout=10,
-                key_filename=webserver_keyfile)
-        ftp = ssh.open_sftp()
-        ftp.get_channel().settimeout(15)
-        print "...connected"
-
-        ftp.chdir('logs')
-        files = ftp.listdir()
-        for f in files:
-            if f.startswith('access-') and f.endswith('.log'):
-
-                destpath = os.path.join(logsdir, f)
-                archivepath = os.path.join(logsarchivedir, f + '.gz')
-                if os.path.exists(archivepath):
-                    if os.path.exists(destpath):
-                        # Just in case we have it archived but failed to remove
-                        # the original...
-                        os.remove(destpath)
-                else:
-                    destsize = ftp.stat(f).st_size
-                    if (not os.path.exists(destpath) or
-                            os.path.getsize(destpath) != destsize):
-                        print "...retrieving " + f
-                        ftp.get(f, destpath)
-    except Exception as e:
-        traceback.print_exc()
-        sys.exit(1)
-    finally:
-        #Disconnect
-        if ftp != None:
-            ftp.close()
-        if ssh != None:
-            ssh.close()
-
-# Process logs
-logexpr = '(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] "GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) \d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
-logsearch = re.compile(logexpr).search
-apps = {}
-unknownapks = []
-knownapks = common.KnownApks()
-for logfile in glob.glob(os.path.join(logsdir,'access-*.log')):
-    logdate = logfile[len(logsdir) + 1 + len('access-'):-4]
-    matches = (logsearch(line) for line in file(logfile))
-    for match in matches:
-        if match and match.group('statuscode') == '200':
-            uri = match.group('uri')
-            if uri.endswith('.apk'):
-                _, apkname = os.path.split(uri)
-                app = knownapks.getapp(apkname)
-                if app:
-                    appid, _ = app
-                    if appid in apps:
-                        apps[appid] += 1
+                    destpath = os.path.join(logsdir, f)
+                    archivepath = os.path.join(logsarchivedir, f + '.gz')
+                    if os.path.exists(archivepath):
+                        if os.path.exists(destpath):
+                            # Just in case we have it archived but failed to remove
+                            # the original...
+                            os.remove(destpath)
                     else:
-                        apps[appid] = 1
-                else:
-                    if not apkname in unknownapks:
-                        unknownapks.append(apkname)
+                        destsize = ftp.stat(f).st_size
+                        if (not os.path.exists(destpath) or
+                                os.path.getsize(destpath) != destsize):
+                            print "...retrieving " + f
+                            ftp.get(f, destpath)
+        except Exception as e:
+            traceback.print_exc()
+            sys.exit(1)
+        finally:
+            #Disconnect
+            if ftp != None:
+                ftp.close()
+            if ssh != None:
+                ssh.close()
 
-# Calculate and write stats for total downloads...
-f = open('stats/total_downloads_app.txt', 'w')
-lst = []
-alldownloads = 0
-for app, count in apps.iteritems():
-    lst.append(app + " " + str(count))
-    alldownloads += count
-lst.append("ALL " + str(alldownloads))
-f.write('# Total downloads by application, since October 2011\n')
-for line in sorted(lst):
-    f.write(line + '\n')
-f.close()
+    # Process logs
+    logexpr = '(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] "GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) \d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
+    logsearch = re.compile(logexpr).search
+    apps = {}
+    unknownapks = []
+    knownapks = common.KnownApks()
+    for logfile in glob.glob(os.path.join(logsdir,'access-*.log')):
+        logdate = logfile[len(logsdir) + 1 + len('access-'):-4]
+        matches = (logsearch(line) for line in file(logfile))
+        for match in matches:
+            if match and match.group('statuscode') == '200':
+                uri = match.group('uri')
+                if uri.endswith('.apk'):
+                    _, apkname = os.path.split(uri)
+                    app = knownapks.getapp(apkname)
+                    if app:
+                        appid, _ = app
+                        if appid in apps:
+                            apps[appid] += 1
+                        else:
+                            apps[appid] = 1
+                    else:
+                        if not apkname in unknownapks:
+                            unknownapks.append(apkname)
 
-# Write list of latest apps added to the repo...
-latest = knownapks.getlatest(10)
-f = open('stats/latestapps.txt', 'w')
-for app in latest:
-    f.write(app + '\n')
-f.close()
+    # Calculate and write stats for total downloads...
+    f = open('stats/total_downloads_app.txt', 'w')
+    lst = []
+    alldownloads = 0
+    for app, count in apps.iteritems():
+        lst.append(app + " " + str(count))
+        alldownloads += count
+    lst.append("ALL " + str(alldownloads))
+    f.write('# Total downloads by application, since October 2011\n')
+    for line in sorted(lst):
+        f.write(line + '\n')
+    f.close()
 
-if len(unknownapks) > 0:
-    print '\nUnknown apks:'
-    for apk in unknownapks:
-        print apk
+    # Write list of latest apps added to the repo...
+    latest = knownapks.getlatest(10)
+    f = open('stats/latestapps.txt', 'w')
+    for app in latest:
+        f.write(app + '\n')
+    f.close()
 
-print "Finished."
+    if len(unknownapks) > 0:
+        print '\nUnknown apks:'
+        for apk in unknownapks:
+            print apk
+
+    print "Finished."
+
+if __name__ == "__main__":
+    main()
 

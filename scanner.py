@@ -31,80 +31,85 @@ import common
 from common import BuildException
 from common import VCSException
 
-#Read configuration...
-execfile('config.py')
+def main():
+
+    # Read configuration...
+    execfile('config.py')
 
 
-# Parse command line...
-parser = OptionParser()
-parser.add_option("-v", "--verbose", action="store_true", default=False,
-                  help="Spew out even more information than normal")
-parser.add_option("-p", "--package", default=None,
-                  help="Scan only the specified package")
-(options, args) = parser.parse_args()
+    # Parse command line...
+    parser = OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    parser.add_option("-p", "--package", default=None,
+                      help="Scan only the specified package")
+    (options, args) = parser.parse_args()
 
-# Get all apps...
-apps = common.read_metadata(options.verbose)
+    # Get all apps...
+    apps = common.read_metadata(options.verbose)
 
-html_parser = HTMLParser.HTMLParser()
+    html_parser = HTMLParser.HTMLParser()
 
-problems = []
+    problems = []
 
-extlib_dir = os.path.join('build', 'extlib')
+    extlib_dir = os.path.join('build', 'extlib')
 
-for app in apps:
+    for app in apps:
 
-    skip = False
-    if options.package and app['id'] != options.package:
-        skip = True
-    elif app['Disabled']:
-        print "Skipping %s: disabled" % app['id']
-        skip = True
-    elif not app['builds']:
-        print "Skipping %s: no builds specified" % app['id']
-        skip = True
+        skip = False
+        if options.package and app['id'] != options.package:
+            skip = True
+        elif app['Disabled']:
+            print "Skipping %s: disabled" % app['id']
+            skip = True
+        elif not app['builds']:
+            print "Skipping %s: no builds specified" % app['id']
+            skip = True
 
-    if not skip:
+        if not skip:
 
-        print "Processing " + app['id']
+            print "Processing " + app['id']
 
-        try:
+            try:
 
-            build_dir = 'build/' + app['id']
+                build_dir = 'build/' + app['id']
 
-            # Set up vcs interface and make sure we have the latest code...
-            vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
+                # Set up vcs interface and make sure we have the latest code...
+                vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
 
-            for thisbuild in app['builds']:
+                for thisbuild in app['builds']:
 
-                if thisbuild['commit'].startswith('!'):
-                    print ("..skipping version " + thisbuild['version'] + " - " +
-                            thisbuild['commit'][1:])
-                else:
-                    print "..scanning version " + thisbuild['version']
+                    if thisbuild['commit'].startswith('!'):
+                        print ("..skipping version " + thisbuild['version'] + " - " +
+                                thisbuild['commit'][1:])
+                    else:
+                        print "..scanning version " + thisbuild['version']
 
-                    # Prepare the source code...
-                    root_dir = common.prepare_source(vcs, app, thisbuild,
-                            build_dir, extlib_dir, sdk_path, ndk_path, javacc_path)
+                        # Prepare the source code...
+                        root_dir = common.prepare_source(vcs, app, thisbuild,
+                                build_dir, extlib_dir, sdk_path, ndk_path, javacc_path)
 
-                    # Do the scan...
-                    buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
-                    for problem in buildprobs:
-                        problems.append(problem + 
-                            ' in ' + app['id'] + ' ' + thisbuild['version'])
+                        # Do the scan...
+                        buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
+                        for problem in buildprobs:
+                            problems.append(problem + 
+                                ' in ' + app['id'] + ' ' + thisbuild['version'])
 
-        except BuildException as be:
-            msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
-            problems.append(msg)
-        except VCSException as vcse:
-            msg = "VCS error while scanning app %s: %s" % (app['id'], vcse)
-            problems.append(msg)
-        except Exception:
-            msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
-            problems.append(msg)
+            except BuildException as be:
+                msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
+                problems.append(msg)
+            except VCSException as vcse:
+                msg = "VCS error while scanning app %s: %s" % (app['id'], vcse)
+                problems.append(msg)
+            except Exception:
+                msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
+                problems.append(msg)
 
-print "Finished:"
-for problem in problems:
-    print problem
-print str(len(problems)) + ' problems.'
+    print "Finished:"
+    for problem in problems:
+        print problem
+    print str(len(problems)) + ' problems.'
+
+if __name__ == "__main__":
+    main()
 
