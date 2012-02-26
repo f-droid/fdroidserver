@@ -30,7 +30,7 @@ import common
 def main():
 
     #Read configuration...
-    execfile('config.py')
+    execfile('config.py', globals())
 
     # Parse command line...
     parser = OptionParser()
