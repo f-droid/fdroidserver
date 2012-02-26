@@ -34,7 +34,7 @@ from common import VCSException
 def main():
 
     # Read configuration...
-    execfile('config.py')
+    execfile('config.py', globals())
 
 
     # Parse command line...

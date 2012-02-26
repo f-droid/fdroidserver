@@ -32,11 +32,7 @@ import time
 def main():
 
     # Read configuration...
-    repo_name = None
-    repo_description = None
-    repo_icon = None
-    repo_url = None
-    execfile('config.py')
+    execfile('config.py', globals())
 
     import common
 
@@ -68,13 +64,6 @@ def main():
     os.mkdir(icon_dir)
 
     warnings = 0
-
-    # Make sure we have the repository description...
-    if (repo_url is None or repo_name is None or
-            repo_icon is None or repo_description is None):
-        print "Repository description fields are required in config.py"
-        print "See config.sample.py for details"
-        sys.exit(1)
 
     # Get all apps...
     apps = common.read_metadata(verbose=options.verbose)

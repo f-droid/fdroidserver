@@ -118,7 +118,7 @@ def build_server(app, thisbuild, build_dir, output_dir):
         raise BuildException("Failed to destroy")
 
 
-def build_local(app, thisbuild, build_dir, output_dir):
+def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install):
     """Do a build locally."""
 
     # Prepare the source code...
@@ -156,8 +156,6 @@ def build_local(app, thisbuild, build_dir, output_dir):
         if p.returncode != 0:
             print output
             raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']))
-        elif options.verbose:
-            print output
 
     # Build the release...
     if thisbuild.has_key('maven'):
@@ -165,7 +163,7 @@ def build_local(app, thisbuild, build_dir, output_dir):
             '-Dandroid.sdk.path=' + sdk_path],
             cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
-        if options.install:
+        if install:
             antcommands = ['debug',' install']
         elif thisbuild.has_key('antcommand'):
             antcommands = [thisbuild['antcommand']]
@@ -176,8 +174,6 @@ def build_local(app, thisbuild, build_dir, output_dir):
     output, error = p.communicate()
     if p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
-    elif options.verbose:
-        print output
     print "Build successful"
 
     # Find the apk name in the output...
@@ -241,6 +237,8 @@ def build_local(app, thisbuild, build_dir, output_dir):
 
     # Copy the unsigned apk to our destination directory for further
     # processing (by publish.py)...
+    dest = os.path.join(output_dir, app['id'] + '_' +
+            thisbuild['vercode'] + '.apk')
     shutil.copyfile(src, dest)
 
     # Move the source tarball into the output directory...
@@ -250,7 +248,8 @@ def build_local(app, thisbuild, build_dir, output_dir):
             os.path.join(output_dir, tarfilename))
 
 
-def trybuild(app, thisbuild, build_dir, output_dir, repo_dir, vcs, test):
+def trybuild(app, thisbuild, build_dir, output_dir, extlib_dir, tmp_dir,
+        repo_dir, vcs, test, server, install):
     """
     Build a particular version of an application, if it needs building.
 
@@ -268,16 +267,12 @@ def trybuild(app, thisbuild, build_dir, output_dir, repo_dir, vcs, test):
     if thisbuild['commit'].startswith('!'):
         return False
 
-    if options.verbose:
-        mstart = '.. building version '
-    else:
-        mstart = 'Building version '
-    print mstart + thisbuild['version'] + ' of ' + app['id']
+    print "Building version " + thisbuild['version'] + ' of ' + app['id']
 
-    if options.server:
+    if server:
         build_server(app, thisbuild, build_dir, output_dir)
     else:
-        build_local(app, thisbuild, build_dir, output_dir)
+        build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install)
     return True
 
 
@@ -313,6 +308,9 @@ def parse_commandline():
 
     # The --install option implies --test and --force...
     if options.install:
+        if options.server:
+            print "Can't install when building on a build server."
+            sys.exit(1)
         options.force = True
         options.test = True
 
@@ -322,7 +320,7 @@ def parse_commandline():
 def main():
 
     # Read configuration...
-    execfile('config.py')
+    execfile('config.py', globals())
     options, args = parse_commandline()
 
     # Get all apps...
@@ -382,8 +380,9 @@ def main():
 
         for thisbuild in app['builds']:
             try:
-                if trybuild(app, thisbuild, build_dir, output_dir, repo_dir,
-                        vcs, options.test):
+                if trybuild(app, thisbuild, build_dir, output_dir, extlib_dir,
+                        tmp_dir, repo_dir, vcs, options.test, options.server,
+                        options.install):
                     build_succeeded.append(app)
             except BuildException as be:
                 if options.stop:

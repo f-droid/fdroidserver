@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# updatestats.py - part of the FDroid server tools
+# stats.py - part of the FDroid server tools
 # Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
@@ -33,7 +33,7 @@ import common
 def main():
 
     # Read configuration...
-    execfile('config.py')
+    execfile('config.py', globals())
 
     # Parse command line...
     parser = OptionParser()

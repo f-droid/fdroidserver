@@ -28,11 +28,7 @@ from optparse import OptionParser
 def main():
 
     # Read configuration...
-    repo_name = None
-    repo_description = None
-    repo_icon = None
-    repo_url = None
-    execfile('config.py')
+    execfile('config.py', globals())
 
     import common
 

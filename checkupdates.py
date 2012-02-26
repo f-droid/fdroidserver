@@ -46,6 +46,7 @@ def check_market(app):
 
     m = re.search('<dd itemprop="softwareVersion">([^>]+)</dd>', page)
     if m:
+        html_parser = HTMLParser.HTMLParser()
         version = html_parser.unescape(m.group(1))
 
     if version == 'Varies with device':
@@ -66,7 +67,7 @@ def check_market(app):
 def main():
 
     #Read configuration...
-    execfile('config.py')
+    execfile('config.py', globals())
 
     # Parse command line...
     parser = OptionParser()
@@ -78,8 +79,6 @@ def main():
 
     # Get all apps...
     apps = common.read_metadata(options.verbose)
-
-    html_parser = HTMLParser.HTMLParser()
 
     for app in apps:
 
