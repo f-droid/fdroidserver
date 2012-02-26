@@ -20,8 +20,9 @@ Build Version:0.8.0,9,0.8.0,oldsdkloc=yes,submodules=yes,fixtrans=yes,target=and
 Build Version:0.8.1,10,0.8.1,oldsdkloc=yes,submodules=yes,fixtrans=yes,target=android-10
 Build Version:0.8.2,11,0.8.2,oldsdkloc=yes,submodules=yes,fixtrans=yes,target=android-10
 Build Version:0.8.3,12,!can't find corresponding source code
+Build Version:0.8.4,13,0.8.4,oldsdkloc=yes,submodules=yes,fixtrans=yes,target=android-10,prebuild=android update project -p android-actionbar/actionbar
 
-Update Check Mode:Market
-Current Version:0.8.3
-Current Version Code:12
+Update Check Mode:None
+Current Version:0.8.4
+Current Version Code:13
 
