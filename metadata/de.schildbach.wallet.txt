@@ -1,0 +1,26 @@
+Category:System
+License:GPLv3
+Web Site:http://code.google.com/p/bitcoin-wallet/
+Source Code:http://code.google.com/p/bitcoin-wallet/source/checkout
+Issue Tracker:http://code.google.com/p/bitcoin-wallet/issues/list
+
+Summary:Bitcoin Wallet
+Description:
+A bitcoin wallet, allowing you to store, send and receive bitcoins on your
+device.
+
+Use this at your own risk, and be aware that if you lose access to the data
+of this application, you will lose any bitcoins contained in it. To back up
+the wallet, back up the files in /datadata/de.schildbach.wallet/files - you
+will need root access to do this.
+.
+
+Repo Type:git-svn
+Repo:http://bitcoin-wallet.googlecode.com/svn/
+
+Build Version:1.48.2,66,680,subdir=branches/1.48-maintenance/,forceversion=yes,init=sed -i 's/_test//' AndroidManifest.xml && find src -name *.java -exec sed -i 's/_test\.R/.R/' {} \;
+
+Update Check Mode:Market
+Current Version:1.48.2
+Current Version Code:66
+
