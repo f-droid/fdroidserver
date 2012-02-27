@@ -164,7 +164,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
             cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         if install:
-            antcommands = ['debug',' install']
+            antcommands = ['debug','install']
         elif thisbuild.has_key('antcommand'):
             antcommands = [thisbuild['antcommand']]
         else:
@@ -174,6 +174,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
     output, error = p.communicate()
     if p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
+    if install:
+        return
     print "Build successful"
 
     # Find the apk name in the output...
@@ -300,6 +302,9 @@ def parse_commandline():
                       help="Use 'ant debug install' to build and install a " +
                       "debug version on your device or emulator. " +
                       "Implies --force and --test")
+    parser.add_option("--all", action="store_true", default=False,
+                      help="Use with --install, when not using --package"
+                      " to confirm you really want to build and install everything.")
     options, args = parser.parse_args()
 
     if options.force and not options.test:
@@ -310,6 +315,11 @@ def parse_commandline():
     if options.install:
         if options.server:
             print "Can't install when building on a build server."
+            sys.exit(1)
+        if not options.package and not options.all:
+            print "This would build and install everything in the repo to the device."
+            print "You probably want to use --package and maybe also --vercode."
+            print "If you really want to install everything, use --all."
             sys.exit(1)
         options.force = True
         options.test = True
