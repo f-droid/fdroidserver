@@ -44,6 +44,7 @@ Free Documentation License".
 * Setup::
 * Simple Binary Repository::
 * Building Applications::
+* Importing Applications::
 * Metadata::
 * Build Server::
 * GNU Free Documentation License::
@@ -311,6 +312,47 @@ the @code{--install} switch. If you do this without using @code{--package} and
 individual version overwriting the previous!). In most cases, this will not be
 what you want to do, so execution will stop straight away. However, you can
 override this if you're sure that's what you want, by using @code{--all}.
+
+
+@node Importing Applications
+@chapter Importing Applications
+
+To help with starting work on including a new application, @code{fdroid import}
+will take a URL and optionally some other parameters, and attempt to construct
+as much information as possible by analysing the source code. Basic usage is:
+
+@example
+./fdroid import --url=http://address.of.project
+@end example
+
+For this to work, the URL must point to a project format that the script
+understands. Currently this is limited to one of the following:
+
+@enumerate
+@item
+Gitorious - @code{https://gitorious.org/PROJECTNAME/REPONAME}
+@item
+Github - @code{https://github.com/USER/PROJECT}
+@item
+Google Code - @code{http://code.google.com/p/PROJECT/}
+(supports git, svn and hg repos)
+@end enumerate
+
+Depending on the project type, more or less information may be gathered. For
+example, the license will be retrieved from a Google Code project, but not a
+GitHub one.
+
+If the import is successful, a metadata file will be created. You will need to
+edit this further to check the information, and fill in the blanks.
+
+If it fails, you'll be told why. If it got as far as retrieving the source
+code, you can inspect it further by looking in @code{tmp/importer} where a full
+checkout will exist.
+
+A frequent cause of initial failure is that the project directory is actually
+a subdirectory in the repository. In this case, run the importer again using
+the @code{--subdir} option to tell it where. It will not attempt to determine
+this automatically, since there may be several options.
 
 
 @node Metadata
