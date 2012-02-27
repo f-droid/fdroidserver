@@ -25,6 +25,6 @@ Update Check Mode:Market
 #Source is now accessible, but the build is failing without an obvious error.
 #Need to look at this again.
 #Build Version:10.0.7,17,2671,subdir=tags/10.0.7,update=no,initfun=yes
-Current Version:10.0.8
-Current Version Code:18
+Current Version:11.0.1
+Current Version Code:19
 

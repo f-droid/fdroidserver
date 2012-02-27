@@ -20,3 +20,8 @@ Repo:http://addi.googlecode.com/svn/Addi/
 
 Build Version:1.88,37,179
 Build Version:1.91,40,189,buildjni=yes
+
+Update Check Mode:Market
+Current Version:1.91
+Current Version Code:40
+
