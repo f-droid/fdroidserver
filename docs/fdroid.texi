@@ -232,6 +232,7 @@ Run build.py to build any applications that are not already built.
 Run publish.py to finalise packaging and sign any APKs that have been built.
 @end enumerate
 
+
 @section More about build.py
 
 When run without any parameters, build.py will build any and all versions of
@@ -283,6 +284,17 @@ A similar effect could by achieved by simply deleting the output files from
 Along similar lines (and only in conjunction with @code{--test}, you can use
 @code{--force} to force a build of a Disabled application for test purposes,
 where normally it would be completely ignored.
+
+
+@section Direct Installation
+
+You can also build and install directly to a connected device or emulator using
+the @code{--install} switch. If you do this without using @code{--package} and
+@code{--vercode} then all versions of all packages will be installed (with each
+individual version overwriting the previous!). In most cases, this will not be
+what you want to do, so execution will stop straight away. However, you can
+override this if you're sure that's what you want, by using @code{--all}.
+
 
 @node Metadata
 @chapter Metadata
