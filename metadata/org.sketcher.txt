@@ -1,7 +1,7 @@
 Disabled:Is this Free Software or an advert for proprietary software?
 Category:Office
 License:Apache2
-Web Site:https://github.com/wargoth/Sketcher
+Web Site:https://sites.google.com/site/sketcherapp/
 Source Code:https://github.com/wargoth/Sketcher
 Issue Tracker:https://github.com/wargoth/Sketcher/issues
 Donate:https://sites.google.com/site/sketcherapp/
