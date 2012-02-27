@@ -62,6 +62,11 @@ def main():
         repo = url + '.git'
         repotype = 'git'
         sourcecode = url
+    elif url.startswith('https://gitorious.org/'):
+        projecttype = 'gitorious'
+        repo = 'https://git.gitorious.org/' + url[22:] + '.git'
+        repotype = 'git'
+        sourcecode = url
     elif url.startswith('http://code.google.com/p/'):
         if not url.endswith('/'):
             print "Expected format for googlecode url is http://code.google.com/p/PROJECT/"
