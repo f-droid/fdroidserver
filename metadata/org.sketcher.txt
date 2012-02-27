@@ -1,3 +1,4 @@
+Disabled:Is this Free Software or an advert for proprietary software?
 Category:Office
 License:Apache2
 Web Site:https://github.com/wargoth/Sketcher
