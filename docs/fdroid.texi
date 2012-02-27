@@ -140,6 +140,21 @@ up some basic configuration details. This is done by creating a file called
 @code{config.py} which you should do by copying from @code{config.sample.py}
 and then editing according to the instructions within.
 
+Once configured in this way, all the functionality of the tools is accessed
+by running the @code{fdroid} script. Run it on its own to get a list of the
+available commands:
+
+@example
+./fdroid
+@end example
+
+You can follow any command with @code{--help} to get a list of additional
+options available for that command.
+
+@example
+./fdroid update --help
+@end example
+
 
 @node Simple Binary Repository
 @chapter Simple Binary Repository
@@ -153,19 +168,19 @@ and compiled elsewhere, the process is quite simple:
 @item
 Make a repo directory and put APK files in it.
 @item
-Run @code{update.py}.
+Run @code{fdroid update.py}.
 @item
 If it reports that any metadata files are missing, you can create them
 in the @code{metadata} directory and run it again.
 @item
-To ease creation of metadata files, run @code{update.py} with the @code{-c}
+To ease creation of metadata files, run @code{fdroid update} with the @code{-c}
 option. It will create 'skeleton' metadata files that are missing, and you can
 then just edit them and fill in the details.
 @item
-Then, if you've changed things, run @code{update.py} again.
+Then, if you've changed things, run @code{fdroid update} again.
 @item
-Running @code{update.py} adds an Icons directory into the repo directory, and
-also creates the repository index (index.xml, and also index.jar if you've
+Running @code{fdroid update} adds an Icons directory into the repo directory,
+and also creates the repository index (index.xml, and also index.jar if you've
 configured the system to use a signed index).
 @end enumerate
 
@@ -227,25 +242,27 @@ except now you need to:
 @item
 Include Build Version entries in the metadata files.
 @item
-Run build.py to build any applications that are not already built.
+Run @code{fdroid build} to build any applications that are not already built.
 @item
-Run publish.py to finalise packaging and sign any APKs that have been built.
+Run @code{fdroid publish} to finalise packaging and sign any APKs that have
+been built.
 @end enumerate
 
 
 @section More about build.py
 
-When run without any parameters, build.py will build any and all versions of
-applications that you don't already have in the @code{repo} directory (or more
-accurately, the @code{unsigned} directory. There are various other things you
-can do. As with all the tools, the @code{--help} option is your friend, but a
-few annotated examples and discussion of the more common usage modes follows:
+When run without any parameters, @code{fdroid build} will build any and all
+versions of applications that you don't already have in the @code{repo}
+directory (or more accurately, the @code{unsigned} directory. There are various
+other things you can do. As with all the tools, the @code{--help} option is
+your friend, but a few annotated examples and discussion of the more common
+usage modes follows:
 
 To build a single version of a single application, you could run the
 following:
 
 @example
-./build.py --package=org.fdroid.fdroid --vercode 16
+./fdroid build --package=org.fdroid.fdroid --vercode 16
 @end example
 
 This attempts to build version code 16 (which is version 0.25) of the F-Droid
@@ -267,7 +284,7 @@ tarball containing exactly the source that was used to generate the binary.
 If you were intending to publish these files, you could then run:
 
 @example
-./publish.py
+./fdroid publish
 @end example
 
 The source tarball would move to the @code{repo} directory (which is the
@@ -324,7 +341,7 @@ following them). In fact, you can standardise all the metadata in a single
 command, without changing the functional content, by running:
 
 @example
-./rewritemetadata.py
+./fdroid rewritemetadata
 @end example
 
 The following sections describe the fields recognised within the file.
@@ -753,7 +770,7 @@ do it occasionally.
 
 Once it's complete you'll have a new base box called 'buildserver' which is
 what's used for the actual builds. You can then build packages as normal,
-but with the addition of the @code{--server} flag to @code{build.py} to
+but with the addition of the @code{--server} flag to @code{fdroid build} to
 instruct it to do all the hard work within the virtual machine, which is
 reset to a completely clean state for every package built.
 
