@@ -25,8 +25,9 @@ Build Version:1.3.1,70,210,target=android-10
 Build Version:1.3.2,71,217,target=android-10
 Build Version:1.3.3_4,75,!No corresponding source in repo
 Build Version:1.3.4,76,251,target=android-10
+Build Version:1.4,77,268,target=android-10
 
 Update Check Mode:Market
-Current Version:1.3.4
-Current Version Code:76
+Current Version:1.4
+Current Version Code:77
 

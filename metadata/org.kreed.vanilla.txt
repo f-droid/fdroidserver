@@ -1,8 +1,8 @@
 Category:Multimedia
 License:GPLv3+
-Web Site:
+Web Site:https://github.com/kreed/vanilla
 Source Code:https://github.com/kreed/vanilla
-Issue Tracker:
+Issue Tracker:https://github.com/kreed/vanilla/issues
 
 Summary:Simple and streamlined music player
 Description:
@@ -16,8 +16,9 @@ Repo Type:git
 Repo:https://github.com/kreed/vanilla.git
 
 Build Version:0.1,16,4169dd05b3ac321555bb8436fd2a90f93e52b49d
+Build Version:0.9.9,99,0.9.9
 
-Update Check Mode:Market
-Current Version:0.1
-Current Version Code:16
+Update Check Mode:None
+Current Version:0.9.9
+Current Version Code:99
 
