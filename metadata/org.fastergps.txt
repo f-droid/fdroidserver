@@ -3,7 +3,6 @@ License:GPLv3
 Web Site:http://code.google.com/p/faster-gps/
 Source Code:https://gitorious.org/fastergps/
 Issue Tracker:http://code.google.com/p/faster-gps/issues/list
-Donate:
 
 Summary:Faster GPS fix
 Description:
@@ -20,7 +19,9 @@ Repo Type:git
 Repo:git://gitorious.org/fastergps/fastergps.git
 
 Build Version:1.0,1,90430ede39c5ad4fef338744af954f865b246c41,subdir=org_fastergps/
+Build Version:1.2,3,aa1f260,subdir=org_fastergps/
 
 Update Check Mode:Market
-Current Version:1.0
-Current Version Code:1
+Current Version:1.2
+Current Version Code:3
+

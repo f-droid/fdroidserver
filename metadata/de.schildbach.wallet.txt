@@ -19,8 +19,12 @@ Repo Type:git-svn
 Repo:http://bitcoin-wallet.googlecode.com/svn/
 
 Build Version:1.48.2,66,680,subdir=branches/1.48-maintenance/,forceversion=yes,init=sed -i 's/_test//' AndroidManifest.xml && find src -name *.java -exec sed -i 's/_test\.R/.R/' {} \;
+#Need to figure out the exact right version (it's an unspecified
+#non-released snapshot version) of the bitcoinj library to use - don't want to
+#break it!
+#Build Version:1.52,69,683,subdir=trunk,forceversion=yes,init=sed -i 's/_test//' AndroidManifest.xml && find src -name *.java -exec sed -i 's/_test\.R/.R/' {} \;
 
 Update Check Mode:Market
-Current Version:1.48.2
-Current Version Code:66
+Current Version:1.52
+Current Version Code:69
 
