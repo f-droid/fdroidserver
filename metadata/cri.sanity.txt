@@ -1,4 +1,3 @@
-Disabled:Seems to be another free advert for a proprietary version
 Category:System
 License:GPLv3+
 Web Site:https://github.com/awaken/sanity
