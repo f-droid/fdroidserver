@@ -943,7 +943,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                       'libgoogleanalytics',
                       'admob-sdk-android',
                       'googleadview',
-                      'googleadmobadssdk']
+                      'googleadmobadssdk',
+                      'heyzap']
     for r,d,f in os.walk(build_dir):
         for curfile in f:
             for suspect in usual_suspects:
