@@ -1,4 +1,4 @@
-Category:Office
+Category:Science & Education
 License:GPLv3
 Web Site:https://code.google.com/p/ankidroid/wiki/Index
 Source Code:http://github.com/nicolas-raoul/Anki-Android/

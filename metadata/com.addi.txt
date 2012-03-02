@@ -1,4 +1,4 @@
-Category:Office
+Category:Science & Education
 License:GPLv3
 Web Site:http://code.google.com/p/addi/
 Source Code:http://code.google.com/p/addi/source/checkout
