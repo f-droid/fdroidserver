@@ -22,5 +22,5 @@ Build Version:1.1.7nicolas-raoul-1,25,7c3697421dcd5d9f9825058e4ea2457ae75a21ec
 
 Update Check Mode:Market
 Current Version:1.1.8
-Current Version Code:24 # Actually I don't know, source code for 1.1.8 is not available, see https://github.com/wargoth/Sketcher/issues/41
+Current Version Code:25
 

@@ -18,5 +18,6 @@ Repo:http://jota-text-editor.googlecode.com/svn/trunk/
 Build Version:0.2.07,57,86,buildjni=yes,target=android-11
 
 Update Check Mode:Market
-Current Version:0.2.07
-Current Version Code:57
+Current Version:0.2.08
+Current Version Code:58
+

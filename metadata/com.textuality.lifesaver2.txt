@@ -10,6 +10,6 @@ A simple backup and restore of your SMS and call logs.
 .
 
 Update Check Mode:Market
-Current Version:2.0
-Current Version Code:4
+Current Version:2.1
+Current Version Code:5
 
