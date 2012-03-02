@@ -1,0 +1,35 @@
+Category:Navigation
+License:GPLv3
+Web Site:http://www.ametro.org/
+Source Code:http://code.google.com/p/ametro/source/checkout
+Issue Tracker:http://code.google.com/p/ametro/issues/list
+Donate:http://www.ametro.org/donate
+
+Summary:Subway/metro/train navigator
+Description:
+aMetro is an open source application for Android platform
+for finding the shortest path in public transport (metro, subway,
+trains and other types of transport), with maps that are compatible
+with the maps from pMetro project (http://pmetro.info).
+
+Features:
+
+View metro maps and schemes for 180 cities around the world.
+
+View maps for other kinds of transportation.
+
+Zoom maps.
+
+Find the shortest route between selected stations.
+
+Get information about stations.
+
+Update maps automatically.
+
+Find the nearest station next to user's location (for selected cities)
+.
+
+Repo Type:git-svn
+Repo:http://ametro.googlecode.com/svn/trunk/
+
+Build Version:1.1.5,17,489,subdir=workspace/aMetro
