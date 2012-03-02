@@ -1,4 +1,4 @@
-Category:Multimedia
+Category:Readers
 License:GPLv2
 Web Site:http://crengine.sourceforge.net
 Source Code:http://sourceforge.net/scm/?type=git&group_id=191284

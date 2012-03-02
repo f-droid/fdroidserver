@@ -1,4 +1,4 @@
-Category:Multimedia
+Category:Readers
 License:GPLv2+
 Web Site:http://www.fbreader.org/FBReaderJ/
 Source Code:https://github.com/geometer/FBReaderJ

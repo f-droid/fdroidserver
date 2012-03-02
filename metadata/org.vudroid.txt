@@ -1,4 +1,4 @@
-Category:Multimedia
+Category:Readers
 License:GPLv3
 Web Site:http://code.google.com/p/vudroid/
 Source Code:http://code.google.com/p/vudroid/source/checkout
