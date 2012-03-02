@@ -1,4 +1,4 @@
-Category:Internet
+Category:Phone & SMS
 License:GPLv3
 Web Site:http://code.google.com/p/auto-answer/
 Source Code:http://code.google.com/p/auto-answer/source/checkout

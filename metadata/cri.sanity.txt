@@ -1,4 +1,4 @@
-Category:System
+Category:Phone & SMS
 License:GPLv3+
 Web Site:https://github.com/awaken/sanity
 Source Code:https://github.com/awaken/sanity

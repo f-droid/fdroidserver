@@ -1,4 +1,4 @@
-Category:Cryptography
+Category:Phone & SMS
 License:GPLv3
 Web Site:http://www.whispersys.com/
 Source Code:https://github.com/WhisperSystems/TextSecure
