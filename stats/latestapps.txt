@@ -1,3 +1,5 @@
+pt.isec.tp.am
+de.schildbach.wallet
 com.addi
 com.everysoft.autoanswer
 org.fastergps
@@ -6,5 +8,3 @@ li.klass.fhem
 org.jsharkey.sky
 uk.co.jarofgreen.JustADamnCompass
 org.tof
-com.anoshenko.android.mahjongg
-org.liberty.android.fantastischmemo

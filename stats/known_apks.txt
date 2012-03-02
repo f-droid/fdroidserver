@@ -1,5 +1,6 @@
 0.2.2.14-alpha-orbot-1.0.4.apk org.torproject.android 2010-12-29
 0.2.2.22-alpha-orbot-1.0.4.1.apk org.torproject.android
+0.2.3.10-alpha-orbot-1.0.7-FINAL.apk org.torproject.android 2012-02-25
 2010-12-09-OpenSatNav-snapshot-r197.apk org.opensatnav
 APG-1.0.7-release.apk org.thialfihar.android.apg 2010-10-21
 APG-1.0.8-release.apk org.thialfihar.android.apg
@@ -307,10 +308,12 @@ com.webworxshop.swallowcatcher_6.apk com.webworxshop.swallowcatcher 2011-07-12
 com.webworxshop.swallowcatcher_7.apk com.webworxshop.swallowcatcher 2011-12-07
 com.zegoggles.smssync_1404.apk com.zegoggles.smssync
 com.zegoggles.smssync_1405.apk com.zegoggles.smssync
+cri.sanity_21100.apk cri.sanity 2012-03-01
 cz.hejl.chesswalk_7.apk cz.hejl.chesswalk 2012-01-12
 cz.romario.opensudoku_1104.apk cz.romario.opensudoku 2012-01-12
 cz.romario.opensudoku_1105.apk cz.romario.opensudoku 2012-01-12
 de.blau.android.Application_14.apk de.blau.android
+de.schildbach.wallet_66.apk de.schildbach.wallet 2012-02-27
 de.shandschuh.slightbackup_12.apk de.shandschuh.slightbackup 2011-08-25
 de.shandschuh.slightbackup_13.apk de.shandschuh.slightbackup 2011-10-10
 de.shandschuh.slightbackup_6.apk de.shandschuh.slightbackup 2011-07-14
@@ -322,6 +325,8 @@ de.shandschuh.sparserss_68.apk de.shandschuh.sparserss 2011-10-02
 de.shandschuh.sparserss_69.apk de.shandschuh.sparserss 2011-11-03
 de.shandschuh.sparserss_70.apk de.shandschuh.sparserss 2011-12-12
 de.shandschuh.sparserss_71.apk de.shandschuh.sparserss 2012-02-06
+de.shandschuh.sparserss_76.apk de.shandschuh.sparserss 2012-02-26
+de.shandschuh.sparserss_77.apk de.shandschuh.sparserss 2012-02-28
 de.ub0r.android.adBlock_5.apk de.ub0r.android.adBlock 2011-01-23
 dk.andsen.asqlitemanager_10.apk dk.andsen.asqlitemanager 2012-01-26
 dk.andsen.asqlitemanager_7.apk dk.andsen.asqlitemanager 2011-12-05
@@ -515,6 +520,7 @@ org.eehouse.android.xw4_30.apk org.eehouse.android.xw4 2012-01-13
 org.eehouse.android.xw4_31.apk org.eehouse.android.xw4 2012-01-13
 org.example.pushupbuddy_1.apk org.example.pushupbuddy 2011-10-17
 org.fastergps_1.apk org.fastergps 2012-02-24
+org.fastergps_3.apk org.fastergps 2012-03-01
 org.fdroid.fdroid_10.apk org.fdroid.fdroid 2011-01-30
 org.fdroid.fdroid_11.apk org.fdroid.fdroid 2011-01-30
 org.fdroid.fdroid_12.apk org.fdroid.fdroid 2011-02-24
@@ -563,6 +569,7 @@ org.jtb.alogcat_39.apk org.jtb.alogcat 2012-01-24
 org.jtb.droidlife_21.apk org.jtb.droidlife 2011-11-27
 org.kost.externalip_3.apk org.kost.externalip 2011-09-26
 org.kreed.vanilla_16.apk org.kreed.vanilla 2011-04-02
+org.kreed.vanilla_99.apk org.kreed.vanilla 2012-02-28
 org.liberty.android.fantastischmemo_135.apk org.liberty.android.fantastischmemo 2012-02-12
 org.marcus905.wifi.ace_20100924.apk org.marcus905.wifi.ace 2011-01-27
 org.marcus905.wifi.ace_20120115.apk org.marcus905.wifi.ace 2012-02-06
@@ -585,6 +592,7 @@ org.pocketworkstation.pckeyboard_1018.apk org.pocketworkstation.pckeyboard 2011-
 org.pocketworkstation.pckeyboard_1020.apk org.pocketworkstation.pckeyboard 2011-07-01
 org.pocketworkstation.pckeyboard_1022.apk org.pocketworkstation.pckeyboard 2011-10-02
 org.pocketworkstation.pckeyboard_1029.apk org.pocketworkstation.pckeyboard 2012-01-15
+org.pocketworkstation.pckeyboard_1031.apk org.pocketworkstation.pckeyboard 2012-02-26
 org.scoutant.blokish_1.apk org.scoutant.blokish 2011-08-25
 org.scoutant.blokish_7.apk org.scoutant.blokish 2011-11-27
 org.scoutant.blokish_8.apk org.scoutant.blokish 2011-11-27
@@ -638,11 +646,13 @@ org.wordpress.android_45.apk org.wordpress.android 2012-02-15
 org.wordpress.android_46.apk org.wordpress.android 2012-02-16
 org.xbmc.android.remote_730.apk org.xbmc.android.remote 2011-02-24
 org.xbmc.android.remote_768.apk org.xbmc.android.remote 2011-05-18
+org.xbmc.android.remote_808.apk org.xbmc.android.remote 2012-02-29
 org.yaaic_10.apk org.yaaic 2011-04-26
 org.yaaic_11.apk org.yaaic 2011-07-22
 org.yaaic_9.apk org.yaaic 2011-04-03
 org.yaxim.androidclient_10.apk org.yaxim.androidclient 2011-09-26
 org.yaxim.androidclient_11.apk org.yaxim.androidclient 2011-10-03
+org.yaxim.androidclient_13.apk org.yaxim.androidclient 2012-02-26
 org.yaxim.androidclient_5.apk org.yaxim.androidclient 2011-01-15
 org.yaxim.androidclient_6.apk org.yaxim.androidclient 2011-03-09
 org.yaxim.androidclient_7.apk org.yaxim.androidclient 2011-03-30
@@ -656,6 +666,7 @@ org.zirco_15.apk org.zirco 2011-10-10
 org.zirco_16.apk org.zirco 2011-12-12
 org.zirco_17.apk org.zirco 2012-01-08
 pl.magot.vetch.ancal_32.apk pl.magot.vetch.ancal 2011-02-01
+pt.isec.tp.am_2.apk pt.isec.tp.am 2012-02-27
 regalandroid-1.0.0-20101204.212606-5.apk net.dahanne.android.regalandroid 2010-12-16
 regalandroid-1.0.1-aligned.apk net.dahanne.android.regalandroid
 remuco.client.android_1.apk remuco.client.android 2012-01-08
