@@ -470,7 +470,7 @@ class FDroid
 				$handle = fopen(getenv('DOCUMENT_ROOT').'/repo/categories.txt', 'r');
 				if ($handle) {
 					while (($buffer = fgets($handle, 4096)) !== false) {
-					    $categories[] = $buffer;
+					    $categories[] = rtrim($buffer);
 					}
 				    fclose($handle);
 				}
