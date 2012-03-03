@@ -464,8 +464,16 @@ class FDroid
 		if(($query_vars['fdfilter']===null || $query_vars['fdfilter']!='') && $numpages>0)
 		{
 			$out.='<div style="float:left;">';
-			if($query_vars['fdfilter']===null) {
-				$categories = array('All applications','Games','Internet','Multimedia','Navigation','Office','System');
+                        if($query_vars['fdfilter']===null) {
+
+				$categories = array('All categories');
+				$handle = fopen(getenv('DOCUMENT_ROOT').'/repo/categories.txt', 'r');
+				if ($handle) {
+					while (($buffer = fgets($handle, 4096)) !== false) {
+					    $categories[] = $buffer;
+					}
+				    fclose($handle);
+				}
 
 				$out.='<form name="categoryform" action="" method="get">';
 				$out.=$this->makeformdata($query_vars);
