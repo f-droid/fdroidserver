@@ -6,20 +6,8 @@ Issue Tracker:https://github.com/awaken/sanity/issues
 
 Summary:Phone Assistant
 Description:
-Feature-packed phone assistant. Features include:
-*audio record your phone calls in mpeg4, 3gpp or amr format (also automatically)
-*announce caller and SMS: speak the caller's name when receiving a call or a message using the synthesized voice (text to speech)
-*block unwanted calls and SMS: automatically refuse incoming calls and SMS filtering out the phone number (include or exclude anonymous and/or unknown numbers, favourites, contacts and groups; enable the block by choosing date and time); advanced: choose between different block methods to confuse the caller!
-*auto answer: automatically answer the call when phone is ringing by choosing phone numbers, date and time and if respond only when using headphones.
-*urgent calls: choose what phone numbers your phone will ring or vibrate also when it's in silent mode
-*automatic speakerphone: automatically turn on/off the handsfree when the phone is far/close to your ear
-*outgoing anonymous calls: make private calls by hiding your caller ID (also automatically by filtering the phone numbers to call)
-*reduce electromagnetic waves: automatically turn on/off wifi, bluetooth, GPS and mobile data (2G/3G) when you speak at your phone
-*choose different volume levels during calls: one for normal calling, loud handsfree, wired heasets volume and bluetooth headsets volume
-*automatic bluetooth headsets: automatically enable bluetooth for a limited time when the call starts
-*timeouts for restoring silent mode and airplane mode: just enable the silent/aiplane mode (in any way) and Sanity will ask you how much time to stay in that mode
-*vibrate the phone when the call begins and when the call ends.
-*fast sms: displays the received SMS allowing you to respond immediately.
+Feature-packed phone assistant, including autdio recording, caller anouncement,
+call blocking and much more.
 .
 
 Repo Type:git
@@ -28,4 +16,6 @@ Repo:https://github.com/awaken/sanity.git
 Build Version:2.11,21100,04eefb2c48f7
 
 Update Check Mode:Market
+Current Version:2.12
+Current Version Code:21200
 
