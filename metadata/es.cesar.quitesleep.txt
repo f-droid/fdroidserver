@@ -22,3 +22,8 @@ Repo:https://code.google.com/p/quitesleep/
 
 Build Version:2.0,5,fbf8f2db2b36,prebuild=rm -rf libs && mv lib libs
 Build Version:2.0.3,9,619ef22277cc,prebuild=rm -rf libs && mv lib libs
+
+Update Check Mode:Market
+Current Version:2.0.4
+Current Version Code:10
+

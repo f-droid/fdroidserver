@@ -33,3 +33,8 @@ Repo Type:git-svn
 Repo:http://ametro.googlecode.com/svn/trunk/
 
 Build Version:1.1.5,17,489,subdir=workspace/aMetro
+
+Update Check Mode:Market
+Current Version:1.1.4
+Current Version Code:16
+

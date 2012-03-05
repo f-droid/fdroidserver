@@ -21,8 +21,11 @@ Repo:git://xmp.git.sourceforge.net/gitroot/xmp/xmp
 Build Version:2.1.0,15,639549fda2111cb800fabe468b4a64bf4ae27003,\
 buildjni=yes,subdir=src/android/project,target=android-8,\
 forceversion=yes
+Build Version:2.9.0,21,03a9c9c9d5acf3b1b659e407c18d072309d50e3a,\
+init=cd ../../ && autoconf && ./configure,buildjni=yes,subdir=players/android,target=android-14,\
+forceversion=yes
 
 Update Check Mode:Market
-Current Version:2.4.0
-Current Version Code:20
+Current Version:2.9.0
+Current Version Code:21
 

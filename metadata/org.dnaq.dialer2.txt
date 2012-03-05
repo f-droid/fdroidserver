@@ -15,3 +15,8 @@ Repo Type:hg
 Repo:https://bitbucket.org/dnaq/dialer2
 
 Build Version:2.90,17,f170814ddcda
+
+Update Check Mode:Market
+Current Version:2.90
+Current Version Code:17
+

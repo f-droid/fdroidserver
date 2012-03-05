@@ -24,3 +24,8 @@ Repo Type:hg
 Repo:https://code.google.com/p/apv/
 
 Build Version:0.3.2,32000,ff030f8b49e6,subdir=pdfview,buildjni=yes,patch=fdroid-ndk-build.patch,prebuild=scripts/build-native.sh
+
+Update Check Mode:Market
+Current Version:0.3.0
+Current Version Code:300
+

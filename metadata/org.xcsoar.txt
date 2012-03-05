@@ -15,8 +15,8 @@ Repo Type:git
 Repo:http://git.xcsoar.org/cgit/master/xcsoar.git/
 
 Update Check Mode:Market
-Current Version:6.2.6
-Current Version Code:53
+Current Version:6.2.6c
+Current Version Code:55
 
 #Far too difficult to build - binary in repo
 #Build Version:6.2.4,51,95a3ad045eb05cb69b11b274f27c7eae387b9c40

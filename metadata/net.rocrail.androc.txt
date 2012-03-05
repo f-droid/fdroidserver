@@ -32,6 +32,6 @@ Build Version:1.5.324,324,324
 Build Version:339,339,339
 
 Update Check Mode:Market
-Current Version:339
-Current Version Code:339
+Current Version:341
+Current Version Code:341
 

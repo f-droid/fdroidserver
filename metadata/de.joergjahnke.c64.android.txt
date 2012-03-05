@@ -12,6 +12,6 @@ A Commodore 64 (C64) emulator.
 .
 
 Update Check Mode:Market
-Current Version:1.6.1
-Current Version Code:10601
+Current Version:1.6.2
+Current Version Code:10602
 
