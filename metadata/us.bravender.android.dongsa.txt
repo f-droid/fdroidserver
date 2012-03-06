@@ -1,0 +1,17 @@
+Category:Science & Education
+License:AGPL
+Web Site:https://github.com/dbravender/korean_conjugation
+Source Code:https://github.com/dbravender/korean_conjugation
+Issue Tracker:https://github.com/dbravender/korean_conjugation
+
+Summary:Korean verb conjugation tool
+Description:
+Shows Korean verb conjugations for learners of Korean.
+.
+
+Repo Type:git
+Repo:https://github.com/dbravender/korean_conjugation
+
+Build Version:2.0,6,22b088bf06e0f5f911da4c3b511039e6430721ac,target=android-2
+
+Update Check Mode:Market
