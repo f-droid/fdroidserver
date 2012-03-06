@@ -16,6 +16,7 @@ Repo:https://github.com/NightWhistler/PageTurner.git
 Build Version:0.2.14_dev,1,dadd9b4eb0f4ca272e7e86c3e06dd47993755696,extlibs=guice/guice-2.0-no_aop.jar;roboguice/roboguice-1.1.jar;epublib/epublib-core-3.0-SNAPSHOT.jar;acra/acra-4.2.3.jar;sl4j/slf4j-android-1.6.1-RC1.jar;HtmlSpanner/htmlspanner-0.1-SNAPSHOT.jar;htmlcleaner/htmlcleaner-2.2.jar
 Build Version:1.0,2,59a4d5ceca218973105bb3923d02dda72a45fbdd,extlibs=guice/guice-2.0-no_aop.jar;roboguice/roboguice-1.1.jar;epublib/epublib-core-3.0-SNAPSHOT.jar;acra/acra-4.2.3.jar;sl4j/slf4j-android-1.6.1-RC1.jar;HtmlSpanner/htmlspanner-0.1-SNAPSHOT.jar;htmlcleaner/htmlcleaner-2.2.jar
 Build Version:1.0.1,3,d29570f185d585d3eaf83ebf8b9e78928f36ad2e,extlibs=guice/guice-2.0-no_aop.jar;roboguice/roboguice-1.1.jar;epublib/epublib-core-3.0-SNAPSHOT.jar;acra/acra-4.2.3.jar;sl4j/slf4j-android-1.6.1-RC1.jar;HtmlSpanner/htmlspanner-0.1-SNAPSHOT.jar;htmlcleaner/htmlcleaner-2.2.jar
+Build Version:1.1.2,6,1.1.2,extlibs=guice/guice-2.0-no_aop.jar;roboguice/roboguice-1.1.jar;epublib/epublib-core-3.0-SNAPSHOT2.jar;acra/acra-4.2.3.jar;sl4j/slf4j-android-1.6.1-RC1.jar;HtmlSpanner/htmlspanner-0.1-SNAPSHOT.jar;htmlcleaner/htmlcleaner-2.2.jar
 
 Update Check Mode:Market
 
