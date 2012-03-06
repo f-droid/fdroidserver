@@ -160,6 +160,8 @@ def main():
             license = 'GPLv2'
         elif ltext == 'Apache License 2.0':
             license = 'Apache2'
+        elif ltext == 'MIT License':
+            license = 'MIT'
         else:
             print "License " + ltext + " is not recognised"
             sys.exit(1)
