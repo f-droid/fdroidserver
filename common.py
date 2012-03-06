@@ -937,7 +937,7 @@ def scan_source(build_dir, root_dir, thisbuild):
 
     problems = []
 
-    # Scan for common known non-free blobs:
+    # Common known non-free blobs:
     usual_suspects = ['flurryagent',
                       'paypal_mpl',
                       'libgoogleanalytics',
@@ -945,12 +945,29 @@ def scan_source(build_dir, root_dir, thisbuild):
                       'googleadview',
                       'googleadmobadssdk',
                       'heyzap']
+
+    # Iterate through all files in the source code...
     for r,d,f in os.walk(build_dir):
         for curfile in f:
+
+            # Path (relative) to the file...
+            fp = os.path.join(r, curfile)
+
             for suspect in usual_suspects:
                 if curfile.lower().find(suspect) != -1:
-                    msg = 'Found probable non-free blob ' + os.path.join(r, curfile)
+                    msg = 'Found probable non-free blob ' + fp
                     problems.append(msg)
+
+            if curfile.endswith('.java'):
+                for line in file(fp):
+
+                    if line.find('DexClassLoader') != -1:
+                        msg = 'Found DexClassLoader in ' + fp
+                        problems.append(msg)
+
+                    if line.lower().find('all rights reserved') != -1:
+                        msg = 'All rights reserved in ' + fp
+                        problems.append(msg)
 
     # Presence of a jni directory without buildjni=yes might
     # indicate a problem...
