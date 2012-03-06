@@ -67,10 +67,17 @@ def main():
         repo = 'https://git.gitorious.org/' + url[22:] + '.git'
         repotype = 'git'
         sourcecode = url
+    elif url.startswith('https://bitbucket.org/'):
+        if url.endswith('/'):
+            url = url[:-1]
+        projecttype = 'bitbucket'
+        sourcecode = url + '/src'
+        issuetracker = url + '/issues'
+        repotype = 'hg'
+        repo = url
     elif url.startswith('http://code.google.com/p/'):
         if not url.endswith('/'):
-            print "Expected format for googlecode url is http://code.google.com/p/PROJECT/"
-            sys.exit(1)
+            url += '/';
         projecttype = 'googlecode'
         sourcecode = url + 'source/checkout'
         issuetracker = url + 'issues/list'

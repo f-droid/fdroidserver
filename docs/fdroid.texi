@@ -336,6 +336,8 @@ Github - @code{https://github.com/USER/PROJECT}
 @item
 Google Code - @code{http://code.google.com/p/PROJECT/}
 (supports git, svn and hg repos)
+@item
+Bitbucket - @code{https://bitbucket.org/USER/PROJECT/}
 @end enumerate
 
 Depending on the project type, more or less information may be gathered. For
