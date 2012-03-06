@@ -12,6 +12,6 @@ Shows Korean verb conjugations for learners of Korean.
 Repo Type:git
 Repo:https://github.com/dbravender/korean_conjugation
 
-Build Version:2.0,6,22b088bf06e0f5f911da4c3b511039e6430721ac,target=android-2
+Build Version:2.0,6,22b088bf06e0f5f911da4c3b511039e6430721ac,subdir=android,update=force
 
 Update Check Mode:Market
