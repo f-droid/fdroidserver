@@ -43,6 +43,8 @@ def main():
                       help="Spew out even more information than normal")
     parser.add_option("-p", "--package", default=None,
                       help="Scan only the specified package")
+    parser.add_option("--nosvn", action="store_true", default=False,
+                      help="Skip svn repositories - for test purposes, because they are too slow.")
     (options, args) = parser.parse_args()
 
     # Get all apps...
@@ -64,6 +66,8 @@ def main():
             skip = True
         elif not app['builds']:
             print "Skipping %s: no builds specified" % app['id']
+            skip = True
+        elif options.nosvn and app['Repo Type'] == 'svn':
             skip = True
 
         if not skip:
