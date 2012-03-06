@@ -950,24 +950,26 @@ def scan_source(build_dir, root_dir, thisbuild):
     for r,d,f in os.walk(build_dir):
         for curfile in f:
 
-            # Path (relative) to the file...
-            fp = os.path.join(r, curfile)
+            if r.find('/.hg/') == -1:
 
-            for suspect in usual_suspects:
-                if curfile.lower().find(suspect) != -1:
-                    msg = 'Found probable non-free blob ' + fp
-                    problems.append(msg)
+                # Path (relative) to the file...
+                fp = os.path.join(r, curfile)
 
-            if curfile.endswith('.java'):
-                for line in file(fp):
-
-                    if line.find('DexClassLoader') != -1:
-                        msg = 'Found DexClassLoader in ' + fp
+                for suspect in usual_suspects:
+                    if curfile.lower().find(suspect) != -1:
+                        msg = 'Found probable non-free blob ' + fp
                         problems.append(msg)
 
-                    if line.lower().find('all rights reserved') != -1:
-                        msg = 'All rights reserved in ' + fp
-                        problems.append(msg)
+                if curfile.endswith('.java'):
+                    for line in file(fp):
+
+                        if line.find('DexClassLoader') != -1:
+                            msg = 'Found DexClassLoader in ' + fp
+                            problems.append(msg)
+
+                        if line.lower().find('all rights reserved') != -1:
+                            msg = 'All rights reserved in ' + fp
+                            problems.append(msg)
 
     # Presence of a jni directory without buildjni=yes might
     # indicate a problem...
