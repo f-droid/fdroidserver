@@ -119,7 +119,7 @@ class FDroid
 	function getlicenseurl($license) {
 	    switch($license) {
         	    case 'MIT':
-			return 'http://www.gnu.org/licenses/license-list.html#X11';
+			return 'http://www.gnu.org/licenses/license-list.html#X11License';
 		    case 'BSD':
 			return 'http://www.gnu.org/licenses/license-list.html#ModifiedBSD';
 		    case 'GPLv3':
