@@ -112,6 +112,31 @@ class FDroid
 	}
 
 
+	// Get a URL for a full description of a license, as given by one of our
+	// pre-defined license abbreviations. This is a temporary function, as this
+	// needs to be data-driven so the same information can be used by the client,
+	// the web site and the documentation.
+	function getlicenseurl($license) {
+	    switch($license) {
+        	    case 'MIT':
+			return 'http://www.gnu.org/licenses/license-list.html#X11';
+		    case 'BSD':
+			return 'http://www.gnu.org/licenses/license-list.html#ModifiedBSD';
+		    case 'GPLv3':
+		    case 'GPLv3+':
+			return 'http://www.gnu.org/licenses/license-list.html#GNUGPL';
+		    case 'GPLv2':
+		    case 'GPLv2+':
+			return 'http://www.gnu.org/licenses/license-list.html#GPLv2';
+		    case 'LGPL':
+			return 'http://www.gnu.org/licenses/license-list.html#LGPL';
+		    case 'Apache2':
+			return 'http://www.gnu.org/licenses/license-list.html#apache2';
+		    default:
+			return null;
+	    }
+	}
+
 	function get_app($query_vars) {
 		global $permissions_data;
 		$permissions_object = new AndroidPermissions($this->site_path.'/wp-content/plugins/wp-fdroid/AndroidManifest.xml',
@@ -231,7 +256,14 @@ class FDroid
 				}
 
 				$out.="<p>";
-				$out.="<b>License:</b> ".$license;
+				$licenseurl=$this->getlicenseurl($license);
+				$out.="<b>License:</b> ";
+				if($licenseurl)
+				    $out.='<a href="'.$licenseurl.'" target="_blank">';
+				$out.=$license;
+				if($licenseurl)
+				    $out.='</a>';
+
 				if(isset($requirements)) {
 					$out.='<br /><b>Additional requirements:</b> '.$requirements;
 				}
