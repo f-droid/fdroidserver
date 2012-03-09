@@ -1,4 +1,3 @@
-Disabled:3 source files are Copyright Google, All Rights Reserved
 Category:System
 License:GPLv3
 Web Site:http://code.google.com/p/ad-away/

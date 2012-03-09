@@ -1,4 +1,3 @@
-Disabled:src/org/fox/ttrss/BillingSecurity.java is All Rights Reserved
 Category:Internet
 License:GPLv2
 Web Site:https://github.com/gothfox/Tiny-Tiny-RSS-for-Honeycomb
@@ -14,7 +13,7 @@ Client for Tiny Tiny RSS Reader.
 Repo Type:git
 Repo:https://github.com/gothfox/Tiny-Tiny-RSS-for-Honeycomb.git
 
-Build Version:0.5.i3,67,989feec2ce7dc5b8c72d12ce20b18d570ca831ad
+Build Version:0.5.3,67,989feec2ce7dc5b8c72d12ce20b18d570ca831ad
 
 Update Check Mode:Market
 
