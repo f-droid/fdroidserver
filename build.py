@@ -118,7 +118,7 @@ def build_server(app, thisbuild, build_dir, output_dir):
         raise BuildException("Failed to destroy")
 
 
-def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install):
+def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install, force):
     """Do a build locally."""
 
     # Prepare the source code...
@@ -132,7 +132,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
         print 'Scanner found ' + str(len(buildprobs)) + ' problems:'
         for problem in buildprobs:
             print '...' + problem
-        raise BuildException("Can't build due to " +
+        if not force:
+            raise BuildException("Can't build due to " +
                 str(len(buildprobs)) + " scanned problems")
 
     # Build the source tarball right before we build the release...
@@ -251,7 +252,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
 
 
 def trybuild(app, thisbuild, build_dir, output_dir, extlib_dir, tmp_dir,
-        repo_dir, vcs, test, server, install):
+        repo_dir, vcs, test, server, install, force):
     """
     Build a particular version of an application, if it needs building.
 
@@ -274,7 +275,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, extlib_dir, tmp_dir,
     if server:
         build_server(app, thisbuild, build_dir, output_dir)
     else:
-        build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install)
+        build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install, force)
     return True
 
 
@@ -297,7 +298,7 @@ def parse_commandline():
     parser.add_option("--on-server", action="store_true", default=False,
                       help="Specify that we're running on the build server")
     parser.add_option("-f", "--force", action="store_true", default=False,
-                      help="Force build of disabled app. Only allowed in test mode.")
+                      help="Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode.")
     parser.add_option("--install", action="store_true", default=False,
                       help="Use 'ant debug install' to build and install a " +
                       "debug version on your device or emulator. " +
@@ -306,10 +307,6 @@ def parse_commandline():
                       help="Use with --install, when not using --package"
                       " to confirm you really want to build and install everything.")
     options, args = parser.parse_args()
-
-    if options.force and not options.test:
-        print "Force is only allowed in test mode"
-        sys.exit(1)
 
     # The --install option implies --test and --force...
     if options.install:
@@ -323,6 +320,10 @@ def parse_commandline():
             sys.exit(1)
         options.force = True
         options.test = True
+
+    if options.force and not options.test:
+        print "Force is only allowed in test mode"
+        sys.exit(1)
 
     return options, args
 
@@ -368,8 +369,8 @@ def main():
         if len(apps) == 0:
             print "No such package"
             sys.exit(1)
-    apps = [app for app in apps if not app['Disabled'] and app['builds'] and
-            len(app['Repo Type']) > 0 and len(app['builds']) > 0]
+    apps = [app for app in apps if (options.force or not app['Disabled']) and
+            app['builds'] and len(app['Repo Type']) > 0 and len(app['builds']) > 0]
     if len(apps) == 0:
         print "Nothing to do - all apps are disabled or have no builds defined."
         sys.exit(1)
@@ -392,7 +393,7 @@ def main():
             try:
                 if trybuild(app, thisbuild, build_dir, output_dir, extlib_dir,
                         tmp_dir, repo_dir, vcs, options.test, options.server,
-                        options.install):
+                        options.install, options.force):
                     build_succeeded.append(app)
             except BuildException as be:
                 if options.stop:
