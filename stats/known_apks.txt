@@ -131,6 +131,7 @@ at.tomtasche.reader_12.apk at.tomtasche.reader 2011-01-10
 at.tomtasche.reader_15.apk at.tomtasche.reader 2011-01-13
 at.tomtasche.reader_22.apk at.tomtasche.reader 2012-02-10
 at.tomtasche.reader_24.apk at.tomtasche.reader 2012-02-10
+au.com.darkside.XServer_2.apk au.com.darkside.XServer 2012-03-06
 caldwell.ben.trolly_6.apk caldwell.ben.trolly 2011-01-27
 cmupdaterapp.ui_501.apk cmupdaterapp.ui 2011-07-12
 com.FireFart.Permissions_2.apk com.FireFart.Permissions 2011-03-02
@@ -309,6 +310,7 @@ com.webworxshop.swallowcatcher_7.apk com.webworxshop.swallowcatcher 2011-12-07
 com.zegoggles.smssync_1404.apk com.zegoggles.smssync
 com.zegoggles.smssync_1405.apk com.zegoggles.smssync
 cri.sanity_21100.apk cri.sanity 2012-03-01
+cx.hell.android.pdfview_32000.apk cx.hell.android.pdfview 2012-03-02
 cz.hejl.chesswalk_7.apk cz.hejl.chesswalk 2012-01-12
 cz.romario.opensudoku_1104.apk cz.romario.opensudoku 2012-01-12
 cz.romario.opensudoku_1105.apk cz.romario.opensudoku 2012-01-12
@@ -327,12 +329,15 @@ de.shandschuh.sparserss_70.apk de.shandschuh.sparserss 2011-12-12
 de.shandschuh.sparserss_71.apk de.shandschuh.sparserss 2012-02-06
 de.shandschuh.sparserss_76.apk de.shandschuh.sparserss 2012-02-26
 de.shandschuh.sparserss_77.apk de.shandschuh.sparserss 2012-02-28
+de.shandschuh.sparserss_78.apk de.shandschuh.sparserss 2012-03-05
 de.ub0r.android.adBlock_5.apk de.ub0r.android.adBlock 2011-01-23
 dk.andsen.asqlitemanager_10.apk dk.andsen.asqlitemanager 2012-01-26
 dk.andsen.asqlitemanager_7.apk dk.andsen.asqlitemanager 2011-12-05
 dk.andsen.asqlitemanager_9.apk dk.andsen.asqlitemanager 2011-12-08
 edu.nyu.cs.omnidroid.app_6.apk edu.nyu.cs.omnidroid.app 2011-10-04
 edu.rit.poe.atomix_2.apk edu.rit.poe.atomix 2011-03-02
+es.cesar.quitesleep_5.apk es.cesar.quitesleep 2012-03-02
+es.cesar.quitesleep_9.apk es.cesar.quitesleep 2012-03-02
 fennec-10.0.1.multi.android-arm.apk org.mozilla.firefox 2012-02-14
 fennec-10.0.2.multi.android-arm.apk org.mozilla.firefox 2012-02-21
 fennec-10.0.multi.android-arm.apk org.mozilla.firefox 2012-02-01
@@ -417,6 +422,7 @@ net.micode.compass_1.apk net.micode.compass 2012-02-15
 net.nightwhistler.pageturner_1.apk net.nightwhistler.pageturner 2012-02-03
 net.nightwhistler.pageturner_2.apk net.nightwhistler.pageturner 2012-02-04
 net.nightwhistler.pageturner_3.apk net.nightwhistler.pageturner 2012-02-11
+net.nightwhistler.pageturner_6.apk net.nightwhistler.pageturner 2012-03-06
 net.osmand.plus_34.apk net.osmand.plus 2011-06-24
 net.osmand.plus_36.apk net.osmand.plus 2011-07-12
 net.osmand.plus_37.apk net.osmand.plus 2011-09-26
@@ -470,7 +476,9 @@ org.adaway_25.apk org.adaway 2012-01-24
 org.adaway_26.apk org.adaway 2012-02-15
 org.adaway_27.apk org.adaway 2012-02-24
 org.adaway_28.apk org.adaway 2012-02-24
+org.adaway_30.apk org.adaway 2012-03-09
 org.adw.launcher_34.apk org.adw.launcher 2011-12-05
+org.ametro_17.apk org.ametro 2012-03-02
 org.androidsoft.games.memory.kids_13.apk org.androidsoft.games.memory.kids 2011-12-08
 org.coolreader_103.apk org.coolreader 2011-02-13
 org.coolreader_109.apk org.coolreader 2011-03-03
@@ -513,6 +521,7 @@ org.coolreader_94.apk org.coolreader 2011-02-02
 org.coolreader_96.apk org.coolreader 2011-02-08
 org.curiouscreature.android.shelves_1.apk org.curiouscreature.android.shelves 2011-01-27
 org.damazio.notifier_11.apk org.damazio.notifier 2011-01-31
+org.dnaq.dialer2_17.apk org.dnaq.dialer2 2012-03-02
 org.droidseries_12.apk org.droidseries 2011-03-02
 org.droidseries_13.apk org.droidseries 2011-11-28
 org.eehouse.android.xw4_26.apk org.eehouse.android.xw4 2012-01-13
@@ -532,6 +541,7 @@ org.fdroid.fdroid_8.apk org.fdroid.fdroid 2011-01-17
 org.fdroid.fdroid_9.apk org.fdroid.fdroid 2011-01-30
 org.fdroid.taskstrid_170.apk org.fdroid.taskstrid 2011-01-15
 org.fosdem_4.apk org.fosdem 2011-02-04
+org.fox.ttrss_67.apk org.fox.ttrss 2012-03-09
 org.geometerplus.zlibrary.ui.android_10011.apk org.geometerplus.zlibrary.ui.android 2011-04-26
 org.geometerplus.zlibrary.ui.android_10013.apk org.geometerplus.zlibrary.ui.android 2011-05-16
 org.geometerplus.zlibrary.ui.android_10014.apk org.geometerplus.zlibrary.ui.android 2011-05-18
@@ -553,6 +563,7 @@ org.geometerplus.zlibrary.ui.android_9912.apk org.geometerplus.zlibrary.ui.andro
 org.geometerplus.zlibrary.ui.android_9915.apk org.geometerplus.zlibrary.ui.android 2011-03-12
 org.geometerplus.zlibrary.ui.android_9918.apk org.geometerplus.zlibrary.ui.android 2011-03-17
 org.helllabs.android.xmp_15.apk org.helllabs.android.xmp 2011-03-02
+org.helllabs.android.xmp_21.apk org.helllabs.android.xmp 2012-03-05
 org.jessies.mathdroid_25.apk org.jessies.mathdroid 2011-12-06
 org.jfedor.frozenbubble_11.apk org.jfedor.frozenbubble 2011-04-26
 org.jfedor.frozenbubble_12.apk org.jfedor.frozenbubble 2011-10-10
@@ -618,6 +629,7 @@ org.ttrssreader_1210.apk org.ttrssreader 2011-11-24
 org.ttrssreader_1220.apk org.ttrssreader 2012-01-02
 org.ttrssreader_1230.apk org.ttrssreader 2012-01-20
 org.ttrssreader_1240.apk org.ttrssreader 2012-02-01
+org.ttrssreader_1254.apk org.ttrssreader 2012-03-09
 org.ttrssreader_807.apk org.ttrssreader 2011-01-22
 org.ttrssreader_840.apk org.ttrssreader 2011-02-09
 org.ttrssreader_850.apk org.ttrssreader 2011-06-12
@@ -627,6 +639,7 @@ org.ttrssreader_892.apk org.ttrssreader 2011-03-09
 org.ttrssreader_911.apk org.ttrssreader 2011-03-17
 org.ttrssreader_931.apk org.ttrssreader 2011-03-26
 org.ttrssreader_973.apk org.ttrssreader 2011-05-10
+org.uaraven.e_14.apk org.uaraven.e 2012-03-06
 org.vudroid_3.apk org.vudroid 2011-06-12
 org.vudroid_4.apk org.vudroid 2011-06-12
 org.vudroid_5.apk org.vudroid 2011-06-12
@@ -671,6 +684,7 @@ regalandroid-1.0.0-20101204.212606-5.apk net.dahanne.android.regalandroid 2010-1
 regalandroid-1.0.1-aligned.apk net.dahanne.android.regalandroid
 remuco.client.android_1.apk remuco.client.android 2012-01-08
 ru.gelin.android.weather.notification_23.apk ru.gelin.android.weather.notification 2011-12-11
+ru.qrck.quitetaskmanager_2.apk ru.qrck.quitetaskmanager 2012-03-02
 se.johanhil.clipboard_2.apk se.johanhil.clipboard 2011-03-10
 se.johanhil.duckduckgo_1.apk se.johanhil.duckduckgo 2011-03-10
 se.peterbjorkman.android.trafikinfo_12.apk se.peterbjorkman.android.trafikinfo 2011-01-27
@@ -694,6 +708,7 @@ tuioDroid.impl_4.apk tuioDroid.impl 2011-11-28
 tuxrider_1.0.4.apk com.drodin.tuxrider 2010-11-18
 uk.co.jarofgreen.JustADamnCompass_2.apk uk.co.jarofgreen.JustADamnCompass 2012-02-12
 urbanstew.RehearsalAssistant_22.apk urbanstew.RehearsalAssistant 2011-02-19
+us.bravender.android.dongsa_6.apk us.bravender.android.dongsa 2012-03-06
 us.lindanrandy.cidrcalculator_115.apk us.lindanrandy.cidrcalculator 2012-01-21
 us.lindanrandy.cidrcalculator_118.apk us.lindanrandy.cidrcalculator 2012-01-28
 vu.de.urpool.quickdroid_31.apk vu.de.urpool.quickdroid 2011-01-27
