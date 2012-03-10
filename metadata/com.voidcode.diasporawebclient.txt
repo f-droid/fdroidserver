@@ -19,6 +19,6 @@ mv google-api-translate-java-0.97.jar libs/ && \
 mv microsoft-translator-java-api-0.4-jar-with-dependencies.jar libs/
 
 Update Check Mode:Market
-Current Version:1.6.1
-Current Version Code:8
+Current Version:1.6.2
+Current Version Code:9
 

@@ -30,6 +30,6 @@ Build Version:7.5,105,!No source available
 Build Version:7.6.1,112,!No source available
 
 Update Check Mode:Market
-Current Version:7.7
-Current Version Code:113
+Current Version:7.8
+Current Version Code:114
 

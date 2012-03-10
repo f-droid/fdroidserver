@@ -15,4 +15,6 @@ Repo:https://code.google.com/p/android-xserver/
 Build Version:1.02,2,5811ae984ea0,subdir=XServer
 
 Update Check Mode:Market
+Current Version:1.03
+Current Version Code:3
 

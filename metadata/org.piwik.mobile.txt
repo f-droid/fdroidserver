@@ -11,6 +11,6 @@ you access to your statistics.
 .
 
 Update Check Mode:Market
-Current Version:1.6.2
-Current Version Code:10
+Current Version:1.7.0
+Current Version Code:11
 

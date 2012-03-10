@@ -26,6 +26,6 @@ init=cd ../../ && autoconf && ./configure,buildjni=yes,subdir=players/android,ta
 forceversion=yes
 
 Update Check Mode:Market
-Current Version:2.9.0
-Current Version Code:21
+Current Version:2.9.1
+Current Version Code:22
 

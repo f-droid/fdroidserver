@@ -14,6 +14,6 @@ Repo:https://github.com/rtyley/agit.git
 
 Update Check Mode:Market
 #No builds yet - another 'need to figure out how to make maven work' scenario
-Current Version:1.27
-Current Version Code:120101721
+Current Version:1.28
+Current Version Code:120300515
 
