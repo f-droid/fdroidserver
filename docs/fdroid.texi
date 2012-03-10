@@ -405,6 +405,9 @@ The following sections describe the fields recognised within the file.
 * AntiFeatures::
 * Disabled::
 * Requires Root::
+* Update Check Mode::
+* Current Version::
+* Current Version Code::
 @end menu
 
 @node License
@@ -747,6 +750,50 @@ Set this optional field to "Yes" if the application requires root
 privileges to be usable. This lets the client filter it out if the
 user so desires.
 
+@node Update Check Mode
+@section Update Check Mode
+
+@cindex Update Check Mode
+
+This determines the method using for determining when new releases are
+available - in other words, the updating of the Current Version and Current
+Version Code fields in the metadata by the @code{fdroid checkupdates} process.
+
+Valid modes are:
+
+@itemize
+@item
+@code{None} - No checking is done
+@item
+@code{RepoManifest} - The AndroidManifest.xml file in the most recent commit
+in the source repository is checked. The appropriateness of this method depends
+on the development process used by the application's developers. You should not
+specify this method unless you're sure it's appropriate. (Also, it currently
+only works for git repositories).
+@item
+@code{Market} - This is being phased out and should not be used!
+@end itemize
+
+@node Current Version
+@section Current Version
+
+@cindex Current Version
+
+The name of the version that is current. There may be newer versions of the
+application than this (e.g. betas), and there will almost certainly be older
+ones. This should be the one that is recommended for general use.
+
+This field is normally automatically updated - see Update Check Mode.
+
+@node Current Version Code
+@section Current Version Code
+
+@cindex Current Version Code
+
+The version code corresponding to the Current Version field. Both these fields
+must be correct and matching.
+
+This field is normally automatically updated - see Update Check Mode.
 
 @node Build Server
 @chapter Build Server
