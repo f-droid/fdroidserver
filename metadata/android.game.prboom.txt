@@ -1,0 +1,26 @@
+Category:Games
+License:GPLv3
+Web Site:http://code.google.com/p/prboom4android/
+Source Code:http://code.google.com/p/prboom4android/source/checkout
+Issue Tracker:http://code.google.com/p/prboom4android/issues/list
+
+Summary:PrBoom Doom engine for Android Devices
+Description:
+PrBoom4Android is a port of the open source PrBoom Doom engine.
+It was originally ported to android by Vladimir Silva when the
+first android device, the G1, was released. Since the original
+port was designed to work with the G1's hardware keyboard, it
+did not function with touchscreen only devices. This release
+adds on-screen multitouch controls to support newer devices.
+If you have a hardware keyboard, you can always use that or
+enable the touch controls, the choice is yours!
+
+You will need a WAD file (Doom game data file) to play, you will
+be offered to download one of free WAD files by the game on first
+run.
+.
+
+Repo Type:git-svn
+Repo:http://prboom4android.googlecode.com/svn/trunk/
+
+Build Version:1.3.1-beta,31,49,buildjni=yes
