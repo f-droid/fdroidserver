@@ -614,23 +614,34 @@ build.xml file. Specifying update=no bypasses that.
 
 Specifiying update=force forces rebuilding of the build.xml file at the
 same time - this is frequently needed with r14 of the Android platform
-tools.
+tools. Be aware of any customisations in build.xml when using
+update=force.
 
-Be aware of any customisations in build.xml when using update=force.
+Otherwise, value can be a semicol-separated list of directories in
+which to run 'android update project' relative to the main
+application directory (which may include '@code{subdir}' parameter).
+Default value is '@code{.}', and passing non-default value may be
+useful for multi-component projects. Note that @code{--subprojects}
+switch is automatically passed to 'android update project', so using
+explicit list may be needed only for peculiar source layouts.
 
 @item initfun=yes
 Enables a selection of mad hacks to make com.funambol.android build.
 Probably not useful for any other application.
 
-@item buildjni=[no|yes|force]
+@item buildjni=[yes|no|<dir list>]
 Enables building of native code via the ndk-build script before doing
-the main ant build. The default is @code{no}.
+the main ant build. The value may be a list of directories relative
+to the main application directory in which to run ndk-build, or 'yes'
+which corresponds to '.' . Using explicit list may be useful to build
+multi-component projects.
 
-The build and scan processes will complain (refuse to build) if this is set
-to @code{no}, but there is a @code{jni} directory present. If the native code
-is being built by other means, you can specify @code{manual} here to avoid
-that. However, if the native code is actually not required, remove the
-directory instead.
+The build and scan processes will complain (refuse to build) if this
+parameter is not defined, but there is a @code{jni} directory present.
+If the native code is being built by other means, you can specify
+@code{no} here to avoid that. However, if the native code is actually
+not required, remove the directory instead (using @code{prebuild} for
+example).
 
 @item submodules=yes
 Use if the project (git only) has submodules - causes git submodule

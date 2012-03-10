@@ -149,10 +149,18 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
     tarball.close()
 
     # Build native stuff if required...
-    if thisbuild.get('buildjni', 'no') == 'yes':
+    if thisbuild.get('buildjni') not in (None, 'no'):
+        jni_components = thisbuild.get('buildjni')
+        if jni_components == 'yes':
+            jni_components = ['']
+        else:
+            jni_components = jni_components.split(';')
         ndkbuild = os.path.join(ndk_path, "ndk-build")
-        p = subprocess.Popen([ndkbuild], cwd=root_dir,
-                stdout=subprocess.PIPE)
+        for d in jni_components:
+            if options.verbose:
+                print "Running ndk-build in " + root_dir + '/' + d
+            p = subprocess.Popen([ndkbuild], cwd=root_dir + '/' + d,
+                    stdout=subprocess.PIPE)
         output = p.communicate()[0]
         if p.returncode != 0:
             print output
@@ -327,9 +335,11 @@ def parse_commandline():
 
     return options, args
 
+options = None
 
 def main():
 
+    global options
     # Read configuration...
     execfile('config.py', globals())
     options, args = parse_commandline()

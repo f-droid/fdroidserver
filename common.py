@@ -713,7 +713,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
             raise BuildException("Error running init command")
 
     # Generate (or update) the ant build file, build.xml...
-    if (build.get('update', 'yes') != 'no' and
+    if (build.get('update', '.') != 'no' and
         not build.has_key('maven')):
         parms = [os.path.join(sdk_path, 'tools', 'android'),
                 'update', 'project', '-p', '.']
@@ -721,14 +721,17 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
         if build.has_key('target'):
             parms.append('-t')
             parms.append(build['target'])
+        update_dirs = build.get('update', '.').split(';')
         # Force build.xml update if necessary...
-        if build.get('update', 'yes') == 'force' or build.has_key('target'):
+        if build.get('update', '.') == 'force' or build.has_key('target'):
+            update_dirs = ['.']
             buildxml = os.path.join(root_dir, 'build.xml')
             if os.path.exists(buildxml):
                 print 'Force-removing old build.xml'
                 os.remove(buildxml)
-        if subprocess.call(parms, cwd=root_dir) != 0:
-            raise BuildException("Failed to update project")
+        for d in update_dirs:
+            if subprocess.call(parms, cwd=root_dir + '/' + d) != 0:
+                raise BuildException("Failed to update project")
 
     # If the app has ant set up to sign the release, we need to switch
     # that off, because we want the unsigned apk...
@@ -1000,7 +1003,7 @@ def scan_source(build_dir, root_dir, thisbuild):
     # Presence of a jni directory without buildjni=yes might
     # indicate a problem...
     if (os.path.exists(os.path.join(root_dir, 'jni')) and 
-            thisbuild.get('buildjni', 'no') == 'no'):
+            thisbuild.get('buildjni') is None):
         msg = 'Found jni directory, but buildjni is not enabled'
         problems.append(msg)
 
