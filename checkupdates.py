@@ -28,6 +28,56 @@ import HTMLParser
 import common
 
 
+# Check for a new version by looking at the AndroidManifest.xml at the HEAD
+# of the source repo. Whether this can be used reliably or not depends on
+# the development procedures used by the project's developers. Use it with
+# caution, because it's inappropriate for many projects.
+# Returns (None, "a message") if this didn't work, or (version, vercode) for
+# the details of the current version.
+def check_repomanifest(app):
+
+    try:
+
+        build_dir = 'build/' + app['id']
+
+        if app['Repo Type'] != 'git':
+            return (None, 'RepoManifest update mode only works for git repositories currently')
+
+        # Set up vcs interface and make sure we have the latest code...
+        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
+        vcs.gotorevision('origin/master')
+
+        if len(app['builds']) == 0:
+            return (None, "Can't use RepoManifest with no builds defined")
+
+        manifest = build_dir
+        if app['builds'][-1].has_key('subdir'):
+            manifest = os.path.join(manifest, app['builds'][-1]['subdir'])
+        manifest = os.path.join(manifest, 'AndroidManifest.xml')
+
+        version, vercode, package = common.parse_androidmanifest(manifest)
+        if not package:
+            return (None, "Couldn't find ipackage ID")
+        if package != app['id']:
+            return (None, "Package ID mismatch")
+        if not version:
+            return (None,"Couldn't find latest version name")
+        if not vercode:
+            return (None,"Couldn't find latest version code")
+
+        return (version, vercode)
+
+    except BuildException as be:
+        msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
+        return (None, msg)
+    except VCSException as vcse:
+        msg = "VCS error while scanning app %s: %s" % (app['id'], vcse)
+        return (None, msg)
+    except Exception:
+        msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
+        return (None, msg)
+
+
 # Check for a new version by looking at the Google market.
 # Returns (None, "a message") if this didn't work, or (version, vercode) for
 # the details of the current version.
@@ -91,6 +141,8 @@ def main():
             mode = app['Update Check Mode']
             if mode == 'Market':
                 (version, vercode) = check_market(app)
+            elif mode == 'RepoManifest':
+                (version, vercode) = check_repomanifest(app)
             elif mode == 'None':
                 version = None
                 vercode = 'Checking disabled'

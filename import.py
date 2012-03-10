@@ -189,25 +189,7 @@ def main():
         sys.exit(1)
 
     # Extract some information...
-    vcsearch = re.compile(r'.*android:versionCode="([^"]+)".*').search
-    vnsearch = re.compile(r'.*android:versionName="([^"]+)".*').search
-    psearch = re.compile(r'.*package="([^"]+)".*').search
-    version = None
-    vercode = None
-    package = None
-    for line in file(manifest):
-        if not package:
-            matches = psearch(line)
-            if matches:
-                package = matches.group(1)
-        if not version:
-            matches = vnsearch(line)
-            if matches:
-                version = matches.group(1)
-        if not vercode:
-            matches = vcsearch(line)
-            if matches:
-                vercode = matches.group(1)
+    version, vercode, package = common.parse_androidmanifest(manifest)
     if not package:
         print "Couldn't find package ID"
         sys.exit(1)

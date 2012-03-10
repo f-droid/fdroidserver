@@ -563,6 +563,32 @@ def parse_description(lines):
     return text
 
 
+# Extract some information from the AndroidManifest.xml at the given path.
+# Returns (version, vercode, package), any or all of which might be None.
+def parse_androidmanifest(manifest):
+
+    vcsearch = re.compile(r'.*android:versionCode="([^"]+)".*').search
+    vnsearch = re.compile(r'.*android:versionName="([^"]+)".*').search
+    psearch = re.compile(r'.*package="([^"]+)".*').search
+    version = None
+    vercode = None
+    package = None
+    for line in file(manifest):
+        if not package:
+            matches = psearch(line)
+            if matches:
+                package = matches.group(1)
+        if not version:
+            matches = vnsearch(line)
+            if matches:
+                version = matches.group(1)
+        if not vercode:
+            matches = vcsearch(line)
+            if matches:
+                vercode = matches.group(1)
+    return (version, vercode, package)
+
+
 class BuildException(Exception):
     def __init__(self, value, stdout = None, stderr = None):
         self.value = value
@@ -967,9 +993,9 @@ def scan_source(build_dir, root_dir, thisbuild):
                             msg = 'Found DexClassLoader in ' + fp
                             problems.append(msg)
 
-                        if line.lower().find('all rights reserved') != -1:
-                            msg = 'All rights reserved in ' + fp
-                            problems.append(msg)
+#                        if line.lower().find('all rights reserved') != -1:
+#                            msg = 'All rights reserved in ' + fp
+#                            problems.append(msg)
 
     # Presence of a jni directory without buildjni=yes might
     # indicate a problem...
