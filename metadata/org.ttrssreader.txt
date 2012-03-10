@@ -27,7 +27,8 @@ Build Version:1.22,1220,1.22,subdir=ttrss-reader,target=android-8
 #The 1.23 tag is wrong...
 Build Version:1.23,1230,1e255c7e32ae,subdir=ttrss-reader,target=android-8
 Build Version:1.24,1240,fb656e839908,subdir=ttrss-reader,target=android-8
-Build Version:1.25,1254,953879d8ccb1,subdir=ttrss-reader,target=android-13
+Build Version:1.25,1253,69d2376a53f2,subdir=ttrss-reader,target=android-13
+Build Version:1.25,1254,!broken - crashes on startup
 
 Update Check Mode:Market
 Current Version:1.25
