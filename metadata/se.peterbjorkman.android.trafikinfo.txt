@@ -8,7 +8,11 @@ Summary:Show Swedish traffic information
 Description:
 This application shows traffic information received from Trafikverket,
 the Swedish Transport Administration.
+
+Requires proprietary Google Maps to be installed on your device.
 .
+
+AntiFeatures:NonFreeDep
 
 Repo Type:svn
 Repo:http://trafikinfoandroid.googlecode.com/svn/trunk
