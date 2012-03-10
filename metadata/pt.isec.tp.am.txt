@@ -14,7 +14,7 @@ special bonus balls will appear, but be careful to not press the wrong one!
 Repo Type:git
 Repo:https://git.gitorious.org/free-fall/free-fall.git
 
-Build Version:1.5,2,f050399
+Build Version:1.6.1,4,78c2201a3
 
-Update Check Mode:Market
+Update Check Mode:None
 
