@@ -399,6 +399,7 @@ fdroid rewritemetadata
 The following sections describe the fields recognised within the file.
 
 @menu
+* Category::
 * License::
 * Name::
 * Web Site::
@@ -417,6 +418,16 @@ The following sections describe the fields recognised within the file.
 * Current Version::
 * Current Version Code::
 @end menu
+
+@node Category
+@section Category
+
+A single category for the application to be placed in. There is no fixed list
+of categories - both the client and the web site will automatically show any
+categories that exist in any applications. However, if your metadata is
+intended for the main F-Droid repository, you should probably use one of the
+existing categories (look at the site/client), or discuss the proposal to add
+a new one.
 
 @node License
 @section License
