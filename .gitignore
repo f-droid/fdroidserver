@@ -1,10 +1,4 @@
 config.py
-repo/
-logs/
-built/
-tmp/
-build_*/
 *~
 *.pyc
 buildserver.box
-unsigned/
