@@ -124,17 +124,29 @@ Paramiko (debian package python-paramiko)
 @cindex setup, installation
 
 Because the tools and data will always change rapidly, you will almost
-certainly want to work from a git clone of the tools, which are designed to
-work in this way, with all associated data in a pre-defined directory
-structure below the main one. To get started:
+certainly want to work from a git clone of the tools at this stage. To
+get started:
 
 @example
 git clone git://gitorious.org/f-droid/fdroidserver.git
-cd fdroidserver
 @end example
 
-You will now be in the root directory of the tools. All the tasks associated
-with managing the repository and data are done from here.
+You now have lots of stuff in the fdroidserver directory, but the most
+important is the 'fdroid' command script which you run to perform all tasks.
+This script is always run from a repostitory data directory, so the
+most sensible thing to do next is to put your new fdroidserver directory
+in your @code{PATH}.
+
+@section Data
+
+To do anything, you'll need at least one repository data directory. It's
+from this directory that you run the @code{fdroid} command to perform all
+repository management tasks. You can either create a brand new one, or
+grab a copy of the data used by the main F-Droid repository:
+
+@example
+git clone git://gitorious.org/f-droid/fdroiddata.git
+@end example
 
 Regardless of the intended usage of the tools, you will always need to set
 up some basic configuration details. This is done by creating a file called
@@ -142,18 +154,14 @@ up some basic configuration details. This is done by creating a file called
 and then editing according to the instructions within.
 
 Once configured in this way, all the functionality of the tools is accessed
-by running the @code{fdroid} script. Run it on its own to get a list of the
-available commands:
-
-@example
-./fdroid
-@end example
+by running the @code{fdroid} command. Run it on its own to get a list of the
+available sub-commands.
 
 You can follow any command with @code{--help} to get a list of additional
 options available for that command.
 
 @example
-./fdroid update --help
+fdroid update --help
 @end example
 
 
@@ -385,7 +393,7 @@ following them). In fact, you can standardise all the metadata in a single
 command, without changing the functional content, by running:
 
 @example
-./fdroid rewritemetadata
+fdroid rewritemetadata
 @end example
 
 The following sections describe the fields recognised within the file.
