@@ -41,7 +41,11 @@ def main():
 
     command = sys.argv[1]
     if not command in commands:
-        print "Command '" + command + "' not recognised"
+        print "Command '" + command + "' not recognised."
+        print ""
+        print "Valid commands are:"
+        for command in commands:
+            print "  " + command
         sys.exit(1)
 
     # Trick optparse into displaying the right usage when --help is used.
