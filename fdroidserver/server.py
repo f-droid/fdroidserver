@@ -1,7 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# fdroid.py - part of the FDroid server tools
+# server.py - part of the FDroid server tools
 # Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
@@ -18,40 +18,33 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import fdroidserver
-
-commands = [
-        "build",
-        "update",
-        "publish",
-        "checkupdates",
-        "import",
-        "rewritemeta",
-        "scanner",
-        "stats",
-        "server"]
+import os
+import subprocess
+from optparse import OptionParser
 
 def main():
 
-    if len(sys.argv) <= 1:
-        print "Specify a command. Valid commands are:"
-        for command in commands:
-            print "  " + command
-        sys.exit(0)
+    #Read configuration...
+    execfile('config.py', globals())
 
-    command = sys.argv[1]
-    if not command in commands:
-        print "Command '" + command + "' not recognised"
+    # Parse command line...
+    parser = OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    (options, args) = parser.parse_args()
+
+    if len(args) != 1:
+        print "Specify a single command"
         sys.exit(1)
 
-    # Trick optparse into displaying the right usage when --help is used.
-    sys.argv[0] += ' ' + command
+    if args[0] != 'update':
+        print "The only command currently supported is 'update'"
+        sys.exit(1)
 
-    del sys.argv[1]
-    mod = __import__('fdroidserver.' + command, None, None, [command])
-    mod.main()
-    sys.exit(0)
+    sys.exit(subprocess.call(['rsync', 
+        '-u', '-v', '-r', '--delete', 'repo', serverwebroot]))
 
 if __name__ == "__main__":
     main()
+
 

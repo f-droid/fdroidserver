@@ -39,4 +39,7 @@ keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"
 keyaliases = {}
 keyaliases['com.example.app'] = 'example'
 
+#The ssh path to the server's public web root directory. This is used for
+#uploading data, etc.
+serverwebroot = 'user@example:/var/www/repo'
 
