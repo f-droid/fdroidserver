@@ -130,12 +130,14 @@ def main():
     # Get all apps...
     apps = common.read_metadata(options.verbose)
 
-    for app in apps:
+    # Filter apps according to command-line options
+    if options.package:
+        apps = [app for app in apps if app['id'] == options.package]
+        if len(apps) == 0:
+            print "No such package"
+            sys.exit(1)
 
-        if options.package and options.package != app['id']:
-            # Silent skip...
-            pass
-        else:
+    for app in apps:
             print "Processing " + app['id'] + '...'
 
             mode = app['Update Check Mode']
