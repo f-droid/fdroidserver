@@ -36,10 +36,19 @@ def main():
     parser = OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
+    parser.add_option("-p", "--package", default=None,
+                      help="Build only the specified package")
     (options, args) = parser.parse_args()
 
     # Get all apps...
     apps = common.read_metadata(options.verbose)
+
+    # Filter apps according to command-line options
+    if options.package:
+        apps = [app for app in apps if app['id'] == options.package]
+        if len(apps) == 0:
+            print "No such package"
+            sys.exit(1)
 
     for app in apps:
         print "Writing " + app['id']
