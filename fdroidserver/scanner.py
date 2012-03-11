@@ -50,6 +50,13 @@ def main():
     # Get all apps...
     apps = common.read_metadata(options.verbose)
 
+    # Filter apps according to command-line options
+    if options.package:
+        apps = [app for app in apps if app['id'] == options.package]
+        if len(apps) == 0:
+            print "No such package"
+            sys.exit(1)
+
     html_parser = HTMLParser.HTMLParser()
 
     problems = []
@@ -59,9 +66,7 @@ def main():
     for app in apps:
 
         skip = False
-        if options.package and app['id'] != options.package:
-            skip = True
-        elif app['Disabled']:
+        if app['Disabled']:
             print "Skipping %s: disabled" % app['id']
             skip = True
         elif not app['builds']:
