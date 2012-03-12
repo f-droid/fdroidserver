@@ -118,13 +118,13 @@ def build_server(app, thisbuild, build_dir, output_dir):
         raise BuildException("Failed to destroy")
 
 
-def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install, force):
+def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install, force, verbose=False):
     """Do a build locally."""
 
     # Prepare the source code...
     root_dir = common.prepare_source(vcs, app, thisbuild,
             build_dir, extlib_dir, sdk_path, ndk_path,
-            javacc_path)
+            javacc_path, verbose)
 
     # Scan before building...
     buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
@@ -260,7 +260,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
 
 
 def trybuild(app, thisbuild, build_dir, output_dir, extlib_dir, tmp_dir,
-        repo_dir, vcs, test, server, install, force):
+        repo_dir, vcs, test, server, install, force, verbose=False):
     """
     Build a particular version of an application, if it needs building.
 
@@ -283,7 +283,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, extlib_dir, tmp_dir,
     if server:
         build_server(app, thisbuild, build_dir, output_dir)
     else:
-        build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install, force)
+        build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install, force, verbose)
     return True
 
 
@@ -403,7 +403,7 @@ def main():
             try:
                 if trybuild(app, thisbuild, build_dir, output_dir, extlib_dir,
                         tmp_dir, repo_dir, vcs, options.test, options.server,
-                        options.install, options.force):
+                        options.install, options.force, options.verbose):
                     build_succeeded.append(app)
             except BuildException as be:
                 if options.stop:
