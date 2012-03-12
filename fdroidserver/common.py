@@ -683,9 +683,10 @@ def getsrclib(spec, extlib_dir):
 #  'sdk_path'    - the path to the Android SDK
 #  'ndk_path'    - the path to the Android NDK
 #  'javacc_path' - the path to javacc
+#  'verbose'     - optional: verbose or not (default=False)
 # Returns the root directory, which may be the same as 'build_dir' or may
 # be a subdirectory of it.
-def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, javacc_path):
+def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, javacc_path, verbose=False):
 
     # Optionally, the actual app source can be in a subdirectory...
     if build.has_key('subdir'):
@@ -704,11 +705,13 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
 
     # Initialise submodules if requred...
     if build.get('submodules', 'no')  == 'yes':
+        if verbose: print "Initialising submodules..."
         vcs.initsubmodules()
 
     # Run an init command if one is required...
     if build.has_key('init'):
         init = build['init']
+        if verbose: print "Doing init: exec '%s' in '%s'"%(init,root_dir)
         if subprocess.call(init, cwd=root_dir, shell=True) != 0:
             raise BuildException("Error running init command")
 
@@ -730,7 +733,11 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
                 print 'Force-removing old build.xml'
                 os.remove(buildxml)
         for d in update_dirs:
-            if subprocess.call(parms, cwd=root_dir + '/' + d) != 0:
+            cwd = root_dir + '/' + d
+            if verbose:
+                print "Update of '%s': exec '%s' in '%s'"%\
+                    (d," ".join(parms),cwd)
+            if subprocess.call(parms, cwd=cwd) != 0:
                 raise BuildException("Failed to update project")
 
     # If the app has ant set up to sign the release, we need to switch
