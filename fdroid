@@ -31,17 +31,23 @@ commands = [
         "stats",
         "server"]
 
+def print_help():
+    print "Valid commands are:"
+    for command in commands:
+        print "  " + command
+    print "Use '%s <command> -h' for more info about that command."%sys.argv[0]
+
 def main():
 
     if len(sys.argv) <= 1:
-        print "Specify a command. Valid commands are:"
-        for command in commands:
-            print "  " + command
+        print_help()
         sys.exit(0)
 
     command = sys.argv[1]
     if not command in commands:
-        print "Command '" + command + "' not recognised"
+        print "Command '" + command + "' not recognised."
+        print ""
+        print_help()
         sys.exit(1)
 
     # Trick optparse into displaying the right usage when --help is used.
