@@ -35,7 +35,7 @@ def print_help():
     print "Valid commands are:"
     for command in commands:
         print "  " + command
-    print "Use '%s <command> -h' for more info about that command."%sys.argv[0]
+    print "Use '%s <command> --help' for more info about that command."%sys.argv[0]
 
 def main():
 
