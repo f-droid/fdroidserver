@@ -737,8 +737,13 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
             if verbose:
                 print "Update of '%s': exec '%s' in '%s'"%\
                     (d," ".join(parms),cwd)
-            if subprocess.call(parms, cwd=cwd) != 0:
-                raise BuildException("Failed to update project")
+            p = subprocess.Popen(parms, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            (out, err) = p.communicate()
+            if p.returncode != 0:
+                raise BuildException("Failed to update project with stdout '%s' and stderr '%s'"%(out,err))
+            # check to see whether an error was returned without a proper exit code (this is the case for the 'no target set or target invalid' error)
+            if err != "" and err.startswith("Error: "):
+                raise BuildException("Failed to update project with stdout '%s' and stderr '%s'"%(out,err))
 
     # If the app has ant set up to sign the release, we need to switch
     # that off, because we want the unsigned apk...
