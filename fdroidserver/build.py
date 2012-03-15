@@ -241,7 +241,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
     if (version != thisbuild['version'] or
             vercode != thisbuild['vercode']):
         raise BuildException(("Unexpected version/version code in output"
-                             "APK: %s / %s"
+                             "APK: %s / %s, "
                              "Expected: %s / %s")
                              % (version, str(vercode), thisbuild['version'], str(thisbuild['vercode']))
                             )
