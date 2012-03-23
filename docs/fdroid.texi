@@ -98,7 +98,7 @@ JavaCC (Debian package javacc)
 @item
 JDK (Debian package openjdk-6-jdk)
 @item
-VCS clients: svn, git, hg, bzr
+VCS clients: svn, git, git-svn, hg, bzr
 @item
 A keystore for holding release keys. (Safe, secure and well backed up!)
 @end itemize
