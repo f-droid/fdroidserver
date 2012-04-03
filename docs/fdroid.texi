@@ -346,11 +346,14 @@ Google Code - @code{http://code.google.com/p/PROJECT/}
 (supports git, svn and hg repos)
 @item
 Bitbucket - @code{https://bitbucket.org/USER/PROJECT/}
+@item
+Git - @code{git://REPO}
 @end enumerate
 
 Depending on the project type, more or less information may be gathered. For
 example, the license will be retrieved from a Google Code project, but not a
-GitHub one.
+GitHub one. A bare repo url, such as the git:// one, is the least preferable
+optional of all, since you will have to enter much more information manually.
 
 If the import is successful, a metadata file will be created. You will need to
 edit this further to check the information, and fill in the blanks.

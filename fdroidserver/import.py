@@ -57,6 +57,13 @@ def main():
     projecttype = None
     issuetracker = None
     license = None
+    website = url #by default, we might override it
+    if url.startswith('git://'):
+        projecttype = 'git'
+        repo = url
+        repotype = 'git'
+        sourcecode = ""
+        website = ""
     if url.startswith('https://github.com'):
         if url.endswith('/'):
             url = url[:-1]
@@ -211,7 +218,7 @@ def main():
     # Construct the metadata...
     app = common.parse_metadata(None)
     app['id'] = package
-    app['Web Site'] = url
+    app['Web Site'] = website
     app['Source Code'] = sourcecode
     if issuetracker:
         app['Issue Tracker'] = issuetracker
