@@ -58,6 +58,8 @@ def main():
     issuetracker = None
     license = None
     if url.startswith('https://github.com'):
+        if url.endswith('/'):
+            url = url[:-1]
         projecttype = 'github'
         repo = url + '.git'
         repotype = 'git'
