@@ -183,6 +183,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
     output, error = p.communicate()
     if p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
+    if verbose:
+        print output
     if install:
         return
     print "Build successful"
@@ -203,7 +205,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
         src = os.path.join(bindir, src) + '.apk'
 #[INFO] Installing /home/ciaran/fdroidserver/tmp/mainline/application/target/callerid-1.0-SNAPSHOT.apk
     else:
-        src = re.match(r".*^.*Creating (\S+) for release.*$.*", output,
+        src = re.match(r".*^.*Creating (.+) for release.*$.*", output,
             re.S|re.M).group(1)
         src = os.path.join(bindir, src)
 
