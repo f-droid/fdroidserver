@@ -895,6 +895,8 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
         for name, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
             prebuild = prebuild.replace('$$' + name + '$$', libpath)
+        prebuild = prebuild.replace('$$SDK$$', sdk_path)
+        prebuild = prebuild.replace('$$NDK$$', ndk_path)
         if subprocess.call(prebuild, cwd=root_dir, shell=True) != 0:
             raise BuildException("Error running pre-build command")
 
