@@ -720,6 +720,8 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
     # Run an init command if one is required...
     if build.has_key('init'):
         init = build['init']
+        init = init.replace('$$SDK$$', sdk_path)
+        init = init.replace('$$NDK$$', ndk_path)
         if verbose: print "Doing init: exec '%s' in '%s'"%(init,root_dir)
         if subprocess.call(init, cwd=root_dir, shell=True) != 0:
             raise BuildException("Error running init command")
