@@ -43,6 +43,8 @@ def main():
                       help="Download logs we don't have")
     (options, args) = parser.parse_args()
 
+    # Get all metadata-defined apps...
+    metaapps = common.read_metadata(options.verbose)
 
     statsdir = 'stats'
     logsdir = os.path.join(statsdir, 'logs')
@@ -123,17 +125,48 @@ def main():
                             unknownapks.append(apkname)
 
     # Calculate and write stats for total downloads...
-    f = open('stats/total_downloads_app.txt', 'w')
     lst = []
     alldownloads = 0
     for app, count in apps.iteritems():
         lst.append(app + " " + str(count))
         alldownloads += count
     lst.append("ALL " + str(alldownloads))
+    f = open('stats/total_downloads_app.txt', 'w')
     f.write('# Total downloads by application, since October 2011\n')
     for line in sorted(lst):
         f.write(line + '\n')
     f.close()
+
+    # Calculate and write stats for repo types...
+    repotypes = {}
+    for app in metaapps:
+        if len(app['Repo Type']) == 0:
+            rtype = 'none'
+        else:
+            rtype = app['Repo Type']
+        if rtype in repotypes:
+            repotypes[rtype] += 1;
+        else:
+            repotypes[rtype] = 1
+    f = open('stats/repotypes.txt', 'w')
+    for rtype, count in repotypes.iteritems():
+        f.write(rtype + ' ' + str(count) + '\n')
+    f.close()
+
+    # Calculate and write stats for licenses...
+    licenses = {}
+    for app in metaapps:
+        license = app['License']
+        if license in licenses:
+            licenses[license] += 1;
+        else:
+            licenses[license] = 1
+    f = open('stats/licenses.txt', 'w')
+    for license, count in licenses.iteritems():
+        f.write(license + ' ' + str(count) + '\n')
+    f.close()
+
+
 
     # Write list of latest apps added to the repo...
     latest = knownapks.getlatest(10)
