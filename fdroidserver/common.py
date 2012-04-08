@@ -669,6 +669,15 @@ def getsrclib(spec, extlib_dir):
         shutil.rmtree(os.path.join(sdir, 'bin'))
         return sdir
 
+    if name == 'BitcoinJWallet':
+        sdir = os.path.join(extlib_dir, 'BitcoinJWallet')
+        vcs = getvcs('git',
+                'https://code.google.com/r/andreasschildbach-bitcoinj/', sdir)
+        vcs.gotorevision(ref)
+        if subprocess.call(['mvn', 'install'], cwd=sdir) != 0:
+            raise BuildException("Maven build failed for BitcoinJWallet srclib")
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
