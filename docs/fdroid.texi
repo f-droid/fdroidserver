@@ -445,21 +445,31 @@ Common values:
 
 @item
 @samp{GPLv2}
+GNU GPL version 2
 
 @item
 @samp{GPLv2+}
+GNU GPL version 2 or later
 
 @item
 @samp{GPLv3}
+GNU GPL version 3
+
+@item
+@samp{GPLv3}
+GNU GPL version 3 or later
 
 @item
 @samp{Apache2}
+Apache 2
 
 @item
 @samp{MIT}
+MIT X11 license
 
 @item
 @samp{BSD}
+BSD license. Some disambiguation is needed here, regarding original versions modfied versions of this license.
 
 @end itemize
 
@@ -540,6 +550,8 @@ values are:
 @samp{hg}
 @item
 @samp{bzr}
+@item
+@samp{srclib}
 @end itemize
 @node Repo
 @section Repo
@@ -683,9 +695,18 @@ insert literal commas, or as the last character on a line to join that
 line with the next. It has no special meaning in other contexts; in
 particular, literal backslashes should not be escaped.
 
+You can use $$name$$ to substitute the path to a referenced srclib - see
+the @code{srclib} directory for details of this.
+
+You can use $$SDK$$ and $$NDK$$ to substitute the paths to the android
+SDK and NDK directories respectively.
+
 @item init=xxxx
 As for 'prebuild', but runs on the source code BEFORE any other processing
 takes place.
+
+You can use $$SDK$$ and $$NDK$$ to substitute the paths to the android
+SDK and NDK directories respectively.
 
 @item novcheck=yes 
 Don't check that the version name and code in the resulting apk are
