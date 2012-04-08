@@ -168,8 +168,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
 
     # Build the release...
     if thisbuild.has_key('maven'):
-        p = subprocess.Popen(['mvn', 'clean', 'install',
-            '-Dandroid.sdk.path=' + sdk_path],
+        p = subprocess.Popen(['mvn', 'clean', 'package',
+            '-Dandroid.sdk.path=' + sdk_path,
+            '-Dandroid.sign.debug=false'],
             cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         if install:
@@ -200,7 +201,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
                 thisbuild['version'] + "-unsigned.apk")
         src = os.path.join(bindir, src)
     elif thisbuild.has_key('maven'):
-        src = re.match(r".*^\[INFO\] Installing /.*/([^/]*)\.apk",
+        src = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
                 output, re.S|re.M).group(1)
         src = os.path.join(bindir, src) + '.apk'
 #[INFO] Installing /home/ciaran/fdroidserver/tmp/mainline/application/target/callerid-1.0-SNAPSHOT.apk
