@@ -456,8 +456,16 @@ GNU GPL version 2 or later
 GNU GPL version 3
 
 @item
-@samp{GPLv3}
+@samp{GPLv3+}
 GNU GPL version 3 or later
+
+@item
+@samp{GPL}
+An unspecified GPL version. Use this only as a last resort.
+
+@item
+@samp{AGPL}
+Afferro GPL version 3.
 
 @item
 @samp{Apache2}
