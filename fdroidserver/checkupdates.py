@@ -24,8 +24,11 @@ import re
 import urllib
 import time
 from optparse import OptionParser
+import traceback
 import HTMLParser
 import common
+from common import BuildException
+from common import VCSException
 
 
 # Check for a new version by looking at the AndroidManifest.xml at the HEAD
