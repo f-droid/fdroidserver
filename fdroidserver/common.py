@@ -643,6 +643,28 @@ def getsrclib(spec, extlib_dir):
             raise BuildException('Error updating ActionBarSherlock project')
         return libdir
 
+    if name == 'ActionBar':
+        sdir = os.path.join(extlib_dir, 'ActionBar')
+        vcs = getvcs('git',
+            'https://github.com/johannilsson/android-actionbar.git', sdir)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'actionbar')
+        if subprocess.call(['android', 'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating ActionBar project')
+        return libdir
+
+    if name == 'ActionBarNW':
+        sdir = os.path.join(extlib_dir, 'ActionBarNW')
+        vcs = getvcs('git',
+            'https://github.com/NightWhistler/android-actionbar.git', sdir)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'actionbar')
+        if subprocess.call(['android', 'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating ActionBarNW project')
+        return libdir
+
     if name == 'FacebookSDK':
         sdir = os.path.join(extlib_dir, 'FacebookSDK')
         vcs = getvcs('git',
