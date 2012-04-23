@@ -46,6 +46,7 @@ Free Documentation License".
 * Building Applications::
 * Importing Applications::
 * Metadata::
+* Update Processing::
 * Build Server::
 * GNU Free Documentation License::
 * Index::
@@ -856,6 +857,44 @@ The version code corresponding to the Current Version field. Both these fields
 must be correct and matching.
 
 This field is normally automatically updated - see Update Check Mode.
+
+@node Update Processing
+@chapter Update Processing
+
+@section Detecting
+
+There are various mechanisms in place for automatically detecting that updates
+are available for applications, with the @code{Update Check Mode} field in the
+metadata determining which method is used for a particular application.
+
+Running the @code{fdroid checkupdates} command will apply this method to each
+application in the repository and update the @code{Current Version} and
+@code{Current Version Code} fields in the metadata accordingly.
+
+As usual, the @code{-p} option can be used with this, to restrict processing
+to a particular application.
+
+Note that this only updates the metadata such that we know what the current
+published/recommended version is. It doesn't make that version available in
+the repository - for that, see the next section.
+
+@section Adding
+
+Adding updates (i.e. new versions of applications already included in the
+repository) happens in two ways. The simple case is applications where the
+APK files are binaries, retrieved from a developer's published build. In this
+case, all that's required is to place the new binary in the @code{Repo}
+directory, and the next run of @code{fdroid update} will pick it up.
+
+For applications built from source, it is necessary to add a new
+@code{Build Version} line to the metadata file. At the very least, the version
+name, version code and commit will be different. It is also possible that the
+additional build flags will change between versions.
+
+For processing multiple updates in the metadata at once, it can be useful to
+run @code{fdroid update --interactive}. This will check all the applications
+in the repository, and where updates are required you will be prompted to
+[E]dit the metadata, [I]gnore the update, or [Q]uit altogether.
 
 @node Build Server
 @chapter Build Server
