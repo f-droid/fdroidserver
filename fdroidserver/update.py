@@ -486,19 +486,20 @@ def main():
     knownapks.writeifchanged()
 
     # Generate latest apps data for widget
-    data = ''
-    for line in file(os.path.join('stats', 'latestapps.txt')):
-        appid = line.rstrip()
-        data += appid + "\t"
-        for app in apps:
-            if app['id'] == appid:
-                data += app['Name'] + "\t"
-                data += app['icon'] + "\t"
-                data += app['License'] + "\n"
-                break
-    f = open('repo/latestapps.dat', 'w')
-    f.write(data)
-    f.close()
+    if os.path.exists(os.path.join('stats', 'latestapps.txt')):
+        data = ''
+        for line in file(os.path.join('stats', 'latestapps.txt')):
+            appid = line.rstrip()
+            data += appid + "\t"
+            for app in apps:
+                if app['id'] == appid:
+                    data += app['Name'] + "\t"
+                    data += app['icon'] + "\t"
+                    data += app['License'] + "\n"
+                    break
+        f = open('repo/latestapps.dat', 'w')
+        f.write(data)
+        f.close()
 
 
 
