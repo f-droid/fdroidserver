@@ -643,6 +643,16 @@ def getsrclib(spec, extlib_dir):
             raise BuildException('Error updating ActionBarSherlock project')
         return libdir
 
+    if name == 'ViewPagerIndicator':
+        sdir = os.path.join(extlib_dir, 'ViewPagerIndicator')
+        vcs = getvcs('git',
+            'https://github.com/mariotaku/viewpagerindicator.git', sdir)
+        vcs.gotorevision(ref)
+        if subprocess.call(['android', 'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating ViewPagerIndicator project')
+        return sdir
+
     if name == 'ActionBar':
         sdir = os.path.join(extlib_dir, 'ActionBar')
         vcs = getvcs('git',
