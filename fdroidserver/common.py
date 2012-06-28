@@ -709,7 +709,7 @@ def getsrclib(spec, extlib_dir):
         vcs = getvcs('git',
                 'https://code.google.com/r/andreasschildbach-bitcoinj/', sdir)
         vcs.gotorevision(ref)
-        if subprocess.call(['mvn', 'install'], cwd=sdir) != 0:
+        if subprocess.call(['mvn3', 'install'], cwd=sdir) != 0:
             raise BuildException("Maven build failed for BitcoinJWallet srclib")
         return sdir
 
