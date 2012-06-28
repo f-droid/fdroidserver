@@ -201,12 +201,15 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
                 thisbuild['version'] + "-unsigned.apk")
         src = os.path.join(bindir, src)
     elif thisbuild.has_key('maven'):
-        try:
-            src = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
-                output, re.S|re.M).group(1)
-        except:
+        m = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
+                output, re.S|re.M)
+        if not m:
+            m = re.match(r".*^\[INFO\] Creating additional unsigned apk file .*/([^/]+)\.apk",
+                    output, re.S|re.M)
+        if not m:
             print output
             raise BuildException('Failed to find output')
+        src = m.group(1)
         src = os.path.join(bindir, src) + '.apk'
 #[INFO] Installing /home/ciaran/fdroidserver/tmp/mainline/application/target/callerid-1.0-SNAPSHOT.apk
     else:
@@ -217,6 +220,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
     # By way of a sanity check, make sure the version and version
     # code in our new apk match what we expect...
     print "Checking " + src
+    if not os.path.exists(src):
+        raise BuildException("Unsigned apk is not at expected location of " + src)
     p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools',
                                     'aapt'),
                         'dump', 'badging', src],
