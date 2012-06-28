@@ -362,6 +362,7 @@ def parse_metadata(metafile, **kw):
     thisinfo['Source Code'] = ''
     thisinfo['Issue Tracker'] = ''
     thisinfo['Donate'] = None
+    thisinfo['FlattrID'] = None
     thisinfo['Disabled'] = None
     thisinfo['AntiFeatures'] = None
     thisinfo['Update Check Mode'] = 'Market'
@@ -498,6 +499,8 @@ def write_metadata(dest, app):
     writefield('Issue Tracker')
     if app['Donate']:
         writefield('Donate')
+    if app['FlattrID']:
+        writefield('FlattrID')
     mf.write('\n')
     if app['Name']:
         writefield('Name')

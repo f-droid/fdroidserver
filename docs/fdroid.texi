@@ -410,6 +410,7 @@ The following sections describe the fields recognised within the file.
 * Source Code::
 * Issue Tracker::
 * Donate::
+* FlattrID::
 * Summary::
 * Description::
 * Repo Type::
@@ -523,6 +524,15 @@ applications have one.
 
 The URL to donate to the project. This could be the project's donate page
 if it has one, or perhaps even a direct PayPal link.
+
+@node FlattrID
+@section FlattrID
+
+@cindex FlattrID
+
+The project's Flattr (http://flattr.com) ID, if it has one. This should be
+a numeric ID, such that (for example) https://flattr.com/thing/xxxx leads
+directly to the page to donate to the project.
 
 @node Summary
 @section Summary
