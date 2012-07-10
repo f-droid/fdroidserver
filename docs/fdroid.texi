@@ -522,8 +522,15 @@ applications have one.
 
 @cindex Donate
 
-The URL to donate to the project. This could be the project's donate page
-if it has one, or perhaps even a direct PayPal link.
+The URL to donate to the project. This should be the project's donate page
+if it has one.
+
+It is possible to use a direct PayPal link here, if that is all that is
+available. However, bear in mind that the developer may not be aware of
+that direct link, and if they later changed to a different PayPal account,
+or the PayPal link format changed, things could go wrong. It is always
+best to use a link that the developer explicitly makes public, rather than
+something that is auto-generated 'button code'.
 
 @node FlattrID
 @section FlattrID
