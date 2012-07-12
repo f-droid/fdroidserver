@@ -1100,16 +1100,24 @@ class KnownApks:
                 f.write(line + '\n')
             f.close()
 
+    # Record an apk (if it's new, otherwise does nothing)
+    # Returns the date it was added.
     def recordapk(self, apk, app):
         if not apk in self.apks:
             self.apks[apk] = (app, time.gmtime(time.time()))
             self.changed = True
+        _, added = self.apks[apk]
+        return added
 
+    # Look up information - given the 'apkname', returns (app id, date added/None).
+    # Or returns None for an unknown apk.
     def getapp(self, apkname):
         if apkname in self.apks:
             return self.apks[apkname]
         return None
 
+    # Get the most recent 'num' apps added to the repo, as a list of package ids
+    # with the most recent first.
     def getlatest(self, num):
         apps = {}
         for apk, app in self.apks.iteritems():

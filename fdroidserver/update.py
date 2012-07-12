@@ -74,6 +74,9 @@ def main():
         if app['Category'] not in categories:
             categories.append(app['Category'])
 
+    # Read known apks data (will be updated and written back when we've finished)
+    knownapks = common.KnownApks()
+
     # Gather information about all the apk files in the repo directory...
     apks = []
     for apkfile in glob.glob(os.path.join('repo','*.apk')):
@@ -183,17 +186,41 @@ def main():
             warnings += 1
         apk.close()
 
+        # Record in known apks, getting the added date at the same time..
+        added = knownapks.recordapk(thisinfo['apkname'], thisinfo['id'])
+        if added:
+            thisinfo['added'] = added
+
         apks.append(thisinfo)
 
     # Some information from the apks needs to be applied up to the application
     # level. When doing this, we use the info from the most recent version's apk.
+    # We deal with figuring out when the app was added and last updated at the
+    # same time.
     for app in apps:
-        bestver = 0 
+        bestver = 0
+        added = None
+        lastupdated = None
         for apk in apks:
             if apk['id'] == app['id']:
                 if apk['versioncode'] > bestver:
                     bestver = apk['versioncode']
                     bestapk = apk
+
+                if 'added' in apk:
+                    if not added or apk['added'] < added:
+                        added = apk['added']
+                    if not lastupdated or apk['added'] > lastupdated:
+                        lastupdated = apk['added']
+
+        if added:
+            app['added'] = added
+        else:
+            print "WARNING: Don't know when " + app['id'] + " was added"
+        if lastupdated:
+            app['lastupdated'] = lastupdated
+        else:
+            print "WARNING: Don't know when " + app['id'] + " was last updated"
 
         if bestver == 0:
             if app['Name'] is None:
@@ -306,6 +333,10 @@ def main():
                 root.appendChild(apel)
 
                 addElement('id', app['id'], doc, apel)
+                if 'added' in app:
+                    addElement('added', time.strftime('%Y-%m-%d', app['added']), doc, apel)
+                if 'lastupdated' in app:
+                    addElement('lastupdated', time.strftime('%Y-%m-%d', app['lastupdated']), doc, apel)
                 addElement('name', app['Name'], doc, apel)
                 addElement('summary', app['Summary'], doc, apel)
                 addElement('icon', app['icon'], doc, apel)
@@ -361,6 +392,8 @@ def main():
                     addElement('sig', apk['sig'], doc, apkel)
                     addElement('size', str(apk['size']), doc, apkel)
                     addElement('sdkver', str(apk['sdkversion']), doc, apkel)
+                    if 'added' in apk:
+                        addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
                     perms = ""
                     for p in apk['permissions']:
                         if len(perms) > 0:
@@ -480,9 +513,6 @@ def main():
     f.close()
 
     # Update known apks info...
-    knownapks = common.KnownApks()
-    for apk in apks:
-        knownapks.recordapk(apk['apkname'], apk['id'])
     knownapks.writeifchanged()
 
     # Generate latest apps data for widget
