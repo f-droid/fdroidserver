@@ -111,7 +111,8 @@ def main():
 
             # Sign the application...
             p = subprocess.Popen(['jarsigner', '-keystore', keystore,
-                '-storepass', keystorepass, '-keypass', keypass,
+                '-storepass', keystorepass, '-keypass', keypass, '-sigalg',
+                'MD5withRSA', '-digestalg', 'SHA1',
                     apkfile, keyalias], stdout=subprocess.PIPE)
             output = p.communicate()[0]
             print output
