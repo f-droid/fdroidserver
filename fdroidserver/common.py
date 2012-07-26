@@ -173,7 +173,7 @@ class vcs_gitsvn(vcs):
             p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev],
                 cwd=self.local, stdout=subprocess.PIPE)
             rev = p.communicate()[0].rstrip()
-            if p.returncode != 0:
+            if p.returncode != 0 or len(rev) == 0:
                 raise VCSException("Failed to get git treeish from svn rev")
             # Check out the appropriate revision...
             if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
