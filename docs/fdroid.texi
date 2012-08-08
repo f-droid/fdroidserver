@@ -151,8 +151,9 @@ git clone git://gitorious.org/f-droid/fdroiddata.git
 
 Regardless of the intended usage of the tools, you will always need to set
 up some basic configuration details. This is done by creating a file called
-@code{config.py} which you should do by copying from @code{config.sample.py}
-and then editing according to the instructions within.
+@code{config.py} in the data directory. You should do this by copying the
+example file (@code{config.sample.py}) from the fdroidserver project to your
+data directory and then editing according to the instructions within.
 
 Once configured in this way, all the functionality of the tools is accessed
 by running the @code{fdroid} command. Run it on its own to get a list of the
@@ -651,7 +652,9 @@ good idea if it's heavily customised.
 @item rm=<relpath>
 Specifies the relative path of file to delete before the build is
 done. The path is relative to the base of the build directory - i.e.
-the directory that contains AndroidManifest.xml.
+the root of the directory structure checked out from the source
+respository - not necessarily the directory that contains
+AndroidManifest.xml.
 
 @item antcommand=xxx
 Specify an alternate ant command (target) instead of the default
