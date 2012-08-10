@@ -38,6 +38,8 @@ def main():
                       help="Project URL to import from.")
     parser.add_option("-s", "--subdir", default=None,
                       help="Path to main android project subdirectory, if not in root.")
+    parser.add_option("-r", "--repo", default=None,
+                      help="Allows a different repo to be specified for a multi-repo google code project")
     (options, args) = parser.parse_args()
 
     if not options.url:
@@ -89,6 +91,8 @@ def main():
             url += '/';
         projecttype = 'googlecode'
         sourcecode = url + 'source/checkout'
+        if options.repo:
+            sourcecode += "?repo=" + options.repo
         issuetracker = url + 'issues/list'
 
         # Figure out the repo type and adddress...
