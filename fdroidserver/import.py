@@ -181,6 +181,8 @@ def main():
 
     if not projecttype:
         print "Unable to determine the project type."
+        print "The URL you supplied was not in one of the supported formats. Please consult"
+        print "the manual for a list of supported formats, and supply one of those."
         sys.exit(1)
 
     # Get a copy of the source so we can extract some info...
