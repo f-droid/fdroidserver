@@ -345,7 +345,11 @@ Gitorious - @code{https://gitorious.org/PROJECTNAME/REPONAME}
 Github - @code{https://github.com/USER/PROJECT}
 @item
 Google Code - @code{http://code.google.com/p/PROJECT/}
-(supports git, svn and hg repos)
+Supports git, svn and hg repos.
+
+Some Google Code projects have multiple repositories, identified by a
+dropdown list on the @code{source/checkout} page. To access one other than
+the default, specify its name using the @code{--repo} switch.
 @item
 Bitbucket - @code{https://bitbucket.org/USER/PROJECT/}
 @item
@@ -680,7 +684,7 @@ same time - this is frequently needed with r14 of the Android platform
 tools. Be aware of any customisations in build.xml when using
 update=force.
 
-Otherwise, value can be a semicol-separated list of directories in
+Otherwise, value can be a semicolon-separated list of directories in
 which to run 'android update project' relative to the main
 application directory (which may include '@code{subdir}' parameter).
 Default value is '@code{.}', and passing non-default value may be
