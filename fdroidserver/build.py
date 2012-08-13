@@ -207,6 +207,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
             m = re.match(r".*^\[INFO\] Creating additional unsigned apk file .*/([^/]+)\.apk",
                     output, re.S|re.M)
         if not m:
+            # This format is found in com.github.mobile for example...
+            m = re.match(r".*^\[INFO\] [^$]*aapt \[package,[^$]*" + app['id'] + "/app/target/([^$]+)\.ap_\]",
+                    output, re.S|re.M)
+        if not m:
             print output
             raise BuildException('Failed to find output')
         src = m.group(1)
