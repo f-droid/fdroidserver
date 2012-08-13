@@ -68,7 +68,35 @@ class vcs:
     # None is acceptable for 'rev' if you know you are cloning a clean copy of
     # the repo - otherwise it must specify a valid revision.
     def gotorevision(self, rev):
-        raise VCSException("This VCS type doesn't define gotorevision")
+
+        # The .fdroidvcs-id file for a repo tells us what VCS type
+        # and remote that directory was created from, allowing us to drop it
+        # automatically if either of those things changes.
+        fdpath = os.path.join(self.local, '..',
+                '.fdroidvcs-' + os.path.basename(self.local))
+        cdata = self.repotype() + ' ' + self.remote
+        writeback = True
+        if os.path.exists(self.local):
+            if os.path.exists(fdpath):
+                with open(fdpath, 'r') as f:
+                    fsdata = f.read()
+                if fsdata == cdata:
+                    writeback = False
+                else:
+                    print "*** Repository details changed - deleting ***"
+                    shutil.rmtree(self.local)
+
+        self.gotorevisionx(rev)
+
+        # If necessary, write the .fdroidvcs file.
+        if writeback:
+            with open(fdpath, 'w') as f:
+                f.write(cdata)
+
+    # Derived classes need to implement this. It's called once basic checking
+    # has been performend.
+    def gotorevisionx(self, rev):
+        raise VCSException("This VCS type doesn't define gotorevisionx")
 
     # Initialise and update submodules
     def initsubmodules(self):
@@ -81,9 +109,12 @@ class vcs:
 
 class vcs_git(vcs):
 
+    def repotype(self):
+        return 'git'
+
     # If the local directory exists, but is somehow not a git repository, git
     # will traverse up the directory tree until it finds one that is (i.e.
-    # fdroidserver) and then we'll proceed to destory it! This is called as
+    # fdroidserver) and then we'll proceed to destroy it! This is called as
     # a safety check.
     def checkrepo(self):
         p = subprocess.Popen(['git', 'rev-parse', '--show-toplevel'],
@@ -92,7 +123,7 @@ class vcs_git(vcs):
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
 
-    def gotorevision(self, rev):
+    def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout...
             if subprocess.call(['git', 'clone', self.remote, self.local]) != 0:
@@ -136,6 +167,9 @@ class vcs_git(vcs):
 
 class vcs_gitsvn(vcs):
 
+    def repotype(self):
+        return 'git-svn'
+
     # If the local directory exists, but is somehow not a git repository, git
     # will traverse up the directory tree until it finds one that is (i.e.
     # fdroidserver) and then we'll proceed to destory it! This is called as
@@ -147,7 +181,7 @@ class vcs_gitsvn(vcs):
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
 
-    def gotorevision(self, rev):
+    def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout...
             if subprocess.call(['git', 'svn', 'clone', self.remote, self.local]) != 0:
@@ -184,6 +218,9 @@ class vcs_gitsvn(vcs):
 
 class vcs_svn(vcs):
 
+    def repotype(self):
+        return 'svn'
+
     def userargs(self):
         if self.username is None:
             return ['--non-interactive']
@@ -191,7 +228,7 @@ class vcs_svn(vcs):
                 '--password', self.password,
                 '--non-interactive']
 
-    def gotorevision(self, rev):
+    def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             if subprocess.call(['svn', 'checkout', self.remote, self.local] +
                     self.userargs()) != 0:
@@ -217,7 +254,10 @@ class vcs_svn(vcs):
 
 class vcs_hg(vcs):
 
-    def gotorevision(self, rev):
+    def repotype(self):
+        return 'hg'
+
+    def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             if subprocess.call(['hg', 'clone', self.remote, self.local]) !=0:
                 raise VCSException("Hg clone failed")
@@ -239,7 +279,10 @@ class vcs_hg(vcs):
 
 class vcs_bzr(vcs):
 
-    def gotorevision(self, rev):
+    def repotype(self):
+        return 'bzr'
+
+    def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             if subprocess.call(['bzr', 'branch', self.remote, self.local]) != 0:
                 raise VCSException("Bzr branch failed")
@@ -260,7 +303,10 @@ class vcs_bzr(vcs):
 
 class vcs_srclib(vcs):
 
-    def gotorevision(self, rev):
+    def repotype(self):
+        return 'srclib'
+
+    def gotorevisionx(self, rev):
 
         # Yuk...
         extlib_dir = 'build/extlib'
@@ -1060,12 +1106,9 @@ def scan_source(build_dir, root_dir, thisbuild):
                             msg = 'Found DexClassLoader in ' + fp
                             problems.append(msg)
 
-#                        if line.lower().find('all rights reserved') != -1:
-#                            msg = 'All rights reserved in ' + fp
-#                            problems.append(msg)
-
     # Presence of a jni directory without buildjni=yes might
-    # indicate a problem...
+    # indicate a problem... (if it's not a problem, explicitly use
+    # buildjni=no to bypass this check)
     if (os.path.exists(os.path.join(root_dir, 'jni')) and 
             thisbuild.get('buildjni') is None):
         msg = 'Found jni directory, but buildjni is not enabled'
