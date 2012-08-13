@@ -1049,6 +1049,10 @@ def scan_source(build_dir, root_dir, thisbuild):
                         msg = 'Found probable non-free blob ' + fp
                         problems.append(msg)
 
+                if curfile.endswith('.apk'):
+                    msg = 'Found apk file, which should not be in the source - ' + fp
+                    problems.append(msg)
+
                 if curfile.endswith('.java'):
                     for line in file(fp):
 
