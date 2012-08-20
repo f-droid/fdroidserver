@@ -25,6 +25,63 @@ import re
 import urllib
 from optparse import OptionParser
 
+
+# Get the repo type and address from the given web page. The page is scanned
+# in a rather naive manner for 'git clone xxxx', 'hg clone xxxx', etc, and
+# when one of these is found it's assumed that's the information we want.
+# Returns repotype, address, or None, reason
+def getrepofrompage(url):
+
+    req = urllib.urlopen(url)
+    if req.getcode() != 200:
+        return (None, 'Unable to find source at ' + sourcecode + ' - return code ' + str(req.getcode()))
+    page = req.read()
+
+    # Works for Google Code and BitBucket...
+    index = page.find('hg clone')
+    if index != -1:
+        repotype = 'hg'
+        repo = page[index + 9:]
+        index = repo.find('<')
+        if index == -1:
+            return (None, "Error while getting repo address")
+        repo = repo[:index]
+        return (repotype, repo)
+
+    # Works for Google Code and BitBucket...
+    index=page.find('git clone')
+    if index != -1:
+        repotype = 'git'
+        repo = page[index + 10:]
+        index = repo.find('<')
+        if index == -1:
+            return (None, "Error while getting repo address")
+        repo = repo[:index]
+        return (repotype, repo)
+
+    # Google Code only...
+    index=page.find('svn checkout')
+    if index != -1:
+        repotype = 'git-svn'
+        repo = page[index + 13:]
+        prefix = '<strong><em>http</em></strong>'
+        if not repo.startswith(prefix):
+            return (None, "Unexpected checkout instructions format")
+        repo = 'http' + repo[len(prefix):]
+        index = repo.find('<')
+        if index == -1:
+            return (None, "Error while getting repo address - no end tag? '" + repo + "'")
+            sys.exit(1)
+        repo = repo[:index]
+        index = repo.find(' ')
+        if index == -1:
+            return (None, "Error while getting repo address - no space? '" + repo + "'")
+        repo = repo[:index]
+        return (repotype, repo)
+
+    return (None, "No information found." + page)
+
+
 def main():
 
     # Read configuration...
@@ -84,8 +141,11 @@ def main():
         projecttype = 'bitbucket'
         sourcecode = url + '/src'
         issuetracker = url + '/issues'
-        repotype = 'hg'
-        repo = url
+        # Figure out the repo type and adddress...
+        repotype, repo = getrepofrompage(sourcecode)
+        if not repotype:
+            print "Unable to determine vcs type. " + repo
+            sys.exit(1)
     elif url.startswith('http://code.google.com/p/'):
         if not url.endswith('/'):
             url += '/';
@@ -96,53 +156,9 @@ def main():
         issuetracker = url + 'issues/list'
 
         # Figure out the repo type and adddress...
-        req = urllib.urlopen(sourcecode)
-        if req.getcode() != 200:
-            print 'Unable to find source at ' + sourcecode + ' - return code ' + str(req.getcode())
-            sys.exit(1)
-        page = req.read()
-        repotype = None
-        index = page.find('hg clone')
-        if index != -1:
-            repotype = 'hg'
-            repo = page[index + 9:]
-            index = repo.find('<')
-            if index == -1:
-                print "Error while getting repo address"
-                sys.exit(1)
-            repo = repo[:index]
+        repotype, repo = getrepofrompage(sourcecode)
         if not repotype:
-            index=page.find('git clone')
-            if index != -1:
-                repotype = 'git'
-                repo = page[index + 10:]
-                index = repo.find('<')
-                if index == -1:
-                    print "Error while getting repo address"
-                    sys.exit(1)
-                repo = repo[:index]
-        if not repotype:
-            index=page.find('svn checkout')
-            if index != -1:
-                repotype = 'git-svn'
-                repo = page[index + 13:]
-                prefix = '<strong><em>http</em></strong>'
-                if not repo.startswith(prefix):
-                    print "Unexpected checkout instructions format"
-                    sys.exit(1)
-                repo = 'http' + repo[len(prefix):]
-                index = repo.find('<')
-                if index == -1:
-                    print "Error while getting repo address - no end tag? '" + repo + "'"
-                    sys.exit(1)
-                repo = repo[:index]
-                index = repo.find(' ')
-                if index == -1:
-                    print "Error while getting repo address - no space? '" + repo + "'"
-                    sys.exit(1)
-                repo = repo[:index]
-        if not repotype:
-            print "Unable to determine vcs type"
+            print "Unable to determine vcs type. " + repo
             sys.exit(1)
 
         # Figure out the license...
