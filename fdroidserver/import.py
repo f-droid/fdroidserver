@@ -204,8 +204,8 @@ def main():
     # Get a copy of the source so we can extract some info...
     print 'Getting source from ' + repotype + ' repo at ' + repo
     src_dir = os.path.join(tmp_dir, 'importer')
-    if os.path.exists(tmp_dir):
-        shutil.rmtree(tmp_dir)
+    if os.path.exists(src_dir):
+        shutil.rmtree(src_dir)
     vcs = common.getvcs(repotype, repo, src_dir)
     vcs.gotorevision(None)
     if options.subdir:
