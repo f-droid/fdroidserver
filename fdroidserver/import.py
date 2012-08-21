@@ -191,6 +191,12 @@ def main():
             license = 'Apache2'
         elif ltext == 'MIT License':
             license = 'MIT'
+        elif ltext == 'GNU Lesser GPL':
+            license = 'LGPL'
+        elif ltext == 'Mozilla Public License 1.1':
+            license = 'MPL'
+        elif ltext == 'New BSD License':
+            license = 'NewBSD'
         else:
             print "License " + ltext + " is not recognised"
             sys.exit(1)
