@@ -484,7 +484,11 @@ MIT X11 license
 
 @item
 @samp{BSD}
-BSD license. Some disambiguation is needed here, regarding original versions modfied versions of this license.
+BSD license - the original '4-clause' version.
+
+@item
+@samp{NewBSD}
+BSD license - the new, or modified, version.
 
 @end itemize
 
@@ -966,7 +970,7 @@ Integrating the build server setup into the main scripts is a work in progress.
 Some things may not work properly yet. Talk to CiaranG if you're trying to use
 this and have problems.
 
-In addition to the basic setup sets previously described, you will also need
+In addition to the basic setup previously described, you will also need
 a Vagrant-compatible Debian Squeeze base box called 'debian6-32'. You can
 create one of these for yourself from standard Debian installation media, as
 the specification for what's required to be Vagrant-compatible is very well

@@ -120,8 +120,10 @@ class FDroid
 	    switch($license) {
         	    case 'MIT':
 			return 'http://www.gnu.org/licenses/license-list.html#X11License';
-		    case 'BSD':
+		    case 'NewBSD':
 			return 'http://www.gnu.org/licenses/license-list.html#ModifiedBSD';
+		    case 'BSD':
+			return 'http://www.gnu.org/licenses/license-list.html#OriginalBSD';
 		    case 'GPLv3':
 		    case 'GPLv3+':
 			return 'http://www.gnu.org/licenses/license-list.html#GNUGPL';
