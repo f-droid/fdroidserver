@@ -177,9 +177,16 @@ and compiled elsewhere, the process is quite simple:
 
 @enumerate
 @item
-Make a repo directory and put APK files in it.
+Set up the server tools, as described in Setup.
 @item
-Run @code{fdroid update.py}.
+Make a directory for your repository. This is the directory from which you
+will do all the work with your repository. Create a config file there, called
+@code{config.py}, by copying the @code{config.sample.py} from the server
+project and editing it.
+@item
+Within that, make a directory called @code{repo} and put APK files in it.
+@item
+Run @code{fdroid update}.
 @item
 If it reports that any metadata files are missing, you can create them
 in the @code{metadata} directory and run it again.
@@ -193,6 +200,8 @@ Then, if you've changed things, run @code{fdroid update} again.
 Running @code{fdroid update} adds an Icons directory into the repo directory,
 and also creates the repository index (index.xml, and also index.jar if you've
 configured the system to use a signed index).
+@item
+Publish the resulting contents of the @code{repo} directory to your web server.
 @end enumerate
 
 Following the above process will result in a @code{repo} directory, which you
