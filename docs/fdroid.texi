@@ -425,6 +425,7 @@ The following sections describe the fields recognised within the file.
 * Issue Tracker::
 * Donate::
 * FlattrID::
+* Bitcoin::
 * Summary::
 * Description::
 * Repo Type::
@@ -558,6 +559,13 @@ something that is auto-generated 'button code'.
 The project's Flattr (http://flattr.com) ID, if it has one. This should be
 a numeric ID, such that (for example) https://flattr.com/thing/xxxx leads
 directly to the page to donate to the project.
+
+@node Bitcoin
+@section Bitcoin
+
+@cindex Bitcoin
+
+A bitcoin address for donating to the project.
 
 @node Summary
 @section Summary
