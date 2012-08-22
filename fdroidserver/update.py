@@ -28,13 +28,113 @@ import hashlib
 from xml.dom.minidom import Document
 from optparse import OptionParser
 import time
+import common
+
+
+# Update the wiki. 'apps' is a list of all applications and everything we know
+# about them, and 'apks' likewise. Set 'verbose' to True for verbose output.
+def update_wiki(apps, apks, verbose=False):
+
+    print "Updating wiki"
+    wikicat = 'Apps'
+    import mwclient
+    site = mwclient.Site(wiki_server, path=wiki_path)
+    site.login(wiki_user, wiki_password)
+    generated_pages = {}
+    for app in apps:
+        wikidata = ''
+        if app['Disabled']:
+            wikidata += '{{Disabled|' + app['Disabled'] + '}}\n'
+        if app['AntiFeatures']:
+            wikidata += '{{AntiFeatures|' + app['AntiFeatures'] + '}}\n'
+        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|license=%s|root=%s}}\n'%(
+                app['id'],
+                app['Name'],
+                time.strftime('%Y-%m-%d', app['added']) if 'added' in app else '',
+                time.strftime('%Y-%m-%d', app['lastupdated']) if 'lastupdated' in app else '',
+                app['Source Code'],
+                app['Issue Tracker'],
+                app['Web Site'],
+                app['Donate'],
+                app['FlattrID'],
+                app['License'],
+                app.get('Requires Root', 'No'))
+        wikidata += "=Summary=\n"
+        wikidata += app['Summary'] + "\n"
+        wikidata += "=Description=\n"
+        wikidata += common.parse_description(app['Description']) + "\n"
+
+        apklist = []
+        gotcurrentver = False
+        for apk in apks:
+            if apk['id'] == app['id']:
+                if str(apk['versioncode']) == app['Current Version Code']:
+                    gotcurrentver = True
+                apklist.append(apk)
+        apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
+        wikidata += "=Versions=\n"
+        if len(apklist) == 0:
+            wikidata += "We currently have no versions of this app available.\n\n"
+        elif not gotcurrentver:
+            wikidata += "We don't have the current version of this app.\n\n"
+        if len(app['Current Version']) > 0:
+            wikidata += "The current (recommended) version is " + app['Current Version']
+            wikidata += " (version code " + app['Current Version Code'] + ").\n\n"
+        for apk in apklist:
+            wikidata += "==" + apk['version'] + "==\n"
+            wikidata += "Version code: " + str(apk['versioncode']) + '\n'
+
+        wikidata += '\n[[Category:' + wikicat + ']]\n'
+        if len(apklist) == 0 and not app['Disabled']:
+            wikidata += '\n[[Category:Apps with no packages]]\n'
+        elif not gotcurrentver and not app['Disabled']:
+            wikidata += '\n[[Category:Apps to Update]]\n'
+        generated_pages[app['id']] = wikidata
+
+        # Make a redirect from the name to the ID too, unless there's
+        # already an existing page with the name and it isn't a redirect.
+        noclobber = False
+        for page in site.allpages(prefix=app['Name'], filterredir='nonredirects'):
+            if page.name == app['Name']:
+                noclobber = True
+        # Another reason not to make the redirect page is if the app name
+        # is the same as it's ID, because that will overwrite the real page
+        # with an redirect to itself! (Although it seems like an odd
+        # scenario this happens a lot, e.g. where there is metadata but no
+        # builds or binaries to extract a name from.
+        if app['Name'] == app['id']:
+            noclobber = True
+        if not noclobber:
+            generated_pages[app['Name']] = "#REDIRECT [[" + app['id'] + "]]\n[[Category:" + wikicat + "]]"
+
+    catpages = site.Pages['Category:' + wikicat]
+    existingpages = []
+    for page in catpages:
+        existingpages.append(page.name)
+        if page.name in generated_pages:
+            pagetxt = page.edit()
+            if pagetxt != generated_pages[page.name]:
+                print "Updating modified page " + page.name
+                page.save(generated_pages[page.name], summary='Auto-updated')
+            else:
+                print "Page " + page.name + " is unchanged"
+        else:
+            print "Deleting page " + page.name
+            page.delete('No longer published')
+    for pagename, text in generated_pages.items():
+        if verbose:
+            print "Checking " + pagename
+        if not pagename in existingpages:
+            print "Creating page " + pagename
+            newpage = site.Pages[pagename]
+            newpage.save(text, summary='Auto-created')
+
+
 
 def main():
 
     # Read configuration...
     execfile('config.py', globals())
-
-    import common
 
     # Parse command line...
     parser = OptionParser()
@@ -51,6 +151,8 @@ def main():
     parser.add_option("-e", "--editor", default="/etc/alternatives/editor",
                       help="Specify editor to use in interactive mode. Default "+
                           "is /etc/alternatives/editor")
+    parser.add_option("-w", "--wiki", default=False, action="store_true",
+                      help="Update the wiki")
     parser.add_option("", "--pretty", action="store_true", default=False,
                       help="Produce human-readable index.xml")
     (options, args) = parser.parse_args()
@@ -357,7 +459,7 @@ def main():
                 addElement('marketversion', app['Current Version'], doc, apel)
                 addElement('marketvercode', app['Current Version Code'], doc, apel)
 
-                if not (app['AntiFeatures'] is None):
+                if app['AntiFeatures']:
                     addElement('antifeatures', app['AntiFeatures'], doc, apel)
                 if app['Requires Root']:
                     addElement('requirements', 'root', doc, apel)
@@ -531,7 +633,9 @@ def main():
         f.write(data)
         f.close()
 
-
+    # Update the wiki...
+    if options.wiki:
+        update_wiki(apps, apks, options.verbose)
 
     print "Finished."
     print str(apps_inrepo) + " apps in repo"

@@ -43,3 +43,9 @@ keyaliases['com.example.app'] = 'example'
 #uploading data, etc.
 serverwebroot = 'user@example:/var/www/repo'
 
+#Wiki details
+wiki_server = "server"
+wiki_path = "/wiki/"
+wiki_user = "login"
+wiki_password = "1234"
+
