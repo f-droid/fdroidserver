@@ -55,7 +55,7 @@ Free Documentation License".
 @node Overview
 @chapter Overview
 
-The F-Droid server tools provide various scripts, tools and data that are used
+The F-Droid server tools provide various scripts and tools that are used
 to maintain the main F-Droid application repository. You can use these same
 tools to create your own additional or alternative repository for publishing,
 or to assist in creating, testing and submitting metadata to the main
@@ -134,7 +134,7 @@ git clone git://gitorious.org/f-droid/fdroidserver.git
 
 You now have lots of stuff in the fdroidserver directory, but the most
 important is the 'fdroid' command script which you run to perform all tasks.
-This script is always run from a repostitory data directory, so the
+This script is always run from a repository data directory, so the
 most sensible thing to do next is to put your new fdroidserver directory
 in your @code{PATH}.
 
