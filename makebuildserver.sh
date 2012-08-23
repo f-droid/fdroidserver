@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 rm -f buildserver.box
 cd buildserver
 vagrant up

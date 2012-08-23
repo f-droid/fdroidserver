@@ -879,6 +879,12 @@ on the development process used by the application's developers. You should not
 specify this method unless you're sure it's appropriate. (Also, it currently
 only works for git repositories).
 @item
+@code{Tags} - The AndroidManifest.xml file in all tagged revisions in the
+source repository is checked, looking for the highest version code. The
+appropriateness of this method depends on the development process used by the
+application's developers. You should not specify this method unless you're sure
+it's appropriate. (Also, it currently only works for git repositories).
+@item
 @code{Market} - This is being phased out and should not be used!
 @end itemize
 

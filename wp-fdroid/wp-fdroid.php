@@ -296,7 +296,17 @@ class FDroid
 				$i=0;
 				foreach($apks as $apk) {
 					$first = $i+1==count($apks);
-					$out.="<p><b>Version ".$apk['version']."</b><br />";
+                                        $out.="<p><b>Version ".$apk['version']."</b><br />";
+
+                                        // Is this source or binary?
+                                        $srcbuild = isset($apk['srcname']) && file_exists($this->site_path.'/repo/'.$apk['srcname']);
+
+                                        $out.="<p>This version is build and signed by ";
+                                        if($srcbuild) {
+                                            $out.="F-Droid, and guaranteed to correspond to the source tarball below.</p>";
+                                        } else {
+                                            $out.="the original developer.</p>";
+                                        }
 					$out.='<a href="https://f-droid.org/repo/'.$apk['apkname'].'">download apk</a> ';
 					$out.=$this->human_readable_size($apk['size']);
 					$diffSize = $apk['diff']['size'];
@@ -305,7 +315,7 @@ class FDroid
 						$out.=$diffSize>0?'+':'';
 						$out.=$this->human_readable_size($diffSize, 1).')</span>';
 					}
-					if(isset($apk['srcname']) && file_exists($this->site_path.'/repo/'.$apk['srcname'])) {
+					if($srcbuild) {
 						$out.='<br /><a href="https://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a> ';
 						$out.=$this->human_readable_size(filesize($this->site_path.'/repo/'.$apk['srcname']));
 					}

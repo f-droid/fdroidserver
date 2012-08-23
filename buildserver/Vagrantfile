@@ -7,7 +7,7 @@ Vagrant::Config.run do |config|
 
   config.vm.provision :shell, :path => "fixpaths.sh"
   # Set apt proxy - remove, or adjust this, accordingly!
-  config.vm.provision :shell, :inline => 'sudo echo "Acquire::http { Proxy \"http://thurlow:3142\"; };" > /etc/apt/apt.conf.d/02proxy && sudo apt-get update'
+  config.vm.provision :shell, :inline => 'sudo echo "Acquire::http { Proxy \"http://glencoe:3142\"; };" > /etc/apt/apt.conf.d/02proxy && sudo apt-get update'
 
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "cookbooks"

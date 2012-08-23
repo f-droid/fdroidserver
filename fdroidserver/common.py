@@ -102,6 +102,10 @@ class vcs:
     def initsubmodules(self):
         raise VCSException('Submodules not supported for this vcs type')
 
+    # Get a list of all known tags
+    def gettags(self):
+        raise VCSException('gettags not supported for this vcs type')
+
     # Returns the srclib (name, path) used in setting up the current
     # revision, or None.
     def getsrclib(self):
@@ -163,6 +167,12 @@ class vcs_git(vcs):
         if subprocess.call(['git', 'submodule', 'update'],
                 cwd=self.local) != 0:
             raise VCSException("Git submodule update failed")
+
+    def gettags(self):
+        self.checkrepo()
+        p = subprocess.Popen(['git', 'tag'],
+                stdout=subprocess.PIPE, cwd=self.local)
+        return p.communicate()[0].splitlines()
 
 
 class vcs_gitsvn(vcs):
@@ -617,6 +627,7 @@ def parse_description(lines):
 
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
+# All values returned are strings.
 def parse_androidmanifest(manifest):
 
     vcsearch = re.compile(r'.*android:versionCode="([^"]+)".*').search
