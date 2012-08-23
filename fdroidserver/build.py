@@ -237,14 +237,21 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
     else:
         vercode = None
         version = None
+        foundid = None
         for line in output.splitlines():
             if line.startswith("package:"):
+                pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
+                foundid = re.match(pat, line).group(1)
                 pat = re.compile(".*versionCode='([0-9]*)'.*")
                 vercode = re.match(pat, line).group(1)
                 pat = re.compile(".*versionName='([^']*)'.*")
                 version = re.match(pat, line).group(1)
-        if version == None or vercode == None:
+        if not version or not vercode:
             raise BuildException("Could not find version information in build in output")
+        if not foundid:
+            raise BuildException("Could not find package ID in output")
+        if foundid != app['id']:
+            raise BuildException("Wrong package ID - build " + foundid + " but expected " + app['id'])
 
     # Some apps (e.g. Timeriffic) have had the bonkers idea of
     # including the entire changelog in the version number. Remove
