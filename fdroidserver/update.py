@@ -47,7 +47,7 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += '{{Disabled|' + app['Disabled'] + '}}\n'
         if app['AntiFeatures']:
             wikidata += '{{AntiFeatures|' + app['AntiFeatures'] + '}}\n'
-        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|license=%s|root=%s}}\n'%(
+        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|bitcoin=%s|license=%s|root=%s}}\n'%(
                 app['id'],
                 app['Name'],
                 time.strftime('%Y-%m-%d', app['added']) if 'added' in app else '',
@@ -57,21 +57,39 @@ def update_wiki(apps, apks, verbose=False):
                 app['Web Site'],
                 app['Donate'],
                 app['FlattrID'],
+                app['Bitcoin'],
                 app['License'],
                 app.get('Requires Root', 'No'))
-        wikidata += "=Summary=\n"
-        wikidata += app['Summary'] + "\n"
+
+        wikidata += app['Summary']
+        wikidata += " - [http://f-droid.org/repository/browse/?fdid=" + app['id'] + " view in repository]\n\n"
+
         wikidata += "=Description=\n"
         wikidata += common.parse_description(app['Description']) + "\n"
 
+        # Get a list of all packages for this application...
         apklist = []
         gotcurrentver = False
+        cantupdate = False
         for apk in apks:
             if apk['id'] == app['id']:
                 if str(apk['versioncode']) == app['Current Version Code']:
                     gotcurrentver = True
                 apklist.append(apk)
+        # Include ones we can't build, as a special case...
+        for thisbuild in app['builds']:
+            if thisbuild['commit'].startswith('!'):
+                if thisbuild['vercode'] == app['Current Version Code']:
+                    cantupdate = True
+                apklist.append({
+                        #TODO: Nasty: vercode is a string in the build, and an int elsewhere
+                        'versioncode': int(thisbuild['vercode']),
+                        'version': thisbuild['version'],
+                        'buildproblem': thisbuild['commit'][1:]
+                    })
+        # Sort with most recent first...
         apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
+
         wikidata += "=Versions=\n"
         if len(apklist) == 0:
             wikidata += "We currently have no versions of this app available.\n\n"
@@ -82,14 +100,29 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += " (version code " + app['Current Version Code'] + ").\n\n"
         for apk in apklist:
             wikidata += "==" + apk['version'] + "==\n"
+
+            if 'buildproblem' in apk:
+                wikidata += "We can't build this version: " + apk['buildproblem'] + "\n\n"
+            else:
+                wikidata += "This version is built and signed by "
+                if apk.has_key('srcname'):
+                    wikidata += "F-Droid, and guaranteed to correspond to the source tarball published with it.\n\n"
+                else:
+                    wikidata += "the original developer.\n\n"
             wikidata += "Version code: " + str(apk['versioncode']) + '\n'
 
         wikidata += '\n[[Category:' + wikicat + ']]\n'
         if len(apklist) == 0 and not app['Disabled']:
             wikidata += '\n[[Category:Apps with no packages]]\n'
+        elif cantupdate and not app['Disabled']:
+            wikidata += "\n[[Category:Apps we can't update]]\n"
         elif not gotcurrentver and not app['Disabled']:
             wikidata += '\n[[Category:Apps to Update]]\n'
-        generated_pages[app['id']] = wikidata
+
+        # We can't have underscores in the page name, even if they're in
+        # the package ID, because MediaWiki messes with them...
+        pagename = app['id'].replace('_', ' ')
+        generated_pages[pagename] = wikidata
 
         # Make a redirect from the name to the ID too, unless there's
         # already an existing page with the name and it isn't a redirect.
@@ -102,10 +135,10 @@ def update_wiki(apps, apks, verbose=False):
         # with an redirect to itself! (Although it seems like an odd
         # scenario this happens a lot, e.g. where there is metadata but no
         # builds or binaries to extract a name from.
-        if app['Name'] == app['id']:
+        if app['Name'] == pagename:
             noclobber = True
         if not noclobber:
-            generated_pages[app['Name']] = "#REDIRECT [[" + app['id'] + "]]\n[[Category:" + wikicat + "]]"
+            generated_pages[app['Name']] = "#REDIRECT [[" + pagename + "]]\n[[Category:" + wikicat + "]]"
 
     catpages = site.Pages['Category:' + wikicat]
     existingpages = []
