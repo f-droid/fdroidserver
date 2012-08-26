@@ -301,7 +301,7 @@ class FDroid
                                         // Is this source or binary?
                                         $srcbuild = isset($apk['srcname']) && file_exists($this->site_path.'/repo/'.$apk['srcname']);
 
-                                        $out.="<p>This version is build and signed by ";
+                                        $out.="<p>This version is built and signed by ";
                                         if($srcbuild) {
                                             $out.="F-Droid, and guaranteed to correspond to the source tarball below.</p>";
                                         } else {
@@ -420,11 +420,13 @@ class FDroid
 			$summaryCount[$permissions_data['permission'][$permission]['protectionLevel']]++;
 		}
 
-		$summary = '';
-		foreach($summaryCount as $protectionLevel => $count) {
-			$summary .= $this->get_permission_protection_level_icon($protectionLevel, 'regular').' '.$count;
-			$summary .= ', ';
-		}
+                $summary = '';
+                if(isset($summaryCount)) {
+		        foreach($summaryCount as $protectionLevel => $count) {
+			        $summary .= $this->get_permission_protection_level_icon($protectionLevel, 'regular').' '.$count;
+			        $summary .= ', ';
+                        }
+                }
 		$summary = substr($summary,0,-2);
 
 		return $out;
