@@ -1095,7 +1095,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                       'admob-sdk-android',
                       'googleadview',
                       'googleadmobadssdk',
-                      'heyzap']
+                      'heyzap',
+                      'jpct-ae']
 
     # Iterate through all files in the source code...
     for r,d,f in os.walk(build_dir):
