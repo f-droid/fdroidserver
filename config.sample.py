@@ -49,3 +49,8 @@ wiki_path = "/wiki/"
 wiki_user = "login"
 wiki_password = "1234"
 
+#Only set this to true when running a repository where you want to generate
+#stats, and only then on the master build servers, not a development
+#machine.
+update_stats = False
+

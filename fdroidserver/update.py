@@ -170,6 +170,8 @@ def update_wiki(apps, apks, verbose=False):
 def main():
 
     # Read configuration...
+    global update_stats
+    update_stats = False
     execfile('config.py', globals())
 
     # Parse command line...
@@ -650,24 +652,26 @@ def main():
     f.write(catdata)
     f.close()
 
-    # Update known apks info...
-    knownapks.writeifchanged()
+    if update_stats:
 
-    # Generate latest apps data for widget
-    if os.path.exists(os.path.join('stats', 'latestapps.txt')):
-        data = ''
-        for line in file(os.path.join('stats', 'latestapps.txt')):
-            appid = line.rstrip()
-            data += appid + "\t"
-            for app in apps:
-                if app['id'] == appid:
-                    data += app['Name'] + "\t"
-                    data += app['icon'] + "\t"
-                    data += app['License'] + "\n"
-                    break
-        f = open('repo/latestapps.dat', 'w')
-        f.write(data)
-        f.close()
+        # Update known apks info...
+        knownapks.writeifchanged()
+
+        # Generate latest apps data for widget
+        if os.path.exists(os.path.join('stats', 'latestapps.txt')):
+            data = ''
+            for line in file(os.path.join('stats', 'latestapps.txt')):
+                appid = line.rstrip()
+                data += appid + "\t"
+                for app in apps:
+                    if app['id'] == appid:
+                        data += app['Name'] + "\t"
+                        data += app['icon'] + "\t"
+                        data += app['License'] + "\n"
+                        break
+            f = open('repo/latestapps.dat', 'w')
+            f.write(data)
+            f.close()
 
     # Update the wiki...
     if options.wiki:

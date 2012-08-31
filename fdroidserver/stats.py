@@ -33,7 +33,13 @@ import common
 def main():
 
     # Read configuration...
+    global update_stats
+    update_stats = False
     execfile('config.py', globals())
+
+    if not update_stats:
+        print "Stats are disabled - check your configuration"
+        sys.exit(1)
 
     # Parse command line...
     parser = OptionParser()
