@@ -92,9 +92,10 @@ def update_wiki(apps, apks, verbose=False):
 
         wikidata += "=Versions=\n"
         if len(apklist) == 0:
-            wikidata += "We currently have no versions of this app available.\n\n"
+            wikidata += "We currently have no versions of this app available."
         elif not gotcurrentver:
-            wikidata += "We don't have the current version of this app.\n\n"
+            wikidata += "We don't have the current version of this app."
+        wikidata += " (Check mode: " + app['Update Check Mode'] + ")\n\n"
         if len(app['Current Version']) > 0:
             wikidata += "The current (recommended) version is " + app['Current Version']
             wikidata += " (version code " + app['Current Version Code'] + ").\n\n"
@@ -118,6 +119,8 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += "\n[[Category:Apps we can't update]]\n"
         elif not gotcurrentver and not app['Disabled']:
             wikidata += '\n[[Category:Apps to Update]]\n'
+        if app['Update Check Mode'] == 'None':
+            wikidata += '\n[[Category:Apps with no update check]]\n'
 
         # We can't have underscores in the page name, even if they're in
         # the package ID, because MediaWiki messes with them...
