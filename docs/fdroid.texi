@@ -979,7 +979,9 @@ the ability to execute anything) for other applications in the repository.
 @end enumerate
 
 Through complete isolation, the repurcussions are at least limited to the
-application in question.
+application in question. Not only is the build environment fresh for each
+build, and thrown away afterwards, but it is also isolated from the signing
+environment.
 
 Aside from security issues, there are some applications which have strange
 requirements such as custom versions of the NDK. It would be impractical (or
@@ -994,14 +996,14 @@ Some things may not work properly yet. Talk to CiaranG if you're trying to use
 this and have problems.
 
 In addition to the basic setup previously described, you will also need
-a Vagrant-compatible Debian Squeeze base box called 'debian6-32'. You can
-create one of these for yourself from standard Debian installation media, as
+a Vagrant-compatible Ubuntu Precise base box called 'precise32'. You can
+create one of these for yourself from standard Ubuntu installation media, as
 the specification for what's required to be Vagrant-compatible is very well
 defined. This is the sensible and secure way to do it, since you know what's
-in it. If you insist on taking a shortcut, ask CiaranG for his on the forum
-or in IRC.
+in it. If you insist on taking a shortcut, ask CiaranG about it on IRC.
 
-With this base box installed, you can then do:
+With this base box installed, you can then go to the @code{fdroidserver}
+directory and run this:
 
 @example
 ./makebuildserver.sh

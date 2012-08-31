@@ -3,6 +3,7 @@ set -e
 rm -f buildserver.box
 cd buildserver
 vagrant up
+sleep 5
 vagrant ssh -c "sudo shutdown -h now"
 cd ..
 # Just to wait until it's shut down!

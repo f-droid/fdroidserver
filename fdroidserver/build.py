@@ -36,13 +36,13 @@ from common import VCSException
 def build_server(app, thisbuild, build_dir, output_dir):
     """Do a build on the build server."""
 
-    import paramiko
+    import ssh
 
     # Destroy the builder vm if it already exists...
     # TODO: need to integrate the snapshot stuff so it doesn't have to
     # keep wasting time doing this unnecessarily.
     if os.path.exists(os.path.join('builder', '.vagrant')):
-        if subprocess.call(['vagrant', 'destroy'], cwd='builder') != 0:
+        if subprocess.call(['vagrant', 'destroy', '-f'], cwd='builder') != 0:
             raise BuildException("Failed to destroy build server")
 
     # Start up the virtual maachine...
@@ -55,65 +55,114 @@ def build_server(app, thisbuild, build_dir, output_dir):
     vagranthost = 'default' # Host in ssh config file
 
     # Load and parse the SSH config...
-    sshconfig = paramiko.SSHConfig()
+    sshconfig = ssh.SSHConfig()
     sshf = open('builder/sshconfig', 'r')
     sshconfig.parse(sshf)
     sshf.close()
     sshconfig = sshconfig.lookup(vagranthost)
 
     # Open SSH connection...
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    print sshconfig
-    ssh.connect(sshconfig['hostname'], username=sshconfig['user'],
+    sshs = ssh.SSHClient()
+    sshs.set_missing_host_key_policy(ssh.AutoAddPolicy())
+    sshs.connect(sshconfig['hostname'], username=sshconfig['user'],
         port=int(sshconfig['port']), timeout=10, look_for_keys=False,
         key_filename=sshconfig['identityfile'])
 
     # Get an SFTP connection...
-    ftp = ssh.open_sftp()
+    ftp = sshs.open_sftp()
     ftp.get_channel().settimeout(15)
 
     # Put all the necessary files in place...
     ftp.chdir('/home/vagrant')
-    ftp.put('build.py', 'build.py')
-    ftp.put('common.py', 'common.py')
-    ftp.put('config.buildserver.py', 'config.py')
+
+    # Helper to copy the contents of a directory to the server...
+    def send_dir(path):
+        root = os.path.dirname(path)
+        main = os.path.basename(path)
+        ftp.mkdir(main)
+        for r, d, f in os.walk(path):
+            rr = os.path.relpath(r, root)
+            ftp.chdir(rr)
+            for dd in d:
+                ftp.mkdir(dd)
+            for ff in f:
+                ftp.put(os.path.join(root, rr, ff), ff)
+            for i in range(len(rr.split('/'))):
+                ftp.chdir('..')
+        ftp.chdir('..')
+
+    serverpath = os.path.abspath(os.path.dirname(__file__))
+    ftp.put(os.path.join(serverpath, 'build.py'), 'build.py')
+    ftp.put(os.path.join(serverpath, 'common.py'), 'common.py')
+    ftp.put(os.path.join(serverpath, '..', 'config.buildserver.py'), 'config.py')
+
+    # Copy the metadata - just the file for this app...
     ftp.mkdir('metadata')
     ftp.chdir('metadata')
     ftp.put(os.path.join('metadata', app['id'] + '.txt'),
             app['id'] + '.txt')
     ftp.chdir('..')
+    # Create the build directory...
     ftp.mkdir('build')
     ftp.chdir('build')
     ftp.mkdir('extlib')
-    ftp.mkdir(app['id'])
-    ftp.chdir('..')
-    def send_dir(path):
-        lastdir = path
-        for r, d, f in os.walk(path):
-            ftp.chdir(r)
-            for dd in d:
-                ftp.mkdir(dd)
-            for ff in f:
-                ftp.put(os.path.join(r, ff), ff)
-            for i in range(len(r.split('/'))):
+    # Copy the main app source code
+    if os.path.exists(build_dir):
+        send_dir(build_dir)
+    # Copy any extlibs that are required...
+    if thisbuild.has_key('extlibs'):
+        ftp.chdir('build')
+        ftp.chdir('extlib')
+        for lib in thisbuild['extlibs'].split(';'):
+            lp = lib.split('/')
+            for d in lp[:-1]:
+                ftp.mkdir(d)
+                ftp.chdir(d)
+            ftp.put(os.path.join('build/extlib', lib), lp[-1])
+            for _ in lp[:-1]:
                 ftp.chdir('..')
-    send_dir(build_dir)
-    # TODO: send relevant extlib and srclib directories too
+        ftp.chdir('..')
+        ftp.chdir('..')
+    # Copy any srclibs that are required...
+    if thisbuild.has_key('srclibs'):
+        ftp.chdir('build')
+        ftp.chdir('extlib')
+        for lib in thisbuild['srclibs'].split(';'):
+            lp = lib.split('@').split('/')
+            for d in lp[:-1]:
+                ftp.mkdir(d)
+                ftp.chdir(d)
+            ftp.put(os.path.join('build/extlib', lib), lp[-1])
+            for _ in lp[:-1]:
+                ftp.chdir('..')
+        ftp.chdir('..')
+        ftp.chdir('..')
 
     # Execute the build script...
-    ssh.exec_command('python build.py --on-server -p ' +
+    chan = sshs.get_transport().open_session()
+    stdoutf = chan.makefile('rb')
+    stderrf = chan.makefile_stderr('rb')
+    chan.exec_command('python build.py --on-server -p ' +
             app['id'] + ' --vercode ' + thisbuild['vercode'])
+    returncode = chan.recv_exit_status()
+    output = stdoutf.read()
+    error = stderrf.read()
+    if returncode != 0:
+        raise BuildException("Build.py failed on server for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
 
     # Retrieve the built files...
+    ftp.chdir('/home/vagrant/unsigned')
     apkfile = app['id'] + '_' + thisbuild['vercode'] + '.apk'
     tarball = app['id'] + '_' + thisbuild['vercode'] + '_src' + '.tar.gz'
-    ftp.chdir('/home/vagrant/unsigned')
-    ftp.get(apkfile, os.path.join(output_dir, apkfile))
-    ftp.get(tarball, os.path.join(output_dir, tarball))
+    try:
+        ftp.get(apkfile, os.path.join(output_dir, apkfile))
+        ftp.get(tarball, os.path.join(output_dir, tarball))
+    except:
+        raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
+    ftp.close()
 
     # Get rid of the virtual machine...
-    if subprocess.call(['vagrant', 'destroy'], cwd='builder') != 0:
+    if subprocess.call(['vagrant', 'destroy', '-f'], cwd='builder') != 0:
         # Not a very helpful message yet!
         raise BuildException("Failed to destroy")
 
@@ -304,6 +353,10 @@ def trybuild(app, thisbuild, build_dir, output_dir, extlib_dir, tmp_dir,
     print "Building version " + thisbuild['version'] + ' of ' + app['id']
 
     if server:
+        # When using server mode, still keep a local cache of the repo, by
+        # grabbing the source now.
+        vcs.gotorevision(thisbuild['commit'])
+
         build_server(app, thisbuild, build_dir, output_dir)
     else:
         build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install, force, verbose)
@@ -395,6 +448,17 @@ def main():
         print "Creating build directory"
         os.makedirs(build_dir)
     extlib_dir = os.path.join(build_dir, 'extlib')
+
+    # Create the 'builder' vagrant directory if we don't have it...
+    if options.server:
+        if not os.path.exists('builder'):
+            os.mkdir('builder')
+            vf = open('builder/Vagrantfile', 'w')
+            vf.write('Vagrant::Config.run do |config|\n')
+            vf.write('config.vm.box = "buildserver"\n')
+            vf.write('config.vm.customize ["modifyvm", :id, "--memory", "768"]\n')
+            vf.write('end\n')
+            vf.close()
 
     # Filter apps and build versions according to command-line options, etc...
     if options.package:

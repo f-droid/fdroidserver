@@ -1,7 +1,0 @@
-Vagrant::Config.run do |config|
-
-  config.vm.box = "buildserver"
-
-  config.vm.customize ["modifyvm", :id, "--memory", "768"]
-
-end
