@@ -716,6 +716,27 @@ def getsrclib(spec, extlib_dir):
             raise BuildException('Error updating ViewPagerIndicator project')
         return sdir
 
+    if name == 'UITableView':
+        sdir = os.path.join(extlib_dir, 'UITableView')
+        vcs = getvcs('git',
+            'https://github.com/thiagolocatelli/android-uitableview.git', sdir)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'android-uitableview')
+        if subprocess.call(['android', 'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating UITableView project')
+        return libdir
+
+    if name == 'ViewPagerTabs':
+        sdir = os.path.join(extlib_dir, 'ViewPagerTabs')
+        vcs = getvcs('git',
+            'https://github.com/astuetz/android-viewpagertabs.git', sdir)
+        vcs.gotorevision(ref)
+        if subprocess.call(['android', 'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating ViewPagerTabs project')
+        return sdir
+
     if name == 'ActionBar':
         sdir = os.path.join(extlib_dir, 'ActionBar')
         vcs = getvcs('git',
