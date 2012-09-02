@@ -732,6 +732,10 @@ def getsrclib(spec, extlib_dir):
         vcs = getvcs('git',
             'https://github.com/astuetz/android-viewpagertabs.git', sdir)
         vcs.gotorevision(ref)
+        pp = open(os.path.join(sdir, 'project.properties'), 'w')
+        pp.write('android.library=true\n')
+        pp.write('target=android-15\n')
+        pp.close()
         if subprocess.call(['android', 'update', 'project', '-p',
             sdir]) != 0:
             raise BuildException('Error updating ViewPagerTabs project')
