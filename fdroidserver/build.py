@@ -38,17 +38,57 @@ def build_server(app, thisbuild, build_dir, output_dir):
 
     import ssh
 
-    # Destroy the builder vm if it already exists...
-    # TODO: need to integrate the snapshot stuff so it doesn't have to
-    # keep wasting time doing this unnecessarily.
-    if os.path.exists(os.path.join('builder', '.vagrant')):
-        if subprocess.call(['vagrant', 'destroy', '-f'], cwd='builder') != 0:
-            raise BuildException("Failed to destroy build server")
+    # Reset existing builder machine to a clean state if possible.
+    vm_ok = False
+    if not options.resetserver:
+        print "Checking for valid existing build server"
+        if os.path.exists(os.path.join('builder', 'Vagrantfile')):
+            print "...directory exists"
+            p = subprocess.Popen(['vagrant', 'snap', 'list'],
+                cwd='builder', stdout=subprocess.PIPE)
+            output = p.communicate()[0]
+            if output.find('fdroidclean') != -1:
+                print "...snapshot exists - resetting build server to clean state"
+                subprocess.call(['vagrant', 'suspend'], cwd='builder')
+                if subprocess.call(['vagrant', 'snap', 'go', 'fdroidclean'],
+                    cwd='builder') == 0:
+                    if subprocess.call(['vagrant', 'up'], cwd='builder') != 0:
+                        raise BuildException("Failed to start build server")
+                    print "...reset to snapshot - server is valid"
+                    vm_ok = True
+                else:
+                    print "...failed to reset to snapshot"
+            else:
+                print "...snapshot doesn't exist - vagrant snap said:\n" + output
 
-    # Start up the virtual maachine...
-    if subprocess.call(['vagrant', 'up'], cwd='builder') != 0:
-        # Not a very helpful message yet!
-        raise BuildException("Failed to set up build server")
+    # If we can't use the existing machine for any reason, make a
+    # new one from scratch.
+    if not vm_ok:
+        if os.path.exists('builder'):
+            print "Removing broken/incomplete/unwanted build server"
+            subprocess.call(['vagrant', 'destroy', '-f'], cwd='builder')
+            shutil.rmtree('builder')
+        os.mkdir('builder')
+        vf = open('builder/Vagrantfile', 'w')
+        vf.write('Vagrant::Config.run do |config|\n')
+        vf.write('config.vm.box = "buildserver"\n')
+        vf.write('config.vm.customize ["modifyvm", :id, "--memory", "768"]\n')
+        vf.write('end\n')
+        vf.close()
+        print "Starting new build server"
+        if subprocess.call(['vagrant', 'up'], cwd='builder') != 0:
+            raise BuildException("Failed to start build server")
+        print "Saving clean state of new build server"
+        if subprocess.call(['vagrant', 'snap', 'take', '-n', 'fdroidclean'],
+                cwd='builder') != 0:
+            raise BuildException("Failed to take snapshot")
+        # Make sure it worked...
+        p = subprocess.Popen(['vagrant', 'snap', 'list'],
+            cwd='builder', stdout=subprocess.PIPE)
+        output = p.communicate()[0]
+        if output.find('fdroidclean') == -1:
+            raise BuildException("Failed to take snapshot.")
+
     # Get SSH configuration settings for us to connect...
     subprocess.call('vagrant ssh-config >sshconfig',
             cwd='builder', shell=True)
@@ -91,6 +131,7 @@ def build_server(app, thisbuild, build_dir, output_dir):
                 ftp.chdir('..')
         ftp.chdir('..')
 
+    print "Preparing server for build..."
     serverpath = os.path.abspath(os.path.dirname(__file__))
     ftp.put(os.path.join(serverpath, 'build.py'), 'build.py')
     ftp.put(os.path.join(serverpath, 'common.py'), 'common.py')
@@ -139,6 +180,7 @@ def build_server(app, thisbuild, build_dir, output_dir):
         ftp.chdir('..')
 
     # Execute the build script...
+    print "Starting build..."
     chan = sshs.get_transport().open_session()
     stdoutf = chan.makefile('rb')
     stderrf = chan.makefile_stderr('rb')
@@ -161,10 +203,8 @@ def build_server(app, thisbuild, build_dir, output_dir):
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
     ftp.close()
 
-    # Get rid of the virtual machine...
-    if subprocess.call(['vagrant', 'destroy', '-f'], cwd='builder') != 0:
-        # Not a very helpful message yet!
-        raise BuildException("Failed to destroy")
+    # Suspend the buildserver...
+    subprocess.call(['vagrant', 'suspend'], cwd='builder')
 
 
 def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install, force, verbose=False):
@@ -379,6 +419,8 @@ def parse_commandline():
                       help="Test mode - put output in the tmp directory only.")
     parser.add_option("--server", action="store_true", default=False,
                       help="Use build server")
+    parser.add_option("--resetserver", action="store_true", default=False,
+                      help="Reset and create a brand new build server, even if the existing one appears to be ok.")
     parser.add_option("--on-server", action="store_true", default=False,
                       help="Specify that we're running on the build server")
     parser.add_option("-f", "--force", action="store_true", default=False,
@@ -407,6 +449,10 @@ def parse_commandline():
 
     if options.force and not options.test:
         print "Force is only allowed in test mode"
+        sys.exit(1)
+
+    if options.resetserver and not options.server:
+        print "Using --resetserver without --server makes no sense"
         sys.exit(1)
 
     return options, args
@@ -448,17 +494,6 @@ def main():
         print "Creating build directory"
         os.makedirs(build_dir)
     extlib_dir = os.path.join(build_dir, 'extlib')
-
-    # Create the 'builder' vagrant directory if we don't have it...
-    if options.server:
-        if not os.path.exists('builder'):
-            os.mkdir('builder')
-            vf = open('builder/Vagrantfile', 'w')
-            vf.write('Vagrant::Config.run do |config|\n')
-            vf.write('config.vm.box = "buildserver"\n')
-            vf.write('config.vm.customize ["modifyvm", :id, "--memory", "768"]\n')
-            vf.write('end\n')
-            vf.close()
 
     # Filter apps and build versions according to command-line options, etc...
     if options.package:
