@@ -25,6 +25,7 @@ import subprocess
 import re
 import zipfile
 import hashlib
+import pickle
 from xml.dom.minidom import Document
 from optparse import OptionParser
 import time
@@ -217,7 +218,15 @@ def main():
     # Read known apks data (will be updated and written back when we've finished)
     knownapks = common.KnownApks()
 
-    # Gather information about all the apk files in the repo directory...
+    # Gather information about all the apk files in the repo directory, using
+    # cached data if possible.
+    apkcachefile = os.path.join('tmp', 'apkcache')
+    if os.path.exists(apkcachefile):
+        with open(apkcachefile, 'rb') as cf:
+            apkcache = pickle.load(cf)
+    else:
+        apkcache = {}
+    cachechanged = False
     apks = []
     for apkfile in glob.glob(os.path.join('repo','*.apk')):
 
@@ -227,111 +236,124 @@ def main():
             sys.exit(1)
         srcfilename = apkfilename[:-4] + "_src.tar.gz"
 
-        if not options.quiet:
-            print "Processing " + apkfilename
-        thisinfo = {}
-        thisinfo['apkname'] = apkfilename
-        if os.path.exists(os.path.join('repo', srcfilename)):
-            thisinfo['srcname'] = srcfilename
-        thisinfo['size'] = os.path.getsize(apkfile)
-        thisinfo['permissions'] = []
-        thisinfo['features'] = []
-        p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools', 'aapt'),
-                              'dump', 'badging', apkfile],
-                             stdout=subprocess.PIPE)
-        output = p.communicate()[0]
-        if options.verbose:
-            print output
-        if p.returncode != 0:
-            print "ERROR: Failed to get apk information"
-            sys.exit(1)
-        for line in output.splitlines():
-            if line.startswith("package:"):
-                pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
-                thisinfo['id'] = re.match(pat, line).group(1)
-                pat = re.compile(".*versionCode='([0-9]*)'.*")
-                thisinfo['versioncode'] = int(re.match(pat, line).group(1))
-                pat = re.compile(".*versionName='([^']*)'.*")
-                thisinfo['version'] = re.match(pat, line).group(1)
-            if line.startswith("application:"):
-                pat = re.compile(".*label='([^']*)'.*")
-                thisinfo['name'] = re.match(pat, line).group(1)
-                pat = re.compile(".*icon='([^']*)'.*")
-                thisinfo['iconsrc'] = re.match(pat, line).group(1)
-            if line.startswith("sdkVersion:"):
-                pat = re.compile(".*'([0-9]*)'.*")
-                thisinfo['sdkversion'] = re.match(pat, line).group(1)
-            if line.startswith("native-code:"):
-                pat = re.compile(".*'([^']*)'.*")
-                thisinfo['nativecode'] = re.match(pat, line).group(1)
-            if line.startswith("uses-permission:"):
-                pat = re.compile(".*'([^']*)'.*")
-                perm = re.match(pat, line).group(1)
-                if perm.startswith("android.permission."):
-                    perm = perm[19:]
-                thisinfo['permissions'].append(perm)
-            if line.startswith("uses-feature:"):
-                pat = re.compile(".*'([^']*)'.*")
-                perm = re.match(pat, line).group(1)
-                #Filter out this, it's only added with the latest SDK tools and
-                #causes problems for lots of apps.
-                if (perm != "android.hardware.screen.portrait" and
-                    perm != "android.hardware.screen.landscape"):
-                    if perm.startswith("android.feature."):
-                        perm = perm[16:]
-                    thisinfo['features'].append(perm)
+        if apkcache.has_key(apkfilename):
+            if options.verbose:
+                print "Reading " + apkfilename + " from cache"
+            thisinfo = apkcache[apkfilename]
 
-        if not thisinfo.has_key('sdkversion'):
-            print "  WARNING: no SDK version information found"
-            thisinfo['sdkversion'] = 0
+        else:
 
-        # Calculate the md5 and sha256...
-        m = hashlib.md5()
-        sha = hashlib.sha256()
-        f = open(apkfile, 'rb')
-        while True:
-            t = f.read(1024)
-            if len(t) == 0:
-                break
-            m.update(t)
-            sha.update(t)
-        thisinfo['md5'] = m.hexdigest()
-        thisinfo['sha256'] = sha.hexdigest()
-        f.close()
+            if not options.quiet:
+                print "Processing " + apkfilename
+            thisinfo = {}
+            thisinfo['apkname'] = apkfilename
+            if os.path.exists(os.path.join('repo', srcfilename)):
+                thisinfo['srcname'] = srcfilename
+            thisinfo['size'] = os.path.getsize(apkfile)
+            thisinfo['permissions'] = []
+            thisinfo['features'] = []
+            p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools', 'aapt'),
+                                  'dump', 'badging', apkfile],
+                                 stdout=subprocess.PIPE)
+            output = p.communicate()[0]
+            if options.verbose:
+                print output
+            if p.returncode != 0:
+                print "ERROR: Failed to get apk information"
+                sys.exit(1)
+            for line in output.splitlines():
+                if line.startswith("package:"):
+                    pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
+                    thisinfo['id'] = re.match(pat, line).group(1)
+                    pat = re.compile(".*versionCode='([0-9]*)'.*")
+                    thisinfo['versioncode'] = int(re.match(pat, line).group(1))
+                    pat = re.compile(".*versionName='([^']*)'.*")
+                    thisinfo['version'] = re.match(pat, line).group(1)
+                if line.startswith("application:"):
+                    pat = re.compile(".*label='([^']*)'.*")
+                    thisinfo['name'] = re.match(pat, line).group(1)
+                    pat = re.compile(".*icon='([^']*)'.*")
+                    thisinfo['iconsrc'] = re.match(pat, line).group(1)
+                if line.startswith("sdkVersion:"):
+                    pat = re.compile(".*'([0-9]*)'.*")
+                    thisinfo['sdkversion'] = re.match(pat, line).group(1)
+                if line.startswith("native-code:"):
+                    pat = re.compile(".*'([^']*)'.*")
+                    thisinfo['nativecode'] = re.match(pat, line).group(1)
+                if line.startswith("uses-permission:"):
+                    pat = re.compile(".*'([^']*)'.*")
+                    perm = re.match(pat, line).group(1)
+                    if perm.startswith("android.permission."):
+                        perm = perm[19:]
+                    thisinfo['permissions'].append(perm)
+                if line.startswith("uses-feature:"):
+                    pat = re.compile(".*'([^']*)'.*")
+                    perm = re.match(pat, line).group(1)
+                    #Filter out this, it's only added with the latest SDK tools and
+                    #causes problems for lots of apps.
+                    if (perm != "android.hardware.screen.portrait" and
+                        perm != "android.hardware.screen.landscape"):
+                        if perm.startswith("android.feature."):
+                            perm = perm[16:]
+                        thisinfo['features'].append(perm)
 
-        # Get the signature (or md5 of, to be precise)...
-        p = subprocess.Popen(['java', 'getsig',
-                              os.path.join(os.getcwd(), apkfile)],
-                             cwd=os.path.join(os.path.dirname(__file__), 'getsig'),
-                             stdout=subprocess.PIPE)
-        output = p.communicate()[0]
-        if options.verbose:
-            print output
-        if p.returncode != 0 or not output.startswith('Result:'):
-            print "ERROR: Failed to get apk signature"
-            sys.exit(1)
-        thisinfo['sig'] = output[7:].strip()
+            if not thisinfo.has_key('sdkversion'):
+                print "  WARNING: no SDK version information found"
+                thisinfo['sdkversion'] = 0
 
-        # Extract the icon file...
-        apk = zipfile.ZipFile(apkfile, 'r')
-        thisinfo['icon'] = (thisinfo['id'] + '.' +
-            str(thisinfo['versioncode']) + '.png')
-        iconfilename = os.path.join(icon_dir, thisinfo['icon'])
-        try:
-            iconfile = open(iconfilename, 'wb')
-            iconfile.write(apk.read(thisinfo['iconsrc']))
-            iconfile.close()
-        except:
-            print "WARNING: Error retrieving icon file"
-            warnings += 1
-        apk.close()
+            # Calculate the md5 and sha256...
+            m = hashlib.md5()
+            sha = hashlib.sha256()
+            with open(apkfile, 'rb') as f:
+                while True:
+                    t = f.read(1024)
+                    if len(t) == 0:
+                        break
+                    m.update(t)
+                    sha.update(t)
+                thisinfo['md5'] = m.hexdigest()
+                thisinfo['sha256'] = sha.hexdigest()
 
-        # Record in known apks, getting the added date at the same time..
-        added = knownapks.recordapk(thisinfo['apkname'], thisinfo['id'])
-        if added:
-            thisinfo['added'] = added
+            # Get the signature (or md5 of, to be precise)...
+            p = subprocess.Popen(['java', 'getsig',
+                                  os.path.join(os.getcwd(), apkfile)],
+                                 cwd=os.path.join(os.path.dirname(__file__), 'getsig'),
+                                 stdout=subprocess.PIPE)
+            output = p.communicate()[0]
+            if options.verbose:
+                print output
+            if p.returncode != 0 or not output.startswith('Result:'):
+                print "ERROR: Failed to get apk signature"
+                sys.exit(1)
+            thisinfo['sig'] = output[7:].strip()
+
+            # Extract the icon file...
+            apk = zipfile.ZipFile(apkfile, 'r')
+            thisinfo['icon'] = (thisinfo['id'] + '.' +
+                str(thisinfo['versioncode']) + '.png')
+            iconfilename = os.path.join(icon_dir, thisinfo['icon'])
+            try:
+                iconfile = open(iconfilename, 'wb')
+                iconfile.write(apk.read(thisinfo['iconsrc']))
+                iconfile.close()
+            except:
+                print "WARNING: Error retrieving icon file"
+                warnings += 1
+            apk.close()
+
+            # Record in known apks, getting the added date at the same time..
+            added = knownapks.recordapk(thisinfo['apkname'], thisinfo['id'])
+            if added:
+                thisinfo['added'] = added
+
+            apkcache[apkfilename] = thisinfo
+            cachechanged = True
 
         apks.append(thisinfo)
+
+    if cachechanged:
+        with open(apkcachefile, 'wb') as cf:
+            pickle.dump(apkcache, cf)
 
     # Some information from the apks needs to be applied up to the application
     # level. When doing this, we use the info from the most recent version's apk.
