@@ -451,10 +451,6 @@ def parse_commandline():
         print "Force is only allowed in test mode"
         sys.exit(1)
 
-    if options.resetserver and not options.server:
-        print "Using --resetserver without --server makes no sense"
-        sys.exit(1)
-
     return options, args
 
 options = None
@@ -463,8 +459,15 @@ def main():
 
     global options
     # Read configuration...
+    global build_server_always
+    build_server_always = False
     execfile('config.py', globals())
     options, args = parse_commandline()
+    if build_server_always:
+        options.server = True
+    if options.resetserver and not options.server:
+        print "Using --resetserver without --server makes no sense"
+        sys.exit(1)
 
     # Get all apps...
     apps = common.read_metadata(options.verbose)

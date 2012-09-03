@@ -54,3 +54,8 @@ wiki_password = "1234"
 #machine.
 update_stats = False
 
+
+#Set this to true to always use a build server. This saves specifying the
+#--server option on dedicated secure build server hosts.
+build_server_always = False
+
