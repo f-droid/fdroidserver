@@ -212,8 +212,10 @@ def main():
     # Generate a list of categories...
     categories = []
     for app in apps:
-        if app['Category'] not in categories:
-            categories.append(app['Category'])
+        cats = app['Category'].Split(';')
+        for cat in cats
+            if cat not in categories:
+                categories.append(cat)
 
     # Read known apks data (will be updated and written back when we've finished)
     knownapks = common.KnownApks()
@@ -506,7 +508,12 @@ def main():
                         common.parse_description(app['Description']), doc, apel)
                 addElement('license', app['License'], doc, apel)
                 if 'Category' in app:
-                    addElement('category', app['Category'], doc, apel)
+                    # We put the first (primary) category in LAST, which will have
+                    # the desired effect of making clients that only understand one
+                    # category see that one.
+                    cats = app['Category'].split(';').reverse()
+                    for cat in cats:
+                        addElement('category', cat, doc, apel)
                 addElement('web', app['Web Site'], doc, apel)
                 addElement('source', app['Source Code'], doc, apel)
                 addElement('tracker', app['Issue Tracker'], doc, apel)
