@@ -18,21 +18,8 @@ script "setup-android-sdk" do
     rm android-sdk_r16-linux.tgz
     #{sdk_loc}/tools/android update sdk --no-ui -t platform-tool
     #{sdk_loc}/tools/android update sdk --no-ui -t tool
-    #{sdk_loc}/tools/android update sdk --no-ui -t android-3
-    #{sdk_loc}/tools/android update sdk --no-ui -t android-4
-    #{sdk_loc}/tools/android update sdk --no-ui -t android-7
-    #{sdk_loc}/tools/android update sdk --no-ui -t android-8
-    #{sdk_loc}/tools/android update sdk --no-ui -t android-10
-    #{sdk_loc}/tools/android update sdk --no-ui -t android-11
-    #{sdk_loc}/tools/android update sdk --no-ui -t android-13
-    #{sdk_loc}/tools/android update sdk --no-ui -t android-14
-    #{sdk_loc}/tools/android update sdk --no-ui -t android-15
-    #{sdk_loc}/tools/android update sdk --no-ui -t android-16
-    #{sdk_loc}/tools/android update sdk --no-ui -t addon-google_apis-google-16
   "
-  not_if do
-    File.exists?("#{sdk_loc}")
-  end
+  not_if "test -d #{sdk_loc}"
 end
 
 execute "add-android-sdk-path" do
@@ -41,4 +28,36 @@ execute "add-android-sdk-path" do
   command "echo \"export PATH=\\$PATH:#{path}\" >> /home/#{user}/.bashrc"
   not_if "grep #{sdk_loc} /home/#{user}/.bashrc"
 end
+
+%w{android-3 android-4 android-7 android-8 android-10
+   android-11 android-13 android-14 android-15 android-16}.each do |sdk|
+
+  script "add_sdk_#{sdk}" do
+    interpreter "bash"
+    user user
+    cwd "/tmp"
+    code "
+      #{sdk_loc}/tools/android update sdk --no-ui -a -t #{sdk}
+    "
+    not_if "test -d #{sdk_loc}/platforms/#{sdk}"
+  end
+
+end
+
+%w{addon-google_apis-google-7 addon-google_apis-google-16}.each do |sdk|
+
+  script "add_addon_#{sdk}" do
+    interpreter "bash"
+    user user
+    cwd "/tmp"
+    code "
+      #{sdk_loc}/tools/android update sdk --no-ui -a -t #{sdk}
+    "
+
+    not_if "test -d #{sdk_loc}/add-ons/#{sdk}"
+
+  end
+
+end
+
 
