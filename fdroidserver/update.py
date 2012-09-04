@@ -212,8 +212,8 @@ def main():
     # Generate a list of categories...
     categories = []
     for app in apps:
-        cats = app['Category'].Split(';')
-        for cat in cats
+        cats = app['Category'].split(';')
+        for cat in cats:
             if cat not in categories:
                 categories.append(cat)
 
@@ -511,7 +511,8 @@ def main():
                     # We put the first (primary) category in LAST, which will have
                     # the desired effect of making clients that only understand one
                     # category see that one.
-                    cats = app['Category'].split(';').reverse()
+                    cats = app['Category'].split(';')
+                    cats.reverse()
                     for cat in cats:
                         addElement('category', cat, doc, apel)
                 addElement('web', app['Web Site'], doc, apel)
