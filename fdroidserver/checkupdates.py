@@ -218,7 +218,7 @@ def main():
             else:
                 print '...updating to version:' + version + ' vercode:' + vercode
                 app['Current Version'] = version
-                app['Current Version Code'] = (str)((int)vercode)
+                app['Current Version Code'] = str(int(vercode))
                 metafile = os.path.join('metadata', app['id'] + '.txt')
                 common.write_metadata(metafile, app)
 
