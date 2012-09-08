@@ -194,15 +194,18 @@ def main():
                       help="Update the wiki")
     parser.add_option("", "--pretty", action="store_true", default=False,
                       help="Produce human-readable index.xml")
+    parser.add_option("--clean", action="store_true", default=False,
+                      help="Clean update - don't uses caches, reprocess all apks")
     (options, args) = parser.parse_args()
 
 
     icon_dir=os.path.join('repo','icons')
 
     # Delete and re-create the icon directory...
-    if os.path.exists(icon_dir):
+    if options.clean and os.path.exists(icon_dir):
         shutil.rmtree(icon_dir)
-    os.mkdir(icon_dir)
+    if not os.path.exists(icon_dir):
+        os.mkdir(icon_dir)
 
     warnings = 0
 
@@ -223,7 +226,7 @@ def main():
     # Gather information about all the apk files in the repo directory, using
     # cached data if possible.
     apkcachefile = os.path.join('tmp', 'apkcache')
-    if os.path.exists(apkcachefile):
+    if not options.clean and os.path.exists(apkcachefile):
         with open(apkcachefile, 'rb') as cf:
             apkcache = pickle.load(cf)
     else:
