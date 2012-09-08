@@ -33,7 +33,7 @@ from common import BuildException
 from common import VCSException
 
 
-def build_server(app, thisbuild, build_dir, output_dir):
+def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path):
     """Do a build on the build server."""
 
     import ssh
@@ -152,7 +152,10 @@ def build_server(app, thisbuild, build_dir, output_dir):
         ftp.chdir('metadata')
         ftp.put(os.path.join('metadata', app['id'] + '.txt'),
                 app['id'] + '.txt')
-        ftp.chdir('..')
+        # And patches if there are any...
+        if os.path.exists(os.path.join('metadata', app['id'])):
+            send_dir(os.path.join('metadata', app['id']))
+        ftp.chdir('/home/vagrant')
         # Create the build directory...
         ftp.mkdir('build')
         ftp.chdir('build')
@@ -162,8 +165,7 @@ def build_server(app, thisbuild, build_dir, output_dir):
             send_dir(build_dir)
         # Copy any extlibs that are required...
         if thisbuild.has_key('extlibs'):
-            ftp.chdir('build')
-            ftp.chdir('extlib')
+            ftp.chdir('/home/vagrant/build/extlib')
             for lib in thisbuild['extlibs'].split(';'):
                 lp = lib.split('/')
                 for d in lp[:-1]:
@@ -172,22 +174,20 @@ def build_server(app, thisbuild, build_dir, output_dir):
                 ftp.put(os.path.join('build/extlib', lib), lp[-1])
                 for _ in lp[:-1]:
                     ftp.chdir('..')
-            ftp.chdir('..')
-            ftp.chdir('..')
         # Copy any srclibs that are required...
+        srclibpaths = []
         if thisbuild.has_key('srclibs'):
-            ftp.chdir('build')
-            ftp.chdir('extlib')
             for lib in thisbuild['srclibs'].split(';'):
-                lp = lib.split('@').split('/')
-                for d in lp[:-1]:
-                    ftp.mkdir(d)
-                    ftp.chdir(d)
-                ftp.put(os.path.join('build/extlib', lib), lp[-1])
-                for _ in lp[:-1]:
-                    ftp.chdir('..')
-            ftp.chdir('..')
-            ftp.chdir('..')
+                name, _ = lib.split('@')
+                srclibpaths.append((name, common.getsrclib(lib, 'build/extlib', sdk_path)))
+        # If one was used for the main source, add that too.
+        basesrclib = vcs.getsrclib()
+        if basesrclib:
+            srclibpaths.append(basesrclib)
+        print "Sending srclibs:"
+        for _, lib in srclibpaths:
+            ftp.chdir('/home/vagrant/build/extlib')
+            send_dir(lib)
 
         # Execute the build script...
         print "Starting build..."
@@ -409,7 +409,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, extlib_dir, tmp_dir,
         # grabbing the source now.
         vcs.gotorevision(thisbuild['commit'])
 
-        build_server(app, thisbuild, build_dir, output_dir)
+        build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path)
     else:
         build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install, force, verbose)
     return True
@@ -534,7 +534,7 @@ def main():
         build_dir = 'build/' + app['id']
 
         # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
+        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
 
         for thisbuild in app['builds']:
             try:

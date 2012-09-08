@@ -212,7 +212,7 @@ def main():
     src_dir = os.path.join(tmp_dir, 'importer')
     if os.path.exists(src_dir):
         shutil.rmtree(src_dir)
-    vcs = common.getvcs(repotype, repo, src_dir)
+    vcs = common.getvcs(repotype, repo, src_dir, sdk_path)
     vcs.gotorevision(None)
     if options.subdir:
         root_dir = os.path.join(src_dir, options.subdir)

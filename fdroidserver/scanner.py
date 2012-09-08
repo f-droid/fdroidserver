@@ -84,7 +84,7 @@ def main():
                 build_dir = 'build/' + app['id']
 
                 # Set up vcs interface and make sure we have the latest code...
-                vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
+                vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
 
                 for thisbuild in app['builds']:
 

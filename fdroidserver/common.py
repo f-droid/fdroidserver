@@ -22,23 +22,25 @@ import subprocess
 import time
 import operator
 
-def getvcs(vcstype, remote, local):
+def getvcs(vcstype, remote, local, sdk_path):
     if vcstype == 'git':
-        return vcs_git(remote, local)
+        return vcs_git(remote, local, sdk_path)
     elif vcstype == 'svn':
-        return vcs_svn(remote, local)
+        return vcs_svn(remote, local, sdk_path)
     elif vcstype == 'git-svn':
-        return vcs_gitsvn(remote, local)
+        return vcs_gitsvn(remote, local, sdk_path)
     elif vcstype == 'hg':
-        return vcs_hg(remote, local)
+        return vcs_hg(remote, local, sdk_path)
     elif vcstype == 'bzr':
-        return vcs_bzr(remote, local)
+        return vcs_bzr(remote, local, sdk_path)
     elif vcstype == 'srclib':
-        return vcs_srclib(remote, local)
+        return vcs_srclib(remote, local, sdk_path)
     raise VCSException("Invalid vcs type " + vcstype)
 
 class vcs:
-    def __init__(self, remote, local):
+    def __init__(self, remote, local, sdk_path):
+
+        self.sdk_path = sdk_path
 
         # It's possible to sneak a username and password in with
         # the remote address... (this really only applies to svn
@@ -329,7 +331,7 @@ class vcs_srclib(vcs):
         else:
             srclib = self.remote
             path = None
-        libdir = getsrclib(srclib + '@' + rev, extlib_dir)
+        libdir = getsrclib(srclib + '@' + rev, extlib_dir, self.sdk_path)
         self.srclib = (srclib, libdir)
         if path:
             libdir = os.path.join(libdir, path)
@@ -685,23 +687,24 @@ class MetaDataException(Exception):
 # Returns the path to it.
 # TODO: These are currently just hard-coded in this method. It will be a
 # metadata-driven system eventually, but not yet.
-def getsrclib(spec, extlib_dir):
+def getsrclib(spec, extlib_dir, sdk_path):
     name, ref = spec.split('@')
 
     if name == 'GreenDroid':
         sdir = os.path.join(extlib_dir, 'GreenDroid')
         vcs = getvcs('git',
-            'https://github.com/cyrilmottier/GreenDroid.git', sdir)
+            'https://github.com/cyrilmottier/GreenDroid.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return os.path.join(sdir, 'GreenDroid')
 
     if name == 'ActionBarSherlock':
         sdir = os.path.join(extlib_dir, 'ActionBarSherlock')
         vcs = getvcs('git',
-            'https://github.com/JakeWharton/ActionBarSherlock.git', sdir)
+            'https://github.com/JakeWharton/ActionBarSherlock.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         libdir = os.path.join(sdir, 'library')
-        if subprocess.call(['android', 'update', 'project', '-p',
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
             libdir]) != 0:
             raise BuildException('Error updating ActionBarSherlock project')
         return libdir
@@ -709,9 +712,10 @@ def getsrclib(spec, extlib_dir):
     if name == 'ViewPagerIndicator':
         sdir = os.path.join(extlib_dir, 'ViewPagerIndicator')
         vcs = getvcs('git',
-            'https://github.com/mariotaku/viewpagerindicator.git', sdir)
+            'https://github.com/mariotaku/viewpagerindicator.git', sdir, sdk_path)
         vcs.gotorevision(ref)
-        if subprocess.call(['android', 'update', 'project', '-p',
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
             sdir]) != 0:
             raise BuildException('Error updating ViewPagerIndicator project')
         return sdir
@@ -719,10 +723,11 @@ def getsrclib(spec, extlib_dir):
     if name == 'UITableView':
         sdir = os.path.join(extlib_dir, 'UITableView')
         vcs = getvcs('git',
-            'https://github.com/thiagolocatelli/android-uitableview.git', sdir)
+            'https://github.com/thiagolocatelli/android-uitableview.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         libdir = os.path.join(sdir, 'android-uitableview')
-        if subprocess.call(['android', 'update', 'project', '-p',
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
             libdir]) != 0:
             raise BuildException('Error updating UITableView project')
         return libdir
@@ -730,13 +735,14 @@ def getsrclib(spec, extlib_dir):
     if name == 'ViewPagerTabs':
         sdir = os.path.join(extlib_dir, 'ViewPagerTabs')
         vcs = getvcs('git',
-            'https://github.com/astuetz/android-viewpagertabs.git', sdir)
+            'https://github.com/astuetz/android-viewpagertabs.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         pp = open(os.path.join(sdir, 'project.properties'), 'w')
         pp.write('android.library=true\n')
         pp.write('target=android-15\n')
         pp.close()
-        if subprocess.call(['android', 'update', 'project', '-p',
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
             sdir]) != 0:
             raise BuildException('Error updating ViewPagerTabs project')
         return sdir
@@ -744,10 +750,11 @@ def getsrclib(spec, extlib_dir):
     if name == 'ActionBar':
         sdir = os.path.join(extlib_dir, 'ActionBar')
         vcs = getvcs('git',
-            'https://github.com/johannilsson/android-actionbar.git', sdir)
+            'https://github.com/johannilsson/android-actionbar.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         libdir = os.path.join(sdir, 'actionbar')
-        if subprocess.call(['android', 'update', 'project', '-p',
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
             libdir]) != 0:
             raise BuildException('Error updating ActionBar project')
         return libdir
@@ -755,10 +762,11 @@ def getsrclib(spec, extlib_dir):
     if name == 'ActionBarNW':
         sdir = os.path.join(extlib_dir, 'ActionBarNW')
         vcs = getvcs('git',
-            'https://github.com/NightWhistler/android-actionbar.git', sdir)
+            'https://github.com/NightWhistler/android-actionbar.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         libdir = os.path.join(sdir, 'actionbar')
-        if subprocess.call(['android', 'update', 'project', '-p',
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
             libdir]) != 0:
             raise BuildException('Error updating ActionBarNW project')
         return libdir
@@ -766,10 +774,11 @@ def getsrclib(spec, extlib_dir):
     if name == 'FacebookSDK':
         sdir = os.path.join(extlib_dir, 'FacebookSDK')
         vcs = getvcs('git',
-                'git://github.com/facebook/facebook-android-sdk.git', sdir)
+                'git://github.com/facebook/facebook-android-sdk.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         libdir = os.path.join(sdir, 'facebook')
-        if subprocess.call(['android', 'update', 'project', '-p',
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
             libdir]) != 0:
             raise BuildException('Error updating FacebookSDK project')
         return libdir
@@ -777,14 +786,14 @@ def getsrclib(spec, extlib_dir):
     if name == 'OI':
         sdir = os.path.join(extlib_dir, 'OI')
         vcs = getvcs('git-svn',
-                'http://openintents.googlecode.com/svn/trunk/', sdir)
+                'http://openintents.googlecode.com/svn/trunk/', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
     if name == 'JOpenDocument':
         sdir = os.path.join(extlib_dir, 'JOpenDocument')
         vcs = getvcs('git',
-                'https://github.com/andiwand/JOpenDocument.git', sdir)
+                'https://github.com/andiwand/JOpenDocument.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         shutil.rmtree(os.path.join(sdir, 'bin'))
         return sdir
@@ -792,7 +801,7 @@ def getsrclib(spec, extlib_dir):
     if name == 'BitcoinJWallet':
         sdir = os.path.join(extlib_dir, 'BitcoinJWallet')
         vcs = getvcs('git',
-                'https://code.google.com/r/andreasschildbach-bitcoinj/', sdir)
+                'https://code.google.com/r/andreasschildbach-bitcoinj/', sdir, sdk_path)
         vcs.gotorevision(ref)
         if subprocess.call(['mvn3', 'install'], cwd=sdir) != 0:
             raise BuildException("Maven build failed for BitcoinJWallet srclib")
@@ -990,7 +999,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
     if build.has_key('srclibs'):
         for lib in build['srclibs'].split(';'):
             name, _ = lib.split('@')
-            srclibpaths.append((name, getsrclib(lib, extlib_dir)))
+            srclibpaths.append((name, getsrclib(lib, extlib_dir, sdk_path)))
     basesrclib = vcs.getsrclib()
     # If one was used for the main source, add that too.
     if basesrclib:

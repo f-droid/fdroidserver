@@ -38,7 +38,7 @@ from common import VCSException
 # caution, because it's inappropriate for many projects.
 # Returns (None, "a message") if this didn't work, or (version, vercode) for
 # the details of the current version.
-def check_tags(app):
+def check_tags(app, sdk_path):
 
     try:
 
@@ -48,7 +48,7 @@ def check_tags(app):
             return (None, 'Tags update mode only works for git repositories currently')
 
         # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
+        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
         vcs.gotorevision('origin/master')
 
         if len(app['builds']) == 0:
@@ -91,7 +91,7 @@ def check_tags(app):
 # caution, because it's inappropriate for many projects.
 # Returns (None, "a message") if this didn't work, or (version, vercode) for
 # the details of the current version.
-def check_repomanifest(app):
+def check_repomanifest(app, sdk_path):
 
     try:
 
@@ -101,7 +101,7 @@ def check_repomanifest(app):
             return (None, 'RepoManifest update mode only works for git repositories currently')
 
         # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
+        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
         vcs.gotorevision('origin/master')
 
         if len(app['builds']) == 0:
@@ -201,9 +201,9 @@ def main():
             if mode == 'Market':
                 (version, vercode) = check_market(app)
             elif mode == 'Tags':
-                (version, vercode) = check_tags(app)
+                (version, vercode) = check_tags(app, sdk_path)
             elif mode == 'RepoManifest':
-                (version, vercode) = check_repomanifest(app)
+                (version, vercode) = check_repomanifest(app, sdk_path)
             elif mode == 'None':
                 version = None
                 vercode = 'Checking disabled'
