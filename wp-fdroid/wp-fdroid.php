@@ -241,7 +241,7 @@ class FDroid
 
 				// Output app information
 				$out='<div id="appheader">';
-				$out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$icon.'" width=48></div>';
+				$out.='<div style="float:left;padding-right:10px;"><img src="' . site_url() . '/repo/icons/'.$icon.'" width=48></div>';
 				$out.='<p><span style="font-size:20px">'.$name."</span>";
 				$out.="<br>".$summary."</p>";
 				$out.="</div>";
@@ -690,7 +690,7 @@ class FDOutList
 		$out.='<a href="'.makelink($query_vars, array('fdid'=>$appinfo['id'])).'">';
 		$out.='<div id="appheader">';
 
-		$out.='<div style="float:left;padding-right:10px;"><img src="http://f-droid.org/repo/icons/'.$appinfo['icon'].'" style="width:48px;border:none;"></div>';
+                $out.='<div style="float:left;padding-right:10px;"><img src="' . site_url() . '/repo/icons/'.$appinfo['icon'].'" style="width:48px;border:none;"></div>';
 
 		$out.='<div style="float:right;">';
 		$out.='<p>Details...</p>';
@@ -739,7 +739,7 @@ class FDOutGrid
 		$out.='<div id="appheader" style="text-align:center;width:110px;">';
 
 		$out.='<a href="'.$link.'" style="border-bottom-style:none;">';
-		$out.='<img src="http://f-droid.org/repo/icons/'.$appinfo['icon'].'" style="width:48px;border-width:0;padding-top:5px;padding-bottom:5px;"><br/>';
+		$out.='<img src="' . site_url() . '/repo/icons/'.$appinfo['icon'].'" style="width:48px;border-width:0;padding-top:5px;padding-bottom:5px;"><br/>';
 		$out.=$appinfo['name'].'<br/>';
 		$out.='</a>';
 
@@ -813,7 +813,7 @@ function widget_fdroidlatest($args) {
 			$app = explode("\t", $buffer);
 			echo '<a href="/repository/browse/?fdid='.$app[0].'">';
 			if(isset($app[2]) && trim($app[2])) {
-				echo '<img src="http://f-droid.org/repo/icons/'.$app[2].'" style="width:32px;border:none;float:right;" />';
+				echo '<img src="' . site_url() . '/repo/icons/'.$app[2].'" style="width:32px;border:none;float:right;" />';
 			}
 			echo $app[1].'<br />';
 			if(isset($app[3]) && trim($app[3])) {
