@@ -139,10 +139,11 @@ def update_wiki(apps, apks, verbose=False):
         # with an redirect to itself! (Although it seems like an odd
         # scenario this happens a lot, e.g. where there is metadata but no
         # builds or binaries to extract a name from.
-        if app['Name'] == pagename:
+        apppagename = app['Name'].replace('_', ' ')
+        if apppagename == pagename:
             noclobber = True
         if not noclobber:
-            generated_pages[app['Name']] = "#REDIRECT [[" + pagename + "]]\n[[Category:" + wikicat + "]]"
+            generated_pages[apppagename] = "#REDIRECT [[" + pagename + "]]\n[[Category:" + wikicat + "]]"
 
     catpages = site.Pages['Category:' + wikicat]
     existingpages = []
