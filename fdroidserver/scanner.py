@@ -34,6 +34,9 @@ from common import VCSException
 def main():
 
     # Read configuration...
+    global build_server_always, mvn3
+    build_server_always = False
+    mvn3 = "mvn3"
     execfile('config.py', globals())
 
 

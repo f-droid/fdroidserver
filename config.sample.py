@@ -8,6 +8,9 @@ ndk_path = "/path/to/android-ndk-r5"
 #You probably don't need to change this...
 javacc_path = "/usr/share/java"
 
+#Command for running maven 3 (could be mvn, mvn3, or a full path)
+mvn3 = "mvn3"
+
 repo_url = "http://f-droid.org/repo"
 repo_name = "FDroid"
 repo_icon = "fdroid-icon.png"

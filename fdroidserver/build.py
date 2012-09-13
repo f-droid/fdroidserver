@@ -269,7 +269,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
 
     # Build the release...
     if thisbuild.has_key('maven'):
-        p = subprocess.Popen(['mvn3', 'clean', 'package',
+        p = subprocess.Popen([mvn3, 'clean', 'package',
             '-Dandroid.sdk.path=' + sdk_path,
             '-Dandroid.sign.debug=false'],
             cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -471,8 +471,9 @@ def main():
 
     global options
     # Read configuration...
-    global build_server_always
+    global build_server_always, mvn3
     build_server_always = False
+    mvn3 = "mvn3"
     execfile('config.py', globals())
     options, args = parse_commandline()
     if build_server_always:
