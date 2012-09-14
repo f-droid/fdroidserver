@@ -96,6 +96,8 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += "We currently have no versions of this app available."
         elif not gotcurrentver:
             wikidata += "We don't have the current version of this app."
+        else:
+            wikidata += "We have the current version of this app."
         wikidata += " (Check mode: " + app['Update Check Mode'] + ")\n\n"
         if len(app['Current Version']) > 0:
             wikidata += "The current (recommended) version is " + app['Current Version']
