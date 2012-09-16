@@ -709,16 +709,29 @@ def getsrclib(spec, extlib_dir, sdk_path):
             raise BuildException('Error updating ActionBarSherlock project')
         return libdir
 
+    if name == 'Amazing-ListView':
+        sdir = os.path.join(extlib_dir, 'Amazing-ListView')
+        vcs = getvcs('git-svn',
+	    'http://android-amazing-listview.googlecode.com/svn/trunk', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'AmazingListView')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating Amazing-ListView project')
+        return libdir
+
     if name == 'ViewPagerIndicator':
         sdir = os.path.join(extlib_dir, 'ViewPagerIndicator')
         vcs = getvcs('git',
-            'https://github.com/mariotaku/viewpagerindicator.git', sdir, sdk_path)
+            'https://github.com/JakeWharton/Android-ViewPagerIndicator.git', sdir, sdk_path)
         vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'library')
         if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
             'update', 'project', '-p',
-            sdir]) != 0:
-            raise BuildException('Error updating ViewPagerIndicator project')
-        return sdir
+            libdir]) != 0:
+            raise BuildException('Error updating Android-ViewPagerIndicator project')
+        return libdir
 
     if name == 'UITableView':
         sdir = os.path.join(extlib_dir, 'UITableView')
@@ -805,6 +818,17 @@ def getsrclib(spec, extlib_dir, sdk_path):
         vcs.gotorevision(ref)
         if subprocess.call([mvn3, 'install'], cwd=sdir) != 0:
             raise BuildException("Maven build failed for BitcoinJWallet srclib")
+        return sdir
+
+    if name == 'Android-Color-Picker':
+        sdir = os.path.join(extlib_dir, 'Color-Picker')
+        vcs = getvcs('git',
+            'https://github.com/brk3/android-color-picker.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating Color-Picker project')
         return sdir
 
     raise BuildException('Unknown srclib ' + name)
