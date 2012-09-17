@@ -30,7 +30,7 @@ from xml.dom.minidom import Document
 from optparse import OptionParser
 import time
 import common
-
+from common import MetaDataException
 
 # Update the wiki. 'apps' is a list of all applications and everything we know
 # about them, and 'apks' likewise. Set 'verbose' to True for verbose output.
@@ -66,7 +66,7 @@ def update_wiki(apps, apks, verbose=False):
         wikidata += " - [http://f-droid.org/repository/browse/?fdid=" + app['id'] + " view in repository]\n\n"
 
         wikidata += "=Description=\n"
-        wikidata += common.parse_description(app['Description']) + "\n"
+        wikidata += common.description_wiki(app['Description']) + "\n"
 
         # Get a list of all packages for this application...
         apklist = []
@@ -438,6 +438,10 @@ def main():
         el = doc.createElement(name)
         el.appendChild(doc.createTextNode(value))
         parent.appendChild(el)
+    def addElementCDATA(name, value, doc, parent):
+        el = doc.createElement(name)
+        el.appendChild(doc.createCDATASection(value))
+        parent.appendChild(el)
 
     root = doc.createElement("fdroid")
     doc.appendChild(root)
@@ -510,8 +514,15 @@ def main():
                 addElement('name', app['Name'], doc, apel)
                 addElement('summary', app['Summary'], doc, apel)
                 addElement('icon', app['icon'], doc, apel)
+                def linkres(link):
+                    for app in apps:
+                        if app['id'] == link:
+                            return ("fdroid.app:" + link, app['Name'])
+                    raise MetaDataException("Cannot resolve app id " + link)
                 addElement('description',
-                        common.parse_description(app['Description']), doc, apel)
+                        common.description_plain(app['Description'], linkres), doc, apel)
+                addElement('desc', 
+                        common.description_html(app['Description'], linkres), doc, apel)
                 addElement('license', app['License'], doc, apel)
                 if 'Category' in app:
                     # We put the first (primary) category in LAST, which will have
