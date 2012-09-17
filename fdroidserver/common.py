@@ -709,7 +709,7 @@ class DescriptionFormatter:
                 if index2 == -1:
                     urltxt = url
                 else:
-                    urltxt = url[index2 + 1]
+                    urltxt = url[index2 + 1:]
                     url = url[:index]
                 linkified_html += '<a href="' + url + '">' + cgi.escape(urltxt) + '</a>'
                 linkified_plain += urltxt
