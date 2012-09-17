@@ -820,7 +820,7 @@ def getsrclib(spec, extlib_dir, sdk_path):
             raise BuildException("Maven build failed for BitcoinJWallet srclib")
         return sdir
 
-    if name == 'Android-Color-Picker':
+    if name == 'Color-Picker':
         sdir = os.path.join(extlib_dir, 'Color-Picker')
         vcs = getvcs('git',
             'https://github.com/brk3/android-color-picker.git', sdir, sdk_path)
@@ -829,6 +829,28 @@ def getsrclib(spec, extlib_dir, sdk_path):
             'update', 'project', '-p',
             sdir]) != 0:
             raise BuildException('Error updating Color-Picker project')
+        return sdir
+
+    if name == 'Processing-Multitouch':
+        sdir = os.path.join(extlib_dir, 'Processing-Multitouch')
+        vcs = getvcs('git',
+	    'https://github.com/rjmarsan/AndroidProcessingMultitouch.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating Multitouch project')
+        return sdir
+
+    if name == 'NewQuickAction3D':
+        sdir = os.path.join(extlib_dir, 'NewQuickAction3D')
+        vcs = getvcs('git',
+	    'https://github.com/alt236/NewQuickAction3D.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating NewQuickAction3D project')
         return sdir
 
     raise BuildException('Unknown srclib ' + name)
