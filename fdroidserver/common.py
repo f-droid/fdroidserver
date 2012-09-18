@@ -853,6 +853,18 @@ def getsrclib(spec, extlib_dir, sdk_path):
             raise BuildException('Error updating NewQuickAction3D project')
         return sdir
 
+    if name == 'AnySoftKeyboard-API':
+        sdir = os.path.join(extlib_dir, 'AnySoftKeyboard-API')
+        vcs = getvcs('git',
+            'https://github.com/AnySoftKeyboard/AnySoftKeyboard-API.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating AnySoftKeyboard-API project')
+        return sdir
+
+
     raise BuildException('Unknown srclib ' + name)
 
 
