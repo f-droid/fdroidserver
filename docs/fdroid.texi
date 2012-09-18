@@ -583,8 +583,22 @@ A brief summary of what the application is.
 
 @cindex Description
 
-A full description of the application. This can span multiple lines, and is
-terminated by a line containing a single '.'.
+A full description of the application. This can span multiple lines (which
+should be kept to a maximum of 80 characters), and is terminated by a line
+containing a single '.'.
+
+Basic MediaWiki-style formatting can be used. Leaving a blank line starts a
+new paragraph. Surrounding text with @code{''} make it italic, and with
+@code{'''} makes it bold.
+
+You can link to another app in the repo by using @code{[[app.id]]}. The link
+will be made appropriately whether in the Android client, the web repo
+browser or the wiki. The link text will be the apps name.
+
+Links to web addresses can be done using @code{[http://example.com Text]}.
+
+Bulletted lists are done by simply starting each item with a @code{*} on
+a new line, and numbered lists are the same but using @code{#}.
 
 @node Repo Type
 @section Repo Type

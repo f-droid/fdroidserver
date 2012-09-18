@@ -21,6 +21,7 @@ import shutil
 import subprocess
 import time
 import operator
+import cgi
 
 def getvcs(vcstype, remote, local, sdk_path):
     if vcstype == 'git':
@@ -612,19 +613,177 @@ def read_metadata(verbose=False):
         apps.append(parse_metadata(metafile, verbose=verbose))
     return apps
 
+# Formatter for descriptions. Create an instance, and call parseline() with
+# each line of the description source from the metadata. At the end, call
+# end() and then text_plain, text_wiki and text_html will contain the result.
+class DescriptionFormatter:
+    stNONE = 0
+    stPARA = 1
+    stUL = 2
+    stOL = 3
+    bold = False
+    ital = False
+    state = stNONE
+    text_plain = ''
+    text_wiki = ''
+    text_html = ''
+    linkResolver = None
+    def __init__(self, linkres):
+        self.linkResolver = linkres
+    def endcur(self, notstates=None):
+        if notstates and self.state in notstates:
+            return
+        if self.state == self.stPARA:
+            self.endpara()
+        elif self.state == self.stUL:
+            self.endul()
+        elif self.state == self.stOL:
+            self.endol()
+    def endpara(self):
+        self.text_plain += '\n'
+        self.text_html += '</p>'
+        self.state = self.stNONE
+    def endul(self):
+        self.text_html += '</ul>'
+        self.state = self.stNONE
+    def endol(self):
+        self.text_html += '</ol>'
+        self.state = self.stNONE
+
+    def formatted(self, txt, html):
+        formatted = ''
+        if html:
+            txt = cgi.escape(txt)
+        while True:
+            index = txt.find("''")
+            if index == -1:
+                return formatted + txt
+            formatted += txt[:index]
+            txt = txt[index:]
+            if txt.startswith("'''"):
+                if html:
+                    if self.bold:
+                        formatted += '</b>'
+                    else:
+                        formatted += '<b>'
+                self.bold = not self.bold
+                txt = txt[3:]
+            else:
+                if html:
+                    if self.ital:
+                        formatted += '</i>'
+                    else:
+                        formatted += '<i>'
+                self.ital = not self.ital
+                txt = txt[2:]
+
+
+    def linkify(self, txt):
+        linkified_plain = ''
+        linkified_html = ''
+        while True:
+            index = txt.find("[")
+            if index == -1:
+                return (linkified_plain + self.formatted(txt, False), linkified_html + self.formatted(txt, True))
+            linkified_plain += self.formatted(txt[:index], False)
+            linkified_html += self.formatted(txt[:index], True)
+            txt = txt[index:]
+            if txt.startswith("[["):
+                index = txt.find("]]")
+                if index == -1:
+                    raise MetaDataException("Unterminated ]]")
+                url = txt[2:index]
+                if self.linkResolver:
+                    url, urltext = self.linkResolver(url)
+                else:
+                    urltext = url
+                linkified_html += '<a href="' + url + '">' + cgi.escape(urltext) + '</a>'
+                linkified_plain += urltext
+                txt = txt[index+2:]
+            else:
+                index = txt.find("]")
+                if index == -1:
+                    raise MetaDataException("Unterminated ]")
+                url = txt[2:index]
+                index2 = url.find(' ')
+                if index2 == -1:
+                    urltxt = url
+                else:
+                    urltxt = url[index2 + 1:]
+                    url = url[:index]
+                linkified_html += '<a href="' + url + '">' + cgi.escape(urltxt) + '</a>'
+                linkified_plain += urltxt
+                if urltxt != url:
+                    linkified_plain += ' (' + url + ')'
+                txt = txt[index+1:]
+
+    def addtext(self, txt):
+        p, h = self.linkify(txt)
+        self.text_plain += p
+        self.text_html += h
+
+    def parseline(self, line):
+        self.text_wiki += line + '\n'
+        if len(line) == 0:
+            self.endcur()
+        elif line.startswith('*'):
+            self.endcur([self.stUL])
+            if self.state != self.stUL:
+                self.text_html += '<ul>'
+                self.state = self.stUL
+            self.text_html += '<li>'
+            self.text_plain += '*'
+            self.addtext(line[1:])
+            self.text_html += '</li>'
+        elif line.startswith('#'):
+            self.endcur([self.stOL])
+            if self.state != self.stOL:
+                self.text_html += '<ol>'
+                self.state = self.stOL
+            self.text_html += '<li>'
+            self.text_plain += '*' #TODO: lazy - put the numbers in!
+            self.addtext(line[1:])
+            self.text_html += '</li>'
+        else:
+            self.endcur([self.stPARA])
+            if self.state == self.stNONE:
+                self.text_html += '<p>'
+                self.state = self.stPARA
+            elif self.state == self.stPARA:
+                self.text_html += ' '
+                self.text_plain += ' '
+            self.addtext(line)
+
+    def end(self):
+        self.endcur()
 
 # Parse multiple lines of description as written in a metadata file, returning
-# a single string.
-def parse_description(lines):
-    text = ''
+# a single string in plain text format.
+def description_plain(lines, linkres):
+    ps = DescriptionFormatter(linkres)
     for line in lines:
-        if len(line) == 0:
-            text += '\n\n'
-        else:
-            if not text.endswith('\n') and len(text) > 0:
-                text += ' '
-            text += line
-    return text
+        ps.parseline(line)
+    ps.end()
+    return ps.text_plain
+
+# Parse multiple lines of description as written in a metadata file, returning
+# a single string in wiki format.
+def description_wiki(lines):
+    ps = DescriptionFormatter(None)
+    for line in lines:
+        ps.parseline(line)
+    ps.end()
+    return ps.text_wiki
+
+# Parse multiple lines of description as written in a metadata file, returning
+# a single string in HTML format.
+def description_html(lines,linkres):
+    ps = DescriptionFormatter(linkres)
+    for line in lines:
+        ps.parseline(line)
+    ps.end()
+    return ps.text_html
+
 
 
 # Extract some information from the AndroidManifest.xml at the given path.

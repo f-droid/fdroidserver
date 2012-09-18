@@ -126,6 +126,9 @@ def main():
     if url.startswith('https://github.com'):
         if url.endswith('/'):
             url = url[:-1]
+        if url.endswith('.git'):
+            print "A github URL should point to the project, not the git repo"
+            sys.exit(1)
         projecttype = 'github'
         repo = url + '.git'
         repotype = 'git'

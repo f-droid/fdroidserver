@@ -164,7 +164,7 @@ class FDroid
 						case "summary":
 							$summary=$el;
 							break;
-						case "description":
+						case "desc":
 							$desc=$el;
 							break;
 						case "license":
@@ -246,7 +246,7 @@ class FDroid
 				$out.="<br>".$summary."</p>";
 				$out.="</div>";
 
-				$out.="<p>".$desc."</p>";
+				$out.=str_replace('href="fdroid.app:', 'href="/repository/browse/?fdid=', $desc);
 
 				if(isset($antifeatures)) {
 					$antifeaturesArray = explode(',',$antifeatures);
@@ -640,7 +640,7 @@ class FDroid
 					case "summary":
 						$appinfo['summary']=$el;
 						break;
-					case "description":
+					case "desc":
 						$appinfo['description']=$el;
 						break;
 					case "license":
