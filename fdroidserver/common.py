@@ -1023,6 +1023,16 @@ def getsrclib(spec, extlib_dir, sdk_path):
             raise BuildException('Error updating AnySoftKeyboard-API project')
         return sdir
 
+    if name == 'File-Picker':
+        sdir = os.path.join(extlib_dir, 'File-Picker')
+        vcs = getvcs('hg',
+	    'https://code.google.com/p/android-file-picker/', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating File-Picker project')
+        return sdir
 
     raise BuildException('Unknown srclib ' + name)
 
