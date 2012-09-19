@@ -704,13 +704,13 @@ class DescriptionFormatter:
                 index = txt.find("]")
                 if index == -1:
                     raise MetaDataException("Unterminated ]")
-                url = txt[2:index]
+                url = txt[1:index]
                 index2 = url.find(' ')
                 if index2 == -1:
                     urltxt = url
                 else:
                     urltxt = url[index2 + 1:]
-                    url = url[:index]
+                    url = url[:index2]
                 linkified_html += '<a href="' + url + '">' + cgi.escape(urltxt) + '</a>'
                 linkified_plain += urltxt
                 if urltxt != url:
