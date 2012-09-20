@@ -426,6 +426,7 @@ def parse_metadata(metafile, **kw):
     thisinfo['Disabled'] = None
     thisinfo['AntiFeatures'] = None
     thisinfo['Update Check Mode'] = 'Market'
+    thisinfo['Auto Update Mode'] = 'None'
     thisinfo['Current Version'] = ''
     thisinfo['Current Version Code'] = '0'
     thisinfo['Repo Type'] = ''
@@ -594,6 +595,7 @@ def write_metadata(dest, app):
             mf.write('\n')
     if len(app['builds']) > 0:
         mf.write('\n')
+    writefield('Auto Update Mode')
     writefield('Update Check Mode')
     if len(app['Current Version']) > 0:
         writefield('Current Version')
