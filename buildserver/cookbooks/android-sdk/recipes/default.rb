@@ -29,8 +29,8 @@ execute "add-android-sdk-path" do
   not_if "grep #{sdk_loc} /home/#{user}/.bashrc"
 end
 
-%w{android-3 android-4 android-7 android-8 android-10
-   android-11 android-13 android-14 android-15 android-16}.each do |sdk|
+%w{android-3 android-4 android-7 android-8 android-10 android-11
+   android-12 android-13 android-14 android-15 android-16}.each do |sdk|
 
   script "add_sdk_#{sdk}" do
     interpreter "bash"
