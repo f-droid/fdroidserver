@@ -114,7 +114,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path):
         sshs = ssh.SSHClient()
         sshs.set_missing_host_key_policy(ssh.AutoAddPolicy())
         sshs.connect(sshconfig['hostname'], username=sshconfig['user'],
-            port=int(sshconfig['port']), timeout=10, look_for_keys=False,
+            port=int(sshconfig['port']), timeout=60, look_for_keys=False,
             key_filename=sshconfig['identityfile'])
 
         # Get an SFTP connection...
