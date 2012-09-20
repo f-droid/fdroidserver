@@ -843,10 +843,12 @@ class MetaDataException(Exception):
 
 
 # Get the specified source library.
-# Returns the path to it.
+# Returns the path to it. Normally this is the path to be used when referencing
+# it, which may be a subdirectory of the actual project. If you want the base
+# directory of the project, pass 'basepath=True'.
 # TODO: These are currently just hard-coded in this method. It will be a
 # metadata-driven system eventually, but not yet.
-def getsrclib(spec, extlib_dir, sdk_path):
+def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
     name, ref = spec.split('@')
 
     if name == 'GreenDroid':
@@ -866,6 +868,8 @@ def getsrclib(spec, extlib_dir, sdk_path):
             'update', 'project', '-p',
             libdir]) != 0:
             raise BuildException('Error updating ActionBarSherlock project')
+        if basepath:
+            return sdir
         return libdir
 
     if name == 'Amazing-ListView':
@@ -878,6 +882,8 @@ def getsrclib(spec, extlib_dir, sdk_path):
             'update', 'project', '-p',
             libdir]) != 0:
             raise BuildException('Error updating Amazing-ListView project')
+        if basepath:
+            return sdir
         return libdir
 
     if name == 'ViewPagerIndicator':
@@ -890,6 +896,8 @@ def getsrclib(spec, extlib_dir, sdk_path):
             'update', 'project', '-p',
             libdir]) != 0:
             raise BuildException('Error updating Android-ViewPagerIndicator project')
+        if basepath:
+            return sdir
         return libdir
 
     if name == 'UITableView':
@@ -902,6 +910,8 @@ def getsrclib(spec, extlib_dir, sdk_path):
             'update', 'project', '-p',
             libdir]) != 0:
             raise BuildException('Error updating UITableView project')
+        if basepath:
+            return sdir
         return libdir
 
     if name == 'ViewPagerTabs':
@@ -929,6 +939,8 @@ def getsrclib(spec, extlib_dir, sdk_path):
             'update', 'project', '-p',
             libdir]) != 0:
             raise BuildException('Error updating ActionBar project')
+        if basepath:
+            return sdir
         return libdir
 
     if name == 'ActionBarNW':
@@ -941,6 +953,8 @@ def getsrclib(spec, extlib_dir, sdk_path):
             'update', 'project', '-p',
             libdir]) != 0:
             raise BuildException('Error updating ActionBarNW project')
+        if basepath:
+            return sdir
         return libdir
 
     if name == 'FacebookSDK':
@@ -953,6 +967,8 @@ def getsrclib(spec, extlib_dir, sdk_path):
             'update', 'project', '-p',
             libdir]) != 0:
             raise BuildException('Error updating FacebookSDK project')
+        if basepath:
+            return sdir
         return libdir
 
     if name == 'OI':
