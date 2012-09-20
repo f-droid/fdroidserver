@@ -181,7 +181,9 @@ def main():
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     parser.add_option("-p", "--package", default=None,
-                      help="Build only the specified package")
+                      help="Check only the specified package")
+    parser.add_option("--auto", action="store_true", default=False,
+                      help="Process auto-updates")
     (options, args) = parser.parse_args()
 
     # Get all apps...
@@ -196,6 +198,8 @@ def main():
 
     for app in apps:
             print "Processing " + app['id'] + '...'
+
+            writeit = False
 
             mode = app['Update Check Mode']
             if mode == 'Market':
@@ -219,8 +223,38 @@ def main():
                 print '...updating to version:' + version + ' vercode:' + vercode
                 app['Current Version'] = version
                 app['Current Version Code'] = str(int(vercode))
-                metafile = os.path.join('metadata', app['id'] + '.txt')
-                common.write_metadata(metafile, app)
+                writeit = True
+
+            if options.auto:
+                mode = app['Auto Update Mode']
+                if mode == 'None':
+                    pass
+                elif mode.startswith('Version '):
+                    pattern = mode[8:]
+                    gotcur = False
+                    latest = None
+                    for build in app['builds']:
+                        if build['vercode'] == app['Current Version Code']:
+                            gotcur = True
+                        if not latest or build['vercode'] > latest['vercode']:
+                            latest = build
+                    if not gotcur:
+                        newbuild = latest.copy()
+                        del newbuild['origlines']
+                        newbuild['vercode'] = app['Current Version Code']
+                        newbuild['version'] = app['Current Version']
+                        print "...auto-generating build for " + newbuild['version']
+                        commit = pattern.replace('%v', newbuild['version'])
+                        commit = commit.replace('%c', newbuild['vercode'])
+                        newbuild['commit'] = commit
+                        app['builds'].append(newbuild)
+                        writeit = True
+                else:
+                    print 'Invalid auto update mode'
+
+                if writeit:
+                    metafile = os.path.join('metadata', app['id'] + '.txt')
+                    common.write_metadata(metafile, app)
 
     print "Finished."
 

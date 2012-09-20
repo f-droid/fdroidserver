@@ -114,7 +114,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path):
         sshs = ssh.SSHClient()
         sshs.set_missing_host_key_policy(ssh.AutoAddPolicy())
         sshs.connect(sshconfig['hostname'], username=sshconfig['user'],
-            port=int(sshconfig['port']), timeout=10, look_for_keys=False,
+            port=int(sshconfig['port']), timeout=60, look_for_keys=False,
             key_filename=sshconfig['identityfile'])
 
         # Get an SFTP connection...
@@ -179,14 +179,16 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path):
         if thisbuild.has_key('srclibs'):
             for lib in thisbuild['srclibs'].split(';'):
                 name, _ = lib.split('@')
-                srclibpaths.append((name, common.getsrclib(lib, 'build/extlib', sdk_path)))
+                srclibpaths.append((name, common.getsrclib(lib, 'build/extlib', sdk_path, basepath=True)))
         # If one was used for the main source, add that too.
         basesrclib = vcs.getsrclib()
         if basesrclib:
             srclibpaths.append(basesrclib)
-        print "Sending srclibs:"
         for _, lib in srclibpaths:
+            print "Sending srclib '" + lib + "'"
             ftp.chdir('/home/vagrant/build/extlib')
+            if not os.path.exists(lib):
+                raise BuildException("Missing srclib directory '" + lib + "'")
             send_dir(lib)
 
         # Execute the build script...
