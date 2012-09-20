@@ -235,6 +235,21 @@ def main():
     else:
         apkcache = {}
     cachechanged = False
+
+    # Check repo directory for disabled builds and remove them...
+    for app in apps:
+        for build in app['builds']:
+            if build['commit'].startswith('!'):
+                apkfilename = app['id'] + '_' + str(build['vercode']) + '.apk'
+                apkpath = os.path.join('repo', apkfilename)
+                srcpath = apkfilename[:-4] + "_src.tar.gz"
+                for name in [apkpath, srcpath]:
+                    if os.path.exists(name):
+                        print "Deleting disabled build output " + apkfilename
+                        os.remove(name)
+                if apkcache.has_key(apkfilename):
+                    del apkcache[apkfilename]
+
     apks = []
     for apkfile in glob.glob(os.path.join('repo','*.apk')):
 
