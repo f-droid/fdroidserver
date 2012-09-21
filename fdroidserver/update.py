@@ -102,12 +102,14 @@ def update_wiki(apps, apks, verbose=False):
         if len(app['Current Version']) > 0:
             wikidata += "The current (recommended) version is " + app['Current Version']
             wikidata += " (version code " + app['Current Version Code'] + ").\n\n"
+        validapks = 0
         for apk in apklist:
             wikidata += "==" + apk['version'] + "==\n"
 
             if 'buildproblem' in apk:
                 wikidata += "We can't build this version: " + apk['buildproblem'] + "\n\n"
             else:
+                validapks += 1
                 wikidata += "This version is built and signed by "
                 if apk.has_key('srcname'):
                     wikidata += "F-Droid, and guaranteed to correspond to the source tarball published with it.\n\n"
@@ -116,7 +118,7 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += "Version code: " + str(apk['versioncode']) + '\n'
 
         wikidata += '\n[[Category:' + wikicat + ']]\n'
-        if len(apklist) == 0 and not app['Disabled']:
+        if validapks == 0 and not app['Disabled']:
             wikidata += '\n[[Category:Apps with no packages]]\n'
         elif cantupdate and not app['Disabled']:
             wikidata += "\n[[Category:Apps we can't update]]\n"
