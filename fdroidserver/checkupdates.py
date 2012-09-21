@@ -197,64 +197,64 @@ def main():
             sys.exit(1)
 
     for app in apps:
-            print "Processing " + app['id'] + '...'
+        print "Processing " + app['id'] + '...'
 
-            writeit = False
+        writeit = False
 
-            mode = app['Update Check Mode']
-            if mode == 'Market':
-                (version, vercode) = check_market(app)
-            elif mode == 'Tags':
-                (version, vercode) = check_tags(app, sdk_path)
-            elif mode == 'RepoManifest':
-                (version, vercode) = check_repomanifest(app, sdk_path)
-            elif mode == 'None':
-                version = None
-                vercode = 'Checking disabled'
+        mode = app['Update Check Mode']
+        if mode == 'Market':
+            (version, vercode) = check_market(app)
+        elif mode == 'Tags':
+            (version, vercode) = check_tags(app, sdk_path)
+        elif mode == 'RepoManifest':
+            (version, vercode) = check_repomanifest(app, sdk_path)
+        elif mode == 'None':
+            version = None
+            vercode = 'Checking disabled'
+        else:
+            version = None
+            vercode = 'Invalid update check method'
+
+        if not version:
+            print "..." + vercode
+        elif vercode == app['Current Version Code'] and version == app['Current Version']:
+            print "...up to date"
+        else:
+            print '...updating to version:' + version + ' vercode:' + vercode
+            app['Current Version'] = version
+            app['Current Version Code'] = str(int(vercode))
+            writeit = True
+
+        if options.auto:
+            mode = app['Auto Update Mode']
+            if mode == 'None':
+                pass
+            elif mode.startswith('Version '):
+                pattern = mode[8:]
+                gotcur = False
+                latest = None
+                for build in app['builds']:
+                    if build['vercode'] == app['Current Version Code']:
+                        gotcur = True
+                    if not latest or build['vercode'] > latest['vercode']:
+                        latest = build
+                if not gotcur:
+                    newbuild = latest.copy()
+                    del newbuild['origlines']
+                    newbuild['vercode'] = app['Current Version Code']
+                    newbuild['version'] = app['Current Version']
+                    print "...auto-generating build for " + newbuild['version']
+                    commit = pattern.replace('%v', newbuild['version'])
+                    commit = commit.replace('%c', newbuild['vercode'])
+                    newbuild['commit'] = commit
+                    app['builds'].append(newbuild)
+                    writeit = True
             else:
-                version = None
-                vercode = 'Invalid update check method'
+                print 'Invalid auto update mode'
 
-            if not version:
-                print "..." + vercode
-            elif vercode == app['Current Version Code'] and version == app['Current Version']:
-                print "...up to date"
-            else:
-                print '...updating to version:' + version + ' vercode:' + vercode
-                app['Current Version'] = version
-                app['Current Version Code'] = str(int(vercode))
-                writeit = True
-
-            if options.auto:
-                mode = app['Auto Update Mode']
-                if mode == 'None':
-                    pass
-                elif mode.startswith('Version '):
-                    pattern = mode[8:]
-                    gotcur = False
-                    latest = None
-                    for build in app['builds']:
-                        if build['vercode'] == app['Current Version Code']:
-                            gotcur = True
-                        if not latest or build['vercode'] > latest['vercode']:
-                            latest = build
-                    if not gotcur:
-                        newbuild = latest.copy()
-                        del newbuild['origlines']
-                        newbuild['vercode'] = app['Current Version Code']
-                        newbuild['version'] = app['Current Version']
-                        print "...auto-generating build for " + newbuild['version']
-                        commit = pattern.replace('%v', newbuild['version'])
-                        commit = commit.replace('%c', newbuild['vercode'])
-                        newbuild['commit'] = commit
-                        app['builds'].append(newbuild)
-                        writeit = True
-                else:
-                    print 'Invalid auto update mode'
-
-                if writeit:
-                    metafile = os.path.join('metadata', app['id'] + '.txt')
-                    common.write_metadata(metafile, app)
+        if writeit:
+            metafile = os.path.join('metadata', app['id'] + '.txt')
+            common.write_metadata(metafile, app)
 
     print "Finished."
 
