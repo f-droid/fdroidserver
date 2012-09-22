@@ -1064,6 +1064,17 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating EmulatorView project')
         return libdir
 
+    if name == 'Tree-View-List':
+        sdir = os.path.join(extlib_dir, 'Tree-View-List')
+        vcs = getvcs('hg',
+	    'https://code.google.com/p/tree-view-list-android/', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating Tree-List-View project')
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
