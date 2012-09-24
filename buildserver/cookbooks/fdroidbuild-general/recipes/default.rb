@@ -1,5 +1,5 @@
 
-%w{ant ant-contrib autoconf maven javacc python git-core mercurial subversion bzr git-svn make perlmagick}.each do |pkg|
+%w{ant ant-contrib autoconf libtool maven javacc python git-core mercurial subversion bzr git-svn make perlmagick}.each do |pkg|
   package pkg do
     action :install
   end
