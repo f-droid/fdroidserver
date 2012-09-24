@@ -1275,8 +1275,11 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
             prebuild = prebuild.replace('$$' + name + '$$', libpath)
         prebuild = prebuild.replace('$$SDK$$', sdk_path)
         prebuild = prebuild.replace('$$NDK$$', ndk_path)
-        if subprocess.call(prebuild, cwd=root_dir, shell=True) != 0:
-            raise BuildException("Error running pre-build command")
+        p = subprocess.Popen(prebuild, cwd=root_dir, shell=True,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        if p.returncode != 0:
+            raise BuildException("Error running pre-build command", out, err)
 
     # Special case init functions for funambol...
     if build.get('initfun', 'no')  == "yes":
