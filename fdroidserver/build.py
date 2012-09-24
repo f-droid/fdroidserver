@@ -83,10 +83,30 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path):
         print "Starting new build server"
         if subprocess.call(['vagrant', 'up'], cwd='builder') != 0:
             raise BuildException("Failed to start build server")
+
+        # Open SSH connection to make sure it's working and ready...
+        print "Connecting to virtual machine..."
+        subprocess.call('vagrant ssh-config >sshconfig',
+                cwd='builder', shell=True)
+        vagranthost = 'default' # Host in ssh config file
+        sshconfig = ssh.SSHConfig()
+        sshf = open('builder/sshconfig', 'r')
+        sshconfig.parse(sshf)
+        sshf.close()
+        sshconfig = sshconfig.lookup(vagranthost)
+        sshs = ssh.SSHClient()
+        sshs.set_missing_host_key_policy(ssh.AutoAddPolicy())
+        sshs.connect(sshconfig['hostname'], username=sshconfig['user'],
+            port=int(sshconfig['port']), timeout=60, look_for_keys=False,
+            key_filename=sshconfig['identityfile'])
+
         print "Saving clean state of new build server"
         if subprocess.call(['vagrant', 'snap', 'take', '-n', 'fdroidclean'],
                 cwd='builder') != 0:
             raise BuildException("Failed to take snapshot")
+        print "Restarting new build server"
+        if subprocess.call(['vagrant', 'up'], cwd='builder') != 0:
+            raise BuildException("Failed to start build server")
         # Make sure it worked...
         p = subprocess.Popen(['vagrant', 'snap', 'list'],
             cwd='builder', stdout=subprocess.PIPE)
