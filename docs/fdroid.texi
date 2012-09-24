@@ -1025,12 +1025,15 @@ With this base box installed, you can then go to the @code{fdroidserver}
 directory and run this:
 
 @example
-./makebuildserver.sh
+./makebuildserver.py
 @end example
 
-This will take a long time - most of it spent installing the necessary parts
-of the Android SDK for all the various platforms. Luckily you only need to
-do it occasionally.
+This will take a long time, and use a lot of bandwidth - most of it spent
+installing the necessary parts of the Android SDK for all the various
+platforms. Luckily you only need to do it occasionally. Once you have a
+working build server image, if the recipes change (e.g. when packages need
+to be added) you can just run that script again and the existing one will
+be updated in place.
 
 Once it's complete you'll have a new base box called 'buildserver' which is
 what's used for the actual builds. You can then build packages as normal,
