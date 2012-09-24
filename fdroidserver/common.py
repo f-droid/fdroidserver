@@ -1052,6 +1052,29 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating File-Picker project')
         return sdir
 
+    if name == 'EmulatorView':
+        sdir = os.path.join(extlib_dir, 'EmulatorView')
+        vcs = getvcs('git',
+            'https://github.com/jackpal/Android-Terminal-Emulator.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'libraries', 'emulatorview')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating EmulatorView project')
+        return libdir
+
+    if name == 'Tree-View-List':
+        sdir = os.path.join(extlib_dir, 'Tree-View-List')
+        vcs = getvcs('hg',
+	    'https://code.google.com/p/tree-view-list-android/', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating Tree-List-View project')
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
