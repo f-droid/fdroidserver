@@ -236,7 +236,7 @@ def main():
                 for build in app['builds']:
                     if build['vercode'] == app['Current Version Code']:
                         gotcur = True
-                    if not latest or build['vercode'] > latest['vercode']:
+                    if not latest or int(build['vercode']) > int(latest['vercode']):
                         latest = build
                 if not gotcur:
                     newbuild = latest.copy()
