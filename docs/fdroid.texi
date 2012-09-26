@@ -48,6 +48,7 @@ Free Documentation License".
 * Metadata::
 * Update Processing::
 * Build Server::
+* Signing::
 * GNU Free Documentation License::
 * Index::
 @end menu
@@ -1040,6 +1041,45 @@ what's used for the actual builds. You can then build packages as normal,
 but with the addition of the @code{--server} flag to @code{fdroid build} to
 instruct it to do all the hard work within the virtual machine, which is
 reset to a completely clean state for every package built.
+
+@node Signing
+@chapter Signing
+
+There are two kinds of signing involved in running a repository - the signing
+of the APK files generated from source builds, and the signing of the repo
+index itself. The latter is optional, but very strongly recommended.
+
+@section Repo Index Signing
+
+When setting up the repository, one of the first steps should be to generate
+a signing key for the repository index. This will also create a keystore, which
+is a file that can be used to hold this and all other keys used. Consider the
+location, security and backup status of this file carefully, then create it as
+follows:
+
+@code{keytool -genkey -v -keystore my.keystore -alias repokey -keyalg RSA -keysize 2048 -validity 10000}
+
+In the above, replace 'my.keystore' with the name of the keystore file to be
+created, and 'repokey' with a name to identify the repo index key by.
+
+You'll be asked for a password for the keystore, AND a password for the key.
+They shouldn't be the same. In between, you'll be asked for some identifying
+details which will go in the certificate.
+
+The two passwords entered go into @code{config.py}, as @code{keystorepass} and
+@code{keypass} respectively. The path to the keystore file, and the alias you
+chose for the key also go into that file, as @code{keystore} and
+@code{repo_keyalias} respectively.
+
+@section Package Signing
+
+With the repo index signing configured, all that remains to be done for package
+signing to work is to set the @code{keydname} field in @code{config.py} to
+contain the same identifying details you entered before.
+
+A new key will be generated using these details, for each application that is
+built. (If a specific key is required for a particular application, this system
+can be overridden using the @code{keyaliases} config settings.
 
 
 @node GNU Free Documentation License
