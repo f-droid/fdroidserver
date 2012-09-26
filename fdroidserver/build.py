@@ -57,8 +57,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path):
                     subprocess.call(['vagrant', 'suspend'], cwd='builder')
                 if subprocess.call(['vagrant', 'snap', 'go', 'fdroidclean'],
                     cwd='builder') == 0:
-                    if subprocess.call(['vagrant', 'up'], cwd='builder') != 0:
-                        raise BuildException("Failed to start build server")
+                    #if subprocess.call(['vagrant', 'up'], cwd='builder') != 0:
+                    #    raise BuildException("Failed to start build server")
                     print "...reset to snapshot - server is valid"
                     vm_ok = True
                 else:
@@ -97,8 +97,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path):
         sshs = ssh.SSHClient()
         sshs.set_missing_host_key_policy(ssh.AutoAddPolicy())
         sshs.connect(sshconfig['hostname'], username=sshconfig['user'],
-            port=int(sshconfig['port']), timeout=60, look_for_keys=False,
+            port=int(sshconfig['port']), timeout=300, look_for_keys=False,
             key_filename=sshconfig['identityfile'])
+        sshs.close()
 
         print "Saving clean state of new build server"
         if subprocess.call(['vagrant', 'snap', 'take', '-n', 'fdroidclean'],
@@ -134,7 +135,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path):
         sshs = ssh.SSHClient()
         sshs.set_missing_host_key_policy(ssh.AutoAddPolicy())
         sshs.connect(sshconfig['hostname'], username=sshconfig['user'],
-            port=int(sshconfig['port']), timeout=60, look_for_keys=False,
+            port=int(sshconfig['port']), timeout=300, look_for_keys=False,
             key_filename=sshconfig['identityfile'])
 
         # Get an SFTP connection...
@@ -214,13 +215,16 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path):
         # Execute the build script...
         print "Starting build..."
         chan = sshs.get_transport().open_session()
-        stdoutf = chan.makefile('rb')
-        stderrf = chan.makefile_stderr('rb')
+        stdoutf = chan.makefile('r')
+        stderrf = chan.makefile_stderr('r')
         chan.exec_command('python build.py --on-server -p ' +
                 app['id'] + ' --vercode ' + thisbuild['vercode'])
+        output = ''
+        error = ''
+        while not chan.exit_status_ready():
+            output += stdoutf.read()
+            error += stderrf.read()
         returncode = chan.recv_exit_status()
-        output = stdoutf.read()
-        error = stderrf.read()
         if returncode != 0:
             raise BuildException("Build.py failed on server for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
 
@@ -238,6 +242,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path):
     finally:
 
         # Suspend the build server.
+        print "Suspending build server"
         subprocess.call(['vagrant', 'suspend'], cwd='builder')
 
 
@@ -566,21 +571,24 @@ def main():
                         options.install, options.force, options.verbose):
                     build_succeeded.append(app)
             except BuildException as be:
+                logfile = open(os.path.join(log_dir, app['id'] + '.log'), 'a+')
+                logfile.write(str(be))
+                logfile.close()
                 if options.stop:
-                    raise
+                    sys.exit(1)
                 print "Could not build app %s due to BuildException: %s" % (app['id'], be)
                 logfile = open(os.path.join(log_dir, app['id'] + '.log'), 'a+')
                 logfile.write(str(be))
-                logfile.close
+                logfile.close()
                 failed_apps[app['id']] = be
             except VCSException as vcse:
                 if options.stop:
-                    raise
+                    sys.exit(1)
                 print "VCS error while building app %s: %s" % (app['id'], vcse)
                 failed_apps[app['id']] = vcse
             except Exception as e:
                 if options.stop:
-                    raise
+                    sys.exit(1)
                 print "Could not build app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
                 failed_apps[app['id']] = e
 
@@ -596,6 +604,7 @@ def main():
     if len(failed_apps) > 0:
         print str(len(failed_apps)) + ' builds failed'
 
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()
