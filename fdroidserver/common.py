@@ -613,6 +613,21 @@ def read_metadata(verbose=False):
         if verbose:
             print "Reading " + metafile
         apps.append(parse_metadata(metafile, verbose=verbose))
+
+    # Parse all descriptions at load time, just to ensure cross-referencing
+    # errors are caught early rather than when they hit the build server.
+    def linkres(link):
+        for app in apps:
+            if app['id'] == link:
+                return ("fdroid.app:" + link, "Dummy name - don't know yet")
+        raise MetaDataException("Cannot resolve app id " + link)
+    for app in apps:
+        try:
+            description_html(app['Description'], linkres)
+        except Exception, e:
+            raise MetaDataException("Problem with description of " + app['id'] +
+                    " - " + str(e))
+
     return apps
 
 # Formatter for descriptions. Create an instance, and call parseline() with
