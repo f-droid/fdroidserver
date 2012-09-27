@@ -210,7 +210,7 @@ def main():
     if options.clean and os.path.exists(icon_dir):
         shutil.rmtree(icon_dir)
     if not os.path.exists(icon_dir):
-        os.mkdir(icon_dir)
+        os.makedirs(icon_dir)
 
     warnings = 0
 
