@@ -33,7 +33,8 @@ from common import BuildException
 from common import VCSException
 
 
-def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path):
+# Note that 'force' here also implies test mode.
+def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
     """Do a build on the build server."""
 
     import ssh
@@ -217,8 +218,11 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path):
         chan = sshs.get_transport().open_session()
         stdoutf = chan.makefile('r')
         stderrf = chan.makefile_stderr('r')
-        chan.exec_command('python build.py --on-server -p ' +
-                app['id'] + ' --vercode ' + thisbuild['vercode'])
+        cmdline = 'python build.py --on-server'
+        if force:
+            cmdline += ' --force --test'
+        cmdline += ' -p ' + app['id'] + ' --vercode ' + thisbuild['vercode']
+        chan.exec_command(cmdline)
         output = ''
         error = ''
         while not chan.exit_status_ready():
@@ -229,7 +233,10 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path):
             raise BuildException("Build.py failed on server for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
 
         # Retrieve the built files...
-        ftp.chdir('/home/vagrant/unsigned')
+        if(force):
+            ftp.chdir('/home/vagrant/tmp')
+        else:
+            ftp.chdir('/home/vagrant/unsigned')
         apkfile = app['id'] + '_' + thisbuild['vercode'] + '.apk'
         tarball = app['id'] + '_' + thisbuild['vercode'] + '_src' + '.tar.gz'
         try:
@@ -436,7 +443,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, extlib_dir, tmp_dir,
         # grabbing the source now.
         vcs.gotorevision(thisbuild['commit'])
 
-        build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path)
+        build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force)
     else:
         build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install, force, verbose)
     return True
