@@ -860,6 +860,13 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs.gotorevision(ref)
         return os.path.join(sdir, 'GreenDroid')
 
+    if name == 'Dropbear':
+        sdir = os.path.join(extlib_dir, 'Dropbear')
+        vcs = getvcs('git',
+            'https://github.com/CyanogenMod/android_external_dropbear.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     if name == 'ActionBarSherlock':
         sdir = os.path.join(extlib_dir, 'ActionBarSherlock')
         vcs = getvcs('git',
