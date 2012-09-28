@@ -607,26 +607,27 @@ def write_metadata(dest, app):
 
 # Read all metadata. Returns a list of 'app' objects (which are dictionaries as
 # returned by the parse_metadata function.
-def read_metadata(verbose=False):
+def read_metadata(verbose=False, xref=True):
     apps = []
     for metafile in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
         if verbose:
             print "Reading " + metafile
         apps.append(parse_metadata(metafile, verbose=verbose))
 
-    # Parse all descriptions at load time, just to ensure cross-referencing
-    # errors are caught early rather than when they hit the build server.
-    def linkres(link):
+    if xref:
+        # Parse all descriptions at load time, just to ensure cross-referencing
+        # errors are caught early rather than when they hit the build server.
+        def linkres(link):
+            for app in apps:
+                if app['id'] == link:
+                    return ("fdroid.app:" + link, "Dummy name - don't know yet")
+            raise MetaDataException("Cannot resolve app id " + link)
         for app in apps:
-            if app['id'] == link:
-                return ("fdroid.app:" + link, "Dummy name - don't know yet")
-        raise MetaDataException("Cannot resolve app id " + link)
-    for app in apps:
-        try:
-            description_html(app['Description'], linkres)
-        except Exception, e:
-            raise MetaDataException("Problem with description of " + app['id'] +
-                    " - " + str(e))
+            try:
+                description_html(app['Description'], linkres)
+            except Exception, e:
+                raise MetaDataException("Problem with description of " + app['id'] +
+                        " - " + str(e))
 
     return apps
 

@@ -467,7 +467,7 @@ def parse_commandline():
                       help="Use build server")
     parser.add_option("--resetserver", action="store_true", default=False,
                       help="Reset and create a brand new build server, even if the existing one appears to be ok.")
-    parser.add_option("--on-server", action="store_true", default=False,
+    parser.add_option("--on-server", dest="onserver", action="store_true", default=False,
                       help="Specify that we're running on the build server")
     parser.add_option("-f", "--force", action="store_true", default=False,
                       help="Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode.")
@@ -517,7 +517,7 @@ def main():
         sys.exit(1)
 
     # Get all apps...
-    apps = common.read_metadata(options.verbose)
+    apps = common.read_metadata(options.verbose, xref=not options.onserver)
 
     log_dir = 'logs'
     if not os.path.isdir(log_dir):
