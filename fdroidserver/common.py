@@ -1084,6 +1084,23 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             'update', 'project', '-p',
             libdir]) != 0:
             raise BuildException('Error updating EmulatorView project')
+        if basepath:
+            return sdir
+        return libdir
+
+#Leave the native code as a blob; submodules required for that
+    if name == 'Libpd':
+        sdir = os.path.join(extlib_dir, 'Libpd')
+        vcs = getvcs('git',
+	    'https://github.com/libpd/pd-for-android.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'PdCore')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('LibPd project')
+        if basepath:
+            return sdir
         return libdir
 
     if name == 'Tree-View-List':
@@ -1095,6 +1112,17 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             'update', 'project', '-p',
             sdir]) != 0:
             raise BuildException('Error updating Tree-List-View project')
+        return sdir
+
+    if name == 'Transdroid-Search':
+        sdir = os.path.join(extlib_dir, 'Transdroid-Search')
+        vcs = getvcs('git-svn',
+	    'http://transdroid-search.googlecode.com/svn/trunk/', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating Transdroid-Search project')
         return sdir
 
     raise BuildException('Unknown srclib ' + name)
