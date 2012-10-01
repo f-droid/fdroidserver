@@ -1114,15 +1114,11 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating Tree-List-View project')
         return sdir
 
-    if name == 'Transdroid-Search':
-        sdir = os.path.join(extlib_dir, 'Transdroid-Search')
-        vcs = getvcs('git-svn',
-	    'http://transdroid-search.googlecode.com/svn/trunk/', sdir, sdk_path)
+    if name == 'PrayTimes':
+        sdir = os.path.join(extlib_dir, 'PrayTimes')
+        vcs = getvcs('git',
+	    'https://github.com/ebraminio/PrayTimes.git', sdir, sdk_path)
         vcs.gotorevision(ref)
-        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
-            'update', 'project', '-p',
-            sdir]) != 0:
-            raise BuildException('Error updating Transdroid-Search project')
         return sdir
 
     raise BuildException('Unknown srclib ' + name)
