@@ -772,15 +772,15 @@ particular, literal backslashes should not be escaped.
 You can use $$name$$ to substitute the path to a referenced srclib - see
 the @code{srclib} directory for details of this.
 
-You can use $$SDK$$ and $$NDK$$ to substitute the paths to the android
-SDK and NDK directories respectively.
+You can use $$SDK$$, $$NDK$$ and $$MVN3$$ to substitute the paths to the
+android SDK and NDK directories, and maven 3 executable respectively.
 
 @item init=xxxx
 As for 'prebuild', but runs on the source code BEFORE any other processing
 takes place.
 
-You can use $$SDK$$ and $$NDK$$ to substitute the paths to the android
-SDK and NDK directories respectively.
+You can use $$SDK$$, $$NDK$$ and $$MVN3$$ to substitute the paths to the
+android SDK and NDK directories, and maven 3 executable respectively.
 
 @item novcheck=yes 
 Don't check that the version name and code in the resulting apk are

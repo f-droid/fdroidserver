@@ -259,7 +259,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
     # Prepare the source code...
     root_dir = common.prepare_source(vcs, app, thisbuild,
             build_dir, extlib_dir, sdk_path, ndk_path,
-            javacc_path, verbose)
+            javacc_path, mvn3, verbose)
 
     # Scan before building...
     buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
@@ -505,9 +505,8 @@ def main():
 
     global options
     # Read configuration...
-    global build_server_always, mvn3
-    build_server_always = False
-    mvn3 = "mvn3"
+    globals()['build_server_always'] = False
+    globals()['mvn3'] = "mvn3"
     execfile('config.py', globals())
     options, args = parse_commandline()
     if build_server_always:

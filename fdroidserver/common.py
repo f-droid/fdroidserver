@@ -867,6 +867,7 @@ class MetaDataException(Exception):
 # TODO: These are currently just hard-coded in this method. It will be a
 # metadata-driven system eventually, but not yet.
 def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
+
     name, ref = spec.split('@')
 
     if name == 'GreenDroid':
@@ -1016,8 +1017,6 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs = getvcs('git',
                 'https://code.google.com/r/andreasschildbach-bitcoinj/', sdir, sdk_path)
         vcs.gotorevision(ref)
-        if subprocess.call([mvn3, 'install'], cwd=sdir) != 0:
-            raise BuildException("Maven build failed for BitcoinJWallet srclib")
         return sdir
 
     if name == 'Color-Picker':
@@ -1112,10 +1111,11 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
 #  'sdk_path'    - the path to the Android SDK
 #  'ndk_path'    - the path to the Android NDK
 #  'javacc_path' - the path to javacc
+#  'mvn3'        - the path to the maven 3 executable
 #  'verbose'     - optional: verbose or not (default=False)
 # Returns the root directory, which may be the same as 'build_dir' or may
 # be a subdirectory of it.
-def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, javacc_path, verbose=False):
+def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, javacc_path, mvn3, verbose=False):
 
     # Optionally, the actual app source can be in a subdirectory...
     if build.has_key('subdir'):
@@ -1142,6 +1142,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
         init = build['init']
         init = init.replace('$$SDK$$', sdk_path)
         init = init.replace('$$NDK$$', ndk_path)
+        init = init.replace('$$MVN$$', mvn3)
         if verbose: print "Doing init: exec '%s' in '%s'"%(init,root_dir)
         if subprocess.call(init, cwd=root_dir, shell=True) != 0:
             raise BuildException("Error running init command")
@@ -1321,6 +1322,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
             prebuild = prebuild.replace('$$' + name + '$$', libpath)
         prebuild = prebuild.replace('$$SDK$$', sdk_path)
         prebuild = prebuild.replace('$$NDK$$', ndk_path)
+        prebuild = prebuild.replace('$$MVN3$$', mvn3)
         p = subprocess.Popen(prebuild, cwd=root_dir, shell=True,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
