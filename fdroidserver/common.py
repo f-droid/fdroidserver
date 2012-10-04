@@ -1121,6 +1121,55 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs.gotorevision(ref)
         return sdir
 
+    if name == 'HoloEverywhere':
+        sdir = os.path.join(extlib_dir, 'HoloEverywhere')
+        vcs = getvcs('git',
+	    'https://github.com/ChristopheVersieux/HoloEverywhere.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'library')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating HoloEverywhere project')
+        if basepath:
+            return sdir
+        return libdir
+
+    if name == 'PullToRefresh':
+        sdir = os.path.join(extlib_dir, 'PullToRefresh')
+        vcs = getvcs('git',
+	    'https://github.com/chrisbanes/Android-PullToRefresh.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'library')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating PullToRefresh project')
+        if basepath:
+            return sdir
+        return libdir
+
+    if name == 'TessTwo':
+        sdir = os.path.join(extlib_dir, 'TessTwo')
+        vcs = getvcs('git',
+	    'https://github.com/rmtheis/tess-two.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'tess-two')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating TessTwo project')
+        if basepath:
+            return sdir
+        return libdir
+
+    if name == 'TwidereExtension':
+        sdir = os.path.join(extlib_dir, 'TwidereExtension')
+        vcs = getvcs('git',
+	    'https://github.com/mariotaku/twidere-extension-library.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
