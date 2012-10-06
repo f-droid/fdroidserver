@@ -1170,6 +1170,13 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs.gotorevision(ref)
         return sdir
 
+    if name == 'EncfsJava':
+        sdir = os.path.join(extlib_dir, 'EncfsJava')
+        vcs = getvcs('git',
+	    'https://github.com/mrpdaemon/encfs-java.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
