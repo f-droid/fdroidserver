@@ -1402,6 +1402,38 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
         if p.returncode != 0:
             raise BuildException("Error running pre-build command", out, err)
 
+    if build.get('anal-tics', 'no') == 'yes':
+        fp = os.path.join(root_dir, 'src', 'com', 'google', 'android', 'apps', 'analytics')
+        os.makedirs(fp)
+        with open(os.path.join(fp, 'GoogleAnalyticsTracker.java'), 'w') as f:
+            f.write("""
+            package com.google.android.apps.analytics;
+            public class GoogleAnalyticsTracker {
+                private static GoogleAnalyticsTracker instance;
+                private GoogleAnalyticsTracker() {
+                }
+                public static GoogleAnalyticsTracker getInstance() {
+                    if(instance == null)
+                        instance = new GoogleAnalyticsTracker();
+                    return instance;
+                }
+                public void start(String i,int think ,Object not) {
+                }
+                public void dispatch() {
+                }
+                public void stop() {
+                }
+                public void setProductVersion(String uh, String hu) {
+                }
+                public void trackEvent(String that,String just,String aint,int happening) {
+                }
+                public void trackPageView(String nope) {
+                }
+                public void setCustomVar(int mind,String your,String own,int business) {
+                }
+            }
+            """)
+
     # Special case init functions for funambol...
     if build.get('initfun', 'no')  == "yes":
 
