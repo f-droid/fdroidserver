@@ -1140,14 +1140,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs = getvcs('git',
 	    'https://github.com/chrisbanes/Android-PullToRefresh.git', sdir, sdk_path)
         vcs.gotorevision(ref)
-        libdir = os.path.join(sdir, 'library')
-        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
-            'update', 'project', '-p',
-            libdir]) != 0:
-            raise BuildException('Error updating PullToRefresh project')
-        if basepath:
-            return sdir
-        return libdir
+        return sdir
 
     if name == 'TessTwo':
         sdir = os.path.join(extlib_dir, 'TessTwo')
