@@ -90,7 +90,7 @@ class FDroid
 			$query_vars['fdfilter'] = '';
 		}
 
-		if($query_vars['fdcategory'] == 'All applications') {
+		if($query_vars['fdcategory'] == 'All categories') {
 			unset($query_vars['fdcategory']);
 		}
 		
@@ -99,7 +99,7 @@ class FDroid
 		} else {
 			if($query_vars['fdfilter'] !== null) {
 				$out.='<form name="searchform" action="" method="get">';
-				$out.='<p><input name="fdfilter" type="text" value="'.$query_vars['fdfilter'].'" size="30"> ';
+				$out.='<p><input name="fdfilter" type="text" value="'.sanitize_text_field($query_vars['fdfilter']).'" size="30"> ';
 				$out.='<input type="submit" value="Search"></p>';
 				$out.=$this->makeformdata($query_vars);
 				$out.='</form>'."\n";
@@ -542,13 +542,13 @@ class FDroid
 				$out.='</form>'."\n";
 			}
 			else {
-				$out.='Applications matching "'.$query_vars['fdfilter'].'"';
+				$out.='Applications matching "'.sanitize_text_field($query_vars['fdfilter']).'"';
 			}
 			$out.="</div>";
 
 			$out.='<div style="float:right;">';
-			$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'list','fdpage'=>'1')).'">List</a> | ';
-			$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'grid','fdpage'=>'1')).'">Grid</a>';
+			$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'list')).'">List</a> | ';
+			$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'grid')).'">Grid</a>';
 			$out.='</div>';
 
 			$out.='<br break="all"/>';
@@ -598,10 +598,10 @@ class FDroid
 
 		$out='';
 
-		$out.='<input type="hidden" name="page_id" value="'.get_query_var('page_id').'">';
+		$out.='<input type="hidden" name="page_id" value="'.(int)get_query_var('page_id').'">';
 		foreach($query_vars as $name => $value) {
-			if($value !== null && $name != 'fdfilter')
-				$out.='<input type="hidden" name="'.$name.'" value="'.$value.'">';
+			if($value !== null && $name != 'fdfilter' && !($name == 'fdpage' && (int)$value ==1))
+				$out.='<input type="hidden" name="'.$name.'" value="'.sanitize_text_field($value).'">';
 		}
 
 		return $out;
@@ -782,7 +782,17 @@ function permissions_cmp($a, $b) {
 // Make a link to this page, with the current query vars attached and desired params added/modified
 function makelink($query_vars, $params=array()) {
 	$link=get_permalink();
-	$vars=linkify(array_merge($query_vars, $params));
+
+	$p = array_merge($query_vars, $params);
+
+	// Page 1 is the default, don't clutter urls with it...
+	if($p['fdpage'] == 1)
+		unset($p['fdpage']);
+	// Likewise for list style...
+	if($p['fdstyle'] == 'list')
+		unset($p['fdstyle']);
+
+	$vars=linkify($p);
 	if(strlen($vars)==0)
 		return $link;
 	if(strpos($link,'?')===false)
