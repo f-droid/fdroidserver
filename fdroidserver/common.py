@@ -1140,14 +1140,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs = getvcs('git',
 	    'https://github.com/chrisbanes/Android-PullToRefresh.git', sdir, sdk_path)
         vcs.gotorevision(ref)
-        libdir = os.path.join(sdir, 'library')
-        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
-            'update', 'project', '-p',
-            libdir]) != 0:
-            raise BuildException('Error updating PullToRefresh project')
-        if basepath:
-            return sdir
-        return libdir
+        return sdir
 
     if name == 'TessTwo':
         sdir = os.path.join(extlib_dir, 'TessTwo')
@@ -1176,6 +1169,24 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
 	    'https://github.com/mrpdaemon/encfs-java.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
+
+    if name == 'MobAdMob':
+        sdir = os.path.join(extlib_dir, 'MobAdMob')
+        vcs = getvcs('git',
+	    'https://github.com/mar-v-in/MobAdMob.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'MobAdMob')
+        pp = open(os.path.join(libdir, 'project.properties'), 'w')
+        pp.write('android.library=true\n')
+        pp.write('target=android-16\n')
+        pp.close()
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating MobAdMob project')
+        if basepath:
+            return sdir
+        return libdir
 
     raise BuildException('Unknown srclib ' + name)
 
