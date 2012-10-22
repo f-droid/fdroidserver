@@ -1188,6 +1188,29 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
+    if name == 'WebSMSAPI':
+        sdir = os.path.join(extlib_dir, 'WebSMSAPI')
+        vcs = getvcs('git',
+	    'https://github.com/felixb/websms-api.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating WebSMSAPI project')
+        shutil.rmtree(os.path.join(sdir, 'test'))
+        return sdir
+
+    if name == 'ub0rlib':
+        sdir = os.path.join(extlib_dir, 'ub0rlib')
+        vcs = getvcs('git',
+	    'https://github.com/felixb/ub0rlib.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating ub0rlib project')
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
