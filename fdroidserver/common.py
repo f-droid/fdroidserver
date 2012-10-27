@@ -1211,6 +1211,49 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating ub0rlib project')
         return sdir
 
+    if name == 'JustPlayerPluginsAdView':
+        sdir = os.path.join(extlib_dir, 'JustPlayerPluginsAdView')
+        vcs = getvcs('git',
+	    'https://bitbucket.org/yokmama/just-player-plugins.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'AdView')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating JustPlayerPluginsAdview project')
+        if basepath:
+            return sdir
+        return libdir
+
+    if name == 'NoAnalytics':
+        sdir = os.path.join(extlib_dir, 'NoAnalytics')
+        vcs = getvcs('git',
+	    'https://github.com/mar-v-in/NoAnalytics.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'NoAnalytics')
+        pp = open(os.path.join(libdir, 'project.properties'), 'w')
+        pp.write('android.library=true\n')
+        pp.write('target=android-16\n')
+        pp.close()
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating NoAnalytics project')
+        if basepath:
+            return sdir
+        return libdir
+
+    if name == 'TintAddon':
+	sdir = os.path.join(extlib_dir, 'TintAddon')
+        vcs = getvcs('git',
+	    'https://github.com/Anasthase/TintBrowserAddonFrameworkLibrary.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating TintAddon project')
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
