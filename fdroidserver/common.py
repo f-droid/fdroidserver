@@ -1261,6 +1261,13 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs.gotorevision(ref)
         return sdir
 
+    if name == 'SL4A':
+        sdir = os.path.join(extlib_dir, 'SL4A')
+        vcs = getvcs('hg',
+	    'https://code.google.com/p/android-scripting', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
