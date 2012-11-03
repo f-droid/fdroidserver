@@ -1268,6 +1268,27 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs.gotorevision(ref)
         return sdir
 
+    if name == 'GNUPG':
+        sdir = os.path.join(extlib_dir, 'GNUPG')
+        vcs = getvcs('git',
+	    'https://github.com/guardianproject/gnupg-for-android.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'IOCipher':
+        sdir = os.path.join(extlib_dir, 'IOCipher')
+        vcs = getvcs('git',
+	    'https://github.com/guardianproject/IOCipher.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'FFMPEG-Java':
+        sdir = os.path.join(extlib_dir, 'FFMPEG-Java')
+        vcs = getvcs('git',
+	    'https://github.com/guardianproject/android-ffmpeg-java.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
