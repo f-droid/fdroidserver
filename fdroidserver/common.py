@@ -1254,6 +1254,13 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating TintAddon project')
         return sdir
 
+    if name == 'EyesFree':
+        sdir = os.path.join(extlib_dir, 'EyesFree')
+        vcs = getvcs('git-svn',
+	    'http://eyes-free.googlecode.com/svn/trunk', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
