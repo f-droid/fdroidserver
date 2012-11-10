@@ -1300,6 +1300,27 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating Slider project')
         return sdir
 
+    if name == 'NumberPicker':
+        sdir = os.path.join(extlib_dir, 'NumberPicker')
+        vcs = getvcs('git',
+	    'https://github.com/thibault/NumberPickerWidget.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'RootCommands':
+        sdir = os.path.join(extlib_dir, 'RootCommands')
+        vcs = getvcs('git',
+	    'https://github.com/dschuermann/root-commands.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'RootCommands Library')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating RootCommands project')
+        if basepath:
+            return sdir
+        return libdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
