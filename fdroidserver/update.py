@@ -168,8 +168,11 @@ def update_wiki(apps, apks, verbose=False):
             print "Checking " + pagename
         if not pagename in existingpages:
             print "Creating page " + pagename
-            newpage = site.Pages[pagename]
-            newpage.save(text, summary='Auto-created')
+            try:
+                newpage = site.Pages[pagename]
+                newpage.save(text, summary='Auto-created')
+            except:
+                print "...FAILED to create page"
 
 
 
