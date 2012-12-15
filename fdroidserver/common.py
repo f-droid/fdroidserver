@@ -1347,6 +1347,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating NumberPicker-SimonVT project')
         if basepath:
             return sdir
+        return libdir
 
     raise BuildException('Unknown srclib ' + name)
 
