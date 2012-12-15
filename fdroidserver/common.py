@@ -1321,6 +1321,33 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
+    if name == 'LibPageKite':
+        sdir = os.path.join(extlib_dir, 'LibPageKite')
+        vcs = getvcs('git',
+	    'https://github.com/pagekite/libpagekite.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'OpenSSL-GP':
+        sdir = os.path.join(extlib_dir, 'OpenSSL-GP')
+        vcs = getvcs('git',
+	    'https://github.com/guardianproject/openssl-android.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'NumberPicker-SimonVT':
+        sdir = os.path.join(extlib_dir, 'NumberPicker-SimonVT')
+        vcs = getvcs('git',
+	    'https://github.com/SimonVT/android-numberpicker.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'library')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating NumberPicker-SimonVT project')
+        if basepath:
+            return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
