@@ -1349,6 +1349,24 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
+    if name == 'ComicViewer':
+        sdir = os.path.join(extlib_dir, 'ComicViewer')
+        vcs = getvcs('git',
+	    'https://github.com/tcoxon/ComicViewer.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating ComicViewer project')
+        return sdir
+
+    if name == 'GitHubAPI':
+        sdir = os.path.join(extlib_dir, 'GitHubAPI')
+        vcs = getvcs('git',
+	    'git://git.eclipse.org/gitroot/egit/egit-github.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
