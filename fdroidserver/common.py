@@ -1367,6 +1367,20 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs.gotorevision(ref)
         return sdir
 
+    if name == 'Busybox':
+        sdir = os.path.join(extlib_dir, 'Busybox')
+        vcs = getvcs('git',
+	    'git://busybox.net/busybox.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'BusyboxConfigs':
+        sdir = os.path.join(extlib_dir, 'BusyboxConfigs')
+        vcs = getvcs('git',
+	    'https://github.com/tias/android-busybox-ndk.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
