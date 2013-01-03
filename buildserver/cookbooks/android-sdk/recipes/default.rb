@@ -30,7 +30,7 @@ execute "add-android-sdk-path" do
 end
 
 %w{android-3 android-4 android-7 android-8 android-10 android-11
-   android-12 android-13 android-14 android-15 android-16
+   android-12 android-13 android-14 android-15 android-16 android-17
    extra-android-support}.each do |sdk|
 
   script "add_sdk_#{sdk}" do
