@@ -1321,6 +1321,80 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
+    if name == 'LibPageKite':
+        sdir = os.path.join(extlib_dir, 'LibPageKite')
+        vcs = getvcs('git',
+	    'https://github.com/pagekite/libpagekite.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'OpenSSL-GP':
+        sdir = os.path.join(extlib_dir, 'OpenSSL-GP')
+        vcs = getvcs('git',
+	    'https://github.com/guardianproject/openssl-android.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'NumberPicker-SimonVT':
+        sdir = os.path.join(extlib_dir, 'NumberPicker-SimonVT')
+        vcs = getvcs('git',
+	    'https://github.com/SimonVT/android-numberpicker.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'library')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating NumberPicker-SimonVT project')
+        if basepath:
+            return sdir
+        return libdir
+
+    if name == 'ComicViewer':
+        sdir = os.path.join(extlib_dir, 'ComicViewer')
+        vcs = getvcs('git',
+	    'https://github.com/tcoxon/ComicViewer.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating ComicViewer project')
+        return sdir
+
+    if name == 'GitHubAPI':
+        sdir = os.path.join(extlib_dir, 'GitHubAPI')
+        vcs = getvcs('git',
+	    'git://git.eclipse.org/gitroot/egit/egit-github.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'Busybox':
+        sdir = os.path.join(extlib_dir, 'Busybox')
+        vcs = getvcs('git',
+	    'git://busybox.net/busybox.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'BusyboxConfigs':
+        sdir = os.path.join(extlib_dir, 'BusyboxConfigs')
+        vcs = getvcs('git',
+	    'https://github.com/tias/android-busybox-ndk.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'AppMsg':
+        sdir = os.path.join(extlib_dir, 'AppMsg')
+        vcs = getvcs('git',
+	    'https://github.com/johnkil/Android-AppMsg.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'library')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating AppMsg project')
+        if basepath:
+            return sdir
+        return libdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
