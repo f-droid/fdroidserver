@@ -1395,6 +1395,59 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
+    if name == 'BillingLibrary':
+        sdir = os.path.join(extlib_dir, 'BillingLibrary')
+        vcs = getvcs('git',
+	    'https://github.com/robotmedia/AndroidBillingLibrary.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'AndroidBillingLibrary')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating BillingLibrary project')
+        if basepath:
+            return sdir
+        return libdir
+
+    if name == 'FilePicker':
+        sdir = os.path.join(extlib_dir, 'FilePicker')
+        vcs = getvcs('git',
+	    'https://github.com/Filepicker/filepicker-android.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating AppMsg project')
+        return sdir 
+
+    if name == 'aFileChooser':
+        sdir = os.path.join(extlib_dir, 'aFileChooser')
+        vcs = getvcs('git',
+	    'https://github.com/TomTasche/aFileChooser', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'aFileChooser')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating aFileChooser project')
+        if basepath:
+            return sdir
+        return libdir
+
+    if name == 'SlidingMenu':
+        sdir = os.path.join(extlib_dir, 'SlidingMenu')
+        vcs = getvcs('git',
+	    'https://github.com/jfeinstein10/SlidingMenu', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'library')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating SlidingMenu project')
+        if basepath:
+            return sdir
+        return libdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
