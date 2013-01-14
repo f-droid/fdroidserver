@@ -1448,6 +1448,17 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
+    if name == 'K9Mail-XOAuth':
+        sdir = os.path.join(extlib_dir, 'K9Mail-XOAUTH')
+        vcs = getvcs('git',
+	    'https://github.com/jberkel/k9mail.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating KMail-XOAUTH project')
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
