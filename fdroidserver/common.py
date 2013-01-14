@@ -1459,6 +1459,22 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating KMail-XOAUTH project')
         return sdir
 
+    if name == 'RootTools':
+        sdir = os.path.join(extlib_dir, 'RootTools')
+        vcs = getvcs('svn',
+	    'http://roottools.googlecode.com/svn/trunk/Stable/RootTools-sdk3-generic', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        pp = open(os.path.join(sdir, 'project.properties'), 'w')
+        pp.write('android.library=true\n')
+        pp.write('target=android-16\n')
+        pp.close()
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p', 
+            sdir]) != 0:
+            raise BuildException('Error updating RootTools project')
+        os.remove(os.path.join(sdir, 'android.jar'))
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
