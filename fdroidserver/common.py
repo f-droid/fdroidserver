@@ -1448,7 +1448,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    if name == 'K9Mail-XOAuth':
+    if name == 'K9Mail-XOAUTH':
         sdir = os.path.join(extlib_dir, 'K9Mail-XOAUTH')
         vcs = getvcs('git',
 	    'https://github.com/jberkel/k9mail.git', sdir, sdk_path)
