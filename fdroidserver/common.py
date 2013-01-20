@@ -1475,6 +1475,23 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         os.remove(os.path.join(sdir, 'android.jar'))
         return sdir
 
+    if name == 'OsmAnd-tools':
+        sdir = os.path.join(extlib_dir, 'OsmAnd-tools')
+        vcs = getvcs('git',
+	    'https://github.com/osmandapp/OsmAnd-tools', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'OsmAndMapCreator')
+        if basepath:
+            return sdir
+        return libdir
+
+    if name == 'OsmAnd-core':
+        sdir = os.path.join(extlib_dir, 'OsmAnd-core')
+        vcs = getvcs('git',
+	    'https://github.com/osmandapp/OsmAnd-core', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
