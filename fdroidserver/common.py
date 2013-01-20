@@ -1480,10 +1480,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs = getvcs('git',
 	    'https://github.com/osmandapp/OsmAnd-tools', sdir, sdk_path)
         vcs.gotorevision(ref)
-        libdir = os.path.join(sdir, 'OsmAndMapCreator')
-        if basepath:
-            return sdir
-        return libdir
+        return sdir
 
     if name == 'OsmAnd-core':
         sdir = os.path.join(extlib_dir, 'OsmAnd-core')
