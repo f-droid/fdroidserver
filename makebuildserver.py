@@ -23,7 +23,11 @@ if os.path.exists(boxfile):
 
 vagrant(['halt'], serverdir)
 print "Configuring build server VM"
-vagrant(['up'], serverdir)
+returncode, out, err = vagrant(['up'], serverdir)
+if returncode != 0:
+    print "Failed to configure server"
+    print out
+    print err
 print "Stopping build server VM"
 vagrant(['halt'], serverdir)
 

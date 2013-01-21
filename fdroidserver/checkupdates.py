@@ -231,6 +231,12 @@ def main():
                 pass
             elif mode.startswith('Version '):
                 pattern = mode[8:]
+                if pattern.startswith('+'):
+                    o = pattern.find(' ')
+                    suffix = pattern[1:o]
+                    pattern = pattern[o + 1:]
+                else:
+                    suffix = ''
                 gotcur = False
                 latest = None
                 for build in app['builds']:
@@ -242,7 +248,7 @@ def main():
                     newbuild = latest.copy()
                     del newbuild['origlines']
                     newbuild['vercode'] = app['Current Version Code']
-                    newbuild['version'] = app['Current Version']
+                    newbuild['version'] = app['Current Version'] + suffix
                     print "...auto-generating build for " + newbuild['version']
                     commit = pattern.replace('%v', newbuild['version'])
                     commit = commit.replace('%c', newbuild['vercode'])
