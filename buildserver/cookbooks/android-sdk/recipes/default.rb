@@ -12,10 +12,10 @@ script "setup-android-sdk" do
   user user
   cwd "/tmp"
   code "
-    wget http://dl.google.com/android/android-sdk_r16-linux.tgz
-    tar zxvf android-sdk_r16-linux.tgz
+    wget http://dl.google.com/android/android-sdk_r21.0.1-linux.tgz
+    tar zxvf android-sdk_r21.0.1-linux.tgz
     mv android-sdk-linux #{sdk_loc}
-    rm android-sdk_r16-linux.tgz
+    rm android-sdk_r21.0.1-linux.tgz
     #{sdk_loc}/tools/android update sdk --no-ui -t platform-tool
     #{sdk_loc}/tools/android update sdk --no-ui -t tool
   "
