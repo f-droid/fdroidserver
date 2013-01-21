@@ -436,6 +436,7 @@ The following sections describe the fields recognised within the file.
 * Disabled::
 * Requires Root::
 * Update Check Mode::
+* Auto Update Mode::
 * Current Version::
 * Current Version Code::
 @end menu
@@ -907,6 +908,36 @@ it's appropriate. (Also, it currently only works for git repositories).
 @item
 @code{Market} - This is being phased out and should not be used!
 @end itemize
+
+@node Auto Update Mode
+@section Auto Update Mode
+
+@cindex Auto Update Mode
+
+This determines the method using for auto-generating new builds new releases are
+available - in other words, adding a new Build Version line to the metadata.
+This happens in conjunction with the 'Update Check Mode' functionality - i.e.
+when an update is detected by that, it is also processed by this.
+
+Valid modes are:
+
+@itemize
+@item
+@code{None} - No auto-updating is done
+@item
+@code{Version} - Identifies the target commit (i.e. tag) for the new build based
+on the given version specification, which is simply text in which %v and %c are
+replaced with the required version name and version code respectively.
+
+For example, if an app always has a tag "2.7.2" corresponding to version 2.7.2,
+you would simply specify "Version %v". If an app always has a tag "ver_1234"
+for a version with version code 1234, you would specify "Version ver_%c".
+
+Additionally, a suffix can be added to the version name at this stage, to
+differentiate F-Droid's build from the original. Continuing the first example
+above, you would specify that as "Version +-fdroid %v" - "-fdroid" is the suffix.
+@end itemize
+
 
 @node Current Version
 @section Current Version
