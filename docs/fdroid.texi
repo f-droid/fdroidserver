@@ -1053,6 +1053,9 @@ the specification for what's required to be Vagrant-compatible is very well
 defined. This is the sensible and secure way to do it, since you know what's
 in it. If you insist on taking a shortcut, ask CiaranG about it on IRC.
 
+You can use a different version or distro for the base box, so long as you
+don't expect any help making it work.
+
 With this base box installed, you can then go to the @code{fdroidserver}
 directory and run this:
 
