@@ -1170,6 +1170,17 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs.gotorevision(ref)
         return sdir
 
+    if name == 'FinfAgent':
+        sdir = os.path.join(extlib_dir, 'FinfAgent')
+        vcs = getvcs('git',
+	    'https://github.com/uniqdom/FinfAgent.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating FinfAgent project')
+        return sdir
+
     if name == 'MobAdMob':
         sdir = os.path.join(extlib_dir, 'MobAdMob')
         vcs = getvcs('git',
