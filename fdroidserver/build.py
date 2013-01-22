@@ -233,7 +233,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
             raise BuildException("Build.py failed on server for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
 
         # Retrieve the built files...
-        if(force):
+        print "Retrieving build output..."
+        if force:
             ftp.chdir('/home/vagrant/tmp')
         else:
             ftp.chdir('/home/vagrant/unsigned')

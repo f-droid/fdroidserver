@@ -1088,7 +1088,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-#Leave the native code as a blob; submodules required for that
+    #Leave the native code as a blob; submodules required for that
     if name == 'Libpd':
         sdir = os.path.join(extlib_dir, 'Libpd')
         vcs = getvcs('git',
