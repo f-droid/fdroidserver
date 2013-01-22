@@ -1448,6 +1448,47 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
+    if name == 'K9Mail-XOAUTH':
+        sdir = os.path.join(extlib_dir, 'K9Mail-XOAUTH')
+        vcs = getvcs('git',
+	    'https://github.com/jberkel/k9mail.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating KMail-XOAUTH project')
+        return sdir
+
+    if name == 'RootTools':
+        sdir = os.path.join(extlib_dir, 'RootTools')
+        vcs = getvcs('svn',
+	    'http://roottools.googlecode.com/svn/trunk/Stable/RootTools-sdk3-generic', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        pp = open(os.path.join(sdir, 'project.properties'), 'w')
+        pp.write('android.library=true\n')
+        pp.write('target=android-16\n')
+        pp.close()
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p', 
+            sdir]) != 0:
+            raise BuildException('Error updating RootTools project')
+        os.remove(os.path.join(sdir, 'android.jar'))
+        return sdir
+
+    if name == 'OsmAnd-tools':
+        sdir = os.path.join(extlib_dir, 'OsmAnd-tools')
+        vcs = getvcs('git',
+	    'https://github.com/osmandapp/OsmAnd-tools', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'OsmAnd-core':
+        sdir = os.path.join(extlib_dir, 'OsmAnd-core')
+        vcs = getvcs('git',
+	    'https://github.com/osmandapp/OsmAnd-core', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
