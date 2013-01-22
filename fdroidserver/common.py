@@ -1088,7 +1088,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-#Leave the native code as a blob; submodules required for that
+    #Leave the native code as a blob; submodules required for that
     if name == 'Libpd':
         sdir = os.path.join(extlib_dir, 'Libpd')
         vcs = getvcs('git',
@@ -1168,6 +1168,17 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs = getvcs('git',
 	    'https://github.com/mrpdaemon/encfs-java.git', sdir, sdk_path)
         vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'FinfAgent':
+        sdir = os.path.join(extlib_dir, 'FinfAgent')
+        vcs = getvcs('git',
+	    'https://github.com/uniqdom/FinfAgent.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating FinfAgent project')
         return sdir
 
     if name == 'MobAdMob':
