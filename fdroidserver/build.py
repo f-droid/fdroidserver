@@ -216,8 +216,6 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         # Execute the build script...
         print "Starting build..."
         chan = sshs.get_transport().open_session()
-        stdoutf = chan.makefile('r')
-        stderrf = chan.makefile_stderr('r')
         cmdline = 'python build.py --on-server'
         if force:
             cmdline += ' --force --test'
@@ -226,9 +224,16 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         output = ''
         error = ''
         while not chan.exit_status_ready():
-            output += stdoutf.read()
-            error += stderrf.read()
+            while chan.recv_ready():
+                output += chan.recv(1024)
+            while chan.recv_stderr_ready():
+                error += chan.recv_stderr(1024)
+        print "...getting exit status"
         returncode = chan.recv_exit_status()
+        while chan.recv_ready():
+            output += chan.recv(1024)
+        while chan.recv_stderr_ready():
+            error += chan.recv_stderr(1024)
         if returncode != 0:
             raise BuildException("Build.py failed on server for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
 
