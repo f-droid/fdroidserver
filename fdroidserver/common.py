@@ -1500,6 +1500,17 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs.gotorevision(ref)
         return sdir
 
+    if name == 'AndrozicLib':
+        sdir = os.path.join(extlib_dir, 'AndrozicLib')
+        vcs = getvcs('git',
+	    'https://github.com/andreynovikov/androzic-library', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating AndrozicLib project')
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
