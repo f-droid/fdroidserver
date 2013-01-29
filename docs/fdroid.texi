@@ -270,11 +270,11 @@ been built.
 @end enumerate
 
 
-@section More about build.py
+@section More about "fdroid build"
 
 When run without any parameters, @code{fdroid build} will build any and all
 versions of applications that you don't already have in the @code{repo}
-directory (or more accurately, the @code{unsigned} directory. There are various
+directory (or more accurately, the @code{unsigned} directory). There are various
 other things you can do. As with all the tools, the @code{--help} option is
 your friend, but a few annotated examples and discussion of the more common
 usage modes follows:
