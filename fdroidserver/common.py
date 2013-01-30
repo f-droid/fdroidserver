@@ -1511,6 +1511,13 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating AndrozicLib project')
         return sdir
 
+    if name == 'Otr4j':
+	sdir = os.path.join(extlib_dir, 'Otr4j')
+        vcs = getvcs('git',
+	    'https://github.com/redsolution/otr4j.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
