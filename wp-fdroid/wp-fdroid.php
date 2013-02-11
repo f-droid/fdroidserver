@@ -476,7 +476,7 @@ class FDroid
 
 	private function human_readable_size($size, $minDiv=0) {
 		$si_prefix = array('bytes','kB','MB');
-		$div = 1000;
+		$div = 1024;
 
 		for($i=0;(abs($size) > $div && $i < count($si_prefix)) || $i<$minDiv;$i++) {
 			$size /= $div;
