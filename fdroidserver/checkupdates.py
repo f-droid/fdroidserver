@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # checkupdates.py - part of the FDroid server tools
-# Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -21,8 +21,9 @@ import sys
 import os
 import shutil
 import re
-import urllib
+import urllib2
 import time
+import subprocess
 from optparse import OptionParser
 import traceback
 import HTMLParser
@@ -68,7 +69,7 @@ def check_tags(app, sdk_path):
             version, vercode, package = common.parse_androidmanifest(manifest)
             if package and package == app['id'] and version and vercode:
                 if int(vercode) > int(hcode):
-                    hcode = vercode
+                    hcode = str(int(vercode))
                     hver = version
 
         if hver:
@@ -122,7 +123,7 @@ def check_repomanifest(app, sdk_path):
         if not vercode:
             return (None,"Couldn't find latest version code")
 
-        return (version, vercode)
+        return (version, str(int(vercode)))
 
     except BuildException as be:
         msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
@@ -139,14 +140,21 @@ def check_repomanifest(app, sdk_path):
 # Returns (None, "a message") if this didn't work, or (version, vercode) for
 # the details of the current version.
 def check_market(app):
-    time.sleep(10)
-    url = 'http://market.android.com/details?id=' + app['id']
-    req = urllib.urlopen(url)
-    if req.getcode() == 404:
-        return (None, 'Not in market')
-    elif req.getcode() != 200:
-        return (None, 'Return code ' + str(req.getcode()))
-    page = req.read()
+    time.sleep(15)
+    url = 'https://play.google.com/store/apps/details?id=' + app['id']
+    headers = {'User-Agent' : 'Mozilla/5.0 (X11; Linux i686; rv:18.0) Gecko/20100101 Firefox/18.0'}
+    req = urllib2.Request(url, None, headers)
+    try:
+        resp = urllib2.urlopen(req)
+    except urllib2.HTTPError, e:
+        if e.code == 404:
+            return (None, 'Not in market')
+        elif e.code == 503:
+            print "Whoops"
+            sys.exit(1)
+        else:
+            return (None, 'Failed with HTTP status' + str(req.getcode()))
+    page = resp.read()
 
     version = None
     vercode = None
@@ -167,7 +175,7 @@ def check_market(app):
         return (None, "Couldn't find version code")
     if not version:
         return (None, "Couldn't find version")
-    return (version, vercode)
+    return (version, str(int(vercode)))
 
 
 
@@ -184,6 +192,8 @@ def main():
                       help="Check only the specified package")
     parser.add_option("--auto", action="store_true", default=False,
                       help="Process auto-updates")
+    parser.add_option("--commit", action="store_true", default=False,
+                      help="Commit changes")
     (options, args) = parser.parse_args()
 
     # Get all apps...
@@ -200,6 +210,7 @@ def main():
         print "Processing " + app['id'] + '...'
 
         writeit = False
+        logmsg = None
 
         mode = app['Update Check Mode']
         if mode == 'Market':
@@ -224,6 +235,7 @@ def main():
             app['Current Version'] = version
             app['Current Version Code'] = str(int(vercode))
             writeit = True
+            logmsg = "Update current version of " + app['id'] + " to " + version
 
         if options.auto:
             mode = app['Auto Update Mode']
@@ -255,12 +267,20 @@ def main():
                     newbuild['commit'] = commit
                     app['builds'].append(newbuild)
                     writeit = True
+                    logmsg = "Update " + app['id'] + " to " + newbuild['version']
             else:
                 print 'Invalid auto update mode'
 
         if writeit:
             metafile = os.path.join('metadata', app['id'] + '.txt')
             common.write_metadata(metafile, app)
+            if options.commit:
+                if subprocess.call("git add " + metafile, shell=True) != 0:
+                    print "Git add failed"
+                    sys.exit(1)
+                if subprocess.call('git commit -m \"' + logmsg + '\"', shell=True) != 0:
+                    print "Git commit failed"
+                    sys.exit(1)
 
     print "Finished."
 
