@@ -1518,6 +1518,20 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs.gotorevision(ref)
         return sdir
 
+    if name == 'AnySoftKeyboardTools':
+        sdir = os.path.join(extlib_dir, 'AnySoftKeyboardTools')
+        vcs = getvcs('git',
+	    'https://github.com/AnySoftKeyboard/AnySoftKeyboardTools', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'DashClock':
+        sdir = os.path.join(extlib_dir, 'DashClock')
+        vcs = getvcs('git',
+	    'https://code.google.com/p/dashclock', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
