@@ -1532,6 +1532,20 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs.gotorevision(ref)
         return sdir
 
+    if name == 'KoushWidgets':
+        sdir = os.path.join(extlib_dir, 'KoushWidgets')
+        vcs = getvcs('git',
+	    'https://github.com/koush/Widgets', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'Widgets')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating KoushWidgets project')
+        if basepath:
+            return sdir
+        return libdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
