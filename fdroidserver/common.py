@@ -1546,6 +1546,28 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
+    if name == 'HoloColorPicker':
+        sdir = os.path.join(extlib_dir, 'HoloColorPicker')
+        vcs = getvcs('git',
+	    'https://github.com/frigus02/HoloColorPicker', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating HoloColorPicker project')
+        return sdir
+
+    if name == 'ChartLib':
+        sdir = os.path.join(extlib_dir, 'ChartLib')
+        vcs = getvcs('git',
+	    'https://bitbucket.org/frigus02/chartlib', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating ChartLib project')
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
