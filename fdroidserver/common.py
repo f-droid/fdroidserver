@@ -1579,6 +1579,13 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating MeterLib project')
         return sdir
 
+    if name == 'SunriseSunset':
+        sdir = os.path.join(extlib_dir, 'SunriseSunset')
+        vcs = getvcs('git',
+	    'https://github.com/mikereedell/sunrisesunsetlib-java', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
