@@ -1568,6 +1568,17 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating ChartLib project')
         return sdir
 
+    if name == 'MeterLib':
+        sdir = os.path.join(extlib_dir, 'MeterLib')
+        vcs = getvcs('git',
+	    'https://github.com/zaren678/HdhomerunSignalMeterLib', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating MeterLib project')
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
