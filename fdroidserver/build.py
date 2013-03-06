@@ -87,8 +87,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
 
         # Open SSH connection to make sure it's working and ready...
         print "Connecting to virtual machine..."
-        subprocess.call('vagrant ssh-config >sshconfig',
-                cwd='builder', shell=True)
+        if subprocess.call('vagrant ssh-config >sshconfig',
+                cwd='builder', shell=True) != 0:
+            raise BuildException("Error getting ssh config")
         vagranthost = 'default' # Host in ssh config file
         sshconfig = ssh.SSHConfig()
         sshf = open('builder/sshconfig', 'r')
@@ -191,7 +192,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
             for lib in thisbuild['extlibs'].split(';'):
                 lp = lib.split('/')
                 for d in lp[:-1]:
-                    ftp.mkdir(d)
+                    if d not in ftp.listdir():
+                        ftp.mkdir(d)
                     ftp.chdir(d)
                 ftp.put(os.path.join('build/extlib', lib), lp[-1])
                 for _ in lp[:-1]:
@@ -350,6 +352,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
         if not m:
             # This format is found in com.github.mobile for example...
             m = re.match(r".*^\[INFO\] [^$]*aapt \[package,[^$]*" + app['id'] + "/app/target/([^$]+)\.ap_\]",
+                    output, re.S|re.M)
+        if not m:
+            # This format is found in com.yubico.yubitotp and com.botbrew.basil for example...
+            m = re.match(r".*^\[INFO\] [^$]*aapt \[package,[^$]*" + app['id'] + "/" + thisbuild['bindir'] + "/([^$]+)\.ap_,",
                     output, re.S|re.M)
         if not m:
             print output
