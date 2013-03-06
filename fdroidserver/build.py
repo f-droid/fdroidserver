@@ -354,8 +354,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
             m = re.match(r".*^\[INFO\] [^$]*aapt \[package,[^$]*" + app['id'] + "/app/target/([^$]+)\.ap_\]",
                     output, re.S|re.M)
         if not m:
-            # This format is found in com.botbrew.basil for example...
-            m = re.match(r".*^\[INFO\] [^$]*aapt \[package,[^$]*" + app['id'] + "/target/([^$]+)\.ap_\]",
+            # This format is found in com.yubico.yubitotp and com.botbrew.basil for example...
+            m = re.match(r".*^\[INFO\] [^$]*aapt \[package,[^$]*" + app['id'] + "/" + thisbuild['bindir'] + "/([^$]+)\.ap_,",
                     output, re.S|re.M)
         if not m:
             print output
