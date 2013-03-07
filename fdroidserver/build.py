@@ -350,19 +350,14 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
             m = re.match(r".*^\[INFO\] Creating additional unsigned apk file .*/([^/]+)\.apk",
                     output, re.S|re.M)
         if not m:
-            # This format is found in com.github.mobile for example...
-            m = re.match(r".*^\[INFO\] [^$]*aapt \[package,[^$]*" + app['id'] + "/app/target/([^$]+)\.ap_\]",
-                    output, re.S|re.M)
-        if not m:
-            # This format is found in com.yubico.yubitotp and com.botbrew.basil for example...
-            m = re.match(r".*^\[INFO\] [^$]*aapt \[package,[^$]*" + app['id'] + "/" + thisbuild['bindir'] + "/([^$]+)\.ap_,",
+            # This format is found in com.github.mobile, com.yubico.yubitotp and com.botbrew.basil for example...
+            m = re.match(r".*^\[INFO\] [^$]*aapt \[package,[^$]*" + app['id'] + "/" + thisbuild['bindir'] + "/([^/]+)\.ap[_k][,\]]",
                     output, re.S|re.M)
         if not m:
             print output
             raise BuildException('Failed to find output')
         src = m.group(1)
         src = os.path.join(bindir, src) + '.apk'
-#[INFO] Installing /home/ciaran/fdroidserver/tmp/mainline/application/target/callerid-1.0-SNAPSHOT.apk
     else:
         src = re.match(r".*^.*Creating (.+) for release.*$.*", output,
             re.S|re.M).group(1)
