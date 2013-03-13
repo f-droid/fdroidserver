@@ -112,9 +112,11 @@ If you intend to use the 'Build Server' system, for secure and clean builds
 @item
 VirtualBox (debian package virtualbox-ose)
 @item
-Ruby
+Ruby (debian package ruby)
 @item
-Vagrant and Vagrant-snap
+Vagrant (gem install vagrant)
+@item
+Vagrant-snap (gem install vagrant-snap)
 @item
 Paramiko (debian package python-paramiko)
 @end itemize
@@ -1042,16 +1044,11 @@ virtual machine, anything is possible.
 
 @section Setting up a build server
 
-Integrating the build server setup into the main scripts is a work in progress.
-Some things may not work properly yet. Talk to CiaranG if you're trying to use
-this and have problems.
-
 In addition to the basic setup previously described, you will also need
 a Vagrant-compatible Ubuntu Precise base box called 'precise32'. You can
 create one of these for yourself from standard Ubuntu installation media, as
 the specification for what's required to be Vagrant-compatible is very well
-defined. This is the sensible and secure way to do it, since you know what's
-in it. If you insist on taking a shortcut, ask CiaranG about it on IRC.
+defined.
 
 Documentation for creating a base box can be found at
 @url{http://docs.vagrantup.com/v1/docs/base_boxes.html}.
@@ -1076,8 +1073,13 @@ be updated in place.
 Once it's complete you'll have a new base box called 'buildserver' which is
 what's used for the actual builds. You can then build packages as normal,
 but with the addition of the @code{--server} flag to @code{fdroid build} to
-instruct it to do all the hard work within the virtual machine, which is
-reset to a completely clean state for every package built.
+instruct it to do all the hard work within the virtual machine.
+
+The first time a build is done, a new virtual machine is created using the
+'buildserver' box as a base. A snapshot of this clean machine state is saved
+for use in future builds, to improve performance. You can force discarding
+of this snapshot and rebuilding from scratch using the @code{--resetserver}
+switch with @code{fdroid build}.
 
 @node Signing
 @chapter Signing
