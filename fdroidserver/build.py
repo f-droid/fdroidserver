@@ -187,7 +187,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         if os.path.exists(build_dir):
             send_dir(build_dir)
         # Copy any extlibs that are required...
-        if thisbuild.has_key('extlibs'):
+        if 'extlibs' in thisbuild:
             ftp.chdir('/home/vagrant/build/extlib')
             for lib in thisbuild['extlibs'].split(';'):
                 lp = lib.split('/')
@@ -200,7 +200,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
                     ftp.chdir('..')
         # Copy any srclibs that are required...
         srclibpaths = []
-        if thisbuild.has_key('srclibs'):
+        if 'srclibs' in thisbuild:
             for lib in thisbuild['srclibs'].split(';'):
                 name, _ = lib.split('@')
                 srclibpaths.append((name, common.getsrclib(lib, 'build/extlib', sdk_path, basepath=True)))
@@ -310,7 +310,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
             raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']))
 
     # Build the release...
-    if thisbuild.has_key('maven'):
+    if 'maven' in thisbuild:
         p = subprocess.Popen([mvn3, 'clean', 'package',
             '-Dandroid.sdk.path=' + sdk_path,
             '-Dandroid.sign.debug=false'],
@@ -318,7 +318,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
     else:
         if install:
             antcommands = ['debug','install']
-        elif thisbuild.has_key('antcommand'):
+        elif 'antcommand' in thisbuild:
             antcommands = [thisbuild['antcommand']]
         else:
             antcommands = ['release']
@@ -334,7 +334,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
     print "Build successful"
 
     # Find the apk name in the output...
-    if thisbuild.has_key('bindir'):
+    if 'bindir' in thisbuild:
         bindir = os.path.join(build_dir, thisbuild['bindir'])
     else:
         bindir = os.path.join(root_dir, 'bin')
@@ -343,7 +343,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
         src = ("funambol-android-sync-client-" +
                 thisbuild['version'] + "-unsigned.apk")
         src = os.path.join(bindir, src)
-    elif thisbuild.has_key('maven'):
+    elif 'maven' in thisbuild:
         m = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
                 output, re.S|re.M)
         if not m:

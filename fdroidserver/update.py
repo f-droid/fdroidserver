@@ -111,7 +111,7 @@ def update_wiki(apps, apks, verbose=False):
             else:
                 validapks += 1
                 wikidata += "This version is built and signed by "
-                if apk.has_key('srcname'):
+                if 'srcname' in apk:
                     wikidata += "F-Droid, and guaranteed to correspond to the source tarball published with it.\n\n"
                 else:
                     wikidata += "the original developer.\n\n"
@@ -252,7 +252,7 @@ def main():
                     if os.path.exists(name):
                         print "Deleting disabled build output " + apkfilename
                         os.remove(name)
-                if apkcache.has_key(apkfilename):
+                if apkfilename in apkcache:
                     del apkcache[apkfilename]
 
     apks = []
@@ -264,7 +264,7 @@ def main():
             sys.exit(1)
         srcfilename = apkfilename[:-4] + "_src.tar.gz"
 
-        if apkcache.has_key(apkfilename):
+        if apkfilename in apkcache:
             if options.verbose:
                 print "Reading " + apkfilename + " from cache"
             thisinfo = apkcache[apkfilename]
@@ -325,7 +325,7 @@ def main():
                             perm = perm[16:]
                         thisinfo['features'].append(perm)
 
-            if not thisinfo.has_key('sdkversion'):
+            if not 'sdkversion' in thisinfo:
                 print "  WARNING: no SDK version information found"
                 thisinfo['sdkversion'] = 0
 
@@ -587,7 +587,7 @@ def main():
                     addElement('version', apk['version'], doc, apkel)
                     addElement('versioncode', str(apk['versioncode']), doc, apkel)
                     addElement('apkname', apk['apkname'], doc, apkel)
-                    if apk.has_key('srcname'):
+                    if 'srcname' in apk:
                         addElement('srcname', apk['srcname'], doc, apkel)
                     for hash_type in ('sha256', 'md5'):
                         if not hash_type in apk:

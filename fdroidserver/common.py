@@ -583,7 +583,7 @@ def write_metadata(dest, app):
     for build in app['builds']:
         writecomments('build:' + build['version'])
         mf.write('Build Version:')
-        if build.has_key('origlines'):
+        if 'origlines' in build:
             # Keeping the original formatting if we loaded it from a file...
             mf.write('\\\n'.join(build['origlines']) + '\n')
         else:
@@ -1607,7 +1607,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
 def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, javacc_path, mvn3, verbose=False):
 
     # Optionally, the actual app source can be in a subdirectory...
-    if build.has_key('subdir'):
+    if 'subdir' in build:
         root_dir = os.path.join(build_dir, build['subdir'])
     else:
         root_dir = build_dir
@@ -1627,7 +1627,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
         vcs.initsubmodules()
 
     # Run an init command if one is required...
-    if build.has_key('init'):
+    if 'init' in build:
         init = build['init']
         init = init.replace('$$SDK$$', sdk_path)
         init = init.replace('$$NDK$$', ndk_path)
@@ -1639,16 +1639,16 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
     # Generate (or update) the ant build file, build.xml...
     updatemode = build.get('update', '.')
     if (updatemode != 'no' and
-        not build.has_key('maven')):
+        'maven' not in build):
         parms = [os.path.join(sdk_path, 'tools', 'android'),
                 'update', 'project', '-p', '.']
         parms.append('--subprojects')
-        if build.has_key('target'):
+        if 'target' in build:
             parms.append('-t')
             parms.append(build['target'])
         update_dirs = updatemode.split(';')
         # Force build.xml update if necessary...
-        if updatemode == 'force' or build.has_key('target'):
+        if updatemode == 'force' or 'target' in build:
             if updatemode == 'force':
                 update_dirs = ['.']
             buildxml = os.path.join(root_dir, 'build.xml')
@@ -1691,26 +1691,26 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
         # Add ndk location...
         props+= "\nndk.dir=" + ndk_path + "\n"
         # Add java.encoding if necessary...
-        if build.has_key('encoding'):
+        if 'encoding' in build:
             props += "\njava.encoding=" + build['encoding'] + "\n"
         f = open(locprops, 'w')
         f.write(props)
         f.close()
 
     # Insert version code and number into the manifest if necessary...
-    if build.has_key('forceversion'):
+    if 'forceversion' in build:
         if subprocess.call(['sed','-r','-i',
             's/android:versionName="[^"]+"/android:versionName="' + build['version'] + '"/g',
             'AndroidManifest.xml'], cwd=root_dir) !=0:
             raise BuildException("Failed to amend manifest")
-    if build.has_key('forcevercode'):
+    if 'forcevercode' in build:
         if subprocess.call(['sed','-r','-i',
             's/android:versionCode="[^"]+"/android:versionCode="' + build['vercode'] + '"/g',
             'AndroidManifest.xml'], cwd=root_dir) !=0:
             raise BuildException("Failed to amend manifest")
 
     # Delete unwanted file...
-    if build.has_key('rm'):
+    if 'rm' in build:
         dest = os.path.join(build_dir, build['rm'])
         if os.path.exists(dest):
             os.remove(dest)
@@ -1766,7 +1766,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
                         f.close()
 
     # Add required external libraries...
-    if build.has_key('extlibs'):
+    if 'extlibs' in build:
         libsdir = os.path.join(root_dir, 'libs')
         if not os.path.exists(libsdir):
             os.mkdir(libsdir)
@@ -1777,7 +1777,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
 
     # Get required source libraries...
     srclibpaths = []
-    if build.has_key('srclibs'):
+    if 'srclibs' in build:
         for lib in build['srclibs'].split(';'):
             name, _ = lib.split('@')
             srclibpaths.append((name, getsrclib(lib, extlib_dir, sdk_path)))
@@ -1803,7 +1803,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
                 raise BuildException("Failed to apply patch %s" % patch_path)
 
     # Run a pre-build command if one is required...
-    if build.has_key('prebuild'):
+    if 'prebuild' in build:
         prebuild = build['prebuild']
         # Substitute source library paths into prebuild commands...
         for name, libpath in srclibpaths:

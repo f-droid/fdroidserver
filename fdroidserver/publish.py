@@ -81,7 +81,7 @@ def main():
             # If a collision does occur later, we're going to have to
             # come up with a new alogrithm, AND rename all existing keys
             # in the keystore!
-            if keyaliases.has_key(appid):
+            if appid in keyaliases:
                 # For this particular app, the key alias is overridden...
                 keyalias = keyaliases[appid]
             else:

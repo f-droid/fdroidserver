@@ -56,7 +56,7 @@ def check_tags(app, sdk_path):
             return (None, "Can't use Tags with no builds defined")
 
         manifest = build_dir
-        if app['builds'][-1].has_key('subdir'):
+        if 'subdir' in app['builds'][-1]:
             manifest = os.path.join(manifest, app['builds'][-1]['subdir'])
         manifest = os.path.join(manifest, 'AndroidManifest.xml')
 
@@ -109,7 +109,7 @@ def check_repomanifest(app, sdk_path):
             return (None, "Can't use RepoManifest with no builds defined")
 
         manifest = build_dir
-        if app['builds'][-1].has_key('subdir'):
+        if 'subdir' in app['builds'][-1]:
             manifest = os.path.join(manifest, app['builds'][-1]['subdir'])
         manifest = os.path.join(manifest, 'AndroidManifest.xml')
 
