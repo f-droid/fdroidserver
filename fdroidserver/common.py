@@ -1323,7 +1323,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs = getvcs('git',
 	    'https://github.com/dschuermann/root-commands.git', sdir, sdk_path)
         vcs.gotorevision(ref)
-        libdir = os.path.join(sdir, 'RootCommands Library')
+        libdir = os.path.join(sdir, 'RootCommands-Library')
         if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
             'update', 'project', '-p',
             libdir]) != 0:
