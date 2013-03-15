@@ -904,12 +904,6 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         'http://google-gson.googlecode.com/svn/trunk', sdir, sdk_path)
         vcs.gotorevision(ref)
         libdir = os.path.join(sdir, 'gson')
-        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
-            'update', 'project', '-p',
-            libdir]) != 0:
-            raise BuildException('Error updating Google-Gson project')
-        if basepath:
-            return sdir
         return libdir
 
     if name == 'Amazing-ListView':
