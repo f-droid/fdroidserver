@@ -1586,6 +1586,13 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs.gotorevision(ref)
         return sdir
 
+    if name == 'iptables':
+        sdir = os.path.join(extlib_dir, 'iptables')
+        vcs = getvcs('git',
+	    'https://android.googlesource.com/platform/external/iptables', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
