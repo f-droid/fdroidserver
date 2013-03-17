@@ -1961,26 +1961,30 @@ def scan_source(build_dir, root_dir, thisbuild):
     for r,d,f in os.walk(build_dir):
         for curfile in f:
 
-            if r.find('/.hg/') == -1:
+            if r.find('/.hg') != -1 or r.find('/.git') != -1:
+                continue
 
-                # Path (relative) to the file...
-                fp = os.path.join(r, curfile)
+            # Path (relative) to the file...
+            fp = os.path.join(r, curfile)
 
-                for suspect in usual_suspects:
-                    if curfile.lower().find(suspect) != -1:
-                        msg = 'Found probable non-free blob ' + fp
-                        problems.append(msg)
-
-                if curfile.endswith('.apk'):
-                    msg = 'Found apk file, which should not be in the source - ' + fp
+            for suspect in usual_suspects:
+                if curfile.lower().find(suspect) != -1:
+                    msg = 'Found probable non-free blob ' + fp
                     problems.append(msg)
 
-                if curfile.endswith('.java'):
-                    for line in file(fp):
+            if curfile.endswith('.apk'):
+                msg = 'Found apk file, which should not be in the source - ' + fp
+                problems.append(msg)
 
-                        if line.find('DexClassLoader') != -1:
-                            msg = 'Found DexClassLoader in ' + fp
-                            problems.append(msg)
+            elif curfile.endswith('.so') or curfile.endswith('.elf'):
+                msg = 'Found ELF at ' + fp
+                problems.append(msg)
+
+            elif curfile.endswith('.java'):
+                for line in file(fp):
+                    if line.find('DexClassLoader') != -1:
+                        msg = 'Found DexClassLoader in ' + fp
+                        problems.append(msg)
 
     # Presence of a jni directory without buildjni=yes might
     # indicate a problem... (if it's not a problem, explicitly use
