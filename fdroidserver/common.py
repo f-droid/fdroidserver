@@ -1961,14 +1961,14 @@ def scan_source(build_dir, root_dir, thisbuild):
     for r,d,f in os.walk(build_dir):
         for curfile in f:
 
-            if r.find('/.hg') != -1 or r.find('/.git') != -1:
+            if '/.hg' in r or '/.git' in r or '/.svn' in r:
                 continue
 
             # Path (relative) to the file...
             fp = os.path.join(r, curfile)
 
             for suspect in usual_suspects:
-                if curfile.lower().find(suspect) != -1:
+                if suspect in curfile.lower():
                     msg = 'Found probable non-free blob ' + fp
                     problems.append(msg)
 
@@ -1982,7 +1982,7 @@ def scan_source(build_dir, root_dir, thisbuild):
 
             elif curfile.endswith('.java'):
                 for line in file(fp):
-                    if line.find('DexClassLoader') != -1:
+                    if 'DexClassLoader' in line:
                         msg = 'Found DexClassLoader in ' + fp
                         problems.append(msg)
 
