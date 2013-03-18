@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # common.py - part of the FDroid server tools
-# Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -1592,6 +1592,17 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs = getvcs('git',
 	    'https://github.com/mikereedell/sunrisesunsetlib-java', sdir, sdk_path)
         vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'LocaleAPI':
+        sdir = os.path.join(extlib_dir, 'LocaleAPI')
+        vcs = getvcs('git',
+                'https://git.gitorious.org/locale-api/mirror.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating LocaleAPI project')
         return sdir
 
     raise BuildException('Unknown srclib ' + name)
