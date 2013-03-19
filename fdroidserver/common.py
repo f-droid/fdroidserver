@@ -2008,8 +2008,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                 msg = 'Found apk file, which should not be in the source - ' + fp
                 problems.append(msg)
 
-            elif curfile.endswith('.so') or curfile.endswith('.elf'):
-                msg = 'Found ELF at ' + fp
+            elif curfile.endswith('.so'):
+                print 'Warning: ELF at ' + fp
                 problems.append(msg)
 
             elif curfile.endswith('.java'):
