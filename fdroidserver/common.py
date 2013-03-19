@@ -1828,7 +1828,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
 
     # There should never be gen or bin directories in the source, so just get
     # rid of them...
-    for baddir in ['gen', 'bin']:
+    for baddir in ['gen', 'bin', 'obj', 'libs/armeabi', 'libs/mips', 'libs/x86']:
         badpath = os.path.join(root_dir, baddir)
         if os.path.exists(badpath):
             shutil.rmtree(badpath)
