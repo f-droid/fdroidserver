@@ -2009,8 +2009,11 @@ def scan_source(build_dir, root_dir, thisbuild):
                 problems.append(msg)
 
             elif curfile.endswith('.so'):
-                print 'Warning: ELF at ' + fp
-                problems.append(msg)
+                if '/jni' in r:
+                    print 'Warning: Found ELF at ' + fp
+                else:
+                    msg = 'Found ELF at ' + fp
+                    problems.append(msg)
 
             elif curfile.endswith('.java'):
                 for line in file(fp):
