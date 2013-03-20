@@ -98,7 +98,7 @@ def main():
                         print "..scanning version " + thisbuild['version']
 
                         # Prepare the source code...
-                        root_dir = common.prepare_source(vcs, app, thisbuild,
+                        root_dir, _ = common.prepare_source(vcs, app, thisbuild,
                                 build_dir, extlib_dir, sdk_path, ndk_path, javacc_path, mvn3, options.verbose)
 
                         # Do the scan...

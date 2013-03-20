@@ -772,6 +772,11 @@ insert literal commas, or as the last character on a line to join that
 line with the next. It has no special meaning in other contexts; in
 particular, literal backslashes should not be escaped.
 
+Note that nothing should be build during this prebuild phase - scanning
+of the code and building of the source tarball, for example, take place
+after this. For custom actions that actually build things, use 'build'
+instead.
+
 You can use $$name$$ to substitute the path to a referenced srclib - see
 the @code{srclib} directory for details of this.
 
@@ -784,6 +789,15 @@ takes place.
 
 You can use $$SDK$$, $$NDK$$ and $$MVN3$$ to substitute the paths to the
 android SDK and NDK directories, and maven 3 executable respectively.
+
+@item build=xxxx
+As for 'prebuild', but runs during the actual build phase (but before the
+main ant/maven build). Use this only for actions that do actual building.
+Any prepartion of the source code should be done using 'init' or 'prebuild'.
+
+You can use $$SDK$$, $$NDK$$ and $$MVN3$$ to substitute the paths to the
+android SDK and NDK directories, and maven 3 executable respectively.
+
 
 @item novcheck=yes 
 Don't check that the version name and code in the resulting apk are

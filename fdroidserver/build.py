@@ -265,7 +265,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
     """Do a build locally."""
 
     # Prepare the source code...
-    root_dir = common.prepare_source(vcs, app, thisbuild,
+    root_dir, srclibpaths = common.prepare_source(vcs, app, thisbuild,
             build_dir, extlib_dir, sdk_path, ndk_path,
             javacc_path, mvn3, verbose)
 
@@ -290,6 +290,22 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
         return False
     tarball.add(build_dir, tarname, exclude=tarexc)
     tarball.close()
+
+    # Run a build command if one is required...
+    if 'build' in thisbuild:
+        prebuild = build['build']
+        # Substitute source library paths into prebuild commands...
+        for name, libpath in srclibpaths:
+            libpath = os.path.relpath(libpath, root_dir)
+            prebuild = prebuild.replace('$$' + name + '$$', libpath)
+        prebuild = prebuild.replace('$$SDK$$', sdk_path)
+        prebuild = prebuild.replace('$$NDK$$', ndk_path)
+        prebuild = prebuild.replace('$$MVN3$$', mvn3)
+        p = subprocess.Popen(prebuild, cwd=root_dir, shell=True,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        if p.returncode != 0:
+            raise BuildException("Error running build command", out, err)
 
     # Build native stuff if required...
     if thisbuild.get('buildjni') not in (None, 'no'):

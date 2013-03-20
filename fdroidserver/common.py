@@ -1642,8 +1642,10 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
 #  'javacc_path' - the path to javacc
 #  'mvn3'        - the path to the maven 3 executable
 #  'verbose'     - optional: verbose or not (default=False)
-# Returns the root directory, which may be the same as 'build_dir' or may
-# be a subdirectory of it.
+# Returns the (root, srclibpaths) where:
+#   'root' is the root directory, which may be the same as 'build_dir' or may
+#          be a subdirectory of it.
+#   'srclibpaths' is information on the srclibs being used
 def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, javacc_path, mvn3, verbose=False):
 
     # Optionally, the actual app source can be in a subdirectory...
@@ -1970,7 +1972,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
             'build.properties'], cwd=root_dir) !=0:
             raise BuildException("Failed to amend build.properties")
 
-    return root_dir
+    return (root_dir, srclibpaths)
 
 
 # Scan the source code in the given directory (and all subdirectories)
