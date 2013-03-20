@@ -1830,7 +1830,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
 
     # There should never be gen or bin directories in the source, so just get
     # rid of them...
-    for baddir in ['gen', 'bin']:
+    for baddir in ['gen', 'bin', 'obj', 'libs/armeabi', 'libs/mips', 'libs/x86']:
         badpath = os.path.join(root_dir, baddir)
         if os.path.exists(badpath):
             shutil.rmtree(badpath)
@@ -2010,9 +2010,12 @@ def scan_source(build_dir, root_dir, thisbuild):
                 msg = 'Found apk file, which should not be in the source - ' + fp
                 problems.append(msg)
 
-            elif curfile.endswith('.so') or curfile.endswith('.elf'):
-                msg = 'Found ELF at ' + fp
-                problems.append(msg)
+            elif curfile.endswith('.so'):
+                if '/jni' in r:
+                    print 'Warning: Found ELF at ' + fp
+                else:
+                    msg = 'Found ELF at ' + fp
+                    problems.append(msg)
 
             elif curfile.endswith('.java'):
                 for line in file(fp):
