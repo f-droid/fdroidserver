@@ -1991,6 +1991,11 @@ def scan_source(build_dir, root_dir, thisbuild):
                       'heyzap',
                       'jpct-ae']
 
+    if 'scanignore' in thisbuild:
+        ignore = thisbuild['scanignore'].split(';')
+    else:
+        ignore = []
+
     # Iterate through all files in the source code...
     for r,d,f in os.walk(build_dir):
         for curfile in f:
@@ -2001,6 +2006,15 @@ def scan_source(build_dir, root_dir, thisbuild):
             # Path (relative) to the file...
             fp = os.path.join(r, curfile)
 
+            # Check if this file has been explicitly excluded from scanning...
+            ignorethis = False
+            for i in ignore:
+                if fp.startswith(i):
+                    ignorethis = True
+                    break
+            if ignorethis:
+                continue
+
             for suspect in usual_suspects:
                 if suspect in curfile.lower():
                     msg = 'Found probable non-free blob ' + fp
@@ -2010,12 +2024,13 @@ def scan_source(build_dir, root_dir, thisbuild):
                 msg = 'Found apk file, which should not be in the source - ' + fp
                 problems.append(msg)
 
+            elif curfile.endswith('.elf'):
+                msg = 'Found .elf at ' + fp
+                problems.append(msg)
+
             elif curfile.endswith('.so'):
-                if '/jni' in r:
-                    print 'Warning: Found ELF at ' + fp
-                else:
-                    msg = 'Found ELF at ' + fp
-                    problems.append(msg)
+                msg = 'Found .so at ' + fp
+                problems.append(msg)
 
             elif curfile.endswith('.java'):
                 for line in file(fp):

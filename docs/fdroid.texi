@@ -754,6 +754,14 @@ If the native code is being built by other means, you can specify
 not required, remove the directory instead (using @code{prebuild} for
 example).
 
+@item scanignore=path1;path2;...
+Enables one or more files/paths to be exlcuded from the scan process.
+This should only be used where there is a very good reason, and
+probably accompanied by a comment explaining why it is necessary.
+
+When scanning, files whose relative paths start with any of the paths
+given here are ignored.
+
 @item submodules=yes
 Use if the project (git only) has submodules - causes git submodule
 init and update to be executed after the source is cloned.
