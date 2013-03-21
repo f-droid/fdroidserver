@@ -66,11 +66,13 @@ def check_tags(app, sdk_path):
         for tag in vcs.gettags():
             vcs.gotorevision(tag)
 
-            version, vercode, package = common.parse_androidmanifest(manifest)
-            if package and package == app['id'] and version and vercode:
-                if int(vercode) > int(hcode):
-                    hcode = str(int(vercode))
-                    hver = version
+            # Only process tags where the manifest exists...
+            if os.path.exists(manifest):
+                version, vercode, package = common.parse_androidmanifest(manifest)
+                if package and package == app['id'] and version and vercode:
+                    if int(vercode) > int(hcode):
+                        hcode = str(int(vercode))
+                        hver = version
 
         if hver:
             return (hver, hcode)
