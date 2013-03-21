@@ -293,7 +293,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
 
     # Run a build command if one is required...
     if 'build' in thisbuild:
-        prebuild = build['build']
+        prebuild = thisbuild['build']
         # Substitute source library paths into prebuild commands...
         for name, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
