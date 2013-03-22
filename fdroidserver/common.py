@@ -906,6 +906,21 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         libdir = os.path.join(sdir, 'gson')
         return libdir
 
+    if name == 'libsuperuser':
+        sdir = os.path.join(extlib_dir, 'libsuperuser')
+        vcs = getvcs('git',
+        'https://github.com/Chainfire/libsuperuser', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'libsuperuser')
+        return libdir
+
+    if name == 'AndroidUtils':
+        sdir = os.path.join(extlib_dir, 'libsuperuser')
+        vcs = getvcs('git',
+        'https://github.com/yuriykulikov/AndroidUtils', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     if name == 'Amazing-ListView':
         sdir = os.path.join(extlib_dir, 'Amazing-ListView')
         vcs = getvcs('git-svn',
