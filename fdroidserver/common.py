@@ -1753,9 +1753,10 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
 
     # Delete unwanted file...
     if 'rm' in build:
-        dest = os.path.join(build_dir, build['rm'])
-        if os.path.exists(dest):
-            os.remove(dest)
+        for part in build['rm'].split(';'):
+            dest = os.path.join(build_dir, part)
+            if os.path.exists(dest):
+                os.remove(dest)
 
     # Fix apostrophes translation files if necessary...
     if build.get('fixapos', 'no') == 'yes':

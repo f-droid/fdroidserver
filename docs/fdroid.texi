@@ -704,6 +704,8 @@ the root of the directory structure checked out from the source
 respository - not necessarily the directory that contains
 AndroidManifest.xml.
 
+Multiple files can be specified by separating they with ';'.
+
 @item antcommand=xxx
 Specify an alternate ant command (target) instead of the default
 'release'.
