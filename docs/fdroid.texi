@@ -916,7 +916,10 @@ Valid modes are:
 
 @itemize
 @item
-@code{None} - No checking is done
+@code{None} - No checking is done because there's no appropriate automated way
+of doing so. Updates should be checked for manually.
+@item
+@code{Static} - No checking is done - updated versions are not expected.
 @item
 @code{RepoManifest} - The AndroidManifest.xml file in the most recent commit
 in the source repository is checked. The appropriateness of this method depends
