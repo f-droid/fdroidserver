@@ -222,7 +222,8 @@ def main():
         elif mode == 'RepoManifest':
             (version, vercode) = check_repomanifest(app, sdk_path)
         elif mode == 'Static':
-            pass
+            version = None
+            vercode = 'Checking disabled'
         elif mode == 'None':
             version = None
             vercode = 'Checking disabled'
