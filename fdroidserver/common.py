@@ -40,7 +40,6 @@ def getvcs(vcstype, remote, local, sdk_path):
 
 class vcs:
     def __init__(self, remote, local, sdk_path):
-
         self.sdk_path = sdk_path
 
         # It's possible to sneak a username and password in with
@@ -177,7 +176,6 @@ class vcs_git(vcs):
                 stdout=subprocess.PIPE, cwd=self.local)
         return p.communicate()[0].splitlines()
 
-
 class vcs_gitsvn(vcs):
 
     def repotype(self):
@@ -264,7 +262,6 @@ class vcs_svn(vcs):
                     self.userargs(), cwd=self.local) != 0:
                 raise VCSException("Svn update failed")
 
-
 class vcs_hg(vcs):
 
     def repotype(self):
@@ -288,7 +285,6 @@ class vcs_hg(vcs):
             if subprocess.call(['hg', 'checkout', '-C'] + revargs,
                     cwd=self.local) != 0:
                 raise VCSException("Hg checkout failed")
-
 
 class vcs_bzr(vcs):
 
@@ -339,7 +335,6 @@ class vcs_srclib(vcs):
         shutil.copytree(libdir, self.local)
         return self.local
 
-
 # Get the type expected for a given metadata field.
 def metafieldtype(name):
     if name == 'Description':
@@ -351,7 +346,6 @@ def metafieldtype(name):
     elif name == 'Use Built':
         return 'obsolete'
     return 'string'
-
 
 # Parse metadata for a single application.
 #
@@ -604,7 +598,6 @@ def write_metadata(dest, app):
     writecomments(None)
     mf.close()
 
-
 # Read all metadata. Returns a list of 'app' objects (which are dictionaries as
 # returned by the parse_metadata function.
 def read_metadata(verbose=False, xref=True):
@@ -694,7 +687,6 @@ class DescriptionFormatter:
                         formatted += '<i>'
                 self.ital = not self.ital
                 txt = txt[2:]
-
 
     def linkify(self, txt):
         linkified_plain = ''
@@ -802,13 +794,10 @@ def description_html(lines,linkres):
     ps.end()
     return ps.text_html
 
-
-
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
 # All values returned are strings.
 def parse_androidmanifest(manifest):
-
     vcsearch = re.compile(r'.*android:versionCode="([^"]+)".*').search
     vnsearch = re.compile(r'.*android:versionName="([^"]+)".*').search
     psearch = re.compile(r'.*package="([^"]+)".*').search
@@ -829,7 +818,6 @@ def parse_androidmanifest(manifest):
             if matches:
                 vercode = matches.group(1)
     return (version, vercode, package)
-
 
 class BuildException(Exception):
     def __init__(self, value, stdout = None, stderr = None):
@@ -859,7 +847,6 @@ class MetaDataException(Exception):
     def __str__(self):
         return repr(self.value)
 
-
 # Get the specified source library.
 # Returns the path to it. Normally this is the path to be used when referencing
 # it, which may be a subdirectory of the actual project. If you want the base
@@ -867,7 +854,6 @@ class MetaDataException(Exception):
 # TODO: These are currently just hard-coded in this method. It will be a
 # metadata-driven system eventually, but not yet.
 def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
-
     name, ref = spec.split('@')
 
     if name == 'GreenDroid':
@@ -1656,7 +1642,6 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
 
     raise BuildException('Unknown srclib ' + name)
 
-
 # Prepare the source code for a particular build
 #  'vcs'         - the appropriate vcs object for the application
 #  'app'         - the application details from the metadata
@@ -1675,7 +1660,6 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
 #          be a subdirectory of it.
 #   'srclibpaths' is information on the srclibs being used
 def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, javacc_path, mvn3, verbose=False):
-
     # Optionally, the actual app source can be in a subdirectory...
     if 'subdir' in build:
         root_dir = os.path.join(build_dir, build['subdir'])
@@ -2003,11 +1987,9 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
 
     return (root_dir, srclibpaths)
 
-
 # Scan the source code in the given directory (and all subdirectories)
 # and return a list of potential problems.
 def scan_source(build_dir, root_dir, thisbuild):
-
     problems = []
 
     # Common known non-free blobs:
@@ -2076,7 +2058,6 @@ def scan_source(build_dir, root_dir, thisbuild):
         problems.append(msg)
 
     return problems
-
 
 class KnownApks:
 
