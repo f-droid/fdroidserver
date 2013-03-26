@@ -1585,7 +1585,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
     elif name == 'ColorPickerPreference':
         sdir = os.path.join(extlib_dir, 'ColorPickerPreference')
         vcs = getvcs('git',
-	    'https://github.com/frigus02/HoloColorPicker', sdir, sdk_path)
+	    'https://github.com/attenzione/android-ColorPickerPreference', sdir, sdk_path)
         vcs.gotorevision(ref)
         if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
             'update', 'project', '-p',
