@@ -912,10 +912,12 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         'https://github.com/Chainfire/libsuperuser', sdir, sdk_path)
         vcs.gotorevision(ref)
         libdir = os.path.join(sdir, 'libsuperuser')
+        if basepath:
+            return sdir
         return libdir
 
     if name == 'AndroidUtils':
-        sdir = os.path.join(extlib_dir, 'libsuperuser')
+        sdir = os.path.join(extlib_dir, 'AndroidUtils')
         vcs = getvcs('git',
         'https://github.com/yuriykulikov/AndroidUtils', sdir, sdk_path)
         vcs.gotorevision(ref)
