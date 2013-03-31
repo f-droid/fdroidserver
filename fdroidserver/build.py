@@ -318,6 +318,17 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
         for d in jni_components:
             if options.verbose:
                 print "Running ndk-build in " + root_dir + '/' + d
+            manifest = root_dir + '/' + d + '/AndroidManifest.xml'
+            if os.path.exists(manifest):
+                # Read and write the whole AM.xml to fix newlines and avoid
+                # the ndk r8c or later 'wordlist' errors. The outcome of this
+                # under gnu/linux is the same as when using tools like
+                # dos2unix, but the native python way is faster and will
+                # work in non-unix systems.
+                manifest_text = open(manifest, 'U').read()
+                open(manifest, 'w').write(manifest_text)
+                # In case the AM.xml read was big, free the memory
+                del manifest_text
             p = subprocess.Popen([ndkbuild], cwd=root_dir + '/' + d,
                     stdout=subprocess.PIPE)
         output = p.communicate()[0]
