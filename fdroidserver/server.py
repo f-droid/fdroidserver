@@ -41,8 +41,14 @@ def main():
         print "The only command currently supported is 'update'"
         sys.exit(1)
 
-    sys.exit(subprocess.call(['rsync', 
-        '-u', '-v', '-r', '--delete', 'repo', serverwebroot]))
+    if subprocess.call(['rsync', '-u', '-v', '-r', '--delete', '--exclude', 'repo/index.xml', '--exclude', 'repo/index.jar', 'repo', serverwebroot]) != 0:
+        sys.exit(1)
+    if subprocess.call(['rsync', '-u', '-v', '-r', '--delete', 'repo/index.xml', serverwebroot + '/repo']) != 0:
+        sys.exit(1)
+    if subprocess.call(['rsync', '-u', '-v', '-r', '--delete', 'repo/index.jar', serverwebroot + '/repo']) != 0:
+        sys.exit(1)
+
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()
