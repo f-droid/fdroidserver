@@ -205,7 +205,6 @@ class vcs_gitsvn(vcs):
                         trunk = i[6:]
                     elif i.startswith('tags='):
                         tags = i[5:]
-                gitsvn_cmd = []
                 if trunk:
                     gitsvn_cmd += ['-T', trunk]
                 if tags:
