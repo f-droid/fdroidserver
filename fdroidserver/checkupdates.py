@@ -45,12 +45,15 @@ def check_tags(app, sdk_path):
 
         build_dir = 'build/' + app['id']
 
-        if app['Repo Type'] != 'git':
-            return (None, 'Tags update mode only works for git repositories currently')
+        if app['Repo Type'] not in ('git', 'git-svn'):
+            return (None, 'Tags update mode only works for git and git-svn repositories currently')
 
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
-        vcs.gotorevision('origin/master')
+        if app['Repo Type'] == 'git':
+            vcs.gotorevision('origin/master')
+        elif app['Repo Type'] == 'git-svn':
+            vcs.gotorevision('trunk')
 
         if len(app['builds']) == 0:
             return (None, "Can't use Tags with no builds defined")
@@ -100,12 +103,15 @@ def check_repomanifest(app, sdk_path):
 
         build_dir = 'build/' + app['id']
 
-        if app['Repo Type'] != 'git':
-            return (None, 'RepoManifest update mode only works for git repositories currently')
+        if app['Repo Type'] not in ('git', 'git-svn'):
+            return (None, 'RepoManifest update mode only works for git and git-svn repositories currently')
 
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
-        vcs.gotorevision('origin/master')
+        if app['Repo Type'] == 'git':
+            vcs.gotorevision('origin/master')
+        elif app['Repo Type'] == 'git-svn':
+            vcs.gotorevision('trunk')
 
         if len(app['builds']) == 0:
             return (None, "Can't use RepoManifest with no builds defined")

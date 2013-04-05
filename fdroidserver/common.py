@@ -197,7 +197,7 @@ class vcs_gitsvn(vcs):
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout...
-            if subprocess.call(['git', 'svn', 'clone', self.remote, self.local]) != 0:
+            if subprocess.call(['git', 'svn', 'clone', '-T', 'trunk', '-t', 'tags', self.remote, self.local]) != 0:
                 raise VCSException("Git clone failed")
             self.checkrepo()
         else:
@@ -216,18 +216,29 @@ class vcs_gitsvn(vcs):
                     raise VCSException("Git svn rebase failed")
                 self.refreshed = True
         if rev:
-            # Figure out the git commit id corresponding to the svn revision...
-            p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev],
-                cwd=self.local, stdout=subprocess.PIPE)
-            rev = p.communicate()[0].rstrip()
-            if p.returncode != 0 or len(rev) == 0:
-                raise VCSException("Failed to get git treeish from svn rev")
-            # Check out the appropriate revision...
-            if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
-                raise VCSException("Git checkout failed")
+            if rev == 'trunk':
+                if subprocess.call(['git', 'checkout', 'trunk'], cwd=self.local) != 0:
+                    raise VCSException("Git checkout failed")
+            else:
+                # Try finding a svn tag
+                if subprocess.call(['git', 'checkout', 'tags/' + rev], cwd=self.local) != 0:
+                    # No tag found, normal svn rev translation
+                    # Translate svn rev into git format
+                    p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev],
+                        cwd=self.local, stdout=subprocess.PIPE)
+                    rev = p.communicate()[0].rstrip()
+                    if p.returncode != 0 or len(rev) == 0:
+                        raise VCSException("Failed to get git treeish from svn rev")
+                    # Check out the appropriate git revision...
+                    if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
+                        raise VCSException("Git checkout failed")
         # Get rid of any uncontrolled files left behind...
         if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
             raise VCSException("Git clean failed")
+
+    def gettags(self):
+        self.checkrepo()
+        return os.listdir(self.local+'/.git/svn/refs/remotes/tags')
 
 class vcs_svn(vcs):
 
