@@ -197,8 +197,24 @@ class vcs_gitsvn(vcs):
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout...
-            if subprocess.call(['git', 'svn', 'clone', '-T', 'trunk', '-t', 'tags', self.remote, self.local]) != 0:
-                raise VCSException("Git clone failed")
+            gitsvn_cmd = ['git', 'svn', 'clone']
+            remote_split = self.remote.split(';')
+            if len(remote_split) > 1:
+                for i in remote_split[1:]:
+                    if i.startswith('trunk='):
+                        trunk = i[6:]
+                    elif i.startswith('tags='):
+                        tags = i[5:]
+                gitsvn_cmd = []
+                if trunk:
+                    gitsvn_cmd += ['-T', trunk]
+                if tags:
+                    gitsvn_cmd += ['-t', tags]
+                if subprocess.call(gitsvn_cmd + [remote_split[0], self.local]) != 0:
+                    raise VCSException("Git clone failed")
+            else:
+                if subprocess.call(gitsvn_cmd + [self.remote, self.local]) != 0:
+                    raise VCSException("Git clone failed")
             self.checkrepo()
         else:
             self.checkrepo()
