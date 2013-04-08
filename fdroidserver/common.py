@@ -1654,6 +1654,13 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
+    elif name == 'XChange':
+        sdir = os.path.join(extlib_dir, 'XChange')
+        vcs = getvcs('git',
+	    'https://github.com/timmolter/XChange', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
