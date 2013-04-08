@@ -41,6 +41,9 @@ keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"
 #for particular applications. Normally, just leave it empty.
 keyaliases = {}
 keyaliases['com.example.app'] = 'example'
+#You can also force an app to use the same key alias as another one, using
+#the @ prefix.
+keyaliases['com.example.another.plugin'] = '@com.example.another'
 
 #The ssh path to the server's public web root directory. This is used for
 #uploading data, etc.

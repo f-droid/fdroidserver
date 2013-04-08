@@ -84,6 +84,10 @@ def main():
             if appid in keyaliases:
                 # For this particular app, the key alias is overridden...
                 keyalias = keyaliases[appid]
+                if keyalias.startswith('@'):
+                    m = md5.new()
+                    m.update(keyalias[1:])
+                    keyalias = m.hexdigest()[:8]
             else:
                 m = md5.new()
                 m.update(appid)
