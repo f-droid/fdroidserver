@@ -26,15 +26,15 @@ import cgi
 def getvcs(vcstype, remote, local, sdk_path):
     if vcstype == 'git':
         return vcs_git(remote, local, sdk_path)
-    elif vcstype == 'svn':
+    if vcstype == 'svn':
         return vcs_svn(remote, local, sdk_path)
-    elif vcstype == 'git-svn':
+    if vcstype == 'git-svn':
         return vcs_gitsvn(remote, local, sdk_path)
-    elif vcstype == 'hg':
+    if vcstype == 'hg':
         return vcs_hg(remote, local, sdk_path)
-    elif vcstype == 'bzr':
+    if vcstype == 'bzr':
         return vcs_bzr(remote, local, sdk_path)
-    elif vcstype == 'srclib':
+    if vcstype == 'srclib':
         return vcs_srclib(remote, local, sdk_path)
     raise VCSException("Invalid vcs type " + vcstype)
 
@@ -370,11 +370,11 @@ class vcs_srclib(vcs):
 def metafieldtype(name):
     if name == 'Description':
         return 'multiline'
-    elif name == 'Requires Root':
+    if name == 'Requires Root':
         return 'flag'
-    elif name == 'Build Version':
+    if name == 'Build Version':
         return 'build'
-    elif name == 'Use Built':
+    if name == 'Use Built':
         return 'obsolete'
     return 'string'
 
@@ -903,14 +903,14 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs.gotorevision(ref)
         return os.path.join(sdir, 'GreenDroid')
 
-    elif name == 'Dropbear':
+    if name == 'Dropbear':
         sdir = os.path.join(extlib_dir, 'Dropbear')
         vcs = getvcs('git',
             'https://github.com/CyanogenMod/android_external_dropbear.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'ActionBarSherlock':
+    if name == 'ActionBarSherlock':
         sdir = os.path.join(extlib_dir, 'ActionBarSherlock')
         vcs = getvcs('git',
             'https://github.com/JakeWharton/ActionBarSherlock.git', sdir, sdk_path)
@@ -924,7 +924,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'Google-Gson':
+    if name == 'Google-Gson':
         sdir = os.path.join(extlib_dir, 'Google-Gson')
         vcs = getvcs('git-svn',
         'http://google-gson.googlecode.com/svn/trunk', sdir, sdk_path)
@@ -932,7 +932,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         libdir = os.path.join(sdir, 'gson')
         return libdir
 
-    elif name == 'libsuperuser':
+    if name == 'libsuperuser':
         sdir = os.path.join(extlib_dir, 'libsuperuser')
         vcs = getvcs('git',
         'https://github.com/Chainfire/libsuperuser', sdir, sdk_path)
@@ -942,14 +942,14 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'AndroidUtils':
+    if name == 'AndroidUtils':
         sdir = os.path.join(extlib_dir, 'AndroidUtils')
         vcs = getvcs('git',
         'https://github.com/yuriykulikov/AndroidUtils', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'Amazing-ListView':
+    if name == 'Amazing-ListView':
         sdir = os.path.join(extlib_dir, 'Amazing-ListView')
         vcs = getvcs('git-svn',
 	    'http://android-amazing-listview.googlecode.com/svn/trunk', sdir, sdk_path)
@@ -963,7 +963,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'ViewPagerIndicator':
+    if name == 'ViewPagerIndicator':
         sdir = os.path.join(extlib_dir, 'ViewPagerIndicator')
         vcs = getvcs('git',
             'https://github.com/JakeWharton/Android-ViewPagerIndicator.git', sdir, sdk_path)
@@ -977,7 +977,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'UITableView':
+    if name == 'UITableView':
         sdir = os.path.join(extlib_dir, 'UITableView')
         vcs = getvcs('git',
             'https://github.com/thiagolocatelli/android-uitableview.git', sdir, sdk_path)
@@ -991,7 +991,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'ViewPagerTabs':
+    if name == 'ViewPagerTabs':
         sdir = os.path.join(extlib_dir, 'ViewPagerTabs')
         vcs = getvcs('git',
             'https://github.com/astuetz/android-viewpagertabs.git', sdir, sdk_path)
@@ -1006,7 +1006,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating ViewPagerTabs project')
         return sdir
 
-    elif name == 'ActionBar':
+    if name == 'ActionBar':
         sdir = os.path.join(extlib_dir, 'ActionBar')
         vcs = getvcs('git',
             'https://github.com/johannilsson/android-actionbar.git', sdir, sdk_path)
@@ -1020,7 +1020,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'ActionBarNW':
+    if name == 'ActionBarNW':
         sdir = os.path.join(extlib_dir, 'ActionBarNW')
         vcs = getvcs('git',
             'https://github.com/NightWhistler/android-actionbar.git', sdir, sdk_path)
@@ -1034,7 +1034,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'FacebookSDK':
+    if name == 'FacebookSDK':
         sdir = os.path.join(extlib_dir, 'FacebookSDK')
         vcs = getvcs('git',
                 'git://github.com/facebook/facebook-android-sdk.git', sdir, sdk_path)
@@ -1048,14 +1048,14 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'OI':
+    if name == 'OI':
         sdir = os.path.join(extlib_dir, 'OI')
         vcs = getvcs('git-svn',
                 'http://openintents.googlecode.com/svn/trunk/', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'JOpenDocument':
+    if name == 'JOpenDocument':
         sdir = os.path.join(extlib_dir, 'JOpenDocument')
         vcs = getvcs('git',
                 'https://github.com/andiwand/JOpenDocument.git', sdir, sdk_path)
@@ -1063,14 +1063,14 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         shutil.rmtree(os.path.join(sdir, 'bin'))
         return sdir
 
-    elif name == 'BitcoinJWallet':
+    if name == 'BitcoinJWallet':
         sdir = os.path.join(extlib_dir, 'BitcoinJWallet')
         vcs = getvcs('git',
                 'https://code.google.com/r/andreasschildbach-bitcoinj/', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'Color-Picker':
+    if name == 'Color-Picker':
         sdir = os.path.join(extlib_dir, 'Color-Picker')
         vcs = getvcs('git',
             'https://github.com/brk3/android-color-picker.git', sdir, sdk_path)
@@ -1081,7 +1081,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating Color-Picker project')
         return sdir
 
-    elif name == 'Processing-Multitouch':
+    if name == 'Processing-Multitouch':
         sdir = os.path.join(extlib_dir, 'Processing-Multitouch')
         vcs = getvcs('git',
 	    'https://github.com/rjmarsan/AndroidProcessingMultitouch.git', sdir, sdk_path)
@@ -1092,7 +1092,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating Multitouch project')
         return sdir
 
-    elif name == 'NewQuickAction3D':
+    if name == 'NewQuickAction3D':
         sdir = os.path.join(extlib_dir, 'NewQuickAction3D')
         vcs = getvcs('git',
 	    'https://github.com/alt236/NewQuickAction3D.git', sdir, sdk_path)
@@ -1103,7 +1103,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating NewQuickAction3D project')
         return sdir
 
-    elif name == 'AnySoftKeyboard-API':
+    if name == 'AnySoftKeyboard-API':
         sdir = os.path.join(extlib_dir, 'AnySoftKeyboard-API')
         vcs = getvcs('git',
             'https://github.com/AnySoftKeyboard/AnySoftKeyboard-API.git', sdir, sdk_path)
@@ -1114,7 +1114,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating AnySoftKeyboard-API project')
         return sdir
 
-    elif name == 'File-Picker':
+    if name == 'File-Picker':
         sdir = os.path.join(extlib_dir, 'File-Picker')
         vcs = getvcs('hg',
 	    'https://code.google.com/p/android-file-picker/', sdir, sdk_path)
@@ -1125,7 +1125,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating File-Picker project')
         return sdir
 
-    elif name == 'EmulatorView':
+    if name == 'EmulatorView':
         sdir = os.path.join(extlib_dir, 'EmulatorView')
         vcs = getvcs('git',
             'https://github.com/jackpal/Android-Terminal-Emulator.git', sdir, sdk_path)
@@ -1140,7 +1140,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         return libdir
 
     #Leave the native code as a blob; submodules required for that
-    elif name == 'Libpd':
+    if name == 'Libpd':
         sdir = os.path.join(extlib_dir, 'Libpd')
         vcs = getvcs('git',
 	    'https://github.com/libpd/pd-for-android.git', sdir, sdk_path)
@@ -1154,7 +1154,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'Tree-View-List':
+    if name == 'Tree-View-List':
         sdir = os.path.join(extlib_dir, 'Tree-View-List')
         vcs = getvcs('hg',
 	    'https://code.google.com/p/tree-view-list-android/', sdir, sdk_path)
@@ -1165,14 +1165,14 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating Tree-List-View project')
         return sdir
 
-    elif name == 'PrayTimes':
+    if name == 'PrayTimes':
         sdir = os.path.join(extlib_dir, 'PrayTimes')
         vcs = getvcs('git',
 	    'https://github.com/ebraminio/PrayTimes.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'HoloEverywhere':
+    if name == 'HoloEverywhere':
         sdir = os.path.join(extlib_dir, 'HoloEverywhere')
         vcs = getvcs('git',
 	    'https://github.com/ChristopheVersieux/HoloEverywhere.git', sdir, sdk_path)
@@ -1186,14 +1186,14 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'PullToRefresh':
+    if name == 'PullToRefresh':
         sdir = os.path.join(extlib_dir, 'PullToRefresh')
         vcs = getvcs('git',
 	    'https://github.com/chrisbanes/Android-PullToRefresh.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'TessTwo':
+    if name == 'TessTwo':
         sdir = os.path.join(extlib_dir, 'TessTwo')
         vcs = getvcs('git',
 	    'https://github.com/rmtheis/tess-two.git', sdir, sdk_path)
@@ -1207,21 +1207,21 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'TwidereExtension':
+    if name == 'TwidereExtension':
         sdir = os.path.join(extlib_dir, 'TwidereExtension')
         vcs = getvcs('git',
 	    'https://github.com/mariotaku/twidere-extension-library.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'EncfsJava':
+    if name == 'EncfsJava':
         sdir = os.path.join(extlib_dir, 'EncfsJava')
         vcs = getvcs('git',
 	    'https://github.com/mrpdaemon/encfs-java.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'FinfAgent':
+    if name == 'FinfAgent':
         sdir = os.path.join(extlib_dir, 'FinfAgent')
         vcs = getvcs('git',
 	    'https://github.com/uniqdom/FinfAgent.git', sdir, sdk_path)
@@ -1232,7 +1232,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating FinfAgent project')
         return sdir
 
-    elif name == 'MobAdMob':
+    if name == 'MobAdMob':
         sdir = os.path.join(extlib_dir, 'MobAdMob')
         vcs = getvcs('git',
 	    'https://github.com/mar-v-in/MobAdMob.git', sdir, sdk_path)
@@ -1250,7 +1250,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'WebSMSAPI':
+    if name == 'WebSMSAPI':
         sdir = os.path.join(extlib_dir, 'WebSMSAPI')
         vcs = getvcs('git',
 	    'https://github.com/felixb/websms-api.git', sdir, sdk_path)
@@ -1262,7 +1262,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         shutil.rmtree(os.path.join(sdir, 'test'))
         return sdir
 
-    elif name == 'ub0rlib':
+    if name == 'ub0rlib':
         sdir = os.path.join(extlib_dir, 'ub0rlib')
         vcs = getvcs('git',
 	    'https://github.com/felixb/ub0rlib.git', sdir, sdk_path)
@@ -1273,7 +1273,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating ub0rlib project')
         return sdir
 
-    elif name == 'JustPlayerPluginsAdView':
+    if name == 'JustPlayerPluginsAdView':
         sdir = os.path.join(extlib_dir, 'JustPlayerPluginsAdView')
         vcs = getvcs('git',
 	    'https://bitbucket.org/yokmama/just-player-plugins.git', sdir, sdk_path)
@@ -1287,7 +1287,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'NoAnalytics':
+    if name == 'NoAnalytics':
         sdir = os.path.join(extlib_dir, 'NoAnalytics')
         vcs = getvcs('git',
 	    'https://github.com/mar-v-in/NoAnalytics.git', sdir, sdk_path)
@@ -1305,7 +1305,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'TintAddon':
+    if name == 'TintAddon':
 	sdir = os.path.join(extlib_dir, 'TintAddon')
         vcs = getvcs('git',
 	    'https://github.com/Anasthase/TintBrowserAddonFrameworkLibrary.git', sdir, sdk_path)
@@ -1316,42 +1316,42 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating TintAddon project')
         return sdir
 
-    elif name == 'EyesFree':
+    if name == 'EyesFree':
         sdir = os.path.join(extlib_dir, 'EyesFree')
         vcs = getvcs('git-svn',
 	    'http://eyes-free.googlecode.com/svn/trunk', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'SL4A':
+    if name == 'SL4A':
         sdir = os.path.join(extlib_dir, 'SL4A')
         vcs = getvcs('hg',
 	    'https://code.google.com/p/android-scripting', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'GNUPG':
+    if name == 'GNUPG':
         sdir = os.path.join(extlib_dir, 'GNUPG')
         vcs = getvcs('git',
 	    'https://github.com/guardianproject/gnupg-for-android.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'IOCipher':
+    if name == 'IOCipher':
         sdir = os.path.join(extlib_dir, 'IOCipher')
         vcs = getvcs('git',
 	    'https://github.com/guardianproject/IOCipher.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'FFMPEG-Java':
+    if name == 'FFMPEG-Java':
         sdir = os.path.join(extlib_dir, 'FFMPEG-Java')
         vcs = getvcs('git',
 	    'https://github.com/guardianproject/android-ffmpeg-java.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'Slider':
+    if name == 'Slider':
         sdir = os.path.join(extlib_dir, 'Slider')
         vcs = getvcs('git',
 	    'https://github.com/Xlythe/Slider', sdir, sdk_path)
@@ -1362,14 +1362,14 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating Slider project')
         return sdir
 
-    elif name == 'NumberPicker':
+    if name == 'NumberPicker':
         sdir = os.path.join(extlib_dir, 'NumberPicker')
         vcs = getvcs('git',
 	    'https://github.com/thibault/NumberPickerWidget.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'RootCommands':
+    if name == 'RootCommands':
         sdir = os.path.join(extlib_dir, 'RootCommands')
         vcs = getvcs('git',
 	    'https://github.com/dschuermann/root-commands.git', sdir, sdk_path)
@@ -1383,21 +1383,21 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'LibPageKite':
+    if name == 'LibPageKite':
         sdir = os.path.join(extlib_dir, 'LibPageKite')
         vcs = getvcs('git',
 	    'https://github.com/pagekite/libpagekite.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'OpenSSL-GP':
+    if name == 'OpenSSL-GP':
         sdir = os.path.join(extlib_dir, 'OpenSSL-GP')
         vcs = getvcs('git',
 	    'https://github.com/guardianproject/openssl-android.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'NumberPicker-SimonVT':
+    if name == 'NumberPicker-SimonVT':
         sdir = os.path.join(extlib_dir, 'NumberPicker-SimonVT')
         vcs = getvcs('git',
 	    'https://github.com/SimonVT/android-numberpicker.git', sdir, sdk_path)
@@ -1411,7 +1411,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'ComicViewer':
+    if name == 'ComicViewer':
         sdir = os.path.join(extlib_dir, 'ComicViewer')
         vcs = getvcs('git',
 	    'https://github.com/tcoxon/ComicViewer.git', sdir, sdk_path)
@@ -1422,28 +1422,28 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating ComicViewer project')
         return sdir
 
-    elif name == 'GitHubAPI':
+    if name == 'GitHubAPI':
         sdir = os.path.join(extlib_dir, 'GitHubAPI')
         vcs = getvcs('git',
 	    'git://git.eclipse.org/gitroot/egit/egit-github.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'Busybox':
+    if name == 'Busybox':
         sdir = os.path.join(extlib_dir, 'Busybox')
         vcs = getvcs('git',
 	    'git://busybox.net/busybox.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'BusyboxConfigs':
+    if name == 'BusyboxConfigs':
         sdir = os.path.join(extlib_dir, 'BusyboxConfigs')
         vcs = getvcs('git',
 	    'https://github.com/tias/android-busybox-ndk.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'AppMsg':
+    if name == 'AppMsg':
         sdir = os.path.join(extlib_dir, 'AppMsg')
         vcs = getvcs('git',
 	    'https://github.com/johnkil/Android-AppMsg.git', sdir, sdk_path)
@@ -1457,7 +1457,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'BillingLibrary':
+    if name == 'BillingLibrary':
         sdir = os.path.join(extlib_dir, 'BillingLibrary')
         vcs = getvcs('git',
 	    'https://github.com/robotmedia/AndroidBillingLibrary.git', sdir, sdk_path)
@@ -1471,7 +1471,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'FilePicker':
+    if name == 'FilePicker':
         sdir = os.path.join(extlib_dir, 'FilePicker')
         vcs = getvcs('git',
 	    'https://github.com/Filepicker/filepicker-android.git', sdir, sdk_path)
@@ -1482,7 +1482,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating AppMsg project')
         return sdir 
 
-    elif name == 'aFileChooser':
+    if name == 'aFileChooser':
         sdir = os.path.join(extlib_dir, 'aFileChooser')
         vcs = getvcs('git',
 	    'https://github.com/TomTasche/aFileChooser', sdir, sdk_path)
@@ -1496,7 +1496,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'SlidingMenu':
+    if name == 'SlidingMenu':
         sdir = os.path.join(extlib_dir, 'SlidingMenu')
         vcs = getvcs('git',
 	    'https://github.com/jfeinstein10/SlidingMenu', sdir, sdk_path)
@@ -1510,7 +1510,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'K9Mail-XOAUTH':
+    if name == 'K9Mail-XOAUTH':
         sdir = os.path.join(extlib_dir, 'K9Mail-XOAUTH')
         vcs = getvcs('git',
 	    'https://github.com/jberkel/k9mail.git', sdir, sdk_path)
@@ -1521,7 +1521,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating KMail-XOAUTH project')
         return sdir
 
-    elif name == 'RootTools':
+    if name == 'RootTools':
         sdir = os.path.join(extlib_dir, 'RootTools')
         vcs = getvcs('svn',
 	    'http://roottools.googlecode.com/svn/trunk/Stable/RootTools-sdk3-generic', sdir, sdk_path)
@@ -1537,21 +1537,21 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         os.remove(os.path.join(sdir, 'android.jar'))
         return sdir
 
-    elif name == 'OsmAnd-tools':
+    if name == 'OsmAnd-tools':
         sdir = os.path.join(extlib_dir, 'OsmAnd-tools')
         vcs = getvcs('git',
 	    'https://github.com/osmandapp/OsmAnd-tools', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'OsmAnd-core':
+    if name == 'OsmAnd-core':
         sdir = os.path.join(extlib_dir, 'OsmAnd-core')
         vcs = getvcs('git',
 	    'https://github.com/osmandapp/OsmAnd-core', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'AndrozicLib':
+    if name == 'AndrozicLib':
         sdir = os.path.join(extlib_dir, 'AndrozicLib')
         vcs = getvcs('git',
 	    'https://github.com/andreynovikov/androzic-library', sdir, sdk_path)
@@ -1562,28 +1562,28 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating AndrozicLib project')
         return sdir
 
-    elif name == 'Otr4j':
+    if name == 'Otr4j':
 	sdir = os.path.join(extlib_dir, 'Otr4j')
         vcs = getvcs('git',
 	    'https://github.com/redsolution/otr4j.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'AnySoftKeyboardTools':
+    if name == 'AnySoftKeyboardTools':
         sdir = os.path.join(extlib_dir, 'AnySoftKeyboardTools')
         vcs = getvcs('git',
 	    'https://github.com/AnySoftKeyboard/AnySoftKeyboardTools', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'DashClock':
+    if name == 'DashClock':
         sdir = os.path.join(extlib_dir, 'DashClock')
         vcs = getvcs('git',
 	    'https://code.google.com/p/dashclock', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'KoushWidgets':
+    if name == 'KoushWidgets':
         sdir = os.path.join(extlib_dir, 'KoushWidgets')
         vcs = getvcs('git',
 	    'https://github.com/koush/Widgets', sdir, sdk_path)
@@ -1597,7 +1597,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'HoloColorPicker':
+    if name == 'HoloColorPicker':
         sdir = os.path.join(extlib_dir, 'HoloColorPicker')
         vcs = getvcs('git',
 	    'https://github.com/frigus02/HoloColorPicker', sdir, sdk_path)
@@ -1608,7 +1608,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating HoloColorPicker project')
         return sdir
 
-    elif name == 'ColorPickerPreference':
+    if name == 'ColorPickerPreference':
         sdir = os.path.join(extlib_dir, 'ColorPickerPreference')
         vcs = getvcs('git',
 	    'https://github.com/attenzione/android-ColorPickerPreference', sdir, sdk_path)
@@ -1619,7 +1619,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating ColorPickerPreference project')
         return sdir
 
-    elif name == 'ChartLib':
+    if name == 'ChartLib':
         sdir = os.path.join(extlib_dir, 'ChartLib')
         vcs = getvcs('git',
 	    'https://bitbucket.org/frigus02/chartlib', sdir, sdk_path)
@@ -1630,7 +1630,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating ChartLib project')
         return sdir
 
-    elif name == 'MeterLib':
+    if name == 'MeterLib':
         sdir = os.path.join(extlib_dir, 'MeterLib')
         vcs = getvcs('git',
 	    'https://github.com/zaren678/HdhomerunSignalMeterLib', sdir, sdk_path)
@@ -1641,14 +1641,14 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating MeterLib project')
         return sdir
 
-    elif name == 'SunriseSunset':
+    if name == 'SunriseSunset':
         sdir = os.path.join(extlib_dir, 'SunriseSunset')
         vcs = getvcs('git',
 	    'https://github.com/mikereedell/sunrisesunsetlib-java', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'LocaleAPI':
+    if name == 'LocaleAPI':
         sdir = os.path.join(extlib_dir, 'LocaleAPI')
         vcs = getvcs('git',
                 'https://git.gitorious.org/locale-api/mirror.git', sdir, sdk_path)
@@ -1659,14 +1659,14 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating LocaleAPI project')
         return sdir
 
-    elif name == 'iptables':
+    if name == 'iptables':
         sdir = os.path.join(extlib_dir, 'iptables')
         vcs = getvcs('git',
 	    'https://android.googlesource.com/platform/external/iptables', sdir, sdk_path)
         vcs.gotorevision(ref)
         return sdir
 
-    elif name == 'LockPattern':
+    if name == 'LockPattern':
         sdir = os.path.join(extlib_dir, 'LockPattern')
         vcs = getvcs('hg',
 	    'https://code.google.com/p/android-lockpattern', sdir, sdk_path)
@@ -1680,7 +1680,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
-    elif name == 'XChange':
+    if name == 'XChange':
         sdir = os.path.join(extlib_dir, 'XChange')
         vcs = getvcs('git',
 	    'https://github.com/timmolter/XChange', sdir, sdk_path)
