@@ -1687,6 +1687,16 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs.gotorevision(ref)
         return sdir
 
+    if name == 'MusicBrainz-API':
+        sdir = os.path.join(extlib_dir, 'MusicBrainz-API')
+        vcs = getvcs('git',
+        'https://github.com/jdamcd/musicbrainz-android', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'api')
+        if basepath:
+            return sdir
+        return libdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
