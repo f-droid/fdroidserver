@@ -29,6 +29,7 @@ with open(os.path.join(serverdir, 'up.log'), 'w') as log:
     log.write('==stderr==\n' + err + '\n\n')
 if returncode != 0:
     print "Failed to configure server"
+    sys.exit(1)
 print "Stopping build server VM"
 vagrant(['halt'], serverdir)
 
