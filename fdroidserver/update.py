@@ -698,6 +698,7 @@ def main():
         # Sign the index...
         p = subprocess.Popen(['jarsigner', '-keystore', keystore,
             '-storepass', keystorepass, '-keypass', keypass,
+            '-digestalg', 'SHA1', '-sigalg', 'MD5withRSA',
             os.path.join('repo', 'index.jar') , repo_keyalias], stdout=subprocess.PIPE)
         output = p.communicate()[0]
         if p.returncode != 0:
