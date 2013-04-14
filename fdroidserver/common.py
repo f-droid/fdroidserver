@@ -416,6 +416,10 @@ def parse_metadata(metafile, **kw):
         thisbuild['origlines'] = lines
         thisbuild['version'] = parts[0]
         thisbuild['vercode'] = parts[1]
+        try:
+            testvercode = int(thisbuild['vercode'])
+        except:
+            raise MetaDataException("Invalid version code for build in " + metafile.name)
         thisbuild['commit'] = parts[2]
         for p in parts[3:]:
             pk, pv = p.split('=', 1)
