@@ -2180,3 +2180,19 @@ class KnownApks:
         lst.reverse()
         return lst
 
+def isApkDebuggable(apkfile):
+    """Returns True if the given apk file is debuggable"""
+
+    p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools', 'aapt'),
+		  'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
+		 stdout=subprocess.PIPE)
+    output = p.communicate()[0]
+    if p.returncode != 0:
+        print "ERROR: Failed to get apk manifest information"
+        sys.exit(1)
+    for line in output.splitlines():
+        if line.find('android:debuggable') != -1 and not line.endswith('0x0'):
+            return True
+    return False
+
+

@@ -329,6 +329,10 @@ def main():
                 print "  WARNING: no SDK version information found"
                 thisinfo['sdkversion'] = 0
 
+            # Check for debuggable apks...
+            if common.isApkDebuggable(apkfile):
+                print "WARNING: {0} is debuggable... {1}".format(apkfile, line)
+
             # Calculate the md5 and sha256...
             m = hashlib.md5()
             sha = hashlib.sha256()
