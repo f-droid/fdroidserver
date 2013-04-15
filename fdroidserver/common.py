@@ -2180,8 +2180,11 @@ class KnownApks:
         lst.reverse()
         return lst
 
-def isApkDebuggable(apkfile):
-    """Returns True if the given apk file is debuggable"""
+def isApkDebuggable(apkfile, sdk_path):
+    """Returns True if the given apk file is debuggable
+
+    :param apkfile: full path to the apk to check
+    :param sdk_path: path to android sdk"""
 
     p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools', 'aapt'),
 		  'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],

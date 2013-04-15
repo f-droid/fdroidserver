@@ -330,7 +330,7 @@ def main():
                 thisinfo['sdkversion'] = 0
 
             # Check for debuggable apks...
-            if common.isApkDebuggable(apkfile):
+            if common.isApkDebuggable(apkfile, sdk_path):
                 print "WARNING: {0} is debuggable... {1}".format(apkfile, line)
 
             # Calculate the md5 and sha256...
