@@ -338,10 +338,13 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
 
     # Build the release...
     if 'maven' in thisbuild:
-        p = subprocess.Popen([mvn3, 'clean', 'package',
-            '-Dandroid.sdk.path=' + sdk_path,
-            '-Dandroid.sign.debug=false'],
-            cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if install:
+            mvncmd = [mvn3, 'clean', 'package', '-Dandroid.sdk.path=' + sdk_path, '-Dandroid.sign.debug=true']
+        else:
+            mvncmd = [mvn3, 'clean', 'package', '-Dandroid.sdk.path=' + sdk_path, '-Dandroid.release=true']
+        if 'mvnflags' in thisbuild:
+            mvncmd += thisbuild['mvnflags']
+        p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         if install:
             antcommands = ['debug','install']
@@ -357,6 +360,12 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
     if verbose:
         print output
     if install:
+        if 'maven' in thisbuild:
+            p = subprocess.Popen([mvn3, 'android:deploy', '-Dandroid.sdk.path=' + sdk_path],
+                    cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output, error = p.communicate()
+            if p.returncode != 0:
+                raise BuildException("Warning: Could not deploy %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
         return
     print "Build successful"
 
