@@ -292,13 +292,14 @@ class FDroid
 				$out.='}';
 				$out.='</script>';
 
+				$out.="<h3>Packages</h3>";
+
 				$out.="<p><b>NOTE:</b> Although APK downloads are available below to give ";
 				$out.="you the choice, you should be aware that by installing that way you ";
 				$out.="will not receive update notifications, and it's a less secure way ";
 				$out.="to download, especially if you are not currently using HTTPS. ";
 				$out.="We recommend that you install the F-Droid client and use that.</p>";
 
-				$out.="<h3>Packages</h3>";
 				$i=0;
 				foreach($apks as $apk) {
 					$first = $i+1==count($apks);

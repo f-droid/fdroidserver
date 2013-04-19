@@ -390,6 +390,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
             re.S|re.M).group(1)
         src = os.path.join(bindir, src)
 
+    # Make sure it's not debuggable...
+    if not install and common.isApkDebuggable(src, sdk_path):
+        raise BuildException("APK is debuggable")
+
     # By way of a sanity check, make sure the version and version
     # code in our new apk match what we expect...
     print "Checking " + src

@@ -416,6 +416,10 @@ def parse_metadata(metafile, **kw):
         thisbuild['origlines'] = lines
         thisbuild['version'] = parts[0]
         thisbuild['vercode'] = parts[1]
+        try:
+            testvercode = int(thisbuild['vercode'])
+        except:
+            raise MetaDataException("Invalid version code for build in " + metafile.name)
         thisbuild['commit'] = parts[2]
         for p in parts[3:]:
             pk, pv = p.split('=', 1)
@@ -2185,4 +2189,23 @@ class KnownApks:
             lst.append(app)
         lst.reverse()
         return lst
+
+def isApkDebuggable(apkfile, sdk_path):
+    """Returns True if the given apk file is debuggable
+
+    :param apkfile: full path to the apk to check
+    :param sdk_path: path to android sdk"""
+
+    p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools', 'aapt'),
+		  'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
+		 stdout=subprocess.PIPE)
+    output = p.communicate()[0]
+    if p.returncode != 0:
+        print "ERROR: Failed to get apk manifest information"
+        sys.exit(1)
+    for line in output.splitlines():
+        if line.find('android:debuggable') != -1 and not line.endswith('0x0'):
+            return True
+    return False
+
 
