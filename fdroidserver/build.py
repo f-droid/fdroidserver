@@ -340,9 +340,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
     if 'maven' in thisbuild:
         mvncmd = [mvn3, 'clean', 'package', '-Dandroid.sdk.path=' + sdk_path]
         if install:
-            mvncmd.append('-Dandroid.sign.debug=true')
+            mvncmd += ['-Dandroid.sign.debug=true']
         else:
-            mvncmd.append('-Dandroid.release=true')
+            mvncmd += ['-Dandroid.sign.debug=false', '-Dandroid.release=true']
         if 'mvnflags' in thisbuild:
             mvncmd += thisbuild['mvnflags']
         p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
