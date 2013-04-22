@@ -920,6 +920,9 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             'https://github.com/JakeWharton/ActionBarSherlock.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         libdir = os.path.join(sdir, 'library')
+        # For latest ABS releases
+        if not os.path.exists(libdir):
+            libdir = os.path.join(sdir, 'actionbarsherlock')
         if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
             'update', 'project', '-p',
             libdir]) != 0:
