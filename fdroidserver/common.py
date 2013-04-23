@@ -1704,6 +1704,47 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
+    if name == 'XChart':
+        sdir = os.path.join(extlib_dir, 'XChart')
+        vcs = getvcs('git',
+	    'https://github.com/timmolter/XChart', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'xchart')
+        return libdir
+
+    if name == 'Libxmp':
+        sdir = os.path.join(extlib_dir, 'Libxmp')
+        vcs = getvcs('git',
+	    'git://git.code.sf.net/p/xmp/libxmp', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
+    if name == 'MenuDrawer':
+        sdir = os.path.join(extlib_dir, 'MenuDrawer')
+        vcs = getvcs('git',
+	    'https://github.com/SimonVT/android-menudrawer', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'library')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating MenuDrawer project')
+
+    if name == 'ImageLoader':
+        sdir = os.path.join(extlib_dir, 'ImageLoader')
+        vcs = getvcs('git',
+	    'https://github.com/nostra13/Android-Universal-Image-Loader.git', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'library')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating ImageLoader project')
+        if basepath:
+            return sdir
+        shutil.rmtree(os.path.join(sdir, 'downloads'))
+        return libdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
