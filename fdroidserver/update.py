@@ -130,6 +130,12 @@ def update_wiki(apps, apks, verbose=False):
         # We can't have underscores in the page name, even if they're in
         # the package ID, because MediaWiki messes with them...
         pagename = app['id'].replace('_', ' ')
+
+        # Drop a trailing newline, because mediawiki is going to drop it anyway
+        # and it we don't we'll think the page has changed when it hasn't...
+        if wikidata.endswith('\n'):
+            wikidata = wikidata[:-1]
+
         generated_pages[pagename] = wikidata
 
         # Make a redirect from the name to the ID too, unless there's
