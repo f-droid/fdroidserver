@@ -526,6 +526,8 @@ def parse_commandline():
     parser.add_option("--all", action="store_true", default=False,
                       help="Use with --install, when not using --package"
                       " to confirm you really want to build and install everything.")
+    parser.add_option("-w", "--wiki", default=False, action="store_true",
+                      help="Update the wiki")
     options, args = parser.parse_args()
 
     # The --install option implies --test and --force...
@@ -618,6 +620,11 @@ def main():
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
 
+        if options.wiki:
+            import mwclient
+            site = mwclient.Site(wiki_server, path=wiki_path)
+            site.login(wiki_user, wiki_password)
+
         for thisbuild in app['builds']:
             try:
                 if trybuild(app, thisbuild, build_dir, output_dir, extlib_dir,
@@ -631,10 +638,13 @@ def main():
                 if options.stop:
                     sys.exit(1)
                 print "Could not build app %s due to BuildException: %s" % (app['id'], be)
-                logfile = open(os.path.join(log_dir, app['id'] + '.log'), 'a+')
-                logfile.write(str(be))
-                logfile.close()
                 failed_apps[app['id']] = be
+                if options.wiki:
+                    newpage = site.Pages[app['id'] + '/lastbuild']
+                    txt = str(be)
+                    if len(txt) > 8192:
+                        txt = txt[-8192:]
+                    newpage.save(str(be), summary='Build log')
             except VCSException as vcse:
                 if options.stop:
                     sys.exit(1)
