@@ -3,7 +3,7 @@
 #your system configuration.
 
 sdk_path = "/path/to/android-sdk-linux_86"
-ndk_path = "/path/to/android-ndk-r5"
+ndk_path = "/path/to/android-ndk-r8e"
 
 #You probably don't need to change this...
 javacc_path = "/usr/share/java"
@@ -11,12 +11,14 @@ javacc_path = "/usr/share/java"
 #Command for running maven 3 (could be mvn, mvn3, or a full path)
 mvn3 = "mvn3"
 
-repo_url = "http://f-droid.org/repo"
-repo_name = "FDroid"
+repo_url = "https://f-droid.org/repo"
+repo_name = "F-Droid"
 repo_icon = "fdroid-icon.png"
 repo_description = """
-The official FDroid repository. Applications in this repository are official
-binaries built by the original application developers.
+The official repository of the F-Droid client. Applications in this repository 
+are either official binaries built by the original application developers, or
+are binaries built from source by the admin of f-droid.org using the tools on
+https://gitorious.org/f-droid.
 """
 
 #The key (from the keystore defined below) to be used for signing the
