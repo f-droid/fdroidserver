@@ -1745,6 +1745,20 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         shutil.rmtree(os.path.join(sdir, 'downloads'))
         return libdir
 
+    if name == 'DragSort':
+        sdir = os.path.join(extlib_dir, 'DragSort')
+        vcs = getvcs('git',
+	    'https://github.com/bauerca/drag-sort-listview', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'library')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating DragSort project')
+        if basepath:
+            return sdir
+        return libdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
