@@ -1759,6 +1759,17 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
+    if name == 'QuickdicUtils':
+        sdir = os.path.join(extlib_dir, 'QuickdicUtils')
+        vcs = getvcs('git',
+	    'https://code.google.com/p/quickdic-dictionary.util', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            sdir]) != 0:
+            raise BuildException('Error updating QuickdicUtils project')
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
