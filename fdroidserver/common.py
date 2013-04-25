@@ -1729,6 +1729,9 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             'update', 'project', '-p',
             libdir]) != 0:
             raise BuildException('Error updating MenuDrawer project')
+        if basepath:
+            return sdir
+        return libdir
 
     if name == 'ImageLoader':
         sdir = os.path.join(extlib_dir, 'ImageLoader')
