@@ -1523,7 +1523,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
 	    'https://github.com/jberkel/k9mail.git', sdir, sdk_path)
         vcs.gotorevision(ref)
         if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
-            'update', 'project', '-p',
+            'update', 'project', '-t', 'android-10', '-p',
             sdir]) != 0:
             raise BuildException('Error updating KMail-XOAUTH project')
         return sdir
