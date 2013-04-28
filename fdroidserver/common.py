@@ -1434,7 +1434,10 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs = getvcs('git',
 	    'git://git.eclipse.org/gitroot/egit/egit-github.git', sdir, sdk_path)
         vcs.gotorevision(ref)
-        return sdir
+        libdir = os.path.join(sdir, 'org.eclipse.egit.github.core')
+        if basepath:
+            return sdir
+        return libdir
 
     if name == 'Busybox':
         sdir = os.path.join(extlib_dir, 'Busybox')
@@ -1710,6 +1713,8 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
 	    'https://github.com/timmolter/XChart', sdir, sdk_path)
         vcs.gotorevision(ref)
         libdir = os.path.join(sdir, 'xchart')
+        if basepath:
+            return sdir
         return libdir
 
     if name == 'Libxmp':
@@ -1771,6 +1776,13 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             'update', 'project', '-p',
             sdir]) != 0:
             raise BuildException('Error updating QuickdicUtils project')
+        return sdir
+
+    if name == 'PrettyTime':
+        sdir = os.path.join(extlib_dir, 'PrettyTime')
+        vcs = getvcs('git',
+	    'https://github.com/ocpsoft/prettytime', sdir, sdk_path)
+        vcs.gotorevision(ref)
         return sdir
 
     raise BuildException('Unknown srclib ' + name)
