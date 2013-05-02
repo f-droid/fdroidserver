@@ -644,7 +644,10 @@ def main():
                     txt = str(be)
                     if len(txt) > 8192:
                         txt = txt[-8192:]
-                    newpage.save(str(be), summary='Build log')
+                    try:
+                        newpage.save(str(be), summary='Build log')
+                    except:
+                        print "Error while attempting to publish build log"
             except VCSException as vcse:
                 if options.stop:
                     sys.exit(1)
