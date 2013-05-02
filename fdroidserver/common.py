@@ -1792,9 +1792,23 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         vcs.gotorevision(ref)
         libdir = os.path.join(sdir, 'library')
         if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
-            'update', 'project', '-p',
+            'update', 'project', '-l', '../../NineOldAndroids/library', '-p',
             libdir]) != 0:
             raise BuildException('Error updating ShowCase project')
+        if basepath:
+            return sdir
+        return libdir
+
+    if name == 'NineOldAndroids':
+        sdir = os.path.join(extlib_dir, 'NineOldAndroids')
+        vcs = getvcs('git',
+	    'https://github.com/JakeWharton/NineOldAndroids', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'library')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p', 
+            libdir]) != 0:
+            raise BuildException('Error updating NineOldAndroids project')
         if basepath:
             return sdir
         return libdir
