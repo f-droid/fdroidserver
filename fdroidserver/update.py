@@ -165,7 +165,8 @@ def update_wiki(apps, apks, verbose=False):
                 print "Updating modified page " + page.name
                 page.save(generated_pages[page.name], summary='Auto-updated')
             else:
-                print "Page " + page.name + " is unchanged"
+                if verbose:
+                    print "Page " + page.name + " is unchanged"
         else:
             print "Deleting page " + page.name
             page.delete('No longer published')
