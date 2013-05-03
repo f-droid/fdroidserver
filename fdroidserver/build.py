@@ -631,6 +631,7 @@ def main():
                         tmp_dir, repo_dir, vcs, options.test, options.server,
                         options.install, options.force, options.verbose):
                     build_succeeded.append(app)
+                    wikilog = "Build succeeded"
             except BuildException as be:
                 logfile = open(os.path.join(log_dir, app['id'] + '.log'), 'a+')
                 logfile.write(str(be))
@@ -639,25 +640,29 @@ def main():
                     sys.exit(1)
                 print "Could not build app %s due to BuildException: %s" % (app['id'], be)
                 failed_apps[app['id']] = be
-                if options.wiki:
-                    newpage = site.Pages[app['id'] + '/lastbuild']
-                    txt = str(be)
-                    if len(txt) > 8192:
-                        txt = txt[-8192:]
-                    try:
-                        newpage.save(str(be), summary='Build log')
-                    except:
-                        print "Error while attempting to publish build log"
+                wikilog = str(be)
             except VCSException as vcse:
                 if options.stop:
                     sys.exit(1)
                 print "VCS error while building app %s: %s" % (app['id'], vcse)
                 failed_apps[app['id']] = vcse
+                wikilog = str(vcse)
             except Exception as e:
                 if options.stop:
                     sys.exit(1)
                 print "Could not build app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
                 failed_apps[app['id']] = e
+                wikilog = str(e)
+
+            if options.wiki:
+                newpage = site.Pages[app['id'] + '/lastbuild']
+                txt = wikilog
+                if len(txt) > 8192:
+                    txt = txt[-8192:]
+                try:
+                    newpage.save(str(be), summary='Build log')
+                except:
+                    print "Error while attempting to publish build log"
 
     for app in build_succeeded:
         print "success: %s" % (app['id'])
