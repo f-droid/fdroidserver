@@ -1813,6 +1813,13 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
+    if name == 'Jutf7':
+        sdir = os.path.join(extlib_dir, 'Jutf7')
+        vcs = getvcs('git-svn',
+	    'https://jutf7.svn.sourceforge.net/svnroot/jutf7/trunk', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
