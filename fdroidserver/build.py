@@ -626,6 +626,7 @@ def main():
             site.login(wiki_user, wiki_password)
 
         for thisbuild in app['builds']:
+            wikilog = None
             try:
                 if trybuild(app, thisbuild, build_dir, output_dir, extlib_dir,
                         tmp_dir, repo_dir, vcs, options.test, options.server,
@@ -654,7 +655,7 @@ def main():
                 failed_apps[app['id']] = e
                 wikilog = str(e)
 
-            if options.wiki:
+            if options.wiki and wikilog:
                 newpage = site.Pages[app['id'] + '/lastbuild']
                 txt = wikilog
                 if len(txt) > 8192:
