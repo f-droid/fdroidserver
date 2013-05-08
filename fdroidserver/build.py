@@ -656,12 +656,12 @@ def main():
                 wikilog = str(e)
 
             if options.wiki and wikilog:
-                newpage = site.Pages[app['id'] + '/lastbuild']
-                txt = wikilog
-                if len(txt) > 8192:
-                    txt = txt[-8192:]
                 try:
-                    newpage.save(str(be), summary='Build log')
+                    newpage = site.Pages[app['id'] + '/lastbuild']
+                    txt = wikilog
+                    if len(txt) > 8192:
+                        txt = txt[-8192:]
+                    newpage.save(wikilog, summary='Build log')
                 except:
                     print "Error while attempting to publish build log"
 
