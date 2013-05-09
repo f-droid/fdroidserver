@@ -21,6 +21,20 @@ are binaries built from source by the admin of f-droid.org using the tools on
 https://gitorious.org/f-droid.
 """
 
+# As above, but for the archive repo.
+# archive_older sets the number of versions kept in the main repo, with all
+# older ones going to the archive. Set it to 0, and there will be no archive
+# repository, and no need to define the other archive_ values.
+archive_older = 3
+archive_url = "https://f-droid.org/archive"
+archive_name = "F-Droid Archive"
+archive_icon = "fdroid-icon.png"
+archive_description = """
+The archive repository of the F-Droid client. This contains older versions
+of applications from the main repository.
+"""
+
+
 #The key (from the keystore defined below) to be used for signing the
 #repository itself. Can be None for an unsigned repository.
 repo_keyalias = None

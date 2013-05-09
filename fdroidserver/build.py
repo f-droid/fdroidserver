@@ -22,10 +22,8 @@ import os
 import shutil
 import subprocess
 import re
-import zipfile
 import tarfile
 import traceback
-from xml.dom.minidom import Document
 from optparse import OptionParser
 
 import common
@@ -465,8 +463,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
             os.path.join(output_dir, tarfilename))
 
 
-def trybuild(app, thisbuild, build_dir, output_dir, extlib_dir, tmp_dir,
-        repo_dir, vcs, test, server, install, force, verbose=False):
+def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, extlib_dir,
+        tmp_dir, repo_dir, vcs, test, server, install, force, verbose=False):
     """
     Build a particular version of an application, if it needs building.
 
@@ -480,6 +478,12 @@ def trybuild(app, thisbuild, build_dir, output_dir, extlib_dir, tmp_dir,
 
     if os.path.exists(dest) or (not test and os.path.exists(dest_repo)):
         return False
+
+    if also_check_dir:
+        dest_also = os.path.join(also_check_dir, app['id'] + '_' +
+                thisbuild['vercode'] + '.apk')
+        if os.path.exists(dest_also):
+            return False
 
     if thisbuild['commit'].startswith('!'):
         return False
@@ -554,10 +558,13 @@ options = None
 def main():
 
     global options
+
     # Read configuration...
     globals()['build_server_always'] = False
     globals()['mvn3'] = "mvn3"
+    globals()['archive_older'] = 0
     execfile('config.py', globals())
+
     options, args = parse_commandline()
     if build_server_always:
         options.server = True
@@ -585,6 +592,11 @@ def main():
         if not os.path.isdir(output_dir):
             print "Creating output directory"
             os.makedirs(output_dir)
+
+    if archive_older != 0:
+        also_check_dir = 'archive'
+    else:
+        also_check_dir = None
 
     repo_dir = 'repo'
 
@@ -628,9 +640,10 @@ def main():
         for thisbuild in app['builds']:
             wikilog = None
             try:
-                if trybuild(app, thisbuild, build_dir, output_dir, extlib_dir,
-                        tmp_dir, repo_dir, vcs, options.test, options.server,
-                        options.install, options.force, options.verbose):
+                if trybuild(app, thisbuild, build_dir, output_dir, also_check_dir,
+                        extlib_dir, tmp_dir, repo_dir, vcs, options.test,
+                        options.server, options.install, options.force,
+                        options.verbose):
                     build_succeeded.append(app)
                     wikilog = "Build succeeded"
             except BuildException as be:

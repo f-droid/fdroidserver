@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # update.py - part of the FDroid server tools
-# Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-2013, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -182,88 +182,52 @@ def update_wiki(apps, apks, verbose=False):
                 print "...FAILED to create page"
 
 
+def delete_disabled_builds(apps, apkcache, repodirs):
+    """Delete disabled build outputs.
 
-def main():
-
-    # Read configuration...
-    global update_stats
-    update_stats = False
-    execfile('config.py', globals())
-
-    # Parse command line...
-    parser = OptionParser()
-    parser.add_option("-c", "--createmeta", action="store_true", default=False,
-                      help="Create skeleton metadata files that are missing")
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
-    parser.add_option("-q", "--quiet", action="store_true", default=False,
-                      help="No output, except for warnings and errors")
-    parser.add_option("-b", "--buildreport", action="store_true", default=False,
-                      help="Report on build data status")
-    parser.add_option("-i", "--interactive", default=False, action="store_true",
-                      help="Interactively ask about things that need updating.")
-    parser.add_option("-e", "--editor", default="/etc/alternatives/editor",
-                      help="Specify editor to use in interactive mode. Default "+
-                          "is /etc/alternatives/editor")
-    parser.add_option("-w", "--wiki", default=False, action="store_true",
-                      help="Update the wiki")
-    parser.add_option("", "--pretty", action="store_true", default=False,
-                      help="Produce human-readable index.xml")
-    parser.add_option("--clean", action="store_true", default=False,
-                      help="Clean update - don't uses caches, reprocess all apks")
-    (options, args) = parser.parse_args()
+    :param apps: list of all applications, as per common.read_metadata
+    :param apkcache: current apk cache information
+    :param repodirs: the repo directories to process
+    """
+    for app in apps:
+        for build in app['builds']:
+            if build['commit'].startswith('!'):
+                apkfilename = app['id'] + '_' + str(build['vercode']) + '.apk'
+                for repodir in repodirs:
+                    apkpath = os.path.join(repodir, apkfilename)
+                    srcpath = os.path.join(repodir, apkfilename[:-4] + "_src.tar.gz")
+                    for name in [apkpath, srcpath]:
+                        if os.path.exists(name):
+                            print "Deleting disabled build output " + apkfilename
+                            os.remove(name)
+                if apkfilename in apkcache:
+                    del apkcache[apkfilename]
 
 
-    icon_dir=os.path.join('repo','icons')
+def scan_apks(apps, apkcache, repodir, knownapks):
+    """Scan the apks in the given repo directory.
 
+    This also extracts the icons.
+
+    :param apps: list of all applications, as per common.read_metadata
+    :param apkcache: current apk cache information
+    :param repodir: repo directory to scan
+    :param knownapks: known apks info
+    :returns: (apks, cachechanged) where apks is a list of apk information,
+              and cachechanged is True if the apkcache got changed.
+    """
+
+    cachechanged = False
+
+    icon_dir = os.path.join(repodir ,'icons')
     # Delete and re-create the icon directory...
     if options.clean and os.path.exists(icon_dir):
         shutil.rmtree(icon_dir)
     if not os.path.exists(icon_dir):
         os.makedirs(icon_dir)
 
-    warnings = 0
-
-    # Get all apps...
-    apps = common.read_metadata(verbose=options.verbose)
-
-    # Generate a list of categories...
-    categories = []
-    for app in apps:
-        cats = app['Category'].split(';')
-        for cat in cats:
-            if cat not in categories:
-                categories.append(cat)
-
-    # Read known apks data (will be updated and written back when we've finished)
-    knownapks = common.KnownApks()
-
-    # Gather information about all the apk files in the repo directory, using
-    # cached data if possible.
-    apkcachefile = os.path.join('tmp', 'apkcache')
-    if not options.clean and os.path.exists(apkcachefile):
-        with open(apkcachefile, 'rb') as cf:
-            apkcache = pickle.load(cf)
-    else:
-        apkcache = {}
-    cachechanged = False
-
-    # Check repo directory for disabled builds and remove them...
-    for app in apps:
-        for build in app['builds']:
-            if build['commit'].startswith('!'):
-                apkfilename = app['id'] + '_' + str(build['vercode']) + '.apk'
-                apkpath = os.path.join('repo', apkfilename)
-                srcpath = apkfilename[:-4] + "_src.tar.gz"
-                for name in [apkpath, srcpath]:
-                    if os.path.exists(name):
-                        print "Deleting disabled build output " + apkfilename
-                        os.remove(name)
-                if apkfilename in apkcache:
-                    del apkcache[apkfilename]
-
     apks = []
-    for apkfile in glob.glob(os.path.join('repo','*.apk')):
+    for apkfile in glob.glob(os.path.join(repodir, '*.apk')):
 
         apkfilename = apkfile[5:]
         if apkfilename.find(' ') != -1:
@@ -282,7 +246,7 @@ def main():
                 print "Processing " + apkfilename
             thisinfo = {}
             thisinfo['apkname'] = apkfilename
-            if os.path.exists(os.path.join('repo', srcfilename)):
+            if os.path.exists(os.path.join(repodir, srcfilename)):
                 thisinfo['srcname'] = srcfilename
             thisinfo['size'] = os.path.getsize(apkfile)
             thisinfo['permissions'] = []
@@ -377,7 +341,6 @@ def main():
                 iconfile.close()
             except:
                 print "WARNING: Error retrieving icon file"
-                warnings += 1
             apk.close()
 
             # Record in known apks, getting the added date at the same time..
@@ -390,79 +353,20 @@ def main():
 
         apks.append(thisinfo)
 
-    if cachechanged:
-        with open(apkcachefile, 'wb') as cf:
-            pickle.dump(apkcache, cf)
+    return apks, cachechanged
 
-    # Some information from the apks needs to be applied up to the application
-    # level. When doing this, we use the info from the most recent version's apk.
-    # We deal with figuring out when the app was added and last updated at the
-    # same time.
-    for app in apps:
-        bestver = 0
-        added = None
-        lastupdated = None
-        for apk in apks:
-            if apk['id'] == app['id']:
-                if apk['versioncode'] > bestver:
-                    bestver = apk['versioncode']
-                    bestapk = apk
 
-                if 'added' in apk:
-                    if not added or apk['added'] < added:
-                        added = apk['added']
-                    if not lastupdated or apk['added'] > lastupdated:
-                        lastupdated = apk['added']
+def make_index(apps, apks, repodir, archive, categories):
+    """Make a repo index.
 
-        if added:
-            app['added'] = added
-        else:
-            print "WARNING: Don't know when " + app['id'] + " was added"
-        if lastupdated:
-            app['lastupdated'] = lastupdated
-        else:
-            print "WARNING: Don't know when " + app['id'] + " was last updated"
+    :param apps: fully populated apps list
+    :param apks: full populated apks list
+    :param repodir: the repo directory
+    :param archive: True if this is the archive repo, False if it's the
+                    main one.
+    :param categories: list of categories
+    """
 
-        if bestver == 0:
-            if app['Name'] is None:
-                app['Name'] = app['id']
-            app['icon'] = ''
-            if app['Disabled'] is None:
-                print "WARNING: Application " + app['id'] + " has no packages"
-        else:
-            if app['Name'] is None:
-                app['Name'] = bestapk['name']
-            app['icon'] = bestapk['icon']
-
-    # Generate warnings for apk's with no metadata (or create skeleton
-    # metadata files, if requested on the command line)
-    for apk in apks:
-        found = False
-        for app in apps:
-            if app['id'] == apk['id']:
-                found = True
-                break
-        if not found:
-            if options.createmeta:
-                f = open(os.path.join('metadata', apk['id'] + '.txt'), 'w')
-                f.write("License:Unknown\n")
-                f.write("Web Site:\n")
-                f.write("Source Code:\n")
-                f.write("Issue Tracker:\n")
-                f.write("Summary:" + apk['name'] + "\n")
-                f.write("Description:\n")
-                f.write(apk['name'] + "\n")
-                f.write(".\n")
-                f.close()
-                print "Generated skeleton metadata for " + apk['id']
-            else:
-                print "WARNING: " + apk['apkname'] + " (" + apk['id'] + ") has no metadata"
-                print "       " + apk['name'] + " - " + apk['version']  
-
-    #Sort the app list by name, then the web site doesn't have to by default:
-    apps = sorted(apps, key=lambda app: app['Name'].upper())
-
-    # Create the index
     doc = Document()
 
     def addElement(name, value, doc, parent):
@@ -478,9 +382,16 @@ def main():
     doc.appendChild(root)
 
     repoel = doc.createElement("repo")
-    repoel.setAttribute("name", repo_name)
-    repoel.setAttribute("icon", os.path.basename(repo_icon))
-    repoel.setAttribute("url", repo_url)
+    if archive:
+        repoel.setAttribute("name", archive_name)
+        repoel.setAttribute("icon", os.path.basename(archive_icon))
+        repoel.setAttribute("url", archive_url)
+        addElement('description', archive_description, doc, repoel)
+    else:
+        repoel.setAttribute("name", repo_name)
+        repoel.setAttribute("icon", os.path.basename(repo_icon))
+        repoel.setAttribute("url", repo_url)
+        addElement('description', repo_description, doc, repoel)
 
     if repo_keyalias != None:
 
@@ -509,30 +420,19 @@ def main():
 
         repoel.setAttribute("pubkey", extract_pubkey())
 
-    addElement('description', repo_description, doc, repoel)
     root.appendChild(repoel)
-
-    apps_inrepo = 0
-    apps_disabled = 0
-    apps_nopkg = 0
 
     for app in apps:
 
         if app['Disabled'] is None:
 
             # Get a list of the apks for this app...
-            gotcurrentver = False
             apklist = []
             for apk in apks:
                 if apk['id'] == app['id']:
-                    if str(apk['versioncode']) == app['Current Version Code']:
-                        gotcurrentver = True
                     apklist.append(apk)
 
-            if len(apklist) == 0:
-                apps_nopkg += 1
-            else:
-                apps_inrepo += 1
+            if len(apklist) != 0:
                 apel = doc.createElement("application")
                 apel.setAttribute("id", app['id'])
                 root.appendChild(apel)
@@ -627,62 +527,7 @@ def main():
                     if len(features) > 0:
                         addElement('features', features, doc, apkel)
 
-            if options.buildreport:
-                if len(app['builds']) == 0:
-                    print ("WARNING: No builds defined for " + app['id'] +
-                            " Source: " + app['Source Code'])
-                    warnings += 1
-                else:
-                    if app['Current Version Code'] != '0':
-                        gotbuild = False
-                        for build in app['builds']:
-                            if build['vercode'] == app['Current Version Code']:
-                                gotbuild = True
-                        if not gotbuild:
-                            print ("WARNING: No build data for current version of "
-                                    + app['id'] + " (" + app['Current Version']
-                                    + ") " + app['Source Code'])
-                            warnings += 1
-
-            # If we don't have the current version, check if there is a build
-            # with a commit ID starting with '!' - this means we can't build it
-            # for some reason, and don't want hassling about it...
-            if not gotcurrentver and app['Current Version Code'] != '0':
-                for build in app['builds']:
-                    if build['vercode'] == app['Current Version Code']:
-                        gotcurrentver = True
-
-            # Output a message of harassment if we don't have the current version:
-            if not gotcurrentver and app['Current Version Code'] != '0':
-                addr = app['Source Code']
-                print "WARNING: Don't have current version (" + app['Current Version'] + ") of " + app['Name']
-                print "         (" + app['id'] + ") " + addr
-                warnings += 1
-                if options.verbose:
-                    # A bit of extra debug info, basically for diagnosing
-                    # app developer mistakes:
-                    print "         Current vercode:" + app['Current Version Code']
-                    print "         Got:"
-                    for apk in apks:
-                        if apk['id'] == app['id']:
-                            print "           " + str(apk['versioncode']) + " - " + apk['version']
-                if options.interactive:
-                    print "Build data out of date for " + app['id']
-                    while True:
-                        answer = raw_input("[I]gnore, [E]dit or [Q]uit?").lower()
-                        if answer == 'i':
-                            break
-                        elif answer == 'e':
-                            subprocess.call([options.editor,
-                                os.path.join('metadata',
-                                app['id'] + '.txt')])
-                            break
-                        elif answer == 'q':
-                            sys.exit(0)
-        else:
-            apps_disabled += 1
-
-    of = open(os.path.join('repo','index.xml'), 'wb')
+    of = open(os.path.join(repodir, 'index.xml'), 'wb')
     if options.pretty:
         output = doc.toprettyxml()
     else:
@@ -698,7 +543,7 @@ def main():
         
         #Create a jar of the index...
         p = subprocess.Popen(['jar', 'cf', 'index.jar', 'index.xml'],
-            cwd='repo', stdout=subprocess.PIPE)
+            cwd=repodir, stdout=subprocess.PIPE)
         output = p.communicate()[0]
         if options.verbose:
             print output
@@ -710,7 +555,7 @@ def main():
         p = subprocess.Popen(['jarsigner', '-keystore', keystore,
             '-storepass', keystorepass, '-keypass', keypass,
             '-digestalg', 'SHA1', '-sigalg', 'MD5withRSA',
-            os.path.join('repo', 'index.jar') , repo_keyalias], stdout=subprocess.PIPE)
+            os.path.join(repodir, 'index.jar') , repo_keyalias], stdout=subprocess.PIPE)
         output = p.communicate()[0]
         if p.returncode != 0:
             print "Failed to sign index"
@@ -720,6 +565,7 @@ def main():
             print output
 
     # Copy the repo icon into the repo directory...
+    icon_dir=os.path.join(repodir ,'icons')
     iconfilename = os.path.join(icon_dir, os.path.basename(repo_icon))
     shutil.copyfile(repo_icon, iconfilename)
 
@@ -727,9 +573,184 @@ def main():
     catdata = ''
     for cat in categories:
         catdata += cat + '\n'
-    f = open('repo/categories.txt', 'w')
+    f = open(os.path.join(repodir, 'categories.txt'), 'w')
     f.write(catdata)
     f.close()
+
+
+
+def archive_old_apks(apps, apks, repodir, archivedir, keepversions):
+
+    for app in apps:
+
+        # Get a list of the apks for this app...
+        apklist = []
+        for apk in apks:
+            if apk['id'] == app['id']:
+                apklist.append(apk)
+
+        # Sort the apk list into version order...
+        apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
+
+        if len(apklist) > keepversions:
+            for apk in apklist[keepversions:]:
+                print "Moving " + apk['apkname'] + " to archive"
+                shutil.move(os.path.join(repodir, apk['apkname']),
+                    os.path.join(archivedir, apk['apkname']))
+                if 'srcname' in apk:
+                    shutil.move(os.path.join(repodir, apk['srcname']),
+                        os.path.join(archivedir, apk['srcname']))
+                apks.remove(apk)
+
+
+def main():
+
+    # Read configuration...
+    global update_stats, archive_older
+    update_stats = False
+    archive_older = 0
+    execfile('config.py', globals())
+
+    # Parse command line...
+    global options
+    parser = OptionParser()
+    parser.add_option("-c", "--createmeta", action="store_true", default=False,
+                      help="Create skeleton metadata files that are missing")
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    parser.add_option("-q", "--quiet", action="store_true", default=False,
+                      help="No output, except for warnings and errors")
+    parser.add_option("-b", "--buildreport", action="store_true", default=False,
+                      help="Report on build data status")
+    parser.add_option("-i", "--interactive", default=False, action="store_true",
+                      help="Interactively ask about things that need updating.")
+    parser.add_option("-e", "--editor", default="/etc/alternatives/editor",
+                      help="Specify editor to use in interactive mode. Default "+
+                          "is /etc/alternatives/editor")
+    parser.add_option("-w", "--wiki", default=False, action="store_true",
+                      help="Update the wiki")
+    parser.add_option("", "--pretty", action="store_true", default=False,
+                      help="Produce human-readable index.xml")
+    parser.add_option("--clean", action="store_true", default=False,
+                      help="Clean update - don't uses caches, reprocess all apks")
+    (options, args) = parser.parse_args()
+
+    # Get all apps...
+    apps = common.read_metadata(verbose=options.verbose)
+
+    # Generate a list of categories...
+    categories = []
+    for app in apps:
+        cats = app['Category'].split(';')
+        for cat in cats:
+            if cat not in categories:
+                categories.append(cat)
+
+    # Read known apks data (will be updated and written back when we've finished)
+    knownapks = common.KnownApks()
+
+    # Gather information about all the apk files in the repo directory, using
+    # cached data if possible.
+    apkcachefile = os.path.join('tmp', 'apkcache')
+    if not options.clean and os.path.exists(apkcachefile):
+        with open(apkcachefile, 'rb') as cf:
+            apkcache = pickle.load(cf)
+    else:
+        apkcache = {}
+    cachechanged = False
+
+    repodirs = ['repo']
+    if archive_older != 0:
+        repodirs.append('archive')
+        if not os.path.exists('archive'):
+            os.mkdir('archive')
+
+    delete_disabled_builds(apps, apkcache, repodirs)
+
+    apks, cc = scan_apks(apps, apkcache, repodirs[0], knownapks)
+    if cc:
+        cachechanged = True
+
+    # Some information from the apks needs to be applied up to the application
+    # level. When doing this, we use the info from the most recent version's apk.
+    # We deal with figuring out when the app was added and last updated at the
+    # same time.
+    for app in apps:
+        bestver = 0
+        added = None
+        lastupdated = None
+        for apk in apks:
+            if apk['id'] == app['id']:
+                if apk['versioncode'] > bestver:
+                    bestver = apk['versioncode']
+                    bestapk = apk
+
+                if 'added' in apk:
+                    if not added or apk['added'] < added:
+                        added = apk['added']
+                    if not lastupdated or apk['added'] > lastupdated:
+                        lastupdated = apk['added']
+
+        if added:
+            app['added'] = added
+        else:
+            print "WARNING: Don't know when " + app['id'] + " was added"
+        if lastupdated:
+            app['lastupdated'] = lastupdated
+        else:
+            print "WARNING: Don't know when " + app['id'] + " was last updated"
+
+        if bestver == 0:
+            if app['Name'] is None:
+                app['Name'] = app['id']
+            app['icon'] = ''
+            if app['Disabled'] is None:
+                print "WARNING: Application " + app['id'] + " has no packages"
+        else:
+            if app['Name'] is None:
+                app['Name'] = bestapk['name']
+            app['icon'] = bestapk['icon']
+
+    # Sort the app list by name, then the web site doesn't have to by default.
+    # (we had to wait until we'd scanned the apks to do this, because mostly the
+    # name comes from there!)
+    apps = sorted(apps, key=lambda app: app['Name'].upper())
+
+    # Generate warnings for apk's with no metadata (or create skeleton
+    # metadata files, if requested on the command line)
+    for apk in apks:
+        found = False
+        for app in apps:
+            if app['id'] == apk['id']:
+                found = True
+                break
+        if not found:
+            if options.createmeta:
+                f = open(os.path.join('metadata', apk['id'] + '.txt'), 'w')
+                f.write("License:Unknown\n")
+                f.write("Web Site:\n")
+                f.write("Source Code:\n")
+                f.write("Issue Tracker:\n")
+                f.write("Summary:" + apk['name'] + "\n")
+                f.write("Description:\n")
+                f.write(apk['name'] + "\n")
+                f.write(".\n")
+                f.close()
+                print "Generated skeleton metadata for " + apk['id']
+            else:
+                print "WARNING: " + apk['apkname'] + " (" + apk['id'] + ") has no metadata"
+                print "       " + apk['name'] + " - " + apk['version']  
+
+    if len(repodirs) > 1:
+        archive_old_apks(apps, apks, repodirs[0], repodirs[1], archive_older)
+
+    make_index(apps, apks, repodirs[0], False, categories)
+
+    if len(repodirs) > 1:
+        apks, cc = scan_apks(apps, apkcache, repodirs[1], knownapks)
+        if cc:
+            cachechanged = True
+        make_index(apps, apks, repodirs[1], True, categories)
 
     if update_stats:
 
@@ -748,19 +769,19 @@ def main():
                         data += app['icon'] + "\t"
                         data += app['License'] + "\n"
                         break
-            f = open('repo/latestapps.dat', 'w')
+            f = open(os.path.join(repodirs[0], 'latestapps.dat'), 'w')
             f.write(data)
             f.close()
+
+    if cachechanged:
+        with open(apkcachefile, 'wb') as cf:
+            pickle.dump(apkcache, cf)
 
     # Update the wiki...
     if options.wiki:
         update_wiki(apps, apks, options.verbose)
 
     print "Finished."
-    print str(apps_inrepo) + " apps in repo"
-    print str(apps_disabled) + " disabled"
-    print str(apps_nopkg) + " with no packages"
-    print str(warnings) + " warnings"
 
 if __name__ == "__main__":
     main()
