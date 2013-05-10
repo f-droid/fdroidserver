@@ -32,10 +32,13 @@ import time
 import common
 from common import MetaDataException
 
-# Update the wiki. 'apps' is a list of all applications and everything we know
-# about them, and 'apks' likewise. Set 'verbose' to True for verbose output.
 def update_wiki(apps, apks, verbose=False):
+    """Update the wiki
 
+    :param apps: fully populated list of all applications
+    :param apks: all apks, except...
+    :param verbose: True to make a lot of noise
+    """
     print "Updating wiki"
     wikicat = 'Apps'
     import mwclient
@@ -746,11 +749,12 @@ def main():
 
     make_index(apps, apks, repodirs[0], False, categories)
 
+    archapks = None
     if len(repodirs) > 1:
-        apks, cc = scan_apks(apps, apkcache, repodirs[1], knownapks)
+        archapks , cc = scan_apks(apps, apkcache, repodirs[1], knownapks)
         if cc:
             cachechanged = True
-        make_index(apps, apks, repodirs[1], True, categories)
+        make_index(apps, archapks, repodirs[1], True, categories)
 
     if update_stats:
 
@@ -779,6 +783,8 @@ def main():
 
     # Update the wiki...
     if options.wiki:
+        if archapks:
+            apks.extend(archapks)
         update_wiki(apps, apks, options.verbose)
 
     print "Finished."
