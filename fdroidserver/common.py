@@ -1847,6 +1847,20 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             raise BuildException('Error updating Common-AskSven project')
         return sdir
 
+    if name == 'PhotoView':
+        sdir = os.path.join(extlib_dir, 'PhotoView')
+        vcs = getvcs('git',
+       'https://github.com/chrisbanes/PhotoView', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        libdir = os.path.join(sdir, 'library')
+        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            'update', 'project', '-p',
+            libdir]) != 0:
+            raise BuildException('Error updating Common-AskSven project')
+        if basepath:
+            return sdir
+        return libdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
