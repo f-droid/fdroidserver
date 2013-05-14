@@ -1861,6 +1861,13 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
             return sdir
         return libdir
 
+    if name == 'Rescu':
+        sdir = os.path.join(extlib_dir, 'Rescu')
+        vcs = getvcs('git',
+	    'https://github.com/mmazi/rescu', sdir, sdk_path)
+        vcs.gotorevision(ref)
+        return sdir
+
     raise BuildException('Unknown srclib ' + name)
 
 
