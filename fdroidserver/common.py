@@ -837,15 +837,16 @@ def description_html(lines,linkres):
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
 # All values returned are strings.
-def parse_androidmanifest(manifest):
+def parse_androidmanifest(app_dir):
 
     vcsearch = re.compile(r'.*android:versionCode="([^"]+)".*').search
-    vnsearch = re.compile(r'.*android:versionName="([^"]+)".*').search
+    vnsearch = re.compile(r'.*android:versionName="([\.0-9a-zA-Z]+)".*').search
     psearch = re.compile(r'.*package="([^"]+)".*').search
+    vnsearch_xml = re.compile(r'.*"app_version">([\.0-9a-zA-Z]+)<.*').search
     version = None
     vercode = None
     package = None
-    for line in file(manifest):
+    for line in file(app_dir + '/AndroidManifest.xml'):
         if not package:
             matches = psearch(line)
             if matches:
@@ -858,8 +859,23 @@ def parse_androidmanifest(manifest):
             matches = vcsearch(line)
             if matches:
                 vercode = matches.group(1)
+    if version:
+        return (version, vercode, package)
+    for xmlfile in glob.glob(app_dir + '/res/values/strings*transl*.xml'):
+        for line in file(xmlfile):
+            if not version:
+                matches = vnsearch_xml(line)
+                if matches:
+                    version = matches.group(1)
+    if not version:
+        for line in file(app_dir + '/res/values/strings.xml'):
+            if not version:
+                matches = vnsearch_xml(line)
+                if matches:
+                    version = matches.group(1)
+    if not version:
+        version = "None"
     return (version, vercode, package)
-
 
 class BuildException(Exception):
     def __init__(self, value, stdout = None, stderr = None):

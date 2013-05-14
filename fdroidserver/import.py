@@ -223,13 +223,12 @@ def main():
         root_dir = src_dir
 
     # Check AndroidManiifest.xml exists...
-    manifest = os.path.join(root_dir, 'AndroidManifest.xml')
-    if not os.path.exists(manifest):
+    if not os.path.exists(root_dir + '/AndroidManifest.xml'):
         print "AndroidManifest.xml did not exist in the expected location. Specify --subdir?"
         sys.exit(1)
 
     # Extract some information...
-    version, vercode, package = common.parse_androidmanifest(manifest)
+    version, vercode, package = common.parse_androidmanifest(root_dir)
     if not package:
         print "Couldn't find package ID"
         sys.exit(1)
