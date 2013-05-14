@@ -950,7 +950,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
     if name == 'Google-Gson':
         sdir = os.path.join(extlib_dir, 'Google-Gson')
         vcs = getvcs('git-svn',
-        'http://google-gson.googlecode.com/svn/trunk', sdir, sdk_path)
+        'http://google-gson.googlecode.com/svn;trunk=trunk;tags=tags', sdir, sdk_path)
         vcs.gotorevision(ref)
         libdir = os.path.join(sdir, 'gson')
         return libdir
