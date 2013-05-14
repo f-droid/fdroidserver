@@ -97,7 +97,7 @@ def check_tags(app, sdk_path):
 # caution, because it's inappropriate for many projects.
 # Returns (None, "a message") if this didn't work, or (version, vercode) for
 # the details of the current version.
-def check_repomanifest(app, sdk_path):
+def check_repomanifest(app, sdk_path, branch="master"):
 
     try:
 
@@ -109,7 +109,7 @@ def check_repomanifest(app, sdk_path):
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
         if app['Repo Type'] == 'git':
-            vcs.gotorevision('origin/master')
+            vcs.gotorevision('origin/'+branch)
         elif app['Repo Type'] == 'git-svn':
             vcs.gotorevision('trunk')
 
@@ -227,6 +227,8 @@ def main():
             (version, vercode) = check_tags(app, sdk_path)
         elif mode == 'RepoManifest':
             (version, vercode) = check_repomanifest(app, sdk_path)
+        elif mode.startswith('RepoManifest/'):
+            (version, vercode) = check_repomanifest(app, sdk_path, mode[13:])
         elif mode == 'Static':
             version = None
             vercode = 'Checking disabled'
