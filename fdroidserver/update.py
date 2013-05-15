@@ -232,11 +232,10 @@ def scan_apks(apps, apkcache, repodir, knownapks):
     apks = []
     for apkfile in glob.glob(os.path.join(repodir, '*.apk')):
 
-        apkfilename = apkfile[5:]
+        apkfilename = apkfile[len(repodir):]
         if apkfilename.find(' ') != -1:
             print "No spaces in APK filenames!"
             sys.exit(1)
-        srcfilename = apkfilename[:-4] + "_src.tar.gz"
 
         if apkfilename in apkcache:
             if options.verbose:
@@ -249,6 +248,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 print "Processing " + apkfilename
             thisinfo = {}
             thisinfo['apkname'] = apkfilename
+            srcfilename = apkfilename[:-4] + "_src.tar.gz"
             if os.path.exists(os.path.join(repodir, srcfilename)):
                 thisinfo['srcname'] = srcfilename
             thisinfo['size'] = os.path.getsize(apkfile)
@@ -747,11 +747,13 @@ def main():
     if len(repodirs) > 1:
         archive_old_apks(apps, apks, repodirs[0], repodirs[1], archive_older)
 
+    # Make the index for the main repo...
     make_index(apps, apks, repodirs[0], False, categories)
 
+    # If there's an archive repo, scan the apks for that and make the index...
     archapks = None
     if len(repodirs) > 1:
-        archapks , cc = scan_apks(apps, apkcache, repodirs[1], knownapks)
+        archapks, cc = scan_apks(apps, apkcache, repodirs[1], knownapks)
         if cc:
             cachechanged = True
         make_index(apps, archapks, repodirs[1], True, categories)
