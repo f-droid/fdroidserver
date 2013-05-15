@@ -839,10 +839,10 @@ def description_html(lines,linkres):
 # All values returned are strings.
 def parse_androidmanifest(app_dir):
 
-    vcsearch = re.compile(r'.*android:versionCode="([0-9]+)".*').search
-    vnsearch = re.compile(r'.*android:versionName="([^@]+)".*').search
+    vcsearch = re.compile(r'.*android:versionCode="([0-9]+?)".*').search
+    vnsearch = re.compile(r'.*android:versionName="([^@]+?)".*').search
     psearch = re.compile(r'.*package="([^"]+)".*').search
-    vnsearch_xml = re.compile(r'.*"(app_|)version">([^<]+)<.*').search
+    vnsearch_xml = re.compile(r'.*"(app_|)version">([^<]+?)<.*').search
     version = None
     vercode = None
     package = None
