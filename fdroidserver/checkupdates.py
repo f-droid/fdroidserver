@@ -289,7 +289,7 @@ def main():
                 if subprocess.call("git add " + metafile, shell=True) != 0:
                     print "Git add failed"
                     sys.exit(1)
-                if subprocess.call('git commit -m \"' + logmsg + '\"', shell=True) != 0:
+                if subprocess.call("git commit -m '" + logmsg.replace("'", "\\'") +  "'", shell=True) != 0:
                     print "Git commit failed"
                     sys.exit(1)
 
