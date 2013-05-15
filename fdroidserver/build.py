@@ -24,6 +24,7 @@ import subprocess
 import re
 import tarfile
 import traceback
+import time
 from optparse import OptionParser
 
 import common
@@ -674,6 +675,7 @@ def main():
                     txt = wikilog
                     if len(txt) > 8192:
                         txt = txt[-8192:]
+                    txt = "Build completed at " + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + "\n\n" + txt
                     newpage.save(wikilog, summary='Build log')
                 except:
                     print "Error while attempting to publish build log"
