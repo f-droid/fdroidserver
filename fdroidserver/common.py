@@ -842,7 +842,7 @@ def parse_androidmanifest(app_dir):
     vcsearch = re.compile(r'.*android:versionCode="([0-9]+)".*').search
     vnsearch = re.compile(r'.*android:versionName="([^@]+)".*').search
     psearch = re.compile(r'.*package="([^"]+)".*').search
-    vnsearch_xml = re.compile(r'.*"app_version">([^<]+)<.*').search
+    vnsearch_xml = re.compile(r'.*"[a-z_]*version">([^<]+)<.*').search
     version = None
     vercode = None
     package = None
