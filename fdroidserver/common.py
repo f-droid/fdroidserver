@@ -842,7 +842,7 @@ def parse_androidmanifest(app_dir):
     vcsearch = re.compile(r'.*android:versionCode="([0-9]+)".*').search
     vnsearch = re.compile(r'.*android:versionName="([^@]+)".*').search
     psearch = re.compile(r'.*package="([^"]+)".*').search
-    vnsearch_xml = re.compile(r'.*"[a-z_]*version">([^<]+)<.*').search
+    vnsearch_xml = re.compile(r'.*"(app_|)version">([^<]+)<.*').search
     version = None
     vercode = None
     package = None
@@ -866,13 +866,13 @@ def parse_androidmanifest(app_dir):
             if not version:
                 matches = vnsearch_xml(line)
                 if matches:
-                    version = matches.group(1)
+                    version = matches.group(2)
     if not version:
         for line in file(app_dir + '/res/values/strings.xml'):
             if not version:
                 matches = vnsearch_xml(line)
                 if matches:
-                    version = matches.group(1)
+                    version = matches.group(2)
     if not version:
         version = "None"
     return (version, vercode, package)
