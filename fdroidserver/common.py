@@ -1856,7 +1856,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
         if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
             'update', 'project', '-p',
             libdir]) != 0:
-            raise BuildException('Error updating Common-AskSven project')
+            raise BuildException('Error updating PhotoView project')
         if basepath:
             return sdir
         return libdir
