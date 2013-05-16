@@ -232,7 +232,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
     apks = []
     for apkfile in glob.glob(os.path.join(repodir, '*.apk')):
 
-        apkfilename = apkfile[len(repodir):]
+        apkfilename = apkfile[len(repodir) + 1:]
         if apkfilename.find(' ') != -1:
             print "No spaces in APK filenames!"
             sys.exit(1)
