@@ -230,6 +230,13 @@ def scan_apks(apps, apkcache, repodir, knownapks):
         os.makedirs(icon_dir)
 
     apks = []
+    name_pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
+    vercode_pat = re.compile(".*versionCode='([0-9]*)'.*")
+    vername_pat = re.compile(".*versionName='(.*)'[\n '].*")
+    label_pat = re.compile(".*label='(.*)'[\n '].*")
+    icon_pat = re.compile(".*icon='([^']*)'.*")
+    sdkversion_pat = re.compile(".*'([0-9]*)'.*")
+    string_pat = re.compile(".*'([^']*)'.*")
     for apkfile in glob.glob(os.path.join(repodir, '*.apk')):
 
         apkfilename = apkfile[len(repodir) + 1:]
@@ -265,32 +272,23 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 sys.exit(1)
             for line in output.splitlines():
                 if line.startswith("package:"):
-                    pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
-                    thisinfo['id'] = re.match(pat, line).group(1)
-                    pat = re.compile(".*versionCode='([0-9]*)'.*")
-                    thisinfo['versioncode'] = int(re.match(pat, line).group(1))
-                    pat = re.compile(".*versionName='([^']*)'.*")
-                    thisinfo['version'] = re.match(pat, line).group(1)
-                if line.startswith("application:"):
-                    pat = re.compile(".*label='([^']*)'.*")
-                    thisinfo['name'] = re.match(pat, line).group(1)
-                    pat = re.compile(".*icon='([^']*)'.*")
-                    thisinfo['iconsrc'] = re.match(pat, line).group(1)
-                if line.startswith("sdkVersion:"):
-                    pat = re.compile(".*'([0-9]*)'.*")
-                    thisinfo['sdkversion'] = re.match(pat, line).group(1)
-                if line.startswith("native-code:"):
-                    pat = re.compile(".*'([^']*)'.*")
-                    thisinfo['nativecode'] = re.match(pat, line).group(1)
-                if line.startswith("uses-permission:"):
-                    pat = re.compile(".*'([^']*)'.*")
-                    perm = re.match(pat, line).group(1)
+                    thisinfo['id'] = re.match(name_pat, line).group(1)
+                    thisinfo['versioncode'] = int(re.match(vercode_pat, line).group(1))
+                    thisinfo['version'] = re.match(vername_pat, line).group(1)
+                elif line.startswith("application:"):
+                    thisinfo['name'] = re.match(label_pat, line).group(1)
+                    thisinfo['iconsrc'] = re.match(icon_pat, line).group(1)
+                elif line.startswith("sdkVersion:"):
+                    thisinfo['sdkversion'] = re.match(sdkversion_pat, line).group(1)
+                elif line.startswith("native-code:"):
+                    thisinfo['nativecode'] = re.match(string_pat, line).group(1)
+                elif line.startswith("uses-permission:"):
+                    perm = re.match(string_pat, line).group(1)
                     if perm.startswith("android.permission."):
                         perm = perm[19:]
                     thisinfo['permissions'].append(perm)
-                if line.startswith("uses-feature:"):
-                    pat = re.compile(".*'([^']*)'.*")
-                    perm = re.match(pat, line).group(1)
+                elif line.startswith("uses-feature:"):
+                    perm = re.match(string_pat, line).group(1)
                     #Filter out this, it's only added with the latest SDK tools and
                     #causes problems for lots of apps.
                     if (perm != "android.hardware.screen.portrait" and
