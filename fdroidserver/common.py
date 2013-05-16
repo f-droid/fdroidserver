@@ -462,6 +462,7 @@ def parse_metadata(metafile, **kw):
     thisinfo['Repo Type'] = ''
     thisinfo['Repo'] = ''
     thisinfo['Requires Root'] = False
+    thisinfo['No Source Since'] = ''
 
     # General defaults...
     thisinfo['builds'] = []
@@ -631,6 +632,9 @@ def write_metadata(dest, app):
         writefield('Current Version')
         writefield('Current Version Code')
     mf.write('\n')
+    if len(app['No Source Since']) > 0:
+        writefield('No Source Since')
+        mf.write('\n')
     writecomments(None)
     mf.close()
 

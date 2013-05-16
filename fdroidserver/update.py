@@ -101,6 +101,8 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += "We don't have the current version of this app."
         else:
             wikidata += "We have the current version of this app."
+        if len(app['No Source Since']) > 0:
+            wikidata += "This application has been partially or entirely been missing source code since version " + app['No Source Since']
         wikidata += " (Check mode: " + app['Update Check Mode'] + ")\n\n"
         if len(app['Current Version']) > 0:
             wikidata += "The current (recommended) version is " + app['Current Version']
@@ -121,7 +123,9 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += "Version code: " + str(apk['versioncode']) + '\n'
 
         wikidata += '\n[[Category:' + wikicat + ']]\n'
-        if validapks == 0 and not app['Disabled']:
+        if len(app['No Source Since']) > 0:
+            wikidata += '\n[[Category:Apps that are missing source code]]\n'
+        elif validapks == 0 and not app['Disabled']:
             wikidata += '\n[[Category:Apps with no packages]]\n'
         elif cantupdate and not app['Disabled']:
             wikidata += "\n[[Category:Apps we can't update]]\n"
