@@ -96,21 +96,32 @@ def check_tags(app, sdk_path):
 # caution, because it's inappropriate for many projects.
 # Returns (None, "a message") if this didn't work, or (version, vercode) for
 # the details of the current version.
-def check_repomanifest(app, sdk_path, branch="master"):
+def check_repomanifest(app, sdk_path, branch=None):
 
     try:
 
         build_dir = 'build/' + app['id']
 
-        if app['Repo Type'] not in ('git', 'git-svn'):
-            return (None, 'RepoManifest update mode only works for git and git-svn repositories currently')
+        if app['Repo Type'] == 'bzr':
+            return (None, 'RepoManifest update mode has not been ported to bzr repositories yet')
 
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
         if app['Repo Type'] == 'git':
-            vcs.gotorevision('origin/'+branch)
+            if branch:
+                vcs.gotorevision('origin/'+branch)
+            else:
+                vcs.gotorevision('origin/master')
+                pass
         elif app['Repo Type'] == 'git-svn':
             vcs.gotorevision('trunk')
+        elif app['Repo Type'] == 'svn':
+            pass
+        elif app['Repo Type'] == 'hg':
+            if branch:
+                vcs.gotorevision(branch)
+            else:
+                vcs.gotorevision('default')
 
         if len(app['builds']) == 0:
             return (None, "Can't use RepoManifest with no builds defined")

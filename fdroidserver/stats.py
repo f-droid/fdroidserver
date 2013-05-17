@@ -159,6 +159,19 @@ def main():
         f.write(rtype + ' ' + str(count) + '\n')
     f.close()
 
+    # Calculate and write stats for update check modes...
+    ucms = {}
+    for app in metaapps:
+        checkmode = app['Update Check Mode']
+        if checkmode in ucms:
+            ucms[checkmode] += 1;
+        else:
+            ucms[checkmode] = 1
+    f = open('stats/update_check_modes.txt', 'w')
+    for checkmode, count in ucms.iteritems():
+        f.write(checkmode + ' ' + str(count) + '\n')
+    f.close()
+
     # Calculate and write stats for licenses...
     licenses = {}
     for app in metaapps:
