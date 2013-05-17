@@ -2367,6 +2367,7 @@ def isApkDebuggable(apkfile, sdk_path):
     :param apkfile: full path to the apk to check
     :param sdk_path: path to android sdk"""
 
+    # TODO: use new build-tools path
     p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools', 'aapt'),
 		  'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
 		 stdout=subprocess.PIPE)
