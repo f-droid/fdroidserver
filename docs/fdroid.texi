@@ -639,7 +639,10 @@ The repository location. Usually a git: or svn: URL, for example.
 The git-svn option connects to an SVN repository, and you specify the URL in
 exactly the same way, but git is used as a back-end. This is preferable for
 performance reasons, and also because a local copy of the entire history is
-available in case the upstream repository disappears. (It happens!)
+available in case the upstream repository disappears. (It happens!). In
+order to use RepoManifest or Tags as update check modes for this VCS type
+the URL must encode the path to the trunk and tags, like so: 
+http://svn.code.sf.net/p/project/code;trunk=trunk;tags=tags.
 
 For a Subversion repo that requires authentication, you can precede the repo
 URL with username:password@ and those parameters will be passed as @option{--username}
@@ -922,25 +925,29 @@ Valid modes are:
 @code{None} - No checking is done because there's no appropriate automated way
 of doing so. Updates should be checked for manually.
 @item
-@code{Static} - No checking is done - updated versions are not expected. This
-method is also used when there is no other checking method available and the
-upstream developer keeps us posted on new versions.
+@code{Static} - No checking is done—either development has ceased or new versions
+are not desired. This method is also used when there is no other checking method 
+available and the upstream developer keeps us posted on new versions.
 @item
 @code{RepoManifest} - The AndroidManifest.xml file in the most recent commit
 in the source repository is checked. The appropriateness of this method depends
 on the development process used by the application's developers. You should not
-specify this method unless you're sure it's appropriate. The branch currently
-defaults to master, but you may specify any of your own by using
-'RepoManifest/yourbranch'. (Also, it currently only works for git
-repositories).
+specify this method unless you're sure it's appropriate. 
+It currently only works for git and git-svn repositories. In the case of the 
+latter, the repo URL must encode the path to the trunk and tags. In the case
+of git, the branch currently defaults to master, but you may specify another by
+using 'RepoManifest/yourbranch'. 
 @item
 @code{Tags} - The AndroidManifest.xml file in all tagged revisions in the
 source repository is checked, looking for the highest version code. The
 appropriateness of this method depends on the development process used by the
 application's developers. You should not specify this method unless you're sure
-it's appropriate. (Also, it currently only works for git repositories).
+it's appropriate. It currently only works for git and git-svn repositories. In 
+the case of the latter, the repo URL must encode the path to the trunk and 
+tags.
 @item
-@code{Market} - This is being phased out and should not be used!
+@code{Market} - This is being phased out and should only be used when the other
+automatic modes don't work.
 @end itemize
 
 @node Auto Update Mode
