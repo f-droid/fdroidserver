@@ -441,6 +441,7 @@ The following sections describe the fields recognised within the file.
 * Auto Update Mode::
 * Current Version::
 * Current Version Code::
+* No Source Since::
 @end menu
 
 @node Category
@@ -992,6 +993,18 @@ The version code corresponding to the Current Version field. Both these fields
 must be correct and matching.
 
 This field is normally automatically updated - see Update Check Mode.
+
+@node No Source Since
+@section No Source Since
+
+@cindex No Source Since
+
+In case we are missing the source code for the Current Version reported by
+Upstream, this defines the first version that started missing source code.
+Apps that are missing source code for just one or a few versions, but provide
+source code for newer ones are not to be considered here - this field is
+intended to illustrate which apps do not currently distribute source code, and
+since when have they been doing so.
 
 @node Update Processing
 @chapter Update Processing
