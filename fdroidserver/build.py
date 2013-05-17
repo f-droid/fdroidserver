@@ -512,6 +512,8 @@ def parse_commandline():
                       help="Build only the specified package")
     parser.add_option("-c", "--vercode", default=None,
                       help="Build only the specified version code")
+    parser.add_option("-l", "--latest", action="store_true", default=False,
+                      help="Build only the latest version code available")
     parser.add_option("-s", "--stop", action="store_true", default=False,
                       help="Make the build stop on exceptions")
     parser.add_option("-t", "--test", action="store_true", default=False,
@@ -622,6 +624,10 @@ def main():
         for app in apps:
             app['builds'] = [b for b in app['builds']
                     if str(b['vercode']) == options.vercode]
+    elif options.latest:
+        for app in apps:
+            m = max([i['vercode'] for i in app['builds']], key=int)
+            app['builds'] = [b for b in app['builds'] if b['vercode'] == m]
 
     # Build applications...
     failed_apps = {}
