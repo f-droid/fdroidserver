@@ -933,10 +933,10 @@ available and the upstream developer keeps us posted on new versions.
 in the source repository is checked. The appropriateness of this method depends
 on the development process used by the application's developers. You should not
 specify this method unless you're sure it's appropriate. 
-It currently only works for git and git-svn repositories. In the case of the 
-latter, the repo URL must encode the path to the trunk and tags. In the case
-of git, the branch currently defaults to master, but you may specify another by
-using 'RepoManifest/yourbranch'. 
+It currently works for every repository type excepting bzr. For git repos, the
+branch used defaults to master. You may specify your own by using
+"RepoManifest/yourbranch" as UCM. The same applies to hg, in which case the
+default value is the "default" branch.
 @item
 @code{Tags} - The AndroidManifest.xml file in all tagged revisions in the
 source repository is checked, looking for the highest version code. The
