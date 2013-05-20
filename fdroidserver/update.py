@@ -86,8 +86,7 @@ def update_wiki(apps, apks, verbose=False):
                 if thisbuild['vercode'] == app['Current Version Code']:
                     cantupdate = True
                 apklist.append({
-                        #TODO: Nasty: vercode is a string in the build, and an int elsewhere
-                        'versioncode': int(thisbuild['vercode']),
+                        'versioncode': thisbuild['vercode'],
                         'version': thisbuild['version'],
                         'buildproblem': thisbuild['commit'][1:]
                     })

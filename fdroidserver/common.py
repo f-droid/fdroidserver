@@ -416,7 +416,7 @@ def parse_metadata(metafile, **kw):
         thisbuild['version'] = parts[0]
         thisbuild['vercode'] = parts[1]
         try:
-            testvercode = int(thisbuild['vercode'])
+            thisbuild['vercode'] = int(thisbuild['vercode'])
         except:
             raise MetaDataException("Invalid version code for build in " + metafile.name)
         thisbuild['commit'] = parts[2]
@@ -617,7 +617,7 @@ def write_metadata(dest, app):
             # Keeping the original formatting if we loaded it from a file...
             mf.write('\\\n'.join(build['origlines']) + '\n')
         else:
-            mf.write(build['version'] + ',' + build['vercode'] + ',' + 
+            mf.write(build['version'] + ',' + str(build['vercode']) + ',' + 
                     build['commit'])
             for key,value in build.iteritems():
                 if key not in ['version', 'vercode', 'commit']:
@@ -861,7 +861,7 @@ def parse_androidmanifest(app_dir):
         if not vercode:
             matches = vcsearch(line)
             if matches:
-                vercode = matches.group(1)
+                vercode = int(matches.group(1))
     if version:
         return (version, vercode, package)
     for xmlfile in glob.glob(app_dir + '/res/values/strings*transl*.xml'):
@@ -1116,7 +1116,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
             raise BuildException("Failed to amend manifest")
     if 'forcevercode' in build:
         if subprocess.call(['sed','-r','-i',
-            's/android:versionCode="[^"]+"/android:versionCode="' + build['vercode'] + '"/g',
+            's/android:versionCode="[^"]+"/android:versionCode="' + str(build['vercode']) + '"/g',
             'AndroidManifest.xml'], cwd=root_dir) !=0:
             raise BuildException("Failed to amend manifest")
 
@@ -1490,7 +1490,6 @@ def isApkDebuggable(apkfile, sdk_path):
     :param apkfile: full path to the apk to check
     :param sdk_path: path to android sdk"""
 
-    # TODO: use new build-tools path
     p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools', 'aapt'),
 		  'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
 		 stdout=subprocess.PIPE)
