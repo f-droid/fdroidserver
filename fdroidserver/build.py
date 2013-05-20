@@ -672,21 +672,21 @@ def main():
                 logfile = open(os.path.join(log_dir, app['id'] + '.log'), 'a+')
                 logfile.write(str(be))
                 logfile.close()
+                print "Could not build app %s due to BuildException: %s" % (app['id'], be)
                 if options.stop:
                     sys.exit(1)
-                print "Could not build app %s due to BuildException: %s" % (app['id'], be)
                 failed_apps[app['id']] = be
                 wikilog = str(be)
             except VCSException as vcse:
+                print "VCS error while building app %s: %s" % (app['id'], vcse)
                 if options.stop:
                     sys.exit(1)
-                print "VCS error while building app %s: %s" % (app['id'], vcse)
                 failed_apps[app['id']] = vcse
                 wikilog = str(vcse)
             except Exception as e:
+                print "Could not build app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
                 if options.stop:
                     sys.exit(1)
-                print "Could not build app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
                 failed_apps[app['id']] = e
                 wikilog = str(e)
 
