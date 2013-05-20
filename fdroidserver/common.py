@@ -347,8 +347,7 @@ class vcs_srclib(vcs):
 
     def gotorevisionx(self, rev):
 
-        # Yuk...
-        extlib_dir = 'build/extlib'
+        srclib_dir = 'build/srclib'
 
         if os.path.exists(self.local):
             shutil.rmtree(self.local)
@@ -358,7 +357,7 @@ class vcs_srclib(vcs):
         else:
             srclib = self.remote
             path = None
-        libdir = getsrclib(srclib + '@' + rev, extlib_dir, self.sdk_path)
+        libdir = getsrclib(srclib + '@' + rev, srclib_dir, self.sdk_path)
         self.srclib = (srclib, libdir)
         if path:
             libdir = os.path.join(libdir, path)
@@ -951,7 +950,7 @@ def parse_srclib(metafile, **kw):
 # Returns the path to it. Normally this is the path to be used when referencing
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
-def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
+def getsrclib(spec, srclib_dir, sdk_path, basepath=False):
 
     name, ref = spec.split('@')
 
@@ -962,7 +961,8 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
 
     srclib = parse_srclib(srclib_path)
 
-    sdir = os.path.join(extlib_dir, name)
+    sdir = os.path.join(srclib_dir, name)
+    print sdir
     vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir, sdk_path)
     vcs.gotorevision(ref)
 
@@ -1002,6 +1002,8 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
 #  'build'       - the build details from the metadata
 #  'build_dir'   - the path to the build directory, usually
 #                   'build/app.id'
+#  'srclib_dir'  - the path to the source libraries directory, usually
+#                   'build/srclib'
 #  'extlib_dir'  - the path to the external libraries directory, usually
 #                   'build/extlib'
 #  'sdk_path'    - the path to the Android SDK
@@ -1013,7 +1015,7 @@ def getsrclib(spec, extlib_dir, sdk_path, basepath=False):
 #   'root' is the root directory, which may be the same as 'build_dir' or may
 #          be a subdirectory of it.
 #   'srclibpaths' is information on the srclibs being used
-def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, javacc_path, mvn3, verbose=False):
+def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path, ndk_path, javacc_path, mvn3, verbose=False):
 
     # Optionally, the actual app source can be in a subdirectory...
     if 'subdir' in build:
@@ -1190,7 +1192,7 @@ def prepare_source(vcs, app, build, build_dir, extlib_dir, sdk_path, ndk_path, j
     if 'srclibs' in build:
         for lib in build['srclibs'].split(';'):
             name, _ = lib.split('@')
-            srclibpaths.append((name, getsrclib(lib, extlib_dir, sdk_path)))
+            srclibpaths.append((name, getsrclib(lib, srclib_dir, sdk_path)))
     basesrclib = vcs.getsrclib()
     # If one was used for the main source, add that too.
     if basesrclib:

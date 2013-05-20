@@ -260,12 +260,12 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         subprocess.call(['vagrant', 'suspend'], cwd='builder')
 
 
-def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install, force, verbose=False):
+def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, verbose=False):
     """Do a build locally."""
 
     # Prepare the source code...
     root_dir, srclibpaths = common.prepare_source(vcs, app, thisbuild,
-            build_dir, extlib_dir, sdk_path, ndk_path,
+            build_dir, srclib_dir, extlib_dir, sdk_path, ndk_path,
             javacc_path, mvn3, verbose)
 
     # Scan before building...
@@ -464,7 +464,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir,
             os.path.join(output_dir, tarfilename))
 
 
-def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, extlib_dir,
+def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, extlib_dir,
         tmp_dir, repo_dir, vcs, test, server, install, force, verbose=False):
     """
     Build a particular version of an application, if it needs building.
@@ -498,7 +498,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, extlib_dir,
 
         build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force)
     else:
-        build_local(app, thisbuild, vcs, build_dir, output_dir, extlib_dir, tmp_dir, install, force, verbose)
+        build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, verbose)
     return True
 
 
@@ -607,6 +607,7 @@ def main():
     if not os.path.isdir(build_dir):
         print "Creating build directory"
         os.makedirs(build_dir)
+    srclib_dir = os.path.join(build_dir, 'srclib')
     extlib_dir = os.path.join(build_dir, 'extlib')
 
     # Filter apps and build versions according to command-line options, etc...
@@ -648,7 +649,7 @@ def main():
             wikilog = None
             try:
                 if trybuild(app, thisbuild, build_dir, output_dir, also_check_dir,
-                        extlib_dir, tmp_dir, repo_dir, vcs, options.test,
+                        srclib_dir, extlib_dir, tmp_dir, repo_dir, vcs, options.test,
                         options.server, options.install, options.force,
                         options.verbose):
                     build_succeeded.append(app)
