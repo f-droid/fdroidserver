@@ -886,6 +886,20 @@ class BuildException(Exception):
         self.stdout = stdout
         self.stderr = stderr
 
+    def get_wikitext(self):
+        ret = repr(self.value) + "\n"
+        if self.stdout:
+            ret += "=stdout=\n"
+            ret += "<pre>\n"
+            ret += str(self.stdout)
+            ret += "</pre>\n"
+        if self.stderr:
+            ret += "=stderr=\n"
+            ret += "<pre>\n"
+            ret += str(self.stderr)
+            ret += "</pre>\n"
+        return ret
+
     def __str__(self):
         ret = repr(self.value)
         if self.stdout:

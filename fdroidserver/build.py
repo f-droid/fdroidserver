@@ -677,7 +677,7 @@ def main():
                 if options.stop:
                     sys.exit(1)
                 failed_apps[app['id']] = be
-                wikilog = str(be)
+                wikilog = be.get_wikitext()
             except VCSException as vcse:
                 print "VCS error while building app %s: %s" % (app['id'], vcse)
                 if options.stop:
