@@ -475,6 +475,8 @@ def make_index(apps, apks, repodir, archive, categories):
                     addElement('donate', app['Donate'], doc, apel)
                 if app['Bitcoin'] != None:
                     addElement('bitcoin', app['Bitcoin'], doc, apel)
+                if app['FlattrID'] != None:
+                    addElement('flattr', app['FlattrID'], doc, apel)
 
                 # These elements actually refer to the current version (i.e. which
                 # one is recommended. They are historically mis-named, and need
