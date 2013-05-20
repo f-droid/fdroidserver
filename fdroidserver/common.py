@@ -962,7 +962,6 @@ def getsrclib(spec, srclib_dir, sdk_path, basepath=False):
     srclib = parse_srclib(srclib_path)
 
     sdir = os.path.join(srclib_dir, name)
-    print sdir
     vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir, sdk_path)
     vcs.gotorevision(ref)
 
