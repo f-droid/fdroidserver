@@ -196,6 +196,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         ftp.mkdir('build')
         ftp.chdir('build')
         ftp.mkdir('extlib')
+        ftp.mkdir('srclib')
         # Copy the main app source code
         if os.path.exists(build_dir):
             send_dir(build_dir)
@@ -216,14 +217,14 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         if 'srclibs' in thisbuild:
             for lib in thisbuild['srclibs'].split(';'):
                 name, _ = lib.split('@')
-                srclibpaths.append((name, common.getsrclib(lib, 'build/extlib', sdk_path, basepath=True)))
+                srclibpaths.append((name, common.getsrclib(lib, 'build/srclib', sdk_path, basepath=True)))
         # If one was used for the main source, add that too.
         basesrclib = vcs.getsrclib()
         if basesrclib:
             srclibpaths.append(basesrclib)
         for _, lib in srclibpaths:
             print "Sending srclib '" + lib + "'"
-            ftp.chdir('/home/vagrant/build/extlib')
+            ftp.chdir('/home/vagrant/build/srclib')
             if not os.path.exists(lib):
                 raise BuildException("Missing srclib directory '" + lib + "'")
             send_dir(lib)
