@@ -232,11 +232,10 @@ def scan_apks(apps, apkcache, repodir, knownapks):
         shutil.rmtree(icon_dir)
     if not os.path.exists(icon_dir):
         os.makedirs(icon_dir)
-
     apks = []
     name_pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
     vercode_pat = re.compile(".*versionCode='([0-9]*)'.*")
-    vername_pat = re.compile(".*versionName='(.*)'[\n '].*")
+    vername_pat = re.compile(".*versionName='([^']*)'.*")
     label_pat = re.compile(".*label='(.*)'[\n '].*")
     icon_pat = re.compile(".*icon='([^']*)'.*")
     sdkversion_pat = re.compile(".*'([0-9]*)'.*")
@@ -276,9 +275,14 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 sys.exit(1)
             for line in output.splitlines():
                 if line.startswith("package:"):
-                    thisinfo['id'] = re.match(name_pat, line).group(1)
-                    thisinfo['versioncode'] = int(re.match(vercode_pat, line).group(1))
-                    thisinfo['version'] = re.match(vername_pat, line).group(1)
+                    try:
+                        thisinfo['id'] = re.match(name_pat, line).group(1)
+                        thisinfo['versioncode'] = int(re.match(vercode_pat, line).group(1))
+                        thisinfo['version'] = re.match(vername_pat, line).group(1)
+                    except Exception, e:
+                        print "Package matching failed: " + str(e)
+                        print "Line was: " + line
+                        sys.exit(1)
                 elif line.startswith("application:"):
                     thisinfo['name'] = re.match(label_pat, line).group(1)
                     thisinfo['iconsrc'] = re.match(icon_pat, line).group(1)
