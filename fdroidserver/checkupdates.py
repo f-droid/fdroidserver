@@ -116,7 +116,7 @@ def check_repomanifest(app, sdk_path, branch=None):
         elif app['Repo Type'] == 'git-svn':
             vcs.gotorevision('trunk')
         elif app['Repo Type'] == 'svn':
-            pass
+            vcs.gotorevision(None)
         elif app['Repo Type'] == 'hg':
             if branch:
                 vcs.gotorevision(branch)
