@@ -45,7 +45,7 @@ end
 
 end
 
-%w{addon-google_apis-google-7 addon-google_apis-google-10 addon-google_apis-google-15 addon-google_apis-google-16}.each do |sdk|
+%w{addon-google_apis-google-7 addon-google_apis-google-10 addon-google_apis-google-15 addon-google_apis-google-16 addon-google_apis-google-17}.each do |sdk|
 
   script "add_addon_#{sdk}" do
     interpreter "bash"
