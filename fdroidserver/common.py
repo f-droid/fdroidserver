@@ -278,7 +278,7 @@ class vcs_svn(vcs):
                     r"svn status | awk '/\?/ {print $2}' | xargs rm -rf"):
                 if subprocess.call(svncommand, cwd=self.local,
                         shell=True) != 0:
-                    raise VCSException("Svn reset failed")
+                    raise VCSException("Svn reset ({0}) failed in {1}".format(svncommand, self.local))
             if not self.refreshed:
                 if subprocess.call(['svn', 'update'] +
                         self.userargs(), cwd=self.local) != 0:
