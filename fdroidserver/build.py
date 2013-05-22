@@ -185,12 +185,14 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
 
         # Copy the metadata - just the file for this app...
         ftp.mkdir('metadata')
+        ftp.mkdir('srclibs')
         ftp.chdir('metadata')
         ftp.put(os.path.join('metadata', app['id'] + '.txt'),
                 app['id'] + '.txt')
         # And patches if there are any...
         if os.path.exists(os.path.join('metadata', app['id'])):
             send_dir(os.path.join('metadata', app['id']))
+
         ftp.chdir('/home/vagrant')
         # Create the build directory...
         ftp.mkdir('build')
@@ -222,12 +224,17 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         basesrclib = vcs.getsrclib()
         if basesrclib:
             srclibpaths.append(basesrclib)
-        for _, lib in srclibpaths:
+        for name, lib in srclibpaths:
             print "Sending srclib '" + lib + "'"
             ftp.chdir('/home/vagrant/build/srclib')
             if not os.path.exists(lib):
                 raise BuildException("Missing srclib directory '" + lib + "'")
             send_dir(lib)
+            # Copy the metadata file too...
+            ftp.chdir('/home/vagrant/srclibs')
+            ftp.put(os.path.join('srclibs', name + '.txt'),
+                    name + '.txt')
+
 
         # Execute the build script...
         print "Starting build..."
@@ -495,7 +502,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
     if os.path.exists(dest) or (not test and os.path.exists(dest_repo)):
         return False
 
-    if also_check_dir:
+    if also_check_dir and not test:
         dest_also = os.path.join(also_check_dir, app['id'] + '_' +
                 thisbuild['vercode'] + '.apk')
         if os.path.exists(dest_also):
