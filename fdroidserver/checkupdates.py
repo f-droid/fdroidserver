@@ -51,9 +51,9 @@ def check_tags(app, sdk_path):
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
         if app['Repo Type'] == 'git':
-            vcs.gotorevision('origin/master')
+            vcs.gotorevision(None)
         elif app['Repo Type'] == 'git-svn':
-            vcs.gotorevision('trunk')
+            vcs.gotorevision(None)
 
         if len(app['builds']) == 0:
             return (None, "Can't use Tags with no builds defined")
