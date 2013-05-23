@@ -1,13 +1,13 @@
 Vagrant::Config.run do |config|
 
-  config.vm.box = "precise32"
-  config.vm.box_url = "/shares/software/OS and Boot/precise32.box"
+  config.vm.box = "raring64"
+  config.vm.box_url = "/shares/software/OS and Boot/raring64.box"
 
   config.vm.customize ["modifyvm", :id, "--memory", "2048"]
 
   config.vm.provision :shell, :path => "fixpaths.sh"
   # Set apt proxy - remove, or adjust this, accordingly!
-  config.vm.provision :shell, :inline => 'sudo echo "Acquire::http { Proxy \"http://glencoe:3142\"; };" > /etc/apt/apt.conf.d/02proxy && sudo apt-get update'
+  config.vm.provision :shell, :inline => 'sudo echo "Acquire::http { Proxy \"http://192.168.0.19:8000\"; };" > /etc/apt/apt.conf.d/02proxy && sudo apt-get update'
 
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "cookbooks"
