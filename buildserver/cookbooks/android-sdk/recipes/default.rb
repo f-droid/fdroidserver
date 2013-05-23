@@ -8,6 +8,7 @@ sdk_loc = node[:settings][:sdk_loc]
 user = node[:settings][:user]
 
 script "setup-android-sdk" do
+  timeout 14400
   interpreter "bash"
   user user
   cwd "/tmp"

@@ -2,6 +2,7 @@
 ndk_loc = node[:settings][:ndk_loc]
 
 script "setup-android-ndk" do
+  timeout 14400
   interpreter "bash"
   user node[:settings][:user]
   cwd "/tmp"
