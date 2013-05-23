@@ -7,7 +7,7 @@
 @copying
 This manual is for the F-Droid repository server tools.
 
-Copyright @copyright{} 2010, 2011, 2012 Ciaran Gultnieks
+Copyright @copyright{} 2010, 2011, 2012, 2013 Ciaran Gultnieks
 Copyright @copyright{} 2011 Henrik Tunedal, Michael Haas, John Sullivan
 
 @quotation
@@ -1091,21 +1091,53 @@ at least extremely messy) to start modifying and restoring the SDK on a
 multi-purpose system, but within the confines of a throwaway single-use
 virtual machine, anything is possible.
 
+All this is in addition to the obvious advantage of having a standardised
+and completely reproducible environment in which builds are made.
+
 @section Setting up a build server
 
 In addition to the basic setup previously described, you will also need
-a Vagrant-compatible Ubuntu Precise base box called 'precise32'. You can
-create one of these for yourself from standard Ubuntu installation media, as
-the specification for what's required to be Vagrant-compatible is very well
-defined.
+a Vagrant-compatible Ubuntu Raring base box called 'raring64'.
+
+You can use a different version or distro for the base box, so long as you
+don't expect any help making it work. One thing to be aware of is that
+working copies of source trees are moved from the host to the guest, so
+for example, having subversion v1.6 on the host and v1.7 on the guest
+would fail.
+
+Unless you're very trusting. you should create one of these for yourself
+from verified standard Ubuntu installation media. However, you could skip
+over the next few paragraphs (and sacrifice some security) by downloading 
+@url{https://f-droid.org/raring64.box}.
 
 Documentation for creating a base box can be found at
 @url{http://docs.vagrantup.com/v1/docs/base_boxes.html}.
 
-You can use a different version or distro for the base box, so long as you
-don't expect any help making it work.
+In addition to carefully following the steps described there, you should
+consider the following:
 
-With this base box installed, you can then go to the @code{fdroidserver}
+@enumerate
+@item
+It is advisable to disable udev network device persistence, otherwise any
+movement of the VM between machines, or reconfiguration, will result in
+broken networking.
+
+For a Debian/Ubuntu default install, just
+@code{touch /etc/udev/rules.d/75-persistent-net-generator.rules} to turn
+off rule generation, and at the same time, get rid of any rules it's
+already created in @code{/etc/udev/rules.d/70-persistent-net.rules}.
+@item
+Unless you want the VM to become totally inaccessible following a failed
+boot, you need to set @code{GRUB_RECORDFAIL_TIMEOUT} to a value other than
+-1 in @code{/etc/grub/default} and then run @code{update-grub}.
+@end enumerate
+
+You may also want to edit @code{buildserver/Vagrantfile} - in particular
+there is a path for retrieving the base box if it doesn't exist, and an
+apt proxy definition, both of which may need customising for your
+environment.
+
+With this base box available, you can then go to the @code{fdroidserver}
 directory and run this:
 
 @example
