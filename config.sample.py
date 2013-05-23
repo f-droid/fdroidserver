@@ -76,6 +76,11 @@ wiki_password = "1234"
 #machine.
 update_stats = False
 
+#Use the following to push stats to a Carbon instance:
+stats_to_carbon = False
+carbon_host = '0.0.0.0'
+carbon_port = 2003
+
 
 #Set this to true to always use a build server. This saves specifying the
 #--server option on dedicated secure build server hosts.

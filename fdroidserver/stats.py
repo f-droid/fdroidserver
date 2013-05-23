@@ -29,12 +29,24 @@ from optparse import OptionParser
 import HTMLParser
 import paramiko
 import common
+import socket
+
+
+carbon_socket = None
+def carbon_send(key, value):
+    global carbon_socket
+    if not carbon_socket:
+        carbon_socket = socket.socket()
+        carbon_socket = carbon_socket.connect((carbon_host, carbon_port))
+    msg = '%s %d 42 %d\n' % (key, value, int(time.time()))
+    carbon_socket.sendall(msg)
 
 def main():
 
     # Read configuration...
-    global update_stats
+    global update_stats, stats_to_carbon
     update_stats = False
+    stats_to_carbon = False
     execfile('config.py', globals())
 
     if not update_stats:
@@ -74,7 +86,7 @@ def main():
             ssh.connect('f-droid.org', username='fdroid', timeout=10,
                     key_filename=webserver_keyfile)
             ftp = ssh.open_sftp()
-            ftp.get_channel().settimeout(15)
+            ftp.get_channel().settimeout(60)
             print "...connected"
 
             ftp.chdir('logs')
@@ -135,6 +147,8 @@ def main():
     alldownloads = 0
     for app, count in apps.iteritems():
         lst.append(app + " " + str(count))
+        if stats_to_carbon:
+            carbon_send('fdroid.download.' + app.replace('.', '_'), count)
         alldownloads += count
     lst.append("ALL " + str(alldownloads))
     f = open('stats/total_downloads_app.txt', 'w')
