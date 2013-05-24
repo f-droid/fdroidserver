@@ -176,7 +176,7 @@ def main():
     # Calculate and write stats for update check modes...
     ucms = {}
     for app in metaapps:
-        checkmode = app['Update Check Mode']
+        checkmode = app['Update Check Mode'].split('/')[0]
         if checkmode in ucms:
             ucms[checkmode] += 1;
         else:
@@ -198,8 +198,6 @@ def main():
     for license, count in licenses.iteritems():
         f.write(license + ' ' + str(count) + '\n')
     f.close()
-
-
 
     # Write list of latest apps added to the repo...
     latest = knownapks.getlatest(10)
