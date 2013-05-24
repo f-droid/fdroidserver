@@ -35,8 +35,12 @@ def getvcs(vcstype, remote, local, sdk_path):
     if vcstype == 'bzr':
         return vcs_bzr(remote, local, sdk_path)
     if vcstype == 'srclib':
-        return vcs_srclib(remote, local, sdk_path)
+        return getsrclib(remote, local, sdk_path, raw=True)
     raise VCSException("Invalid vcs type " + vcstype)
+
+def getsrclibvcs(name):
+    srclib_path = os.path.join('srclibs', name + ".txt")
+    return parse_srclib(srclib_path)['Repo Type']
 
 class vcs:
     def __init__(self, remote, local, sdk_path):
@@ -340,29 +344,26 @@ class vcs_bzr(vcs):
                     cwd=self.local) != 0:
                 raise VCSException("Bzr revert failed")
 
-class vcs_srclib(vcs):
+    def __init__(self, remote, local, sdk_path):
 
-    def repotype(self):
-        return 'srclib'
+        self.sdk_path = sdk_path
 
-    def gotorevisionx(self, rev):
-
-        srclib_dir = 'build/srclib'
-
-        if os.path.exists(self.local):
-            shutil.rmtree(self.local)
-
-        if self.remote.find(':') != -1:
-            srclib, path = self.remote.split(':')
+        index = remote.find('@')
+        if index != -1:
+            self.username = remote[:index]
+            remote = remote[index+1:]
+            index = self.username.find(':')
+            if index == -1:
+                raise VCSException("Password required with username")
+            self.password = self.username[index+1:]
+            self.username = self.username[:index]
         else:
-            srclib = self.remote
-            path = None
-        libdir = getsrclib(srclib + '@' + rev, srclib_dir, self.sdk_path)
-        self.srclib = (srclib, libdir)
-        if path:
-            libdir = os.path.join(libdir, path)
-        shutil.copytree(libdir, self.local)
-        return self.local
+            self.username = None
+
+        self.remote = remote
+        self.local = local
+        self.refreshed = False
+        self.srclib = None
 
 
 # Get the type expected for a given metadata field.
@@ -964,9 +965,13 @@ def parse_srclib(metafile, **kw):
 # Returns the path to it. Normally this is the path to be used when referencing
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
-def getsrclib(spec, srclib_dir, sdk_path, basepath=False):
+def getsrclib(spec, srclib_dir, sdk_path, basepath=False, raw=False):
 
-    name, ref = spec.split('@')
+    if raw:
+        name = spec
+        ref = None
+    else:
+        name, ref = spec.split('@')
 
     srclib_path = os.path.join('srclibs', name + ".txt")
 
@@ -978,6 +983,9 @@ def getsrclib(spec, srclib_dir, sdk_path, basepath=False):
     sdir = os.path.join(srclib_dir, name)
     vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir, sdk_path)
     vcs.gotorevision(ref)
+
+    if raw:
+        return vcs
 
     libdir = None
 
