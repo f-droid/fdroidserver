@@ -163,7 +163,10 @@ def main():
         if len(app['Repo Type']) == 0:
             rtype = 'none'
         else:
-            rtype = app['Repo Type']
+            if app['Repo Type'] == 'srclib':
+                rtype = common.getsrclibvcs(app['Repo'])
+            else:
+                rtype = app['Repo Type']
         if rtype in repotypes:
             repotypes[rtype] += 1;
         else:
