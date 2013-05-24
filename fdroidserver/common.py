@@ -257,7 +257,7 @@ class vcs_gitsvn(vcs):
 
     def gettags(self):
         self.checkrepo()
-        return os.listdir(self.local+'/.git/svn/refs/remotes/tags')
+        return os.listdir(os.path.join(self.local, '/.git/svn/refs/remotes/tags'))
 
 class vcs_svn(vcs):
 
@@ -850,7 +850,7 @@ def parse_androidmanifest(app_dir):
     version = None
     vercode = None
     package = None
-    for line in file(app_dir + '/AndroidManifest.xml'):
+    for line in file(os.path.join(app_dir, 'AndroidManifest.xml')):
         if not package:
             matches = psearch(line)
             if matches:
@@ -865,14 +865,15 @@ def parse_androidmanifest(app_dir):
                 vercode = matches.group(1)
     if version:
         return (version, vercode, package)
-    for xmlfile in glob.glob(app_dir + '/res/values/strings*transl*.xml'):
+    for xmlfile in glob.glob(os.path.join(
+            app_dir, 'res', 'values', 'strings*transl*.xml')):
         for line in file(xmlfile):
             if not version:
                 matches = vnsearch_xml(line)
                 if matches:
                     version = matches.group(2)
     if not version:
-        for line in file(app_dir + '/res/values/strings.xml'):
+        for line in file(os.path.join(app_dir, 'res/values/strings.xml')):
             if not version:
                 matches = vnsearch_xml(line)
                 if matches:
@@ -1088,7 +1089,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
                 print 'Force-removing old build.xml'
                 os.remove(buildxml)
         for d in update_dirs:
-            cwd = root_dir + '/' + d
+            cwd = os.path.join(root_dir, d)
             if verbose:
                 print "Update of '%s': exec '%s' in '%s'"%\
                     (d," ".join(parms),cwd)
