@@ -35,8 +35,12 @@ def getvcs(vcstype, remote, local, sdk_path):
     if vcstype == 'bzr':
         return vcs_bzr(remote, local, sdk_path)
     if vcstype == 'srclib':
-        return vcs_srclib(remote, local, sdk_path)
+        return getsrclib(remote, local, sdk_path, raw=True)
     raise VCSException("Invalid vcs type " + vcstype)
+
+def getsrclibvcs(name):
+    srclib_path = os.path.join('srclibs', name + ".txt")
+    return parse_srclib(srclib_path)['Repo Type']
 
 class vcs:
     def __init__(self, remote, local, sdk_path):
@@ -253,7 +257,7 @@ class vcs_gitsvn(vcs):
 
     def gettags(self):
         self.checkrepo()
-        return os.listdir(self.local+'/.git/svn/refs/remotes/tags')
+        return os.listdir(os.path.join(self.local, '/.git/svn/refs/remotes/tags'))
 
 class vcs_svn(vcs):
 
@@ -340,29 +344,26 @@ class vcs_bzr(vcs):
                     cwd=self.local) != 0:
                 raise VCSException("Bzr revert failed")
 
-class vcs_srclib(vcs):
+    def __init__(self, remote, local, sdk_path):
 
-    def repotype(self):
-        return 'srclib'
+        self.sdk_path = sdk_path
 
-    def gotorevisionx(self, rev):
-
-        srclib_dir = 'build/srclib'
-
-        if os.path.exists(self.local):
-            shutil.rmtree(self.local)
-
-        if self.remote.find(':') != -1:
-            srclib, path = self.remote.split(':')
+        index = remote.find('@')
+        if index != -1:
+            self.username = remote[:index]
+            remote = remote[index+1:]
+            index = self.username.find(':')
+            if index == -1:
+                raise VCSException("Password required with username")
+            self.password = self.username[index+1:]
+            self.username = self.username[:index]
         else:
-            srclib = self.remote
-            path = None
-        libdir = getsrclib(srclib + '@' + rev, srclib_dir, self.sdk_path)
-        self.srclib = (srclib, libdir)
-        if path:
-            libdir = os.path.join(libdir, path)
-        shutil.copytree(libdir, self.local)
-        return self.local
+            self.username = None
+
+        self.remote = remote
+        self.local = local
+        self.refreshed = False
+        self.srclib = None
 
 
 # Get the type expected for a given metadata field.
@@ -849,7 +850,7 @@ def parse_androidmanifest(app_dir):
     version = None
     vercode = None
     package = None
-    for line in file(app_dir + '/AndroidManifest.xml'):
+    for line in file(os.path.join(app_dir, 'AndroidManifest.xml')):
         if not package:
             matches = psearch(line)
             if matches:
@@ -864,14 +865,15 @@ def parse_androidmanifest(app_dir):
                 vercode = matches.group(1)
     if version:
         return (version, vercode, package)
-    for xmlfile in glob.glob(app_dir + '/res/values/strings*transl*.xml'):
+    for xmlfile in glob.glob(os.path.join(
+            app_dir, 'res', 'values', 'strings*transl*.xml')):
         for line in file(xmlfile):
             if not version:
                 matches = vnsearch_xml(line)
                 if matches:
                     version = matches.group(2)
     if not version:
-        for line in file(app_dir + '/res/values/strings.xml'):
+        for line in file(os.path.join(app_dir, 'res/values/strings.xml')):
             if not version:
                 matches = vnsearch_xml(line)
                 if matches:
@@ -964,9 +966,13 @@ def parse_srclib(metafile, **kw):
 # Returns the path to it. Normally this is the path to be used when referencing
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
-def getsrclib(spec, srclib_dir, sdk_path, basepath=False):
+def getsrclib(spec, srclib_dir, sdk_path, basepath=False, raw=False):
 
-    name, ref = spec.split('@')
+    if raw:
+        name = spec
+        ref = None
+    else:
+        name, ref = spec.split('@')
 
     srclib_path = os.path.join('srclibs', name + ".txt")
 
@@ -978,6 +984,9 @@ def getsrclib(spec, srclib_dir, sdk_path, basepath=False):
     sdir = os.path.join(srclib_dir, name)
     vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir, sdk_path)
     vcs.gotorevision(ref)
+
+    if raw:
+        return vcs
 
     libdir = None
 
@@ -1080,7 +1089,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
                 print 'Force-removing old build.xml'
                 os.remove(buildxml)
         for d in update_dirs:
-            cwd = root_dir + '/' + d
+            cwd = os.path.join(root_dir, d)
             if verbose:
                 print "Update of '%s': exec '%s' in '%s'"%\
                     (d," ".join(parms),cwd)

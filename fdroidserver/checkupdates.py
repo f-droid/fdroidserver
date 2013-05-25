@@ -19,7 +19,6 @@
 
 import sys
 import os
-import shutil
 import re
 import urllib2
 import time
@@ -43,24 +42,29 @@ def check_tags(app, sdk_path):
 
     try:
 
-        build_dir = 'build/' + app['id']
+        if app['Repo Type'] == 'srclib':
+            build_dir = os.path.join('build', 'srclib')
+            repotype = common.getsrclibvcs(app['Repo'])
+        else:
+            build_dir = os.path.join('build/', app['id'])
+            repotype = app['Repo Type']
 
-        if app['Repo Type'] not in ('git', 'git-svn'):
+        if repotype not in ('git', 'git-svn'):
             return (None, 'Tags update mode only works for git and git-svn repositories currently')
 
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
-        if app['Repo Type'] == 'git':
-            vcs.gotorevision(None)
-        elif app['Repo Type'] == 'git-svn':
-            vcs.gotorevision(None)
+
+        if app['Repo Type'] == 'srclib':
+            build_dir = os.path.join(build_dir, app['Repo'])
+
+        vcs.gotorevision(None)
 
         if len(app['builds']) == 0:
             return (None, "Can't use Tags with no builds defined")
 
-        app_dir = build_dir
         if 'subdir' in app['builds'][-1]:
-            app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
+            build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
 
         hver = None
         hcode = "0"
@@ -69,8 +73,8 @@ def check_tags(app, sdk_path):
             vcs.gotorevision(tag)
 
             # Only process tags where the manifest exists...
-            if os.path.exists(app_dir + '/AndroidManifest.xml'):
-                version, vercode, package = common.parse_androidmanifest(app_dir)
+            if os.path.exists(os.path.join(build_dir, 'AndroidManifest.xml')):
+                version, vercode, package = common.parse_androidmanifest(build_dir)
                 if package and package == app['id'] and version and vercode:
                     if int(vercode) > int(hcode):
                         hcode = str(int(vercode))
@@ -100,24 +104,32 @@ def check_repomanifest(app, sdk_path, branch=None):
 
     try:
 
-        build_dir = 'build/' + app['id']
+        if app['Repo Type'] == 'srclib':
+            build_dir = os.path.join('build', 'srclib')
+            repotype = common.getsrclibvcs(app['Repo'])
+        else:
+            build_dir = os.path.join('build/', app['id'])
+            repotype = app['Repo Type']
 
-        if app['Repo Type'] == 'bzr':
+        if repotype == 'bzr':
             return (None, 'RepoManifest update mode has not been ported to bzr repositories yet')
 
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
-        if app['Repo Type'] == 'git':
+        if app['Repo Type'] == 'srclib':
+            build_dir = os.path.join(build_dir, app['Repo'])
+
+        if vcs.repotype() == 'git':
             if branch:
                 vcs.gotorevision('origin/'+branch)
             else:
                 vcs.gotorevision('origin/master')
                 pass
-        elif app['Repo Type'] == 'git-svn':
-            vcs.gotorevision('trunk')
-        elif app['Repo Type'] == 'svn':
+        elif vcs.repotype() == 'git-svn':
             vcs.gotorevision(None)
-        elif app['Repo Type'] == 'hg':
+        elif vcs.repotype() == 'svn':
+            vcs.gotorevision(None)
+        elif vcs.repotype() == 'hg':
             if branch:
                 vcs.gotorevision(branch)
             else:
@@ -126,11 +138,10 @@ def check_repomanifest(app, sdk_path, branch=None):
         if len(app['builds']) == 0:
             return (None, "Can't use RepoManifest with no builds defined")
 
-        app_dir = build_dir
         if 'subdir' in app['builds'][-1]:
-            app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
+            build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
 
-        version, vercode, package = common.parse_androidmanifest(app_dir)
+        version, vercode, package = common.parse_androidmanifest(build_dir)
         if not package:
             return (None, "Couldn't find package ID")
         if package != app['id']:

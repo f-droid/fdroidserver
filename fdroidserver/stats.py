@@ -161,7 +161,10 @@ def main():
         if len(app['Repo Type']) == 0:
             rtype = 'none'
         else:
-            rtype = app['Repo Type']
+            if app['Repo Type'] == 'srclib':
+                rtype = common.getsrclibvcs(app['Repo'])
+            else:
+                rtype = app['Repo Type']
         if rtype in repotypes:
             repotypes[rtype] += 1;
         else:
@@ -174,7 +177,7 @@ def main():
     # Calculate and write stats for update check modes...
     ucms = {}
     for app in metaapps:
-        checkmode = app['Update Check Mode']
+        checkmode = app['Update Check Mode'].split('/')[0]
         if checkmode in ucms:
             ucms[checkmode] += 1;
         else:
@@ -196,8 +199,6 @@ def main():
     for license, count in licenses.iteritems():
         f.write(license + ' ' + str(count) + '\n')
     f.close()
-
-
 
     # Write list of latest apps added to the repo...
     latest = knownapks.getlatest(10)

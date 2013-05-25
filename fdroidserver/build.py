@@ -657,10 +657,16 @@ def main():
     build_succeeded = []
     for app in apps:
 
-        build_dir = 'build/' + app['id']
+        if app['Repo Type'] == 'srclib':
+            build_dir = os.path.join('build', 'srclib')
+        else:
+            build_dir = os.path.join('build', app['id'])
 
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
+
+        if app['Repo Type'] == 'srclib':
+            build_dir = os.path.join(build_dir, app['Repo'])
 
         if options.wiki:
             import mwclient
