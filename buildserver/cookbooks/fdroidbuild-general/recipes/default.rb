@@ -18,3 +18,11 @@ end
   end
 end
 
+if node['kernel']['machine'] == "x86_64"
+  %w{ia32-libs}.each do |pkg|
+    package pkg do
+      action :install
+    end
+  end
+end
+
