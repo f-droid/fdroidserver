@@ -21,6 +21,36 @@ if not os.path.exists('makebuildserver.py') or not os.path.exists(serverdir):
 if os.path.exists(boxfile):
     os.remove(boxfile)
 
+
+# Update cached files.
+cachedir = os.path.join('buildserver', 'cache')
+if not os.path.exists(cachedir):
+    os.mkdir(cachedir)
+cachefiles = [
+    ('android-sdk_r21.0.1-linux.tgz',
+     'http://dl.google.com/android/android-sdk_r21.0.1-linux.tgz',
+     'cookbooks/recipes/android-sdk/default.rb'),
+    ('android-ndk-r8e-linux-x64.tar.bz2',
+     'http://dl.google.com/android/ndk/android-ndk-r8e-linux-x64.tar.bz2',
+     'cookbooks/recipes/android-ndk/default.rb')
+    ]
+wanted = []
+for f, src, check in cachefiles:
+    if subprocess.call('grep ' + f + ' ' + check) != 0:
+        print "Cache mismatch - " + f + " is not mentioned in " + check
+        sys.exit(1)
+    if not os.path.exists(os.path.join(cachedir, f)):
+        print "Downloading " + f + " to cache"
+        if subprocess.call('wget ' + src, cwd=cachedir) != 0:
+            print "...download of " + f + " failed."
+            sys.exit(1)
+    wanted.append(f)
+for f in os.listdir(cachedir):
+    if not f in wanted:
+        print "Removing unwanted cache file " + f
+        os.remove(os.path.join(cachedir, f))
+
+
 vagrant(['halt'], serverdir)
 print "Configuring build server VM"
 returncode, out, err = vagrant(['up'], serverdir)
