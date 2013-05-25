@@ -19,8 +19,8 @@ Vagrant::Config.run do |config|
         :user => "vagrant"
       }
     }
+    chef.add_recipe "fdroidbuild-general"
     chef.add_recipe "android-sdk"
     chef.add_recipe "android-ndk"
-    chef.add_recipe "fdroidbuild-general"
   end
 end
