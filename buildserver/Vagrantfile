@@ -3,7 +3,7 @@ Vagrant::Config.run do |config|
   config.vm.box = "raring64"
   config.vm.box_url = "/shares/software/OS and Boot/raring64.box"
 
-  config.vm.customize ["modifyvm", :id, "--memory", "2048"]
+  config.vm.customize ["modifyvm", :id, "--memory", "3584"]
 
   config.vm.provision :shell, :path => "fixpaths.sh"
   # Set apt proxy - remove, or adjust this, accordingly!
