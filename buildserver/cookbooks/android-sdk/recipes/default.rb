@@ -37,7 +37,10 @@ end
     user user
     cwd "/tmp"
     code "
-      #{sdk_loc}/tools/android update sdk --no-ui -a -t #{sdk}
+      #{sdk_loc}/tools/android update sdk --no-ui -a -t #{sdk} <<X
+y
+
+X
     "
     not_if "test -d #{sdk_loc}/platforms/#{sdk}"
   end
@@ -51,7 +54,10 @@ end
     user user
     cwd "/tmp"
     code "
-      #{sdk_loc}/tools/android update sdk --no-ui -a -t #{sdk}
+       #{sdk_loc}/tools/android update sdk --no-ui -a -t #{sdk} <<X
+y
+
+X
     "
 
     not_if "test -d #{sdk_loc}/add-ons/#{sdk}"
