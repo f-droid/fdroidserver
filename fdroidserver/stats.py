@@ -32,14 +32,12 @@ import common
 import socket
 
 
-carbon_socket = None
 def carbon_send(key, value):
-    global carbon_socket
-    if not carbon_socket:
-        carbon_socket = socket.socket()
-        carbon_socket = carbon_socket.connect((carbon_host, carbon_port))
-    msg = '%s %d 42 %d\n' % (key, value, int(time.time()))
-    carbon_socket.sendall(msg)
+    s = socket.socket()
+    s.connect((carbon_host, carbon_port))
+    msg = '%s %d %d\n' % (key, value, int(time.time()))
+    s.sendall(msg)
+    s.close()
 
 def main():
 
