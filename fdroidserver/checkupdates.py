@@ -177,9 +177,6 @@ def check_market(app):
     except urllib2.HTTPError, e:
         if e.code == 404:
             return (None, 'Not in market')
-        elif e.code == 503:
-            print "Whoops"
-            sys.exit(1)
         else:
             return (None, 'Failed with HTTP status' + str(req.getcode()))
     page = resp.read()
