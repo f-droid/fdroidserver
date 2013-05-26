@@ -60,11 +60,9 @@ def check_tags(app, sdk_path):
 
         vcs.gotorevision(None)
 
-        if len(app['builds']) == 0:
-            return (None, "Can't use Tags with no builds defined")
-
-        if 'subdir' in app['builds'][-1]:
-            build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
+        if len(app['builds']) > 0:
+            if 'subdir' in app['builds'][-1]:
+                build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
 
         hver = None
         hcode = "0"
@@ -135,11 +133,9 @@ def check_repomanifest(app, sdk_path, branch=None):
             else:
                 vcs.gotorevision('default')
 
-        if len(app['builds']) == 0:
-            return (None, "Can't use RepoManifest with no builds defined")
-
-        if 'subdir' in app['builds'][-1]:
-            build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
+        if len(app['builds']) > 0:
+            if 'subdir' in app['builds'][-1]:
+                build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
 
         version, vercode, package = common.parse_androidmanifest(build_dir)
         if not package:
