@@ -124,7 +124,10 @@ def check_repomanifest(app, sdk_path, branch=None):
                 vcs.gotorevision('origin/master')
                 pass
         elif vcs.repotype() == 'git-svn':
-            vcs.gotorevision(None)
+            if branch:
+                vcs.gotorevision(branch)
+            else:
+                vcs.gotorevision(None)
         elif vcs.repotype() == 'svn':
             vcs.gotorevision(None)
         elif vcs.repotype() == 'hg':
