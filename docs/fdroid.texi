@@ -638,7 +638,7 @@ The git-svn option connects to an SVN repository, and you specify the URL in
 exactly the same way, but git is used as a back-end. This is preferable for
 performance reasons, and also because a local copy of the entire history is
 available in case the upstream repository disappears. (It happens!). In
-order to use RepoManifest or Tags as update check modes for this VCS type
+order to use Tags as update check mode for this VCS type
 the URL must encode the path to the trunk and tags, like so: 
 http://svn.code.sf.net/p/project/code;trunk=trunk;tags=tags.
 
