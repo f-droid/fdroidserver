@@ -245,9 +245,8 @@ class vcs_gitsvn(vcs):
                     cwd=self.local, stdout=subprocess.PIPE)
                 rev = p.communicate()[0].rstrip()
                 if p.returncode != 0 or len(rev) == 0:
-                    # If it's not a svn rev, do a normal git checkout (master,
-                    # trunk, raw git sha, etc)
-                    if subprocess.call(['git', 'checkout', 'trunk'], cwd=self.local) != 0:
+                    # Try a plain git checkout as a last resort
+                    if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
                         raise VCSException("No git treeish found and direct git checkout failed")
                 # Check out the appropriate git revision...
                 if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
