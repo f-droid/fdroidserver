@@ -652,30 +652,38 @@ def main():
             m = max([i['vercode'] for i in app['builds']], key=int)
             app['builds'] = [b for b in app['builds'] if b['vercode'] == m]
 
+    if options.wiki:
+        import mwclient
+        site = mwclient.Site(wiki_server, path=wiki_path)
+        site.login(wiki_user, wiki_password)
+
     # Build applications...
     failed_apps = {}
     build_succeeded = []
     for app in apps:
 
-        if app['Repo Type'] == 'srclib':
-            build_dir = os.path.join('build', 'srclib')
-        else:
-            build_dir = os.path.join('build', app['id'])
-
-        # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
-
-        if app['Repo Type'] == 'srclib':
-            build_dir = os.path.join(build_dir, app['Repo'])
-
-        if options.wiki:
-            import mwclient
-            site = mwclient.Site(wiki_server, path=wiki_path)
-            site.login(wiki_user, wiki_password)
+        first = True
 
         for thisbuild in app['builds']:
             wikilog = None
             try:
+
+                # For the first build of a particular app, we need to set up
+                # the source repo. We can reuse it on subsequent builds, if
+                # there are any.
+                if first:
+                    if app['Repo Type'] == 'srclib':
+                        build_dir = os.path.join('build', 'srclib')
+                    else:
+                        build_dir = os.path.join('build', app['id'])
+
+                    # Set up vcs interface and make sure we have the latest code...
+                    vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
+
+                    if app['Repo Type'] == 'srclib':
+                        build_dir = os.path.join(build_dir, app['Repo'])
+                    first = False
+
                 if trybuild(app, thisbuild, build_dir, output_dir, also_check_dir,
                         srclib_dir, extlib_dir, tmp_dir, repo_dir, vcs, options.test,
                         options.server, options.install, options.force,
