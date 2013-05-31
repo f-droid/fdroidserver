@@ -1060,7 +1060,7 @@ in the repository, and where updates are required you will be prompted to
 The Build Server system isolates the builds for each package within a clean,
 isolated and secure throwaway virtual machine environment.
 
-@section Rationale
+@section Overview
 
 Building applications in this manner on a large scale, especially with the
 involvement of automated and/or unattended processes, could be considered
@@ -1097,12 +1097,16 @@ multi-purpose system, but within the confines of a throwaway single-use
 virtual machine, anything is possible.
 
 All this is in addition to the obvious advantage of having a standardised
-and completely reproducible environment in which builds are made.
+and completely reproducible environment in which builds are made. Additionally,
+it allows for specialised custom build environments for particular
+applications.
 
 @section Setting up a build server
 
 In addition to the basic setup previously described, you will also need
-a Vagrant-compatible Ubuntu Raring base box called 'raring64'.
+a Vagrant-compatible Ubuntu Raring base box called 'raring32' (or raring64
+for a 64-bit VM, if you want it to be much slower, and require more disk
+space).
 
 You can use a different version or distro for the base box, so long as you
 don't expect any help making it work. One thing to be aware of is that
@@ -1113,7 +1117,7 @@ would fail.
 Unless you're very trusting. you should create one of these for yourself
 from verified standard Ubuntu installation media. However, you could skip
 over the next few paragraphs (and sacrifice some security) by downloading 
-@url{https://f-droid.org/raring64.box}.
+@url{https://f-droid.org/raring32.box} or @url{https://f-droid.org/raring64.box}.
 
 Documentation for creating a base box can be found at
 @url{http://docs.vagrantup.com/v1/docs/base_boxes.html}.
@@ -1142,8 +1146,10 @@ there is a path for retrieving the base box if it doesn't exist, and an
 apt proxy definition, both of which may need customising for your
 environment.
 
-With this base box available, you can then go to the @code{fdroidserver}
-directory and run this:
+With this base box available, you should then look at the settings at the
+top of @code{makebuildserver.py} and see if any need changing to suit your
+environment. You can then go to the @code{fdroidserver} directory and run
+this:
 
 @example
 ./makebuildserver.py
@@ -1155,6 +1161,18 @@ platforms. Luckily you only need to do it occasionally. Once you have a
 working build server image, if the recipes change (e.g. when packages need
 to be added) you can just run that script again and the existing one will
 be updated in place.
+
+The main sdk/ndk downloads will automatically be cached to speed things
+up the next time, but there's no easy way of doing this for the longer
+sections which use the SDK's @code{android} tool to install platforms,
+add-ons and tools. However, instead of allowing automatic caching, you
+can supply a pre-populated cache directory which includes not only these
+downloads, but also .tar.gz files for all the relevant additions. If the
+provisioning scripts detect these, they will be used in preference to
+running the android tools. For example, if you have
+@code{buildserver/addons/cache/platforms/android-15.tar.gz} that will be
+used when installing the android-15 platform, instead of re-downloading it
+using @code{android update sdk --no-ui -t android-15}.
 
 Once it's complete you'll have a new base box called 'buildserver' which is
 what's used for the actual builds. You can then build packages as normal,
