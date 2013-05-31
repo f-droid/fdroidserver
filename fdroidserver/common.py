@@ -40,6 +40,8 @@ def getvcs(vcstype, remote, local, sdk_path):
 
 def getsrclibvcs(name):
     srclib_path = os.path.join('srclibs', name + ".txt")
+    if not os.path.exists(srclib_path):
+        raise VCSException("Missing srclib " + name)
     return parse_srclib(srclib_path)['Repo Type']
 
 class vcs:
