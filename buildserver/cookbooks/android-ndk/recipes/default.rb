@@ -7,7 +7,12 @@ script "setup-android-ndk" do
   user node[:settings][:user]
   cwd "/tmp"
   code "
-    tar jxvf /vagrant/cache/android-ndk-r8e-linux-x64.tar.bz2
+    if [ `uname -m` == 'x86_64' ] ; then
+       SUFFIX = '_64'
+    else
+       SUFFIX = ''
+    fi
+    tar jxvf /vagrant/cache/android-ndk-r8e-linux-x86$SUFFIX.tar.bz2
     mv android-ndk-r8e #{ndk_loc}
   "
   not_if do

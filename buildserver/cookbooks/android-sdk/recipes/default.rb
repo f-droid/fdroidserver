@@ -37,10 +37,16 @@ end
     user user
     cwd "/tmp"
     code "
-      #{sdk_loc}/tools/android update sdk --no-ui -a -t #{sdk} <<X
+      if [ -f /vagrant/cache/platforms/#{sdk}.tar.gz ] ; then
+        echo Installing from cache
+        tar -C #{sdk_loc}/platforms -z -x -f /vagrant/cache/platforms/#{sdk}.tar.gz
+      else
+        echo Installing via 'android'
+        #{sdk_loc}/tools/android update sdk --no-ui -a -t #{sdk} <<X
 y
 
 X
+      fi
     "
     not_if "test -d #{sdk_loc}/platforms/#{sdk}"
   end
@@ -54,10 +60,16 @@ end
     user user
     cwd "/tmp"
     code "
-       #{sdk_loc}/tools/android update sdk --no-ui -a -t #{sdk} <<X
+      if [ -f /vagrant/cache/add-ons/#{sdk}.tar.gz ] ; then
+        echo Installing from cache
+        tar -C #{sdk_loc}/add-ons -z -x -f /vagrant/cache/add-ons/#{sdk}.tar.gz
+      else
+        echo Installing via 'android'
+        #{sdk_loc}/tools/android update sdk --no-ui -a -t #{sdk} <<X
 y
 
 X
+      fi
     "
 
     not_if "test -d #{sdk_loc}/add-ons/#{sdk}"
