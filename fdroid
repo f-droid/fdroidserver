@@ -18,7 +18,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import fdroidserver
 
 commands = [
         "build",
@@ -45,8 +44,7 @@ def main():
 
     command = sys.argv[1]
     if not command in commands:
-        print "Command '" + command + "' not recognised."
-        print ""
+        print "Command '" + command + "' not recognised.\n"
         print_help()
         sys.exit(1)
 
