@@ -173,7 +173,7 @@ def check_market(app):
     headers = {'User-Agent' : 'Mozilla/5.0 (X11; Linux i686; rv:18.0) Gecko/20100101 Firefox/18.0'}
     req = urllib2.Request(url, None, headers)
     try:
-        resp = urllib2.urlopen(req)
+        resp = urllib2.urlopen(req, None, 20)
     except urllib2.HTTPError, e:
         if e.code == 404:
             return (None, 'Not in market')
@@ -182,6 +182,8 @@ def check_market(app):
             sys.exit(1)
         else:
             return (None, 'Failed with HTTP status' + str(req.getcode()))
+    except Exception, e:
+        return (None, 'Failed:' + str(e))
     page = resp.read()
 
     version = None
