@@ -30,7 +30,7 @@ import HTMLParser
 import paramiko
 import common
 import socket
-
+import subprocess
 
 def carbon_send(key, value):
     s = socket.socket()
@@ -90,21 +90,14 @@ def main():
             ftp.chdir('logs')
             files = ftp.listdir()
             for f in files:
-                if f.startswith('access-') and f.endswith('.log'):
+                if f.startswith('access-') and f.endswith('.log.gz'):
 
                     destpath = os.path.join(logsdir, f)
-                    archivepath = os.path.join(logsarchivedir, f + '.gz')
-                    if os.path.exists(archivepath):
-                        if os.path.exists(destpath):
-                            # Just in case we have it archived but failed to remove
-                            # the original...
-                            os.remove(destpath)
-                    else:
-                        destsize = ftp.stat(f).st_size
-                        if (not os.path.exists(destpath) or
-                                os.path.getsize(destpath) != destsize):
-                            print "...retrieving " + f
-                            ftp.get(f, destpath)
+                    destsize = ftp.stat(f).st_size
+                    if (not os.path.exists(destpath) or
+                            os.path.getsize(destpath) != destsize):
+                        print "...retrieving " + f
+                        ftp.get(f, destpath)
         except Exception as e:
             traceback.print_exc()
             sys.exit(1)
@@ -116,14 +109,19 @@ def main():
                 ssh.close()
 
     # Process logs
+    if options.verbose:
+        print 'Processing logs...'
     logexpr = '(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] "GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) \d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
     logsearch = re.compile(logexpr).search
     apps = {}
     unknownapks = []
     knownapks = common.KnownApks()
-    for logfile in glob.glob(os.path.join(logsdir,'access-*.log')):
-        logdate = logfile[len(logsdir) + 1 + len('access-'):-4]
-        matches = (logsearch(line) for line in file(logfile))
+    for logfile in glob.glob(os.path.join(logsdir,'access-*.log.gz')):
+        if options.verbose:
+            print '...' + logfile
+        logdate = logfile[len(logsdir) + 1 + len('access-'):-7]
+        p = subprocess.Popen(["zcat", logfile], stdout = subprocess.PIPE)
+        matches = (logsearch(line) for line in p.stdout)
         for match in matches:
             if match and match.group('statuscode') == '200':
                 uri = match.group('uri')
