@@ -245,13 +245,13 @@ class vcs_gitsvn(vcs):
                 # Translate svn rev into git format
                 p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev],
                     cwd=self.local, stdout=subprocess.PIPE)
-                rev = p.communicate()[0].rstrip()
-                if p.returncode != 0 or len(rev) == 0:
+                git_rev = p.communicate()[0].rstrip()
+                if p.returncode != 0 or len(git_rev) == 0:
                     # Try a plain git checkout as a last resort
                     if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
                         raise VCSException("No git treeish found and direct git checkout failed")
                 # Check out the appropriate git revision...
-                if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
+                if subprocess.call(['git', 'checkout', git_rev], cwd=self.local) != 0:
                     raise VCSException("Git checkout failed")
         # Get rid of any uncontrolled files left behind...
         if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
@@ -259,7 +259,7 @@ class vcs_gitsvn(vcs):
 
     def gettags(self):
         self.checkrepo()
-        return os.listdir(os.path.join(self.local, '/.git/svn/refs/remotes/tags'))
+        return os.listdir(os.path.join(self.local, '.git/svn/refs/remotes/tags'))
 
 class vcs_svn(vcs):
 
