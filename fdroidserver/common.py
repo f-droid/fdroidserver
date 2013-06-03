@@ -235,11 +235,13 @@ class vcs_gitsvn(vcs):
                     raise VCSException("Git svn rebase failed")
                 self.refreshed = True
         if rev:
+            nospaces_rev = rev.replace(' ', '%20')
             # Try finding a svn tag
-            p = subprocess.Popen(['git', 'checkout', 'tags/' + rev],
-                    cwd=self.local, stderr=subprocess.PIPE)
+            p = subprocess.Popen(['git', 'checkout', 'tags/' + nospaces_rev],
+                    cwd=self.local, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            out, err = p.communicate()
             if p.returncode == 0:
-                print p.communicate()[0]
+                print out
             else:
                 # No tag found, normal svn rev translation
                 # Translate svn rev into git format
@@ -248,11 +250,22 @@ class vcs_gitsvn(vcs):
                 git_rev = p.communicate()[0].rstrip()
                 if p.returncode != 0 or len(git_rev) == 0:
                     # Try a plain git checkout as a last resort
-                    if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
+                    p = subprocess.Popen(['git', 'checkout', rev], cwd=self.local,
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    out, err = p.communicate()
+                    if p.returncode == 0:
+                        print out
+                    else:
                         raise VCSException("No git treeish found and direct git checkout failed")
-                # Check out the appropriate git revision...
-                if subprocess.call(['git', 'checkout', git_rev], cwd=self.local) != 0:
-                    raise VCSException("Git checkout failed")
+                else:
+                    # Check out the git rev equivalent to the svn rev
+                    p = subprocess.Popen(['git', 'checkout', git_rev], cwd=self.local,
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    out, err = p.communicate()
+                    if p.returncode == 0:
+                        print out
+                    else:
+                        raise VCSException("Git svn checkout failed")
         # Get rid of any uncontrolled files left behind...
         if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
             raise VCSException("Git clean failed")
