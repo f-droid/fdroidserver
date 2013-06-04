@@ -1081,7 +1081,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         init = init.replace('$$NDK$$', ndk_path)
         init = init.replace('$$MVN$$', mvn3)
         if verbose: print "Doing init: exec '%s' in '%s'"%(init,root_dir)
-        if subprocess.call(init, cwd=root_dir, shell=True) != 0:
+        if subprocess.call(['bash', '-c', init], cwd=root_dir) != 0:
             raise BuildException("Error running init command")
 
     # Generate (or update) the ant build file, build.xml...
@@ -1261,7 +1261,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         prebuild = prebuild.replace('$$SDK$$', sdk_path)
         prebuild = prebuild.replace('$$NDK$$', ndk_path)
         prebuild = prebuild.replace('$$MVN3$$', mvn3)
-        p = subprocess.Popen(prebuild, cwd=root_dir, shell=True,
+        p = subprocess.Popen(['bash', '-c', prebuild], cwd=root_dir,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
         if p.returncode != 0:

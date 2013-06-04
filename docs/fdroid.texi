@@ -789,6 +789,8 @@ insert literal commas, or as the last character on a line to join that
 line with the next. It has no special meaning in other contexts; in
 particular, literal backslashes should not be escaped.
 
+The command runs using bash.
+
 Note that nothing should be build during this prebuild phase - scanning
 of the code and building of the source tarball, for example, take place
 after this. For custom actions that actually build things, use 'build'
