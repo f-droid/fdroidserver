@@ -28,6 +28,22 @@ execute "add-android-sdk-path" do
   not_if "grep #{sdk_loc} /home/#{user}/.bashrc"
 end
 
+script "add_build_tools" do
+  interpreter "bash"
+  user user
+  cwd "/tmp"
+  code "
+    if [ -f /vagrant/cache/build-tools/17.0.0.tar.gz ] ; then
+      echo Installing from cache
+      tar -C #{sdk_loc}/build-tools -z -x -f /vagrant/cache/build-tools/17.0.0.tar.gz
+    else
+      echo Need the right install filter for this
+    fi
+  "
+  not_if "test -d #{sdk_loc}/build-tools/17.0.0"
+end
+
+
 %w{android-3 android-4 android-7 android-8 android-10 android-11
    android-12 android-13 android-14 android-15 android-16 android-17
    extra-android-support}.each do |sdk|
