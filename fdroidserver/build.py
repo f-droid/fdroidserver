@@ -49,8 +49,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
     vm_ok = False
     if not options.resetserver:
         print "Checking for valid existing build server"
-        if os.path.exists(os.path.join('builder', 'Vagrantfile')):
-            print "...directory exists"
+        if (os.path.exists(os.path.join('builder', 'Vagrantfile')) and 
+                os.path.exists(os.path.join('builder', '.vagrant'))):
+            print "...VM is present"
             p = subprocess.Popen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'list', '--details'],
                 cwd='builder', stdout=subprocess.PIPE)
             output = p.communicate()[0]
