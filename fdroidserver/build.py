@@ -220,7 +220,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         if 'srclibs' in thisbuild:
             for lib in thisbuild['srclibs'].split(';'):
                 name, _ = lib.split('@')
-                srclibpaths.append((name, common.getsrclib(lib, 'build/srclib', sdk_path, basepath=True)))
+                if options.verbose:
+                    print "Processing srclib '" + name + "'"
+                srclibpaths.append((name, common.getsrclib(lib, 'build/srclib', sdk_path, basepath=True, prepare=False)))
         # If one was used for the main source, add that too.
         basesrclib = vcs.getsrclib()
         if basesrclib:
@@ -283,13 +285,13 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         subprocess.call(['vagrant', 'suspend'], cwd='builder')
 
 
-def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, verbose=False):
+def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, verbose, onserver):
     """Do a build locally."""
 
     # Prepare the source code...
     root_dir, srclibpaths = common.prepare_source(vcs, app, thisbuild,
             build_dir, srclib_dir, extlib_dir, sdk_path, ndk_path,
-            javacc_path, mvn3, verbose)
+            javacc_path, mvn3, verbose, onserver)
 
     # Scan before building...
     buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
@@ -488,7 +490,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
 
 def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, extlib_dir,
-        tmp_dir, repo_dir, vcs, test, server, install, force, verbose=False):
+        tmp_dir, repo_dir, vcs, test, server, install, force, verbose, onserver):
     """
     Build a particular version of an application, if it needs building.
 
@@ -521,7 +523,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
 
         build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force)
     else:
-        build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, verbose)
+        build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, verbose, onserver)
     return True
 
 
@@ -688,7 +690,7 @@ def main():
                 if trybuild(app, thisbuild, build_dir, output_dir, also_check_dir,
                         srclib_dir, extlib_dir, tmp_dir, repo_dir, vcs, options.test,
                         options.server, options.install, options.force,
-                        options.verbose):
+                        options.verbose, options.onserver):
                     build_succeeded.append(app)
                     wikilog = "Build succeeded"
             except BuildException as be:

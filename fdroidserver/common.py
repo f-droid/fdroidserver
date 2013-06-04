@@ -981,7 +981,7 @@ def parse_srclib(metafile, **kw):
 # Returns the path to it. Normally this is the path to be used when referencing
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
-def getsrclib(spec, srclib_dir, sdk_path, basepath=False, raw=False):
+def getsrclib(spec, srclib_dir, sdk_path, basepath=False, raw=False, prepare=True, preponly=False):
 
     if raw:
         name = spec
@@ -997,11 +997,13 @@ def getsrclib(spec, srclib_dir, sdk_path, basepath=False, raw=False):
     srclib = parse_srclib(srclib_path)
 
     sdir = os.path.join(srclib_dir, name)
-    vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir, sdk_path)
-    vcs.gotorevision(ref)
 
-    if raw:
-        return vcs
+    if not preponly:
+        vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir, sdk_path)
+        vcs.gotorevision(ref)
+
+        if raw:
+            return vcs
 
     libdir = None
 
@@ -1015,18 +1017,21 @@ def getsrclib(spec, srclib_dir, sdk_path, basepath=False, raw=False):
     if libdir is None:
         libdir = sdir
 
-    if srclib["Prepare"] is not None:
-        p = subprocess.Popen(srclib["Prepare"], cwd=libdir, shell=True,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = p.communicate()
-        if p.returncode != 0:
-            raise BuildException("Error running prepare command for srclib "
-                    + name, out, err)
-    
-    if srclib["Update Project"] == "Yes":
-        if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
-            'update', 'project', '-p', libdir]) != 0:
-                raise BuildException( 'Error updating ' + name + ' project')
+    if prepare:
+
+        if srclib["Prepare"] is not None:
+            print "******************************* PREPARE " + srclib["Prepare"] + " **************"
+            p = subprocess.Popen(['bash', '-c', srclib["Prepare"]], cwd=libdir,
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            out, err = p.communicate()
+            if p.returncode != 0:
+                raise BuildException("Error running prepare command for srclib "
+                        + name, out, err)
+        
+        if srclib["Update Project"] == "Yes":
+            if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+                'update', 'project', '-p', libdir]) != 0:
+                    raise BuildException( 'Error updating ' + name + ' project')
 
     if basepath:
         return sdir
@@ -1052,7 +1057,7 @@ def getsrclib(spec, srclib_dir, sdk_path, basepath=False, raw=False):
 #   'root' is the root directory, which may be the same as 'build_dir' or may
 #          be a subdirectory of it.
 #   'srclibpaths' is information on the srclibs being used
-def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path, ndk_path, javacc_path, mvn3, verbose=False):
+def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path, ndk_path, javacc_path, mvn3, verbose=False, onserver=False):
 
     # Optionally, the actual app source can be in a subdirectory...
     if 'subdir' in build:
@@ -1229,7 +1234,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     if 'srclibs' in build:
         for lib in build['srclibs'].split(';'):
             name, _ = lib.split('@')
-            srclibpaths.append((name, getsrclib(lib, srclib_dir, sdk_path)))
+            srclibpaths.append((name, getsrclib(lib, srclib_dir, sdk_path, preponly=onserver)))
     basesrclib = vcs.getsrclib()
     # If one was used for the main source, add that too.
     if basesrclib:
