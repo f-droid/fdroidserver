@@ -35,7 +35,9 @@ def getvcs(vcstype, remote, local, sdk_path):
     if vcstype == 'bzr':
         return vcs_bzr(remote, local, sdk_path)
     if vcstype == 'srclib':
-        return getsrclib(remote, local, sdk_path, raw=True)
+        if local != 'build/srclib/' + remote:
+            raise VCSException("Error: srclib paths are hard-coded!")
+        return getsrclib(remote, 'build/srclib', sdk_path, raw=True)
     raise VCSException("Invalid vcs type " + vcstype)
 
 def getsrclibvcs(name):
@@ -85,6 +87,7 @@ class vcs:
                 '.fdroidvcs-' + os.path.basename(self.local))
         cdata = self.repotype() + ' ' + self.remote
         writeback = True
+        deleterepo = False
         if os.path.exists(self.local):
             if os.path.exists(fdpath):
                 with open(fdpath, 'r') as f:
@@ -92,8 +95,13 @@ class vcs:
                 if fsdata == cdata:
                     writeback = False
                 else:
+                    deleterepo = True
                     print "*** Repository details changed - deleting ***"
-                    shutil.rmtree(self.local)
+            else:
+                deleterepo = True
+                print "*** Repository details missing - deleting ***"
+        if deleterepo:
+            shutil.rmtree(self.local)
 
         self.gotorevisionx(rev)
 

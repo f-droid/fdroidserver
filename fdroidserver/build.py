@@ -676,17 +676,20 @@ def main():
                 # there are any.
                 if first:
                     if app['Repo Type'] == 'srclib':
-                        build_dir = os.path.join('build', 'srclib')
+                        build_dir = os.path.join('build', 'srclib', app['Repo'])
                     else:
                         build_dir = os.path.join('build', app['id'])
 
                     # Set up vcs interface and make sure we have the latest code...
+                    if options.verbose:
+                        print "Getting {0} vcs interface for {1}".format(
+                                app['Repo Type'], app['Repo'])
                     vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
 
-                    if app['Repo Type'] == 'srclib':
-                        build_dir = os.path.join(build_dir, app['Repo'])
                     first = False
 
+                if options.verbose:
+                    print "Checking " + thisbuild['version']
                 if trybuild(app, thisbuild, build_dir, output_dir, also_check_dir,
                         srclib_dir, extlib_dir, tmp_dir, repo_dir, vcs, options.test,
                         options.server, options.install, options.force,
