@@ -44,7 +44,8 @@ def main():
 
     command = sys.argv[1]
     if not command in commands:
-        print "Command '" + command + "' not recognised.\n"
+        if command not in ('-h', '--help'):
+            print "Command '" + command + "' not recognised.\n"
         print_help()
         sys.exit(1)
 
