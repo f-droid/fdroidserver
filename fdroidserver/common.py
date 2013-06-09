@@ -989,7 +989,7 @@ def parse_srclib(metafile, **kw):
 # Returns the path to it. Normally this is the path to be used when referencing
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
-def getsrclib(spec, srclib_dir, sdk_path, basepath=False, raw=False, prepare=True, preponly=False):
+def getsrclib(spec, srclib_dir, sdk_path, ndk_path="", mvn3="", basepath=False, raw=False, prepare=True, preponly=False):
 
     if raw:
         name = spec
@@ -1028,8 +1028,12 @@ def getsrclib(spec, srclib_dir, sdk_path, basepath=False, raw=False, prepare=Tru
     if prepare:
 
         if srclib["Prepare"] is not None:
-            print "******************************* PREPARE " + srclib["Prepare"] + " **************"
-            p = subprocess.Popen(['bash', '-c', srclib["Prepare"]], cwd=libdir,
+            cmd = srclib["Prepare"].replace('$$SDK$$', sdk_path)
+            cmd = cmd.replace('$$NDK$$', ndk_path).replace('$$MVN$$', mvn3)
+
+            print "******************************* PREPARE " + cmd + " **************"
+
+            p = subprocess.Popen(['bash', '-c', cmd], cwd=libdir,
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             out, err = p.communicate()
             if p.returncode != 0:
@@ -1242,7 +1246,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     if 'srclibs' in build:
         for lib in build['srclibs'].split(';'):
             name, _ = lib.split('@')
-            srclibpaths.append((name, getsrclib(lib, srclib_dir, sdk_path, preponly=onserver)))
+            srclibpaths.append((name, getsrclib(lib, srclib_dir, sdk_path, ndk_path, mvn3, preponly=onserver)))
     basesrclib = vcs.getsrclib()
     # If one was used for the main source, add that too.
     if basesrclib:
