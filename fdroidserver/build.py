@@ -367,6 +367,12 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             mvncmd += ['-Dandroid.sign.debug=true']
         else:
             mvncmd += ['-Dandroid.sign.debug=false', '-Dandroid.release=true']
+        if 'target' in thisbuild:
+            target = thisbuild["target"].split('-')[1]
+            subprocess.call(['sed', '-i',
+                    's@<platform>[0-9]*</platform>@<platform>'+target+'</platform>@g',
+                    'pom.xml'], cwd=root_dir)
+
         if 'mvnflags' in thisbuild:
             mvncmd += thisbuild['mvnflags']
         p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
