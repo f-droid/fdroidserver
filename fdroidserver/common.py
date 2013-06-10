@@ -466,6 +466,7 @@ def parse_metadata(metafile, **kw):
 
     # Defaults for fields that come from metadata...
     thisinfo['Name'] = None
+    thisinfo['Auto Name'] = ''
     thisinfo['Category'] = 'None'
     thisinfo['Description'] = []
     thisinfo['Summary'] = ''
@@ -621,6 +622,7 @@ def write_metadata(dest, app):
     mf.write('\n')
     if app['Name']:
         writefield('Name')
+    writefield('Auto Name')
     writefield('Summary')
     writefield('Description', '')
     for line in app['Description']:
@@ -860,6 +862,32 @@ def description_html(lines,linkres):
     return ps.text_html
 
 
+# Retrieve the package name
+def fetch_real_name(app_dir):
+    name_search = re.compile(r'.*android:label="([^"]+)".*').search
+    name = None
+    for line in file(os.path.join(app_dir, 'AndroidManifest.xml')):
+        if name is not None:
+            break
+        matches = name_search(line)
+        if matches:
+            name = matches.group(1)
+
+    if name.startswith('@string/'):
+        id = name[8:]
+        name2 = None
+        string_search= re.compile(r'.*"'+id+'">([^<]+?)<.*').search
+        for xmlfile in glob.glob(os.path.join(
+                app_dir, 'res', 'values', 'strings*.xml')):
+            for line in file(xmlfile):
+                if name2 is not None:
+                    break
+                matches = string_search(line)
+                if matches:
+                    name2 = matches.group(1)
+        return name2
+
+    return name
 
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.

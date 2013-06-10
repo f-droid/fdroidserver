@@ -268,6 +268,24 @@ def main():
             writeit = True
             logmsg = "Update current version of " + app['id'] + " to " + version
 
+        if app['Repo Type'] == 'srclib':
+            app_dir = os.path.join('build', 'srclib', app['Repo'])
+        else:
+            app_dir = os.path.join('build/', app['id'])
+
+        vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir, sdk_path)
+        vcs.gotorevision(None)
+
+        if len(app['builds']) > 0:
+            if 'subdir' in app['builds'][-1]:
+                app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
+
+        new_name = common.fetch_real_name(app_dir)
+        if new_name != app['Auto Name']:
+            app['Auto Name'] = new_name
+            writeit = True
+            logmsg = "Update auto name of " + app['id'] + " to " + new_name
+
         if options.auto:
             mode = app['Auto Update Mode']
             if mode == 'None':
