@@ -6,7 +6,7 @@
 end
 
 if node['kernel']['machine'] == "x86_64"
-  %w{ia32-libs}.each do |pkg|
+  %w{libstdc++6:i386 libgcc1:i386 zlib1g:i386 libncurses5:i386}.each do |pkg|
     package pkg do
       action :install
     end
