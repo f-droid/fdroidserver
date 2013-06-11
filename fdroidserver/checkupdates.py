@@ -285,7 +285,6 @@ def main():
             app['Auto Name'] = new_name
             if not writeit:
                 writeit = True
-                logmsg = "Update auto name of " + app['id'] + " to " + new_name
 
         if options.auto:
             mode = app['Auto Update Mode']
@@ -324,7 +323,7 @@ def main():
         if writeit:
             metafile = os.path.join('metadata', app['id'] + '.txt')
             common.write_metadata(metafile, app)
-            if options.commit:
+            if options.commit and logmsg:
                 if subprocess.call("git add " + metafile, shell=True) != 0:
                     print "Git add failed"
                     sys.exit(1)
