@@ -283,8 +283,9 @@ def main():
         new_name = common.fetch_real_name(app_dir)
         if new_name != app['Auto Name']:
             app['Auto Name'] = new_name
-            writeit = True
-            logmsg = "Update auto name of " + app['id'] + " to " + new_name
+            if not writeit:
+                writeit = True
+                logmsg = "Update auto name of " + app['id'] + " to " + new_name
 
         if options.auto:
             mode = app['Auto Update Mode']
