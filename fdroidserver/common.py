@@ -1443,8 +1443,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                       'admob-sdk-android',
                       'googleadview',
                       'googleadmobadssdk',
-		      'google-play-services',
-		      'crittercism',
+                      'google-play-services',
+                      'crittercism',
                       'heyzap',
                       'jpct-ae']
 
