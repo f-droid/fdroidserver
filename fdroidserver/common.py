@@ -893,10 +893,10 @@ def fetch_real_name(app_dir):
                     name2 = matches.group(1)
         if name2 is not None:
             return name2
+        return ''
 
-    if name is not None:
+    else:
         return name
-    return ''
 
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
