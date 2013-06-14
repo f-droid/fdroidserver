@@ -876,7 +876,7 @@ def fetch_real_name(app_dir):
     if name.startswith('@string/'):
         id = name[8:]
         name2 = None
-        string_search= re.compile(r'.*"'+id+'">([^<]+?)<.*').search
+        string_search= re.compile(r'.*"'+id+'".*>([^<]+?)<.*').search
         for xmlfile in glob.glob(os.path.join(
                 app_dir, 'res', 'values', 'strings*.xml')):
             for line in file(xmlfile):
