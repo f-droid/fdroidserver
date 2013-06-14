@@ -268,23 +268,30 @@ def main():
             writeit = True
             logmsg = "Update current version of " + app['id'] + " to " + version
 
-        if app['Repo Type'] == 'srclib':
-            app_dir = os.path.join('build', 'srclib', app['Repo'])
-        else:
-            app_dir = os.path.join('build/', app['id'])
+        # Do the Auto Name thing...
+        if len(app["Repo Type"]) > 0:
 
-        vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir, sdk_path)
-        vcs.gotorevision(None)
+            try:
 
-        if len(app['builds']) > 0:
-            if 'subdir' in app['builds'][-1]:
-                app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
+                if app['Repo Type'] == 'srclib':
+                    app_dir = os.path.join('build', 'srclib', app['Repo'])
+                else:
+                    app_dir = os.path.join('build/', app['id'])
 
-        new_name = common.fetch_real_name(app_dir)
-        if new_name != app['Auto Name']:
-            app['Auto Name'] = new_name
-            if not writeit:
-                writeit = True
+                vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir, sdk_path)
+                vcs.gotorevision(None)
+
+                if len(app['builds']) > 0:
+                    if 'subdir' in app['builds'][-1]:
+                        app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
+
+                new_name = common.fetch_real_name(app_dir)
+                if new_name != app['Auto Name']:
+                    app['Auto Name'] = new_name
+                    if not writeit:
+                        writeit = True
+            except Exception:
+                msg = "Auto Name failed for  %s due to exception: %s" % (app['id'], traceback.format_exc())
 
         if options.auto:
             mode = app['Auto Update Mode']
