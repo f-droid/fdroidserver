@@ -864,14 +864,20 @@ def description_html(lines,linkres):
 
 # Retrieve the package name
 def fetch_real_name(app_dir):
+    app_search = re.compile(r'.*<application.*').search
     name_search = re.compile(r'.*android:label="([^"]+)".*').search
+    app_found = False
     name = None
     for line in file(os.path.join(app_dir, 'AndroidManifest.xml')):
-        if name is not None:
-            break
-        matches = name_search(line)
-        if matches:
-            name = matches.group(1)
+        if not app_found:
+            if app_search(line):
+                app_found = True
+        else:
+            if name is not None:
+                break
+            matches = name_search(line)
+            if matches:
+                name = matches.group(1)
 
     if name.startswith('@string/'):
         id = name[8:]
