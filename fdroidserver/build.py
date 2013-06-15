@@ -317,15 +317,15 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     # Run a build command if one is required...
     if 'build' in thisbuild:
-        prebuild = thisbuild['build']
-        # Substitute source library paths into prebuild commands...
+        cmd = thisbuild['build']
+        # Substitute source library paths into commands...
         for name, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
-            prebuild = prebuild.replace('$$' + name + '$$', libpath)
-        prebuild = prebuild.replace('$$SDK$$', sdk_path)
-        prebuild = prebuild.replace('$$NDK$$', ndk_path)
-        prebuild = prebuild.replace('$$MVN3$$', mvn3)
-        p = subprocess.Popen(prebuild, cwd=root_dir, shell=True,
+            cmd = cmd.replace('$$' + name + '$$', libpath)
+        cmd = cmd.replace('$$SDK$$', sdk_path)
+        cmd = cmd.replace('$$NDK$$', ndk_path)
+        cmd = cmd.replace('$$MVN3$$', mvn3)
+        p = subprocess.Popen(['bash', '-c', cmd], cwd=root_dir,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
         if p.returncode != 0:
