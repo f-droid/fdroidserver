@@ -872,7 +872,7 @@ def fetch_real_name(app_dir):
         if not app_found:
             if app_search(line):
                 app_found = True
-        else:
+        if app_found:
             if name is not None:
                 break
             matches = name_search(line)
