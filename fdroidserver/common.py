@@ -864,19 +864,25 @@ def description_html(lines,linkres):
 
 # Retrieve the package name
 def fetch_real_name(app_dir):
+    app_search = re.compile(r'.*<application.*').search
     name_search = re.compile(r'.*android:label="([^"]+)".*').search
+    app_found = False
     name = None
     for line in file(os.path.join(app_dir, 'AndroidManifest.xml')):
-        if name is not None:
-            break
-        matches = name_search(line)
-        if matches:
-            name = matches.group(1)
+        if not app_found:
+            if app_search(line):
+                app_found = True
+        else:
+            if name is not None:
+                break
+            matches = name_search(line)
+            if matches:
+                name = matches.group(1)
 
     if name.startswith('@string/'):
         id = name[8:]
         name2 = None
-        string_search= re.compile(r'.*"'+id+'">([^<]+?)<.*').search
+        string_search= re.compile(r'.*"'+id+'".*>([^<]+?)<.*').search
         for xmlfile in glob.glob(os.path.join(
                 app_dir, 'res', 'values', 'strings*.xml')):
             for line in file(xmlfile):
@@ -887,10 +893,10 @@ def fetch_real_name(app_dir):
                     name2 = matches.group(1)
         if name2 is not None:
             return name2
+        return ''
 
-    if name is not None:
+    else:
         return name
-    return ''
 
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
@@ -1443,6 +1449,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                       'admob-sdk-android',
                       'googleadview',
                       'googleadmobadssdk',
+                      'google-play-services',
+                      'crittercism',
                       'heyzap',
                       'jpct-ae']
 
