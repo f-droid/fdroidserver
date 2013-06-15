@@ -148,15 +148,17 @@ def update_wiki(apps, apks, verbose=False):
         # Make a redirect from the name to the ID too, unless there's
         # already an existing page with the name and it isn't a redirect.
         noclobber = False
-        for page in site.allpages(prefix=app['Name'], filterredir='nonredirects'):
-            if page.name == app['Name']:
+        apppagename = app['Name'].replace('_', ' ')
+        apppagename = apppagename.replace('{', '')
+        apppagename = apppagename.replace('}', ' ')
+        for page in site.allpages(prefix=apppagename, filterredir='nonredirects'):
+            if page.name == apppagename:
                 noclobber = True
         # Another reason not to make the redirect page is if the app name
         # is the same as it's ID, because that will overwrite the real page
         # with an redirect to itself! (Although it seems like an odd
         # scenario this happens a lot, e.g. where there is metadata but no
         # builds or binaries to extract a name from.
-        apppagename = app['Name'].replace('_', ' ')
         if apppagename == pagename:
             noclobber = True
         if not noclobber:
