@@ -530,6 +530,8 @@ def make_index(apps, apks, repodir, archive, categories):
                     perms = ""
                     if len(apk['permissions']) > 0:
                         addElement('permissions', ','.join(apk['permissions']), doc, apkel)
+                    if len(apk['nativecode']) > 0:
+                        addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
                     if len(apk['features') > 0:
                         addElement('features', ','.join(apk['features']), doc, apkel)
 
