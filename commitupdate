@@ -1,0 +1,31 @@
+#!/bin/bash
+
+while read line; do
+    if [[ "$line" == *M*metadata/*.txt ]]; then
+        file=${line##* }
+
+        newbuild=0
+        while read l; do
+            if [[ "$l" == "+Build Version:"* ]]; then
+                newbuild=1
+                build=${l#*:}
+                version=${build%%,*}
+                build=${build#*,}
+                vercode=${build%%,*}
+            fi
+        done < <(git diff -- "$file")
+
+        [ $newbuild -eq 0 ] && continue
+
+        while read l; do
+            [[ "$l" == "Auto Name:"* ]] && name=${l##*:}
+        done < "$file"
+
+        id=${file##*/}
+        id=${id%.txt*}
+        [ -n "$name" ] && id="$name ($id)"
+
+        echo "> git commit -m \"Update $id to $version ($vercode)\" -- \"$file\""
+        git commit -m "Update $id to $version ($vercode)" -- "$file"
+    fi
+done < <(git status --porcelain)
