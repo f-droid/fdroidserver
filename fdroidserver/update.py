@@ -266,7 +266,10 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             thisinfo['size'] = os.path.getsize(apkfile)
             thisinfo['permissions'] = []
             thisinfo['features'] = []
-            p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools', 'aapt'),
+            if not os.path.exists(aapt_path):
+                print "Missing aapt - check aapt_path in your config"
+                sys.exit(1)
+            p = subprocess.Popen([aapt_path,
                                   'dump', 'badging', apkfile],
                                  stdout=subprocess.PIPE)
             output = p.communicate()[0]
