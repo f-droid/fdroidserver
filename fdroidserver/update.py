@@ -532,7 +532,7 @@ def make_index(apps, apks, repodir, archive, categories):
                         addElement('permissions', ','.join(apk['permissions']), doc, apkel)
                     if len(apk['nativecode']) > 0:
                         addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
-                    if len(apk['features') > 0:
+                    if len(apk['features']) > 0:
                         addElement('features', ','.join(apk['features']), doc, apkel)
 
     of = open(os.path.join(repodir, 'index.xml'), 'wb')
