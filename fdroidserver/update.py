@@ -294,7 +294,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 elif line.startswith("sdkVersion:"):
                     thisinfo['sdkversion'] = re.match(sdkversion_pat, line).group(1)
                 elif line.startswith("native-code:"):
-                    thisinfo['nativecode'] = re.match(string_pat, line).group(1)
+                    thisinfo['nativecode'] = line[14:-1].split("' '")
                 elif line.startswith("uses-permission:"):
                     perm = re.match(string_pat, line).group(1)
                     if perm.startswith("android.permission."):
@@ -531,19 +531,12 @@ def make_index(apps, apks, repodir, archive, categories):
                     if 'added' in apk:
                         addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
                     perms = ""
-                    for p in apk['permissions']:
-                        if len(perms) > 0:
-                            perms += ","
-                        perms += p
-                    if len(perms) > 0:
-                        addElement('permissions', perms, doc, apkel)
-                    features = ""
-                    for f in apk['features']:
-                        if len(features) > 0:
-                            features += ","
-                        features += f
-                    if len(features) > 0:
-                        addElement('features', features, doc, apkel)
+                    if len(apk['permissions']) > 0:
+                        addElement('permissions', ','.join(apk['permissions']), doc, apkel)
+                    if len(apk['nativecode']) > 0:
+                        addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
+                    if len(apk['features']) > 0:
+                        addElement('features', ','.join(apk['features']), doc, apkel)
 
     of = open(os.path.join(repodir, 'index.xml'), 'wb')
     if options.pretty:
