@@ -274,6 +274,8 @@ def main():
     if not os.path.exists('build'):
         os.mkdir('build')
     shutil.move(src_dir, os.path.join('build', package))
+    with open('build/.fdroidvcs-' + package, 'w') as f:
+        f.write(repotype + ' ' + repo)
 
     metafile = os.path.join('metadata', package + '.txt')
     common.write_metadata(metafile, app)
