@@ -109,9 +109,6 @@ def check_repomanifest(app, sdk_path, branch=None):
             build_dir = os.path.join('build/', app['id'])
             repotype = app['Repo Type']
 
-        if repotype == 'bzr':
-            return (None, 'RepoManifest update mode has not been ported to bzr repositories yet')
-
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
         if app['Repo Type'] == 'srclib':
@@ -135,6 +132,8 @@ def check_repomanifest(app, sdk_path, branch=None):
                 vcs.gotorevision(branch)
             else:
                 vcs.gotorevision('default')
+        elif vcs.repotype() == 'bzr':
+            vcs.gotorevision(None)
 
         if len(app['builds']) > 0:
             if 'subdir' in app['builds'][-1]:
