@@ -884,7 +884,7 @@ def fetch_real_name(app_dir):
         name2 = None
         string_search= re.compile(r'.*"'+id+'".*>([^<]+?)<.*').search
         for xmlfile in glob.glob(os.path.join(
-                app_dir, 'res', 'values', 'strings*.xml')):
+                app_dir, 'res', 'values', '*string*.xml')):
             for line in file(xmlfile):
                 if name2 is not None:
                     break
