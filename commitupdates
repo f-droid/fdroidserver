@@ -13,7 +13,7 @@ while read line; do
                 build=${build#*,}
                 vercode=${build%%,*}
             fi
-        done < <(git diff -- "$file")
+        done < <(git diff HEAD -- "$file")
 
         [ $newbuild -eq 0 ] && continue
 
