@@ -25,7 +25,8 @@ while read line; do
         id=${id%.txt*}
         [ -n "$name" ] && id="$name ($id)"
 
-        echo "> git commit -m \"Update $id to $version ($vercode)\" -- \"$file\""
-        git commit -m "Update $id to $version ($vercode)" -- "$file"
+        echo "> git commit -m \"Update $id to $version ($vercode)\" -- $file metadata/$id/"
+        git commit -m "Update $id to $version ($vercode)" -- $file metadata/$id/
     fi
 done < <(git status --porcelain)
+
