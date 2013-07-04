@@ -139,7 +139,7 @@ def check_repomanifest(app, sdk_path, branch=None):
             if 'subdir' in app['builds'][-1]:
                 build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
 
-        if !os.path.isdir(build_dir):
+        if not os.path.isdir(build_dir):
             return (None, "Subdir '" + app['builds'][-1]['subdir'] + "'is not a valid directory")
 
         version, vercode, package = common.parse_androidmanifest(build_dir)
