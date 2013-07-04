@@ -904,7 +904,7 @@ def fetch_real_name(app_dir):
 def parse_androidmanifest(app_dir):
 
     vcsearch = re.compile(r'.*android:versionCode="([0-9]+?)".*').search
-    vnsearch = re.compile(r'.*android:versionName="([^@]+?)".*').search
+    vnsearch = re.compile(r'.*android:versionName="([^"]+?)".*').search
     psearch = re.compile(r'.*package="([^"]+)".*').search
     vnsearch_xml = re.compile(r'.*"(app_|)version">([^<]+?)<.*').search
     version = None
