@@ -861,6 +861,15 @@ def description_html(lines,linkres):
     ps.end()
     return ps.text_html
 
+def retrieve_string(app_dir, string_id):
+    string_search = re.compile(r'.*"'+string_id+'".*>([^<]+?)<.*').search
+    for xmlfile in glob.glob(os.path.join(
+            app_dir, 'res', 'values', '*string*.xml')):
+        for line in file(xmlfile):
+            matches = string_search(line)
+            if matches:
+                return matches.group(1)
+    return ''
 
 # Retrieve the package name
 def fetch_real_name(app_dir):
@@ -880,20 +889,7 @@ def fetch_real_name(app_dir):
                 name = matches.group(1)
 
     if name.startswith('@string/'):
-        id = name[8:]
-        name2 = None
-        string_search= re.compile(r'.*"'+id+'".*>([^<]+?)<.*').search
-        for xmlfile in glob.glob(os.path.join(
-                app_dir, 'res', 'values', '*string*.xml')):
-            for line in file(xmlfile):
-                if name2 is not None:
-                    break
-                matches = string_search(line)
-                if matches:
-                    name2 = matches.group(1)
-        if name2 is not None:
-            return name2
-        return ''
+        return retrieve_string(app_dir, name[8:])
 
     else:
         return name
@@ -923,23 +919,8 @@ def parse_androidmanifest(app_dir):
             matches = vcsearch(line)
             if matches:
                 vercode = matches.group(1)
-    if version:
-        return (version, vercode, package)
-    for xmlfile in glob.glob(os.path.join(
-            app_dir, 'res', 'values', 'strings*transl*.xml')):
-        for line in file(xmlfile):
-            if not version:
-                matches = vnsearch_xml(line)
-                if matches:
-                    version = matches.group(2)
-    if not version:
-        for line in file(os.path.join(app_dir, 'res/values/strings.xml')):
-            if not version:
-                matches = vnsearch_xml(line)
-                if matches:
-                    version = matches.group(2)
-    if not version:
-        version = "None"
+    if version.startswith('@string/'):
+        version = retrieve_string(app_dir, version[8:])
     return (version, vercode, package)
 
 class BuildException(Exception):
