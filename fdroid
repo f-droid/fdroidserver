@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+import os
 
 commands = [
         "build",
@@ -48,6 +49,10 @@ def main():
             print "Command '" + command + "' not recognised.\n"
         print_help()
         sys.exit(1)
+
+    for basedir in ('metadata', 'tmp'):
+        if not os.path.exists(basedir):
+             os.makedirs(basedir)
 
     # Trick optparse into displaying the right usage when --help is used.
     sys.argv[0] += ' ' + command
