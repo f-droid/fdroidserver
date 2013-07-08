@@ -864,7 +864,7 @@ def description_html(lines,linkres):
 def retrieve_string(app_dir, string_id):
     string_search = re.compile(r'.*"'+string_id+'".*>([^<]+?)<.*').search
     for xmlfile in glob.glob(os.path.join(
-            app_dir, 'res', 'values', '*string*.xml')):
+            app_dir, 'res', 'values', '*.xml')):
         for line in file(xmlfile):
             matches = string_search(line)
             if matches:
