@@ -42,7 +42,7 @@ def update_wiki(apps, apks, verbose=False):
     print "Updating wiki"
     wikicat = 'Apps'
     import mwclient
-    site = mwclient.Site(wiki_server, path=wiki_path)
+    site = mwclient.Site((wiki_protocol, wiki_server), path=wiki_path)
     site.login(wiki_user, wiki_password)
     generated_pages = {}
     for app in apps:

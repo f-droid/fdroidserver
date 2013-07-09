@@ -66,6 +66,7 @@ keyaliases['com.example.another.plugin'] = '@com.example.another'
 serverwebroot = 'user@example:/var/www/repo'
 
 #Wiki details
+wiki_protocol = "http"
 wiki_server = "server"
 wiki_path = "/wiki/"
 wiki_user = "login"

@@ -663,7 +663,7 @@ def main():
 
     if options.wiki:
         import mwclient
-        site = mwclient.Site(wiki_server, path=wiki_path)
+        site = mwclient.Site((wiki_protocol, wiki_server), path=wiki_path)
         site.login(wiki_user, wiki_password)
 
     # Build applications...
