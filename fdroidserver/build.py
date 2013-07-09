@@ -34,9 +34,17 @@ from common import VCSException
 
 
 def get_builder_vm_id():
-    with open(os.path.join('builder', '.vagrant')) as vf:
-        v = json.load(vf)
-    return v['active']['default']
+    vd = os.path.join('builder', '.vagrant')
+    if os.path.isdir(vd):
+        # Vagrant 1.2 (and maybe 1.1?) it's a directory tree...
+        with open(os.path.join(vd, 'machines', 'default', 'virtualbox', 'id')) as vf:
+            id = vf.read()
+        return id
+    else:
+        # Vagrant 1.0 - it's a json file...
+        with open(os.path.join('builder', '.vagrant')) as vf:
+            v = json.load(vf)
+        return v['active']['default']
 
 
 # Note that 'force' here also implies test mode.
@@ -82,11 +90,19 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
             subprocess.call(['vagrant', 'destroy', '-f'], cwd='builder')
             shutil.rmtree('builder')
         os.mkdir('builder')
-        with open('builder/Vagrantfile', 'w') as vf:
-            vf.write('Vagrant::Config.run do |config|\n')
-            vf.write('config.vm.box = "buildserver"\n')
-            vf.write('config.vm.customize ["modifyvm", :id, "--memory", "768"]\n')
-            vf.write('end\n')
+
+        p = subprocess.Popen('vagrant --version', shell=True, stdout=subprocess.PIPE)
+        vver = p.communicate()[0]
+        if vver.startswith('Vagrant version 1.2'):
+            with open('builder/Vagrantfile', 'w') as vf:
+                vf.write('Vagrant.configure("2") do |config|\n')
+                vf.write('config.vm.box = "buildserver"\n')
+                vf.write('end\n')
+        else:
+            with open('builder/Vagrantfile', 'w') as vf:
+                vf.write('Vagrant::Config.run do |config|\n')
+                vf.write('config.vm.box = "buildserver"\n')
+                vf.write('end\n')
 
         print "Starting new build server"
         if subprocess.call(['vagrant', 'up'], cwd='builder') != 0:
