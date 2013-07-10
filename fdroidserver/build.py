@@ -46,6 +46,22 @@ def get_builder_vm_id():
             v = json.load(vf)
         return v['active']['default']
 
+def got_valid_builder_vm():
+    """Returns True if we have a valid-looking builder vm
+    """
+    if not os.path.exists(os.path.join('builder', 'Vagrantfile')):
+        return False
+    vd = os.path.join('builder', '.vagrant')
+    if not os.path.exists(vd):
+        return False
+    if not os.path.isdir(vd):
+        # Vagrant 1.0 - if the directory is there, it's valid...
+        return True
+    # Vagrant 1.2 - the directory can exist, but the id can be missing...
+    if not os.path.exists(os.path.join(vd, 'machines', 'default', 'virtualbox', 'id')):
+        return False
+    return True
+
 
 # Note that 'force' here also implies test mode.
 def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
@@ -57,8 +73,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
     vm_ok = False
     if not options.resetserver:
         print "Checking for valid existing build server"
-        if (os.path.exists(os.path.join('builder', 'Vagrantfile')) and 
-                os.path.exists(os.path.join('builder', '.vagrant'))):
+        if got_valid_builder_vm():
             print "...VM is present"
             p = subprocess.Popen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'list', '--details'],
                 cwd='builder', stdout=subprocess.PIPE)
