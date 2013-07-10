@@ -868,7 +868,10 @@ def retrieve_string(app_dir, string_id):
         for line in file(xmlfile):
             matches = string_search(line)
             if matches:
-                return matches.group(1)
+                s = matches.group(1)
+                if s.startswith('@string/'):
+                    return retrieve_string(app_dir, s[8:]);
+                return s.replace("\\'","'")
     return ''
 
 # Retrieve the package name
@@ -890,9 +893,7 @@ def fetch_real_name(app_dir):
 
     if name.startswith('@string/'):
         return retrieve_string(app_dir, name[8:])
-
-    else:
-        return name
+    return name
 
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
