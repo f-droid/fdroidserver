@@ -603,9 +603,9 @@ A brief summary of what the application is.
 
 @cindex Description
 
-A full description of the application. This can span multiple lines (which
-should be kept to a maximum of 80 characters), and is terminated by a line
-containing a single '.'.
+A full description of the application, relevant to the latest version. 
+This can span multiple lines (which should be kept to a maximum of 80 
+characters), and is terminated by a line containing a single '.'.
 
 Basic MediaWiki-style formatting can be used. Leaving a blank line starts a
 new paragraph. Surrounding text with @code{''} make it italic, and with
@@ -620,6 +620,12 @@ Links to web addresses can be done using @code{[http://example.com Text]}.
 Bulletted lists are done by simply starting each item with a @code{*} on
 a new line, and numbered lists are the same but using @code{#}. There is
 currently no support for nesting lists - you can have one level only.
+
+It can be helpful to note information pertaining to updating from an 
+earlier version; whether the app contains any prebuilts built by the 
+upstream developers or whether non-free elements were removed; whether the 
+app is in rapid development or whether the latest version lags behind the 
+current version; or whether the app supports multiple architectures.
 
 @node Repo Type
 @section Repo Type
