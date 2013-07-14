@@ -896,7 +896,10 @@ Another example, using extra parameters:
 @cindex AntiFeatures
 
 This is optional - if present, it contains a comma-separated list of any of
-the following values, describing an AntiFeature the application has:
+the following values, describing an anti-feature the application has. 
+Even though such apps won't be displayed unless a settings box is ticked, 
+it is a good idea to mention the reasons for the anti-feature(s) in the 
+description:
 
 @itemize @bullet
 
@@ -905,13 +908,19 @@ the following values, describing an AntiFeature the application has:
 
 @item
 @samp{Tracking} - the application tracks and reports your activity to
-somewhere without your consent.
+somewhere without your consent. It's commonly used for when developers 
+obtain crash logs without the user's consent, or when an app is useless 
+without some kind of authentication.
 
 @item
-@samp{NonFreeNet} - the application promotes a non-Free network service.
+@samp{NonFreeNet} - the application relies on computational services that 
+are impossible to replace or that the replacement cannot be connected to 
+without major changes to the app.
 
 @item
-@samp{NonFreeAdd} - the application promotes non-Free add-ons.
+@samp{NonFreeAdd} - the application promotes non-Free add-ons, such that the 
+app is effectively an advert for other non-free software and such software is 
+not clearly labelled as such.
 
 @item
 @samp{NonFreeDep} - the application depends on a non-Free application (e.g.
@@ -939,7 +948,9 @@ For this reason, the field is deployed when an app has outlived it's usefulness.
 
 Set this optional field to "Yes" if the application requires root
 privileges to be usable. This lets the client filter it out if the
-user so desires.
+user so desires. Whether root is required or not, it is good to give 
+a paragraph in the description to the conditions on which root may be 
+asked for and the reason for it.
 
 @node Update Check Mode
 @section Update Check Mode
