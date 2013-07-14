@@ -1,0 +1,191 @@
+#!bash
+#
+# fdroid completion support.
+#
+# 'fdroid' is aliased automatically, but aliases to it are not. For instance,
+# to alias 'fd' to 'fdroid' and have competion available:
+#
+#   alias fd='fdroid'
+#   complete -F _fdroid fd
+#
+# One can use completion on aliased subcommands as follows:
+#
+#   alias fbuild='fdroid build'
+#   complete -F _fdroid_build fbuild
+#
+# There's also a completion function made for aliases to 'fdroid build -p':
+#
+#   alias fbld='fdroid build -p'
+#   complete -F _fdroid_build_project fbld
+
+__package() {
+    [[ -d ./metadata ]] || return 0
+    files=( metadata/*.txt )
+    files=( ${files[@]/metadata\//} )
+    files=${files[@]/.txt/}
+    COMPREPLY=( $( compgen -W "$files" -- $cur ) )
+}
+
+__fdroid_init() {
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    (( $# >= 1 )) && __complete_${1}
+}
+
+__vercode() {
+    local s p_found p
+    s=${#COMP_WORDS[*]}
+    p_found=false
+
+    $aliased && p=${COMP_WORDS[1]} || {
+        for (( i=1; i <= s; i++ )); do
+            $p_found && { p=${COMP_WORDS[$i]}; break;}
+            [[ ${COMP_WORDS[$i]} == -p ]] || [[ ${COMP_WORDS[$i]} == --package ]] &&\
+                p_found=true
+        done
+        $p_found || return 0
+    }
+
+    COMPREPLY=( $( compgen -W "$( while read line; do
+        [[ "$line" == "Build Version:"* ]] && {
+            line="${line#*,}"
+            printf "${line%%,*} "
+        } done < "metadata/${p}.txt" )" -- $cur ) )
+}
+
+__complete_options() {
+    case "${cur}" in
+        --*)
+            COMPREPLY=( $( compgen -W "${lopts}" -- $cur ) )
+            return 0;;
+        *)
+            COMPREPLY=( $( compgen -W "${opts} ${lopts}" -- $cur ) )
+            return 0;;
+    esac
+}
+
+__complete_build() {
+    opts="-h -v -p -c -l -s -t -f"
+    lopts="--help --verbose --package --vercode --latest --server --resetserver
+ --on-server --force --install --all"
+    case "${prev}" in
+        -p|--package)
+            __package
+            return 0;;
+        -c|--vercode)
+            __vercode
+            return 0;;
+    esac
+    __complete_options
+}
+
+__complete_update() {
+    opts="-h -c -v -q -b -i -e -w"
+    lopts="--help --createmeta --verbose --quiet --buildreport --interactive
+ --editor --wiki --pretty --clean"
+    case "${prev}" in
+        -e|--editor)
+            _filedir
+            return 0;;
+    esac
+    __complete_options
+}
+
+__complete_publish() {
+    opts="-h -v -p"
+    lopts="--help --verbose --package"
+    case "${prev}" in
+        -p|--package)
+            __package
+            return 0;;
+    esac
+    __complete_options
+}
+
+__complete_checkupdates() {
+    opts="-h -v -p"
+    lopts="--help --verbose --package --auto --commit"
+    case "${prev}" in
+        -p|--package)
+            __package
+            return 0;;
+    esac
+    __complete_options
+}
+
+__complete_import() {
+    opts="-h -u -s -r"
+    lopts="--help --url --subdir --repo"
+    case "${prev}" in
+        -u|--url|-r|--repo) return 0;;
+        -s|--subdir)
+            _filedir
+            return 0;;
+    esac
+    __complete_options
+}
+
+__complete_rewritemeta() {
+    opts="-h -v -p"
+    lopts="--help --verbose --package"
+    case "${prev}" in
+        -p|--package)
+            __package
+            return 0;;
+    esac
+    __complete_options
+}
+
+__complete_scanner() {
+    opts="-h -v -p"
+    lopts="--help --verbose --package --nosvn"
+    case "${prev}" in
+        -p|--package)
+            __package
+            return 0;;
+    esac
+    __complete_options
+}
+
+__complete_stats() {
+    opts="-h -v -d"
+    lopts="--help --verbose --download"
+    __complete_options
+}
+
+__complete_server() {
+    opts="-h -v"
+    lopts="--help --verbose update"
+    __complete_options
+}
+
+_fdroid() {
+    local cmd cmds aliased
+    cmd=${COMP_WORDS[1]}
+    cmds=" build update publish checkupdates import rewritemeta scanner stats server "
+    aliased=false
+
+    for c in $cmds; do eval "_fdroid_${c} () {
+        local cur prev cmds opts lopts
+        __fdroid_init ${c};
+    }"; done
+
+    [[ $cmds == *\ $cmd\ * ]] && _fdroid_${cmd} || {
+        (($COMP_CWORD == 1)) && COMPREPLY=( $( compgen -W "${cmds}" -- $cmd ) )
+    }
+}
+
+_fdroid_build_project() {
+    local cur prev cmds opts lopts aliased
+    __fdroid_init
+    aliased=true
+    (( $COMP_CWORD == 1 )) && prev="-p"
+
+    __complete_build
+}
+
+complete -F _fdroid fdroid
+
+return 0
