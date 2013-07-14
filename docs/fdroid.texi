@@ -307,7 +307,7 @@ This attempts to build version code 16 (which is version 0.25) of the F-Droid
 client. Many of the tools recognise this @code{--package} parameter, allowing
 their activity to be limited to just a single package.
 
-If the build above was succesful, two files will have been placed in the
+If the build above was successful, two files will have been placed in the
 @code{unsigned} directory:
 
 @example
@@ -340,6 +340,10 @@ Along similar lines (and only in conjunction with @code{--test}, you can use
 @code{--force} to force a build of a Disabled application or of a version 
 that was found to contain ELFs or known non-free libraries, where normally it 
 would be completely ignored.
+
+If the build was unsuccessful, you can find out why by looking at the output 
+in the logs/ directory. If that isn't illuminating, try building the app the 
+regular way, step by step: android update project, ndk-build, ant debug.
 
 
 @section Direct Installation
