@@ -337,13 +337,19 @@ A similar effect could by achieved by simply deleting the output files from
 @code{unsigned} after the build, but with the risk of forgetting to do so!
 
 Along similar lines (and only in conjunction with @code{--test}, you can use
-@code{--force} to force a build of a Disabled application or of a version 
-that was found to contain ELFs or known non-free libraries, where normally it 
-would be completely ignored.
+@code{--force} to force a build of a Disabled application, where normally it 
+would be completely ignored. Similarly a version that was found to contain 
+ELFs or known non-free libraries can be forced to build. See also — 
+scanignore= in the Build Version section.
 
 If the build was unsuccessful, you can find out why by looking at the output 
 in the logs/ directory. If that isn't illuminating, try building the app the 
 regular way, step by step: android update project, ndk-build, ant debug.
+
+Note that source code repositories often contain prebuilt libraries. If the 
+app is being considered for the main F-Droid repository, it is important that 
+all such prebuilts are built either via the metadata or by a reputable third 
+party.
 
 
 @section Direct Installation
