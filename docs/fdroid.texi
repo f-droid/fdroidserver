@@ -955,33 +955,57 @@ Valid modes are:
 @itemize
 @item
 @code{None} - No checking is done because there's no appropriate automated way
-of doing so. Updates should be checked for manually.
+of doing so. Updates should be checked for manually. Use this, for example, 
+when deploying betas or patched versions; when builds are done in a directory 
+different to where the AndroidManifest.xml is; if the developers use the 
+gradle build system and store version info in a separate file; if the 
+developers make a new branch for each release and don't make tags; or if you've 
+changed the package name or version code logic.
 @item
 @code{Static} - No checking is done—either development has ceased or new versions
 are not desired. This method is also used when there is no other checking method 
 available and the upstream developer keeps us posted on new versions.
 @item
-@code{RepoManifest} - The AndroidManifest.xml file in the most recent commit
-in the source repository is checked. The appropriateness of this method depends
-on the development process used by the application's developers. You should not
-specify this method unless you're sure it's appropriate. 
-It currently works for every repository type to different extents. For git,
-git-svn and hg repo types, you may use "RepoManifest/yourbranch" as UCM so
-that "yourbranch" would be the branch used in place of the default one.  The
-default values are "master" for git, "default" for hg and none for git-svn (it
-stays in the same branch). On the other hand, branch support hasn't been
-implemented yet in bzr and svn, but RepoManifest may still be used without it.
+@code{RepoManifest} - At the most recent commit, the AndroidManifest.xml file 
+is looked for in the directory where it was found in the the most recent build.
+The appropriateness of this method depends on the development process used by 
+the application's developers. You should not specify this method unless you're 
+sure it's appropriate. For example, some developers bump the version when 
+commencing development instead of when publishing.
+It will return an error if the AndroidManifest.xml has moved to a different 
+directory. The current version that it gives may not be accurate, since not all 
+versions are fit to be published. Therefore, before building, it is often 
+necessary to check if the current version has been published somewhere by the 
+upstream developers, either by checking for apks that they distribute or for 
+tags in the source code repository. 
+
+It currently works for every repository type to different extents, except 
+the srclib repo type. For git, git-svn and hg repo types, you may use 
+"RepoManifest/yourbranch" as UCM so that "yourbranch" would be the branch used 
+in place of the default one.  The default values are "master" for git, 
+"default" for hg and none for git-svn (it stays in the same branch). 
+On the other hand, branch support hasn't been implemented yet in bzr and svn, 
+but RepoManifest may still be used without it.
 @item
 @code{Tags} - The AndroidManifest.xml file in all tagged revisions in the
 source repository is checked, looking for the highest version code. The
 appropriateness of this method depends on the development process used by the
 application's developers. You should not specify this method unless you're sure
-it's appropriate.
+it's appropriate. It shouldn't be used if the developers like to tag betas or 
+are known to forget to tag releases. Like RepoManifest, it will not return the 
+correct value if the directory containing the AndroidManifest.xml has moved.
+Despite these caveats, it is the often the favourite update check mode. 
+
 It currently only works for git and git-svn repositories. In the case of the
 latter, the repo URL must encode the path to the trunk and tags.
 @item
 @code{Market} - This is being phased out and should only be used when the other
-automatic modes don't work.
+automatic modes don't work. It won't work if the developer deploys multiple 
+apks to Google Play; if the current version does not have more than one 
+review; or if the package has been abandoned in favour of another. 
+Nevertheless, it can often be helpful to consult Google Play for version 
+information when checking the validity of the current version obtained via 
+RepoManifest.
 @end itemize
 
 @node Auto Update Mode
