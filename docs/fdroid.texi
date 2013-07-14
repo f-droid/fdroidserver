@@ -611,7 +611,9 @@ A bitcoin address for donating to the project.
 
 @cindex Summary
 
-A brief summary of what the application is.
+A brief summary of what the application is. Since the summary is only allowed 
+one line on the list of the F-Droid client, keeping it to within 32 characters 
+will ensure it fits even on the smallest screens.
 
 @node Description
 @section Description
