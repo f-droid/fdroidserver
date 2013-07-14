@@ -637,7 +637,8 @@ It can be helpful to note information pertaining to updating from an
 earlier version; whether the app contains any prebuilts built by the 
 upstream developers or whether non-free elements were removed; whether the 
 app is in rapid development or whether the latest version lags behind the 
-current version; or whether the app supports multiple architectures.
+current version; whether the app supports multiple architectures or whether 
+there is a maximum SDK specified (such info not being recorded in the index).
 
 @node Repo Type
 @section Repo Type
@@ -780,7 +781,9 @@ If specified, the package version in AndroidManifest.xml is replaced
 with the version name for the build as specified in the metadata.
 
 This is useful for cases when upstream repo failed to update it for
-specific tag, or to build an arbitrary revision.
+specific tag; to build an arbitrary revision; to make it apparent that 
+the version differs significantly from upstream; or to make it apparent 
+which architecture or platform the apk is designed to run on.
 
 @item forcevercode=yes
 If specified, the package version code in the AndroidManifest.xml is
