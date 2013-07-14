@@ -795,7 +795,7 @@ If specified, the package version code in the AndroidManifest.xml is
 replaced with the version code for the build. See also forceversion.
 
 @item rm=<relpath>
-Specifies the relative path of file to delete before the build is
+Specifies the relative path of a file to delete before the build is
 done. The path is relative to the base of the build directory - i.e.
 the root of the directory structure checked out from the source
 respository - not necessarily the directory that contains
@@ -820,7 +820,7 @@ Specifies a list of external libraries (jar files) from the
 of the project. Separate items with semicolons.
 
 @item srclibs=a@@r;b@@r1;
-Specifies a list of source or Android libraries. Separate items with 
+Specifies a list of source libraries or Android projects. Separate items with 
 semicolons, and each item is of the form name@@rev where name is the predefined 
 source library name and rev is the revision or tag in source control to use. 
 Each srclib has a metadata file under srclibs/ in the repository directory, 
