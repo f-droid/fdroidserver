@@ -823,9 +823,9 @@ of the project. Separate items with semicolons.
 Specifies a list of source libraries or Android projects. Separate items with 
 semicolons, and each item is of the form name@@rev where name is the predefined 
 source library name and rev is the revision or tag in source control to use. 
+
 Each srclib has a metadata file under srclibs/ in the repository directory, 
 and the source code is stored in build/srclib/. 
-
 Repo Type: and Repo: are specified in the same way as for apps; Subdir: can be 
 a comma separated list, for when directories are renamed by upstream; Update 
 Project: updates the projects in the working directory and one level down; 
@@ -906,7 +906,7 @@ of the checked out repo.
 
 @item antcommand=xxx
 Specify an alternate ant command (target) instead of the default
-'release'.
+'release'. It can't be given any flags, such as the path to a build.xml.
 
 @item novcheck=yes 
 Don't check that the version name and code in the resulting apk are
