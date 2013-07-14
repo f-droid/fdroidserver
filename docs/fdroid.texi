@@ -1024,8 +1024,9 @@ RepoManifest.
 
 @cindex Auto Update Mode
 
-This determines the method using for auto-generating new builds new releases are
-available - in other words, adding a new Build Version line to the metadata.
+This determines the method using for auto-generating new builds when new 
+releases are available - in other words, adding a new Build Version line to the 
+metadata.
 This happens in conjunction with the 'Update Check Mode' functionality - i.e.
 when an update is detected by that, it is also processed by this.
 
@@ -1056,7 +1057,11 @@ above, you would specify that as "Version +-fdroid %v" - "-fdroid" is the suffix
 
 The name of the version that is current. There may be newer versions of the
 application than this (e.g. betas), and there will almost certainly be older
-ones. This should be the one that is recommended for general use.
+ones. This should be the one that is recommended for general use. 
+In the event that there is no source code for the current version, or that 
+non-free libraries are being used, this would ideally be the latest 
+recommended version that is still free, though it may still be expedient to 
+retain the automatic update check — see No Source Since.
 
 This field is normally automatically updated - see Update Check Mode.
 
@@ -1076,7 +1081,8 @@ This field is normally automatically updated - see Update Check Mode.
 @cindex No Source Since
 
 In case we are missing the source code for the Current Version reported by
-Upstream, this defines the first version that started missing source code.
+Upstream, or that non-free elements have been introduced, this defines the 
+first version that began to miss source code.
 Apps that are missing source code for just one or a few versions, but provide
 source code for newer ones are not to be considered here - this field is
 intended to illustrate which apps do not currently distribute source code, and
