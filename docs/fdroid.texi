@@ -711,7 +711,7 @@ be replaced.
 
 In addition to the three, always required, parameters described above,
 further parameters can be added (in name=value format) to apply further
-configuration to the build. These are:
+configuration to the build. These are (roughly in order of application):
 
 @table @code
 
@@ -719,11 +719,16 @@ configuration to the build. These are:
 Specifies to build from a subdirectory of the checked out source code.
 Normally this directory is changed to before building,
 
-@item bindir=<path>
-Normally the build output (apk) is expected to be in the bin
-subdirectory below the ant build files. If the project is configured
-to put it elsewhere, that can be specified here, relative to the base
-of the checked out repo.
+@item submodules=yes
+Use if the project (git only) has submodules - causes git submodule
+init and update to be executed after the source is cloned.
+
+@item init=xxxx
+As for 'prebuild', but runs on the source code BEFORE any other processing
+takes place.
+
+You can use $$SDK$$, $$NDK$$ and $$MVN3$$ to substitute the paths to the
+android SDK and NDK directories, and maven 3 executable respectively.
 
 @item oldsdkloc=yes
 The sdk location in the repo is in an old format, or the build.xml is
@@ -737,30 +742,6 @@ Specifies a particular SDK target, when the source doesn't. This is
 likely to cause the whole build.xml to be rewritten, which is fine if
 it's a 'standard' android file or doesn't already exist, but not a
 good idea if it's heavily customised.
-
-@item rm=<relpath>
-Specifies the relative path of file to delete before the build is
-done. The path is relative to the base of the build directory - i.e.
-the root of the directory structure checked out from the source
-respository - not necessarily the directory that contains
-AndroidManifest.xml.
-
-Multiple files can be specified by separating they with ';'.
-
-@item antcommand=xxx
-Specify an alternate ant command (target) instead of the default
-'release'.
-
-@item forceversion=yes
-If specified, the package version in AndroidManifest.xml is replaced
-with the version name for the build as specified in the metadata.
-
-This is useful for cases when upstream repo failed to update it for
-specific tag, or to build an arbitrary revision.
-
-@item forcevercode=yes
-If specified, the package version code in the AndroidManifest.xml is
-replaced with the version code for the build. See also forceversion.
 
 @item update=xxx
 By default, 'android update project' is used to generate or update the
@@ -779,42 +760,69 @@ useful for multi-component projects. Note that @code{--subprojects}
 switch is automatically passed to 'android update project', so using
 explicit list may be needed only for peculiar source layouts.
 
-@item initfun=yes
-Enables a selection of mad hacks to make com.funambol.android build.
-Probably not useful for any other application.
-
-@item buildjni=[yes|no|<dir list>]
-Enables building of native code via the ndk-build script before doing
-the main ant build. The value may be a list of directories relative
-to the main application directory in which to run ndk-build, or 'yes'
-which corresponds to '.' . Using explicit list may be useful to build
-multi-component projects.
-
-The build and scan processes will complain (refuse to build) if this
-parameter is not defined, but there is a @code{jni} directory present.
-If the native code is being built by other means, you can specify
-@code{no} here to avoid that. However, if the native code is actually
-not required, remove the directory instead (using @code{prebuild} for
-example).
-
-@item scanignore=path1;path2;...
-Enables one or more files/paths to be exlcuded from the scan process.
-This should only be used where there is a very good reason, and
-probably accompanied by a comment explaining why it is necessary.
-
-When scanning, files whose relative paths start with any of the paths
-given here are ignored.
-
-@item submodules=yes
-Use if the project (git only) has submodules - causes git submodule
-init and update to be executed after the source is cloned.
-
 @item encoding=xxxx
 Adds a java.encoding property to local.properties with the given
 value. Generally the value will be 'utf-8'. This is picked up by the
 SDK's ant rules, and forces the Java compiler to interpret source
 files with this encoding. If you receive warnings during the compile
 about character encodings, you probably need this.
+
+@item forceversion=yes
+If specified, the package version in AndroidManifest.xml is replaced
+with the version name for the build as specified in the metadata.
+
+This is useful for cases when upstream repo failed to update it for
+specific tag, or to build an arbitrary revision.
+
+@item forcevercode=yes
+If specified, the package version code in the AndroidManifest.xml is
+replaced with the version code for the build. See also forceversion.
+
+@item rm=<relpath>
+Specifies the relative path of file to delete before the build is
+done. The path is relative to the base of the build directory - i.e.
+the root of the directory structure checked out from the source
+respository - not necessarily the directory that contains
+AndroidManifest.xml.
+
+Multiple files can be specified by separating they with ';'.
+
+@item fixtrans=yes
+Modifies any instances of string resources that use multiple
+formatting arguments, but don't use positional notation. For example,
+"Hello %s, %d" becomes "Hello %1$s, %2$d". Newer versions of the
+Android platform tools enforce this sensible standard. If you get
+error messages relating to that, you need to enable this.
+
+@item fixapos=yes
+Like fixtrans, but deals with an even older issue relating to
+'unescaped apostrophes' in translation strings.
+
+@item extlibs=a;b;c
+Specifies a list of external libraries (jar files) from the
+@code{build/extlib} library, which will be placed in the @code{libs} directory
+of the project. Separate items with semicolons.
+
+@item srclibs=a@@r;b@@r1;
+Specifies a list of source or Android libraries. Separate items with 
+semicolons, and each item is of the form name@@rev where name is the predefined 
+source library name and rev is the revision or tag in source control to use. 
+Each srclib has a metadata file under srclibs/ in the repository directory, 
+and the source code is stored in build/srclib/. 
+
+Repo Type: and Repo: are specified in the same way as for apps; Subdir: can be 
+a comma separated list, for when directories are renamed by upstream; Update 
+Project: updates the projects in the working directory and one level down; 
+Prepare: can be used for any kind of preparation: in particular if you need to 
+update the project with a particular target. You can then also use $$name$$ in 
+the init/prebuild/build command to substitute the relative path to the library 
+directory, but it could need tweaking if you've changed into another directory.
+
+@item patch=x
+Apply patch(es). 'x' names one (or more - comma-seperated)
+files within a directory below the metadata, with the same
+name as the metadata file but without the extension. Each of
+these patches is applied to the code in turn.
 
 @item prebuild=xxxx
 Specifies a shell command (or commands - chain with &&) to run before
@@ -837,12 +845,17 @@ You can use $$SDK$$, $$NDK$$ and $$MVN3$$ to substitute the paths to the
 android SDK and NDK directories, and maven 3 executable respectively e.g. 
 for when you need to run @code{android update project} explicitly.
 
-@item init=xxxx
-As for 'prebuild', but runs on the source code BEFORE any other processing
-takes place.
+@item initfun=yes
+Enables a selection of mad hacks to make com.funambol.android build.
+Probably not useful for any other application.
 
-You can use $$SDK$$, $$NDK$$ and $$MVN3$$ to substitute the paths to the
-android SDK and NDK directories, and maven 3 executable respectively.
+@item scanignore=path1;path2;...
+Enables one or more files/paths to be exlcuded from the scan process.
+This should only be used where there is a very good reason, and
+probably accompanied by a comment explaining why it is necessary.
+
+When scanning, files whose relative paths start with any of the paths
+given here are ignored.
 
 @item build=xxxx
 As for 'prebuild', but runs during the actual build phase (but before the
@@ -852,52 +865,38 @@ Any prepartion of the source code should be done using 'init' or 'prebuild'.
 You can use $$SDK$$, $$NDK$$ and $$MVN3$$ to substitute the paths to the
 android SDK and NDK directories, and maven 3 executable respectively.
 
+@item buildjni=[yes|no|<dir list>]
+Enables building of native code via the ndk-build script before doing
+the main ant build. The value may be a list of directories relative
+to the main application directory in which to run ndk-build, or 'yes'
+which corresponds to '.' . Using explicit list may be useful to build
+multi-component projects.
+
+The build and scan processes will complain (refuse to build) if this
+parameter is not defined, but there is a @code{jni} directory present.
+If the native code is being built by other means, you can specify
+@code{no} here to avoid that. However, if the native code is actually
+not required, remove the directory instead (using @code{prebuild} for
+example).
+
+@item maven=yes
+Build with maven instead of ant
+
+@item bindir=<path>
+Normally the build output (apk) is expected to be in the bin
+subdirectory below the ant build files. If the project is configured
+to put it elsewhere, that can be specified here, relative to the base
+of the checked out repo.
+
+@item antcommand=xxx
+Specify an alternate ant command (target) instead of the default
+'release'.
 
 @item novcheck=yes 
 Don't check that the version name and code in the resulting apk are
 correct by looking at the build output - assume the metadata is
 correct. This takes away a useful level of sanity checking, and should
 only be used if the values can't be extracted.
-
-@item fixtrans=yes
-Modifies any instances of string resources that use multiple
-formatting arguments, but don't use positional notation. For example,
-"Hello %s, %d" becomes "Hello %1$s, %2$d". Newer versions of the
-Android platform tools enforce this sensible standard. If you get
-error messages relating to that, you need to enable this.
-
-@item fixapos=yes
-Like fixtrans, but deals with an even older issue relating to
-'unescaped apostrophes' in translation strings.
-
-@item maven=yes
-Build with maven instead of ant
-
-@item patch=x
-Apply patch(es). 'x' names one (or more - comma-seperated)
-files within a directory below the metadata, with the same
-name as the metadata file but without the extension. Each of
-these patches is applied to the code in turn.
-
-@item extlibs=a;b;c
-Specifies a list of external libraries (jar files) from the
-@code{build/extlib} library, which will be placed in the @code{libs} directory
-of the project. Separate items with semicolons.
-
-@item srclibs=a@@r;b@@r1;
-Specifies a list of source or Android libraries. Separate items with 
-semicolons, and each item is of the form name@@rev where name is the predefined 
-source library name and rev is the revision or tag in source control to use. 
-Each srclib has a metadata file under srclibs/ in the repository directory, 
-and the source code is stored in build/srclib/. 
-
-Repo Type: and Repo: are specified in the same way as for apps; Subdir: can be 
-a comma separated list, for when directories are renamed by upstream; Update 
-Project: updates the projects in the working directory and one level down; 
-Prepare: can be used for any kind of preparation: in particular if you need to 
-update the project with a particular target. You can then also use $$name$$ in 
-the init/prebuild/build command to substitute the relative path to the library 
-directory, but it could need tweaking if you've changed into another directory.
 
 @end table
 
@@ -999,7 +998,8 @@ the application's developers. You should not specify this method unless you're
 sure it's appropriate. For example, some developers bump the version when 
 commencing development instead of when publishing.
 It will return an error if the AndroidManifest.xml has moved to a different 
-directory. The current version that it gives may not be accurate, since not all 
+directory or if the package name has changed. 
+The current version that it gives may not be accurate, since not all 
 versions are fit to be published. Therefore, before building, it is often 
 necessary to check if the current version has been published somewhere by the 
 upstream developers, either by checking for apks that they distribute or for 
