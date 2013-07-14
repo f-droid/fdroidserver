@@ -5,6 +5,10 @@
 sdk_path = "/path/to/android-sdk-linux_86"
 ndk_path = "/path/to/android-ndk-r8e"
 
+# May be necessary for fdroid update; you may still need to make a symlink to
+# aapt in platform-tools
+aapt_path = "/path/to/android-sdk-linux_x86/build-tools/17.0.0/aapt"
+
 #You probably don't need to change this...
 javacc_path = "/usr/share/java"
 
