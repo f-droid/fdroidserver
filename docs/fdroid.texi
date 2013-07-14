@@ -350,6 +350,9 @@ the @code{--install} switch. If you do this without using @code{--package} and
 individual version overwriting the previous!). In most cases, this will not be
 what you want to do, so execution will stop straight away. However, you can
 override this if you're sure that's what you want, by using @code{--all}.
+Note that currently, no sanity checks are performed with this mode, so that if 
+the version is incorrect or that if the package name is different, you won't 
+be informed.
 
 
 @node Importing Applications
