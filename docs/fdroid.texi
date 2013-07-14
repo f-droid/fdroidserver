@@ -867,14 +867,19 @@ Specifies a list of external libraries (jar files) from the
 of the project. Separate items with semicolons.
 
 @item srclibs=a@@r;b@@r1;
-Specifies a list of source libraries (kept up to date using version control)
-from a predefined set. Separate items with semicolons, and each item is of
-the form name@@rev where name is the predefined source library name and rev is
-the revision in source control to use. You can then also use $$name$$ in the
-prebuild command to substitute the relative path to the library directory.
+Specifies a list of source or Android libraries. Separate items with 
+semicolons, and each item is of the form name@@rev where name is the predefined 
+source library name and rev is the revision or tag in source control to use. 
+Each srclib has a metadata file under srclibs/ in the repository directory, 
+and the source code is stored in build/srclib/. 
 
-The available source libraries are current hard-coded in common.py. This will
-later be data-driven.
+Repo Type: and Repo: are specified in the same way as for apps; Subdir: can be 
+a comma separated list, for when directories are renamed by upstream; Update 
+Project: updates the projects in the working directory and one level down; 
+Prepare: can be used for any kind of preparation: in particular if you need to 
+update the project with a particular target. You can then also use $$name$$ in 
+the init/prebuild/build command to substitute the relative path to the library 
+directory, but it could need tweaking if you've changed into another directory.
 
 @end table
 
