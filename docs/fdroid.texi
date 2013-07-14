@@ -490,7 +490,8 @@ clients that only understand one.
 
 @cindex license
 
-The license for the application.
+The overall license for the application, or in certain cases, for the 
+source code only. 
 
 Common values: 
 
@@ -514,7 +515,9 @@ GNU GPL version 3 or later
 
 @item
 @samp{GPL}
-An unspecified GPL version. Use this only as a last resort.
+An unspecified GPL version. Use this only as a last resort or if there is 
+some confusion over compatiblity of component licenses: particularly the use of 
+Apache libraries with GPLv2 source code.
 
 @item
 @samp{AGPL}
