@@ -691,6 +691,9 @@ everything after the ! is used as a reason why it can't be built. The
 purpose of this feature is to allow non-buildable releases (e.g. the source
 is not published) to be flagged, so the scripts don't generate repeated
 messages about them. (And also to record the information for review later).
+If an apk has already been built, ! causes it to be deleted once 
+@code{fdroid update} is run; this is the procedure if ever a version has to 
+be replaced.
 
 In addition to the three, always required, parameters described above,
 further parameters can be added (in name=value format) to apply further
@@ -925,7 +928,9 @@ include it.
 If this field is present, the application does not get put into the public
 index. This allows metadata to be retained while an application is temporarily
 disabled from being published. The value should be a description of why the
-application is disabled.
+application is disabled. No apks or source code archives are deleted: to purge 
+an apk see the Build Version section or delete manually for developer builds. 
+For this reason, the field is deployed when an app has outlived it's usefulness.
 
 @node Requires Root
 @section Requires Root
