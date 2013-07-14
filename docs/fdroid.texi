@@ -969,7 +969,8 @@ index. This allows metadata to be retained while an application is temporarily
 disabled from being published. The value should be a description of why the
 application is disabled. No apks or source code archives are deleted: to purge 
 an apk see the Build Version section or delete manually for developer builds. 
-For this reason, the field is deployed when an app has outlived it's usefulness.
+The field is therefore used when an app has outlived it's usefulness, because 
+the source tarball is retained.
 
 @node Requires Root
 @section Requires Root
@@ -1091,7 +1092,7 @@ application than this (e.g. betas), and there will almost certainly be older
 ones. This should be the one that is recommended for general use. 
 In the event that there is no source code for the current version, or that 
 non-free libraries are being used, this would ideally be the latest 
-recommended version that is still free, though it may still be expedient to 
+version that is still free, though it may still be expedient to 
 retain the automatic update check — see No Source Since.
 
 This field is normally automatically updated - see Update Check Mode.
@@ -1102,7 +1103,9 @@ This field is normally automatically updated - see Update Check Mode.
 @cindex Current Version Code
 
 The version code corresponding to the Current Version field. Both these fields
-must be correct and matching.
+must be correct and matching although it's the current version code that's
+used by Android to determine version order and by F-Droid client to determine
+which version should be recommended.
 
 This field is normally automatically updated - see Update Check Mode.
 
