@@ -337,8 +337,9 @@ A similar effect could by achieved by simply deleting the output files from
 @code{unsigned} after the build, but with the risk of forgetting to do so!
 
 Along similar lines (and only in conjunction with @code{--test}, you can use
-@code{--force} to force a build of a Disabled application for test purposes,
-where normally it would be completely ignored.
+@code{--force} to force a build of a Disabled application or of a version 
+that was found to contain ELFs or known non-free libraries, where normally it 
+would be completely ignored.
 
 
 @section Direct Installation
