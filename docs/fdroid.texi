@@ -450,6 +450,7 @@ The following sections describe the fields recognised within the file.
 * Category::
 * License::
 * Name::
+* Auto Name::
 * Web Site::
 * Source Code::
 * Issue Tracker::
@@ -541,15 +542,27 @@ BSD license - the new, or modified, version.
 
 @end itemize
 
+@node Auto Name
+@section Auto Name
+
+@cindex Auto Name
+
+The name of the application as can best be retrieved from the source code. 
+This is done so that the commitupdates script can put a familiar name in 
+the commit description. It is generated automatically when 
+@code{fdroid checkupdates} is run.
+
 @node Name
 @section Name
 
 @cindex Name
 
-The name of the application. Normally, this field should not be present since the
-application's correct name is retrieved from the APK file. However, in a situation
-where an APK contains a bad or missing application name, it can be overridden
-using this.
+The name of the application. Normally, this field should not be present since 
+the application's correct name is retrieved from the APK file. However, in a 
+situation where an APK contains a bad or missing application name, it can be 
+overridden using this. Note that this only overrides the name in the list of 
+apps presented in the client; it doesn't changed the name or application label
+in the source code.
 
 @node Web Site
 @section Web Site
