@@ -101,7 +101,8 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += "We don't have the current version of this app."
         else:
             wikidata += "We have the current version of this app."
-        wikidata += " (Check mode: " + app['Update Check Mode'] + ")\n\n"
+        wikidata += " (Check mode: " + app['Update Check Mode'] + ") "
+        wikidata += " (Auto-update mode: " + app['Auto Update Mode'] + ")\n\n"
         if len(app['No Source Since']) > 0:
             wikidata += "This application has partially or entirely been missing source code since version " + app['No Source Since'] + ".\n\n"
         if len(app['Current Version']) > 0:
