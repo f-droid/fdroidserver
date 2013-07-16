@@ -282,6 +282,9 @@ class FDroid
 					$out.='<b>Donate:</b> <a href="'.$donate.'">'.$donate.'</a><br />';
 				$out.="</p>";
 
+                                $out.="<p>For full details and additional technical information, see ";
+                                $out.="<a href=\"/wiki/page/".$query_vars['fdid']."\">this application's page</a> on the F-Droid wiki.</p>";
+
 				$out.='<script type="text/javascript">';
 				$out.='function showHidePermissions(id) {';
 				$out.='  if(document.getElementById(id).style.display==\'none\')';
