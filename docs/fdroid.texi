@@ -392,6 +392,8 @@ Some Google Code projects have multiple repositories, identified by a
 dropdown list on the @code{source/checkout} page. To access one other than
 the default, specify its name using the @code{--repo} switch.
 @item
+Bitbucket - @code{https://bitbucket.org/USER/PROJECT/}
+@item
 Git - @code{git://REPO}
 @end enumerate
 
