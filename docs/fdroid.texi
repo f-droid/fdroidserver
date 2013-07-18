@@ -1267,10 +1267,10 @@ there is a path for retrieving the base box if it doesn't exist, and an
 apt proxy definition, both of which may need customising for your
 environment.
 
-With this base box available, you should then look at the settings at the
-top of @code{makebuildserver.py} and see if any need changing to suit your
-environment. You can then go to the @code{fdroidserver} directory and run
-this:
+With this base box available, you should then create @code{makebs.config.py},
+using @code{makebs.config.sample.py} as a reference - look at the settings and
+documentation there to decide if any need changing to suit your environment.
+You can then go to the @code{fdroidserver} directory and run this:
 
 @example
 ./makebuildserver.py
