@@ -478,8 +478,14 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     print "Checking " + src
     if not os.path.exists(src):
         raise BuildException("Unsigned apk is not at expected location of " + src)
-    p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools',
-                                    'aapt'),
+    if ('aapt_path' not in globals()):
+        # (re-)read configuration
+        execfile('config.py', globals())
+    if not os.path.exists(aapt_path):
+        print "Missing aapt - check aapt_path in your config"
+        sys.exit(1)
+
+    p = subprocess.Popen([aapt_path,
                         'dump', 'badging', src],
                         stdout=subprocess.PIPE)
     output = p.communicate()[0]

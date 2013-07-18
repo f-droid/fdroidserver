@@ -1564,9 +1564,16 @@ def isApkDebuggable(apkfile, sdk_path):
     """Returns True if the given apk file is debuggable
 
     :param apkfile: full path to the apk to check
-    :param sdk_path: path to android sdk"""
+    :param sdk_path: path to android sdk (deprecated)"""
 
-    p = subprocess.Popen([os.path.join(sdk_path, 'platform-tools', 'aapt'),
+    if ('aapt_path' not in globals()):
+        # (re-)read configuration
+        execfile('config.py', globals())
+    if not os.path.exists(aapt_path):
+        print "Missing aapt - check aapt_path in your config"
+        sys.exit(1)
+
+    p = subprocess.Popen([aapt_path,
 		  'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
 		 stdout=subprocess.PIPE)
     output = p.communicate()[0]
