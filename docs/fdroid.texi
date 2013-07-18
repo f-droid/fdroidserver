@@ -127,7 +127,7 @@ If you intend to use the 'Build Server' system, for secure and clean builds
 
 @itemize @bullet
 @item
-VirtualBox (debian package virtualbox-ose)
+VirtualBox (debian package virtualbox)
 @item
 Ruby (debian packages ruby and rubygems)
 @item
