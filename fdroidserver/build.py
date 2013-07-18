@@ -231,9 +231,6 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         ftp.chdir('build')
         ftp.mkdir('extlib')
         ftp.mkdir('srclib')
-        # Copy the main app source code
-        if os.path.exists(build_dir):
-            send_dir(build_dir)
         # Copy any extlibs that are required...
         if 'extlibs' in thisbuild:
             ftp.chdir('/home/vagrant/build/extlib')
@@ -263,12 +260,20 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
             ftp.chdir('/home/vagrant/build/srclib')
             if not os.path.exists(lib):
                 raise BuildException("Missing srclib directory '" + lib + "'")
+            fv = '.fdroidvcs-' + name
+            ftp.put(os.path.join('build/srclib', fv), fv)
             send_dir(lib)
             # Copy the metadata file too...
             ftp.chdir('/home/vagrant/srclibs')
             ftp.put(os.path.join('srclibs', name + '.txt'),
                     name + '.txt')
-
+        # Copy the main app source code
+        # (no need if it's a srclib)
+        if (not basesrclib) and os.path.exists(build_dir):
+            ftp.chdir('/home/vagrant/build')
+            fv = '.fdroidvcs-' + app['id']
+            ftp.put(os.path.join('build', fv), fv)
+            send_dir(build_dir)
 
         # Execute the build script...
         print "Starting build..."
