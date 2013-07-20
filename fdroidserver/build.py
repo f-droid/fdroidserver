@@ -435,7 +435,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             if p.returncode != 0:
                 raise BuildException("Warning: Could not deploy %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
         return
-    print "Build successful"
+    print "Successfully built version " + thisbuild['version'] + ' of ' + app['id']
 
     # Find the apk name in the output...
     if 'bindir' in thisbuild:
