@@ -187,7 +187,7 @@ def check_market(app):
     version = None
     vercode = None
 
-    m = re.search('<dd itemprop="softwareVersion">([^>]+)</dd>', page)
+    m = re.search('itemprop="softwareVersion">[ ]*([^<]+)[ ]*</div>', page)
     if m:
         html_parser = HTMLParser.HTMLParser()
         version = html_parser.unescape(m.group(1))
