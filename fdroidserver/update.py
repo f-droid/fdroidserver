@@ -295,9 +295,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 elif line.startswith("sdkVersion:"):
                     thisinfo['sdkversion'] = re.match(sdkversion_pat, line).group(1)
                 elif line.startswith("native-code:"):
-                    thisinfo['nativecode'] = line[14:-1]
-                    if "' '" in thisinfo['nativecode']:
-                        thisinfo['nativecode'] = thisinfo['nativecode'].replace("' '", ",")
+                    thisinfo['nativecode'] = list(line[14:-1].split("' '"))
                 elif line.startswith("uses-permission:"):
                     perm = re.match(string_pat, line).group(1)
                     if perm.startswith("android.permission."):
@@ -536,8 +534,8 @@ def make_index(apps, apks, repodir, archive, categories):
                     perms = ""
                     if len(apk['permissions']) > 0:
                         addElement('permissions', ','.join(apk['permissions']), doc, apkel)
-                    if 'nativecode' in apk:
-                        addElement('nativecode', apk['nativecode'], doc, apkel)
+                    if 'nativecode' in apk and len(apk['nativecode']) > 0:
+                        addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
                     if len(apk['features']) > 0:
                         addElement('features', ','.join(apk['features']), doc, apkel)
 
