@@ -295,7 +295,9 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 elif line.startswith("sdkVersion:"):
                     thisinfo['sdkversion'] = re.match(sdkversion_pat, line).group(1)
                 elif line.startswith("native-code:"):
-                    thisinfo['nativecode'] = list(line[14:-1].split("' '"))
+                    thisinfo['nativecode'] = []
+                    for arch in line[13:].split(' '):
+                        thisinfo['nativecode'].append(arch[1:-1])
                 elif line.startswith("uses-permission:"):
                     perm = re.match(string_pat, line).group(1)
                     if perm.startswith("android.permission."):
