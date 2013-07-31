@@ -147,6 +147,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         print "Saving clean state of new build server"
         if subprocess.call(['vagrant', 'suspend'], cwd='builder') != 0:
             raise BuildException("Failed to suspend build server")
+        print "...waiting a sec..."
+        time.sleep(10)
         if subprocess.call(['VBoxManage', 'snapshot', get_builder_vm_id(), 'take', 'fdroidclean'],
                 cwd='builder') != 0:
             raise BuildException("Failed to take snapshot")
