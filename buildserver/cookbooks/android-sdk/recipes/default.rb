@@ -1,8 +1,3 @@
-%w{openjdk-6-jdk}.each do |pkg|
-  package pkg do
-    action :install
-  end
-end
 
 sdk_loc = node[:settings][:sdk_loc]
 user = node[:settings][:user]
