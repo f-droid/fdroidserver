@@ -1560,11 +1560,10 @@ class KnownApks:
         lst.reverse()
         return lst
 
-def isApkDebuggable(apkfile, sdk_path):
+def isApkDebuggable(apkfile):
     """Returns True if the given apk file is debuggable
 
-    :param apkfile: full path to the apk to check
-    :param sdk_path: path to android sdk (deprecated)"""
+    :param apkfile: full path to the apk to check"""
 
     if ('aapt_path' not in globals()):
         # (re-)read configuration
