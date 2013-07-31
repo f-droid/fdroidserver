@@ -32,7 +32,10 @@ script "add_build_tools" do
       echo Installing from cache
       tar -C #{sdk_loc}/build-tools -z -x -f /vagrant/cache/build-tools/17.0.0.tar.gz
     else
-      #{sdk_loc}/tools/android update sdk --no-ui -a -t build-tools-17.0.0
+      #{sdk_loc}/tools/android update sdk --no-ui -a -t build-tools-17.0.0 <<X
+y
+
+X
     fi
   "
   not_if "test -d #{sdk_loc}/build-tools/17.0.0"
