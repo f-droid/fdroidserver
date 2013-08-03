@@ -1133,7 +1133,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     # Generate (or update) the ant build file, build.xml...
     updatemode = build.get('update', '.')
     if (updatemode != 'no' and
-        'maven' not in build):
+        'maven' not in build and 'gradle' not in build):
         parms = [os.path.join(sdk_path, 'tools', 'android'),
                 'update', 'project', '-p', '.']
         parms.append('--subprojects')
