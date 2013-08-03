@@ -874,13 +874,22 @@ def retrieve_string(app_dir, string_id):
                 return s.replace("\\'","'")
     return ''
 
+# Find the AM.xml - try the new gradle method first.
+def manifest_path(app_dir):
+    gradlepath = os.path.join(app_dir, 'source', 'main', 'AndroidManifest.xml')
+    if os.path.exists(gradlepath):
+        return gradlepath
+    rootpath = os.path.join(app_dir, 'AndroidManifest.xml')
+    return rootpath
+
+
 # Retrieve the package name
 def fetch_real_name(app_dir):
     app_search = re.compile(r'.*<application.*').search
     name_search = re.compile(r'.*android:label="([^"]+)".*').search
     app_found = False
     name = None
-    for line in file(os.path.join(app_dir, 'AndroidManifest.xml')):
+    for line in file(manifest_path(app_dir)):
         if not app_found:
             if app_search(line):
                 app_found = True
@@ -907,7 +916,7 @@ def parse_androidmanifest(app_dir):
     version = None
     vercode = None
     package = None
-    for line in file(os.path.join(app_dir, 'AndroidManifest.xml')):
+    for line in file(manifest_path(app_dir)):
         if not package:
             matches = psearch(line)
             if matches:
