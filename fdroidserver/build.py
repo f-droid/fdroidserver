@@ -467,6 +467,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             raise BuildException('Failed to find output')
         src = m.group(1)
         src = os.path.join(bindir, src) + '.apk'
+    elif 'gradle' in thisbuild:
+        src = os.path.join('build', 'apk', '-'.join(app['Auto Name'], flavour, 'release', 'unsigned')+'.apk')
     else:
         src = re.match(r".*^.*Creating (.+) for release.*$.*", output,
             re.S|re.M).group(1)
