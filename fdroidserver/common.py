@@ -1070,6 +1070,7 @@ def getsrclib(spec, srclib_dir, sdk_path, ndk_path="", mvn3="", basepath=False, 
                         + name, out, err)
         
         if srclib["Update Project"] == "Yes":
+            print "Updating srclib %s at path %s" % (name, libdir)
             if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
                 'update', 'project', '-p', libdir]) != 0:
                     raise BuildException( 'Error updating ' + name + ' project')

@@ -71,8 +71,11 @@ def check_tags(app, sdk_path):
             vcs.gotorevision(tag)
 
             # Only process tags where the manifest exists...
-            if os.path.exists(common.manifest_path(build_dir)):
+            path = common.manifest_path(build_dir)
+            print "Trying manifest at %s" % path
+            if os.path.exists(path):
                 version, vercode, package = common.parse_androidmanifest(build_dir)
+                print "Manifest exists. Found version %s" % version
                 if package and package == app['id'] and version and vercode:
                     if int(vercode) > int(hcode):
                         hcode = str(int(vercode))
