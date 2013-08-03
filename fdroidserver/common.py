@@ -876,7 +876,7 @@ def retrieve_string(app_dir, string_id):
 
 # Find the AM.xml - try the new gradle method first.
 def manifest_path(app_dir):
-    gradlepath = os.path.join(app_dir, 'source', 'main', 'AndroidManifest.xml')
+    gradlepath = os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml')
     if os.path.exists(gradlepath):
         return gradlepath
     rootpath = os.path.join(app_dir, 'AndroidManifest.xml')
