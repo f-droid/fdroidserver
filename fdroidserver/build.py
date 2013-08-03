@@ -417,7 +417,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     elif 'gradle' in thisbuild:
         flavour = thisbuild['gradle']
-        p = subprocess.Popen(gradle, 'assemble'+flavour+'Release', cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        arg = 'assemble'+flavour+'Release'
+        p = subprocess.Popen(gradle, arg, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         if install:
             antcommands = ['debug','install']
