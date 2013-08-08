@@ -30,6 +30,7 @@ script "add_build_tools" do
   code "
     if [ -f /vagrant/cache/build-tools/17.0.0.tar.gz ] ; then
       echo Installing from cache
+      mkdir #{sdk_loc}/build-tools
       tar -C #{sdk_loc}/build-tools -z -x -f /vagrant/cache/build-tools/17.0.0.tar.gz
     else
       #{sdk_loc}/tools/android update sdk --no-ui -a -t build-tools-17.0.0 <<X
