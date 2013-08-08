@@ -8,10 +8,6 @@ ndk_path = "/path/to/android-ndk-r8e"
 # Build tools version to be used
 build_tools = "18.0.1"
 
-# May be necessary for fdroid update; you may still need to make a symlink to
-# aapt in platform-tools
-aapt_path = "/path/to/android-sdk-linux_x86/build-tools/17.0.0/aapt"
-
 #You probably don't need to change this...
 javacc_path = "/usr/share/java"
 
