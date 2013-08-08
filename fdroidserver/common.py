@@ -22,6 +22,7 @@ import subprocess
 import time
 import operator
 import cgi
+import fileinput
 
 def getvcs(vcstype, remote, local, sdk_path):
     if vcstype == 'git':
@@ -875,12 +876,25 @@ def retrieve_string(app_dir, string_id):
     return ''
 
 # Find the AM.xml - try the new gradle method first.
-def manifest_path(app_dir):
-    gradlepath = os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml')
-    if os.path.exists(gradlepath):
-        return gradlepath
-    rootpath = os.path.join(app_dir, 'AndroidManifest.xml')
-    return rootpath
+def manifest_path(app_dir, flavour, gradle, build_tools, gradle_plugin):
+
+    if flavour is None:
+        return os.path.join(app_dir, 'AndroidManifest.xml')
+
+    if not os.path.exists(os.path.join(app_dir, 'src', flavour)):
+        return None
+
+    for line in fileinput.input(os.path.join(app_dir, 'build.gradle'), inplace=True):
+        if 'buildToolsVersion' in line:
+            print 'buildToolsVersion "%s"' % build_tools,
+        elif 'com.android.tools.build:gradle:' in line:
+            print "classpath 'com.android.tools.build:gradle:%s'" % gradle_plugin,
+        else:
+            print line,
+
+    subprocess.Popen([gradle, 'process'+flavour+'ReleaseManifest'], cwd=app_dir).communicate()
+
+    return os.path.join(app_dir, 'build', 'manifests', flavour, 'release', 'AndroidManifest.xml')
 
 
 # Retrieve the package name
@@ -907,7 +921,7 @@ def fetch_real_name(app_dir):
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
 # All values returned are strings.
-def parse_androidmanifest(app_dir):
+def parse_androidmanifest(manifest):
 
     vcsearch = re.compile(r'.*android:versionCode="([0-9]+?)".*').search
     vnsearch = re.compile(r'.*android:versionName="([^"]+?)".*').search
@@ -916,7 +930,7 @@ def parse_androidmanifest(app_dir):
     version = None
     vercode = None
     package = None
-    for line in file(manifest_path(app_dir)):
+    for line in file(manifest):
         if not package:
             matches = psearch(line)
             if matches:
@@ -929,8 +943,8 @@ def parse_androidmanifest(app_dir):
             matches = vcsearch(line)
             if matches:
                 vercode = matches.group(1)
-    if version.startswith('@string/'):
-        version = retrieve_string(app_dir, version[8:])
+    #if version.startswith('@string/'):
+        #version = retrieve_string(app_dir, version[8:])
     return (version, vercode, package)
 
 class BuildException(Exception):
