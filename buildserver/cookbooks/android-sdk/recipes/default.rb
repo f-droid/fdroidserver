@@ -23,27 +23,30 @@ execute "add-android-sdk-path" do
   not_if "grep #{sdk_loc} /home/#{user}/.bashrc"
 end
 
-script "add_build_tools" do
-  interpreter "bash"
-  user user
-  cwd "/tmp"
-  code "
-    if [ -f /vagrant/cache/build-tools/17.0.0.tar.gz ] ; then
-      echo Installing from cache
-      tar -C #{sdk_loc}/build-tools -z -x -f /vagrant/cache/build-tools/17.0.0.tar.gz
-    else
-      #{sdk_loc}/tools/android update sdk --no-ui -a -t build-tools-17.0.0 <<X
+%w{17.0.0 18.0.1}.each do |ver|
+
+  script "add_build_tools_#{ver}" do
+    interpreter "bash"
+    user user
+    cwd "/tmp"
+    code "
+      if [ -f /vagrant/cache/build-tools/#{ver}.tar.gz ] ; then
+        echo Installing from cache
+        mkdir #{sdk_loc}/build-tools
+        tar -C #{sdk_loc}/build-tools -z -x -f /vagrant/cache/build-tools/#{ver}.tar.gz
+      else
+        #{sdk_loc}/tools/android update sdk --no-ui -a -t build-tools-#{ver} <<X
 y
 
 X
-    fi
-  "
-  not_if "test -d #{sdk_loc}/build-tools/17.0.0"
+      fi
+    "
+    not_if "test -d #{sdk_loc}/build-tools/#{ver}"
+  end
 end
 
-
 %w{android-3 android-4 android-7 android-8 android-10 android-11
-   android-12 android-13 android-14 android-15 android-16 android-17
+   android-12 android-13 android-14 android-15 android-16 android-17 android-18
    extra-android-support}.each do |sdk|
 
   script "add_sdk_#{sdk}" do
