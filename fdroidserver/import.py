@@ -123,7 +123,7 @@ def main():
         repotype = 'git'
         sourcecode = ""
         website = ""
-    if url.startswith('https://github.com'):
+    elif url.startswith('https://github.com'):
         if url.endswith('/'):
             url = url[:-1]
         if url.endswith('.git'):

@@ -479,7 +479,7 @@ def parse_metadata(metafile, **kw):
     thisinfo['Bitcoin'] = None
     thisinfo['Disabled'] = None
     thisinfo['AntiFeatures'] = None
-    thisinfo['Update Check Mode'] = 'Market'
+    thisinfo['Update Check Mode'] = 'None'
     thisinfo['Auto Update Mode'] = 'None'
     thisinfo['Current Version'] = ''
     thisinfo['Current Version Code'] = '0'
