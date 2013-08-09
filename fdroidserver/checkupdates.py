@@ -74,9 +74,8 @@ def check_tags(app, sdk_path):
             vcs.gotorevision(tag)
 
             # Only process tags where the manifest exists...
-            path = common.manifest_path(build_dir, flavour, gradle,
-                    build_tools, gradle_plugin)
-            if path is not None and os.path.exists(path):
+            path = common.manifest_path(build_dir, flavour)
+            if path is not None:
                 version, vercode, package = common.parse_androidmanifest(path)
                 print "Manifest exists. Found version %s" % version
                 if package and package == app['id'] and version and vercode:
@@ -150,10 +149,9 @@ def check_repomanifest(app, sdk_path, branch=None):
         if not os.path.isdir(build_dir):
             return (None, "Subdir '" + app['builds'][-1]['subdir'] + "'is not a valid directory")
 
-        path = common.manifest_path(build_dir, flavour, gradle, build_tools,
-                gradle_plugin)
+        path = common.manifest_path(build_dir, flavour)
         if path is None:
-            return (None, "Gradle flavour not found")
+            return (None, "No manifest could be found")
 
         version, vercode, package = common.parse_androidmanifest(path)
         if not package:

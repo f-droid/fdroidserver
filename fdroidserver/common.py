@@ -875,26 +875,26 @@ def retrieve_string(app_dir, string_id):
                 return s.replace("\\'","'")
     return ''
 
-# Find the AM.xml - try the new gradle method first.
-def manifest_path(app_dir, flavour, gradle, build_tools, gradle_plugin):
+# Find the AM.xml - try to use new gradle manifest paths
+# TODO: Gradle can use multiple manifests. Return a list of the existing ones
+# and later iterate through them to find the highest vercode.
+def manifest_path(app_dir, flavour):
 
-    if flavour is None:
-        return os.path.join(app_dir, 'AndroidManifest.xml')
+    root_manifest = os.path.join(app_dir, 'AndroidManifest.xml')
+    if flavour is not None:
+        flavour_manifest = os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml')
+        if os.path.isfile(flavour_manifest):
+            return flavour_manifest
 
-    if not os.path.exists(os.path.join(app_dir, 'src', flavour)):
-        return None
+        main_manifest = os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml')
+        print main_manifest
+        if os.path.isfile(main_manifest):
+            return main_manifest
 
-    for line in fileinput.input(os.path.join(app_dir, 'build.gradle'), inplace=True):
-        if 'buildToolsVersion' in line:
-            print 'buildToolsVersion "%s"' % build_tools,
-        elif 'com.android.tools.build:gradle:' in line:
-            print "classpath 'com.android.tools.build:gradle:%s'" % gradle_plugin,
-        else:
-            print line,
+    if os.path.isfile(root_manifest):
+        return root_manifest
 
-    subprocess.Popen([gradle, 'process'+flavour+'ReleaseManifest'], cwd=app_dir).communicate()
-
-    return os.path.join(app_dir, 'build', 'manifests', flavour, 'release', 'AndroidManifest.xml')
+    return None
 
 
 # Retrieve the package name
