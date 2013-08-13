@@ -417,7 +417,27 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     elif 'gradle' in thisbuild:
         flavour = thisbuild['gradle']
-        p = subprocess.Popen([gradle, 'assemble'+flavour+'Release'], cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        if 'compilesdk' in thisbuild:
+            level = thisbuild["compilesdk"].split('-')[1]
+            subprocess.call(['sed', '-i',
+                    's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+level+'@g',
+                    'build.gradle'], cwd=root_dir)
+
+        subprocess.call(['sed', '-i',
+                's@buildToolsVersion[ ]*["\'][0-9\.]*["\']@buildToolsVersion "'+build_tools+'"@g',
+                'build.gradle'], cwd=root_dir)
+
+        subprocess.call(['sed', '-i',
+                's@com.android.tools.build:gradle:[0-9\.\+]*@com.android.tools.build:gradle:'+target+'@g',
+                'build.gradle'], cwd=root_dir)
+        
+        if install:
+            commands = [gradle, 'assemble'+flavour+'Debug', 'install'+flavour+'Debug']
+        else:
+            commands = [gradle, 'assemble'+flavour+'Release']
+
+        p = subprocess.Popen(commands, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         if install:
             antcommands = ['debug','install']
