@@ -875,26 +875,19 @@ def retrieve_string(app_dir, string_id):
                 return s.replace("\\'","'")
     return ''
 
-# Find the AM.xml - try to use new gradle manifest paths
-# TODO: Gradle can use multiple manifests. Return a list of the existing ones
-# and later iterate through them to find the highest vercode.
-def manifest_path(app_dir, flavour):
+# Return list of existing AM.xml files that will be used to find the highest
+# vercode
+def manifest_paths(app_dir, flavour):
 
-    root_manifest = os.path.join(app_dir, 'AndroidManifest.xml')
+    possible_manifests = [ os.path.join(app_dir, 'AndroidManifest.xml'),
+            os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml'),
+            os.path.join(app_dir, 'build.gradle') ]
+
     if flavour is not None:
-        flavour_manifest = os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml')
-        if os.path.isfile(flavour_manifest):
-            return flavour_manifest
+        possible_manifests.append(
+                os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml'))
 
-        main_manifest = os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml')
-        print main_manifest
-        if os.path.isfile(main_manifest):
-            return main_manifest
-
-    if os.path.isfile(root_manifest):
-        return root_manifest
-
-    return None
+    return [path for path in possible_manifests if os.path.isfile(path)]
 
 
 # Retrieve the package name
@@ -921,31 +914,56 @@ def fetch_real_name(app_dir):
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
 # All values returned are strings.
-def parse_androidmanifest(manifest):
+def parse_androidmanifests(paths):
 
     vcsearch = re.compile(r'.*android:versionCode="([0-9]+?)".*').search
     vnsearch = re.compile(r'.*android:versionName="([^"]+?)".*').search
     psearch = re.compile(r'.*package="([^"]+)".*').search
-    vnsearch_xml = re.compile(r'.*"(app_|)version">([^<]+?)<.*').search
-    version = None
-    vercode = None
-    package = None
-    for line in file(manifest):
-        if not package:
-            matches = psearch(line)
-            if matches:
-                package = matches.group(1)
-        if not version:
-            matches = vnsearch(line)
-            if matches:
-                version = matches.group(1)
-        if not vercode:
-            matches = vcsearch(line)
-            if matches:
-                vercode = matches.group(1)
-    #if version.startswith('@string/'):
-        #version = retrieve_string(app_dir, version[8:])
-    return (version, vercode, package)
+
+    vcsearch_g = re.compile(r'.*versionCode[ ]+?([0-9]+?).*').search
+    vnsearch_g = re.compile(r'.*versionName[ ]+?"([^"]+?)".*').search
+    psearch_g = re.compile(r'.*packageName[ ]+?"([^"]+)".*').search
+
+    max_version = None
+    max_vercode = None
+    max_package = None
+
+    for path in paths:
+
+        gradle = path.endswith("build.gradle")
+        version = None
+        vercode = None
+        package = None
+
+        for line in file(path):
+            if not package:
+                if gradle:
+                    matches = psearch_g(line)
+                else:
+                    matches = psearch(line)
+                if matches:
+                    package = matches.group(1)
+            if not version:
+                if gradle:
+                    matches = vnsearch_g(line)
+                else:
+                    matches = vnsearch(line)
+                if matches:
+                    version = matches.group(1)
+            if not vercode:
+                if gradle:
+                    matches = vcsearch_g(line)
+                else:
+                    matches = vcsearch(line)
+                if matches:
+                    vercode = matches.group(1)
+
+        if max_vercode is None or (vercode is not None and vercode > max_vercode):
+            max_version = version
+            max_vercode = vercode
+            max_package = package
+
+    return (max_version, max_vercode, max_package)
 
 class BuildException(Exception):
     def __init__(self, value, stdout = None, stderr = None):

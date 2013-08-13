@@ -74,14 +74,13 @@ def check_tags(app, sdk_path):
             vcs.gotorevision(tag)
 
             # Only process tags where the manifest exists...
-            path = common.manifest_path(build_dir, flavour)
-            if path is not None:
-                version, vercode, package = common.parse_androidmanifest(path)
-                print "Manifest exists. Found version %s" % version
-                if package and package == app['id'] and version and vercode:
-                    if int(vercode) > int(hcode):
-                        hcode = str(int(vercode))
-                        hver = version
+            paths = common.manifest_paths(build_dir, flavour)
+            version, vercode, package = common.parse_androidmanifests(paths)
+            print "Manifest exists. Found version %s" % version
+            if package and package == app['id'] and version and vercode:
+                if int(vercode) > int(hcode):
+                    hcode = str(int(vercode))
+                    hver = version
 
         if hver:
             return (hver, hcode)
@@ -149,11 +148,9 @@ def check_repomanifest(app, sdk_path, branch=None):
         if not os.path.isdir(build_dir):
             return (None, "Subdir '" + app['builds'][-1]['subdir'] + "'is not a valid directory")
 
-        path = common.manifest_path(build_dir, flavour)
-        if path is None:
-            return (None, "No manifest could be found")
+        paths = common.manifest_paths(build_dir, flavour)
 
-        version, vercode, package = common.parse_androidmanifest(path)
+        version, vercode, package = common.parse_androidmanifest(paths)
         if not package:
             return (None, "Couldn't find package ID")
         if package != app['id']:
