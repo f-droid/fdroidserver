@@ -933,7 +933,8 @@ def parse_androidmanifests(paths):
         gradle = path.endswith("gradle")
         version = None
         vercode = None
-        package = None
+        # Remember package name, may be defined separately from version+vercode
+        package = max_package
 
         for line in file(path):
             if not package:
@@ -957,6 +958,10 @@ def parse_androidmanifests(paths):
                     matches = vcsearch(line)
                 if matches:
                     vercode = matches.group(1)
+
+        # Better some package name than nothing
+        if max_package is None:
+            max_package = package
 
         if max_vercode is None or (vercode is not None and vercode > max_vercode):
             max_version = version
