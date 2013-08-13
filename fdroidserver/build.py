@@ -429,7 +429,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 'build.gradle'], cwd=root_dir)
 
         subprocess.call(['sed', '-i',
-                's@com.android.tools.build:gradle:[0-9\.\+]*@com.android.tools.build:gradle:'+target+'@g',
+                's@com.android.tools.build:gradle:[0-9\.\+]*@com.android.tools.build:gradle:'+gradle_plugin+'@g',
                 'build.gradle'], cwd=root_dir)
         
         if install:
