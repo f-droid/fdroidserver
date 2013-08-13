@@ -863,7 +863,6 @@ def description_html(lines,linkres):
     return ps.text_html
 
 def retrieve_string(xml_dir, string):
-    print string
     if not string.startswith('@string/'):
         return string.replace("\\'","'")
     string_search = re.compile(r'.*"'+string[8:]+'".*>([^<]+?)<.*').search
@@ -894,7 +893,6 @@ def fetch_real_name(app_dir, flavour):
     app_found = False
     name = None
     for f in manifest_paths(app_dir, flavour):
-        print f
         if not f.endswith(".xml"):
             continue
         xml_dir = os.path.join(f[:-19], 'res', 'values')
