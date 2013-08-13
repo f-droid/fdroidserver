@@ -139,6 +139,8 @@ def check_repomanifest(app, sdk_path, branch=None):
         elif vcs.repotype() == 'bzr':
             vcs.gotorevision(None)
 
+        flavour = None
+
         if len(app['builds']) > 0:
             if 'subdir' in app['builds'][-1]:
                 build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
@@ -150,7 +152,7 @@ def check_repomanifest(app, sdk_path, branch=None):
 
         paths = common.manifest_paths(build_dir, flavour)
 
-        version, vercode, package = common.parse_androidmanifest(paths)
+        version, vercode, package = common.parse_androidmanifests(paths)
         if not package:
             return (None, "Couldn't find package ID")
         if package != app['id']:

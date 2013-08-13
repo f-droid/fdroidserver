@@ -930,7 +930,7 @@ def parse_androidmanifests(paths):
 
     for path in paths:
 
-        gradle = path.endswith("build.gradle")
+        gradle = path.endswith("gradle")
         version = None
         vercode = None
         package = None
