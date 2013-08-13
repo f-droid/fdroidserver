@@ -304,15 +304,18 @@ def main():
                     vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir, sdk_path)
                     vcs.gotorevision(None)
 
+                    flavour = None
                     if len(app['builds']) > 0:
                         if 'subdir' in app['builds'][-1]:
                             app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
+                        if 'gradle' in app['builds'][-1]:
+                            flavour = app['builds'][-1]['gradle']
 
-                    #new_name = common.fetch_real_name(app_dir)
-                    #if new_name != app['Auto Name']:
-                        #app['Auto Name'] = new_name
-                        #if not writeit:
-                            #writeit = True
+                    new_name = common.fetch_real_name(app_dir, flavour)
+                    if new_name != app['Auto Name']:
+                        app['Auto Name'] = new_name
+                        writeit = True
+
                 except Exception:
                     msg = "Auto Name failed for  %s due to exception: %s" % (app['id'], traceback.format_exc())
 

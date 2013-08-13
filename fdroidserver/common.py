@@ -862,21 +862,19 @@ def description_html(lines,linkres):
     ps.end()
     return ps.text_html
 
-def retrieve_string(app_dir, string_id):
-    string_search = re.compile(r'.*"'+string_id+'".*>([^<]+?)<.*').search
-    for xmlfile in glob.glob(os.path.join(
-            app_dir, 'res', 'values', '*.xml')):
+def retrieve_string(xml_dir, string):
+    print string
+    if not string.startswith('@string/'):
+        return string.replace("\\'","'")
+    string_search = re.compile(r'.*"'+string[8:]+'".*>([^<]+?)<.*').search
+    for xmlfile in glob.glob(os.path.join(xml_dir, '*.xml')):
         for line in file(xmlfile):
             matches = string_search(line)
             if matches:
-                s = matches.group(1)
-                if s.startswith('@string/'):
-                    return retrieve_string(app_dir, s[8:]);
-                return s.replace("\\'","'")
+                return retrieve_string(xml_dir, matches.group(1))
     return ''
 
-# Return list of existing AM.xml files that will be used to find the highest
-# vercode
+# Return list of existing files that will be used to find the highest vercode
 def manifest_paths(app_dir, flavour):
 
     possible_manifests = [ os.path.join(app_dir, 'AndroidManifest.xml'),
@@ -886,30 +884,30 @@ def manifest_paths(app_dir, flavour):
     if flavour is not None:
         possible_manifests.append(
                 os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml'))
-
+    
     return [path for path in possible_manifests if os.path.isfile(path)]
 
-
 # Retrieve the package name
-def fetch_real_name(app_dir):
+def fetch_real_name(app_dir, flavour):
     app_search = re.compile(r'.*<application.*').search
     name_search = re.compile(r'.*android:label="([^"]+)".*').search
     app_found = False
     name = None
-    for line in file(manifest_path(app_dir)):
-        if not app_found:
-            if app_search(line):
-                app_found = True
-        if app_found:
-            if name is not None:
-                break
-            matches = name_search(line)
-            if matches:
-                name = matches.group(1)
+    for f in manifest_paths(app_dir, flavour):
+        print f
+        if not f.endswith(".xml"):
+            continue
+        xml_dir = os.path.join(f[:-19], 'res', 'values')
+        for line in file(f):
+            if not app_found:
+                if app_search(line):
+                    app_found = True
+            if app_found:
+                matches = name_search(line)
+                if matches:
+                    return retrieve_string(xml_dir, matches.group(1))
 
-    if name.startswith('@string/'):
-        return retrieve_string(app_dir, name[8:])
-    return name
+    return ''
 
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
