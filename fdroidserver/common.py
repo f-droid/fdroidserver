@@ -910,6 +910,9 @@ def fetch_real_name(app_dir, flavour):
 # All values returned are strings.
 def parse_androidmanifests(paths):
 
+    if not paths:
+        return (None, None, None)
+
     vcsearch = re.compile(r'.*android:versionCode="([0-9]+?)".*').search
     vnsearch = re.compile(r'.*android:versionName="([^"]+?)".*').search
     psearch = re.compile(r'.*package="([^"]+)".*').search
