@@ -176,10 +176,10 @@ def check_repomanifest(app, sdk_path, branch=None):
         return (None, msg)
 
 
-# Check for a new version by looking at the Google market.
-# Returns (None, "a message") if this didn't work, or (version, vercode) for
+# Check for a new version by looking at the Google Play Store.
+# Returns (None, "a message") if this didn't work, or (version, None) for
 # the details of the current version.
-def check_market(app):
+def check_gplay(app):
     time.sleep(15)
     url = 'https://play.google.com/store/apps/details?id=' + app['id']
     headers = {'User-Agent' : 'Mozilla/5.0 (X11; Linux i686; rv:18.0) Gecko/20100101 Firefox/18.0'}
@@ -225,7 +225,7 @@ def main():
                       help="Only process apps with auto-updates")
     parser.add_option("--commit", action="store_true", default=False,
                       help="Commit changes")
-    parser.add_option("--market", action="store_true", default=False,
+    parser.add_option("--gplay", action="store_true", default=False,
                       help="Only print differences with the Play Store")
     (options, args) = parser.parse_args()
 
@@ -239,9 +239,9 @@ def main():
             print "No such package"
             sys.exit(1)
 
-    if options.market:
+    if options.gplay:
         for app in apps:
-            version, reason = check_market(app)
+            version, reason = check_gplay(app)
             if version is None and options.verbose:
                 if reason == '404':
                     print "%s (%s) is not in the Play Store" % (app['Auto Name'], app['id'])
