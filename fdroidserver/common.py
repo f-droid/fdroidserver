@@ -670,8 +670,6 @@ def write_metadata(dest, app):
 def read_metadata(verbose=False, xref=True):
     apps = []
     for metafile in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
-        if verbose:
-            print "Reading " + metafile
         apps.append(parse_metadata(metafile, verbose=verbose))
 
     if xref:
