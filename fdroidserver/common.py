@@ -22,6 +22,7 @@ import subprocess
 import time
 import operator
 import cgi
+import fileinput
 
 def getvcs(vcstype, remote, local, sdk_path):
     if vcstype == 'git':
@@ -861,77 +862,109 @@ def description_html(lines,linkres):
     ps.end()
     return ps.text_html
 
-def retrieve_string(app_dir, string_id):
-    string_search = re.compile(r'.*"'+string_id+'".*>([^<]+?)<.*').search
-    for xmlfile in glob.glob(os.path.join(
-            app_dir, 'res', 'values', '*.xml')):
+def retrieve_string(xml_dir, string):
+    if not string.startswith('@string/'):
+        return string.replace("\\'","'")
+    string_search = re.compile(r'.*"'+string[8:]+'".*>([^<]+?)<.*').search
+    for xmlfile in glob.glob(os.path.join(xml_dir, '*.xml')):
         for line in file(xmlfile):
             matches = string_search(line)
             if matches:
-                s = matches.group(1)
-                if s.startswith('@string/'):
-                    return retrieve_string(app_dir, s[8:]);
-                return s.replace("\\'","'")
+                return retrieve_string(xml_dir, matches.group(1))
     return ''
 
-# Find the AM.xml - try the new gradle method first.
-def manifest_path(app_dir):
-    gradlepath = os.path.join(app_dir, 'source', 'main', 'AndroidManifest.xml')
-    if os.path.exists(gradlepath):
-        return gradlepath
-    rootpath = os.path.join(app_dir, 'AndroidManifest.xml')
-    return rootpath
+# Return list of existing files that will be used to find the highest vercode
+def manifest_paths(app_dir, flavour):
 
+    possible_manifests = [ os.path.join(app_dir, 'AndroidManifest.xml'),
+            os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml'),
+            os.path.join(app_dir, 'build.gradle') ]
+
+    if flavour is not None:
+        possible_manifests.append(
+                os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml'))
+    
+    return [path for path in possible_manifests if os.path.isfile(path)]
 
 # Retrieve the package name
-def fetch_real_name(app_dir):
+def fetch_real_name(app_dir, flavour):
     app_search = re.compile(r'.*<application.*').search
     name_search = re.compile(r'.*android:label="([^"]+)".*').search
     app_found = False
     name = None
-    for line in file(manifest_path(app_dir)):
-        if not app_found:
-            if app_search(line):
-                app_found = True
-        if app_found:
-            if name is not None:
-                break
-            matches = name_search(line)
-            if matches:
-                name = matches.group(1)
+    for f in manifest_paths(app_dir, flavour):
+        if not f.endswith(".xml"):
+            continue
+        xml_dir = os.path.join(f[:-19], 'res', 'values')
+        for line in file(f):
+            if not app_found:
+                if app_search(line):
+                    app_found = True
+            if app_found:
+                matches = name_search(line)
+                if matches:
+                    return retrieve_string(xml_dir, matches.group(1))
 
-    if name.startswith('@string/'):
-        return retrieve_string(app_dir, name[8:])
-    return name
+    return ''
 
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
 # All values returned are strings.
-def parse_androidmanifest(app_dir):
+def parse_androidmanifests(paths):
 
     vcsearch = re.compile(r'.*android:versionCode="([0-9]+?)".*').search
     vnsearch = re.compile(r'.*android:versionName="([^"]+?)".*').search
     psearch = re.compile(r'.*package="([^"]+)".*').search
-    vnsearch_xml = re.compile(r'.*"(app_|)version">([^<]+?)<.*').search
-    version = None
-    vercode = None
-    package = None
-    for line in file(manifest_path(app_dir)):
-        if not package:
-            matches = psearch(line)
-            if matches:
-                package = matches.group(1)
-        if not version:
-            matches = vnsearch(line)
-            if matches:
-                version = matches.group(1)
-        if not vercode:
-            matches = vcsearch(line)
-            if matches:
-                vercode = matches.group(1)
-    if version.startswith('@string/'):
-        version = retrieve_string(app_dir, version[8:])
-    return (version, vercode, package)
+
+    vcsearch_g = re.compile(r'.*versionCode[ ]+?([0-9]+?).*').search
+    vnsearch_g = re.compile(r'.*versionName[ ]+?"([^"]+?)".*').search
+    psearch_g = re.compile(r'.*packageName[ ]+?"([^"]+)".*').search
+
+    max_version = None
+    max_vercode = None
+    max_package = None
+
+    for path in paths:
+
+        gradle = path.endswith("gradle")
+        version = None
+        vercode = None
+        # Remember package name, may be defined separately from version+vercode
+        package = max_package
+
+        for line in file(path):
+            if not package:
+                if gradle:
+                    matches = psearch_g(line)
+                else:
+                    matches = psearch(line)
+                if matches:
+                    package = matches.group(1)
+            if not version:
+                if gradle:
+                    matches = vnsearch_g(line)
+                else:
+                    matches = vnsearch(line)
+                if matches:
+                    version = matches.group(1)
+            if not vercode:
+                if gradle:
+                    matches = vcsearch_g(line)
+                else:
+                    matches = vcsearch(line)
+                if matches:
+                    vercode = matches.group(1)
+
+        # Better some package name than nothing
+        if max_package is None:
+            max_package = package
+
+        if max_vercode is None or (vercode is not None and vercode > max_vercode):
+            max_version = version
+            max_vercode = vercode
+            max_package = package
+
+    return (max_version, max_vercode, max_package)
 
 class BuildException(Exception):
     def __init__(self, value, stdout = None, stderr = None):
@@ -1134,7 +1167,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     # Generate (or update) the ant build file, build.xml...
     updatemode = build.get('update', '.')
     if (updatemode != 'no' and
-        'maven' not in build):
+        'maven' not in build and 'gradle' not in build):
         parms = [os.path.join(sdk_path, 'tools', 'android'),
                 'update', 'project', '-p', '.']
         parms.append('--subprojects')
@@ -1575,14 +1608,9 @@ def isApkDebuggable(apkfile):
 
     :param apkfile: full path to the apk to check"""
 
-    if ('aapt_path' not in globals()):
-        # (re-)read configuration
-        execfile('config.py', globals())
-    if not os.path.exists(aapt_path):
-        print "Missing aapt - check aapt_path in your config"
-        sys.exit(1)
+    execfile('config.py', globals())
 
-    p = subprocess.Popen([aapt_path,
+    p = subprocess.Popen([os.path.join(sdk_path, 'build-tools', build_tools, 'aapt'),
 		  'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
 		 stdout=subprocess.PIPE)
     output = p.communicate()[0]

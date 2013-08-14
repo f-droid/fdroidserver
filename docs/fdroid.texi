@@ -772,6 +772,14 @@ already exist, but not a good idea if it's heavily customised. If you get an
 error about invalid target, first try @code{init=rm -rf bin/}; otherwise this 
 parameter should do the trick.
 
+Please note that gradle builds should be using compilesdk=.
+
+@item compilesdk=<level>
+Practically accomplishes the same that target= does when used in ant and maven
+projects. compilesdk= is used rather than target= so as to not cause any more
+confusion. It only takes effect on gradle builds in the build.gradle file,
+thus using it in any other case is not wise.
+
 @item update=xxx
 By default, 'android update project' is used to generate or update the
 build.xml file. Specifying update=no bypasses that.

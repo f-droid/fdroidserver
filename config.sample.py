@@ -5,15 +5,20 @@
 sdk_path = "/path/to/android-sdk-linux_86"
 ndk_path = "/path/to/android-ndk-r8e"
 
-# May be necessary for fdroid update; you may still need to make a symlink to
-# aapt in platform-tools
-aapt_path = "/path/to/android-sdk-linux_x86/build-tools/17.0.0/aapt"
+# Build tools version to be used
+build_tools = "18.0.1"
 
 #You probably don't need to change this...
 javacc_path = "/usr/share/java"
 
 #Command for running maven 3 (could be mvn, mvn3, or a full path)
 mvn3 = "mvn3"
+
+# Gradle command
+gradle = "gradle"
+
+# Android gradle plugin version
+gradle_plugin = "0.5.+"
 
 repo_url = "https://f-droid.org/repo"
 repo_name = "F-Droid"

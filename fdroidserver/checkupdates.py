@@ -60,9 +60,12 @@ def check_tags(app, sdk_path):
 
         vcs.gotorevision(None)
 
+        flavour = None
         if len(app['builds']) > 0:
             if 'subdir' in app['builds'][-1]:
                 build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
+            if 'gradle' in app['builds'][-1]:
+                flavour = app['builds'][-1]['gradle']
 
         hver = None
         hcode = "0"
@@ -71,15 +74,13 @@ def check_tags(app, sdk_path):
             vcs.gotorevision(tag)
 
             # Only process tags where the manifest exists...
-            path = common.manifest_path(build_dir)
-            print "Trying manifest at %s" % path
-            if os.path.exists(path):
-                version, vercode, package = common.parse_androidmanifest(build_dir)
-                print "Manifest exists. Found version %s" % version
-                if package and package == app['id'] and version and vercode:
-                    if int(vercode) > int(hcode):
-                        hcode = str(int(vercode))
-                        hver = version
+            paths = common.manifest_paths(build_dir, flavour)
+            version, vercode, package = common.parse_androidmanifests(paths)
+            print "Manifest exists. Found version %s" % version
+            if package and package == app['id'] and version and vercode:
+                if int(vercode) > int(hcode):
+                    hcode = str(int(vercode))
+                    hver = version
 
         if hver:
             return (hver, hcode)
@@ -138,20 +139,20 @@ def check_repomanifest(app, sdk_path, branch=None):
         elif vcs.repotype() == 'bzr':
             vcs.gotorevision(None)
 
+        flavour = None
+
         if len(app['builds']) > 0:
             if 'subdir' in app['builds'][-1]:
                 build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
+            if 'gradle' in app['builds'][-1]:
+                flavour = app['builds'][-1]['gradle']
 
         if not os.path.isdir(build_dir):
             return (None, "Subdir '" + app['builds'][-1]['subdir'] + "'is not a valid directory")
 
-        if os.path.exists(os.path.join(build_dir, 'AndroidManifest.xml')):
-            version, vercode, package = common.parse_androidmanifest(build_dir)
-        elif os.path.exists(os.path.join(build_dir, 'src', 'main', 'AndroidManifest.xml')):
-            # Alternate location for simple gradle locations...
-            version, vercode, package = common.parse_androidmanifest(os.path.join(build_dir, 'src', 'main'))
-        else:
-            return (None, "AndroidManifest.xml not found")
+        paths = common.manifest_paths(build_dir, flavour)
+
+        version, vercode, package = common.parse_androidmanifests(paths)
         if not package:
             return (None, "Couldn't find package ID")
         if package != app['id']:
@@ -219,6 +220,7 @@ def check_market(app):
 def main():
 
     #Read configuration...
+    globals()['gradle'] = "gradle"
     execfile('config.py', globals())
 
     # Parse command line...
@@ -302,15 +304,18 @@ def main():
                     vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir, sdk_path)
                     vcs.gotorevision(None)
 
+                    flavour = None
                     if len(app['builds']) > 0:
                         if 'subdir' in app['builds'][-1]:
                             app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
+                        if 'gradle' in app['builds'][-1]:
+                            flavour = app['builds'][-1]['gradle']
 
-                    new_name = common.fetch_real_name(app_dir)
+                    new_name = common.fetch_real_name(app_dir, flavour)
                     if new_name != app['Auto Name']:
                         app['Auto Name'] = new_name
-                        if not writeit:
-                            writeit = True
+                        writeit = True
+
                 except Exception:
                     msg = "Auto Name failed for  %s due to exception: %s" % (app['id'], traceback.format_exc())
 

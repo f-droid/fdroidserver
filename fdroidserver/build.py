@@ -415,6 +415,29 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if 'mvnflags' in thisbuild:
             mvncmd += thisbuild['mvnflags']
         p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    elif 'gradle' in thisbuild:
+        flavour = thisbuild['gradle']
+
+        if 'compilesdk' in thisbuild:
+            level = thisbuild["compilesdk"].split('-')[1]
+            subprocess.call(['sed', '-i',
+                    's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+level+'@g',
+                    'build.gradle'], cwd=root_dir)
+
+        subprocess.call(['sed', '-i',
+                's@buildToolsVersion[ ]*["\'][0-9\.]*["\']@buildToolsVersion "'+build_tools+'"@g',
+                'build.gradle'], cwd=root_dir)
+
+        subprocess.call(['sed', '-i',
+                's@com.android.tools.build:gradle:[0-9\.\+]*@com.android.tools.build:gradle:'+gradle_plugin+'@g',
+                'build.gradle'], cwd=root_dir)
+        
+        if install:
+            commands = [gradle, 'assemble'+flavour+'Debug', 'install'+flavour+'Debug']
+        else:
+            commands = [gradle, 'assemble'+flavour+'Release']
+
+        p = subprocess.Popen(commands, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         if install:
             antcommands = ['debug','install']
@@ -464,6 +487,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             raise BuildException('Failed to find output')
         src = m.group(1)
         src = os.path.join(bindir, src) + '.apk'
+    elif 'gradle' in thisbuild:
+        src = os.path.join(build_dir, 'build', 'apk', '-'.join([app['id'], flavour, 'release', 'unsigned'])+'.apk')
     else:
         src = re.match(r".*^.*Creating (.+) for release.*$.*", output,
             re.S|re.M).group(1)
@@ -478,14 +503,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     print "Checking " + src
     if not os.path.exists(src):
         raise BuildException("Unsigned apk is not at expected location of " + src)
-    if ('aapt_path' not in globals()):
-        # (re-)read configuration
-        execfile('config.py', globals())
-    if not os.path.exists(aapt_path):
-        print "Missing aapt - check aapt_path in your config"
-        sys.exit(1)
 
-    p = subprocess.Popen([aapt_path,
+    p = subprocess.Popen([os.path.join(sdk_path, 'build-tools', build_tools, 'aapt'),
                         'dump', 'badging', src],
                         stdout=subprocess.PIPE)
     output = p.communicate()[0]
