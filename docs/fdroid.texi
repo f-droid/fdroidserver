@@ -1064,14 +1064,6 @@ Despite these caveats, it is the often the favourite update check mode.
 
 It currently only works for git and git-svn repositories. In the case of the
 latter, the repo URL must encode the path to the trunk and tags.
-@item
-@code{Market} - This is being phased out and should only be used when the other
-automatic modes don't work. It won't work if the developer deploys multiple 
-apks to Google Play; if the current version does not have more than one 
-review; or if the package has been abandoned in favour of another. 
-Nevertheless, it can often be helpful to consult Google Play for version 
-information when checking the validity of the current version obtained via 
-RepoManifest.
 @end itemize
 
 @node Auto Update Mode

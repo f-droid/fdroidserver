@@ -195,7 +195,6 @@ def check_market(app):
         return (None, 'Failed:' + str(e))
 
     version = None
-    vercode = None
 
     m = re.search('itemprop="softwareVersion">[ ]*([^<]+)[ ]*</div>', page)
     if m:
@@ -205,16 +204,9 @@ def check_market(app):
     if version == 'Varies with device':
         return (None, 'Device-variable version, cannot use this method')
 
-    m = re.search('data-paramValue="(\d+)"><div class="goog-menuitem-content">Latest Version<', page)
-    if m:
-        vercode = m.group(1)
-
-    if not vercode:
-        return (None, "Couldn't find version code")
     if not version:
         return (None, "Couldn't find version")
-    return (version, str(int(vercode)))
-
+    return (version, None)
 
 
 def main():
@@ -262,9 +254,7 @@ def main():
             logmsg = None
 
             mode = app['Update Check Mode']
-            if mode == 'Market':
-                (version, vercode) = check_market(app)
-            elif mode == 'Tags':
+            if mode == 'Tags':
                 (version, vercode) = check_tags(app, sdk_path)
             elif mode == 'RepoManifest':
                 (version, vercode) = check_repomanifest(app, sdk_path)
