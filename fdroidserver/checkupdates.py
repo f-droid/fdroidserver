@@ -26,6 +26,7 @@ import subprocess
 from optparse import OptionParser
 import traceback
 import HTMLParser
+from distutils.version import LooseVersion
 import common
 from common import BuildException
 from common import VCSException
@@ -187,10 +188,7 @@ def check_market(app):
         resp = urllib2.urlopen(req, None, 20)
         page = resp.read()
     except urllib2.HTTPError, e:
-        if e.code == 404:
-            return (None, 'Not in market')
-        else:
-            return (None, 'Failed with HTTP status' + str(req.getcode()))
+        return (None, str(e.code))
     except Exception, e:
         return (None, 'Failed:' + str(e))
 
@@ -206,7 +204,7 @@ def check_market(app):
 
     if not version:
         return (None, "Couldn't find version")
-    return (version, None)
+    return (version.strip(), None)
 
 
 def main():
@@ -227,6 +225,8 @@ def main():
                       help="Only process apps with auto-updates")
     parser.add_option("--commit", action="store_true", default=False,
                       help="Commit changes")
+    parser.add_option("--market", action="store_true", default=False,
+                      help="Only print differences with the Play Store")
     (options, args) = parser.parse_args()
 
     # Get all apps...
@@ -238,6 +238,25 @@ def main():
         if len(apps) == 0:
             print "No such package"
             sys.exit(1)
+
+    if options.market:
+        for app in apps:
+            version, reason = check_market(app)
+            if version is None and options.verbose:
+                if reason == '404':
+                    print "%s (%s) is not in the Play Store" % (app['Auto Name'], app['id'])
+                else:
+                    print "%s (%s) encountered a problem: %s" % (app['Auto Name'], app['id'], reason)
+            if version is not None:
+                stored = app['Current Version']
+                if LooseVersion(stored) < LooseVersion(version):
+                    print "%s (%s) has version %s on the Play Store, which is bigger than %s" % (
+                            app['Auto Name'], app['id'], version, stored)
+                elif options.verbose:
+                    print "%s (%s) has the same version %s on the Play Store" % (
+                            app['Auto Name'], app['id'], version)
+        return
+
 
     for app in apps:
 

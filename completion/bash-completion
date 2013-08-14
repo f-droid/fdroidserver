@@ -106,7 +106,7 @@ __complete_publish() {
 
 __complete_checkupdates() {
     opts="-h -v -p"
-    lopts="--help --verbose --package --auto --commit"
+    lopts="--help --verbose --package --auto --autoonly --commit --market"
     case "${prev}" in
         -p|--package)
             __package
