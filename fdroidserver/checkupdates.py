@@ -145,7 +145,13 @@ def check_repomanifest(app, sdk_path, branch=None):
         if not os.path.isdir(build_dir):
             return (None, "Subdir '" + app['builds'][-1]['subdir'] + "'is not a valid directory")
 
-        version, vercode, package = common.parse_androidmanifest(build_dir)
+        if os.path.exists(os.path.join(build_dir, 'AndroidManifest.xml')):
+            version, vercode, package = common.parse_androidmanifest(build_dir)
+        elif os.path.exists(os.path.join(build_dir, 'src', 'main', 'AndroidManifest.xml')):
+            # Alternate location for simple gradle locations...
+            version, vercode, package = common.parse_androidmanifest(os.path.join(build_dir, 'src', 'main'))
+        else:
+            return (None, "AndroidManifest.xml not found")
         if not package:
             return (None, "Couldn't find package ID")
         if package != app['id']:

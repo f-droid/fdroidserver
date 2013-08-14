@@ -49,22 +49,38 @@ if not os.path.exists(cachedir):
     os.mkdir(cachedir)
 cachefiles = [
     ('android-sdk_r21.0.1-linux.tgz',
-     'http://dl.google.com/android/android-sdk_r21.0.1-linux.tgz')]
+     'http://dl.google.com/android/android-sdk_r21.0.1-linux.tgz',
+     None),
+    ('gradle-1.7-bin.zip',
+     'http://services.gradle.org/distributions/gradle-1.7-bin.zip',
+     '360c97d51621b5a1ecf66748c718594e5f790ae4fbc1499543e0c006033c9d30')]
 if arch64:
     cachefiles.extend([
     ('android-ndk-r8e-linux-x86_64.tar.bz2',
-     'http://dl.google.com/android/ndk/android-ndk-r8e-linux-x86_64.tar.bz2')])
+     'http://dl.google.com/android/ndk/android-ndk-r8e-linux-x86_64.tar.bz2',
+     None)])
 else:
     cachefiles.extend([
     ('android-ndk-r8e-linux-x86.tar.bz2',
-     'http://dl.google.com/android/ndk/android-ndk-r8e-linux-x86.tar.bz2')])
+     'http://dl.google.com/android/ndk/android-ndk-r8e-linux-x86.tar.bz2',
+     None)])
 wanted = []
-for f, src in cachefiles:
+for f, src, shasum in cachefiles:
     if not os.path.exists(os.path.join(cachedir, f)):
         print "Downloading " + f + " to cache"
         if subprocess.call(['wget', src], cwd=cachedir) != 0:
             print "...download of " + f + " failed."
             sys.exit(1)
+    if shasum:
+        p = subprocess.Popen(['shasum', '-a', '256', os.path.join(cachedir, f)],
+                stdout=subprocess.PIPE)
+        v = p.communicate()[0].split(' ')[0]
+        if v != shasum:
+            print "Invalid shasum of '" + v + "' detected for " + f
+            sys.exit(1)
+        else:
+            print "...shasum verified for " + f
+
     wanted.append(f)
 
 

@@ -13,3 +13,25 @@ if node['kernel']['machine'] == "x86_64"
   end
 end
 
+script "install-gradle" do
+  cwd "/tmp"
+  interpreter "bash"
+  code "
+    unzip /vagrant/cache/gradle-1.7-bin.zip
+    mv gradle-1.7 /opt/gradle
+  "
+  not_if "test -d /opt/gradle"
+end
+
+execute "add-gradle-home" do
+  user user
+  command "echo \"export GRADLE_HOME=/opt/gradle\" >> /home/#{user}/.bashrc"
+  not_if "grep GRADLE_HOME /home/#{user}/.bashrc"
+end
+execute "add-gradle-bin" do
+  user user
+  command "echo \"export PATH=$PATH:/opt/gradle/bin\" >> /home/#{user}/.bashrc"
+  not_if "grep gradle/bin /home/#{user}/.bashrc"
+end
+
+
