@@ -975,6 +975,9 @@ def parse_androidmanifests(paths):
             max_vercode = vercode
             max_package = package
 
+    if max_version is None:
+        max_version = "Unknown"
+
     return (max_version, max_vercode, max_package)
 
 class BuildException(Exception):
