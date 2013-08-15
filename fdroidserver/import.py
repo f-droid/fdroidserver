@@ -228,7 +228,8 @@ def main():
         sys.exit(1)
 
     # Extract some information...
-    version, vercode, package = common.parse_androidmanifest(root_dir)
+    paths = manifest_paths(app_dir, None)
+    version, vercode, package = common.parse_androidmanifests(paths)
     if not package:
         print "Couldn't find package ID"
         sys.exit(1)
