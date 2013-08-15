@@ -1,5 +1,7 @@
-aapt_path = "/home/vagrant/android-sdk/platform-tools/aapt"
 sdk_path = "/home/vagrant/android-sdk"
 ndk_path = "/home/vagrant/android-ndk"
+build_tools = "18.0.1"
 javacc_path = "/usr/share/java"
 mvn3 = "mvn"
+gradle = "gradle"
+gradle_plugin = "0.5.+"
