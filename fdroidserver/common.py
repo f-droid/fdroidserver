@@ -902,8 +902,18 @@ def fetch_real_name(app_dir, flavour):
                 matches = name_search(line)
                 if matches:
                     return retrieve_string(xml_dir, matches.group(1))
-
     return ''
+
+# Retrieve the version name
+def version_name(original, app_dir, flavour):
+    for f in manifest_paths(app_dir, flavour):
+        if not f.endswith(".xml"):
+            continue
+        xml_dir = os.path.join(f[:-19], 'res', 'values')
+        string = retrieve_string(xml_dir, original)
+        if len(string) > 0:
+            return string
+    return original
 
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.

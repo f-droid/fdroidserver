@@ -300,7 +300,7 @@ def main():
                 writeit = True
                 logmsg = "Update current version of " + app['id'] + " to " + version
 
-            # Do the Auto Name thing...
+            # Do the Auto Name thing as well as finding the CV real name
             if len(app["Repo Type"]) > 0:
 
                 try:
@@ -325,8 +325,13 @@ def main():
                         app['Auto Name'] = new_name
                         writeit = True
 
+                    if app['Current Version'].startswith('@string/'):
+                        cv = common.version_name(app['Current Version'], app_dir, flavour)
+                        if app['Current Version'] != cv:
+                            app['Current Version'] = cv
+                            writeit = True
                 except Exception:
-                    msg = "Auto Name failed for  %s due to exception: %s" % (app['id'], traceback.format_exc())
+                    msg = "Auto Name or Current Version failed for %s due to exception: %s" % (app['id'], traceback.format_exc())
 
             if options.auto:
                 mode = app['Auto Update Mode']
