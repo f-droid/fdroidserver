@@ -431,6 +431,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         subprocess.call(['sed', '-i',
                 's@com.android.tools.build:gradle:[0-9\.\+]*@com.android.tools.build:gradle:'+gradle_plugin+'@g',
                 'build.gradle'], cwd=root_dir)
+
+        if flavour in ['main', 'yes', '']:
+            flavour = ''
         
         if install:
             commands = [gradle, 'assemble'+flavour+'Debug', 'install'+flavour+'Debug']
@@ -490,7 +493,11 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     elif 'gradle' in thisbuild:
         if 'subdir' in thisbuild:
             build_dir = os.path.join(build_dir, thisbuild['subdir'])
-        src = os.path.join(build_dir, 'build', 'apk', '-'.join([os.path.basename(build_dir), flavour, 'release', 'unsigned'])+'.apk')
+        if flavour in ['main', 'yes', '']:
+            name = '-'.join([os.path.basename(build_dir), 'release', 'unsigned'])
+        else:
+            name = '-'.join([os.path.basename(build_dir), flavour, 'release', 'unsigned'])
+        src = os.path.join(build_dir, 'build', 'apk', name+'.apk')
     else:
         src = re.match(r".*^.*Creating (.+) for release.*$.*", output,
             re.S|re.M).group(1)
