@@ -31,6 +31,7 @@ from optparse import OptionParser
 import time
 import common
 from common import MetaDataException
+from PIL import Image
 
 def update_wiki(apps, apks, verbose=False):
     """Update the wiki
@@ -356,6 +357,15 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             except:
                 print "WARNING: Error retrieving icon file"
             apk.close()
+
+            im = Image.open(iconfilename)
+            if any(length > 72 for length in im.size):
+                print iconfilename, "is too large:", im.size
+                im.thumbnail((72, 72), Image.ANTIALIAS)
+                print iconfilename, "new size:", im.size
+                im.save(iconfilename, "PNG")
+            else:
+                print iconfilename, "is small enough:", im.size
 
             # Record in known apks, getting the added date at the same time..
             added = knownapks.recordapk(thisinfo['apkname'], thisinfo['id'])

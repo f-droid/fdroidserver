@@ -134,6 +134,8 @@ Ruby (debian packages ruby and rubygems)
 Vagrant (gem install vagrant)
 @item
 Paramiko (debian package python-paramiko)
+@item
+Imaging (debian package python-imaging)
 @end itemize
 
 
