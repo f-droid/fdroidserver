@@ -216,16 +216,16 @@ def delete_disabled_builds(apps, apkcache, repodirs):
 
 def resize_icon(iconpath):
     im = Image.open(iconpath)
-    if any(length > 72 for length in im.size):
+    if any(length > max_icon_size for length in im.size):
         print iconpath, "is too large:", im.size
-        im.thumbnail((72, 72), Image.ANTIALIAS)
+        im.thumbnail((max_icon_size, max_icon_size), Image.ANTIALIAS)
         print iconpath, "new size:", im.size
         im.save(iconpath, "PNG")
     else:
         print iconpath, "is small enough:", im.size
 
 def resize_all_icons(repodirs):
-    """Resize all icons to max size 72x72 pixels
+    """Resize all icons that exceed the max size
 
     :param apps: list of all applications, as per common.read_metadata
     :param repodirs: the repo directories to process
@@ -639,9 +639,10 @@ def archive_old_apks(apps, apks, repodir, archivedir, keepversions):
 def main():
 
     # Read configuration...
-    global update_stats, archive_older
+    global update_stats, archive_older, max_icon_size
     update_stats = False
     archive_older = 0
+    max_icon_size = 72
     execfile('config.py', globals())
 
     # Parse command line...

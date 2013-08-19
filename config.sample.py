@@ -20,6 +20,10 @@ gradle = "gradle"
 # Android gradle plugin version
 gradle_plugin = "0.5.+"
 
+# Max height and width (in pixels) for the icons in the repo
+# This corresponds to 72x72 pixels, i.e. mdpi
+icon_max_size = 72
+
 repo_url = "https://f-droid.org/repo"
 repo_name = "F-Droid"
 repo_icon = "fdroid-icon.png"
