@@ -214,6 +214,25 @@ def delete_disabled_builds(apps, apkcache, repodirs):
                 if apkfilename in apkcache:
                     del apkcache[apkfilename]
 
+def resize_icon(iconpath):
+    im = Image.open(iconpath)
+    if any(length > 72 for length in im.size):
+        print iconpath, "is too large:", im.size
+        im.thumbnail((72, 72), Image.ANTIALIAS)
+        print iconpath, "new size:", im.size
+        im.save(iconpath, "PNG")
+    else:
+        print iconpath, "is small enough:", im.size
+
+def resize_all_icons(repodirs):
+    """Resize all icons to max size 72x72 pixels
+
+    :param apps: list of all applications, as per common.read_metadata
+    :param repodirs: the repo directories to process
+    """
+    for repodir in repodirs:
+        for iconpath in glob.glob(os.path.join(repodir, 'icons', '*.png')):
+            resize_icon(iconpath)
 
 def scan_apks(apps, apkcache, repodir, knownapks):
     """Scan the apks in the given repo directory.
@@ -349,23 +368,16 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             apk = zipfile.ZipFile(apkfile, 'r')
             thisinfo['icon'] = (thisinfo['id'] + '.' +
                 str(thisinfo['versioncode']) + '.png')
-            iconfilename = os.path.join(icon_dir, thisinfo['icon'])
+            iconpath = os.path.join(icon_dir, thisinfo['icon'])
             try:
-                iconfile = open(iconfilename, 'wb')
+                iconfile = open(iconpath, 'wb')
                 iconfile.write(apk.read(thisinfo['iconsrc']))
                 iconfile.close()
             except:
                 print "WARNING: Error retrieving icon file"
             apk.close()
 
-            im = Image.open(iconfilename)
-            if any(length > 72 for length in im.size):
-                print iconfilename, "is too large:", im.size
-                im.thumbnail((72, 72), Image.ANTIALIAS)
-                print iconfilename, "new size:", im.size
-                im.save(iconfilename, "PNG")
-            else:
-                print iconfilename, "is small enough:", im.size
+            resize_icon(iconpath)
 
             # Record in known apks, getting the added date at the same time..
             added = knownapks.recordapk(thisinfo['apkname'], thisinfo['id'])
@@ -645,6 +657,8 @@ def main():
                       help="Report on build data status")
     parser.add_option("-i", "--interactive", default=False, action="store_true",
                       help="Interactively ask about things that need updating.")
+    parser.add_option("-I", "--icons", action="store_true", default=False,
+                      help="Resize all the icons exceeding the max pixel size and exit")
     parser.add_option("-e", "--editor", default="/etc/alternatives/editor",
                       help="Specify editor to use in interactive mode. Default "+
                           "is /etc/alternatives/editor")
@@ -655,6 +669,16 @@ def main():
     parser.add_option("--clean", action="store_true", default=False,
                       help="Clean update - don't uses caches, reprocess all apks")
     (options, args) = parser.parse_args()
+
+    repodirs = ['repo']
+    if archive_older != 0:
+        repodirs.append('archive')
+        if not os.path.exists('archive'):
+            os.mkdir('archive')
+
+    if options.icons:
+        resize_all_icons(repodirs)
+        sys.exit(0)
 
     # Get all apps...
     apps = common.read_metadata(verbose=options.verbose)
@@ -679,12 +703,6 @@ def main():
     else:
         apkcache = {}
     cachechanged = False
-
-    repodirs = ['repo']
-    if archive_older != 0:
-        repodirs.append('archive')
-        if not os.path.exists('archive'):
-            os.mkdir('archive')
 
     delete_disabled_builds(apps, apkcache, repodirs)
 
