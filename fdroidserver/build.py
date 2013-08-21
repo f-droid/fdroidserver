@@ -206,8 +206,10 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
                 for dd in d:
                     ftp.mkdir(dd)
                 for ff in f:
-                    if not os.path.islink(os.path.join(root, rr, ff)):
-                        ftp.put(os.path.join(root, rr, ff), ff)
+                    lfile = os.path.join(root, rr, ff)
+                    if not os.path.islink(lfile):
+                        ftp.put(lfile, ff)
+                        ftp.chmod(ff, os.stat(lfile).st_mode)
                 for i in range(len(rr.split('/'))):
                     ftp.chdir('..')
             ftp.chdir('..')
