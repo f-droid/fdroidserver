@@ -1199,6 +1199,12 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
                 os.remove(buildxml)
         for d in update_dirs:
             cwd = os.path.join(root_dir, d)
+            # Remove gen and bin dirs in libraries
+            # rid of them...
+            for baddir in ['gen', 'bin']:
+                badpath = os.path.join(cwd, baddir)
+                if os.path.exists(badpath):
+                    shutil.rmtree(badpath)
             if verbose:
                 print "Update of '%s': exec '%s' in '%s'"%\
                     (d," ".join(parms),cwd)
