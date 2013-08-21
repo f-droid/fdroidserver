@@ -215,14 +215,18 @@ def delete_disabled_builds(apps, apkcache, repodirs):
                     del apkcache[apkfilename]
 
 def resize_icon(iconpath):
-    im = Image.open(iconpath)
-    if any(length > max_icon_size for length in im.size):
-        print iconpath, "is too large:", im.size
-        im.thumbnail((max_icon_size, max_icon_size), Image.ANTIALIAS)
-        print iconpath, "new size:", im.size
-        im.save(iconpath, "PNG")
-    else:
-        print iconpath, "is small enough:", im.size
+    try:
+        im = Image.open(iconpath)
+        if any(length > max_icon_size for length in im.size):
+            print iconpath, "is too large:", im.size
+            im.thumbnail((max_icon_size, max_icon_size), Image.ANTIALIAS)
+            print iconpath, "new size:", im.size
+            im.save(iconpath, "PNG")
+        else:
+            if options.verbose:
+                print iconpath, "is small enough:", im.size
+    except Exception,e:
+        print "ERROR: Failed processing {0} - {1}".format(iconpath, e)
 
 def resize_all_icons(repodirs):
     """Resize all icons that exceed the max size
