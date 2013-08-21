@@ -19,12 +19,7 @@
 
 import sys
 import os
-import shutil
-import re
-import urllib
-import time
 from optparse import OptionParser
-import HTMLParser
 import common
 
 def main():

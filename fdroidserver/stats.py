@@ -19,14 +19,11 @@
 
 import sys
 import os
-import shutil
 import re
-import urllib
 import time
 import traceback
 import glob
 from optparse import OptionParser
-import HTMLParser
 import paramiko
 import common
 import socket

@@ -21,14 +21,10 @@ import sys
 import os
 import shutil
 import subprocess
-import re
-import zipfile
-import tarfile
 import md5
 import glob
 from optparse import OptionParser
 
-import common
 from common import BuildException
 
 def main():

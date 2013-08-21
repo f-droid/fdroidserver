@@ -20,8 +20,6 @@
 import sys
 import os
 import shutil
-import subprocess
-import re
 import urllib
 from optparse import OptionParser
 

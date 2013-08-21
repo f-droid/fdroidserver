@@ -19,11 +19,6 @@
 
 import sys
 import os
-import shutil
-import re
-import urllib
-import time
-import subprocess
 import traceback
 from optparse import OptionParser
 import HTMLParser

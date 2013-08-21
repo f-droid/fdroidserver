@@ -22,7 +22,6 @@ import subprocess
 import time
 import operator
 import cgi
-import fileinput
 
 def getvcs(vcstype, remote, local, sdk_path):
     if vcstype == 'git':
