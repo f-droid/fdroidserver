@@ -923,11 +923,21 @@ example).
 @item maven=yes
 Build with maven instead of ant
 
+@item gradle=<flavour>
+Build with gradle instead of ant, specifying what flavour to assemble.
+If <flavour> is 'yes', 'main' or empty, no flavour will be used. Note
+that this will not work on projects with flavours, since it will build
+all flavours and there will be no 'main' build.
+
+@item preassemble=<task1> <task2>
+Space-separated list of gradle tasks to be run before the assemble task
+in a gradle project build.
+
 @item bindir=<path>
 Normally the build output (apk) is expected to be in the bin
 subdirectory below the ant build files. If the project is configured
 to put it elsewhere, that can be specified here, relative to the base
-of the checked out repo.
+of the checked out repo. Not yet implemented for gradle.
 
 @item antcommand=xxx
 Specify an alternate ant command (target) instead of the default
