@@ -490,8 +490,6 @@ def make_index(apps, apks, repodir, archive, categories):
                         if app['id'] == link:
                             return ("fdroid.app:" + link, app['Name'])
                     raise MetaDataException("Cannot resolve app id " + link)
-                addElement('description',
-                        common.description_plain(app['Description'], linkres), doc, apel)
                 addElement('desc', 
                         common.description_html(app['Description'], linkres), doc, apel)
                 addElement('license', app['License'], doc, apel)
