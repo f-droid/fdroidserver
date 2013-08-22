@@ -47,7 +47,7 @@ end
 
 %w{android-3 android-4 android-7 android-8 android-10 android-11
    android-12 android-13 android-14 android-15 android-16 android-17 android-18
-   extra-android-support}.each do |sdk|
+   extra-android-support extra-android-m2repository}.each do |sdk|
 
   script "add_sdk_#{sdk}" do
     interpreter "bash"
