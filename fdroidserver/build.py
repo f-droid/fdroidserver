@@ -325,6 +325,16 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         print "Suspending build server"
         subprocess.call(['vagrant', 'suspend'], cwd='builder')
 
+def adapt_gradle(path, verbose):
+    if verbose:
+        print "Adapting build.gradle at %s" % path
+
+    subprocess.call(['sed', '-i',
+            's@buildToolsVersion[ ]*["\\\'][0-9\.]*["\\\']@buildToolsVersion "'+build_tools+'"@g', path])
+
+    subprocess.call(['sed', '-i',
+            's@com.android.tools.build:gradle:[0-9\.\+]*@com.android.tools.build:gradle:'+gradle_plugin+'@g', path])
+
 
 def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, verbose, onserver):
     """Do a build locally."""
@@ -426,21 +436,27 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                     's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+level+'@g',
                     'build.gradle'], cwd=root_dir)
 
-        subprocess.call(['sed', '-i',
-                's@buildToolsVersion[ ]*["\'][0-9\.]*["\']@buildToolsVersion "'+build_tools+'"@g',
-                'build.gradle'], cwd=root_dir)
-
-        subprocess.call(['sed', '-i',
-                's@com.android.tools.build:gradle:[0-9\.\+]*@com.android.tools.build:gradle:'+gradle_plugin+'@g',
-                'build.gradle'], cwd=root_dir)
+        for root, dirs, files in os.walk(root_dir):
+            root = os.path.relpath(root, root_dir)
+            for f in files:
+                if f == 'build.gradle':
+                    adapt_gradle(os.path.join(root_dir, root, f), verbose)
+                    continue
 
         if flavour in ['main', 'yes', '']:
             flavour = ''
         
+        commands = [gradle]
+        if 'preassemble' in thisbuild:
+            for task in thisbuild['preassemble'].split():
+                commands.append(task)
         if install:
-            commands = [gradle, 'assemble'+flavour+'Debug', 'install'+flavour+'Debug']
+            commands += ['assemble'+flavour+'Debug', 'install'+flavour+'Debug']
         else:
-            commands = [gradle, 'assemble'+flavour+'Release']
+            commands += ['assemble'+flavour+'Release']
+
+        if verbose:
+            print "Running %s on %s" % (" ".join(commands), root_dir)
 
         p = subprocess.Popen(commands, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
