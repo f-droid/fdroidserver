@@ -1315,6 +1315,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
 
     # Add required external libraries...
     if 'extlibs' in build:
+        print "Collecting prebuilt libraries..."
         libsdir = os.path.join(root_dir, 'libs')
         if not os.path.exists(libsdir):
             os.mkdir(libsdir)
@@ -1326,6 +1327,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     # Get required source libraries...
     srclibpaths = []
     if 'srclibs' in build:
+        print "Collecting source libraries..."
         for lib in build['srclibs'].split(';'):
             name, _ = lib.split('@')
             srclibpaths.append((name, getsrclib(lib, srclib_dir, sdk_path, ndk_path, mvn3, preponly=onserver)))
@@ -1353,6 +1355,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     # Run a pre-build command if one is required...
     if 'prebuild' in build:
         prebuild = build['prebuild']
+        if verbose:
+            print "Running source init (prebuild) commands:" + prebuild
+        else:
+            print "Running source init (prebuild) commands..."
+
         # Substitute source library paths into prebuild commands...
         for name, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
@@ -1365,6 +1372,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         out, err = p.communicate()
         if p.returncode != 0:
             raise BuildException("Error running pre-build command", out, err)
+
+    print "Applying generic clean-ups..."
 
     if build.get('anal-tics', 'no') == 'yes':
         fp = os.path.join(root_dir, 'src', 'com', 'google', 'android', 'apps', 'analytics')

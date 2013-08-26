@@ -345,6 +345,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             javacc_path, mvn3, verbose, onserver)
 
     # Scan before building...
+    print "Scanning source for common problems..."
     buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
     if len(buildprobs) > 0:
         print 'Scanner found ' + str(len(buildprobs)) + ' problems:'
@@ -355,6 +356,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 str(len(buildprobs)) + " scanned problems")
 
     # Build the source tarball right before we build the release...
+    print "Creating source tarball..."
     tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
     tarball = tarfile.open(os.path.join(tmp_dir,
         tarname + '.tar.gz'), "w:gz")
@@ -369,6 +371,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     # Run a build command if one is required...
     if 'build' in thisbuild:
         cmd = thisbuild['build']
+        if options.verbose:
+            print "Running custom build commands: " + cmd
+        else:
+            print "Running custom build commands..."
         # Substitute source library paths into commands...
         for name, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
@@ -376,14 +382,19 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         cmd = cmd.replace('$$SDK$$', sdk_path)
         cmd = cmd.replace('$$NDK$$', ndk_path)
         cmd = cmd.replace('$$MVN3$$', mvn3)
-        p = subprocess.Popen(['bash', '-c', cmd], cwd=root_dir,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if options.verbose:
+            # Note: output goes to console, not log
+            p = subprocess.Popen(['bash', '-x', '-c', cmd], cwd=root_dir)
+        else:
+            p = subprocess.Popen(['bash', '-c', cmd], cwd=root_dir,
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
         if p.returncode != 0:
             raise BuildException("Error running build command", out, err)
 
     # Build native stuff if required...
     if thisbuild.get('buildjni') not in (None, 'no'):
+        print "Building native libraries..."
         jni_components = thisbuild.get('buildjni')
         if jni_components == 'yes':
             jni_components = ['']
@@ -413,6 +424,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     # Build the release...
     if 'maven' in thisbuild:
+        print "Building Maven project..."
         mvncmd = [mvn3, 'clean', 'package', '-Dandroid.sdk.path=' + sdk_path]
         if install:
             mvncmd += ['-Dandroid.sign.debug=true']
@@ -428,6 +440,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             mvncmd += thisbuild['mvnflags']
         p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     elif 'gradle' in thisbuild:
+        print "Building Gradle project..."
         if '@' in thisbuild['gradle']:
             flavour = thisbuild['gradle'].split('@')[0]
             gradle_dir = thisbuild['gradle'].split('@')[1]
@@ -471,6 +484,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         p = subprocess.Popen(commands, cwd=gradle_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
+        print "Building Ant project..."
         if install:
             antcommands = ['debug','install']
         elif 'antcommand' in thisbuild:
