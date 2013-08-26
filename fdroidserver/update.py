@@ -342,17 +342,14 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             if common.isApkDebuggable(apkfile):
                 print "WARNING: {0} is debuggable... {1}".format(apkfile, line)
 
-            # Calculate the md5 and sha256...
-            m = hashlib.md5()
+            # Calculate the sha256...
             sha = hashlib.sha256()
             with open(apkfile, 'rb') as f:
                 while True:
                     t = f.read(1024)
                     if len(t) == 0:
                         break
-                    m.update(t)
                     sha.update(t)
-                thisinfo['md5'] = m.hexdigest()
                 thisinfo['sha256'] = sha.hexdigest()
 
             # Get the signature (or md5 of, to be precise)...
@@ -542,7 +539,7 @@ def make_index(apps, apks, repodir, archive, categories):
                     addElement('apkname', apk['apkname'], doc, apkel)
                     if 'srcname' in apk:
                         addElement('srcname', apk['srcname'], doc, apkel)
-                    for hash_type in ('sha256', 'md5'):
+                    for hash_type in ('sha256'):
                         if not hash_type in apk:
                             continue
                         hashel = doc.createElement("hash")
