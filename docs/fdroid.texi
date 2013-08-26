@@ -923,11 +923,14 @@ example).
 @item maven=yes
 Build with maven instead of ant
 
-@item gradle=<flavour>
+@item gradle=<flavour>[@<dir>]
 Build with gradle instead of ant, specifying what flavour to assemble.
 If <flavour> is 'yes', 'main' or empty, no flavour will be used. Note
 that this will not work on projects with flavours, since it will build
 all flavours and there will be no 'main' build.
+If @<dir> is attached to <flavour>, then the gradle tasks will be run in that
+directory. This might be necessary if gradle needs to be run in the parent
+directory, in which case one would use 'gradle=<flavour>@..'.
 
 @item preassemble=<task1> <task2>
 Space-separated list of gradle tasks to be run before the assemble task

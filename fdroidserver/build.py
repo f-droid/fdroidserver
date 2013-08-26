@@ -428,19 +428,30 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             mvncmd += thisbuild['mvnflags']
         p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     elif 'gradle' in thisbuild:
-        flavour = thisbuild['gradle']
+        if '@' in thisbuild['gradle']:
+            flavour = thisbuild['gradle'].split('@')[0]
+            gradle_dir = thisbuild['gradle'].split('@')[1]
+            gradle_dir = os.path.join(root_dir, gradle_dir)
+        else:
+            flavour = thisbuild['gradle']
+            gradle_dir = root_dir
+
 
         if 'compilesdk' in thisbuild:
             level = thisbuild["compilesdk"].split('-')[1]
             subprocess.call(['sed', '-i',
                     's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+level+'@g',
                     'build.gradle'], cwd=root_dir)
+            if '@' in thisbuild['gradle']:
+                subprocess.call(['sed', '-i',
+                        's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+level+'@g',
+                        'build.gradle'], cwd=gradle_dir)
 
-        for root, dirs, files in os.walk(root_dir):
-            root = os.path.relpath(root, root_dir)
+        for root, dirs, files in os.walk(gradle_dir):
+            root = os.path.relpath(root, gradle_dir)
             for f in files:
                 if f == 'build.gradle':
-                    adapt_gradle(os.path.join(root_dir, root, f), verbose)
+                    adapt_gradle(os.path.join(gradle_dir, root, f), verbose)
                     continue
 
         if flavour in ['main', 'yes', '']:
@@ -456,9 +467,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             commands += ['assemble'+flavour+'Release']
 
         if verbose:
-            print "Running %s on %s" % (" ".join(commands), root_dir)
+            print "Running %s on %s" % (" ".join(commands), gradle_dir)
 
-        p = subprocess.Popen(commands, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen(commands, cwd=gradle_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         if install:
             antcommands = ['debug','install']
