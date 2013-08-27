@@ -291,7 +291,7 @@ def main():
 
             if not version:
                 print "..." + vercode
-            elif vercode == app['Current Version Code'] and version == app['Current Version']:
+            elif vercode == app['Current Version Code']:
                 print "...up to date"
             else:
                 print '...updating to version:' + version + ' vercode:' + vercode
@@ -371,6 +371,7 @@ def main():
                 metafile = os.path.join('metadata', app['id'] + '.txt')
                 common.write_metadata(metafile, app)
                 if options.commit and logmsg:
+                    print "Commiting update for " + metafile
                     if subprocess.call("git add " + metafile, shell=True) != 0:
                         print "Git add failed"
                         sys.exit(1)
