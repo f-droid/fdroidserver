@@ -539,7 +539,7 @@ def make_index(apps, apks, repodir, archive, categories):
                     addElement('apkname', apk['apkname'], doc, apkel)
                     if 'srcname' in apk:
                         addElement('srcname', apk['srcname'], doc, apkel)
-                    for hash_type in ('sha256'):
+                    for hash_type in ['sha256']:
                         if not hash_type in apk:
                             continue
                         hashel = doc.createElement("hash")
