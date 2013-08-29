@@ -289,16 +289,16 @@ def main():
                 version = None
                 vercode = 'Invalid update check method'
 
+            updating = False
             if not version:
                 print "..." + vercode
             elif vercode == app['Current Version Code']:
                 print "...up to date"
             else:
-                print '...updating to version:' + version + ' vercode:' + vercode
                 app['Current Version'] = version
                 app['Current Version Code'] = str(int(vercode))
+                updating = True
                 writeit = True
-                logmsg = "Update current version of " + app['id'] + " to " + version
 
             # Do the Auto Name thing as well as finding the CV real name
             if len(app["Repo Type"]) > 0:
@@ -332,6 +332,11 @@ def main():
                             writeit = True
                 except Exception:
                     msg = "Auto Name or Current Version failed for %s due to exception: %s" % (app['id'], traceback.format_exc())
+
+            if updating:
+                print '...updating to version %s (%s)' % (app['Current Version'], app['Current Version Code'])
+                name = str('%s (%s)' % (app['Auto Name'], app['id']) if app['Auto Name'] else app['id'])
+                logmsg = 'Update current version of %s to %s (%s)' % (name, app['Current Version'], app['Current Version Code'])
 
             if options.auto:
                 mode = app['Auto Update Mode']
