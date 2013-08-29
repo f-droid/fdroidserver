@@ -63,9 +63,13 @@ def main():
             remoteapk = os.path.join(tmp_dir, apkfilename)
             if os.path.exists(remoteapk):
                 os.remove(remoteapk)
-            if subprocess.call(['wget',
-                'https://f-droid.org/repo/' + apkfilename],
-                cwd=tmp_dir) != 0:
+            url = 'https://f-droid.org/repo/' + apkfilename
+            print "...retrieving " + url
+            p = subprocess.Popen(['wget', url],
+                cwd=tmp_dir,
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            out = p.communicate()[0]
+            if p.returncode != 0:
                 print "Failed to get " + apkfilename
                 sys.exit(1)
 
@@ -77,11 +81,11 @@ def main():
                 os.mkdir(d)
 
             if subprocess.call(['jar', 'xf',
-                os.path.join("..", unsigned_dir, apkfilename)],
+                os.path.join("..", "..", unsigned_dir, apkfilename)],
                 cwd=thisdir) != 0:
                 print "Failed to unpack local build of " + apkfilename
                 sys.exit(1)
-            if subprocess.call(['jar', 'xf', os.path.join("..", remoteapk)],
+            if subprocess.call(['jar', 'xf', os.path.join("..", "..", remoteapk)],
                 cwd=thisdir) != 0:
                 print "Failed to unpack remote build of " + apkfilename
                 sys.exit(1)
