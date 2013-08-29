@@ -1,20 +1,23 @@
 
-#Copy this file to config.py, then amend the settings below according to
-#your system configuration.
+# Copy this file to config.py, then amend the settings below according to
+# your system configuration.
 
+# Path to the Android SDK ($ANDROID_HOME)
 sdk_path = "/path/to/android-sdk-linux_86"
+
+# Path to the Android NDK ($ANDROID_NDK)
 ndk_path = "/path/to/android-ndk-r8e"
 
 # Build tools version to be used
 build_tools = "18.0.1"
 
-#You probably don't need to change this...
+# Path to Android Java SWT ($ANDROID_SWT)
 javacc_path = "/usr/share/java"
 
-#Command for running maven 3 (could be mvn, mvn3, or a full path)
+# Command for running maven 3 (could be mvn, mvn3, or a full path)
 mvn3 = "mvn3"
 
-# Gradle command
+# Command for running Gradle
 gradle = "gradle"
 
 # Android gradle plugin version
