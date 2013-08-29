@@ -32,7 +32,7 @@ execute "add-gradle-home" do
 end
 execute "add-gradle-bin" do
   user user
-  command "echo \"export PATH=$PATH:/opt/gradle/bin\" >> /home/#{user}/.bashrc"
+  command "echo \"export PATH=\\$PATH:/opt/gradle/bin\" >> /home/#{user}/.bashrc"
   not_if "grep gradle/bin /home/#{user}/.bashrc"
 end
 
