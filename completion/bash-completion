@@ -149,6 +149,17 @@ __complete_scanner() {
     __complete_options
 }
 
+__complete_verify() {
+    opts="-h -v -p"
+    lopts="--help --verbose --package"
+    case "${prev}" in
+        -p|--package)
+            __package
+            return 0;;
+    esac
+    __complete_options
+}
+
 __complete_stats() {
     opts="-h -v -d"
     lopts="--help --verbose --download"
@@ -164,7 +175,7 @@ __complete_server() {
 _fdroid() {
     local cmd cmds aliased
     cmd=${COMP_WORDS[1]}
-    cmds=" build update publish checkupdates import rewritemeta scanner stats server "
+    cmds=" build update publish checkupdates import rewritemeta scanner verify stats server "
     aliased=false
 
     for c in $cmds; do eval "_fdroid_${c} () {
