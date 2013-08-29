@@ -95,7 +95,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
                 else:
                     print "...failed to reset to snapshot"
             else:
-                print "...snapshot doesn't exist - vagrant snap said:\n" + output
+                print "...snapshot doesn't exist - VBoxManage snapshot list:\n" + output
 
     # If we can't use the existing machine for any reason, make a
     # new one from scratch.
