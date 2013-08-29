@@ -19,14 +19,14 @@ end
 execute "add-android-sdk-path" do
   user user
   path = "#{sdk_loc}/tools:#{sdk_loc}/platform-tools"
-  command "echo \"export PATH=\\$PATH:#{path} #PATH-SDK\" >> /home/#{user}/.bashrc"
-  not_if "grep PATH-SDK /home/#{user}/.bashrc"
+  command "echo \"export PATH=\\$PATH:#{path} #PATH-SDK\" >> /home/#{user}/.bsenv"
+  not_if "grep PATH-SDK /home/#{user}/.bsenv"
 end
 
 execute "add-android-home" do
   user user
-  command "echo \"export ANDROID_HOME=#{sdk_loc}\" >> /home/#{user}/.bashrc"
-  not_if "grep ANDROID_HOME /home/#{user}/.bashrc"
+  command "echo \"export ANDROID_HOME=#{sdk_loc}\" >> /home/#{user}/.bsenv"
+  not_if "grep ANDROID_HOME /home/#{user}/.bsenv"
 end
 
 %w{17.0.0 18.0.1}.each do |ver|

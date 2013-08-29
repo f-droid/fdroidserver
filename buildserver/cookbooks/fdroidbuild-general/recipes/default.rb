@@ -27,13 +27,18 @@ end
 
 execute "add-gradle-home" do
   user user
-  command "echo \"export GRADLE_HOME=/opt/gradle\" >> /home/#{user}/.bashrc"
-  not_if "grep GRADLE_HOME /home/#{user}/.bashrc"
+  command "echo \"export GRADLE_HOME=/opt/gradle\" >> /home/#{user}/.bsenv"
+  not_if "grep GRADLE_HOME /home/#{user}/.bsenv"
 end
 execute "add-gradle-bin" do
   user user
-  command "echo \"export PATH=\\$PATH:/opt/gradle/bin\" >> /home/#{user}/.bashrc"
-  not_if "grep gradle/bin /home/#{user}/.bashrc"
+  command "echo \"export PATH=\\$PATH:/opt/gradle/bin\" >> /home/#{user}/.bsenv"
+  not_if "grep gradle/bin /home/#{user}/.bsenv"
+end
+execute "add-bsenv" do
+  user user
+  command "echo \". ./bsenv \" >> /home/#{user}/.bashrc"
+  not_if "grep bsenv /home/#{user}/.bashrc"
 end
 
 
