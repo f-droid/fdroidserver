@@ -77,11 +77,11 @@ def main():
                 os.mkdir(d)
 
             if subprocess.call(['jar', 'xf',
-                os.path.join(unsigned_dir, apkfilename)],
+                os.path.join("..", unsigned_dir, apkfilename)],
                 cwd=thisdir) != 0:
                 print "Failed to unpack local build of " + apkfilename
                 sys.exit(1)
-            if subprocess.call(['jar', 'xf', remoteapk],
+            if subprocess.call(['jar', 'xf', os.path.join("..", remoteapk)],
                 cwd=thisdir) != 0:
                 print "Failed to unpack remote build of " + apkfilename
                 sys.exit(1)
