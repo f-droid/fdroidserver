@@ -438,7 +438,13 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         if 'mvnflags' in thisbuild:
             mvncmd += thisbuild['mvnflags']
-        p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        # Output directly to console
+        if options.verbose:
+            print "Running %s on %s" % (" ".join(mvncmd), root_dir)
+            p = subprocess.Popen(mvncmd, cwd=root_dir)
+        else:
+            p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     elif 'gradle' in thisbuild:
         print "Building Gradle project..."
         if '@' in thisbuild['gradle']:
@@ -479,25 +485,31 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         else:
             commands += ['assemble'+flavour+'Release']
 
+        # Output directly to console
         if verbose:
             print "Running %s on %s" % (" ".join(commands), gradle_dir)
-
-        p = subprocess.Popen(commands, cwd=gradle_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(commands, cwd=gradle_dir)
+        else:
+            p = subprocess.Popen(commands, cwd=gradle_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         print "Building Ant project..."
+        antcommands = ['ant']
         if install:
-            antcommands = ['debug','install']
+            antcommands += ['debug','install']
         elif 'antcommand' in thisbuild:
-            antcommands = [thisbuild['antcommand']]
+            antcommands += [thisbuild['antcommand']]
         else:
-            antcommands = ['release']
-        p = subprocess.Popen(['ant'] + antcommands, cwd=root_dir, 
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            antcommands += ['release']
+
+        # Output directly to console
+        if verbose:
+            print "Running %s on %s" % (" ".join(antcommands), root_dir)
+            p = subprocess.Popen(antcommands, cwd=root_dir)
+        else:
+            p = subprocess.Popen(antcommands, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = p.communicate()
     if p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
-    if verbose:
-        print output
     if install:
         if 'maven' in thisbuild:
             p = subprocess.Popen([mvn3, 'android:deploy', '-Dandroid.sdk.path=' + sdk_path],
