@@ -466,12 +466,11 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                         's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+level+'@g',
                         'build.gradle'], cwd=gradle_dir)
 
-        for root, dirs, files in os.walk(gradle_dir):
-            root = os.path.relpath(root, gradle_dir)
+        for root, dirs, files in os.walk(build_dir):
             for f in files:
                 if f == 'build.gradle':
-                    adapt_gradle(os.path.join(gradle_dir, root, f), verbose)
-                    continue
+                    adapt_gradle(os.path.join(root, f), verbose)
+                    break
 
         if flavour in ['main', 'yes', '']:
             flavour = ''
