@@ -422,6 +422,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             print output
             raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']))
 
+    output = ""
     # Build the release...
     if 'maven' in thisbuild:
         print "Building Maven project..."
@@ -438,7 +439,15 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         if 'mvnflags' in thisbuild:
             mvncmd += thisbuild['mvnflags']
+
         p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        for line in p.stdout.readlines():
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            output += line
+
     elif 'gradle' in thisbuild:
         print "Building Gradle project..."
         if '@' in thisbuild['gradle']:
@@ -482,6 +491,13 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             print "Running %s on %s" % (" ".join(commands), gradle_dir)
 
         p = subprocess.Popen(commands, cwd=gradle_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        for line in p.stdout.readlines():
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            output += line
+
     else:
         print "Building Ant project..."
         if install:
@@ -492,24 +508,24 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             antcommands = ['release']
         p = subprocess.Popen(['ant'] + antcommands, cwd=root_dir, 
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    output, error = p.communicate()
+    _, error = p.communicate()
     if p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
-    if verbose:
-        print output
     if install:
         if 'maven' in thisbuild:
             p = subprocess.Popen([mvn3, 'android:deploy', '-Dandroid.sdk.path=' + sdk_path],
                     cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            output, error = p.communicate()
+            output_, error = p.communicate()
             if p.returncode != 0:
-                raise BuildException("Warning: Could not deploy %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
+                raise BuildException("Warning: Could not deploy %s:%s" % (app['id'], thisbuild['version']), output_.strip(), error.strip())
         return
     print "Successfully built version " + thisbuild['version'] + ' of ' + app['id']
 
     # Find the apk name in the output...
     if 'bindir' in thisbuild:
         bindir = os.path.join(build_dir, thisbuild['bindir'])
+    elif 'maven' in thisbuild:
+        bindir = os.path.join(root_dir, 'target')
     else:
         bindir = os.path.join(root_dir, 'bin')
     if thisbuild.get('initfun', 'no')  == "yes":
@@ -525,10 +541,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                     output, re.S|re.M)
         if not m:
             # This format is found in com.github.mobile, com.yubico.yubitotp and com.botbrew.basil for example...
-            m = re.match(r".*^\[INFO\] [^$]*aapt \[package,[^$]*" + app['id'] + "/" + thisbuild['bindir'] + "/([^/]+)\.ap[_k][,\]]",
+            m = re.match(r'.*^\[INFO\] [^$]*aapt \[package,[^$]*' + bindir + '/([^/]+)\.ap[_k][,\]]',
                     output, re.S|re.M)
         if not m:
-            print output
             raise BuildException('Failed to find output')
         src = m.group(1)
         src = os.path.join(bindir, src) + '.apk'
