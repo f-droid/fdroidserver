@@ -440,7 +440,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if 'mvnflags' in thisbuild:
             mvncmd += thisbuild['mvnflags']
 
-        p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         for line in p.stdout.readlines():
             if verbose:
                 # Output directly to console
@@ -490,7 +490,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if verbose:
             print "Running %s on %s" % (" ".join(commands), gradle_dir)
 
-        p = subprocess.Popen(commands, cwd=gradle_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen(commands, cwd=gradle_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         for line in p.stdout.readlines():
             if verbose:
                 # Output directly to console
@@ -500,14 +500,20 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     else:
         print "Building Ant project..."
+        antcommands = ['ant']
         if install:
-            antcommands = ['debug','install']
+            antcommands += ['debug','install']
         elif 'antcommand' in thisbuild:
-            antcommands = [thisbuild['antcommand']]
+            antcommands += [thisbuild['antcommand']]
         else:
-            antcommands = ['release']
-        p = subprocess.Popen(['ant'] + antcommands, cwd=root_dir, 
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            antcommands += ['release']
+        p = subprocess.Popen(antcommands, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        for line in p.stdout.readlines():
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            output += line
     _, error = p.communicate()
     if p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
