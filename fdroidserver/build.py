@@ -490,7 +490,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if verbose:
             print "Running %s on %s" % (" ".join(commands), gradle_dir)
 
-        p = subprocess.Popen(commands, cwd=gradle_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p = subprocess.Popen(commands, cwd=gradle_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         for line in p.stdout.readlines():
             if verbose:
                 # Output directly to console
@@ -507,7 +507,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             antcommands += [thisbuild['antcommand']]
         else:
             antcommands += ['release']
-        p = subprocess.Popen(antcommands, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p = subprocess.Popen(antcommands, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         for line in p.stdout.readlines():
             if verbose:
                 # Output directly to console
