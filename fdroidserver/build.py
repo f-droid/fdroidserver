@@ -422,7 +422,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             print output
             raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']))
 
+    p = None
     output = ""
+    error = ""
     # Build the release...
     if 'maven' in thisbuild:
         print "Building Maven project..."
@@ -440,13 +442,19 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if 'mvnflags' in thisbuild:
             mvncmd += thisbuild['mvnflags']
 
-        p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        for line in p.stdout.readlines():
+        p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        for line in iter(p.stdout.readline, ''):
             if verbose:
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
             output += line
+        for line in iter(p.stderr.readline, ''):
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            error += line
 
     elif 'gradle' in thisbuild:
         print "Building Gradle project..."
@@ -491,12 +499,18 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             print "Running %s on %s" % (" ".join(commands), gradle_dir)
 
         p = subprocess.Popen(commands, cwd=gradle_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        for line in p.stdout.readlines():
+        for line in iter(p.stdout.readline, ''):
             if verbose:
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
             output += line
+        for line in iter(p.stderr.readline, ''):
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            error += line
 
     else:
         print "Building Ant project..."
@@ -508,13 +522,19 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         else:
             antcommands += ['release']
         p = subprocess.Popen(antcommands, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        for line in p.stdout.readlines():
+        for line in iter(p.stdout.readline, ''):
             if verbose:
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
             output += line
-    _, error = p.communicate()
+        for line in iter(p.stderr.readline, ''):
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            error += line
+    p.communicate()
     if p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
     if install:
