@@ -153,6 +153,7 @@ def update_wiki(apps, apks, verbose=False):
         apppagename = app['Name'].replace('_', ' ')
         apppagename = apppagename.replace('{', '')
         apppagename = apppagename.replace('}', ' ')
+        apppagename = apppagename.replace(':', ' ')
         for page in site.allpages(prefix=apppagename, filterredir='nonredirects'):
             if page.name == apppagename:
                 noclobber = True
