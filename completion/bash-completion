@@ -26,8 +26,8 @@
 __package() {
     [[ -d ./metadata ]] || return 0
     files=( metadata/*.txt )
-    files=( ${files[@]/metadata\//} )
-    files=${files[@]/.txt/}
+    files=( ${files[@]#metadata/} )
+    files=${files[@]%.txt}
     COMPREPLY=( $( compgen -W "$files" -- $cur ) )
 }
 
