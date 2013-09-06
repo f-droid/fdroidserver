@@ -464,8 +464,6 @@ def parse_metadata(metafile, **kw):
         if not isinstance(metafile, file):
             metafile = open(metafile, "r")
         thisinfo['id'] = metafile.name[9:-4]
-        if kw.get("verbose", False):
-            print "Reading metadata for " + thisinfo['id']
     else:
         thisinfo['id'] = None
 
@@ -674,7 +672,11 @@ def write_metadata(dest, app):
 def read_metadata(verbose=False, xref=True):
     apps = []
     for metafile in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
-        apps.append(parse_metadata(metafile, verbose=verbose))
+        try:
+            appinfo = parse_metadata(metafile, verbose=verbose)
+        except Exception, e:
+            raise MetaDataException("Problem reading metadata file %s: - %s" % (metafile, str(e)))
+        apps.append(appinfo)
 
     if xref:
         # Parse all descriptions at load time, just to ensure cross-referencing
