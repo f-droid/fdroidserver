@@ -1,5 +1,7 @@
 #!/bin/bash
 
+commands=()
+
 while read line; do
     if [[ "$line" == *M*metadata/*.txt ]]; then
         file=${line##* }
@@ -25,9 +27,12 @@ while read line; do
         id=${id%.txt*}
         [ -d metadata/$id ] && extra=metadata/$id
         [ -n "$name" ] && id="$name ($id)"
+
+        commands+=("git commit -m 'Update $id to $version ($vercode)' -e -- $file $extra")
     fi
 done < <(git status --porcelain)
 
-echo "> git commit -m \"Update $id to $version ($vercode)\" -e -- $file $extra"
-git commit -m "Update $id to $version ($vercode)" -e -- $file $extra
+for cmd in "${commands[@]}"; do
+    eval "$cmd"
+done
 
