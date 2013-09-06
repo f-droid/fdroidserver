@@ -342,6 +342,11 @@ class vcs_hg(vcs):
                     cwd=self.local) != 0:
                 raise VCSException("Hg checkout failed")
 
+    def gettags(self):
+        p = subprocess.Popen(['hg', 'tags', '-q'],
+                stdout=subprocess.PIPE, cwd=self.local)
+        return p.communicate()[0].splitlines()[1:]
+
 
 class vcs_bzr(vcs):
 

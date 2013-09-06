@@ -50,8 +50,8 @@ def check_tags(app, sdk_path):
             build_dir = os.path.join('build/', app['id'])
             repotype = app['Repo Type']
 
-        if repotype not in ('git', 'git-svn'):
-            return (None, 'Tags update mode only works for git and git-svn repositories currently')
+        if repotype not in ('git', 'git-svn', 'hg'):
+            return (None, 'Tags update mode only works for git, hg and git-svn repositories currently')
 
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
