@@ -13,16 +13,21 @@
 #   alias fbuild='fdroid build'
 #   complete -F _fdroid_build fbuild
 #
-# There's also a completion function made for aliases to 'fdroid build -p':
+# There are also completion function for '-p com.some.app' aliases:
 #
-#   alias fbld='fdroid build -p'
+#   alias fbld='fdroid build -v -l -p'
 #   complete -F _fdroid_build_project fbld
+#
+#   alias fcheckup='fdroid checkupdates -v -p'
+#   complete -F _fdroid_checkupdates_project fcheckup
+#
+# This way, one can simply do 'fbld com.some.app' or 'fcheckup com.some.app'
 
 __package() {
     [[ -d ./metadata ]] || return 0
     files=( metadata/*.txt )
-    files=( ${files[@]/metadata\//} )
-    files=${files[@]/.txt/}
+    files=( ${files[@]#metadata/} )
+    files=${files[@]%.txt}
     COMPREPLY=( $( compgen -W "$files" -- $cur ) )
 }
 
@@ -195,6 +200,15 @@ _fdroid_build_project() {
     (( $COMP_CWORD == 1 )) && prev="-p"
 
     __complete_build
+}
+
+_fdroid_checkupdates_project() {
+    local cur prev cmds opts lopts aliased
+    __fdroid_init
+    aliased=true
+    (( $COMP_CWORD == 1 )) && prev="-p"
+
+    __complete_checkupdates
 }
 
 complete -F _fdroid fdroid

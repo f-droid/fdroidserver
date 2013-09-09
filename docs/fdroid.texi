@@ -1077,8 +1077,9 @@ are known to forget to tag releases. Like RepoManifest, it will not return the
 correct value if the directory containing the AndroidManifest.xml has moved.
 Despite these caveats, it is the often the favourite update check mode. 
 
-It currently only works for git and git-svn repositories. In the case of the
-latter, the repo URL must encode the path to the trunk and tags.
+It currently only works for git, hg and git-svn repositories. In the case of
+the latter, the repo URL must encode the path to the trunk and tags or else no
+tags will be found.
 @end itemize
 
 @node Auto Update Mode
