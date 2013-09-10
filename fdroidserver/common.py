@@ -451,7 +451,7 @@ def parse_metadata(metafile, **kw):
         thisbuild['commit'] = parts[2]
         for p in parts[3:]:
             pk, pv = p.split('=', 1)
-            thisbuild[pk] = pv
+            thisbuild[pk.strip()] = pv
         return thisbuild
 
     def add_comments(key):
