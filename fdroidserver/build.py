@@ -240,6 +240,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         if 'extlibs' in thisbuild:
             ftp.chdir('/home/vagrant/build/extlib')
             for lib in thisbuild['extlibs'].split(';'):
+                lib = lib.strip()
                 lp = lib.split('/')
                 for d in lp[:-1]:
                     if d not in ftp.listdir():
@@ -252,6 +253,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         srclibpaths = []
         if 'srclibs' in thisbuild:
             for lib in thisbuild['srclibs'].split(';'):
+                lib = lib.strip()
                 name, _ = lib.split('@')
                 if options.verbose:
                     print "Processing srclib '" + name + "'"
@@ -399,7 +401,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if jni_components == 'yes':
             jni_components = ['']
         else:
-            jni_components = jni_components.split(';')
+            jni_components = [c.strip() for c in jni_components.split(';')]
         ndkbuild = os.path.join(ndk_path, "ndk-build")
         for d in jni_components:
             if options.verbose:

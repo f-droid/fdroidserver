@@ -1194,7 +1194,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         if 'target' in build:
             parms.append('-t')
             parms.append(build['target'])
-        update_dirs = updatemode.split(';')
+        update_dirs = [d.strip() for d in updatemode.split(';')]
         # Force build.xml update if necessary...
         if updatemode == 'force' or 'target' in build:
             if updatemode == 'force':
@@ -1266,7 +1266,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     # Delete unwanted file...
     if 'rm' in build:
         for part in build['rm'].split(';'):
-            dest = os.path.join(build_dir, part)
+            dest = os.path.join(build_dir, part.strip())
             if os.path.exists(dest):
                 os.remove(dest)
 
@@ -1327,6 +1327,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         if not os.path.exists(libsdir):
             os.mkdir(libsdir)
         for lib in build['extlibs'].split(';'):
+            lib = lib.strip()
             libf = os.path.basename(lib)
             shutil.copyfile(os.path.join(extlib_dir, lib),
                     os.path.join(libsdir, libf))
@@ -1336,6 +1337,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     if 'srclibs' in build:
         print "Collecting source libraries..."
         for lib in build['srclibs'].split(';'):
+            lib = lib.strip()
             name, _ = lib.split('@')
             srclibpaths.append((name, getsrclib(lib, srclib_dir, sdk_path, ndk_path, mvn3, preponly=onserver)))
     basesrclib = vcs.getsrclib()
@@ -1353,6 +1355,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     # Apply patches if any
     if 'patch' in build:
         for patch in build['patch'].split(';'):
+            patch = patch.strip()
             print "Applying " + patch
             patch_path = os.path.join('metadata', app['id'], patch)
             if subprocess.call(['patch', '-p1',
@@ -1516,7 +1519,7 @@ def scan_source(build_dir, root_dir, thisbuild):
                       'jpct-ae']
 
     if 'scanignore' in thisbuild:
-        ignore = thisbuild['scanignore'].split(';')
+        ignore = [p.strip() for p in thisbuild['scanignore'].split(';')]
     else:
         ignore = []
 
