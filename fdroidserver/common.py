@@ -169,9 +169,9 @@ class vcs_git(vcs):
                     raise VCSException("Git fetch failed")
                 self.refreshed = True
         # Check out the appropriate revision...
-        if rev:
-            if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
-                raise VCSException("Git checkout failed")
+        rev = str(rev if rev else 'origin/master')
+        if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
+            raise VCSException("Git checkout failed")
         # Get rid of any uncontrolled files left behind...
         if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
             raise VCSException("Git clean failed")
@@ -242,6 +242,8 @@ class vcs_gitsvn(vcs):
                         cwd=self.local) != 0:
                     raise VCSException("Git svn rebase failed")
                 self.refreshed = True
+
+        rev = str(rev if rev else 'master')
         if rev:
             nospaces_rev = rev.replace(' ', '%20')
             # Try finding a svn tag
@@ -311,11 +313,11 @@ class vcs_svn(vcs):
                         self.userargs(), cwd=self.local) != 0:
                     raise VCSException("Svn update failed")
                 self.refreshed = True
-        if rev:
-            revargs = ['-r', rev]
-            if subprocess.call(['svn', 'update', '--force'] + revargs +
-                    self.userargs(), cwd=self.local) != 0:
-                raise VCSException("Svn update failed")
+
+        revargs = list(['-r', rev] if rev else [])
+        if subprocess.call(['svn', 'update', '--force'] + revargs +
+                self.userargs(), cwd=self.local) != 0:
+            raise VCSException("Svn update failed")
 
 
 class vcs_hg(vcs):
@@ -336,6 +338,8 @@ class vcs_hg(vcs):
                         cwd=self.local) != 0:
                     raise VCSException("Hg pull failed")
                 self.refreshed = True
+
+        rev = str(rev if rev else 'default')
         if rev:
             revargs = [rev]
             if subprocess.call(['hg', 'checkout', '-C'] + revargs,
@@ -366,11 +370,11 @@ class vcs_bzr(vcs):
                         cwd=self.local) != 0:
                     raise VCSException("Bzr update failed")
                 self.refreshed = True
-        if rev:
-            revargs = ['-r', rev]
-            if subprocess.call(['bzr', 'revert'] + revargs,
-                    cwd=self.local) != 0:
-                raise VCSException("Bzr revert failed")
+
+        revargs = list(['-r', rev] if rev else [])
+        if subprocess.call(['bzr', 'revert'] + revargs,
+                cwd=self.local) != 0:
+            raise VCSException("Bzr revert failed")
 
     def __init__(self, remote, local, sdk_path):
 
