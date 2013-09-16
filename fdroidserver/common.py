@@ -1211,9 +1211,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
             cwd = os.path.join(root_dir, d)
             # Remove gen and bin dirs in libraries
             # rid of them...
-            for baddir in ['gen', 'bin']:
+            for baddir in ['gen', 'bin', 'obj', 'libs/armeabi-v7a', 'libs/armeabi', 'libs/mips', 'libs/x86']:
                 badpath = os.path.join(cwd, baddir)
                 if os.path.exists(badpath):
+                    print "Removing %s in update dir %s" % (badpath, d)
                     shutil.rmtree(badpath)
             if verbose:
                 print "Update of '%s': exec '%s' in '%s'"%\
@@ -1354,6 +1355,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     for baddir in ['gen', 'bin', 'obj', 'libs/armeabi-v7a', 'libs/armeabi', 'libs/mips', 'libs/x86']:
         badpath = os.path.join(root_dir, baddir)
         if os.path.exists(badpath):
+            print "Removing %s" % badpath
             shutil.rmtree(badpath)
 
     # Apply patches if any
