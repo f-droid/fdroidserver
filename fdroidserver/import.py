@@ -44,6 +44,7 @@ def getrepofrompage(url):
         if index == -1:
             return (None, "Error while getting repo address")
         repo = repo[:index]
+        repo = repo.split('"')[0]
         return (repotype, repo)
 
     # Works for Google Code and BitBucket...
@@ -55,6 +56,7 @@ def getrepofrompage(url):
         if index == -1:
             return (None, "Error while getting repo address")
         repo = repo[:index]
+        repo = repo.split('"')[0]
         return (repotype, repo)
 
     # Google Code only...
@@ -75,6 +77,7 @@ def getrepofrompage(url):
         if index == -1:
             return (None, "Error while getting repo address - no space? '" + repo + "'")
         repo = repo[:index]
+        repo = repo.split('"')[0]
         return (repotype, repo)
 
     return (None, "No information found." + page)
