@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Commits updates to apps, allowing you to edit the commit messages
+
 commands=()
 
 while read line; do
