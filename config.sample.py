@@ -6,10 +6,10 @@
 sdk_path = "/path/to/android-sdk-linux_86"
 
 # Path to the Android NDK ($ANDROID_NDK)
-ndk_path = "/path/to/android-ndk-r8e"
+ndk_path = "/path/to/android-ndk-r9"
 
 # Build tools version to be used
-build_tools = "18.0.1"
+build_tools = "18.1"
 
 # Path to Android Java SWT ($ANDROID_SWT)
 javacc_path = "/usr/share/java"
