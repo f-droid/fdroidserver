@@ -337,6 +337,8 @@ def adapt_gradle(path, verbose):
     subprocess.call(['sed', '-i',
             's@com.android.tools.build:gradle:[0-9\.\+]*@com.android.tools.build:gradle:'+gradle_plugin+'@g', path])
 
+    subprocess.call(['sed', '-i', '/signingConfig /d', path])
+
 
 def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, verbose, onserver):
     """Do a build locally."""
