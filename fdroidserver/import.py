@@ -134,6 +134,7 @@ def main():
         repo = url + '.git'
         repotype = 'git'
         sourcecode = url
+        issuetracker = url + '/issues'
     elif url.startswith('https://gitorious.org/'):
         projecttype = 'gitorious'
         repo = 'https://git.gitorious.org/' + url[22:] + '.git'
