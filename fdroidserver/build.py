@@ -490,7 +490,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if flavour in ['main', 'yes', '']:
             flavour = ''
         
-        commands = [gradle]
+        commands = [gradle, 'clean']
         if 'preassemble' in thisbuild:
             for task in thisbuild['preassemble'].split():
                 commands.append(task)
@@ -518,7 +518,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     else:
         print "Building Ant project..."
-        antcommands = ['ant']
+        antcommands = ['ant', 'clean']
         if install:
             antcommands += ['debug','install']
         elif 'antcommand' in thisbuild:
