@@ -1084,13 +1084,19 @@ It currently only works for git, hg and git-svn repositories. In the case of
 the latter, the repo URL must encode the path to the trunk and tags or else no
 tags will be found.
 @item
-@code{HTTP} - An HTTP request is performed, and the resulting document is
-scanned for two regular expressions, the first specifying the version name
-and the second the version code. The expression for the version name can be
-blank, but the version code must always be correct.
+@code{HTTP} - HTTP requests are used to determine the current version code and
+version name. This is controlled by the @code{Update Check Data} field, which
+is of the form @code{urlcode|excode|urlver|exver}.
 
-The @code{Update Check Data} field is used to provide the url and the two
-regular expressions, in the form @code{url|ex1|ex2}.
+Firstly, if @code{urlcode} is non-empty, the document from that URL is
+retrieved, and matched against the regular expression @code{excode}, with the
+first group becoming the version code.
+
+Secondly, if @code{urlver} is non-empty, the document from that URL is
+retrieved, and matched against the regular expression @code{exver}, with the
+first group becoming the version name. The @code{urlver} field can be set to
+simply '.' which says to use the same document returned for the version code
+again, rather than retrieving a different one.
 @end itemize
 
 @node Update Check Data

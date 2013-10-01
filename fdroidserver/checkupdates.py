@@ -43,27 +43,30 @@ def check_http(app):
         if not 'Update Check Data' in app:
             raise Exception('Missing Update Check Data')
 
-        url, verex, codeex = app['Update Check Data'].split('|')
+        urlcode, codeex, urlver, verex = app['Update Check Data'].split('|')
 
-        req = urllib2.Request(url, None)
-        resp = urllib2.urlopen(req, None, 20)
-        page = resp.read()
+        vercode = "99999999"
+        if len(urlcode) > 0:
+            req = urllib2.Request(urlcode, None)
+            resp = urllib2.urlopen(req, None, 20)
+            page = resp.read()
 
-        if len(verex) > 0:
-            m = re.search(verex, page)
-            if not m:
-                raise Exception("No RE match for version")
-            version = m.group(1)
-        else:
-            version = "??"
-
-        if len(codeex) > 0:
             m = re.search(codeex, page)
             if not m:
                 raise Exception("No RE match for version code")
             vercode = m.group(1)
-        else:
-            vercode = "99999999"
+
+        version = "??"
+        if len(urlver) > 0:
+            if urlver != '.':
+                req = urllib2.Request(urlver, None)
+                resp = urllib2.urlopen(req, None, 20)
+                page = resp.read()
+
+            m = re.search(verex, page)
+            if not m:
+                raise Exception("No RE match for version")
+            version = m.group(1)
 
         return (version, vercode)
 
