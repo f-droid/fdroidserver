@@ -661,6 +661,8 @@ def write_metadata(dest, app):
         mf.write('\n')
     writefield('Auto Update Mode')
     writefield('Update Check Mode')
+    if 'Update Check Data' in app:
+        writefield('Update Check Data')
     if len(app['Current Version']) > 0:
         writefield('Current Version')
         writefield('Current Version Code')

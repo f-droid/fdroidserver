@@ -33,6 +33,43 @@ from common import BuildException
 from common import VCSException
 
 
+# Check for a new version by looking at a document retrieved via HTTP.
+# The app's Update Check Data field is used to provide the information
+# required.
+def check_http(app):
+
+    try:
+
+        if not 'Update Check Data' in app:
+            raise Exception('Missing Update Check Data')
+
+        url, verex, codeex = app['Update Check Data'].split('|')
+
+        req = urllib2.Request(url, None)
+        resp = urllib2.urlopen(req, None, 20)
+        page = resp.read()
+
+        if len(verex) > 0:
+            m = re.search(verex, page)
+            if not m:
+                raise Exception("No RE match for version")
+            version = m.group(1)
+        else:
+            version = "??"
+
+        if len(codeex) > 0:
+            m = re.search(codeex, page)
+            if not m:
+                raise Exception("No RE match for version code")
+            vercode = m.group(1)
+        else:
+            vercode = "99999999"
+
+        return (version, vercode)
+
+    except Exception:
+        msg = "Could not complete http check for app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
+        return (None, msg)
 
 # Check for a new version by looking at the tags in the source repo.
 # Whether this can be used reliably or not depends on
@@ -272,6 +309,8 @@ def main():
                 (version, vercode) = check_repomanifest(app, sdk_path)
             elif mode.startswith('RepoManifest/'):
                 (version, vercode) = check_repomanifest(app, sdk_path, mode[13:])
+            elif mode == 'HTTP':
+                (version, vercode) = check_http(app)
             elif mode == 'Static':
                 version = None
                 vercode = 'Checking disabled'

@@ -1082,7 +1082,22 @@ Despite these caveats, it is the often the favourite update check mode.
 It currently only works for git, hg and git-svn repositories. In the case of
 the latter, the repo URL must encode the path to the trunk and tags or else no
 tags will be found.
+@item
+@code{HTTP} - An HTTP request is performed, and the resulting document is
+scanned for two regular expressions, the first specifying the version name
+and the second the version code. The expression for the version name can be
+blank, but the version code must always be correct.
+
+The @code{Update Check Data} field is used to provide the url and the two
+regular expressions, in the form @code{url|ex1|ex2}.
 @end itemize
+
+@node Update Check Data
+@section Update Check Data
+
+@cindex Update Check Data
+
+Used in conjunction with @code{Update Check Mode} for certain modes.
 
 @node Auto Update Mode
 @section Auto Update Mode
