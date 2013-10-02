@@ -53,19 +53,18 @@ class vcs:
         self.sdk_path = sdk_path
 
         # It's possible to sneak a username and password in with
-        # the remote address... (this really only applies to svn
-        # and we should probably be more specific!)
-        index = remote.find('@')
-        if index != -1:
-            self.username = remote[:index]
-            remote = remote[index+1:]
-            index = self.username.find(':')
-            if index == -1:
-                raise VCSException("Password required with username")
-            self.password = self.username[index+1:]
-            self.username = self.username[:index]
-        else:
-            self.username = None
+        # the remote address for svn...
+        self.username = None
+        if self.repotype() == 'svn':
+            index = remote.find('@')
+            if index != -1:
+                self.username = remote[:index]
+                remote = remote[index+1:]
+                index = self.username.find(':')
+                if index == -1:
+                    raise VCSException("Password required with username")
+                self.password = self.username[index+1:]
+                self.username = self.username[:index]
 
         self.remote = remote
         self.local = local
