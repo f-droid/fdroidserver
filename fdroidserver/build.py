@@ -434,6 +434,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     else:
         output = ''
         error = ''
+    output_apk = ''
     # Build the release...
     if 'maven' in thisbuild:
         print "Building Maven project..."
@@ -459,6 +460,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 sys.stdout.flush()
             else:
                 output += line
+            if 'apk' in line:
+                output_apk += line
         for line in iter(p.stderr.readline, ''):
             if verbose:
                 # Output directly to console
@@ -542,6 +545,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 sys.stdout.flush()
             else:
                 output += line
+            if 'apk' in line:
+                output_apk += line
         for line in iter(p.stderr.readline, ''):
             if verbose:
                 # Output directly to console
@@ -576,14 +581,14 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         src = os.path.join(bindir, src)
     elif 'maven' in thisbuild:
         m = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
-                output, re.S|re.M)
+                output_apk, re.S|re.M)
         if not m:
             m = re.match(r".*^\[INFO\] Creating additional unsigned apk file .*/([^/]+)\.apk",
-                    output, re.S|re.M)
+                    output_apk, re.S|re.M)
         if not m:
             # This format is found in com.github.mobile, com.yubico.yubitotp and com.botbrew.basil for example...
             m = re.match(r'.*^\[INFO\] [^$]*aapt \[package,[^$]*' + bindir + '/([^/]+)\.ap[_k][,\]]',
-                    output, re.S|re.M)
+                    output_apk, re.S|re.M)
         if not m:
             raise BuildException('Failed to find output')
         src = m.group(1)
@@ -597,7 +602,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             name = '-'.join([os.path.basename(build_dir), flavour, 'release', 'unsigned'])
         src = os.path.join(build_dir, 'build', 'apk', name+'.apk')
     else:
-        src = re.match(r".*^.*Creating (.+) for release.*$.*", output,
+        src = re.match(r".*^.*Creating (.+) for release.*$.*", output_apk,
             re.S|re.M).group(1)
         src = os.path.join(bindir, src)
 
