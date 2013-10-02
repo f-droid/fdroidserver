@@ -1015,9 +1015,9 @@ class BuildException(Exception):
     def __str__(self):
         ret = repr(self.value)
         if self.stdout:
-            ret = ret + "\n==== stdout begin ====\n" + str(self.stdout) + "\n==== stdout end ===="
+            ret += "\n==== stdout begin ====\n%s\n==== stdout end ====" % self.stdout.strip()
         if self.stderr:
-            ret = ret + "\n==== stderr begin ====\n" + str(self.stderr) + "\n==== stderr end ===="
+            ret += "\n==== stderr begin ====\n%s\n==== stderr end ====" % self.stderr.strip()
         return ret
 
 class VCSException(Exception):
@@ -1657,8 +1657,8 @@ def isApkDebuggable(apkfile):
     execfile('config.py', globals())
 
     p = subprocess.Popen([os.path.join(sdk_path, 'build-tools', build_tools, 'aapt'),
-		  'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
-		 stdout=subprocess.PIPE)
+          'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
+         stdout=subprocess.PIPE)
     output = p.communicate()[0]
     if p.returncode != 0:
         print "ERROR: Failed to get apk manifest information"

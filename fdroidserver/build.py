@@ -305,7 +305,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         while chan.recv_stderr_ready():
             error += chan.recv_stderr(1024)
         if returncode != 0:
-            raise BuildException("Build.py failed on server for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
+            raise BuildException("Build.py failed on server for %s:%s" % (app['id'], thisbuild['version']), output, error)
 
         # Retrieve the built files...
         print "Retrieving build output..."
@@ -319,7 +319,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
             ftp.get(apkfile, os.path.join(output_dir, apkfile))
             ftp.get(tarball, os.path.join(output_dir, tarball))
         except:
-            raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
+            raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output, error)
         ftp.close()
 
     finally:
@@ -428,8 +428,12 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']))
 
     p = None
-    output = ""
-    error = ""
+    if verbose:
+        output = None
+        error = None
+    else:
+        output = ''
+        error = ''
     # Build the release...
     if 'maven' in thisbuild:
         print "Building Maven project..."
@@ -453,13 +457,15 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
-            output += line
+            else:
+                output += line
         for line in iter(p.stderr.readline, ''):
             if verbose:
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
-            error += line
+            else:
+                error += line
 
     elif 'gradle' in thisbuild:
         print "Building Gradle project..."
@@ -509,13 +515,15 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
-            output += line
+            else:
+                output += line
         for line in iter(p.stderr.readline, ''):
             if verbose:
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
-            error += line
+            else:
+                error += line
 
     else:
         print "Building Ant project..."
@@ -532,23 +540,25 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
-            output += line
+            else:
+                output += line
         for line in iter(p.stderr.readline, ''):
             if verbose:
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
-            error += line
+            else:
+                error += line
     p.communicate()
     if p.returncode != 0:
-        raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output.strip(), error.strip())
+        raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output, error)
     if install:
         if 'maven' in thisbuild:
             p = subprocess.Popen([mvn3, 'android:deploy', '-Dandroid.sdk.path=' + sdk_path],
                     cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            output_, error = p.communicate()
+            output_, error_ = p.communicate()
             if p.returncode != 0:
-                raise BuildException("Warning: Could not deploy %s:%s" % (app['id'], thisbuild['version']), output_.strip(), error.strip())
+                raise BuildException("Warning: Could not deploy %s:%s" % (app['id'], thisbuild['version']), output_, error_)
         return
     print "Successfully built version " + thisbuild['version'] + ' of ' + app['id']
 
