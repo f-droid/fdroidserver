@@ -1,7 +1,7 @@
 
 user = node[:settings][:user]
 
-%w{ant ant-contrib autoconf autopoint bison cmake expect libtool libssl1.0.0 libssl-dev maven openjdk-7-jdk javacc python git-core mercurial subversion bzr git-svn make perlmagick pkg-config zip ruby rubygems librmagick-ruby yasm imagemagick}.each do |pkg|
+%w{ant ant-contrib autoconf autopoint bison cmake expect libtool libsaxonb-java libssl1.0.0 libssl-dev maven openjdk-7-jdk javacc python git-core mercurial subversion bzr git-svn make perlmagick pkg-config zip ruby rubygems librmagick-ruby yasm imagemagick}.each do |pkg|
   package pkg do
     action :install
   end
