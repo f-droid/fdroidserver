@@ -12,7 +12,7 @@ script "setup-android-ndk" do
     else
        SUFFIX = ''
     fi
-    tar jxvf /vagrant/cache/android-ndk-r8e-linux-x86$SUFFIX.tar.bz2
+    tar jxvf /vagrant/cache/android-ndk-r9-linux-x86$SUFFIX.tar.bz2
     mv android-ndk-r8e #{ndk_loc}
   "
   not_if do

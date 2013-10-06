@@ -50,20 +50,20 @@ if not os.path.exists(cachedir):
 cachefiles = [
     ('android-sdk_r21.0.1-linux.tgz',
      'http://dl.google.com/android/android-sdk_r21.0.1-linux.tgz',
-     None),
+     'e797ff3abbdc0fe2e7299e82e92ade830fa922ddd045d9a5a2d187c5c1a2661c'),
     ('gradle-1.7-bin.zip',
      'http://services.gradle.org/distributions/gradle-1.7-bin.zip',
      '360c97d51621b5a1ecf66748c718594e5f790ae4fbc1499543e0c006033c9d30')]
 if arch64:
     cachefiles.extend([
-    ('android-ndk-r8e-linux-x86_64.tar.bz2',
-     'http://dl.google.com/android/ndk/android-ndk-r8e-linux-x86_64.tar.bz2',
-     None)])
+    ('android-ndk-r9-linux-x64_64.tar.bz2',
+     'http://dl.google.com/android/ndk/android-ndk-r9-linux-x86_64.tar.bz2',
+     '8a6013bfd8a8709592c53086c4f841933f5f2b175dd030326406d24ff4daa267')])
 else:
     cachefiles.extend([
-    ('android-ndk-r8e-linux-x86.tar.bz2',
-     'http://dl.google.com/android/ndk/android-ndk-r8e-linux-x86.tar.bz2',
-     None)])
+    ('android-ndk-r9-linux-x86.tar.bz2',
+     'http://dl.google.com/android/ndk/android-ndk-r9-linux-x86.tar.bz2',
+     '30f3da01e4d8d3415777b5d88a0b70fac5a4620807fd28110f9bc4c8093f6b6e')])
 wanted = []
 for f, src, shasum in cachefiles:
     if not os.path.exists(os.path.join(cachedir, f)):
