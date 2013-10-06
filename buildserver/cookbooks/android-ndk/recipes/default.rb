@@ -8,9 +8,9 @@ script "setup-android-ndk" do
   cwd "/tmp"
   code "
     if [ `uname -m` == 'x86_64' ] ; then
-       SUFFIX = '_64'
+       SUFFIX='_64'
     else
-       SUFFIX = ''
+       SUFFIX=''
     fi
     tar jxvf /vagrant/cache/android-ndk-r9-linux-x86$SUFFIX.tar.bz2
     mv android-ndk-r9 #{ndk_loc}
