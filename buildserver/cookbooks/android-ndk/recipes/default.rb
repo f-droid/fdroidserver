@@ -13,7 +13,7 @@ script "setup-android-ndk" do
        SUFFIX = ''
     fi
     tar jxvf /vagrant/cache/android-ndk-r9-linux-x86$SUFFIX.tar.bz2
-    mv android-ndk-r8e #{ndk_loc}
+    mv android-ndk-r9 #{ndk_loc}
   "
   not_if do
     File.exists?("#{ndk_loc}")
