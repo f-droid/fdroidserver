@@ -37,7 +37,7 @@ def getvcs(vcstype, remote, local, sdk_path):
         return vcs_bzr(remote, local, sdk_path)
     if vcstype == 'srclib':
         if local != 'build/srclib/' + remote:
-            print "Warning: srclib paths are hard-coded!"
+            raise VCSException("Error: srclib paths are hard-coded!")
         return getsrclib(remote, 'build/srclib', sdk_path, raw=True)
     raise VCSException("Invalid vcs type " + vcstype)
 
