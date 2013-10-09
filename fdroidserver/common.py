@@ -305,8 +305,7 @@ class vcs_svn(vcs):
             for svncommand in (
                     'svn revert -R .',
                     r"svn status | awk '/\?/ {print $2}' | xargs rm -rf"):
-                if subprocess.call(svncommand, cwd=self.local,
-                        shell=True) != 0:
+                if subprocess.call(svncommand, cwd=self.local) != 0:
                     raise VCSException("Svn reset ({0}) failed in {1}".format(svncommand, self.local))
             if not self.refreshed:
                 if subprocess.call(['svn', 'update'] +
@@ -330,8 +329,7 @@ class vcs_hg(vcs):
             if subprocess.call(['hg', 'clone', self.remote, self.local]) !=0:
                 raise VCSException("Hg clone failed")
         else:
-            if subprocess.call('hg status -u | xargs rm -rf',
-                    cwd=self.local, shell=True) != 0:
+            if subprocess.call('hg status -u | xargs rm -rf', cwd=self.local) != 0:
                 raise VCSException("Hg clean failed")
             if not self.refreshed:
                 if subprocess.call(['hg', 'pull'],
@@ -1182,13 +1180,35 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
 
     # Run an init command if one is required...
     if 'init' in build:
-        init = build['init']
-        init = init.replace('$$SDK$$', sdk_path)
-        init = init.replace('$$NDK$$', ndk_path)
-        init = init.replace('$$MVN$$', mvn3)
-        if verbose: print "Doing init: exec '%s' in '%s'"%(init,root_dir)
-        if subprocess.call(['bash', '-c', init], cwd=root_dir) != 0:
-            raise BuildException("Error running init command")
+        output = ''
+        error = ''
+        cmd = build['init']
+        cmd = cmd.replace('$$SDK$$', sdk_path)
+        cmd = cmd.replace('$$NDK$$', ndk_path)
+        cmd = cmd.replace('$$MVN$$', mvn3)
+        if verbose:
+            print "Running 'init' commands in %s" % root_dir
+
+        p = subprocess.Popen(['bash', '-x', '-c', cmd], cwd=root_dir,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        for line in iter(p.stdout.readline, ''):
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            else:
+                output += line
+        for line in iter(p.stderr.readline, ''):
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            else:
+                error += line
+        p.communicate()
+        if p.returncode != 0:
+            raise BuildException("Error running init command for %s:%s" %
+                    (app['id'], thisbuild['version']), output, error)
 
     # Generate (or update) the ant build file, build.xml...
     updatemode = build.get('update', '.')
@@ -1372,25 +1392,40 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
 
     # Run a pre-build command if one is required...
     if 'prebuild' in build:
-        prebuild = build['prebuild']
-        if verbose:
-            print "Running source init (prebuild) commands:" + prebuild
-        else:
-            print "Running source init (prebuild) commands..."
+        output = ''
+        error = ''
+        cmd = build['prebuild']
 
         # Substitute source library paths into prebuild commands...
         for name, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
-            prebuild = prebuild.replace('$$' + name + '$$', libpath)
-        prebuild = prebuild.replace('$$SDK$$', sdk_path)
-        prebuild = prebuild.replace('$$NDK$$', ndk_path)
-        prebuild = prebuild.replace('$$MVN3$$', mvn3)
-        p = subprocess.Popen(['bash', '-c', prebuild], cwd=root_dir,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = p.communicate()
-        if p.returncode != 0:
-            raise BuildException("Error running pre-build command", out, err)
+            cmd = cmd.replace('$$' + name + '$$', libpath)
+        cmd = cmd.replace('$$SDK$$', sdk_path)
+        cmd = cmd.replace('$$NDK$$', ndk_path)
+        cmd = cmd.replace('$$MVN3$$', mvn3)
+        if verbose:
+            print "Running 'prebuild' commands in %s" % root_dir
 
+        p = subprocess.Popen(['bash', '-x', '-c', cmd], cwd=root_dir,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        for line in iter(p.stdout.readline, ''):
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            else:
+                output += line
+        for line in iter(p.stderr.readline, ''):
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            else:
+                error += line
+        p.communicate()
+        if p.returncode != 0:
+            raise BuildException("Error running prebuild command for %s:%s" %
+                    (app['id'], thisbuild['version']), output, error)
     print "Applying generic clean-ups..."
 
     if build.get('anal-tics', 'no') == 'yes':

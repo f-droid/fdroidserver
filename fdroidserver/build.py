@@ -375,11 +375,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     # Run a build command if one is required...
     if 'build' in thisbuild:
-        cmd = thisbuild['build']
-        if options.verbose:
-            print "Running custom build commands: " + cmd
-        else:
-            print "Running custom build commands..."
+        output, error = ''
+        build = thisbuild['build']
         # Substitute source library paths into commands...
         for name, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
@@ -387,15 +384,29 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         cmd = cmd.replace('$$SDK$$', sdk_path)
         cmd = cmd.replace('$$NDK$$', ndk_path)
         cmd = cmd.replace('$$MVN3$$', mvn3)
-        if options.verbose:
-            # Note: output goes to console, not log
-            p = subprocess.Popen(['bash', '-x', '-c', cmd], cwd=root_dir)
-        else:
-            p = subprocess.Popen(['bash', '-c', cmd], cwd=root_dir,
-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = p.communicate()
+        if verbose:
+            print "Running 'build' commands in %s" % root_dir
+
+        p = subprocess.Popen(['bash', '-x', '-c', build], cwd=root_dir,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        for line in iter(p.stdout.readline, ''):
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            else:
+                output += line
+        for line in iter(p.stderr.readline, ''):
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            else:
+                error += line
+        p.communicate()
         if p.returncode != 0:
-            raise BuildException("Error running build command", out, err)
+            raise BuildException("Error running build command for %s:%s" %
+                    (app['id'], thisbuild['version']), output, error)
 
     # Build native stuff if required...
     if thisbuild.get('buildjni') not in (None, 'no'):
