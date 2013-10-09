@@ -1514,7 +1514,7 @@ def scan_source(build_dir, root_dir, thisbuild):
 
     problems = []
 
-    # Common known non-free blobs:
+    # Common known non-free blobs (always lower case):
     usual_suspects = ['flurryagent',
                       'paypal_mpl',
                       'libgoogleanalytics',
@@ -1524,7 +1524,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                       'google-play-services',
                       'crittercism',
                       'heyzap',
-                      'jpct-ae']
+                      'jpct-ae',
+                      'youtubeandroidplayerapi']
 
     if 'scanignore' in thisbuild:
         ignore = [p.strip() for p in thisbuild['scanignore'].split(';')]
