@@ -43,10 +43,12 @@ def update_wiki(apps, apks, verbose=False):
     """
     print "Updating wiki"
     wikicat = 'Apps'
+    wikiredircat = 'App Redirects'
     import mwclient
     site = mwclient.Site((wiki_protocol, wiki_server), path=wiki_path)
     site.login(wiki_user, wiki_password)
     generated_pages = {}
+    generated_redirects = {}
     for app in apps:
         wikidata = ''
         if app['Disabled']:
@@ -185,33 +187,35 @@ def update_wiki(apps, apks, verbose=False):
         if apppagename == pagename:
             noclobber = True
         if not noclobber:
-            generated_pages[apppagename] = "#REDIRECT [[" + pagename + "]]\n[[Category:" + wikicat + "]]"
+            generated_redirects[apppagename] = "#REDIRECT [[" + pagename + "]]\n[[Category:" + wikiredircat + "]]"
 
-    catpages = site.Pages['Category:' + wikicat]
-    existingpages = []
-    for page in catpages:
-        existingpages.append(page.name)
-        if page.name in generated_pages:
-            pagetxt = page.edit()
-            if pagetxt != generated_pages[page.name]:
-                print "Updating modified page " + page.name
-                page.save(generated_pages[page.name], summary='Auto-updated')
+    for tcat, genp in [(wikicat, generated_pages),
+            (wikiredircat, generated_redirects)]:
+        catpages = site.Pages['Category:' + tcat]
+        existingpages = []
+        for page in catpages:
+            existingpages.append(page.name)
+            if page.name in genp:
+                pagetxt = page.edit()
+                if pagetxt != genp[page.name]:
+                    print "Updating modified page " + page.name
+                    page.save(genp[page.name], summary='Auto-updated')
+                else:
+                    if verbose:
+                        print "Page " + page.name + " is unchanged"
             else:
-                if verbose:
-                    print "Page " + page.name + " is unchanged"
-        else:
-            print "Deleting page " + page.name
-            page.delete('No longer published')
-    for pagename, text in generated_pages.items():
-        if verbose:
-            print "Checking " + pagename
-        if not pagename in existingpages:
-            print "Creating page " + pagename
-            try:
-                newpage = site.Pages[pagename]
-                newpage.save(text, summary='Auto-created')
-            except:
-                print "...FAILED to create page"
+                print "Deleting page " + page.name
+                page.delete('No longer published')
+        for pagename, text in genp.items():
+            if verbose:
+                print "Checking " + pagename
+            if not pagename in existingpages:
+                print "Creating page " + pagename
+                try:
+                    newpage = site.Pages[pagename]
+                    newpage.save(text, summary='Auto-created')
+                except:
+                    print "...FAILED to create page"
 
 
 def delete_disabled_builds(apps, apkcache, repodirs):
