@@ -77,6 +77,7 @@ def update_wiki(apps, apks, verbose=False):
         apklist = []
         gotcurrentver = False
         cantupdate = False
+        buildfails = False
         for apk in apks:
             if apk['id'] == app['id']:
                 if str(apk['versioncode']) == app['Current Version Code']:
@@ -100,6 +101,7 @@ def update_wiki(apps, apks, verbose=False):
                         builtit = True
                         break
                 if not builtit:
+                    buildfails = True
                     apklist.append({
                             'versioncode': int(thisbuild['vercode']),
                             'version': thisbuild['version'],
@@ -144,6 +146,8 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += '\n[[Category:Apps with no packages]]\n'
         elif cantupdate and not app['Disabled']:
             wikidata += "\n[[Category:Apps we can't update]]\n"
+        elif cantupdate and not app['Disabled']:
+            wikidata += "\n[[Category:Apps with failing builds]]\n"
         elif not gotcurrentver and not app['Disabled']:
             wikidata += '\n[[Category:Apps to Update]]\n'
         if app['Update Check Mode'] == 'None':
