@@ -146,7 +146,7 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += '\n[[Category:Apps with no packages]]\n'
         elif cantupdate and not app['Disabled']:
             wikidata += "\n[[Category:Apps we can't update]]\n"
-        elif cantupdate and not app['Disabled']:
+        elif buildfails and not app['Disabled']:
             wikidata += "\n[[Category:Apps with failing builds]]\n"
         elif not gotcurrentver and not app['Disabled']:
             wikidata += '\n[[Category:Apps to Update]]\n'
@@ -171,8 +171,11 @@ def update_wiki(apps, apks, verbose=False):
         apppagename = apppagename.replace('{', '')
         apppagename = apppagename.replace('}', ' ')
         apppagename = apppagename.replace(':', ' ')
-        for page in site.allpages(prefix=apppagename, filterredir='nonredirects'):
-            if page.name == apppagename:
+        # Drop double spaces caused mostly by replacing ':' above
+        apppagename = apppagename.replace('  ', ' ')
+        for expagename in site.allpages(prefix=apppagename,
+                filterredir='nonredirects', generator=False):
+            if expagename == apppagename:
                 noclobber = True
         # Another reason not to make the redirect page is if the app name
         # is the same as it's ID, because that will overwrite the real page
