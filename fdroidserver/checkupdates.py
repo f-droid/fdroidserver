@@ -85,7 +85,7 @@ def check_tags(app, sdk_path):
     try:
 
         if app['Repo Type'] == 'srclib':
-            build_dir = os.path.join('build', 'srclib')
+            build_dir = os.path.join('build', 'srclib', app['Repo'])
             repotype = common.getsrclibvcs(app['Repo'])
         else:
             build_dir = os.path.join('build/', app['id'])
@@ -96,9 +96,6 @@ def check_tags(app, sdk_path):
 
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
-
-        if app['Repo Type'] == 'srclib':
-            build_dir = os.path.join(build_dir, app['Repo'])
 
         vcs.gotorevision(None)
 
