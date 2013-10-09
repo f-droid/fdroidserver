@@ -715,6 +715,10 @@ and @option{--password} to the SVN checkout command. (This works only for
 plain svn and not for git-svn - one of the very few cases where using svn is
 advisable).
 
+If the Repo Type is @code{srclib}, then you can specify the name of the
+according srclib .txt file. For example if @code{scrlibs/FooBar.txt} exist, then
+you can set Repo to @code{FooBar}.
+
 
 @node Build Version
 @section Build Version
