@@ -93,6 +93,18 @@ def update_wiki(apps, apks, verbose=False):
                         'version': thisbuild['version'],
                         'buildproblem': thisbuild['commit'][1:]
                     })
+            else:
+                builtit = False
+                for apk in apklist:
+                    if apk['versioncode'] == int(thisbuild['vercode']):
+                        builtit = True
+                        break
+                if not builtit:
+                    apklist.append({
+                            'versioncode': int(thisbuild['vercode']),
+                            'version': thisbuild['version'],
+                            'buildproblem': "The build for this version appears to have failed. Check the build logs."
+                        })
         # Sort with most recent first...
         apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
 
