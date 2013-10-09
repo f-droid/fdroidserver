@@ -146,7 +146,7 @@ def check_repomanifest(app, sdk_path, branch=None):
     try:
 
         if app['Repo Type'] == 'srclib':
-            build_dir = os.path.join('build', 'srclib')
+            build_dir = os.path.join('build', 'srclib', app['Repo'])
             repotype = common.getsrclibvcs(app['Repo'])
         else:
             build_dir = os.path.join('build/', app['id'])
@@ -154,8 +154,6 @@ def check_repomanifest(app, sdk_path, branch=None):
 
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
-        if app['Repo Type'] == 'srclib':
-            build_dir = os.path.join(build_dir, app['Repo'])
 
         if vcs.repotype() == 'git':
             if branch:
