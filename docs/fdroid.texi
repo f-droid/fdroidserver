@@ -554,10 +554,11 @@ BSD license - the new, or modified, version.
 
 @cindex Auto Name
 
-The name of the application as can best be retrieved from the source code. 
-This is done so that the commitupdates script can put a familiar name in 
-the commit description. It is generated automatically when 
-@code{fdroid checkupdates} is run.
+The name of the application as can best be retrieved from the source code.
+This is done so that the commitupdates script can put a familiar name in the
+description of commits created when a new update of the application is
+found. The Auto Name entry is generated automatically when @code{fdroid
+checkupdates} is run.
 
 @node Name
 @section Name
