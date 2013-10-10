@@ -432,8 +432,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     tarball.close()
 
     # Run a build command if one is required...
+    output = ''
+    error = ''
     if 'build' in thisbuild:
-        output, error = ''
         build = thisbuild['build']
         # Substitute source library paths into commands...
         for name, libpath in srclibpaths:
