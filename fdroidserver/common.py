@@ -1229,14 +1229,27 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
             if os.path.exists(buildxml):
                 print 'Force-removing old build.xml'
                 os.remove(buildxml)
+        for baddir in [
+                'gen', 'bin', 'obj', # ant
+                'libs/armeabi-v7a', 'libs/armeabi', # jni
+                'libs/mips', 'libs/x86', # jni
+                'build', # gradle
+                'target']: # maven
+            badpath = os.path.join(build_dir, baddir)
+            if os.path.exists(badpath):
+                print "Removing '%s'" % badpath
+                shutil.rmtree(badpath)
         for d in update_dirs:
             cwd = os.path.join(root_dir, d)
             # Remove gen and bin dirs in libraries
             # rid of them...
-            for baddir in ['gen', 'bin', 'obj', 'libs/armeabi-v7a', 'libs/armeabi', 'libs/mips', 'libs/x86']:
+            for baddir in [
+                    'gen', 'bin', 'obj', # ant
+                    'libs/armeabi-v7a', 'libs/armeabi', # jni
+                    'libs/mips', 'libs/x86']:
                 badpath = os.path.join(cwd, baddir)
                 if os.path.exists(badpath):
-                    print "Removing %s in update dir %s" % (badpath, d)
+                    print "Removing '%s'" % badpath
                     shutil.rmtree(badpath)
             if verbose:
                 print "Update of '%s': exec '%s' in '%s'"%\
@@ -1371,14 +1384,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     # If one was used for the main source, add that too.
     if basesrclib:
         srclibpaths.append(basesrclib)
-
-    # There should never be bin, gen or native libs directories in the source, so just get
-    # rid of them...
-    for baddir in ['gen', 'bin', 'obj', 'libs/armeabi-v7a', 'libs/armeabi', 'libs/mips', 'libs/x86']:
-        badpath = os.path.join(root_dir, baddir)
-        if os.path.exists(badpath):
-            print "Removing %s" % badpath
-            shutil.rmtree(badpath)
 
     # Apply patches if any
     if 'patch' in build:

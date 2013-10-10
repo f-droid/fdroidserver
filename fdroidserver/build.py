@@ -349,6 +349,47 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             build_dir, srclib_dir, extlib_dir, sdk_path, ndk_path,
             javacc_path, mvn3, verbose, onserver)
 
+    # We need to clean via the build tool in case the binary dirs are
+    # different from the default ones
+    p = None
+    if 'maven' in thisbuild:
+        print "Cleaning Maven project..."
+        cmd = [mvn3, 'clean', '-Dandroid.sdk.path=' + sdk_path]
+
+        p = subprocess.Popen(cmd, cwd=root_dir,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    elif 'gradle' in thisbuild:
+        print "Cleaning Gradle project..."
+        cmd = [gradle, 'clean']
+
+        if '@' in thisbuild['gradle']:
+            gradle_dir = os.path.join(root_dir, thisbuild['gradle'].split('@')[1])
+        else:
+            gradle_dir = root_dir
+
+        p = subprocess.Popen(cmd, cwd=gradle_dir,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    else:
+        print "Cleaning Ant project..."
+        cmd = ['ant', 'clean']
+        p = subprocess.Popen(cmd, cwd=root_dir,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    for line in iter(p.stdout.readline, ''):
+        if verbose:
+            # Output directly to console
+            sys.stdout.write(line)
+            sys.stdout.flush()
+        else:
+            output += line
+    for line in iter(p.stderr.readline, ''):
+        if verbose:
+            # Output directly to console
+            sys.stdout.write(line)
+            sys.stdout.flush()
+        else:
+            error += line
+
     # Scan before building...
     print "Scanning source for common problems..."
     buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
@@ -449,7 +490,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     # Build the release...
     if 'maven' in thisbuild:
         print "Building Maven project..."
-        mvncmd = [mvn3, 'clean', 'package', '-Dandroid.sdk.path=' + sdk_path]
+        mvncmd = [mvn3, 'package', '-Dandroid.sdk.path=' + sdk_path]
         if install:
             mvncmd += ['-Dandroid.sign.debug=true']
         else:
@@ -511,7 +552,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if flavour in ['main', 'yes', '']:
             flavour = ''
         
-        commands = [gradle, 'clean']
+        commands = [gradle]
         if 'preassemble' in thisbuild:
             for task in thisbuild['preassemble'].split():
                 commands.append(task)
@@ -541,7 +582,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     else:
         print "Building Ant project..."
-        antcommands = ['ant', 'clean']
+        antcommands = ['ant']
         if install:
             antcommands += ['debug','install']
         elif 'antcommand' in thisbuild:
