@@ -217,6 +217,8 @@ def update_wiki(apps, apks, verbose=False):
                 except:
                     print "...FAILED to create page"
 
+    # Purge server cache to ensure counts are up to date
+    site.pages['Repository Maintenance'].purge()
 
 def delete_disabled_builds(apps, apkcache, repodirs):
     """Delete disabled build outputs.
