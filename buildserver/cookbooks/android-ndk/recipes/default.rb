@@ -1,5 +1,18 @@
 
 ndk_loc = node[:settings][:ndk_loc]
+user = node[:settings][:user]
+
+execute "add-android-ndk-path" do
+  user user
+  command "echo \"export PATH=\\$PATH:#{ndk_loc} #PATH-NDK\" >> /home/#{user}/.bsenv"
+  not_if "grep PATH-NDK /home/#{user}/.bsenv"
+end
+
+execute "add-android-ndk-var" do
+  user user
+  command "echo \"export ANDROID_NDK=#{ndk_loc}\" >> /home/#{user}/.bsenv"
+  not_if "grep ANDROID_NDK /home/#{user}/.bsenv"
+end
 
 script "setup-android-ndk" do
   timeout 14400
