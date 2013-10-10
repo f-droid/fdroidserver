@@ -352,6 +352,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     # We need to clean via the build tool in case the binary dirs are
     # different from the default ones
     p = None
+    output = ''
+    error = ''
     if 'maven' in thisbuild:
         print "Cleaning Maven project..."
         cmd = [mvn3, 'clean', '-Dandroid.sdk.path=' + sdk_path]
@@ -389,6 +391,11 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             sys.stdout.flush()
         else:
             error += line
+
+    p.communicate()
+    if p.returncode != 0:
+        raise BuildException("Error cleaning %s:%s" %
+                (app['id'], thisbuild['version']), output, error)
 
     # Also clean jni
     print "Cleaning jni dirs..."
