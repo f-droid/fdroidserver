@@ -488,103 +488,106 @@ def make_index(apps, apks, repodir, archive, categories):
 
     for app in apps:
 
-        if app['Disabled'] is None:
+        if app['Disabled'] is not None:
+            continue
 
-            # Get a list of the apks for this app...
-            apklist = []
-            for apk in apks:
-                if apk['id'] == app['id']:
-                    apklist.append(apk)
+        # Get a list of the apks for this app...
+        apklist = []
+        for apk in apks:
+            if apk['id'] == app['id']:
+                apklist.append(apk)
 
-            if len(apklist) != 0:
-                apel = doc.createElement("application")
-                apel.setAttribute("id", app['id'])
-                root.appendChild(apel)
+        if len(apklist) == 0:
+            continue
 
-                addElement('id', app['id'], doc, apel)
-                if 'added' in app:
-                    addElement('added', time.strftime('%Y-%m-%d', app['added']), doc, apel)
-                if 'lastupdated' in app:
-                    addElement('lastupdated', time.strftime('%Y-%m-%d', app['lastupdated']), doc, apel)
-                addElement('name', app['Name'], doc, apel)
-                addElement('summary', app['Summary'], doc, apel)
-                addElement('icon', app['icon'], doc, apel)
-                def linkres(link):
-                    for app in apps:
-                        if app['id'] == link:
-                            return ("fdroid.app:" + link, app['Name'])
-                    raise MetaDataException("Cannot resolve app id " + link)
-                addElement('desc', 
-                        common.description_html(app['Description'], linkres), doc, apel)
-                addElement('license', app['License'], doc, apel)
-                if 'Category' in app:
-                    # We put the first (primary) category in LAST, which will have
-                    # the desired effect of making clients that only understand one
-                    # category see that one.
-                    cats = app['Category'].split(';')
-                    cats.reverse()
-                    for cat in cats:
-                        addElement('category', cat, doc, apel)
-                addElement('web', app['Web Site'], doc, apel)
-                addElement('source', app['Source Code'], doc, apel)
-                addElement('tracker', app['Issue Tracker'], doc, apel)
-                if app['Donate'] != None:
-                    addElement('donate', app['Donate'], doc, apel)
-                if app['Bitcoin'] != None:
-                    addElement('bitcoin', app['Bitcoin'], doc, apel)
-                if app['FlattrID'] != None:
-                    addElement('flattr', app['FlattrID'], doc, apel)
+        apel = doc.createElement("application")
+        apel.setAttribute("id", app['id'])
+        root.appendChild(apel)
 
-                # These elements actually refer to the current version (i.e. which
-                # one is recommended. They are historically mis-named, and need
-                # changing, but stay like this for now to support existing clients.
-                addElement('marketversion', app['Current Version'], doc, apel)
-                addElement('marketvercode', app['Current Version Code'], doc, apel)
+        addElement('id', app['id'], doc, apel)
+        if 'added' in app:
+            addElement('added', time.strftime('%Y-%m-%d', app['added']), doc, apel)
+        if 'lastupdated' in app:
+            addElement('lastupdated', time.strftime('%Y-%m-%d', app['lastupdated']), doc, apel)
+        addElement('name', app['Name'], doc, apel)
+        addElement('summary', app['Summary'], doc, apel)
+        addElement('icon', app['icon'], doc, apel)
+        def linkres(link):
+            for app in apps:
+                if app['id'] == link:
+                    return ("fdroid.app:" + link, app['Name'])
+            raise MetaDataException("Cannot resolve app id " + link)
+        addElement('desc', 
+                common.description_html(app['Description'], linkres), doc, apel)
+        addElement('license', app['License'], doc, apel)
+        if 'Category' in app:
+            # We put the first (primary) category in LAST, which will have
+            # the desired effect of making clients that only understand one
+            # category see that one.
+            cats = app['Category'].split(';')
+            cats.reverse()
+            for cat in cats:
+                addElement('category', cat, doc, apel)
+        addElement('web', app['Web Site'], doc, apel)
+        addElement('source', app['Source Code'], doc, apel)
+        addElement('tracker', app['Issue Tracker'], doc, apel)
+        if app['Donate'] != None:
+            addElement('donate', app['Donate'], doc, apel)
+        if app['Bitcoin'] != None:
+            addElement('bitcoin', app['Bitcoin'], doc, apel)
+        if app['FlattrID'] != None:
+            addElement('flattr', app['FlattrID'], doc, apel)
 
-                if app['AntiFeatures']:
-                    addElement('antifeatures', app['AntiFeatures'], doc, apel)
-                if app['Requires Root']:
-                    addElement('requirements', 'root', doc, apel)
+        # These elements actually refer to the current version (i.e. which
+        # one is recommended. They are historically mis-named, and need
+        # changing, but stay like this for now to support existing clients.
+        addElement('marketversion', app['Current Version'], doc, apel)
+        addElement('marketvercode', app['Current Version Code'], doc, apel)
 
-                # Sort the apk list into version order, just so the web site
-                # doesn't have to do any work by default...
-                apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
+        if app['AntiFeatures']:
+            addElement('antifeatures', app['AntiFeatures'], doc, apel)
+        if app['Requires Root']:
+            addElement('requirements', 'root', doc, apel)
 
-                # Check for duplicates - they will make the client unhappy...
-                for i in range(len(apklist) - 1):
-                    if apklist[i]['versioncode'] == apklist[i+1]['versioncode']:
-                        print "ERROR - duplicate versions"
-                        print apklist[i]['apkname']
-                        print apklist[i+1]['apkname']
-                        sys.exit(1)
+        # Sort the apk list into version order, just so the web site
+        # doesn't have to do any work by default...
+        apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
 
-                for apk in apklist:
-                    apkel = doc.createElement("package")
-                    apel.appendChild(apkel)
-                    addElement('version', apk['version'], doc, apkel)
-                    addElement('versioncode', str(apk['versioncode']), doc, apkel)
-                    addElement('apkname', apk['apkname'], doc, apkel)
-                    if 'srcname' in apk:
-                        addElement('srcname', apk['srcname'], doc, apkel)
-                    for hash_type in ['sha256']:
-                        if not hash_type in apk:
-                            continue
-                        hashel = doc.createElement("hash")
-                        hashel.setAttribute("type", hash_type)
-                        hashel.appendChild(doc.createTextNode(apk[hash_type]))
-                        apkel.appendChild(hashel)
-                    addElement('sig', apk['sig'], doc, apkel)
-                    addElement('size', str(apk['size']), doc, apkel)
-                    addElement('sdkver', str(apk['sdkversion']), doc, apkel)
-                    if 'added' in apk:
-                        addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
-                    perms = ""
-                    if len(apk['permissions']) > 0:
-                        addElement('permissions', ','.join(apk['permissions']), doc, apkel)
-                    if 'nativecode' in apk and len(apk['nativecode']) > 0:
-                        addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
-                    if len(apk['features']) > 0:
-                        addElement('features', ','.join(apk['features']), doc, apkel)
+        # Check for duplicates - they will make the client unhappy...
+        for i in range(len(apklist) - 1):
+            if apklist[i]['versioncode'] == apklist[i+1]['versioncode']:
+                print "ERROR - duplicate versions"
+                print apklist[i]['apkname']
+                print apklist[i+1]['apkname']
+                sys.exit(1)
+
+        for apk in apklist:
+            apkel = doc.createElement("package")
+            apel.appendChild(apkel)
+            addElement('version', apk['version'], doc, apkel)
+            addElement('versioncode', str(apk['versioncode']), doc, apkel)
+            addElement('apkname', apk['apkname'], doc, apkel)
+            if 'srcname' in apk:
+                addElement('srcname', apk['srcname'], doc, apkel)
+            for hash_type in ['sha256']:
+                if not hash_type in apk:
+                    continue
+                hashel = doc.createElement("hash")
+                hashel.setAttribute("type", hash_type)
+                hashel.appendChild(doc.createTextNode(apk[hash_type]))
+                apkel.appendChild(hashel)
+            addElement('sig', apk['sig'], doc, apkel)
+            addElement('size', str(apk['size']), doc, apkel)
+            addElement('sdkver', str(apk['sdkversion']), doc, apkel)
+            if 'added' in apk:
+                addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
+            perms = ""
+            if len(apk['permissions']) > 0:
+                addElement('permissions', ','.join(apk['permissions']), doc, apkel)
+            if 'nativecode' in apk and len(apk['nativecode']) > 0:
+                addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
+            if len(apk['features']) > 0:
+                addElement('features', ','.join(apk['features']), doc, apkel)
 
     of = open(os.path.join(repodir, 'index.xml'), 'wb')
     if options.pretty:
