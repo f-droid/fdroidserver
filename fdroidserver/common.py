@@ -1208,7 +1208,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         p.communicate()
         if p.returncode != 0:
             raise BuildException("Error running init command for %s:%s" %
-                    (app['id'], thisbuild['version']), output, error)
+                    (app['id'], build['version']), output, error)
 
     # Generate (or update) the ant build file, build.xml...
     updatemode = build.get('update', '.')
@@ -1430,7 +1430,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         p.communicate()
         if p.returncode != 0:
             raise BuildException("Error running prebuild command for %s:%s" %
-                    (app['id'], thisbuild['version']), output, error)
+                    (app['id'], build['version']), output, error)
     print "Applying generic clean-ups..."
 
     if build.get('anal-tics', 'no') == 'yes':
