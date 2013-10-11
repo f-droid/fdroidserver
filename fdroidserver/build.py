@@ -371,31 +371,31 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         p = subprocess.Popen(cmd, cwd=gradle_dir,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    else:
+    elif thisbuild.get('update', '.') != 'no':
         print "Cleaning Ant project..."
         cmd = ['ant', 'clean']
         p = subprocess.Popen(cmd, cwd=root_dir,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    for line in iter(p.stdout.readline, ''):
-        if verbose:
-            # Output directly to console
-            sys.stdout.write(line)
-            sys.stdout.flush()
-        else:
-            output += line
-    for line in iter(p.stderr.readline, ''):
-        if verbose:
-            # Output directly to console
-            sys.stdout.write(line)
-            sys.stdout.flush()
-        else:
-            error += line
-
-    p.communicate()
-    if p.returncode != 0:
-        raise BuildException("Error cleaning %s:%s" %
-                (app['id'], thisbuild['version']), output, error)
+    if p is not None:
+        for line in iter(p.stdout.readline, ''):
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            else:
+                output += line
+        for line in iter(p.stderr.readline, ''):
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            else:
+                error += line
+        p.communicate()
+        if p.returncode != 0:
+            raise BuildException("Error cleaning %s:%s" %
+                    (app['id'], thisbuild['version']), output, error)
 
     # Also clean jni
     print "Cleaning jni dirs..."
@@ -435,7 +435,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     output = ''
     error = ''
     if 'build' in thisbuild:
-        build = thisbuild['build']
+        cmd = thisbuild['build']
         # Substitute source library paths into commands...
         for name, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
@@ -446,7 +446,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if verbose:
             print "Running 'build' commands in %s" % root_dir
 
-        p = subprocess.Popen(['bash', '-x', '-c', build], cwd=root_dir,
+        p = subprocess.Popen(['bash', '-x', '-c', cmd], cwd=root_dir,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         for line in iter(p.stdout.readline, ''):
             if verbose:
