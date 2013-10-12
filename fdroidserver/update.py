@@ -458,7 +458,7 @@ def make_index(apps, apks, repodir, archive, categories):
         repoel.setAttribute("url", repo_url)
         addElement('description', repo_description, doc, repoel)
 
-    if repo_keyalias != None:
+    if repo_keyalias is not None:
 
         # Generate a certificate fingerprint the same way keytool does it
         # (but with slightly different formatting)
@@ -532,13 +532,13 @@ def make_index(apps, apks, repodir, archive, categories):
         addElement('web', app['Web Site'], doc, apel)
         addElement('source', app['Source Code'], doc, apel)
         addElement('tracker', app['Issue Tracker'], doc, apel)
-        if app['Donate'] != None:
+        if app['Donate'] is not None:
             addElement('donate', app['Donate'], doc, apel)
-        if app['Bitcoin'] != None:
+        if app['Bitcoin'] is not None:
             addElement('bitcoin', app['Bitcoin'], doc, apel)
-        if app['Litecoin'] != None:
+        if app['Litecoin'] is not None:
             addElement('litecoin', app['Litecoin'], doc, apel)
-        if app['FlattrID'] != None:
+        if app['FlattrID'] is not None:
             addElement('flattr', app['FlattrID'], doc, apel)
 
         # These elements actually refer to the current version (i.e. which
@@ -600,7 +600,7 @@ def make_index(apps, apks, repodir, archive, categories):
     of.write(output)
     of.close()
 
-    if repo_keyalias != None:
+    if repo_keyalias is not None:
 
         if not options.quiet:
             print "Creating signed index."

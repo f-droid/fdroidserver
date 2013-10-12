@@ -100,9 +100,9 @@ def main():
             sys.exit(1)
         finally:
             #Disconnect
-            if ftp != None:
+            if ftp is not None:
                 ftp.close()
-            if ssh != None:
+            if ssh is not None:
                 ssh.close()
 
     # Process logs
