@@ -55,7 +55,7 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += '{{Disabled|' + app['Disabled'] + '}}\n'
         if app['AntiFeatures']:
             wikidata += '{{AntiFeatures|' + app['AntiFeatures'] + '}}\n'
-        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|bitcoin=%s|license=%s|root=%s}}\n'%(
+        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s}}\n'%(
                 app['id'],
                 app['Name'],
                 time.strftime('%Y-%m-%d', app['added']) if 'added' in app else '',
@@ -66,6 +66,7 @@ def update_wiki(apps, apks, verbose=False):
                 app['Donate'],
                 app['FlattrID'],
                 app['Bitcoin'],
+                app['Litecoin'],
                 app['License'],
                 app.get('Requires Root', 'No'))
 
@@ -535,6 +536,8 @@ def make_index(apps, apks, repodir, archive, categories):
             addElement('donate', app['Donate'], doc, apel)
         if app['Bitcoin'] != None:
             addElement('bitcoin', app['Bitcoin'], doc, apel)
+        if app['Litecoin'] != None:
+            addElement('litecoin', app['Litecoin'], doc, apel)
         if app['FlattrID'] != None:
             addElement('flattr', app['FlattrID'], doc, apel)
 

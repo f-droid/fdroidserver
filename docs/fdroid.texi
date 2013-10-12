@@ -463,6 +463,7 @@ The following sections describe the fields recognised within the file.
 * Donate::
 * FlattrID::
 * Bitcoin::
+* Litecoin::
 * Summary::
 * Description::
 * Repo Type::
@@ -626,6 +627,13 @@ directly to the page to donate to the project.
 @cindex Bitcoin
 
 A bitcoin address for donating to the project.
+
+@node Litecoin
+@section Litecoin
+
+@cindex Litecoin
+
+A litecoin address for donating to the project.
 
 @node Summary
 @section Summary
