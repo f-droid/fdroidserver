@@ -485,6 +485,7 @@ def parse_metadata(metafile, **kw):
     thisinfo['Litecoin'] = None
     thisinfo['Disabled'] = None
     thisinfo['AntiFeatures'] = None
+    thisinfo['Archive Policy'] = None
     thisinfo['Update Check Mode'] = 'None'
     thisinfo['Auto Update Mode'] = 'None'
     thisinfo['Current Version'] = ''
@@ -578,6 +579,17 @@ def parse_metadata(metafile, **kw):
     if len(thisinfo['Description']) == 0:
         thisinfo['Description'].append('No description available')
 
+    # Validate archive policy...
+    if thisinfo['Archive Policy']:
+        if not thisinfo['Archive Policy'].endswith(' versions'):
+            raise MetaDataException("Invalid archive policy")
+        try:
+            versions = int(thisinfo['Archive Policy'][:-9])
+            if versions < 1 or versions > 20:
+                raise MetaDataException("Silly number of days for archive policy")
+        except:
+            raise MetaDataException("Incomprehensible number of days for archive policy")
+
     # Ensure all AntiFeatures are recognised...
     if thisinfo['AntiFeatures']:
         parts = thisinfo['AntiFeatures'].split(",")
@@ -659,6 +671,8 @@ def write_metadata(dest, app):
             mf.write('\n')
     if len(app['builds']) > 0:
         mf.write('\n')
+    if app['Archive Policy']:
+        writefield('Archive Policy')
     writefield('Auto Update Mode')
     writefield('Update Check Mode')
     if 'Update Check Data' in app:

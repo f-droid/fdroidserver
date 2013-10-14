@@ -644,7 +644,7 @@ def make_index(apps, apks, repodir, archive, categories):
 
 
 
-def archive_old_apks(apps, apks, repodir, archivedir, keepversions):
+def archive_old_apks(apps, apks, repodir, archivedir, defaultkeepversions):
 
     for app in apps:
 
@@ -656,6 +656,11 @@ def archive_old_apks(apps, apks, repodir, archivedir, keepversions):
 
         # Sort the apk list into version order...
         apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
+
+        if app['Archive Policy']:
+            keepversions = int(app['Archive Policy'][:-9])
+        else:
+            keepversions = defaultkeepversions
 
         if len(apklist) > keepversions:
             for apk in apklist[keepversions:]:

@@ -472,6 +472,7 @@ The following sections describe the fields recognised within the file.
 * AntiFeatures::
 * Disabled::
 * Requires Root::
+* Archive Policy::
 * Update Check Mode::
 * Update Check Data::
 * Auto Update Mode::
@@ -1122,6 +1123,19 @@ again, rather than retrieving a different one.
 @cindex Update Check Data
 
 Used in conjunction with @code{Update Check Mode} for certain modes.
+
+@node Archive Policy
+@section Archive Policy
+
+@cindex Archive Policy
+
+This determines the policy for moving old versions of an app to the archive
+repo, if one is configured. The configuration sets a default maximum number
+of versions kept in the main repo, after which older ones are moved to the
+archive. This app-specific policy setting can override that.
+
+Currently the only supported format is "n versions", where n is the number
+of versions to keep.
 
 @node Auto Update Mode
 @section Auto Update Mode
