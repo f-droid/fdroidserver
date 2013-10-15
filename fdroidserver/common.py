@@ -23,6 +23,7 @@ import subprocess
 import time
 import operator
 import cgi
+import magic
 
 def getvcs(vcstype, remote, local, sdk_path):
     if vcstype == 'git':
@@ -1590,46 +1591,42 @@ def scan_source(build_dir, root_dir, thisbuild):
         ignore = []
 
     # Iterate through all files in the source code...
-    for r,d,f in os.walk(build_dir):
-        for curfile in f:
+    with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as m:
+        for r,d,f in os.walk(build_dir):
+            for curfile in f:
 
-            if '/.hg' in r or '/.git' in r or '/.svn' in r:
-                continue
+                if '/.hg' in r or '/.git' in r or '/.svn' in r:
+                    continue
 
-            # Path (relative) to the file...
-            fp = os.path.join(r, curfile)
+                # Path (relative) to the file...
+                fp = os.path.join(r, curfile)
 
-            # Check if this file has been explicitly excluded from scanning...
-            ignorethis = False
-            for i in ignore:
-                if fp.startswith(i):
-                    ignorethis = True
-                    break
-            if ignorethis:
-                continue
+                # Check if this file has been explicitly excluded from scanning...
+                ignorethis = False
+                for i in ignore:
+                    if fp.startswith(i):
+                        ignorethis = True
+                        break
+                if ignorethis:
+                    continue
 
-            for suspect in usual_suspects:
-                if suspect in curfile.lower():
-                    msg = 'Found probable non-free blob ' + fp
-                    problems.append(msg)
+                for suspect in usual_suspects:
+                    if suspect in curfile.lower():
+                        problems.append('Found probable non-free blob ' + fp)
 
-            if curfile.endswith('.apk'):
-                msg = 'Found apk file, which should not be in the source - ' + fp
-                problems.append(msg)
+                mime = m.id_filename(fp)
+                if mime == 'application/x-sharedlib':
+                    problems.append('Found shared library at ' + fp)
+                elif mime == 'application/octet-stream':
+                    problems.append('Found binary at ' + fp)
+                elif mime == 'application/vnd.android.package-archive' or fp.endswith('.apk'):
+                    problems.append('Found apk at ' + fp)
 
-            elif curfile.endswith('.elf'):
-                msg = 'Found .elf at ' + fp
-                problems.append(msg)
-
-            elif curfile.endswith('.so'):
-                msg = 'Found .so at ' + fp
-                problems.append(msg)
-
-            elif curfile.endswith('.java'):
-                for line in file(fp):
-                    if 'DexClassLoader' in line:
-                        msg = 'Found DexClassLoader in ' + fp
-                        problems.append(msg)
+                elif curfile.endswith('.java'):
+                    for line in file(fp):
+                        if 'DexClassLoader' in line:
+                            problems.append('Found DexClassLoader in ' + fp)
+                            break
 
     # Presence of a jni directory without buildjni=yes might
     # indicate a problem... (if it's not a problem, explicitly use

@@ -138,6 +138,8 @@ Vagrant (gem install vagrant)
 Paramiko (debian package python-paramiko)
 @item
 Imaging (debian package python-imaging)
+@item
+Filemagic (pip install filemagic)
 @end itemize
 
 
