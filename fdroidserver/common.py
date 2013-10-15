@@ -586,9 +586,9 @@ def parse_metadata(metafile, **kw):
         try:
             versions = int(thisinfo['Archive Policy'][:-9])
             if versions < 1 or versions > 20:
-                raise MetaDataException("Silly number of days for archive policy")
+                raise MetaDataException("Silly number of versions for archive policy")
         except:
-            raise MetaDataException("Incomprehensible number of days for archive policy")
+            raise MetaDataException("Incomprehensible number of versions for archive policy")
 
     # Ensure all AntiFeatures are recognised...
     if thisinfo['AntiFeatures']:
