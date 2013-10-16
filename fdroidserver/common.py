@@ -1617,11 +1617,13 @@ def scan_source(build_dir, root_dir, thisbuild):
 
                 mime = m.id_filename(fp)
                 if mime == 'application/x-sharedlib':
-                    problems.append('Found shared library at %s (%s)' % (fd, fp))
-                elif mime == 'application/octet-stream':
-                    problems.append('Found binary at %s (%s)' % (fd, fp))
-                elif mime == 'application/vnd.android.package-archive' or fp.endswith('.apk'):
-                    problems.append('Found apk at %s (%s)' % (fd, fp))
+                    problems.append('Found shared library at %s' % fd)
+                elif mime == 'application/x-archive':
+                    problems.append('Found static library at %s' % fd)
+                elif mime == 'application/x-executable':
+                    problems.append('Found binary executable at %s' % fd)
+                elif fp.endswith('.apk'):
+                    problems.append('Found apk archive at %s' % fd)
 
                 elif curfile.endswith('.java'):
                     for line in file(fp):
