@@ -23,6 +23,8 @@ import subprocess
 import time
 import operator
 import cgi
+import Queue
+import threading
 import magic
 
 def getvcs(vcstype, remote, local, sdk_path):
@@ -1135,14 +1137,10 @@ def getsrclib(spec, srclib_dir, sdk_path, ndk_path="", mvn3="", basepath=False, 
             cmd = srclib["Prepare"].replace('$$SDK$$', sdk_path)
             cmd = cmd.replace('$$NDK$$', ndk_path).replace('$$MVN$$', mvn3)
 
-            print "******************************* PREPARE " + cmd + " **************"
-
-            p = subprocess.Popen(['bash', '-c', cmd], cwd=libdir,
-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            out, err = p.communicate()
+            p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=libdir, verbose=verbose)
             if p.returncode != 0:
-                raise BuildException("Error running prepare command for srclib "
-                        + name, out, err)
+                raise BuildException("Error running prepare command for srclib %s"
+                        % name, p.stdout, p.stderr)
         
         if srclib["Update Project"] == "Yes":
             print "Updating srclib %s at path %s" % (name, libdir)
@@ -1198,8 +1196,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
 
     # Run an init command if one is required...
     if 'init' in build:
-        output = ''
-        error = ''
         cmd = build['init']
         cmd = cmd.replace('$$SDK$$', sdk_path)
         cmd = cmd.replace('$$NDK$$', ndk_path)
@@ -1207,26 +1203,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         if verbose:
             print "Running 'init' commands in %s" % root_dir
 
-        p = subprocess.Popen(['bash', '-x', '-c', cmd], cwd=root_dir,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        for line in iter(p.stdout.readline, ''):
-            if verbose:
-                # Output directly to console
-                sys.stdout.write(line)
-                sys.stdout.flush()
-            else:
-                output += line
-        for line in iter(p.stderr.readline, ''):
-            if verbose:
-                # Output directly to console
-                sys.stdout.write(line)
-                sys.stdout.flush()
-            else:
-                error += line
-        p.communicate()
+        p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir, verbose=verbose)
         if p.returncode != 0:
             raise BuildException("Error running init command for %s:%s" %
-                    (app['id'], build['version']), output, error)
+                    (app['id'], build['version']), p.stdout, p.stderr)
 
     # Generate (or update) the ant build file, build.xml...
     updatemode = build.get('update', '.')
@@ -1272,13 +1252,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
             if verbose:
                 print "Update of '%s': exec '%s' in '%s'"%\
                     (d," ".join(parms),cwd)
-            p = subprocess.Popen(parms, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            (out, err) = p.communicate()
-            if p.returncode != 0:
-                raise BuildException("Failed to update project with stdout '%s' and stderr '%s'"%(out,err))
+            p = FDroidPopen(parms, cwd=cwd, verbose=verbose)
             # check to see whether an error was returned without a proper exit code (this is the case for the 'no target set or target invalid' error)
-            if err != "" and err.startswith("Error: "):
-                raise BuildException("Failed to update project with stdout '%s' and stderr '%s'"%(out,err))
+            if p.returncode != 0 or (p.stderr != "" and p.stderr.startswith("Error: ")):
+                raise BuildException("Failed to update project at %s" % cwd,
+                        p.stdout, p.stderr)
 
     # If the app has ant set up to sign the release, we need to switch
     # that off, because we want the unsigned apk...
@@ -1429,26 +1407,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         if verbose:
             print "Running 'prebuild' commands in %s" % root_dir
 
-        p = subprocess.Popen(['bash', '-x', '-c', cmd], cwd=root_dir,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        for line in iter(p.stdout.readline, ''):
-            if verbose:
-                # Output directly to console
-                sys.stdout.write(line)
-                sys.stdout.flush()
-            else:
-                output += line
-        for line in iter(p.stderr.readline, ''):
-            if verbose:
-                # Output directly to console
-                sys.stdout.write(line)
-                sys.stdout.flush()
-            else:
-                error += line
-        p.communicate()
+        p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir, verbose=verbose)
         if p.returncode != 0:
             raise BuildException("Error running prebuild command for %s:%s" %
-                    (app['id'], build['version']), output, error)
+                    (app['id'], build['version']), p.stdout, p.stderr)
     print "Applying generic clean-ups..."
 
     if build.get('anal-tics', 'no') == 'yes':
@@ -1730,3 +1692,76 @@ def isApkDebuggable(apkfile):
     return False
 
 
+class AsynchronousFileReader(threading.Thread):
+    '''
+    Helper class to implement asynchronous reading of a file
+    in a separate thread. Pushes read lines on a queue to
+    be consumed in another thread.
+    '''
+ 
+    def __init__(self, fd, queue):
+        assert isinstance(queue, Queue.Queue)
+        assert callable(fd.readline)
+        threading.Thread.__init__(self)
+        self._fd = fd
+        self._queue = queue
+ 
+    def run(self):
+        '''The body of the tread: read lines and put them on the queue.'''
+        for line in iter(self._fd.readline, ''):
+            self._queue.put(line)
+ 
+    def eof(self):
+        '''Check whether there is no more content to expect.'''
+        return not self.is_alive() and self._queue.empty()
+
+class PopenResult:
+    returncode = None
+    stdout = ''
+    stderr = ''
+    stdout_apk = ''
+
+def FDroidPopen(commands, cwd,
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        verbose=False, apkoutput=False):
+    """
+    Runs a command the FDroid way and returns return code and output
+
+    :param commands, cwd, stdout, stderr: like subprocess.Popen
+    :param verbose: whether to print output as it is saved
+    """
+    result = PopenResult()
+    p = subprocess.Popen(commands, cwd=cwd, stdout=stdout, stderr=stderr)
+    
+    stdout_queue = Queue.Queue()
+    stdout_reader = AsynchronousFileReader(p.stdout, stdout_queue)
+    stdout_reader.start()
+    stderr_queue = Queue.Queue()
+    stderr_reader = AsynchronousFileReader(p.stderr, stderr_queue)
+    stderr_reader.start()
+    
+    # Check the queues for output (until there is no more to get)
+    while not stdout_reader.eof() or not stderr_reader.eof():
+        # Show what we received from standard output
+        while not stdout_queue.empty():
+            line = stdout_queue.get()
+            if verbose:
+                # Output directly to console
+                sys.stdout.write(line)
+                sys.stdout.flush()
+            if apkoutput and 'apk' in line:
+                result.stdout_apk += line
+            result.stdout += line
+
+        # Show what we received from standard error
+        while not stderr_queue.empty():
+            line = stderr_queue.get()
+            if verbose:
+                # Output directly to console
+                sys.stderr.write(line)
+                sys.stderr.flush()
+            result.stderr += line
+
+    p.communicate()
+    result.returncode = p.returncode
+    return result

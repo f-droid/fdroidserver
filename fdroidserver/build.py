@@ -27,36 +27,10 @@ import tarfile
 import traceback
 import time
 import json
-import Queue
-import threading
 from optparse import OptionParser
 
 import common
-from common import BuildException
-from common import VCSException
-
-class AsynchronousFileReader(threading.Thread):
-    '''
-    Helper class to implement asynchronous reading of a file
-    in a separate thread. Pushes read lines on a queue to
-    be consumed in another thread.
-    '''
- 
-    def __init__(self, fd, queue):
-        assert isinstance(queue, Queue.Queue)
-        assert callable(fd.readline)
-        threading.Thread.__init__(self)
-        self._fd = fd
-        self._queue = queue
- 
-    def run(self):
-        '''The body of the tread: read lines and put them on the queue.'''
-        for line in iter(self._fd.readline, ''):
-            self._queue.put(line)
- 
-    def eof(self):
-        '''Check whether there is no more content to expect.'''
-        return not self.is_alive() and self._queue.empty()
+from common import BuildException, VCSException, FDroidPopen
 
 def get_builder_vm_id():
     vd = os.path.join('builder', '.vagrant')
@@ -315,8 +289,6 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
             cmdline += ' --force --test'
         cmdline += ' -p ' + app['id'] + ' --vercode ' + thisbuild['vercode']
         chan.exec_command('bash -c ". ~/.bsenv && ' + cmdline + '"')
-        output = ''
-        error = ''
         while not chan.exit_status_ready():
             while chan.recv_ready():
                 output += chan.recv(1024)
@@ -376,14 +348,11 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     # We need to clean via the build tool in case the binary dirs are
     # different from the default ones
     p = None
-    output = ''
-    error = ''
     if 'maven' in thisbuild:
         print "Cleaning Maven project..."
         cmd = [mvn3, 'clean', '-Dandroid.sdk.path=' + sdk_path]
 
-        p = subprocess.Popen(cmd, cwd=root_dir,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = FDroidPopen(cmd, cwd=root_dir, verbose=verbose)
     elif 'gradle' in thisbuild:
         print "Cleaning Gradle project..."
         cmd = [gradle, 'clean']
@@ -393,33 +362,15 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         else:
             gradle_dir = root_dir
 
-        p = subprocess.Popen(cmd, cwd=gradle_dir,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = FDroidPopen(cmd, cwd=gradle_dir, verbose=verbose)
     elif thisbuild.get('update', '.') != 'no':
         print "Cleaning Ant project..."
         cmd = ['ant', 'clean']
-        p = subprocess.Popen(cmd, cwd=root_dir,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = FDroidPopen(cmd, cwd=root_dir, verbose=verbose)
 
-    if p is not None:
-        for line in iter(p.stdout.readline, ''):
-            if verbose:
-                # Output directly to console
-                sys.stdout.write(line)
-                sys.stdout.flush()
-            else:
-                output += line
-        for line in iter(p.stderr.readline, ''):
-            if verbose:
-                # Output directly to console
-                sys.stdout.write(line)
-                sys.stdout.flush()
-            else:
-                error += line
-        p.communicate()
-        if p.returncode != 0:
-            raise BuildException("Error cleaning %s:%s" %
-                    (app['id'], thisbuild['version']), output, error)
+    if p is not None and p.returncode != 0:
+        raise BuildException("Error cleaning %s:%s" %
+                (app['id'], thisbuild['version']), p.stdout, p.stderr)
 
     # Also clean jni
     print "Cleaning jni dirs..."
@@ -456,8 +407,6 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     tarball.close()
 
     # Run a build command if one is required...
-    output = ''
-    error = ''
     if 'build' in thisbuild:
         cmd = thisbuild['build']
         # Substitute source library paths into commands...
@@ -470,42 +419,12 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if verbose:
             print "Running 'build' commands in %s" % root_dir
 
-        p = subprocess.Popen(['bash', '-x', '-c', cmd], cwd=root_dir,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = FDroidPopen(['bash', '-x', '-c', cmd],
+                cwd=root_dir, verbose=verbose)
         
-        stdout_queue = Queue.Queue()
-        stdout_reader = AsynchronousFileReader(p.stdout, stdout_queue)
-        stdout_reader.start()
-        stderr_queue = Queue.Queue()
-        stderr_reader = AsynchronousFileReader(p.stderr, stderr_queue)
-        stderr_reader.start()
-        
-        # Check the queues if we received some output (until there is nothing more to get).
-        while not stdout_reader.eof() or not stderr_reader.eof():
-            # Show what we received from standard output.
-            while not stdout_queue.empty():
-                line = stdout_queue.get()
-                if verbose:
-                    # Output directly to console
-                    sys.stdout.write(line)
-                    sys.stdout.flush()
-                else:
-                    error += line
- 
-            # Show what we received from standard error.
-            while not stderr_queue.empty():
-                line = stderr_queue.get()
-                if verbose:
-                    # Output directly to console
-                    sys.stdout.write(line)
-                    sys.stdout.flush()
-                else:
-                    error += line
-
-        p.communicate()
         if p.returncode != 0:
             raise BuildException("Error running build command for %s:%s" %
-                    (app['id'], thisbuild['version']), output, error)
+                    (app['id'], thisbuild['version']), p.stdout, p.stderr)
 
     # Build native stuff if required...
     if thisbuild.get('buildjni') not in (None, 'no'):
@@ -530,21 +449,12 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 open(manifest, 'w').write(manifest_text)
                 # In case the AM.xml read was big, free the memory
                 del manifest_text
-            p = subprocess.Popen([ndkbuild], cwd=root_dir + '/' + d,
-                    stdout=subprocess.PIPE)
-        output = p.communicate()[0]
-        if p.returncode != 0:
-            print output
-            raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']))
+            p = FDroidPopen([ndkbuild], cwd=os.path.join(root_dir,d),
+                    verbose=verbose)
+            if p.returncode != 0:
+                raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout, p.stderr)
 
     p = None
-    if verbose:
-        output = None
-        error = None
-    else:
-        output = ''
-        error = ''
-    output_apk = ''
     # Build the release...
     if 'maven' in thisbuild:
         print "Building Maven project..."
@@ -562,23 +472,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if 'mvnflags' in thisbuild:
             mvncmd += thisbuild['mvnflags']
 
-        p = subprocess.Popen(mvncmd, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        for line in iter(p.stdout.readline, ''):
-            if verbose:
-                # Output directly to console
-                sys.stdout.write(line)
-                sys.stdout.flush()
-            else:
-                output += line
-            if 'apk' in line:
-                output_apk += line
-        for line in iter(p.stderr.readline, ''):
-            if verbose:
-                # Output directly to console
-                sys.stdout.write(line)
-                sys.stdout.flush()
-            else:
-                error += line
+        p = FDroidPopen(mvncmd, cwd=root_dir, verbose=verbose, apkoutput=True)
 
     elif 'gradle' in thisbuild:
         print "Building Gradle project..."
@@ -622,58 +516,29 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if verbose:
             print "Running %s on %s" % (" ".join(commands), gradle_dir)
 
-        p = subprocess.Popen(commands, cwd=gradle_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        for line in iter(p.stdout.readline, ''):
-            if verbose:
-                # Output directly to console
-                sys.stdout.write(line)
-                sys.stdout.flush()
-            else:
-                output += line
-        for line in iter(p.stderr.readline, ''):
-            if verbose:
-                # Output directly to console
-                sys.stdout.write(line)
-                sys.stdout.flush()
-            else:
-                error += line
+        p = FDroidPopen(commands, cwd=gradle_dir, verbose=verbose)
 
     else:
         print "Building Ant project..."
-        antcommands = ['ant']
+        cmd = ['ant']
         if install:
-            antcommands += ['debug','install']
+            cmd += ['debug','install']
         elif 'antcommand' in thisbuild:
-            antcommands += [thisbuild['antcommand']]
+            cmd += [thisbuild['antcommand']]
         else:
-            antcommands += ['release']
-        p = subprocess.Popen(antcommands, cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        for line in iter(p.stdout.readline, ''):
-            if verbose:
-                # Output directly to console
-                sys.stdout.write(line)
-                sys.stdout.flush()
-            else:
-                output += line
-            if 'apk' in line:
-                output_apk += line
-        for line in iter(p.stderr.readline, ''):
-            if verbose:
-                # Output directly to console
-                sys.stdout.write(line)
-                sys.stdout.flush()
-            else:
-                error += line
-    p.communicate()
+            cmd += ['release']
+        p = FDroidPopen(cmd, cwd=root_dir, verbose=verbose, apkoutput=True)
     if p.returncode != 0:
-        raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output, error)
+        raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout, p.stderr)
     if install:
         if 'maven' in thisbuild:
-            p = subprocess.Popen([mvn3, 'android:deploy', '-Dandroid.sdk.path=' + sdk_path],
-                    cwd=root_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            output_, error_ = p.communicate()
+            p = FDroidPopen([mvn3, 'android:deploy',
+                '-Dandroid.sdk.path=' + sdk_path],
+                cwd=root_dir, verobse=verbose)
             if p.returncode != 0:
-                raise BuildException("Warning: Could not deploy %s:%s" % (app['id'], thisbuild['version']), output_, error_)
+                raise BuildException("Warning: Could not deploy %s:%s"
+                        % (app['id'], thisbuild['version']),
+                        p.stdout, p.stderr)
         return
     print "Successfully built version " + thisbuild['version'] + ' of ' + app['id']
 
@@ -691,14 +556,14 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         src = os.path.join(bindir, src)
     elif 'maven' in thisbuild:
         m = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
-                output_apk, re.S|re.M)
+                p.stdout_apk, re.S|re.M)
         if not m:
             m = re.match(r".*^\[INFO\] Creating additional unsigned apk file .*/([^/]+)\.apk",
-                    output_apk, re.S|re.M)
+                    p.stdout_apk, re.S|re.M)
         if not m:
             # This format is found in com.github.mobile, com.yubico.yubitotp and com.botbrew.basil for example...
             m = re.match(r'.*^\[INFO\] [^$]*aapt \[package,[^$]*' + bindir + '/([^/]+)\.ap[_k][,\]]',
-                    output_apk, re.S|re.M)
+                    p.stdout_apk, re.S|re.M)
         if not m:
             raise BuildException('Failed to find output')
         src = m.group(1)
@@ -712,7 +577,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             name = '-'.join([os.path.basename(build_dir), flavour, 'release', 'unsigned'])
         src = os.path.join(build_dir, 'build', 'apk', name+'.apk')
     else:
-        src = re.match(r".*^.*Creating (.+) for release.*$.*", output_apk,
+        src = re.match(r".*^.*Creating (.+) for release.*$.*", p.stdout_apk,
             re.S|re.M).group(1)
         src = os.path.join(bindir, src)
 
