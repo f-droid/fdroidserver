@@ -289,6 +289,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
             cmdline += ' --force --test'
         cmdline += ' -p ' + app['id'] + ' --vercode ' + thisbuild['vercode']
         chan.exec_command('bash -c ". ~/.bsenv && ' + cmdline + '"')
+        output = ''
+        error = ''
         while not chan.exit_status_ready():
             while chan.recv_ready():
                 output += chan.recv(1024)
