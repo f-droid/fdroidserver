@@ -1137,7 +1137,7 @@ def getsrclib(spec, srclib_dir, sdk_path, ndk_path="", mvn3="", basepath=False, 
             cmd = srclib["Prepare"].replace('$$SDK$$', sdk_path)
             cmd = cmd.replace('$$NDK$$', ndk_path).replace('$$MVN$$', mvn3)
 
-            p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=libdir, verbose=verbose)
+            p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=libdir)
             if p.returncode != 0:
                 raise BuildException("Error running prepare command for srclib %s"
                         % name, p.stdout, p.stderr)
