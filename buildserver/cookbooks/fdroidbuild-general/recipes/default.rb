@@ -1,7 +1,7 @@
 
 user = node[:settings][:user]
 
-%w{ant ant-contrib autoconf autopoint bison cmake expect libtool libsaxonb-java libssl1.0.0 libssl-dev maven openjdk-7-jdk javacc python git-core mercurial subversion bzr git-svn make perlmagick pkg-config zip ruby rubygems librmagick-ruby yasm imagemagick gettext}.each do |pkg|
+%w{ant ant-contrib autoconf autopoint bison cmake expect libtool libsaxonb-java libssl1.0.0 libssl-dev maven openjdk-7-jdk javacc python git-core mercurial subversion bzr git-svn make perlmagick pkg-config zip ruby rubygems librmagick-ruby yasm imagemagick gettext python-pip}.each do |pkg|
   package pkg do
     action :install
   end
@@ -13,6 +13,12 @@ if node['kernel']['machine'] == "x86_64"
       action :install
     end
   end
+end
+
+execute "add-filemagic" do
+  user "root"
+  command "pip install filemagic"
+  not_if "pip list | grep filemagic"
 end
 
 script "install-gradle" do
