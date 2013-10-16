@@ -1600,11 +1600,12 @@ def scan_source(build_dir, root_dir, thisbuild):
 
                 # Path (relative) to the file...
                 fp = os.path.join(r, curfile)
+                fd = fp[len(build_dir)+1:]
 
                 # Check if this file has been explicitly excluded from scanning...
                 ignorethis = False
                 for i in ignore:
-                    if fp.startswith(i):
+                    if fd.startswith(i):
                         ignorethis = True
                         break
                 if ignorethis:
@@ -1616,11 +1617,11 @@ def scan_source(build_dir, root_dir, thisbuild):
 
                 mime = m.id_filename(fp)
                 if mime == 'application/x-sharedlib':
-                    problems.append('Found shared library at ' + fp)
+                    problems.append('Found shared library at %s (%s)' % (fd, fp))
                 elif mime == 'application/octet-stream':
-                    problems.append('Found binary at ' + fp)
+                    problems.append('Found binary at %s (%s)' % (fd, fp))
                 elif mime == 'application/vnd.android.package-archive' or fp.endswith('.apk'):
-                    problems.append('Found apk at ' + fp)
+                    problems.append('Found apk at %s (%s)' % (fd, fp))
 
                 elif curfile.endswith('.java'):
                     for line in file(fp):
