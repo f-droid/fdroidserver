@@ -29,17 +29,6 @@ execute "add-android-home" do
   not_if "grep ANDROID_HOME /home/#{user}/.bsenv"
 end
 
-execute "add-maven-support-repo" do
-  user user
-  command "mkdir /home/#{user}/.m2 && echo \"
-<settings><activeProfiles><activeProfile>android</activeProfile></activeProfiles>
-<profiles><profile><id>android</id><repositories><repository><id>android-support-repository</id>
-<url>file:///opt/android/sdk/extras/android/m2repository/</url>
-</repository></repositories></profile></profiles></settings>
-\" > /home/#{user}/.m2/settings.xml"
-  not_if "grep m2repository /home/#{user}/.m2/settings.xml"
-end
-
 %w{17.0.0 18.0.1}.each do |ver|
 
   script "add_build_tools_#{ver}" do
