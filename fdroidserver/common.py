@@ -23,7 +23,6 @@ import subprocess
 import time
 import operator
 import cgi
-import magic
 
 def getvcs(vcstype, remote, local, sdk_path):
     if vcstype == 'git':
@@ -1591,6 +1590,7 @@ def scan_source(build_dir, root_dir, thisbuild):
         ignore = []
 
     # Iterate through all files in the source code...
+    import magic
     with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as m:
         for r,d,f in os.walk(build_dir):
             for curfile in f:
