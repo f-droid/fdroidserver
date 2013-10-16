@@ -23,6 +23,7 @@ import subprocess
 import time
 import operator
 import cgi
+import magic
 
 def getvcs(vcstype, remote, local, sdk_path):
     if vcstype == 'git':
@@ -1588,48 +1589,50 @@ def scan_source(build_dir, root_dir, thisbuild):
         ignore = [p.strip() for p in thisbuild['scanignore'].split(';')]
     else:
         ignore = []
+    
+    ms = magic.open(magic.MIME_TYPE)
+    ms.load()
 
     # Iterate through all files in the source code...
-    import magic
-    with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as m:
-        for r,d,f in os.walk(build_dir):
-            for curfile in f:
+    for r,d,f in os.walk(build_dir):
+        for curfile in f:
 
-                if '/.hg' in r or '/.git' in r or '/.svn' in r:
-                    continue
+            if '/.hg' in r or '/.git' in r or '/.svn' in r:
+                continue
 
-                # Path (relative) to the file...
-                fp = os.path.join(r, curfile)
-                fd = fp[len(build_dir)+1:]
+            # Path (relative) to the file...
+            fp = os.path.join(r, curfile)
+            fd = fp[len(build_dir)+1:]
 
-                # Check if this file has been explicitly excluded from scanning...
-                ignorethis = False
-                for i in ignore:
-                    if fd.startswith(i):
-                        ignorethis = True
+            # Check if this file has been explicitly excluded from scanning...
+            ignorethis = False
+            for i in ignore:
+                if fd.startswith(i):
+                    ignorethis = True
+                    break
+            if ignorethis:
+                continue
+
+            for suspect in usual_suspects:
+                if suspect in curfile.lower():
+                    problems.append('Found probable non-free blob ' + fp)
+
+            mime = ms.file(fp)
+            if mime == 'application/x-sharedlib':
+                problems.append('Found shared library at %s' % fd)
+            elif mime == 'application/x-archive':
+                problems.append('Found static library at %s' % fd)
+            elif mime == 'application/x-executable':
+                problems.append('Found binary executable at %s' % fd)
+            elif fp.endswith('.apk'):
+                problems.append('Found apk archive at %s' % fd)
+
+            elif curfile.endswith('.java'):
+                for line in file(fp):
+                    if 'DexClassLoader' in line:
+                        problems.append('Found DexClassLoader in ' + fp)
                         break
-                if ignorethis:
-                    continue
-
-                for suspect in usual_suspects:
-                    if suspect in curfile.lower():
-                        problems.append('Found probable non-free blob ' + fp)
-
-                mime = m.id_filename(fp)
-                if mime == 'application/x-sharedlib':
-                    problems.append('Found shared library at %s' % fd)
-                elif mime == 'application/x-archive':
-                    problems.append('Found static library at %s' % fd)
-                elif mime == 'application/x-executable':
-                    problems.append('Found binary executable at %s' % fd)
-                elif fp.endswith('.apk'):
-                    problems.append('Found apk archive at %s' % fd)
-
-                elif curfile.endswith('.java'):
-                    for line in file(fp):
-                        if 'DexClassLoader' in line:
-                            problems.append('Found DexClassLoader in ' + fp)
-                            break
+    ms.close()
 
     # Presence of a jni directory without buildjni=yes might
     # indicate a problem... (if it's not a problem, explicitly use
