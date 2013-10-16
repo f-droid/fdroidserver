@@ -460,11 +460,11 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     # Build the release...
     if 'maven' in thisbuild:
         print "Building Maven project..."
-        mvncmd = [mvn3, 'package', '-Dandroid.sdk.path=' + sdk_path]
+        mvncmd = [mvn3, '-Dandroid.sdk.path=' + sdk_path]
         if install:
-            mvncmd += ['-Dandroid.sign.debug=true']
+            mvncmd += ['-Dandroid.sign.debug=true', 'package', 'android:deploy']
         else:
-            mvncmd += ['-Dandroid.sign.debug=false', '-Dandroid.release=true']
+            mvncmd += ['-Dandroid.sign.debug=false', '-Dandroid.release=true', 'target']
         if 'target' in thisbuild:
             target = thisbuild["target"].split('-')[1]
             subprocess.call(['sed', '-i',
@@ -515,9 +515,6 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         else:
             commands += ['assemble'+flavour+'Release']
 
-        if verbose:
-            print "Running %s on %s" % (" ".join(commands), gradle_dir)
-
         p = FDroidPopen(commands, cwd=gradle_dir, verbose=verbose)
 
     else:
@@ -530,18 +527,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         else:
             cmd += ['release']
         p = FDroidPopen(cmd, cwd=root_dir, verbose=verbose, apkoutput=True)
+
     if p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout, p.stderr)
-    if install:
-        if 'maven' in thisbuild:
-            p = FDroidPopen([mvn3, 'android:deploy',
-                '-Dandroid.sdk.path=' + sdk_path],
-                cwd=root_dir, verobse=verbose)
-            if p.returncode != 0:
-                raise BuildException("Warning: Could not deploy %s:%s"
-                        % (app['id'], thisbuild['version']),
-                        p.stdout, p.stderr)
-        return
     print "Successfully built version " + thisbuild['version'] + ' of ' + app['id']
 
     # Find the apk name in the output...
