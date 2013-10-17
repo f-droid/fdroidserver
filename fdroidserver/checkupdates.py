@@ -203,6 +203,35 @@ def check_repomanifest(app, sdk_path, branch=None):
         msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
         return (None, msg)
 
+def check_repotrunk(app, sdk_path, branch=None):
+
+    try:
+        if app['Repo Type'] == 'srclib':
+            build_dir = os.path.join('build', 'srclib', app['Repo'])
+            repotype = common.getsrclibvcs(app['Repo'])
+        else:
+            build_dir = os.path.join('build/', app['id'])
+            repotype = app['Repo Type']
+
+        if repotype not in ('svn', 'git-svn'):
+            return (None, 'RepoTrunk update mode only makes sense in svn and git-svn repositories')
+
+        # Set up vcs interface and make sure we have the latest code...
+        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
+
+        vcs.gotorevision(None)
+
+        ref = vcs.getref()
+        return (ref, ref)
+    except BuildException as be:
+        msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
+        return (None, msg)
+    except VCSException as vcse:
+        msg = "VCS error while scanning app %s: %s" % (app['id'], vcse)
+        return (None, msg)
+    except Exception:
+        msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
+        return (None, msg)
 
 # Check for a new version by looking at the Google Play Store.
 # Returns (None, "a message") if this didn't work, or (version, None) for
@@ -307,6 +336,8 @@ def main():
                 (version, vercode) = check_repomanifest(app, sdk_path)
             elif mode.startswith('RepoManifest/'):
                 (version, vercode) = check_repomanifest(app, sdk_path, mode[13:])
+            elif mode == 'RepoTrunk':
+                (version, vercode) = check_repotrunk(app, sdk_path)
             elif mode == 'HTTP':
                 (version, vercode) = check_http(app)
             elif mode == 'Static':

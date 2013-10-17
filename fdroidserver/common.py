@@ -126,6 +126,10 @@ class vcs:
     def gettags(self):
         raise VCSException('gettags not supported for this vcs type')
 
+    # Get current commit reference (hash, revision, etc)
+    def getref(self):
+        raise VCSException('getref not supported for this vcs type')
+
     # Returns the srclib (name, path) used in setting up the current
     # revision, or None.
     def getsrclib(self):
@@ -287,6 +291,12 @@ class vcs_gitsvn(vcs):
         self.checkrepo()
         return os.listdir(os.path.join(self.local, '.git/svn/refs/remotes/tags'))
 
+    def getref(self):
+        self.checkrepo()
+        p = subprocess.Popen(['git', 'svn', 'find-rev', 'HEAD'],
+                stdout=subprocess.PIPE, cwd=self.local)
+        return p.communicate()[0]
+
 class vcs_svn(vcs):
 
     def repotype(self):
@@ -321,6 +331,12 @@ class vcs_svn(vcs):
                 self.userargs(), cwd=self.local) != 0:
             raise VCSException("Svn update failed")
 
+    def getref(self):
+        p = subprocess.Popen(['svn', 'info'],
+                stdout=subprocess.PIPE, cwd=self.local)
+        for line in p.communicate()[0].splitlines():
+            if line is not None and line.startswith('Last Changed Rev: '):
+                return line[18:]
 
 class vcs_hg(vcs):
 

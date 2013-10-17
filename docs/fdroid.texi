@@ -1091,6 +1091,13 @@ in place of the default one.  The default values are "master" for git,
 On the other hand, branch support hasn't been implemented yet in bzr and svn, 
 but RepoManifest may still be used without it.
 @item
+@code{RepoTrunk} - For svn and git-svn repositories, especially those who
+don't have a bundled AndroidManifest.xml file, the Tags and RepoManifest
+checks will not work, since there is no version information to obtain. But,
+for those apps who automate their build process with the commit ref that HEAD
+points to, RepoTrunk will set the Current Version and Current Version Code to
+that number.
+@item
 @code{Tags} - The AndroidManifest.xml file in all tagged revisions in the
 source repository is checked, looking for the highest version code. The
 appropriateness of this method depends on the development process used by the
