@@ -19,8 +19,8 @@ script "install-gradle" do
   cwd "/tmp"
   interpreter "bash"
   code "
-    unzip /vagrant/cache/gradle-1.7-bin.zip
-    mv gradle-1.7 /opt/gradle
+    unzip /vagrant/cache/gradle-1.8-bin.zip
+    mv gradle-1.8 /opt/gradle
   "
   not_if "test -d /opt/gradle"
 end

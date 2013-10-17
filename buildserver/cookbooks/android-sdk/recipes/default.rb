@@ -8,7 +8,7 @@ script "setup-android-sdk" do
   user user
   cwd "/tmp"
   code "
-    tar zxvf /vagrant/cache/android-sdk_r21.0.1-linux.tgz
+    tar zxvf /vagrant/cache/android-sdk_r22.2.1-linux.tgz
     mv android-sdk-linux #{sdk_loc}
     #{sdk_loc}/tools/android update sdk --no-ui -t platform-tool
     #{sdk_loc}/tools/android update sdk --no-ui -t tool
@@ -29,7 +29,7 @@ execute "add-android-home" do
   not_if "grep ANDROID_HOME /home/#{user}/.bsenv"
 end
 
-%w{17.0.0 18.0.1}.each do |ver|
+%w{18.1.1}.each do |ver|
 
   script "add_build_tools_#{ver}" do
     interpreter "bash"

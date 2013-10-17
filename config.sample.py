@@ -6,10 +6,11 @@
 sdk_path = "/path/to/android-sdk-linux_86"
 
 # Path to the Android NDK ($ANDROID_NDK)
+# Legacy toolchains are only needed by some apps
 ndk_path = "/path/to/android-ndk-r9"
 
 # Build tools version to be used
-build_tools = "18.1"
+build_tools = "18.1.1"
 
 # Path to Android Java SWT ($ANDROID_SWT)
 javacc_path = "/usr/share/java"
@@ -21,7 +22,9 @@ mvn3 = "mvn3"
 gradle = "gradle"
 
 # Android gradle plugin version
-gradle_plugin = "0.5.+"
+# "0.5.+" -> gradle 1.7
+# "0.6.+" -> gradle 1.8
+gradle_plugin = "0.6.+"
 
 # Max height and width (in pixels) for the icons in the repo
 # This corresponds to 72x72 pixels, i.e. mdpi

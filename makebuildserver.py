@@ -48,22 +48,28 @@ cachedir = os.path.join('buildserver', 'cache')
 if not os.path.exists(cachedir):
     os.mkdir(cachedir)
 cachefiles = [
-    ('android-sdk_r21.0.1-linux.tgz',
-     'http://dl.google.com/android/android-sdk_r21.0.1-linux.tgz',
-     'e797ff3abbdc0fe2e7299e82e92ade830fa922ddd045d9a5a2d187c5c1a2661c'),
-    ('gradle-1.7-bin.zip',
-     'http://services.gradle.org/distributions/gradle-1.7-bin.zip',
-     '360c97d51621b5a1ecf66748c718594e5f790ae4fbc1499543e0c006033c9d30')]
+    ('android-sdk_r22.2.1-linux.tgz',
+     'http://dl.google.com/android/android-sdk_r22.2.1-linux.tgz',
+     '17ea4610008985eb1454b3b25ad00c59300cee3141f7ea3deec98f45d862faa5'),
+    ('gradle-1.8-bin.zip',
+     'http://services.gradle.org/distributions/gradle-1.8-bin.zip',
+     'a342bbfa15fd18e2482287da4959588f45a41b60910970a16e6d97959aea5703')]
 if arch64:
     cachefiles.extend([
     ('android-ndk-r9-linux-x64_64.tar.bz2',
      'http://dl.google.com/android/ndk/android-ndk-r9-linux-x86_64.tar.bz2',
-     '8a6013bfd8a8709592c53086c4f841933f5f2b175dd030326406d24ff4daa267')])
+     '8a6013bfd8a8709592c53086c4f841933f5f2b175dd030326406d24ff4daa267'),
+    ('android-ndk-r9-linux-x86_64-legacy-toolchains.tar.bz2',
+     'http://dl.google.com/android/ndk/android-ndk-r9-linux-x86_64-legacy-toolchains.tar.bz2',
+     '087fbca38a1a2c1a309de272d22e84bbc1c3e2254211761180572fde75faab27')])
 else:
     cachefiles.extend([
     ('android-ndk-r9-linux-x86.tar.bz2',
      'http://dl.google.com/android/ndk/android-ndk-r9-linux-x86.tar.bz2',
-     '30f3da01e4d8d3415777b5d88a0b70fac5a4620807fd28110f9bc4c8093f6b6e')])
+     '30f3da01e4d8d3415777b5d88a0b70fac5a4620807fd28110f9bc4c8093f6b6e'),
+    ('android-ndk-r9-linux-x86-legacy-toolchains.tar.bz2',
+     'http://dl.google.com/android/ndk/android-ndk-r9-linux-x86-legacy-toolchains.tar.bz2',
+     '26b94f0a5d686b4892cb22b06094751efded0958baed380b2ccce56517fd830b')])
 wanted = []
 for f, src, shasum in cachefiles:
     if not os.path.exists(os.path.join(cachedir, f)):
