@@ -291,7 +291,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
     name_pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
     vercode_pat = re.compile(".*versionCode='([0-9]*)'.*")
     vername_pat = re.compile(".*versionName='([^']*)'.*")
-    label_pat = re.compile(".*label='(.*)'[\n '].*")
+    label_pat = re.compile(".*label='(.*?)'[\n '].*")
     icon_pat = re.compile(".*icon='([^']*)'.*")
     sdkversion_pat = re.compile(".*'([0-9]*)'.*")
     string_pat = re.compile(".*'([^']*)'.*")
