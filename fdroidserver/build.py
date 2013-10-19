@@ -311,8 +311,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
             ftp.chdir('/home/vagrant/tmp')
         else:
             ftp.chdir('/home/vagrant/unsigned')
-        apkfile = app['id'] + '_' + thisbuild['vercode'] + '.apk'
-        tarball = app['id'] + '_' + thisbuild['vercode'] + '_src' + '.tar.gz'
+        apkfile = common.getapkname(app,thisbuild)
+        tarball = common.getsrcname(app,thisbuild)
         try:
             ftp.get(apkfile, os.path.join(output_dir, apkfile))
             ftp.get(tarball, os.path.join(output_dir, tarball))
@@ -397,9 +397,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     # Build the source tarball right before we build the release...
     print "Creating source tarball..."
-    tarname = app['id'] + '_' + thisbuild['vercode'] + '_src'
-    tarball = tarfile.open(os.path.join(tmp_dir,
-        tarname + '.tar.gz'), "w:gz")
+    tarname = common.getsrcname(app,thisbuild)
+    tarball = tarfile.open(os.path.join(tmp_dir, tarname), "w:gz")
     def tarexc(f):
         for vcs_dir in ['.svn', '.git', '.hg', '.bzr']:
             if f.endswith(vcs_dir):
@@ -625,15 +624,13 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     # Copy the unsigned apk to our destination directory for further
     # processing (by publish.py)...
-    dest = os.path.join(output_dir, app['id'] + '_' +
-            thisbuild['vercode'] + '.apk')
+    dest = common.getapkname(app,thisbuild)
     shutil.copyfile(src, dest)
 
     # Move the source tarball into the output directory...
     if output_dir != tmp_dir:
-        tarfilename = tarname + '.tar.gz'
-        shutil.move(os.path.join(tmp_dir, tarfilename),
-            os.path.join(output_dir, tarfilename))
+        shutil.move(os.path.join(tmp_dir, tarname),
+            os.path.join(output_dir, tarname))
 
 
 def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, extlib_dir,
@@ -644,17 +641,16 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
     Returns True if the build was done, False if it wasn't necessary.
     """
 
-    dest = os.path.join(output_dir, app['id'] + '_' +
-            thisbuild['vercode'] + '.apk')
-    dest_repo = os.path.join(repo_dir, app['id'] + '_' +
-            thisbuild['vercode'] + '.apk')
+    dest_apk = common.getapkname(app,thisbuild)
+
+    dest = os.path.join(output_dir, dest_apk)
+    dest_repo = os.path.join(repo_dir, dest_apk)
 
     if os.path.exists(dest) or (not test and os.path.exists(dest_repo)):
         return False
 
     if also_check_dir and not test:
-        dest_also = os.path.join(also_check_dir, app['id'] + '_' +
-                thisbuild['vercode'] + '.apk')
+        dest_also = os.path.join(also_check_dir, dest_apk)
         if os.path.exists(dest_also):
             return False
 

@@ -464,9 +464,18 @@ def parse_metadata(metafile, **kw):
         thisbuild = {}
         thisbuild['origlines'] = lines
         thisbuild['version'] = parts[0]
-        thisbuild['vercode'] = parts[1]
+        ver = parts[1].split('-')
+        if len(ver) == 1:
+            thisbuild['vercode'] = parts[1]
+            thisbuild['subvercode'] = None
+        elif len(ver) == 2:
+            thisbuild['vercode'] = ver[0]
+            thisbuild['subvercode'] = ver[1]
+        else:
+            raise MetaDataException("Invalid version code for build in " + metafile.name)
         try:
             testvercode = int(thisbuild['vercode'])
+            testsubvercode = int(thisbuild['subvercode'])
         except:
             raise MetaDataException("Invalid version code for build in " + metafile.name)
         thisbuild['commit'] = parts[2]
@@ -623,6 +632,17 @@ def parse_metadata(metafile, **kw):
 
     return thisinfo
 
+def getvercode(build):
+    if build['subvercode'] is None:
+        return build['vercode']
+    return "%s-%s" % (build['vercode'], build['subvercode'])
+
+def getapkname(app, build):
+    return "%s_%s.apk" % (app['id'], getvercode(build))
+
+def getsrcname(app, build):
+    return "%s_%s_src.tar.gz" % (app['id'], getvercode(build))
+
 # Write a metadata file.
 #
 # 'dest'    - The path to the output file
@@ -675,6 +695,7 @@ def write_metadata(dest, app):
         writefield('Repo Type')
         writefield('Repo')
         mf.write('\n')
+    keystoignore = ['version', 'vercode', 'subvercode', 'commit']
     for build in app['builds']:
         writecomments('build:' + build['version'])
         mf.write('Build Version:')
@@ -682,10 +703,12 @@ def write_metadata(dest, app):
             # Keeping the original formatting if we loaded it from a file...
             mf.write('\\\n'.join(build['origlines']) + '\n')
         else:
-            mf.write(build['version'] + ',' + build['vercode'] + ',' + 
-                    build['commit'])
+            mf.write("%s,%s,%s" % (
+                build['version'],
+                getvercode(build),
+                build['commit']))
             for key,value in build.iteritems():
-                if key not in ['version', 'vercode', 'commit']:
+                if key not in keystoignore:
                     mf.write(',' + key + '=' + value)
             mf.write('\n')
     if len(app['builds']) > 0:
