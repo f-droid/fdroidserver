@@ -51,6 +51,26 @@ X
   end
 end
 
+# This is currently 18.0.1
+script "add_platform_tools" do
+  interpreter "bash"
+  user user
+  cwd "/tmp"
+  code "
+    if [ -f /vagrant/cache/platform-tools.tar.gz ] ; then
+      echo Installing from cache
+      mkdir #{sdk_loc}/platform-tools
+      tar -C #{sdk_loc}/platform-tools -z -x -f /vagrant/cache/platform-tools.tar.gz
+    else
+      #{sdk_loc}/tools/android update sdk --no-ui -a -t platform-tools <<X
+y
+
+X
+    fi
+  "
+  not_if "test -d #{sdk_loc}/platform-tools"
+end
+
 %w{android-3 android-4 android-7 android-8 android-10 android-11
    android-12 android-13 android-14 android-15 android-16 android-17 android-18
    extra-android-support extra-android-m2repository}.each do |sdk|
