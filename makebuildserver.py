@@ -4,6 +4,7 @@ import os
 import sys
 import subprocess
 import time
+from optparse import OptionParser
 
 execfile('makebs.config.py', globals())
 
@@ -35,6 +36,16 @@ def vagrant(params, cwd=None, printout=False):
 boxfile = 'buildserver.box'
 serverdir = 'buildserver'
 
+parser = OptionParser()
+parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+parser.add_option("-c", "--clean", action="store_true", default=False,
+                      help="Build from scratch, rather than attempting to update the existing server")
+options, args = parser.parse_args()
+
+
+
+
 if not os.path.exists('makebuildserver.py') or not os.path.exists(serverdir):
     print 'This must be run from the correct directory!'
     sys.exit(1)
@@ -42,6 +53,8 @@ if not os.path.exists('makebuildserver.py') or not os.path.exists(serverdir):
 if os.path.exists(boxfile):
     os.remove(boxfile)
 
+if options.clean:
+    vagrant(['destroy', '-f'], cwd=serverdir, printout=options.verbose)
 
 # Update cached files.
 cachedir = os.path.join('buildserver', 'cache')
