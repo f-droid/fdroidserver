@@ -624,7 +624,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     # Copy the unsigned apk to our destination directory for further
     # processing (by publish.py)...
-    dest = common.getapkname(app,thisbuild)
+    dest = os.path.join(output_dir, common.getapkname(app,thisbuild))
     shutil.copyfile(src, dest)
 
     # Move the source tarball into the output directory...
