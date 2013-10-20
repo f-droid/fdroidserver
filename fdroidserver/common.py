@@ -1328,21 +1328,26 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         f.close()
 
     # Insert version code and number into the manifest if necessary...
+    flavour = None
+    if 'gradle' in build:
+        flavour = build['gradle'].split('@')[0]
+        if flavour in ['main', 'yes', '']:
+            flavour = None
     if 'forceversion' in build:
-        for path in manifest_paths:
+        for path in manifest_paths(root_dir, flavour):
             if not os.path.isfile(path):
                 continue
             if subprocess.call(['sed','-r','-i',
                 's/android:versionName="[^"]+"/android:versionName="' + build['version'] + '"/g',
-                path], cwd=root_dir) != 0:
+                path]) != 0:
                 raise BuildException("Failed to amend manifest")
     if 'forcevercode' in build:
-        for path in manifest_paths:
+        for path in manifest_paths(root_dir, flavour):
             if not os.path.isfile(path):
                 continue
             if subprocess.call(['sed','-r','-i',
                 's/android:versionCode="[^"]+"/android:versionCode="' + build['vercode'] + '"/g',
-                path], cwd=root_dir) != 0:
+                path]) != 0:
                 raise BuildException("Failed to amend manifest")
 
     # Delete unwanted file...
