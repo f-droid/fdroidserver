@@ -475,7 +475,8 @@ def parse_metadata(metafile, **kw):
             raise MetaDataException("Invalid version code for build in " + metafile.name)
         try:
             testvercode = int(thisbuild['vercode'])
-            testsubvercode = int(thisbuild['subvercode'])
+            if thisbuild['subvercode'] is not None:
+                testsubvercode = int(thisbuild['subvercode'])
         except:
             raise MetaDataException("Invalid version code for build in " + metafile.name)
         thisbuild['commit'] = parts[2]
@@ -1328,15 +1329,21 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
 
     # Insert version code and number into the manifest if necessary...
     if 'forceversion' in build:
-        if subprocess.call(['sed','-r','-i',
-            's/android:versionName="[^"]+"/android:versionName="' + build['version'] + '"/g',
-            'AndroidManifest.xml'], cwd=root_dir) !=0:
-            raise BuildException("Failed to amend manifest")
+        for path in manifest_paths:
+            if not os.path.isfile(path):
+                continue
+            if subprocess.call(['sed','-r','-i',
+                's/android:versionName="[^"]+"/android:versionName="' + build['version'] + '"/g',
+                path], cwd=root_dir) != 0:
+                raise BuildException("Failed to amend manifest")
     if 'forcevercode' in build:
-        if subprocess.call(['sed','-r','-i',
-            's/android:versionCode="[^"]+"/android:versionCode="' + build['vercode'] + '"/g',
-            'AndroidManifest.xml'], cwd=root_dir) !=0:
-            raise BuildException("Failed to amend manifest")
+        for path in manifest_paths:
+            if not os.path.isfile(path):
+                continue
+            if subprocess.call(['sed','-r','-i',
+                's/android:versionCode="[^"]+"/android:versionCode="' + build['vercode'] + '"/g',
+                path], cwd=root_dir) != 0:
+                raise BuildException("Failed to amend manifest")
 
     # Delete unwanted file...
     if 'rm' in build:
