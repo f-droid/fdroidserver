@@ -317,7 +317,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
             ftp.get(apkfile, os.path.join(output_dir, apkfile))
             ftp.get(tarball, os.path.join(output_dir, tarball))
         except:
-            raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), output, error)
+            raise BuildException("Build failed for %s:%s - missing output files" % (app['id'], thisbuild['version']), output, error)
         ftp.close()
 
     finally:
