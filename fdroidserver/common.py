@@ -348,7 +348,8 @@ class vcs_hg(vcs):
             if subprocess.call(['hg', 'clone', self.remote, self.local]) !=0:
                 raise VCSException("Hg clone failed")
         else:
-            if subprocess.call('hg status -u | xargs rm -rf', cwd=self.local) != 0:
+            if subprocess.call('hg status -u | xargs rm -rf',
+                    cwd=self.local, shell=True) != 0:
                 raise VCSException("Hg clean failed")
             if not self.refreshed:
                 if subprocess.call(['hg', 'pull'],
