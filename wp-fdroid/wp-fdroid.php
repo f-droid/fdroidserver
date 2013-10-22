@@ -28,8 +28,8 @@ class FDroid
 		add_shortcode('fdroidrepo',array($this, 'do_shortcode'));
 		add_filter('query_vars',array($this, 'queryvars'));
 		$this->inited=false;
-                $this->site_path=getenv('DOCUMENT_ROOT');
-                wp_register_sidebar_widget('fdroid_latest', 'FDroid Latest', 'widget_fdroidlatest');
+		$this->site_path=getenv('DOCUMENT_ROOT');
+		wp_register_sidebar_widget('fdroid_latest', 'FDroid Latest', 'widget_fdroidlatest');
 	}
 
 
@@ -118,7 +118,7 @@ class FDroid
 	// the web site and the documentation.
 	function getlicenseurl($license) {
 	    switch($license) {
-        	    case 'MIT':
+		    case 'MIT':
 			return 'http://www.gnu.org/licenses/license-list.html#X11License';
 		    case 'NewBSD':
 			return 'http://www.gnu.org/licenses/license-list.html#ModifiedBSD';
@@ -282,8 +282,8 @@ class FDroid
 					$out.='<b>Donate:</b> <a href="'.$donate.'">'.$donate.'</a><br />';
 				$out.="</p>";
 
-                                $out.="<p>For full details and additional technical information, see ";
-                                $out.="<a href=\"/wiki/page/".$query_vars['fdid']."\">this application's page</a> on the F-Droid wiki.</p>";
+				$out.="<p>For full details and additional technical information, see ";
+				$out.="<a href=\"/wiki/page/".$query_vars['fdid']."\">this application's page</a> on the F-Droid wiki.</p>";
 
 				$out.='<script type="text/javascript">';
 				$out.='function showHidePermissions(id) {';
@@ -306,17 +306,17 @@ class FDroid
 				$i=0;
 				foreach($apks as $apk) {
 					$first = $i+1==count($apks);
-                                        $out.="<p><b>Version ".$apk['version']."</b><br />";
+					$out.="<p><b>Version ".$apk['version']."</b><br />";
 
-                                        // Is this source or binary?
-                                        $srcbuild = isset($apk['srcname']) && file_exists($this->site_path.'/repo/'.$apk['srcname']);
+					// Is this source or binary?
+					$srcbuild = isset($apk['srcname']) && file_exists($this->site_path.'/repo/'.$apk['srcname']);
 
-                                        $out.="<p>This version is built and signed by ";
-                                        if($srcbuild) {
-                                            $out.="F-Droid, and guaranteed to correspond to the source tarball below.</p>";
-                                        } else {
-                                            $out.="the original developer.</p>";
-                                        }
+					$out.="<p>This version is built and signed by ";
+					if($srcbuild) {
+					    $out.="F-Droid, and guaranteed to correspond to the source tarball below.</p>";
+					} else {
+					    $out.="the original developer.</p>";
+					}
 					$out.='<a href="https://f-droid.org/repo/'.$apk['apkname'].'">download apk</a> ';
 					$out.=$this->human_readable_size($apk['size']);
 					$diffSize = $apk['diff']['size'];
@@ -430,13 +430,13 @@ class FDroid
 			$summaryCount[$permissions_data['permission'][$permission]['protectionLevel']]++;
 		}
 
-                $summary = '';
-                if(isset($summaryCount)) {
-		        foreach($summaryCount as $protectionLevel => $count) {
-			        $summary .= $this->get_permission_protection_level_icon($protectionLevel, 'regular').' '.$count;
-			        $summary .= ', ';
-                        }
-                }
+		$summary = '';
+		if(isset($summaryCount)) {
+			foreach($summaryCount as $protectionLevel => $count) {
+				$summary .= $this->get_permission_protection_level_icon($protectionLevel, 'regular').' '.$count;
+				$summary .= ', ';
+			}
+		}
 		$summary = substr($summary,0,-2);
 
 		return $out;
@@ -520,7 +520,7 @@ class FDroid
 		if(($query_vars['fdfilter']===null || $query_vars['fdfilter']!='') && $numpages>0)
 		{
 			$out.='<div style="float:left;">';
-                        if($query_vars['fdfilter']===null) {
+			if($query_vars['fdfilter']===null) {
 
 				$categories = array('All categories');
 				$handle = fopen(getenv('DOCUMENT_ROOT').'/repo/categories.txt', 'r');
@@ -694,7 +694,7 @@ class FDOutList
 		$out.='<a href="'.makelink($query_vars, array('fdid'=>$appinfo['id'])).'">';
 		$out.='<div id="appheader">';
 
-                $out.='<div style="float:left;padding-right:10px;"><img src="' . site_url() . '/repo/icons/'.$appinfo['icon'].'" style="width:48px;border:none;"></div>';
+		$out.='<div style="float:left;padding-right:10px;"><img src="' . site_url() . '/repo/icons/'.$appinfo['icon'].'" style="width:48px;border:none;"></div>';
 
 		$out.='<div style="float:right;">';
 		$out.='<p>Details...</p>';
