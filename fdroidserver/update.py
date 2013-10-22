@@ -55,7 +55,7 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += '{{Disabled|' + app['Disabled'] + '}}\n'
         if app['AntiFeatures']:
             wikidata += '{{AntiFeatures|' + app['AntiFeatures'] + '}}\n'
-        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s}}\n'%(
+        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|license=%s}}\n'%(
                 app['id'],
                 app['Name'],
                 time.strftime('%Y-%m-%d', app['added']) if 'added' in app else '',
@@ -67,8 +67,7 @@ def update_wiki(apps, apks, verbose=False):
                 app['FlattrID'],
                 app['Bitcoin'],
                 app['Litecoin'],
-                app['License'],
-                app.get('Requires Root', 'No'))
+                app['License'])
 
         wikidata += app['Summary']
         wikidata += " - [http://f-droid.org/repository/browse/?fdid=" + app['id'] + " view in repository]\n\n"
@@ -549,8 +548,6 @@ def make_index(apps, apks, repodir, archive, categories):
 
         if app['AntiFeatures']:
             addElement('antifeatures', app['AntiFeatures'], doc, apel)
-        if app['Requires Root']:
-            addElement('requirements', 'root', doc, apel)
 
         # Sort the apk list into version order, just so the web site
         # doesn't have to do any work by default...
@@ -585,6 +582,10 @@ def make_index(apps, apks, repodir, archive, categories):
             if 'added' in apk:
                 addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
             perms = ""
+            if app['Requires Root']:
+                if 'ACCESS_SUPERUSER' not in apk['permissions']:
+                    apk['permissions'].append('ACCESS_SUPERUSER')
+                
             if len(apk['permissions']) > 0:
                 addElement('permissions', ','.join(apk['permissions']), doc, apkel)
             if 'nativecode' in apk and len(apk['nativecode']) > 0:
