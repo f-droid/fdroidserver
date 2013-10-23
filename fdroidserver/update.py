@@ -152,7 +152,9 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += "\n[[Category:Apps with failing builds]]\n"
         elif not gotcurrentver and not app['Disabled']:
             wikidata += '\n[[Category:Apps to Update]]\n'
-        if app['Update Check Mode'] == 'None':
+        if app['Disabled']:
+            wikidata += '\n[[Category:Apps that are disabled]]\n'
+        if app['Update Check Mode'] == 'None' and not app['Disabled']:
             wikidata += '\n[[Category:Apps with no update check]]\n'
 
         # We can't have underscores in the page name, even if they're in
