@@ -354,7 +354,12 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         print "Cleaning Maven project..."
         cmd = [mvn3, 'clean', '-Dandroid.sdk.path=' + sdk_path]
 
-        p = FDroidPopen(cmd, cwd=root_dir, verbose=verbose)
+        if '@' in thisbuild['maven']:
+            maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@')[1])
+        else:
+            maven_dir = root_dir
+
+        p = FDroidPopen(cmd, cwd=maven_dir, verbose=verbose)
     elif 'gradle' in thisbuild:
         print "Cleaning Gradle project..."
         cmd = [gradle, 'clean']
@@ -459,21 +464,31 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     # Build the release...
     if 'maven' in thisbuild:
         print "Building Maven project..."
+
+        if '@' in thisbuild['maven']:
+            maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@')[1])
+        else:
+            maven_dir = root_dir
+
         mvncmd = [mvn3, '-Dandroid.sdk.path=' + sdk_path]
         if install:
             mvncmd += ['-Dandroid.sign.debug=true', 'package', 'android:deploy']
         else:
-            mvncmd += ['-Dandroid.sign.debug=false', '-Dandroid.release=true', 'target']
+            mvncmd += ['-Dandroid.sign.debug=false', '-Dandroid.release=true', 'package']
         if 'target' in thisbuild:
             target = thisbuild["target"].split('-')[1]
             subprocess.call(['sed', '-i',
                     's@<platform>[0-9]*</platform>@<platform>'+target+'</platform>@g',
                     'pom.xml'], cwd=root_dir)
+            if '@' in thisbuild['maven']:
+                subprocess.call(['sed', '-i',
+                        's@<platform>[0-9]*</platform>@<platform>'+target+'</platform>@g',
+                        'pom.xml'], cwd=maven_dir)
 
         if 'mvnflags' in thisbuild:
             mvncmd += thisbuild['mvnflags']
 
-        p = FDroidPopen(mvncmd, cwd=root_dir, verbose=verbose, apkoutput=True)
+        p = FDroidPopen(mvncmd, cwd=maven_dir, verbose=verbose, apkoutput=True)
 
     elif 'gradle' in thisbuild:
         print "Building Gradle project..."
