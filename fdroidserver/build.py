@@ -894,8 +894,9 @@ def main():
     for app in build_succeeded:
         print "success: %s" % (app['id'])
 
-    for fa in failed_apps:
-        print "Build for app %s failed:\n%s" % (fa, failed_apps[fa])
+    if not options.verbose:
+        for fa in failed_apps:
+            print "Build for app %s failed:\n%s" % (fa, failed_apps[fa])
 
     print "Finished."
     if len(build_succeeded) > 0:

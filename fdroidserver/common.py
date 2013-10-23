@@ -1815,6 +1815,9 @@ def FDroidPopen(commands, cwd,
                 sys.stderr.flush()
             result.stderr += line
 
+    if verbose:
+        print "Directory: %s" % cwd
+        print " > %s" % ' '.join(commands)
     p.communicate()
     result.returncode = p.returncode
     return result
