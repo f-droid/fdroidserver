@@ -1155,7 +1155,8 @@ def getsrclib(spec, srclib_dir, sdk_path, ndk_path="", mvn3="", basepath=False, 
     if not preponly:
         vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir, sdk_path)
         vcs.srclib = (name, sdir)
-        vcs.gotorevision(ref)
+        if ref:
+            vcs.gotorevision(ref)
 
         if raw:
             return vcs
