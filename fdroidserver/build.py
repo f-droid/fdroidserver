@@ -562,7 +562,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         m = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
                 p.stdout_apk, re.S|re.M)
         if not m:
-            m = re.match(r".*^\[INFO\] Creating additional unsigned apk file .*/([^/]+)\.apk",
+            m = re.match(r".*^\[INFO\] Creating additional unsigned apk file .*/([^/]+)\.apk[^l]",
                     p.stdout_apk, re.S|re.M)
         if not m:
             # This format is found in com.github.mobile, com.yubico.yubitotp and com.botbrew.basil for example...
