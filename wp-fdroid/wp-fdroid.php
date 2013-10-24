@@ -97,13 +97,11 @@ class FDroid
 		if($query_vars['fdid']!==null) {
 			$out.=$this->get_app($query_vars);
 		} else {
-			if($query_vars['fdfilter'] !== null) {
-				$out.='<form name="searchform" action="" method="get">';
-				$out.='<p><input name="fdfilter" type="text" value="'.sanitize_text_field($query_vars['fdfilter']).'" size="30"> ';
-				$out.='<input type="submit" value="Search"></p>';
-				$out.=$this->makeformdata($query_vars);
-				$out.='</form>'."\n";
-			}
+                        $out.='<form name="searchform" action="" method="get">';
+                        $out.='<p><input name="fdfilter" type="text" value="'.sanitize_text_field($query_vars['fdfilter']).'" size="30"> ';
+                        $out.='<input type="submit" value="Search"></p>';
+                        $out.=$this->makeformdata($query_vars);
+                        $out.='</form>'."\n";
 
 			$out.=$this->get_apps($query_vars);
 		}
