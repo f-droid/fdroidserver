@@ -1,4 +1,13 @@
 
+F-Droid is an installable catalogue of FOSS (Free and Open Source Software)
+applications for the Android platform. The client makes it easy to browse,
+install, and keep track of updates on your device.
+
+The F-Droid server tools provide various scripts and tools that are used to
+maintain the main F-Droid application repository. You can use these same tools
+to create your own additional or alternative repository for publishing, or to
+assist in creating, testing and submitting metadata to the main repository.
+
 For documentation, please see the docs directory.
 
 Alternatively, visit http://f-droid.org/manual/
