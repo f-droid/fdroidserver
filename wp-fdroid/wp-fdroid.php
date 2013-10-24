@@ -297,7 +297,8 @@ class FDroid
 
 				$out.="<h3>Packages</h3>";
 
-				$out.="<p><b>NOTE:</b> Although APK downloads are available below to give ";
+				$out.='<div style="float:right; margin-left:10px;"><a id="downloadbutton" href="https://f-droid.org/FDroid.apk"><span>Download F-Droid</span></a></div>';
+				$out.="<p>Although APK downloads are available below to give ";
 				$out.="you the choice, you should be aware that by installing that way you ";
 				$out.="will not receive update notifications, and it's a less secure way ";
 				$out.="to download. ";
