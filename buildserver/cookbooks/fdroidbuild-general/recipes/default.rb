@@ -37,7 +37,7 @@ execute "add-gradle-bin" do
 end
 execute "add-bsenv" do
   user user
-  command "echo \". ./bsenv \" >> /home/#{user}/.bashrc"
+  command "echo \". ./.bsenv \" >> /home/#{user}/.bashrc"
   not_if "grep bsenv /home/#{user}/.bashrc"
 end
 
