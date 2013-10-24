@@ -653,21 +653,33 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
     """
     Build a particular version of an application, if it needs building.
 
-    Returns True if the build was done, False if it wasn't necessary.
+    :param output_dir: The directory where the build output will go. Usually
+       this is the 'unsigned' directory.
+    :param repo_dir: The repo directory - used for checking if the build is
+       necessary.
+    :paaram also_check_dir: An additional location for checking if the build
+       is necessary (usually the archive repo)
+    :param test: True if building in test mode, in which case the build will
+       always happen, even if the output already exists. In test mode, the
+       output directory should be a temporary location, not any of the real
+       ones.
+
+    :returns: True if the build was done, False if it wasn't necessary.
     """
 
-    dest_apk = common.getapkname(app,thisbuild)
+    dest_apk = common.getapkname(app, thisbuild)
 
     dest = os.path.join(output_dir, dest_apk)
     dest_repo = os.path.join(repo_dir, dest_apk)
 
-    if os.path.exists(dest) or (not test and os.path.exists(dest_repo)):
-        return False
-
-    if also_check_dir and not test:
-        dest_also = os.path.join(also_check_dir, dest_apk)
-        if os.path.exists(dest_also):
+    if not test:
+        if os.path.exists(dest) or os.path.exists(dest_repo):
             return False
+
+        if also_check_dir:
+            dest_also = os.path.join(also_check_dir, dest_apk)
+            if os.path.exists(dest_also):
+                return False
 
     if thisbuild['commit'].startswith('!'):
         return False
@@ -700,7 +712,7 @@ def parse_commandline():
     parser.add_option("-s", "--stop", action="store_true", default=False,
                       help="Make the build stop on exceptions")
     parser.add_option("-t", "--test", action="store_true", default=False,
-                      help="Test mode - put output in the tmp directory only.")
+                      help="Test mode - put output in the tmp directory only, and always build, even if the output already exists.")
     parser.add_option("--server", action="store_true", default=False,
                       help="Use build server")
     parser.add_option("--resetserver", action="store_true", default=False,
