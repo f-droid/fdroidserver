@@ -300,7 +300,7 @@ class FDroid
 				$out.="<p><b>NOTE:</b> Although APK downloads are available below to give ";
 				$out.="you the choice, you should be aware that by installing that way you ";
 				$out.="will not receive update notifications, and it's a less secure way ";
-				$out.="to download, especially if you are not currently using HTTPS. ";
+				$out.="to download. ";
 				$out.="We recommend that you install the F-Droid client and use that.</p>";
 
 				$i=0;
