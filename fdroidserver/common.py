@@ -465,19 +465,9 @@ def parse_metadata(metafile, **kw):
         thisbuild = {}
         thisbuild['origlines'] = lines
         thisbuild['version'] = parts[0]
-        ver = parts[1].split('-')
-        if len(ver) == 1:
-            thisbuild['vercode'] = parts[1]
-            thisbuild['subvercode'] = None
-        elif len(ver) == 2:
-            thisbuild['vercode'] = ver[0]
-            thisbuild['subvercode'] = ver[1]
-        else:
-            raise MetaDataException("Invalid version code for build in " + metafile.name)
+        thisbuild['vercode'] = parts[1]
         try:
             testvercode = int(thisbuild['vercode'])
-            if thisbuild['subvercode'] is not None:
-                testsubvercode = int(thisbuild['subvercode'])
         except:
             raise MetaDataException("Invalid version code for build in " + metafile.name)
         thisbuild['commit'] = parts[2]
@@ -635,9 +625,7 @@ def parse_metadata(metafile, **kw):
     return thisinfo
 
 def getvercode(build):
-    if build['subvercode'] is None:
-        return build['vercode']
-    return "%s-%s" % (build['vercode'], build['subvercode'])
+    return "%s" % (build['vercode'])
 
 def getapkname(app, build):
     return "%s_%s.apk" % (app['id'], getvercode(build))
