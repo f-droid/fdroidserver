@@ -1257,12 +1257,16 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
             if os.path.exists(buildxml):
                 print 'Force-removing old build.xml'
                 os.remove(buildxml)
-        for baddir in [
+
+        baddirs = [
                 'gen', 'bin', 'obj', # ant
                 'libs/armeabi-v7a', 'libs/armeabi', # jni
-                'libs/mips', 'libs/x86', # jni
-                'build', # gradle
-                'target']: # maven
+                'libs/mips', 'libs/x86'] # jni
+        if 'gradle' in build:
+            baddirs.append('build')
+        if 'maven' in build:
+            baddirs.append('target')
+        for baddir in baddirs:
             badpath = os.path.join(build_dir, baddir)
             if os.path.exists(badpath):
                 print "Removing '%s'" % badpath
