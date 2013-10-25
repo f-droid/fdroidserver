@@ -1,4 +1,4 @@
-#!bash
+#!/bin/bash
 #
 # fdroid completion support.
 #
