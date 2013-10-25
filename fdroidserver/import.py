@@ -264,6 +264,7 @@ def main():
     build = {}
     build['version'] = version
     build['vercode'] = vercode
+    build['subvercode'] = None
     build['commit'] = '?'
     if options.subdir:
         build['subdir'] = options.subdir
