@@ -150,7 +150,7 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += "\n[[Category:Apps we can't update]]\n"
         elif buildfails and not app['Disabled']:
             wikidata += "\n[[Category:Apps with failing builds]]\n"
-        elif not gotcurrentver and not app['Disabled']:
+        elif not gotcurrentver and not app['Disabled'] and app['Update Check Mode'] != "Static":
             wikidata += '\n[[Category:Apps to Update]]\n'
         if app['Disabled']:
             wikidata += '\n[[Category:Apps that are disabled]]\n'
