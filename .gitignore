@@ -1,5 +1,6 @@
-config.py
-makebs.config.py
+/config.py
+/makebs.config.py
 *~
 *.pyc
-buildserver.box
+*.class
+*.box
