@@ -55,7 +55,7 @@ def update_wiki(apps, apks, verbose=False):
             wikidata += '{{Disabled|' + app['Disabled'] + '}}\n'
         if app['AntiFeatures']:
             wikidata += '{{AntiFeatures|' + app['AntiFeatures'] + '}}\n'
-        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|license=%s}}\n'%(
+        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s}}\n'%(
                 app['id'],
                 app['Name'],
                 time.strftime('%Y-%m-%d', app['added']) if 'added' in app else '',
@@ -67,7 +67,8 @@ def update_wiki(apps, apks, verbose=False):
                 app['FlattrID'],
                 app['Bitcoin'],
                 app['Litecoin'],
-                app['License'])
+                app['License'],
+                app.get('Requires Root', 'No'))
 
         wikidata += app['Summary']
         wikidata += " - [http://f-droid.org/repository/browse/?fdid=" + app['id'] + " view in repository]\n\n"
@@ -550,6 +551,8 @@ def make_index(apps, apks, repodir, archive, categories):
 
         if app['AntiFeatures']:
             addElement('antifeatures', app['AntiFeatures'], doc, apel)
+        if app['Requires Root']:
+            addElement('requirements', 'root', doc, apel)
 
         # Sort the apk list into version order, just so the web site
         # doesn't have to do any work by default...
