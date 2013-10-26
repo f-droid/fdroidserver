@@ -1590,7 +1590,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                       'crittercism',
                       'heyzap',
                       'jpct-ae',
-                      'youtubeandroidplayerapi']
+                      'youtubeandroidplayerapi',
+                      'bugsense']
 
     if 'scanignore' in thisbuild:
         ignore = [p.strip() for p in thisbuild['scanignore'].split(';')]
