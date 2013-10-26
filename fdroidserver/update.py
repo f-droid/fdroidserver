@@ -88,14 +88,14 @@ def update_wiki(apps, apks, verbose=False):
                 apklist.append(apk)
         # Include ones we can't build, as a special case...
         for thisbuild in app['builds']:
-            if thisbuild['commit'].startswith('!'):
+            if thisbuild['commit'].startswith('!') or 'disable' in thisbuild:
                 if thisbuild['vercode'] == app['Current Version Code']:
                     cantupdate = True
                 apklist.append({
                         #TODO: Nasty: vercode is a string in the build, and an int elsewhere
                         'versioncode': int(thisbuild['vercode']),
                         'version': thisbuild['version'],
-                        'buildproblem': thisbuild['commit'][1:]
+                        'buildproblem': thisbuild.get('disable', thisbuild['commit'][1:])
                     })
             else:
                 builtit = False
@@ -232,7 +232,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
     """
     for app in apps:
         for build in app['builds']:
-            if build['commit'].startswith('!'):
+            if build['commit'].startswith('!') or 'disable' in build:
                 apkfilename = app['id'] + '_' + str(build['vercode']) + '.apk'
                 for repodir in repodirs:
                     apkpath = os.path.join(repodir, apkfilename)

@@ -681,7 +681,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
             if os.path.exists(dest_also):
                 return False
 
-    if thisbuild['commit'].startswith('!'):
+    if thisbuild['commit'].startswith('!') or 'disable' in thisbuild:
         return False
 
     print "Building version " + thisbuild['version'] + ' of ' + app['id']
