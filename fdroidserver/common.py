@@ -757,7 +757,7 @@ def write_metadata(dest, app, verbose=False):
 
         # This defines the preferred order for the build items - as in the
         # manual, they're roughly in order of application.
-        keyorder = ['disable', 'commit', 'subdir', 'submodules', 'init',
+        keyorder = ['disabled', 'commit', 'subdir', 'submodules', 'init',
                     'oldsdkloc', 'target', 'compilesdk', 'update',
                     'encoding', 'forceversion', 'forcevercode', 'rm',
                     'fixtrans', 'fixapos', 'extlibs', 'srclibs',
