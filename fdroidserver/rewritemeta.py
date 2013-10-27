@@ -32,22 +32,19 @@ def main():
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     parser.add_option("-p", "--package", default=None,
-                      help="Build only the specified package")
+                      help="Process only the specified package")
     (options, args) = parser.parse_args()
 
     # Get all apps...
-    apps = common.read_metadata(options.verbose)
+    apps = common.read_metadata(options.verbose, package=options.package)
 
-    # Filter apps according to command-line options
-    if options.package:
-        apps = [app for app in apps if app['id'] == options.package]
-        if len(apps) == 0:
-            print "No such package"
-            sys.exit(1)
+    if len(apps) == 0 and options.package:
+        print "No such package"
+        sys.exit(1)
 
     for app in apps:
         print "Writing " + app['id']
-        common.write_metadata(os.path.join('metadata', app['id']) + '.txt', app)
+        common.write_metadata(os.path.join('metadata', app['id']) + '.txt', app, verbose=options.verbose)
 
     print "Finished."
 

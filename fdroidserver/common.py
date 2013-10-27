@@ -424,6 +424,8 @@ def metafieldtype(name):
         return 'flag'
     if name == 'Build Version':
         return 'build'
+    if name == 'Build':
+        return 'buildv2'
     if name == 'Use Built':
         return 'obsolete'
     return 'string'
@@ -454,7 +456,7 @@ def metafieldtype(name):
 #  'descriptionlines' - original lines of description as formatted in the
 #                       metadata file.
 #
-def parse_metadata(metafile, **kw):
+def parse_metadata(metafile, verbose=False):
 
     def parse_buildline(lines):
         value = "".join(lines)
@@ -477,6 +479,8 @@ def parse_metadata(metafile, **kw):
         return thisbuild
 
     def add_comments(key):
+        if len(curcomments) == 0:
+            return
         for comment in curcomments:
             thisinfo['comments'].append((key, comment))
         del curcomments[:]
@@ -525,9 +529,35 @@ def parse_metadata(metafile, **kw):
     mode = 0
     buildlines = []
     curcomments = []
+    curbuild = None
 
     for line in metafile:
         line = line.rstrip('\r\n')
+        if mode == 3:
+            if not line.startswith(' '):
+                if 'commit' not in curbuild:
+                    raise MetaDataException("No commit specified for {0} in {1}".format(
+                        curbuild['version'], metafile.name))
+                thisinfo['builds'].append(curbuild)
+                add_comments('build:' + curbuild['version'])
+                mode = 0
+            else:
+                if line.endswith('\\'):
+                    buildlines.append(line[:-1].lstrip())
+                else:
+                    buildlines.append(line.lstrip())
+                    bl = ''.join(buildlines)
+                    bv = bl.split('=', 1)
+                    if len(bv) != 2:
+                        raise MetaDataException("Invalid build flag at {0} in {1}".
+                                format(buildlines[0], metafile.name))
+                    name, val = bv
+                    if name in curbuild:
+                        raise MetaDataException("Duplicate definition on {0} in version {1} of {2}".
+                                format(name, curbuild['version'], metafile.name))
+                    curbuild[name] = val.lstrip()
+                    buildlines = []
+
         if mode == 0:
             if len(line) == 0:
                 continue
@@ -547,7 +577,7 @@ def parse_metadata(metafile, **kw):
                 field = 'Current Version Code'
 
             fieldtype = metafieldtype(field)
-            if fieldtype != 'build':
+            if fieldtype not in ['build', 'buildv2']:
                 add_comments(field)
             if fieldtype == 'multiline':
                 mode = 1
@@ -570,6 +600,20 @@ def parse_metadata(metafile, **kw):
                 else:
                     thisinfo['builds'].append(parse_buildline([value]))
                     add_comments('build:' + thisinfo['builds'][-1]['version'])
+            elif fieldtype == 'buildv2':
+                curbuild = {}
+                vv = value.split(',')
+                if len(vv) != 2:
+                    raise MetaDataException('Build should have comma-separated version and vercode, not "{0}", in {1}'.
+                        format(value, metafile.name))
+                curbuild['version'] = vv[0]
+                curbuild['vercode'] = vv[1]
+                try:
+                    testvercode = int(curbuild['vercode'])
+                except:
+                    raise MetaDataException("Invalid version code for build in " + metafile.name)
+                buildlines = []
+                mode = 3
             elif fieldtype == 'obsolete':
                 pass        # Just throw it away!
             else:
@@ -595,6 +639,8 @@ def parse_metadata(metafile, **kw):
         raise MetaDataException(field + " not terminated in " + metafile.name)
     elif mode == 2:
         raise MetaDataException("Unterminated continuation in " + metafile.name)
+    elif mode == 3:
+        raise MetaDataException("Unterminated build in " + metafile.name)
 
     if len(thisinfo['Description']) == 0:
         thisinfo['Description'].append('No description available')
@@ -637,12 +683,16 @@ def getsrcname(app, build):
 #
 # 'dest'    - The path to the output file
 # 'app'     - The app data
-def write_metadata(dest, app):
+def write_metadata(dest, app, verbose=False):
 
     def writecomments(key):
+        written = 0
         for pf, comment in app['comments']:
             if pf == key:
                 mf.write(comment + '\n')
+                written += 1
+        if verbose and written > 0:
+            print "...writing comments for " + (key if key else 'EOF')
 
     def writefield(field, value=None):
         writecomments(field)
@@ -671,7 +721,8 @@ def write_metadata(dest, app):
     mf.write('\n')
     if app['Name']:
         writefield('Name')
-    writefield('Auto Name')
+    if len(app['Auto Name']) > 0:
+        writefield('Auto Name')
     writefield('Summary')
     writefield('Description', '')
     for line in app['Description']:
@@ -685,24 +736,40 @@ def write_metadata(dest, app):
         writefield('Repo Type')
         writefield('Repo')
         mf.write('\n')
-    keystoignore = ['version', 'vercode', 'subvercode', 'commit']
     for build in app['builds']:
         writecomments('build:' + build['version'])
-        mf.write('Build Version:')
-        if 'origlines' in build:
-            # Keeping the original formatting if we loaded it from a file...
-            mf.write('\\\n'.join(build['origlines']) + '\n')
-        else:
-            mf.write("%s,%s,%s" % (
-                build['version'],
-                getvercode(build),
-                build['commit']))
-            for key,value in build.iteritems():
-                if key not in keystoignore:
-                    mf.write(',' + key + '=' + value)
-            mf.write('\n')
-    if len(app['builds']) > 0:
+        mf.write('Build:')
+        mf.write("%s,%s\n" % (
+            build['version'],
+            getvercode(build)))
+
+        # This defines the preferred order for the build items - as in the
+        # manual, they're roughly in order of application.
+        keyorder = ['disable', 'commit', 'subdir', 'submodules', 'init',
+                    'oldsdkloc', 'target', 'compilesdk', 'update',
+                    'encoding', 'forceversion', 'forcevercode', 'rm',
+                    'fixtrans', 'fixapos', 'extlibs', 'srclibs',
+                    'patch', 'prebuild', 'initfun', 'scanignore', 'build',
+                    'buildjni', 'gradle', 'maven', 'preassemble',
+                    'bindir', 'antcommand', 'novcheck']
+
+        def write_builditem(key, value):
+            if key not in ['version', 'vercode', 'origlines']:
+                if verbose:
+                    print "...writing {0} : {1}".format(key, value)
+                outline = '    ' + key + '='
+                bits = value.split('&& ')
+                outline += '&& \\\n        '.join([s.lstrip() for s in bits])
+                outline += '\n'
+                mf.write(outline)
+        for key in keyorder:
+            if key in build:
+                write_builditem(key, build[key])
+        for key, value in build.iteritems():
+            if not key in keyorder:
+                write_builditem(key, value)
         mf.write('\n')
+
     if app['Archive Policy']:
         writefield('Archive Policy')
     writefield('Auto Update Mode')
@@ -722,14 +789,15 @@ def write_metadata(dest, app):
 
 # Read all metadata. Returns a list of 'app' objects (which are dictionaries as
 # returned by the parse_metadata function.
-def read_metadata(verbose=False, xref=True):
+def read_metadata(verbose=False, xref=True, package=None):
     apps = []
     for metafile in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
-        try:
-            appinfo = parse_metadata(metafile, verbose=verbose)
-        except Exception, e:
-            raise MetaDataException("Problem reading metadata file %s: - %s" % (metafile, str(e)))
-        apps.append(appinfo)
+        if package is None or metafile == os.path.join('metadata', package + '.txt'):
+            try:
+                appinfo = parse_metadata(metafile, verbose=verbose)
+            except Exception, e:
+                raise MetaDataException("Problem reading metadata file %s: - %s" % (metafile, str(e)))
+            apps.append(appinfo)
 
     if xref:
         # Parse all descriptions at load time, just to ensure cross-referencing

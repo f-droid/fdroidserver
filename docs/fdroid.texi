@@ -1068,7 +1068,7 @@ gradle build system and store version info in a separate file; if the
 developers make a new branch for each release and don't make tags; or if you've 
 changed the package name or version code logic.
 @item
-@code{Static} - No checking is done—either development has ceased or new versions
+@code{Static} - No checking is done - either development has ceased or new versions
 are not desired. This method is also used when there is no other checking method 
 available and the upstream developer keeps us posted on new versions.
 @item
