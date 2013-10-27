@@ -1290,6 +1290,12 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     else:
         root_dir = build_dir
 
+    if 'gradle' in build:
+        if '@' in build['gradle']:
+            gradle_dir = os.path.join(root_dir, build['gradle'].split('@')[1])
+        else:
+            gradle_dir = root_dir
+
     # Get a working copy of the right revision...
     print "Getting source for revision " + build['commit']
     vcs.gotorevision(build['commit'])
@@ -1379,6 +1385,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
             if subprocess.call(['sed','-i','s/^key.store/#/',
                                 propfile], cwd=root_dir) !=0:
                 raise BuildException("Failed to amend %s" % propfile)
+    for root, dirs, files in os.walk(gradle_dir):
+        for f in files:
+            if f == 'build.gradle':
+                clean_gradle_keys(os.path.join(root, f), verbose)
+                break
 
     # Update the local.properties file...
     locprops = os.path.join(root_dir, 'local.properties')
@@ -1898,3 +1909,25 @@ def FDroidPopen(commands, cwd,
     p.communicate()
     result.returncode = p.returncode
     return result
+
+def clean_gradle_keys(path, verbose):
+    if verbose:
+        print "Cleaning build.gradle of keysigning configs at %s" % path
+
+    lines = None
+    with open(path, "r") as o:
+        lines = o.readlines()
+    
+    opened = 0
+    with open(path, "w") as o:
+        for line in lines:
+            if 'signingConfigs ' in line:
+                opened = 1
+            elif opened > 0:
+                if '{' in line:
+                    opened += 1
+                elif '}' in line:
+                    opened -=1
+            elif 'signingConfig' not in line:
+                o.write(line)
+
