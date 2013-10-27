@@ -86,7 +86,7 @@ def main():
 
                 for thisbuild in app['builds']:
 
-                    if thisbuild['commit'].startswith('!') or 'disable' in thisbuild:
+                    if 'disable' in thisbuild:
                         print ("..skipping version " + thisbuild['version'] + " - " +
                                 thisbuild.get('disable', thisbuild['commit'][1:]))
                     else:

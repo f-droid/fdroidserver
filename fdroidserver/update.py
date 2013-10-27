@@ -232,7 +232,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
     """
     for app in apps:
         for build in app['builds']:
-            if build['commit'].startswith('!') or 'disable' in build:
+            if 'disable' in build:
                 apkfilename = app['id'] + '_' + str(build['vercode']) + '.apk'
                 for repodir in repodirs:
                     apkpath = os.path.join(repodir, apkfilename)
