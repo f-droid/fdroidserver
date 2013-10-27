@@ -1428,8 +1428,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     if 'rm' in build:
         for part in build['rm'].split(';'):
             dest = os.path.join(build_dir, part.strip())
-            if not os.path.realpath(dest).startswith(os.path.realpath(root_dir)):
-                raise BuildException("rm is outside build root")
+            if not os.path.realpath(dest).startswith(os.path.realpath(build_dir)):
+                raise BuildException("rm for {0} is outside build root {1}".format(
+                    os.path.realpath(build_dir),os.path.realpath(dest)))
             if os.path.exists(dest):
                 subprocess.call('rm -rf ' + dest, shell=True)
 
