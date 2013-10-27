@@ -573,13 +573,14 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         src = m.group(1)
         src = os.path.join(bindir, src) + '.apk'
     elif 'gradle' in thisbuild:
+        dd = build_dir
         if 'subdir' in thisbuild:
-            build_dir = os.path.join(build_dir, thisbuild['subdir'])
+            dd = os.path.join(dd, thisbuild['subdir'])
         if flavour in ['main', 'yes', '']:
-            name = '-'.join([os.path.basename(build_dir), 'release', 'unsigned'])
+            name = '-'.join([os.path.basename(dd), 'release', 'unsigned'])
         else:
-            name = '-'.join([os.path.basename(build_dir), flavour, 'release', 'unsigned'])
-        src = os.path.join(build_dir, 'build', 'apk', name+'.apk')
+            name = '-'.join([os.path.basename(dd), flavour, 'release', 'unsigned'])
+        src = os.path.join(dd, 'build', 'apk', name+'.apk')
     else:
         src = re.match(r".*^.*Creating (.+) for release.*$.*", p.stdout_apk,
             re.S|re.M).group(1)
