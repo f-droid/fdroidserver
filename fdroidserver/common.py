@@ -466,8 +466,8 @@ def parse_metadata(metafile, verbose=False):
             raise MetaDataException("Invalid build format: " + value + " in " + metafile.name)
         thisbuild = {}
         thisbuild['origlines'] = lines
-        thisbuild['version'] = parts[0]
-        thisbuild['vercode'] = parts[1]
+        thisbuild['version'] = parts[0].strip()
+        thisbuild['vercode'] = parts[1].strip()
         try:
             testvercode = int(thisbuild['vercode'])
         except:
