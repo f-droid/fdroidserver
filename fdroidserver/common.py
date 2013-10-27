@@ -1424,12 +1424,14 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
                 path]) != 0:
                 raise BuildException("Failed to amend manifest")
 
-    # Delete unwanted file...
+    # Delete unwanted files...
     if 'rm' in build:
         for part in build['rm'].split(';'):
             dest = os.path.join(build_dir, part.strip())
+            if not os.path.realpath(dest).startswith(os.path.realpath(root_dir)):
+                raise BuildException("rm is outside build root")
             if os.path.exists(dest):
-                os.remove(dest)
+                subprocess.call('rm -rf ' + dest, shell=True)
 
     # Fix apostrophes translation files if necessary...
     if build.get('fixapos', 'no') == 'yes':
