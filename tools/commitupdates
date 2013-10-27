@@ -16,6 +16,12 @@ while read line; do
                 version=${build%%,*}
                 build=${build#*,}
                 vercode=${build%%,*}
+            elif [[ "$l" == "+Build:"* ]]; then
+                newbuild=1
+                build=${l#*:}
+                version=${build%%,*}
+                build=${build#*,}
+                vercode=${build%%,*}
             fi
         done < <(git diff HEAD -- "$file")
 
