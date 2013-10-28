@@ -544,6 +544,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout, p.stderr)
     print "Successfully built version " + thisbuild['version'] + ' of ' + app['id']
 
+    if install:
+        return
+
     # Find the apk name in the output...
     if 'bindir' in thisbuild:
         bindir = os.path.join(build_dir, thisbuild['bindir'])
@@ -585,7 +588,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         src = os.path.join(bindir, src)
 
     # Make sure it's not debuggable...
-    if not install and common.isApkDebuggable(src):
+    if common.isApkDebuggable(src):
         raise BuildException("APK is debuggable")
 
     # By way of a sanity check, make sure the version and version
