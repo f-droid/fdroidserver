@@ -1290,12 +1290,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     else:
         root_dir = build_dir
 
-    if 'gradle' in build:
-        if '@' in build['gradle']:
-            gradle_dir = os.path.join(root_dir, build['gradle'].split('@')[1])
-        else:
-            gradle_dir = root_dir
-
     # Get a working copy of the right revision...
     print "Getting source for revision " + build['commit']
     vcs.gotorevision(build['commit'])
@@ -1385,7 +1379,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
             if subprocess.call(['sed','-i','s/^key.store/#/',
                                 propfile], cwd=root_dir) !=0:
                 raise BuildException("Failed to amend %s" % propfile)
-    for root, dirs, files in os.walk(gradle_dir):
+    for root, dirs, files in os.walk(build_dir):
         for f in files:
             if f == 'build.gradle':
                 clean_gradle_keys(os.path.join(root, f), verbose)
