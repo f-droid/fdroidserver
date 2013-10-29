@@ -1864,6 +1864,11 @@ def FDroidPopen(commands, cwd,
     :param commands, cwd, stdout, stderr: like subprocess.Popen
     :param verbose: whether to print output as it is saved
     """
+
+    if verbose:
+        print "Directory: %s" % cwd
+        print " > %s" % ' '.join(commands)
+
     result = PopenResult()
     p = subprocess.Popen(commands, cwd=cwd, stdout=stdout, stderr=stderr)
     
@@ -1897,9 +1902,6 @@ def FDroidPopen(commands, cwd,
             result.stderr += line
         time.sleep(0.5)
 
-    if verbose:
-        print "Directory: %s" % cwd
-        print " > %s" % ' '.join(commands)
     p.communicate()
     result.returncode = p.returncode
     return result
