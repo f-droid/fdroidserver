@@ -1711,7 +1711,7 @@ def scan_source(build_dir, root_dir, thisbuild):
 
             for suspect in usual_suspects:
                 if suspect in curfile.lower():
-                    problems.append('Found probable non-free blob ' + fp)
+                    problems.append('Found usual supect in filename ' + fp)
 
             mime = ms.file(fp)
             if mime == 'application/x-sharedlib':
@@ -1720,7 +1720,7 @@ def scan_source(build_dir, root_dir, thisbuild):
                 problems.append('Found static library at %s' % fd)
             elif mime == 'application/x-executable':
                 problems.append('Found binary executable at %s' % fd)
-            elif fp.endswith('.apk'):
+            elif mime == 'application/jar' and fp.endswith('.apk'):
                 problems.append('Found apk archive at %s' % fd)
 
             elif curfile.endswith('.java'):
