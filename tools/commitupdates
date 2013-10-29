@@ -36,7 +36,7 @@ while read line; do
         [ -d metadata/$id ] && extra=metadata/$id
         [ -n "$name" ] && id="$name ($id)"
 
-        commands+=("git commit -m 'Update $id to $version ($vercode)' -e -- $file $extra")
+        commands+=("git commit -m 'Update $id to $version ($vercode)' -e -v -- $file $extra")
     fi
 done < <(git status --porcelain)
 
