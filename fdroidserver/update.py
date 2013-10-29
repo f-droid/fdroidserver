@@ -88,14 +88,14 @@ def update_wiki(apps, apks, verbose=False):
                 apklist.append(apk)
         # Include ones we can't build, as a special case...
         for thisbuild in app['builds']:
-            if thisbuild['commit'].startswith('!') or 'disable' in thisbuild:
+            if 'disable' in thisbuild:
                 if thisbuild['vercode'] == app['Current Version Code']:
                     cantupdate = True
                 apklist.append({
                         #TODO: Nasty: vercode is a string in the build, and an int elsewhere
                         'versioncode': int(thisbuild['vercode']),
                         'version': thisbuild['version'],
-                        'buildproblem': thisbuild.get('disable', thisbuild['commit'][1:])
+                        'buildproblem': thisbuild['disable']
                     })
             else:
                 builtit = False
