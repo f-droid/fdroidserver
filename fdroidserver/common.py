@@ -475,7 +475,7 @@ def parse_metadata(metafile, verbose=False):
         if parts[2].startswith('!'):
             # For backwards compatibility, handle old-style disabling,
             # including attempting to extract the commit from the message
-            thisbuild['disable'] = parts[2]
+            thisbuild['disable'] = parts[2][1:]
             commit = 'unknown - see disabled'
             index = parts[2].rfind('at ')
             if index != -1:
