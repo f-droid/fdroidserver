@@ -106,6 +106,7 @@ def check_tags(app, sdk_path):
             if 'gradle' in app['builds'][-1]:
                 flavour = app['builds'][-1]['gradle']
 
+        htag = None
         hver = None
         hcode = "0"
 
@@ -118,22 +119,23 @@ def check_tags(app, sdk_path):
             if package and package == app['id'] and version and vercode:
                 print "Manifest exists. Found version %s" % version
                 if int(vercode) > int(hcode):
+                    htag = tag
                     hcode = str(int(vercode))
                     hver = version
 
         if hver:
-            return (hver, hcode)
-        return (None, "Couldn't find any version information")
+            return (hver, hcode, htag)
+        return (None, "Couldn't find any version information", None)
 
     except BuildException as be:
         msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
-        return (None, msg)
+        return (None, msg, None)
     except VCSException as vcse:
         msg = "VCS error while scanning app %s: %s" % (app['id'], vcse)
-        return (None, msg)
+        return (None, msg, None)
     except Exception:
         msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
-        return (None, msg)
+        return (None, msg, None)
 
 # Check for a new version by looking at the AndroidManifest.xml at the HEAD
 # of the source repo. Whether this can be used reliably or not depends on
@@ -329,9 +331,10 @@ def main():
             writeit = False
             logmsg = None
 
+            tag = None
             mode = app['Update Check Mode']
             if mode == 'Tags':
-                (version, vercode) = check_tags(app, sdk_path)
+                (version, vercode, tag) = check_tags(app, sdk_path)
             elif mode == 'RepoManifest':
                 (version, vercode) = check_repomanifest(app, sdk_path)
             elif mode.startswith('RepoManifest/'):
@@ -372,7 +375,7 @@ def main():
                         app_dir = os.path.join('build/', app['id'])
 
                     vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir, sdk_path)
-                    vcs.gotorevision(None)
+                    vcs.gotorevision(tag)
 
                     flavour = None
                     if len(app['builds']) > 0:
