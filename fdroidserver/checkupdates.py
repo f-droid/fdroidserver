@@ -47,6 +47,7 @@ def check_http(app):
 
         vercode = "99999999"
         if len(urlcode) > 0:
+            print "...requesting {0}".format(urlcode)
             req = urllib2.Request(urlcode, None)
             resp = urllib2.urlopen(req, None, 20)
             page = resp.read()
@@ -59,6 +60,7 @@ def check_http(app):
         version = "??"
         if len(urlver) > 0:
             if urlver != '.':
+                print "...requesting {0}".format(urlver)
                 req = urllib2.Request(urlver, None)
                 resp = urllib2.urlopen(req, None, 20)
                 page = resp.read()
