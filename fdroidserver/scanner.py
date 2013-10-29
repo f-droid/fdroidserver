@@ -59,7 +59,12 @@ def main():
 
     problems = []
 
-    extlib_dir = os.path.join('build', 'extlib')
+    build_dir = 'build'
+    if not os.path.isdir(build_dir):
+        print "Creating build directory"
+        os.makedirs(build_dir)
+    srclib_dir = os.path.join(build_dir, 'srclib')
+    extlib_dir = os.path.join(build_dir, 'extlib')
 
     for app in apps:
 
@@ -94,7 +99,8 @@ def main():
 
                         # Prepare the source code...
                         root_dir, _ = common.prepare_source(vcs, app, thisbuild,
-                                build_dir, extlib_dir, sdk_path, ndk_path, javacc_path, mvn3, options.verbose)
+                                build_dir, srclib_dir, extlib_dir, sdk_path, ndk_path,
+                                javacc_path, mvn3, options.verbose, False)
 
                         # Do the scan...
                         buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
