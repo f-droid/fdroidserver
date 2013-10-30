@@ -1406,25 +1406,37 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         f.write(props)
         f.close()
 
-    # Insert version code and number into the manifest if necessary...
     flavour = None
     if 'gradle' in build:
         flavour = build['gradle'].split('@')[0]
         if flavour in ['main', 'yes', '']:
             flavour = None
+
+    # Remove forced debuggable flags
+    print "Removing debuggable flags..."
+    for path in manifest_paths(root_dir, flavour):
+        if not os.path.isfile(path):
+            continue
+        if subprocess.call(['sed','-i',
+            's/android:debuggable="[^"]*"//g', path]) != 0:
+            raise BuildException("Failed to remove debuggable flags")
+
+    # Insert version code and number into the manifest if necessary...
     if 'forceversion' in build:
+        print "Changing the version name..."
         for path in manifest_paths(root_dir, flavour):
             if not os.path.isfile(path):
                 continue
-            if subprocess.call(['sed','-r','-i',
+            if subprocess.call(['sed','-i',
                 's/android:versionName="[^"]+"/android:versionName="' + build['version'] + '"/g',
                 path]) != 0:
                 raise BuildException("Failed to amend manifest")
     if 'forcevercode' in build:
+        print "Changing the version code..."
         for path in manifest_paths(root_dir, flavour):
             if not os.path.isfile(path):
                 continue
-            if subprocess.call(['sed','-r','-i',
+            if subprocess.call(['sed','-i',
                 's/android:versionCode="[^"]+"/android:versionCode="' + build['vercode'] + '"/g',
                 path]) != 0:
                 raise BuildException("Failed to amend manifest")
