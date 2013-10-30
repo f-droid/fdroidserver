@@ -295,7 +295,7 @@ class vcs_gitsvn(vcs):
         self.checkrepo()
         p = subprocess.Popen(['git', 'svn', 'find-rev', 'HEAD'],
                 stdout=subprocess.PIPE, cwd=self.local)
-        return p.communicate()[0]
+        return p.communicate()[0].strip()
 
 class vcs_svn(vcs):
 
