@@ -8,25 +8,6 @@ while read line; do
     if [[ "$line" == *M*metadata/*.txt ]]; then
         file=${line##* }
 
-        newbuild=0
-        while read l; do
-            if [[ "$l" == "+Build Version:"* ]]; then
-                newbuild=1
-                build=${l#*:}
-                version=${build%%,*}
-                build=${build#*,}
-                vercode=${build%%,*}
-            elif [[ "$l" == "+Build:"* ]]; then
-                newbuild=1
-                build=${l#*:}
-                version=${build%%,*}
-                build=${build#*,}
-                vercode=${build%%,*}
-            fi
-        done < <(git diff HEAD -- "$file")
-
-        [ $newbuild -eq 0 ] && continue
-
         while read l; do
             [[ "$l" == "Auto Name:"* ]] && name=${l##*:}
         done < "$file"
@@ -36,7 +17,25 @@ while read line; do
         [ -d metadata/$id ] && extra=metadata/$id
         [ -n "$name" ] && id="$name ($id)"
 
-        commands+=("git commit -m 'Update $id to $version ($vercode)' -e -v -- $file $extra")
+        newbuild=0
+        while read l; do
+            if [[ "$l" == "+Build:"* ]]; then
+                newbuild=1
+                build=${l#*:}
+                version=${build%%,*}
+                build=${build#*,}
+                vercode=${build%%,*}
+            fi
+        done < <(git diff HEAD -- "$file")
+
+        if [ $newbuild -eq 0 ]
+		then
+			message="$id:"
+		else
+			message="Update $id to $version ($vercode)"
+		fi
+
+        commands+=("git commit -m '$message' -e -v -- $file $extra")
     fi
 done < <(git status --porcelain)
 
