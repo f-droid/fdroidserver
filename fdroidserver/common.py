@@ -1654,7 +1654,8 @@ def scan_source(build_dir, root_dir, thisbuild):
             elif mime == 'application/x-executable':
                 problems.append('Found binary executable at %s' % fd)
             elif mime == 'application/jar' and fp.endswith('.apk'):
-                problems.append('Found apk archive at %s' % fd)
+                print 'Removing apk file at %s' % fd
+                os.remove(fp)
 
             elif curfile.endswith('.java'):
                 for line in file(fp):
