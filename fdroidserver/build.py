@@ -554,12 +554,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         bindir = os.path.join(root_dir, 'target')
     else:
         bindir = os.path.join(root_dir, 'bin')
-    if thisbuild.get('initfun', 'no')  == "yes":
-        # Special case (again!) for funambol...
-        src = ("funambol-android-sync-client-" +
-                thisbuild['version'] + "-unsigned.apk")
-        src = os.path.join(bindir, src)
-    elif 'maven' in thisbuild:
+    if 'maven' in thisbuild:
         m = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
                 p.stdout_apk, re.S|re.M)
         if not m:
