@@ -51,6 +51,10 @@ def main():
         print_help()
         sys.exit(1)
 
+    if not os.path.isfile('config.py'):
+        print "ERROR: No config.py configuration file present"
+        sys.exit(2)
+
     for basedir in ('metadata', 'tmp'):
         if not os.path.exists(basedir):
              os.makedirs(basedir)
