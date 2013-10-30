@@ -415,6 +415,12 @@ class vcs_bzr(vcs):
         self.refreshed = False
         self.srclib = None
 
+    def gettags(self):
+        p = subprocess.Popen(['bzr', 'tags'],
+                stdout=subprocess.PIPE, cwd=self.local)
+        return [tag.split('   ')[0].strip() for tag in
+                p.communicate()[0].splitlines()]
+
 
 # Get the type expected for a given metadata field.
 def metafieldtype(name):

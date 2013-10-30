@@ -1111,9 +1111,9 @@ are known to forget to tag releases. Like RepoManifest, it will not return the
 correct value if the directory containing the AndroidManifest.xml has moved.
 Despite these caveats, it is the often the favourite update check mode. 
 
-It currently only works for git, hg and git-svn repositories. In the case of
-the latter, the repo URL must encode the path to the trunk and tags or else no
-tags will be found.
+It currently only works for git, hg, bzr and git-svn repositories. In the case
+of the latter, the repo URL must encode the path to the trunk and tags or else
+no tags will be found.
 @item
 @code{HTTP} - HTTP requests are used to determine the current version code and
 version name. This is controlled by the @code{Update Check Data} field, which
