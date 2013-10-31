@@ -159,17 +159,17 @@ def check_repomanifest(app, sdk_path, branch=None):
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
 
-        if vcs.repotype() == 'git':
+        if repotype == 'git':
             if branch:
                 branch = 'origin/'+branch
             vcs.gotorevision(branch)
-        elif vcs.repotype() == 'git-svn':
+        elif repotype == 'git-svn':
             vcs.gotorevision(branch)
-        elif vcs.repotype() == 'svn':
+        elif repotype == 'svn':
             vcs.gotorevision(None)
-        elif vcs.repotype() == 'hg':
+        elif repotype == 'hg':
             vcs.gotorevision(branch)
-        elif vcs.repotype() == 'bzr':
+        elif repotype == 'bzr':
             vcs.gotorevision(None)
 
         flavour = None
