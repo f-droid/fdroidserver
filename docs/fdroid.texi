@@ -722,9 +722,8 @@ http://svn.code.sf.net/p/project/code/svn;trunk=trunk;tags=tags;branches=branche
 
 For a Subversion repo that requires authentication, you can precede the repo
 URL with username:password@ and those parameters will be passed as @option{--username}
-and @option{--password} to the SVN checkout command. (This works only for
-plain svn and not for git-svn - one of the very few cases where using svn is
-advisable).
+and @option{--password} to the SVN checkout command. (This now works for both
+svn and git-svn)
 
 If the Repo Type is @code{srclib}, then you must specify the name of the
 according srclib .txt file. For example if @code{scrlibs/FooBar.txt} exist
