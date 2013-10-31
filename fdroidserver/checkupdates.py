@@ -321,133 +321,131 @@ def main():
 
     for app in apps:
 
-        process = True
 
         if options.autoonly and app['Auto Update Mode'] == 'None':
-            process = False
+            print "Nothing to do for %s..." % app['id']
+            return
 
-        if process:
+        print "Processing " + app['id'] + '...'
 
-            print "Processing " + app['id'] + '...'
+        writeit = False
+        logmsg = None
 
-            writeit = False
-            logmsg = None
+        tag = None
+        mode = app['Update Check Mode']
+        if mode == 'Tags':
+            (version, vercode, tag) = check_tags(app, sdk_path)
+        elif mode == 'RepoManifest':
+            (version, vercode) = check_repomanifest(app, sdk_path)
+        elif mode.startswith('RepoManifest/'):
+            (version, vercode) = check_repomanifest(app, sdk_path, mode[13:])
+        elif mode == 'RepoTrunk':
+            (version, vercode) = check_repotrunk(app, sdk_path)
+        elif mode == 'HTTP':
+            (version, vercode) = check_http(app)
+        elif mode == 'Static':
+            version = None
+            vercode = 'Checking disabled'
+        elif mode == 'None':
+            version = None
+            vercode = 'Checking disabled'
+        else:
+            version = None
+            vercode = 'Invalid update check method'
 
-            tag = None
-            mode = app['Update Check Mode']
-            if mode == 'Tags':
-                (version, vercode, tag) = check_tags(app, sdk_path)
-            elif mode == 'RepoManifest':
-                (version, vercode) = check_repomanifest(app, sdk_path)
-            elif mode.startswith('RepoManifest/'):
-                (version, vercode) = check_repomanifest(app, sdk_path, mode[13:])
-            elif mode == 'RepoTrunk':
-                (version, vercode) = check_repotrunk(app, sdk_path)
-            elif mode == 'HTTP':
-                (version, vercode) = check_http(app)
-            elif mode == 'Static':
-                version = None
-                vercode = 'Checking disabled'
-            elif mode == 'None':
-                version = None
-                vercode = 'Checking disabled'
-            else:
-                version = None
-                vercode = 'Invalid update check method'
+        updating = False
+        if not version:
+            print "..." + vercode
+        elif vercode == app['Current Version Code']:
+            print "...up to date"
+        else:
+            app['Current Version'] = version
+            app['Current Version Code'] = str(int(vercode))
+            updating = True
+            writeit = True
 
-            updating = False
-            if not version:
-                print "..." + vercode
-            elif vercode == app['Current Version Code']:
-                print "...up to date"
-            else:
-                app['Current Version'] = version
-                app['Current Version Code'] = str(int(vercode))
-                updating = True
-                writeit = True
+        # Do the Auto Name thing as well as finding the CV real name
+        if len(app["Repo Type"]) > 0:
 
-            # Do the Auto Name thing as well as finding the CV real name
-            if len(app["Repo Type"]) > 0:
+            try:
 
-                try:
-
-                    if app['Repo Type'] == 'srclib':
-                        app_dir = os.path.join('build', 'srclib', app['Repo'])
-                    else:
-                        app_dir = os.path.join('build/', app['id'])
-
-                    vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir, sdk_path)
-                    vcs.gotorevision(tag)
-
-                    flavour = None
-                    if len(app['builds']) > 0:
-                        if 'subdir' in app['builds'][-1]:
-                            app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
-                        if 'gradle' in app['builds'][-1]:
-                            flavour = app['builds'][-1]['gradle']
-
-                    new_name = common.fetch_real_name(app_dir, flavour)
-                    if new_name != app['Auto Name']:
-                        app['Auto Name'] = new_name
-
-                    if app['Current Version'].startswith('@string/'):
-                        cv = common.version_name(app['Current Version'], app_dir, flavour)
-                        if app['Current Version'] != cv:
-                            app['Current Version'] = cv
-                            writeit = True
-                except Exception:
-                    msg = "Auto Name or Current Version failed for %s due to exception: %s" % (app['id'], traceback.format_exc())
-
-            if updating:
-                print '...updating to version %s (%s)' % (app['Current Version'], app['Current Version Code'])
-                name = str('%s (%s)' % (app['Auto Name'], app['id']) if app['Auto Name'] else app['id'])
-                logmsg = 'Update current version of %s to %s (%s)' % (name, app['Current Version'], app['Current Version Code'])
-
-            if options.auto:
-                mode = app['Auto Update Mode']
-                if mode == 'None':
-                    pass
-                elif mode.startswith('Version '):
-                    pattern = mode[8:]
-                    if pattern.startswith('+'):
-                        o = pattern.find(' ')
-                        suffix = pattern[1:o]
-                        pattern = pattern[o + 1:]
-                    else:
-                        suffix = ''
-                    gotcur = False
-                    latest = None
-                    for build in app['builds']:
-                        if build['vercode'] == app['Current Version Code']:
-                            gotcur = True
-                        if not latest or int(build['vercode']) > int(latest['vercode']):
-                            latest = build
-                    if not gotcur:
-                        newbuild = latest.copy()
-                        del newbuild['origlines']
-                        newbuild['vercode'] = app['Current Version Code']
-                        newbuild['version'] = app['Current Version'] + suffix
-                        print "...auto-generating build for " + newbuild['version']
-                        commit = pattern.replace('%v', newbuild['version'])
-                        commit = commit.replace('%c', newbuild['vercode'])
-                        newbuild['commit'] = commit
-                        app['builds'].append(newbuild)
-                        writeit = True
-                        logmsg = "Update " + app['id'] + " to " + newbuild['version']
+                if app['Repo Type'] == 'srclib':
+                    app_dir = os.path.join('build', 'srclib', app['Repo'])
                 else:
-                    print 'Invalid auto update mode'
+                    app_dir = os.path.join('build/', app['id'])
 
-            if writeit:
-                metafile = os.path.join('metadata', app['id'] + '.txt')
-                common.write_metadata(metafile, app)
-                if options.commit and logmsg:
-                    print "Commiting update for " + metafile
-                    if subprocess.call("git add " + metafile, shell=True) != 0:
-                        print "Git add failed"
-                        sys.exit(1)
-                    if subprocess.call("git commit -m '" + logmsg.replace("'", "\\'") +  "'", shell=True) != 0:
-                        print "Git commit failed"
-                        sys.exit(1)
+                vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir, sdk_path)
+                vcs.gotorevision(tag)
+
+                flavour = None
+                if len(app['builds']) > 0:
+                    if 'subdir' in app['builds'][-1]:
+                        app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
+                    if 'gradle' in app['builds'][-1]:
+                        flavour = app['builds'][-1]['gradle']
+
+                new_name = common.fetch_real_name(app_dir, flavour)
+                if new_name != app['Auto Name']:
+                    app['Auto Name'] = new_name
+
+                if app['Current Version'].startswith('@string/'):
+                    cv = common.version_name(app['Current Version'], app_dir, flavour)
+                    if app['Current Version'] != cv:
+                        app['Current Version'] = cv
+                        writeit = True
+            except Exception:
+                msg = "Auto Name or Current Version failed for %s due to exception: %s" % (app['id'], traceback.format_exc())
+
+        if updating:
+            print '...updating to version %s (%s)' % (app['Current Version'], app['Current Version Code'])
+            name = str('%s (%s)' % (app['Auto Name'], app['id']) if app['Auto Name'] else app['id'])
+            logmsg = 'Update current version of %s to %s (%s)' % (name, app['Current Version'], app['Current Version Code'])
+
+        if options.auto:
+            mode = app['Auto Update Mode']
+            if mode == 'None':
+                pass
+            elif mode.startswith('Version '):
+                pattern = mode[8:]
+                if pattern.startswith('+'):
+                    o = pattern.find(' ')
+                    suffix = pattern[1:o]
+                    pattern = pattern[o + 1:]
+                else:
+                    suffix = ''
+                gotcur = False
+                latest = None
+                for build in app['builds']:
+                    if build['vercode'] == app['Current Version Code']:
+                        gotcur = True
+                    if not latest or int(build['vercode']) > int(latest['vercode']):
+                        latest = build
+                if not gotcur:
+                    newbuild = latest.copy()
+                    del newbuild['origlines']
+                    newbuild['vercode'] = app['Current Version Code']
+                    newbuild['version'] = app['Current Version'] + suffix
+                    print "...auto-generating build for " + newbuild['version']
+                    commit = pattern.replace('%v', newbuild['version'])
+                    commit = commit.replace('%c', newbuild['vercode'])
+                    newbuild['commit'] = commit
+                    app['builds'].append(newbuild)
+                    writeit = True
+                    logmsg = "Update " + app['id'] + " to " + newbuild['version']
+            else:
+                print 'Invalid auto update mode'
+
+        if writeit:
+            metafile = os.path.join('metadata', app['id'] + '.txt')
+            common.write_metadata(metafile, app)
+            if options.commit and logmsg:
+                print "Commiting update for " + metafile
+                if subprocess.call("git add " + metafile, shell=True) != 0:
+                    print "Git add failed"
+                    sys.exit(1)
+                if subprocess.call("git commit -m '" + logmsg.replace("'", "\\'") +  "'", shell=True) != 0:
+                    print "Git commit failed"
+                    sys.exit(1)
 
     print "Finished."
 
