@@ -182,6 +182,37 @@ def main():
         f.write(checkmode + ' ' + str(count) + '\n')
     f.close()
 
+    ctgs = {}
+    for app in metaapps:
+        if app['Category'] is None:
+            continue
+        categories = [c.strip() for c in app['Category'].split(';')]
+        for category in categories:
+            if category in ctgs:
+                ctgs[category] += 1;
+            else:
+                ctgs[category] = 1
+    f = open('stats/categories.txt', 'w')
+    for category, count in ctgs.iteritems():
+        f.write(category + ' ' + str(count) + '\n')
+    f.close()
+
+    afs = {}
+    for app in metaapps:
+        if app['AntiFeatures'] is None:
+            continue
+        antifeatures = [a.strip() for a in app['AntiFeatures'].split(',')]
+        for antifeature in antifeatures:
+            if antifeature in afs:
+                afs[antifeature] += 1;
+            else:
+                afs[antifeature] = 1
+    f = open('stats/antifeatures.txt', 'w')
+    for antifeature, count in afs.iteritems():
+        f.write(antifeature + ' ' + str(count) + '\n')
+    f.close()
+    return
+
     # Calculate and write stats for licenses...
     licenses = {}
     for app in metaapps:
