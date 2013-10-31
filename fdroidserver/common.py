@@ -1886,6 +1886,6 @@ def clean_gradle_keys(path, verbose):
                     opened += 1
                 elif '}' in line:
                     opened -=1
-            elif 'signingConfig' not in line:
+            elif not any(s in line for s in (' signingConfig ',)):
                 o.write(line)
 
