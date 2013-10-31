@@ -1355,7 +1355,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         'maven' not in build and 'gradle' not in build):
         parms = [os.path.join(sdk_path, 'tools', 'android'),
                 'update', 'project', '-p', '.']
-        parms.append('--subprojects')
         if 'target' in build:
             parms.append('-t')
             parms.append(build['target'])
@@ -1369,19 +1368,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
                 print 'Force-removing old build.xml'
                 os.remove(buildxml)
 
-        baddirs = [
-                'gen', 'bin', 'obj', # ant
-                'libs/armeabi-v7a', 'libs/armeabi', # jni
-                'libs/mips', 'libs/x86'] # jni
-        if 'gradle' in build:
-            baddirs.append('build')
-        if 'maven' in build:
-            baddirs.append('target')
-        for baddir in baddirs:
-            badpath = os.path.join(build_dir, baddir)
-            if os.path.exists(badpath):
-                print "Removing '%s'" % badpath
-                shutil.rmtree(badpath)
         for d in update_dirs:
             cwd = os.path.join(root_dir, d)
             # Remove gen and bin dirs in libraries
