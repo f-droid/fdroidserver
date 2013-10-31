@@ -268,11 +268,12 @@ def check_gplay(app):
     return (version.strip(), None)
 
 
+config = {}
+
 def main():
 
-    #Read configuration...
-    globals()['gradle'] = "gradle"
-    execfile('config.py', globals())
+    # Read configuration...
+    common.read_config(config)
 
     # Parse command line...
     parser = OptionParser()
@@ -334,13 +335,13 @@ def main():
         tag = None
         mode = app['Update Check Mode']
         if mode == 'Tags':
-            (version, vercode, tag) = check_tags(app, sdk_path)
+            (version, vercode, tag) = check_tags(app, config['sdk_path'])
         elif mode == 'RepoManifest':
-            (version, vercode) = check_repomanifest(app, sdk_path)
+            (version, vercode) = check_repomanifest(app, config['sdk_path'])
         elif mode.startswith('RepoManifest/'):
-            (version, vercode) = check_repomanifest(app, sdk_path, mode[13:])
+            (version, vercode) = check_repomanifest(app, config['sdk_path'], mode[13:])
         elif mode == 'RepoTrunk':
-            (version, vercode) = check_repotrunk(app, sdk_path)
+            (version, vercode) = check_repotrunk(app, config['sdk_path'])
         elif mode == 'HTTP':
             (version, vercode) = check_http(app)
         elif mode == 'Static':
@@ -374,7 +375,8 @@ def main():
                 else:
                     app_dir = os.path.join('build/', app['id'])
 
-                vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir, sdk_path)
+                vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir,
+                        config['sdk_path'])
                 vcs.gotorevision(tag)
 
                 flavour = None

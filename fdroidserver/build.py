@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # build.py - part of the FDroid server tools
-# Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -331,10 +331,10 @@ def adapt_gradle(path, verbose):
         print "Adapting build.gradle at %s" % path
 
     subprocess.call(['sed', '-i',
-            's@buildToolsVersion[ ]*["\\\'][0-9\.]*["\\\']@buildToolsVersion "'+build_tools+'"@g', path])
+            's@buildToolsVersion[ ]*["\\\'][0-9\.]*["\\\']@buildToolsVersion "'+ config['build_tools'] +'"@g', path])
 
     subprocess.call(['sed', '-i',
-            's@com.android.tools.build:gradle:[0-9\.\+]*@com.android.tools.build:gradle:'+gradle_plugin+'@g', path])
+            's@com.android.tools.build:gradle:[0-9\.\+]*@com.android.tools.build:gradle:'+ config['gradle_plugin'] +'@g', path])
 
 
 def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, verbose, onserver):
@@ -342,15 +342,15 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     # Prepare the source code...
     root_dir, srclibpaths = common.prepare_source(vcs, app, thisbuild,
-            build_dir, srclib_dir, extlib_dir, sdk_path, ndk_path,
-            javacc_path, mvn3, verbose, onserver)
+            build_dir, srclib_dir, extlib_dir, config['sdk_path'], config['ndk_path'],
+            config['javacc_path'], config['mvn3'], verbose, onserver)
 
     # We need to clean via the build tool in case the binary dirs are
     # different from the default ones
     p = None
     if 'maven' in thisbuild:
         print "Cleaning Maven project..."
-        cmd = [mvn3, 'clean', '-Dandroid.sdk.path=' + sdk_path]
+        cmd = [config['mvn3'], 'clean', '-Dandroid.sdk.path=' + config['sdk_path']]
 
         if '@' in thisbuild['maven']:
             maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@')[1])
@@ -360,7 +360,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         p = FDroidPopen(cmd, cwd=maven_dir, verbose=verbose)
     elif 'gradle' in thisbuild:
         print "Cleaning Gradle project..."
-        cmd = [gradle, 'clean']
+        cmd = [config['gradle'], 'clean']
 
         if '@' in thisbuild['gradle']:
             gradle_dir = os.path.join(root_dir, thisbuild['gradle'].split('@')[1])
@@ -417,9 +417,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         for name, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
             cmd = cmd.replace('$$' + name + '$$', libpath)
-        cmd = cmd.replace('$$SDK$$', sdk_path)
-        cmd = cmd.replace('$$NDK$$', ndk_path)
-        cmd = cmd.replace('$$MVN3$$', mvn3)
+        cmd = cmd.replace('$$SDK$$', config['sdk_path'])
+        cmd = cmd.replace('$$NDK$$', config['ndk_path'])
+        cmd = cmd.replace('$$MVN3$$', config['mvn3'])
         if verbose:
             print "Running 'build' commands in %s" % root_dir
 
@@ -438,7 +438,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             jni_components = ['']
         else:
             jni_components = [c.strip() for c in jni_components.split(';')]
-        ndkbuild = os.path.join(ndk_path, "ndk-build")
+        ndkbuild = os.path.join(config['ndk_path'], "ndk-build")
         for d in jni_components:
             if options.verbose:
                 print "Running ndk-build in " + root_dir + '/' + d
@@ -468,7 +468,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         else:
             maven_dir = root_dir
 
-        mvncmd = [mvn3, '-Dandroid.sdk.path=' + sdk_path]
+        mvncmd = [config['mvn3'], '-Dandroid.sdk.path=' + config['sdk_path']]
         if install:
             mvncmd += ['-Dandroid.sign.debug=true', 'package', 'android:deploy']
         else:
@@ -518,7 +518,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if flavour in ['main', 'yes', '']:
             flavour = ''
         
-        commands = [gradle]
+        commands = [config['gradle']]
         if 'preassemble' in thisbuild:
             for task in thisbuild['preassemble'].split():
                 commands.append(task)
@@ -583,7 +583,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         src = os.path.join(bindir, src)
 
     # Make sure it's not debuggable...
-    if common.isApkDebuggable(src):
+    if common.isApkDebuggable(src, config):
         raise BuildException("APK is debuggable")
 
     # By way of a sanity check, make sure the version and version
@@ -592,7 +592,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if not os.path.exists(src):
         raise BuildException("Unsigned apk is not at expected location of " + src)
 
-    p = subprocess.Popen([os.path.join(sdk_path, 'build-tools', build_tools, 'aapt'),
+    p = subprocess.Popen([os.path.join(config['sdk_path'],
+                        'build-tools', config['build_tools'], 'aapt'),
                         'dump', 'badging', src],
                         stdout=subprocess.PIPE)
     output = p.communicate()[0]
@@ -688,7 +689,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
         # grabbing the source now.
         vcs.gotorevision(thisbuild['commit'])
 
-        build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force)
+        build_server(app, thisbuild, vcs, build_dir, output_dir, config['sdk_path'], force)
     else:
         build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, verbose, onserver)
     return True
@@ -753,19 +754,17 @@ def parse_commandline():
     return options, args
 
 options = None
+config = {}
 
 def main():
 
     global options
 
     # Read configuration...
-    globals()['build_server_always'] = False
-    globals()['mvn3'] = "mvn3"
-    globals()['archive_older'] = 0
-    execfile('config.py', globals())
+    common.read_config(config)
 
     options, args = parse_commandline()
-    if build_server_always:
+    if config['build_server_always']:
         options.server = True
     if options.resetserver and not options.server:
         print "Using --resetserver without --server makes no sense"
@@ -792,7 +791,7 @@ def main():
             print "Creating output directory"
             os.makedirs(output_dir)
 
-    if archive_older != 0:
+    if config['archive_older'] != 0:
         also_check_dir = 'archive'
     else:
         also_check_dir = None
@@ -828,8 +827,9 @@ def main():
 
     if options.wiki:
         import mwclient
-        site = mwclient.Site((wiki_protocol, wiki_server), path=wiki_path)
-        site.login(wiki_user, wiki_password)
+        site = mwclient.Site((config['wiki_protocol'], config['wiki_server']),
+                path=config['wiki_path'])
+        site.login(config['wiki_user'], config['wiki_password'])
 
     # Build applications...
     failed_apps = {}
@@ -855,7 +855,7 @@ def main():
                     if options.verbose:
                         print "Getting {0} vcs interface for {1}".format(
                                 app['Repo Type'], app['Repo'])
-                    vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
+                    vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, config['sdk_path'])
 
                     first = False
 

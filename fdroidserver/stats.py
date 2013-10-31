@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # stats.py - part of the FDroid server tools
-# Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -31,20 +31,19 @@ import subprocess
 
 def carbon_send(key, value):
     s = socket.socket()
-    s.connect((carbon_host, carbon_port))
+    s.connect((config['carbon_host'], config['carbon_port']))
     msg = '%s %d %d\n' % (key, value, int(time.time()))
     s.sendall(msg)
     s.close()
 
+config = {}
+
 def main():
 
     # Read configuration...
-    global update_stats, stats_to_carbon
-    update_stats = False
-    stats_to_carbon = False
-    execfile('config.py', globals())
+    common.read_config(config)
 
-    if not update_stats:
+    if not config['update_stats']:
         print "Stats are disabled - check your configuration"
         sys.exit(1)
 
@@ -79,7 +78,7 @@ def main():
             ssh = paramiko.SSHClient()
             ssh.load_system_host_keys()
             ssh.connect('f-droid.org', username='fdroid', timeout=10,
-                    key_filename=webserver_keyfile)
+                    key_filename=config['webserver_keyfile'])
             ftp = ssh.open_sftp()
             ftp.get_channel().settimeout(60)
             print "...connected"
@@ -140,7 +139,7 @@ def main():
     alldownloads = 0
     for app, count in apps.iteritems():
         lst.append(app + " " + str(count))
-        if stats_to_carbon:
+        if config['stats_to_carbon']:
             carbon_send('fdroid.download.' + app.replace('.', '_'), count)
         alldownloads += count
     lst.append("ALL " + str(alldownloads))

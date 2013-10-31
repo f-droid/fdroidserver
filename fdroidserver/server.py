@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # server.py - part of the FDroid server tools
-# Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -21,13 +21,14 @@ import sys
 import os
 import subprocess
 from optparse import OptionParser
+import common
+
+config = {}
 
 def main():
 
-    #Read configuration...
-    global archive_older
-    archive_older = 0
-    execfile('config.py', globals())
+    # Read configuration...
+    common.read_config(config)
 
     # Parse command line...
     parser = OptionParser()
@@ -44,20 +45,20 @@ def main():
         sys.exit(1)
 
     repodirs = ['repo']
-    if archive_older != 0:
+    if config['archive_older'] != 0:
         repodirs.append('archive')
 
     for repodir in repodirs:
         index = os.path.join(repodir, 'index.xml')
         indexjar = os.path.join(repodir, 'index.jar')
         if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                '--exclude', index, '--exclude', indexjar, repodir, serverwebroot]) != 0:
+                '--exclude', index, '--exclude', indexjar, repodir, config['serverwebroot']]) != 0:
             sys.exit(1)
         if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                index, serverwebroot + '/' + repodir]) != 0:
+                index, config['serverwebroot'] + '/' + repodir]) != 0:
             sys.exit(1)
         if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                indexjar, serverwebroot + '/' + repodir]) != 0:
+                indexjar, config['serverwebroot'] + '/' + repodir]) != 0:
             sys.exit(1)
 
     sys.exit(0)

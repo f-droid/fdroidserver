@@ -45,8 +45,9 @@ def update_wiki(apps, apks, verbose=False):
     wikicat = 'Apps'
     wikiredircat = 'App Redirects'
     import mwclient
-    site = mwclient.Site((wiki_protocol, wiki_server), path=wiki_path)
-    site.login(wiki_user, wiki_password)
+    site = mwclient.Site((config['wiki_protocol'], config['wiki_server']),
+            path=config['wiki_path'])
+    site.login(config['wiki_user'], config['wiki_password'])
     generated_pages = {}
     generated_redirects = {}
     for app in apps:
@@ -247,9 +248,10 @@ def delete_disabled_builds(apps, apkcache, repodirs):
 def resize_icon(iconpath):
     try:
         im = Image.open(iconpath)
-        if any(length > max_icon_size for length in im.size):
+        if any(length > config['max_icon_size'] for length in im.size):
             print iconpath, "is too large:", im.size
-            im.thumbnail((max_icon_size, max_icon_size), Image.ANTIALIAS)
+            im.thumbnail((config['max_icon_size'], config['max_icon_size']),
+                    Image.ANTIALIAS)
             print iconpath, "new size:", im.size
             im.save(iconpath, "PNG")
         else:
@@ -321,7 +323,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             thisinfo['size'] = os.path.getsize(apkfile)
             thisinfo['permissions'] = []
             thisinfo['features'] = []
-            p = subprocess.Popen([os.path.join(sdk_path, 'build-tools', build_tools, 'aapt'),
+            p = subprocess.Popen([os.path.join(config['sdk_path'], 'build-tools', config['build_tools'], 'aapt'),
                                   'dump', 'badging', apkfile],
                                  stdout=subprocess.PIPE)
             output = p.communicate()[0]
@@ -369,7 +371,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 thisinfo['sdkversion'] = 0
 
             # Check for debuggable apks...
-            if common.isApkDebuggable(apkfile):
+            if common.isApkDebuggable(apkfile, config):
                 print "WARNING: {0} is debuggable... {1}".format(apkfile, line)
 
             # Calculate the sha256...
@@ -450,17 +452,17 @@ def make_index(apps, apks, repodir, archive, categories):
 
     repoel = doc.createElement("repo")
     if archive:
-        repoel.setAttribute("name", archive_name)
-        repoel.setAttribute("icon", os.path.basename(archive_icon))
-        repoel.setAttribute("url", archive_url)
-        addElement('description', archive_description, doc, repoel)
+        repoel.setAttribute("name", config['archive_name'])
+        repoel.setAttribute("icon", os.path.basename(config['archive_icon']))
+        repoel.setAttribute("url", config['archive_url'])
+        addElement('description', config['archive_description'], doc, repoel)
     else:
-        repoel.setAttribute("name", repo_name)
-        repoel.setAttribute("icon", os.path.basename(repo_icon))
-        repoel.setAttribute("url", repo_url)
-        addElement('description', repo_description, doc, repoel)
+        repoel.setAttribute("name", config['repo_name'])
+        repoel.setAttribute("icon", os.path.basename(config['repo_icon']))
+        repoel.setAttribute("url", config['repo_url'])
+        addElement('description', config['repo_description'], doc, repoel)
 
-    if repo_keyalias is not None:
+    if config['repo_keyalias'] is not None:
 
         # Generate a certificate fingerprint the same way keytool does it
         # (but with slightly different formatting)
@@ -473,9 +475,9 @@ def make_index(apps, apks, repodir, archive, categories):
 
         def extract_pubkey():
             p = subprocess.Popen(['keytool', '-exportcert',
-                                  '-alias', repo_keyalias,
-                                  '-keystore', keystore,
-                                  '-storepass', keystorepass],
+                                  '-alias', config['repo_keyalias'],
+                                  '-keystore', config['keystore'],
+                                  '-storepass', config['keystorepass']],
                                  stdout=subprocess.PIPE)
             cert = p.communicate()[0]
             if p.returncode != 0:
@@ -606,11 +608,11 @@ def make_index(apps, apks, repodir, archive, categories):
     of.write(output)
     of.close()
 
-    if repo_keyalias is not None:
+    if config['repo_keyalias'] is not None:
 
         if not options.quiet:
             print "Creating signed index."
-            print "Key fingerprint:", repo_pubkey_fingerprint
+            print "Key fingerprint:", config['repo_pubkey_fingerprint']
         
         #Create a jar of the index...
         p = subprocess.Popen(['jar', 'cf', 'index.jar', 'index.xml'],
@@ -623,10 +625,10 @@ def make_index(apps, apks, repodir, archive, categories):
             sys.exit(1)
 
         # Sign the index...
-        p = subprocess.Popen(['jarsigner', '-keystore', keystore,
-            '-storepass', keystorepass, '-keypass', keypass,
+        p = subprocess.Popen(['jarsigner', '-keystore', config['keystore'],
+            '-storepass', config['keystorepass'], '-keypass', config['keypass'],
             '-digestalg', 'SHA1', '-sigalg', 'MD5withRSA',
-            os.path.join(repodir, 'index.jar') , repo_keyalias], stdout=subprocess.PIPE)
+            os.path.join(repodir, 'index.jar') , config['repo_keyalias']], stdout=subprocess.PIPE)
         output = p.communicate()[0]
         if p.returncode != 0:
             print "Failed to sign index"
@@ -637,8 +639,8 @@ def make_index(apps, apks, repodir, archive, categories):
 
     # Copy the repo icon into the repo directory...
     icon_dir=os.path.join(repodir ,'icons')
-    iconfilename = os.path.join(icon_dir, os.path.basename(repo_icon))
-    shutil.copyfile(repo_icon, iconfilename)
+    iconfilename = os.path.join(icon_dir, os.path.basename(config['repo_icon']))
+    shutil.copyfile(config['repo_icon'], iconfilename)
 
     # Write a category list in the repo to allow quick access...
     catdata = ''
@@ -679,14 +681,13 @@ def archive_old_apks(apps, apks, repodir, archivedir, defaultkeepversions):
                 apks.remove(apk)
 
 
+config = {}
+options = None
+
 def main():
 
     # Read configuration...
-    global update_stats, archive_older, max_icon_size
-    update_stats = False
-    archive_older = 0
-    max_icon_size = 72
-    execfile('config.py', globals())
+    common.read_config(config)
 
     # Parse command line...
     global options
@@ -715,7 +716,7 @@ def main():
     (options, args) = parser.parse_args()
 
     repodirs = ['repo']
-    if archive_older != 0:
+    if config['archive_older'] != 0:
         repodirs.append('archive')
         if not os.path.exists('archive'):
             os.mkdir('archive')
@@ -825,7 +826,7 @@ def main():
                 print "       " + apk['name'] + " - " + apk['version']  
 
     if len(repodirs) > 1:
-        archive_old_apks(apps, apks, repodirs[0], repodirs[1], archive_older)
+        archive_old_apks(apps, apks, repodirs[0], repodirs[1], config['archive_older'])
 
     # Make the index for the main repo...
     make_index(apps, apks, repodirs[0], False, categories)
@@ -838,7 +839,7 @@ def main():
             cachechanged = True
         make_index(apps, archapks, repodirs[1], True, categories)
 
-    if update_stats:
+    if config['update_stats']:
 
         # Update known apks info...
         knownapks.writeifchanged()

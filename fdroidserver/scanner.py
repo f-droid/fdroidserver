@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # scanner.py - part of the FDroid server tools
-# Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -26,13 +26,12 @@ import common
 from common import BuildException
 from common import VCSException
 
+config = {}
+
 def main():
 
     # Read configuration...
-    global build_server_always, mvn3
-    globals()['build_server_always'] = False
-    globals()['mvn3'] = "mvn3"
-    execfile('config.py', globals())
+    common.read_config(config)
 
 
     # Parse command line...
@@ -87,7 +86,8 @@ def main():
                 build_dir = 'build/' + app['id']
 
                 # Set up vcs interface and make sure we have the latest code...
-                vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
+                vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir,
+                        config['sdk_path'])
 
                 for thisbuild in app['builds']:
 
@@ -99,8 +99,10 @@ def main():
 
                         # Prepare the source code...
                         root_dir, _ = common.prepare_source(vcs, app, thisbuild,
-                                build_dir, srclib_dir, extlib_dir, sdk_path, ndk_path,
-                                javacc_path, mvn3, options.verbose, False)
+                                build_dir, srclib_dir, extlib_dir,
+                                config['sdk_path'], config['ndk_path'],
+                                config['javacc_path'], config['mvn3'],
+                                options.verbose, False)
 
                         # Do the scan...
                         buildprobs = common.scan_source(build_dir, root_dir, thisbuild)

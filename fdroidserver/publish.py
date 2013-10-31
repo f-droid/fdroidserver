@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # publish.py - part of the FDroid server tools
-# Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -26,12 +26,15 @@ import md5
 import glob
 from optparse import OptionParser
 
+import common
 from common import BuildException
+
+config = {}
 
 def main():
 
-    #Read configuration...
-    execfile('config.py', globals())
+    # Read configuration...
+    common.read_config(config)
 
     # Parse command line...
     parser = OptionParser()
@@ -78,9 +81,9 @@ def main():
             # If a collision does occur later, we're going to have to
             # come up with a new alogrithm, AND rename all existing keys
             # in the keystore!
-            if appid in keyaliases:
+            if appid in config['keyaliases']:
                 # For this particular app, the key alias is overridden...
-                keyalias = keyaliases[appid]
+                keyalias = config['keyaliases'][appid]
                 if keyalias.startswith('@'):
                     m = md5.new()
                     m.update(keyalias[1:])
@@ -94,25 +97,27 @@ def main():
             # See if we already have a key for this application, and
             # if not generate one...
             p = subprocess.Popen(['keytool', '-list',
-                '-alias', keyalias, '-keystore', keystore,
-                '-storepass', keystorepass], stdout=subprocess.PIPE)
+                '-alias', keyalias, '-keystore', config['keystore'],
+                '-storepass', config['keystorepass']], stdout=subprocess.PIPE)
             output = p.communicate()[0]
             if p.returncode !=0:
                 print "Key does not exist - generating..."
                 p = subprocess.Popen(['keytool', '-genkey',
-                    '-keystore', keystore, '-alias', keyalias,
+                    '-keystore', config['keystore'], '-alias', keyalias,
                     '-keyalg', 'RSA', '-keysize', '2048',
                     '-validity', '10000',
-                    '-storepass', keystorepass, '-keypass', keypass,
-                    '-dname', keydname], stdout=subprocess.PIPE)
+                    '-storepass', config['keystorepass'],
+                    '-keypass', config['keypass'],
+                    '-dname', config['keydname']], stdout=subprocess.PIPE)
                 output = p.communicate()[0]
                 print output
                 if p.returncode != 0:
                     raise BuildException("Failed to generate key")
 
             # Sign the application...
-            p = subprocess.Popen(['jarsigner', '-keystore', keystore,
-                '-storepass', keystorepass, '-keypass', keypass, '-sigalg',
+            p = subprocess.Popen(['jarsigner', '-keystore', config['keystore'],
+                '-storepass', config['keystorepass'],
+                '-keypass', config['keypass'], '-sigalg',
                 'MD5withRSA', '-digestalg', 'SHA1',
                     apkfile, keyalias], stdout=subprocess.PIPE)
             output = p.communicate()[0]
@@ -121,7 +126,7 @@ def main():
                 raise BuildException("Failed to sign application")
 
             # Zipalign it...
-            p = subprocess.Popen([os.path.join(sdk_path,'tools','zipalign'),
+            p = subprocess.Popen([os.path.join(config['sdk_path'],'tools','zipalign'),
                                 '-v', '4', apkfile,
                                 os.path.join(output_dir, apkfilename)],
                                 stdout=subprocess.PIPE)

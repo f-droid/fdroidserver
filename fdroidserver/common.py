@@ -27,6 +27,26 @@ import Queue
 import threading
 import magic
 
+def read_config(config):
+    """Read the repository config
+
+    The config is read from config.py, which is in the current directory when
+    any of the repo management commands are used.
+    """
+    if not os.path.isfile('config.py'):
+        print "Missing config file - is this a repo directory?"
+        sys.exit(2)
+    config['build_server_always'] = False
+    config['mvn3'] = "mvn3"
+    config['archive_older'] = 0
+    config['gradle'] = 'gradle'
+    config['update_stats'] = False
+    config['archive_older'] = 0
+    config['max_icon_size'] = 72
+    config['stats_to_carbon'] = False
+    execfile('config.py', config)
+
+
 def getvcs(vcstype, remote, local, sdk_path):
     if vcstype == 'git':
         return vcs_git(remote, local, sdk_path)
@@ -1755,16 +1775,15 @@ class KnownApks:
         lst.reverse()
         return lst
 
-def isApkDebuggable(apkfile):
+def isApkDebuggable(apkfile, config):
     """Returns True if the given apk file is debuggable
 
     :param apkfile: full path to the apk to check"""
 
-    execfile('config.py', globals())
-
-    p = subprocess.Popen([os.path.join(sdk_path, 'build-tools', build_tools, 'aapt'),
-          'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
-         stdout=subprocess.PIPE)
+    p = subprocess.Popen([os.path.join(config['sdk_path'],
+        'build-tools', config['build_tools'], 'aapt'),
+        'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
+        stdout=subprocess.PIPE)
     output = p.communicate()[0]
     if p.returncode != 0:
         print "ERROR: Failed to get apk manifest information"

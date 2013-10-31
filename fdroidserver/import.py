@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # import.py - part of the FDroid server tools
-# Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -22,7 +22,7 @@ import os
 import shutil
 import urllib
 from optparse import OptionParser
-
+import common
 
 # Get the repo type and address from the given web page. The page is scanned
 # in a rather naive manner for 'git clone xxxx', 'hg clone xxxx', etc, and
@@ -82,11 +82,12 @@ def getrepofrompage(url):
 
     return (None, "No information found." + page)
 
+config  = {}
 
 def main():
 
     # Read configuration...
-    execfile('config.py', globals())
+    common.read_config(config)
 
     import common
 
@@ -219,7 +220,7 @@ def main():
     src_dir = os.path.join(tmp_dir, 'importer')
     if os.path.exists(src_dir):
         shutil.rmtree(src_dir)
-    vcs = common.getvcs(repotype, repo, src_dir, sdk_path)
+    vcs = common.getvcs(repotype, repo, src_dir, config['sdk_path'])
     vcs.gotorevision(options.rev)
     if options.subdir:
         root_dir = os.path.join(src_dir, options.subdir)
