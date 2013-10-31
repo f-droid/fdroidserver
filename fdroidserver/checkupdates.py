@@ -286,8 +286,6 @@ def main():
                       help="Only process apps with auto-updates")
     parser.add_option("--commit", action="store_true", default=False,
                       help="Commit changes")
-    parser.add_option("--subdir-changes", action="store_true", default=False,
-                      help="Look for changes in app subdirectories")
     parser.add_option("--gplay", action="store_true", default=False,
                       help="Only print differences with the Play Store")
     (options, args) = parser.parse_args()
@@ -354,8 +352,6 @@ def main():
         else:
             version = None
             vercode = 'Invalid update check method'
-
-        if options.subdir-changes:
 
         updating = False
         if not version:
