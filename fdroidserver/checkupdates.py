@@ -396,7 +396,7 @@ def main():
                         app['Current Version'] = cv
                         writeit = True
             except Exception:
-                msg = "Auto Name or Current Version failed for %s due to exception: %s" % (app['id'], traceback.format_exc())
+                print "ERROR: Auto Name or Current Version failed for %s due to exception: %s" % (app['id'], traceback.format_exc())
 
         if updating:
             print '...updating to version %s (%s)' % (app['Current Version'], app['Current Version Code'])
