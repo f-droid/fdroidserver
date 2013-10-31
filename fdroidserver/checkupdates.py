@@ -400,8 +400,9 @@ def main():
 
         if updating:
             print '...updating to version %s (%s)' % (app['Current Version'], app['Current Version Code'])
-            name = str('%s (%s)' % (app['Auto Name'], app['id']) if app['Auto Name'] else app['id'])
-            logmsg = 'Update current version of %s to %s (%s)' % (name, app['Current Version'], app['Current Version Code'])
+            name = '%s (%s)' % (app['Auto Name'], app['id']) if app['Auto Name'] else app['id']
+            ver = "%s (%s)" % (app['Current Version'], app['Current Version Code'])
+            logmsg = 'Update CV of %s to %s' % (name, ver)
 
         if options.auto:
             mode = app['Auto Update Mode']
@@ -434,7 +435,9 @@ def main():
                     newbuild['commit'] = commit
                     app['builds'].append(newbuild)
                     writeit = True
-                    logmsg = "Update " + app['id'] + " to " + newbuild['version']
+                    name = "%s (%s)" % (app['Auto Name'], app['id']) if app['Auto Name'] else app['id']
+                    ver = "%s (%s)" % (newbuild['version'], newbuild['vercode'])
+                    logmsg = "Update %s to %s" % (name, ver)
             else:
                 print 'Invalid auto update mode'
 
@@ -443,10 +446,8 @@ def main():
             common.write_metadata(metafile, app)
             if options.commit and logmsg:
                 print "Commiting update for " + metafile
-                if subprocess.call("git add " + metafile, shell=True) != 0:
-                    print "Git add failed"
-                    sys.exit(1)
-                if subprocess.call("git commit -m '" + logmsg.replace("'", "\\'") +  "'", shell=True) != 0:
+                if subprocess.call(["git", "commit", "-m",
+                    "'"+logmsg.replace("'", "\\'")+"'", "--", metafile]) != 0:
                     print "Git commit failed"
                     sys.exit(1)
 
