@@ -58,7 +58,7 @@ class vcs:
         # It's possible to sneak a username and password in with
         # the remote address for svn...
         self.username = None
-        if self.repotype() == 'svn':
+        if self.repotype() in ('svn', 'git-svn'):
             index = remote.find('@')
             if index != -1:
                 self.username = remote[:index]
@@ -204,6 +204,13 @@ class vcs_gitsvn(vcs):
     def repotype(self):
         return 'git-svn'
 
+    # Damn git-svn tries to use a graphical password prompt, so we have to
+    # trick it into taking the password from stdin
+    def userargs(self):
+        if self.username is None:
+            return ('', '')
+        return ('echo "%s" | DISPLAY="" ' % self.password, '--username "%s"' % self.username)
+
     # If the local directory exists, but is somehow not a git repository, git
     # will traverse up the directory tree until it finds one that is (i.e.
     # fdroidserver) and then we'll proceed to destory it! This is called as
@@ -218,20 +225,22 @@ class vcs_gitsvn(vcs):
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout...
-            gitsvn_cmd = ['git', 'svn', 'clone']
-            remote_split = self.remote.split(';')
-            if len(remote_split) > 1:
+            gitsvn_cmd = '%sgit svn clone %s' % self.userargs()
+            if ';' in self.remote:
+                remote_split = self.remote.split(';')
                 for i in remote_split[1:]:
                     if i.startswith('trunk='):
-                        gitsvn_cmd += ['-T', i[6:]]
+                        gitsvn_cmd += '-T %s' % i[6:]
                     elif i.startswith('tags='):
-                        gitsvn_cmd += ['-t', i[5:]]
+                        gitsvn_cmd += '-t %s', i[5:]
                     elif i.startswith('branches='):
-                        gitsvn_cmd += ['-b', i[9:]]
-                if subprocess.call(gitsvn_cmd + [remote_split[0], self.local]) != 0:
+                        gitsvn_cmd += '-b %s' % i[9:]
+                if subprocess.call([gitsvn_cmd + " %s %s" % (remote_split[0], self.local)],
+                        shell=True) != 0:
                     raise VCSException("Git clone failed")
             else:
-                if subprocess.call(gitsvn_cmd + [self.remote, self.local]) != 0:
+                if subprocess.call([gitsvn_cmd + " %s %s" % (self.remote, self.local)],
+                        shell=True) != 0:
                     raise VCSException("Git clone failed")
             self.checkrepo()
         else:
@@ -245,8 +254,8 @@ class vcs_gitsvn(vcs):
                 raise VCSException("Git clean failed")
             if not self.refreshed:
                 # Get new commits and tags from repo...
-                if subprocess.call(['git', 'svn', 'rebase'],
-                        cwd=self.local) != 0:
+                if subprocess.call(['%sgit svn rebase %s' % self.userargs()],
+                        cwd=self.local, shell=True) != 0:
                     raise VCSException("Git svn rebase failed")
                 self.refreshed = True
 
