@@ -424,7 +424,8 @@ def main():
                         latest = build
                 if not gotcur:
                     newbuild = latest.copy()
-                    del newbuild['origlines']
+                    if 'origlines' in newbuild:
+                        del newbuild['origlines']
                     newbuild['vercode'] = app['Current Version Code']
                     newbuild['version'] = app['Current Version'] + suffix
                     print "...auto-generating build for " + newbuild['version']
