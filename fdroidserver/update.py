@@ -425,6 +425,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
     return apks, cachechanged
 
 
+repo_pubkey_fingerprint = None
+
 def make_index(apps, apks, repodir, archive, categories):
     """Make a repo index.
 
