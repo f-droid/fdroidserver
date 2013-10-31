@@ -381,7 +381,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     print "Cleaning jni dirs..."
     for baddir in [
             'libs/armeabi-v7a', 'libs/armeabi',
-            'libs/mips', 'libs/x86']:
+            'libs/mips', 'libs/x86', 'obj']:
         badpath = os.path.join(build_dir, baddir)
         if os.path.exists(badpath):
             print "Removing '%s'" % badpath
