@@ -60,7 +60,6 @@ def main():
 
     statsdir = 'stats'
     logsdir = os.path.join(statsdir, 'logs')
-    logsarchivedir = os.path.join(logsdir, 'archive')
     datadir = os.path.join(statsdir, 'data')
     if not os.path.exists(statsdir):
         os.mkdir(statsdir)
@@ -94,7 +93,7 @@ def main():
                             os.path.getsize(destpath) != destsize):
                         print "...retrieving " + f
                         ftp.get(f, destpath)
-        except Exception as e:
+        except Exception:
             traceback.print_exc()
             sys.exit(1)
         finally:

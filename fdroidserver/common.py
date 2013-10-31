@@ -504,7 +504,7 @@ def parse_metadata(metafile, verbose=False):
         thisbuild['version'] = parts[0]
         thisbuild['vercode'] = parts[1]
         try:
-            testvercode = int(thisbuild['vercode'])
+            int(thisbuild['vercode'])
         except:
             raise MetaDataException("Invalid version code for build in " + metafile.name)
         if parts[2].startswith('!'):
@@ -656,7 +656,7 @@ def parse_metadata(metafile, verbose=False):
                 curbuild['version'] = vv[0]
                 curbuild['vercode'] = vv[1]
                 try:
-                    testvercode = int(curbuild['vercode'])
+                    int(curbuild['vercode'])
                 except:
                     raise MetaDataException("Invalid version code for build in " + metafile.name)
                 buildlines = []
@@ -1063,7 +1063,6 @@ def fetch_real_name(app_dir, flavour):
     app_search = re.compile(r'.*<application.*').search
     name_search = re.compile(r'.*android:label="([^"]+)".*').search
     app_found = False
-    name = None
     for f in manifest_paths(app_dir, flavour):
         if not f.endswith(".xml"):
             continue
@@ -1211,9 +1210,6 @@ def parse_srclib(metafile, **kw):
 
     if metafile is None:
         return thisinfo
-
-    mode = 0
-    buildlines = []
 
     for line in metafile:
         line = line.rstrip('\r\n')
@@ -1573,8 +1569,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
 
     # Run a pre-build command if one is required...
     if 'prebuild' in build:
-        output = ''
-        error = ''
         cmd = build['prebuild']
 
         # Substitute source library paths into prebuild commands...

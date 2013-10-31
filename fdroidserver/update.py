@@ -588,7 +588,6 @@ def make_index(apps, apks, repodir, archive, categories):
             addElement('sdkver', str(apk['sdkversion']), doc, apkel)
             if 'added' in apk:
                 addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
-            perms = ""
             if app['Requires Root']:
                 if 'ACCESS_SUPERUSER' not in apk['permissions']:
                     apk['permissions'].append('ACCESS_SUPERUSER')

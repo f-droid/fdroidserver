@@ -21,7 +21,6 @@ import sys
 import os
 import traceback
 from optparse import OptionParser
-import HTMLParser
 import common
 from common import BuildException
 from common import VCSException
@@ -53,8 +52,6 @@ def main():
         if len(apps) == 0:
             print "No such package"
             sys.exit(1)
-
-    html_parser = HTMLParser.HTMLParser()
 
     problems = []
 
