@@ -611,7 +611,7 @@ def make_index(apps, apks, repodir, archive, categories):
 
         if not options.quiet:
             print "Creating signed index."
-            print "Key fingerprint:", config['repo_pubkey_fingerprint']
+            print "Key fingerprint:", repo_pubkey_fingerprint
         
         #Create a jar of the index...
         p = subprocess.Popen(['jar', 'cf', 'index.jar', 'index.xml'],
