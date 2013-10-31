@@ -27,24 +27,38 @@ import Queue
 import threading
 import magic
 
-def read_config(config):
+config = None
+options = None
+
+def read_config(opts):
     """Read the repository config
 
     The config is read from config.py, which is in the current directory when
     any of the repo management commands are used.
     """
+    global config, options
+
+    if config is not None:
+        return config
     if not os.path.isfile('config.py'):
         print "Missing config file - is this a repo directory?"
         sys.exit(2)
-    config['build_server_always'] = False
-    config['mvn3'] = "mvn3"
-    config['archive_older'] = 0
-    config['gradle'] = 'gradle'
-    config['update_stats'] = False
-    config['archive_older'] = 0
-    config['max_icon_size'] = 72
-    config['stats_to_carbon'] = False
+
+    options = opts
+
+    config = {
+        'build_server_always': False,
+        'mvn3': "mvn3",
+        'archive_older': 0,
+        'gradle': 'gradle',
+        'update_stats': False,
+        'archive_older': 0,
+        'max_icon_size': 72,
+        'stats_to_carbon': False
+    }
+    print "Reading config.py..."
     execfile('config.py', config)
+    return config
 
 
 def getvcs(vcstype, remote, local, sdk_path):
@@ -491,7 +505,7 @@ def metafieldtype(name):
 #  'descriptionlines' - original lines of description as formatted in the
 #                       metadata file.
 #
-def parse_metadata(metafile, verbose=False):
+def parse_metadata(metafile):
 
     def parse_buildline(lines):
         value = "".join(lines)
@@ -730,7 +744,7 @@ def getsrcname(app, build):
 #
 # 'dest'    - The path to the output file
 # 'app'     - The app data
-def write_metadata(dest, app, verbose=False):
+def write_metadata(dest, app):
 
     def writecomments(key):
         written = 0
@@ -738,7 +752,7 @@ def write_metadata(dest, app, verbose=False):
             if pf == key:
                 mf.write(comment + '\n')
                 written += 1
-        if verbose and written > 0:
+        if options.verbose and written > 0:
             print "...writing comments for " + (key if key else 'EOF')
 
     def writefield(field, value=None):
@@ -802,7 +816,7 @@ def write_metadata(dest, app, verbose=False):
 
         def write_builditem(key, value):
             if key not in ['version', 'vercode', 'origlines']:
-                if verbose:
+                if options.verbose:
                     print "...writing {0} : {1}".format(key, value)
                 outline = '    ' + key + '='
                 bits = value.split('&& ')
@@ -836,12 +850,12 @@ def write_metadata(dest, app, verbose=False):
 
 # Read all metadata. Returns a list of 'app' objects (which are dictionaries as
 # returned by the parse_metadata function.
-def read_metadata(verbose=False, xref=True, package=None):
+def read_metadata(xref=True, package=None):
     apps = []
     for metafile in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
         if package is None or metafile == os.path.join('metadata', package + '.txt'):
             try:
-                appinfo = parse_metadata(metafile, verbose=verbose)
+                appinfo = parse_metadata(metafile)
             except Exception, e:
                 raise MetaDataException("Problem reading metadata file %s: - %s" % (metafile, str(e)))
             apps.append(appinfo)
@@ -1308,12 +1322,11 @@ def getsrclib(spec, srclib_dir, sdk_path, ndk_path="", mvn3="", basepath=False, 
 #  'ndk_path'    - the path to the Android NDK
 #  'javacc_path' - the path to javacc
 #  'mvn3'        - the path to the maven 3 executable
-#  'verbose'     - optional: verbose or not (default=False)
 # Returns the (root, srclibpaths) where:
 #   'root' is the root directory, which may be the same as 'build_dir' or may
 #          be a subdirectory of it.
 #   'srclibpaths' is information on the srclibs being used
-def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path, ndk_path, javacc_path, mvn3, verbose=False, onserver=False):
+def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path, ndk_path, javacc_path, mvn3, onserver=False):
 
     # Optionally, the actual app source can be in a subdirectory...
     if 'subdir' in build:
@@ -1332,7 +1345,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
 
     # Initialise submodules if requred...
     if build.get('submodules', 'no')  == 'yes':
-        if verbose: print "Initialising submodules..."
+        if options.verbose:
+            print "Initialising submodules..."
         vcs.initsubmodules()
 
     # Run an init command if one is required...
@@ -1341,10 +1355,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         cmd = cmd.replace('$$SDK$$', sdk_path)
         cmd = cmd.replace('$$NDK$$', ndk_path)
         cmd = cmd.replace('$$MVN$$', mvn3)
-        if verbose:
+        if options.verbose:
             print "Running 'init' commands in %s" % root_dir
 
-        p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir, verbose=verbose)
+        p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running init command for %s:%s" %
                     (app['id'], build['version']), p.stdout, p.stderr)
@@ -1380,10 +1394,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
                 if os.path.exists(badpath):
                     print "Removing '%s'" % badpath
                     shutil.rmtree(badpath)
-            if verbose:
+            if options.verbose:
                 print "Update of '%s': exec '%s' in '%s'"%\
                     (d," ".join(parms),cwd)
-            p = FDroidPopen(parms, cwd=cwd, verbose=verbose)
+            p = FDroidPopen(parms, cwd=cwd)
             # check to see whether an error was returned without a proper exit code (this is the case for the 'no target set or target invalid' error)
             if p.returncode != 0 or (p.stderr != "" and p.stderr.startswith("Error: ")):
                 raise BuildException("Failed to update project at %s" % cwd,
@@ -1399,7 +1413,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     for root, dirs, files in os.walk(build_dir):
         for f in files:
             if f == 'build.gradle':
-                clean_gradle_keys(os.path.join(root, f), verbose)
+                clean_gradle_keys(os.path.join(root, f))
                 break
 
     # Update the local.properties file...
@@ -1564,10 +1578,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         cmd = cmd.replace('$$SDK$$', sdk_path)
         cmd = cmd.replace('$$NDK$$', ndk_path)
         cmd = cmd.replace('$$MVN3$$', mvn3)
-        if verbose:
+        if options.verbose:
             print "Running 'prebuild' commands in %s" % root_dir
 
-        p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir, verbose=verbose)
+        p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running prebuild command for %s:%s" %
                     (app['id'], build['version']), p.stdout, p.stderr)
@@ -1805,15 +1819,14 @@ class PopenResult:
 
 def FDroidPopen(commands, cwd,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-        verbose=False, apkoutput=False):
+        apkoutput=False):
     """
     Runs a command the FDroid way and returns return code and output
 
     :param commands, cwd, stdout, stderr: like subprocess.Popen
-    :param verbose: whether to print output as it is saved
     """
 
-    if verbose:
+    if options.verbose:
         print "Directory: %s" % cwd
         print " > %s" % ' '.join(commands)
 
@@ -1832,7 +1845,7 @@ def FDroidPopen(commands, cwd,
         # Show what we received from standard output
         while not stdout_queue.empty():
             line = stdout_queue.get()
-            if verbose:
+            if options.verbose:
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
@@ -1843,7 +1856,7 @@ def FDroidPopen(commands, cwd,
         # Show what we received from standard error
         while not stderr_queue.empty():
             line = stderr_queue.get()
-            if verbose:
+            if options.verbose:
                 # Output directly to console
                 sys.stderr.write(line)
                 sys.stderr.flush()
@@ -1854,8 +1867,8 @@ def FDroidPopen(commands, cwd,
     result.returncode = p.returncode
     return result
 
-def clean_gradle_keys(path, verbose):
-    if verbose:
+def clean_gradle_keys(path):
+    if options.verbose:
         print "Cleaning build.gradle of keysigning configs at %s" % path
 
     lines = None

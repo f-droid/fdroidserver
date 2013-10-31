@@ -1,8 +1,8 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #
-# publish.py - part of the FDroid server tools
-# Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
+# verify.py - part of the FDroid server tools
+# Copyright (C) 2013, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -24,12 +24,17 @@ import subprocess
 import glob
 from optparse import OptionParser
 
+import common
 from common import BuildException
+
+options = None
+config = None
 
 def main():
 
-    #Read configuration...
-    execfile('config.py', globals())
+    global options, config
+
+    options, args = parse_commandline()
 
     # Parse command line...
     parser = OptionParser()
@@ -38,6 +43,8 @@ def main():
     parser.add_option("-p", "--package", default=None,
                       help="Verify only the specified package")
     (options, args) = parser.parse_args()
+
+    config = common.read_config(options)
 
     tmp_dir = 'tmp'
     if not os.path.isdir(tmp_dir):

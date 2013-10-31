@@ -23,12 +23,14 @@ import subprocess
 from optparse import OptionParser
 import common
 
-config = {}
+config = None
+options = None
 
 def main():
 
-    # Read configuration...
-    common.read_config(config)
+    global config, options
+
+    config = common.read_config(options)
 
     # Parse command line...
     parser = OptionParser()

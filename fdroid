@@ -52,7 +52,7 @@ def main():
         sys.exit(1)
 
     if not os.path.isfile('config.py'):
-        print "ERROR: No config.py configuration file present"
+        print "Missing config file - is this a repo directory?"
         sys.exit(2)
 
     for basedir in ('metadata', 'tmp'):

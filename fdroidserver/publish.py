@@ -29,12 +29,12 @@ from optparse import OptionParser
 import common
 from common import BuildException
 
-config = {}
+config = None
+options = None
 
 def main():
 
-    # Read configuration...
-    common.read_config(config)
+    global config, options
 
     # Parse command line...
     parser = OptionParser()
@@ -43,6 +43,8 @@ def main():
     parser.add_option("-p", "--package", default=None,
                       help="Publish only the specified package")
     (options, args) = parser.parse_args()
+
+    config = common.read_config(options)
 
     log_dir = 'logs'
     if not os.path.isdir(log_dir):
