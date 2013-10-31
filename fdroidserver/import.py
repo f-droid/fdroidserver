@@ -32,7 +32,7 @@ def getrepofrompage(url):
 
     req = urllib.urlopen(url)
     if req.getcode() != 200:
-        return (None, 'Unable to find source at ' + sourcecode + ' - return code ' + str(req.getcode()))
+        return (None, 'Unable to get ' + url + ' - return code ' + str(req.getcode()))
     page = req.read()
 
     # Works for Google Code and BitBucket...
