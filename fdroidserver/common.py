@@ -230,11 +230,11 @@ class vcs_gitsvn(vcs):
                 remote_split = self.remote.split(';')
                 for i in remote_split[1:]:
                     if i.startswith('trunk='):
-                        gitsvn_cmd += '-T %s' % i[6:]
+                        gitsvn_cmd += ' -T %s' % i[6:]
                     elif i.startswith('tags='):
-                        gitsvn_cmd += '-t %s', i[5:]
+                        gitsvn_cmd += ' -t %s' % i[5:]
                     elif i.startswith('branches='):
-                        gitsvn_cmd += '-b %s' % i[9:]
+                        gitsvn_cmd += ' -b %s' % i[9:]
                 if subprocess.call([gitsvn_cmd + " %s %s" % (remote_split[0], self.local)],
                         shell=True) != 0:
                     raise VCSException("Git clone failed")
