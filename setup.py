@@ -11,6 +11,11 @@ setup(name='FDroidServer',
       url='http://f-droid.org',
       packages=['fdroidserver'],
       scripts=['fdroid'],
+      data_files=[
+        ('share/doc/fdroidserver/examples',
+         ['config.buildserver.py', 'config.sample.py', 'makebs.config.sample.py',
+          'fdroid-icon.png']),
+        ],
       install_requires=[
         'python-magic',
         'PIL',
