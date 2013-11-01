@@ -197,7 +197,7 @@ class vcs_git(vcs):
                 self.refreshed = True
         # Check out the appropriate revision...
         rev = str(rev if rev else 'origin/master')
-		if subprocess.call(['git', 'checkout', '-f', rev], cwd=self.local) != 0:
+        if subprocess.call(['git', 'checkout', '-f', rev], cwd=self.local) != 0:
             raise VCSException("Git checkout failed")
         # Get rid of any uncontrolled files left behind...
         if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
@@ -211,14 +211,14 @@ class vcs_git(vcs):
         if subprocess.call(['git', 'submodule', 'update'],
                 cwd=self.local) != 0:
             raise VCSException("Git submodule update failed")
-		if subprocess.call(['git', 'submodule', 'foreach',
-			'git', 'reset', '--hard'],
-				cwd=self.local) != 0:
-			raise VCSException("Git submodule reset failed")
-		if subprocess.call(['git', 'submodule', 'foreach',
-			'git', 'clean', '-dffx'],
-				cwd=self.local) != 0:
-			raise VCSException("Git submodule clean failed")
+        if subprocess.call(['git', 'submodule', 'foreach',
+            'git', 'reset', '--hard'],
+                cwd=self.local) != 0:
+            raise VCSException("Git submodule reset failed")
+        if subprocess.call(['git', 'submodule', 'foreach',
+            'git', 'clean', '-dffx'],
+                cwd=self.local) != 0:
+            raise VCSException("Git submodule clean failed")
 
     def gettags(self):
         self.checkrepo()
@@ -566,6 +566,7 @@ def parse_metadata(metafile, verbose=False):
     thisinfo['AntiFeatures'] = None
     thisinfo['Archive Policy'] = None
     thisinfo['Update Check Mode'] = 'None'
+    thisinfo['Vercode Operation'] = None
     thisinfo['Auto Update Mode'] = 'None'
     thisinfo['Current Version'] = ''
     thisinfo['Current Version Code'] = '0'
@@ -829,6 +830,8 @@ def write_metadata(dest, app, verbose=False):
         writefield('Archive Policy')
     writefield('Auto Update Mode')
     writefield('Update Check Mode')
+    if app['Vercode Operation']:
+        writefield('Vercode Operation')
     if 'Update Check Data' in app:
         writefield('Update Check Data')
     if len(app['Current Version']) > 0:

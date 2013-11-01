@@ -333,6 +333,7 @@ def main():
         logmsg = None
 
         tag = None
+        msg = None
         mode = app['Update Check Mode']
         if mode == 'Tags':
             (version, vercode, tag) = check_tags(app, config['sdk_path'])
@@ -346,17 +347,21 @@ def main():
             (version, vercode) = check_http(app)
         elif mode == 'Static':
             version = None
-            vercode = 'Checking disabled'
+            msg = 'Checking disabled'
         elif mode == 'None':
             version = None
-            vercode = 'Checking disabled'
+            msg = 'Checking disabled'
         else:
             version = None
-            vercode = 'Invalid update check method'
+            msg = 'Invalid update check method'
+
+        if vercode and app['Vercode Operation']:
+            op = app['Vercode Operation'].replace("%c", str(int(vercode)))
+            vercode = str(eval(op))
 
         updating = False
         if not version:
-            print "..." + vercode
+            print "...%s" % msg
         elif vercode == app['Current Version Code']:
             print "...up to date"
         else:
