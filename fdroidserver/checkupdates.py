@@ -447,7 +447,7 @@ def main():
             if options.commit and logmsg:
                 print "Commiting update for " + metafile
                 if subprocess.call(["git", "commit", "-m",
-                    "'"+logmsg.replace("'", "\\'")+"'", "--", metafile]) != 0:
+                    logmsg, "--", metafile]) != 0:
                     print "Git commit failed"
                     sys.exit(1)
 
