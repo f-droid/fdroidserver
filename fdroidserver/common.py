@@ -211,7 +211,7 @@ class vcs_git(vcs):
                 self.refreshed = True
         # Check out the appropriate revision...
         rev = str(rev if rev else 'origin/master')
-        if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
+        if subprocess.call(['git', 'checkout', '-f', rev], cwd=self.local) != 0:
             raise VCSException("Git checkout failed")
         # Get rid of any uncontrolled files left behind...
         if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
@@ -225,6 +225,14 @@ class vcs_git(vcs):
         if subprocess.call(['git', 'submodule', 'update'],
                 cwd=self.local) != 0:
             raise VCSException("Git submodule update failed")
+        if subprocess.call(['git', 'submodule', 'foreach',
+            'git', 'reset', '--hard'],
+                cwd=self.local) != 0:
+            raise VCSException("Git submodule reset failed")
+        if subprocess.call(['git', 'submodule', 'foreach',
+            'git', 'clean', '-dffx'],
+                cwd=self.local) != 0:
+            raise VCSException("Git submodule clean failed")
 
     def gettags(self):
         self.checkrepo()
@@ -572,6 +580,7 @@ def parse_metadata(metafile):
     thisinfo['AntiFeatures'] = None
     thisinfo['Archive Policy'] = None
     thisinfo['Update Check Mode'] = 'None'
+    thisinfo['Vercode Operation'] = None
     thisinfo['Auto Update Mode'] = 'None'
     thisinfo['Current Version'] = ''
     thisinfo['Current Version Code'] = '0'
@@ -810,7 +819,7 @@ def write_metadata(dest, app):
                     'oldsdkloc', 'target', 'compilesdk', 'update',
                     'encoding', 'forceversion', 'forcevercode', 'rm',
                     'fixtrans', 'fixapos', 'extlibs', 'srclibs',
-                    'patch', 'prebuild', 'initfun', 'scanignore', 'build',
+                    'patch', 'prebuild', 'scanignore', 'scandelete', 'build',
                     'buildjni', 'gradle', 'maven', 'preassemble',
                     'bindir', 'antcommand', 'novcheck']
 
@@ -835,6 +844,8 @@ def write_metadata(dest, app):
         writefield('Archive Policy')
     writefield('Auto Update Mode')
     writefield('Update Check Mode')
+    if app['Vercode Operation']:
+        writefield('Vercode Operation')
     if 'Update Check Data' in app:
         writefield('Update Check Data')
     if len(app['Current Version']) > 0:
@@ -1344,7 +1355,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         raise BuildException('Missing subdir ' + root_dir)
 
     # Initialise submodules if requred...
-    if build.get('submodules', 'no')  == 'yes':
+    if build.get('submodules', 'no') == 'yes':
         if verbose: print "Initialising submodules..."
     if build.get('submodules', 'no') == 'yes':
         if options.verbose:
@@ -1645,13 +1656,49 @@ def scan_source(build_dir, root_dir, thisbuild):
                       'youtubeandroidplayerapi',
                       'bugsense']
 
-    if 'scanignore' in thisbuild:
-        ignore = [p.strip() for p in thisbuild['scanignore'].split(';')]
-    else:
-        ignore = []
-    
+    def getpaths(field):
+        paths = []
+        if field not in thisbuild:
+            return paths
+        for p in thisbuild[field].split(';'):
+            p = p.strip()
+            if p == '.':
+                p = '/'
+            elif p.startswith('./'):
+                p = p[1:]
+            elif not p.startswith('/'):
+                p = '/' + p;
+            if p not in paths:
+                paths.append(p)
+        return paths
+
+    scanignore = getpaths('scanignore')
+    scandelete = getpaths('scandelete')
+
     ms = magic.open(magic.MIME_TYPE)
     ms.load()
+
+    def toignore(fd):
+        for i in scanignore:
+            if fd.startswith(i):
+                return True
+        return False
+
+    def todelete(fd):
+        for i in scandelete:
+            if fd.startswith(i):
+                return True
+        return False
+
+    def removeproblem(what, fd, fp):
+        print 'Removing %s at %s' % (what, fd)
+        os.remove(fp)
+    
+    def handleproblem(what, fd, fp):
+        if todelete(fd):
+            removeproblem(what, fd, fp)
+        else:
+            problems.append('Found %s at %s' % (what, fd))
 
     # Iterate through all files in the source code...
     for r,d,f in os.walk(build_dir):
@@ -1662,36 +1709,30 @@ def scan_source(build_dir, root_dir, thisbuild):
 
             # Path (relative) to the file...
             fp = os.path.join(r, curfile)
-            fd = fp[len(build_dir)+1:]
+            fd = fp[len(build_dir):]
 
             # Check if this file has been explicitly excluded from scanning...
-            ignorethis = False
-            for i in ignore:
-                if fd.startswith(i):
-                    ignorethis = True
-                    break
-            if ignorethis:
+            if toignore(fd):
                 continue
 
             for suspect in usual_suspects:
                 if suspect in curfile.lower():
-                    problems.append('Found usual supect in filename ' + fp)
+                    handleproblem('usual supect', fd, fp)
 
             mime = ms.file(fp)
             if mime == 'application/x-sharedlib':
-                problems.append('Found shared library at %s' % fd)
+                handleproblem('shared library', fd, fp)
             elif mime == 'application/x-archive':
-                problems.append('Found static library at %s' % fd)
+                handleproblem('static library', fd, fp)
             elif mime == 'application/x-executable':
-                problems.append('Found binary executable at %s' % fd)
+                handleproblem('binary executable', fd, fp)
             elif mime == 'application/jar' and fp.endswith('.apk'):
-                print 'Removing apk file at %s' % fd
-                os.remove(fp)
+                removeproblem('APK file', fd, fp)
 
             elif curfile.endswith('.java'):
                 for line in file(fp):
                     if 'DexClassLoader' in line:
-                        problems.append('Found DexClassLoader in ' + fp)
+                        handleproblem('DexClassLoader', fd, fp)
                         break
     ms.close()
 

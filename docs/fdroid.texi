@@ -346,7 +346,7 @@ Along similar lines (and only in conjunction with @code{--test}, you can use
 @code{--force} to force a build of a Disabled application, where normally it 
 would be completely ignored. Similarly a version that was found to contain 
 ELFs or known non-free libraries can be forced to build. See also — 
-scanignore= in the Build Version section.
+scanignore= and scandelete= in the Build Version section.
 
 If the build was unsuccessful, you can find out why by looking at the output 
 in the logs/ directory. If that isn't illuminating, try building the app the 
@@ -476,6 +476,7 @@ The following sections describe the fields recognised within the file.
 * Requires Root::
 * Archive Policy::
 * Update Check Mode::
+* Vercode Operation::
 * Update Check Data::
 * Auto Update Mode::
 * Current Version::
@@ -907,17 +908,17 @@ You can use $$SDK$$, $$NDK$$ and $$MVN3$$ to substitute the paths to the
 android SDK and NDK directories, and maven 3 executable respectively e.g. 
 for when you need to run @code{android update project} explicitly.
 
-@item initfun=yes
-Enables a selection of mad hacks to make com.funambol.android build.
-Probably not useful for any other application.
-
 @item scanignore=path1;path2;...
 Enables one or more files/paths to be exlcuded from the scan process.
 This should only be used where there is a very good reason, and
 probably accompanied by a comment explaining why it is necessary.
 
-When scanning, files whose relative paths start with any of the paths
-given here are ignored.
+When scanning the source tree for problems, matching files whose relative
+paths start with any of the paths given here are ignored.
+
+@item scandelete=path1;path2;...
+Similar to scanignore=, but instead of ignoring files under the given paths,
+it tells f-droid to delete the matching files directly.
 
 @item build=xxxx
 As for 'prebuild', but runs during the actual build phase (but before the
@@ -1135,6 +1136,20 @@ again, rather than retrieving a different one.
 @cindex Update Check Data
 
 Used in conjunction with @code{Update Check Mode} for certain modes.
+
+@node Vercode Operation
+@section Vercode Operation
+
+@cindex Vercode Operation
+
+Operation to be applied to the vercode obtained by the defined @code{Update
+Check Mode}. @code{%c} will be replaced by the actual vercode, and the whole
+string will be passed to python's @code{eval} function.
+
+Especially useful with apps that we want to compile for different ABIs, but
+whose vercodes don't always have trailing zeros. With @code{Vercode Operation}
+set at something like @code{%c*10 + 4}, we will be able to track updates and
+build three different versions of every upstream version.
 
 @node Archive Policy
 @section Archive Policy
