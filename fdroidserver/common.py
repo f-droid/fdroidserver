@@ -197,7 +197,7 @@ class vcs_git(vcs):
                 self.refreshed = True
         # Check out the appropriate revision...
         rev = str(rev if rev else 'origin/master')
-        if subprocess.call(['git', 'checkout', rev], cwd=self.local) != 0:
+		if subprocess.call(['git', 'checkout', '-f', rev], cwd=self.local) != 0:
             raise VCSException("Git checkout failed")
         # Get rid of any uncontrolled files left behind...
         if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
