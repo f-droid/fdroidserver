@@ -385,7 +385,7 @@ class vcs_hg(vcs):
             if subprocess.call(['hg', 'clone', self.remote, self.local]) !=0:
                 raise VCSException("Hg clone failed")
         else:
-            if subprocess.call('hg status -u | xargs rm -rf',
+            if subprocess.call('hg status -uS | xargs rm -rf',
                     cwd=self.local, shell=True) != 0:
                 raise VCSException("Hg clean failed")
             if not self.refreshed:
@@ -395,11 +395,11 @@ class vcs_hg(vcs):
                 self.refreshed = True
 
         rev = str(rev if rev else 'default')
-        if rev:
-            revargs = [rev]
-            if subprocess.call(['hg', 'checkout', '-C'] + revargs,
-                    cwd=self.local) != 0:
-                raise VCSException("Hg checkout failed")
+        if not rev:
+            return
+        if subprocess.call(['hg', 'update', '-C', rev],
+                cwd=self.local) != 0:
+            raise VCSException("Hg checkout failed")
 
     def gettags(self):
         p = subprocess.Popen(['hg', 'tags', '-q'],
@@ -1111,7 +1111,7 @@ def parse_androidmanifests(paths):
     vnsearch = re.compile(r'.*android:versionName="([^"]+?)".*').search
     psearch = re.compile(r'.*package="([^"]+)".*').search
 
-    vcsearch_g = re.compile(r'.*versionCode[ =]*([0-9]+?).*').search
+    vcsearch_g = re.compile(r'.*versionCode[ =]*([0-9]+?)[^\d].*').search
     vnsearch_g = re.compile(r'.*versionName[ =]*"([^"]+?)".*').search
     psearch_g = re.compile(r'.*packageName[ =]*"([^"]+)".*').search
 
