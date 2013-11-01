@@ -1356,8 +1356,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
 
     # Initialise submodules if requred...
     if build.get('submodules', 'no') == 'yes':
-        if verbose: print "Initialising submodules..."
-    if build.get('submodules', 'no') == 'yes':
         if options.verbose:
             print "Initialising submodules..."
         vcs.initsubmodules()
