@@ -36,12 +36,12 @@ def carbon_send(key, value):
     s.sendall(msg)
     s.close()
 
-config = {}
+options = None
+config = None
 
 def main():
 
-    # Read configuration...
-    common.read_config(config)
+    global options, config
 
     if not config['update_stats']:
         print "Stats are disabled - check your configuration"
@@ -54,6 +54,8 @@ def main():
     parser.add_option("-d", "--download", action="store_true", default=False,
                       help="Download logs we don't have")
     (options, args) = parser.parse_args()
+
+    config = common.read_config(options)
 
     # Get all metadata-defined apps...
     metaapps = common.read_metadata(options.verbose)
@@ -114,7 +116,6 @@ def main():
     for logfile in glob.glob(os.path.join(logsdir,'access-*.log.gz')):
         if options.verbose:
             print '...' + logfile
-        logdate = logfile[len(logsdir) + 1 + len('access-'):-7]
         p = subprocess.Popen(["zcat", logfile], stdout = subprocess.PIPE)
         matches = (logsearch(line) for line in p.stdout)
         for match in matches:

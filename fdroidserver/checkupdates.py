@@ -268,12 +268,12 @@ def check_gplay(app):
     return (version.strip(), None)
 
 
-config = {}
+config = None
+options = None
 
 def main():
 
-    # Read configuration...
-    common.read_config(config)
+    global config, options
 
     # Parse command line...
     parser = OptionParser()
@@ -290,6 +290,8 @@ def main():
     parser.add_option("--gplay", action="store_true", default=False,
                       help="Only print differences with the Play Store")
     (options, args) = parser.parse_args()
+
+    config = common.read_config(options)
 
     # Get all apps...
     apps = common.read_metadata(options.verbose)

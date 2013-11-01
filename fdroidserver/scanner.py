@@ -25,13 +25,12 @@ import common
 from common import BuildException
 from common import VCSException
 
-config = {}
+config = None
+options = None
 
 def main():
 
-    # Read configuration...
-    common.read_config(config)
-
+    global config, options
 
     # Parse command line...
     parser = OptionParser()
@@ -43,8 +42,10 @@ def main():
                       help="Skip svn repositories - for test purposes, because they are too slow.")
     (options, args) = parser.parse_args()
 
+    config = common.read_config(options)
+
     # Get all apps...
-    apps = common.read_metadata(options.verbose)
+    apps = common.read_metadata()
 
     # Filter apps according to command-line options
     if options.package:
@@ -99,7 +100,7 @@ def main():
                                 build_dir, srclib_dir, extlib_dir,
                                 config['sdk_path'], config['ndk_path'],
                                 config['javacc_path'], config['mvn3'],
-                                options.verbose, False)
+                                False)
 
                         # Do the scan...
                         buildprobs = common.scan_source(build_dir, root_dir, thisbuild)

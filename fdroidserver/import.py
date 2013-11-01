@@ -82,14 +82,12 @@ def getrepofrompage(url):
 
     return (None, "No information found." + page)
 
-config  = {}
+config = None
+options = None
 
 def main():
 
-    # Read configuration...
-    common.read_config(config)
-
-    import common
+    global config, options
 
     # Parse command line...
     parser = OptionParser()
@@ -102,6 +100,8 @@ def main():
     parser.add_option("--rev", default=None,
                       help="Allows a different revision (or git branch) to be specified for the initial import")
     (options, args) = parser.parse_args()
+
+    config = common.read_config(options)
 
     if not options.url:
         print "Specify project url."

@@ -326,8 +326,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
         print "Suspending build server"
         subprocess.call(['vagrant', 'suspend'], cwd='builder')
 
-def adapt_gradle(path, verbose):
-    if verbose:
+def adapt_gradle(path):
+    if options.verbose:
         print "Adapting build.gradle at %s" % path
 
     subprocess.call(['sed', '-i',
@@ -337,13 +337,13 @@ def adapt_gradle(path, verbose):
             's@com.android.tools.build:gradle:[0-9\.\+]*@com.android.tools.build:gradle:'+ config['gradle_plugin'] +'@g', path])
 
 
-def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, verbose, onserver):
+def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, onserver):
     """Do a build locally."""
 
     # Prepare the source code...
     root_dir, srclibpaths = common.prepare_source(vcs, app, thisbuild,
             build_dir, srclib_dir, extlib_dir, config['sdk_path'], config['ndk_path'],
-            config['javacc_path'], config['mvn3'], verbose, onserver)
+            config['javacc_path'], config['mvn3'], onserver)
 
     # We need to clean via the build tool in case the binary dirs are
     # different from the default ones
@@ -357,7 +357,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         else:
             maven_dir = root_dir
 
-        p = FDroidPopen(cmd, cwd=maven_dir, verbose=verbose)
+        p = FDroidPopen(cmd, cwd=maven_dir)
     elif 'gradle' in thisbuild:
         print "Cleaning Gradle project..."
         cmd = [config['gradle'], 'clean']
@@ -367,11 +367,11 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         else:
             gradle_dir = root_dir
 
-        p = FDroidPopen(cmd, cwd=gradle_dir, verbose=verbose)
+        p = FDroidPopen(cmd, cwd=gradle_dir)
     elif thisbuild.get('update', '.') != 'no':
         print "Cleaning Ant project..."
         cmd = ['ant', 'clean']
-        p = FDroidPopen(cmd, cwd=root_dir, verbose=verbose)
+        p = FDroidPopen(cmd, cwd=root_dir)
 
     if p is not None and p.returncode != 0:
         raise BuildException("Error cleaning %s:%s" %
@@ -420,11 +420,11 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         cmd = cmd.replace('$$SDK$$', config['sdk_path'])
         cmd = cmd.replace('$$NDK$$', config['ndk_path'])
         cmd = cmd.replace('$$MVN3$$', config['mvn3'])
-        if verbose:
+        if options.verbose:
             print "Running 'build' commands in %s" % root_dir
 
         p = FDroidPopen(['bash', '-x', '-c', cmd],
-                cwd=root_dir, verbose=verbose)
+                cwd=root_dir)
         
         if p.returncode != 0:
             raise BuildException("Error running build command for %s:%s" %
@@ -453,8 +453,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 open(manifest, 'w').write(manifest_text)
                 # In case the AM.xml read was big, free the memory
                 del manifest_text
-            p = FDroidPopen([ndkbuild], cwd=os.path.join(root_dir,d),
-                    verbose=verbose)
+            p = FDroidPopen([ndkbuild], cwd=os.path.join(root_dir,d))
             if p.returncode != 0:
                 raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout, p.stderr)
 
@@ -486,7 +485,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if 'mvnflags' in thisbuild:
             mvncmd += thisbuild['mvnflags']
 
-        p = FDroidPopen(mvncmd, cwd=maven_dir, verbose=verbose, apkoutput=True)
+        p = FDroidPopen(mvncmd, cwd=maven_dir, apkoutput=True)
 
     elif 'gradle' in thisbuild:
         print "Building Gradle project..."
@@ -512,7 +511,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         for root, dirs, files in os.walk(build_dir):
             for f in files:
                 if f == 'build.gradle':
-                    adapt_gradle(os.path.join(root, f), verbose)
+                    adapt_gradle(os.path.join(root, f))
                     break
 
         if flavour in ['main', 'yes', '']:
@@ -527,7 +526,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         else:
             commands += ['assemble'+flavour+'Release']
 
-        p = FDroidPopen(commands, cwd=gradle_dir, verbose=verbose)
+        p = FDroidPopen(commands, cwd=gradle_dir)
 
     else:
         print "Building Ant project..."
@@ -538,7 +537,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             cmd += [thisbuild['antcommand']]
         else:
             cmd += ['release']
-        p = FDroidPopen(cmd, cwd=root_dir, verbose=verbose, apkoutput=True)
+        p = FDroidPopen(cmd, cwd=root_dir, apkoutput=True)
 
     if p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout, p.stderr)
@@ -647,7 +646,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
 
 def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, extlib_dir,
-        tmp_dir, repo_dir, vcs, test, server, install, force, verbose, onserver):
+        tmp_dir, repo_dir, vcs, test, server, install, force, onserver):
     """
     Build a particular version of an application, if it needs building.
 
@@ -691,7 +690,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
 
         build_server(app, thisbuild, vcs, build_dir, output_dir, config['sdk_path'], force)
     else:
-        build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, verbose, onserver)
+        build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, onserver)
     return True
 
 
@@ -754,16 +753,15 @@ def parse_commandline():
     return options, args
 
 options = None
-config = {}
+config = None
 
 def main():
 
-    global options
-
-    # Read configuration...
-    common.read_config(config)
+    global options, config
 
     options, args = parse_commandline()
+    config = common.read_config(options)
+
     if config['build_server_always']:
         options.server = True
     if options.resetserver and not options.server:
@@ -771,7 +769,7 @@ def main():
         sys.exit(1)
 
     # Get all apps...
-    apps = common.read_metadata(options.verbose, xref=not options.onserver)
+    apps = common.read_metadata(xref=not options.onserver)
 
     log_dir = 'logs'
     if not os.path.isdir(log_dir):
@@ -863,8 +861,7 @@ def main():
                     print "Checking " + thisbuild['version']
                 if trybuild(app, thisbuild, build_dir, output_dir, also_check_dir,
                         srclib_dir, extlib_dir, tmp_dir, repo_dir, vcs, options.test,
-                        options.server, options.install, options.force,
-                        options.verbose, options.onserver):
+                        options.server, options.install, options.force, options.onserver):
                     build_succeeded.append(app)
                     wikilog = "Build succeeded"
             except BuildException as be:

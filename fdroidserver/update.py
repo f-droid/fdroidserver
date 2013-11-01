@@ -34,12 +34,11 @@ import common
 from common import MetaDataException
 from PIL import Image
 
-def update_wiki(apps, apks, verbose=False):
+def update_wiki(apps, apks):
     """Update the wiki
 
     :param apps: fully populated list of all applications
     :param apks: all apks, except...
-    :param verbose: True to make a lot of noise
     """
     print "Updating wiki"
     wikicat = 'Apps'
@@ -205,13 +204,13 @@ def update_wiki(apps, apks, verbose=False):
                     print "Updating modified page " + page.name
                     page.save(genp[page.name], summary='Auto-updated')
                 else:
-                    if verbose:
+                    if options.verbose:
                         print "Page " + page.name + " is unchanged"
             else:
                 print "Deleting page " + page.name
                 page.delete('No longer published')
         for pagename, text in genp.items():
-            if verbose:
+            if options.verbose:
                 print "Checking " + pagename
             if not pagename in existingpages:
                 print "Creating page " + pagename
@@ -682,16 +681,14 @@ def archive_old_apks(apps, apks, repodir, archivedir, defaultkeepversions):
                 apks.remove(apk)
 
 
-config = {}
+config = None
 options = None
 
 def main():
 
-    # Read configuration...
-    common.read_config(config)
+    global config, options
 
     # Parse command line...
-    global options
     parser = OptionParser()
     parser.add_option("-c", "--createmeta", action="store_true", default=False,
                       help="Create skeleton metadata files that are missing")
@@ -716,6 +713,8 @@ def main():
                       help="Clean update - don't uses caches, reprocess all apks")
     (options, args) = parser.parse_args()
 
+    config = common.read_config(options)
+
     repodirs = ['repo']
     if config['archive_older'] != 0:
         repodirs.append('archive')
@@ -727,7 +726,7 @@ def main():
         sys.exit(0)
 
     # Get all apps...
-    apps = common.read_metadata(verbose=options.verbose)
+    apps = common.read_metadata()
 
     # Generate a list of categories...
     categories = []
@@ -869,7 +868,7 @@ def main():
     if options.wiki:
         if archapks:
             apks.extend(archapks)
-        update_wiki(apps, apks, options.verbose)
+        update_wiki(apps, apks)
 
     print "Finished."
 

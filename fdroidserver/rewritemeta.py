@@ -22,10 +22,12 @@ import os
 from optparse import OptionParser
 import common
 
+config = None
+options = None
+
 def main():
 
-    #Read configuration...
-    execfile('config.py', globals())
+    global config, options
 
     # Parse command line...
     parser = OptionParser()
@@ -35,8 +37,10 @@ def main():
                       help="Process only the specified package")
     (options, args) = parser.parse_args()
 
+    config = common.read_config(options)
+
     # Get all apps...
-    apps = common.read_metadata(options.verbose, package=options.package)
+    apps = common.read_metadata(package=options.package)
 
     if len(apps) == 0 and options.package:
         print "No such package"
@@ -44,7 +48,7 @@ def main():
 
     for app in apps:
         print "Writing " + app['id']
-        common.write_metadata(os.path.join('metadata', app['id']) + '.txt', app, verbose=options.verbose)
+        common.write_metadata(os.path.join('metadata', app['id']) + '.txt', app)
 
     print "Finished."
 
