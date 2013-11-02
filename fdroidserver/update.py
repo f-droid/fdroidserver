@@ -295,7 +295,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
     vercode_pat = re.compile(".*versionCode='([0-9]*)'.*")
     vername_pat = re.compile(".*versionName='([^']*)'.*")
     label_pat = re.compile(".*label='(.*?)'(\n| [a-z]*?=).*")
-    icon_pat = re.compile(".*icon='([^']*)'.*")
+    icon_pat = re.compile(".*icon='([^']+?)'.*")
     sdkversion_pat = re.compile(".*'([0-9]*)'.*")
     string_pat = re.compile(".*'([^']*)'.*")
     for apkfile in glob.glob(os.path.join(repodir, '*.apk')):
@@ -343,7 +343,9 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         sys.exit(1)
                 elif line.startswith("application:"):
                     thisinfo['name'] = re.match(label_pat, line).group(1)
-                    thisinfo['iconsrc'] = re.match(icon_pat, line).group(1)
+                    match = re.match(icon_pat, line)
+                    if match:
+                        thisinfo['iconsrc'] = match.group(1)
                 elif line.startswith("sdkVersion:"):
                     thisinfo['sdkversion'] = re.match(sdkversion_pat, line).group(1)
                 elif line.startswith("native-code:"):
@@ -384,10 +386,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 thisinfo['sha256'] = sha.hexdigest()
 
             # Get the signature (or md5 of, to be precise)...
-            p = subprocess.Popen(['java', 'getsig',
-                                  os.path.join(os.getcwd(), apkfile)],
-                                 cwd=os.path.join(os.path.dirname(__file__), 'getsig'),
-                                 stdout=subprocess.PIPE)
+            p = subprocess.Popen(['java', '-cp', os.path.join(os.path.dirname(__file__), 'getsig'),
+                        'getsig', os.path.join(os.getcwd(), apkfile)], stdout=subprocess.PIPE)
             output = p.communicate()[0]
             if options.verbose:
                 print output
@@ -397,19 +397,20 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             thisinfo['sig'] = output[7:].strip()
 
             # Extract the icon file...
-            apk = zipfile.ZipFile(apkfile, 'r')
-            thisinfo['icon'] = (thisinfo['id'] + '.' +
-                str(thisinfo['versioncode']) + '.png')
-            iconpath = os.path.join(icon_dir, thisinfo['icon'])
-            try:
-                iconfile = open(iconpath, 'wb')
-                iconfile.write(apk.read(thisinfo['iconsrc']))
-                iconfile.close()
-            except:
-                print "WARNING: Error retrieving icon file"
-            apk.close()
+            if 'iconsrc' in thisinfo:
+                apk = zipfile.ZipFile(apkfile, 'r')
+                thisinfo['icon'] = (thisinfo['id'] + '.' +
+                    str(thisinfo['versioncode']) + '.png')
+                iconpath = os.path.join(icon_dir, thisinfo['icon'])
+                try:
+                    iconfile = open(iconpath, 'wb')
+                    iconfile.write(apk.read(thisinfo['iconsrc']))
+                    iconfile.close()
+                except:
+                    print "WARNING: Error retrieving icon file"
+                apk.close()
 
-            resize_icon(iconpath)
+                resize_icon(iconpath)
 
             # Record in known apks, getting the added date at the same time..
             added = knownapks.recordapk(thisinfo['apkname'], thisinfo['id'])
@@ -517,7 +518,8 @@ def make_index(apps, apks, repodir, archive, categories):
             addElement('lastupdated', time.strftime('%Y-%m-%d', app['lastupdated']), doc, apel)
         addElement('name', app['Name'], doc, apel)
         addElement('summary', app['Summary'], doc, apel)
-        addElement('icon', app['icon'], doc, apel)
+        if app['icon'] is not None:
+            addElement('icon', app['icon'], doc, apel)
         def linkres(link):
             for app in apps:
                 if app['id'] == link:
@@ -786,13 +788,13 @@ def main():
         if bestver == 0:
             if app['Name'] is None:
                 app['Name'] = app['id']
-            app['icon'] = ''
+            app['icon'] = None
             if app['Disabled'] is None:
                 print "WARNING: Application " + app['id'] + " has no packages"
         else:
             if app['Name'] is None:
                 app['Name'] = bestapk['name']
-            app['icon'] = bestapk['icon']
+            app['icon'] = bestapk['icon'] if 'icon' in bestapk else None
 
     # Sort the app list by name, then the web site doesn't have to by default.
     # (we had to wait until we'd scanned the apks to do this, because mostly the
@@ -852,7 +854,8 @@ def main():
                 for app in apps:
                     if app['id'] == appid:
                         data += app['Name'] + "\t"
-                        data += app['icon'] + "\t"
+                        if app['icon'] is not None:
+                            data += app['icon'] + "\t"
                         data += app['License'] + "\n"
                         break
             f = open(os.path.join(repodirs[0], 'latestapps.dat'), 'w')
