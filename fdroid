@@ -22,6 +22,7 @@ import os
 
 commands = [
         "build",
+        "init",
         "update",
         "publish",
         "verify",
@@ -51,7 +52,7 @@ def main():
         print_help()
         sys.exit(1)
 
-    if not os.path.isfile('config.py'):
+    if command != 'init' and not os.path.isfile('config.py'):
         print "Missing config file - is this a repo directory?"
         sys.exit(2)
 
