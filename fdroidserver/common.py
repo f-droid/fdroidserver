@@ -45,6 +45,8 @@ def read_config(opts):
         sys.exit(2)
 
     options = opts
+    if not hasattr(options, 'verbose'):
+        options.verbose = False
 
     config = {
         'build_server_always': False,
