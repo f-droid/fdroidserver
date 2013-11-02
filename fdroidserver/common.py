@@ -641,6 +641,8 @@ def parse_metadata(metafile, verbose=False):
                 if len(value) > 0:
                     raise MetaDataException("Unexpected text on same line as " + field + " in " + metafile.name)
             elif fieldtype == 'string':
+                if field == 'Category' and thisinfo['Categories'] == 'None':
+                    thisinfo['Categories'] = value.replace(';',',')
                 thisinfo[field] = value
             elif fieldtype == 'flag':
                 if value == 'Yes':
