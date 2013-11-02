@@ -551,7 +551,7 @@ def parse_metadata(metafile, verbose=False):
     # Defaults for fields that come from metadata...
     thisinfo['Name'] = None
     thisinfo['Auto Name'] = ''
-    thisinfo['Category'] = 'None'
+    thisinfo['Categories'] = 'None'
     thisinfo['Description'] = []
     thisinfo['Summary'] = ''
     thisinfo['License'] = 'Unknown'
@@ -761,7 +761,7 @@ def write_metadata(dest, app, verbose=False):
         writefield('Disabled')
     if app['AntiFeatures']:
         writefield('AntiFeatures')
-    writefield('Category')
+    writefield('Categories')
     writefield('License')
     writefield('Web Site')
     writefield('Source Code')
