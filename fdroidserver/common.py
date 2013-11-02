@@ -1891,7 +1891,7 @@ def FDroidPopen(commands, cwd,
                 sys.stderr.write(line)
                 sys.stderr.flush()
             result.stderr += line
-        time.sleep(0.5)
+        time.sleep(0.2)
 
     p.communicate()
     result.returncode = p.returncode
