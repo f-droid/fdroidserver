@@ -455,7 +455,7 @@ fdroid rewritemetadata
 The following sections describe the fields recognised within the file.
 
 @menu
-* Category::
+* Categories::
 * License::
 * Name::
 * Auto Name::
@@ -484,19 +484,19 @@ The following sections describe the fields recognised within the file.
 * No Source Since::
 @end menu
 
-@node Category
-@section Category
+@node Categories
+@section Categories
 
-A single category for the application to be placed in. There is no fixed list
-of categories - both the client and the web site will automatically show any
-categories that exist in any applications. However, if your metadata is
-intended for the main F-Droid repository, you should use one of the existing
-categories (look at the site/client), or discuss the proposal to add
+Any number of categories for the application to be placed in. There is no
+fixed list of categories - both the client and the web site will automatically
+show any categories that exist in any applications. However, if your metadata
+is intended for the main F-Droid repository, you should use one of the
+existing categories (look at the site/client), or discuss the proposal to add
 a new one.
 
-Additional categories can be specified, by using ';' as a separator. In this
-case the first is the primary category, and the only one that will be seen by
-clients that only understand one.
+Categories must be separated by a single comma character, ','. For backwards
+compatibility, F-Droid will use the first category given as <category> element
+for older clients to at least see one category.
 
 @node License
 @section License
