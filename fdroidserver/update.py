@@ -526,14 +526,13 @@ def make_index(apps, apks, repodir, archive, categories):
         addElement('desc', 
                 common.description_html(app['Description'], linkres), doc, apel)
         addElement('license', app['License'], doc, apel)
-        if 'Category' in app:
+        if 'Categories' in app:
+            appcategories = [c.strip() for c in app['Categories'].split(',')]
+            addElement('categories', ','.join(appcategories), doc, apel)
             # We put the first (primary) category in LAST, which will have
             # the desired effect of making clients that only understand one
             # category see that one.
-            cats = app['Category'].split(';')
-            cats.reverse()
-            for cat in cats:
-                addElement('category', cat, doc, apel)
+            addElement('category', appcategories[0], doc, apel)
         addElement('web', app['Web Site'], doc, apel)
         addElement('source', app['Source Code'], doc, apel)
         addElement('tracker', app['Issue Tracker'], doc, apel)
@@ -731,7 +730,7 @@ def main():
     # Generate a list of categories...
     categories = []
     for app in apps:
-        cats = app['Category'].split(';')
+        cats = app['Categories'].split(',')
         for cat in cats:
             if cat not in categories:
                 categories.append(cat)

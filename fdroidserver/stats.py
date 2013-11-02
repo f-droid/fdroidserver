@@ -183,9 +183,9 @@ def main():
 
     ctgs = {}
     for app in metaapps:
-        if app['Category'] is None:
+        if app['Categories'] is None:
             continue
-        categories = [c.strip() for c in app['Category'].split(';')]
+        categories = [c.strip() for c in app['Categories'].split(',')]
         for category in categories:
             if category in ctgs:
                 ctgs[category] += 1;

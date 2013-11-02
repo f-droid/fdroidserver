@@ -119,7 +119,8 @@ def check_tags(app, sdk_path):
             paths = common.manifest_paths(build_dir, flavour)
             version, vercode, package = common.parse_androidmanifests(paths)
             if package and package == app['id'] and version and vercode:
-                print "Manifest exists. Found version %s" % version
+                print "Manifest exists. Found version %s (%s)" % (
+                        version, vercode)
                 if int(vercode) > int(hcode):
                     htag = tag
                     hcode = str(int(vercode))
@@ -336,6 +337,7 @@ def main():
 
         tag = None
         msg = None
+        vercode = None
         mode = app['Update Check Mode']
         if mode == 'Tags':
             (version, vercode, tag) = check_tags(app, config['sdk_path'])
