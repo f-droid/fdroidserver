@@ -385,10 +385,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 thisinfo['sha256'] = sha.hexdigest()
 
             # Get the signature (or md5 of, to be precise)...
-            p = subprocess.Popen(['java', 'getsig',
-                                  os.path.join(os.getcwd(), apkfile)],
-                                 cwd=os.path.join(os.path.dirname(__file__), 'getsig'),
-                                 stdout=subprocess.PIPE)
+            p = subprocess.Popen(['java', '-cp', os.path.join(os.path.dirname(__file__), 'getsig'),
+                        'getsig', os.path.join(os.getcwd(), apkfile)], stdout=subprocess.PIPE)
             output = p.communicate()[0]
             if options.verbose:
                 print output
