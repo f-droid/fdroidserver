@@ -217,6 +217,11 @@ _fdroid_checkupdates_project() {
 	__complete_checkupdates
 }
 
+_fd-commit() {
+	__package
+}
+
 complete -F _fdroid fdroid
+complete -F _fd-commit fd-commit
 
 return 0
