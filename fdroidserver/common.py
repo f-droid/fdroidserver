@@ -1432,23 +1432,34 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
                 break
 
     # Update the local.properties file...
-    locprops = os.path.join(root_dir, 'local.properties')
-    if os.path.exists(locprops):
-        f = open(locprops, 'r')
+    localprops = [ os.path.join(build_dir, 'local.properties') ]
+    if 'subdir' in build:
+        localprops += [ os.path.join(root_dir, 'local.properties') ]
+    for path in localprops:
+        if not os.path.isfile(path):
+            continue
+        if options.verbose:
+            print "Updating properties file at %s" % path
+        f = open(path, 'r')
         props = f.read()
         f.close()
+        props += '\n'
         # Fix old-fashioned 'sdk-location' by copying
         # from sdk.dir, if necessary...
         if build.get('oldsdkloc', 'no') == "yes":
             sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
                 re.S|re.M).group(1)
-            props += "\nsdk-location=" + sdkloc + "\n"
+            props += "sdk-location=%s\n" % sdkloc
+        else:
+            props += "sdk.dir=%s\n" % sdk_path
+            props += "sdk-location=%s\n" % sdk_path
         # Add ndk location...
-        props+= "\nndk.dir=" + ndk_path + "\n"
+        props += "ndk.dir=%s\n" % ndk_path
+        props += "ndk-location=%s\n" % ndk_path
         # Add java.encoding if necessary...
         if 'encoding' in build:
-            props += "\njava.encoding=" + build['encoding'] + "\n"
-        f = open(locprops, 'w')
+            props += "java.encoding=%s\n" % build['encoding']
+        f = open(path, 'w')
         f.write(props)
         f.close()
 
