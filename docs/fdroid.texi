@@ -805,20 +805,19 @@ thus using it in any other case is not wise.
 
 @item update=xxx
 By default, 'android update project' is used to generate or update the
-build.xml file. Specifying update=no bypasses that.
+project and all its referenced projects. Specifying update=no bypasses that.
 
 Specifiying update=force forces rebuilding of the build.xml file at the
 same time - this is frequently needed with r14 of the Android platform
 tools. Be aware of any customisations in build.xml when using
 update=force.
 
+Default value is '@code{auto}', which uses the paths used in the
+project.properties file to find out what project paths to update.
+
 Otherwise, value can be a semicolon-separated list of directories in
 which to run 'android update project' relative to the main
 application directory (which may include '@code{subdir}' parameter).
-Default value is '@code{.}', and passing non-default value may be
-useful for multi-component projects. Note that @code{--subprojects}
-switch is automatically passed to 'android update project', so using
-explicit list may be needed only for peculiar source layouts.
 
 @item encoding=xxxx
 Adds a java.encoding property to local.properties with the given
