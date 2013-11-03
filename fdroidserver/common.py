@@ -1379,15 +1379,31 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
                     (app['id'], build['version']), p.stdout, p.stderr)
 
     # Generate (or update) the ant build file, build.xml...
-    updatemode = build.get('update', '.')
-    if (updatemode != 'no' and
-        'maven' not in build and 'gradle' not in build):
+    updatemode = build.get('update', 'auto')
+    if (updatemode != 'no'
+            and build.get('maven', 'no') == 'no'
+            and build.get('gradle', 'no') == 'no'):
         parms = [os.path.join(sdk_path, 'tools', 'android'),
-                'update', 'project', '-p', '.']
+                'update', 'project']
         if 'target' in build:
             parms.append('-t')
             parms.append(build['target'])
-        update_dirs = [d.strip() for d in updatemode.split(';')]
+        update_dirs = None
+        if updatemode == 'auto':
+            update_dirs = ['.']
+            with open(os.path.join(root_dir, 'project.properties')) as f:
+                for line in f.readlines():
+                    if not line.startswith('android.library.reference.'):
+                        continue
+                    path = line.split('=')[1].strip()
+                    relpath = os.path.join(root_dir, path)
+                    if not os.path.isdir(relpath):
+                        continue
+                    if options.verbose:
+                        print "Found subproject %s..." % path
+                    update_dirs.append(path)
+        else:
+            update_dirs = [d.strip() for d in updatemode.split(';')]
         # Force build.xml update if necessary...
         if updatemode == 'force' or 'target' in build:
             if updatemode == 'force':
@@ -1398,24 +1414,26 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
                 os.remove(buildxml)
 
         for d in update_dirs:
-            cwd = os.path.join(root_dir, d)
             # Remove gen and bin dirs in libraries
             # rid of them...
             for baddir in [
                     'gen', 'bin', 'obj', # ant
                     'libs/armeabi-v7a', 'libs/armeabi', # jni
                     'libs/mips', 'libs/x86']:
-                badpath = os.path.join(cwd, baddir)
+                badpath = os.path.join(root_dir, d, baddir)
                 if os.path.exists(badpath):
                     print "Removing '%s'" % badpath
                     shutil.rmtree(badpath)
+            dparms = parms + ['-p', d]
             if options.verbose:
-                print "Update of '%s': exec '%s' in '%s'"%\
-                    (d," ".join(parms),cwd)
-            p = FDroidPopen(parms, cwd=cwd)
+                if d == '.':
+                    print "Updating main project..."
+                else:
+                    print "Updating subproject %s..." % d
+            p = FDroidPopen(dparms, cwd=root_dir)
             # check to see whether an error was returned without a proper exit code (this is the case for the 'no target set or target invalid' error)
             if p.returncode != 0 or (p.stderr != "" and p.stderr.startswith("Error: ")):
-                raise BuildException("Failed to update project at %s" % cwd,
+                raise BuildException("Failed to update project at %s" % d,
                         p.stdout, p.stderr)
 
     # If the app has ant set up to sign the release, we need to switch
