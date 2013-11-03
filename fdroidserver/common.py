@@ -1417,7 +1417,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
             p = FDroidPopen(dparms, cwd=root_dir, verbose=verbose)
             # check to see whether an error was returned without a proper exit code (this is the case for the 'no target set or target invalid' error)
             if p.returncode != 0 or (p.stderr != "" and p.stderr.startswith("Error: ")):
-                raise BuildException("Failed to update project at %s" % cwd,
+                raise BuildException("Failed to update project at %s" % d,
                         p.stdout, p.stderr)
 
     # If the app has ant set up to sign the release, we need to switch
