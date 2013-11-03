@@ -5,21 +5,21 @@
 # 'fdroid' is aliased automatically, but aliases to it are not. For instance,
 # to alias 'fd' to 'fdroid' and have competion available:
 #
-#   alias fd='fdroid'
-#   complete -F _fdroid fd
+#	alias fd='fdroid'
+#	complete -F _fdroid fd
 #
 # One can use completion on aliased subcommands as follows:
 #
-#   alias fbuild='fdroid build'
-#   complete -F _fdroid_build fbuild
+#	alias fbuild='fdroid build'
+#	complete -F _fdroid_build fbuild
 #
 # There are also completion function for '-p com.some.app' aliases:
 #
-#   alias fbld='fdroid build -v -l -p'
-#   complete -F _fdroid_build_project fbld
+#	alias fbld='fdroid build -v -l -p'
+#	complete -F _fdroid_build_project fbld
 #
-#   alias fcheckup='fdroid checkupdates -v -p'
-#   complete -F _fdroid_checkupdates_project fcheckup
+#	alias fcheckup='fdroid checkupdates -v -p'
+#	complete -F _fdroid_checkupdates_project fcheckup
 #
 # This way, one can simply do 'fbld com.some.app' or 'fcheckup com.some.app'
 
@@ -217,6 +217,11 @@ _fdroid_checkupdates_project() {
 	__complete_checkupdates
 }
 
+_fd-commit() {
+	__package
+}
+
 complete -F _fdroid fdroid
+complete -F _fd-commit fd-commit
 
 return 0

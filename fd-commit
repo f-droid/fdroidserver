@@ -5,41 +5,55 @@
 commands=()
 
 while read line; do
-    if [[ "$line" == *M*metadata/*.txt ]]; then
-        file=${line##* }
+	if [[ "$line" == *M*metadata/*.txt ]]; then
+		file=${line##* }
+		
+		id=${file##*/}
+		id=${id%.txt*}
+		if [ $# -gt 0 ]; then
+			found=false
+			for arg in "$@"; do
+				if [ "$id" == "$arg" ]; then
+					found=true
+					break
+				fi
+			done
+			$found || continue
+		fi
 
-        while read l; do
-            [[ "$l" == "Auto Name:"* ]] && name=${l##*:}
-        done < "$file"
+		[ -d metadata/$id ] && extra=metadata/$id
 
-        id=${file##*/}
-        id=${id%.txt*}
-        [ -d metadata/$id ] && extra=metadata/$id
-        [ -n "$name" ] && id="$name ($id)"
+		while read l; do
+			if [[ "$l" == "Auto Name:"* ]]; then
+				name=${l##*:}
+				break
+			fi
+		done < "$file"
 
-        newbuild=0
-        while read l; do
-            if [[ "$l" == "+Build:"* ]]; then
-                newbuild=1
-                build=${l#*:}
-                version=${build%%,*}
-                build=${build#*,}
-                vercode=${build%%,*}
-            fi
-        done < <(git diff HEAD -- "$file")
+		[ -n "$name" ] && id="$name ($id)"
 
-        if [ $newbuild -eq 0 ]
-		then
+		newbuild=0
+		while read l; do
+			if [[ "$l" == "+Build:"* ]]; then
+				newbuild=1
+				build=${l#*:}
+				version=${build%%,*}
+				build=${build#*,}
+				vercode=${build%%,*}
+			fi
+		done < <(git diff HEAD -- "$file")
+
+		if [ $newbuild -eq 0 ]; then
 			message="$id:"
 		else
 			message="Update $id to $version ($vercode)"
 		fi
 
-        commands+=("git commit -m '$message' -e -v -- $file $extra")
-    fi
+		commands+=("git commit -m '$message' -e -v -- $file $extra")
+	fi
 done < <(git status --porcelain)
 
 for cmd in "${commands[@]}"; do
-    eval "$cmd"
+	eval "$cmd"
 done
 
