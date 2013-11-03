@@ -453,8 +453,12 @@ def main():
             common.write_metadata(metafile, app)
             if options.commit and logmsg:
                 print "Commiting update for " + metafile
-                if subprocess.call(["git", "commit", "-m",
-                    logmsg, "--", metafile]) != 0:
+                gitcmd = ["git", "commit", "-m",
+                    logmsg]
+                if 'auto_author' in config:
+                    gitcmd.extend(['--author', config['auto_author']])
+                gitcmd.extend(["--", metafile])
+                if subprocess.call(gitcmd) != 0:
                     print "Git commit failed"
                     sys.exit(1)
 
