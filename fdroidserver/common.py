@@ -1117,6 +1117,24 @@ def version_name(original, app_dir, flavour):
             return string
     return original
 
+def ant_subprojects(root_dir):
+    subprojects = []
+    proppath = os.path.join(root_dir, 'project.properties')
+    if not os.path.isfile(proppath):
+        return subprojects
+    with open(proppath) as f:
+        for line in f.readlines():
+            if not line.startswith('android.library.reference.'):
+                continue
+            path = line.split('=')[1].strip()
+            relpath = os.path.join(root_dir, path)
+            if not os.path.isdir(relpath):
+                continue
+            if options.verbose:
+                print "Found subproject %s..." % path
+            subprojects.append(path)
+    return subprojects
+
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
 # All values returned are strings.
@@ -1390,18 +1408,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
             parms.append(build['target'])
         update_dirs = None
         if updatemode == 'auto':
-            update_dirs = ['.']
-            with open(os.path.join(root_dir, 'project.properties')) as f:
-                for line in f.readlines():
-                    if not line.startswith('android.library.reference.'):
-                        continue
-                    path = line.split('=')[1].strip()
-                    relpath = os.path.join(root_dir, path)
-                    if not os.path.isdir(relpath):
-                        continue
-                    if options.verbose:
-                        print "Found subproject %s..." % path
-                    update_dirs.append(path)
+            update_dirs = ['.'] + ant_subprojects(root_dir)
         else:
             update_dirs = [d.strip() for d in updatemode.split(';')]
         # Force build.xml update if necessary...
