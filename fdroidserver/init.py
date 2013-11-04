@@ -68,7 +68,7 @@ def main():
         sys.exit()
 
     # now that we have a local config.py, read configuration...
-    common.read_config(config)
+    config = common.read_config(options)
 
     # track down where the Android SDK is
     if os.path.isdir(config['sdk_path']):
