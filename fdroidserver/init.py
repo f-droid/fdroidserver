@@ -45,6 +45,7 @@ def main():
     # Parse command line...
     global options
     parser = OptionParser()
+    (options, args) = parser.parse_args()
 
     # find root install prefix
     tmp = os.path.dirname(sys.argv[0])
