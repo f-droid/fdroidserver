@@ -30,13 +30,13 @@ def main():
 
     global config, options
 
-    config = common.read_config(options)
-
     # Parse command line...
     parser = OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     (options, args) = parser.parse_args()
+
+    config = common.read_config(options)
 
     if len(args) != 1:
         print "Specify a single command"
