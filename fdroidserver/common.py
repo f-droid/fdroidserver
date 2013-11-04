@@ -30,17 +30,17 @@ import magic
 config = None
 options = None
 
-def read_config(opts):
+def read_config(opts, config_file='config.py'):
     """Read the repository config
 
-    The config is read from config.py, which is in the current directory when
+    The config is read from config_file, which is in the current directory when
     any of the repo management commands are used.
     """
     global config, options
 
     if config is not None:
         return config
-    if not os.path.isfile('config.py'):
+    if not os.path.isfile(config_file):
         print "Missing config file - is this a repo directory?"
         sys.exit(2)
 
@@ -58,8 +58,8 @@ def read_config(opts):
         'max_icon_size': 72,
         'stats_to_carbon': False
     }
-    print "Reading config.py..."
-    execfile('config.py', config)
+    print "Reading %s..." % config_file
+    execfile(config_file, config)
     return config
 
 

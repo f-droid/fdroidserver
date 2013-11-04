@@ -34,8 +34,6 @@ def main():
 
     global options, config
 
-    options, args = parse_commandline()
-
     # Parse command line...
     parser = OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,

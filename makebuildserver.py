@@ -5,8 +5,7 @@ import sys
 import subprocess
 import time
 from optparse import OptionParser
-
-execfile('makebs.config.py', globals())
+from fdroidserver import common
 
 def vagrant(params, cwd=None, printout=False):
     """Run vagrant.
@@ -43,8 +42,7 @@ parser.add_option("-c", "--clean", action="store_true", default=False,
                       help="Build from scratch, rather than attempting to update the existing server")
 options, args = parser.parse_args()
 
-
-
+config = common.read_config(options, 'makebs.config.py')
 
 if not os.path.exists('makebuildserver.py') or not os.path.exists(serverdir):
     print 'This must be run from the correct directory!'
@@ -67,7 +65,7 @@ cachefiles = [
     ('gradle-1.8-bin.zip',
      'http://services.gradle.org/distributions/gradle-1.8-bin.zip',
      'a342bbfa15fd18e2482287da4959588f45a41b60910970a16e6d97959aea5703')]
-if arch64:
+if config['arch64']:
     cachefiles.extend([
     ('android-ndk-r9-linux-x64_64.tar.bz2',
      'http://dl.google.com/android/ndk/android-ndk-r9-linux-x86_64.tar.bz2',
@@ -114,11 +112,11 @@ Vagrant::Config.run do |config|
   config.vm.customize ["modifyvm", :id, "--memory", "{2}"]
 
   config.vm.provision :shell, :path => "fixpaths.sh"
-""".format(basebox, baseboxurl, memory)
-if aptproxy:
+""".format(config['basebox'], config['baseboxurl'], config['memory'])
+if 'aptproxy' in config and config['aptproxy']:
     vagrantfile += """
   config.vm.provision :shell, :inline => 'sudo echo "Acquire::http {{ Proxy \\"{0}\\"; }};" > /etc/apt/apt.conf.d/02proxy && sudo apt-get update'
-""".format(aptproxy)
+""".format(config['aptproxy'])
 vagrantfile += """
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "cookbooks"
