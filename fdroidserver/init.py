@@ -19,9 +19,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import hashlib
 import os
 import re
 import shutil
+import socket
+import subprocess
 import sys
 from optparse import OptionParser
 
@@ -41,6 +44,40 @@ def write_to_config(key, value):
     with open('config.py', 'w') as f:
         f.writelines(data)
 
+
+def genpassword():
+    '''generate a random password for when generating keys'''
+    h = hashlib.sha256()
+    h.update(os.urandom(16)) # salt
+    h.update(bytes(socket.getfqdn()))
+    return h.digest().encode('base64').strip()
+
+
+def genkey(keystore, repo_keyalias, password, keydname):
+    '''generate a new keystore with a new key in it for signing repos'''
+    print('Generating a new key in "' + keystore + '"...')
+    p = subprocess.Popen(['keytool', '-genkey',
+                          '-keystore', keystore, '-alias', repo_keyalias,
+                          '-keyalg', 'RSA', '-keysize', '4096',
+                          '-sigalg', 'SHA256withRSA',
+                          '-validity', '10000',
+                          '-storepass', password, '-keypass', password,
+                          '-dname', keydname],
+                         stdout=subprocess.PIPE)
+    output = p.communicate()[0]
+    print(output)
+    if p.returncode != 0:
+        raise BuildException("Failed to generate key")
+    # now show the lovely key that was just generated
+    p = subprocess.Popen(['keytool', '-list', '-v',
+                          '-keystore', keystore, '-alias', repo_keyalias],
+                         stdin=subprocess.PIPE,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
+    output = p.communicate(password)[0]
+    print(output.lstrip().strip() + '\n\n')
+
+
 def main():
 
     global options, config
@@ -49,6 +86,8 @@ def main():
     parser = OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
+    parser.add_option("--keystore", default=None,
+                      help="Path to the keystore for the repo signing key")
     (options, args) = parser.parse_args()
 
     # find root install prefix
@@ -127,10 +166,39 @@ def main():
         write_to_config('ndk_path', ndk_path)
     # the NDK is optional so we don't prompt the user for it if its not found
 
+    # find or generate the keystore for the repo signing key. First try the
+    # path written in the default config.py.  Then check if the user has
+    # specified a path from the command line, which will trump all others.
+    # Otherwise, create ~/.local/share/fdroidserver and stick it in there.
+    keystore = config['keystore']
+    if options.keystore:
+        if os.path.isfile(options.keystore):
+            keystore = options.keystore
+        else:
+            print('"' + options.keystore + '" does not exist or is not a file!')
+            sys.exit(1)
+    if not os.path.isfile(keystore):
+        # no existing or specified keystore, generate the whole thing
+        keystoredir = os.path.join(os.getenv('HOME'),
+                                   '.local', 'share', 'fdroidserver')
+        if not os.path.exists(keystoredir):
+            os.makedirs(keystoredir, mode=0o700)
+        keystore = os.path.join(keystoredir, 'keystore.jks')
+        repo_keyalias = socket.getfqdn()
+        password = genpassword()
+        keydname = 'CN=' + repo_keyalias + ', OU=F-Droid'
+        write_to_config('keystore', keystore)
+        write_to_config('repo_keyalias', repo_keyalias)
+        write_to_config('keystorepass', password)
+        write_to_config('keypass', password)
+        write_to_config('keydname', keydname)
+        genkey(keystore, repo_keyalias, password, keydname)
+
     print('Built repo in "' + repodir + '" with this config:')
     print('  Android SDK:\t\t\t' + sdk_path)
     print('  Android SDK Build Tools:\t' + os.path.dirname(aapt))
     print('  Android NDK (optional):\t' + ndk_path)
+    print('  Keystore for signing key:\t' + keystore)
     print('\nTo complete the setup, add your APKs to "' +
           os.path.join(repodir, 'repo') + '"' +
 '''
@@ -139,4 +207,5 @@ then run "fdroid update -c; fdroid update".  You might also want to edit
 a signing key.
 
 For more info: https://f-droid.org/manual/fdroid.html#Simple-Binary-Repository
+and https://f-droid.org/manual/fdroid.html#Signing
 ''')
