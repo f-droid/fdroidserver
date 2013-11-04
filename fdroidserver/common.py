@@ -1503,7 +1503,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
             if not os.path.isfile(path):
                 continue
             if subprocess.call(['sed','-i',
-                's/android:versionName="[^"]+"/android:versionName="' + build['version'] + '"/g',
+                's/android:versionName="[^"]*"/android:versionName="' + build['version'] + '"/g',
                 path]) != 0:
                 raise BuildException("Failed to amend manifest")
     if 'forcevercode' in build:
@@ -1512,7 +1512,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
             if not os.path.isfile(path):
                 continue
             if subprocess.call(['sed','-i',
-                's/android:versionCode="[^"]+"/android:versionCode="' + build['vercode'] + '"/g',
+                's/android:versionCode="[^"]*"/android:versionCode="' + build['vercode'] + '"/g',
                 path]) != 0:
                 raise BuildException("Failed to amend manifest")
 
