@@ -315,7 +315,7 @@ class vcs_gitsvn(vcs):
             else:
                 # No tag found, normal svn rev translation
                 # Translate svn rev into git format
-                p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev, '--before'],
+                p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev],
                     cwd=self.local, stdout=subprocess.PIPE)
                 git_rev = p.communicate()[0].rstrip()
                 if p.returncode != 0 or len(git_rev) == 0:
