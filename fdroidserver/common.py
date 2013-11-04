@@ -1502,19 +1502,31 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         for path in manifest_paths(root_dir, flavour):
             if not os.path.isfile(path):
                 continue
-            if subprocess.call(['sed','-i',
-                's/android:versionName="[^"]*"/android:versionName="' + build['version'] + '"/g',
-                path]) != 0:
-                raise BuildException("Failed to amend manifest")
+            if path.endswith('.xml'):
+                if subprocess.call(['sed','-i',
+                    's/android:versionName="[^"]*"/android:versionName="' + build['version'] + '"/g',
+                    path]) != 0:
+                    raise BuildException("Failed to amend manifest")
+            elif path.endswith('.gradle'):
+                if subprocess.call(['sed','-i',
+                    's/versionName[ ]*=[ ]*"[^"]*"/versionName = "' + build['version'] + '"/g',
+                    path]) != 0:
+                    raise BuildException("Failed to amend build.gradle")
     if 'forcevercode' in build:
         print "Changing the version code..."
         for path in manifest_paths(root_dir, flavour):
             if not os.path.isfile(path):
                 continue
-            if subprocess.call(['sed','-i',
-                's/android:versionCode="[^"]*"/android:versionCode="' + build['vercode'] + '"/g',
-                path]) != 0:
-                raise BuildException("Failed to amend manifest")
+            if path.endswith('.xml'):
+                if subprocess.call(['sed','-i',
+                    's/android:versionCode="[^"]*"/android:versionCode="' + build['vercode'] + '"/g',
+                    path]) != 0:
+                    raise BuildException("Failed to amend manifest")
+            elif path.endswith('.gradle'):
+                if subprocess.call(['sed','-i',
+                    's/versionCode[ ]*=[ ]*[0-9]*/versionCode = ' + build['vercode'] + '/g',
+                    path]) != 0:
+                    raise BuildException("Failed to amend build.gradle")
 
     # Delete unwanted files...
     if 'rm' in build:
