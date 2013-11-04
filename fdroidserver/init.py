@@ -104,12 +104,12 @@ def main():
             aapt = os.path.join(d, 'aapt')
             break
     if os.path.isfile(aapt):
-        dir = os.path.basename(os.path.dirname(aapt))
-        if dir == 'build-tools':
+        dirname = os.path.basename(os.path.dirname(aapt))
+        if dirname == 'build-tools':
             # this is the old layout, before versioned build-tools
             write_to_config('build_tools', '')
         else:
-            write_to_config('build_tools', dir)
+            write_to_config('build_tools', dirname)
 
     # track down where the Android NDK is
     ndk_path = '/opt/android-ndk'
