@@ -23,6 +23,7 @@ while read line; do
 
 		[ -d metadata/$id ] && extra=metadata/$id
 
+		name=
 		while read l; do
 			if [[ "$l" == "Auto Name:"* ]]; then
 				name=${l##*:}
@@ -30,7 +31,7 @@ while read line; do
 			fi
 		done < "$file"
 
-		[ -n "$name" ] && id="$name ($id)"
+		[ -n "$name" ] && fullname="$name ($id)" || fullname=$id
 
 		newbuild=0
 		while read l; do
@@ -44,9 +45,9 @@ while read line; do
 		done < <(git diff HEAD -- "$file")
 
 		if [ $newbuild -eq 0 ]; then
-			message="$id:"
+			message="$fullname:"
 		else
-			message="Update $id to $version ($vercode)"
+			message="Update $fullname to $version ($vercode)"
 		fi
 
 		commands+=("git commit -m '$message' -e -v -- $file $extra")
