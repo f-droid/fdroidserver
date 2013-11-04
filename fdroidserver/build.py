@@ -485,7 +485,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if 'mvnflags' in thisbuild:
             mvncmd += thisbuild['mvnflags']
 
-        p = FDroidPopen(mvncmd, cwd=maven_dir, apkoutput=True)
+        p = FDroidPopen(mvncmd, cwd=maven_dir)
 
     elif 'gradle' in thisbuild:
         print "Building Gradle project..."
@@ -537,7 +537,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             cmd += [thisbuild['antcommand']]
         else:
             cmd += ['release']
-        p = FDroidPopen(cmd, cwd=root_dir, apkoutput=True)
+        p = FDroidPopen(cmd, cwd=root_dir)
 
     if p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout, p.stderr)
@@ -554,15 +554,17 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     else:
         bindir = os.path.join(root_dir, 'bin')
     if 'maven' in thisbuild:
+        stdout_apk = '\n'.join([
+            line for line in p.stdout.splitlines() if 'apk' in line])
         m = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
-                p.stdout_apk, re.S|re.M)
+                stdout_apk, re.S|re.M)
         if not m:
             m = re.match(r".*^\[INFO\] Creating additional unsigned apk file .*/([^/]+)\.apk[^l]",
-                    p.stdout_apk, re.S|re.M)
+                    stdout_apk, re.S|re.M)
         if not m:
             # This format is found in com.github.mobile, com.yubico.yubitotp and com.botbrew.basil for example...
             m = re.match(r'.*^\[INFO\] [^$]*aapt \[package,[^$]*' + bindir + '/([^/]+)\.ap[_k][,\]]',
-                    p.stdout_apk, re.S|re.M)
+                    stdout_apk, re.S|re.M)
         if not m:
             raise BuildException('Failed to find output')
         src = m.group(1)
@@ -577,7 +579,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             name = '-'.join([os.path.basename(dd), flavour, 'release', 'unsigned'])
         src = os.path.join(dd, 'build', 'apk', name+'.apk')
     else:
-        src = re.match(r".*^.*Creating (.+) for release.*$.*", p.stdout_apk,
+        stdout_apk = '\n'.join([
+            line for line in p.stdout.splitlines() if 'apk' in line])
+        src = re.match(r".*^.*Creating (.+) for release.*$.*", stdout_apk,
             re.S|re.M).group(1)
         src = os.path.join(bindir, src)
 

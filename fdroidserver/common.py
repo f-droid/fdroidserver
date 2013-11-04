@@ -1406,9 +1406,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
             and build.get('gradle', 'no') == 'no'):
         parms = [os.path.join(sdk_path, 'tools', 'android'),
                 'update', 'project']
-        if 'target' in build:
-            parms.append('-t')
-            parms.append(build['target'])
+        if 'target' in build and build['target']:
+            parms += ['-t', build['target']]
         update_dirs = None
         if updatemode == 'auto':
             update_dirs = ['.'] + ant_subprojects(root_dir)
@@ -1859,9 +1858,7 @@ class KnownApks:
                 else:
                     apps[appid] = added
         sortedapps = sorted(apps.iteritems(), key=operator.itemgetter(1))[-num:]
-        lst = []
-        for app, added in sortedapps:
-            lst.append(app)
+        lst = [app for app,added in sortedapps]
         lst.reverse()
         return lst
 
@@ -1913,13 +1910,11 @@ class PopenResult:
     stderr = ''
     stdout_apk = ''
 
-def FDroidPopen(commands, cwd,
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-        apkoutput=False):
+def FDroidPopen(commands, cwd):
     """
     Runs a command the FDroid way and returns return code and output
 
-    :param commands, cwd, stdout, stderr: like subprocess.Popen
+    :param commands, cwd: like subprocess.Popen
     """
 
     if options.verbose:
@@ -1927,7 +1922,8 @@ def FDroidPopen(commands, cwd,
         print " > %s" % ' '.join(commands)
 
     result = PopenResult()
-    p = subprocess.Popen(commands, cwd=cwd, stdout=stdout, stderr=stderr)
+    p = subprocess.Popen(commands, cwd=cwd,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
     stdout_queue = Queue.Queue()
     stdout_reader = AsynchronousFileReader(p.stdout, stdout_queue)
@@ -1945,8 +1941,6 @@ def FDroidPopen(commands, cwd,
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
-            if apkoutput and 'apk' in line:
-                result.stdout_apk += line
             result.stdout += line
 
         # Show what we received from standard error
