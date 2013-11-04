@@ -86,8 +86,12 @@ def main():
     parser = OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
+    parser.add_option("-d", "--distinguished-name", default=None,
+                      help="X.509 'Distiguished Name' used when generating keys")
     parser.add_option("--keystore", default=None,
                       help="Path to the keystore for the repo signing key")
+    parser.add_option("--repo-keyalias", default=None,
+                      help="Alias of the repo signing key in the keystore")
     (options, args) = parser.parse_args()
 
     # find root install prefix
@@ -174,9 +178,16 @@ def main():
     if options.keystore:
         if os.path.isfile(options.keystore):
             keystore = options.keystore
+            write_to_config('keystore', keystore)
         else:
             print('"' + options.keystore + '" does not exist or is not a file!')
             sys.exit(1)
+    if options.repo_keyalias:
+        repo_keyalias = options.repo_keyalias
+        write_to_config('repo_keyalias', repo_keyalias)
+    if options.distinguished_name:
+        keydname = options.distinguished_name
+        write_to_config('keydname', keydname)
     if not os.path.isfile(keystore):
         # no existing or specified keystore, generate the whole thing
         keystoredir = os.path.join(os.getenv('HOME'),
@@ -184,14 +195,16 @@ def main():
         if not os.path.exists(keystoredir):
             os.makedirs(keystoredir, mode=0o700)
         keystore = os.path.join(keystoredir, 'keystore.jks')
-        repo_keyalias = socket.getfqdn()
-        password = genpassword()
-        keydname = 'CN=' + repo_keyalias + ', OU=F-Droid'
         write_to_config('keystore', keystore)
-        write_to_config('repo_keyalias', repo_keyalias)
+        password = genpassword()
         write_to_config('keystorepass', password)
         write_to_config('keypass', password)
-        write_to_config('keydname', keydname)
+        if not options.repo_keyalias:
+            repo_keyalias = socket.getfqdn()
+            write_to_config('repo_keyalias', repo_keyalias)
+        if not options.distinguished_name:
+            keydname = 'CN=' + repo_keyalias + ', OU=F-Droid'
+            write_to_config('keydname', keydname)
         genkey(keystore, repo_keyalias, password, keydname)
 
     print('Built repo in "' + repodir + '" with this config:')
