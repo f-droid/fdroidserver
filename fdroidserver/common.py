@@ -867,6 +867,9 @@ def write_metadata(dest, app):
 # returned by the parse_metadata function.
 def read_metadata(xref=True, package=None):
     apps = []
+    for basedir in ('metadata', 'tmp'):
+        if not os.path.exists(basedir):
+            os.makedirs(basedir)
     for metafile in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
         if package is None or metafile == os.path.join('metadata', package + '.txt'):
             try:

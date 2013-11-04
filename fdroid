@@ -52,14 +52,6 @@ def main():
         print_help()
         sys.exit(1)
 
-    if command != 'init' and not os.path.isfile('config.py'):
-        print "Missing config file - is this a repo directory?"
-        sys.exit(2)
-
-    for basedir in ('metadata', 'tmp'):
-        if not os.path.exists(basedir):
-             os.makedirs(basedir)
-
     # Trick optparse into displaying the right usage when --help is used.
     sys.argv[0] += ' ' + command
 
