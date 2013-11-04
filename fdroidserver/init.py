@@ -42,9 +42,13 @@ def write_to_config(key, value):
         f.writelines(data)
 
 def main():
+
+    global options, config
+
     # Parse command line...
-    global options
     parser = OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
     (options, args) = parser.parse_args()
 
     # find root install prefix

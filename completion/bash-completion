@@ -183,10 +183,16 @@ __complete_server() {
 	__complete_options
 }
 
+__complete_init() {
+	opts="-h -v"
+	lopts="--help --verbose"
+	__complete_options
+}
+
 _fdroid() {
 	local cmd cmds aliased
 	cmd=${COMP_WORDS[1]}
-	cmds=" build update publish checkupdates import rewritemeta scanner verify stats server "
+	cmds=" build init update publish checkupdates import rewritemeta scanner verify stats server "
 	aliased=false
 
 	for c in $cmds; do eval "_fdroid_${c} () {
