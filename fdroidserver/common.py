@@ -1910,7 +1910,7 @@ class PopenResult:
     stderr = ''
     stdout_apk = ''
 
-def FDroidPopen(commands, cwd):
+def FDroidPopen(commands, cwd=None):
     """
     Runs a command the FDroid way and returns return code and output
 
@@ -1918,7 +1918,8 @@ def FDroidPopen(commands, cwd):
     """
 
     if options.verbose:
-        print "Directory: %s" % cwd
+        if cwd is not None:
+            print "Directory: %s" % cwd
         print " > %s" % ' '.join(commands)
 
     result = PopenResult()

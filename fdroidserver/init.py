@@ -29,6 +29,7 @@ import sys
 from optparse import OptionParser
 
 import common
+from common import FDroidPopen, BuildException
 
 
 config = {}
@@ -56,24 +57,21 @@ def genpassword():
 def genkey(keystore, repo_keyalias, password, keydname):
     '''generate a new keystore with a new key in it for signing repos'''
     print('Generating a new key in "' + keystore + '"...')
-    p = subprocess.Popen(['keytool', '-genkey',
-                          '-keystore', keystore, '-alias', repo_keyalias,
-                          '-keyalg', 'RSA', '-keysize', '4096',
-                          '-sigalg', 'SHA256withRSA',
-                          '-validity', '10000',
-                          '-storepass', password, '-keypass', password,
-                          '-dname', keydname],
-                         stdout=subprocess.PIPE)
-    output = p.communicate()[0]
-    print(output)
+    p = FDroidPopen(['keytool', '-genkey',
+                '-keystore', keystore, '-alias', repo_keyalias,
+                '-keyalg', 'RSA', '-keysize', '4096',
+                '-sigalg', 'SHA256withRSA',
+                '-validity', '10000',
+                '-storepass', password, '-keypass', password,
+                '-dname', keydname])
     if p.returncode != 0:
-        raise BuildException("Failed to generate key")
+        raise BuildException("Failed to generate key", p.stdout, p.stderr)
     # now show the lovely key that was just generated
     p = subprocess.Popen(['keytool', '-list', '-v',
-                          '-keystore', keystore, '-alias', repo_keyalias],
-                         stdin=subprocess.PIPE,
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE)
+                '-keystore', keystore, '-alias', repo_keyalias],
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE)
     output = p.communicate(password)[0]
     print(output.lstrip().strip() + '\n\n')
 
