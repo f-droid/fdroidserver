@@ -19,6 +19,7 @@
 
 import glob, os, sys, re
 import shutil
+import stat
 import subprocess
 import time
 import operator
@@ -43,6 +44,9 @@ def read_config(opts, config_file='config.py'):
     if not os.path.isfile(config_file):
         print "Missing config file - is this a repo directory?"
         sys.exit(2)
+    st = os.stat(config_file)
+    if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
+        print("WARNING: unsafe permissions on config.py (should be 0600)!")
 
     options = opts
     if not hasattr(options, 'verbose'):
