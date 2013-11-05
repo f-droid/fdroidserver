@@ -477,7 +477,7 @@ class vcs_bzr(vcs):
 
 # Get the type expected for a given metadata field.
 def metafieldtype(name):
-    if name == 'Description':
+    if name in ['Description', 'Maintainer Notes']:
         return 'multiline'
     if name == 'Requires Root':
         return 'flag'
@@ -843,6 +843,14 @@ def write_metadata(dest, app):
             if not key in keyorder:
                 write_builditem(key, value)
         mf.write('\n')
+
+    if 'Maintainer Notes' in app:
+        writefield('Maintainer Notes', '')
+        for line in app['Maintainer Notes']:
+            mf.write(line + '\n')
+        mf.write('.\n')
+        mf.write('\n')
+
 
     if app['Archive Policy']:
         writefield('Archive Policy')
