@@ -76,6 +76,10 @@ def update_wiki(apps, apks):
         wikidata += "=Description=\n"
         wikidata += common.description_wiki(app['Description']) + "\n"
 
+        if 'Maintainer Notes' in app:
+            wikidata += "=Maintainer Notes=\n"
+            wikidata += common.description_wiki(app['Maintainer Notes']) + "\n"
+
         # Get a list of all packages for this application...
         apklist = []
         gotcurrentver = False

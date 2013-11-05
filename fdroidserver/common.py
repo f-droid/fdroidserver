@@ -1057,7 +1057,8 @@ def description_plain(lines, linkres):
     return ps.text_plain
 
 # Parse multiple lines of description as written in a metadata file, returning
-# a single string in wiki format.
+# a single string in wiki format. Used for the Maintainer Notes field as well,
+# because it's the same format.
 def description_wiki(lines):
     ps = DescriptionFormatter(None)
     for line in lines:
