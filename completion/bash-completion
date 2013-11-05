@@ -184,8 +184,8 @@ __complete_server() {
 }
 
 __complete_init() {
-	opts="-h -v"
-	lopts="--help --verbose"
+	opts="-h -v -d"
+	lopts="--help --verbose --keystore --distinguished-name --repo-keyalias"
 	__complete_options
 }
 
