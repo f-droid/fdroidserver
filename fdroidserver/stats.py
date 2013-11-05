@@ -43,10 +43,6 @@ def main():
 
     global options, config
 
-    if not config['update_stats']:
-        print "Stats are disabled - check your configuration"
-        sys.exit(1)
-
     # Parse command line...
     parser = OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
@@ -56,6 +52,10 @@ def main():
     (options, args) = parser.parse_args()
 
     config = common.read_config(options)
+
+    if not config['update_stats']:
+        print "Stats are disabled - check your configuration"
+        sys.exit(1)
 
     # Get all metadata-defined apps...
     metaapps = common.read_metadata(options.verbose)
