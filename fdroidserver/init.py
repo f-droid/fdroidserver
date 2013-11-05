@@ -109,6 +109,7 @@ def main():
         os.mkdir('repo')
         shutil.copy(os.path.join(examplesdir, 'fdroid-icon.png'), repodir)
         shutil.copyfile(os.path.join(examplesdir, 'config.sample.py'), 'config.py')
+        os.chmod('config.py', 0o0600)
     else:
         print('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
         sys.exit()
