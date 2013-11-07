@@ -19,6 +19,7 @@
 
 import glob, os, sys, re
 import shutil
+import stat
 import subprocess
 import time
 import operator
@@ -43,6 +44,9 @@ def read_config(opts, config_file='config.py'):
     if not os.path.isfile(config_file):
         print "Missing config file - is this a repo directory?"
         sys.exit(2)
+    st = os.stat(config_file)
+    if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
+        print("WARNING: unsafe permissions on config.py (should be 0600)!")
 
     options = opts
     if not hasattr(options, 'verbose'):
@@ -91,19 +95,14 @@ class vcs:
 
         self.sdk_path = sdk_path
 
-        # It's possible to sneak a username and password in with
-        # the remote address for svn...
+        # svn, git-svn and bzr may require auth
         self.username = None
-        if self.repotype() in ('svn', 'git-svn'):
-            index = remote.find('@')
-            if index != -1:
-                self.username = remote[:index]
-                remote = remote[index+1:]
-                index = self.username.find(':')
-                if index == -1:
+        if self.repotype() in ('svn', 'git-svn', 'bzr'):
+            if '@' in remote:
+                self.username, remote = remote.split('@')
+                if ':' not in self.username:
                     raise VCSException("Password required with username")
-                self.password = self.username[index+1:]
-                self.username = self.username[:index]
+                self.username, self.password = self.username.split(':')
 
         self.remote = remote
         self.local = local
@@ -318,7 +317,7 @@ class vcs_gitsvn(vcs):
                 p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev],
                     cwd=self.local, stdout=subprocess.PIPE)
                 git_rev = p.communicate()[0].rstrip()
-                if p.returncode != 0 or len(git_rev) == 0:
+                if p.returncode != 0 or not git_rev:
                     # Try a plain git checkout as a last resort
                     p = subprocess.Popen(['git', 'checkout', rev], cwd=self.local,
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -447,27 +446,6 @@ class vcs_bzr(vcs):
                 cwd=self.local) != 0:
             raise VCSException("Bzr revert failed")
 
-    def __init__(self, remote, local, sdk_path):
-
-        self.sdk_path = sdk_path
-
-        index = remote.find('@')
-        if index != -1:
-            self.username = remote[:index]
-            remote = remote[index+1:]
-            index = self.username.find(':')
-            if index == -1:
-                raise VCSException("Password required with username")
-            self.password = self.username[index+1:]
-            self.username = self.username[:index]
-        else:
-            self.username = None
-
-        self.remote = remote
-        self.local = local
-        self.refreshed = False
-        self.srclib = None
-
     def gettags(self):
         p = subprocess.Popen(['bzr', 'tags'],
                 stdout=subprocess.PIPE, cwd=self.local)
@@ -550,7 +528,7 @@ def parse_metadata(metafile):
         return thisbuild
 
     def add_comments(key):
-        if len(curcomments) == 0:
+        if not curcomments:
             return
         for comment in curcomments:
             thisinfo['comments'].append((key, comment))
@@ -631,7 +609,7 @@ def parse_metadata(metafile):
                     buildlines = []
 
         if mode == 0:
-            if len(line) == 0:
+            if not line:
                 continue
             if line.startswith("#"):
                 curcomments.append(line)
@@ -654,7 +632,7 @@ def parse_metadata(metafile):
             if fieldtype == 'multiline':
                 mode = 1
                 thisinfo[field] = []
-                if len(value) > 0:
+                if value:
                     raise MetaDataException("Unexpected text on same line as " + field + " in " + metafile.name)
             elif fieldtype == 'string':
                 if field == 'Category' and thisinfo['Categories'] == 'None':
@@ -716,7 +694,7 @@ def parse_metadata(metafile):
     elif mode == 3:
         raise MetaDataException("Unterminated build in " + metafile.name)
 
-    if len(thisinfo['Description']) == 0:
+    if not thisinfo['Description']:
         thisinfo['Description'].append('No description available')
 
     # Validate archive policy...
@@ -795,7 +773,7 @@ def write_metadata(dest, app):
     mf.write('\n')
     if app['Name']:
         writefield('Name')
-    if len(app['Auto Name']) > 0:
+    if app['Auto Name']:
         writefield('Auto Name')
     writefield('Summary')
     writefield('Description', '')
@@ -806,7 +784,7 @@ def write_metadata(dest, app):
     if app['Requires Root']:
         writefield('Requires Root', 'Yes')
         mf.write('\n')
-    if len(app['Repo Type']) > 0:
+    if app['Repo Type']:
         writefield('Repo Type')
         writefield('Repo')
         mf.write('\n')
@@ -860,11 +838,11 @@ def write_metadata(dest, app):
         writefield('Vercode Operation')
     if 'Update Check Data' in app:
         writefield('Update Check Data')
-    if len(app['Current Version']) > 0:
+    if app['Current Version']:
         writefield('Current Version')
         writefield('Current Version Code')
     mf.write('\n')
-    if len(app['No Source Since']) > 0:
+    if app['No Source Since']:
         writefield('No Source Since')
         mf.write('\n')
     writecomments(None)
@@ -1014,7 +992,7 @@ class DescriptionFormatter:
 
     def parseline(self, line):
         self.text_wiki += line + '\n'
-        if len(line) == 0:
+        if not line:
             self.endcur()
         elif line.startswith('*'):
             self.endcur([self.stUL])
@@ -1125,7 +1103,7 @@ def version_name(original, app_dir, flavour):
             continue
         xml_dir = os.path.join(f[:-19], 'res', 'values')
         string = retrieve_string(xml_dir, original)
-        if len(string) > 0:
+        if string:
             return string
     return original
 
@@ -1272,10 +1250,9 @@ def parse_srclib(metafile, **kw):
 
     for line in metafile:
         line = line.rstrip('\r\n')
-        if len(line) == 0:
+        if not line or line.startswith("#"):
             continue
-        if line.startswith("#"):
-            continue
+
         index = line.find(':')
         if index == -1:
             raise MetaDataException("Invalid metadata in " + metafile.name + " at: " + line)
