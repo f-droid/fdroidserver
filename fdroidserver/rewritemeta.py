@@ -40,7 +40,7 @@ def main():
     config = common.read_config(options)
 
     # Get all apps...
-    apps = common.read_metadata(package=options.package)
+    apps = common.read_metadata(package=options.package, xref=False)
 
     if len(apps) == 0 and options.package:
         print "No such package"
