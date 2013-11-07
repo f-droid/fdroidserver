@@ -66,6 +66,28 @@ def main():
         print "No unsigned directory - nothing to do"
         sys.exit(0)
 
+    # It was suggested at https://dev.guardianproject.info/projects/bazaar/wiki/FDroid_Audit
+    # that a package could be crafted, such that it would use the same signing
+    # key as an existing app. While it may be theoretically possible for such a
+    # colliding package ID to be generated, it seems virtually impossible that
+    # the colliding ID would be something that would be a) a valid package ID,
+    # and b) a sane-looking ID that would make its way into the repo.
+    # Nonetheless, to be sure, before publishing we check that there are no
+    # collisions, and refuse to do any publishing if that's the case...
+    apps = common.read_metadata()
+    allaliases = []
+    for app in apps:
+        m = md5.new()
+        m.update(app['id'])
+        keyalias = m.hexdigest()[:8]
+        if keyalias in allaliases:
+            print "There is a keyalias collision - publishing halted"
+            sys.exit(1)
+        allaliases.append(keyalias)
+    if options.verbose:
+        print "{0} apps, {0} key aliases".format(len(apps), len(allaliases))
+
+    # Process any apks that are waiting to be signed...
     for apkfile in sorted(glob.glob(os.path.join(unsigned_dir, '*.apk'))):
 
         apkfilename = os.path.basename(apkfile)
