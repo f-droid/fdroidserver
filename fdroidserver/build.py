@@ -63,7 +63,7 @@ def got_valid_builder_vm():
 
 
 # Note that 'force' here also implies test mode.
-def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
+def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
     """Do a build on the build server."""
 
     import ssh
@@ -256,7 +256,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, sdk_path, force):
                 name, _ = lib.split('@')
                 if options.verbose:
                     print "Processing srclib '" + name + "'"
-                srclibpaths.append((name, common.getsrclib(lib, 'build/srclib', sdk_path, basepath=True, prepare=False)))
+                srclibpaths.append((name, common.getsrclib(lib, 'build/srclib', basepath=True, prepare=False)))
         # If one was used for the main source, add that too.
         basesrclib = vcs.getsrclib()
         if basesrclib:
@@ -342,8 +342,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     # Prepare the source code...
     root_dir, srclibpaths = common.prepare_source(vcs, app, thisbuild,
-            build_dir, srclib_dir, extlib_dir, config['sdk_path'], config['ndk_path'],
-            config['javacc_path'], config['mvn3'], onserver)
+            build_dir, srclib_dir, extlib_dir, onserver)
 
     # We need to clean via the build tool in case the binary dirs are
     # different from the default ones
@@ -412,19 +411,15 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     # Run a build command if one is required...
     if 'build' in thisbuild:
-        cmd = thisbuild['build']
+        cmd = common.replace_config_vars(thisbuild['build'])
         # Substitute source library paths into commands...
         for name, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
             cmd = cmd.replace('$$' + name + '$$', libpath)
-        cmd = cmd.replace('$$SDK$$', config['sdk_path'])
-        cmd = cmd.replace('$$NDK$$', config['ndk_path'])
-        cmd = cmd.replace('$$MVN3$$', config['mvn3'])
         if options.verbose:
             print "Running 'build' commands in %s" % root_dir
 
-        p = FDroidPopen(['bash', '-x', '-c', cmd],
-                cwd=root_dir)
+        p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         
         if p.returncode != 0:
             raise BuildException("Error running build command for %s:%s" %
@@ -691,7 +686,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
         # grabbing the source now.
         vcs.gotorevision(thisbuild['commit'])
 
-        build_server(app, thisbuild, vcs, build_dir, output_dir, config['sdk_path'], force)
+        build_server(app, thisbuild, vcs, build_dir, output_dir, force)
     else:
         build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, onserver)
     return True
@@ -856,7 +851,7 @@ def main():
                     if options.verbose:
                         print "Getting {0} vcs interface for {1}".format(
                                 app['Repo Type'], app['Repo'])
-                    vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, config['sdk_path'])
+                    vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
 
                     first = False
 

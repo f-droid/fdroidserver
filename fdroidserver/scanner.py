@@ -84,8 +84,7 @@ def main():
                 build_dir = 'build/' + app['id']
 
                 # Set up vcs interface and make sure we have the latest code...
-                vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir,
-                        config['sdk_path'])
+                vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
 
                 for thisbuild in app['builds']:
 
@@ -97,10 +96,7 @@ def main():
 
                         # Prepare the source code...
                         root_dir, _ = common.prepare_source(vcs, app, thisbuild,
-                                build_dir, srclib_dir, extlib_dir,
-                                config['sdk_path'], config['ndk_path'],
-                                config['javacc_path'], config['mvn3'],
-                                False)
+                                build_dir, srclib_dir, extlib_dir, False)
 
                         # Do the scan...
                         buildprobs = common.scan_source(build_dir, root_dir, thisbuild)

@@ -82,7 +82,7 @@ def check_http(app):
 # caution, because it's inappropriate for many projects.
 # Returns (None, "a message") if this didn't work, or (version, vercode) for
 # the details of the current version.
-def check_tags(app, sdk_path):
+def check_tags(app):
 
     try:
 
@@ -97,7 +97,7 @@ def check_tags(app, sdk_path):
             return (None, 'Tags update mode only works for git, hg, bzr and git-svn repositories currently', None)
 
         # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
+        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
 
         vcs.gotorevision(None)
 
@@ -146,7 +146,7 @@ def check_tags(app, sdk_path):
 # caution, because it's inappropriate for many projects.
 # Returns (None, "a message") if this didn't work, or (version, vercode) for
 # the details of the current version.
-def check_repomanifest(app, sdk_path, branch=None):
+def check_repomanifest(app, branch=None):
 
     try:
 
@@ -158,7 +158,7 @@ def check_repomanifest(app, sdk_path, branch=None):
             repotype = app['Repo Type']
 
         # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
+        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
 
         if repotype == 'git':
             if branch:
@@ -208,7 +208,7 @@ def check_repomanifest(app, sdk_path, branch=None):
         msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
         return (None, msg)
 
-def check_repotrunk(app, sdk_path, branch=None):
+def check_repotrunk(app, branch=None):
 
     try:
         if app['Repo Type'] == 'srclib':
@@ -222,7 +222,7 @@ def check_repotrunk(app, sdk_path, branch=None):
             return (None, 'RepoTrunk update mode only makes sense in svn and git-svn repositories')
 
         # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, sdk_path)
+        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
 
         vcs.gotorevision(None)
 
@@ -340,13 +340,13 @@ def main():
         vercode = None
         mode = app['Update Check Mode']
         if mode == 'Tags':
-            (version, vercode, tag) = check_tags(app, config['sdk_path'])
+            (version, vercode, tag) = check_tags(app)
         elif mode == 'RepoManifest':
-            (version, vercode) = check_repomanifest(app, config['sdk_path'])
+            (version, vercode) = check_repomanifest(app)
         elif mode.startswith('RepoManifest/'):
-            (version, vercode) = check_repomanifest(app, config['sdk_path'], mode[13:])
+            (version, vercode) = check_repomanifest(app, mode[13:])
         elif mode == 'RepoTrunk':
-            (version, vercode) = check_repotrunk(app, config['sdk_path'])
+            (version, vercode) = check_repotrunk(app)
         elif mode == 'HTTP':
             (version, vercode) = check_http(app)
         elif mode == 'Static':
@@ -384,8 +384,7 @@ def main():
                 else:
                     app_dir = os.path.join('build/', app['id'])
 
-                vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir,
-                        config['sdk_path'])
+                vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir)
                 vcs.gotorevision(tag)
 
                 flavour = None

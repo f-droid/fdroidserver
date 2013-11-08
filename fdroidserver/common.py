@@ -67,21 +67,21 @@ def read_config(opts, config_file='config.py'):
     return config
 
 
-def getvcs(vcstype, remote, local, sdk_path):
+def getvcs(vcstype, remote, local):
     if vcstype == 'git':
-        return vcs_git(remote, local, sdk_path)
+        return vcs_git(remote, local)
     if vcstype == 'svn':
-        return vcs_svn(remote, local, sdk_path)
+        return vcs_svn(remote, local)
     if vcstype == 'git-svn':
-        return vcs_gitsvn(remote, local, sdk_path)
+        return vcs_gitsvn(remote, local)
     if vcstype == 'hg':
-        return vcs_hg(remote, local, sdk_path)
+        return vcs_hg(remote, local)
     if vcstype == 'bzr':
-        return vcs_bzr(remote, local, sdk_path)
+        return vcs_bzr(remote, local)
     if vcstype == 'srclib':
         if local != 'build/srclib/' + remote:
             raise VCSException("Error: srclib paths are hard-coded!")
-        return getsrclib(remote, 'build/srclib', sdk_path, raw=True)
+        return getsrclib(remote, 'build/srclib', raw=True)
     raise VCSException("Invalid vcs type " + vcstype)
 
 def getsrclibvcs(name):
@@ -91,9 +91,7 @@ def getsrclibvcs(name):
     return parse_srclib(srclib_path)['Repo Type']
 
 class vcs:
-    def __init__(self, remote, local, sdk_path):
-
-        self.sdk_path = sdk_path
+    def __init__(self, remote, local):
 
         # svn, git-svn and bzr may require auth
         self.username = None
@@ -1270,7 +1268,7 @@ def parse_srclib(metafile, **kw):
 # Returns the path to it. Normally this is the path to be used when referencing
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
-def getsrclib(spec, srclib_dir, sdk_path, ndk_path="", mvn3="", basepath=False, raw=False, prepare=True, preponly=False):
+def getsrclib(spec, srclib_dir, basepath=False, raw=False, prepare=True, preponly=False):
 
     if raw:
         name = spec
@@ -1288,7 +1286,7 @@ def getsrclib(spec, srclib_dir, sdk_path, ndk_path="", mvn3="", basepath=False, 
     sdir = os.path.join(srclib_dir, name)
 
     if not preponly:
-        vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir, sdk_path)
+        vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir)
         vcs.srclib = (name, sdir)
         if ref:
             vcs.gotorevision(ref)
@@ -1311,8 +1309,7 @@ def getsrclib(spec, srclib_dir, sdk_path, ndk_path="", mvn3="", basepath=False, 
     if prepare:
 
         if srclib["Prepare"] is not None:
-            cmd = srclib["Prepare"].replace('$$SDK$$', sdk_path)
-            cmd = cmd.replace('$$NDK$$', ndk_path).replace('$$MVN$$', mvn3)
+            cmd = replace_config_vars(srclib["Prepare"])
 
             p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=libdir)
             if p.returncode != 0:
@@ -1321,7 +1318,7 @@ def getsrclib(spec, srclib_dir, sdk_path, ndk_path="", mvn3="", basepath=False, 
         
         if srclib["Update Project"] == "Yes":
             print "Updating srclib %s at path %s" % (name, libdir)
-            if subprocess.call([os.path.join(sdk_path, 'tools', 'android'),
+            if subprocess.call([os.path.join(config['sdk_path'], 'tools', 'android'),
                 'update', 'project', '-p', libdir]) != 0:
                     raise BuildException( 'Error updating ' + name + ' project')
 
@@ -1340,15 +1337,11 @@ def getsrclib(spec, srclib_dir, sdk_path, ndk_path="", mvn3="", basepath=False, 
 #                   'build/srclib'
 #  'extlib_dir'  - the path to the external libraries directory, usually
 #                   'build/extlib'
-#  'sdk_path'    - the path to the Android SDK
-#  'ndk_path'    - the path to the Android NDK
-#  'javacc_path' - the path to javacc
-#  'mvn3'        - the path to the maven 3 executable
 # Returns the (root, srclibpaths) where:
 #   'root' is the root directory, which may be the same as 'build_dir' or may
 #          be a subdirectory of it.
 #   'srclibpaths' is information on the srclibs being used
-def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path, ndk_path, javacc_path, mvn3, onserver=False):
+def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=False):
 
     # Optionally, the actual app source can be in a subdirectory...
     if 'subdir' in build:
@@ -1373,10 +1366,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
 
     # Run an init command if one is required...
     if 'init' in build:
-        cmd = build['init']
-        cmd = cmd.replace('$$SDK$$', sdk_path)
-        cmd = cmd.replace('$$NDK$$', ndk_path)
-        cmd = cmd.replace('$$MVN$$', mvn3)
+        cmd = replace_config_vars(build['init'])
         if options.verbose:
             print "Running 'init' commands in %s" % root_dir
 
@@ -1390,7 +1380,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
     if (updatemode != 'no'
             and build.get('maven', 'no') == 'no'
             and build.get('gradle', 'no') == 'no'):
-        parms = [os.path.join(sdk_path, 'tools', 'android'),
+        parms = [os.path.join(config['sdk_path'], 'tools', 'android'),
                 'update', 'project']
         if 'target' in build and build['target']:
             parms += ['-t', build['target']]
@@ -1464,11 +1454,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
                 re.S|re.M).group(1)
             props += "sdk-location=%s\n" % sdkloc
         else:
-            props += "sdk.dir=%s\n" % sdk_path
-            props += "sdk-location=%s\n" % sdk_path
+            props += "sdk.dir=%s\n" % config['sdk_path']
+            props += "sdk-location=%s\n" % ['sdk_path']
         # Add ndk location...
-        props += "ndk.dir=%s\n" % ndk_path
-        props += "ndk-location=%s\n" % ndk_path
+        props += "ndk.dir=%s\n" % config['ndk_path']
+        props += "ndk-location=%s\n" % config['ndk_path']
         # Add java.encoding if necessary...
         if 'encoding' in build:
             props += "java.encoding=%s\n" % build['encoding']
@@ -1602,7 +1592,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
         for lib in build['srclibs'].split(';'):
             lib = lib.strip()
             name, _ = lib.split('@')
-            srclibpaths.append((name, getsrclib(lib, srclib_dir, sdk_path, ndk_path, mvn3, preponly=onserver)))
+            srclibpaths.append((name, getsrclib(lib, srclib_dir, preponly=onserver)))
     basesrclib = vcs.getsrclib()
     # If one was used for the main source, add that too.
     if basesrclib:
@@ -1620,15 +1610,13 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, sdk_path,
 
     # Run a pre-build command if one is required...
     if 'prebuild' in build:
-        cmd = build['prebuild']
+        cmd = replace_config_vars(build['prebuild'])
 
         # Substitute source library paths into prebuild commands...
         for name, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
             cmd = cmd.replace('$$' + name + '$$', libpath)
-        cmd = cmd.replace('$$SDK$$', sdk_path)
-        cmd = cmd.replace('$$NDK$$', ndk_path)
-        cmd = cmd.replace('$$MVN3$$', mvn3)
+
         if options.verbose:
             print "Running 'prebuild' commands in %s" % root_dir
 
@@ -1964,4 +1952,10 @@ def clean_gradle_keys(path):
                     opened -=1
             elif not any(s in line for s in (' signingConfig ',)):
                 o.write(line)
+
+def replace_config_vars(cmd):
+    cmd = cmd.replace('$$SDK$$', config['sdk_path'])
+    cmd = cmd.replace('$$NDK$$', config['ndk_path'])
+    cmd = cmd.replace('$$MVN3$$', config['mvn3'])
+    return cmd
 
