@@ -555,7 +555,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         bindir = os.path.join(root_dir, 'bin')
     if 'maven' in thisbuild:
         stdout_apk = '\n'.join([
-            line for line in p.stdout.splitlines() if any(a in line for a in ('apk','ap_'))])
+            line for line in p.stdout.splitlines() if any(a in line for a in ('.apk','.ap_'))])
         m = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
                 stdout_apk, re.S|re.M)
         if not m:
@@ -579,7 +579,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         src = os.path.join(dd, 'build', 'apk', name+'.apk')
     else:
         stdout_apk = '\n'.join([
-            line for line in p.stdout.splitlines() if 'apk' in line])
+            line for line in p.stdout.splitlines() if '.apk' in line])
         src = re.match(r".*^.*Creating (.+) for release.*$.*", stdout_apk,
             re.S|re.M).group(1)
         src = os.path.join(bindir, src)
