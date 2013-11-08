@@ -555,15 +555,14 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         bindir = os.path.join(root_dir, 'bin')
     if 'maven' in thisbuild:
         stdout_apk = '\n'.join([
-            line for line in p.stdout.splitlines() if 'apk' in line])
+            line for line in p.stdout.splitlines() if any(a in line for a in ('apk','ap_'))])
         m = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
                 stdout_apk, re.S|re.M)
         if not m:
             m = re.match(r".*^\[INFO\] Creating additional unsigned apk file .*/([^/]+)\.apk[^l]",
                     stdout_apk, re.S|re.M)
         if not m:
-            # This format is found in com.github.mobile, com.yubico.yubitotp and com.botbrew.basil for example...
-            m = re.match(r'.*^\[INFO\] [^$]*aapt \[package,[^$]*' + bindir + '/([^/]+)\.ap[_k][,\]]',
+            m = re.match(r'.*^\[INFO\] [^$]*aapt \[package,[^$]*' + bindir + r'/([^/]+)\.ap[_k][,\]]',
                     stdout_apk, re.S|re.M)
         if not m:
             raise BuildException('Failed to find output')
