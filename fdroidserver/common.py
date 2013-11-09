@@ -523,7 +523,6 @@ def parse_metadata(metafile):
         for p in parts[3:]:
             pk, pv = p.split('=', 1)
             thisbuild[pk.strip()] = pv
-
         return thisbuild
 
     def add_comments(key):
@@ -532,7 +531,6 @@ def parse_metadata(metafile):
         for comment in curcomments:
             thisinfo['comments'].append((key, comment))
         del curcomments[:]
-
 
     thisinfo = {}
     if metafile:
@@ -685,20 +683,6 @@ def parse_metadata(metafile):
                 add_comments('build:' + thisinfo['builds'][-1]['version'])
                 mode = 0
     add_comments(None)
-
-    # These can only contain 'yes' or 'no'
-    for key in ('submodules', 'oldsdkloc', 'forceversion', 'forcevercode', 'fixtrans', 'fixapos', 'novcheck'):
-        for build in thisinfo['builds']:
-            if key not in build:
-                build[key] = False
-                continue
-            if build[key] == 'yes':
-                build[key] = True
-            elif build[key] == 'no':
-                build[key] = False
-            else:
-                raise MetaDataException("Invalid value %s assigned to boolean build flag %s"
-                        % (build[key], key))
 
     # Mode at end of file should always be 0...
     if mode == 1:
@@ -1375,7 +1359,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         raise BuildException('Missing subdir ' + root_dir)
 
     # Initialise submodules if requred...
-    if build['submodules']:
+    if build.get('submodules', 'no') == 'yes':
         if options.verbose:
             print "Initialising submodules..."
         vcs.initsubmodules()
@@ -1465,7 +1449,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         props += '\n'
         # Fix old-fashioned 'sdk-location' by copying
         # from sdk.dir, if necessary...
-        if build['oldsdkloc']:
+        if build.get('oldsdkloc', 'no') == "yes":
             sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
                 re.S|re.M).group(1)
             props += "sdk-location=%s\n" % sdkloc
@@ -1483,7 +1467,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         f.close()
 
     flavour = None
-    if build.get('gradle', 'no') != 'no':
+    if 'gradle' in build:
         flavour = build['gradle'].split('@')[0]
         if flavour in ['main', 'yes', '']:
             flavour = None
@@ -1498,7 +1482,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             raise BuildException("Failed to remove debuggable flags")
 
     # Insert version code and number into the manifest if necessary...
-    if build['forceversion']:
+    if 'forceversion' in build:
         print "Changing the version name..."
         for path in manifest_paths(root_dir, flavour):
             if not os.path.isfile(path):
@@ -1513,7 +1497,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                     's/versionName[ ]*=[ ]*"[^"]*"/versionName = "' + build['version'] + '"/g',
                     path]) != 0:
                     raise BuildException("Failed to amend build.gradle")
-    if build['forcevercode']:
+    if 'forcevercode' in build:
         print "Changing the version code..."
         for path in manifest_paths(root_dir, flavour):
             if not os.path.isfile(path):
@@ -1540,7 +1524,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 subprocess.call('rm -rf ' + dest, shell=True)
 
     # Fix apostrophes translation files if necessary...
-    if build['fixapos']:
+    if build.get('fixapos', 'no') == 'yes':
         for root, dirs, files in os.walk(os.path.join(root_dir, 'res')):
             for filename in files:
                 if filename.endswith('.xml'):
@@ -1551,7 +1535,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                         raise BuildException("Failed to amend " + filename)
 
     # Fix translation files if necessary...
-    if build['fixtrans']:
+    if build.get('fixtrans', 'no') == 'yes':
         for root, dirs, files in os.walk(os.path.join(root_dir, 'res')):
             for filename in files:
                 if filename.endswith('.xml'):
@@ -1640,6 +1624,40 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         if p.returncode != 0:
             raise BuildException("Error running prebuild command for %s:%s" %
                     (app['id'], build['version']), p.stdout, p.stderr)
+    print "Applying generic clean-ups..."
+
+    if build.get('anal-tics', 'no') == 'yes':
+        fp = os.path.join(root_dir, 'src', 'com', 'google', 'android', 'apps', 'analytics')
+        os.makedirs(fp)
+        with open(os.path.join(fp, 'GoogleAnalyticsTracker.java'), 'w') as f:
+            f.write("""
+            package com.google.android.apps.analytics;
+            public class GoogleAnalyticsTracker {
+                private static GoogleAnalyticsTracker instance;
+                private GoogleAnalyticsTracker() {
+                }
+                public static GoogleAnalyticsTracker getInstance() {
+                    if(instance == null)
+                        instance = new GoogleAnalyticsTracker();
+                    return instance;
+                }
+                public void start(String i,int think ,Object not) {
+                }
+                public void dispatch() {
+                }
+                public void stop() {
+                }
+                public void setProductVersion(String uh, String hu) {
+                }
+                public void trackEvent(String that,String just,String aint,int happening) {
+                }
+                public void trackPageView(String nope) {
+                }
+                public void setCustomVar(int mind,String your,String own,int business) {
+                }
+            }
+            """)
+
 
     return (root_dir, srclibpaths)
 
