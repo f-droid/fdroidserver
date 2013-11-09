@@ -31,6 +31,12 @@ import magic
 config = None
 options = None
 
+# These can only contain 'yes' or 'no'
+bool_keys = (
+        'submodules', 'oldsdkloc',
+        'forceversion', 'forcevercode',
+        'fixtrans', 'fixapos', 'novcheck')
+
 def read_config(opts, config_file='config.py'):
     """Read the repository config
 
@@ -686,8 +692,7 @@ def parse_metadata(metafile):
                 mode = 0
     add_comments(None)
 
-    # These can only contain 'yes' or 'no'
-    for key in ('submodules', 'oldsdkloc', 'forceversion', 'forcevercode', 'fixtrans', 'fixapos', 'novcheck'):
+    for key in bool_keys:
         for build in thisinfo['builds']:
             if key not in build:
                 build[key] = False
@@ -821,13 +826,17 @@ def write_metadata(dest, app):
 
         def write_builditem(key, value):
             if key not in ['version', 'vercode', 'origlines']:
+                if key in bool_keys:
+                    if not value:
+                        return
+                    value = 'yes'
                 if options.verbose:
                     print "...writing {0} : {1}".format(key, value)
-                outline = '    ' + key + '='
-                bits = value.split('&& ')
-                outline += '&& \\\n        '.join([s.lstrip() for s in bits])
+                outline = '    %s=' % key
+                outline += '&& \\\n        '.join([s.lstrip() for s in value.split('&& ')])
                 outline += '\n'
                 mf.write(outline)
+
         for key in keyorder:
             if key in build:
                 write_builditem(key, build[key])
