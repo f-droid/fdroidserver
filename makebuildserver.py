@@ -163,6 +163,16 @@ with open(os.path.join(serverdir, 'up.log'), 'w') as log:
 if returncode != 0:
     print "Failed to configure server"
     sys.exit(1)
+
+print "Writing buildserver ID"
+p = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE)
+buildserverid = p.communicate()[0].strip()
+print "...ID is " + buildserverid
+subprocess.call(
+    ['vagrant', 'ssh', '-c', 'sh -c "echo {0} >/home/vagrant/buildserverid"'
+    .format(buildserverid)],
+    cwd=serverdir)
+
 print "Stopping build server VM"
 vagrant(['halt'], serverdir)
 
