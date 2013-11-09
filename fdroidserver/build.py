@@ -347,22 +347,22 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     # We need to clean via the build tool in case the binary dirs are
     # different from the default ones
     p = None
-    if 'maven' in thisbuild:
+    if thisbuild.get('maven', 'no') != 'no':
         print "Cleaning Maven project..."
         cmd = [config['mvn3'], 'clean', '-Dandroid.sdk.path=' + config['sdk_path']]
 
         if '@' in thisbuild['maven']:
-            maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@')[1])
+            maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@',1)[1])
         else:
             maven_dir = root_dir
 
         p = FDroidPopen(cmd, cwd=maven_dir)
-    elif 'gradle' in thisbuild:
+    elif thisbuild.get('gradle', 'no') != 'no':
         print "Cleaning Gradle project..."
         cmd = [config['gradle'], 'clean']
 
         if '@' in thisbuild['gradle']:
-            gradle_dir = os.path.join(root_dir, thisbuild['gradle'].split('@')[1])
+            gradle_dir = os.path.join(root_dir, thisbuild['gradle'].split('@',1)[1])
         else:
             gradle_dir = root_dir
 
@@ -454,11 +454,11 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     p = None
     # Build the release...
-    if 'maven' in thisbuild:
+    if thisbuild.get('maven', 'no') != 'no':
         print "Building Maven project..."
 
         if '@' in thisbuild['maven']:
-            maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@')[1])
+            maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@',1)[1])
         else:
             maven_dir = root_dir
 
@@ -482,7 +482,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         p = FDroidPopen(mvncmd, cwd=maven_dir)
 
-    elif 'gradle' in thisbuild:
+        bindir = os.path.join(root_dir, 'target')
+
+    elif thisbuild.get('gradle', 'no') != 'no':
         print "Building Gradle project..."
         if '@' in thisbuild['gradle']:
             flavour = thisbuild['gradle'].split('@')[0]
@@ -534,6 +536,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             cmd += ['release']
         p = FDroidPopen(cmd, cwd=root_dir)
 
+        bindir = os.path.join(root_dir, 'bin')
+
     if p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout, p.stderr)
     print "Successfully built version " + thisbuild['version'] + ' of ' + app['id']
@@ -544,11 +548,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     # Find the apk name in the output...
     if 'bindir' in thisbuild:
         bindir = os.path.join(build_dir, thisbuild['bindir'])
-    elif 'maven' in thisbuild:
-        bindir = os.path.join(root_dir, 'target')
-    else:
-        bindir = os.path.join(root_dir, 'bin')
-    if 'maven' in thisbuild:
+
+    if thisbuild.get('maven', 'no') != 'no':
         stdout_apk = '\n'.join([
             line for line in p.stdout.splitlines() if any(a in line for a in ('.apk','.ap_'))])
         m = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
@@ -563,7 +564,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             raise BuildException('Failed to find output')
         src = m.group(1)
         src = os.path.join(bindir, src) + '.apk'
-    elif 'gradle' in thisbuild:
+    elif thisbuild.get('gradle', 'no') != 'no':
         dd = build_dir
         if 'subdir' in thisbuild:
             dd = os.path.join(dd, thisbuild['subdir'])
@@ -606,7 +607,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             vercode = re.match(pat, line).group(1)
             pat = re.compile(".*versionName='([^']*)'.*")
             version = re.match(pat, line).group(1)
-    if thisbuild.get('novcheck', 'no') == "yes":
+    if thisbuild['novcheck']:
         vercode = thisbuild['vercode']
         version = thisbuild['version']
     if not version or not vercode:
