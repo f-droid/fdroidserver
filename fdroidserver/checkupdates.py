@@ -327,7 +327,8 @@ def main():
 
 
         if options.autoonly and app['Auto Update Mode'] == 'None':
-            print "Nothing to do for %s..." % app['id']
+            if options.verbose:
+                print "Nothing to do for %s..." % app['id']
             continue
 
         print "Processing " + app['id'] + '...'
