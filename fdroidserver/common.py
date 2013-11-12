@@ -1607,9 +1607,13 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             os.mkdir(libsdir)
         for lib in build['extlibs'].split(';'):
             lib = lib.strip()
+            if options.verbose:
+                print "...installing extlib {0}".format(lib)
             libf = os.path.basename(lib)
-            shutil.copyfile(os.path.join(extlib_dir, lib),
-                    os.path.join(libsdir, libf))
+            libsrc = os.path.join(extlib_dir, lib)
+            if not os.path.exists(libsrc):
+                raise BuildException("Missing extlib file {0}".format(libsrc))
+            shutil.copyfile(libsrc, os.path.join(libsdir, libf))
 
     # Get required source libraries...
     srclibpaths = []

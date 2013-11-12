@@ -241,12 +241,15 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             ftp.chdir('/home/vagrant/build/extlib')
             for lib in thisbuild['extlibs'].split(';'):
                 lib = lib.strip()
+                libsrc = os.path.join('build/extlib', lib)
+                if not os.path.exists(libsrc):
+                    raise BuildException("Missing extlib {0}".format(libsrc))
                 lp = lib.split('/')
                 for d in lp[:-1]:
                     if d not in ftp.listdir():
                         ftp.mkdir(d)
                     ftp.chdir(d)
-                ftp.put(os.path.join('build/extlib', lib), lp[-1])
+                ftp.put(libsrc, lp[-1])
                 for _ in lp[:-1]:
                     ftp.chdir('..')
         # Copy any srclibs that are required...
