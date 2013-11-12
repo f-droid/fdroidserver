@@ -62,6 +62,22 @@ def got_valid_builder_vm():
     return True
 
 
+def vagrant(params, cwd=None, printout=False):
+    """Run vagrant.
+
+    :param: list of parameters to pass to vagrant
+    :cwd: directory to run in, or None for current directory
+    :returns: (ret, out) where ret is the return code, and out
+               is the stdout (and stderr) from vagrant
+    """
+    p = subprocess.Popen(['vagrant'] + params, cwd=cwd,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    out = p.communicate()[0]
+    if options.verbose:
+        print out
+    return (p.returncode, out)
+
+
 # Note that 'force' here also implies test mode.
 def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
     """Do a build on the build server."""
@@ -75,20 +91,25 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         if got_valid_builder_vm():
             print "...VM is present"
             p = subprocess.Popen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'list', '--details'],
-                cwd='builder', stdout=subprocess.PIPE)
+                cwd='builder', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             output = p.communicate()[0]
             if output.find('fdroidclean') != -1:
-                print "...snapshot exists - resetting build server to clean state"
-                p = subprocess.Popen(['vagrant', 'status'],
-                    cwd='builder', stdout=subprocess.PIPE)
-                output = p.communicate()[0]
+                if options.verbose:
+                    print "...snapshot exists - resetting build server to clean state"
+                retcode, output = vagrant(['status'], cwd='builder')
                 if output.find('running') != -1:
-                    print "...suspending"
-                    subprocess.call(['vagrant', 'suspend'], cwd='builder')
-                if subprocess.call(['VBoxManage', 'snapshot', get_builder_vm_id(), 'restore', 'fdroidclean'],
-                    cwd='builder') == 0:
+                    if options.verbose:
+                        print "...suspending"
+                    vagrant(['suspend'], cwd='builder')
+                p = subprocess.Popen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'restore', 'fdroidclean'],
+                    cwd='builder', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                output = p.communicate()[0]
+                if options.verbose:
+                    print output
+                if p.returncode == 0:
                     print "...reset to snapshot - server is valid"
-                    if subprocess.call(['vagrant', 'up'], cwd='builder') != 0:
+                    retcode, output = vagrant(['up'], cwd='builder')
+                    if retcode != 0:
                         raise BuildException("Failed to start build server")
                     vm_ok = True
                 else:
@@ -101,7 +122,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
     if not vm_ok:
         if os.path.exists('builder'):
             print "Removing broken/incomplete/unwanted build server"
-            subprocess.call(['vagrant', 'destroy', '-f'], cwd='builder')
+            vagrant(['destroy', '-f'], cwd='builder')
             shutil.rmtree('builder')
         os.mkdir('builder')
 
@@ -119,7 +140,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                 vf.write('end\n')
 
         print "Starting new build server"
-        if subprocess.call(['vagrant', 'up'], cwd='builder') != 0:
+        retcode, _ = vagrant(['up'], cwd='builder')
+        if retcode != 0:
             raise BuildException("Failed to start build server")
 
         # Open SSH connection to make sure it's working and ready...
@@ -144,19 +166,24 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         sshs.close()
 
         print "Saving clean state of new build server"
-        if subprocess.call(['vagrant', 'suspend'], cwd='builder') != 0:
+        retcode, _ = vagrant(['suspend'], cwd='builder')
+        if retcode != 0:
             raise BuildException("Failed to suspend build server")
         print "...waiting a sec..."
         time.sleep(10)
-        if subprocess.call(['VBoxManage', 'snapshot', get_builder_vm_id(), 'take', 'fdroidclean'],
-                cwd='builder') != 0:
+        p = subprocess.Popen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'take', 'fdroidclean'],
+                cwd='builder', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        output = p.communicate()[0]
+        if p.returncode != 0:
+            print output
             raise BuildException("Failed to take snapshot")
         print "Restarting new build server"
-        if subprocess.call(['vagrant', 'up'], cwd='builder') != 0:
+        retcode, _ = vagrant(['up'], cwd='builder')
+        if retcode != 0:
             raise BuildException("Failed to start build server")
         # Make sure it worked...
         p = subprocess.Popen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'list', '--details'],
-            cwd='builder', stdout=subprocess.PIPE)
+            cwd='builder', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         output = p.communicate()[0]
         if output.find('fdroidclean') == -1:
             raise BuildException("Failed to take snapshot.")
@@ -164,7 +191,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
     try:
 
         # Get SSH configuration settings for us to connect...
-        print "Getting ssh configuration..."
+        if options.verbose:
+            print "Getting ssh configuration..."
         subprocess.call('vagrant ssh-config >sshconfig',
                 cwd='builder', shell=True)
         vagranthost = 'default' # Host in ssh config file
@@ -177,7 +205,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         sshconfig = sshconfig.lookup(vagranthost)
 
         # Open SSH connection...
-        print "Connecting to virtual machine..."
+        if options.verbose:
+            print "Connecting to virtual machine..."
         sshs = ssh.SSHClient()
         sshs.set_missing_host_key_policy(ssh.AutoAddPolicy())
         idfile = sshconfig['identityfile']
@@ -266,7 +295,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         if basesrclib:
             srclibpaths.append(basesrclib)
         for name, lib in srclibpaths:
-            print "Sending srclib '" + lib + "'"
+            if options.verbose:
+                print "Sending srclib '" + lib + "'"
             ftp.chdir('/home/vagrant/build/srclib')
             if not os.path.exists(lib):
                 raise BuildException("Missing srclib directory '" + lib + "'")
