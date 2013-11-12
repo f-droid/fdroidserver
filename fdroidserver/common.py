@@ -68,7 +68,8 @@ def read_config(opts, config_file='config.py'):
         'max_icon_size': 72,
         'stats_to_carbon': False
     }
-    print "Reading %s..." % config_file
+    if options.verbose:
+        print "Reading %s..." % config_file
     execfile(config_file, config)
     return config
 
