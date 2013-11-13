@@ -345,7 +345,8 @@ def main():
         elif mode == 'RepoManifest':
             (version, vercode) = check_repomanifest(app)
         elif mode.startswith('RepoManifest/'):
-            (version, vercode) = check_repomanifest(app, mode[13:])
+            tag = mode[13:]
+            (version, vercode) = check_repomanifest(app, tag)
         elif mode == 'RepoTrunk':
             (version, vercode) = check_repotrunk(app)
         elif mode == 'HTTP':
