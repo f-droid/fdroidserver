@@ -79,6 +79,7 @@ def update_wiki(apps, apks):
         if 'Maintainer Notes' in app:
             wikidata += "=Maintainer Notes=\n"
             wikidata += common.description_wiki(app['Maintainer Notes']) + "\n"
+            wikidata += "\nMetadata: [https://gitorious.org/f-droid/fdroiddata/source/master:metadata/{0}.txt current] [https://gitorious.org/f-droid/fdroiddata/history/metadata/{0}.txt history]\n".format(app['id'])
 
         # Get a list of all packages for this application...
         apklist = []
@@ -112,7 +113,7 @@ def update_wiki(apps, apks):
                     apklist.append({
                             'versioncode': int(thisbuild['vercode']),
                             'version': thisbuild['version'],
-                            'buildproblem': "The build for this version appears to have failed. Check the build logs."
+                            'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild|build log]].".format(app['id'])
                         })
         # Sort with most recent first...
         apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
