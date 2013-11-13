@@ -332,10 +332,16 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                 error += chan.recv_stderr(1024)
         print "...getting exit status"
         returncode = chan.recv_exit_status()
-        while chan.recv_ready():
-            output += chan.recv(1024)
-        while chan.recv_stderr_ready():
-            error += chan.recv_stderr(1024)
+        while True:
+            get = chan.recv(1024)
+            if len(get) == 0:
+                break
+            output += get
+        while True:
+            get = chan.recv_stderr(1024)
+            if len(get) == 0:
+                break
+            error += get
         if returncode != 0:
             raise BuildException("Build.py failed on server for %s:%s" % (app['id'], thisbuild['version']), output, error)
 
