@@ -1348,6 +1348,8 @@ def getsrclib(spec, srclib_dir, basepath=False, raw=False, prepare=True, preponl
                 'update', 'project', '-p', libdir]) != 0:
                     raise BuildException( 'Error updating ' + name + ' project')
 
+            remove_signing_keys(libdir)
+
     if basepath:
         return sdir
     return libdir
@@ -1447,18 +1449,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 raise BuildException("Failed to update project at %s" % d,
                         p.stdout, p.stderr)
 
-    # If the app has ant set up to sign the release, we need to switch
-    # that off, because we want the unsigned apk...
-    for propfile in ('build.properties', 'default.properties', 'ant.properties'):
-        if os.path.exists(os.path.join(root_dir, propfile)):
-            if subprocess.call(['sed','-i','s/^key.store/#/',
-                                propfile], cwd=root_dir) !=0:
-                raise BuildException("Failed to amend %s" % propfile)
-    for root, dirs, files in os.walk(build_dir):
-        for f in files:
-            if f == 'build.gradle':
-                clean_gradle_keys(os.path.join(root, f))
-                break
+    remove_signing_keys(build_dir)
 
     # Update the local.properties file...
     localprops = [ os.path.join(build_dir, 'local.properties') ]
@@ -1928,26 +1919,42 @@ def FDroidPopen(commands, cwd=None):
     result.returncode = p.returncode
     return result
 
-def clean_gradle_keys(path):
-    if options.verbose:
-        print "Cleaning build.gradle of keysigning configs at %s" % path
+def remove_signing_keys(build_dir):
+    for root, dirs, files in os.walk(build_dir):
+        if 'build.gradle' in files:
+            path = os.path.join(root, 'build.gradle')
 
-    lines = None
-    with open(path, "r") as o:
-        lines = o.readlines()
-    
-    opened = 0
-    with open(path, "w") as o:
-        for line in lines:
-            if 'signingConfigs ' in line:
-                opened = 1
-            elif opened > 0:
-                if '{' in line:
-                    opened += 1
-                elif '}' in line:
-                    opened -=1
-            elif not any(s in line for s in (' signingConfig ',)):
-                o.write(line)
+            if options.verbose:
+                print "Cleaning build.gradle of keysigning configs at %s" % path
+
+            with open(path, "r") as o:
+                lines = o.readlines()
+            
+            opened = 0
+            with open(path, "w") as o:
+                for line in lines:
+                    if 'signingConfigs ' in line:
+                        opened = 1
+                    elif opened > 0:
+                        if '{' in line:
+                            opened += 1
+                        elif '}' in line:
+                            opened -=1
+                    elif not any(s in line for s in (
+                            ' signingConfig ',
+                            'android.signingConfigs.',
+                            'variant.outputFile = ')):
+                        o.write(line)
+
+        for propfile in ('build.properties', 'default.properties', 'ant.properties'):
+            if propfile in files:
+                if options.verbose:
+                    print "Cleaning %s of keysigning configs at %s" % (propfile,path)
+                path = os.path.join(root, propfile)
+                with open(path, "w") as o:
+                    for line in lines:
+                        if not line.startswith('key.store'):
+                            o.write(line)
 
 def replace_config_vars(cmd):
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
