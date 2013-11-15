@@ -1543,11 +1543,14 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if 'rm' in build:
         for part in build['rm'].split(';'):
             dest = os.path.join(build_dir, part.strip())
-            if not os.path.realpath(dest).startswith(os.path.realpath(build_dir)):
+            rdest = os.path.realpath(dest)
+            if not rdest.startswith(os.path.realpath(build_dir)):
                 raise BuildException("rm for {0} is outside build root {1}".format(
                     os.path.realpath(build_dir),os.path.realpath(dest)))
-            if os.path.exists(dest):
-                subprocess.call('rm -rf ' + dest, shell=True)
+            if rdest == os.path.realpath(build_dir):
+                raise BuildException("rm removes whole build directory")
+            if os.path.exists(rdest):
+                subprocess.call('rm -rf ' + rdest, shell=True)
 
     # Fix apostrophes translation files if necessary...
     if build['fixapos']:
