@@ -1267,6 +1267,7 @@ def parse_srclib(metafile, **kw):
     thisinfo['Repo'] = ''
     thisinfo['Subdir'] = None
     thisinfo['Prepare'] = None
+    thisinfo['Srclibs'] = None
     thisinfo['Update Project'] = None
 
     if metafile is None:
@@ -1294,7 +1295,8 @@ def parse_srclib(metafile, **kw):
 # Returns the path to it. Normally this is the path to be used when referencing
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
-def getsrclib(spec, srclib_dir, basepath=False, raw=False, prepare=True, preponly=False):
+def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, basepath=False,
+        raw=False, prepare=True, preponly=False):
 
     if raw:
         name = spec
@@ -1321,8 +1323,9 @@ def getsrclib(spec, srclib_dir, basepath=False, raw=False, prepare=True, preponl
             return vcs
 
     libdir = None
-
-    if srclib["Subdir"] is not None:
+    if subdir is not None:
+        libdir = subdir
+    elif srclib["Subdir"] is not None:
         for subdir in srclib["Subdir"]:
             libdir_candidate = os.path.join(sdir, subdir)
             if os.path.exists(libdir_candidate):
@@ -1331,6 +1334,20 @@ def getsrclib(spec, srclib_dir, basepath=False, raw=False, prepare=True, preponl
 
     if libdir is None:
         libdir = sdir
+
+    if srclib["Srclibs"]:
+        n=1
+        for lib in srclib["Srclibs"].split(','):
+            s_tuple = None
+            for t in srclibpaths:
+                if t[0] == lib:
+                    s_tuple = t
+                    break
+            if s_tuple is None:
+                raise BuildException('Missing recursive srclib %s for %s' % (
+                    lib, name))
+            place_srclib(libdir, n, s_tuple[2])
+            n+=1
 
     if prepare:
 
@@ -1624,9 +1641,18 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if 'srclibs' in build:
         print "Collecting source libraries..."
         for lib in build['srclibs'].split(';'):
+            number = None
+            subdir = None
             lib = lib.strip()
-            name, _ = lib.split('@')
-            srclibpaths.append((name, getsrclib(lib, srclib_dir, preponly=onserver)))
+            name, ref = lib.split('@')
+            if ':' in name:
+                number, name = name.split(':', 1)
+            if '/' in name:
+                name, subdir = name.split('/',1)
+            libpath = getsrclib(name+'@'+ref, srclib_dir, srclibpaths, subdir, preponly=onserver)
+            srclibpaths.append((name, number, libpath))
+            place_srclib(root_dir, number, libpath)
+                
     basesrclib = vcs.getsrclib()
     # If one was used for the main source, add that too.
     if basesrclib:
@@ -1647,7 +1673,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         cmd = replace_config_vars(build['prebuild'])
 
         # Substitute source library paths into prebuild commands...
-        for name, libpath in srclibpaths:
+        for name, number, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
             cmd = cmd.replace('$$' + name + '$$', libpath)
 
@@ -1984,3 +2010,12 @@ def replace_config_vars(cmd):
     cmd = cmd.replace('$$MVN3$$', config['mvn3'])
     return cmd
 
+def place_srclib(root_dir, number, libpath):
+    if not number:
+        return
+    relpath = os.path.relpath(libpath, root_dir)
+    if subprocess.call(['sed','-i',
+            's@\(android\.library\.reference\.'
+            +str(number)+'\)=.*@\\1='+relpath+'@',
+            'project.properties'], cwd=root_dir) != 0:
+        raise BuildException("Failed to place srclibs in project.properties")
