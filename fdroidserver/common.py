@@ -1344,9 +1344,16 @@ def getsrclib(spec, srclib_dir, basepath=False, raw=False, prepare=True, preponl
         
         if srclib["Update Project"] == "Yes":
             print "Updating srclib %s at path %s" % (name, libdir)
-            if subprocess.call([os.path.join(config['sdk_path'], 'tools', 'android'),
-                'update', 'project', '-p', libdir]) != 0:
-                    raise BuildException( 'Error updating ' + name + ' project')
+            p = FDroidPopen([
+                os.path.join(config['sdk_path'], 'tools', 'android'),
+                'update', 'project', '-p', libdir])
+            # Check to see whether an error was returned without a proper exit
+            # code (this is the case for the 'no target set or target invalid'
+            # error)
+            if p.returncode != 0 or (p.stderr != "" and
+                    p.stderr.startswith("Error: ")):
+                raise BuildException("Failed to update srclib project {0}"
+                        .format(name), p.stdout, p.stderr)
 
     if basepath:
         return sdir
@@ -1442,8 +1449,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 else:
                     print "Updating subproject %s..." % d
             p = FDroidPopen(dparms, cwd=root_dir)
-            # check to see whether an error was returned without a proper exit code (this is the case for the 'no target set or target invalid' error)
-            if p.returncode != 0 or (p.stderr != "" and p.stderr.startswith("Error: ")):
+            # Check to see whether an error was returned without a proper exit
+            # code (this is the case for the 'no target set or target invalid'
+            # error)
+            if p.returncode != 0 or (p.stderr != "" and
+                    p.stderr.startswith("Error: ")):
                 raise BuildException("Failed to update project at %s" % d,
                         p.stdout, p.stderr)
 
