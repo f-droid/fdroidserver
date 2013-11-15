@@ -76,10 +76,10 @@ def update_wiki(apps, apks):
         wikidata += "=Description=\n"
         wikidata += common.description_wiki(app['Description']) + "\n"
 
+        wikidata += "=Maintainer Notes=\n"
         if 'Maintainer Notes' in app:
-            wikidata += "=Maintainer Notes=\n"
             wikidata += common.description_wiki(app['Maintainer Notes']) + "\n"
-            wikidata += "\nMetadata: [https://gitorious.org/f-droid/fdroiddata/source/master:metadata/{0}.txt current] [https://gitorious.org/f-droid/fdroiddata/history/metadata/{0}.txt history]\n".format(app['id'])
+        wikidata += "\nMetadata: [https://gitorious.org/f-droid/fdroiddata/source/master:metadata/{0}.txt current] [https://gitorious.org/f-droid/fdroiddata/history/metadata/{0}.txt history]\n".format(app['id'])
 
         # Get a list of all packages for this application...
         apklist = []
