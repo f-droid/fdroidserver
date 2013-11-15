@@ -1936,9 +1936,10 @@ def remove_signing_keys(build_dir):
     for root, dirs, files in os.walk(build_dir):
         if 'build.gradle' in files:
             path = os.path.join(root, 'build.gradle')
+            changed = False
 
             if options.verbose:
-                print "Cleaning build.gradle of keysigning configs at %s" % path
+                print "Cleaned build.gradle of keysigning configs at %s" % path
 
             with open(path, "r") as o:
                 lines = o.readlines()
@@ -1948,26 +1949,34 @@ def remove_signing_keys(build_dir):
                 for line in lines:
                     if 'signingConfigs ' in line:
                         opened = 1
+                        changed = True
                     elif opened > 0:
                         if '{' in line:
                             opened += 1
                         elif '}' in line:
                             opened -=1
-                    elif not any(s in line for s in (
+                    elif any(s in line for s in (
                             ' signingConfig ',
                             'android.signingConfigs.',
                             'variant.outputFile = ')):
+                        changed = True
+                    else:
                         o.write(line)
 
         for propfile in ('build.properties', 'default.properties', 'ant.properties'):
             if propfile in files:
-                if options.verbose:
-                    print "Cleaning %s of keysigning configs at %s" % (propfile,path)
                 path = os.path.join(root, propfile)
+                changed = False
+
                 with open(path, "w") as o:
                     for line in lines:
-                        if not line.startswith('key.store'):
+                        if line.startswith('key.store'):
+                            changed = True
+                        else:
                             o.write(line)
+
+                if changed and options.verbose:
+                    print "Cleaned %s of keysigning configs at %s" % (propfile,path)
 
 def replace_config_vars(cmd):
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
