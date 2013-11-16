@@ -1324,7 +1324,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, basepath=False,
 
     libdir = None
     if subdir is not None:
-        libdir = subdir
+        libdir = os.path.join(sdir, subdir)
     elif srclib["Subdir"] is not None:
         for subdir in srclib["Subdir"]:
             libdir_candidate = os.path.join(sdir, subdir)
