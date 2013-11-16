@@ -259,6 +259,7 @@ def main():
         app['License'] = license
     app['Repo Type'] = repotype
     app['Repo'] = repo
+    app['Update Check Mode'] = "Tags"
 
     # Create a build line...
     build = {}
