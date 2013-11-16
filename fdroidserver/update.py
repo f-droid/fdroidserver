@@ -391,6 +391,12 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 thisinfo['sha256'] = sha.hexdigest()
 
             # Get the signature (or md5 of, to be precise)...
+            getsig_dir = os.path.join(os.path.dirname(__file__), 'getsig')
+            if not os.path.exists(getsig_dir + "/getsig.class"):
+                print "ERROR: getsig.class not found. To fix:"
+                print "\tcd " + getsig_dir
+                print "\t./make.sh"
+                sys.exit(1)
             p = subprocess.Popen(['java', '-cp', os.path.join(os.path.dirname(__file__), 'getsig'),
                         'getsig', os.path.join(os.getcwd(), apkfile)], stdout=subprocess.PIPE)
             output = p.communicate()[0]
