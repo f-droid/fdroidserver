@@ -294,7 +294,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         basesrclib = vcs.getsrclib()
         if basesrclib:
             srclibpaths.append(basesrclib)
-        for name, lib in srclibpaths:
+        for name, number, lib in srclibpaths:
             if options.verbose:
                 print "Sending srclib '" + lib + "'"
             ftp.chdir('/home/vagrant/build/srclib')
@@ -453,7 +453,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if 'build' in thisbuild:
         cmd = common.replace_config_vars(thisbuild['build'])
         # Substitute source library paths into commands...
-        for name, libpath in srclibpaths:
+        for name, number, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
             cmd = cmd.replace('$$' + name + '$$', libpath)
         if options.verbose:
