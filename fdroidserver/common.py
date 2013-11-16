@@ -1971,8 +1971,8 @@ def remove_signing_keys(build_dir):
                 lines = o.readlines()
             
             opened = 0
-            with open(path, "w+") as o:
-                for line in o:
+            with open(path, "w") as o:
+                for line in lines:
                     if 'signingConfigs ' in line:
                         opened = 1
                         changed = True
@@ -1994,8 +1994,11 @@ def remove_signing_keys(build_dir):
                 path = os.path.join(root, propfile)
                 changed = False
 
-                with open(path, "w+") as o:
-                    for line in o:
+                with open(path, "r") as o:
+                    lines = o.readlines()
+
+                with open(path, "w") as o:
+                    for line in lines:
                         if line.startswith('key.store'):
                             changed = True
                         else:
