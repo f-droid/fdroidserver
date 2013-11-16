@@ -818,12 +818,11 @@ def write_metadata(dest, app):
         # This defines the preferred order for the build items - as in the
         # manual, they're roughly in order of application.
         keyorder = ['disable', 'commit', 'subdir', 'submodules', 'init',
-                    'oldsdkloc', 'target', 'compilesdk', 'update',
-                    'encoding', 'forceversion', 'forcevercode', 'rm',
-                    'fixtrans', 'fixapos', 'extlibs', 'srclibs',
-                    'patch', 'prebuild', 'scanignore', 'scandelete', 'build',
-                    'buildjni', 'gradle', 'maven', 'preassemble',
-                    'bindir', 'antcommand', 'novcheck']
+                    'gradle', 'maven', 'oldsdkloc', 'target', 'compilesdk',
+                    'update', 'encoding', 'forceversion', 'forcevercode', 'rm',
+                    'fixtrans', 'fixapos', 'extlibs', 'srclibs', 'patch',
+                    'prebuild', 'scanignore', 'scandelete', 'build', 'buildjni',
+                    'preassemble', 'bindir', 'antcommand', 'novcheck']
 
         def write_builditem(key, value):
             if key not in ['version', 'vercode', 'origlines']:
