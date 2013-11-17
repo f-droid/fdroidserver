@@ -1705,7 +1705,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                       'heyzap',
                       'jpct-ae',
                       'youtubeandroidplayerapi',
-                      'bugsense']
+                      'bugsense',
+                      'crashlytics']
 
     def getpaths(field):
         paths = []
