@@ -1984,7 +1984,8 @@ def remove_signing_keys(build_dir):
                     elif any(s in line for s in (
                             ' signingConfig ',
                             'android.signingConfigs.',
-                            'variant.outputFile = ')):
+                            'variant.outputFile = ',
+                            '.readLine(')):
                         changed = True
                     else:
                         o.write(line)
