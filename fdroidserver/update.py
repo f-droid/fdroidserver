@@ -53,8 +53,8 @@ def update_wiki(apps, apks):
         wikidata = ''
         if app['Disabled']:
             wikidata += '{{Disabled|' + app['Disabled'] + '}}\n'
-        if app['AntiFeatures']:
-            wikidata += '{{AntiFeatures|' + app['AntiFeatures'] + '}}\n'
+        for af in app.get('AntiFeatures', []).split(','):
+            wikidata += '{{AntiFeature|' + af + '}}\n'
         wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s}}\n'%(
                 app['id'],
                 app['Name'],
