@@ -1650,7 +1650,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 name, subdir = name.split('/',1)
             libpath = getsrclib(name+'@'+ref, srclib_dir, srclibpaths, subdir, preponly=onserver)
             srclibpaths.append((name, number, libpath))
-            place_srclib(root_dir, number, libpath)
+            place_srclib(root_dir, int(number), libpath)
                 
     basesrclib = vcs.getsrclib()
     # If one was used for the main source, add that too.
@@ -2018,8 +2018,19 @@ def place_srclib(root_dir, number, libpath):
     if not number:
         return
     relpath = os.path.relpath(libpath, root_dir)
-    if subprocess.call(['sed','-i',
-            's@\(android\.library\.reference\.'
-            +str(number)+'\)=.*@\\1='+relpath+'@',
-            'project.properties'], cwd=root_dir) != 0:
-        raise BuildException("Failed to place srclibs in project.properties")
+    proppath = os.path.join(root_dir, 'project.properties')
+
+    with open(proppath, "r") as o:
+        lines = o.readlines()
+
+    with open(proppath, "w") as o:
+        placed = False
+        for line in lines:
+            if line.startswith('android.library.reference.%d=' % number):
+                o.write('android.library.reference.%d=%s\n' % (number,relpath))
+                placed = True
+            else:
+                o.write(line)
+        if not placed:
+            o.write('android.library.reference.%d=%s\n' % (number,relpath))
+
