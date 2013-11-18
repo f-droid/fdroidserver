@@ -285,11 +285,19 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         srclibpaths = []
         if 'srclibs' in thisbuild:
             for lib in thisbuild['srclibs'].split(';'):
+                number = None
+                subdir = None
                 lib = lib.strip()
-                name, _ = lib.split('@')
+                name, ref = lib.split('@')
+                if ':' in name:
+                    number, name = name.split(':', 1)
+                if '/' in name:
+                    name, subdir = name.split('/',1)
                 if options.verbose:
                     print "Processing srclib '" + name + "'"
-                srclibpaths.append((name, common.getsrclib(lib, 'build/srclib', basepath=True, prepare=False)))
+                libpath = common.getsrclib(name+'@'+ref, 'build/srclib', srclibpaths, subdir, basepath=True, prepare=False)
+                srclibpaths.append((name, number, libpath))
+
         # If one was used for the main source, add that too.
         basesrclib = vcs.getsrclib()
         if basesrclib:
