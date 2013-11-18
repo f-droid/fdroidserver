@@ -4,6 +4,10 @@
 
 commands=()
 
+if [ ! -d metadata ]; then
+	[ -d ../metadata ] && cd .. || { echo "No metadata files found!"; exit 2; }
+fi
+
 while read line; do
 	if [[ "$line" == *M*metadata/*.txt ]]; then
 		file=${line##* }
