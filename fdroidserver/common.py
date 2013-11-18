@@ -1297,11 +1297,17 @@ def parse_srclib(metafile, **kw):
 def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, basepath=False,
         raw=False, prepare=True, preponly=False):
 
+    number = None
+    subdir = None
     if raw:
         name = spec
         ref = None
     else:
         name, ref = spec.split('@')
+        if ':' in name:
+            number, name = name.split(':', 1)
+        if '/' in name:
+            name, subdir = name.split('/',1)
 
     srclib_path = os.path.join('srclibs', name + ".txt")
 
@@ -1314,7 +1320,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, basepath=False,
 
     if not preponly:
         vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir)
-        vcs.srclib = (name, sdir)
+        vcs.srclib = (name, number, sdir)
         if ref:
             vcs.gotorevision(ref)
 
