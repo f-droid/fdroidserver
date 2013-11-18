@@ -23,12 +23,12 @@
 #
 # This way, one can simply do 'fbld com.some.app' or 'fcheckup com.some.app'
 
-__package() {
-	[[ -d ./metadata ]] || return 0
-	files=( metadata/*.txt )
-	files=( ${files[@]#metadata/} )
-	files=${files[@]%.txt}
-	COMPREPLY=( $( compgen -W "$files" -- $cur ) )
+__fdroid_cwd() {
+	if [[ "${PWD##*/}" == metadata ]]; then
+		subdir=
+	else
+		[ -d metadata ] && subdir="metadata/" || return 1
+	fi
 }
 
 __fdroid_init() {
@@ -37,6 +37,13 @@ __fdroid_init() {
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
 
 	(( $# >= 1 )) && __complete_${1}
+}
+
+__package() {
+	files=( ${subdir}*.txt )
+	files=( ${files[@]#${subdir}} )
+	files=${files[@]%.txt}
+	COMPREPLY=( $( compgen -W "$files" -- $cur ) )
 }
 
 __vercode() {
@@ -63,7 +70,7 @@ __vercode() {
 			line="${line#*,}"
 			printf "${line%%,*} "
 		fi
-		done < "metadata/${p}.txt" )" -- $cur ) )
+		done < "${subdir}${p}.txt" )" -- $cur ) )
 }
 
 __complete_options() {
@@ -194,6 +201,7 @@ _fdroid() {
 	cmd=${COMP_WORDS[1]}
 	cmds=" build init update publish checkupdates import rewritemeta scanner verify stats server "
 	aliased=false
+	__fdroid_cwd || return 0
 
 	for c in $cmds; do eval "_fdroid_${c} () {
 		local cur prev cmds opts lopts
@@ -224,6 +232,7 @@ _fdroid_checkupdates_project() {
 }
 
 _fd-commit() {
+	__fdroid_cwd || return 0
 	__package
 }
 
