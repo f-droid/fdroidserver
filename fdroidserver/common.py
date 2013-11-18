@@ -1650,7 +1650,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 name, subdir = name.split('/',1)
             libpath = getsrclib(name+'@'+ref, srclib_dir, srclibpaths, subdir, preponly=onserver)
             srclibpaths.append((name, number, libpath))
-            place_srclib(root_dir, int(number), libpath)
+            place_srclib(root_dir, int(number) if number else None, libpath)
                 
     basesrclib = vcs.getsrclib()
     # If one was used for the main source, add that too.
