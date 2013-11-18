@@ -25,9 +25,9 @@
 
 __fdroid_cwd() {
 	if [[ "${PWD##*/}" == metadata ]]; then
-		subdir=
+		subdir=.
 	else
-		[ -d metadata ] && subdir="metadata/" || return 1
+		[ -d metadata ] && subdir=metadata || return 1
 	fi
 }
 
@@ -40,8 +40,9 @@ __fdroid_init() {
 }
 
 __package() {
-	files=( ${subdir}*.txt )
-	files=( ${files[@]#${subdir}} )
+	[ -n "$subdir" ] || __fdroid_cwd
+	files=( ${subdir}/*.txt )
+	files=( ${files[@]#${subdir}/} )
 	files=${files[@]%.txt}
 	COMPREPLY=( $( compgen -W "$files" -- $cur ) )
 }
@@ -59,6 +60,7 @@ __vercode() {
 		done
 		$p_found || return 0
 	}
+	[ -n "$subdir" ] || __fdroid_cwd
 
 	COMPREPLY=( $( compgen -W "$( while read line; do
 		if [[ "$line" == "Build Version:"* ]]
@@ -70,7 +72,7 @@ __vercode() {
 			line="${line#*,}"
 			printf "${line%%,*} "
 		fi
-		done < "${subdir}${p}.txt" )" -- $cur ) )
+		done < "${subdir}/${p}.txt" )" -- $cur ) )
 }
 
 __complete_options() {
