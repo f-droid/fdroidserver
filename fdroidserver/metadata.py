@@ -27,6 +27,14 @@ class MetaDataException(Exception):
     def __str__(self):
         return repr(self.value)
 
+# Designates a metadata field type and checks that it matches 
+#
+# 'name'     - The long name of the field type
+# 'matching' - List of possible values or regex expression
+# 'sep'      - Separator to use if value may be a list
+# 'fields'   - Metadata fields (Field:Value) of this type
+# 'attrs'    - Build attributes (attr=value) of this type
+#
 class FieldType():
     def __init__(self, name, matching, sep, fields, attrs):
         self.name = name
@@ -63,6 +71,7 @@ class FieldType():
             self._assert_regex(values, appid)
 
 
+# Generic value types
 valuetypes = {
     'int' : FieldType("Integer",
         r'^[0-9]+$', None,
@@ -102,9 +111,10 @@ valuetypes = {
     'antifeatures' : FieldType("Anti-Feature",
         [ "Ads", "Tracking", "NonFreeNet", "NonFreeDep", "NonFreeAdd" ], ',',
         [ "AntiFeatures" ],
-        [ ]),
+        [ ])
 }
 
+# Check an app's metadata information for integrity errors
 def check_metadata(info):
     for k, t in valuetypes.iteritems():
         for field in t.fields:
