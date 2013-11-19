@@ -20,7 +20,7 @@
 import sys
 import os
 from optparse import OptionParser
-import common
+import common, metadata
 
 config = None
 options = None
@@ -40,7 +40,7 @@ def main():
     config = common.read_config(options)
 
     # Get all apps...
-    apps = common.read_metadata(package=options.package, xref=False)
+    apps = metadata.read_metadata(package=options.package, xref=False)
 
     if len(apps) == 0 and options.package:
         print "No such package"
@@ -48,7 +48,7 @@ def main():
 
     for app in apps:
         print "Writing " + app['id']
-        common.write_metadata(os.path.join('metadata', app['id']) + '.txt', app)
+        metadata.write_metadata(os.path.join('metadata', app['id']) + '.txt', app)
 
     print "Finished."
 

@@ -29,7 +29,7 @@ import time
 import json
 from optparse import OptionParser
 
-import common
+import common, metadata
 from common import BuildException, VCSException, FDroidPopen
 
 def get_builder_vm_id():
@@ -816,7 +816,7 @@ def main():
         sys.exit(1)
 
     # Get all apps...
-    apps = common.read_metadata(xref=not options.onserver)
+    apps = metadata.read_metadata(xref=not options.onserver)
 
     log_dir = 'logs'
     if not os.path.isdir(log_dir):

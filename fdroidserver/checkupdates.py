@@ -28,7 +28,7 @@ from optparse import OptionParser
 import traceback
 import HTMLParser
 from distutils.version import LooseVersion
-import common
+import common, metadata
 from common import BuildException
 from common import VCSException
 
@@ -295,7 +295,7 @@ def main():
     config = common.read_config(options)
 
     # Get all apps...
-    apps = common.read_metadata(options.verbose)
+    apps = metadata.read_metadata(options.verbose)
 
     # Filter apps according to command-line options
     if options.package:
@@ -453,7 +453,7 @@ def main():
 
         if writeit:
             metafile = os.path.join('metadata', app['id'] + '.txt')
-            common.write_metadata(metafile, app)
+            metadata.write_metadata(metafile, app)
             if options.commit and logmsg:
                 print "Commiting update for " + metafile
                 gitcmd = ["git", "commit", "-m",
