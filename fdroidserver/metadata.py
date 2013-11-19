@@ -79,7 +79,7 @@ valuetypes = {
         [ 'vercode' ]),
 
     'http' : FieldType("HTTP link",
-        r'^http[s]?://.+$', None,
+        r'^http[s]?://', None,
         [ "Web Site", "Source Code", "Issue Tracker", "Donate" ], []),
 
     'bitcoin' : FieldType("Bitcoin address",
@@ -672,17 +672,18 @@ def write_metadata(dest, app):
                     'preassemble', 'bindir', 'antcommand', 'novcheck']
 
         def write_builditem(key, value):
-            if key not in ['version', 'vercode', 'origlines']:
-                if key in valuetypes['bool'].attrs:
-                    if not value:
-                        return
-                    value = 'yes'
-                #if options.verbose:
-                    #print "...writing {0} : {1}".format(key, value)
-                outline = '    %s=' % key
-                outline += '&& \\\n        '.join([s.lstrip() for s in value.split('&& ')])
-                outline += '\n'
-                mf.write(outline)
+            if key in ['version', 'vercode', 'origlines']:
+                return
+            if key in valuetypes['bool'].attrs:
+                if not value:
+                    return
+                value = 'yes'
+            #if options.verbose:
+                #print "...writing {0} : {1}".format(key, value)
+            outline = '    %s=' % key
+            outline += '&& \\\n        '.join([s.lstrip() for s in value.split('&& ')])
+            outline += '\n'
+            mf.write(outline)
 
         for key in keyorder:
             if key in build:
