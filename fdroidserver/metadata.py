@@ -107,15 +107,19 @@ valuetypes = {
 
 def check_metadata(info):
     for k, t in valuetypes.iteritems():
-        for field in [f for f in t.fields if f in info]:
-            t.check(info[field], info['id'])
-            if k == 'Bool':
-                info[field] = info[field] == "Yes"
+        for field in t.fields:
+            if field in info:
+                t.check(info[field], info['id'])
+                if k == 'Bool':
+                    info[field] = info[field] == "Yes"
         for build in info['builds']:
-            for attr in [a for a in t.attrs if a in build]:
-                t.check(build[attr], info['id'])
-                if k == 'bool':
-                    info[field] = info[field] == "yes"
+            for attr in t.attrs:
+                if attr in build:
+                    t.check(build[attr], info['id'])
+                    if k == 'bool':
+                        build[attr] = build[attr] == "yes"
+                elif k == 'bool':
+                    build[attr] = False
 
 # Formatter for descriptions. Create an instance, and call parseline() with
 # each line of the description source from the metadata. At the end, call
