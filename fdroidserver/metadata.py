@@ -83,6 +83,11 @@ valuetypes = {
         [ "Bitcoin" ],
         [ ]),
 
+    'archive' : FieldType("Archive Policy",
+        r'^[0-9]+ versions$', None,
+        [ "Archive Policy" ],
+        [ ]),
+
     'bool' : FieldType("Boolean",
         ['yes', 'no'], None,
         [ ],
@@ -101,8 +106,6 @@ valuetypes = {
 }
 
 def check_metadata(info):
-
-    # Generic fields and attributes
     for k, t in valuetypes.iteritems():
         for field in [f for f in t.fields if f in info]:
             t.check(info[field], info['id'])
@@ -113,16 +116,6 @@ def check_metadata(info):
                 t.check(build[attr], info['id'])
                 if k == 'bool':
                     info[field] = info[field] == "yes"
-
-    # Special fields
-    if info['Archive Policy']:
-        if not re.match(r'^[0-9]+ versions$', info['Archive Policy']):
-            raise MetaDataException("Invalid archive policy '%s' in %s"
-                    % (info['Archive Policy'], info["id"]))
-        versions = int(info['Archive Policy'][:-9])
-        if versions < 1 or versions > 20:
-            raise MetaDataException("Silly number of versions '%s' for archive policy in %s"
-                    % (versions, info["id"]))
 
 # Formatter for descriptions. Create an instance, and call parseline() with
 # each line of the description source from the metadata. At the end, call
