@@ -719,8 +719,9 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, basepath=False,
             remove_signing_keys(libdir)
 
     if basepath:
-        return sdir
-    return libdir
+        libdir = sdir
+
+    return (name, number, libdir)
 
 
 # Prepare the source code for a particular build
@@ -985,17 +986,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if 'srclibs' in build:
         print "Collecting source libraries..."
         for lib in build['srclibs'].split(';'):
-            number = None
-            subdir = None
-            lib = lib.strip()
-            name, ref = lib.split('@')
-            if ':' in name:
-                number, name = name.split(':', 1)
-            if '/' in name:
-                name, subdir = name.split('/',1)
-            libpath = getsrclib(name+'@'+ref, srclib_dir, srclibpaths, subdir, preponly=onserver)
-            srclibpaths.append((name, number, libpath))
-            place_srclib(root_dir, int(number) if number else None, libpath)
+            srclibpaths.append(getsrclib(lib, srclib_dir, srclibpaths, preponly=onserver))
+
+    for name, number, libpath in srclibpaths:
+        place_srclib(root_dir, int(number) if number else None, libpath)
                 
     basesrclib = vcs.getsrclib()
     # If one was used for the main source, add that too.
