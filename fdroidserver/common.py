@@ -1303,9 +1303,6 @@ def remove_signing_keys(build_dir):
             path = os.path.join(root, 'build.gradle')
             changed = False
 
-            if options.verbose:
-                print "Cleaned build.gradle of keysigning configs at %s" % path
-
             with open(path, "r") as o:
                 lines = o.readlines()
             
@@ -1328,6 +1325,9 @@ def remove_signing_keys(build_dir):
                         changed = True
                     else:
                         o.write(line)
+
+            if changed and options.verbose:
+                print "Cleaned build.gradle of keysigning configs at %s" % path
 
         for propfile in ('build.properties', 'default.properties', 'ant.properties'):
             if propfile in files:
