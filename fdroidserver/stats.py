@@ -25,7 +25,7 @@ import traceback
 import glob
 from optparse import OptionParser
 import paramiko
-import common
+import common, metadata
 import socket
 import subprocess
 
@@ -58,7 +58,7 @@ def main():
         sys.exit(1)
 
     # Get all metadata-defined apps...
-    metaapps = common.read_metadata(options.verbose)
+    metaapps = metadata.read_metadata(options.verbose)
 
     statsdir = 'stats'
     logsdir = os.path.join(statsdir, 'logs')

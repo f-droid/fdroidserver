@@ -30,7 +30,7 @@ import pickle
 from xml.dom.minidom import Document
 from optparse import OptionParser
 import time
-import common
+import common, metadata
 from common import MetaDataException
 from PIL import Image
 
@@ -75,11 +75,11 @@ def update_wiki(apps, apks):
         wikidata += " - [http://f-droid.org/repository/browse/?fdid=" + app['id'] + " view in repository]\n\n"
 
         wikidata += "=Description=\n"
-        wikidata += common.description_wiki(app['Description']) + "\n"
+        wikidata += metadata.description_wiki(app['Description']) + "\n"
 
         wikidata += "=Maintainer Notes=\n"
         if 'Maintainer Notes' in app:
-            wikidata += common.description_wiki(app['Maintainer Notes']) + "\n"
+            wikidata += metadata.description_wiki(app['Maintainer Notes']) + "\n"
         wikidata += "\nMetadata: [https://gitorious.org/f-droid/fdroiddata/source/master:metadata/{0}.txt current] [https://gitorious.org/f-droid/fdroiddata/history/metadata/{0}.txt history]\n".format(app['id'])
 
         # Get a list of all packages for this application...
@@ -232,7 +232,7 @@ def update_wiki(apps, apks):
 def delete_disabled_builds(apps, apkcache, repodirs):
     """Delete disabled build outputs.
 
-    :param apps: list of all applications, as per common.read_metadata
+    :param apps: list of all applications, as per metadata.read_metadata
     :param apkcache: current apk cache information
     :param repodirs: the repo directories to process
     """
@@ -268,7 +268,7 @@ def resize_icon(iconpath):
 def resize_all_icons(repodirs):
     """Resize all icons that exceed the max size
 
-    :param apps: list of all applications, as per common.read_metadata
+    :param apps: list of all applications, as per metadata.read_metadata
     :param repodirs: the repo directories to process
     """
     for repodir in repodirs:
@@ -280,7 +280,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
     This also extracts the icons.
 
-    :param apps: list of all applications, as per common.read_metadata
+    :param apps: list of all applications, as per metadata.read_metadata
     :param apkcache: current apk cache information
     :param repodir: repo directory to scan
     :param knownapks: known apks info
@@ -538,7 +538,7 @@ def make_index(apps, apks, repodir, archive, categories):
                     return ("fdroid.app:" + link, app['Name'])
             raise MetaDataException("Cannot resolve app id " + link)
         addElement('desc', 
-                common.description_html(app['Description'], linkres), doc, apel)
+                metadata.description_html(app['Description'], linkres), doc, apel)
         addElement('license', app['License'], doc, apel)
         if 'Categories' in app:
             appcategories = [c.strip() for c in app['Categories'].split(',')]
@@ -739,7 +739,7 @@ def main():
         sys.exit(0)
 
     # Get all apps...
-    apps = common.read_metadata()
+    apps = metadata.read_metadata()
 
     # Generate a list of categories...
     categories = []

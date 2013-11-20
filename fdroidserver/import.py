@@ -22,7 +22,7 @@ import os
 import shutil
 import urllib
 from optparse import OptionParser
-import common
+import common, metadata
 
 # Get the repo type and address from the given web page. The page is scanned
 # in a rather naive manner for 'git clone xxxx', 'hg clone xxxx', etc, and
@@ -114,7 +114,7 @@ def main():
         os.makedirs(tmp_dir)
 
     # Get all apps...
-    apps = common.read_metadata()
+    apps = metadata.read_metadata()
 
     # Figure out what kind of project it is...
     projecttype = None
@@ -249,7 +249,7 @@ def main():
             sys.exit(1)
 
     # Construct the metadata...
-    app = common.parse_metadata(None)
+    app = metadata.parse_metadata(None)
     app['id'] = package
     app['Web Site'] = website
     app['Source Code'] = sourcecode
@@ -281,7 +281,7 @@ def main():
         f.write(repotype + ' ' + repo)
 
     metafile = os.path.join('metadata', package + '.txt')
-    common.write_metadata(metafile, app)
+    metadata.write_metadata(metafile, app)
     print "Wrote " + metafile
 
 

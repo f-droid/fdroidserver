@@ -26,7 +26,7 @@ import md5
 import glob
 from optparse import OptionParser
 
-import common
+import common, metadata
 from common import BuildException
 
 config = None
@@ -74,7 +74,7 @@ def main():
     # and b) a sane-looking ID that would make its way into the repo.
     # Nonetheless, to be sure, before publishing we check that there are no
     # collisions, and refuse to do any publishing if that's the case...
-    apps = common.read_metadata()
+    apps = metadata.read_metadata()
     allaliases = []
     for app in apps:
         m = md5.new()

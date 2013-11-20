@@ -21,7 +21,7 @@ import sys
 import os
 import traceback
 from optparse import OptionParser
-import common
+import common, metadata
 from common import BuildException
 from common import VCSException
 
@@ -45,7 +45,7 @@ def main():
     config = common.read_config(options)
 
     # Get all apps...
-    apps = common.read_metadata()
+    apps = metadata.read_metadata()
 
     # Filter apps according to command-line options
     if options.package:
