@@ -111,6 +111,16 @@ valuetypes = {
     'antifeatures' : FieldType("Anti-Feature",
         [ "Ads", "Tracking", "NonFreeNet", "NonFreeDep", "NonFreeAdd" ], ',',
         [ "AntiFeatures" ],
+        [ ]),
+
+    'autoupdatemodes' : FieldType("Auto Update Mode",
+        r"^(Version .+|None)$", None,
+        [ "Auto Update Mode" ],
+        [ ]),
+
+    'updatecheckmodes' : FieldType("Update Check Mode",
+        r"^(Tags|RepoManifest|RepoManifest/.+|RepoTrunk|HTTP|Static|None)$", None,
+        [ "Update Check Mode" ],
         [ ])
 }
 
