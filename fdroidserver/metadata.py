@@ -92,9 +92,9 @@ valuetypes = {
         [ "Bitcoin" ],
         [ ]),
 
-    'archive' : FieldType("Archive Policy",
-        r'^[0-9]+ versions$', None,
-        [ "Archive Policy" ],
+    'Bool' : FieldType("Boolean",
+        ['Yes', 'No'], None,
+        [ "Requires Root" ],
         [ ]),
 
     'bool' : FieldType("Boolean",
@@ -103,9 +103,14 @@ valuetypes = {
         [ 'submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
             'fixtrans', 'fixapos', 'novcheck' ]),
 
-    'Bool' : FieldType("Boolean",
-        ['Yes', 'No'], None,
-        [ "Requires Root" ],
+    'Repo Type' : FieldType("Repo Type",
+        [ 'git', 'git-svn', 'svn', 'hg', 'bzr', 'srclib' ], None,
+        [ "Repo Type" ],
+        [ ]),
+
+    'archive' : FieldType("Archive Policy",
+        r'^[0-9]+ versions$', None,
+        [ "Archive Policy" ],
         [ ]),
 
     'antifeatures' : FieldType("Anti-Feature",
