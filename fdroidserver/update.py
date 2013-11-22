@@ -31,7 +31,7 @@ from xml.dom.minidom import Document
 from optparse import OptionParser
 import time
 import common, metadata
-from common import MetaDataException
+from metadata import MetaDataException
 from PIL import Image
 
 def update_wiki(apps, apks):
