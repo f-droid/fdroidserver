@@ -47,7 +47,7 @@ def read_config(opts, config_file='config.py'):
         sys.exit(2)
     st = os.stat(config_file)
     if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
-        print "WARNING: unsafe permissions on config.py (should be 0600)!"
+        print "WARNING: unsafe permissions on {0} (should be 0600)!".format(config_file)
 
     options = opts
     if not hasattr(options, 'verbose'):
