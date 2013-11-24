@@ -988,14 +988,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         for lib in build['srclibs'].split(';'):
             srclibpaths.append(getsrclib(lib, srclib_dir, srclibpaths, preponly=onserver))
 
-    for name, number, libpath in srclibpaths:
-        place_srclib(root_dir, int(number) if number else None, libpath)
-                
-    basesrclib = vcs.getsrclib()
-    # If one was used for the main source, add that too.
-    if basesrclib:
-        srclibpaths.append(basesrclib)
-
     # Apply patches if any
     if 'patch' in build:
         for patch in build['patch'].split(';'):
@@ -1005,6 +997,14 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             if subprocess.call(['patch', '-p1',
                             '-i', os.path.abspath(patch_path)], cwd=build_dir) != 0:
                 raise BuildException("Failed to apply patch %s" % patch_path)
+
+    for name, number, libpath in srclibpaths:
+        place_srclib(root_dir, int(number) if number else None, libpath)
+
+    basesrclib = vcs.getsrclib()
+    # If one was used for the main source, add that too.
+    if basesrclib:
+        srclibpaths.append(basesrclib)
 
     # Run a pre-build command if one is required...
     if 'prebuild' in build:
