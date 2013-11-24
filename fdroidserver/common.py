@@ -904,11 +904,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if 'rm' in build:
         for part in build['rm'].split(';'):
             dest = os.path.join(build_dir, part.strip())
-            rdest = os.path.realpath(dest)
-            if not rdest.startswith(os.path.realpath(build_dir)):
-                raise BuildException("rm for {0} is outside build root {1}".format(
-                    os.path.realpath(build_dir),os.path.realpath(dest)))
-            if rdest == os.path.realpath(build_dir):
+            rdest = os.path.abspath(dest)
+            if not rdest.startswith(os.path.abspath(build_dir)):
+                raise BuildException("rm for {1} is outside build root {0}".format(
+                    os.path.abspath(build_dir),os.path.abspath(dest)))
+            if rdest == os.path.abspath(build_dir):
                 raise BuildException("rm removes whole build directory")
             if os.path.exists(rdest):
                 subprocess.call('rm -rf ' + rdest, shell=True)
