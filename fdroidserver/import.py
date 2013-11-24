@@ -22,6 +22,7 @@ import os
 import shutil
 import urllib
 from optparse import OptionParser
+from ConfigParser import ConfigParser
 import common, metadata
 
 # Get the repo type and address from the given web page. The page is scanned
@@ -229,18 +230,29 @@ def main():
 
     # Extract some information...
     paths = common.manifest_paths(root_dir, None)
-    if not paths:
-        print "No android project could be found. Specify --subdir?"
-        sys.exit(1)
+    if paths:
 
-    version, vercode, package = common.parse_androidmanifests(paths)
-    if not package:
-        print "Couldn't find package ID"
-        sys.exit(1)
-    if not version:
-        print "WARNING: Couldn't find latest version name"
-    if not vercode:
-        print "WARNING: Couldn't find latest version code"
+        version, vercode, package = common.parse_androidmanifests(paths)
+        if not package:
+            print "Couldn't find package ID"
+            sys.exit(1)
+        if not version:
+            print "WARNING: Couldn't find latest version name"
+        if not vercode:
+            print "WARNING: Couldn't find latest version code"
+    else:
+        spec = os.path.join(root_dir, 'buildozer.spec')
+        if os.path.exists(spec):
+            defaults = {'orientation': 'landscape', 'icon': '', 
+                    'permissions': '', 'android.api': "18"}
+            bconfig = ConfigParser(defaults, allow_no_value=True)
+            bconfig.read(spec)
+            package = bconfig.get('app', 'package.domain') + '.' + bconfig.get('app', 'package.name')
+            version = bconfig.get('app', 'version')
+            vercode = None
+        else:
+            print "No android or kivy project could be found. Specify --subdir?"
+            sys.exit(1)
 
     # Make sure it's actually new...
     for app in apps:
