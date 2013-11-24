@@ -905,13 +905,21 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         for part in build['rm'].split(';'):
             dest = os.path.join(build_dir, part.strip())
             rdest = os.path.abspath(dest)
+            if options.verbose:
+                print "Removing {0}".format(rdest)
             if not rdest.startswith(os.path.abspath(build_dir)):
                 raise BuildException("rm for {1} is outside build root {0}".format(
                     os.path.abspath(build_dir),os.path.abspath(dest)))
             if rdest == os.path.abspath(build_dir):
                 raise BuildException("rm removes whole build directory")
-            if os.path.exists(rdest):
-                subprocess.call('rm -rf ' + rdest, shell=True)
+            if os.path.lexists(rdest):
+                if os.path.islink(rdest):
+                    subprocess.call('unlink ' + rdest, shell=True)
+                else:
+                    subprocess.call('rm -rf ' + rdest, shell=True)
+            else:
+                if options.verbose:
+                    print "...but it didn't exist"
 
     # Fix apostrophes translation files if necessary...
     if build['fixapos']:
