@@ -776,6 +776,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     updatemode = build.get('update', 'auto')
     if (updatemode != 'no'
             and build.get('maven', 'no') == 'no'
+            and build.get('kivy', 'no') == 'no'
             and build.get('gradle', 'no') == 'no'):
         parms = [os.path.join(config['sdk_path'], 'tools', 'android'),
                 'update', 'project']

@@ -27,6 +27,7 @@ import tarfile
 import traceback
 import time
 import json
+from ConfigParser import ConfigParser
 from optparse import OptionParser
 
 import common, metadata
@@ -408,7 +409,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             gradle_dir = root_dir
 
         p = FDroidPopen(cmd, cwd=gradle_dir)
-    elif thisbuild.get('update', '.') != 'no':
+    elif thisbuild.get('update', '.') != 'no' and thisbuild.get('kivy', 'no') == 'no':
         print "Cleaning Ant project..."
         cmd = ['ant', 'clean']
         p = FDroidPopen(cmd, cwd=root_dir)
@@ -525,6 +526,59 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         bindir = os.path.join(root_dir, 'target')
 
+    elif thisbuild.get('kivy', 'no') != 'no':
+        print "Building Kivy project..."
+
+        spec = os.path.join(root_dir, 'buildozer.spec')
+        if not os.path.exists(spec):
+            raise BuildException("Expected to find buildozer-compatible spec at {0}"
+                    .format(spec))
+
+        defaults = {'orientation': 'landscape', 'icon': '', 
+                'permissions': '', 'android.api': "18"}
+        bconfig = ConfigParser(defaults, allow_no_value=True)
+        bconfig.read(spec)
+
+
+        cmd = 'ANDROIDSDK=' + config['sdk_path']
+        cmd += ' ANDROIDNDK=' + config['ndk_path']
+        cmd += ' ANDROIDNDKVER=r9'
+        cmd += ' ANDROIDAPI=' + str(bconfig.get('app', 'android.api'))
+        cmd += ' ./distribute.sh'
+        cmd += ' -m ' + bconfig.get('app', 'requirements')
+        if subprocess.call(cmd, cwd='python-for-android', shell=True) != 0:
+            raise BuildException("Distribute build failed")
+
+        cid = bconfig.get('app', 'package.domain') + '.' + bconfig.get('app', 'package.name')
+        if cid != app['id']:
+            raise BuildException("Package ID mismatch between metadata and spec")
+
+        orientation = bconfig.get('app', 'orientation', 'landscape')
+        if orientation == 'all':
+            orientation = 'sensor'
+
+        cmd = ['./build.py'
+                '--dir', root_dir,
+                '--name', bconfig.get('app', 'title'),
+                '--package', app['id'],
+                '--version', bconfig.get('app', 'version'),
+                '--orientation', orientation,
+                ]
+
+        perms = bconfig.get('app', 'permissions')
+        for perm in perms.split(','):
+            cmd.extend(['--permission', perm])
+
+        if config.get('app', 'fullscreen') == 0:
+            cmd.append('--window')
+
+        icon = bconfig.get('app', 'icon.filename')
+        if icon:
+            cmd.extend(['--icon', os.path.join(root_dir, icon)])
+
+        cmd.append('release')
+        p = FDroidPopen(cmd, cwd='python-for-android/dist/default')
+
     elif thisbuild.get('gradle', 'no') != 'no':
         print "Building Gradle project..."
         if '@' in thisbuild['gradle']:
@@ -605,6 +659,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             raise BuildException('Failed to find output')
         src = m.group(1)
         src = os.path.join(bindir, src) + '.apk'
+    elif thisbuild.get('kivy', 'no') != 'no':
+        src = 'python-for-android/dist/default/bin/{0}-{1}-release.apk'.format(
+                bconfig.get('app', 'title'), bconfig.get('app', 'version'))
     elif thisbuild.get('gradle', 'no') != 'no':
         dd = build_dir
         if 'subdir' in thisbuild:
