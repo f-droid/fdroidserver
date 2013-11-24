@@ -821,8 +821,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 raise BuildException("Failed to update project at %s" % d,
                         p.stdout, p.stderr)
 
-    remove_signing_keys(build_dir)
-
     # Update the local.properties file...
     localprops = [ os.path.join(build_dir, 'local.properties') ]
     if 'subdir' in build:
@@ -964,6 +962,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                         f = open(os.path.join(root, filename), 'w')
                         f.writelines(outlines)
                         f.close()
+
+    remove_signing_keys(build_dir)
 
     # Add required external libraries...
     if 'extlibs' in build:
