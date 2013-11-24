@@ -320,6 +320,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         cmdline = 'python build.py --on-server'
         if force:
             cmdline += ' --force --test'
+        if options.verbose:
+            cmdline += ' --verbose'
         cmdline += ' -p ' + app['id'] + ' --vercode ' + thisbuild['vercode']
         chan.exec_command('bash -c ". ~/.bsenv && ' + cmdline + '"')
         output = ''
