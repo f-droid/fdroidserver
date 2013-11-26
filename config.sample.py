@@ -30,13 +30,6 @@ gradle_plugin = "0.6.+"
 # This corresponds to 72x72 pixels, i.e. mdpi
 icon_max_size = 72
 
-# Set the maximum age (in days) of an index that a client should accept from
-# this repo. Setting it to 0 or not setting it at all disables this
-# functionality. If you do set this to a non-zero value, you need to ensure
-# that your index is updated much more frequently than the specified interval.
-# The same policy is applied to the archive repo, if there is one.
-repo_maxage = 0
-
 repo_url = "https://f-droid.org/repo"
 repo_name = "F-Droid"
 repo_icon = "fdroid-icon.png"

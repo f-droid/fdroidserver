@@ -539,19 +539,13 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         bconfig = ConfigParser(defaults, allow_no_value=True)
         bconfig.read(spec)
 
-        distdir = 'python-for-android/dist/fdroid'
-        if os.path.exists(distdir):
-            shutil.rmtree(distdir)
-
-        modules = bconfig.get('app', 'requirements').split(',')
 
         cmd = 'ANDROIDSDK=' + config['sdk_path']
         cmd += ' ANDROIDNDK=' + config['ndk_path']
         cmd += ' ANDROIDNDKVER=r9'
         cmd += ' ANDROIDAPI=' + str(bconfig.get('app', 'android.api'))
         cmd += ' ./distribute.sh'
-        cmd += ' -m ' + "'" + ' '.join(modules) + "'" 
-        cmd += ' -d fdroid'
+        cmd += ' -m ' + bconfig.get('app', 'requirements')
         if subprocess.call(cmd, cwd='python-for-android', shell=True) != 0:
             raise BuildException("Distribute build failed")
 
@@ -583,7 +577,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             cmd.extend(['--icon', os.path.join(root_dir, icon)])
 
         cmd.append('release')
-        p = FDroidPopen(cmd, cwd=distdir)
+        p = FDroidPopen(cmd, cwd='python-for-android/dist/default')
 
     elif thisbuild.get('gradle', 'no') != 'no':
         print "Building Gradle project..."

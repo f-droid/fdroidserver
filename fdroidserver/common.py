@@ -61,8 +61,7 @@ def read_config(opts, config_file='config.py'):
         'update_stats': False,
         'archive_older': 0,
         'max_icon_size': 72,
-        'stats_to_carbon': False,
-        'repo_maxage': 0
+        'stats_to_carbon': False
     }
     if options.verbose:
         print "Reading %s..." % config_file
