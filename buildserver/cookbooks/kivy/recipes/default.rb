@@ -1,7 +1,7 @@
 
 user = node[:settings][:user]
 
-%w{cython python-pygame python-opengl python-gst0.10 python-enchant libgl1-mesa-dev libgles2-mesa-dev}.each do |pkg|
+%w{cython python-pygame python-pip python-opengl python-gst0.10 python-enchant libgl1-mesa-dev libgles2-mesa-dev}.each do |pkg|
   package pkg do
     action :install
   end
@@ -13,7 +13,7 @@ script "install-kivy" do
   code "
     tar xf /vagrant/cache/Kivy-1.7.2.tar.gz
     cd Kivy-1.7.2
-    sudo python setup.py install
+    python setup.py install
     cd ..
     rm -rf Kivy*
   "
@@ -25,6 +25,7 @@ script "install-p4a" do
   interpreter "bash"
   code "
     git clone git://github.com/kivy/python-for-android
+    chown -R vagrant:vagrant python-for-android
     cd python-for-android
     git checkout ca369d774e2
   "
