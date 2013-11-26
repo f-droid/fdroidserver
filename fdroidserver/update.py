@@ -467,11 +467,15 @@ def make_index(apps, apks, repodir, archive, categories):
     repoel = doc.createElement("repo")
     if archive:
         repoel.setAttribute("name", config['archive_name'])
+        if config['repo_maxage'] != 0:
+            repoel.setAttribute("maxage", str(config['repo_maxage']))
         repoel.setAttribute("icon", os.path.basename(config['archive_icon']))
         repoel.setAttribute("url", config['archive_url'])
         addElement('description', config['archive_description'], doc, repoel)
     else:
         repoel.setAttribute("name", config['repo_name'])
+        if config['repo_maxage'] != 0:
+            repoel.setAttribute("maxage", str(config['repo_maxage']))
         repoel.setAttribute("icon", os.path.basename(config['repo_icon']))
         repoel.setAttribute("url", config['repo_url'])
         addElement('description', config['repo_description'], doc, repoel)
