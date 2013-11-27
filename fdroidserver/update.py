@@ -570,7 +570,14 @@ def make_index(apps, apks, repodir, archive, categories):
         addElement('marketvercode', app['Current Version Code'], doc, apel)
 
         if app['AntiFeatures']:
-            addElement('antifeatures', app['AntiFeatures'], doc, apel)
+            af = app['AntiFeatures'].split(',')
+            # TODO: Temporarily not including UpstreamNonFree in the index,
+            # because current F-Droid clients do not understand it, and also
+            # look ugly when they encounter an unknown antifeature. This
+            # filtering can be removed in time...
+            if 'UpstreamNonFree' in af:
+                af.remove('UpstreamNonFree')
+            addElement('antifeatures', ','.join(af), doc, apel)
         if app['Requires Root']:
             addElement('requirements', 'root', doc, apel)
 
