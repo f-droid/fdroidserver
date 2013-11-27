@@ -490,22 +490,21 @@ class FDroid
 
 	private function get_antifeature_description($antifeature) {
 		// Anti feature names and descriptions
-		$antifeatureDescription['ads']['name'] = 'Advertising';
-		$antifeatureDescription['ads']['description'] = 'This application contains advertising';
-		$antifeatureDescription['tracking']['name'] = 'Tracks You';
-		$antifeatureDescription['tracking']['description'] = 'This application tracks and reports your activity to somewhere';
-		$antifeatureDescription['nonfreenet']['name'] = 'Non-Free Network Services';
-		$antifeatureDescription['nonfreenet']['description'] = 'This application promotes a non-Free network service';
-		$antifeatureDescription['nonfreeadd']['name'] = 'Non-Free Addons';
-		$antifeatureDescription['nonfreeadd']['description'] = 'This application promotes non-Free add-ons';
-		$antifeatureDescription['nonfreedep']['name'] = 'Non-Free Dependencies';
-		$antifeatureDescription['nonfreedep']['description'] = 'This application depends on another non-Free application';
-		$antifeatureDescription['upstreamnonfree']['name'] = 'Upstream Non-Free';
-		$antifeatureDescription['nonfreedep']['description'] = 'The upstream source code is non-free';
+		$antifeatureDescription['Ads']['name'] = 'Advertising';
+		$antifeatureDescription['Ads']['description'] = 'This application contains advertising.';
+		$antifeatureDescription['Tracking']['name'] = 'Tracks You';
+		$antifeatureDescription['Tracking']['description'] = 'This application tracks and reports your activity to somewhere.';
+		$antifeatureDescription['NonFreeNet']['name'] = 'Non-Free Network Services';
+		$antifeatureDescription['NonFreeNet']['description'] = 'This application promotes a non-Free network service.';
+		$antifeatureDescription['NonFreeAdd']['name'] = 'Non-Free Addons';
+		$antifeatureDescription['NonFreeAdd']['description'] = 'This application promotes non-Free add-ons.';
+		$antifeatureDescription['NonFreeDep']['name'] = 'Non-Free Dependencies';
+		$antifeatureDescription['NonFreeDep']['description'] = 'This application depends on another non-Free application.';
+		$antifeatureDescription['UpstreamNonFree']['name'] = 'Upstream Non-Free';
+		$antifeatureDescription['UpstreamNonFree']['description'] = 'The upstream source code is non-free.';
 
-		$antifeatureLower = strtolower($antifeature);
-		if(isset($antifeatureDescription[$antifeatureLower])) {
-			return $antifeatureDescription[$antifeatureLower];
+		if(isset($antifeatureDescription[$antifeature])) {
+			return $antifeatureDescription[$antifeature];
 		}
 		return array('name'=>$antifeature);
 	}
