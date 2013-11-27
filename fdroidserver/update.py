@@ -768,9 +768,18 @@ def main():
 
     delete_disabled_builds(apps, apkcache, repodirs)
 
+    # Scan all apks in the main repo
     apks, cc = scan_apks(apps, apkcache, repodirs[0], knownapks)
     if cc:
         cachechanged = True
+
+    # Scan the archive repo for apks as well
+    if len(repodirs) > 1:
+        archapks, cc = scan_apks(apps, apkcache, repodirs[1], knownapks)
+        if cc:
+            cachechanged = True
+    else:
+        archapks = []
 
     # Some information from the apks needs to be applied up to the application
     # level. When doing this, we use the info from the most recent version's apk.
@@ -780,7 +789,7 @@ def main():
         bestver = 0
         added = None
         lastupdated = None
-        for apk in apks:
+        for apk in apks + archapks:
             if apk['id'] == app['id']:
                 if apk['versioncode'] > bestver:
                     bestver = apk['versioncode']
@@ -795,17 +804,19 @@ def main():
         if added:
             app['added'] = added
         else:
-            print "WARNING: Don't know when " + app['id'] + " was added"
+            if options.verbose:
+                print "WARNING: Don't know when " + app['id'] + " was added"
         if lastupdated:
             app['lastupdated'] = lastupdated
         else:
-            print "WARNING: Don't know when " + app['id'] + " was last updated"
+            if options.verbose:
+                print "WARNING: Don't know when " + app['id'] + " was last updated"
 
         if bestver == 0:
             if app['Name'] is None:
                 app['Name'] = app['id']
             app['icon'] = None
-            if app['Disabled'] is None:
+            if options.verbose and app['Disabled'] is None:
                 print "WARNING: Application " + app['id'] + " has no packages"
         else:
             if app['Name'] is None:
@@ -848,12 +859,9 @@ def main():
     # Make the index for the main repo...
     make_index(apps, apks, repodirs[0], False, categories)
 
-    # If there's an archive repo, scan the apks for that and make the index...
-    archapks = None
+    # If there's an archive repo,  make the index for it. We already scanned it
+    # earlier on.
     if len(repodirs) > 1:
-        archapks, cc = scan_apks(apps, apkcache, repodirs[1], knownapks)
-        if cc:
-            cachechanged = True
         make_index(apps, archapks, repodirs[1], True, categories)
 
     if config['update_stats']:
@@ -884,9 +892,7 @@ def main():
 
     # Update the wiki...
     if options.wiki:
-        if archapks:
-            apks.extend(archapks)
-        update_wiki(apps, apks)
+        update_wiki(apps, apks + archapks)
 
     print "Finished."
 
