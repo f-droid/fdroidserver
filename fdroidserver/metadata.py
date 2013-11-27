@@ -114,7 +114,7 @@ valuetypes = {
         [ ]),
 
     'antifeatures' : FieldType("Anti-Feature",
-        [ "Ads", "Tracking", "NonFreeNet", "NonFreeDep", "NonFreeAdd" ], ',',
+        [ "Ads", "Tracking", "NonFreeNet", "NonFreeDep", "NonFreeAdd", "UpstreamNonFree" ], ',',
         [ "AntiFeatures" ],
         [ ]),
 
