@@ -249,9 +249,9 @@ class FDroid
 				if(isset($antifeatures)) {
 					$antifeaturesArray = explode(',',$antifeatures);
 					foreach($antifeaturesArray as $antifeature) {
-						$antifeatureDesctiption = $this->get_antifeature_description($antifeature);
-						$out.='<p style="border:3px solid #CC0000;background-color:#FFDDDD;padding:5px;"><strong>'.$antifeatureDesctiption['name'].'</strong><br />';
-						$out.=$antifeatureDesctiption['description'].'</p>';
+						$antifeatureDescription = $this->get_antifeature_description($antifeature);
+						$out.='<p style="border:3px solid #CC0000;background-color:#FFDDDD;padding:5px;"><strong>'.$antifeatureDescription['name'].'</strong><br />';
+						$out.=$antifeatureDescription['description'].' <a href="/wiki/page/Antifeature:'.$antifeature.'">more...</a></p>';
 					}
 				}
 
