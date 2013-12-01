@@ -1055,7 +1055,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                       'jpct-ae',
                       'youtubeandroidplayerapi',
                       'bugsense',
-                      'crashlytics']
+                      'crashlytics',
+                      'ouya-sdk']
 
     def getpaths(field):
         paths = []
