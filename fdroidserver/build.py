@@ -549,6 +549,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         cmd += ' ANDROIDNDK=' + config['ndk_path']
         cmd += ' ANDROIDNDKVER=r9'
         cmd += ' ANDROIDAPI=' + str(bconfig.get('app', 'android.api'))
+        cmd += ' VIRTUALENV=virtualenv'
         cmd += ' ./distribute.sh'
         cmd += ' -m ' + "'" + ' '.join(modules) + "'" 
         cmd += ' -d fdroid'
