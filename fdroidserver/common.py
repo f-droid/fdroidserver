@@ -75,6 +75,16 @@ def getapkname(app, build):
 def getsrcname(app, build):
     return "%s_%s_src.tar.gz" % (app['id'], build['vercode'])
 
+def getappname(app):
+	if app['Name']:
+		return '%s (%s)' % (app['Name'], app['id'])
+	if app['Auto Name']:
+		return '%s (%s)' % (app['Auto Name'], app['id'])
+	return app['id']
+
+def getcvname(app):
+	return '%s (%s)' % (app['Current Version'], app['Current Version Code'])
+
 def getvcs(vcstype, remote, local):
     if vcstype == 'git':
         return vcs_git(remote, local)

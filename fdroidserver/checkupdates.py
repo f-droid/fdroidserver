@@ -309,17 +309,17 @@ def main():
             version, reason = check_gplay(app)
             if version is None and options.verbose:
                 if reason == '404':
-                    print "%s (%s) is not in the Play Store" % (app['Auto Name'], app['id'])
+                    print "%s is not in the Play Store" % common.getappname(app)
                 else:
-                    print "%s (%s) encountered a problem: %s" % (app['Auto Name'], app['id'], reason)
+                    print "%s encountered a problem: %s" % common.getappname(app)
             if version is not None:
                 stored = app['Current Version']
                 if LooseVersion(stored) < LooseVersion(version):
-                    print "%s (%s) has version %s on the Play Store, which is bigger than %s" % (
-                            app['Auto Name'], app['id'], version, stored)
+                    print "%s has version %s on the Play Store, which is bigger than %s" % (
+                            common.getappname(app), version, stored)
                 elif options.verbose:
-                    print "%s (%s) has the same version %s on the Play Store" % (
-                            app['Auto Name'], app['id'], version)
+                    print "%s has the same version %s on the Play Store" % (
+                            common.getappname(app), version)
         return
 
 
@@ -409,9 +409,9 @@ def main():
                 print "ERROR: Auto Name or Current Version failed for %s due to exception: %s" % (app['id'], traceback.format_exc())
 
         if updating:
-            print '...updating to version %s (%s)' % (app['Current Version'], app['Current Version Code'])
-            name = '%s (%s)' % (app['Auto Name'], app['id']) if app['Auto Name'] else app['id']
-            ver = "%s (%s)" % (app['Current Version'], app['Current Version Code'])
+            print '...updating to version %s' % ver
+            name = common.getappname(app)
+            ver = common.getcvname(app)
             logmsg = 'Update CV of %s to %s' % (name, ver)
 
         if options.auto:
@@ -445,8 +445,8 @@ def main():
                     newbuild['commit'] = commit
                     app['builds'].append(newbuild)
                     writeit = True
-                    name = "%s (%s)" % (app['Auto Name'], app['id']) if app['Auto Name'] else app['id']
-                    ver = "%s (%s)" % (newbuild['version'], newbuild['vercode'])
+                    name = common.getappname(app)
+                    ver = common.getcvname(app)
                     logmsg = "Update %s to %s" % (name, ver)
             else:
                 print 'Invalid auto update mode'

@@ -27,15 +27,21 @@ while read line; do
 
 		[ -d metadata/$id ] && extra=metadata/$id
 
-		name=
 		while read l; do
 			if [[ "$l" == "Auto Name:"* ]]; then
+				autoname=${l##*:}
+			elif [[ "$l" == "Name:"* ]]; then
 				name=${l##*:}
-				break
 			fi
 		done < "$file"
 
-		[ -n "$name" ] && fullname="$name ($id)" || fullname=$id
+		if [ -n "$name" ]; then
+			fullname="$name ($id)"
+		elif [ -n "$autoname" ]; then
+			fullname="$autoname ($id)"
+		else
+			fullname="$id"
+		fi
 
 		newbuild=0
 		while read l; do
