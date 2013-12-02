@@ -26,6 +26,7 @@ import common
 config = None
 options = None
 
+
 def main():
 
     global config, options
@@ -42,30 +43,38 @@ def main():
         print "Specify a single command"
         sys.exit(1)
 
-    if args[0] != 'update':
-        print "The only command currently supported is 'update'"
+    if args[0] != 'init' and args[0] != 'update':
+        print "The only commands currently supported are 'init' and 'update'"
         sys.exit(1)
+
+    host, fdroiddir = config['serverwebroot'].split(':')
 
     repodirs = ['repo']
     if config['archive_older'] != 0:
         repodirs.append('archive')
 
     for repodir in repodirs:
-        index = os.path.join(repodir, 'index.xml')
-        indexjar = os.path.join(repodir, 'index.jar')
-        if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                '--exclude', index, '--exclude', indexjar, repodir, config['serverwebroot']]) != 0:
-            sys.exit(1)
-        if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                index, config['serverwebroot'] + '/' + repodir]) != 0:
-            sys.exit(1)
-        if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                indexjar, config['serverwebroot'] + '/' + repodir]) != 0:
-            sys.exit(1)
+        if args[0] == 'init':
+            if subprocess.call(['ssh', '-v', host,
+                                'mkdir -p', fdroiddir + '/' + repodir]) != 0:
+                sys.exit(1)
+        elif args[0] == 'update':
+            index = os.path.join(repodir, 'index.xml')
+            indexjar = os.path.join(repodir, 'index.jar')
+            if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
+                                '--exclude', index, '--exclude', indexjar,
+                                repodir, config['serverwebroot']]) != 0:
+                sys.exit(1)
+            if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
+                                index,
+                                config['serverwebroot'] + '/' + repodir]) != 0:
+                sys.exit(1)
+            if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
+                                indexjar,
+                                config['serverwebroot'] + '/' + repodir]) != 0:
+                sys.exit(1)
 
     sys.exit(0)
 
 if __name__ == "__main__":
     main()
-
-
