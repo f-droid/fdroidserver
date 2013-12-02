@@ -459,15 +459,22 @@ class vcs_bzr(vcs):
                 p.communicate()[0].splitlines()]
 
 def retrieve_string(xml_dir, string):
-    if not string.startswith('@string/'):
-        return string.replace("\\'","'")
-    string_search = re.compile(r'.*"'+string[8:]+'".*>([^<]+?)<.*').search
-    for xmlfile in glob.glob(os.path.join(xml_dir, '*.xml')):
-        for line in file(xmlfile):
-            matches = string_search(line)
-            if matches:
-                return retrieve_string(xml_dir, matches.group(1))
-    return ''
+    if string.startswith('@string/'):
+        string_search = re.compile(r'.*"'+string[8:]+'".*>([^<]+?)<.*').search
+        for xmlfile in glob.glob(os.path.join(xml_dir, '*.xml')):
+            for line in file(xmlfile):
+                matches = string_search(line)
+                if matches:
+                    return retrieve_string(xml_dir, matches.group(1))
+    elif string.startswith('&') and string.endswith(';'):
+        string_search = re.compile(r'.*<!ENTITY.*'+string[1:-1]+'.*"([^"]+?)".*>').search
+        for xmlfile in glob.glob(os.path.join(xml_dir, '*.xml')):
+            for line in file(xmlfile):
+                matches = string_search(line)
+                if matches:
+                    return retrieve_string(xml_dir, matches.group(1))
+
+    return string.replace("\\'","'")
 
 # Return list of existing files that will be used to find the highest vercode
 def manifest_paths(app_dir, flavour):
