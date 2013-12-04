@@ -409,9 +409,9 @@ def main():
                 print "ERROR: Auto Name or Current Version failed for %s due to exception: %s" % (app['id'], traceback.format_exc())
 
         if updating:
-            print '...updating to version %s' % ver
             name = common.getappname(app)
             ver = common.getcvname(app)
+            print '...updating to version %s' % ver
             logmsg = 'Update CV of %s to %s' % (name, ver)
 
         if options.auto:
