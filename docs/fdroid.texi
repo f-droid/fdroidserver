@@ -499,6 +499,8 @@ Categories must be separated by a single comma character, ','. For backwards
 compatibility, F-Droid will use the first category given as <category> element
 for older clients to at least see one category.
 
+This is converted to (@code{<categories>}) in the public index file.
+
 @node License
 @section License
 
@@ -555,6 +557,8 @@ BSD license - the new, or modified, version.
 
 @end itemize
 
+This is converted to (@code{<license>}) in the public index file.
+
 @node Auto Name
 @section Auto Name
 
@@ -585,6 +589,8 @@ in the source code.
 
 The URL for the application's web site.
 
+This is converted to (@code{<web>}) in the public index file.
+
 @node Source Code
 @section Source Code
 
@@ -594,6 +600,8 @@ The URL to view or obtain the application's source code. This should be
 something human-friendly. Machine-readable source-code is covered in the
 'Repo' field.
 
+This is converted to (@code{<source>}) in the public index file.
+
 @node Issue Tracker
 @section Issue Tracker
 
@@ -601,6 +609,8 @@ something human-friendly. Machine-readable source-code is covered in the
 
 The URL for the application's issue tracker. Optional, since not all
 applications have one.
+
+This is converted to (@code{<tracker>}) in the public index file.
 
 @node Donate
 @section Donate
@@ -617,6 +627,8 @@ or the PayPal link format changed, things could go wrong. It is always
 best to use a link that the developer explicitly makes public, rather than
 something that is auto-generated 'button code'.
 
+This is converted to (@code{<donate>}) in the public index file.
+
 @node FlattrID
 @section FlattrID
 
@@ -626,12 +638,16 @@ The project's Flattr (http://flattr.com) ID, if it has one. This should be
 a numeric ID, such that (for example) https://flattr.com/thing/xxxx leads
 directly to the page to donate to the project.
 
+This is converted to (@code{<flattr>}) in the public index file.
+
 @node Bitcoin
 @section Bitcoin
 
 @cindex Bitcoin
 
 A bitcoin address for donating to the project.
+
+This is converted to (@code{<bitcoin>}) in the public index file.
 
 @node Litecoin
 @section Litecoin
@@ -678,6 +694,8 @@ upstream developers or whether non-free elements were removed; whether the
 app is in rapid development or whether the latest version lags behind the 
 current version; whether the app supports multiple architectures or whether 
 there is a maximum SDK specified (such info not being recorded in the index).
+
+This is converted to (@code{<desc>}) in the public index file.
 
 @node Maintainer Notes
 @section Maintainer Notes
@@ -1221,6 +1239,8 @@ retain the automatic update check — see No Source Since.
 
 This field is normally automatically updated - see Update Check Mode.
 
+This is converted to (@code{<marketversion>}) in the public index file.
+
 @node Current Version Code
 @section Current Version Code
 
@@ -1232,6 +1252,8 @@ used by Android to determine version order and by F-Droid client to determine
 which version should be recommended.
 
 This field is normally automatically updated - see Update Check Mode.
+
+This is converted to (@code{<marketvercode>}) in the public index file.
 
 @node No Source Since
 @section No Source Since
