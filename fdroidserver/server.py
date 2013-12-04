@@ -47,7 +47,19 @@ def main():
         print "The only commands currently supported are 'init' and 'update'"
         sys.exit(1)
 
-    host, fdroiddir = config['serverwebroot'].split(':')
+    serverwebroot = config['serverwebroot'].rstrip('/').replace('//', '/')
+    host, fdroiddir = serverwebroot.split(':')
+    serverrepobase = os.path.basename(fdroiddir)
+    if 'nonstandardwebroot' in config and config['nonstandardwebroot'] == True:
+        standardwebroot = False
+    else:
+        standardwebroot = True
+    if serverrepobase != 'fdroid' and standardwebroot:
+        print('ERROR: serverwebroot does not end with "fdroid", '
+              + 'perhaps you meant one of these:\n\t'
+              + serverwebroot.rstrip('/') + '/fdroid\n\t'
+              + serverwebroot.rstrip('/').rstrip(serverrepobase) + 'fdroid')
+        sys.exit(1)
 
     repodirs = ['repo']
     if config['archive_older'] != 0:

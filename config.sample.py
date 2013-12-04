@@ -87,9 +87,15 @@ keyaliases['com.example.app'] = 'example'
 #the @ prefix.
 keyaliases['com.example.another.plugin'] = '@com.example.another'
 
-#The ssh path to the server's public web root directory. This is used for
-#uploading data, etc.
-serverwebroot = 'user@example:/var/www/repo'
+# The full path to the root of the repository.  It must be specified in
+# rsync/ssh format for a remote host/path. This is used for syncing a locally
+# generated repo to the server that is it hosted on.  It must end in the
+# standard public repo name of "/fdroid", but can be in up to three levels of
+# sub-directories (i.e. /var/www/packagerepos/fdroid).
+serverwebroot = 'user@example:/var/www/fdroid'
+
+# If you want to force 'fdroid server' to use a non-standard serverwebroot
+#nonstandardwebroot = True
 
 #Wiki details
 wiki_protocol = "http"
