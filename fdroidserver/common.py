@@ -470,14 +470,14 @@ class vcs_bzr(vcs):
 
 def retrieve_string(xml_dir, string):
     if string.startswith('@string/'):
-        string_search = re.compile(r'.*"'+string[8:]+'".*>([^<]+?)<.*').search
+        string_search = re.compile(r'.*"'+string[8:]+'".*?>([^<]+?)<.*').search
         for xmlfile in glob.glob(os.path.join(xml_dir, '*.xml')):
             for line in file(xmlfile):
                 matches = string_search(line)
                 if matches:
                     return retrieve_string(xml_dir, matches.group(1))
     elif string.startswith('&') and string.endswith(';'):
-        string_search = re.compile(r'.*<!ENTITY.*'+string[1:-1]+'.*"([^"]+?)".*>').search
+        string_search = re.compile(r'.*<!ENTITY.*'+string[1:-1]+'.*?"([^"]+?)".*>').search
         for xmlfile in glob.glob(os.path.join(xml_dir, '*.xml')):
             for line in file(xmlfile):
                 matches = string_search(line)
