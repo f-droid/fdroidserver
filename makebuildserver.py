@@ -5,7 +5,6 @@ import sys
 import subprocess
 import time
 from optparse import OptionParser
-from fdroidserver import common
 
 def vagrant(params, cwd=None, printout=False):
     """Run vagrant.
@@ -42,7 +41,8 @@ parser.add_option("-c", "--clean", action="store_true", default=False,
                       help="Build from scratch, rather than attempting to update the existing server")
 options, args = parser.parse_args()
 
-config = common.read_config(options, 'makebs.config.py')
+config = {}
+execfile('makebs.config.py', config)
 
 if not os.path.exists('makebuildserver.py') or not os.path.exists(serverdir):
     print 'This must be run from the correct directory!'

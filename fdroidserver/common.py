@@ -55,7 +55,7 @@ def read_config(opts, config_file='config.py'):
     if not hasattr(options, 'verbose'):
         options.verbose = False
 
-    config = {
+    defconfig = {
         'build_server_always': False,
         'mvn3': "mvn3",
         'archive_older': 0,
@@ -66,6 +66,8 @@ def read_config(opts, config_file='config.py'):
         'stats_to_carbon': False,
         'repo_maxage': 0
     }
+    config = {}
+
     if options.verbose:
         print "Reading %s..." % config_file
     execfile(config_file, config)
@@ -97,6 +99,10 @@ def read_config(opts, config_file='config.py'):
         if not os.path.isdir(val):
             print "ERROR: No such directory found for %s: %s" % (key, val)
             sys.exit(3)
+
+    for k, v in defconfig.items():
+        if k not in config:
+            config[k] = v
 
     return config
 
