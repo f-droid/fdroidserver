@@ -1,21 +1,22 @@
-
 # Copy this file to config.py, then amend the settings below according to
 # your system configuration.
 
-# Path to the Android SDK ($ANDROID_HOME)
-sdk_path = "/path/to/android-sdk-linux_86"
+# Path to the Android SDK, $ANDROID_HOME already set on most systems
+#sdk_path = "/path/to/android-sdk"
+sdk_path = "$ANDROID_HOME"
 
-# Path to the Android NDK ($ANDROID_NDK)
+# Path to the Android NDK, $ANDROID_NDK already set on most systems
 # Legacy toolchains are only needed by some apps
-ndk_path = "/path/to/android-ndk-r9"
+#ndk_path = "/path/to/android-ndk"
+ndk_path = "$ANDROID_NDK"
 
 # Build tools version to be used
 build_tools = "18.1.1"
 
-# Command for running maven 3 (could be mvn, mvn3, or a full path)
+# Command for running maven 3 (command or full path)
 mvn3 = "mvn3"
 
-# Command for running Gradle
+# Command for running Gradle (command or full path)
 gradle = "gradle"
 
 # Android gradle plugin version
@@ -105,8 +106,6 @@ stats_to_carbon = False
 carbon_host = '0.0.0.0'
 carbon_port = 2003
 
-
 #Set this to true to always use a build server. This saves specifying the
 #--server option on dedicated secure build server hosts.
 build_server_always = False
-

@@ -67,6 +67,11 @@ def read_config(opts, config_file='config.py'):
     if options.verbose:
         print "Reading %s..." % config_file
     execfile(config_file, config)
+    for k, v in config.items():
+        if type(v) != str:
+            continue
+        if v[0] == '$':
+            config[k] = os.environ[v[1:]]
     return config
 
 def getapkname(app, build):
