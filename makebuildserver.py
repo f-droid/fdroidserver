@@ -71,20 +71,20 @@ cachefiles = [
     ]
 if config['arch64']:
     cachefiles.extend([
-    ('android-ndk-r9-linux-x64_64.tar.bz2',
-     'http://dl.google.com/android/ndk/android-ndk-r9-linux-x86_64.tar.bz2',
-     '8a6013bfd8a8709592c53086c4f841933f5f2b175dd030326406d24ff4daa267'),
-    ('android-ndk-r9-linux-x86_64-legacy-toolchains.tar.bz2',
-     'http://dl.google.com/android/ndk/android-ndk-r9-linux-x86_64-legacy-toolchains.tar.bz2',
-     '087fbca38a1a2c1a309de272d22e84bbc1c3e2254211761180572fde75faab27')])
+    ('android-ndk-r9b-linux-x64_64.tar.bz2',
+     'http://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64.tar.bz2',
+     '8956e9efeea95f49425ded8bb697013b66e162b064b0f66b5c75628f76e0f532'),
+    ('android-ndk-r9b-linux-x86_64-legacy-toolchains.tar.bz2',
+     'http://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64-legacy-toolchains.tar.bz2',
+     'de93a394f7c8f3436db44568648f87738a8d09801a52f459dcad3fc047e045a1')])
 else:
     cachefiles.extend([
-    ('android-ndk-r9-linux-x86.tar.bz2',
-     'http://dl.google.com/android/ndk/android-ndk-r9-linux-x86.tar.bz2',
-     '30f3da01e4d8d3415777b5d88a0b70fac5a4620807fd28110f9bc4c8093f6b6e'),
-    ('android-ndk-r9-linux-x86-legacy-toolchains.tar.bz2',
-     'http://dl.google.com/android/ndk/android-ndk-r9-linux-x86-legacy-toolchains.tar.bz2',
-     '26b94f0a5d686b4892cb22b06094751efded0958baed380b2ccce56517fd830b')])
+    ('android-ndk-r9b-linux-x86.tar.bz2',
+     'http://dl.google.com/android/ndk/android-ndk-r9b-linux-x86.tar.bz2',
+     '748104b829dd12afb2fdb3044634963abb24cdb0aad3b26030abe2e9e65bfc81'),
+    ('android-ndk-r9b-linux-x86-legacy-toolchains.tar.bz2',
+     'http://dl.google.com/android/ndk/android-ndk-r9b-linux-x86-legacy-toolchains.tar.bz2',
+     '606aadf815ae28cc7b0154996247c70d609f111b14e44bcbcd6cad4c87fefb6f')])
 wanted = []
 for f, src, shasum in cachefiles:
     if not os.path.exists(os.path.join(cachedir, f)):
