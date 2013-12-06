@@ -12,9 +12,6 @@ ndk_path = "/path/to/android-ndk-r9"
 # Build tools version to be used
 build_tools = "18.1.1"
 
-# Path to Android Java SWT ($ANDROID_SWT)
-javacc_path = "/usr/share/java"
-
 # Command for running maven 3 (could be mvn, mvn3, or a full path)
 mvn3 = "mvn3"
 
