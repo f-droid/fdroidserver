@@ -47,10 +47,6 @@ def read_config(opts, config_file='config.py'):
         print "Missing config file - is this a repo directory?"
         sys.exit(2)
 
-    st = os.stat(config_file)
-    if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
-        print "WARNING: unsafe permissions on {0} (should be 0600)!".format(config_file)
-
     options = opts
     if not hasattr(options, 'verbose'):
         options.verbose = False
@@ -71,6 +67,11 @@ def read_config(opts, config_file='config.py'):
     if options.verbose:
         print "Reading %s..." % config_file
     execfile(config_file, config)
+
+    if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
+        st = os.stat(config_file)
+        if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
+            print "WARNING: unsafe permissions on {0} (should be 0600)!".format(config_file)
 
     # Expand environment variables
     for k, v in config.items():
