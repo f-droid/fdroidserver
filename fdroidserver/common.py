@@ -84,6 +84,7 @@ def read_config(opts, config_file='config.py'):
     for key in ('mvn3', 'gradle'):
         if key not in config:
             print "WARNING: %s not set in config" % key
+            continue
         val = config[key]
         executable = find_executable(val)
         if not executable:
@@ -94,6 +95,7 @@ def read_config(opts, config_file='config.py'):
     for key in ('sdk_path', 'ndk_path', 'build_tools'):
         if key not in config:
             print "WARNING: %s not set in config" % key
+            continue
         val = config[key]
         if key == 'build_tools':
             val = os.path.join(config['sdk_path'], 'build-tools', val)
