@@ -403,7 +403,7 @@ class vcs_svn(vcs):
         p = subprocess.Popen(['svn', 'info'],
                 stdout=subprocess.PIPE, cwd=self.local)
         for line in p.communicate()[0].splitlines():
-            if line is not None and line.startswith('Last Changed Rev: '):
+            if line and line.startswith('Last Changed Rev: '):
                 return line[18:]
 
 class vcs_hg(vcs):
@@ -493,7 +493,7 @@ def manifest_paths(app_dir, flavour):
             os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml'),
             os.path.join(app_dir, 'build.gradle') ]
 
-    if flavour is not None:
+    if flavour:
         possible_manifests.append(
                 os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml'))
     
@@ -651,8 +651,8 @@ class VCSException(Exception):
 # Returns the path to it. Normally this is the path to be used when referencing
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
-def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, basepath=False,
-        raw=False, prepare=True, preponly=False):
+def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, target=None,
+        basepath=False, raw=False, prepare=True, preponly=False):
 
     number = None
     subdir = None
@@ -685,9 +685,9 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, basepath=False,
             return vcs
 
     libdir = None
-    if subdir is not None:
+    if subdir:
         libdir = os.path.join(sdir, subdir)
-    elif srclib["Subdir"] is not None:
+    elif srclib["Subdir"]:
         for subdir in srclib["Subdir"]:
             libdir_candidate = os.path.join(sdir, subdir)
             if os.path.exists(libdir_candidate):
@@ -713,7 +713,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, basepath=False,
 
     if prepare:
 
-        if srclib["Prepare"] is not None:
+        if srclib["Prepare"]:
             cmd = replace_config_vars(srclib["Prepare"])
 
             p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=libdir)
@@ -723,9 +723,11 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, basepath=False,
         
         if srclib["Update Project"] == "Yes":
             print "Updating srclib %s at path %s" % (name, libdir)
-            p = FDroidPopen([
-                os.path.join(config['sdk_path'], 'tools', 'android'),
-                'update', 'project', '-p', libdir])
+            cmd = [os.path.join(config['sdk_path'], 'tools', 'android'),
+                'update', 'project', '-p', libdir]
+            if target:
+                cmd += ['-t', target]
+            p = FDroidPopen(cmd)
             # Check to see whether an error was returned without a proper exit
             # code (this is the case for the 'no target set or target invalid'
             # error)
@@ -1011,9 +1013,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     # Get required source libraries...
     srclibpaths = []
     if 'srclibs' in build:
+        target=build['target'] if 'target' in build else None
         print "Collecting source libraries..."
         for lib in build['srclibs'].split(';'):
-            srclibpaths.append(getsrclib(lib, srclib_dir, srclibpaths, preponly=onserver))
+            srclibpaths.append(getsrclib(lib, srclib_dir, srclibpaths,
+                target=target, preponly=onserver))
 
     # Apply patches if any
     if 'patch' in build:
@@ -1285,7 +1289,7 @@ def FDroidPopen(commands, cwd=None):
     """
 
     if options.verbose:
-        if cwd is not None:
+        if cwd:
             print "Directory: %s" % cwd
         print " > %s" % ' '.join(commands)
 
