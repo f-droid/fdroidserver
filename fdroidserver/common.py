@@ -77,6 +77,7 @@ def read_config(opts, config_file='config.py'):
     for k, v in config.items():
         if type(v) != str:
             continue
+        v = os.path.expanduser(v)
         config[k] = os.path.expandvars(v)
 
     # Check that commands and binaries do exist
