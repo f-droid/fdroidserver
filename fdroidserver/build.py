@@ -395,6 +395,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         if '@' in thisbuild['maven']:
             maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@',1)[1])
+            maven_dir = os.path.normpath(maven_dir)
         else:
             maven_dir = root_dir
 
@@ -405,6 +406,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         if '@' in thisbuild['gradle']:
             gradle_dir = os.path.join(root_dir, thisbuild['gradle'].split('@',1)[1])
+            gradle_dir = os.path.normpath(gradle_dir)
         else:
             gradle_dir = root_dir
 
