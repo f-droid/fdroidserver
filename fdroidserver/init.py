@@ -102,12 +102,12 @@ def main():
         prefix = tmp
         examplesdir = prefix
 
-    repodir = os.getcwd()
+    fdroiddir = os.getcwd()
 
     if not os.path.exists('config.py') and not os.path.exists('repo'):
         # 'metadata' and 'tmp' are created in fdroid
         os.mkdir('repo')
-        shutil.copy(os.path.join(examplesdir, 'fdroid-icon.png'), repodir)
+        shutil.copy(os.path.join(examplesdir, 'fdroid-icon.png'), fdroiddir)
         shutil.copyfile(os.path.join(examplesdir, 'config.sample.py'), 'config.py')
         os.chmod('config.py', 0o0600)
     else:
@@ -206,13 +206,14 @@ def main():
             write_to_config('keydname', keydname)
         genkey(keystore, repo_keyalias, password, keydname)
 
-    print('Built repo in "' + repodir + '" with this config:')
+    print('Built repo based in "' + fdroiddir + '"')
+    print('with this config:')
     print('  Android SDK:\t\t\t' + sdk_path)
     print('  Android SDK Build Tools:\t' + os.path.dirname(aapt))
     print('  Android NDK (optional):\t' + ndk_path)
     print('  Keystore for signing key:\t' + keystore)
     print('\nTo complete the setup, add your APKs to "' +
-          os.path.join(repodir, 'repo') + '"' +
+          os.path.join(fdroiddir, 'repo') + '"' +
 '''
 then run "fdroid update -c; fdroid update".  You might also want to edit
 "config.py" to set the URL, repo name, and more.  You should also set up
