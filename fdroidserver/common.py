@@ -77,8 +77,7 @@ def read_config(opts, config_file='config.py'):
     for k, v in config.items():
         if type(v) != str:
             continue
-        if v[0] == '$':
-            config[k] = os.environ[v[1:]]
+        config[k] = os.path.expandvars(v)
 
     # Check that commands and binaries do exist
     for key in ('mvn3', 'gradle'):
