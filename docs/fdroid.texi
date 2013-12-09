@@ -684,6 +684,9 @@ browser or the wiki. The link text will be the apps name.
 
 Links to web addresses can be done using @code{[http://example.com Text]}.
 
+For both of the above link formats, the entire link (from opening to closing
+square bracket) must be on the same line.
+
 Bulletted lists are done by simply starting each item with a @code{*} on
 a new line, and numbered lists are the same but using @code{#}. There is
 currently no support for nesting lists - you can have one level only.
