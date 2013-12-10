@@ -88,8 +88,8 @@ valuetypes = {
         [ ]),
 
     'litecoin' : FieldType("Litecoin address",
-        r'^[a-zA-Z0-9]{27,34}$', None,
-        [ "Bitcoin" ],
+        r'^L[a-zA-Z0-9]{33}$', None,
+        [ "Litecoin" ],
         [ ]),
 
     'Bool' : FieldType("Boolean",
