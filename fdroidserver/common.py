@@ -132,7 +132,12 @@ def read_app_args(args, options, allapps):
                     print "No such package: %s" % p
             raise Exception("Found invalid app ids in arguments")
 
-    apps = [app for app in apps if (options.force or not app['Disabled']) and
+    if hasattr(options, "force"):
+        force = options.force
+    else:
+        force = False
+
+    apps = [app for app in apps if (force or not app['Disabled']) and
             app['builds'] and len(app['Repo Type']) > 0 and len(app['builds']) > 0]
     if len(apps) == 0:
         raise Exception("No apps to process.")

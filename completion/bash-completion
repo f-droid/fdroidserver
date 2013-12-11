@@ -45,6 +45,16 @@ __signed_package() {
 	COMPREPLY=( $( compgen -W "$files" -- $cur ) )
 }
 
+__signed_vercode() {
+	local p
+	p=${cur:0:-1}
+
+	files=( repo/${p}_*.apk )
+	files=( ${files[@]#*_} )
+	files=${files[@]%.apk}
+	COMPREPLY=( $( compgen -P "${p}:" -W "$files" -- $cur ) )
+}
+
 __vercode() {
 	local p
 	p=${cur:0:-1}
@@ -86,6 +96,22 @@ __complete_build() {
 			return 0;;
 	esac
 	__complete_options
+}
+
+__complete_install() {
+	opts="-h -v"
+	lopts="--help --verbose --all"
+	case "${cur}" in
+		-*)
+			__complete_options
+			return 0;;
+		*:)
+			__signed_vercode
+			return 0;;
+		*)
+			__signed_package
+			return 0;;
+	esac
 }
 
 __complete_update() {
@@ -188,7 +214,8 @@ __complete_init() {
 _fdroid() {
 	local cmd cmds aliased
 	cmd=${COMP_WORDS[1]}
-	cmds=" build init update publish checkupdates import rewritemeta scanner verify stats server "
+	cmds=" build init install update publish checkupdates import
+ rewritemeta scanner verify stats server "
 	aliased=false
 
 	for c in $cmds; do eval "_fdroid_${c} () {
@@ -199,24 +226,6 @@ _fdroid() {
 	[[ $cmds == *\ $cmd\ * ]] && _fdroid_${cmd} || {
 		(($COMP_CWORD == 1)) && COMPREPLY=( $( compgen -W "${cmds}" -- $cmd ) )
 	}
-}
-
-_fdroid_build_project() {
-	local cur prev cmds opts lopts aliased
-	__fdroid_init
-	aliased=true
-	(( $COMP_CWORD == 1 )) && prev="-p"
-
-	__complete_build
-}
-
-_fdroid_checkupdates_project() {
-	local cur prev cmds opts lopts aliased
-	__fdroid_init
-	aliased=true
-	(( $COMP_CWORD == 1 )) && prev="-p"
-
-	__complete_checkupdates
 }
 
 _fd-commit() {
