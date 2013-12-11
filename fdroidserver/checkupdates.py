@@ -449,7 +449,7 @@ def main():
                     ver = common.getcvname(app)
                     logmsg = "Update %s to %s" % (name, ver)
             else:
-                print 'Invalid auto update mode'
+                print 'Invalid auto update mode "' + mode + '"'
 
         if writeit:
             metafile = os.path.join('metadata', app['id'] + '.txt')
