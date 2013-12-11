@@ -479,6 +479,7 @@ def make_index(apps, apks, repodir, archive, categories):
         repoel.setAttribute("icon", os.path.basename(config['repo_icon']))
         repoel.setAttribute("url", config['repo_url'])
         addElement('description', config['repo_description'], doc, repoel)
+    repoel.setAttribute("timestamp", str(int(time.time())))
 
     if config['repo_keyalias'] is not None:
 
