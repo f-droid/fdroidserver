@@ -27,6 +27,7 @@ while read line; do
 
 		[ -d metadata/$id ] && extra=metadata/$id
 
+		autoname=""
 		while read l; do
 			if [[ "$l" == "Auto Name:"* ]]; then
 				autoname=${l##*:}
