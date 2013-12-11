@@ -379,7 +379,7 @@ def adapt_gradle(path):
             's@com.android.tools.build:gradle:[0-9\.\+]*@com.android.tools.build:gradle:'+ config['gradle_plugin'] +'@g', path])
 
 
-def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, onserver):
+def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver):
     """Do a build locally."""
 
     # Prepare the source code...
@@ -506,11 +506,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         else:
             maven_dir = root_dir
 
-        mvncmd = [config['mvn3'], '-Dandroid.sdk.path=' + config['sdk_path']]
-        if install:
-            mvncmd += ['-Dandroid.sign.debug=true', 'package', 'android:deploy']
-        else:
-            mvncmd += ['-Dandroid.sign.debug=false', '-Dandroid.release=true', 'package']
+        mvncmd = [config['mvn3'], '-Dandroid.sdk.path=' + config['sdk_path'],
+                '-Dandroid.sign.debug=false', '-Dandroid.release=true', 'package']
         if 'target' in thisbuild:
             target = thisbuild["target"].split('-')[1]
             subprocess.call(['sed', '-i',
@@ -622,19 +619,14 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if 'preassemble' in thisbuild:
             for task in thisbuild['preassemble'].split():
                 commands.append(task)
-        if install:
-            commands += ['assemble'+flavour+'Debug', 'install'+flavour+'Debug']
-        else:
-            commands += ['assemble'+flavour+'Release']
+        commands += ['assemble'+flavour+'Release']
 
         p = FDroidPopen(commands, cwd=gradle_dir)
 
     else:
         print "Building Ant project..."
         cmd = ['ant']
-        if install:
-            cmd += ['debug','install']
-        elif 'antcommand' in thisbuild:
+        if 'antcommand' in thisbuild:
             cmd += [thisbuild['antcommand']]
         else:
             cmd += ['release']
@@ -645,9 +637,6 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout, p.stderr)
     print "Successfully built version " + thisbuild['version'] + ' of ' + app['id']
-
-    if install:
-        return
 
     # Find the apk name in the output...
     if 'bindir' in thisbuild:
@@ -752,7 +741,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
 
 def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, extlib_dir,
-        tmp_dir, repo_dir, vcs, test, server, install, force, onserver):
+        tmp_dir, repo_dir, vcs, test, server, force, onserver):
     """
     Build a particular version of an application, if it needs building.
 
@@ -796,22 +785,18 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
 
         build_server(app, thisbuild, vcs, build_dir, output_dir, force)
     else:
-        build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, install, force, onserver)
+        build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver)
     return True
 
 
 def parse_commandline():
     """Parse the command line. Returns options, args."""
 
-    parser = OptionParser()
+    parser = OptionParser(usage="Usage: %prog [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
-    parser.add_option("-p", "--package", default=None,
-                      help="Build only the specified package")
-    parser.add_option("-c", "--vercode", default=None,
-                      help="Build only the specified version code")
     parser.add_option("-l", "--latest", action="store_true", default=False,
-                      help="Build only the latest version code available")
+                      help="Build only the latest version of each package")
     parser.add_option("-s", "--stop", action="store_true", default=False,
                       help="Make the build stop on exceptions")
     parser.add_option("-t", "--test", action="store_true", default=False,
@@ -824,13 +809,8 @@ def parse_commandline():
                       help="Specify that we're running on the build server")
     parser.add_option("-f", "--force", action="store_true", default=False,
                       help="Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode.")
-    parser.add_option("--install", action="store_true", default=False,
-                      help="Use 'ant debug install' to build and install a " +
-                      "debug version on your device or emulator. " +
-                      "Implies --force and --test")
-    parser.add_option("--all", action="store_true", default=False,
-                      help="Use with --install, when not using --package"
-                      " to confirm you really want to build and install everything.")
+    parser.add_option("-a", "--all", action="store_true", default=False,
+                      help="Build all applications available")
     parser.add_option("-w", "--wiki", default=False, action="store_true",
                       help="Update the wiki")
     options, args = parser.parse_args()
@@ -838,19 +818,6 @@ def parse_commandline():
     # Force --stop with --on-server to get cotrect exit code
     if options.onserver:
         options.stop = True
-
-    # The --install option implies --test and --force...
-    if options.install:
-        if options.server:
-            print "Can't install when building on a build server."
-            sys.exit(1)
-        if not options.package and not options.all:
-            print "This would build and install everything in the repo to the device."
-            print "You probably want to use --package and maybe also --vercode."
-            print "If you really want to install everything, use --all."
-            sys.exit(1)
-        options.force = True
-        options.test = True
 
     if options.force and not options.test:
         print "Force is only allowed in test mode"
@@ -873,9 +840,6 @@ def main():
     if options.resetserver and not options.server:
         print "Using --resetserver without --server makes no sense"
         sys.exit(1)
-
-    # Get all apps...
-    apps = metadata.read_metadata(xref=not options.onserver)
 
     log_dir = 'logs'
     if not os.path.isdir(log_dir):
@@ -909,25 +873,10 @@ def main():
     srclib_dir = os.path.join(build_dir, 'srclib')
     extlib_dir = os.path.join(build_dir, 'extlib')
 
-    # Filter apps and build versions according to command-line options, etc...
-    if options.package:
-        apps = [app for app in apps if app['id'] == options.package]
-        if len(apps) == 0:
-            print "No such package"
-            sys.exit(1)
-    apps = [app for app in apps if (options.force or not app['Disabled']) and
-            app['builds'] and len(app['Repo Type']) > 0 and len(app['builds']) > 0]
-    if len(apps) == 0:
-        print "Nothing to do - all apps are disabled or have no builds defined."
-        sys.exit(1)
-    if options.vercode:
-        for app in apps:
-            app['builds'] = [b for b in app['builds']
-                    if str(b['vercode']) == options.vercode]
-    elif options.latest:
-        for app in apps:
-            m = max([i['vercode'] for i in app['builds']], key=int)
-            app['builds'] = [b for b in app['builds'] if b['vercode'] == m]
+    # Get all apps...
+    allapps = metadata.read_metadata(xref=not options.onserver)
+
+    apps = common.read_app_args(args, options, allapps)
 
     if options.wiki:
         import mwclient
@@ -967,7 +916,7 @@ def main():
                     print "Checking " + thisbuild['version']
                 if trybuild(app, thisbuild, build_dir, output_dir, also_check_dir,
                         srclib_dir, extlib_dir, tmp_dir, repo_dir, vcs, options.test,
-                        options.server, options.install, options.force, options.onserver):
+                        options.server, options.force, options.onserver):
                     build_succeeded.append(app)
                     wikilog = "Build succeeded"
             except BuildException as be:

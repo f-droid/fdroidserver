@@ -38,25 +38,26 @@ class MetaDataException(Exception):
 class FieldType():
     def __init__(self, name, matching, sep, fields, attrs):
         self.name = name
+        self.matching = matching
         if type(matching) is str:
-            self.matching = re.compile(matching)
-        elif type(matching) is list:
-            self.matching = matching
+            self.compiled = re.compile(matching)
         self.sep = sep
         self.fields = fields
         self.attrs = attrs
 
     def _assert_regex(self, values, appid):
         for v in values:
-            if not self.matching.match(v):
-                raise MetaDataException("'%s' is not a valid %s in %s"
-                        % (v, self.name, appid))
+            if not self.compiled.match(v):
+                raise MetaDataException("'%s' is not a valid %s in %s. "
+                        % (v, self.name, appid) +
+                        "Regex pattern: %s" % (self.matching))
 
     def _assert_list(self, values, appid):
         for v in values:
             if v not in self.matching:
-                raise MetaDataException("'%s' is not a valid %s in %s"
-                        % (v, self.name, appid))
+                raise MetaDataException("'%s' is not a valid %s in %s. "
+                        % (v, self.name, appid) +
+                        "Possible values: %s" % (", ".join(self.matching)))
 
     def check(self, value, appid):
         if type(value) is not str or not value:

@@ -110,6 +110,53 @@ def read_config(opts, config_file='config.py'):
 
     return config
 
+def read_app_args(args, options, allapps):
+    if args:
+        vercodes = {}
+        for p in args:
+            if ':' in p:
+                package, vercode = p.split(':')
+            else:
+                package, vercode = p, None
+            if package not in vercodes:
+                vercodes[package] = [vercode] if vercode else []
+                continue
+            elif vercode not in vercodes[package]:
+                vercodes[package] += [vercode] if vercode else []
+        packages = vercodes.keys()
+        apps = [app for app in allapps if app['id'] in packages]
+        if len(apps) != len(packages):
+            allids = [app["id"] for app in allapps]
+            for p in packages:
+                if p not in allids:
+                    print "No such package: %s" % p
+            raise Exception("Found invalid app ids in arguments")
+
+    apps = [app for app in apps if (options.force or not app['Disabled']) and
+            app['builds'] and len(app['Repo Type']) > 0 and len(app['builds']) > 0]
+    if len(apps) == 0:
+        raise Exception("No apps to process.")
+
+    error = False
+    for app in apps:
+        vc = vercodes[app['id']]
+        if vc:
+            app['builds'] = [b for b in app['builds'] if b['vercode'] in vc]
+            if len(app['builds']) != len(vercodes[app['id']]):
+                error = True
+                allvcs = [b['vercode'] for b in app['builds']]
+                for v in vercodes[app['id']]:
+                    if v not in allvcs:
+                        print "No such vercode %s for app %s" % (v, app['id'])
+        elif options.latest:
+            app['builds'] = app['builds'][-1:]
+
+    if error:
+        raise Exception("Found invalid vercodes for some apps")
+
+    return apps
+
+
 def getapkname(app, build):
     return "%s_%s.apk" % (app['id'], build['vercode'])
 
@@ -117,14 +164,14 @@ def getsrcname(app, build):
     return "%s_%s_src.tar.gz" % (app['id'], build['vercode'])
 
 def getappname(app):
-	if app['Name']:
-		return '%s (%s)' % (app['Name'], app['id'])
-	if app['Auto Name']:
-		return '%s (%s)' % (app['Auto Name'], app['id'])
-	return app['id']
+    if app['Name']:
+        return '%s (%s)' % (app['Name'], app['id'])
+    if app['Auto Name']:
+        return '%s (%s)' % (app['Auto Name'], app['id'])
+    return app['id']
 
 def getcvname(app):
-	return '%s (%s)' % (app['Current Version'], app['Current Version Code'])
+    return '%s (%s)' % (app['Current Version'], app['Current Version Code'])
 
 def getvcs(vcstype, remote, local):
     if vcstype == 'git':
