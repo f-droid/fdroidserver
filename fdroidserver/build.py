@@ -877,6 +877,15 @@ def main():
     allapps = metadata.read_metadata(xref=not options.onserver)
 
     apps = common.read_app_args(args, options, allapps)
+    apps = [app for app in apps if (options.force or not app['Disabled']) and
+            len(app['Repo Type']) > 0 and len(app['builds']) > 0]
+
+    if len(apps) == 0:
+        raise Exception("No apps to process.")
+
+    if options.latest:
+        for app in apps:
+            app['builds'] = app['builds'][-1:]
 
     if options.wiki:
         import mwclient

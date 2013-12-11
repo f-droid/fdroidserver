@@ -59,26 +59,35 @@ def main():
     apps = common.read_app_args(args, options, allapps)
 
     for app in apps:
-        for thisbuild in app['builds']:
-            apk = os.path.join(output_dir, common.getapkname(app, thisbuild))
-            if not os.path.exists(apk):
-                raise Exception("No such signed apk: %s" % apk)
-                continue
-            # Get device list each time to avoid device not found errors
-            devs = devices()
-            if not devs:
-                raise Exception("No attached devices found")
-            print "Installing %s..." % apk
-            for dev in devs:
-                print "Installing %s on %s..." % (apk, dev)
-                p = FDroidPopen(["adb", "-s", dev, "install", apk ])
-                fail= ""
-                for line in p.stdout.splitlines():
-                    if line.startswith("Failure"):
-                        fail = line[9:-1]
-                if fail:
-                    raise Exception("Failed to install %s on %s: %s" % (
-                        apk, dev, fail))
+        last = None
+        for build in app['builds']:
+            apk = os.path.join(output_dir, common.getapkname(app, build))
+            if os.path.exists(apk):
+                last = build
+        if last is None:
+            raise Exception("No available signed apks for %s" % app['id'])
+
+    for app in apps:
+        build = app['builds'][0]
+        apk = os.path.join(output_dir, common.getapkname(app, build))
+        if not os.path.exists(apk):
+            raise Exception("No such signed apk: %s" % apk)
+            continue
+        # Get device list each time to avoid device not found errors
+        devs = devices()
+        if not devs:
+            raise Exception("No attached devices found")
+        print "Installing %s..." % apk
+        for dev in devs:
+            print "Installing %s on %s..." % (apk, dev)
+            p = FDroidPopen(["adb", "-s", dev, "install", apk ])
+            fail= ""
+            for line in p.stdout.splitlines():
+                if line.startswith("Failure"):
+                    fail = line[9:-1]
+            if fail:
+                raise Exception("Failed to install %s on %s: %s" % (
+                    apk, dev, fail))
 
     print "\nFinished"
 

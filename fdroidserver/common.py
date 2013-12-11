@@ -111,36 +111,31 @@ def read_config(opts, config_file='config.py'):
     return config
 
 def read_app_args(args, options, allapps):
-    if args:
-        vercodes = {}
-        for p in args:
-            if ':' in p:
-                package, vercode = p.split(':')
-            else:
-                package, vercode = p, None
-            if package not in vercodes:
-                vercodes[package] = [vercode] if vercode else []
-                continue
-            elif vercode not in vercodes[package]:
-                vercodes[package] += [vercode] if vercode else []
-        packages = vercodes.keys()
-        apps = [app for app in allapps if app['id'] in packages]
-        if len(apps) != len(packages):
-            allids = [app["id"] for app in allapps]
-            for p in packages:
-                if p not in allids:
-                    print "No such package: %s" % p
-            raise Exception("Found invalid app ids in arguments")
+    if not args:
+        return []
 
-    if hasattr(options, "force"):
-        force = options.force
-    else:
-        force = False
+    vercodes = {}
+    for p in args:
+        if ':' in p:
+            package, vercode = p.split(':')
+        else:
+            package, vercode = p, None
+        if package not in vercodes:
+            vercodes[package] = [vercode] if vercode else []
+            continue
+        elif vercode not in vercodes[package]:
+            vercodes[package] += [vercode] if vercode else []
+    packages = vercodes.keys()
+    apps = [app for app in allapps if app['id'] in packages]
+    if len(apps) != len(packages):
+        allids = [app["id"] for app in allapps]
+        for p in packages:
+            if p not in allids:
+                print "No such package: %s" % p
+        raise Exception("Found invalid app ids in arguments")
 
-    apps = [app for app in apps if (force or not app['Disabled']) and
-            app['builds'] and len(app['Repo Type']) > 0 and len(app['builds']) > 0]
-    if len(apps) == 0:
-        raise Exception("No apps to process.")
+    if not vercodes:
+        return apps
 
     error = False
     for app in apps:
@@ -153,8 +148,6 @@ def read_app_args(args, options, allapps):
                 for v in vercodes[app['id']]:
                     if v not in allvcs:
                         print "No such vercode %s for app %s" % (v, app['id'])
-        elif options.latest:
-            app['builds'] = app['builds'][-1:]
 
     if error:
         raise Exception("Found invalid vercodes for some apps")
