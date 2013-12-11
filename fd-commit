@@ -25,9 +25,13 @@ while read line; do
 			$found || continue
 		fi
 
-		[ -d metadata/$id ] && extra=metadata/$id
+		if [ -d metadata/$id ]; then
+		   	extra=metadata/$id
+		else
+			extra=
+		fi
 
-		autoname=""
+		name= autoname=
 		while read l; do
 			if [[ "$l" == "Auto Name:"* ]]; then
 				autoname=${l##*:}
