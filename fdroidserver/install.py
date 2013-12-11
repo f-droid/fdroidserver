@@ -56,7 +56,7 @@ def main():
     # Get all apps...
     allapps = metadata.read_metadata()
 
-    apps = common.read_app_args(args, options, allapps)
+    apps = common.read_app_args(args, options, allapps, True)
 
     for app in apps:
         last = None

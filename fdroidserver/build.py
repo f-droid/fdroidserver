@@ -876,7 +876,7 @@ def main():
     # Get all apps...
     allapps = metadata.read_metadata(xref=not options.onserver)
 
-    apps = common.read_app_args(args, options, allapps)
+    apps = common.read_app_args(args, options, allapps, True)
     apps = [app for app in apps if (options.force or not app['Disabled']) and
             len(app['Repo Type']) > 0 and len(app['builds']) > 0]
 

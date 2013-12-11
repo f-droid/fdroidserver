@@ -110,20 +110,20 @@ def read_config(opts, config_file='config.py'):
 
     return config
 
-def read_app_args(args, options, allapps):
+def read_app_args(args, options, allapps, allow_vercodes=False):
     if not args:
         return []
 
     vercodes = {}
     for p in args:
-        if ':' in p:
+        if allow_vercodes and ':' in p:
             package, vercode = p.split(':')
         else:
             package, vercode = p, None
         if package not in vercodes:
             vercodes[package] = [vercode] if vercode else []
             continue
-        elif vercode not in vercodes[package]:
+        elif vercode and vercode not in vercodes[package]:
             vercodes[package] += [vercode] if vercode else []
     packages = vercodes.keys()
     apps = [app for app in allapps if app['id'] in packages]

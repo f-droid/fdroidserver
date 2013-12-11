@@ -280,8 +280,6 @@ def main():
     parser = OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
-    parser.add_option("-p", "--package", default=None,
-                      help="Check only the specified package")
     parser.add_option("--auto", action="store_true", default=False,
                       help="Process auto-updates")
     parser.add_option("--autoonly", action="store_true", default=False,
@@ -295,14 +293,9 @@ def main():
     config = common.read_config(options)
 
     # Get all apps...
-    apps = metadata.read_metadata(options.verbose)
+    allapps = metadata.read_metadata(options.verbose)
 
-    # Filter apps according to command-line options
-    if options.package:
-        apps = [app for app in apps if app['id'] == options.package]
-        if len(apps) == 0:
-            print "No such package"
-            sys.exit(1)
+    apps = common.read_app_args(args, options, allapps, False)
 
     if options.gplay:
         for app in apps:
@@ -324,7 +317,6 @@ def main():
 
 
     for app in apps:
-
 
         if options.autoonly and app['Auto Update Mode'] == 'None':
             if options.verbose:

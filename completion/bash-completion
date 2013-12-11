@@ -139,13 +139,15 @@ __complete_publish() {
 
 __complete_checkupdates() {
 	opts="-h -v -p"
-	lopts="--help --verbose --package --auto --autoonly --commit --gplay"
-	case "${prev}" in
-		-p|--package)
+	lopts="--help --verbose --auto --autoonly --commit --gplay"
+	case "${cur}" in
+		-*)
+			__complete_options
+			return 0;;
+		*)
 			__package
 			return 0;;
 	esac
-	__complete_options
 }
 
 __complete_import() {
