@@ -30,7 +30,7 @@ def main():
     global config, options
 
     # Parse command line...
-    parser = OptionParser()
+    parser = OptionParser(usage="Usage: %prog [options] [APPID [APPID ...]]")
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     (options, args) = parser.parse_args()
@@ -41,13 +41,9 @@ def main():
     allapps = metadata.read_metadata(xref=False)
     apps = common.read_app_args(args, allapps, False)
 
-    if len(apps) == 0:
-        print "No packages to rewrite"
-        sys.exit(1)
-
     for app in apps:
         print "Writing " + app['id']
-        metadata.write_metadata(os.path.join('metadata', app['id']) + '.txt', app)
+        metadata.write_metadata(os.path.join('metadata', app['id'])+'.txt', app)
 
     print "Finished."
 

@@ -33,7 +33,7 @@ def main():
     global config, options
 
     # Parse command line...
-    parser = OptionParser()
+    parser = OptionParser(usage="Usage: %prog [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     parser.add_option("-p", "--package", default=None,
@@ -45,14 +45,8 @@ def main():
     config = common.read_config(options)
 
     # Get all apps...
-    apps = metadata.read_metadata()
-
-    # Filter apps according to command-line options
-    if options.package:
-        apps = [app for app in apps if app['id'] == options.package]
-        if len(apps) == 0:
-            print "No such package"
-            sys.exit(1)
+    allapps = metadata.read_metadata()
+    apps = common.read_app_args(args, allapps, True)
 
     problems = []
 
@@ -68,51 +62,49 @@ def main():
         skip = False
         if app['Disabled']:
             print "Skipping %s: disabled" % app['id']
-            skip = True
-        elif not app['builds']:
+            continue
+        if not app['builds']:
             print "Skipping %s: no builds specified" % app['id']
-            skip = True
+            continue
         elif options.nosvn and app['Repo Type'] == 'svn':
-            skip = True
+            continue
 
-        if not skip:
+        print "Processing " + app['id']
 
-            print "Processing " + app['id']
+        try:
 
-            try:
+            build_dir = 'build/' + app['id']
 
-                build_dir = 'build/' + app['id']
+            # Set up vcs interface and make sure we have the latest code...
+            vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
 
-                # Set up vcs interface and make sure we have the latest code...
-                vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
+            for thisbuild in app['builds']:
 
-                for thisbuild in app['builds']:
+                if 'disable' in thisbuild:
+                    print ("..skipping version " + thisbuild['version'] + " - " +
+                            thisbuild.get('disable', thisbuild['commit'][1:]))
+                else:
+                    print "..scanning version " + thisbuild['version']
 
-                    if 'disable' in thisbuild:
-                        print ("..skipping version " + thisbuild['version'] + " - " +
-                                thisbuild.get('disable', thisbuild['commit'][1:]))
-                    else:
-                        print "..scanning version " + thisbuild['version']
+                    # Prepare the source code...
+                    root_dir, _ = common.prepare_source(vcs, app, thisbuild,
+                            build_dir, srclib_dir, extlib_dir, False)
 
-                        # Prepare the source code...
-                        root_dir, _ = common.prepare_source(vcs, app, thisbuild,
-                                build_dir, srclib_dir, extlib_dir, False)
+                    # Do the scan...
+                    buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
+                    for problem in buildprobs:
+                        problems.append(problem + 
+                            ' in ' + app['id'] + ' ' + thisbuild['version'])
 
-                        # Do the scan...
-                        buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
-                        for problem in buildprobs:
-                            problems.append(problem + 
-                                ' in ' + app['id'] + ' ' + thisbuild['version'])
-
-            except BuildException as be:
-                msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
-                problems.append(msg)
-            except VCSException as vcse:
-                msg = "VCS error while scanning app %s: %s" % (app['id'], vcse)
-                problems.append(msg)
-            except Exception:
-                msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
-                problems.append(msg)
+        except BuildException as be:
+            msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
+            problems.append(msg)
+        except VCSException as vcse:
+            msg = "VCS error while scanning app %s: %s" % (app['id'], vcse)
+            problems.append(msg)
+        except Exception:
+            msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
+            problems.append(msg)
 
     print "Finished:"
     for problem in problems:
