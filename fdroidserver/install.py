@@ -65,8 +65,7 @@ def main():
         # Get the signed apk with the highest vercode
         for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
 
-            apkfilename = os.path.basename(apkfile)
-            appid, vercode = common.apknameinfo(apkfilename)
+            appid, vercode = common.apknameinfo(apkfile)
             if appid not in apks:
                 continue
             if vercodes[appid] and vc not in vercodes[appid]:
@@ -81,8 +80,7 @@ def main():
 
         for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
 
-            apkfilename = os.path.basename(apkfile)
-            appid, vercode = common.apknameinfo(apkfilename)
+            appid, vercode = common.apknameinfo(apkfile)
             apks[appid] = apkfile
 
     else:
@@ -103,8 +101,11 @@ def main():
                 if line.startswith("Failure"):
                     fail = line[9:-1]
             if fail:
-                raise Exception("Failed to install %s on %s: %s" % (
-                    apk, dev, fail))
+                if fail == "INSTALL_FAILED_ALREADY_EXISTS":
+                    print "%s is already installed on %s." % (apk, dev)
+                else:
+                    raise Exception("Failed to install %s on %s: %s" % (
+                        apk, dev, fail))
 
     print "\nFinished"
 

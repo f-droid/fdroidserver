@@ -163,15 +163,16 @@ def read_app_args(args, options, allapps, allow_vercodes=False):
 
 apk_regex = None
 
-def apknameinfo(basename):
+def apknameinfo(filename):
     global apk_regex
+    filename = os.path.basename(filename)
     if apk_regex is None:
         apk_regex = re.compile(r"^([a-zA-Z\.]+)_([0-9]+)\.apk$")
-    m = apk_regex.match(basename)
+    m = apk_regex.match(filename)
     try:
         result = (m.group(1), m.group(2))
     except AttributeError:
-        raise Exception("Invalid apk name: %s" % basename)
+        raise Exception("Invalid apk name: %s" % filename)
     return result
 
 def getapkname(app, build):
@@ -1428,7 +1429,7 @@ def FDroidPopen(commands, cwd=None):
                 sys.stderr.write(line)
                 sys.stderr.flush()
             result.stderr += line
-        time.sleep(0.2)
+        time.sleep(0.1)
 
     p.communicate()
     result.returncode = p.returncode
