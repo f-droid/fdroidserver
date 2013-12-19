@@ -25,7 +25,6 @@ from optparse import OptionParser
 
 import common
 from common import FDroidPopen
-import metadata
 
 options = None
 config = None
@@ -34,7 +33,6 @@ def devices():
     p = FDroidPopen(["adb", "devices"])
     if p.returncode != 0:
         raise Exception("An error occured when finding devices: %s" % p.stderr)
-    devs = []
     return [l.split()[0] for l in p.stdout.splitlines()[1:-1]]
 
 
@@ -68,7 +66,7 @@ def main():
             appid, vercode = common.apknameinfo(apkfile)
             if appid not in apks:
                 continue
-            if vercodes[appid] and vc not in vercodes[appid]:
+            if vercodes[appid] and vercode not in vercodes[appid]:
                 continue
             apks[appid] = apkfile
 
