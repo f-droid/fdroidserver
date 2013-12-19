@@ -110,11 +110,14 @@ def read_config(opts, config_file='config.py'):
 
     return config
 
-def read_pkg_args(args, options, allow_vercodes=False):
-    if not args:
-        return {}
+# Given the arguments in the form of multiple appid:[vc] strings, this returns
+# a dictionary with the set of vercodes specified for each package.
+def read_pkg_args(args, allow_vercodes=False):
 
     vercodes = {}
+    if not args:
+        return vercodes
+
     for p in args:
         if allow_vercodes and ':' in p:
             package, vercode = p.split(':')
@@ -128,10 +131,17 @@ def read_pkg_args(args, options, allow_vercodes=False):
 
     return vercodes
 
-def read_app_args(args, options, allapps, allow_vercodes=False):
-    vercodes = read_pkg_args(args, options, allow_vercodes)
+# On top of what read_pkg_args does, this returns the whole app metadata, but
+# limiting the builds list to the builds matching the vercodes specified.
+def read_app_args(args, allapps, allow_vercodes=False):
+
+    vercodes = read_pkg_args(args, allow_vercodes)
+
+    if not vercodes:
+        return allapps
 
     apps = [app for app in allapps if app['id'] in vercodes]
+
     if not apps:
         raise Exception("No packages specified")
     if len(apps) != len(vercodes):
@@ -141,20 +151,18 @@ def read_app_args(args, options, allapps, allow_vercodes=False):
                 print "No such package: %s" % p
         raise Exception("Found invalid app ids in arguments")
 
-    if not vercodes:
-        return apps
-
     error = False
     for app in apps:
         vc = vercodes[app['id']]
-        if vc:
-            app['builds'] = [b for b in app['builds'] if b['vercode'] in vc]
-            if len(app['builds']) != len(vercodes[app['id']]):
-                error = True
-                allvcs = [b['vercode'] for b in app['builds']]
-                for v in vercodes[app['id']]:
-                    if v not in allvcs:
-                        print "No such vercode %s for app %s" % (v, app['id'])
+        if not vc:
+            continue
+        app['builds'] = [b for b in app['builds'] if b['vercode'] in vc]
+        if len(app['builds']) != len(vercodes[app['id']]):
+            error = True
+            allvcs = [b['vercode'] for b in app['builds']]
+            for v in vercodes[app['id']]:
+                if v not in allvcs:
+                    print "No such vercode %s for app %s" % (v, app['id'])
 
     if error:
         raise Exception("Found invalid vercodes for some apps")
