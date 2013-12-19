@@ -25,7 +25,6 @@ import glob
 from optparse import OptionParser
 
 import common
-from common import BuildException
 
 options = None
 config = None

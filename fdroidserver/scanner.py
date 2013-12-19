@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import os
 import traceback
 from optparse import OptionParser
@@ -59,7 +58,6 @@ def main():
 
     for app in apps:
 
-        skip = False
         if app['Disabled']:
             print "Skipping %s: disabled" % app['id']
             continue
