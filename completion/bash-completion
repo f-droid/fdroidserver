@@ -40,6 +40,9 @@ __package() {
 
 __signed_package() {
 	files=( repo/*.apk )
+	if [ "${files[0]}" == "repo/*.apk" ]; then
+		return
+	fi
 	files=( ${files[@]#repo/} )
 	files=${files[@]%_*}
 	COMPREPLY=( $( compgen -W "$files" -- $cur ) )

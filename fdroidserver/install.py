@@ -3,6 +3,7 @@
 #
 # verify.py - part of the FDroid server tools
 # Copyright (C) 2013, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2013 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -19,6 +20,7 @@
 
 import sys
 import os
+import glob
 from optparse import OptionParser
 
 import common
@@ -44,6 +46,8 @@ def main():
     parser = OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
+    parser.add_option("-a", "--all", action="store_true", default=False,
+                      help="Install all signed applications available")
     (options, args) = parser.parse_args()
 
     config = common.read_config(options)
@@ -53,26 +57,39 @@ def main():
         print "No signed output directory - nothing to do"
         sys.exit(1)
 
-    # Get all apps...
-    allapps = metadata.read_metadata()
+    if args:
 
-    apps = common.read_app_args(args, options, allapps, True)
+        vercodes = common.read_pkg_args(args, options, True)
+        apks = { appid : None for appid in vercodes }
 
-    for app in apps:
-        last = None
-        for build in app['builds']:
-            apk = os.path.join(output_dir, common.getapkname(app, build))
-            if os.path.exists(apk):
-                last = build
-        if last is None:
-            raise Exception("No available signed apks for %s" % app['id'])
+        # Get the signed apk with the highest vercode
+        for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
 
-    for app in apps:
-        build = app['builds'][0]
-        apk = os.path.join(output_dir, common.getapkname(app, build))
-        if not os.path.exists(apk):
-            raise Exception("No such signed apk: %s" % apk)
-            continue
+            apkfilename = os.path.basename(apkfile)
+            appid, vercode = common.apknameinfo(apkfilename)
+            if appid not in apks:
+                continue
+            if vercodes[appid] and vc not in vercodes[appid]:
+                continue
+            apks[appid] = apkfile
+
+        for appid, apk in apks.iteritems():
+            if not apk:
+                raise Exception("No signed apk available for %s" % appid)
+
+    elif options.all:
+
+        for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
+
+            apkfilename = os.path.basename(apkfile)
+            appid, vercode = common.apknameinfo(apkfilename)
+            apks[appid] = apkfile
+
+    else:
+        print "If you really want to install all the signed apps, use --all"
+        sys.exit(0)
+    
+    for appid, apk in apks.iteritems():
         # Get device list each time to avoid device not found errors
         devs = devices()
         if not devs:

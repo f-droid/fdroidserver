@@ -110,9 +110,9 @@ def read_config(opts, config_file='config.py'):
 
     return config
 
-def read_app_args(args, options, allapps, allow_vercodes=False):
+def read_pkg_args(args, options, allow_vercodes=False):
     if not args:
-        return []
+        return {}
 
     vercodes = {}
     for p in args:
@@ -125,11 +125,18 @@ def read_app_args(args, options, allapps, allow_vercodes=False):
             continue
         elif vercode and vercode not in vercodes[package]:
             vercodes[package] += [vercode] if vercode else []
-    packages = vercodes.keys()
-    apps = [app for app in allapps if app['id'] in packages]
-    if len(apps) != len(packages):
+
+    return vercodes
+
+def read_app_args(args, options, allapps, allow_vercodes=False):
+    vercodes = read_pkg_args(args, options, allow_vercodes)
+
+    apps = [app for app in allapps if app['id'] in vercodes]
+    if not apps:
+        raise Exception("No packages specified")
+    if len(apps) != len(vercodes):
         allids = [app["id"] for app in allapps]
-        for p in packages:
+        for p in vercodes:
             if p not in allids:
                 print "No such package: %s" % p
         raise Exception("Found invalid app ids in arguments")
@@ -154,6 +161,18 @@ def read_app_args(args, options, allapps, allow_vercodes=False):
 
     return apps
 
+apk_regex = None
+
+def apknameinfo(basename):
+    global apk_regex
+    if apk_regex is None:
+        apk_regex = re.compile(r"^([a-zA-Z\.]+)_([0-9]+)\.apk$")
+    m = apk_regex.match(basename)
+    try:
+        result = (m.group(1), m.group(2))
+    except AttributeError:
+        raise Exception("Invalid apk name: %s" % basename)
+    return result
 
 def getapkname(app, build):
     return "%s_%s.apk" % (app['id'], build['vercode'])
