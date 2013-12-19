@@ -57,7 +57,7 @@ def main():
 
     if args:
 
-        vercodes = common.read_pkg_args(args, options, True)
+        vercodes = common.read_pkg_args(args, True)
         apks = { appid : None for appid in vercodes }
 
         # Get the signed apk with the highest vercode
