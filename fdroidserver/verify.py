@@ -34,11 +34,9 @@ def main():
     global options, config
 
     # Parse command line...
-    parser = OptionParser()
+    parser = OptionParser(usage="Usage: %prog [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
-    parser.add_option("-p", "--package", default=None,
-                      help="Verify only the specified package")
     (options, args) = parser.parse_args()
 
     config = common.read_config(options)

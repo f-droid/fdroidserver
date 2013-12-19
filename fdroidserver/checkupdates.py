@@ -277,7 +277,7 @@ def main():
     global config, options
 
     # Parse command line...
-    parser = OptionParser()
+    parser = OptionParser(usage="Usage: %prog [options] [APPID [APPID ...]]")
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     parser.add_option("--auto", action="store_true", default=False,
