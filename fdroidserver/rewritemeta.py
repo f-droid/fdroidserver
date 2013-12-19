@@ -33,17 +33,16 @@ def main():
     parser = OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
-    parser.add_option("-p", "--package", default=None,
-                      help="Process only the specified package")
     (options, args) = parser.parse_args()
 
     config = common.read_config(options)
 
     # Get all apps...
-    apps = metadata.read_metadata(package=options.package, xref=False)
+    allapps = metadata.read_metadata(xref=False)
+    apps = common.read_app_args(args, allapps, False)
 
-    if len(apps) == 0 and options.package:
-        print "No such package"
+    if len(apps) == 0:
+        print "No packages to rewrite"
         sys.exit(1)
 
     for app in apps:
