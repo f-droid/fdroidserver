@@ -295,7 +295,7 @@ def main():
     # Get all apps...
     allapps = metadata.read_metadata(options.verbose)
 
-    apps = common.read_app_args(args, options, allapps, False)
+    apps = common.read_app_args(args, allapps, False)
 
     if options.gplay:
         for app in apps:

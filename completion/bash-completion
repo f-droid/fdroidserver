@@ -12,16 +12,6 @@
 #
 #	alias fbuild='fdroid build'
 #	complete -F _fdroid_build fbuild
-#
-# There are also completion function for '-p com.some.app' aliases:
-#
-#	alias fbld='fdroid build -v -l -p'
-#	complete -F _fdroid_build_project fbld
-#
-#	alias fcheckup='fdroid checkupdates -v -p'
-#	complete -F _fdroid_checkupdates_project fcheckup
-#
-# This way, one can simply do 'fbld com.some.app' or 'fcheckup com.some.app'
 
 __fdroid_init() {
 	COMPREPLY=()
@@ -38,21 +28,22 @@ __package() {
 	COMPREPLY=( $( compgen -W "$files" -- $cur ) )
 }
 
-__signed_package() {
-	files=( repo/*.apk )
-	if [ "${files[0]}" == "repo/*.apk" ]; then
-		return
-	fi
-	files=( ${files[@]#repo/} )
+__apk_package() {
+	files=( ${1}/*.apk )
+	[ -f "${files[0]}" ] || return
+
+	files=( ${files[@]#*/} )
 	files=${files[@]%_*}
 	COMPREPLY=( $( compgen -W "$files" -- $cur ) )
 }
 
-__signed_vercode() {
+__apk_vercode() {
 	local p
 	p=${cur:0:-1}
 
-	files=( repo/${p}_*.apk )
+	files=( ${1}/${p}_*.apk )
+	[ -f "${files[0]}" ] || return
+
 	files=( ${files[@]#*_} )
 	files=${files[@]%.apk}
 	COMPREPLY=( $( compgen -P "${p}:" -W "$files" -- $cur ) )
@@ -109,10 +100,10 @@ __complete_install() {
 			__complete_options
 			return 0;;
 		*:)
-			__signed_vercode
+			__apk_vercode repo
 			return 0;;
 		*)
-			__signed_package
+			__apk_package repo
 			return 0;;
 	esac
 }
@@ -130,14 +121,19 @@ __complete_update() {
 }
 
 __complete_publish() {
-	opts="-h -v -p"
-	lopts="--help --verbose --package"
-	case "${prev}" in
-		-p|--package)
-			__package
+	opts="-h -v"
+	lopts="--help --verbose"
+	case "${cur}" in
+		-*)
+			__complete_options
+			return 0;;
+		*:)
+			__apk_vercode unsigned
+			return 0;;
+		*)
+			__apk_package unsigned
 			return 0;;
 	esac
-	__complete_options
 }
 
 __complete_checkupdates() {
