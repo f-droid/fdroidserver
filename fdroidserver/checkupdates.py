@@ -417,7 +417,7 @@ def main():
                     try:
                         suffix, pattern = pattern.split(' ', 1)
                     except ValueError:
-                        raise MetaDataException("Invalid AUM at: " + line)
+                        raise MetaDataException("Invalid AUM: " + mode)
                 else:
                     suffix = ''
                 gotcur = False
