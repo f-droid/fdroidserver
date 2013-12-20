@@ -31,6 +31,7 @@ from distutils.version import LooseVersion
 import common, metadata
 from common import BuildException
 from common import VCSException
+from metadata import MetaDataException
 
 
 # Check for a new version by looking at a document retrieved via HTTP.
@@ -413,9 +414,10 @@ def main():
             elif mode.startswith('Version '):
                 pattern = mode[8:]
                 if pattern.startswith('+'):
-                    o = pattern.find(' ')
-                    suffix = pattern[1:o]
-                    pattern = pattern[o + 1:]
+                    try:
+                        suffix, pattern = pattern.split(' ', 1)
+                    except ValueError:
+                        raise MetaDataException("Invalid AUM at: " + line)
                 else:
                     suffix = ''
                 gotcur = False

@@ -94,11 +94,11 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             p = subprocess.Popen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'list', '--details'],
                 cwd='builder', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             output = p.communicate()[0]
-            if output.find('fdroidclean') != -1:
+            if 'fdroidclean' in output:
                 if options.verbose:
                     print "...snapshot exists - resetting build server to clean state"
                 retcode, output = vagrant(['status'], cwd='builder')
-                if output.find('running') != -1:
+                if 'running' in output:
                     if options.verbose:
                         print "...suspending"
                     vagrant(['suspend'], cwd='builder')
@@ -186,7 +186,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         p = subprocess.Popen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'list', '--details'],
             cwd='builder', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         output = p.communicate()[0]
-        if output.find('fdroidclean') == -1:
+        if 'fdroidclean' not in output:
             raise BuildException("Failed to take snapshot.")
 
     try:
