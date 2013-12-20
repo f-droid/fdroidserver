@@ -341,11 +341,10 @@ def parse_srclib(metafile, **kw):
         if not line or line.startswith("#"):
             continue
 
-        index = line.find(':')
-        if index == -1:
+        try:
+            field, value = line.split(':',1)
+        except ValueError:
             raise MetaDataException("Invalid metadata in " + metafile.name + " at: " + line)
-        field = line[:index]
-        value = line[index+1:]
 
         if field == "Subdir":
             thisinfo[field] = value.split(',')
@@ -543,11 +542,10 @@ def parse_metadata(metafile):
             if line.startswith("#"):
                 curcomments.append(line)
                 continue
-            index = line.find(':')
-            if index == -1:
+            try:
+                field, value = line.split(':',1)
+            except ValueError:
                 raise MetaDataException("Invalid metadata in " + metafile.name + " at: " + line)
-            field = line[:index]
-            value = line[index+1:]
 
             # Translate obsolete fields...
             if field == 'Market Version':

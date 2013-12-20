@@ -101,7 +101,7 @@ def main():
                 cwd=tmp_dir, stdout=subprocess.PIPE)
             out = p.communicate()[0]
             lines = out.splitlines()
-            if len(lines) != 1 or lines[0].find('META-INF') == -1:
+            if len(lines) != 1 or 'META-INF' not in lines[0]:
                 raise Exception("Unexpected diff output - " + out)
 
             print "...successfully verified"

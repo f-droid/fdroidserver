@@ -1361,7 +1361,7 @@ def isApkDebuggable(apkfile, config):
         print "ERROR: Failed to get apk manifest information"
         sys.exit(1)
     for line in output.splitlines():
-        if line.find('android:debuggable') != -1 and not line.endswith('0x0'):
+        if 'android:debuggable' in line and not line.endswith('0x0'):
             return True
     return False
 
