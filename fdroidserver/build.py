@@ -323,7 +323,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             cmdline += ' --force --test'
         if options.verbose:
             cmdline += ' --verbose'
-        cmdline += "%s:%s" % (app['id'], thisbuild['vercode'])
+        cmdline += " %s:%s" % (app['id'], thisbuild['vercode'])
         chan.exec_command('bash -c ". ~/.bsenv && ' + cmdline + '"')
         output = ''
         error = ''
