@@ -62,9 +62,9 @@ cachefiles = [
     ('android-sdk_r22.3-linux.tgz',
      'http://dl.google.com/android/android-sdk_r22.3-linux.tgz',
      '4077575c98075480e0156c10e48a1521e31c7952768271a206870e6813057f4f'),
-    ('gradle-1.8-bin.zip',
-     'http://services.gradle.org/distributions/gradle-1.8-bin.zip',
-     'a342bbfa15fd18e2482287da4959588f45a41b60910970a16e6d97959aea5703'),
+    ('gradle-1.9-bin.zip',
+     'http://services.gradle.org/distributions/gradle-1.9-bin.zip',
+     '097ddc2bcbc9da2bb08cbf6bf8079585e35ad088bafd42e8716bc96405db98e9'),
     ('Kivy-1.7.2.tar.gz',
      'http://pypi.python.org/packages/source/K/Kivy/Kivy-1.7.2.tar.gz',
      '0485e2ef97b5086df886eb01f8303cb542183d2d71a159466f99ad6c8a1d03f1')
