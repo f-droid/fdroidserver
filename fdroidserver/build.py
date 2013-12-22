@@ -833,6 +833,10 @@ def main():
     global options, config
 
     options, args = parse_commandline()
+    if not args and not options.all:
+        print "If you really want to build all the apps, use --all"
+        sys.exit(1)
+
     config = common.read_config(options)
 
     if config['build_server_always']:

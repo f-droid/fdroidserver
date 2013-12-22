@@ -48,6 +48,10 @@ def main():
                       help="Install all signed applications available")
     (options, args) = parser.parse_args()
 
+    if not args and not options.all:
+        print "If you really want to install all the signed apps, use --all"
+        sys.exit(1)
+
     config = common.read_config(options)
 
     output_dir = 'repo'
@@ -74,16 +78,10 @@ def main():
             if not apk:
                 raise Exception("No signed apk available for %s" % appid)
 
-    elif options.all:
-
-        for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
-
-            appid, vercode = common.apknameinfo(apkfile)
-            apks[appid] = apkfile
-
     else:
-        print "If you really want to install all the signed apps, use --all"
-        sys.exit(0)
+
+        apks = { common.apknameinfo(apkfile)[0] : apkfile for apkfile in
+                sorted(glob.glob(os.path.join(output_dir, '*.apk'))) }
     
     for appid, apk in apks.iteritems():
         # Get device list each time to avoid device not found errors
