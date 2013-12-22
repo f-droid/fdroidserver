@@ -29,7 +29,7 @@ execute "add-android-home" do
   not_if "grep ANDROID_HOME /home/#{user}/.bsenv"
 end
 
-%w{18.1.1}.each do |ver|
+%w{19.0.1}.each do |ver|
 
   script "add_build_tools_#{ver}" do
     interpreter "bash"
@@ -51,7 +51,7 @@ X
   end
 end
 
-# This is currently 18.0.1
+# This is currently 19.0.1
 script "add_platform_tools" do
   interpreter "bash"
   user user

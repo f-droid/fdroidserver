@@ -11,7 +11,7 @@ sdk_path = "$ANDROID_HOME"
 ndk_path = "$ANDROID_NDK"
 
 # Build tools version to be used
-build_tools = "18.1.1"
+build_tools = "19.0.1"
 
 # Command for running maven 3 (command or full path)
 mvn3 = "mvn3"
