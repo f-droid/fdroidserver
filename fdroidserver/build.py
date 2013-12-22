@@ -28,7 +28,7 @@ import traceback
 import time
 import json
 from ConfigParser import ConfigParser
-from optparse import OptionParser
+from optparse import OptionParser, OptionError
 
 import common, metadata
 from common import BuildException, VCSException, FDroidPopen
@@ -820,8 +820,7 @@ def parse_commandline():
         options.stop = True
 
     if options.force and not options.test:
-        print "Force is only allowed in test mode"
-        sys.exit(1)
+        raise OptionError("Force is only allowed in test mode", "force")
 
     return options, args
 
@@ -834,16 +833,14 @@ def main():
 
     options, args = parse_commandline()
     if not args and not options.all:
-        print "If you really want to build all the apps, use --all"
-        sys.exit(1)
+        raise OptionError("If you really want to build all the apps, use --all", "all")
 
     config = common.read_config(options)
 
     if config['build_server_always']:
         options.server = True
     if options.resetserver and not options.server:
-        print "Using --resetserver without --server makes no sense"
-        sys.exit(1)
+        raise OptionError("Using --resetserver without --server makes no sense", "resetserver")
 
     log_dir = 'logs'
     if not os.path.isdir(log_dir):

@@ -21,7 +21,7 @@
 import sys
 import os
 import glob
-from optparse import OptionParser
+from optparse import OptionParser, OptionError
 
 import common
 from common import FDroidPopen
@@ -49,15 +49,14 @@ def main():
     (options, args) = parser.parse_args()
 
     if not args and not options.all:
-        print "If you really want to install all the signed apps, use --all"
-        sys.exit(1)
+        raise OptionError("If you really want to install all the signed apps, use --all", "all")
 
     config = common.read_config(options)
 
     output_dir = 'repo'
     if not os.path.isdir(output_dir):
         print "No signed output directory - nothing to do"
-        sys.exit(1)
+        sys.exit(0)
 
     if args:
 
