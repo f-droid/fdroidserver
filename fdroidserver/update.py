@@ -578,7 +578,8 @@ def make_index(apps, apks, repodir, archive, categories):
             # filtering can be removed in time...
             if 'UpstreamNonFree' in af:
                 af.remove('UpstreamNonFree')
-            addElement('antifeatures', ','.join(af), doc, apel)
+            if af:
+                addElement('antifeatures', ','.join(af), doc, apel)
         if app['Requires Root']:
             addElement('requirements', 'root', doc, apel)
 
