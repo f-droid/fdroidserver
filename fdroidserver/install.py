@@ -33,7 +33,11 @@ def devices():
     p = FDroidPopen(["adb", "devices"])
     if p.returncode != 0:
         raise Exception("An error occured when finding devices: %s" % p.stderr)
-    return [l.split()[0] for l in p.stdout.splitlines()[1:-1]]
+    lines = p.stdout.splitlines()
+    if len(lines) < 3:
+        return []
+    lines = lines[1:-1]
+    return [l.split()[0] for l in lines]
 
 
 def main():
