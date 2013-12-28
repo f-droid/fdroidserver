@@ -210,7 +210,6 @@ def main():
     for antifeature, count in afs.iteritems():
         f.write(antifeature + ' ' + str(count) + '\n')
     f.close()
-    return
 
     # Calculate and write stats for licenses...
     licenses = {}
