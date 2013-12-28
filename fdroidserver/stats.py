@@ -49,6 +49,8 @@ def main():
                       help="Spew out even more information than normal")
     parser.add_option("-d", "--download", action="store_true", default=False,
                       help="Download logs we don't have")
+    parser.add_option("--nologs", action="store_true", default=False,
+                      help="Don't do anything logs-related")
     (options, args) = parser.parse_args()
 
     config = common.read_config(options)
@@ -105,51 +107,55 @@ def main():
             if ssh is not None:
                 ssh.close()
 
-    # Process logs
-    if options.verbose:
-        print 'Processing logs...'
-    logexpr = '(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] "GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) \d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
-    logsearch = re.compile(logexpr).search
-    apps = {}
-    unknownapks = []
     knownapks = common.KnownApks()
-    for logfile in glob.glob(os.path.join(logsdir,'access-*.log.gz')):
-        if options.verbose:
-            print '...' + logfile
-        p = subprocess.Popen(["zcat", logfile], stdout = subprocess.PIPE)
-        matches = (logsearch(line) for line in p.stdout)
-        for match in matches:
-            if match and match.group('statuscode') == '200':
-                uri = match.group('uri')
-                if uri.endswith('.apk'):
-                    _, apkname = os.path.split(uri)
-                    app = knownapks.getapp(apkname)
-                    if app:
-                        appid, _ = app
-                        if appid in apps:
-                            apps[appid] += 1
-                        else:
-                            apps[appid] = 1
-                    else:
-                        if not apkname in unknownapks:
-                            unknownapks.append(apkname)
+    unknownapks = []
 
-    # Calculate and write stats for total downloads...
-    lst = []
-    alldownloads = 0
-    for app, count in apps.iteritems():
-        lst.append(app + " " + str(count))
-        if config['stats_to_carbon']:
-            carbon_send('fdroid.download.' + app.replace('.', '_'), count)
-        alldownloads += count
-    lst.append("ALL " + str(alldownloads))
-    f = open('stats/total_downloads_app.txt', 'w')
-    f.write('# Total downloads by application, since October 2011\n')
-    for line in sorted(lst):
-        f.write(line + '\n')
-    f.close()
+    if not options.nologs:
+        # Process logs
+        if options.verbose:
+            print 'Processing logs...'
+        apps = {}
+        logexpr = '(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] "GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) \d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
+        logsearch = re.compile(logexpr).search
+        for logfile in glob.glob(os.path.join(logsdir,'access-*.log.gz')):
+            if options.verbose:
+                print '...' + logfile
+            p = subprocess.Popen(["zcat", logfile], stdout = subprocess.PIPE)
+            matches = (logsearch(line) for line in p.stdout)
+            for match in matches:
+                if match and match.group('statuscode') == '200':
+                    uri = match.group('uri')
+                    if uri.endswith('.apk'):
+                        _, apkname = os.path.split(uri)
+                        app = knownapks.getapp(apkname)
+                        if app:
+                            appid, _ = app
+                            if appid in apps:
+                                apps[appid] += 1
+                            else:
+                                apps[appid] = 1
+                        else:
+                            if not apkname in unknownapks:
+                                unknownapks.append(apkname)
+
+        # Calculate and write stats for total downloads...
+        lst = []
+        alldownloads = 0
+        for app, count in apps.iteritems():
+            lst.append(app + " " + str(count))
+            if config['stats_to_carbon']:
+                carbon_send('fdroid.download.' + app.replace('.', '_'), count)
+            alldownloads += count
+        lst.append("ALL " + str(alldownloads))
+        f = open('stats/total_downloads_app.txt', 'w')
+        f.write('# Total downloads by application, since October 2011\n')
+        for line in sorted(lst):
+            f.write(line + '\n')
+        f.close()
 
     # Calculate and write stats for repo types...
+    if options.verbose:
+        print "Processing repo types..."
     repotypes = {}
     for app in metaapps:
         if len(app['Repo Type']) == 0:
@@ -169,6 +175,8 @@ def main():
     f.close()
 
     # Calculate and write stats for update check modes...
+    if options.verbose:
+        print "Processing update check modes..."
     ucms = {}
     for app in metaapps:
         checkmode = app['Update Check Mode'].split('/')[0]
@@ -181,6 +189,8 @@ def main():
         f.write(checkmode + ' ' + str(count) + '\n')
     f.close()
 
+    if options.verbose:
+        print "Processing categories..."
     ctgs = {}
     for app in metaapps:
         if app['Categories'] is None:
@@ -196,6 +206,8 @@ def main():
         f.write(category + ' ' + str(count) + '\n')
     f.close()
 
+    if options.verbose:
+        print "Processing antifeatures..."
     afs = {}
     for app in metaapps:
         if app['AntiFeatures'] is None:
@@ -212,6 +224,8 @@ def main():
     f.close()
 
     # Calculate and write stats for licenses...
+    if options.verbose:
+        print "Processing licenses..."
     licenses = {}
     for app in metaapps:
         license = app['License']
@@ -225,13 +239,15 @@ def main():
     f.close()
 
     # Write list of latest apps added to the repo...
+    if options.verbose:
+        print "Processing latest apps..."
     latest = knownapks.getlatest(10)
     f = open('stats/latestapps.txt', 'w')
     for app in latest:
         f.write(app + '\n')
     f.close()
 
-    if len(unknownapks) > 0:
+    if unknownapks:
         print '\nUnknown apks:'
         for apk in unknownapks:
             print apk
