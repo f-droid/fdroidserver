@@ -94,33 +94,10 @@ all, of the following:
 
 @itemize @bullet
 @item
-All SDK platforms requested by the apps you want to build
-(The Android SDK is made available by Google under a proprietary license but
-within that, the SDK platforms, support library and some other components are 
-under the Apache license and source code is provided. 
-Google APIs, used for building apps using Google Maps, are free to the extent 
-that the library comes pre-installed on the device.
-Google Play Services, Google Admob and others are proprietary and shouldn't be
-included in the main F-Droid repository.)
-@item
-A version of the Android NDK
-@item
-Ant
-@item
-Ant Contrib Tasks (Debian package ant-contrib)
-@item
-Maven (Debian package maven)
-@item
-JavaCC (Debian package javacc)
-@item
 JDK (Debian package openjdk-6-jdk): openjdk-6 is recommended though openjdk-7
 should work too
 @item
 VCS clients: svn, git, git-svn, hg, bzr
-@item
-Miscellaneous packages listed in 
-buildserver/cookbooks/fdroidbuild-general/recipes/default.rb
-of the F-Droid server repository
 @item
 A keystore for holding release keys. (Safe, secure and well backed up!)
 @end itemize
@@ -143,6 +120,32 @@ Imaging (debian package python-imaging)
 Magic (debian package python-magic)
 @end itemize
 
+On the other hand, if you want to build the apps directly on your system
+without the 'Build Server' system, you may need:
+
+@itemize @bullet
+@item
+All SDK platforms requested by the apps you want to build
+(The Android SDK is made available by Google under a proprietary license but
+within that, the SDK platforms, support library and some other components are 
+under the Apache license and source code is provided. 
+Google APIs, used for building apps using Google Maps, are free to the extent 
+that the library comes pre-installed on the device.
+Google Play Services, Google Admob and others are proprietary and shouldn't be
+included in the main F-Droid repository.)
+@item
+A version of the Android NDK
+@item
+Ant with Contrib Tasks (Debian packages ant and ant-contrib)
+@item
+Maven (Debian package maven)
+@item
+JavaCC (Debian package javacc)
+@item
+Miscellaneous packages listed in 
+buildserver/cookbooks/fdroidbuild-general/recipes/default.rb
+of the F-Droid server repository
+@end itemize
 
 @node Setup
 @chapter Setup
