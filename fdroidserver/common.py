@@ -1237,6 +1237,9 @@ def scan_source(build_dir, root_dir, thisbuild):
         else:
             problems.append('Found %s at %s' % (what, fd))
 
+    def warnproblem(what, fd, fp):
+        print 'Warning: Found %s at %s' % (what, fd)
+
     # Iterate through all files in the source code...
     for r,d,f in os.walk(build_dir):
         for curfile in f:
@@ -1265,6 +1268,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                 handleproblem('binary executable', fd, fp)
             elif mime == 'application/jar' and fp.endswith('.apk'):
                 removeproblem('APK file', fd, fp)
+            elif mime == 'application/jar' and fp.endswith('.jar'):
+                warnproblem('JAR file', fd, fp)
 
             elif curfile.endswith('.java'):
                 for line in file(fp):
