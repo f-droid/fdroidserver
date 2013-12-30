@@ -307,12 +307,12 @@ To build a single version of a single application, you could run the
 following:
 
 @example
-./fdroid build --package=org.fdroid.fdroid --vercode 16
+./fdroid build org.fdroid.fdroid:16
 @end example
 
 This attempts to build version code 16 (which is version 0.25) of the F-Droid
-client. Many of the tools recognise this @code{--package} parameter, allowing
-their activity to be limited to just a single package.
+client. Many of the tools recognise arguments as packages, allowing their
+activity to be limited to just a limited set of packages.
 
 If the build above was successful, two files will have been placed in the
 @code{unsigned} directory:
@@ -361,15 +361,14 @@ party.
 
 @section Direct Installation
 
-You can also build and install directly to a connected device or emulator using
-the @code{--install} switch. If you do this without using @code{--package} and
-@code{--vercode} then all versions of all packages will be installed (with each
-individual version overwriting the previous!). In most cases, this will not be
-what you want to do, so execution will stop straight away. However, you can
-override this if you're sure that's what you want, by using @code{--all}.
-Note that currently, no sanity checks are performed with this mode, so that if 
-the version is incorrect or that if the package name is different, you won't 
-be informed.
+You can also build and install directly to a connected device or emulator
+using the @code{fdroid install} command. If you do this without passing
+packages as arguments then all the latest built and signed version available
+of each package will be installed . In most cases, this will not be what you
+want to do, so execution will stop straight away. However, you can override
+this if you're sure that's what you want, by using @code{--all}.  Note that
+currently, no sanity checks are performed with this mode, so if the files in
+the signed output directory were modified, you won't be notified.
 
 
 @node Importing Applications
