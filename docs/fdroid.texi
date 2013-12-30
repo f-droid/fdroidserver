@@ -81,11 +81,11 @@ GNU/Linux
 @item
 Python 2.x
 @item
-The Android SDK Tools and Build-tools. 
-Note that F-Droid does not assume that you have the Android SDK in your 
-@code{PATH}: these directories will be specified in your repository 
-configuration. Recent revisions of the SDK have @code{aapt} located in 
-android-sdk/build-tools/ and it may be necessary to make a symlink to it in 
+The Android SDK Tools and Build-tools.
+Note that F-Droid does not assume that you have the Android SDK in your
+@code{PATH}: these directories will be specified in your repository
+configuration. Recent revisions of the SDK have @code{aapt} located in
+android-sdk/build-tools/ and it may be necessary to make a symlink to it in
 android-sdk/platform-tools/
 @end itemize
 
@@ -127,9 +127,9 @@ without the 'Build Server' system, you may need:
 @item
 All SDK platforms requested by the apps you want to build
 (The Android SDK is made available by Google under a proprietary license but
-within that, the SDK platforms, support library and some other components are 
-under the Apache license and source code is provided. 
-Google APIs, used for building apps using Google Maps, are free to the extent 
+within that, the SDK platforms, support library and some other components are
+under the Apache license and source code is provided.
+Google APIs, used for building apps using Google Maps, are free to the extent
 that the library comes pre-installed on the device.
 Google Play Services, Google Admob and others are proprietary and shouldn't be
 included in the main F-Droid repository.)
@@ -142,7 +142,7 @@ Maven (Debian package maven)
 @item
 JavaCC (Debian package javacc)
 @item
-Miscellaneous packages listed in 
+Miscellaneous packages listed in
 buildserver/cookbooks/fdroidbuild-general/recipes/default.rb
 of the F-Droid server repository
 @end itemize
@@ -347,18 +347,18 @@ A similar effect could by achieved by simply deleting the output files from
 @code{unsigned} after the build, but with the risk of forgetting to do so!
 
 Along similar lines (and only in conjunction with @code{--test}, you can use
-@code{--force} to force a build of a Disabled application, where normally it 
-would be completely ignored. Similarly a version that was found to contain 
-ELFs or known non-free libraries can be forced to build. See also — 
+@code{--force} to force a build of a Disabled application, where normally it
+would be completely ignored. Similarly a version that was found to contain
+ELFs or known non-free libraries can be forced to build. See also —
 scanignore= and scandelete= in the Build Version section.
 
-If the build was unsuccessful, you can find out why by looking at the output 
-in the logs/ directory. If that isn't illuminating, try building the app the 
+If the build was unsuccessful, you can find out why by looking at the output
+in the logs/ directory. If that isn't illuminating, try building the app the
 regular way, step by step: android update project, ndk-build, ant debug.
 
-Note that source code repositories often contain prebuilt libraries. If the 
-app is being considered for the main F-Droid repository, it is important that 
-all such prebuilts are built either via the metadata or by a reputable third 
+Note that source code repositories often contain prebuilt libraries. If the
+app is being considered for the main F-Droid repository, it is important that
+all such prebuilts are built either via the metadata or by a reputable third
 party.
 
 
@@ -509,10 +509,10 @@ This is converted to (@code{<categories>}) in the public index file.
 
 @cindex license
 
-The overall license for the application, or in certain cases, for the 
-source code only. 
+The overall license for the application, or in certain cases, for the
+source code only.
 
-Common values: 
+Common values:
 
 @itemize @bullet
 
@@ -534,8 +534,8 @@ GNU GPL version 3 or later
 
 @item
 @samp{GPL}
-An unspecified GPL version. Use this only as a last resort or if there is 
-some confusion over compatiblity of component licenses: particularly the use of 
+An unspecified GPL version. Use this only as a last resort or if there is
+some confusion over compatiblity of component licenses: particularly the use of
 Apache libraries with GPLv2 source code.
 
 @item
@@ -578,10 +578,10 @@ checkupdates} is run.
 
 @cindex Name
 
-The name of the application. Normally, this field should not be present since 
-the application's correct name is retrieved from the APK file. However, in a 
-situation where an APK contains a bad or missing application name, it can be 
-overridden using this. Note that this only overrides the name in the list of 
+The name of the application. Normally, this field should not be present since
+the application's correct name is retrieved from the APK file. However, in a
+situation where an APK contains a bad or missing application name, it can be
+overridden using this. Note that this only overrides the name in the list of
 apps presented in the client; it doesn't changed the name or application label
 in the source code.
 
@@ -664,8 +664,8 @@ A litecoin address for donating to the project.
 
 @cindex Summary
 
-A brief summary of what the application is. Since the summary is only allowed 
-one line on the list of the F-Droid client, keeping it to within 32 characters 
+A brief summary of what the application is. Since the summary is only allowed
+one line on the list of the F-Droid client, keeping it to within 32 characters
 will ensure it fits even on the smallest screens.
 
 @node Description
@@ -673,8 +673,8 @@ will ensure it fits even on the smallest screens.
 
 @cindex Description
 
-A full description of the application, relevant to the latest version. 
-This can span multiple lines (which should be kept to a maximum of 80 
+A full description of the application, relevant to the latest version.
+This can span multiple lines (which should be kept to a maximum of 80
 characters), and is terminated by a line containing a single '.'.
 
 Basic MediaWiki-style formatting can be used. Leaving a blank line starts a
@@ -694,11 +694,11 @@ Bulletted lists are done by simply starting each item with a @code{*} on
 a new line, and numbered lists are the same but using @code{#}. There is
 currently no support for nesting lists - you can have one level only.
 
-It can be helpful to note information pertaining to updating from an 
-earlier version; whether the app contains any prebuilts built by the 
-upstream developers or whether non-free elements were removed; whether the 
-app is in rapid development or whether the latest version lags behind the 
-current version; whether the app supports multiple architectures or whether 
+It can be helpful to note information pertaining to updating from an
+earlier version; whether the app contains any prebuilts built by the
+upstream developers or whether non-free elements were removed; whether the
+app is in rapid development or whether the latest version lags behind the
+current version; whether the app supports multiple architectures or whether
 there is a maximum SDK specified (such info not being recorded in the index).
 
 This is converted to (@code{<desc>}) in the public index file.
@@ -795,8 +795,8 @@ can also be achieved by starting the commit ID with '!')
 The purpose of this feature is to allow non-buildable releases (e.g. the source
 is not published) to be flagged, so the scripts don't generate repeated
 messages about them. (And also to record the information for review later).
-If an apk has already been built, disabling causes it to be deleted once 
-@code{fdroid update} is run; this is the procedure if ever a version has to 
+If an apk has already been built, disabling causes it to be deleted once
+@code{fdroid update} is run; this is the procedure if ever a version has to
 be replaced.
 
 @item subdir=<path>
@@ -822,13 +822,13 @@ is sdk-location. Typically, if you get a message along the lines of:
 try enabling this option.
 
 @item target=<target>
-Specifies a particular SDK target for compilation, overriding the 
-project.properties of the app and possibly sub-projects. Note that this does 
-not change the target SDK in the AndroidManifest.xml — the level of features 
-that can be included in the build. This is likely to cause the whole build.xml 
-to be rewritten, which is fine if it's a 'standard' android file or doesn't 
-already exist, but not a good idea if it's heavily customised. If you get an 
-error about invalid target, first try @code{init=rm -rf bin/}; otherwise this 
+Specifies a particular SDK target for compilation, overriding the
+project.properties of the app and possibly sub-projects. Note that this does
+not change the target SDK in the AndroidManifest.xml — the level of features
+that can be included in the build. This is likely to cause the whole build.xml
+to be rewritten, which is fine if it's a 'standard' android file or doesn't
+already exist, but not a good idea if it's heavily customised. If you get an
+error about invalid target, first try @code{init=rm -rf bin/}; otherwise this
 parameter should do the trick.
 
 Please note that gradle builds should be using compilesdk=.
@@ -867,8 +867,8 @@ If specified, the package version in AndroidManifest.xml is replaced
 with the version name for the build as specified in the metadata.
 
 This is useful for cases when upstream repo failed to update it for
-specific tag; to build an arbitrary revision; to make it apparent that 
-the version differs significantly from upstream; or to make it apparent 
+specific tag; to build an arbitrary revision; to make it apparent that
+the version differs significantly from upstream; or to make it apparent
 which architecture or platform the apk is designed to run on.
 
 @item forcevercode=yes
@@ -902,18 +902,18 @@ Specifies a list of external libraries (jar files) from the
 of the project. Separate items with semicolons.
 
 @item srclibs=a@@r;b@@r1;
-Specifies a list of source libraries or Android projects. Separate items with 
-semicolons, and each item is of the form name@@rev where name is the predefined 
-source library name and rev is the revision or tag in source control to use. 
+Specifies a list of source libraries or Android projects. Separate items with
+semicolons, and each item is of the form name@@rev where name is the predefined
+source library name and rev is the revision or tag in source control to use.
 
-Each srclib has a metadata file under srclibs/ in the repository directory, 
-and the source code is stored in build/srclib/. 
-Repo Type: and Repo: are specified in the same way as for apps; Subdir: can be 
-a comma separated list, for when directories are renamed by upstream; Update 
-Project: updates the projects in the working directory and one level down; 
-Prepare: can be used for any kind of preparation: in particular if you need to 
-update the project with a particular target. You can then also use $$name$$ in 
-the init/prebuild/build command to substitute the relative path to the library 
+Each srclib has a metadata file under srclibs/ in the repository directory,
+and the source code is stored in build/srclib/.
+Repo Type: and Repo: are specified in the same way as for apps; Subdir: can be
+a comma separated list, for when directories are renamed by upstream; Update
+Project: updates the projects in the working directory and one level down;
+Prepare: can be used for any kind of preparation: in particular if you need to
+update the project with a particular target. You can then also use $$name$$ in
+the init/prebuild/build command to substitute the relative path to the library
 directory, but it could need tweaking if you've changed into another directory.
 
 @item patch=x
@@ -940,7 +940,7 @@ You can use $$name$$ to substitute the path to a referenced srclib - see
 the @code{srclib} directory for details of this.
 
 You can use $$SDK$$, $$NDK$$ and $$MVN3$$ to substitute the paths to the
-android SDK and NDK directories, and maven 3 executable respectively e.g. 
+android SDK and NDK directories, and maven 3 executable respectively e.g.
 for when you need to run @code{android update project} explicitly.
 
 @item scanignore=path1;path2;...
@@ -1008,7 +1008,7 @@ of the checked out repo. Not yet implemented for gradle.
 Specify an alternate ant command (target) instead of the default
 'release'. It can't be given any flags, such as the path to a build.xml.
 
-@item novcheck=yes 
+@item novcheck=yes
 Don't check that the version name and code in the resulting apk are
 correct by looking at the build output - assume the metadata is
 correct. This takes away a useful level of sanity checking, and should
@@ -1026,9 +1026,9 @@ Another example, using extra parameters:
 @cindex AntiFeatures
 
 This is optional - if present, it contains a comma-separated list of any of
-the following values, describing an anti-feature the application has. 
-Even though such apps won't be displayed unless a settings box is ticked, 
-it is a good idea to mention the reasons for the anti-feature(s) in the 
+the following values, describing an anti-feature the application has.
+Even though such apps won't be displayed unless a settings box is ticked,
+it is a good idea to mention the reasons for the anti-feature(s) in the
 description:
 
 @itemize @bullet
@@ -1038,18 +1038,18 @@ description:
 
 @item
 @samp{Tracking} - the application tracks and reports your activity to
-somewhere without your consent. It's commonly used for when developers 
-obtain crash logs without the user's consent, or when an app is useless 
+somewhere without your consent. It's commonly used for when developers
+obtain crash logs without the user's consent, or when an app is useless
 without some kind of authentication.
 
 @item
-@samp{NonFreeNet} - the application relies on computational services that 
-are impossible to replace or that the replacement cannot be connected to 
+@samp{NonFreeNet} - the application relies on computational services that
+are impossible to replace or that the replacement cannot be connected to
 without major changes to the app.
 
 @item
-@samp{NonFreeAdd} - the application promotes non-Free add-ons, such that the 
-app is effectively an advert for other non-free software and such software is 
+@samp{NonFreeAdd} - the application promotes non-Free add-ons, such that the
+app is effectively an advert for other non-free software and such software is
 not clearly labelled as such.
 
 @item
@@ -1067,9 +1067,9 @@ include it.
 If this field is present, the application does not get put into the public
 index. This allows metadata to be retained while an application is temporarily
 disabled from being published. The value should be a description of why the
-application is disabled. No apks or source code archives are deleted: to purge 
-an apk see the Build Version section or delete manually for developer builds. 
-The field is therefore used when an app has outlived it's usefulness, because 
+application is disabled. No apks or source code archives are deleted: to purge
+an apk see the Build Version section or delete manually for developer builds.
+The field is therefore used when an app has outlived it's usefulness, because
 the source tarball is retained.
 
 @node Requires Root
@@ -1079,8 +1079,8 @@ the source tarball is retained.
 
 Set this optional field to "Yes" if the application requires root
 privileges to be usable. This lets the client filter it out if the
-user so desires. Whether root is required or not, it is good to give 
-a paragraph in the description to the conditions on which root may be 
+user so desires. Whether root is required or not, it is good to give
+a paragraph in the description to the conditions on which root may be
 asked for and the reason for it.
 
 @node Update Check Mode
@@ -1097,37 +1097,37 @@ Valid modes are:
 @itemize
 @item
 @code{None} - No checking is done because there's no appropriate automated way
-of doing so. Updates should be checked for manually. Use this, for example, 
-when deploying betas or patched versions; when builds are done in a directory 
-different to where the AndroidManifest.xml is; if the developers use the 
-gradle build system and store version info in a separate file; if the 
-developers make a new branch for each release and don't make tags; or if you've 
+of doing so. Updates should be checked for manually. Use this, for example,
+when deploying betas or patched versions; when builds are done in a directory
+different to where the AndroidManifest.xml is; if the developers use the
+gradle build system and store version info in a separate file; if the
+developers make a new branch for each release and don't make tags; or if you've
 changed the package name or version code logic.
 @item
 @code{Static} - No checking is done - either development has ceased or new versions
-are not desired. This method is also used when there is no other checking method 
+are not desired. This method is also used when there is no other checking method
 available and the upstream developer keeps us posted on new versions.
 @item
-@code{RepoManifest} - At the most recent commit, the AndroidManifest.xml file 
+@code{RepoManifest} - At the most recent commit, the AndroidManifest.xml file
 is looked for in the directory where it was found in the the most recent build.
-The appropriateness of this method depends on the development process used by 
-the application's developers. You should not specify this method unless you're 
-sure it's appropriate. For example, some developers bump the version when 
+The appropriateness of this method depends on the development process used by
+the application's developers. You should not specify this method unless you're
+sure it's appropriate. For example, some developers bump the version when
 commencing development instead of when publishing.
-It will return an error if the AndroidManifest.xml has moved to a different 
-directory or if the package name has changed. 
-The current version that it gives may not be accurate, since not all 
-versions are fit to be published. Therefore, before building, it is often 
-necessary to check if the current version has been published somewhere by the 
-upstream developers, either by checking for apks that they distribute or for 
-tags in the source code repository. 
+It will return an error if the AndroidManifest.xml has moved to a different
+directory or if the package name has changed.
+The current version that it gives may not be accurate, since not all
+versions are fit to be published. Therefore, before building, it is often
+necessary to check if the current version has been published somewhere by the
+upstream developers, either by checking for apks that they distribute or for
+tags in the source code repository.
 
-It currently works for every repository type to different extents, except 
-the srclib repo type. For git, git-svn and hg repo types, you may use 
-"RepoManifest/yourbranch" as UCM so that "yourbranch" would be the branch used 
-in place of the default one.  The default values are "master" for git, 
-"default" for hg and none for git-svn (it stays in the same branch). 
-On the other hand, branch support hasn't been implemented yet in bzr and svn, 
+It currently works for every repository type to different extents, except
+the srclib repo type. For git, git-svn and hg repo types, you may use
+"RepoManifest/yourbranch" as UCM so that "yourbranch" would be the branch used
+in place of the default one.  The default values are "master" for git,
+"default" for hg and none for git-svn (it stays in the same branch).
+On the other hand, branch support hasn't been implemented yet in bzr and svn,
 but RepoManifest may still be used without it.
 @item
 @code{RepoTrunk} - For svn and git-svn repositories, especially those who
@@ -1141,10 +1141,10 @@ that number.
 source repository is checked, looking for the highest version code. The
 appropriateness of this method depends on the development process used by the
 application's developers. You should not specify this method unless you're sure
-it's appropriate. It shouldn't be used if the developers like to tag betas or 
-are known to forget to tag releases. Like RepoManifest, it will not return the 
+it's appropriate. It shouldn't be used if the developers like to tag betas or
+are known to forget to tag releases. Like RepoManifest, it will not return the
 correct value if the directory containing the AndroidManifest.xml has moved.
-Despite these caveats, it is the often the favourite update check mode. 
+Despite these caveats, it is the often the favourite update check mode.
 
 It currently only works for git, hg, bzr and git-svn repositories. In the case
 of the latter, the repo URL must encode the path to the trunk and tags or else
@@ -1204,8 +1204,8 @@ of versions to keep.
 
 @cindex Auto Update Mode
 
-This determines the method using for auto-generating new builds when new 
-releases are available - in other words, adding a new Build Version line to the 
+This determines the method using for auto-generating new builds when new
+releases are available - in other words, adding a new Build Version line to the
 metadata.
 This happens in conjunction with the 'Update Check Mode' functionality - i.e.
 when an update is detected by that, it is also processed by this.
@@ -1237,10 +1237,10 @@ above, you would specify that as "Version +-fdroid %v" - "-fdroid" is the suffix
 
 The name of the version that is current. There may be newer versions of the
 application than this (e.g. betas), and there will almost certainly be older
-ones. This should be the one that is recommended for general use. 
-In the event that there is no source code for the current version, or that 
-non-free libraries are being used, this would ideally be the latest 
-version that is still free, though it may still be expedient to 
+ones. This should be the one that is recommended for general use.
+In the event that there is no source code for the current version, or that
+non-free libraries are being used, this would ideally be the latest
+version that is still free, though it may still be expedient to
 retain the automatic update check — see No Source Since.
 
 This field is normally automatically updated - see Update Check Mode.
@@ -1267,7 +1267,7 @@ This is converted to (@code{<marketvercode>}) in the public index file.
 @cindex No Source Since
 
 In case we are missing the source code for the Current Version reported by
-Upstream, or that non-free elements have been introduced, this defines the 
+Upstream, or that non-free elements have been introduced, this defines the
 first version that began to miss source code.
 Apps that are missing source code for just one or a few versions, but provide
 source code for newer ones are not to be considered here - this field is
@@ -1374,7 +1374,7 @@ would fail.
 
 Unless you're very trusting. you should create one of these for yourself
 from verified standard Ubuntu installation media. However, you could skip
-over the next few paragraphs (and sacrifice some security) by downloading 
+over the next few paragraphs (and sacrifice some security) by downloading
 @url{https://f-droid.org/raring32.box} or @url{https://f-droid.org/raring64.box}.
 
 Documentation for creating a base box can be found at

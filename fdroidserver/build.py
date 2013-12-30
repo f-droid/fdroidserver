@@ -464,7 +464,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             print "Running 'build' commands in %s" % root_dir
 
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
-        
+
         if p.returncode != 0:
             raise BuildException("Error running build command for %s:%s" %
                     (app['id'], thisbuild['version']), p.stdout, p.stderr)
@@ -533,7 +533,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             raise BuildException("Expected to find buildozer-compatible spec at {0}"
                     .format(spec))
 
-        defaults = {'orientation': 'landscape', 'icon': '', 
+        defaults = {'orientation': 'landscape', 'icon': '',
                 'permissions': '', 'android.api': "18"}
         bconfig = ConfigParser(defaults, allow_no_value=True)
         bconfig.read(spec)
@@ -550,7 +550,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         cmd += ' ANDROIDAPI=' + str(bconfig.get('app', 'android.api'))
         cmd += ' VIRTUALENV=virtualenv'
         cmd += ' ./distribute.sh'
-        cmd += ' -m ' + "'" + ' '.join(modules) + "'" 
+        cmd += ' -m ' + "'" + ' '.join(modules) + "'"
         cmd += ' -d fdroid'
         if subprocess.call(cmd, cwd='python-for-android', shell=True) != 0:
             raise BuildException("Distribute build failed")
@@ -614,7 +614,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         if flavour in ['main', 'yes', '']:
             flavour = ''
-        
+
         commands = [config['gradle']]
         if 'preassemble' in thisbuild:
             for task in thisbuild['preassemble'].split():
