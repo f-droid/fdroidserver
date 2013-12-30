@@ -1408,7 +1408,7 @@ proxy definition, both of which may need customising for your environment.
 You can then go to the @code{fdroidserver} directory and run this:
 
 @example
-./makebuildserver.py
+./makebuildserver
 @end example
 
 This will take a long time, and use a lot of bandwidth - most of it spent

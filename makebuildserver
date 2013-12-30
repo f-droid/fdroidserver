@@ -44,7 +44,7 @@ options, args = parser.parse_args()
 config = {}
 execfile('makebs.config.py', config)
 
-if not os.path.exists('makebuildserver.py') or not os.path.exists(serverdir):
+if not os.path.exists('makebuildserver') or not os.path.exists(serverdir):
     print 'This must be run from the correct directory!'
     sys.exit(1)
 

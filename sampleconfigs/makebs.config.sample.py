@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-# You will need to alter these before running makebuildserver.py
+# You will need to alter these before running ./makebuildserver
 
 # Name of the base box to use...
 basebox = "raring32"
