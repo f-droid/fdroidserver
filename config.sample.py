@@ -40,7 +40,7 @@ repo_url = "https://f-droid.org/repo"
 repo_name = "F-Droid"
 repo_icon = "fdroid-icon.png"
 repo_description = """
-The official repository of the F-Droid client. Applications in this repository 
+The official repository of the F-Droid client. Applications in this repository
 are either official binaries built by the original application developers, or
 are binaries built from source by the admin of f-droid.org using the tools on
 https://gitorious.org/f-droid.

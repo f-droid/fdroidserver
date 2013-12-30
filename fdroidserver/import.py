@@ -244,7 +244,7 @@ def main():
     else:
         spec = os.path.join(root_dir, 'buildozer.spec')
         if os.path.exists(spec):
-            defaults = {'orientation': 'landscape', 'icon': '', 
+            defaults = {'orientation': 'landscape', 'icon': '',
                     'permissions': '', 'android.api': "18"}
             bconfig = ConfigParser(defaults, allow_no_value=True)
             bconfig.read(spec)

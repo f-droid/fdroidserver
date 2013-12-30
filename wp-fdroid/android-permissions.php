@@ -15,7 +15,7 @@ class AndroidPermissions
 		$this->android_strings_file_path = $android_strings_file_path_in;
 		$this->cache_file_path = $cache_file_path_in;
 	}
-	
+
 	// Returns an associative array with android permissions and data about them
 	function get_permissions_array() {
 

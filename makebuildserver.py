@@ -124,7 +124,7 @@ if 'aptproxy' in config and config['aptproxy']:
 vagrantfile += """
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "cookbooks"
-    chef.log_level = :debug 
+    chef.log_level = :debug
     chef.json = {
       :settings => {
         :sdk_loc => "/home/vagrant/android-sdk",

@@ -89,7 +89,7 @@ def main():
                     # Do the scan...
                     buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
                     for problem in buildprobs:
-                        problems.append(problem + 
+                        problems.append(problem +
                             ' in ' + app['id'] + ' ' + thisbuild['version'])
 
         except BuildException as be:

@@ -11,7 +11,7 @@ fi
 while read line; do
 	if [[ "$line" == *M*metadata/*.txt ]]; then
 		file=${line##* }
-		
+
 		id=${file##*/}
 		id=${id%.txt*}
 		if [ $# -gt 0 ]; then

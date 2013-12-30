@@ -542,7 +542,7 @@ def make_index(apps, apks, repodir, archive, categories):
                 if app['id'] == link:
                     return ("fdroid.app:" + link, app['Name'])
             raise MetaDataException("Cannot resolve app id " + link)
-        addElement('desc', 
+        addElement('desc',
                 metadata.description_html(app['Description'], linkres), doc, apel)
         addElement('license', app['License'], doc, apel)
         if 'Categories' in app:
@@ -618,7 +618,7 @@ def make_index(apps, apks, repodir, archive, categories):
             if app['Requires Root']:
                 if 'ACCESS_SUPERUSER' not in apk['permissions']:
                     apk['permissions'].append('ACCESS_SUPERUSER')
-                
+
             if len(apk['permissions']) > 0:
                 addElement('permissions', ','.join(apk['permissions']), doc, apkel)
             if 'nativecode' in apk and len(apk['nativecode']) > 0:
@@ -639,7 +639,7 @@ def make_index(apps, apks, repodir, archive, categories):
         if not options.quiet:
             print "Creating signed index."
             print "Key fingerprint:", repo_pubkey_fingerprint
-        
+
         #Create a jar of the index...
         p = subprocess.Popen(['jar', 'cf', 'index.jar', 'index.xml'],
             cwd=repodir, stdout=subprocess.PIPE)
@@ -860,7 +860,7 @@ def main():
                 print "Generated skeleton metadata for " + apk['id']
             else:
                 print "WARNING: " + apk['apkname'] + " (" + apk['id'] + ") has no metadata"
-                print "       " + apk['name'] + " - " + apk['version']  
+                print "       " + apk['name'] + " - " + apk['version']
 
     if len(repodirs) > 1:
         archive_old_apks(apps, apks, repodirs[0], repodirs[1], config['archive_older'])

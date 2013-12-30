@@ -492,7 +492,7 @@ class vcs_svn(vcs):
     def userargs(self):
         if self.username is None:
             return ['--non-interactive']
-        return ['--username', self.username, 
+        return ['--username', self.username,
                 '--password', self.password,
                 '--non-interactive']
 
@@ -615,7 +615,7 @@ def manifest_paths(app_dir, flavour):
     if flavour:
         possible_manifests.append(
                 os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml'))
-    
+
     return [path for path in possible_manifests if os.path.isfile(path)]
 
 # Retrieve the package name
@@ -839,7 +839,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, target=None,
             if p.returncode != 0:
                 raise BuildException("Error running prepare command for srclib %s"
                         % name, p.stdout, p.stderr)
-        
+
         if srclib["Update Project"] == "Yes":
             print "Updating srclib %s at path %s" % (name, libdir)
             cmd = [os.path.join(config['sdk_path'], 'tools', 'android'),
@@ -1234,7 +1234,7 @@ def scan_source(build_dir, root_dir, thisbuild):
     def removeproblem(what, fd, fp):
         print 'Removing %s at %s' % (what, fd)
         os.remove(fp)
-    
+
     def handleproblem(what, fd, fp):
         if todelete(fd):
             removeproblem(what, fd, fp)
@@ -1285,7 +1285,7 @@ def scan_source(build_dir, root_dir, thisbuild):
     # Presence of a jni directory without buildjni=yes might
     # indicate a problem... (if it's not a problem, explicitly use
     # buildjni=no to bypass this check)
-    if (os.path.exists(os.path.join(root_dir, 'jni')) and 
+    if (os.path.exists(os.path.join(root_dir, 'jni')) and
             thisbuild.get('buildjni') is None):
         msg = 'Found jni directory, but buildjni is not enabled'
         problems.append(msg)
@@ -1381,19 +1381,19 @@ class AsynchronousFileReader(threading.Thread):
     in a separate thread. Pushes read lines on a queue to
     be consumed in another thread.
     '''
- 
+
     def __init__(self, fd, queue):
         assert isinstance(queue, Queue.Queue)
         assert callable(fd.readline)
         threading.Thread.__init__(self)
         self._fd = fd
         self._queue = queue
- 
+
     def run(self):
         '''The body of the tread: read lines and put them on the queue.'''
         for line in iter(self._fd.readline, ''):
             self._queue.put(line)
- 
+
     def eof(self):
         '''Check whether there is no more content to expect.'''
         return not self.is_alive() and self._queue.empty()
@@ -1419,14 +1419,14 @@ def FDroidPopen(commands, cwd=None):
     result = PopenResult()
     p = subprocess.Popen(commands, cwd=cwd,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    
+
     stdout_queue = Queue.Queue()
     stdout_reader = AsynchronousFileReader(p.stdout, stdout_queue)
     stdout_reader.start()
     stderr_queue = Queue.Queue()
     stderr_reader = AsynchronousFileReader(p.stderr, stderr_queue)
     stderr_reader.start()
-    
+
     # Check the queues for output (until there is no more to get)
     while not stdout_reader.eof() or not stderr_reader.eof():
         # Show what we received from standard output
@@ -1460,7 +1460,7 @@ def remove_signing_keys(build_dir):
 
             with open(path, "r") as o:
                 lines = o.readlines()
-            
+
             opened = 0
             with open(path, "w") as o:
                 for line in lines:

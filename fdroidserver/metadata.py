@@ -27,7 +27,7 @@ class MetaDataException(Exception):
     def __str__(self):
         return repr(self.value)
 
-# Designates a metadata field type and checks that it matches 
+# Designates a metadata field type and checks that it matches
 #
 # 'name'     - The long name of the field type
 # 'matching' - List of possible values or regex expression

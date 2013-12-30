@@ -93,7 +93,7 @@ class FDroid
 		if($query_vars['fdcategory'] == 'All categories') {
 			unset($query_vars['fdcategory']);
 		}
-		
+
 		if($query_vars['fdid']!==null) {
 			$out.=$this->get_app($query_vars);
 		} else {
@@ -533,7 +533,7 @@ class FDroid
 
 				$out.='<form name="categoryform" action="" method="get">';
 				$out.=$this->makeformdata($query_vars);
-				
+
 				$out.='<select name="fdcategory" style="color:#333333;" onChange="document.categoryform.submit();">';
 				foreach($categories as $category) {
 					$out.='<option';
@@ -542,7 +542,7 @@ class FDroid
 					$out.='>'.$category.'</option>';
 				}
 				$out.='</select>';
-				
+
 				$out.='</form>'."\n";
 			}
 			else {
@@ -820,7 +820,7 @@ function widget_fdroidlatest($args) {
 	extract($args);
 	echo $before_widget;
 	echo $before_title . 'Latest Apps' . $after_title;
-	
+
 	$handle = fopen(getenv('DOCUMENT_ROOT').'/repo/latestapps.dat', 'r');
 	if ($handle) {
 		while (($buffer = fgets($handle, 4096)) !== false) {
@@ -837,7 +837,7 @@ function widget_fdroidlatest($args) {
 		}
 		fclose($handle);
 	}
-	
+
 	echo $after_widget;
 }
 

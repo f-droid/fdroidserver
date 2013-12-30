@@ -85,7 +85,7 @@ def main():
 
         apks = { common.apknameinfo(apkfile)[0] : apkfile for apkfile in
                 sorted(glob.glob(os.path.join(output_dir, '*.apk'))) }
-    
+
     for appid, apk in apks.iteritems():
         # Get device list each time to avoid device not found errors
         devs = devices()

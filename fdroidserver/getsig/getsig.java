@@ -10,7 +10,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class getsig {
- 
+
     public static void main(String[] args) {
 
         String apkPath = null;
@@ -29,12 +29,12 @@ public class getsig {
             System.out.println("Specify the APK file to get the signature from!");
             System.exit(1);
         }
- 
+
         try {
 
             JarFile apk = new JarFile(apkPath);
             java.security.cert.Certificate[] certs = null;
- 
+
             Enumeration entries = apk.entries();
             while (entries.hasMoreElements()) {
                 JarEntry je = (JarEntry) entries.nextElement();
