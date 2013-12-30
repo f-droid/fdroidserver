@@ -169,6 +169,11 @@ def read_app_args(args, allapps, allow_vercodes=False):
 
     return apps
 
+def has_extension(filename, extension):
+    name, ext = os.path.splitext(filename)
+    ext = ext.lower()[1:]
+    return ext == extension
+
 apk_regex = None
 
 def apknameinfo(filename):
@@ -619,7 +624,7 @@ def fetch_real_name(app_dir, flavour):
     name_search = re.compile(r'.*android:label="([^"]+)".*').search
     app_found = False
     for f in manifest_paths(app_dir, flavour):
-        if not f.endswith(".xml"):
+        if not has_extension(f, 'xml'):
             continue
         xml_dir = os.path.join(f[:-19], 'res', 'values')
         for line in file(f):
@@ -635,7 +640,7 @@ def fetch_real_name(app_dir, flavour):
 # Retrieve the version name
 def version_name(original, app_dir, flavour):
     for f in manifest_paths(app_dir, flavour):
-        if not f.endswith(".xml"):
+        if not has_extension(f, 'xml'):
             continue
         xml_dir = os.path.join(f[:-19], 'res', 'values')
         string = retrieve_string(xml_dir, original)
@@ -683,7 +688,7 @@ def parse_androidmanifests(paths):
 
     for path in paths:
 
-        gradle = path.endswith("gradle")
+        gradle = has_extension(path, 'gradle')
         version = None
         vercode = None
         # Remember package name, may be defined separately from version+vercode
@@ -1009,12 +1014,12 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         for path in manifest_paths(root_dir, flavour):
             if not os.path.isfile(path):
                 continue
-            if path.endswith('.xml'):
+            if has_extension(path, 'xml'):
                 if subprocess.call(['sed','-i',
                     's/android:versionName="[^"]*"/android:versionName="' + build['version'] + '"/g',
                     path]) != 0:
                     raise BuildException("Failed to amend manifest")
-            elif path.endswith('.gradle'):
+            elif has_extension(path, 'gradle'):
                 if subprocess.call(['sed','-i',
                     's/versionName[ ]*=[ ]*"[^"]*"/versionName = "' + build['version'] + '"/g',
                     path]) != 0:
@@ -1024,12 +1029,12 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         for path in manifest_paths(root_dir, flavour):
             if not os.path.isfile(path):
                 continue
-            if path.endswith('.xml'):
+            if has_extension(path, 'xml'):
                 if subprocess.call(['sed','-i',
                     's/android:versionCode="[^"]*"/android:versionCode="' + build['vercode'] + '"/g',
                     path]) != 0:
                     raise BuildException("Failed to amend manifest")
-            elif path.endswith('.gradle'):
+            elif has_extension(path, 'gradle'):
                 if subprocess.call(['sed','-i',
                     's/versionCode[ ]*=[ ]*[0-9]*/versionCode = ' + build['vercode'] + '/g',
                     path]) != 0:
@@ -1060,7 +1065,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build['fixapos']:
         for root, dirs, files in os.walk(os.path.join(root_dir, 'res')):
             for filename in files:
-                if filename.endswith('.xml'):
+                if has_extension(filename, 'xml'):
                     if subprocess.call(['sed','-i','s@' +
                         r"\([^\\]\)'@\1\\'" +
                         '@g',
@@ -1071,7 +1076,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build['fixtrans']:
         for root, dirs, files in os.walk(os.path.join(root_dir, 'res')):
             for filename in files:
-                if filename.endswith('.xml'):
+                if has_extension(filename, 'xml'):
                     f = open(os.path.join(root, filename))
                     changed = False
                     outlines = []
@@ -1170,7 +1175,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     return (root_dir, srclibpaths)
 
-
 # Scan the source code in the given directory (and all subdirectories)
 # and return a list of potential problems.
 def scan_source(build_dir, root_dir, thisbuild):
@@ -1266,12 +1270,12 @@ def scan_source(build_dir, root_dir, thisbuild):
                 handleproblem('static library', fd, fp)
             elif mime == 'application/x-executable':
                 handleproblem('binary executable', fd, fp)
-            elif mime == 'application/jar' and fp.endswith('.apk'):
+            elif mime == 'application/jar' and has_extension(fp, 'apk'):
                 removeproblem('APK file', fd, fp)
-            elif mime == 'application/jar' and fp.endswith('.jar'):
+            elif mime == 'application/jar' and has_extension(fp, 'jar'):
                 warnproblem('JAR file', fd, fp)
 
-            elif curfile.endswith('.java'):
+            elif has_extension(fp, 'java'):
                 for line in file(fp):
                     if 'DexClassLoader' in line:
                         handleproblem('DexClassLoader', fd, fp)
