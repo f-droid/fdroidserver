@@ -436,7 +436,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if len(buildprobs) > 0:
         print 'Scanner found ' + str(len(buildprobs)) + ' problems:'
         for problem in buildprobs:
-            print '...' + problem
+            print '    %s' % problem
         if not force:
             raise BuildException("Can't build due to " +
                 str(len(buildprobs)) + " scanned problems")
