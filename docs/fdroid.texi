@@ -1396,14 +1396,12 @@ boot, you need to set @code{GRUB_RECORDFAIL_TIMEOUT} to a value other than
 -1 in @code{/etc/grub/default} and then run @code{update-grub}.
 @end enumerate
 
-You may also want to edit @code{buildserver/Vagrantfile} - in particular
-there is a path for retrieving the base box if it doesn't exist, and an
-apt proxy definition, both of which may need customising for your
-environment.
 
 With this base box available, you should then create @code{makebs.config.py},
 using @code{makebs.config.sample.py} as a reference - look at the settings and
 documentation there to decide if any need changing to suit your environment.
+There is a path for retrieving the base box if it doesn't exist, and an apt
+proxy definition, both of which may need customising for your environment.
 You can then go to the @code{fdroidserver} directory and run this:
 
 @example
@@ -1425,9 +1423,9 @@ can supply a pre-populated cache directory which includes not only these
 downloads, but also .tar.gz files for all the relevant additions. If the
 provisioning scripts detect these, they will be used in preference to
 running the android tools. For example, if you have
-@code{buildserver/addons/cache/platforms/android-15.tar.gz} that will be
-used when installing the android-15 platform, instead of re-downloading it
-using @code{android update sdk --no-ui -t android-15}.
+@code{buildserver/addons/cache/platforms/android-19.tar.gz} that will be
+used when installing the android-19 platform, instead of re-downloading it
+using @code{android update sdk --no-ui -t android-19}.
 
 Once it's complete you'll have a new base box called 'buildserver' which is
 what's used for the actual builds. You can then build packages as normal,
