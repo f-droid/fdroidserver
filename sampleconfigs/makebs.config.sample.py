@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 # You will need to alter these before running makebuildserver.py
 
 # Name of the base box to use...

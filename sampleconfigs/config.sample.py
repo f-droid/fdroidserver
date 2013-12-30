@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 # Copy this file to config.py, then amend the settings below according to
 # your system configuration.
 
