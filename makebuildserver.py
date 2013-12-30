@@ -71,7 +71,7 @@ cachefiles = [
     ]
 if config['arch64']:
     cachefiles.extend([
-    ('android-ndk-r9b-linux-x64_64.tar.bz2',
+    ('android-ndk-r9b-linux-x86_64.tar.bz2',
      'http://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64.tar.bz2',
      '8956e9efeea95f49425ded8bb697013b66e162b064b0f66b5c75628f76e0f532'),
     ('android-ndk-r9b-linux-x86_64-legacy-toolchains.tar.bz2',
