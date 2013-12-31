@@ -18,8 +18,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# 'fdroid' is aliased automatically, but aliases to it are not. For instance,
-# to alias 'fd' to 'fdroid' and have competion available:
+# 'fdroid' is completed automatically, but aliases to it are not.
+# For instance, to alias 'fd' to 'fdroid' and have competion available:
 #
 #	alias fd='fdroid'
 #	complete -F _fdroid fd
@@ -54,8 +54,7 @@ __apk_package() {
 }
 
 __apk_vercode() {
-	local p
-	p=${cur:0:-1}
+	local p=${cur:0:-1}
 
 	files=( ${1}/${p}_*.apk )
 	[ -f "${files[0]}" ] || return
@@ -66,8 +65,7 @@ __apk_vercode() {
 }
 
 __vercode() {
-	local p
-	p=${cur:0:-1}
+	local p=${cur:0:-1}
 
 	COMPREPLY=( $( compgen -P "${p}:" -W "$( while read line; do
 		if [[ "$line" == "Build Version:"* ]]
@@ -243,14 +241,13 @@ __complete_init() {
 }
 
 _fdroid() {
-	local cmd cmds aliased
+	local cmd cmds
 	cmd=${COMP_WORDS[1]}
 	cmds=" build init install update publish checkupdates import
  rewritemeta scanner verify stats server "
-	aliased=false
 
 	for c in $cmds; do eval "_fdroid_${c} () {
-		local cur prev cmds opts lopts
+		local cur prev opts lopts
 		__fdroid_init ${c};
 	}"; done
 
