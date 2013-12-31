@@ -71,6 +71,9 @@ def update_wiki(apps, apks):
                 app['License'],
                 app.get('Requires Root', 'No'))
 
+        if app['Provides']:
+            wikidata += "This app provides: %s" % ', '.join(app['Summary'].split(','))
+
         wikidata += app['Summary']
         wikidata += " - [http://f-droid.org/repository/browse/?fdid=" + app['id'] + " view in repository]\n\n"
 
@@ -580,6 +583,9 @@ def make_index(apps, apks, repodir, archive, categories):
                 af.remove('UpstreamNonFree')
             if af:
                 addElement('antifeatures', ','.join(af), doc, apel)
+        if app['Provides']:
+            pv = app['Provides'].split(',')
+            addElement('provides', ','.join(pv), doc, apel)
         if app['Requires Root']:
             addElement('requirements', 'root', doc, apel)
 
