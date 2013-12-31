@@ -56,7 +56,7 @@ def update_wiki(apps, apks):
         if app['AntiFeatures']:
             for af in app['AntiFeatures'].split(','):
                 wikidata += '{{AntiFeature|' + af + '}}\n'
-        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s}}\n'%(
+        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|dogecoin=%s|license=%s|root=%s}}\n'%(
                 app['id'],
                 app['Name'],
                 time.strftime('%Y-%m-%d', app['added']) if 'added' in app else '',
@@ -68,6 +68,7 @@ def update_wiki(apps, apks):
                 app['FlattrID'],
                 app['Bitcoin'],
                 app['Litecoin'],
+                app['Dogecoin'],
                 app['License'],
                 app.get('Requires Root', 'No'))
 
@@ -484,7 +485,7 @@ def make_index(apps, apks, repodir, archive, categories):
         addElement('description', config['repo_description'], doc, repoel)
     repoel.setAttribute("timestamp", str(int(time.time())))
 
-    if config['repo_keyalias'] is not None:
+    if config['repo_keyalias']:
 
         # Generate a certificate fingerprint the same way keytool does it
         # (but with slightly different formatting)
@@ -538,7 +539,7 @@ def make_index(apps, apks, repodir, archive, categories):
             addElement('lastupdated', time.strftime('%Y-%m-%d', app['lastupdated']), doc, apel)
         addElement('name', app['Name'], doc, apel)
         addElement('summary', app['Summary'], doc, apel)
-        if app['icon'] is not None:
+        if app['icon']:
             addElement('icon', app['icon'], doc, apel)
         def linkres(link):
             for app in apps:
@@ -558,13 +559,15 @@ def make_index(apps, apks, repodir, archive, categories):
         addElement('web', app['Web Site'], doc, apel)
         addElement('source', app['Source Code'], doc, apel)
         addElement('tracker', app['Issue Tracker'], doc, apel)
-        if app['Donate'] is not None:
+        if app['Donate']:
             addElement('donate', app['Donate'], doc, apel)
-        if app['Bitcoin'] is not None:
+        if app['Bitcoin']:
             addElement('bitcoin', app['Bitcoin'], doc, apel)
-        if app['Litecoin'] is not None:
+        if app['Litecoin']:
             addElement('litecoin', app['Litecoin'], doc, apel)
-        if app['FlattrID'] is not None:
+        if app['Dogecoin']:
+            addElement('dogecoin', app['Dogecoin'], doc, apel)
+        if app['FlattrID']:
             addElement('flattr', app['FlattrID'], doc, apel)
 
         # These elements actually refer to the current version (i.e. which
