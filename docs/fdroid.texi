@@ -461,6 +461,7 @@ The following sections describe the fields recognised within the file.
 * Categories::
 * License::
 * Name::
+* Provides::
 * Auto Name::
 * Web Site::
 * Source Code::
@@ -584,6 +585,17 @@ situation where an APK contains a bad or missing application name, it can be
 overridden using this. Note that this only overrides the name in the list of
 apps presented in the client; it doesn't changed the name or application label
 in the source code.
+
+@node Provides
+@section Provides
+
+@cindex Provides
+
+Comma-separated list of application IDs that this app provides. In other
+words, if the user has any of these apps installed, F-Droid will show this app
+as installed instead. It will also appear if the user clicks on urls linking
+to the other app IDs. Useful when an app switches package name, or when you
+want an app to act as multiple apps.
 
 @node Web Site
 @section Web Site
