@@ -93,6 +93,11 @@ valuetypes = {
         [ "Litecoin" ],
         [ ]),
 
+    'dogecoin' : FieldType("Dogecoin address",
+        r'^D[a-zA-Z0-9]{33}$', None,
+        [ "Dogecoin" ],
+        [ ]),
+
     'Bool' : FieldType("Boolean",
         ['Yes', 'No'], None,
         [ "Requires Root" ],
@@ -485,6 +490,7 @@ def parse_metadata(metafile):
     thisinfo['FlattrID'] = None
     thisinfo['Bitcoin'] = None
     thisinfo['Litecoin'] = None
+    thisinfo['Dogecoin'] = None
     thisinfo['Disabled'] = None
     thisinfo['AntiFeatures'] = None
     thisinfo['Archive Policy'] = None
@@ -657,6 +663,8 @@ def write_metadata(dest, app):
         writefield('Bitcoin')
     if app['Litecoin']:
         writefield('Litecoin')
+    if app['Dogecoin']:
+        writefield('Dogecoin')
     mf.write('\n')
     if app['Name']:
         writefield('Name')
