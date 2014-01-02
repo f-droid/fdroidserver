@@ -118,3 +118,10 @@ carbon_port = 2003
 #Set this to true to always use a build server. This saves specifying the
 #--server option on dedicated secure build server hosts.
 build_server_always = False
+
+# Limit in number of characters that fields can take up
+# Only the fields listed here are supported, defaults shown
+char_limits: {
+    'Summary' : 40
+    'Description' : 1500
+}
