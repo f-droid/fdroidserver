@@ -190,6 +190,19 @@ __complete_rewritemeta() {
 	esac
 }
 
+__complete_lint() {
+	opts="-h -v"
+	lopts="--help --verbose"
+	case "${cur}" in
+		-*)
+			__complete_options
+			return 0;;
+		*)
+			__package
+			return 0;;
+	esac
+}
+
 __complete_scanner() {
 	opts="-h -v"
 	lopts="--help --verbose --nosvn"
@@ -244,7 +257,7 @@ _fdroid() {
 	local cmd cmds
 	cmd=${COMP_WORDS[1]}
 	cmds=" build init install update publish checkupdates import
- rewritemeta scanner verify stats server "
+ rewritemeta lint scanner verify stats server "
 
 	for c in $cmds; do eval "_fdroid_${c} () {
 		local cur prev opts lopts
