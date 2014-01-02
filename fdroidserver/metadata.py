@@ -75,7 +75,7 @@ class FieldType():
 # Generic value types
 valuetypes = {
     'int' : FieldType("Integer",
-        r'^[0-9]+$', None,
+        r'^[1-9][0-9]*$', None,
         [ 'FlattrID' ],
         [ 'vercode' ]),
 
