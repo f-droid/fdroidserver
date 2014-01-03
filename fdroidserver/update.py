@@ -469,6 +469,7 @@ def make_index(apps, apks, repodir, archive, categories):
     doc.appendChild(root)
 
     repoel = doc.createElement("repo")
+
     if archive:
         repoel.setAttribute("name", config['archive_name'])
         if config['repo_maxage'] != 0:
@@ -476,6 +477,7 @@ def make_index(apps, apks, repodir, archive, categories):
         repoel.setAttribute("icon", os.path.basename(config['archive_icon']))
         repoel.setAttribute("url", config['archive_url'])
         addElement('description', config['archive_description'], doc, repoel)
+
     else:
         repoel.setAttribute("name", config['repo_name'])
         if config['repo_maxage'] != 0:
@@ -483,6 +485,8 @@ def make_index(apps, apks, repodir, archive, categories):
         repoel.setAttribute("icon", os.path.basename(config['repo_icon']))
         repoel.setAttribute("url", config['repo_url'])
         addElement('description', config['repo_description'], doc, repoel)
+
+    repoel.setAttribute("version", "10")
     repoel.setAttribute("timestamp", str(int(time.time())))
 
     if config['repo_keyalias']:
