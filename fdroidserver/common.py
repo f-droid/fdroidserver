@@ -941,13 +941,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 os.remove(buildxml)
 
         for d in update_dirs:
-            # Remove gen and bin dirs in libraries
-            # rid of them...
-            for baddir in ['gen', 'bin', 'obj']
-                badpath = os.path.join(root_dir, d, baddir)
-                if os.path.exists(badpath):
-                    print "Removing '%s'" % badpath
-                    shutil.rmtree(badpath)
+            subdir = os.path.join(root_dir, d)
+            # Clean update dirs via ant
+            p = FDroidPopen(['ant', 'clean'], cwd=subdir)
             dparms = parms + ['-p', d]
             if options.verbose:
                 if d == '.':
