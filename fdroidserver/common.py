@@ -943,10 +943,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         for d in update_dirs:
             # Remove gen and bin dirs in libraries
             # rid of them...
-            for baddir in [
-                    'gen', 'bin', 'obj', # ant
-                    'libs/armeabi-v7a', 'libs/armeabi', # jni
-                    'libs/mips', 'libs/x86']:
+            for baddir in ['gen', 'bin', 'obj']
                 badpath = os.path.join(root_dir, d, baddir)
                 if os.path.exists(badpath):
                     print "Removing '%s'" % badpath

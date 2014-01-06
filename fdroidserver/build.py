@@ -420,16 +420,6 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         raise BuildException("Error cleaning %s:%s" %
                 (app['id'], thisbuild['version']), p.stdout, p.stderr)
 
-    # Also clean jni
-    print "Cleaning jni dirs..."
-    for baddir in [
-            'libs/armeabi-v7a', 'libs/armeabi',
-            'libs/mips', 'libs/x86', 'obj']:
-        badpath = os.path.join(build_dir, baddir)
-        if os.path.exists(badpath):
-            print "Removing '%s'" % badpath
-            shutil.rmtree(badpath)
-
     # Scan before building...
     print "Scanning source for common problems..."
     buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
