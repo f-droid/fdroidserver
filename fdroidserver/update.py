@@ -301,9 +301,9 @@ def resize_all_icons(repodirs):
     for repodir in repodirs:
         for density in get_densities():
             icon_dir = get_icon_dir(repodir, density)
-            icon_glob = os.path.join(repodir, icon_dir, '*.png')
+            icon_glob = os.path.join(icon_dir, '*.png')
             for iconpath in glob.glob(icon_glob):
-                resize_icon(iconpath)
+                resize_icon(iconpath, density)
 
 def scan_apks(apps, apkcache, repodir, knownapks):
     """Scan the apks in the given repo directory.
@@ -365,8 +365,6 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                                   'dump', 'badging', apkfile],
                                  stdout=subprocess.PIPE)
             output = p.communicate()[0]
-            #if options.verbose:
-                #print output
             if p.returncode != 0:
                 print "ERROR: Failed to get apk information"
                 sys.exit(1)
@@ -922,21 +920,21 @@ def main():
 
         if added:
             app['added'] = added
-        #else:
-            #if options.verbose:
-                #print "WARNING: Don't know when " + app['id'] + " was added"
+        else:
+            if options.verbose:
+                print "WARNING: Don't know when " + app['id'] + " was added"
         if lastupdated:
             app['lastupdated'] = lastupdated
-        #else:
-            #if options.verbose:
-                #print "WARNING: Don't know when " + app['id'] + " was last updated"
+        else:
+            if options.verbose:
+                print "WARNING: Don't know when " + app['id'] + " was last updated"
 
         if bestver == 0:
             if app['Name'] is None:
                 app['Name'] = app['id']
             app['icon'] = None
-            #if options.verbose and app['Disabled'] is None:
-                #print "WARNING: Application " + app['id'] + " has no packages"
+            if options.verbose and app['Disabled'] is None:
+                print "WARNING: Application " + app['id'] + " has no packages"
         else:
             if app['Name'] is None:
                 app['Name'] = bestapk['name']
