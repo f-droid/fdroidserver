@@ -334,6 +334,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
     vername_pat = re.compile(".*versionName='([^']*)'.*")
     label_pat = re.compile(".*label='(.*?)'(\n| [a-z]*?=).*")
     icon_pat = re.compile(".*application-icon-([0-9]+):'([^']+?)'.*")
+    icon_pat_nodpi = re.compile(".*icon='([^']+?)'.*")
     sdkversion_pat = re.compile(".*'([0-9]*)'.*")
     string_pat = re.compile(".*'([^']*)'.*")
     for apkfile in glob.glob(os.path.join(repodir, '*.apk')):
@@ -379,13 +380,27 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         sys.exit(1)
                 elif line.startswith("application:"):
                     thisinfo['name'] = re.match(label_pat, line).group(1)
+                    if 'icons_src' not in thisinfo:
+                        thisinfo['icons_src'] = {}
+                    # Keep path to non-dpi icon in case we need it
+                    match = re.match(icon_pat_nodpi, line)
+                    if match:
+                        thisinfo['icons_src']['-1'] = match.group(1)
+                elif line.startswith("launchable-activity:"):
+                    if 'icons_src' not in thisinfo:
+                        thisinfo['icons_src'] = {}
+                    # Only use launchable-activity as fallback to application
+                    elif '-1' not in thisinfo['icons_src']:
+                        match = re.match(icon_pat_nodpi, line)
+                        if match:
+                            thisinfo['icons_src']['-1'] = match.group(1)
                 elif line.startswith("application-icon-"):
+                    if 'icons_src' not in thisinfo:
+                        thisinfo['icons_src'] = {}
                     match = re.match(icon_pat, line)
                     if match:
                         density = match.group(1)
                         path = match.group(2)
-                        if 'icons_src' not in thisinfo:
-                            thisinfo['icons_src'] = {}
                         thisinfo['icons_src'][density] = path
                 elif line.startswith("sdkVersion:"):
                     thisinfo['sdkversion'] = re.match(sdkversion_pat, line).group(1)
@@ -477,8 +492,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
                 resize_icon(icondest, density)
 
-            last_density = None
             # First try resizing down to not lose quality
+            last_density = None
             for density in densities:
                 if density not in empty_densities:
                     last_density = density
@@ -500,8 +515,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 im.save(iconpath, "PNG")
                 empty_densities.remove(density)
 
-            last_density = None
             # Then just copy from the highest resolution available
+            last_density = None
             for density in reversed(densities):
                 if density not in empty_densities:
                     last_density = density
