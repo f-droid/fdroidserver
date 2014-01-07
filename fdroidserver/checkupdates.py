@@ -114,6 +114,8 @@ def check_tags(app):
         hcode = "0"
 
         for tag in vcs.gettags():
+            if options.verbose:
+                print "Check tag: '{0}'".format(tag)
             vcs.gotorevision(tag)
 
             # Only process tags where the manifest exists...
