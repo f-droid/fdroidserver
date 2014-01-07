@@ -34,6 +34,23 @@ import common, metadata
 from metadata import MetaDataException
 from PIL import Image
 
+
+def get_densities():
+    return [480, 320, 240, 160, 120]
+
+def launcher_size(density):
+    return (density * 48) / 160
+
+def icon_dens_label(density):
+    return "icon-%s" % density
+
+def get_icon_dir(density):
+    return os.path.join(repodir, "icons-%s" % density)
+
+def get_icon_dirs(repodir):
+    for density in get_densities():
+        yield get_icon_dir(density)
+
 def update_wiki(apps, apks):
     """Update the wiki
 
@@ -677,7 +694,7 @@ def make_index(apps, apks, repodir, archive, categories):
             print output
 
     # Copy the repo icon into the repo directory...
-    icon_dir=os.path.join(repodir ,'icons')
+    icon_dir = os.path.join(repodir ,'icons')
     iconfilename = os.path.join(icon_dir, os.path.basename(config['repo_icon']))
     shutil.copyfile(config['repo_icon'], iconfilename)
 
