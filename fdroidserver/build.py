@@ -369,14 +369,16 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         subprocess.call(['vagrant', 'suspend'], cwd='builder')
 
 def adapt_gradle(path):
-    if options.verbose:
-        print "Adapting build.gradle at %s" % path
+    for root, dirs, files in os.walk(path):
+        for f in files:
+            if f == 'build.gradle':
+                if options.verbose:
+                    print "Adapting build.gradle at %s" % path
 
-    subprocess.call(['sed', '-i',
-            's@buildToolsVersion[ ]*["\\\'][0-9\.]*["\\\']@buildToolsVersion "'+ config['build_tools'] +'"@g', path])
-
-    subprocess.call(['sed', '-i',
-            's@com.android.tools.build:gradle:[0-9\.\+]*@com.android.tools.build:gradle:'+ config['gradle_plugin'] +'@g', path])
+                subprocess.call(['sed', '-i',
+                        's@buildToolsVersion[ ]*["\\\'][0-9\.]*["\\\']@buildToolsVersion "'
+                        + config['build_tools'] + '"@g', path])
+                break
 
 
 def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver):
@@ -596,11 +598,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                         's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+level+'@g',
                         'build.gradle'], cwd=gradle_dir)
 
-        for root, dirs, files in os.walk(gradle_dir):
-            for f in files:
-                if f == 'build.gradle':
-                    adapt_gradle(os.path.join(root, f))
-                    break
+        adapt_gradle(gradle_dir)
+
+        for name, number, libpath in srclibpaths:
+            adapt_gradle(libpath)
 
         if flavour in ['main', 'yes', '']:
             flavour = ''
