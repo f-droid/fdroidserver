@@ -332,6 +332,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                 output += chan.recv(1024)
             while chan.recv_stderr_ready():
                 error += chan.recv_stderr(1024)
+            time.sleep(0.1)
         print "...getting exit status"
         returncode = chan.recv_exit_status()
         while True:
