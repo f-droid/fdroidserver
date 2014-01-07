@@ -278,6 +278,9 @@ def delete_disabled_builds(apps, apkcache, repodirs):
 
 def resize_icon(iconpath, density):
 
+    if not os.path.isfile(iconpath):
+        return
+
     try:
         im = Image.open(iconpath)
         size = dpi_to_px(density)
@@ -498,7 +501,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 for density in densities:
                     if density in thisinfo['icons']:
                         break
-                    if dpi >= int(density):
+                    if density == densities[-1] or dpi >= int(density):
                         thisinfo['icons'][density] = iconfilename
                         shutil.move(iconpath,
                                 os.path.join(get_icon_dir(repodir, density), iconfilename))
@@ -554,9 +557,10 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 resize_icon(icondest, density)
 
             # Copy from icons-mdpi to icons since mdpi is the baseline density
-            shutil.copyfile(
-                    os.path.join(get_icon_dir(repodir, '160'), iconfilename),
-                    os.path.join(get_icon_dir(repodir, None), iconfilename))
+            baseline = os.path.join(get_icon_dir(repodir, '160'), iconfilename)
+            if os.path.isfile(baseline):
+                shutil.copyfile(baseline,
+                        os.path.join(get_icon_dir(repodir, None), iconfilename))
 
             # Record in known apks, getting the added date at the same time..
             added = knownapks.recordapk(thisinfo['apkname'], thisinfo['id'])
