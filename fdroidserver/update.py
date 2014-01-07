@@ -508,6 +508,9 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         empty_densities.remove(density)
                         break
 
+            if thisinfo['icons']:
+                thisinfo['icon'] = iconfilename
+
             apk.close()
 
             # First try resizing down to not lose quality
