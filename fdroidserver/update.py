@@ -620,7 +620,7 @@ def make_index(apps, apks, repodir, archive, categories):
         repoel.setAttribute("url", config['repo_url'])
         addElement('description', config['repo_description'], doc, repoel)
 
-    repoel.setAttribute("version", "10")
+    repoel.setAttribute("version", "11")
     repoel.setAttribute("timestamp", str(int(time.time())))
 
     if config['repo_keyalias']:
