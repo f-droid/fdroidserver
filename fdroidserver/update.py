@@ -38,8 +38,11 @@ from PIL import Image
 def get_densities():
     return ['640', '480', '320', '240', '160', '120']
 
-def launcher_size(density):
+def dpi_to_px(density):
     return (int(density) * 48) / 160
+
+def px_to_dpi(px):
+    return (int(px) * 160) / 48
 
 def get_icon_dir(repodir, density):
     if density is None:
@@ -277,7 +280,7 @@ def resize_icon(iconpath, density):
 
     try:
         im = Image.open(iconpath)
-        size = launcher_size(density)
+        size = dpi_to_px(density)
 
         if any(length > size for length in im.size):
             oldsize = im.size
@@ -483,10 +486,24 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                     del thisinfo['icons_src'][density]
                     empty_densities.append(density)
 
-                resize_icon(icondest, density)
-
             if '-1' in thisinfo['icons_src']:
-                pass #TODO
+                iconsrc = thisinfo['icons_src']['-1']
+                iconpath = os.path.join(
+                        get_icon_dir(repodir, None), iconfilename)
+                iconfile = open(iconpath, 'wb')
+                iconfile.write(apk.read(iconsrc))
+                iconfile.close()
+                im = Image.open(iconpath)
+                dpi = px_to_dpi(im.size[0])
+                for density in densities:
+                    if density in thisinfo['icons']:
+                        break
+                    if dpi >= int(density):
+                        thisinfo['icons'][density] = iconfilename
+                        shutil.move(iconpath,
+                                os.path.join(get_icon_dir(repodir, density), iconfilename))
+                        empty_densities.remove(density)
+                        break
 
             apk.close()
 
@@ -507,7 +524,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 iconpath = os.path.join(
                         get_icon_dir(repodir, density), iconfilename)
                 im = Image.open(last_iconpath)
-                size = launcher_size(density)
+                size = dpi_to_px(density)
 
                 im.thumbnail((size, size), Image.ANTIALIAS)
                 im.save(iconpath, "PNG")
@@ -530,6 +547,11 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         os.path.join(get_icon_dir(repodir, density), iconfilename))
 
                 empty_densities.remove(density)
+
+            for density in densities:
+                icon_dir = get_icon_dir(repodir, density)
+                icondest = os.path.join(icon_dir, iconfilename)
+                resize_icon(icondest, density)
 
             # Copy from icons-mdpi to icons since mdpi is the baseline density
             shutil.copyfile(
