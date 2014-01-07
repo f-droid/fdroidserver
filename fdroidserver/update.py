@@ -458,6 +458,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 sys.exit(1)
             thisinfo['sig'] = output[7:].strip()
 
+            apk = zipfile.ZipFile(apkfile, 'r')
+
             iconfilename = "%s.%s.png" % (
                     thisinfo['id'],
                     thisinfo['versioncode'])
@@ -469,7 +471,6 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 if density not in thisinfo['icons_src']:
                     empty_densities.append(density)
                     continue
-                apk = zipfile.ZipFile(apkfile, 'r')
                 if 'icons' not in thisinfo:
                     thisinfo['icons'] = {}
                 iconsrc = thisinfo['icons_src'][density]
@@ -488,9 +489,9 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                     del thisinfo['icons_src'][density]
                     empty_densities.append(density)
 
-                apk.close()
-
                 resize_icon(icondest, density)
+
+            apk.close()
 
             # First try resizing down to not lose quality
             last_density = None
