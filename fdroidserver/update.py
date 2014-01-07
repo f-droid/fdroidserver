@@ -187,6 +187,8 @@ def update_wiki(apps, apks):
             wikidata += '\n[[Category:Apps that are disabled]]\n'
         if app['Update Check Mode'] == 'None' and not app['Disabled']:
             wikidata += '\n[[Category:Apps with no update check]]\n'
+        for appcat in [c.strip() for c in app['Categories'].split(',')]:
+            wikidata += '\n[[Category:{0}]]\n'.format(appcat)
 
         # We can't have underscores in the page name, even if they're in
         # the package ID, because MediaWiki messes with them...
