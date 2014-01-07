@@ -361,6 +361,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             thisinfo['size'] = os.path.getsize(apkfile)
             thisinfo['permissions'] = []
             thisinfo['features'] = []
+            thisinfo['icons_src'] = {}
+            thisinfo['icons'] = {}
             p = subprocess.Popen([os.path.join(config['sdk_path'], 'build-tools', config['build_tools'], 'aapt'),
                                   'dump', 'badging', apkfile],
                                  stdout=subprocess.PIPE)
@@ -380,23 +382,17 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         sys.exit(1)
                 elif line.startswith("application:"):
                     thisinfo['name'] = re.match(label_pat, line).group(1)
-                    if 'icons_src' not in thisinfo:
-                        thisinfo['icons_src'] = {}
                     # Keep path to non-dpi icon in case we need it
                     match = re.match(icon_pat_nodpi, line)
                     if match:
                         thisinfo['icons_src']['-1'] = match.group(1)
                 elif line.startswith("launchable-activity:"):
-                    if 'icons_src' not in thisinfo:
-                        thisinfo['icons_src'] = {}
                     # Only use launchable-activity as fallback to application
-                    elif '-1' not in thisinfo['icons_src']:
+                    if '-1' not in thisinfo['icons_src']:
                         match = re.match(icon_pat_nodpi, line)
                         if match:
                             thisinfo['icons_src']['-1'] = match.group(1)
                 elif line.startswith("application-icon-"):
-                    if 'icons_src' not in thisinfo:
-                        thisinfo['icons_src'] = {}
                     match = re.match(icon_pat, line)
                     if match:
                         density = match.group(1)
@@ -471,8 +467,6 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 if density not in thisinfo['icons_src']:
                     empty_densities.append(density)
                     continue
-                if 'icons' not in thisinfo:
-                    thisinfo['icons'] = {}
                 iconsrc = thisinfo['icons_src'][density]
                 icon_dir = get_icon_dir(repodir, density)
                 icondest = os.path.join(icon_dir, iconfilename)
@@ -490,6 +484,9 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                     empty_densities.append(density)
 
                 resize_icon(icondest, density)
+
+            if '-1' in thisinfo['icons_src']:
+                pass #TODO
 
             apk.close()
 
