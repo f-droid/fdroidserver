@@ -280,9 +280,9 @@ def resize_icon(iconpath, density):
         size = launcher_size(density)
 
         if any(length > size for length in im.size):
-            print iconpath, "is too large:", im.size
+            oldsize = im.size
             im.thumbnail((size, size), Image.ANTIALIAS)
-            print iconpath, "new size:", im.size
+            print iconpath, "was too large at", oldsize, "- new size is", im.size
             im.save(iconpath, "PNG")
 
         else:
