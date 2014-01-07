@@ -197,7 +197,11 @@ def check_repomanifest(app, branch=None):
         if not vercode:
             return (None,"Couldn't find latest version code")
 
-        return (version, str(int(vercode)))
+        vercode = str(int(vercode))
+
+        print "Manifest exists. Found version %s (%s)" % (version, vercode)
+
+        return (version, vercode)
 
     except BuildException as be:
         msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
