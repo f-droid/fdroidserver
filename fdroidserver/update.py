@@ -36,20 +36,23 @@ from PIL import Image
 
 
 def get_densities():
-    return [480, 320, 240, 160, 120]
+    return ['480', '320', '240', '160', '120']
 
 def launcher_size(density):
-    return (density * 48) / 160
+    return (int(density) * 48) / 160
 
 def icon_dens_label(density):
     return "icon-%s" % density
 
-def get_icon_dir(density):
+def get_icon_dir(repodir, density):
+    if density is None:
+        return os.path.join(repodir, "icons")
     return os.path.join(repodir, "icons-%s" % density)
 
 def get_icon_dirs(repodir):
     for density in get_densities():
-        yield get_icon_dir(density)
+        yield get_icon_dir(repodir, density)
+    yield os.path.join(repodir, "icons")
 
 def update_wiki(apps, apks):
     """Update the wiki
@@ -271,30 +274,36 @@ def delete_disabled_builds(apps, apkcache, repodirs):
                 if apkfilename in apkcache:
                     del apkcache[apkfilename]
 
-def resize_icon(iconpath):
+def resize_icon(iconpath, density):
+
     try:
         im = Image.open(iconpath)
-        if any(length > config['max_icon_size'] for length in im.size):
+        size = launcher_size(density)
+
+        if any(length > size for length in im.size):
             print iconpath, "is too large:", im.size
-            im.thumbnail((config['max_icon_size'], config['max_icon_size']),
-                    Image.ANTIALIAS)
+            im.thumbnail((size, size), Image.ANTIALIAS)
             print iconpath, "new size:", im.size
             im.save(iconpath, "PNG")
+
         else:
             if options.verbose:
                 print iconpath, "is small enough:", im.size
+
     except Exception,e:
-        print "ERROR: Failed processing {0} - {1}".format(iconpath, e)
+        print "ERROR: Failed resizing {0} - {1}".format(iconpath, e)
 
 def resize_all_icons(repodirs):
     """Resize all icons that exceed the max size
 
-    :param apps: list of all applications, as per metadata.read_metadata
     :param repodirs: the repo directories to process
     """
     for repodir in repodirs:
-        for iconpath in glob.glob(os.path.join(repodir, 'icons', '*.png')):
-            resize_icon(iconpath)
+        for density in get_densities():
+            icon_dir = get_icon_dir(repodir, density)
+            icon_glob = os.path.join(repodir, icon_dir, '*.png')
+            for iconpath in glob.glob(icon_glob):
+                resize_icon(iconpath)
 
 def scan_apks(apps, apkcache, repodir, knownapks):
     """Scan the apks in the given repo directory.
@@ -311,18 +320,21 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
     cachechanged = False
 
-    icon_dir = os.path.join(repodir ,'icons')
-    # Delete and re-create the icon directory...
-    if options.clean and os.path.exists(icon_dir):
-        shutil.rmtree(icon_dir)
-    if not os.path.exists(icon_dir):
-        os.makedirs(icon_dir)
+    icon_dirs = get_icon_dirs(repodir)
+    for icon_dir in icon_dirs:
+        if os.path.exists(icon_dir):
+            if options.clean:
+                shutil.rmtree(icon_dir)
+                os.makedirs(icon_dir)
+        else:
+            os.makedirs(icon_dir)
+
     apks = []
     name_pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
     vercode_pat = re.compile(".*versionCode='([0-9]*)'.*")
     vername_pat = re.compile(".*versionName='([^']*)'.*")
     label_pat = re.compile(".*label='(.*?)'(\n| [a-z]*?=).*")
-    icon_pat = re.compile(".*icon='([^']+?)'.*")
+    icon_pat = re.compile(".*application-icon-([0-9]+):'([^']+?)'.*")
     sdkversion_pat = re.compile(".*'([0-9]*)'.*")
     string_pat = re.compile(".*'([^']*)'.*")
     for apkfile in glob.glob(os.path.join(repodir, '*.apk')):
@@ -353,8 +365,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                                   'dump', 'badging', apkfile],
                                  stdout=subprocess.PIPE)
             output = p.communicate()[0]
-            if options.verbose:
-                print output
+            #if options.verbose:
+                #print output
             if p.returncode != 0:
                 print "ERROR: Failed to get apk information"
                 sys.exit(1)
@@ -370,9 +382,14 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         sys.exit(1)
                 elif line.startswith("application:"):
                     thisinfo['name'] = re.match(label_pat, line).group(1)
+                elif line.startswith("application-icon-"):
                     match = re.match(icon_pat, line)
                     if match:
-                        thisinfo['iconsrc'] = match.group(1)
+                        density = match.group(1)
+                        path = match.group(2)
+                        if 'icons_src' not in thisinfo:
+                            thisinfo['icons_src'] = {}
+                        thisinfo['icons_src'][density] = path
                 elif line.startswith("sdkVersion:"):
                     thisinfo['sdkversion'] = re.match(sdkversion_pat, line).group(1)
                 elif line.startswith("native-code:"):
@@ -429,21 +446,44 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 sys.exit(1)
             thisinfo['sig'] = output[7:].strip()
 
+            iconfilename = "%s.%s.png" % (
+                    thisinfo['id'],
+                    thisinfo['versioncode'])
+
             # Extract the icon file...
-            if 'iconsrc' in thisinfo:
+            empty_densities = []
+            for density in get_densities():
+                label = icon_dens_label(density)
+                if density not in thisinfo['icons_src']:
+                    empty_densities.append(density)
+                    continue
                 apk = zipfile.ZipFile(apkfile, 'r')
-                thisinfo['icon'] = (thisinfo['id'] + '.' +
-                    str(thisinfo['versioncode']) + '.png')
-                iconpath = os.path.join(icon_dir, thisinfo['icon'])
+                iconsrc = thisinfo['icons_src'][density]
+                icon_dir = get_icon_dir(repodir, density)
+                icondest = os.path.join(icon_dir, iconfilename)
+
                 try:
-                    iconfile = open(iconpath, 'wb')
-                    iconfile.write(apk.read(thisinfo['iconsrc']))
+                    iconfile = open(icondest, 'wb')
+                    iconfile.write(apk.read(iconsrc))
                     iconfile.close()
+                    thisinfo[label] = iconfilename 
+
                 except:
                     print "WARNING: Error retrieving icon file"
+                    del thisinfo[label]
+                    del thisinfo['icons_src'][density]
+                    empty_densities.append(density)
+
                 apk.close()
 
-                resize_icon(iconpath)
+                resize_icon(icondest, density)
+
+            # TODO: Handle empty_densities
+
+            # Copy from icons-mdpi to icons since mdpi is the baseline density
+            shutil.copyfile(
+                    os.path.join(get_icon_dir(repodir, '160'), iconfilename),
+                    os.path.join(get_icon_dir(repodir, None), iconfilename))
 
             # Record in known apks, getting the added date at the same time..
             added = knownapks.recordapk(thisinfo['apkname'], thisinfo['id'])
@@ -842,21 +882,21 @@ def main():
 
         if added:
             app['added'] = added
-        else:
-            if options.verbose:
-                print "WARNING: Don't know when " + app['id'] + " was added"
+        #else:
+            #if options.verbose:
+                #print "WARNING: Don't know when " + app['id'] + " was added"
         if lastupdated:
             app['lastupdated'] = lastupdated
-        else:
-            if options.verbose:
-                print "WARNING: Don't know when " + app['id'] + " was last updated"
+        #else:
+            #if options.verbose:
+                #print "WARNING: Don't know when " + app['id'] + " was last updated"
 
         if bestver == 0:
             if app['Name'] is None:
                 app['Name'] = app['id']
             app['icon'] = None
-            if options.verbose and app['Disabled'] is None:
-                print "WARNING: Application " + app['id'] + " has no packages"
+            #if options.verbose and app['Disabled'] is None:
+                #print "WARNING: Application " + app['id'] + " has no packages"
         else:
             if app['Name'] is None:
                 app['Name'] = bestapk['name']
