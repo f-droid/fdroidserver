@@ -683,9 +683,9 @@ def parse_androidmanifests(paths):
     vnsearch = re.compile(r'.*android:versionName="([^"]+?)".*').search
     psearch = re.compile(r'.*package="([^"]+)".*').search
 
-    vcsearch_g = re.compile(r'.*versionCode[ =]*([0-9]+?)[^\d].*').search
-    vnsearch_g = re.compile(r'.*versionName[ =]*"([^"]+?)".*').search
-    psearch_g = re.compile(r'.*packageName[ =]*"([^"]+)".*').search
+    vcsearch_g = re.compile(r'.*versionCode[ ]*=[ ]*["\']*([0-9]+?)[^\d].*').search
+    vnsearch_g = re.compile(r'.*versionName[ ]*=[ ]*(["\'])((?:(?=(\\?))\3.)*?)\1.*').search
+    psearch_g = re.compile(r'.*packageName[ ]*=[ ]*["\']([^"]+)["\'].*').search
 
     max_version = None
     max_vercode = None
@@ -713,7 +713,7 @@ def parse_androidmanifests(paths):
                 else:
                     matches = vnsearch(line)
                 if matches:
-                    version = matches.group(1)
+                    version = matches.group(2 if gradle else 1)
             if not vercode:
                 if gradle:
                     matches = vcsearch_g(line)
