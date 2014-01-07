@@ -21,12 +21,6 @@ mvn3 = "mvn3"
 # Command for running Gradle (command or full path)
 gradle = "gradle"
 
-# Android gradle plugin version
-# "0.5.+" -> gradle 1.7
-# "0.6.+" -> gradle 1.8
-# "0.7.+" -> gradle 1.9
-gradle_plugin = "0.7.+"
-
 # Max height and width (in pixels) for the icons in the repo
 # This corresponds to 72x72 pixels, i.e. mdpi
 icon_max_size = 72
