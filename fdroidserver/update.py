@@ -36,13 +36,10 @@ from PIL import Image
 
 
 def get_densities():
-    return ['480', '320', '240', '160', '120']
+    return ['640', '480', '320', '240', '160', '120']
 
 def launcher_size(density):
     return (int(density) * 48) / 160
-
-def icon_dens_label(density):
-    return "icon-%s" % density
 
 def get_icon_dir(repodir, density):
     if density is None:
@@ -454,11 +451,12 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             densities = get_densities()
             empty_densities = []
             for density in densities:
-                label = icon_dens_label(density)
                 if density not in thisinfo['icons_src']:
                     empty_densities.append(density)
                     continue
                 apk = zipfile.ZipFile(apkfile, 'r')
+                if 'icons' not in thisinfo:
+                    thisinfo['icons'] = {}
                 iconsrc = thisinfo['icons_src'][density]
                 icon_dir = get_icon_dir(repodir, density)
                 icondest = os.path.join(icon_dir, iconfilename)
@@ -467,11 +465,11 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                     iconfile = open(icondest, 'wb')
                     iconfile.write(apk.read(iconsrc))
                     iconfile.close()
-                    thisinfo[label] = iconfilename 
+                    thisinfo['icons'][density] = iconfilename 
 
                 except:
                     print "WARNING: Error retrieving icon file"
-                    del thisinfo[label]
+                    del thisinfo['icons'][density]
                     del thisinfo['icons_src'][density]
                     empty_densities.append(density)
 
