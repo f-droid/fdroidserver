@@ -65,6 +65,11 @@ def main():
             warn("Summary of length %s is over the %i char limit" % (
                 summ_chars, config['char_limits']['Summary']))
 
+        if app['Summary']:
+            lastchar = app['Summary'][-1]
+            if any(lastchar==c for c in ['.', ',', '!', '?']):
+                warn("Summary should not end with a %s" % lastchar)
+
         desc_chars = 0
         for line in app['Description']:
             desc_chars += len(line)
