@@ -451,8 +451,9 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                     thisinfo['versioncode'])
 
             # Extract the icon file...
+            densities = get_densities()
             empty_densities = []
-            for density in get_densities():
+            for density in densities:
                 label = icon_dens_label(density)
                 if density not in thisinfo['icons_src']:
                     empty_densities.append(density)
@@ -478,7 +479,46 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
                 resize_icon(icondest, density)
 
-            # TODO: Handle empty_densities
+            last_density = None
+            # First try resizing down to not lose quality
+            for density in densities:
+                if density not in empty_densities:
+                    last_density = density
+                    continue
+                if last_density is None:
+                    continue
+                if options.verbose:
+                    print "Density %s not available, resizing down from %s" % (
+                            density, last_density)
+
+                last_iconpath = os.path.join(
+                        get_icon_dir(repodir, last_density), iconfilename)
+                iconpath = os.path.join(
+                        get_icon_dir(repodir, density), iconfilename)
+                im = Image.open(last_iconpath)
+                size = launcher_size(density)
+
+                im.thumbnail((size, size), Image.ANTIALIAS)
+                im.save(iconpath, "PNG")
+                empty_densities.remove(density)
+
+            last_density = None
+            # Then just copy from the highest resolution available
+            for density in reversed(densities):
+                if density not in empty_densities:
+                    last_density = density
+                    continue
+                if last_density is None:
+                    continue
+                if options.verbose:
+                    print "Density %s not available, copying from lower density %s" % (
+                            density, last_density)
+
+                shutil.copyfile(
+                        os.path.join(get_icon_dir(repodir, last_density), iconfilename),
+                        os.path.join(get_icon_dir(repodir, density), iconfilename))
+
+                empty_densities.remove(density)
 
             # Copy from icons-mdpi to icons since mdpi is the baseline density
             shutil.copyfile(
