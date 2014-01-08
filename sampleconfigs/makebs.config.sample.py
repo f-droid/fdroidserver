@@ -3,11 +3,13 @@
 # You will need to alter these before running ./makebuildserver
 
 # Name of the base box to use...
-basebox = "raring32"
+basebox = "testing32"
 
 # Location where raring32.box can be found, if you don't already have
-# it. Could be set to https://f-droid.org/raring32.box if you like...
-baseboxurl = "/shares/software/OS and Boot/raring32.box"
+# it. For security reasons, it's recommended that you make your own
+# in a secure environment using trusted media (see the manual) but
+# you can use this default if you like...
+baseboxurl = "https://f-droid.org/testing32.box"
 
 memory = 3584
 
