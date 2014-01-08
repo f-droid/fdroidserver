@@ -62,7 +62,7 @@ def read_config(opts, config_file='config.py'):
         'stats_to_carbon': False,
         'repo_maxage': 0,
         'char_limits': {
-            'Summary' : 40,
+            'Summary' : 50,
             'Description' : 1500
         }
 
