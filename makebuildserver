@@ -201,5 +201,8 @@ vagrant(['package', '--output', os.path.join('..', boxfile)], serverdir)
 print "Adding box"
 vagrant(['box', 'add', 'buildserver', boxfile, '-f'])
 
-os.remove(boxfile)
+# Remove box file if it exists (older vagrant versions left it there, newer
+# ones seem to delete it
+if os.path.exists(boxfile):
+    os.remove(boxfile)
 
