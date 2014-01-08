@@ -1374,7 +1374,7 @@ applications.
 @section Setting up a build server
 
 In addition to the basic setup previously described, you will also need
-a Vagrant-compatible Ubuntu Raring base box called 'raring32' (or raring64
+a Vagrant-compatible Debian Testing base box called 'testing32' (or testing64
 for a 64-bit VM, if you want it to be much slower, and require more disk
 space).
 
@@ -1385,9 +1385,9 @@ for example, having subversion v1.6 on the host and v1.7 on the guest
 would fail.
 
 Unless you're very trusting. you should create one of these for yourself
-from verified standard Ubuntu installation media. However, you could skip
+from verified standard Debian installation media. However, you could skip
 over the next few paragraphs (and sacrifice some security) by downloading
-@url{https://f-droid.org/raring32.box} or @url{https://f-droid.org/raring64.box}.
+@url{https://f-droid.org/testing32.box}.
 
 Documentation for creating a base box can be found at
 @url{http://docs.vagrantup.com/v1/docs/base_boxes.html}.
