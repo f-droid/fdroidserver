@@ -690,11 +690,18 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     for line in output.splitlines():
         if line.startswith("package:"):
             pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
-            foundid = re.match(pat, line).group(1)
+            m = pat.match(line)
+            if m:
+                foundid = m.group(1)
             pat = re.compile(".*versionCode='([0-9]*)'.*")
-            vercode = re.match(pat, line).group(1)
+            m = pat.match(line)
+            if m:
+                vercode = m.group(1)
             pat = re.compile(".*versionName='([^']*)'.*")
-            version = re.match(pat, line).group(1)
+            m = pat.match(line)
+            if m:
+                version = m.group(1)
+
     if thisbuild['novcheck']:
         vercode = thisbuild['vercode']
         version = thisbuild['version']
