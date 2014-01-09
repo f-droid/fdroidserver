@@ -111,7 +111,8 @@ VirtualBox (debian package virtualbox)
 @item
 Ruby (debian packages ruby and rubygems)
 @item
-Vagrant (gem install vagrant)
+Vagrant (unpackaged) Be sure to use 1.3.x because 1.4.x is completely broken
+(at the time of writing, the forthcoming 1.4.3 might work)
 @item
 Paramiko (debian package python-paramiko)
 @item
