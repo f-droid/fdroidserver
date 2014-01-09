@@ -1,8 +1,8 @@
 #!/usr/bin/env python2
+#
+# You may want to alter these before running ./makebuildserver
 
-# You will need to alter these before running ./makebuildserver
-
-# Name of the base box to use...
+# Name of the base box to use
 basebox = "testing32"
 
 # Location where raring32.box can be found, if you don't already have
@@ -13,8 +13,8 @@ baseboxurl = "https://f-droid.org/testing32.box"
 
 memory = 3584
 
-# Debian package proxy server - set this to None unless you have one...
-aptproxy = "http://192.168.0.19:8000"
+# Debian package proxy server - if you have one, e.g. "http://192.168.0.19:8000"
+aptproxy = None
 
-# Set to True if your base box is 64 bit...
+# Set to True if your base box is 64 bit (e.g. testing32.box isn't)
 arch64 = False
