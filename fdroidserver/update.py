@@ -828,7 +828,7 @@ def make_index(apps, apks, repodir, archive, categories):
 
 
 
-def archive_old_apks(apps, apks, repodir, archivedir, defaultkeepversions):
+def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversions):
 
     for app in apps:
 
@@ -854,6 +854,7 @@ def archive_old_apks(apps, apks, repodir, archivedir, defaultkeepversions):
                 if 'srcname' in apk:
                     shutil.move(os.path.join(repodir, apk['srcname']),
                         os.path.join(archivedir, apk['srcname']))
+                archapks.append(apk)
                 apks.remove(apk)
 
 
@@ -1013,7 +1014,7 @@ def main():
                 print "       " + apk['name'] + " - " + apk['version']
 
     if len(repodirs) > 1:
-        archive_old_apks(apps, apks, repodirs[0], repodirs[1], config['archive_older'])
+        archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])
 
     # Make the index for the main repo...
     make_index(apps, apks, repodirs[0], False, categories)
