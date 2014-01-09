@@ -77,6 +77,9 @@ cachefiles = [
     ('gradle-1.9-bin.zip',
      'http://services.gradle.org/distributions/gradle-1.9-bin.zip',
      '097ddc2bcbc9da2bb08cbf6bf8079585e35ad088bafd42e8716bc96405db98e9'),
+    ('gradle-1.10-bin.zip',
+     'http://services.gradle.org/distributions/gradle-1.10-bin.zip',
+     '6e6db4fc595f27ceda059d23693b6f6848583950606112b37dfd0e97a0a0a4fe'),
     ('Kivy-1.7.2.tar.gz',
      'http://pypi.python.org/packages/source/K/Kivy/Kivy-1.7.2.tar.gz',
      '0485e2ef97b5086df886eb01f8303cb542183d2d71a159466f99ad6c8a1d03f1')
