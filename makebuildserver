@@ -147,6 +147,7 @@ vagrantfile += """
     chef.add_recipe "fdroidbuild-general"
     chef.add_recipe "android-sdk"
     chef.add_recipe "android-ndk"
+    chef.add_recipe "gradle"
     chef.add_recipe "kivy"
   end
 end
