@@ -197,12 +197,11 @@ while not ready:
                 print "Status: " + line
 
 print "Packaging"
-vagrant(['package', '--output', os.path.join('..', boxfile)], serverdir)
+vagrant(['package', '--output', os.path.join('..', boxfile)], serverdir,
+        printout=options.verbose)
 print "Adding box"
-vagrant(['box', 'add', 'buildserver', boxfile, '-f'])
+vagrant(['box', 'add', 'buildserver', boxfile, '-f'],
+        printout=options.verbose)
 
-# Remove box file if it exists (older vagrant versions left it there, newer
-# ones seem to delete it
-if os.path.exists(boxfile):
-    os.remove(boxfile)
+os.remove(boxfile)
 
