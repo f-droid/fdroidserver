@@ -19,26 +19,25 @@ if node['kernel']['machine'] == "x86_64"
   end
 end
 
-script "install-gradle" do
+script "add-gradle-dir" do
   cwd "/tmp"
   interpreter "bash"
-  code "
-    unzip /vagrant/cache/gradle-1.9-bin.zip
-    mv gradle-1.9 /opt/gradle
-  "
+  code "mkdir -p /opt/gradle"
   not_if "test -d /opt/gradle"
 end
 
-execute "add-gradle-home" do
-  user user
-  command "echo \"export GRADLE_HOME=/opt/gradle\" >> /home/#{user}/.bsenv"
-  not_if "grep GRADLE_HOME /home/#{user}/.bsenv"
+%w{1.4 1.6 1.7 1.8 1.9}.each do |ver|
+  script "install-gradle-#{ver}" do
+    cwd "/tmp"
+    interpreter "bash"
+    code "
+      unzip /vagrant/cache/gradle-#{ver}-bin.zip
+      mv gradle-#{ver} /opt/gradle/#{ver}
+    "
+    not_if "test -d /opt/gradle/#{ver}"
+  end
 end
-execute "add-gradle-bin" do
-  user user
-  command "echo \"export PATH=\\$PATH:/opt/gradle/bin\" >> /home/#{user}/.bsenv"
-  not_if "grep gradle/bin /home/#{user}/.bsenv"
-end
+
 execute "add-bsenv" do
   user user
   command "echo \". ./.bsenv \" >> /home/#{user}/.bashrc"
