@@ -102,6 +102,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                     if options.verbose:
                         print "...suspending"
                     vagrant(['suspend'], cwd='builder')
+                    print "...waiting a sec..."
+                    time.sleep(10)
                 p = subprocess.Popen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'restore', 'fdroidclean'],
                     cwd='builder', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                 output = p.communicate()[0]
@@ -112,6 +114,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                     retcode, output = vagrant(['up'], cwd='builder')
                     if retcode != 0:
                         raise BuildException("Failed to start build server")
+                    print "...waiting a sec..."
+                    time.sleep(10)
                     vm_ok = True
                 else:
                     print "...failed to reset to snapshot"
@@ -178,10 +182,14 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         if p.returncode != 0:
             print output
             raise BuildException("Failed to take snapshot")
+        print "...waiting a sec..."
+        time.sleep(10)
         print "Restarting new build server"
         retcode, _ = vagrant(['up'], cwd='builder')
         if retcode != 0:
             raise BuildException("Failed to start build server")
+        print "...waiting a sec..."
+        time.sleep(10)
         # Make sure it worked...
         p = subprocess.Popen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'list', '--details'],
             cwd='builder', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
