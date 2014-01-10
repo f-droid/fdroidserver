@@ -4,6 +4,7 @@ import os
 import sys
 import subprocess
 import time
+import hashlib
 from optparse import OptionParser
 
 def vagrant(params, cwd=None, printout=False):
@@ -98,16 +99,26 @@ else:
      'http://dl.google.com/android/ndk/android-ndk-r9b-linux-x86-legacy-toolchains.tar.bz2',
      '606aadf815ae28cc7b0154996247c70d609f111b14e44bcbcd6cad4c87fefb6f')])
 wanted = []
+
+def sha256_for_file(path):
+    with open(path, 'r') as f:
+        s = hashlib.sha256()
+        while True:
+            data = f.read(4096)
+            if not data:
+                break
+            s.update(data)
+        return s.hexdigest()
+
 for f, src, shasum in cachefiles:
-    if not os.path.exists(os.path.join(cachedir, f)):
+    relpath = os.path.join(cachedir, f)
+    if not os.path.exists(relpath):
         print "Downloading " + f + " to cache"
         if subprocess.call(['wget', src], cwd=cachedir) != 0:
             print "...download of " + f + " failed."
             sys.exit(1)
     if shasum:
-        p = subprocess.Popen(['shasum', '-a', '256', os.path.join(cachedir, f)],
-                stdout=subprocess.PIPE)
-        v = p.communicate()[0].split(' ')[0]
+        v = sha256_for_file(relpath)
         if v != shasum:
             print "Invalid shasum of '" + v + "' detected for " + f
             sys.exit(1)
