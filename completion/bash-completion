@@ -3,7 +3,7 @@
 # bash-completion - part of the FDroid server tools
 # Commits updates to apps, allowing you to edit the commit messages
 #
-# Copyright (C) 2013 Daniel Martí <mvdan@mvdan.cc>
+# Copyright (C) 2013, 2014 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -169,10 +169,7 @@ __complete_import() {
 	opts="-h -u -s -r"
 	lopts="--help --url --subdir --repo"
 	case "${prev}" in
-		-u|--url|-r|--repo) return 0;;
-		-s|--subdir)
-			_filedir
-			return 0;;
+		-u|--url|-r|--repo|-s|--subdir) return 0;;
 	esac
 	__complete_options
 }
@@ -256,8 +253,8 @@ __complete_init() {
 _fdroid() {
 	local cmd cmds
 	cmd=${COMP_WORDS[1]}
-	cmds=" build init install update publish checkupdates import
- rewritemeta lint scanner verify stats server "
+	cmds=" build init install update publish checkupdates import \
+rewritemeta lint scanner verify stats server "
 
 	for c in $cmds; do eval "_fdroid_${c} () {
 		local cur prev opts lopts
