@@ -400,7 +400,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     # We need to clean via the build tool in case the binary dirs are
     # different from the default ones
     p = None
-    if thisbuild.get('maven', 'no') != 'no':
+    if thisbuild['type'] == 'maven':
         print "Cleaning Maven project..."
         cmd = [config['mvn3'], 'clean', '-Dandroid.sdk.path=' + config['sdk_path']]
 
@@ -411,7 +411,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             maven_dir = root_dir
 
         p = FDroidPopen(cmd, cwd=maven_dir)
-    elif thisbuild.get('gradle', 'no') != 'no':
+
+    elif thisbuild['type'] == 'gradle':
         print "Cleaning Gradle project..."
         cmd = [config['gradle'], 'clean']
 
@@ -422,10 +423,13 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             gradle_dir = root_dir
 
         p = FDroidPopen(cmd, cwd=gradle_dir)
-    elif thisbuild.get('update', '.') != 'no' and thisbuild.get('kivy', 'no') == 'no':
+
+    elif thisbuild['type'] == 'kivy':
+        pass
+
+    elif thisbuild['type'] == 'ant':
         print "Cleaning Ant project..."
-        cmd = ['ant', 'clean']
-        p = FDroidPopen(cmd, cwd=root_dir)
+        p = FDroidPopen(['ant', 'clean'], cwd=root_dir)
 
     if p is not None and p.returncode != 0:
         raise BuildException("Error cleaning %s:%s" %
@@ -499,7 +503,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     p = None
     # Build the release...
-    if thisbuild.get('maven', 'no') != 'no':
+    if thisbuild['type'] == 'maven':
         print "Building Maven project..."
 
         if '@' in thisbuild['maven']:
@@ -526,7 +530,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         bindir = os.path.join(root_dir, 'target')
 
-    elif thisbuild.get('kivy', 'no') != 'no':
+    elif thisbuild['type'] == 'kivy':
         print "Building Kivy project..."
 
         spec = os.path.join(root_dir, 'buildozer.spec')
@@ -586,7 +590,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         cmd.append('release')
         p = FDroidPopen(cmd, cwd=distdir)
 
-    elif thisbuild.get('gradle', 'no') != 'no':
+    elif thisbuild['type'] == 'gradle':
         print "Building Gradle project..."
         if '@' in thisbuild['gradle']:
             flavour = thisbuild['gradle'].split('@')[0]
@@ -642,7 +646,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if 'bindir' in thisbuild:
         bindir = os.path.join(build_dir, thisbuild['bindir'])
 
-    if thisbuild.get('maven', 'no') != 'no':
+    if thisbuild['type'] == 'maven':
         stdout_apk = '\n'.join([
             line for line in p.stdout.splitlines() if any(a in line for a in ('.apk','.ap_'))])
         m = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
@@ -657,10 +661,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             raise BuildException('Failed to find output')
         src = m.group(1)
         src = os.path.join(bindir, src) + '.apk'
-    elif thisbuild.get('kivy', 'no') != 'no':
+    elif thisbuild['type'] == 'kivy':
         src = 'python-for-android/dist/default/bin/{0}-{1}-release.apk'.format(
                 bconfig.get('app', 'title'), bconfig.get('app', 'version'))
-    elif thisbuild.get('gradle', 'no') != 'no':
+    elif thisbuild['type'] == 'gradle':
         dd = build_dir
         if 'subdir' in thisbuild:
             dd = os.path.join(dd, thisbuild['subdir'])

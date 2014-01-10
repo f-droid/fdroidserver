@@ -918,10 +918,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Generate (or update) the ant build file, build.xml...
     updatemode = build.get('update', 'auto')
-    if (updatemode != 'no'
-            and build.get('maven', 'no') == 'no'
-            and build.get('kivy', 'no') == 'no'
-            and build.get('gradle', 'no') == 'no'):
+    if (updatemode != 'no' and build['type'] == 'ant'):
         parms = [os.path.join(config['sdk_path'], 'tools', 'android'),
                 'update', 'project']
         if 'target' in build and build['target']:
@@ -992,7 +989,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         f.close()
 
     flavour = None
-    if build.get('gradle', 'no') != 'no':
+    if build['type'] == 'gradle':
         flavour = build['gradle'].split('@')[0]
         if flavour in ['main', 'yes', '']:
             flavour = None
@@ -1406,7 +1403,7 @@ def FDroidPopen(commands, cwd=None):
     """
     Runs a command the FDroid way and returns return code and output
 
-    :param commands, cwd: like subprocess.Popen
+    :param commands and cwd like in subprocess.Popen
     """
 
     if options.verbose:

@@ -466,6 +466,11 @@ def parse_metadata(metafile):
             thisinfo['comments'].append((key, comment))
         del curcomments[:]
 
+    def get_build_type(build):
+        for t in ['maven', 'gradle', 'kivy']:
+            if build.get(t, 'no') != 'no':
+                return t
+        return 'ant'
 
     thisinfo = {}
     if metafile:
@@ -619,6 +624,9 @@ def parse_metadata(metafile):
 
     if not thisinfo['Description']:
         thisinfo['Description'].append('No description available')
+
+    for build in thisinfo['builds']:
+        build['type'] = get_build_type(build)
 
     return thisinfo
 
