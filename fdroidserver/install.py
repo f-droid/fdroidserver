@@ -34,6 +34,8 @@ def devices():
     if p.returncode != 0:
         raise Exception("An error occured when finding devices: %s" % p.stderr)
     lines = p.stdout.splitlines()
+    if lines[0].startswith('* daemon not running'):
+        lines = lines[2:]
     if len(lines) < 3:
         return []
     lines = lines[1:-1]
