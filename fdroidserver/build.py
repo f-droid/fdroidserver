@@ -377,17 +377,16 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         print "Suspending build server"
         subprocess.call(['vagrant', 'suspend'], cwd='builder')
 
-def adapt_gradle(path):
-    for root, dirs, files in os.walk(path):
-        for f in files:
-            if f == 'build.gradle':
-                if options.verbose:
-                    print "Adapting build.gradle at %s" % path
+def adapt_gradle(build_dir):
+    for root, dirs, files in os.walk(build_dir):
+        if 'build.gradle' in files:
+            path = os.path.join(root, 'build.gradle')
+            if options.verbose:
+                print "Adapting build.gradle at %s" % path
 
-                subprocess.call(['sed', '-i',
-                        's@buildToolsVersion[ ]*["\\\'][0-9\.]*["\\\']@buildToolsVersion "'
-                        + config['build_tools'] + '"@g', path])
-                break
+            subprocess.call(['sed', '-i',
+                    's@buildToolsVersion[ ]*["\\\'][0-9\.]*["\\\']@buildToolsVersion "'
+                    + config['build_tools'] + '"@g', path])
 
 
 def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver):
