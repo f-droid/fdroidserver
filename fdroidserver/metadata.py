@@ -705,7 +705,7 @@ def write_metadata(dest, app):
                     'preassemble', 'bindir', 'antcommand', 'novcheck']
 
         def write_builditem(key, value):
-            if key in ['version', 'vercode', 'origlines']:
+            if key in ['version', 'vercode', 'origlines', 'type']:
                 return
             if key in valuetypes['bool'].attrs:
                 if not value:
