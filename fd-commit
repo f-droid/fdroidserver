@@ -78,7 +78,7 @@ while read line; do
 		fi
 
 		message=${message//\"/\\\"}
-		commands+=("git commit -m \"$message\" -e -v -- $file $extra")
+		commands+=("git add -- $file $extra && git commit -m \"$message\" -e -v")
 	fi
 done < <(git status --porcelain)
 
