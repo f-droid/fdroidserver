@@ -29,26 +29,26 @@ execute "add-android-home" do
   not_if "grep ANDROID_HOME /home/#{user}/.bsenv"
 end
 
-%w{19.0.1}.each do |ver|
-
-  script "add_build_tools_#{ver}" do
-    interpreter "bash"
-    user user
-    cwd "/tmp"
-    code "
-      if [ -f /vagrant/cache/build-tools/#{ver}.tar.gz ] ; then
-        echo Installing from cache
-        mkdir #{sdk_loc}/build-tools
-        tar -C #{sdk_loc}/build-tools -z -x -f /vagrant/cache/build-tools/#{ver}.tar.gz
-      else
-        #{sdk_loc}/tools/android update sdk --no-ui -a -t build-tools-#{ver} <<X
+script "add_build_tools" do
+  interpreter "bash"
+  user user
+  ver = "19.0.1"
+  cwd "/tmp"
+  code "
+    if [ -f /vagrant/cache/build-tools/#{ver}.tar.gz ] ; then
+      echo Installing from cache
+      mkdir #{sdk_loc}/build-tools
+      tar -C #{sdk_loc}/build-tools -z -x -f /vagrant/cache/build-tools/#{ver}.tar.gz
+    else
+      #{sdk_loc}/tools/android update sdk --no-ui -a -t build-tools-#{ver} <<X
 y
 
 X
-      fi
-    "
-    not_if "test -d #{sdk_loc}/build-tools/#{ver}"
-  end
+    fi
+	sed -i '/BTPATH/d' /home/#{user}/.bsenv
+	echo \"export PATH=\\$PATH:#{sdk_loc}/build-tools/#{ver} #BTPATH\" >> /home/#{user}/.bsenv
+  "
+  not_if "test -d #{sdk_loc}/build-tools/#{ver}"
 end
 
 # This is currently 19.0.1
