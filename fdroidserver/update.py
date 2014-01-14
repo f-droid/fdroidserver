@@ -296,7 +296,7 @@ def resize_icon(iconpath, density):
                 print iconpath, "is small enough:", im.size
 
     except Exception,e:
-        print "ERROR: Failed resizing {0} - {1}".format(iconpath, e)
+        print "WARNING: Failed resizing {0} - {1}".format(iconpath, e)
 
 def resize_all_icons(repodirs):
     """Resize all icons that exceed the max size
@@ -496,17 +496,20 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 iconfile = open(iconpath, 'wb')
                 iconfile.write(apk.read(iconsrc))
                 iconfile.close()
-                im = Image.open(iconpath)
-                dpi = px_to_dpi(im.size[0])
-                for density in densities:
-                    if density in thisinfo['icons']:
-                        break
-                    if density == densities[-1] or dpi >= int(density):
-                        thisinfo['icons'][density] = iconfilename
-                        shutil.move(iconpath,
-                                os.path.join(get_icon_dir(repodir, density), iconfilename))
-                        empty_densities.remove(density)
-                        break
+                try:
+                    im = Image.open(iconpath)
+                    dpi = px_to_dpi(im.size[0])
+                    for density in densities:
+                        if density in thisinfo['icons']:
+                            break
+                        if density == densities[-1] or dpi >= int(density):
+                            thisinfo['icons'][density] = iconfilename
+                            shutil.move(iconpath,
+                                    os.path.join(get_icon_dir(repodir, density), iconfilename))
+                            empty_densities.remove(density)
+                            break
+                except Exception,e:
+                    print "WARNING: Failed reading {0} - {1}".format(iconpath, e)
 
             if thisinfo['icons']:
                 thisinfo['icon'] = iconfilename
