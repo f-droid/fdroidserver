@@ -412,6 +412,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         p = FDroidPopen(cmd, cwd=maven_dir)
 
     elif thisbuild['type'] == 'gradle':
+
         print "Cleaning Gradle project..."
         cmd = [config['gradle'], 'clean']
 
@@ -420,6 +421,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             gradle_dir = os.path.normpath(gradle_dir)
         else:
             gradle_dir = root_dir
+
+        adapt_gradle(gradle_dir)
+        for name, number, libpath in srclibpaths:
+            adapt_gradle(libpath)
 
         p = FDroidPopen(cmd, cwd=gradle_dir)
 
@@ -606,11 +611,6 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 subprocess.call(['sed', '-i',
                         's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+level+'@g',
                         'build.gradle'], cwd=gradle_dir)
-
-        adapt_gradle(gradle_dir)
-
-        for name, number, libpath in srclibpaths:
-            adapt_gradle(libpath)
 
         if len(flavours) == 1 and flavours[0] in ['main', 'yes', '']:
             flavours[0] = ''
