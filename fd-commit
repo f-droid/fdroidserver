@@ -82,8 +82,8 @@ while read line; do
 	fi
 done < <(git status --porcelain)
 
-git reset
+git reset >/dev/null
 for cmd in "${commands[@]}"; do
 	eval "$cmd"
-	git reset
+	git reset >/dev/null
 done
