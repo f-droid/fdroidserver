@@ -314,7 +314,11 @@ def main():
                     print "%s encountered a problem: %s" % (common.getappname(app), reason)
             if version is not None:
                 stored = app['Current Version']
-                if LooseVersion(stored) < LooseVersion(version):
+                if stored == '':
+                    if options.verbose:
+                        print "%s has no Current Version but has version %s on the Play Store" % (
+                                common.getappname(app), version)
+                elif LooseVersion(stored) < LooseVersion(version):
                     print "%s has version %s on the Play Store, which is bigger than %s" % (
                             common.getappname(app), version, stored)
                 elif options.verbose:
