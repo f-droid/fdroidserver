@@ -25,7 +25,7 @@ d_plugin_k=(0.7 0.6 0.5 0.4 0.3 0.2)
 d_plugin_v=(1.9 1.8 1.6 1.6 1.4 1.4)
 
 # Latest takes priority
-files=(build.gradle)
+files=(../build.gradle build.gradle)
 
 for f in ${files[@]}; do
 	[[ -f $f ]] || continue
@@ -40,7 +40,7 @@ done
 
 if [[ -n $wrapper_ver ]]; then
 	v_found=$wrapper_ver
-	echo Found $v_found via gradleVersion
+	echo "Found $v_found via gradleVersion"
 	run_gradle
 fi
 
@@ -57,12 +57,12 @@ if [[ -n $plugin_pver ]]; then
 	done
 	if $match; then
 		v_found=$plugin_ver
-		echo Found $v_found via gradle plugin version $k
+		echo "Found $v_found via gradle plugin version $k"
 	fi
 fi
 
 [[ -n $v_found ]] && run_gradle
 
-echo No suitable gradle version found - defaulting to $v_def
+echo "No suitable gradle version found - defaulting to $v_def"
 v_found=$v_def
 run_gradle
