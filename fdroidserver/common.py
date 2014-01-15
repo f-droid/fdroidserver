@@ -555,6 +555,18 @@ class vcs_hg(vcs):
         if subprocess.call(['hg', 'update', '-C', rev],
                 cwd=self.local) != 0:
             raise VCSException("Hg checkout failed")
+        p = subprocess.Popen(['hg', 'purge', '--all'], stdout=subprocess.PIPE,
+                             cwd=self.local)
+        result = p.communicate()[0]
+        if "'purge' is provided by the following extension" in result:
+            #Also delete untracked files, we have to enable purge extension for that:
+            with open(self.local+"/.hg/hgrc", "a") as myfile:
+                           myfile.write("\n[extensions]\nhgext.purge=")
+            if subprocess.call(['hg', 'purge', '--all'],
+                           cwd=self.local) != 0:
+                                   raise VCSException("HG purge failed")
+        else:
+            raise VCSException("HG purge failed")
 
     def gettags(self):
         p = subprocess.Popen(['hg', 'tags', '-q'],
