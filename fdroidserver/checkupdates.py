@@ -322,8 +322,12 @@ def main():
                     print "%s has version %s on the Play Store, which is bigger than %s" % (
                             common.getappname(app), version, stored)
                 elif options.verbose:
-                    print "%s has the same version %s on the Play Store" % (
-                            common.getappname(app), version)
+                    if stored != version:
+                        print "%s has version %s on the Play Store, which differs from %s" % (
+                                common.getappname(app), version, stored)
+                    else:
+                        print "%s has the same version %s on the Play Store" % (
+                                common.getappname(app), version)
         return
 
 
