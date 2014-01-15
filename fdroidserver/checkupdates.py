@@ -311,7 +311,7 @@ def main():
                 if reason == '404':
                     print "%s is not in the Play Store" % common.getappname(app)
                 else:
-                    print "%s encountered a problem: %s" % common.getappname(app)
+                    print "%s encountered a problem: %s" % (common.getappname(app), reason)
             if version is not None:
                 stored = app['Current Version']
                 if LooseVersion(stored) < LooseVersion(version):
