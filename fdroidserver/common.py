@@ -1460,6 +1460,10 @@ def FDroidPopen(commands, cwd=None):
     return result
 
 def remove_signing_keys(build_dir):
+    comment = re.compile(r'[ ]*//')
+    signing_configs = re.compile(r'[\t ]*signingConfigs[ \t]*{[ \t]*$')
+    r_open = re.compile(r'.*{[\t ]*$')
+    r_close = re.compile(r'.*}[\t ]*$')
     for root, dirs, files in os.walk(build_dir):
         if 'build.gradle' in files:
             path = os.path.join(root, 'build.gradle')
@@ -1471,14 +1475,16 @@ def remove_signing_keys(build_dir):
             opened = 0
             with open(path, "w") as o:
                 for line in lines:
-                    if 'signingConfigs ' in line:
+                    if comment.match(line):
+                        pass
+                    elif signing_configs.match(line):
                         opened = 1
                         changed = True
                     elif opened > 0:
-                        if '{' in line:
+                        if r_open.match(line):
                             opened += 1
-                        elif '}' in line:
-                            opened -=1
+                        elif r_close.match(line):
+                            opened -= 1
                     elif any(s in line for s in (
                             ' signingConfig ',
                             'android.signingConfigs.',
