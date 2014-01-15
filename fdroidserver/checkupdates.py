@@ -314,7 +314,7 @@ def main():
                     print "%s encountered a problem: %s" % (common.getappname(app), reason)
             if version is not None:
                 stored = app['Current Version']
-                if stored == '':
+                if not stored:
                     if options.verbose:
                         print "%s has no Current Version but has version %s on the Play Store" % (
                                 common.getappname(app), version)
