@@ -589,11 +589,11 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     elif thisbuild['type'] == 'gradle':
         print "Building Gradle project..."
         if '@' in thisbuild['gradle']:
-            flavour = thisbuild['gradle'].split('@')[0]
+            flavours = thisbuild['gradle'].split('@')[0].split(',')
             gradle_dir = thisbuild['gradle'].split('@')[1]
             gradle_dir = os.path.join(root_dir, gradle_dir)
         else:
-            flavour = thisbuild['gradle']
+            flavours = thisbuild['gradle'].split(',')
             gradle_dir = root_dir
 
 
@@ -612,14 +612,14 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         for name, number, libpath in srclibpaths:
             adapt_gradle(libpath)
 
-        if flavour in ['main', 'yes', '']:
-            flavour = ''
+        if len(flavours) == 1 and flavours[0] in ['main', 'yes', '']:
+            flavours[0] = ''
 
         commands = [config['gradle']]
         if 'preassemble' in thisbuild:
             for task in thisbuild['preassemble'].split():
                 commands.append(task)
-        commands += ['assemble'+flavour+'Release']
+        commands += ['assemble'+''.join(flavours)+'Release']
 
         p = FDroidPopen(commands, cwd=gradle_dir)
 
@@ -664,10 +664,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         dd = build_dir
         if 'subdir' in thisbuild:
             dd = os.path.join(dd, thisbuild['subdir'])
-        if flavour in ['main', 'yes', '']:
+        if len(flavours) == 1 and flavours[0] == '':
             name = '-'.join([os.path.basename(dd), 'release', 'unsigned'])
         else:
-            name = '-'.join([os.path.basename(dd), flavour, 'release', 'unsigned'])
+            name = '-'.join([os.path.basename(dd), '-'.join(flavours), 'release', 'unsigned'])
         src = os.path.join(dd, 'build', 'apk', name+'.apk')
     else:
         stdout_apk = '\n'.join([
