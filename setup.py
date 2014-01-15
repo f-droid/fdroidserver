@@ -10,7 +10,7 @@ setup(name='FDroidServer',
       author_email='team@f-droid.org',
       url='https://f-droid.org',
       packages=['fdroidserver'],
-      scripts=['fdroid'],
+      scripts=['fdroid', 'fd-commit'],
       data_files=[
         ('share/doc/fdroidserver/examples',
          [ 'config.buildserver.py',
