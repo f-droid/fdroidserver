@@ -175,11 +175,11 @@ def update_wiki(apps, apks):
         wikidata += '\n[[Category:' + wikicat + ']]\n'
         if len(app['No Source Since']) > 0:
             wikidata += '\n[[Category:Apps missing source code]]\n'
-        elif validapks == 0 and not app['Disabled']:
+        if validapks == 0 and not app['Disabled']:
             wikidata += '\n[[Category:Apps with no packages]]\n'
-        elif cantupdate and not app['Disabled']:
+        if cantupdate and not app['Disabled']:
             wikidata += "\n[[Category:Apps we can't update]]\n"
-        elif buildfails and not app['Disabled']:
+        if buildfails and not app['Disabled']:
             wikidata += "\n[[Category:Apps with failing builds]]\n"
         elif not gotcurrentver and not app['Disabled'] and app['Update Check Mode'] != "Static":
             wikidata += '\n[[Category:Apps to Update]]\n'
