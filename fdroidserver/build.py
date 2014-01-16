@@ -326,6 +326,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         # Execute the build script...
         print "Starting build..."
         chan = sshs.get_transport().open_session()
+        chan.get_pty()
         cmdline = 'python build.py --on-server'
         if force:
             cmdline += ' --force --test'
@@ -334,12 +335,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         cmdline += " %s:%s" % (app['id'], thisbuild['vercode'])
         chan.exec_command('bash -c ". ~/.bsenv && ' + cmdline + '"')
         output = ''
-        error = ''
         while not chan.exit_status_ready():
             while chan.recv_ready():
                 output += chan.recv(1024)
-            while chan.recv_stderr_ready():
-                error += chan.recv_stderr(1024)
             time.sleep(0.1)
         print "...getting exit status"
         returncode = chan.recv_exit_status()
@@ -348,13 +346,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             if len(get) == 0:
                 break
             output += get
-        while True:
-            get = chan.recv_stderr(1024)
-            if len(get) == 0:
-                break
-            error += get
         if returncode != 0:
-            raise BuildException("Build.py failed on server for %s:%s" % (app['id'], thisbuild['version']), output, error)
+            raise BuildException("Build.py failed on server for %s:%s" % (app['id'], thisbuild['version']), output)
 
         # Retrieve the built files...
         print "Retrieving build output..."
@@ -368,7 +361,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             ftp.get(apkfile, os.path.join(output_dir, apkfile))
             ftp.get(tarball, os.path.join(output_dir, tarball))
         except:
-            raise BuildException("Build failed for %s:%s - missing output files" % (app['id'], thisbuild['version']), output, error)
+            raise BuildException("Build failed for %s:%s - missing output files" % (app['id'], thisbuild['version']), output)
         ftp.close()
 
     finally:
@@ -432,7 +425,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     if p is not None and p.returncode != 0:
         raise BuildException("Error cleaning %s:%s" %
-                (app['id'], thisbuild['version']), p.stdout, p.stderr)
+                (app['id'], thisbuild['version']), p.stdout)
 
     # Scan before building...
     print "Scanning source for common problems..."
@@ -468,7 +461,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         if p.returncode != 0:
             raise BuildException("Error running build command for %s:%s" %
-                    (app['id'], thisbuild['version']), p.stdout, p.stderr)
+                    (app['id'], thisbuild['version']), p.stdout)
 
     # Build native stuff if required...
     if thisbuild.get('buildjni') not in (None, 'no'):
@@ -495,7 +488,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 del manifest_text
             p = FDroidPopen([ndkbuild], cwd=os.path.join(root_dir,d))
             if p.returncode != 0:
-                raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout, p.stderr)
+                raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout)
 
     p = None
     # Build the release...
@@ -635,7 +628,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         bindir = os.path.join(root_dir, 'bin')
 
     if p.returncode != 0:
-        raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout, p.stderr)
+        raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout)
     print "Successfully built version " + thisbuild['version'] + ' of ' + app['id']
 
     # Find the apk name in the output...
@@ -965,7 +958,7 @@ def main():
                     if len(txt) > 8192:
                         txt = txt[-8192:]
                     txt = "Build completed at " + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + "\n\n" + txt
-                    newpage.save(wikilog, summary='Build log')
+                    newpage.save(txt, summary='Build log')
                 except:
                     print "Error while attempting to publish build log"
 

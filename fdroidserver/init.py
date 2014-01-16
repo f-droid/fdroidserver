@@ -65,7 +65,7 @@ def genkey(keystore, repo_keyalias, password, keydname):
                 '-storepass', password, '-keypass', password,
                 '-dname', keydname])
     if p.returncode != 0:
-        raise BuildException("Failed to generate key", p.stdout, p.stderr)
+        raise BuildException("Failed to generate key", p.stdout)
     # now show the lovely key that was just generated
     p = subprocess.Popen(['keytool', '-list', '-v',
                 '-keystore', keystore, '-alias', repo_keyalias],

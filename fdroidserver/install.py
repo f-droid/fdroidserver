@@ -32,7 +32,7 @@ config = None
 def devices():
     p = FDroidPopen(["adb", "devices"])
     if p.returncode != 0:
-        raise Exception("An error occured when finding devices: %s" % p.stderr)
+        raise Exception("An error occured when finding devices: %s" % p.stdout)
     lines = p.stdout.splitlines()
     if lines[0].startswith('* daemon not running'):
         lines = lines[2:]

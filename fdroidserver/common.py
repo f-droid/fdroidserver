@@ -749,31 +749,23 @@ def parse_androidmanifests(paths):
     return (max_version, max_vercode, max_package)
 
 class BuildException(Exception):
-    def __init__(self, value, stdout = None, stderr = None):
+    def __init__(self, value, detail = None):
         self.value = value
-        self.stdout = stdout
-        self.stderr = stderr
+        self.detail = detail
 
     def get_wikitext(self):
         ret = repr(self.value) + "\n"
-        if self.stdout:
-            ret += "=stdout=\n"
+        if self.detail:
+            ret += "=detail=\n"
             ret += "<pre>\n"
-            ret += str(self.stdout)
-            ret += "</pre>\n"
-        if self.stderr:
-            ret += "=stderr=\n"
-            ret += "<pre>\n"
-            ret += str(self.stderr)
+            ret += str(self.detail)
             ret += "</pre>\n"
         return ret
 
     def __str__(self):
         ret = repr(self.value)
-        if self.stdout:
-            ret += "\n==== stdout begin ====\n%s\n==== stdout end ====" % self.stdout.strip()
-        if self.stderr:
-            ret += "\n==== stderr begin ====\n%s\n==== stderr end ====" % self.stderr.strip()
+        if self.detail:
+            ret += "\n==== detail begin ====\n%s\n==== detail end ====" % self.detail.strip()
         return ret
 
 class VCSException(Exception):
@@ -855,7 +847,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, target=None,
             p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=libdir)
             if p.returncode != 0:
                 raise BuildException("Error running prepare command for srclib %s"
-                        % name, p.stdout, p.stderr)
+                        % name, p.stdout)
 
         if srclib["Update Project"] == "Yes":
             print "Updating srclib %s at path %s" % (name, libdir)
@@ -867,10 +859,9 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, target=None,
             # Check to see whether an error was returned without a proper exit
             # code (this is the case for the 'no target set or target invalid'
             # error)
-            if p.returncode != 0 or (p.stderr != "" and
-                    p.stderr.startswith("Error: ")):
+            if p.returncode != 0 or p.stdout.startswith("Error: "):
                 raise BuildException("Failed to update srclib project {0}"
-                        .format(name), p.stdout, p.stderr)
+                        .format(name), p.stdout)
 
             remove_signing_keys(libdir)
 
@@ -926,7 +917,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running init command for %s:%s" %
-                    (app['id'], build['version']), p.stdout, p.stderr)
+                    (app['id'], build['version']), p.stdout)
 
     # Generate (or update) the ant build file, build.xml...
     updatemode = build.get('update', 'auto')
@@ -963,10 +954,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             # Check to see whether an error was returned without a proper exit
             # code (this is the case for the 'no target set or target invalid'
             # error)
-            if p.returncode != 0 or (p.stderr != "" and
-                    p.stderr.startswith("Error: ")):
+            if p.returncode != 0 or p.stdout.startswith("Error: "):
                 raise BuildException("Failed to update project at %s" % d,
-                        p.stdout, p.stderr)
+                        p.stdout)
 
     # Update the local.properties file...
     localprops = [ os.path.join(build_dir, 'local.properties') ]
@@ -1178,7 +1168,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running prebuild command for %s:%s" %
-                    (app['id'], build['version']), p.stdout, p.stderr)
+                    (app['id'], build['version']), p.stdout)
 
     return (root_dir, srclibpaths)
 
@@ -1413,9 +1403,11 @@ class PopenResult:
 
 def FDroidPopen(commands, cwd=None):
     """
-    Runs a command the FDroid way and returns return code and output
+    Run a command and capture the output.
 
-    :param commands and cwd like in subprocess.Popen
+    :param commands: command and argument list like in subprocess.Popen
+    :param cwd: optionally specifies a working directory
+    :returns: A PopenResult.
     """
 
     if options.verbose:
@@ -1425,18 +1417,14 @@ def FDroidPopen(commands, cwd=None):
 
     result = PopenResult()
     p = subprocess.Popen(commands, cwd=cwd,
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     stdout_queue = Queue.Queue()
     stdout_reader = AsynchronousFileReader(p.stdout, stdout_queue)
     stdout_reader.start()
-    stderr_queue = Queue.Queue()
-    stderr_reader = AsynchronousFileReader(p.stderr, stderr_queue)
-    stderr_reader.start()
 
-    # Check the queues for output (until there is no more to get)
-    while not stdout_reader.eof() or not stderr_reader.eof():
-        # Show what we received from standard output
+    # Check the queue for output (until there is no more to get)
+    while not stdout_reader.eof():
         while not stdout_queue.empty():
             line = stdout_queue.get()
             if options.verbose:
@@ -1445,14 +1433,6 @@ def FDroidPopen(commands, cwd=None):
                 sys.stdout.flush()
             result.stdout += line
 
-        # Show what we received from standard error
-        while not stderr_queue.empty():
-            line = stderr_queue.get()
-            if options.verbose:
-                # Output directly to console
-                sys.stderr.write(line)
-                sys.stderr.flush()
-            result.stderr += line
         time.sleep(0.1)
 
     p.communicate()
