@@ -603,7 +603,8 @@ want an app to act as multiple apps.
 
 @cindex Web Site
 
-The URL for the application's web site.
+The URL for the application's web site. If there is no relevant web site, this
+can be omitted (or left blank).
 
 This is converted to (@code{<web>}) in the public index file.
 
