@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from optparse import OptionParser
+import re
 import common, metadata
 
 config = None
@@ -48,6 +49,25 @@ def main():
     allapps = metadata.read_metadata(xref=False)
     apps = common.read_app_args(args, allapps, False)
 
+    regex_warnings = {
+            'Source Code': [
+                (re.compile(r'.*code\.google\.com/p/[^/]+/source/.*'),
+                    "/source is enough on its own"),
+                (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
+                    "/source is missing")
+            ],
+            'Issue Tracker': [
+                (re.compile(r'.*code\.google\.com/p/[^/]+/issues/.*'),
+                    "/issues is enough on its own"),
+                (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
+                    "/issues is missing"),
+                (re.compile(r'.*github\.com/[^/]+/[^/]+/issues/.*'),
+                    "/issues is enough on its own"),
+                (re.compile(r'.*github\.com/[^/]+/[^/]+[/]*$'),
+                    "/issues is missing")
+            ]
+    }
+
     for app in apps:
         appid = app['id']
         lastcommit = ''
@@ -69,6 +89,13 @@ def main():
             lastchar = app['Summary'][-1]
             if any(lastchar==c for c in ['.', ',', '!', '?']):
                 warn("Summary should not end with a %s" % lastchar)
+
+        for f in ['Source Code', 'Issue Tracker']:
+            if f not in regex_warnings:
+                continue
+            for m, r in regex_warnings[f]:
+                if m.match(app[f]):
+                    warn("%s url '%s': %s" % (f, app[f], r))
 
         desc_chars = 0
         for line in app['Description']:
