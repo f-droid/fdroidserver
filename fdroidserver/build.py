@@ -415,7 +415,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         else:
             gradle_dir = root_dir
 
-        adapt_gradle(gradle_dir)
+        adapt_gradle(build_dir)
         for name, number, libpath in srclibpaths:
             adapt_gradle(libpath)
 
