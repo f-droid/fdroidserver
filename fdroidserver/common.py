@@ -561,9 +561,8 @@ class vcs_hg(vcs):
         # Also delete untracked files, we have to enable purge extension for that:
         if "'purge' is provided by the following extension" in result:
             with open(self.local+"/.hg/hgrc", "a") as myfile:
-                myfile.write("\n[extensions]\nhgext.purge=")
-            if subprocess.call(['hg', 'purge', '--all'],
-                    cwd=self.local) != 0:
+                myfile.write("\n[extensions]\nhgext.purge=\n")
+            if subprocess.call(['hg', 'purge', '--all'], cwd=self.local) != 0:
                 raise VCSException("HG purge failed")
         else:
             raise VCSException("HG purge failed")
