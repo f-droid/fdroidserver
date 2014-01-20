@@ -109,6 +109,15 @@ def main():
                 if m.match(app[f]):
                     warn("%s url '%s': %s" % (f, app[f], r))
 
+        # Build warnings
+        for build in app['builds']:
+            for n in ['master', 'origin/', 'default', 'trunk']:
+                if 'commit' not in build:
+                    continue
+                if build['commit'].startswith(n):
+                    warn("Branch '%s' used as commit" % n)
+
+
         if not appid:
             print
 
