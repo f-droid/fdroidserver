@@ -918,77 +918,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             raise BuildException("Error running init command for %s:%s" %
                     (app['id'], build['version']), p.stdout)
 
-    # Generate (or update) the ant build file, build.xml...
-    updatemode = build.get('update', 'auto')
-    if (updatemode != 'no' and build['type'] == 'ant'):
-        parms = [os.path.join(config['sdk_path'], 'tools', 'android'),
-                'update', 'project']
-        if 'target' in build and build['target']:
-            parms += ['-t', build['target']]
-        update_dirs = None
-        if updatemode == 'auto':
-            update_dirs = ['.'] + ant_subprojects(root_dir)
-        else:
-            update_dirs = [d.strip() for d in updatemode.split(';')]
-        # Force build.xml update if necessary...
-        if updatemode == 'force' or 'target' in build:
-            if updatemode == 'force':
-                update_dirs = ['.']
-            buildxml = os.path.join(root_dir, 'build.xml')
-            if os.path.exists(buildxml):
-                print 'Force-removing old build.xml'
-                os.remove(buildxml)
-
-        for d in update_dirs:
-            subdir = os.path.join(root_dir, d)
-            # Clean update dirs via ant
-            p = FDroidPopen(['ant', 'clean'], cwd=subdir)
-            dparms = parms + ['-p', d]
-            if options.verbose:
-                if d == '.':
-                    print "Updating main project..."
-                else:
-                    print "Updating subproject %s..." % d
-            p = FDroidPopen(dparms, cwd=root_dir)
-            # Check to see whether an error was returned without a proper exit
-            # code (this is the case for the 'no target set or target invalid'
-            # error)
-            if p.returncode != 0 or p.stdout.startswith("Error: "):
-                raise BuildException("Failed to update project at %s" % d,
-                        p.stdout)
-
-    # Update the local.properties file...
-    localprops = [ os.path.join(build_dir, 'local.properties') ]
-    if 'subdir' in build:
-        localprops += [ os.path.join(root_dir, 'local.properties') ]
-    for path in localprops:
-        if not os.path.isfile(path):
-            continue
-        if options.verbose:
-            print "Updating properties file at %s" % path
-        f = open(path, 'r')
-        props = f.read()
-        f.close()
-        props += '\n'
-        # Fix old-fashioned 'sdk-location' by copying
-        # from sdk.dir, if necessary...
-        if build['oldsdkloc']:
-            sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
-                re.S|re.M).group(1)
-            props += "sdk-location=%s\n" % sdkloc
-        else:
-            props += "sdk.dir=%s\n" % config['sdk_path']
-            props += "sdk-location=%s\n" % ['sdk_path']
-        # Add ndk location...
-        props += "ndk.dir=%s\n" % config['ndk_path']
-        props += "ndk-location=%s\n" % config['ndk_path']
-        # Add java.encoding if necessary...
-        if 'encoding' in build:
-            props += "java.encoding=%s\n" % build['encoding']
-        f = open(path, 'w')
-        f.write(props)
-        f.close()
-
     flavour = None
     if build['type'] == 'gradle':
         flavour = build['gradle'].split('@')[0]
@@ -1151,6 +1080,77 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     # If one was used for the main source, add that too.
     if basesrclib:
         srclibpaths.append(basesrclib)
+
+    # Generate (or update) the ant build file, build.xml...
+    updatemode = build.get('update', 'auto')
+    if (updatemode != 'no' and build['type'] == 'ant'):
+        parms = [os.path.join(config['sdk_path'], 'tools', 'android'),
+                'update', 'project']
+        if 'target' in build and build['target']:
+            parms += ['-t', build['target']]
+        update_dirs = None
+        if updatemode == 'auto':
+            update_dirs = ['.'] + ant_subprojects(root_dir)
+        else:
+            update_dirs = [d.strip() for d in updatemode.split(';')]
+        # Force build.xml update if necessary...
+        if updatemode == 'force' or 'target' in build:
+            if updatemode == 'force':
+                update_dirs = ['.']
+            buildxml = os.path.join(root_dir, 'build.xml')
+            if os.path.exists(buildxml):
+                print 'Force-removing old build.xml'
+                os.remove(buildxml)
+
+        for d in update_dirs:
+            subdir = os.path.join(root_dir, d)
+            # Clean update dirs via ant
+            p = FDroidPopen(['ant', 'clean'], cwd=subdir)
+            dparms = parms + ['-p', d]
+            if options.verbose:
+                if d == '.':
+                    print "Updating main project..."
+                else:
+                    print "Updating subproject %s..." % d
+            p = FDroidPopen(dparms, cwd=root_dir)
+            # Check to see whether an error was returned without a proper exit
+            # code (this is the case for the 'no target set or target invalid'
+            # error)
+            if p.returncode != 0 or p.stdout.startswith("Error: "):
+                raise BuildException("Failed to update project at %s" % d,
+                        p.stdout)
+
+    # Update the local.properties file...
+    localprops = [ os.path.join(build_dir, 'local.properties') ]
+    if 'subdir' in build:
+        localprops += [ os.path.join(root_dir, 'local.properties') ]
+    for path in localprops:
+        if not os.path.isfile(path):
+            continue
+        if options.verbose:
+            print "Updating properties file at %s" % path
+        f = open(path, 'r')
+        props = f.read()
+        f.close()
+        props += '\n'
+        # Fix old-fashioned 'sdk-location' by copying
+        # from sdk.dir, if necessary...
+        if build['oldsdkloc']:
+            sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
+                re.S|re.M).group(1)
+            props += "sdk-location=%s\n" % sdkloc
+        else:
+            props += "sdk.dir=%s\n" % config['sdk_path']
+            props += "sdk-location=%s\n" % ['sdk_path']
+        # Add ndk location...
+        props += "ndk.dir=%s\n" % config['ndk_path']
+        props += "ndk-location=%s\n" % config['ndk_path']
+        # Add java.encoding if necessary...
+        if 'encoding' in build:
+            props += "java.encoding=%s\n" % build['encoding']
+        f = open(path, 'w')
+        f.write(props)
+        f.close()
 
     # Run a pre-build command if one is required...
     if 'prebuild' in build:
