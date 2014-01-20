@@ -90,6 +90,8 @@ def main():
         # Description size limit
         desc_chars = 0
         for line in app['Description']:
+            if re.match(r'[ ]*\*[^ ]', line):
+                warn("Invalid bulleted list: '%s'" % line)
             desc_chars += len(line)
         if desc_chars > config['char_limits']['Description']:
             warn("Description of length %s is over the %i char limit" % (
@@ -116,7 +118,6 @@ def main():
                     continue
                 if build['commit'].startswith(n):
                     warn("Branch '%s' used as commit" % n)
-
 
         if not appid:
             print
