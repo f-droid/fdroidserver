@@ -506,7 +506,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             maven_dir = root_dir
 
         mvncmd = [config['mvn3'], '-Dandroid.sdk.path=' + config['sdk_path'],
-                '-Dandroid.sign.debug=false', '-Dandroid.release=true', 'package']
+                '-Dandroid.sign.debug=false', '-Dmaven.test.skip=true',
+                '-Dandroid.release=true', 'package']
         if 'target' in thisbuild:
             target = thisbuild["target"].split('-')[1]
             subprocess.call(['sed', '-i',
