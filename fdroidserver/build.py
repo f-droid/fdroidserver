@@ -886,7 +886,11 @@ def main():
 
     if options.latest:
         for app in apps:
-            app['builds'] = app['builds'][-1:]
+            for build in reversed(app['builds']):
+                if 'disable' in build:
+                    continue
+                app['builds'] = [ build ]
+                break
 
     if options.wiki:
         import mwclient
