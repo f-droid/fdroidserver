@@ -50,7 +50,15 @@ def main():
     apps = common.read_app_args(args, allapps, False)
 
     regex_warnings = {
+            'Web Site': [
+                (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
+                    "Appending .git is not necessary"),
+                (re.compile(r'.*code\.google\.com/p/[^/]+/[^w]'),
+                    "Possible incorrect path appended to google code project site")
+            ],
             'Source Code': [
+                (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
+                    "Appending .git is not necessary"),
                 (re.compile(r'.*code\.google\.com/p/[^/]+/source/.*'),
                     "/source is often enough on its own"),
                 (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
@@ -81,6 +89,10 @@ def main():
                 any(s in lastcommit for s in ('.', ',', '_', '-', '/'))):
             warn("Last used commit '%s' looks like a tag, but Update Check Mode is RepoManifest" % lastcommit)
 
+        # No license
+        if app['License'] == 'Unknown':
+            warn("License was not properly set")
+
         # Summary size limit
         summ_chars = len(app['Summary'])
         if summ_chars > config['char_limits']['Summary']:
@@ -104,9 +116,7 @@ def main():
                 warn("Summary should not end with a %s" % lastchar)
 
         # Common mistakes in urls
-        for f in ['Source Code', 'Issue Tracker']:
-            if f not in regex_warnings:
-                continue
+        for f in regex_warnings:
             for m, r in regex_warnings[f]:
                 if m.match(app[f]):
                     warn("%s url '%s': %s" % (f, app[f], r))
