@@ -564,7 +564,7 @@ class vcs_hg(vcs):
                 myfile.write("\n[extensions]\nhgext.purge=\n")
             if subprocess.call(['hg', 'purge', '--all'], cwd=self.local) != 0:
                 raise VCSException("HG purge failed")
-        else:
+        elif p.resultcode != 0:
             raise VCSException("HG purge failed")
 
     def gettags(self):
