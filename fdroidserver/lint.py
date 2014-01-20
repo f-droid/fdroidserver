@@ -52,17 +52,17 @@ def main():
     regex_warnings = {
             'Source Code': [
                 (re.compile(r'.*code\.google\.com/p/[^/]+/source/.*'),
-                    "/source is enough on its own"),
+                    "/source is often enough on its own"),
                 (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
                     "/source is missing")
             ],
             'Issue Tracker': [
                 (re.compile(r'.*code\.google\.com/p/[^/]+/issues/.*'),
-                    "/issues is enough on its own"),
+                    "/issues is often enough on its own"),
                 (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
                     "/issues is missing"),
                 (re.compile(r'.*github\.com/[^/]+/[^/]+/issues/.*'),
-                    "/issues is enough on its own"),
+                    "/issues is often enough on its own"),
                 (re.compile(r'.*github\.com/[^/]+/[^/]+[/]*$'),
                     "/issues is missing")
             ]
@@ -76,33 +76,38 @@ def main():
             if 'commit' in build and 'disable' not in build:
                 lastcommit = build['commit']
 
+        # Potentially incorrect UCM
         if (app['Update Check Mode'] == 'RepoManifest' and
                 any(s in lastcommit for s in ('.', ',', '_', '-', '/'))):
             warn("Last used commit '%s' looks like a tag, but Update Check Mode is RepoManifest" % lastcommit)
 
+        # Summary size limit
         summ_chars = len(app['Summary'])
         if summ_chars > config['char_limits']['Summary']:
             warn("Summary of length %s is over the %i char limit" % (
                 summ_chars, config['char_limits']['Summary']))
 
-        if app['Summary']:
-            lastchar = app['Summary'][-1]
-            if any(lastchar==c for c in ['.', ',', '!', '?']):
-                warn("Summary should not end with a %s" % lastchar)
-
-        for f in ['Source Code', 'Issue Tracker']:
-            if f not in regex_warnings:
-                continue
-            for m, r in regex_warnings[f]:
-                if m.match(app[f]):
-                    warn("%s url '%s': %s" % (f, app[f], r))
-
+        # Description size limit
         desc_chars = 0
         for line in app['Description']:
             desc_chars += len(line)
         if desc_chars > config['char_limits']['Description']:
             warn("Description of length %s is over the %i char limit" % (
                 desc_chars, config['char_limits']['Description']))
+
+        # No punctuation in summary
+        if app['Summary']:
+            lastchar = app['Summary'][-1]
+            if any(lastchar==c for c in ['.', ',', '!', '?']):
+                warn("Summary should not end with a %s" % lastchar)
+
+        # Common mistakes in urls
+        for f in ['Source Code', 'Issue Tracker']:
+            if f not in regex_warnings:
+                continue
+            for m, r in regex_warnings[f]:
+                if m.match(app[f]):
+                    warn("%s url '%s': %s" % (f, app[f], r))
 
         if not appid:
             print
