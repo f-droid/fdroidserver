@@ -346,7 +346,7 @@ class vcs_git(vcs):
                 if subprocess.call(['git', 'fetch', 'origin'],
                         cwd=self.local) != 0:
                     raise VCSException("Git fetch failed")
-                if subprocess.call(['git', 'fetch', '--tags', 'origin'],
+                if subprocess.call(['git', 'fetch', '--prune', '--tags', 'origin'],
                         cwd=self.local) != 0:
                     raise VCSException("Git fetch failed")
                 self.refreshed = True
