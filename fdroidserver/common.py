@@ -848,7 +848,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, target=None,
                 raise BuildException("Error running prepare command for srclib %s"
                         % name, p.stdout)
 
-        if srclib["Update Project"] == "Yes" and autoupdate and not number:
+        if srclib["Update Project"] == "Yes" and not (autoupdate and number):
             print "Updating srclib %s at path %s" % (name, libdir)
             cmd = [os.path.join(config['sdk_path'], 'tools', 'android'),
                 'update', 'project', '-p', libdir]
