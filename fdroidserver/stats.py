@@ -162,8 +162,11 @@ def main():
 
         f = open('stats/total_downloads_app_version.txt', 'w')
         f.write('# Total downloads by application and version, since October 2011\n')
-        for appVer, count in sorted(appsVer):
-            f.write(appVer + ' ' + str(count) + '\n')
+        lst = []
+        for appver, count in appsVer.iteritems():
+            lst.append(appver + " " + str(count))
+        for line in sorted(lst):
+            f.write(line + "\n")
         f.close()
 
     # Calculate and write stats for repo types...
