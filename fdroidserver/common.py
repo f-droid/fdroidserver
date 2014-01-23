@@ -779,7 +779,7 @@ class VCSException(Exception):
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
 def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, target=None,
-        basepath=False, raw=False, prepare=True, preponly=False):
+        basepath=False, raw=False, prepare=True, preponly=False, autoupdate=True):
 
     number = None
     subdir = None
@@ -848,7 +848,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, target=None,
                 raise BuildException("Error running prepare command for srclib %s"
                         % name, p.stdout)
 
-        if srclib["Update Project"] == "Yes":
+        if srclib["Update Project"] == "Yes" and autoupdate and not number:
             print "Updating srclib %s at path %s" % (name, libdir)
             cmd = [os.path.join(config['sdk_path'], 'tools', 'android'),
                 'update', 'project', '-p', libdir]
@@ -930,12 +930,13 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Get required source libraries...
     srclibpaths = []
+    updatemode = build.get('update', 'auto')
     if 'srclibs' in build:
         target=build['target'] if 'target' in build else None
         print "Collecting source libraries..."
         for lib in build['srclibs'].split(';'):
             srclibpaths.append(getsrclib(lib, srclib_dir, srclibpaths,
-                target=target, preponly=onserver))
+                target=target, preponly=onserver, autoupdate=(updatemode=='auto')))
 
     for name, number, libpath in srclibpaths:
         place_srclib(root_dir, int(number) if number else None, libpath)
@@ -947,7 +948,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
 
     # Generate (or update) the ant build file, build.xml...
-    updatemode = build.get('update', 'auto')
     if (updatemode != 'no' and build['type'] == 'ant'):
         parms = [os.path.join(config['sdk_path'], 'tools', 'android'),
                 'update', 'project']
