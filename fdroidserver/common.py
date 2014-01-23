@@ -918,6 +918,34 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             raise BuildException("Error running init command for %s:%s" %
                     (app['id'], build['version']), p.stdout)
 
+    # Apply patches if any
+    if 'patch' in build:
+        for patch in build['patch'].split(';'):
+            patch = patch.strip()
+            print "Applying " + patch
+            patch_path = os.path.join('metadata', app['id'], patch)
+            if subprocess.call(['patch', '-p1',
+                            '-i', os.path.abspath(patch_path)], cwd=build_dir) != 0:
+                raise BuildException("Failed to apply patch %s" % patch_path)
+
+    # Get required source libraries...
+    srclibpaths = []
+    if 'srclibs' in build:
+        target=build['target'] if 'target' in build else None
+        print "Collecting source libraries..."
+        for lib in build['srclibs'].split(';'):
+            srclibpaths.append(getsrclib(lib, srclib_dir, srclibpaths,
+                target=target, preponly=onserver))
+
+    for name, number, libpath in srclibpaths:
+        place_srclib(root_dir, int(number) if number else None, libpath)
+
+    basesrclib = vcs.getsrclib()
+    # If one was used for the main source, add that too.
+    if basesrclib:
+        srclibpaths.append(basesrclib)
+
+
     # Generate (or update) the ant build file, build.xml...
     updatemode = build.get('update', 'auto')
     if (updatemode != 'no' and build['type'] == 'ant'):
@@ -1124,33 +1152,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             if not os.path.exists(libsrc):
                 raise BuildException("Missing extlib file {0}".format(libsrc))
             shutil.copyfile(libsrc, os.path.join(libsdir, libf))
-
-    # Get required source libraries...
-    srclibpaths = []
-    if 'srclibs' in build:
-        target=build['target'] if 'target' in build else None
-        print "Collecting source libraries..."
-        for lib in build['srclibs'].split(';'):
-            srclibpaths.append(getsrclib(lib, srclib_dir, srclibpaths,
-                target=target, preponly=onserver))
-
-    # Apply patches if any
-    if 'patch' in build:
-        for patch in build['patch'].split(';'):
-            patch = patch.strip()
-            print "Applying " + patch
-            patch_path = os.path.join('metadata', app['id'], patch)
-            if subprocess.call(['patch', '-p1',
-                            '-i', os.path.abspath(patch_path)], cwd=build_dir) != 0:
-                raise BuildException("Failed to apply patch %s" % patch_path)
-
-    for name, number, libpath in srclibpaths:
-        place_srclib(root_dir, int(number) if number else None, libpath)
-
-    basesrclib = vcs.getsrclib()
-    # If one was used for the main source, add that too.
-    if basesrclib:
-        srclibpaths.append(basesrclib)
 
     # Run a pre-build command if one is required...
     if 'prebuild' in build:
