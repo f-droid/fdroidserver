@@ -80,6 +80,9 @@ def main():
         appid = app['id']
         lastcommit = ''
 
+        if app['Disabled']:
+            continue
+
         for build in app['builds']:
             if 'commit' in build and 'disable' not in build:
                 lastcommit = build['commit']
