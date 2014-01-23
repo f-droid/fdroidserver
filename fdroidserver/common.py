@@ -690,8 +690,8 @@ def parse_androidmanifests(paths):
     if not paths:
         return (None, None, None)
 
-    vcsearch = re.compile(r'.*android:versionCode="([0-9]+?)".*').search
-    vnsearch = re.compile(r'.*android:versionName="([^"]+?)".*').search
+    vcsearch = re.compile(r'.*:versionCode="([0-9]+?)".*').search
+    vnsearch = re.compile(r'.*:versionName="([^"]+?)".*').search
     psearch = re.compile(r'.*package="([^"]+)".*').search
 
     vcsearch_g = re.compile(r'.*versionCode[ ]*[=]*[ ]*["\']*([0-9]+)["\']*').search
