@@ -115,6 +115,7 @@ def main():
         if options.verbose:
             print 'Processing logs...'
         apps = {}
+        appsVer = {}
         logexpr = '(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] "GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) \d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
         logsearch = re.compile(logexpr).search
         for logfile in glob.glob(os.path.join(logsdir,'access-*.log.gz')):
@@ -134,6 +135,12 @@ def main():
                                 apps[appid] += 1
                             else:
                                 apps[appid] = 1
+                            # Strip the '.apk' from apkname
+                            appVer = apkname[:-4]
+                            if appVer in appsVer:
+                                appsVer[appVer] += 1
+                            else:
+                                appsVer[appVer] = 1
                         else:
                             if not apkname in unknownapks:
                                 unknownapks.append(apkname)
@@ -151,6 +158,12 @@ def main():
         f.write('# Total downloads by application, since October 2011\n')
         for line in sorted(lst):
             f.write(line + '\n')
+        f.close()
+
+        f = open('stats/total_downloads_app_version.txt', 'w')
+        f.write('# Total downloads by application and version, since October 2011\n')
+        for appVer, count in sorted(appsVer):
+            f.write(appVer + ' ' + str(count) + '\n')
         f.close()
 
     # Calculate and write stats for repo types...
