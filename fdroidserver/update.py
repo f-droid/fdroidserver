@@ -532,7 +532,12 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         get_icon_dir(repodir, last_density), iconfilename)
                 iconpath = os.path.join(
                         get_icon_dir(repodir, density), iconfilename)
-                im = Image.open(last_iconpath)
+                try:
+                    im = Image.open(last_iconpath)
+                except:
+                    print "WARNING: Invalid image file at %s" % last_iconpath
+                    continue
+
                 size = dpi_to_px(density)
 
                 im.thumbnail((size, size), Image.ANTIALIAS)
