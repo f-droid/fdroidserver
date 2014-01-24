@@ -454,7 +454,16 @@ class vcs_gitsvn(vcs):
             else:
                 # No tag found, normal svn rev translation
                 # Translate svn rev into git format
-                p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + rev],
+                rev_split=rev.split('/')
+                if len(rev_split) > 1:
+                  treeish=rev_split[0]
+                  svn_rev=rev_split[1]
+                else:
+                  # if no branch is specified, then assume trunk (ie. 'master' 
+                  # branch):
+                  treeish='master'
+                  svn_rev=rev
+                p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + svn_rev, treeish],
                     cwd=self.local, stdout=subprocess.PIPE)
                 git_rev = p.communicate()[0].rstrip()
                 if p.returncode != 0 or not git_rev:
