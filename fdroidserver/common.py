@@ -454,18 +454,21 @@ class vcs_gitsvn(vcs):
             else:
                 # No tag found, normal svn rev translation
                 # Translate svn rev into git format
-                rev_split=rev.split('/')
+                rev_split = rev.split('/')
                 if len(rev_split) > 1:
-                  treeish=rev_split[0]
-                  svn_rev=rev_split[1]
+                    treeish = rev_split[0]
+                    svn_rev = rev_split[1]
+
                 else:
-                  # if no branch is specified, then assume trunk (ie. 'master' 
-                  # branch):
-                  treeish='master'
-                  svn_rev=rev
+                    # if no branch is specified, then assume trunk (ie. 'master' 
+                    # branch):
+                    treeish = 'master'
+                    svn_rev = rev
+
                 p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + svn_rev, treeish],
                     cwd=self.local, stdout=subprocess.PIPE)
                 git_rev = p.communicate()[0].rstrip()
+
                 if p.returncode != 0 or not git_rev:
                     # Try a plain git checkout as a last resort
                     p = subprocess.Popen(['git', 'checkout', rev], cwd=self.local,
@@ -484,6 +487,7 @@ class vcs_gitsvn(vcs):
                         print out
                     else:
                         raise VCSException("Git svn checkout failed")
+
         # Get rid of any uncontrolled files left behind...
         if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
             raise VCSException("Git clean failed")
