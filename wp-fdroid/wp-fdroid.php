@@ -99,6 +99,7 @@ class FDroid
 		} else {
                         $out.='<form name="searchform" action="" method="get">';
                         $out.='<p><input name="fdfilter" type="text" value="'.sanitize_text_field($query_vars['fdfilter']).'" size="30"> ';
+                        $out.='<input type="hidden" name="fdpage" value="1">';
                         $out.='<input type="submit" value="Search"></p>';
                         $out.=$this->makeformdata($query_vars);
                         $out.='</form>'."\n";
