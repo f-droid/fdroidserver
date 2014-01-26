@@ -437,7 +437,7 @@ class vcs_gitsvn(vcs):
                 raise VCSException("Git clean failed")
             if not self.refreshed:
                 # Get new commits and tags from repo...
-                if subprocess.call(['git svn rebase %s' % self.userargs()],
+                if subprocess.call(['%sgit svn rebase %s' % self.userargs()],
                         cwd=self.local, shell=True) != 0:
                     raise VCSException("Git svn rebase failed")
                 self.refreshed = True
