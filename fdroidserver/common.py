@@ -53,19 +53,17 @@ def read_config(opts, config_file='config.py'):
 
     defconfig = {
         'build_server_always': False,
-        'mvn3': "mvn3",
-        'archive_older': 0,
+        'mvn3': "mvn",
         'gradle': 'gradle',
+        'archive_older': 0,
         'update_stats': False,
         'archive_older': 0,
-        'max_icon_size': 72,
         'stats_to_carbon': False,
         'repo_maxage': 0,
         'char_limits': {
             'Summary' : 50,
             'Description' : 1500
         }
-
     }
     config = {}
 
