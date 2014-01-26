@@ -15,10 +15,16 @@ ndk_path = "$ANDROID_NDK"
 # Build tools version to be used
 build_tools = "19.0.1"
 
-# Command for running maven 3 (command or full path)
-mvn3 = "mvn3"
+# Command for running Ant
+#ant = "/path/to/ant"
+ant = "ant"
 
-# Command for running Gradle (command or full path)
+# Command for running maven 3
+#mvn3 = "/path/to/mvn"
+mvn3 = "mvn"
+
+# Command for running Gradle
+#gradle = "/path/to/gradle"
 gradle = "gradle"
 
 # Set the maximum age (in days) of an index that a client should accept from

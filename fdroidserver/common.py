@@ -51,14 +51,17 @@ def read_config(opts, config_file='config.py'):
         options.verbose = False
 
     defconfig = {
-        'build_server_always': False,
+        'sdk_path': "$ANDROID_HOME",
+        'ndk_path': "$ANDROID_NDK",
+        'build_tools': "19.0.1",
+        'ant': "ant",
         'mvn3': "mvn",
         'gradle': 'gradle',
         'archive_older': 0,
         'update_stats': False,
-        'archive_older': 0,
         'stats_to_carbon': False,
         'repo_maxage': 0,
+        'build_server_always': False,
         'char_limits': {
             'Summary' : 50,
             'Description' : 1500
@@ -75,30 +78,16 @@ def read_config(opts, config_file='config.py'):
         if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
             print "WARNING: unsafe permissions on {0} (should be 0600)!".format(config_file)
 
+    for k, v in defconfig.items():
+        if k not in config:
+            config[k] = v
+
     # Expand environment variables
     for k, v in config.items():
         if type(v) != str:
             continue
         v = os.path.expanduser(v)
         config[k] = os.path.expandvars(v)
-
-    # Check that directories exist
-    for key in ('sdk_path', 'ndk_path', 'build_tools'):
-        if key not in config:
-            continue
-        val = config[key]
-        if key == 'build_tools':
-            if 'sdk_path' not in config:
-                print "ERROR: sdk_path needs to be set for build_tools"
-                sys.exit(3)
-            val = os.path.join(config['sdk_path'], 'build-tools', val)
-        if not os.path.isdir(val):
-            print "ERROR: No such directory found for %s: %s" % (key, val)
-            sys.exit(3)
-
-    for k, v in defconfig.items():
-        if k not in config:
-            config[k] = v
 
     return config
 
