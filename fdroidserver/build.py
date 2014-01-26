@@ -378,7 +378,7 @@ def adapt_gradle(build_dir):
                 print "Adapting build.gradle at %s" % path
 
             subprocess.call(['sed', '-i',
-                    's@buildToolsVersion[ ]*[=]*[ ]*["\\\'][0-9\.]*["\\\']@buildToolsVersion "'
+                    r's@buildToolsVersion\([ =]*\)["\'][0-9\.]*["\']@buildToolsVersion\1"'
                     + config['build_tools'] + '"@g', path])
 
 
