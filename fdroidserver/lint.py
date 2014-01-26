@@ -88,7 +88,7 @@ def main():
                 lastcommit = build['commit']
 
         # Potentially incorrect UCM
-        if (app['Update Check Mode'].startswith('RepoManifest') and
+        if (app['Update Check Mode'] == 'RepoManifest' and
                 any(s in lastcommit for s in ('.', ',', '_', '-', '/'))):
             warn("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
                 lastcommit, app['Update Check Mode']))
