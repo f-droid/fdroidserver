@@ -26,7 +26,6 @@ import operator
 import Queue
 import threading
 import magic
-from distutils.spawn import find_executable
 
 import metadata
 
@@ -82,16 +81,6 @@ def read_config(opts, config_file='config.py'):
             continue
         v = os.path.expanduser(v)
         config[k] = os.path.expandvars(v)
-
-    # Check that commands and binaries do exist
-    for key in ('mvn3', 'gradle'):
-        if key not in config:
-            continue
-        val = config[key]
-        executable = find_executable(val)
-        if not executable:
-            print "ERROR: No such command or binary for %s: %s" % (key, val)
-            sys.exit(3)
 
     # Check that directories exist
     for key in ('sdk_path', 'ndk_path', 'build_tools'):
