@@ -1018,9 +1018,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         else:
             props += "sdk.dir=%s\n" % config['sdk_path']
             props += "sdk-location=%s\n" % ['sdk_path']
-        # Add ndk location...
-        props += "ndk.dir=%s\n" % config['ndk_path']
-        props += "ndk-location=%s\n" % config['ndk_path']
+        if 'ndk_path' in config:
+            # Add ndk location...
+            props += "ndk.dir=%s\n" % config['ndk_path']
+            props += "ndk-location=%s\n" % config['ndk_path']
         # Add java.encoding if necessary...
         if 'encoding' in build:
             props += "java.encoding=%s\n" % build['encoding']
