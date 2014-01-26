@@ -29,6 +29,7 @@ import time
 import json
 from ConfigParser import ConfigParser
 from optparse import OptionParser, OptionError
+from distutils.spawn import find_executable
 
 import common, metadata
 from common import BuildException, VCSException, FDroidPopen
@@ -777,6 +778,31 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
         return False
 
     print "Building version " + thisbuild['version'] + ' of ' + app['id']
+
+    if thisbuild['type'] in ('ant', 'maven', 'gradle'):
+        if not os.path.isdir(config['sdk_path']):
+            print "SDK is needed but not installed - Aborting"
+            return False
+
+    if thisbuild.get('buildjni') not in (None, 'no'):
+        if not os.path.isdir(config['ndk_path']):
+            print "NDK is needed but not installed - Aborting"
+            return False
+
+    if thisbuild['type'] == 'ant':
+        if not find_executable(config['ant']):
+            print "Ant is needed but not installed - Aborting"
+            return False
+
+    if thisbuild['type'] == 'maven':
+        if not find_executable(config['maven']):
+            print "Maven is needed but not installed - Aborting"
+            return False
+
+    if thisbuild['type'] == 'gradle':
+        if not find_executable(config['gradle']):
+            print "Gradle is needed but not installed - Aborting"
+            return False
 
     if server:
         # When using server mode, still keep a local cache of the repo, by
