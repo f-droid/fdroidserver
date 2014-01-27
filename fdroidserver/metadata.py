@@ -19,6 +19,7 @@
 
 import os, re, glob
 import cgi
+import logging
 
 class MetaDataException(Exception):
     def __init__(self, value):
@@ -642,8 +643,8 @@ def write_metadata(dest, app):
             if pf == key:
                 mf.write("%s\n" % comment)
                 written += 1
-        #if options.verbose and written > 0:
-            #print "...writing comments for " + (key if key else 'EOF')
+        if written > 0:
+            logging.debug("...writing comments for " + (key if key else 'EOF'))
 
     def writefield(field, value=None):
         writecomments(field)
@@ -711,8 +712,7 @@ def write_metadata(dest, app):
                 if not value:
                     return
                 value = 'yes'
-            #if options.verbose:
-                #print "...writing {0} : {1}".format(key, value)
+            logging.debug("...writing {0} : {1}".format(key, value))
             outline = '    %s=' % key
             outline += '&& \\\n        '.join([s.lstrip() for s in value.split('&& ')])
             outline += '\n'
