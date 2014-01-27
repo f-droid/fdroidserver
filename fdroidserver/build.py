@@ -631,10 +631,6 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout)
     print "Successfully built version " + thisbuild['version'] + ' of ' + app['id']
 
-    # Find the apk name in the output...
-    if 'bindir' in thisbuild:
-        bindir = os.path.join(build_dir, thisbuild['bindir'])
-
     if thisbuild['type'] == 'maven':
         stdout_apk = '\n'.join([
             line for line in p.stdout.splitlines() if any(a in line for a in ('.apk','.ap_'))])

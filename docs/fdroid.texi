@@ -1012,12 +1012,6 @@ to run maven inside that relative subdirectory.
 Space-separated list of gradle tasks to be run before the assemble task
 in a gradle project build.
 
-@item bindir=<path>
-Normally the build output (apk) is expected to be in the bin
-subdirectory below the ant build files. If the project is configured
-to put it elsewhere, that can be specified here, relative to the base
-of the checked out repo. Not yet implemented for gradle.
-
 @item antcommand=xxx
 Specify an alternate ant command (target) instead of the default
 'release'. It can't be given any flags, such as the path to a build.xml.
