@@ -26,6 +26,7 @@ import operator
 import Queue
 import threading
 import magic
+import logging
 
 import metadata
 
@@ -43,7 +44,7 @@ def read_config(opts, config_file='config.py'):
     if config is not None:
         return config
     if not os.path.isfile(config_file):
-        print "Missing config file - is this a repo directory?"
+        logging.critical("Missing config file - is this a repo directory?")
         sys.exit(2)
 
     options = opts
@@ -69,14 +70,13 @@ def read_config(opts, config_file='config.py'):
     }
     config = {}
 
-    if options.verbose:
-        print "Reading %s..." % config_file
+    logging.info("Reading %s" % config_file)
     execfile(config_file, config)
 
     if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
         st = os.stat(config_file)
         if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
-            print "WARNING: unsafe permissions on {0} (should be 0600)!".format(config_file)
+            logging.warn("unsafe permissions on {0} (should be 0600)!".format(config_file))
 
     for k, v in defconfig.items():
         if k not in config:
@@ -129,7 +129,7 @@ def read_app_args(args, allapps, allow_vercodes=False):
         allids = [app["id"] for app in allapps]
         for p in vercodes:
             if p not in allids:
-                print "No such package: %s" % p
+                logging.critical("No such package: %s" % p)
         raise Exception("Found invalid app ids in arguments")
 
     error = False
@@ -143,7 +143,7 @@ def read_app_args(args, allapps, allow_vercodes=False):
             allvcs = [b['vercode'] for b in app['builds']]
             for v in vercodes[app['id']]:
                 if v not in allvcs:
-                    print "No such vercode %s for app %s" % (v, app['id'])
+                    logging.critical("No such vercode %s for app %s" % (v, app['id']))
 
     if error:
         raise Exception("Found invalid vercodes for some apps")
@@ -250,10 +250,10 @@ class vcs:
                     writeback = False
                 else:
                     deleterepo = True
-                    print "*** Repository details changed - deleting ***"
+                    logging.info("Repository details changed - deleting")
             else:
                 deleterepo = True
-                print "*** Repository details missing - deleting ***"
+                logging.info("Repository details missing - deleting")
         if deleterepo:
             shutil.rmtree(self.local)
 
@@ -304,21 +304,21 @@ class vcs_git(vcs):
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
-            # Brand new checkout...
+            # Brand new checkout
             if subprocess.call(['git', 'clone', self.remote, self.local]) != 0:
                 raise VCSException("Git clone failed")
             self.checkrepo()
         else:
             self.checkrepo()
-            # Discard any working tree changes...
+            # Discard any working tree changes
             if subprocess.call(['git', 'reset', '--hard'], cwd=self.local) != 0:
                 raise VCSException("Git reset failed")
             # Remove untracked files now, in case they're tracked in the target
-            # revision (it happens!)...
+            # revision (it happens!)
             if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
                 raise VCSException("Git clean failed")
             if not self.refreshed:
-                # Get latest commits and tags from remote...
+                # Get latest commits and tags from remote
                 if subprocess.call(['git', 'fetch', 'origin'],
                         cwd=self.local) != 0:
                     raise VCSException("Git fetch failed")
@@ -326,11 +326,11 @@ class vcs_git(vcs):
                         cwd=self.local) != 0:
                     raise VCSException("Git fetch failed")
                 self.refreshed = True
-        # Check out the appropriate revision...
+        # Check out the appropriate revision
         rev = str(rev if rev else 'origin/master')
         if subprocess.call(['git', 'checkout', '-f', rev], cwd=self.local) != 0:
             raise VCSException("Git checkout failed")
-        # Get rid of any uncontrolled files left behind...
+        # Get rid of any uncontrolled files left behind
         if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
             raise VCSException("Git clean failed")
 
@@ -383,7 +383,7 @@ class vcs_gitsvn(vcs):
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
-            # Brand new checkout...
+            # Brand new checkout
             gitsvn_cmd = '%sgit svn clone %s' % self.userargs()
             if ';' in self.remote:
                 remote_split = self.remote.split(';')
@@ -404,15 +404,15 @@ class vcs_gitsvn(vcs):
             self.checkrepo()
         else:
             self.checkrepo()
-            # Discard any working tree changes...
+            # Discard any working tree changes
             if subprocess.call(['git', 'reset', '--hard'], cwd=self.local) != 0:
                 raise VCSException("Git reset failed")
             # Remove untracked files now, in case they're tracked in the target
-            # revision (it happens!)...
+            # revision (it happens!)
             if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
                 raise VCSException("Git clean failed")
             if not self.refreshed:
-                # Get new commits and tags from repo...
+                # Get new commits and tags from repo
                 if subprocess.call(['%sgit svn rebase %s' % self.userargs()],
                         cwd=self.local, shell=True) != 0:
                     raise VCSException("Git svn rebase failed")
@@ -464,7 +464,7 @@ class vcs_gitsvn(vcs):
                     else:
                         raise VCSException("Git svn checkout failed")
 
-        # Get rid of any uncontrolled files left behind...
+        # Get rid of any uncontrolled files left behind
         if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
             raise VCSException("Git clean failed")
 
@@ -666,8 +666,7 @@ def ant_subprojects(root_dir):
             relpath = os.path.join(root_dir, path)
             if not os.path.isdir(relpath):
                 continue
-            if options.verbose:
-                print "Found subproject %s..." % path
+            logging.info("Found subproject at %s" % path)
             subprojects.append(path)
     return subprojects
 
@@ -838,7 +837,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, target=None,
                         % name, p.stdout)
 
         if srclib["Update Project"] == "Yes" and not (autoupdate and number):
-            print "Updating srclib %s at path %s" % (name, libdir)
+            logging.info("Updating srclib %s at path %s" % (name, libdir))
             cmd = [os.path.join(config['sdk_path'], 'tools', 'android'),
                 'update', 'project', '-p', libdir]
             if target:
@@ -875,32 +874,30 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, target=None,
 #   'srclibpaths' is information on the srclibs being used
 def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=False):
 
-    # Optionally, the actual app source can be in a subdirectory...
+    # Optionally, the actual app source can be in a subdirectory
     if 'subdir' in build:
         root_dir = os.path.join(build_dir, build['subdir'])
     else:
         root_dir = build_dir
 
-    # Get a working copy of the right revision...
-    print "Getting source for revision " + build['commit']
+    # Get a working copy of the right revision
+    logging.info("Getting source for revision " + build['commit'])
     vcs.gotorevision(build['commit'])
 
     # Check that a subdir (if we're using one) exists. This has to happen
-    # after the checkout, since it might not exist elsewhere...
+    # after the checkout, since it might not exist elsewhere
     if not os.path.exists(root_dir):
         raise BuildException('Missing subdir ' + root_dir)
 
-    # Initialise submodules if requred...
+    # Initialise submodules if requred
     if build['submodules']:
-        if options.verbose:
-            print "Initialising submodules..."
+        logging.info("Initialising submodules")
         vcs.initsubmodules()
 
-    # Run an init command if one is required...
+    # Run an init command if one is required
     if 'init' in build:
         cmd = replace_config_vars(build['init'])
-        if options.verbose:
-            print "Running 'init' commands in %s" % root_dir
+        logging.info("Running 'init' commands in %s" % root_dir)
 
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
@@ -911,18 +908,18 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if 'patch' in build:
         for patch in build['patch'].split(';'):
             patch = patch.strip()
-            print "Applying " + patch
+            logging.info("Applying " + patch)
             patch_path = os.path.join('metadata', app['id'], patch)
             if subprocess.call(['patch', '-p1',
                             '-i', os.path.abspath(patch_path)], cwd=build_dir) != 0:
                 raise BuildException("Failed to apply patch %s" % patch_path)
 
-    # Get required source libraries...
+    # Get required source libraries
     srclibpaths = []
     updatemode = build.get('update', 'auto')
     if 'srclibs' in build:
         target=build['target'] if 'target' in build else None
-        print "Collecting source libraries..."
+        logging.info("Collecting source libraries")
         for lib in build['srclibs'].split(';'):
             srclibpaths.append(getsrclib(lib, srclib_dir, srclibpaths,
                 target=target, preponly=onserver, autoupdate=(updatemode=='auto')))
@@ -936,7 +933,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         srclibpaths.append(basesrclib)
 
 
-    # Generate (or update) the ant build file, build.xml...
+    # Generate (or update) the ant build file, build.xml
     if (updatemode != 'no' and build['type'] == 'ant'):
         parms = [os.path.join(config['sdk_path'], 'tools', 'android'),
                 'update', 'project']
@@ -947,13 +944,13 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             update_dirs = ['.'] + ant_subprojects(root_dir)
         else:
             update_dirs = [d.strip() for d in updatemode.split(';')]
-        # Force build.xml update if necessary...
+        # Force build.xml update if necessary
         if updatemode == 'force' or 'target' in build:
             if updatemode == 'force':
                 update_dirs = ['.']
             buildxml = os.path.join(root_dir, 'build.xml')
             if os.path.exists(buildxml):
-                print 'Force-removing old build.xml'
+                logging.info('Force-removing old build.xml')
                 os.remove(buildxml)
 
         for d in update_dirs:
@@ -961,11 +958,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             # Clean update dirs via ant
             p = FDroidPopen(['ant', 'clean'], cwd=subdir)
             dparms = parms + ['-p', d]
-            if options.verbose:
-                if d == '.':
-                    print "Updating main project..."
-                else:
-                    print "Updating subproject %s..." % d
+            if d == '.':
+                logging.info("Updating main project")
+            else:
+                logging.info("Updating subproject %s" % d)
             p = FDroidPopen(dparms, cwd=root_dir)
             # Check to see whether an error was returned without a proper exit
             # code (this is the case for the 'no target set or target invalid'
@@ -974,21 +970,20 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 raise BuildException("Failed to update project at %s" % d,
                         p.stdout)
 
-    # Update the local.properties file...
+    # Update the local.properties file
     localprops = [ os.path.join(build_dir, 'local.properties') ]
     if 'subdir' in build:
         localprops += [ os.path.join(root_dir, 'local.properties') ]
     for path in localprops:
         if not os.path.isfile(path):
             continue
-        if options.verbose:
-            print "Updating properties file at %s" % path
+        logging.info("Updating properties file at %s" % path)
         f = open(path, 'r')
         props = f.read()
         f.close()
         props += '\n'
         # Fix old-fashioned 'sdk-location' by copying
-        # from sdk.dir, if necessary...
+        # from sdk.dir, if necessary
         if build['oldsdkloc']:
             sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
                 re.S|re.M).group(1)
@@ -997,10 +992,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             props += "sdk.dir=%s\n" % config['sdk_path']
             props += "sdk-location=%s\n" % ['sdk_path']
         if 'ndk_path' in config:
-            # Add ndk location...
+            # Add ndk location
             props += "ndk.dir=%s\n" % config['ndk_path']
             props += "ndk-location=%s\n" % config['ndk_path']
-        # Add java.encoding if necessary...
+        # Add java.encoding if necessary
         if 'encoding' in build:
             props += "java.encoding=%s\n" % build['encoding']
         f = open(path, 'w')
@@ -1014,7 +1009,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             flavour = None
 
     # Remove forced debuggable flags
-    print "Removing debuggable flags..."
+    logging.info("Removing debuggable flags")
     for path in manifest_paths(root_dir, flavour):
         if not os.path.isfile(path):
             continue
@@ -1022,9 +1017,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             's/android:debuggable="[^"]*"//g', path]) != 0:
             raise BuildException("Failed to remove debuggable flags")
 
-    # Insert version code and number into the manifest if necessary...
+    # Insert version code and number into the manifest if necessary
     if build['forceversion']:
-        print "Changing the version name..."
+        logging.info("Changing the version name")
         for path in manifest_paths(root_dir, flavour):
             if not os.path.isfile(path):
                 continue
@@ -1039,7 +1034,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                     path]) != 0:
                     raise BuildException("Failed to amend build.gradle")
     if build['forcevercode']:
-        print "Changing the version code..."
+        logging.info("Changing the version code")
         for path in manifest_paths(root_dir, flavour):
             if not os.path.isfile(path):
                 continue
@@ -1054,13 +1049,12 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                     path]) != 0:
                     raise BuildException("Failed to amend build.gradle")
 
-    # Delete unwanted files...
+    # Delete unwanted files
     if 'rm' in build:
         for part in build['rm'].split(';'):
             dest = os.path.join(build_dir, part.strip())
             rdest = os.path.abspath(dest)
-            if options.verbose:
-                print "Removing {0}".format(rdest)
+            logging.info("Removing {0}".format(rdest))
             if not rdest.startswith(os.path.abspath(build_dir)):
                 raise BuildException("rm for {1} is outside build root {0}".format(
                     os.path.abspath(build_dir),os.path.abspath(dest)))
@@ -1072,10 +1066,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 else:
                     subprocess.call('rm -rf ' + rdest, shell=True)
             else:
-                if options.verbose:
-                    print "...but it didn't exist"
+                logging.info("...but it didn't exist")
 
-    # Fix apostrophes translation files if necessary...
+    # Fix apostrophes translation files if necessary
     if build['fixapos']:
         for root, dirs, files in os.walk(os.path.join(root_dir, 'res')):
             for filename in files:
@@ -1086,7 +1079,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                         os.path.join(root, filename)]) != 0:
                         raise BuildException("Failed to amend " + filename)
 
-    # Fix translation files if necessary...
+    # Fix translation files if necessary
     if build['fixtrans']:
         for root, dirs, files in os.walk(os.path.join(root_dir, 'res')):
             for filename in files:
@@ -1112,7 +1105,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                             else:
                                 index += 1
                         # We only want to insert the positional arguments
-                        # when there is more than one argument...
+                        # when there is more than one argument
                         if oldline != line:
                             if num > 2:
                                 changed = True
@@ -1127,33 +1120,31 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     remove_signing_keys(build_dir)
 
-    # Add required external libraries...
+    # Add required external libraries
     if 'extlibs' in build:
-        print "Collecting prebuilt libraries..."
+        logging.info("Collecting prebuilt libraries")
         libsdir = os.path.join(root_dir, 'libs')
         if not os.path.exists(libsdir):
             os.mkdir(libsdir)
         for lib in build['extlibs'].split(';'):
             lib = lib.strip()
-            if options.verbose:
-                print "...installing extlib {0}".format(lib)
+            logging.info("...installing extlib {0}".format(lib))
             libf = os.path.basename(lib)
             libsrc = os.path.join(extlib_dir, lib)
             if not os.path.exists(libsrc):
                 raise BuildException("Missing extlib file {0}".format(libsrc))
             shutil.copyfile(libsrc, os.path.join(libsdir, libf))
 
-    # Run a pre-build command if one is required...
+    # Run a pre-build command if one is required
     if 'prebuild' in build:
         cmd = replace_config_vars(build['prebuild'])
 
-        # Substitute source library paths into prebuild commands...
+        # Substitute source library paths into prebuild commands
         for name, number, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
             cmd = cmd.replace('$$' + name + '$$', libpath)
 
-        if options.verbose:
-            print "Running 'prebuild' commands in %s" % root_dir
+        logging.info("Running 'prebuild' commands in %s" % root_dir)
 
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
@@ -1219,7 +1210,7 @@ def scan_source(build_dir, root_dir, thisbuild):
         return False
 
     def removeproblem(what, fd, fp):
-        print 'Removing %s at %s' % (what, fd)
+        logging.info('Removing %s at %s' % (what, fd))
         os.remove(fp)
 
     def handleproblem(what, fd, fp):
@@ -1229,20 +1220,20 @@ def scan_source(build_dir, root_dir, thisbuild):
             problems.append('Found %s at %s' % (what, fd))
 
     def warnproblem(what, fd, fp):
-        print 'Warning: Found %s at %s' % (what, fd)
+        logging.info('Warning: Found %s at %s' % (what, fd))
 
-    # Iterate through all files in the source code...
+    # Iterate through all files in the source code
     for r,d,f in os.walk(build_dir):
         for curfile in f:
 
             if '/.hg' in r or '/.git' in r or '/.svn' in r:
                 continue
 
-            # Path (relative) to the file...
+            # Path (relative) to the file
             fp = os.path.join(r, curfile)
             fd = fp[len(build_dir):]
 
-            # Check if this file has been explicitly excluded from scanning...
+            # Check if this file has been explicitly excluded from scanning
             if toignore(fd):
                 continue
 
@@ -1270,7 +1261,7 @@ def scan_source(build_dir, root_dir, thisbuild):
     ms.close()
 
     # Presence of a jni directory without buildjni=yes might
-    # indicate a problem... (if it's not a problem, explicitly use
+    # indicate a problem (if it's not a problem, explicitly use
     # buildjni=no to bypass this check)
     if (os.path.exists(os.path.join(root_dir, 'jni')) and
             thisbuild.get('buildjni') is None):
@@ -1354,7 +1345,7 @@ def isApkDebuggable(apkfile, config):
         stdout=subprocess.PIPE)
     output = p.communicate()[0]
     if p.returncode != 0:
-        print "ERROR: Failed to get apk manifest information"
+        logging.critical("Failed to get apk manifest information")
         sys.exit(1)
     for line in output.splitlines():
         if 'android:debuggable' in line and not line.endswith('0x0'):
@@ -1388,8 +1379,6 @@ class AsynchronousFileReader(threading.Thread):
 class PopenResult:
     returncode = None
     stdout = ''
-    stderr = ''
-    stdout_apk = ''
 
 def FDroidPopen(commands, cwd=None):
     """
@@ -1400,10 +1389,9 @@ def FDroidPopen(commands, cwd=None):
     :returns: A PopenResult.
     """
 
-    if options.verbose:
-        if cwd:
-            print "Directory: %s" % cwd
-        print " > %s" % ' '.join(commands)
+    if cwd:
+        logging.info("Directory: %s" % cwd)
+    logging.info(" > %s" % ' '.join(commands))
 
     result = PopenResult()
     p = subprocess.Popen(commands, cwd=cwd,
@@ -1464,8 +1452,8 @@ def remove_signing_keys(build_dir):
                     else:
                         o.write(line)
 
-            if changed and options.verbose:
-                print "Cleaned build.gradle of keysigning configs at %s" % path
+            if changed:
+                logging.info("Cleaned build.gradle of keysigning configs at %s" % path)
 
         for propfile in ('build.properties', 'default.properties', 'ant.properties'):
             if propfile in files:
@@ -1482,8 +1470,8 @@ def remove_signing_keys(build_dir):
                         else:
                             o.write(line)
 
-                if changed and options.verbose:
-                    print "Cleaned %s of keysigning configs at %s" % (propfile,path)
+                if changed:
+                    logging.info("Cleaned %s of keysigning configs at %s" % (propfile,path))
 
 def replace_config_vars(cmd):
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])

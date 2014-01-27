@@ -19,6 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+import logging
 
 commands = [
         "build",
@@ -53,6 +54,11 @@ def main():
             print "Command '" + command + "' not recognised.\n"
         print_help()
         sys.exit(1)
+
+    verbose = any(s in sys.argv for s in ['-v', '--verbose'])
+
+    logging.basicConfig(format='%(levelname)s: %(message)s',
+            level=logging.DEBUG if verbose else logging.INFO)
 
     # Trick optparse into displaying the right usage when --help is used.
     sys.argv[0] += ' ' + command

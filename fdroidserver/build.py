@@ -662,7 +662,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         else:
             name = '-'.join([os.path.basename(dd), '-'.join(flavours), 'release', 'unsigned'])
         src = os.path.join(dd, 'build', 'apk', name+'.apk')
-    else:
+    elif thisbuild['type'] == 'ant':
         stdout_apk = '\n'.join([
             line for line in p.stdout.splitlines() if '.apk' in line])
         src = re.match(r".*^.*Creating (.+) for release.*$.*", stdout_apk,
