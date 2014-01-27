@@ -296,9 +296,8 @@ class vcs_git(vcs):
     # fdroidserver) and then we'll proceed to destroy it! This is called as
     # a safety check.
     def checkrepo(self):
-        p = subprocess.Popen(['git', 'rev-parse', '--show-toplevel'],
-                stdout=subprocess.PIPE, cwd=self.local)
-        result = p.communicate()[0].rstrip()
+        p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local)
+        result = p.stdout.rstrip()
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
 
@@ -353,9 +352,8 @@ class vcs_git(vcs):
 
     def gettags(self):
         self.checkrepo()
-        p = subprocess.Popen(['git', 'tag'],
-                stdout=subprocess.PIPE, cwd=self.local)
-        return p.communicate()[0].splitlines()
+        p = FDroidPopen(['git', 'tag'], cwd=self.local)
+        return p.stdout.splitlines()
 
 
 class vcs_gitsvn(vcs):
@@ -375,9 +373,8 @@ class vcs_gitsvn(vcs):
     # fdroidserver) and then we'll proceed to destory it! This is called as
     # a safety check.
     def checkrepo(self):
-        p = subprocess.Popen(['git', 'rev-parse', '--show-toplevel'],
-                stdout=subprocess.PIPE, cwd=self.local)
-        result = p.communicate()[0].rstrip()
+        p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local)
+        result = p.stdout.rstrip()
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
 
@@ -422,12 +419,8 @@ class vcs_gitsvn(vcs):
         if rev:
             nospaces_rev = rev.replace(' ', '%20')
             # Try finding a svn tag
-            p = subprocess.Popen(['git', 'checkout', 'tags/' + nospaces_rev],
-                    cwd=self.local, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            out, err = p.communicate()
-            if p.returncode == 0:
-                print out
-            else:
+            p = FDroidPopen(['git', 'checkout', 'tags/' + nospaces_rev], cwd=self.local)
+            if p.returncode != 0:
                 # No tag found, normal svn rev translation
                 # Translate svn rev into git format
                 rev_split = rev.split('/')
@@ -441,27 +434,19 @@ class vcs_gitsvn(vcs):
                     treeish = 'master'
                     svn_rev = rev
 
-                p = subprocess.Popen(['git', 'svn', 'find-rev', 'r' + svn_rev, treeish],
-                    cwd=self.local, stdout=subprocess.PIPE)
-                git_rev = p.communicate()[0].rstrip()
+                p = FDroidPopen(['git', 'svn', 'find-rev', 'r' + svn_rev, treeish],
+                    cwd=self.local)
+                git_rev = p.stdout.rstrip()
 
                 if p.returncode != 0 or not git_rev:
                     # Try a plain git checkout as a last resort
-                    p = subprocess.Popen(['git', 'checkout', rev], cwd=self.local,
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    out, err = p.communicate()
-                    if p.returncode == 0:
-                        print out
-                    else:
+                    p = subprocess.Popen(['git', 'checkout', rev], cwd=self.local)
+                    if p.returncode != 0:
                         raise VCSException("No git treeish found and direct git checkout failed")
                 else:
                     # Check out the git rev equivalent to the svn rev
-                    p = subprocess.Popen(['git', 'checkout', git_rev], cwd=self.local,
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    out, err = p.communicate()
-                    if p.returncode == 0:
-                        print out
-                    else:
+                    p = FDroidPopen(['git', 'checkout', git_rev], cwd=self.local)
+                    if p.returncode != 0:
                         raise VCSException("Git svn checkout failed")
 
         # Get rid of any uncontrolled files left behind
@@ -474,9 +459,10 @@ class vcs_gitsvn(vcs):
 
     def getref(self):
         self.checkrepo()
-        p = subprocess.Popen(['git', 'svn', 'find-rev', 'HEAD'],
-                stdout=subprocess.PIPE, cwd=self.local)
-        return p.communicate()[0].strip()
+        p = FDroidPopen(['git', 'svn', 'find-rev', 'HEAD'], cwd=self.local)
+        if p.returncode != 0:
+            return None
+        return p.stdout.strip()
 
 class vcs_svn(vcs):
 
@@ -513,11 +499,11 @@ class vcs_svn(vcs):
             raise VCSException("Svn update failed")
 
     def getref(self):
-        p = subprocess.Popen(['svn', 'info'],
-                stdout=subprocess.PIPE, cwd=self.local)
+        p = FDroidPopen(['svn', 'info'], cwd=self.local)
         for line in p.communicate()[0].splitlines():
             if line and line.startswith('Last Changed Rev: '):
                 return line[18:]
+        return None
 
 class vcs_hg(vcs):
 
