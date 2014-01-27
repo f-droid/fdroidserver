@@ -71,12 +71,8 @@ def vagrant(params, cwd=None, printout=False):
     :returns: (ret, out) where ret is the return code, and out
                is the stdout (and stderr) from vagrant
     """
-    p = subprocess.Popen(['vagrant'] + params, cwd=cwd,
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    out = p.communicate()[0]
-    if options.verbose:
-        print out
-    return (p.returncode, out)
+    p = FDroidPopen(['vagrant'] + params, cwd=cwd)
+    return (p.returncode, p.stdout)
 
 
 # Note that 'force' here also implies test mode.
@@ -91,10 +87,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         print "Checking for valid existing build server"
         if got_valid_builder_vm():
             print "...VM is present"
-            p = subprocess.Popen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'list', '--details'],
-                cwd='builder', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            output = p.communicate()[0]
-            if 'fdroidclean' in output:
+            p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'list', '--details'], cwd='builder')
+            if 'fdroidclean' in p.stdout:
                 if options.verbose:
                     print "...snapshot exists - resetting build server to clean state"
                 retcode, output = vagrant(['status'], cwd='builder')
@@ -104,9 +98,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                     vagrant(['suspend'], cwd='builder')
                     print "...waiting a sec..."
                     time.sleep(10)
-                p = subprocess.Popen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'restore', 'fdroidclean'],
-                    cwd='builder', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-                output = p.communicate()[0]
+                p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'restore', 'fdroidclean'],
+                    cwd='builder')
                 if options.verbose:
                     print output
                 if p.returncode == 0:
@@ -131,9 +124,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             shutil.rmtree('builder')
         os.mkdir('builder')
 
-        p = subprocess.Popen('vagrant --version', shell=True, stdout=subprocess.PIPE)
-        vver = p.communicate()[0]
-        if vver.startswith('Vagrant version 1.2'):
+        p = FDroidPopen('vagrant --version', shell=True, stdout=subprocess.PIPE)
+        if p.stdout.startswith('Vagrant version 1.2'):
             with open('builder/Vagrantfile', 'w') as vf:
                 vf.write('Vagrant.configure("2") do |config|\n')
                 vf.write('config.vm.box = "buildserver"\n')
@@ -176,11 +168,10 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             raise BuildException("Failed to suspend build server")
         print "...waiting a sec..."
         time.sleep(10)
-        p = subprocess.Popen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'take', 'fdroidclean'],
-                cwd='builder', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        output = p.communicate()[0]
+        p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'take', 'fdroidclean'],
+                cwd='builder')
         if p.returncode != 0:
-            print output
+            print p.stdout
             raise BuildException("Failed to take snapshot")
         print "...waiting a sec..."
         time.sleep(10)
@@ -191,10 +182,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         print "...waiting a sec..."
         time.sleep(10)
         # Make sure it worked...
-        p = subprocess.Popen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'list', '--details'],
-            cwd='builder', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        output = p.communicate()[0]
-        if 'fdroidclean' not in output:
+        p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'list', '--details'],
+            cwd='builder')
+        if 'fdroidclean' not in p.stdout:
             raise BuildException("Failed to take snapshot.")
 
     try:
