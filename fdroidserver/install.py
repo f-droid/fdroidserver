@@ -22,6 +22,7 @@ import sys
 import os
 import glob
 from optparse import OptionParser, OptionError
+import logging
 
 import common
 from common import FDroidPopen
@@ -61,7 +62,7 @@ def main():
 
     output_dir = 'repo'
     if not os.path.isdir(output_dir):
-        print "No signed output directory - nothing to do"
+        logging.info("No signed output directory - nothing to do")
         sys.exit(0)
 
     if args:
@@ -93,22 +94,24 @@ def main():
         devs = devices()
         if not devs:
             raise Exception("No attached devices found")
-        print "Installing %s..." % apk
+        logging.info("Installing %s..." % apk)
         for dev in devs:
-            print "Installing %s on %s..." % (apk, dev)
+            logging.info("Installing %s on %s..." % (apk, dev))
             p = FDroidPopen(["adb", "-s", dev, "install", apk ])
             fail= ""
             for line in p.stdout.splitlines():
                 if line.startswith("Failure"):
                     fail = line[9:-1]
-            if fail:
-                if fail == "INSTALL_FAILED_ALREADY_EXISTS":
-                    print "%s is already installed on %s." % (apk, dev)
-                else:
-                    raise Exception("Failed to install %s on %s: %s" % (
-                        apk, dev, fail))
+            if not fail:
+                continue
 
-    print "\nFinished"
+            if fail == "INSTALL_FAILED_ALREADY_EXISTS":
+                logging.warn("%s is already installed on %s." % (apk, dev))
+            else:
+                raise Exception("Failed to install %s on %s: %s" % (
+                    apk, dev, fail))
+
+    logging.info("\nFinished")
 
 if __name__ == "__main__":
     main()

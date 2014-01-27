@@ -21,6 +21,7 @@ import sys
 import os
 import subprocess
 from optparse import OptionParser
+import logging
 import common
 
 config = None
@@ -40,11 +41,11 @@ def main():
     config = common.read_config(options)
 
     if len(args) != 1:
-        print "Specify a single command"
+        logging.critical("Specify a single command")
         sys.exit(1)
 
     if args[0] != 'init' and args[0] != 'update':
-        print "The only commands currently supported are 'init' and 'update'"
+        logging.critical("The only commands currently supported are 'init' and 'update'")
         sys.exit(1)
 
     serverwebroot = config['serverwebroot'].rstrip('/').replace('//', '/')

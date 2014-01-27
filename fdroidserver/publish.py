@@ -24,6 +24,7 @@ import shutil
 import md5
 import glob
 from optparse import OptionParser
+import logging
 
 import common, metadata
 from common import FDroidPopen, BuildException
@@ -45,22 +46,22 @@ def main():
 
     log_dir = 'logs'
     if not os.path.isdir(log_dir):
-        print "Creating log directory"
+        logging.info("Creating log directory")
         os.makedirs(log_dir)
 
     tmp_dir = 'tmp'
     if not os.path.isdir(tmp_dir):
-        print "Creating temporary directory"
+        logging.info("Creating temporary directory")
         os.makedirs(tmp_dir)
 
     output_dir = 'repo'
     if not os.path.isdir(output_dir):
-        print "Creating output directory"
+        logging.info("Creating output directory")
         os.makedirs(output_dir)
 
     unsigned_dir = 'unsigned'
     if not os.path.isdir(unsigned_dir):
-        print "No unsigned directory - nothing to do"
+        logging.info("No unsigned directory - nothing to do")
         sys.exit(0)
 
     # It was suggested at https://dev.guardianproject.info/projects/bazaar/wiki/FDroid_Audit
@@ -79,11 +80,10 @@ def main():
         m.update(app['id'])
         keyalias = m.hexdigest()[:8]
         if keyalias in allaliases:
-            print "There is a keyalias collision - publishing halted"
+            logging.info("There is a keyalias collision - publishing halted")
             sys.exit(1)
         allaliases.append(keyalias)
-    if options.verbose:
-        print "{0} apps, {0} key aliases".format(len(allapps), len(allaliases))
+    logging.info("{0} apps, {0} key aliases".format(len(allapps), len(allaliases)))
 
     # Process any apks that are waiting to be signed...
     for apkfile in sorted(glob.glob(os.path.join(unsigned_dir, '*.apk'))):
@@ -95,7 +95,7 @@ def main():
         if appid in vercodes and vercodes[appid]:
             if vercode not in vercodes[appid]:
                 continue
-        print "Processing " + apkfile
+        logging.info("Processing " + apkfile)
 
         # Figure out the key alias name we'll use. Only the first 8
         # characters are significant, so we'll use the first 8 from
@@ -114,7 +114,7 @@ def main():
             m = md5.new()
             m.update(appid)
             keyalias = m.hexdigest()[:8]
-        print "Key alias: " + keyalias
+        logging.info("Key alias: " + keyalias)
 
         # See if we already have a key for this application, and
         # if not generate one...
@@ -122,7 +122,7 @@ def main():
             '-alias', keyalias, '-keystore', config['keystore'],
             '-storepass', config['keystorepass']])
         if p.returncode !=0:
-            print "Key does not exist - generating..."
+            logging.info("Key does not exist - generating...")
             p = FDroidPopen(['keytool', '-genkey',
                 '-keystore', config['keystore'], '-alias', keyalias,
                 '-keyalg', 'RSA', '-keysize', '2048',
@@ -155,7 +155,7 @@ def main():
         shutil.move(os.path.join(unsigned_dir, tarfilename),
                 os.path.join(output_dir, tarfilename))
 
-        print 'Published ' + apkfilename
+        logging.info('Published ' + apkfilename)
 
 
 if __name__ == "__main__":

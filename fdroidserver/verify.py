@@ -109,8 +109,8 @@ def main():
             notverified += 1
 
     logging.info("Finished")
-    print "{0} successfully verified".format(verified)
-    print "{0} NOT verified".format(notverified)
+    logging.info("{0} successfully verified".format(verified))
+    logging.info("{0} NOT verified".format(notverified))
 
 if __name__ == "__main__":
     main()

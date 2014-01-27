@@ -19,6 +19,7 @@
 
 from optparse import OptionParser
 import re
+import logging
 import common, metadata
 
 config = None
@@ -31,7 +32,7 @@ def warn(message):
     if appid:
         print "%s:" % appid
         appid = None
-    print('    %s' % message)
+    print '    %s' % message
 
 def main():
 
@@ -136,7 +137,7 @@ def main():
         if not appid:
             print
 
-    print "Finished."
+    logging.info("Finished.")
 
 if __name__ == "__main__":
     main()
