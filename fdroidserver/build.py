@@ -665,7 +665,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     p = FDroidPopen([os.path.join(config['sdk_path'],
                         'build-tools', config['build_tools'], 'aapt'),
-                        'dump', 'badging', src])
+                        'dump', 'badging', src], ouptut=False)
 
     vercode = None
     version = None

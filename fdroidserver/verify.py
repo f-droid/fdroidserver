@@ -23,10 +23,10 @@ import shutil
 import subprocess
 import glob
 from optparse import OptionParser
-
-from common import FDroidPopen
+import logging
 
 import common
+from common import FDroidPopen
 
 options = None
 config = None
@@ -45,12 +45,12 @@ def main():
 
     tmp_dir = 'tmp'
     if not os.path.isdir(tmp_dir):
-        print "Creating temporary directory"
+        logging.info("Creating temporary directory")
         os.makedirs(tmp_dir)
 
     unsigned_dir = 'unsigned'
     if not os.path.isdir(unsigned_dir):
-        print "No unsigned directory - nothing to do"
+        logging.error("No unsigned directory - nothing to do")
         sys.exit(0)
 
     verified = 0
@@ -70,13 +70,13 @@ def main():
 
         try:
 
-            print "Processing " + apkfilename
+            logging.info("Processing " + apkfilename)
 
             remoteapk = os.path.join(tmp_dir, apkfilename)
             if os.path.exists(remoteapk):
                 os.remove(remoteapk)
             url = 'https://f-droid.org/repo/' + apkfilename
-            print "...retrieving " + url
+            logging.info("...retrieving " + url)
             p = FDroidPopen(['wget', url], cwd=tmp_dir)
             if p.returncode != 0:
                 raise Exception("Failed to get " + apkfilename)
@@ -101,14 +101,14 @@ def main():
             if len(lines) != 1 or 'META-INF' not in lines[0]:
                 raise Exception("Unexpected diff output - " + p.stdout)
 
-            print "...successfully verified"
+            logging.info("...successfully verified")
             verified += 1
 
         except Exception, e:
-            print "...NOT verified - {0}".format(e)
+            logging.info("...NOT verified - {0}".format(e))
             notverified += 1
 
-    print "\nFinished"
+    logging.info("Finished")
     print "{0} successfully verified".format(verified)
     print "{0} NOT verified".format(notverified)
 
