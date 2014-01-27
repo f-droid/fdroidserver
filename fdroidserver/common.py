@@ -1323,7 +1323,8 @@ def isApkDebuggable(apkfile, config):
 
     p = FDroidPopen([os.path.join(config['sdk_path'],
         'build-tools', config['build_tools'], 'aapt'),
-        'dump', 'xmltree', apkfile, 'AndroidManifest.xml'])
+        'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
+        output=False)
     if p.returncode != 0:
         logging.critical("Failed to get apk manifest information")
         sys.exit(1)
@@ -1360,12 +1361,13 @@ class PopenResult:
     returncode = None
     stdout = ''
 
-def FDroidPopen(commands, cwd=None):
+def FDroidPopen(commands, cwd=None, output=True):
     """
     Run a command and capture the output.
 
     :param commands: command and argument list like in subprocess.Popen
     :param cwd: optionally specifies a working directory
+    :param output: whether to print output as it is fetched
     :returns: A PopenResult.
     """
 
@@ -1386,7 +1388,7 @@ def FDroidPopen(commands, cwd=None):
     while not stdout_reader.eof():
         while not stdout_queue.empty():
             line = stdout_queue.get()
-            if options.verbose:
+            if output and options.verbose:
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
