@@ -26,10 +26,10 @@ import shutil
 import socket
 import sys
 from optparse import OptionParser
+import logging
 
 import common
 from common import FDroidPopen, BuildException
-
 
 config = {}
 options = None
@@ -55,7 +55,7 @@ def genpassword():
 
 def genkey(keystore, repo_keyalias, password, keydname):
     '''generate a new keystore with a new key in it for signing repos'''
-    print('Generating a new key in "' + keystore + '"...')
+    logging.info('Generating a new key in "' + keystore + '"...')
     p = FDroidPopen(['keytool', '-genkey',
                 '-keystore', keystore, '-alias', repo_keyalias,
                 '-keyalg', 'RSA', '-keysize', '4096',
@@ -69,7 +69,7 @@ def genkey(keystore, repo_keyalias, password, keydname):
     p = FDroidPopen(['keytool', '-list', '-v',
                 '-keystore', keystore, '-alias', repo_keyalias])
     output = p.communicate(password)[0]
-    print(output.lstrip().strip() + '\n\n')
+    logging.info(output.lstrip().strip() + '\n\n')
 
 
 def main():
@@ -107,7 +107,7 @@ def main():
         shutil.copyfile(os.path.join(examplesdir, 'config.sample.py'), 'config.py')
         os.chmod('config.py', 0o0600)
     else:
-        print('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
+        logging.info('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
         sys.exit()
 
     # now that we have a local config.py, read configuration...
@@ -115,7 +115,7 @@ def main():
 
     # track down where the Android SDK is
     if os.path.isdir(config['sdk_path']):
-        print('Using "' + config['sdk_path'] + '" for the Android SDK')
+        logging.info('Using "' + config['sdk_path'] + '" for the Android SDK')
         sdk_path = config['sdk_path']
     elif 'ANDROID_HOME' in os.environ.keys():
         sdk_path = os.environ['ANDROID_HOME']
@@ -130,7 +130,7 @@ def main():
             if os.path.isdir(os.path.join(sdk_path, 'build-tools')):
                 break
             else:
-                print('"' + s + '" does not contain the Android SDK! Try again...')
+                logging.info('"' + s + '" does not contain the Android SDK! Try again...')
     if os.path.isdir(sdk_path):
         write_to_config('sdk_path', sdk_path)
 
@@ -159,7 +159,7 @@ def main():
     if os.path.isdir(config['ndk_path']):
         ndk_path = config['ndk_path']
     elif 'ANDROID_NDK' in os.environ.keys():
-        print('using ANDROID_NDK')
+        logging.info('using ANDROID_NDK')
         ndk_path = os.environ['ANDROID_NDK']
     if os.path.isdir(ndk_path):
         write_to_config('ndk_path', ndk_path)
@@ -175,7 +175,7 @@ def main():
             keystore = options.keystore
             write_to_config('keystore', keystore)
         else:
-            print('"' + options.keystore + '" does not exist or is not a file!')
+            logging.info('"' + options.keystore + '" does not exist or is not a file!')
             sys.exit(1)
     if options.repo_keyalias:
         repo_keyalias = options.repo_keyalias
@@ -202,13 +202,13 @@ def main():
             write_to_config('keydname', keydname)
         genkey(keystore, repo_keyalias, password, keydname)
 
-    print('Built repo based in "' + fdroiddir + '"')
-    print('with this config:')
-    print('  Android SDK:\t\t\t' + sdk_path)
-    print('  Android SDK Build Tools:\t' + os.path.dirname(aapt))
-    print('  Android NDK (optional):\t' + ndk_path)
-    print('  Keystore for signing key:\t' + keystore)
-    print('\nTo complete the setup, add your APKs to "' +
+    logging.info('Built repo based in "' + fdroiddir + '"')
+    logging.info('with this config:')
+    logging.info('  Android SDK:\t\t\t' + sdk_path)
+    logging.info('  Android SDK Build Tools:\t' + os.path.dirname(aapt))
+    logging.info('  Android NDK (optional):\t' + ndk_path)
+    logging.info('  Keystore for signing key:\t' + keystore)
+    logging.info('\nTo complete the setup, add your APKs to "' +
           os.path.join(fdroiddir, 'repo') + '"' +
 '''
 then run "fdroid update -c; fdroid update".  You might also want to edit

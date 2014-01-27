@@ -48,8 +48,6 @@ def read_config(opts, config_file='config.py'):
         sys.exit(2)
 
     options = opts
-    if not hasattr(options, 'verbose'):
-        options.verbose = False
 
     defconfig = {
         'sdk_path': "$ANDROID_HOME",
