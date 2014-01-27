@@ -28,6 +28,8 @@ from optparse import OptionParser
 import traceback
 import HTMLParser
 from distutils.version import LooseVersion
+import logging
+
 import common, metadata
 from common import BuildException
 from common import VCSException
@@ -48,7 +50,7 @@ def check_http(app):
 
         vercode = "99999999"
         if len(urlcode) > 0:
-            print "...requesting {0}".format(urlcode)
+            logging.info("...requesting {0}".format(urlcode))
             req = urllib2.Request(urlcode, None)
             resp = urllib2.urlopen(req, None, 20)
             page = resp.read()
@@ -61,7 +63,7 @@ def check_http(app):
         version = "??"
         if len(urlver) > 0:
             if urlver != '.':
-                print "...requesting {0}".format(urlver)
+                logging.info("...requesting {0}".format(urlver))
                 req = urllib2.Request(urlver, None)
                 resp = urllib2.urlopen(req, None, 20)
                 page = resp.read()
@@ -114,16 +116,15 @@ def check_tags(app):
         hcode = "0"
 
         for tag in vcs.gettags():
-            if options.verbose:
-                print "Check tag: '{0}'".format(tag)
+            logging.info("Check tag: '{0}'".format(tag))
             vcs.gotorevision(tag)
 
             # Only process tags where the manifest exists...
             paths = common.manifest_paths(build_dir, flavour)
             version, vercode, package = common.parse_androidmanifests(paths)
             if package and package == app['id'] and version and vercode:
-                print "Manifest exists. Found version %s (%s)" % (
-                        version, vercode)
+                logging.info("Manifest exists. Found version %s (%s)" % (
+                        version, vercode))
                 if int(vercode) > int(hcode):
                     htag = tag
                     hcode = str(int(vercode))
@@ -201,7 +202,7 @@ def check_repomanifest(app, branch=None):
 
         vercode = str(int(vercode))
 
-        print "Manifest exists. Found version %s (%s)" % (version, vercode)
+        logging.info("Manifest exists. Found version %s (%s)" % (version, vercode))
 
         return (version, vercode)
 
@@ -307,38 +308,36 @@ def main():
     if options.gplay:
         for app in apps:
             version, reason = check_gplay(app)
-            if version is None and options.verbose:
+            if version is None:
                 if reason == '404':
-                    print "%s is not in the Play Store" % common.getappname(app)
+                    logging.info("%s is not in the Play Store" % common.getappname(app))
                 else:
-                    print "%s encountered a problem: %s" % (common.getappname(app), reason)
+                    logging.info("%s encountered a problem: %s" % (common.getappname(app), reason))
             if version is not None:
                 stored = app['Current Version']
                 if not stored:
-                    if options.verbose:
-                        print "%s has no Current Version but has version %s on the Play Store" % (
-                                common.getappname(app), version)
+                    logging.info("%s has no Current Version but has version %s on the Play Store" % (
+                            common.getappname(app), version))
                 elif LooseVersion(stored) < LooseVersion(version):
-                    print "%s has version %s on the Play Store, which is bigger than %s" % (
-                            common.getappname(app), version, stored)
-                elif options.verbose:
+                    logging.info("%s has version %s on the Play Store, which is bigger than %s" % (
+                            common.getappname(app), version, stored))
+                else:
                     if stored != version:
-                        print "%s has version %s on the Play Store, which differs from %s" % (
-                                common.getappname(app), version, stored)
+                        logging.info("%s has version %s on the Play Store, which differs from %s" % (
+                                common.getappname(app), version, stored))
                     else:
-                        print "%s has the same version %s on the Play Store" % (
-                                common.getappname(app), version)
+                        logging.info("%s has the same version %s on the Play Store" % (
+                                common.getappname(app), version))
         return
 
 
     for app in apps:
 
         if options.autoonly and app['Auto Update Mode'] == 'None':
-            if options.verbose:
-                print "Nothing to do for %s..." % app['id']
+            logging.info("Nothing to do for %s..." % app['id'])
             continue
 
-        print "Processing " + app['id'] + '...'
+        logging.info("Processing " + app['id'] + '...')
 
         writeit = False
         logmsg = None
@@ -374,9 +373,9 @@ def main():
 
         updating = False
         if not version:
-            print "...%s" % msg
+            logging.info("...%s" % msg)
         elif vercode == app['Current Version Code']:
-            print "...up to date"
+            logging.info("...up to date")
         else:
             app['Current Version'] = version
             app['Current Version Code'] = str(int(vercode))
@@ -413,12 +412,12 @@ def main():
                         app['Current Version'] = cv
                         writeit = True
             except Exception:
-                print "ERROR: Auto Name or Current Version failed for %s due to exception: %s" % (app['id'], traceback.format_exc())
+                logging.info("ERROR: Auto Name or Current Version failed for %s due to exception: %s" % (app['id'], traceback.format_exc()))
 
         if updating:
             name = common.getappname(app)
             ver = common.getcvname(app)
-            print '...updating to version %s' % ver
+            logging.info('...updating to version %s' % ver)
             logmsg = 'Update CV of %s to %s' % (name, ver)
 
         if options.auto:
@@ -447,7 +446,7 @@ def main():
                         del newbuild['origlines']
                     newbuild['vercode'] = app['Current Version Code']
                     newbuild['version'] = app['Current Version'] + suffix
-                    print "...auto-generating build for " + newbuild['version']
+                    logging.info("...auto-generating build for " + newbuild['version'])
                     commit = pattern.replace('%v', newbuild['version'])
                     commit = commit.replace('%c', newbuild['vercode'])
                     newbuild['commit'] = commit
@@ -457,23 +456,23 @@ def main():
                     ver = common.getcvname(app)
                     logmsg = "Update %s to %s" % (name, ver)
             else:
-                print 'Invalid auto update mode "' + mode + '"'
+                logging.info('Invalid auto update mode "' + mode + '"')
 
         if writeit:
             metafile = os.path.join('metadata', app['id'] + '.txt')
             metadata.write_metadata(metafile, app)
             if options.commit and logmsg:
-                print "Commiting update for " + metafile
+                logging.info("Commiting update for " + metafile)
                 gitcmd = ["git", "commit", "-m",
                     logmsg]
                 if 'auto_author' in config:
                     gitcmd.extend(['--author', config['auto_author']])
                 gitcmd.extend(["--", metafile])
                 if subprocess.call(gitcmd) != 0:
-                    print "Git commit failed"
+                    logging.info("Git commit failed")
                     sys.exit(1)
 
-    print "Finished."
+    logging.info("Finished.")
 
 if __name__ == "__main__":
     main()

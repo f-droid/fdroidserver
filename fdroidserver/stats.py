@@ -26,6 +26,7 @@ import glob
 from optparse import OptionParser
 import paramiko
 import socket
+import logging
 
 import common, metadata
 from common import FDroidPopen
@@ -57,7 +58,7 @@ def main():
     config = common.read_config(options)
 
     if not config['update_stats']:
-        print "Stats are disabled - check your configuration"
+        logging.info("Stats are disabled - check your configuration")
         sys.exit(1)
 
     # Get all metadata-defined apps...
@@ -78,14 +79,14 @@ def main():
         ssh = None
         ftp = None
         try:
-            print 'Retrieving logs'
+            logging.info('Retrieving logs')
             ssh = paramiko.SSHClient()
             ssh.load_system_host_keys()
             ssh.connect('f-droid.org', username='fdroid', timeout=10,
                     key_filename=config['webserver_keyfile'])
             ftp = ssh.open_sftp()
             ftp.get_channel().settimeout(60)
-            print "...connected"
+            logging.info("...connected")
 
             ftp.chdir('logs')
             files = ftp.listdir()
@@ -96,7 +97,7 @@ def main():
                     destsize = ftp.stat(f).st_size
                     if (not os.path.exists(destpath) or
                             os.path.getsize(destpath) != destsize):
-                        print "...retrieving " + f
+                        logging.info("...retrieving " + f)
                         ftp.get(f, destpath)
         except Exception:
             traceback.print_exc()
@@ -113,15 +114,13 @@ def main():
 
     if not options.nologs:
         # Process logs
-        if options.verbose:
-            print 'Processing logs...'
+        logging.info('Processing logs...')
         apps = {}
         appsVer = {}
         logexpr = '(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] "GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) \d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
         logsearch = re.compile(logexpr).search
         for logfile in glob.glob(os.path.join(logsdir,'access-*.log.gz')):
-            if options.verbose:
-                print '...' + logfile
+            logging.info('...' + logfile)
             p = FDroidPopen(["zcat", logfile])
             matches = (logsearch(line) for line in p.stdout)
             for match in matches:
@@ -172,8 +171,7 @@ def main():
         f.close()
 
     # Calculate and write stats for repo types...
-    if options.verbose:
-        print "Processing repo types..."
+    logging.info("Processing repo types...")
     repotypes = {}
     for app in metaapps:
         if len(app['Repo Type']) == 0:
@@ -193,8 +191,7 @@ def main():
     f.close()
 
     # Calculate and write stats for update check modes...
-    if options.verbose:
-        print "Processing update check modes..."
+    logging.info("Processing update check modes...")
     ucms = {}
     for app in metaapps:
         checkmode = app['Update Check Mode'].split('/')[0]
@@ -207,8 +204,7 @@ def main():
         f.write(checkmode + ' ' + str(count) + '\n')
     f.close()
 
-    if options.verbose:
-        print "Processing categories..."
+    logging.info("Processing categories...")
     ctgs = {}
     for app in metaapps:
         if app['Categories'] is None:
@@ -224,8 +220,7 @@ def main():
         f.write(category + ' ' + str(count) + '\n')
     f.close()
 
-    if options.verbose:
-        print "Processing antifeatures..."
+    logging.info("Processing antifeatures...")
     afs = {}
     for app in metaapps:
         if app['AntiFeatures'] is None:
@@ -242,8 +237,7 @@ def main():
     f.close()
 
     # Calculate and write stats for licenses...
-    if options.verbose:
-        print "Processing licenses..."
+    logging.info("Processing licenses...")
     licenses = {}
     for app in metaapps:
         license = app['License']
@@ -257,8 +251,7 @@ def main():
     f.close()
 
     # Write list of latest apps added to the repo...
-    if options.verbose:
-        print "Processing latest apps..."
+    logging.info("Processing latest apps...")
     latest = knownapks.getlatest(10)
     f = open('stats/latestapps.txt', 'w')
     for app in latest:
@@ -266,11 +259,11 @@ def main():
     f.close()
 
     if unknownapks:
-        print '\nUnknown apks:'
+        logging.info('\nUnknown apks:')
         for apk in unknownapks:
-            print apk
+            logging.info(apk)
 
-    print "Finished."
+    logging.info("Finished.")
 
 if __name__ == "__main__":
     main()

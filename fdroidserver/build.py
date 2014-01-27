@@ -462,8 +462,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             jni_components = [c.strip() for c in jni_components.split(';')]
         ndkbuild = os.path.join(config['ndk_path'], "ndk-build")
         for d in jni_components:
-            if options.verbose:
-                print "Running ndk-build in " + root_dir + '/' + d
+            logging.info("Building native code in '%s'" % d)
             manifest = root_dir + '/' + d + '/AndroidManifest.xml'
             if os.path.exists(manifest):
                 # Read and write the whole AM.xml to fix newlines and avoid
@@ -482,7 +481,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     p = None
     # Build the release...
     if thisbuild['type'] == 'maven':
-        print "Building Maven project..."
+        logging.info("Building Maven project...")
 
         if '@' in thisbuild['maven']:
             maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@',1)[1])
@@ -510,7 +509,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         bindir = os.path.join(root_dir, 'target')
 
     elif thisbuild['type'] == 'kivy':
-        print "Building Kivy project..."
+        logging.info("Building Kivy project...")
 
         spec = os.path.join(root_dir, 'buildozer.spec')
         if not os.path.exists(spec):
@@ -570,7 +569,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         p = FDroidPopen(cmd, cwd=distdir)
 
     elif thisbuild['type'] == 'gradle':
-        print "Building Gradle project..."
+        logging.info("Building Gradle project...")
         if '@' in thisbuild['gradle']:
             flavours = thisbuild['gradle'].split('@')[0].split(',')
             gradle_dir = thisbuild['gradle'].split('@')[1]
@@ -601,7 +600,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         p = FDroidPopen(commands, cwd=gradle_dir)
 
     else:
-        print "Building Ant project..."
+        logging.info("Building Ant project...")
         cmd = ['ant']
         if 'antcommand' in thisbuild:
             cmd += [thisbuild['antcommand']]
@@ -613,7 +612,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     if p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout)
-    print "Successfully built version " + thisbuild['version'] + ' of ' + app['id']
+    logging.info("Successfully built version " + thisbuild['version'] + ' of ' + app['id'])
 
     # Find the apk name in the output...
     if 'bindir' in thisbuild:
@@ -659,7 +658,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     # By way of a sanity check, make sure the version and version
     # code in our new apk match what we expect...
-    print "Checking " + src
+    logging.info("Checking " + src)
     if not os.path.exists(src):
         raise BuildException("Unsigned apk is not at expected location of " + src)
 
@@ -758,7 +757,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
     if 'disable' in thisbuild:
         return False
 
-    print "Building version " + thisbuild['version'] + ' of ' + app['id']
+    logging.info("Building version " + thisbuild['version'] + ' of ' + app['id'])
 
     if server:
         # When using server mode, still keep a local cache of the repo, by
@@ -826,12 +825,12 @@ def main():
 
     log_dir = 'logs'
     if not os.path.isdir(log_dir):
-        print "Creating log directory"
+        logging.info("Creating log directory")
         os.makedirs(log_dir)
 
     tmp_dir = 'tmp'
     if not os.path.isdir(tmp_dir):
-        print "Creating temporary directory"
+        logging.info("Creating temporary directory")
         os.makedirs(tmp_dir)
 
     if options.test:
@@ -839,7 +838,7 @@ def main():
     else:
         output_dir = 'unsigned'
         if not os.path.isdir(output_dir):
-            print "Creating output directory"
+            logging.info("Creating output directory")
             os.makedirs(output_dir)
 
     if config['archive_older'] != 0:
@@ -851,7 +850,7 @@ def main():
 
     build_dir = 'build'
     if not os.path.isdir(build_dir):
-        print "Creating build directory"
+        logging.info("Creating build directory")
         os.makedirs(build_dir)
     srclib_dir = os.path.join(build_dir, 'srclib')
     extlib_dir = os.path.join(build_dir, 'extlib')
@@ -901,15 +900,13 @@ def main():
                         build_dir = os.path.join('build', app['id'])
 
                     # Set up vcs interface and make sure we have the latest code...
-                    if options.verbose:
-                        print "Getting {0} vcs interface for {1}".format(
-                                app['Repo Type'], app['Repo'])
+                    logging.info("Getting {0} vcs interface for {1}".format(
+                            app['Repo Type'], app['Repo']))
                     vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
 
                     first = False
 
-                if options.verbose:
-                    print "Checking " + thisbuild['version']
+                logging.info("Checking " + thisbuild['version'])
                 if trybuild(app, thisbuild, build_dir, output_dir, also_check_dir,
                         srclib_dir, extlib_dir, tmp_dir, repo_dir, vcs, options.test,
                         options.server, options.force, options.onserver):
@@ -919,19 +916,19 @@ def main():
                 logfile = open(os.path.join(log_dir, app['id'] + '.log'), 'a+')
                 logfile.write(str(be))
                 logfile.close()
-                print "Could not build app %s due to BuildException: %s" % (app['id'], be)
+                logging.info("Could not build app %s due to BuildException: %s" % (app['id'], be))
                 if options.stop:
                     sys.exit(1)
                 failed_apps[app['id']] = be
                 wikilog = be.get_wikitext()
             except VCSException as vcse:
-                print "VCS error while building app %s: %s" % (app['id'], vcse)
+                logging.info("VCS error while building app %s: %s" % (app['id'], vcse))
                 if options.stop:
                     sys.exit(1)
                 failed_apps[app['id']] = vcse
                 wikilog = str(vcse)
             except Exception as e:
-                print "Could not build app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
+                logging.info("Could not build app %s due to unknown error: %s" % (app['id'], traceback.format_exc()))
                 if options.stop:
                     sys.exit(1)
                 failed_apps[app['id']] = e
@@ -946,20 +943,20 @@ def main():
                     txt = "Build completed at " + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + "\n\n" + txt
                     newpage.save(txt, summary='Build log')
                 except:
-                    print "Error while attempting to publish build log"
+                    logging.info("Error while attempting to publish build log")
 
     for app in build_succeeded:
-        print "success: %s" % (app['id'])
+        logging.info("success: %s" % (app['id']))
 
     if not options.verbose:
         for fa in failed_apps:
-            print "Build for app %s failed:\n%s" % (fa, failed_apps[fa])
+            logging.info("Build for app %s failed:\n%s" % (fa, failed_apps[fa]))
 
-    print "Finished."
+    logging.info("Finished.")
     if len(build_succeeded) > 0:
-        print str(len(build_succeeded)) + ' builds succeeded'
+        logging.info(str(len(build_succeeded)) + ' builds succeeded')
     if len(failed_apps) > 0:
-        print str(len(failed_apps)) + ' builds failed'
+        logging.info(str(len(failed_apps)) + ' builds failed')
 
     sys.exit(0)
 

@@ -24,6 +24,7 @@ import shutil
 import urllib
 from optparse import OptionParser
 from ConfigParser import ConfigParser
+import logging
 import common, metadata
 
 # Get the repo type and address from the given web page. The page is scanned
@@ -106,13 +107,13 @@ def main():
     config = common.read_config(options)
 
     if not options.url:
-        print "Specify project url."
+        logging.info("Specify project url.")
         sys.exit(1)
     url = options.url
 
     tmp_dir = 'tmp'
     if not os.path.isdir(tmp_dir):
-        print "Creating temporary directory"
+        logging.info("Creating temporary directory")
         os.makedirs(tmp_dir)
 
     # Get all apps...
@@ -133,7 +134,7 @@ def main():
         if url.endswith('/'):
             url = url[:-1]
         if url.endswith('.git'):
-            print "A github URL should point to the project, not the git repo"
+            logging.info("A github URL should point to the project, not the git repo")
             sys.exit(1)
         projecttype = 'github'
         repo = url + '.git'
@@ -154,7 +155,7 @@ def main():
         # Figure out the repo type and adddress...
         repotype, repo = getrepofrompage(sourcecode)
         if not repotype:
-            print "Unable to determine vcs type. " + repo
+            logging.info("Unable to determine vcs type. " + repo)
             sys.exit(1)
     elif url.startswith('http://code.google.com/p/'):
         if not url.endswith('/'):
@@ -168,29 +169,29 @@ def main():
         # Figure out the repo type and adddress...
         repotype, repo = getrepofrompage(sourcecode)
         if not repotype:
-            print "Unable to determine vcs type. " + repo
+            logging.info("Unable to determine vcs type. " + repo)
             sys.exit(1)
 
         # Figure out the license...
         req = urllib.urlopen(url)
         if req.getcode() != 200:
-            print 'Unable to find project page at ' + sourcecode + ' - return code ' + str(req.getcode())
+            logging.info('Unable to find project page at ' + sourcecode + ' - return code ' + str(req.getcode()))
             sys.exit(1)
         page = req.read()
         index = page.find('Code license')
         if index == -1:
-            print "Couldn't find license data"
+            logging.info("Couldn't find license data")
             sys.exit(1)
         ltext = page[index:]
         lprefix = 'rel="nofollow">'
         index = ltext.find(lprefix)
         if index == -1:
-            print "Couldn't find license text"
+            logging.info("Couldn't find license text")
             sys.exit(1)
         ltext = ltext[index + len(lprefix):]
         index = ltext.find('<')
         if index == -1:
-            print "License text not formatted as expected"
+            logging.info("License text not formatted as expected")
             sys.exit(1)
         ltext = ltext[:index]
         if ltext == 'GNU GPL v3':
@@ -208,17 +209,17 @@ def main():
         elif ltext == 'New BSD License':
             license = 'NewBSD'
         else:
-            print "License " + ltext + " is not recognised"
+            logging.info("License " + ltext + " is not recognised")
             sys.exit(1)
 
     if not projecttype:
-        print "Unable to determine the project type."
-        print "The URL you supplied was not in one of the supported formats. Please consult"
-        print "the manual for a list of supported formats, and supply one of those."
+        logging.info("Unable to determine the project type.")
+        logging.info("The URL you supplied was not in one of the supported formats. Please consult")
+        logging.info("the manual for a list of supported formats, and supply one of those.")
         sys.exit(1)
 
     # Get a copy of the source so we can extract some info...
-    print 'Getting source from ' + repotype + ' repo at ' + repo
+    logging.info('Getting source from ' + repotype + ' repo at ' + repo)
     src_dir = os.path.join(tmp_dir, 'importer')
     if os.path.exists(src_dir):
         shutil.rmtree(src_dir)
@@ -235,12 +236,12 @@ def main():
 
         version, vercode, package = common.parse_androidmanifests(paths)
         if not package:
-            print "Couldn't find package ID"
+            logging.info("Couldn't find package ID")
             sys.exit(1)
         if not version:
-            print "WARNING: Couldn't find latest version name"
+            logging.info("WARNING: Couldn't find latest version name")
         if not vercode:
-            print "WARNING: Couldn't find latest version code"
+            logging.info("WARNING: Couldn't find latest version code")
     else:
         spec = os.path.join(root_dir, 'buildozer.spec')
         if os.path.exists(spec):
@@ -252,13 +253,13 @@ def main():
             version = bconfig.get('app', 'version')
             vercode = None
         else:
-            print "No android or kivy project could be found. Specify --subdir?"
+            logging.info("No android or kivy project could be found. Specify --subdir?")
             sys.exit(1)
 
     # Make sure it's actually new...
     for app in apps:
         if app['id'] == package:
-            print "Package " + package + " already exists"
+            logging.info("Package " + package + " already exists")
             sys.exit(1)
 
     # Construct the metadata...
@@ -295,7 +296,7 @@ def main():
 
     metafile = os.path.join('metadata', package + '.txt')
     metadata.write_metadata(metafile, app)
-    print "Wrote " + metafile
+    logging.info("Wrote " + metafile)
 
 
 if __name__ == "__main__":
