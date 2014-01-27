@@ -19,6 +19,7 @@
 
 import os
 from optparse import OptionParser
+import logging
 import common, metadata
 
 config = None
@@ -41,10 +42,10 @@ def main():
     apps = common.read_app_args(args, allapps, False)
 
     for app in apps:
-        print "Writing " + app['id']
+        logging.info("Writing " + app['id'])
         metadata.write_metadata(os.path.join('metadata', app['id'])+'.txt', app)
 
-    print "Finished."
+    logging.info("Finished.")
 
 if __name__ == "__main__":
     main()

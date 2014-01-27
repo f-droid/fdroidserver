@@ -20,6 +20,8 @@
 import os
 import traceback
 from optparse import OptionParser
+import logging
+
 import common, metadata
 from common import BuildException
 from common import VCSException
@@ -49,7 +51,7 @@ def main():
 
     build_dir = 'build'
     if not os.path.isdir(build_dir):
-        print "Creating build directory"
+        logging.info("Creating build directory")
         os.makedirs(build_dir)
     srclib_dir = os.path.join(build_dir, 'srclib')
     extlib_dir = os.path.join(build_dir, 'extlib')
@@ -57,15 +59,15 @@ def main():
     for app in apps:
 
         if app['Disabled']:
-            print "Skipping %s: disabled" % app['id']
+            logging.info("Skipping %s: disabled" % app['id'])
             continue
         if not app['builds']:
-            print "Skipping %s: no builds specified" % app['id']
+            logging.info("Skipping %s: no builds specified" % app['id'])
             continue
         elif options.nosvn and app['Repo Type'] == 'svn':
             continue
 
-        print "Processing " + app['id']
+        logging.info("Processing " + app['id'])
 
         try:
 
@@ -77,10 +79,10 @@ def main():
             for thisbuild in app['builds']:
 
                 if 'disable' in thisbuild:
-                    print ("..skipping version " + thisbuild['version'] + " - " +
-                            thisbuild.get('disable', thisbuild['commit'][1:]))
+                    logging.info("...skipping version %s - %s" % (
+                        thisbuild['version'], thisbuild.get('disable', thisbuild['commit'][1:])))
                 else:
-                    print "..scanning version " + thisbuild['version']
+                    logging.info("...scanning version " + thisbuild['version'])
 
                     # Prepare the source code...
                     root_dir, _ = common.prepare_source(vcs, app, thisbuild,
@@ -102,7 +104,7 @@ def main():
             msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
             problems.append(msg)
 
-    print "Finished:"
+    logging.info("Finished:")
     for problem in problems:
         print problem
     print str(len(problems)) + ' problems.'
