@@ -440,7 +440,7 @@ class vcs_gitsvn(vcs):
 
                 if p.returncode != 0 or not git_rev:
                     # Try a plain git checkout as a last resort
-                    p = subprocess.Popen(['git', 'checkout', rev], cwd=self.local)
+                    p = FDroidPopen(['git', 'checkout', rev], cwd=self.local)
                     if p.returncode != 0:
                         raise VCSException("No git treeish found and direct git checkout failed")
                 else:
@@ -530,11 +530,9 @@ class vcs_hg(vcs):
         if subprocess.call(['hg', 'update', '-C', rev],
                 cwd=self.local) != 0:
             raise VCSException("Hg checkout failed")
-        p = subprocess.Popen(['hg', 'purge', '--all'], stdout=subprocess.PIPE,
-                             cwd=self.local)
-        result = p.communicate()[0]
+        p = FDroidPopen(['hg', 'purge', '--all'], cwd=self.local)
         # Also delete untracked files, we have to enable purge extension for that:
-        if "'purge' is provided by the following extension" in result:
+        if "'purge' is provided by the following extension" in p.stdout:
             with open(self.local+"/.hg/hgrc", "a") as myfile:
                 myfile.write("\n[extensions]\nhgext.purge=\n")
             if subprocess.call(['hg', 'purge', '--all'], cwd=self.local) != 0:
@@ -543,9 +541,8 @@ class vcs_hg(vcs):
             raise VCSException("HG purge failed")
 
     def gettags(self):
-        p = subprocess.Popen(['hg', 'tags', '-q'],
-                stdout=subprocess.PIPE, cwd=self.local)
-        return p.communicate()[0].splitlines()[1:]
+        p = FDroidPopen(['hg', 'tags', '-q'], cwd=self.local)
+        return p.stdout.splitlines()[1:]
 
 
 class vcs_bzr(vcs):
@@ -573,10 +570,9 @@ class vcs_bzr(vcs):
             raise VCSException("Bzr revert failed")
 
     def gettags(self):
-        p = subprocess.Popen(['bzr', 'tags'],
-                stdout=subprocess.PIPE, cwd=self.local)
+        p = FDroidPopen(['bzr', 'tags'], cwd=self.local)
         return [tag.split('   ')[0].strip() for tag in
-                p.communicate()[0].splitlines()]
+                p.stdout.splitlines()]
 
 def retrieve_string(xml_dir, string):
     if string.startswith('@string/'):
@@ -1325,15 +1321,13 @@ def isApkDebuggable(apkfile, config):
 
     :param apkfile: full path to the apk to check"""
 
-    p = subprocess.Popen([os.path.join(config['sdk_path'],
+    p = FDroidPopen([os.path.join(config['sdk_path'],
         'build-tools', config['build_tools'], 'aapt'),
-        'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
-        stdout=subprocess.PIPE)
-    output = p.communicate()[0]
+        'dump', 'xmltree', apkfile, 'AndroidManifest.xml'])
     if p.returncode != 0:
         logging.critical("Failed to get apk manifest information")
         sys.exit(1)
-    for line in output.splitlines():
+    for line in p.stdout.splitlines():
         if 'android:debuggable' in line and not line.endswith('0x0'):
             return True
     return False
@@ -1377,11 +1371,12 @@ def FDroidPopen(commands, cwd=None):
 
     if cwd:
         logging.info("Directory: %s" % cwd)
-    logging.info(" > %s" % ' '.join(commands))
+    logging.info("> %s" % ' '.join(commands))
 
     result = PopenResult()
     p = subprocess.Popen(commands, cwd=cwd,
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            stdin=subprocess.PIPE)
 
     stdout_queue = Queue.Queue()
     stdout_reader = AsynchronousFileReader(p.stdout, stdout_queue)

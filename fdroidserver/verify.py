@@ -24,6 +24,8 @@ import subprocess
 import glob
 from optparse import OptionParser
 
+from common import FDroidPopen
+
 import common
 
 options = None
@@ -75,10 +77,7 @@ def main():
                 os.remove(remoteapk)
             url = 'https://f-droid.org/repo/' + apkfilename
             print "...retrieving " + url
-            p = subprocess.Popen(['wget', url],
-                cwd=tmp_dir,
-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            out = p.communicate()[0]
+            p = FDroidPopen(['wget', url], cwd=tmp_dir)
             if p.returncode != 0:
                 raise Exception("Failed to get " + apkfilename)
 
@@ -97,12 +96,10 @@ def main():
                 cwd=thatdir) != 0:
                 raise Exception("Failed to unpack remote build of " + apkfilename)
 
-            p = subprocess.Popen(['diff', '-r', 'this_apk', 'that_apk'],
-                cwd=tmp_dir, stdout=subprocess.PIPE)
-            out = p.communicate()[0]
-            lines = out.splitlines()
+            p = FDroidPopen(['diff', '-r', 'this_apk', 'that_apk'], cwd=tmp_dir)
+            lines = p.stdout.splitlines()
             if len(lines) != 1 or 'META-INF' not in lines[0]:
-                raise Exception("Unexpected diff output - " + out)
+                raise Exception("Unexpected diff output - " + p.stdout)
 
             print "...successfully verified"
             verified += 1

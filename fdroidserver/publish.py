@@ -21,13 +21,12 @@
 import sys
 import os
 import shutil
-import subprocess
 import md5
 import glob
 from optparse import OptionParser
 
 import common, metadata
-from common import BuildException
+from common import FDroidPopen, BuildException
 
 config = None
 options = None
@@ -119,42 +118,34 @@ def main():
 
         # See if we already have a key for this application, and
         # if not generate one...
-        p = subprocess.Popen(['keytool', '-list',
+        p = FDroidPopen(['keytool', '-list',
             '-alias', keyalias, '-keystore', config['keystore'],
-            '-storepass', config['keystorepass']], stdout=subprocess.PIPE)
-        output = p.communicate()[0]
+            '-storepass', config['keystorepass']])
         if p.returncode !=0:
             print "Key does not exist - generating..."
-            p = subprocess.Popen(['keytool', '-genkey',
+            p = FDroidPopen(['keytool', '-genkey',
                 '-keystore', config['keystore'], '-alias', keyalias,
                 '-keyalg', 'RSA', '-keysize', '2048',
                 '-validity', '10000',
                 '-storepass', config['keystorepass'],
                 '-keypass', config['keypass'],
-                '-dname', config['keydname']], stdout=subprocess.PIPE)
-            output = p.communicate()[0]
-            print output
+                '-dname', config['keydname']])
             if p.returncode != 0:
                 raise BuildException("Failed to generate key")
 
         # Sign the application...
-        p = subprocess.Popen(['jarsigner', '-keystore', config['keystore'],
+        p = FDroidPopen(['jarsigner', '-keystore', config['keystore'],
             '-storepass', config['keystorepass'],
             '-keypass', config['keypass'], '-sigalg',
             'MD5withRSA', '-digestalg', 'SHA1',
-                apkfile, keyalias], stdout=subprocess.PIPE)
-        output = p.communicate()[0]
-        print output
+                apkfile, keyalias])
         if p.returncode != 0:
             raise BuildException("Failed to sign application")
 
         # Zipalign it...
-        p = subprocess.Popen([os.path.join(config['sdk_path'],'tools','zipalign'),
+        p = FDroidPopen([os.path.join(config['sdk_path'],'tools','zipalign'),
                             '-v', '4', apkfile,
-                            os.path.join(output_dir, apkfilename)],
-                            stdout=subprocess.PIPE)
-        output = p.communicate()[0]
-        print output
+                            os.path.join(output_dir, apkfilename)])
         if p.returncode != 0:
             raise BuildException("Failed to align application")
         os.remove(apkfile)

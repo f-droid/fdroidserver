@@ -22,7 +22,6 @@ import sys
 import os
 import shutil
 import glob
-import subprocess
 import re
 import zipfile
 import hashlib
@@ -34,6 +33,7 @@ import common, metadata
 from metadata import MetaDataException
 from PIL import Image
 
+from common import FDroidPopen
 
 def get_densities():
     return ['640', '480', '320', '240', '160', '120']
@@ -369,14 +369,13 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             thisinfo['features'] = []
             thisinfo['icons_src'] = {}
             thisinfo['icons'] = {}
-            p = subprocess.Popen([os.path.join(config['sdk_path'], 'build-tools', config['build_tools'], 'aapt'),
-                                  'dump', 'badging', apkfile],
-                                 stdout=subprocess.PIPE)
-            output = p.communicate()[0]
+            p = FDroidPopen([os.path.join(config['sdk_path'],
+                        'build-tools', config['build_tools'], 'aapt'),
+                    'dump', 'badging', apkfile])
             if p.returncode != 0:
                 print "ERROR: Failed to get apk information"
                 sys.exit(1)
-            for line in output.splitlines():
+            for line in p.stdout.splitlines():
                 if line.startswith("package:"):
                     try:
                         thisinfo['id'] = re.match(name_pat, line).group(1)
@@ -450,15 +449,12 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 print "\tcd " + getsig_dir
                 print "\t./make.sh"
                 sys.exit(1)
-            p = subprocess.Popen(['java', '-cp', os.path.join(os.path.dirname(__file__), 'getsig'),
-                        'getsig', os.path.join(os.getcwd(), apkfile)], stdout=subprocess.PIPE)
-            output = p.communicate()[0]
-            if options.verbose:
-                print output
-            if p.returncode != 0 or not output.startswith('Result:'):
+            p = FDroidPopen(['java', '-cp', os.path.join(os.path.dirname(__file__), 'getsig'),
+                        'getsig', os.path.join(os.getcwd(), apkfile)])
+            if p.returncode != 0 or not p.stdout.startswith('Result:'):
                 print "ERROR: Failed to get apk signature"
                 sys.exit(1)
-            thisinfo['sig'] = output[7:].strip()
+            thisinfo['sig'] = p.stdout[7:].strip()
 
             apk = zipfile.ZipFile(apkfile, 'r')
 
@@ -646,18 +642,16 @@ def make_index(apps, apks, repodir, archive, categories):
             return " ".join(ret)
 
         def extract_pubkey():
-            p = subprocess.Popen(['keytool', '-exportcert',
+            p = FDroidPopen(['keytool', '-exportcert',
                                   '-alias', config['repo_keyalias'],
                                   '-keystore', config['keystore'],
-                                  '-storepass', config['keystorepass']],
-                                 stdout=subprocess.PIPE)
-            cert = p.communicate()[0]
+                                  '-storepass', config['keystorepass']])
             if p.returncode != 0:
                 print "ERROR: Failed to get repo pubkey"
                 sys.exit(1)
             global repo_pubkey_fingerprint
-            repo_pubkey_fingerprint = cert_fingerprint(cert)
-            return "".join("%02x" % ord(b) for b in cert)
+            repo_pubkey_fingerprint = cert_fingerprint(p.stdout)
+            return "".join("%02x" % ord(b) for b in p.stdout)
 
         repoel.setAttribute("pubkey", extract_pubkey())
 
@@ -799,27 +793,19 @@ def make_index(apps, apks, repodir, archive, categories):
             print "Key fingerprint:", repo_pubkey_fingerprint
 
         #Create a jar of the index...
-        p = subprocess.Popen(['jar', 'cf', 'index.jar', 'index.xml'],
-            cwd=repodir, stdout=subprocess.PIPE)
-        output = p.communicate()[0]
-        if options.verbose:
-            print output
+        p = FDroidPopen(['jar', 'cf', 'index.jar', 'index.xml'], cwd=repodir)
         if p.returncode != 0:
             print "ERROR: Failed to create jar file"
             sys.exit(1)
 
         # Sign the index...
-        p = subprocess.Popen(['jarsigner', '-keystore', config['keystore'],
+        p = FDroidPopen(['jarsigner', '-keystore', config['keystore'],
             '-storepass', config['keystorepass'], '-keypass', config['keypass'],
             '-digestalg', 'SHA1', '-sigalg', 'MD5withRSA',
-            os.path.join(repodir, 'index.jar') , config['repo_keyalias']], stdout=subprocess.PIPE)
-        output = p.communicate()[0]
+            os.path.join(repodir, 'index.jar') , config['repo_keyalias']])
         if p.returncode != 0:
             print "Failed to sign index"
-            print output
             sys.exit(1)
-        if options.verbose:
-            print output
 
     # Copy the repo icon into the repo directory...
     icon_dir = os.path.join(repodir ,'icons')

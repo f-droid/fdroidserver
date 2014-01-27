@@ -24,7 +24,6 @@ import os
 import re
 import shutil
 import socket
-import subprocess
 import sys
 from optparse import OptionParser
 
@@ -67,11 +66,8 @@ def genkey(keystore, repo_keyalias, password, keydname):
     if p.returncode != 0:
         raise BuildException("Failed to generate key", p.stdout)
     # now show the lovely key that was just generated
-    p = subprocess.Popen(['keytool', '-list', '-v',
-                '-keystore', keystore, '-alias', repo_keyalias],
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
+    p = FDroidPopen(['keytool', '-list', '-v',
+                '-keystore', keystore, '-alias', repo_keyalias])
     output = p.communicate(password)[0]
     print(output.lstrip().strip() + '\n\n')
 

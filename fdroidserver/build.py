@@ -669,16 +669,14 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if not os.path.exists(src):
         raise BuildException("Unsigned apk is not at expected location of " + src)
 
-    p = subprocess.Popen([os.path.join(config['sdk_path'],
+    p = FDroidPopen([os.path.join(config['sdk_path'],
                         'build-tools', config['build_tools'], 'aapt'),
-                        'dump', 'badging', src],
-                        stdout=subprocess.PIPE)
-    output = p.communicate()[0]
+                        'dump', 'badging', src])
 
     vercode = None
     version = None
     foundid = None
-    for line in output.splitlines():
+    for line in p.stdout.splitlines():
         if line.startswith("package:"):
             pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
             m = pat.match(line)
