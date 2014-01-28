@@ -359,7 +359,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         tarball = common.getsrcname(app,thisbuild)
         try:
             ftp.get(apkfile, os.path.join(output_dir, apkfile))
-            ftp.get(tarball, os.path.join(output_dir, tarball))
+            if not options.notarball:
+                ftp.get(tarball, os.path.join(output_dir, tarball))
         except:
             raise BuildException("Build failed for %s:%s - missing output files" % (app['id'], thisbuild['version']), output)
         ftp.close()
@@ -443,14 +444,15 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             raise BuildException("Can't build due to " +
                 str(len(buildprobs)) + " scanned problems")
 
-    # Build the source tarball right before we build the release...
-    print "Creating source tarball..."
-    tarname = common.getsrcname(app,thisbuild)
-    tarball = tarfile.open(os.path.join(tmp_dir, tarname), "w:gz")
-    def tarexc(f):
-        return any(f.endswith(s) for s in ['.svn', '.git', '.hg', '.bzr'])
-    tarball.add(build_dir, tarname, exclude=tarexc)
-    tarball.close()
+    if not options.notarball:
+        # Build the source tarball right before we build the release...
+        print "Creating source tarball..."
+        tarname = common.getsrcname(app,thisbuild)
+        tarball = tarfile.open(os.path.join(tmp_dir, tarname), "w:gz")
+        def tarexc(f):
+            return any(f.endswith(s) for s in ['.svn', '.git', '.hg', '.bzr'])
+        tarball.add(build_dir, tarname, exclude=tarexc)
+        tarball.close()
 
     # Run a build command if one is required...
     if 'build' in thisbuild:
@@ -720,7 +722,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     shutil.copyfile(src, dest)
 
     # Move the source tarball into the output directory...
-    if output_dir != tmp_dir:
+    if output_dir != tmp_dir and not options.notarball:
         shutil.move(os.path.join(tmp_dir, tarname),
             os.path.join(output_dir, tarname))
 
@@ -792,6 +794,8 @@ def parse_commandline():
                       help="Reset and create a brand new build server, even if the existing one appears to be ok.")
     parser.add_option("--on-server", dest="onserver", action="store_true", default=False,
                       help="Specify that we're running on the build server")
+    parser.add_option("--no-tarball", dest="notarball", action="store_true", default=False,
+                      help="Don't create a source tarball, useful when testing a build")
     parser.add_option("-f", "--force", action="store_true", default=False,
                       help="Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode.")
     parser.add_option("-a", "--all", action="store_true", default=False,
