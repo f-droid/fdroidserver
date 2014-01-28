@@ -1013,6 +1013,11 @@ in a gradle project build.
 Specify an alternate ant command (target) instead of the default
 'release'. It can't be given any flags, such as the path to a build.xml.
 
+@item output=path/to/output.apk
+To be used when app is built with a tool other than the ones natively
+supported, like GNU Make. The given path will be where the build= set of
+commands should produce the final unsigned release apk.
+
 @item novcheck=yes
 Don't check that the version name and code in the resulting apk are
 correct by looking at the build output - assume the metadata is
