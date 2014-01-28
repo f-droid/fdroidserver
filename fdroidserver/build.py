@@ -618,7 +618,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         bindir = os.path.join(root_dir, 'bin')
 
-    if p.returncode != 0:
+    if p is not None and p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout)
     print "Successfully built version " + thisbuild['version'] + ' of ' + app['id']
 
@@ -655,6 +655,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         src = re.match(r".*^.*Creating (.+) for release.*$.*", stdout_apk,
             re.S|re.M).group(1)
         src = os.path.join(bindir, src)
+    elif thisbuild['type'] == 'raw':
+        src = os.path.join(root_dir, thisbuild['output'])
+        src = os.path.normpath(src)
 
     # Make sure it's not debuggable...
     if common.isApkDebuggable(src, config):

@@ -470,6 +470,8 @@ def parse_metadata(metafile):
         for t in ['maven', 'gradle', 'kivy']:
             if build.get(t, 'no') != 'no':
                 return t
+        if 'output' in build:
+            return 'raw'
         return 'ant'
 
     thisinfo = {}
@@ -698,7 +700,7 @@ def write_metadata(dest, app):
         # This defines the preferred order for the build items - as in the
         # manual, they're roughly in order of application.
         keyorder = ['disable', 'commit', 'subdir', 'submodules', 'init',
-                    'gradle', 'maven', 'oldsdkloc', 'target',
+                    'gradle', 'maven', 'output', 'oldsdkloc', 'target',
                     'update', 'encoding', 'forceversion', 'forcevercode', 'rm',
                     'fixtrans', 'fixapos', 'extlibs', 'srclibs', 'patch',
                     'prebuild', 'scanignore', 'scandelete', 'build', 'buildjni',
