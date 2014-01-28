@@ -2,7 +2,7 @@
 #
 # common.py - part of the FDroid server tools
 # Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
-# Copyright (C) 2013 Daniel Martí <mvdan@mvdan.cc>
+# Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -913,8 +913,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         srclibpaths.append(basesrclib)
 
 
-    # Generate (or update) the ant build file, build.xml
-    if (updatemode != 'no' and build['type'] == 'ant'):
+    # Generate (or update) the ant build file, build.xml...
+    if updatemode != 'no' and build['type'] == 'ant':
         parms = [os.path.join(config['sdk_path'], 'tools', 'android'),
                 'update', 'project']
         if 'target' in build and build['target']:
@@ -987,6 +987,18 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         flavour = build['gradle'].split('@')[0]
         if flavour in ['main', 'yes', '']:
             flavour = None
+
+        if 'target' in build:
+            n = build["target"].split('-')[1]
+            subprocess.call(['sed', '-i',
+                's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+n+'@g',
+                'build.gradle'], cwd=root_dir)
+            if '@' in build['gradle']:
+                gradle_dir = os.path.join(root_dir, build['gradle'].split('@',1)[1])
+                gradle_dir = os.path.normpath(gradle_dir)
+                subprocess.call(['sed', '-i',
+                    's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+n+'@g',
+                    'build.gradle'], cwd=gradle_dir)
 
     # Remove forced debuggable flags
     logging.info("Removing debuggable flags")
@@ -1466,8 +1478,10 @@ def place_srclib(root_dir, number, libpath):
     relpath = os.path.relpath(libpath, root_dir)
     proppath = os.path.join(root_dir, 'project.properties')
 
-    with open(proppath, "r") as o:
-        lines = o.readlines()
+    lines = []
+    if os.path.isfile(proppath):
+        with open(proppath, "r") as o:
+            lines = o.readlines()
 
     with open(proppath, "w") as o:
         placed = False

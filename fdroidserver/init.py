@@ -3,7 +3,7 @@
 #
 # update.py - part of the FDroid server tools
 # Copyright (C) 2010-2013, Ciaran Gultnieks, ciaran@ciarang.com
-# Copyright (C) 2013 Daniel Martí <mvdan@mvdan.cc>
+# Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 # Copyright (C) 2013 Hans-Christoph Steiner <hans@eds.org>
 #
 # This program is free software: you can redistribute it and/or modify

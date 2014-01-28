@@ -3,7 +3,7 @@
 #
 # build.py - part of the FDroid server tools
 # Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
-# Copyright (C) 2013 Daniel Martí <mvdan@mvdan.cc>
+# Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -578,17 +578,6 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             flavours = thisbuild['gradle'].split(',')
             gradle_dir = root_dir
 
-
-        if 'compilesdk' in thisbuild:
-            level = thisbuild["compilesdk"].split('-')[1]
-            subprocess.call(['sed', '-i',
-                    's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+level+'@g',
-                    'build.gradle'], cwd=root_dir)
-            if '@' in thisbuild['gradle']:
-                subprocess.call(['sed', '-i',
-                        's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+level+'@g',
-                        'build.gradle'], cwd=gradle_dir)
-
         if len(flavours) == 1 and flavours[0] in ['main', 'yes', '']:
             flavours[0] = ''
 
@@ -613,10 +602,6 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if p.returncode != 0:
         raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout)
     logging.info("Successfully built version " + thisbuild['version'] + ' of ' + app['id'])
-
-    # Find the apk name in the output...
-    if 'bindir' in thisbuild:
-        bindir = os.path.join(build_dir, thisbuild['bindir'])
 
     if thisbuild['type'] == 'maven':
         stdout_apk = '\n'.join([

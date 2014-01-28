@@ -3,7 +3,7 @@
 # fd-commit - part of the FDroid server tools
 # Commits updates to apps, allowing you to edit the commit messages
 #
-# Copyright (C) 2013 Daniel Martí <mvdan@mvdan.cc>
+# Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -60,19 +60,31 @@ while read line; do
 			fullname="$id"
 		fi
 
+		onlybuild=true
 		newbuild=false
 		while read l; do
-			if [[ "$l" == "+Build:"* ]]; then
+			if [[ "$l" == "-Build:"* ]]; then
+				onlybuild=false
+			elif [[ "$l" == "+Build:"* ]]; then
+				if $newbuild; then
+					onlybuild=false
+				fi
 				newbuild=true
 				build=${l#*:}
 				version=${build%%,*}
 				build=${build#*,}
 				vercode=${build%%,*}
+			elif $newbuild && $onlybuild [[ "$l" == "+"*"disable="* ]]; then
+				disable=true
 			fi
 		done < <(git diff HEAD -- "$file")
 
-		if $newbuild ; then
-			message="Update $fullname to $version ($vercode)"
+		if $newbuild && $onlybuild; then
+			if $disable; then
+				message="Don't update $fullname to $version ($vercode)"
+			else
+				message="Update $fullname to $version ($vercode)"
+			fi
 		else
 			message="$fullname:"
 		fi

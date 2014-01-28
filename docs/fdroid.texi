@@ -12,7 +12,9 @@ Copyright @copyright{} 2010, 2011, 2012, 2013 Ciaran Gultnieks
 
 Copyright @copyright{} 2011 Henrik Tunedal, Michael Haas, John Sullivan
 
-Copyright @copyright{} 2013 David Black, Daniel Martí
+Copyright @copyright{} 2013 David Black
+
+Copyright @copyright{} 2013, 2014 Daniel Martí
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -836,22 +838,17 @@ is sdk-location. Typically, if you get a message along the lines of:
 try enabling this option.
 
 @item target=<target>
-Specifies a particular SDK target for compilation, overriding the
-project.properties of the app and possibly sub-projects. Note that this does
-not change the target SDK in the AndroidManifest.xml — the level of features
-that can be included in the build. This is likely to cause the whole build.xml
-to be rewritten, which is fine if it's a 'standard' android file or doesn't
-already exist, but not a good idea if it's heavily customised. If you get an
-error about invalid target, first try @code{init=rm -rf bin/}; otherwise this
-parameter should do the trick.
+Specifies a particular SDK target for compilation, overriding the value
+defined in the code by upstream.  This has different effects depending on what
+build system used — this flag currently affects ant, maven and gradle projects
+only. Note that this does not change the target SDK in the
+AndroidManifest.xml, which determines the level of features that can be
+included in the build.
 
-Please note that gradle builds should be using compilesdk=.
-
-@item compilesdk=<level>
-Practically accomplishes the same that target= does when used in ant and maven
-projects. compilesdk= is used rather than target= so as to not cause any more
-confusion. It only takes effect on gradle builds in the build.gradle file,
-thus using it in any other case is not wise.
+In the case of an ant project, it modifies project.properties of the app and
+possibly sub-projects. This is likely to cause the whole build.xml to be
+rewritten, which is fine if it's a 'standard' android file or doesn't already
+exist, but not a good idea if it's heavily customised.
 
 @item update=xxx
 By default, 'android update project' is used to generate or update the
@@ -1011,12 +1008,6 @@ to run maven inside that relative subdirectory.
 @item preassemble=<task1> <task2>
 Space-separated list of gradle tasks to be run before the assemble task
 in a gradle project build.
-
-@item bindir=<path>
-Normally the build output (apk) is expected to be in the bin
-subdirectory below the ant build files. If the project is configured
-to put it elsewhere, that can be specified here, relative to the base
-of the checked out repo. Not yet implemented for gradle.
 
 @item antcommand=xxx
 Specify an alternate ant command (target) instead of the default
@@ -1196,9 +1187,10 @@ Check Mode}. @code{%c} will be replaced by the actual vercode, and the whole
 string will be passed to python's @code{eval} function.
 
 Especially useful with apps that we want to compile for different ABIs, but
-whose vercodes don't always have trailing zeros. With @code{Vercode Operation}
-set at something like @code{%c*10 + 4}, we will be able to track updates and
-build three different versions of every upstream version.
+whose vercodes don't always have trailing zeros. For example, with
+@code{Vercode Operation} set at something like @code{%c*10 + 4}, we will be
+able to track updates and build up to four different versions of every
+upstream version.
 
 @node Archive Policy
 @section Archive Policy

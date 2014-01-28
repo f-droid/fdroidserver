@@ -2,7 +2,7 @@
 #
 # common.py - part of the FDroid server tools
 # Copyright (C) 2013, Ciaran Gultnieks, ciaran@ciarang.com
-# Copyright (C) 2013 Daniel Martí <mvdan@mvdan.cc>
+# Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -699,7 +699,7 @@ def write_metadata(dest, app):
         # This defines the preferred order for the build items - as in the
         # manual, they're roughly in order of application.
         keyorder = ['disable', 'commit', 'subdir', 'submodules', 'init',
-                    'gradle', 'maven', 'oldsdkloc', 'target', 'compilesdk',
+                    'gradle', 'maven', 'oldsdkloc', 'target',
                     'update', 'encoding', 'forceversion', 'forcevercode', 'rm',
                     'fixtrans', 'fixapos', 'extlibs', 'srclibs', 'patch',
                     'prebuild', 'scanignore', 'scandelete', 'build', 'buildjni',
