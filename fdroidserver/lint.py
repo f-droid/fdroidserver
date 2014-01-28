@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # rewritemeta.py - part of the FDroid server tool
-# Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
