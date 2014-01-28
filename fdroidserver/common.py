@@ -1013,12 +1013,14 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         if flavour in ['main', 'yes', '']:
             flavour = None
 
-        if 'target' in thisbuild:
-            n = thisbuild["target"].split('-')[1]
+        if 'target' in build:
+            n = build["target"].split('-')[1]
             subprocess.call(['sed', '-i',
                 's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+n+'@g',
                 'build.gradle'], cwd=root_dir)
-            if '@' in thisbuild['gradle']:
+            if '@' in build['gradle']:
+                gradle_dir = os.path.join(root_dir, build['gradle'].split('@',1)[1])
+                gradle_dir = os.path.normpath(gradle_dir)
                 subprocess.call(['sed', '-i',
                     's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+n+'@g',
                     'build.gradle'], cwd=gradle_dir)
