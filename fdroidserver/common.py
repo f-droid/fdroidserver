@@ -937,7 +937,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
 
     # Generate (or update) the ant build file, build.xml...
-    if (updatemode != 'no' and build['type'] == 'ant'):
+    if updatemode != 'no' and build['type'] == 'ant':
         parms = [os.path.join(config['sdk_path'], 'tools', 'android'),
                 'update', 'project']
         if 'target' in build and build['target']:
@@ -1012,6 +1012,16 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         flavour = build['gradle'].split('@')[0]
         if flavour in ['main', 'yes', '']:
             flavour = None
+
+        if 'target' in thisbuild:
+            n = thisbuild["target"].split('-')[1]
+            subprocess.call(['sed', '-i',
+                's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+n+'@g',
+                'build.gradle'], cwd=root_dir)
+            if '@' in thisbuild['gradle']:
+                subprocess.call(['sed', '-i',
+                    's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+n+'@g',
+                    'build.gradle'], cwd=gradle_dir)
 
     # Remove forced debuggable flags
     print "Removing debuggable flags..."

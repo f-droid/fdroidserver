@@ -595,17 +595,6 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             flavours = thisbuild['gradle'].split(',')
             gradle_dir = root_dir
 
-
-        if 'compilesdk' in thisbuild:
-            level = thisbuild["compilesdk"].split('-')[1]
-            subprocess.call(['sed', '-i',
-                    's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+level+'@g',
-                    'build.gradle'], cwd=root_dir)
-            if '@' in thisbuild['gradle']:
-                subprocess.call(['sed', '-i',
-                        's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+level+'@g',
-                        'build.gradle'], cwd=gradle_dir)
-
         if len(flavours) == 1 and flavours[0] in ['main', 'yes', '']:
             flavours[0] = ''
 
