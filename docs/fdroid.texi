@@ -1185,9 +1185,10 @@ Check Mode}. @code{%c} will be replaced by the actual vercode, and the whole
 string will be passed to python's @code{eval} function.
 
 Especially useful with apps that we want to compile for different ABIs, but
-whose vercodes don't always have trailing zeros. With @code{Vercode Operation}
-set at something like @code{%c*10 + 4}, we will be able to track updates and
-build three different versions of every upstream version.
+whose vercodes don't always have trailing zeros. For example, with
+@code{Vercode Operation} set at something like @code{%c*10 + 4}, we will be
+able to track updates and build up to four different versions of every
+upstream version.
 
 @node Archive Policy
 @section Archive Policy
