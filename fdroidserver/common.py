@@ -1248,7 +1248,6 @@ def scan_source(build_dir, root_dir, thisbuild):
     for r,d,f in os.walk(build_dir):
 
         if any(insidedir(r, igndir) for igndir in ('.hg', '.git', '.svn')):
-            print r
             continue
 
         for curfile in f:
