@@ -333,20 +333,18 @@ class vcs_git(vcs):
 
     def initsubmodules(self):
         self.checkrepo()
-        if subprocess.call(['git', 'submodule', 'init'],
-                cwd=self.local) != 0:
-            raise VCSException("Git submodule init failed")
-        if subprocess.call(['git', 'submodule', 'update'],
-                cwd=self.local) != 0:
-            raise VCSException("Git submodule update failed")
-        if subprocess.call(['git', 'submodule', 'foreach',
+        if subprocess.call(['git', 'submodule', 'foreach', '--recursive',
             'git', 'reset', '--hard'],
                 cwd=self.local) != 0:
             raise VCSException("Git submodule reset failed")
-        if subprocess.call(['git', 'submodule', 'foreach',
+        if subprocess.call(['git', 'submodule', 'foreach', '--recursive',
             'git', 'clean', '-dffx'],
                 cwd=self.local) != 0:
             raise VCSException("Git submodule clean failed")
+        if subprocess.call(['git', 'submodule', 'update',
+            '--init', '--force', '--recursive'],
+                cwd=self.local) != 0:
+            raise VCSException("Git submodule update failed")
 
     def gettags(self):
         self.checkrepo()

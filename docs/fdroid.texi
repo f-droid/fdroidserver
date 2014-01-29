@@ -820,8 +820,10 @@ Specifies to build from a subdirectory of the checked out source code.
 Normally this directory is changed to before building,
 
 @item submodules=yes
-Use if the project (git only) has submodules - causes git submodule
-init and update to be executed after the source is cloned.
+Use if the project (git only) has submodules - causes @code{git submodule
+update --init --recursive} to be executed after the source is cloned.
+Submodules are reset and cleaned like the main app repository itself before
+each build.
 
 @item init=xxxx
 As for 'prebuild', but runs on the source code BEFORE any other processing
@@ -1012,6 +1014,11 @@ in a gradle project build.
 @item antcommand=xxx
 Specify an alternate ant command (target) instead of the default
 'release'. It can't be given any flags, such as the path to a build.xml.
+
+@item output=path/to/output.apk
+To be used when app is built with a tool other than the ones natively
+supported, like GNU Make. The given path will be where the build= set of
+commands should produce the final unsigned release apk.
 
 @item novcheck=yes
 Don't check that the version name and code in the resulting apk are
