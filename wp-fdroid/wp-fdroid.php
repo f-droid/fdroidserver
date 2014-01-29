@@ -10,7 +10,7 @@ Author URI: http://ciarang.com
 Revision history
 0.01 - 2010-12-04: Initial development version
 
-*/
+ */
 
 include('android-permissions.php');
 
@@ -79,30 +79,44 @@ class FDroid
 			}
 		}
 
-		// Santiy check query vars
+		// Sanity check and standardise all query variables...
 		if(!isset($query_vars['fdpage']) || !is_numeric($query_vars['fdpage']) || $query_vars['fdpage'] <= 0) {
 			$query_vars['fdpage'] = 1;
+		} else {
+			$query_vars['fdpage'] = strval(intval($query_vars['fdpage']));
+		}
+		if(isset($query_vars['fdstyle']) && ($query_vars['fdstyle'] != 'list' && $query_vars['fdstyle'] != 'grid')) {
+			$query_vars['fdstyle'] = 'list';
+		}
+		if(isset($query_vars['fdcategory'])) {
+			if($query_vars['fdcategory'] == 'All categories') {
+				unset($query_vars['fdcategory']);
+			} else {
+				$query_vars['fdcategory'] = sanitize_text_field($query_vars['fdcategory']);
+			}
+		}
+		if(isset($query_vars['fdfilter'])) {
+			$query_vars['fdfilter'] = sanitize_text_field($query_vars['fdfilter']);
+		} else {
+			if(isset($attribs['search'])) {
+				$query_vars['fdfilter'] = '';
+			}
+		}
+		if(isset($query_vars['fdid'])) {
+			$query_vars['fdid'] = sanitize_text_field($query_vars['fdid']);
 		}
 
 		$out = '';
 
-		if(isset($attribs['search']) && $query_vars['fdfilter']===null) {
-			$query_vars['fdfilter'] = '';
-		}
-
-		if($query_vars['fdcategory'] == 'All categories') {
-			unset($query_vars['fdcategory']);
-		}
-
 		if($query_vars['fdid']!==null) {
 			$out.=$this->get_app($query_vars);
 		} else {
-                        $out.='<form name="searchform" action="" method="get">';
-                        $out.='<p><input name="fdfilter" type="text" value="'.sanitize_text_field($query_vars['fdfilter']).'" size="30"> ';
-                        $out.='<input type="hidden" name="fdpage" value="1">';
-                        $out.='<input type="submit" value="Search"></p>';
-                        $out.=$this->makeformdata($query_vars);
-                        $out.='</form>'."\n";
+			$out.='<form name="searchform" action="" method="get">';
+			$out.='<p><input name="fdfilter" type="text" value="'.$query_vars['fdfilter'].'" size="30"> ';
+			$out.='<input type="hidden" name="fdpage" value="1">';
+			$out.='<input type="submit" value="Search"></p>';
+			$out.=$this->makeformdata($query_vars);
+			$out.='</form>'."\n";
 
 			$out.=$this->get_apps($query_vars);
 		}
@@ -116,26 +130,26 @@ class FDroid
 	// needs to be data-driven so the same information can be used by the client,
 	// the web site and the documentation.
 	function getlicenseurl($license) {
-	    switch($license) {
-		    case 'MIT':
+		switch($license) {
+		case 'MIT':
 			return 'http://www.gnu.org/licenses/license-list.html#X11License';
-		    case 'NewBSD':
+		case 'NewBSD':
 			return 'http://www.gnu.org/licenses/license-list.html#ModifiedBSD';
-		    case 'BSD':
+		case 'BSD':
 			return 'http://www.gnu.org/licenses/license-list.html#OriginalBSD';
-		    case 'GPLv3':
-		    case 'GPLv3+':
+		case 'GPLv3':
+		case 'GPLv3+':
 			return 'http://www.gnu.org/licenses/license-list.html#GNUGPL';
-		    case 'GPLv2':
-		    case 'GPLv2+':
+		case 'GPLv2':
+		case 'GPLv2+':
 			return 'http://www.gnu.org/licenses/license-list.html#GPLv2';
-		    case 'LGPL':
+		case 'LGPL':
 			return 'http://www.gnu.org/licenses/license-list.html#LGPL';
-		    case 'Apache2':
+		case 'Apache2':
 			return 'http://www.gnu.org/licenses/license-list.html#apache2';
-		    default:
+		default:
 			return null;
-	    }
+		}
 	}
 
 	function get_app($query_vars) {
@@ -154,73 +168,73 @@ class FDroid
 				$apks=array();;
 				foreach($app->children() as $el) {
 					switch($el->getName()) {
-						case "name":
-							$name=$el;
-							break;
-						case "added":
-							$added=$el;
-							break;
-						case "icon":
-							$icon=$el;
-							break;
-						case "summary":
-							$summary=$el;
-							break;
-						case "desc":
-							$desc=$el;
-							break;
-						case "license":
-							$license=$el;
-							break;
-						case "source":
-							$source=$el;
-							break;
-						case "tracker":
-							$issues=$el;
-							break;
-						case "donate":
-							$donate=$el;
-							break;
-						case "web":
-							$web=$el;
-							break;
-						case "antifeatures";
-							$antifeatures=$el;
-							break;
-						case "requirements";
-							$requirements=$el;
-							break;
-						case "package":
-							$thisapk=array();
-							foreach($el->children() as $pel) {
-								switch($pel->getName()) {
-								case "version":
-									$thisapk['version']=$pel;
-									break;
-								case "vercode":
-									$thisapk['vercode']=$pel;
-									break;
-								case "apkname":
-									$thisapk['apkname']=$pel;
-									break;
-								case "srcname":
-									$thisapk['srcname']=$pel;
-									break;
-								case "hash":
-									$thisapk['hash']=$pel;
-									break;
-								case "size":
-									$thisapk['size']=$pel;
-									break;
-								case "sdkver":
-									$thisapk['sdkver']=$pel;
-									break;
-								case "permissions":
-									$thisapk['permissions']=$pel;
-									break;
-								}
+					case "name":
+						$name=$el;
+						break;
+					case "added":
+						$added=$el;
+						break;
+					case "icon":
+						$icon=$el;
+						break;
+					case "summary":
+						$summary=$el;
+						break;
+					case "desc":
+						$desc=$el;
+						break;
+					case "license":
+						$license=$el;
+						break;
+					case "source":
+						$source=$el;
+						break;
+					case "tracker":
+						$issues=$el;
+						break;
+					case "donate":
+						$donate=$el;
+						break;
+					case "web":
+						$web=$el;
+						break;
+                                        case "antifeatures":
+						$antifeatures=$el;
+						break;
+                                        case "requirements":
+						$requirements=$el;
+						break;
+					case "package":
+						$thisapk=array();
+						foreach($el->children() as $pel) {
+							switch($pel->getName()) {
+							case "version":
+								$thisapk['version']=$pel;
+								break;
+							case "vercode":
+								$thisapk['vercode']=$pel;
+								break;
+							case "apkname":
+								$thisapk['apkname']=$pel;
+								break;
+							case "srcname":
+								$thisapk['srcname']=$pel;
+								break;
+							case "hash":
+								$thisapk['hash']=$pel;
+								break;
+							case "size":
+								$thisapk['size']=$pel;
+								break;
+							case "sdkver":
+								$thisapk['sdkver']=$pel;
+								break;
+							case "permissions":
+								$thisapk['permissions']=$pel;
+								break;
 							}
-							$apks[]=$thisapk;
+						}
+						$apks[]=$thisapk;
 
 					}
 				}
@@ -263,10 +277,10 @@ class FDroid
 				$licenseurl=$this->getlicenseurl($license);
 				$out.="<b>License:</b> ";
 				if($licenseurl)
-				    $out.='<a href="'.$licenseurl.'" target="_blank">';
+					$out.='<a href="'.$licenseurl.'" target="_blank">';
 				$out.=$license;
 				if($licenseurl)
-				    $out.='</a>';
+					$out.='</a>';
 
 				if(isset($requirements)) {
 					$out.='<br /><b>Additional requirements:</b> '.$requirements;
@@ -317,9 +331,9 @@ class FDroid
 
 					$out.="<p>This version is built and signed by ";
 					if($srcbuild) {
-					    $out.="F-Droid, and guaranteed to correspond to the source tarball below.</p>";
+						$out.="F-Droid, and guaranteed to correspond to the source tarball below.</p>";
 					} else {
-					    $out.="the original developer.</p>";
+						$out.="the original developer.</p>";
 					}
 					$out.='<a href="https://f-droid.org/repo/'.$apk['apkname'].'">download apk</a> ';
 					$out.=$this->human_readable_size($apk['size']);
@@ -362,7 +376,7 @@ class FDroid
 						/*if($i==0)
 							$divStyleDisplay='block';
 						else*/
-							$divStyleDisplay='none';
+						$divStyleDisplay='none';
 						$divId='permissions'.$i;
 						$out.='<br /><a href="javascript:void(0);" onClick="showHidePermissions(\''.$divId.'\');">view permissions</a>';
 						$out.=' <span style="color:#AAAAAA;">['.$summary.']</span>';
@@ -531,9 +545,9 @@ class FDroid
 				$handle = fopen(getenv('DOCUMENT_ROOT').'/repo/categories.txt', 'r');
 				if ($handle) {
 					while (($buffer = fgets($handle, 4096)) !== false) {
-					    $categories[] = rtrim($buffer);
+						$categories[] = rtrim($buffer);
 					}
-				    fclose($handle);
+					fclose($handle);
 				}
 
 				$out.='<form name="categoryform" action="" method="get">';
@@ -551,7 +565,7 @@ class FDroid
 				$out.='</form>'."\n";
 			}
 			else {
-				$out.='Applications matching "'.sanitize_text_field($query_vars['fdfilter']).'"';
+				$out.='Applications matching "'.$query_vars['fdfilter'].'"';
 			}
 			$out.="</div>";
 
@@ -640,24 +654,24 @@ class FDroid
 			$appinfo['id']=$appinfo['attrs']['id'];
 			foreach($app->children() as $el) {
 				switch($el->getName()) {
-					case "name":
-						$appinfo['name']=$el;
-						break;
-					case "icon":
-						$appinfo['icon']=$el;
-						break;
-					case "summary":
-						$appinfo['summary']=$el;
-						break;
-					case "desc":
-						$appinfo['description']=$el;
-						break;
-					case "license":
-						$appinfo['license']=$el;
-						break;
-					case "category":
-						$appinfo['category']=$el;
-						break;
+				case "name":
+					$appinfo['name']=$el;
+					break;
+				case "icon":
+					$appinfo['icon']=$el;
+					break;
+				case "summary":
+					$appinfo['summary']=$el;
+					break;
+				case "desc":
+					$appinfo['description']=$el;
+					break;
+				case "license":
+					$appinfo['license']=$el;
+					break;
+				case "category":
+					$appinfo['category']=$el;
+					break;
 				}
 			}
 
