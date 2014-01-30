@@ -1212,12 +1212,16 @@ def scan_source(build_dir, root_dir, thisbuild):
     def warnproblem(what, fd, fp):
         logging.info('Warning: Found %s at %s' % (what, fd))
 
+    def insidedir(path, dirname):
+        return path.endswith('/%s' % dirname) or '/%s/' % dirname in path
+
     # Iterate through all files in the source code
     for r,d,f in os.walk(build_dir):
-        for curfile in f:
 
-            if '/.hg' in r or '/.git' in r or '/.svn' in r:
-                continue
+        if any(insidedir(r, igndir) for igndir in ('.hg', '.git', '.svn')):
+            continue
+
+        for curfile in f:
 
             # Path (relative) to the file
             fp = os.path.join(r, curfile)
