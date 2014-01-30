@@ -171,9 +171,6 @@ class FDroid
 					case "name":
 						$name=$el;
 						break;
-					case "added":
-						$added=$el;
-						break;
 					case "icon":
 						$icon=$el;
 						break;
@@ -213,6 +210,9 @@ class FDroid
 								break;
 							case "vercode":
 								$thisapk['vercode']=$pel;
+								break;
+							case "added":
+								$thisapk['added']=$el;
 								break;
 							case "apkname":
 								$thisapk['apkname']=$pel;
