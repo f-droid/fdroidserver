@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP FDroid
-Plugin URI: http://f-droid.org/repository
+Plugin URI: https://f-droid.org/repository
 Description: An FDroid repository browser
 Author: Ciaran Gultnieks
 Version: 0.01
