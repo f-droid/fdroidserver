@@ -1383,9 +1383,10 @@ def FDroidPopen(commands, cwd=None, output=True):
     :returns: A PopenResult.
     """
 
-    if cwd:
-        logging.info("Directory: %s" % cwd)
-    logging.info("> %s" % ' '.join(commands))
+    if output:
+        if cwd:
+            logging.info("Directory: %s" % cwd)
+        logging.info("> %s" % ' '.join(commands))
 
     result = PopenResult()
     p = subprocess.Popen(commands, cwd=cwd,
