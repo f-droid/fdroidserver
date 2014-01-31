@@ -294,7 +294,8 @@ class vcs_git(vcs):
     # fdroidserver) and then we'll proceed to destroy it! This is called as
     # a safety check.
     def checkrepo(self):
-        p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local)
+        p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'],
+                cwd=self.local, output=False)
         result = p.stdout.rstrip()
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
@@ -369,7 +370,8 @@ class vcs_gitsvn(vcs):
     # fdroidserver) and then we'll proceed to destory it! This is called as
     # a safety check.
     def checkrepo(self):
-        p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local)
+        p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'],
+                cwd=self.local, output=False)
         result = p.stdout.rstrip()
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
