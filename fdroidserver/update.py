@@ -97,7 +97,7 @@ def update_wiki(apps, apks):
             wikidata += "This app provides: %s" % ', '.join(app['Summary'].split(','))
 
         wikidata += app['Summary']
-        wikidata += " - [http://f-droid.org/repository/browse/?fdid=" + app['id'] + " view in repository]\n\n"
+        wikidata += " - [https://f-droid.org/repository/browse/?fdid=" + app['id'] + " view in repository]\n\n"
 
         wikidata += "=Description=\n"
         wikidata += metadata.description_wiki(app['Description']) + "\n"
