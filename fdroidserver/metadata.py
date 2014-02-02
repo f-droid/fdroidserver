@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# common.py - part of the FDroid server tools
+# metadata.py - part of the FDroid server tools
 # Copyright (C) 2013, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 #
