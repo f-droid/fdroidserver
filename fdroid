@@ -29,6 +29,7 @@ commands = [
         "verify",
         "checkupdates",
         "import",
+        "readmeta",
         "rewritemeta",
         "lint",
         "scanner",

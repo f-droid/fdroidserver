@@ -360,11 +360,13 @@ def parse_srclib(metafile, **kw):
 
 # Read all metadata. Returns a list of 'app' objects (which are dictionaries as
 # returned by the parse_metadata function.
-def read_metadata(xref=True, package=None):
+def read_metadata(xref=True, package=None, store=True):
     apps = []
+
     for basedir in ('metadata', 'tmp'):
         if not os.path.exists(basedir):
             os.makedirs(basedir)
+
     for metafile in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
         if package is None or metafile == os.path.join('metadata', package + '.txt'):
             try:
