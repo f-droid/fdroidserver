@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# common.py - part of the FDroid server tools
+# metadata.py - part of the FDroid server tools
 # Copyright (C) 2013, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 #
@@ -361,11 +361,13 @@ def parse_srclib(metafile, **kw):
 
 # Read all metadata. Returns a list of 'app' objects (which are dictionaries as
 # returned by the parse_metadata function.
-def read_metadata(xref=True, package=None):
+def read_metadata(xref=True, package=None, store=True):
     apps = []
+
     for basedir in ('metadata', 'tmp'):
         if not os.path.exists(basedir):
             os.makedirs(basedir)
+
     for metafile in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
         if package is None or metafile == os.path.join('metadata', package + '.txt'):
             try:
