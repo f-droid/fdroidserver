@@ -120,7 +120,7 @@ Paramiko (debian package python-paramiko)
 @item
 Imaging (debian package python-imaging)
 @item
-Magic (debian package python-magic)
+Magic (debian package python-pgmagick)
 @end itemize
 
 On the other hand, if you want to build the apps directly on your system
