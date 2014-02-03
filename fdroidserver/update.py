@@ -782,7 +782,7 @@ def make_index(apps, apks, repodir, archive, categories):
 
         if not options.quiet:
             logging.info("Creating signed index.")
-            logging.info("Key fingerprint:", repo_pubkey_fingerprint)
+            logging.info("Key fingerprint: %s", repo_pubkey_fingerprint)
 
         #Create a jar of the index...
         p = FDroidPopen(['jar', 'cf', 'index.jar', 'index.xml'], cwd=repodir)
