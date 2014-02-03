@@ -5,7 +5,7 @@ execute "apt-get-update" do
   command "apt-get update"
 end
 
-%w{ant ant-contrib autoconf autopoint bison cmake expect libtool libsaxonb-java libssl1.0.0 libssl-dev maven openjdk-7-jdk javacc python python-magic git-core mercurial subversion bzr git-svn make perlmagick pkg-config zip ruby rubygems librmagick-ruby yasm imagemagick gettext realpath transfig texinfo curl librsvg2-bin xsltproc vorbis-tools}.each do |pkg|
+%w{ant ant-contrib autoconf autopoint bison cmake expect libtool libsaxonb-java libssl1.0.0 libssl-dev maven openjdk-7-jdk javacc python python-pgmagick git-core mercurial subversion bzr git-svn make perlmagick pkg-config zip ruby rubygems librmagick-ruby yasm imagemagick gettext realpath transfig texinfo curl librsvg2-bin xsltproc vorbis-tools}.each do |pkg|
   package pkg do
     action :install
   end
