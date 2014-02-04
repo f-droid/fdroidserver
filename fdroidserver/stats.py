@@ -27,9 +27,8 @@ from optparse import OptionParser
 import paramiko
 import socket
 import logging
-
 import common, metadata
-from common import FDroidPopen
+import subprocess
 
 def carbon_send(key, value):
     s = socket.socket()
@@ -121,30 +120,31 @@ def main():
         logsearch = re.compile(logexpr).search
         for logfile in glob.glob(os.path.join(logsdir,'access-*.log.gz')):
             logging.info('...' + logfile)
-            p = FDroidPopen(["zcat", logfile])
+            if options.verbose:
+                print '...' + logfile
+            p = subprocess.Popen(["zcat", logfile], stdout = subprocess.PIPE)
             matches = (logsearch(line) for line in p.stdout)
             for match in matches:
                 if match and match.group('statuscode') == '200':
                     uri = match.group('uri')
-                    if not uri.endswith('.apk'):
-                        continue
-                    _, apkname = os.path.split(uri)
-                    app = knownapks.getapp(apkname)
-                    if app:
-                        appid, _ = app
-                        if appid in apps:
-                            apps[appid] += 1
+                    if uri.endswith('.apk'):
+                        _, apkname = os.path.split(uri)
+                        app = knownapks.getapp(apkname)
+                        if app:
+                            appid, _ = app
+                            if appid in apps:
+                                apps[appid] += 1
+                            else:
+                                apps[appid] = 1
+                            # Strip the '.apk' from apkname
+                            appVer = apkname[:-4]
+                            if appVer in appsVer:
+                                appsVer[appVer] += 1
+                            else:
+                                appsVer[appVer] = 1
                         else:
-                            apps[appid] = 1
-                        # Strip the '.apk' from apkname
-                        appVer = apkname[:-4]
-                        if appVer in appsVer:
-                            appsVer[appVer] += 1
-                        else:
-                            appsVer[appVer] = 1
-                    else:
-                        if not apkname in unknownapks:
-                            unknownapks.append(apkname)
+                            if not apkname in unknownapks:
+                                unknownapks.append(apkname)
 
         # Calculate and write stats for total downloads...
         lst = []
