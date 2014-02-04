@@ -124,8 +124,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             shutil.rmtree('builder')
         os.mkdir('builder')
 
-        p = FDroidPopen('vagrant --version', shell=True, stdout=subprocess.PIPE)
-        if p.stdout.startswith('Vagrant version 1.2'):
+        p = subprocess.Popen('vagrant --version', shell=True, stdout=subprocess.PIPE)
+        vver = p.communicate()[0]
+        if vver.startswith('Vagrant version 1.2'):
             with open('builder/Vagrantfile', 'w') as vf:
                 vf.write('Vagrant.configure("2") do |config|\n')
                 vf.write('config.vm.box = "buildserver"\n')
