@@ -60,6 +60,18 @@ app_defaults = {
 }
 
 
+# This defines the preferred order for the build items - as in the
+# manual, they're roughly in order of application.
+ordered_flags = [
+    'disable', 'commit', 'subdir', 'submodules', 'init',
+    'gradle', 'maven', 'output', 'oldsdkloc', 'target',
+    'update', 'encoding', 'forceversion', 'forcevercode', 'rm',
+    'fixtrans', 'fixapos', 'extlibs', 'srclibs', 'patch',
+    'prebuild', 'scanignore', 'scandelete', 'build', 'buildjni',
+    'preassemble', 'bindir', 'antcommand', 'novcheck'
+]
+
+
 # Designates a metadata field type and checks that it matches
 #
 # 'name'     - The long name of the field type
@@ -492,7 +504,11 @@ def parse_metadata(metafile):
             thisbuild['commit'] = parts[2]
         for p in parts[3:]:
             pk, pv = p.split('=', 1)
-            thisbuild[pk.strip()] = pv
+            pk = pk.strip()
+            if pk not in ordered_flags:
+                raise MetaDataException("Unrecognised build flag at {0} in {1}".
+                        format(p, metafile.name))
+            thisbuild[pk] = pv
 
         return thisbuild
 
@@ -707,15 +723,6 @@ def write_metadata(dest, app):
         writecomments('build:' + build['version'])
         mf.write("Build:%s,%s\n" % ( build['version'], build['vercode']))
 
-        # This defines the preferred order for the build items - as in the
-        # manual, they're roughly in order of application.
-        keyorder = ['disable', 'commit', 'subdir', 'submodules', 'init',
-                    'gradle', 'maven', 'output', 'oldsdkloc', 'target',
-                    'update', 'encoding', 'forceversion', 'forcevercode', 'rm',
-                    'fixtrans', 'fixapos', 'extlibs', 'srclibs', 'patch',
-                    'prebuild', 'scanignore', 'scandelete', 'build', 'buildjni',
-                    'preassemble', 'bindir', 'antcommand', 'novcheck']
-
         def write_builditem(key, value):
             if key in ['version', 'vercode', 'origlines', 'type']:
                 return
@@ -729,12 +736,9 @@ def write_metadata(dest, app):
             outline += '\n'
             mf.write(outline)
 
-        for key in keyorder:
+        for key in ordered_flags:
             if key in build:
                 write_builditem(key, build[key])
-        for key, value in build.iteritems():
-            if not key in keyorder:
-                write_builditem(key, value)
         mf.write('\n')
 
     if 'Maintainer Notes' in app:
