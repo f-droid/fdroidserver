@@ -46,9 +46,9 @@ while read line; do
 		name= autoname=
 		while read l; do
 			if [[ "$l" == "Auto Name:"* ]]; then
-				autoname=${l##*:}
+				autoname=${l#*:}
 			elif [[ "$l" == "Name:"* ]]; then
-				name=${l##*:}
+				name=${l#*:}
 			fi
 		done < "$file"
 
