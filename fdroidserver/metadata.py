@@ -586,6 +586,8 @@ def parse_metadata(metafile):
                 field, value = line.split(':',1)
             except ValueError:
                 raise MetaDataException("Invalid metadata in " + metafile.name + " at: " + line)
+            if field != field.strip() or value != value.strip():
+                raise MetaDataException("Extra spacing found in " + metafile.name + " at: " + line)
 
             # Translate obsolete fields...
             if field == 'Market Version':
