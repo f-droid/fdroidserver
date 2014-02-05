@@ -757,7 +757,7 @@ def write_metadata(dest, app):
     writefield('Update Check Mode')
     if app['Vercode Operation']:
         writefield('Vercode Operation')
-    if 'Update Check Data' in app:
+    if app['Update Check Data']:
         writefield('Update Check Data')
     if app['Current Version']:
         writefield('Current Version')
