@@ -28,6 +28,38 @@ class MetaDataException(Exception):
     def __str__(self):
         return repr(self.value)
 
+app_defaults = {
+    'Name': None,
+    'Provides': None,
+    'Auto Name': '',
+    'Categories': 'None',
+    'Description': [],
+    'Summary': '',
+    'License': 'Unknown',
+    'Web Site': '',
+    'Source Code': '',
+    'Issue Tracker': '',
+    'Donate': None,
+    'FlattrID': None,
+    'Bitcoin': None,
+    'Litecoin': None,
+    'Dogecoin': None,
+    'Disabled': None,
+    'AntiFeatures': None,
+    'Archive Policy': None,
+    'Update Check Mode': 'None',
+    'Update Check Data': None,
+    'Vercode Operation': None,
+    'Auto Update Mode': 'None',
+    'Current Version': '',
+    'Current Version Code': '0',
+    'Repo Type': '',
+    'Repo': '',
+    'Requires Root': False,
+    'No Source Since': ''
+}
+
+
 # Designates a metadata field type and checks that it matches
 #
 # 'name'     - The long name of the field type
@@ -404,6 +436,8 @@ def metafieldtype(name):
         return 'buildv2'
     if name == 'Use Built':
         return 'obsolete'
+    if name not in app_defaults:
+        return 'unknown'
     return 'string'
 
 # Parse metadata for a single application.
@@ -485,34 +519,7 @@ def parse_metadata(metafile):
     else:
         thisinfo['id'] = None
 
-    # Defaults for fields that come from metadata...
-    thisinfo['Name'] = None
-    thisinfo['Provides'] = None
-    thisinfo['Auto Name'] = ''
-    thisinfo['Categories'] = 'None'
-    thisinfo['Description'] = []
-    thisinfo['Summary'] = ''
-    thisinfo['License'] = 'Unknown'
-    thisinfo['Web Site'] = ''
-    thisinfo['Source Code'] = ''
-    thisinfo['Issue Tracker'] = ''
-    thisinfo['Donate'] = None
-    thisinfo['FlattrID'] = None
-    thisinfo['Bitcoin'] = None
-    thisinfo['Litecoin'] = None
-    thisinfo['Dogecoin'] = None
-    thisinfo['Disabled'] = None
-    thisinfo['AntiFeatures'] = None
-    thisinfo['Archive Policy'] = None
-    thisinfo['Update Check Mode'] = 'None'
-    thisinfo['Vercode Operation'] = None
-    thisinfo['Auto Update Mode'] = 'None'
-    thisinfo['Current Version'] = ''
-    thisinfo['Current Version Code'] = '0'
-    thisinfo['Repo Type'] = ''
-    thisinfo['Repo'] = ''
-    thisinfo['Requires Root'] = False
-    thisinfo['No Source Since'] = ''
+    thisinfo.update(app_defaults)
 
     # General defaults...
     thisinfo['builds'] = []
