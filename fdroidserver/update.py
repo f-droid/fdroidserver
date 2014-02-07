@@ -287,11 +287,12 @@ def resize_icon(iconpath, density):
         if any(length > size for length in im.size):
             oldsize = im.size
             im.thumbnail((size, size), Image.ANTIALIAS)
-            logging.info(iconpath, "was too large at", oldsize, "- new size is", im.size)
+            logging.info("%s was too large at %s - new size is %s" % (
+                iconpath, oldsize, im.size))
             im.save(iconpath, "PNG")
 
         else:
-            logging.info(iconpath, "is small enough:", im.size)
+            logging.debug("%s is small enough: %s" % im.size)
 
     except Exception,e:
         logging.info("WARNING: Failed resizing {0} - {1}".format(iconpath, e))
@@ -782,7 +783,7 @@ def make_index(apps, apks, repodir, archive, categories):
 
         if not options.quiet:
             logging.info("Creating signed index.")
-            logging.info("Key fingerprint: %s", repo_pubkey_fingerprint)
+            logging.info("Key fingerprint: %s" % repo_pubkey_fingerprint)
 
         #Create a jar of the index...
         p = FDroidPopen(['jar', 'cf', 'index.jar', 'index.xml'], cwd=repodir)
