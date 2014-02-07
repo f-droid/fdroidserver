@@ -619,7 +619,7 @@ def fetch_real_name(app_dir, flavour):
             if app_found:
                 matches = name_search(line)
                 if matches:
-                    return retrieve_string(xml_dir, matches.group(1))
+                    return retrieve_string(xml_dir, matches.group(1)).strip()
     return ''
 
 # Retrieve the version name
