@@ -295,7 +295,7 @@ def resize_icon(iconpath, density):
             logging.debug("%s is small enough: %s" % im.size)
 
     except Exception,e:
-        logging.info("WARNING: Failed resizing {0} - {1}".format(iconpath, e))
+        logging.warn("Failed resizing {0} - {1}".format(iconpath, e))
 
 def resize_all_icons(repodirs):
     """Resize all icons that exceed the max size
@@ -423,12 +423,12 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         thisinfo['features'].append(perm)
 
             if not 'sdkversion' in thisinfo:
-                logging.info("  WARNING: no SDK version information found")
+                logging.warn("no SDK version information found")
                 thisinfo['sdkversion'] = 0
 
             # Check for debuggable apks...
             if common.isApkDebuggable(apkfile, config):
-                logging.info("WARNING: {0} is debuggable... {1}".format(apkfile, line))
+                logging.warn("{0} is debuggable... {1}".format(apkfile, line))
 
             # Calculate the sha256...
             sha = hashlib.sha256()
@@ -476,7 +476,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                     thisinfo['icons'][density] = iconfilename 
 
                 except:
-                    logging.info("WARNING: Error retrieving icon file")
+                    logging.warn("Error retrieving icon file")
                     del thisinfo['icons'][density]
                     del thisinfo['icons_src'][density]
                     empty_densities.append(density)
@@ -501,7 +501,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                             empty_densities.remove(density)
                             break
                 except Exception,e:
-                    logging.info("WARNING: Failed reading {0} - {1}".format(iconpath, e))
+                    logging.warn("Failed reading {0} - {1}".format(iconpath, e))
 
             if thisinfo['icons']:
                 thisinfo['icon'] = iconfilename
@@ -526,7 +526,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 try:
                     im = Image.open(last_iconpath)
                 except:
-                    logging.info("WARNING: Invalid image file at %s" % last_iconpath)
+                    logging.warn("Invalid image file at %s" % last_iconpath)
                     continue
 
                 size = dpi_to_px(density)
@@ -951,17 +951,17 @@ def main():
         if added:
             app['added'] = added
         else:
-            logging.info("WARNING: Don't know when " + app['id'] + " was added")
+            logging.warn("Don't know when " + app['id'] + " was added")
         if lastupdated:
             app['lastupdated'] = lastupdated
         else:
-            logging.info("WARNING: Don't know when " + app['id'] + " was last updated")
+            logging.warn("Don't know when " + app['id'] + " was last updated")
 
         if bestver == 0:
             if app['Name'] is None:
                 app['Name'] = app['id']
             app['icon'] = None
-            logging.info("WARNING: Application " + app['id'] + " has no packages")
+            logging.warn("Application " + app['id'] + " has no packages")
         else:
             if app['Name'] is None:
                 app['Name'] = bestapk['name']
@@ -994,7 +994,7 @@ def main():
                 f.close()
                 logging.info("Generated skeleton metadata for " + apk['id'])
             else:
-                logging.info("WARNING: " + apk['apkname'] + " (" + apk['id'] + ") has no metadata")
+                logging.warn(apk['apkname'] + " (" + apk['id'] + ") has no metadata")
                 logging.info("       " + apk['name'] + " - " + apk['version'])
 
     if len(repodirs) > 1:
