@@ -58,8 +58,12 @@ def main():
 
     verbose = any(s in sys.argv for s in ['-v', '--verbose'])
 
-    logging.basicConfig(format='%(levelname)s: %(message)s',
-            level=logging.DEBUG if verbose else logging.INFO)
+    if verbose:
+        logging.basicConfig(format='%(levelname)s: %(message)s',
+                level=logging.DEBUG)
+    else:
+        logging.basicConfig(format='%(message)s',
+                level=logging.INFO)
 
     # Trick optparse into displaying the right usage when --help is used.
     sys.argv[0] += ' ' + command
