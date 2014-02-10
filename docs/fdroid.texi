@@ -463,9 +463,9 @@ The following sections describe the fields recognised within the file.
 @menu
 * Categories::
 * License::
+* Auto Name::
 * Name::
 * Provides::
-* Auto Name::
 * Web Site::
 * Source Code::
 * Issue Tracker::
