@@ -1168,6 +1168,11 @@ Despite these caveats, it is the often the favourite update check mode.
 It currently only works for git, hg, bzr and git-svn repositories. In the case
 of the latter, the repo URL must contain the path to the trunk and tags or
 else no tags will be found.
+
+Optionally append a regex pattern at the end - separated with a space - to
+only check the tags matching said pattern. Useful when apps tag non-release
+versions such as X.X-alpha, so you can filter them out with something like
+@code{.*[0-9]$} which requires tag names to end with a digit.
 @item
 @code{HTTP} - HTTP requests are used to determine the current version code and
 version name. This is controlled by the @code{Update Check Data} field, which
