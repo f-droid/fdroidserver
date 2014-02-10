@@ -675,7 +675,7 @@ class FDroid
 				}
 			}
 
-			if(($query_vars['fdfilter']===null || $query_vars['fdfilter']!='' && (stristr($appinfo['name'],$query_vars['fdfilter']) || stristr($appinfo['summary'],$query_vars['fdfilter']) || stristr($appinfo['description'],$query_vars['fdfilter']))) && (!isset($query_vars['fdcategory']) || $query_vars['fdcategory'] && $query_vars['fdcategory']==$appinfo['category'])) {
+			if(($query_vars['fdfilter']===null || $query_vars['fdfilter']!='' && (stristr($appinfo['name'],$query_vars['fdfilter']) || stristr($appinfo['id'],$query_vars['fdfilter']) || stristr($appinfo['summary'],$query_vars['fdfilter']) || stristr($appinfo['description'],$query_vars['fdfilter']))) && (!isset($query_vars['fdcategory']) || $query_vars['fdcategory'] && $query_vars['fdcategory']==$appinfo['category'])) {
 				if($skipped<($query_vars['fdpage']-1)*$outputter->perpage) {
 					$skipped++;
 				} else if($got<$outputter->perpage) {
