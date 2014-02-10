@@ -922,7 +922,7 @@ source library name and rev is the revision or tag in source control to use.
 For ant projects, you can optionally append a number with a colon at the
 beginning of a srclib item to automatically place it in project.properties as
 a library under the specified number. For example, if you specify
-@code{1:somelib@1.0}, f-droid will automatically do the equivalent of the
+@code{1:somelib@@1.0}, f-droid will automatically do the equivalent of the
 legacy practice @code{prebuild=echo "android.library.reference.1=$$somelib$$"
 >> project.properties}.
 
