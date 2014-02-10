@@ -1102,6 +1102,19 @@ user so desires. Whether root is required or not, it is good to give
 a paragraph in the description to the conditions on which root may be
 asked for and the reason for it.
 
+@node Archive Policy
+@section Archive Policy
+
+@cindex Archive Policy
+
+This determines the policy for moving old versions of an app to the archive
+repo, if one is configured. The configuration sets a default maximum number
+of versions kept in the main repo, after which older ones are moved to the
+archive. This app-specific policy setting can override that.
+
+Currently the only supported format is "n versions", where n is the number
+of versions to keep.
+
 @node Update Check Mode
 @section Update Check Mode
 
@@ -1210,19 +1223,6 @@ whose vercodes don't always have trailing zeros. For example, with
 @code{Vercode Operation} set at something like @code{%c*10 + 4}, we will be
 able to track updates and build up to four different versions of every
 upstream version.
-
-@node Archive Policy
-@section Archive Policy
-
-@cindex Archive Policy
-
-This determines the policy for moving old versions of an app to the archive
-repo, if one is configured. The configuration sets a default maximum number
-of versions kept in the main repo, after which older ones are moved to the
-archive. This app-specific policy setting can override that.
-
-Currently the only supported format is "n versions", where n is the number
-of versions to keep.
 
 @node Auto Update Mode
 @section Auto Update Mode
