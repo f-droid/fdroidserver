@@ -1202,13 +1202,6 @@ simply '.' which says to use the same document returned for the version code
 again, rather than retrieving a different one.
 @end itemize
 
-@node Update Check Data
-@section Update Check Data
-
-@cindex Update Check Data
-
-Used in conjunction with @code{Update Check Mode} for certain modes.
-
 @node Vercode Operation
 @section Vercode Operation
 
@@ -1223,6 +1216,13 @@ whose vercodes don't always have trailing zeros. For example, with
 @code{Vercode Operation} set at something like @code{%c*10 + 4}, we will be
 able to track updates and build up to four different versions of every
 upstream version.
+
+@node Update Check Data
+@section Update Check Data
+
+@cindex Update Check Data
+
+Used in conjunction with @code{Update Check Mode} for certain modes.
 
 @node Auto Update Mode
 @section Auto Update Mode
