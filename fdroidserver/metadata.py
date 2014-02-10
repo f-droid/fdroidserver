@@ -175,7 +175,7 @@ valuetypes = {
         [ ]),
 
     'updatecheckmodes' : FieldType("Update Check Mode",
-        r"^(Tags|RepoManifest|RepoManifest/.+|RepoTrunk|HTTP|Static|None)$", None,
+        r"^(Tags|Tags .+|RepoManifest|RepoManifest/.+|RepoTrunk|HTTP|Static|None)$", None,
         [ "Update Check Mode" ],
         [ ])
 }

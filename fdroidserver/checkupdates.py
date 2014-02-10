@@ -85,7 +85,7 @@ def check_http(app):
 # caution, because it's inappropriate for many projects.
 # Returns (None, "a message") if this didn't work, or (version, vercode) for
 # the details of the current version.
-def check_tags(app):
+def check_tags(app, pattern):
 
     try:
 
@@ -98,6 +98,8 @@ def check_tags(app):
 
         if repotype not in ('git', 'git-svn', 'hg', 'bzr'):
             return (None, 'Tags update mode only works for git, hg, bzr and git-svn repositories currently', None)
+        if pattern and repotype not in ('git'):
+            return (None, 'Tags with pattern update mode only works for git repositories currently', None)
 
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
@@ -115,7 +117,9 @@ def check_tags(app):
         hver = None
         hcode = "0"
 
-        for tag in vcs.gettags():
+        tags = vcs.gettags_pattern(pattern) if pattern else vcs.gettags()
+
+        for tag in tags:
             logging.info("Check tag: '{0}'".format(tag))
             vcs.gotorevision(tag)
 
@@ -346,8 +350,9 @@ def main():
         msg = None
         vercode = None
         mode = app['Update Check Mode']
-        if mode == 'Tags':
-            (version, vercode, tag) = check_tags(app)
+        if mode.startswith('Tags'):
+            pattern = mode[5:] if len(mode) > 4 else None
+            (version, vercode, tag) = check_tags(app, pattern)
         elif mode == 'RepoManifest':
             (version, vercode) = check_repomanifest(app)
         elif mode.startswith('RepoManifest/'):
