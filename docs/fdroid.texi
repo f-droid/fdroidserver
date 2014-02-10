@@ -914,10 +914,17 @@ Specifies a list of external libraries (jar files) from the
 @code{build/extlib} library, which will be placed in the @code{libs} directory
 of the project. Separate items with semicolons.
 
-@item srclibs=a@@r;b@@r1;
+@item srclibs=[n:]a@@r;[n:]b@@r1;
 Specifies a list of source libraries or Android projects. Separate items with
 semicolons, and each item is of the form name@@rev where name is the predefined
 source library name and rev is the revision or tag in source control to use.
+
+For ant projects, you can optionally append a number with a colon at the
+beginning of a srclib item to automatically place it in project.properties as
+a library under the specified number. For example, if you specify
+@code{1:somelib@1.0}, f-droid will automatically do the equivalent of the
+legacy practice @code{prebuild=echo "android.library.reference.1=$$somelib$$"
+>> project.properties}.
 
 Each srclib has a metadata file under srclibs/ in the repository directory,
 and the source code is stored in build/srclib/.
@@ -1159,8 +1166,8 @@ correct value if the directory containing the AndroidManifest.xml has moved.
 Despite these caveats, it is the often the favourite update check mode.
 
 It currently only works for git, hg, bzr and git-svn repositories. In the case
-of the latter, the repo URL must encode the path to the trunk and tags or else
-no tags will be found.
+of the latter, the repo URL must contain the path to the trunk and tags or
+else no tags will be found.
 @item
 @code{HTTP} - HTTP requests are used to determine the current version code and
 version name. This is controlled by the @code{Update Check Data} field, which
