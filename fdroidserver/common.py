@@ -633,11 +633,11 @@ def version_name(original, app_dir, flavour):
             return string
     return original
 
-def ant_subprojects(root_dir):
-    subprojects = []
+def get_library_references(root_dir):
+    libraries = []
     proppath = os.path.join(root_dir, 'project.properties')
     if not os.path.isfile(proppath):
-        return subprojects
+        return libraries
     with open(proppath) as f:
         for line in f.readlines():
             if not line.startswith('android.library.reference.'):
@@ -647,7 +647,17 @@ def ant_subprojects(root_dir):
             if not os.path.isdir(relpath):
                 continue
             logging.info("Found subproject at %s" % path)
-            subprojects.append(path)
+            libraries.append(path)
+    return libraries
+
+def ant_subprojects(root_dir):
+    subprojects = get_library_references(root_dir)
+    for subpath in subprojects:
+        subrelpath = os.path.join(root_dir, subpath)
+        for p in get_library_references(subrelpath):
+            relp = os.path.normpath(os.path.join(subpath,p))
+            if relp not in subprojects:
+                subprojects.insert(0, relp)
     return subprojects
 
 # Extract some information from the AndroidManifest.xml at the given path.
@@ -921,7 +931,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             parms += ['-t', build['target']]
         update_dirs = None
         if updatemode == 'auto':
-            update_dirs = ['.'] + ant_subprojects(root_dir)
+            update_dirs = ant_subprojects(root_dir) + ['.']
         else:
             update_dirs = [d.strip() for d in updatemode.split(';')]
         # Force build.xml update if necessary
@@ -935,8 +945,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
         for d in update_dirs:
             subdir = os.path.join(root_dir, d)
-            # Clean update dirs via ant
-            p = FDroidPopen(['ant', 'clean'], cwd=subdir)
             dparms = parms + ['-p', d]
             if d == '.':
                 logging.info("Updating main project")
@@ -949,6 +957,12 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             if p.returncode != 0 or p.stdout.startswith("Error: "):
                 raise BuildException("Failed to update project at %s" % d,
                         p.stdout)
+            # Clean update dirs via ant
+            if d == '.':
+                logging.info("Cleaning main project")
+            else:
+                logging.info("Cleaning subproject %s" % d)
+            p = FDroidPopen(['ant', 'clean'], cwd=subdir)
 
     # Update the local.properties file
     localprops = [ os.path.join(build_dir, 'local.properties') ]
