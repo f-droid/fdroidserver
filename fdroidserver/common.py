@@ -1385,6 +1385,8 @@ def FDroidPopen(commands, cwd=None, output=True):
     :returns: A PopenResult.
     """
 
+    cwd = os.path.normpath(cwd)
+
     if output:
         if cwd:
             logging.info("Directory: %s" % cwd)
