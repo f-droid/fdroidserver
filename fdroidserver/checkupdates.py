@@ -98,8 +98,6 @@ def check_tags(app, pattern):
 
         if repotype not in ('git', 'git-svn', 'hg', 'bzr'):
             return (None, 'Tags update mode only works for git, hg, bzr and git-svn repositories currently', None)
-        if pattern and repotype not in ('git'):
-            return (None, 'Tags with pattern update mode only works for git repositories currently', None)
 
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
@@ -117,7 +115,11 @@ def check_tags(app, pattern):
         hver = None
         hcode = "0"
 
-        tags = vcs.gettags_pattern(pattern) if pattern else vcs.gettags()
+        tags = vcs.gettags()
+        if pattern:
+            print pattern
+            pat = re.compile(pattern)
+            tags = [tag for tag in tags if pat.match(tag)]
 
         for tag in tags:
             logging.info("Check tag: '{0}'".format(tag))

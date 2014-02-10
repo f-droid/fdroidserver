@@ -275,10 +275,6 @@ class vcs:
     def gettags(self):
         raise VCSException('gettags not supported for this vcs type')
 
-    # Get a list of all known tags
-    def gettags_pattern(self, pattern):
-        raise VCSException('gettags with pattern not supported for this vcs type')
-
     # Get current commit reference (hash, revision, etc)
     def getref(self):
         raise VCSException('getref not supported for this vcs type')
@@ -354,11 +350,6 @@ class vcs_git(vcs):
     def gettags(self):
         self.checkrepo()
         p = FDroidPopen(['git', 'tag'], cwd=self.local)
-        return p.stdout.splitlines()
-
-    def gettags_pattern(self, pattern):
-        self.checkrepo()
-        p = FDroidPopen(['git', 'tag', '-l', pattern], cwd=self.local)
         return p.stdout.splitlines()
 
 
