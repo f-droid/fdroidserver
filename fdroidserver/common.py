@@ -175,9 +175,9 @@ def getsrcname(app, build):
 
 def getappname(app):
     if app['Name']:
-        return '%s (%s)' % (app['Name'], app['id'])
+        return app['Name']
     if app['Auto Name']:
-        return '%s (%s)' % (app['Auto Name'], app['id'])
+        return app['Auto Name']
     return app['id']
 
 def getcvname(app):

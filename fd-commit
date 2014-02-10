@@ -53,9 +53,9 @@ while read line; do
 		done < "$file"
 
 		if [ -n "$name" ]; then
-			fullname="$name ($id)"
+			fullname="$name"
 		elif [ -n "$autoname" ]; then
-			fullname="$autoname ($id)"
+			fullname="$autoname"
 		else
 			fullname="$id"
 		fi
