@@ -970,7 +970,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             props += "sdk-location=%s\n" % sdkloc
         else:
             props += "sdk.dir=%s\n" % config['sdk_path']
-            props += "sdk-location=%s\n" % ['sdk_path']
+            props += "sdk-location=%s\n" % config['sdk_path']
         if 'ndk_path' in config:
             # Add ndk location
             props += "ndk.dir=%s\n" % config['ndk_path']
