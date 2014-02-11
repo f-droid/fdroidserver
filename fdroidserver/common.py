@@ -756,7 +756,7 @@ class VCSException(Exception):
 # Returns the path to it. Normally this is the path to be used when referencing
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
-def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, target=None,
+def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
         basepath=False, raw=False, prepare=True, preponly=False, autoupdate=True):
 
     number = None
@@ -826,21 +826,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None, target=None,
                 raise BuildException("Error running prepare command for srclib %s"
                         % name, p.stdout)
 
-        if srclib["Update Project"] == "Yes" and not (autoupdate and number):
-            logging.info("Updating srclib %s at path %s" % (name, libdir))
-            cmd = [os.path.join(config['sdk_path'], 'tools', 'android'),
-                'update', 'project', '-p', libdir]
-            if target:
-                cmd += ['-t', target]
-            p = FDroidPopen(cmd)
-            # Check to see whether an error was returned without a proper exit
-            # code (this is the case for the 'no target set or target invalid'
-            # error)
-            if p.returncode != 0 or p.stdout.startswith("Error: "):
-                raise BuildException("Failed to update srclib project {0}"
-                        .format(name), p.stdout)
-
-            remove_signing_keys(libdir)
+        remove_signing_keys(libdir)
 
     if basepath:
         libdir = sdir
@@ -908,11 +894,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     srclibpaths = []
     updatemode = build.get('update', 'auto')
     if 'srclibs' in build:
-        target=build['target'] if 'target' in build else None
         logging.info("Collecting source libraries")
         for lib in build['srclibs'].split(';'):
             srclibpaths.append(getsrclib(lib, srclib_dir, srclibpaths,
-                target=target, preponly=onserver, autoupdate=(updatemode=='auto')))
+                preponly=onserver, autoupdate=(updatemode=='auto')))
 
     for name, number, libpath in srclibpaths:
         place_srclib(root_dir, int(number) if number else None, libpath)
