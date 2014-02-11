@@ -660,6 +660,17 @@ def ant_subprojects(root_dir):
                 subprojects.insert(0, relp)
     return subprojects
 
+def remove_debuggable_flags(root_dir):
+    # Remove forced debuggable flags
+    logging.info("Removing debuggable flags")
+    for root, dirs, files in os.walk(root_dir):
+        if 'AndroidManifest.xml' in files:
+            path = os.path.join(root, 'AndroidManifest.xml')
+            p = FDroidPopen(['sed','-i',
+                's/android:debuggable="[^"]*"//g', path])
+            if p.returncode != 0:
+                raise BuildException("Failed to remove debuggable flags of %s" % path)
+
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
 # All values returned are strings.
@@ -816,6 +827,9 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
             place_srclib(libdir, n, s_tuple[2])
             n+=1
 
+    remove_signing_keys(sdir)
+    remove_debuggable_flags(sdir)
+
     if prepare:
 
         if srclib["Prepare"]:
@@ -825,8 +839,6 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
             if p.returncode != 0:
                 raise BuildException("Error running prepare command for srclib %s"
                         % name, p.stdout)
-
-        remove_signing_keys(libdir)
 
     if basepath:
         libdir = sdir
@@ -957,13 +969,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                     'build.gradle'], cwd=gradle_dir)
 
     # Remove forced debuggable flags
-    logging.info("Removing debuggable flags")
-    for path in manifest_paths(root_dir, flavour):
-        if not os.path.isfile(path):
-            continue
-        if subprocess.call(['sed','-i',
-            's/android:debuggable="[^"]*"//g', path]) != 0:
-            raise BuildException("Failed to remove debuggable flags")
+    remove_debuggable_flags(root_dir)
 
     # Insert version code and number into the manifest if necessary
     if build['forceversion']:
