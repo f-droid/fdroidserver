@@ -907,50 +907,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if basesrclib:
         srclibpaths.append(basesrclib)
 
-    # Generate (or update) the ant build file, build.xml...
-    if updatemode != 'no' and build['type'] == 'ant':
-        parms = [os.path.join(config['sdk_path'], 'tools', 'android'), 'update']
-        lparms = parms + ['lib-project']
-        parms = parms + ['project']
-
-        if 'target' in build and build['target']:
-            parms += ['-t', build['target']]
-            lparms += ['-t', build['target']]
-        if updatemode == 'auto':
-            update_dirs = ant_subprojects(root_dir) + ['.']
-        else:
-            update_dirs = [d.strip() for d in updatemode.split(';')]
-
-        # Force build.xml update if necessary
-        if updatemode == 'force' or 'target' in build:
-            if updatemode == 'force':
-                update_dirs = ['.']
-            buildxml = os.path.join(root_dir, 'build.xml')
-            if os.path.exists(buildxml):
-                logging.info('Force-removing old build.xml')
-                os.remove(buildxml)
-
-        for d in update_dirs:
-            subdir = os.path.join(root_dir, d)
-            if d == '.':
-                logging.info("Updating main project")
-                cmd = parms + ['-p', d]
-            else:
-                logging.info("Updating subproject %s" % d)
-                cmd = lparms + ['-p', d]
-            p = FDroidPopen(cmd, cwd=root_dir)
-            # Check to see whether an error was returned without a proper exit
-            # code (this is the case for the 'no target set or target invalid'
-            # error)
-            if p.returncode != 0 or p.stdout.startswith("Error: "):
-                raise BuildException("Failed to update project at %s" % d, p.stdout)
-            # Clean update dirs via ant
-            if d == '.':
-                logging.info("Cleaning main project")
-            else:
-                logging.info("Cleaning subproject %s" % d)
-            p = FDroidPopen(['ant', 'clean'], cwd=subdir)
-
     # Update the local.properties file
     localprops = [ os.path.join(build_dir, 'local.properties') ]
     if 'subdir' in build:
@@ -1143,6 +1099,50 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         if p.returncode != 0:
             raise BuildException("Error running prebuild command for %s:%s" %
                     (app['id'], build['version']), p.stdout)
+
+    # Generate (or update) the ant build file, build.xml...
+    if updatemode != 'no' and build['type'] == 'ant':
+        parms = [os.path.join(config['sdk_path'], 'tools', 'android'), 'update']
+        lparms = parms + ['lib-project']
+        parms = parms + ['project']
+
+        if 'target' in build and build['target']:
+            parms += ['-t', build['target']]
+            lparms += ['-t', build['target']]
+        if updatemode == 'auto':
+            update_dirs = ant_subprojects(root_dir) + ['.']
+        else:
+            update_dirs = [d.strip() for d in updatemode.split(';')]
+
+        # Force build.xml update if necessary
+        if updatemode == 'force' or 'target' in build:
+            if updatemode == 'force':
+                update_dirs = ['.']
+            buildxml = os.path.join(root_dir, 'build.xml')
+            if os.path.exists(buildxml):
+                logging.info('Force-removing old build.xml')
+                os.remove(buildxml)
+
+        for d in update_dirs:
+            subdir = os.path.join(root_dir, d)
+            if d == '.':
+                logging.info("Updating main project")
+                cmd = parms + ['-p', d]
+            else:
+                logging.info("Updating subproject %s" % d)
+                cmd = lparms + ['-p', d]
+            p = FDroidPopen(cmd, cwd=root_dir)
+            # Check to see whether an error was returned without a proper exit
+            # code (this is the case for the 'no target set or target invalid'
+            # error)
+            if p.returncode != 0 or p.stdout.startswith("Error: "):
+                raise BuildException("Failed to update project at %s" % d, p.stdout)
+            # Clean update dirs via ant
+            if d == '.':
+                logging.info("Cleaning main project")
+            else:
+                logging.info("Cleaning subproject %s" % d)
+            p = FDroidPopen(['ant', 'clean'], cwd=subdir)
 
     return (root_dir, srclibpaths)
 
