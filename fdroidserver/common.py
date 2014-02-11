@@ -757,7 +757,7 @@ class VCSException(Exception):
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
 def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
-        basepath=False, raw=False, prepare=True, preponly=False, autoupdate=True):
+        basepath=False, raw=False, prepare=True, preponly=False):
 
     number = None
     subdir = None
@@ -892,12 +892,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Get required source libraries
     srclibpaths = []
-    updatemode = build.get('update', 'auto')
     if 'srclibs' in build:
         logging.info("Collecting source libraries")
         for lib in build['srclibs'].split(';'):
             srclibpaths.append(getsrclib(lib, srclib_dir, srclibpaths,
-                preponly=onserver, autoupdate=(updatemode=='auto')))
+                preponly=onserver))
 
     for name, number, libpath in srclibpaths:
         place_srclib(root_dir, int(number) if number else None, libpath)
@@ -1100,6 +1099,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             raise BuildException("Error running prebuild command for %s:%s" %
                     (app['id'], build['version']), p.stdout)
 
+    updatemode = build.get('update', 'auto')
     # Generate (or update) the ant build file, build.xml...
     if updatemode != 'no' and build['type'] == 'ant':
         parms = [os.path.join(config['sdk_path'], 'tools', 'android'), 'update']
@@ -1113,15 +1113,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             update_dirs = ant_subprojects(root_dir) + ['.']
         else:
             update_dirs = [d.strip() for d in updatemode.split(';')]
-
-        # Force build.xml update if necessary
-        if updatemode == 'force' or 'target' in build:
-            if updatemode == 'force':
-                update_dirs = ['.']
-            buildxml = os.path.join(root_dir, 'build.xml')
-            if os.path.exists(buildxml):
-                logging.info('Force-removing old build.xml')
-                os.remove(buildxml)
 
         for d in update_dirs:
             subdir = os.path.join(root_dir, d)
