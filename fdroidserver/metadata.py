@@ -386,7 +386,9 @@ def parse_srclib(metafile, **kw):
     if metafile is None:
         return thisinfo
 
+    n = 0
     for line in metafile:
+        n += 1
         line = line.rstrip('\r\n')
         if not line or line.startswith("#"):
             continue
@@ -394,7 +396,7 @@ def parse_srclib(metafile, **kw):
         try:
             field, value = line.split(':',1)
         except ValueError:
-            raise MetaDataException("Invalid metadata in " + metafile.name + " at: " + line)
+            raise MetaDataException("Invalid metadata in %s:%d" % (line, n))
 
         if field == "Subdir":
             thisinfo[field] = value.split(',')
@@ -414,10 +416,7 @@ def read_metadata(xref=True, package=None, store=True):
 
     for metafile in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
         if package is None or metafile == os.path.join('metadata', package + '.txt'):
-            try:
-                appinfo = parse_metadata(metafile)
-            except Exception, e:
-                raise MetaDataException("Problem reading metadata file %s: - %s" % (metafile, str(e)))
+            appinfo = parse_metadata(metafile)
             check_metadata(appinfo)
             apps.append(appinfo)
 
@@ -549,13 +548,16 @@ def parse_metadata(metafile):
     curcomments = []
     curbuild = None
 
+    c = 0
     for line in metafile:
+        c += 1
+        linedesc = "%s:%d" % (metafile.name, c)
         line = line.rstrip('\r\n')
         if mode == 3:
             if not any(line.startswith(s) for s in (' ', '\t')):
                 if 'commit' not in curbuild and 'disable' not in curbuild:
                     raise MetaDataException("No commit specified for {0} in {1}".format(
-                        curbuild['version'], metafile.name))
+                        curbuild['version'], linedesc))
                 thisinfo['builds'].append(curbuild)
                 add_comments('build:' + curbuild['version'])
                 mode = 0
@@ -568,11 +570,11 @@ def parse_metadata(metafile):
                     bv = bl.split('=', 1)
                     if len(bv) != 2:
                         raise MetaDataException("Invalid build flag at {0} in {1}".
-                                format(buildlines[0], metafile.name))
+                                format(buildlines[0], linedesc))
                     name, val = bv
                     if name in curbuild:
                         raise MetaDataException("Duplicate definition on {0} in version {1} of {2}".
-                                format(name, curbuild['version'], metafile.name))
+                                format(name, curbuild['version'], linedesc))
                     curbuild[name] = val.lstrip()
                     buildlines = []
 
@@ -585,9 +587,9 @@ def parse_metadata(metafile):
             try:
                 field, value = line.split(':',1)
             except ValueError:
-                raise MetaDataException("Invalid metadata in " + metafile.name + " at: " + line)
+                raise MetaDataException("Invalid metadata in "+linedesc)
             if field != field.strip() or value != value.strip():
-                raise MetaDataException("Extra spacing found in " + metafile.name + " at: " + line)
+                raise MetaDataException("Extra spacing found in "+linedesc)
 
             # Translate obsolete fields...
             if field == 'Market Version':
@@ -602,7 +604,7 @@ def parse_metadata(metafile):
                 mode = 1
                 thisinfo[field] = []
                 if value:
-                    raise MetaDataException("Unexpected text on same line as " + field + " in " + metafile.name)
+                    raise MetaDataException("Unexpected text on same line as " + field + " in " + linedesc)
             elif fieldtype == 'string':
                 thisinfo[field] = value
             elif fieldtype == 'build':
@@ -617,7 +619,7 @@ def parse_metadata(metafile):
                 vv = value.split(',')
                 if len(vv) != 2:
                     raise MetaDataException('Build should have comma-separated version and vercode, not "{0}", in {1}'.
-                        format(value, metafile.name))
+                        format(value, linedesc))
                 curbuild['version'] = vv[0]
                 curbuild['vercode'] = vv[1]
                 buildlines = []
@@ -625,7 +627,7 @@ def parse_metadata(metafile):
             elif fieldtype == 'obsolete':
                 pass        # Just throw it away!
             else:
-                raise MetaDataException("Unrecognised field type for " + field + " in " + metafile.name)
+                raise MetaDataException("Unrecognised field type for " + field + " in " + linedesc)
         elif mode == 1:     # Multiline field
             if line == '.':
                 mode = 0
