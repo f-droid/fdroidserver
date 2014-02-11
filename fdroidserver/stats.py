@@ -194,7 +194,11 @@ def main():
     logging.info("Processing update check modes...")
     ucms = {}
     for app in metaapps:
-        checkmode = app['Update Check Mode'].split('/')[0]
+        checkmode = app['Update Check Mode']
+        if checkmode.startswith('RepoManifest/'):
+            checkmode = checkmode[:12]
+        if checkmode.startswith('Tags '):
+            checkmode = checkmode[:4]
         if checkmode in ucms:
             ucms[checkmode] += 1;
         else:
