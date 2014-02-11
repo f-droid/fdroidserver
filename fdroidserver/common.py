@@ -922,18 +922,20 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if basesrclib:
         srclibpaths.append(basesrclib)
 
-
     # Generate (or update) the ant build file, build.xml...
     if updatemode != 'no' and build['type'] == 'ant':
-        parms = [os.path.join(config['sdk_path'], 'tools', 'android'),
-                'update', 'project']
+        parms = [os.path.join(config['sdk_path'], 'tools', 'android'), 'update']
+        lparms = parms + ['lib-project']
+        parms = parms + ['project']
+
         if 'target' in build and build['target']:
             parms += ['-t', build['target']]
-        update_dirs = None
+            lparms += ['-t', build['target']]
         if updatemode == 'auto':
             update_dirs = ant_subprojects(root_dir) + ['.']
         else:
             update_dirs = [d.strip() for d in updatemode.split(';')]
+
         # Force build.xml update if necessary
         if updatemode == 'force' or 'target' in build:
             if updatemode == 'force':
@@ -945,18 +947,18 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
         for d in update_dirs:
             subdir = os.path.join(root_dir, d)
-            dparms = parms + ['-p', d]
             if d == '.':
                 logging.info("Updating main project")
+                cmd = parms + ['-p', d]
             else:
                 logging.info("Updating subproject %s" % d)
-            p = FDroidPopen(dparms, cwd=root_dir)
+                cmd = lparms + ['-p', d]
+            p = FDroidPopen(cmd, cwd=root_dir)
             # Check to see whether an error was returned without a proper exit
             # code (this is the case for the 'no target set or target invalid'
             # error)
             if p.returncode != 0 or p.stdout.startswith("Error: "):
-                raise BuildException("Failed to update project at %s" % d,
-                        p.stdout)
+                raise BuildException("Failed to update project at %s" % d, p.stdout)
             # Clean update dirs via ant
             if d == '.':
                 logging.info("Cleaning main project")
