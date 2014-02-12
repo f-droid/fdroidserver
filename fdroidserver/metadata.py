@@ -381,7 +381,6 @@ def parse_srclib(metafile, **kw):
     thisinfo['Subdir'] = None
     thisinfo['Prepare'] = None
     thisinfo['Srclibs'] = None
-    thisinfo['Update Project'] = None
 
     if metafile is None:
         return thisinfo
@@ -451,6 +450,13 @@ def metafieldtype(name):
         return 'unknown'
     return 'string'
 
+def flagtype(name):
+    if name in ['extlibs', 'srclibs', 'patch', 'rm', 'scanignore', 'scandelete']:
+        return 'list'
+    if name in ['init', 'prebuild', 'build']:
+        return 'script'
+    return 'string'
+
 # Parse metadata for a single application.
 #
 #  'metafile' - the filename to read. The package id for the application comes
@@ -507,7 +513,17 @@ def parse_metadata(metafile):
             if pk not in ordered_flags:
                 raise MetaDataException("Unrecognised build flag at {0} in {1}".
                         format(p, metafile.name))
-            thisbuild[pk] = pv
+            t = flagtype(pk)
+            if t == 'list':
+                # Port legacy ';' separators
+                thisbuild[pk] = pv.replace(';',',').split(',')
+            elif t == 'string':
+                thisbuild[pk] = pv
+            elif t == 'script':
+                thisbuild[pk] = pv
+            else:
+                raise MetaDataException("Unrecognised build flag type '%s' at %s in %s" % (
+                        t, p, metafile.name))
 
         return thisbuild
 
@@ -732,9 +748,15 @@ def write_metadata(dest, app):
                 if not value:
                     return
                 value = 'yes'
+            t = flagtype(key)
             logging.debug("...writing {0} : {1}".format(key, value))
             outline = '    %s=' % key
-            outline += '&& \\\n        '.join([s.lstrip() for s in value.split('&& ')])
+            if t == 'string':
+                outline += value
+            elif t == 'script':
+                outline += '&& \\\n        '.join([s.lstrip() for s in value.split('&& ')])
+            elif t == 'list':
+                outline += ','.join(value) if type(value) == list else value
             outline += '\n'
             mf.write(outline)
 

@@ -815,7 +815,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
 
     if srclib["Srclibs"]:
         n=1
-        for lib in srclib["Srclibs"].split(','):
+        for lib in srclib["Srclibs"]:
             s_tuple = None
             for t in srclibpaths:
                 if t[0] == lib:
@@ -894,7 +894,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Apply patches if any
     if 'patch' in build:
-        for patch in build['patch'].split(';'):
+        for patch in build['patch']:
             patch = patch.strip()
             logging.info("Applying " + patch)
             patch_path = os.path.join('metadata', app['id'], patch)
@@ -906,7 +906,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     srclibpaths = []
     if 'srclibs' in build:
         logging.info("Collecting source libraries")
-        for lib in build['srclibs'].split(';'):
+        for lib in build['srclibs']:
             srclibpaths.append(getsrclib(lib, srclib_dir, srclibpaths,
                 preponly=onserver))
 
@@ -1005,7 +1005,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Delete unwanted files
     if 'rm' in build:
-        for part in build['rm'].split(';'):
+        for part in build['rm']:
             dest = os.path.join(build_dir, part.strip())
             rdest = os.path.abspath(dest)
             logging.info("Removing {0}".format(rdest))
@@ -1030,7 +1030,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         libsdir = os.path.join(root_dir, 'libs')
         if not os.path.exists(libsdir):
             os.mkdir(libsdir)
-        for lib in build['extlibs'].split(';'):
+        for lib in build['extlibs']:
             lib = lib.strip()
             logging.info("...installing extlib {0}".format(lib))
             libf = os.path.basename(lib)
@@ -1119,7 +1119,7 @@ def scan_source(build_dir, root_dir, thisbuild):
         paths = []
         if field not in thisbuild:
             return paths
-        for p in thisbuild[field].split(';'):
+        for p in thisbuild[field]:
             p = p.strip()
             if p == '.':
                 p = '/'
