@@ -1022,56 +1022,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             else:
                 logging.info("...but it didn't exist")
 
-    # Fix apostrophes translation files if necessary
-    if build['fixapos']:
-        for root, dirs, files in os.walk(os.path.join(root_dir, 'res')):
-            for filename in files:
-                if has_extension(filename, 'xml'):
-                    if subprocess.call(['sed','-i','s@' +
-                        r"\([^\\]\)'@\1\\'" +
-                        '@g',
-                        os.path.join(root, filename)]) != 0:
-                        raise BuildException("Failed to amend " + filename)
-
-    # Fix translation files if necessary
-    if build['fixtrans']:
-        for root, dirs, files in os.walk(os.path.join(root_dir, 'res')):
-            for filename in files:
-                if has_extension(filename, 'xml'):
-                    f = open(os.path.join(root, filename))
-                    changed = False
-                    outlines = []
-                    for line in f:
-                        num = 1
-                        index = 0
-                        oldline = line
-                        while True:
-                            index = line.find("%", index)
-                            if index == -1:
-                                break
-                            next = line[index+1:index+2]
-                            if next == "s" or next == "d":
-                                line = (line[:index+1] +
-                                        str(num) + "$" +
-                                        line[index+1:])
-                                num += 1
-                                index += 3
-                            else:
-                                index += 1
-                        # We only want to insert the positional arguments
-                        # when there is more than one argument
-                        if oldline != line:
-                            if num > 2:
-                                changed = True
-                            else:
-                                line = oldline
-                        outlines.append(line)
-                    f.close()
-                    if changed:
-                        f = open(os.path.join(root, filename), 'w')
-                        f.writelines(outlines)
-                        f.close()
-
     remove_signing_keys(build_dir)
 
     # Add required external libraries

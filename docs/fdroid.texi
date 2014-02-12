@@ -855,11 +855,7 @@ exist, but not a good idea if it's heavily customised.
 @item update=xxx
 By default, 'android update project' is used to generate or update the
 project and all its referenced projects. Specifying update=no bypasses that.
-
-Specifiying update=force forces rebuilding of the build.xml file at the
-same time - this is frequently needed with r14 of the Android platform
-tools. Be aware of any customisations in build.xml when using
-update=force.
+Note that this only matters in ant build recipes.
 
 Default value is '@code{auto}', which uses the paths used in the
 project.properties file to find out what project paths to update.
@@ -898,17 +894,6 @@ AndroidManifest.xml.
 Multiple files/directories can be specified by separating them with ';'.
 Directories will be recursively deleted.
 
-@item fixtrans=yes
-Modifies any instances of string resources that use multiple
-formatting arguments, but don't use positional notation. For example,
-"Hello %s, %d" becomes "Hello %1$s, %2$d". Newer versions of the
-Android platform tools enforce this sensible standard. If you get
-error messages relating to that, you need to enable this.
-
-@item fixapos=yes
-Like fixtrans, but deals with an even older issue relating to
-'unescaped apostrophes' in translation strings.
-
 @item extlibs=a;b;c
 Specifies a list of external libraries (jar files) from the
 @code{build/extlib} library, which will be placed in the @code{libs} directory
@@ -937,23 +922,22 @@ the init/prebuild/build command to substitute the relative path to the library
 directory, but it could need tweaking if you've changed into another directory.
 
 @item patch=x
-Apply patch(es). 'x' names one (or more - comma-seperated)
-files within a directory below the metadata, with the same
-name as the metadata file but without the extension. Each of
-these patches is applied to the code in turn.
+Apply patch(es). 'x' names one (or more - comma-seperated) files within a
+directory below the metadata, with the same name as the metadata file but
+without the extension. Each of these patches is applied to the code in turn.
 
 @item prebuild=xxxx
-Specifies a shell command (or commands - chain with &&) to run before
-the build takes place. Backslash can be used as an escape character to
-insert literal commas, or as the last character on a line to join that
-line with the next. It has no special meaning in other contexts; in
-particular, literal backslashes should not be escaped.
+Specifies a shell command (or commands - chain with &&) to run before the
+build takes place. Backslash can be used as an escape character to insert
+literal commas, or as the last character on a line to join that line with the
+next. It has no special meaning in other contexts; in particular, literal
+backslashes should not be escaped.
 
 The command runs using bash.
 
-Note that nothing should be build during this prebuild phase - scanning
-of the code and building of the source tarball, for example, take place
-after this. For custom actions that actually build things, use 'build'
+Note that nothing should be build during this prebuild phase - scanning of the
+code and building of the source tarball, for example, take place after this.
+For custom actions that actually build things or produce binaries, use 'build'
 instead.
 
 You can use $$name$$ to substitute the path to a referenced srclib - see

@@ -66,9 +66,9 @@ ordered_flags = [
     'disable', 'commit', 'subdir', 'submodules', 'init',
     'gradle', 'maven', 'output', 'oldsdkloc', 'target',
     'update', 'encoding', 'forceversion', 'forcevercode', 'rm',
-    'fixtrans', 'fixapos', 'extlibs', 'srclibs', 'patch',
-    'prebuild', 'scanignore', 'scandelete', 'build', 'buildjni',
-    'preassemble', 'bindir', 'antcommand', 'novcheck'
+    'extlibs', 'srclibs', 'patch', 'prebuild', 'scanignore',
+    'scandelete', 'build', 'buildjni', 'preassemble', 'bindir',
+    'antcommand', 'novcheck'
 ]
 
 
@@ -152,7 +152,7 @@ valuetypes = {
         ['yes', 'no'], None,
         [ ],
         [ 'submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
-            'fixtrans', 'fixapos', 'novcheck' ]),
+            'novcheck' ]),
 
     'Repo Type' : FieldType("Repo Type",
         [ 'git', 'git-svn', 'svn', 'hg', 'bzr', 'srclib' ], None,
