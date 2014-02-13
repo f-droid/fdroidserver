@@ -21,7 +21,12 @@
 commands=()
 
 if [ ! -d metadata ]; then
-	[ -d ../metadata ] && cd .. || { echo "No metadata files found!"; exit 2; }
+	if [ -d ../metadata ]; then
+		cd ..
+	else
+		echo "No metadata files found!"
+		exit 2
+	fi
 fi
 
 while read line; do
