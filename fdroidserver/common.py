@@ -1085,11 +1085,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             if p.returncode != 0 or p.stdout.startswith("Error: "):
                 raise BuildException("Failed to update project at %s" % d, p.stdout)
             # Clean update dirs via ant
-            if d == '.':
-                logging.info("Cleaning main project")
-            else:
+            if d != '.':
                 logging.info("Cleaning subproject %s" % d)
-            p = FDroidPopen(['ant', 'clean'], cwd=subdir)
+                p = FDroidPopen(['ant', 'clean'], cwd=subdir)
 
     return (root_dir, srclibpaths)
 
