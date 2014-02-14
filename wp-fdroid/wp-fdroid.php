@@ -323,8 +323,8 @@ class FDroid
 				$i=0;
 				foreach($apks as $apk) {
 					$first = $i+1==count($apks);
-					$out.="<p><b>Version ".$apk['version']."</b><br />";
-					$out.="Added on ".$apk['added']."<br />";
+					$out.="<p><b>Version ".$apk['version']."</b>";
+					$out.=" - Added on ".$apk['added']."<br />";
 
 					// Is this source or binary?
 					$srcbuild = isset($apk['srcname']) && file_exists($this->site_path.'/repo/'.$apk['srcname']);
