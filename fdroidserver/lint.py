@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #
-# rewritemeta.py - part of the FDroid server tool
+# lint.py - part of the FDroid server tool
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -142,12 +142,14 @@ def main():
             warn("Summary of length %s is over the %i char limit" % (
                 summ_chars, config['char_limits']['Summary']))
 
-        # Description size limit
+        # Invalid lists
         desc_chars = 0
         for line in app['Description']:
             if re.match(r'[ ]*\*[^ ]', line):
                 warn("Invalid bulleted list: '%s'" % line)
             desc_chars += len(line)
+
+        # Description size limit
         if desc_chars > config['char_limits']['Description']:
             warn("Description of length %s is over the %i char limit" % (
                 desc_chars, config['char_limits']['Description']))
