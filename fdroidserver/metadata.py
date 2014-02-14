@@ -64,7 +64,7 @@ app_defaults = {
 # manual, they're roughly in order of application.
 ordered_flags = [
     'disable', 'commit', 'subdir', 'submodules', 'init',
-    'gradle', 'maven', 'output', 'oldsdkloc', 'target',
+    'gradle', 'maven', 'kivy', 'output', 'oldsdkloc', 'target',
     'update', 'encoding', 'forceversion', 'forcevercode', 'rm',
     'extlibs', 'srclibs', 'patch', 'prebuild', 'scanignore',
     'scandelete', 'build', 'buildjni', 'preassemble', 'bindir',
@@ -484,6 +484,34 @@ def flagtype(name):
 #
 def parse_metadata(metafile):
 
+    linedesc = None
+
+    def add_buildflag(p, thisbuild):
+        bv = p.split('=', 1)
+        if len(bv) != 2:
+            raise MetaDataException("Invalid build flag at {0} in {1}".
+                    format(buildlines[0], linedesc))
+        pk, pv = bv
+        if pk in thisbuild:
+            raise MetaDataException("Duplicate definition on {0} in version {1} of {2}".
+                    format(pk, thisbuild['version'], linedesc))
+
+        pk = pk.lstrip()
+        if pk not in ordered_flags:
+            raise MetaDataException("Unrecognised build flag at {0} in {1}".
+                    format(p, linedesc))
+        t = flagtype(pk)
+        if t == 'list':
+            # Port legacy ';' separators
+            thisbuild[pk] = pv.replace(';',',').split(',')
+        elif t == 'string':
+            thisbuild[pk] = pv
+        elif t == 'script':
+            thisbuild[pk] = pv
+        else:
+            raise MetaDataException("Unrecognised build flag type '%s' at %s in %s" % (
+                    t, p, linedesc))
+
     def parse_buildline(lines):
         value = "".join(lines)
         parts = [p.replace("\\,", ",")
@@ -508,22 +536,7 @@ def parse_metadata(metafile):
         else:
             thisbuild['commit'] = parts[2]
         for p in parts[3:]:
-            pk, pv = p.split('=', 1)
-            pk = pk.strip()
-            if pk not in ordered_flags:
-                raise MetaDataException("Unrecognised build flag at {0} in {1}".
-                        format(p, metafile.name))
-            t = flagtype(pk)
-            if t == 'list':
-                # Port legacy ';' separators
-                thisbuild[pk] = pv.replace(';',',').split(',')
-            elif t == 'string':
-                thisbuild[pk] = pv
-            elif t == 'script':
-                thisbuild[pk] = pv
-            else:
-                raise MetaDataException("Unrecognised build flag type '%s' at %s in %s" % (
-                        t, p, metafile.name))
+            add_buildflag(p, thisbuild)
 
         return thisbuild
 
@@ -583,15 +596,7 @@ def parse_metadata(metafile):
                 else:
                     buildlines.append(line.lstrip())
                     bl = ''.join(buildlines)
-                    bv = bl.split('=', 1)
-                    if len(bv) != 2:
-                        raise MetaDataException("Invalid build flag at {0} in {1}".
-                                format(buildlines[0], linedesc))
-                    name, val = bv
-                    if name in curbuild:
-                        raise MetaDataException("Duplicate definition on {0} in version {1} of {2}".
-                                format(name, curbuild['version'], linedesc))
-                    curbuild[name] = val.lstrip()
+                    add_buildflag(bl, curbuild)
                     buildlines = []
 
         if mode == 0:
