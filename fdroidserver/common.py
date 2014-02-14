@@ -121,14 +121,14 @@ def read_app_args(args, allapps, allow_vercodes=False):
 
     apps = [app for app in allapps if app['id'] in vercodes]
 
-    if not apps:
-        raise Exception("No packages specified")
     if len(apps) != len(vercodes):
         allids = [app["id"] for app in allapps]
         for p in vercodes:
             if p not in allids:
                 logging.critical("No such package: %s" % p)
         raise Exception("Found invalid app ids in arguments")
+    if not apps:
+        raise Exception("No packages specified")
 
     error = False
     for app in apps:
