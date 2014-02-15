@@ -504,7 +504,7 @@ def parse_metadata(metafile):
         t = flagtype(pk)
         if t == 'list':
             # Port legacy ';' separators
-            thisbuild[pk] = pv.replace(';',',').split(',')
+            thisbuild[pk] = [v.strip() for v in pv.replace(';',',').split(',')]
         elif t == 'string':
             thisbuild[pk] = pv
         elif t == 'script':
