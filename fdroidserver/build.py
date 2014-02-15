@@ -266,7 +266,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         # Copy any extlibs that are required...
         if 'extlibs' in thisbuild:
             ftp.chdir('/home/vagrant/build/extlib')
-            for lib in thisbuild['extlibs'].split(';'):
+            for lib in thisbuild['extlibs']:
                 lib = lib.strip()
                 libsrc = os.path.join('build/extlib', lib)
                 if not os.path.exists(libsrc):
@@ -282,7 +282,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         # Copy any srclibs that are required...
         srclibpaths = []
         if 'srclibs' in thisbuild:
-            for lib in thisbuild['srclibs'].split(';'):
+            for lib in thisbuild['srclibs']:
                 srclibpaths.append(common.getsrclib(lib, 'build/srclib', srclibpaths,
                     basepath=True, prepare=False))
 
@@ -459,10 +459,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if thisbuild.get('buildjni') not in (None, 'no'):
         logging.info("Building native libraries...")
         jni_components = thisbuild.get('buildjni')
-        if jni_components == 'yes':
+        if jni_components == ['yes']:
             jni_components = ['']
-        else:
-            jni_components = [c.strip() for c in jni_components.split(';')]
         ndkbuild = os.path.join(config['ndk_path'], "ndk-build")
         for d in jni_components:
             logging.info("Building native code in '%s'" % d)

@@ -451,7 +451,8 @@ def metafieldtype(name):
     return 'string'
 
 def flagtype(name):
-    if name in ['extlibs', 'srclibs', 'patch', 'rm', 'scanignore', 'scandelete']:
+    if name in ['extlibs', 'srclibs', 'patch', 'rm', 'buildjni',
+            'scanignore', 'scandelete']:
         return 'list'
     if name in ['init', 'prebuild', 'build']:
         return 'script'
