@@ -948,7 +948,7 @@ android SDK and NDK directories, and maven 3 executable respectively e.g.
 for when you need to run @code{android update project} explicitly.
 
 @item scanignore=path1,path2,...
-Enables one or more files/paths to be exlcuded from the scan process.
+Enables one or more files/paths to be excluded from the scan process.
 This should only be used where there is a very good reason, and
 probably accompanied by a comment explaining why it is necessary.
 
