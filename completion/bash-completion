@@ -94,7 +94,7 @@ __complete_options() {
 __complete_build() {
 	opts="-h -v -c -l -s -t -f"
 	lopts="--help --verbose --latest --server --resetserver --on-server
- --force --all"
+ --skip-scan --no-tarball --force --all"
 	case "${cur}" in
 		-*)
 			__complete_options

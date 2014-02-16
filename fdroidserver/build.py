@@ -419,16 +419,17 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         raise BuildException("Error cleaning %s:%s" %
                 (app['id'], thisbuild['version']), p.stdout)
 
-    # Scan before building...
-    logging.info("Scanning source for common problems...")
-    buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
-    if len(buildprobs) > 0:
-        logging.info('Scanner found %d problems:' % len(buildprobs))
-        for problem in buildprobs:
-            logging.info('    %s' % problem)
-        if not force:
-            raise BuildException("Can't build due to " +
-                str(len(buildprobs)) + " scanned problems")
+    if not options.skipscan:
+        # Scan before building...
+        logging.info("Scanning source for common problems...")
+        buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
+        if len(buildprobs) > 0:
+            logging.info('Scanner found %d problems:' % len(buildprobs))
+            for problem in buildprobs:
+                logging.info('    %s' % problem)
+            if not force:
+                raise BuildException("Can't build due to " +
+                    str(len(buildprobs)) + " scanned problems")
 
     if not options.notarball:
         # Build the source tarball right before we build the release...
@@ -777,6 +778,8 @@ def parse_commandline():
                       help="Reset and create a brand new build server, even if the existing one appears to be ok.")
     parser.add_option("--on-server", dest="onserver", action="store_true", default=False,
                       help="Specify that we're running on the build server")
+    parser.add_option("--skip-scan", dest="skipscan", action="store_true", default=False,
+                      help="Skip scanning the source code for binaries and other problems")
     parser.add_option("--no-tarball", dest="notarball", action="store_true", default=False,
                       help="Don't create a source tarball, useful when testing a build")
     parser.add_option("-f", "--force", action="store_true", default=False,
