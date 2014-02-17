@@ -1082,8 +1082,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             else:
                 print("Updating subproject %s" % d)
                 cmd = lparms + ['-p', d]
-            print cmd
-            print ' '.join(cmd)
             p = FDroidPopen(cmd, cwd=root_dir)
             # Check to see whether an error was returned without a proper exit
             # code (this is the case for the 'no target set or target invalid'
