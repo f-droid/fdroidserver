@@ -486,7 +486,7 @@ class vcs_svn(vcs):
             for svncommand in (
                     'svn revert -R .',
                     r"svn status | awk '/\?/ {print $2}' | xargs rm -rf"):
-                p = SilentPopen(svncommand, cwd=self.local, shell=True)
+                p = SilentPopen([svncommand], cwd=self.local, shell=True)
                 if p.returncode != 0:
                     raise VCSException("Svn reset ({0}) failed in {1}".format(svncommand, self.local))
             if not self.refreshed:
@@ -518,7 +518,7 @@ class vcs_hg(vcs):
             if p.returncode != 0:
                 raise VCSException("Hg clone failed")
         else:
-            p = SilentPopen('hg status -uS | xargs rm -rf', cwd=self.local, shell=True)
+            p = SilentPopen(['hg status -uS | xargs rm -rf'], cwd=self.local, shell=True)
             if p.returncode != 0:
                 raise VCSException("Hg clean failed")
             if not self.refreshed:
@@ -1016,19 +1016,13 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     # Delete unwanted files
     if 'rm' in build:
         for part in build['rm']:
-            dest = os.path.join(build_dir, part.strip())
-            rdest = os.path.abspath(dest)
-            logging.info("Removing {0}".format(rdest))
-            if not rdest.startswith(os.path.abspath(build_dir)):
-                raise BuildException("rm for {1} is outside build root {0}".format(
-                    os.path.abspath(build_dir),os.path.abspath(dest)))
-            if rdest == os.path.abspath(build_dir):
-                raise BuildException("rm removes whole build directory")
-            if os.path.lexists(rdest):
-                if os.path.islink(rdest):
-                    SilentPopen('unlink ' + rdest, shell=True)
+            dest = os.path.join(build_dir, part)
+            logging.info("Removing {0}".format(part))
+            if os.path.lexists(dest):
+                if os.path.islink(dest):
+                    SilentPopen(['unlink ' + dest], shell=True)
                 else:
-                    SilentPopen('rm -rf ' + rdest, shell=True)
+                    SilentPopen(['rm -rf ' + dest], shell=True)
             else:
                 logging.info("...but it didn't exist")
 
