@@ -19,7 +19,6 @@ setup(name='FDroidServer',
           'fdroid-icon.png']),
         ],
       install_requires=[
-        'python-magic',
         'PIL',
         ],
       classifiers=[
