@@ -49,6 +49,11 @@ def read_config(opts, config_file='config.py'):
 
     options = opts
 
+    config = {}
+
+    logging.info("Reading %s" % config_file)
+    execfile(config_file, config)
+
     defconfig = {
         'sdk_path': "$ANDROID_HOME",
         'ndk_path': "$ANDROID_NDK",
@@ -66,16 +71,6 @@ def read_config(opts, config_file='config.py'):
             'Description' : 1500
         }
     }
-    config = {}
-
-    logging.info("Reading %s" % config_file)
-    execfile(config_file, config)
-
-    if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
-        st = os.stat(config_file)
-        if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
-            logging.warn("unsafe permissions on {0} (should be 0600)!".format(config_file))
-
     for k, v in defconfig.items():
         if k not in config:
             config[k] = v
@@ -86,6 +81,18 @@ def read_config(opts, config_file='config.py'):
             continue
         v = os.path.expanduser(v)
         config[k] = os.path.expandvars(v)
+
+    if not config['sdk_path']:
+        logging.critical("$ANDROID_HOME is not set!")
+        sys.exit(3)
+    if not os.path.isdir(config['sdk_path']):
+        logging.critical("$ANDROID_HOME points to a non-existing directory!")
+        sys.exit(3)
+
+    if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
+        st = os.stat(config_file)
+        if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
+            logging.warn("unsafe permissions on {0} (should be 0600)!".format(config_file))
 
     return config
 
