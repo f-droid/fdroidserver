@@ -141,6 +141,8 @@ def update_wiki(apps, apks):
                             'version': thisbuild['version'],
                             'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild|build log]].".format(app['id'])
                         })
+        if app['Current Version Code'] == '0':
+            cantupdate = True
         # Sort with most recent first...
         apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
 
