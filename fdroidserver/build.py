@@ -373,6 +373,14 @@ def adapt_gradle(build_dir):
 def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver):
     """Do a build locally."""
 
+    if thisbuild.get('buildjni') not in (None, ['no']):
+        if not config['ndk_path']:
+            logging.critical("$ANDROID_NDK is not set!")
+            sys.exit(3)
+        elif not os.path.isdir(config['sdk_path']):
+            logging.critical("$ANDROID_NDK points to a non-existing directory!")
+            sys.exit(3)
+
     # Prepare the source code...
     root_dir, srclibpaths = common.prepare_source(vcs, app, thisbuild,
             build_dir, srclib_dir, extlib_dir, onserver)
