@@ -1136,8 +1136,11 @@ def scan_source(build_dir, root_dir, thisbuild):
     scanignore = getpaths('scanignore')
     scandelete = getpaths('scandelete')
 
-    ms = magic.open(magic.MIME_TYPE)
-    ms.load()
+    try:
+        ms = magic.open(magic.MIME_TYPE)
+        ms.load()
+    except AttributeError:
+        ms = None
 
     def toignore(fd):
         for i in scanignore:
@@ -1187,7 +1190,7 @@ def scan_source(build_dir, root_dir, thisbuild):
                 if suspect in curfile.lower():
                     handleproblem('usual supect', fd, fp)
 
-            mime = ms.file(fp)
+            mime = magic.from_file(fp, mime=True) if ms is None else ms.file(fp)
             if mime == 'application/x-sharedlib':
                 handleproblem('shared library', fd, fp)
             elif mime == 'application/x-archive':
@@ -1204,7 +1207,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                     if 'DexClassLoader' in line:
                         handleproblem('DexClassLoader', fd, fp)
                         break
-    ms.close()
+    if ms is not None:
+        ms.close()
 
     # Presence of a jni directory without buildjni=yes might
     # indicate a problem (if it's not a problem, explicitly use
