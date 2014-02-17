@@ -992,7 +992,7 @@ that this will not work on projects with flavours, since it will build
 all flavours and there will be no 'main' build.
 If @@<dir> is attached to <flavour>, then the gradle tasks will be run in that
 directory. This might be necessary if gradle needs to be run in the parent
-directory, in which case one would use 'gradle=<flavour>@..'.
+directory, in which case one would use 'gradle=<flavour>@@..'.
 
 @item maven=yes[@@<dir>]
 Build with maven instead of ant. Like gradle, an extra @@<dir> tells f-droid
