@@ -302,33 +302,38 @@ class vcs_git(vcs):
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout
-            if subprocess.call(['git', 'clone', self.remote, self.local]) != 0:
+            p = SilentPopen(['git', 'clone', self.remote, self.local])
+            if p.returncode != 0:
                 raise VCSException("Git clone failed")
             self.checkrepo()
         else:
             self.checkrepo()
             # Discard any working tree changes
-            if subprocess.call(['git', 'reset', '--hard'], cwd=self.local) != 0:
+            p = SilentPopen(['git', 'reset', '--hard'], cwd=self.local)
+            if p.returncode != 0:
                 raise VCSException("Git reset failed")
             # Remove untracked files now, in case they're tracked in the target
             # revision (it happens!)
-            if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
+            p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
+            if p.returncode != 0:
                 raise VCSException("Git clean failed")
             if not self.refreshed:
                 # Get latest commits and tags from remote
-                if subprocess.call(['git', 'fetch', 'origin'],
-                        cwd=self.local) != 0:
+                p = SilentPopen(['git', 'fetch', 'origin'], cwd=self.local)
+                if p.returncode != 0:
                     raise VCSException("Git fetch failed")
-                if subprocess.call(['git', 'fetch', '--prune', '--tags', 'origin'],
-                        cwd=self.local) != 0:
+                p = SilentPopen(['git', 'fetch', '--prune', '--tags', 'origin'], cwd=self.local)
+                if p.returncode != 0:
                     raise VCSException("Git fetch failed")
                 self.refreshed = True
         # Check out the appropriate revision
         rev = str(rev if rev else 'origin/master')
-        if subprocess.call(['git', 'checkout', '-f', rev], cwd=self.local) != 0:
+        p = SilentPopen(['git', 'checkout', '-f', rev], cwd=self.local)
+        if p.returncode != 0:
             raise VCSException("Git checkout failed")
         # Get rid of any uncontrolled files left behind
-        if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
+        p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
+        if p.returncode != 0:
             raise VCSException("Git clean failed")
 
     def initsubmodules(self):
@@ -340,9 +345,8 @@ class vcs_git(vcs):
             p = SilentPopen(['git', 'submodule', 'foreach', '--recursive'] + cmd, cwd=self.local)
             if p.returncode != 0:
                 raise VCSException("Git submodule reset failed")
-        if subprocess.call(['git', 'submodule', 'update',
-            '--init', '--force', '--recursive'],
-                cwd=self.local) != 0:
+        p = SilentPopen(['git', 'submodule', 'update', '--init', '--force', '--recursive'], cwd=self.local)
+        if p.returncode != 0:
             raise VCSException("Git submodule update failed")
 
     def gettags(self):
@@ -386,27 +390,29 @@ class vcs_gitsvn(vcs):
                         gitsvn_cmd += ' -t %s' % i[5:]
                     elif i.startswith('branches='):
                         gitsvn_cmd += ' -b %s' % i[9:]
-                if subprocess.call([gitsvn_cmd + " %s %s" % (remote_split[0], self.local)],
-                        shell=True) != 0:
+                p = SilentPopen([gitsvn_cmd + " %s %s" % (remote_split[0], self.local)], shell=True)
+                if p.returncode != 0:
                     raise VCSException("Git clone failed")
             else:
-                if subprocess.call([gitsvn_cmd + " %s %s" % (self.remote, self.local)],
-                        shell=True) != 0:
+                p = SilentPopen([gitsvn_cmd + " %s %s" % (self.remote, self.local)], shell=True)
+                if p.returncode != 0:
                     raise VCSException("Git clone failed")
             self.checkrepo()
         else:
             self.checkrepo()
             # Discard any working tree changes
-            if subprocess.call(['git', 'reset', '--hard'], cwd=self.local) != 0:
+            p = SilentPopen(['git', 'reset', '--hard'], cwd=self.local)
+            if p.returncode != 0:
                 raise VCSException("Git reset failed")
             # Remove untracked files now, in case they're tracked in the target
             # revision (it happens!)
-            if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
+            p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
+            if p.returncode != 0:
                 raise VCSException("Git clean failed")
             if not self.refreshed:
                 # Get new commits and tags from repo
-                if subprocess.call(['%sgit svn rebase %s' % self.userargs()],
-                        cwd=self.local, shell=True) != 0:
+                p = SilentPopen(['%sgit svn rebase %s' % self.userargs()], cwd=self.local, shell=True)
+                if p.returncode != 0:
                     raise VCSException("Git svn rebase failed")
                 self.refreshed = True
 
@@ -444,7 +450,8 @@ class vcs_gitsvn(vcs):
                         raise VCSException("Git svn checkout failed")
 
         # Get rid of any uncontrolled files left behind
-        if subprocess.call(['git', 'clean', '-dffx'], cwd=self.local) != 0:
+        p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
+        if p.returncode != 0:
             raise VCSException("Git clean failed")
 
     def gettags(self):
@@ -472,24 +479,25 @@ class vcs_svn(vcs):
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
-            if subprocess.call(['svn', 'checkout', self.remote, self.local] +
-                    self.userargs()) != 0:
+            p = SilentPopen(['svn', 'checkout', self.remote, self.local] + self.userargs())
+            if p.returncode != 0:
                 raise VCSException("Svn checkout failed")
         else:
             for svncommand in (
                     'svn revert -R .',
                     r"svn status | awk '/\?/ {print $2}' | xargs rm -rf"):
-                if subprocess.call(svncommand, cwd=self.local, shell=True) != 0:
+                p = SilentPopen(svncommand, cwd=self.local, shell=True)
+                if p.returncode != 0:
                     raise VCSException("Svn reset ({0}) failed in {1}".format(svncommand, self.local))
             if not self.refreshed:
-                if subprocess.call(['svn', 'update'] +
-                        self.userargs(), cwd=self.local) != 0:
+                p = SilentPopen(['svn', 'update'] + self.userargs(), cwd=self.local)
+                if p.returncode != 0:
                     raise VCSException("Svn update failed")
                 self.refreshed = True
 
         revargs = list(['-r', rev] if rev else [])
-        if subprocess.call(['svn', 'update', '--force'] + revargs +
-                self.userargs(), cwd=self.local) != 0:
+        p = SilentPopen(['svn', 'update', '--force'] + revargs + self.userargs(), cwd=self.local)
+        if p.returncode != 0:
             raise VCSException("Svn update failed")
 
     def getref(self):
@@ -506,30 +514,32 @@ class vcs_hg(vcs):
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
-            if subprocess.call(['hg', 'clone', self.remote, self.local]) !=0:
+            p = SilentPopen(['hg', 'clone', self.remote, self.local])
+            if p.returncode != 0:
                 raise VCSException("Hg clone failed")
         else:
-            if subprocess.call('hg status -uS | xargs rm -rf',
-                    cwd=self.local, shell=True) != 0:
+            p = SilentPopen('hg status -uS | xargs rm -rf', cwd=self.local, shell=True)
+            if p.returncode != 0:
                 raise VCSException("Hg clean failed")
             if not self.refreshed:
-                if subprocess.call(['hg', 'pull'],
-                        cwd=self.local) != 0:
+                p = SilentPopen(['hg', 'pull'], cwd=self.local)
+                if p.returncode != 0:
                     raise VCSException("Hg pull failed")
                 self.refreshed = True
 
         rev = str(rev if rev else 'default')
         if not rev:
             return
-        if subprocess.call(['hg', 'update', '-C', rev],
-                cwd=self.local) != 0:
+        p = SilentPopen(['hg', 'update', '-C', rev], cwd=self.local)
+        if p.returncode != 0:
             raise VCSException("Hg checkout failed")
         p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
         # Also delete untracked files, we have to enable purge extension for that:
         if "'purge' is provided by the following extension" in p.stdout:
             with open(self.local+"/.hg/hgrc", "a") as myfile:
                 myfile.write("\n[extensions]\nhgext.purge=\n")
-            if subprocess.call(['hg', 'purge', '--all'], cwd=self.local) != 0:
+            p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
+            if p.returncode != 0:
                 raise VCSException("HG purge failed")
         elif p.returncode != 0:
             raise VCSException("HG purge failed")
@@ -546,21 +556,22 @@ class vcs_bzr(vcs):
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
-            if subprocess.call(['bzr', 'branch', self.remote, self.local]) != 0:
+            p = SilentPopen(['bzr', 'branch', self.remote, self.local])
+            if p.returncode != 0:
                 raise VCSException("Bzr branch failed")
         else:
-            if subprocess.call(['bzr', 'clean-tree', '--force',
-                    '--unknown', '--ignored'], cwd=self.local) != 0:
+            p = SilentPopen(['bzr', 'clean-tree', '--force', '--unknown', '--ignored'], cwd=self.local)
+            if p.returncode != 0:
                 raise VCSException("Bzr revert failed")
             if not self.refreshed:
-                if subprocess.call(['bzr', 'pull'],
-                        cwd=self.local) != 0:
+                p = SilentPopen(['bzr', 'pull'], cwd=self.local)
+                if p.returncode != 0:
                     raise VCSException("Bzr update failed")
                 self.refreshed = True
 
         revargs = list(['-r', rev] if rev else [])
-        if subprocess.call(['bzr', 'revert'] + revargs,
-                cwd=self.local) != 0:
+        p = SilentPopen(['bzr', 'revert'] + revargs, cwd=self.local)
+        if p.returncode != 0:
             raise VCSException("Bzr revert failed")
 
     def gettags(self):
@@ -893,8 +904,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             patch = patch.strip()
             logging.info("Applying " + patch)
             patch_path = os.path.join('metadata', app['id'], patch)
-            if subprocess.call(['patch', '-p1',
-                            '-i', os.path.abspath(patch_path)], cwd=build_dir) != 0:
+            p = FDroidPopen(['patch', '-p1', '-i', os.path.abspath(patch_path)], cwd=build_dir)
+            if p.returncode != 0:
                 raise BuildException("Failed to apply patch %s" % patch_path)
 
     # Get required source libraries
@@ -953,13 +964,13 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
         if 'target' in build:
             n = build["target"].split('-')[1]
-            subprocess.call(['sed', '-i',
+            FDroidPopen(['sed', '-i',
                 's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+n+'@g',
                 'build.gradle'], cwd=root_dir)
             if '@' in build['gradle']:
                 gradle_dir = os.path.join(root_dir, build['gradle'].split('@',1)[1])
                 gradle_dir = os.path.normpath(gradle_dir)
-                subprocess.call(['sed', '-i',
+                FDroidPopen(['sed', '-i',
                     's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+n+'@g',
                     'build.gradle'], cwd=gradle_dir)
 
@@ -973,14 +984,16 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             if not os.path.isfile(path):
                 continue
             if has_extension(path, 'xml'):
-                if subprocess.call(['sed','-i',
+                p = SilentPopen(['sed', '-i',
                     's/android:versionName="[^"]*"/android:versionName="' + build['version'] + '"/g',
-                    path]) != 0:
+                    path])
+                if p.returncode != 0:
                     raise BuildException("Failed to amend manifest")
             elif has_extension(path, 'gradle'):
-                if subprocess.call(['sed','-i',
+                p = SilentPopen(['sed', '-i',
                     's/versionName[ ]*=[ ]*"[^"]*"/versionName = "' + build['version'] + '"/g',
-                    path]) != 0:
+                    path])
+                if p.returncode != 0:
                     raise BuildException("Failed to amend build.gradle")
     if build['forcevercode']:
         logging.info("Changing the version code")
@@ -988,14 +1001,16 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             if not os.path.isfile(path):
                 continue
             if has_extension(path, 'xml'):
-                if subprocess.call(['sed','-i',
+                p = SilentPopen(['sed', '-i',
                     's/android:versionCode="[^"]*"/android:versionCode="' + build['vercode'] + '"/g',
-                    path]) != 0:
+                    path])
+                if p.returncode != 0:
                     raise BuildException("Failed to amend manifest")
             elif has_extension(path, 'gradle'):
-                if subprocess.call(['sed','-i',
+                p = SilentPopen(['sed', '-i',
                     's/versionCode[ ]*=[ ]*[0-9]*/versionCode = ' + build['vercode'] + '/g',
-                    path]) != 0:
+                    path])
+                if p.returncode != 0:
                     raise BuildException("Failed to amend build.gradle")
 
     # Delete unwanted files
@@ -1011,9 +1026,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 raise BuildException("rm removes whole build directory")
             if os.path.lexists(rdest):
                 if os.path.islink(rdest):
-                    subprocess.call('unlink ' + rdest, shell=True)
+                    SilentPopen('unlink ' + rdest, shell=True)
                 else:
-                    subprocess.call('rm -rf ' + rdest, shell=True)
+                    SilentPopen('rm -rf ' + rdest, shell=True)
             else:
                 logging.info("...but it didn't exist")
 
@@ -1317,7 +1332,7 @@ class PopenResult:
     returncode = None
     stdout = ''
 
-def SilentPopen(commands, cwd=None):
+def SilentPopen(commands, cwd=None, shell=False):
     """
     Run a command silently and capture the output.
 
@@ -1328,20 +1343,18 @@ def SilentPopen(commands, cwd=None):
 
     if cwd:
         cwd = os.path.normpath(cwd)
-
-    if cwd:
         logging.debug("Directory: %s" % cwd)
     logging.debug("> %s" % ' '.join(commands))
 
     result = PopenResult()
-    p = subprocess.Popen(commands, cwd=cwd,
+    p = subprocess.Popen(commands, cwd=cwd, shell=shell,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     result.stdout = p.communicate()[0]
     result.returncode = p.returncode
     return result
 
-def FDroidPopen(commands, cwd=None):
+def FDroidPopen(commands, cwd=None, shell=False):
     """
     Run a command and capture the possibly huge output.
 
@@ -1352,13 +1365,11 @@ def FDroidPopen(commands, cwd=None):
 
     if cwd:
         cwd = os.path.normpath(cwd)
-
-    if cwd:
         logging.info("Directory: %s" % cwd)
     logging.info("> %s" % ' '.join(commands))
 
     result = PopenResult()
-    p = subprocess.Popen(commands, cwd=cwd,
+    p = subprocess.Popen(commands, cwd=cwd, shell=shell,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     stdout_queue = Queue.Queue()

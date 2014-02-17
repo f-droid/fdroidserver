@@ -32,7 +32,7 @@ from optparse import OptionParser, OptionError
 import logging
 
 import common, metadata
-from common import BuildException, VCSException, FDroidPopen
+from common import BuildException, VCSException, FDroidPopen, SilentPopen
 
 def get_builder_vm_id():
     vd = os.path.join('builder', '.vagrant')
@@ -364,7 +364,7 @@ def adapt_gradle(build_dir):
             path = os.path.join(root, 'build.gradle')
             logging.info("Adapting build.gradle at %s" % path)
 
-            subprocess.call(['sed', '-i',
+            FDroidPopen(['sed', '-i',
                     r's@buildToolsVersion\([ =]*\)["\'][0-9\.]*["\']@buildToolsVersion\1"'
                     + config['build_tools'] + '"@g', path])
 
@@ -495,11 +495,11 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 '-Dandroid.release=true', 'package']
         if 'target' in thisbuild:
             target = thisbuild["target"].split('-')[1]
-            subprocess.call(['sed', '-i',
+            FDroidPopen(['sed', '-i',
                     's@<platform>[0-9]*</platform>@<platform>'+target+'</platform>@g',
                     'pom.xml'], cwd=root_dir)
             if '@' in thisbuild['maven']:
-                subprocess.call(['sed', '-i',
+                FDroidPopen(['sed', '-i',
                         's@<platform>[0-9]*</platform>@<platform>'+target+'</platform>@g',
                         'pom.xml'], cwd=maven_dir)
 
@@ -537,7 +537,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         cmd += ' ./distribute.sh'
         cmd += ' -m ' + "'" + ' '.join(modules) + "'"
         cmd += ' -d fdroid'
-        if subprocess.call(cmd, cwd='python-for-android', shell=True) != 0:
+        p = FDroidPopen(cmd, cwd='python-for-android', shell=True)
+        if p.returncode != 0:
             raise BuildException("Distribute build failed")
 
         cid = bconfig.get('app', 'package.domain') + '.' + bconfig.get('app', 'package.name')
@@ -652,9 +653,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if not os.path.exists(src):
         raise BuildException("Unsigned apk is not at expected location of " + src)
 
-    p = FDroidPopen([os.path.join(config['sdk_path'],
-                        'build-tools', config['build_tools'], 'aapt'),
-                        'dump', 'badging', src], output=False)
+    p = SilentPopen([os.path.join(config['sdk_path'],
+        'build-tools', config['build_tools'], 'aapt'),
+        'dump', 'badging', src])
 
     vercode = None
     version = None
