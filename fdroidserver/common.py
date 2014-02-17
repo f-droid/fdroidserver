@@ -1347,8 +1347,7 @@ def FDroidPopen(commands, cwd=None, output=True):
 
     result = PopenResult()
     p = subprocess.Popen(commands, cwd=cwd,
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-            stdin=subprocess.PIPE)
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     stdout_queue = Queue.Queue()
     stdout_reader = AsynchronousFileReader(p.stdout, stdout_queue)
