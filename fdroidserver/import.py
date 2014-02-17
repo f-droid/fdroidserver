@@ -286,7 +286,7 @@ def main():
     if options.subdir:
         build['subdir'] = options.subdir
     if os.path.exists(os.path.join(root_dir, 'jni')):
-        build['buildjni'] = 'yes'
+        build['buildjni'] = ['yes']
     app['builds'].append(build)
 
     # Keep the repo directory to save bandwidth...

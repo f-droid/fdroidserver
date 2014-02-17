@@ -457,7 +457,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                     (app['id'], thisbuild['version']), p.stdout)
 
     # Build native stuff if required...
-    if thisbuild.get('buildjni') not in (None, 'no'):
+    if thisbuild.get('buildjni') not in (None, ['no']):
         logging.info("Building native libraries...")
         jni_components = thisbuild.get('buildjni')
         if jni_components == ['yes']:
