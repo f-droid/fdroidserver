@@ -3,15 +3,11 @@
 # Copy this file to config.py, then amend the settings below according to
 # your system configuration.
 
-# Path to the Android SDK, $ANDROID_HOME already set on most systems
+# Override the path to the Android SDK, $ANDROID_HOME by default
 #sdk_path = "/path/to/android-sdk"
-sdk_path = "$ANDROID_HOME"
 
-# Path to the Android NDK, $ANDROID_NDK already set on most systems
-# Legacy toolchains are only needed by some apps
+# Override the path to the Android NDK, $ANDROID_NDK by default
 #ndk_path = "/path/to/android-ndk"
-ndk_path = "$ANDROID_NDK"
-
 # Build tools version to be used
 build_tools = "19.0.1"
 
