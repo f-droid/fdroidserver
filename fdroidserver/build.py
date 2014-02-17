@@ -244,7 +244,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         ftp.put(os.path.join(serverpath, 'build.py'), 'build.py')
         ftp.put(os.path.join(serverpath, 'common.py'), 'common.py')
         ftp.put(os.path.join(serverpath, 'metadata.py'), 'metadata.py')
-        ftp.put(os.path.join(serverpath, '..', 'config.buildserver.py'), 'config.py')
+        ftp.put(os.path.join(serverpath, '..', 'buildserver',
+            'config.buildserver.py'), 'config.py')
         ftp.chmod('config.py', 0o600)
 
         # Copy the metadata - just the file for this app...
