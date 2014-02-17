@@ -294,8 +294,7 @@ class vcs_git(vcs):
     # fdroidserver) and then we'll proceed to destroy it! This is called as
     # a safety check.
     def checkrepo(self):
-        p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'],
-                cwd=self.local, output=False)
+        p = SilentPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local)
         result = p.stdout.rstrip()
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
@@ -334,14 +333,13 @@ class vcs_git(vcs):
 
     def initsubmodules(self):
         self.checkrepo()
-        if subprocess.call(['git', 'submodule', 'foreach', '--recursive',
-            'git', 'reset', '--hard'],
-                cwd=self.local) != 0:
-            raise VCSException("Git submodule reset failed")
-        if subprocess.call(['git', 'submodule', 'foreach', '--recursive',
-            'git', 'clean', '-dffx'],
-                cwd=self.local) != 0:
-            raise VCSException("Git submodule clean failed")
+        for cmd in [
+                ['git', 'reset', '--hard'],
+                ['git', 'clean', '-dffx'],
+                ]:
+            p = SilentPopen(['git', 'submodule', 'foreach', '--recursive'] + cmd, cwd=self.local)
+            if p.returncode != 0:
+                raise VCSException("Git submodule reset failed")
         if subprocess.call(['git', 'submodule', 'update',
             '--init', '--force', '--recursive'],
                 cwd=self.local) != 0:
@@ -349,7 +347,7 @@ class vcs_git(vcs):
 
     def gettags(self):
         self.checkrepo()
-        p = FDroidPopen(['git', 'tag'], cwd=self.local)
+        p = SilentPopen(['git', 'tag'], cwd=self.local)
         return p.stdout.splitlines()
 
 
@@ -370,8 +368,7 @@ class vcs_gitsvn(vcs):
     # fdroidserver) and then we'll proceed to destory it! This is called as
     # a safety check.
     def checkrepo(self):
-        p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'],
-                cwd=self.local, output=False)
+        p = SilentPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local)
         result = p.stdout.rstrip()
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
@@ -417,7 +414,7 @@ class vcs_gitsvn(vcs):
         if rev:
             nospaces_rev = rev.replace(' ', '%20')
             # Try finding a svn tag
-            p = FDroidPopen(['git', 'checkout', 'tags/' + nospaces_rev], cwd=self.local)
+            p = SilentPopen(['git', 'checkout', 'tags/' + nospaces_rev], cwd=self.local)
             if p.returncode != 0:
                 # No tag found, normal svn rev translation
                 # Translate svn rev into git format
@@ -432,18 +429,17 @@ class vcs_gitsvn(vcs):
                     treeish = 'master'
                     svn_rev = rev
 
-                p = FDroidPopen(['git', 'svn', 'find-rev', 'r' + svn_rev, treeish],
-                    cwd=self.local)
+                p = SilentPopen(['git', 'svn', 'find-rev', 'r' + svn_rev, treeish], cwd=self.local)
                 git_rev = p.stdout.rstrip()
 
                 if p.returncode != 0 or not git_rev:
                     # Try a plain git checkout as a last resort
-                    p = FDroidPopen(['git', 'checkout', rev], cwd=self.local)
+                    p = SilentPopen(['git', 'checkout', rev], cwd=self.local)
                     if p.returncode != 0:
                         raise VCSException("No git treeish found and direct git checkout failed")
                 else:
                     # Check out the git rev equivalent to the svn rev
-                    p = FDroidPopen(['git', 'checkout', git_rev], cwd=self.local)
+                    p = SilentPopen(['git', 'checkout', git_rev], cwd=self.local)
                     if p.returncode != 0:
                         raise VCSException("Git svn checkout failed")
 
@@ -457,7 +453,7 @@ class vcs_gitsvn(vcs):
 
     def getref(self):
         self.checkrepo()
-        p = FDroidPopen(['git', 'svn', 'find-rev', 'HEAD'], cwd=self.local)
+        p = SilentPopen(['git', 'svn', 'find-rev', 'HEAD'], cwd=self.local)
         if p.returncode != 0:
             return None
         return p.stdout.strip()
@@ -497,8 +493,8 @@ class vcs_svn(vcs):
             raise VCSException("Svn update failed")
 
     def getref(self):
-        p = FDroidPopen(['svn', 'info'], cwd=self.local)
-        for line in p.communicate()[0].splitlines():
+        p = SilentPopen(['svn', 'info'], cwd=self.local)
+        for line in p.stdout.splitlines():
             if line and line.startswith('Last Changed Rev: '):
                 return line[18:]
         return None
@@ -528,7 +524,7 @@ class vcs_hg(vcs):
         if subprocess.call(['hg', 'update', '-C', rev],
                 cwd=self.local) != 0:
             raise VCSException("Hg checkout failed")
-        p = FDroidPopen(['hg', 'purge', '--all'], cwd=self.local)
+        p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
         # Also delete untracked files, we have to enable purge extension for that:
         if "'purge' is provided by the following extension" in p.stdout:
             with open(self.local+"/.hg/hgrc", "a") as myfile:
@@ -539,7 +535,7 @@ class vcs_hg(vcs):
             raise VCSException("HG purge failed")
 
     def gettags(self):
-        p = FDroidPopen(['hg', 'tags', '-q'], cwd=self.local)
+        p = SilentPopen(['hg', 'tags', '-q'], cwd=self.local)
         return p.stdout.splitlines()[1:]
 
 
@@ -568,7 +564,7 @@ class vcs_bzr(vcs):
             raise VCSException("Bzr revert failed")
 
     def gettags(self):
-        p = FDroidPopen(['bzr', 'tags'], cwd=self.local)
+        p = SilentPopen(['bzr', 'tags'], cwd=self.local)
         return [tag.split('   ')[0].strip() for tag in
                 p.stdout.splitlines()]
 
@@ -666,8 +662,7 @@ def remove_debuggable_flags(root_dir):
     for root, dirs, files in os.walk(root_dir):
         if 'AndroidManifest.xml' in files:
             path = os.path.join(root, 'AndroidManifest.xml')
-            p = FDroidPopen(['sed','-i',
-                's/android:debuggable="[^"]*"//g', path])
+            p = FDroidPopen(['sed','-i', 's/android:debuggable="[^"]*"//g', path])
             if p.returncode != 0:
                 raise BuildException("Failed to remove debuggable flags of %s" % path)
 
@@ -1283,10 +1278,9 @@ def isApkDebuggable(apkfile, config):
 
     :param apkfile: full path to the apk to check"""
 
-    p = FDroidPopen([os.path.join(config['sdk_path'],
+    p = SilentPopen([os.path.join(config['sdk_path'],
         'build-tools', config['build_tools'], 'aapt'),
-        'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
-        output=False)
+        'dump', 'xmltree', apkfile, 'AndroidManifest.xml'])
     if p.returncode != 0:
         logging.critical("Failed to get apk manifest information")
         sys.exit(1)
@@ -1323,27 +1317,45 @@ class PopenResult:
     returncode = None
     stdout = ''
 
-def FDroidPopen(commands, cwd=None, output=True):
+def SilentPopen(commands, cwd=None):
     """
-    Run a command and capture the output.
+    Run a command silently and capture the output.
 
     :param commands: command and argument list like in subprocess.Popen
     :param cwd: optionally specifies a working directory
-    :param output: whether to print output as it is fetched
+    :returns: A Popen object.
+    """
+
+    if cwd:
+        cwd = os.path.normpath(cwd)
+
+    if cwd:
+        logging.debug("Directory: %s" % cwd)
+    logging.debug("> %s" % ' '.join(commands))
+
+    result = PopenResult()
+    p = subprocess.Popen(commands, cwd=cwd,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+    result.stdout = p.communicate()[0]
+    result.returncode = p.returncode
+    return result
+
+def FDroidPopen(commands, cwd=None):
+    """
+    Run a command and capture the possibly huge output.
+
+    :param commands: command and argument list like in subprocess.Popen
+    :param cwd: optionally specifies a working directory
     :returns: A PopenResult.
     """
 
     if cwd:
         cwd = os.path.normpath(cwd)
 
-    if output:
-        if cwd:
-            logging.info("Directory: %s" % cwd)
-        logging.info("> %s" % ' '.join(commands))
-
     if cwd:
-        print("Directory: %s" % cwd)
-    print("> %s" % ' '.join(commands))
+        logging.info("Directory: %s" % cwd)
+    logging.info("> %s" % ' '.join(commands))
 
     result = PopenResult()
     p = subprocess.Popen(commands, cwd=cwd,
@@ -1357,7 +1369,7 @@ def FDroidPopen(commands, cwd=None, output=True):
     while not stdout_reader.eof():
         while not stdout_queue.empty():
             line = stdout_queue.get()
-            if output and options.verbose:
+            if options.verbose:
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
@@ -1399,7 +1411,8 @@ def remove_signing_keys(build_dir):
                             ' signingConfig ',
                             'android.signingConfigs.',
                             'variant.outputFile = ',
-                            '.readLine(')):
+                            '.readLine(',
+                            )):
                         changed = True
                     else:
                         o.write(line)
