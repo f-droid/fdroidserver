@@ -152,8 +152,9 @@ def main():
 
         # Move the source tarball into the output directory...
         tarfilename = apkfilename[:-4] + '_src.tar.gz'
-        shutil.move(os.path.join(unsigned_dir, tarfilename),
-                os.path.join(output_dir, tarfilename))
+        tarfile = os.path.join(unsigned_dir, tarfilename)
+        if os.path.exists(tarfile):
+            shutil.move(tarfile, os.path.join(output_dir, tarfilename))
 
         logging.info('Published ' + apkfilename)
 
