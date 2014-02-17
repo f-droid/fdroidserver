@@ -1055,9 +1055,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             raise BuildException("Error running prebuild command for %s:%s" %
                     (app['id'], build['version']), p.stdout)
 
-    updatemode = build.get('update', 'auto')
+    updatemode = build.get('update', ['auto'])
     # Generate (or update) the ant build file, build.xml...
-    if updatemode != 'no' and build['type'] == 'ant':
+    if updatemode != ['no'] and build['type'] == 'ant':
         parms = [os.path.join(config['sdk_path'], 'tools', 'android'), 'update']
         lparms = parms + ['lib-project']
         parms = parms + ['project']
@@ -1065,10 +1065,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         if 'target' in build and build['target']:
             parms += ['-t', build['target']]
             lparms += ['-t', build['target']]
-        if updatemode == 'auto':
+        if updatemode == ['auto']:
             update_dirs = ant_subprojects(root_dir) + ['.']
         else:
-            update_dirs = [d.strip() for d in updatemode.split(';')]
+            update_dirs = updatemode
 
         for d in update_dirs:
             subdir = os.path.join(root_dir, d)

@@ -852,7 +852,7 @@ possibly sub-projects. This is likely to cause the whole build.xml to be
 rewritten, which is fine if it's a 'standard' android file or doesn't already
 exist, but not a good idea if it's heavily customised.
 
-@item update=xxx
+@item update=<auto/dirs>
 By default, 'android update project' is used to generate or update the
 project and all its referenced projects. Specifying update=no bypasses that.
 Note that this only matters in ant build recipes.
@@ -860,7 +860,7 @@ Note that this only matters in ant build recipes.
 Default value is '@code{auto}', which uses the paths used in the
 project.properties file to find out what project paths to update.
 
-Otherwise, value can be a semicolon-separated list of directories in
+Otherwise, value can be a comma-separated list of directories in
 which to run 'android update project' relative to the main
 application directory (which may include '@code{subdir}' parameter).
 
@@ -895,14 +895,14 @@ Multiple files/directories can be specified by separating them with ','.
 Directories will be recursively deleted.
 
 @item extlibs=a,b,...
-Specifies a list of external libraries (jar files) from the
+Comma-separated list of external libraries (jar files) from the
 @code{build/extlib} library, which will be placed in the @code{libs} directory
-of the project. Separate items with semicolons.
+of the project.
 
 @item srclibs=[n:]a@@r,[n:]b@@r1,...
-Specifies a list of source libraries or Android projects. Separate items with
-semicolons, and each item is of the form name@@rev where name is the predefined
-source library name and rev is the revision or tag in source control to use.
+Comma-separated list of source libraries or Android projects. Each item is of
+the form name@@rev where name is the predefined source library name and rev is
+the revision or tag to use in the respective source control.
 
 For ant projects, you can optionally append a number with a colon at the
 beginning of a srclib item to automatically place it in project.properties as
