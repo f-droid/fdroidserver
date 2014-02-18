@@ -1206,7 +1206,7 @@ def scan_source(build_dir, root_dir, thisbuild):
                 handleproblem('binary executable', fd, fp)
             elif mime == 'application/jar' and has_extension(fp, 'apk'):
                 removeproblem('APK file', fd, fp)
-            elif mime == 'application/jar' and has_extension(fp, 'jar'):
+            elif mime == 'application/jar':
                 warnproblem('JAR file', fd, fp)
 
             elif has_extension(fp, 'java'):
