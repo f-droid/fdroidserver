@@ -417,7 +417,10 @@ class vcs_gitsvn(vcs):
             if p.returncode != 0:
                 raise VCSException("Git clean failed")
             if not self.refreshed:
-                # Get new commits and tags from repo
+                # Get new commits, branches and tags from repo
+                p = SilentPopen(['%sgit svn fetch %s' % self.userargs()], cwd=self.local, shell=True)
+                if p.returncode != 0:
+                    raise VCSException("Git svn fetch failed")
                 p = SilentPopen(['%sgit svn rebase %s' % self.userargs()], cwd=self.local, shell=True)
                 if p.returncode != 0:
                     raise VCSException("Git svn rebase failed")
