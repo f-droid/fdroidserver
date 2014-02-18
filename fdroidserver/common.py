@@ -1211,7 +1211,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                 handleproblem('Java compiled class', fd, fp)
             elif mime == 'application/jar' and has_extension(fp, 'apk'):
                 removeproblem('APK file', fd, fp)
-            elif mime == 'application/jar':
+            elif mime == 'application/jar' or (
+                    mime == 'application/zip' and has_extension(fp, 'jar')):
                 warnproblem('JAR file', fd, fp)
             elif mime == 'application/zip':
                 warnproblem('ZIP file', fd, fp)
