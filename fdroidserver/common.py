@@ -1210,6 +1210,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                 removeproblem('APK file', fd, fp)
             elif mime == 'application/jar':
                 warnproblem('JAR file', fd, fp)
+            elif mime == 'application/zip':
+                warnproblem('ZIP file', fd, fp)
 
             elif has_extension(fp, 'java'):
                 for line in file(fp):
