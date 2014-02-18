@@ -21,27 +21,30 @@
 import sys
 import logging
 
-commands = [
-        "build",
-        "init",
-        "install",
-        "update",
-        "publish",
-        "verify",
-        "checkupdates",
-        "import",
-        "readmeta",
-        "rewritemeta",
-        "lint",
-        "scanner",
-        "stats",
-        "server"]
+commands = {
+        "build": "Build a package from source",
+        "init": "Quickly start a new repository",
+        "publish": "Sign and place packages in the repo",
+        "update": "Update repo information for new packages",
+        "verify": "Verify the integrity of downloaded packages",
+        "checkupdates": "Check for updates to applications",
+        "import": "Add a new application from its source code",
+        "install": "Install built packages on devices",
+        "readmeta": "Read all the metadata files and exit",
+        "rewritemeta": "Rewrite all the metadata files",
+        "lint": "Warn about possible metadata errors",
+        "scanner": "Scan the source code of a package",
+        "stats": "Update the stats of the repo",
+        "server": "Interact with the repo HTTP server",
+        }
 
 def print_help():
+    print "usage: fdroid [-h|--help] <command> [<args>]"
+    print
     print "Valid commands are:"
-    for command in commands:
-        print "  " + command
-    print "Use '%s <command> --help' for more info about that command."%sys.argv[0]
+    for cmd,summary in commands.items():
+        print "   " + cmd + ' '*(15-len(cmd)) + summary
+    print
 
 def main():
 
@@ -50,20 +53,21 @@ def main():
         sys.exit(0)
 
     command = sys.argv[1]
-    if not command in commands:
-        if command not in ('-h', '--help'):
-            print "Command '" + command + "' not recognised.\n"
-        print_help()
-        sys.exit(1)
+    if command not in commands:
+        if command in ('-h', '--help'):
+            print_help()
+            sys.exit(0)
+        else:
+            logging.error("Command '" + command + "' not recognised.\n")
+            print_help()
+            sys.exit(1)
 
     verbose = any(s in sys.argv for s in ['-v', '--verbose'])
 
     if verbose:
-        logging.basicConfig(format='%(levelname)s: %(message)s',
-                level=logging.DEBUG)
+        logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
     else:
-        logging.basicConfig(format='%(message)s',
-                level=logging.INFO)
+        logging.basicConfig(format='%(message)s', level=logging.INFO)
 
     # Trick optparse into displaying the right usage when --help is used.
     sys.argv[0] += ' ' + command
