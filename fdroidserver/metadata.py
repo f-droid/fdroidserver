@@ -440,6 +440,8 @@ def read_metadata(xref=True, package=None, store=True):
 def metafieldtype(name):
     if name in ['Description', 'Maintainer Notes']:
         return 'multiline'
+    if name in ['Categories']:
+        return 'list'
     if name == 'Build Version':
         return 'build'
     if name == 'Build':
@@ -629,6 +631,8 @@ def parse_metadata(metafile):
                     raise MetaDataException("Unexpected text on same line as " + field + " in " + linedesc)
             elif fieldtype == 'string':
                 thisinfo[field] = value
+            elif fieldtype == 'list':
+                thisinfo[field] = [v.strip() for v in value.replace(';',',').split(',')]
             elif fieldtype == 'build':
                 if value.endswith("\\"):
                     mode = 2

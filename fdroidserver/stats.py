@@ -204,10 +204,7 @@ def main():
     logging.info("Processing categories...")
     ctgs = Counter()
     for app in metaapps:
-        if app['Categories'] is None:
-            continue
-        categories = [c.strip() for c in app['Categories'].split(',')]
-        for category in categories:
+        for category in app['Categories']:
             ctgs[category] += 1;
     f = open('stats/categories.txt', 'w')
     for category in ctgs:

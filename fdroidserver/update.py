@@ -190,7 +190,7 @@ def update_wiki(apps, apks):
             wikidata += '\n[[Category:Apps that are disabled]]\n'
         if app['Update Check Mode'] == 'None' and not app['Disabled']:
             wikidata += '\n[[Category:Apps with no update check]]\n'
-        for appcat in [c.strip() for c in app['Categories'].split(',')]:
+        for appcat in app['Categories']:
             wikidata += '\n[[Category:{0}]]\n'.format(appcat)
 
         # We can't have underscores in the page name, even if they're in
@@ -689,12 +689,11 @@ def make_index(apps, apks, repodir, archive, categories):
                 metadata.description_html(app['Description'], linkres), doc, apel)
         addElement('license', app['License'], doc, apel)
         if 'Categories' in app:
-            appcategories = [c.strip() for c in app['Categories'].split(',')]
-            addElement('categories', ','.join(appcategories), doc, apel)
+            addElement('categories', ','.join(app["Categories"]), doc, apel)
             # We put the first (primary) category in LAST, which will have
             # the desired effect of making clients that only understand one
             # category see that one.
-            addElement('category', appcategories[0], doc, apel)
+            addElement('category', app["Categories"][0], doc, apel)
         addElement('web', app['Web Site'], doc, apel)
         addElement('source', app['Source Code'], doc, apel)
         addElement('tracker', app['Issue Tracker'], doc, apel)
@@ -895,12 +894,9 @@ def main():
     apps = metadata.read_metadata()
 
     # Generate a list of categories...
-    categories = []
+    categories = set()
     for app in apps:
-        cats = app['Categories'].split(',')
-        for cat in cats:
-            if cat not in categories:
-                categories.append(cat)
+        categories.update(app['Categories'])
 
     # Read known apks data (will be updated and written back when we've finished)
     knownapks = common.KnownApks()
