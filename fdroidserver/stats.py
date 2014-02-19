@@ -169,7 +169,7 @@ def main():
 
     # Calculate and write stats for repo types...
     logging.info("Processing repo types...")
-    repotypes = {}
+    repotypes = Counter()
     for app in metaapps:
         if len(app['Repo Type']) == 0:
             rtype = 'none'
@@ -178,76 +178,66 @@ def main():
                 rtype = common.getsrclibvcs(app['Repo'])
             else:
                 rtype = app['Repo Type']
-        if rtype in repotypes:
-            repotypes[rtype] += 1;
-        else:
-            repotypes[rtype] = 1
+        repotypes[rtype] += 1
     f = open('stats/repotypes.txt', 'w')
-    for rtype, count in repotypes.iteritems():
+    for rtype in repotypes:
+        count = repotypes[rtype]
         f.write(rtype + ' ' + str(count) + '\n')
     f.close()
 
     # Calculate and write stats for update check modes...
     logging.info("Processing update check modes...")
-    ucms = {}
+    ucms = Counter()
     for app in metaapps:
         checkmode = app['Update Check Mode']
         if checkmode.startswith('RepoManifest/'):
             checkmode = checkmode[:12]
         if checkmode.startswith('Tags '):
             checkmode = checkmode[:4]
-        if checkmode in ucms:
-            ucms[checkmode] += 1;
-        else:
-            ucms[checkmode] = 1
+        ucms[checkmode] += 1;
     f = open('stats/update_check_modes.txt', 'w')
-    for checkmode, count in ucms.iteritems():
+    for checkmode in ucms:
+        count = ucms[checkmode]
         f.write(checkmode + ' ' + str(count) + '\n')
     f.close()
 
     logging.info("Processing categories...")
-    ctgs = {}
+    ctgs = Counter()
     for app in metaapps:
         if app['Categories'] is None:
             continue
         categories = [c.strip() for c in app['Categories'].split(',')]
         for category in categories:
-            if category in ctgs:
-                ctgs[category] += 1;
-            else:
-                ctgs[category] = 1
+            ctgs[category] += 1;
     f = open('stats/categories.txt', 'w')
-    for category, count in ctgs.iteritems():
+    for category in ctgs:
+        count = ctgs[category]
         f.write(category + ' ' + str(count) + '\n')
     f.close()
 
     logging.info("Processing antifeatures...")
-    afs = {}
+    afs = Counter()
     for app in metaapps:
         if app['AntiFeatures'] is None:
             continue
         antifeatures = [a.strip() for a in app['AntiFeatures'].split(',')]
         for antifeature in antifeatures:
-            if antifeature in afs:
-                afs[antifeature] += 1;
-            else:
-                afs[antifeature] = 1
+            afs[antifeature] += 1;
     f = open('stats/antifeatures.txt', 'w')
-    for antifeature, count in afs.iteritems():
+    for antifeature in afs:
+        count = afs[antifeature]
         f.write(antifeature + ' ' + str(count) + '\n')
     f.close()
 
     # Calculate and write stats for licenses...
     logging.info("Processing licenses...")
-    licenses = {}
+    licenses = Counter()
     for app in metaapps:
         license = app['License']
-        if license in licenses:
-            licenses[license] += 1;
-        else:
-            licenses[license] = 1
+        licenses[license] += 1;
     f = open('stats/licenses.txt', 'w')
-    for license, count in licenses.iteritems():
+    for license in licenses:
+        count = licenses[license]
         f.write(license + ' ' + str(count) + '\n')
     f.close()
 
