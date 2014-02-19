@@ -405,6 +405,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         thisinfo['icons_src'][density] = path
                 elif line.startswith("sdkVersion:"):
                     thisinfo['sdkversion'] = re.match(sdkversion_pat, line).group(1)
+                elif line.startswith("maxSdkVersion:"):
+                    thisinfo['maxsdkversion'] = re.match(sdkversion_pat, line).group(1)
                 elif line.startswith("native-code:"):
                     thisinfo['nativecode'] = []
                     for arch in line[13:].split(' '):
@@ -623,7 +625,7 @@ def make_index(apps, apks, repodir, archive, categories):
         repoel.setAttribute("url", config['repo_url'])
         addElement('description', config['repo_description'], doc, repoel)
 
-    repoel.setAttribute("version", "11")
+    repoel.setAttribute("version", "12")
     repoel.setAttribute("timestamp", str(int(time.time())))
 
     if config['repo_keyalias']:
@@ -759,6 +761,8 @@ def make_index(apps, apks, repodir, archive, categories):
             addElement('sig', apk['sig'], doc, apkel)
             addElement('size', str(apk['size']), doc, apkel)
             addElement('sdkver', str(apk['sdkversion']), doc, apkel)
+            if 'maxsdkversion' in apk:
+                addElement('maxsdkver', str(apk['maxsdkversion']), doc, apkel)
             if 'added' in apk:
                 addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
             if app['Requires Root']:
