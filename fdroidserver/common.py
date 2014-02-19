@@ -830,8 +830,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
         libdir = sdir
 
     if srclib["Srclibs"]:
-        n=1
-        for lib in srclib["Srclibs"]:
+        for n,lib in enumerate(srclib["Srclibs"]):
             s_tuple = None
             for t in srclibpaths:
                 if t[0] == lib:
@@ -841,7 +840,6 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
                 raise BuildException('Missing recursive srclib %s for %s' % (
                     lib, name))
             place_srclib(libdir, n, s_tuple[2])
-            n+=1
 
     remove_signing_keys(sdir)
     remove_debuggable_flags(sdir)
