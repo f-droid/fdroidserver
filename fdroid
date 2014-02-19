@@ -58,7 +58,7 @@ def main():
             print_help()
             sys.exit(0)
         else:
-            logging.error("Command '" + command + "' not recognised.\n")
+            print "Command '%s' not recognised.\n" % command
             print_help()
             sys.exit(1)
 
