@@ -705,6 +705,9 @@ def write_metadata(dest, app):
         writecomments(field)
         if value is None:
             value = app[field]
+        t = metafieldtype(field)
+        if t == 'list':
+            value = ','.join(value)
         mf.write("%s:%s\n" % (field, value))
 
     mf = open(dest, 'w')
