@@ -446,7 +446,10 @@ def main():
                         gotcur = True
                     if not latest or int(build['vercode']) > int(latest['vercode']):
                         latest = build
-                if not gotcur:
+
+                if 'disable' in latest:
+                    logging.warn('Skipping %s since the latest build is disabled' % app['id'])
+                elif not gotcur:
                     newbuild = latest.copy()
                     if 'origlines' in newbuild:
                         del newbuild['origlines']
