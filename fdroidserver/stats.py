@@ -29,6 +29,7 @@ import socket
 import logging
 import common, metadata
 import subprocess
+from collections import Counter
 
 def carbon_send(key, value):
     s = socket.socket()
@@ -114,8 +115,8 @@ def main():
     if not options.nologs:
         # Process logs
         logging.info('Processing logs...')
-        apps = {}
-        appsVer = {}
+        appscount = Counter()
+        appsvercount = Counter()
         logexpr = '(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] "GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) \d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
         logsearch = re.compile(logexpr).search
         for logfile in glob.glob(os.path.join(logsdir,'access-*.log.gz')):
@@ -132,16 +133,10 @@ def main():
                         app = knownapks.getapp(apkname)
                         if app:
                             appid, _ = app
-                            if appid in apps:
-                                apps[appid] += 1
-                            else:
-                                apps[appid] = 1
+                            appscount[appid] += 1
                             # Strip the '.apk' from apkname
-                            appVer = apkname[:-4]
-                            if appVer in appsVer:
-                                appsVer[appVer] += 1
-                            else:
-                                appsVer[appVer] = 1
+                            appver = apkname[:-4]
+                            appsvercount[appver] += 1
                         else:
                             if not apkname in unknownapks:
                                 unknownapks.append(apkname)
@@ -149,7 +144,8 @@ def main():
         # Calculate and write stats for total downloads...
         lst = []
         alldownloads = 0
-        for app, count in apps.iteritems():
+        for appid in appscount:
+            count = appscount[appid]
             lst.append(app + " " + str(count))
             if config['stats_to_carbon']:
                 carbon_send('fdroid.download.' + app.replace('.', '_'), count)
@@ -164,7 +160,8 @@ def main():
         f = open('stats/total_downloads_app_version.txt', 'w')
         f.write('# Total downloads by application and version, since October 2011\n')
         lst = []
-        for appver, count in appsVer.iteritems():
+        for appver in appsvercount:
+            count = appsvercount[appver]
             lst.append(appver + " " + str(count))
         for line in sorted(lst):
             f.write(line + "\n")
