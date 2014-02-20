@@ -212,7 +212,7 @@ class FDroid
 								$thisapk['vercode']=$pel;
 								break;
 							case "added":
-								$thisapk['added']=$el;
+								$thisapk['added']=$pel;
 								break;
 							case "apkname":
 								$thisapk['apkname']=$pel;
