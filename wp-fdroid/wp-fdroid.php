@@ -132,21 +132,31 @@ class FDroid
 	function getlicenseurl($license) {
 		switch($license) {
 		case 'MIT':
-			return 'http://www.gnu.org/licenses/license-list.html#X11License';
+			return 'https://www.gnu.org/licenses/license-list.html#X11License';
 		case 'NewBSD':
-			return 'http://www.gnu.org/licenses/license-list.html#ModifiedBSD';
+			return 'https://www.gnu.org/licenses/license-list.html#ModifiedBSD';
 		case 'BSD':
-			return 'http://www.gnu.org/licenses/license-list.html#OriginalBSD';
+			return 'https://www.gnu.org/licenses/license-list.html#OriginalBSD';
 		case 'GPLv3':
 		case 'GPLv3+':
-			return 'http://www.gnu.org/licenses/license-list.html#GNUGPL';
+			return 'https://www.gnu.org/licenses/license-list.html#GNUGPLv3';
 		case 'GPLv2':
 		case 'GPLv2+':
-			return 'http://www.gnu.org/licenses/license-list.html#GPLv2';
+			return 'https://www.gnu.org/licenses/license-list.html#GPLv2';
+		case 'AGPLv3':
+		case 'AGPLv3+':
+			return 'https://www.gnu.org/licenses/license-list.html#AGPLv3.0';
 		case 'LGPL':
-			return 'http://www.gnu.org/licenses/license-list.html#LGPL';
+			return 'https://www.gnu.org/licenses/license-list.html#LGPL';
+		case 'LGPL':
+		case 'LGPLv3':
+			return 'https://www.gnu.org/licenses/license-list.html#LGPLv3';
+		case 'LGPLv2.1':
+			return 'https://www.gnu.org/licenses/license-list.html#LGPLv2.1';
 		case 'Apache2':
-			return 'http://www.gnu.org/licenses/license-list.html#apache2';
+			return 'https://www.gnu.org/licenses/license-list.html#apache2';
+		case 'WTFPL':
+			return 'https://www.gnu.org/licenses/license-list.html#WTFPL';
 		default:
 			return null;
 		}
