@@ -580,8 +580,8 @@ class FDroid
 			$out.="</div>";
 
 			$out.='<div style="float:right;">';
-			$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'list')).'">List</a> | ';
-			$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'grid')).'">Grid</a>';
+			$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'list', 'fdpage'=>1)).'">List</a> | ';
+			$out.='<a href="'.makelink($query_vars, array('fdstyle'=>'grid', 'fdpage'=>1)).'">Grid</a>';
 			$out.='</div>';
 
 			$out.='<br break="all"/>';
