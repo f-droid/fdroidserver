@@ -623,7 +623,7 @@ class FDroid
 
 		$out.='<input type="hidden" name="page_id" value="'.(int)get_query_var('page_id').'">';
 		foreach($query_vars as $name => $value) {
-			if($value !== null && $name != 'fdfilter' && !($name == 'fdpage' && (int)$value ==1))
+			if($value !== null && $name != 'fdfilter' && $name != 'fdpage')
 				$out.='<input type="hidden" name="'.$name.'" value="'.sanitize_text_field($value).'">';
 		}
 
