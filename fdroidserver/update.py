@@ -236,22 +236,22 @@ def update_wiki(apps, apks):
             if page.name in genp:
                 pagetxt = page.edit()
                 if pagetxt != genp[page.name]:
-                    logging.info("Updating modified page " + page.name)
+                    logging.debug("Updating modified page " + page.name)
                     page.save(genp[page.name], summary='Auto-updated')
                 else:
-                    logging.info("Page " + page.name + " is unchanged")
+                    logging.debug("Page " + page.name + " is unchanged")
             else:
-                logging.info("Deleting page " + page.name)
+                logging.warn("Deleting page " + page.name)
                 page.delete('No longer published')
         for pagename, text in genp.items():
-            logging.info("Checking " + pagename)
+            logging.debug("Checking " + pagename)
             if not pagename in existingpages:
-                logging.info("Creating page " + pagename)
+                logging.debug("Creating page " + pagename)
                 try:
                     newpage = site.Pages[pagename]
                     newpage.save(text, summary='Auto-created')
                 except:
-                    logging.warn("...FAILED to create page")
+                    logging.error("...FAILED to create page")
 
     # Purge server cache to ensure counts are up to date
     site.pages['Repository Maintenance'].purge()
@@ -272,7 +272,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
                     srcpath = os.path.join(repodir, apkfilename[:-4] + "_src.tar.gz")
                     for name in [apkpath, srcpath]:
                         if os.path.exists(name):
-                            logging.info("Deleting disabled build output " + apkfilename)
+                            logging.warn("Deleting disabled build output " + apkfilename)
                             os.remove(name)
                 if apkfilename in apkcache:
                     del apkcache[apkfilename]
@@ -289,15 +289,15 @@ def resize_icon(iconpath, density):
         if any(length > size for length in im.size):
             oldsize = im.size
             im.thumbnail((size, size), Image.ANTIALIAS)
-            logging.info("%s was too large at %s - new size is %s" % (
+            logging.debug("%s was too large at %s - new size is %s" % (
                 iconpath, oldsize, im.size))
             im.save(iconpath, "PNG")
 
         else:
-            logging.debug("%s is small enough: %s" % im.size)
+            logging.info("%s is small enough: %s" % im.size)
 
     except Exception,e:
-        logging.warn("Failed resizing {0} - {1}".format(iconpath, e))
+        logging.error("Failed resizing {0} - {1}".format(iconpath, e))
 
 def resize_all_icons(repodirs):
     """Resize all icons that exceed the max size
@@ -348,11 +348,11 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
         apkfilename = apkfile[len(repodir) + 1:]
         if ' ' in apkfilename:
-            logging.info("No spaces in APK filenames!")
+            logging.error("No spaces in APK filenames!")
             sys.exit(1)
 
         if apkfilename in apkcache:
-            logging.info("Reading " + apkfilename + " from cache")
+            logging.debug("Reading " + apkfilename + " from cache")
             thisinfo = apkcache[apkfilename]
 
         else:
