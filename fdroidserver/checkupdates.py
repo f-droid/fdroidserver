@@ -352,6 +352,7 @@ def main():
         tag = None
         msg = None
         vercode = None
+        noverok = False
         mode = app['Update Check Mode']
         if mode.startswith('Tags'):
             pattern = mode[5:] if len(mode) > 4 else None
@@ -368,9 +369,11 @@ def main():
         elif mode == 'Static':
             version = None
             msg = 'Checking disabled'
+            noverok = True
         elif mode == 'None':
             version = None
             msg = 'Checking disabled'
+            noverok = True
         else:
             version = None
             msg = 'Invalid update check method'
@@ -381,7 +384,11 @@ def main():
 
         updating = False
         if not version:
-            logging.info("...%s" % msg)
+            logmsg = "...{0} : {1}".format(app[id], msg)
+            if noverok:
+                logging.info(logmsg)
+            else:
+                logging.warn(logmsg)
         elif vercode == app['Current Version Code']:
             logging.info("...up to date")
         else:
@@ -420,7 +427,7 @@ def main():
                         app['Current Version'] = cv
                         writeit = True
             except Exception:
-                logging.info("ERROR: Auto Name or Current Version failed for %s due to exception: %s" % (app['id'], traceback.format_exc()))
+                logging.error("Auto Name or Current Version failed for %s due to exception: %s" % (app['id'], traceback.format_exc()))
 
         if updating:
             name = common.getappname(app)
@@ -467,7 +474,7 @@ def main():
                     ver = common.getcvname(app)
                     logmsg = "Update %s to %s" % (name, ver)
             else:
-                logging.warn('Invalid auto update mode "' + mode + '"')
+                logging.warn('Invalid auto update mode "' + mode + '" on ' + app['id'])
 
         if writeit:
             metafile = os.path.join('metadata', app['id'] + '.txt')
