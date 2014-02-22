@@ -50,7 +50,7 @@ def check_http(app):
 
         vercode = "99999999"
         if len(urlcode) > 0:
-            logging.info("...requesting {0}".format(urlcode))
+            logging.debug("...requesting {0}".format(urlcode))
             req = urllib2.Request(urlcode, None)
             resp = urllib2.urlopen(req, None, 20)
             page = resp.read()
@@ -63,7 +63,7 @@ def check_http(app):
         version = "??"
         if len(urlver) > 0:
             if urlver != '.':
-                logging.info("...requesting {0}".format(urlver))
+                logging.debug("...requesting {0}".format(urlver))
                 req = urllib2.Request(urlver, None)
                 resp = urllib2.urlopen(req, None, 20)
                 page = resp.read()
@@ -121,14 +121,14 @@ def check_tags(app, pattern):
             tags = [tag for tag in tags if pat.match(tag)]
 
         for tag in tags:
-            logging.info("Check tag: '{0}'".format(tag))
+            logging.debug("Check tag: '{0}'".format(tag))
             vcs.gotorevision(tag)
 
             # Only process tags where the manifest exists...
             paths = common.manifest_paths(build_dir, flavour)
             version, vercode, package = common.parse_androidmanifests(paths)
             if package and package == app['id'] and version and vercode:
-                logging.info("Manifest exists. Found version %s (%s)" % (
+                logging.debug("Manifest exists. Found version %s (%s)" % (
                         version, vercode))
                 if int(vercode) > int(hcode):
                     htag = tag
@@ -207,7 +207,7 @@ def check_repomanifest(app, branch=None):
 
         vercode = str(int(vercode))
 
-        logging.info("Manifest exists. Found version %s (%s)" % (version, vercode))
+        logging.debug("Manifest exists. Found version %s (%s)" % (version, vercode))
 
         return (version, vercode)
 
@@ -339,7 +339,7 @@ def main():
     for app in apps:
 
         if options.autoonly and app['Auto Update Mode'] == 'None':
-            logging.info("Nothing to do for %s..." % app['id'])
+            logging.debug("Nothing to do for %s..." % app['id'])
             continue
 
         logging.info("Processing " + app['id'] + '...')
@@ -465,7 +465,7 @@ def main():
                     ver = common.getcvname(app)
                     logmsg = "Update %s to %s" % (name, ver)
             else:
-                logging.info('Invalid auto update mode "' + mode + '"')
+                logging.warn('Invalid auto update mode "' + mode + '"')
 
         if writeit:
             metafile = os.path.join('metadata', app['id'] + '.txt')
@@ -478,7 +478,7 @@ def main():
                     gitcmd.extend(['--author', config['auto_author']])
                 gitcmd.extend(["--", metafile])
                 if subprocess.call(gitcmd) != 0:
-                    logging.info("Git commit failed")
+                    logging.error("Git commit failed")
                     sys.exit(1)
 
     logging.info("Finished.")
