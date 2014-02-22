@@ -36,6 +36,8 @@ def main():
     parser = OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
+    parser.add_option("-q", "--quiet", action="store_true", default=False,
+                      help="Restrict output to warnings and errors")
     (options, args) = parser.parse_args()
 
     config = common.read_config(options)

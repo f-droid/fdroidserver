@@ -357,8 +357,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
         else:
 
-            if not options.quiet:
-                logging.info("Processing " + apkfilename)
+            logging.info("Processing " + apkfilename)
             thisinfo = {}
             thisinfo['apkname'] = apkfilename
             srcfilename = apkfilename[:-4] + "_src.tar.gz"
@@ -786,9 +785,8 @@ def make_index(apps, apks, repodir, archive, categories):
 
     if config['repo_keyalias'] is not None:
 
-        if not options.quiet:
-            logging.info("Creating signed index.")
-            logging.info("Key fingerprint: %s" % repo_pubkey_fingerprint)
+        logging.info("Creating signed index.")
+        logging.info("Key fingerprint: %s" % repo_pubkey_fingerprint)
 
         #Create a jar of the index...
         p = FDroidPopen(['jar', 'cf', 'index.jar', 'index.xml'], cwd=repodir)
@@ -864,7 +862,7 @@ def main():
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     parser.add_option("-q", "--quiet", action="store_true", default=False,
-                      help="No output, except for warnings and errors")
+                      help="Restrict output to warnings and errors")
     parser.add_option("-b", "--buildreport", action="store_true", default=False,
                       help="Report on build data status")
     parser.add_option("-i", "--interactive", default=False, action="store_true",

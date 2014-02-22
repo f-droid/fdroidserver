@@ -63,9 +63,15 @@ def main():
             sys.exit(1)
 
     verbose = any(s in sys.argv for s in ['-v', '--verbose'])
+    quiet = any(s in sys.argv for s in ['-q', '--quiet'])
+    if verbose and quiet:
+        print "Specifying verbose and quiet and the same time is silly"
+        sys.exit(1)
 
     if verbose:
         logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
+    elif quiet:
+        logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.WARN)
     else:
         logging.basicConfig(format='%(message)s', level=logging.INFO)
 
