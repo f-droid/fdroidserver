@@ -589,21 +589,25 @@ class vcs_bzr(vcs):
         return [tag.split('   ')[0].strip() for tag in
                 p.stdout.splitlines()]
 
-def retrieve_string(xml_dir, string):
+def retrieve_string(app_dir, string, xmlfiles=None):
+    if xmlfiles is None:
+        xmlfiles = []
+        for r,d,f in os.walk(app_dir):
+            if r.endswith('/res/values'):
+                xmlfiles += [os.path.join(r,x) for x in f if x.endswith('.xml')]
+
+    string_search = None
     if string.startswith('@string/'):
         string_search = re.compile(r'.*"'+string[8:]+'".*?>([^<]+?)<.*').search
-        for xmlfile in glob.glob(os.path.join(xml_dir, '*.xml')):
-            for line in file(xmlfile):
-                matches = string_search(line)
-                if matches:
-                    return retrieve_string(xml_dir, matches.group(1))
     elif string.startswith('&') and string.endswith(';'):
         string_search = re.compile(r'.*<!ENTITY.*'+string[1:-1]+'.*?"([^"]+?)".*>').search
-        for xmlfile in glob.glob(os.path.join(xml_dir, '*.xml')):
+
+    if string_search is not None:
+        for xmlfile in xmlfiles:
             for line in file(xmlfile):
                 matches = string_search(line)
                 if matches:
-                    return retrieve_string(xml_dir, matches.group(1))
+                    return retrieve_string(app_dir, matches.group(1), xmlfiles)
 
     return string.replace("\\'","'")
 
@@ -628,7 +632,6 @@ def fetch_real_name(app_dir, flavour):
     for f in manifest_paths(app_dir, flavour):
         if not has_extension(f, 'xml'):
             continue
-        xml_dir = os.path.join(f[:-19], 'res', 'values')
         for line in file(f):
             if not app_found:
                 if app_search(line):
@@ -636,7 +639,7 @@ def fetch_real_name(app_dir, flavour):
             if app_found:
                 matches = name_search(line)
                 if matches:
-                    return retrieve_string(xml_dir, matches.group(1)).strip()
+                    return retrieve_string(app_dir, matches.group(1)).strip()
     return ''
 
 # Retrieve the version name
@@ -644,8 +647,7 @@ def version_name(original, app_dir, flavour):
     for f in manifest_paths(app_dir, flavour):
         if not has_extension(f, 'xml'):
             continue
-        xml_dir = os.path.join(f[:-19], 'res', 'values')
-        string = retrieve_string(xml_dir, original)
+        string = retrieve_string(app_dir, original)
         if string:
             return string
     return original
