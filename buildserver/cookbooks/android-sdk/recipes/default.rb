@@ -32,7 +32,7 @@ end
 script "add_build_tools" do
   interpreter "bash"
   user user
-  ver = "19.0.1"
+  ver = "19.0.2"
   cwd "/tmp"
   code "
     if [ -f /vagrant/cache/build-tools/#{ver}.tar.gz ] ; then
