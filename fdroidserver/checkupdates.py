@@ -384,7 +384,7 @@ def main():
 
         updating = False
         if not version:
-            logmsg = "...{0} : {1}".format(app[id], msg)
+            logmsg = "...{0} : {1}".format(app['id'], msg)
             if noverok:
                 logging.info(logmsg)
             else:
