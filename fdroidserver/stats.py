@@ -148,9 +148,9 @@ def main():
         alldownloads = 0
         for appid in appscount:
             count = appscount[appid]
-            lst.append(app + " " + str(count))
+            lst.append(appid + " " + str(count))
             if config['stats_to_carbon']:
-                carbon_send('fdroid.download.' + app.replace('.', '_'), count)
+                carbon_send('fdroid.download.' + appid.replace('.', '_'), count)
             alldownloads += count
         lst.append("ALL " + str(alldownloads))
         f = open('stats/total_downloads_app.txt', 'w')
