@@ -830,7 +830,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
         libdir = sdir
 
     if srclib["Srclibs"]:
-        for n,lib in enumerate(srclib["Srclibs"]):
+        for n,lib in enumerate(srclib["Srclibs"].replace(';',',').split(',')):
             s_tuple = None
             for t in srclibpaths:
                 if t[0] == lib:
