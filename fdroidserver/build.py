@@ -30,6 +30,7 @@ import json
 from ConfigParser import ConfigParser
 from optparse import OptionParser, OptionError
 import logging
+import multiprocessing
 
 import common, metadata
 from common import BuildException, VCSException, FDroidPopen, SilentPopen
@@ -471,7 +472,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         jni_components = thisbuild.get('buildjni')
         if jni_components == ['yes']:
             jni_components = ['']
+        jobs = multiprocessing.cpu_count()
         ndkbuild = os.path.join(config['ndk_path'], "ndk-build")
+        cmd = [ndkbuild, "-j"+str(jobs)]
         for d in jni_components:
             logging.info("Building native code in '%s'" % d)
             manifest = root_dir + '/' + d + '/AndroidManifest.xml'
@@ -485,7 +488,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 open(manifest, 'w').write(manifest_text)
                 # In case the AM.xml read was big, free the memory
                 del manifest_text
-            p = FDroidPopen([ndkbuild], cwd=os.path.join(root_dir,d))
+            p = FDroidPopen(cmd, cwd=os.path.join(root_dir,d))
             if p.returncode != 0:
                 raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout)
 
