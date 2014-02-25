@@ -82,6 +82,10 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
     """Do a build on the build server."""
 
     import ssh
+    if options.debug:
+        logging.getLogger("ssh").setLevel(logging.DEBUG)
+    else:
+        logging.getLogger("ssh").setLevel(logging.WARN)
 
     # Reset existing builder machine to a clean state if possible.
     vm_ok = False
