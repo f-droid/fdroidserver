@@ -82,7 +82,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
     """Do a build on the build server."""
 
     import ssh
-    if options.debug:
+    if options.verbose:
         logging.getLogger("ssh").setLevel(logging.DEBUG)
     else:
         logging.getLogger("ssh").setLevel(logging.WARN)
