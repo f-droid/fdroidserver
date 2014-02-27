@@ -438,7 +438,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         logging.info("Scanning source for common problems...")
         buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
         if len(buildprobs) > 0:
-            logging.info('Scanner found %d problems:' % len(buildprobs))
+            logging.warn('Scanner found %d problems:' % len(buildprobs))
             for problem in buildprobs:
                 logging.info('    %s' % problem)
             if not force:
@@ -913,13 +913,13 @@ def main():
                         build_dir = os.path.join('build', app['id'])
 
                     # Set up vcs interface and make sure we have the latest code...
-                    logging.info("Getting {0} vcs interface for {1}".format(
+                    logging.debug("Getting {0} vcs interface for {1}".format(
                             app['Repo Type'], app['Repo']))
                     vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
 
                     first = False
 
-                logging.info("Checking " + thisbuild['version'])
+                logging.debug("Checking " + thisbuild['version'])
                 if trybuild(app, thisbuild, build_dir, output_dir, also_check_dir,
                         srclib_dir, extlib_dir, tmp_dir, repo_dir, vcs, options.test,
                         options.server, options.force, options.onserver):
