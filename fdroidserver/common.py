@@ -1406,8 +1406,6 @@ def FDroidPopen(commands, cwd=None, shell=False):
 def remove_signing_keys(build_dir):
     comment = re.compile(r'[ ]*//')
     signing_configs = re.compile(r'^[\t ]*signingConfigs[ \t]*{[ \t]*$')
-    r_open = re.compile(r'.*{[\t ]*$')
-    r_close = re.compile(r'.*}[\t ]*$')
     line_matches = [
             re.compile(r'^[\t ]*signingConfig [^ ]*$'),
             re.compile(r'android.signingConfigs.'),
@@ -1417,7 +1415,6 @@ def remove_signing_keys(build_dir):
     for root, dirs, files in os.walk(build_dir):
         if 'build.gradle' in files:
             path = os.path.join(root, 'build.gradle')
-            changed = False
 
             with open(path, "r") as o:
                 lines = o.readlines()
@@ -1426,40 +1423,38 @@ def remove_signing_keys(build_dir):
             with open(path, "w") as o:
                 for line in lines:
                     if comment.match(line):
-                        pass
-                    elif signing_configs.match(line):
-                        opened = 1
-                        changed = True
-                    elif opened > 0:
-                        if r_open.match(line):
-                            opened += 1
-                        elif r_close.match(line):
-                            opened -= 1
-                    elif any(s.match(line) for s in line_matches):
-                        changed = True
-                    else:
+                        continue
+
+                    if opened > 0:
+                        opened += line.count('{')
+                        opened -= line.count('}')
+                        continue
+
+                    if signing_configs.match(line):
+                        opened += 1
+                        continue
+
+                    if any(s.match(line) for s in line_matches):
+                        continue
+
+                    if opened == 0:
                         o.write(line)
 
-            if changed:
-                logging.info("Cleaned build.gradle of keysigning configs at %s" % path)
+            logging.info("Cleaned build.gradle of keysigning configs at %s" % path)
 
         for propfile in ('build.properties', 'default.properties', 'ant.properties'):
             if propfile in files:
                 path = os.path.join(root, propfile)
-                changed = False
 
                 with open(path, "r") as o:
                     lines = o.readlines()
 
                 with open(path, "w") as o:
                     for line in lines:
-                        if line.startswith('key.store'):
-                            changed = True
-                        else:
+                        if not line.startswith('key.store'):
                             o.write(line)
 
-                if changed:
-                    logging.info("Cleaned %s of keysigning configs at %s" % (propfile,path))
+                logging.info("Cleaned %s of keysigning configs at %s" % (propfile,path))
 
 def replace_config_vars(cmd):
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
