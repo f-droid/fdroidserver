@@ -372,7 +372,7 @@ class vcs_gitsvn(vcs):
     def userargs(self):
         if self.username is None:
             return ('', '')
-        return ('echo "%s" | DISPLAY="" ' % self.password, '--username "%s"' % self.username)
+        return ('echo "%s" | DISPLAY="" ' % self.password, ' --username "%s"' % self.username)
 
     # If the local directory exists, but is somehow not a git repository, git
     # will traverse up the directory tree until it finds one that is (i.e.
@@ -387,7 +387,7 @@ class vcs_gitsvn(vcs):
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout
-            gitsvn_cmd = '%sgit svn clone %s' % self.userargs()
+            gitsvn_cmd = '%sgit svn clone%s' % self.userargs()
             if ';' in self.remote:
                 remote_split = self.remote.split(';')
                 for i in remote_split[1:]:
