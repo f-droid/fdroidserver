@@ -994,8 +994,12 @@ def main():
                 f.close()
                 logging.info("Generated skeleton metadata for " + apk['id'])
             else:
-                logging.warn(apk['apkname'] + " (" + apk['id'] + ") has no metadata")
-                logging.info("       " + apk['name'] + " - " + apk['version'])
+                logging.warn(apk['apkname'] + " (" + apk['id'] + ") has no metadata - removing")
+                rmf = os.path.join(repodirs[0], apk['apkname'])
+                if not os.path.exists(rmf):
+                    logging.error("Could not find {0} to remove it".format(rmf))
+                else:
+                    os.remove(rmf)
 
     if len(repodirs) > 1:
         archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])
