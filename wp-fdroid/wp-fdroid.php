@@ -370,11 +370,11 @@ class FDroid
 					$hasminsdk = isset($apk['sdkver']);
 					$hasmaxsdk = isset($apk['maxsdkver']);
 					if($hasminsdk && $hasmaxsdk) {
-						$out.="<p>This app requires Android ".$this->androidversion($apk['sdkver'])." up to ".$this->androidversion($apk['maxsdkver'])."</p>";
+						$out.="<p>This version requires Android ".$this->androidversion($apk['sdkver'])." up to ".$this->androidversion($apk['maxsdkver'])."</p>";
 					} elseif($hasminsdk) {
-						$out.="<p>This app requires Android ".$this->androidversion($apk['sdkver'])."</p>";
+						$out.="<p>This version requires Android ".$this->androidversion($apk['sdkver'])." or newer.</p>";
 					} elseif($hasmaxsdk) {
-						$out.="<p>This app requires Android up to ".$this->androidversion($apk['maxsdkver'])."</p>";
+						$out.="<p>This version requires Android ".$this->androidversion($apk['maxsdkver'])." or old.</p>";
 					}
 
 					$hasabis = isset($apk['nativecode']);
