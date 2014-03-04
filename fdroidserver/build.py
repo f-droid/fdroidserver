@@ -809,7 +809,7 @@ def parse_commandline():
                       help="Update the wiki")
     options, args = parser.parse_args()
 
-    # Force --stop with --on-server to get cotrect exit code
+    # Force --stop with --on-server to get correct exit code
     if options.onserver:
         options.stop = True
 
