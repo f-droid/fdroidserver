@@ -239,6 +239,12 @@ class FDroid
 							case "sdkver":
 								$thisapk['sdkver']=$pel;
 								break;
+							case "maxsdkver":
+								$thisapk['maxsdkver']=$pel;
+								break;
+							case "nativecode":
+								$thisapk['nativecode']=$pel;
+								break;
 							case "permissions":
 								$thisapk['permissions']=$pel;
 								break;
@@ -335,6 +341,12 @@ class FDroid
 					$first = $i+1==count($apks);
 					$out.="<p><b>Version ".$apk['version']."</b>";
 					$out.=" - Added on ".$apk['added']."<br />";
+
+					$hasabis = isset($apk['nativecode']);
+					if($hasabis) {
+						$abis = str_replace(',', ' ', $apk['nativecode']);
+						$out.="<p>This app uses native code and will only run on: ".$abis."</p>";
+					}
 
 					// Is this source or binary?
 					$srcbuild = isset($apk['srcname']) && file_exists($this->site_path.'/repo/'.$apk['srcname']);
