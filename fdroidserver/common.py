@@ -250,7 +250,7 @@ class vcs:
         if os.path.exists(self.local):
             if os.path.exists(fdpath):
                 with open(fdpath, 'r') as f:
-                    fsdata = f.read()
+                    fsdata = f.read().strip()
                 if fsdata == cdata:
                     writeback = False
                 else:
