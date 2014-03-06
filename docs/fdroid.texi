@@ -246,7 +246,7 @@ particular application is named @code{package.id.txt} where package.id is the
 unique identifier for that package.
 
 See the Metadata chapter for details of what goes in the metadata file. All
-fields are relevant for binary APKs, EXCEPT for 'Build Version' entries, which
+fields are relevant for binary APKs, EXCEPT for @code{Build:} entries, which
 should be omitted.
 
 
@@ -291,7 +291,7 @@ except now you need to:
 
 @enumerate
 @item
-Include Build Version entries in the metadata files.
+Include Build entries in the metadata files.
 @item
 Run @code{fdroid build} to build any applications that are not already built.
 @item
@@ -353,7 +353,7 @@ Along similar lines (and only in conjunction with @code{--test}, you can use
 @code{--force} to force a build of a Disabled application, where normally it
 would be completely ignored. Similarly a version that was found to contain
 ELFs or known non-free libraries can be forced to build. See also —
-scanignore= and scandelete= in the Build Version section.
+@code{scanignore=} and @code{scandelete=} in the @code{Build:} section.
 
 If the build was unsuccessful, you can find out why by looking at the output
 in the logs/ directory. If that isn't illuminating, try building the app the
@@ -478,7 +478,7 @@ The following sections describe the fields recognised within the file.
 * Maintainer Notes::
 * Repo Type::
 * Repo::
-* Build Version::
+* Build::
 * AntiFeatures::
 * Disabled::
 * Requires Root::
@@ -783,20 +783,21 @@ according srclib .txt file. For example if @code{scrlibs/FooBar.txt} exist
 and you want to use this srclib, then you have to set Repo to
 @code{FooBar}.
 
-@node Build Version
-@section Build Version
+@node Build
+@section Build
 
-@cindex Build Version
+@cindex Build
 
 Any number of these fields can be present, each specifying a version to
 automatically build from source. The value is a comma-separated list.
 For example:
 
-@samp{Build Version:0.12,3,651696a49be2cd7db5ce6a2fa8185e31f9a20035}
+@samp{Build:1.2,12}
 
-The above specifies to build version 0.12, which has a version code of 3.
-The third parameter specifies the tag, commit or revision number from
-which to build it in the source repository.
+The above specifies to build version 1.2, which has a version code of 12.
+The @code{commit=} parameter specifies the tag, commit or revision number from
+which to build it in the source repository. It is the only mandatory flag,
+which in this case could for example be @code{commit=v1.2}.
 
 In addition to the three, always required, parameters described above,
 further parameters can be added (in name=value format) to apply further
