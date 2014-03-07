@@ -60,9 +60,9 @@ cachedir = os.path.join('buildserver', 'cache')
 if not os.path.exists(cachedir):
     os.mkdir(cachedir)
 cachefiles = [
-    ('android-sdk_r22.3-linux.tgz',
-     'https://dl.google.com/android/android-sdk_r22.3-linux.tgz',
-     '4077575c98075480e0156c10e48a1521e31c7952768271a206870e6813057f4f'),
+    ('android-sdk_r22.6-linux.tgz',
+     'https://dl.google.com/android/android-sdk_r22.6-linux.tgz',
+     'da4c25536ba7f85cdd37be8636fcc563480410788df30c3fc5b5c876e6220e5f'),
     ('gradle-1.4-bin.zip',
      'http://services.gradle.org/distributions/gradle-1.4-bin.zip',
      'cd99e85fbcd0ae8b99e81c9992a2f10cceb7b5f009c3720ef3a0078f4f92e94e'),
