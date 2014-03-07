@@ -25,9 +25,7 @@ d_plugin_k=( 0.9  0.8 0.7 0.6 0.5 0.4 0.3 0.2)
 d_plugin_v=(1.11 1.10 1.9 1.8 1.6 1.6 1.4 1.4)
 
 # Latest takes priority
-files=(../build.gradle build.gradle)
-
-for f in ${files[@]}; do
+for f in ../build.gradle build.gradle; do
 	[[ -f $f ]] || continue
 	while read l; do
 		if [[ $l == *'com.android.tools.build:gradle:'* ]]; then
@@ -61,8 +59,9 @@ if [[ -n $plugin_pver ]]; then
 	fi
 fi
 
-[[ -n $v_found ]] && run_gradle
+if [[ -z $v_found ]]; then
+	echo "No suitable gradle version found - defaulting to $v_def"
+	v_found=$v_def
+fi
 
-echo "No suitable gradle version found - defaulting to $v_def"
-v_found=$v_def
 run_gradle
