@@ -57,7 +57,7 @@ def read_config(opts, config_file='config.py'):
     defconfig = {
         'sdk_path': "$ANDROID_HOME",
         'ndk_path': "$ANDROID_NDK",
-        'build_tools': "19.0.2",
+        'build_tools': "19.0.3",
         'ant': "ant",
         'mvn3': "mvn",
         'gradle': 'gradle',
