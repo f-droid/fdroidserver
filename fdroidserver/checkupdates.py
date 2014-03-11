@@ -340,7 +340,7 @@ def main():
 
     for app in apps:
 
-        if options.autoonly and app['Auto Update Mode'] == 'None':
+        if options.autoonly and app['Auto Update Mode'] in ('None', 'Static'):
             logging.debug("Nothing to do for %s..." % app['id'])
             continue
 
@@ -366,11 +366,7 @@ def main():
             (version, vercode) = check_repotrunk(app)
         elif mode == 'HTTP':
             (version, vercode) = check_http(app)
-        elif mode == 'Static':
-            version = None
-            msg = 'Checking disabled'
-            noverok = True
-        elif mode == 'None':
+        elif mode in ('None', 'Static'):
             version = None
             msg = 'Checking disabled'
             noverok = True
@@ -398,7 +394,7 @@ def main():
             writeit = True
 
         # Do the Auto Name thing as well as finding the CV real name
-        if len(app["Repo Type"]) > 0 and mode != 'None':
+        if len(app["Repo Type"]) > 0 and mode not in ('None', 'Static'):
 
             try:
 
@@ -438,7 +434,7 @@ def main():
 
         if options.auto:
             mode = app['Auto Update Mode']
-            if mode == 'None':
+            if mode in ('None', 'Static'):
                 pass
             elif mode.startswith('Version '):
                 pattern = mode[8:]
