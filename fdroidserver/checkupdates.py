@@ -458,7 +458,7 @@ def main():
                         latest = build
 
                 if 'disable' in latest:
-                    logging.warn('Skipping %s since the latest build is disabled' % app['id'])
+                    logging.warn('Not auto-updating %s since the latest build is disabled' % app['id'])
                 elif not gotcur:
                     newbuild = latest.copy()
                     if 'origlines' in newbuild:
