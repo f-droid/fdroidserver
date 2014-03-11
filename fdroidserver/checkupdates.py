@@ -420,6 +420,7 @@ def main():
                 new_name = common.fetch_real_name(app_dir, flavour)
                 if new_name != app['Auto Name']:
                     app['Auto Name'] = new_name
+                    writeit = True
 
                 if app['Current Version'].startswith('@string/'):
                     cv = common.version_name(app['Current Version'], app_dir, flavour)
