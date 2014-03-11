@@ -398,7 +398,7 @@ def main():
             writeit = True
 
         # Do the Auto Name thing as well as finding the CV real name
-        if len(app["Repo Type"]) > 0:
+        if len(app["Repo Type"]) > 0 and mode != 'None':
 
             try:
 
