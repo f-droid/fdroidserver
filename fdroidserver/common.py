@@ -1442,7 +1442,12 @@ def remove_signing_keys(build_dir):
 
             logging.info("Cleaned build.gradle of keysigning configs at %s" % path)
 
-        for propfile in ('build.properties', 'default.properties', 'ant.properties'):
+        for propfile in [
+                'project.properties',
+                'build.properties',
+                'default.properties',
+                'ant.properties',
+                ]:
             if propfile in files:
                 path = os.path.join(root, propfile)
 
@@ -1451,8 +1456,11 @@ def remove_signing_keys(build_dir):
 
                 with open(path, "w") as o:
                     for line in lines:
-                        if not line.startswith('key.store'):
-                            o.write(line)
+                        if line.startswith('key.store'):
+                            continue
+                        if line.startswith('key.alias'):
+                            continue
+                        o.write(line)
 
                 logging.info("Cleaned %s of keysigning configs at %s" % (propfile,path))
 
