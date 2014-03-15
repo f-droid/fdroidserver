@@ -76,7 +76,7 @@ def check_http(app):
         return (version, vercode)
 
     except Exception:
-        msg = "Could not complete http check for app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
+        msg = "Could not complete http check for app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
         return (None, msg)
 
 # Check for a new version by looking at the tags in the source repo.
@@ -128,7 +128,7 @@ def check_tags(app, pattern):
             paths = common.manifest_paths(build_dir, flavour)
             version, vercode, package = common.parse_androidmanifests(paths)
             if package and package == app['id'] and version and vercode:
-                logging.debug("Manifest exists. Found version %s (%s)" % (
+                logging.debug("Manifest exists. Found version {0} ({1})".format(
                         version, vercode))
                 if int(vercode) > int(hcode):
                     htag = tag
@@ -140,13 +140,13 @@ def check_tags(app, pattern):
         return (None, "Couldn't find any version information", None)
 
     except BuildException as be:
-        msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
+        msg = "Could not scan app {0} due to BuildException: {1}".format(app['id'], be)
         return (None, msg, None)
     except VCSException as vcse:
-        msg = "VCS error while scanning app %s: %s" % (app['id'], vcse)
+        msg = "VCS error while scanning app {0}: {1}".format(app['id'], vcse)
         return (None, msg, None)
     except Exception:
-        msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
+        msg = "Could not scan app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
         return (None, msg, None)
 
 # Check for a new version by looking at the AndroidManifest.xml at the HEAD
@@ -207,18 +207,18 @@ def check_repomanifest(app, branch=None):
 
         vercode = str(int(vercode))
 
-        logging.debug("Manifest exists. Found version %s (%s)" % (version, vercode))
+        logging.debug("Manifest exists. Found version {0} ({1})".format(version, vercode))
 
         return (version, vercode)
 
     except BuildException as be:
-        msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
+        msg = "Could not scan app {0} due to BuildException: {1}".format(app['id'], be)
         return (None, msg)
     except VCSException as vcse:
-        msg = "VCS error while scanning app %s: %s" % (app['id'], vcse)
+        msg = "VCS error while scanning app {0}: {1}".format(app['id'], vcse)
         return (None, msg)
     except Exception:
-        msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
+        msg = "Could not scan app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
         return (None, msg)
 
 def check_repotrunk(app, branch=None):
@@ -242,13 +242,13 @@ def check_repotrunk(app, branch=None):
         ref = vcs.getref()
         return (ref, ref)
     except BuildException as be:
-        msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
+        msg = "Could not scan app {0} due to BuildException: {1}".format(app['id'], be)
         return (None, msg)
     except VCSException as vcse:
-        msg = "VCS error while scanning app %s: %s" % (app['id'], vcse)
+        msg = "VCS error while scanning app {0}: {1}".format(app['id'], vcse)
         return (None, msg)
     except Exception:
-        msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
+        msg = "Could not scan app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
         return (None, msg)
 
 # Check for a new version by looking at the Google Play Store.
@@ -317,23 +317,23 @@ def main():
             version, reason = check_gplay(app)
             if version is None:
                 if reason == '404':
-                    logging.info("%s is not in the Play Store" % common.getappname(app))
+                    logging.info("{0} is not in the Play Store".format(common.getappname(app)))
                 else:
-                    logging.info("%s encountered a problem: %s" % (common.getappname(app), reason))
+                    logging.info("{0} encountered a problem: {1}".format(common.getappname(app), reason))
             if version is not None:
                 stored = app['Current Version']
                 if not stored:
-                    logging.info("%s has no Current Version but has version %s on the Play Store" % (
+                    logging.info("{0} has no Current Version but has version {1} on the Play Store".format(
                             common.getappname(app), version))
                 elif LooseVersion(stored) < LooseVersion(version):
-                    logging.info("%s has version %s on the Play Store, which is bigger than %s" % (
+                    logging.info("{0} has version {1} on the Play Store, which is bigger than {2}".format(
                             common.getappname(app), version, stored))
                 else:
                     if stored != version:
-                        logging.info("%s has version %s on the Play Store, which differs from %s" % (
+                        logging.info("{0} has version {1} on the Play Store, which differs from {2}".format(
                                 common.getappname(app), version, stored))
                     else:
-                        logging.info("%s has the same version %s on the Play Store" % (
+                        logging.info("{0} has the same version {1} on the Play Store".format(
                                 common.getappname(app), version))
         return
 
@@ -341,7 +341,7 @@ def main():
     for app in apps:
 
         if options.autoonly and app['Auto Update Mode'] in ('None', 'Static'):
-            logging.debug("Nothing to do for %s..." % app['id'])
+            logging.debug("Nothing to do for {0}...".format(app['id']))
             continue
 
         logging.info("Processing " + app['id'] + '...')
@@ -428,7 +428,7 @@ def main():
                         if not logmsg:
                             logmsg = "Fix CV of {0}".format(common.getappname(app))
             except Exception:
-                logging.error("Auto Name or Current Version failed for %s due to exception: %s" % (app['id'], traceback.format_exc()))
+                logging.error("Auto Name or Current Version failed for {0} due to exception: {1}".format(app['id'], traceback.format_exc()))
 
         if updating:
             name = common.getappname(app)
