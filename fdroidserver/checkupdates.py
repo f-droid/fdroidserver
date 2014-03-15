@@ -417,12 +417,16 @@ def main():
                 if new_name != app['Auto Name']:
                     app['Auto Name'] = new_name
                     writeit = True
+                    if not logmsg:
+                        logmsg = "Set autoname of {0}".format(common.getappname(app))
 
                 if app['Current Version'].startswith('@string/'):
                     cv = common.version_name(app['Current Version'], app_dir, flavour)
                     if app['Current Version'] != cv:
                         app['Current Version'] = cv
                         writeit = True
+                        if not logmsg:
+                            logmsg = "Fix CV of {0}".format(common.getappname(app))
             except Exception:
                 logging.error("Auto Name or Current Version failed for %s due to exception: %s" % (app['id'], traceback.format_exc()))
 
