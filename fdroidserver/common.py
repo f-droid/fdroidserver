@@ -646,7 +646,10 @@ def fetch_real_name(app_dir, flavour):
                 if matches:
                     stringname = matches.group(1)
                     logging.debug("fetch_real_name: using string " + stringname)
-                    return retrieve_string(app_dir, stringname).strip()
+                    result = retrieve_string(app_dir, stringname)
+                    if result:
+                        result = result.strip()
+                    return result
     return None
 
 # Retrieve the version name
