@@ -632,6 +632,7 @@ def fetch_real_name(app_dir, flavour):
     for f in manifest_paths(app_dir, flavour):
         if not has_extension(f, 'xml'):
             continue
+        logging.debug("fetch_real_name: Checking manifest at " + f)
         for line in file(f):
             if not app_found:
                 if app_search(line):
@@ -639,7 +640,9 @@ def fetch_real_name(app_dir, flavour):
             if app_found:
                 matches = name_search(line)
                 if matches:
-                    return retrieve_string(app_dir, matches.group(1)).strip()
+                    stringname = matches.group(1)
+                    logging.debug("fetch_real_name: using string " + stringname)
+                    return retrieve_string(app_dir, stringname).strip()
     return ''
 
 # Retrieve the version name

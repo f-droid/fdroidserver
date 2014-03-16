@@ -413,7 +413,10 @@ def main():
                     if 'gradle' in app['builds'][-1]:
                         flavour = app['builds'][-1]['gradle']
 
+                logging.debug("...fetch auto name from " + app_dir +
+                        ((" (flavour:" + flavour) if flavour else ""))
                 new_name = common.fetch_real_name(app_dir, flavour)
+                logging.debug("...got autoname '" + new_name + "'")
                 if new_name != app['Auto Name']:
                     app['Auto Name'] = new_name
                     if not commitmsg:
