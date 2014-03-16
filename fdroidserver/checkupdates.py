@@ -346,8 +346,9 @@ def main():
 
         logging.info("Processing " + app['id'] + '...')
 
-        writeit = False
-        logmsg = None
+        # If a change is made, commitmsg should be set to a description of it.
+        # Only if this is set will changes be written back to the metadata.
+        commitmsg = None
 
         tag = None
         msg = None
@@ -391,7 +392,6 @@ def main():
             app['Current Version'] = version
             app['Current Version Code'] = str(int(vercode))
             updating = True
-            writeit = True
 
         # Do the Auto Name thing as well as finding the CV real name
         if len(app["Repo Type"]) > 0 and mode not in ('None', 'Static'):
@@ -416,17 +416,15 @@ def main():
                 new_name = common.fetch_real_name(app_dir, flavour)
                 if new_name != app['Auto Name']:
                     app['Auto Name'] = new_name
-                    writeit = True
-                    if not logmsg:
-                        logmsg = "Set autoname of {0}".format(common.getappname(app))
+                    if not commitmsg:
+                        commitmsg = "Set autoname of {0}".format(common.getappname(app))
 
                 if app['Current Version'].startswith('@string/'):
                     cv = common.version_name(app['Current Version'], app_dir, flavour)
                     if app['Current Version'] != cv:
                         app['Current Version'] = cv
-                        writeit = True
-                        if not logmsg:
-                            logmsg = "Fix CV of {0}".format(common.getappname(app))
+                        if not commitmsg:
+                            commitmsg = "Fix CV of {0}".format(common.getappname(app))
             except Exception:
                 logging.error("Auto Name or Current Version failed for {0} due to exception: {1}".format(app['id'], traceback.format_exc()))
 
@@ -434,7 +432,7 @@ def main():
             name = common.getappname(app)
             ver = common.getcvname(app)
             logging.info('...updating to version %s' % ver)
-            logmsg = 'Update CV of %s to %s' % (name, ver)
+            commitmsg = 'Update CV of %s to %s' % (name, ver)
 
         if options.auto:
             mode = app['Auto Update Mode']
@@ -470,20 +468,19 @@ def main():
                     commit = commit.replace('%c', newbuild['vercode'])
                     newbuild['commit'] = commit
                     app['builds'].append(newbuild)
-                    writeit = True
                     name = common.getappname(app)
                     ver = common.getcvname(app)
-                    logmsg = "Update %s to %s" % (name, ver)
+                    commitmsg = "Update %s to %s" % (name, ver)
             else:
                 logging.warn('Invalid auto update mode "' + mode + '" on ' + app['id'])
 
-        if writeit:
+        if commitmsg:
             metafile = os.path.join('metadata', app['id'] + '.txt')
             metadata.write_metadata(metafile, app)
-            if options.commit and logmsg:
+            if options.commit:
                 logging.info("Commiting update for " + metafile)
                 gitcmd = ["git", "commit", "-m",
-                    logmsg]
+                    commitmsg]
                 if 'auto_author' in config:
                     gitcmd.extend(['--author', config['auto_author']])
                 gitcmd.extend(["--", metafile])
