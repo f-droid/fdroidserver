@@ -416,11 +416,14 @@ def main():
                 logging.debug("...fetch auto name from " + app_dir +
                         ((" (flavour:" + flavour) if flavour else ""))
                 new_name = common.fetch_real_name(app_dir, flavour)
-                logging.debug("...got autoname '" + new_name + "'")
-                if new_name != app['Auto Name']:
-                    app['Auto Name'] = new_name
-                    if not commitmsg:
-                        commitmsg = "Set autoname of {0}".format(common.getappname(app))
+                if new_name:
+                    logging.debug("...got autoname '" + new_name + "'")
+                    if new_name != app['Auto Name']:
+                        app['Auto Name'] = new_name
+                        if not commitmsg:
+                            commitmsg = "Set autoname of {0}".format(common.getappname(app))
+                else:
+                    logging.debug("...couldn't get autoname")
 
                 if app['Current Version'].startswith('@string/'):
                     cv = common.version_name(app['Current Version'], app_dir, flavour)

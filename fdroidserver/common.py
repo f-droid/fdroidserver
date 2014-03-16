@@ -611,6 +611,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
                 matches = string_search(line)
                 if matches:
                     return retrieve_string(app_dir, matches.group(1), xmlfiles)
+        return None
 
     return string.replace("\\'","'")
 
@@ -627,7 +628,7 @@ def manifest_paths(app_dir, flavour):
 
     return [path for path in possible_manifests if os.path.isfile(path)]
 
-# Retrieve the package name
+# Retrieve the package name. Returns the name, or None if not found.
 def fetch_real_name(app_dir, flavour):
     app_search = re.compile(r'.*<application.*').search
     name_search = re.compile(r'.*android:label="([^"]+)".*').search
@@ -646,7 +647,7 @@ def fetch_real_name(app_dir, flavour):
                     stringname = matches.group(1)
                     logging.debug("fetch_real_name: using string " + stringname)
                     return retrieve_string(app_dir, stringname).strip()
-    return ''
+    return None
 
 # Retrieve the version name
 def version_name(original, app_dir, flavour):
