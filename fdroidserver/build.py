@@ -962,10 +962,7 @@ def main():
             if options.wiki and wikilog:
                 try:
                     newpage = site.Pages[app['id'] + '/lastbuild']
-                    txt = wikilog
-                    if len(txt) > 8192:
-                        txt = txt[-8192:]
-                    txt = "Build completed at " + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + "\n\n" + txt
+                    txt = "Build completed at " + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + "\n\n" + wikilog
                     newpage.save(txt, summary='Build log')
                 except:
                     logging.info("Error while attempting to publish build log")

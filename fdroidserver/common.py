@@ -774,7 +774,8 @@ class BuildException(Exception):
         if self.detail:
             ret += "=detail=\n"
             ret += "<pre>\n"
-            ret += str(self.detail)
+            txt = self.detail[-8192:] if len(self.detail) > 8192 else self.detail
+            ret += str(txt)
             ret += "</pre>\n"
         return ret
 
