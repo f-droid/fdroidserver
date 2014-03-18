@@ -591,13 +591,17 @@ class vcs_bzr(vcs):
 
 def retrieve_string(app_dir, string, xmlfiles=None):
 
-    res_dir = os.path.join(app_dir, 'res')
+    res_dirs = [
+            os.path.join(app_dir, 'res'),
+            os.path.join(app_dir, 'src/main/res'),
+            ]
 
     if xmlfiles is None:
         xmlfiles = []
-        for r,d,f in os.walk(res_dir):
-            if r.endswith('/values'):
-                xmlfiles += [os.path.join(r,x) for x in f if x.endswith('.xml')]
+        for res_dir in res_dirs:
+            for r,d,f in os.walk(res_dir):
+                if r.endswith('/values'):
+                    xmlfiles += [os.path.join(r,x) for x in f if x.endswith('.xml')]
 
     string_search = None
     if string.startswith('@string/'):
