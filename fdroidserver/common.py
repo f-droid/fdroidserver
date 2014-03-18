@@ -51,7 +51,7 @@ def read_config(opts, config_file='config.py'):
 
     config = {}
 
-    logging.info("Reading %s" % config_file)
+    logging.debug("Reading %s" % config_file)
     execfile(config_file, config)
 
     defconfig = {
