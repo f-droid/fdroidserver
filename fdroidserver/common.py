@@ -1186,7 +1186,7 @@ def scan_source(build_dir, root_dir, thisbuild):
             problems.append('Found %s at %s' % (what, fd))
 
     def warnproblem(what, fd, fp):
-        logging.info('Warning: Found %s at %s' % (what, fd))
+        logging.warn('Found %s at %s' % (what, fd))
 
     def insidedir(path, dirname):
         return path.endswith('/%s' % dirname) or '/%s/' % dirname in path

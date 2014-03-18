@@ -243,9 +243,9 @@ def main():
             logging.info("Couldn't find package ID")
             sys.exit(1)
         if not version:
-            logging.info("WARNING: Couldn't find latest version name")
+            logging.warn("Couldn't find latest version name")
         if not vercode:
-            logging.info("WARNING: Couldn't find latest version code")
+            logging.warn("Couldn't find latest version code")
     else:
         spec = os.path.join(root_dir, 'buildozer.spec')
         if os.path.exists(spec):
