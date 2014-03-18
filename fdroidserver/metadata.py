@@ -48,6 +48,7 @@ app_defaults = {
     'AntiFeatures': None,
     'Archive Policy': None,
     'Update Check Mode': 'None',
+    'Update Check Name': None,
     'Update Check Data': None,
     'Vercode Operation': None,
     'Auto Update Mode': 'None',

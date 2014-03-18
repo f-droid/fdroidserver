@@ -89,6 +89,7 @@ def check_tags(app, pattern):
 
     try:
 
+        appid = app['Update Check Name'] if app['Update Check Name'] else app['id']
         if app['Repo Type'] == 'srclib':
             build_dir = os.path.join('build', 'srclib', app['Repo'])
             repotype = common.getsrclibvcs(app['Repo'])
@@ -127,13 +128,15 @@ def check_tags(app, pattern):
             # Only process tags where the manifest exists...
             paths = common.manifest_paths(build_dir, flavour)
             version, vercode, package = common.parse_androidmanifests(paths)
-            if package and package == app['id'] and version and vercode:
-                logging.debug("Manifest exists. Found version {0} ({1})".format(
-                        version, vercode))
-                if int(vercode) > int(hcode):
-                    htag = tag
-                    hcode = str(int(vercode))
-                    hver = version
+            if not package or package != appid or not version or not vercode:
+                continue
+
+            logging.debug("Manifest exists. Found version {0} ({1})".format(
+                    version, vercode))
+            if int(vercode) > int(hcode):
+                htag = tag
+                hcode = str(int(vercode))
+                hver = version
 
         if hver:
             return (hver, hcode, htag)
@@ -159,6 +162,7 @@ def check_repomanifest(app, branch=None):
 
     try:
 
+        appid = app['Update Check Name'] if 'Update Check Name' in app else app['id']
         if app['Repo Type'] == 'srclib':
             build_dir = os.path.join('build', 'srclib', app['Repo'])
             repotype = common.getsrclibvcs(app['Repo'])
@@ -198,7 +202,7 @@ def check_repomanifest(app, branch=None):
         version, vercode, package = common.parse_androidmanifests(paths)
         if not package:
             return (None, "Couldn't find package ID")
-        if package != app['id']:
+        if package != appid:
             return (None, "Package ID mismatch")
         if not version:
             return (None,"Couldn't find latest version name")
