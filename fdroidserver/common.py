@@ -309,7 +309,7 @@ class vcs_git(vcs):
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout
-            p = SilentPopen(['git', 'clone', self.remote, self.local])
+            p = FDroidPopen(['git', 'clone', self.remote, self.local])
             if p.returncode != 0:
                 raise VCSException("Git clone failed")
             self.checkrepo()
@@ -326,7 +326,7 @@ class vcs_git(vcs):
                 raise VCSException("Git clean failed")
             if not self.refreshed:
                 # Get latest commits and tags from remote
-                p = SilentPopen(['git', 'fetch', 'origin'], cwd=self.local)
+                p = FDroidPopen(['git', 'fetch', 'origin'], cwd=self.local)
                 if p.returncode != 0:
                     raise VCSException("Git fetch failed")
                 p = SilentPopen(['git', 'fetch', '--prune', '--tags', 'origin'], cwd=self.local)
@@ -352,7 +352,7 @@ class vcs_git(vcs):
             p = SilentPopen(['git', 'submodule', 'foreach', '--recursive'] + cmd, cwd=self.local)
             if p.returncode != 0:
                 raise VCSException("Git submodule reset failed")
-        p = SilentPopen(['git', 'submodule', 'update', '--init', '--force', '--recursive'], cwd=self.local)
+        p = FDroidPopen(['git', 'submodule', 'update', '--init', '--force', '--recursive'], cwd=self.local)
         if p.returncode != 0:
             raise VCSException("Git submodule update failed")
 
@@ -1358,28 +1358,9 @@ class PopenResult:
     stdout = ''
 
 def SilentPopen(commands, cwd=None, shell=False):
-    """
-    Run a command silently and capture the output.
+    return FDroidPopen(commands, cwd=cwd, shell=shell, output=False)
 
-    :param commands: command and argument list like in subprocess.Popen
-    :param cwd: optionally specifies a working directory
-    :returns: A Popen object.
-    """
-
-    if cwd:
-        cwd = os.path.normpath(cwd)
-        logging.debug("Directory: %s" % cwd)
-    logging.debug("> %s" % ' '.join(commands))
-
-    result = PopenResult()
-    p = subprocess.Popen(commands, cwd=cwd, shell=shell,
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
-    result.stdout = p.communicate()[0]
-    result.returncode = p.returncode
-    return result
-
-def FDroidPopen(commands, cwd=None, shell=False):
+def FDroidPopen(commands, cwd=None, shell=False, output=True):
     """
     Run a command and capture the possibly huge output.
 
@@ -1395,6 +1376,7 @@ def FDroidPopen(commands, cwd=None, shell=False):
 
     result = PopenResult()
     p = subprocess.Popen(commands, cwd=cwd, shell=shell,
+            universal_newlines=True,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     stdout_queue = Queue.Queue()
@@ -1405,7 +1387,7 @@ def FDroidPopen(commands, cwd=None, shell=False):
     while not stdout_reader.eof():
         while not stdout_queue.empty():
             line = stdout_queue.get()
-            if options.verbose:
+            if output and options.verbose:
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
