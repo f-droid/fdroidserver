@@ -25,21 +25,112 @@ import common, metadata
 config = None
 options = None
 
-appid = None
+regex_warnings = {
+        'Web Site': [
+            (re.compile(r'.*[^sS]://github\.com/.*'),
+                "github URLs should always use https:// not http://"),
+            (re.compile(r'.*[^sS]://code\.google\.com/.*'),
+                "code.google.com URLs should always use https:// not http://"),
+        ],
+        'Source Code': [
+            (re.compile(r'.*[^sS]://github\.com/.*'),
+                "github URLs should always use https:// (not http://, git://, or git@)"),
+            (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
+                "/source is missing"),
+            (re.compile(r'.*[^sS]://code\.google\.com/.*'),
+                "code.google.com URLs should always use https:// not http://"),
+            (re.compile(r'.*[^sS]://dl\.google\.com/.*'),
+                "dl.google.com URLs should always use https:// not http://"),
+            (re.compile(r'.*[^sS]://gitorious\.org/.*'),
+                "gitorious URLs should always use https:// (not http://, git://, or git@)"),
+        ],
+        'Repo': [
+            (re.compile(r'.*[^sS]://code\.google\.com/.*'),
+                "code.google.com URLs should always use https:// not http://"),
+            (re.compile(r'.*[^sS]://dl\.google\.com/.*'),
+                "dl.google.com URLs should always use https:// not http://"),
+            (re.compile(r'.*[^sS]://github\.com/.*'),
+                "github URLs should always use https:// (not http://, git://, or git@)"),
+            (re.compile(r'.*[^sS]://gitorious\.org/.*'),
+                "gitorious URLs should always use https:// (not http://, git://, or git@)"),
+            (re.compile(r'.*[^sS]://[^.]*\.googlecode\.com/svn/?.*'),
+                "Google Code SVN URLs should always use https:// (not http:// or svn://)"),
+            (re.compile(r'.*[^sS]://svn\.apache\.org/repos/?.*'),
+                "Apache SVN URLs should always use https:// (not http:// or svn://)"),
+            (re.compile(r'.*[^sS]://svn\.code\.sf\.net/.*'),
+                "Sourceforge SVN URLs should always use https:// (not http:// or svn://)"),
+        ],
+        'Issue Tracker': [
+            (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
+                "/issues is missing"),
+            (re.compile(r'.*[^sS]://code\.google\.com/.*'),
+                "code.google.com URLs should always use https:// not http://"),
+            (re.compile(r'.*github\.com/[^/]+/[^/]+[/]*$'),
+                "/issues is missing"),
+            (re.compile(r'.*[^sS]://github\.com/.*'),
+                "github URLs should always use https:// not http://"),
+            (re.compile(r'.*[^sS]://gitorious\.org/.*'),
+                "gitorious URLs should always use https:// not http://"),
+        ],
+}
 
-def warn(message):
-    global appid
-    if appid:
-        print "%s:" % appid
-        appid = None
-    print '    %s' % message
+regex_pedantic = {
+        'Web Site': [
+            (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
+                "Appending .git is not necessary"),
+            (re.compile(r'.*code\.google\.com/p/[^/]+/[^w]'),
+                "Possible incorrect path appended to google code project site"),
+        ],
+        'Source Code': [
+            (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
+                "Appending .git is not necessary"),
+            (re.compile(r'.*code\.google\.com/p/[^/]+/source/.*'),
+                "/source is often enough on its own"),
+        ],
+        'Repo': [
+            (re.compile(r'^http://.*'),
+                "if https:// is available, use it instead of http://"),
+            (re.compile(r'^svn://.*'),
+                "if https:// is available, use it instead of svn://"),
+        ],
+        'Issue Tracker': [
+            (re.compile(r'.*code\.google\.com/p/[^/]+/issues/.*'),
+                "/issues is often enough on its own"),
+            (re.compile(r'.*github\.com/[^/]+/[^/]+/issues/.*'),
+                "/issues is often enough on its own"),
+        ],
+        'Summary': [
+            (re.compile(r'.*\bandroid\b.*', re.IGNORECASE),
+                "No need to specify that the app is for Android"),
+            (re.compile(r'.*\b(app|application)\b.*', re.IGNORECASE),
+                "No need to specify that the app is... an app"),
+            (re.compile(r'.*\b(free software|open source)\b.*', re.IGNORECASE),
+                "No need to specify that the app is Free Software"),
+        ],
+}
+
+appid = None
 
 def main():
 
     global config, options, appid
 
+    def warn(message):
+        global appid
+        if appid:
+            print "%s:" % appid
+            appid = None
+        print '    %s' % message
+
+    def pwarn(message):
+        if options.pedantic:
+            warn(message)
+
+
     # Parse command line...
     parser = OptionParser(usage="Usage: %prog [options] [APPID [APPID ...]]")
+    parser.add_option("-p", "--pedantic", action="store_true", default=False,
+                      help="Show pedantic warnings that might give false positives")
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     (options, args) = parser.parse_args()
@@ -49,71 +140,6 @@ def main():
     # Get all apps...
     allapps = metadata.read_metadata(xref=False)
     apps = common.read_app_args(args, allapps, False)
-
-    regex_warnings = {
-            'Web Site': [
-                (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
-                    "Appending .git is not necessary"),
-                (re.compile(r'.*[^sS]://github\.com/.*'),
-                    "github URLs should always use https:// not http://"),
-                (re.compile(r'.*code\.google\.com/p/[^/]+/[^w]'),
-                    "Possible incorrect path appended to google code project site"),
-                (re.compile(r'.*[^sS]://code\.google\.com/.*'),
-                    "code.google.com URLs should always use https:// not http://"),
-            ],
-            'Source Code': [
-                (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
-                    "Appending .git is not necessary"),
-                (re.compile(r'.*[^sS]://github\.com/.*'),
-                    "github URLs should always use https:// (not http://, git://, or git@)"),
-                (re.compile(r'.*code\.google\.com/p/[^/]+/source/.*'),
-                    "/source is often enough on its own"),
-                (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
-                    "/source is missing"),
-                (re.compile(r'.*[^sS]://code\.google\.com/.*'),
-                    "code.google.com URLs should always use https:// not http://"),
-                (re.compile(r'.*[^sS]://dl\.google\.com/.*'),
-                    "dl.google.com URLs should always use https:// not http://"),
-                (re.compile(r'.*[^sS]://gitorious\.org/.*'),
-                    "gitorious URLs should always use https:// (not http://, git://, or git@)"),
-            ],
-            'Repo': [
-                (re.compile(r'.*[^sS]://code\.google\.com/.*'),
-                    "code.google.com URLs should always use https:// not http://"),
-                (re.compile(r'.*[^sS]://dl\.google\.com/.*'),
-                    "dl.google.com URLs should always use https:// not http://"),
-                (re.compile(r'.*[^sS]://github\.com/.*'),
-                    "github URLs should always use https:// (not http://, git://, or git@)"),
-                (re.compile(r'.*[^sS]://gitorious\.org/.*'),
-                    "gitorious URLs should always use https:// (not http://, git://, or git@)"),
-                (re.compile(r'.*[^sS]://[^.]*\.googlecode\.com/svn/?.*'),
-                    "Google Code SVN URLs should always use https:// (not http:// or svn://)"),
-                (re.compile(r'.*[^sS]://svn\.apache\.org/repos/?.*'),
-                    "Apache SVN URLs should always use https:// (not http:// or svn://)"),
-                (re.compile(r'.*[^sS]://svn\.code\.sf\.net/.*'),
-                    "Sourceforge SVN URLs should always use https:// (not http:// or svn://)"),
-                (re.compile(r'^http://.*'),
-                    "if https:// is available, use it instead of http://"),
-                (re.compile(r'^svn://.*'),
-                    "if https:// is available, use it instead of svn://"),
-            ],
-            'Issue Tracker': [
-                (re.compile(r'.*code\.google\.com/p/[^/]+/issues/.*'),
-                    "/issues is often enough on its own"),
-                (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
-                    "/issues is missing"),
-                (re.compile(r'.*[^sS]://code\.google\.com/.*'),
-                    "code.google.com URLs should always use https:// not http://"),
-                (re.compile(r'.*github\.com/[^/]+/[^/]+/issues/.*'),
-                    "/issues is often enough on its own"),
-                (re.compile(r'.*github\.com/[^/]+/[^/]+[/]*$'),
-                    "/issues is missing"),
-                (re.compile(r'.*[^sS]://github\.com/.*'),
-                    "github URLs should always use https:// not http://"),
-                (re.compile(r'.*[^sS]://gitorious\.org/.*'),
-                    "gitorious URLs should always use https:// not http://"),
-            ]
-    }
 
     for app in apps:
         appid = app['id']
@@ -128,8 +154,8 @@ def main():
 
         # Potentially incorrect UCM
         if (app['Update Check Mode'] == 'RepoManifest' and
-                any(s in lastcommit for s in ('.', ',', '_', '-', '/'))):
-            warn("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
+                any(s in lastcommit for s in '.,_-/')):
+            pwarn("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
                 lastcommit, app['Update Check Mode']))
 
         # No license
@@ -157,22 +183,28 @@ def main():
         # No punctuation in summary
         if app['Summary']:
             lastchar = app['Summary'][-1]
-            if any(lastchar==c for c in ['.', ',', '!', '?']):
+            if any(lastchar==c for c in '.,!?'):
                 warn("Summary should not end with a %s" % lastchar)
 
-        # Common mistakes in urls
+        # Regex checks in all kinds of fields
         for f in regex_warnings:
             for m, r in regex_warnings[f]:
                 if m.match(app[f]):
-                    warn("%s url '%s': %s" % (f, app[f], r))
+                    warn("%s '%s': %s" % (f, app[f], r))
+
+        # Regex pedantic checks in all kinds of fields
+        if options.pedantic:
+            for f in regex_pedantic:
+                for m, r in regex_pedantic[f]:
+                    if m.match(app[f]):
+                        warn("%s '%s': %s" % (f, app[f], r))
 
         # Build warnings
         for build in app['builds']:
             for n in ['master', 'origin/', 'default', 'trunk']:
-                if 'commit' not in build:
-                    continue
-                if build['commit'].startswith(n):
-                    warn("Branch '%s' used as commit" % n)
+                if 'commit' in build:
+                    if build['commit'].startswith(n):
+                        warn("Branch '%s' used as commit" % n)
 
         if not appid:
             print
