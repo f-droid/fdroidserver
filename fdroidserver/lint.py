@@ -106,6 +106,8 @@ regex_pedantic = {
                 "No need to specify that the app is... an app"),
             (re.compile(r'.*\b(free software|open source)\b.*', re.IGNORECASE),
                 "No need to specify that the app is Free Software"),
+            (re.compile(r'.*[.,!?].*'),
+                "Punctuation should be avoided"),
         ],
 }
 
@@ -180,12 +182,6 @@ def main():
             warn("Description of length %s is over the %i char limit" % (
                 desc_chars, config['char_limits']['Description']))
 
-        # No punctuation in summary
-        if app['Summary']:
-            lastchar = app['Summary'][-1]
-            if any(lastchar==c for c in '.,!?'):
-                warn("Summary should not end with a %s" % lastchar)
-
         # Regex checks in all kinds of fields
         for f in regex_warnings:
             for m, r in regex_warnings[f]:
@@ -205,6 +201,11 @@ def main():
                 if 'commit' in build:
                     if build['commit'].startswith(n):
                         warn("Branch '%s' used as commit" % n)
+                if 'srclibs' in build:
+                    for srclib in build['srclibs']:
+                        ref = srclib.split('@')[1].split('/')[0]
+                        if ref.startswith(n):
+                            warn("Branch '%s' used as srclib commit" % n)
 
         if not appid:
             print
