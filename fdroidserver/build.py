@@ -613,8 +613,11 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         commands = [config['gradle']]
         if 'preassemble' in thisbuild:
             commands += thisbuild['preassemble'].split()
+
         flavours_cmd = ''.join(flavours)
-        flavours_cmd = flavours_cmd[0].upper() + flavours_cmd[1:]
+        if flavours_cmd:
+            flavours_cmd = flavours_cmd[0].upper() + flavours_cmd[1:]
+
         commands += ['assemble'+flavours_cmd+'Release']
 
         p = FDroidPopen(commands, cwd=gradle_dir)
