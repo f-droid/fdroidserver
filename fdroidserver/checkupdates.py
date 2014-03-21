@@ -111,6 +111,8 @@ def check_tags(app, pattern):
                 build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
             if 'gradle' in app['builds'][-1]:
                 flavour = app['builds'][-1]['gradle']
+        if flavour == 'yes':
+            flavour = None
 
         htag = None
         hver = None
@@ -193,6 +195,8 @@ def check_repomanifest(app, branch=None):
                 build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
             if 'gradle' in app['builds'][-1]:
                 flavour = app['builds'][-1]['gradle']
+        if flavour == 'yes':
+            flavour = None
 
         if not os.path.isdir(build_dir):
             return (None, "Subdir '" + app['builds'][-1]['subdir'] + "'is not a valid directory")
@@ -416,9 +420,11 @@ def main():
                         app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
                     if 'gradle' in app['builds'][-1]:
                         flavour = app['builds'][-1]['gradle']
+                if flavour == 'yes':
+                    flavour = None
 
                 logging.debug("...fetch auto name from " + app_dir +
-                        ((" (flavour:" + flavour) if flavour else ""))
+                        ((" (flavour: %s)" % flavour) if flavour else ""))
                 new_name = common.fetch_real_name(app_dir, flavour)
                 if new_name:
                     logging.debug("...got autoname '" + new_name + "'")
