@@ -368,13 +368,17 @@ def main():
             (version, vercode, tag) = check_tags(app, pattern)
         elif mode == 'RepoManifest':
             (version, vercode) = check_repomanifest(app)
+            msg = vercode
         elif mode.startswith('RepoManifest/'):
             tag = mode[13:]
             (version, vercode) = check_repomanifest(app, tag)
+            msg = vercode
         elif mode == 'RepoTrunk':
             (version, vercode) = check_repotrunk(app)
+            msg = vercode
         elif mode == 'HTTP':
             (version, vercode) = check_http(app)
+            msg = vercode
         elif mode in ('None', 'Static'):
             version = None
             msg = 'Checking disabled'
