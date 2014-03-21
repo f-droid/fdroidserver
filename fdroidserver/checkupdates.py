@@ -164,7 +164,7 @@ def check_repomanifest(app, branch=None):
 
     try:
 
-        appid = app['Update Check Name'] if 'Update Check Name' in app else app['id']
+        appid = app['Update Check Name'] if app['Update Check Name'] else app['id']
         if app['Repo Type'] == 'srclib':
             build_dir = os.path.join('build', 'srclib', app['Repo'])
             repotype = common.getsrclibvcs(app['Repo'])
