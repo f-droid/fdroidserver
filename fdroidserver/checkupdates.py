@@ -366,6 +366,7 @@ def main():
         if mode.startswith('Tags'):
             pattern = mode[5:] if len(mode) > 4 else None
             (version, vercode, tag) = check_tags(app, pattern)
+            msg = vercode
         elif mode == 'RepoManifest':
             (version, vercode) = check_repomanifest(app)
             msg = vercode
