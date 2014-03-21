@@ -624,6 +624,7 @@ def manifest_paths(app_dir, flavour):
 
     possible_manifests = [ os.path.join(app_dir, 'AndroidManifest.xml'),
             os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml'),
+            os.path.join(app_dir, 'src', 'AndroidManifest.xml'),
             os.path.join(app_dir, 'build.gradle') ]
 
     if flavour:
