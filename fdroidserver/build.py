@@ -944,7 +944,9 @@ def main():
                 logfile = open(os.path.join(log_dir, app['id'] + '.log'), 'a+')
                 logfile.write(str(be))
                 logfile.close()
-                print("Could not build app %s due to BuildException: %s" % (app['id'], be))
+                reason = str(be).split('\n',1)[0] if options.verbose else str(be)
+                print("Could not build app %s due to BuildException: %s" % (
+                    app['id'], reason))
                 if options.stop:
                     sys.exit(1)
                 failed_apps[app['id']] = be
