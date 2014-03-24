@@ -30,7 +30,6 @@ import json
 from ConfigParser import ConfigParser
 from optparse import OptionParser, OptionError
 import logging
-import multiprocessing
 
 import common, metadata
 from common import BuildException, VCSException, FDroidPopen, SilentPopen
@@ -486,7 +485,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         jni_components = thisbuild.get('buildjni')
         if jni_components == ['yes']:
             jni_components = ['']
-        cmd = [ os.path.join(config['ndk_path'], "ndk-build", "-j1" ]
+        cmd = [ os.path.join(config['ndk_path'], "ndk-build"), "-j1" ]
         for d in jni_components:
             logging.info("Building native code in '%s'" % d)
             manifest = root_dir + '/' + d + '/AndroidManifest.xml'
