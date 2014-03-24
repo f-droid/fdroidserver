@@ -106,7 +106,7 @@ regex_pedantic = {
                 "No need to specify that the app is... an app"),
             (re.compile(r'.*\b(free software|open source)\b.*', re.IGNORECASE),
                 "No need to specify that the app is Free Software"),
-            (re.compile(r'.*[.,!?].*'),
+            (re.compile(r'.*[a-z0-9][.,!?][ $]'),
                 "Punctuation should be avoided"),
         ],
 }
