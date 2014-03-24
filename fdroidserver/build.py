@@ -486,9 +486,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         jni_components = thisbuild.get('buildjni')
         if jni_components == ['yes']:
             jni_components = ['']
-        jobs = multiprocessing.cpu_count()
-        ndkbuild = os.path.join(config['ndk_path'], "ndk-build")
-        cmd = [ndkbuild, "-j"+str(jobs)]
+        cmd = [ os.path.join(config['ndk_path'], "ndk-build", "-j1" ]
         for d in jni_components:
             logging.info("Building native code in '%s'" % d)
             manifest = root_dir + '/' + d + '/AndroidManifest.xml'
