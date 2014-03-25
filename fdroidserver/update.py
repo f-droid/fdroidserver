@@ -104,9 +104,7 @@ def update_wiki(apps, apks):
 
         wikidata += "=Maintainer Notes=\n"
         if 'Maintainer Notes' in app:
-            wikidata += "<pre>\n"
-            wikidata += metadata.description_wiki(app['Maintainer Notes'])
-            wikidata += "</pre>"
+            wikidata += metadata.description_wiki(app['Maintainer Notes']) + "\n"
         wikidata += "\nMetadata: [https://gitorious.org/f-droid/fdroiddata/source/master:metadata/{0}.txt current] [https://gitorious.org/f-droid/fdroiddata/history/metadata/{0}.txt history]\n".format(app['id'])
 
         # Get a list of all packages for this application...
