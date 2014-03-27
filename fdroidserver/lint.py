@@ -173,7 +173,7 @@ def main():
         # Invalid lists
         desc_chars = 0
         for line in app['Description']:
-            if re.match(r'[ ]*\*[^ ]', line):
+            if re.match(r'[ ]*[*#][^ .]', line):
                 warn("Invalid bulleted list: '%s'" % line)
             desc_chars += len(line)
 

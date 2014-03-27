@@ -311,22 +311,22 @@ class DescriptionFormatter:
         self.text_wiki += "%s\n" % line
         if not line:
             self.endcur()
-        elif line.startswith('*'):
+        elif line.startswith('* '):
             self.endcur([self.stUL])
             if self.state != self.stUL:
                 self.text_html += '<ul>'
                 self.state = self.stUL
             self.text_html += '<li>'
-            self.text_plain += '*'
+            self.text_plain += '* '
             self.addtext(line[1:])
             self.text_html += '</li>'
-        elif line.startswith('#'):
+        elif line.startswith('# '):
             self.endcur([self.stOL])
             if self.state != self.stOL:
                 self.text_html += '<ol>'
                 self.state = self.stOL
             self.text_html += '<li>'
-            self.text_plain += '*' #TODO: lazy - put the numbers in!
+            self.text_plain += '* ' #TODO: lazy - put the numbers in!
             self.addtext(line[1:])
             self.text_html += '</li>'
         else:
