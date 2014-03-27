@@ -345,6 +345,19 @@ class vcs_git(vcs):
 
     def initsubmodules(self):
         self.checkrepo()
+        submfile = os.path.join(self.local, '.gitmodules')
+        if not os.path.isfile(submfile):
+            raise VCSException("No git submodules available")
+
+        # fix submodules not accessible without an account and public key auth
+        with open(submfile, 'r') as f:
+            lines = f.readlines()
+        with open(submfile, 'w') as f:
+            for line in lines:
+                if 'git@github.com' in line:
+                    line = line.replace('git@github.com:', 'https://github.com/')
+                f.write(line)
+
         for cmd in [
                 ['git', 'reset', '--hard'],
                 ['git', 'clean', '-dffx'],
