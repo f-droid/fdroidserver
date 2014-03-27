@@ -688,6 +688,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     vercode = None
     version = None
     foundid = None
+    nativecode = None
     for line in p.stdout.splitlines():
         if line.startswith("package:"):
             pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
@@ -702,7 +703,12 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             m = pat.match(line)
             if m:
                 version = m.group(1)
+        elif line.startswith("native-code:"):
+            nativecode = line[12:]
 
+    if thisbuild.get('buildjni') is not None:
+        if nativecode is None or "'" not in nativecode:
+            raise BuildException("Native code should have been built but none was packaged")
     if thisbuild['novcheck']:
         vercode = thisbuild['vercode']
         version = thisbuild['version']

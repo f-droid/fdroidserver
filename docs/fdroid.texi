@@ -981,19 +981,22 @@ multi-component projects.
 
 The build and scan processes will complain (refuse to build) if this
 parameter is not defined, but there is a @code{jni} directory present.
-If the native code is being built by other means, you can specify
-@code{no} here to avoid that. However, if the native code is actually
-not required, remove the directory instead (using @code{prebuild} for
-example).
+If the native code is being built by other means like a gradle task, you
+can specify @code{no} here to avoid that. However, if the native code is
+actually not required or used, remove the directory instead (using
+@code{rm=jni} for example). Using @code{buildjni=no} when the jni code
+isn't used nor built will result in an error saying that native
+libraries were expected in the resulting package.
 
 @item gradle=<flavour>[@@<dir>]
 Build with gradle instead of ant, specifying what flavour to assemble.
 If <flavour> is 'yes', 'main' or empty, no flavour will be used. Note
 that this will not work on projects with flavours, since it will build
 all flavours and there will be no 'main' build.
-If @@<dir> is attached to <flavour>, then the gradle tasks will be run in that
-directory. This might be necessary if gradle needs to be run in the parent
-directory, in which case one would use 'gradle=<flavour>@@..'.
+If @@<dir> is attached to <flavour>, then the gradle tasks will be run
+in that directory. This might be necessary if gradle needs to be run in
+the parent directory, in which case one would use
+'gradle=<flavour>@@..'.
 
 @item maven=yes[@@<dir>]
 Build with maven instead of ant. Like gradle, an extra @@<dir> tells f-droid
