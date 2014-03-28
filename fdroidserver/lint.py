@@ -160,9 +160,9 @@ def main():
             pwarn("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
                 lastcommit, app['Update Check Mode']))
 
-        # No license
-        if app['License'] == 'Unknown':
-            warn("License was not properly set")
+        # No proper license
+        if app['License'] in ('Unknown','None',''):
+            warn("License was not set")
 
         # Summary size limit
         summ_chars = len(app['Summary'])
