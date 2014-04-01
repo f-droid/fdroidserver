@@ -122,23 +122,23 @@ def main():
         # if not generate one...
         p = FDroidPopen(['keytool', '-list',
             '-alias', keyalias, '-keystore', config['keystore'],
-            '-storepass', config['keystorepass']])
+            '-storepass:file', config['keystorepass']])
         if p.returncode !=0:
             logging.info("Key does not exist - generating...")
             p = FDroidPopen(['keytool', '-genkey',
                 '-keystore', config['keystore'], '-alias', keyalias,
                 '-keyalg', 'RSA', '-keysize', '2048',
                 '-validity', '10000',
-                '-storepass', config['keystorepass'],
-                '-keypass', config['keypass'],
+                '-storepass:file', config['keystorepassfile'],
+                '-keypass:file', config['keypassfile'],
                 '-dname', config['keydname']])
             if p.returncode != 0:
                 raise BuildException("Failed to generate key")
 
         # Sign the application...
         p = FDroidPopen(['jarsigner', '-keystore', config['keystore'],
-            '-storepass', config['keystorepass'],
-            '-keypass', config['keypass'], '-sigalg',
+            '-storepass:file', config['keystorepassfile'],
+            '-keypass:file', config['keypassfile'], '-sigalg',
             'MD5withRSA', '-digestalg', 'SHA1',
                 apkfile, keyalias])
         if p.returncode != 0:
