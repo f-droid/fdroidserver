@@ -73,7 +73,7 @@ def genkey(keystore, repo_keyalias, password, keydname):
     p = FDroidPopen(['keytool', '-list', '-v',
                 '-keystore', keystore, '-alias', repo_keyalias],
                 '-storepass:file', config['keystorepassfile'])
-    logging.info(output.lstrip().strip() + '\n\n')
+    logging.info(p.stdout.strip() + '\n\n')
 
 
 def main():
