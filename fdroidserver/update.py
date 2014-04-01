@@ -800,6 +800,7 @@ def make_index(apps, apks, repodir, archive, categories):
             '-keypass:file', config['keypassfile'],
             '-digestalg', 'SHA1', '-sigalg', 'MD5withRSA',
             os.path.join(repodir, 'index.jar') , config['repo_keyalias']])
+        # TODO keypass should be sent via stdin
         if p.returncode != 0:
             logging.info("Failed to sign index")
             sys.exit(1)

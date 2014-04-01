@@ -56,8 +56,8 @@ def genpassword():
 def genkey(keystore, repo_keyalias, password, keydname):
     '''generate a new keystore with a new key in it for signing repos'''
     logging.info('Generating a new key in "' + keystore + '"...')
-    write_password_file("keystorepass", password)
-    write_password_file("keypass", password)
+    common.write_password_file("keystorepass", password)
+    common.write_password_file("keypass", password)
     p = FDroidPopen(['keytool', '-genkey',
                 '-keystore', keystore, '-alias', repo_keyalias,
                 '-keyalg', 'RSA', '-keysize', '4096',
@@ -66,12 +66,13 @@ def genkey(keystore, repo_keyalias, password, keydname):
                 '-storepass:file', config['keystorepassfile'],
                 '-keypass:file', config['keypassfile'],
                 '-dname', keydname])
+    # TODO keypass should be sent via stdin
     if p.returncode != 0:
         raise BuildException("Failed to generate key", p.stdout)
     # now show the lovely key that was just generated
     p = FDroidPopen(['keytool', '-list', '-v',
-                '-keystore', keystore, '-alias', repo_keyalias])
-    output = p.communicate(password)[0]
+                '-keystore', keystore, '-alias', repo_keyalias],
+                '-storepass:file', config['keystorepassfile'])
     logging.info(output.lstrip().strip() + '\n\n')
 
 
@@ -101,7 +102,7 @@ def main():
     else:
         # we're running straight out of the git repo
         prefix = tmp
-        examplesdir = prefix
+        examplesdir = prefix + '/examples'
 
     fdroiddir = os.getcwd()
 
@@ -112,7 +113,8 @@ def main():
         shutil.copyfile(os.path.join(examplesdir, 'config.py'), 'config.py')
         os.chmod('config.py', 0o0600)
     else:
-        logging.info('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
+        logging.warn('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
+        logging.info('Try running `fdroid init` in an empty directory.')
         sys.exit()
 
     # now that we have a local config.py, read configuration...
