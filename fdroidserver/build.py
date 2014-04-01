@@ -653,13 +653,19 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         src = 'python-for-android/dist/default/bin/{0}-{1}-release.apk'.format(
                 bconfig.get('app', 'title'), bconfig.get('app', 'version'))
     elif thisbuild['type'] == 'gradle':
+        basename = app['id']
         dd = build_dir
         if 'subdir' in thisbuild:
             dd = os.path.join(dd, thisbuild['subdir'])
+            basename = thisbuild['subdir']
+        if '@' in thisbuild['gradle']:
+            dd = os.path.join(dd, thisbuild['gradle'].split('@')[1])
+            basename = app['id']
         if len(flavours) == 1 and flavours[0] == '':
-            name = '-'.join([os.path.basename(dd), 'release', 'unsigned'])
+            name = '-'.join([basename, 'release', 'unsigned'])
         else:
-            name = '-'.join([os.path.basename(dd), '-'.join(flavours), 'release', 'unsigned'])
+            name = '-'.join([basename, '-'.join(flavours), 'release', 'unsigned'])
+        dd = os.path.normpath(dd)
         src = os.path.join(dd, 'build', 'apk', name+'.apk')
     elif thisbuild['type'] == 'ant':
         stdout_apk = '\n'.join([
