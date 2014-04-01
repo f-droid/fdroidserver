@@ -101,7 +101,7 @@ def main():
     else:
         # we're running straight out of the git repo
         prefix = tmp
-        examplesdir = prefix
+        examplesdir = prefix + '/examples'
 
     fdroiddir = os.getcwd()
 

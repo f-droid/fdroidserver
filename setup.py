@@ -16,7 +16,7 @@ setup(name='FDroidServer',
          [ 'buildserver/config.buildserver.py',
            'examples/config.py',
            'examples/makebs.config.py',
-           'fdroid-icon.png']),
+           'examples/fdroid-icon.png']),
         ],
       install_requires=[
         'python-magic',
