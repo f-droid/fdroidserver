@@ -69,7 +69,8 @@ def read_config(opts, config_file='config.py'):
         'char_limits': {
             'Summary' : 50,
             'Description' : 1500
-        }
+        },
+        'keyaliases': { },
     }
     for k, v in defconfig.items():
         if k not in config:
