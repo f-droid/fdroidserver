@@ -109,7 +109,7 @@ def main():
         # 'metadata' and 'tmp' are created in fdroid
         os.mkdir('repo')
         shutil.copy(os.path.join(examplesdir, 'fdroid-icon.png'), fdroiddir)
-        shutil.copyfile(os.path.join(examplesdir, 'sampleconfigs', 'config.py'), 'config.py')
+        shutil.copyfile(os.path.join(examplesdir, 'config.py'), 'config.py')
         os.chmod('config.py', 0o0600)
     else:
         logging.info('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
