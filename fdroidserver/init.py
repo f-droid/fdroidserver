@@ -56,12 +56,15 @@ def genpassword():
 def genkey(keystore, repo_keyalias, password, keydname):
     '''generate a new keystore with a new key in it for signing repos'''
     logging.info('Generating a new key in "' + keystore + '"...')
+    write_password_file("keystorepass", password)
+    write_password_file("keypass", password)
     p = FDroidPopen(['keytool', '-genkey',
                 '-keystore', keystore, '-alias', repo_keyalias,
                 '-keyalg', 'RSA', '-keysize', '4096',
                 '-sigalg', 'SHA256withRSA',
                 '-validity', '10000',
-                '-storepass', password, '-keypass', password,
+                '-storepass:file', config['keystorepassfile'],
+                '-keypass:file', config['keypassfile'],
                 '-dname', keydname])
     if p.returncode != 0:
         raise BuildException("Failed to generate key", p.stdout)
@@ -106,7 +109,7 @@ def main():
         # 'metadata' and 'tmp' are created in fdroid
         os.mkdir('repo')
         shutil.copy(os.path.join(examplesdir, 'fdroid-icon.png'), fdroiddir)
-        shutil.copyfile(os.path.join(examplesdir, 'sampleconfigs', 'config.py'), 'config.py')
+        shutil.copyfile(os.path.join(examplesdir, 'config.py'), 'config.py')
         os.chmod('config.py', 0o0600)
     else:
         logging.info('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')

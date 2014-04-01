@@ -66,6 +66,8 @@ def read_config(opts, config_file='config.py'):
         'stats_to_carbon': False,
         'repo_maxage': 0,
         'build_server_always': False,
+        'keystore': os.path.join(os.getenv('HOME'),
+                                 '.local', 'share', 'fdroidserver', 'keystore.jks'),
         'char_limits': {
             'Summary' : 50,
             'Description' : 1500
@@ -95,7 +97,25 @@ def read_config(opts, config_file='config.py'):
         if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
             logging.warn("unsafe permissions on {0} (should be 0600)!".format(config_file))
 
+    for k in ["keystorepass", "keypass"]:
+        if k in config:
+            write_password_file(k)
+
     return config
+
+def write_password_file(pwtype, password=None):
+    '''
+    writes out passwords to a protected file instead of passing passwords as
+    command line argments
+    '''
+    filename = '.fdroid.' + pwtype + '.txt'
+    fd = os.open(filename, os.O_CREAT | os.O_WRONLY, 0600)
+    if password == None:
+        os.write(fd, config[pwtype])
+    else:
+        os.write(fd, password)
+    os.close(fd)
+    config[pwtype + 'file'] = filename
 
 # Given the arguments in the form of multiple appid:[vc] strings, this returns
 # a dictionary with the set of vercodes specified for each package.

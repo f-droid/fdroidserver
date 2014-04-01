@@ -642,7 +642,7 @@ def make_index(apps, apks, repodir, archive, categories):
             p = FDroidPopen(['keytool', '-exportcert',
                                   '-alias', config['repo_keyalias'],
                                   '-keystore', config['keystore'],
-                                  '-storepass', config['keystorepass']])
+                                  '-storepass:file', config['keystorepassfile']])
             if p.returncode != 0:
                 logging.critical("Failed to get repo pubkey")
                 sys.exit(1)
@@ -796,7 +796,8 @@ def make_index(apps, apks, repodir, archive, categories):
 
         # Sign the index...
         p = FDroidPopen(['jarsigner', '-keystore', config['keystore'],
-            '-storepass', config['keystorepass'], '-keypass', config['keypass'],
+            '-storepass:file', config['keystorepassfile'],
+            '-keypass:file', config['keypassfile'],
             '-digestalg', 'SHA1', '-sigalg', 'MD5withRSA',
             os.path.join(repodir, 'index.jar') , config['repo_keyalias']])
         if p.returncode != 0:
