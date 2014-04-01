@@ -112,7 +112,8 @@ def main():
         shutil.copyfile(os.path.join(examplesdir, 'config.py'), 'config.py')
         os.chmod('config.py', 0o0600)
     else:
-        logging.info('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
+        logging.warn('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
+        logging.info('Try running `fdroid init` in an empty directory.')
         sys.exit()
 
     # now that we have a local config.py, read configuration...
