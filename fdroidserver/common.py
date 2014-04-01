@@ -66,6 +66,8 @@ def read_config(opts, config_file='config.py'):
         'stats_to_carbon': False,
         'repo_maxage': 0,
         'build_server_always': False,
+        'keystore': os.path.join(os.getenv('HOME'),
+                                 '.local', 'share', 'fdroidserver', 'keystore.jks'),
         'char_limits': {
             'Summary' : 50,
             'Description' : 1500

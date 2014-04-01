@@ -60,7 +60,7 @@ repo_keyalias = None
 
 #The keystore to use for release keys when building. This needs to be
 #somewhere safe and secure, and backed up!
-keystore = "/home/me/somewhere/my.keystore"
+#keystore = "/home/me/.local/share/fdroidserver/keystore.jks"
 
 # The password for the keystore (at least 6 characters).  If this password is
 # different than the keypass below, it can be OK to store the password in this
