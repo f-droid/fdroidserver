@@ -56,8 +56,8 @@ def genpassword():
 def genkey(keystore, repo_keyalias, password, keydname):
     '''generate a new keystore with a new key in it for signing repos'''
     logging.info('Generating a new key in "' + keystore + '"...')
-    write_password_file("keystorepass", password)
-    write_password_file("keypass", password)
+    common.write_password_file("keystorepass", password)
+    common.write_password_file("keypass", password)
     p = FDroidPopen(['keytool', '-genkey',
                 '-keystore', keystore, '-alias', repo_keyalias,
                 '-keyalg', 'RSA', '-keysize', '4096',
