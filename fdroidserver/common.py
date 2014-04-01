@@ -1428,7 +1428,6 @@ def remove_signing_keys(build_dir):
             re.compile(r'.*android\.signingConfigs\..*'),
             re.compile(r'.*variant\.outputFile = .*'),
             re.compile(r'.*\.readLine\(.*'),
-            re.compile(r'.*System\.console\(\).*'),
     ]
     for root, dirs, files in os.walk(build_dir):
         if 'build.gradle' in files:
