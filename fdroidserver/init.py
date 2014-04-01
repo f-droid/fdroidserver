@@ -66,12 +66,13 @@ def genkey(keystore, repo_keyalias, password, keydname):
                 '-storepass:file', config['keystorepassfile'],
                 '-keypass:file', config['keypassfile'],
                 '-dname', keydname])
+    # TODO keypass should be sent via stdin
     if p.returncode != 0:
         raise BuildException("Failed to generate key", p.stdout)
     # now show the lovely key that was just generated
     p = FDroidPopen(['keytool', '-list', '-v',
-                '-keystore', keystore, '-alias', repo_keyalias])
-    output = p.communicate(password)[0]
+                '-keystore', keystore, '-alias', repo_keyalias],
+                '-storepass:file', config['keystorepassfile'])
     logging.info(output.lstrip().strip() + '\n\n')
 
 
