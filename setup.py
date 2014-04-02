@@ -1,8 +1,15 @@
 #!/usr/bin/env python2
 
 from setuptools import setup
+import os
+import subprocess
+import sys
 
-setup(name='FDroidServer',
+if not os.path.exists('fdroidserver/getsig/getsig.class'):
+    subprocess.check_output('cd fdroidserver/getsig && javac getsig.java',
+                            shell=True)
+
+setup(name='fdroidserver',
       version='0.1',
       description='F-Droid Server Tools',
       long_description=open('README').read(),
@@ -12,11 +19,12 @@ setup(name='FDroidServer',
       packages=['fdroidserver'],
       scripts=['fdroid', 'fd-commit'],
       data_files=[
-        ('share/doc/fdroidserver/examples',
+        (sys.prefix + '/share/doc/fdroidserver/examples',
          [ 'buildserver/config.buildserver.py',
            'examples/config.py',
            'examples/makebs.config.py',
            'examples/fdroid-icon.png']),
+        ('fdroidserver/getsig', ['fdroidserver/getsig/getsig.class'])
         ],
       install_requires=[
         'python-magic',
