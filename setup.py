@@ -1,7 +1,13 @@
 #!/usr/bin/env python2
 
 from setuptools import setup
+import os
+import subprocess
 import sys
+
+if not os.path.exists('fdroidserver/getsig/getsig.class'):
+    subprocess.check_output('cd fdroidserver/getsig && javac getsig.java',
+                            shell=True)
 
 setup(name='fdroidserver',
       version='0.1',
@@ -18,6 +24,7 @@ setup(name='fdroidserver',
            'examples/config.py',
            'examples/makebs.config.py',
            'examples/fdroid-icon.png']),
+        ('fdroidserver/getsig', ['fdroidserver/getsig/getsig.class'])
         ],
       install_requires=[
         'python-magic',
