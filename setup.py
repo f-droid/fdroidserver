@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 
 from setuptools import setup
+import sys
 
 setup(name='fdroidserver',
       version='0.1',
@@ -12,7 +13,7 @@ setup(name='fdroidserver',
       packages=['fdroidserver'],
       scripts=['fdroid', 'fd-commit'],
       data_files=[
-        ('share/doc/fdroidserver/examples',
+        (sys.prefix + '/share/doc/fdroidserver/examples',
          [ 'buildserver/config.buildserver.py',
            'examples/config.py',
            'examples/makebs.config.py',
