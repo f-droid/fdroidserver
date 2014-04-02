@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # this is the script run by the Jenkins server to run the build and tests.  Be
 # sure to always run it in its dir, i.e. ./jenkins-build.sh, otherwise it might
