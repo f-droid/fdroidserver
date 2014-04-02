@@ -251,6 +251,9 @@ class vcs:
         self.refreshed = False
         self.srclib = None
 
+    def repotype(self):
+        return None
+
     # Take the local repository to a clean version of the given revision, which
     # is specificed in the VCS's native format. Beforehand, the repository can
     # be dirty, or even non-existent. If the repository does already exist
