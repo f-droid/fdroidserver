@@ -2,7 +2,7 @@
 
 from setuptools import setup
 
-setup(name='FDroidServer',
+setup(name='fdroidserver',
       version='0.1',
       description='F-Droid Server Tools',
       long_description=open('README').read(),
