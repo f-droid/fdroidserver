@@ -1161,10 +1161,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     return (root_dir, srclibpaths)
 
 # Scan the source code in the given directory (and all subdirectories)
-# and return a list of potential problems.
+# and return the number of fatal problems encountered
 def scan_source(build_dir, root_dir, thisbuild):
 
-    problems = []
+    count = 0
 
     # Common known non-free blobs (always lower case):
     usual_suspects = ['flurryagent',
@@ -1223,14 +1223,16 @@ def scan_source(build_dir, root_dir, thisbuild):
         logging.info('Removing %s at %s' % (what, fd))
         os.remove(fp)
 
+    def warnproblem(what, fd):
+        logging.warn('Found %s at %s' % (what, fd))
+
     def handleproblem(what, fd, fp):
         if todelete(fd):
             removeproblem(what, fd, fp)
         else:
-            problems.append('Found %s at %s' % (what, fd))
-
-    def warnproblem(what, fd, fp):
-        logging.warn('Found %s at %s' % (what, fd))
+            logging.error('Found %s at %s' % (what, fd))
+            return True
+        return False
 
     def insidedir(path, dirname):
         return path.endswith('/%s' % dirname) or '/%s/' % dirname in path
@@ -1253,13 +1255,13 @@ def scan_source(build_dir, root_dir, thisbuild):
 
             for suspect in usual_suspects:
                 if suspect in curfile.lower():
-                    handleproblem('usual supect', fd, fp)
+                    count += handleproblem('usual supect', fd, fp)
 
             mime = magic.from_file(fp, mime=True) if ms is None else ms.file(fp)
             if mime == 'application/x-sharedlib':
-                handleproblem('shared library', fd, fp)
+                count += handleproblem('shared library', fd, fp)
             elif mime == 'application/x-archive':
-                handleproblem('static library', fd, fp)
+                count += handleproblem('static library', fd, fp)
             elif mime == 'application/x-executable':
                 handleproblem('binary executable', fd, fp)
             elif mime == 'application/x-java-applet':
@@ -1271,14 +1273,14 @@ def scan_source(build_dir, root_dir, thisbuild):
                     'application/java-archive',
                     'binary',
                     ]:
-                warnproblem('JAR file', fd, fp)
+                warnproblem('JAR file', fd)
             elif mime == 'application/zip':
-                warnproblem('ZIP file', fd, fp)
+                warnproblem('ZIP file', fd)
 
             elif has_extension(fp, 'java'):
                 for line in file(fp):
                     if 'DexClassLoader' in line:
-                        handleproblem('DexClassLoader', fd, fp)
+                        count += handleproblem('DexClassLoader', fd, fp)
                         break
     if ms is not None:
         ms.close()
@@ -1288,10 +1290,10 @@ def scan_source(build_dir, root_dir, thisbuild):
     # buildjni=no to bypass this check)
     if (os.path.exists(os.path.join(root_dir, 'jni')) and
             thisbuild.get('buildjni') is None):
-        msg = 'Found jni directory, but buildjni is not enabled'
-        problems.append(msg)
+        logging.warn('Found jni directory, but buildjni is not enabled')
+        count += 1
 
-    return problems
+    return count
 
 
 class KnownApks:

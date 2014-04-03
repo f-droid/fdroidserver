@@ -445,14 +445,12 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if not options.skipscan:
         # Scan before building...
         logging.info("Scanning source for common problems...")
-        buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
-        if len(buildprobs) > 0:
-            logging.warn('Scanner found %d problems:' % len(buildprobs))
-            for problem in buildprobs:
-                logging.info('    %s' % problem)
-            if not force:
-                raise BuildException("Can't build due to " +
-                    str(len(buildprobs)) + " scanned problems")
+        count = common.scan_source(build_dir, root_dir, thisbuild)
+        if count > 0:
+            if force:
+                logging.warn('Scanner found %d problems:' % count)
+            else:
+                raise BuildException("Can't build due to %d scanned problems" % count)
 
     if not options.notarball:
         # Build the source tarball right before we build the release...
