@@ -31,7 +31,6 @@ setup(name='fdroidserver',
         'paramiko',
         'PIL',
         'python-magic',
-        'ssh',
         ],
       classifiers=[
         'Development Status :: 3 - Alpha',
