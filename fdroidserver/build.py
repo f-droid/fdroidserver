@@ -485,7 +485,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             jni_components = ['']
         cmd = [ os.path.join(config['ndk_path'], "ndk-build"), "-j1" ]
         for d in jni_components:
-            logging.info("Building native code in '%s'" % d)
+            if d:
+                logging.info("Building native code in '%s'" % d)
+            else:
+                logging.info("Building native code in the main project")
             manifest = root_dir + '/' + d + '/AndroidManifest.xml'
             if os.path.exists(manifest):
                 # Read and write the whole AM.xml to fix newlines and avoid
