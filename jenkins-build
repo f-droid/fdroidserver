@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # this is the script run by the Jenkins server to run the build and tests.  Be
 # sure to always run it in its dir, i.e. ./jenkins-build.sh, otherwise it might
@@ -76,11 +76,13 @@ set +e
 #   Module 'sys' has no '_MEIPASS' member
 # disable F0401 until there is a plugin to handle this properly:
 #   keysync-gui:25: [F] Unable to import 'ordereddict'
-pylint --output-format=parseable --reports=n \
+# use the virtualenv python so pylint checks against its installed libs
+python /usr/bin/pylint --output-format=parseable --reports=n \
     fdroidserver/*.py fdroid makebuildserver setup.py > $WORKSPACE/pylint.parseable
 
 # to only tell jenkins there was an error if we got ERROR or FATAL, uncomment these:
-#[ $(($? & 1)) = "1" ] && exit 1
-#[ $(($? & 2)) = "2" ] && exit 2
+[ $(($? & 1)) = "1" ] && echo "FATALs found"
+[ $(($? & 2)) = "2" ] && echo "ERRORs found"
+[ $(($? & 4)) = "4" ] && echo "WARNINGs found"
 set -e
 

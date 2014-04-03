@@ -27,8 +27,11 @@ setup(name='fdroidserver',
         ('fdroidserver/getsig', ['fdroidserver/getsig/getsig.class'])
         ],
       install_requires=[
-        'python-magic',
+        'mwclient',
+        'paramiko',
         'PIL',
+        'python-magic',
+        'ssh',
         ],
       classifiers=[
         'Development Status :: 3 - Alpha',
