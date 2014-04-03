@@ -80,11 +80,11 @@ def vagrant(params, cwd=None, printout=False):
 def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
     """Do a build on the build server."""
 
-    import ssh
+    import paramiko
     if options.verbose:
-        logging.getLogger("ssh").setLevel(logging.DEBUG)
+        logging.getLogger("paramiko").setLevel(logging.DEBUG)
     else:
-        logging.getLogger("ssh").setLevel(logging.WARN)
+        logging.getLogger("paramiko").setLevel(logging.WARN)
 
     # Reset existing builder machine to a clean state if possible.
     vm_ok = False
@@ -152,13 +152,13 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                 cwd='builder', shell=True) != 0:
             raise BuildException("Error getting ssh config")
         vagranthost = 'default' # Host in ssh config file
-        sshconfig = ssh.SSHConfig()
+        sshconfig = paramiko.SSHConfig()
         sshf = open('builder/sshconfig', 'r')
         sshconfig.parse(sshf)
         sshf.close()
         sshconfig = sshconfig.lookup(vagranthost)
-        sshs = ssh.SSHClient()
-        sshs.set_missing_host_key_policy(ssh.AutoAddPolicy())
+        sshs = paramiko.SSHClient()
+        sshs.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         idfile = sshconfig['identityfile']
         if idfile.startswith('"') and idfile.endswith('"'):
             idfile = idfile[1:-1]
@@ -200,7 +200,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         vagranthost = 'default' # Host in ssh config file
 
         # Load and parse the SSH config...
-        sshconfig = ssh.SSHConfig()
+        sshconfig = paramiko.SSHConfig()
         sshf = open('builder/sshconfig', 'r')
         sshconfig.parse(sshf)
         sshf.close()
@@ -208,9 +208,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
 
         # Open SSH connection...
         logging.info("Connecting to virtual machine...")
-        sshs = ssh.SSHClient()
-        sshs.set_missing_host_key_policy(ssh.AutoAddPolicy())
-        idfile = sshconfig['identityfile']
+        sshs = paramiko.SSHClient()
+        sshs.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        idfile = sshconfig['identityfile'][0]
         if idfile.startswith('"') and idfile.endswith('"'):
             idfile = idfile[1:-1]
         sshs.connect(sshconfig['hostname'], username=sshconfig['user'],
