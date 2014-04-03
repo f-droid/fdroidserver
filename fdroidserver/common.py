@@ -66,8 +66,7 @@ def read_config(opts, config_file='config.py'):
         'stats_to_carbon': False,
         'repo_maxage': 0,
         'build_server_always': False,
-        'keystore': os.path.join(os.getenv('HOME'),
-                                 '.local', 'share', 'fdroidserver', 'keystore.jks'),
+        'keystore': '$HOME/.local/share/fdroidserver/keystore.jks',
         'char_limits': {
             'Summary' : 50,
             'Description' : 1500
@@ -86,10 +85,13 @@ def read_config(opts, config_file='config.py'):
         config[k] = os.path.expandvars(v)
 
     if not config['sdk_path']:
-        logging.critical("$ANDROID_HOME is not set!")
+        logging.critical("Neither $ANDROID_HOME nor sdk_path is set, no Android SDK found!")
+        sys.exit(3)
+    if not os.path.exists(config['sdk_path']):
+        logging.critical('Android SDK path "' + config['sdk_path'] + '" does not exist!')
         sys.exit(3)
     if not os.path.isdir(config['sdk_path']):
-        logging.critical("$ANDROID_HOME points to a non-existing directory!")
+        logging.critical('Android SDK path "' + config['sdk_path'] + '" is not a directory!')
         sys.exit(3)
 
     if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
