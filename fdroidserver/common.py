@@ -1355,7 +1355,7 @@ class KnownApks:
                 else:
                     apps[appid] = added
         sortedapps = sorted(apps.iteritems(), key=operator.itemgetter(1))[-num:]
-        lst = [app for app,added in sortedapps]
+        lst = [app for app,_ in sortedapps]
         lst.reverse()
         return lst
 
