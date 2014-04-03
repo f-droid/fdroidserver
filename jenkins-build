@@ -79,8 +79,10 @@ set +e
         fdroidserver/*.py fdroid makebuildserver setup.py > $WORKSPACE/pylint.parseable
 
 # to only tell jenkins there was an error if we got ERROR or FATAL, uncomment these:
+# running pylint in the virtualenv is causing this FATAL error, which is a bug:
+# https://bitbucket.org/logilab/pylint/issue/73/pylint-is-unable-to-import
 [ $(($? & 1)) = "1" ] && echo "FATALs found"
-[ $(($? & 2)) = "2" ] && echo "ERRORs found"
-[ $(($? & 4)) = "4" ] && echo "WARNINGs found"
+[ $(($? & 2)) = "2" ] && exit 2
+[ $(($? & 4)) = "4" ] && exit 4
 set -e
 
