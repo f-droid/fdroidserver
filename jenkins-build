@@ -72,17 +72,17 @@ pyflakes fdroid makebuildserver fdroidserver/*.py setup.py
 
 cd $WORKSPACE
 set +e
-# disable E1101 until there is a plugin to handle this properly:
-#   Module 'sys' has no '_MEIPASS' member
-# disable F0401 until there is a plugin to handle this properly:
-#   keysync-gui:25: [F] Unable to import 'ordereddict'
 # use the virtualenv python so pylint checks against its installed libs
-python /usr/bin/pylint --output-format=parseable --reports=n \
-    fdroidserver/*.py fdroid makebuildserver setup.py > $WORKSPACE/pylint.parseable
+    PYTHONPATH=$WORKSPACE/.pylint-plugins python /usr/bin/pylint \
+        --output-format=parseable --reports=n \
+        --load-plugins astng_hashlib \
+        fdroidserver/*.py fdroid makebuildserver setup.py > $WORKSPACE/pylint.parseable
 
 # to only tell jenkins there was an error if we got ERROR or FATAL, uncomment these:
+# running pylint in the virtualenv is causing this FATAL error, which is a bug:
+# https://bitbucket.org/logilab/pylint/issue/73/pylint-is-unable-to-import
 [ $(($? & 1)) = "1" ] && echo "FATALs found"
-[ $(($? & 2)) = "2" ] && echo "ERRORs found"
-[ $(($? & 4)) = "4" ] && echo "WARNINGs found"
+[ $(($? & 2)) = "2" ] && exit 2
+[ $(($? & 4)) = "4" ] && exit 4
 set -e
 
