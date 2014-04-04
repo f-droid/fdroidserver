@@ -71,8 +71,8 @@ def genkey(keystore, repo_keyalias, password, keydname):
         raise BuildException("Failed to generate key", p.stdout)
     # now show the lovely key that was just generated
     p = FDroidPopen(['keytool', '-list', '-v',
-                '-keystore', keystore, '-alias', repo_keyalias],
-                '-storepass:file', config['keystorepassfile'])
+                     '-keystore', keystore, '-alias', repo_keyalias,
+                     '-storepass:file', config['keystorepassfile']])
     logging.info(p.stdout.strip() + '\n\n')
 
 
