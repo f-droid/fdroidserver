@@ -627,7 +627,7 @@ def make_index(apps, apks, repodir, archive, categories):
     repoel.setAttribute("version", "12")
     repoel.setAttribute("timestamp", str(int(time.time())))
 
-    if config['repo_keyalias']:
+    if 'repo_keyalias' in config:
 
         # Generate a certificate fingerprint the same way keytool does it
         # (but with slightly different formatting)
@@ -783,7 +783,7 @@ def make_index(apps, apks, repodir, archive, categories):
     of.write(output)
     of.close()
 
-    if config['repo_keyalias'] is not None:
+    if 'repo_keyalias' in config:
 
         logging.info("Creating signed index.")
         logging.info("Key fingerprint: %s" % repo_pubkey_fingerprint)

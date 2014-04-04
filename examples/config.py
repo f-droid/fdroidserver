@@ -54,9 +54,10 @@ of applications from the main repository.
 """
 
 
-#The key (from the keystore defined below) to be used for signing the
-#repository itself. Can be None for an unsigned repository.
-repo_keyalias = None
+# The key (from the keystore defined below) to be used for signing the
+# repository itself.  This is the same name you would give to keytool or
+# jarsigner using -alias.  (Not needed in an unsigned repository).
+#repo_keyalias = "fdroidrepo"
 
 #The keystore to use for release keys when building. This needs to be
 #somewhere safe and secure, and backed up!
