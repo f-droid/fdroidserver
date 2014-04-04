@@ -63,8 +63,13 @@ def main():
 
     unsigned_dir = 'unsigned'
     if not os.path.isdir(unsigned_dir):
-        logging.info("No unsigned directory - nothing to do")
-        sys.exit(0)
+        logging.warning("No unsigned directory - nothing to do")
+        sys.exit(1)
+
+    for f in [config['keystorepassfile'], config['keystore'], config['keypassfile']]:
+        if not os.path.exists(f):
+            logging.error("Config error - missing '{0}'".format(f))
+            sys.exit(1)
 
     # It was suggested at https://dev.guardianproject.info/projects/bazaar/wiki/FDroid_Audit
     # that a package could be crafted, such that it would use the same signing
@@ -82,7 +87,7 @@ def main():
         m.update(app['id'])
         keyalias = m.hexdigest()[:8]
         if keyalias in allaliases:
-            logging.info("There is a keyalias collision - publishing halted")
+            logging.error("There is a keyalias collision - publishing halted")
             sys.exit(1)
         allaliases.append(keyalias)
     logging.info("{0} apps, {0} key aliases".format(len(allapps), len(allaliases)))
