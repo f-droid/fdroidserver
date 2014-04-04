@@ -54,6 +54,16 @@ def read_config(opts, config_file='config.py'):
     logging.debug("Reading %s" % config_file)
     execfile(config_file, config)
 
+    # smartcardoptions must be a list since its command line args for Popen
+    if 'smartcardoptions' in config:
+        config['smartcardoptions'] = config['smartcardoptions'].split(' ')
+    elif 'keystore' in config and config['keystore'] == 'NONE':
+        # keystore='NONE' means use smartcard, these are required defaults
+        config['smartcardoptions'] = ['-storetype', 'PKCS11', '-providerName',
+                                      'SunPKCS11-OpenSC', '-providerClass',
+                                      'sun.security.pkcs11.SunPKCS11',
+                                      '-providerArg', 'opensc-fdroid.cfg']
+
     defconfig = {
         'sdk_path': "$ANDROID_HOME",
         'ndk_path': "$ANDROID_NDK",
@@ -67,6 +77,7 @@ def read_config(opts, config_file='config.py'):
         'repo_maxage': 0,
         'build_server_always': False,
         'keystore': '$HOME/.local/share/fdroidserver/keystore.jks',
+        'smartcardoptions': [],
         'char_limits': {
             'Summary' : 50,
             'Description' : 1500

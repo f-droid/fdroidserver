@@ -642,7 +642,8 @@ def make_index(apps, apks, repodir, archive, categories):
             p = FDroidPopen(['keytool', '-exportcert',
                                   '-alias', config['repo_keyalias'],
                                   '-keystore', config['keystore'],
-                                  '-storepass:file', config['keystorepassfile']])
+                                  '-storepass:file', config['keystorepassfile']]
+                            + config['smartcardoptions'])
             if p.returncode != 0:
                 logging.critical("Failed to get repo pubkey")
                 sys.exit(1)
@@ -799,7 +800,8 @@ def make_index(apps, apks, repodir, archive, categories):
             '-storepass:file', config['keystorepassfile'],
             '-keypass:file', config['keypassfile'],
             '-digestalg', 'SHA1', '-sigalg', 'MD5withRSA',
-            os.path.join(repodir, 'index.jar') , config['repo_keyalias']])
+            os.path.join(repodir, 'index.jar') , config['repo_keyalias']]
+            + config['smartcardoptions'])
         # TODO keypass should be sent via stdin
         if p.returncode != 0:
             logging.info("Failed to sign index")

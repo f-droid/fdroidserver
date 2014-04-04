@@ -59,9 +59,19 @@ of applications from the main repository.
 # jarsigner using -alias.  (Not needed in an unsigned repository).
 #repo_keyalias = "fdroidrepo"
 
-#The keystore to use for release keys when building. This needs to be
-#somewhere safe and secure, and backed up!
-#keystore = "/home/me/.local/share/fdroidserver/keystore.jks"
+# The keystore to use for release keys when building. This needs to be
+# somewhere safe and secure, and backed up!  The best way to manage these
+# sensitive keys is to use a "smartcard" (aka Hardware Security Module). To
+# configure FDroid to use a smartcard, set the keystore file using the keyword
+# "NONE" (i.e. keystore = "NONE").  That makes Java find the keystore on the
+# smartcard based on 'smartcardoptions' below.
+#keystore = "~/.local/share/fdroidserver/keystore.jks"
+
+# You should not need to change these at all, unless you have a very
+# customized setup for using smartcards in Java with keytool/jarsigner
+#smartcardoptions = "-storetype PKCS11 -providerName SunPKCS11-OpenSC \
+#    -providerClass sun.security.pkcs11.SunPKCS11 \
+#    -providerArg opensc-fdroid.cfg"
 
 # The password for the keystore (at least 6 characters).  If this password is
 # different than the keypass below, it can be OK to store the password in this
