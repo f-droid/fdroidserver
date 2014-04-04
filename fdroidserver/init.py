@@ -224,6 +224,10 @@ def main():
                 files = glob.glob('/usr/lib/' + os.uname()[4] + '-*-gnu/opensc-pkcs11.so')
                 if len(files) > 0:
                     opensc_so = files[0]
+                else:
+                    opensc_so = '/usr/lib/opensc-pkcs11.so'
+                    logging.warn('No OpenSC PKCS#11 module found, ' +
+                                 'install OpenSC then edit "opensc-fdroid.cfg"!')
             with open(os.path.join(examplesdir, 'opensc-fdroid.cfg'), 'r') as f:
                 opensc_fdroid = f.read()
             opensc_fdroid = re.sub('^library.*', 'library = ' + opensc_so, opensc_fdroid,
