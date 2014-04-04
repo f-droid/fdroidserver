@@ -189,6 +189,7 @@ def main():
                 logging.info('"' + keystore
                              + '" does not exist, creating a new keystore there.')
     write_to_config('keystore', keystore)
+    repo_keyalias = None
     if options.repo_keyalias:
         repo_keyalias = options.repo_keyalias
         write_to_config('repo_keyalias', repo_keyalias)
@@ -203,7 +204,7 @@ def main():
         password = genpassword()
         write_to_config('keystorepass', password)
         write_to_config('keypass', password)
-        if not options.repo_keyalias:
+        if options.repo_keyalias == None:
             repo_keyalias = socket.getfqdn()
             write_to_config('repo_keyalias', repo_keyalias)
         if not options.distinguished_name:
@@ -217,6 +218,8 @@ def main():
     logging.info('  Android SDK Build Tools:\t' + os.path.dirname(aapt))
     logging.info('  Android NDK (optional):\t' + ndk_path)
     logging.info('  Keystore for signing key:\t' + keystore)
+    if repo_keyalias != None:
+        logging.info('  Alias for key in store:\t' + repo_keyalias)
     logging.info('\nTo complete the setup, add your APKs to "' +
           os.path.join(fdroiddir, 'repo') + '"' +
 '''
