@@ -175,15 +175,20 @@ def main():
     # find or generate the keystore for the repo signing key. First try the
     # path written in the default config.py.  Then check if the user has
     # specified a path from the command line, which will trump all others.
-    # Otherwise, create ~/.local/share/fdroidserver and stick it in there.
+    # Otherwise, create ~/.local/share/fdroidserver and stick it in there.  If
+    # keystore is set to NONE, that means that Java will look for keys in a
+    # Hardware Security Module aka Smartcard.
     keystore = config['keystore']
     if options.keystore:
-        if os.path.isfile(options.keystore):
+        keystore = os.path.abspath(options.keystore)
+        if options.keystore == 'NONE':
             keystore = options.keystore
-            write_to_config('keystore', keystore)
         else:
-            logging.info('"' + options.keystore + '" does not exist or is not a file!')
-            sys.exit(1)
+            keystore = os.path.abspath(options.keystore)
+            if not os.path.exists(keystore):
+                logging.info('"' + keystore
+                             + '" does not exist, creating a new keystore there.')
+    write_to_config('keystore', keystore)
     if options.repo_keyalias:
         repo_keyalias = options.repo_keyalias
         write_to_config('repo_keyalias', repo_keyalias)
@@ -195,7 +200,6 @@ def main():
         keystoredir = os.path.dirname(keystore)
         if not os.path.exists(keystoredir):
             os.makedirs(keystoredir, mode=0o700)
-        write_to_config('keystore', keystore)
         password = genpassword()
         write_to_config('keystorepass', password)
         write_to_config('keypass', password)
