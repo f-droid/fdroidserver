@@ -38,8 +38,8 @@ def write_to_config(key, value):
     '''write a key/value to the local config.py'''
     with open('config.py', 'r') as f:
         data = f.read()
-    pattern = key + '\s*=.*'
-    repl = key + ' = "' + value + '"'
+    pattern = '\n[\s#]*' + key + '\s*=\s*"[^"]*"'
+    repl = '\n' + key + ' = "' + value + '"'
     data = re.sub(pattern, repl, data)
     with open('config.py', 'w') as f:
         f.writelines(data)
