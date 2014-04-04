@@ -49,3 +49,13 @@ $fdroid update -c
 $fdroid update
 test -e repo/index.xml
 test -e repo/index.jar
+
+
+#------------------------------------------------------------------------------#
+# setup a new repo from scratch with a HSM/smartcard
+
+REPOROOT=`mktemp --directory --tmpdir=$WORKSPACE`
+cd $REPOROOT
+$fdroid init --keystore NONE
+test -e opensc-fdroid.cfg
+test ! -e NONE

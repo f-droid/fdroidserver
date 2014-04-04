@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import glob
 import hashlib
 import os
 import re
@@ -40,6 +41,16 @@ def write_to_config(key, value):
         data = f.read()
     pattern = '\n[\s#]*' + key + '\s*=\s*"[^"]*"'
     repl = '\n' + key + ' = "' + value + '"'
+    data = re.sub(pattern, repl, data)
+    with open('config.py', 'w') as f:
+        f.writelines(data)
+
+def disable_in_config(key, value):
+    '''write a key/value to the local config.py, then comment it out'''
+    with open('config.py', 'r') as f:
+        data = f.read()
+    pattern = '\n[\s#]*' + key + '\s*=\s*"[^"]*"'
+    repl = '\n#' + key + ' = "' + value + '"'
     data = re.sub(pattern, repl, data)
     with open('config.py', 'w') as f:
         f.writelines(data)
@@ -196,7 +207,30 @@ def main():
     if options.distinguished_name:
         keydname = options.distinguished_name
         write_to_config('keydname', keydname)
-    if not os.path.isfile(keystore):
+    if keystore == 'NONE': # we're using a smartcard
+        write_to_config('repo_keyalias', '1')  # seems to be the default
+        disable_in_config('keypass', 'never used with smartcard')
+        write_to_config('smartcardoptions',
+                        ('-storetype PKCS11 -providerName SunPKCS11-OpenSC '
+                         + '-providerClass sun.security.pkcs11.SunPKCS11 '
+                         + '-providerArg opensc-fdroid.cfg'))
+        # find opensc-pkcs11.so
+        if not os.path.exists('opensc-fdroid.cfg'):
+            if os.path.exists('/usr/lib/opensc-pkcs11.so'):
+                opensc_so = '/usr/lib/opensc-pkcs11.so'
+            elif os.path.exists('/usr/lib64/opensc-pkcs11.so'):
+                opensc_so = '/usr/lib64/opensc-pkcs11.so'
+            else:
+                files = glob.glob('/usr/lib/' + os.uname()[4] + '-*-gnu/opensc-pkcs11.so')
+                if len(files) > 0:
+                    opensc_so = files[0]
+            with open(os.path.join(examplesdir, 'opensc-fdroid.cfg'), 'r') as f:
+                opensc_fdroid = f.read()
+            opensc_fdroid = re.sub('^library.*', 'library = ' + opensc_so, opensc_fdroid,
+                                   flags=re.MULTILINE)
+            with open('opensc-fdroid.cfg', 'w') as f:
+                f.write(opensc_fdroid)
+    elif not os.path.exists(keystore):
         # no existing or specified keystore, generate the whole thing
         keystoredir = os.path.dirname(keystore)
         if not os.path.exists(keystoredir):

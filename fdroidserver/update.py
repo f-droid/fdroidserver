@@ -796,12 +796,15 @@ def make_index(apps, apks, repodir, archive, categories):
             sys.exit(1)
 
         # Sign the index...
-        p = FDroidPopen(['jarsigner', '-keystore', config['keystore'],
-            '-storepass:file', config['keystorepassfile'],
-            '-keypass:file', config['keypassfile'],
-            '-digestalg', 'SHA1', '-sigalg', 'MD5withRSA',
-            os.path.join(repodir, 'index.jar') , config['repo_keyalias']]
-            + config['smartcardoptions'])
+        args = ['jarsigner', '-keystore', config['keystore'],
+                '-storepass:file', config['keystorepassfile'],
+                '-digestalg', 'SHA1', '-sigalg', 'MD5withRSA',
+                os.path.join(repodir, 'index.jar'), config['repo_keyalias']]
+        if config['keystore'] == 'NONE':
+            args += config['smartcardoptions']
+        else:  # smardcards never use -keypass
+            args += ['-keypass:file', config['keypassfile']]
+        p = FDroidPopen(args)
         # TODO keypass should be sent via stdin
         if p.returncode != 0:
             logging.info("Failed to sign index")
