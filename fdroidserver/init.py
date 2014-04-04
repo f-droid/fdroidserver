@@ -192,11 +192,9 @@ def main():
         write_to_config('keydname', keydname)
     if not os.path.isfile(keystore):
         # no existing or specified keystore, generate the whole thing
-        keystoredir = os.path.join(os.getenv('HOME'),
-                                   '.local', 'share', 'fdroidserver')
+        keystoredir = os.path.dirname(keystore)
         if not os.path.exists(keystoredir):
             os.makedirs(keystoredir, mode=0o700)
-        keystore = os.path.join(keystoredir, 'keystore.jks')
         write_to_config('keystore', keystore)
         password = genpassword()
         write_to_config('keystorepass', password)
