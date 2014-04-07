@@ -69,6 +69,9 @@ while read line; do
 		newbuild=false
 		disable=false
 		while read l; do
+			if [[ "$l" == *"Maintainer Notes:"* ]]; then
+				break
+			fi
 			if [[ "$l" == "-Build:"* ]]; then
 				onlybuild=false
 			elif [[ "$l" == "+Build:"* ]]; then
