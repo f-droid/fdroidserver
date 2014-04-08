@@ -450,7 +450,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             if force:
                 logging.warn('Scanner found %d problems:' % count)
             else:
-                raise BuildException("Can't build due to %d scanned problems" % count)
+                raise BuildException("Can't build due to %d errors while scanning" % count)
 
     if not options.notarball:
         # Build the source tarball right before we build the release...
