@@ -23,6 +23,7 @@ setup(name='fdroidserver',
          [ 'buildserver/config.buildserver.py',
            'examples/config.py',
            'examples/makebs.config.py',
+           'examples/opensc-fdroid.cfg',
            'examples/fdroid-icon.png']),
         ('fdroidserver/getsig', ['fdroidserver/getsig/getsig.class'])
         ],
