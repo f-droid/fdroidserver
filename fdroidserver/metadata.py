@@ -32,7 +32,7 @@ app_defaults = {
     'Name': None,
     'Provides': None,
     'Auto Name': '',
-    'Categories': 'None',
+    'Categories': ['None'],
     'Description': [],
     'Summary': '',
     'License': 'Unknown',
