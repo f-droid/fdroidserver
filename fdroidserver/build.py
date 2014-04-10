@@ -254,6 +254,12 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             'config.buildserver.py'), 'config.py')
         ftp.chmod('config.py', 0o600)
 
+        # Copy over the ID (head commit hash) of the fdroidserver in use...
+        subprocess.call('git rev-parse HEAD >' +
+                os.path.join(os.getcwd(), 'tmp', 'fdroidserverid'),
+                shell=True, cwd=serverpath)
+        ftp.put('tmp/fdroidserverid', 'fdroidserverid')
+
         # Copy the metadata - just the file for this app...
         ftp.mkdir('metadata')
         ftp.mkdir('srclibs')
