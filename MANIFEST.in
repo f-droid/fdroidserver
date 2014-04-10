@@ -24,7 +24,7 @@ include docs/update.sh
 include examples/config.py
 include examples/fdroid-icon.png
 include examples/makebs.config.py
-include tests/run-tests.sh
+include tests/run-tests
 include wp-fdroid/AndroidManifest.xml
 include wp-fdroid/android-permissions.php
 include wp-fdroid/readme.txt
