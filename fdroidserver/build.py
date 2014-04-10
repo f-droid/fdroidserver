@@ -470,6 +470,22 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         tarball.add(build_dir, tarname, exclude=tarexc)
         tarball.close()
 
+    if onserver:
+        manifest = os.path.join(root_dir, 'AndroidManifest.xml')
+        if os.path.exists(manifest):
+            with open('/home/vagrant/buildserverid', 'r') as f:
+                buildserverid = f.read()
+            with open('/home/vagrant/fdroidserverid', 'r') as f:
+                fdroidserverid = f.read()
+            with open(manifest, 'r') as f:
+                manifestcontent = f.read()
+            manifestcontent = manifestcontent.replace('</manifest>',
+                    '<fdroid buildserverid="' + buildserverid + '"' + 
+                    ' fdroidserverid="' + fdroidserverid + '"' +
+                    '/></manifest>')
+            with open(manifest, 'w') as f:
+                f.write(manifestcontent)
+
     # Run a build command if one is required...
     if 'build' in thisbuild:
         cmd = common.replace_config_vars(thisbuild['build'])
