@@ -160,7 +160,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         sshs = paramiko.SSHClient()
         sshs.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         idfile = sshconfig['identityfile']
-        if idfile.startswith('"') and idfile.endswith('"'):
+        if isinstance(idfile, list):
+            idfile = idfile[0]
+        elif idfile.startswith('"') and idfile.endswith('"'):
             idfile = idfile[1:-1]
         sshs.connect(sshconfig['hostname'], username=sshconfig['user'],
             port=int(sshconfig['port']), timeout=300, look_for_keys=False,
