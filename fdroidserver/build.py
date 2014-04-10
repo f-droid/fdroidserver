@@ -117,7 +117,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                 else:
                     logging.info("...failed to reset to snapshot")
             else:
-                logging.info("...snapshot doesn't exist - VBoxManage snapshot list:\n" + output)
+                logging.info("...snapshot doesn't exist - VBoxManage snapshot list:\n" + p.stdout)
 
     # If we can't use the existing machine for any reason, make a
     # new one from scratch.
