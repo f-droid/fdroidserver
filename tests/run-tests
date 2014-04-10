@@ -7,12 +7,10 @@ copy_apks_into_repo() {
     for f in `ls -1 ../../*/bin/*.apk`; do
         name=$(basename $(dirname `dirname $f`))
         echo "name $name"
-        apk=${name}_`basename $f`
+        apk=`aapt d badging "$f" | sed -n "s,^package: name='\(.*\)' versionCode='\([0-9][0-9]*\)' .*,\1_\2.apk,p"`
         echo "apk $apk"
-        cp $f $1/repo/$apk
+        cp -f $f $1/repo/$apk
     done
-    # delete any 'unaligned' duplicates
-    rm -f $1/repo/*unaligned*.apk
 }
 
 if [ -z $WORKSPACE ]; then
