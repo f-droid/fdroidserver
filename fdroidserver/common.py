@@ -1276,9 +1276,9 @@ def scan_source(build_dir, root_dir, thisbuild):
             elif mime == 'application/x-archive':
                 count += handleproblem('static library', fd, fp)
             elif mime == 'application/x-executable':
-                handleproblem('binary executable', fd, fp)
+                count += handleproblem('binary executable', fd, fp)
             elif mime == 'application/x-java-applet':
-                handleproblem('Java compiled class', fd, fp)
+                count += handleproblem('Java compiled class', fd, fp)
             elif mime == 'application/jar' and has_extension(fp, 'apk'):
                 removeproblem('APK file', fd, fp)
             elif has_extension(fp, 'jar') and mime in [
