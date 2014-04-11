@@ -766,9 +766,9 @@ def parse_androidmanifests(paths):
     vnsearch = re.compile(r'.*:versionName="([^"]+?)".*').search
     psearch = re.compile(r'.*package="([^"]+)".*').search
 
-    vcsearch_g = re.compile(r'.*versionCode[ ]*[=]*[ ]*["\']*([0-9]+)["\']*').search
-    vnsearch_g = re.compile(r'.*versionName[ ]*[=]*[ ]*(["\'])((?:(?=(\\?))\3.)*?)\1.*').search
-    psearch_g = re.compile(r'.*packageName[ ]*[=]*[ ]*["\']([^"]+)["\'].*').search
+    vcsearch_g = re.compile(r'.*versionCode *=* *["\']*([0-9]+)["\']*').search
+    vnsearch_g = re.compile(r'.*versionName *=* *(["\'])((?:(?=(\\?))\3.)*?)\1.*').search
+    psearch_g = re.compile(r'.*packageName *=* *["\']([^"]+)["\'].*').search
 
     max_version = None
     max_vercode = None
@@ -1043,13 +1043,13 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         if 'target' in build:
             n = build["target"].split('-')[1]
             FDroidPopen(['sed', '-i',
-                's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+n+'@g',
+                's@compileSdkVersion *[0-9]*@compileSdkVersion '+n+'@g',
                 'build.gradle'], cwd=root_dir)
             if '@' in build['gradle']:
                 gradle_dir = os.path.join(root_dir, build['gradle'].split('@',1)[1])
                 gradle_dir = os.path.normpath(gradle_dir)
                 FDroidPopen(['sed', '-i',
-                    's@compileSdkVersion[ ]*[0-9]*@compileSdkVersion '+n+'@g',
+                    's@compileSdkVersion *[0-9]*@compileSdkVersion '+n+'@g',
                     'build.gradle'], cwd=gradle_dir)
 
     # Remove forced debuggable flags
@@ -1069,7 +1069,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                     raise BuildException("Failed to amend manifest")
             elif has_extension(path, 'gradle'):
                 p = SilentPopen(['sed', '-i',
-                    's/versionName[ ]*=[ ]*"[^"]*"/versionName = "' + build['version'] + '"/g',
+                    's/versionName *=* *"[^"]*"/versionName = "' + build['version'] + '"/g',
                     path])
                 if p.returncode != 0:
                     raise BuildException("Failed to amend build.gradle")
@@ -1086,7 +1086,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                     raise BuildException("Failed to amend manifest")
             elif has_extension(path, 'gradle'):
                 p = SilentPopen(['sed', '-i',
-                    's/versionCode[ ]*=[ ]*[0-9]*/versionCode = ' + build['vercode'] + '/g',
+                    's/versionCode *=* *[0-9]*/versionCode = ' + build['vercode'] + '/g',
                     path])
                 if p.returncode != 0:
                     raise BuildException("Failed to amend build.gradle")
