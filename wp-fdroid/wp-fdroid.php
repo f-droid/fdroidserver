@@ -341,7 +341,7 @@ class FDroid
 				if($donate && strlen($donate)>0)
 					$out.='<b>Donate:</b> <a href="'.$donate.'">'.$donate.'</a><br />';
 				if($flattr && strlen($flattr)>0)
-					$out.='<b>Flattr:</b> <a href="https://flattr.com/thing/'.$flattr.'"><img src="/wp-content/uploads/flattr-badge-large.png" /></a><br />';
+					$out.='<b>Flattr:</b> <a href="https://flattr.com/thing/'.$flattr.'"><img src="/wp-content/uploads/flattr-badge-large.png" style="border:0" /></a><br />';
 				$out.="</p>";
 
 				$out.="<p>For full details and additional technical information, see ";
