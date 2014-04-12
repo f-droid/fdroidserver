@@ -227,6 +227,9 @@ class FDroid
 					case "donate":
 						$donate=$el;
 						break;
+					case "flattr":
+						$flattr=$el;
+						break;
 					case "web":
 						$web=$el;
 						break;
@@ -337,6 +340,8 @@ class FDroid
 					$out.='<b>Source Code:</b> <a href="'.$source.'">'.$source.'</a><br />';
 				if($donate && strlen($donate)>0)
 					$out.='<b>Donate:</b> <a href="'.$donate.'">'.$donate.'</a><br />';
+				if($flattr && strlen($flattr)>0)
+					$out.='<b>Flattr:</b> <a href="https://flattr.com/thing/'.$flattr.'"><img src="/wp-content/uploads/flattr-badge-large.png" /></a><br />';
 				$out.="</p>";
 
 				$out.="<p>For full details and additional technical information, see ";
