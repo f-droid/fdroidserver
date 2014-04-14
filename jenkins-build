@@ -25,6 +25,14 @@ if [ -z $ANDROID_HOME ]; then
     fi
 fi
 
+
+#------------------------------------------------------------------------------#
+# cache pypi downloads
+if [ -z $PIP_DOWNLOAD_CACHE ]; then
+    export PIP_DOWNLOAD_CACHE=$HOME/.pip_download_cache
+fi
+
+
 #------------------------------------------------------------------------------#
 # required Java 7 keytool/jarsigner for :file support
 
