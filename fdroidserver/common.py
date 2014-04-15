@@ -1180,20 +1180,22 @@ def scan_source(build_dir, root_dir, thisbuild):
     count = 0
 
     # Common known non-free blobs (always lower case):
-    usual_suspects = ['flurryagent',
-                      'paypal_mpl',
-                      'libgoogleanalytics',
-                      'admob-sdk-android',
-                      'googleadview',
-                      'googleadmobadssdk',
-                      'google-play-services',
-                      'crittercism',
-                      'heyzap',
-                      'jpct-ae',
-                      'youtubeandroidplayerapi',
-                      'bugsense',
-                      'crashlytics',
-                      'ouya-sdk']
+    usual_suspects = [
+            re.compile(r'flurryagent', re.IGNORECASE),
+            re.compile(r'paypal.*mpl', re.IGNORECASE),
+            re.compile(r'libgoogleanalytics', re.IGNORECASE),
+            re.compile(r'admob.*sdk.*android', re.IGNORECASE),
+            re.compile(r'googleadview', re.IGNORECASE),
+            re.compile(r'googleadmobadssdk', re.IGNORECASE),
+            re.compile(r'google.*play.*services', re.IGNORECASE),
+            re.compile(r'crittercism', re.IGNORECASE),
+            re.compile(r'heyzap', re.IGNORECASE),
+            re.compile(r'jpct.*ae', re.IGNORECASE),
+            re.compile(r'youtubeandroidplayerapi', re.IGNORECASE),
+            re.compile(r'bugsense', re.IGNORECASE),
+            re.compile(r'crashlytics', re.IGNORECASE),
+            re.compile(r'ouya.*sdk', re.IGNORECASE),
+            ]
 
     def getpaths(field):
         paths = []
@@ -1266,32 +1268,43 @@ def scan_source(build_dir, root_dir, thisbuild):
             if toignore(fd):
                 continue
 
-            for suspect in usual_suspects:
-                if suspect in curfile.lower():
-                    count += handleproblem('usual supect', fd, fp)
-
             mime = magic.from_file(fp, mime=True) if ms is None else ms.file(fp)
+
             if mime == 'application/x-sharedlib':
                 count += handleproblem('shared library', fd, fp)
+
             elif mime == 'application/x-archive':
                 count += handleproblem('static library', fd, fp)
+
             elif mime == 'application/x-executable':
                 count += handleproblem('binary executable', fd, fp)
+
             elif mime == 'application/x-java-applet':
                 count += handleproblem('Java compiled class', fd, fp)
-            elif has_extension(fp, 'apk') and mime in (
+
+            elif mime in (
                     'application/jar',
                     'application/zip',
-                    ):
-                removeproblem('APK file', fd, fp)
-            elif has_extension(fp, 'jar') and mime in (
-                    'application/zip',
                     'application/java-archive',
+                    'application/octet-stream',
                     'binary',
                     ):
-                warnproblem('JAR file', fd)
-            elif mime == 'application/zip':
-                warnproblem('ZIP file', fd)
+
+                if has_extension(fp, 'apk'):
+                    removeproblem('APK file', fd, fp)
+
+                elif has_extension(fp, 'jar'):
+
+                    if any(suspect.match(curfile) for suspect in usual_suspects):
+                        count += handleproblem('usual supect', fd, fp)
+                    else:
+                        warnproblem('JAR file', fd)
+
+                elif has_extension(fp, 'zip'):
+                    warnproblem('ZIP file', fd)
+
+                else:
+                    warnproblem('unknown compressed or binary file', fd)
 
             elif has_extension(fp, 'java'):
                 for line in file(fp):
