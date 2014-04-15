@@ -19,6 +19,7 @@
 
 import os, sys, re
 import shutil
+import glob
 import stat
 import subprocess
 import time
@@ -1173,6 +1174,18 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     return (root_dir, srclibpaths)
 
+# Split and extend via globbing the paths from a field
+def getpaths(build_dir, build, field):
+    paths = []
+    if field not in build:
+        return paths
+    for p in build[field]:
+        p = p.strip()
+        full_path = os.path.join(build_dir, p)
+        full_path = os.path.normpath(full_path)
+        paths += [r[len(build_dir):] for r in glob.glob(full_path)]
+    return paths
+
 # Scan the source code in the given directory (and all subdirectories)
 # and return the number of fatal problems encountered
 def scan_source(build_dir, root_dir, thisbuild):
@@ -1197,24 +1210,8 @@ def scan_source(build_dir, root_dir, thisbuild):
             re.compile(r'ouya.*sdk', re.IGNORECASE),
             ]
 
-    def getpaths(field):
-        paths = []
-        if field not in thisbuild:
-            return paths
-        for p in thisbuild[field]:
-            p = p.strip()
-            if p == '.':
-                p = '/'
-            elif p.startswith('./'):
-                p = p[1:]
-            elif not p.startswith('/'):
-                p = '/' + p;
-            if p not in paths:
-                paths.append(p)
-        return paths
-
-    scanignore = getpaths('scanignore')
-    scandelete = getpaths('scandelete')
+    scanignore = getpaths(build_dir, thisbuild, 'scanignore')
+    scandelete = getpaths(build_dir, thisbuild, 'scandelete')
 
     try:
         ms = magic.open(magic.MIME_TYPE)
