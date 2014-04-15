@@ -1094,7 +1094,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Delete unwanted files
     if 'rm' in build:
-        for part in build['rm']:
+        for part in getpaths(build_dir, build, 'rm'):
             dest = os.path.join(build_dir, part)
             logging.info("Removing {0}".format(part))
             if os.path.lexists(dest):
@@ -1183,7 +1183,7 @@ def getpaths(build_dir, build, field):
         p = p.strip()
         full_path = os.path.join(build_dir, p)
         full_path = os.path.normpath(full_path)
-        paths += [r[len(build_dir):] for r in glob.glob(full_path)]
+        paths += [r[len(build_dir)+1:] for r in glob.glob(full_path)]
     return paths
 
 # Scan the source code in the given directory (and all subdirectories)
@@ -1259,7 +1259,7 @@ def scan_source(build_dir, root_dir, thisbuild):
 
             # Path (relative) to the file
             fp = os.path.join(r, curfile)
-            fd = fp[len(build_dir):]
+            fd = fp[len(build_dir)+1:]
 
             # Check if this file has been explicitly excluded from scanning
             if toignore(fd):
