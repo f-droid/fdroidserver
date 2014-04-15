@@ -50,19 +50,22 @@ def main():
         logging.critical("The only commands currently supported are 'init' and 'update'")
         sys.exit(1)
 
-    serverwebroot = config['serverwebroot'].rstrip('/').replace('//', '/')
-    host, fdroiddir = serverwebroot.split(':')
-    serverrepobase = os.path.basename(fdroiddir)
+    if 'serverwebroot' in config:
+        serverwebroot = config['serverwebroot'].rstrip('/').replace('//', '/')
+        host, fdroiddir = serverwebroot.split(':')
+        serverrepobase = os.path.basename(fdroiddir)
+        if serverrepobase != 'fdroid' and standardwebroot:
+            logging.error('serverwebroot does not end with "fdroid", '
+                          + 'perhaps you meant one of these:\n\t'
+                          + serverwebroot.rstrip('/') + '/fdroid\n\t'
+                          + serverwebroot.rstrip('/').rstrip(serverrepobase) + 'fdroid')
+            sys.exit(1)
+    else:
+        serverwebroot = None
     if 'nonstandardwebroot' in config and config['nonstandardwebroot'] == True:
         standardwebroot = False
     else:
         standardwebroot = True
-    if serverrepobase != 'fdroid' and standardwebroot:
-        print('ERROR: serverwebroot does not end with "fdroid", '
-              + 'perhaps you meant one of these:\n\t'
-              + serverwebroot.rstrip('/') + '/fdroid\n\t'
-              + serverwebroot.rstrip('/').rstrip(serverrepobase) + 'fdroid')
-        sys.exit(1)
 
     repodirs = ['repo']
     if config['archive_older'] != 0:
@@ -70,24 +73,27 @@ def main():
 
     for repodir in repodirs:
         if args[0] == 'init':
-            if subprocess.call(['ssh', '-v', host,
+            if serverwebroot == None:
+                logging.warn('No serverwebroot set! Edit your config.py to set it.')
+            elif subprocess.call(['ssh', '-v', host,
                                 'mkdir -p', fdroiddir + '/' + repodir]) != 0:
                 sys.exit(1)
         elif args[0] == 'update':
-            index = os.path.join(repodir, 'index.xml')
-            indexjar = os.path.join(repodir, 'index.jar')
-            if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                                '--exclude', index, '--exclude', indexjar,
-                                repodir, config['serverwebroot']]) != 0:
-                sys.exit(1)
-            if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                                index,
-                                config['serverwebroot'] + '/' + repodir]) != 0:
-                sys.exit(1)
-            if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                                indexjar,
-                                config['serverwebroot'] + '/' + repodir]) != 0:
-                sys.exit(1)
+            if serverwebroot != None:
+                index = os.path.join(repodir, 'index.xml')
+                indexjar = os.path.join(repodir, 'index.jar')
+                if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
+                                    '--exclude', index, '--exclude', indexjar,
+                                    repodir, config['serverwebroot']]) != 0:
+                    sys.exit(1)
+                if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
+                                    index,
+                                    config['serverwebroot'] + '/' + repodir]) != 0:
+                    sys.exit(1)
+                if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
+                                    indexjar,
+                                    config['serverwebroot'] + '/' + repodir]) != 0:
+                    sys.exit(1)
 
     sys.exit(0)
 
