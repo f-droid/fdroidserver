@@ -682,7 +682,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         dd = build_dir
         if 'subdir' in thisbuild:
             dd = os.path.join(dd, thisbuild['subdir'])
-            basename = thisbuild['subdir']
+            basename = os.path.basename(thisbuild['subdir'])
         if '@' in thisbuild['gradle']:
             dd = os.path.join(dd, thisbuild['gradle'].split('@')[1])
             basename = app['id']
