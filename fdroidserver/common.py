@@ -1279,13 +1279,16 @@ def scan_source(build_dir, root_dir, thisbuild):
                 count += handleproblem('binary executable', fd, fp)
             elif mime == 'application/x-java-applet':
                 count += handleproblem('Java compiled class', fd, fp)
-            elif mime == 'application/jar' and has_extension(fp, 'apk'):
+            elif has_extension(fp, 'apk') and mime in (
+                    'application/jar',
+                    'application/zip',
+                    ):
                 removeproblem('APK file', fd, fp)
-            elif has_extension(fp, 'jar') and mime in [
+            elif has_extension(fp, 'jar') and mime in (
                     'application/zip',
                     'application/java-archive',
                     'binary',
-                    ]:
+                    ):
                 warnproblem('JAR file', fd)
             elif mime == 'application/zip':
                 warnproblem('ZIP file', fd)
