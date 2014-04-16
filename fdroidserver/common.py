@@ -115,6 +115,13 @@ def read_config(opts, config_file='config.py'):
         if k in config:
             write_password_file(k)
 
+    # since this is used with rsync, where trailing slashes have meaning,
+    # ensure there is always a trailing slash
+    if 'serverwebroot' in config:
+        if config['serverwebroot'][-1] != '/':
+            config['serverwebroot'] += '/'
+        config['serverwebroot'] = config['serverwebroot'].replace('//', '/')
+
     return config
 
 def write_password_file(pwtype, password=None):

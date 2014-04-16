@@ -29,19 +29,23 @@ options = None
 
 
 def update_serverwebroot(repo_section):
+    rsyncargs = ['rsync', '-u', '-r', '--delete']
+    if options.verbose:
+        rsyncargs += ['--verbose']
+    if options.quiet:
+        rsyncargs += ['--quiet']
     index = os.path.join(repo_section, 'index.xml')
     indexjar = os.path.join(repo_section, 'index.jar')
-    if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                        '--exclude', index, '--exclude', indexjar,
+    # serverwebroot is guaranteed to have a trailing slash in common.py
+    if subprocess.call(rsyncargs +
+                       ['--exclude', index, '--exclude', indexjar,
                         repo_section, config['serverwebroot']]) != 0:
         sys.exit(1)
-    if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                        index,
-                        config['serverwebroot'] + '/' + repo_section]) != 0:
+    if subprocess.call(rsyncargs +
+                       [index, config['serverwebroot'] + repo_section]) != 0:
         sys.exit(1)
-    if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                        indexjar,
-                        config['serverwebroot'] + '/' + repo_section]) != 0:
+    if subprocess.call(rsyncargs +
+                       [indexjar, config['serverwebroot'] + repo_section]) != 0:
         sys.exit(1)
 
 def main():
@@ -71,8 +75,8 @@ def main():
         standardwebroot = True
 
     if 'serverwebroot' in config:
-        serverwebroot = config['serverwebroot'].rstrip('/').replace('//', '/')
-        host, fdroiddir = serverwebroot.split(':')
+        serverwebroot = config['serverwebroot']
+        host, fdroiddir = serverwebroot.rstrip('/').split(':')
         serverrepobase = os.path.basename(fdroiddir)
         if serverrepobase != 'fdroid' and standardwebroot:
             logging.error('serverwebroot does not end with "fdroid", '
@@ -93,9 +97,16 @@ def main():
 
     if args[0] == 'init':
         if serverwebroot != None:
+            sshargs = ['ssh']
+            if options.quiet:
+                sshargs += ['-q']
             for repo_section in repo_sections:
-                if subprocess.call(['ssh', '-v', host,
-                                    'mkdir -p', fdroiddir + '/' + repo_section]) != 0:
+                cmd = sshargs + [host, 'mkdir -p', fdroiddir + '/' + repo_section]
+                if options.verbose:
+                    # ssh -v produces different output than rsync -v, so this
+                    # simulates rsync -v
+                    logging.info(' '.join(cmd))
+                if subprocess.call(cmd) != 0:
                     sys.exit(1)
     elif args[0] == 'update':
         for repo_section in repo_sections:
