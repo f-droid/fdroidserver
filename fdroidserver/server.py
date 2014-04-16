@@ -27,6 +27,53 @@ import common
 config = None
 options = None
 
+def update_awsbucket(repo_section):
+    '''
+    Upload the contents of the directory `repo_section` (including
+    subdirectories) to the AWS S3 "bucket". The contents of that subdir of the
+    bucket will first be deleted.
+
+    Requires AWS credentials set in config.py: awsaccesskeyid, awssecretkey
+    '''
+
+    import libcloud.security
+    libcloud.security.VERIFY_SSL_CERT = True
+    from libcloud.storage.types import Provider
+    from libcloud.storage.providers import get_driver
+
+    if 'awsaccesskeyid' not in config or 'awssecretkey' not in config:
+        logging.error('To use awsbucket, you must set awssecretkey and awsaccesskeyid in config.py!')
+        sys.exit(1)
+    awsbucket = config['awsbucket']
+
+    cls = get_driver(Provider.S3)
+    driver = cls(config['awsaccesskeyid'], config['awssecretkey'])
+    container = driver.get_container(container_name=awsbucket)
+
+    upload_dir = 'fdroid/' + repo_section
+    if options.verbose:
+        logging.info('Deleting existing repo on Amazon S3 bucket: "' + awsbucket
+                     + '/' + upload_dir + '"')
+    for obj in container.list_objects():
+        if obj.name.startswith(upload_dir + '/'):
+            obj.delete()
+            if options.verbose:
+                logging.info('  deleted ' + obj.name)
+
+    if options.verbose:
+        logging.info('Uploading to Amazon S3 bucket: "' + awsbucket + '/' + upload_dir + '"')
+    for root, _, files in os.walk(os.path.join(os.getcwd(), repo_section)):
+        for name in files:
+            file_to_upload = os.path.join(root, name)
+            object_name = 'fdroid/' + os.path.relpath(file_to_upload, os.getcwd())
+
+            if options.verbose:
+                logging.info('  ' + file_to_upload + '...')
+            extra = { 'acl': 'public-read' }
+            driver.upload_object(file_path=file_to_upload,
+                                 container=container,
+                                 object_name=object_name,
+                                 extra=extra)
 
 def update_serverwebroot(repo_section):
     rsyncargs = ['rsync', '-u', '-r', '--delete']
@@ -84,11 +131,8 @@ def main():
                           + serverwebroot.rstrip('/') + '/fdroid\n\t'
                           + serverwebroot.rstrip('/').rstrip(serverrepobase) + 'fdroid')
             sys.exit(1)
-    else:
-        serverwebroot = None
-
-    if serverwebroot == None:
-        logging.warn('No serverwebroot set! Edit your config.py to set one.')
+    elif 'awsbucket' not in config:
+        logging.warn('No serverwebroot or awsbucket set! Edit your config.py to set one or both.')
         sys.exit(1)
 
     repo_sections = ['repo']
@@ -110,8 +154,10 @@ def main():
                     sys.exit(1)
     elif args[0] == 'update':
         for repo_section in repo_sections:
-            if serverwebroot != None:
+            if 'serverwebroot' in config:
                 update_serverwebroot(repo_section)
+            if 'awsbucket' in config:
+                update_awsbucket(repo_section)
 
     sys.exit(0)
 
