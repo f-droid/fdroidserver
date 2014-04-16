@@ -28,8 +28,23 @@ config = None
 options = None
 
 
-def main():
+def update_serverwebroot(repo_section):
+    index = os.path.join(repo_section, 'index.xml')
+    indexjar = os.path.join(repo_section, 'index.jar')
+    if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
+                        '--exclude', index, '--exclude', indexjar,
+                        repo_section, config['serverwebroot']]) != 0:
+        sys.exit(1)
+    if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
+                        index,
+                        config['serverwebroot'] + '/' + repo_section]) != 0:
+        sys.exit(1)
+    if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
+                        indexjar,
+                        config['serverwebroot'] + '/' + repo_section]) != 0:
+        sys.exit(1)
 
+def main():
     global config, options
 
     # Parse command line...
@@ -50,6 +65,11 @@ def main():
         logging.critical("The only commands currently supported are 'init' and 'update'")
         sys.exit(1)
 
+    if 'nonstandardwebroot' in config and config['nonstandardwebroot'] == True:
+        standardwebroot = False
+    else:
+        standardwebroot = True
+
     if 'serverwebroot' in config:
         serverwebroot = config['serverwebroot'].rstrip('/').replace('//', '/')
         host, fdroiddir = serverwebroot.split(':')
@@ -62,38 +82,25 @@ def main():
             sys.exit(1)
     else:
         serverwebroot = None
-    if 'nonstandardwebroot' in config and config['nonstandardwebroot'] == True:
-        standardwebroot = False
-    else:
-        standardwebroot = True
 
-    repodirs = ['repo']
+    if serverwebroot == None:
+        logging.warn('No serverwebroot set! Edit your config.py to set one.')
+        sys.exit(1)
+
+    repo_sections = ['repo']
     if config['archive_older'] != 0:
-        repodirs.append('archive')
+        repo_sections.append('archive')
 
-    for repodir in repodirs:
-        if args[0] == 'init':
-            if serverwebroot == None:
-                logging.warn('No serverwebroot set! Edit your config.py to set it.')
-            elif subprocess.call(['ssh', '-v', host,
-                                'mkdir -p', fdroiddir + '/' + repodir]) != 0:
-                sys.exit(1)
-        elif args[0] == 'update':
+    if args[0] == 'init':
+        if serverwebroot != None:
+            for repo_section in repo_sections:
+                if subprocess.call(['ssh', '-v', host,
+                                    'mkdir -p', fdroiddir + '/' + repo_section]) != 0:
+                    sys.exit(1)
+    elif args[0] == 'update':
+        for repo_section in repo_sections:
             if serverwebroot != None:
-                index = os.path.join(repodir, 'index.xml')
-                indexjar = os.path.join(repodir, 'index.jar')
-                if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                                    '--exclude', index, '--exclude', indexjar,
-                                    repodir, config['serverwebroot']]) != 0:
-                    sys.exit(1)
-                if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                                    index,
-                                    config['serverwebroot'] + '/' + repodir]) != 0:
-                    sys.exit(1)
-                if subprocess.call(['rsync', '-u', '-v', '-r', '--delete',
-                                    indexjar,
-                                    config['serverwebroot'] + '/' + repodir]) != 0:
-                    sys.exit(1)
+                update_serverwebroot(repo_section)
 
     sys.exit(0)
 
