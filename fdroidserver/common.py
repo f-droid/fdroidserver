@@ -1252,7 +1252,7 @@ def scan_source(build_dir, root_dir, thisbuild):
     # Iterate through all files in the source code
     for r,d,f in os.walk(build_dir):
 
-        if any(insidedir(r, igndir) for igndir in ('.hg', '.git', '.svn')):
+        if any(insidedir(r, d) for d in ('.hg', '.git', '.svn', '.bzr')):
             continue
 
         for curfile in f:
