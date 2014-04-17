@@ -1448,7 +1448,6 @@ def FDroidPopen(commands, cwd=None, shell=False, output=True):
 
     result = PopenResult()
     p = subprocess.Popen(commands, cwd=cwd, shell=shell,
-            universal_newlines=True,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     stdout_queue = Queue.Queue()
