@@ -645,7 +645,10 @@ def make_index(apps, apks, repodir, archive, categories):
                                   '-storepass:file', config['keystorepassfile']]
                             + config['smartcardoptions'])
             if p.returncode != 0:
-                logging.critical("Failed to get repo pubkey")
+                msg = "Failed to get repo pubkey!"
+                if config['keystore'] == 'NONE':
+                    msg += ' Is your crypto smartcard plugged in?'
+                logging.critical(msg)
                 sys.exit(1)
             global repo_pubkey_fingerprint
             repo_pubkey_fingerprint = cert_fingerprint(p.stdout)
