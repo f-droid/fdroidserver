@@ -123,6 +123,9 @@ def check_tags(app, pattern):
             pat = re.compile(pattern)
             tags = [tag for tag in tags if pat.match(tag)]
 
+        if repotype in ('git',):
+            tags = vcs.latesttags(tags, 5)
+
         for tag in tags:
             logging.debug("Check tag: '{0}'".format(tag))
             vcs.gotorevision(tag)

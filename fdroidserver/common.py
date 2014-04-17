@@ -320,6 +320,10 @@ class vcs:
     def gettags(self):
         raise VCSException('gettags not supported for this vcs type')
 
+    # Get a list of latest number tags
+    def latesttags(self, number):
+        raise VCSException('latesttags not supported for this vcs type')
+
     # Get current commit reference (hash, revision, etc)
     def getref(self):
         raise VCSException('getref not supported for this vcs type')
@@ -411,6 +415,14 @@ class vcs_git(vcs):
         self.checkrepo()
         p = SilentPopen(['git', 'tag'], cwd=self.local)
         return p.stdout.splitlines()
+
+    def latesttags(self, alltags, number):
+        self.checkrepo()
+        p = SilentPopen(['echo "'+'\n'.join(alltags)+'" | \
+                xargs -I@ git log --format=format:"%at @%n" -1 @ | \
+                sort -n | awk \'{print $2}\''],
+                cwd=self.local, shell=True)
+        return p.stdout.splitlines()[-number:]
 
 
 class vcs_gitsvn(vcs):
@@ -1441,10 +1453,11 @@ def FDroidPopen(commands, cwd=None, shell=False, output=True):
     :returns: A PopenResult.
     """
 
-    if cwd:
-        cwd = os.path.normpath(cwd)
-        logging.info("Directory: %s" % cwd)
-    logging.info("> %s" % ' '.join(commands))
+    if output:
+        if cwd:
+            cwd = os.path.normpath(cwd)
+            logging.info("Directory: %s" % cwd)
+        logging.info("> %s" % ' '.join(commands))
 
     result = PopenResult()
     p = subprocess.Popen(commands, cwd=cwd, shell=shell,
