@@ -1,18 +1,75 @@
 <?php
 /*
 Plugin Name: WP FDroid
-Plugin URI: https://f-droid.org/repository
+Plugin URI: https://f-droid.org/
 Description: An FDroid repository browser
 Author: Ciaran Gultnieks
-Version: 0.01
+Version: 0.02
 Author URI: http://ciarang.com
 
 Revision history
+0.02 - 2014-04-17: It's changed somewhat since then
 0.01 - 2010-12-04: Initial development version
 
  */
 
 include('android-permissions.php');
+
+
+// Widget for displaying latest apps.
+class FDroidLatestWidget extends WP_Widget {
+
+	function FDroidLatestWidget() {
+		parent::__construct(false, 'F-Droid Latest Apps');
+	}
+
+	function widget( $args, $instance ) {
+		extract($args);
+		$title = apply_filters('widget_title', $instance['title']);
+		echo $before_widget;
+		echo $before_title . $title . $after_title;
+
+		$handle = fopen(getenv('DOCUMENT_ROOT').'/repo/latestapps.dat', 'r');
+		if ($handle) {
+			while (($buffer = fgets($handle, 4096)) !== false) {
+				$app = explode("\t", $buffer);
+				echo '<a href="/repository/browse/?fdid='.$app[0].'">';
+				if(isset($app[2]) && trim($app[2])) {
+					echo '<img src="' . site_url() . '/repo/icons/'.$app[2].'" style="width:32px;border:none;float:right;" />';
+				}
+				echo $app[1].'<br />';
+				if(isset($app[3]) && trim($app[3])) {
+					echo '<span style="color:#BBBBBB;">'.$app[3].'</span>';
+				}
+				echo '</a><br style="clear:both;" />';
+			}
+			fclose($handle);
+		}
+		echo $after_widget;
+	}
+
+	function update($new_instance, $old_instance) {
+		$instance = array();
+		$instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
+		return $instance;
+	}
+
+	function form($instance) {
+		if (isset($instance['title'])) {
+			$title = $instance['title'];
+		}
+		else {
+			$title = __('New title', 'text_domain');
+		}
+		?>
+		<p>
+		<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label> 
+		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>">
+		</p>
+		<?php
+	}
+}
+
 
 class FDroid
 {
@@ -24,12 +81,13 @@ class FDroid
 
 	// Constructor
 	function FDroid() {
-		// Add filters etc here!
 		add_shortcode('fdroidrepo',array($this, 'do_shortcode'));
 		add_filter('query_vars',array($this, 'queryvars'));
 		$this->inited=false;
 		$this->site_path=getenv('DOCUMENT_ROOT');
-		wp_register_sidebar_widget('fdroid_latest', 'FDroid Latest', 'widget_fdroidlatest');
+		add_action('widgets_init', function() {
+			register_widget('FDroidLatestWidget');
+		});
 	}
 
 
@@ -895,31 +953,6 @@ function linkify($vars) {
 			$retvar .= $k.'='.$v.'&';
 	}
 	return substr($retvar,0,-1);
-}
-
-function widget_fdroidlatest($args) {
-	extract($args);
-	echo $before_widget;
-	echo $before_title . 'Latest Apps' . $after_title;
-
-	$handle = fopen(getenv('DOCUMENT_ROOT').'/repo/latestapps.dat', 'r');
-	if ($handle) {
-		while (($buffer = fgets($handle, 4096)) !== false) {
-			$app = explode("\t", $buffer);
-			echo '<a href="/repository/browse/?fdid='.$app[0].'">';
-			if(isset($app[2]) && trim($app[2])) {
-				echo '<img src="' . site_url() . '/repo/icons/'.$app[2].'" style="width:32px;border:none;float:right;" />';
-			}
-			echo $app[1].'<br />';
-			if(isset($app[3]) && trim($app[3])) {
-				echo '<span style="color:#BBBBBB;">'.$app[3].'</span>';
-			}
-			echo '</a><br style="clear:both;" />';
-		}
-		fclose($handle);
-	}
-
-	echo $after_widget;
 }
 
 $wp_fdroid = new FDroid();
