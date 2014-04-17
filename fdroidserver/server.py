@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+import hashlib
 import os
 import subprocess
 from optparse import OptionParser
@@ -55,29 +56,62 @@ def update_awsbucket(repo_section):
         logging.info('Created new container "' + container.name + '"')
 
     upload_dir = 'fdroid/' + repo_section
-    if options.verbose:
-        logging.info('Deleting existing repo on Amazon S3 bucket: "' + awsbucket
-                     + '/' + upload_dir + '"')
+    objs = dict()
     for obj in container.list_objects():
         if obj.name.startswith(upload_dir + '/'):
-            obj.delete()
-            if options.verbose:
-                logging.info('  deleted ' + obj.name)
+            objs[obj.name] = obj
 
-    if options.verbose:
-        logging.info('Uploading to Amazon S3 bucket: "' + awsbucket + '/' + upload_dir + '"')
     for root, _, files in os.walk(os.path.join(os.getcwd(), repo_section)):
         for name in files:
+            upload = False
             file_to_upload = os.path.join(root, name)
             object_name = 'fdroid/' + os.path.relpath(file_to_upload, os.getcwd())
+            if not object_name in objs:
+                upload = True
+            else:
+                obj = objs.pop(object_name)
+                if obj.size != os.path.getsize(file_to_upload):
+                    upload = True
+                else:
+                    # if the sizes match, then compare by MD5
+                    md5 = hashlib.md5()
+                    with open(file_to_upload, 'rb') as f:
+                        while True:
+                            data = f.read(8192)
+                            if not data:
+                                break
+                            md5.update(data)
+                    if obj.hash != md5.hexdigest():
+                        s3url = 's3://' + awsbucket + '/' + obj.name
+                        logging.info(' deleting ' + s3url)
+                        if not driver.delete_object(obj):
+                            logging.warn('Could not delete ' + s3url)
+                        upload = True
 
-            if options.verbose:
-                logging.info('  ' + file_to_upload + '...')
-            extra = { 'acl': 'public-read' }
-            driver.upload_object(file_path=file_to_upload,
-                                 container=container,
-                                 object_name=object_name,
-                                 extra=extra)
+            if upload:
+                if options.verbose:
+                    logging.info(' uploading "' + file_to_upload + '"...')
+                extra = { 'acl': 'public-read' }
+                if file_to_upload.endswith('.sig'):
+                    extra['content_type'] = 'application/pgp-signature'
+                elif file_to_upload.endswith('.asc'):
+                    extra['content_type'] = 'application/pgp-signature'
+                logging.info(' uploading ' + os.path.relpath(file_to_upload)
+                             + ' to s3://' + awsbucket + '/' + obj.name)
+                obj = driver.upload_object(file_path=file_to_upload,
+                                           container=container,
+                                           object_name=object_name,
+                                           verify_hash=False,
+                                           extra=extra)
+    # delete the remnants in the bucket, they do not exist locally
+    while objs:
+        object_name, obj = objs.popitem()
+        s3url = 's3://' + awsbucket + '/' + object_name
+        if object_name.startswith(upload_dir):
+            logging.warn(' deleting ' + s3url)
+            driver.delete_object(obj)
+        else:
+            logging.info(' skipping ' + s3url)
 
 def update_serverwebroot(repo_section):
     rsyncargs = ['rsync', '-u', '-r', '--delete']
