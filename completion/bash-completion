@@ -65,7 +65,8 @@ __apk_vercode() {
 }
 
 __vercode() {
-	local p=${cur:0:-1}
+	local p v
+	echo $cur | IFS=':' read p v
 
 	COMPREPLY=( $( compgen -P "${p}:" -W "$( while read line; do
 		if [[ "$line" == "Build Version:"* ]]
@@ -99,7 +100,7 @@ __complete_build() {
 		-*)
 			__complete_options
 			return 0;;
-		*:)
+		*:*)
 			__vercode
 			return 0;;
 		*)
