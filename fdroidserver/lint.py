@@ -111,23 +111,26 @@ regex_pedantic = {
         ],
 }
 
-appid = None
-
 def main():
 
-    global config, options, appid
+    global config, options, appid, app_count, warn_count
+    appid = None
+
+    app_count = 0
+    warn_count = 0
 
     def warn(message):
-        global appid
+        global appid, app_count, warn_count
         if appid:
             print "%s:" % appid
             appid = None
+            app_count += 1
         print '    %s' % message
+        warn_count += 1
 
     def pwarn(message):
         if options.pedantic:
             warn(message)
-
 
     # Parse command line...
     parser = OptionParser(usage="Usage: %prog [options] [APPID [APPID ...]]")
@@ -224,7 +227,7 @@ def main():
         if not appid:
             print
 
-    logging.info("Finished.")
+    logging.info("Found a total of %i warnings in %i apps." % (warn_count, app_count))
 
 if __name__ == "__main__":
     main()
