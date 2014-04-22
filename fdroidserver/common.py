@@ -656,7 +656,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
 
     res_dirs = [
             os.path.join(app_dir, 'res'),
-            os.path.join(app_dir, 'src/main/res'),
+            os.path.join(app_dir, 'src/main'),
             ]
 
     if xmlfiles is None:
