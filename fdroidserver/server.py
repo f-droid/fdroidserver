@@ -97,7 +97,7 @@ def update_awsbucket(repo_section):
                 elif file_to_upload.endswith('.asc'):
                     extra['content_type'] = 'application/pgp-signature'
                 logging.info(' uploading ' + os.path.relpath(file_to_upload)
-                             + ' to s3://' + awsbucket + '/' + obj.name)
+                             + ' to s3://' + awsbucket + '/' + object_name)
                 obj = driver.upload_object(file_path=file_to_upload,
                                            container=container,
                                            object_name=object_name,
