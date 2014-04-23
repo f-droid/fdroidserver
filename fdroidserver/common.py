@@ -34,6 +34,28 @@ import metadata
 config = None
 options = None
 
+def get_default_config():
+    return {
+        'sdk_path': os.getenv("ANDROID_HOME"),
+        'ndk_path': "$ANDROID_NDK",
+        'build_tools': "19.0.3",
+        'ant': "ant",
+        'mvn3': "mvn",
+        'gradle': 'gradle',
+        'archive_older': 0,
+        'update_stats': False,
+        'stats_to_carbon': False,
+        'repo_maxage': 0,
+        'build_server_always': False,
+        'keystore': '$HOME/.local/share/fdroidserver/keystore.jks',
+        'smartcardoptions': [],
+        'char_limits': {
+            'Summary' : 50,
+            'Description' : 1500
+        },
+        'keyaliases': { },
+    }
+
 def read_config(opts, config_file='config.py'):
     """Read the repository config
 
@@ -65,26 +87,7 @@ def read_config(opts, config_file='config.py'):
                                       'sun.security.pkcs11.SunPKCS11',
                                       '-providerArg', 'opensc-fdroid.cfg']
 
-    defconfig = {
-        'sdk_path': "$ANDROID_HOME",
-        'ndk_path': "$ANDROID_NDK",
-        'build_tools': "19.0.3",
-        'ant': "ant",
-        'mvn3': "mvn",
-        'gradle': 'gradle',
-        'archive_older': 0,
-        'update_stats': False,
-        'stats_to_carbon': False,
-        'repo_maxage': 0,
-        'build_server_always': False,
-        'keystore': '$HOME/.local/share/fdroidserver/keystore.jks',
-        'smartcardoptions': [],
-        'char_limits': {
-            'Summary' : 50,
-            'Description' : 1500
-        },
-        'keyaliases': { },
-    }
+    defconfig = get_default_config()
     for k, v in defconfig.items():
         if k not in config:
             config[k] = v
@@ -96,14 +99,7 @@ def read_config(opts, config_file='config.py'):
         v = os.path.expanduser(v)
         config[k] = os.path.expandvars(v)
 
-    if not config['sdk_path']:
-        logging.critical("Neither $ANDROID_HOME nor sdk_path is set, no Android SDK found!")
-        sys.exit(3)
-    if not os.path.exists(config['sdk_path']):
-        logging.critical('Android SDK path "' + config['sdk_path'] + '" does not exist!')
-        sys.exit(3)
-    if not os.path.isdir(config['sdk_path']):
-        logging.critical('Android SDK path "' + config['sdk_path'] + '" is not a directory!')
+    if not test_sdk_exists(config):
         sys.exit(3)
 
     if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
@@ -123,6 +119,21 @@ def read_config(opts, config_file='config.py'):
         config['serverwebroot'] = config['serverwebroot'].replace('//', '/')
 
     return config
+
+def test_sdk_exists(c):
+    if c['sdk_path'] == None:
+        # c['sdk_path'] is set to the value of ANDROID_HOME by default
+        logging.critical("Neither ANDROID_HOME nor sdk_path is set, no Android SDK found!")
+        logging.info('Set ANDROID_HOME to the path to your SDK, i.e.:')
+        logging.info('\texport ANDROID_HOME=/opt/android-sdk')
+        return False
+    if not os.path.exists(c['sdk_path']):
+        logging.critical('Android SDK path "' + c['sdk_path'] + '" does not exist!')
+        return False
+    if not os.path.isdir(c['sdk_path']):
+        logging.critical('Android SDK path "' + c['sdk_path'] + '" is not a directory!')
+        return False
+    return True
 
 def write_password_file(pwtype, password=None):
     '''

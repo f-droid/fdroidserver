@@ -105,6 +105,8 @@ def main():
                       help="Alias of the repo signing key in the keystore")
     (options, args) = parser.parse_args()
 
+    common.test_sdk_exists(common.get_default_config())
+
     # find root install prefix
     tmp = os.path.dirname(sys.argv[0])
     if os.path.basename(tmp) == 'bin':
