@@ -10,3 +10,21 @@ assist in creating, testing and submitting metadata to the main repository.
 For documentation, please see the docs directory.
 
 Alternatively, visit https://f-droid.org/manual/
+
+
+Installing
+----------
+
+The easiest way to install the fdroidserver tools is to use virtualenv and pip
+(if you are Debian/Ubuntu/Mint/etc, you can first try installing using
+`apt-get install fdroidserver`).  First, make sure you have virtualenv
+installed, it should be included in your OS's Python distribution or via other
+mechanisms like dnf/yum/pacman/emerge/Fink/MacPorts/Brew.  Then here's how to
+install:
+
+    git clone https://gitlab.com/fdroid/fdroidserver.git
+    cd fdroidserver
+    virtualenv env/
+    . env/bin/activate
+    pip install -e .
+    python setup.py install

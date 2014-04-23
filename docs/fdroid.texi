@@ -160,7 +160,7 @@ certainly want to work from a git clone of the tools at this stage. To
 get started:
 
 @example
-git clone git@gitlab.com:fdroid/fdroidserver.git
+git clone https://gitlab.com/fdroid/fdroidserver.git
 @end example
 
 You now have lots of stuff in the fdroidserver directory, but the most
@@ -177,7 +177,7 @@ repository management tasks. You can either create a brand new one, or
 grab a copy of the data used by the main F-Droid repository:
 
 @example
-git clone git@gitlab.com:fdroid/fdroiddata.git
+git clone https://gitlab.com/fdroid/fdroiddata.git
 @end example
 
 Regardless of the intended usage of the tools, you will always need to set

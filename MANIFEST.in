@@ -2,11 +2,10 @@ include README
 include COPYING
 include fd-commit
 include fdroid
-include jenkins-build.sh
+include jenkins-build
 include makebuildserver
 include updateplugin
 include buildserver/config.buildserver.py
-include buildserver/cookbooks
 include buildserver/fixpaths.sh
 include buildserver/cookbooks/android-ndk/recipes/default.rb
 include buildserver/cookbooks/android-sdk/recipes/default.rb

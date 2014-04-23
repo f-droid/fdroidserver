@@ -115,6 +115,13 @@ def read_config(opts, config_file='config.py'):
         if k in config:
             write_password_file(k)
 
+    # since this is used with rsync, where trailing slashes have meaning,
+    # ensure there is always a trailing slash
+    if 'serverwebroot' in config:
+        if config['serverwebroot'][-1] != '/':
+            config['serverwebroot'] += '/'
+        config['serverwebroot'] = config['serverwebroot'].replace('//', '/')
+
     return config
 
 def write_password_file(pwtype, password=None):
@@ -123,7 +130,7 @@ def write_password_file(pwtype, password=None):
     command line argments
     '''
     filename = '.fdroid.' + pwtype + '.txt'
-    fd = os.open(filename, os.O_CREAT | os.O_WRONLY, 0600)
+    fd = os.open(filename, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0600)
     if password == None:
         os.write(fd, config[pwtype])
     else:
