@@ -104,7 +104,7 @@ STORED_ANDROID_HOME=$ANDROID_HOME
 unset ANDROID_HOME
 echo "ANDROID_HOME: $ANDROID_HOME"
 cd $REPOROOT
-$fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME
+$fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME --no-prompt
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
 $fdroid update -c

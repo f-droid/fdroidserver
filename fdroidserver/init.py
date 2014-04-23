@@ -105,6 +105,8 @@ def main():
                       help="Alias of the repo signing key in the keystore")
     parser.add_option("--android-home", default=None,
                       help="Path to the Android SDK (sometimes set in ANDROID_HOME)")
+    parser.add_option("--no-prompt", action="store_true", default=False,
+                      help="Do not prompt for Android SDK path, just fail")
     (options, args) = parser.parse_args()
 
     # find root install prefix
@@ -127,7 +129,7 @@ def main():
     elif not common.test_sdk_exists(test_config):
         # if neither --android-home nor the default sdk_path exist, prompt the user
         default_sdk_path = '/opt/android-sdk'
-        while True:
+        while not options.no_prompt:
             s = raw_input('Enter the path to the Android SDK (' + default_sdk_path + ') here:\n> ')
             if re.match('^\s*$', s) != None:
                 test_config['sdk_path'] = default_sdk_path
