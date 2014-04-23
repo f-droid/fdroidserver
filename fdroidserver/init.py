@@ -119,9 +119,10 @@ def main():
 
     fdroiddir = os.getcwd()
 
-    if not os.path.exists('config.py') and not os.path.exists('repo'):
+    if not os.path.exists('config.py'):
         # 'metadata' and 'tmp' are created in fdroid
-        os.mkdir('repo')
+        if not os.path.exists('repo'):
+            os.mkdir('repo')
         shutil.copy(os.path.join(examplesdir, 'fdroid-icon.png'), fdroiddir)
         shutil.copyfile(os.path.join(examplesdir, 'config.py'), 'config.py')
         os.chmod('config.py', 0o0600)
