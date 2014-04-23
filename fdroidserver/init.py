@@ -103,9 +103,9 @@ def main():
                       help="Path to the keystore for the repo signing key")
     parser.add_option("--repo-keyalias", default=None,
                       help="Alias of the repo signing key in the keystore")
+    parser.add_option("--android-home", default=None,
+                      help="Path to the Android SDK (sometimes set in ANDROID_HOME)")
     (options, args) = parser.parse_args()
-
-    common.test_sdk_exists(common.get_default_config())
 
     # find root install prefix
     tmp = os.path.dirname(sys.argv[0])
@@ -118,6 +118,25 @@ def main():
         examplesdir = prefix + '/examples'
 
     fdroiddir = os.getcwd()
+    test_config = common.get_default_config()
+
+    # track down where the Android SDK is, the default is to use the path set
+    # in ANDROID_HOME if that exists, otherwise None
+    if options.android_home != None:
+        test_config['sdk_path'] = options.android_home
+    elif not common.test_sdk_exists(test_config):
+        # if neither --android-home nor the default sdk_path exist, prompt the user
+        default_sdk_path = '/opt/android-sdk'
+        while True:
+            s = raw_input('Enter the path to the Android SDK (' + default_sdk_path + ') here:\n> ')
+            if re.match('^\s*$', s) != None:
+                test_config['sdk_path'] = default_sdk_path
+            else:
+                test_config['sdk_path'] = s
+            if common.test_sdk_exists(test_config):
+                break
+    if not common.test_sdk_exists(test_config):
+        sys.exit(3)
 
     if not os.path.exists('config.py'):
         # 'metadata' and 'tmp' are created in fdroid
@@ -126,6 +145,7 @@ def main():
         shutil.copy(os.path.join(examplesdir, 'fdroid-icon.png'), fdroiddir)
         shutil.copyfile(os.path.join(examplesdir, 'config.py'), 'config.py')
         os.chmod('config.py', 0o0600)
+        write_to_config('sdk_path', test_config['sdk_path'])
     else:
         logging.warn('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
         logging.info('Try running `fdroid init` in an empty directory.')
@@ -134,29 +154,8 @@ def main():
     # now that we have a local config.py, read configuration...
     config = common.read_config(options)
 
-    # track down where the Android SDK is
-    if os.path.isdir(config['sdk_path']):
-        logging.info('Using "' + config['sdk_path'] + '" for the Android SDK')
-        sdk_path = config['sdk_path']
-    elif 'ANDROID_HOME' in os.environ.keys():
-        sdk_path = os.environ['ANDROID_HOME']
-    else:
-        default_sdk_path = '/opt/android-sdk'
-        while True:
-            s = raw_input('Enter the path to the Android SDK (' + default_sdk_path + '): ')
-            if re.match('^\s*$', s) != None:
-                sdk_path = default_sdk_path
-            else:
-                sdk_path = s
-            if os.path.isdir(os.path.join(sdk_path, 'build-tools')):
-                break
-            else:
-                logging.info('"' + s + '" does not contain the Android SDK! Try again...')
-    if os.path.isdir(sdk_path):
-        write_to_config('sdk_path', sdk_path)
-
     # try to find a working aapt, in all the recent possible paths
-    build_tools = os.path.join(sdk_path, 'build-tools')
+    build_tools = os.path.join(config['sdk_path'], 'build-tools')
     aaptdirs = []
     aaptdirs.append(os.path.join(build_tools, config['build_tools']))
     aaptdirs.append(build_tools)
@@ -255,7 +254,7 @@ def main():
 
     logging.info('Built repo based in "' + fdroiddir + '"')
     logging.info('with this config:')
-    logging.info('  Android SDK:\t\t\t' + sdk_path)
+    logging.info('  Android SDK:\t\t\t' + config['sdk_path'])
     logging.info('  Android SDK Build Tools:\t' + os.path.dirname(aapt))
     logging.info('  Android NDK (optional):\t' + ndk_path)
     logging.info('  Keystore for signing key:\t' + keystore)

@@ -123,8 +123,8 @@ def read_config(opts, config_file='config.py'):
 def test_sdk_exists(c):
     if c['sdk_path'] == None:
         # c['sdk_path'] is set to the value of ANDROID_HOME by default
-        logging.critical("Neither ANDROID_HOME nor sdk_path is set, no Android SDK found!")
-        logging.info('Set ANDROID_HOME to the path to your SDK, i.e.:')
+        logging.critical('No Android SDK found! ANDROID_HOME is not set and sdk_path is not in config.py!')
+        logging.info('You can use ANDROID_HOME to set the path to your SDK, i.e.:')
         logging.info('\texport ANDROID_HOME=/opt/android-sdk')
         return False
     if not os.path.exists(c['sdk_path']):
@@ -132,6 +132,9 @@ def test_sdk_exists(c):
         return False
     if not os.path.isdir(c['sdk_path']):
         logging.critical('Android SDK path "' + c['sdk_path'] + '" is not a directory!')
+        return False
+    if not os.path.isdir(os.path.join(c['sdk_path'], 'build-tools')):
+        logging.critical('Android SDK path "' + c['sdk_path'] + '" does not contain "build-tools/"!')
         return False
     return True
 
