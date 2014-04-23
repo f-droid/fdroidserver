@@ -32,7 +32,7 @@ setup(name='fdroidserver',
         'paramiko',
         'PIL',
         'python-magic',
-        'apache-libcloud >= 0.5',
+        'apache-libcloud >= 0.14.1',
         ],
       classifiers=[
         'Development Status :: 3 - Alpha',

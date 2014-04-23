@@ -38,7 +38,7 @@ def update_awsbucket(repo_section):
 
     import libcloud.security
     libcloud.security.VERIFY_SSL_CERT = True
-    from libcloud.storage.types import Provider
+    from libcloud.storage.types import Provider, ContainerDoesNotExistError
     from libcloud.storage.providers import get_driver
 
     if 'awsaccesskeyid' not in config or 'awssecretkey' not in config:
@@ -48,7 +48,11 @@ def update_awsbucket(repo_section):
 
     cls = get_driver(Provider.S3)
     driver = cls(config['awsaccesskeyid'], config['awssecretkey'])
-    container = driver.get_container(container_name=awsbucket)
+    try:
+        container = driver.get_container(container_name=awsbucket)
+    except ContainerDoesNotExistError:
+        container = driver.create_container(container_name=awsbucket)
+        logging.info('Created new container "' + container.name + '"')
 
     upload_dir = 'fdroid/' + repo_section
     if options.verbose:
