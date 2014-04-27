@@ -42,7 +42,7 @@ def update_awsbucket(repo_section):
     from libcloud.storage.types import Provider, ContainerDoesNotExistError
     from libcloud.storage.providers import get_driver
 
-    if 'awsaccesskeyid' not in config or 'awssecretkey' not in config:
+    if not config.get('awsaccesskeyid') or not config.get('awssecretkey'):
         logging.error('To use awsbucket, you must set awssecretkey and awsaccesskeyid in config.py!')
         sys.exit(1)
     awsbucket = config['awsbucket']
@@ -97,7 +97,7 @@ def update_awsbucket(repo_section):
                 elif file_to_upload.endswith('.asc'):
                     extra['content_type'] = 'application/pgp-signature'
                 logging.info(' uploading ' + os.path.relpath(file_to_upload)
-                             + ' to s3://' + awsbucket + '/' + obj.name)
+                             + ' to s3://' + awsbucket + '/' + object_name)
                 obj = driver.upload_object(file_path=file_to_upload,
                                            container=container,
                                            object_name=object_name,
@@ -154,12 +154,12 @@ def main():
         logging.critical("The only commands currently supported are 'init' and 'update'")
         sys.exit(1)
 
-    if 'nonstandardwebroot' in config and config['nonstandardwebroot'] == True:
+    if config.get('nonstandardwebroot') == True:
         standardwebroot = False
     else:
         standardwebroot = True
 
-    if 'serverwebroot' in config:
+    if config.get('serverwebroot'):
         serverwebroot = config['serverwebroot']
         host, fdroiddir = serverwebroot.rstrip('/').split(':')
         serverrepobase = os.path.basename(fdroiddir)
@@ -169,7 +169,7 @@ def main():
                           + serverwebroot.rstrip('/') + '/fdroid\n\t'
                           + serverwebroot.rstrip('/').rstrip(serverrepobase) + 'fdroid')
             sys.exit(1)
-    elif 'awsbucket' not in config:
+    elif not config.get('awsbucket'):
         logging.warn('No serverwebroot or awsbucket set! Edit your config.py to set one or both.')
         sys.exit(1)
 
@@ -178,7 +178,7 @@ def main():
         repo_sections.append('archive')
 
     if args[0] == 'init':
-        if serverwebroot != None:
+        if config.get('serverwebroot'):
             sshargs = ['ssh']
             if options.quiet:
                 sshargs += ['-q']
@@ -192,9 +192,9 @@ def main():
                     sys.exit(1)
     elif args[0] == 'update':
         for repo_section in repo_sections:
-            if 'serverwebroot' in config:
+            if config.get('serverwebroot'):
                 update_serverwebroot(repo_section)
-            if 'awsbucket' in config:
+            if config.get('awsbucket'):
                 update_awsbucket(repo_section)
 
     sys.exit(0)

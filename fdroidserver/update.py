@@ -632,10 +632,9 @@ def make_index(apps, apks, repodir, archive, categories):
         # Generate a certificate fingerprint the same way keytool does it
         # (but with slightly different formatting)
         def cert_fingerprint(data):
-            digest = hashlib.sha1(data).digest()
+            digest = hashlib.sha256(data).digest()
             ret = []
-            for i in range(4):
-                ret.append(":".join("%02X" % ord(b) for b in digest[i*5:i*5+5]))
+            ret.append(' '.join("%02X" % ord(b) for b in digest))
             return " ".join(ret)
 
         def extract_pubkey():
@@ -789,8 +788,8 @@ def make_index(apps, apks, repodir, archive, categories):
 
     if 'repo_keyalias' in config:
 
-        logging.info("Creating signed index.")
-        logging.info("Key fingerprint: %s" % repo_pubkey_fingerprint)
+        logging.info("Creating signed index with this key:")
+        logging.info("SHA256: %s" % repo_pubkey_fingerprint)
 
         #Create a jar of the index...
         p = FDroidPopen(['jar', 'cf', 'index.jar', 'index.xml'], cwd=repodir)

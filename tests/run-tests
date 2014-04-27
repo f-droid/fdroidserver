@@ -13,6 +13,22 @@ copy_apks_into_repo() {
     done
 }
 
+create_fake_android_home() {
+    mkdir $1/build-tools
+    mkdir $1/build-tools/19.0.1
+    touch $1/build-tools/19.0.1/aapt
+}
+
+create_test_dir() {
+    test -e $WORKSPACE/.testfiles || mkdir $WORKSPACE/.testfiles
+    mktemp --directory --tmpdir=$WORKSPACE/.testfiles
+}
+
+create_test_file() {
+    test -e $WORKSPACE/.testfiles || mkdir $WORKSPACE/.testfiles
+    mktemp --tmpdir=$WORKSPACE/.testfiles
+}
+
 if [ -z $WORKSPACE ]; then
     WORKSPACE=`dirname $(pwd)`
     echo "Setting Workspace to $WORKSPACE"
@@ -24,9 +40,9 @@ if [ -z $fdroid ]; then
 fi
 
 #------------------------------------------------------------------------------#
-# setup a new repo from scratch
+echo "setup a new repo from scratch using ANDROID_HOME"
 
-REPOROOT=`mktemp --directory --tmpdir=$WORKSPACE`
+REPOROOT=`create_test_dir`
 cd $REPOROOT
 $fdroid init
 copy_apks_into_repo $REPOROOT
@@ -35,9 +51,85 @@ $fdroid update
 
 
 #------------------------------------------------------------------------------#
-# setup a new repo from scratch and generate a keystore
+# check that --android-home fails when dir does not exist or is not a dir
 
-REPOROOT=`mktemp --directory --tmpdir=$WORKSPACE`
+REPOROOT=`create_test_dir`
+KEYSTORE=$REPOROOT/keystore.jks
+cd $REPOROOT
+set +e
+$fdroid init --keystore $KEYSTORE --android-home /opt/fakeandroidhome
+if [ $? -eq 0 ]; then
+    echo "This should have failed because /opt/fakeandroidhome does not exist!"
+    exit 1
+else
+    echo "testing android-home path checker passed"
+fi
+TESTFILE=`create_test_file`
+$fdroid init --keystore $KEYSTORE --android-home $TESTFILE
+if [ $? -eq 0 ]; then
+    echo "This should have failed because $TESTFILE is a file not a dir!"
+    exit 1
+else
+    echo "testing android-home not-dir checker passed"
+fi
+set -e
+
+
+#------------------------------------------------------------------------------#
+echo "check that --android-home overrides ANDROID_HOME"
+
+REPOROOT=`create_test_dir`
+FAKE_ANDROID_HOME=`create_test_dir`
+create_fake_android_home $FAKE_ANDROID_HOME
+KEYSTORE=$REPOROOT/keystore.jks
+cd $REPOROOT
+$fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME
+set +e
+grep $FAKE_ANDROID_HOME $REPOROOT/config.py
+if [ $? -ne 0 ]; then
+    echo "the value set in --android-home '$FAKE_ANDROID_HOME' should override ANDROID_HOME '$ANDROID_HOME'"
+    exit 1
+fi
+set -e
+
+
+#------------------------------------------------------------------------------#
+echo "setup a new repo from scratch with keystore and android-home set on cmd line"
+
+REPOROOT=`create_test_dir`
+KEYSTORE=$REPOROOT/keystore.jks
+FAKE_ANDROID_HOME=`create_test_dir`
+create_fake_android_home $FAKE_ANDROID_HOME
+STORED_ANDROID_HOME=$ANDROID_HOME
+unset ANDROID_HOME
+echo "ANDROID_HOME: $ANDROID_HOME"
+cd $REPOROOT
+$fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME --no-prompt
+test -e $KEYSTORE
+copy_apks_into_repo $REPOROOT
+$fdroid update -c
+$fdroid update
+test -e repo/index.xml
+test -e repo/index.jar
+export ANDROID_HOME=$STORED_ANDROID_HOME
+
+
+#------------------------------------------------------------------------------#
+echo "setup new repo from scratch using ANDROID_HOME, putting APKs in repo first"
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+mkdir repo
+copy_apks_into_repo $REPOROOT
+$fdroid init
+$fdroid update -c
+$fdroid update
+
+
+#------------------------------------------------------------------------------#
+echo "setup a new repo from scratch and generate a keystore"
+
+REPOROOT=`create_test_dir`
 KEYSTORE=$REPOROOT/keystore.jks
 cd $REPOROOT
 $fdroid init --keystore $KEYSTORE
@@ -50,10 +142,13 @@ test -e repo/index.jar
 
 
 #------------------------------------------------------------------------------#
-# setup a new repo from scratch with a HSM/smartcard
+echo "setup a new repo from scratch with a HSM/smartcard"
 
-REPOROOT=`mktemp --directory --tmpdir=$WORKSPACE`
+REPOROOT=`create_test_dir`
 cd $REPOROOT
 $fdroid init --keystore NONE
 test -e opensc-fdroid.cfg
 test ! -e NONE
+
+
+echo SUCCESS

@@ -10,3 +10,4 @@ dist/
 env/
 fdroidserver.egg-info/
 pylint.parseable
+/.testfiles/
