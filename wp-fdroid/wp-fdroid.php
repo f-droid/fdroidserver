@@ -33,15 +33,16 @@ class FDroidLatestWidget extends WP_Widget {
 		if ($handle) {
 			while (($buffer = fgets($handle, 4096)) !== false) {
 				$app = explode("\t", $buffer);
-				echo '<a href="/repository/browse/?fdid='.$app[0].'">';
+				echo '<div style="width:100%">';
 				if(isset($app[2]) && trim($app[2])) {
 					echo '<img src="' . site_url() . '/repo/icons/'.$app[2].'" style="width:32px;border:none;float:right;" />';
 				}
-				echo $app[1].'<br />';
+				echo '<p style="margin:0px;"><a href="/repository/browse/?fdid='.$app[0].'">';
+				echo $app[1].'</a><br/>';
 				if(isset($app[3]) && trim($app[3])) {
-					echo '<span style="color:#BBBBBB;">'.$app[3].'</span>';
+					echo '<span style="color:#BBBBBB;">'.$app[3].'</span></p>';
 				}
-				echo '</a><br style="clear:both;" />';
+				echo '</div>';
 			}
 			fclose($handle);
 		}
@@ -462,6 +463,9 @@ class FDroid
 						$out.=' <span style="color:#AAAAAA;">(';
 						$out.=$diffSize>0?'+':'';
 						$out.=$this->human_readable_size($diffSize, 1).')</span>';
+					}
+					if(file_exists($this->site_path.'/repo/'.$apk['apkname'].'.txt')) {
+						$out.=' <a href="https://f-droid.org/repo/'.$apk['apkname'].'.txt">GPG Signature</a> ';
 					}
 					if($srcbuild) {
 						$out.='<br /><a href="https://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a> ';
