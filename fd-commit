@@ -30,41 +30,48 @@ if [ ! -d metadata ]; then
 fi
 
 while read line; do
-	if [[ "$line" == *M*metadata/*.txt ]]; then
-		file=${line##* }
+	if [[ "$line" == *??*metadata/*.txt ]]; then
+		new=true
+	elif [[ "$line" == *M*metadata/*.txt ]]; then
+		new=false
+	fi
+	file=${line##* }
 
-		id=${file##*/}
-		id=${id%.txt*}
-		if [ $# -gt 0 ]; then
-			found=false
-			for arg in "$@"; do
-				if [ "$id" == "$arg" ]; then
-					found=true
-					break
-				fi
-			done
-			$found || continue
-		fi
-
-		[ -d metadata/$id ] && extra=metadata/$id || extra=
-
-		name= autoname=
-		while read l; do
-			if [[ "$l" == "Auto Name:"* ]]; then
-				autoname=${l#*:}
-			elif [[ "$l" == "Name:"* ]]; then
-				name=${l#*:}
+	id=${file##*/}
+	id=${id%.txt*}
+	if [ $# -gt 0 ]; then
+		found=false
+		for arg in "$@"; do
+			if [ "$id" == "$arg" ]; then
+				found=true
+				break
 			fi
-		done < "$file"
+		done
+		$found || continue
+	fi
 
-		if [ -n "$name" ]; then
-			fullname="$name"
-		elif [ -n "$autoname" ]; then
-			fullname="$autoname"
-		else
-			fullname="$id"
+	[ -d metadata/$id ] && extra=metadata/$id || extra=
+
+	name= autoname=
+	while read l; do
+		if [[ "$l" == "Auto Name:"* ]]; then
+			autoname=${l#*:}
+		elif [[ "$l" == "Name:"* ]]; then
+			name=${l#*:}
 		fi
+	done < "$file"
 
+	if [ -n "$name" ]; then
+		fullname="$name"
+	elif [ -n "$autoname" ]; then
+		fullname="$autoname"
+	else
+		fullname="$id"
+	fi
+
+	if $new; then
+		message="New app: $fullname"
+	else
 		onlybuild=true
 		newbuild=false
 		disable=false
@@ -97,11 +104,11 @@ while read line; do
 		else
 			message="$fullname:"
 		fi
-
-		message=${message//\"/\\\"}
-		commands+=("git add -- $file $extra && git commit -m \"$message\" -e -v")
 	fi
-done < <(git status --porcelain)
+
+	message=${message//\"/\\\"}
+	commands+=("git add -- $file $extra && git commit -m \"$message\" -e -v")
+done < <(git status --porcelain metadata)
 
 [[ -z $commands ]] && exit 0
 
