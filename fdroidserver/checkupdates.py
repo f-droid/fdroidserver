@@ -479,9 +479,7 @@ def main():
                     if not latest or int(build['vercode']) > int(latest['vercode']):
                         latest = build
 
-                if 'disable' in latest:
-                    logging.warn('Not auto-updating %s since the latest build is disabled' % app['id'])
-                elif not gotcur:
+                if not gotcur:
                     newbuild = latest.copy()
                     if 'origlines' in newbuild:
                         del newbuild['origlines']
