@@ -30,7 +30,7 @@ if [ ! -d metadata ]; then
 fi
 
 while read line; do
-	if [[ "$line" == *??*metadata/*.txt ]]; then
+	if [[ "$line" == *\?\?*metadata/*.txt ]]; then
 		new=true
 	elif [[ "$line" == *M*metadata/*.txt ]]; then
 		new=false
