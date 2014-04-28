@@ -54,6 +54,9 @@ of applications from the main repository.
 """
 
 
+# The ID of a GPG key for making detached signatures for apks. Optional.
+#gpgkey = '1DBA2E89'
+
 # The key (from the keystore defined below) to be used for signing the
 # repository itself.  This is the same name you would give to keytool or
 # jarsigner using -alias.  (Not needed in an unsigned repository).
