@@ -428,6 +428,9 @@ class vcs_git(vcs):
             p = SilentPopen(['git', 'submodule', 'foreach', '--recursive'] + cmd, cwd=self.local)
             if p.returncode != 0:
                 raise VCSException("Git submodule reset failed")
+        p = FDroidPopen(['git', 'submodule', 'sync'], cwd=self.local)
+        if p.returncode != 0:
+            raise VCSException("Git submodule sync failed")
         p = FDroidPopen(['git', 'submodule', 'update', '--init', '--force', '--recursive'], cwd=self.local)
         if p.returncode != 0:
             raise VCSException("Git submodule update failed")
