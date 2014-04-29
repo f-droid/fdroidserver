@@ -23,6 +23,7 @@ import re
 import time
 import traceback
 import glob
+import json
 from optparse import OptionParser
 import paramiko
 import socket
@@ -53,6 +54,8 @@ def main():
                       help="Restrict output to warnings and errors")
     parser.add_option("-d", "--download", action="store_true", default=False,
                       help="Download logs we don't have")
+    parser.add_option("--recalc", action="store_true", default=False,
+                      help="Recalculate aggregate stats - use when changes have been made that would invalidate old cached data.")
     parser.add_option("--nologs", action="store_true", default=False,
                       help="Don't do anything logs-related")
     (options, args) = parser.parse_args()
@@ -123,25 +126,55 @@ def main():
         logsearch = re.compile(logexpr).search
         for logfile in glob.glob(os.path.join(logsdir,'access-*.log.gz')):
             logging.debug('...' + logfile)
-            if options.verbose:
-                print '...' + logfile
-            p = subprocess.Popen(["zcat", logfile], stdout = subprocess.PIPE)
-            matches = (logsearch(line) for line in p.stdout)
-            for match in matches:
-                if match and match.group('statuscode') == '200':
-                    uri = match.group('uri')
-                    if uri.endswith('.apk'):
-                        _, apkname = os.path.split(uri)
-                        app = knownapks.getapp(apkname)
-                        if app:
-                            appid, _ = app
-                            appscount[appid] += 1
-                            # Strip the '.apk' from apkname
-                            appver = apkname[:-4]
-                            appsvercount[appver] += 1
-                        else:
-                            if not apkname in unknownapks:
-                                unknownapks.append(apkname)
+
+            # Get the date for this log - e.g. 2012-02-28
+            thisdate = os.path.basename(logfile)[7:-7]
+
+            agg_path = os.path.join(datadir, thisdate + '.json')
+            if not options.recalc and os.path.exists(agg_path):
+                # Use previously calculated aggregate data
+                with open(agg_path, 'r') as f:
+                    today = json.load(f)
+
+            else:
+                # Calculate from logs...
+
+                today = {
+                        'apps': Counter(),
+                        'appsver': Counter(),
+                        'unknown': []
+                        }
+
+                p = subprocess.Popen(["zcat", logfile], stdout = subprocess.PIPE)
+                matches = (logsearch(line) for line in p.stdout)
+                for match in matches:
+                    if match and match.group('statuscode') == '200':
+                        uri = match.group('uri')
+                        if uri.endswith('.apk'):
+                            _, apkname = os.path.split(uri)
+                            app = knownapks.getapp(apkname)
+                            if app:
+                                appid, _ = app
+                                today['apps'][appid] += 1
+                                # Strip the '.apk' from apkname
+                                appver = apkname[:-4]
+                                today['appsver'][appver] += 1
+                            else:
+                                if not apkname in today['unknown']:
+                                    today['unknown'].append(apkname)
+
+                # Save calculated aggregate data for today to cache
+                with open(agg_path, 'w') as f:
+                    json.dump(today, f)
+
+            # Add today's stats (whether cached or recalculated) to the total
+            for appid in today['apps']:
+                appscount[appid] += today['apps'][appid]
+            for appid in today['appsver']:
+                appsvercount[appid] += today['appsver'][appid]
+            for uk in today['unknown']:
+                if not uk in unknownapks:
+                    unknownapks.append(uk)
 
         # Calculate and write stats for total downloads...
         lst = []
