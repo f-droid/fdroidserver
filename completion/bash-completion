@@ -93,9 +93,10 @@ __complete_options() {
 }
 
 __complete_build() {
-	opts="-h -v -c -l -s -t -f"
-	lopts="--help --verbose --latest --server --resetserver --on-server
- --skip-scan --no-tarball --force --all"
+	opts="-h -v -q -l -s -t -f -a -w"
+
+	lopts="--help --verbose --quiet --latest --stop --test --server --resetserver
+ --on-server --skip-scan --no-tarball --force --all --wiki"
 	case "${cur}" in
 		-*)
 			__complete_options
@@ -170,7 +171,7 @@ __complete_import() {
 	opts="-h -u -s -r -q"
 	lopts="--help --url --subdir --repo --rev --quiet"
 	case "${prev}" in
-		-u|--url|-r|--repo|-s|--subdir) return 0;;
+		-u|--url|-r|--repo|-s|--subdir|--rev) return 0;;
 	esac
 	__complete_options
 }
