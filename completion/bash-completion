@@ -167,8 +167,8 @@ __complete_checkupdates() {
 }
 
 __complete_import() {
-	opts="-h -u -s -r"
-	lopts="--help --url --subdir --repo"
+	opts="-h -u -s -r -q"
+	lopts="--help --url --subdir --repo --rev --quiet"
 	case "${prev}" in
 		-u|--url|-r|--repo|-s|--subdir) return 0;;
 	esac
