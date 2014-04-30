@@ -28,9 +28,11 @@ from optparse import OptionParser
 import paramiko
 import socket
 import logging
-import common, metadata
+import common
+import metadata
 import subprocess
 from collections import Counter
+
 
 def carbon_send(key, value):
     s = socket.socket()
@@ -41,6 +43,7 @@ def carbon_send(key, value):
 
 options = None
 config = None
+
 
 def main():
 
@@ -55,7 +58,8 @@ def main():
     parser.add_option("-d", "--download", action="store_true", default=False,
                       help="Download logs we don't have")
     parser.add_option("--recalc", action="store_true", default=False,
-                      help="Recalculate aggregate stats - use when changes have been made that would invalidate old cached data.")
+                      help="Recalculate aggregate stats - use when changes "
+                      "have been made that would invalidate old cached data.")
     parser.add_option("--nologs", action="store_true", default=False,
                       help="Don't do anything logs-related")
     (options, args) = parser.parse_args()
@@ -88,7 +92,7 @@ def main():
             ssh = paramiko.SSHClient()
             ssh.load_system_host_keys()
             ssh.connect('f-droid.org', username='fdroid', timeout=10,
-                    key_filename=config['webserver_keyfile'])
+                        key_filename=config['webserver_keyfile'])
             ftp = ssh.open_sftp()
             ftp.get_channel().settimeout(60)
             logging.info("...connected")
@@ -108,7 +112,7 @@ def main():
             traceback.print_exc()
             sys.exit(1)
         finally:
-            #Disconnect
+            # Disconnect
             if ftp is not None:
                 ftp.close()
             if ssh is not None:
@@ -122,9 +126,11 @@ def main():
         logging.info('Processing logs...')
         appscount = Counter()
         appsvercount = Counter()
-        logexpr = '(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] "GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) \d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
+        logexpr = '(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] ' + \
+                  '"GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) ' + \
+                  '\d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
         logsearch = re.compile(logexpr).search
-        for logfile in glob.glob(os.path.join(logsdir,'access-*.log.gz')):
+        for logfile in glob.glob(os.path.join(logsdir, 'access-*.log.gz')):
             logging.debug('...' + logfile)
 
             # Get the date for this log - e.g. 2012-02-28
@@ -140,12 +146,12 @@ def main():
                 # Calculate from logs...
 
                 today = {
-                        'apps': Counter(),
-                        'appsver': Counter(),
-                        'unknown': []
-                        }
+                    'apps': Counter(),
+                    'appsver': Counter(),
+                    'unknown': []
+                    }
 
-                p = subprocess.Popen(["zcat", logfile], stdout = subprocess.PIPE)
+                p = subprocess.Popen(["zcat", logfile], stdout=subprocess.PIPE)
                 matches = (logsearch(line) for line in p.stdout)
                 for match in matches:
                     if match and match.group('statuscode') == '200':
@@ -160,7 +166,7 @@ def main():
                                 appver = apkname[:-4]
                                 today['appsver'][appver] += 1
                             else:
-                                if not apkname in today['unknown']:
+                                if apkname not in today['unknown']:
                                     today['unknown'].append(apkname)
 
                 # Save calculated aggregate data for today to cache
@@ -173,7 +179,7 @@ def main():
             for appid in today['appsver']:
                 appsvercount[appid] += today['appsver'][appid]
             for uk in today['unknown']:
-                if not uk in unknownapks:
+                if uk not in unknownapks:
                     unknownapks.append(uk)
 
         # Calculate and write stats for total downloads...
@@ -183,7 +189,8 @@ def main():
             count = appscount[appid]
             lst.append(appid + " " + str(count))
             if config['stats_to_carbon']:
-                carbon_send('fdroid.download.' + appid.replace('.', '_'), count)
+                carbon_send('fdroid.download.' + appid.replace('.', '_'),
+                            count)
             alldownloads += count
         lst.append("ALL " + str(alldownloads))
         f = open('stats/total_downloads_app.txt', 'w')
@@ -193,7 +200,8 @@ def main():
         f.close()
 
         f = open('stats/total_downloads_app_version.txt', 'w')
-        f.write('# Total downloads by application and version, since October 2011\n')
+        f.write('# Total downloads by application and version, '
+                'since October 2011\n')
         lst = []
         for appver in appsvercount:
             count = appsvercount[appver]
@@ -290,4 +298,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
