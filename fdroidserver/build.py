@@ -31,14 +31,17 @@ from ConfigParser import ConfigParser
 from optparse import OptionParser, OptionError
 import logging
 
-import common, metadata
+import common
+import metadata
 from common import BuildException, VCSException, FDroidPopen, SilentPopen
+
 
 def get_builder_vm_id():
     vd = os.path.join('builder', '.vagrant')
     if os.path.isdir(vd):
         # Vagrant 1.2 (and maybe 1.1?) it's a directory tree...
-        with open(os.path.join(vd, 'machines', 'default', 'virtualbox', 'id')) as vf:
+        with open(os.path.join(vd, 'machines', 'default',
+                  'virtualbox', 'id')) as vf:
             id = vf.read()
         return id
     else:
@@ -46,6 +49,7 @@ def get_builder_vm_id():
         with open(os.path.join('builder', '.vagrant')) as vf:
             v = json.load(vf)
         return v['active']['default']
+
 
 def got_valid_builder_vm():
     """Returns True if we have a valid-looking builder vm
@@ -59,7 +63,8 @@ def got_valid_builder_vm():
         # Vagrant 1.0 - if the directory is there, it's valid...
         return True
     # Vagrant 1.2 - the directory can exist, but the id can be missing...
-    if not os.path.exists(os.path.join(vd, 'machines', 'default', 'virtualbox', 'id')):
+    if not os.path.exists(os.path.join(vd, 'machines', 'default',
+                          'virtualbox', 'id')):
         return False
     return True
 
@@ -93,9 +98,12 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
 
         if got_valid_builder_vm():
             logging.info("...VM is present")
-            p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'list', '--details'], cwd='builder')
+            p = FDroidPopen(['VBoxManage', 'snapshot',
+                             get_builder_vm_id(), 'list',
+                             '--details'], cwd='builder')
             if 'fdroidclean' in p.stdout:
-                logging.info("...snapshot exists - resetting build server to clean state")
+                logging.info("...snapshot exists - resetting build server to "
+                             "clean state")
                 retcode, output = vagrant(['status'], cwd='builder')
 
                 if 'running' in output:
@@ -103,8 +111,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                     vagrant(['suspend'], cwd='builder')
                     logging.info("...waiting a sec...")
                     time.sleep(10)
-                p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'restore', 'fdroidclean'],
-                    cwd='builder')
+                p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(),
+                                 'restore', 'fdroidclean'],
+                                cwd='builder')
 
                 if p.returncode == 0:
                     logging.info("...reset to snapshot - server is valid")
@@ -117,7 +126,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                 else:
                     logging.info("...failed to reset to snapshot")
             else:
-                logging.info("...snapshot doesn't exist - VBoxManage snapshot list:\n" + p.stdout)
+                logging.info("...snapshot doesn't exist - "
+                             "VBoxManage snapshot list:\n" + p.stdout)
 
     # If we can't use the existing machine for any reason, make a
     # new one from scratch.
@@ -128,7 +138,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             shutil.rmtree('builder')
         os.mkdir('builder')
 
-        p = subprocess.Popen('vagrant --version', shell=True, stdout=subprocess.PIPE)
+        p = subprocess.Popen('vagrant --version', shell=True,
+                             stdout=subprocess.PIPE)
         vver = p.communicate()[0]
         if vver.startswith('Vagrant version 1.2'):
             with open('builder/Vagrantfile', 'w') as vf:
@@ -149,9 +160,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         # Open SSH connection to make sure it's working and ready...
         logging.info("Connecting to virtual machine...")
         if subprocess.call('vagrant ssh-config >sshconfig',
-                cwd='builder', shell=True) != 0:
+                           cwd='builder', shell=True) != 0:
             raise BuildException("Error getting ssh config")
-        vagranthost = 'default' # Host in ssh config file
+        vagranthost = 'default'  # Host in ssh config file
         sshconfig = paramiko.SSHConfig()
         sshf = open('builder/sshconfig', 'r')
         sshconfig.parse(sshf)
@@ -165,8 +176,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         elif idfile.startswith('"') and idfile.endswith('"'):
             idfile = idfile[1:-1]
         sshs.connect(sshconfig['hostname'], username=sshconfig['user'],
-            port=int(sshconfig['port']), timeout=300, look_for_keys=False,
-            key_filename=idfile)
+                     port=int(sshconfig['port']), timeout=300,
+                     look_for_keys=False,
+                     key_filename=idfile)
         sshs.close()
 
         logging.info("Saving clean state of new build server")
@@ -175,8 +187,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             raise BuildException("Failed to suspend build server")
         logging.info("...waiting a sec...")
         time.sleep(10)
-        p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'take', 'fdroidclean'],
-                cwd='builder')
+        p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(),
+                         'take', 'fdroidclean'],
+                        cwd='builder')
         if p.returncode != 0:
             raise BuildException("Failed to take snapshot")
         logging.info("...waiting a sec...")
@@ -188,8 +201,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         logging.info("...waiting a sec...")
         time.sleep(10)
         # Make sure it worked...
-        p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(), 'list', '--details'],
-            cwd='builder')
+        p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(),
+                         'list', '--details'],
+                        cwd='builder')
         if 'fdroidclean' not in p.stdout:
             raise BuildException("Failed to take snapshot.")
 
@@ -198,8 +212,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         # Get SSH configuration settings for us to connect...
         logging.info("Getting ssh configuration...")
         subprocess.call('vagrant ssh-config >sshconfig',
-                cwd='builder', shell=True)
-        vagranthost = 'default' # Host in ssh config file
+                        cwd='builder', shell=True)
+        vagranthost = 'default'  # Host in ssh config file
 
         # Load and parse the SSH config...
         sshconfig = paramiko.SSHConfig()
@@ -216,8 +230,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         if idfile.startswith('"') and idfile.endswith('"'):
             idfile = idfile[1:-1]
         sshs.connect(sshconfig['hostname'], username=sshconfig['user'],
-            port=int(sshconfig['port']), timeout=300, look_for_keys=False,
-            key_filename=idfile)
+                     port=int(sshconfig['port']), timeout=300,
+                     look_for_keys=False, key_filename=idfile)
 
         # Get an SFTP connection...
         ftp = sshs.open_sftp()
@@ -251,13 +265,13 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         ftp.put(os.path.join(serverpath, 'common.py'), 'common.py')
         ftp.put(os.path.join(serverpath, 'metadata.py'), 'metadata.py')
         ftp.put(os.path.join(serverpath, '..', 'buildserver',
-            'config.buildserver.py'), 'config.py')
+                'config.buildserver.py'), 'config.py')
         ftp.chmod('config.py', 0o600)
 
         # Copy over the ID (head commit hash) of the fdroidserver in use...
         subprocess.call('git rev-parse HEAD >' +
-                os.path.join(os.getcwd(), 'tmp', 'fdroidserverid'),
-                shell=True, cwd=serverpath)
+                        os.path.join(os.getcwd(), 'tmp', 'fdroidserverid'),
+                        shell=True, cwd=serverpath)
         ftp.put('tmp/fdroidserverid', 'fdroidserverid')
 
         # Copy the metadata - just the file for this app...
@@ -296,8 +310,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         srclibpaths = []
         if 'srclibs' in thisbuild:
             for lib in thisbuild['srclibs']:
-                srclibpaths.append(common.getsrclib(lib, 'build/srclib', srclibpaths,
-                    basepath=True, prepare=False))
+                srclibpaths.append(
+                    common.getsrclib(lib, 'build/srclib', srclibpaths,
+                                     basepath=True, prepare=False))
 
         # If one was used for the main source, add that too.
         basesrclib = vcs.getsrclib()
@@ -355,8 +370,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             ftp.chdir('/home/vagrant/tmp')
         else:
             ftp.chdir('/home/vagrant/unsigned')
-        apkfile = common.getapkname(app,thisbuild)
-        tarball = common.getsrcname(app,thisbuild)
+        apkfile = common.getapkname(app, thisbuild)
+        tarball = common.getsrcname(app, thisbuild)
         try:
             ftp.get(apkfile, os.path.join(output_dir, apkfile))
             if not options.notarball:
@@ -370,6 +385,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         # Suspend the build server.
         logging.info("Suspending build server")
         subprocess.call(['vagrant', 'suspend'], cwd='builder')
+
 
 def adapt_gradle(build_dir):
     for root, dirs, files in os.walk(build_dir):
@@ -463,8 +479,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if not options.notarball:
         # Build the source tarball right before we build the release...
         logging.info("Creating source tarball...")
-        tarname = common.getsrcname(app,thisbuild)
+        tarname = common.getsrcname(app, thisbuild)
         tarball = tarfile.open(os.path.join(tmp_dir, tarname), "w:gz")
+
         def tarexc(f):
             return any(f.endswith(s) for s in ['.svn', '.git', '.hg', '.bzr'])
         tarball.add(build_dir, tarname, exclude=tarexc)
@@ -507,7 +524,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         jni_components = thisbuild.get('buildjni')
         if jni_components == ['yes']:
             jni_components = ['']
-        cmd = [ os.path.join(config['ndk_path'], "ndk-build"), "-j1" ]
+        cmd = [os.path.join(config['ndk_path'], "ndk-build"), "-j1"]
         for d in jni_components:
             if d:
                 logging.info("Building native code in '%s'" % d)
@@ -524,7 +541,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 open(manifest, 'w').write(manifest_text)
                 # In case the AM.xml read was big, free the memory
                 del manifest_text
-            p = FDroidPopen(cmd, cwd=os.path.join(root_dir,d))
+            p = FDroidPopen(cmd, cwd=os.path.join(root_dir, d))
             if p.returncode != 0:
                 raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout)
 
@@ -534,7 +551,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         logging.info("Building Maven project...")
 
         if '@' in thisbuild['maven']:
-            maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@',1)[1])
+            maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@', 1)[1])
         else:
             maven_dir = root_dir
 
@@ -568,7 +585,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                     .format(spec))
 
         defaults = {'orientation': 'landscape', 'icon': '',
-                'permissions': '', 'android.api': "18"}
+                    'permissions': '', 'android.api': "18"}
         bconfig = ConfigParser(defaults, allow_no_value=True)
         bconfig.read(spec)
 
@@ -599,12 +616,12 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             orientation = 'sensor'
 
         cmd = ['./build.py'
-                '--dir', root_dir,
-                '--name', bconfig.get('app', 'title'),
-                '--package', app['id'],
-                '--version', bconfig.get('app', 'version'),
-                '--orientation', orientation,
-                ]
+               '--dir', root_dir,
+               '--name', bconfig.get('app', 'title'),
+               '--package', app['id'],
+               '--version', bconfig.get('app', 'version'),
+               '--orientation', orientation
+              ]
 
         perms = bconfig.get('app', 'permissions')
         for perm in perms.split(','):
@@ -769,13 +786,13 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     # Copy the unsigned apk to our destination directory for further
     # processing (by publish.py)...
-    dest = os.path.join(output_dir, common.getapkname(app,thisbuild))
+    dest = os.path.join(output_dir, common.getapkname(app, thisbuild))
     shutil.copyfile(src, dest)
 
     # Move the source tarball into the output directory...
     if output_dir != tmp_dir and not options.notarball:
         shutil.move(os.path.join(tmp_dir, tarname),
-            os.path.join(output_dir, tarname))
+                    os.path.join(output_dir, tarname))
 
 
 def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, extlib_dir,
@@ -871,6 +888,7 @@ def parse_commandline():
 options = None
 config = None
 
+
 def main():
 
     global options, config
@@ -933,7 +951,7 @@ def main():
             for build in reversed(app['builds']):
                 if 'disable' in build:
                     continue
-                app['builds'] = [ build ]
+                app['builds'] = [build]
                 break
 
     if options.wiki:
@@ -979,7 +997,7 @@ def main():
                 logfile = open(os.path.join(log_dir, app['id'] + '.log'), 'a+')
                 logfile.write(str(be))
                 logfile.close()
-                reason = str(be).split('\n',1)[0] if options.verbose else str(be)
+                reason = str(be).split('\n', 1)[0] if options.verbose else str(be)
                 print("Could not build app %s due to BuildException: %s" % (
                     app['id'], reason))
                 if options.stop:
@@ -1024,4 +1042,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
