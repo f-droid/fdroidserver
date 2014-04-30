@@ -229,7 +229,7 @@ def main():
             checkmode = checkmode[:12]
         if checkmode.startswith('Tags '):
             checkmode = checkmode[:4]
-        ucms[checkmode] += 1;
+        ucms[checkmode] += 1
     f = open('stats/update_check_modes.txt', 'w')
     for checkmode in ucms:
         count = ucms[checkmode]
@@ -240,7 +240,7 @@ def main():
     ctgs = Counter()
     for app in metaapps:
         for category in app['Categories']:
-            ctgs[category] += 1;
+            ctgs[category] += 1
     f = open('stats/categories.txt', 'w')
     for category in ctgs:
         count = ctgs[category]
@@ -254,7 +254,7 @@ def main():
             continue
         antifeatures = [a.strip() for a in app['AntiFeatures'].split(',')]
         for antifeature in antifeatures:
-            afs[antifeature] += 1;
+            afs[antifeature] += 1
     f = open('stats/antifeatures.txt', 'w')
     for antifeature in afs:
         count = afs[antifeature]
@@ -266,7 +266,7 @@ def main():
     licenses = Counter()
     for app in metaapps:
         license = app['License']
-        licenses[license] += 1;
+        licenses[license] += 1
     f = open('stats/licenses.txt', 'w')
     for license in licenses:
         count = licenses[license]
