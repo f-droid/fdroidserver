@@ -525,9 +525,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if onserver:
         manifest = os.path.join(root_dir, 'AndroidManifest.xml')
         if os.path.exists(manifest):
-            with open('/home/vagrant/buildserverid', 'r') as f:
+            homedir = os.path.expanduser('~')
+            with open(os.path.join(homedir, 'buildserverid'), 'r') as f:
                 buildserverid = f.read()
-            with open('/home/vagrant/fdroidserverid', 'r') as f:
+            with open(os.path.join(homedir, 'fdroidserverid'), 'r') as f:
                 fdroidserverid = f.read()
             with open(manifest, 'r') as f:
                 manifestcontent = f.read()
