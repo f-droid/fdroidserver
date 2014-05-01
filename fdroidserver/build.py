@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # build.py - part of the FDroid server tools
-# Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-2014, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -35,6 +35,10 @@ import common
 import metadata
 from common import BuildException, VCSException, FDroidPopen, SilentPopen
 
+try:
+    import paramiko
+except:
+    paramiko = None
 
 def get_builder_vm_id():
     vd = os.path.join('builder', '.vagrant')
@@ -70,7 +74,7 @@ def got_valid_builder_vm():
 
 
 def vagrant(params, cwd=None, printout=False):
-    """Run vagrant.
+    """Run a vagrant command.
 
     :param: list of parameters to pass to vagrant
     :cwd: directory to run in, or None for current directory
@@ -81,19 +85,48 @@ def vagrant(params, cwd=None, printout=False):
     return (p.returncode, p.stdout)
 
 
-# Note that 'force' here also implies test mode.
-def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
-    """Do a build on the build server."""
+def get_vagrant_sshinfo():
+    """Get ssh connection info for a vagrant VM
 
-    import paramiko
-    if options.verbose:
-        logging.getLogger("paramiko").setLevel(logging.DEBUG)
-    else:
-        logging.getLogger("paramiko").setLevel(logging.WARN)
+    :returns: A dictionary containing 'hostname', 'port', 'user'
+        and 'idfile'
+    """
+    if subprocess.call('vagrant ssh-config >sshconfig',
+                       cwd='builder', shell=True) != 0:
+        raise BuildException("Error getting ssh config")
+    vagranthost = 'default'  # Host in ssh config file
+    sshconfig = paramiko.SSHConfig()
+    sshf = open('builder/sshconfig', 'r')
+    sshconfig.parse(sshf)
+    sshf.close()
+    sshconfig = sshconfig.lookup(vagranthost)
+    idfile = sshconfig['identityfile']
+    if isinstance(idfile, list):
+        idfile = idfile[0]
+    elif idfile.startswith('"') and idfile.endswith('"'):
+        idfile = idfile[1:-1]
+    return {'hostname': sshconfig['hostname'],
+            'port': int(sshconfig['port']),
+            'user': sshconfig['user'],
+            'idfile': idfile}
 
+
+def get_clean_vm(reset=False):
+    """Get a clean VM ready to do a buildserver build.
+
+    This might involve creating and starting a new virtual machine from
+    scratch, or it might be as simple (unless overridden by the reset
+    parameter) as re-using a snapshot created previously.
+
+    A BuildException will be raised if anything goes wrong.
+
+    :reset: True to force creating from scratch.
+    :returns: A dictionary containing 'hostname', 'port', 'user'
+        and 'idfile'
+    """
     # Reset existing builder machine to a clean state if possible.
     vm_ok = False
-    if not options.resetserver:
+    if not reset:
         logging.info("Checking for valid existing build server")
 
         if got_valid_builder_vm():
@@ -122,6 +155,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                         raise BuildException("Failed to start build server")
                     logging.info("...waiting a sec...")
                     time.sleep(10)
+                    sshinfo = get_vagrant_sshinfo()
                     vm_ok = True
                 else:
                     logging.info("...failed to reset to snapshot")
@@ -159,26 +193,13 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
 
         # Open SSH connection to make sure it's working and ready...
         logging.info("Connecting to virtual machine...")
-        if subprocess.call('vagrant ssh-config >sshconfig',
-                           cwd='builder', shell=True) != 0:
-            raise BuildException("Error getting ssh config")
-        vagranthost = 'default'  # Host in ssh config file
-        sshconfig = paramiko.SSHConfig()
-        sshf = open('builder/sshconfig', 'r')
-        sshconfig.parse(sshf)
-        sshf.close()
-        sshconfig = sshconfig.lookup(vagranthost)
+        sshinfo = get_vagrant_sshinfo()
         sshs = paramiko.SSHClient()
         sshs.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        idfile = sshconfig['identityfile']
-        if isinstance(idfile, list):
-            idfile = idfile[0]
-        elif idfile.startswith('"') and idfile.endswith('"'):
-            idfile = idfile[1:-1]
-        sshs.connect(sshconfig['hostname'], username=sshconfig['user'],
-                     port=int(sshconfig['port']), timeout=300,
+        sshs.connect(sshinfo['hostname'], username=sshinfo['user'],
+                     port=sshinfo['port'], timeout=300,
                      look_for_keys=False,
-                     key_filename=idfile)
+                     key_filename=sshinfo['idfile'])
         sshs.close()
 
         logging.info("Saving clean state of new build server")
@@ -207,31 +228,40 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         if 'fdroidclean' not in p.stdout:
             raise BuildException("Failed to take snapshot.")
 
+    return sshinfo
+
+
+def release_vm():
+    """Release the VM previously started with get_clean_vm().
+
+    This should always be called.
+    """
+    logging.info("Suspending build server")
+    subprocess.call(['vagrant', 'suspend'], cwd='builder')
+
+
+# Note that 'force' here also implies test mode.
+def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
+    """Do a build on the build server."""
+
+    if not paramiko:
+        raise BuildException("Paramiko is required to use the buildserver")
+    if options.verbose:
+        logging.getLogger("paramiko").setLevel(logging.DEBUG)
+    else:
+        logging.getLogger("paramiko").setLevel(logging.WARN)
+
+    sshinfo = get_clean_vm()
+
     try:
-
-        # Get SSH configuration settings for us to connect...
-        logging.info("Getting ssh configuration...")
-        subprocess.call('vagrant ssh-config >sshconfig',
-                        cwd='builder', shell=True)
-        vagranthost = 'default'  # Host in ssh config file
-
-        # Load and parse the SSH config...
-        sshconfig = paramiko.SSHConfig()
-        sshf = open('builder/sshconfig', 'r')
-        sshconfig.parse(sshf)
-        sshf.close()
-        sshconfig = sshconfig.lookup(vagranthost)
 
         # Open SSH connection...
         logging.info("Connecting to virtual machine...")
         sshs = paramiko.SSHClient()
         sshs.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        idfile = sshconfig['identityfile'][0]
-        if idfile.startswith('"') and idfile.endswith('"'):
-            idfile = idfile[1:-1]
-        sshs.connect(sshconfig['hostname'], username=sshconfig['user'],
-                     port=int(sshconfig['port']), timeout=300,
-                     look_for_keys=False, key_filename=idfile)
+        sshs.connect(sshinfo['hostname'], username=sshinfo['user'],
+                     port=sshinfo['port'], timeout=300,
+                     look_for_keys=False, key_filename=sshinfo['idfile'])
 
         # Get an SFTP connection...
         ftp = sshs.open_sftp()
@@ -362,7 +392,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                 break
             output += get
         if returncode != 0:
-            raise BuildException("Build.py failed on server for %s:%s" % (app['id'], thisbuild['version']), output)
+            raise BuildException(
+                "Build.py failed on server for {0}:{1}".format(
+                    app['id'], thisbuild['version']), output)
 
         # Retrieve the built files...
         logging.info("Retrieving build output...")
@@ -377,14 +409,15 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             if not options.notarball:
                 ftp.get(tarball, os.path.join(output_dir, tarball))
         except:
-            raise BuildException("Build failed for %s:%s - missing output files" % (app['id'], thisbuild['version']), output)
+            raise BuildException(
+                "Build failed for %s:%s - missing output files".format(
+                    app['id'], thisbuild['version']), output)
         ftp.close()
 
     finally:
 
         # Suspend the build server.
-        logging.info("Suspending build server")
-        subprocess.call(['vagrant', 'suspend'], cwd='builder')
+        release_vm()
 
 
 def adapt_gradle(build_dir):
