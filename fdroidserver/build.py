@@ -263,12 +263,14 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                      port=sshinfo['port'], timeout=300,
                      look_for_keys=False, key_filename=sshinfo['idfile'])
 
+        homedir = '/home/' + sshinfo['user']
+
         # Get an SFTP connection...
         ftp = sshs.open_sftp()
         ftp.get_channel().settimeout(15)
 
         # Put all the necessary files in place...
-        ftp.chdir('/home/vagrant')
+        ftp.chdir(homedir)
 
         # Helper to copy the contents of a directory to the server...
         def send_dir(path):
@@ -314,7 +316,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         if os.path.exists(os.path.join('metadata', app['id'])):
             send_dir(os.path.join('metadata', app['id']))
 
-        ftp.chdir('/home/vagrant')
+        ftp.chdir(homedir)
         # Create the build directory...
         ftp.mkdir('build')
         ftp.chdir('build')
@@ -322,7 +324,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         ftp.mkdir('srclib')
         # Copy any extlibs that are required...
         if 'extlibs' in thisbuild:
-            ftp.chdir('/home/vagrant/build/extlib')
+            ftp.chdir(homedir + '/build/extlib')
             for lib in thisbuild['extlibs']:
                 lib = lib.strip()
                 libsrc = os.path.join('build/extlib', lib)
@@ -350,20 +352,20 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             srclibpaths.append(basesrclib)
         for name, number, lib in srclibpaths:
             logging.info("Sending srclib '%s'" % lib)
-            ftp.chdir('/home/vagrant/build/srclib')
+            ftp.chdir(homedir + '/build/srclib')
             if not os.path.exists(lib):
                 raise BuildException("Missing srclib directory '" + lib + "'")
             fv = '.fdroidvcs-' + name
             ftp.put(os.path.join('build/srclib', fv), fv)
             send_dir(lib)
             # Copy the metadata file too...
-            ftp.chdir('/home/vagrant/srclibs')
+            ftp.chdir(homedir + '/srclibs')
             ftp.put(os.path.join('srclibs', name + '.txt'),
                     name + '.txt')
         # Copy the main app source code
         # (no need if it's a srclib)
         if (not basesrclib) and os.path.exists(build_dir):
-            ftp.chdir('/home/vagrant/build')
+            ftp.chdir(homedir + '/build')
             fv = '.fdroidvcs-' + app['id']
             ftp.put(os.path.join('build', fv), fv)
             send_dir(build_dir)
@@ -399,9 +401,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         # Retrieve the built files...
         logging.info("Retrieving build output...")
         if force:
-            ftp.chdir('/home/vagrant/tmp')
+            ftp.chdir(homedir + '/tmp')
         else:
-            ftp.chdir('/home/vagrant/unsigned')
+            ftp.chdir(homedir + '/unsigned')
         apkfile = common.getapkname(app, thisbuild)
         tarball = common.getsrcname(app, thisbuild)
         try:
