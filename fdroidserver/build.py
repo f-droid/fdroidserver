@@ -421,7 +421,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         cmd = [config['mvn3'], 'clean', '-Dandroid.sdk.path=' + config['sdk_path']]
 
         if '@' in thisbuild['maven']:
-            maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@',1)[1])
+            maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@', 1)[1])
             maven_dir = os.path.normpath(maven_dir)
         else:
             maven_dir = root_dir
@@ -434,7 +434,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         cmd = [config['gradle'], 'clean']
 
         if '@' in thisbuild['gradle']:
-            gradle_dir = os.path.join(root_dir, thisbuild['gradle'].split('@',1)[1])
+            gradle_dir = os.path.join(root_dir, thisbuild['gradle'].split('@', 1)[1])
             gradle_dir = os.path.normpath(gradle_dir)
         else:
             gradle_dir = root_dir
@@ -497,7 +497,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             with open(manifest, 'r') as f:
                 manifestcontent = f.read()
             manifestcontent = manifestcontent.replace('</manifest>',
-                    '<fdroid buildserverid="' + buildserverid + '"' + 
+                    '<fdroid buildserverid="' + buildserverid + '"' +
                     ' fdroidserverid="' + fdroidserverid + '"' +
                     '/></manifest>')
             with open(manifest, 'w') as f:
@@ -679,15 +679,15 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     if thisbuild['type'] == 'maven':
         stdout_apk = '\n'.join([
-            line for line in p.stdout.splitlines() if any(a in line for a in ('.apk','.ap_'))])
+            line for line in p.stdout.splitlines() if any(a in line for a in ('.apk', '.ap_'))])
         m = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
-                stdout_apk, re.S|re.M)
+                stdout_apk, re.S | re.M)
         if not m:
             m = re.match(r".*^\[INFO\] Creating additional unsigned apk file .*/([^/]+)\.apk[^l]",
-                    stdout_apk, re.S|re.M)
+                    stdout_apk, re.S | re.M)
         if not m:
             m = re.match(r'.*^\[INFO\] [^$]*aapt \[package,[^$]*' + bindir + r'/([^/]+)\.ap[_k][,\]]',
-                    stdout_apk, re.S|re.M)
+                    stdout_apk, re.S | re.M)
         if not m:
             raise BuildException('Failed to find output')
         src = m.group(1)
@@ -714,7 +714,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         stdout_apk = '\n'.join([
             line for line in p.stdout.splitlines() if '.apk' in line])
         src = re.match(r".*^.*Creating (.+) for release.*$.*", stdout_apk,
-            re.S|re.M).group(1)
+            re.S | re.M).group(1)
         src = os.path.join(bindir, src)
     elif thisbuild['type'] == 'raw':
         src = os.path.join(root_dir, thisbuild['output'])
