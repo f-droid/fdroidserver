@@ -163,7 +163,7 @@ def main():
             sys.exit(1)
     elif url.startswith('http://code.google.com/p/'):
         if not url.endswith('/'):
-            url += '/';
+            url += '/'
         projecttype = 'googlecode'
         sourcecode = url + 'source/checkout'
         if options.repo:
