@@ -610,6 +610,7 @@ def make_index(apps, apks, repodir, archive, categories):
         el = doc.createElement(name)
         el.appendChild(doc.createTextNode(value))
         parent.appendChild(el)
+
     def addElementCDATA(name, value, doc, parent):
         el = doc.createElement(name)
         el.appendChild(doc.createCDATASection(value))
@@ -696,6 +697,7 @@ def make_index(apps, apks, repodir, archive, categories):
         addElement('summary', app['Summary'], doc, apel)
         if app['icon']:
             addElement('icon', app['icon'], doc, apel)
+
         def linkres(link):
             for app in apps:
                 if app['id'] == link:

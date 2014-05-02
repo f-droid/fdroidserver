@@ -218,8 +218,10 @@ class DescriptionFormatter:
     text_wiki = ''
     text_html = ''
     linkResolver = None
+
     def __init__(self, linkres):
         self.linkResolver = linkres
+
     def endcur(self, notstates=None):
         if notstates and self.state in notstates:
             return
@@ -229,13 +231,16 @@ class DescriptionFormatter:
             self.endul()
         elif self.state == self.stOL:
             self.endol()
+
     def endpara(self):
         self.text_plain += '\n'
         self.text_html += '</p>'
         self.state = self.stNONE
+
     def endul(self):
         self.text_html += '</ul>'
         self.state = self.stNONE
+
     def endol(self):
         self.text_html += '</ol>'
         self.state = self.stNONE
