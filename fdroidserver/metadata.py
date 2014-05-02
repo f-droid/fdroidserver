@@ -335,7 +335,7 @@ class DescriptionFormatter:
                 self.text_html += '<ol>'
                 self.state = self.stOL
             self.text_html += '<li>'
-            self.text_plain += '* ' #TODO: lazy - put the numbers in!
+            self.text_plain += '* '  # TODO: lazy - put the numbers in!
             self.addtext(line[1:])
             self.text_html += '</li>'
         else:

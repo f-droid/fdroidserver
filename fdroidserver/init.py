@@ -61,7 +61,7 @@ def disable_in_config(key, value):
 def genpassword():
     '''generate a random password for when generating keys'''
     h = hashlib.sha256()
-    h.update(os.urandom(16)) # salt
+    h.update(os.urandom(16))  # salt
     h.update(bytes(socket.getfqdn()))
     return h.digest().encode('base64').strip()
 
@@ -213,7 +213,7 @@ def main():
     if options.distinguished_name:
         keydname = options.distinguished_name
         write_to_config('keydname', keydname)
-    if keystore == 'NONE': # we're using a smartcard
+    if keystore == 'NONE':  # we're using a smartcard
         write_to_config('repo_keyalias', '1')  # seems to be the default
         disable_in_config('keypass', 'never used with smartcard')
         write_to_config('smartcardoptions',

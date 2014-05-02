@@ -130,7 +130,7 @@ def main():
     projecttype = None
     issuetracker = None
     license = None
-    website = url #by default, we might override it
+    website = url  # by default, we might override it
     if url.startswith('git://'):
         projecttype = 'git'
         repo = url
