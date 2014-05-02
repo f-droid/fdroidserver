@@ -121,7 +121,7 @@ def read_config(opts, config_file='config.py'):
     return config
 
 def test_sdk_exists(c):
-    if c['sdk_path'] == None:
+    if c['sdk_path'] is None:
         # c['sdk_path'] is set to the value of ANDROID_HOME by default
         logging.critical('No Android SDK found! ANDROID_HOME is not set and sdk_path is not in config.py!')
         logging.info('You can use ANDROID_HOME to set the path to your SDK, i.e.:')
@@ -145,7 +145,7 @@ def write_password_file(pwtype, password=None):
     '''
     filename = '.fdroid.' + pwtype + '.txt'
     fd = os.open(filename, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0600)
-    if password == None:
+    if password is None:
         os.write(fd, config[pwtype])
     else:
         os.write(fd, password)
