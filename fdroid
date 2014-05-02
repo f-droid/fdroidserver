@@ -42,7 +42,7 @@ def print_help():
     print "usage: fdroid [-h|--help] <command> [<args>]"
     print
     print "Valid commands are:"
-    for cmd,summary in commands.items():
+    for cmd, summary in commands.items():
         print "   " + cmd + ' '*(15-len(cmd)) + summary
     print
 

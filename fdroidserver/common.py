@@ -686,9 +686,9 @@ def retrieve_string(app_dir, string, xmlfiles=None):
     if xmlfiles is None:
         xmlfiles = []
         for res_dir in res_dirs:
-            for r,d,f in os.walk(res_dir):
+            for r, d, f in os.walk(res_dir):
                 if r.endswith('/values'):
-                    xmlfiles += [os.path.join(r,x) for x in f if x.endswith('.xml')]
+                    xmlfiles += [os.path.join(r, x) for x in f if x.endswith('.xml')]
 
     string_search = None
     if string.startswith('@string/'):
@@ -704,7 +704,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
                     return retrieve_string(app_dir, matches.group(1), xmlfiles)
         return None
 
-    return string.replace("\\'","'")
+    return string.replace("\\'", "'")
 
 # Return list of existing files that will be used to find the highest vercode
 def manifest_paths(app_dir, flavour):
@@ -776,7 +776,7 @@ def ant_subprojects(root_dir):
     for subpath in subprojects:
         subrelpath = os.path.join(root_dir, subpath)
         for p in get_library_references(subrelpath):
-            relp = os.path.normpath(os.path.join(subpath,p))
+            relp = os.path.normpath(os.path.join(subpath, p))
             if relp not in subprojects:
                 subprojects.insert(0, relp)
     return subprojects
@@ -787,7 +787,7 @@ def remove_debuggable_flags(root_dir):
     for root, dirs, files in os.walk(root_dir):
         if 'AndroidManifest.xml' in files:
             path = os.path.join(root, 'AndroidManifest.xml')
-            p = FDroidPopen(['sed','-i', 's/android:debuggable="[^"]*"//g', path])
+            p = FDroidPopen(['sed', '-i', 's/android:debuggable="[^"]*"//g', path])
             if p.returncode != 0:
                 raise BuildException("Failed to remove debuggable flags of %s" % path)
 
@@ -901,7 +901,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
         if ':' in name:
             number, name = name.split(':', 1)
         if '/' in name:
-            name, subdir = name.split('/',1)
+            name, subdir = name.split('/', 1)
 
     srclib_path = os.path.join('srclibs', name + ".txt")
 
@@ -936,7 +936,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
 
     if srclib["Srclibs"]:
         n = 1
-        for lib in srclib["Srclibs"].replace(';',',').split(','):
+        for lib in srclib["Srclibs"].replace(';', ',').split(','):
             s_tuple = None
             for t in srclibpaths:
                 if t[0] == lib:
@@ -1083,7 +1083,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 's@compileSdkVersion *[0-9]*@compileSdkVersion '+n+'@g',
                 'build.gradle'], cwd=root_dir)
             if '@' in build['gradle']:
-                gradle_dir = os.path.join(root_dir, build['gradle'].split('@',1)[1])
+                gradle_dir = os.path.join(root_dir, build['gradle'].split('@', 1)[1])
                 gradle_dir = os.path.normpath(gradle_dir)
                 FDroidPopen(['sed', '-i',
                     's@compileSdkVersion *[0-9]*@compileSdkVersion '+n+'@g',
@@ -1286,7 +1286,7 @@ def scan_source(build_dir, root_dir, thisbuild):
         return path.endswith('/%s' % dirname) or '/%s/' % dirname in path
 
     # Iterate through all files in the source code
-    for r,d,f in os.walk(build_dir):
+    for r, d, f in os.walk(build_dir):
 
         if any(insidedir(r, d) for d in ('.hg', '.git', '.svn', '.bzr')):
             continue
@@ -1417,7 +1417,7 @@ class KnownApks:
                 else:
                     apps[appid] = added
         sortedapps = sorted(apps.iteritems(), key=operator.itemgetter(1))[-num:]
-        lst = [app for app,_ in sortedapps]
+        lst = [app for app, _ in sortedapps]
         lst.reverse()
         return lst
 
@@ -1566,7 +1566,7 @@ def remove_signing_keys(build_dir):
                             continue
                         o.write(line)
 
-                logging.info("Cleaned %s of keysigning configs at %s" % (propfile,path))
+                logging.info("Cleaned %s of keysigning configs at %s" % (propfile, path))
 
 def replace_config_vars(cmd):
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
@@ -1589,10 +1589,10 @@ def place_srclib(root_dir, number, libpath):
         placed = False
         for line in lines:
             if line.startswith('android.library.reference.%d=' % number):
-                o.write('android.library.reference.%d=%s\n' % (number,relpath))
+                o.write('android.library.reference.%d=%s\n' % (number, relpath))
                 placed = True
             else:
                 o.write(line)
         if not placed:
-            o.write('android.library.reference.%d=%s\n' % (number,relpath))
+            o.write('android.library.reference.%d=%s\n' % (number, relpath))
 

@@ -363,7 +363,7 @@ def description_wiki(lines):
 
 # Parse multiple lines of description as written in a metadata file, returning
 # a single string in HTML format.
-def description_html(lines,linkres):
+def description_html(lines, linkres):
     ps = DescriptionFormatter(linkres)
     for line in lines:
         ps.parseline(line)
@@ -394,7 +394,7 @@ def parse_srclib(metafile, **kw):
             continue
 
         try:
-            field, value = line.split(':',1)
+            field, value = line.split(':', 1)
         except ValueError:
             raise MetaDataException("Invalid metadata in %s:%d" % (line, n))
 
@@ -507,7 +507,7 @@ def parse_metadata(metafile):
         t = flagtype(pk)
         if t == 'list':
             # Port legacy ';' separators
-            thisbuild[pk] = [v.strip() for v in pv.replace(';',',').split(',')]
+            thisbuild[pk] = [v.strip() for v in pv.replace(';', ',').split(',')]
         elif t == 'string':
             thisbuild[pk] = pv
         elif t == 'script':
@@ -610,7 +610,7 @@ def parse_metadata(metafile):
                 curcomments.append(line)
                 continue
             try:
-                field, value = line.split(':',1)
+                field, value = line.split(':', 1)
             except ValueError:
                 raise MetaDataException("Invalid metadata in "+linedesc)
             if field != field.strip() or value != value.strip():
@@ -633,7 +633,7 @@ def parse_metadata(metafile):
             elif fieldtype == 'string':
                 thisinfo[field] = value
             elif fieldtype == 'list':
-                thisinfo[field] = [v.strip() for v in value.replace(';',',').split(',')]
+                thisinfo[field] = [v.strip() for v in value.replace(';', ',').split(',')]
             elif fieldtype == 'build':
                 if value.endswith("\\"):
                     mode = 2

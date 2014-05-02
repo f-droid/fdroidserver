@@ -212,9 +212,9 @@ def check_repomanifest(app, branch=None):
         if package != appid:
             return (None, "Package ID mismatch")
         if not version:
-            return (None,"Couldn't find latest version name")
+            return (None, "Couldn't find latest version name")
         if not vercode:
-            return (None,"Couldn't find latest version code")
+            return (None, "Couldn't find latest version code")
 
         vercode = str(int(vercode))
 

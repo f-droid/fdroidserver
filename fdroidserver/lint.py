@@ -171,7 +171,7 @@ def main():
                 lastcommit, app['Update Check Mode']))
 
         # No proper license
-        if app['License'] in ('Unknown','None',''):
+        if app['License'] in ('Unknown', 'None', ''):
             warn("License was not set")
 
         # Summary size limit

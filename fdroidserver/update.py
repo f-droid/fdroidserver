@@ -296,7 +296,7 @@ def resize_icon(iconpath, density):
         else:
             logging.info("%s is small enough: %s" % im.size)
 
-    except Exception,e:
+    except Exception, e:
         logging.error("Failed resizing {0} - {1}".format(iconpath, e))
 
 def resize_all_icons(repodirs):
@@ -503,7 +503,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                                     os.path.join(get_icon_dir(repodir, density), iconfilename))
                             empty_densities.remove(density)
                             break
-                except Exception,e:
+                except Exception, e:
                     logging.warn("Failed reading {0} - {1}".format(iconpath, e))
 
             if thisinfo['icons']:
