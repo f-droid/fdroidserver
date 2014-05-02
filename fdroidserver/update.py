@@ -813,7 +813,7 @@ def make_index(apps, apks, repodir, archive, categories):
             sys.exit(1)
 
     # Copy the repo icon into the repo directory...
-    icon_dir = os.path.join(repodir ,'icons')
+    icon_dir = os.path.join(repodir, 'icons')
     iconfilename = os.path.join(icon_dir, os.path.basename(config['repo_icon']))
     shutil.copyfile(config['repo_icon'], iconfilename)
 

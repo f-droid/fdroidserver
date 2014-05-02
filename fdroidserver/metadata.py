@@ -120,62 +120,62 @@ class FieldType():
 
 # Generic value types
 valuetypes = {
-    'int' : FieldType("Integer",
+    'int': FieldType("Integer",
         r'^[1-9][0-9]*$', None,
         [ 'FlattrID' ],
         [ 'vercode' ]),
 
-    'http' : FieldType("HTTP link",
+    'http': FieldType("HTTP link",
         r'^http[s]?://', None,
         [ "Web Site", "Source Code", "Issue Tracker", "Donate" ], []),
 
-    'bitcoin' : FieldType("Bitcoin address",
+    'bitcoin': FieldType("Bitcoin address",
         r'^[a-zA-Z0-9]{27,34}$', None,
         [ "Bitcoin" ],
         [ ]),
 
-    'litecoin' : FieldType("Litecoin address",
+    'litecoin': FieldType("Litecoin address",
         r'^L[a-zA-Z0-9]{33}$', None,
         [ "Litecoin" ],
         [ ]),
 
-    'dogecoin' : FieldType("Dogecoin address",
+    'dogecoin': FieldType("Dogecoin address",
         r'^D[a-zA-Z0-9]{33}$', None,
         [ "Dogecoin" ],
         [ ]),
 
-    'Bool' : FieldType("Boolean",
+    'Bool': FieldType("Boolean",
         ['Yes', 'No'], None,
         [ "Requires Root" ],
         [ ]),
 
-    'bool' : FieldType("Boolean",
+    'bool': FieldType("Boolean",
         ['yes', 'no'], None,
         [ ],
         [ 'submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
             'novcheck' ]),
 
-    'Repo Type' : FieldType("Repo Type",
+    'Repo Type': FieldType("Repo Type",
         [ 'git', 'git-svn', 'svn', 'hg', 'bzr', 'srclib' ], None,
         [ "Repo Type" ],
         [ ]),
 
-    'archive' : FieldType("Archive Policy",
+    'archive': FieldType("Archive Policy",
         r'^[0-9]+ versions$', None,
         [ "Archive Policy" ],
         [ ]),
 
-    'antifeatures' : FieldType("Anti-Feature",
+    'antifeatures': FieldType("Anti-Feature",
         [ "Ads", "Tracking", "NonFreeNet", "NonFreeDep", "NonFreeAdd", "UpstreamNonFree" ], ',',
         [ "AntiFeatures" ],
         [ ]),
 
-    'autoupdatemodes' : FieldType("Auto Update Mode",
+    'autoupdatemodes': FieldType("Auto Update Mode",
         r"^(Version .+|None)$", None,
         [ "Auto Update Mode" ],
         [ ]),
 
-    'updatecheckmodes' : FieldType("Update Check Mode",
+    'updatecheckmodes': FieldType("Update Check Mode",
         r"^(Tags|Tags .+|RepoManifest|RepoManifest/.+|RepoTrunk|HTTP|Static|None)$", None,
         [ "Update Check Mode" ],
         [ ])

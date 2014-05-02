@@ -268,7 +268,7 @@ def check_repotrunk(app, branch=None):
 def check_gplay(app):
     time.sleep(15)
     url = 'https://play.google.com/store/apps/details?id=' + app['id']
-    headers = {'User-Agent' : 'Mozilla/5.0 (X11; Linux i686; rv:18.0) Gecko/20100101 Firefox/18.0'}
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux i686; rv:18.0) Gecko/20100101 Firefox/18.0'}
     req = urllib2.Request(url, None, headers)
     try:
         resp = urllib2.urlopen(req, None, 20)

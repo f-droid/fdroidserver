@@ -50,8 +50,8 @@ def get_default_config():
         'keystore': '$HOME/.local/share/fdroidserver/keystore.jks',
         'smartcardoptions': [],
         'char_limits': {
-            'Summary' : 50,
-            'Description' : 1500
+            'Summary': 50,
+            'Description': 1500
         },
         'keyaliases': { },
     }
