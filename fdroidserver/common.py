@@ -857,7 +857,7 @@ def parse_androidmanifests(paths):
     return (max_version, max_vercode, max_package)
 
 class BuildException(Exception):
-    def __init__(self, value, detail = None):
+    def __init__(self, value, detail=None):
         self.value = value
         self.detail = detail
 
