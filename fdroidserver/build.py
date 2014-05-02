@@ -40,6 +40,7 @@ try:
 except ImportError:
     pass
 
+
 def get_builder_vm_id():
     vd = os.path.join('builder', '.vagrant')
     if os.path.isdir(vd):

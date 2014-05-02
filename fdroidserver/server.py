@@ -28,6 +28,7 @@ import common
 config = None
 options = None
 
+
 def update_awsbucket(repo_section):
     '''
     Upload the contents of the directory `repo_section` (including
@@ -113,6 +114,7 @@ def update_awsbucket(repo_section):
         else:
             logging.info(' skipping ' + s3url)
 
+
 def update_serverwebroot(repo_section):
     rsyncargs = ['rsync', '-u', '-r', '--delete']
     if options.verbose:
@@ -132,6 +134,7 @@ def update_serverwebroot(repo_section):
     if subprocess.call(rsyncargs +
                        [indexjar, config['serverwebroot'] + repo_section]) != 0:
         sys.exit(1)
+
 
 def main():
     global config, options

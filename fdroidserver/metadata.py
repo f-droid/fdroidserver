@@ -23,6 +23,7 @@ import glob
 import cgi
 import logging
 
+
 class MetaDataException(Exception):
     def __init__(self, value):
         self.value = value
@@ -183,6 +184,7 @@ valuetypes = {
         [])
 }
 
+
 # Check an app's metadata information for integrity errors
 def check_metadata(info):
     for k, t in valuetypes.iteritems():
@@ -199,6 +201,7 @@ def check_metadata(info):
                         build[attr] = build[attr] == "yes"
                 elif k == 'bool':
                     build[attr] = False
+
 
 # Formatter for descriptions. Create an instance, and call parseline() with
 # each line of the description source from the metadata. At the end, call
@@ -344,6 +347,7 @@ class DescriptionFormatter:
     def end(self):
         self.endcur()
 
+
 # Parse multiple lines of description as written in a metadata file, returning
 # a single string in plain text format.
 def description_plain(lines, linkres):
@@ -352,6 +356,7 @@ def description_plain(lines, linkres):
         ps.parseline(line)
     ps.end()
     return ps.text_plain
+
 
 # Parse multiple lines of description as written in a metadata file, returning
 # a single string in wiki format. Used for the Maintainer Notes field as well,
@@ -363,6 +368,7 @@ def description_wiki(lines):
     ps.end()
     return ps.text_wiki
 
+
 # Parse multiple lines of description as written in a metadata file, returning
 # a single string in HTML format.
 def description_html(lines, linkres):
@@ -371,6 +377,7 @@ def description_html(lines, linkres):
         ps.parseline(line)
     ps.end()
     return ps.text_html
+
 
 def parse_srclib(metafile, **kw):
 
@@ -407,6 +414,7 @@ def parse_srclib(metafile, **kw):
 
     return thisinfo
 
+
 # Read all metadata. Returns a list of 'app' objects (which are dictionaries as
 # returned by the parse_metadata function.
 def read_metadata(xref=True, package=None, store=True):
@@ -439,6 +447,7 @@ def read_metadata(xref=True, package=None, store=True):
 
     return apps
 
+
 # Get the type expected for a given metadata field.
 def metafieldtype(name):
     if name in ['Description', 'Maintainer Notes']:
@@ -455,6 +464,7 @@ def metafieldtype(name):
         return 'unknown'
     return 'string'
 
+
 def flagtype(name):
     if name in ['extlibs', 'srclibs', 'patch', 'rm', 'buildjni',
             'update', 'scanignore', 'scandelete']:
@@ -462,6 +472,7 @@ def flagtype(name):
     if name in ['init', 'prebuild', 'build']:
         return 'script'
     return 'string'
+
 
 # Parse metadata for a single application.
 #
@@ -688,6 +699,7 @@ def parse_metadata(metafile):
         build['type'] = get_build_type(build)
 
     return thisinfo
+
 
 # Write a metadata file.
 #

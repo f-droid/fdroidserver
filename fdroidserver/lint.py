@@ -119,6 +119,7 @@ regex_pedantic = {
         ],
 }
 
+
 def main():
 
     global config, options, appid, app_count, warn_count

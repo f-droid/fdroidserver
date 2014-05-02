@@ -80,6 +80,7 @@ def check_http(app):
         msg = "Could not complete http check for app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
         return (None, msg)
 
+
 # Check for a new version by looking at the tags in the source repo.
 # Whether this can be used reliably or not depends on
 # the development procedures used by the project's developers. Use it with
@@ -158,6 +159,7 @@ def check_tags(app, pattern):
         msg = "Could not scan app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
         return (None, msg, None)
 
+
 # Check for a new version by looking at the AndroidManifest.xml at the HEAD
 # of the source repo. Whether this can be used reliably or not depends on
 # the development procedures used by the project's developers. Use it with
@@ -233,6 +235,7 @@ def check_repomanifest(app, branch=None):
         msg = "Could not scan app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
         return (None, msg)
 
+
 def check_repotrunk(app, branch=None):
 
     try:
@@ -262,6 +265,7 @@ def check_repotrunk(app, branch=None):
     except Exception:
         msg = "Could not scan app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
         return (None, msg)
+
 
 # Check for a new version by looking at the Google Play Store.
 # Returns (None, "a message") if this didn't work, or (version, None) for
@@ -296,6 +300,7 @@ def check_gplay(app):
 
 config = None
 options = None
+
 
 def main():
 

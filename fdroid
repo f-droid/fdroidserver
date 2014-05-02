@@ -38,6 +38,7 @@ commands = {
         "server": "Interact with the repo HTTP server",
         }
 
+
 def print_help():
     print "usage: fdroid [-h|--help] <command> [<args>]"
     print
@@ -45,6 +46,7 @@ def print_help():
     for cmd, summary in commands.items():
         print "   " + cmd + ' '*(15-len(cmd)) + summary
     print
+
 
 def main():
 

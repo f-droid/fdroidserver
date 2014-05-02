@@ -35,6 +35,7 @@ from common import FDroidPopen, BuildException
 config = {}
 options = None
 
+
 def write_to_config(key, value):
     '''write a key/value to the local config.py'''
     with open('config.py', 'r') as f:
@@ -44,6 +45,7 @@ def write_to_config(key, value):
     data = re.sub(pattern, repl, data)
     with open('config.py', 'w') as f:
         f.writelines(data)
+
 
 def disable_in_config(key, value):
     '''write a key/value to the local config.py, then comment it out'''

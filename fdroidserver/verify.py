@@ -31,6 +31,7 @@ from common import FDroidPopen
 options = None
 config = None
 
+
 def main():
 
     global options, config

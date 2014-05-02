@@ -37,24 +37,30 @@ import metadata
 from common import FDroidPopen
 from metadata import MetaDataException
 
+
 def get_densities():
     return ['640', '480', '320', '240', '160', '120']
+
 
 def dpi_to_px(density):
     return (int(density) * 48) / 160
 
+
 def px_to_dpi(px):
     return (int(px) * 160) / 48
+
 
 def get_icon_dir(repodir, density):
     if density is None:
         return os.path.join(repodir, "icons")
     return os.path.join(repodir, "icons-%s" % density)
 
+
 def get_icon_dirs(repodir):
     for density in get_densities():
         yield get_icon_dir(repodir, density)
     yield os.path.join(repodir, "icons")
+
 
 def update_wiki(apps, apks):
     """Update the wiki
@@ -257,6 +263,7 @@ def update_wiki(apps, apks):
     # Purge server cache to ensure counts are up to date
     site.pages['Repository Maintenance'].purge()
 
+
 def delete_disabled_builds(apps, apkcache, repodirs):
     """Delete disabled build outputs.
 
@@ -277,6 +284,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
                             os.remove(name)
                 if apkfilename in apkcache:
                     del apkcache[apkfilename]
+
 
 def resize_icon(iconpath, density):
 
@@ -300,6 +308,7 @@ def resize_icon(iconpath, density):
     except Exception, e:
         logging.error("Failed resizing {0} - {1}".format(iconpath, e))
 
+
 def resize_all_icons(repodirs):
     """Resize all icons that exceed the max size
 
@@ -311,6 +320,7 @@ def resize_all_icons(repodirs):
             icon_glob = os.path.join(icon_dir, '*.png')
             for iconpath in glob.glob(icon_glob):
                 resize_icon(iconpath, density)
+
 
 def scan_apks(apps, apkcache, repodir, knownapks):
     """Scan the apks in the given repo directory.
@@ -581,6 +591,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
 
 repo_pubkey_fingerprint = None
+
 
 def make_index(apps, apks, repodir, archive, categories):
     """Make a repo index.
@@ -860,6 +871,7 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
 
 config = None
 options = None
+
 
 def main():
 

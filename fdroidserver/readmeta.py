@@ -20,6 +20,7 @@
 import os
 import metadata
 
+
 def main():
 
     if not os.path.isdir('metadata'):

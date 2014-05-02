@@ -33,6 +33,7 @@ from common import FDroidPopen, BuildException
 config = None
 options = None
 
+
 def main():
 
     global config, options

@@ -30,6 +30,7 @@ from common import VCSException
 config = None
 options = None
 
+
 def main():
 
     global config, options

@@ -30,6 +30,7 @@ from common import FDroidPopen
 options = None
 config = None
 
+
 def devices():
     p = FDroidPopen(["adb", "devices"])
     if p.returncode != 0:

@@ -28,6 +28,7 @@ import logging
 import common
 import metadata
 
+
 # Get the repo type and address from the given web page. The page is scanned
 # in a rather naive manner for 'git clone xxxx', 'hg clone xxxx', etc, and
 # when one of these is found it's assumed that's the information we want.
@@ -88,6 +89,7 @@ def getrepofrompage(url):
 
 config = None
 options = None
+
 
 def main():
 
