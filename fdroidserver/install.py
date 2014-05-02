@@ -98,7 +98,7 @@ def main():
         for dev in devs:
             logging.info("Installing %s on %s..." % (apk, dev))
             p = FDroidPopen(["adb", "-s", dev, "install", apk])
-            fail= ""
+            fail = ""
             for line in p.stdout.splitlines():
                 if line.startswith("Failure"):
                     fail = line[9:-1]

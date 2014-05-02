@@ -1055,7 +1055,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         # from sdk.dir, if necessary
         if build['oldsdkloc']:
             sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
-                re.S|re.M).group(1)
+                re.S | re.M).group(1)
             props += "sdk-location=%s\n" % sdkloc
         else:
             props += "sdk.dir=%s\n" % config['sdk_path']

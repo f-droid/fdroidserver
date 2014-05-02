@@ -128,7 +128,7 @@ def main():
         p = FDroidPopen(['keytool', '-list',
             '-alias', keyalias, '-keystore', config['keystore'],
             '-storepass:file', config['keystorepassfile']])
-        if p.returncode !=0:
+        if p.returncode != 0:
             logging.info("Key does not exist - generating...")
             p = FDroidPopen(['keytool', '-genkey',
                 '-keystore', config['keystore'], '-alias', keyalias,

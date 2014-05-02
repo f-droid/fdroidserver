@@ -51,7 +51,7 @@ def getrepofrompage(url):
         return (repotype, repo)
 
     # Works for Google Code and BitBucket...
-    index=page.find('git clone')
+    index = page.find('git clone')
     if index != -1:
         repotype = 'git'
         repo = page[index + 10:]
@@ -63,7 +63,7 @@ def getrepofrompage(url):
         return (repotype, repo)
 
     # Google Code only...
-    index=page.find('svn checkout')
+    index = page.find('svn checkout')
     if index != -1:
         repotype = 'git-svn'
         repo = page[index + 13:]

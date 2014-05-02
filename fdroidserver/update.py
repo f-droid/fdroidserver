@@ -879,7 +879,7 @@ def main():
     parser.add_option("-I", "--icons", action="store_true", default=False,
                       help="Resize all the icons exceeding the max pixel size and exit")
     parser.add_option("-e", "--editor", default="/etc/alternatives/editor",
-                      help="Specify editor to use in interactive mode. Default "+
+                      help="Specify editor to use in interactive mode. Default " +
                           "is /etc/alternatives/editor")
     parser.add_option("-w", "--wiki", default=False, action="store_true",
                       help="Update the wiki")
