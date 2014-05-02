@@ -91,7 +91,7 @@ def update_awsbucket(repo_section):
             if upload:
                 if options.verbose:
                     logging.info(' uploading "' + file_to_upload + '"...')
-                extra = { 'acl': 'public-read' }
+                extra = {'acl': 'public-read' }
                 if file_to_upload.endswith('.sig'):
                     extra['content_type'] = 'application/pgp-signature'
                 elif file_to_upload.endswith('.asc'):

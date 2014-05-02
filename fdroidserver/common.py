@@ -53,7 +53,7 @@ def get_default_config():
             'Summary': 50,
             'Description': 1500
         },
-        'keyaliases': { },
+        'keyaliases': {},
     }
 
 def read_config(opts, config_file='config.py'):
@@ -709,7 +709,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
 # Return list of existing files that will be used to find the highest vercode
 def manifest_paths(app_dir, flavour):
 
-    possible_manifests = [ os.path.join(app_dir, 'AndroidManifest.xml'),
+    possible_manifests = [os.path.join(app_dir, 'AndroidManifest.xml'),
             os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml'),
             os.path.join(app_dir, 'src', 'AndroidManifest.xml'),
             os.path.join(app_dir, 'build.gradle') ]
@@ -1040,9 +1040,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         srclibpaths.append(basesrclib)
 
     # Update the local.properties file
-    localprops = [ os.path.join(build_dir, 'local.properties') ]
+    localprops = [os.path.join(build_dir, 'local.properties') ]
     if 'subdir' in build:
-        localprops += [ os.path.join(root_dir, 'local.properties') ]
+        localprops += [os.path.join(root_dir, 'local.properties') ]
     for path in localprops:
         if not os.path.isfile(path):
             continue
@@ -1364,7 +1364,7 @@ class KnownApks:
         self.path = os.path.join('stats', 'known_apks.txt')
         self.apks = {}
         if os.path.exists(self.path):
-            for line in file( self.path):
+            for line in file(self.path):
                 t = line.rstrip().split(' ')
                 if len(t) == 2:
                     self.apks[t[0]] = (t[1], None)
