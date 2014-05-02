@@ -22,7 +22,8 @@ import traceback
 from optparse import OptionParser
 import logging
 
-import common, metadata
+import common
+import metadata
 from common import BuildException
 from common import VCSException
 

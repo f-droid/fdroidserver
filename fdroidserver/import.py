@@ -25,7 +25,8 @@ import urllib
 from optparse import OptionParser
 from ConfigParser import ConfigParser
 import logging
-import common, metadata
+import common
+import metadata
 
 # Get the repo type and address from the given web page. The page is scanned
 # in a rather naive manner for 'git clone xxxx', 'hg clone xxxx', etc, and

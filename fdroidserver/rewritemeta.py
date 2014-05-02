@@ -20,7 +20,8 @@
 import os
 from optparse import OptionParser
 import logging
-import common, metadata
+import common
+import metadata
 
 config = None
 options = None

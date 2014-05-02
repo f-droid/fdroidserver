@@ -32,7 +32,8 @@ import time
 from PIL import Image
 import logging
 
-import common, metadata
+import common
+import metadata
 from common import FDroidPopen
 from metadata import MetaDataException
 

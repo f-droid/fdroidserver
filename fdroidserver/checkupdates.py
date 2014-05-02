@@ -30,7 +30,8 @@ import HTMLParser
 from distutils.version import LooseVersion
 import logging
 
-import common, metadata
+import common
+import metadata
 from common import BuildException
 from common import VCSException
 from metadata import MetaDataException

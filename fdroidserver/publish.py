@@ -26,7 +26,8 @@ import glob
 from optparse import OptionParser
 import logging
 
-import common, metadata
+import common
+import metadata
 from common import FDroidPopen, BuildException
 
 config = None
