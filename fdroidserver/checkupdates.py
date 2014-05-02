@@ -354,7 +354,6 @@ def main():
                                 common.getappname(app), version))
         return
 
-
     for app in apps:
 
         if options.autoonly and app['Auto Update Mode'] in ('None', 'Static'):

@@ -272,7 +272,6 @@ class DescriptionFormatter:
                 self.ital = not self.ital
                 txt = txt[2:]
 
-
     def linkify(self, txt):
         linkified_plain = ''
         linkified_html = ''
@@ -804,7 +803,6 @@ def write_metadata(dest, app):
             mf.write("%s\n" % line)
         mf.write('.\n')
         mf.write('\n')
-
 
     if app['Archive Policy']:
         writefield('Archive Policy')

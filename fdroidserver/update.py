@@ -840,7 +840,6 @@ def make_index(apps, apks, repodir, archive, categories):
     f.close()
 
 
-
 def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversions):
 
     for app in apps:
