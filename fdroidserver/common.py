@@ -712,7 +712,7 @@ def manifest_paths(app_dir, flavour):
     possible_manifests = [os.path.join(app_dir, 'AndroidManifest.xml'),
             os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml'),
             os.path.join(app_dir, 'src', 'AndroidManifest.xml'),
-            os.path.join(app_dir, 'build.gradle') ]
+            os.path.join(app_dir, 'build.gradle')]
 
     if flavour:
         possible_manifests.append(
@@ -1040,9 +1040,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         srclibpaths.append(basesrclib)
 
     # Update the local.properties file
-    localprops = [os.path.join(build_dir, 'local.properties') ]
+    localprops = [os.path.join(build_dir, 'local.properties')]
     if 'subdir' in build:
-        localprops += [os.path.join(root_dir, 'local.properties') ]
+        localprops += [os.path.join(root_dir, 'local.properties')]
     for path in localprops:
         if not os.path.isfile(path):
             continue

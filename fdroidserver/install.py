@@ -68,7 +68,7 @@ def main():
     if args:
 
         vercodes = common.read_pkg_args(args, True)
-        apks = {appid: None for appid in vercodes }
+        apks = {appid: None for appid in vercodes}
 
         # Get the signed apk with the highest vercode
         for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
@@ -87,7 +87,7 @@ def main():
     else:
 
         apks = {common.apknameinfo(apkfile)[0]: apkfile for apkfile in
-                sorted(glob.glob(os.path.join(output_dir, '*.apk'))) }
+                sorted(glob.glob(os.path.join(output_dir, '*.apk')))}
 
     for appid, apk in apks.iteritems():
         # Get device list each time to avoid device not found errors
@@ -97,7 +97,7 @@ def main():
         logging.info("Installing %s..." % apk)
         for dev in devs:
             logging.info("Installing %s on %s..." % (apk, dev))
-            p = FDroidPopen(["adb", "-s", dev, "install", apk ])
+            p = FDroidPopen(["adb", "-s", dev, "install", apk])
             fail= ""
             for line in p.stdout.splitlines():
                 if line.startswith("Failure"):
