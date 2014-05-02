@@ -821,5 +821,3 @@ def write_metadata(dest, app):
         mf.write('\n')
     writecomments(None)
     mf.close()
-
-

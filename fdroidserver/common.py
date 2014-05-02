@@ -1635,4 +1635,3 @@ def place_srclib(root_dir, number, libpath):
                 o.write(line)
         if not placed:
             o.write('android.library.reference.%d=%s\n' % (number, relpath))
-
