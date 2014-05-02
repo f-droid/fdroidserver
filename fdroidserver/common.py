@@ -527,7 +527,7 @@ class vcs_gitsvn(vcs):
                     svn_rev = rev_split[1]
 
                 else:
-                    # if no branch is specified, then assume trunk (ie. 'master' 
+                    # if no branch is specified, then assume trunk (ie. 'master'
                     # branch):
                     treeish = 'master'
                     svn_rev = rev

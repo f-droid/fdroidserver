@@ -476,7 +476,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                     iconfile = open(icondest, 'wb')
                     iconfile.write(apk.read(iconsrc))
                     iconfile.close()
-                    thisinfo['icons'][density] = iconfilename 
+                    thisinfo['icons'][density] = iconfilename
 
                 except:
                     logging.warn("Error retrieving icon file")
