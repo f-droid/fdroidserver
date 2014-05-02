@@ -154,7 +154,7 @@ def main():
         logging.critical("The only commands currently supported are 'init' and 'update'")
         sys.exit(1)
 
-    if config.get('nonstandardwebroot') == True:
+    if config.get('nonstandardwebroot') is True:
         standardwebroot = False
     else:
         standardwebroot = True
