@@ -190,6 +190,8 @@ def main():
         for line in app['Description']:
             if re.match(r'[ ]*[*#][^ .]', line):
                 warn("Invalid bulleted list: '%s'" % line)
+            if re.match(r'^ ', line):
+                warn("Unnecessary leading space: '%s'" % line)
             desc_chars += len(line)
 
         # Description size limit
