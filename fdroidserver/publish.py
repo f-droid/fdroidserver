@@ -128,35 +128,36 @@ def main():
         # See if we already have a key for this application, and
         # if not generate one...
         p = FDroidPopen(['keytool', '-list',
-            '-alias', keyalias, '-keystore', config['keystore'],
-            '-storepass:file', config['keystorepassfile']])
+                         '-alias', keyalias, '-keystore', config['keystore'],
+                         '-storepass:file', config['keystorepassfile']])
         if p.returncode != 0:
             logging.info("Key does not exist - generating...")
             p = FDroidPopen(['keytool', '-genkey',
-                '-keystore', config['keystore'], '-alias', keyalias,
-                '-keyalg', 'RSA', '-keysize', '2048',
-                '-validity', '10000',
-                '-storepass:file', config['keystorepassfile'],
-                '-keypass:file', config['keypassfile'],
-                '-dname', config['keydname']])
+                             '-keystore', config['keystore'],
+                             '-alias', keyalias,
+                             '-keyalg', 'RSA', '-keysize', '2048',
+                             '-validity', '10000',
+                             '-storepass:file', config['keystorepassfile'],
+                             '-keypass:file', config['keypassfile'],
+                             '-dname', config['keydname']])
             # TODO keypass should be sent via stdin
             if p.returncode != 0:
                 raise BuildException("Failed to generate key")
 
         # Sign the application...
         p = FDroidPopen(['jarsigner', '-keystore', config['keystore'],
-            '-storepass:file', config['keystorepassfile'],
-            '-keypass:file', config['keypassfile'], '-sigalg',
-            'MD5withRSA', '-digestalg', 'SHA1',
-                apkfile, keyalias])
+                         '-storepass:file', config['keystorepassfile'],
+                         '-keypass:file', config['keypassfile'], '-sigalg',
+                         'MD5withRSA', '-digestalg', 'SHA1',
+                         apkfile, keyalias])
         # TODO keypass should be sent via stdin
         if p.returncode != 0:
             raise BuildException("Failed to sign application")
 
         # Zipalign it...
         p = FDroidPopen([os.path.join(config['sdk_path'], 'tools', 'zipalign'),
-                            '-v', '4', apkfile,
-                            os.path.join(output_dir, apkfilename)])
+                         '-v', '4', apkfile,
+                         os.path.join(output_dir, apkfilename)])
         if p.returncode != 0:
             raise BuildException("Failed to align application")
         os.remove(apkfile)

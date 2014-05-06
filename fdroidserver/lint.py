@@ -27,97 +27,96 @@ config = None
 options = None
 
 regex_warnings = {
-        'Web Site': [
-            (re.compile(r'.*[^sS]://github\.com/.*'),
-                "github URLs should always use https:// not http://"),
-            (re.compile(r'.*[^sS]://code\.google\.com/.*'),
-                "code.google.com URLs should always use https:// not http://"),
+    'Web Site': [
+        (re.compile(r'.*[^sS]://github\.com/.*'),
+         "github URLs should always use https:// not http://"),
+        (re.compile(r'.*[^sS]://code\.google\.com/.*'),
+         "code.google.com URLs should always use https:// not http://"),
         ],
-        'Source Code': [
-            (re.compile(r'.*[^sS]://github\.com/.*'),
-                "github URLs should always use https:// (not http://, git://, or git@)"),
-            (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
-                "/source is missing"),
-            (re.compile(r'.*[^sS]://code\.google\.com/.*'),
-                "code.google.com URLs should always use https:// not http://"),
-            (re.compile(r'.*[^sS]://dl\.google\.com/.*'),
-                "dl.google.com URLs should always use https:// not http://"),
-            (re.compile(r'.*[^sS]://gitorious\.org/.*'),
-                "gitorious URLs should always use https:// (not http://, git://, or git@)"),
+    'Source Code': [
+        (re.compile(r'.*[^sS]://github\.com/.*'),
+         "github URLs should always use https:// (not http://, git://, or git@)"),
+        (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
+         "/source is missing"),
+        (re.compile(r'.*[^sS]://code\.google\.com/.*'),
+         "code.google.com URLs should always use https:// not http://"),
+        (re.compile(r'.*[^sS]://dl\.google\.com/.*'),
+         "dl.google.com URLs should always use https:// not http://"),
+        (re.compile(r'.*[^sS]://gitorious\.org/.*'),
+         "gitorious URLs should always use https:// (not http://, git://, or git@)"),
         ],
-        'Repo': [
-            (re.compile(r'.*[^sS]://code\.google\.com/.*'),
-                "code.google.com URLs should always use https:// not http://"),
-            (re.compile(r'.*[^sS]://dl\.google\.com/.*'),
-                "dl.google.com URLs should always use https:// not http://"),
-            (re.compile(r'.*[^sS]://github\.com/.*'),
-                "github URLs should always use https:// (not http://, git://, or git@)"),
-            (re.compile(r'.*[^sS]://gitorious\.org/.*'),
-                "gitorious URLs should always use https:// (not http://, git://, or git@)"),
-            (re.compile(r'.*[^sS]://[^.]*\.googlecode\.com/svn/?.*'),
-                "Google Code SVN URLs should always use https:// (not http:// or svn://)"),
-            (re.compile(r'.*[^sS]://svn\.apache\.org/repos/?.*'),
-                "Apache SVN URLs should always use https:// (not http:// or svn://)"),
-            (re.compile(r'.*[^sS]://svn\.code\.sf\.net/.*'),
-                "Sourceforge SVN URLs should always use https:// (not http:// or svn://)"),
+    'Repo': [
+        (re.compile(r'.*[^sS]://code\.google\.com/.*'),
+         "code.google.com URLs should always use https:// not http://"),
+        (re.compile(r'.*[^sS]://dl\.google\.com/.*'),
+         "dl.google.com URLs should always use https:// not http://"),
+        (re.compile(r'.*[^sS]://github\.com/.*'),
+         "github URLs should always use https:// (not http://, git://, or git@)"),
+        (re.compile(r'.*[^sS]://gitorious\.org/.*'),
+         "gitorious URLs should always use https:// (not http://, git://, or git@)"),
+        (re.compile(r'.*[^sS]://[^.]*\.googlecode\.com/svn/?.*'),
+         "Google Code SVN URLs should always use https:// (not http:// or svn://)"),
+        (re.compile(r'.*[^sS]://svn\.apache\.org/repos/?.*'),
+         "Apache SVN URLs should always use https:// (not http:// or svn://)"),
+        (re.compile(r'.*[^sS]://svn\.code\.sf\.net/.*'),
+         "Sourceforge SVN URLs should always use https:// (not http:// or svn://)"),
         ],
-        'Issue Tracker': [
-            (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
-                "/issues is missing"),
-            (re.compile(r'.*[^sS]://code\.google\.com/.*'),
-                "code.google.com URLs should always use https:// not http://"),
-            (re.compile(r'.*github\.com/[^/]+/[^/]+[/]*$'),
-                "/issues is missing"),
-            (re.compile(r'.*[^sS]://github\.com/.*'),
-                "github URLs should always use https:// not http://"),
-            (re.compile(r'.*[^sS]://gitorious\.org/.*'),
-                "gitorious URLs should always use https:// not http://"),
+    'Issue Tracker': [
+        (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
+         "/issues is missing"),
+        (re.compile(r'.*[^sS]://code\.google\.com/.*'),
+         "code.google.com URLs should always use https:// not http://"),
+        (re.compile(r'.*github\.com/[^/]+/[^/]+[/]*$'),
+         "/issues is missing"),
+        (re.compile(r'.*[^sS]://github\.com/.*'),
+         "github URLs should always use https:// not http://"),
+        (re.compile(r'.*[^sS]://gitorious\.org/.*'),
+         "gitorious URLs should always use https:// not http://"),
         ],
-        'Description': [
-            (re.compile(r'[ ]*[*#][^ .]'),
-                "Invalid bulleted list"),
-            (re.compile(r'^ '),
-                "Unnecessary leading space"),
+    'Description': [
+        (re.compile(r'[ ]*[*#][^ .]'),
+         "Invalid bulleted list"),
+        (re.compile(r'^ '),
+         "Unnecessary leading space"),
         ],
-
 }
 
 regex_pedantic = {
-        'Web Site': [
-            (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
-                "Appending .git is not necessary"),
-            (re.compile(r'.*code\.google\.com/p/[^/]+/[^w]'),
-                "Possible incorrect path appended to google code project site"),
+    'Web Site': [
+        (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
+         "Appending .git is not necessary"),
+        (re.compile(r'.*code\.google\.com/p/[^/]+/[^w]'),
+         "Possible incorrect path appended to google code project site"),
         ],
-        'Source Code': [
-            (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
-                "Appending .git is not necessary"),
-            (re.compile(r'.*code\.google\.com/p/[^/]+/source/.*'),
-                "/source is often enough on its own"),
+    'Source Code': [
+        (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
+         "Appending .git is not necessary"),
+        (re.compile(r'.*code\.google\.com/p/[^/]+/source/.*'),
+         "/source is often enough on its own"),
         ],
-        'Repo': [
-            (re.compile(r'^http://.*'),
-                "if https:// is available, use it instead of http://"),
-            (re.compile(r'^svn://.*'),
-                "if https:// is available, use it instead of svn://"),
+    'Repo': [
+        (re.compile(r'^http://.*'),
+         "if https:// is available, use it instead of http://"),
+        (re.compile(r'^svn://.*'),
+         "if https:// is available, use it instead of svn://"),
         ],
-        'Issue Tracker': [
-            (re.compile(r'.*code\.google\.com/p/[^/]+/issues/.*'),
-                "/issues is often enough on its own"),
-            (re.compile(r'.*github\.com/[^/]+/[^/]+/issues/.*'),
-                "/issues is often enough on its own"),
+    'Issue Tracker': [
+        (re.compile(r'.*code\.google\.com/p/[^/]+/issues/.*'),
+         "/issues is often enough on its own"),
+        (re.compile(r'.*github\.com/[^/]+/[^/]+/issues/.*'),
+         "/issues is often enough on its own"),
         ],
-        'Summary': [
-            (re.compile(r'.*\bandroid\b.*', re.IGNORECASE),
-                "No need to specify that the app is for Android"),
-            (re.compile(r'.*\b(app|application)\b.*', re.IGNORECASE),
-                "No need to specify that the app is... an app"),
-            (re.compile(r'.*\b(free software|open source)\b.*', re.IGNORECASE),
-                "No need to specify that the app is Free Software"),
-            (re.compile(r'.*[a-z0-9][.,!?][ $]'),
-                "Punctuation should be avoided"),
+    'Summary': [
+        (re.compile(r'.*\bandroid\b.*', re.IGNORECASE),
+         "No need to specify that the app is for Android"),
+        (re.compile(r'.*\b(app|application)\b.*', re.IGNORECASE),
+         "No need to specify that the app is... an app"),
+        (re.compile(r'.*\b(free software|open source)\b.*', re.IGNORECASE),
+         "No need to specify that the app is Free Software"),
+        (re.compile(r'.*[a-z0-9][.,!?][ $]'),
+         "Punctuation should be avoided"),
         ],
-}
+    }
 
 
 def main():
@@ -194,7 +193,6 @@ def main():
                 pwarn("Summary '%s' probably contains redundant info already in app name '%s'" % (
                     summary, name))
 
-
         # Description size limit
         desc_chars = sum(len(l) for l in app['Description'])
         if desc_chars > config['char_limits']['Description']:
@@ -212,7 +210,6 @@ def main():
                     for l in app[f]:
                         if m.match(l):
                             warn("%s at line '%s': %s" % (f, l, r))
-
 
         # Regex pedantic checks in all kinds of fields
         if options.pedantic:

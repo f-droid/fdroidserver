@@ -90,13 +90,14 @@ def main():
 
                     # Prepare the source code...
                     root_dir, _ = common.prepare_source(vcs, app, thisbuild,
-                            build_dir, srclib_dir, extlib_dir, False)
+                                                        build_dir, srclib_dir,
+                                                        extlib_dir, False)
 
                     # Do the scan...
                     buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
                     for problem in buildprobs:
-                        problems.append(problem +
-                            ' in ' + app['id'] + ' ' + thisbuild['version'])
+                        problems.append(problem + ' in ' + app['id']
+                                        + ' ' + thisbuild['version'])
 
         except BuildException as be:
             msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)

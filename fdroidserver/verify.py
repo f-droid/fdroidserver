@@ -92,11 +92,12 @@ def main():
                 os.mkdir(d)
 
             if subprocess.call(['jar', 'xf',
-                os.path.join("..", "..", unsigned_dir, apkfilename)],
-                cwd=thisdir) != 0:
+                                os.path.join("..", "..", unsigned_dir, apkfilename)],
+                               cwd=thisdir) != 0:
                 raise Exception("Failed to unpack local build of " + apkfilename)
-            if subprocess.call(['jar', 'xf', os.path.join("..", "..", remoteapk)],
-                cwd=thatdir) != 0:
+            if subprocess.call(['jar', 'xf',
+                                os.path.join("..", "..", remoteapk)],
+                               cwd=thatdir) != 0:
                 raise Exception("Failed to unpack remote build of " + apkfilename)
 
             p = FDroidPopen(['diff', '-r', 'this_apk', 'that_apk'], cwd=tmp_dir)
