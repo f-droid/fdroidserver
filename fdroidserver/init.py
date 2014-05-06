@@ -35,6 +35,7 @@ from common import FDroidPopen, BuildException
 config = {}
 options = None
 
+
 def write_to_config(key, value):
     '''write a key/value to the local config.py'''
     with open('config.py', 'r') as f:
@@ -44,6 +45,7 @@ def write_to_config(key, value):
     data = re.sub(pattern, repl, data)
     with open('config.py', 'w') as f:
         f.writelines(data)
+
 
 def disable_in_config(key, value):
     '''write a key/value to the local config.py, then comment it out'''
@@ -59,7 +61,7 @@ def disable_in_config(key, value):
 def genpassword():
     '''generate a random password for when generating keys'''
     h = hashlib.sha256()
-    h.update(os.urandom(16)) # salt
+    h.update(os.urandom(16))  # salt
     h.update(bytes(socket.getfqdn()))
     return h.digest().encode('base64').strip()
 
@@ -124,14 +126,14 @@ def main():
 
     # track down where the Android SDK is, the default is to use the path set
     # in ANDROID_HOME if that exists, otherwise None
-    if options.android_home != None:
+    if options.android_home is not None:
         test_config['sdk_path'] = options.android_home
     elif not common.test_sdk_exists(test_config):
         # if neither --android-home nor the default sdk_path exist, prompt the user
         default_sdk_path = '/opt/android-sdk'
         while not options.no_prompt:
             s = raw_input('Enter the path to the Android SDK (' + default_sdk_path + ') here:\n> ')
-            if re.match('^\s*$', s) != None:
+            if re.match('^\s*$', s) is not None:
                 test_config['sdk_path'] = default_sdk_path
             else:
                 test_config['sdk_path'] = s
@@ -211,7 +213,7 @@ def main():
     if options.distinguished_name:
         keydname = options.distinguished_name
         write_to_config('keydname', keydname)
-    if keystore == 'NONE': # we're using a smartcard
+    if keystore == 'NONE':  # we're using a smartcard
         write_to_config('repo_keyalias', '1')  # seems to be the default
         disable_in_config('keypass', 'never used with smartcard')
         write_to_config('smartcardoptions',
@@ -246,7 +248,7 @@ def main():
         password = genpassword()
         write_to_config('keystorepass', password)
         write_to_config('keypass', password)
-        if options.repo_keyalias == None:
+        if options.repo_keyalias is None:
             repo_keyalias = socket.getfqdn()
             write_to_config('repo_keyalias', repo_keyalias)
         if not options.distinguished_name:
@@ -260,7 +262,7 @@ def main():
     logging.info('  Android SDK Build Tools:\t' + os.path.dirname(aapt))
     logging.info('  Android NDK (optional):\t' + ndk_path)
     logging.info('  Keystore for signing key:\t' + keystore)
-    if repo_keyalias != None:
+    if repo_keyalias is not None:
         logging.info('  Alias for key in store:\t' + repo_keyalias)
     logging.info('\nTo complete the setup, add your APKs to "' +
           os.path.join(fdroiddir, 'repo') + '"' +

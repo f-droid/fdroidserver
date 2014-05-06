@@ -30,6 +30,7 @@ from common import FDroidPopen
 options = None
 config = None
 
+
 def devices():
     p = FDroidPopen(["adb", "devices"])
     if p.returncode != 0:
@@ -68,7 +69,7 @@ def main():
     if args:
 
         vercodes = common.read_pkg_args(args, True)
-        apks = { appid : None for appid in vercodes }
+        apks = {appid: None for appid in vercodes}
 
         # Get the signed apk with the highest vercode
         for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
@@ -86,8 +87,8 @@ def main():
 
     else:
 
-        apks = { common.apknameinfo(apkfile)[0] : apkfile for apkfile in
-                sorted(glob.glob(os.path.join(output_dir, '*.apk'))) }
+        apks = {common.apknameinfo(apkfile)[0]: apkfile for apkfile in
+                sorted(glob.glob(os.path.join(output_dir, '*.apk')))}
 
     for appid, apk in apks.iteritems():
         # Get device list each time to avoid device not found errors
@@ -97,8 +98,8 @@ def main():
         logging.info("Installing %s..." % apk)
         for dev in devs:
             logging.info("Installing %s on %s..." % (apk, dev))
-            p = FDroidPopen(["adb", "-s", dev, "install", apk ])
-            fail= ""
+            p = FDroidPopen(["adb", "-s", dev, "install", apk])
+            fail = ""
             for line in p.stdout.splitlines():
                 if line.startswith("Failure"):
                     fail = line[9:-1]
@@ -115,4 +116,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

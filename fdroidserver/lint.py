@@ -20,7 +20,8 @@
 from optparse import OptionParser
 import re
 import logging
-import common, metadata
+import common
+import metadata
 
 config = None
 options = None
@@ -118,6 +119,7 @@ regex_pedantic = {
         ],
 }
 
+
 def main():
 
     global config, options, appid, app_count, warn_count
@@ -171,7 +173,7 @@ def main():
                 lastcommit, app['Update Check Mode']))
 
         # No proper license
-        if app['License'] in ('Unknown','None',''):
+        if app['License'] in ('Unknown', 'None', ''):
             warn("License was not set")
 
         # Summary size limit
@@ -240,4 +242,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -37,8 +37,9 @@ from common import BuildException, VCSException, FDroidPopen, SilentPopen
 
 try:
     import paramiko
-except:
-    paramiko = None
+except ImportError:
+    pass
+
 
 def get_builder_vm_id():
     vd = os.path.join('builder', '.vagrant')
@@ -244,7 +245,9 @@ def release_vm():
 def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
     """Do a build on the build server."""
 
-    if not paramiko:
+    try:
+        paramiko
+    except NameError:
         raise BuildException("Paramiko is required to use the buildserver")
     if options.verbose:
         logging.getLogger("paramiko").setLevel(logging.DEBUG)

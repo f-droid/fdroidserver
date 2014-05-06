@@ -25,7 +25,9 @@ import urllib
 from optparse import OptionParser
 from ConfigParser import ConfigParser
 import logging
-import common, metadata
+import common
+import metadata
+
 
 # Get the repo type and address from the given web page. The page is scanned
 # in a rather naive manner for 'git clone xxxx', 'hg clone xxxx', etc, and
@@ -51,7 +53,7 @@ def getrepofrompage(url):
         return (repotype, repo)
 
     # Works for Google Code and BitBucket...
-    index=page.find('git clone')
+    index = page.find('git clone')
     if index != -1:
         repotype = 'git'
         repo = page[index + 10:]
@@ -63,7 +65,7 @@ def getrepofrompage(url):
         return (repotype, repo)
 
     # Google Code only...
-    index=page.find('svn checkout')
+    index = page.find('svn checkout')
     if index != -1:
         repotype = 'git-svn'
         repo = page[index + 13:]
@@ -87,6 +89,7 @@ def getrepofrompage(url):
 
 config = None
 options = None
+
 
 def main():
 
@@ -127,7 +130,7 @@ def main():
     projecttype = None
     issuetracker = None
     license = None
-    website = url #by default, we might override it
+    website = url  # by default, we might override it
     if url.startswith('git://'):
         projecttype = 'git'
         repo = url
@@ -163,7 +166,7 @@ def main():
             sys.exit(1)
     elif url.startswith('http://code.google.com/p/'):
         if not url.endswith('/'):
-            url += '/';
+            url += '/'
         projecttype = 'googlecode'
         sourcecode = url + 'source/checkout'
         if options.repo:
@@ -305,4 +308,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

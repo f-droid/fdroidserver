@@ -17,7 +17,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, sys, re
+import os
+import sys
+import re
 import shutil
 import glob
 import stat
@@ -33,6 +35,7 @@ import metadata
 
 config = None
 options = None
+
 
 def get_default_config():
     return {
@@ -50,11 +53,12 @@ def get_default_config():
         'keystore': '$HOME/.local/share/fdroidserver/keystore.jks',
         'smartcardoptions': [],
         'char_limits': {
-            'Summary' : 50,
-            'Description' : 1500
+            'Summary': 50,
+            'Description': 1500
         },
-        'keyaliases': { },
+        'keyaliases': {},
     }
+
 
 def read_config(opts, config_file='config.py'):
     """Read the repository config
@@ -120,8 +124,9 @@ def read_config(opts, config_file='config.py'):
 
     return config
 
+
 def test_sdk_exists(c):
-    if c['sdk_path'] == None:
+    if c['sdk_path'] is None:
         # c['sdk_path'] is set to the value of ANDROID_HOME by default
         logging.critical('No Android SDK found! ANDROID_HOME is not set and sdk_path is not in config.py!')
         logging.info('You can use ANDROID_HOME to set the path to your SDK, i.e.:')
@@ -138,6 +143,7 @@ def test_sdk_exists(c):
         return False
     return True
 
+
 def write_password_file(pwtype, password=None):
     '''
     writes out passwords to a protected file instead of passing passwords as
@@ -145,12 +151,13 @@ def write_password_file(pwtype, password=None):
     '''
     filename = '.fdroid.' + pwtype + '.txt'
     fd = os.open(filename, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0600)
-    if password == None:
+    if password is None:
         os.write(fd, config[pwtype])
     else:
         os.write(fd, password)
     os.close(fd)
     config[pwtype + 'file'] = filename
+
 
 # Given the arguments in the form of multiple appid:[vc] strings, this returns
 # a dictionary with the set of vercodes specified for each package.
@@ -172,6 +179,7 @@ def read_pkg_args(args, allow_vercodes=False):
             vercodes[package] += [vercode] if vercode else []
 
     return vercodes
+
 
 # On top of what read_pkg_args does, this returns the whole app metadata, but
 # limiting the builds list to the builds matching the vercodes specified.
@@ -211,12 +219,14 @@ def read_app_args(args, allapps, allow_vercodes=False):
 
     return apps
 
+
 def has_extension(filename, extension):
     name, ext = os.path.splitext(filename)
     ext = ext.lower()[1:]
     return ext == extension
 
 apk_regex = None
+
 
 def apknameinfo(filename):
     global apk_regex
@@ -230,11 +240,14 @@ def apknameinfo(filename):
         raise Exception("Invalid apk name: %s" % filename)
     return result
 
+
 def getapkname(app, build):
     return "%s_%s.apk" % (app['id'], build['vercode'])
 
+
 def getsrcname(app, build):
     return "%s_%s_src.tar.gz" % (app['id'], build['vercode'])
+
 
 def getappname(app):
     if app['Name']:
@@ -243,8 +256,10 @@ def getappname(app):
         return app['Auto Name']
     return app['id']
 
+
 def getcvname(app):
     return '%s (%s)' % (app['Current Version'], app['Current Version Code'])
+
 
 def getvcs(vcstype, remote, local):
     if vcstype == 'git':
@@ -263,11 +278,13 @@ def getvcs(vcstype, remote, local):
         return getsrclib(remote, 'build/srclib', raw=True)
     raise VCSException("Invalid vcs type " + vcstype)
 
+
 def getsrclibvcs(name):
     srclib_path = os.path.join('srclibs', name + ".txt")
     if not os.path.exists(srclib_path):
         raise VCSException("Missing srclib " + name)
     return metadata.parse_srclib(srclib_path)['Repo Type']
+
 
 class vcs:
     def __init__(self, remote, local):
@@ -353,6 +370,7 @@ class vcs:
     # revision, or None.
     def getsrclib(self):
         return self.srclib
+
 
 class vcs_git(vcs):
 
@@ -527,7 +545,7 @@ class vcs_gitsvn(vcs):
                     svn_rev = rev_split[1]
 
                 else:
-                    # if no branch is specified, then assume trunk (ie. 'master' 
+                    # if no branch is specified, then assume trunk (ie. 'master'
                     # branch):
                     treeish = 'master'
                     svn_rev = rev
@@ -561,6 +579,7 @@ class vcs_gitsvn(vcs):
         if p.returncode != 0:
             return None
         return p.stdout.strip()
+
 
 class vcs_svn(vcs):
 
@@ -603,6 +622,7 @@ class vcs_svn(vcs):
             if line and line.startswith('Last Changed Rev: '):
                 return line[18:]
         return None
+
 
 class vcs_hg(vcs):
 
@@ -676,6 +696,7 @@ class vcs_bzr(vcs):
         return [tag.split('   ')[0].strip() for tag in
                 p.stdout.splitlines()]
 
+
 def retrieve_string(app_dir, string, xmlfiles=None):
 
     res_dirs = [
@@ -686,9 +707,9 @@ def retrieve_string(app_dir, string, xmlfiles=None):
     if xmlfiles is None:
         xmlfiles = []
         for res_dir in res_dirs:
-            for r,d,f in os.walk(res_dir):
+            for r, d, f in os.walk(res_dir):
                 if r.endswith('/values'):
-                    xmlfiles += [os.path.join(r,x) for x in f if x.endswith('.xml')]
+                    xmlfiles += [os.path.join(r, x) for x in f if x.endswith('.xml')]
 
     string_search = None
     if string.startswith('@string/'):
@@ -704,21 +725,23 @@ def retrieve_string(app_dir, string, xmlfiles=None):
                     return retrieve_string(app_dir, matches.group(1), xmlfiles)
         return None
 
-    return string.replace("\\'","'")
+    return string.replace("\\'", "'")
+
 
 # Return list of existing files that will be used to find the highest vercode
 def manifest_paths(app_dir, flavour):
 
-    possible_manifests = [ os.path.join(app_dir, 'AndroidManifest.xml'),
+    possible_manifests = [os.path.join(app_dir, 'AndroidManifest.xml'),
             os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml'),
             os.path.join(app_dir, 'src', 'AndroidManifest.xml'),
-            os.path.join(app_dir, 'build.gradle') ]
+            os.path.join(app_dir, 'build.gradle')]
 
     if flavour:
         possible_manifests.append(
                 os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml'))
 
     return [path for path in possible_manifests if os.path.isfile(path)]
+
 
 # Retrieve the package name. Returns the name, or None if not found.
 def fetch_real_name(app_dir, flavour):
@@ -744,6 +767,7 @@ def fetch_real_name(app_dir, flavour):
                     return result
     return None
 
+
 # Retrieve the version name
 def version_name(original, app_dir, flavour):
     for f in manifest_paths(app_dir, flavour):
@@ -753,6 +777,7 @@ def version_name(original, app_dir, flavour):
         if string:
             return string
     return original
+
 
 def get_library_references(root_dir):
     libraries = []
@@ -771,15 +796,17 @@ def get_library_references(root_dir):
             libraries.append(path)
     return libraries
 
+
 def ant_subprojects(root_dir):
     subprojects = get_library_references(root_dir)
     for subpath in subprojects:
         subrelpath = os.path.join(root_dir, subpath)
         for p in get_library_references(subrelpath):
-            relp = os.path.normpath(os.path.join(subpath,p))
+            relp = os.path.normpath(os.path.join(subpath, p))
             if relp not in subprojects:
                 subprojects.insert(0, relp)
     return subprojects
+
 
 def remove_debuggable_flags(root_dir):
     # Remove forced debuggable flags
@@ -787,9 +814,10 @@ def remove_debuggable_flags(root_dir):
     for root, dirs, files in os.walk(root_dir):
         if 'AndroidManifest.xml' in files:
             path = os.path.join(root, 'AndroidManifest.xml')
-            p = FDroidPopen(['sed','-i', 's/android:debuggable="[^"]*"//g', path])
+            p = FDroidPopen(['sed', '-i', 's/android:debuggable="[^"]*"//g', path])
             if p.returncode != 0:
                 raise BuildException("Failed to remove debuggable flags of %s" % path)
+
 
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
@@ -856,8 +884,9 @@ def parse_androidmanifests(paths):
 
     return (max_version, max_vercode, max_package)
 
+
 class BuildException(Exception):
-    def __init__(self, value, detail = None):
+    def __init__(self, value, detail=None):
         self.value = value
         self.detail = detail
 
@@ -877,12 +906,14 @@ class BuildException(Exception):
             ret += "\n==== detail begin ====\n%s\n==== detail end ====" % self.detail.strip()
         return ret
 
+
 class VCSException(Exception):
     def __init__(self, value):
         self.value = value
 
     def __str__(self):
         return repr(self.value)
+
 
 # Get the specified source library.
 # Returns the path to it. Normally this is the path to be used when referencing
@@ -901,7 +932,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
         if ':' in name:
             number, name = name.split(':', 1)
         if '/' in name:
-            name, subdir = name.split('/',1)
+            name, subdir = name.split('/', 1)
 
     srclib_path = os.path.join('srclibs', name + ".txt")
 
@@ -936,7 +967,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
 
     if srclib["Srclibs"]:
         n = 1
-        for lib in srclib["Srclibs"].replace(';',',').split(','):
+        for lib in srclib["Srclibs"].replace(';', ',').split(','):
             s_tuple = None
             for t in srclibpaths:
                 if t[0] == lib:
@@ -1040,9 +1071,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         srclibpaths.append(basesrclib)
 
     # Update the local.properties file
-    localprops = [ os.path.join(build_dir, 'local.properties') ]
+    localprops = [os.path.join(build_dir, 'local.properties')]
     if 'subdir' in build:
-        localprops += [ os.path.join(root_dir, 'local.properties') ]
+        localprops += [os.path.join(root_dir, 'local.properties')]
     for path in localprops:
         if not os.path.isfile(path):
             continue
@@ -1055,7 +1086,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         # from sdk.dir, if necessary
         if build['oldsdkloc']:
             sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
-                re.S|re.M).group(1)
+                re.S | re.M).group(1)
             props += "sdk-location=%s\n" % sdkloc
         else:
             props += "sdk.dir=%s\n" % config['sdk_path']
@@ -1083,7 +1114,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 's@compileSdkVersion *[0-9]*@compileSdkVersion '+n+'@g',
                 'build.gradle'], cwd=root_dir)
             if '@' in build['gradle']:
-                gradle_dir = os.path.join(root_dir, build['gradle'].split('@',1)[1])
+                gradle_dir = os.path.join(root_dir, build['gradle'].split('@', 1)[1])
                 gradle_dir = os.path.normpath(gradle_dir)
                 FDroidPopen(['sed', '-i',
                     's@compileSdkVersion *[0-9]*@compileSdkVersion '+n+'@g',
@@ -1210,6 +1241,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     return (root_dir, srclibpaths)
 
+
 # Split and extend via globbing the paths from a field
 def getpaths(build_dir, build, field):
     paths = []
@@ -1221,6 +1253,7 @@ def getpaths(build_dir, build, field):
         full_path = os.path.normpath(full_path)
         paths += [r[len(build_dir)+1:] for r in glob.glob(full_path)]
     return paths
+
 
 # Scan the source code in the given directory (and all subdirectories)
 # and return the number of fatal problems encountered
@@ -1286,7 +1319,7 @@ def scan_source(build_dir, root_dir, thisbuild):
         return path.endswith('/%s' % dirname) or '/%s/' % dirname in path
 
     # Iterate through all files in the source code
-    for r,d,f in os.walk(build_dir):
+    for r, d, f in os.walk(build_dir):
 
         if any(insidedir(r, d) for d in ('.hg', '.git', '.svn', '.bzr')):
             continue
@@ -1364,7 +1397,7 @@ class KnownApks:
         self.path = os.path.join('stats', 'known_apks.txt')
         self.apks = {}
         if os.path.exists(self.path):
-            for line in file( self.path):
+            for line in file(self.path):
                 t = line.rstrip().split(' ')
                 if len(t) == 2:
                     self.apks[t[0]] = (t[1], None)
@@ -1417,9 +1450,10 @@ class KnownApks:
                 else:
                     apps[appid] = added
         sortedapps = sorted(apps.iteritems(), key=operator.itemgetter(1))[-num:]
-        lst = [app for app,_ in sortedapps]
+        lst = [app for app, _ in sortedapps]
         lst.reverse()
         return lst
+
 
 def isApkDebuggable(apkfile, config):
     """Returns True if the given apk file is debuggable
@@ -1461,12 +1495,15 @@ class AsynchronousFileReader(threading.Thread):
         '''Check whether there is no more content to expect.'''
         return not self.is_alive() and self._queue.empty()
 
+
 class PopenResult:
     returncode = None
     stdout = ''
 
+
 def SilentPopen(commands, cwd=None, shell=False):
     return FDroidPopen(commands, cwd=cwd, shell=shell, output=False)
+
 
 def FDroidPopen(commands, cwd=None, shell=False, output=True):
     """
@@ -1506,6 +1543,7 @@ def FDroidPopen(commands, cwd=None, shell=False, output=True):
     p.communicate()
     result.returncode = p.returncode
     return result
+
 
 def remove_signing_keys(build_dir):
     comment = re.compile(r'[ ]*//')
@@ -1566,13 +1604,15 @@ def remove_signing_keys(build_dir):
                             continue
                         o.write(line)
 
-                logging.info("Cleaned %s of keysigning configs at %s" % (propfile,path))
+                logging.info("Cleaned %s of keysigning configs at %s" % (propfile, path))
+
 
 def replace_config_vars(cmd):
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
     cmd = cmd.replace('$$NDK$$', config['ndk_path'])
     cmd = cmd.replace('$$MVN3$$', config['mvn3'])
     return cmd
+
 
 def place_srclib(root_dir, number, libpath):
     if not number:
@@ -1589,10 +1629,9 @@ def place_srclib(root_dir, number, libpath):
         placed = False
         for line in lines:
             if line.startswith('android.library.reference.%d=' % number):
-                o.write('android.library.reference.%d=%s\n' % (number,relpath))
+                o.write('android.library.reference.%d=%s\n' % (number, relpath))
                 placed = True
             else:
                 o.write(line)
         if not placed:
-            o.write('android.library.reference.%d=%s\n' % (number,relpath))
-
+            o.write('android.library.reference.%d=%s\n' % (number, relpath))

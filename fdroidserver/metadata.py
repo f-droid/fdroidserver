@@ -17,9 +17,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, re, glob
+import os
+import re
+import glob
 import cgi
 import logging
+
 
 class MetaDataException(Exception):
     def __init__(self, value):
@@ -120,66 +123,67 @@ class FieldType():
 
 # Generic value types
 valuetypes = {
-    'int' : FieldType("Integer",
+    'int': FieldType("Integer",
         r'^[1-9][0-9]*$', None,
-        [ 'FlattrID' ],
-        [ 'vercode' ]),
+        ['FlattrID'],
+        ['vercode']),
 
-    'http' : FieldType("HTTP link",
+    'http': FieldType("HTTP link",
         r'^http[s]?://', None,
-        [ "Web Site", "Source Code", "Issue Tracker", "Donate" ], []),
+        ["Web Site", "Source Code", "Issue Tracker", "Donate"], []),
 
-    'bitcoin' : FieldType("Bitcoin address",
+    'bitcoin': FieldType("Bitcoin address",
         r'^[a-zA-Z0-9]{27,34}$', None,
-        [ "Bitcoin" ],
-        [ ]),
+        ["Bitcoin"],
+        []),
 
-    'litecoin' : FieldType("Litecoin address",
+    'litecoin': FieldType("Litecoin address",
         r'^L[a-zA-Z0-9]{33}$', None,
-        [ "Litecoin" ],
-        [ ]),
+        ["Litecoin"],
+        []),
 
-    'dogecoin' : FieldType("Dogecoin address",
+    'dogecoin': FieldType("Dogecoin address",
         r'^D[a-zA-Z0-9]{33}$', None,
-        [ "Dogecoin" ],
-        [ ]),
+        ["Dogecoin"],
+        []),
 
-    'Bool' : FieldType("Boolean",
+    'Bool': FieldType("Boolean",
         ['Yes', 'No'], None,
-        [ "Requires Root" ],
-        [ ]),
+        ["Requires Root"],
+        []),
 
-    'bool' : FieldType("Boolean",
+    'bool': FieldType("Boolean",
         ['yes', 'no'], None,
-        [ ],
-        [ 'submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
-            'novcheck' ]),
+        [],
+        ['submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
+            'novcheck']),
 
-    'Repo Type' : FieldType("Repo Type",
-        [ 'git', 'git-svn', 'svn', 'hg', 'bzr', 'srclib' ], None,
-        [ "Repo Type" ],
-        [ ]),
+    'Repo Type': FieldType("Repo Type",
+        ['git', 'git-svn', 'svn', 'hg', 'bzr', 'srclib'], None,
+        ["Repo Type"],
+        []),
 
-    'archive' : FieldType("Archive Policy",
+    'archive': FieldType("Archive Policy",
         r'^[0-9]+ versions$', None,
-        [ "Archive Policy" ],
-        [ ]),
+        ["Archive Policy"],
+        []),
 
-    'antifeatures' : FieldType("Anti-Feature",
-        [ "Ads", "Tracking", "NonFreeNet", "NonFreeDep", "NonFreeAdd", "UpstreamNonFree" ], ',',
-        [ "AntiFeatures" ],
-        [ ]),
+    'antifeatures': FieldType("Anti-Feature",
+        ["Ads", "Tracking", "NonFreeNet", "NonFreeDep", "NonFreeAdd", "UpstreamNonFree"], ',',
+        ["AntiFeatures"],
+        []),
 
-    'autoupdatemodes' : FieldType("Auto Update Mode",
+    'autoupdatemodes': FieldType("Auto Update Mode",
         r"^(Version .+|None)$", None,
-        [ "Auto Update Mode" ],
-        [ ]),
+        ["Auto Update Mode"],
+        []),
 
-    'updatecheckmodes' : FieldType("Update Check Mode",
+    'updatecheckmodes': FieldType("Update Check Mode",
         r"^(Tags|Tags .+|RepoManifest|RepoManifest/.+|RepoTrunk|HTTP|Static|None)$", None,
-        [ "Update Check Mode" ],
-        [ ])
+        ["Update Check Mode"],
+        [])
 }
+
 
 # Check an app's metadata information for integrity errors
 def check_metadata(info):
@@ -198,6 +202,7 @@ def check_metadata(info):
                 elif k == 'bool':
                     build[attr] = False
 
+
 # Formatter for descriptions. Create an instance, and call parseline() with
 # each line of the description source from the metadata. At the end, call
 # end() and then text_plain, text_wiki and text_html will contain the result.
@@ -213,8 +218,10 @@ class DescriptionFormatter:
     text_wiki = ''
     text_html = ''
     linkResolver = None
+
     def __init__(self, linkres):
         self.linkResolver = linkres
+
     def endcur(self, notstates=None):
         if notstates and self.state in notstates:
             return
@@ -224,13 +231,16 @@ class DescriptionFormatter:
             self.endul()
         elif self.state == self.stOL:
             self.endol()
+
     def endpara(self):
         self.text_plain += '\n'
         self.text_html += '</p>'
         self.state = self.stNONE
+
     def endul(self):
         self.text_html += '</ul>'
         self.state = self.stNONE
+
     def endol(self):
         self.text_html += '</ol>'
         self.state = self.stNONE
@@ -261,7 +271,6 @@ class DescriptionFormatter:
                         formatted += '<i>'
                 self.ital = not self.ital
                 txt = txt[2:]
-
 
     def linkify(self, txt):
         linkified_plain = ''
@@ -326,7 +335,7 @@ class DescriptionFormatter:
                 self.text_html += '<ol>'
                 self.state = self.stOL
             self.text_html += '<li>'
-            self.text_plain += '* ' #TODO: lazy - put the numbers in!
+            self.text_plain += '* '  # TODO: lazy - put the numbers in!
             self.addtext(line[1:])
             self.text_html += '</li>'
         else:
@@ -342,6 +351,7 @@ class DescriptionFormatter:
     def end(self):
         self.endcur()
 
+
 # Parse multiple lines of description as written in a metadata file, returning
 # a single string in plain text format.
 def description_plain(lines, linkres):
@@ -350,6 +360,7 @@ def description_plain(lines, linkres):
         ps.parseline(line)
     ps.end()
     return ps.text_plain
+
 
 # Parse multiple lines of description as written in a metadata file, returning
 # a single string in wiki format. Used for the Maintainer Notes field as well,
@@ -361,14 +372,16 @@ def description_wiki(lines):
     ps.end()
     return ps.text_wiki
 
+
 # Parse multiple lines of description as written in a metadata file, returning
 # a single string in HTML format.
-def description_html(lines,linkres):
+def description_html(lines, linkres):
     ps = DescriptionFormatter(linkres)
     for line in lines:
         ps.parseline(line)
     ps.end()
     return ps.text_html
+
 
 def parse_srclib(metafile, **kw):
 
@@ -394,7 +407,7 @@ def parse_srclib(metafile, **kw):
             continue
 
         try:
-            field, value = line.split(':',1)
+            field, value = line.split(':', 1)
         except ValueError:
             raise MetaDataException("Invalid metadata in %s:%d" % (line, n))
 
@@ -404,6 +417,7 @@ def parse_srclib(metafile, **kw):
             thisinfo[field] = value
 
     return thisinfo
+
 
 # Read all metadata. Returns a list of 'app' objects (which are dictionaries as
 # returned by the parse_metadata function.
@@ -437,6 +451,7 @@ def read_metadata(xref=True, package=None, store=True):
 
     return apps
 
+
 # Get the type expected for a given metadata field.
 def metafieldtype(name):
     if name in ['Description', 'Maintainer Notes']:
@@ -453,6 +468,7 @@ def metafieldtype(name):
         return 'unknown'
     return 'string'
 
+
 def flagtype(name):
     if name in ['extlibs', 'srclibs', 'patch', 'rm', 'buildjni',
             'update', 'scanignore', 'scandelete']:
@@ -460,6 +476,7 @@ def flagtype(name):
     if name in ['init', 'prebuild', 'build']:
         return 'script'
     return 'string'
+
 
 # Parse metadata for a single application.
 #
@@ -507,7 +524,7 @@ def parse_metadata(metafile):
         t = flagtype(pk)
         if t == 'list':
             # Port legacy ';' separators
-            thisbuild[pk] = [v.strip() for v in pv.replace(';',',').split(',')]
+            thisbuild[pk] = [v.strip() for v in pv.replace(';', ',').split(',')]
         elif t == 'string':
             thisbuild[pk] = pv
         elif t == 'script':
@@ -610,7 +627,7 @@ def parse_metadata(metafile):
                 curcomments.append(line)
                 continue
             try:
-                field, value = line.split(':',1)
+                field, value = line.split(':', 1)
             except ValueError:
                 raise MetaDataException("Invalid metadata in "+linedesc)
             if field != field.strip() or value != value.strip():
@@ -633,7 +650,7 @@ def parse_metadata(metafile):
             elif fieldtype == 'string':
                 thisinfo[field] = value
             elif fieldtype == 'list':
-                thisinfo[field] = [v.strip() for v in value.replace(';',',').split(',')]
+                thisinfo[field] = [v.strip() for v in value.replace(';', ',').split(',')]
             elif fieldtype == 'build':
                 if value.endswith("\\"):
                     mode = 2
@@ -686,6 +703,7 @@ def parse_metadata(metafile):
         build['type'] = get_build_type(build)
 
     return thisinfo
+
 
 # Write a metadata file.
 #
@@ -753,7 +771,7 @@ def write_metadata(dest, app):
         mf.write('\n')
     for build in app['builds']:
         writecomments('build:' + build['version'])
-        mf.write("Build:%s,%s\n" % ( build['version'], build['vercode']))
+        mf.write("Build:%s,%s\n" % (build['version'], build['vercode']))
 
         def write_builditem(key, value):
             if key in ['version', 'vercode', 'origlines', 'type']:
@@ -786,7 +804,6 @@ def write_metadata(dest, app):
         mf.write('.\n')
         mf.write('\n')
 
-
     if app['Archive Policy']:
         writefield('Archive Policy')
     writefield('Auto Update Mode')
@@ -804,5 +821,3 @@ def write_metadata(dest, app):
         mf.write('\n')
     writecomments(None)
     mf.close()
-
-

@@ -38,13 +38,15 @@ commands = {
         "server": "Interact with the repo HTTP server",
         }
 
+
 def print_help():
     print "usage: fdroid [-h|--help] <command> [<args>]"
     print
     print "Valid commands are:"
-    for cmd,summary in commands.items():
+    for cmd, summary in commands.items():
         print "   " + cmd + ' '*(15-len(cmd)) + summary
     print
+
 
 def main():
 
@@ -85,4 +87,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

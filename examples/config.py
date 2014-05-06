@@ -141,6 +141,6 @@ build_server_always = False
 # Limit in number of characters that fields can take up
 # Only the fields listed here are supported, defaults shown
 char_limits = {
-    'Summary' : 50,
-    'Description' : 1500
+    'Summary': 50,
+    'Description': 1500
 }

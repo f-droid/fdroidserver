@@ -31,6 +31,7 @@ from common import FDroidPopen
 options = None
 config = None
 
+
 def main():
 
     global options, config
@@ -116,5 +117,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

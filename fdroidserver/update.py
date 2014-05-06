@@ -32,28 +32,35 @@ import time
 from PIL import Image
 import logging
 
-import common, metadata
+import common
+import metadata
 from common import FDroidPopen
 from metadata import MetaDataException
+
 
 def get_densities():
     return ['640', '480', '320', '240', '160', '120']
 
+
 def dpi_to_px(density):
     return (int(density) * 48) / 160
 
+
 def px_to_dpi(px):
     return (int(px) * 160) / 48
+
 
 def get_icon_dir(repodir, density):
     if density is None:
         return os.path.join(repodir, "icons")
     return os.path.join(repodir, "icons-%s" % density)
 
+
 def get_icon_dirs(repodir):
     for density in get_densities():
         yield get_icon_dir(repodir, density)
     yield os.path.join(repodir, "icons")
+
 
 def update_wiki(apps, apks):
     """Update the wiki
@@ -77,7 +84,7 @@ def update_wiki(apps, apks):
         if app['AntiFeatures']:
             for af in app['AntiFeatures'].split(','):
                 wikidata += '{{AntiFeature|' + af + '}}\n'
-        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|dogecoin=%s|license=%s|root=%s}}\n'%(
+        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|dogecoin=%s|license=%s|root=%s}}\n' % (
                 app['id'],
                 app['Name'],
                 time.strftime('%Y-%m-%d', app['added']) if 'added' in app else '',
@@ -256,6 +263,7 @@ def update_wiki(apps, apks):
     # Purge server cache to ensure counts are up to date
     site.pages['Repository Maintenance'].purge()
 
+
 def delete_disabled_builds(apps, apkcache, repodirs):
     """Delete disabled build outputs.
 
@@ -277,6 +285,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
                 if apkfilename in apkcache:
                     del apkcache[apkfilename]
 
+
 def resize_icon(iconpath, density):
 
     if not os.path.isfile(iconpath):
@@ -296,8 +305,9 @@ def resize_icon(iconpath, density):
         else:
             logging.info("%s is small enough: %s" % im.size)
 
-    except Exception,e:
+    except Exception, e:
         logging.error("Failed resizing {0} - {1}".format(iconpath, e))
+
 
 def resize_all_icons(repodirs):
     """Resize all icons that exceed the max size
@@ -310,6 +320,7 @@ def resize_all_icons(repodirs):
             icon_glob = os.path.join(icon_dir, '*.png')
             for iconpath in glob.glob(icon_glob):
                 resize_icon(iconpath, density)
+
 
 def scan_apks(apps, apkcache, repodir, knownapks):
     """Scan the apks in the given repo directory.
@@ -476,7 +487,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                     iconfile = open(icondest, 'wb')
                     iconfile.write(apk.read(iconsrc))
                     iconfile.close()
-                    thisinfo['icons'][density] = iconfilename 
+                    thisinfo['icons'][density] = iconfilename
 
                 except:
                     logging.warn("Error retrieving icon file")
@@ -503,7 +514,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                                     os.path.join(get_icon_dir(repodir, density), iconfilename))
                             empty_densities.remove(density)
                             break
-                except Exception,e:
+                except Exception, e:
                     logging.warn("Failed reading {0} - {1}".format(iconpath, e))
 
             if thisinfo['icons']:
@@ -581,6 +592,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
 repo_pubkey_fingerprint = None
 
+
 def make_index(apps, apks, repodir, archive, categories):
     """Make a repo index.
 
@@ -598,6 +610,7 @@ def make_index(apps, apks, repodir, archive, categories):
         el = doc.createElement(name)
         el.appendChild(doc.createTextNode(value))
         parent.appendChild(el)
+
     def addElementCDATA(name, value, doc, parent):
         el = doc.createElement(name)
         el.appendChild(doc.createCDATASection(value))
@@ -684,6 +697,7 @@ def make_index(apps, apks, repodir, archive, categories):
         addElement('summary', app['Summary'], doc, apel)
         if app['icon']:
             addElement('icon', app['icon'], doc, apel)
+
         def linkres(link):
             for app in apps:
                 if app['id'] == link:
@@ -813,7 +827,7 @@ def make_index(apps, apks, repodir, archive, categories):
             sys.exit(1)
 
     # Copy the repo icon into the repo directory...
-    icon_dir = os.path.join(repodir ,'icons')
+    icon_dir = os.path.join(repodir, 'icons')
     iconfilename = os.path.join(icon_dir, os.path.basename(config['repo_icon']))
     shutil.copyfile(config['repo_icon'], iconfilename)
 
@@ -824,7 +838,6 @@ def make_index(apps, apks, repodir, archive, categories):
     f = open(os.path.join(repodir, 'categories.txt'), 'w')
     f.write(catdata)
     f.close()
-
 
 
 def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversions):
@@ -860,6 +873,7 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
 config = None
 options = None
 
+
 def main():
 
     global config, options
@@ -879,7 +893,7 @@ def main():
     parser.add_option("-I", "--icons", action="store_true", default=False,
                       help="Resize all the icons exceeding the max pixel size and exit")
     parser.add_option("-e", "--editor", default="/etc/alternatives/editor",
-                      help="Specify editor to use in interactive mode. Default "+
+                      help="Specify editor to use in interactive mode. Default " +
                           "is /etc/alternatives/editor")
     parser.add_option("-w", "--wiki", default=False, action="store_true",
                       help="Update the wiki")
@@ -1055,4 +1069,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

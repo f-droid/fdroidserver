@@ -30,7 +30,8 @@ import HTMLParser
 from distutils.version import LooseVersion
 import logging
 
-import common, metadata
+import common
+import metadata
 from common import BuildException
 from common import VCSException
 from metadata import MetaDataException
@@ -78,6 +79,7 @@ def check_http(app):
     except Exception:
         msg = "Could not complete http check for app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
         return (None, msg)
+
 
 # Check for a new version by looking at the tags in the source repo.
 # Whether this can be used reliably or not depends on
@@ -157,6 +159,7 @@ def check_tags(app, pattern):
         msg = "Could not scan app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
         return (None, msg, None)
 
+
 # Check for a new version by looking at the AndroidManifest.xml at the HEAD
 # of the source repo. Whether this can be used reliably or not depends on
 # the development procedures used by the project's developers. Use it with
@@ -212,9 +215,9 @@ def check_repomanifest(app, branch=None):
         if package != appid:
             return (None, "Package ID mismatch")
         if not version:
-            return (None,"Couldn't find latest version name")
+            return (None, "Couldn't find latest version name")
         if not vercode:
-            return (None,"Couldn't find latest version code")
+            return (None, "Couldn't find latest version code")
 
         vercode = str(int(vercode))
 
@@ -231,6 +234,7 @@ def check_repomanifest(app, branch=None):
     except Exception:
         msg = "Could not scan app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
         return (None, msg)
+
 
 def check_repotrunk(app, branch=None):
 
@@ -262,13 +266,14 @@ def check_repotrunk(app, branch=None):
         msg = "Could not scan app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
         return (None, msg)
 
+
 # Check for a new version by looking at the Google Play Store.
 # Returns (None, "a message") if this didn't work, or (version, None) for
 # the details of the current version.
 def check_gplay(app):
     time.sleep(15)
     url = 'https://play.google.com/store/apps/details?id=' + app['id']
-    headers = {'User-Agent' : 'Mozilla/5.0 (X11; Linux i686; rv:18.0) Gecko/20100101 Firefox/18.0'}
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux i686; rv:18.0) Gecko/20100101 Firefox/18.0'}
     req = urllib2.Request(url, None, headers)
     try:
         resp = urllib2.urlopen(req, None, 20)
@@ -295,6 +300,7 @@ def check_gplay(app):
 
 config = None
 options = None
+
 
 def main():
 
@@ -347,7 +353,6 @@ def main():
                         logging.info("{0} has the same version {1} on the Play Store".format(
                                 common.getappname(app), version))
         return
-
 
     for app in apps:
 
@@ -515,4 +520,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

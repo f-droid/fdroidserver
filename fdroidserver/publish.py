@@ -26,11 +26,13 @@ import glob
 from optparse import OptionParser
 import logging
 
-import common, metadata
+import common
+import metadata
 from common import FDroidPopen, BuildException
 
 config = None
 options = None
+
 
 def main():
 
@@ -128,7 +130,7 @@ def main():
         p = FDroidPopen(['keytool', '-list',
             '-alias', keyalias, '-keystore', config['keystore'],
             '-storepass:file', config['keystorepassfile']])
-        if p.returncode !=0:
+        if p.returncode != 0:
             logging.info("Key does not exist - generating...")
             p = FDroidPopen(['keytool', '-genkey',
                 '-keystore', config['keystore'], '-alias', keyalias,
@@ -152,7 +154,7 @@ def main():
             raise BuildException("Failed to sign application")
 
         # Zipalign it...
-        p = FDroidPopen([os.path.join(config['sdk_path'],'tools','zipalign'),
+        p = FDroidPopen([os.path.join(config['sdk_path'], 'tools', 'zipalign'),
                             '-v', '4', apkfile,
                             os.path.join(output_dir, apkfilename)])
         if p.returncode != 0:
@@ -170,4 +172,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

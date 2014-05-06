@@ -28,6 +28,7 @@ import common
 config = None
 options = None
 
+
 def update_awsbucket(repo_section):
     '''
     Upload the contents of the directory `repo_section` (including
@@ -91,7 +92,7 @@ def update_awsbucket(repo_section):
             if upload:
                 if options.verbose:
                     logging.info(' uploading "' + file_to_upload + '"...')
-                extra = { 'acl': 'public-read' }
+                extra = {'acl': 'public-read'}
                 if file_to_upload.endswith('.sig'):
                     extra['content_type'] = 'application/pgp-signature'
                 elif file_to_upload.endswith('.asc'):
@@ -113,6 +114,7 @@ def update_awsbucket(repo_section):
         else:
             logging.info(' skipping ' + s3url)
 
+
 def update_serverwebroot(repo_section):
     rsyncargs = ['rsync', '-u', '-r', '--delete']
     if options.verbose:
@@ -132,6 +134,7 @@ def update_serverwebroot(repo_section):
     if subprocess.call(rsyncargs +
                        [indexjar, config['serverwebroot'] + repo_section]) != 0:
         sys.exit(1)
+
 
 def main():
     global config, options
@@ -154,7 +157,7 @@ def main():
         logging.critical("The only commands currently supported are 'init' and 'update'")
         sys.exit(1)
 
-    if config.get('nonstandardwebroot') == True:
+    if config.get('nonstandardwebroot') is True:
         standardwebroot = False
     else:
         standardwebroot = True

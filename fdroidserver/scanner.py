@@ -22,12 +22,14 @@ import traceback
 from optparse import OptionParser
 import logging
 
-import common, metadata
+import common
+import metadata
 from common import BuildException
 from common import VCSException
 
 config = None
 options = None
+
 
 def main():
 
@@ -113,4 +115,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
