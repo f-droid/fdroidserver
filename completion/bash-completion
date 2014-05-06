@@ -111,8 +111,8 @@ __complete_build() {
 }
 
 __complete_install() {
-	opts="-h -v"
-	lopts="--help --verbose --all"
+	opts="-h -v -q"
+	lopts="--help --verbose --quiet --all"
 	case "${cur}" in
 		-*)
 			__complete_options
@@ -139,8 +139,8 @@ __complete_update() {
 }
 
 __complete_publish() {
-	opts="-h -v"
-	lopts="--help --verbose"
+	opts="-h -v -q"
+	lopts="--help --verbose --quiet"
 	case "${cur}" in
 		-*)
 			__complete_options
@@ -155,8 +155,8 @@ __complete_publish() {
 }
 
 __complete_checkupdates() {
-	opts="-h -v"
-	lopts="--help --verbose --auto --autoonly --commit --gplay"
+	opts="-h -v -q"
+	lopts="--help --verbose --quiet --auto --autoonly --commit --gplay"
 	case "${cur}" in
 		-*)
 			__complete_options
@@ -177,14 +177,14 @@ __complete_import() {
 }
 
 __complete_readmeta() {
-	opts="-h -v"
-	lopts="--help --verbose"
+	opts="-h -v -q"
+	lopts="--help --verbose --quiet"
 	__complete_options
 }
 
 __complete_rewritemeta() {
-	opts="-h -v"
-	lopts="--help --verbose"
+	opts="-h -v -q"
+	lopts="--help --verbose --quiet"
 	case "${cur}" in
 		-*)
 			__complete_options
@@ -196,8 +196,8 @@ __complete_rewritemeta() {
 }
 
 __complete_lint() {
-	opts="-h -v -p"
-	lopts="--help --verbose --pedantic"
+	opts="-h -v -q -p"
+	lopts="--help --verbose --quiet --pedantic"
 	case "${cur}" in
 		-*)
 			__complete_options
@@ -209,8 +209,8 @@ __complete_lint() {
 }
 
 __complete_scanner() {
-	opts="-h -v"
-	lopts="--help --verbose --nosvn"
+	opts="-h -v -q"
+	lopts="--help --verbose --quiet --nosvn"
 	case "${cur}" in
 		-*)
 			__complete_options
@@ -225,8 +225,8 @@ __complete_scanner() {
 }
 
 __complete_verify() {
-	opts="-h -v -p"
-	lopts="--help --verbose"
+	opts="-h -v -q -p"
+	lopts="--help --verbose --quiet"
 	case "${cur}" in
 		-*)
 			__complete_options
@@ -241,20 +241,20 @@ __complete_verify() {
 }
 
 __complete_stats() {
-	opts="-h -v -d"
-	lopts="--help --verbose --download"
+	opts="-h -v -q -d"
+	lopts="--help --verbose --quiet --download"
 	__complete_options
 }
 
 __complete_server() {
-	opts="-h -v"
-	lopts="--help --verbose update"
+	opts="-h -v -q"
+	lopts="--help --verbose --quiet update"
 	__complete_options
 }
 
 __complete_init() {
-	opts="-h -v -d"
-	lopts="--help --verbose --keystore --distinguished-name --repo-keyalias"
+	opts="-h -v -q -d"
+	lopts="--help --verbose --quiet --keystore --distinguished-name --repo-keyalias"
 	__complete_options
 }
 
