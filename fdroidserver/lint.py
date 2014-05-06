@@ -72,6 +72,13 @@ regex_warnings = {
             (re.compile(r'.*[^sS]://gitorious\.org/.*'),
                 "gitorious URLs should always use https:// not http://"),
         ],
+        'Description': [
+            (re.compile(r'[ ]*[*#][^ .]'),
+                "Invalid bulleted list"),
+            (re.compile(r'^ '),
+                "Unnecessary leading space"),
+        ],
+
 }
 
 regex_pedantic = {
@@ -185,16 +192,9 @@ def main():
                 pwarn("Summary '%s' probably contains redundant info already in app name '%s'" % (
                     summary, name))
 
-        # Invalid lists
-        desc_chars = 0
-        for line in app['Description']:
-            if re.match(r'[ ]*[*#][^ .]', line):
-                warn("Invalid bulleted list: '%s'" % line)
-            if re.match(r'^ ', line):
-                warn("Unnecessary leading space: '%s'" % line)
-            desc_chars += len(line)
 
         # Description size limit
+        desc_chars = sum(len(l) for l in app['Description'])
         if desc_chars > config['char_limits']['Description']:
             warn("Description of length %s is over the %i char limit" % (
                 desc_chars, config['char_limits']['Description']))
@@ -202,8 +202,15 @@ def main():
         # Regex checks in all kinds of fields
         for f in regex_warnings:
             for m, r in regex_warnings[f]:
-                if m.match(app[f]):
-                    warn("%s '%s': %s" % (f, app[f], r))
+                t = metadata.metafieldtype(f)
+                if t == 'string':
+                    if m.match(app[f]):
+                        warn("%s '%s': %s" % (f, app[f], r))
+                elif t == 'multiline':
+                    for l in app[f]:
+                        if m.match(l):
+                            warn("%s at line '%s': %s" % (f, l, r))
+
 
         # Regex pedantic checks in all kinds of fields
         if options.pedantic:
