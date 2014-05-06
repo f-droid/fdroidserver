@@ -183,7 +183,7 @@ def check_repomanifest(app, branch=None):
 
         if repotype == 'git':
             if branch:
-                branch = 'origin/'+branch
+                branch = 'origin/' + branch
             vcs.gotorevision(branch)
         elif repotype == 'git-svn':
             vcs.gotorevision(branch)

@@ -20,7 +20,7 @@ setup(name='fdroidserver',
       scripts=['fdroid', 'fd-commit'],
       data_files=[
         (sys.prefix + '/share/doc/fdroidserver/examples',
-         [ 'buildserver/config.buildserver.py',
+         ['buildserver/config.buildserver.py',
            'examples/config.py',
            'examples/makebs.config.py',
            'examples/opensc-fdroid.cfg',

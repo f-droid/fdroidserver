@@ -293,7 +293,7 @@ class DescriptionFormatter:
                     urltext = url
                 linkified_html += '<a href="' + url + '">' + cgi.escape(urltext) + '</a>'
                 linkified_plain += urltext
-                txt = txt[index+2:]
+                txt = txt[index + 2:]
             else:
                 index = txt.find("]")
                 if index == -1:
@@ -309,7 +309,7 @@ class DescriptionFormatter:
                 linkified_plain += urltxt
                 if urltxt != url:
                     linkified_plain += ' (' + url + ')'
-                txt = txt[index+1:]
+                txt = txt[index + 1:]
 
     def addtext(self, txt):
         p, h = self.linkify(txt)
@@ -550,7 +550,7 @@ def parse_metadata(metafile):
             commit = 'unknown - see disabled'
             index = parts[2].rfind('at ')
             if index != -1:
-                commit = parts[2][index+3:]
+                commit = parts[2][index + 3:]
                 if commit.endswith(')'):
                     commit = commit[:-1]
             thisbuild['commit'] = commit
@@ -629,9 +629,9 @@ def parse_metadata(metafile):
             try:
                 field, value = line.split(':', 1)
             except ValueError:
-                raise MetaDataException("Invalid metadata in "+linedesc)
+                raise MetaDataException("Invalid metadata in " + linedesc)
             if field != field.strip() or value != value.strip():
-                raise MetaDataException("Extra spacing found in "+linedesc)
+                raise MetaDataException("Extra spacing found in " + linedesc)
 
             # Translate obsolete fields...
             if field == 'Market Version':

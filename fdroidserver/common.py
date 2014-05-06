@@ -460,7 +460,7 @@ class vcs_git(vcs):
 
     def latesttags(self, alltags, number):
         self.checkrepo()
-        p = SilentPopen(['echo "'+'\n'.join(alltags)+'" | \
+        p = SilentPopen(['echo "' + '\n'.join(alltags) + '" | \
                 xargs -I@ git log --format=format:"%at @%n" -1 @ | \
                 sort -n | awk \'{print $2}\''],
                         cwd=self.local, shell=True)
@@ -653,7 +653,7 @@ class vcs_hg(vcs):
         p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
         # Also delete untracked files, we have to enable purge extension for that:
         if "'purge' is provided by the following extension" in p.stdout:
-            with open(self.local+"/.hg/hgrc", "a") as myfile:
+            with open(self.local + "/.hg/hgrc", "a") as myfile:
                 myfile.write("\n[extensions]\nhgext.purge=\n")
             p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
             if p.returncode != 0:
@@ -713,9 +713,9 @@ def retrieve_string(app_dir, string, xmlfiles=None):
 
     string_search = None
     if string.startswith('@string/'):
-        string_search = re.compile(r'.*"'+string[8:]+'".*?>([^<]+?)<.*').search
+        string_search = re.compile(r'.*"' + string[8:] + '".*?>([^<]+?)<.*').search
     elif string.startswith('&') and string.endswith(';'):
-        string_search = re.compile(r'.*<!ENTITY.*'+string[1:-1]+'.*?"([^"]+?)".*>').search
+        string_search = re.compile(r'.*<!ENTITY.*' + string[1:-1] + '.*?"([^"]+?)".*>').search
 
     if string_search is not None:
         for xmlfile in xmlfiles:
@@ -1112,14 +1112,14 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         if 'target' in build:
             n = build["target"].split('-')[1]
             FDroidPopen(['sed', '-i',
-                         's@compileSdkVersion *[0-9]*@compileSdkVersion '+n+'@g',
+                         's@compileSdkVersion *[0-9]*@compileSdkVersion ' + n + '@g',
                          'build.gradle'],
                         cwd=root_dir)
             if '@' in build['gradle']:
                 gradle_dir = os.path.join(root_dir, build['gradle'].split('@', 1)[1])
                 gradle_dir = os.path.normpath(gradle_dir)
                 FDroidPopen(['sed', '-i',
-                             's@compileSdkVersion *[0-9]*@compileSdkVersion '+n+'@g',
+                             's@compileSdkVersion *[0-9]*@compileSdkVersion ' + n + '@g',
                              'build.gradle'],
                             cwd=gradle_dir)
 
@@ -1258,7 +1258,7 @@ def getpaths(build_dir, build, field):
         p = p.strip()
         full_path = os.path.join(build_dir, p)
         full_path = os.path.normpath(full_path)
-        paths += [r[len(build_dir)+1:] for r in glob.glob(full_path)]
+        paths += [r[len(build_dir) + 1:] for r in glob.glob(full_path)]
     return paths
 
 
@@ -1335,7 +1335,7 @@ def scan_source(build_dir, root_dir, thisbuild):
 
             # Path (relative) to the file
             fp = os.path.join(r, curfile)
-            fd = fp[len(build_dir)+1:]
+            fd = fp[len(build_dir) + 1:]
 
             # Check if this file has been explicitly excluded from scanning
             if toignore(fd):

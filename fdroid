@@ -44,7 +44,7 @@ def print_help():
     print
     print "Valid commands are:"
     for cmd, summary in commands.items():
-        print "   " + cmd + ' '*(15-len(cmd)) + summary
+        print "   " + cmd + ' ' * (15 - len(cmd)) + summary
     print
 
 

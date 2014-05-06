@@ -604,12 +604,14 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if 'target' in thisbuild:
             target = thisbuild["target"].split('-')[1]
             FDroidPopen(['sed', '-i',
-                         's@<platform>[0-9]*</platform>@<platform>'+target+'</platform>@g',
+                         's@<platform>[0-9]*</platform>@<platform>'
+                         + target + '</platform>@g',
                          'pom.xml'],
                         cwd=root_dir)
             if '@' in thisbuild['maven']:
                 FDroidPopen(['sed', '-i',
-                             's@<platform>[0-9]*</platform>@<platform>'+target+'</platform>@g',
+                             's@<platform>[0-9]*</platform>@<platform>'
+                             + target + '</platform>@g',
                              'pom.xml'],
                             cwd=maven_dir)
 
@@ -702,7 +704,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if flavours_cmd:
             flavours_cmd = flavours_cmd[0].upper() + flavours_cmd[1:]
 
-        commands += ['assemble'+flavours_cmd+'Release']
+        commands += ['assemble' + flavours_cmd + 'Release']
 
         p = FDroidPopen(commands, cwd=gradle_dir)
 
@@ -753,7 +755,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         else:
             name = '-'.join([basename, '-'.join(flavours), 'release', 'unsigned'])
         dd = os.path.normpath(dd)
-        src = os.path.join(dd, 'build', 'apk', name+'.apk')
+        src = os.path.join(dd, 'build', 'apk', name + '.apk')
     elif thisbuild['type'] == 'ant':
         stdout_apk = '\n'.join([
             line for line in p.stdout.splitlines() if '.apk' in line])

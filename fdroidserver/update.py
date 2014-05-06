@@ -754,9 +754,9 @@ def make_index(apps, apks, repodir, archive, categories):
 
         # Check for duplicates - they will make the client unhappy...
         for i in range(len(apklist) - 1):
-            if apklist[i]['versioncode'] == apklist[i+1]['versioncode']:
+            if apklist[i]['versioncode'] == apklist[i + 1]['versioncode']:
                 logging.critical("duplicate versions: '%s' - '%s'" % (
-                    apklist[i]['apkname'], apklist[i+1]['apkname']))
+                    apklist[i]['apkname'], apklist[i + 1]['apkname']))
                 sys.exit(1)
 
         for apk in apklist:
