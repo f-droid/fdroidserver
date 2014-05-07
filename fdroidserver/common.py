@@ -319,7 +319,7 @@ class vcs:
         # and remote that directory was created from, allowing us to drop it
         # automatically if either of those things changes.
         fdpath = os.path.join(self.local, '..',
-                '.fdroidvcs-' + os.path.basename(self.local))
+                              '.fdroidvcs-' + os.path.basename(self.local))
         cdata = self.repotype() + ' ' + self.remote
         writeback = True
         deleterepo = False
@@ -460,10 +460,10 @@ class vcs_git(vcs):
 
     def latesttags(self, alltags, number):
         self.checkrepo()
-        p = SilentPopen(['echo "'+'\n'.join(alltags)+'" | \
+        p = SilentPopen(['echo "' + '\n'.join(alltags) + '" | \
                 xargs -I@ git log --format=format:"%at @%n" -1 @ | \
                 sort -n | awk \'{print $2}\''],
-                cwd=self.local, shell=True)
+                        cwd=self.local, shell=True)
         return p.stdout.splitlines()[-number:]
 
 
@@ -653,7 +653,7 @@ class vcs_hg(vcs):
         p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
         # Also delete untracked files, we have to enable purge extension for that:
         if "'purge' is provided by the following extension" in p.stdout:
-            with open(self.local+"/.hg/hgrc", "a") as myfile:
+            with open(self.local + "/.hg/hgrc", "a") as myfile:
                 myfile.write("\n[extensions]\nhgext.purge=\n")
             p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
             if p.returncode != 0:
@@ -700,9 +700,9 @@ class vcs_bzr(vcs):
 def retrieve_string(app_dir, string, xmlfiles=None):
 
     res_dirs = [
-            os.path.join(app_dir, 'res'),
-            os.path.join(app_dir, 'src/main'),
-            ]
+        os.path.join(app_dir, 'res'),
+        os.path.join(app_dir, 'src/main'),
+        ]
 
     if xmlfiles is None:
         xmlfiles = []
@@ -713,9 +713,9 @@ def retrieve_string(app_dir, string, xmlfiles=None):
 
     string_search = None
     if string.startswith('@string/'):
-        string_search = re.compile(r'.*"'+string[8:]+'".*?>([^<]+?)<.*').search
+        string_search = re.compile(r'.*"' + string[8:] + '".*?>([^<]+?)<.*').search
     elif string.startswith('&') and string.endswith(';'):
-        string_search = re.compile(r'.*<!ENTITY.*'+string[1:-1]+'.*?"([^"]+?)".*>').search
+        string_search = re.compile(r'.*<!ENTITY.*' + string[1:-1] + '.*?"([^"]+?)".*>').search
 
     if string_search is not None:
         for xmlfile in xmlfiles:
@@ -731,14 +731,15 @@ def retrieve_string(app_dir, string, xmlfiles=None):
 # Return list of existing files that will be used to find the highest vercode
 def manifest_paths(app_dir, flavour):
 
-    possible_manifests = [os.path.join(app_dir, 'AndroidManifest.xml'),
-            os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml'),
-            os.path.join(app_dir, 'src', 'AndroidManifest.xml'),
-            os.path.join(app_dir, 'build.gradle')]
+    possible_manifests = \
+        [os.path.join(app_dir, 'AndroidManifest.xml'),
+         os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml'),
+         os.path.join(app_dir, 'src', 'AndroidManifest.xml'),
+         os.path.join(app_dir, 'build.gradle')]
 
     if flavour:
         possible_manifests.append(
-                os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml'))
+            os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml'))
 
     return [path for path in possible_manifests if os.path.isfile(path)]
 
@@ -920,7 +921,7 @@ class VCSException(Exception):
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
 def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
-        basepath=False, raw=False, prepare=True, preponly=False):
+              basepath=False, raw=False, prepare=True, preponly=False):
 
     number = None
     subdir = None
@@ -990,7 +991,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
             p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=libdir)
             if p.returncode != 0:
                 raise BuildException("Error running prepare command for srclib %s"
-                        % name, p.stdout)
+                                     % name, p.stdout)
 
     if basepath:
         libdir = sdir
@@ -1042,7 +1043,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running init command for %s:%s" %
-                    (app['id'], build['version']), p.stdout)
+                                 (app['id'], build['version']), p.stdout)
 
     # Apply patches if any
     if 'patch' in build:
@@ -1060,7 +1061,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         logging.info("Collecting source libraries")
         for lib in build['srclibs']:
             srclibpaths.append(getsrclib(lib, srclib_dir, srclibpaths,
-                preponly=onserver))
+                                         preponly=onserver))
 
     for name, number, libpath in srclibpaths:
         place_srclib(root_dir, int(number) if number else None, libpath)
@@ -1086,7 +1087,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         # from sdk.dir, if necessary
         if build['oldsdkloc']:
             sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
-                re.S | re.M).group(1)
+                              re.S | re.M).group(1)
             props += "sdk-location=%s\n" % sdkloc
         else:
             props += "sdk.dir=%s\n" % config['sdk_path']
@@ -1111,14 +1112,16 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         if 'target' in build:
             n = build["target"].split('-')[1]
             FDroidPopen(['sed', '-i',
-                's@compileSdkVersion *[0-9]*@compileSdkVersion '+n+'@g',
-                'build.gradle'], cwd=root_dir)
+                         's@compileSdkVersion *[0-9]*@compileSdkVersion ' + n + '@g',
+                         'build.gradle'],
+                        cwd=root_dir)
             if '@' in build['gradle']:
                 gradle_dir = os.path.join(root_dir, build['gradle'].split('@', 1)[1])
                 gradle_dir = os.path.normpath(gradle_dir)
                 FDroidPopen(['sed', '-i',
-                    's@compileSdkVersion *[0-9]*@compileSdkVersion '+n+'@g',
-                    'build.gradle'], cwd=gradle_dir)
+                             's@compileSdkVersion *[0-9]*@compileSdkVersion ' + n + '@g',
+                             'build.gradle'],
+                            cwd=gradle_dir)
 
     # Remove forced debuggable flags
     remove_debuggable_flags(root_dir)
@@ -1131,14 +1134,16 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 continue
             if has_extension(path, 'xml'):
                 p = SilentPopen(['sed', '-i',
-                    's/android:versionName="[^"]*"/android:versionName="' + build['version'] + '"/g',
-                    path])
+                                 's/android:versionName="[^"]*"/android:versionName="'
+                                 + build['version'] + '"/g',
+                                 path])
                 if p.returncode != 0:
                     raise BuildException("Failed to amend manifest")
             elif has_extension(path, 'gradle'):
                 p = SilentPopen(['sed', '-i',
-                    's/versionName *=* *"[^"]*"/versionName = "' + build['version'] + '"/g',
-                    path])
+                                 's/versionName *=* *"[^"]*"/versionName = "'
+                                 + build['version'] + '"/g',
+                                 path])
                 if p.returncode != 0:
                     raise BuildException("Failed to amend build.gradle")
     if build['forcevercode']:
@@ -1148,14 +1153,16 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 continue
             if has_extension(path, 'xml'):
                 p = SilentPopen(['sed', '-i',
-                    's/android:versionCode="[^"]*"/android:versionCode="' + build['vercode'] + '"/g',
-                    path])
+                                 's/android:versionCode="[^"]*"/android:versionCode="'
+                                 + build['vercode'] + '"/g',
+                                 path])
                 if p.returncode != 0:
                     raise BuildException("Failed to amend manifest")
             elif has_extension(path, 'gradle'):
                 p = SilentPopen(['sed', '-i',
-                    's/versionCode *=* *[0-9]*/versionCode = ' + build['vercode'] + '/g',
-                    path])
+                                 's/versionCode *=* *[0-9]*/versionCode = '
+                                 + build['vercode'] + '/g',
+                                 path])
                 if p.returncode != 0:
                     raise BuildException("Failed to amend build.gradle")
 
@@ -1203,7 +1210,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running prebuild command for %s:%s" %
-                    (app['id'], build['version']), p.stdout)
+                                 (app['id'], build['version']), p.stdout)
 
     updatemode = build.get('update', ['auto'])
     # Generate (or update) the ant build file, build.xml...
@@ -1251,7 +1258,7 @@ def getpaths(build_dir, build, field):
         p = p.strip()
         full_path = os.path.join(build_dir, p)
         full_path = os.path.normpath(full_path)
-        paths += [r[len(build_dir)+1:] for r in glob.glob(full_path)]
+        paths += [r[len(build_dir) + 1:] for r in glob.glob(full_path)]
     return paths
 
 
@@ -1263,21 +1270,21 @@ def scan_source(build_dir, root_dir, thisbuild):
 
     # Common known non-free blobs (always lower case):
     usual_suspects = [
-            re.compile(r'flurryagent', re.IGNORECASE),
-            re.compile(r'paypal.*mpl', re.IGNORECASE),
-            re.compile(r'libgoogleanalytics', re.IGNORECASE),
-            re.compile(r'admob.*sdk.*android', re.IGNORECASE),
-            re.compile(r'googleadview', re.IGNORECASE),
-            re.compile(r'googleadmobadssdk', re.IGNORECASE),
-            re.compile(r'google.*play.*services', re.IGNORECASE),
-            re.compile(r'crittercism', re.IGNORECASE),
-            re.compile(r'heyzap', re.IGNORECASE),
-            re.compile(r'jpct.*ae', re.IGNORECASE),
-            re.compile(r'youtubeandroidplayerapi', re.IGNORECASE),
-            re.compile(r'bugsense', re.IGNORECASE),
-            re.compile(r'crashlytics', re.IGNORECASE),
-            re.compile(r'ouya.*sdk', re.IGNORECASE),
-            ]
+        re.compile(r'flurryagent', re.IGNORECASE),
+        re.compile(r'paypal.*mpl', re.IGNORECASE),
+        re.compile(r'libgoogleanalytics', re.IGNORECASE),
+        re.compile(r'admob.*sdk.*android', re.IGNORECASE),
+        re.compile(r'googleadview', re.IGNORECASE),
+        re.compile(r'googleadmobadssdk', re.IGNORECASE),
+        re.compile(r'google.*play.*services', re.IGNORECASE),
+        re.compile(r'crittercism', re.IGNORECASE),
+        re.compile(r'heyzap', re.IGNORECASE),
+        re.compile(r'jpct.*ae', re.IGNORECASE),
+        re.compile(r'youtubeandroidplayerapi', re.IGNORECASE),
+        re.compile(r'bugsense', re.IGNORECASE),
+        re.compile(r'crashlytics', re.IGNORECASE),
+        re.compile(r'ouya.*sdk', re.IGNORECASE),
+        ]
 
     scanignore = getpaths(build_dir, thisbuild, 'scanignore')
     scandelete = getpaths(build_dir, thisbuild, 'scandelete')
@@ -1328,7 +1335,7 @@ def scan_source(build_dir, root_dir, thisbuild):
 
             # Path (relative) to the file
             fp = os.path.join(r, curfile)
-            fd = fp[len(build_dir)+1:]
+            fd = fp[len(build_dir) + 1:]
 
             # Check if this file has been explicitly excluded from scanning
             if toignore(fd):
@@ -1460,9 +1467,9 @@ def isApkDebuggable(apkfile, config):
 
     :param apkfile: full path to the apk to check"""
 
-    p = SilentPopen([os.path.join(config['sdk_path'],
-        'build-tools', config['build_tools'], 'aapt'),
-        'dump', 'xmltree', apkfile, 'AndroidManifest.xml'])
+    p = SilentPopen([os.path.join(config['sdk_path'], 'build-tools',
+                                  config['build_tools'], 'aapt'),
+                     'dump', 'xmltree', apkfile, 'AndroidManifest.xml'])
     if p.returncode != 0:
         logging.critical("Failed to get apk manifest information")
         sys.exit(1)
@@ -1522,7 +1529,7 @@ def FDroidPopen(commands, cwd=None, shell=False, output=True):
 
     result = PopenResult()
     p = subprocess.Popen(commands, cwd=cwd, shell=shell,
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     stdout_queue = Queue.Queue()
     stdout_reader = AsynchronousFileReader(p.stdout, stdout_queue)
@@ -1549,11 +1556,11 @@ def remove_signing_keys(build_dir):
     comment = re.compile(r'[ ]*//')
     signing_configs = re.compile(r'^[\t ]*signingConfigs[ \t]*{[ \t]*$')
     line_matches = [
-            re.compile(r'^[\t ]*signingConfig [^ ]*$'),
-            re.compile(r'.*android\.signingConfigs\..*'),
-            re.compile(r'.*variant\.outputFile = .*'),
-            re.compile(r'.*\.readLine\(.*'),
-    ]
+        re.compile(r'^[\t ]*signingConfig [^ ]*$'),
+        re.compile(r'.*android\.signingConfigs\..*'),
+        re.compile(r'.*variant\.outputFile = .*'),
+        re.compile(r'.*\.readLine\(.*'),
+        ]
     for root, dirs, files in os.walk(build_dir):
         if 'build.gradle' in files:
             path = os.path.join(root, 'build.gradle')

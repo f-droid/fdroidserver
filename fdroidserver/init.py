@@ -72,13 +72,13 @@ def genkey(keystore, repo_keyalias, password, keydname):
     common.write_password_file("keystorepass", password)
     common.write_password_file("keypass", password)
     p = FDroidPopen(['keytool', '-genkey',
-                '-keystore', keystore, '-alias', repo_keyalias,
-                '-keyalg', 'RSA', '-keysize', '4096',
-                '-sigalg', 'SHA256withRSA',
-                '-validity', '10000',
-                '-storepass:file', config['keystorepassfile'],
-                '-keypass:file', config['keypassfile'],
-                '-dname', keydname])
+                     '-keystore', keystore, '-alias', repo_keyalias,
+                     '-keyalg', 'RSA', '-keysize', '4096',
+                     '-sigalg', 'SHA256withRSA',
+                     '-validity', '10000',
+                     '-storepass:file', config['keystorepassfile'],
+                     '-keypass:file', config['keypassfile'],
+                     '-dname', keydname])
     # TODO keypass should be sent via stdin
     if p.returncode != 0:
         raise BuildException("Failed to generate key", p.stdout)
@@ -265,8 +265,7 @@ def main():
     if repo_keyalias is not None:
         logging.info('  Alias for key in store:\t' + repo_keyalias)
     logging.info('\nTo complete the setup, add your APKs to "' +
-          os.path.join(fdroiddir, 'repo') + '"' +
-'''
+                 os.path.join(fdroiddir, 'repo') + '"' + '''
 then run "fdroid update -c; fdroid update".  You might also want to edit
 "config.py" to set the URL, repo name, and more.  You should also set up
 a signing key (a temporary one might have been automatically generated).

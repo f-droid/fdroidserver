@@ -127,8 +127,8 @@ def main():
         appscount = Counter()
         appsvercount = Counter()
         logexpr = '(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] ' + \
-                  '"GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) ' + \
-                  '\d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
+            '"GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) ' + \
+            '\d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
         logsearch = re.compile(logexpr).search
         for logfile in glob.glob(os.path.join(logsdir, 'access-*.log.gz')):
             logging.debug('...' + logfile)

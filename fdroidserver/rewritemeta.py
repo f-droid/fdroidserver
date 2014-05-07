@@ -47,7 +47,7 @@ def main():
 
     for app in apps:
         logging.info("Writing " + app['id'])
-        metadata.write_metadata(os.path.join('metadata', app['id'])+'.txt', app)
+        metadata.write_metadata(os.path.join('metadata', app['id']) + '.txt', app)
 
     logging.info("Finished.")
 

@@ -138,8 +138,8 @@ def check_tags(app, pattern):
             if not package or package != appid or not version or not vercode:
                 continue
 
-            logging.debug("Manifest exists. Found version {0} ({1})".format(
-                    version, vercode))
+            logging.debug("Manifest exists. Found version {0} ({1})"
+                          .format(version, vercode))
             if int(vercode) > int(hcode):
                 htag = tag
                 hcode = str(int(vercode))
@@ -183,7 +183,7 @@ def check_repomanifest(app, branch=None):
 
         if repotype == 'git':
             if branch:
-                branch = 'origin/'+branch
+                branch = 'origin/' + branch
             vcs.gotorevision(branch)
         elif repotype == 'git-svn':
             vcs.gotorevision(branch)
@@ -340,18 +340,18 @@ def main():
             if version is not None:
                 stored = app['Current Version']
                 if not stored:
-                    logging.info("{0} has no Current Version but has version {1} on the Play Store".format(
-                            common.getappname(app), version))
+                    logging.info("{0} has no Current Version but has version {1} on the Play Store"
+                                 .format(common.getappname(app), version))
                 elif LooseVersion(stored) < LooseVersion(version):
-                    logging.info("{0} has version {1} on the Play Store, which is bigger than {2}".format(
-                            common.getappname(app), version, stored))
+                    logging.info("{0} has version {1} on the Play Store, which is bigger than {2}"
+                                 .format(common.getappname(app), version, stored))
                 else:
                     if stored != version:
-                        logging.info("{0} has version {1} on the Play Store, which differs from {2}".format(
-                                common.getappname(app), version, stored))
+                        logging.info("{0} has version {1} on the Play Store, which differs from {2}"
+                                     .format(common.getappname(app), version, stored))
                     else:
-                        logging.info("{0} has the same version {1} on the Play Store".format(
-                                common.getappname(app), version))
+                        logging.info("{0} has the same version {1} on the Play Store"
+                                     .format(common.getappname(app), version))
         return
 
     for app in apps:
@@ -437,7 +437,7 @@ def main():
                     flavour = None
 
                 logging.debug("...fetch auto name from " + app_dir +
-                        ((" (flavour: %s)" % flavour) if flavour else ""))
+                              ((" (flavour: %s)" % flavour) if flavour else ""))
                 new_name = common.fetch_real_name(app_dir, flavour)
                 if new_name:
                     logging.debug("...got autoname '" + new_name + "'")
@@ -507,8 +507,7 @@ def main():
             metadata.write_metadata(metafile, app)
             if options.commit:
                 logging.info("Commiting update for " + metafile)
-                gitcmd = ["git", "commit", "-m",
-                    commitmsg]
+                gitcmd = ["git", "commit", "-m", commitmsg]
                 if 'auto_author' in config:
                     gitcmd.extend(['--author', config['auto_author']])
                 gitcmd.extend(["--", metafile])
