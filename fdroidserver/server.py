@@ -67,7 +67,7 @@ def update_awsbucket(repo_section):
             upload = False
             file_to_upload = os.path.join(root, name)
             object_name = 'fdroid/' + os.path.relpath(file_to_upload, os.getcwd())
-            if not object_name in objs:
+            if object_name not in objs:
                 upload = True
             else:
                 obj = objs.pop(object_name)

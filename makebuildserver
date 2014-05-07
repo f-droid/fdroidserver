@@ -7,6 +7,7 @@ import time
 import hashlib
 from optparse import OptionParser
 
+
 def vagrant(params, cwd=None, printout=False):
     """Run vagrant.
 
@@ -18,7 +19,7 @@ def vagrant(params, cwd=None, printout=False):
                is the stdout (and stderr) from vagrant
     """
     p = subprocess.Popen(['vagrant'] + params, cwd=cwd,
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out = ''
     if printout:
         while True:
@@ -37,9 +38,9 @@ serverdir = 'buildserver'
 
 parser = OptionParser()
 parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
+                  help="Spew out even more information than normal")
 parser.add_option("-c", "--clean", action="store_true", default=False,
-                      help="Build from scratch, rather than attempting to update the existing server")
+                  help="Build from scratch, rather than attempting to update the existing server")
 options, args = parser.parse_args()
 
 config = {}
@@ -105,6 +106,7 @@ else:
      'https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86-legacy-toolchains.tar.bz2',
      '606aadf815ae28cc7b0154996247c70d609f111b14e44bcbcd6cad4c87fefb6f')])
 wanted = []
+
 
 def sha256_for_file(path):
     with open(path, 'r') as f:
@@ -234,4 +236,3 @@ vagrant(['box', 'add', 'buildserver', boxfile, '-f'],
         printout=options.verbose)
 
 os.remove(boxfile)
-

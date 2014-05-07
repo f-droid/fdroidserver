@@ -251,7 +251,7 @@ def update_wiki(apps, apks):
                 page.delete('No longer published')
         for pagename, text in genp.items():
             logging.debug("Checking " + pagename)
-            if not pagename in existingpages:
+            if pagename not in existingpages:
                 logging.debug("Creating page " + pagename)
                 try:
                     newpage = site.Pages[pagename]
@@ -427,15 +427,15 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                     thisinfo['permissions'].append(perm)
                 elif line.startswith("uses-feature:"):
                     perm = re.match(string_pat, line).group(1)
-                    #Filter out this, it's only added with the latest SDK tools and
-                    #causes problems for lots of apps.
+                    # Filter out this, it's only added with the latest SDK tools and
+                    # causes problems for lots of apps.
                     if perm != "android.hardware.screen.portrait" \
                             and perm != "android.hardware.screen.landscape":
                         if perm.startswith("android.feature."):
                             perm = perm[16:]
                         thisinfo['features'].append(perm)
 
-            if not 'sdkversion' in thisinfo:
+            if 'sdkversion' not in thisinfo:
                 logging.warn("no SDK version information found")
                 thisinfo['sdkversion'] = 0
 
@@ -768,7 +768,7 @@ def make_index(apps, apks, repodir, archive, categories):
             if 'srcname' in apk:
                 addElement('srcname', apk['srcname'], doc, apkel)
             for hash_type in ['sha256']:
-                if not hash_type in apk:
+                if hash_type not in apk:
                     continue
                 hashel = doc.createElement("hash")
                 hashel.setAttribute("type", hash_type)
@@ -805,7 +805,7 @@ def make_index(apps, apks, repodir, archive, categories):
         logging.info("Creating signed index with this key:")
         logging.info("SHA256: %s" % repo_pubkey_fingerprint)
 
-        #Create a jar of the index...
+        # Create a jar of the index...
         p = FDroidPopen(['jar', 'cf', 'index.jar', 'index.xml'], cwd=repodir)
         if p.returncode != 0:
             logging.critical("Failed to create jar file")
