@@ -1284,6 +1284,7 @@ def scan_source(build_dir, root_dir, thisbuild):
         re.compile(r'bugsense', re.IGNORECASE),
         re.compile(r'crashlytics', re.IGNORECASE),
         re.compile(r'ouya.*sdk', re.IGNORECASE),
+        re.compile(r'libspen23', re.IGNORECASE),
         ]
 
     scanignore = getpaths(build_dir, thisbuild, 'scanignore')
