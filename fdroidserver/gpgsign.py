@@ -20,15 +20,12 @@
 
 import sys
 import os
-import shutil
-import md5
 import glob
 from optparse import OptionParser
 import logging
 
 import common
-import metadata
-from common import FDroidPopen, BuildException
+from common import FDroidPopen
 
 config = None
 options = None
