@@ -25,6 +25,7 @@ commands = {
     "build": "Build a package from source",
     "init": "Quickly start a new repository",
     "publish": "Sign and place packages in the repo",
+    "gpgsign": "Add gpg signatures for packages in repo",
     "update": "Update repo information for new packages",
     "verify": "Verify the integrity of downloaded packages",
     "checkupdates": "Check for updates to applications",
