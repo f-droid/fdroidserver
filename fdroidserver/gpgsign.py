@@ -69,7 +69,7 @@ def main():
                 logging.error("Signing failed.")
                 sys.exit(1)
 
-        logging.info('Signed ' + apkfilename)
+            logging.info('Signed ' + apkfilename)
 
 
 if __name__ == "__main__":
