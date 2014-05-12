@@ -39,7 +39,8 @@ def main():
     global config, options
 
     # Parse command line...
-    parser = OptionParser(usage="Usage: %prog [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
+    parser = OptionParser(usage="Usage: %prog [options] "
+                          "[APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     parser.add_option("-q", "--quiet", action="store_true", default=False,
@@ -68,12 +69,15 @@ def main():
         logging.warning("No unsigned directory - nothing to do")
         sys.exit(1)
 
-    for f in [config['keystorepassfile'], config['keystore'], config['keypassfile']]:
+    for f in [config['keystorepassfile'],
+              config['keystore'],
+              config['keypassfile']]:
         if not os.path.exists(f):
             logging.error("Config error - missing '{0}'".format(f))
             sys.exit(1)
 
-    # It was suggested at https://dev.guardianproject.info/projects/bazaar/wiki/FDroid_Audit
+    # It was suggested at
+    #    https://dev.guardianproject.info/projects/bazaar/wiki/FDroid_Audit
     # that a package could be crafted, such that it would use the same signing
     # key as an existing app. While it may be theoretically possible for such a
     # colliding package ID to be generated, it seems virtually impossible that
@@ -92,7 +96,8 @@ def main():
             logging.error("There is a keyalias collision - publishing halted")
             sys.exit(1)
         allaliases.append(keyalias)
-    logging.info("{0} apps, {0} key aliases".format(len(allapps), len(allaliases)))
+    logging.info("{0} apps, {0} key aliases".format(len(allapps),
+                                                    len(allaliases)))
 
     # Process any apks that are waiting to be signed...
     for apkfile in sorted(glob.glob(os.path.join(unsigned_dir, '*.apk'))):
