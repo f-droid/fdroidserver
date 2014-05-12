@@ -39,9 +39,9 @@ done
 for f in ../build.gradle build.gradle; do
 	[[ -f $f ]] || continue
 	while read l; do
-		if [[ $l == *'com.android.tools.build:gradle:'* ]]; then
+		if [[ -z "$plugin_pver" && $l == *'com.android.tools.build:gradle:'* ]]; then
 			plugin_pver=$(echo -n "$l" | sed "s/.*com.android.tools.build:gradle:\\([0-9\\.\\+]\\+\\).*/\\1/")
-		elif [[ $l == *'gradleVersion'* ]]; then
+		elif [[ -z "$wrapper_ver" && $l == *'gradleVersion'* ]]; then
 			wrapper_ver=$(echo -n "$l" | sed "s/.*gradleVersion[ ]*=[ ]*[\"']\\([0-9\\.]\\+\\)[\"'].*/\\1/")
 		fi
 	done < $f
