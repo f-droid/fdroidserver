@@ -823,7 +823,7 @@ def remove_debuggable_flags(root_dir):
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
 # All values returned are strings.
-def parse_androidmanifests(paths):
+def parse_androidmanifests(paths, ignoreversions=None):
 
     if not paths:
         return (None, None, None)
@@ -835,6 +835,8 @@ def parse_androidmanifests(paths):
     vcsearch_g = re.compile(r'.*versionCode *=* *["\']*([0-9]+)["\']*').search
     vnsearch_g = re.compile(r'.*versionName *=* *(["\'])((?:(?=(\\?))\3.)*?)\1.*').search
     psearch_g = re.compile(r'.*packageName *=* *["\']([^"]+)["\'].*').search
+
+    ignoresearch = re.compile(ignoreversions).search if ignoreversions else None
 
     max_version = None
     max_vercode = None
@@ -876,9 +878,12 @@ def parse_androidmanifests(paths):
             max_package = package
 
         if max_vercode is None or (vercode is not None and vercode > max_vercode):
-            max_version = version
-            max_vercode = vercode
-            max_package = package
+            if not ignoresearch or not ignoresearch(version):
+                max_version = version
+                max_vercode = vercode
+                max_package = package
+            else:
+                max_version = "Ignore"
 
     if max_version is None:
         max_version = "Unknown"

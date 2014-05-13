@@ -51,6 +51,7 @@ app_defaults = {
     'AntiFeatures': None,
     'Archive Policy': None,
     'Update Check Mode': 'None',
+    'Update Check Ignore': None,
     'Update Check Name': None,
     'Update Check Data': None,
     'Vercode Operation': None,
@@ -808,6 +809,8 @@ def write_metadata(dest, app):
         writefield('Archive Policy')
     writefield('Auto Update Mode')
     writefield('Update Check Mode')
+    if app['Update Check Ignore']:
+        writefield('Update Check Ignore')
     if app['Vercode Operation']:
         writefield('Vercode Operation')
     if app['Update Check Data']:
