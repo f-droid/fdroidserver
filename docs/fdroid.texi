@@ -484,6 +484,7 @@ The following sections describe the fields recognised within the file.
 * Requires Root::
 * Archive Policy::
 * Update Check Mode::
+* Update Check Ignore::
 * Vercode Operation::
 * Update Check Data::
 * Auto Update Mode::
@@ -1204,6 +1205,14 @@ whose vercodes don't always have trailing zeros. For example, with
 @code{Vercode Operation} set at something like @code{%c*10 + 4}, we will be
 able to track updates and build up to four different versions of every
 upstream version.
+
+@node Update Check Ignore
+@section Update Check Ignore
+
+When checking for updates (via @code{Update Check Mode}) this can be used to
+specify a regex which, if matched against the version name, causes that version
+to be ignored. For example, 'beta' could be specified to ignore version names
+that include that text.
 
 @node Update Check Data
 @section Update Check Data
