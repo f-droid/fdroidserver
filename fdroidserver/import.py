@@ -164,7 +164,8 @@ def main():
         if not repotype:
             logging.info("Unable to determine vcs type. " + repo)
             sys.exit(1)
-    elif url.startswith('http://code.google.com/p/'):
+    elif (url.startswith('http://code.google.com/p/') or
+            url.startswith('https://code.google.com/p/')):
         if not url.endswith('/'):
             url += '/'
         projecttype = 'googlecode'
