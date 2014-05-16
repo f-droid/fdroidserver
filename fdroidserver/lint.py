@@ -74,6 +74,8 @@ regex_warnings = {
          "gitorious URLs should always use https:// not http://"),
         ],
     'Description': [
+        (re.compile(r'^No description available$'),
+         "Description yet to be filled"),
         (re.compile(r'[ ]*[*#][^ .]'),
          "Invalid bulleted list"),
         (re.compile(r'^ '),
