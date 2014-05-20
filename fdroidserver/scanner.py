@@ -47,9 +47,10 @@ def main():
 
     config = common.read_config(options)
 
-    # Get all apps...
+    # Read all app and srclib metadata
     allapps = metadata.read_metadata()
     apps = common.read_app_args(args, allapps, True)
+    metadata.read_srclibs()
 
     problems = []
 

@@ -280,10 +280,9 @@ def getvcs(vcstype, remote, local):
 
 
 def getsrclibvcs(name):
-    srclib_path = os.path.join('srclibs', name + ".txt")
-    if not os.path.exists(srclib_path):
+    if not name in metadata.srclibs:
         raise VCSException("Missing srclib " + name)
-    return metadata.parse_srclib(srclib_path)['Repo Type']
+    return metadata.srclibs[name]['Repo Type']
 
 
 class vcs:
@@ -940,12 +939,10 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
         if '/' in name:
             name, subdir = name.split('/', 1)
 
-    srclib_path = os.path.join('srclibs', name + ".txt")
-
-    if not os.path.exists(srclib_path):
+    if not name in metadata.srclibs:
         raise BuildException('srclib ' + name + ' not found.')
 
-    srclib = metadata.parse_srclib(srclib_path)
+    srclib = metadata.srclibs[name]
 
     sdir = os.path.join(srclib_dir, name)
 

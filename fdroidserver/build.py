@@ -983,8 +983,9 @@ def main():
     srclib_dir = os.path.join(build_dir, 'srclib')
     extlib_dir = os.path.join(build_dir, 'extlib')
 
-    # Get all apps...
+    # Read all app and srclib metadata
     allapps = metadata.read_metadata(xref=not options.onserver)
+    metadata.read_srclibs()
 
     apps = common.read_app_args(args, allapps, True)
     apps = [app for app in apps if (options.force or not app['Disabled']) and

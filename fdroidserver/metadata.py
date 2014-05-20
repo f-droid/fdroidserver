@@ -23,7 +23,7 @@ import glob
 import cgi
 import logging
 
-srclibs = []
+srclibs = {}
 
 class MetaDataException(Exception):
     def __init__(self, value):
@@ -419,6 +419,28 @@ def parse_srclib(metafile):
             thisinfo[field] = value
 
     return thisinfo
+
+
+def read_srclibs():
+    """Read all srclib metadata.
+
+    The information read will be accessible as metadata.srclibs, which is a
+    dictionary, keyed on srclib name, with the values each being a dictionary
+    in the same format as that returned by the parse_srclib function.
+
+    A MetaDataException is raised if there are any problems with the srclib
+    metadata.
+    """
+    global srclibs
+    srclibs = {}
+
+    srcdir = 'srclibs'
+    if not os.path.exists(srcdir):
+        os.makedirs(srcdir)
+
+    for metafile in sorted(glob.glob(os.path.join(srcdir, '*.txt'))):
+        srclibname = os.path.basename(metafile[:-4])
+        srclibs[srclibname] = parse_srclib(metafile)
 
 
 # Read all metadata. Returns a list of 'app' objects (which are dictionaries as
