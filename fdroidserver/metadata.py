@@ -384,7 +384,7 @@ def description_html(lines, linkres):
     return ps.text_html
 
 
-def parse_srclib(metafile, **kw):
+def parse_srclib(metafile):
 
     thisinfo = {}
     if metafile and not isinstance(metafile, file):
