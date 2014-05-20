@@ -907,7 +907,7 @@ class BuildException(Exception):
         return ret
 
     def __str__(self):
-        ret = repr(self.value)
+        ret = self.value
         if self.detail:
             ret += "\n==== detail begin ====\n%s\n==== detail end ====" % self.detail.strip()
         return ret
@@ -918,7 +918,7 @@ class VCSException(Exception):
         self.value = value
 
     def __str__(self):
-        return repr(self.value)
+        return self.value
 
 
 # Get the specified source library.

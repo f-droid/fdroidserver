@@ -83,7 +83,14 @@ def main():
 
     del sys.argv[1]
     mod = __import__('fdroidserver.' + command, None, None, [command])
-    mod.main()
+    try:
+        mod.main()
+    except Exception, e:
+        if verbose:
+            raise
+        else:
+            print str(e)
+        sys.exit(1)
     sys.exit(0)
 
 if __name__ == "__main__":
