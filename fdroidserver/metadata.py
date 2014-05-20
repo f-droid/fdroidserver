@@ -422,7 +422,7 @@ def parse_srclib(metafile, **kw):
 
 # Read all metadata. Returns a list of 'app' objects (which are dictionaries as
 # returned by the parse_metadata function.
-def read_metadata(xref=True, package=None, store=True):
+def read_metadata(xref=True, package=None):
     apps = []
 
     for basedir in ('metadata', 'tmp'):

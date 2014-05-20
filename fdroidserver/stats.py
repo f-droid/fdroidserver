@@ -71,7 +71,7 @@ def main():
         sys.exit(1)
 
     # Get all metadata-defined apps...
-    metaapps = metadata.read_metadata(options.verbose)
+    metaapps = metadata.read_metadata()
 
     statsdir = 'stats'
     logsdir = os.path.join(statsdir, 'logs')

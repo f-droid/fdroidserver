@@ -26,7 +26,7 @@ def main():
     if not os.path.isdir('metadata'):
         return
 
-    metadata.read_metadata(xref=False, store=False)
+    metadata.read_metadata(xref=True)
 
 if __name__ == "__main__":
     main()
