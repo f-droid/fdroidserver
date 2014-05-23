@@ -402,6 +402,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         thisinfo['icons_src']['-1'] = match.group(1)
                 elif line.startswith("launchable-activity:"):
                     # Only use launchable-activity as fallback to application
+                    if not thisinfo['name']:
+                        thisinfo['name'] = re.match(label_pat, line).group(1)
                     if '-1' not in thisinfo['icons_src']:
                         match = re.match(icon_pat_nodpi, line)
                         if match:
