@@ -18,15 +18,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import metadata
 
+import common
+import metadata
 
 def main():
 
-    if not os.path.isdir('metadata'):
-        return
+    config = common.read_config(None)
 
     metadata.read_metadata(xref=True)
+    metadata.read_srclibs()
 
 if __name__ == "__main__":
     main()
