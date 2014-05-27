@@ -712,7 +712,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
 
     string_search = None
     if string.startswith('@string/'):
-        string_search = re.compile(r'.*"' + string[8:] + '".*?>([^<]+?)<.*').search
+        string_search = re.compile(r'.*name="' + string[8:] + '".*?>([^<]+?)<.*').search
     elif string.startswith('&') and string.endswith(';'):
         string_search = re.compile(r'.*<!ENTITY.*' + string[1:-1] + '.*?"([^"]+?)".*>').search
 
