@@ -17,14 +17,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-
 import common
 import metadata
 
 def main():
 
-    config = common.read_config(None)
+    common.read_config(None)
 
     metadata.read_metadata(xref=True)
     metadata.read_srclibs()
