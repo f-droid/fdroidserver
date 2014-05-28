@@ -44,7 +44,7 @@ def check_http(app):
 
     try:
 
-        if not 'Update Check Data' in app:
+        if 'Update Check Data' not in app:
             raise Exception('Missing Update Check Data')
 
         urlcode, codeex, urlver, verex = app['Update Check Data'].split('|')

@@ -280,7 +280,7 @@ def getvcs(vcstype, remote, local):
 
 
 def getsrclibvcs(name):
-    if not name in metadata.srclibs:
+    if name not in metadata.srclibs:
         raise VCSException("Missing srclib " + name)
     return metadata.srclibs[name]['Repo Type']
 
@@ -939,7 +939,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
         if '/' in name:
             name, subdir = name.split('/', 1)
 
-    if not name in metadata.srclibs:
+    if name not in metadata.srclibs:
         raise BuildException('srclib ' + name + ' not found.')
 
     srclib = metadata.srclibs[name]
@@ -1434,7 +1434,7 @@ class KnownApks:
     # Record an apk (if it's new, otherwise does nothing)
     # Returns the date it was added.
     def recordapk(self, apk, app):
-        if not apk in self.apks:
+        if apk not in self.apks:
             self.apks[apk] = (app, time.gmtime(time.time()))
             self.changed = True
         _, added = self.apks[apk]

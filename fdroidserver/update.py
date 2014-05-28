@@ -129,7 +129,7 @@ def update_wiki(apps, apks):
             if 'disable' in thisbuild:
                 if thisbuild['vercode'] == app['Current Version Code']:
                     cantupdate = True
-                #TODO: Nasty: vercode is a string in the build, and an int elsewhere
+                # TODO: Nasty: vercode is a string in the build, and an int elsewhere
                 apklist.append({'versioncode': int(thisbuild['vercode']),
                                 'version': thisbuild['version'],
                                 'buildproblem': thisbuild['disable']
