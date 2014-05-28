@@ -4,23 +4,23 @@
 # your system configuration.
 
 # Override the path to the Android SDK, $ANDROID_HOME by default
-#sdk_path = "/path/to/android-sdk"
+# sdk_path = "/path/to/android-sdk"
 
 # Override the path to the Android NDK, $ANDROID_NDK by default
-#ndk_path = "/path/to/android-ndk"
+# ndk_path = "/path/to/android-ndk"
 # Build tools version to be used
 build_tools = "19.0.2"
 
 # Command for running Ant
-#ant = "/path/to/ant"
+# ant = "/path/to/ant"
 ant = "ant"
 
 # Command for running maven 3
-#mvn3 = "/path/to/mvn"
+# mvn3 = "/path/to/mvn"
 mvn3 = "mvn"
 
 # Command for running Gradle
-#gradle = "/path/to/gradle"
+# gradle = "/path/to/gradle"
 gradle = "gradle"
 
 # Set the maximum age (in days) of an index that a client should accept from
@@ -55,12 +55,12 @@ of applications from the main repository.
 
 
 # The ID of a GPG key for making detached signatures for apks. Optional.
-#gpgkey = '1DBA2E89'
+# gpgkey = '1DBA2E89'
 
 # The key (from the keystore defined below) to be used for signing the
 # repository itself.  This is the same name you would give to keytool or
 # jarsigner using -alias.  (Not needed in an unsigned repository).
-#repo_keyalias = "fdroidrepo"
+# repo_keyalias = "fdroidrepo"
 
 # The keystore to use for release keys when building. This needs to be
 # somewhere safe and secure, and backed up!  The best way to manage these
@@ -68,11 +68,11 @@ of applications from the main repository.
 # configure FDroid to use a smartcard, set the keystore file using the keyword
 # "NONE" (i.e. keystore = "NONE").  That makes Java find the keystore on the
 # smartcard based on 'smartcardoptions' below.
-#keystore = "~/.local/share/fdroidserver/keystore.jks"
+# keystore = "~/.local/share/fdroidserver/keystore.jks"
 
 # You should not need to change these at all, unless you have a very
 # customized setup for using smartcards in Java with keytool/jarsigner
-#smartcardoptions = "-storetype PKCS11 -providerName SunPKCS11-OpenSC \
+# smartcardoptions = "-storetype PKCS11 -providerName SunPKCS11-OpenSC \
 #    -providerClass sun.security.pkcs11.SunPKCS11 \
 #    -providerArg opensc-fdroid.cfg"
 
@@ -80,22 +80,22 @@ of applications from the main repository.
 # different than the keypass below, it can be OK to store the password in this
 # file for real use.  But in general, sensitive passwords should not be stored
 # in text files!
-#keystorepass = "password1"
+# keystorepass = "password1"
 
 # The password for keys - the same is used for each auto-generated key as well
 # as for the repository key.  You should not normally store this password in a
 # file since it is a sensitive password.
-#keypass = "password2"
+# keypass = "password2"
 
-#The distinguished name used for all keys.
+# The distinguished name used for all keys.
 keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"
 
-#Use this to override the auto-generated key aliases with specific ones
-#for particular applications. Normally, just leave it empty.
+# Use this to override the auto-generated key aliases with specific ones
+# for particular applications. Normally, just leave it empty.
 keyaliases = {}
 keyaliases['com.example.app'] = 'example'
-#You can also force an app to use the same key alias as another one, using
-#the @ prefix.
+# You can also force an app to use the same key alias as another one, using
+# the @ prefix.
 keyaliases['com.example.another.plugin'] = '@com.example.another'
 
 # The full path to the root of the repository.  It must be specified in
@@ -103,39 +103,39 @@ keyaliases['com.example.another.plugin'] = '@com.example.another'
 # generated repo to the server that is it hosted on.  It must end in the
 # standard public repo name of "/fdroid", but can be in up to three levels of
 # sub-directories (i.e. /var/www/packagerepos/fdroid).
-#serverwebroot = 'user@example:/var/www/fdroid'
+# serverwebroot = 'user@example:/var/www/fdroid'
 
 # To upload the repo to an Amazon S3 bucket using `fdroid server update`.
 # Warning, this deletes and recreates the whole fdroid/ directory each
 # time. This is based on apache-libcloud, which supports basically all cloud
 # storage services, so it should be easy to port the fdroid server tools to
 # any of them.
-#awsbucket = 'myawsfdroid'
-#awsaccesskeyid = 'SEE0CHAITHEIMAUR2USA'
-#awssecretkey = 'yourverysecretkeywordpassphraserighthere'
+# awsbucket = 'myawsfdroid'
+# awsaccesskeyid = 'SEE0CHAITHEIMAUR2USA'
+# awssecretkey = 'yourverysecretkeywordpassphraserighthere'
 
 # If you want to force 'fdroid server' to use a non-standard serverwebroot
-#nonstandardwebroot = False
+# nonstandardwebroot = False
 
-#Wiki details
+# Wiki details
 wiki_protocol = "http"
 wiki_server = "server"
 wiki_path = "/wiki/"
 wiki_user = "login"
 wiki_password = "1234"
 
-#Only set this to true when running a repository where you want to generate
-#stats, and only then on the master build servers, not a development
-#machine.
+# Only set this to true when running a repository where you want to generate
+# stats, and only then on the master build servers, not a development
+# machine.
 update_stats = False
 
-#Use the following to push stats to a Carbon instance:
+# Use the following to push stats to a Carbon instance:
 stats_to_carbon = False
 carbon_host = '0.0.0.0'
 carbon_port = 2003
 
-#Set this to true to always use a build server. This saves specifying the
-#--server option on dedicated secure build server hosts.
+# Set this to true to always use a build server. This saves specifying the
+# --server option on dedicated secure build server hosts.
 build_server_always = False
 
 # Limit in number of characters that fields can take up
