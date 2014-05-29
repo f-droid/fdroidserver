@@ -134,8 +134,8 @@ def check_tags(app, pattern):
 
             # Only process tags where the manifest exists...
             paths = common.manifest_paths(build_dir, flavour)
-            version, vercode, package = common.parse_androidmanifests(paths,
-                    app['Update Check Ignore'])
+            version, vercode, package = \
+                common.parse_androidmanifests(paths, app['Update Check Ignore'])
             if not package or package != appid or not version or not vercode:
                 continue
 
@@ -210,8 +210,8 @@ def check_repomanifest(app, branch=None):
 
         paths = common.manifest_paths(build_dir, flavour)
 
-        version, vercode, package = common.parse_androidmanifests(paths,
-                app['Update Check Ignore'])
+        version, vercode, package = \
+            common.parse_androidmanifests(paths, app['Update Check Ignore'])
         if not package:
             return (None, "Couldn't find package ID")
         if package != appid:
