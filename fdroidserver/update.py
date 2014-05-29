@@ -947,6 +947,45 @@ def main():
     if cc:
         cachechanged = True
 
+    # Generate warnings for apk's with no metadata (or create skeleton
+    # metadata files, if requested on the command line)
+    newmetadata = False
+    for apk in apks:
+        found = False
+        for app in apps:
+            if app['id'] == apk['id']:
+                found = True
+                break
+        if not found:
+            if options.createmeta:
+                f = open(os.path.join('metadata', apk['id'] + '.txt'), 'w')
+                f.write("License:Unknown\n")
+                f.write("Web Site:\n")
+                f.write("Source Code:\n")
+                f.write("Issue Tracker:\n")
+                f.write("Summary:" + apk['name'] + "\n")
+                f.write("Description:\n")
+                f.write(apk['name'] + "\n")
+                f.write(".\n")
+                f.close()
+                logging.info("Generated skeleton metadata for " + apk['id'])
+                newmetadata = True
+            else:
+                msg = apk['apkname'] + " (" + apk['id'] + ") has no metadata!"
+                if options.delete_unknown:
+                    logging.warn(msg + "\n\tdeleting: repo/" + apk['apkname'])
+                    rmf = os.path.join(repodirs[0], apk['apkname'])
+                    if not os.path.exists(rmf):
+                        logging.error("Could not find {0} to remove it".format(rmf))
+                    else:
+                        os.remove(rmf)
+                else:
+                    logging.warn(msg + "\n\tUse `fdroid update -c` to create it.")
+
+    # update the metadata with the newly created ones included
+    if newmetadata:
+        apps = metadata.read_metadata()
+
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
         archapks, cc = scan_apks(apps, apkcache, repodirs[1], knownapks)
@@ -998,39 +1037,6 @@ def main():
     # (we had to wait until we'd scanned the apks to do this, because mostly the
     # name comes from there!)
     apps = sorted(apps, key=lambda app: app['Name'].upper())
-
-    # Generate warnings for apk's with no metadata (or create skeleton
-    # metadata files, if requested on the command line)
-    for apk in apks:
-        found = False
-        for app in apps:
-            if app['id'] == apk['id']:
-                found = True
-                break
-        if not found:
-            if options.createmeta:
-                f = open(os.path.join('metadata', apk['id'] + '.txt'), 'w')
-                f.write("License:Unknown\n")
-                f.write("Web Site:\n")
-                f.write("Source Code:\n")
-                f.write("Issue Tracker:\n")
-                f.write("Summary:" + apk['name'] + "\n")
-                f.write("Description:\n")
-                f.write(apk['name'] + "\n")
-                f.write(".\n")
-                f.close()
-                logging.info("Generated skeleton metadata for " + apk['id'])
-            else:
-                msg = apk['apkname'] + " (" + apk['id'] + ") has no metadata!"
-                if options.delete_unknown:
-                    logging.warn(msg + "\n\tdeleting: repo/" + apk['apkname'])
-                    rmf = os.path.join(repodirs[0], apk['apkname'])
-                    if not os.path.exists(rmf):
-                        logging.error("Could not find {0} to remove it".format(rmf))
-                    else:
-                        os.remove(rmf)
-                else:
-                    logging.warn(msg + "\n\tUse `fdroid update -c` to create it.")
 
     if len(repodirs) > 1:
         archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])
