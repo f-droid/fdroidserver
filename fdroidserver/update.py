@@ -884,6 +884,8 @@ def main():
     parser = OptionParser()
     parser.add_option("-c", "--createmeta", action="store_true", default=False,
                       help="Create skeleton metadata files that are missing")
+    parser.add_option("--delete-unknown", action="store_true", default=False,
+                      help="Delete APKs without metadata from the repo")
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     parser.add_option("-q", "--quiet", action="store_true", default=False,
@@ -1019,12 +1021,16 @@ def main():
                 f.close()
                 logging.info("Generated skeleton metadata for " + apk['id'])
             else:
-                logging.warn(apk['apkname'] + " (" + apk['id'] + ") has no metadata - removing")
-                rmf = os.path.join(repodirs[0], apk['apkname'])
-                if not os.path.exists(rmf):
-                    logging.error("Could not find {0} to remove it".format(rmf))
+                msg = apk['apkname'] + " (" + apk['id'] + ") has no metadata!"
+                if options.delete_unknown:
+                    logging.warn(msg + "\n\tdeleting: repo/" + apk['apkname'])
+                    rmf = os.path.join(repodirs[0], apk['apkname'])
+                    if not os.path.exists(rmf):
+                        logging.error("Could not find {0} to remove it".format(rmf))
+                    else:
+                        os.remove(rmf)
                 else:
-                    os.remove(rmf)
+                    logging.warn(msg + "\n\tUse `fdroid update -c` to create it.")
 
     if len(repodirs) > 1:
         archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])
