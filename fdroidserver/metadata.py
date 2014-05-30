@@ -34,12 +34,10 @@ class MetaDataException(Exception):
         return self.value
 
 app_defaults = {
-    'Name': None,
+    'Disabled': None,
+    'AntiFeatures': None,
     'Provides': None,
-    'Auto Name': '',
     'Categories': ['None'],
-    'Description': [],
-    'Summary': '',
     'License': 'Unknown',
     'Web Site': '',
     'Source Code': '',
@@ -49,20 +47,23 @@ app_defaults = {
     'Bitcoin': None,
     'Litecoin': None,
     'Dogecoin': None,
-    'Disabled': None,
-    'AntiFeatures': None,
-    'Archive Policy': None,
-    'Update Check Mode': 'None',
-    'Update Check Ignore': None,
-    'Update Check Name': None,
-    'Update Check Data': None,
-    'Vercode Operation': None,
-    'Auto Update Mode': 'None',
-    'Current Version': '',
-    'Current Version Code': '0',
+    'Name': None,
+    'Auto Name': '',
+    'Summary': '',
+    'Description': [],
+    'Requires Root': False,
     'Repo Type': '',
     'Repo': '',
-    'Requires Root': False,
+    'Maintainer Notes': [],
+    'Archive Policy': None,
+    'Auto Update Mode': 'None',
+    'Update Check Mode': 'None',
+    'Update Check Ignore': None,
+    'Vercode Operation': None,
+    'Update Check Name': None,
+    'Update Check Data': None,
+    'Current Version': '',
+    'Current Version Code': '0',
     'No Source Since': ''
     }
 
@@ -842,7 +843,7 @@ def write_metadata(dest, app):
                 write_builditem(key, build[key])
         mf.write('\n')
 
-    if 'Maintainer Notes' in app:
+    if app['Maintainer Notes']:
         writefield('Maintainer Notes', '')
         for line in app['Maintainer Notes']:
             mf.write("%s\n" % line)
@@ -857,6 +858,8 @@ def write_metadata(dest, app):
         writefield('Update Check Ignore')
     if app['Vercode Operation']:
         writefield('Vercode Operation')
+    if app['Update Check Name']:
+        writefield('Update Check Name')
     if app['Update Check Data']:
         writefield('Update Check Data')
     if app['Current Version']:
