@@ -128,8 +128,8 @@ __complete_install() {
 
 __complete_update() {
 	opts="-h -c -v -q -b -i -I -e -w"
-	lopts="--help --createmeta --verbose --quiet --buildreport --interactive
- --icons --editor --wiki --pretty --clean --delete-unknown"
+	lopts="--help --create-metadata --verbose --quiet --buildreport
+ --interactive --icons --editor --wiki --pretty --clean --delete-unknown"
 	case "${prev}" in
 		-e|--editor)
 			_filedir

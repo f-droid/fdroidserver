@@ -882,7 +882,7 @@ def main():
 
     # Parse command line...
     parser = OptionParser()
-    parser.add_option("-c", "--createmeta", action="store_true", default=False,
+    parser.add_option("-c", "--create-metadata", action="store_true", default=False,
                       help="Create skeleton metadata files that are missing")
     parser.add_option("--delete-unknown", action="store_true", default=False,
                       help="Delete APKs without metadata from the repo")
@@ -957,7 +957,7 @@ def main():
                 found = True
                 break
         if not found:
-            if options.createmeta:
+            if options.create_metadata:
                 f = open(os.path.join('metadata', apk['id'] + '.txt'), 'w')
                 f.write("License:Unknown\n")
                 f.write("Web Site:\n")
