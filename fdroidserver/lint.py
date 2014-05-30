@@ -73,6 +73,10 @@ regex_warnings = {
         (re.compile(r'.*[^sS]://gitorious\.org/.*'),
          "gitorious URLs should always use https:// not http://"),
         ],
+    'License': [
+        (re.compile(r'^(|None|Unknown)$'),
+         "No license specified"),
+        ],
     'Description': [
         (re.compile(r'^No description available$'),
          "Description yet to be filled"),
@@ -98,9 +102,9 @@ regex_pedantic = {
         ],
     'Repo': [
         (re.compile(r'^http://.*'),
-         "if https:// is available, use it instead of http://"),
+         "use https:// if available"),
         (re.compile(r'^svn://.*'),
-         "if https:// is available, use it instead of svn://"),
+         "use https:// if available"),
         ],
     'Issue Tracker': [
         (re.compile(r'.*code\.google\.com/p/[^/]+/issues/.*'),
@@ -174,10 +178,6 @@ def main():
                 any(s in lastcommit for s in '.,_-/')):
             pwarn("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
                 lastcommit, app['Update Check Mode']))
-
-        # No proper license
-        if app['License'] in ('Unknown', 'None', ''):
-            warn("License was not set")
 
         # Summary size limit
         summ_chars = len(app['Summary'])
