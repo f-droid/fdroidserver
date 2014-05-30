@@ -173,6 +173,26 @@ grep -F '<application id=' repo/index.xml
 
 
 #------------------------------------------------------------------------------#
+echo_header "setup a new repo from scratch, generate a keystore, then add APK and update"
+
+REPOROOT=`create_test_dir`
+KEYSTORE=$REPOROOT/keystore.jks
+cd $REPOROOT
+$fdroid init --keystore $KEYSTORE
+test -e $KEYSTORE
+copy_apks_into_repo $REPOROOT
+$fdroid update --createmeta
+test -e repo/index.xml
+test -e repo/index.jar
+grep -F '<application id=' repo/index.xml
+cp $WORKSPACE/tests/urzip.apk $REPOROOT/
+$fdroid update --createmeta
+test -e repo/index.xml
+test -e repo/index.jar
+grep -F '<application id=' repo/index.xml
+
+
+#------------------------------------------------------------------------------#
 echo_header "setup a new repo from scratch with a HSM/smartcard"
 
 REPOROOT=`create_test_dir`
