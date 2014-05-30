@@ -87,7 +87,8 @@ ordered_flags = [
 # 'fields'   - Metadata fields (Field:Value) of this type
 # 'attrs'    - Build attributes (attr=value) of this type
 #
-class FieldType():
+class FieldValidator():
+
     def __init__(self, name, matching, sep, fields, attrs):
         self.name = name
         self.matching = matching
@@ -126,84 +127,78 @@ class FieldType():
 
 # Generic value types
 valuetypes = {
-    'int': FieldType("Integer",
-                     r'^[1-9][0-9]*$', None,
-                     ['FlattrID'],
-                     ['vercode']),
+    FieldValidator("Integer",
+                   r'^[1-9][0-9]*$', None,
+                   ['FlattrID'],
+                   ['vercode']),
 
-    'http': FieldType("HTTP link",
-                      r'^http[s]?://', None,
-                      ["Web Site", "Source Code", "Issue Tracker", "Donate"], []),
+    FieldValidator("HTTP link",
+                   r'^http[s]?://', None,
+                   ["Web Site", "Source Code", "Issue Tracker", "Donate"], []),
 
-    'bitcoin': FieldType("Bitcoin address",
-                         r'^[a-zA-Z0-9]{27,34}$', None,
-                         ["Bitcoin"],
-                         []),
+    FieldValidator("Bitcoin address",
+                   r'^[a-zA-Z0-9]{27,34}$', None,
+                   ["Bitcoin"],
+                   []),
 
-    'litecoin': FieldType("Litecoin address",
-                          r'^L[a-zA-Z0-9]{33}$', None,
-                          ["Litecoin"],
-                          []),
+    FieldValidator("Litecoin address",
+                   r'^L[a-zA-Z0-9]{33}$', None,
+                   ["Litecoin"],
+                   []),
 
-    'dogecoin': FieldType("Dogecoin address",
-                          r'^D[a-zA-Z0-9]{33}$', None,
-                          ["Dogecoin"],
-                          []),
+    FieldValidator("Dogecoin address",
+                   r'^D[a-zA-Z0-9]{33}$', None,
+                   ["Dogecoin"],
+                   []),
 
-    'Bool': FieldType("Boolean",
-                      ['Yes', 'No'], None,
-                      ["Requires Root"],
-                      []),
+    FieldValidator("Boolean",
+                   ['Yes', 'No'], None,
+                   ["Requires Root"],
+                   []),
 
-    'bool': FieldType("Boolean",
-                      ['yes', 'no'], None,
-                      [],
-                      ['submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
-                       'novcheck']),
+    FieldValidator("bool",
+                   ['yes', 'no'], None,
+                   [],
+                   ['submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
+                    'novcheck']),
 
-    'Repo Type': FieldType("Repo Type",
-                           ['git', 'git-svn', 'svn', 'hg', 'bzr', 'srclib'], None,
-                           ["Repo Type"],
-                           []),
+    FieldValidator("Repo Type",
+                   ['git', 'git-svn', 'svn', 'hg', 'bzr', 'srclib'], None,
+                   ["Repo Type"],
+                   []),
 
-    'archive': FieldType("Archive Policy",
-                         r'^[0-9]+ versions$', None,
-                         ["Archive Policy"],
-                         []),
+    FieldValidator("Archive Policy",
+                   r'^[0-9]+ versions$', None,
+                   ["Archive Policy"],
+                   []),
 
-    'antifeatures': FieldType("Anti-Feature",
-                              ["Ads", "Tracking", "NonFreeNet", "NonFreeDep", "NonFreeAdd", "UpstreamNonFree"], ',',
-                              ["AntiFeatures"],
-                              []),
+    FieldValidator("Anti-Feature",
+                   ["Ads", "Tracking", "NonFreeNet", "NonFreeDep", "NonFreeAdd", "UpstreamNonFree"], ',',
+                   ["AntiFeatures"],
+                   []),
 
-    'autoupdatemodes': FieldType("Auto Update Mode",
-                                 r"^(Version .+|None)$", None,
-                                 ["Auto Update Mode"],
-                                 []),
+    FieldValidator("Auto Update Mode",
+                   r"^(Version .+|None)$", None,
+                   ["Auto Update Mode"],
+                   []),
 
-    'updatecheckmodes': FieldType("Update Check Mode",
-                                  r"^(Tags|Tags .+|RepoManifest|RepoManifest/.+|RepoTrunk|HTTP|Static|None)$", None,
-                                  ["Update Check Mode"],
-                                  [])
+    FieldValidator("Update Check Mode",
+                   r"^(Tags|Tags .+|RepoManifest|RepoManifest/.+|RepoTrunk|HTTP|Static|None)$", None,
+                   ["Update Check Mode"],
+                   [])
     }
 
 
 # Check an app's metadata information for integrity errors
 def check_metadata(info):
-    for k, t in valuetypes.iteritems():
-        for field in t.fields:
+    for v in valuetypes:
+        for field in v.fields:
             if field in info:
-                t.check(info[field], info['id'])
-                if k == 'Bool':
-                    info[field] = info[field] == "Yes"
+                v.check(info[field], info['id'])
         for build in info['builds']:
-            for attr in t.attrs:
+            for attr in v.attrs:
                 if attr in build:
-                    t.check(build[attr], info['id'])
-                    if k == 'bool':
-                        build[attr] = build[attr] == "yes"
-                elif k == 'bool':
-                    build[attr] = False
+                    v.check(build[attr], info['id'])
 
 
 # Formatter for descriptions. Create an instance, and call parseline() with
@@ -499,6 +494,9 @@ def flagtype(name):
         return 'list'
     if name in ['init', 'prebuild', 'build']:
         return 'script'
+    if name in ['submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
+            'novcheck']:
+        return 'bool'
     return 'string'
 
 
@@ -549,10 +547,15 @@ def parse_metadata(metafile):
         if t == 'list':
             # Port legacy ';' separators
             thisbuild[pk] = [v.strip() for v in pv.replace(';', ',').split(',')]
-        elif t == 'string':
+        elif t == 'string' or t == 'script':
             thisbuild[pk] = pv
-        elif t == 'script':
-            thisbuild[pk] = pv
+        elif t == 'bool':
+            value = pv == 'yes'
+            if value:
+                thisbuild[pk] = True
+            else:
+                logging.debug("...ignoring bool flag %s" % p)
+
         else:
             raise MetaDataException("Unrecognised build flag type '%s' at %s in %s"
                                     % (t, p, linedesc))
@@ -622,6 +625,16 @@ def parse_metadata(metafile):
     curcomments = []
     curbuild = None
 
+    def fill_bool_defaults(build):
+        # TODO: quick fix to make bool flags default to False
+        # Should provide defaults for all flags instead of using
+        # build.get(flagname, default) each time
+        for f in ordered_flags:
+            if f in build:
+                continue
+            if flagtype(f) == 'bool':
+                build[f] = False
+
     c = 0
     for line in metafile:
         c += 1
@@ -632,6 +645,8 @@ def parse_metadata(metafile):
                 if 'commit' not in curbuild and 'disable' not in curbuild:
                     raise MetaDataException("No commit specified for {0} in {1}"
                                             .format(curbuild['version'], linedesc))
+
+                fill_bool_defaults(curbuild)
                 thisinfo['builds'].append(curbuild)
                 add_comments('build:' + curbuild['version'])
                 mode = 0
@@ -706,8 +721,9 @@ def parse_metadata(metafile):
                 buildlines.append(line[:-1])
             else:
                 buildlines.append(line)
-                thisinfo['builds'].append(
-                    parse_buildline(buildlines))
+                curbuild = parse_buildline(buildlines)
+                fill_bool_defaults(curbuild)
+                thisinfo['builds'].append(curbuild)
                 add_comments('build:' + thisinfo['builds'][-1]['version'])
                 mode = 0
     add_comments(None)
@@ -798,21 +814,26 @@ def write_metadata(dest, app):
         mf.write("Build:%s,%s\n" % (build['version'], build['vercode']))
 
         def write_builditem(key, value):
+
             if key in ['version', 'vercode', 'origlines', 'type']:
                 return
-            if key in valuetypes['bool'].attrs:
-                if not value:
-                    return
-                value = 'yes'
+
             t = flagtype(key)
+            if t == 'bool' and value == False:
+                return
+
             logging.debug("...writing {0} : {1}".format(key, value))
             outline = '    %s=' % key
+
             if t == 'string':
                 outline += value
+            if t == 'bool':
+                outline += 'yes'
             elif t == 'script':
                 outline += '&& \\\n        '.join([s.lstrip() for s in value.split('&& ')])
             elif t == 'list':
                 outline += ','.join(value) if type(value) == list else value
+
             outline += '\n'
             mf.write(outline)
 
