@@ -132,7 +132,12 @@ def main():
         # if neither --android-home nor the default sdk_path exist, prompt the user
         default_sdk_path = '/opt/android-sdk'
         while not options.no_prompt:
-            s = raw_input('Enter the path to the Android SDK (' + default_sdk_path + ') here:\n> ')
+            try:
+                s = raw_input('Enter the path to the Android SDK ('
+                              + default_sdk_path + ') here:\n> ')
+            except KeyboardInterrupt:
+                print('')
+                sys.exit(1)
             if re.match('^\s*$', s) is not None:
                 test_config['sdk_path'] = default_sdk_path
             else:
