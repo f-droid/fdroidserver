@@ -3,6 +3,11 @@
 set -e
 set -x
 
+echo_header() {
+    echo "=============================================================================="
+    echo $1
+}
+
 copy_apks_into_repo() {
     for f in `ls -1 ../../*/bin/*.apk`; do
         name=$(basename $(dirname `dirname $f`))
@@ -40,7 +45,7 @@ if [ -z $fdroid ]; then
 fi
 
 #------------------------------------------------------------------------------#
-echo "setup a new repo from scratch using ANDROID_HOME"
+echo_header "setup a new repo from scratch using ANDROID_HOME"
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
@@ -76,7 +81,33 @@ set -e
 
 
 #------------------------------------------------------------------------------#
-echo "check that --android-home overrides ANDROID_HOME"
+echo_header "check that fake android home passes `fdroid init`"
+
+REPOROOT=`create_test_dir`
+FAKE_ANDROID_HOME=`create_test_dir`
+create_fake_android_home $FAKE_ANDROID_HOME
+KEYSTORE=$REPOROOT/keystore.jks
+cd $REPOROOT
+$fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME
+
+
+#------------------------------------------------------------------------------#
+echo_header "check that 'fdroid init' fails when build-tools cannot be found"
+
+REPOROOT=`create_test_dir`
+FAKE_ANDROID_HOME=`create_test_dir`
+create_fake_android_home $FAKE_ANDROID_HOME
+rm -f $FAKE_ANDROID_HOME/build-tools/*/aapt
+KEYSTORE=$REPOROOT/keystore.jks
+cd $REPOROOT
+set +e
+$fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME
+[ $? -eq 0 ] && exit 1
+set -e
+
+
+#------------------------------------------------------------------------------#
+echo_header "check that --android-home overrides ANDROID_HOME"
 
 REPOROOT=`create_test_dir`
 FAKE_ANDROID_HOME=`create_test_dir`
@@ -94,7 +125,7 @@ set -e
 
 
 #------------------------------------------------------------------------------#
-echo "setup a new repo from scratch with keystore and android-home set on cmd line"
+echo_header "setup a new repo from scratch with keystore and android-home set on cmd line"
 
 REPOROOT=`create_test_dir`
 KEYSTORE=$REPOROOT/keystore.jks
@@ -115,7 +146,7 @@ export ANDROID_HOME=$STORED_ANDROID_HOME
 
 
 #------------------------------------------------------------------------------#
-echo "setup new repo from scratch using ANDROID_HOME, putting APKs in repo first"
+echo_header "setup new repo from scratch using ANDROID_HOME, putting APKs in repo first"
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
@@ -127,7 +158,7 @@ $fdroid update
 
 
 #------------------------------------------------------------------------------#
-echo "setup a new repo from scratch and generate a keystore"
+echo_header "setup a new repo from scratch and generate a keystore"
 
 REPOROOT=`create_test_dir`
 KEYSTORE=$REPOROOT/keystore.jks
@@ -142,7 +173,7 @@ test -e repo/index.jar
 
 
 #------------------------------------------------------------------------------#
-echo "setup a new repo from scratch with a HSM/smartcard"
+echo_header "setup a new repo from scratch with a HSM/smartcard"
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT

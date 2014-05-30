@@ -155,18 +155,15 @@ def main():
         logging.info('Try running `fdroid init` in an empty directory.')
         sys.exit()
 
-    # now that we have a local config.py, read configuration...
-    config = common.read_config(options)
-
     # try to find a working aapt, in all the recent possible paths
-    build_tools = os.path.join(config['sdk_path'], 'build-tools')
+    build_tools = os.path.join(test_config['sdk_path'], 'build-tools')
     aaptdirs = []
-    aaptdirs.append(os.path.join(build_tools, config['build_tools']))
+    aaptdirs.append(os.path.join(build_tools, test_config['build_tools']))
     aaptdirs.append(build_tools)
-    for f in sorted(os.listdir(build_tools), reverse=True):
+    for f in os.listdir(build_tools):
         if os.path.isdir(os.path.join(build_tools, f)):
             aaptdirs.append(os.path.join(build_tools, f))
-    for d in aaptdirs:
+    for d in sorted(aaptdirs, reverse=True):
         if os.path.isfile(os.path.join(d, 'aapt')):
             aapt = os.path.join(d, 'aapt')
             break
@@ -174,9 +171,15 @@ def main():
         dirname = os.path.basename(os.path.dirname(aapt))
         if dirname == 'build-tools':
             # this is the old layout, before versioned build-tools
-            write_to_config('build_tools', '')
+            test_config['build_tools'] = ''
         else:
-            write_to_config('build_tools', dirname)
+            test_config['build_tools'] = dirname
+        write_to_config('build_tools', test_config['build_tools'])
+    if not common.test_build_tools_exists(test_config):
+        sys.exit(3)
+
+    # now that we have a local config.py, read configuration...
+    config = common.read_config(options)
 
     # track down where the Android NDK is
     ndk_path = '/opt/android-ndk'
