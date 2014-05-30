@@ -51,8 +51,8 @@ REPOROOT=`create_test_dir`
 cd $REPOROOT
 $fdroid init
 copy_apks_into_repo $REPOROOT
-$fdroid update -c
-$fdroid update
+$fdroid update --createmeta
+grep -F '<application id=' repo/index.xml
 
 
 #------------------------------------------------------------------------------#
@@ -138,8 +138,8 @@ cd $REPOROOT
 $fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME --no-prompt
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
-$fdroid update -c
-$fdroid update
+$fdroid update --createmeta
+grep -F '<application id=' repo/index.xml
 test -e repo/index.xml
 test -e repo/index.jar
 export ANDROID_HOME=$STORED_ANDROID_HOME
@@ -153,8 +153,8 @@ cd $REPOROOT
 mkdir repo
 copy_apks_into_repo $REPOROOT
 $fdroid init
-$fdroid update -c
-$fdroid update
+$fdroid update --createmeta
+grep -F '<application id=' repo/index.xml
 
 
 #------------------------------------------------------------------------------#
@@ -166,10 +166,10 @@ cd $REPOROOT
 $fdroid init --keystore $KEYSTORE
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
-$fdroid update -c
-$fdroid update
+$fdroid update --createmeta
 test -e repo/index.xml
 test -e repo/index.jar
+grep -F '<application id=' repo/index.xml
 
 
 #------------------------------------------------------------------------------#
