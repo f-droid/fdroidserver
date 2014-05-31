@@ -170,7 +170,7 @@ def main():
             continue
 
         for build in app['builds']:
-            if 'commit' in build and 'disable' not in build:
+            if build['commit'] and not build['disable']:
                 lastcommit = build['commit']
 
         # Potentially incorrect UCM
@@ -225,16 +225,14 @@ def main():
         # Build warnings
         for build in app['builds']:
             for n in ['master', 'origin/', 'default', 'trunk']:
-                if 'commit' in build:
-                    if build['commit'].startswith(n):
-                        warn("Branch '%s' used as commit in build '%s'" % (
-                            n, build['version']))
-                if 'srclibs' in build:
-                    for srclib in build['srclibs']:
-                        ref = srclib.split('@')[1].split('/')[0]
-                        if ref.startswith(n):
-                            warn("Branch '%s' used as commit in srclib '%s'" % (
-                                n, srclib))
+                if build['commit'] and build['commit'].startswith(n):
+                    warn("Branch '%s' used as commit in build '%s'" % (
+                        n, build['version']))
+                for srclib in build['srclibs']:
+                    ref = srclib.split('@')[1].split('/')[0]
+                    if ref.startswith(n):
+                        warn("Branch '%s' used as commit in srclib '%s'" % (
+                            n, srclib))
 
         if not appid:
             print

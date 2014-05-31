@@ -126,7 +126,7 @@ def update_wiki(apps, apks):
                 apklist.append(apk)
         # Include ones we can't build, as a special case...
         for thisbuild in app['builds']:
-            if 'disable' in thisbuild:
+            if thisbuild['disable']:
                 if thisbuild['vercode'] == app['Current Version Code']:
                     cantupdate = True
                 # TODO: Nasty: vercode is a string in the build, and an int elsewhere
@@ -272,7 +272,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
     """
     for app in apps:
         for build in app['builds']:
-            if 'disable' in build:
+            if build['disable']:
                 apkfilename = app['id'] + '_' + str(build['vercode']) + '.apk'
                 for repodir in repodirs:
                     apkpath = os.path.join(repodir, apkfilename)

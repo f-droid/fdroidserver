@@ -326,7 +326,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         ftp.mkdir('extlib')
         ftp.mkdir('srclib')
         # Copy any extlibs that are required...
-        if 'extlibs' in thisbuild:
+        if thisbuild['extlibs']:
             ftp.chdir(homedir + '/build/extlib')
             for lib in thisbuild['extlibs']:
                 lib = lib.strip()
@@ -343,7 +343,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                     ftp.chdir('..')
         # Copy any srclibs that are required...
         srclibpaths = []
-        if 'srclibs' in thisbuild:
+        if thisbuild['srclibs']:
             for lib in thisbuild['srclibs']:
                 srclibpaths.append(
                     common.getsrclib(lib, 'build/srclib', srclibpaths,
@@ -439,7 +439,7 @@ def adapt_gradle(build_dir):
 def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver):
     """Do a build locally."""
 
-    if thisbuild.get('buildjni') not in (None, ['no']):
+    if thisbuild['buildjni'] and thisbuild['buildjni'] != ['no']:
         if not config['ndk_path']:
             logging.critical("$ANDROID_NDK is not set!")
             sys.exit(3)
@@ -546,13 +546,14 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 f.write(manifestcontent)
 
     # Run a build command if one is required...
-    if 'build' in thisbuild:
+    if thisbuild['build']:
+        logging.info("Running 'build' commands in %s" % root_dir)
         cmd = common.replace_config_vars(thisbuild['build'])
+
         # Substitute source library paths into commands...
         for name, number, libpath in srclibpaths:
             libpath = os.path.relpath(libpath, root_dir)
             cmd = cmd.replace('$$' + name + '$$', libpath)
-        logging.info("Running 'build' commands in %s" % root_dir)
 
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
 
@@ -561,9 +562,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                                  (app['id'], thisbuild['version']), p.stdout)
 
     # Build native stuff if required...
-    if thisbuild.get('buildjni') not in (None, ['no']):
-        logging.info("Building native libraries...")
-        jni_components = thisbuild.get('buildjni')
+    if thisbuild['buildjni'] and thisbuild['buildjni'] != ['no']:
+        logging.info("Building the native code")
+        jni_components = thisbuild['buildjni']
+
         if jni_components == ['yes']:
             jni_components = ['']
         cmd = [os.path.join(config['ndk_path'], "ndk-build"), "-j1"]
@@ -601,7 +603,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                   '-Dmaven.jar.sign.skip=true', '-Dmaven.test.skip=true',
                   '-Dandroid.sign.debug=false', '-Dandroid.release=true',
                   'package']
-        if 'target' in thisbuild:
+        if thisbuild['target']:
             target = thisbuild["target"].split('-')[1]
             FDroidPopen(['sed', '-i',
                          's@<platform>[0-9]*</platform>@<platform>'
@@ -615,7 +617,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                              'pom.xml'],
                             cwd=maven_dir)
 
-        if 'mvnflags' in thisbuild:
+        if thisbuild['mvnflags']:
             mvncmd += thisbuild['mvnflags']
 
         p = FDroidPopen(mvncmd, cwd=maven_dir)
@@ -697,7 +699,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             flavours[0] = ''
 
         commands = [config['gradle']]
-        if 'preassemble' in thisbuild:
+        if thisbuild['preassemble']:
             commands += thisbuild['preassemble'].split()
 
         flavours_cmd = ''.join(flavours)
@@ -711,7 +713,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     elif thisbuild['type'] == 'ant':
         logging.info("Building Ant project...")
         cmd = ['ant']
-        if 'antcommand' in thisbuild:
+        if thisbuild['antcommand']:
             cmd += [thisbuild['antcommand']]
         else:
             cmd += ['release']
@@ -744,7 +746,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     elif thisbuild['type'] == 'gradle':
         basename = app['id']
         dd = build_dir
-        if 'subdir' in thisbuild:
+        if thisbuild['subdir']:
             dd = os.path.join(dd, thisbuild['subdir'])
             basename = os.path.basename(thisbuild['subdir'])
         if '@' in thisbuild['gradle']:
@@ -801,7 +803,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         elif line.startswith("native-code:"):
             nativecode = line[12:]
 
-    if thisbuild.get('buildjni') is not None:
+    if thisbuild['buildjni']:
         if nativecode is None or "'" not in nativecode:
             raise BuildException("Native code should have been built but none was packaged")
     if thisbuild['novcheck']:
@@ -875,7 +877,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
             if os.path.exists(dest_also):
                 return False
 
-    if 'disable' in thisbuild:
+    if thisbuild['disable']:
         return False
 
     logging.info("Building version " + thisbuild['version'] + ' of ' + app['id'])
@@ -997,7 +999,7 @@ def main():
     if options.latest:
         for app in apps:
             for build in reversed(app['builds']):
-                if 'disable' in build:
+                if build['disable']:
                     continue
                 app['builds'] = [build]
                 break

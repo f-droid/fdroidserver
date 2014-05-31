@@ -1018,7 +1018,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
 def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=False):
 
     # Optionally, the actual app source can be in a subdirectory
-    if 'subdir' in build:
+    if build['subdir']:
         root_dir = os.path.join(build_dir, build['subdir'])
     else:
         root_dir = build_dir
@@ -1038,7 +1038,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         raise BuildException('Missing subdir ' + root_dir)
 
     # Run an init command if one is required
-    if 'init' in build:
+    if build['init']:
         cmd = replace_config_vars(build['init'])
         logging.info("Running 'init' commands in %s" % root_dir)
 
@@ -1048,7 +1048,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                                  (app['id'], build['version']), p.stdout)
 
     # Apply patches if any
-    if 'patch' in build:
+    if build['patch']:
+        logging.info("Applying patches")
         for patch in build['patch']:
             patch = patch.strip()
             logging.info("Applying " + patch)
@@ -1059,7 +1060,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Get required source libraries
     srclibpaths = []
-    if 'srclibs' in build:
+    if build['srclibs']:
         logging.info("Collecting source libraries")
         for lib in build['srclibs']:
             srclibpaths.append(getsrclib(lib, srclib_dir, srclibpaths,
@@ -1075,7 +1076,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Update the local.properties file
     localprops = [os.path.join(build_dir, 'local.properties')]
-    if 'subdir' in build:
+    if build['subdir']:
         localprops += [os.path.join(root_dir, 'local.properties')]
     for path in localprops:
         if not os.path.isfile(path):
@@ -1099,7 +1100,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             props += "ndk.dir=%s\n" % config['ndk_path']
             props += "ndk-location=%s\n" % config['ndk_path']
         # Add java.encoding if necessary
-        if 'encoding' in build:
+        if build['encoding']:
             props += "java.encoding=%s\n" % build['encoding']
         f = open(path, 'w')
         f.write(props)
@@ -1111,7 +1112,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         if flavour in ['main', 'yes', '']:
             flavour = None
 
-        if 'target' in build:
+        if build['target']:
             n = build["target"].split('-')[1]
             FDroidPopen(['sed', '-i',
                          's@compileSdkVersion *[0-9]*@compileSdkVersion ' + n + '@g',
@@ -1169,7 +1170,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                     raise BuildException("Failed to amend build.gradle")
 
     # Delete unwanted files
-    if 'rm' in build:
+    if build['rm']:
+        logging.info("Removing specified files")
         for part in getpaths(build_dir, build, 'rm'):
             dest = os.path.join(build_dir, part)
             logging.info("Removing {0}".format(part))
@@ -1184,7 +1186,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     remove_signing_keys(build_dir)
 
     # Add required external libraries
-    if 'extlibs' in build:
+    if build['extlibs']:
         logging.info("Collecting prebuilt libraries")
         libsdir = os.path.join(root_dir, 'libs')
         if not os.path.exists(libsdir):
@@ -1199,7 +1201,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             shutil.copyfile(libsrc, os.path.join(libsdir, libf))
 
     # Run a pre-build command if one is required
-    if 'prebuild' in build:
+    if build['prebuild']:
+        logging.info("Running 'prebuild' commands in %s" % root_dir)
+
         cmd = replace_config_vars(build['prebuild'])
 
         # Substitute source library paths into prebuild commands
@@ -1207,27 +1211,24 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             libpath = os.path.relpath(libpath, root_dir)
             cmd = cmd.replace('$$' + name + '$$', libpath)
 
-        logging.info("Running 'prebuild' commands in %s" % root_dir)
-
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running prebuild command for %s:%s" %
                                  (app['id'], build['version']), p.stdout)
 
-    updatemode = build.get('update', ['auto'])
     # Generate (or update) the ant build file, build.xml...
-    if updatemode != ['no'] and build['type'] == 'ant':
+    if build['update'] and build['update'] != ['no'] and build['type'] == 'ant':
         parms = [os.path.join(config['sdk_path'], 'tools', 'android'), 'update']
         lparms = parms + ['lib-project']
         parms = parms + ['project']
 
-        if 'target' in build and build['target']:
+        if build['target']:
             parms += ['-t', build['target']]
             lparms += ['-t', build['target']]
-        if updatemode == ['auto']:
+        if build['update'] == ['auto']:
             update_dirs = ant_subprojects(root_dir) + ['.']
         else:
-            update_dirs = updatemode
+            update_dirs = build['update']
 
         for d in update_dirs:
             subdir = os.path.join(root_dir, d)
@@ -1254,8 +1255,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 # Split and extend via globbing the paths from a field
 def getpaths(build_dir, build, field):
     paths = []
-    if field not in build:
-        return paths
     for p in build[field]:
         p = p.strip()
         full_path = os.path.join(build_dir, p)
@@ -1394,7 +1393,7 @@ def scan_source(build_dir, root_dir, thisbuild):
     # indicate a problem (if it's not a problem, explicitly use
     # buildjni=no to bypass this check)
     if (os.path.exists(os.path.join(root_dir, 'jni')) and
-            thisbuild.get('buildjni') is None):
+            not thisbuild['buildjni']):
         logging.warn('Found jni directory, but buildjni is not enabled')
         count += 1
 

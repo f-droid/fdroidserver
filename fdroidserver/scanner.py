@@ -83,7 +83,7 @@ def main():
 
             for thisbuild in app['builds']:
 
-                if 'disable' in thisbuild:
+                if thisbuild['disable']:
                     logging.info("...skipping version %s - %s" % (
                         thisbuild['version'], thisbuild.get('disable', thisbuild['commit'][1:])))
                 else:

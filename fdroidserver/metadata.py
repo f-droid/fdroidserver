@@ -23,6 +23,8 @@ import glob
 import cgi
 import logging
 
+from collections import OrderedDict
+
 srclibs = {}
 
 
@@ -33,51 +35,73 @@ class MetaDataException(Exception):
     def __str__(self):
         return self.value
 
-app_defaults = {
-    'Disabled': None,
-    'AntiFeatures': None,
-    'Provides': None,
-    'Categories': ['None'],
-    'License': 'Unknown',
-    'Web Site': '',
-    'Source Code': '',
-    'Issue Tracker': '',
-    'Donate': None,
-    'FlattrID': None,
-    'Bitcoin': None,
-    'Litecoin': None,
-    'Dogecoin': None,
-    'Name': None,
-    'Auto Name': '',
-    'Summary': '',
-    'Description': [],
-    'Requires Root': False,
-    'Repo Type': '',
-    'Repo': '',
-    'Maintainer Notes': [],
-    'Archive Policy': None,
-    'Auto Update Mode': 'None',
-    'Update Check Mode': 'None',
-    'Update Check Ignore': None,
-    'Vercode Operation': None,
-    'Update Check Name': None,
-    'Update Check Data': None,
-    'Current Version': '',
-    'Current Version Code': '0',
-    'No Source Since': ''
-    }
+# In the order in which they are laid out on files
+app_defaults = OrderedDict([
+    ('Disabled', None),
+    ('AntiFeatures', None),
+    ('Provides', None),
+    ('Categories', ['None']),
+    ('License', 'Unknown'),
+    ('Web Site', ''),
+    ('Source Code', ''),
+    ('Issue Tracker', ''),
+    ('Donate', None),
+    ('FlattrID', None),
+    ('Bitcoin', None),
+    ('Litecoin', None),
+    ('Dogecoin', None),
+    ('Name', None),
+    ('Auto Name', ''),
+    ('Summary', ''),
+    ('Description', []),
+    ('Requires Root', False),
+    ('Repo Type', ''),
+    ('Repo', ''),
+    ('Maintainer Notes', []),
+    ('Archive Policy', None),
+    ('Auto Update Mode', 'None'),
+    ('Update Check Mode', 'None'),
+    ('Update Check Ignore', None),
+    ('Vercode Operation', None),
+    ('Update Check Name', None),
+    ('Update Check Data', None),
+    ('Current Version', ''),
+    ('Current Version Code', '0'),
+    ('No Source Since', ''),
+    ])
 
 
-# This defines the preferred order for the build items - as in the
-# manual, they're roughly in order of application.
-ordered_flags = [
-    'disable', 'commit', 'subdir', 'submodules', 'init',
-    'gradle', 'maven', 'kivy', 'output', 'oldsdkloc', 'target',
-    'update', 'encoding', 'forceversion', 'forcevercode', 'rm',
-    'extlibs', 'srclibs', 'patch', 'prebuild', 'scanignore',
-    'scandelete', 'build', 'buildjni', 'preassemble', 'bindir',
-    'antcommand', 'novcheck'
-    ]
+# In the order in which they are laid out on files
+# Sorted by their action and their place in the build timeline
+flag_defaults = OrderedDict([
+    ('disable', False),
+    ('commit', None),
+    ('subdir', None),
+    ('submodules', False),
+    ('init', None),
+    ('patch', []),
+    ('gradle', False),
+    ('maven', False),
+    ('kivy', False),
+    ('output', None),
+    ('srclibs', []),
+    ('oldsdkloc', False),
+    ('encoding', None),
+    ('forceversion', False),
+    ('forcevercode', False),
+    ('rm', []),
+    ('extlibs', []),
+    ('prebuild', []),
+    ('update', ['auto']),
+    ('target', None),
+    ('scanignore', []),
+    ('scandelete', []),
+    ('build', []),
+    ('buildjni', []),
+    ('preassemble', []),
+    ('antcommand', None),
+    ('novcheck', False),
+    ])
 
 
 # Designates a metadata field type and checks that it matches
@@ -198,7 +222,7 @@ def check_metadata(info):
                 v.check(info[field], info['id'])
         for build in info['builds']:
             for attr in v.attrs:
-                if attr in build:
+                if build[attr]:
                     v.check(build[attr], info['id'])
 
 
@@ -496,7 +520,7 @@ def flagtype(name):
     if name in ['init', 'prebuild', 'build']:
         return 'script'
     if name in ['submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
-            'novcheck']:
+                'novcheck']:
         return 'bool'
     return 'string'
 
@@ -541,7 +565,7 @@ def parse_metadata(metafile):
                                     .format(pk, thisbuild['version'], linedesc))
 
         pk = pk.lstrip()
-        if pk not in ordered_flags:
+        if pk not in flag_defaults:
             raise MetaDataException("Unrecognised build flag at {0} in {1}"
                                     .format(p, linedesc))
         t = flagtype(pk)
@@ -598,9 +622,9 @@ def parse_metadata(metafile):
 
     def get_build_type(build):
         for t in ['maven', 'gradle', 'kivy']:
-            if build.get(t, 'no') != 'no':
+            if build[t]:
                 return t
-        if 'output' in build:
+        if build['output']:
             return 'raw'
         return 'ant'
 
@@ -626,16 +650,6 @@ def parse_metadata(metafile):
     curcomments = []
     curbuild = None
 
-    def fill_bool_defaults(build):
-        # TODO: quick fix to make bool flags default to False
-        # Should provide defaults for all flags instead of using
-        # build.get(flagname, default) each time
-        for f in ordered_flags:
-            if f in build:
-                continue
-            if flagtype(f) == 'bool':
-                build[f] = False
-
     c = 0
     for line in metafile:
         c += 1
@@ -647,7 +661,6 @@ def parse_metadata(metafile):
                     raise MetaDataException("No commit specified for {0} in {1}"
                                             .format(curbuild['version'], linedesc))
 
-                fill_bool_defaults(curbuild)
                 thisinfo['builds'].append(curbuild)
                 add_comments('build:' + curbuild['version'])
                 mode = 0
@@ -696,7 +709,7 @@ def parse_metadata(metafile):
                     mode = 2
                     buildlines = [value[:-1]]
                 else:
-                    thisinfo['builds'].append(parse_buildline([value]))
+                    curbuild = parse_buildline([value])
                     add_comments('build:' + thisinfo['builds'][-1]['version'])
             elif fieldtype == 'buildv2':
                 curbuild = {}
@@ -723,7 +736,6 @@ def parse_metadata(metafile):
             else:
                 buildlines.append(line)
                 curbuild = parse_buildline(buildlines)
-                fill_bool_defaults(curbuild)
                 thisinfo['builds'].append(curbuild)
                 add_comments('build:' + thisinfo['builds'][-1]['version'])
                 mode = 0
@@ -741,6 +753,10 @@ def parse_metadata(metafile):
         thisinfo['Description'].append('No description available')
 
     for build in thisinfo['builds']:
+        for flag, value in flag_defaults.iteritems():
+            if flag in build:
+                continue
+            build[flag] = value
         build['type'] = get_build_type(build)
 
     return thisinfo
@@ -819,9 +835,10 @@ def write_metadata(dest, app):
             if key in ['version', 'vercode', 'origlines', 'type']:
                 return
 
-            t = flagtype(key)
-            if t == 'bool' and value == False:
+            if value == flag_defaults[key]:
                 return
+
+            t = flagtype(key)
 
             logging.debug("...writing {0} : {1}".format(key, value))
             outline = '    %s=' % key
@@ -838,9 +855,10 @@ def write_metadata(dest, app):
             outline += '\n'
             mf.write(outline)
 
-        for key in ordered_flags:
-            if key in build:
-                write_builditem(key, build[key])
+        for flag in flag_defaults:
+            value = build[flag]
+            if value:
+                write_builditem(flag, value)
         mf.write('\n')
 
     if app['Maintainer Notes']:

@@ -109,9 +109,9 @@ def check_tags(app, pattern):
 
         flavour = None
         if len(app['builds']) > 0:
-            if 'subdir' in app['builds'][-1]:
+            if app['builds'][-1]['subdir']:
                 build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
-            if 'gradle' in app['builds'][-1]:
+            if app['builds'][-1]['gradle']:
                 flavour = app['builds'][-1]['gradle']
         if flavour == 'yes':
             flavour = None
@@ -198,9 +198,9 @@ def check_repomanifest(app, branch=None):
         flavour = None
 
         if len(app['builds']) > 0:
-            if 'subdir' in app['builds'][-1]:
+            if app['builds'][-1]['subdir']:
                 build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
-            if 'gradle' in app['builds'][-1]:
+            if app['builds'][-1]['gradle']:
                 flavour = app['builds'][-1]['gradle']
         if flavour == 'yes':
             flavour = None
@@ -434,9 +434,9 @@ def main():
 
                 flavour = None
                 if len(app['builds']) > 0:
-                    if 'subdir' in app['builds'][-1]:
+                    if app['builds'][-1]['subdir']:
                         app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
-                    if 'gradle' in app['builds'][-1]:
+                    if app['builds'][-1]['gradle']:
                         flavour = app['builds'][-1]['gradle']
                 if flavour == 'yes':
                     flavour = None
@@ -491,9 +491,8 @@ def main():
 
                 if not gotcur:
                     newbuild = latest.copy()
-                    for k in ('origlines', 'disable'):
-                        if k in newbuild:
-                            del newbuild[k]
+                    del newbuild['origlines']
+                    newbuild['disable'] = False
                     newbuild['vercode'] = app['Current Version Code']
                     newbuild['version'] = app['Current Version'] + suffix
                     logging.info("...auto-generating build for " + newbuild['version'])
