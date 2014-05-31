@@ -30,5 +30,5 @@ else
 fi
 
 # If there are python errors or warnings, print them and fail.
-[ -n "$PYFLAKES" ] && $PYFLAKES $FILES
-#[ -n "$PEP8" ] && $PEP8 --ignore=E123,E501 $FILES
+[ -n $PYFLAKES ] && $PYFLAKES $FILES
+[ -n $PEP8 ] && $PEP8 --ignore=E123,E501 $FILES
