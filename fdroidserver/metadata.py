@@ -837,7 +837,7 @@ def write_metadata(dest, app):
 
         def write_builditem(key, value):
 
-            if key in ['version', 'vercode', 'origlines', 'type']:
+            if key in ['version', 'vercode']:
                 return
 
             if value == flag_defaults[key]:
