@@ -138,13 +138,12 @@ def main():
         sourcecode = ""
         website = ""
     elif url.startswith('https://github.com'):
-        if url.endswith('/'):
-            url = url[:-1]
-        if url.endswith('.git'):
-            logging.info("A github URL should point to the project, not the git repo")
-            sys.exit(1)
         projecttype = 'github'
-        repo = url + '.git'
+        repotype = 'git'
+        sourcecode = url
+        issuetracker = url + '/issues'
+    elif url.startswith('https://gitlab.com/'):
+        projecttype = 'gitlab'
         repotype = 'git'
         sourcecode = url
         issuetracker = url + '/issues'
