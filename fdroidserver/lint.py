@@ -224,15 +224,22 @@ def main():
 
         # Build warnings
         for build in app['builds']:
-            for n in ['master', 'origin/', 'default', 'trunk']:
-                if build['commit'] and build['commit'].startswith(n):
+            for s in ['master', 'origin/', 'default', 'trunk']:
+                if build['commit'] and build['commit'].startswith(s):
                     warn("Branch '%s' used as commit in build '%s'" % (
-                        n, build['version']))
+                        s, build['version']))
                 for srclib in build['srclibs']:
                     ref = srclib.split('@')[1].split('/')[0]
-                    if ref.startswith(n):
+                    if ref.startswith(s):
                         warn("Branch '%s' used as commit in srclib '%s'" % (
-                            n, srclib))
+                            s, srclib))
+            for s in ['git clone', 'svn checkout', 'svn co', 'hg clone']:
+                for flag in ['init', 'prebuild', 'build']:
+                    if not build[flag]:
+                        continue
+                    if s in build[flag]:
+                        # TODO: This should not be pedantic!
+                        pwarn("'%s' used in %s '%s'" % (s, flag, build[flag]))
 
         if not appid:
             print
