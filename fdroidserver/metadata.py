@@ -649,6 +649,7 @@ def parse_metadata(metafile):
     buildlines = []
     curcomments = []
     curbuild = None
+    vc_seen = {}
 
     c = 0
     for line in metafile:
@@ -719,6 +720,10 @@ def parse_metadata(metafile):
                                             .format(value, linedesc))
                 curbuild['version'] = vv[0]
                 curbuild['vercode'] = vv[1]
+                if curbuild['vercode'] in vc_seen:
+                    raise MetaDataException('Duplicate build recipe found for vercode %s in %s' % (
+                                            curbuild['vercode'], linedesc))
+                vc_seen[curbuild['vercode']] = True
                 buildlines = []
                 mode = 3
             elif fieldtype == 'obsolete':
