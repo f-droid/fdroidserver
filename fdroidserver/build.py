@@ -617,9 +617,6 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                              'pom.xml'],
                             cwd=maven_dir)
 
-        if thisbuild['mvnflags']:
-            mvncmd += thisbuild['mvnflags']
-
         p = FDroidPopen(mvncmd, cwd=maven_dir)
 
         bindir = os.path.join(root_dir, 'target')
