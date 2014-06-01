@@ -663,7 +663,7 @@ def parse_metadata(metafile):
                                             .format(curbuild['version'], linedesc))
 
                 thisinfo['builds'].append(curbuild)
-                add_comments('build:' + curbuild['version'])
+                add_comments('build:' + curbuild['vercode'])
                 mode = 0
             else:
                 if line.endswith('\\'):
@@ -711,7 +711,7 @@ def parse_metadata(metafile):
                     buildlines = [value[:-1]]
                 else:
                     curbuild = parse_buildline([value])
-                    add_comments('build:' + thisinfo['builds'][-1]['version'])
+                    add_comments('build:' + thisinfo['builds'][-1]['vercode'])
             elif fieldtype == 'buildv2':
                 curbuild = {}
                 vv = value.split(',')
@@ -742,7 +742,7 @@ def parse_metadata(metafile):
                 buildlines.append(line)
                 curbuild = parse_buildline(buildlines)
                 thisinfo['builds'].append(curbuild)
-                add_comments('build:' + thisinfo['builds'][-1]['version'])
+                add_comments('build:' + thisinfo['builds'][-1]['vercode'])
                 mode = 0
     add_comments(None)
 
@@ -832,7 +832,7 @@ def write_metadata(dest, app):
         writefield('Repo')
         mf.write('\n')
     for build in app['builds']:
-        writecomments('build:' + build['version'])
+        writecomments('build:' + build['vercode'])
         mf.write("Build:%s,%s\n" % (build['version'], build['vercode']))
 
         def write_builditem(key, value):
