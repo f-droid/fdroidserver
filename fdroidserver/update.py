@@ -363,8 +363,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             thisinfo = apkcache[apkfilename]
 
         else:
-
-            logging.info("Processing " + apkfilename)
+            if options.verbose:
+                logging.info("Processing " + apkfilename)
             thisinfo = {}
             thisinfo['apkname'] = apkfilename
             srcfilename = apkfilename[:-4] + "_src.tar.gz"
@@ -801,8 +801,8 @@ def make_index(apps, apks, repodir, archive, categories):
 
     if 'repo_keyalias' in config:
 
-        logging.info("Creating signed index with this key:")
-        logging.info("SHA256: %s" % repo_pubkey_fingerprint)
+        logging.info("Creating signed index with this key (SHA256):")
+        logging.info("%s" % repo_pubkey_fingerprint)
 
         # Create a jar of the index...
         p = FDroidPopen(['jar', 'cf', 'index.jar', 'index.xml'], cwd=repodir)
