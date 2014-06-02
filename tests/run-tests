@@ -9,12 +9,15 @@ echo_header() {
 }
 
 copy_apks_into_repo() {
-    for f in `ls -1 ../../*/bin/*.apk`; do
+    for f in `find $APKDIR -name '*.apk' | grep -F -v -e unaligned -e unsigned`; do
         name=$(basename $(dirname `dirname $f`))
-        echo "name $name"
-        apk=`aapt d badging "$f" | sed -n "s,^package: name='\(.*\)' versionCode='\([0-9][0-9]*\)' .*,\1_\2.apk,p"`
-        echo "apk $apk"
-        cp -f $f $1/repo/$apk
+        apk=`aapt dump badging "$f" | sed -n "s,^package: name='\(.*\)' versionCode='\([0-9][0-9]*\)' .*,\1_\2.apk,p"`
+        test $f -nt repo/$apk && rm -f repo/$apk  # delete existing if $f is newer
+        if [ ! -e repo/$apk ] && [ ! -e archive/$apk ]; then
+            echo "$f --> repo/$apk"
+            ln $f $1/repo/$apk || \
+                rsync -axv $f $1/repo/$apk # rsync if hard link is not possible
+        fi
     done
 }
 
@@ -33,6 +36,16 @@ create_test_file() {
     test -e $WORKSPACE/.testfiles || mkdir $WORKSPACE/.testfiles
     mktemp --tmpdir=$WORKSPACE/.testfiles
 }
+
+#------------------------------------------------------------------------------#
+# "main"
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 '/path/to/folder/with/apks'"
+    exit 1
+fi
+
+APKDIR=$1
 
 if [ -z $WORKSPACE ]; then
     WORKSPACE=`dirname $(pwd)`

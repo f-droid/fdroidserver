@@ -47,7 +47,7 @@ cd $WORKSPACE/fdroidserver/getsig
 #------------------------------------------------------------------------------#
 # run local tests
 cd $WORKSPACE/tests
-./run-tests
+./run-tests ~jenkins/
 
 
 #------------------------------------------------------------------------------#
@@ -67,7 +67,7 @@ python setup.py install
 
 # run tests in new pip+virtualenv install
 . $WORKSPACE/env/bin/activate
-fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests
+fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests ~jenkins/
 
 
 #------------------------------------------------------------------------------#
