@@ -379,8 +379,15 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                                           config['build_tools'], 'aapt'),
                              'dump', 'badging', apkfile])
             if p.returncode != 0:
-                logging.critical("Failed to get apk information")
-                sys.exit(1)
+                if options.delete_unknown:
+                    if os.path.exists(apkfile):
+                        logging.error("Failed to get apk information, deleting " + apkfile)
+                        os.remove(apkfile)
+                    else:
+                        logging.error("Could not find {0} to remove it".format(apkfile))
+                else:
+                    logging.error("Failed to get apk information, skipping " + apkfile)
+                continue
             for line in p.stdout.splitlines():
                 if line.startswith("package:"):
                     try:
