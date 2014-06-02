@@ -301,9 +301,6 @@ def resize_icon(iconpath, density):
                 iconpath, oldsize, im.size))
             im.save(iconpath, "PNG")
 
-        else:
-            logging.info("%s is small enough: %s" % im.size)
-
     except Exception, e:
         logging.error("Failed resizing {0} - {1}".format(iconpath, e))
 
