@@ -419,7 +419,12 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         path = match.group(2)
                         thisinfo['icons_src'][density] = path
                 elif line.startswith("sdkVersion:"):
-                    thisinfo['sdkversion'] = re.match(sdkversion_pat, line).group(1)
+                    m = re.match(sdkversion_pat, line)
+                    if m is None:
+                        logging.error(line.replace('sdkVersion:', '')
+                                      + ' is not a valid minSdkVersion!')
+                    else:
+                        thisinfo['sdkversion'] = m.group(1)
                 elif line.startswith("maxSdkVersion:"):
                     thisinfo['maxsdkversion'] = re.match(sdkversion_pat, line).group(1)
                 elif line.startswith("native-code:"):
