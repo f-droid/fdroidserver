@@ -452,7 +452,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
             # Check for debuggable apks...
             if common.isApkDebuggable(apkfile, config):
-                logging.warn("{0} is debuggable... {1}".format(apkfile, line))
+                logging.warn('{0} is set to android:debuggable="true"!'.format(apkfile))
 
             # Calculate the sha256...
             sha = hashlib.sha256()
