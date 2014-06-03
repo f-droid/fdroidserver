@@ -967,6 +967,9 @@ def main():
                 break
         if not found:
             if options.create_metadata:
+                if 'name' not in apk:
+                    logging.error(apk['id'] + ' does not have a name! Skipping...')
+                    continue
                 f = open(os.path.join('metadata', apk['id'] + '.txt'), 'w')
                 f.write("License:Unknown\n")
                 f.write("Web Site:\n")
