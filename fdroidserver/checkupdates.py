@@ -491,7 +491,8 @@ def main():
 
                 if not gotcur:
                     newbuild = latest.copy()
-                    del newbuild['origlines']
+                    if 'origlines' in newbuild:
+                        del newbuild['origlines']
                     newbuild['disable'] = False
                     newbuild['vercode'] = app['Current Version Code']
                     newbuild['version'] = app['Current Version'] + suffix
