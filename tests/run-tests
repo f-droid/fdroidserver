@@ -138,6 +138,11 @@ set -e
 
 
 #------------------------------------------------------------------------------#
+# In this case, ANDROID_HOME is set to a fake, non-working version that will
+# be detected by fdroid as an Android SDK install.  It should use the path set
+# by --android-home over the one in ANDROID_HOME, therefore if it uses the one
+# in ANDROID_HOME, it won't work because it is a fake one.  Only
+# --android-home provides a working one.
 echo_header "setup a new repo from scratch with keystore and android-home set on cmd line"
 
 REPOROOT=`create_test_dir`
@@ -148,7 +153,7 @@ STORED_ANDROID_HOME=$ANDROID_HOME
 unset ANDROID_HOME
 echo "ANDROID_HOME: $ANDROID_HOME"
 cd $REPOROOT
-$fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME --no-prompt
+$fdroid init --keystore $KEYSTORE --android-home $STORED_ANDROID_HOME --no-prompt
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
