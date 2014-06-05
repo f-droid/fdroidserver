@@ -105,6 +105,9 @@ keyaliases['com.example.another.plugin'] = '@com.example.another'
 # sub-directories (i.e. /var/www/packagerepos/fdroid).
 # serverwebroot = 'user@example:/var/www/fdroid'
 
+# optionally specific which identity file to use when using rsync over SSH
+# identity_file = '~/.ssh/fdroid_id_rsa'
+
 # To upload the repo to an Amazon S3 bucket using `fdroid server update`.
 # Warning, this deletes and recreates the whole fdroid/ directory each
 # time. This is based on apache-libcloud, which supports basically all cloud

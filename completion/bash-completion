@@ -247,8 +247,8 @@ __complete_stats() {
 }
 
 __complete_server() {
-	opts="-h -v -q"
-	lopts="--help --verbose --quiet update"
+	opts="-h -i -v -q"
+	lopts="--help --identity-file --verbose --quiet update"
 	__complete_options
 }
 

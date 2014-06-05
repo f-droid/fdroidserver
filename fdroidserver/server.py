@@ -121,6 +121,10 @@ def update_serverwebroot(repo_section):
         rsyncargs += ['--verbose']
     if options.quiet:
         rsyncargs += ['--quiet']
+    if options.identity_file is not None:
+        rsyncargs += ['-e', 'ssh -i ' + options.identity_file]
+    if 'identity_file' in config:
+        rsyncargs += ['-e', 'ssh -i ' + config['identity_file']]
     indexxml = os.path.join(repo_section, 'index.xml')
     indexjar = os.path.join(repo_section, 'index.jar')
     # serverwebroot is guaranteed to have a trailing slash in common.py
@@ -142,6 +146,8 @@ def main():
 
     # Parse command line...
     parser = OptionParser()
+    parser.add_option("-i", "--identity-file", default=None,
+                      help="Specify an identity file to provide to SSH for rsyncing")
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     parser.add_option("-q", "--quiet", action="store_true", default=False,
