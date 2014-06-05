@@ -301,9 +301,6 @@ def resize_icon(iconpath, density):
                 iconpath, oldsize, im.size))
             im.save(iconpath, "PNG")
 
-        else:
-            logging.info("%s is small enough: %s" % im.size)
-
     except Exception, e:
         logging.error("Failed resizing {0} - {1}".format(iconpath, e))
 
@@ -366,8 +363,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             thisinfo = apkcache[apkfilename]
 
         else:
-
-            logging.info("Processing " + apkfilename)
+            if options.verbose:
+                logging.info("Processing " + apkfilename)
             thisinfo = {}
             thisinfo['apkname'] = apkfilename
             srcfilename = apkfilename[:-4] + "_src.tar.gz"
@@ -382,8 +379,15 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                                           config['build_tools'], 'aapt'),
                              'dump', 'badging', apkfile])
             if p.returncode != 0:
-                logging.critical("Failed to get apk information")
-                sys.exit(1)
+                if options.delete_unknown:
+                    if os.path.exists(apkfile):
+                        logging.error("Failed to get apk information, deleting " + apkfile)
+                        os.remove(apkfile)
+                    else:
+                        logging.error("Could not find {0} to remove it".format(apkfile))
+                else:
+                    logging.error("Failed to get apk information, skipping " + apkfile)
+                continue
             for line in p.stdout.splitlines():
                 if line.startswith("package:"):
                     try:
@@ -415,7 +419,12 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         path = match.group(2)
                         thisinfo['icons_src'][density] = path
                 elif line.startswith("sdkVersion:"):
-                    thisinfo['sdkversion'] = re.match(sdkversion_pat, line).group(1)
+                    m = re.match(sdkversion_pat, line)
+                    if m is None:
+                        logging.error(line.replace('sdkVersion:', '')
+                                      + ' is not a valid minSdkVersion!')
+                    else:
+                        thisinfo['sdkversion'] = m.group(1)
                 elif line.startswith("maxSdkVersion:"):
                     thisinfo['maxsdkversion'] = re.match(sdkversion_pat, line).group(1)
                 elif line.startswith("native-code:"):
@@ -443,7 +452,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
             # Check for debuggable apks...
             if common.isApkDebuggable(apkfile, config):
-                logging.warn("{0} is debuggable... {1}".format(apkfile, line))
+                logging.warn('{0} is set to android:debuggable="true"!'.format(apkfile))
 
             # Calculate the sha256...
             sha = hashlib.sha256()
@@ -804,8 +813,8 @@ def make_index(apps, apks, repodir, archive, categories):
 
     if 'repo_keyalias' in config:
 
-        logging.info("Creating signed index with this key:")
-        logging.info("SHA256: %s" % repo_pubkey_fingerprint)
+        logging.info("Creating signed index with this key (SHA256):")
+        logging.info("%s" % repo_pubkey_fingerprint)
 
         # Create a jar of the index...
         p = FDroidPopen(['jar', 'cf', 'index.jar', 'index.xml'], cwd=repodir)
@@ -882,7 +891,7 @@ def main():
 
     # Parse command line...
     parser = OptionParser()
-    parser.add_option("-c", "--createmeta", action="store_true", default=False,
+    parser.add_option("-c", "--create-metadata", action="store_true", default=False,
                       help="Create skeleton metadata files that are missing")
     parser.add_option("--delete-unknown", action="store_true", default=False,
                       help="Delete APKs without metadata from the repo")
@@ -957,7 +966,10 @@ def main():
                 found = True
                 break
         if not found:
-            if options.createmeta:
+            if options.create_metadata:
+                if 'name' not in apk:
+                    logging.error(apk['id'] + ' does not have a name! Skipping...')
+                    continue
                 f = open(os.path.join('metadata', apk['id'] + '.txt'), 'w')
                 f.write("License:Unknown\n")
                 f.write("Web Site:\n")

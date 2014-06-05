@@ -30,14 +30,14 @@ gradle = "gradle"
 # The same policy is applied to the archive repo, if there is one.
 repo_maxage = 0
 
-repo_url = "https://f-droid.org/repo"
-repo_name = "F-Droid"
+repo_url = "https://MyFirstFDroidRepo.org/fdroid/repo"
+repo_name = "My First FDroid Repo Demo"
 repo_icon = "fdroid-icon.png"
 repo_description = """
-The official repository of the F-Droid client. Applications in this repository
-are either official binaries built by the original application developers, or
-are binaries built from source by the admin of f-droid.org using the tools on
-https://gitorious.org/f-droid.
+This is a repository of apps to be used with FDroid. Applications in this
+repository are either official binaries built by the original application
+developers, or are binaries built from source by the admin of f-droid.org
+using the tools on https://gitlab.com/u/fdroid.
 """
 
 # As above, but for the archive repo.
@@ -46,11 +46,11 @@ https://gitorious.org/f-droid.
 # repository, and no need to define the other archive_ values.
 archive_older = 3
 archive_url = "https://f-droid.org/archive"
-archive_name = "F-Droid Archive"
+archive_name = "My First FDroid Archive Demo"
 archive_icon = "fdroid-icon.png"
 archive_description = """
-The archive repository of the F-Droid client. This contains older versions
-of applications from the main repository.
+The repository of older versions of applications from the main demo
+repository.
 """
 
 

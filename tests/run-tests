@@ -3,13 +3,21 @@
 set -e
 set -x
 
+echo_header() {
+    echo "=============================================================================="
+    echo $1
+}
+
 copy_apks_into_repo() {
-    for f in `ls -1 ../../*/bin/*.apk`; do
+    for f in `find $APKDIR -name '*.apk' | grep -F -v -e unaligned -e unsigned`; do
         name=$(basename $(dirname `dirname $f`))
-        echo "name $name"
-        apk=`aapt d badging "$f" | sed -n "s,^package: name='\(.*\)' versionCode='\([0-9][0-9]*\)' .*,\1_\2.apk,p"`
-        echo "apk $apk"
-        cp -f $f $1/repo/$apk
+        apk=`aapt dump badging "$f" | sed -n "s,^package: name='\(.*\)' versionCode='\([0-9][0-9]*\)' .*,\1_\2.apk,p"`
+        test $f -nt repo/$apk && rm -f repo/$apk  # delete existing if $f is newer
+        if [ ! -e repo/$apk ] && [ ! -e archive/$apk ]; then
+            echo "$f --> repo/$apk"
+            ln $f $1/repo/$apk || \
+                rsync -axv $f $1/repo/$apk # rsync if hard link is not possible
+        fi
     done
 }
 
@@ -29,6 +37,16 @@ create_test_file() {
     mktemp --tmpdir=$WORKSPACE/.testfiles
 }
 
+#------------------------------------------------------------------------------#
+# "main"
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 '/path/to/folder/with/apks'"
+    exit 1
+fi
+
+APKDIR=$1
+
 if [ -z $WORKSPACE ]; then
     WORKSPACE=`dirname $(pwd)`
     echo "Setting Workspace to $WORKSPACE"
@@ -40,14 +58,14 @@ if [ -z $fdroid ]; then
 fi
 
 #------------------------------------------------------------------------------#
-echo "setup a new repo from scratch using ANDROID_HOME"
+echo_header "setup a new repo from scratch using ANDROID_HOME"
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
 $fdroid init
 copy_apks_into_repo $REPOROOT
-$fdroid update -c
-$fdroid update
+$fdroid update --create-metadata
+grep -F '<application id=' repo/index.xml
 
 
 #------------------------------------------------------------------------------#
@@ -76,7 +94,33 @@ set -e
 
 
 #------------------------------------------------------------------------------#
-echo "check that --android-home overrides ANDROID_HOME"
+echo_header "check that fake android home passes `fdroid init`"
+
+REPOROOT=`create_test_dir`
+FAKE_ANDROID_HOME=`create_test_dir`
+create_fake_android_home $FAKE_ANDROID_HOME
+KEYSTORE=$REPOROOT/keystore.jks
+cd $REPOROOT
+$fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME
+
+
+#------------------------------------------------------------------------------#
+echo_header "check that 'fdroid init' fails when build-tools cannot be found"
+
+REPOROOT=`create_test_dir`
+FAKE_ANDROID_HOME=`create_test_dir`
+create_fake_android_home $FAKE_ANDROID_HOME
+rm -f $FAKE_ANDROID_HOME/build-tools/*/aapt
+KEYSTORE=$REPOROOT/keystore.jks
+cd $REPOROOT
+set +e
+$fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME
+[ $? -eq 0 ] && exit 1
+set -e
+
+
+#------------------------------------------------------------------------------#
+echo_header "check that --android-home overrides ANDROID_HOME"
 
 REPOROOT=`create_test_dir`
 FAKE_ANDROID_HOME=`create_test_dir`
@@ -94,7 +138,12 @@ set -e
 
 
 #------------------------------------------------------------------------------#
-echo "setup a new repo from scratch with keystore and android-home set on cmd line"
+# In this case, ANDROID_HOME is set to a fake, non-working version that will
+# be detected by fdroid as an Android SDK install.  It should use the path set
+# by --android-home over the one in ANDROID_HOME, therefore if it uses the one
+# in ANDROID_HOME, it won't work because it is a fake one.  Only
+# --android-home provides a working one.
+echo_header "setup a new repo from scratch with keystore and android-home set on cmd line"
 
 REPOROOT=`create_test_dir`
 KEYSTORE=$REPOROOT/keystore.jks
@@ -104,30 +153,30 @@ STORED_ANDROID_HOME=$ANDROID_HOME
 unset ANDROID_HOME
 echo "ANDROID_HOME: $ANDROID_HOME"
 cd $REPOROOT
-$fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME --no-prompt
+$fdroid init --keystore $KEYSTORE --android-home $STORED_ANDROID_HOME --no-prompt
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
-$fdroid update -c
-$fdroid update
+$fdroid update --create-metadata
+grep -F '<application id=' repo/index.xml
 test -e repo/index.xml
 test -e repo/index.jar
 export ANDROID_HOME=$STORED_ANDROID_HOME
 
 
 #------------------------------------------------------------------------------#
-echo "setup new repo from scratch using ANDROID_HOME, putting APKs in repo first"
+echo_header "setup new repo from scratch using ANDROID_HOME, putting APKs in repo first"
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
 mkdir repo
 copy_apks_into_repo $REPOROOT
 $fdroid init
-$fdroid update -c
-$fdroid update
+$fdroid update --create-metadata
+grep -F '<application id=' repo/index.xml
 
 
 #------------------------------------------------------------------------------#
-echo "setup a new repo from scratch and generate a keystore"
+echo_header "setup a new repo from scratch and generate a keystore"
 
 REPOROOT=`create_test_dir`
 KEYSTORE=$REPOROOT/keystore.jks
@@ -135,14 +184,34 @@ cd $REPOROOT
 $fdroid init --keystore $KEYSTORE
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
-$fdroid update -c
-$fdroid update
+$fdroid update --create-metadata
 test -e repo/index.xml
 test -e repo/index.jar
+grep -F '<application id=' repo/index.xml
 
 
 #------------------------------------------------------------------------------#
-echo "setup a new repo from scratch with a HSM/smartcard"
+echo_header "setup a new repo from scratch, generate a keystore, then add APK and update"
+
+REPOROOT=`create_test_dir`
+KEYSTORE=$REPOROOT/keystore.jks
+cd $REPOROOT
+$fdroid init --keystore $KEYSTORE
+test -e $KEYSTORE
+copy_apks_into_repo $REPOROOT
+$fdroid update --create-metadata
+test -e repo/index.xml
+test -e repo/index.jar
+grep -F '<application id=' repo/index.xml
+cp $WORKSPACE/tests/urzip.apk $REPOROOT/
+$fdroid update --create-metadata
+test -e repo/index.xml
+test -e repo/index.jar
+grep -F '<application id=' repo/index.xml
+
+
+#------------------------------------------------------------------------------#
+echo_header "setup a new repo from scratch with a HSM/smartcard"
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
