@@ -1,7 +1,7 @@
 #!/bin/bash
 
-set -e
-set -x
+set -e # quit script on error
+set -x # show each command as it is executed
 
 echo_header() {
     echo "=============================================================================="
@@ -9,6 +9,7 @@ echo_header() {
 }
 
 copy_apks_into_repo() {
+    set +x
     for f in `find $APKDIR -name '*.apk' | grep -F -v -e unaligned -e unsigned`; do
         name=$(basename $(dirname `dirname $f`))
         apk=`aapt dump badging "$f" | sed -n "s,^package: name='\(.*\)' versionCode='\([0-9][0-9]*\)' .*,\1_\2.apk,p"`
@@ -19,6 +20,7 @@ copy_apks_into_repo() {
                 rsync -axv $f $1/repo/$apk # rsync if hard link is not possible
         fi
     done
+    set -x
 }
 
 create_fake_android_home() {
