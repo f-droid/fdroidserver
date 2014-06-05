@@ -116,23 +116,24 @@ def update_awsbucket(repo_section):
 
 
 def update_serverwebroot(repo_section):
-    rsyncargs = ['rsync', '-u', '-r', '--delete']
+    rsyncargs = ['rsync', '--update', '--recursive', '--delete']
     if options.verbose:
         rsyncargs += ['--verbose']
     if options.quiet:
         rsyncargs += ['--quiet']
-    index = os.path.join(repo_section, 'index.xml')
+    indexxml = os.path.join(repo_section, 'index.xml')
     indexjar = os.path.join(repo_section, 'index.jar')
     # serverwebroot is guaranteed to have a trailing slash in common.py
     if subprocess.call(rsyncargs +
-                       ['--exclude', index, '--exclude', indexjar,
+                       ['--exclude', indexxml, '--exclude', indexjar,
                         repo_section, config['serverwebroot']]) != 0:
         sys.exit(1)
-    if subprocess.call(rsyncargs +
-                       [index, config['serverwebroot'] + repo_section]) != 0:
+    # use stricter checking on the indexes since they provide the signature
+    rsyncargs += ['--checksum']
+    sectionpath = config['serverwebroot'] + repo_section
+    if subprocess.call(rsyncargs + [indexxml, sectionpath]) != 0:
         sys.exit(1)
-    if subprocess.call(rsyncargs +
-                       [indexjar, config['serverwebroot'] + repo_section]) != 0:
+    if subprocess.call(rsyncargs + [indexjar, sectionpath]) != 0:
         sys.exit(1)
 
 
