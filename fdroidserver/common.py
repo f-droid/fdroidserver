@@ -1559,7 +1559,7 @@ def remove_signing_keys(build_dir):
     signing_configs = re.compile(r'^[\t ]*signingConfigs[ \t]*{[ \t]*$')
     line_matches = [
         re.compile(r'^[\t ]*signingConfig [^ ]*$'),
-        re.compile(r'.*android\.signingConfigs\..*'),
+        re.compile(r'.*android\.signingConfigs\.[^{]*$'),
         re.compile(r'.*variant\.outputFile = .*'),
         re.compile(r'.*\.readLine\(.*'),
         ]
