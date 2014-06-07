@@ -1411,7 +1411,7 @@ def scan_source(build_dir, root_dir, thisbuild):
     # buildjni=no to bypass this check)
     if (os.path.exists(os.path.join(root_dir, 'jni')) and
             not thisbuild['buildjni']):
-        logging.warn('Found jni directory, but buildjni is not enabled')
+        logging.error('Found jni directory, but buildjni is not enabled')
         count += 1
 
     return count
