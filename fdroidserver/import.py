@@ -139,11 +139,13 @@ def main():
         website = ""
     elif url.startswith('https://github.com'):
         projecttype = 'github'
+        repo = url
         repotype = 'git'
         sourcecode = url
         issuetracker = url + '/issues'
     elif url.startswith('https://gitlab.com/'):
         projecttype = 'gitlab'
+        repo = url
         repotype = 'git'
         sourcecode = url
         issuetracker = url + '/issues'
