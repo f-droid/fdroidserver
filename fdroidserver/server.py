@@ -116,23 +116,28 @@ def update_awsbucket(repo_section):
 
 
 def update_serverwebroot(repo_section):
-    rsyncargs = ['rsync', '-u', '-r', '--delete']
+    rsyncargs = ['rsync', '--update', '--recursive', '--delete']
     if options.verbose:
         rsyncargs += ['--verbose']
     if options.quiet:
         rsyncargs += ['--quiet']
-    index = os.path.join(repo_section, 'index.xml')
+    if options.identity_file is not None:
+        rsyncargs += ['-e', 'ssh -i ' + options.identity_file]
+    if 'identity_file' in config:
+        rsyncargs += ['-e', 'ssh -i ' + config['identity_file']]
+    indexxml = os.path.join(repo_section, 'index.xml')
     indexjar = os.path.join(repo_section, 'index.jar')
     # serverwebroot is guaranteed to have a trailing slash in common.py
     if subprocess.call(rsyncargs +
-                       ['--exclude', index, '--exclude', indexjar,
+                       ['--exclude', indexxml, '--exclude', indexjar,
                         repo_section, config['serverwebroot']]) != 0:
         sys.exit(1)
-    if subprocess.call(rsyncargs +
-                       [index, config['serverwebroot'] + repo_section]) != 0:
+    # use stricter checking on the indexes since they provide the signature
+    rsyncargs += ['--checksum']
+    sectionpath = config['serverwebroot'] + repo_section
+    if subprocess.call(rsyncargs + [indexxml, sectionpath]) != 0:
         sys.exit(1)
-    if subprocess.call(rsyncargs +
-                       [indexjar, config['serverwebroot'] + repo_section]) != 0:
+    if subprocess.call(rsyncargs + [indexjar, sectionpath]) != 0:
         sys.exit(1)
 
 
@@ -141,6 +146,8 @@ def main():
 
     # Parse command line...
     parser = OptionParser()
+    parser.add_option("-i", "--identity-file", default=None,
+                      help="Specify an identity file to provide to SSH for rsyncing")
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     parser.add_option("-q", "--quiet", action="store_true", default=False,
