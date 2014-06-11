@@ -8,7 +8,7 @@ script "setup-android-sdk" do
   user user
   cwd "/tmp"
   code "
-    tar zxvf /vagrant/cache/android-sdk_r22.3-linux.tgz
+    tar zxvf /vagrant/cache/android-sdk_r22.6.2-linux.tgz
     mv android-sdk-linux #{sdk_loc}
     #{sdk_loc}/tools/android update sdk --no-ui -t platform-tool
     #{sdk_loc}/tools/android update sdk --no-ui -t tool
@@ -32,7 +32,7 @@ end
 script "add_build_tools" do
   interpreter "bash"
   user user
-  ver = "19.0.3"
+  ver = "19.1.0"
   cwd "/tmp"
   code "
     if [ -f /vagrant/cache/build-tools/#{ver}.tar.gz ] ; then
@@ -51,7 +51,6 @@ X
   not_if "test -d #{sdk_loc}/build-tools/#{ver}"
 end
 
-# This is currently 19.0.1
 script "add_platform_tools" do
   interpreter "bash"
   user user
