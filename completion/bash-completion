@@ -254,7 +254,8 @@ __complete_server() {
 
 __complete_init() {
 	opts="-h -v -q -d"
-	lopts="--help --verbose --quiet --keystore --distinguished-name --repo-keyalias"
+	lopts="--help --verbose --quiet --distinguished-name --keystore
+ --repo-keyalias --android-home --no-prompt"
 	__complete_options
 }
 
