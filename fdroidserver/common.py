@@ -30,6 +30,7 @@ import Queue
 import threading
 import magic
 import logging
+from distutils.version import LooseVersion
 
 import metadata
 
@@ -1128,6 +1129,27 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         flavour = build['gradle'].split('@')[0]
         if flavour in ['main', 'yes', '']:
             flavour = None
+
+        version_regex = re.compile(r".*'com\.android\.tools\.build:gradle:([^\.]+\.[^\.]+).*'.*")
+        gradlepluginver = None
+
+        with open(os.path.join(root_dir, 'build.gradle')) as f:
+            for line in f:
+                match = version_regex.match(line)
+                if match:
+                    gradlepluginver = match.group(1)
+                    break
+        if '@' in build['gradle'] and not gradlepluginver:
+            gradle_dir = os.path.join(root_dir, build['gradle'].split('@', 1)[1])
+            gradle_dir = os.path.normpath(gradle_dir)
+            with open(os.path.join(root_dir, 'build.gradle')) as f:
+                for line in f:
+                    match = version_regex.match(line)
+                    if match:
+                        gradlepluginver = match.group(1)
+                        break
+
+        build['gradlepluginver'] = LooseVersion(gradlepluginver)
 
         if build['target']:
             n = build["target"].split('-')[1]

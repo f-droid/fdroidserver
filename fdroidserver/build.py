@@ -29,6 +29,7 @@ import time
 import json
 from ConfigParser import ConfigParser
 from optparse import OptionParser, OptionError
+from distutils.version import LooseVersion
 import logging
 
 import common
@@ -707,7 +708,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         # Avoid having to use lintOptions.abortOnError false
         # TODO: Do flavours or project names change this task name?
-        commands += ['-x', 'lintVitalRelease']
+        if thisbuild['gradlepluginver'] >= LooseVersion('0.8'):
+            commands += ['-x', 'lintVital' + flavours_cmd + 'Release']
 
         p = FDroidPopen(commands, cwd=gradle_dir)
 
