@@ -52,6 +52,8 @@ def main():
     parser = OptionParser(usage="Usage: %prog [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
+    parser.add_option("-q", "--quiet", action="store_true", default=False,
+                      help="Restrict output to warnings and errors")
     parser.add_option("-a", "--all", action="store_true", default=False,
                       help="Install all signed applications available")
     (options, args) = parser.parse_args()
