@@ -711,6 +711,7 @@ def parse_metadata(metafile):
                     buildlines = [value[:-1]]
                 else:
                     curbuild = parse_buildline([value])
+                    thisinfo['builds'].append(curbuild)
                     add_comments('build:' + thisinfo['builds'][-1]['vercode'])
             elif fieldtype == 'buildv2':
                 curbuild = {}
