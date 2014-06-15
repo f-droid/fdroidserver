@@ -294,6 +294,12 @@ def main():
         build['subdir'] = options.subdir
     if os.path.exists(os.path.join(root_dir, 'jni')):
         build['buildjni'] = ['yes']
+
+    for flag, value in metadata.flag_defaults.iteritems():
+        if flag in build:
+            continue
+        build[flag] = value
+
     app['builds'].append(build)
 
     # Keep the repo directory to save bandwidth...
