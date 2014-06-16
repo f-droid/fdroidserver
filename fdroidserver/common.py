@@ -41,8 +41,8 @@ options = None
 def get_default_config():
     return {
         'sdk_path': os.getenv("ANDROID_HOME"),
-        'ndk_path': "$ANDROID_NDK",
-        'build_tools': "19.0.3",
+        'ndk_path': os.getenv("ANDROID_NDK"),
+        'build_tools': "19.1",
         'ant': "ant",
         'mvn3': "mvn",
         'gradle': 'gradle',
@@ -51,7 +51,7 @@ def get_default_config():
         'stats_to_carbon': False,
         'repo_maxage': 0,
         'build_server_always': False,
-        'keystore': '$HOME/.local/share/fdroidserver/keystore.jks',
+        'keystore': os.path.join(os.getenv("HOME"), '.local', 'share', 'fdroidserver', 'keystore.jks'),
         'smartcardoptions': [],
         'char_limits': {
             'Summary': 50,
