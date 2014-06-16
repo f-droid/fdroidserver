@@ -25,8 +25,8 @@ copy_apks_into_repo() {
 
 create_fake_android_home() {
     mkdir $1/build-tools
-    mkdir $1/build-tools/19.0.1
-    touch $1/build-tools/19.0.1/aapt
+    mkdir $1/build-tools/19.1
+    touch $1/build-tools/19.1/aapt
 }
 
 create_test_dir() {
