@@ -858,12 +858,12 @@ def parse_androidmanifests(paths, ignoreversions=None):
     max_version = None
     max_vercode = None
     max_package = None
+    version = None
+    vercode = None
 
     for path in paths:
 
         gradle = has_extension(path, 'gradle')
-        version = None
-        vercode = None
         # Remember package name, may be defined separately from version+vercode
         package = max_package
 
@@ -903,7 +903,7 @@ def parse_androidmanifests(paths, ignoreversions=None):
                 max_version = "Ignore"
 
     if max_version is None:
-        max_version = "Unknown"
+        max_version = version if version else "Unknown"
 
     return (max_version, max_vercode, max_package)
 
