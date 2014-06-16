@@ -42,7 +42,7 @@ def get_default_config():
     return {
         'sdk_path': os.getenv("ANDROID_HOME"),
         'ndk_path': os.getenv("ANDROID_NDK"),
-        'build_tools': "19.1",
+        'build_tools': "19.1.0",
         'ant': "ant",
         'mvn3': "mvn",
         'gradle': 'gradle',
