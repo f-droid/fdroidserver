@@ -1136,23 +1136,37 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         version_regex = re.compile(r".*'com\.android\.tools\.build:gradle:([^\.]+\.[^\.]+).*'.*")
         gradlepluginver = None
 
-        with open(os.path.join(root_dir, 'build.gradle')) as f:
-            for line in f:
-                match = version_regex.match(line)
-                if match:
-                    gradlepluginver = match.group(1)
-                    break
-        if '@' in build['gradle'] and not gradlepluginver:
-            gradle_dir = os.path.join(root_dir, build['gradle'].split('@', 1)[1])
-            gradle_dir = os.path.normpath(gradle_dir)
-            with open(os.path.join(gradle_dir, 'build.gradle')) as f:
+        gradle_files = [os.path.join(root_dir, 'build.gradle')]
+
+        # Parent dir build.gradle
+        parent_dir = os.path.normpath(os.path.join(root_dir, '..'))
+        if parent_dir.startswith(build_dir):
+            gradle_files.append(os.path.join(parent_dir, 'build.gradle'))
+
+        # Gradle execution dir build.gradle
+        if '@' in build['gradle']:
+            gradle_file = os.path.join(root_dir, build['gradle'].split('@', 1)[1], 'build.gradle')
+            gradle_file = os.path.normpath(gradle_file)
+            if gradle_file not in gradle_files:
+                gradle_files.append(gradle_file)
+
+        for path in gradle_files:
+            if gradlepluginver:
+                break
+            if not os.path.isfile(path):
+                continue
+            with open(path) as f:
                 for line in f:
                     match = version_regex.match(line)
                     if match:
                         gradlepluginver = match.group(1)
                         break
 
-        build['gradlepluginver'] = LooseVersion(gradlepluginver)
+        if gradlepluginver:
+            build['gradlepluginver'] = LooseVersion(gradlepluginver)
+        else:
+            logging.warn("Could not fetch the gradle plugin version, defaulting to 0.11")
+            build['gradlepluginver'] = LooseVersion('0.11')
 
         if build['target']:
             n = build["target"].split('-')[1]
