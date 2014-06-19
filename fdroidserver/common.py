@@ -1145,7 +1145,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         if '@' in build['gradle'] and not gradlepluginver:
             gradle_dir = os.path.join(root_dir, build['gradle'].split('@', 1)[1])
             gradle_dir = os.path.normpath(gradle_dir)
-            with open(os.path.join(root_dir, 'build.gradle')) as f:
+            with open(os.path.join(gradle_dir, 'build.gradle')) as f:
                 for line in f:
                     match = version_regex.match(line)
                     if match:
