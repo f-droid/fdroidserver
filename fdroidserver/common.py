@@ -1576,7 +1576,7 @@ def SilentPopen(commands, cwd=None, shell=False):
     return FDroidPopen(commands, cwd=cwd, shell=shell, output=False)
 
 
-def FDroidPopen(commands, cwd=None, shell=False, output=False):
+def FDroidPopen(commands, cwd=None, shell=False, output=True):
     """
     Run a command and capture the possibly huge output.
 
