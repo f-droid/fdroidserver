@@ -92,6 +92,11 @@ def read_config(opts, config_file='config.py'):
                                       'sun.security.pkcs11.SunPKCS11',
                                       '-providerArg', 'opensc-fdroid.cfg']
 
+    if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
+        st = os.stat(config_file)
+        if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
+            logging.warn("unsafe permissions on {0} (should be 0600)!".format(config_file))
+
     defconfig = get_default_config()
     for k, v in defconfig.items():
         if k not in config:
@@ -106,11 +111,6 @@ def read_config(opts, config_file='config.py'):
 
     if not test_sdk_exists(config):
         sys.exit(3)
-
-    if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
-        st = os.stat(config_file)
-        if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
-            logging.warn("unsafe permissions on {0} (should be 0600)!".format(config_file))
 
     for k in ["keystorepass", "keypass"]:
         if k in config:
