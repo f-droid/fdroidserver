@@ -1632,6 +1632,8 @@ def remove_signing_keys(build_dir):
             with open(path, "r") as o:
                 lines = o.readlines()
 
+            changed = False
+
             opened = 0
             with open(path, "w") as o:
                 for line in lines:
@@ -1644,16 +1646,19 @@ def remove_signing_keys(build_dir):
                         continue
 
                     if signing_configs.match(line):
+                        changed = True
                         opened += 1
                         continue
 
                     if any(s.match(line) for s in line_matches):
+                        changed = True
                         continue
 
                     if opened == 0:
                         o.write(line)
 
-            logging.info("Cleaned build.gradle of keysigning configs at %s" % path)
+            if changed:
+                logging.info("Cleaned build.gradle of keysigning configs at %s" % path)
 
         for propfile in [
                 'project.properties',
@@ -1667,15 +1672,18 @@ def remove_signing_keys(build_dir):
                 with open(path, "r") as o:
                     lines = o.readlines()
 
+                changed = False
+
                 with open(path, "w") as o:
                     for line in lines:
-                        if line.startswith('key.store'):
+                        if any(line.startswith(s) for s in ('key.store', 'key.alias')):
+                            changed = True
                             continue
-                        if line.startswith('key.alias'):
-                            continue
+
                         o.write(line)
 
-                logging.info("Cleaned %s of keysigning configs at %s" % (propfile, path))
+                if changed:
+                    logging.info("Cleaned %s of keysigning configs at %s" % (propfile, path))
 
 
 def replace_config_vars(cmd):
