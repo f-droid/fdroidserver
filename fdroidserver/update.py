@@ -363,8 +363,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             thisinfo = apkcache[apkfilename]
 
         else:
-            if options.verbose:
-                logging.info("Processing " + apkfilename)
+            logging.debug("Processing " + apkfilename)
             thisinfo = {}
             thisinfo['apkname'] = apkfilename
             srcfilename = apkfilename[:-4] + "_src.tar.gz"
