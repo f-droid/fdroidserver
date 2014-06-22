@@ -893,15 +893,21 @@ def parse_androidmanifests(paths, ignoreversions=None):
                 if matches:
                     vercode = matches.group(1)
 
-        # Better some package name than nothing
-        if max_package is None:
+        # Always grab the package name and version name in case they are not
+        # together with the highest version code
+        if max_package is None and package is not None:
             max_package = package
+        if max_version is None and version is not None:
+            max_version = version
 
         if max_vercode is None or (vercode is not None and vercode > max_vercode):
             if not ignoresearch or not ignoresearch(version):
-                max_version = version
-                max_vercode = vercode
-                max_package = package
+                if version is not None:
+                    max_version = version
+                if vercode is not None:
+                    max_vercode = vercode
+                if package is not None:
+                    max_package = package
             else:
                 max_version = "Ignore"
 
