@@ -809,8 +809,14 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         elif line.startswith("native-code:"):
             nativecode = line[12:]
 
-    if thisbuild['buildjni']:
-        if nativecode is None or "'" not in nativecode:
+    # Ignore empty strings or any kind of space/newline chars that we don't
+    # care about
+    if nativecode is not None:
+        nativecode = nativecode.strip()
+        nativecode = None if not nativecode else nativecode
+
+    if thisbuild['buildjni'] != 'no':
+        if nativecode is not None:
             raise BuildException("Native code should have been built but none was packaged")
     if thisbuild['novcheck']:
         vercode = thisbuild['vercode']
