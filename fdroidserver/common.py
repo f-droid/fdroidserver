@@ -352,8 +352,8 @@ class vcs:
                 else:
                     deleterepo = True
                     logging.info(
-                            "Repository details for {0} changed - deleting"
-                            .format(self.local))
+                        "Repository details for {0} changed - deleting"
+                        .format(self.local))
             else:
                 deleterepo = True
                 logging.info("Repository details missing - deleting")
