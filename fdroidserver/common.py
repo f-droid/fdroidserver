@@ -436,8 +436,9 @@ class vcs_git(vcs):
                 if p.returncode != 0:
                     raise VCSException("Git fetch failed")
                 self.refreshed = True
-        # Check out the appropriate revision
-        rev = str(rev if rev else 'origin/master')
+        # origin/HEAD is the HEAD of the remote, e.g. the "default branch" on
+        # a github repo. Most of the time this is the same as origin/master.
+        rev = str(rev if rev else 'origin/HEAD')
         p = SilentPopen(['git', 'checkout', '-f', rev], cwd=self.local)
         if p.returncode != 0:
             raise VCSException("Git checkout failed")
