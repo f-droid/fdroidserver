@@ -1585,11 +1585,10 @@ def FDroidPopen(commands, cwd=None, shell=False, output=True):
     :returns: A PopenResult.
     """
 
-    if output:
-        if cwd:
-            cwd = os.path.normpath(cwd)
-            logging.info("Directory: %s" % cwd)
-        logging.info("> %s" % ' '.join(commands))
+    if cwd:
+        cwd = os.path.normpath(cwd)
+        logging.debug("Directory: %s" % cwd)
+    logging.debug("> %s" % ' '.join(commands))
 
     result = PopenResult()
     p = subprocess.Popen(commands, cwd=cwd, shell=shell,
