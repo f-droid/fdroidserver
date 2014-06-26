@@ -115,7 +115,7 @@ def update_awsbucket(repo_section):
 
 
 def update_serverwebroot(repo_section):
-    rsyncargs = ['rsync', '--update', '--recursive', '--delete']
+    rsyncargs = ['rsync', '--archive', '--delete']
     if options.verbose:
         rsyncargs += ['--verbose']
     if options.quiet:
