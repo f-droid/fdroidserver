@@ -23,6 +23,10 @@ include docs/update.sh
 include examples/config.py
 include examples/fdroid-icon.png
 include examples/makebs.config.py
+include examples/opensc-fdroid.cfg
+include fdroidserver/getsig/run.sh
+include fdroidserver/getsig/make.sh
+include fdroidserver/getsig/getsig.java
 include tests/run-tests
 include wp-fdroid/AndroidManifest.xml
 include wp-fdroid/android-permissions.php
