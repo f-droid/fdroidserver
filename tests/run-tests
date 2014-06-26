@@ -106,7 +106,7 @@ set -e
 
 
 #------------------------------------------------------------------------------#
-echo_header "setup a new repo from scratch using ANDROID_HOME"
+echo_header "setup a new repo from scratch using ANDROID_HOME and do a local sync"
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
@@ -114,6 +114,13 @@ $fdroid init
 copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
 grep -F '<application id=' repo/index.xml
+
+LOCALCOPYDIR=`create_test_dir`/fdroid
+$fdroid server update --local-copy-dir=$LOCALCOPYDIR
+NEWREPOROOT=`create_test_dir`
+cd $NEWREPOROOT
+$fdroid init
+$fdroid server update --local-copy-dir=$LOCALCOPYDIR --sync-from-local-copy-dir
 
 
 #------------------------------------------------------------------------------#

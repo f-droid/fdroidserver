@@ -140,8 +140,8 @@ def update_serverwebroot(repo_section):
         sys.exit(1)
 
 
-def update_localcopy(repo_section, local_copy_dir):
-    rsyncargs = ['rsync', '--update', '--recursive', '--delete']
+def _local_sync(fromdir, todir):
+    rsyncargs = ['rsync', '--archive', '--one-file-system', '--delete']
     # use stricter rsync checking on all files since people using offline mode
     # are already prioritizing security above ease and speed
     rsyncargs += ['--checksum']
@@ -149,9 +149,22 @@ def update_localcopy(repo_section, local_copy_dir):
         rsyncargs += ['--verbose']
     if options.quiet:
         rsyncargs += ['--quiet']
-    # local_copy_dir is guaranteed to have a trailing slash in main() below
-    if subprocess.call(rsyncargs + [repo_section, local_copy_dir]) != 0:
+    logging.debug(' '.join(rsyncargs + [fromdir, todir]))
+    if subprocess.call(rsyncargs + [fromdir, todir]) != 0:
         sys.exit(1)
+
+
+def sync_from_localcopy(repo_section, local_copy_dir):
+    logging.info('Syncing from local_copy_dir to this repo.')
+    # trailing slashes have a meaning in rsync which is not needed here, so
+    # remove them all
+    _local_sync(os.path.join(local_copy_dir, repo_section).rstrip('/'),
+                repo_section.rstrip('/'))
+
+
+def update_localcopy(repo_section, local_copy_dir):
+    # local_copy_dir is guaranteed to have a trailing slash in main() below
+    _local_sync(repo_section, local_copy_dir)
 
 
 def main():
@@ -163,6 +176,8 @@ def main():
                       help="Specify an identity file to provide to SSH for rsyncing")
     parser.add_option("--local-copy-dir", default=None,
                       help="Specify a local folder to sync the repo to")
+    parser.add_option("--sync-from-local-copy-dir", action="store_true", default=False,
+                      help="Before uploading to servers, sync from local copy dir")
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     parser.add_option("-q", "--quiet", action="store_true", default=False,
@@ -251,12 +266,15 @@ def main():
                     sys.exit(1)
     elif args[0] == 'update':
         for repo_section in repo_sections:
+            if local_copy_dir is not None:
+                if config['sync_from_local_copy_dir'] and os.path.exists(repo_section):
+                    sync_from_localcopy(repo_section, local_copy_dir)
+                else:
+                    update_localcopy(repo_section, local_copy_dir)
             if config.get('serverwebroot'):
                 update_serverwebroot(repo_section)
             if config.get('awsbucket'):
                 update_awsbucket(repo_section)
-            if local_copy_dir is not None:
-                update_localcopy(repo_section, local_copy_dir)
 
     sys.exit(0)
 

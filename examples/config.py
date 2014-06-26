@@ -124,6 +124,14 @@ keyaliases['com.example.another.plugin'] = '@com.example.another'
 # local_copy_dir = '/media/MyUSBThumbDrive/fdroid'
 
 
+# If you are using local_copy_dir on an offline build/signing server, once the
+# thumb drive has been plugged into the online machine, it will need to be
+# synced to the copy on the online machine.  To make that happen
+# automatically, set sync_from_local_copy_dir to True:
+#
+# sync_from_local_copy_dir = True
+
+
 # To upload the repo to an Amazon S3 bucket using `fdroid server update`.
 # Warning, this deletes and recreates the whole fdroid/ directory each
 # time. This is based on apache-libcloud, which supports basically all cloud

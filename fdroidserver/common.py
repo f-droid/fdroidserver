@@ -47,6 +47,7 @@ def get_default_config():
         'mvn3': "mvn",
         'gradle': 'gradle',
         'archive_older': 0,
+        'sync_from_local_copy_dir': False,
         'update_stats': False,
         'stats_to_carbon': False,
         'repo_maxage': 0,
