@@ -71,6 +71,41 @@ if [ -z $aapt ]; then
 fi
 
 #------------------------------------------------------------------------------#
+echo_header "test config checks of local_copy_dir"
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+$fdroid init
+$fdroid update --create-metadata
+$fdroid server update --local-copy-dir=/tmp/fdroid
+
+# now test the errors work
+set +e
+$fdroid server update --local-copy-dir=thisisnotanabsolutepath
+if [ $? -eq 0 ]; then
+    echo "This should have failed because thisisnotanabsolutepath is not an absolute path!"
+    exit 1
+else
+    echo "testing absolute path checker passed"
+fi
+$fdroid server update --local-copy-dir=/tmp/IReallyDoubtThisPathExistsasdfasdf
+if [ $? -eq 0 ]; then
+    echo "This should have failed because the path does not end with 'fdroid'!"
+    exit 1
+else
+    echo "testing dirname exists checker passed"
+fi
+$fdroid server update --local-copy-dir=/tmp/IReallyDoubtThisPathExistsasdfasdf/fdroid
+if [ $? -eq 0 ]; then
+    echo "This should have failed because the dirname path does not exist!"
+    exit 1
+else
+    echo "testing dirname exists checker passed"
+fi
+set -e
+
+
+#------------------------------------------------------------------------------#
 echo_header "setup a new repo from scratch using ANDROID_HOME"
 
 REPOROOT=`create_test_dir`
