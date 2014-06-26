@@ -218,12 +218,10 @@ valuetypes = {
 def check_metadata(info):
     for v in valuetypes:
         for field in v.fields:
-            if field in info:
-                v.check(info[field], info['id'])
+            v.check(info[field], info['id'])
         for build in info['builds']:
             for attr in v.attrs:
-                if build[attr]:
-                    v.check(build[attr], info['id'])
+                v.check(build[attr], info['id'])
 
 
 # Formatter for descriptions. Create an instance, and call parseline() with
