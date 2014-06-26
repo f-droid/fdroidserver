@@ -250,6 +250,8 @@ def main():
     repo_sections = ['repo']
     if config['archive_older'] != 0:
         repo_sections.append('archive')
+        if not os.path.exists('archive'):
+            os.mkdir('archive')
 
     if args[0] == 'init':
         if config.get('serverwebroot'):
