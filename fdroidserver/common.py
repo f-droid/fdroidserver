@@ -445,7 +445,7 @@ class vcs_git(vcs):
         rev = str(rev if rev else 'origin/HEAD')
         p = SilentPopen(['git', 'checkout', '-f', rev], cwd=self.local)
         if p.returncode != 0:
-            raise VCSException("Git checkout failed")
+            raise VCSException("Git checkout of '%s' failed" % rev)
         # Get rid of any uncontrolled files left behind
         p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
         if p.returncode != 0:
@@ -584,12 +584,12 @@ class vcs_gitsvn(vcs):
                     # Try a plain git checkout as a last resort
                     p = SilentPopen(['git', 'checkout', rev], cwd=self.local)
                     if p.returncode != 0:
-                        raise VCSException("No git treeish found and direct git checkout failed")
+                        raise VCSException("No git treeish found and direct git checkout of '%s' failed" % rev)
                 else:
                     # Check out the git rev equivalent to the svn rev
                     p = SilentPopen(['git', 'checkout', git_rev], cwd=self.local)
                     if p.returncode != 0:
-                        raise VCSException("Git svn checkout failed")
+                        raise VCSException("Git svn checkout of '%s' failed" % rev)
 
         # Get rid of any uncontrolled files left behind
         p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
@@ -624,7 +624,7 @@ class vcs_svn(vcs):
         if not os.path.exists(self.local):
             p = SilentPopen(['svn', 'checkout', self.remote, self.local] + self.userargs())
             if p.returncode != 0:
-                raise VCSException("Svn checkout failed")
+                raise VCSException("Svn checkout of '%s' failed" % rev)
         else:
             for svncommand in (
                     'svn revert -R .',
@@ -676,7 +676,7 @@ class vcs_hg(vcs):
             return
         p = SilentPopen(['hg', 'update', '-C', rev], cwd=self.local)
         if p.returncode != 0:
-            raise VCSException("Hg checkout failed")
+            raise VCSException("Hg checkout of '%s' failed" % rev)
         p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
         # Also delete untracked files, we have to enable purge extension for that:
         if "'purge' is provided by the following extension" in p.stdout:
@@ -716,7 +716,7 @@ class vcs_bzr(vcs):
         revargs = list(['-r', rev] if rev else [])
         p = SilentPopen(['bzr', 'revert'] + revargs, cwd=self.local)
         if p.returncode != 0:
-            raise VCSException("Bzr revert failed")
+            raise VCSException("Bzr revert of '%s' failed" % rev)
 
     def gettags(self):
         p = SilentPopen(['bzr', 'tags'], cwd=self.local)
