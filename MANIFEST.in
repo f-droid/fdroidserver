@@ -28,6 +28,7 @@ include fdroidserver/getsig/run.sh
 include fdroidserver/getsig/make.sh
 include fdroidserver/getsig/getsig.java
 include tests/run-tests
+include tests/urzip.apk
 include wp-fdroid/AndroidManifest.xml
 include wp-fdroid/android-permissions.php
 include wp-fdroid/readme.txt

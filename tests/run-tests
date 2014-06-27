@@ -42,7 +42,8 @@ create_test_file() {
 #------------------------------------------------------------------------------#
 # "main"
 
-if [ $# -ne 1 ]; then
+if [ $1 = "-h" ] || [ $1 = "--help" ]; then
+    set +x
     echo "Usage: $0 '/path/to/folder/with/apks'"
     exit 1
 fi
@@ -53,7 +54,11 @@ if [ -z $ANDROID_HOME ]; then
     exit 1
 fi
 
-APKDIR=$1
+if [ -z $1 ]; then
+    APKDIR=`pwd`
+else
+    APKDIR=$1
+fi
 
 if [ -z $WORKSPACE ]; then
     WORKSPACE=`dirname $(pwd)`
