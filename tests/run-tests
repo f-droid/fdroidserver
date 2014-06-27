@@ -75,6 +75,24 @@ if [ -z $aapt ]; then
     aapt=`ls -1 $ANDROID_HOME/build-tools/*/aapt | sort | tail -1`
 fi
 
+
+#------------------------------------------------------------------------------#
+echo_header "create a source tarball and use that to build a repo"
+
+cd $WORKSPACE
+python setup.py sdist
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+tar xzf `ls -1 $WORKSPACE/dist/fdroidserver-*.tar.gz | sort -n | tail -1`
+cd $REPOROOT/fdroidserver-*/fdroidserver/getsig
+./make.sh
+cd $REPOROOT
+./fdroidserver-*/fdroid init
+copy_apks_into_repo $REPOROOT
+./fdroidserver-*/fdroid update --create-metadata
+
+
 #------------------------------------------------------------------------------#
 echo_header "test config checks of local_copy_dir"
 
