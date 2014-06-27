@@ -115,7 +115,7 @@ def update_awsbucket(repo_section):
 
 
 def update_serverwebroot(repo_section):
-    rsyncargs = ['rsync', '--update', '--recursive', '--delete']
+    rsyncargs = ['rsync', '--archive', '--delete']
     if options.verbose:
         rsyncargs += ['--verbose']
     if options.quiet:
@@ -140,6 +140,33 @@ def update_serverwebroot(repo_section):
         sys.exit(1)
 
 
+def _local_sync(fromdir, todir):
+    rsyncargs = ['rsync', '--archive', '--one-file-system', '--delete']
+    # use stricter rsync checking on all files since people using offline mode
+    # are already prioritizing security above ease and speed
+    rsyncargs += ['--checksum']
+    if options.verbose:
+        rsyncargs += ['--verbose']
+    if options.quiet:
+        rsyncargs += ['--quiet']
+    logging.debug(' '.join(rsyncargs + [fromdir, todir]))
+    if subprocess.call(rsyncargs + [fromdir, todir]) != 0:
+        sys.exit(1)
+
+
+def sync_from_localcopy(repo_section, local_copy_dir):
+    logging.info('Syncing from local_copy_dir to this repo.')
+    # trailing slashes have a meaning in rsync which is not needed here, so
+    # remove them all
+    _local_sync(os.path.join(local_copy_dir, repo_section).rstrip('/'),
+                repo_section.rstrip('/'))
+
+
+def update_localcopy(repo_section, local_copy_dir):
+    # local_copy_dir is guaranteed to have a trailing slash in main() below
+    _local_sync(repo_section, local_copy_dir)
+
+
 def main():
     global config, options
 
@@ -147,6 +174,10 @@ def main():
     parser = OptionParser()
     parser.add_option("-i", "--identity-file", default=None,
                       help="Specify an identity file to provide to SSH for rsyncing")
+    parser.add_option("--local-copy-dir", default=None,
+                      help="Specify a local folder to sync the repo to")
+    parser.add_option("--sync-from-local-copy-dir", action="store_true", default=False,
+                      help="Before uploading to servers, sync from local copy dir")
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     parser.add_option("-q", "--quiet", action="store_true", default=False,
@@ -171,20 +202,56 @@ def main():
     if config.get('serverwebroot'):
         serverwebroot = config['serverwebroot']
         host, fdroiddir = serverwebroot.rstrip('/').split(':')
-        serverrepobase = os.path.basename(fdroiddir)
-        if serverrepobase != 'fdroid' and standardwebroot:
+        repobase = os.path.basename(fdroiddir)
+        if standardwebroot and repobase != 'fdroid':
             logging.error('serverwebroot does not end with "fdroid", '
                           + 'perhaps you meant one of these:\n\t'
                           + serverwebroot.rstrip('/') + '/fdroid\n\t'
-                          + serverwebroot.rstrip('/').rstrip(serverrepobase) + 'fdroid')
+                          + serverwebroot.rstrip('/').rstrip(repobase) + 'fdroid')
             sys.exit(1)
-    elif not config.get('awsbucket'):
-        logging.warn('No serverwebroot or awsbucket set! Edit your config.py to set one or both.')
+
+    if options.local_copy_dir is not None:
+        local_copy_dir = options.local_copy_dir
+    elif config.get('local_copy_dir'):
+        local_copy_dir = config['local_copy_dir']
+    else:
+        local_copy_dir = None
+    if local_copy_dir is not None:
+        fdroiddir = local_copy_dir.rstrip('/')
+        if os.path.exists(fdroiddir) and not os.path.isdir(fdroiddir):
+            logging.error('local_copy_dir must be directory, not a file!')
+            sys.exit(1)
+        if not os.path.exists(os.path.dirname(fdroiddir)):
+            logging.error('The root dir for local_copy_dir "'
+                          + os.path.dirname(fdroiddir)
+                          + '" does not exist!')
+            sys.exit(1)
+        if not os.path.isabs(fdroiddir):
+            logging.error('local_copy_dir must be an absolute path!')
+            sys.exit(1)
+        repobase = os.path.basename(fdroiddir)
+        if standardwebroot and repobase != 'fdroid':
+            logging.error('local_copy_dir does not end with "fdroid", '
+                          + 'perhaps you meant: ' + fdroiddir + '/fdroid')
+            sys.exit(1)
+        if local_copy_dir[-1] != '/':
+            local_copy_dir += '/'
+        local_copy_dir = local_copy_dir.replace('//', '/')
+        if not os.path.exists(fdroiddir):
+            os.mkdir(fdroiddir)
+
+    if not config.get('awsbucket') \
+            and not config.get('serverwebroot') \
+            and local_copy_dir is None:
+        logging.warn('No serverwebroot, local_copy_dir, or awsbucket set!'
+                     + 'Edit your config.py to set at least one.')
         sys.exit(1)
 
     repo_sections = ['repo']
     if config['archive_older'] != 0:
         repo_sections.append('archive')
+        if not os.path.exists('archive'):
+            os.mkdir('archive')
 
     if args[0] == 'init':
         if config.get('serverwebroot'):
@@ -201,6 +268,11 @@ def main():
                     sys.exit(1)
     elif args[0] == 'update':
         for repo_section in repo_sections:
+            if local_copy_dir is not None:
+                if config['sync_from_local_copy_dir'] and os.path.exists(repo_section):
+                    sync_from_localcopy(repo_section, local_copy_dir)
+                else:
+                    update_localcopy(repo_section, local_copy_dir)
             if config.get('serverwebroot'):
                 update_serverwebroot(repo_section)
             if config.get('awsbucket'):

@@ -98,27 +98,55 @@ keyaliases['com.example.app'] = 'example'
 # the @ prefix.
 keyaliases['com.example.another.plugin'] = '@com.example.another'
 
+
 # The full path to the root of the repository.  It must be specified in
 # rsync/ssh format for a remote host/path. This is used for syncing a locally
 # generated repo to the server that is it hosted on.  It must end in the
 # standard public repo name of "/fdroid", but can be in up to three levels of
 # sub-directories (i.e. /var/www/packagerepos/fdroid).
+#
 # serverwebroot = 'user@example:/var/www/fdroid'
 
+
 # optionally specific which identity file to use when using rsync over SSH
+#
 # identity_file = '~/.ssh/fdroid_id_rsa'
+
+
+# If you are running the repo signing process on a completely offline machine,
+# which provides the best security, then you can specify a folder to sync the
+# repo to when running `fdroid server update`.  This is most likely going to
+# be a USB thumb drive, SD Card, or some other kind of removable media.  Make
+# sure it is mounted before running `fdroid server update`.  Using the
+# standard folder called 'fdroid' as the specified folder is recommended, like
+# with serverwebroot.
+#
+# local_copy_dir = '/media/MyUSBThumbDrive/fdroid'
+
+
+# If you are using local_copy_dir on an offline build/signing server, once the
+# thumb drive has been plugged into the online machine, it will need to be
+# synced to the copy on the online machine.  To make that happen
+# automatically, set sync_from_local_copy_dir to True:
+#
+# sync_from_local_copy_dir = True
+
 
 # To upload the repo to an Amazon S3 bucket using `fdroid server update`.
 # Warning, this deletes and recreates the whole fdroid/ directory each
 # time. This is based on apache-libcloud, which supports basically all cloud
 # storage services, so it should be easy to port the fdroid server tools to
 # any of them.
+#
 # awsbucket = 'myawsfdroid'
 # awsaccesskeyid = 'SEE0CHAITHEIMAUR2USA'
 # awssecretkey = 'yourverysecretkeywordpassphraserighthere'
 
+
 # If you want to force 'fdroid server' to use a non-standard serverwebroot
+#
 # nonstandardwebroot = False
+
 
 # Wiki details
 wiki_protocol = "http"
