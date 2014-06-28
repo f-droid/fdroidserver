@@ -46,7 +46,6 @@ def get_default_config():
         'ant': "ant",
         'mvn3': "mvn",
         'gradle': 'gradle',
-        'archive_older': 0,
         'sync_from_local_copy_dir': False,
         'update_stats': False,
         'stats_to_carbon': False,
@@ -59,6 +58,15 @@ def get_default_config():
             'Description': 1500
         },
         'keyaliases': {},
+        'repo_url': "https://MyFirstFDroidRepo.org/fdroid/repo",
+        'repo_name': "My First FDroid Repo Demo",
+        'repo_icon': "fdroid-icon.png",
+        'repo_description':
+            "This is a repository of apps to be used with FDroid. Applications in this "
+            "repository are either official binaries built by the original application "
+            "developers, or are binaries built from source by the admin of f-droid.org "
+            "using the tools on https://gitlab.com/u/fdroid.",
+            'archive_older': 0,
     }
 
 

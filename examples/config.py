@@ -33,12 +33,10 @@ repo_maxage = 0
 repo_url = "https://MyFirstFDroidRepo.org/fdroid/repo"
 repo_name = "My First FDroid Repo Demo"
 repo_icon = "fdroid-icon.png"
-repo_description = """
-This is a repository of apps to be used with FDroid. Applications in this
-repository are either official binaries built by the original application
-developers, or are binaries built from source by the admin of f-droid.org
-using the tools on https://gitlab.com/u/fdroid.
-"""
+repo_description = "This is a repository of apps to be used with FDroid. Applications in this "
+"repository are either official binaries built by the original application "
+"developers, or are binaries built from source by the admin of f-droid.org "
+"using the tools on https://gitlab.com/u/fdroid."
 
 # As above, but for the archive repo.
 # archive_older sets the number of versions kept in the main repo, with all
