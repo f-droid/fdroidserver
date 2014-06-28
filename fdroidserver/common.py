@@ -577,13 +577,13 @@ class vcs_gitsvn(vcs):
                 # Translate svn rev into git format
                 rev_split = rev.split('/')
                 if len(rev_split) > 1:
-                    treeish = rev_split[0]
+                    treeish = 'origin/' + rev_split[0]
                     svn_rev = rev_split[1]
 
                 else:
                     # if no branch is specified, then assume trunk (ie. 'master'
                     # branch):
-                    treeish = 'master'
+                    treeish = 'origin/master'
                     svn_rev = rev
 
                 p = SilentPopen(['git', 'svn', 'find-rev', 'r' + svn_rev, treeish], cwd=self.local)
