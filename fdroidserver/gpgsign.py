@@ -1,9 +1,8 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #
-# publish.py - part of the FDroid server tools
-# Copyright (C) 2010-2014, Ciaran Gultnieks, ciaran@ciarang.com
-# Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
+# gpgsign.py - part of the FDroid server tools
+# Copyright (C) 2014, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
