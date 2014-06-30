@@ -26,7 +26,6 @@ def main():
     common.read_config(None)
 
     metadata.read_metadata(xref=True)
-    metadata.read_srclibs()
 
 if __name__ == "__main__":
     main()

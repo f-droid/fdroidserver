@@ -25,7 +25,7 @@ import logging
 
 from collections import OrderedDict
 
-srclibs = {}
+srclibs = None
 
 
 class MetaDataException(Exception):
@@ -451,6 +451,11 @@ def read_srclibs():
     metadata.
     """
     global srclibs
+
+    # They were already loaded
+    if srclibs is not None:
+        return
+
     srclibs = {}
 
     srcdir = 'srclibs'
@@ -465,6 +470,11 @@ def read_srclibs():
 # Read all metadata. Returns a list of 'app' objects (which are dictionaries as
 # returned by the parse_metadata function.
 def read_metadata(xref=True):
+
+    # Always read the srclibs before the apps, since they can use a srlib as
+    # their source repository.
+    read_srclibs()
+
     apps = []
 
     for basedir in ('metadata', 'tmp'):

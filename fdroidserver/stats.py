@@ -71,7 +71,6 @@ def main():
         sys.exit(1)
 
     # Get all metadata-defined apps...
-    metadata.read_srclibs()
     metaapps = metadata.read_metadata()
 
     statsdir = 'stats'

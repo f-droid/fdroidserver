@@ -333,7 +333,6 @@ def main():
 
     # Get all apps...
     allapps = metadata.read_metadata()
-    metadata.read_srclibs()
 
     apps = common.read_app_args(args, allapps, False)
 
