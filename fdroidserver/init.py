@@ -112,13 +112,13 @@ def main():
     (options, args) = parser.parse_args()
 
     # find root install prefix
-    tmp = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
+    tmp = os.path.dirname(sys.argv[0])
     if os.path.basename(tmp) == 'bin':
         prefix = os.path.dirname(tmp)
         examplesdir = prefix + '/share/doc/fdroidserver/examples'
     else:
         # we're running straight out of the git repo
-        prefix = tmp
+        prefix = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
         examplesdir = prefix + '/examples'
 
     fdroiddir = os.getcwd()
