@@ -933,6 +933,13 @@ def main():
         resize_all_icons(repodirs)
         sys.exit(0)
 
+    # check that icons exist now, rather than fail at the end of `fdroid update`
+    for k in ['repo_icon', 'archive_icon']:
+        if k in config:
+            if not os.path.exists(config[k]):
+                logging.error(k + ' "' + config[k] + '" does not exist! Correct it in config.py.')
+                sys.exit(1)
+
     # Get all apps...
     apps = metadata.read_metadata()
 
