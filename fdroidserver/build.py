@@ -892,7 +892,8 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
     if thisbuild['disable']:
         return False
 
-    logging.info("Building version " + thisbuild['version'] + ' of ' + app['id'])
+    logging.info("Building version %s (%s) of %s" % (
+        thisbuild['version'], thisbuild['vercode'], app['id']))
 
     if server:
         # When using server mode, still keep a local cache of the repo, by
