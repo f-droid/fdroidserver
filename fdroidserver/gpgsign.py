@@ -53,7 +53,7 @@ def main():
     for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
 
         apkfilename = os.path.basename(apkfile)
-        sigfilename = apkfilename + ".txt"
+        sigfilename = apkfilename + ".asc"
         sigpath = os.path.join(output_dir, sigfilename)
 
         if not os.path.exists(sigpath):
