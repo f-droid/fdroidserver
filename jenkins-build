@@ -53,17 +53,17 @@ cd $WORKSPACE/tests
 #------------------------------------------------------------------------------#
 # test building the source tarball
 cd $WORKSPACE
-python setup.py sdist
+python2 setup.py sdist
 
 
 #------------------------------------------------------------------------------#
 # test install using site packages
 cd $WORKSPACE
 rm -rf $WORKSPACE/env
-virtualenv --system-site-packages $WORKSPACE/env
+virtualenv --python=python2 --system-site-packages $WORKSPACE/env
 . $WORKSPACE/env/bin/activate
 pip install -e $WORKSPACE
-python setup.py install
+python2 setup.py install
 
 # run tests in new pip+virtualenv install
 . $WORKSPACE/env/bin/activate
@@ -81,7 +81,7 @@ sh hooks/pre-commit
 cd $WORKSPACE
 set +e
 # use the virtualenv python so pylint checks against its installed libs
-    PYTHONPATH=$WORKSPACE/.pylint-plugins python /usr/bin/pylint \
+    PYTHONPATH=$WORKSPACE/.pylint-plugins python2 /usr/bin/pylint \
         --output-format=parseable --reports=n \
         --load-plugins astng_hashlib \
         fdroidserver/*.py fdroid makebuildserver setup.py > $WORKSPACE/pylint.parseable
