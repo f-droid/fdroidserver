@@ -112,7 +112,7 @@ def main():
     (options, args) = parser.parse_args()
 
     # find root install prefix
-    tmp = os.path.dirname(sys.argv[0])
+    tmp = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
     if os.path.basename(tmp) == 'bin':
         prefix = os.path.dirname(tmp)
         examplesdir = prefix + '/share/doc/fdroidserver/examples'
