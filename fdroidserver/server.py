@@ -157,9 +157,9 @@ def _local_sync(fromdir, todir):
 def sync_from_localcopy(repo_section, local_copy_dir):
     logging.info('Syncing from local_copy_dir to this repo.')
     # trailing slashes have a meaning in rsync which is not needed here, so
-    # remove them all
-    _local_sync(os.path.join(local_copy_dir, repo_section).rstrip('/'),
-                repo_section.rstrip('/'))
+    # make sure both paths have exactly one trailing slash
+    _local_sync(os.path.join(local_copy_dir, repo_section).rstrip('/') + '/',
+                repo_section.rstrip('/') + '/')
 
 
 def update_localcopy(repo_section, local_copy_dir):
