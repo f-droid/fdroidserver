@@ -44,28 +44,32 @@ def main():
 
     config = common.read_config(options)
 
-    output_dir = 'repo'
-    if not os.path.isdir(output_dir):
-        logging.error("Missing output directory")
-        sys.exit(1)
+    repodirs = ['repo']
+    if config['archive_older'] != 0:
+        repodirs.append('archive')
 
-    # Process any apks that are waiting to be signed...
-    for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
+    for output_dir in repodirs:
+        if not os.path.isdir(output_dir):
+            logging.error("Missing output directory '" + output_dir + "'")
+            sys.exit(1)
 
-        apkfilename = os.path.basename(apkfile)
-        sigfilename = apkfilename + ".asc"
-        sigpath = os.path.join(output_dir, sigfilename)
+        # Process any apks that are waiting to be signed...
+        for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
 
-        if not os.path.exists(sigpath):
-            p = FDroidPopen(['gpg', '-a',
-                             '--output', sigpath,
-                             '--detach-sig',
-                             os.path.join(output_dir, apkfilename)])
-            if p.returncode != 0:
-                logging.error("Signing failed.")
-                sys.exit(1)
+            apkfilename = os.path.basename(apkfile)
+            sigfilename = apkfilename + ".asc"
+            sigpath = os.path.join(output_dir, sigfilename)
 
-            logging.info('Signed ' + apkfilename)
+            if not os.path.exists(sigpath):
+                p = FDroidPopen(['gpg', '-a',
+                                 '--output', sigpath,
+                                 '--detach-sig',
+                                 os.path.join(output_dir, apkfilename)])
+                if p.returncode != 0:
+                    logging.error("Signing failed.")
+                    sys.exit(1)
+
+                logging.info('Signed ' + apkfilename)
 
 
 if __name__ == "__main__":
