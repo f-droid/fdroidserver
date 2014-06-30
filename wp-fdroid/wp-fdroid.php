@@ -464,8 +464,8 @@ class FDroid
 						$out.=$diffSize>0?'+':'';
 						$out.=$this->human_readable_size($diffSize, 1).')</span>';
 					}
-					if(file_exists($this->site_path.'/repo/'.$apk['apkname'].'.txt')) {
-						$out.=' <a href="https://f-droid.org/repo/'.$apk['apkname'].'.txt">GPG Signature</a> ';
+					if(file_exists($this->site_path.'/repo/'.$apk['apkname'].'.asc')) {
+						$out.=' <a href="https://f-droid.org/repo/'.$apk['apkname'].'.asc">GPG Signature</a> ';
 					}
 					if($srcbuild) {
 						$out.='<br /><a href="https://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a> ';
