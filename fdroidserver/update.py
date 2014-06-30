@@ -876,6 +876,12 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
                 if 'srcname' in apk:
                     shutil.move(os.path.join(repodir, apk['srcname']),
                                 os.path.join(archivedir, apk['srcname']))
+                # Move GPG signature too...
+                sigfile = apk['srcname'] + '.asc'
+                sigsrc = os.path.join(repodir, sigfile)
+                if os.path.exists(sigsrc):
+                    shutil.move(sigsrc, os.path.join(archivedir, sigfile))
+
                 archapks.append(apk)
                 apks.remove(apk)
 
