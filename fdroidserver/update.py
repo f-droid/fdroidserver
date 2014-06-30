@@ -34,7 +34,7 @@ import logging
 
 import common
 import metadata
-from common import FDroidPopen
+from common import FDroidPopen, SilentPopen
 from metadata import MetaDataException
 
 
@@ -374,7 +374,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             thisinfo['features'] = []
             thisinfo['icons_src'] = {}
             thisinfo['icons'] = {}
-            p = FDroidPopen([os.path.join(config['sdk_path'], 'build-tools',
+            p = SilentPopen([os.path.join(config['sdk_path'], 'build-tools',
                                           config['build_tools'], 'aapt'),
                              'dump', 'badging', apkfile])
             if p.returncode != 0:
