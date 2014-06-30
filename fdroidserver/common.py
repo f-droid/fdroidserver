@@ -66,7 +66,7 @@ def get_default_config():
             "repository are either official binaries built by the original application "
             "developers, or are binaries built from source by the admin of f-droid.org "
             "using the tools on https://gitlab.com/u/fdroid.",
-            'archive_older': 0,
+        'archive_older': 0,
     }
 
 
