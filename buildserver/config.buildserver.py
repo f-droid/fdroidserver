@@ -1,6 +1,6 @@
 sdk_path = "/home/vagrant/android-sdk"
 ndk_path = "/home/vagrant/android-ndk"
-build_tools = "19.1.0"
+build_tools = "20.0.0"
 ant = "ant"
 mvn3 = "mvn"
 gradle = "gradle"
