@@ -355,7 +355,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
         apkfilename = apkfile[len(repodir) + 1:]
         if ' ' in apkfilename:
-            logging.error("No spaces in APK filenames!")
+            logging.critical("Spaces in filenames are not allowed.")
             sys.exit(1)
 
         if apkfilename in apkcache:
@@ -394,7 +394,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         thisinfo['versioncode'] = int(re.match(vercode_pat, line).group(1))
                         thisinfo['version'] = re.match(vername_pat, line).group(1)
                     except Exception, e:
-                        logging.info("Package matching failed: " + str(e))
+                        logging.error("Package matching failed: " + str(e))
                         logging.info("Line was: " + line)
                         sys.exit(1)
                 elif line.startswith("application:"):
@@ -539,8 +539,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                     continue
                 if last_density is None:
                     continue
-                logging.info("Density %s not available, resizing down from %s"
-                             % (density, last_density))
+                logging.debug("Density %s not available, resizing down from %s"
+                              % (density, last_density))
 
                 last_iconpath = os.path.join(
                     get_icon_dir(repodir, last_density), iconfilename)
@@ -566,8 +566,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                     continue
                 if last_density is None:
                     continue
-                logging.info("Density %s not available, copying from lower density %s"
-                             % (density, last_density))
+                logging.debug("Density %s not available, copying from lower density %s"
+                              % (density, last_density))
 
                 shutil.copyfile(
                     os.path.join(get_icon_dir(repodir, last_density), iconfilename),
@@ -833,7 +833,7 @@ def make_index(apps, apks, repodir, archive, categories):
         p = FDroidPopen(args)
         # TODO keypass should be sent via stdin
         if p.returncode != 0:
-            logging.info("Failed to sign index")
+            logging.critical("Failed to sign index")
             sys.exit(1)
 
     # Copy the repo icon into the repo directory...
@@ -937,7 +937,7 @@ def main():
     for k in ['repo_icon', 'archive_icon']:
         if k in config:
             if not os.path.exists(config[k]):
-                logging.error(k + ' "' + config[k] + '" does not exist! Correct it in config.py.')
+                logging.critical(k + ' "' + config[k] + '" does not exist! Correct it in config.py.')
                 sys.exit(1)
 
     # Get all apps...

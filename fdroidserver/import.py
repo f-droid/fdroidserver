@@ -76,7 +76,6 @@ def getrepofrompage(url):
         index = repo.find('<')
         if index == -1:
             return (None, "Error while getting repo address - no end tag? '" + repo + "'")
-            sys.exit(1)
         repo = repo[:index]
         index = repo.find(' ')
         if index == -1:
@@ -114,7 +113,7 @@ def main():
     config = common.read_config(options)
 
     if not options.url:
-        logging.info("Specify project url.")
+        logging.error("Specify project url.")
         sys.exit(1)
     url = options.url
 
@@ -163,7 +162,7 @@ def main():
         # Figure out the repo type and adddress...
         repotype, repo = getrepofrompage(sourcecode)
         if not repotype:
-            logging.info("Unable to determine vcs type. " + repo)
+            logging.error("Unable to determine vcs type. " + repo)
             sys.exit(1)
     elif (url.startswith('http://code.google.com/p/') or
             url.startswith('https://code.google.com/p/')):
@@ -178,29 +177,29 @@ def main():
         # Figure out the repo type and adddress...
         repotype, repo = getrepofrompage(sourcecode)
         if not repotype:
-            logging.info("Unable to determine vcs type. " + repo)
+            logging.error("Unable to determine vcs type. " + repo)
             sys.exit(1)
 
         # Figure out the license...
         req = urllib.urlopen(url)
         if req.getcode() != 200:
-            logging.info('Unable to find project page at ' + sourcecode + ' - return code ' + str(req.getcode()))
+            logging.error('Unable to find project page at ' + sourcecode + ' - return code ' + str(req.getcode()))
             sys.exit(1)
         page = req.read()
         index = page.find('Code license')
         if index == -1:
-            logging.info("Couldn't find license data")
+            logging.error("Couldn't find license data")
             sys.exit(1)
         ltext = page[index:]
         lprefix = 'rel="nofollow">'
         index = ltext.find(lprefix)
         if index == -1:
-            logging.info("Couldn't find license text")
+            logging.error("Couldn't find license text")
             sys.exit(1)
         ltext = ltext[index + len(lprefix):]
         index = ltext.find('<')
         if index == -1:
-            logging.info("License text not formatted as expected")
+            logging.error("License text not formatted as expected")
             sys.exit(1)
         ltext = ltext[:index]
         if ltext == 'GNU GPL v3':
@@ -218,13 +217,13 @@ def main():
         elif ltext == 'New BSD License':
             license = 'NewBSD'
         else:
-            logging.info("License " + ltext + " is not recognised")
+            logging.error("License " + ltext + " is not recognised")
             sys.exit(1)
 
     if not projecttype:
-        logging.info("Unable to determine the project type.")
-        logging.info("The URL you supplied was not in one of the supported formats. Please consult")
-        logging.info("the manual for a list of supported formats, and supply one of those.")
+        logging.error("Unable to determine the project type.")
+        logging.error("The URL you supplied was not in one of the supported formats. Please consult")
+        logging.error("the manual for a list of supported formats, and supply one of those.")
         sys.exit(1)
 
     # Get a copy of the source so we can extract some info...
@@ -245,7 +244,7 @@ def main():
 
         version, vercode, package = common.parse_androidmanifests(paths)
         if not package:
-            logging.info("Couldn't find package ID")
+            logging.error("Couldn't find package ID")
             sys.exit(1)
         if not version:
             logging.warn("Couldn't find latest version name")
@@ -262,13 +261,13 @@ def main():
             version = bconfig.get('app', 'version')
             vercode = None
         else:
-            logging.info("No android or kivy project could be found. Specify --subdir?")
+            logging.error("No android or kivy project could be found. Specify --subdir?")
             sys.exit(1)
 
     # Make sure it's actually new...
     for app in apps:
         if app['id'] == package:
-            logging.info("Package " + package + " already exists")
+            logging.error("Package " + package + " already exists")
             sys.exit(1)
 
     # Construct the metadata...
