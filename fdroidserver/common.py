@@ -121,6 +121,9 @@ def read_config(opts, config_file='config.py'):
     if not test_sdk_exists(config):
         sys.exit(3)
 
+    if not test_build_tools_exists(config):
+        sys.exit(3)
+
     for k in ["keystorepass", "keypass"]:
         if k in config:
             write_password_file(k)
@@ -150,9 +153,6 @@ def test_sdk_exists(c):
         return False
     if not os.path.isdir(os.path.join(c['sdk_path'], 'build-tools')):
         logging.critical('Android SDK path "' + c['sdk_path'] + '" does not contain "build-tools/"!')
-        return False
-    if not os.path.isdir(os.path.join(c['sdk_path'], 'build-tools', c['build_tools'])):
-        logging.critical('Configured build-tools version "' + c['build_tools'] + '" not found in the SDK!')
         return False
     return True
 

@@ -179,7 +179,7 @@ set -e
 
 
 #------------------------------------------------------------------------------#
-echo_header "check that fake android home passes `fdroid init`"
+echo_header "check that fake android home passes 'fdroid init'"
 
 REPOROOT=`create_test_dir`
 FAKE_ANDROID_HOME=`create_test_dir`
