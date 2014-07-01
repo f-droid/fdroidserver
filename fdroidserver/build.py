@@ -816,7 +816,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         nativecode = None if not nativecode else nativecode
 
     if thisbuild['buildjni'] and thisbuild['buildjni'] != ['no']:
-        if nativecode is not None:
+        if nativecode is None:
             raise BuildException("Native code should have been built but none was packaged")
     if thisbuild['novcheck']:
         vercode = thisbuild['vercode']
