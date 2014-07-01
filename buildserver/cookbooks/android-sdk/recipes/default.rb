@@ -23,12 +23,6 @@ execute "add-android-sdk-path" do
   not_if "grep PATH-SDK /home/#{user}/.bsenv"
 end
 
-execute "add-android-home" do
-  user user
-  command "echo \"export ANDROID_HOME=#{sdk_loc}\" >> /home/#{user}/.bsenv"
-  not_if "grep ANDROID_HOME /home/#{user}/.bsenv"
-end
-
 script "add_build_tools" do
   interpreter "bash"
   user user

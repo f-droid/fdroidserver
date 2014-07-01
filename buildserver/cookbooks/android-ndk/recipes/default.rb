@@ -8,12 +8,6 @@ execute "add-android-ndk-path" do
   not_if "grep PATH-NDK /home/#{user}/.bsenv"
 end
 
-execute "add-android-ndk-var" do
-  user user
-  command "echo \"export ANDROID_NDK=#{ndk_loc}\" >> /home/#{user}/.bsenv"
-  not_if "grep ANDROID_NDK /home/#{user}/.bsenv"
-end
-
 script "setup-android-ndk" do
   timeout 14400
   interpreter "bash"

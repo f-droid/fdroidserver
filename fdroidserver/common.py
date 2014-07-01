@@ -36,6 +36,7 @@ import metadata
 
 config = None
 options = None
+env = None
 
 
 def get_default_config():
@@ -76,7 +77,7 @@ def read_config(opts, config_file='config.py'):
     The config is read from config_file, which is in the current directory when
     any of the repo management commands are used.
     """
-    global config, options
+    global config, options, env
 
     if config is not None:
         return config
@@ -123,6 +124,15 @@ def read_config(opts, config_file='config.py'):
 
     if not test_build_tools_exists(config):
         sys.exit(3)
+
+    env = os.environ
+
+    # There is no standard, so just set up the most common environment
+    # variables
+    for n in ['ANDROID_HOME', 'ANDROID_SDK', 'SDK']:
+        env[n] = config['sdk_path']
+    for n in ['ANDROID_NDK', 'NDK']:
+        env[n] = config['ndk_path']
 
     for k in ["keystorepass", "keypass"]:
         if k in config:
@@ -1594,13 +1604,15 @@ def FDroidPopen(commands, cwd=None, shell=False, output=True):
     :returns: A PopenResult.
     """
 
+    global env
+
     if cwd:
         cwd = os.path.normpath(cwd)
         logging.debug("Directory: %s" % cwd)
     logging.debug("> %s" % ' '.join(commands))
 
     result = PopenResult()
-    p = subprocess.Popen(commands, cwd=cwd, shell=shell,
+    p = subprocess.Popen(commands, cwd=cwd, shell=shell, env=env,
                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     stdout_queue = Queue.Queue()
