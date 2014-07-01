@@ -4,14 +4,9 @@ bindir="$(dirname $0)"
 basedir="$(dirname $bindir)"
 verdir="${basedir}/versions"
 args=("$@")
-pushd "${verdir}" &>/dev/null
 
-v_all=(*/)
-v_all=(${v_all[@]%/})
-
+v_all=($(cd ${verdir} && ls | sort -rV))
 echo "Available gradle versions: ${v_all[@]}"
-
-popd &>/dev/null
 
 run_gradle() {
 	${verdir}/${v_found}/bin/gradle "${args[@]}"
