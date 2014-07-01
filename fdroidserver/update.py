@@ -387,7 +387,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 else:
                     logging.error("Failed to get apk information, skipping " + apkfile)
                 continue
-            for line in p.stdout.splitlines():
+            for line in p.output.splitlines():
                 if line.startswith("package:"):
                     try:
                         thisinfo['id'] = re.match(name_pat, line).group(1)
@@ -470,10 +470,10 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 sys.exit(1)
             p = FDroidPopen(['java', '-cp', os.path.join(os.path.dirname(__file__), 'getsig'),
                              'getsig', os.path.join(os.getcwd(), apkfile)])
-            if p.returncode != 0 or not p.stdout.startswith('Result:'):
+            if p.returncode != 0 or not p.output.startswith('Result:'):
                 logging.critical("Failed to get apk signature")
                 sys.exit(1)
-            thisinfo['sig'] = p.stdout[7:].strip()
+            thisinfo['sig'] = p.output[7:].strip()
 
             apk = zipfile.ZipFile(apkfile, 'r')
 
@@ -672,8 +672,8 @@ def make_index(apps, apks, repodir, archive, categories):
                 logging.critical(msg)
                 sys.exit(1)
             global repo_pubkey_fingerprint
-            repo_pubkey_fingerprint = cert_fingerprint(p.stdout)
-            return "".join("%02x" % ord(b) for b in p.stdout)
+            repo_pubkey_fingerprint = cert_fingerprint(p.output)
+            return "".join("%02x" % ord(b) for b in p.output)
 
         repoel.setAttribute("pubkey", extract_pubkey())
 

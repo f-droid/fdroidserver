@@ -414,7 +414,7 @@ class vcs_git(vcs):
     # a safety check.
     def checkrepo(self):
         p = SilentPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local)
-        result = p.stdout.rstrip()
+        result = p.output.rstrip()
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
 
@@ -492,7 +492,7 @@ class vcs_git(vcs):
     def gettags(self):
         self.checkrepo()
         p = SilentPopen(['git', 'tag'], cwd=self.local)
-        return p.stdout.splitlines()
+        return p.output.splitlines()
 
     def latesttags(self, alltags, number):
         self.checkrepo()
@@ -500,7 +500,7 @@ class vcs_git(vcs):
                         + 'xargs -I@ git log --format=format:"%at @%n" -1 @ | '
                         + 'sort -n | awk \'{print $2}\''],
                         cwd=self.local, shell=True)
-        return p.stdout.splitlines()[-number:]
+        return p.output.splitlines()[-number:]
 
 
 class vcs_gitsvn(vcs):
@@ -521,7 +521,7 @@ class vcs_gitsvn(vcs):
     # a safety check.
     def checkrepo(self):
         p = SilentPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local)
-        result = p.stdout.rstrip()
+        result = p.output.rstrip()
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
 
@@ -587,7 +587,7 @@ class vcs_gitsvn(vcs):
                     svn_rev = rev
 
                 p = SilentPopen(['git', 'svn', 'find-rev', 'r' + svn_rev, treeish], cwd=self.local)
-                git_rev = p.stdout.rstrip()
+                git_rev = p.output.rstrip()
 
                 if p.returncode != 0 or not git_rev:
                     # Try a plain git checkout as a last resort
@@ -614,7 +614,7 @@ class vcs_gitsvn(vcs):
         p = SilentPopen(['git', 'svn', 'find-rev', 'HEAD'], cwd=self.local)
         if p.returncode != 0:
             return None
-        return p.stdout.strip()
+        return p.output.strip()
 
 
 class vcs_svn(vcs):
@@ -654,7 +654,7 @@ class vcs_svn(vcs):
 
     def getref(self):
         p = SilentPopen(['svn', 'info'], cwd=self.local)
-        for line in p.stdout.splitlines():
+        for line in p.output.splitlines():
             if line and line.startswith('Last Changed Rev: '):
                 return line[18:]
         return None
@@ -688,7 +688,7 @@ class vcs_hg(vcs):
             raise VCSException("Hg checkout of '%s' failed" % rev)
         p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
         # Also delete untracked files, we have to enable purge extension for that:
-        if "'purge' is provided by the following extension" in p.stdout:
+        if "'purge' is provided by the following extension" in p.output:
             with open(self.local + "/.hg/hgrc", "a") as myfile:
                 myfile.write("\n[extensions]\nhgext.purge=\n")
             p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
@@ -699,7 +699,7 @@ class vcs_hg(vcs):
 
     def gettags(self):
         p = SilentPopen(['hg', 'tags', '-q'], cwd=self.local)
-        return p.stdout.splitlines()[1:]
+        return p.output.splitlines()[1:]
 
 
 class vcs_bzr(vcs):
@@ -730,7 +730,7 @@ class vcs_bzr(vcs):
     def gettags(self):
         p = SilentPopen(['bzr', 'tags'], cwd=self.local)
         return [tag.split('   ')[0].strip() for tag in
-                p.stdout.splitlines()]
+                p.output.splitlines()]
 
 
 def retrieve_string(app_dir, string, xmlfiles=None):
@@ -1036,7 +1036,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
             p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=libdir)
             if p.returncode != 0:
                 raise BuildException("Error running prepare command for srclib %s"
-                                     % name, p.stdout)
+                                     % name, p.output)
 
     if basepath:
         libdir = sdir
@@ -1088,7 +1088,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running init command for %s:%s" %
-                                 (app['id'], build['version']), p.stdout)
+                                 (app['id'], build['version']), p.output)
 
     # Apply patches if any
     if build['patch']:
@@ -1292,7 +1292,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running prebuild command for %s:%s" %
-                                 (app['id'], build['version']), p.stdout)
+                                 (app['id'], build['version']), p.output)
 
     # Generate (or update) the ant build file, build.xml...
     if build['update'] and build['update'] != ['no'] and build['type'] == 'ant':
@@ -1320,8 +1320,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             # Check to see whether an error was returned without a proper exit
             # code (this is the case for the 'no target set or target invalid'
             # error)
-            if p.returncode != 0 or p.stdout.startswith("Error: "):
-                raise BuildException("Failed to update project at %s" % d, p.stdout)
+            if p.returncode != 0 or p.output.startswith("Error: "):
+                raise BuildException("Failed to update project at %s" % d, p.output)
             # Clean update dirs via ant
             if d != '.':
                 logging.info("Cleaning subproject %s" % d)
@@ -1553,7 +1553,7 @@ def isApkDebuggable(apkfile, config):
     if p.returncode != 0:
         logging.critical("Failed to get apk manifest information")
         sys.exit(1)
-    for line in p.stdout.splitlines():
+    for line in p.output.splitlines():
         if 'android:debuggable' in line and not line.endswith('0x0'):
             return True
     return False
@@ -1585,7 +1585,7 @@ class AsynchronousFileReader(threading.Thread):
 
 class PopenResult:
     returncode = None
-    stdout = ''
+    output = ''
 
 
 def SilentPopen(commands, cwd=None, shell=False):
@@ -1622,7 +1622,7 @@ def FDroidPopen(commands, cwd=None, shell=False, output=True):
                 # Output directly to console
                 sys.stdout.write(line)
                 sys.stdout.flush()
-            result.stdout += line
+            result.output += line
 
         time.sleep(0.1)
 

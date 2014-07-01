@@ -101,9 +101,9 @@ def main():
                 raise Exception("Failed to unpack remote build of " + apkfilename)
 
             p = FDroidPopen(['diff', '-r', 'this_apk', 'that_apk'], cwd=tmp_dir)
-            lines = p.stdout.splitlines()
+            lines = p.output.splitlines()
             if len(lines) != 1 or 'META-INF' not in lines[0]:
-                raise Exception("Unexpected diff output - " + p.stdout)
+                raise Exception("Unexpected diff output - " + p.output)
 
             logging.info("...successfully verified")
             verified += 1

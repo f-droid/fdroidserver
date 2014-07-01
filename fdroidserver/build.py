@@ -84,7 +84,7 @@ def vagrant(params, cwd=None, printout=False):
                is the stdout (and stderr) from vagrant
     """
     p = FDroidPopen(['vagrant'] + params, cwd=cwd)
-    return (p.returncode, p.stdout)
+    return (p.returncode, p.output)
 
 
 def get_vagrant_sshinfo():
@@ -136,7 +136,7 @@ def get_clean_vm(reset=False):
             p = FDroidPopen(['VBoxManage', 'snapshot',
                              get_builder_vm_id(), 'list',
                              '--details'], cwd='builder')
-            if 'fdroidclean' in p.stdout:
+            if 'fdroidclean' in p.output:
                 logging.info("...snapshot exists - resetting build server to "
                              "clean state")
                 retcode, output = vagrant(['status'], cwd='builder')
@@ -163,7 +163,7 @@ def get_clean_vm(reset=False):
                     logging.info("...failed to reset to snapshot")
             else:
                 logging.info("...snapshot doesn't exist - "
-                             "VBoxManage snapshot list:\n" + p.stdout)
+                             "VBoxManage snapshot list:\n" + p.output)
 
     # If we can't use the existing machine for any reason, make a
     # new one from scratch.
@@ -227,7 +227,7 @@ def get_clean_vm(reset=False):
         p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(),
                          'list', '--details'],
                         cwd='builder')
-        if 'fdroidclean' not in p.stdout:
+        if 'fdroidclean' not in p.output:
             raise BuildException("Failed to take snapshot.")
 
     return sshinfo
@@ -494,7 +494,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     if p is not None and p.returncode != 0:
         raise BuildException("Error cleaning %s:%s" %
-                             (app['id'], thisbuild['version']), p.stdout)
+                             (app['id'], thisbuild['version']), p.output)
 
     logging.info("Getting rid of Gradle wrapper binaries...")
     for root, dirs, files in os.walk(build_dir):
@@ -560,7 +560,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         if p.returncode != 0:
             raise BuildException("Error running build command for %s:%s" %
-                                 (app['id'], thisbuild['version']), p.stdout)
+                                 (app['id'], thisbuild['version']), p.output)
 
     # Build native stuff if required...
     if thisbuild['buildjni'] and thisbuild['buildjni'] != ['no']:
@@ -588,7 +588,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 del manifest_text
             p = FDroidPopen(cmd, cwd=os.path.join(root_dir, d))
             if p.returncode != 0:
-                raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout)
+                raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']), p.output)
 
     p = None
     # Build the release...
@@ -725,12 +725,12 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         bindir = os.path.join(root_dir, 'bin')
 
     if p is not None and p.returncode != 0:
-        raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.stdout)
+        raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.output)
     logging.info("Successfully built version " + thisbuild['version'] + ' of ' + app['id'])
 
     if thisbuild['type'] == 'maven':
         stdout_apk = '\n'.join([
-            line for line in p.stdout.splitlines() if any(a in line for a in ('.apk', '.ap_'))])
+            line for line in p.output.splitlines() if any(a in line for a in ('.apk', '.ap_'))])
         m = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
                      stdout_apk, re.S | re.M)
         if not m:
@@ -766,7 +766,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             src = os.path.join(dd, 'build', 'apk', name + '.apk')
     elif thisbuild['type'] == 'ant':
         stdout_apk = '\n'.join([
-            line for line in p.stdout.splitlines() if '.apk' in line])
+            line for line in p.output.splitlines() if '.apk' in line])
         src = re.match(r".*^.*Creating (.+) for release.*$.*", stdout_apk,
                        re.S | re.M).group(1)
         src = os.path.join(bindir, src)
@@ -792,7 +792,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     version = None
     foundid = None
     nativecode = None
-    for line in p.stdout.splitlines():
+    for line in p.output.splitlines():
         if line.startswith("package:"):
             pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
             m = pat.match(line)
