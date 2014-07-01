@@ -473,17 +473,11 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         logging.info("Cleaning Gradle project...")
         cmd = [config['gradle'], 'clean']
 
-        if '@' in thisbuild['gradle']:
-            gradle_dir = os.path.join(root_dir, thisbuild['gradle'].split('@', 1)[1])
-            gradle_dir = os.path.normpath(gradle_dir)
-        else:
-            gradle_dir = root_dir
-
         adapt_gradle(build_dir)
         for name, number, libpath in srclibpaths:
             adapt_gradle(libpath)
 
-        p = FDroidPopen(cmd, cwd=gradle_dir)
+        p = FDroidPopen(cmd, cwd=root_dir)
 
     elif thisbuild['type'] == 'kivy':
         pass
@@ -685,13 +679,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     elif thisbuild['type'] == 'gradle':
         logging.info("Building Gradle project...")
-        if '@' in thisbuild['gradle']:
-            flavours = thisbuild['gradle'].split('@')[0].split(',')
-            gradle_dir = thisbuild['gradle'].split('@')[1]
-            gradle_dir = os.path.join(root_dir, gradle_dir)
-        else:
-            flavours = thisbuild['gradle'].split(',')
-            gradle_dir = root_dir
+        flavours = thisbuild['gradle'].split(',')
 
         if len(flavours) == 1 and flavours[0] in ['main', 'yes', '']:
             flavours[0] = ''
@@ -711,7 +699,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if LooseVersion('0.8') <= thisbuild['gradlepluginver'] < LooseVersion('0.11'):
             commands += ['-x', 'lintVital' + flavours_cmd + 'Release']
 
-        p = FDroidPopen(commands, cwd=gradle_dir)
+        p = FDroidPopen(commands, cwd=root_dir)
 
     elif thisbuild['type'] == 'ant':
         logging.info("Building Ant project...")
