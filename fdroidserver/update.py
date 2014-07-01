@@ -876,11 +876,11 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
                 if 'srcname' in apk:
                     shutil.move(os.path.join(repodir, apk['srcname']),
                                 os.path.join(archivedir, apk['srcname']))
-                # Move GPG signature too...
-                sigfile = apk['srcname'] + '.asc'
-                sigsrc = os.path.join(repodir, sigfile)
-                if os.path.exists(sigsrc):
-                    shutil.move(sigsrc, os.path.join(archivedir, sigfile))
+                    # Move GPG signature too...
+                    sigfile = apk['srcname'] + '.asc'
+                    sigsrc = os.path.join(repodir, sigfile)
+                    if os.path.exists(sigsrc):
+                        shutil.move(sigsrc, os.path.join(archivedir, sigfile))
 
                 archapks.append(apk)
                 apks.remove(apk)
@@ -932,6 +932,13 @@ def main():
     if options.icons:
         resize_all_icons(repodirs)
         sys.exit(0)
+
+    # check that icons exist now, rather than fail at the end of `fdroid update`
+    for k in ['repo_icon', 'archive_icon']:
+        if k in config:
+            if not os.path.exists(config[k]):
+                logging.error(k + ' "' + config[k] + '" does not exist! Correct it in config.py.')
+                sys.exit(1)
 
     # Get all apps...
     apps = metadata.read_metadata()

@@ -61,11 +61,11 @@ def get_default_config():
         'repo_url': "https://MyFirstFDroidRepo.org/fdroid/repo",
         'repo_name': "My First FDroid Repo Demo",
         'repo_icon': "fdroid-icon.png",
-        'repo_description':
+        'repo_description': (
             "This is a repository of apps to be used with FDroid. Applications in this "
-            "repository are either official binaries built by the original application "
-            "developers, or are binaries built from source by the admin of f-droid.org "
-            "using the tools on https://gitlab.com/u/fdroid.",
+            + "repository are either official binaries built by the original application "
+            + "developers, or are binaries built from source by the admin of f-droid.org "
+            + "using the tools on https://gitlab.com/u/fdroid."),
         'archive_older': 0,
     }
 
@@ -121,6 +121,9 @@ def read_config(opts, config_file='config.py'):
     if not test_sdk_exists(config):
         sys.exit(3)
 
+    if not test_build_tools_exists(config):
+        sys.exit(3)
+
     for k in ["keystorepass", "keypass"]:
         if k in config:
             write_password_file(k)
@@ -150,9 +153,6 @@ def test_sdk_exists(c):
         return False
     if not os.path.isdir(os.path.join(c['sdk_path'], 'build-tools')):
         logging.critical('Android SDK path "' + c['sdk_path'] + '" does not contain "build-tools/"!')
-        return False
-    if not os.path.isdir(os.path.join(c['sdk_path'], 'build-tools', c['build_tools'])):
-        logging.critical('Configured build-tools version "' + c['build_tools'] + '" not found in the SDK!')
         return False
     return True
 
