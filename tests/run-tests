@@ -84,6 +84,13 @@ fi
 
 
 #------------------------------------------------------------------------------#
+echo_header "run commit hooks"
+
+cd $WORKSPACE
+./hooks/pre-commit
+
+
+#------------------------------------------------------------------------------#
 echo_header "create a source tarball and use that to build a repo"
 
 cd $WORKSPACE
