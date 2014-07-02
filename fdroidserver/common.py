@@ -173,9 +173,9 @@ def read_config(opts, config_file='config.py'):
 def test_sdk_exists(c):
     if c['sdk_path'] is None:
         # c['sdk_path'] is set to the value of ANDROID_HOME by default
-        logging.critical('No Android SDK found! ANDROID_HOME is not set and sdk_path is not in config.py!')
-        logging.info('You can use ANDROID_HOME to set the path to your SDK, i.e.:')
-        logging.info('\texport ANDROID_HOME=/opt/android-sdk')
+        logging.error('No Android SDK found! ANDROID_HOME is not set and sdk_path is not in config.py!')
+        logging.error('You can use ANDROID_HOME to set the path to your SDK, i.e.:')
+        logging.error('\texport ANDROID_HOME=/opt/android-sdk')
         return False
     if not os.path.exists(c['sdk_path']):
         logging.critical('Android SDK path "' + c['sdk_path'] + '" does not exist!')
@@ -392,11 +392,12 @@ class vcs:
                 else:
                     deleterepo = True
                     logging.info(
-                        "Repository details for {0} changed - deleting"
-                        .format(self.local))
+                        "Repository details for %s changed - deleting" % (
+                            self.local))
             else:
                 deleterepo = True
-                logging.info("Repository details missing - deleting")
+                logging.info("Repository details for %s missing - deleting" % (
+                    self.local))
         if deleterepo:
             shutil.rmtree(self.local)
 
@@ -866,7 +867,7 @@ def get_library_references(root_dir):
             relpath = os.path.join(root_dir, path)
             if not os.path.isdir(relpath):
                 continue
-            logging.info("Found subproject at %s" % path)
+            logging.debug("Found subproject at %s" % path)
             libraries.append(path)
     return libraries
 
@@ -884,7 +885,7 @@ def ant_subprojects(root_dir):
 
 def remove_debuggable_flags(root_dir):
     # Remove forced debuggable flags
-    logging.info("Removing debuggable flags")
+    logging.info("Removing debuggable flags from %s" % root_dir)
     for root, dirs, files in os.walk(root_dir):
         if 'AndroidManifest.xml' in files:
             path = os.path.join(root, 'AndroidManifest.xml')
