@@ -339,6 +339,7 @@ class vcs:
 
         self.remote = remote
         self.local = local
+        self.clone_failed = False
         self.refreshed = False
         self.srclib = None
 
@@ -353,6 +354,9 @@ class vcs:
     # None is acceptable for 'rev' if you know you are cloning a clean copy of
     # the repo - otherwise it must specify a valid revision.
     def gotorevision(self, rev):
+
+        if self.clone_failed:
+            raise VCSException("Downloading the repository already failed once, not trying again.")
 
         # The .fdroidvcs-id file for a repo tells us what VCS type
         # and remote that directory was created from, allowing us to drop it
@@ -433,6 +437,7 @@ class vcs_git(vcs):
             # Brand new checkout
             p = FDroidPopen(['git', 'clone', self.remote, self.local])
             if p.returncode != 0:
+                self.clone_failed = True
                 raise VCSException("Git clone failed", p.output)
             self.checkrepo()
         else:
@@ -550,10 +555,12 @@ class vcs_gitsvn(vcs):
                         gitsvn_cmd += ' -b %s' % i[9:]
                 p = SilentPopen([gitsvn_cmd + " %s %s" % (remote_split[0], self.local)], shell=True)
                 if p.returncode != 0:
+                    self.clone_failed = True
                     raise VCSException("Git clone failed", p.output)
             else:
                 p = SilentPopen([gitsvn_cmd + " %s %s" % (self.remote, self.local)], shell=True)
                 if p.returncode != 0:
+                    self.clone_failed = True
                     raise VCSException("Git clone failed", p.output)
             self.checkrepo()
         else:
@@ -643,6 +650,7 @@ class vcs_svn(vcs):
         if not os.path.exists(self.local):
             p = SilentPopen(['svn', 'checkout', self.remote, self.local] + self.userargs())
             if p.returncode != 0:
+                self.clone_failed = True
                 raise VCSException("Svn checkout of '%s' failed" % rev, p.output)
         else:
             for svncommand in (
@@ -679,6 +687,7 @@ class vcs_hg(vcs):
         if not os.path.exists(self.local):
             p = SilentPopen(['hg', 'clone', self.remote, self.local])
             if p.returncode != 0:
+                self.clone_failed = True
                 raise VCSException("Hg clone failed", p.output)
         else:
             p = SilentPopen(['hg status -uS | xargs rm -rf'], cwd=self.local, shell=True)
@@ -721,6 +730,7 @@ class vcs_bzr(vcs):
         if not os.path.exists(self.local):
             p = SilentPopen(['bzr', 'branch', self.remote, self.local])
             if p.returncode != 0:
+                self.clone_failed = True
                 raise VCSException("Bzr branch failed", p.output)
         else:
             p = SilentPopen(['bzr', 'clean-tree', '--force', '--unknown', '--ignored'], cwd=self.local)
