@@ -125,10 +125,25 @@ def read_config(opts, config_file='config.py'):
     if not test_build_tools_exists(config):
         sys.exit(3)
 
-    env = os.environ
+    bin_paths = {
+        'aapt': [
+            os.path.join(config['sdk_path'], 'build-tools', config['build_tools'], 'aapt'),
+            ]
+        }
+
+    for b, paths in bin_paths.items():
+        config[b] = None
+        for path in paths:
+            if os.path.isfile(path):
+                config[b] = path
+                break
+        if config[b] is None:
+            logging.warn("Could not find %s in any of the following paths:\n%s" % (
+                b, '\n'.join(paths)))
 
     # There is no standard, so just set up the most common environment
     # variables
+    env = os.environ
     for n in ['ANDROID_HOME', 'ANDROID_SDK']:
         env[n] = config['sdk_path']
     for n in ['ANDROID_NDK', 'NDK']:
@@ -175,11 +190,6 @@ def test_build_tools_exists(c):
     if not os.path.isdir(versioned_build_tools):
         logging.critical('Android Build Tools path "'
                          + versioned_build_tools + '" does not exist!')
-        return False
-    if not os.path.exists(os.path.join(c['sdk_path'], 'build-tools', c['build_tools'], 'aapt')):
-        logging.critical('Android Build Tools "'
-                         + versioned_build_tools
-                         + '" does not contain "aapt"!')
         return False
     return True
 

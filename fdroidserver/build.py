@@ -772,9 +772,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if not os.path.exists(src):
         raise BuildException("Unsigned apk is not at expected location of " + src)
 
-    p = SilentPopen([os.path.join(config['sdk_path'], 'build-tools',
-                                  config['build_tools'], 'aapt'),
-                     'dump', 'badging', src])
+    p = SilentPopen([config['aapt'], 'dump', 'badging', src])
 
     vercode = None
     version = None
