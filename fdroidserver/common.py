@@ -133,6 +133,9 @@ def read_config(opts, config_file='config.py'):
             os.path.join(config['sdk_path'], 'tools', 'zipalign'),
             os.path.join(config['sdk_path'], 'build-tools', config['build_tools'], 'zipalign'),
             ],
+        'android': [
+            os.path.join(config['sdk_path'], 'tools', 'android'),
+            ],
         }
 
     for b, paths in bin_paths.items():
@@ -1323,9 +1326,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Generate (or update) the ant build file, build.xml...
     if build['update'] and build['update'] != ['no'] and build['type'] == 'ant':
-        parms = [os.path.join(config['sdk_path'], 'tools', 'android'), 'update']
-        lparms = parms + ['lib-project']
-        parms = parms + ['project']
+        parms = [config['android'], 'update', 'lib-project']
+        lparms = [config['android'], 'update', 'project']
 
         if build['target']:
             parms += ['-t', build['target']]
