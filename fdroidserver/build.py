@@ -1050,20 +1050,23 @@ def main():
                 logfile.write(str(be))
                 logfile.close()
                 reason = str(be).split('\n', 1)[0] if options.verbose else str(be)
-                print("Could not build app %s due to BuildException: %s" % (
+                logging.error("Could not build app %s due to BuildException: %s" % (
                     app['id'], reason))
                 if options.stop:
                     sys.exit(1)
                 failed_apps[app['id']] = be
                 wikilog = be.get_wikitext()
             except VCSException as vcse:
-                print("VCS error while building app %s: %s" % (app['id'], vcse))
+                reason = str(vcse).split('\n', 1)[0] if options.verbose else str(vcse)
+                logging.error("VCS error while building app %s: %s" % (
+                    app['id'], reason))
                 if options.stop:
                     sys.exit(1)
                 failed_apps[app['id']] = vcse
                 wikilog = str(vcse)
             except Exception as e:
-                print("Could not build app %s due to unknown error: %s" % (app['id'], traceback.format_exc()))
+                logging.error("Could not build app %s due to unknown error: %s" % (
+                    app['id'], traceback.format_exc()))
                 if options.stop:
                     sys.exit(1)
                 failed_apps[app['id']] = e

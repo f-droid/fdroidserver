@@ -433,42 +433,42 @@ class vcs_git(vcs):
             # Brand new checkout
             p = FDroidPopen(['git', 'clone', self.remote, self.local])
             if p.returncode != 0:
-                raise VCSException("Git clone failed")
+                raise VCSException("Git clone failed", p.output)
             self.checkrepo()
         else:
             self.checkrepo()
             # Discard any working tree changes
             p = SilentPopen(['git', 'reset', '--hard'], cwd=self.local)
             if p.returncode != 0:
-                raise VCSException("Git reset failed")
+                raise VCSException("Git reset failed", p.output)
             # Remove untracked files now, in case they're tracked in the target
             # revision (it happens!)
             p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
             if p.returncode != 0:
-                raise VCSException("Git clean failed")
+                raise VCSException("Git clean failed", p.output)
             if not self.refreshed:
                 # Get latest commits and tags from remote
                 p = FDroidPopen(['git', 'fetch', 'origin'], cwd=self.local)
                 if p.returncode != 0:
-                    raise VCSException("Git fetch failed")
+                    raise VCSException("Git fetch failed", p.output)
                 p = SilentPopen(['git', 'fetch', '--prune', '--tags', 'origin'], cwd=self.local)
                 if p.returncode != 0:
-                    raise VCSException("Git fetch failed")
+                    raise VCSException("Git fetch failed", p.output)
                 # Recreate origin/HEAD as git clone would do it, in case it disappeared
                 p = SilentPopen(['git', 'remote', 'set-head', 'origin', '--auto'], cwd=self.local)
                 if p.returncode != 0:
-                    raise VCSException("Git remote set-head failed")
+                    raise VCSException("Git remote set-head failed", p.output)
                 self.refreshed = True
         # origin/HEAD is the HEAD of the remote, e.g. the "default branch" on
         # a github repo. Most of the time this is the same as origin/master.
         rev = str(rev if rev else 'origin/HEAD')
         p = SilentPopen(['git', 'checkout', '-f', rev], cwd=self.local)
         if p.returncode != 0:
-            raise VCSException("Git checkout of '%s' failed" % rev)
+            raise VCSException("Git checkout of '%s' failed" % rev, p.output)
         # Get rid of any uncontrolled files left behind
         p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
         if p.returncode != 0:
-            raise VCSException("Git clean failed")
+            raise VCSException("Git clean failed", p.output)
 
     def initsubmodules(self):
         self.checkrepo()
@@ -491,13 +491,13 @@ class vcs_git(vcs):
                 ]:
             p = SilentPopen(['git', 'submodule', 'foreach', '--recursive'] + cmd, cwd=self.local)
             if p.returncode != 0:
-                raise VCSException("Git submodule reset failed")
+                raise VCSException("Git submodule reset failed", p.output)
         p = FDroidPopen(['git', 'submodule', 'sync'], cwd=self.local)
         if p.returncode != 0:
-            raise VCSException("Git submodule sync failed")
+            raise VCSException("Git submodule sync failed", p.output)
         p = FDroidPopen(['git', 'submodule', 'update', '--init', '--force', '--recursive'], cwd=self.local)
         if p.returncode != 0:
-            raise VCSException("Git submodule update failed")
+            raise VCSException("Git submodule update failed", p.output)
 
     def gettags(self):
         self.checkrepo()
@@ -550,23 +550,23 @@ class vcs_gitsvn(vcs):
                         gitsvn_cmd += ' -b %s' % i[9:]
                 p = SilentPopen([gitsvn_cmd + " %s %s" % (remote_split[0], self.local)], shell=True)
                 if p.returncode != 0:
-                    raise VCSException("Git clone failed")
+                    raise VCSException("Git clone failed", p.output)
             else:
                 p = SilentPopen([gitsvn_cmd + " %s %s" % (self.remote, self.local)], shell=True)
                 if p.returncode != 0:
-                    raise VCSException("Git clone failed")
+                    raise VCSException("Git clone failed", p.output)
             self.checkrepo()
         else:
             self.checkrepo()
             # Discard any working tree changes
             p = SilentPopen(['git', 'reset', '--hard'], cwd=self.local)
             if p.returncode != 0:
-                raise VCSException("Git reset failed")
+                raise VCSException("Git reset failed", p.output)
             # Remove untracked files now, in case they're tracked in the target
             # revision (it happens!)
             p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
             if p.returncode != 0:
-                raise VCSException("Git clean failed")
+                raise VCSException("Git clean failed", p.output)
             if not self.refreshed:
                 # Get new commits, branches and tags from repo
                 p = SilentPopen(['%sgit svn fetch %s' % self.userargs()], cwd=self.local, shell=True)
@@ -574,7 +574,7 @@ class vcs_gitsvn(vcs):
                     raise VCSException("Git svn fetch failed")
                 p = SilentPopen(['%sgit svn rebase %s' % self.userargs()], cwd=self.local, shell=True)
                 if p.returncode != 0:
-                    raise VCSException("Git svn rebase failed")
+                    raise VCSException("Git svn rebase failed", p.output)
                 self.refreshed = True
 
         rev = str(rev if rev else 'master')
@@ -603,17 +603,17 @@ class vcs_gitsvn(vcs):
                     # Try a plain git checkout as a last resort
                     p = SilentPopen(['git', 'checkout', rev], cwd=self.local)
                     if p.returncode != 0:
-                        raise VCSException("No git treeish found and direct git checkout of '%s' failed" % rev)
+                        raise VCSException("No git treeish found and direct git checkout of '%s' failed" % rev, p.output)
                 else:
                     # Check out the git rev equivalent to the svn rev
                     p = SilentPopen(['git', 'checkout', git_rev], cwd=self.local)
                     if p.returncode != 0:
-                        raise VCSException("Git svn checkout of '%s' failed" % rev)
+                        raise VCSException("Git svn checkout of '%s' failed" % rev, p.output)
 
         # Get rid of any uncontrolled files left behind
         p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
         if p.returncode != 0:
-            raise VCSException("Git clean failed")
+            raise VCSException("Git clean failed", p.output)
 
     def gettags(self):
         self.checkrepo()
@@ -643,24 +643,24 @@ class vcs_svn(vcs):
         if not os.path.exists(self.local):
             p = SilentPopen(['svn', 'checkout', self.remote, self.local] + self.userargs())
             if p.returncode != 0:
-                raise VCSException("Svn checkout of '%s' failed" % rev)
+                raise VCSException("Svn checkout of '%s' failed" % rev, p.output)
         else:
             for svncommand in (
                     'svn revert -R .',
                     r"svn status | awk '/\?/ {print $2}' | xargs rm -rf"):
                 p = SilentPopen([svncommand], cwd=self.local, shell=True)
                 if p.returncode != 0:
-                    raise VCSException("Svn reset ({0}) failed in {1}".format(svncommand, self.local))
+                    raise VCSException("Svn reset ({0}) failed in {1}".format(svncommand, self.local), p.output)
             if not self.refreshed:
                 p = SilentPopen(['svn', 'update'] + self.userargs(), cwd=self.local)
                 if p.returncode != 0:
-                    raise VCSException("Svn update failed")
+                    raise VCSException("Svn update failed", p.output)
                 self.refreshed = True
 
         revargs = list(['-r', rev] if rev else [])
         p = SilentPopen(['svn', 'update', '--force'] + revargs + self.userargs(), cwd=self.local)
         if p.returncode != 0:
-            raise VCSException("Svn update failed")
+            raise VCSException("Svn update failed", p.output)
 
     def getref(self):
         p = SilentPopen(['svn', 'info'], cwd=self.local)
@@ -679,15 +679,15 @@ class vcs_hg(vcs):
         if not os.path.exists(self.local):
             p = SilentPopen(['hg', 'clone', self.remote, self.local])
             if p.returncode != 0:
-                raise VCSException("Hg clone failed")
+                raise VCSException("Hg clone failed", p.output)
         else:
             p = SilentPopen(['hg status -uS | xargs rm -rf'], cwd=self.local, shell=True)
             if p.returncode != 0:
-                raise VCSException("Hg clean failed")
+                raise VCSException("Hg clean failed", p.output)
             if not self.refreshed:
                 p = SilentPopen(['hg', 'pull'], cwd=self.local)
                 if p.returncode != 0:
-                    raise VCSException("Hg pull failed")
+                    raise VCSException("Hg pull failed", p.output)
                 self.refreshed = True
 
         rev = str(rev if rev else 'default')
@@ -695,7 +695,7 @@ class vcs_hg(vcs):
             return
         p = SilentPopen(['hg', 'update', '-C', rev], cwd=self.local)
         if p.returncode != 0:
-            raise VCSException("Hg checkout of '%s' failed" % rev)
+            raise VCSException("Hg checkout of '%s' failed" % rev, p.output)
         p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
         # Also delete untracked files, we have to enable purge extension for that:
         if "'purge' is provided by the following extension" in p.output:
@@ -703,9 +703,9 @@ class vcs_hg(vcs):
                 myfile.write("\n[extensions]\nhgext.purge=\n")
             p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
             if p.returncode != 0:
-                raise VCSException("HG purge failed")
+                raise VCSException("HG purge failed", p.output)
         elif p.returncode != 0:
-            raise VCSException("HG purge failed")
+            raise VCSException("HG purge failed", p.output)
 
     def gettags(self):
         p = SilentPopen(['hg', 'tags', '-q'], cwd=self.local)
@@ -721,21 +721,21 @@ class vcs_bzr(vcs):
         if not os.path.exists(self.local):
             p = SilentPopen(['bzr', 'branch', self.remote, self.local])
             if p.returncode != 0:
-                raise VCSException("Bzr branch failed")
+                raise VCSException("Bzr branch failed", p.output)
         else:
             p = SilentPopen(['bzr', 'clean-tree', '--force', '--unknown', '--ignored'], cwd=self.local)
             if p.returncode != 0:
-                raise VCSException("Bzr revert failed")
+                raise VCSException("Bzr revert failed", p.output)
             if not self.refreshed:
                 p = SilentPopen(['bzr', 'pull'], cwd=self.local)
                 if p.returncode != 0:
-                    raise VCSException("Bzr update failed")
+                    raise VCSException("Bzr update failed", p.output)
                 self.refreshed = True
 
         revargs = list(['-r', rev] if rev else [])
         p = SilentPopen(['bzr', 'revert'] + revargs, cwd=self.local)
         if p.returncode != 0:
-            raise VCSException("Bzr revert of '%s' failed" % rev)
+            raise VCSException("Bzr revert of '%s' failed" % rev, p.output)
 
     def gettags(self):
         p = SilentPopen(['bzr', 'tags'], cwd=self.local)
@@ -943,7 +943,7 @@ def parse_androidmanifests(paths, ignoreversions=None):
     return (max_version, max_vercode, max_package)
 
 
-class BuildException(Exception):
+class _FDroidException(Exception):
     def __init__(self, value, detail=None):
         self.value = value
         self.detail = detail
@@ -965,12 +965,12 @@ class BuildException(Exception):
         return ret
 
 
-class VCSException(Exception):
-    def __init__(self, value):
-        self.value = value
+class VCSException(_FDroidException):
+    pass
 
-    def __str__(self):
-        return self.value
+
+class BuildException(_FDroidException):
+    pass
 
 
 # Get the specified source library.

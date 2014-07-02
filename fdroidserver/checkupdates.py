@@ -32,8 +32,7 @@ import logging
 
 import common
 import metadata
-from common import BuildException
-from common import VCSException
+from common import BuildException, VCSException
 from metadata import MetaDataException
 
 
