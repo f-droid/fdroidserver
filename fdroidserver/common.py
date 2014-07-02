@@ -1340,10 +1340,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         for d in update_dirs:
             subdir = os.path.join(root_dir, d)
             if d == '.':
-                print("Updating main project")
+                logging.info("Updating main project")
                 cmd = parms + ['-p', d]
             else:
-                print("Updating subproject %s" % d)
+                logging.info("Updating subproject %s" % d)
                 cmd = lparms + ['-p', d]
             p = FDroidPopen(cmd, cwd=root_dir)
             # Check to see whether an error was returned without a proper exit
