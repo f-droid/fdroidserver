@@ -129,7 +129,7 @@ def read_config(opts, config_file='config.py'):
 
     # There is no standard, so just set up the most common environment
     # variables
-    for n in ['ANDROID_HOME', 'ANDROID_SDK', 'SDK']:
+    for n in ['ANDROID_HOME', 'ANDROID_SDK']:
         env[n] = config['sdk_path']
     for n in ['ANDROID_NDK', 'NDK']:
         env[n] = config['ndk_path']
