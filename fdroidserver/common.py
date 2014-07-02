@@ -128,7 +128,11 @@ def read_config(opts, config_file='config.py'):
     bin_paths = {
         'aapt': [
             os.path.join(config['sdk_path'], 'build-tools', config['build_tools'], 'aapt'),
-            ]
+            ],
+        'zipalign': [
+            os.path.join(config['sdk_path'], 'tools', 'zipalign'),
+            os.path.join(config['sdk_path'], 'build-tools', config['build_tools'], 'zipalign'),
+            ],
         }
 
     for b, paths in bin_paths.items():

@@ -160,8 +160,7 @@ def main():
             raise BuildException("Failed to sign application")
 
         # Zipalign it...
-        p = FDroidPopen([os.path.join(config['sdk_path'], 'tools', 'zipalign'),
-                         '-v', '4', apkfile,
+        p = FDroidPopen([config['zipalign'], '-v', '4', apkfile,
                          os.path.join(output_dir, apkfilename)])
         if p.returncode != 0:
             raise BuildException("Failed to align application")
