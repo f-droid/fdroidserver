@@ -6,7 +6,7 @@
 # Redirect output to stderr.
 exec 1>&2
 
-FILES="fdroid makebuildserver examples/*.py fdroidserver/*.py"
+FILES="fdroid makebuildserver examples/*.py buildserver/*.py fdroidserver/*.py"
 
 cmd_exists() {
 	command -v $1 1>/dev/null
