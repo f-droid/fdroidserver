@@ -971,7 +971,7 @@ def parse_androidmanifests(paths, ignoreversions=None):
     return (max_version, max_vercode, max_package)
 
 
-class _FDroidException(Exception):
+class FDroidException(Exception):
     def __init__(self, value, detail=None):
         self.value = value
         self.detail = detail
@@ -993,11 +993,11 @@ class _FDroidException(Exception):
         return ret
 
 
-class VCSException(_FDroidException):
+class VCSException(FDroidException):
     pass
 
 
-class BuildException(_FDroidException):
+class BuildException(FDroidException):
     pass
 
 

@@ -21,6 +21,8 @@
 import sys
 import logging
 
+from fdroidserver.common import FDroidException
+
 commands = {
     "build": "Build a package from source",
     "init": "Quickly start a new repository",
@@ -83,14 +85,21 @@ def main():
 
     del sys.argv[1]
     mod = __import__('fdroidserver.' + command, None, None, [command])
+
     try:
         mod.main()
-    except Exception, e:
+    # These are ours, contain a proper message and are "expected"
+    except FDroidException, e:
         if verbose:
             raise
         else:
-            print str(e)
+            logging.critical(str(e))
         sys.exit(1)
+    # These should only be unexpected crashes due to bugs in the code
+    # str(e) often doesn't contain a reason, so just show the backtrace
+    except Exception, e:
+        logging.critical("Unknown exception found!")
+        raise
     sys.exit(0)
 
 if __name__ == "__main__":
