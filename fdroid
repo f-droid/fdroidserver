@@ -95,6 +95,9 @@ def main():
         else:
             logging.critical(str(e))
         sys.exit(1)
+    except KeyboardInterrupt:
+        print('')
+        sys.exit(1)
     # These should only be unexpected crashes due to bugs in the code
     # str(e) often doesn't contain a reason, so just show the backtrace
     except Exception, e:
