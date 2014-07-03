@@ -41,8 +41,8 @@ env = None
 
 def get_default_config():
     return {
-        'sdk_path': os.getenv("ANDROID_HOME"),
-        'ndk_path': os.getenv("ANDROID_NDK"),
+        'sdk_path': os.getenv("ANDROID_HOME") or "",
+        'ndk_path': os.getenv("ANDROID_NDK") or "",
         'build_tools': "20.0.0",
         'ant': "ant",
         'mvn3': "mvn",
