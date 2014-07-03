@@ -118,6 +118,7 @@ def check_tags(app, pattern):
         if flavour == 'yes':
             flavour = None
 
+        hpak = None
         htag = None
         hver = None
         hcode = "0"
@@ -144,10 +145,13 @@ def check_tags(app, pattern):
             logging.debug("Manifest exists. Found version {0} ({1})"
                           .format(version, vercode))
             if int(vercode) > int(hcode):
+                hpak = package
                 htag = tag
                 hcode = str(int(vercode))
                 hver = version
 
+        if not hpak:
+            return (None, "Couldn't find package ID", None)
         if hver:
             return (hver, hcode, htag)
         return (None, "Couldn't find any version information", None)
