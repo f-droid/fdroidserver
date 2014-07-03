@@ -189,7 +189,7 @@ def main():
 
         # Redundant summaries
         summary = app['Summary']
-        name = str(app['Name'] if app['Name'] else app['Auto Name'])
+        name = app['Name'] or app['Auto Name']
         if summary and name:
             summary_l = summary.lower()
             name_l = name.lower()

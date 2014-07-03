@@ -90,7 +90,7 @@ def check_tags(app, pattern):
 
     try:
 
-        appid = app['Update Check Name'] if app['Update Check Name'] else app['id']
+        appid = app['Update Check Name'] or app['id']
         if app['Repo Type'] == 'srclib':
             build_dir = os.path.join('build', 'srclib', app['Repo'])
             repotype = common.getsrclibvcs(app['Repo'])
@@ -174,7 +174,7 @@ def check_repomanifest(app, branch=None):
 
     try:
 
-        appid = app['Update Check Name'] if app['Update Check Name'] else app['id']
+        appid = app['Update Check Name'] or app['id']
         if app['Repo Type'] == 'srclib':
             build_dir = os.path.join('build', 'srclib', app['Repo'])
             repotype = common.getsrclibvcs(app['Repo'])
@@ -312,7 +312,7 @@ def dirs_with_manifest(startdir):
 # subdir relative to the build dir if found, None otherwise.
 def check_changed_subdir(app):
 
-    appid = app['Update Check Name'] if app['Update Check Name'] else app['id']
+    appid = app['Update Check Name'] or app['id']
     if app['Repo Type'] == 'srclib':
         build_dir = os.path.join('build', 'srclib', app['Repo'])
     else:

@@ -490,7 +490,7 @@ class vcs_git(vcs):
                 self.refreshed = True
         # origin/HEAD is the HEAD of the remote, e.g. the "default branch" on
         # a github repo. Most of the time this is the same as origin/master.
-        rev = str(rev if rev else 'origin/HEAD')
+        rev = rev or 'origin/HEAD'
         p = SilentPopen(['git', 'checkout', '-f', rev], cwd=self.local)
         if p.returncode != 0:
             raise VCSException("Git checkout of '%s' failed" % rev, p.output)
@@ -608,7 +608,7 @@ class vcs_gitsvn(vcs):
                     raise VCSException("Git svn rebase failed", p.output)
                 self.refreshed = True
 
-        rev = str(rev if rev else 'master')
+        rev = rev or 'master'
         if rev:
             nospaces_rev = rev.replace(' ', '%20')
             # Try finding a svn tag
@@ -723,7 +723,7 @@ class vcs_hg(vcs):
                     raise VCSException("Hg pull failed", p.output)
                 self.refreshed = True
 
-        rev = str(rev if rev else 'default')
+        rev = rev or 'default'
         if not rev:
             return
         p = SilentPopen(['hg', 'update', '-C', rev], cwd=self.local)

@@ -794,7 +794,7 @@ def write_metadata(dest, app):
                 mf.write("%s\n" % comment)
                 written += 1
         if written > 0:
-            logging.debug("...writing comments for " + (key if key else 'EOF'))
+            logging.debug("...writing comments for " + (key or 'EOF'))
 
     def writefield(field, value=None):
         writecomments(field)
