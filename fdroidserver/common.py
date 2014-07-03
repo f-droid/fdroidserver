@@ -1021,7 +1021,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
             name, subdir = name.split('/', 1)
 
     if name not in metadata.srclibs:
-        raise BuildException('srclib ' + name + ' not found.')
+        raise VCSException('srclib ' + name + ' not found.')
 
     srclib = metadata.srclibs[name]
 
@@ -1058,7 +1058,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
                     s_tuple = t
                     break
             if s_tuple is None:
-                raise BuildException('Missing recursive srclib %s for %s' % (
+                raise VCSException('Missing recursive srclib %s for %s' % (
                     lib, name))
             place_srclib(libdir, n, s_tuple[2])
             n += 1

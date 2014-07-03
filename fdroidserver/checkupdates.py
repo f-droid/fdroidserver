@@ -32,7 +32,7 @@ import logging
 
 import common
 import metadata
-from common import BuildException, VCSException
+from common import VCSException
 from metadata import MetaDataException
 
 
@@ -156,9 +156,6 @@ def check_tags(app, pattern):
             return (hver, hcode, htag)
         return (None, "Couldn't find any version information", None)
 
-    except BuildException as be:
-        msg = "Could not scan app {0} due to BuildException: {1}".format(app['id'], be)
-        return (None, msg, None)
     except VCSException as vcse:
         msg = "VCS error while scanning app {0}: {1}".format(app['id'], vcse)
         return (None, msg, None)
@@ -235,9 +232,6 @@ def check_repomanifest(app, branch=None):
 
         return (version, vercode)
 
-    except BuildException as be:
-        msg = "Could not scan app {0} due to BuildException: {1}".format(app['id'], be)
-        return (None, msg)
     except VCSException as vcse:
         msg = "VCS error while scanning app {0}: {1}".format(app['id'], vcse)
         return (None, msg)
@@ -266,9 +260,6 @@ def check_repotrunk(app, branch=None):
 
         ref = vcs.getref()
         return (ref, ref)
-    except BuildException as be:
-        msg = "Could not scan app {0} due to BuildException: {1}".format(app['id'], be)
-        return (None, msg)
     except VCSException as vcse:
         msg = "VCS error while scanning app {0}: {1}".format(app['id'], vcse)
         return (None, msg)
