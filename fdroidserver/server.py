@@ -143,7 +143,8 @@ def update_serverwebroot(repo_section):
 
 
 def _local_sync(fromdir, todir):
-    rsyncargs = ['rsync', '--archive', '--one-file-system', '--delete']
+    rsyncargs = ['rsync', '--recursive', '--links', '--times',
+                 '--one-file-system', '--delete', '--chmod=Da+rx,Fa-x,a+r,u+w']
     # use stricter rsync checking on all files since people using offline mode
     # are already prioritizing security above ease and speed
     rsyncargs += ['--checksum']
