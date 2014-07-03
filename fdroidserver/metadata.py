@@ -533,6 +533,23 @@ def flagtype(name):
     return 'string'
 
 
+def fill_build_defaults(build):
+
+    def get_build_type():
+        for t in ['maven', 'gradle', 'kivy']:
+            if build[t]:
+                return t
+        if build['output']:
+            return 'raw'
+        return 'ant'
+
+    for flag, value in flag_defaults.iteritems():
+        if flag in build:
+            continue
+        build[flag] = value
+    build['type'] = get_build_type()
+
+
 # Parse metadata for a single application.
 #
 #  'metafile' - the filename to read. The package id for the application comes
@@ -627,14 +644,6 @@ def parse_metadata(metafile):
         for comment in curcomments:
             thisinfo['comments'].append((key, comment))
         del curcomments[:]
-
-    def get_build_type(build):
-        for t in ['maven', 'gradle', 'kivy']:
-            if build[t]:
-                return t
-        if build['output']:
-            return 'raw'
-        return 'ant'
 
     thisinfo = {}
     if metafile:
@@ -767,11 +776,7 @@ def parse_metadata(metafile):
         thisinfo['Description'].append('No description available')
 
     for build in thisinfo['builds']:
-        for flag, value in flag_defaults.iteritems():
-            if flag in build:
-                continue
-            build[flag] = value
-        build['type'] = get_build_type(build)
+        fill_build_defaults(build)
 
     return thisinfo
 
@@ -841,6 +846,10 @@ def write_metadata(dest, app):
         writefield('Repo')
         mf.write('\n')
     for build in app['builds']:
+
+        if build['version'] == "Ignore":
+            continue
+
         writecomments('build:' + build['vercode'])
         mf.write("Build:%s,%s\n" % (build['version'], build['vercode']))
 

@@ -299,6 +299,216 @@ def check_gplay(app):
     return (version.strip(), None)
 
 
+# Return all directories under startdir that contain any of the manifest
+# files, and thus are probably an Android project.
+def dirs_with_manifest(startdir):
+    for r, d, f in os.walk(startdir):
+        if any(m in f for m in [
+                'AndroidManifest.xml', 'pom.xml', 'build.gradle']):
+            yield r
+
+
+# Tries to find a new subdir starting from the root build_dir. Returns said
+# subdir relative to the build dir if found, None otherwise.
+def check_changed_subdir(app):
+
+    appid = app['Update Check Name'] if app['Update Check Name'] else app['id']
+    if app['Repo Type'] == 'srclib':
+        build_dir = os.path.join('build', 'srclib', app['Repo'])
+    else:
+        build_dir = os.path.join('build/', app['id'])
+
+    if not os.path.isdir(build_dir):
+        return None
+
+    flavour = None
+    if len(app['builds']) > 0 and app['builds'][-1]['gradle']:
+        flavour = app['builds'][-1]['gradle']
+    if flavour == 'yes':
+        flavour = None
+
+    for d in dirs_with_manifest(build_dir):
+        logging.debug("Trying possible dir %s." % d)
+        m_paths = common.manifest_paths(d, flavour)
+        package = common.parse_androidmanifests(m_paths, app['Update Check Ignore'])[2]
+        if package and package == appid:
+            logging.debug("Manifest exists in possible dir %s." % d)
+            return os.path.relpath(d, build_dir)
+
+    return None
+
+
+def checkupdates_app(app, first=True):
+
+    # If a change is made, commitmsg should be set to a description of it.
+    # Only if this is set will changes be written back to the metadata.
+    commitmsg = None
+
+    tag = None
+    msg = None
+    vercode = None
+    noverok = False
+    mode = app['Update Check Mode']
+    if mode.startswith('Tags'):
+        pattern = mode[5:] if len(mode) > 4 else None
+        (version, vercode, tag) = check_tags(app, pattern)
+        msg = vercode
+    elif mode == 'RepoManifest':
+        (version, vercode) = check_repomanifest(app)
+        msg = vercode
+    elif mode.startswith('RepoManifest/'):
+        tag = mode[13:]
+        (version, vercode) = check_repomanifest(app, tag)
+        msg = vercode
+    elif mode == 'RepoTrunk':
+        (version, vercode) = check_repotrunk(app)
+        msg = vercode
+    elif mode == 'HTTP':
+        (version, vercode) = check_http(app)
+        msg = vercode
+    elif mode in ('None', 'Static'):
+        version = None
+        msg = 'Checking disabled'
+        noverok = True
+    else:
+        version = None
+        msg = 'Invalid update check method'
+
+    if first and version is None and vercode == "Couldn't find package ID":
+        logging.warn("Couldn't find any version information. Looking for a subdir change...")
+        new_subdir = check_changed_subdir(app)
+        if new_subdir is None:
+            logging.warn("Couldn't find any new subdir.")
+        else:
+            logging.warn("Trying a new subdir: %s" % new_subdir)
+            new_build = {}
+            metadata.fill_build_defaults(new_build)
+            new_build['version'] = "Ignore"
+            new_build['vercode'] = "-1"
+            new_build['subdir'] = new_subdir
+            app['builds'].append(new_build)
+            return checkupdates_app(app, first=False)
+
+    if version and vercode and app['Vercode Operation']:
+        op = app['Vercode Operation'].replace("%c", str(int(vercode)))
+        vercode = str(eval(op))
+
+    updating = False
+    if not version:
+        logmsg = "...{0} : {1}".format(app['id'], msg)
+        if noverok:
+            logging.info(logmsg)
+        else:
+            logging.warn(logmsg)
+    elif vercode == app['Current Version Code']:
+        logging.info("...up to date")
+    else:
+        app['Current Version'] = version
+        app['Current Version Code'] = str(int(vercode))
+        updating = True
+
+    # Do the Auto Name thing as well as finding the CV real name
+    if len(app["Repo Type"]) > 0 and mode not in ('None', 'Static'):
+
+        try:
+
+            if app['Repo Type'] == 'srclib':
+                app_dir = os.path.join('build', 'srclib', app['Repo'])
+            else:
+                app_dir = os.path.join('build/', app['id'])
+
+            vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir)
+            vcs.gotorevision(tag)
+
+            flavour = None
+            if len(app['builds']) > 0:
+                if app['builds'][-1]['subdir']:
+                    app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
+                if app['builds'][-1]['gradle']:
+                    flavour = app['builds'][-1]['gradle']
+            if flavour == 'yes':
+                flavour = None
+
+            logging.debug("...fetch auto name from " + app_dir +
+                          ((" (flavour: %s)" % flavour) if flavour else ""))
+            new_name = common.fetch_real_name(app_dir, flavour)
+            if new_name:
+                logging.debug("...got autoname '" + new_name + "'")
+                if new_name != app['Auto Name']:
+                    app['Auto Name'] = new_name
+                    if not commitmsg:
+                        commitmsg = "Set autoname of {0}".format(common.getappname(app))
+            else:
+                logging.debug("...couldn't get autoname")
+
+            if app['Current Version'].startswith('@string/'):
+                cv = common.version_name(app['Current Version'], app_dir, flavour)
+                if app['Current Version'] != cv:
+                    app['Current Version'] = cv
+                    if not commitmsg:
+                        commitmsg = "Fix CV of {0}".format(common.getappname(app))
+        except Exception:
+            logging.error("Auto Name or Current Version failed for {0} due to exception: {1}".format(app['id'], traceback.format_exc()))
+
+    if updating:
+        name = common.getappname(app)
+        ver = common.getcvname(app)
+        logging.info('...updating to version %s' % ver)
+        commitmsg = 'Update CV of %s to %s' % (name, ver)
+
+    if options.auto:
+        mode = app['Auto Update Mode']
+        if mode in ('None', 'Static'):
+            pass
+        elif mode.startswith('Version '):
+            pattern = mode[8:]
+            if pattern.startswith('+'):
+                try:
+                    suffix, pattern = pattern.split(' ', 1)
+                except ValueError:
+                    raise MetaDataException("Invalid AUM: " + mode)
+            else:
+                suffix = ''
+            gotcur = False
+            latest = None
+            for build in app['builds']:
+                if build['vercode'] == app['Current Version Code']:
+                    gotcur = True
+                if not latest or int(build['vercode']) > int(latest['vercode']):
+                    latest = build
+
+            if not gotcur:
+                newbuild = latest.copy()
+                if 'origlines' in newbuild:
+                    del newbuild['origlines']
+                newbuild['disable'] = False
+                newbuild['vercode'] = app['Current Version Code']
+                newbuild['version'] = app['Current Version'] + suffix
+                logging.info("...auto-generating build for " + newbuild['version'])
+                commit = pattern.replace('%v', newbuild['version'])
+                commit = commit.replace('%c', newbuild['vercode'])
+                newbuild['commit'] = commit
+                app['builds'].append(newbuild)
+                name = common.getappname(app)
+                ver = common.getcvname(app)
+                commitmsg = "Update %s to %s" % (name, ver)
+        else:
+            logging.warn('Invalid auto update mode "' + mode + '" on ' + app['id'])
+
+    if commitmsg:
+        metafile = os.path.join('metadata', app['id'] + '.txt')
+        metadata.write_metadata(metafile, app)
+        if options.commit:
+            logging.info("Commiting update for " + metafile)
+            gitcmd = ["git", "commit", "-m", commitmsg]
+            if 'auto_author' in config:
+                gitcmd.extend(['--author', config['auto_author']])
+            gitcmd.extend(["--", metafile])
+            if subprocess.call(gitcmd) != 0:
+                logging.error("Git commit failed")
+                sys.exit(1)
+
+
 config = None
 options = None
 
@@ -363,158 +573,7 @@ def main():
 
         logging.info("Processing " + app['id'] + '...')
 
-        # If a change is made, commitmsg should be set to a description of it.
-        # Only if this is set will changes be written back to the metadata.
-        commitmsg = None
-
-        tag = None
-        msg = None
-        vercode = None
-        noverok = False
-        mode = app['Update Check Mode']
-        if mode.startswith('Tags'):
-            pattern = mode[5:] if len(mode) > 4 else None
-            (version, vercode, tag) = check_tags(app, pattern)
-            msg = vercode
-        elif mode == 'RepoManifest':
-            (version, vercode) = check_repomanifest(app)
-            msg = vercode
-        elif mode.startswith('RepoManifest/'):
-            tag = mode[13:]
-            (version, vercode) = check_repomanifest(app, tag)
-            msg = vercode
-        elif mode == 'RepoTrunk':
-            (version, vercode) = check_repotrunk(app)
-            msg = vercode
-        elif mode == 'HTTP':
-            (version, vercode) = check_http(app)
-            msg = vercode
-        elif mode in ('None', 'Static'):
-            version = None
-            msg = 'Checking disabled'
-            noverok = True
-        else:
-            version = None
-            msg = 'Invalid update check method'
-
-        if vercode and app['Vercode Operation']:
-            op = app['Vercode Operation'].replace("%c", str(int(vercode)))
-            vercode = str(eval(op))
-
-        updating = False
-        if not version:
-            logmsg = "...{0} : {1}".format(app['id'], msg)
-            if noverok:
-                logging.info(logmsg)
-            else:
-                logging.warn(logmsg)
-        elif vercode == app['Current Version Code']:
-            logging.info("...up to date")
-        else:
-            app['Current Version'] = version
-            app['Current Version Code'] = str(int(vercode))
-            updating = True
-
-        # Do the Auto Name thing as well as finding the CV real name
-        if len(app["Repo Type"]) > 0 and mode not in ('None', 'Static'):
-
-            try:
-
-                if app['Repo Type'] == 'srclib':
-                    app_dir = os.path.join('build', 'srclib', app['Repo'])
-                else:
-                    app_dir = os.path.join('build/', app['id'])
-
-                vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir)
-                vcs.gotorevision(tag)
-
-                flavour = None
-                if len(app['builds']) > 0:
-                    if app['builds'][-1]['subdir']:
-                        app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
-                    if app['builds'][-1]['gradle']:
-                        flavour = app['builds'][-1]['gradle']
-                if flavour == 'yes':
-                    flavour = None
-
-                logging.debug("...fetch auto name from " + app_dir +
-                              ((" (flavour: %s)" % flavour) if flavour else ""))
-                new_name = common.fetch_real_name(app_dir, flavour)
-                if new_name:
-                    logging.debug("...got autoname '" + new_name + "'")
-                    if new_name != app['Auto Name']:
-                        app['Auto Name'] = new_name
-                        if not commitmsg:
-                            commitmsg = "Set autoname of {0}".format(common.getappname(app))
-                else:
-                    logging.debug("...couldn't get autoname")
-
-                if app['Current Version'].startswith('@string/'):
-                    cv = common.version_name(app['Current Version'], app_dir, flavour)
-                    if app['Current Version'] != cv:
-                        app['Current Version'] = cv
-                        if not commitmsg:
-                            commitmsg = "Fix CV of {0}".format(common.getappname(app))
-            except Exception:
-                logging.error("Auto Name or Current Version failed for {0} due to exception: {1}".format(app['id'], traceback.format_exc()))
-
-        if updating:
-            name = common.getappname(app)
-            ver = common.getcvname(app)
-            logging.info('...updating to version %s' % ver)
-            commitmsg = 'Update CV of %s to %s' % (name, ver)
-
-        if options.auto:
-            mode = app['Auto Update Mode']
-            if mode in ('None', 'Static'):
-                pass
-            elif mode.startswith('Version '):
-                pattern = mode[8:]
-                if pattern.startswith('+'):
-                    try:
-                        suffix, pattern = pattern.split(' ', 1)
-                    except ValueError:
-                        raise MetaDataException("Invalid AUM: " + mode)
-                else:
-                    suffix = ''
-                gotcur = False
-                latest = None
-                for build in app['builds']:
-                    if build['vercode'] == app['Current Version Code']:
-                        gotcur = True
-                    if not latest or int(build['vercode']) > int(latest['vercode']):
-                        latest = build
-
-                if not gotcur:
-                    newbuild = latest.copy()
-                    if 'origlines' in newbuild:
-                        del newbuild['origlines']
-                    newbuild['disable'] = False
-                    newbuild['vercode'] = app['Current Version Code']
-                    newbuild['version'] = app['Current Version'] + suffix
-                    logging.info("...auto-generating build for " + newbuild['version'])
-                    commit = pattern.replace('%v', newbuild['version'])
-                    commit = commit.replace('%c', newbuild['vercode'])
-                    newbuild['commit'] = commit
-                    app['builds'].append(newbuild)
-                    name = common.getappname(app)
-                    ver = common.getcvname(app)
-                    commitmsg = "Update %s to %s" % (name, ver)
-            else:
-                logging.warn('Invalid auto update mode "' + mode + '" on ' + app['id'])
-
-        if commitmsg:
-            metafile = os.path.join('metadata', app['id'] + '.txt')
-            metadata.write_metadata(metafile, app)
-            if options.commit:
-                logging.info("Commiting update for " + metafile)
-                gitcmd = ["git", "commit", "-m", commitmsg]
-                if 'auto_author' in config:
-                    gitcmd.extend(['--author', config['auto_author']])
-                gitcmd.extend(["--", metafile])
-                if subprocess.call(gitcmd) != 0:
-                    logging.error("Git commit failed")
-                    sys.exit(1)
+        checkupdates_app(app)
 
     logging.info("Finished.")
 
