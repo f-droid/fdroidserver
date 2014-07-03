@@ -26,6 +26,8 @@ copy_apks_into_repo() {
 # keep this as an old version to test the automatic parsing of build-tools
 # verion numbers in `fdroid init`
 create_fake_android_home() {
+    mkdir $1/tools
+    mkdir $1/platform-tools
     mkdir $1/build-tools
     mkdir $1/build-tools/19.0.2
     touch $1/build-tools/19.0.2/aapt
