@@ -186,9 +186,11 @@ def test_sdk_exists(c):
     if not os.path.isdir(c['sdk_path']):
         logging.critical('Android SDK path "' + c['sdk_path'] + '" is not a directory!')
         return False
-    if not os.path.isdir(os.path.join(c['sdk_path'], 'build-tools')):
-        logging.critical('Android SDK path "' + c['sdk_path'] + '" does not contain "build-tools/"!')
-        return False
+    for d in ['build-tools', 'platform-tools', 'tools']:
+        if not os.path.isdir(os.path.join(c['sdk_path'], d)):
+            logging.critical('Android SDK path "%s" does not contain "%s/"!' % (
+                c['sdk_path'], d))
+            return False
     return True
 
 
