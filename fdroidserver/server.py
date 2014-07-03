@@ -20,6 +20,8 @@
 import sys
 import hashlib
 import os
+import paramiko
+import pwd
 import subprocess
 from optparse import OptionParser
 import logging
@@ -255,17 +257,26 @@ def main():
 
     if args[0] == 'init':
         if config.get('serverwebroot'):
-            sshargs = ['ssh']
-            if options.quiet:
-                sshargs += ['-q']
+            ssh = paramiko.SSHClient()
+            ssh.load_system_host_keys()
+            sshstr, remotepath = config['serverwebroot'].rstrip('/').split(':')
+            if sshstr.find('@') >= 0:
+                username, hostname = sshstr.split('@')
+            else:
+                username = pwd.getpwuid(os.getuid())[0]  # get effective uid
+                hostname = sshstr
+            ssh.connect(hostname, username=username)
+            sftp = ssh.open_sftp()
+            if os.path.basename(remotepath) \
+                    not in sftp.listdir(os.path.dirname(remotepath)):
+                sftp.mkdir(remotepath, mode=0755)
             for repo_section in repo_sections:
-                cmd = sshargs + [host, 'mkdir -p', fdroiddir + '/' + repo_section]
-                if options.verbose:
-                    # ssh -v produces different output than rsync -v, so this
-                    # simulates rsync -v
-                    logging.info(' '.join(cmd))
-                if subprocess.call(cmd) != 0:
-                    sys.exit(1)
+                repo_path = os.path.join(remotepath, repo_section)
+                if os.path.basename(repo_path) \
+                        not in sftp.listdir(remotepath):
+                    sftp.mkdir(repo_path, mode=0755)
+            sftp.close()
+            ssh.close()
     elif args[0] == 'update':
         for repo_section in repo_sections:
             if local_copy_dir is not None:
