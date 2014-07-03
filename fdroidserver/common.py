@@ -136,6 +136,9 @@ def read_config(opts, config_file='config.py'):
         'android': [
             os.path.join(config['sdk_path'], 'tools', 'android'),
             ],
+        'adb': [
+            os.path.join(config['sdk_path'], 'platform-tools', 'adb'),
+            ],
         }
 
     for b, paths in bin_paths.items():

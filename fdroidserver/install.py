@@ -32,7 +32,7 @@ config = None
 
 
 def devices():
-    p = FDroidPopen(["adb", "devices"])
+    p = FDroidPopen([config['adb'], "devices"])
     if p.returncode != 0:
         raise Exception("An error occured when finding devices: %s" % p.output)
     lines = p.output.splitlines()
@@ -100,7 +100,7 @@ def main():
         logging.info("Installing %s..." % apk)
         for dev in devs:
             logging.info("Installing %s on %s..." % (apk, dev))
-            p = FDroidPopen(["adb", "-s", dev, "install", apk])
+            p = FDroidPopen([config['adb'], "-s", dev, "install", apk])
             fail = ""
             for line in p.output.splitlines():
                 if line.startswith("Failure"):
