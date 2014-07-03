@@ -480,7 +480,13 @@ class vcs_git(vcs):
                 # Recreate origin/HEAD as git clone would do it, in case it disappeared
                 p = SilentPopen(['git', 'remote', 'set-head', 'origin', '--auto'], cwd=self.local)
                 if p.returncode != 0:
-                    raise VCSException("Git remote set-head failed", p.output)
+                    lines = p.output.splitlines()
+                    if 'Multiple remote HEAD branches' not in lines[0]:
+                        raise VCSException("Git remote set-head failed", p.output)
+                    branch = lines[1].split(' ')[-1]
+                    p2 = SilentPopen(['git', 'remote', 'set-head', 'origin', branch], cwd=self.local)
+                    if p2.returncode != 0:
+                        raise VCSException("Git remote set-head failed", p.output + '\n' + p2.output)
                 self.refreshed = True
         # origin/HEAD is the HEAD of the remote, e.g. the "default branch" on
         # a github repo. Most of the time this is the same as origin/master.
