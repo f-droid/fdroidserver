@@ -695,8 +695,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         commands += ['assemble' + flavours_cmd + 'Release']
 
         # Avoid having to use lintOptions.abortOnError false
-        # TODO: Do flavours or project names change this task name?
-        if LooseVersion('0.8') <= thisbuild['gradlepluginver'] < LooseVersion('0.12'):
+        if thisbuild['gradlepluginver'] >= LooseVersion('0.8'):
             commands += ['-x', 'lintVital' + flavours_cmd + 'Release']
 
         p = FDroidPopen(commands, cwd=root_dir)
