@@ -338,6 +338,54 @@ def check_changed_subdir(app):
     return None
 
 
+def fetch_autoname(app, tag):
+
+    if not app["Repo Type"] or app['Update Check Mode'] in ('None', 'Static'):
+        return None
+
+    if app['Repo Type'] == 'srclib':
+        app_dir = os.path.join('build', 'srclib', app['Repo'])
+    else:
+        app_dir = os.path.join('build/', app['id'])
+
+    try:
+        vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir)
+        vcs.gotorevision(tag)
+    except VCSException:
+        return None
+
+    flavour = None
+    if len(app['builds']) > 0:
+        if app['builds'][-1]['subdir']:
+            app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
+        if app['builds'][-1]['gradle']:
+            flavour = app['builds'][-1]['gradle']
+    if flavour == 'yes':
+        flavour = None
+
+    logging.debug("...fetch auto name from " + app_dir +
+                  ((" (flavour: %s)" % flavour) if flavour else ""))
+    new_name = common.fetch_real_name(app_dir, flavour)
+    commitmsg = None
+    if new_name:
+        logging.debug("...got autoname '" + new_name + "'")
+        if new_name != app['Auto Name']:
+            app['Auto Name'] = new_name
+            if not commitmsg:
+                commitmsg = "Set autoname of {0}".format(common.getappname(app))
+    else:
+        logging.debug("...couldn't get autoname")
+
+    if app['Current Version'].startswith('@string/'):
+        cv = common.version_name(app['Current Version'], app_dir, flavour)
+        if app['Current Version'] != cv:
+            app['Current Version'] = cv
+            if not commitmsg:
+                commitmsg = "Fix CV of {0}".format(common.getappname(app))
+
+    return commitmsg
+
+
 def checkupdates_app(app, first=True):
 
     # If a change is made, commitmsg should be set to a description of it.
@@ -394,7 +442,7 @@ def checkupdates_app(app, first=True):
         vercode = str(eval(op))
 
     updating = False
-    if not version:
+    if version is None:
         logmsg = "...{0} : {1}".format(app['id'], msg)
         if noverok:
             logging.info(logmsg)
@@ -407,48 +455,7 @@ def checkupdates_app(app, first=True):
         app['Current Version Code'] = str(int(vercode))
         updating = True
 
-    # Do the Auto Name thing as well as finding the CV real name
-    if len(app["Repo Type"]) > 0 and mode not in ('None', 'Static'):
-
-        try:
-
-            if app['Repo Type'] == 'srclib':
-                app_dir = os.path.join('build', 'srclib', app['Repo'])
-            else:
-                app_dir = os.path.join('build/', app['id'])
-
-            vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir)
-            vcs.gotorevision(tag)
-
-            flavour = None
-            if len(app['builds']) > 0:
-                if app['builds'][-1]['subdir']:
-                    app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
-                if app['builds'][-1]['gradle']:
-                    flavour = app['builds'][-1]['gradle']
-            if flavour == 'yes':
-                flavour = None
-
-            logging.debug("...fetch auto name from " + app_dir +
-                          ((" (flavour: %s)" % flavour) if flavour else ""))
-            new_name = common.fetch_real_name(app_dir, flavour)
-            if new_name:
-                logging.debug("...got autoname '" + new_name + "'")
-                if new_name != app['Auto Name']:
-                    app['Auto Name'] = new_name
-                    if not commitmsg:
-                        commitmsg = "Set autoname of {0}".format(common.getappname(app))
-            else:
-                logging.debug("...couldn't get autoname")
-
-            if app['Current Version'].startswith('@string/'):
-                cv = common.version_name(app['Current Version'], app_dir, flavour)
-                if app['Current Version'] != cv:
-                    app['Current Version'] = cv
-                    if not commitmsg:
-                        commitmsg = "Fix CV of {0}".format(common.getappname(app))
-        except Exception:
-            logging.error("Auto Name or Current Version failed for {0} due to exception: {1}".format(app['id'], traceback.format_exc()))
+    commitmsg = fetch_autoname(app, tag)
 
     if updating:
         name = common.getappname(app)
