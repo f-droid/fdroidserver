@@ -76,7 +76,7 @@ def main():
     if verbose:
         logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
     elif quiet:
-        logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.WARN)
+        logging.basicConfig(format='%(message)s', level=logging.WARN)
     else:
         logging.basicConfig(format='%(message)s', level=logging.INFO)
 
