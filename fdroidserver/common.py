@@ -1668,8 +1668,8 @@ def FDroidPopen(commands, cwd=None, shell=False, output=True):
             line = stdout_queue.get()
             if output and options.verbose:
                 # Output directly to console
-                sys.stdout.write(line)
-                sys.stdout.flush()
+                sys.stderr.write(line)
+                sys.stderr.flush()
             result.output += line
 
         time.sleep(0.1)
