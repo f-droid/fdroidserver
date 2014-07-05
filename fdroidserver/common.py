@@ -901,7 +901,7 @@ def ant_subprojects(root_dir):
 
 def remove_debuggable_flags(root_dir):
     # Remove forced debuggable flags
-    logging.info("Removing debuggable flags from %s" % root_dir)
+    logging.debug("Removing debuggable flags from %s" % root_dir)
     for root, dirs, files in os.walk(root_dir):
         if 'AndroidManifest.xml' in files:
             path = os.path.join(root, 'AndroidManifest.xml')
@@ -1357,10 +1357,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         for d in update_dirs:
             subdir = os.path.join(root_dir, d)
             if d == '.':
-                logging.info("Updating main project")
+                logging.debug("Updating main project")
                 cmd = parms + ['-p', d]
             else:
-                logging.info("Updating subproject %s" % d)
+                logging.debug("Updating subproject %s" % d)
                 cmd = lparms + ['-p', d]
             p = FDroidPopen(cmd, cwd=root_dir)
             # Check to see whether an error was returned without a proper exit

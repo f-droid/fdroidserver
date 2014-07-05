@@ -490,10 +490,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         raise BuildException("Error cleaning %s:%s" %
                              (app['id'], thisbuild['version']), p.output)
 
-    logging.info("Getting rid of Gradle wrapper binaries...")
     for root, dirs, files in os.walk(build_dir):
         # Don't remove possibly necessary 'gradle' dirs if 'gradlew' is not there
         if 'gradlew' in files:
+            logging.debug("Getting rid of Gradle wrapper stuff in %s" % root)
             os.remove(os.path.join(root, 'gradlew'))
             if 'gradlew.bat' in files:
                 os.remove(os.path.join(root, 'gradlew.bat'))
