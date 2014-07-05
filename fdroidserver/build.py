@@ -430,7 +430,7 @@ def adapt_gradle(build_dir):
     for root, dirs, files in os.walk(build_dir):
         if 'build.gradle' in files:
             path = os.path.join(root, 'build.gradle')
-            logging.info("Adapting build.gradle at %s" % path)
+            logging.debug("Adapting build.gradle at %s" % path)
 
             FDroidPopen(['sed', '-i',
                          r's@buildToolsVersion\([ =]*\)["\'][0-9\.]*["\']@buildToolsVersion\1"'
@@ -767,7 +767,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     # By way of a sanity check, make sure the version and version
     # code in our new apk match what we expect...
-    logging.info("Checking " + src)
+    logging.debug("Checking " + src)
     if not os.path.exists(src):
         raise BuildException("Unsigned apk is not at expected location of " + src)
 
@@ -1075,7 +1075,7 @@ def main():
                     txt = "Build completed at " + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + "\n\n" + wikilog
                     newpage.save(txt, summary='Build log')
                 except:
-                    logging.info("Error while attempting to publish build log")
+                    logging.error("Error while attempting to publish build log")
 
     for app in build_succeeded:
         logging.info("success: %s" % (app['id']))
