@@ -42,14 +42,13 @@ while read line; do
 	id=${id%.txt*}
 
 	if [ $# -gt 0 ]; then
-		found=false
-		for arg in "$@"; do
-			if [ "$id" == "$arg" ]; then
-				found=true
-				break
-			fi
-		done
-		$found || continue
+		case "$@" in
+			*" $id "*) ;;  # Middle
+			"$id "*) ;;    # Start
+			*" $id") ;;    # End
+			"$id") ;;      # Alone
+			*) continue ;; # Missing
+		esac
 	fi
 
 	[ -d metadata/$id ] && extra=metadata/$id || extra=
