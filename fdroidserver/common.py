@@ -622,18 +622,23 @@ class vcs_gitsvn(vcs):
                 # No tag found, normal svn rev translation
                 # Translate svn rev into git format
                 rev_split = rev.split('/')
-                if len(rev_split) > 1:
-                    treeish = 'origin/' + rev_split[0]
-                    svn_rev = rev_split[1]
 
-                else:
-                    # if no branch is specified, then assume trunk (ie. 'master'
-                    # branch):
-                    treeish = 'origin/master'
-                    svn_rev = rev
+                p = None
+                for treeish in ['origin/', '']:
+                    if len(rev_split) > 1:
+                        treeish += rev_split[0]
+                        svn_rev = rev_split[1]
 
-                p = SilentPopen(['git', 'svn', 'find-rev', 'r' + svn_rev, treeish], cwd=self.local)
-                git_rev = p.output.rstrip()
+                    else:
+                        # if no branch is specified, then assume trunk (i.e. 'master' branch):
+                        treeish += 'master'
+                        svn_rev = rev
+
+                    p = SilentPopen(['git', 'svn', 'find-rev', 'r' + svn_rev, treeish], cwd=self.local)
+                    git_rev = p.output.rstrip()
+
+                    if p.returncode == 0 and git_rev:
+                        break
 
                 if p.returncode != 0 or not git_rev:
                     # Try a plain git checkout as a last resort
