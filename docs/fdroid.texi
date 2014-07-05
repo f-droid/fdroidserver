@@ -844,27 +844,26 @@ try enabling this option.
 @item target=<target>
 Specifies a particular SDK target for compilation, overriding the value
 defined in the code by upstream.  This has different effects depending on what
-build system used — this flag currently affects ant, maven and gradle projects
+build system used — this flag currently affects Ant, Maven and Gradle projects
 only. Note that this does not change the target SDK in the
 AndroidManifest.xml, which determines the level of features that can be
 included in the build.
 
-In the case of an ant project, it modifies project.properties of the app and
+In the case of an Ant project, it modifies project.properties of the app and
 possibly sub-projects. This is likely to cause the whole build.xml to be
 rewritten, which is fine if it's a 'standard' android file or doesn't already
 exist, but not a good idea if it's heavily customised.
 
 @item update=<auto/dirs>
-By default, 'android update project' is used to generate or update the
+By default, 'android update' is used in Ant builds to generate or update the
 project and all its referenced projects. Specifying update=no bypasses that.
-Note that this only matters in ant build recipes.
+Note that this is useless in builds that don't use Ant.
 
-Default value is '@code{auto}', which uses the paths used in the
-project.properties file to find out what project paths to update.
+Default value is '@code{auto}', which recursively uses the paths in
+project.properties to find all the subprojects to update.
 
-Otherwise, value can be a comma-separated list of directories in
-which to run 'android update project' relative to the main
-application directory (which may include '@code{subdir}' parameter).
+Otherwise, the value can be a comma-separated list of directories in which to
+run 'android update' relative to the application directory.
 
 @item encoding=xxxx
 Adds a java.encoding property to local.properties with the given
@@ -906,7 +905,7 @@ Comma-separated list of source libraries or Android projects. Each item is of
 the form name@@rev where name is the predefined source library name and rev is
 the revision or tag to use in the respective source control.
 
-For ant projects, you can optionally append a number with a colon at the
+For Ant projects, you can optionally append a number with a colon at the
 beginning of a srclib item to automatically place it in project.properties as
 a library under the specified number. For example, if you specify
 @code{1:somelib@@1.0}, f-droid will automatically do the equivalent of the
@@ -946,7 +945,7 @@ You can use $$name$$ to substitute the path to a referenced srclib - see
 the @code{srclib} directory for details of this.
 
 You can use $$SDK$$, $$NDK$$ and $$MVN3$$ to substitute the paths to the
-android SDK and NDK directories, and maven 3 executable respectively e.g.
+android SDK and NDK directories, and Maven 3 executable respectively e.g.
 for when you need to run @code{android update project} explicitly.
 
 @item scanignore=path1,path2,...
@@ -963,26 +962,26 @@ it tells f-droid to delete the matching files directly.
 
 @item build=xxxx
 As for 'prebuild', but runs during the actual build phase (but before the
-main ant/maven build). Use this only for actions that do actual building.
+main Ant/Maven build). Use this only for actions that do actual building.
 Any prepartion of the source code should be done using 'init' or 'prebuild'.
 
-Any building that takes place before build= will be ignored, as either ant,
+Any building that takes place before build= will be ignored, as either Ant,
 mvn or gradle will be executed to clean the build environment right before
 build= (or the final build) is run.
 
 You can use $$SDK$$, $$NDK$$ and $$MVN3$$ to substitute the paths to the
-android SDK and NDK directories, and maven 3 executable respectively.
+android SDK and NDK directories, and Maven 3 executable respectively.
 
 @item buildjni=[yes|no|<dir list>]
 Enables building of native code via the ndk-build script before doing
-the main ant build. The value may be a list of directories relative
+the main Ant build. The value may be a list of directories relative
 to the main application directory in which to run ndk-build, or 'yes'
 which corresponds to '.' . Using explicit list may be useful to build
 multi-component projects.
 
 The build and scan processes will complain (refuse to build) if this
 parameter is not defined, but there is a @code{jni} directory present.
-If the native code is being built by other means like a gradle task, you
+If the native code is being built by other means like a Gradle task, you
 can specify @code{no} here to avoid that. However, if the native code is
 actually not required or used, remove the directory instead (using
 @code{rm=jni} for example). Using @code{buildjni=no} when the jni code
@@ -990,22 +989,22 @@ isn't used nor built will result in an error saying that native
 libraries were expected in the resulting package.
 
 @item gradle=<flavour>
-Build with gradle instead of ant, specifying what flavour to assemble.
+Build with Gradle instead of Ant, specifying what flavour to assemble.
 If <flavour> is 'yes' or 'main', no flavour will be used. Note
 that this will not work on projects with flavours, since it will build
 all flavours and there will be no 'main' build.
 
 @item maven=yes[@@<dir>]
-Build with maven instead of ant. An extra @@<dir> tells f-droid to run maven
+Build with Maven instead of Ant. An extra @@<dir> tells f-droid to run Maven
 inside that relative subdirectory. Sometimes it is needed to use @@.. so that
 builds happen correctly.
 
 @item preassemble=<task1> <task2>
-Space-separated list of gradle tasks to be run before the assemble task
-in a gradle project build.
+Space-separated list of Gradle tasks to be run before the assemble task
+in a Gradle project build.
 
 @item antcommand=xxx
-Specify an alternate ant command (target) instead of the default
+Specify an alternate Ant command (target) instead of the default
 'release'. It can't be given any flags, such as the path to a build.xml.
 
 @item output=path/to/output.apk
@@ -1118,7 +1117,7 @@ Valid modes are:
 of doing so. Updates should be checked for manually. Use this, for example,
 when deploying betas or patched versions; when builds are done in a directory
 different to where the AndroidManifest.xml is; if the developers use the
-gradle build system and store version info in a separate file; if the
+Gradle build system and store version info in a separate file; if the
 developers make a new branch for each release and don't make tags; or if you've
 changed the package name or version code logic.
 @item
@@ -1350,7 +1349,7 @@ of things that an attacker could do in such a situation:
 
 @enumerate
 @item
-Use custom ant build steps to execute virtually anything as the user doing
+Use custom Ant build steps to execute virtually anything as the user doing
 the build.
 @item
 Access the keystore.
