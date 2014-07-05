@@ -22,6 +22,7 @@ import re
 import logging
 import common
 import metadata
+from collections import Counter
 
 config = None
 options = None
@@ -129,20 +130,19 @@ regex_pedantic = {
 
 def main():
 
-    global config, options, appid, app_count, warn_count
+    global config, options, appid, count
     appid = None
 
-    app_count = 0
-    warn_count = 0
+    count = Counter()
 
     def warn(message):
-        global appid, app_count, warn_count
+        global appid, count
         if appid:
             print "%s:" % appid
             appid = None
-            app_count += 1
+            count['app'] += 1
         print '    %s' % message
-        warn_count += 1
+        count['warn'] += 1
 
     def pwarn(message):
         if options.pedantic:
@@ -246,7 +246,7 @@ def main():
         if not appid:
             print
 
-    logging.info("Found a total of %i warnings in %i apps." % (warn_count, app_count))
+    logging.info("Found a total of %i warnings in %i apps." % (count['warn'], count['app']))
 
 if __name__ == "__main__":
     main()
