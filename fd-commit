@@ -82,7 +82,7 @@ while read line; do
 				'+Build:'*)
 					$newbuild && onlybuild=false
 					newbuild=true
-					build=${l#*:}
+					build=${line#*:}
 					version=${build%%,*}
 					build=${build#*,}
 					vercode=${build%%,*}
