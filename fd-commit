@@ -57,6 +57,7 @@ while read line; do
 		case "$l" in
 			'Auto Name:'*) autoname=${l#*:} ;;
 			'Name:'*) name=${l#*:} ;;
+			'Summary:'*) break ;;
 		esac
 	done < "$file"
 
