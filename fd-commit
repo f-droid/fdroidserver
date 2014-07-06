@@ -30,15 +30,16 @@ if [ ! -d metadata ]; then
 fi
 
 while read line; do
-	if [[ "$line" == *\?\?*metadata/*.txt ]]; then
-		new=true
-	elif [[ "$line" == *M*metadata/*.txt ]]; then
-		new=false
-	fi
-	file=${line##* }
 
+	case "$line" in
+		*'??'*'metadata/'*'.txt') new=true ;;
+		*'M'*'metadata/'*'.txt') new=false ;;
+	esac
+
+	file=${line##* }
 	id=${file##*/}
 	id=${id%.txt*}
+
 	if [ $# -gt 0 ]; then
 		case "$@" in
 			*" $id "*) ;;  # Middle
@@ -53,11 +54,10 @@ while read line; do
 
 	name= autoname=
 	while read l; do
-		if [[ "$l" == "Auto Name:"* ]]; then
-			autoname=${l#*:}
-		elif [[ "$l" == "Name:"* ]]; then
-			name=${l#*:}
-		fi
+		case "$l" in
+			'Auto Name:'*) autoname=${l#*:} ;;
+			'Name:'*) name=${l#*:} ;;
+		esac
 	done < "$file"
 
 	if [ -n "$name" ]; then
@@ -74,24 +74,22 @@ while read line; do
 		onlybuild=true
 		newbuild=false
 		disable=false
-		while read l; do
-			if [[ "$l" == *"Maintainer Notes:"* ]]; then
-				break
-			fi
-			if [[ "$l" == "-Build:"* ]]; then
-				onlybuild=false
-			elif [[ "$l" == "+Build:"* ]]; then
-				if $newbuild; then
-					onlybuild=false
-				fi
-				newbuild=true
-				build=${l#*:}
-				version=${build%%,*}
-				build=${build#*,}
-				vercode=${build%%,*}
-			elif $newbuild && $onlybuild && [[ "$l" == "+"*"disable="* ]]; then
-				disable=true
-			fi
+		while read line; do
+			case "$line" in
+				*'Maintainer Notes:'*) break ;;
+				'-Build:'*) onlybuild=false ;;
+				'+Build:'*)
+					$newbuild && onlybuild=false
+					newbuild=true
+					build=${l#*:}
+					version=${build%%,*}
+					build=${build#*,}
+					vercode=${build%%,*}
+					;;
+				'+'*'disable='*)
+					$newbuild && $onlybuild && disable=true
+					;;
+			esac
 		done < <(git diff HEAD -- "$file")
 
 		if $newbuild && $onlybuild; then
@@ -107,9 +105,10 @@ while read line; do
 
 	message=${message//\"/\\\"}
 	commands+=("git add -- $file $extra && git commit -m \"$message\" -e -v")
+
 done < <(git status --porcelain metadata)
 
-[[ -z $commands ]] && exit 0
+[ -z "$commands" ] && exit 0
 
 git reset >/dev/null
 for cmd in "${commands[@]}"; do
