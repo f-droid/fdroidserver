@@ -32,7 +32,7 @@ import logging
 
 import common
 import metadata
-from common import VCSException
+from common import VCSException, FDroidException
 from metadata import MetaDataException
 
 
@@ -44,7 +44,7 @@ def check_http(app):
     try:
 
         if 'Update Check Data' not in app:
-            raise Exception('Missing Update Check Data')
+            raise FDroidException('Missing Update Check Data')
 
         urlcode, codeex, urlver, verex = app['Update Check Data'].split('|')
 
@@ -57,7 +57,7 @@ def check_http(app):
 
             m = re.search(codeex, page)
             if not m:
-                raise Exception("No RE match for version code")
+                raise FDroidException("No RE match for version code")
             vercode = m.group(1)
 
         version = "??"
@@ -70,12 +70,12 @@ def check_http(app):
 
             m = re.search(verex, page)
             if not m:
-                raise Exception("No RE match for version")
+                raise FDroidException("No RE match for version")
             version = m.group(1)
 
         return (version, vercode)
 
-    except Exception:
+    except FDroidException:
         msg = "Could not complete http check for app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
         return (None, msg)
 

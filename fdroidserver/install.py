@@ -25,7 +25,7 @@ from optparse import OptionParser, OptionError
 import logging
 
 import common
-from common import FDroidPopen
+from common import FDroidPopen, FDroidException
 
 options = None
 config = None
@@ -34,7 +34,7 @@ config = None
 def devices():
     p = FDroidPopen([config['adb'], "devices"])
     if p.returncode != 0:
-        raise Exception("An error occured when finding devices: %s" % p.output)
+        raise FDroidException("An error occured when finding devices: %s" % p.output)
     lines = p.output.splitlines()
     if lines[0].startswith('* daemon not running'):
         lines = lines[2:]
@@ -85,7 +85,7 @@ def main():
 
         for appid, apk in apks.iteritems():
             if not apk:
-                raise Exception("No signed apk available for %s" % appid)
+                raise FDroidException("No signed apk available for %s" % appid)
 
     else:
 
@@ -96,7 +96,7 @@ def main():
         # Get device list each time to avoid device not found errors
         devs = devices()
         if not devs:
-            raise Exception("No attached devices found")
+            raise FDroidException("No attached devices found")
         logging.info("Installing %s..." % apk)
         for dev in devs:
             logging.info("Installing %s on %s..." % (apk, dev))
@@ -111,7 +111,7 @@ def main():
             if fail == "INSTALL_FAILED_ALREADY_EXISTS":
                 logging.warn("%s is already installed on %s." % (apk, dev))
             else:
-                raise Exception("Failed to install %s on %s: %s" % (
+                raise FDroidException("Failed to install %s on %s: %s" % (
                     apk, dev, fail))
 
     logging.info("\nFinished")

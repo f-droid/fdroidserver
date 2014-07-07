@@ -34,7 +34,7 @@ import logging
 
 import common
 import metadata
-from common import BuildException, VCSException, FDroidPopen, SilentPopen
+from common import FDroidException, BuildException, VCSException, FDroidPopen, SilentPopen
 
 try:
     import paramiko
@@ -991,7 +991,7 @@ def main():
             len(app['Repo Type']) > 0 and len(app['builds']) > 0]
 
     if len(apps) == 0:
-        raise Exception("No apps to process.")
+        raise FDroidException("No apps to process.")
 
     if options.latest:
         for app in apps:

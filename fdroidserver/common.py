@@ -259,9 +259,9 @@ def read_app_args(args, allapps, allow_vercodes=False):
         for p in vercodes:
             if p not in allids:
                 logging.critical("No such package: %s" % p)
-        raise Exception("Found invalid app ids in arguments")
+        raise FDroidException("Found invalid app ids in arguments")
     if not apps:
-        raise Exception("No packages specified")
+        raise FDroidException("No packages specified")
 
     error = False
     for app in apps:
@@ -277,7 +277,7 @@ def read_app_args(args, allapps, allow_vercodes=False):
                     logging.critical("No such vercode %s for app %s" % (v, app['id']))
 
     if error:
-        raise Exception("Found invalid vercodes for some apps")
+        raise FDroidException("Found invalid vercodes for some apps")
 
     return apps
 
@@ -299,7 +299,7 @@ def apknameinfo(filename):
     try:
         result = (m.group(1), m.group(2))
     except AttributeError:
-        raise Exception("Invalid apk name: %s" % filename)
+        raise FDroidException("Invalid apk name: %s" % filename)
     return result
 
 
