@@ -617,7 +617,11 @@ class vcs_gitsvn(vcs):
         if rev:
             nospaces_rev = rev.replace(' ', '%20')
             # Try finding a svn tag
-            p = SilentPopen(['git', 'checkout', 'tags/' + nospaces_rev], cwd=self.local)
+            for treeish in ['origin/', '']:
+                p = SilentPopen(['git', 'checkout', treeish + 'tags/' + nospaces_rev],
+                                cwd=self.local)
+                if p.returncode == 0:
+                    break
             if p.returncode != 0:
                 # No tag found, normal svn rev translation
                 # Translate svn rev into git format
@@ -634,7 +638,8 @@ class vcs_gitsvn(vcs):
                         treeish += 'master'
                         svn_rev = rev
 
-                    p = SilentPopen(['git', 'svn', 'find-rev', 'r' + svn_rev, treeish], cwd=self.local)
+                    p = SilentPopen(['git', 'svn', 'find-rev', 'r' + svn_rev, treeish],
+                                    cwd=self.local)
                     git_rev = p.output.rstrip()
 
                     if p.returncode == 0 and git_rev:
