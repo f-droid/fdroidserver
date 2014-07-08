@@ -1666,7 +1666,7 @@ def FDroidPopen(commands, cwd=None, shell=False, output=True):
     while not stdout_reader.eof():
         while not stdout_queue.empty():
             line = stdout_queue.get()
-            if output and options.verbose:
+            if output or options.verbose:
                 # Output directly to console
                 sys.stderr.write(line)
                 sys.stderr.flush()
