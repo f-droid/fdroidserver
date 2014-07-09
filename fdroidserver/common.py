@@ -534,7 +534,7 @@ class vcs_git(vcs):
             p = SilentPopen(['git', 'submodule', 'foreach', '--recursive'] + cmd, cwd=self.local)
             if p.returncode != 0:
                 raise VCSException("Git submodule reset failed", p.output)
-        p = FDroidPopen(['git', 'submodule', 'sync'], cwd=self.local)
+        p = SilentPopen(['git', 'submodule', 'sync'], cwd=self.local)
         if p.returncode != 0:
             raise VCSException("Git submodule sync failed", p.output)
         p = FDroidPopen(['git', 'submodule', 'update', '--init', '--force', '--recursive'], cwd=self.local)
@@ -920,7 +920,7 @@ def remove_debuggable_flags(root_dir):
     for root, dirs, files in os.walk(root_dir):
         if 'AndroidManifest.xml' in files:
             path = os.path.join(root, 'AndroidManifest.xml')
-            p = FDroidPopen(['sed', '-i', 's/android:debuggable="[^"]*"//g', path])
+            p = SilentPopen(['sed', '-i', 's/android:debuggable="[^"]*"//g', path])
             if p.returncode != 0:
                 raise BuildException("Failed to remove debuggable flags of %s" % path)
 
@@ -1254,7 +1254,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
         if build['target']:
             n = build["target"].split('-')[1]
-            FDroidPopen(['sed', '-i',
+            SilentPopen(['sed', '-i',
                          's@compileSdkVersion *[0-9]*@compileSdkVersion ' + n + '@g',
                          'build.gradle'],
                         cwd=root_dir)
