@@ -21,6 +21,7 @@
 import sys
 import os
 import shutil
+import glob
 import subprocess
 import re
 import tarfile
@@ -734,23 +735,19 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         src = 'python-for-android/dist/default/bin/{0}-{1}-release.apk'.format(
             bconfig.get('app', 'title'), bconfig.get('app', 'version'))
     elif thisbuild['type'] == 'gradle':
-        basename = app['id']
-        dd = build_dir
-        if thisbuild['subdir']:
-            dd = os.path.join(dd, thisbuild['subdir'])
-            basename = os.path.basename(thisbuild['subdir'])
-        if '@' in thisbuild['gradle']:
-            dd = os.path.join(dd, thisbuild['gradle'].split('@')[1])
-            basename = app['id']
-        if len(flavours) == 1 and flavours[0] == '':
-            name = '-'.join([basename, 'release', 'unsigned'])
-        else:
-            name = '-'.join([basename, '-'.join(flavours), 'release', 'unsigned'])
-        dd = os.path.normpath(dd)
+
         if thisbuild['gradlepluginver'] >= LooseVersion('0.11'):
-            src = os.path.join(dd, 'build', 'outputs', 'apk', name + '.apk')
+            apks_dir = os.path.join(root_dir, 'build', 'outputs', 'apk')
         else:
-            src = os.path.join(dd, 'build', 'apk', name + '.apk')
+            apks_dir = os.path.join(root_dir, 'build', 'apk')
+
+        apks = glob.glob(os.path.join(apks_dir, '*-release-unsigned.apk'))
+        if len(apks) > 1:
+            raise BuildException('More than one resulting apks found in %s' % apks_dir,
+                                 '\n'.join(apks))
+        if len(apks) < 1:
+            raise BuildException('Failed to find gradle output in %s' % apks_dir)
+        src = apks[0]
     elif thisbuild['type'] == 'ant':
         stdout_apk = '\n'.join([
             line for line in p.output.splitlines() if '.apk' in line])
