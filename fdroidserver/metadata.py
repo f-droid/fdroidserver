@@ -497,7 +497,7 @@ def read_metadata(xref=True):
         for app in apps:
             try:
                 description_html(app['Description'], linkres)
-            except Exception, e:
+            except MetaDataException, e:
                 raise MetaDataException("Problem with description of " + app['id'] +
                                         " - " + str(e))
 
