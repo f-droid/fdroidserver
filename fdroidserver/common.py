@@ -646,7 +646,9 @@ class vcs_gitsvn(vcs):
                         treeish += 'master'
                         svn_rev = rev
 
-                    p = SilentPopen(['git', 'svn', 'find-rev', 'r' + svn_rev, treeish],
+                    svn_rev = svn_rev if svn_rev[0] == 'r' else 'r' + svn_rev
+
+                    p = SilentPopen(['git', 'svn', 'find-rev', svn_rev, treeish],
                                     cwd=self.local)
                     git_rev = p.output.rstrip()
 
