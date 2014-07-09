@@ -406,12 +406,20 @@ class vcs:
         if deleterepo:
             shutil.rmtree(self.local)
 
-        self.gotorevisionx(rev)
+        exc = None
+
+        try:
+            self.gotorevisionx(rev)
+        except FDroidException, e:
+            exc = e
 
         # If necessary, write the .fdroidvcs file.
-        if writeback:
+        if writeback and not self.clone_failed:
             with open(fdpath, 'w') as f:
                 f.write(cdata)
+
+        if exc is not None:
+            raise exc
 
     # Derived classes need to implement this. It's called once basic checking
     # has been performend.
