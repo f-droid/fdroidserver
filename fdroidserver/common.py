@@ -1220,7 +1220,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     flavour = None
     if build['type'] == 'gradle':
-        flavour = build['gradle'].split('@')[0]
+        flavour = build['gradle']
         if flavour in ['main', 'yes', '']:
             flavour = None
 
@@ -1233,13 +1233,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         parent_dir = os.path.normpath(os.path.join(root_dir, '..'))
         if parent_dir.startswith(build_dir):
             gradle_files.append(os.path.join(parent_dir, 'build.gradle'))
-
-        # Gradle execution dir build.gradle
-        if '@' in build['gradle']:
-            gradle_file = os.path.join(root_dir, build['gradle'].split('@', 1)[1], 'build.gradle')
-            gradle_file = os.path.normpath(gradle_file)
-            if gradle_file not in gradle_files:
-                gradle_files.append(gradle_file)
 
         for path in gradle_files:
             if gradlepluginver:
