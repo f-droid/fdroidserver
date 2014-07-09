@@ -1456,14 +1456,13 @@ def scan_source(build_dir, root_dir, thisbuild):
             return True
         return False
 
-    def insidedir(path, dirname):
-        return path.endswith('/%s' % dirname) or '/%s/' % dirname in path
-
     # Iterate through all files in the source code
-    for r, d, f in os.walk(build_dir):
+    for r, d, f in os.walk(build_dir, topdown=True):
 
-        if any(insidedir(r, d) for d in ('.hg', '.git', '.svn', '.bzr')):
-            continue
+        # It's topdown, so checking the basename is enough
+        for ignoredir in ('.hg', '.git', '.svn', '.bzr'):
+            if ignoredir in d:
+                d.remove(ignoredir)
 
         for curfile in f:
 
