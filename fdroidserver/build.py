@@ -696,8 +696,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         commands += ['assemble' + flavours_cmd + 'Release']
 
         # Avoid having to use lintOptions.abortOnError false
-        if thisbuild['gradlepluginver'] >= LooseVersion('0.8'):
-            commands += ['-x', 'lintVital' + flavours_cmd + 'Release']
+        if thisbuild['gradlepluginver'] >= LooseVersion('0.7'):
+            with open(os.path.join(root_dir, 'build.gradle'), "a") as f:
+                f.write("\nandroid { lintOptions { checkReleaseBuilds false } }\n")
 
         p = FDroidPopen(commands, cwd=root_dir)
 
