@@ -116,7 +116,7 @@ def update_awsbucket(repo_section):
             logging.info(' skipping ' + s3url)
 
 
-def update_serverwebroot(repo_section):
+def update_serverwebroot(serverwebroot, repo_section):
     rsyncargs = ['rsync', '--archive', '--delete']
     if options.verbose:
         rsyncargs += ['--verbose']
@@ -131,11 +131,11 @@ def update_serverwebroot(repo_section):
     # serverwebroot is guaranteed to have a trailing slash in common.py
     if subprocess.call(rsyncargs +
                        ['--exclude', indexxml, '--exclude', indexjar,
-                        repo_section, config['serverwebroot']]) != 0:
+                        repo_section, serverwebroot]) != 0:
         sys.exit(1)
     # use stricter checking on the indexes since they provide the signature
     rsyncargs += ['--checksum']
-    sectionpath = config['serverwebroot'] + repo_section
+    sectionpath = serverwebroot + repo_section
     if subprocess.call(rsyncargs + [indexxml, sectionpath]) != 0:
         sys.exit(1)
     if subprocess.call(rsyncargs + [indexjar, sectionpath]) != 0:
@@ -202,12 +202,11 @@ def main():
     else:
         standardwebroot = True
 
-    if config.get('serverwebroot'):
-        serverwebroot = config['serverwebroot']
+    for serverwebroot in config.get('serverwebroot', []):
         host, fdroiddir = serverwebroot.rstrip('/').split(':')
         repobase = os.path.basename(fdroiddir)
         if standardwebroot and repobase != 'fdroid':
-            logging.error('serverwebroot does not end with "fdroid", '
+            logging.error('serverwebroot path does not end with "fdroid", '
                           + 'perhaps you meant one of these:\n\t'
                           + serverwebroot.rstrip('/') + '/fdroid\n\t'
                           + serverwebroot.rstrip('/').rstrip(repobase) + 'fdroid')
@@ -257,10 +256,10 @@ def main():
             os.mkdir('archive')
 
     if args[0] == 'init':
-        if config.get('serverwebroot'):
-            ssh = paramiko.SSHClient()
-            ssh.load_system_host_keys()
-            sshstr, remotepath = config['serverwebroot'].rstrip('/').split(':')
+        ssh = paramiko.SSHClient()
+        ssh.load_system_host_keys()
+        for serverwebroot in config.get('serverwebroot', []):
+            sshstr, remotepath = serverwebroot.rstrip('/').split(':')
             if sshstr.find('@') >= 0:
                 username, hostname = sshstr.split('@')
             else:
@@ -285,8 +284,8 @@ def main():
                     sync_from_localcopy(repo_section, local_copy_dir)
                 else:
                     update_localcopy(repo_section, local_copy_dir)
-            if config.get('serverwebroot'):
-                update_serverwebroot(repo_section)
+            for serverwebroot in config.get('serverwebroot', []):
+                update_serverwebroot(serverwebroot, repo_section)
             if config.get('awsbucket'):
                 update_awsbucket(repo_section)
 

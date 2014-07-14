@@ -102,9 +102,15 @@ keyaliases['com.example.another.plugin'] = '@com.example.another'
 # rsync/ssh format for a remote host/path. This is used for syncing a locally
 # generated repo to the server that is it hosted on.  It must end in the
 # standard public repo name of "/fdroid", but can be in up to three levels of
-# sub-directories (i.e. /var/www/packagerepos/fdroid).
+# sub-directories (i.e. /var/www/packagerepos/fdroid).  You can include
+# multiple servers to sync to by wrapping the whole thing in {} or [], and
+# including the serverwebroot strings in a comma-separated list.
 #
 # serverwebroot = 'user@example:/var/www/fdroid'
+# serverwebroot = {
+#     'foo.com:/usr/share/nginx/www/fdroid',
+#     'bar.info:/var/www/fdroid',
+#     }
 
 
 # optionally specific which identity file to use when using rsync over SSH

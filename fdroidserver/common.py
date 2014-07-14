@@ -168,12 +168,21 @@ def read_config(opts, config_file='config.py'):
         if k in config:
             config[k] = clean_description(config[k])
 
-    # since this is used with rsync, where trailing slashes have meaning,
-    # ensure there is always a trailing slash
     if 'serverwebroot' in config:
-        if config['serverwebroot'][-1] != '/':
-            config['serverwebroot'] += '/'
-        config['serverwebroot'] = config['serverwebroot'].replace('//', '/')
+        if isinstance(config['serverwebroot'], basestring):
+            roots = [config['serverwebroot']]
+        elif all(isinstance(item, basestring) for item in config['serverwebroot']):
+            roots = config['serverwebroot']
+        else:
+            raise TypeError('only accepts strings, lists, and tuples')
+        rootlist = []
+        for rootstr in roots:
+            # since this is used with rsync, where trailing slashes have
+            # meaning, ensure there is always a trailing slash
+            if rootstr[-1] != '/':
+                rootstr += '/'
+            rootlist.append(rootstr.replace('//', '/'))
+        config['serverwebroot'] = rootlist
 
     return config
 
