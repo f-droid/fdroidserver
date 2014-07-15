@@ -154,8 +154,13 @@ class FieldValidator():
 valuetypes = {
     FieldValidator("Integer",
                    r'^[1-9][0-9]*$', None,
-                   ['FlattrID'],
+                   [],
                    ['vercode']),
+
+    FieldValidator("Hexadecimal",
+                   r'^[0-9a-f]+$', None,
+                   ['FlattrID'],
+                   []),
 
     FieldValidator("HTTP link",
                    r'^http[s]?://', None,
