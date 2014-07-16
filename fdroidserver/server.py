@@ -20,6 +20,8 @@
 import sys
 import hashlib
 import os
+import paramiko
+import pwd
 import subprocess
 from optparse import OptionParser
 import logging
@@ -114,7 +116,7 @@ def update_awsbucket(repo_section):
             logging.info(' skipping ' + s3url)
 
 
-def update_serverwebroot(repo_section):
+def update_serverwebroot(serverwebroot, repo_section):
     rsyncargs = ['rsync', '--archive', '--delete']
     if options.verbose:
         rsyncargs += ['--verbose']
@@ -129,11 +131,11 @@ def update_serverwebroot(repo_section):
     # serverwebroot is guaranteed to have a trailing slash in common.py
     if subprocess.call(rsyncargs +
                        ['--exclude', indexxml, '--exclude', indexjar,
-                        repo_section, config['serverwebroot']]) != 0:
+                        repo_section, serverwebroot]) != 0:
         sys.exit(1)
     # use stricter checking on the indexes since they provide the signature
     rsyncargs += ['--checksum']
-    sectionpath = config['serverwebroot'] + repo_section
+    sectionpath = serverwebroot + repo_section
     if subprocess.call(rsyncargs + [indexxml, sectionpath]) != 0:
         sys.exit(1)
     if subprocess.call(rsyncargs + [indexjar, sectionpath]) != 0:
@@ -141,7 +143,8 @@ def update_serverwebroot(repo_section):
 
 
 def _local_sync(fromdir, todir):
-    rsyncargs = ['rsync', '--archive', '--one-file-system', '--delete']
+    rsyncargs = ['rsync', '--recursive', '--links', '--times',
+                 '--one-file-system', '--delete', '--chmod=Da+rx,Fa-x,a+r,u+w']
     # use stricter rsync checking on all files since people using offline mode
     # are already prioritizing security above ease and speed
     rsyncargs += ['--checksum']
@@ -199,12 +202,11 @@ def main():
     else:
         standardwebroot = True
 
-    if config.get('serverwebroot'):
-        serverwebroot = config['serverwebroot']
+    for serverwebroot in config.get('serverwebroot', []):
         host, fdroiddir = serverwebroot.rstrip('/').split(':')
         repobase = os.path.basename(fdroiddir)
         if standardwebroot and repobase != 'fdroid':
-            logging.error('serverwebroot does not end with "fdroid", '
+            logging.error('serverwebroot path does not end with "fdroid", '
                           + 'perhaps you meant one of these:\n\t'
                           + serverwebroot.rstrip('/') + '/fdroid\n\t'
                           + serverwebroot.rstrip('/').rstrip(repobase) + 'fdroid')
@@ -254,18 +256,27 @@ def main():
             os.mkdir('archive')
 
     if args[0] == 'init':
-        if config.get('serverwebroot'):
-            sshargs = ['ssh']
-            if options.quiet:
-                sshargs += ['-q']
+        ssh = paramiko.SSHClient()
+        ssh.load_system_host_keys()
+        for serverwebroot in config.get('serverwebroot', []):
+            sshstr, remotepath = serverwebroot.rstrip('/').split(':')
+            if sshstr.find('@') >= 0:
+                username, hostname = sshstr.split('@')
+            else:
+                username = pwd.getpwuid(os.getuid())[0]  # get effective uid
+                hostname = sshstr
+            ssh.connect(hostname, username=username)
+            sftp = ssh.open_sftp()
+            if os.path.basename(remotepath) \
+                    not in sftp.listdir(os.path.dirname(remotepath)):
+                sftp.mkdir(remotepath, mode=0755)
             for repo_section in repo_sections:
-                cmd = sshargs + [host, 'mkdir -p', fdroiddir + '/' + repo_section]
-                if options.verbose:
-                    # ssh -v produces different output than rsync -v, so this
-                    # simulates rsync -v
-                    logging.info(' '.join(cmd))
-                if subprocess.call(cmd) != 0:
-                    sys.exit(1)
+                repo_path = os.path.join(remotepath, repo_section)
+                if os.path.basename(repo_path) \
+                        not in sftp.listdir(remotepath):
+                    sftp.mkdir(repo_path, mode=0755)
+            sftp.close()
+            ssh.close()
     elif args[0] == 'update':
         for repo_section in repo_sections:
             if local_copy_dir is not None:
@@ -273,8 +284,8 @@ def main():
                     sync_from_localcopy(repo_section, local_copy_dir)
                 else:
                     update_localcopy(repo_section, local_copy_dir)
-            if config.get('serverwebroot'):
-                update_serverwebroot(repo_section)
+            for serverwebroot in config.get('serverwebroot', []):
+                update_serverwebroot(serverwebroot, repo_section)
             if config.get('awsbucket'):
                 update_awsbucket(repo_section)
 

@@ -33,11 +33,12 @@ repo_maxage = 0
 repo_url = "https://MyFirstFDroidRepo.org/fdroid/repo"
 repo_name = "My First FDroid Repo Demo"
 repo_icon = "fdroid-icon.png"
-repo_description = (
-    "This is a repository of apps to be used with FDroid. Applications in this "
-    + "repository are either official binaries built by the original application "
-    + "developers, or are binaries built from source by the admin of f-droid.org "
-    + "using the tools on https://gitlab.com/u/fdroid.")
+repo_description = """
+This is a repository of apps to be used with FDroid. Applications in this
+repository are either official binaries built by the original application
+developers, or are binaries built from source by the admin of f-droid.org
+using the tools on https://gitlab.com/u/fdroid.
+"""
 
 # As above, but for the archive repo.
 # archive_older sets the number of versions kept in the main repo, with all
@@ -47,9 +48,9 @@ archive_older = 3
 archive_url = "https://f-droid.org/archive"
 archive_name = "My First FDroid Archive Demo"
 archive_icon = "fdroid-icon.png"
-archive_description = (
-    "The repository of older versions of applications from the main demo "
-    + "repository.")
+archive_description = """
+The repository of older versions of applications from the main demo repository.
+"""
 
 
 # The ID of a GPG key for making detached signatures for apks. Optional.
@@ -101,9 +102,15 @@ keyaliases['com.example.another.plugin'] = '@com.example.another'
 # rsync/ssh format for a remote host/path. This is used for syncing a locally
 # generated repo to the server that is it hosted on.  It must end in the
 # standard public repo name of "/fdroid", but can be in up to three levels of
-# sub-directories (i.e. /var/www/packagerepos/fdroid).
+# sub-directories (i.e. /var/www/packagerepos/fdroid).  You can include
+# multiple servers to sync to by wrapping the whole thing in {} or [], and
+# including the serverwebroot strings in a comma-separated list.
 #
 # serverwebroot = 'user@example:/var/www/fdroid'
+# serverwebroot = {
+#     'foo.com:/usr/share/nginx/www/fdroid',
+#     'bar.info:/var/www/fdroid',
+#     }
 
 
 # optionally specific which identity file to use when using rsync over SSH

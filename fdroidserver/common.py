@@ -62,11 +62,12 @@ def get_default_config():
         'repo_url': "https://MyFirstFDroidRepo.org/fdroid/repo",
         'repo_name': "My First FDroid Repo Demo",
         'repo_icon': "fdroid-icon.png",
-        'repo_description': (
-            "This is a repository of apps to be used with FDroid. Applications in this "
-            + "repository are either official binaries built by the original application "
-            + "developers, or are binaries built from source by the admin of f-droid.org "
-            + "using the tools on https://gitlab.com/u/fdroid."),
+        'repo_description': '''
+            This is a repository of apps to be used with FDroid. Applications in this
+            repository are either official binaries built by the original application
+            developers, or are binaries built from source by the admin of f-droid.org
+            using the tools on https://gitlab.com/u/fdroid.
+            ''',
         'archive_older': 0,
     }
 
@@ -163,12 +164,25 @@ def read_config(opts, config_file='config.py'):
         if k in config:
             write_password_file(k)
 
-    # since this is used with rsync, where trailing slashes have meaning,
-    # ensure there is always a trailing slash
+    for k in ["repo_description", "archive_description"]:
+        if k in config:
+            config[k] = clean_description(config[k])
+
     if 'serverwebroot' in config:
-        if config['serverwebroot'][-1] != '/':
-            config['serverwebroot'] += '/'
-        config['serverwebroot'] = config['serverwebroot'].replace('//', '/')
+        if isinstance(config['serverwebroot'], basestring):
+            roots = [config['serverwebroot']]
+        elif all(isinstance(item, basestring) for item in config['serverwebroot']):
+            roots = config['serverwebroot']
+        else:
+            raise TypeError('only accepts strings, lists, and tuples')
+        rootlist = []
+        for rootstr in roots:
+            # since this is used with rsync, where trailing slashes have
+            # meaning, ensure there is always a trailing slash
+            if rootstr[-1] != '/':
+                rootstr += '/'
+            rootlist.append(rootstr.replace('//', '/'))
+        config['serverwebroot'] = rootlist
 
     return config
 
@@ -288,6 +302,19 @@ def has_extension(filename, extension):
     return ext == extension
 
 apk_regex = None
+
+
+def clean_description(description):
+    'Remove unneeded newlines and spaces from a block of description text'
+    returnstring = ''
+    # this is split up by paragraph to make removing the newlines easier
+    for paragraph in re.split(r'\n\n', description):
+        paragraph = re.sub('\r', '', paragraph)
+        paragraph = re.sub('\n', ' ', paragraph)
+        paragraph = re.sub(' {2,}', ' ', paragraph)
+        paragraph = re.sub('^\s*(\w)', r'\1', paragraph)
+        returnstring += paragraph + '\n\n'
+    return returnstring.rstrip('\n')
 
 
 def apknameinfo(filename):
