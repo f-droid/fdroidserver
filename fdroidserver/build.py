@@ -1067,9 +1067,14 @@ def main():
 
             if options.wiki and wikilog:
                 try:
-                    newpage = site.Pages[app['id'] + '/lastbuild']
+                    # Write a page with the last build log for this version code
+                    lastbuildpage = app['id'] + '/lastbuild_' + thisbuild['vercode']
+                    newpage = site.Pages[lastbuildpage]
                     txt = "Build completed at " + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + "\n\n" + wikilog
                     newpage.save(txt, summary='Build log')
+                    # Redirect from /lastbuild to the most recent build log
+                    newpage = site.Pages[app['id'] + '/lastbuild']
+                    newpage.save('#REDIRECT [[' + lastbuildpage + ']]', summary='Update redirect')
                 except:
                     logging.error("Error while attempting to publish build log")
 

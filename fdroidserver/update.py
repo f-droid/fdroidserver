@@ -144,7 +144,7 @@ def update_wiki(apps, apks):
                     buildfails = True
                     apklist.append({'versioncode': int(thisbuild['vercode']),
                                     'version': thisbuild['version'],
-                                    'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild|build log]].".format(app['id'])
+                                    'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(app['id'], thisbuild['vercode'])
                                     })
         if app['Current Version Code'] == '0':
             cantupdate = True
