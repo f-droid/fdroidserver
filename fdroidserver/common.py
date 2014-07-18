@@ -700,7 +700,10 @@ class vcs_gitsvn(vcs):
 
     def gettags(self):
         self.checkrepo()
-        return os.listdir(os.path.join(self.local, '.git/svn/refs/remotes/tags'))
+        for treeish in ['origin/', '']:
+            d = os.path.join(self.local, '.git', 'svn', 'refs', 'remotes', treeish, 'tags')
+            if os.path.isdir(d):
+                return os.listdir(d)
 
     def getref(self):
         self.checkrepo()
