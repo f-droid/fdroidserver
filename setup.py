@@ -30,7 +30,7 @@ setup(name='fdroidserver',
       install_requires=[
         'mwclient',
         'paramiko',
-        'PIL',
+        'Pillow',
         'python-magic',
         'apache-libcloud >= 0.14.1',
         ],
