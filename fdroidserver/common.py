@@ -362,9 +362,9 @@ def getvcs(vcstype, remote, local):
     if vcstype == 'bzr':
         return vcs_bzr(remote, local)
     if vcstype == 'srclib':
-        if local != 'build/srclib/' + remote:
+        if local != os.path.join('build', 'srclib', remote):
             raise VCSException("Error: srclib paths are hard-coded!")
-        return getsrclib(remote, 'build/srclib', raw=True)
+        return getsrclib(remote, os.path.join('build', 'srclib'), raw=True)
     raise VCSException("Invalid vcs type " + vcstype)
 
 
@@ -787,7 +787,7 @@ class vcs_hg(vcs):
         p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
         # Also delete untracked files, we have to enable purge extension for that:
         if "'purge' is provided by the following extension" in p.output:
-            with open(self.local + "/.hg/hgrc", "a") as myfile:
+            with open(os.path.join(self.local, '.hg', 'hgrc'), "a") as myfile:
                 myfile.write("\n[extensions]\nhgext.purge=\n")
             p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
             if p.returncode != 0:
@@ -836,14 +836,14 @@ def retrieve_string(app_dir, string, xmlfiles=None):
 
     res_dirs = [
         os.path.join(app_dir, 'res'),
-        os.path.join(app_dir, 'src/main'),
+        os.path.join(app_dir, 'src', 'main'),
         ]
 
     if xmlfiles is None:
         xmlfiles = []
         for res_dir in res_dirs:
             for r, d, f in os.walk(res_dir):
-                if r.endswith('/values'):
+                if os.path.basename(r) == 'values':
                     xmlfiles += [os.path.join(r, x) for x in f if x.endswith('.xml')]
 
     string_search = None
