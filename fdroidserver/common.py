@@ -353,8 +353,6 @@ def getcvname(app):
 def getvcs(vcstype, remote, local):
     if vcstype == 'git':
         return vcs_git(remote, local)
-    if vcstype == 'svn':
-        return vcs_svn(remote, local)
     if vcstype == 'git-svn':
         return vcs_gitsvn(remote, local)
     if vcstype == 'hg':
@@ -365,6 +363,8 @@ def getvcs(vcstype, remote, local):
         if local != os.path.join('build', 'srclib', remote):
             raise VCSException("Error: srclib paths are hard-coded!")
         return getsrclib(remote, os.path.join('build', 'srclib'), raw=True)
+    if vcstype == 'svn':
+        raise VCSException("Deprecated vcs type 'svn' - please use 'git-svn' instead")
     raise VCSException("Invalid vcs type " + vcstype)
 
 
@@ -379,7 +379,7 @@ class vcs:
 
         # svn, git-svn and bzr may require auth
         self.username = None
-        if self.repotype() in ('svn', 'git-svn', 'bzr'):
+        if self.repotype() in ('git-svn', 'bzr'):
             if '@' in remote:
                 self.username, remote = remote.split('@')
                 if ':' not in self.username:
@@ -711,50 +711,6 @@ class vcs_gitsvn(vcs):
         if p.returncode != 0:
             return None
         return p.output.strip()
-
-
-class vcs_svn(vcs):
-
-    def repotype(self):
-        return 'svn'
-
-    def userargs(self):
-        if self.username is None:
-            return ['--non-interactive']
-        return ['--username', self.username,
-                '--password', self.password,
-                '--non-interactive']
-
-    def gotorevisionx(self, rev):
-        if not os.path.exists(self.local):
-            p = SilentPopen(['svn', 'checkout', self.remote, self.local] + self.userargs())
-            if p.returncode != 0:
-                self.clone_failed = True
-                raise VCSException("Svn checkout of '%s' failed" % rev, p.output)
-        else:
-            for svncommand in (
-                    'svn revert -R .',
-                    r"svn status | awk '/\?/ {print $2}' | xargs rm -rf"):
-                p = SilentPopen([svncommand], cwd=self.local, shell=True)
-                if p.returncode != 0:
-                    raise VCSException("Svn reset ({0}) failed in {1}".format(svncommand, self.local), p.output)
-            if not self.refreshed:
-                p = SilentPopen(['svn', 'update'] + self.userargs(), cwd=self.local)
-                if p.returncode != 0:
-                    raise VCSException("Svn update failed", p.output)
-                self.refreshed = True
-
-        revargs = list(['-r', rev] if rev else [])
-        p = SilentPopen(['svn', 'update', '--force'] + revargs + self.userargs(), cwd=self.local)
-        if p.returncode != 0:
-            raise VCSException("Svn update failed", p.output)
-
-    def getref(self):
-        p = SilentPopen(['svn', 'info'], cwd=self.local)
-        for line in p.output.splitlines():
-            if line and line.startswith('Last Changed Rev: '):
-                return line[18:]
-        return None
 
 
 class vcs_hg(vcs):

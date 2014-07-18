@@ -191,8 +191,6 @@ def check_repomanifest(app, branch=None):
             vcs.gotorevision(branch)
         elif repotype == 'git-svn':
             vcs.gotorevision(branch)
-        elif repotype == 'svn':
-            vcs.gotorevision(None)
         elif repotype == 'hg':
             vcs.gotorevision(branch)
         elif repotype == 'bzr':
@@ -250,8 +248,8 @@ def check_repotrunk(app, branch=None):
             build_dir = os.path.join('build/', app['id'])
             repotype = app['Repo Type']
 
-        if repotype not in ('svn', 'git-svn'):
-            return (None, 'RepoTrunk update mode only makes sense in svn and git-svn repositories')
+        if repotype not in ('git-svn', ):
+            return (None, 'RepoTrunk update mode only makes sense in git-svn repositories')
 
         # Set up vcs interface and make sure we have the latest code...
         vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)

@@ -235,7 +235,7 @@ def main():
                     if ref.startswith(s):
                         warn("Branch '%s' used as commit in srclib '%s'" % (
                             s, srclib))
-            for s in ['git clone', 'svn checkout', 'svn co', 'hg clone']:
+            for s in ['git clone', 'git svn clone', 'svn checkout', 'svn co', 'hg clone']:
                 for flag in ['init', 'prebuild', 'build']:
                     if not build[flag]:
                         continue

@@ -40,8 +40,6 @@ def main():
                       help="Spew out even more information than normal")
     parser.add_option("-q", "--quiet", action="store_true", default=False,
                       help="Restrict output to warnings and errors")
-    parser.add_option("--nosvn", action="store_true", default=False,
-                      help="Skip svn repositories - for test purposes, because they are too slow.")
     (options, args) = parser.parse_args()
 
     config = common.read_config(options)
@@ -66,8 +64,6 @@ def main():
             continue
         if not app['builds']:
             logging.info("Skipping %s: no builds specified" % app['id'])
-            continue
-        elif options.nosvn and app['Repo Type'] == 'svn':
             continue
 
         logging.info("Processing " + app['id'])
