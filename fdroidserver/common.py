@@ -1463,7 +1463,7 @@ def scan_source(build_dir, root_dir, thisbuild):
             try:
                 mime = magic.from_file(fp, mime=True) if ms is None else ms.file(fp)
             except UnicodeError:
-                warnproblem('malformed magic number', fd, fp)
+                warnproblem('malformed magic number', fd)
 
             if mime == 'application/x-sharedlib':
                 count += handleproblem('shared library', fd, fp)
