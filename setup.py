@@ -10,7 +10,7 @@ if not os.path.exists('fdroidserver/getsig/getsig.class'):
                             shell=True)
 
 setup(name='fdroidserver',
-      version='0.2',
+      version='0.2.1',
       description='F-Droid Server Tools',
       long_description=open('README').read(),
       author='The F-Droid Project',
