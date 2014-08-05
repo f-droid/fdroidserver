@@ -183,8 +183,8 @@ git clone https://gitlab.com/fdroid/fdroiddata.git
 Regardless of the intended usage of the tools, you will always need to set
 up some basic configuration details. This is done by creating a file called
 @code{config.py} in the data directory. You should do this by copying the
-example file (@code{config.sample.py}) from the fdroidserver project to your
-data directory and then editing according to the instructions within.
+example file (@code{./examples/config.py}) from the fdroidserver project to
+your data directory and then editing according to the instructions within.
 
 Once configured in this way, all the functionality of the tools is accessed
 by running the @code{fdroid} command. Run it on its own to get a list of the
@@ -212,7 +212,7 @@ Set up the server tools, as described in Setup.
 @item
 Make a directory for your repository. This is the directory from which you
 will do all the work with your repository. Create a config file there, called
-@code{config.py}, by copying the @code{config.sample.py} from the server
+@code{config.py}, by copying @code{./examples/config.py} from the server
 project and editing it.
 @item
 Within that, make a directory called @code{repo} and put APK files in it.
@@ -1419,7 +1419,7 @@ boot, you need to set @code{GRUB_RECORDFAIL_TIMEOUT} to a value other than
 
 
 With this base box available, you should then create @code{makebs.config.py},
-using @code{makebs.config.sample.py} as a reference - look at the settings and
+using @code{./examples/makebs.config.py} as a reference - look at the settings and
 documentation there to decide if any need changing to suit your environment.
 There is a path for retrieving the base box if it doesn't exist, and an apt
 proxy definition, both of which may need customising for your environment.
