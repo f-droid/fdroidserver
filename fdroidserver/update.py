@@ -370,8 +370,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             if os.path.exists(os.path.join(repodir, srcfilename)):
                 thisinfo['srcname'] = srcfilename
             thisinfo['size'] = os.path.getsize(apkfile)
-            thisinfo['permissions'] = []
-            thisinfo['features'] = []
+            thisinfo['permissions'] = set()
+            thisinfo['features'] = set()
             thisinfo['icons_src'] = {}
             thisinfo['icons'] = {}
             p = SilentPopen([config['aapt'], 'dump', 'badging', apkfile])
@@ -432,7 +432,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                     perm = re.match(string_pat, line).group(1)
                     if perm.startswith("android.permission."):
                         perm = perm[19:]
-                    thisinfo['permissions'].append(perm)
+                    thisinfo['permissions'].add(perm)
                 elif line.startswith("uses-feature:"):
                     perm = re.match(string_pat, line).group(1)
                     # Filter out this, it's only added with the latest SDK tools and
@@ -441,7 +441,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                             and perm != "android.hardware.screen.landscape":
                         if perm.startswith("android.feature."):
                             perm = perm[16:]
-                        thisinfo['features'].append(perm)
+                        thisinfo['features'].add(perm)
 
             if 'sdkversion' not in thisinfo:
                 logging.warn("no SDK version information found")
