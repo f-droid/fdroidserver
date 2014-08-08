@@ -791,7 +791,7 @@ def make_index(apps, apks, repodir, archive, categories):
                 addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
             if app['Requires Root']:
                 if 'ACCESS_SUPERUSER' not in apk['permissions']:
-                    apk['permissions'].append('ACCESS_SUPERUSER')
+                    apk['permissions'].add('ACCESS_SUPERUSER')
 
             if len(apk['permissions']) > 0:
                 addElement('permissions', ','.join(apk['permissions']), doc, apkel)
