@@ -444,12 +444,12 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         thisinfo['features'].add(perm)
 
             if 'sdkversion' not in thisinfo:
-                logging.warn("no SDK version information found")
+                logging.warn("No SDK version information found in {0}".format(apkfile))
                 thisinfo['sdkversion'] = 0
 
             # Check for debuggable apks...
             if common.isApkDebuggable(apkfile, config):
-                logging.warn('{0} is set to android:debuggable="true"!'.format(apkfile))
+                logging.warn('{0} is set to android:debuggable="true"'.format(apkfile))
 
             # Calculate the sha256...
             sha = hashlib.sha256()
