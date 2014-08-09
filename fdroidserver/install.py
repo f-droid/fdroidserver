@@ -76,7 +76,10 @@ def main():
         # Get the signed apk with the highest vercode
         for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
 
-            appid, vercode = common.apknameinfo(apkfile)
+            try:
+                appid, vercode = common.apknameinfo(apkfile)
+            except FDroidException:
+                continue
             if appid not in apks:
                 continue
             if vercodes[appid] and vercode not in vercodes[appid]:
