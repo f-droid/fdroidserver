@@ -468,10 +468,14 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 sys.exit(1)
             p = FDroidPopen(['java', '-cp', os.path.join(os.path.dirname(__file__), 'getsig'),
                              'getsig', os.path.join(os.getcwd(), apkfile)])
-            if p.returncode != 0 or not p.output.startswith('Result:'):
+            thisinfo['sig'] = None
+            for line in p.output.splitlines():
+                if line.startswith('Result:'):
+                    thisinfo['sig'] = line[7:].strip()
+                    break
+            if p.returncode != 0 or not thisinfo['sig']:
                 logging.critical("Failed to get apk signature")
                 sys.exit(1)
-            thisinfo['sig'] = p.output[7:].strip()
 
             apk = zipfile.ZipFile(apkfile, 'r')
 
