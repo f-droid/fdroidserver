@@ -1670,8 +1670,7 @@ def FDroidPopen(commands, cwd=None, shell=False, output=True):
 
         time.sleep(0.1)
 
-    p.wait()
-    result.returncode = p.returncode
+    result.returncode = p.wait()
     return result
 
 
