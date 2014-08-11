@@ -276,8 +276,9 @@ def delete_disabled_builds(apps, apkcache, repodirs):
                 apkfilename = app['id'] + '_' + str(build['vercode']) + '.apk'
                 for repodir in repodirs:
                     apkpath = os.path.join(repodir, apkfilename)
+                    ascpath = apkpath + ".asc"
                     srcpath = os.path.join(repodir, apkfilename[:-4] + "_src.tar.gz")
-                    for name in [apkpath, srcpath]:
+                    for name in [apkpath, srcpath, ascpath]:
                         if os.path.exists(name):
                             logging.warn("Deleting disabled build output " + apkfilename)
                             os.remove(name)
