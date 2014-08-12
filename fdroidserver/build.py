@@ -719,7 +719,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     if thisbuild['type'] == 'maven':
         stdout_apk = '\n'.join([
-            line for line in p.output.splitlines() if any(a in line for a in ('.apk', '.ap_'))])
+            line for line in p.output.splitlines() if any(
+                a in line for a in ('.apk', '.ap_', '.jar'))])
         m = re.match(r".*^\[INFO\] .*apkbuilder.*/([^/]*)\.apk",
                      stdout_apk, re.S | re.M)
         if not m:
@@ -727,6 +728,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                          stdout_apk, re.S | re.M)
         if not m:
             m = re.match(r'.*^\[INFO\] [^$]*aapt \[package,[^$]*' + bindir + r'/([^/]+)\.ap[_k][,\]]',
+                         stdout_apk, re.S | re.M)
+
+        if not m:
+            m = re.match(r".*^\[INFO\] Building jar: .*/" + bindir + r"/(.+)\.jar",
                          stdout_apk, re.S | re.M)
         if not m:
             raise BuildException('Failed to find output')
