@@ -226,7 +226,9 @@ def main():
 
         # Build warnings
         for build in app['builds']:
-            for s in ['master', 'origin/', 'default', 'trunk']:
+            if build['disable']:
+                continue
+            for s in ['master', 'origin', 'HEAD', 'default', 'trunk']:
                 if build['commit'] and build['commit'].startswith(s):
                     warn("Branch '%s' used as commit in build '%s'" % (
                         s, build['version']))
