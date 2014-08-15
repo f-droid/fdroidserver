@@ -486,6 +486,7 @@ The following sections describe the fields recognised within the file.
 * Update Check Mode::
 * Update Check Ignore::
 * Vercode Operation::
+* Update Check Name::
 * Update Check Data::
 * Auto Update Mode::
 * Current Version::
@@ -1205,10 +1206,22 @@ upstream version.
 @node Update Check Ignore
 @section Update Check Ignore
 
+@cindex Update Check Ignore
+
 When checking for updates (via @code{Update Check Mode}) this can be used to
 specify a regex which, if matched against the version name, causes that version
 to be ignored. For example, 'beta' could be specified to ignore version names
 that include that text.
+
+@node Update Check Name
+@section Update Check Name
+
+@cindex Update Check Name
+
+When checking for updates (via @code{Update Check Mode}) this can be used to
+specify the package name to search for. Useful when apps have a static package
+name but change it programmatically in some app flavors, by e.g. appending
+".open" or ".free" at the end of the package name.
 
 @node Update Check Data
 @section Update Check Data
