@@ -62,7 +62,7 @@ def get_icon_dirs(repodir):
     yield os.path.join(repodir, "icons")
 
 
-def update_wiki(apps, apks):
+def update_wiki(apps, sortedids, apks):
     """Update the wiki
 
     :param apps: fully populated list of all applications
@@ -77,7 +77,10 @@ def update_wiki(apps, apks):
     site.login(config['wiki_user'], config['wiki_password'])
     generated_pages = {}
     generated_redirects = {}
-    for app in apps:
+
+    for appid in sortedids:
+        app = apps[appid]
+
         wikidata = ''
         if app['Disabled']:
             wikidata += '{{Disabled|' + app['Disabled'] + '}}\n'
@@ -85,7 +88,7 @@ def update_wiki(apps, apks):
             for af in app['AntiFeatures'].split(','):
                 wikidata += '{{AntiFeature|' + af + '}}\n'
         wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|dogecoin=%s|license=%s|root=%s}}\n' % (
-            app['id'],
+            appid,
             app['Name'],
             time.strftime('%Y-%m-%d', app['added']) if 'added' in app else '',
             time.strftime('%Y-%m-%d', app['lastupdated']) if 'lastupdated' in app else '',
@@ -104,7 +107,7 @@ def update_wiki(apps, apks):
             wikidata += "This app provides: %s" % ', '.join(app['Summary'].split(','))
 
         wikidata += app['Summary']
-        wikidata += " - [https://f-droid.org/repository/browse/?fdid=" + app['id'] + " view in repository]\n\n"
+        wikidata += " - [https://f-droid.org/repository/browse/?fdid=" + appid + " view in repository]\n\n"
 
         wikidata += "=Description=\n"
         wikidata += metadata.description_wiki(app['Description']) + "\n"
@@ -112,7 +115,7 @@ def update_wiki(apps, apks):
         wikidata += "=Maintainer Notes=\n"
         if 'Maintainer Notes' in app:
             wikidata += metadata.description_wiki(app['Maintainer Notes']) + "\n"
-        wikidata += "\nMetadata: [https://gitlab.com/fdroid/fdroiddata/blob/master/metadata/{0}.txt current] [https://gitlab.com/fdroid/fdroiddata/commits/master/metadata/{0}.txt history]\n".format(app['id'])
+        wikidata += "\nMetadata: [https://gitlab.com/fdroid/fdroiddata/blob/master/metadata/{0}.txt current] [https://gitlab.com/fdroid/fdroiddata/commits/master/metadata/{0}.txt history]\n".format(appid)
 
         # Get a list of all packages for this application...
         apklist = []
@@ -120,7 +123,7 @@ def update_wiki(apps, apks):
         cantupdate = False
         buildfails = False
         for apk in apks:
-            if apk['id'] == app['id']:
+            if apk['id'] == appid:
                 if str(apk['versioncode']) == app['Current Version Code']:
                     gotcurrentver = True
                 apklist.append(apk)
@@ -144,7 +147,7 @@ def update_wiki(apps, apks):
                     buildfails = True
                     apklist.append({'versioncode': int(thisbuild['vercode']),
                                     'version': thisbuild['version'],
-                                    'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(app['id'], thisbuild['vercode'])
+                                    'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(appid, thisbuild['vercode'])
                                     })
         if app['Current Version Code'] == '0':
             cantupdate = True
@@ -200,7 +203,7 @@ def update_wiki(apps, apks):
 
         # We can't have underscores in the page name, even if they're in
         # the package ID, because MediaWiki messes with them...
-        pagename = app['id'].replace('_', ' ')
+        pagename = appid.replace('_', ' ')
 
         # Drop a trailing newline, because mediawiki is going to drop it anyway
         # and it we don't we'll think the page has changed when it hasn't...
@@ -270,10 +273,10 @@ def delete_disabled_builds(apps, apkcache, repodirs):
     :param apkcache: current apk cache information
     :param repodirs: the repo directories to process
     """
-    for app in apps:
+    for appid, app in apps.iteritems():
         for build in app['builds']:
             if build['disable']:
-                apkfilename = app['id'] + '_' + str(build['vercode']) + '.apk'
+                apkfilename = appid + '_' + str(build['vercode']) + '.apk'
                 for repodir in repodirs:
                     apkpath = os.path.join(repodir, apkfilename)
                     ascpath = apkpath + ".asc"
@@ -605,7 +608,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 repo_pubkey_fingerprint = None
 
 
-def make_index(apps, apks, repodir, archive, categories):
+def make_index(apps, sortedids, apks, repodir, archive, categories):
     """Make a repo index.
 
     :param apps: fully populated apps list
@@ -682,7 +685,8 @@ def make_index(apps, apks, repodir, archive, categories):
 
     root.appendChild(repoel)
 
-    for app in apps:
+    for appid in sortedids:
+        app = apps[appid]
 
         if app['Disabled'] is not None:
             continue
@@ -690,7 +694,7 @@ def make_index(apps, apks, repodir, archive, categories):
         # Get a list of the apks for this app...
         apklist = []
         for apk in apks:
-            if apk['id'] == app['id']:
+            if apk['id'] == appid:
                 apklist.append(apk)
 
         if len(apklist) == 0:
@@ -710,11 +714,11 @@ def make_index(apps, apks, repodir, archive, categories):
         if app['icon']:
             addElement('icon', app['icon'], doc, apel)
 
-        def linkres(link):
-            for app in apps:
-                if app['id'] == link:
-                    return ("fdroid.app:" + link, app['Name'])
-            raise MetaDataException("Cannot resolve app id " + link)
+        def linkres(appid):
+            if appid in apps:
+                return ("fdroid:app" + appid, apps[appid]['Name'])
+            raise MetaDataException("Cannot resolve app id " + appid)
+
         addElement('desc',
                    metadata.description_html(app['Description'], linkres),
                    doc, apel)
@@ -855,12 +859,12 @@ def make_index(apps, apks, repodir, archive, categories):
 
 def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversions):
 
-    for app in apps:
+    for appid, app in apps.iteritems():
 
         # Get a list of the apks for this app...
         apklist = []
         for apk in apks:
-            if apk['id'] == app['id']:
+            if apk['id'] == appid:
                 apklist.append(apk)
 
         # Sort the apk list into version order...
@@ -948,7 +952,7 @@ def main():
 
     # Generate a list of categories...
     categories = set()
-    for app in apps:
+    for app in apps.itervalues():
         categories.update(app['Categories'])
 
     # Read known apks data (will be updated and written back when we've finished)
@@ -975,12 +979,7 @@ def main():
     # metadata files, if requested on the command line)
     newmetadata = False
     for apk in apks:
-        found = False
-        for app in apps:
-            if app['id'] == apk['id']:
-                found = True
-                break
-        if not found:
+        if apk['id'] not in apps:
             if options.create_metadata:
                 if 'name' not in apk:
                     logging.error(apk['id'] + ' does not have a name! Skipping...')
@@ -1025,12 +1024,12 @@ def main():
     # level. When doing this, we use the info from the most recent version's apk.
     # We deal with figuring out when the app was added and last updated at the
     # same time.
-    for app in apps:
+    for appid, app in apps.iteritems():
         bestver = 0
         added = None
         lastupdated = None
         for apk in apks + archapks:
-            if apk['id'] == app['id']:
+            if apk['id'] == appid:
                 if apk['versioncode'] > bestver:
                     bestver = apk['versioncode']
                     bestapk = apk
@@ -1044,17 +1043,17 @@ def main():
         if added:
             app['added'] = added
         else:
-            logging.warn("Don't know when " + app['id'] + " was added")
+            logging.warn("Don't know when " + appid + " was added")
         if lastupdated:
             app['lastupdated'] = lastupdated
         else:
-            logging.warn("Don't know when " + app['id'] + " was last updated")
+            logging.warn("Don't know when " + appid + " was last updated")
 
         if bestver == 0:
             if app['Name'] is None:
-                app['Name'] = app['id']
+                app['Name'] = appid
             app['icon'] = None
-            logging.warn("Application " + app['id'] + " has no packages")
+            logging.warn("Application " + appid + " has no packages")
         else:
             if app['Name'] is None:
                 app['Name'] = bestapk['name']
@@ -1063,18 +1062,18 @@ def main():
     # Sort the app list by name, then the web site doesn't have to by default.
     # (we had to wait until we'd scanned the apks to do this, because mostly the
     # name comes from there!)
-    apps = sorted(apps, key=lambda app: app['Name'].upper())
+    sortedids = sorted(apps.iterkeys(), key=lambda appid: apps[appid]['Name'].upper())
 
     if len(repodirs) > 1:
         archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])
 
     # Make the index for the main repo...
-    make_index(apps, apks, repodirs[0], False, categories)
+    make_index(apps, sortedids, apks, repodirs[0], False, categories)
 
     # If there's an archive repo,  make the index for it. We already scanned it
     # earlier on.
     if len(repodirs) > 1:
-        make_index(apps, archapks, repodirs[1], True, categories)
+        make_index(apps, sortedids, archapks, repodirs[1], True, categories)
 
     if config['update_stats']:
 
@@ -1087,13 +1086,11 @@ def main():
             for line in file(os.path.join('stats', 'latestapps.txt')):
                 appid = line.rstrip()
                 data += appid + "\t"
-                for app in apps:
-                    if app['id'] == appid:
-                        data += app['Name'] + "\t"
-                        if app['icon'] is not None:
-                            data += app['icon'] + "\t"
-                        data += app['License'] + "\n"
-                        break
+                app = apps[appid]
+                data += app['Name'] + "\t"
+                if app['icon'] is not None:
+                    data += app['icon'] + "\t"
+                data += app['License'] + "\n"
             f = open(os.path.join(repodirs[0], 'latestapps.dat'), 'w')
             f.write(data)
             f.close()
@@ -1104,7 +1101,7 @@ def main():
 
     # Update the wiki...
     if options.wiki:
-        update_wiki(apps, apks + archapks)
+        update_wiki(apps, sortedids, apks + archapks)
 
     logging.info("Finished.")
 

@@ -480,30 +480,30 @@ def read_metadata(xref=True):
     # their source repository.
     read_srclibs()
 
-    apps = []
+    apps = {}
 
     for basedir in ('metadata', 'tmp'):
         if not os.path.exists(basedir):
             os.makedirs(basedir)
 
     for metafile in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
-        appinfo = parse_metadata(metafile)
+        appid, appinfo = parse_metadata(metafile)
         check_metadata(appinfo)
-        apps.append(appinfo)
+        apps[appid] = appinfo
 
     if xref:
         # Parse all descriptions at load time, just to ensure cross-referencing
         # errors are caught early rather than when they hit the build server.
-        def linkres(link):
-            for app in apps:
-                if app['id'] == link:
-                    return ("fdroid.app:" + link, "Dummy name - don't know yet")
-            raise MetaDataException("Cannot resolve app id " + link)
-        for app in apps:
+        def linkres(appid):
+            if appid in apps:
+                return ("fdroid:app" + appid, "Dummy name - don't know yet")
+            raise MetaDataException("Cannot resolve app id " + appid)
+
+        for appid, app in apps.iteritems():
             try:
                 description_html(app['Description'], linkres)
             except MetaDataException, e:
-                raise MetaDataException("Problem with description of " + app['id'] +
+                raise MetaDataException("Problem with description of " + appid +
                                         " - " + str(e))
 
     return apps
@@ -568,7 +568,6 @@ def fill_build_defaults(build):
 #
 # Known keys not originating from the metadata are:
 #
-#  'id'               - the application's package ID
 #  'builds'           - a list of dictionaries containing build information
 #                       for each defined build
 #  'comments'         - a list of comments from the metadata file. Each is
@@ -582,6 +581,7 @@ def fill_build_defaults(build):
 #
 def parse_metadata(metafile):
 
+    appid = None
     linedesc = None
 
     def add_buildflag(p, thisbuild):
@@ -654,11 +654,10 @@ def parse_metadata(metafile):
     if metafile:
         if not isinstance(metafile, file):
             metafile = open(metafile, "r")
-        thisinfo['id'] = metafile.name[9:-4]
-    else:
-        thisinfo['id'] = None
+        appid = metafile.name[9:-4]
 
     thisinfo.update(app_defaults)
+    thisinfo['id'] = appid
 
     # General defaults...
     thisinfo['builds'] = []
@@ -783,7 +782,7 @@ def parse_metadata(metafile):
     for build in thisinfo['builds']:
         fill_build_defaults(build)
 
-    return thisinfo
+    return (appid, thisinfo)
 
 
 # Write a metadata file.

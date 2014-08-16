@@ -570,13 +570,13 @@ def main():
                                      .format(common.getappname(app), version))
         return
 
-    for app in apps:
+    for appid, app in apps.iteritems():
 
         if options.autoonly and app['Auto Update Mode'] in ('None', 'Static'):
-            logging.debug("Nothing to do for {0}...".format(app['id']))
+            logging.debug("Nothing to do for {0}...".format(appid))
             continue
 
-        logging.info("Processing " + app['id'] + '...')
+        logging.info("Processing " + appid + '...')
 
         checkupdates_app(app)
 

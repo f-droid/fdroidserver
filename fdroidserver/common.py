@@ -266,7 +266,10 @@ def read_app_args(args, allapps, allow_vercodes=False):
     if not vercodes:
         return allapps
 
-    apps = [app for app in allapps if app['id'] in vercodes]
+    apps = {}
+    for appid, app in allapps.iteritems():
+        if appid in vercodes:
+            apps[appid] = app
 
     if len(apps) != len(vercodes):
         allids = [app["id"] for app in allapps]
@@ -278,17 +281,17 @@ def read_app_args(args, allapps, allow_vercodes=False):
         raise FDroidException("No packages specified")
 
     error = False
-    for app in apps:
-        vc = vercodes[app['id']]
+    for appid, app in apps.iteritems():
+        vc = vercodes[appid]
         if not vc:
             continue
         app['builds'] = [b for b in app['builds'] if b['vercode'] in vc]
-        if len(app['builds']) != len(vercodes[app['id']]):
+        if len(app['builds']) != len(vercodes[appid]):
             error = True
             allvcs = [b['vercode'] for b in app['builds']]
-            for v in vercodes[app['id']]:
+            for v in vercodes[appid]:
                 if v not in allvcs:
-                    logging.critical("No such vercode %s for app %s" % (v, app['id']))
+                    logging.critical("No such vercode %s for app %s" % (v, appid))
 
     if error:
         raise FDroidException("Found invalid vercodes for some apps")
@@ -617,15 +620,13 @@ class vcs_gitsvn(vcs):
                         gitsvn_cmd += ' -t %s' % i[5:]
                     elif i.startswith('branches='):
                         gitsvn_cmd += ' -b %s' % i[9:]
-                p = SilentPopen([gitsvn_cmd + " %s %s" % (remote_split[0], self.local)], shell=True)
-                if p.returncode != 0:
+                if subprocess.call([gitsvn_cmd + " %s %s" % (remote_split[0], self.local)], shell=True) != 0:
                     self.clone_failed = True
-                    raise VCSException("Git svn clone failed", p.output)
+                    raise VCSException("Git svn clone failed")
             else:
-                p = SilentPopen([gitsvn_cmd + " %s %s" % (self.remote, self.local)], shell=True)
-                if p.returncode != 0:
+                if subprocess.call([gitsvn_cmd + " %s %s" % (self.remote, self.local)], shell=True) != 0:
                     self.clone_failed = True
-                    raise VCSException("Git svn clone failed", p.output)
+                    raise VCSException("Git svn clone failed")
             self.checkrepo()
         else:
             self.checkrepo()

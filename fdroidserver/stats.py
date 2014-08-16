@@ -71,7 +71,7 @@ def main():
         sys.exit(1)
 
     # Get all metadata-defined apps...
-    metaapps = [a for a in metadata.read_metadata() if not a['Disabled']]
+    metaapps = [a for a in metadata.read_metadata().itervalues() if not a['Disabled']]
 
     statsdir = 'stats'
     logsdir = os.path.join(statsdir, 'logs')

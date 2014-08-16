@@ -88,9 +88,9 @@ def main():
     allapps = metadata.read_metadata()
     vercodes = common.read_pkg_args(args, True)
     allaliases = []
-    for app in allapps:
+    for appid in allapps:
         m = md5.new()
-        m.update(app['id'])
+        m.update(appid)
         keyalias = m.hexdigest()[:8]
         if keyalias in allaliases:
             logging.error("There is a keyalias collision - publishing halted")

@@ -57,20 +57,20 @@ def main():
     srclib_dir = os.path.join(build_dir, 'srclib')
     extlib_dir = os.path.join(build_dir, 'extlib')
 
-    for app in apps:
+    for appid, app in apps.iteritems():
 
         if app['Disabled']:
-            logging.info("Skipping %s: disabled" % app['id'])
+            logging.info("Skipping %s: disabled" % appid)
             continue
         if not app['builds']:
-            logging.info("Skipping %s: no builds specified" % app['id'])
+            logging.info("Skipping %s: no builds specified" % appid)
             continue
 
-        logging.info("Processing " + app['id'])
+        logging.info("Processing " + appid)
 
         try:
 
-            build_dir = 'build/' + app['id']
+            build_dir = 'build/' + appid
 
             # Set up vcs interface and make sure we have the latest code...
             vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
@@ -91,17 +91,17 @@ def main():
                     # Do the scan...
                     buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
                     for problem in buildprobs:
-                        problems.append(problem + ' in ' + app['id']
+                        problems.append(problem + ' in ' + appid
                                         + ' ' + thisbuild['version'])
 
         except BuildException as be:
-            msg = "Could not scan app %s due to BuildException: %s" % (app['id'], be)
+            msg = "Could not scan app %s due to BuildException: %s" % (appid, be)
             problems.append(msg)
         except VCSException as vcse:
-            msg = "VCS error while scanning app %s: %s" % (app['id'], vcse)
+            msg = "VCS error while scanning app %s: %s" % (appid, vcse)
             problems.append(msg)
         except Exception:
-            msg = "Could not scan app %s due to unknown error: %s" % (app['id'], traceback.format_exc())
+            msg = "Could not scan app %s due to unknown error: %s" % (appid, traceback.format_exc())
             problems.append(msg)
 
     logging.info("Finished:")

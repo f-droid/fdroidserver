@@ -564,7 +564,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         if jni_components == ['yes']:
             jni_components = ['']
-        cmd = [os.path.join(config['ndk_path'], "ndk-build"), "-j1"]
+        cmd = [os.path.join(config['ndk_path'], "ndk-build"), "-j4"]
         for d in jni_components:
             if d:
                 logging.info("Building native code in '%s'" % d)
@@ -990,14 +990,15 @@ def main():
     allapps = metadata.read_metadata(xref=not options.onserver)
 
     apps = common.read_app_args(args, allapps, True)
-    apps = [app for app in apps if (options.force or not app['Disabled']) and
-            len(app['Repo Type']) > 0 and len(app['builds']) > 0]
+    for appid, app in apps.items():
+        if (app['Disabled'] and not options.force) or not app['Repo Type'] or not app['builds']:
+            del apps[appid]
 
-    if len(apps) == 0:
+    if not apps:
         raise FDroidException("No apps to process.")
 
     if options.latest:
-        for app in apps:
+        for app in apps.itervalues():
             for build in reversed(app['builds']):
                 if build['disable']:
                     continue
@@ -1013,7 +1014,7 @@ def main():
     # Build applications...
     failed_apps = {}
     build_succeeded = []
-    for app in apps:
+    for appid, app in apps.iteritems():
 
         first = True
 
@@ -1028,7 +1029,7 @@ def main():
                     if app['Repo Type'] == 'srclib':
                         build_dir = os.path.join('build', 'srclib', app['Repo'])
                     else:
-                        build_dir = os.path.join('build', app['id'])
+                        build_dir = os.path.join('build', appid)
 
                     # Set up vcs interface and make sure we have the latest code...
                     logging.debug("Getting {0} vcs interface for {1}"
@@ -1046,39 +1047,39 @@ def main():
                     build_succeeded.append(app)
                     wikilog = "Build succeeded"
             except BuildException as be:
-                logfile = open(os.path.join(log_dir, app['id'] + '.log'), 'a+')
+                logfile = open(os.path.join(log_dir, appid + '.log'), 'a+')
                 logfile.write(str(be))
                 logfile.close()
-                print("Could not build app %s due to BuildException: %s" % (app['id'], be))
+                print("Could not build app %s due to BuildException: %s" % (appid, be))
                 if options.stop:
                     sys.exit(1)
-                failed_apps[app['id']] = be
+                failed_apps[appid] = be
                 wikilog = be.get_wikitext()
             except VCSException as vcse:
                 reason = str(vcse).split('\n', 1)[0] if options.verbose else str(vcse)
                 logging.error("VCS error while building app %s: %s" % (
-                    app['id'], reason))
+                    appid, reason))
                 if options.stop:
                     sys.exit(1)
-                failed_apps[app['id']] = vcse
+                failed_apps[appid] = vcse
                 wikilog = str(vcse)
             except Exception as e:
                 logging.error("Could not build app %s due to unknown error: %s" % (
-                    app['id'], traceback.format_exc()))
+                    appid, traceback.format_exc()))
                 if options.stop:
                     sys.exit(1)
-                failed_apps[app['id']] = e
+                failed_apps[appid] = e
                 wikilog = str(e)
 
             if options.wiki and wikilog:
                 try:
                     # Write a page with the last build log for this version code
-                    lastbuildpage = app['id'] + '/lastbuild_' + thisbuild['vercode']
+                    lastbuildpage = appid + '/lastbuild_' + thisbuild['vercode']
                     newpage = site.Pages[lastbuildpage]
                     txt = "Build completed at " + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + "\n\n" + wikilog
                     newpage.save(txt, summary='Build log')
                     # Redirect from /lastbuild to the most recent build log
-                    newpage = site.Pages[app['id'] + '/lastbuild']
+                    newpage = site.Pages[appid + '/lastbuild']
                     newpage.save('#REDIRECT [[' + lastbuildpage + ']]', summary='Update redirect')
                 except:
                     logging.error("Error while attempting to publish build log")

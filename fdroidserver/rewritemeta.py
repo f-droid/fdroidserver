@@ -45,9 +45,9 @@ def main():
     allapps = metadata.read_metadata(xref=True)
     apps = common.read_app_args(args, allapps, False)
 
-    for app in apps:
-        logging.info("Writing " + app['id'])
-        metadata.write_metadata(os.path.join('metadata', app['id']) + '.txt', app)
+    for appid, app in apps.iteritems():
+        logging.info("Writing " + appid)
+        metadata.write_metadata(os.path.join('metadata', appid) + '.txt', app)
 
     logging.info("Finished.")
 

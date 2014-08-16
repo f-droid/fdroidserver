@@ -164,8 +164,7 @@ def main():
     allapps = metadata.read_metadata(xref=False)
     apps = common.read_app_args(args, allapps, False)
 
-    for app in apps:
-        appid = app['id']
+    for appid, app in apps.iteritems():
         lastcommit = ''
 
         if app['Disabled']:

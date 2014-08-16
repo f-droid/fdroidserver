@@ -265,14 +265,12 @@ def main():
             sys.exit(1)
 
     # Make sure it's actually new...
-    for app in apps:
-        if app['id'] == package:
-            logging.error("Package " + package + " already exists")
-            sys.exit(1)
+    if package in apps:
+        logging.error("Package " + package + " already exists")
+        sys.exit(1)
 
     # Construct the metadata...
-    app = metadata.parse_metadata(None)
-    app['id'] = package
+    app = metadata.parse_metadata(None)[1]
     app['Web Site'] = website
     app['Source Code'] = sourcecode
     if issuetracker:
