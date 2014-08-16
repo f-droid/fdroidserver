@@ -620,12 +620,12 @@ class vcs_gitsvn(vcs):
                 p = SilentPopen([gitsvn_cmd + " %s %s" % (remote_split[0], self.local)], shell=True)
                 if p.returncode != 0:
                     self.clone_failed = True
-                    raise VCSException("Git clone failed", p.output)
+                    raise VCSException("Git svn clone failed", p.output)
             else:
                 p = SilentPopen([gitsvn_cmd + " %s %s" % (self.remote, self.local)], shell=True)
                 if p.returncode != 0:
                     self.clone_failed = True
-                    raise VCSException("Git clone failed", p.output)
+                    raise VCSException("Git svn clone failed", p.output)
             self.checkrepo()
         else:
             self.checkrepo()
@@ -691,7 +691,7 @@ class vcs_gitsvn(vcs):
                     # Check out the git rev equivalent to the svn rev
                     p = SilentPopen(['git', 'checkout', git_rev], cwd=self.local)
                     if p.returncode != 0:
-                        raise VCSException("Git svn checkout of '%s' failed" % rev, p.output)
+                        raise VCSException("Git checkout of '%s' failed" % rev, p.output)
 
         # Get rid of any uncontrolled files left behind
         p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
