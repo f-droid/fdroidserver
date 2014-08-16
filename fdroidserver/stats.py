@@ -214,13 +214,9 @@ def main():
     logging.info("Processing repo types...")
     repotypes = Counter()
     for app in metaapps:
-        if len(app['Repo Type']) == 0:
-            rtype = 'none'
-        else:
-            if app['Repo Type'] == 'srclib':
-                rtype = common.getsrclibvcs(app['Repo'])
-            else:
-                rtype = app['Repo Type']
+        rtype = app['Repo Type'] or 'none'
+        if rtype == 'srclib':
+            rtype = common.getsrclibvcs(app['Repo'])
         repotypes[rtype] += 1
     f = open('stats/repotypes.txt', 'w')
     for rtype in repotypes:
