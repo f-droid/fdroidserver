@@ -664,7 +664,7 @@ def parse_metadata(metafile):
     thisinfo['comments'] = []
 
     if metafile is None:
-        return thisinfo
+        return appid, thisinfo
 
     mode = 0
     buildlines = []
