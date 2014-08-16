@@ -34,6 +34,7 @@ while read line; do
 	case "$line" in
 		*'??'*'metadata/'*'.txt') new=true ;;
 		*'M'*'metadata/'*'.txt') new=false ;;
+		*) continue ;;
 	esac
 
 	file=${line##* }
