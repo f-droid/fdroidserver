@@ -564,7 +564,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         if jni_components == ['yes']:
             jni_components = ['']
-        cmd = [os.path.join(config['ndk_path'], "ndk-build"), "-j4"]
+        cmd = [os.path.join(config['ndk_path'], "ndk-build"), "-j1"]
         for d in jni_components:
             if d:
                 logging.info("Building native code in '%s'" % d)

@@ -620,13 +620,15 @@ class vcs_gitsvn(vcs):
                         gitsvn_cmd += ' -t %s' % i[5:]
                     elif i.startswith('branches='):
                         gitsvn_cmd += ' -b %s' % i[9:]
-                if subprocess.call([gitsvn_cmd + " %s %s" % (remote_split[0], self.local)], shell=True) != 0:
+                p = SilentPopen([gitsvn_cmd + " %s %s" % (remote_split[0], self.local)], shell=True)
+                if p.returncode != 0:
                     self.clone_failed = True
-                    raise VCSException("Git svn clone failed")
+                    raise VCSException("Git svn clone failed", p.output)
             else:
-                if subprocess.call([gitsvn_cmd + " %s %s" % (self.remote, self.local)], shell=True) != 0:
+                p = SilentPopen([gitsvn_cmd + " %s %s" % (self.remote, self.local)], shell=True)
+                if p.returncode != 0:
                     self.clone_failed = True
-                    raise VCSException("Git svn clone failed")
+                    raise VCSException("Git svn clone failed", p.output)
             self.checkrepo()
         else:
             self.checkrepo()
