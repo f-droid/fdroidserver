@@ -1438,7 +1438,9 @@ def scan_source(build_dir, root_dir, thisbuild):
         logging.warn('Found %s at %s' % (what, fd))
 
     def handleproblem(what, fd, fp):
-        if todelete(fd):
+        if toignore(fd):
+            logging.info('Ignoring %s at %s' % (what, fd))
+        elif todelete(fd):
             removeproblem(what, fd, fp)
         else:
             logging.error('Found %s at %s' % (what, fd))
@@ -1458,10 +1460,6 @@ def scan_source(build_dir, root_dir, thisbuild):
             # Path (relative) to the file
             fp = os.path.join(r, curfile)
             fd = fp[len(build_dir) + 1:]
-
-            # Check if this file has been explicitly excluded from scanning
-            if toignore(fd):
-                continue
 
             try:
                 mime = magic.from_file(fp, mime=True) if ms is None else ms.file(fp)
