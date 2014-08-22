@@ -49,6 +49,7 @@ def get_default_config():
         'gradle': 'gradle',
         'sync_from_local_copy_dir': False,
         'update_stats': False,
+        'stats_ignore': [],
         'stats_to_carbon': False,
         'repo_maxage': 0,
         'build_server_always': False,

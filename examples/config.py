@@ -165,6 +165,10 @@ wiki_password = "1234"
 # machine.
 update_stats = False
 
+# When used with stats, this is a list of IP addresses that are ignored for
+# calculation purposes.
+stats_ignore = []
+
 # Use the following to push stats to a Carbon instance:
 stats_to_carbon = False
 carbon_host = '0.0.0.0'

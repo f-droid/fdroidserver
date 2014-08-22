@@ -154,20 +154,26 @@ def main():
                 p = subprocess.Popen(["zcat", logfile], stdout=subprocess.PIPE)
                 matches = (logsearch(line) for line in p.stdout)
                 for match in matches:
-                    if match and match.group('statuscode') == '200':
-                        uri = match.group('uri')
-                        if uri.endswith('.apk'):
-                            _, apkname = os.path.split(uri)
-                            app = knownapks.getapp(apkname)
-                            if app:
-                                appid, _ = app
-                                today['apps'][appid] += 1
-                                # Strip the '.apk' from apkname
-                                appver = apkname[:-4]
-                                today['appsver'][appver] += 1
-                            else:
-                                if apkname not in today['unknown']:
-                                    today['unknown'].append(apkname)
+                    if not match:
+                        continue
+                    if match.group('statuscode') != '200':
+                        continue
+                    if match.group('ip') in config['stats_ignore']:
+                        continue
+                    uri = match.group('uri')
+                    if not uri.endswith('.apk'):
+                        continue
+                    _, apkname = os.path.split(uri)
+                    app = knownapks.getapp(apkname)
+                    if app:
+                        appid, _ = app
+                        today['apps'][appid] += 1
+                        # Strip the '.apk' from apkname
+                        appver = apkname[:-4]
+                        today['appsver'][appver] += 1
+                    else:
+                        if apkname not in today['unknown']:
+                            today['unknown'].append(apkname)
 
                 # Save calculated aggregate data for today to cache
                 with open(agg_path, 'w') as f:
