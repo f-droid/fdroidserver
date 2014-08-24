@@ -78,6 +78,10 @@ regex_warnings = {
         (re.compile(r'^(|None|Unknown)$'),
          "No license specified"),
         ],
+    'Summary': [
+        (re.compile(r'^$'),
+         "Summary yet to be filled"),
+        ],
     'Description': [
         (re.compile(r'^No description available$'),
          "Description yet to be filled"),
