@@ -184,17 +184,15 @@ def main():
             warn("Summary of length %s is over the %i char limit" % (
                 summ_chars, config['char_limits']['Summary']))
 
-        # Redundant summaries
-        summary = app['Summary']
+        # Redundant summaries or descriptions
         name = app['Name'] or app['Auto Name']
-        if summary and name:
-            summary_l = summary.lower()
-            name_l = name.lower()
-            if summary_l == name_l:
-                warn("Summary '%s' is just the app's name" % summary)
-            elif (summary_l in name_l or name_l in summary_l):
-                pwarn("Summary '%s' probably contains redundant info already in app name '%s'" % (
-                    summary, name))
+        if app['Summary'] and name:
+            if app['Summary'].lower() == name.lower():
+                warn("Summary '%s' is just the app's name" % app['Summary'])
+
+        if app['Summary'] and app['Description']:
+            if app['Summary'].lower() == app['Description'][0].lower():
+                warn("Description '%s' is just the app's summary" % app['Summary'])
 
         # Description size limit
         desc_chars = sum(len(l) for l in app['Description'])
