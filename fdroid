@@ -22,6 +22,7 @@ import sys
 import logging
 
 from fdroidserver.common import FDroidException
+from optparse import OptionError
 
 commands = {
     "build": "Build a package from source",
@@ -95,6 +96,9 @@ def main():
             raise
         else:
             logging.critical(str(e))
+        sys.exit(1)
+    except OptionError, e:
+        logging.critical(str(e))
         sys.exit(1)
     except KeyboardInterrupt:
         print('')
