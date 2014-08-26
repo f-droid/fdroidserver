@@ -128,16 +128,16 @@ regex_pedantic = {
 
 def main():
 
-    global config, options, appid, count
-    appid = None
+    global config, options, curid, count
+    curid = None
 
     count = Counter()
 
     def warn(message):
-        global appid, count
-        if appid:
-            print "%s:" % appid
-            appid = None
+        global curid, count
+        if curid:
+            print "%s:" % curid
+            curid = None
             count['app'] += 1
         print '    %s' % message
         count['warn'] += 1
@@ -163,6 +163,7 @@ def main():
     apps = common.read_app_args(args, allapps, False)
 
     for appid, app in apps.iteritems():
+        curid = appid
         lastcommit = ''
 
         if app['Disabled']:
@@ -240,7 +241,7 @@ def main():
                         # TODO: This should not be pedantic!
                         pwarn("'%s' used in %s '%s'" % (s, flag, build[flag]))
 
-        if not appid:
+        if not curid:
             print
 
     logging.info("Found a total of %i warnings in %i apps." % (count['warn'], count['app']))
