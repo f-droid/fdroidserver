@@ -877,7 +877,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
             if os.path.exists(dest_also):
                 return False
 
-    if thisbuild['disable']:
+    if thisbuild['disable'] and not options.force:
         return False
 
     logging.info("Building version %s (%s) of %s" % (
@@ -1000,7 +1000,7 @@ def main():
     if options.latest:
         for app in apps.itervalues():
             for build in reversed(app['builds']):
-                if build['disable']:
+                if build['disable'] and not options.force:
                     continue
                 app['builds'] = [build]
                 break
