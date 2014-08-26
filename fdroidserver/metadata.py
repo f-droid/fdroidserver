@@ -810,33 +810,29 @@ def write_metadata(dest, app):
             value = ','.join(value)
         mf.write("%s:%s\n" % (field, value))
 
+    def writefield_nonempty(field, value=None):
+        if value is None:
+            value = app[field]
+        if value:
+            writefield(field, value)
+
     mf = open(dest, 'w')
-    if app['Disabled']:
-        writefield('Disabled')
-    if app['AntiFeatures']:
-        writefield('AntiFeatures')
-    if app['Provides']:
-        writefield('Provides')
+    writefield_nonempty('Disabled')
+    writefield_nonempty('AntiFeatures')
+    writefield_nonempty('Provides')
     writefield('Categories')
     writefield('License')
     writefield('Web Site')
     writefield('Source Code')
     writefield('Issue Tracker')
-    if app['Donate']:
-        writefield('Donate')
-    if app['FlattrID']:
-        writefield('FlattrID')
-    if app['Bitcoin']:
-        writefield('Bitcoin')
-    if app['Litecoin']:
-        writefield('Litecoin')
-    if app['Dogecoin']:
-        writefield('Dogecoin')
+    writefield_nonempty('Donate')
+    writefield_nonempty('FlattrID')
+    writefield_nonempty('Bitcoin')
+    writefield_nonempty('Litecoin')
+    writefield_nonempty('Dogecoin')
     mf.write('\n')
-    if app['Name']:
-        writefield('Name')
-    if app['Auto Name']:
-        writefield('Auto Name')
+    writefield_nonempty('Name')
+    writefield_nonempty('Auto Name')
     writefield('Summary')
     writefield('Description', '')
     for line in app['Description']:
@@ -896,18 +892,13 @@ def write_metadata(dest, app):
         mf.write('.\n')
         mf.write('\n')
 
-    if app['Archive Policy']:
-        writefield('Archive Policy')
+    writefield_nonempty('Archive Policy')
     writefield('Auto Update Mode')
     writefield('Update Check Mode')
-    if app['Update Check Ignore']:
-        writefield('Update Check Ignore')
-    if app['Vercode Operation']:
-        writefield('Vercode Operation')
-    if app['Update Check Name']:
-        writefield('Update Check Name')
-    if app['Update Check Data']:
-        writefield('Update Check Data')
+    writefield_nonempty('Update Check Ignore')
+    writefield_nonempty('Vercode Operation')
+    writefield_nonempty('Update Check Name')
+    writefield_nonempty('Update Check Data')
     if app['Current Version']:
         writefield('Current Version')
         writefield('Current Version Code')
