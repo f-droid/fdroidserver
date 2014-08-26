@@ -679,7 +679,8 @@ def parse_metadata(metafile):
         line = line.rstrip('\r\n')
         if mode == 3:
             if not any(line.startswith(s) for s in (' ', '\t')):
-                if 'commit' not in curbuild and 'disable' not in curbuild:
+                commit = curbuild['commit'] if 'commit' in curbuild else None
+                if not commit and 'disable' not in curbuild:
                     raise MetaDataException("No commit specified for {0} in {1}"
                                             .format(curbuild['version'], linedesc))
 
