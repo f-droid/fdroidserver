@@ -146,6 +146,10 @@ for f, src, shasum in cachefiles:
 vagrantfile = """
 Vagrant::Config.run do |config|
 
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box
+  end
+
   config.vm.box = "{0}"
   config.vm.box_url = "{1}"
 
