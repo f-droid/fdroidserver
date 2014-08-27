@@ -116,6 +116,8 @@ Ruby (debian packages ruby and rubygems)
 Vagrant (unpackaged) Be sure to use 1.3.x because 1.4.x is completely broken
 (at the time of writing, the forthcoming 1.4.3 might work)
 @item
+vagrant-cachier plugin (unpackaged): `vagrant plugin install vagrant-cachier`
+@item
 Paramiko (debian package python-paramiko)
 @item
 Imaging (debian package python-imaging)
