@@ -716,7 +716,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
 
         def linkres(appid):
             if appid in apps:
-                return ("fdroid:app" + appid, apps[appid]['Name'])
+                return ("fdroid.app:" + appid, apps[appid]['Name'])
             raise MetaDataException("Cannot resolve app id " + appid)
 
         addElement('desc',

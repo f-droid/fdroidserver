@@ -496,7 +496,7 @@ def read_metadata(xref=True):
         # errors are caught early rather than when they hit the build server.
         def linkres(appid):
             if appid in apps:
-                return ("fdroid:app" + appid, "Dummy name - don't know yet")
+                return ("fdroid.app:" + appid, "Dummy name - don't know yet")
             raise MetaDataException("Cannot resolve app id " + appid)
 
         for appid, app in apps.iteritems():
