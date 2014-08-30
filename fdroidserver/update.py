@@ -465,6 +465,16 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                     sha.update(t)
                 thisinfo['sha256'] = sha.hexdigest()
 
+            # verify the jar signature is correct
+            args = ['jarsigner', '-verify']
+            if options.verbose:
+                args += ['-verbose', '-certs']
+            args += apkfile
+            p = FDroidPopen(args)
+            if p.returncode != 0:
+                logging.critical(apkfile + " has a bad signature!")
+                sys.exit(1)
+
             # Get the signature (or md5 of, to be precise)...
             getsig_dir = os.path.join(os.path.dirname(__file__), 'getsig')
             if not os.path.exists(getsig_dir + "/getsig.class"):
