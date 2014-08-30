@@ -1,13 +1,7 @@
 #!/usr/bin/env python2
 
 from setuptools import setup
-import os
-import subprocess
 import sys
-
-if not os.path.exists('fdroidserver/getsig/getsig.class'):
-    subprocess.check_output('cd fdroidserver/getsig && javac getsig.java',
-                            shell=True)
 
 setup(name='fdroidserver',
       version='0.2.1',
@@ -25,8 +19,6 @@ setup(name='fdroidserver',
                   'examples/makebs.config.py',
                   'examples/opensc-fdroid.cfg',
                   'examples/fdroid-icon.png']),
-          ('fdroidserver/getsig',
-              ['fdroidserver/getsig/getsig.class']),
           ],
       install_requires=[
           'mwclient',
@@ -34,6 +26,8 @@ setup(name='fdroidserver',
           'Pillow',
           'python-magic',
           'apache-libcloud >= 0.14.1',
+          'pyasn1',
+          'pyasn1-modules',
           ],
       classifiers=[
           'Development Status :: 3 - Alpha',

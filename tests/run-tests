@@ -101,8 +101,6 @@ $python setup.py sdist
 REPOROOT=`create_test_dir`
 cd $REPOROOT
 tar xzf `ls -1 $WORKSPACE/dist/fdroidserver-*.tar.gz | sort -n | tail -1`
-cd $REPOROOT/fdroidserver-*/fdroidserver/getsig
-./make.sh
 cd $REPOROOT
 ./fdroidserver-*/fdroid init
 copy_apks_into_repo $REPOROOT

@@ -29,6 +29,11 @@ import pickle
 from xml.dom.minidom import Document
 from optparse import OptionParser
 import time
+from pyasn1.error import PyAsn1Error
+from pyasn1.codec.der import decoder, encoder
+from pyasn1_modules import rfc2315
+from hashlib import md5
+
 from PIL import Image
 import logging
 
@@ -322,6 +327,52 @@ def resize_all_icons(repodirs):
                 resize_icon(iconpath, density)
 
 
+cert_path_regex = re.compile(r'^META-INF/.*\.RSA$')
+
+
+def getsig(apkpath):
+    """ Get the signing certificate of an apk. To get the same md5 has that
+    Android gets, we encode the .RSA certificate in a specific format and pass
+    it hex-encoded to the md5 digest algorithm.
+
+    :param apkpath: path to the apk
+    :returns: A string containing the md5 of the signature of the apk or None
+              if an error occurred.
+    """
+
+    cert = None
+
+    with zipfile.ZipFile(apkpath, 'r') as apk:
+
+        certs = [n for n in apk.namelist() if cert_path_regex.match(n)]
+
+        if len(certs) < 1:
+            logging.error("Found no signing certificates on %s" % apkpath)
+            return None
+        if len(certs) > 1:
+            logging.error("Found multiple signing certificates on %s" % apkpath)
+            return None
+
+        cert = apk.read(certs[0])
+
+    content = decoder.decode(cert, asn1Spec=rfc2315.ContentInfo())[0]
+    if content.getComponentByName('contentType') != rfc2315.signedData:
+        logging.error("Unexpected format.")
+        return None
+
+    content = decoder.decode(content.getComponentByName('content'),
+                             asn1Spec=rfc2315.SignedData())[0]
+    try:
+        certificates = content.getComponentByName('certificates')
+    except PyAsn1Error:
+        logging.error("Certificates not found.")
+        return None
+
+    cert_encoded = encoder.encode(certificates)[4:]
+
+    return md5(cert_encoded.encode('hex')).hexdigest()
+
+
 def scan_apks(apps, apkcache, repodir, knownapks):
     """Scan the apks in the given repo directory.
 
@@ -476,18 +527,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 sys.exit(1)
 
             # Get the signature (or md5 of, to be precise)...
-            getsig_dir = os.path.join(os.path.dirname(__file__), 'getsig')
-            if not os.path.exists(getsig_dir + "/getsig.class"):
-                logging.critical("getsig.class not found. To fix: cd '%s' && ./make.sh" % getsig_dir)
-                sys.exit(1)
-            p = FDroidPopen(['java', '-cp', os.path.join(os.path.dirname(__file__), 'getsig'),
-                             'getsig', os.path.join(os.getcwd(), apkfile)])
-            thisinfo['sig'] = None
-            for line in p.output.splitlines():
-                if line.startswith('Result:'):
-                    thisinfo['sig'] = line[7:].strip()
-                    break
-            if p.returncode != 0 or not thisinfo['sig']:
+            thisinfo['sig'] = getsig(os.path.join(os.getcwd(), apkfile))
+            if not thisinfo['sig']:
                 logging.critical("Failed to get apk signature")
                 sys.exit(1)
 

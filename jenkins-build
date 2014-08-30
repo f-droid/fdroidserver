@@ -38,11 +38,6 @@ fi
 
 export PATH=/usr/lib/jvm/java-7-openjdk-amd64/bin:$PATH
 
-#------------------------------------------------------------------------------#
-# run local build
-cd $WORKSPACE/fdroidserver/getsig
-./make.sh
-
 
 #------------------------------------------------------------------------------#
 # run local tests
