@@ -45,9 +45,9 @@ cd $WORKSPACE/fdroidserver/getsig
 
 
 #------------------------------------------------------------------------------#
-# run local tests
+# run local tests, don't scan fdroidserver/ project for APKs
 cd $WORKSPACE/tests
-./run-tests ~jenkins/
+./run-tests ~jenkins/workspace/[[:upper:]a-eg-z]\*
 
 
 #------------------------------------------------------------------------------#
