@@ -24,8 +24,14 @@ include examples/config.py
 include examples/fdroid-icon.png
 include examples/makebs.config.py
 include examples/opensc-fdroid.cfg
+include tests/getsig/run.sh
+include tests/getsig/make.sh
+include tests/getsig/getsig.java
+include tests/getsig/getsig.class
 include tests/run-tests
+include tests/update.TestCase
 include tests/urzip.apk
+include tests/urzip-badsig.apk
 include wp-fdroid/AndroidManifest.xml
 include wp-fdroid/android-permissions.php
 include wp-fdroid/readme.txt

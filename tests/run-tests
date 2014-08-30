@@ -93,6 +93,15 @@ cd $WORKSPACE
 
 
 #------------------------------------------------------------------------------#
+echo_header "test python getsig replacement"
+
+cd $WORKSPACE/tests/getsig
+./make.sh
+cd $WORKSPACE/tests
+./update.TestCase
+
+
+#------------------------------------------------------------------------------#
 echo_header "create a source tarball and use that to build a repo"
 
 cd $WORKSPACE

@@ -1,0 +1,82 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+
+# http://www.drdobbs.com/testing/unit-testing-with-python/240165163
+
+import inspect
+import optparse
+import os
+import sys
+import unittest
+
+localmodule = os.path.realpath(os.path.join(
+        os.path.dirname(inspect.getfile(inspect.currentframe())),
+        '..'))
+print('localmodule: ' + localmodule)
+if localmodule not in sys.path:
+    sys.path.insert(0,localmodule)
+
+import fdroidserver.common
+import fdroidserver.update
+from fdroidserver.common import FDroidPopen, SilentPopen
+
+class UpdateTest(unittest.TestCase):
+    '''fdroid update'''
+
+    def javagetsig(self, apkfile):
+        getsig_dir = os.path.join(os.path.dirname(__file__), 'getsig')
+        if not os.path.exists(getsig_dir + "/getsig.class"):
+            logging.critical("getsig.class not found. To fix: cd '%s' && ./make.sh" % getsig_dir)
+            sys.exit(1)
+        p = FDroidPopen(['java', '-cp', os.path.join(os.path.dirname(__file__), 'getsig'),
+                         'getsig', os.path.join(os.getcwd(), apkfile)])
+        sig = None
+        for line in p.output.splitlines():
+            if line.startswith('Result:'):
+                sig = line[7:].strip()
+                break
+        if p.returncode == 0:
+            return sig
+        else:
+            return None
+        
+    def testGoodGetsig(self):
+        apkfile = os.path.join(os.path.dirname(__file__), 'urzip.apk')
+        sig = self.javagetsig(apkfile)
+        self.assertIsNotNone(sig, "sig is None")
+        pysig = fdroidserver.update.getsig(apkfile)
+        self.assertIsNotNone(pysig, "pysig is None")        
+        self.assertEquals(sig, fdroidserver.update.getsig(apkfile),
+                          "python sig not equal to java sig!")
+        self.assertEquals(len(sig), len(pysig),
+                          "the length of the two sigs are different!")
+        try:
+            self.assertEquals(sig.decode('hex'), pysig.decode('hex'),
+                              "the length of the two sigs are different!")
+        except TypeError as e:
+            print e
+            self.assertTrue(False, 'TypeError!')
+
+    def testBadGetsig(self):
+        apkfile = os.path.join(os.path.dirname(__file__), 'urzip-badsig.apk')
+        sig = self.javagetsig(apkfile)
+        self.assertIsNone(sig, "sig should be None: " + str(sig))
+        pysig = fdroidserver.update.getsig(apkfile)
+        self.assertIsNone(pysig, "python sig should be None: " + str(sig))
+
+        apkfile = os.path.join(os.path.dirname(__file__), 'urzip-badcert.apk')
+        sig = self.javagetsig(apkfile)
+        self.assertIsNone(sig, "sig should be None: " + str(sig))
+        pysig = fdroidserver.update.getsig(apkfile)
+        self.assertIsNone(pysig, "python sig should be None: " + str(sig))
+
+
+if __name__ == "__main__":
+    parser = optparse.OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
+
+    newSuite = unittest.TestSuite()
+    newSuite.addTest(unittest.makeSuite(UpdateTest))
+    unittest.main()
