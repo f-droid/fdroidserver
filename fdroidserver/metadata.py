@@ -783,6 +783,8 @@ def parse_metadata(metafile):
     for build in thisinfo['builds']:
         fill_build_defaults(build)
 
+    thisinfo['builds'] = sorted(thisinfo['builds'], key=lambda build: int(build['vercode']))
+
     return (appid, thisinfo)
 
 
