@@ -342,6 +342,13 @@ def getsig(apkpath):
 
     cert = None
 
+    # verify the jar signature is correct
+    args = ['jarsigner', '-verify', apkpath]
+    p = FDroidPopen(args)
+    if p.returncode != 0:
+        logging.critical(apkpath + " has a bad signature!")
+        return None
+
     with zipfile.ZipFile(apkpath, 'r') as apk:
 
         certs = [n for n in apk.namelist() if cert_path_regex.match(n)]
@@ -515,16 +522,6 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                         break
                     sha.update(t)
                 thisinfo['sha256'] = sha.hexdigest()
-
-            # verify the jar signature is correct
-            args = ['jarsigner', '-verify']
-            if options.verbose:
-                args += ['-verbose', '-certs']
-            args += apkfile
-            p = FDroidPopen(args)
-            if p.returncode != 0:
-                logging.critical(apkfile + " has a bad signature!")
-                sys.exit(1)
 
             # Get the signature (or md5 of, to be precise)...
             thisinfo['sig'] = getsig(os.path.join(os.getcwd(), apkfile))
