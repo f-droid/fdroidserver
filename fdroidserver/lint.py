@@ -196,7 +196,7 @@ def main():
             if app['Summary'].lower() == name.lower():
                 warn("Summary '%s' is just the app's name" % app['Summary'])
 
-        if app['Summary'] and app['Description']:
+        if app['Summary'] and app['Description'] and len(app['Description']) == 1:
             if app['Summary'].lower() == app['Description'][0].lower():
                 warn("Description '%s' is just the app's summary" % app['Summary'])
 
