@@ -91,8 +91,8 @@ def main():
             logging.info('Retrieving logs')
             ssh = paramiko.SSHClient()
             ssh.load_system_host_keys()
-            ssh.connect('f-droid.org', username='fdroid', timeout=10,
-                        key_filename=config['webserver_keyfile'])
+            ssh.connect(config['stats_server'], username=config['stats_user'],
+                        timeout=10, key_filename=config['webserver_keyfile'])
             ftp = ssh.open_sftp()
             ftp.get_channel().settimeout(60)
             logging.info("...connected")

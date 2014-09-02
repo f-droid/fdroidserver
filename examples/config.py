@@ -169,6 +169,12 @@ update_stats = False
 # calculation purposes.
 stats_ignore = []
 
+# Server stats logs are retrieved from. Required when update_stats is True.
+stats_server = "example.com"
+
+# User stats logs are retrieved from. Required when update_stats is True.
+stats_user = "bob"
+
 # Use the following to push stats to a Carbon instance:
 stats_to_carbon = False
 carbon_host = '0.0.0.0'

@@ -50,6 +50,8 @@ def get_default_config():
         'sync_from_local_copy_dir': False,
         'update_stats': False,
         'stats_ignore': [],
+        'stats_server': None,
+        'stats_user': None,
         'stats_to_carbon': False,
         'repo_maxage': 0,
         'build_server_always': False,
