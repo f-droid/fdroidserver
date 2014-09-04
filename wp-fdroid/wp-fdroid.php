@@ -954,7 +954,7 @@ function linkify($vars) {
 	$retvar = '';
 	foreach($vars as $k => $v) {
 		if($k!==null && $v!==null && $v!='')
-			$retvar .= $k.'='.$v.'&';
+			$retvar .= $k.'='.urlencode($v).'&';
 	}
 	return substr($retvar,0,-1);
 }
