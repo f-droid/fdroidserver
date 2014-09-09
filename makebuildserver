@@ -148,6 +148,9 @@ Vagrant::Config.run do |config|
 
   if Vagrant.has_plugin?("vagrant-cachier")
     config.cache.scope = :box
+    config.cache.auto_detect = false
+    config.cache.enable :apt
+    config.cache.enable :chef
   end
 
   config.vm.box = "{0}"
