@@ -1654,8 +1654,12 @@ def FDroidPopen(commands, cwd=None, shell=False, output=True):
     logging.debug("> %s" % ' '.join(commands))
 
     result = PopenResult()
-    p = subprocess.Popen(commands, cwd=cwd, shell=shell, env=env,
-                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    p = None
+    try:
+        p = subprocess.Popen(commands, cwd=cwd, shell=shell, env=env,
+                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    except OSError, e:
+        raise BuildException("OSError while trying to execute " + ' '.join(commands) + ': ' + str(e))
 
     stdout_queue = Queue.Queue()
     stdout_reader = AsynchronousFileReader(p.stdout, stdout_queue)
