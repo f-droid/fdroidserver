@@ -989,11 +989,13 @@ actually not required or used, remove the directory instead (using
 isn't used nor built will result in an error saying that native
 libraries were expected in the resulting package.
 
-@item gradle=<flavour>
-Build with Gradle instead of Ant, specifying what flavour to assemble.
-If <flavour> is 'yes' or 'main', no flavour will be used. Note
-that this will not work on projects with flavours, since it will build
-all flavours and there will be no 'main' build.
+@item gradle=<flavour1>[,<flavour2>,...]
+Build with Gradle instead of Ant, specifying what flavours to use. Flavours
+are case sensitive since the path to the output apk is as well.
+
+If only one flavour is given and it is 'yes' or 'main', no flavour will be
+used. Note that for projects with flavours, you must specify at least one
+valid flavour since 'yes' or 'main' will build all of them separately.
 
 @item maven=yes[@@<dir>]
 Build with Maven instead of Ant. An extra @@<dir> tells f-droid to run Maven
