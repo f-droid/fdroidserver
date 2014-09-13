@@ -601,7 +601,11 @@ def parse_metadata(metafile):
         t = flagtype(pk)
         if t == 'list':
             # Port legacy ';' separators
-            thisbuild[pk] = [v.strip() for v in pv.replace(';', ',').split(',')]
+            pv = [v.strip() for v in pv.replace(';', ',').split(',')]
+            if pk == 'gradle':
+                if len(pv) == 1 and pv[0] in ['main', 'yes', '']:
+                    pv = []
+            thisbuild[pk] = pv
         elif t == 'string' or t == 'script':
             thisbuild[pk] = pv
         elif t == 'bool':

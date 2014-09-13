@@ -358,8 +358,6 @@ def fetch_autoname(app, tag):
             app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
         if app['builds'][-1]['gradle']:
             flavours = app['builds'][-1]['gradle']
-    if len(flavours) == 1 and flavours[0] in ['main', 'yes', '']:
-        flavours = None
 
     logging.debug("...fetch auto name from " + app_dir)
     new_name = common.fetch_real_name(app_dir, flavours)

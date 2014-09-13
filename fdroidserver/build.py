@@ -682,9 +682,6 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         logging.info("Building Gradle project...")
         flavours = thisbuild['gradle']
 
-        if len(flavours) == 1 and flavours[0] in ['main', 'yes', '']:
-            flavours[0] = ''
-
         commands = [config['gradle']]
         if thisbuild['preassemble']:
             commands += thisbuild['preassemble'].split()

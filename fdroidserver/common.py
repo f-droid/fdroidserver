@@ -833,10 +833,9 @@ def manifest_paths(app_dir, flavours):
          os.path.join(app_dir, 'src', 'AndroidManifest.xml'),
          os.path.join(app_dir, 'build.gradle')]
 
-    if flavours:
-        for flavour in flavours:
-            possible_manifests.append(
-                os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml'))
+    for flavour in flavours:
+        possible_manifests.append(
+            os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml'))
 
     return [path for path in possible_manifests if os.path.isfile(path)]
 
@@ -1210,11 +1209,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         f.write(props)
         f.close()
 
-    flavours = None
+    flavours = []
     if build['type'] == 'gradle':
         flavours = build['gradle']
-        if len(flavours) == 1 and flavours[0] in ['main', 'yes', '']:
-            flavours = None
 
         version_regex = re.compile(r".*'com\.android\.tools\.build:gradle:([^\.]+\.[^\.]+).*'.*")
         gradlepluginver = None
