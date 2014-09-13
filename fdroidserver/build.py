@@ -684,7 +684,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         commands = [config['gradle']]
         if thisbuild['preassemble']:
-            commands += thisbuild['preassemble'].split()
+            commands += thisbuild['preassemble']
 
         flavours_cmd = ''.join(flavours)
         if flavours_cmd:

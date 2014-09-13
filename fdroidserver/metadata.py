@@ -527,7 +527,7 @@ def metafieldtype(name):
 
 
 def flagtype(name):
-    if name in ['extlibs', 'srclibs', 'patch', 'rm', 'buildjni',
+    if name in ['extlibs', 'srclibs', 'patch', 'rm', 'buildjni', 'preassemble',
                 'update', 'scanignore', 'scandelete', 'gradle', 'antcommands']:
         return 'list'
     if name in ['init', 'prebuild', 'build']:

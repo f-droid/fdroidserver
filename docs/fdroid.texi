@@ -886,7 +886,7 @@ which architecture or platform the apk is designed to run on.
 If specified, the package version code in the AndroidManifest.xml is
 replaced with the version code for the build. See also forceversion.
 
-@item rm=relpath1,relpath2,...
+@item rm=<path1>[,<path2>,...]
 Specifies the relative paths of files or directories to delete before
 the build is done. The paths are relative to the base of the build
 directory - i.e. the root of the directory structure checked out from
@@ -896,7 +896,7 @@ AndroidManifest.xml.
 Multiple files/directories can be specified by separating them with ','.
 Directories will be recursively deleted.
 
-@item extlibs=a,b,...
+@item extlibs=<lib1>[,<lib2>,...]
 Comma-separated list of external libraries (jar files) from the
 @code{build/extlib} library, which will be placed in the @code{libs} directory
 of the project.
@@ -949,7 +949,7 @@ You can use $$SDK$$, $$NDK$$ and $$MVN3$$ to substitute the paths to the
 android SDK and NDK directories, and Maven 3 executable respectively e.g.
 for when you need to run @code{android update project} explicitly.
 
-@item scanignore=path1,path2,...
+@item scanignore=<path1>[,<path2>,...]
 Enables one or more files/paths to be excluded from the scan process.
 This should only be used where there is a very good reason, and
 probably accompanied by a comment explaining why it is necessary.
@@ -957,7 +957,7 @@ probably accompanied by a comment explaining why it is necessary.
 When scanning the source tree for problems, matching files whose relative
 paths start with any of the paths given here are ignored.
 
-@item scandelete=path1,path2,...
+@item scandelete=<path1>[,<path2>,...]
 Similar to scanignore=, but instead of ignoring files under the given paths,
 it tells f-droid to delete the matching files directly.
 
@@ -1002,9 +1002,9 @@ Build with Maven instead of Ant. An extra @@<dir> tells f-droid to run Maven
 inside that relative subdirectory. Sometimes it is needed to use @@.. so that
 builds happen correctly.
 
-@item preassemble=<task1> <task2>
-Space-separated list of Gradle tasks to be run before the assemble task
-in a Gradle project build.
+@item preassemble=<task1>[,<task2>,...]
+List of Gradle tasks to be run before the assemble task in a Gradle project
+build.
 
 @item antcommands=<target1>[,<target2>,...]
 Specify an alternate set of Ant commands (target) instead of the default
