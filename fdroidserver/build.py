@@ -680,7 +680,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     elif thisbuild['type'] == 'gradle':
         logging.info("Building Gradle project...")
-        flavours = thisbuild['gradle'].split(',')
+        flavours = thisbuild['gradle']
 
         if len(flavours) == 1 and flavours[0] in ['main', 'yes', '']:
             flavours[0] = ''
@@ -705,8 +705,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     elif thisbuild['type'] == 'ant':
         logging.info("Building Ant project...")
         cmd = ['ant']
-        if thisbuild['antcommand']:
-            cmd += [thisbuild['antcommand']]
+        if thisbuild['antcommands']:
+            cmd += thisbuild['antcommands']
         else:
             cmd += ['release']
         p = FDroidPopen(cmd, cwd=root_dir)

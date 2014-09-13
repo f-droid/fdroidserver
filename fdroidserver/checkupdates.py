@@ -352,18 +352,17 @@ def fetch_autoname(app, tag):
     except VCSException:
         return None
 
-    flavour = None
+    flavours = None
     if len(app['builds']) > 0:
         if app['builds'][-1]['subdir']:
             app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
         if app['builds'][-1]['gradle']:
-            flavour = app['builds'][-1]['gradle']
-    if flavour == 'yes':
-        flavour = None
+            flavours = app['builds'][-1]['gradle']
+    if len(flavours) == 1 and flavours[0] in ['main', 'yes', '']:
+        flavours = None
 
-    logging.debug("...fetch auto name from " + app_dir +
-                  ((" (flavour: %s)" % flavour) if flavour else ""))
-    new_name = common.fetch_real_name(app_dir, flavour)
+    logging.debug("...fetch auto name from " + app_dir)
+    new_name = common.fetch_real_name(app_dir, flavours)
     commitmsg = None
     if new_name:
         logging.debug("...got autoname '" + new_name + "'")
@@ -375,7 +374,7 @@ def fetch_autoname(app, tag):
         logging.debug("...couldn't get autoname")
 
     if app['Current Version'].startswith('@string/'):
-        cv = common.version_name(app['Current Version'], app_dir, flavour)
+        cv = common.version_name(app['Current Version'], app_dir, flavours)
         if app['Current Version'] != cv:
             app['Current Version'] = cv
             if not commitmsg:

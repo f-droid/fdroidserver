@@ -99,7 +99,7 @@ flag_defaults = OrderedDict([
     ('build', ''),
     ('buildjni', []),
     ('preassemble', []),
-    ('antcommand', None),
+    ('antcommands', None),
     ('novcheck', False),
     ])
 
@@ -528,7 +528,7 @@ def metafieldtype(name):
 
 def flagtype(name):
     if name in ['extlibs', 'srclibs', 'patch', 'rm', 'buildjni',
-                'update', 'scanignore', 'scandelete']:
+                'update', 'scanignore', 'scandelete', 'gradle', 'antcommands']:
         return 'list'
     if name in ['init', 'prebuild', 'build']:
         return 'script'

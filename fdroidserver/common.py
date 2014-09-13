@@ -825,7 +825,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
 
 
 # Return list of existing files that will be used to find the highest vercode
-def manifest_paths(app_dir, flavour):
+def manifest_paths(app_dir, flavours):
 
     possible_manifests = \
         [os.path.join(app_dir, 'AndroidManifest.xml'),
@@ -833,19 +833,20 @@ def manifest_paths(app_dir, flavour):
          os.path.join(app_dir, 'src', 'AndroidManifest.xml'),
          os.path.join(app_dir, 'build.gradle')]
 
-    if flavour:
-        possible_manifests.append(
-            os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml'))
+    if flavours:
+        for flavour in flavours:
+            possible_manifests.append(
+                os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml'))
 
     return [path for path in possible_manifests if os.path.isfile(path)]
 
 
 # Retrieve the package name. Returns the name, or None if not found.
-def fetch_real_name(app_dir, flavour):
+def fetch_real_name(app_dir, flavours):
     app_search = re.compile(r'.*<application.*').search
     name_search = re.compile(r'.*android:label="([^"]+)".*').search
     app_found = False
-    for f in manifest_paths(app_dir, flavour):
+    for f in manifest_paths(app_dir, flavours):
         if not has_extension(f, 'xml'):
             continue
         logging.debug("fetch_real_name: Checking manifest at " + f)
@@ -866,8 +867,8 @@ def fetch_real_name(app_dir, flavour):
 
 
 # Retrieve the version name
-def version_name(original, app_dir, flavour):
-    for f in manifest_paths(app_dir, flavour):
+def version_name(original, app_dir, flavours):
+    for f in manifest_paths(app_dir, flavours):
         if not has_extension(f, 'xml'):
             continue
         string = retrieve_string(app_dir, original)
@@ -1209,11 +1210,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         f.write(props)
         f.close()
 
-    flavour = None
+    flavours = None
     if build['type'] == 'gradle':
-        flavour = build['gradle']
-        if flavour in ['main', 'yes', '']:
-            flavour = None
+        flavours = build['gradle']
+        if len(flavours) == 1 and flavours[0] in ['main', 'yes', '']:
+            flavours = None
 
         version_regex = re.compile(r".*'com\.android\.tools\.build:gradle:([^\.]+\.[^\.]+).*'.*")
         gradlepluginver = None
@@ -1256,7 +1257,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     # Insert version code and number into the manifest if necessary
     if build['forceversion']:
         logging.info("Changing the version name")
-        for path in manifest_paths(root_dir, flavour):
+        for path in manifest_paths(root_dir, flavours):
             if not os.path.isfile(path):
                 continue
             if has_extension(path, 'xml'):
@@ -1275,7 +1276,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                     raise BuildException("Failed to amend build.gradle")
     if build['forcevercode']:
         logging.info("Changing the version code")
-        for path in manifest_paths(root_dir, flavour):
+        for path in manifest_paths(root_dir, flavours):
             if not os.path.isfile(path):
                 continue
             if has_extension(path, 'xml'):

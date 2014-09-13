@@ -1006,8 +1006,8 @@ builds happen correctly.
 Space-separated list of Gradle tasks to be run before the assemble task
 in a Gradle project build.
 
-@item antcommand=xxx
-Specify an alternate Ant command (target) instead of the default
+@item antcommands=<target1>[,<target2>,...]
+Specify an alternate set of Ant commands (target) instead of the default
 'release'. It can't be given any flags, such as the path to a build.xml.
 
 @item output=path/to/output.apk
