@@ -109,14 +109,12 @@ def check_tags(app, pattern):
 
         vcs.gotorevision(None)
 
-        flavour = None
+        flavours = []
         if len(app['builds']) > 0:
             if app['builds'][-1]['subdir']:
                 build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
             if app['builds'][-1]['gradle']:
-                flavour = app['builds'][-1]['gradle']
-        if flavour == 'yes':
-            flavour = None
+                flavours = app['builds'][-1]['gradle']
 
         hpak = None
         htag = None
@@ -136,7 +134,7 @@ def check_tags(app, pattern):
             vcs.gotorevision(tag)
 
             # Only process tags where the manifest exists...
-            paths = common.manifest_paths(build_dir, flavour)
+            paths = common.manifest_paths(build_dir, flavours)
             version, vercode, package = \
                 common.parse_androidmanifests(paths, app['Update Check Ignore'])
             if not package or package != appid or not version or not vercode:
@@ -196,20 +194,17 @@ def check_repomanifest(app, branch=None):
         elif repotype == 'bzr':
             vcs.gotorevision(None)
 
-        flavour = None
-
+        flavours = []
         if len(app['builds']) > 0:
             if app['builds'][-1]['subdir']:
                 build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
             if app['builds'][-1]['gradle']:
-                flavour = app['builds'][-1]['gradle']
-        if flavour == 'yes':
-            flavour = None
+                flavours = app['builds'][-1]['gradle']
 
         if not os.path.isdir(build_dir):
             return (None, "Subdir '" + app['builds'][-1]['subdir'] + "'is not a valid directory")
 
-        paths = common.manifest_paths(build_dir, flavour)
+        paths = common.manifest_paths(build_dir, flavours)
 
         version, vercode, package = \
             common.parse_androidmanifests(paths, app['Update Check Ignore'])
@@ -319,15 +314,13 @@ def check_changed_subdir(app):
     if not os.path.isdir(build_dir):
         return None
 
-    flavour = None
+    flavours = []
     if len(app['builds']) > 0 and app['builds'][-1]['gradle']:
-        flavour = app['builds'][-1]['gradle']
-    if flavour == 'yes':
-        flavour = None
+        flavours = app['builds'][-1]['gradle']
 
     for d in dirs_with_manifest(build_dir):
         logging.debug("Trying possible dir %s." % d)
-        m_paths = common.manifest_paths(d, flavour)
+        m_paths = common.manifest_paths(d, flavours)
         package = common.parse_androidmanifests(m_paths, app['Update Check Ignore'])[2]
         if package and package == appid:
             logging.debug("Manifest exists in possible dir %s." % d)
@@ -352,7 +345,7 @@ def fetch_autoname(app, tag):
     except VCSException:
         return None
 
-    flavours = None
+    flavours = []
     if len(app['builds']) > 0:
         if app['builds'][-1]['subdir']:
             app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
