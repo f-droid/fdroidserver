@@ -36,8 +36,11 @@ config = {}
 options = None
 
 
-def write_to_config(key, value):
+def write_to_config(config, key, value=None):
     '''write a key/value to the local config.py'''
+    if value is None:
+        origkey = key + '_orig'
+        value = config[origkey] if origkey in config else config[key]
     with open('config.py', 'r') as f:
         data = f.read()
     pattern = '\n[\s#]*' + key + '\s*=\s*"[^"]*"'
@@ -122,7 +125,8 @@ def main():
         examplesdir = prefix + '/examples'
 
     fdroiddir = os.getcwd()
-    test_config = common.get_default_config()
+    test_config = dict()
+    common.fill_config_defaults(test_config)
 
     # track down where the Android SDK is, the default is to use the path set
     # in ANDROID_HOME if that exists, otherwise None
@@ -154,7 +158,7 @@ def main():
         shutil.copy(os.path.join(examplesdir, 'fdroid-icon.png'), fdroiddir)
         shutil.copyfile(os.path.join(examplesdir, 'config.py'), 'config.py')
         os.chmod('config.py', 0o0600)
-        write_to_config('sdk_path', test_config['sdk_path'])
+        write_to_config(test_config, 'sdk_path')
     else:
         logging.warn('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
         logging.info('Try running `fdroid init` in an empty directory.')
@@ -179,7 +183,7 @@ def main():
             test_config['build_tools'] = ''
         else:
             test_config['build_tools'] = dirname
-        write_to_config('build_tools', test_config['build_tools'])
+        write_to_config(test_config, 'build_tools')
     if not common.test_build_tools_exists(test_config):
         sys.exit(3)
 
@@ -194,7 +198,7 @@ def main():
         logging.info('using ANDROID_NDK')
         ndk_path = os.environ['ANDROID_NDK']
     if os.path.isdir(ndk_path):
-        write_to_config('ndk_path', ndk_path)
+        write_to_config(test_config, 'ndk_path')
     # the NDK is optional so we don't prompt the user for it if its not found
 
     # find or generate the keystore for the repo signing key. First try the
@@ -213,18 +217,18 @@ def main():
             if not os.path.exists(keystore):
                 logging.info('"' + keystore
                              + '" does not exist, creating a new keystore there.')
-    write_to_config('keystore', keystore)
+    write_to_config(test_config, 'keystore', keystore)
     repo_keyalias = None
     if options.repo_keyalias:
         repo_keyalias = options.repo_keyalias
-        write_to_config('repo_keyalias', repo_keyalias)
+        write_to_config(test_config, 'repo_keyalias', repo_keyalias)
     if options.distinguished_name:
         keydname = options.distinguished_name
-        write_to_config('keydname', keydname)
+        write_to_config(test_config, 'keydname', keydname)
     if keystore == 'NONE':  # we're using a smartcard
-        write_to_config('repo_keyalias', '1')  # seems to be the default
+        write_to_config(test_config, 'repo_keyalias', '1')  # seems to be the default
         disable_in_config('keypass', 'never used with smartcard')
-        write_to_config('smartcardoptions',
+        write_to_config(test_config, 'smartcardoptions',
                         ('-storetype PKCS11 -providerName SunPKCS11-OpenSC '
                          + '-providerClass sun.security.pkcs11.SunPKCS11 '
                          + '-providerArg opensc-fdroid.cfg'))
@@ -254,14 +258,14 @@ def main():
         if not os.path.exists(keystoredir):
             os.makedirs(keystoredir, mode=0o700)
         password = genpassword()
-        write_to_config('keystorepass', password)
-        write_to_config('keypass', password)
+        write_to_config(test_config, 'keystorepass', password)
+        write_to_config(test_config, 'keypass', password)
         if options.repo_keyalias is None:
             repo_keyalias = socket.getfqdn()
-            write_to_config('repo_keyalias', repo_keyalias)
+            write_to_config(test_config, 'repo_keyalias', repo_keyalias)
         if not options.distinguished_name:
             keydname = 'CN=' + repo_keyalias + ', OU=F-Droid'
-            write_to_config('keydname', keydname)
+            write_to_config(test_config, 'keydname', keydname)
         genkey(keystore, repo_keyalias, password, keydname)
 
     logging.info('Built repo based in "' + fdroiddir + '"')

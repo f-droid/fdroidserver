@@ -39,40 +39,56 @@ options = None
 env = None
 
 
-def get_default_config():
-    return {
-        'sdk_path': os.getenv("ANDROID_HOME") or "",
-        'ndk_path': os.getenv("ANDROID_NDK") or "",
-        'build_tools': "20.0.0",
-        'ant': "ant",
-        'mvn3': "mvn",
-        'gradle': 'gradle',
-        'sync_from_local_copy_dir': False,
-        'update_stats': False,
-        'stats_ignore': [],
-        'stats_server': None,
-        'stats_user': None,
-        'stats_to_carbon': False,
-        'repo_maxage': 0,
-        'build_server_always': False,
-        'keystore': os.path.join(os.getenv("HOME"), '.local', 'share', 'fdroidserver', 'keystore.jks'),
-        'smartcardoptions': [],
-        'char_limits': {
-            'Summary': 50,
-            'Description': 1500
-        },
-        'keyaliases': {},
-        'repo_url': "https://MyFirstFDroidRepo.org/fdroid/repo",
-        'repo_name': "My First FDroid Repo Demo",
-        'repo_icon': "fdroid-icon.png",
-        'repo_description': '''
-            This is a repository of apps to be used with FDroid. Applications in this
-            repository are either official binaries built by the original application
-            developers, or are binaries built from source by the admin of f-droid.org
-            using the tools on https://gitlab.com/u/fdroid.
-            ''',
-        'archive_older': 0,
-    }
+default_config = {
+    'sdk_path': "$ANDROID_HOME",
+    'ndk_path': "$ANDROID_NDK",
+    'build_tools': "20.0.0",
+    'ant': "ant",
+    'mvn3': "mvn",
+    'gradle': 'gradle',
+    'sync_from_local_copy_dir': False,
+    'update_stats': False,
+    'stats_ignore': [],
+    'stats_server': None,
+    'stats_user': None,
+    'stats_to_carbon': False,
+    'repo_maxage': 0,
+    'build_server_always': False,
+    'keystore': os.path.join("$HOME", '.local', 'share', 'fdroidserver', 'keystore.jks'),
+    'smartcardoptions': [],
+    'char_limits': {
+        'Summary': 50,
+        'Description': 1500
+    },
+    'keyaliases': {},
+    'repo_url': "https://MyFirstFDroidRepo.org/fdroid/repo",
+    'repo_name': "My First FDroid Repo Demo",
+    'repo_icon': "fdroid-icon.png",
+    'repo_description': '''
+        This is a repository of apps to be used with FDroid. Applications in this
+        repository are either official binaries built by the original application
+        developers, or are binaries built from source by the admin of f-droid.org
+        using the tools on https://gitlab.com/u/fdroid.
+        ''',
+    'archive_older': 0,
+}
+
+
+def fill_config_defaults(config):
+    for k, v in default_config.items():
+        if k not in config:
+            config[k] = v
+
+    # Expand environment variables
+    for k, v in config.items():
+        if type(v) != str:
+            continue
+        orig = v
+        v = os.path.expanduser(v)
+        v = os.path.expandvars(v)
+        if orig != v:
+            config[k] = v
+            config[k + '_orig'] = orig
 
 
 def read_config(opts, config_file='config.py'):
@@ -111,17 +127,7 @@ def read_config(opts, config_file='config.py'):
         if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
             logging.warn("unsafe permissions on {0} (should be 0600)!".format(config_file))
 
-    defconfig = get_default_config()
-    for k, v in defconfig.items():
-        if k not in config:
-            config[k] = v
-
-    # Expand environment variables
-    for k, v in config.items():
-        if type(v) != str:
-            continue
-        v = os.path.expanduser(v)
-        config[k] = os.path.expandvars(v)
+    fill_config_defaults(config)
 
     if not test_sdk_exists(config):
         sys.exit(3)
@@ -193,7 +199,7 @@ def read_config(opts, config_file='config.py'):
 def test_sdk_exists(c):
     if c['sdk_path'] is None:
         # c['sdk_path'] is set to the value of ANDROID_HOME by default
-        logging.error('No Android SDK found! ANDROID_HOME is not set and sdk_path is not in config.py!')
+        logging.error('No Android SDK found!')
         logging.error('You can use ANDROID_HOME to set the path to your SDK, i.e.:')
         logging.error('\texport ANDROID_HOME=/opt/android-sdk')
         return False
