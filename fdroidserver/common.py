@@ -79,10 +79,9 @@ def fill_config_defaults(config):
         if k not in config:
             config[k] = v
 
-    # Expand environment variables
-    for k, v in config.items():
-        if type(v) != str:
-            continue
+    # Expand paths (~users and $vars)
+    for k in ['sdk_path', 'ndk_path', 'ant', 'mvn3', 'gradle', 'keystore', 'repo_icon']:
+        v = config[k]
         orig = v
         v = os.path.expanduser(v)
         v = os.path.expandvars(v)
