@@ -603,8 +603,8 @@ def parse_metadata(metafile):
             # Port legacy ';' separators
             pv = [v.strip() for v in pv.replace(';', ',').split(',')]
             if pk == 'gradle':
-                if len(pv) == 1 and pv[0] in ['main', 'yes', '']:
-                    pv = []
+                if len(pv) == 1 and pv[0] in ['main', 'yes']:
+                    pv = ['yes']
             thisbuild[pk] = pv
         elif t == 'string' or t == 'script':
             thisbuild[pk] = pv
