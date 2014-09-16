@@ -74,20 +74,20 @@ default_config = {
 }
 
 
-def fill_config_defaults(config):
+def fill_config_defaults(thisconfig):
     for k, v in default_config.items():
-        if k not in config:
-            config[k] = v
+        if k not in thisconfig:
+            thisconfig[k] = v
 
     # Expand paths (~users and $vars)
     for k in ['sdk_path', 'ndk_path', 'ant', 'mvn3', 'gradle', 'keystore', 'repo_icon']:
-        v = config[k]
+        v = thisconfig[k]
         orig = v
         v = os.path.expanduser(v)
         v = os.path.expandvars(v)
         if orig != v:
-            config[k] = v
-            config[k + '_orig'] = orig
+            thisconfig[k] = v
+            thisconfig[k + '_orig'] = orig
 
 
 def read_config(opts, config_file='config.py'):
@@ -195,31 +195,31 @@ def read_config(opts, config_file='config.py'):
     return config
 
 
-def test_sdk_exists(config):
-    if config['sdk_path'] == default_config['sdk_path']:
+def test_sdk_exists(thisconfig):
+    if thisconfig['sdk_path'] == default_config['sdk_path']:
         logging.error('No Android SDK found!')
         logging.error('You can use ANDROID_HOME to set the path to your SDK, i.e.:')
         logging.error('\texport ANDROID_HOME=/opt/android-sdk')
         return False
-    if not os.path.exists(config['sdk_path']):
-        logging.critical('Android SDK path "' + config['sdk_path'] + '" does not exist!')
+    if not os.path.exists(thisconfig['sdk_path']):
+        logging.critical('Android SDK path "' + thisconfig['sdk_path'] + '" does not exist!')
         return False
-    if not os.path.isdir(config['sdk_path']):
-        logging.critical('Android SDK path "' + config['sdk_path'] + '" is not a directory!')
+    if not os.path.isdir(thisconfig['sdk_path']):
+        logging.critical('Android SDK path "' + thisconfig['sdk_path'] + '" is not a directory!')
         return False
     for d in ['build-tools', 'platform-tools', 'tools']:
-        if not os.path.isdir(os.path.join(config['sdk_path'], d)):
+        if not os.path.isdir(os.path.join(thisconfig['sdk_path'], d)):
             logging.critical('Android SDK path "%s" does not contain "%s/"!' % (
-                config['sdk_path'], d))
+                thisconfig['sdk_path'], d))
             return False
     return True
 
 
-def test_build_tools_exists(config):
-    if not test_sdk_exists(config):
+def test_build_tools_exists(thisconfig):
+    if not test_sdk_exists(thisconfig):
         return False
-    build_tools = os.path.join(config['sdk_path'], 'build-tools')
-    versioned_build_tools = os.path.join(build_tools, config['build_tools'])
+    build_tools = os.path.join(thisconfig['sdk_path'], 'build-tools')
+    versioned_build_tools = os.path.join(build_tools, thisconfig['build_tools'])
     if not os.path.isdir(versioned_build_tools):
         logging.critical('Android Build Tools path "'
                          + versioned_build_tools + '" does not exist!')
