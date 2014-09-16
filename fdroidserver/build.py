@@ -681,6 +681,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     elif thisbuild['type'] == 'gradle':
         logging.info("Building Gradle project...")
         flavours = thisbuild['gradle']
+        if flavours == ['yes']:
+            flavours = []
 
         commands = [config['gradle']]
         if thisbuild['preassemble']:
