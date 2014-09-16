@@ -36,11 +36,11 @@ config = {}
 options = None
 
 
-def write_to_config(config, key, value=None):
+def write_to_config(thisconfig, key, value=None):
     '''write a key/value to the local config.py'''
     if value is None:
         origkey = key + '_orig'
-        value = config[origkey] if origkey in config else config[key]
+        value = thisconfig[origkey] if origkey in thisconfig else thisconfig[key]
     with open('config.py', 'r') as f:
         data = f.read()
     pattern = '\n[\s#]*' + key + '\s*=\s*"[^"]*"'
@@ -158,7 +158,11 @@ def main():
         shutil.copy(os.path.join(examplesdir, 'fdroid-icon.png'), fdroiddir)
         shutil.copyfile(os.path.join(examplesdir, 'config.py'), 'config.py')
         os.chmod('config.py', 0o0600)
-        write_to_config(test_config, 'sdk_path')
+        # If android_home is None, test_config['sdk_path'] will be used and
+        # "$ANDROID_HOME" may be used if the env var is set up correctly.
+        # If android_home is not None, the path given from the command line
+        # will be directly written in the config.
+        write_to_config(test_config, 'sdk_path', options.android_home)
     else:
         logging.warn('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
         logging.info('Try running `fdroid init` in an empty directory.')
