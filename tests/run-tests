@@ -313,5 +313,6 @@ $fdroid init --keystore NONE
 test -e opensc-fdroid.cfg
 test ! -e NONE
 
+rm -rf $WORKSPACE/fdroidserver.egg-info/
 
 echo SUCCESS
