@@ -32,3 +32,27 @@ fi
 # If there are python errors or warnings, print them and fail.
 [ -n $PYFLAKES ] && $PYFLAKES $FILES
 [ -n $PEP8 ] && $PEP8 --ignore=E123,E501 $FILES
+
+
+#------------------------------------------------------------------------------#
+# check the syntax of included shell scripts
+
+basedir=`cd $(dirname $0)/.. && pwd`
+echo basedir: $basedir
+
+if [ $(basename $basedir) = ".git" ]; then
+    basedir=$(dirname $basedir)
+fi
+
+exitstatus=0
+# use bash to check that the syntax is correct
+for f in $basedir/fd-commit $basedir/jenkins-build $basedir/docs/*.sh $basedir/hooks/pre-commit; do
+    if bash -n $f; then
+        : # success! do nothing
+    else
+        echo "FAILED!"
+        exitstatus=1
+    fi
+done
+
+exit $exitstatus
