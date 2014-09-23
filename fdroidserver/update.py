@@ -1051,7 +1051,7 @@ def main():
 
         if bestver == 0:
             if app['Name'] is None:
-                app['Name'] = appid
+                app['Name'] = app['Auto Name'] or appid
             app['icon'] = None
             logging.warn("Application " + appid + " has no packages")
         else:
