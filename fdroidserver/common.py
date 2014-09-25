@@ -1188,13 +1188,15 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build['subdir']:
         localprops += [os.path.join(root_dir, 'local.properties')]
     for path in localprops:
-        if not os.path.isfile(path):
-            continue
-        logging.info("Updating properties file at %s" % path)
-        f = open(path, 'r')
-        props = f.read()
-        f.close()
-        props += '\n'
+        props = ""
+        if os.path.isfile(path):
+            logging.info("Updating local.properties file at %s" % path)
+            f = open(path, 'r')
+            props += f.read()
+            f.close()
+            props += '\n'
+        else:
+            logging.info("Creating local.properties file at %s" % path)
         # Fix old-fashioned 'sdk-location' by copying
         # from sdk.dir, if necessary
         if build['oldsdkloc']:
