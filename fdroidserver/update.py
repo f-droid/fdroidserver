@@ -869,9 +869,18 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                 and config['make_current_version_link'] \
                 and repodir == 'repo':  # only create these
             apklinkname = app[config['current_version_name_source']] + '.apk'
+            current_version_path = os.path.join(repodir, current_version_file)
             if os.path.exists(apklinkname):
                 os.remove(apklinkname)
-            os.symlink(os.path.join(repodir, current_version_file), apklinkname)
+            os.symlink(current_version_path, apklinkname)
+            # also symlink gpg signature, if it exists
+            for extension in ('.asc', '.sig'):
+                sigfile_path = current_version_path + extension
+                if os.path.exists(sigfile_path):
+                    siglinkname = apklinkname + extension
+                    if os.path.exists(siglinkname):
+                        os.remove(siglinkname)
+                    os.symlink(sigfile_path, siglinkname)
 
     of = open(os.path.join(repodir, 'index.xml'), 'wb')
     if options.pretty:
