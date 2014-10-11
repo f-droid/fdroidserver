@@ -868,7 +868,9 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         if current_version_file is not None \
                 and config['make_current_version_link'] \
                 and repodir == 'repo':  # only create these
-            apklinkname = app[config['current_version_name_source']] + '.apk'
+            sanitized_name = re.sub('''[ '"&%?+=]''', '',
+                                    app[config['current_version_name_source']])
+            apklinkname = sanitized_name + '.apk'
             current_version_path = os.path.join(repodir, current_version_file)
             if os.path.exists(apklinkname):
                 os.remove(apklinkname)
