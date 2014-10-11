@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+import glob
 import hashlib
 import os
 import paramiko
@@ -143,6 +144,16 @@ def update_serverwebroot(serverwebroot, repo_section):
         sys.exit(1)
     if subprocess.call(rsyncargs + [indexjar, sectionpath]) != 0:
         sys.exit(1)
+    # upload "current version" symlinks if requested
+    if config['make_current_version_link'] and repo_section == 'repo':
+        links_to_upload = []
+        for f in glob.glob('*.apk') \
+                + glob.glob('*.apk.asc') + glob.glob('*.apk.sig'):
+            if os.path.islink(f):
+                links_to_upload.append(f)
+        if len(links_to_upload) > 0:
+            if subprocess.call(rsyncargs + links_to_upload + [serverwebroot]) != 0:
+                sys.exit(1)
 
 
 def _local_sync(fromdir, todir):
