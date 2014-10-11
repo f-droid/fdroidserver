@@ -121,7 +121,9 @@ def update_awsbucket(repo_section):
 
 
 def update_serverwebroot(serverwebroot, repo_section):
-    rsyncargs = ['rsync', '--archive', '--delete']
+    # use a checksum comparison for accurate comparisons on different
+    # filesystems, for example, FAT has a low resolution timestamp
+    rsyncargs = ['rsync', '--archive', '--delete', '--checksum']
     if options.verbose:
         rsyncargs += ['--verbose']
     if options.quiet:
@@ -132,17 +134,18 @@ def update_serverwebroot(serverwebroot, repo_section):
         rsyncargs += ['-e', 'ssh -i ' + config['identity_file']]
     indexxml = os.path.join(repo_section, 'index.xml')
     indexjar = os.path.join(repo_section, 'index.jar')
-    # serverwebroot is guaranteed to have a trailing slash in common.py
+    # upload the first time without the index so that the repo stays working
+    # while this update is running.  Then once it is complete, rerun the
+    # command again to upload the index.  Always using the same target with
+    # rsync allows for very strict settings on the receiving server, you can
+    # literally specify the one rsync command that is allowed to run in
+    # ~/.ssh/authorized_keys.  (serverwebroot is guaranteed to have a trailing
+    # slash in common.py)
     if subprocess.call(rsyncargs +
                        ['--exclude', indexxml, '--exclude', indexjar,
                         repo_section, serverwebroot]) != 0:
         sys.exit(1)
-    # use stricter checking on the indexes since they provide the signature
-    rsyncargs += ['--checksum']
-    sectionpath = serverwebroot + repo_section
-    if subprocess.call(rsyncargs + [indexxml, sectionpath]) != 0:
-        sys.exit(1)
-    if subprocess.call(rsyncargs + [indexjar, sectionpath]) != 0:
+    if subprocess.call(rsyncargs + [repo_section, serverwebroot]) != 0:
         sys.exit(1)
     # upload "current version" symlinks if requested
     if config['make_current_version_link'] and repo_section == 'repo':
