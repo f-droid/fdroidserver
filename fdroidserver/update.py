@@ -824,7 +824,15 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                     apklist[i]['apkname'], apklist[i + 1]['apkname']))
                 sys.exit(1)
 
+        current_version_code = 0
+        current_version_file = None
         for apk in apklist:
+            # find the APK for the "Current Version"
+            if current_version_code < apk['versioncode']:
+                current_version_code = apk['versioncode']
+            if current_version_code < int(app['Current Version Code']):
+                current_version_file = apk['apkname']
+
             apkel = doc.createElement("package")
             apel.appendChild(apkel)
             addElement('version', apk['version'], doc, apkel)
@@ -856,6 +864,14 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                 addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
             if len(apk['features']) > 0:
                 addElement('features', ','.join(apk['features']), doc, apkel)
+
+        if current_version_file is not None \
+                and config['make_current_version_link'] \
+                and repodir == 'repo':  # only create these
+            apklinkname = app[config['current_version_name_source']] + '.apk'
+            if os.path.exists(apklinkname):
+                os.remove(apklinkname)
+            os.symlink(os.path.join(repodir, current_version_file), apklinkname)
 
     of = open(os.path.join(repodir, 'index.xml'), 'wb')
     if options.pretty:
