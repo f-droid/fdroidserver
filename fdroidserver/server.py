@@ -40,6 +40,9 @@ def update_awsbucket(repo_section):
     Requires AWS credentials set in config.py: awsaccesskeyid, awssecretkey
     '''
 
+    logging.debug('Syncing "' + repo_section + '" to Amazon S3 bucket "'
+                  + config['awsbucket'] + '"')
+
     import libcloud.security
     libcloud.security.VERIFY_SSL_CERT = True
     from libcloud.storage.types import Provider, ContainerDoesNotExistError
