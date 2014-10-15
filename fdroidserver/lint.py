@@ -85,11 +85,11 @@ regex_warnings = {
     'Description': [
         (re.compile(r'^No description available$'),
          "Description yet to be filled"),
-        (re.compile(r'[ ]*[*#][^ .]'),
+        (re.compile(r'\s*[*#][^ .]'),
          "Invalid bulleted list"),
-        (re.compile(r'^ '),
+        (re.compile(r'^\s'),
          "Unnecessary leading space"),
-        (re.compile(r'.* $'),
+        (re.compile(r'.*\s$'),
          "Unnecessary trailing space"),
         ],
 }
