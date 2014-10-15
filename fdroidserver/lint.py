@@ -89,6 +89,8 @@ regex_warnings = {
          "Invalid bulleted list"),
         (re.compile(r'^ '),
          "Unnecessary leading space"),
+        (re.compile(r'.* $'),
+         "Unnecessary trailing space"),
         ],
 }
 
