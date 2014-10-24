@@ -83,9 +83,9 @@ def main():
                 raise FDroidException("Failed to get " + apkfilename)
 
             compare_result = common.compare_apks(
-                    os.path.join(unsigned_dir, apkfilename),
-                    remoteapk,
-                    tmp_dir)
+                os.path.join(unsigned_dir, apkfilename),
+                remoteapk,
+                tmp_dir)
             if compare_result:
                 raise FDroidException(compare_result)
 

@@ -113,9 +113,9 @@ def main():
 
         # There ought to be valid metadata for this app, otherwise why are we
         # trying to publish it?
-        if not appid in allapps:
+        if appid not in allapps:
             logging.error("Unexpected {0} found in unsigned directory"
-                    .format(apkfilename))
+                          .format(apkfilename))
             sys.exit(1)
         app = allapps[appid]
 
@@ -133,7 +133,7 @@ def main():
                     break
             if not versionname:
                 logging.error("...no defined build for version code {0}"
-                        .format(vercode))
+                              .format(vercode))
                 continue
 
             # Figure out where the developer's binary is supposed to come from...
@@ -147,14 +147,14 @@ def main():
             p = FDroidPopen(['wget', '-nv', url], cwd=tmp_dir)
             if p.returncode != 0 or not os.path.exists(srcapk):
                 logging.error("...failed to retrieve " + url +
-                        " - publish skipped")
+                              " - publish skipped")
                 continue
 
             # Compare our unsigned one with the downloaded one...
             compare_result = common.compare_apks(srcapk, apkfile, tmp_dir)
             if compare_result:
                 logging.error("...verfication failed - publish skipped : "
-                        + compare_result)
+                              + compare_result)
                 continue
 
             # Success! So move the downloaded file to the repo...

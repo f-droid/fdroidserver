@@ -1812,13 +1812,10 @@ def compare_apks(apk1, apk2, tmp_dir):
         return("Failed to unpack " + apk2)
 
     p = FDroidPopen(['diff', '-r', 'this_apk', 'that_apk'], cwd=tmp_dir,
-            output=False)
+                    output=False)
     lines = p.output.splitlines()
     if len(lines) != 1 or 'META-INF' not in lines[0]:
         return("Unexpected diff output - " + p.output)
 
     # If we get here, it seems like they're the same!
     return None
-
-
-
