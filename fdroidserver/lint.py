@@ -171,6 +171,8 @@ def main():
         if app['Disabled']:
             continue
 
+        count['app_total'] += 1
+
         for build in app['builds']:
             if build['commit'] and not build['disable']:
                 lastcommit = build['commit']
@@ -251,7 +253,8 @@ def main():
         if not curid:
             print
 
-    logging.info("Found a total of %i warnings in %i apps." % (count['warn'], count['app']))
+    logging.info("Found a total of %i warnings in %i apps out of %i total." % (
+        count['warn'], count['app'], count['app_total']))
 
 if __name__ == "__main__":
     main()
