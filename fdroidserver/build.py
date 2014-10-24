@@ -522,25 +522,6 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         tarball.add(build_dir, tarname, exclude=tarexc)
         tarball.close()
 
-    if onserver:
-        manifest = os.path.join(root_dir, 'AndroidManifest.xml')
-        if os.path.exists(manifest):
-            homedir = os.path.expanduser('~')
-            with open(os.path.join(homedir, 'buildserverid'), 'r') as f:
-                buildserverid = f.read()
-            with open(os.path.join(homedir, 'fdroidserverid'), 'r') as f:
-                fdroidserverid = f.read()
-            with open(manifest, 'r') as f:
-                manifestcontent = f.read()
-            manifestcontent = manifestcontent.replace('</manifest>',
-                                                      '<fdroid buildserverid="'
-                                                      + buildserverid + '"'
-                                                      + ' fdroidserverid="'
-                                                      + fdroidserverid + '"'
-                                                      + '/></manifest>')
-            with open(manifest, 'w') as f:
-                f.write(manifestcontent)
-
     # Run a build command if one is required...
     if thisbuild['build']:
         logging.info("Running 'build' commands in %s" % root_dir)
@@ -831,6 +812,19 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                              % (version, str(vercode), thisbuild['version'],
                                 str(thisbuild['vercode']))
                              )
+
+    # Add information for 'fdroid verify' to be able to reproduce the build
+    # environment.
+    if onserver:
+        metadir = os.path.join(tmp_dir, 'META-INF')
+        if not os.path.exists(metadir):
+            os.mkdir(metadir)
+        homedir = os.path.expanduser('~')
+        for fn in ['buildserverid', 'fdroidserverid']:
+            shutil.copyfile(os.path.join(homedir, fn),
+                            os.path.join(metadir, fn))
+            subprocess.call(['jar', 'uf', os.path.abspath(src),
+                            'META-INF/' + fn], cwd=tmp_dir)
 
     # Copy the unsigned apk to our destination directory for further
     # processing (by publish.py)...
