@@ -111,60 +111,113 @@ def main():
                 continue
         logging.info("Processing " + apkfile)
 
-        # Figure out the key alias name we'll use. Only the first 8
-        # characters are significant, so we'll use the first 8 from
-        # the MD5 of the app's ID and hope there are no collisions.
-        # If a collision does occur later, we're going to have to
-        # come up with a new alogrithm, AND rename all existing keys
-        # in the keystore!
-        if appid in config['keyaliases']:
-            # For this particular app, the key alias is overridden...
-            keyalias = config['keyaliases'][appid]
-            if keyalias.startswith('@'):
-                m = md5.new()
-                m.update(keyalias[1:])
-                keyalias = m.hexdigest()[:8]
-        else:
-            m = md5.new()
-            m.update(appid)
-            keyalias = m.hexdigest()[:8]
-        logging.info("Key alias: " + keyalias)
+        # There ought to be valid metadata for this app, otherwise why are we
+        # trying to publish it?
+        if not appid in allapps:
+            logging.error("Unexpected {0} found in unsigned directory"
+                    .format(apkfilename))
+            sys.exit(1)
+        app = allapps[appid]
 
-        # See if we already have a key for this application, and
-        # if not generate one...
-        p = FDroidPopen(['keytool', '-list',
-                         '-alias', keyalias, '-keystore', config['keystore'],
-                         '-storepass:file', config['keystorepassfile']])
-        if p.returncode != 0:
-            logging.info("Key does not exist - generating...")
-            p = FDroidPopen(['keytool', '-genkey',
-                             '-keystore', config['keystore'],
-                             '-alias', keyalias,
-                             '-keyalg', 'RSA', '-keysize', '2048',
-                             '-validity', '10000',
+        if 'Binaries' in app:
+
+            # It's an app where we build from source, and verify the apk
+            # contents against a developer's binary, and then publish their
+            # version if everything checks out.
+
+            # Need the version name for the version code...
+            versionname = None
+            for build in app['builds']:
+                if build['vercode'] == vercode:
+                    versionname = build['version']
+                    break
+            if not versionname:
+                logging.error("...no defined build for version code {0}"
+                        .format(vercode))
+                continue
+
+            # Figure out where the developer's binary is supposed to come from...
+            url = app['Binaries']
+            url = url.replace('%v', versionname)
+            url = url.replace('%c', str(vercode))
+
+            # Grab the binary from where the developer publishes it...
+            logging.info("...retrieving " + url)
+            srcapk = os.path.join(tmp_dir, url.split('/')[-1])
+            p = FDroidPopen(['wget', '-nv', url], cwd=tmp_dir)
+            if p.returncode != 0 or not os.path.exists(srcapk):
+                logging.error("...failed to retrieve " + url +
+                        " - publish skipped")
+                continue
+
+            # Compare our unsigned one with the downloaded one...
+            compare_result = common.compare_apks(srcapk, apkfile, tmp_dir)
+            if compare_result:
+                logging.error("...verfication failed - publish skipped : "
+                        + compare_result)
+                continue
+
+            # Success! So move the downloaded file to the repo...
+            shutil.move(srcapk, os.path.join(output_dir, apkfilename))
+
+        else:
+
+            # It's a 'normal' app, i.e. we sign and publish it...
+
+            # Figure out the key alias name we'll use. Only the first 8
+            # characters are significant, so we'll use the first 8 from
+            # the MD5 of the app's ID and hope there are no collisions.
+            # If a collision does occur later, we're going to have to
+            # come up with a new alogrithm, AND rename all existing keys
+            # in the keystore!
+            if appid in config['keyaliases']:
+                # For this particular app, the key alias is overridden...
+                keyalias = config['keyaliases'][appid]
+                if keyalias.startswith('@'):
+                    m = md5.new()
+                    m.update(keyalias[1:])
+                    keyalias = m.hexdigest()[:8]
+            else:
+                m = md5.new()
+                m.update(appid)
+                keyalias = m.hexdigest()[:8]
+            logging.info("Key alias: " + keyalias)
+
+            # See if we already have a key for this application, and
+            # if not generate one...
+            p = FDroidPopen(['keytool', '-list',
+                             '-alias', keyalias, '-keystore', config['keystore'],
+                             '-storepass:file', config['keystorepassfile']])
+            if p.returncode != 0:
+                logging.info("Key does not exist - generating...")
+                p = FDroidPopen(['keytool', '-genkey',
+                                 '-keystore', config['keystore'],
+                                 '-alias', keyalias,
+                                 '-keyalg', 'RSA', '-keysize', '2048',
+                                 '-validity', '10000',
+                                 '-storepass:file', config['keystorepassfile'],
+                                 '-keypass:file', config['keypassfile'],
+                                 '-dname', config['keydname']])
+                # TODO keypass should be sent via stdin
+                if p.returncode != 0:
+                    raise BuildException("Failed to generate key")
+
+            # Sign the application...
+            p = FDroidPopen(['jarsigner', '-keystore', config['keystore'],
                              '-storepass:file', config['keystorepassfile'],
-                             '-keypass:file', config['keypassfile'],
-                             '-dname', config['keydname']])
+                             '-keypass:file', config['keypassfile'], '-sigalg',
+                             'MD5withRSA', '-digestalg', 'SHA1',
+                             apkfile, keyalias])
             # TODO keypass should be sent via stdin
             if p.returncode != 0:
-                raise BuildException("Failed to generate key")
+                raise BuildException("Failed to sign application")
 
-        # Sign the application...
-        p = FDroidPopen(['jarsigner', '-keystore', config['keystore'],
-                         '-storepass:file', config['keystorepassfile'],
-                         '-keypass:file', config['keypassfile'], '-sigalg',
-                         'MD5withRSA', '-digestalg', 'SHA1',
-                         apkfile, keyalias])
-        # TODO keypass should be sent via stdin
-        if p.returncode != 0:
-            raise BuildException("Failed to sign application")
-
-        # Zipalign it...
-        p = FDroidPopen([config['zipalign'], '-v', '4', apkfile,
-                         os.path.join(output_dir, apkfilename)])
-        if p.returncode != 0:
-            raise BuildException("Failed to align application")
-        os.remove(apkfile)
+            # Zipalign it...
+            p = FDroidPopen([config['zipalign'], '-v', '4', apkfile,
+                             os.path.join(output_dir, apkfilename)])
+            if p.returncode != 0:
+                raise BuildException("Failed to align application")
+            os.remove(apkfile)
 
         # Move the source tarball into the output directory...
         tarfilename = apkfilename[:-4] + '_src.tar.gz'

@@ -19,8 +19,6 @@
 
 import sys
 import os
-import shutil
-import subprocess
 import glob
 from optparse import OptionParser
 import logging
@@ -80,30 +78,16 @@ def main():
                 os.remove(remoteapk)
             url = 'https://f-droid.org/repo/' + apkfilename
             logging.info("...retrieving " + url)
-            p = FDroidPopen(['wget', url], cwd=tmp_dir)
+            p = FDroidPopen(['wget', '-nv', url], cwd=tmp_dir)
             if p.returncode != 0:
                 raise FDroidException("Failed to get " + apkfilename)
 
-            thisdir = os.path.join(tmp_dir, 'this_apk')
-            thatdir = os.path.join(tmp_dir, 'that_apk')
-            for d in [thisdir, thatdir]:
-                if os.path.exists(d):
-                    shutil.rmtree(d)
-                os.mkdir(d)
-
-            if subprocess.call(['jar', 'xf',
-                                os.path.join("..", "..", unsigned_dir, apkfilename)],
-                               cwd=thisdir) != 0:
-                raise FDroidException("Failed to unpack local build of " + apkfilename)
-            if subprocess.call(['jar', 'xf',
-                                os.path.join("..", "..", remoteapk)],
-                               cwd=thatdir) != 0:
-                raise FDroidException("Failed to unpack remote build of " + apkfilename)
-
-            p = FDroidPopen(['diff', '-r', 'this_apk', 'that_apk'], cwd=tmp_dir)
-            lines = p.output.splitlines()
-            if len(lines) != 1 or 'META-INF' not in lines[0]:
-                raise FDroidException("Unexpected diff output - " + p.output)
+            compare_result = common.compare_apks(
+                    os.path.join(unsigned_dir, apkfilename),
+                    remoteapk,
+                    tmp_dir)
+            if compare_result:
+                raise FDroidException(compare_result)
 
             logging.info("...successfully verified")
             verified += 1

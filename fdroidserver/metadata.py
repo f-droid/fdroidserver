@@ -57,6 +57,7 @@ app_defaults = OrderedDict([
     ('Requires Root', False),
     ('Repo Type', ''),
     ('Repo', ''),
+    ('Binaries', ''),
     ('Maintainer Notes', []),
     ('Archive Policy', None),
     ('Auto Update Mode', 'None'),
@@ -195,6 +196,11 @@ valuetypes = {
     FieldValidator("Repo Type",
                    ['git', 'git-svn', 'svn', 'hg', 'bzr', 'srclib'], None,
                    ["Repo Type"],
+                   []),
+
+    FieldValidator("Binaries",
+                   r'^http[s]?://', None,
+                   ["Binaries"],
                    []),
 
     FieldValidator("Archive Policy",
@@ -851,6 +857,8 @@ def write_metadata(dest, app):
     if app['Repo Type']:
         writefield('Repo Type')
         writefield('Repo')
+        if app['Binaries']:
+            writefield('Binaries')
         mf.write('\n')
     for build in app['builds']:
 
