@@ -57,7 +57,7 @@ app_defaults = OrderedDict([
     ('Requires Root', False),
     ('Repo Type', ''),
     ('Repo', ''),
-    ('Binaries', ''),
+    ('Binaries', None),
     ('Maintainer Notes', []),
     ('Archive Policy', None),
     ('Auto Update Mode', 'None'),
