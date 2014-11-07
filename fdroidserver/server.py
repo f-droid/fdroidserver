@@ -40,6 +40,9 @@ def update_awsbucket(repo_section):
     Requires AWS credentials set in config.py: awsaccesskeyid, awssecretkey
     '''
 
+    logging.debug('Syncing "' + repo_section + '" to Amazon S3 bucket "'
+                  + config['awsbucket'] + '"')
+
     import libcloud.security
     libcloud.security.VERIFY_SSL_CERT = True
     from libcloud.storage.types import Provider, ContainerDoesNotExistError
@@ -143,7 +146,7 @@ def update_serverwebroot(serverwebroot, repo_section):
 
 
 def _local_sync(fromdir, todir):
-    rsyncargs = ['rsync', '--recursive', '--links', '--times',
+    rsyncargs = ['rsync', '--recursive', '--links', '--times', '--perms',
                  '--one-file-system', '--delete', '--chmod=Da+rx,Fa-x,a+r,u+w']
     # use stricter rsync checking on all files since people using offline mode
     # are already prioritizing security above ease and speed

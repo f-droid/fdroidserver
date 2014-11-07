@@ -1,8 +1,10 @@
+
+
 #!/bin/sh -e
 # gendocs.sh -- generate a GNU manual in many formats.  This script is
 #   mentioned in maintain.texi.  See the help message below for usage details.
 
-scriptversion=2013-02-03.15
+scriptversion=2014-10-09.23
 
 # Copyright 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013
 # Free Software Foundation, Inc.
@@ -273,7 +275,7 @@ mkdir -p "$outdir/"
 cmd="$SETLANG $MAKEINFO -o $PACKAGE.info $commonarg $infoarg \"$srcfile\""
 echo "Generating info... ($cmd)"
 eval "$cmd"
-tar czf "$outdir/$PACKAGE.info.tar.gz" $PACKAGE.info*
+tar --create $PACKAGE.info* | gzip --no-name -f -9 --to-stdout > "$outdir/$PACKAGE.info.tar.gz"
 ls -l "$outdir/$PACKAGE.info.tar.gz"
 info_tgz_size=`calcsize "$outdir/$PACKAGE.info.tar.gz"`
 # do not mv the info files, there's no point in having them available
@@ -283,7 +285,7 @@ cmd="$SETLANG $TEXI2DVI $dirargs \"$srcfile\""
 printf "\nGenerating dvi... ($cmd)\n"
 eval "$cmd"
 # compress/finish dvi:
-gzip -f -9 $PACKAGE.dvi
+gzip --no-name -f -9 $PACKAGE.dvi
 dvi_gz_size=`calcsize $PACKAGE.dvi.gz`
 mv $PACKAGE.dvi.gz "$outdir/"
 ls -l "$outdir/$PACKAGE.dvi.gz"
@@ -301,7 +303,7 @@ if $generate_ascii; then
   printf "\nGenerating ascii... ($cmd)\n"
   eval "$cmd"
   ascii_size=`calcsize $PACKAGE.txt`
-  gzip -f -9 -c $PACKAGE.txt >"$outdir/$PACKAGE.txt.gz"
+  gzip --no-name -f -9 -c $PACKAGE.txt >"$outdir/$PACKAGE.txt.gz"
   ascii_gz_size=`calcsize "$outdir/$PACKAGE.txt.gz"`
   mv $PACKAGE.txt "$outdir/"
   ls -l "$outdir/$PACKAGE.txt" "$outdir/$PACKAGE.txt.gz"
@@ -317,7 +319,7 @@ html_split()
   (
     cd ${split_html_dir} || exit 1
     ln -sf ${PACKAGE}.html index.html
-    tar -czf "$abs_outdir/${PACKAGE}.html_$1.tar.gz" -- *.html
+    tar --create -- *.html | gzip --no-name -f -9 --to-stdout > "$abs_outdir/${PACKAGE}.html_$1.tar.gz"
   )
   eval html_$1_tgz_size=`calcsize "$outdir/${PACKAGE}.html_$1.tar.gz"`
   rm -f "$outdir"/html_$1/*.html
@@ -333,7 +335,7 @@ if test -z "$use_texi2html"; then
   rm -rf $PACKAGE.html  # in case a directory is left over
   eval "$cmd"
   html_mono_size=`calcsize $PACKAGE.html`
-  gzip -f -9 -c $PACKAGE.html >"$outdir/$PACKAGE.html.gz"
+  gzip --no-name -f -9 -c $PACKAGE.html >"$outdir/$PACKAGE.html.gz"
   html_mono_gz_size=`calcsize "$outdir/$PACKAGE.html.gz"`
   copy_images "$outdir/" $PACKAGE.html
   mv $PACKAGE.html "$outdir/"
@@ -347,7 +349,7 @@ if test -z "$use_texi2html"; then
   copy_images $split_html_dir/ $split_html_dir/*.html
   (
     cd $split_html_dir || exit 1
-    tar -czf "$abs_outdir/$PACKAGE.html_$split.tar.gz" -- *
+    tar --create -- * | gzip --no-name -f -9 --to-stdout > "$abs_outdir/$PACKAGE.html_$split.tar.gz"
   )
   eval \
     html_${split}_tgz_size=`calcsize "$outdir/$PACKAGE.html_$split.tar.gz"`
@@ -363,7 +365,7 @@ else # use texi2html:
   rm -rf $PACKAGE.html  # in case a directory is left over
   eval "$cmd"
   html_mono_size=`calcsize $PACKAGE.html`
-  gzip -f -9 -c $PACKAGE.html >"$outdir/$PACKAGE.html.gz"
+  gzip --no-name -f -9 -c $PACKAGE.html >"$outdir/$PACKAGE.html.gz"
   html_mono_gz_size=`calcsize "$outdir/$PACKAGE.html.gz"`
   mv $PACKAGE.html "$outdir/"
 
@@ -377,7 +379,7 @@ d=`dirname $srcfile`
 (
   cd "$d"
   srcfiles=`ls -d *.texinfo *.texi *.txi *.eps $source_extra 2>/dev/null` || true
-  tar czfh "$abs_outdir/$PACKAGE.texi.tar.gz" $srcfiles
+  tar --create --dereference $srcfiles | gzip --no-name -f -9 --to-stdout > "$abs_outdir/$PACKAGE.texi.tar.gz"
   ls -l "$abs_outdir/$PACKAGE.texi.tar.gz"
 )
 texi_tgz_size=`calcsize "$outdir/$PACKAGE.texi.tar.gz"`
@@ -388,7 +390,7 @@ if test -n "$docbook"; then
   printf "\nGenerating docbook XML... ($cmd)\n"
   eval "$cmd"
   docbook_xml_size=`calcsize $PACKAGE-db.xml`
-  gzip -f -9 -c $PACKAGE-db.xml >"$outdir/$PACKAGE-db.xml.gz"
+  gzip --no-name -f -9 -c $PACKAGE-db.xml >"$outdir/$PACKAGE-db.xml.gz"
   docbook_xml_gz_size=`calcsize "$outdir/$PACKAGE-db.xml.gz"`
   mv $PACKAGE-db.xml "$outdir/"
 
@@ -399,7 +401,7 @@ if test -n "$docbook"; then
   eval "$cmd"
   (
     cd ${split_html_db_dir} || exit 1
-    tar -czf "$abs_outdir/${PACKAGE}.html_node_db.tar.gz" -- *.html
+    tar --create -- *.html | gzip --no-name -f -9 --to-stdout > "$abs_outdir/${PACKAGE}.html_node_db.tar.gz"
   )
   html_node_db_tgz_size=`calcsize "$outdir/${PACKAGE}.html_node_db.tar.gz"`
   rm -f "$outdir"/html_node_db/*.html
