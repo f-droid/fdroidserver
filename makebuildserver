@@ -147,12 +147,14 @@ for f, src, shasum in cachefiles:
 # Generate an appropriate Vagrantfile for the buildserver, based on our
 # settings...
 vagrantfile = """
-Vagrant::Config.run do |config|
+Vagrant.configure("2") do |config|
 
   config.vm.box = "{0}"
   config.vm.box_url = "{1}"
 
-  config.vm.customize ["modifyvm", :id, "--memory", "{2}"]
+  config.vm.provider "virtualbox" do |v|
+    v.customize ["modifyvm", :id, "--memory", "{2}"]
+  end
 
   config.vm.provision :shell, :path => "fixpaths.sh"
 """.format(config['basebox'], config['baseboxurl'], config['memory'])
