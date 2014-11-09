@@ -37,20 +37,22 @@ else
 fi
 
 # If there are python errors or warnings, print them and fail.
-$PYFLAKES $PY_FILES
-$PEP8 --ignore=E123,E501 $PY_FILES
+
+if ! $PYFLAKES $PY_FILES; then
+	err "pyflakes tests failed!"
+fi
+
+if ! $PEP8 --ignore=E123,E501 $PY_FILES; then
+	err "pep8 tests failed!"
+fi
 
 
-#------------------------------------------------------------------------------#
-# check the syntax of included shell scripts
+# check the syntax of included shell scripts with bash -n
 
-# use bash to check that the syntax is correct
 for f in $SH_FILES; do
-    if bash -n $f; then
-        : # success! do nothing
-    else
-        err "FAILED!"
-    fi
+	if ! bash -n $f; then
+		err "bash tests failed!"
+	fi
 done
 
 exit 0
