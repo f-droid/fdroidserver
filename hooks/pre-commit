@@ -6,7 +6,8 @@
 # Redirect output to stderr.
 exec 1>&2
 
-FILES="fdroid makebuildserver setup.py examples/*.py buildserver/*.py fdroidserver/*.py"
+PY_FILES="fdroid makebuildserver setup.py examples/*.py buildserver/*.py fdroidserver/*.py"
+SH_FILES="fd-commit jenkins-build docs/*.sh hooks/pre-commit"
 
 cmd_exists() {
 	command -v $1 1>/dev/null
@@ -30,8 +31,8 @@ else
 fi
 
 # If there are python errors or warnings, print them and fail.
-[ -n $PYFLAKES ] && $PYFLAKES $FILES
-[ -n $PEP8 ] && $PEP8 --ignore=E123,E501 $FILES
+[ -n $PYFLAKES ] && $PYFLAKES $PY_FILES
+[ -n $PEP8 ] && $PEP8 --ignore=E123,E501 $PY_FILES
 
 
 #------------------------------------------------------------------------------#
@@ -39,7 +40,7 @@ fi
 
 exitstatus=0
 # use bash to check that the syntax is correct
-for f in fd-commit jenkins-build docs/*.sh hooks/pre-commit; do
+for f in $SH_FILES; do
     if bash -n $f; then
         : # success! do nothing
     else
