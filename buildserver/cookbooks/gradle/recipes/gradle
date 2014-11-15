@@ -33,8 +33,8 @@ for v in ${d_plugin_v}; do
 	fi
 done
 
-# Latest takes priority
-for f in ../build.gradle build.gradle; do
+# Earliest takes priority
+for f in build.gradle ../build.gradle; do
 	[[ -f $f ]] || continue
 	while read l; do
 		if [[ -z "$plugin_pver" && $l == *'com.android.tools.build:gradle:'* ]]; then
