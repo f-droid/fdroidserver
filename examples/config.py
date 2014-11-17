@@ -52,6 +52,15 @@ archive_description = """
 The repository of older versions of applications from the main demo repository.
 """
 
+# `fdroid update` will create a link to the current version of a given app.
+# This provides a static path to the current APK.  To disable the creation of
+# this link, uncomment this:
+# make_current_version_link = False
+
+# By default, the "current version" link will be based on the "Name" of the
+# app from the metadata.  You can change it to use a different field from the
+# metadata here:
+# current_version_name_source = 'id'
 
 # The ID of a GPG key for making detached signatures for apks. Optional.
 # gpgkey = '1DBA2E89'

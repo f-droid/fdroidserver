@@ -47,6 +47,8 @@ default_config = {
     'mvn3': "mvn",
     'gradle': 'gradle',
     'sync_from_local_copy_dir': False,
+    'make_current_version_link': True,
+    'current_version_name_source': 'Name',
     'update_stats': False,
     'stats_ignore': [],
     'stats_server': None,

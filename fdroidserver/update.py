@@ -824,7 +824,15 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                     apklist[i]['apkname'], apklist[i + 1]['apkname']))
                 sys.exit(1)
 
+        current_version_code = 0
+        current_version_file = None
         for apk in apklist:
+            # find the APK for the "Current Version"
+            if current_version_code < apk['versioncode']:
+                current_version_code = apk['versioncode']
+            if current_version_code < int(app['Current Version Code']):
+                current_version_file = apk['apkname']
+
             apkel = doc.createElement("package")
             apel.appendChild(apkel)
             addElement('version', apk['version'], doc, apkel)
@@ -856,6 +864,25 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                 addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
             if len(apk['features']) > 0:
                 addElement('features', ','.join(apk['features']), doc, apkel)
+
+        if current_version_file is not None \
+                and config['make_current_version_link'] \
+                and repodir == 'repo':  # only create these
+            sanitized_name = re.sub('''[ '"&%?+=]''', '',
+                                    app[config['current_version_name_source']])
+            apklinkname = sanitized_name + '.apk'
+            current_version_path = os.path.join(repodir, current_version_file)
+            if os.path.exists(apklinkname):
+                os.remove(apklinkname)
+            os.symlink(current_version_path, apklinkname)
+            # also symlink gpg signature, if it exists
+            for extension in ('.asc', '.sig'):
+                sigfile_path = current_version_path + extension
+                if os.path.exists(sigfile_path):
+                    siglinkname = apklinkname + extension
+                    if os.path.exists(siglinkname):
+                        os.remove(siglinkname)
+                    os.symlink(sigfile_path, siglinkname)
 
     of = open(os.path.join(repodir, 'index.xml'), 'wb')
     if options.pretty:
