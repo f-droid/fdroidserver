@@ -46,19 +46,19 @@ create_test_file() {
 #------------------------------------------------------------------------------#
 # "main"
 
-if [ $1 = "-h" ] || [ $1 = "--help" ]; then
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
     set +x
     echo "Usage: $0 '/path/to/folder/with/apks'"
     exit 1
 fi
 
-if [ -z $ANDROID_HOME ]; then
+if [ -z "$ANDROID_HOME" ]; then
     echo "ANDROID_HOME must be set with the path to the Android SDK, i.e.: "
     echo "  export ANDROID_HOME=/opt/android-sdk"
     exit 1
 fi
 
-if [ -z $1 ]; then
+if [ -z "$1" ]; then
     APKDIR=`pwd`
 else
     APKDIR=$1
