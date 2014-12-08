@@ -1,0 +1,54 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+
+# http://www.drdobbs.com/testing/unit-testing-with-python/240165163
+
+import inspect
+import optparse
+import os
+import sys
+import unittest
+
+localmodule = os.path.realpath(os.path.join(
+        os.path.dirname(inspect.getfile(inspect.currentframe())),
+        '..'))
+print('localmodule: ' + localmodule)
+if localmodule not in sys.path:
+    sys.path.insert(0,localmodule)
+
+import fdroidserver.common
+
+class CommonTest(unittest.TestCase):
+    '''fdroidserver/common.py'''
+
+    def testIsApkDebuggable(self):
+        config = dict()
+        config['aapt'] = '/usr/bin/aapt'
+        # these are set debuggable
+        testfiles = []
+        testfiles.append(os.path.join(os.path.dirname(__file__), 'urzip.apk'))
+        testfiles.append(os.path.join(os.path.dirname(__file__), 'urzip-badsig.apk'))
+        testfiles.append(os.path.join(os.path.dirname(__file__), 'urzip-badcert.apk'))
+        for apkfile in testfiles:
+            debuggable = fdroidserver.common.isApkDebuggable(apkfile, config)
+            self.assertTrue(debuggable,
+                            "debuggable APK state was not properly parsed!")
+        # these are set NOT debuggable
+        testfiles = []
+        testfiles.append(os.path.join(os.path.dirname(__file__), 'urzip-release.apk'))
+        testfiles.append(os.path.join(os.path.dirname(__file__), 'urzip-release-unsigned.apk'))
+        for apkfile in testfiles:
+            debuggable = fdroidserver.common.isApkDebuggable(apkfile, config)
+            self.assertFalse(debuggable,
+                             "debuggable APK state was not properly parsed!")
+
+
+if __name__ == "__main__":
+    parser = optparse.OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
+
+    newSuite = unittest.TestSuite()
+    newSuite.addTest(unittest.makeSuite(CommonTest))
+    unittest.main()
