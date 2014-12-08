@@ -130,9 +130,6 @@ def read_config(opts, config_file='config.py'):
 
     fill_config_defaults(config)
 
-    if not test_sdk_exists(config):
-        sys.exit(3)
-
     if not test_build_tools_exists(config):
         sys.exit(3)
 
