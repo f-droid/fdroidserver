@@ -1597,8 +1597,7 @@ def isApkDebuggable(apkfile, config):
 
     :param apkfile: full path to the apk to check"""
 
-    p = SilentPopen([os.path.join(config['sdk_path'], 'build-tools',
-                                  config['build_tools'], 'aapt'),
+    p = SilentPopen([config['aapt'],
                      'dump', 'xmltree', apkfile, 'AndroidManifest.xml'])
     if p.returncode != 0:
         logging.critical("Failed to get apk manifest information")
