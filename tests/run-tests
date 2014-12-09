@@ -97,9 +97,9 @@ echo_header "test python getsig replacement"
 
 cd $WORKSPACE/tests/getsig
 ./make.sh
-cd $WORKSPACE/tests
-./common.TestCase
-./update.TestCase
+for testcase in $WORKSPACE/tests/*.TestCase; do
+    $testcase
+done
 
 
 #------------------------------------------------------------------------------#

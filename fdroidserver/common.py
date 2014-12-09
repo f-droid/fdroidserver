@@ -130,32 +130,6 @@ def read_config(opts, config_file='config.py'):
 
     fill_config_defaults(config)
 
-    bin_paths = {
-        'aapt': [
-            os.path.join(config['sdk_path'], 'build-tools', config['build_tools'], 'aapt'),
-            ],
-        'zipalign': [
-            os.path.join(config['sdk_path'], 'tools', 'zipalign'),
-            os.path.join(config['sdk_path'], 'build-tools', config['build_tools'], 'zipalign'),
-            ],
-        'android': [
-            os.path.join(config['sdk_path'], 'tools', 'android'),
-            ],
-        'adb': [
-            os.path.join(config['sdk_path'], 'platform-tools', 'adb'),
-            ],
-        }
-
-    for b, paths in bin_paths.items():
-        config[b] = None
-        for path in paths:
-            if os.path.isfile(path):
-                config[b] = path
-                break
-        if config[b] is None:
-            logging.warn("Could not find %s in any of the following paths:\n%s" % (
-                b, '\n'.join(paths)))
-
     # There is no standard, so just set up the most common environment
     # variables
     env = os.environ
@@ -1378,8 +1352,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Generate (or update) the ant build file, build.xml...
     if build['update'] and build['update'] != ['no'] and build['type'] == 'ant':
-        parms = [config['android'], 'update', 'lib-project']
-        lparms = [config['android'], 'update', 'project']
+        parms = ['android', 'update', 'lib-project']
+        lparms = ['android', 'update', 'project']
 
         if build['target']:
             parms += ['-t', build['target']]
@@ -1397,7 +1371,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             else:
                 logging.debug("Updating subproject %s" % d)
                 cmd = lparms + ['-p', d]
-            p = FDroidPopen(cmd, cwd=root_dir)
+            p = SdkToolsPopen(cmd, cwd=root_dir)
             # Check to see whether an error was returned without a proper exit
             # code (this is the case for the 'no target set or target invalid'
             # error)
