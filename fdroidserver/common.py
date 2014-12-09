@@ -130,9 +130,6 @@ def read_config(opts, config_file='config.py'):
 
     fill_config_defaults(config)
 
-    if not test_build_tools_exists(config):
-        sys.exit(3)
-
     bin_paths = {
         'aapt': [
             os.path.join(config['sdk_path'], 'build-tools', config['build_tools'], 'aapt'),
@@ -194,7 +191,42 @@ def read_config(opts, config_file='config.py'):
     return config
 
 
+def find_sdk_tools_cmd(cmd):
+    '''find a working path to a tool from the Android SDK'''
+
+    tooldirs = []
+    if 'sdk_path' in config and os.path.exists(config['sdk_path']):
+        # try to find a working path to this command, in all the recent possible paths
+        if 'build_tools' in config:
+            build_tools = os.path.join(config['sdk_path'], 'build-tools')
+            # if 'build_tools' was manually set and exists, check only that one
+            configed_build_tools = os.path.join(build_tools, config['build_tools'])
+            if os.path.exists(configed_build_tools):
+                tooldirs.append(configed_build_tools)
+            else:
+                # no configed version, so hunt known paths for it
+                for f in sorted(os.listdir(build_tools), reverse=True):
+                    if os.path.isdir(os.path.join(build_tools, f)):
+                        tooldirs.append(os.path.join(build_tools, f))
+                tooldirs.append(build_tools)
+        sdk_tools = os.path.join(config['sdk_path'], 'tools')
+        if os.path.exists(sdk_tools):
+            tooldirs.append(sdk_tools)
+        sdk_platform_tools = os.path.join(config['sdk_path'], 'platform-tools')
+        if os.path.exists(sdk_platform_tools):
+            tooldirs.append(sdk_platform_tools)
+    tooldirs.append('/usr/bin')
+    for d in tooldirs:
+        if os.path.isfile(os.path.join(d, cmd)):
+            return os.path.join(d, cmd)
+    # did not find the command, exit with error message
+    ensure_build_tools_exists(config)
+
+
 def test_sdk_exists(thisconfig):
+    if 'sdk_path' not in thisconfig:
+        logging.error("'sdk_path' not set in config.py!")
+        return False
     if thisconfig['sdk_path'] == default_config['sdk_path']:
         logging.error('No Android SDK found!')
         logging.error('You can use ANDROID_HOME to set the path to your SDK, i.e.:')
@@ -214,16 +246,15 @@ def test_sdk_exists(thisconfig):
     return True
 
 
-def test_build_tools_exists(thisconfig):
+def ensure_build_tools_exists(thisconfig):
     if not test_sdk_exists(thisconfig):
-        return False
+        sys.exit(3)
     build_tools = os.path.join(thisconfig['sdk_path'], 'build-tools')
     versioned_build_tools = os.path.join(build_tools, thisconfig['build_tools'])
     if not os.path.isdir(versioned_build_tools):
         logging.critical('Android Build Tools path "'
                          + versioned_build_tools + '" does not exist!')
-        return False
-    return True
+        sys.exit(3)
 
 
 def write_password_file(pwtype, password=None):
@@ -1597,8 +1628,7 @@ def isApkDebuggable(apkfile, config):
 
     :param apkfile: full path to the apk to check"""
 
-    p = SilentPopen([config['aapt'],
-                     'dump', 'xmltree', apkfile, 'AndroidManifest.xml'])
+    p = SdkToolsPopen(['aapt', 'dump', 'xmltree', apkfile, 'AndroidManifest.xml'])
     if p.returncode != 0:
         logging.critical("Failed to get apk manifest information")
         sys.exit(1)
@@ -1635,6 +1665,14 @@ class AsynchronousFileReader(threading.Thread):
 class PopenResult:
     returncode = None
     output = ''
+
+
+def SdkToolsPopen(commands, cwd=None, shell=False):
+    cmd = commands[0]
+    if cmd not in config:
+        config[cmd] = find_sdk_tools_cmd(commands[0])
+    return FDroidPopen([config[cmd]] + commands[1:],
+                       cwd=cwd, shell=shell, output=False)
 
 
 def SilentPopen(commands, cwd=None, shell=False):

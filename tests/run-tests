@@ -209,16 +209,20 @@ $fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME
 #------------------------------------------------------------------------------#
 echo_header "check that 'fdroid init' fails when build-tools cannot be found"
 
-REPOROOT=`create_test_dir`
-FAKE_ANDROID_HOME=`create_test_dir`
-create_fake_android_home $FAKE_ANDROID_HOME
-rm -f $FAKE_ANDROID_HOME/build-tools/*/aapt
-KEYSTORE=$REPOROOT/keystore.jks
-cd $REPOROOT
-set +e
-$fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME
-[ $? -eq 0 ] && exit 1
-set -e
+if [ -e /usr/bin/aapt ]; then
+    echo "/usr/bin/aapt exists, not running test"
+else
+    REPOROOT=`create_test_dir`
+    FAKE_ANDROID_HOME=`create_test_dir`
+    create_fake_android_home $FAKE_ANDROID_HOME
+    rm -f $FAKE_ANDROID_HOME/build-tools/*/aapt
+    KEYSTORE=$REPOROOT/keystore.jks
+    cd $REPOROOT
+    set +e
+    $fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME
+    [ $? -eq 0 ] && exit 1
+    set -e
+fi
 
 
 #------------------------------------------------------------------------------#

@@ -168,28 +168,31 @@ def main():
         logging.info('Try running `fdroid init` in an empty directory.')
         sys.exit()
 
-    # try to find a working aapt, in all the recent possible paths
-    build_tools = os.path.join(test_config['sdk_path'], 'build-tools')
-    aaptdirs = []
-    aaptdirs.append(os.path.join(build_tools, test_config['build_tools']))
-    aaptdirs.append(build_tools)
-    for f in os.listdir(build_tools):
-        if os.path.isdir(os.path.join(build_tools, f)):
-            aaptdirs.append(os.path.join(build_tools, f))
-    for d in sorted(aaptdirs, reverse=True):
-        if os.path.isfile(os.path.join(d, 'aapt')):
-            aapt = os.path.join(d, 'aapt')
-            break
-    if os.path.isfile(aapt):
-        dirname = os.path.basename(os.path.dirname(aapt))
-        if dirname == 'build-tools':
-            # this is the old layout, before versioned build-tools
-            test_config['build_tools'] = ''
-        else:
-            test_config['build_tools'] = dirname
-        write_to_config(test_config, 'build_tools')
-    if not common.test_build_tools_exists(test_config):
-        sys.exit(3)
+    if os.path.exists('/usr/bin/aapt'):
+        # make sure at least aapt is found, since this can't do anything without it
+        config['aapt'] = common.find_sdk_tools_cmd('aapt')
+    else:
+        # try to find a working aapt, in all the recent possible paths
+        build_tools = os.path.join(test_config['sdk_path'], 'build-tools')
+        aaptdirs = []
+        aaptdirs.append(os.path.join(build_tools, test_config['build_tools']))
+        aaptdirs.append(build_tools)
+        for f in os.listdir(build_tools):
+            if os.path.isdir(os.path.join(build_tools, f)):
+                aaptdirs.append(os.path.join(build_tools, f))
+        for d in sorted(aaptdirs, reverse=True):
+            if os.path.isfile(os.path.join(d, 'aapt')):
+                aapt = os.path.join(d, 'aapt')
+                break
+        if os.path.isfile(aapt):
+            dirname = os.path.basename(os.path.dirname(aapt))
+            if dirname == 'build-tools':
+                # this is the old layout, before versioned build-tools
+                test_config['build_tools'] = ''
+            else:
+                test_config['build_tools'] = dirname
+            write_to_config(test_config, 'build_tools')
+        common.ensure_build_tools_exists(test_config)
 
     # now that we have a local config.py, read configuration...
     config = common.read_config(options)
