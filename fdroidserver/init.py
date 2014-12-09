@@ -124,6 +124,7 @@ def main():
         prefix = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
         examplesdir = prefix + '/examples'
 
+    aapt = None
     fdroiddir = os.getcwd()
     test_config = dict()
     common.fill_config_defaults(test_config)
@@ -133,21 +134,28 @@ def main():
     if options.android_home is not None:
         test_config['sdk_path'] = options.android_home
     elif not common.test_sdk_exists(test_config):
-        # if neither --android-home nor the default sdk_path exist, prompt the user
-        default_sdk_path = '/opt/android-sdk'
-        while not options.no_prompt:
-            try:
-                s = raw_input('Enter the path to the Android SDK ('
-                              + default_sdk_path + ') here:\n> ')
-            except KeyboardInterrupt:
-                print('')
-                sys.exit(1)
-            if re.match('^\s*$', s) is not None:
-                test_config['sdk_path'] = default_sdk_path
-            else:
-                test_config['sdk_path'] = s
-            if common.test_sdk_exists(test_config):
-                break
+        if os.path.isfile('/usr/bin/aapt'):
+            # remove sdk_path and build_tools, they are not required
+            test_config.pop('sdk_path', None)
+            test_config.pop('build_tools', None)
+            # make sure at least aapt is found, since this can't do anything without it
+            test_config['aapt'] = common.find_sdk_tools_cmd('aapt')
+        else:
+            # if neither --android-home nor the default sdk_path exist, prompt the user
+            default_sdk_path = '/opt/android-sdk'
+            while not options.no_prompt:
+                try:
+                    s = raw_input('Enter the path to the Android SDK ('
+                                  + default_sdk_path + ') here:\n> ')
+                except KeyboardInterrupt:
+                    print('')
+                    sys.exit(1)
+                if re.match('^\s*$', s) is not None:
+                    test_config['sdk_path'] = default_sdk_path
+                else:
+                    test_config['sdk_path'] = s
+                if common.test_sdk_exists(test_config):
+                    break
     if not common.test_sdk_exists(test_config):
         sys.exit(3)
 
@@ -162,16 +170,14 @@ def main():
         # "$ANDROID_HOME" may be used if the env var is set up correctly.
         # If android_home is not None, the path given from the command line
         # will be directly written in the config.
-        write_to_config(test_config, 'sdk_path', options.android_home)
+        if 'sdk_path' in test_config:
+            write_to_config(test_config, 'sdk_path', options.android_home)
     else:
         logging.warn('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
         logging.info('Try running `fdroid init` in an empty directory.')
         sys.exit()
 
-    if os.path.exists('/usr/bin/aapt'):
-        # make sure at least aapt is found, since this can't do anything without it
-        config['aapt'] = common.find_sdk_tools_cmd('aapt')
-    else:
+    if not 'aapt' in test_config or not os.path.isfile(test_config['aapt']):
         # try to find a working aapt, in all the recent possible paths
         build_tools = os.path.join(test_config['sdk_path'], 'build-tools')
         aaptdirs = []
@@ -278,7 +284,8 @@ def main():
     logging.info('Built repo based in "' + fdroiddir + '"')
     logging.info('with this config:')
     logging.info('  Android SDK:\t\t\t' + config['sdk_path'])
-    logging.info('  Android SDK Build Tools:\t' + os.path.dirname(aapt))
+    if aapt:
+        logging.info('  Android SDK Build Tools:\t' + os.path.dirname(aapt))
     logging.info('  Android NDK (optional):\t' + ndk_path)
     logging.info('  Keystore for signing key:\t' + keystore)
     if repo_keyalias is not None:

@@ -169,7 +169,7 @@ def find_sdk_tools_cmd(cmd):
     '''find a working path to a tool from the Android SDK'''
 
     tooldirs = []
-    if 'sdk_path' in config and os.path.exists(config['sdk_path']):
+    if config is not None and 'sdk_path' in config and os.path.exists(config['sdk_path']):
         # try to find a working path to this command, in all the recent possible paths
         if 'build_tools' in config:
             build_tools = os.path.join(config['sdk_path'], 'build-tools')
@@ -199,8 +199,11 @@ def find_sdk_tools_cmd(cmd):
 
 def test_sdk_exists(thisconfig):
     if 'sdk_path' not in thisconfig:
-        logging.error("'sdk_path' not set in config.py!")
-        return False
+        if 'aapt' in thisconfig and os.path.isfile(thisconfig['aapt']):
+            return True
+        else:
+            logging.error("'sdk_path' not set in config.py!")
+            return False
     if thisconfig['sdk_path'] == default_config['sdk_path']:
         logging.error('No Android SDK found!')
         logging.error('You can use ANDROID_HOME to set the path to your SDK, i.e.:')
