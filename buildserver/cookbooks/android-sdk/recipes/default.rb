@@ -8,7 +8,7 @@ script "setup-android-sdk" do
   user user
   cwd "/tmp"
   code "
-    tar zxvf /vagrant/cache/android-sdk_r23.0.2-linux.tgz
+    tar zxvf /vagrant/cache/android-sdk_r24.0.1-linux.tgz
     mv android-sdk-linux #{sdk_loc}
     #{sdk_loc}/tools/android update sdk --no-ui -t platform-tool
     #{sdk_loc}/tools/android update sdk --no-ui -t tool

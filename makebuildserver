@@ -62,9 +62,9 @@ if not os.path.exists(cachedir):
     os.mkdir(cachedir)
 
 cachefiles = [
-    ('android-sdk_r23.0.2-linux.tgz',
-     'https://dl.google.com/android/android-sdk_r23.0.2-linux.tgz',
-     'a86741fee9140c340b60fe545566db7c0a43a0963f3c7e64d07b4d05ebbe89f4'),
+    ('android-sdk_r24.0.1-linux.tgz',
+     'https://dl.google.com/android/android-sdk_r24.0.1-linux.tgz',
+     'bb3754524a8f6700c2898617c9d8836a987a8aa43d0e922885cd7a98ca79b281'),
     ('gradle-1.4-bin.zip',
      'https://services.gradle.org/distributions/gradle-1.4-bin.zip',
      'cd99e85fbcd0ae8b99e81c9992a2f10cceb7b5f009c3720ef3a0078f4f92e94e'),
