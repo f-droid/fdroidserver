@@ -9,7 +9,7 @@
 # Override the path to the Android NDK, $ANDROID_NDK by default
 # ndk_path = "/path/to/android-ndk"
 # Build tools version to be used
-build_tools = "21.0.2"
+build_tools = "21.1.1"
 
 # Command for running Ant
 # ant = "/path/to/ant"
