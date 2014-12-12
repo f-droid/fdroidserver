@@ -42,7 +42,7 @@ env = None
 default_config = {
     'sdk_path': "$ANDROID_HOME",
     'ndk_path': "$ANDROID_NDK",
-    'build_tools': "21.1.1",
+    'build_tools': "21.1.2",
     'ant': "ant",
     'mvn3': "mvn",
     'gradle': 'gradle',
