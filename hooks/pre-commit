@@ -8,6 +8,7 @@ exec 1>&2
 
 PY_FILES="fdroid makebuildserver setup.py examples/*.py buildserver/*.py fdroidserver/*.py"
 SH_FILES="fd-commit jenkins-build docs/*.sh hooks/pre-commit"
+RB_FILES="buildserver/cookbooks/*/recipes/*.rb"
 
 err() {
 	echo ERROR: "$@"
@@ -52,6 +53,14 @@ fi
 for f in $SH_FILES; do
 	if ! bash -n $f; then
 		err "bash tests failed!"
+	fi
+done
+
+# check the syntax of included ruby scripts with ruby -c
+
+for f in $RB_FILES; do
+	if ! ruby -c $f 1>/dev/null; then
+		err "ruby tests failed!"
 	fi
 done
 
