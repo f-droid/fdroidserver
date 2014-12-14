@@ -501,7 +501,7 @@ class vcs_git(vcs):
     # fdroidserver) and then we'll proceed to destroy it! This is called as
     # a safety check.
     def checkrepo(self):
-        p = SilentPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local)
+        p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local, output=False)
         result = p.output.rstrip()
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
@@ -517,12 +517,12 @@ class vcs_git(vcs):
         else:
             self.checkrepo()
             # Discard any working tree changes
-            p = SilentPopen(['git', 'reset', '--hard'], cwd=self.local)
+            p = FDroidPopen(['git', 'reset', '--hard'], cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException("Git reset failed", p.output)
             # Remove untracked files now, in case they're tracked in the target
             # revision (it happens!)
-            p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
+            p = FDroidPopen(['git', 'clean', '-dffx'], cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException("Git clean failed", p.output)
             if not self.refreshed:
@@ -530,28 +530,28 @@ class vcs_git(vcs):
                 p = FDroidPopen(['git', 'fetch', 'origin'], cwd=self.local)
                 if p.returncode != 0:
                     raise VCSException("Git fetch failed", p.output)
-                p = SilentPopen(['git', 'fetch', '--prune', '--tags', 'origin'], cwd=self.local)
+                p = FDroidPopen(['git', 'fetch', '--prune', '--tags', 'origin'], cwd=self.local, output=False)
                 if p.returncode != 0:
                     raise VCSException("Git fetch failed", p.output)
                 # Recreate origin/HEAD as git clone would do it, in case it disappeared
-                p = SilentPopen(['git', 'remote', 'set-head', 'origin', '--auto'], cwd=self.local)
+                p = FDroidPopen(['git', 'remote', 'set-head', 'origin', '--auto'], cwd=self.local, output=False)
                 if p.returncode != 0:
                     lines = p.output.splitlines()
                     if 'Multiple remote HEAD branches' not in lines[0]:
                         raise VCSException("Git remote set-head failed", p.output)
                     branch = lines[1].split(' ')[-1]
-                    p2 = SilentPopen(['git', 'remote', 'set-head', 'origin', branch], cwd=self.local)
+                    p2 = FDroidPopen(['git', 'remote', 'set-head', 'origin', branch], cwd=self.local, output=False)
                     if p2.returncode != 0:
                         raise VCSException("Git remote set-head failed", p.output + '\n' + p2.output)
                 self.refreshed = True
         # origin/HEAD is the HEAD of the remote, e.g. the "default branch" on
         # a github repo. Most of the time this is the same as origin/master.
         rev = rev or 'origin/HEAD'
-        p = SilentPopen(['git', 'checkout', '-f', rev], cwd=self.local)
+        p = FDroidPopen(['git', 'checkout', '-f', rev], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException("Git checkout of '%s' failed" % rev, p.output)
         # Get rid of any uncontrolled files left behind
-        p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
+        p = FDroidPopen(['git', 'clean', '-dffx'], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException("Git clean failed", p.output)
 
@@ -574,10 +574,10 @@ class vcs_git(vcs):
                 ['git', 'reset', '--hard'],
                 ['git', 'clean', '-dffx'],
                 ]:
-            p = SilentPopen(['git', 'submodule', 'foreach', '--recursive'] + cmd, cwd=self.local)
+            p = FDroidPopen(['git', 'submodule', 'foreach', '--recursive'] + cmd, cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException("Git submodule reset failed", p.output)
-        p = SilentPopen(['git', 'submodule', 'sync'], cwd=self.local)
+        p = FDroidPopen(['git', 'submodule', 'sync'], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException("Git submodule sync failed", p.output)
         p = FDroidPopen(['git', 'submodule', 'update', '--init', '--force', '--recursive'], cwd=self.local)
@@ -586,12 +586,12 @@ class vcs_git(vcs):
 
     def gettags(self):
         self.checkrepo()
-        p = SilentPopen(['git', 'tag'], cwd=self.local)
+        p = FDroidPopen(['git', 'tag'], cwd=self.local, output=False)
         return p.output.splitlines()
 
     def latesttags(self, alltags, number):
         self.checkrepo()
-        p = SilentPopen(['echo "' + '\n'.join(alltags) + '" | '
+        p = FDroidPopen(['echo "' + '\n'.join(alltags, output=False) + '" | '
                         + 'xargs -I@ git log --format=format:"%at @%n" -1 @ | '
                         + 'sort -n | awk \'{print $2}\''],
                         cwd=self.local, shell=True)
@@ -615,7 +615,7 @@ class vcs_gitsvn(vcs):
     # fdroidserver) and then we'll proceed to destory it! This is called as
     # a safety check.
     def checkrepo(self):
-        p = SilentPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local)
+        p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local, output=False)
         result = p.output.rstrip()
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
@@ -633,12 +633,12 @@ class vcs_gitsvn(vcs):
                         gitsvn_cmd += ' -t %s' % i[5:]
                     elif i.startswith('branches='):
                         gitsvn_cmd += ' -b %s' % i[9:]
-                p = SilentPopen([gitsvn_cmd + " %s %s" % (remote_split[0], self.local)], shell=True)
+                p = FDroidPopen([gitsvn_cmd + " %s %s" % (remote_split[0], self.local)], shell=True, output=False)
                 if p.returncode != 0:
                     self.clone_failed = True
                     raise VCSException("Git svn clone failed", p.output)
             else:
-                p = SilentPopen([gitsvn_cmd + " %s %s" % (self.remote, self.local)], shell=True)
+                p = FDroidPopen([gitsvn_cmd + " %s %s" % (self.remote, self.local)], shell=True, output=False)
                 if p.returncode != 0:
                     self.clone_failed = True
                     raise VCSException("Git svn clone failed", p.output)
@@ -646,20 +646,20 @@ class vcs_gitsvn(vcs):
         else:
             self.checkrepo()
             # Discard any working tree changes
-            p = SilentPopen(['git', 'reset', '--hard'], cwd=self.local)
+            p = FDroidPopen(['git', 'reset', '--hard'], cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException("Git reset failed", p.output)
             # Remove untracked files now, in case they're tracked in the target
             # revision (it happens!)
-            p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
+            p = FDroidPopen(['git', 'clean', '-dffx'], cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException("Git clean failed", p.output)
             if not self.refreshed:
                 # Get new commits, branches and tags from repo
-                p = SilentPopen(['%sgit svn fetch %s' % self.userargs()], cwd=self.local, shell=True)
+                p = FDroidPopen(['%sgit svn fetch %s' % self.userargs()], cwd=self.local, shell=True, output=False)
                 if p.returncode != 0:
                     raise VCSException("Git svn fetch failed")
-                p = SilentPopen(['%sgit svn rebase %s' % self.userargs()], cwd=self.local, shell=True)
+                p = FDroidPopen(['%sgit svn rebase %s' % self.userargs()], cwd=self.local, shell=True, output=False)
                 if p.returncode != 0:
                     raise VCSException("Git svn rebase failed", p.output)
                 self.refreshed = True
@@ -669,8 +669,7 @@ class vcs_gitsvn(vcs):
             nospaces_rev = rev.replace(' ', '%20')
             # Try finding a svn tag
             for treeish in ['origin/', '']:
-                p = SilentPopen(['git', 'checkout', treeish + 'tags/' + nospaces_rev],
-                                cwd=self.local)
+                p = FDroidPopen(['git', 'checkout', treeish + 'tags/' + nospaces_rev], cwd=self.local, output=False)
                 if p.returncode == 0:
                     break
             if p.returncode != 0:
@@ -691,8 +690,7 @@ class vcs_gitsvn(vcs):
 
                     svn_rev = svn_rev if svn_rev[0] == 'r' else 'r' + svn_rev
 
-                    p = SilentPopen(['git', 'svn', 'find-rev', '--before', svn_rev, treeish],
-                                    cwd=self.local)
+                    p = FDroidPopen(['git', 'svn', 'find-rev', '--before', svn_rev, treeish], cwd=self.local, output=False)
                     git_rev = p.output.rstrip()
 
                     if p.returncode == 0 and git_rev:
@@ -700,17 +698,17 @@ class vcs_gitsvn(vcs):
 
                 if p.returncode != 0 or not git_rev:
                     # Try a plain git checkout as a last resort
-                    p = SilentPopen(['git', 'checkout', rev], cwd=self.local)
+                    p = FDroidPopen(['git', 'checkout', rev], cwd=self.local, output=False)
                     if p.returncode != 0:
                         raise VCSException("No git treeish found and direct git checkout of '%s' failed" % rev, p.output)
                 else:
                     # Check out the git rev equivalent to the svn rev
-                    p = SilentPopen(['git', 'checkout', git_rev], cwd=self.local)
+                    p = FDroidPopen(['git', 'checkout', git_rev], cwd=self.local, output=False)
                     if p.returncode != 0:
                         raise VCSException("Git checkout of '%s' failed" % rev, p.output)
 
         # Get rid of any uncontrolled files left behind
-        p = SilentPopen(['git', 'clean', '-dffx'], cwd=self.local)
+        p = FDroidPopen(['git', 'clean', '-dffx'], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException("Git clean failed", p.output)
 
@@ -723,7 +721,7 @@ class vcs_gitsvn(vcs):
 
     def getref(self):
         self.checkrepo()
-        p = SilentPopen(['git', 'svn', 'find-rev', 'HEAD'], cwd=self.local)
+        p = FDroidPopen(['git', 'svn', 'find-rev', 'HEAD'], cwd=self.local, output=False)
         if p.returncode != 0:
             return None
         return p.output.strip()
@@ -736,16 +734,16 @@ class vcs_hg(vcs):
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
-            p = SilentPopen(['hg', 'clone', self.remote, self.local])
+            p = FDroidPopen(['hg', 'clone', self.remote, self.local], output=False)
             if p.returncode != 0:
                 self.clone_failed = True
                 raise VCSException("Hg clone failed", p.output)
         else:
-            p = SilentPopen(['hg status -uS | xargs rm -rf'], cwd=self.local, shell=True)
+            p = FDroidPopen(['hg status -uS | xargs rm -rf'], cwd=self.local, shell=True, output=False)
             if p.returncode != 0:
                 raise VCSException("Hg clean failed", p.output)
             if not self.refreshed:
-                p = SilentPopen(['hg', 'pull'], cwd=self.local)
+                p = FDroidPopen(['hg', 'pull'], cwd=self.local, output=False)
                 if p.returncode != 0:
                     raise VCSException("Hg pull failed", p.output)
                 self.refreshed = True
@@ -753,22 +751,22 @@ class vcs_hg(vcs):
         rev = rev or 'default'
         if not rev:
             return
-        p = SilentPopen(['hg', 'update', '-C', rev], cwd=self.local)
+        p = FDroidPopen(['hg', 'update', '-C', rev], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException("Hg checkout of '%s' failed" % rev, p.output)
-        p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
+        p = FDroidPopen(['hg', 'purge', '--all'], cwd=self.local, output=False)
         # Also delete untracked files, we have to enable purge extension for that:
         if "'purge' is provided by the following extension" in p.output:
             with open(os.path.join(self.local, '.hg', 'hgrc'), "a") as myfile:
                 myfile.write("\n[extensions]\nhgext.purge=\n")
-            p = SilentPopen(['hg', 'purge', '--all'], cwd=self.local)
+            p = FDroidPopen(['hg', 'purge', '--all'], cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException("HG purge failed", p.output)
         elif p.returncode != 0:
             raise VCSException("HG purge failed", p.output)
 
     def gettags(self):
-        p = SilentPopen(['hg', 'tags', '-q'], cwd=self.local)
+        p = FDroidPopen(['hg', 'tags', '-q'], cwd=self.local, output=False)
         return p.output.splitlines()[1:]
 
 
@@ -779,27 +777,27 @@ class vcs_bzr(vcs):
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
-            p = SilentPopen(['bzr', 'branch', self.remote, self.local])
+            p = FDroidPopen(['bzr', 'branch', self.remote, self.local], output=False)
             if p.returncode != 0:
                 self.clone_failed = True
                 raise VCSException("Bzr branch failed", p.output)
         else:
-            p = SilentPopen(['bzr', 'clean-tree', '--force', '--unknown', '--ignored'], cwd=self.local)
+            p = FDroidPopen(['bzr', 'clean-tree', '--force', '--unknown', '--ignored'], cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException("Bzr revert failed", p.output)
             if not self.refreshed:
-                p = SilentPopen(['bzr', 'pull'], cwd=self.local)
+                p = FDroidPopen(['bzr', 'pull'], cwd=self.local, output=False)
                 if p.returncode != 0:
                     raise VCSException("Bzr update failed", p.output)
                 self.refreshed = True
 
         revargs = list(['-r', rev] if rev else [])
-        p = SilentPopen(['bzr', 'revert'] + revargs, cwd=self.local)
+        p = FDroidPopen(['bzr', 'revert'] + revargs, cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException("Bzr revert of '%s' failed" % rev, p.output)
 
     def gettags(self):
-        p = SilentPopen(['bzr', 'tags'], cwd=self.local)
+        p = FDroidPopen(['bzr', 'tags'], cwd=self.local, output=False)
         return [tag.split('   ')[0].strip() for tag in
                 p.output.splitlines()]
 
@@ -924,7 +922,7 @@ def remove_debuggable_flags(root_dir):
     for root, dirs, files in os.walk(root_dir):
         if 'AndroidManifest.xml' in files:
             path = os.path.join(root, 'AndroidManifest.xml')
-            p = SilentPopen(['sed', '-i', 's/android:debuggable="[^"]*"//g', path])
+            p = FDroidPopen(['sed', '-i', 's/android:debuggable="[^"]*"//g', path], output=False)
             if p.returncode != 0:
                 raise BuildException("Failed to remove debuggable flags of %s" % path)
 
@@ -1258,10 +1256,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
         if build['target']:
             n = build["target"].split('-')[1]
-            SilentPopen(['sed', '-i',
+            FDroidPopen(['sed', '-i',
                          's@compileSdkVersion *[0-9]*@compileSdkVersion ' + n + '@g',
-                         'build.gradle'],
-                        cwd=root_dir)
+                         'build.gradle'], cwd=root_dir, output=False)
 
     # Remove forced debuggable flags
     remove_debuggable_flags(root_dir)
@@ -1273,17 +1270,15 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             if not os.path.isfile(path):
                 continue
             if has_extension(path, 'xml'):
-                p = SilentPopen(['sed', '-i',
-                                 's/android:versionName="[^"]*"/android:versionName="'
-                                 + build['version'] + '"/g',
-                                 path])
+                p = FDroidPopen(['sed', '-i',
+                                 's/android:versionName="[^"]*"/android:versionName="' + build['version'] + '"/g',
+                                 path], output=False)
                 if p.returncode != 0:
                     raise BuildException("Failed to amend manifest")
             elif has_extension(path, 'gradle'):
-                p = SilentPopen(['sed', '-i',
-                                 's/versionName *=* *"[^"]*"/versionName = "'
-                                 + build['version'] + '"/g',
-                                 path])
+                p = FDroidPopen(['sed', '-i',
+                                 's/versionName *=* *"[^"]*"/versionName = "' + build['version'] + '"/g',
+                                 path], output=False)
                 if p.returncode != 0:
                     raise BuildException("Failed to amend build.gradle")
     if build['forcevercode']:
@@ -1292,17 +1287,15 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             if not os.path.isfile(path):
                 continue
             if has_extension(path, 'xml'):
-                p = SilentPopen(['sed', '-i',
-                                 's/android:versionCode="[^"]*"/android:versionCode="'
-                                 + build['vercode'] + '"/g',
-                                 path])
+                p = FDroidPopen(['sed', '-i',
+                                 's/android:versionCode="[^"]*"/android:versionCode="' + build['vercode'] + '"/g',
+                                 path], output=False)
                 if p.returncode != 0:
                     raise BuildException("Failed to amend manifest")
             elif has_extension(path, 'gradle'):
-                p = SilentPopen(['sed', '-i',
-                                 's/versionCode *=* *[0-9]*/versionCode = '
-                                 + build['vercode'] + '/g',
-                                 path])
+                p = FDroidPopen(['sed', '-i',
+                                 's/versionCode *=* *[0-9]*/versionCode = ' + build['vercode'] + '/g',
+                                 path], output=False)
                 if p.returncode != 0:
                     raise BuildException("Failed to amend build.gradle")
 
@@ -1314,9 +1307,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             logging.info("Removing {0}".format(part))
             if os.path.lexists(dest):
                 if os.path.islink(dest):
-                    SilentPopen(['unlink ' + dest], shell=True)
+                    FDroidPopen(['unlink ' + dest], shell=True, output=False)
                 else:
-                    SilentPopen(['rm -rf ' + dest], shell=True)
+                    FDroidPopen(['rm -rf ' + dest], shell=True, output=False)
             else:
                 logging.info("...but it didn't exist")
 
@@ -1644,16 +1637,12 @@ class PopenResult:
     output = ''
 
 
-def SdkToolsPopen(commands, cwd=None, shell=False):
+def SdkToolsPopen(commands, cwd=None, shell=False, output=True):
     cmd = commands[0]
     if cmd not in config:
         config[cmd] = find_sdk_tools_cmd(commands[0])
     return FDroidPopen([config[cmd]] + commands[1:],
-                       cwd=cwd, shell=shell, output=False)
-
-
-def SilentPopen(commands, cwd=None, shell=False):
-    return FDroidPopen(commands, cwd=cwd, shell=shell, output=False)
+                       cwd=cwd, shell=shell, output=output)
 
 
 def FDroidPopen(commands, cwd=None, shell=False, output=True):
