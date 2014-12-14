@@ -28,7 +28,7 @@ import logging
 
 import common
 import metadata
-from common import FDroidPopen, BuildException
+from common import FDroidPopen, SdkToolsPopen, BuildException
 
 config = None
 options = None
@@ -213,8 +213,8 @@ def main():
                 raise BuildException("Failed to sign application")
 
             # Zipalign it...
-            p = FDroidPopen([config['zipalign'], '-v', '4', apkfile,
-                             os.path.join(output_dir, apkfilename)])
+            p = SdkToolsPopen(['zipalign', '-v', '4', apkfile,
+                               os.path.join(output_dir, apkfilename)])
             if p.returncode != 0:
                 raise BuildException("Failed to align application")
             os.remove(apkfile)

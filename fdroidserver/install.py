@@ -25,14 +25,14 @@ from optparse import OptionParser, OptionError
 import logging
 
 import common
-from common import FDroidPopen, FDroidException
+from common import SdkToolsPopen, FDroidException
 
 options = None
 config = None
 
 
 def devices():
-    p = FDroidPopen([config['adb'], "devices"])
+    p = SdkToolsPopen(['adb', "devices"])
     if p.returncode != 0:
         raise FDroidException("An error occured when finding devices: %s" % p.output)
     lines = p.output.splitlines()
@@ -103,7 +103,7 @@ def main():
         logging.info("Installing %s..." % apk)
         for dev in devs:
             logging.info("Installing %s on %s..." % (apk, dev))
-            p = FDroidPopen([config['adb'], "-s", dev, "install", apk])
+            p = SdkToolsPopen(['adb', "-s", dev, "install", apk])
             fail = ""
             for line in p.output.splitlines():
                 if line.startswith("Failure"):

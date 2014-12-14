@@ -35,7 +35,7 @@ import logging
 
 import common
 import metadata
-from common import FDroidException, BuildException, VCSException, FDroidPopen, SilentPopen
+from common import FDroidException, BuildException, VCSException, FDroidPopen, SdkToolsPopen
 
 try:
     import paramiko
@@ -754,7 +754,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if not os.path.exists(src):
         raise BuildException("Unsigned apk is not at expected location of " + src)
 
-    p = SilentPopen([config['aapt'], 'dump', 'badging', src])
+    p = SdkToolsPopen(['aapt', 'dump', 'badging', src])
 
     vercode = None
     version = None
