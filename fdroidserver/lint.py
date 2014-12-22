@@ -183,6 +183,12 @@ def main():
             pwarn("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
                 curbuild['commit'], app['Update Check Mode']))
 
+        # Dangerous auto updates
+        if curbuild and app['Auto Update Mode'] != 'None':
+            for flag in ['target', 'srclibs', 'scanignore']:
+                if curbuild[flag]:
+                    pwarn("Auto Update Mode is enabled but '%s' is manually set at '%s'" % (flag, curbuild[flag]))
+
         # Summary size limit
         summ_chars = len(app['Summary'])
         if summ_chars > config['char_limits']['Summary']:
