@@ -165,23 +165,23 @@ def main():
     apps = common.read_app_args(args, allapps, False)
 
     for appid, app in apps.iteritems():
-        curid = appid
-        lastcommit = ''
-
         if app['Disabled']:
             continue
 
+        curid = appid
         count['app_total'] += 1
 
+        curbuild = None
         for build in app['builds']:
-            if build['commit'] and not build['disable']:
-                lastcommit = build['commit']
+            if not curbuild or int(build['vercode']) > int(curbuild['vercode']):
+                curbuild = build
 
         # Potentially incorrect UCM
-        if (app['Update Check Mode'] == 'RepoManifest' and
-                any(s in lastcommit for s in '.,_-/')):
+        if (curbuild and curbuild['commit']
+                and app['Update Check Mode'] == 'RepoManifest' and
+                any(s in curbuild['commit'] for s in '.,_-/')):
             pwarn("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
-                lastcommit, app['Update Check Mode']))
+                curbuild['commit'], app['Update Check Mode']))
 
         # Summary size limit
         summ_chars = len(app['Summary'])
