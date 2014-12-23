@@ -591,10 +591,10 @@ class vcs_git(vcs):
 
     def latesttags(self, alltags, number):
         self.checkrepo()
-        p = FDroidPopen(['echo "' + '\n'.join(alltags, output=False) + '" | '
+        p = FDroidPopen(['echo "' + '\n'.join(alltags) + '" | '
                         + 'xargs -I@ git log --format=format:"%at @%n" -1 @ | '
                         + 'sort -n | awk \'{print $2}\''],
-                        cwd=self.local, shell=True)
+                        cwd=self.local, shell=True, output=False)
         return p.output.splitlines()[-number:]
 
 
