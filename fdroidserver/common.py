@@ -1696,6 +1696,7 @@ def remove_signing_keys(build_dir):
         re.compile(r'^[\t ]*signingConfig [^ ]*$'),
         re.compile(r'.*android\.signingConfigs\.[^{]*$'),
         re.compile(r'.*variant\.outputFile = .*'),
+        re.compile(r'.*output\.outputFile = .*'),
         re.compile(r'.*\.readLine\(.*'),
         ]
     for root, dirs, files in os.walk(build_dir):
