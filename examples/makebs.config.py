@@ -5,7 +5,7 @@
 # Name of the base box to use
 basebox = "testing32"
 
-# Location where raring32.box can be found, if you don't already have
+# Location where testing32.box can be found, if you don't already have
 # it. For security reasons, it's recommended that you make your own
 # in a secure environment using trusted media (see the manual) but
 # you can use this default if you like...

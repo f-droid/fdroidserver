@@ -1404,10 +1404,16 @@ working copies of source trees are moved from the host to the guest, so
 for example, having subversion v1.6 on the host and v1.7 on the guest
 would fail.
 
-Unless you're very trusting. you should create one of these for yourself
-from verified standard Debian installation media. However, you could skip
-over the next few paragraphs (and sacrifice some security) by downloading
-@url{https://f-droid.org/testing32.box}.
+@subsection Creating the Debian base box
+
+The output of this step is a minimal Debian VM that has support for remote
+login and provisioning.
+
+Unless you're very trusting, you should create one of these for yourself
+from verified standard Debian installation media.  However, by popular
+demand, the @code{makebuildserver} script will automatically download a
+prebuilt image unless instructed otherwise.  If you choose to use the
+prebuilt image, you may safely skip the rest of this section.
 
 Documentation for creating a base box can be found at
 @url{http://docs.vagrantup.com/v1/docs/base_boxes.html}.
@@ -1431,8 +1437,9 @@ boot, you need to set @code{GRUB_RECORDFAIL_TIMEOUT} to a value other than
 -1 in @code{/etc/grub/default} and then run @code{update-grub}.
 @end enumerate
 
+@subsection Creating the F-Droid base box
 
-With this base box available, you should then create @code{makebs.config.py},
+The next step in the process is to create @code{makebs.config.py},
 using @code{./examples/makebs.config.py} as a reference - look at the settings and
 documentation there to decide if any need changing to suit your environment.
 There is a path for retrieving the base box if it doesn't exist, and an apt
