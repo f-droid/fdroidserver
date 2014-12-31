@@ -1598,7 +1598,8 @@ def isApkDebuggable(apkfile, config):
 
     :param apkfile: full path to the apk to check"""
 
-    p = SdkToolsPopen(['aapt', 'dump', 'xmltree', apkfile, 'AndroidManifest.xml'])
+    p = SdkToolsPopen(['aapt', 'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
+                      output=False)
     if p.returncode != 0:
         logging.critical("Failed to get apk manifest information")
         sys.exit(1)
