@@ -41,7 +41,7 @@ for f in build.gradle ../build.gradle; do
 		if [[ -z "$plugin_pver" && $l == *'com.android.tools.build:gradle:'* ]]; then
 			plugin_pver=$(echo -n "$l" | sed "s/.*com.android.tools.build:gradle:\\([0-9\\.\\+]\\+\\).*/\\1/")
 		elif [[ -z "$wrapper_ver" && $l == *'gradleVersion'* ]]; then
-			wrapper_ver=$(echo -n "$l" | sed "s/.*gradleVersion[ ]*=[ ]*[\"']\\([0-9\\.]\\+\\)[\"'].*/\\1/")
+			wrapper_ver=$(echo -n "$l" | sed "s/.*gradleVersion *=* *[\"']\\([0-9\\.]\\+\\)[\"'].*/\\1/")
 		fi
 	done < $f
 done
