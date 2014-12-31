@@ -98,7 +98,7 @@ cachefiles = [
     ('Kivy-1.7.2.tar.gz',
      'https://pypi.python.org/packages/source/K/Kivy/Kivy-1.7.2.tar.gz',
      '0485e2ef97b5086df886eb01f8303cb542183d2d71a159466f99ad6c8a1d03f1'),
-    ]
+]
 
 if config['arch64']:
     cachefiles.extend([

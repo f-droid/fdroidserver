@@ -29,6 +29,7 @@ srclibs = None
 
 
 class MetaDataException(Exception):
+
     def __init__(self, value):
         self.value = value
 
@@ -69,7 +70,7 @@ app_defaults = OrderedDict([
     ('Current Version', ''),
     ('Current Version Code', '0'),
     ('No Source Since', ''),
-    ])
+])
 
 
 # In the order in which they are laid out on files
@@ -102,7 +103,7 @@ flag_defaults = OrderedDict([
     ('preassemble', []),
     ('antcommands', None),
     ('novcheck', False),
-    ])
+])
 
 
 # Designates a metadata field type and checks that it matches
@@ -222,7 +223,7 @@ valuetypes = {
                    r"^(Tags|Tags .+|RepoManifest|RepoManifest/.+|RepoTrunk|HTTP|Static|None)$", None,
                    ["Update Check Mode"],
                    [])
-    }
+}
 
 
 # Check an app's metadata information for integrity errors

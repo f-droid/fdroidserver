@@ -149,7 +149,7 @@ def main():
                     'apps': Counter(),
                     'appsver': Counter(),
                     'unknown': []
-                    }
+                }
 
                 p = subprocess.Popen(["zcat", logfile], stdout=subprocess.PIPE)
                 matches = (logsearch(line) for line in p.stdout)

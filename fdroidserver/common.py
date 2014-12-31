@@ -391,6 +391,7 @@ def getsrclibvcs(name):
 
 
 class vcs:
+
     def __init__(self, remote, local):
 
         # svn, git-svn and bzr may require auth
@@ -439,9 +440,8 @@ class vcs:
                     writeback = False
                 else:
                     deleterepo = True
-                    logging.info(
-                        "Repository details for %s changed - deleting" % (
-                            self.local))
+                    logging.info("Repository details for %s changed - deleting" % (
+                        self.local))
             else:
                 deleterepo = True
                 logging.info("Repository details for %s missing - deleting" % (
@@ -592,8 +592,9 @@ class vcs_git(vcs):
     def latesttags(self, alltags, number):
         self.checkrepo()
         p = FDroidPopen(['echo "' + '\n'.join(alltags) + '" | '
-                        + 'xargs -I@ git log --format=format:"%at @%n" -1 @ | '
-                        + 'sort -n | awk \'{print $2}\''],
+                         +
+                         'xargs -I@ git log --format=format:"%at @%n" -1 @ | '
+                         + 'sort -n | awk \'{print $2}\''],
                         cwd=self.local, shell=True, output=False)
         return p.output.splitlines()[-number:]
 
@@ -1005,6 +1006,7 @@ def parse_androidmanifests(paths, ignoreversions=None):
 
 
 class FDroidException(Exception):
+
     def __init__(self, value, detail=None):
         self.value = value
         self.detail = detail
@@ -1415,7 +1417,7 @@ def scan_source(build_dir, root_dir, thisbuild):
         re.compile(r'crashlytics', re.IGNORECASE),
         re.compile(r'ouya.*sdk', re.IGNORECASE),
         re.compile(r'libspen23', re.IGNORECASE),
-        ]
+    ]
 
     scanignore = getpaths(build_dir, thisbuild, 'scanignore')
     scandelete = getpaths(build_dir, thisbuild, 'scandelete')
@@ -1492,7 +1494,7 @@ def scan_source(build_dir, root_dir, thisbuild):
                     'application/java-archive',
                     'application/octet-stream',
                     'binary',
-                    ):
+            ):
 
                 if has_extension(fp, 'apk'):
                     removeproblem('APK file', fd, fp)
@@ -1610,6 +1612,7 @@ def isApkDebuggable(apkfile, config):
 
 
 class AsynchronousFileReader(threading.Thread):
+
     '''
     Helper class to implement asynchronous reading of a file
     in a separate thread. Pushes read lines on a queue to
@@ -1699,7 +1702,7 @@ def remove_signing_keys(build_dir):
         re.compile(r'.*variant\.outputFile = .*'),
         re.compile(r'.*output\.outputFile = .*'),
         re.compile(r'.*\.readLine\(.*'),
-        ]
+    ]
     for root, dirs, files in os.walk(build_dir):
         if 'build.gradle' in files:
             path = os.path.join(root, 'build.gradle')
@@ -1740,7 +1743,7 @@ def remove_signing_keys(build_dir):
                 'build.properties',
                 'default.properties',
                 'ant.properties',
-                ]:
+        ]:
             if propfile in files:
                 path = os.path.join(root, propfile)
 

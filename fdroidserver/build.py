@@ -48,7 +48,7 @@ def get_builder_vm_id():
     if os.path.isdir(vd):
         # Vagrant 1.2 (and maybe 1.1?) it's a directory tree...
         with open(os.path.join(vd, 'machines', 'default',
-                  'virtualbox', 'id')) as vf:
+                               'virtualbox', 'id')) as vf:
             id = vf.read()
         return id
     else:
@@ -71,7 +71,7 @@ def got_valid_builder_vm():
         return True
     # Vagrant 1.2 - the directory can exist, but the id can be missing...
     if not os.path.exists(os.path.join(vd, 'machines', 'default',
-                          'virtualbox', 'id')):
+                                       'virtualbox', 'id')):
         return False
     return True
 
@@ -302,7 +302,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         ftp.put(os.path.join(serverpath, 'common.py'), 'common.py')
         ftp.put(os.path.join(serverpath, 'metadata.py'), 'metadata.py')
         ftp.put(os.path.join(serverpath, '..', 'buildserver',
-                'config.buildserver.py'), 'config.py')
+                             'config.buildserver.py'), 'config.py')
         ftp.chmod('config.py', 0o600)
 
         # Copy over the ID (head commit hash) of the fdroidserver in use...
@@ -824,7 +824,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             shutil.copyfile(os.path.join(homedir, fn),
                             os.path.join(metadir, fn))
             subprocess.call(['jar', 'uf', os.path.abspath(src),
-                            'META-INF/' + fn], cwd=tmp_dir)
+                             'META-INF/' + fn], cwd=tmp_dir)
 
     # Copy the unsigned apk to our destination directory for further
     # processing (by publish.py)...
