@@ -436,7 +436,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             thisinfo['features'] = set()
             thisinfo['icons_src'] = {}
             thisinfo['icons'] = {}
-            p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile])
+            p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
             if p.returncode != 0:
                 if options.delete_unknown:
                     if os.path.exists(apkfile):
