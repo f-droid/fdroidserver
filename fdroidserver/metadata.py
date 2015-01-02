@@ -25,6 +25,8 @@ import logging
 
 from collections import OrderedDict
 
+import common
+
 srclibs = None
 
 
@@ -100,6 +102,7 @@ flag_defaults = OrderedDict([
     ('scandelete', []),
     ('build', ''),
     ('buildjni', []),
+    ('ndk', 'r9b'),  # defaults to oldest
     ('preassemble', []),
     ('antcommands', None),
     ('novcheck', False),
@@ -560,6 +563,7 @@ def fill_build_defaults(build):
             continue
         build[flag] = value
     build['type'] = get_build_type()
+    build['ndk_path'] = common.get_ndk_path(build['ndk'])
 
 
 # Parse metadata for a single application.

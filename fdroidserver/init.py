@@ -203,16 +203,8 @@ def main():
     # now that we have a local config.py, read configuration...
     config = common.read_config(options)
 
-    # track down where the Android NDK is
-    ndk_path = '/opt/android-ndk'
-    if os.path.isdir(config['ndk_path']):
-        ndk_path = config['ndk_path']
-    elif 'ANDROID_NDK' in os.environ.keys():
-        logging.info('using ANDROID_NDK')
-        ndk_path = os.environ['ANDROID_NDK']
-    if os.path.isdir(ndk_path):
-        write_to_config(test_config, 'ndk_path')
-    # the NDK is optional so we don't prompt the user for it if its not found
+    # the NDK is optional and there may be multiple versions of it, so it's
+    # left for the user to configure
 
     # find or generate the keystore for the repo signing key. First try the
     # path written in the default config.py.  Then check if the user has
@@ -286,7 +278,7 @@ def main():
     logging.info('  Android SDK:\t\t\t' + config['sdk_path'])
     if aapt:
         logging.info('  Android SDK Build Tools:\t' + os.path.dirname(aapt))
-    logging.info('  Android NDK (optional):\t' + ndk_path)
+    logging.info('  Android NDK r10d (optional):\t$ANDROID_NDK')
     logging.info('  Keystore for signing key:\t' + keystore)
     if repo_keyalias is not None:
         logging.info('  Alias for key in store:\t' + repo_keyalias)

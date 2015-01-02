@@ -452,12 +452,21 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     """Do a build locally."""
 
     if thisbuild['buildjni'] and thisbuild['buildjni'] != ['no']:
-        if not config['ndk_path']:
-            logging.critical("$ANDROID_NDK is not set!")
+        if not thisbuild['ndk_path']:
+            logging.critical("Android NDK version '%s' could not be found!" % thisbuild['ndk'])
+            logging.critical("Configured versions:")
+            for k, v in config['ndk_paths'].iteritems():
+                if k.endswith("_orig"):
+                    continue
+                logging.critical("  %s: %s" % (k, v))
             sys.exit(3)
-        elif not os.path.isdir(config['sdk_path']):
-            logging.critical("$ANDROID_NDK points to a non-existing directory!")
+        elif not os.path.isdir(thisbuild['ndk_path']):
+            logging.critical("Android NDK '%s' is not a directory!" % thisbuild['ndk_path'])
             sys.exit(3)
+
+    # Set up environment vars that depend on each build
+    for n in ['ANDROID_NDK', 'NDK']:
+        common.env[n] = thisbuild['ndk_path']
 
     # Prepare the source code...
     root_dir, srclibpaths = common.prepare_source(vcs, app, thisbuild,
@@ -551,7 +560,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     # Run a build command if one is required...
     if thisbuild['build']:
         logging.info("Running 'build' commands in %s" % root_dir)
-        cmd = common.replace_config_vars(thisbuild['build'])
+        cmd = common.replace_config_vars(thisbuild['build'], thisbuild)
 
         # Substitute source library paths into commands...
         for name, number, libpath in srclibpaths:
@@ -571,7 +580,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         if jni_components == ['yes']:
             jni_components = ['']
-        cmd = [os.path.join(config['ndk_path'], "ndk-build"), "-j1"]
+        cmd = [os.path.join(thisbuild['ndk_path'], "ndk-build"), "-j1"]
         for d in jni_components:
             if d:
                 logging.info("Building native code in '%s'" % d)
@@ -644,8 +653,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         modules = bconfig.get('app', 'requirements').split(',')
 
         cmd = 'ANDROIDSDK=' + config['sdk_path']
-        cmd += ' ANDROIDNDK=' + config['ndk_path']
-        cmd += ' ANDROIDNDKVER=r9'
+        cmd += ' ANDROIDNDK=' + thisbuild['ndk_path']
+        cmd += ' ANDROIDNDKVER=' + thisbuild['ndk']
         cmd += ' ANDROIDAPI=' + str(bconfig.get('app', 'android.api'))
         cmd += ' VIRTUALENV=virtualenv'
         cmd += ' ./distribute.sh'
@@ -1042,7 +1051,7 @@ def main():
                     # Set up vcs interface and make sure we have the latest code...
                     logging.debug("Getting {0} vcs interface for {1}"
                                   .format(app['Repo Type'], app['Repo']))
-                    vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
+                    vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, build)
 
                     first = False
 

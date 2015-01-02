@@ -41,7 +41,10 @@ env = None
 
 default_config = {
     'sdk_path': "$ANDROID_HOME",
-    'ndk_path': "$ANDROID_NDK",
+    'ndk_paths': {
+        'r9b': None,
+        'r10d': "$ANDROID_NDK"
+    },
     'build_tools': "21.1.2",
     'ant': "ant",
     'mvn3': "mvn",
@@ -82,14 +85,31 @@ def fill_config_defaults(thisconfig):
             thisconfig[k] = v
 
     # Expand paths (~users and $vars)
-    for k in ['sdk_path', 'ndk_path', 'ant', 'mvn3', 'gradle', 'keystore', 'repo_icon']:
+    def expand_path(path):
+        if path is None:
+            return None
+        orig = path
+        path = os.path.expanduser(path)
+        path = os.path.expandvars(path)
+        if orig == path:
+            return None
+        return path
+
+    for k in ['sdk_path', 'ant', 'mvn3', 'gradle', 'keystore', 'repo_icon']:
         v = thisconfig[k]
-        orig = v
-        v = os.path.expanduser(v)
-        v = os.path.expandvars(v)
-        if orig != v:
-            thisconfig[k] = v
-            thisconfig[k + '_orig'] = orig
+        exp = expand_path(v)
+        if exp is not None:
+            thisconfig[k] = exp
+            thisconfig[k + '_orig'] = v
+
+    for k in ['ndk_paths']:
+        d = thisconfig[k]
+        for k2 in d.copy():
+            v = d[k2]
+            exp = expand_path(v)
+            if exp is not None:
+                thisconfig[k][k2] = exp
+                thisconfig[k][k2 + '_orig'] = v
 
 
 def read_config(opts, config_file='config.py'):
@@ -135,8 +155,6 @@ def read_config(opts, config_file='config.py'):
     env = os.environ
     for n in ['ANDROID_HOME', 'ANDROID_SDK']:
         env[n] = config['sdk_path']
-    for n in ['ANDROID_NDK', 'NDK']:
-        env[n] = config['ndk_path']
 
     for k in ["keystorepass", "keypass"]:
         if k in config:
@@ -163,6 +181,15 @@ def read_config(opts, config_file='config.py'):
         config['serverwebroot'] = rootlist
 
     return config
+
+
+def get_ndk_path(version):
+    if version is None:
+        version = 'r10d'  # latest
+    paths = config['ndk_paths']
+    if version not in paths:
+        return None
+    return paths[version]
 
 
 def find_sdk_tools_cmd(cmd):
@@ -366,7 +393,7 @@ def getcvname(app):
     return '%s (%s)' % (app['Current Version'], app['Current Version Code'])
 
 
-def getvcs(vcstype, remote, local):
+def getvcs(vcstype, remote, local, build):
     if vcstype == 'git':
         return vcs_git(remote, local)
     if vcstype == 'git-svn':
@@ -378,7 +405,7 @@ def getvcs(vcstype, remote, local):
     if vcstype == 'srclib':
         if local != os.path.join('build', 'srclib', remote):
             raise VCSException("Error: srclib paths are hard-coded!")
-        return getsrclib(remote, os.path.join('build', 'srclib'), raw=True)
+        return getsrclib(remote, os.path.join('build', 'srclib'), build, raw=True)
     if vcstype == 'svn':
         raise VCSException("Deprecated vcs type 'svn' - please use 'git-svn' instead")
     raise VCSException("Invalid vcs type " + vcstype)
@@ -1040,7 +1067,7 @@ class BuildException(FDroidException):
 # Returns the path to it. Normally this is the path to be used when referencing
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
-def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
+def getsrclib(spec, srclib_dir, build, srclibpaths=[], subdir=None,
               basepath=False, raw=False, prepare=True, preponly=False):
 
     number = None
@@ -1063,7 +1090,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
     sdir = os.path.join(srclib_dir, name)
 
     if not preponly:
-        vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir)
+        vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir, build)
         vcs.srclib = (name, number, sdir)
         if ref:
             vcs.gotorevision(ref)
@@ -1104,7 +1131,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
     if prepare:
 
         if srclib["Prepare"]:
-            cmd = replace_config_vars(srclib["Prepare"])
+            cmd = replace_config_vars(srclib["Prepare"], build)
 
             p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=libdir)
             if p.returncode != 0:
@@ -1155,7 +1182,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Run an init command if one is required
     if build['init']:
-        cmd = replace_config_vars(build['init'])
+        cmd = replace_config_vars(build['init'], build)
         logging.info("Running 'init' commands in %s" % root_dir)
 
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
@@ -1179,7 +1206,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build['srclibs']:
         logging.info("Collecting source libraries")
         for lib in build['srclibs']:
-            srclibpaths.append(getsrclib(lib, srclib_dir, srclibpaths,
+            srclibpaths.append(getsrclib(lib, srclib_dir, build, srclibpaths,
                                          preponly=onserver))
 
     for name, number, libpath in srclibpaths:
@@ -1213,10 +1240,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         else:
             props += "sdk.dir=%s\n" % config['sdk_path']
             props += "sdk-location=%s\n" % config['sdk_path']
-        if config['ndk_path']:
+        if build['ndk_path']:
             # Add ndk location
-            props += "ndk.dir=%s\n" % config['ndk_path']
-            props += "ndk-location=%s\n" % config['ndk_path']
+            props += "ndk.dir=%s\n" % build['ndk_path']
+            props += "ndk-location=%s\n" % build['ndk_path']
         # Add java.encoding if necessary
         if build['encoding']:
             props += "java.encoding=%s\n" % build['encoding']
@@ -1336,7 +1363,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build['prebuild']:
         logging.info("Running 'prebuild' commands in %s" % root_dir)
 
-        cmd = replace_config_vars(build['prebuild'])
+        cmd = replace_config_vars(build['prebuild'], build)
 
         # Substitute source library paths into prebuild commands
         for name, number, libpath in srclibpaths:
@@ -1764,9 +1791,9 @@ def remove_signing_keys(build_dir):
                     logging.info("Cleaned %s of keysigning configs at %s" % (propfile, path))
 
 
-def replace_config_vars(cmd):
+def replace_config_vars(cmd, build):
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
-    cmd = cmd.replace('$$NDK$$', config['ndk_path'])
+    cmd = cmd.replace('$$NDK$$', build['ndk_path'])
     cmd = cmd.replace('$$MVN3$$', config['mvn3'])
     return cmd
 

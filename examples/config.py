@@ -3,24 +3,27 @@
 # Copy this file to config.py, then amend the settings below according to
 # your system configuration.
 
-# Override the path to the Android SDK, $ANDROID_HOME by default
-# sdk_path = "/path/to/android-sdk"
+# Path to the Android SDK
+sdk_path = "$ANDROID_HOME"
 
-# Override the path to the Android NDK, $ANDROID_NDK by default
-# ndk_path = "/path/to/android-ndk"
+# Path to various versions of the Android NDK
+# Most users will have the latest at $ANDROID_NDK, which is used by default
+# If a version is missing or assigned to None, it is assumed not installed
+ndk_paths = {
+    'r9b': None,
+    'r10d': "$ANDROID_NDK"
+}
+
 # Build tools version to be used
-# build_tools = "21.1.2"
+build_tools = "21.1.2"
 
-# Command for running Ant
-# ant = "/path/to/ant"
+# Command or path to binary for running Ant
 ant = "ant"
 
-# Command for running maven 3
-# mvn3 = "/path/to/mvn"
+# Command or path to binary for running maven 3
 mvn3 = "mvn"
 
-# Command for running Gradle
-# gradle = "/path/to/gradle"
+# Command or path to binary for running Gradle
 gradle = "gradle"
 
 # Set the maximum age (in days) of an index that a client should accept from
