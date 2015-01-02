@@ -4,7 +4,7 @@ from setuptools import setup
 import sys
 
 setup(name='fdroidserver',
-      version='0.2.1',
+      version='0.3.0',
       description='F-Droid Server Tools',
       long_description=open('README').read(),
       author='The F-Droid Project',
