@@ -241,7 +241,7 @@ def check_metadata(info):
 
 # Formatter for descriptions. Create an instance, and call parseline() with
 # each line of the description source from the metadata. At the end, call
-# end() and then text_plain, text_wiki and text_html will contain the result.
+# end() and then text_wiki and text_html will contain the result.
 class DescriptionFormatter:
     stNONE = 0
     stPARA = 1
@@ -250,7 +250,6 @@ class DescriptionFormatter:
     bold = False
     ital = False
     state = stNONE
-    text_plain = ''
     text_wiki = ''
     text_html = ''
     linkResolver = None
@@ -269,7 +268,6 @@ class DescriptionFormatter:
             self.endol()
 
     def endpara(self):
-        self.text_plain += '\n'
         self.text_html += '</p>'
         self.state = self.stNONE
 
@@ -349,7 +347,6 @@ class DescriptionFormatter:
 
     def addtext(self, txt):
         p, h = self.linkify(txt)
-        self.text_plain += p
         self.text_html += h
 
     def parseline(self, line):
@@ -362,7 +359,6 @@ class DescriptionFormatter:
                 self.text_html += '<ul>'
                 self.state = self.stUL
             self.text_html += '<li>'
-            self.text_plain += '* '
             self.addtext(line[1:])
             self.text_html += '</li>'
         elif line.startswith('# '):
@@ -371,7 +367,6 @@ class DescriptionFormatter:
                 self.text_html += '<ol>'
                 self.state = self.stOL
             self.text_html += '<li>'
-            self.text_plain += '* '  # TODO: lazy - put the numbers in!
             self.addtext(line[1:])
             self.text_html += '</li>'
         else:
@@ -381,21 +376,10 @@ class DescriptionFormatter:
                 self.state = self.stPARA
             elif self.state == self.stPARA:
                 self.text_html += ' '
-                self.text_plain += ' '
             self.addtext(line)
 
     def end(self):
         self.endcur()
-
-
-# Parse multiple lines of description as written in a metadata file, returning
-# a single string in plain text format.
-def description_plain(lines, linkres):
-    ps = DescriptionFormatter(linkres)
-    for line in lines:
-        ps.parseline(line)
-    ps.end()
-    return ps.text_plain
 
 
 # Parse multiple lines of description as written in a metadata file, returning
