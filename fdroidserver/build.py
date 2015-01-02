@@ -438,6 +438,16 @@ def adapt_gradle(build_dir):
                          + config['build_tools'] + '"@g', path])
 
 
+def capitalize_intact(string):
+    """Like str.capitalize(), but leave the rest of the string intact without
+    switching it to lowercase."""
+    if len(string) == 0:
+        return string
+    if len(string) == 1:
+        return string.upper()
+    return string[0].upper() + string[1:]
+
+
 def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver):
     """Do a build locally."""
 
@@ -457,6 +467,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     # We need to clean via the build tool in case the binary dirs are
     # different from the default ones
     p = None
+    gradletasks = []
     if thisbuild['type'] == 'maven':
         logging.info("Cleaning Maven project...")
         cmd = [config['mvn3'], 'clean', '-Dandroid.sdk.path=' + config['sdk_path']]
@@ -472,11 +483,26 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     elif thisbuild['type'] == 'gradle':
 
         logging.info("Cleaning Gradle project...")
-        cmd = [config['gradle'], 'clean']
+
+        if thisbuild['preassemble']:
+            gradletasks += thisbuild['preassemble']
+
+        flavours = thisbuild['gradle']
+        if flavours == ['yes']:
+            flavours = []
+
+        flavours_cmd = ''.join(flavours)
+        if flavours_cmd:
+            flavours_cmd = capitalize_intact(flavours_cmd)
+
+        gradletasks += ['assemble' + flavours_cmd + 'Release']
 
         adapt_gradle(build_dir)
         for name, number, libpath in srclibpaths:
             adapt_gradle(libpath)
+
+        cmd = [config['gradle']]
+        cmd += ['clean' + capitalize_intact(task) for task in gradletasks]
 
         p = FDroidPopen(cmd, cwd=root_dir)
 
@@ -661,24 +687,13 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     elif thisbuild['type'] == 'gradle':
         logging.info("Building Gradle project...")
-        flavours = thisbuild['gradle']
-        if flavours == ['yes']:
-            flavours = []
-
-        commands = [config['gradle']]
-        if thisbuild['preassemble']:
-            commands += thisbuild['preassemble']
-
-        flavours_cmd = ''.join(flavours)
-        if flavours_cmd:
-            flavours_cmd = flavours_cmd[0].upper() + flavours_cmd[1:]
-
-        commands += ['assemble' + flavours_cmd + 'Release']
 
         # Avoid having to use lintOptions.abortOnError false
         if thisbuild['gradlepluginver'] >= LooseVersion('0.7'):
             with open(os.path.join(root_dir, 'build.gradle'), "a") as f:
                 f.write("\nandroid { lintOptions { checkReleaseBuilds false } }\n")
+
+        commands = [config['gradle']] + gradletasks
 
         p = FDroidPopen(commands, cwd=root_dir)
 
