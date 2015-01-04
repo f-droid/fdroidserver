@@ -188,8 +188,8 @@ def get_ndk_path(version):
         version = 'r10d'  # latest
     paths = config['ndk_paths']
     if version not in paths:
-        return None
-    return paths[version]
+        return ''
+    return paths[version] or ''
 
 
 def find_sdk_tools_cmd(cmd):
