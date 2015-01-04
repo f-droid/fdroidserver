@@ -1051,7 +1051,7 @@ def main():
                     # Set up vcs interface and make sure we have the latest code...
                     logging.debug("Getting {0} vcs interface for {1}"
                                   .format(app['Repo Type'], app['Repo']))
-                    vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir, build)
+                    vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
 
                     first = False
 

@@ -393,7 +393,7 @@ def getcvname(app):
     return '%s (%s)' % (app['Current Version'], app['Current Version Code'])
 
 
-def getvcs(vcstype, remote, local, build):
+def getvcs(vcstype, remote, local):
     if vcstype == 'git':
         return vcs_git(remote, local)
     if vcstype == 'git-svn':
@@ -405,7 +405,7 @@ def getvcs(vcstype, remote, local, build):
     if vcstype == 'srclib':
         if local != os.path.join('build', 'srclib', remote):
             raise VCSException("Error: srclib paths are hard-coded!")
-        return getsrclib(remote, os.path.join('build', 'srclib'), build, raw=True)
+        return getsrclib(remote, os.path.join('build', 'srclib'), raw=True)
     if vcstype == 'svn':
         raise VCSException("Deprecated vcs type 'svn' - please use 'git-svn' instead")
     raise VCSException("Invalid vcs type " + vcstype)
@@ -1067,7 +1067,7 @@ class BuildException(FDroidException):
 # Returns the path to it. Normally this is the path to be used when referencing
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
-def getsrclib(spec, srclib_dir, build, srclibpaths=[], subdir=None,
+def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
               basepath=False, raw=False, prepare=True, preponly=False):
 
     number = None
@@ -1090,7 +1090,7 @@ def getsrclib(spec, srclib_dir, build, srclibpaths=[], subdir=None,
     sdir = os.path.join(srclib_dir, name)
 
     if not preponly:
-        vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir, build)
+        vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir)
         vcs.srclib = (name, number, sdir)
         if ref:
             vcs.gotorevision(ref)
@@ -1131,7 +1131,7 @@ def getsrclib(spec, srclib_dir, build, srclibpaths=[], subdir=None,
     if prepare:
 
         if srclib["Prepare"]:
-            cmd = replace_config_vars(srclib["Prepare"], build)
+            cmd = replace_config_vars(srclib["Prepare"])
 
             p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=libdir)
             if p.returncode != 0:
@@ -1182,7 +1182,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Run an init command if one is required
     if build['init']:
-        cmd = replace_config_vars(build['init'], build)
+        cmd = replace_config_vars(build['init'])
         logging.info("Running 'init' commands in %s" % root_dir)
 
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
@@ -1363,7 +1363,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build['prebuild']:
         logging.info("Running 'prebuild' commands in %s" % root_dir)
 
-        cmd = replace_config_vars(build['prebuild'], build)
+        cmd = replace_config_vars(build['prebuild'])
 
         # Substitute source library paths into prebuild commands
         for name, number, libpath in srclibpaths:
@@ -1791,9 +1791,11 @@ def remove_signing_keys(build_dir):
                     logging.info("Cleaned %s of keysigning configs at %s" % (propfile, path))
 
 
-def replace_config_vars(cmd, build):
+def replace_config_vars(cmd):
+    global env
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
-    cmd = cmd.replace('$$NDK$$', build['ndk_path'])
+    # env['ANDROID_NDK'] is set in build_local right before prepare_source
+    cmd = cmd.replace('$$NDK$$', env['ANDROID_NDK'])
     cmd = cmd.replace('$$MVN3$$', config['mvn3'])
     return cmd
 
