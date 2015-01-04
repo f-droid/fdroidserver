@@ -2,6 +2,19 @@
 ndk_loc = node[:settings][:ndk_loc]
 user = node[:settings][:user]
 
+script "setup-android-ndk" do
+  timeout 14400
+  interpreter "bash"
+  user node[:settings][:user]
+  cwd "/tmp"
+  code "
+    mkdir #{ndk_loc}
+  "
+  not_if do
+    File.exists?("#{ndk_loc}")
+  end
+end
+
 script "setup-android-ndk-r9b" do
   timeout 14400
   interpreter "bash"
