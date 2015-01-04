@@ -46,6 +46,7 @@ script "setup-android-ndk-r10d" do
     else
        SUFFIX=''
     fi
+    chmod u+x /vagrant/cache/android-ndk-r10d-linux-x86$SUFFIX.bin 
     /vagrant/cache/android-ndk-r10d-linux-x86$SUFFIX.bin x
     mv android-ndk-r10d #{ndk_loc}/r10d
   "
