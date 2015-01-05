@@ -1740,8 +1740,15 @@ def remove_signing_keys(build_dir):
             changed = False
 
             opened = 0
+            i = 0
             with open(path, "w") as o:
-                for line in lines:
+                while i < len(lines):
+                    line = lines[i]
+                    i += 1
+                    while line.endswith('\\\n'):
+                        line = line.rstrip('\\\n') + lines[i]
+                        i += 1
+
                     if comment.match(line):
                         continue
 
