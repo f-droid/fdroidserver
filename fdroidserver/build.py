@@ -468,6 +468,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     for n in ['ANDROID_NDK', 'NDK']:
         common.env[n] = thisbuild['ndk_path']
 
+    common.reset_env_path()
+    # Set up the current NDK to the PATH
+    common.add_to_env_path(thisbuild['ndk_path'])
+
     # Prepare the source code...
     root_dir, srclibpaths = common.prepare_source(vcs, app, thisbuild,
                                                   build_dir, srclib_dir,

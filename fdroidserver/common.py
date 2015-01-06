@@ -37,6 +37,7 @@ import metadata
 config = None
 options = None
 env = None
+orig_path = None
 
 
 default_config = {
@@ -118,7 +119,7 @@ def read_config(opts, config_file='config.py'):
     The config is read from config_file, which is in the current directory when
     any of the repo management commands are used.
     """
-    global config, options, env
+    global config, options, env, orig_path
 
     if config is not None:
         return config
@@ -153,6 +154,7 @@ def read_config(opts, config_file='config.py'):
     # There is no standard, so just set up the most common environment
     # variables
     env = os.environ
+    orig_path = env['PATH']
     for n in ['ANDROID_HOME', 'ANDROID_SDK']:
         env[n] = config['sdk_path']
 
@@ -1814,6 +1816,20 @@ def remove_signing_keys(build_dir):
 
                 if changed:
                     logging.info("Cleaned %s of keysigning configs at %s" % (propfile, path))
+
+
+def reset_env_path():
+    global env, orig_path
+    env['PATH'] = orig_path
+
+
+def add_to_env_path(path):
+    global env
+    paths = env['PATH'].split(os.pathsep)
+    if path in paths:
+        return
+    paths += path
+    env['PATH'] = os.pathsep.join(paths)
 
 
 def replace_config_vars(cmd):
