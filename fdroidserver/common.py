@@ -1449,6 +1449,9 @@ def scan_source(build_dir, root_dir, thisbuild):
     scanignore = getpaths(build_dir, thisbuild, 'scanignore')
     scandelete = getpaths(build_dir, thisbuild, 'scandelete')
 
+    scanignore_worked = set()
+    scandelete_worked = set()
+
     try:
         ms = magic.open(magic.MIME_TYPE)
         ms.load()
@@ -1456,33 +1459,38 @@ def scan_source(build_dir, root_dir, thisbuild):
         ms = None
 
     def toignore(fd):
-        for i in scanignore:
-            if fd.startswith(i):
+        for p in scanignore:
+            if fd.startswith(p):
+                scanignore_worked.add(p)
                 return True
         return False
 
     def todelete(fd):
-        for i in scandelete:
-            if fd.startswith(i):
+        for p in scandelete:
+            if fd.startswith(p):
+                scandelete_worked.add(p)
                 return True
         return False
+
+    def ignoreproblem(what, fd, fp):
+        logging.info('Ignoring %s at %s' % (what, fd))
+        return 0
 
     def removeproblem(what, fd, fp):
         logging.info('Removing %s at %s' % (what, fd))
         os.remove(fp)
+        return 0
 
     def warnproblem(what, fd):
         logging.warn('Found %s at %s' % (what, fd))
 
     def handleproblem(what, fd, fp):
         if toignore(fd):
-            logging.info('Ignoring %s at %s' % (what, fd))
-        elif todelete(fd):
-            removeproblem(what, fd, fp)
-        else:
-            logging.error('Found %s at %s' % (what, fd))
-            return True
-        return False
+            return ignoreproblem(what, fd, fp)
+        if todelete(fd):
+            return removeproblem(what, fd, fp)
+        logging.error('Found %s at %s' % (what, fd))
+        return 1
 
     # Iterate through all files in the source code
     for r, d, f in os.walk(build_dir, topdown=True):
@@ -1546,6 +1554,16 @@ def scan_source(build_dir, root_dir, thisbuild):
                         break
     if ms is not None:
         ms.close()
+
+    for p in scanignore:
+        if p not in scanignore_worked:
+            logging.error('Unused scanignore path: %s' % p)
+            count += 1
+
+    for p in scandelete:
+        if p not in scandelete_worked:
+            logging.error('Unused scandelete path: %s' % p)
+            count += 1
 
     # Presence of a jni directory without buildjni=yes might
     # indicate a problem (if it's not a problem, explicitly use
