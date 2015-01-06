@@ -534,7 +534,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             if 'gradle' in dirs:
                 shutil.rmtree(os.path.join(root, 'gradle'))
 
-    if not options.skipscan:
+    if options.skipscan:
+        if thisbuild['scandelete']:
+            raise BuildException("Refusing to skip source scan since scandelete is present")
+    else:
         # Scan before building...
         logging.info("Scanning source for common problems...")
         count = common.scan_source(build_dir, root_dir, thisbuild)
