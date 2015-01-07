@@ -1879,24 +1879,24 @@ def compare_apks(apk1, apk2, tmp_dir):
     trying to do the comparison.
     """
 
-    thisdir = os.path.join(tmp_dir, 'this_apk')
-    thatdir = os.path.join(tmp_dir, 'that_apk')
-    for d in [thisdir, thatdir]:
+    badchars = re.compile('''[/ :;'"]''')
+    apk1dir = os.path.join(tmp_dir, badchars.sub('_', apk1[0:-4]))  # trim .apk
+    apk2dir = os.path.join(tmp_dir, badchars.sub('_', apk2[0:-4]))  # trim .apk
+    for d in [apk1dir, apk2dir]:
         if os.path.exists(d):
             shutil.rmtree(d)
         os.mkdir(d)
 
     if subprocess.call(['jar', 'xf',
                         os.path.abspath(apk1)],
-                       cwd=thisdir) != 0:
+                       cwd=apk1dir) != 0:
         return("Failed to unpack " + apk1)
     if subprocess.call(['jar', 'xf',
                         os.path.abspath(apk2)],
-                       cwd=thatdir) != 0:
+                       cwd=apk2dir) != 0:
         return("Failed to unpack " + apk2)
 
-    p = FDroidPopen(['diff', '-r', 'this_apk', 'that_apk'], cwd=tmp_dir,
-                    output=False)
+    p = FDroidPopen(['diff', '-r', apk1dir, apk2dir], output=False)
     lines = p.output.splitlines()
     if len(lines) != 1 or 'META-INF' not in lines[0]:
         return("Unexpected diff output - " + p.output)
