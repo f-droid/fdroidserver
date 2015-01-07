@@ -1897,10 +1897,43 @@ def compare_apks(apk1, apk2, tmp_dir):
                        cwd=os.path.join(apk2dir, 'jar-xf')) != 0:
         return("Failed to unpack " + apk2)
 
+    # try to find apktool in the path, if it hasn't been manually configed
+    if not 'apktool' in config:
+        tmp = find_command('apktool')
+        if not tmp is None:
+            config['apktool'] = tmp
+    if 'apktool' in config:
+        if subprocess.call([config['apktool'], 'd', os.path.abspath(apk1), '--output', 'apktool'],
+                           cwd=apk1dir) != 0:
+            return("Failed to unpack " + apk1)
+        if subprocess.call([config['apktool'], 'd', os.path.abspath(apk2), '--output', 'apktool'],
+                           cwd=apk2dir) != 0:
+            return("Failed to unpack " + apk2)
+
     p = FDroidPopen(['diff', '-r', apk1dir, apk2dir], output=False)
     lines = p.output.splitlines()
     if len(lines) != 1 or 'META-INF' not in lines[0]:
         return("Unexpected diff output - " + p.output)
 
     # If we get here, it seems like they're the same!
+    return None
+
+
+def find_command(command):
+    '''find the full path of a command, or None if it can't be found in the PATH'''
+
+    def is_exe(fpath):
+        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
+    fpath, fname = os.path.split(command)
+    if fpath:
+        if is_exe(command):
+            return command
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            path = path.strip('"')
+            exe_file = os.path.join(path, command)
+            if is_exe(exe_file):
+                return exe_file
+
     return None
