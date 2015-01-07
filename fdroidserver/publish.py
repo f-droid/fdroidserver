@@ -153,7 +153,7 @@ def main():
             # Compare our unsigned one with the downloaded one...
             compare_result = common.compare_apks(srcapk, apkfile, tmp_dir)
             if compare_result:
-                logging.error("...verfication failed - publish skipped : "
+                logging.error("...verification failed - publish skipped : "
                               + compare_result)
                 continue
 
