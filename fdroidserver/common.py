@@ -1913,6 +1913,9 @@ def compare_apks(apk1, apk2, tmp_dir):
     p = FDroidPopen(['diff', '-r', apk1dir, apk2dir], output=False)
     lines = p.output.splitlines()
     if len(lines) != 1 or 'META-INF' not in lines[0]:
+        meld = find_command('meld')
+        if not meld is None:
+            p = FDroidPopen(['meld', apk1dir, apk2dir], output=False)
         return("Unexpected diff output - " + p.output)
 
     # If we get here, it seems like they're the same!
