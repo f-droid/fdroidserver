@@ -144,7 +144,7 @@ def main():
             # Grab the binary from where the developer publishes it...
             logging.info("...retrieving " + url)
             srcapk = os.path.join(tmp_dir, url.split('/')[-1])
-            p = FDroidPopen(['wget', '-nv', url], cwd=tmp_dir)
+            p = FDroidPopen(['wget', '-nv', '--continue', url], cwd=tmp_dir)
             if p.returncode != 0 or not os.path.exists(srcapk):
                 logging.error("...failed to retrieve " + url +
                               " - publish skipped")
