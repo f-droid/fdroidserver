@@ -1886,14 +1886,15 @@ def compare_apks(apk1, apk2, tmp_dir):
         if os.path.exists(d):
             shutil.rmtree(d)
         os.mkdir(d)
+        os.mkdir(os.path.join(d, 'jar-xf'))
 
     if subprocess.call(['jar', 'xf',
                         os.path.abspath(apk1)],
-                       cwd=apk1dir) != 0:
+                       cwd=os.path.join(apk1dir, 'jar-xf')) != 0:
         return("Failed to unpack " + apk1)
     if subprocess.call(['jar', 'xf',
                         os.path.abspath(apk2)],
-                       cwd=apk2dir) != 0:
+                       cwd=os.path.join(apk2dir, 'jar-xf')) != 0:
         return("Failed to unpack " + apk2)
 
     p = FDroidPopen(['diff', '-r', apk1dir, apk2dir], output=False)
