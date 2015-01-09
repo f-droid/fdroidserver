@@ -7,7 +7,8 @@
 exec 1>&2
 
 PY_FILES="fdroid makebuildserver setup.py examples/*.py buildserver/*.py fdroidserver/*.py"
-SH_FILES="fd-commit jenkins-build docs/*.sh hooks/pre-commit"
+SH_FILES="hooks/pre-commit"
+BASH_FILES="fd-commit jenkins-build docs/update.sh"
 RB_FILES="buildserver/cookbooks/*/recipes/*.rb"
 
 err() {
@@ -18,8 +19,6 @@ err() {
 cmd_exists() {
 	command -v $1 1>/dev/null
 }
-
-# For systems that switched to python3, first check for the python2 versions
 
 if cmd_exists pyflakes-python2; then
 	PYFLAKES=pyflakes-python2
@@ -37,8 +36,6 @@ else
 	err "pep8 is not installed!"
 fi
 
-# If there are python errors or warnings, print them and fail.
-
 if ! $PYFLAKES $PY_FILES; then
 	err "pyflakes tests failed!"
 fi
@@ -48,15 +45,17 @@ if ! $PEP8 --ignore=E123,E501 $PY_FILES; then
 fi
 
 
-# check the syntax of included shell scripts with bash -n
-
 for f in $SH_FILES; do
+	if ! dash -n $f; then
+		err "dash tests failed!"
+	fi
+done
+
+for f in $BASH_FILES; do
 	if ! bash -n $f; then
 		err "bash tests failed!"
 	fi
 done
-
-# check the syntax of included ruby scripts with ruby -c
 
 for f in $RB_FILES; do
 	if ! ruby -c $f 1>/dev/null; then
