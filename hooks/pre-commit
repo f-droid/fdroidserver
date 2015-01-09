@@ -1,7 +1,7 @@
 #!/bin/sh
 #
-# Simple pre-commit hook to check that there are no errors in the fdroid
-# metadata files.
+# Simple pre-commit hook to check that there are no errors in the fdroidserver
+# source files.
 
 # Redirect output to stderr.
 exec 1>&2
