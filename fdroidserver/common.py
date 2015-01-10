@@ -504,7 +504,13 @@ class vcs:
 
     # Get a list of all known tags
     def gettags(self):
-        raise VCSException('gettags not supported for this vcs type')
+        if not self._gettags:
+            raise VCSException('gettags not supported for this vcs type')
+        rtags = []
+        for tag in self._gettags():
+            if re.match('[-A-Za-z0-9_. ]+$', tag):
+                rtags.append(tag)
+        return rtags
 
     # Get a list of latest number tags
     def latesttags(self, number):
@@ -613,7 +619,7 @@ class vcs_git(vcs):
         if p.returncode != 0:
             raise VCSException("Git submodule update failed", p.output)
 
-    def gettags(self):
+    def _gettags(self):
         self.checkrepo()
         p = FDroidPopen(['git', 'tag'], cwd=self.local, output=False)
         return p.output.splitlines()
@@ -742,7 +748,7 @@ class vcs_gitsvn(vcs):
         if p.returncode != 0:
             raise VCSException("Git clean failed", p.output)
 
-    def gettags(self):
+    def _gettags(self):
         self.checkrepo()
         for treeish in ['origin/', '']:
             d = os.path.join(self.local, '.git', 'svn', 'refs', 'remotes', treeish, 'tags')
@@ -795,7 +801,7 @@ class vcs_hg(vcs):
         elif p.returncode != 0:
             raise VCSException("HG purge failed", p.output)
 
-    def gettags(self):
+    def _gettags(self):
         p = FDroidPopen(['hg', 'tags', '-q'], cwd=self.local, output=False)
         return p.output.splitlines()[1:]
 
@@ -826,7 +832,7 @@ class vcs_bzr(vcs):
         if p.returncode != 0:
             raise VCSException("Bzr revert of '%s' failed" % rev, p.output)
 
-    def gettags(self):
+    def _gettags(self):
         p = FDroidPopen(['bzr', 'tags'], cwd=self.local, output=False)
         return [tag.split('   ')[0].strip() for tag in
                 p.output.splitlines()]
