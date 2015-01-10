@@ -987,6 +987,7 @@ def parse_androidmanifests(paths, ignoreversions=None):
 
     for path in paths:
 
+        logging.debug("Parsing manifest at {0}".format(path))
         gradle = has_extension(path, 'gradle')
         version = None
         vercode = None
@@ -1015,6 +1016,9 @@ def parse_androidmanifests(paths, ignoreversions=None):
                     matches = vcsearch(line)
                 if matches:
                     vercode = matches.group(1)
+
+        logging.debug("..got package={0}, version={1}, vercode={2}"
+                      .format(package, version, vercode))
 
         # Always grab the package name and version name in case they are not
         # together with the highest version code
