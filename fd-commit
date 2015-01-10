@@ -78,7 +78,6 @@ while read line; do
 		disable=false
 		while read line; do
 			case "$line" in
-				*'Maintainer Notes:'*) break ;;
 				'-Build:'*) onlybuild=false ;;
 				'+Build:'*)
 					$newbuild && onlybuild=false
