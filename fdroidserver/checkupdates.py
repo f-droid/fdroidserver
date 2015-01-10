@@ -211,7 +211,8 @@ def check_repomanifest(app, branch=None):
         if not package:
             return (None, "Couldn't find package ID")
         if package != appid:
-            return (None, "Package ID mismatch")
+            return (None, "Package ID mismatch - expected {0}, got {1}"
+                    .format(appid, package))
         if not version:
             return (None, "Couldn't find latest version name")
         if not vercode:
