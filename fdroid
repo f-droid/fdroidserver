@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # fdroid.py - part of the FDroid server tools
-# Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-2015, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -40,6 +40,7 @@ commands = {
     "scanner": "Scan the source code of a package",
     "stats": "Update the stats of the repo",
     "server": "Interact with the repo HTTP server",
+    "signindex": "Sign indexes created using update --nosign",
 }
 
 
