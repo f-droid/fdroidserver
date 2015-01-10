@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # update.py - part of the FDroid server tools
-# Copyright (C) 2010-2013, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-2015, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -899,29 +899,38 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
 
     if 'repo_keyalias' in config:
 
-        logging.info("Creating signed index with this key (SHA256):")
-        logging.info("%s" % repo_pubkey_fingerprint)
+        if options.nosign:
+            logging.info("Creating unsigned index in preparation for signing")
+        else:
+            logging.info("Creating signed index with this key (SHA256):")
+            logging.info("%s" % repo_pubkey_fingerprint)
 
         # Create a jar of the index...
-        p = FDroidPopen(['jar', 'cf', 'index.jar', 'index.xml'], cwd=repodir)
+        jar_output = 'index_unsigned.jar' if options.nosign else 'index.jar'
+        p = FDroidPopen(['jar', 'cf', jar_output, 'index.xml'], cwd=repodir)
         if p.returncode != 0:
-            logging.critical("Failed to create jar file")
+            logging.critical("Failed to create {0}".format(jar_output))
             sys.exit(1)
 
         # Sign the index...
-        args = ['jarsigner', '-keystore', config['keystore'],
-                '-storepass:file', config['keystorepassfile'],
-                '-digestalg', 'SHA1', '-sigalg', 'MD5withRSA',
-                os.path.join(repodir, 'index.jar'), config['repo_keyalias']]
-        if config['keystore'] == 'NONE':
-            args += config['smartcardoptions']
-        else:  # smardcards never use -keypass
-            args += ['-keypass:file', config['keypassfile']]
-        p = FDroidPopen(args)
-        # TODO keypass should be sent via stdin
-        if p.returncode != 0:
-            logging.critical("Failed to sign index")
-            sys.exit(1)
+        signed = os.path.join(repodir, 'index.jar')
+        if options.nosign:
+            # Remove old signed index if not signing
+            if os.path.exists(signed):
+                os.remove(signed)
+        else:
+            args = ['jarsigner', '-keystore', config['keystore'],
+                    '-storepass:file', config['keystorepassfile'],
+                    '-digestalg', 'SHA1', '-sigalg', 'MD5withRSA',
+                    signed, config['repo_keyalias']]
+            if config['keystore'] == 'NONE':
+                args += config['smartcardoptions']
+            else:  # smardcards never use -keypass
+                args += ['-keypass:file', config['keypassfile']]
+            p = FDroidPopen(args)
+            if p.returncode != 0:
+                logging.critical("Failed to sign index")
+                sys.exit(1)
 
     # Copy the repo icon into the repo directory...
     icon_dir = os.path.join(repodir, 'icons')
@@ -1006,6 +1015,8 @@ def main():
                       help="Produce human-readable index.xml")
     parser.add_option("--clean", action="store_true", default=False,
                       help="Clean update - don't uses caches, reprocess all apks")
+    parser.add_option("--nosign", action="store_true", default=False,
+                      help="When configured for signed indexes, create only unsigned indexes at this stage")
     (options, args) = parser.parse_args()
 
     config = common.read_config(options)
