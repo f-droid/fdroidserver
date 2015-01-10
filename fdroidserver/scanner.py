@@ -48,7 +48,7 @@ def main():
     allapps = metadata.read_metadata()
     apps = common.read_app_args(args, allapps, True)
 
-    problems = []
+    probcount = 0
 
     build_dir = 'build'
     if not os.path.isdir(build_dir):
@@ -89,25 +89,26 @@ def main():
                                                         extlib_dir, False)
 
                     # Do the scan...
-                    buildprobs = common.scan_source(build_dir, root_dir, thisbuild)
-                    for problem in buildprobs:
-                        problems.append(problem + ' in ' + appid
-                                        + ' ' + thisbuild['version'])
+                    count = common.scan_source(build_dir, root_dir, thisbuild)
+                    if count > 0:
+                        logging.warn('Scanner found %d problems in %s (%s)' % (
+                            count, appid, thisbuild['vercode']))
+                        probcount += count
 
         except BuildException as be:
-            msg = "Could not scan app %s due to BuildException: %s" % (appid, be)
-            problems.append(msg)
+            logging.warn("Could not scan app %s due to BuildException: %s" % (
+                appid, be))
+            probcount += 1
         except VCSException as vcse:
-            msg = "VCS error while scanning app %s: %s" % (appid, vcse)
-            problems.append(msg)
+            logging.warn("VCS error while scanning app %s: %s" % (appid, vcse))
+            probcount += 1
         except Exception:
-            msg = "Could not scan app %s due to unknown error: %s" % (appid, traceback.format_exc())
-            problems.append(msg)
+            logging.warn("Could not scan app %s due to unknown error: %s" % (
+                appid, traceback.format_exc()))
+            probcount += 1
 
     logging.info("Finished:")
-    for problem in problems:
-        print problem
-    print str(len(problems)) + ' problems.'
+    print "%d app(s) with problems" % probcount
 
 if __name__ == "__main__":
     main()

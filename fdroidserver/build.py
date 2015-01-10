@@ -547,7 +547,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         count = common.scan_source(build_dir, root_dir, thisbuild)
         if count > 0:
             if force:
-                logging.warn('Scanner found %d problems:' % count)
+                logging.warn('Scanner found %d problems' % count)
             else:
                 raise BuildException("Can't build due to %d errors while scanning" % count)
 
