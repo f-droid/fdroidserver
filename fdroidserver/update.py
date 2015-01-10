@@ -33,6 +33,7 @@ from pyasn1.error import PyAsn1Error
 from pyasn1.codec.der import decoder, encoder
 from pyasn1_modules import rfc2315
 from hashlib import md5
+from binascii import hexlify, unhexlify
 
 from PIL import Image
 import logging
@@ -714,20 +715,24 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             return " ".join(ret)
 
         def extract_pubkey():
-            p = FDroidPopen(['keytool', '-exportcert',
-                             '-alias', config['repo_keyalias'],
-                             '-keystore', config['keystore'],
-                             '-storepass:file', config['keystorepassfile']]
-                            + config['smartcardoptions'], output=False)
-            if p.returncode != 0:
-                msg = "Failed to get repo pubkey!"
-                if config['keystore'] == 'NONE':
-                    msg += ' Is your crypto smartcard plugged in?'
-                logging.critical(msg)
-                sys.exit(1)
             global repo_pubkey_fingerprint
-            repo_pubkey_fingerprint = cert_fingerprint(p.output)
-            return "".join("%02x" % ord(b) for b in p.output)
+            if 'repo_pubkey' in config:
+                pubkey = unhexlify(config['repo_pubkey'])
+            else:
+                p = FDroidPopen(['keytool', '-exportcert',
+                                 '-alias', config['repo_keyalias'],
+                                 '-keystore', config['keystore'],
+                                 '-storepass:file', config['keystorepassfile']]
+                                + config['smartcardoptions'], output=False)
+                if p.returncode != 0:
+                    msg = "Failed to get repo pubkey!"
+                    if config['keystore'] == 'NONE':
+                        msg += ' Is your crypto smartcard plugged in?'
+                    logging.critical(msg)
+                    sys.exit(1)
+                pubkey = p.output
+            repo_pubkey_fingerprint = cert_fingerprint(pubkey)
+            return hexlify(pubkey)
 
         repoel.setAttribute("pubkey", extract_pubkey())
 

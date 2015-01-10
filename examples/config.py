@@ -73,6 +73,13 @@ The repository of older versions of applications from the main demo repository.
 # jarsigner using -alias.  (Not needed in an unsigned repository).
 # repo_keyalias = "fdroidrepo"
 
+# Optionally, the public key for the key defined by repo_keyalias above can
+# be specified here. There is no need to do this, as the public key can and
+# will be retrieved from the keystore when needed. However, specifying it
+# manually can allow some processing to take place without access to the
+# keystore.
+# repo_pubkey = "..."
+
 # The keystore to use for release keys when building. This needs to be
 # somewhere safe and secure, and backed up!  The best way to manage these
 # sensitive keys is to use a "smartcard" (aka Hardware Security Module). To
