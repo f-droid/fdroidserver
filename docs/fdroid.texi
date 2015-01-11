@@ -468,6 +468,7 @@ The following sections describe the fields recognised within the file.
 * Web Site::
 * Source Code::
 * Issue Tracker::
+* Changelog::
 * Donate::
 * FlattrID::
 * Bitcoin::
@@ -631,6 +632,16 @@ The URL for the application's issue tracker. Optional, since not all
 applications have one.
 
 This is converted to (@code{<tracker>}) in the public index file.
+
+@node Changelog
+@section Changelog
+
+@cindex Changelog
+
+The URL for the application's changelog. Optional, since not all
+applications have one.
+
+This is converted to (@code{<changelog>}) in the public index file.
 
 @node Donate
 @section Donate

@@ -284,6 +284,9 @@ class FDroid
 					case "tracker":
 						$issues=$el;
 						break;
+					case "changelog":
+						$changelog=$el;
+						break;
 					case "donate":
 						$donate=$el;
 						break;
@@ -398,6 +401,8 @@ class FDroid
 					$out.='<b>Issue Tracker:</b> <a href="'.$issues.'">'.$issues.'</a><br />';
 				if(strlen($source)>0)
 					$out.='<b>Source Code:</b> <a href="'.$source.'">'.$source.'</a><br />';
+				if(strlen($changelog)>0)
+					$out.='<b>Changelog:</b> <a href="'.$changelog.'">'.$changelog.'</a><br />';
 				if(isset($donate) && strlen($donate)>0)
 					$out.='<b>Donate:</b> <a href="'.$donate.'">'.$donate.'</a><br />';
 				if(isset($flattr) && strlen($flattr)>0)
