@@ -249,7 +249,8 @@ __complete_stats() {
 
 __complete_server() {
 	opts="-i -v -q"
-	lopts="--identity-file --verbose --quiet update"
+	lopts="--identity-file --local-copy-dir --sync-from-local-copy-dir
+ --verbose --quiet update"
 	__complete_options
 }
 
