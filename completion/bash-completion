@@ -211,7 +211,7 @@ __complete_lint() {
 
 __complete_scanner() {
 	opts="-v -q"
-	lopts="--verbose --quiet --nosvn"
+	lopts="--verbose --quiet"
 	case "${cur}" in
 		-*)
 			__complete_options
