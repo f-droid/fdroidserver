@@ -421,14 +421,30 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             logging.critical("Spaces in filenames are not allowed.")
             sys.exit(1)
 
-        if apkfilename in apkcache:
-            logging.debug("Reading " + apkfilename + " from cache")
-            thisinfo = apkcache[apkfilename]
+        # Calculate the sha256...
+        sha = hashlib.sha256()
+        with open(apkfile, 'rb') as f:
+            while True:
+                t = f.read(16384)
+                if len(t) == 0:
+                    break
+                sha.update(t)
+            shasum = sha.hexdigest()
 
-        else:
+        usecache = False
+        if apkfilename in apkcache:
+            thisinfo = apkcache[apkfilename]
+            if thisinfo['sha256'] == shasum:
+                logging.debug("Reading " + apkfilename + " from cache")
+                usecache = True
+            else:
+                logging.debug("Ignoring stale cache data for " + apkfilename)
+
+        if not usecache:
             logging.debug("Processing " + apkfilename)
             thisinfo = {}
             thisinfo['apkname'] = apkfilename
+            thisinfo['sha256'] = shasum
             srcfilename = apkfilename[:-4] + "_src.tar.gz"
             if os.path.exists(os.path.join(repodir, srcfilename)):
                 thisinfo['srcname'] = srcfilename
@@ -513,16 +529,6 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             # Check for debuggable apks...
             if common.isApkDebuggable(apkfile, config):
                 logging.warn('{0} is set to android:debuggable="true"'.format(apkfile))
-
-            # Calculate the sha256...
-            sha = hashlib.sha256()
-            with open(apkfile, 'rb') as f:
-                while True:
-                    t = f.read(1024)
-                    if len(t) == 0:
-                        break
-                    sha.update(t)
-                thisinfo['sha256'] = sha.hexdigest()
 
             # Get the signature (or md5 of, to be precise)...
             thisinfo['sig'] = getsig(os.path.join(os.getcwd(), apkfile))
