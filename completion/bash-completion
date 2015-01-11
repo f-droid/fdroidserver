@@ -252,6 +252,12 @@ __complete_server() {
 	__complete_options
 }
 
+__complete_signindex() {
+	opts="-h -v -q"
+	lopts="--help --verbose"
+	__complete_options
+}
+
 __complete_init() {
 	opts="-h -v -q -d"
 	lopts="--help --verbose --quiet --distinguished-name --keystore
@@ -263,7 +269,7 @@ _fdroid() {
 	local cmd cmds
 	cmd=${COMP_WORDS[1]}
 	cmds=" build init install update publish checkupdates import \
-readmeta rewritemeta lint scanner verify stats server "
+readmeta rewritemeta lint scanner verify stats server signindex "
 
 	for c in $cmds; do eval "_fdroid_${c} () {
 		local cur prev opts lopts
