@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # server.py - part of the FDroid server tools
-# Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-15, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -123,7 +123,9 @@ def update_awsbucket(repo_section):
 def update_serverwebroot(serverwebroot, repo_section):
     # use a checksum comparison for accurate comparisons on different
     # filesystems, for example, FAT has a low resolution timestamp
-    rsyncargs = ['rsync', '--archive', '--delete', '--checksum']
+    rsyncargs = ['rsync', '--archive', '--delete']
+    if not options.nochecksum:
+        rsyncargs.append('--checksum')
     if options.verbose:
         rsyncargs += ['--verbose']
     if options.quiet:
@@ -164,7 +166,8 @@ def _local_sync(fromdir, todir):
                  '--one-file-system', '--delete', '--chmod=Da+rx,Fa-x,a+r,u+w']
     # use stricter rsync checking on all files since people using offline mode
     # are already prioritizing security above ease and speed
-    rsyncargs += ['--checksum']
+    if not options.nochecksum:
+        rsyncargs.append('--checksum')
     if options.verbose:
         rsyncargs += ['--verbose']
     if options.quiet:
@@ -202,6 +205,8 @@ def main():
                       help="Spew out even more information than normal")
     parser.add_option("-q", "--quiet", action="store_true", default=False,
                       help="Restrict output to warnings and errors")
+    parser.add_option("--no-checksum", action="store_true", default=False,
+                      help="Don't use rsync checksums")
     (options, args) = parser.parse_args()
 
     config = common.read_config(options)
