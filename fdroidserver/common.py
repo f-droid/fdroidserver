@@ -427,6 +427,8 @@ class vcs:
         self.username = None
         if self.repotype() in ('git-svn', 'bzr'):
             if '@' in remote:
+                if self.repotype == 'git-svn':
+                    raise VCSException("Authentication is not supported for git-svn")
                 self.username, remote = remote.split('@')
                 if ':' not in self.username:
                     raise VCSException("Password required with username")
@@ -639,13 +641,6 @@ class vcs_gitsvn(vcs):
     def repotype(self):
         return 'git-svn'
 
-    # Damn git-svn tries to use a graphical password prompt, so we have to
-    # trick it into taking the password from stdin
-    def userargs(self):
-        if self.username is None:
-            return ('', '')
-        return ('echo "%s" | DISPLAY="" ' % self.password, ' --username "%s"' % self.username)
-
     # If the local directory exists, but is somehow not a git repository, git
     # will traverse up the directory tree until it finds one that is (i.e.
     # fdroidserver) and then we'll proceed to destory it! This is called as
@@ -659,22 +654,24 @@ class vcs_gitsvn(vcs):
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout
-            gitsvn_cmd = '%sgit svn clone%s' % self.userargs()
+            gitsvn_args = ['git', 'svn', 'clone']
             if ';' in self.remote:
                 remote_split = self.remote.split(';')
                 for i in remote_split[1:]:
                     if i.startswith('trunk='):
-                        gitsvn_cmd += ' -T %s' % i[6:]
+                        gitsvn_args.extend(['-T', i[6:]])
                     elif i.startswith('tags='):
-                        gitsvn_cmd += ' -t %s' % i[5:]
+                        gitsvn_args.extend(['-t', i[5:]])
                     elif i.startswith('branches='):
-                        gitsvn_cmd += ' -b %s' % i[9:]
-                p = FDroidPopen([gitsvn_cmd + " %s %s" % (remote_split[0], self.local)], shell=True, output=False)
+                        gitsvn_args.extend(['-b', i[9:]])
+                gitsvn_args.extend([remote_split[0], self.local])
+                p = FDroidPopen(gitsvn_args, output=False)
                 if p.returncode != 0:
                     self.clone_failed = True
                     raise VCSException("Git svn clone failed", p.output)
             else:
-                p = FDroidPopen([gitsvn_cmd + " %s %s" % (self.remote, self.local)], shell=True, output=False)
+                gitsvn_args.extend([remote_split[0], self.local])
+                p = FDroidPopen(gitsvn_args, output=False)
                 if p.returncode != 0:
                     self.clone_failed = True
                     raise VCSException("Git svn clone failed", p.output)
@@ -692,10 +689,10 @@ class vcs_gitsvn(vcs):
                 raise VCSException("Git clean failed", p.output)
             if not self.refreshed:
                 # Get new commits, branches and tags from repo
-                p = FDroidPopen(['%sgit svn fetch %s' % self.userargs()], cwd=self.local, shell=True, output=False)
+                p = FDroidPopen(['git', 'svn', 'fetch'], cwd=self.local, output=False)
                 if p.returncode != 0:
                     raise VCSException("Git svn fetch failed")
-                p = FDroidPopen(['%sgit svn rebase %s' % self.userargs()], cwd=self.local, shell=True, output=False)
+                p = FDroidPopen(['git', 'svn', 'rebase'], cwd=self.local, output=False)
                 if p.returncode != 0:
                     raise VCSException("Git svn rebase failed", p.output)
                 self.refreshed = True

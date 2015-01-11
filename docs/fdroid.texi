@@ -774,11 +774,6 @@ root dir.
 Here's an example of a complex git-svn Repo URL:
 http://svn.code.sf.net/p/project/code/svn;trunk=trunk;tags=tags;branches=branches
 
-For a Subversion repo that requires authentication, you can precede the repo
-URL with username:password@ and those parameters will be passed as @option{--username}
-and @option{--password} to the SVN checkout command. (This now works for both
-svn and git-svn)
-
 If the Repo Type is @code{srclib}, then you must specify the name of the
 according srclib .txt file. For example if @code{scrlibs/FooBar.txt} exist
 and you want to use this srclib, then you have to set Repo to
