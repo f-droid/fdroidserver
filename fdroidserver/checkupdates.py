@@ -84,7 +84,7 @@ def check_http(app):
 # Whether this can be used reliably or not depends on
 # the development procedures used by the project's developers. Use it with
 # caution, because it's inappropriate for many projects.
-# Returns (None, "a message") if this didn't work, or (version, vercode) for
+# Returns (None, "a message") if this didn't work, or (version, vercode, tag) for
 # the details of the current version.
 def check_tags(app, pattern):
 
