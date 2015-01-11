@@ -124,7 +124,7 @@ def update_serverwebroot(serverwebroot, repo_section):
     # use a checksum comparison for accurate comparisons on different
     # filesystems, for example, FAT has a low resolution timestamp
     rsyncargs = ['rsync', '--archive', '--delete']
-    if not options.nochecksum:
+    if not options.no_checksum:
         rsyncargs.append('--checksum')
     if options.verbose:
         rsyncargs += ['--verbose']
