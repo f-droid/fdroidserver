@@ -1879,27 +1879,68 @@ def compare_apks(apk1, apk2, tmp_dir):
     trying to do the comparison.
     """
 
-    thisdir = os.path.join(tmp_dir, 'this_apk')
-    thatdir = os.path.join(tmp_dir, 'that_apk')
-    for d in [thisdir, thatdir]:
+    badchars = re.compile('''[/ :;'"]''')
+    apk1dir = os.path.join(tmp_dir, badchars.sub('_', apk1[0:-4]))  # trim .apk
+    apk2dir = os.path.join(tmp_dir, badchars.sub('_', apk2[0:-4]))  # trim .apk
+    for d in [apk1dir, apk2dir]:
         if os.path.exists(d):
             shutil.rmtree(d)
         os.mkdir(d)
+        os.mkdir(os.path.join(d, 'jar-xf'))
 
     if subprocess.call(['jar', 'xf',
                         os.path.abspath(apk1)],
-                       cwd=thisdir) != 0:
+                       cwd=os.path.join(apk1dir, 'jar-xf')) != 0:
         return("Failed to unpack " + apk1)
     if subprocess.call(['jar', 'xf',
                         os.path.abspath(apk2)],
-                       cwd=thatdir) != 0:
+                       cwd=os.path.join(apk2dir, 'jar-xf')) != 0:
         return("Failed to unpack " + apk2)
 
-    p = FDroidPopen(['diff', '-r', 'this_apk', 'that_apk'], cwd=tmp_dir,
-                    output=False)
+    # try to find apktool in the path, if it hasn't been manually configed
+    if not 'apktool' in config:
+        tmp = find_command('apktool')
+        if not tmp is None:
+            config['apktool'] = tmp
+    if 'apktool' in config:
+        if subprocess.call([config['apktool'], 'd', os.path.abspath(apk1), '--output', 'apktool'],
+                           cwd=apk1dir) != 0:
+            return("Failed to unpack " + apk1)
+        if subprocess.call([config['apktool'], 'd', os.path.abspath(apk2), '--output', 'apktool'],
+                           cwd=apk2dir) != 0:
+            return("Failed to unpack " + apk2)
+
+    p = FDroidPopen(['diff', '-r', apk1dir, apk2dir], output=False)
     lines = p.output.splitlines()
     if len(lines) != 1 or 'META-INF' not in lines[0]:
+        meld = find_command('meld')
+        if not meld is None:
+            p = FDroidPopen(['meld', apk1dir, apk2dir], output=False)
         return("Unexpected diff output - " + p.output)
 
+    # since everything verifies, delete the comparison to keep cruft down
+    shutil.rmtree(apk1dir)
+    shutil.rmtree(apk2dir)
+
     # If we get here, it seems like they're the same!
+    return None
+
+
+def find_command(command):
+    '''find the full path of a command, or None if it can't be found in the PATH'''
+
+    def is_exe(fpath):
+        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
+    fpath, fname = os.path.split(command)
+    if fpath:
+        if is_exe(command):
+            return command
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            path = path.strip('"')
+            exe_file = os.path.join(path, command)
+            if is_exe(exe_file):
+                return exe_file
+
     return None
