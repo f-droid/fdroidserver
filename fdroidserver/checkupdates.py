@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # checkupdates.py - part of the FDroid server tools
-# Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
+# Copyright (C) 2010-2015, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -353,17 +353,17 @@ def fetch_autoname(app, tag):
         if app['builds'][-1]['gradle']:
             flavours = app['builds'][-1]['gradle']
 
-    logging.debug("...fetch auto name from " + app_dir)
-    new_name = common.fetch_real_name(app_dir, flavours)
-    commitmsg = None
-    if new_name:
-        logging.debug("...got autoname '" + new_name + "'")
-        if new_name != app['Auto Name']:
+    if not app['Auto Name']:
+        logging.debug("...fetch auto name from " + app_dir)
+        new_name = common.fetch_real_name(app_dir, flavours)
+        commitmsg = None
+        if new_name:
+            logging.debug("...got autoname '" + new_name + "'")
             app['Auto Name'] = new_name
             if not commitmsg:
                 commitmsg = "Set autoname of {0}".format(common.getappname(app))
-    else:
-        logging.debug("...couldn't get autoname")
+        else:
+            logging.debug("...couldn't get autoname")
 
     if app['Current Version'].startswith('@string/'):
         cv = common.version_name(app['Current Version'], app_dir, flavours)
