@@ -1918,6 +1918,10 @@ def compare_apks(apk1, apk2, tmp_dir):
             p = FDroidPopen(['meld', apk1dir, apk2dir], output=False)
         return("Unexpected diff output - " + p.output)
 
+    # since everything verifies, delete the comparison to keep cruft down
+    shutil.rmtree(apk1dir)
+    shutil.rmtree(apk2dir)
+
     # If we get here, it seems like they're the same!
     return None
 
