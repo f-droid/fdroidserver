@@ -1315,7 +1315,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                     raise BuildException("Failed to amend manifest")
             elif has_extension(path, 'gradle'):
                 p = FDroidPopen(['sed', '-i',
-                                 's/versionName *=* *"[^"]*"/versionName = "' + build['version'] + '"/g',
+                                 's/versionName *=* *.*/versionName = "' + build['version'] + '"/g',
                                  path], output=False)
                 if p.returncode != 0:
                     raise BuildException("Failed to amend build.gradle")
