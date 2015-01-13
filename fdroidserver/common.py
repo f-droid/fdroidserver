@@ -670,7 +670,7 @@ class vcs_gitsvn(vcs):
                     self.clone_failed = True
                     raise VCSException("Git svn clone failed", p.output)
             else:
-                gitsvn_args.extend([remote_split[0], self.local])
+                gitsvn_args.extend([self.remote, self.local])
                 p = FDroidPopen(gitsvn_args, output=False)
                 if p.returncode != 0:
                     self.clone_failed = True
