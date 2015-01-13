@@ -1898,9 +1898,9 @@ def compare_apks(apk1, apk2, tmp_dir):
         return("Failed to unpack " + apk2)
 
     # try to find apktool in the path, if it hasn't been manually configed
-    if not 'apktool' in config:
+    if 'apktool' not in config:
         tmp = find_command('apktool')
-        if not tmp is None:
+        if tmp is not None:
             config['apktool'] = tmp
     if 'apktool' in config:
         if subprocess.call([config['apktool'], 'd', os.path.abspath(apk1), '--output', 'apktool'],
@@ -1914,7 +1914,7 @@ def compare_apks(apk1, apk2, tmp_dir):
     lines = p.output.splitlines()
     if len(lines) != 1 or 'META-INF' not in lines[0]:
         meld = find_command('meld')
-        if not meld is None:
+        if meld is not None:
             p = FDroidPopen(['meld', apk1dir, apk2dir], output=False)
         return("Unexpected diff output - " + p.output)
 
