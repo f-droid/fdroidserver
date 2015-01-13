@@ -1835,7 +1835,7 @@ def add_to_env_path(path):
     paths = env['PATH'].split(os.pathsep)
     if path in paths:
         return
-    paths += path
+    paths.append(path)
     env['PATH'] = os.pathsep.join(paths)
 
 
