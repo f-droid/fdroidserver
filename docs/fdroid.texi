@@ -1471,7 +1471,23 @@ provisioning scripts detect these, they will be used in preference to
 running the android tools. For example, if you have
 @code{buildserver/addons/cache/platforms/android-19.tar.gz} that will be
 used when installing the android-19 platform, instead of re-downloading it
-using @code{android update sdk --no-ui -t android-19}.
+using @code{android update sdk --no-ui -t android-19}. It is possible to
+create the cache files of this additions from a local installation of the
+SDK including these:
+
+@example
+cd /path/to/android-sdk/platforms
+tar czf android-19.tar.gz android-19
+mv android-19.tar.gz /path/to/buildserver/addons/cache/platforms/}
+@end example
+
+If you have already built a buildserver it is also possible to get this
+files directly from the buildserver:
+
+@example
+vagrant ssh -- -C 'tar -C ~/android-sdk/platforms czf android-19.tar.gz android-19'
+vagrant ssh -- -C 'cat ~/android-sdk/platforms/android-19.tar.gz' > /path/to/fdroidserver/buildserver/cache/platforms/android19.tar.gz
+@end example
 
 Once it's complete you'll have a new base box called 'buildserver' which is
 what's used for the actual builds. You can then build packages as normal,
