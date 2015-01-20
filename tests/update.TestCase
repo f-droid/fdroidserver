@@ -18,7 +18,7 @@ if localmodule not in sys.path:
 
 import fdroidserver.common
 import fdroidserver.update
-from fdroidserver.common import FDroidPopen, SilentPopen
+from fdroidserver.common import FDroidPopen
 
 class UpdateTest(unittest.TestCase):
     '''fdroid update'''
