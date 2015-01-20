@@ -1537,8 +1537,7 @@ def scan_source(build_dir, root_dir, thisbuild):
                     'application/zip',
                     'application/java-archive',
                     'application/octet-stream',
-                    'binary',
-            ):
+                    'binary', ):
 
                 if has_extension(fp, 'apk'):
                     removeproblem('APK file', fd, fp)
@@ -1803,8 +1802,7 @@ def remove_signing_keys(build_dir):
                 'project.properties',
                 'build.properties',
                 'default.properties',
-                'ant.properties',
-        ]:
+                'ant.properties', ]:
             if propfile in files:
                 path = os.path.join(root, propfile)
 
