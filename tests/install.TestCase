@@ -40,6 +40,7 @@ if __name__ == "__main__":
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     (fdroidserver.install.options, args) = parser.parse_args(['--verbose'])
+    fdroidserver.common.options = fdroidserver.install.options
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(InstallTest))
