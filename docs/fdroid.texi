@@ -1037,8 +1037,7 @@ Another example, using extra parameters:
 
 This is optional - if present, it contains a comma-separated list of any of
 the following values, describing an anti-feature the application has.
-Even though such apps won't be displayed unless a settings box is ticked,
-it is a good idea to mention the reasons for the anti-feature(s) in the
+It is a good idea to mention the reasons for the anti-feature(s) in the
 description:
 
 @itemize @bullet
@@ -1058,14 +1057,20 @@ are impossible to replace or that the replacement cannot be connected to
 without major changes to the app.
 
 @item
-@samp{NonFreeAdd} - the application promotes non-Free add-ons, such that the
+@samp{NonFreeAdd} - the application promotes non-free add-ons, such that the
 app is effectively an advert for other non-free software and such software is
 not clearly labelled as such.
 
 @item
-@samp{NonFreeDep} - the application depends on a non-Free application (e.g.
+@samp{NonFreeDep} - the application depends on a non-free application (e.g.
 Google Maps) - i.e. it requires it to be installed on the device, but does not
 include it.
+
+@item
+@samp{UpstreamNonFree} - the application is or depends on non-free software.
+This does not mean that non-free software is included with the app: Most
+likely, it has been patched in some way to remove the non-free code. However,
+functionality may be missing.
 
 @end itemize
 
