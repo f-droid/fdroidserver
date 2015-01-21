@@ -166,7 +166,7 @@ def _local_sync(fromdir, todir):
                  '--one-file-system', '--delete', '--chmod=Da+rx,Fa-x,a+r,u+w']
     # use stricter rsync checking on all files since people using offline mode
     # are already prioritizing security above ease and speed
-    if not options.nochecksum:
+    if not options.no_checksum:
         rsyncargs.append('--checksum')
     if options.verbose:
         rsyncargs += ['--verbose']
