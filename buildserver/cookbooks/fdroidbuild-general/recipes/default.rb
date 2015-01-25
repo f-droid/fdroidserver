@@ -19,6 +19,11 @@ if node['kernel']['machine'] == "x86_64"
   end
 end
 
+easy_install_package "compare-locales" do
+  options "-U"
+  action :install
+end
+
 execute "add-bsenv" do
   user user
   command "echo \". ./.bsenv \" >> /home/#{user}/.bashrc"
