@@ -171,7 +171,7 @@ class FDroid
 			$out.=$this->get_app($query_vars);
 		} else {
 			$out.='<form name="searchform" action="" method="get">';
-			$out.='<p><input name="fdfilter" type="text" value="'.$query_vars['fdfilter'].'" size="30"> ';
+			$out.='<p><input name="fdfilter" type="text" value="'.esc_attr($query_vars['fdfilter']).'" size="30"> ';
 			$out.='<input type="hidden" name="fdpage" value="1">';
 			$out.='<input type="submit" value="Search"></p>';
 			$out.=$this->makeformdata($query_vars);
@@ -690,7 +690,7 @@ class FDroid
 				$out.='</form>'."\n";
 			}
 			else {
-				$out.='Applications matching "'.$query_vars['fdfilter'].'"';
+				$out.='Applications matching "'.esc_attr($query_vars['fdfilter']).'"';
 			}
 			$out.="</div>";
 
@@ -749,7 +749,7 @@ class FDroid
 		$out.='<input type="hidden" name="page_id" value="'.(int)get_query_var('page_id').'">';
 		foreach($query_vars as $name => $value) {
 			if($value !== null && $name != 'fdfilter' && $name != 'fdpage')
-				$out.='<input type="hidden" name="'.$name.'" value="'.sanitize_text_field($value).'">';
+				$out.='<input type="hidden" name="'.esc_attr($name).'" value="'.esc_attr($value).'">';
 		}
 
 		return $out;
