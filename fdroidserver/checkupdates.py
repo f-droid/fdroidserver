@@ -128,6 +128,7 @@ def check_tags(app, pattern):
 
         if repotype in ('git',):
             tags = vcs.latesttags(tags, 5)
+            logging.debug("Latest tags: " + ','.join(tags))
 
         for tag in tags:
             logging.debug("Check tag: '{0}'".format(tag))

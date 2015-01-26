@@ -175,7 +175,7 @@ def get_clean_vm(reset=False):
             shutil.rmtree('builder')
         os.mkdir('builder')
 
-        p = subprocess.Popen('vagrant --version', shell=True,
+        p = subprocess.Popen(['vagrant', '--version'],
                              stdout=subprocess.PIPE)
         vver = p.communicate()[0]
         if vver.startswith('Vagrant version 1.2'):
@@ -665,7 +665,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         cmd += ' ./distribute.sh'
         cmd += ' -m ' + "'" + ' '.join(modules) + "'"
         cmd += ' -d fdroid'
-        p = FDroidPopen(cmd, cwd='python-for-android', shell=True)
+        p = subprocess.Popen(cmd, cwd='python-for-android', shell=True)
         if p.returncode != 0:
             raise BuildException("Distribute build failed")
 

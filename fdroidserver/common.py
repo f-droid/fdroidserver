@@ -514,8 +514,14 @@ class vcs:
                 rtags.append(tag)
         return rtags
 
-    # Get a list of latest number tags
-    def latesttags(self, number):
+    def latesttags(self, tags, number):
+        """Get the most recent tags in a given list.
+
+        :param tags: a list of tags
+        :param number: the number to return
+        :returns: A list containing the most recent tags in the provided
+                  list, up to the maximum number given.
+        """
         raise VCSException('latesttags not supported for this vcs type')
 
     # Get current commit reference (hash, revision, etc)
@@ -626,14 +632,21 @@ class vcs_git(vcs):
         p = FDroidPopen(['git', 'tag'], cwd=self.local, output=False)
         return p.output.splitlines()
 
-    def latesttags(self, alltags, number):
+    def latesttags(self, tags, number):
         self.checkrepo()
-        p = FDroidPopen(['echo "' + '\n'.join(alltags) + '" | '
-                         +
-                         'xargs -I@ git log --format=format:"%at @%n" -1 @ | '
-                         + 'sort -n | awk \'{print $2}\''],
-                        cwd=self.local, shell=True, output=False)
-        return p.output.splitlines()[-number:]
+        tl = []
+        for tag in tags:
+            p = FDroidPopen(
+                ['git', 'show', '--format=format:%ct', '-s', tag],
+                cwd=self.local, output=False)
+            # Timestamp is on the last line. For a normal tag, it's the only
+            # line, but for annotated tags, the rest of the info precedes it.
+            ts = int(p.output.splitlines()[-1])
+            tl.append((ts, tag))
+        latest = []
+        for _, t in sorted(tl)[-number:]:
+            latest.append(t)
+        return latest
 
 
 class vcs_gitsvn(vcs):
@@ -772,9 +785,13 @@ class vcs_hg(vcs):
                 self.clone_failed = True
                 raise VCSException("Hg clone failed", p.output)
         else:
-            p = FDroidPopen(['hg status -uS | xargs rm -rf'], cwd=self.local, shell=True, output=False)
+            p = FDroidPopen(['hg', 'status', '-uS'], cwd=self.local, output=False)
             if p.returncode != 0:
-                raise VCSException("Hg clean failed", p.output)
+                raise VCSException("Hg status failed", p.output)
+            for line in p.output.splitlines():
+                if not line.startswith('? '):
+                    raise VCSException("Unexpected output from hg status -uS: " + line)
+                FDroidPopen(['rm', '-rf', line[2:]], cwd=self.local, output=False)
             if not self.refreshed:
                 p = FDroidPopen(['hg', 'pull'], cwd=self.local, output=False)
                 if p.returncode != 0:
@@ -1345,9 +1362,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             logging.info("Removing {0}".format(part))
             if os.path.lexists(dest):
                 if os.path.islink(dest):
-                    FDroidPopen(['unlink ' + dest], shell=True, output=False)
+                    FDroidPopen(['unlink', dest], output=False)
                 else:
-                    FDroidPopen(['rm -rf ' + dest], shell=True, output=False)
+                    FDroidPopen(['rm', '-rf', dest], output=False)
             else:
                 logging.info("...but it didn't exist")
 
@@ -1694,15 +1711,15 @@ class PopenResult:
     output = ''
 
 
-def SdkToolsPopen(commands, cwd=None, shell=False, output=True):
+def SdkToolsPopen(commands, cwd=None, output=True):
     cmd = commands[0]
     if cmd not in config:
         config[cmd] = find_sdk_tools_cmd(commands[0])
     return FDroidPopen([config[cmd]] + commands[1:],
-                       cwd=cwd, shell=shell, output=output)
+                       cwd=cwd, output=output)
 
 
-def FDroidPopen(commands, cwd=None, shell=False, output=True):
+def FDroidPopen(commands, cwd=None, output=True):
     """
     Run a command and capture the possibly huge output.
 
@@ -1721,10 +1738,11 @@ def FDroidPopen(commands, cwd=None, shell=False, output=True):
     result = PopenResult()
     p = None
     try:
-        p = subprocess.Popen(commands, cwd=cwd, shell=shell, env=env,
+        p = subprocess.Popen(commands, cwd=cwd, shell=False, env=env,
                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     except OSError, e:
-        raise BuildException("OSError while trying to execute " + ' '.join(commands) + ': ' + str(e))
+        raise BuildException("OSError while trying to execute " +
+                             ' '.join(commands) + ': ' + str(e))
 
     stdout_queue = Queue.Queue()
     stdout_reader = AsynchronousFileReader(p.stdout, stdout_queue)
