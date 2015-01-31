@@ -1902,6 +1902,11 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     is transferred from the signed to the unsigned apk, and then jarsigner is
     used to verify that the signature from the signed apk is also varlid for
     the unsigned one.
+    :param signed_apk: Path to a signed apk file
+    :param unsigned_apk: Path to an unsigned apk file expected to match it
+    :param tmp_dir: Path to directory for temporary files
+    :returns: None if the verification is successful, otherwise a string
+              describing what went wrong.
     """
     with ZipFile(signed_apk) as signed_apk_as_zip:
         meta_inf_files = ['META-INF/MANIFEST.MF', 'META-INF/CERT.SF', 'META-INF/CERT.RSA']
@@ -1912,10 +1917,9 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
 
     if subprocess.call(['jarsigner', '-verify', unsigned_apk]) != 0:
         logging.info("...NOT verified - {0}".format(signed_apk))
-        compare_apks(signed_apk, unsigned_apk, tmp_dir)
-        return False
+        return compare_apks(signed_apk, unsigned_apk, tmp_dir)
     logging.info("...successfully verified")
-    return True
+    return None
 
 
 def compare_apks(apk1, apk2, tmp_dir):
