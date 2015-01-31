@@ -129,7 +129,7 @@ def main():
             srcapk = apkfile + ".binary"
 
             # Compare our unsigned one with the downloaded one...
-            compare_result = common.compare_apks(srcapk, apkfile, tmp_dir)
+            compare_result = common.verify_apks(srcapk, apkfile, tmp_dir)
             if compare_result:
                 logging.error("...verification failed - publish skipped : "
                               + compare_result)
