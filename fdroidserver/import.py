@@ -226,6 +226,16 @@ def main():
         logging.error("the manual for a list of supported formats, and supply one of those.")
         sys.exit(1)
 
+    # Ensure we have a sensible-looking repo address at this point. If not, we
+    # might have got a page format we weren't expecting. (Note that we
+    # specifically don't want git@...)
+    if ((repotype != 'bzr' and (not repo.startswith('http://') and
+        not repo.startswith('https://') and
+        not repo.startswith('git://'))) or
+            ' ' in repo):
+        logging.error("Repo address '{0}' does not seem to be valid".format(repo))
+        sys.exit(1)
+
     # Get a copy of the source so we can extract some info...
     logging.info('Getting source from ' + repotype + ' repo at ' + repo)
     src_dir = os.path.join(tmp_dir, 'importer')
