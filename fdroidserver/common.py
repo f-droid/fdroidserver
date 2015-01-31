@@ -31,6 +31,7 @@ import threading
 import magic
 import logging
 from distutils.version import LooseVersion
+from zipfile import ZipFile
 
 import metadata
 
@@ -1892,6 +1893,29 @@ def place_srclib(root_dir, number, libpath):
                 o.write(line)
         if not placed:
             o.write('android.library.reference.%d=%s\n' % (number, relpath))
+
+
+def verify_apks(signed_apk, unsigned_apk, tmp_dir):
+    """Verify that two apks are the same
+
+    One of the inputs is signed, the other is unsigned. The signature metadata
+    is transferred from the signed to the unsigned apk, and then jarsigner is
+    used to verify that the signature from the signed apk is also varlid for
+    the unsigned one.
+    """
+    with ZipFile(signed_apk) as signed_apk_as_zip:
+        meta_inf_files = ['META-INF/MANIFEST.MF', 'META-INF/CERT.SF', 'META-INF/CERT.RSA']
+        signed_apk_as_zip.extractall(tmp_dir, meta_inf_files)
+    with ZipFile(unsigned_apk, mode='a') as unsigned_apk_as_zip:
+        for meta_inf_file in meta_inf_files:
+            unsigned_apk_as_zip.write(os.path.join(tmp_dir, meta_inf_file), arcname=meta_inf_file)
+
+    if subprocess.call(['jarsigner', '-verify', unsigned_apk]) != 0:
+        logging.info("...NOT verified - {0}".format(signed_apk))
+        compare_apks(signed_apk, unsigned_apk, tmp_dir)
+        return False
+    logging.info("...successfully verified")
+    return True
 
 
 def compare_apks(apk1, apk2, tmp_dir):
