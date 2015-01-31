@@ -1066,6 +1066,23 @@ def main():
                             tmp_dir, repo_dir, vcs, options.test,
                             options.server, options.force,
                             options.onserver):
+
+                    if app.get('Binaries', None):
+                        # This is an app where we build from source, and
+                        # verify the apk contents against a developer's
+                        # binary. We get that binary now, and save it
+                        # alongside our built one in the 'unsigend'
+                        # directory.
+                        url = app['Binaries']
+                        url = url.replace('%v', thisbuild['version'])
+                        url = url.replace('%c', str(thisbuild['vercode']))
+                        logging.info("...retrieving " + url)
+                        of = "{0}_{1}.apk.binary".format(app['id'], thisbuild['vercode'])
+                        of = os.path.join(output_dir, of)
+                        p = FDroidPopen(['wget', '-nv', '-O', of, url])
+                        if p.returncode != 0 or not os.path.exists(of):
+                            raise BuildException("...failed to retrieve " + url)
+
                     build_succeeded.append(app)
                     wikilog = "Build succeeded"
             except BuildException as be:
