@@ -1908,8 +1908,14 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     :returns: None if the verification is successful, otherwise a string
               describing what went wrong.
     """
+    sigfile = re.compile(r'META-INF/[0-9A-Za-z]+\.(SF|RSA)')
     with ZipFile(signed_apk) as signed_apk_as_zip:
-        meta_inf_files = ['META-INF/MANIFEST.MF', 'META-INF/CERT.SF', 'META-INF/CERT.RSA']
+        meta_inf_files = ['META-INF/MANIFEST.MF']
+        for f in signed_apk_as_zip.namelist():
+            if sigfile.match(f):
+                meta_inf_files.append(f)
+        if len(meta_inf_files) < 3:
+            return "Signature files missing from {0}".format(signed_apk)
         signed_apk_as_zip.extractall(tmp_dir, meta_inf_files)
     with ZipFile(unsigned_apk, mode='a') as unsigned_apk_as_zip:
         for meta_inf_file in meta_inf_files:
