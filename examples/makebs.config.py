@@ -11,7 +11,11 @@ basebox = "testing32"
 # you can use this default if you like...
 baseboxurl = "https://f-droid.org/testing32.box"
 
+# The amount of RAM the build server will have
 memory = 3584
+
+# The number of CPUs the build server will have
+cpus = 1
 
 # Debian package proxy server - if you have one, e.g. "http://192.168.0.19:8000"
 aptproxy = None
