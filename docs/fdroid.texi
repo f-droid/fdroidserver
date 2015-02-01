@@ -8,7 +8,7 @@
 @copying
 This manual is for the F-Droid repository server tools.
 
-Copyright @copyright{} 2010, 2011, 2012, 2013 Ciaran Gultnieks
+Copyright @copyright{} 2010, 2011, 2012, 2013, 2014, 2015 Ciaran Gultnieks
 
 Copyright @copyright{} 2011 Henrik Tunedal, Michael Haas, John Sullivan
 
@@ -82,6 +82,8 @@ intended usage. At the very least, you'll need:
 GNU/Linux
 @item
 Python 2.x
+To be sure of being able to process all apk files without error, you need
+2.7.7 or later. See @code{http://bugs.python.org/issue14315}.
 @item
 The Android SDK Tools and Build-tools.
 Note that F-Droid does not assume that you have the Android SDK in your
