@@ -266,7 +266,7 @@ def update_wiki(apps, sortedids, apks):
                     newpage = site.Pages[pagename]
                     newpage.save(text, summary='Auto-created')
                 except:
-                    logging.error("...FAILED to create page")
+                    logging.error("...FAILED to create page '{0}'".format(pagename))
 
     # Purge server cache to ensure counts are up to date
     site.pages['Repository Maintenance'].purge()
@@ -531,6 +531,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 logging.warn('{0} is set to android:debuggable="true"'.format(apkfile))
 
             # Get the signature (or md5 of, to be precise)...
+            logging.debug('Getting signature of {0}'.format(apkfile))
             thisinfo['sig'] = getsig(os.path.join(os.getcwd(), apkfile))
             if not thisinfo['sig']:
                 logging.critical("Failed to get apk signature")
