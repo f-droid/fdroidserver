@@ -11,6 +11,15 @@ SH_FILES="hooks/pre-commit"
 BASH_FILES="fd-commit jenkins-build docs/update.sh completion/bash-completion"
 RB_FILES="buildserver/cookbooks/*/recipes/*.rb"
 
+# In the default configuration, the checks E123, E133, E226, E241 and E242 are
+# ignored because they are not rules unanimously accepted
+# On top of those, we ignore:
+# * E501: line too long (82 > 79 characters)
+#   - Recommended for readability but not enforced
+#   - Some lines are awkward to wrap around a char limit
+
+PEP8_IGNORE="E123,E133,E226,E241,E242,E501"
+
 err() {
 	echo ERROR: "$@"
 	exit 1
@@ -40,7 +49,7 @@ if ! $PYFLAKES $PY_FILES; then
 	err "pyflakes tests failed!"
 fi
 
-if ! $PEP8 --ignore=E123,E501 $PY_FILES; then
+if ! $PEP8 --ignore=$PEP8_IGNORE $PY_FILES; then
 	err "pep8 tests failed!"
 fi
 
