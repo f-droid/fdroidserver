@@ -178,8 +178,9 @@ def main():
 
         # Potentially incorrect UCM
         if (curbuild and curbuild['commit']
-                and app['Update Check Mode'] == 'RepoManifest' and
-                any(s in curbuild['commit'] for s in '.,_-/')):
+                and app['Update Check Mode'] == 'RepoManifest'
+                and curbuild['commit'] != 'unknown - see disabled'
+                and any(s in curbuild['commit'] for s in '.,_-/')):
             pwarn("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
                 curbuild['commit'], app['Update Check Mode']))
 
