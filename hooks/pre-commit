@@ -17,8 +17,11 @@ RB_FILES="buildserver/cookbooks/*/recipes/*.rb"
 # * E501: line too long (82 > 79 characters)
 #   - Recommended for readability but not enforced
 #   - Some lines are awkward to wrap around a char limit
+# * W503: line break before binary operator
+#   - It's quite new
+#   - Quite pedantic
 
-PEP8_IGNORE="E123,E133,E226,E241,E242,E501"
+PEP8_IGNORE="E123,E133,E226,E241,E242,E501,W503"
 
 err() {
 	echo ERROR: "$@"
