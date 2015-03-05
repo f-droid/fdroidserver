@@ -465,7 +465,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             sys.exit(3)
 
     # Set up environment vars that depend on each build
-    for n in ['ANDROID_NDK', 'NDK']:
+    for n in ['ANDROID_NDK', 'NDK', 'ANDROID_NDK_HOME']:
         common.env[n] = thisbuild['ndk_path']
 
     common.reset_env_path()
