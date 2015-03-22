@@ -142,11 +142,12 @@ def main():
         repotype = 'git'
         sourcecode = url
         issuetracker = url + '/issues'
+        website = ""
     elif url.startswith('https://gitlab.com/'):
         projecttype = 'gitlab'
         repo = url
         repotype = 'git'
-        sourcecode = url
+        sourcecode = url + '/tree/HEAD'
         issuetracker = url + '/issues'
     elif url.startswith('https://gitorious.org/'):
         projecttype = 'gitorious'
