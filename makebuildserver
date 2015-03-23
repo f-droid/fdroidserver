@@ -170,7 +170,7 @@ Vagrant.configure("2") do |config|
 """.format(config['basebox'],
            config['baseboxurl'],
            config['memory'],
-           config['cpus'] or 1)
+           config.get('cpus', 1))
 if 'aptproxy' in config and config['aptproxy']:
     vagrantfile += """
   config.vm.provision :shell, :inline => 'sudo echo "Acquire::http {{ Proxy \\"{0}\\"; }};" > /etc/apt/apt.conf.d/02proxy && sudo apt-get update'
