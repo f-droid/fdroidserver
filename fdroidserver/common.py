@@ -47,7 +47,7 @@ default_config = {
         'r9b': None,
         'r10d': "$ANDROID_NDK"
     },
-    'build_tools': "21.1.2",
+    'build_tools': "22.0.0",
     'ant': "ant",
     'mvn3': "mvn",
     'gradle': 'gradle',

@@ -15,7 +15,7 @@ ndk_paths = {
 }
 
 # Build tools version to be used
-build_tools = "21.1.2"
+build_tools = "22.0.0"
 
 # Command or path to binary for running Ant
 ant = "ant"
