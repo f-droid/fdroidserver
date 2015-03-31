@@ -428,13 +428,14 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
 
 
 def adapt_gradle(build_dir):
+    filename = 'build.gradle'
     for root, dirs, files in os.walk(build_dir):
-        if 'build.gradle' in files:
-            path = os.path.join(root, 'build.gradle')
-            logging.debug("Adapting build.gradle at %s" % path)
+        if filename in files:
+            path = os.path.join(root, filename)
+            logging.debug("Adapting %s at %s" % (filename, path))
 
             FDroidPopen(['sed', '-i',
-                         r's@buildToolsVersion\([ =]*\)["\'][0-9\.]*["\']@buildToolsVersion\1"'
+                         r's@buildToolsVersion\([ =]\+\).*@buildToolsVersion\1"'
                          + config['build_tools'] + '"@g', path])
 
 
