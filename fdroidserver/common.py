@@ -945,16 +945,15 @@ def get_library_references(root_dir):
     proppath = os.path.join(root_dir, 'project.properties')
     if not os.path.isfile(proppath):
         return libraries
-    with open(proppath) as f:
-        for line in f.readlines():
-            if not line.startswith('android.library.reference.'):
-                continue
-            path = line.split('=')[1].strip()
-            relpath = os.path.join(root_dir, path)
-            if not os.path.isdir(relpath):
-                continue
-            logging.debug("Found subproject at %s" % path)
-            libraries.append(path)
+    for line in file(proppath):
+        if not line.startswith('android.library.reference.'):
+            continue
+        path = line.split('=')[1].strip()
+        relpath = os.path.join(root_dir, path)
+        if not os.path.isdir(relpath):
+            continue
+        logging.debug("Found subproject at %s" % path)
+        libraries.append(path)
     return libraries
 
 
@@ -1884,9 +1883,11 @@ def place_srclib(root_dir, number, libpath):
     proppath = os.path.join(root_dir, 'project.properties')
 
     lines = []
-    if os.path.isfile(proppath):
-        with open(proppath, "r") as o:
-            lines = o.readlines()
+    if not os.path.isfile(proppath):
+        return
+
+    with open(proppath, "r") as o:
+        lines = o.readlines()
 
     with open(proppath, "w") as o:
         placed = False
