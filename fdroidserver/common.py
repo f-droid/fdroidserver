@@ -875,6 +875,8 @@ def retrieve_string(app_dir, string, xmlfiles=None):
 
     if string_search is not None:
         for xmlfile in xmlfiles:
+            if not os.path.isfile(xmlfile):
+                continue
             for line in file(xmlfile):
                 matches = string_search(line)
                 if matches:
@@ -908,7 +910,7 @@ def fetch_real_name(app_dir, flavours):
     name_search = re.compile(r'.*android:label="([^"]+)".*').search
     app_found = False
     for f in manifest_paths(app_dir, flavours):
-        if not has_extension(f, 'xml'):
+        if not has_extension(f, 'xml') or not os.path.isfile(f):
             continue
         logging.debug("fetch_real_name: Checking manifest at " + f)
         for line in file(f):
@@ -1001,6 +1003,9 @@ def parse_androidmanifests(paths, ignoreversions=None):
     max_package = None
 
     for path in paths:
+
+        if not os.path.isfile(path):
+            continue
 
         logging.debug("Parsing manifest at {0}".format(path))
         gradle = has_extension(path, 'gradle')
@@ -1580,7 +1585,7 @@ def scan_source(build_dir, root_dir, thisbuild):
                 else:
                     warnproblem('unknown compressed or binary file', fd)
 
-            elif has_extension(fp, 'java'):
+            elif has_extension(fp, 'java') and os.path.isfile(fp):
                 for line in file(fp):
                     if 'DexClassLoader' in line:
                         count += handleproblem('DexClassLoader', fd, fp)
@@ -1614,7 +1619,7 @@ class KnownApks:
     def __init__(self):
         self.path = os.path.join('stats', 'known_apks.txt')
         self.apks = {}
-        if os.path.exists(self.path):
+        if os.path.isfile(self.path):
             for line in file(self.path):
                 t = line.rstrip().split(' ')
                 if len(t) == 2:
