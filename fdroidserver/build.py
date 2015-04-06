@@ -430,7 +430,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
 def adapt_gradle(build_dir):
     filename = 'build.gradle'
     for root, dirs, files in os.walk(build_dir):
-        if filename in files:
+        for filename in files:
+            if not filename.endswith('.gradle'):
+                continue
             path = os.path.join(root, filename)
             logging.debug("Adapting %s at %s" % (filename, path))
 

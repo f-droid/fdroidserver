@@ -1296,20 +1296,23 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         version_regex = re.compile(r".*'com\.android\.tools\.build:gradle:([^\.]+\.[^\.]+).*'.*")
         gradlepluginver = None
 
-        gradle_files = [os.path.join(root_dir, 'build.gradle')]
+        gradle_dirs = [root_dir]
 
         # Parent dir build.gradle
         parent_dir = os.path.normpath(os.path.join(root_dir, '..'))
         if parent_dir.startswith(build_dir):
-            gradle_files.append(os.path.join(parent_dir, 'build.gradle'))
+            gradle_dirs.append(parent_dir)
 
-        for path in gradle_files:
+        for dir_path in gradle_dirs:
             if gradlepluginver:
                 break
-            if not os.path.isfile(path):
+            if not os.path.isdir(dir_path):
                 continue
-            with open(path) as f:
-                for line in f:
+            for filename in os.listdir(dir_path):
+                if not filename.endswith('.gradle'):
+                    continue
+                path = os.path.join(dir_path, filename)
+                for line in file(path):
                     match = version_regex.match(line)
                     if match:
                         gradlepluginver = match.group(1)
