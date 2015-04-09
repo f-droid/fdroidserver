@@ -521,6 +521,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             parts[-1] = 'clean' + capitalize_intact(parts[-1])
             cmd += [':'.join(parts)]
 
+        cmd += ['clean']
+
         p = FDroidPopen(cmd, cwd=root_dir)
 
     elif thisbuild['type'] == 'kivy':
