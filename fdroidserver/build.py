@@ -516,7 +516,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             adapt_gradle(libpath)
 
         cmd = [config['gradle']]
-        cmd += ['clean' + capitalize_intact(task) for task in gradletasks]
+        for task in gradletasks:
+            parts = task.split(':')
+            parts[-1] = 'clean' + capitalize_intact(parts[-1])
+            cmd += [':'.join(parts)]
 
         p = FDroidPopen(cmd, cwd=root_dir)
 
