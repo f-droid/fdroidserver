@@ -31,24 +31,22 @@ regex_warnings = {
     'Web Site': [
         (re.compile(r'.*[^sS]://github\.com/.*'),
          "github URLs should always use https:// not http://"),
-        (re.compile(r'.*[^sS]://code\.google\.com/.*'),
-         "code.google.com URLs should always use https:// not http://"),
+        # TODO enable in August 2015, when Google Code goes read-only
+        # (re.compile(r'.*://code\.google\.com/.*'),
+        # "code.google.com will be soon switching down, perhaps it moved to github.com?"),
     ],
     'Source Code': [
         (re.compile(r'.*[^sS]://github\.com/.*'),
          "github URLs should always use https:// (not http://, git://, or git@)"),
-        (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
-         "/source is missing"),
-        (re.compile(r'.*[^sS]://code\.google\.com/.*'),
-         "code.google.com URLs should always use https:// not http://"),
         (re.compile(r'.*[^sS]://dl\.google\.com/.*'),
          "dl.google.com URLs should always use https:// not http://"),
         (re.compile(r'.*[^sS]://gitorious\.org/.*'),
          "gitorious URLs should always use https:// (not http://, git://, or git@)"),
+        # TODO enable in August 2015, when Google Code goes read-only
+        # (re.compile(r'.*://code\.google\.com/.*'),
+        # "code.google.com will be soon switching down, perhaps it moved to github.com?"),
     ],
     'Repo': [
-        (re.compile(r'.*[^sS]://code\.google\.com/.*'),
-         "code.google.com URLs should always use https:// not http://"),
         (re.compile(r'.*[^sS]://dl\.google\.com/.*'),
          "dl.google.com URLs should always use https:// not http://"),
         (re.compile(r'.*[^sS]://github\.com/.*'),
@@ -61,18 +59,20 @@ regex_warnings = {
          "Apache SVN URLs should always use https:// (not http:// or svn://)"),
         (re.compile(r'.*[^sS]://svn\.code\.sf\.net/.*'),
          "Sourceforge SVN URLs should always use https:// (not http:// or svn://)"),
+        # TODO enable in August 2015, when Google Code goes read-only
+        # (re.compile(r'.*://code\.google\.com/.*'),
+        # "code.google.com will be soon switching down, perhaps it moved to github.com?"),
     ],
     'Issue Tracker': [
-        (re.compile(r'.*code\.google\.com/p/[^/]+[/]*$'),
-         "/issues is missing"),
-        (re.compile(r'.*[^sS]://code\.google\.com/.*'),
-         "code.google.com URLs should always use https:// not http://"),
         (re.compile(r'.*github\.com/[^/]+/[^/]+[/]*$'),
          "/issues is missing"),
         (re.compile(r'.*[^sS]://github\.com/.*'),
          "github URLs should always use https:// not http://"),
         (re.compile(r'.*[^sS]://gitorious\.org/.*'),
          "gitorious URLs should always use https:// not http://"),
+        # TODO enable in August 2015, when Google Code goes read-only
+        # (re.compile(r'.*://code\.google\.com/.*'),
+        # "code.google.com will be soon switching down, perhaps it moved to github.com?"),
     ],
     'License': [
         (re.compile(r'^(|None|Unknown)$'),
@@ -98,14 +98,10 @@ regex_pedantic = {
     'Web Site': [
         (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
          "Appending .git is not necessary"),
-        (re.compile(r'.*code\.google\.com/p/[^/]+/[^w]'),
-         "Possible incorrect path appended to google code project site"),
     ],
     'Source Code': [
         (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
          "Appending .git is not necessary"),
-        (re.compile(r'.*code\.google\.com/p/[^/]+/source/.*'),
-         "/source is often enough on its own"),
     ],
     'Repo': [
         (re.compile(r'^http://.*'),
@@ -114,8 +110,6 @@ regex_pedantic = {
          "use https:// if available"),
     ],
     'Issue Tracker': [
-        (re.compile(r'.*code\.google\.com/p/[^/]+/issues/.*'),
-         "/issues is often enough on its own"),
         (re.compile(r'.*github\.com/[^/]+/[^/]+/issues/.*'),
          "/issues is often enough on its own"),
     ],
