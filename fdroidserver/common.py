@@ -1886,11 +1886,9 @@ def place_srclib(root_dir, number, libpath):
     proppath = os.path.join(root_dir, 'project.properties')
 
     lines = []
-    if not os.path.isfile(proppath):
-        return
-
-    with open(proppath, "r") as o:
-        lines = o.readlines()
+    if os.path.isfile(proppath):
+        with open(proppath, "r") as o:
+            lines = o.readlines()
 
     with open(proppath, "w") as o:
         placed = False
