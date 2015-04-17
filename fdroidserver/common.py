@@ -1312,6 +1312,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 if not filename.endswith('.gradle'):
                     continue
                 path = os.path.join(dir_path, filename)
+                if not os.path.isfile(path):
+                    continue
                 for line in file(path):
                     match = version_regex.match(line)
                     if match:
@@ -1588,6 +1590,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                     warnproblem('unknown compressed or binary file', fd)
 
             elif has_extension(fp, 'java') and os.path.isfile(fp):
+                if not os.path.isfile(fp):
+                    continue
                 for line in file(fp):
                     if 'DexClassLoader' in line:
                         count += handleproblem('DexClassLoader', fd, fp)

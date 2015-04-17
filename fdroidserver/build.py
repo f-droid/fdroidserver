@@ -434,6 +434,8 @@ def adapt_gradle(build_dir):
             if not filename.endswith('.gradle'):
                 continue
             path = os.path.join(root, filename)
+            if not os.path.isfile(path):
+                continue
             logging.debug("Adapting %s at %s" % (filename, path))
 
             FDroidPopen(['sed', '-i',
