@@ -195,6 +195,10 @@ def main():
             if app['Web Site'].lower() == app['Source Code'].lower():
                 warn("Website '%s' is just the app's source code link" % app['Web Site'])
 
+        # "None" still a category
+        if 'None' in app['Categories']:
+            warn("Category 'None' is is still present")
+
         name = app['Name'] or app['Auto Name']
         if app['Summary'] and name:
             if app['Summary'].lower() == name.lower():
