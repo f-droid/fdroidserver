@@ -194,7 +194,6 @@ def main():
         if app['Web Site'] and app['Source Code']:
             if app['Web Site'].lower() == app['Source Code'].lower():
                 warn("Website '%s' is just the app's source code link" % app['Web Site'])
-                app['Web Site'] = ''
 
         name = app['Name'] or app['Auto Name']
         if app['Summary'] and name:
