@@ -71,7 +71,8 @@ def main():
         sys.exit(1)
 
     # Get all metadata-defined apps...
-    metaapps = [a for a in metadata.read_metadata().itervalues() if not a['Disabled']]
+    allmetaapps = [a for a in metadata.read_metadata().itervalues()]
+    metaapps = [a for a in allmetaapps if not a['Disabled']]
 
     statsdir = 'stats'
     logsdir = os.path.join(statsdir, 'logs')
@@ -281,6 +282,14 @@ def main():
     for license in licenses:
         count = licenses[license]
         f.write(license + ' ' + str(count) + '\n')
+    f.close()
+
+    # Write list of disabled apps...
+    logging.info("Processing disabled apps...")
+    disabled = [a['id'] for a in allmetaapps if a['Disabled']]
+    f = open('stats/disabled_apps.txt', 'w')
+    for appid in sorted(disabled):
+        f.write(appid + '\n')
     f.close()
 
     # Write list of latest apps added to the repo...
