@@ -325,6 +325,74 @@ $fdroid init --keystore NONE
 test -e opensc-fdroid.cfg
 test ! -e NONE
 
+
+#------------------------------------------------------------------------------#
+echo_header "setup a new repo with no keystore, add APK, and update"
+
+REPOROOT=`create_test_dir`
+KEYSTORE=$REPOROOT/keystore.jks
+cd $REPOROOT
+touch config.py
+touch fdroid-icon.png
+mkdir repo/
+cp $WORKSPACE/tests/urzip.apk $REPOROOT/
+set +e
+$fdroid update --create-metadata
+if [ $? -eq 0 ]; then
+    echo "This should have failed because this repo has no keystore!"
+    exit 1
+else
+    echo "`fdroid update` prompted to add keystore"
+fi
+set -e
+
+# now set up fake, non-working keystore setup
+touch $KEYSTORE
+echo "keystore = \"$KEYSTORE\"" >> config.py
+echo 'repo_keyalias = "foo"' >> config.py
+echo 'keystorepass = "foo"' >> config.py
+echo 'keypass = "foo"' >> config.py
+set +e
+$fdroid update --create-metadata
+if [ $? -eq 0 ]; then
+    echo "This should have failed because this repo has a bad/fake keystore!"
+    exit 1
+else
+    echo "`fdroid update` prompted to add keystore"
+fi
+set -e
+
+
+#------------------------------------------------------------------------------#
+echo_header "setup a new repo with keystore with APK, update, then without key"
+
+REPOROOT=`create_test_dir`
+KEYSTORE=$REPOROOT/keystore.jks
+cd $REPOROOT
+$fdroid init --keystore $KEYSTORE
+test -e $KEYSTORE
+cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
+$fdroid update --create-metadata
+test -e repo/index.xml
+test -e repo/index.jar
+grep -F '<application id=' repo/index.xml
+
+# now set fake repo_keyalias
+sed -i 's,^ *repo_keyalias.*,repo_keyalias = "fake",' $REPOROOT/config.py
+set +e
+$fdroid update
+if [ $? -eq 0 ]; then
+    echo "This should have failed because this repo has a bad repo_keyalias!"
+    exit 1
+else
+    echo "`fdroid update` prompted to add keystore"
+fi
+set -e
+
+
+#------------------------------------------------------------------------------#
+
+# remove this to prevent git conflicts and complaining
 rm -rf $WORKSPACE/fdroidserver.egg-info/
 
 echo SUCCESS
