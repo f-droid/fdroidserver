@@ -30,6 +30,8 @@ import Queue
 import threading
 import magic
 import logging
+import hashlib
+import socket
 from distutils.version import LooseVersion
 from zipfile import ZipFile
 
@@ -2012,3 +2014,34 @@ def find_command(command):
                 return exe_file
 
     return None
+
+
+def genpassword():
+    '''generate a random password for when generating keys'''
+    h = hashlib.sha256()
+    h.update(os.urandom(16))  # salt
+    h.update(bytes(socket.getfqdn()))
+    return h.digest().encode('base64').strip()
+
+
+def genkey(keystore, repo_keyalias, password, keydname):
+    '''generate a new keystore with a new key in it for signing repos'''
+    logging.info('Generating a new key in "' + keystore + '"...')
+    write_password_file("keystorepass", password)
+    write_password_file("keypass", password)
+    p = FDroidPopen(['keytool', '-genkey',
+                     '-keystore', keystore, '-alias', repo_keyalias,
+                     '-keyalg', 'RSA', '-keysize', '4096',
+                     '-sigalg', 'SHA256withRSA',
+                     '-validity', '10000',
+                     '-storepass:file', config['keystorepassfile'],
+                     '-keypass:file', config['keypassfile'],
+                     '-dname', keydname])
+    # TODO keypass should be sent via stdin
+    if p.returncode != 0:
+        raise BuildException("Failed to generate key", p.output)
+    # now show the lovely key that was just generated
+    p = FDroidPopen(['keytool', '-list', '-v',
+                     '-keystore', keystore, '-alias', repo_keyalias,
+                     '-storepass:file', config['keystorepassfile']])
+    logging.info(p.output.strip() + '\n\n')
