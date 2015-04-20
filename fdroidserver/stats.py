@@ -296,8 +296,8 @@ def main():
     logging.info("Processing latest apps...")
     latest = knownapks.getlatest(10)
     f = open('stats/latestapps.txt', 'w')
-    for app in latest:
-        f.write(app + '\n')
+    for appid in latest:
+        f.write(appid + '\n')
     f.close()
 
     if unknownapks:
