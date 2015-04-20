@@ -227,6 +227,8 @@ def main():
     elif not os.path.exists(keystore):
         # no existing or specified keystore, generate the whole thing
         keystoredir = os.path.dirname(keystore)
+        if keystoredir is None or keystoredir == '':
+            keystoredir = os.path.join(os.getcwd(), keystoredir)
         if not os.path.exists(keystoredir):
             os.makedirs(keystoredir, mode=0o700)
         password = common.genpassword()

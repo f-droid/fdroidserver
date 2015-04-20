@@ -63,7 +63,7 @@ default_config = {
     'stats_to_carbon': False,
     'repo_maxage': 0,
     'build_server_always': False,
-    'keystore': os.path.join("$HOME", '.local', 'share', 'fdroidserver', 'keystore.jks'),
+    'keystore': 'keystore.jks',
     'smartcardoptions': [],
     'char_limits': {
         'Summary': 50,
@@ -2038,6 +2038,7 @@ def genkey(keystore, repo_keyalias, password, keydname):
                      '-keypass:file', config['keypassfile'],
                      '-dname', keydname])
     # TODO keypass should be sent via stdin
+    os.chmod(keystore, 0o0600)
     if p.returncode != 0:
         raise BuildException("Failed to generate key", p.output)
     # now show the lovely key that was just generated
