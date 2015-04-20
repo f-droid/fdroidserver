@@ -226,7 +226,7 @@ def main():
             rtype = common.getsrclibvcs(app['Repo'])
         repotypes[rtype] += 1
     f = open('stats/repotypes.txt', 'w')
-    for rtype in repotypes:
+    for rtype in sorted(repotypes):
         count = repotypes[rtype]
         f.write(rtype + ' ' + str(count) + '\n')
     f.close()
@@ -242,7 +242,7 @@ def main():
             checkmode = checkmode[:4]
         ucms[checkmode] += 1
     f = open('stats/update_check_modes.txt', 'w')
-    for checkmode in ucms:
+    for checkmode in sorted(ucms):
         count = ucms[checkmode]
         f.write(checkmode + ' ' + str(count) + '\n')
     f.close()
@@ -253,7 +253,7 @@ def main():
         for category in app['Categories']:
             ctgs[category] += 1
     f = open('stats/categories.txt', 'w')
-    for category in ctgs:
+    for category in sorted(ctgs):
         count = ctgs[category]
         f.write(category + ' ' + str(count) + '\n')
     f.close()
@@ -267,7 +267,7 @@ def main():
         for antifeature in antifeatures:
             afs[antifeature] += 1
     f = open('stats/antifeatures.txt', 'w')
-    for antifeature in afs:
+    for antifeature in sorted(afs):
         count = afs[antifeature]
         f.write(antifeature + ' ' + str(count) + '\n')
     f.close()
@@ -279,7 +279,7 @@ def main():
         license = app['License']
         licenses[license] += 1
     f = open('stats/licenses.txt', 'w')
-    for license in licenses:
+    for license in sorted(licenses):
         count = licenses[license]
         f.write(license + ' ' + str(count) + '\n')
     f.close()
