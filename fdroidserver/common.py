@@ -2067,5 +2067,11 @@ def write_to_config(thisconfig, key, value=None):
     pattern = '\n[\s#]*' + key + '\s*=\s*"[^"]*"'
     repl = '\n' + key + ' = "' + value + '"'
     data = re.sub(pattern, repl, data)
+    # if this key is not in the file, append it
+    if not re.match('\s*' + key + '\s*=\s*"', data):
+        data += repl
+    # make sure the file ends with a carraige return
+    if not re.match('\n$', data):
+        data += '\n'
     with open('config.py', 'w') as f:
         f.writelines(data)
