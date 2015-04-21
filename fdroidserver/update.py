@@ -23,6 +23,7 @@ import os
 import shutil
 import glob
 import re
+import socket
 import zipfile
 import hashlib
 import pickle
@@ -1019,6 +1020,8 @@ def main():
 
     # Parse command line...
     parser = OptionParser()
+    parser.add_option("--create-key", action="store_true", default=False,
+                      help="Create a repo signing key in a keystore")
     parser.add_option("-c", "--create-metadata", action="store_true", default=False,
                       help="Create skeleton metadata files that are missing")
     parser.add_option("--delete-unknown", action="store_true", default=False,
@@ -1064,6 +1067,32 @@ def main():
             if not os.path.exists(config[k]):
                 logging.critical(k + ' "' + config[k] + '" does not exist! Correct it in config.py.')
                 sys.exit(1)
+
+    # if the user asks to create a keystore, do it now, reusing whatever it can
+    if options.create_key:
+        if os.path.exists(config['keystore']):
+            logging.critical("Cowardily refusing to overwrite existing signing key setup!")
+            logging.critical("\t'" + config['keystore'] + "'")
+            sys.exit(1)
+
+        if not 'repo_keyalias' in config:
+            config['repo_keyalias'] = socket.getfqdn()
+            common.write_to_config(config, 'repo_keyalias', config['repo_keyalias'])
+        if not 'keydname' in config:
+            config['keydname'] = 'CN=' + config['repo_keyalias'] + ', OU=F-Droid'
+            common.write_to_config(config, 'keydname', config['keydname'])
+        if not 'keystore' in config:
+            config['keystore'] = common.default_config.keystore
+            common.write_to_config(config, 'keystore', config['keystore'])
+
+        password = common.genpassword()
+        if not 'keystorepass' in config:
+            config['keystorepass'] = password
+            common.write_to_config(config, 'keystorepass', config['keystorepass'])
+        if not 'keypass' in config:
+            config['keypass'] = password
+            common.write_to_config(config, 'keypass', config['keypass'])
+        common.genkeystore(config)
 
     # Get all apps...
     apps = metadata.read_metadata()
