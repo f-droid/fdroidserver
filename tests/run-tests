@@ -160,7 +160,7 @@ cd $REPOROOT
 $fdroid init
 copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
-grep -F '<application id=' repo/index.xml
+grep -F '<application id=' repo/index.xml > /dev/null
 
 LOCALCOPYDIR=`create_test_dir`/fdroid
 $fdroid server update --local-copy-dir=$LOCALCOPYDIR
@@ -263,7 +263,7 @@ $fdroid init --keystore $KEYSTORE --android-home $STORED_ANDROID_HOME --no-promp
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
-grep -F '<application id=' repo/index.xml
+grep -F '<application id=' repo/index.xml > /dev/null
 test -e repo/index.xml
 test -e repo/index.jar
 export ANDROID_HOME=$STORED_ANDROID_HOME
@@ -278,7 +278,7 @@ mkdir repo
 copy_apks_into_repo $REPOROOT
 $fdroid init
 $fdroid update --create-metadata
-grep -F '<application id=' repo/index.xml
+grep -F '<application id=' repo/index.xml > /dev/null
 
 
 #------------------------------------------------------------------------------#
@@ -293,7 +293,7 @@ copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
 test -e repo/index.xml
 test -e repo/index.jar
-grep -F '<application id=' repo/index.xml
+grep -F '<application id=' repo/index.xml > /dev/null
 
 
 #------------------------------------------------------------------------------#
@@ -335,12 +335,12 @@ copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
 test -e repo/index.xml
 test -e repo/index.jar
-grep -F '<application id=' repo/index.xml
+grep -F '<application id=' repo/index.xml > /dev/null
 cp $WORKSPACE/tests/urzip.apk $REPOROOT/
 $fdroid update --create-metadata
 test -e repo/index.xml
 test -e repo/index.jar
-grep -F '<application id=' repo/index.xml
+grep -F '<application id=' repo/index.xml > /dev/null
 
 
 #------------------------------------------------------------------------------#
@@ -402,7 +402,7 @@ cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
 $fdroid update --create-metadata
 test -e repo/index.xml
 test -e repo/index.jar
-grep -F '<application id=' repo/index.xml
+grep -F '<application id=' repo/index.xml > /dev/null
 
 # now set fake repo_keyalias
 sed -i 's,^ *repo_keyalias.*,repo_keyalias = "fake",' $REPOROOT/config.py
