@@ -123,7 +123,7 @@ def update_awsbucket(repo_section):
 def update_serverwebroot(serverwebroot, repo_section):
     # use a checksum comparison for accurate comparisons on different
     # filesystems, for example, FAT has a low resolution timestamp
-    rsyncargs = ['rsync', '--archive', '--delete']
+    rsyncargs = ['rsync', '--archive', '--delete', '--safe-links']
     if not options.no_checksum:
         rsyncargs.append('--checksum')
     if options.verbose:
@@ -162,7 +162,7 @@ def update_serverwebroot(serverwebroot, repo_section):
 
 
 def _local_sync(fromdir, todir):
-    rsyncargs = ['rsync', '--recursive', '--links', '--times', '--perms',
+    rsyncargs = ['rsync', '--recursive', '--safe-links', '--times', '--perms',
                  '--one-file-system', '--delete', '--chmod=Da+rx,Fa-x,a+r,u+w']
     # use stricter rsync checking on all files since people using offline mode
     # are already prioritizing security above ease and speed
