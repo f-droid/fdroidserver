@@ -5,7 +5,7 @@ execute "apt-get-update" do
   command "apt-get update"
 end
 
-%w{ant ant-contrib autoconf autoconf2.13 autopoint bison cmake expect flex gperf libarchive-zip-perl libtool libsaxonb-java libssl1.0.0 libssl-dev maven openjdk-7-jdk javacc python python-magic python-setuptools git-core mercurial subversion bzr git-svn make perlmagick pkg-config zip yasm inkscape imagemagick gettext realpath transfig texinfo curl librsvg2-bin xsltproc vorbis-tools swig quilt faketime optipng python-gnupg python3-gnupg nasm unzip scons}.each do |pkg|
+%w{ant ant-contrib autoconf autoconf2.13 autopoint bison bzr cmake curl expect faketime flex gettext git-core git-svn gperf imagemagick inkscape javacc libarchive-zip-perl librsvg2-bin libsaxonb-java libssl-dev libssl1.0.0 libtool make maven mercurial nasm openjdk-7-jdk optipng perlmagick pkg-config python python-gnupg python-magic python-setuptools python3-gnupg quilt realpath scons subversion swig texinfo transfig unzip vorbis-tools xsltproc yasm zip}.each do |pkg|
   package pkg do
     action :install
   end
