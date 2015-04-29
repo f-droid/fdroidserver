@@ -23,8 +23,8 @@ contains() {
 
 # key-value pairs of what gradle version each gradle plugin version
 # should accept
-d_plugin_k=(  1.1   1.0 0.14 0.13 0.12 0.11 0.10  0.9  0.8 0.7 0.6 0.5 0.4 0.3 0.2)
-d_plugin_v=(2.2.1 2.2.1  2.1  2.1 1.12 1.12 1.12 1.11 1.10 1.9 1.8 1.6 1.6 1.4 1.4)
+d_plugin_k=(1.2   1.1   1.0 0.14 0.13 0.12 0.11 0.10  0.9  0.8 0.7 0.6 0.5 0.4 0.3 0.2)
+d_plugin_v=(2.3 2.2.1 2.2.1  2.1  2.1 1.12 1.12 1.12 1.11 1.10 1.9 1.8 1.6 1.6 1.4 1.4)
 
 # Find the highest version available
 for v in ${d_plugin_v}; do
