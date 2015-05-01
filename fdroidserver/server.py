@@ -226,7 +226,15 @@ def main():
         standardwebroot = True
 
     for serverwebroot in config.get('serverwebroot', []):
-        host, fdroiddir = serverwebroot.rstrip('/').split(':')
+        # this supports both an ssh host:path and just a path
+        s = serverwebroot.rstrip('/').split(':')
+        if len(s) == 1:
+            fdroiddir = s[0]
+        elif len(s) == 2:
+            host, fdroiddir = s
+        else:
+            logging.error('Malformed serverwebroot line: ' + serverwebroot)
+            sys.exit(1)
         repobase = os.path.basename(fdroiddir)
         if standardwebroot and repobase != 'fdroid':
             logging.error('serverwebroot path does not end with "fdroid", '
