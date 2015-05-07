@@ -1293,7 +1293,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build['type'] == 'gradle':
         flavours = build['gradle']
 
-        version_regex = re.compile(r".*'com\.android\.tools\.build:gradle:([^\.]+\.[^\.]+).*'.*")
+        version_regex = re.compile(r"[^/]*'com\.android\.tools\.build:gradle:([^\.]+\.[^\.]+).*'.*")
         gradlepluginver = None
 
         gradle_dirs = [root_dir]
