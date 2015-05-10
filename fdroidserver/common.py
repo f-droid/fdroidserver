@@ -1169,7 +1169,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
     if prepare:
 
         if srclib["Prepare"]:
-            cmd = replace_config_vars(srclib["Prepare"])
+            cmd = replace_config_vars(srclib["Prepare"], None)
 
             p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=libdir)
             if p.returncode != 0:
@@ -1220,7 +1220,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Run an init command if one is required
     if build['init']:
-        cmd = replace_config_vars(build['init'])
+        cmd = replace_config_vars(build['init'], build)
         logging.info("Running 'init' commands in %s" % root_dir)
 
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
@@ -1406,7 +1406,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build['prebuild']:
         logging.info("Running 'prebuild' commands in %s" % root_dir)
 
-        cmd = replace_config_vars(build['prebuild'])
+        cmd = replace_config_vars(build['prebuild'], build)
 
         # Substitute source library paths into prebuild commands
         for name, number, libpath in srclibpaths:
@@ -1874,12 +1874,16 @@ def add_to_env_path(path):
     env['PATH'] = os.pathsep.join(paths)
 
 
-def replace_config_vars(cmd):
+def replace_config_vars(cmd, build):
     global env
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
     # env['ANDROID_NDK'] is set in build_local right before prepare_source
     cmd = cmd.replace('$$NDK$$', env['ANDROID_NDK'])
     cmd = cmd.replace('$$MVN3$$', config['mvn3'])
+    if build is not None:
+        cmd = cmd.replace('$$COMMIT$$', build['commit'])
+        cmd = cmd.replace('$$VERSION$$', build['version'])
+        cmd = cmd.replace('$$VERCODE$$', build['vercode'])
     return cmd
 
 

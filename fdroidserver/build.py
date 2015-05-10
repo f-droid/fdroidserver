@@ -575,7 +575,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     # Run a build command if one is required...
     if thisbuild['build']:
         logging.info("Running 'build' commands in %s" % root_dir)
-        cmd = common.replace_config_vars(thisbuild['build'])
+        cmd = common.replace_config_vars(thisbuild['build'], thisbuild)
 
         # Substitute source library paths into commands...
         for name, number, libpath in srclibpaths:
