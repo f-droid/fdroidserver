@@ -329,7 +329,8 @@ def resize_all_icons(repodirs):
                 resize_icon(iconpath, density)
 
 
-cert_path_regex = re.compile(r'^META-INF/.*\.RSA$')
+# A signature block file with a .DSA, .RSA, or .EC extension
+cert_path_regex = re.compile(r'^META-INF/.*\.(DSA|EC|RSA)$')
 
 
 def getsig(apkpath):
