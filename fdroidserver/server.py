@@ -123,7 +123,7 @@ def update_awsbucket(repo_section):
 def update_serverwebroot(serverwebroot, repo_section):
     # use a checksum comparison for accurate comparisons on different
     # filesystems, for example, FAT has a low resolution timestamp
-    rsyncargs = ['rsync', '--archive', '--delete', '--safe-links']
+    rsyncargs = ['rsync', '--archive', '--delete-after', '--safe-links']
     if not options.no_checksum:
         rsyncargs.append('--checksum')
     if options.verbose:
@@ -136,13 +136,14 @@ def update_serverwebroot(serverwebroot, repo_section):
         rsyncargs += ['-e', 'ssh -i ' + config['identity_file']]
     indexxml = os.path.join(repo_section, 'index.xml')
     indexjar = os.path.join(repo_section, 'index.jar')
-    # upload the first time without the index so that the repo stays working
-    # while this update is running.  Then once it is complete, rerun the
-    # command again to upload the index.  Always using the same target with
-    # rsync allows for very strict settings on the receiving server, you can
-    # literally specify the one rsync command that is allowed to run in
-    # ~/.ssh/authorized_keys.  (serverwebroot is guaranteed to have a trailing
-    # slash in common.py)
+    # Upload the first time without the index files and delay the deletion as
+    # much as possible, that keeps the repo functional while this update is
+    # running.  Then once it is complete, rerun the command again to upload
+    # the index files.  Always using the same target with rsync allows for
+    # very strict settings on the receiving server, you can literally specify
+    # the one rsync command that is allowed to run in ~/.ssh/authorized_keys.
+    # (serverwebroot is guaranteed to have a trailing slash in common.py)
+    logging.info('rsyncing ' + repo_section + ' to ' + serverwebroot)
     if subprocess.call(rsyncargs +
                        ['--exclude', indexxml, '--exclude', indexjar,
                         repo_section, serverwebroot]) != 0:
@@ -225,7 +226,15 @@ def main():
         standardwebroot = True
 
     for serverwebroot in config.get('serverwebroot', []):
-        host, fdroiddir = serverwebroot.rstrip('/').split(':')
+        # this supports both an ssh host:path and just a path
+        s = serverwebroot.rstrip('/').split(':')
+        if len(s) == 1:
+            fdroiddir = s[0]
+        elif len(s) == 2:
+            host, fdroiddir = s
+        else:
+            logging.error('Malformed serverwebroot line: ' + serverwebroot)
+            sys.exit(1)
         repobase = os.path.basename(fdroiddir)
         if standardwebroot and repobase != 'fdroid':
             logging.error('serverwebroot path does not end with "fdroid", '
