@@ -866,10 +866,6 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                 addElement('maxsdkver', str(apk['maxsdkversion']), doc, apkel)
             if 'added' in apk:
                 addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
-            if app['Requires Root']:
-                if 'ACCESS_SUPERUSER' not in apk['permissions']:
-                    apk['permissions'].add('ACCESS_SUPERUSER')
-
             if len(apk['permissions']) > 0:
                 addElement('permissions', ','.join(apk['permissions']), doc, apkel)
             if 'nativecode' in apk and len(apk['nativecode']) > 0:
