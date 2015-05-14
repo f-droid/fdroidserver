@@ -160,7 +160,7 @@ cd $REPOROOT
 $fdroid init
 copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
-grep -F '<application id=' repo/index.xml
+grep -F '<application id=' repo/index.xml > /dev/null
 
 LOCALCOPYDIR=`create_test_dir`/fdroid
 $fdroid server update --local-copy-dir=$LOCALCOPYDIR
@@ -263,7 +263,7 @@ $fdroid init --keystore $KEYSTORE --android-home $STORED_ANDROID_HOME --no-promp
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
-grep -F '<application id=' repo/index.xml
+grep -F '<application id=' repo/index.xml > /dev/null
 test -e repo/index.xml
 test -e repo/index.jar
 export ANDROID_HOME=$STORED_ANDROID_HOME
@@ -278,7 +278,7 @@ mkdir repo
 copy_apks_into_repo $REPOROOT
 $fdroid init
 $fdroid update --create-metadata
-grep -F '<application id=' repo/index.xml
+grep -F '<application id=' repo/index.xml > /dev/null
 
 
 #------------------------------------------------------------------------------#
@@ -293,7 +293,34 @@ copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
 test -e repo/index.xml
 test -e repo/index.jar
-grep -F '<application id=' repo/index.xml
+grep -F '<application id=' repo/index.xml > /dev/null
+
+
+#------------------------------------------------------------------------------#
+echo_header "setup a new repo manually and generate a keystore"
+
+REPOROOT=`create_test_dir`
+KEYSTORE=$REPOROOT/keystore.jks
+cd $REPOROOT
+touch config.py
+cp $WORKSPACE/examples/fdroid-icon.png $REPOROOT/
+! test -e $KEYSTORE
+set +e
+$fdroid update
+if [ $? -eq 0 ]; then
+    echo "This should have failed because this repo has no keystore!"
+    exit 1
+else
+    echo "`fdroid update` prompted to add keystore"
+fi
+set -e
+$fdroid update --create-key
+test -e $KEYSTORE
+copy_apks_into_repo $REPOROOT
+$fdroid update --create-metadata
+test -e repo/index.xml
+test -e repo/index.jar
+grep -F '<application id=' repo/index.xml > /dev/null
 
 
 #------------------------------------------------------------------------------#
@@ -308,12 +335,12 @@ copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
 test -e repo/index.xml
 test -e repo/index.jar
-grep -F '<application id=' repo/index.xml
+grep -F '<application id=' repo/index.xml > /dev/null
 cp $WORKSPACE/tests/urzip.apk $REPOROOT/
 $fdroid update --create-metadata
 test -e repo/index.xml
 test -e repo/index.jar
-grep -F '<application id=' repo/index.xml
+grep -F '<application id=' repo/index.xml > /dev/null
 
 
 #------------------------------------------------------------------------------#
@@ -325,6 +352,92 @@ $fdroid init --keystore NONE
 test -e opensc-fdroid.cfg
 test ! -e NONE
 
+
+#------------------------------------------------------------------------------#
+echo_header "setup a new repo with no keystore, add APK, and update"
+
+REPOROOT=`create_test_dir`
+KEYSTORE=$REPOROOT/keystore.jks
+cd $REPOROOT
+touch config.py
+touch fdroid-icon.png
+mkdir repo/
+cp $WORKSPACE/tests/urzip.apk $REPOROOT/
+set +e
+$fdroid update --create-metadata
+if [ $? -eq 0 ]; then
+    echo "This should have failed because this repo has no keystore!"
+    exit 1
+else
+    echo "`fdroid update` prompted to add keystore"
+fi
+set -e
+
+# now set up fake, non-working keystore setup
+touch $KEYSTORE
+echo "keystore = \"$KEYSTORE\"" >> config.py
+echo 'repo_keyalias = "foo"' >> config.py
+echo 'keystorepass = "foo"' >> config.py
+echo 'keypass = "foo"' >> config.py
+set +e
+$fdroid update --create-metadata
+if [ $? -eq 0 ]; then
+    echo "This should have failed because this repo has a bad/fake keystore!"
+    exit 1
+else
+    echo "`fdroid update` prompted to add keystore"
+fi
+set -e
+
+
+#------------------------------------------------------------------------------#
+echo_header "setup a new repo with keystore with APK, update, then without key"
+
+REPOROOT=`create_test_dir`
+KEYSTORE=$REPOROOT/keystore.jks
+cd $REPOROOT
+$fdroid init --keystore $KEYSTORE
+test -e $KEYSTORE
+cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
+$fdroid update --create-metadata
+test -e repo/index.xml
+test -e repo/index.jar
+grep -F '<application id=' repo/index.xml > /dev/null
+
+# now set fake repo_keyalias
+sed -i 's,^ *repo_keyalias.*,repo_keyalias = "fake",' $REPOROOT/config.py
+set +e
+$fdroid update
+if [ $? -eq 0 ]; then
+    echo "This should have failed because this repo has a bad repo_keyalias!"
+    exit 1
+else
+    echo "`fdroid update` prompted to add keystore"
+fi
+set -e
+
+# try creating a new keystore, but fail because the old one is there
+test -e $KEYSTORE
+set +e
+$fdroid update --create-key
+if [ $? -eq 0 ]; then
+    echo "This should have failed because a keystore is already there!"
+    exit 1
+else
+    echo "`fdroid update` complained about existing keystore"
+fi
+set -e
+
+# now actually create the key with the existing settings
+rm -f $KEYSTORE
+! test -e $KEYSTORE
+$fdroid update --create-key
+test -e $KEYSTORE
+
+
+#------------------------------------------------------------------------------#
+
+# remove this to prevent git conflicts and complaining
 rm -rf $WORKSPACE/fdroidserver.egg-info/
 
 echo SUCCESS

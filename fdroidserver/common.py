@@ -30,6 +30,9 @@ import Queue
 import threading
 import magic
 import logging
+import hashlib
+import socket
+
 from distutils.version import LooseVersion
 from zipfile import ZipFile
 
@@ -61,7 +64,7 @@ default_config = {
     'stats_to_carbon': False,
     'repo_maxage': 0,
     'build_server_always': False,
-    'keystore': os.path.join("$HOME", '.local', 'share', 'fdroidserver', 'keystore.jks'),
+    'keystore': 'keystore.jks',
     'smartcardoptions': [],
     'char_limits': {
         'Summary': 50,
@@ -2016,3 +2019,63 @@ def find_command(command):
                 return exe_file
 
     return None
+
+
+def genpassword():
+    '''generate a random password for when generating keys'''
+    h = hashlib.sha256()
+    h.update(os.urandom(16))  # salt
+    h.update(bytes(socket.getfqdn()))
+    return h.digest().encode('base64').strip()
+
+
+def genkeystore(localconfig):
+    '''Generate a new key with random passwords and add it to new keystore'''
+    logging.info('Generating a new key in "' + localconfig['keystore'] + '"...')
+    keystoredir = os.path.dirname(localconfig['keystore'])
+    if keystoredir is None or keystoredir == '':
+        keystoredir = os.path.join(os.getcwd(), keystoredir)
+    if not os.path.exists(keystoredir):
+        os.makedirs(keystoredir, mode=0o700)
+
+    write_password_file("keystorepass", localconfig['keystorepass'])
+    write_password_file("keypass", localconfig['keypass'])
+    p = FDroidPopen(['keytool', '-genkey',
+                     '-keystore', localconfig['keystore'],
+                     '-alias', localconfig['repo_keyalias'],
+                     '-keyalg', 'RSA', '-keysize', '4096',
+                     '-sigalg', 'SHA256withRSA',
+                     '-validity', '10000',
+                     '-storepass:file', config['keystorepassfile'],
+                     '-keypass:file', config['keypassfile'],
+                     '-dname', localconfig['keydname']])
+    # TODO keypass should be sent via stdin
+    os.chmod(localconfig['keystore'], 0o0600)
+    if p.returncode != 0:
+        raise BuildException("Failed to generate key", p.output)
+    # now show the lovely key that was just generated
+    p = FDroidPopen(['keytool', '-list', '-v',
+                     '-keystore', localconfig['keystore'],
+                     '-alias', localconfig['repo_keyalias'],
+                     '-storepass:file', config['keystorepassfile']])
+    logging.info(p.output.strip() + '\n\n')
+
+
+def write_to_config(thisconfig, key, value=None):
+    '''write a key/value to the local config.py'''
+    if value is None:
+        origkey = key + '_orig'
+        value = thisconfig[origkey] if origkey in thisconfig else thisconfig[key]
+    with open('config.py', 'r') as f:
+        data = f.read()
+    pattern = '\n[\s#]*' + key + '\s*=\s*"[^"]*"'
+    repl = '\n' + key + ' = "' + value + '"'
+    data = re.sub(pattern, repl, data)
+    # if this key is not in the file, append it
+    if not re.match('\s*' + key + '\s*=\s*"', data):
+        data += repl
+    # make sure the file ends with a carraige return
+    if not re.match('\n$', data):
+        data += '\n'
+    with open('config.py', 'w') as f:
+        f.writelines(data)

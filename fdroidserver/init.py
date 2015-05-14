@@ -20,7 +20,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import glob
-import hashlib
 import os
 import re
 import shutil
@@ -30,24 +29,9 @@ from optparse import OptionParser
 import logging
 
 import common
-from common import FDroidPopen, BuildException
 
 config = {}
 options = None
-
-
-def write_to_config(thisconfig, key, value=None):
-    '''write a key/value to the local config.py'''
-    if value is None:
-        origkey = key + '_orig'
-        value = thisconfig[origkey] if origkey in thisconfig else thisconfig[key]
-    with open('config.py', 'r') as f:
-        data = f.read()
-    pattern = '\n[\s#]*' + key + '\s*=\s*"[^"]*"'
-    repl = '\n' + key + ' = "' + value + '"'
-    data = re.sub(pattern, repl, data)
-    with open('config.py', 'w') as f:
-        f.writelines(data)
 
 
 def disable_in_config(key, value):
@@ -59,37 +43,6 @@ def disable_in_config(key, value):
     data = re.sub(pattern, repl, data)
     with open('config.py', 'w') as f:
         f.writelines(data)
-
-
-def genpassword():
-    '''generate a random password for when generating keys'''
-    h = hashlib.sha256()
-    h.update(os.urandom(16))  # salt
-    h.update(bytes(socket.getfqdn()))
-    return h.digest().encode('base64').strip()
-
-
-def genkey(keystore, repo_keyalias, password, keydname):
-    '''generate a new keystore with a new key in it for signing repos'''
-    logging.info('Generating a new key in "' + keystore + '"...')
-    common.write_password_file("keystorepass", password)
-    common.write_password_file("keypass", password)
-    p = FDroidPopen(['keytool', '-genkey',
-                     '-keystore', keystore, '-alias', repo_keyalias,
-                     '-keyalg', 'RSA', '-keysize', '4096',
-                     '-sigalg', 'SHA256withRSA',
-                     '-validity', '10000',
-                     '-storepass:file', config['keystorepassfile'],
-                     '-keypass:file', config['keypassfile'],
-                     '-dname', keydname])
-    # TODO keypass should be sent via stdin
-    if p.returncode != 0:
-        raise BuildException("Failed to generate key", p.output)
-    # now show the lovely key that was just generated
-    p = FDroidPopen(['keytool', '-list', '-v',
-                     '-keystore', keystore, '-alias', repo_keyalias,
-                     '-storepass:file', config['keystorepassfile']])
-    logging.info(p.output.strip() + '\n\n')
 
 
 def main():
@@ -171,7 +124,7 @@ def main():
         # If android_home is not None, the path given from the command line
         # will be directly written in the config.
         if 'sdk_path' in test_config:
-            write_to_config(test_config, 'sdk_path', options.android_home)
+            common.write_to_config(test_config, 'sdk_path', options.android_home)
     else:
         logging.warn('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
         logging.info('Try running `fdroid init` in an empty directory.')
@@ -197,7 +150,7 @@ def main():
                 test_config['build_tools'] = ''
             else:
                 test_config['build_tools'] = dirname
-            write_to_config(test_config, 'build_tools')
+            common.write_to_config(test_config, 'build_tools')
         common.ensure_build_tools_exists(test_config)
 
     # now that we have a local config.py, read configuration...
@@ -222,21 +175,21 @@ def main():
             if not os.path.exists(keystore):
                 logging.info('"' + keystore
                              + '" does not exist, creating a new keystore there.')
-    write_to_config(test_config, 'keystore', keystore)
+    common.write_to_config(test_config, 'keystore', keystore)
     repo_keyalias = None
     if options.repo_keyalias:
         repo_keyalias = options.repo_keyalias
-        write_to_config(test_config, 'repo_keyalias', repo_keyalias)
+        common.write_to_config(test_config, 'repo_keyalias', repo_keyalias)
     if options.distinguished_name:
         keydname = options.distinguished_name
-        write_to_config(test_config, 'keydname', keydname)
+        common.write_to_config(test_config, 'keydname', keydname)
     if keystore == 'NONE':  # we're using a smartcard
-        write_to_config(test_config, 'repo_keyalias', '1')  # seems to be the default
+        common.write_to_config(test_config, 'repo_keyalias', '1')  # seems to be the default
         disable_in_config('keypass', 'never used with smartcard')
-        write_to_config(test_config, 'smartcardoptions',
-                        ('-storetype PKCS11 -providerName SunPKCS11-OpenSC '
-                         + '-providerClass sun.security.pkcs11.SunPKCS11 '
-                         + '-providerArg opensc-fdroid.cfg'))
+        common.write_to_config(test_config, 'smartcardoptions',
+                               ('-storetype PKCS11 -providerName SunPKCS11-OpenSC '
+                                + '-providerClass sun.security.pkcs11.SunPKCS11 '
+                                + '-providerArg opensc-fdroid.cfg'))
         # find opensc-pkcs11.so
         if not os.path.exists('opensc-fdroid.cfg'):
             if os.path.exists('/usr/lib/opensc-pkcs11.so'):
@@ -258,20 +211,17 @@ def main():
             with open('opensc-fdroid.cfg', 'w') as f:
                 f.write(opensc_fdroid)
     elif not os.path.exists(keystore):
-        # no existing or specified keystore, generate the whole thing
-        keystoredir = os.path.dirname(keystore)
-        if not os.path.exists(keystoredir):
-            os.makedirs(keystoredir, mode=0o700)
-        password = genpassword()
-        write_to_config(test_config, 'keystorepass', password)
-        write_to_config(test_config, 'keypass', password)
-        if options.repo_keyalias is None:
-            repo_keyalias = socket.getfqdn()
-            write_to_config(test_config, 'repo_keyalias', repo_keyalias)
-        if not options.distinguished_name:
-            keydname = 'CN=' + repo_keyalias + ', OU=F-Droid'
-            write_to_config(test_config, 'keydname', keydname)
-        genkey(keystore, repo_keyalias, password, keydname)
+        password = common.genpassword()
+        c = dict(test_config)
+        c['keystorepass'] = password
+        c['keypass'] = password
+        c['repo_keyalias'] = socket.getfqdn()
+        c['keydname'] = 'CN=' + c['repo_keyalias'] + ', OU=F-Droid'
+        common.write_to_config(test_config, 'keystorepass', password)
+        common.write_to_config(test_config, 'keypass', password)
+        common.write_to_config(test_config, 'repo_keyalias', c['repo_keyalias'])
+        common.write_to_config(test_config, 'keydname', c['keydname'])
+        common.genkeystore(c)
 
     logging.info('Built repo based in "' + fdroiddir + '"')
     logging.info('with this config:')

@@ -23,6 +23,7 @@ import os
 import shutil
 import glob
 import re
+import socket
 import zipfile
 import hashlib
 import pickle
@@ -664,6 +665,36 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 repo_pubkey_fingerprint = None
 
 
+# Generate a certificate fingerprint the same way keytool does it
+# (but with slightly different formatting)
+def cert_fingerprint(data):
+    digest = hashlib.sha256(data).digest()
+    ret = []
+    ret.append(' '.join("%02X" % ord(b) for b in digest))
+    return " ".join(ret)
+
+
+def extract_pubkey():
+    global repo_pubkey_fingerprint
+    if 'repo_pubkey' in config:
+        pubkey = unhexlify(config['repo_pubkey'])
+    else:
+        p = FDroidPopen(['keytool', '-exportcert',
+                         '-alias', config['repo_keyalias'],
+                         '-keystore', config['keystore'],
+                         '-storepass:file', config['keystorepassfile']]
+                        + config['smartcardoptions'], output=False)
+        if p.returncode != 0 or len(p.output) < 20:
+            msg = "Failed to get repo pubkey!"
+            if config['keystore'] == 'NONE':
+                msg += ' Is your crypto smartcard plugged in?'
+            logging.critical(msg)
+            sys.exit(1)
+        pubkey = p.output
+    repo_pubkey_fingerprint = cert_fingerprint(pubkey)
+    return hexlify(pubkey)
+
+
 def make_index(apps, sortedids, apks, repodir, archive, categories):
     """Make a repo index.
 
@@ -711,38 +742,28 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
     repoel.setAttribute("version", "12")
     repoel.setAttribute("timestamp", str(int(time.time())))
 
-    if 'repo_keyalias' in config:
+    nosigningkey = False
+    if not 'repo_keyalias' in config:
+        nosigningkey = True
+        logging.critical("'repo_keyalias' not found in config.py!")
+    if not 'keystore' in config:
+        nosigningkey = True
+        logging.critical("'keystore' not found in config.py!")
+    if not 'keystorepass' in config:
+        nosigningkey = True
+        logging.critical("'keystorepass' not found in config.py!")
+    if not 'keypass' in config:
+        nosigningkey = True
+        logging.critical("'keypass' not found in config.py!")
+    if not os.path.exists(config['keystore']):
+        nosigningkey = True
+        logging.critical("'" + config['keystore'] + "' does not exist!")
+    if nosigningkey:
+        logging.warning("`fdroid update` requires a signing key, you can create one using:")
+        logging.warning("\tfdroid update --create-key")
+        sys.exit(1)
 
-        # Generate a certificate fingerprint the same way keytool does it
-        # (but with slightly different formatting)
-        def cert_fingerprint(data):
-            digest = hashlib.sha256(data).digest()
-            ret = []
-            ret.append(' '.join("%02X" % ord(b) for b in digest))
-            return " ".join(ret)
-
-        def extract_pubkey():
-            global repo_pubkey_fingerprint
-            if 'repo_pubkey' in config:
-                pubkey = unhexlify(config['repo_pubkey'])
-            else:
-                p = FDroidPopen(['keytool', '-exportcert',
-                                 '-alias', config['repo_keyalias'],
-                                 '-keystore', config['keystore'],
-                                 '-storepass:file', config['keystorepassfile']]
-                                + config['smartcardoptions'], output=False)
-                if p.returncode != 0:
-                    msg = "Failed to get repo pubkey!"
-                    if config['keystore'] == 'NONE':
-                        msg += ' Is your crypto smartcard plugged in?'
-                    logging.critical(msg)
-                    sys.exit(1)
-                pubkey = p.output
-            repo_pubkey_fingerprint = cert_fingerprint(pubkey)
-            return hexlify(pubkey)
-
-        repoel.setAttribute("pubkey", extract_pubkey())
-
+    repoel.setAttribute("pubkey", extract_pubkey())
     root.appendChild(repoel)
 
     for appid in sortedids:
@@ -995,6 +1016,8 @@ def main():
 
     # Parse command line...
     parser = OptionParser()
+    parser.add_option("--create-key", action="store_true", default=False,
+                      help="Create a repo signing key in a keystore")
     parser.add_option("-c", "--create-metadata", action="store_true", default=False,
                       help="Create skeleton metadata files that are missing")
     parser.add_option("--delete-unknown", action="store_true", default=False,
@@ -1040,6 +1063,32 @@ def main():
             if not os.path.exists(config[k]):
                 logging.critical(k + ' "' + config[k] + '" does not exist! Correct it in config.py.')
                 sys.exit(1)
+
+    # if the user asks to create a keystore, do it now, reusing whatever it can
+    if options.create_key:
+        if os.path.exists(config['keystore']):
+            logging.critical("Cowardily refusing to overwrite existing signing key setup!")
+            logging.critical("\t'" + config['keystore'] + "'")
+            sys.exit(1)
+
+        if not 'repo_keyalias' in config:
+            config['repo_keyalias'] = socket.getfqdn()
+            common.write_to_config(config, 'repo_keyalias', config['repo_keyalias'])
+        if not 'keydname' in config:
+            config['keydname'] = 'CN=' + config['repo_keyalias'] + ', OU=F-Droid'
+            common.write_to_config(config, 'keydname', config['keydname'])
+        if not 'keystore' in config:
+            config['keystore'] = common.default_config.keystore
+            common.write_to_config(config, 'keystore', config['keystore'])
+
+        password = common.genpassword()
+        if not 'keystorepass' in config:
+            config['keystorepass'] = password
+            common.write_to_config(config, 'keystorepass', config['keystorepass'])
+        if not 'keypass' in config:
+            config['keypass'] = password
+            common.write_to_config(config, 'keypass', config['keypass'])
+        common.genkeystore(config)
 
     # Get all apps...
     apps = metadata.read_metadata()

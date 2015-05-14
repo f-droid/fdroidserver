@@ -41,8 +41,12 @@ export PATH=/usr/lib/jvm/java-7-openjdk-amd64/bin:$PATH
 
 #------------------------------------------------------------------------------#
 # run local tests, don't scan fdroidserver/ project for APKs
+
+# this is a local repo on the Guardian Project Jenkins server
+apksource=/var/www/fdroid
+
 cd $WORKSPACE/tests
-./run-tests ~jenkins/workspace/[[:upper:]a-eg-z]\*
+./run-tests $apksource
 
 
 #------------------------------------------------------------------------------#
@@ -62,7 +66,7 @@ python2 setup.py install
 
 # run tests in new pip+virtualenv install
 . $WORKSPACE/env/bin/activate
-fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests ~jenkins/
+fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests $apksource
 
 
 #------------------------------------------------------------------------------#
