@@ -218,7 +218,7 @@ def main():
                 desc_charcount, config['char_limits']['Description']))
 
         if (not desc[0] or not desc[-1]
-                or any(not desc[l-1] and not desc[l] for l in range(1, len(desc)))):
+                or any(not desc[l - 1] and not desc[l] for l in range(1, len(desc)))):
             warn("Description has an extra empty line")
 
         # Regex checks in all kinds of fields
