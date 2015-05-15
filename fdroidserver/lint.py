@@ -198,6 +198,8 @@ def main():
         # "None" still a category
         if 'None' in app['Categories']:
             warn("Category 'None' is is still present")
+        elif not app['Categories']:
+            warn("Categories are not set")
 
         name = app['Name'] or app['Auto Name']
         if app['Summary'] and name:
