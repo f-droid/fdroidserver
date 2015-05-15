@@ -750,10 +750,10 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
     if not 'keystore' in config:
         nosigningkey = True
         logging.critical("'keystore' not found in config.py!")
-    if not 'keystorepass' in config:
+    if not 'keystorepass' in config and not 'keystorepassfile' in config:
         nosigningkey = True
         logging.critical("'keystorepass' not found in config.py!")
-    if not 'keypass' in config:
+    if not 'keypass' in config and not 'keypassfile' in config:
         nosigningkey = True
         logging.critical("'keypass' not found in config.py!")
     if not os.path.exists(config['keystore']):
