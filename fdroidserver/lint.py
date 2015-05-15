@@ -206,15 +206,20 @@ def main():
             if app['Summary'].lower() == name.lower():
                 warn("Summary '%s' is just the app's name" % app['Summary'])
 
-        if app['Summary'] and app['Description'] and len(app['Description']) == 1:
-            if app['Summary'].lower() == app['Description'][0].lower():
+        desc = app['Description']
+        if app['Summary'] and desc and len(desc) == 1:
+            if app['Summary'].lower() == desc[0].lower():
                 warn("Description '%s' is just the app's summary" % app['Summary'])
 
         # Description size limit
-        desc_chars = sum(len(l) for l in app['Description'])
-        if desc_chars > config['char_limits']['Description']:
+        desc_charcount = sum(len(l) for l in desc)
+        if desc_charcount > config['char_limits']['Description']:
             warn("Description of length %s is over the %i char limit" % (
-                desc_chars, config['char_limits']['Description']))
+                desc_charcount, config['char_limits']['Description']))
+
+        if (not desc[0] or not desc[-1]
+                or any(not desc[l-1] and not desc[l] for l in range(1, len(desc)))):
+            warn("Description has an extra empty line")
 
         # Regex checks in all kinds of fields
         for f in regex_warnings:
