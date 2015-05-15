@@ -552,6 +552,12 @@ def fill_build_defaults(build):
     build['ndk_path'] = common.get_ndk_path(build['ndk'])
 
 
+def split_list_values(s):
+    # Port legacy ';' separators
+    l = [v.strip() for v in s.replace(';', ',').split(',')]
+    return [v for v in l if v]
+
+
 # Parse metadata for a single application.
 #
 #  'metafile' - the filename to read. The package id for the application comes
@@ -597,8 +603,7 @@ def parse_metadata(metafile):
                                     .format(p, linedesc))
         t = flagtype(pk)
         if t == 'list':
-            # Port legacy ';' separators
-            pv = [v.strip() for v in pv.replace(';', ',').split(',')]
+            pv = split_list_values(pv)
             if pk == 'gradle':
                 if len(pv) == 1 and pv[0] in ['main', 'yes']:
                     pv = ['yes']
@@ -727,7 +732,7 @@ def parse_metadata(metafile):
             elif fieldtype == 'string':
                 thisinfo[field] = value
             elif fieldtype == 'list':
-                thisinfo[field] = [v.strip() for v in value.replace(';', ',').split(',')]
+                thisinfo[field] = split_list_values(value)
             elif fieldtype == 'build':
                 if value.endswith("\\"):
                     mode = 2

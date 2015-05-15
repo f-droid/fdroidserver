@@ -1154,7 +1154,7 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
 
     if srclib["Srclibs"]:
         n = 1
-        for lib in srclib["Srclibs"].replace(';', ',').split(','):
+        for lib in metadata.split_list_values(srclib["Srclibs"]):
             s_tuple = None
             for t in srclibpaths:
                 if t[0] == lib:
