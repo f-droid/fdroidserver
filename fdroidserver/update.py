@@ -744,16 +744,16 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
     repoel.setAttribute("timestamp", str(int(time.time())))
 
     nosigningkey = False
-    if not 'repo_keyalias' in config:
+    if 'repo_keyalias' not in config:
         nosigningkey = True
         logging.critical("'repo_keyalias' not found in config.py!")
-    if not 'keystore' in config:
+    if 'keystore' not in config:
         nosigningkey = True
         logging.critical("'keystore' not found in config.py!")
-    if not 'keystorepass' in config and not 'keystorepassfile' in config:
+    if 'keystorepass' not in config and 'keystorepassfile' not in config:
         nosigningkey = True
         logging.critical("'keystorepass' not found in config.py!")
-    if not 'keypass' in config and not 'keypassfile' in config:
+    if 'keypass' not in config and 'keypassfile' not in config:
         nosigningkey = True
         logging.critical("'keypass' not found in config.py!")
     if not os.path.exists(config['keystore']):
@@ -1072,21 +1072,21 @@ def main():
             logging.critical("\t'" + config['keystore'] + "'")
             sys.exit(1)
 
-        if not 'repo_keyalias' in config:
+        if 'repo_keyalias' not in config:
             config['repo_keyalias'] = socket.getfqdn()
             common.write_to_config(config, 'repo_keyalias', config['repo_keyalias'])
-        if not 'keydname' in config:
+        if 'keydname' not in config:
             config['keydname'] = 'CN=' + config['repo_keyalias'] + ', OU=F-Droid'
             common.write_to_config(config, 'keydname', config['keydname'])
-        if not 'keystore' in config:
+        if 'keystore' not in config:
             config['keystore'] = common.default_config.keystore
             common.write_to_config(config, 'keystore', config['keystore'])
 
         password = common.genpassword()
-        if not 'keystorepass' in config:
+        if 'keystorepass' not in config:
             config['keystorepass'] = password
             common.write_to_config(config, 'keystorepass', config['keystorepass'])
-        if not 'keypass' in config:
+        if 'keypass' not in config:
             config['keypass'] = password
             common.write_to_config(config, 'keypass', config['keypass'])
         common.genkeystore(config)
