@@ -61,10 +61,13 @@ def main():
             sigpath = os.path.join(output_dir, sigfilename)
 
             if not os.path.exists(sigpath):
-                p = FDroidPopen(['gpg', '-a',
-                                 '--output', sigpath,
-                                 '--detach-sig',
-                                 os.path.join(output_dir, apkfilename)])
+                gpgargs = ['gpg', '-a',
+                           '--output', sigpath,
+                           '--detach-sig']
+                if 'gpghome' in config:
+                    gpgargs.extend(['--homedir', config['gpghome']])
+                gpgargs.append(os.path.join(output_dir, apkfilename))
+                p = FDroidPopen(gpgargs)
                 if p.returncode != 0:
                     logging.error("Signing failed.")
                     sys.exit(1)

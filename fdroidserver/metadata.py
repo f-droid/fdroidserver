@@ -339,8 +339,6 @@ class DescriptionFormatter:
                 else:
                     urltxt = url[index2 + 1:]
                     url = url[:index2]
-                if ':' not in url:
-                    raise MetaDataException("'%s' doesn't look like an URL" % url)
                 linkified_html += '<a href="' + url + '">' + cgi.escape(urltxt) + '</a>'
                 linkified_plain += urltxt
                 if urltxt != url:
