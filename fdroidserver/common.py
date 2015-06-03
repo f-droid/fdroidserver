@@ -865,7 +865,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
         xmlfiles = []
         for res_dir in [
             os.path.join(app_dir, 'res'),
-            os.path.join(app_dir, 'src', 'main'),
+            os.path.join(app_dir, 'src', 'main', 'res'),
         ]:
             for r, d, f in os.walk(res_dir):
                 if os.path.basename(r) == 'values':
