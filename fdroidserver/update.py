@@ -94,7 +94,7 @@ def update_wiki(apps, sortedids, apks):
         if app['AntiFeatures']:
             for af in app['AntiFeatures'].split(','):
                 wikidata += '{{AntiFeature|' + af + '}}\n'
-        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|dogecoin=%s|license=%s|root=%s}}\n' % (
+        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|changelog=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|dogecoin=%s|license=%s|root=%s}}\n' % (
             appid,
             app['Name'],
             time.strftime('%Y-%m-%d', app['added']) if 'added' in app else '',
@@ -102,6 +102,7 @@ def update_wiki(apps, sortedids, apks):
             app['Source Code'],
             app['Issue Tracker'],
             app['Web Site'],
+            app['Changelog'],
             app['Donate'],
             app['FlattrID'],
             app['Bitcoin'],
@@ -814,6 +815,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         addElement('web', app['Web Site'], doc, apel)
         addElement('source', app['Source Code'], doc, apel)
         addElement('tracker', app['Issue Tracker'], doc, apel)
+        addElement('changelog', app['Changelog'], doc, apel)
         if app['Donate']:
             addElement('donate', app['Donate'], doc, apel)
         if app['Bitcoin']:
@@ -1133,6 +1135,7 @@ def main():
                 f.write("Web Site:\n")
                 f.write("Source Code:\n")
                 f.write("Issue Tracker:\n")
+                f.write("Changelog:\n")
                 f.write("Summary:" + apk['name'] + "\n")
                 f.write("Description:\n")
                 f.write(apk['name'] + "\n")

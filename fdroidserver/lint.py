@@ -74,6 +74,14 @@ regex_warnings = {
         # (re.compile(r'.*://code\.google\.com/.*'),
         # "code.google.com will be soon switching down, perhaps it moved to github.com?"),
     ],
+    'Changelog': [
+        (re.compile(r'.*[^sS]://code\.google\.com/.*'),
+         "code.google.com URLs should always use https:// not http://"),
+        (re.compile(r'.*[^sS]://github\.com/.*'),
+         "github URLs should always use https:// not http://"),
+        (re.compile(r'.*[^sS]://gitorious\.org/.*'),
+         "gitorious URLs should always use https:// not http://"),
+    ],
     'License': [
         (re.compile(r'^(|None|Unknown)$'),
          "No license specified"),
@@ -116,6 +124,10 @@ regex_pedantic = {
     'Issue Tracker': [
         (re.compile(r'.*github\.com/[^/]+/[^/]+/issues/.*'),
          "/issues is often enough on its own"),
+    ],
+    'Changelog': [
+        (re.compile(r'.*commit.*', re.IGNORECASE),
+         "Not every commit log is suitable as change log"),
     ],
     'Summary': [
         (re.compile(r'.*[a-z0-9][.!?][ $]'),

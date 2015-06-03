@@ -48,6 +48,7 @@ app_defaults = OrderedDict([
     ('Web Site', ''),
     ('Source Code', ''),
     ('Issue Tracker', ''),
+    ('Changelog', ''),
     ('Donate', None),
     ('FlattrID', None),
     ('Bitcoin', None),
@@ -169,7 +170,7 @@ valuetypes = {
 
     FieldValidator("HTTP link",
                    r'^http[s]?://', None,
-                   ["Web Site", "Source Code", "Issue Tracker", "Donate"], []),
+                   ["Web Site", "Source Code", "Issue Tracker", "Changelog", "Donate"], []),
 
     FieldValidator("Bitcoin address",
                    r'^[a-zA-Z0-9]{27,34}$', None,
@@ -830,6 +831,7 @@ def write_metadata(dest, app):
     writefield('Web Site')
     writefield('Source Code')
     writefield('Issue Tracker')
+    writefield('Changelog')
     writefield_nonempty('Donate')
     writefield_nonempty('FlattrID')
     writefield_nonempty('Bitcoin')
