@@ -831,7 +831,7 @@ def write_metadata(dest, app):
     writefield('Web Site')
     writefield('Source Code')
     writefield('Issue Tracker')
-    writefield('Changelog')
+    writefield_nonempty('Changelog')
     writefield_nonempty('Donate')
     writefield_nonempty('FlattrID')
     writefield_nonempty('Bitcoin')
