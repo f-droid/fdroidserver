@@ -39,6 +39,8 @@ from zipfile import ZipFile
 
 import metadata
 
+XMLElementTree.register_namespace('android', 'http://schemas.android.com/apk/res/android')
+
 config = None
 options = None
 env = None
@@ -859,35 +861,30 @@ class vcs_bzr(vcs):
 
 def retrieve_string(app_dir, string, xmlfiles=None):
 
-    res_dirs = [
-        os.path.join(app_dir, 'res'),
-        os.path.join(app_dir, 'src', 'main'),
-        ]
-
     if xmlfiles is None:
         xmlfiles = []
-        for res_dir in res_dirs:
+        for res_dir in [
+            os.path.join(app_dir, 'res'),
+            os.path.join(app_dir, 'src', 'main'),
+        ]:
             for r, d, f in os.walk(res_dir):
                 if os.path.basename(r) == 'values':
                     xmlfiles += [os.path.join(r, x) for x in f if x.endswith('.xml')]
 
-    string_search = None
-    if string.startswith('@string/'):
-        string_search = re.compile(r'.*name="' + string[8:] + '".*?>"?([^<]+?)"?<.*').search
-    elif string.startswith('&') and string.endswith(';'):
-        string_search = re.compile(r'.*<!ENTITY.*' + string[1:-1] + '.*?"([^"]+?)".*>').search
+    if not string.startswith('@string/'):
+        return string.replace("\\'", "'")
 
-    if string_search is not None:
-        for xmlfile in xmlfiles:
-            if not os.path.isfile(xmlfile):
-                continue
-            for line in file(xmlfile):
-                matches = string_search(line)
-                if matches:
-                    return retrieve_string(app_dir, matches.group(1), xmlfiles)
-        return None
+    name = string[len('@string/'):]
 
-    return string.replace("\\'", "'")
+    for path in xmlfiles:
+        if not os.path.isfile(path):
+            continue
+        xml = parse_xml(path)
+        element = xml.find('string[@name="'+name+'"]')
+        if element is not None:
+            return retrieve_string(app_dir, element.text, xmlfiles)
+
+    return ''
 
 
 # Return list of existing files that will be used to find the highest vercode
@@ -914,7 +911,7 @@ def fetch_real_name(app_dir, flavours):
         if not has_extension(path, 'xml') or not os.path.isfile(path):
             continue
         logging.debug("fetch_real_name: Checking manifest at " + path)
-        xml = androidmanifest_xml(path)
+        xml = parse_xml(path)
         app = xml.find('application')
         label = app.attrib["{http://schemas.android.com/apk/res/android}label"]
         result = retrieve_string(app_dir, label)
@@ -1019,7 +1016,7 @@ def parse_androidmanifests(paths, ignoreversions=None):
                     if matches:
                         vercode = matches.group(1)
         else:
-            xml = androidmanifest_xml(path)
+            xml = parse_xml(path)
             if "package" in xml.attrib:
                 package = xml.attrib["package"]
             if "{http://schemas.android.com/apk/res/android}versionName" in xml.attrib:
@@ -2054,6 +2051,5 @@ def write_to_config(thisconfig, key, value=None):
         f.writelines(data)
 
 
-def androidmanifest_xml(path):
-    XMLElementTree.register_namespace('android', 'http://schemas.android.com/apk/res/android')
+def parse_xml(path):
     return XMLElementTree.parse(path).getroot()
