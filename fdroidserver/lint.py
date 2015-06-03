@@ -44,6 +44,8 @@ https_enforcings = [
 http_warnings = https_enforcings + [
     (re.compile(r'.*/$'),
      "HTTP links shouldn't end with a slash"),
+    (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
+     "Appending .git is not necessary"),
     # TODO enable in August 2015, when Google Code goes read-only
     # (re.compile(r'.*://code\.google\.com/.*'),
     #  "code.google.com will be soon switching down, perhaps the project moved to github.com?"),
@@ -90,16 +92,6 @@ regex_warnings = {
 }
 
 regex_pedantic = {
-    'Web Site': [
-        (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
-         "Appending .git is not necessary"),
-    ],
-    'Source Code': [
-        (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
-         "Appending .git is not necessary"),
-    ],
-    'Repo': [
-    ],
     'Issue Tracker': [
         (re.compile(r'.*github\.com/[^/]+/[^/]+/issues/.*'),
          "/issues is often enough on its own"),
