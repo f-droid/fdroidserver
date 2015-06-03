@@ -32,15 +32,18 @@ def enforce_https(domain):
     return (re.compile(r'.*[^sS]://[^/]*' + re.escape(domain) + r'/.*'),
             domain + " URLs should always use https://")
 
-http_warnings = [
-    (re.compile(r'.*/$'),
-     "HTTP links shouldn't end with a slash"),
+https_enforcings = [
     enforce_https('github.com'),
     enforce_https('gitorious.org'),
     enforce_https('apache.org'),
     enforce_https('google.com'),
     enforce_https('svn.code.sf.net'),
     enforce_https('googlecode.com'),
+]
+
+http_warnings = https_enforcings + [
+    (re.compile(r'.*/$'),
+     "HTTP links shouldn't end with a slash"),
     # TODO enable in August 2015, when Google Code goes read-only
     # (re.compile(r'.*://code\.google\.com/.*'),
     #  "code.google.com will be soon switching down, perhaps the project moved to github.com?"),
@@ -51,7 +54,7 @@ regex_warnings = {
     ],
     'Source Code': http_warnings + [
     ],
-    'Repo': [
+    'Repo': https_enforcings + [
     ],
     'Issue Tracker': http_warnings + [
         (re.compile(r'.*github\.com/[^/]+/[^/]+[/]*$'),
@@ -96,10 +99,6 @@ regex_pedantic = {
          "Appending .git is not necessary"),
     ],
     'Repo': [
-        (re.compile(r'^http://.*'),
-         "use https:// if available"),
-        (re.compile(r'^svn://.*'),
-         "use https:// if available"),
     ],
     'Issue Tracker': [
         (re.compile(r'.*github\.com/[^/]+/[^/]+/issues/.*'),
