@@ -32,6 +32,7 @@ import magic
 import logging
 import hashlib
 import socket
+import xml.etree.ElementTree as XMLElementTree
 
 from distutils.version import LooseVersion
 from zipfile import ZipFile
@@ -909,33 +910,24 @@ def manifest_paths(app_dir, flavours):
 
 # Retrieve the package name. Returns the name, or None if not found.
 def fetch_real_name(app_dir, flavours):
-    app_search = re.compile(r'.*<application.*').search
-    name_search = re.compile(r'.*android:label="([^"]+)".*').search
-    app_found = False
-    for f in manifest_paths(app_dir, flavours):
-        if not has_extension(f, 'xml') or not os.path.isfile(f):
+    for path in manifest_paths(app_dir, flavours):
+        if not has_extension(path, 'xml') or not os.path.isfile(path):
             continue
-        logging.debug("fetch_real_name: Checking manifest at " + f)
-        for line in file(f):
-            if not app_found:
-                if app_search(line):
-                    app_found = True
-            if app_found:
-                matches = name_search(line)
-                if matches:
-                    stringname = matches.group(1)
-                    logging.debug("fetch_real_name: using string " + stringname)
-                    result = retrieve_string(app_dir, stringname)
-                    if result:
-                        result = result.strip()
-                    return result
+        logging.debug("fetch_real_name: Checking manifest at " + path)
+        xml = parse_androidmanifest(path)
+        app = xml.find('application')
+        label = app.attrib["{http://schemas.android.com/apk/res/android}label"]
+        result = retrieve_string(app_dir, label)
+        if result:
+            result = result.strip()
+        return result
     return None
 
 
 # Retrieve the version name
 def version_name(original, app_dir, flavours):
-    for f in manifest_paths(app_dir, flavours):
-        if not has_extension(f, 'xml'):
+    for path in manifest_paths(app_dir, flavours):
+        if not has_extension(path, 'xml'):
             continue
         string = retrieve_string(app_dir, original)
         if string:
@@ -2064,3 +2056,8 @@ def write_to_config(thisconfig, key, value=None):
         data += '\n'
     with open('config.py', 'w') as f:
         f.writelines(data)
+
+
+def parse_androidmanifest(path):
+    XMLElementTree.register_namespace('android', 'http://schemas.android.com/apk/res/android')
+    return XMLElementTree.parse(path).getroot()
