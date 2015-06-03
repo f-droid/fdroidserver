@@ -27,60 +27,40 @@ from collections import Counter
 config = None
 options = None
 
+
+def enforce_https(domain):
+    return (re.compile(r'.*[^sS]://[^/]*' + re.escape(domain) + r'/.*'),
+            domain + " URLs should always use https://")
+
+http_warnings = [
+    (re.compile(r'.*/$'),
+     "HTTP links shouldn't end with a slash"),
+    # TODO enable in August 2015, when Google Code goes read-only
+    # (re.compile(r'.*://code\.google\.com/.*'),
+    #  "code.google.com will be soon switching down, perhaps the project moved to github.com?"),
+]
+
 regex_warnings = {
-    'Web Site': [
-        (re.compile(r'.*[^sS]://github\.com/.*'),
-         "github URLs should always use https:// not http://"),
-        # TODO enable in August 2015, when Google Code goes read-only
-        # (re.compile(r'.*://code\.google\.com/.*'),
-        # "code.google.com will be soon switching down, perhaps it moved to github.com?"),
+    'Web Site': http_warnings + [
     ],
-    'Source Code': [
-        (re.compile(r'.*[^sS]://github\.com/.*'),
-         "github URLs should always use https:// (not http://, git://, or git@)"),
-        (re.compile(r'.*[^sS]://dl\.google\.com/.*'),
-         "dl.google.com URLs should always use https:// not http://"),
-        (re.compile(r'.*[^sS]://gitorious\.org/.*'),
-         "gitorious URLs should always use https:// (not http://, git://, or git@)"),
-        # TODO enable in August 2015, when Google Code goes read-only
-        # (re.compile(r'.*://code\.google\.com/.*'),
-        # "code.google.com will be soon switching down, perhaps it moved to github.com?"),
+    'Source Code': http_warnings + [
     ],
     'Repo': [
-        (re.compile(r'.*[^sS]://dl\.google\.com/.*'),
-         "dl.google.com URLs should always use https:// not http://"),
-        (re.compile(r'.*[^sS]://github\.com/.*'),
-         "github URLs should always use https:// (not http://, git://, or git@)"),
-        (re.compile(r'.*[^sS]://gitorious\.org/.*'),
-         "gitorious URLs should always use https:// (not http://, git://, or git@)"),
-        (re.compile(r'.*[^sS]://[^.]*\.googlecode\.com/svn/?.*'),
-         "Google Code SVN URLs should always use https:// (not http:// or svn://)"),
-        (re.compile(r'.*[^sS]://svn\.apache\.org/repos/?.*'),
-         "Apache SVN URLs should always use https:// (not http:// or svn://)"),
-        (re.compile(r'.*[^sS]://svn\.code\.sf\.net/.*'),
-         "Sourceforge SVN URLs should always use https:// (not http:// or svn://)"),
-        # TODO enable in August 2015, when Google Code goes read-only
-        # (re.compile(r'.*://code\.google\.com/.*'),
-        # "code.google.com will be soon switching down, perhaps it moved to github.com?"),
+        enforce_https('github.com'),
+        enforce_https('gitorious.org'),
+        enforce_https('apache.org'),
+        enforce_https('google.com'),
+        enforce_https('svn.code.sf.net'),
+        enforce_https('googlecode.com'),
     ],
-    'Issue Tracker': [
+    'Issue Tracker': http_warnings + [
         (re.compile(r'.*github\.com/[^/]+/[^/]+[/]*$'),
          "/issues is missing"),
-        (re.compile(r'.*[^sS]://github\.com/.*'),
-         "github URLs should always use https:// not http://"),
-        (re.compile(r'.*[^sS]://gitorious\.org/.*'),
-         "gitorious URLs should always use https:// not http://"),
         # TODO enable in August 2015, when Google Code goes read-only
         # (re.compile(r'.*://code\.google\.com/.*'),
         # "code.google.com will be soon switching down, perhaps it moved to github.com?"),
     ],
-    'Changelog': [
-        (re.compile(r'.*[^sS]://code\.google\.com/.*'),
-         "code.google.com URLs should always use https:// not http://"),
-        (re.compile(r'.*[^sS]://github\.com/.*'),
-         "github URLs should always use https:// not http://"),
-        (re.compile(r'.*[^sS]://gitorious\.org/.*'),
-         "gitorious URLs should always use https:// not http://"),
+    'Changelog': http_warnings + [
     ],
     'License': [
         (re.compile(r'^(|None|Unknown)$'),
