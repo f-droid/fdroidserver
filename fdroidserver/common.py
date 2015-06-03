@@ -1024,7 +1024,9 @@ def parse_androidmanifests(paths, ignoreversions=None):
             if "{http://schemas.android.com/apk/res/android}versionName" in xml.attrib:
                 version = xml.attrib["{http://schemas.android.com/apk/res/android}versionName"].encode('utf-8')
             if "{http://schemas.android.com/apk/res/android}versionCode" in xml.attrib:
-                vercode = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"].encode('utf-8')
+                a = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"].encode('utf-8')
+                if string_is_integer(a):
+                    vercode = a
 
         logging.debug("..got package={0}, version={1}, vercode={2}"
                       .format(package, version, vercode))
@@ -2055,3 +2057,11 @@ def write_to_config(thisconfig, key, value=None):
 
 def parse_xml(path):
     return XMLElementTree.parse(path).getroot()
+
+
+def string_is_integer(string):
+    try:
+        int(string)
+        return True
+    except ValueError:
+        return False
