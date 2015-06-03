@@ -128,7 +128,6 @@ def main():
     # Figure out what kind of project it is...
     projecttype = None
     issuetracker = None
-    changelog = None
     license = None
     website = url  # by default, we might override it
     if url.startswith('git://'):
@@ -144,7 +143,6 @@ def main():
         sourcecode = url
         issuetracker = url + '/issues'
         website = ""
-        changelog = url + '/commits'
     elif url.startswith('https://gitlab.com/'):
         projecttype = 'gitlab'
         repo = url
@@ -288,8 +286,6 @@ def main():
     app['Source Code'] = sourcecode
     if issuetracker:
         app['Issue Tracker'] = issuetracker
-    if changelog:
-        app['Changelog'] = changelog
     if license:
         app['License'] = license
     app['Repo Type'] = repotype

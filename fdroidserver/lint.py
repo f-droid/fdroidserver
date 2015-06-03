@@ -125,10 +125,6 @@ regex_pedantic = {
         (re.compile(r'.*github\.com/[^/]+/[^/]+/issues/.*'),
          "/issues is often enough on its own"),
     ],
-    'Changelog': [
-        (re.compile(r'.*commit.*', re.IGNORECASE),
-         "Not every commit log is suitable as change log"),
-    ],
     'Summary': [
         (re.compile(r'.*[a-z0-9][.!?][ $]'),
          "Punctuation should be avoided"),
