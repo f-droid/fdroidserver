@@ -882,7 +882,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
         xml = parse_xml(path)
         element = xml.find('string[@name="' + name + '"]')
         if element is not None:
-            return retrieve_string(app_dir, element.text, xmlfiles)
+            return retrieve_string(app_dir, element.text.encode('utf-8'), xmlfiles)
 
     return ''
 
@@ -915,7 +915,7 @@ def fetch_real_name(app_dir, flavours):
         app = xml.find('application')
         if "{http://schemas.android.com/apk/res/android}label" not in app.attrib:
             continue
-        label = app.attrib["{http://schemas.android.com/apk/res/android}label"]
+        label = app.attrib["{http://schemas.android.com/apk/res/android}label"].encode('utf-8')
         result = retrieve_string(app_dir, label)
         if result:
             result = result.strip()
@@ -1020,11 +1020,11 @@ def parse_androidmanifests(paths, ignoreversions=None):
         else:
             xml = parse_xml(path)
             if "package" in xml.attrib:
-                package = xml.attrib["package"]
+                package = xml.attrib["package"].encode('utf-8')
             if "{http://schemas.android.com/apk/res/android}versionName" in xml.attrib:
-                version = xml.attrib["{http://schemas.android.com/apk/res/android}versionName"]
+                version = xml.attrib["{http://schemas.android.com/apk/res/android}versionName"].encode('utf-8')
             if "{http://schemas.android.com/apk/res/android}versionCode" in xml.attrib:
-                vercode = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"]
+                vercode = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"].encode('utf-8')
 
         logging.debug("..got package={0}, version={1}, vercode={2}"
                       .format(package, version, vercode))
