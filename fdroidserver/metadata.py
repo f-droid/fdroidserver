@@ -414,7 +414,6 @@ def parse_srclib(metafile):
     thisinfo['Repo'] = ''
     thisinfo['Subdir'] = None
     thisinfo['Prepare'] = None
-    thisinfo['Srclibs'] = None
 
     if metafile is None:
         return thisinfo

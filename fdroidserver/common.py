@@ -1108,8 +1108,8 @@ class BuildException(FDroidException):
 # Returns the path to it. Normally this is the path to be used when referencing
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
-def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
-              basepath=False, raw=False, prepare=True, preponly=False):
+def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
+              raw=False, prepare=True, preponly=False):
 
     number = None
     subdir = None
@@ -1151,20 +1151,6 @@ def getsrclib(spec, srclib_dir, srclibpaths=[], subdir=None,
 
     if libdir is None:
         libdir = sdir
-
-    if srclib["Srclibs"]:
-        n = 1
-        for lib in metadata.split_list_values(srclib["Srclibs"]):
-            s_tuple = None
-            for t in srclibpaths:
-                if t[0] == lib:
-                    s_tuple = t
-                    break
-            if s_tuple is None:
-                raise VCSException('Missing recursive srclib %s for %s' % (
-                    lib, name))
-            place_srclib(libdir, n, s_tuple[2])
-            n += 1
 
     remove_signing_keys(sdir)
     remove_debuggable_flags(sdir)
@@ -1247,8 +1233,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build['srclibs']:
         logging.info("Collecting source libraries")
         for lib in build['srclibs']:
-            srclibpaths.append(getsrclib(lib, srclib_dir, build, srclibpaths,
-                                         preponly=onserver))
+            srclibpaths.append(getsrclib(lib, srclib_dir, build, preponly=onserver))
 
     for name, number, libpath in srclibpaths:
         place_srclib(root_dir, int(number) if number else None, libpath)

@@ -348,8 +348,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         if thisbuild['srclibs']:
             for lib in thisbuild['srclibs']:
                 srclibpaths.append(
-                    common.getsrclib(lib, 'build/srclib', srclibpaths,
-                                     basepath=True, prepare=False))
+                    common.getsrclib(lib, 'build/srclib', basepath=True, prepare=False))
 
         # If one was used for the main source, add that too.
         basesrclib = vcs.getsrclib()
