@@ -914,7 +914,7 @@ def fetch_real_name(app_dir, flavours):
         if not has_extension(path, 'xml') or not os.path.isfile(path):
             continue
         logging.debug("fetch_real_name: Checking manifest at " + path)
-        xml = parse_androidmanifest(path)
+        xml = androidmanifest_xml(path)
         app = xml.find('application')
         label = app.attrib["{http://schemas.android.com/apk/res/android}label"]
         result = retrieve_string(app_dir, label)
@@ -982,10 +982,6 @@ def parse_androidmanifests(paths, ignoreversions=None):
     if not paths:
         return (None, None, None)
 
-    vcsearch = re.compile(r'.*:versionCode="([0-9]+?)".*').search
-    vnsearch = re.compile(r'.*:versionName="([^"]+?)".*').search
-    psearch = re.compile(r'.*package="([^"]+)".*').search
-
     vcsearch_g = re.compile(r'.*versionCode *=* *["\']*([0-9]+)["\']*').search
     vnsearch_g = re.compile(r'.*versionName *=* *(["\'])((?:(?=(\\?))\3.)*?)\1.*').search
     psearch_g = re.compile(r'.*packageName *=* *["\']([^"]+)["\'].*').search
@@ -1008,28 +1004,28 @@ def parse_androidmanifests(paths, ignoreversions=None):
         # Remember package name, may be defined separately from version+vercode
         package = max_package
 
-        for line in file(path):
-            if not package:
-                if gradle:
+        if gradle:
+            for line in file(path):
+                if not package:
                     matches = psearch_g(line)
-                else:
-                    matches = psearch(line)
-                if matches:
-                    package = matches.group(1)
-            if not version:
-                if gradle:
+                    if matches:
+                        package = matches.group(1)
+                if not version:
                     matches = vnsearch_g(line)
-                else:
-                    matches = vnsearch(line)
-                if matches:
-                    version = matches.group(2 if gradle else 1)
-            if not vercode:
-                if gradle:
+                    if matches:
+                        version = matches.group(2)
+                if not vercode:
                     matches = vcsearch_g(line)
-                else:
-                    matches = vcsearch(line)
-                if matches:
-                    vercode = matches.group(1)
+                    if matches:
+                        vercode = matches.group(1)
+        else:
+            xml = androidmanifest_xml(path)
+            if "package" in xml.attrib:
+                package = xml.attrib["package"]
+            if "{http://schemas.android.com/apk/res/android}versionName" in xml.attrib:
+                version = xml.attrib["{http://schemas.android.com/apk/res/android}versionName"]
+            if "{http://schemas.android.com/apk/res/android}versionCode" in xml.attrib:
+                vercode = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"]
 
         logging.debug("..got package={0}, version={1}, vercode={2}"
                       .format(package, version, vercode))
@@ -2058,6 +2054,6 @@ def write_to_config(thisconfig, key, value=None):
         f.writelines(data)
 
 
-def parse_androidmanifest(path):
+def androidmanifest_xml(path):
     XMLElementTree.register_namespace('android', 'http://schemas.android.com/apk/res/android')
     return XMLElementTree.parse(path).getroot()
