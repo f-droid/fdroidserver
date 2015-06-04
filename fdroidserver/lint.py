@@ -34,6 +34,7 @@ def enforce_https(domain):
 
 https_enforcings = [
     enforce_https('github.com'),
+    enforce_https('gitlab.com'),
     enforce_https('gitorious.org'),
     enforce_https('apache.org'),
     enforce_https('google.com'),
