@@ -745,25 +745,26 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
     repoel.setAttribute("timestamp", str(int(time.time())))
 
     nosigningkey = False
-    if 'repo_keyalias' not in config:
-        nosigningkey = True
-        logging.critical("'repo_keyalias' not found in config.py!")
-    if 'keystore' not in config:
-        nosigningkey = True
-        logging.critical("'keystore' not found in config.py!")
-    if 'keystorepass' not in config and 'keystorepassfile' not in config:
-        nosigningkey = True
-        logging.critical("'keystorepass' not found in config.py!")
-    if 'keypass' not in config and 'keypassfile' not in config:
-        nosigningkey = True
-        logging.critical("'keypass' not found in config.py!")
-    if not os.path.exists(config['keystore']):
-        nosigningkey = True
-        logging.critical("'" + config['keystore'] + "' does not exist!")
-    if nosigningkey:
-        logging.warning("`fdroid update` requires a signing key, you can create one using:")
-        logging.warning("\tfdroid update --create-key")
-        sys.exit(1)
+    if not options.nosign:
+        if 'repo_keyalias' not in config:
+            nosigningkey = True
+            logging.critical("'repo_keyalias' not found in config.py!")
+        if 'keystore' not in config:
+            nosigningkey = True
+            logging.critical("'keystore' not found in config.py!")
+        if 'keystorepass' not in config and 'keystorepassfile' not in config:
+            nosigningkey = True
+            logging.critical("'keystorepass' not found in config.py!")
+        if 'keypass' not in config and 'keypassfile' not in config:
+            nosigningkey = True
+            logging.critical("'keypass' not found in config.py!")
+        if not os.path.exists(config['keystore']):
+            nosigningkey = True
+            logging.critical("'" + config['keystore'] + "' does not exist!")
+        if nosigningkey:
+            logging.warning("`fdroid update` requires a signing key, you can create one using:")
+            logging.warning("\tfdroid update --create-key")
+            sys.exit(1)
 
     repoel.setAttribute("pubkey", extract_pubkey())
     root.appendChild(repoel)
