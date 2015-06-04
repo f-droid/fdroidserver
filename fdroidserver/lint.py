@@ -61,9 +61,6 @@ regex_warnings = {
     'Issue Tracker': http_warnings + [
         (re.compile(r'.*github\.com/[^/]+/[^/]+[/]*$'),
          "/issues is missing"),
-        # TODO enable in August 2015, when Google Code goes read-only
-        # (re.compile(r'.*://code\.google\.com/.*'),
-        # "code.google.com will be soon switching down, perhaps it moved to github.com?"),
     ],
     'Changelog': http_warnings + [
     ],
