@@ -78,6 +78,8 @@ regex_warnings = {
          "No need to specify that the app is Free Software"),
         (re.compile(r'.*((your|for).*android|android.*(app|device|client|port|version))', re.IGNORECASE),
          "No need to specify that the app is for Android"),
+        (re.compile(r'.*[a-z0-9][.!?]( |$)'),
+         "Punctuation should be avoided"),
     ],
     'Description': [
         (re.compile(r'^No description available$'),
@@ -95,10 +97,6 @@ regex_pedantic = {
     'Issue Tracker': [
         (re.compile(r'.*github\.com/[^/]+/[^/]+/issues/.*'),
          "/issues is often enough on its own"),
-    ],
-    'Summary': [
-        (re.compile(r'.*[a-z0-9][.!?][ $]'),
-         "Punctuation should be avoided"),
     ],
 }
 
