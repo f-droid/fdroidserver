@@ -859,6 +859,13 @@ class vcs_bzr(vcs):
                 p.output.splitlines()]
 
 
+def unescape_string(string):
+    if string[0] == '"' and string[-1] == '"':
+        return string[1:-1]
+
+    return string.replace("\\'", "'")
+
+
 def retrieve_string(app_dir, string, xmlfiles=None):
 
     if xmlfiles is None:
@@ -872,7 +879,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
                     xmlfiles += [os.path.join(r, x) for x in f if x.endswith('.xml')]
 
     if not string.startswith('@string/'):
-        return string.replace("\\'", "'")
+        return unescape_string(string)
 
     name = string[len('@string/'):]
 
