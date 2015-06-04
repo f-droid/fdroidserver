@@ -91,13 +91,6 @@ regex_warnings = {
     ],
 }
 
-regex_pedantic = {
-    'Issue Tracker': [
-        (re.compile(r'.*github\.com/[^/]+/[^/]+/issues/.*'),
-         "/issues is often enough on its own"),
-    ],
-}
-
 
 def main():
 
@@ -209,13 +202,6 @@ def main():
                     for l in app[f]:
                         if m.match(l):
                             warn("%s at line '%s': %s" % (f, l, r))
-
-        # Regex pedantic checks in all kinds of fields
-        if options.pedantic:
-            for f in regex_pedantic:
-                for m, r in regex_pedantic[f]:
-                    if m.match(app[f]):
-                        warn("%s '%s': %s" % (f, app[f], r))
 
         # Build warnings
         for build in app['builds']:
