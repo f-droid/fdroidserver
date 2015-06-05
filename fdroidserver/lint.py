@@ -144,7 +144,7 @@ def main():
                 and not curbuild['commit'].startswith('unknown')
                 and curbuild['vercode'] == app['Current Version Code']
                 and any(s in curbuild['commit'] for s in '.,_-/')):
-            pwarn("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
+            warn("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
                 curbuild['commit'], app['Update Check Mode']))
 
         # Dangerous auto updates
