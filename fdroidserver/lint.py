@@ -43,8 +43,6 @@ https_enforcings = [
 ]
 
 http_warnings = https_enforcings + [
-    (re.compile(r'.*/$'),
-     "HTTP links shouldn't end with a slash"),
     (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
      "Appending .git is not necessary"),
     # TODO enable in August 2015, when Google Code goes read-only
