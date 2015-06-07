@@ -137,6 +137,7 @@ def main():
                 and app['Update Check Mode'] == 'RepoManifest'
                 and not curbuild['commit'].startswith('unknown')
                 and curbuild['vercode'] == app['Current Version Code']
+                and not curbuild['forcevercode']
                 and any(s in curbuild['commit'] for s in '.,_-/')):
             warn("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
                 curbuild['commit'], app['Update Check Mode']))
