@@ -888,7 +888,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
             continue
         xml = parse_xml(path)
         element = xml.find('string[@name="' + name + '"]')
-        if element is not None:
+        if element is not None and element.text is not None:
             return retrieve_string(app_dir, element.text.encode('utf-8'), xmlfiles)
 
     return ''
