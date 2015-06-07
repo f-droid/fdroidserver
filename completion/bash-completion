@@ -197,8 +197,8 @@ __complete_rewritemeta() {
 }
 
 __complete_lint() {
-	opts="-v -q -p"
-	lopts="--verbose --quiet --pedantic"
+	opts="-v -q"
+	lopts="--verbose --quiet"
 	case "${cur}" in
 		-*)
 			__complete_options

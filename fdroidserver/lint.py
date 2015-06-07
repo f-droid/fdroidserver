@@ -106,18 +106,12 @@ def main():
         print '    %s' % message
         count['warn'] += 1
 
-    def pwarn(message):
-        if options.pedantic:
-            warn(message)
-
     # Parse command line...
     parser = OptionParser(usage="Usage: %prog [options] [APPID [APPID ...]]")
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
     parser.add_option("-q", "--quiet", action="store_true", default=False,
                       help="Restrict output to warnings and errors")
-    parser.add_option("-p", "--pedantic", action="store_true", default=False,
-                      help="Show pedantic warnings that might give false positives")
     (options, args) = parser.parse_args()
 
     config = common.read_config(options)
@@ -138,7 +132,7 @@ def main():
             if not curbuild or int(build['vercode']) > int(curbuild['vercode']):
                 curbuild = build
 
-        # Potentially incorrect UCM
+        # Incorrect UCM
         if (curbuild and curbuild['commit']
                 and app['Update Check Mode'] == 'RepoManifest'
                 and not curbuild['commit'].startswith('unknown')
@@ -146,12 +140,6 @@ def main():
                 and any(s in curbuild['commit'] for s in '.,_-/')):
             warn("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
                 curbuild['commit'], app['Update Check Mode']))
-
-        # Dangerous auto updates
-        if curbuild and app['Auto Update Mode'] != 'None':
-            for flag in ['target', 'srclibs', 'scanignore']:
-                if curbuild[flag]:
-                    pwarn("Auto Update Mode is enabled but '%s' is manually set at '%s'" % (flag, curbuild[flag]))
 
         # Summary size limit
         summ_chars = len(app['Summary'])
