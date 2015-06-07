@@ -170,6 +170,9 @@ def main():
         elif not app['Categories']:
             warn("Categories are not set")
 
+        if app['Name'] and app['Name'] == app['Auto Name']:
+            warn("Name '%s' is just the auto name" % app['Name'])
+
         name = app['Name'] or app['Auto Name']
         if app['Summary'] and name:
             if app['Summary'].lower() == name.lower():
