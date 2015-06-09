@@ -816,7 +816,8 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         addElement('web', app['Web Site'], doc, apel)
         addElement('source', app['Source Code'], doc, apel)
         addElement('tracker', app['Issue Tracker'], doc, apel)
-        addElement('changelog', app['Changelog'], doc, apel)
+        if app['Changelog']:
+            addElement('changelog', app['Changelog'], doc, apel)
         if app['Donate']:
             addElement('donate', app['Donate'], doc, apel)
         if app['Bitcoin']:
