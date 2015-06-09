@@ -741,7 +741,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         repoel.setAttribute("url", config['repo_url'])
         addElement('description', config['repo_description'], doc, repoel)
 
-    repoel.setAttribute("version", "12")
+    repoel.setAttribute("version", "13")
     repoel.setAttribute("timestamp", str(int(time.time())))
 
     nosigningkey = False
