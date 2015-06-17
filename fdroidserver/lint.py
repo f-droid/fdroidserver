@@ -23,6 +23,7 @@ import logging
 import common
 import metadata
 from collections import Counter
+from sets import Set
 
 config = None
 options = None
@@ -89,6 +90,22 @@ regex_warnings = {
     ],
 }
 
+categories = Set([
+    "Children",
+    "Development",
+    "Games",
+    "Internet",
+    "Multimedia",
+    "Navigation",
+    "Office",
+    "Phone & SMS",
+    "Reading",
+    "Science & Education",
+    "Security",
+    "System",
+    "Wallpaper",
+])
+
 
 def main():
 
@@ -153,11 +170,12 @@ def main():
             if app['Web Site'].lower() == app['Source Code'].lower():
                 warn("Website '%s' is just the app's source code link" % app['Web Site'])
 
-        # "None" still a category
-        if 'None' in app['Categories']:
-            warn("Category 'None' is is still present")
-        elif not app['Categories']:
+        # Missing or incorrect categories
+        if not app['Categories']:
             warn("Categories are not set")
+        for categ in app['Categories']:
+            if categ not in categories:
+                warn("Category '%s' is not valid" % categ)
 
         if app['Name'] and app['Name'] == app['Auto Name']:
             warn("Name '%s' is just the auto name" % app['Name'])
