@@ -366,13 +366,6 @@ def fetch_autoname(app, tag):
     else:
         logging.debug("...couldn't get autoname")
 
-    if app['Current Version'].startswith('@string/'):
-        cv = common.version_name(app['Current Version'], app_dir, flavours)
-        if app['Current Version'] != cv:
-            app['Current Version'] = cv
-            if not commitmsg:
-                commitmsg = "Fix CV of {0}".format(common.getappname(app))
-
     return commitmsg
 
 

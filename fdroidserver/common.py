@@ -894,6 +894,10 @@ def retrieve_string(app_dir, string, xmlfiles=None):
     return ''
 
 
+def retrieve_string_singleline(app_dir, string, xmlfiles=None):
+    return retrieve_string(app_dir, string, xmlfiles).replace('\n', ' ').strip()
+
+
 # Return list of existing files that will be used to find the highest vercode
 def manifest_paths(app_dir, flavours):
 
@@ -923,22 +927,11 @@ def fetch_real_name(app_dir, flavours):
         if "{http://schemas.android.com/apk/res/android}label" not in app.attrib:
             continue
         label = app.attrib["{http://schemas.android.com/apk/res/android}label"].encode('utf-8')
-        result = retrieve_string(app_dir, label)
+        result = retrieve_string_singleline(app_dir, label)
         if result:
             result = result.strip()
         return result
     return None
-
-
-# Retrieve the version name
-def version_name(original, app_dir, flavours):
-    for path in manifest_paths(app_dir, flavours):
-        if not has_extension(path, 'xml'):
-            continue
-        string = retrieve_string(app_dir, original)
-        if string:
-            return string
-    return original
 
 
 def get_library_references(root_dir):
@@ -1030,6 +1023,8 @@ def parse_androidmanifests(paths, ignoreversions=None):
                 package = xml.attrib["package"].encode('utf-8')
             if "{http://schemas.android.com/apk/res/android}versionName" in xml.attrib:
                 version = xml.attrib["{http://schemas.android.com/apk/res/android}versionName"].encode('utf-8')
+                base_dir = os.path.dirname(path)
+                version = retrieve_string_singleline(base_dir, version)
             if "{http://schemas.android.com/apk/res/android}versionCode" in xml.attrib:
                 a = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"].encode('utf-8')
                 if string_is_integer(a):
