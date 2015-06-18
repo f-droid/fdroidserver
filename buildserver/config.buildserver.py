@@ -3,7 +3,7 @@ ndk_paths = {
     'r9b': "/home/vagrant/android-ndk/r9b",
     'r10d': "/home/vagrant/android-ndk/r10d"
 }
-build_tools = "22.0.0"
+build_tools = "22.0.1"
 ant = "ant"
 mvn3 = "mvn"
 gradle = "gradle"
