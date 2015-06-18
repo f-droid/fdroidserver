@@ -228,7 +228,7 @@ def main():
     logging.info('  Android SDK:\t\t\t' + config['sdk_path'])
     if aapt:
         logging.info('  Android SDK Build Tools:\t' + os.path.dirname(aapt))
-    logging.info('  Android NDK r10d (optional):\t$ANDROID_NDK')
+    logging.info('  Android NDK r10e (optional):\t$ANDROID_NDK')
     logging.info('  Keystore for signing key:\t' + keystore)
     if repo_keyalias is not None:
         logging.info('  Alias for key in store:\t' + repo_keyalias)

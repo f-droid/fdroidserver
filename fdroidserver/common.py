@@ -51,7 +51,7 @@ default_config = {
     'sdk_path': "$ANDROID_HOME",
     'ndk_paths': {
         'r9b': None,
-        'r10d': "$ANDROID_NDK"
+        'r10e': "$ANDROID_NDK"
     },
     'build_tools': "22.0.1",
     'ant': "ant",
@@ -194,7 +194,7 @@ def read_config(opts, config_file='config.py'):
 
 def get_ndk_path(version):
     if version is None:
-        version = 'r10d'  # latest
+        version = 'r10e'  # latest
     paths = config['ndk_paths']
     if version not in paths:
         return ''

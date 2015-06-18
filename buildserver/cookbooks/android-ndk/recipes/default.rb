@@ -35,7 +35,7 @@ script "setup-android-ndk-r9b" do
   end
 end
 
-script "setup-android-ndk-r10d" do
+script "setup-android-ndk-r10e" do
   timeout 14400
   interpreter "bash"
   user node[:settings][:user]
@@ -46,12 +46,12 @@ script "setup-android-ndk-r10d" do
     else
        SUFFIX=''
     fi
-    chmod u+x /vagrant/cache/android-ndk-r10d-linux-x86$SUFFIX.bin
-    /vagrant/cache/android-ndk-r10d-linux-x86$SUFFIX.bin x
-    mv android-ndk-r10d #{ndk_loc}/r10d
+    chmod u+x /vagrant/cache/android-ndk-r10e-linux-x86$SUFFIX.bin
+    /vagrant/cache/android-ndk-r10e-linux-x86$SUFFIX.bin x
+    mv android-ndk-r10e #{ndk_loc}/r10e
   "
   not_if do
-    File.exists?("#{ndk_loc}/r10d")
+    File.exists?("#{ndk_loc}/r10e")
   end
 end
 

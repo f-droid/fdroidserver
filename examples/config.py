@@ -11,7 +11,7 @@ sdk_path = "$ANDROID_HOME"
 # If a version is missing or assigned to None, it is assumed not installed
 ndk_paths = {
     'r9b': None,
-    'r10d': "$ANDROID_NDK"
+    'r10e': "$ANDROID_NDK"
 }
 
 # Build tools version to be used

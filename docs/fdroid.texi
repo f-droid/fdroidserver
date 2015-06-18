@@ -1008,7 +1008,7 @@ that included legacy toolchains, so as to not break builds that require
 toolchains no longer included in current versions of the NDK.
 
 The buildserver supports r9b with its legacy toolchains and the latest release
-as of writing this document, r10d. You may add support for more versions by
+as of writing this document, r10e. You may add support for more versions by
 adding them to 'ndk_paths' in your config file.
 
 @item gradle=<flavour1>[,<flavour2>,...]
