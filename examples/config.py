@@ -34,10 +34,10 @@ gradle = "gradle"
 repo_maxage = 0
 
 repo_url = "https://MyFirstFDroidRepo.org/fdroid/repo"
-repo_name = "My First FDroid Repo Demo"
+repo_name = "My First F-Droid Repo Demo"
 repo_icon = "fdroid-icon.png"
 repo_description = """
-This is a repository of apps to be used with FDroid. Applications in this
+This is a repository of apps to be used with F-Droid. Applications in this
 repository are either official binaries built by the original application
 developers, or are binaries built from source by the admin of f-droid.org
 using the tools on https://gitlab.com/u/fdroid.
@@ -49,7 +49,7 @@ using the tools on https://gitlab.com/u/fdroid.
 # repository, and no need to define the other archive_ values.
 archive_older = 3
 archive_url = "https://f-droid.org/archive"
-archive_name = "My First FDroid Archive Demo"
+archive_name = "My First F-Droid Archive Demo"
 archive_icon = "fdroid-icon.png"
 archive_description = """
 The repository of older versions of applications from the main demo repository.
@@ -86,7 +86,7 @@ The repository of older versions of applications from the main demo repository.
 # The keystore to use for release keys when building. This needs to be
 # somewhere safe and secure, and backed up!  The best way to manage these
 # sensitive keys is to use a "smartcard" (aka Hardware Security Module). To
-# configure FDroid to use a smartcard, set the keystore file using the keyword
+# configure F-Droid to use a smartcard, set the keystore file using the keyword
 # "NONE" (i.e. keystore = "NONE").  That makes Java find the keystore on the
 # smartcard based on 'smartcardoptions' below.
 # keystore = "~/.local/share/fdroidserver/keystore.jks"

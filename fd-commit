@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# fd-commit - part of the FDroid server tools
+# fd-commit - part of the F-Droid server tools
 # Commits updates to apps, allowing you to edit the commit messages
 #
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
