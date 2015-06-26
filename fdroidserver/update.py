@@ -711,11 +711,15 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
     doc = Document()
 
     def addElement(name, value, doc, parent):
+        if not value:
+            return
         el = doc.createElement(name)
         el.appendChild(doc.createTextNode(value))
         parent.appendChild(el)
 
     def addElementCDATA(name, value, doc, parent):
+        if not value:
+            return
         el = doc.createElement(name)
         el.appendChild(doc.createCDATASection(value))
         parent.appendChild(el)
@@ -795,8 +799,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             addElement('lastupdated', time.strftime('%Y-%m-%d', app['lastupdated']), doc, apel)
         addElement('name', app['Name'], doc, apel)
         addElement('summary', app['Summary'], doc, apel)
-        if app['icon']:
-            addElement('icon', app['icon'], doc, apel)
+        addElement('icon', app['icon'], doc, apel)
 
         def linkres(appid):
             if appid in apps:
@@ -807,7 +810,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                    metadata.description_html(app['Description'], linkres),
                    doc, apel)
         addElement('license', app['License'], doc, apel)
-        if 'Categories' in app:
+        if 'Categories' in app and app['Categories']:
             addElement('categories', ','.join(app["Categories"]), doc, apel)
             # We put the first (primary) category in LAST, which will have
             # the desired effect of making clients that only understand one
@@ -816,18 +819,12 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         addElement('web', app['Web Site'], doc, apel)
         addElement('source', app['Source Code'], doc, apel)
         addElement('tracker', app['Issue Tracker'], doc, apel)
-        if app['Changelog']:
-            addElement('changelog', app['Changelog'], doc, apel)
-        if app['Donate']:
-            addElement('donate', app['Donate'], doc, apel)
-        if app['Bitcoin']:
-            addElement('bitcoin', app['Bitcoin'], doc, apel)
-        if app['Litecoin']:
-            addElement('litecoin', app['Litecoin'], doc, apel)
-        if app['Dogecoin']:
-            addElement('dogecoin', app['Dogecoin'], doc, apel)
-        if app['FlattrID']:
-            addElement('flattr', app['FlattrID'], doc, apel)
+        addElement('changelog', app['Changelog'], doc, apel)
+        addElement('donate', app['Donate'], doc, apel)
+        addElement('bitcoin', app['Bitcoin'], doc, apel)
+        addElement('litecoin', app['Litecoin'], doc, apel)
+        addElement('dogecoin', app['Dogecoin'], doc, apel)
+        addElement('flattr', app['FlattrID'], doc, apel)
 
         # These elements actually refer to the current version (i.e. which
         # one is recommended. They are historically mis-named, and need
@@ -835,19 +832,17 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         addElement('marketversion', app['Current Version'], doc, apel)
         addElement('marketvercode', app['Current Version Code'], doc, apel)
 
-        if app['AntiFeatures']:
-            af = app['AntiFeatures'].split(',')
-            # TODO: Temporarily not including UpstreamNonFree in the index,
-            # because current F-Droid clients do not understand it, and also
-            # look ugly when they encounter an unknown antifeature. This
-            # filtering can be removed in time...
-            if 'UpstreamNonFree' in af:
-                af.remove('UpstreamNonFree')
-            if af:
-                addElement('antifeatures', ','.join(af), doc, apel)
-        if app['Provides']:
-            pv = app['Provides'].split(',')
-            addElement('provides', ','.join(pv), doc, apel)
+        af = app['AntiFeatures'].split(',')
+        # TODO: Temporarily not including UpstreamNonFree in the index,
+        # because current F-Droid clients do not understand it, and also
+        # look ugly when they encounter an unknown antifeature. This
+        # filtering can be removed in time...
+        if 'UpstreamNonFree' in af:
+            af.remove('UpstreamNonFree')
+        if af:
+            addElement('antifeatures', ','.join(af), doc, apel)
+        pv = app['Provides'].split(',')
+        addElement('provides', ','.join(pv), doc, apel)
         if app['Requires Root']:
             addElement('requirements', 'root', doc, apel)
 
@@ -892,12 +887,10 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                 addElement('maxsdkver', str(apk['maxsdkversion']), doc, apkel)
             if 'added' in apk:
                 addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
-            if len(apk['permissions']) > 0:
-                addElement('permissions', ','.join(apk['permissions']), doc, apkel)
-            if 'nativecode' in apk and len(apk['nativecode']) > 0:
+            addElement('permissions', ','.join(apk['permissions']), doc, apkel)
+            if 'nativecode' in apk:
                 addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
-            if len(apk['features']) > 0:
-                addElement('features', ','.join(apk['features']), doc, apkel)
+            addElement('features', ','.join(apk['features']), doc, apkel)
 
         if current_version_file is not None \
                 and config['make_current_version_link'] \
