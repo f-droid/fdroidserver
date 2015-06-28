@@ -711,15 +711,16 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
     doc = Document()
 
     def addElement(name, value, doc, parent):
-        if not value:
-            return
         el = doc.createElement(name)
         el.appendChild(doc.createTextNode(value))
         parent.appendChild(el)
 
-    def addElementCDATA(name, value, doc, parent):
+    def addElementNonEmpty(name, value, doc, parent):
         if not value:
             return
+        addElement(name, value, doc, parent)
+
+    def addElementCDATA(name, value, doc, parent):
         el = doc.createElement(name)
         el.appendChild(doc.createCDATASection(value))
         parent.appendChild(el)
@@ -819,12 +820,12 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         addElement('web', app['Web Site'], doc, apel)
         addElement('source', app['Source Code'], doc, apel)
         addElement('tracker', app['Issue Tracker'], doc, apel)
-        addElement('changelog', app['Changelog'], doc, apel)
-        addElement('donate', app['Donate'], doc, apel)
-        addElement('bitcoin', app['Bitcoin'], doc, apel)
-        addElement('litecoin', app['Litecoin'], doc, apel)
-        addElement('dogecoin', app['Dogecoin'], doc, apel)
-        addElement('flattr', app['FlattrID'], doc, apel)
+        addElementNonEmpty('changelog', app['Changelog'], doc, apel)
+        addElementNonEmpty('donate', app['Donate'], doc, apel)
+        addElementNonEmpty('bitcoin', app['Bitcoin'], doc, apel)
+        addElementNonEmpty('litecoin', app['Litecoin'], doc, apel)
+        addElementNonEmpty('dogecoin', app['Dogecoin'], doc, apel)
+        addElementNonEmpty('flattr', app['FlattrID'], doc, apel)
 
         # These elements actually refer to the current version (i.e. which
         # one is recommended. They are historically mis-named, and need
@@ -835,10 +836,10 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         if app['AntiFeatures']:
             af = app['AntiFeatures'].split(',')
             if af:
-                addElement('antifeatures', ','.join(af), doc, apel)
+                addElementNonEmpty('antifeatures', ','.join(af), doc, apel)
         if app['Provides']:
             pv = app['Provides'].split(',')
-            addElement('provides', ','.join(pv), doc, apel)
+            addElementNonEmpty('provides', ','.join(pv), doc, apel)
         if app['Requires Root']:
             addElement('requirements', 'root', doc, apel)
 
@@ -883,10 +884,10 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                 addElement('maxsdkver', str(apk['maxsdkversion']), doc, apkel)
             if 'added' in apk:
                 addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
-            addElement('permissions', ','.join(apk['permissions']), doc, apkel)
+            addElementNonEmpty('permissions', ','.join(apk['permissions']), doc, apkel)
             if 'nativecode' in apk:
                 addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
-            addElement('features', ','.join(apk['features']), doc, apkel)
+            addElementNonEmpty('features', ','.join(apk['features']), doc, apkel)
 
         if current_version_file is not None \
                 and config['make_current_version_link'] \
