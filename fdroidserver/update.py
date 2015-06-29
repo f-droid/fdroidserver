@@ -800,7 +800,8 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             addElement('lastupdated', time.strftime('%Y-%m-%d', app['lastupdated']), doc, apel)
         addElement('name', app['Name'], doc, apel)
         addElement('summary', app['Summary'], doc, apel)
-        addElement('icon', app['icon'], doc, apel)
+        if app['icon']:
+            addElement('icon', app['icon'], doc, apel)
 
         def linkres(appid):
             if appid in apps:
