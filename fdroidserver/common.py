@@ -567,12 +567,14 @@ class vcs_git(vcs):
         else:
             self.checkrepo()
             # Discard any working tree changes
-            p = FDroidPopen(['git', 'reset', '--hard'], cwd=self.local, output=False)
+            p = FDroidPopen(['git', 'submodule', 'foreach', '--recursive',
+                             'git', 'reset', '--hard'], cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException("Git reset failed", p.output)
             # Remove untracked files now, in case they're tracked in the target
             # revision (it happens!)
-            p = FDroidPopen(['git', 'clean', '-dffx'], cwd=self.local, output=False)
+            p = FDroidPopen(['git', 'submodule', 'foreach', '--recursive',
+                             'git', 'clean', '-dffx'], cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException("Git clean failed", p.output)
             if not self.refreshed:
@@ -620,13 +622,6 @@ class vcs_git(vcs):
                     line = line.replace('git@github.com:', 'https://github.com/')
                 f.write(line)
 
-        for cmd in [
-                ['git', 'reset', '--hard'],
-                ['git', 'clean', '-dffx'],
-                ]:
-            p = FDroidPopen(['git', 'submodule', 'foreach', '--recursive'] + cmd, cwd=self.local, output=False)
-            if p.returncode != 0:
-                raise VCSException("Git submodule reset failed", p.output)
         p = FDroidPopen(['git', 'submodule', 'sync'], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException("Git submodule sync failed", p.output)
@@ -1188,7 +1183,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     logging.info("Getting source for revision " + build['commit'])
     vcs.gotorevision(build['commit'])
 
-    # Initialise submodules if requred
+    # Initialise submodules if required
     if build['submodules']:
         logging.info("Initialising submodules")
         vcs.initsubmodules()
