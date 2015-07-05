@@ -1446,21 +1446,21 @@ def scan_source(build_dir, root_dir, thisbuild):
 
     # Common known non-free blobs (always lower case):
     usual_suspects = [
-        re.compile(r'flurryagent', re.IGNORECASE),
-        re.compile(r'paypal.*mpl', re.IGNORECASE),
-        re.compile(r'google.*analytics', re.IGNORECASE),
-        re.compile(r'admob.*sdk.*android', re.IGNORECASE),
-        re.compile(r'google.*ad.*view', re.IGNORECASE),
-        re.compile(r'google.*admob', re.IGNORECASE),
-        re.compile(r'google.*play.*services', re.IGNORECASE),
-        re.compile(r'crittercism', re.IGNORECASE),
-        re.compile(r'heyzap', re.IGNORECASE),
-        re.compile(r'jpct.*ae', re.IGNORECASE),
-        re.compile(r'youtube.*android.*player.*api', re.IGNORECASE),
-        re.compile(r'bugsense', re.IGNORECASE),
-        re.compile(r'crashlytics', re.IGNORECASE),
-        re.compile(r'ouya.*sdk', re.IGNORECASE),
-        re.compile(r'libspen23', re.IGNORECASE),
+        re.compile(r'.*flurryagent', re.IGNORECASE),
+        re.compile(r'.*paypal.*mpl', re.IGNORECASE),
+        re.compile(r'.*google.*analytics', re.IGNORECASE),
+        re.compile(r'.*admob.*sdk.*android', re.IGNORECASE),
+        re.compile(r'.*google.*ad.*view', re.IGNORECASE),
+        re.compile(r'.*google.*admob', re.IGNORECASE),
+        re.compile(r'.*google.*play.*services', re.IGNORECASE),
+        re.compile(r'.*crittercism', re.IGNORECASE),
+        re.compile(r'.*heyzap', re.IGNORECASE),
+        re.compile(r'.*jpct.*ae', re.IGNORECASE),
+        re.compile(r'.*youtube.*android.*player.*api', re.IGNORECASE),
+        re.compile(r'.*bugsense', re.IGNORECASE),
+        re.compile(r'.*crashlytics', re.IGNORECASE),
+        re.compile(r'.*ouya.*sdk', re.IGNORECASE),
+        re.compile(r'.*libspen23', re.IGNORECASE),
     ]
 
     scanignore = getpaths(build_dir, thisbuild, 'scanignore')
@@ -1563,12 +1563,20 @@ def scan_source(build_dir, root_dir, thisbuild):
                 else:
                     warnproblem('unknown compressed or binary file', fd)
 
-            elif has_extension(fp, 'java') and os.path.isfile(fp):
+            elif has_extension(fp, 'java'):
                 if not os.path.isfile(fp):
                     continue
                 for line in file(fp):
                     if 'DexClassLoader' in line:
                         count += handleproblem('DexClassLoader', fd, fp)
+                        break
+
+            elif has_extension(fp, 'gradle'):
+                if not os.path.isfile(fp):
+                    continue
+                for i, line in enumerate(file(fp)):
+                    if any(suspect.match(line) for suspect in usual_suspects):
+                        count += handleproblem('usual suspect at line %d' % i, fd, fp)
                         break
     if ms is not None:
         ms.close()
