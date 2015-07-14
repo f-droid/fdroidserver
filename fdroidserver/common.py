@@ -457,7 +457,7 @@ class vcs:
     # lifetime of the vcs object.
     # None is acceptable for 'rev' if you know you are cloning a clean copy of
     # the repo - otherwise it must specify a valid revision.
-    def gotorevision(self, rev):
+    def gotorevision(self, rev, refresh=True):
 
         if self.clone_failed:
             raise VCSException("Downloading the repository already failed once, not trying again.")
@@ -488,6 +488,8 @@ class vcs:
             shutil.rmtree(self.local)
 
         exc = None
+        if not refresh:
+            self.refreshed = True
 
         try:
             self.gotorevisionx(rev)
@@ -1095,7 +1097,7 @@ class BuildException(FDroidException):
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
 def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
-              raw=False, prepare=True, preponly=False):
+              raw=False, prepare=True, preponly=False, refresh=True):
 
     number = None
     subdir = None
@@ -1120,7 +1122,7 @@ def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
         vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir)
         vcs.srclib = (name, number, sdir)
         if ref:
-            vcs.gotorevision(ref)
+            vcs.gotorevision(ref, refresh)
 
         if raw:
             return vcs
@@ -1171,7 +1173,7 @@ def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
 #   'root' is the root directory, which may be the same as 'build_dir' or may
 #          be a subdirectory of it.
 #   'srclibpaths' is information on the srclibs being used
-def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=False):
+def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=False, refresh=True):
 
     # Optionally, the actual app source can be in a subdirectory
     if build['subdir']:
@@ -1181,7 +1183,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Get a working copy of the right revision
     logging.info("Getting source for revision " + build['commit'])
-    vcs.gotorevision(build['commit'])
+    vcs.gotorevision(build['commit'], refresh)
 
     # Initialise submodules if required
     if build['submodules']:
@@ -1219,7 +1221,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build['srclibs']:
         logging.info("Collecting source libraries")
         for lib in build['srclibs']:
-            srclibpaths.append(getsrclib(lib, srclib_dir, build, preponly=onserver))
+            srclibpaths.append(getsrclib(lib, srclib_dir, build, preponly=onserver, refresh=refresh))
 
     for name, number, libpath in srclibpaths:
         place_srclib(root_dir, int(number) if number else None, libpath)
