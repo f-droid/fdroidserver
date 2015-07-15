@@ -70,8 +70,8 @@ default_config = {
     'keystore': 'keystore.jks',
     'smartcardoptions': [],
     'char_limits': {
-        'Summary': 50,
-        'Description': 1500
+        'Summary': 80,
+        'Description': 4000
     },
     'keyaliases': {},
     'repo_url': "https://MyFirstFDroidRepo.org/fdroid/repo",
