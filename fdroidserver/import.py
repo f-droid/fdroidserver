@@ -198,7 +198,7 @@ def main():
         sys.exit(1)
 
     # Construct the metadata...
-    app = metadata.parse_metadata(None)[1]
+    app = metadata.parse_txt_metadata(None)[1]
     app['Web Site'] = website
     app['Source Code'] = sourcecode
     if issuetracker:

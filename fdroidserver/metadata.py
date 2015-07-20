@@ -470,7 +470,7 @@ def read_srclibs():
 
 
 # Read all metadata. Returns a list of 'app' objects (which are dictionaries as
-# returned by the parse_metadata function.
+# returned by the parse_txt_metadata function.
 def read_metadata(xref=True):
 
     # Always read the srclibs before the apps, since they can use a srlib as
@@ -484,7 +484,7 @@ def read_metadata(xref=True):
             os.makedirs(basedir)
 
     for metafile in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
-        appid, appinfo = parse_metadata(metafile)
+        appid, appinfo = parse_txt_metadata(metafile)
         check_metadata(appinfo)
         apps[appid] = appinfo
 
@@ -584,7 +584,7 @@ def split_list_values(s):
 #  'descriptionlines' - original lines of description as formatted in the
 #                       metadata file.
 #
-def parse_metadata(metafile):
+def parse_txt_metadata(metafile):
 
     appid = None
     linedesc = None
