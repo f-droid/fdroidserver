@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
 import os
 import re
 import glob
@@ -488,6 +489,11 @@ def read_metadata(xref=True):
         check_metadata(appinfo)
         apps[appid] = appinfo
 
+    for metafile in sorted(glob.glob(os.path.join('metadata', '*.json'))):
+        appid, appinfo = parse_json_metadata(metafile)
+        check_metadata(appinfo)
+        apps[appid] = appinfo
+
     if xref:
         # Parse all descriptions at load time, just to ensure cross-referencing
         # errors are caught early rather than when they hit the build server.
@@ -595,6 +601,56 @@ def get_default_app_info_list():
 #  'descriptionlines' - original lines of description as formatted in the
 #                       metadata file.
 #
+
+
+def parse_json_metadata(metafile):
+
+    appid = os.path.basename(metafile)[0:-5]  # strip path and .json
+    thisinfo = get_default_app_info_list()
+    thisinfo['id'] = appid
+
+    # fdroid metadata is only strings and booleans, no floats or ints. And
+    # json returns unicode, and fdroidserver still uses plain python strings
+    jsoninfo = json.load(open(metafile, 'r'),
+                         parse_int=lambda s: s,
+                         parse_float=lambda s: s)
+    supported_metadata = app_defaults.keys() + ['builds', 'comments']
+    for k, v in jsoninfo.iteritems():
+        if k == 'Requires Root':
+            if isinstance(v, basestring):
+                if re.match('^\s*(yes|true).*', v, flags=re.IGNORECASE):
+                    jsoninfo[k] = 'Yes'
+                elif re.match('^\s*(no|false).*', v, flags=re.IGNORECASE):
+                    jsoninfo[k] = 'No'
+            if isinstance(v, bool):
+                if v:
+                    jsoninfo[k] = 'Yes'
+                else:
+                    jsoninfo[k] = 'No'
+        if k not in supported_metadata:
+            logging.warn(metafile + ' contains unknown metadata key, ignoring: ' + k)
+    thisinfo.update(jsoninfo)
+
+    for build in thisinfo['builds']:
+        for k, v in build.iteritems():
+            if k in ('buildjni', 'gradle', 'maven', 'kivy'):
+                # convert standard types to mixed datatype legacy format
+                if isinstance(v, bool):
+                    if v:
+                        build[k] = ['yes']
+                    else:
+                        build[k] = ['no']
+            elif k == 'versionCode':
+                build['vercode'] = v
+                del build['versionCode']
+            elif k == 'versionName':
+                build['version'] = v
+                del build['versionName']
+
+    # TODO create schema using https://pypi.python.org/pypi/jsonschema
+    return (appid, thisinfo)
+
+
 def parse_txt_metadata(metafile):
 
     appid = None
