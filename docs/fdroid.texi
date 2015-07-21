@@ -1422,7 +1422,7 @@ applications.
 @section Setting up a build server
 
 In addition to the basic setup previously described, you will also need
-a Vagrant-compatible Debian Testing base box called 'testing32' (or testing64
+a Vagrant-compatible Debian Testing base box called 'jessie32' (or jessie64
 for a 64-bit VM, if you want it to be much slower, and require more disk
 space).
 
