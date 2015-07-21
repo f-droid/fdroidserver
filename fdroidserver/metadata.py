@@ -560,6 +560,17 @@ def split_list_values(s):
     return [v for v in l if v]
 
 
+def get_default_app_info_list():
+    thisinfo = {}
+    thisinfo.update(app_defaults)
+
+    # General defaults...
+    thisinfo['builds'] = []
+    thisinfo['comments'] = []
+
+    return thisinfo
+
+
 # Parse metadata for a single application.
 #
 #  'metafile' - the filename to read. The package id for the application comes
@@ -661,20 +672,13 @@ def parse_txt_metadata(metafile):
             thisinfo['comments'].append((key, comment))
         del curcomments[:]
 
-    thisinfo = {}
+    thisinfo = get_default_app_info_list()
     if metafile:
         if not isinstance(metafile, file):
             metafile = open(metafile, "r")
         appid = metafile.name[9:-4]
-
-    thisinfo.update(app_defaults)
-    thisinfo['id'] = appid
-
-    # General defaults...
-    thisinfo['builds'] = []
-    thisinfo['comments'] = []
-
-    if metafile is None:
+        thisinfo['id'] = appid
+    else:
         return appid, thisinfo
 
     mode = 0
