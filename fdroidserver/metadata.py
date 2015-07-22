@@ -604,7 +604,7 @@ def post_metadata_parse(thisinfo):
 #  'builds'           - a list of dictionaries containing build information
 #                       for each defined build
 #  'comments'         - a list of comments from the metadata file. Each is
-#                       a tuple of the form (field, comment) where field is
+#                       a list of the form [field, comment] where field is
 #                       the name of the field it preceded in the metadata
 #                       file. Where field is None, the comment goes at the
 #                       end of the file. Alternatively, 'build:version' is
@@ -769,7 +769,7 @@ def parse_txt_metadata(metafile):
         if not curcomments:
             return
         for comment in curcomments:
-            thisinfo['comments'].append((key, comment))
+            thisinfo['comments'].append([key, comment])
         del curcomments[:]
 
     thisinfo = get_default_app_info_list()
