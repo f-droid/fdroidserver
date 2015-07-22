@@ -614,6 +614,36 @@ def post_metadata_parse(thisinfo):
 #
 
 
+def _decode_list(data):
+    '''convert items in a list from unicode to basestring'''
+    rv = []
+    for item in data:
+        if isinstance(item, unicode):
+            item = item.encode('utf-8')
+        elif isinstance(item, list):
+            item = _decode_list(item)
+        elif isinstance(item, dict):
+            item = _decode_dict(item)
+        rv.append(item)
+    return rv
+
+
+def _decode_dict(data):
+    '''convert items in a dict from unicode to basestring'''
+    rv = {}
+    for key, value in data.iteritems():
+        if isinstance(key, unicode):
+            key = key.encode('utf-8')
+        if isinstance(value, unicode):
+            value = value.encode('utf-8')
+        elif isinstance(value, list):
+            value = _decode_list(value)
+        elif isinstance(value, dict):
+            value = _decode_dict(value)
+        rv[key] = value
+    return rv
+
+
 def parse_json_metadata(metafile):
 
     appid = os.path.basename(metafile)[0:-5]  # strip path and .json
@@ -623,6 +653,7 @@ def parse_json_metadata(metafile):
     # fdroid metadata is only strings and booleans, no floats or ints. And
     # json returns unicode, and fdroidserver still uses plain python strings
     jsoninfo = json.load(open(metafile, 'r'),
+                         object_hook=_decode_dict,
                          parse_int=lambda s: s,
                          parse_float=lambda s: s)
     supported_metadata = app_defaults.keys() + ['builds', 'comments']
