@@ -577,6 +577,17 @@ def get_default_app_info_list():
     return thisinfo
 
 
+def post_metadata_parse(thisinfo):
+
+    if not thisinfo['Description']:
+        thisinfo['Description'].append('No description available')
+
+    for build in thisinfo['builds']:
+        fill_build_defaults(build)
+
+    thisinfo['builds'] = sorted(thisinfo['builds'], key=lambda build: int(build['vercode']))
+
+
 # Parse metadata for a single application.
 #
 #  'metafile' - the filename to read. The package id for the application comes
@@ -648,6 +659,8 @@ def parse_json_metadata(metafile):
                 del build['versionName']
 
     # TODO create schema using https://pypi.python.org/pypi/jsonschema
+    post_metadata_parse(thisinfo)
+
     return (appid, thisinfo)
 
 
@@ -848,13 +861,7 @@ def parse_txt_metadata(metafile):
     elif mode == 3:
         raise MetaDataException("Unterminated build in " + metafile.name)
 
-    if not thisinfo['Description']:
-        thisinfo['Description'].append('No description available')
-
-    for build in thisinfo['builds']:
-        fill_build_defaults(build)
-
-    thisinfo['builds'] = sorted(thisinfo['builds'], key=lambda build: int(build['vercode']))
+    post_metadata_parse(thisinfo)
 
     return (appid, thisinfo)
 
