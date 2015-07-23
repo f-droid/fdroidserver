@@ -585,14 +585,58 @@ def get_default_app_info_list():
 
 def post_metadata_parse(thisinfo):
 
+    supported_metadata = app_defaults.keys() + ['comments', 'builds', 'id']
+    for k, v in thisinfo.iteritems():
+        if k not in supported_metadata:
+            raise MetaDataException("Unrecognised metadata: {0}: {1}"
+                                    .format(k, v))
+        if type(v) in (float, int):
+            thisinfo[k] = str(v)
+
+    # convert to the odd internal format
+    for k in ('Description', 'Maintainer Notes'):
+        if isinstance(thisinfo[k], basestring):
+            text = thisinfo[k].rstrip().lstrip()
+            thisinfo[k] = text.split('\n')
+
+    supported_flags = (flag_defaults.keys()
+                       + ['vercode', 'version', 'versionCode', 'versionName'])
+    esc_newlines = re.compile('\\\\( |\\n)')
+
     for build in thisinfo['builds']:
-        for k, v in build.iteritems():
+        for k, v in build.items():
+            if k not in supported_flags:
+                raise MetaDataException("Unrecognised build flag: {0}={1}"
+                                        .format(k, v))
+
             if k == 'versionCode':
                 build['vercode'] = str(v)
                 del build['versionCode']
             elif k == 'versionName':
                 build['version'] = str(v)
                 del build['versionName']
+            elif type(v) in (float, int):
+                build[k] = str(v)
+            else:
+                keyflagtype = flagtype(k)
+                if keyflagtype == 'list':
+                    # these can be bools, strings or lists, but ultimately are lists
+                    if isinstance(v, basestring):
+                        build[k] = [v]
+                    elif isinstance(v, bool):
+                        if v:
+                            build[k] = ['yes']
+                        else:
+                            build[k] = ['no']
+                elif keyflagtype == 'script':
+                    build[k] = re.sub(esc_newlines, '', v).lstrip().rstrip()
+                elif keyflagtype == 'bool':
+                    # TODO handle this using <xsd:element type="xsd:boolean> in a schema
+                    if isinstance(v, basestring):
+                        if v == 'true':
+                            build[k] = True
+                        else:
+                            build[k] = False
 
     if not thisinfo['Description']:
         thisinfo['Description'].append('No description available')
@@ -667,27 +711,12 @@ def parse_json_metadata(metafile):
 
     # fdroid metadata is only strings and booleans, no floats or ints. And
     # json returns unicode, and fdroidserver still uses plain python strings
+    # TODO create schema using https://pypi.python.org/pypi/jsonschema
     jsoninfo = json.load(open(metafile, 'r'),
                          object_hook=_decode_dict,
                          parse_int=lambda s: s,
                          parse_float=lambda s: s)
-    supported_metadata = app_defaults.keys() + ['builds', 'comments']
-    for k, v in jsoninfo.iteritems():
-        if k not in supported_metadata:
-            logging.warn(metafile + ' contains unknown metadata key, ignoring: ' + k)
     thisinfo.update(jsoninfo)
-
-    for build in thisinfo['builds']:
-        for k, v in build.iteritems():
-            if k in ('buildjni', 'gradle', 'maven', 'kivy'):
-                # convert standard types to mixed datatype legacy format
-                if isinstance(v, bool):
-                    if v:
-                        build[k] = ['yes']
-                    else:
-                        build[k] = ['no']
-
-    # TODO create schema using https://pypi.python.org/pypi/jsonschema
     post_metadata_parse(thisinfo)
 
     return (appid, thisinfo)
@@ -739,30 +768,6 @@ def parse_xml_metadata(metafile):
             thisinfo['Requires Root'] = True
         else:
             thisinfo['Requires Root'] = False
-
-    # convert to the odd internal format
-    for k in ('Description', 'Maintainer Notes'):
-        if isinstance(thisinfo[k], basestring):
-            text = thisinfo[k].rstrip().lstrip()
-            thisinfo[k] = text.split('\n')
-
-    supported_flags = flag_defaults.keys() + ['versionCode', 'versionName']
-    for build in thisinfo['builds']:
-        for k, v in build.iteritems():
-            if k not in supported_flags:
-                raise MetaDataException("Unrecognised build flag: {0}={1}"
-                                        .format(k, v))
-            keyflagtype = flagtype(k)
-            if keyflagtype == 'bool':
-                # TODO handle this using <xsd:element type="xsd:boolean> in a schema
-                if isinstance(v, basestring):
-                    if v == 'true':
-                        build[k] = True
-                    else:
-                        build[k] = False
-            elif keyflagtype == 'list':
-                if isinstance(v, basestring):
-                    build[k] = [v]
 
     post_metadata_parse(thisinfo)
 

@@ -3,7 +3,7 @@
     "Auto Update Mode": "Version v%v",
     "Categories": ["System", "Security"],
     "Current Version": "3.0",
-    "Current Version Code": "52",
+    "Current Version Code": 52,
     "Description": [
         "An ad blocker that uses the hosts file. The hosts file",
         "contains a list of mappings between hostnames and IP addresses. When",
@@ -37,7 +37,7 @@
             "buildjni": true,
             "commit": "ea5378a94ee0dc1d99d2cec95fae7e6d81afb2b9",
             "subdir": "org_adaway/",
-            "versionCode": "13",
+            "versionCode": 13,
             "versionName": "1.12"
         },
         {
@@ -45,7 +45,7 @@
             "commit": "4128e59da2eac5c2904c7c7568d298ca51e79540",
             "patch": ["defprop.patch"],
             "subdir": "org_adaway/",
-            "versionCode": "16",
+            "versionCode": 16,
             "versionName": "1.15"
         },
         {
@@ -53,7 +53,7 @@
             "commit": "0b9985398b9eef7baf6aadd0dbb12002bc199d2e",
             "patch": ["defprop.patch"],
             "subdir": "org_adaway/",
-            "versionCode": "19",
+            "versionCode": 19,
             "versionName": "1.18"
         },
         {
@@ -61,7 +61,7 @@
             "commit": "ab27f4dab5f3ea5e228cfb4a6b0e1fbf53695f22",
             "patch": ["defprop.patch"],
             "subdir": "org_adaway/",
-            "versionCode": "20",
+            "versionCode": 20,
             "versionName": "1.19"
         },
         {
@@ -69,7 +69,7 @@
             "commit": "695e3801e4081026c8f7213a2345fc451d5eb89c",
             "patch": ["defprop.patch"],
             "subdir": "org_adaway/",
-            "versionCode": "21",
+            "versionCode": 21,
             "versionName": "1.20"
         },
         {
@@ -77,13 +77,13 @@
             "commit": "65138c11cc8b6affd28b68e125fbc1dff0886a4e",
             "patch": ["defprop.patch"],
             "subdir": "org_adaway/",
-            "versionCode": "22",
+            "versionCode": 22,
             "versionName": "1.21"
         },
         {
             "commit": "unknown - see disabled",
             "disable": "no source in repo",
-            "versionCode": "24",
+            "versionCode": 24,
             "versionName": "1.23"
         },
         {
@@ -91,7 +91,7 @@
             "commit": "f811e53e1e1d2ee047b18715fd7d2072b90ae76b",
             "prebuild": "android update project -p ../com_actionbarsherlock",
             "subdir": "org_adaway/",
-            "versionCode": "25",
+            "versionCode": 25,
             "versionName": "1.24"
         },
         {
@@ -99,7 +99,7 @@
             "commit": "ff97932761cdee68638dc2550751a64b2cbe18e7",
             "prebuild": "android update project -p ../com_actionbarsherlock",
             "subdir": "org_adaway/",
-            "versionCode": "26",
+            "versionCode": 26,
             "versionName": "1.25"
         },
         {
@@ -107,7 +107,7 @@
             "commit": "33d4d80998f30bafc88c04c80cbae00b03916f99",
             "prebuild": "android update project -p ../com_actionbarsherlock",
             "subdir": "org_adaway/",
-            "versionCode": "27",
+            "versionCode": 27,
             "versionName": "1.26"
         },
         {
@@ -115,7 +115,7 @@
             "commit": "743d25a7e287505461f33f4b8e57e4cf988fffea",
             "prebuild": "android update project -p ../com_actionbarsherlock",
             "subdir": "org_adaway/",
-            "versionCode": "28",
+            "versionCode": 28,
             "versionName": "1.27"
         },
         {
@@ -123,7 +123,7 @@
             "commit": "eaa07f4",
             "prebuild": "android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*",
             "subdir": "org_adaway/",
-            "versionCode": "30",
+            "versionCode": 30,
             "versionName": "1.29"
         },
         {
@@ -131,7 +131,7 @@
             "commit": "71ced3f",
             "prebuild": "android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/* && rm libs/android-support-v4.jar",
             "subdir": "org_adaway/",
-            "versionCode": "33",
+            "versionCode": 33,
             "versionName": "1.32"
         },
         {
@@ -139,7 +139,7 @@
             "commit": "9d63c18",
             "prebuild": "android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*",
             "subdir": "org_adaway/",
-            "versionCode": "34",
+            "versionCode": 34,
             "versionName": "1.33"
         },
         {
@@ -147,7 +147,7 @@
             "commit": "f2568b1",
             "prebuild": "android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/* && android update project -p ../org_donations",
             "subdir": "org_adaway/",
-            "versionCode": "35",
+            "versionCode": 35,
             "versionName": "1.34"
         },
         {
@@ -155,7 +155,7 @@
             "commit": "7442d5d",
             "prebuild": "android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/* && android update project -p ../org_donations",
             "subdir": "org_adaway/",
-            "versionCode": "36",
+            "versionCode": 36,
             "versionName": "1.35"
         },
         {
@@ -163,7 +163,7 @@
             "commit": "83fc713",
             "prebuild": "android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/* && android update project -p ../org_donations",
             "subdir": "org_adaway/",
-            "versionCode": "37",
+            "versionCode": 37,
             "versionName": "1.36"
         },
         {
@@ -171,7 +171,7 @@
             "commit": "70da32b567122b701cdcb1609b780eb85732028f",
             "prebuild": "android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/* && android update project -p ../org_donations",
             "subdir": "org_adaway/",
-            "versionCode": "38",
+            "versionCode": 38,
             "versionName": "1.37"
         },
         {
@@ -186,7 +186,7 @@
                        "android-libs/Donations",
                        "android-libs/ActionBarSherlock",
                        "android-libs/HtmlSpanner/htmlspanner"],
-            "versionCode": "40",
+            "versionCode": 40,
             "versionName": "2.1"
         },
         {
@@ -201,7 +201,7 @@
                        "android-libs/Donations",
                        "android-libs/ActionBarSherlock",
                        "android-libs/HtmlSpanner/htmlspanner"],
-            "versionCode": "42",
+            "versionCode": 42,
             "versionName": "2.3"
         },
         {
@@ -210,7 +210,7 @@
             "gradle": true,
             "preassemble": ["renameExecutables"],
             "subdir": "AdAway",
-            "versionCode": "45",
+            "versionCode": 45,
             "versionName": "2.6"
         },
         {
@@ -219,7 +219,7 @@
             "gradle": true,
             "preassemble": ["renameExecutables"],
             "subdir": "AdAway",
-            "versionCode": "46",
+            "versionCode": 46,
             "versionName": "2.7"
         },
         {
@@ -228,7 +228,7 @@
             "gradle": true,
             "preassemble": ["renameExecutables"],
             "subdir": "AdAway",
-            "versionCode": "47",
+            "versionCode": 47,
             "versionName": "2.8"
         },
         {
@@ -237,7 +237,7 @@
             "gradle": true,
             "preassemble": ["renameExecutables"],
             "subdir": "AdAway",
-            "versionCode": "48",
+            "versionCode": 48,
             "versionName": "2.8.1"
         },
         {
@@ -246,7 +246,7 @@
             "gradle": true,
             "preassemble": ["renameExecutables"],
             "subdir": "AdAway",
-            "versionCode": "49",
+            "versionCode": 49,
             "versionName": "2.9"
         },
         {
@@ -255,7 +255,7 @@
             "gradle": true,
             "preassemble": ["renameExecutables"],
             "subdir": "AdAway",
-            "versionCode": "50",
+            "versionCode": 50,
             "versionName": "2.9.1"
         },
         {
@@ -264,7 +264,7 @@
             "gradle": true,
             "preassemble": ["renameExecutables"],
             "subdir": "AdAway",
-            "versionCode": "51",
+            "versionCode": 51,
             "versionName": "2.9.2"
         },
         {
@@ -273,7 +273,7 @@
             "gradle": true,
             "preassemble": ["renameExecutables"],
             "subdir": "AdAway",
-            "versionCode": "52",
+            "versionCode": 52,
             "versionName": "3.0"
         }
     ],
