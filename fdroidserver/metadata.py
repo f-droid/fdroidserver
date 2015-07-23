@@ -20,9 +20,13 @@
 import json
 import os
 import re
+import sys
 import glob
 import cgi
 import logging
+
+# use the C implementation when available
+import xml.etree.cElementTree as ElementTree
 
 from collections import OrderedDict
 
@@ -79,6 +83,8 @@ app_defaults = OrderedDict([
 
 # In the order in which they are laid out on files
 # Sorted by their action and their place in the build timeline
+# These variables can have varying datatypes. For example, anything with
+# flagtype(v) == 'list' is inited as False, then set as a list of strings.
 flag_defaults = OrderedDict([
     ('disable', False),
     ('commit', None),
@@ -494,6 +500,11 @@ def read_metadata(xref=True):
         check_metadata(appinfo)
         apps[appid] = appinfo
 
+    for metafile in sorted(glob.glob(os.path.join('metadata', '*.xml'))):
+        appid, appinfo = parse_xml_metadata(metafile)
+        check_metadata(appinfo)
+        apps[appid] = appinfo
+
     if xref:
         # Parse all descriptions at load time, just to ensure cross-referencing
         # errors are caught early rather than when they hit the build server.
@@ -578,6 +589,20 @@ def get_default_app_info_list():
 
 
 def post_metadata_parse(thisinfo):
+
+    for build in thisinfo['builds']:
+        for k, v in build.iteritems():
+            if k == 'versionCode':
+                build['vercode'] = str(v)
+                del build['versionCode']
+            elif k == 'versionName':
+                build['version'] = str(v)
+                del build['versionName']
+            elif flagtype(k) == 'bool':
+                if v == 'no':
+                    build[k] = False
+                else:
+                    build[k] = True
 
     if not thisinfo['Description']:
         thisinfo['Description'].append('No description available')
@@ -682,14 +707,77 @@ def parse_json_metadata(metafile):
                         build[k] = ['yes']
                     else:
                         build[k] = ['no']
-            elif k == 'versionCode':
-                build['vercode'] = v
-                del build['versionCode']
-            elif k == 'versionName':
-                build['version'] = v
-                del build['versionName']
 
     # TODO create schema using https://pypi.python.org/pypi/jsonschema
+    post_metadata_parse(thisinfo)
+
+    return (appid, thisinfo)
+
+
+def parse_xml_metadata(metafile):
+
+    appid = os.path.basename(metafile)[0:-4]  # strip path and .xml
+    thisinfo = get_default_app_info_list()
+    thisinfo['id'] = appid
+
+    tree = ElementTree.ElementTree(file=metafile)
+    root = tree.getroot()
+
+    if root.tag != 'resources':
+        logging.critical(metafile + ' does not have root as <resources></resources>!')
+        sys.exit(1)
+
+    supported_metadata = app_defaults.keys()
+    for child in root:
+        if child.tag != 'builds':
+            # builds does not have name="" attrib
+            name = child.attrib['name']
+            if name not in supported_metadata:
+                raise MetaDataException("Unrecognised metadata: <"
+                                        + child.tag + ' name="' + name + '">'
+                                        + child.text
+                                        + "</" + child.tag + '>')
+
+        if child.tag == 'string':
+            thisinfo[name] = child.text
+        elif child.tag == 'string-array':
+            items = []
+            for item in child:
+                items.append(item.text)
+            thisinfo[name] = items
+        elif child.tag == 'builds':
+            builds = []
+            for build in child:
+                builddict = dict()
+                for key in build:
+                    builddict[key.tag] = key.text
+                builds.append(builddict)
+            thisinfo['builds'] = builds
+
+    # convert to the odd internal format
+    for k in ('Description', 'Maintainer Notes'):
+        if isinstance(thisinfo[k], basestring):
+            text = thisinfo[k].rstrip().lstrip()
+            thisinfo[k] = text.split('\n')
+
+    supported_flags = flag_defaults.keys() + ['versionCode', 'versionName']
+    for build in thisinfo['builds']:
+        for k, v in build.iteritems():
+            if k not in supported_flags:
+                raise MetaDataException("Unrecognised build flag: {0}={1}"
+                                        .format(k, v))
+            keyflagtype = flagtype(k)
+            if keyflagtype == 'bool':
+                # TODO handle this using <xsd:element type="xsd:boolean> in a schema
+                if isinstance(v, basestring):
+                    if v == 'true':
+                        build[k] = True
+                    else:
+                        build[k] = False
+            elif keyflagtype == 'list':
+                if isinstance(v, basestring):
+                    build[k] = [v]
+
     post_metadata_parse(thisinfo)
 
     return (appid, thisinfo)
