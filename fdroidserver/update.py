@@ -95,6 +95,10 @@ def update_wiki(apps, sortedids, apks):
         if 'AntiFeatures' in app:
             for af in app['AntiFeatures']:
                 wikidata += '{{AntiFeature|' + af + '}}\n'
+        if app['Requires Root']:
+            requiresroot = 'Yes'
+        else:
+            requiresroot = 'No'
         wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|changelog=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|dogecoin=%s|license=%s|root=%s}}\n' % (
             appid,
             app['Name'],
@@ -110,7 +114,7 @@ def update_wiki(apps, sortedids, apks):
             app['Litecoin'],
             app['Dogecoin'],
             app['License'],
-            app.get('Requires Root', 'No'))
+            requiresroot)
 
         if app['Provides']:
             wikidata += "This app provides: %s" % ', '.join(app['Summary'].split(','))

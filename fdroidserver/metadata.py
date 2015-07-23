@@ -195,14 +195,9 @@ valuetypes = {
                    ["Dogecoin"],
                    []),
 
-    FieldValidator("Boolean",
-                   ['Yes', 'No'], None,
-                   ["Requires Root"],
-                   []),
-
     FieldValidator("bool",
-                   ['yes', 'no'], None,
-                   [],
+                   r'([Yy]es|[Nn]o|[Tt]rue|[Ff]alse)', None,
+                   ["Requires Root"],
                    ['submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
                     'novcheck']),
 
@@ -598,11 +593,6 @@ def post_metadata_parse(thisinfo):
             elif k == 'versionName':
                 build['version'] = str(v)
                 del build['versionName']
-            elif flagtype(k) == 'bool':
-                if v == 'no':
-                    build[k] = False
-                else:
-                    build[k] = True
 
     if not thisinfo['Description']:
         thisinfo['Description'].append('No description available')
@@ -683,17 +673,6 @@ def parse_json_metadata(metafile):
                          parse_float=lambda s: s)
     supported_metadata = app_defaults.keys() + ['builds', 'comments']
     for k, v in jsoninfo.iteritems():
-        if k == 'Requires Root':
-            if isinstance(v, basestring):
-                if re.match('^\s*(yes|true).*', v, flags=re.IGNORECASE):
-                    jsoninfo[k] = 'Yes'
-                elif re.match('^\s*(no|false).*', v, flags=re.IGNORECASE):
-                    jsoninfo[k] = 'No'
-            if isinstance(v, bool):
-                if v:
-                    jsoninfo[k] = 'Yes'
-                else:
-                    jsoninfo[k] = 'No'
         if k not in supported_metadata:
             logging.warn(metafile + ' contains unknown metadata key, ignoring: ' + k)
     thisinfo.update(jsoninfo)
@@ -753,6 +732,13 @@ def parse_xml_metadata(metafile):
                     builddict[key.tag] = key.text
                 builds.append(builddict)
             thisinfo['builds'] = builds
+
+    # TODO handle this using <xsd:element type="xsd:boolean> in a schema
+    if not isinstance(thisinfo['Requires Root'], bool):
+        if thisinfo['Requires Root'] == 'true':
+            thisinfo['Requires Root'] = True
+        else:
+            thisinfo['Requires Root'] = False
 
     # convert to the odd internal format
     for k in ('Description', 'Maintainer Notes'):
@@ -1040,7 +1026,7 @@ def write_metadata(dest, app):
     mf.write('.\n')
     mf.write('\n')
     if app['Requires Root']:
-        writefield('Requires Root', 'Yes')
+        writefield('Requires Root', 'yes')
         mf.write('\n')
     if app['Repo Type']:
         writefield('Repo Type')
