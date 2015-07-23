@@ -42,7 +42,7 @@ class MetaDataException(Exception):
 # In the order in which they are laid out on files
 app_defaults = OrderedDict([
     ('Disabled', None),
-    ('AntiFeatures', None),
+    ('AntiFeatures', []),
     ('Provides', None),
     ('Categories', ['None']),
     ('License', 'Unknown'),
@@ -516,7 +516,7 @@ def read_metadata(xref=True):
 def metafieldtype(name):
     if name in ['Description', 'Maintainer Notes']:
         return 'multiline'
-    if name in ['Categories']:
+    if name in ['Categories', 'AntiFeatures']:
         return 'list'
     if name == 'Build Version':
         return 'build'
@@ -929,7 +929,7 @@ def write_metadata(dest, app):
 
     mf = open(dest, 'w')
     writefield_nonempty('Disabled')
-    writefield_nonempty('AntiFeatures')
+    writefield('AntiFeatures')
     writefield_nonempty('Provides')
     writefield('Categories')
     writefield('License')
