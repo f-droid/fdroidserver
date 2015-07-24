@@ -25,6 +25,15 @@ import glob
 import cgi
 import logging
 
+import yaml
+# use libyaml if it is available
+try:
+    from yaml import CLoader
+    YamlLoader = CLoader
+except ImportError:
+    from yaml import Loader
+    YamlLoader = Loader
+
 # use the C implementation when available
 import xml.etree.cElementTree as ElementTree
 
@@ -500,6 +509,11 @@ def read_metadata(xref=True):
         check_metadata(appinfo)
         apps[appid] = appinfo
 
+    for metafile in sorted(glob.glob(os.path.join('metadata', '*.yaml'))):
+        appid, appinfo = parse_yaml_metadata(metafile)
+        check_metadata(appinfo)
+        apps[appid] = appinfo
+
     if xref:
         # Parse all descriptions at load time, just to ensure cross-referencing
         # errors are caught early rather than when they hit the build server.
@@ -769,6 +783,18 @@ def parse_xml_metadata(metafile):
         else:
             thisinfo['Requires Root'] = False
 
+    post_metadata_parse(thisinfo)
+
+    return (appid, thisinfo)
+
+
+def parse_yaml_metadata(metafile):
+
+    appid = os.path.basename(metafile)[0:-5]  # strip path and .yaml
+    thisinfo = get_default_app_info_list(appid)
+
+    yamlinfo = yaml.load(open(metafile, 'r'), Loader=YamlLoader)
+    thisinfo.update(yamlinfo)
     post_metadata_parse(thisinfo)
 
     return (appid, thisinfo)

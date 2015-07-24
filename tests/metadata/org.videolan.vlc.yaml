@@ -1,0 +1,911 @@
+Categories:
+  - Multimedia
+License: GPLv3
+Web Site: http://www.videolan.org/vlc/download-android.html
+Source Code: http://git.videolan.org/?p=vlc-ports/android.git;a=summary
+Issue Tracker: "http://www.videolan.org/support/index.html#bugs"
+Donate: "http://www.videolan.org/contribute.html#money"
+
+Auto Name: VLC
+Summary: Media player
+Description: |
+  Video and audio player that supports a wide range of formats,
+  for both local and remote playback.
+
+  [http://git.videolan.org/?p=vlc-ports/android.git;a=blob_plain;f=NEWS NEWS]
+
+Repo Type: git
+Repo: git://git.videolan.org/vlc-ports/android.git
+
+builds:
+  - versionName: 0.0.11-ARMv7
+    versionCode: 110
+    commit: 0.0.11
+    subdir: vlc-android
+    forceversion: yes
+    forcevercode: yes
+    prebuild: sed -i '48d' ../Makefile
+    update:
+      - .
+      - ../java-libs/SlidingMenu
+      - ../java-libs/ActionBarSherlock
+    build: cd ../ && \
+      ANDROID_ABI=armeabi-v7a ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.0.11-ARM
+    versionCode: 111
+    commit: 0.0.11
+    subdir: vlc-android
+    forceversion: yes
+    forcevercode: yes
+    prebuild: sed -i '48d' ../Makefile
+    update:
+      - .
+      - ../java-libs/SlidingMenu
+      - ../java-libs/ActionBarSherlock
+    build: |
+      cd ../ && \
+      ANDROID_ABI=armeabi ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.0.11-x86
+    versionCode: 112
+    disable: ffmpeg error 0.0.11
+    commit: unknown - see disabled
+    subdir: vlc-android
+    forceversion: yes
+    forcevercode: yes
+    prebuild: sed -i '48d' ../Makefile
+    update:
+      - .
+      - ../java-libs/SlidingMenu
+      - ../java-libs/ActionBarSherlock
+    build: |
+      cd ../ && \
+      ANDROID_ABI=x86 ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.0.11-mips
+    versionCode: 113
+    commit: 0.0.11
+    subdir: vlc-android
+    forceversion: yes
+    forcevercode: yes
+    prebuild: sed -i '48d' ../Makefile
+    update:
+      - .
+      - ../java-libs/SlidingMenu
+      - ../java-libs/ActionBarSherlock
+    build: >
+      cd ../ && \
+      ANDROID_ABI=mips ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.1.3-MIPS
+    versionCode: 1301
+    disable: build failing (at 0.1.3)
+    commit: 0.1.3
+    subdir: vlc-android
+    patch: ndkr9.patch
+    srclibs: VLC@7c52aacbe
+    forceversion: yes
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: |
+      cd ../ && \
+      ANDROID_ABI=mips ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.1.3-x86
+    versionCode: 1302
+    commit: 0.1.3
+    subdir: vlc-android
+    patch: ndkr9.patch
+    srclibs: VLC@7c52aacbe
+    forceversion: yes
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=x86 ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.1.3-ARM
+    versionCode: 1303
+    commit: 0.1.3
+    subdir: vlc-android
+    patch: ndkr9.patch
+    srclibs: VLC@7c52aacbe
+    forceversion: yes
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.1.3-ARMv7
+    versionCode: 1304
+    commit: 0.1.3
+    subdir: vlc-android
+    patch: ndkr9.patch
+    srclibs: VLC@7c52aacbe
+    forceversion: yes
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi-v7a ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.0
+    versionCode: 9002
+    commit: 0.9.0
+    subdir: vlc-android
+    srclibs: VLC@31ffb20309264994
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=x86 ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.0
+    versionCode: 9004
+    commit: 0.9.0
+    subdir: vlc-android
+    srclibs: VLC@31ffb20309264994
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi-v7a ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.1
+    versionCode: 9102
+    commit: 0.9.1
+    subdir: vlc-android
+    srclibs: VLC@37e886d113b8b567c15208579fb2f
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=x86 ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.1
+    versionCode: 9104
+    commit: 0.9.1
+    subdir: vlc-android
+    srclibs: VLC@37e886d113b8b567c15208579fb2f
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi-v7a ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.5
+    versionCode: 9502
+    disable: can't download gmp
+    commit: 0.9.5
+    subdir: vlc-android
+    srclibs: VLC@052600173f376ff58ff04d53746961a2
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=x86 ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.5
+    versionCode: 9504
+    disable: can't download gmp
+    commit: 0.9.5
+    subdir: vlc-android
+    srclibs: VLC@052600173f376ff58ff04d53746961a2
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi-v7a ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.6
+    versionCode: 9602
+    commit: 0.9.6
+    subdir: vlc-android
+    srclibs: VLC-2.2@27f4799
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=x86 ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.6
+    versionCode: 9604
+    commit: 0.9.6
+    subdir: vlc-android
+    srclibs: VLC-2.2@27f4799
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi-v7a ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.7
+    versionCode: 9702
+    commit: 0.9.7
+    subdir: vlc-android
+    srclibs: VLC-2.2@9e1c6ff
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=x86 ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.7
+    versionCode: 9704
+    commit: 0.9.7
+    subdir: vlc-android
+    srclibs: VLC-2.2@9e1c6ff
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi-v7a ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.7.1
+    versionCode: 9711
+    disable: build fails
+    commit: 0.9.7.1
+    subdir: vlc-android
+    srclibs: VLC-2.2@57cd36b
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=mips ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.7.1
+    versionCode: 9712
+    commit: 0.9.7.1
+    subdir: vlc-android
+    srclibs: VLC-2.2@57cd36b
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=x86 ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.7.1
+    versionCode: 9714
+    commit: 0.9.7.1
+    subdir: vlc-android
+    srclibs: VLC-2.2@57cd36b
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi-v7a ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.8
+    versionCode: 9802
+    commit: 0.9.8
+    subdir: vlc-android
+    srclibs: VLC-2.2@f2db364
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=x86 ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.8
+    versionCode: 9803
+    commit: 0.9.8
+    subdir: vlc-android
+    srclibs: VLC-2.2@f2db364
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.8
+    versionCode: 9804
+    commit: 0.9.8
+    subdir: vlc-android
+    srclibs: VLC-2.2@f2db364
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi-v7a ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.9
+    versionCode: 9902
+    commit: 0.9.9
+    subdir: vlc-android
+    srclibs: VLC-2.2@e731dc23a4f8ef6782c7cc2236bbbf41c034dad1
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=x86 ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.9
+    versionCode: 9903
+    commit: 0.9.9
+    subdir: vlc-android
+    srclibs: VLC-2.2@e731dc23a4f8ef6782c7cc2236bbbf41c034dad1
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.9
+    versionCode: 9904
+    commit: 0.9.9
+    subdir: vlc-android
+    srclibs: VLC-2.2@e731dc23a4f8ef6782c7cc2236bbbf41c034dad1
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi-v7a ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.10
+    versionCode: 10002
+    commit: 0.9.10
+    subdir: vlc-android
+    srclibs: VLC-2.2@e33e5de
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=x86 ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.10
+    versionCode: 10003
+    commit: 0.9.10
+    subdir: vlc-android
+    srclibs: VLC-2.2@e33e5de
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi ./compile.sh release
+    buildjni: no
+
+  - versionName: 0.9.10
+    versionCode: 10004
+    commit: 0.9.10
+    subdir: vlc-android
+    srclibs: VLC-2.2@e33e5de
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi-v7a ./compile.sh release
+    buildjni: no
+
+#0.9.10 vercodes were off
+  - versionName: 1.0.0
+    versionCode: 10006
+    disable: doesn't build
+    commit: 1.0.0
+    subdir: vlc-android
+    srclibs: VLC-2.2@036010e
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=x86 ./compile.sh release
+    buildjni: no
+
+#0.9.10 vercodes were off
+  - versionName: 1.0.0
+    versionCode: 10007
+    disable: doesn't build
+    commit: 1.0.0
+    subdir: vlc-android
+    srclibs: VLC-2.2@036010e
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi ./compile.sh release
+    buildjni: no
+
+#0.9.10 vercodes were off
+  - versionName: 1.0.0
+    versionCode: 10008
+    disable: doesn't build
+    commit: 1.0.0
+    subdir: vlc-android
+    srclibs: VLC-2.2@036010e
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi-v7a ./compile.sh release
+    buildjni: no
+
+  - versionName: 1.0.1
+    versionCode: 10102
+    commit: 1.0.1
+    subdir: vlc-android
+    srclibs: VLC-2.2@59409d5
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=x86 ./compile.sh release
+    buildjni: no
+
+  - versionName: 1.0.1
+    versionCode: 10103
+    commit: 1.0.1
+    subdir: vlc-android
+    srclibs: VLC-2.2@59409d5
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi ./compile.sh release
+    buildjni: no
+
+  - versionName: 1.0.1
+    versionCode: 10104
+    commit: 1.0.1
+    subdir: vlc-android
+    srclibs: VLC-2.2@59409d5
+    forcevercode: yes
+    prebuild: sed -i '/ant/d' ../Makefile && \
+        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    build: cd ../ && \
+        ANDROID_ABI=armeabi-v7a ./compile.sh release
+    buildjni: no
+
+  - versionName: 1.1.3
+    versionCode: 1010303
+    commit: 1.1.3
+    subdir: vlc-android
+    gradle: VanillaARMv6fpu
+    srclibs: VLC@a9b19e4
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.1.3
+    versionCode: 1010304
+    commit: 1.1.3
+    subdir: vlc-android
+    gradle: VanillaARMv7
+    srclibs: VLC@a9b19e4
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi-v7a" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.1.3
+    versionCode: 1010305
+    commit: 1.1.3
+    subdir: vlc-android
+    gradle: VanillaX86
+    srclibs: VLC@a9b19e4
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "x86" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.1.5
+    versionCode: 1010503
+    commit: 1.1.5
+    subdir: vlc-android
+    gradle: VanillaARMv6fpu
+    srclibs: VLC@e6b4585
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.1.5
+    versionCode: 1010504
+    commit: 1.1.5
+    subdir: vlc-android
+    gradle: VanillaARMv7
+    srclibs: VLC@e6b4585
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi-v7a" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.1.5
+    versionCode: 1010505
+    commit: 1.1.5
+    subdir: vlc-android
+    gradle: VanillaX86
+    srclibs: VLC@e6b4585
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "x86" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.1.6
+    versionCode: 1010603
+    commit: 1.1.6
+    subdir: vlc-android
+    gradle: VanillaARMv6fpu
+    srclibs: VLC@551b670
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.1.6
+    versionCode: 1010604
+    commit: 1.1.6
+    subdir: vlc-android
+    gradle: VanillaARMv7
+    srclibs: VLC@551b670
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi-v7a" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.1.6
+    versionCode: 1010605
+    commit: 1.1.6
+    subdir: vlc-android
+    gradle: VanillaX86
+    srclibs: VLC@551b670
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "x86" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.0
+    versionCode: 1020003
+    commit: 1.2.0
+    subdir: vlc-android
+    gradle: VanillaARMv6fpu
+    srclibs: VLC@23c8d86
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.0
+    versionCode: 1020004
+    commit: 1.2.0
+    subdir: vlc-android
+    gradle: VanillaARMv7
+    srclibs: VLC@23c8d86
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi-v7a" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.0
+    versionCode: 1020005
+    commit: 1.2.0
+    subdir: vlc-android
+    gradle: VanillaX86
+    srclibs: VLC@23c8d86
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "x86" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.1
+    versionCode: 1020103
+    commit: 1.2.1
+    subdir: vlc-android
+    gradle: VanillaARMv6fpu
+    srclibs: VLC@23c8d86
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.1
+    versionCode: 1020104
+    commit: 1.2.1
+    subdir: vlc-android
+    gradle: VanillaARMv7
+    srclibs: VLC@23c8d86
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi-v7a" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.1
+    versionCode: 1020105
+    commit: 1.2.1
+    subdir: vlc-android
+    gradle: VanillaX86
+    srclibs: VLC@23c8d86
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "x86" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.2
+    versionCode: 1020203
+    commit: 1.2.2
+    subdir: vlc-android
+    gradle: VanillaARMv6fpu
+    srclibs: VLC@7491a5f
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.2
+    versionCode: 1020204
+    commit: 1.2.2
+    subdir: vlc-android
+    gradle: VanillaARMv7
+    srclibs: VLC@7491a5f
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi-v7a" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.2
+    versionCode: 1020205
+    commit: 1.2.2
+    subdir: vlc-android
+    gradle: VanillaX86
+    srclibs: VLC@7491a5f
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "x86" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.3
+    versionCode: 1020303
+    commit: 1.2.3
+    subdir: vlc-android
+    gradle: VanillaARMv6fpu
+    srclibs: VLC@7491a5f
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.3
+    versionCode: 1020304
+    commit: 1.2.3
+    subdir: vlc-android
+    gradle: VanillaARMv7
+    srclibs: VLC@7491a5f
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi-v7a" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.3
+    versionCode: 1020305
+    commit: 1.2.3
+    subdir: vlc-android
+    gradle: VanillaX86
+    srclibs: VLC@7491a5f
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "x86" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.4
+    versionCode: 1020403
+    commit: 1.2.4
+    subdir: vlc-android
+    gradle: VanillaARMv6fpu
+    srclibs: VLC@7491a5f
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.4
+    versionCode: 1020404
+    commit: 1.2.4
+    subdir: vlc-android
+    gradle: VanillaARMv7
+    srclibs: VLC@7491a5f
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi-v7a" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.4
+    versionCode: 1020405
+    commit: 1.2.4
+    subdir: vlc-android
+    gradle: VanillaX86
+    srclibs: VLC@7491a5f
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "x86" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.5
+    versionCode: 1020503
+    commit: 1.2.5
+    subdir: vlc-android
+    gradle: VanillaARMv6fpu
+    srclibs: VLC@50accb8
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.5
+    versionCode: 1020504
+    commit: 1.2.5
+    subdir: vlc-android
+    gradle: VanillaARMv7
+    srclibs: VLC@50accb8
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi-v7a" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.5
+    versionCode: 1020505
+    commit: 1.2.5
+    subdir: vlc-android
+    gradle: VanillaX86
+    srclibs: VLC@50accb8
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "x86" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.6
+    versionCode: 1030003
+    commit: 1.2.6
+    subdir: vlc-android
+    gradle: VanillaARMv6fpu
+    srclibs: VLC@d59b81a
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.6
+    versionCode: 1030004
+    commit: 1.2.6
+    subdir: vlc-android
+    gradle: VanillaARMv7
+    srclibs: VLC@d59b81a
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "armeabi-v7a" --release
+    buildjni: no
+    ndk: r10d
+
+  - versionName: 1.2.6
+    versionCode: 1030005
+    commit: 1.2.6
+    subdir: vlc-android
+    gradle: VanillaX86
+    srclibs: VLC@d59b81a
+    prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh && \
+        ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && \
+        ./compile.sh -a "x86" --release
+    buildjni: no
+    ndk: r10d
+
+Maintainer Notes: |
+  Instructions and dependencies here: http://wiki.videolan.org/AndroidCompile
+  see http://buildbot.videolan.org/builders/ for version code scheme
+  The VLC srclib commit can be found out from TESTED_HASH value in compile.sh
+  
+  On new releases remove the updatecheck and force the CV to the last working
+  build. This will make sure users don't get notified about the update until
+  the final build from the BS has been reviewed and tested. Once done, undo
+  those changes.
+
+# NEW BUILDS
+# +0: vanilla
+# +1: armv5
+# +2: armv6nofpu
+# +3: armv6fpu
+# +4: armv7
+# +5: x86
+# +6: mips
+# +7: armv8
+# +8: x86_64
+# +9: mips64
+# OLD BUILD SYSTEM
+# +0: - (upstream)
+# +1: mips
+# +2: x86
+# +3: arm
+# +4: armv7 (CV)
+Archive Policy: 9 versions
+Auto Update Mode: None
+Update Check Mode: Tags
+# Only use higher vercode ops, if we do build those arches
+Vercode Operation: "%c + 5"
+Current Version: 1.2.6
+Current Version Code: 1030005

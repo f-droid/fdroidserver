@@ -37,7 +37,7 @@ class MetadataTest(unittest.TestCase):
         fdroidserver.common.config = config
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
-        for appid in ('org.smssecure.smssecure', 'org.adaway', 'net.osmand.plus'):
+        for appid in ('org.smssecure.smssecure', 'org.adaway', 'net.osmand.plus', 'org.videolan.vlc'):
             frompickle = pickle.load(open(os.path.join('metadata', appid + '.pickle')))
             self.assertTrue(appid in apps.keys())
             self.assertEquals(apps[appid], frompickle)
