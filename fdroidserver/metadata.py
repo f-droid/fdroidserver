@@ -572,9 +572,11 @@ def split_list_values(s):
     return [v for v in l if v]
 
 
-def get_default_app_info_list():
+def get_default_app_info_list(appid=None):
     thisinfo = {}
     thisinfo.update(app_defaults)
+    if appid is not None:
+        thisinfo['id'] = appid
 
     # General defaults...
     thisinfo['builds'] = []
@@ -706,8 +708,7 @@ def _decode_dict(data):
 def parse_json_metadata(metafile):
 
     appid = os.path.basename(metafile)[0:-5]  # strip path and .json
-    thisinfo = get_default_app_info_list()
-    thisinfo['id'] = appid
+    thisinfo = get_default_app_info_list(appid)
 
     # fdroid metadata is only strings and booleans, no floats or ints. And
     # json returns unicode, and fdroidserver still uses plain python strings
@@ -725,8 +726,7 @@ def parse_json_metadata(metafile):
 def parse_xml_metadata(metafile):
 
     appid = os.path.basename(metafile)[0:-4]  # strip path and .xml
-    thisinfo = get_default_app_info_list()
-    thisinfo['id'] = appid
+    thisinfo = get_default_app_info_list(appid)
 
     tree = ElementTree.ElementTree(file=metafile)
     root = tree.getroot()
