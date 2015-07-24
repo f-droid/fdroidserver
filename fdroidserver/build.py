@@ -1088,9 +1088,7 @@ def main():
                         logging.info("...retrieving " + url)
                         of = "{0}_{1}.apk.binary".format(app['id'], thisbuild['vercode'])
                         of = os.path.join(output_dir, of)
-                        p = FDroidPopen(['wget', '-nv', '-O', of, url])
-                        if p.returncode != 0 or not os.path.exists(of):
-                            raise BuildException("...failed to retrieve " + url)
+                        common.download_file(url, local_filename=of)
 
                     build_succeeded.append(app)
                     wikilog = "Build succeeded"

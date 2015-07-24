@@ -28,6 +28,7 @@ setup(name='fdroidserver',
           'apache-libcloud >= 0.14.1',
           'pyasn1',
           'pyasn1-modules',
+          'requests',
       ],
       classifiers=[
           'Development Status :: 3 - Alpha',
