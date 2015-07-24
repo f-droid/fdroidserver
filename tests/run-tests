@@ -343,7 +343,8 @@ $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 grep -F '<application id=' repo/index.xml > /dev/null
-cp $WORKSPACE/tests/urzip.apk $REPOROOT/
+test -e $REPOROOT/repo/info.guardianproject.urzip_100.apk || \
+    cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
 $fdroid update --create-metadata
 $fdroid readmeta
 test -e repo/index.xml
@@ -369,8 +370,8 @@ KEYSTORE=$REPOROOT/keystore.jks
 cd $REPOROOT
 touch config.py
 touch fdroid-icon.png
-mkdir repo/
-cp $WORKSPACE/tests/urzip.apk $REPOROOT/
+mkdir repo
+cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
 set +e
 $fdroid update --create-metadata
 if [ $? -eq 0 ]; then
