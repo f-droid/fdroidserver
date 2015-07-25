@@ -586,6 +586,9 @@ def parse_metadata(metafile):
     linedesc = None
 
     def add_buildflag(p, thisbuild):
+        if not p.strip():
+            raise MetaDataException("Empty build flag at {1}"
+                                    .format(buildlines[0], linedesc))
         bv = p.split('=', 1)
         if len(bv) != 2:
             raise MetaDataException("Invalid build flag at {0} in {1}"
