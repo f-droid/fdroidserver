@@ -452,7 +452,7 @@ def capitalize_intact(string):
     return string[0].upper() + string[1:]
 
 
-def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver):
+def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh):
     """Do a build locally."""
 
     if thisbuild['buildjni'] and thisbuild['buildjni'] != ['no']:
@@ -479,7 +479,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     # Prepare the source code...
     root_dir, srclibpaths = common.prepare_source(vcs, app, thisbuild,
                                                   build_dir, srclib_dir,
-                                                  extlib_dir, onserver)
+                                                  extlib_dir, onserver, refresh)
 
     # We need to clean via the build tool in case the binary dirs are
     # different from the default ones
@@ -876,7 +876,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
 
 def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, extlib_dir,
-             tmp_dir, repo_dir, vcs, test, server, force, onserver):
+             tmp_dir, repo_dir, vcs, test, server, force, onserver, refresh):
     """
     Build a particular version of an application, if it needs building.
 
@@ -921,7 +921,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
 
         build_server(app, thisbuild, vcs, build_dir, output_dir, force)
     else:
-        build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver)
+        build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh)
     return True
 
 
@@ -949,6 +949,8 @@ def parse_commandline():
                       help="Skip scanning the source code for binaries and other problems")
     parser.add_option("--no-tarball", dest="notarball", action="store_true", default=False,
                       help="Don't create a source tarball, useful when testing a build")
+    parser.add_option("--no-refresh", dest="refresh", action="store_false", default=True,
+                      help="Don't refresh the repository, useful when testing a build with no internet connection")
     parser.add_option("-f", "--force", action="store_true", default=False,
                       help="Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode.")
     parser.add_option("-a", "--all", action="store_true", default=False,
@@ -1074,7 +1076,7 @@ def main():
                             also_check_dir, srclib_dir, extlib_dir,
                             tmp_dir, repo_dir, vcs, options.test,
                             options.server, options.force,
-                            options.onserver):
+                            options.onserver, options.refresh):
 
                     if app.get('Binaries', None):
                         # This is an app where we build from source, and
