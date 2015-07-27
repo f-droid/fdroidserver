@@ -27,6 +27,7 @@ import socket
 import zipfile
 import hashlib
 import pickle
+from datetime import datetime, timedelta
 from xml.dom.minidom import Document
 from optparse import OptionParser
 import time
@@ -541,6 +542,19 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 sys.exit(1)
 
             apk = zipfile.ZipFile(apkfile, 'r')
+
+            # if an APK has files newer than the system time, suggest updating
+            # the system clock.  This is useful for offline systems, used for
+            # signing, which do not have another source of clock sync info. It
+            # has to be more than 24 hours newer because ZIP/APK files do not
+            # store timezone info
+            info = apk.getinfo('AndroidManifest.xml')
+            dt_obj = datetime(*info.date_time)
+            checkdt = dt_obj - timedelta(1)
+            if datetime.today() < checkdt:
+                logging.warn('System clock is older than manifest in: '
+                             + apkfilename + '\nSet clock to that time using:\n'
+                             + 'sudo date -s "' + str(dt_obj) + '"')
 
             iconfilename = "%s.%s.png" % (
                 thisinfo['id'],

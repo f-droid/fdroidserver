@@ -24,7 +24,7 @@ from optparse import OptionParser
 import logging
 
 import common
-from common import FDroidPopen, FDroidException
+from common import FDroidException
 
 options = None
 config = None
@@ -78,9 +78,7 @@ def main():
                 os.remove(remoteapk)
             url = 'https://f-droid.org/repo/' + apkfilename
             logging.info("...retrieving " + url)
-            p = FDroidPopen(['wget', '-nv', url], cwd=tmp_dir)
-            if p.returncode != 0:
-                raise FDroidException("Failed to get " + apkfilename)
+            common.download_file(url, dldir=tmp_dir)
 
             compare_result = common.compare_apks(
                 os.path.join(unsigned_dir, apkfilename),
