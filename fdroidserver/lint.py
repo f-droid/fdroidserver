@@ -22,6 +22,7 @@ import re
 import logging
 import common
 import metadata
+import sys
 from collections import Counter
 from sets import Set
 
@@ -231,6 +232,8 @@ def main():
 
     logging.info("Found a total of %i warnings in %i apps out of %i total." % (
         count['warn'], count['app'], count['app_total']))
+
+    sys.exit(1 if count['warn'] > 0 else 0)
 
 if __name__ == "__main__":
     main()
