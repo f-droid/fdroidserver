@@ -17,12 +17,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from optparse import OptionParser
 import common
 import metadata
 
 
 def main():
 
+    parser = OptionParser(usage="Usage: %prog")
+    parser.parse_args()
     common.read_config(None)
 
     metadata.read_metadata(xref=True)
