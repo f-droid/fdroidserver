@@ -121,6 +121,14 @@ def fill_config_defaults(thisconfig):
                 thisconfig[k][k2 + '_orig'] = v
 
 
+def regsub_file(pattern, repl, path):
+    with open(path, 'r') as f:
+        text = f.read()
+    text = re.sub(pattern, repl, text)
+    with open(path, 'w') as f:
+        f.write(text)
+
+
 def read_config(opts, config_file='config.py'):
     """Read the repository config
 
@@ -965,10 +973,9 @@ def remove_debuggable_flags(root_dir):
     logging.debug("Removing debuggable flags from %s" % root_dir)
     for root, dirs, files in os.walk(root_dir):
         if 'AndroidManifest.xml' in files:
-            path = os.path.join(root, 'AndroidManifest.xml')
-            p = FDroidPopen(['sed', '-i', 's/android:debuggable="[^"]*"//g', path], output=False)
-            if p.returncode != 0:
-                raise BuildException("Failed to remove debuggable flags of %s" % path)
+            regsub_file(r'android:debuggable="[^"]*"',
+                        '',
+                        os.path.join(root, 'AndroidManifest.xml'))
 
 
 # Extract some information from the AndroidManifest.xml at the given path.
@@ -1305,9 +1312,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
         if build['target']:
             n = build["target"].split('-')[1]
-            FDroidPopen(['sed', '-i',
-                         's@compileSdkVersion *[0-9]*@compileSdkVersion ' + n + '@g',
-                         'build.gradle'], cwd=root_dir, output=False)
+            regsub_file(r'compileSdkVersion[ =]+[0-9]+',
+                        r'compileSdkVersion %s' % n,
+                        os.path.join(root_dir, 'build.gradle'))
 
     # Remove forced debuggable flags
     remove_debuggable_flags(root_dir)
@@ -1319,34 +1326,27 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             if not os.path.isfile(path):
                 continue
             if has_extension(path, 'xml'):
-                p = FDroidPopen(['sed', '-i',
-                                 's/android:versionName="[^"]*"/android:versionName="' + build['version'] + '"/g',
-                                 path], output=False)
-                if p.returncode != 0:
-                    raise BuildException("Failed to amend manifest")
+                regsub_file(r'android:versionName="[^"]*"',
+                            r'android:versionName="%s"' % build['version'],
+                            path)
             elif has_extension(path, 'gradle'):
-                p = FDroidPopen(['sed', '-i',
-                                 's/versionName *=* *.*/versionName = "' + build['version'] + '"/g',
-                                 path], output=False)
-                if p.returncode != 0:
-                    raise BuildException("Failed to amend build.gradle")
+                regsub_file(r"""(\s*)versionName[\s'"=]+.*""",
+                            r"""\1versionName '%s'""" % build['version'],
+                            path)
+
     if build['forcevercode']:
         logging.info("Changing the version code")
         for path in manifest_paths(root_dir, flavours):
             if not os.path.isfile(path):
                 continue
             if has_extension(path, 'xml'):
-                p = FDroidPopen(['sed', '-i',
-                                 's/android:versionCode="[^"]*"/android:versionCode="' + build['vercode'] + '"/g',
-                                 path], output=False)
-                if p.returncode != 0:
-                    raise BuildException("Failed to amend manifest")
+                regsub_file(r'android:versionCode="[^"]*"',
+                            r'android:versionCode="%s"' % build['vercode'],
+                            path)
             elif has_extension(path, 'gradle'):
-                p = FDroidPopen(['sed', '-i',
-                                 's/versionCode *=* *[0-9]*/versionCode = ' + build['vercode'] + '/g',
-                                 path], output=False)
-                if p.returncode != 0:
-                    raise BuildException("Failed to amend build.gradle")
+                regsub_file(r'versionCode[ =]+[0-9]+',
+                            r'versionCode %s' % build['vercode'],
+                            path)
 
     # Delete unwanted files
     if build['rm']:

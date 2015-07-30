@@ -436,10 +436,9 @@ def adapt_gradle(build_dir):
             if not os.path.isfile(path):
                 continue
             logging.debug("Adapting %s at %s" % (filename, path))
-
-            FDroidPopen(['sed', '-i',
-                         r's@buildToolsVersion\([ =]\+\).*@buildToolsVersion\1"'
-                         + config['build_tools'] + '"@g', path])
+            common.regsub_file(r"""(\s*)buildToolsVersion[\s'"=]+.*""",
+                               r"""\1buildToolsVersion '%s'""" % config['build_tools'],
+                               path)
 
 
 def capitalize_intact(string):
@@ -631,17 +630,13 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                   'package']
         if thisbuild['target']:
             target = thisbuild["target"].split('-')[1]
-            FDroidPopen(['sed', '-i',
-                         's@<platform>[0-9]*</platform>@<platform>'
-                         + target + '</platform>@g',
-                         'pom.xml'],
-                        cwd=root_dir)
+            common.regsub_file(r'<platform>[0-9]*</platform>',
+                               r'<platform>%s</platform>' % target,
+                               os.path.join(root_dir, 'pom.xml'))
             if '@' in thisbuild['maven']:
-                FDroidPopen(['sed', '-i',
-                             's@<platform>[0-9]*</platform>@<platform>'
-                             + target + '</platform>@g',
-                             'pom.xml'],
-                            cwd=maven_dir)
+                common.regsub_file(r'<platform>[0-9]*</platform>',
+                                   r'<platform>%s</platform>' % target,
+                                   os.path.join(maven_dir, 'pom.xml'))
 
         p = FDroidPopen(mvncmd, cwd=maven_dir)
 
