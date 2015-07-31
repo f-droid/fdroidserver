@@ -70,10 +70,16 @@ def main():
     # find root install prefix
     tmp = os.path.dirname(sys.argv[0])
     if os.path.basename(tmp) == 'bin':
-        prefix = os.path.dirname(os.path.dirname(__file__))  # use .egg layout
-        if not prefix.endswith('.egg'):  # use UNIX layout
-            prefix = os.path.dirname(tmp)
-        examplesdir = prefix + '/share/doc/fdroidserver/examples'
+        prefix = None
+        egg_link = os.path.join(tmp, '..', 'local/lib/python2.7/site-packages/fdroidserver.egg-link')
+        if os.path.exists(egg_link):
+            # installed from local git repo
+            examplesdir = os.path.join(open(egg_link).readline().rstrip(), 'examples')
+        else:
+            prefix = os.path.dirname(os.path.dirname(__file__))  # use .egg layout
+            if not prefix.endswith('.egg'):  # use UNIX layout
+                prefix = os.path.dirname(tmp)
+            examplesdir = prefix + '/share/doc/fdroidserver/examples'
     else:
         # we're running straight out of the git repo
         prefix = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
