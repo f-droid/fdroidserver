@@ -3,6 +3,12 @@
 from setuptools import setup
 import sys
 
+# workaround issue with easy_install on OSX, where sys.prefix is not an installable location
+if sys.platform == 'darwin' and sys.prefix.startswith('/System'):
+    data_prefix = '/Library/Python/2.7/site-packages'
+else:
+    data_prefix = sys.prefix
+
 setup(name='fdroidserver',
       version='0.3.0',
       description='F-Droid Server Tools',
@@ -13,7 +19,7 @@ setup(name='fdroidserver',
       packages=['fdroidserver'],
       scripts=['fdroid', 'fd-commit'],
       data_files=[
-          (sys.prefix + '/share/doc/fdroidserver/examples',
+          (data_prefix + '/share/doc/fdroidserver/examples',
               ['buildserver/config.buildserver.py',
                   'examples/config.py',
                   'examples/makebs.config.py',
