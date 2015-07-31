@@ -70,7 +70,9 @@ def main():
     # find root install prefix
     tmp = os.path.dirname(sys.argv[0])
     if os.path.basename(tmp) == 'bin':
-        prefix = os.path.dirname(tmp)
+        prefix = os.path.dirname(os.path.dirname(__file__))  # use .egg layout
+        if not prefix.endswith('.egg'):  # use UNIX layout
+            prefix = os.path.dirname(tmp)
         examplesdir = prefix + '/share/doc/fdroidserver/examples'
     else:
         # we're running straight out of the git repo
