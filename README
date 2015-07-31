@@ -18,16 +18,36 @@ Installing
 The easiest way to install the `fdroidserver` tools is on Debian, Ubuntu, Mint
 or other Debian based distributions, you can install using:
 
+    sudo apt-get install fdroidserver
+
+For older Ubuntu releases or to get the latest version, you can get
+`fdroidserver` from the Guardian Project PPA (the signing key
+fingerprint is `6B80 A842 07B3 0AC9 DEE2 35FE F50E ADDD 2234 F563`)
+
     sudo add-apt-repository ppa:guardianproject/ppa
     sudo apt-get update
     sudo apt-get install fdroidserver
 
-But you can also use `virtualenv` and `pip` python tools that also work on other
-distributions.
+On OSX, `fdroidserver` is available from third party package managers,
+like Homebrew, MacPorts, and Fink:
 
-First, make sure you have installed the python header files, virtualenv and pip.
-They should be included in your OS's default package manager or you can install
-them via other mechanisms like Brew/dnf/pacman/emerge/Fink/MacPorts.
+    sudo brew install fdroidserver
+
+For any platform where Python's `easy_install` is an option (e.g. OSX
+or Cygwin, you can use it:
+
+    sudo easy_install fdroidserver
+
+Python's `pip` also works:
+
+    sudo pip install fdroidserver
+
+The combination of `virtualenv` and `pip` is great for testing out the
+latest versions of `fdroidserver`.  Using `pip`, `fdroidserver` can
+even be installed straight from git.  First, make sure you have
+installed the python header files, virtualenv and pip.  They should be
+included in your OS's default package manager or you can install them
+via other mechanisms like Brew/dnf/pacman/emerge/Fink/MacPorts.
 
 For Debian based distributions:
 
