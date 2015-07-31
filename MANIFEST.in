@@ -4,7 +4,6 @@ include fd-commit
 include fdroid
 include jenkins-build
 include makebuildserver
-include updateplugin
 include buildserver/config.buildserver.py
 include buildserver/fixpaths.sh
 include buildserver/cookbooks/android-ndk/recipes/default.rb
@@ -27,7 +26,6 @@ include examples/opensc-fdroid.cfg
 include tests/getsig/run.sh
 include tests/getsig/make.sh
 include tests/getsig/getsig.java
-include tests/getsig/getsig.class
 include tests/run-tests
 include tests/update.TestCase
 include tests/urzip.apk
