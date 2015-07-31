@@ -2051,9 +2051,9 @@ def genkeystore(localconfig):
                      '-keypass:file', config['keypassfile'],
                      '-dname', localconfig['keydname']])
     # TODO keypass should be sent via stdin
-    os.chmod(localconfig['keystore'], 0o0600)
     if p.returncode != 0:
         raise BuildException("Failed to generate key", p.output)
+    os.chmod(localconfig['keystore'], 0o0600)
     # now show the lovely key that was just generated
     p = FDroidPopen(['keytool', '-list', '-v',
                      '-keystore', localconfig['keystore'],
