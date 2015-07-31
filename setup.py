@@ -26,11 +26,10 @@ setup(name='fdroidserver',
                   'examples/opensc-fdroid.cfg',
                   'examples/fdroid-icon.png']),
       ],
-      install_requires=[
+      install_requires=[  # should include 'python-magic' but its not strictly required
           'mwclient',
           'paramiko',
           'Pillow',
-          'python-magic',
           'apache-libcloud >= 0.14.1',
           'pyasn1',
           'pyasn1-modules',

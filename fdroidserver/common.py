@@ -29,7 +29,6 @@ import time
 import operator
 import Queue
 import threading
-import magic
 import logging
 import hashlib
 import socket
@@ -1441,6 +1440,37 @@ def getpaths(build_dir, build, field):
     return paths
 
 
+def get_mime_type(path):
+    '''
+    There are two incompatible versions of the 'magic' module, one
+    that comes as part of libmagic, which is what Debian includes as
+    python-magic, then another called python-magic that is a separate
+    project that wraps libmagic.  The second is 'magic' on pypi, so
+    both need to be supported.  Then on platforms where libmagic is
+    not easily included, e.g. OSX and Windows, fallback to the
+    built-in 'mimetypes' module so this will work without
+    libmagic. Hence this function with the following hacks:
+    '''
+
+    try:
+        import magic
+        ms = None
+        try:
+            ms = magic.open(magic.MIME_TYPE)
+            ms.load()
+            return magic.from_file(path, mime=True)
+        except AttributeError:
+            return ms.file(path)
+        if ms is not None:
+            ms.close()
+    except UnicodeError:
+        logging.warn('Found malformed magic number at %s' % path)
+    except ImportError:
+        import mimetypes
+        mimetypes.init()
+        return mimetypes.guess_type(path, strict=False)
+
+
 # Scan the source code in the given directory (and all subdirectories)
 # and return the number of fatal problems encountered
 def scan_source(build_dir, root_dir, thisbuild):
@@ -1471,12 +1501,6 @@ def scan_source(build_dir, root_dir, thisbuild):
 
     scanignore_worked = set()
     scandelete_worked = set()
-
-    try:
-        ms = magic.open(magic.MIME_TYPE)
-        ms.load()
-    except AttributeError:
-        ms = None
 
     def toignore(fd):
         for p in scanignore:
@@ -1526,10 +1550,7 @@ def scan_source(build_dir, root_dir, thisbuild):
             fp = os.path.join(r, curfile)
             fd = fp[len(build_dir) + 1:]
 
-            try:
-                mime = magic.from_file(fp, mime=True) if ms is None else ms.file(fp)
-            except UnicodeError:
-                warnproblem('malformed magic number', fd)
+            mime = get_mime_type(fp)
 
             if mime == 'application/x-sharedlib':
                 count += handleproblem('shared library', fd, fp)
@@ -1537,7 +1558,7 @@ def scan_source(build_dir, root_dir, thisbuild):
             elif mime == 'application/x-archive':
                 count += handleproblem('static library', fd, fp)
 
-            elif mime == 'application/x-executable':
+            elif mime == 'application/x-executable' or mime == 'application/x-mach-binary':
                 count += handleproblem('binary executable', fd, fp)
 
             elif mime == 'application/x-java-applet':
@@ -1581,8 +1602,6 @@ def scan_source(build_dir, root_dir, thisbuild):
                     if any(suspect.match(line) for suspect in usual_suspects):
                         count += handleproblem('usual suspect at line %d' % i, fd, fp)
                         break
-    if ms is not None:
-        ms.close()
 
     for p in scanignore:
         if p not in scanignore_worked:
