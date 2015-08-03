@@ -15,8 +15,8 @@ Alternatively, visit [https://f-droid.org/manual/](https://f-droid.org/manual/)
 Installing
 ----------
 
-The easiest way to install the `fdroidserver` tools is on Debian, Ubuntu, Mint
-or other Debian based distributions, you can install using:
+The easiest way to install the `fdroidserver` tools is on Ubuntu, Mint or other
+Ubuntu based distributions, you can install using:
 
     sudo apt-get install fdroidserver
 
