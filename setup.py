@@ -3,9 +3,9 @@
 from setuptools import setup
 import sys
 
-# workaround issue with easy_install on OSX, where sys.prefix is not an installable location
+# workaround issue on OSX, where sys.prefix is not an installable location
 if sys.platform == 'darwin' and sys.prefix.startswith('/System'):
-    data_prefix = '/Library/Python/2.7/site-packages'
+    data_prefix = '.'
 else:
     data_prefix = sys.prefix
 
