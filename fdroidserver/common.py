@@ -29,7 +29,6 @@ import time
 import operator
 import Queue
 import threading
-import magic
 import logging
 import hashlib
 import socket
@@ -119,6 +118,14 @@ def fill_config_defaults(thisconfig):
             if exp is not None:
                 thisconfig[k][k2] = exp
                 thisconfig[k][k2 + '_orig'] = v
+
+
+def regsub_file(pattern, repl, path):
+    with open(path, 'r') as f:
+        text = f.read()
+    text = re.sub(pattern, repl, text)
+    with open(path, 'w') as f:
+        f.write(text)
 
 
 def read_config(opts, config_file='config.py'):
@@ -965,10 +972,9 @@ def remove_debuggable_flags(root_dir):
     logging.debug("Removing debuggable flags from %s" % root_dir)
     for root, dirs, files in os.walk(root_dir):
         if 'AndroidManifest.xml' in files:
-            path = os.path.join(root, 'AndroidManifest.xml')
-            p = FDroidPopen(['sed', '-i', 's/android:debuggable="[^"]*"//g', path], output=False)
-            if p.returncode != 0:
-                raise BuildException("Failed to remove debuggable flags of %s" % path)
+            regsub_file(r'android:debuggable="[^"]*"',
+                        '',
+                        os.path.join(root, 'AndroidManifest.xml'))
 
 
 # Extract some information from the AndroidManifest.xml at the given path.
@@ -1305,9 +1311,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
         if build['target']:
             n = build["target"].split('-')[1]
-            FDroidPopen(['sed', '-i',
-                         's@compileSdkVersion *[0-9]*@compileSdkVersion ' + n + '@g',
-                         'build.gradle'], cwd=root_dir, output=False)
+            regsub_file(r'compileSdkVersion[ =]+[0-9]+',
+                        r'compileSdkVersion %s' % n,
+                        os.path.join(root_dir, 'build.gradle'))
 
     # Remove forced debuggable flags
     remove_debuggable_flags(root_dir)
@@ -1319,34 +1325,27 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             if not os.path.isfile(path):
                 continue
             if has_extension(path, 'xml'):
-                p = FDroidPopen(['sed', '-i',
-                                 's/android:versionName="[^"]*"/android:versionName="' + build['version'] + '"/g',
-                                 path], output=False)
-                if p.returncode != 0:
-                    raise BuildException("Failed to amend manifest")
+                regsub_file(r'android:versionName="[^"]*"',
+                            r'android:versionName="%s"' % build['version'],
+                            path)
             elif has_extension(path, 'gradle'):
-                p = FDroidPopen(['sed', '-i',
-                                 's/versionName *=* *.*/versionName = "' + build['version'] + '"/g',
-                                 path], output=False)
-                if p.returncode != 0:
-                    raise BuildException("Failed to amend build.gradle")
+                regsub_file(r"""(\s*)versionName[\s'"=]+.*""",
+                            r"""\1versionName '%s'""" % build['version'],
+                            path)
+
     if build['forcevercode']:
         logging.info("Changing the version code")
         for path in manifest_paths(root_dir, flavours):
             if not os.path.isfile(path):
                 continue
             if has_extension(path, 'xml'):
-                p = FDroidPopen(['sed', '-i',
-                                 's/android:versionCode="[^"]*"/android:versionCode="' + build['vercode'] + '"/g',
-                                 path], output=False)
-                if p.returncode != 0:
-                    raise BuildException("Failed to amend manifest")
+                regsub_file(r'android:versionCode="[^"]*"',
+                            r'android:versionCode="%s"' % build['vercode'],
+                            path)
             elif has_extension(path, 'gradle'):
-                p = FDroidPopen(['sed', '-i',
-                                 's/versionCode *=* *[0-9]*/versionCode = ' + build['vercode'] + '/g',
-                                 path], output=False)
-                if p.returncode != 0:
-                    raise BuildException("Failed to amend build.gradle")
+                regsub_file(r'versionCode[ =]+[0-9]+',
+                            r'versionCode %s' % build['vercode'],
+                            path)
 
     # Delete unwanted files
     if build['rm']:
@@ -1441,6 +1440,37 @@ def getpaths(build_dir, build, field):
     return paths
 
 
+def get_mime_type(path):
+    '''
+    There are two incompatible versions of the 'magic' module, one
+    that comes as part of libmagic, which is what Debian includes as
+    python-magic, then another called python-magic that is a separate
+    project that wraps libmagic.  The second is 'magic' on pypi, so
+    both need to be supported.  Then on platforms where libmagic is
+    not easily included, e.g. OSX and Windows, fallback to the
+    built-in 'mimetypes' module so this will work without
+    libmagic. Hence this function with the following hacks:
+    '''
+
+    try:
+        import magic
+        ms = None
+        try:
+            ms = magic.open(magic.MIME_TYPE)
+            ms.load()
+            return magic.from_file(path, mime=True)
+        except AttributeError:
+            return ms.file(path)
+        if ms is not None:
+            ms.close()
+    except UnicodeError:
+        logging.warn('Found malformed magic number at %s' % path)
+    except ImportError:
+        import mimetypes
+        mimetypes.init()
+        return mimetypes.guess_type(path, strict=False)
+
+
 # Scan the source code in the given directory (and all subdirectories)
 # and return the number of fatal problems encountered
 def scan_source(build_dir, root_dir, thisbuild):
@@ -1471,12 +1501,6 @@ def scan_source(build_dir, root_dir, thisbuild):
 
     scanignore_worked = set()
     scandelete_worked = set()
-
-    try:
-        ms = magic.open(magic.MIME_TYPE)
-        ms.load()
-    except AttributeError:
-        ms = None
 
     def toignore(fd):
         for p in scanignore:
@@ -1526,10 +1550,7 @@ def scan_source(build_dir, root_dir, thisbuild):
             fp = os.path.join(r, curfile)
             fd = fp[len(build_dir) + 1:]
 
-            try:
-                mime = magic.from_file(fp, mime=True) if ms is None else ms.file(fp)
-            except UnicodeError:
-                warnproblem('malformed magic number', fd)
+            mime = get_mime_type(fp)
 
             if mime == 'application/x-sharedlib':
                 count += handleproblem('shared library', fd, fp)
@@ -1537,7 +1558,7 @@ def scan_source(build_dir, root_dir, thisbuild):
             elif mime == 'application/x-archive':
                 count += handleproblem('static library', fd, fp)
 
-            elif mime == 'application/x-executable':
+            elif mime == 'application/x-executable' or mime == 'application/x-mach-binary':
                 count += handleproblem('binary executable', fd, fp)
 
             elif mime == 'application/x-java-applet':
@@ -1581,8 +1602,6 @@ def scan_source(build_dir, root_dir, thisbuild):
                     if any(suspect.match(line) for suspect in usual_suspects):
                         count += handleproblem('usual suspect at line %d' % i, fd, fp)
                         break
-    if ms is not None:
-        ms.close()
 
     for p in scanignore:
         if p not in scanignore_worked:
@@ -2032,9 +2051,9 @@ def genkeystore(localconfig):
                      '-keypass:file', config['keypassfile'],
                      '-dname', localconfig['keydname']])
     # TODO keypass should be sent via stdin
-    os.chmod(localconfig['keystore'], 0o0600)
     if p.returncode != 0:
         raise BuildException("Failed to generate key", p.output)
+    os.chmod(localconfig['keystore'], 0o0600)
     # now show the lovely key that was just generated
     p = FDroidPopen(['keytool', '-list', '-v',
                      '-keystore', localconfig['keystore'],

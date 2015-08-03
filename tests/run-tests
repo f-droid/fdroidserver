@@ -35,12 +35,12 @@ create_fake_android_home() {
 
 create_test_dir() {
     test -e $WORKSPACE/.testfiles || mkdir $WORKSPACE/.testfiles
-    mktemp --directory --tmpdir=$WORKSPACE/.testfiles
+    TMPDIR=$WORKSPACE/.testfiles  mktemp -d
 }
 
 create_test_file() {
     test -e $WORKSPACE/.testfiles || mkdir $WORKSPACE/.testfiles
-    mktemp --tmpdir=$WORKSPACE/.testfiles
+    TMPDIR=$WORKSPACE/.testfiles  mktemp
 }
 
 #------------------------------------------------------------------------------#
@@ -124,6 +124,7 @@ REPOROOT=`create_test_dir`
 cd $REPOROOT
 $fdroid init
 $fdroid update --create-metadata
+$fdroid readmeta
 $fdroid server update --local-copy-dir=/tmp/fdroid
 
 # now test the errors work
@@ -160,6 +161,7 @@ cd $REPOROOT
 $fdroid init
 copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
+$fdroid readmeta
 grep -F '<application id=' repo/index.xml > /dev/null
 
 LOCALCOPYDIR=`create_test_dir`/fdroid
@@ -263,6 +265,7 @@ $fdroid init --keystore $KEYSTORE --android-home $STORED_ANDROID_HOME --no-promp
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
+$fdroid readmeta
 grep -F '<application id=' repo/index.xml > /dev/null
 test -e repo/index.xml
 test -e repo/index.jar
@@ -278,6 +281,7 @@ mkdir repo
 copy_apks_into_repo $REPOROOT
 $fdroid init
 $fdroid update --create-metadata
+$fdroid readmeta
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -291,6 +295,7 @@ $fdroid init --keystore $KEYSTORE
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
+$fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 grep -F '<application id=' repo/index.xml > /dev/null
@@ -318,6 +323,7 @@ $fdroid update --create-key
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
+$fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 grep -F '<application id=' repo/index.xml > /dev/null
@@ -333,11 +339,14 @@ $fdroid init --keystore $KEYSTORE
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata
+$fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 grep -F '<application id=' repo/index.xml > /dev/null
-cp $WORKSPACE/tests/urzip.apk $REPOROOT/
+test -e $REPOROOT/repo/info.guardianproject.urzip_100.apk || \
+    cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
 $fdroid update --create-metadata
+$fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 grep -F '<application id=' repo/index.xml > /dev/null
@@ -361,8 +370,8 @@ KEYSTORE=$REPOROOT/keystore.jks
 cd $REPOROOT
 touch config.py
 touch fdroid-icon.png
-mkdir repo/
-cp $WORKSPACE/tests/urzip.apk $REPOROOT/
+mkdir repo
+cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
 set +e
 $fdroid update --create-metadata
 if [ $? -eq 0 ]; then
@@ -400,6 +409,7 @@ $fdroid init --keystore $KEYSTORE
 test -e $KEYSTORE
 cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
 $fdroid update --create-metadata
+$fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 grep -F '<application id=' repo/index.xml > /dev/null

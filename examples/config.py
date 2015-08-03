@@ -3,16 +3,17 @@
 # Copy this file to config.py, then amend the settings below according to
 # your system configuration.
 
-# Path to the Android SDK
-sdk_path = "$ANDROID_HOME"
+# Custom path to the Android SDK, defaults to $ANDROID_HOME
+# sdk_path = "/opt/android-sdk"
 
-# Path to various versions of the Android NDK
-# Most users will have the latest at $ANDROID_NDK, which is used by default
-# If a version is missing or assigned to None, it is assumed not installed
-ndk_paths = {
-    'r9b': None,
-    'r10e': "$ANDROID_NDK"
-}
+# Custom paths to various versions of the Android NDK, defaults to 'r10e' set
+# to $ANDROID_NDK.  Most users will have the latest at $ANDROID_NDK, which is
+# used by default.  If a version is missing or assigned to None, it is assumed
+# not installed.
+# ndk_paths = {
+#    'r9b': "/opt/android-ndk-r9b",
+#    'r10e': "/opt/android-ndk"
+# }
 
 # Build tools version to be used
 build_tools = "22.0.1"

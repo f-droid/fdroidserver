@@ -50,13 +50,21 @@ cd $WORKSPACE/tests
 
 
 #------------------------------------------------------------------------------#
-# test building the source tarball
+# test building the source tarball, then installing it
 cd $WORKSPACE
 python2 setup.py sdist
 
+rm -rf $WORKSPACE/env
+virtualenv --python=python2 $WORKSPACE/env
+. $WORKSPACE/env/bin/activate
+pip install dist/fdroidserver-*.tar.gz
+
+# run tests in new pip+virtualenv install
+fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests $apksource
+
 
 #------------------------------------------------------------------------------#
-# test install using site packages
+# test install using install direct from git repo
 cd $WORKSPACE
 rm -rf $WORKSPACE/env
 virtualenv --python=python2 --system-site-packages $WORKSPACE/env
@@ -65,7 +73,6 @@ pip install -e $WORKSPACE
 python2 setup.py install
 
 # run tests in new pip+virtualenv install
-. $WORKSPACE/env/bin/activate
 fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests $apksource
 
 

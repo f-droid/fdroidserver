@@ -1,0 +1,218 @@
+apply plugin: 'com.android.application'
+
+if ( !hasProperty( 'sourceDeps' ) ) {
+
+    logger.info "Setting up *binary* dependencies for F-Droid (if you'd prefer to build from source, pass the -PsourceDeps argument to gradle while building)."
+
+    repositories {
+        jcenter()
+
+        // This is here until we sort out all dependencies from mavenCentral/jcenter. Once all of
+        // the dependencies below have been sorted out, this can be removed.
+        flatDir {
+            dirs 'libs/binaryDeps'
+        }
+    }
+
+    dependencies {
+
+        compile 'com.android.support:support-v4:22.1.0',
+                'com.android.support:appcompat-v7:22.1.0',
+                'com.android.support:support-annotations:22.1.0',
+
+                'org.thoughtcrime.ssl.pinning:AndroidPinning:1.0.0',
+                'com.nostra13.universalimageloader:universal-image-loader:1.9.4',
+                'com.google.zxing:core:3.2.0',
+                'eu.chainfire:libsuperuser:1.0.0.201504231659',
+
+                // We use a slightly modified spongycastle, see
+                // openkeychain/spongycastle with some changes on top of 1.51.0.0
+                'com.madgag.spongycastle:pkix:1.51.0.0',
+                'com.madgag.spongycastle:prov:1.51.0.0',
+                'com.madgag.spongycastle:core:1.51.0.0'
+
+        // Upstream doesn't have a binary on mavenCentral/jcenter yet:
+        // https://github.com/kolavar/android-support-v4-preferencefragment/issues/13
+        compile(name: 'support-v4-preferencefragment-release', ext: 'aar')
+
+        // Fork for F-Droid, including support for https. Not merged into upstream
+        // yet (seems to be a little unsupported as of late), so not using mavenCentral/jcenter.
+        compile(name: 'nanohttpd-2.1.0')
+
+        // Upstream doesn't have a binary on mavenCentral.
+        compile(name: 'zipsigner')
+
+        // Project semi-abandoned, 3.4.1 is from 2011 and we use trunk from 2013
+        compile(name: 'jmdns')
+
+        androidTestCompile 'commons-io:commons-io:2.2'
+    }
+
+} else {
+
+    logger.info "Setting up *source* dependencies for F-Droid (because you passed in the -PsourceDeps argument to gradle while building)."
+
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        compile project(':extern:AndroidPinning')
+        compile project(':extern:UniversalImageLoader:library')
+        compile project(':extern:libsuperuser:libsuperuser')
+        compile project(':extern:nanohttpd:core')
+        compile project(':extern:jmdns')
+        compile project(':extern:zipsigner')
+        compile project(':extern:zxing-core')
+        compile( project(':extern:support-v4-preferencefragment') ) {
+            exclude module: 'support-v4'
+        }
+
+        // Until the android team updates the gradle plugin version from 0.10.0 to
+        // a newer version, we can't build this from source with our gradle version
+        // of 1.0.0. They use API's which have been moved in the newer plugin.
+        // So yes, this is a little annoying that our "source dependencies" include
+        // a bunch of binaries from jcenter - but the ant build file (which is the
+        // one used to build F-Droid which is distributed on https://f-droid.org
+        // builds these from source - well - not support-v4).
+        //
+        // If the android team gets the build script working with the newer plugin,
+        // then you can find the relevant portions of the ../build.gradle file that
+        // include magic required to make it work at around about the v0.78 git tag.
+        // They have since been removed to clean up the build file.
+        compile 'com.android.support:support-v4:22.1.0',
+                'com.android.support:appcompat-v7:22.1.0',
+                'com.android.support:support-annotations:22.1.0'
+
+        androidTestCompile 'commons-io:commons-io:2.2'
+    }
+
+}
+
+task cleanBinaryDeps(type: Delete) {
+
+    enabled = project.hasProperty('sourceDeps')
+    description = "Removes all .jar and .aar files from F-Droid/libs/. Requires the sourceDeps property to be set (\"gradle -PsourceDeps cleanBinaryDeps\")"
+
+    delete fileTree('libs/binaryDeps') {
+        include '*.aar'
+        include '*.jar'
+    }
+}
+
+task binaryDeps(type: Copy, dependsOn: ':F-Droid:prepareReleaseDependencies') {
+
+    enabled = project.hasProperty('sourceDeps')
+    description = "Copies .jar and .aar files from subproject dependencies in extern/ to F-Droid/libs. Requires the sourceDeps property to be set (\"gradle -PsourceDeps binaryDeps\")"
+
+    from ('../extern/' ) {
+        include 'support-v4-preferencefragment/build/outputs/aar/support-v4-preferencefragment-release.aar',
+                'nanohttpd/core/build/libs/nanohttpd-2.1.0.jar',
+                'zipsigner/build/libs/zipsigner.jar',
+                'jmdns/build/libs/jmdns.jar',
+                'Support/v4/build/libs/support-v4.jar'
+    }
+
+    into 'libs/binaryDeps'
+
+    includeEmptyDirs false
+
+    eachFile { FileCopyDetails details ->
+        // Don't copy to a sub folder such as libs/binaryDeps/Project/build/outputs/aar/project.aar, but
+        // rather libs/binaryDeps/project.aar.
+        details.path = details.name
+    }
+
+}
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion '22.0.1'
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        androidTest.setRoot('test')
+        androidTest {
+            manifest.srcFile 'test/AndroidManifest.xml'
+            java.srcDirs = ['test/src']
+            resources.srcDirs = ['test/src']
+            aidl.srcDirs = ['test/src']
+            renderscript.srcDirs = ['test/src']
+            res.srcDirs = ['test/res']
+            assets.srcDirs = ['test/assets']
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+        buildTypes {
+            debug {
+                debuggable true
+            }
+        }
+    }
+
+    compileOptions {
+        compileOptions.encoding = "UTF-8"
+
+        // Use Java 1.7, requires minSdk 8
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    // Enable all Android lint warnings
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:all"
+        }
+    }
+
+}
+
+// This person took the example code below from another blogpost online, however
+// I lost the reference to it:
+// http://stackoverflow.com/questions/23297562/gradle-javadoc-and-android-documentation
+android.applicationVariants.all { variant ->
+
+    task("generate${variant.name}Javadoc", type: Javadoc) {
+        title = "$name $version API"
+        description "Generates Javadoc for F-Droid."
+        source = variant.javaCompile.source
+
+        def sdkDir
+        Properties properties = new Properties()
+        File localProps = project.rootProject.file('local.properties')
+        if (localProps.exists()) {
+            properties.load(localProps.newDataInputStream())
+            sdkDir = properties.getProperty('sdk.dir')
+        } else {
+            sdkDir = System.getenv('ANDROID_HOME')
+        }
+        if (!sdkDir) {
+            throw new ProjectConfigurationException("Cannot find android sdk. Make sure sdk.dir is defined in local.properties or the environment variable ANDROID_HOME is set.", null)
+        }
+
+        ext.androidJar = "${sdkDir}/platforms/${android.compileSdkVersion}/android.jar"
+        classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
+        options.links("http://docs.oracle.com/javase/7/docs/api/");
+        options.links("http://d.android.com/reference/");
+        exclude '**/BuildConfig.java'
+        exclude '**/R.java'
+    }
+}
