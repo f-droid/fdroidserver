@@ -314,7 +314,7 @@ To build a single version of a single application, you could run the
 following:
 
 @example
-./fdroid build org.fdroid.fdroid:16
+fdroid build org.fdroid.fdroid:16
 @end example
 
 This attempts to build version code 16 (which is version 0.25) of the F-Droid
@@ -336,7 +336,7 @@ tarball containing exactly the source that was used to generate the binary.
 If you were intending to publish these files, you could then run:
 
 @example
-./fdroid publish
+fdroid publish
 @end example
 
 The source tarball would move to the @code{repo} directory (which is the
@@ -366,6 +366,26 @@ all such prebuilts are built either via the metadata or by a reputable third
 party.
 
 
+@section Running "fdroid build" in your app's source
+
+Another option for using @code{fdroid build} is to use a metadata file
+that is included in the app's source itself, rather than in a
+@code{metadata/} folder with lots of other apps.  This metadata file
+should be in the root of your source repo, and be called
+@code{.fdroid.json}, @code{.fdroid.xml}, @code{.fdroid.yaml}, or
+@code{.fdroid.txt}, depending on your preferred data format: JSON,
+XML, YAML, or F-Droid's @code{.txt} format.
+
+Once you have that setup, you can build the most recent version of
+the app using the whole FDroid stack by running:
+
+@example
+fdroid build
+@end example
+
+If you want to build every single version, then specify @code{--all}.
+
+
 @section Direct Installation
 
 You can also build and install directly to a connected device or emulator
@@ -386,7 +406,7 @@ will take a URL and optionally some other parameters, and attempt to construct
 as much information as possible by analysing the source code. Basic usage is:
 
 @example
-./fdroid import --url=http://address.of.project
+fdroid import --url=http://address.of.project
 @end example
 
 For this to work, the URL must point to a project format that the script
