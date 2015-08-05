@@ -1,4 +1,4 @@
-include README
+include README.md
 include COPYING
 include fd-commit
 include fdroid
