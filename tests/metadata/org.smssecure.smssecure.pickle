@@ -753,4 +753,8 @@ NsS'Current Version'
 p224
 S'0.6.0'
 p225
+sS'metadatapath'
+p226
+S'metadata/org.smssecure.smssecure.txt'
+p227
 s.

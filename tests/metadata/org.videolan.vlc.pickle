@@ -5485,4 +5485,8 @@ sS'Current Version'
 p1456
 S'1.2.6'
 p1457
+sS'metadatapath'
+p1458
+S'metadata/org.videolan.vlc.yaml'
+p1459
 s.

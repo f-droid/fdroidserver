@@ -494,23 +494,28 @@ def read_metadata(xref=True):
         if not os.path.exists(basedir):
             os.makedirs(basedir)
 
+    # If there are multiple metadata files for a single appid, then the first
+    # file that is parsed wins over all the others, and the rest throw an
+    # exception. So the original .txt format is parsed first, at least until
+    # newer formats stabilize.
+
     for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
-        appid, appinfo = parse_txt_metadata(metadatapath)
+        appid, appinfo = parse_txt_metadata(apps, metadatapath)
         check_metadata(appinfo)
         apps[appid] = appinfo
 
     for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.json'))):
-        appid, appinfo = parse_json_metadata(metadatapath)
+        appid, appinfo = parse_json_metadata(apps, metadatapath)
         check_metadata(appinfo)
         apps[appid] = appinfo
 
     for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.xml'))):
-        appid, appinfo = parse_xml_metadata(metadatapath)
+        appid, appinfo = parse_xml_metadata(apps, metadatapath)
         check_metadata(appinfo)
         apps[appid] = appinfo
 
     for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.yaml'))):
-        appid, appinfo = parse_yaml_metadata(metadatapath)
+        appid, appinfo = parse_yaml_metadata(apps, metadatapath)
         check_metadata(appinfo)
         apps[appid] = appinfo
 
@@ -586,10 +591,16 @@ def split_list_values(s):
     return [v for v in l if v]
 
 
-def get_default_app_info_list(metadatapath):
+def get_default_app_info_list(apps, metadatapath):
     appid = os.path.splitext(os.path.basename(metadatapath))[0]
+    if appid in apps:
+        logging.critical("'%s' is a duplicate! '%s' is already provided by '%s'"
+                         % (metadatapath, appid, apps[appid]['metadatapath']))
+        sys.exit(1)
+
     thisinfo = {}
     thisinfo.update(app_defaults)
+    thisinfo['metadatapath'] = metadatapath
     if appid is not None:
         thisinfo['id'] = appid
 
@@ -602,7 +613,7 @@ def get_default_app_info_list(metadatapath):
 
 def post_metadata_parse(thisinfo):
 
-    supported_metadata = app_defaults.keys() + ['comments', 'builds', 'id']
+    supported_metadata = app_defaults.keys() + ['comments', 'builds', 'id', 'metadatapath']
     for k, v in thisinfo.iteritems():
         if k not in supported_metadata:
             raise MetaDataException("Unrecognised metadata: {0}: {1}"
@@ -720,9 +731,9 @@ def _decode_dict(data):
     return rv
 
 
-def parse_json_metadata(metadatapath):
+def parse_json_metadata(apps, metadatapath):
 
-    appid, thisinfo = get_default_app_info_list(metadatapath)
+    appid, thisinfo = get_default_app_info_list(apps, metadatapath)
 
     # fdroid metadata is only strings and booleans, no floats or ints. And
     # json returns unicode, and fdroidserver still uses plain python strings
@@ -737,9 +748,9 @@ def parse_json_metadata(metadatapath):
     return (appid, thisinfo)
 
 
-def parse_xml_metadata(metadatapath):
+def parse_xml_metadata(apps, metadatapath):
 
-    appid, thisinfo = get_default_app_info_list(metadatapath)
+    appid, thisinfo = get_default_app_info_list(apps, metadatapath)
 
     tree = ElementTree.ElementTree(file=metadatapath)
     root = tree.getroot()
@@ -787,9 +798,9 @@ def parse_xml_metadata(metadatapath):
     return (appid, thisinfo)
 
 
-def parse_yaml_metadata(metadatapath):
+def parse_yaml_metadata(apps, metadatapath):
 
-    appid, thisinfo = get_default_app_info_list(metadatapath)
+    appid, thisinfo = get_default_app_info_list(apps, metadatapath)
 
     yamlinfo = yaml.load(open(metadatapath, 'r'), Loader=YamlLoader)
     thisinfo.update(yamlinfo)
@@ -798,7 +809,7 @@ def parse_yaml_metadata(metadatapath):
     return (appid, thisinfo)
 
 
-def parse_txt_metadata(metadatapath):
+def parse_txt_metadata(apps, metadatapath):
 
     linedesc = None
 
@@ -874,7 +885,7 @@ def parse_txt_metadata(metadatapath):
             thisinfo['comments'].append([key, comment])
         del curcomments[:]
 
-    appid, thisinfo = get_default_app_info_list(metadatapath)
+    appid, thisinfo = get_default_app_info_list(apps, metadatapath)
     metafile = open(metadatapath, "r")
 
     mode = 0

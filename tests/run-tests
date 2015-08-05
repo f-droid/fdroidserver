@@ -110,6 +110,44 @@ cd $WORKSPACE/docs
 
 
 #------------------------------------------------------------------------------#
+echo_header "test metadata checks"
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+
+touch config.py
+mkdir repo
+cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
+
+set +e
+$fdroid build
+if [ $? -eq 0 ]; then
+    echo "This should have failed because there is no metadata!"
+    exit 1
+else
+    echo "testing metadata checks passed"
+fi
+set -e
+
+mkdir $REPOROOT/metadata/
+cp $WORKSPACE/tests/metadata/org.smssecure.smssecure.txt $REPOROOT/metadata/
+$fdroid readmeta
+
+# now make a fake duplicate
+touch $REPOROOT/metadata/org.smssecure.smssecure.yaml
+
+set +e
+$fdroid readmeta
+if [ $? -eq 0 ]; then
+    echo "This should have failed because there is a duplicate metadata file!"
+    exit 1
+else
+    echo "testing duplicate metadata checks passed"
+fi
+set -e
+
+
+#------------------------------------------------------------------------------#
 echo_header "create a source tarball and use that to build a repo"
 
 cd $WORKSPACE

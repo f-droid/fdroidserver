@@ -2231,4 +2231,8 @@ NsS'Current Version'
 p480
 S'3.0'
 p481
+sS'metadatapath'
+p482
+S'metadata/org.adaway.json'
+p483
 s.
