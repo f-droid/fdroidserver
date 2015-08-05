@@ -202,7 +202,7 @@ def read_config(opts, config_file='config.py'):
 
 def get_ndk_path(version):
     if version is None:
-        version = 'r10e'  # latest
+        version = 'r10e'  # falls back to latest
     paths = config['ndk_paths']
     if version not in paths:
         return ''

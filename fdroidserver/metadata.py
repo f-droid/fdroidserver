@@ -103,7 +103,7 @@ flag_defaults = OrderedDict([
     ('scandelete', []),
     ('build', ''),
     ('buildjni', []),
-    ('ndk', 'r9b'),  # defaults to oldest
+    ('ndk', 'r10e'),  # defaults to latest
     ('preassemble', []),
     ('antcommands', None),
     ('novcheck', False),
