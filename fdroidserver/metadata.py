@@ -586,7 +586,8 @@ def split_list_values(s):
     return [v for v in l if v]
 
 
-def get_default_app_info_list(appid=None):
+def get_default_app_info_list(metafile=None):
+    appid = os.path.splitext(os.path.basename(metafile))[0]
     thisinfo = {}
     thisinfo.update(app_defaults)
     if appid is not None:
@@ -596,7 +597,7 @@ def get_default_app_info_list(appid=None):
     thisinfo['builds'] = []
     thisinfo['comments'] = []
 
-    return thisinfo
+    return appid, thisinfo
 
 
 def post_metadata_parse(thisinfo):
@@ -721,8 +722,7 @@ def _decode_dict(data):
 
 def parse_json_metadata(metafile):
 
-    appid = os.path.basename(metafile)[0:-5]  # strip path and .json
-    thisinfo = get_default_app_info_list(appid)
+    appid, thisinfo = get_default_app_info_list(metafile)
 
     # fdroid metadata is only strings and booleans, no floats or ints. And
     # json returns unicode, and fdroidserver still uses plain python strings
@@ -739,8 +739,7 @@ def parse_json_metadata(metafile):
 
 def parse_xml_metadata(metafile):
 
-    appid = os.path.basename(metafile)[0:-4]  # strip path and .xml
-    thisinfo = get_default_app_info_list(appid)
+    appid, thisinfo = get_default_app_info_list(metafile)
 
     tree = ElementTree.ElementTree(file=metafile)
     root = tree.getroot()
@@ -790,8 +789,7 @@ def parse_xml_metadata(metafile):
 
 def parse_yaml_metadata(metafile):
 
-    appid = os.path.basename(metafile)[0:-5]  # strip path and .yaml
-    thisinfo = get_default_app_info_list(appid)
+    appid, thisinfo = get_default_app_info_list(metafile)
 
     yamlinfo = yaml.load(open(metafile, 'r'), Loader=YamlLoader)
     thisinfo.update(yamlinfo)
@@ -802,7 +800,6 @@ def parse_yaml_metadata(metafile):
 
 def parse_txt_metadata(metafile):
 
-    appid = None
     linedesc = None
 
     def add_buildflag(p, thisbuild):
@@ -877,14 +874,8 @@ def parse_txt_metadata(metafile):
             thisinfo['comments'].append([key, comment])
         del curcomments[:]
 
-    thisinfo = get_default_app_info_list()
-    if metafile:
-        if not isinstance(metafile, file):
-            metafile = open(metafile, "r")
-        appid = metafile.name[9:-4]
-        thisinfo['id'] = appid
-    else:
-        return appid, thisinfo
+    appid, thisinfo = get_default_app_info_list(metafile)
+    metafile = open(metafile, "r")
 
     mode = 0
     buildlines = []
