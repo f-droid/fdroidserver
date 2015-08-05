@@ -456,7 +456,7 @@ following them). In fact, you can standardise all the metadata in a single
 command, without changing the functional content, by running:
 
 @example
-fdroid rewritemetadata
+fdroid rewritemeta
 @end example
 
 The following sections describe the fields recognised within the file.
