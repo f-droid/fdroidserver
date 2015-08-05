@@ -138,6 +138,8 @@ def main():
     allapps = metadata.read_metadata(xref=False)
     apps = common.read_app_args(args, allapps, False)
 
+    filling_ucms = re.compile('^(Tags.*|RepoManifest.*)')
+
     for appid, app in apps.iteritems():
         if app['Disabled']:
             continue
@@ -170,6 +172,14 @@ def main():
         if app['Web Site'] and app['Source Code']:
             if app['Web Site'].lower() == app['Source Code'].lower():
                 warn("Website '%s' is just the app's source code link" % app['Web Site'])
+
+        if filling_ucms.match(app['Update Check Mode']):
+            if all(app[f] == metadata.app_defaults[f] for f in [
+                    'Auto Name',
+                    'Current Version',
+                    'Current Version Code',
+                    ]):
+                warn("UCM is set but it looks like checkupdates hasn't been run yet")
 
         # Missing or incorrect categories
         if not app['Categories']:
