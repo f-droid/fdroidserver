@@ -493,14 +493,14 @@ def checkupdates_app(app, first=True):
             logging.warn('Invalid auto update mode "' + mode + '" on ' + app['id'])
 
     if commitmsg:
-        metafile = os.path.join('metadata', app['id'] + '.txt')
-        metadata.write_metadata(metafile, app)
+        metadatapath = os.path.join('metadata', app['id'] + '.txt')
+        metadata.write_metadata(metadatapath, app)
         if options.commit:
-            logging.info("Commiting update for " + metafile)
+            logging.info("Commiting update for " + metadatapath)
             gitcmd = ["git", "commit", "-m", commitmsg]
             if 'auto_author' in config:
                 gitcmd.extend(['--author', config['auto_author']])
-            gitcmd.extend(["--", metafile])
+            gitcmd.extend(["--", metadatapath])
             if subprocess.call(gitcmd) != 0:
                 logging.error("Git commit failed")
                 sys.exit(1)

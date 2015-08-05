@@ -418,11 +418,9 @@ def description_html(lines, linkres):
     return ps.text_html
 
 
-def parse_srclib(metafile):
+def parse_srclib(metadatapath):
 
     thisinfo = {}
-    if metafile and not isinstance(metafile, file):
-        metafile = open(metafile, "r")
 
     # Defaults for fields that come from metadata
     thisinfo['Repo Type'] = ''
@@ -430,8 +428,10 @@ def parse_srclib(metafile):
     thisinfo['Subdir'] = None
     thisinfo['Prepare'] = None
 
-    if metafile is None:
+    if not os.path.exists(metadatapath):
         return thisinfo
+
+    metafile = open(metadatapath, "r")
 
     n = 0
     for line in metafile:
@@ -475,9 +475,9 @@ def read_srclibs():
     if not os.path.exists(srcdir):
         os.makedirs(srcdir)
 
-    for metafile in sorted(glob.glob(os.path.join(srcdir, '*.txt'))):
-        srclibname = os.path.basename(metafile[:-4])
-        srclibs[srclibname] = parse_srclib(metafile)
+    for metadatapath in sorted(glob.glob(os.path.join(srcdir, '*.txt'))):
+        srclibname = os.path.basename(metadatapath[:-4])
+        srclibs[srclibname] = parse_srclib(metadatapath)
 
 
 # Read all metadata. Returns a list of 'app' objects (which are dictionaries as
@@ -494,23 +494,23 @@ def read_metadata(xref=True):
         if not os.path.exists(basedir):
             os.makedirs(basedir)
 
-    for metafile in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
-        appid, appinfo = parse_txt_metadata(metafile)
+    for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
+        appid, appinfo = parse_txt_metadata(metadatapath)
         check_metadata(appinfo)
         apps[appid] = appinfo
 
-    for metafile in sorted(glob.glob(os.path.join('metadata', '*.json'))):
-        appid, appinfo = parse_json_metadata(metafile)
+    for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.json'))):
+        appid, appinfo = parse_json_metadata(metadatapath)
         check_metadata(appinfo)
         apps[appid] = appinfo
 
-    for metafile in sorted(glob.glob(os.path.join('metadata', '*.xml'))):
-        appid, appinfo = parse_xml_metadata(metafile)
+    for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.xml'))):
+        appid, appinfo = parse_xml_metadata(metadatapath)
         check_metadata(appinfo)
         apps[appid] = appinfo
 
-    for metafile in sorted(glob.glob(os.path.join('metadata', '*.yaml'))):
-        appid, appinfo = parse_yaml_metadata(metafile)
+    for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.yaml'))):
+        appid, appinfo = parse_yaml_metadata(metadatapath)
         check_metadata(appinfo)
         apps[appid] = appinfo
 
@@ -586,8 +586,8 @@ def split_list_values(s):
     return [v for v in l if v]
 
 
-def get_default_app_info_list(metafile=None):
-    appid = os.path.splitext(os.path.basename(metafile))[0]
+def get_default_app_info_list(metadatapath):
+    appid = os.path.splitext(os.path.basename(metadatapath))[0]
     thisinfo = {}
     thisinfo.update(app_defaults)
     if appid is not None:
@@ -666,7 +666,7 @@ def post_metadata_parse(thisinfo):
 
 # Parse metadata for a single application.
 #
-#  'metafile' - the filename to read. The package id for the application comes
+#  'metadatapath' - the filename to read. The package id for the application comes
 #               from this filename. Pass None to get a blank entry.
 #
 # Returns a dictionary containing all the details of the application. There are
@@ -720,14 +720,14 @@ def _decode_dict(data):
     return rv
 
 
-def parse_json_metadata(metafile):
+def parse_json_metadata(metadatapath):
 
-    appid, thisinfo = get_default_app_info_list(metafile)
+    appid, thisinfo = get_default_app_info_list(metadatapath)
 
     # fdroid metadata is only strings and booleans, no floats or ints. And
     # json returns unicode, and fdroidserver still uses plain python strings
     # TODO create schema using https://pypi.python.org/pypi/jsonschema
-    jsoninfo = json.load(open(metafile, 'r'),
+    jsoninfo = json.load(open(metadatapath, 'r'),
                          object_hook=_decode_dict,
                          parse_int=lambda s: s,
                          parse_float=lambda s: s)
@@ -737,15 +737,15 @@ def parse_json_metadata(metafile):
     return (appid, thisinfo)
 
 
-def parse_xml_metadata(metafile):
+def parse_xml_metadata(metadatapath):
 
-    appid, thisinfo = get_default_app_info_list(metafile)
+    appid, thisinfo = get_default_app_info_list(metadatapath)
 
-    tree = ElementTree.ElementTree(file=metafile)
+    tree = ElementTree.ElementTree(file=metadatapath)
     root = tree.getroot()
 
     if root.tag != 'resources':
-        logging.critical(metafile + ' does not have root as <resources></resources>!')
+        logging.critical(metadatapath + ' does not have root as <resources></resources>!')
         sys.exit(1)
 
     supported_metadata = app_defaults.keys()
@@ -787,18 +787,18 @@ def parse_xml_metadata(metafile):
     return (appid, thisinfo)
 
 
-def parse_yaml_metadata(metafile):
+def parse_yaml_metadata(metadatapath):
 
-    appid, thisinfo = get_default_app_info_list(metafile)
+    appid, thisinfo = get_default_app_info_list(metadatapath)
 
-    yamlinfo = yaml.load(open(metafile, 'r'), Loader=YamlLoader)
+    yamlinfo = yaml.load(open(metadatapath, 'r'), Loader=YamlLoader)
     thisinfo.update(yamlinfo)
     post_metadata_parse(thisinfo)
 
     return (appid, thisinfo)
 
 
-def parse_txt_metadata(metafile):
+def parse_txt_metadata(metadatapath):
 
     linedesc = None
 
@@ -874,8 +874,8 @@ def parse_txt_metadata(metafile):
             thisinfo['comments'].append([key, comment])
         del curcomments[:]
 
-    appid, thisinfo = get_default_app_info_list(metafile)
-    metafile = open(metafile, "r")
+    appid, thisinfo = get_default_app_info_list(metadatapath)
+    metafile = open(metadatapath, "r")
 
     mode = 0
     buildlines = []
