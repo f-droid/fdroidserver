@@ -1002,17 +1002,25 @@ def main():
 
     options, parser = parse_commandline()
 
-    metadata_files = glob.glob('.fdroid.*[a-z]')  # ignore files ending in ~
-    if os.path.isdir('metadata'):
-        pass
-    elif len(metadata_files) == 0:
-        raise FDroidException("No app metadata found, nothing to process!")
-    elif len(metadata_files) > 1:
+    # The defaults for .fdroid.* metadata that is included in a git repo are
+    # different than for the standard metadata/ layout because expectations
+    # are different.  In this case, the most common user will be the app
+    # developer working on the latest update of the app on their own machine.
+    local_metadata_files = common.get_local_local_metadata_files()
+    if len(local_metadata_files) == 1:  # there is local metadata in an app's source
+        config = dict(common.default_config)
+        # `fdroid build` should build only the latest version by default since
+        # most of the time the user will be building the most recent update
+        if not options.all:
+            options.latest = True
+    elif len(local_metadata_files) > 1:
         raise FDroidException("Only one local metadata file allowed! Found: "
-                              + " ".join(metadata_files))
-
-    if not options.appid and not options.all:
-        parser.error("option %s: If you really want to build all the apps, use --all" % "all")
+                              + " ".join(local_metadata_files))
+    else:
+        if not os.path.isdir('metadata') and len(local_metadata_files) == 0:
+            raise FDroidException("No app metadata found, nothing to process!")
+        if not options.appid and not options.all:
+            parser.error("option %s: If you really want to build all the apps, use --all" % "all")
 
     config = common.read_config(options)
 

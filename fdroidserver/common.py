@@ -214,7 +214,7 @@ def read_config(opts, config_file='config.py'):
         with io.open(config_file, "rb") as f:
             code = compile(f.read(), config_file, 'exec')
             exec(code, None, config)
-    elif len(glob.glob('.fdroid.[a-z]*')) == 0:
+    elif len(get_local_metadata_files()) == 0:
         logging.critical("Missing config file - is this a repo directory?")
         sys.exit(2)
 
@@ -359,6 +359,16 @@ def write_password_file(pwtype, password=None):
         os.write(fd, password.encode('utf-8'))
     os.close(fd)
     config[pwtype + 'file'] = filename
+
+
+def get_local_metadata_files():
+    '''get any metadata files local to an app's source repo
+
+    This tries to ignore anything that does not count as app metdata,
+    including emacs cruft ending in ~ and the .fdroid.key*pass.txt files.
+
+    '''
+    return glob.glob('.fdroid.[a-jl-z]*[a-rt-z]')
 
 
 # Given the arguments in the form of multiple appid:[vc] strings, this returns
