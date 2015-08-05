@@ -22,6 +22,7 @@ import os
 import re
 import glob
 import cgi
+import logging
 import textwrap
 import io
 
@@ -778,7 +779,10 @@ def read_metadata(xref=True):
     for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.txt'))
                                + glob.glob(os.path.join('metadata', '*.json'))
                                + glob.glob(os.path.join('metadata', '*.xml'))
-                               + glob.glob(os.path.join('metadata', '*.yaml'))):
+                               + glob.glob(os.path.join('metadata', '*.yaml'))
+                               + glob.glob('.fdroid.json')
+                               + glob.glob('.fdroid.xml')
+                               + glob.glob('.fdroid.yaml')):
         app = parse_metadata(metadatapath)
         if app.id in apps:
             raise MetaDataException("Found multiple metadata files for " + app.id)
@@ -823,6 +827,25 @@ def get_default_app_info(metadatapath=None):
         appid = None
     else:
         appid, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
+
+    if appid == '.fdroid':  # we have local metadata in the app's source
+        if os.path.exists('AndroidManifest.xml'):
+            manifestroot = fdroidserver.common.parse_xml('AndroidManifest.xml')
+        else:
+            pattern = re.compile(""".*manifest\.srcFile\s+'AndroidManifest\.xml'.*""")
+            for root, dirs, files in os.walk(os.getcwd()):
+                if 'build.gradle' in files:
+                    p = os.path.join(root, 'build.gradle')
+                    with open(p) as f:
+                        data = f.read()
+                    m = pattern.search(data)
+                    if m:
+                        logging.debug('Using: ' + os.path.join(root, 'AndroidManifest.xml'))
+                        manifestroot = fdroidserver.common.parse_xml(os.path.join(root, 'AndroidManifest.xml'))
+                        break
+        if manifestroot is None:
+            raise MetaDataException("Cannot find a packageName for {0}!".format(metadatapath))
+        appid = manifestroot.attrib['package']
 
     app = App()
     app.metadatapath = metadatapath
