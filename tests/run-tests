@@ -316,7 +316,7 @@ if [ $? -eq 0 ]; then
     echo "This should have failed because this repo has no keystore!"
     exit 1
 else
-    echo "`fdroid update` prompted to add keystore"
+    echo '`fdroid update` prompted to add keystore'
 fi
 set -e
 $fdroid update --create-key
@@ -378,7 +378,7 @@ if [ $? -eq 0 ]; then
     echo "This should have failed because this repo has no keystore!"
     exit 1
 else
-    echo "`fdroid update` prompted to add keystore"
+    echo '`fdroid update` prompted to add keystore'
 fi
 set -e
 
@@ -394,7 +394,7 @@ if [ $? -eq 0 ]; then
     echo "This should have failed because this repo has a bad/fake keystore!"
     exit 1
 else
-    echo "`fdroid update` prompted to add keystore"
+    echo '`fdroid update` prompted to add keystore'
 fi
 set -e
 
@@ -422,7 +422,7 @@ if [ $? -eq 0 ]; then
     echo "This should have failed because this repo has a bad repo_keyalias!"
     exit 1
 else
-    echo "`fdroid update` prompted to add keystore"
+    echo '`fdroid update` prompted to add keystore'
 fi
 set -e
 
@@ -434,7 +434,7 @@ if [ $? -eq 0 ]; then
     echo "This should have failed because a keystore is already there!"
     exit 1
 else
-    echo "`fdroid update` complained about existing keystore"
+    echo '`fdroid update` complained about existing keystore'
 fi
 set -e
 
