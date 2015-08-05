@@ -445,8 +445,10 @@ the APK files in the repo directory, and
 the metadata files in the metadata directory.
 @end enumerate
 
-The metadata files are simple, easy to edit text files, always named as the
-application's package ID with '.txt' appended.
+The original metadata files are simple, easy to edit text files,
+always named as the application's package ID with '.txt' appended.
+Additionally, you can use JSON, XML, or YAML for app metadata, using
+the same fields as the original '.txt' format.
 
 Note that although the metadata files are designed to be easily read and
 writable by humans, they are also processed and written by various scripts.
