@@ -194,25 +194,29 @@ def regsub_file(pattern, repl, path):
 def read_config(opts, config_file='config.py'):
     """Read the repository config
 
-    The config is read from config_file, which is in the current directory when
-    any of the repo management commands are used.
+    The config is read from config_file, which is in the current
+    directory when any of the repo management commands are used. If
+    there is a local metadata file in the git repo, then config.py is
+    not required, just use defaults.
+
     """
-    global config, options, orig_path
+    global config, options
 
     if config is not None:
         return config
-    if not os.path.isfile(config_file):
-        logging.critical("Missing config file - is this a repo directory?")
-        sys.exit(2)
 
     options = opts
 
     config = {}
 
-    logging.debug("Reading %s" % config_file)
-    with io.open(config_file, "rb") as f:
-        code = compile(f.read(), config_file, 'exec')
-        exec(code, None, config)
+    if os.path.isfile(config_file):
+        logging.debug("Reading %s" % config_file)
+        with io.open(config_file, "rb") as f:
+            code = compile(f.read(), config_file, 'exec')
+            exec(code, None, config)
+    elif len(glob.glob('.fdroid.[a-z]*')) == 0:
+        logging.critical("Missing config file - is this a repo directory?")
+        sys.exit(2)
 
     # smartcardoptions must be a list since its command line args for Popen
     if 'smartcardoptions' in config:
@@ -230,16 +234,6 @@ def read_config(opts, config_file='config.py'):
             logging.warn("unsafe permissions on {0} (should be 0600)!".format(config_file))
 
     fill_config_defaults(config)
-
-    # There is no standard, so just set up the most common environment
-    # variables
-    env = os.environ
-    orig_path = env['PATH']
-    for n in ['ANDROID_HOME', 'ANDROID_SDK']:
-        env[n] = config['sdk_path']
-
-    for k, v in config['java_paths'].items():
-        env['JAVA%s_HOME' % k] = v
 
     for k in ["keystorepass", "keypass"]:
         if k in config:
@@ -1798,16 +1792,24 @@ def remove_signing_keys(build_dir):
 
 
 def set_FDroidPopen_env(build=None):
-    # There is only a weak standard, the variables used by gradle, so also set
-    # up the most commonly used environment variables for SDK and NDK
+    '''
+    set up the environment variables for the build environment
+
+    There is only a weak standard, the variables used by gradle, so also set
+    up the most commonly used environment variables for SDK and NDK
+    '''
     global env, orig_path
+
     if env is None:
         env = os.environ
         orig_path = env['PATH']
         for n in ['ANDROID_HOME', 'ANDROID_SDK']:
             env[n] = config['sdk_path']
+        for k, v in config['java_paths'].items():
+            env['JAVA%s_HOME' % k] = v
 
-    # Set up environment vars that depend on each build
+    # Set up environment vars that depend on each build, only set the
+    # NDK env vars if the NDK is not already in the PATH
     if build is not None:
         path = build.ndk_path()
         paths = orig_path.split(os.pathsep)
