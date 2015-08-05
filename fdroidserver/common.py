@@ -197,7 +197,7 @@ def read_config(opts, config_file='config.py'):
     The config is read from config_file, which is in the current directory when
     any of the repo management commands are used.
     """
-    global config, options, env, orig_path
+    global config, options, orig_path
 
     if config is not None:
         return config
@@ -266,6 +266,21 @@ def read_config(opts, config_file='config.py'):
         config['serverwebroot'] = rootlist
 
     return config
+
+
+def get_ndk_path(version):
+    if config is None or 'ndk_paths' not in config:
+        ndk_path = os.getenv('ANDROID_NDK_HOME')
+        if ndk_path is None:
+            logging.error('No NDK found! Either set ANDROID_NDK_HOME or add ndk_path to your config.py')
+        else:
+            return ndk_path
+    if version is None:
+        version = 'r10e'  # falls back to latest
+    paths = config['ndk_paths']
+    if version not in paths:
+        return ''
+    return paths[version] or ''
 
 
 def find_sdk_tools_cmd(cmd):
@@ -1639,6 +1654,8 @@ def FDroidPopenBytes(commands, cwd=None, output=True, stderr_to_stdout=True):
     """
 
     global env
+    if env is None:
+        set_FDroidPopen_env()
 
     if cwd:
         cwd = os.path.normpath(cwd)
@@ -1780,25 +1797,32 @@ def remove_signing_keys(build_dir):
                     logging.info("Cleaned %s of keysigning configs at %s" % (propfile, path))
 
 
-def reset_env_path():
+def set_FDroidPopen_env(build=None):
+    # There is only a weak standard, the variables used by gradle, so also set
+    # up the most commonly used environment variables for SDK and NDK
     global env, orig_path
-    env['PATH'] = orig_path
+    if env is None:
+        env = os.environ
+        orig_path = env['PATH']
+        for n in ['ANDROID_HOME', 'ANDROID_SDK']:
+            env[n] = config['sdk_path']
 
+    # Set up environment vars that depend on each build
+    if build is not None:
+        path = build.ndk_path()
+        paths = orig_path.split(os.pathsep)
+        if path in paths:
+            return
+        paths.append(path)
+        env['PATH'] = os.pathsep.join(paths)
 
-def add_to_env_path(path):
-    global env
-    paths = env['PATH'].split(os.pathsep)
-    if path in paths:
-        return
-    paths.append(path)
-    env['PATH'] = os.pathsep.join(paths)
+        for n in ['ANDROID_NDK', 'NDK', 'ANDROID_NDK_HOME']:
+            env[n] = build.ndk_path()
 
 
 def replace_config_vars(cmd, build):
-    global env
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
-    # env['ANDROID_NDK'] is set in build_local right before prepare_source
-    cmd = cmd.replace('$$NDK$$', env['ANDROID_NDK'])
+    cmd = cmd.replace('$$NDK$$', get_ndk_path(build['ndk']))
     cmd = cmd.replace('$$MVN3$$', config['mvn3'])
     if build is not None:
         cmd = cmd.replace('$$COMMIT$$', build.commit)

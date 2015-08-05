@@ -472,13 +472,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
             logging.critical("Android NDK '%s' is not a directory!" % ndk_path)
             sys.exit(3)
 
-    # Set up environment vars that depend on each build
-    for n in ['ANDROID_NDK', 'NDK', 'ANDROID_NDK_HOME']:
-        common.env[n] = ndk_path
-
-    common.reset_env_path()
-    # Set up the current NDK to the PATH
-    common.add_to_env_path(ndk_path)
+    common.set_FDroidPopen_env(build)
 
     # Prepare the source code...
     root_dir, srclibpaths = common.prepare_source(vcs, app, build,
