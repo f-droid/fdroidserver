@@ -579,8 +579,11 @@ def split_list_values(s):
     return [v for v in l if v]
 
 
-def get_default_app_info_list(apps, metadatapath):
-    appid = os.path.splitext(os.path.basename(metadatapath))[0]
+def get_default_app_info_list(apps, metadatapath=None):
+    if metadatapath is None:
+        appid = None
+    else:
+        appid = os.path.splitext(os.path.basename(metadatapath))[0]
     if appid in apps:
         logging.critical("'%s' is a duplicate! '%s' is already provided by '%s'"
                          % (metadatapath, appid, apps[appid]['metadatapath']))

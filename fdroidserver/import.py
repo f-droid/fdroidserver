@@ -70,71 +70,43 @@ config = None
 options = None
 
 
-def main():
-
-    global config, options
-
-    # Parse command line...
-    parser = ArgumentParser()
-    parser.add_argument("-v", "--verbose", action="store_true", default=False,
-                        help="Spew out even more information than normal")
-    parser.add_argument("-q", "--quiet", action="store_true", default=False,
-                        help="Restrict output to warnings and errors")
-    parser.add_argument("-u", "--url", default=None,
-                        help="Project URL to import from.")
-    parser.add_argument("-s", "--subdir", default=None,
-                        help="Path to main android project subdirectory, if not in root.")
-    parser.add_argument("--rev", default=None,
-                        help="Allows a different revision (or git branch) to be specified for the initial import")
-    options = parser.parse_args()
-
-    config = common.read_config(options)
-
-    if not options.url:
-        logging.error("Specify project url.")
-        sys.exit(1)
-    url = options.url
+def get_metadata_from_url(app, url):
 
     tmp_dir = 'tmp'
     if not os.path.isdir(tmp_dir):
         logging.info("Creating temporary directory")
         os.makedirs(tmp_dir)
 
-    # Get all apps...
-    apps = metadata.read_metadata()
-
     # Figure out what kind of project it is...
     projecttype = None
-    issuetracker = None
-    license = None
-    website = url  # by default, we might override it
+    app['Web Site'] = url  # by default, we might override it
     if url.startswith('git://'):
         projecttype = 'git'
         repo = url
         repotype = 'git'
-        sourcecode = ""
-        website = ""
+        app['Source Code'] = ""
+        app['Web Site'] = ""
     elif url.startswith('https://github.com'):
         projecttype = 'github'
         repo = url
         repotype = 'git'
-        sourcecode = url
-        issuetracker = url + '/issues'
-        website = ""
+        app['Source Code'] = url
+        app['issuetracker'] = url + '/issues'
+        app['Web Site'] = ""
     elif url.startswith('https://gitlab.com/'):
         projecttype = 'gitlab'
         repo = url
         repotype = 'git'
-        sourcecode = url + '/tree/HEAD'
-        issuetracker = url + '/issues'
+        app['Source Code'] = url + '/tree/HEAD'
+        app['issuetracker'] = url + '/issues'
     elif url.startswith('https://bitbucket.org/'):
         if url.endswith('/'):
             url = url[:-1]
         projecttype = 'bitbucket'
-        sourcecode = url + '/src'
-        issuetracker = url + '/issues'
+        app['Source Code'] = url + '/src'
+        app['issuetracker'] = url + '/issues'
         # Figure out the repo type and adddress...
-        repotype, repo = getrepofrompage(sourcecode)
+        repotype, repo = getrepofrompage(app['Source Code'])
         if not repotype:
             logging.error("Unable to determine vcs type. " + repo)
             sys.exit(1)
@@ -165,6 +137,49 @@ def main():
         root_dir = os.path.join(src_dir, options.subdir)
     else:
         root_dir = src_dir
+
+    app['Repo Type'] = repotype
+    app['Repo'] = repo
+
+    return root_dir, src_dir
+
+
+config = None
+options = None
+
+
+def main():
+
+    global config, options
+
+    # Parse command line...
+    parser = ArgumentParser()
+    parser.add_argument("-v", "--verbose", action="store_true", default=False,
+                        help="Spew out even more information than normal")
+    parser.add_argument("-q", "--quiet", action="store_true", default=False,
+                        help="Restrict output to warnings and errors")
+    parser.add_argument("-u", "--url", default=None,
+                        help="Project URL to import from.")
+    parser.add_argument("-s", "--subdir", default=None,
+                        help="Path to main android project subdirectory, if not in root.")
+    parser.add_argument("--rev", default=None,
+                        help="Allows a different revision (or git branch) to be specified for the initial import")
+    options = parser.parse_args()
+
+    config = common.read_config(options)
+
+    apps = metadata.read_metadata()
+    package, app = metadata.get_default_app_info_list(apps)
+    app['Update Check Mode'] = "Tags"
+
+    if os.path.isdir('.git'):
+        if options.url:
+            app['Web Site'] = options.url
+    elif options.url:
+        root_dir, src_dir = get_metadata_from_url(app, options.url)
+    else:
+        logging.error("Specify project url.")
+        sys.exit(1)
 
     # Extract some information...
     paths = common.manifest_paths(root_dir, [])
@@ -197,18 +212,6 @@ def main():
         logging.error("Package " + package + " already exists")
         sys.exit(1)
 
-    # Construct the metadata...
-    app = metadata.parse_txt_metadata(None)[1]
-    app['Web Site'] = website
-    app['Source Code'] = sourcecode
-    if issuetracker:
-        app['Issue Tracker'] = issuetracker
-    if license:
-        app['License'] = license
-    app['Repo Type'] = repotype
-    app['Repo'] = repo
-    app['Update Check Mode'] = "Tags"
-
     # Create a build line...
     build = {}
     build['version'] = version or '?'
@@ -230,9 +233,10 @@ def main():
     # Keep the repo directory to save bandwidth...
     if not os.path.exists('build'):
         os.mkdir('build')
-    shutil.move(src_dir, os.path.join('build', package))
+    if src_dir is not None:
+        shutil.move(src_dir, os.path.join('build', package))
     with open('build/.fdroidvcs-' + package, 'w') as f:
-        f.write(repotype + ' ' + repo)
+        f.write(app['Repo Type'] + ' ' + app['Repo'])
 
     metadatapath = os.path.join('metadata', package + '.txt')
     metadata.write_metadata(metadatapath, app)
