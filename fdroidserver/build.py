@@ -437,7 +437,7 @@ def adapt_gradle(build_dir):
                 continue
             logging.debug("Adapting %s at %s" % (filename, path))
             common.regsub_file(r"""(\s*)buildToolsVersion[\s'"=]+.*""",
-                               r"""\1buildToolsVersion '%s'""" % config['build_tools'],
+                               r"""\1buildToolsVersion = '%s'""" % config['build_tools'],
                                path)
 
 
