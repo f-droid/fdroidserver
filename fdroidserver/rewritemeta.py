@@ -84,8 +84,7 @@ def main():
                 print(app.metadatapath)
             continue
 
-        with open(base + '.' + to_ext, 'w') as f:
-            metadata.write_metadata(to_ext, f, app)
+        metadata.write_metadata(base + '.' + to_ext, app)
 
         if ext != to_ext:
             os.remove(app.metadatapath)

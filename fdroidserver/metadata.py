@@ -1270,7 +1270,7 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
 #
 # 'mf'      - Writer interface (file, StringIO, ...)
 # 'app'     - The app data
-def write_txt_metadata(mf, app):
+def write_txt(mf, app):
 
     def w_comment(line):
         mf.write("# %s\n" % line)
@@ -1313,7 +1313,7 @@ def write_txt_metadata(mf, app):
     write_plaintext_metadata(mf, app, w_comment, w_field, w_build)
 
 
-def write_yaml_metadata(mf, app):
+def write_yaml(mf, app):
 
     def w_comment(line):
         mf.write("# %s\n" % line)
@@ -1377,9 +1377,16 @@ def write_yaml_metadata(mf, app):
     write_plaintext_metadata(mf, app, w_comment, w_field, w_build)
 
 
-def write_metadata(fmt, mf, app):
-    if fmt == 'txt':
-        return write_txt_metadata(mf, app)
-    if fmt == 'yaml':
-        return write_yaml_metadata(mf, app)
-    raise MetaDataException("Unknown metadata format given")
+def write_metadata(metadatapath, app):
+    _, ext = fdroidserver.common.get_extension(metadatapath)
+    accepted = fdroidserver.common.config['accepted_formats']
+    if ext not in accepted:
+        raise MetaDataException('Cannot write "%s", not an accepted format, use: %s' % (
+            metadatapath, ', '.join(accepted)))
+
+    with open(metadatapath, 'w') as mf:
+        if ext == 'txt':
+            return write_txt(mf, app)
+        elif ext == 'yaml':
+            return write_yaml(mf, app)
+    raise MetaDataException('Unknown metadata format: %s' % metadatapath)

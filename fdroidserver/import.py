@@ -243,8 +243,7 @@ def main():
         f.write(app.RepoType + ' ' + app.Repo)
 
     metadatapath = os.path.join('metadata', package + '.txt')
-    with open(metadatapath, 'w') as f:
-        metadata.write_metadata('txt', f, app)
+    metadata.write_metadata(metadatapath, app)
     logging.info("Wrote " + metadatapath)
 
 
