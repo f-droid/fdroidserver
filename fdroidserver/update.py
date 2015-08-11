@@ -1119,14 +1119,11 @@ def main():
             apkcache = pickle.load(cf)
     else:
         apkcache = {}
-    cachechanged = False
 
     delete_disabled_builds(apps, apkcache, repodirs)
 
     # Scan all apks in the main repo
-    apks, cc = scan_apks(apps, apkcache, repodirs[0], knownapks)
-    if cc:
-        cachechanged = True
+    apks, cachechanged = scan_apks(apps, apkcache, repodirs[0], knownapks)
 
     # Generate warnings for apk's with no metadata (or create skeleton
     # metadata files, if requested on the command line)
