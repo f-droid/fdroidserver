@@ -51,7 +51,7 @@ class BuildTest(unittest.TestCase):
         fdroidserver.build.config['build_tools'] = teststring
         fdroidserver.build.adapt_gradle(os.path.dirname(__file__))
         filedata = open(os.path.join(os.path.dirname(__file__), 'build.gradle')).read()
-        self.assertIsNotNone(re.search("\s+buildToolsVersion '%s'\s+" % teststring, filedata))
+        self.assertIsNotNone(re.search("\s+buildToolsVersion = '%s'\s+" % teststring, filedata))
 
 
 if __name__ == "__main__":
