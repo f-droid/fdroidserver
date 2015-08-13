@@ -1452,23 +1452,25 @@ def get_mime_type(path):
     libmagic. Hence this function with the following hacks:
     '''
 
+    ms = None
     try:
         import magic
-        ms = None
         try:
             ms = magic.open(magic.MIME_TYPE)
             ms.load()
-            return magic.from_file(path, mime=True)
+            result = magic.from_file(path, mime=True)
         except AttributeError:
-            return ms.file(path)
-        if ms is not None:
-            ms.close()
+            result = ms.file(path)
     except UnicodeError:
         logging.warn('Found malformed magic number at %s' % path)
+        result = None
     except ImportError:
         import mimetypes
         mimetypes.init()
-        return mimetypes.guess_type(path, strict=False)
+        result = mimetypes.guess_type(path, strict=False)
+    if ms is not None:
+        ms.close()
+    return result
 
 
 # Scan the source code in the given directory (and all subdirectories)
