@@ -12,7 +12,7 @@
 # not installed.
 # ndk_paths = {
 #    'r9b': "/opt/android-ndk-r9b",
-#    'r10e': "/opt/android-ndk"
+#    'r10e': "/opt/android-ndk",
 # }
 
 # Build tools version to be used
@@ -211,5 +211,5 @@ build_server_always = False
 # Only the fields listed here are supported, defaults shown
 char_limits = {
     'Summary': 50,
-    'Description': 1500
+    'Description': 1500,
 }
