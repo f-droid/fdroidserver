@@ -222,6 +222,7 @@ def main():
                 lcount += 1
                 if lcount > 3 and lchar not in validchars:
                     warn("Description has a list (%s) but it isn't bulleted (*) nor numbered (#)" % lchar)
+                    break
             else:
                 lchar = l[0]
                 lcount = 1
