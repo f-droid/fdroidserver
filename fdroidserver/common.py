@@ -1602,7 +1602,7 @@ def scan_source(build_dir, root_dir, thisbuild):
                     continue
                 for i, line in enumerate(file(fp)):
                     if any(suspect.match(line) for suspect in usual_suspects):
-                        count += handleproblem('usual suspect at line %d' % i, fd, fp)
+                        count += handleproblem('usual suspect at line %d' % i+1, fd, fp)
                         break
 
     for p in scanignore:
