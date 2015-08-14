@@ -147,8 +147,15 @@ def main():
         curid = appid
         count['app_total'] += 1
 
+        # enabled_builds = 0
+        lowest_vercode = -1
         curbuild = None
         for build in app['builds']:
+            if not build['disable']:
+                # enabled_builds += 1
+                vercode = int(build['vercode'])
+                if lowest_vercode == -1 or vercode < lowest_vercode:
+                    lowest_vercode = vercode
             if not curbuild or int(build['vercode']) > int(curbuild['vercode']):
                 curbuild = build
 
@@ -180,6 +187,10 @@ def main():
                     'Current Version Code',
                     ]):
                 warn("UCM is set but it looks like checkupdates hasn't been run yet")
+
+        cvc = int(app['Current Version Code'])
+        if cvc > 0 and cvc < lowest_vercode:
+            warn("Current Version Code is lower than any enabled build")
 
         # Missing or incorrect categories
         if not app['Categories']:
