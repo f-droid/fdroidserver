@@ -211,6 +211,21 @@ def main():
                 or any(not desc[l - 1] and not desc[l] for l in range(1, len(desc)))):
             warn("Description has an extra empty line")
 
+        # Check for lists using the wrong characters
+        validchars = ['*', '#']
+        lchar = ''
+        lcount = 0
+        for l in app['Description']:
+            if len(l) < 1:
+                continue
+            if l[0] == lchar:
+                lcount += 1
+                if lcount > 3 and lchar not in validchars:
+                    warn("Description has a list (%s) but it isn't bulleted (*) nor numbered (#)" % lchar)
+            else:
+                lchar = l[0]
+                lcount = 1
+
         # Regex checks in all kinds of fields
         for f in regex_warnings:
             for m, r in regex_warnings[f]:
