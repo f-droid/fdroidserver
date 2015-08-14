@@ -80,6 +80,15 @@ def check_http(app):
         return (None, msg)
 
 
+def app_matches_packagename(app, package):
+        if not package:
+            return False
+        appid = app['Update Check Name'] or app['id']
+        if appid == "Ignore":
+            return True
+        return appid == package
+
+
 # Check for a new version by looking at the tags in the source repo.
 # Whether this can be used reliably or not depends on
 # the development procedures used by the project's developers. Use it with
@@ -90,7 +99,6 @@ def check_tags(app, pattern):
 
     try:
 
-        appid = app['Update Check Name'] or app['id']
         if app['Repo Type'] == 'srclib':
             build_dir = os.path.join('build', 'srclib', app['Repo'])
             repotype = common.getsrclibvcs(app['Repo'])
@@ -138,7 +146,7 @@ def check_tags(app, pattern):
             paths = common.manifest_paths(build_dir, flavours)
             version, vercode, package = \
                 common.parse_androidmanifests(paths, app['Update Check Ignore'])
-            if not package or package != appid or not version or not vercode:
+            if not app_matches_packagename(app, package) or not version or not vercode:
                 continue
 
             logging.debug("Manifest exists. Found version {0} ({1})"
@@ -173,7 +181,6 @@ def check_repomanifest(app, branch=None):
 
     try:
 
-        appid = app['Update Check Name'] or app['id']
         if app['Repo Type'] == 'srclib':
             build_dir = os.path.join('build', 'srclib', app['Repo'])
             repotype = common.getsrclibvcs(app['Repo'])
@@ -211,9 +218,8 @@ def check_repomanifest(app, branch=None):
             common.parse_androidmanifests(paths, app['Update Check Ignore'])
         if not package:
             return (None, "Couldn't find package ID")
-        if package != appid:
-            return (None, "Package ID mismatch - expected {0}, got {1}"
-                    .format(appid, package))
+        if not app_matches_packagename(app, package):
+            return (None, "Package ID mismatch - got {0}".format(package))
         if not version:
             return (None, "Couldn't find latest version name")
         if not vercode:
@@ -307,7 +313,6 @@ def dirs_with_manifest(startdir):
 # subdir relative to the build dir if found, None otherwise.
 def check_changed_subdir(app):
 
-    appid = app['Update Check Name'] or app['id']
     if app['Repo Type'] == 'srclib':
         build_dir = os.path.join('build', 'srclib', app['Repo'])
     else:
@@ -324,7 +329,7 @@ def check_changed_subdir(app):
         logging.debug("Trying possible dir %s." % d)
         m_paths = common.manifest_paths(d, flavours)
         package = common.parse_androidmanifests(m_paths, app['Update Check Ignore'])[2]
-        if package and package == appid:
+        if app_matches_packagename(app, package):
             logging.debug("Manifest exists in possible dir %s." % d)
             return os.path.relpath(d, build_dir)
 

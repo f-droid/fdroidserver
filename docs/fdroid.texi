@@ -1252,6 +1252,10 @@ specify the package name to search for. Useful when apps have a static package
 name but change it programmatically in some app flavors, by e.g. appending
 ".open" or ".free" at the end of the package name.
 
+You can also use @code{Ignore} to ignore package name searching. This should
+only be used in some specific cases, for example if the app's build.gradle
+file does not contain the package name.
+
 @node Update Check Data
 @section Update Check Data
 
