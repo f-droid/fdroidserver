@@ -31,7 +31,7 @@ options = None
 
 
 def enforce_https(domain):
-    return (re.compile(r'.*[^sS]://[^/]*' + re.escape(domain) + r'/.*'),
+    return (re.compile(r'.*[^sS]://[^/]*' + re.escape(domain) + r'(/.*)?'),
             domain + " URLs should always use https://")
 
 https_enforcings = [
