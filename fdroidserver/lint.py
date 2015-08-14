@@ -218,13 +218,14 @@ def main():
         for l in app['Description']:
             if len(l) < 1:
                 continue
-            if l[0] == lchar:
+            c = l.decode('utf-8')[0]
+            if c == lchar:
                 lcount += 1
                 if lcount > 3 and lchar not in validchars:
                     warn("Description has a list (%s) but it isn't bulleted (*) nor numbered (#)" % lchar)
                     break
             else:
-                lchar = l[0]
+                lchar = c
                 lcount = 1
 
         # Regex checks in all kinds of fields
