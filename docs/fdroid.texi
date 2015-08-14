@@ -1323,6 +1323,9 @@ which version should be recommended.
 
 This field is normally automatically updated - see Update Check Mode.
 
+If not set or set to @code{0}, clients will recommend the highest version they
+can, as if the @code{Current Version Code} was infinite.
+
 This is converted to (@code{<marketvercode>}) in the public index file.
 
 @node No Source Since
