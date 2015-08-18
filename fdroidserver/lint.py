@@ -188,6 +188,9 @@ def main():
                     ]):
                 warn("UCM is set but it looks like checkupdates hasn't been run yet")
 
+        if app['Update Check Name'] == appid:
+            warn("Update Check Name is set to the known app id - it can be removed")
+
         cvc = int(app['Current Version Code'])
         if cvc > 0 and cvc < lowest_vercode:
             warn("Current Version Code is lower than any enabled build")
