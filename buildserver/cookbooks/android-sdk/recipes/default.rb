@@ -8,7 +8,7 @@ script "setup-android-sdk" do
   user user
   cwd "/tmp"
   code "
-    tar zxvf /vagrant/cache/android-sdk_r24.3.3-linux.tgz
+    tar zxvf /vagrant/cache/android-sdk_r24.3.4-linux.tgz
     mv android-sdk-linux #{sdk_loc}
     #{sdk_loc}/tools/android update sdk --no-ui -t platform-tool
     #{sdk_loc}/tools/android update sdk --no-ui -t tool
@@ -26,7 +26,7 @@ end
 script "add_build_tools" do
   interpreter "bash"
   user user
-  ver = "22.0.1"
+  ver = "23.0.0"
   cwd "/tmp"
   code "
     if [ -f /vagrant/cache/build-tools/#{ver}.tar.gz ] ; then
@@ -67,7 +67,7 @@ end
 %w{android-3 android-4 android-5 android-6 android-7 android-8 android-9
    android-10 android-11 android-12 android-13 android-14 android-15
    android-16 android-17 android-18 android-19 android-20 android-21
-   android-22
+   android-22 android-23
    extra-android-support extra-android-m2repository}.each do |sdk|
 
   script "add_sdk_#{sdk}" do
