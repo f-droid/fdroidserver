@@ -169,10 +169,10 @@ __complete_checkupdates() {
 }
 
 __complete_import() {
-	opts="-u -s -r -q"
-	lopts="--url --subdir --repo --rev --quiet"
+	opts="-u -s -q"
+	lopts="--url --subdir --rev --quiet"
 	case "${prev}" in
-		-u|--url|-r|--repo|-s|--subdir|--rev) return 0;;
+		-u|--url|-s|--subdir|--rev) return 0;;
 	esac
 	__complete_options
 }

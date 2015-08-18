@@ -40,7 +40,7 @@ def getrepofrompage(url):
         return (None, 'Unable to get ' + url + ' - return code ' + str(req.getcode()))
     page = req.read()
 
-    # Works for Google Code and BitBucket...
+    # Works for BitBucket
     index = page.find('hg clone')
     if index != -1:
         repotype = 'hg'
@@ -52,7 +52,7 @@ def getrepofrompage(url):
         repo = repo.split('"')[0]
         return (repotype, repo)
 
-    # Works for Google Code and BitBucket...
+    # Works for BitBucket
     index = page.find('git clone')
     if index != -1:
         repotype = 'git'
@@ -60,26 +60,6 @@ def getrepofrompage(url):
         index = repo.find('<')
         if index == -1:
             return (None, "Error while getting repo address")
-        repo = repo[:index]
-        repo = repo.split('"')[0]
-        return (repotype, repo)
-
-    # Google Code only...
-    index = page.find('svn checkout')
-    if index != -1:
-        repotype = 'git-svn'
-        repo = page[index + 13:]
-        prefix = '<strong><em>http</em></strong>'
-        if not repo.startswith(prefix):
-            return (None, "Unexpected checkout instructions format")
-        repo = 'http' + repo[len(prefix):]
-        index = repo.find('<')
-        if index == -1:
-            return (None, "Error while getting repo address - no end tag? '" + repo + "'")
-        repo = repo[:index]
-        index = repo.find(' ')
-        if index == -1:
-            return (None, "Error while getting repo address - no space? '" + repo + "'")
         repo = repo[:index]
         repo = repo.split('"')[0]
         return (repotype, repo)
@@ -104,8 +84,6 @@ def main():
                       help="Project URL to import from.")
     parser.add_option("-s", "--subdir", default=None,
                       help="Path to main android project subdirectory, if not in root.")
-    parser.add_option("-r", "--repo", default=None,
-                      help="Allows a different repo to be specified for a multi-repo google code project")
     parser.add_option("--rev", default=None,
                       help="Allows a different revision (or git branch) to be specified for the initial import")
     (options, args) = parser.parse_args()
@@ -165,62 +143,6 @@ def main():
         if not repotype:
             logging.error("Unable to determine vcs type. " + repo)
             sys.exit(1)
-    elif (url.startswith('http://code.google.com/p/') or
-            url.startswith('https://code.google.com/p/')):
-        if not url.endswith('/'):
-            url += '/'
-        projecttype = 'googlecode'
-        sourcecode = url + 'source/checkout'
-        if options.repo:
-            sourcecode += "?repo=" + options.repo
-        issuetracker = url + 'issues/list'
-
-        # Figure out the repo type and adddress...
-        repotype, repo = getrepofrompage(sourcecode)
-        if not repotype:
-            logging.error("Unable to determine vcs type. " + repo)
-            sys.exit(1)
-
-        # Figure out the license...
-        req = urllib.urlopen(url)
-        if req.getcode() != 200:
-            logging.error('Unable to find project page at ' + sourcecode + ' - return code ' + str(req.getcode()))
-            sys.exit(1)
-        page = req.read()
-        index = page.find('Code license')
-        if index == -1:
-            logging.error("Couldn't find license data")
-            sys.exit(1)
-        ltext = page[index:]
-        lprefix = 'rel="nofollow">'
-        index = ltext.find(lprefix)
-        if index == -1:
-            logging.error("Couldn't find license text")
-            sys.exit(1)
-        ltext = ltext[index + len(lprefix):]
-        index = ltext.find('<')
-        if index == -1:
-            logging.error("License text not formatted as expected")
-            sys.exit(1)
-        ltext = ltext[:index]
-        if ltext == 'GNU GPL v3':
-            license = 'GPLv3'
-        elif ltext == 'GNU GPL v2':
-            license = 'GPLv2'
-        elif ltext == 'Apache License 2.0':
-            license = 'Apache2'
-        elif ltext == 'MIT License':
-            license = 'MIT'
-        elif ltext == 'GNU Lesser GPL':
-            license = 'LGPL'
-        elif ltext == 'Mozilla Public License 1.1':
-            license = 'MPL'
-        elif ltext == 'New BSD License':
-            license = 'NewBSD'
-        else:
-            logging.error("License " + ltext + " is not recognised")
-            sys.exit(1)
-
     if not projecttype:
         logging.error("Unable to determine the project type.")
         logging.error("The URL you supplied was not in one of the supported formats. Please consult")
