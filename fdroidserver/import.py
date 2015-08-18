@@ -127,11 +127,6 @@ def main():
         repotype = 'git'
         sourcecode = url + '/tree/HEAD'
         issuetracker = url + '/issues'
-    elif url.startswith('https://gitorious.org/'):
-        projecttype = 'gitorious'
-        repo = 'https://git.gitorious.org/' + url[22:] + '.git'
-        repotype = 'git'
-        sourcecode = url
     elif url.startswith('https://bitbucket.org/'):
         if url.endswith('/'):
             url = url[:-1]
