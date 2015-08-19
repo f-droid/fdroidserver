@@ -260,14 +260,14 @@ def main():
         # Regex checks in all kinds of fields
         for f in regex_warnings:
             for m, r in regex_warnings[f]:
-                t = metadata.metafieldtype(f)
-                if t == 'string':
-                    if app[f] is None:
+                v = app[f]
+                if type(v) == str:
+                    if v is None:
                         continue
-                    if m.match(app[f]):
+                    if m.match(v):
                         warn("%s '%s': %s" % (f, app[f], r))
-                elif t == 'multiline':
-                    for l in app[f]:
+                elif type(v) == list:
+                    for l in v:
                         if m.match(l):
                             warn("%s at line '%s': %s" % (f, l, r))
 
