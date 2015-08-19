@@ -63,6 +63,10 @@ regex_warnings = {
         (re.compile(r'.*github\.com/[^/]+/[^/]+[/]*$'),
          "/issues is missing"),
     ],
+    'Donate': http_warnings + [
+        (re.compile(r'.*flattr\.com'),
+         "Flattr donation methods belong in the FlattrID flag"),
+    ],
     'Changelog': http_warnings + [
     ],
     'License': [
@@ -247,6 +251,8 @@ def main():
             for m, r in regex_warnings[f]:
                 t = metadata.metafieldtype(f)
                 if t == 'string':
+                    if app[f] is None:
+                        continue
                     if m.match(app[f]):
                         warn("%s '%s': %s" % (f, app[f], r))
                 elif t == 'multiline':
