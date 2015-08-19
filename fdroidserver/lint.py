@@ -122,6 +122,8 @@ categories = Set([
     "Wallpaper",
 ])
 
+desc_url = re.compile("[^[]\[([^ ]+)( |\]|$)")
+
 
 def main():
 
@@ -247,6 +249,13 @@ def main():
         for l in app['Description']:
             if len(l) < 1:
                 continue
+
+            for um in desc_url.finditer(l):
+                url = um.group(1)
+                for m, r in http_warnings:
+                    if m.match(url):
+                        warn("URL '%s' in Description: %s" % (url, r))
+
             c = l.decode('utf-8')[0]
             if c == lchar:
                 lcount += 1
@@ -265,7 +274,7 @@ def main():
                     if v is None:
                         continue
                     if m.match(v):
-                        warn("%s '%s': %s" % (f, app[f], r))
+                        warn("%s '%s': %s" % (f, v, r))
                 elif type(v) == list:
                     for l in v:
                         if m.match(l):
