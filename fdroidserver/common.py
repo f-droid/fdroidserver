@@ -1440,7 +1440,7 @@ def getpaths(build_dir, build, field):
     return paths
 
 
-def get_mime_type(path):
+def init_mime_type():
     '''
     There are two incompatible versions of the 'magic' module, one
     that comes as part of libmagic, which is what Debian includes as
@@ -1452,25 +1452,49 @@ def get_mime_type(path):
     libmagic. Hence this function with the following hacks:
     '''
 
+    init_path = ''
+    method = ''
     ms = None
+
+    def mime_from_file(path):
+        try:
+            return magic.from_file(path, mime=True)
+        except UnicodeError:
+            return None
+
+    def mime_file(path):
+        try:
+            return ms.file(path)
+        except UnicodeError:
+            return None
+
+    def mime_guess_type(path):
+        return mimetypes.guess_type(path, strict=False)
+
     try:
         import magic
         try:
             ms = magic.open(magic.MIME_TYPE)
             ms.load()
-            result = magic.from_file(path, mime=True)
+            magic.from_file(init_path, mime=True)
+            method = 'from_file'
         except AttributeError:
-            result = ms.file(path)
-    except UnicodeError:
-        logging.warn('Found malformed magic number at %s' % path)
-        result = None
+            ms.file(init_path)
+            method = 'file'
     except ImportError:
         import mimetypes
         mimetypes.init()
-        result = mimetypes.guess_type(path, strict=False)
-    if ms is not None:
-        ms.close()
-    return result
+        method = 'guess_type'
+
+    logging.info("Using magic method " + method)
+    if method == 'from_file':
+        return mime_from_file
+    if method == 'file':
+        return mime_file
+    if method == 'guess_type':
+        return mime_guess_type
+
+    logging.critical("unknown magic method!")
 
 
 # Scan the source code in the given directory (and all subdirectories)
@@ -1537,6 +1561,8 @@ def scan_source(build_dir, root_dir, thisbuild):
             return removeproblem(what, fd, fp)
         logging.error('Found %s at %s' % (what, fd))
         return 1
+
+    get_mime_type = init_mime_type()
 
     # Iterate through all files in the source code
     for r, d, f in os.walk(build_dir, topdown=True):
