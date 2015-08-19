@@ -44,7 +44,18 @@ https_enforcings = [
     enforce_https('googlecode.com'),
 ]
 
-http_warnings = https_enforcings + [
+
+def forbid_shortener(domain):
+    return (re.compile(r'https?://[^/]*' + re.escape(domain) + r'/.*'),
+            "URL shorteners should not be used")
+
+http_url_shorteners = [
+    forbid_shortener('goo.gl'),
+    forbid_shortener('t.co'),
+    forbid_shortener('ur1.ca'),
+]
+
+http_warnings = https_enforcings + http_url_shorteners + [
     (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
      "Appending .git is not necessary"),
     # TODO enable in August 2015, when Google Code goes read-only
