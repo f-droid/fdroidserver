@@ -1509,7 +1509,7 @@ SDK including these:
 @example
 cd /path/to/android-sdk/platforms
 tar czf android-19.tar.gz android-19
-mv android-19.tar.gz /path/to/buildserver/addons/cache/platforms/}
+mv android-19.tar.gz /path/to/buildserver/addons/cache/platforms/
 @end example
 
 If you have already built a buildserver it is also possible to get this

@@ -103,6 +103,13 @@ done
 
 
 #------------------------------------------------------------------------------#
+echo_header "build the TeX manual"
+
+cd $WORKSPACE/docs
+./gendocs.sh -o html --email admin@f-droid.org fdroid "F-Droid Server Manual"
+
+
+#------------------------------------------------------------------------------#
 echo_header "create a source tarball and use that to build a repo"
 
 cd $WORKSPACE

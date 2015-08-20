@@ -7,7 +7,9 @@ import inspect
 import optparse
 import os
 import re
+import shutil
 import sys
+import tempfile
 import unittest
 
 localmodule = os.path.realpath(os.path.join(
@@ -100,7 +102,15 @@ class CommonTest(unittest.TestCase):
     def test_prepare_sources(self):
         testint = 99999999
         teststr = 'FAKE_STR_FOR_TESTING'
-        testdir = os.path.dirname(__file__)
+
+        tmpdir = os.path.join(os.path.dirname(__file__), '..', '.testfiles')
+        if not os.path.exists(tmpdir):
+            os.makedirs(tmpdir)
+        tmptestsdir = tempfile.mkdtemp(prefix='test_prepare_sources', dir=tmpdir)
+        shutil.copytree(os.path.join(os.path.dirname(__file__), 'source-files'),
+                        os.path.join(tmptestsdir, 'source-files'))
+
+        testdir = os.path.join(tmptestsdir, 'source-files', 'fdroid', 'fdroidclient')
 
         config = dict()
         config['sdk_path'] = os.getenv('ANDROID_HOME')

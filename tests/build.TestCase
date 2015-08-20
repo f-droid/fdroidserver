@@ -7,7 +7,9 @@ import inspect
 import optparse
 import os
 import re
+import shutil
 import sys
+import tempfile
 import unittest
 
 localmodule = os.path.realpath(
@@ -46,13 +48,27 @@ class BuildTest(unittest.TestCase):
                 self.assertTrue(os.path.isfile(path))
 
     def test_adapt_gradle(self):
+        testsbase = os.path.join(os.path.dirname(__file__), '..', '.testfiles')
+        if not os.path.exists(testsbase):
+            os.makedirs(testsbase)
+        testsdir = tempfile.mkdtemp(prefix='test_adapt_gradle', dir=testsbase)
+        shutil.copytree(os.path.join(os.path.dirname(__file__), 'source-files'),
+                        os.path.join(testsdir, 'source-files'))
         teststring = 'FAKE_VERSION_FOR_TESTING'
         fdroidserver.build.config = {}
         fdroidserver.build.config['build_tools'] = teststring
-        fdroidserver.build.adapt_gradle(os.path.dirname(__file__))
-        filedata = open(os.path.join(os.path.dirname(__file__), 'build.gradle')).read()
-        self.assertIsNotNone(re.search("\s+buildToolsVersion = '%s'\s+" % teststring, filedata))
-
+        fdroidserver.build.adapt_gradle(testsdir)
+        pattern = re.compile("buildToolsVersion[\s=]+'%s'\s+" % teststring)
+        for f in ('source-files/fdroid/fdroidclient/build.gradle',
+                  'source-files/Zillode/syncthing-silk/build.gradle',
+                  'source-files/open-keychain/open-keychain/build.gradle',
+                  'source-files/osmandapp/osmand/build.gradle'):
+            filedata = open(os.path.join(testsdir, f)).read()
+            self.assertIsNotNone(pattern.search(filedata))
+        tp = os.path.join(testsdir,
+                          'source-files/open-keychain/open-keychain/OpenKeychain/build.gradle')
+        filedata = open(tp).read()
+        self.assertIsNone(pattern.search(filedata))
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
