@@ -285,6 +285,8 @@ def main():
         repo_sections.append('archive')
         if not os.path.exists('archive'):
             os.mkdir('archive')
+    if config['per_app_repos']:
+        repo_sections += common.get_per_app_repos()
 
     if args[0] == 'init':
         ssh = paramiko.SSHClient()

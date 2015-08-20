@@ -1016,6 +1016,28 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
                 apks.remove(apk)
 
 
+def add_apks_to_per_app_repos(repodir, apks):
+    apks_per_app = dict()
+    for apk in apks:
+        apk['per_app_dir'] = os.path.join(apk['id'], 'fdroid')
+        apk['per_app_repo'] = os.path.join(apk['per_app_dir'], 'repo')
+        apk['per_app_icons'] = os.path.join(apk['per_app_repo'], 'icons')
+        apks_per_app[apk['id']] = apk
+
+        if not os.path.exists(apk['per_app_icons']):
+            logging.info('Adding new repo for only ' + apk['id'])
+            os.makedirs(apk['per_app_icons'])
+
+        apkpath = os.path.join(repodir, apk['apkname'])
+        shutil.copy(apkpath, apk['per_app_repo'])
+        apksigpath = apkpath + '.sig'
+        if os.path.exists(apksigpath):
+            shutil.copy(apksigpath, apk['per_app_repo'])
+        apkascpath = apkpath + '.asc'
+        if os.path.exists(apkascpath):
+            shutil.copy(apkascpath, apk['per_app_repo'])
+
+
 config = None
 options = None
 
@@ -1214,6 +1236,20 @@ def main():
     # (we had to wait until we'd scanned the apks to do this, because mostly the
     # name comes from there!)
     sortedids = sorted(apps.iterkeys(), key=lambda appid: apps[appid]['Name'].upper())
+
+    # APKs are placed into multiple repos based on the app package, providing
+    # per-app subscription feeds for nightly builds and things like it
+    if config['per_app_repos']:
+        add_apks_to_per_app_repos(repodirs[0], apks)
+        for appid, app in apps.iteritems():
+            repodir = os.path.join(appid, 'fdroid', 'repo')
+            appdict = dict()
+            appdict[appid] = app
+            if os.path.isdir(repodir):
+                make_index(appdict, [appid], apks, repodir, False, categories)
+            else:
+                logging.info('Skipping index generation for ' + appid)
+        return
 
     if len(repodirs) > 1:
         archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])

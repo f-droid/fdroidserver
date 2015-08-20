@@ -56,6 +56,12 @@ archive_description = """
 The repository of older versions of applications from the main demo repository.
 """
 
+# Normally, all apps are collected into a single app repository, like on
+# https://f-droid.org.  For certain situations, it is better to make a repo
+# that is made up of APKs only from a single app.  For example, an automated
+# build server that publishes nightly builds.
+# per_app_repos = True
+
 # `fdroid update` will create a link to the current version of a given app.
 # This provides a static path to the current APK.  To disable the creation of
 # this link, uncomment this:
