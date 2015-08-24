@@ -58,6 +58,8 @@ http_url_shorteners = [
 http_warnings = https_enforcings + http_url_shorteners + [
     (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
      "Appending .git is not necessary"),
+    (re.compile(r'(.*/blob/master/|.*raw\.github.com/[^/]*/[^/]*/master/)'),
+     "Use /HEAD/ instead of /master/ to point at a file in the default branch"),
     # TODO enable in August 2015, when Google Code goes read-only
     # (re.compile(r'.*://code\.google\.com/.*'),
     #  "code.google.com will be soon switching down, perhaps the project moved to github.com?"),
