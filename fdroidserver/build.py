@@ -516,6 +516,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             adapt_gradle(libpath)
 
         cmd = [config['gradle']]
+        if thisbuild['gradleprops']:
+            cmd += ['-P'+kv for kv in thisbuild['gradleprops']]
+
         for task in gradletasks:
             parts = task.split(':')
             parts[-1] = 'clean' + capitalize_intact(parts[-1])
@@ -711,9 +714,13 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             with open(os.path.join(root_dir, 'build.gradle'), "a") as f:
                 f.write("\nandroid { lintOptions { checkReleaseBuilds false } }\n")
 
-        commands = [config['gradle']] + gradletasks
+        cmd = [config['gradle']]
+        if thisbuild['gradleprops']:
+            cmd += ['-P'+kv for kv in thisbuild['gradleprops']]
 
-        p = FDroidPopen(commands, cwd=root_dir)
+        cmd += gradletasks
+
+        p = FDroidPopen(cmd, cwd=root_dir)
 
     elif thisbuild['type'] == 'ant':
         logging.info("Building Ant project...")

@@ -1028,6 +1028,13 @@ builds happen correctly.
 List of Gradle tasks to be run before the assemble task in a Gradle project
 build.
 
+@item gradleprops=<prop1>[,<prop2>,...]
+List of Gradle properties to pass via the command line to Gradle. A property
+can be of the form @code{foo} or of the form @code{key=value}.
+
+For example: @code{gradleprops=enableFoo,someSetting=bar} will result in
+@code{gradle -PenableFoo -PsomeSetting=bar}.
+
 @item antcommands=<target1>[,<target2>,...]
 Specify an alternate set of Ant commands (target) instead of the default
 'release'. It can't be given any flags, such as the path to a build.xml.

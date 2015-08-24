@@ -105,6 +105,7 @@ flag_defaults = OrderedDict([
     ('buildjni', []),
     ('ndk', 'r10e'),  # defaults to latest
     ('preassemble', []),
+    ('gradleprops', []),
     ('antcommands', None),
     ('novcheck', False),
 ])
@@ -522,7 +523,8 @@ def metafieldtype(name):
 
 def flagtype(name):
     if name in ['extlibs', 'srclibs', 'patch', 'rm', 'buildjni', 'preassemble',
-                'update', 'scanignore', 'scandelete', 'gradle', 'antcommands']:
+                'update', 'scanignore', 'scandelete', 'gradle', 'antcommands',
+                'gradleprops']:
         return 'list'
     if name in ['init', 'prebuild', 'build']:
         return 'script'
