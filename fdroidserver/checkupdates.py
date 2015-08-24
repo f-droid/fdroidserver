@@ -130,9 +130,11 @@ def check_tags(app, pattern):
         hcode = "0"
 
         tags = vcs.gettags()
+        logging.debug("All tags: " + ','.join(tags))
         if pattern:
             pat = re.compile(pattern)
             tags = [tag for tag in tags if pat.match(tag)]
+            logging.debug("Matching tags: " + ','.join(tags))
 
         if repotype in ('git',):
             tags = vcs.latesttags(tags, 5)
