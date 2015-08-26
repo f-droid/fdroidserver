@@ -117,6 +117,8 @@ Ruby (debian packages ruby and rubygems)
 @item
 Vagrant (unpackaged, tested on v1.4.3)
 @item
+vagrant-cachier plugin (unpackaged): `vagrant plugin install vagrant-cachier`
+@item
 Paramiko (debian package python-paramiko)
 @item
 Imaging (debian package python-imaging)
