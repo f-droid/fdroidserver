@@ -164,6 +164,11 @@ for f, src, shasum in cachefiles:
 
     wanted.append(f)
 
+# allow specifying a list/tuple that includes cached local copy
+if type(config['baseboxurl']) in (list, tuple) or config['baseboxurl'][0] in ('(', '['):
+    baseboxurl = config['baseboxurl']
+else:
+    baseboxurl = '"{0}"'.format(config['baseboxurl'])
 
 # Generate an appropriate Vagrantfile for the buildserver, based on our
 # settings...
@@ -178,7 +183,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.box = "{0}"
-  config.vm.box_url = "{1}"
+  config.vm.box_url = {1}
 
   config.vm.provider "virtualbox" do |v|
     v.customize ["modifyvm", :id, "--memory", "{2}"]
@@ -187,7 +192,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision :shell, :path => "fixpaths.sh"
 """.format(config['basebox'],
-           config['baseboxurl'],
+           baseboxurl,
            config['memory'],
            config.get('cpus', 1))
 if 'aptproxy' in config and config['aptproxy']:
