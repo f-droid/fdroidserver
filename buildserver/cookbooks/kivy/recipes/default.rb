@@ -24,7 +24,7 @@ script "install-p4a" do
   cwd "/home/vagrant"
   interpreter "bash"
   code "
-    git clone git://github.com/kivy/python-for-android
+    git clone https://github.com/kivy/python-for-android
     chown -R vagrant:vagrant python-for-android
     cd python-for-android
     git checkout ca369d774e2
