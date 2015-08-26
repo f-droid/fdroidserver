@@ -10,6 +10,8 @@ basebox = "jessie32"
 # in a secure environment using trusted media (see the manual) but
 # you can use this default if you like...
 baseboxurl = "https://f-droid.org/jessie32.box"
+# or if you have a cached local copy, you can use that first:
+# baseboxurl = ["file:///home/fdroid/fdroidserver/cache/jessie32.box", "https://f-droid.org/jessie32.box"]
 
 # The amount of RAM the build server will have
 memory = 3584

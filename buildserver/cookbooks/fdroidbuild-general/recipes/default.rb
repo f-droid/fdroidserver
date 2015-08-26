@@ -1,5 +1,10 @@
 
 user = node[:settings][:user]
+debian_mirror = node[:settings][:debian_mirror]
+
+execute 'set_debian_mirror' do
+  command "sed -i 's,http://ftp.uk.debian.org/debian/,#{debian_mirror},g' /etc/apt/sources.list"
+end
 
 execute "apt-get-update" do
   command "apt-get update"
