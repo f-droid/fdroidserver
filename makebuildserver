@@ -245,7 +245,7 @@ if writevf:
 
 
 print "Configuring build server VM"
-returncode, out = vagrant(['up'], serverdir, printout=True)
+returncode, out = vagrant(['up', '--provision'], serverdir, printout=True)
 with open(os.path.join(serverdir, 'up.log'), 'w') as log:
     log.write(out)
 if returncode != 0:
