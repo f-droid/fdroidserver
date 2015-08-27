@@ -3,6 +3,6 @@ before_script:
   - echo " == Installing required packages"
   - apt-get -q install -y python pyflakes pep8 dash bash ruby
 
-metadata_check:
+check:
   script:
     - ./hooks/pre-commit
