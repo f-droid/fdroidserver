@@ -1,6 +1,8 @@
 F-Droid Server
 ==============
 
+[![build status](https://ci.gitlab.com/projects/6642/status.png?ref=master)](https://ci.gitlab.com/projects/6642?ref=master)
+
 Server for [F-Droid](https://f-droid.org), the Free Software repository system
 for Android.
 
