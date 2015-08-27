@@ -58,6 +58,7 @@ default_config = {
     'mvn3': "mvn",
     'gradle': 'gradle',
     'sync_from_local_copy_dir': False,
+    'per_app_repos': False,
     'make_current_version_link': True,
     'current_version_name_source': 'Name',
     'update_stats': False,
@@ -2135,3 +2136,26 @@ def download_file(url, local_filename=None, dldir='tmp'):
                 f.write(chunk)
                 f.flush()
     return local_filename
+
+
+def get_per_app_repos():
+    '''per-app repos are dirs named with the packageName of a single app'''
+
+    # Android packageNames are Java packages, they may contain uppercase or
+    # lowercase letters ('A' through 'Z'), numbers, and underscores
+    # ('_'). However, individual package name parts may only start with
+    # letters. https://developer.android.com/guide/topics/manifest/manifest-element.html#package
+    p = re.compile('^([a-zA-Z][a-zA-Z0-9_]*(\\.[a-zA-Z][a-zA-Z0-9_]*)*)?$')
+
+    repos = []
+    for root, dirs, files in os.walk(os.getcwd()):
+        for d in dirs:
+            print 'checking', root, 'for', d
+            if d in ('archive', 'metadata', 'repo', 'srclibs', 'tmp'):
+                # standard parts of an fdroid repo, so never packageNames
+                continue
+            elif p.match(d) \
+                    and os.path.exists(os.path.join(d, 'fdroid', 'repo', 'index.jar')):
+                repos.append(d)
+        break
+    return repos

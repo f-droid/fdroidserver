@@ -104,11 +104,11 @@ def update_awsbucket(repo_section):
                     extra['content_type'] = 'application/pgp-signature'
                 logging.info(' uploading ' + os.path.relpath(file_to_upload)
                              + ' to s3://' + awsbucket + '/' + object_name)
-                obj = driver.upload_object(file_path=file_to_upload,
-                                           container=container,
-                                           object_name=object_name,
-                                           verify_hash=False,
-                                           extra=extra)
+                with open(file_to_upload, 'rb') as iterator:
+                    obj = driver.upload_object_via_stream(iterator=iterator,
+                                                          container=container,
+                                                          object_name=object_name,
+                                                          extra=extra)
     # delete the remnants in the bucket, they do not exist locally
     while objs:
         object_name, obj = objs.popitem()
@@ -285,6 +285,8 @@ def main():
         repo_sections.append('archive')
         if not os.path.exists('archive'):
             os.mkdir('archive')
+    if config['per_app_repos']:
+        repo_sections += common.get_per_app_repos()
 
     if args[0] == 'init':
         ssh = paramiko.SSHClient()
