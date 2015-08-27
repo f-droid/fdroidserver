@@ -499,23 +499,11 @@ def read_metadata(xref=True):
     # exception. So the original .txt format is parsed first, at least until
     # newer formats stabilize.
 
-    for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
-        appid, appinfo = parse_txt_metadata(apps, metadatapath)
-        check_metadata(appinfo)
-        apps[appid] = appinfo
-
-    for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.json'))):
-        appid, appinfo = parse_json_metadata(apps, metadatapath)
-        check_metadata(appinfo)
-        apps[appid] = appinfo
-
-    for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.xml'))):
-        appid, appinfo = parse_xml_metadata(apps, metadatapath)
-        check_metadata(appinfo)
-        apps[appid] = appinfo
-
-    for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.yaml'))):
-        appid, appinfo = parse_yaml_metadata(apps, metadatapath)
+    for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.txt'))
+                               + glob.glob(os.path.join('metadata', '*.json'))
+                               + glob.glob(os.path.join('metadata', '*.xml'))
+                               + glob.glob(os.path.join('metadata', '*.yaml'))):
+        appid, appinfo = parse_metadata(apps, metadatapath)
         check_metadata(appinfo)
         apps[appid] = appinfo
 
@@ -729,6 +717,29 @@ def _decode_dict(data):
             value = _decode_dict(value)
         rv[key] = value
     return rv
+
+
+def parse_metadata(apps, metadatapath):
+    root, ext = os.path.splitext(metadatapath)
+    metadataformat = ext[1:]
+    accepted = common.config['accepted_formats']
+    if metadataformat not in accepted:
+        logging.critical('"' + metadatapath
+                         + '" is not in an accepted format, '
+                         + 'convert to: ' + ', '.join(accepted))
+        sys.exit(1)
+
+    if metadataformat == 'txt':
+        return parse_txt_metadata(apps, metadatapath)
+    elif metadataformat == 'json':
+        return parse_json_metadata(apps, metadatapath)
+    elif metadataformat == 'xml':
+        return parse_xml_metadata(apps, metadatapath)
+    elif metadataformat == 'yaml':
+        return parse_yaml_metadata(apps, metadatapath)
+    else:
+        logging.critical('Unknown metadata format: ' + metadatapath)
+        sys.exit(1)
 
 
 def parse_json_metadata(apps, metadatapath):

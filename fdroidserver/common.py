@@ -59,6 +59,7 @@ default_config = {
     'ant': "ant",
     'mvn3': "mvn",
     'gradle': 'gradle',
+    'accepted_formats': ['txt', 'yaml'],
     'sync_from_local_copy_dir': False,
     'per_app_repos': False,
     'make_current_version_link': True,

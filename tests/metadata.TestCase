@@ -29,11 +29,12 @@ class MetadataTest(unittest.TestCase):
 
         self.maxDiff = None
 
-        # these only need to be set to prevent code running on None.  The
-        # values are not used in metadata.py
+        # these need to be set to prevent code running on None, only
+        # 'accepted_formats' is actually used in metadata.py
         config = dict()
         config['sdk_path'] = '/opt/android-sdk'
         config['ndk_paths'] = dict()
+        config['accepted_formats'] = ['json', 'txt', 'xml', 'yaml']
         fdroidserver.common.config = config
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
