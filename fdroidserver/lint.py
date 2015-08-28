@@ -105,6 +105,8 @@ regex_warnings = {
          "Unnecessary trailing space"),
         (re.compile(r'.*([^[]|^)\[[^:[\]]+( |\]|$)'),
          "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"),
+        (re.compile(r'.*[^[]https?://[^ ]+'),
+         "Unlinkified link - use [http://foo.bar Link title] or [http://foo.bar]"),
     ],
 }
 
