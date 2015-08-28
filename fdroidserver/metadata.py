@@ -883,7 +883,7 @@ def write_metadata(dest, app):
 
             if t == 'string':
                 outline += value
-            if t == 'bool':
+            elif t == 'bool':
                 outline += 'yes'
             elif t == 'script':
                 outline += '&& \\\n        '.join([s.lstrip() for s in value.split('&& ')])
