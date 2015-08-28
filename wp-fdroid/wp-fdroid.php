@@ -452,7 +452,7 @@ class FDroid
 					$hasabis = isset($apk['nativecode']);
 					if($hasabis) {
 						$abis = str_replace(',', ' ', $apk['nativecode']);
-						$out.="<p>This version uses native code and will only run on: ".$abis."</p>";
+						$out.="<p>This version uses native code and is built for: ".$abis."</p>";
 					}
 
 					// Is this source or binary?
