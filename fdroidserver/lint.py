@@ -301,10 +301,11 @@ def main():
         if not curid:
             print
 
-    logging.info("Found a total of %i warnings in %i apps out of %i total." % (
-        count['warn'], count['app'], count['app_total']))
+    if count['warn'] > 0:
+        logging.warn("Found a total of %i warnings in %i apps out of %i total." % (
+            count['warn'], count['app'], count['app_total']))
+        sys.exit(1)
 
-    sys.exit(1 if count['warn'] > 0 else 0)
 
 if __name__ == "__main__":
     main()
