@@ -152,7 +152,7 @@ def main():
     config = common.read_config(options)
 
     # Get all apps...
-    allapps = metadata.read_metadata(xref=False)
+    allapps = metadata.read_metadata(xref=True)
     apps = common.read_app_args(args, allapps, False)
 
     filling_ucms = re.compile('^(Tags.*|RepoManifest.*)')
