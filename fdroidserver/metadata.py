@@ -335,6 +335,8 @@ class DescriptionFormatter:
                 if index == -1:
                     raise MetaDataException("Unterminated ]")
                 url = txt[1:index]
+                if ':' not in url:
+                    raise MetaDataException("Wrong link")
                 index2 = url.find(' ')
                 if index2 == -1:
                     urltxt = url
