@@ -103,6 +103,8 @@ regex_warnings = {
          "Unnecessary leading space"),
         (re.compile(r'.*\s$'),
          "Unnecessary trailing space"),
+        (re.compile(r'.*([^[]|^)\[[^:[\]]+( |\]|$)'),
+         "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"),
     ],
 }
 
