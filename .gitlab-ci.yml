@@ -4,6 +4,16 @@ before_script:
   - apt-get -q install -y python pyflakes pep8 dash bash ruby
       python-imaging python-libcloud python-magic python-paramiko
       python-pyasn1 python-pyasn1-modules python-requests
+  - echo " == Installing the Android SDK"
+  - wget -q -O android-sdk.tgz https://dl.google.com/android/android-sdk_r24.3.4-linux.tgz
+  - tar -x -z -f android-sdk.tgz
+  - mv android-sdk-linux android-sdk
+  - export ANDROID_HOME=$PWD/android-sdk
+  - export PATH="$ANDROID_HOME/tools:$PATH"
+  - echo " == Installing Android SDK components"
+  - echo y | android -s update sdk --no-ui -a -t platform-tools
+  - echo y | android -s update sdk --no-ui -a -t tools
+  - echo y | android -s update sdk --no-ui -a -t build-tools-23.0.0
 
 test:
   script:
