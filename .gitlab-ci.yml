@@ -2,7 +2,11 @@ before_script:
   - apt-get -q update -y
   - echo " == Installing required packages"
   - apt-get -q install -y python pyflakes pep8 dash bash ruby
+      python-imaging python-libcloud python-magic python-paramiko
+      python-pyasn1 python-pyasn1-modules python-requests
 
-check:
+test:
   script:
     - ./hooks/pre-commit
+    - cd tests
+    - ./run-tests
