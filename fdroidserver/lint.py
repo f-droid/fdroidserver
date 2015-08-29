@@ -242,6 +242,16 @@ def main():
             warn("Description of length %s is over the %i char limit" % (
                 desc_charcount, config['char_limits']['Description']))
 
+        maxcols = 140
+        for l in app['Description']:
+            if any(l.startswith(c) for c in ['*', '#']):
+                continue
+            if any(len(w) > maxcols for w in l.split(' ')):
+                continue
+            if len(l) > maxcols:
+                warn("Description should be wrapped to 80-120 chars")
+                break
+
         if (not desc[0] or not desc[-1]
                 or any(not desc[l - 1] and not desc[l] for l in range(1, len(desc)))):
             warn("Description has an extra empty line")
