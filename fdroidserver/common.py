@@ -1669,20 +1669,23 @@ class KnownApks:
         self.changed = False
 
     def writeifchanged(self):
-        if self.changed:
-            if not os.path.exists('stats'):
-                os.mkdir('stats')
-            f = open(self.path, 'w')
-            lst = []
-            for apk, app in self.apks.iteritems():
-                appid, added = app
-                line = apk + ' ' + appid
-                if added:
-                    line += ' ' + time.strftime('%Y-%m-%d', added)
-                lst.append(line)
+        if not self.changed:
+            return
+
+        if not os.path.exists('stats'):
+            os.mkdir('stats')
+
+        lst = []
+        for apk, app in self.apks.iteritems():
+            appid, added = app
+            line = apk + ' ' + appid
+            if added:
+                line += ' ' + time.strftime('%Y-%m-%d', added)
+            lst.append(line)
+
+        with open(self.path, 'w') as f:
             for line in sorted(lst):
                 f.write(line + '\n')
-            f.close()
 
     # Record an apk (if it's new, otherwise does nothing)
     # Returns the date it was added.
