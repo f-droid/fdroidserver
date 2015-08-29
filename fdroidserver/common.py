@@ -1654,6 +1654,10 @@ def scan_source(build_dir, root_dir, thisbuild):
     return count
 
 
+def natural_key(s):
+    return [int(sp) if sp.isdigit() else sp for sp in re.split(r'(\d+)', s)]
+
+
 class KnownApks:
 
     def __init__(self):
@@ -1684,7 +1688,7 @@ class KnownApks:
             lst.append(line)
 
         with open(self.path, 'w') as f:
-            for line in sorted(lst):
+            for line in sorted(lst, key=natural_key):
                 f.write(line + '\n')
 
     # Record an apk (if it's new, otherwise does nothing)
