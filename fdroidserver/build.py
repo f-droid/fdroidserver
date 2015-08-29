@@ -35,6 +35,7 @@ import logging
 
 import common
 import metadata
+import scanner
 from common import FDroidException, BuildException, VCSException, FDroidPopen, SdkToolsPopen
 
 try:
@@ -555,7 +556,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     else:
         # Scan before building...
         logging.info("Scanning source for common problems...")
-        count = common.scan_source(build_dir, root_dir, thisbuild)
+        count = scanner.scan_source(build_dir, root_dir, thisbuild)
         if count > 0:
             if force:
                 logging.warn('Scanner found %d problems' % count)
