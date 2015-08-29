@@ -1097,9 +1097,8 @@ def main():
                     build_succeeded.append(app)
                     wikilog = "Build succeeded"
             except BuildException as be:
-                logfile = open(os.path.join(log_dir, appid + '.log'), 'a+')
-                logfile.write(str(be))
-                logfile.close()
+                with open(os.path.join(log_dir, appid + '.log'), 'a+') as f:
+                    f.write(str(be))
                 print("Could not build app %s due to BuildException: %s" % (appid, be))
                 if options.stop:
                     sys.exit(1)

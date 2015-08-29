@@ -572,9 +572,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 icondest = os.path.join(icon_dir, iconfilename)
 
                 try:
-                    iconfile = open(icondest, 'wb')
-                    iconfile.write(apk.read(iconsrc))
-                    iconfile.close()
+                    with open(icondest, 'wb') as f:
+                        f.write(apk.read(iconsrc))
                     thisinfo['icons'][density] = iconfilename
 
                 except:
@@ -587,9 +586,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 iconsrc = thisinfo['icons_src']['-1']
                 iconpath = os.path.join(
                     get_icon_dir(repodir, None), iconfilename)
-                iconfile = open(iconpath, 'wb')
-                iconfile.write(apk.read(iconsrc))
-                iconfile.close()
+                with open(iconpath, 'wb') as f:
+                    f.write(apk.read(iconsrc))
                 try:
                     im = Image.open(iconpath)
                     dpi = px_to_dpi(im.size[0])
@@ -923,13 +921,13 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                         os.remove(siglinkname)
                     os.symlink(sigfile_path, siglinkname)
 
-    of = open(os.path.join(repodir, 'index.xml'), 'wb')
     if options.pretty:
         output = doc.toprettyxml()
     else:
         output = doc.toxml()
-    of.write(output)
-    of.close()
+
+    with open(os.path.join(repodir, 'index.xml'), 'wb') as f:
+        f.write(output)
 
     if 'repo_keyalias' in config:
 
@@ -975,9 +973,8 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
     catdata = ''
     for cat in categories:
         catdata += cat + '\n'
-    f = open(os.path.join(repodir, 'categories.txt'), 'w')
-    f.write(catdata)
-    f.close()
+    with open(os.path.join(repodir, 'categories.txt'), 'w') as f:
+        f.write(catdata)
 
 
 def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversions):
@@ -1278,9 +1275,8 @@ def main():
                 if app['icon'] is not None:
                     data += app['icon'] + "\t"
                 data += app['License'] + "\n"
-            f = open(os.path.join(repodirs[0], 'latestapps.dat'), 'w')
-            f.write(data)
-            f.close()
+            with open(os.path.join(repodirs[0], 'latestapps.dat'), 'w') as f:
+                f.write(data)
 
     if cachechanged:
         with open(apkcachefile, 'wb') as cf:

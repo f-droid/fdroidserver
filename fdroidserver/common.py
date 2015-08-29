@@ -1247,9 +1247,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         props = ""
         if os.path.isfile(path):
             logging.info("Updating local.properties file at %s" % path)
-            f = open(path, 'r')
-            props += f.read()
-            f.close()
+            with open(path, 'r') as f:
+                props += f.read()
             props += '\n'
         else:
             logging.info("Creating local.properties file at %s" % path)
@@ -1269,9 +1268,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         # Add java.encoding if necessary
         if build['encoding']:
             props += "java.encoding=%s\n" % build['encoding']
-        f = open(path, 'w')
-        f.write(props)
-        f.close()
+        with open(path, 'w') as f:
+            f.write(props)
 
     flavours = []
     if build['type'] == 'gradle':
