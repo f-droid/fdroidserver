@@ -67,7 +67,7 @@ def main():
     config = common.read_config(options)
 
     if not config['update_stats']:
-        logging.info("Stats are disabled - check your configuration")
+        logging.info("Stats are disabled - set \"update_stats = True\" in your config.py")
         sys.exit(1)
 
     # Get all metadata-defined apps...
