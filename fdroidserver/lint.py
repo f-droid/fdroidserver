@@ -122,7 +122,7 @@ categories = Set([
     "Science & Education",
     "Security",
     "System",
-    "Wallpaper",
+    "Theming",
 ])
 
 desc_url = re.compile("[^[]\[([^ ]+)( |\]|$)")
