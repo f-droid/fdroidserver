@@ -119,7 +119,6 @@ categories = Set([
     "Money",
     "Multimedia",
     "Navigation",
-    "Office",
     "Phone & SMS",
     "Reading",
     "Science & Education",
