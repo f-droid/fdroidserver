@@ -1,5 +1,5 @@
 include README.md
-include COPYING
+include LICENSE
 include fd-commit
 include fdroid
 include jenkins-build

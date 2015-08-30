@@ -61,7 +61,7 @@ version="gendocs.sh $scriptversion
 Copyright 2013 Free Software Foundation, Inc.
 There is NO warranty.  You may redistribute this software
 under the terms of the GNU General Public License.
-For more information about these matters, see the files named COPYING."
+For more information about these matters, see the files named LICENSE."
 
 usage="Usage: $prog [OPTION]... PACKAGE MANUAL-TITLE
 
