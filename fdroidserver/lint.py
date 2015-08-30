@@ -111,7 +111,6 @@ regex_warnings = {
 }
 
 categories = Set([
-    "Children",
     "Development",
     "Games",
     "Internet",
