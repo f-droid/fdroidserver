@@ -124,6 +124,7 @@ categories = Set([
     "Reading",
     "Science & Education",
     "Security",
+    "Sports & Health",
     "System",
     "Theming",
     "Time",
