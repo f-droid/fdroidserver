@@ -114,7 +114,9 @@ categories = Set([
     "Connectivity",
     "Development",
     "Games",
+    "Graphics",
     "Internet",
+    "Money",
     "Multimedia",
     "Navigation",
     "Office",
@@ -124,6 +126,8 @@ categories = Set([
     "Security",
     "System",
     "Theming",
+    "Time",
+    "Writing",
 ])
 
 desc_url = re.compile("[^[]\[([^ ]+)( |\]|$)")
