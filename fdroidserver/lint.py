@@ -284,14 +284,13 @@ def main():
                 lcount = 0
                 continue
 
-            ld = l.decode('utf-8')
-            if ld[0] == lchar and ld[1] == ' ':
+            if l[0] == lchar and l[1] == ' ':
                 lcount += 1
                 if lcount > 2 and lchar not in validchars:
                     warn("Description has a list (%s) but it isn't bulleted (*) nor numbered (#)" % lchar)
                     break
             else:
-                lchar = ld[0]
+                lchar = l[0]
                 lcount = 1
 
         # Regex checks in all kinds of fields
