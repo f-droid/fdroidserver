@@ -260,28 +260,30 @@ def main():
                 or any(not desc[l - 1] and not desc[l] for l in range(1, len(desc)))):
             warn("Description has an extra empty line")
 
-        # Check for lists using the wrong characters
-        validchars = ['*', '#']
-        lchar = ''
-        lcount = 0
         for l in app['Description']:
-            if len(l) < 1:
-                continue
-
             for um in desc_url.finditer(l):
                 url = um.group(1)
                 for m, r in http_warnings:
                     if m.match(url):
                         warn("URL '%s' in Description: %s" % (url, r))
 
-            c = l.decode('utf-8')[0]
-            if c == lchar:
+        # Check for lists using the wrong characters
+        validchars = ['*', '#']
+        lchar = ''
+        lcount = 0
+        for l in app['Description']:
+            if len(l) < 1:
+                lcount = 0
+                continue
+
+            ld = l.decode('utf-8')
+            if ld[0] == lchar and ld[1] == ' ':
                 lcount += 1
-                if lcount > 3 and lchar not in validchars:
+                if lcount > 2 and lchar not in validchars:
                     warn("Description has a list (%s) but it isn't bulleted (*) nor numbered (#)" % lchar)
                     break
             else:
-                lchar = c
+                lchar = ld[0]
                 lcount = 1
 
         # Regex checks in all kinds of fields
