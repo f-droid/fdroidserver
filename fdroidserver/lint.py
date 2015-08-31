@@ -260,6 +260,14 @@ def main():
                 or any(not desc[l - 1] and not desc[l] for l in range(1, len(desc)))):
             warn("Description has an extra empty line")
 
+        seenlines = set()
+        for l in app['Description']:
+            if len(l) < 1:
+                continue
+            if l in seenlines:
+                warn("Description has a duplicate line")
+            seenlines.add(l)
+
         for l in app['Description']:
             for um in desc_url.finditer(l):
                 url = um.group(1)
