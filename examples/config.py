@@ -11,12 +11,12 @@
 # used by default.  If a version is missing or assigned to None, it is assumed
 # not installed.
 # ndk_paths = {
-#    'r9b': "/opt/android-ndk-r9b",
-#    'r10e': "/opt/android-ndk",
+#     'r9b': None,
+#     'r10e': "$ANDROID_NDK",
 # }
 
 # Build tools version to be used
-build_tools = "22.0.1"
+build_tools = "23.0.0"
 
 # Command or path to binary for running Ant
 ant = "ant"
@@ -214,13 +214,13 @@ carbon_port = 2003
 build_server_always = False
 
 # By default, fdroid will use YAML and the custom .txt metadata formats.  It
-# is also possible to have metadata in JSON and XML. You can enable your
-# preferred formats by setting them in a list:
-# accepted_formats = ['json', 'txt', 'xml', 'yaml']
+# is also possible to have metadata in JSON and XML by adding 'json' and
+# 'xml'.
+# accepted_formats = ['txt', 'yaml']
 
 # Limit in number of characters that fields can take up
 # Only the fields listed here are supported, defaults shown
 char_limits = {
-    'Summary': 50,
-    'Description': 1500,
+    'Summary': 80,
+    'Description': 4000,
 }

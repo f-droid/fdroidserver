@@ -53,7 +53,7 @@ default_config = {
     'sdk_path': "$ANDROID_HOME",
     'ndk_paths': {
         'r9b': None,
-        'r10e': "$ANDROID_NDK"
+        'r10e': "$ANDROID_NDK",
     },
     'build_tools': "23.0.0",
     'ant': "ant",
@@ -75,7 +75,7 @@ default_config = {
     'smartcardoptions': [],
     'char_limits': {
         'Summary': 80,
-        'Description': 4000
+        'Description': 4000,
     },
     'keyaliases': {},
     'repo_url': "https://MyFirstFDroidRepo.org/fdroid/repo",
