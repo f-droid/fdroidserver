@@ -2,10 +2,11 @@ before_script:
   - apt-get -q update -y
   - echo " == Installing required packages"
   - apt-get -q install -y wget tar lib32stdc++6 lib32z1
-      python python-virtualenv pyflakes pep8 dash bash ruby
-      python-imaging python-libcloud python-logilab-astng python-magic
+      libjpeg-dev python-dev zlib1g-dev
+      python pyflakes pylint pep8 dash bash ruby
+      python-git python-imaging python-libcloud python-logilab-astng python-magic
       python-paramiko python-pip python-pyasn1 python-pyasn1-modules
-      python-requests python-yaml
+      python-requests python-virtualenv python-yaml
       rsync
   - echo " == Installing OpenJDK 7"
   - apt-get -q install -y openjdk-7-jdk
