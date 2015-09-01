@@ -5,6 +5,7 @@ before_script:
       python pyflakes pep8 dash bash ruby
       python-imaging python-libcloud python-magic python-paramiko
       python-pyasn1 python-pyasn1-modules python-requests
+      python-yaml
       rsync
   - echo " == Installing OpenJDK 7"
   - apt-get -q install -y openjdk-7-jdk
