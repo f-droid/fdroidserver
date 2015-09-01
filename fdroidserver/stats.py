@@ -256,8 +256,7 @@ def main():
     for app in metaapps:
         if app['AntiFeatures'] is None:
             continue
-        antifeatures = [a.strip() for a in app['AntiFeatures'].split(',')]
-        for antifeature in antifeatures:
+        for antifeature in app['AntiFeatures']:
             afs[antifeature] += 1
     with open('stats/antifeatures.txt', 'w') as f:
         for antifeature, count in afs.most_common():

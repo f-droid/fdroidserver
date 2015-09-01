@@ -6,7 +6,7 @@
 # Redirect output to stderr.
 exec 1>&2
 
-PY_FILES="fdroid makebuildserver setup.py examples/*.py buildserver/*.py fdroidserver/*.py"
+PY_FILES="fdroid makebuildserver setup.py examples/*.py buildserver/*.py fdroidserver/*.py tests/*.TestCase"
 SH_FILES="hooks/pre-commit"
 BASH_FILES="fd-commit jenkins-build docs/update.sh completion/bash-completion"
 RB_FILES="buildserver/cookbooks/*/recipes/*.rb"

@@ -445,20 +445,29 @@ the APK files in the repo directory, and
 the metadata files in the metadata directory.
 @end enumerate
 
-The metadata files are simple, easy to edit text files, always named as the
-application's package ID with '.txt' appended.
+The original metadata files are simple, easy to edit text files,
+always named as the application's package ID with '.txt' appended.
+Additionally, you can use JSON, XML, or YAML for app metadata, using
+the same fields as the original '.txt' format.
 
-Note that although the metadata files are designed to be easily read and
-writable by humans, they are also processed and written by various scripts.
-They are capable of rewriting the entire file when necessary. Even so,
-the structure and comments will be preserved correctly, although the order
-of fields will be standardised. (In the event that the original file was
-in a different order, comments are considered as being attached to the field
-following them). In fact, you can standardise all the metadata in a single
-command, without changing the functional content, by running:
+Note that although the metadata files are designed to be easily read
+and writable by humans, they are also processed and written by various
+scripts.  The original '.txt' format can be automatically cleaned up
+when necessary.  The structure and comments will be preserved
+correctly, although the order of fields will be standardised. (In the
+event that the original file was in a different order, comments are
+considered as being attached to the field following them). In fact,
+you can standardise all the '.txt' metadata in a single command,
+without changing the functional content, by running:
 
 @example
 fdroid rewritemeta
+@end example
+
+Or just run it on a specific app:
+
+@example
+fdroid rewritemeta org.adaway
 @end example
 
 The following sections describe the fields recognised within the file.

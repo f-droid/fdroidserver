@@ -213,6 +213,11 @@ carbon_port = 2003
 # --server option on dedicated secure build server hosts.
 build_server_always = False
 
+# By default, fdroid will use YAML and the custom .txt metadata formats.  It
+# is also possible to have metadata in JSON and XML. You can enable your
+# preferred formats by setting them in a list:
+# accepted_formats = ['json', 'txt', 'xml', 'yaml']
+
 # Limit in number of characters that fields can take up
 # Only the fields listed here are supported, defaults shown
 char_limits = {

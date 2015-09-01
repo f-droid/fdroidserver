@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # rewritemeta.py - part of the FDroid server tools
+# This cleans up the original .txt metadata file format.
 # Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
@@ -46,8 +47,14 @@ def main():
     apps = common.read_app_args(args, allapps, False)
 
     for appid, app in apps.iteritems():
-        logging.info("Writing " + appid)
-        metadata.write_metadata(os.path.join('metadata', appid) + '.txt', app)
+        metadatapath = app['metadatapath']
+        ext = os.path.splitext(metadatapath)[1][1:]
+        if ext == 'txt':
+            logging.info("Rewriting " + metadatapath)
+            metadata.write_metadata(metadatapath, app)
+        else:
+            logging.info("Ignoring %s file at '%s'"
+                         % (ext.upper(), metadatapath))
 
     logging.info("Finished.")
 

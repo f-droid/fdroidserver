@@ -92,9 +92,13 @@ def update_wiki(apps, sortedids, apks):
         wikidata = ''
         if app['Disabled']:
             wikidata += '{{Disabled|' + app['Disabled'] + '}}\n'
-        if app['AntiFeatures']:
-            for af in app['AntiFeatures'].split(','):
+        if 'AntiFeatures' in app:
+            for af in app['AntiFeatures']:
                 wikidata += '{{AntiFeature|' + af + '}}\n'
+        if app['Requires Root']:
+            requiresroot = 'Yes'
+        else:
+            requiresroot = 'No'
         wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|changelog=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|dogecoin=%s|license=%s|root=%s}}\n' % (
             appid,
             app['Name'],
@@ -110,7 +114,7 @@ def update_wiki(apps, sortedids, apks):
             app['Litecoin'],
             app['Dogecoin'],
             app['License'],
-            app.get('Requires Root', 'No'))
+            requiresroot)
 
         if app['Provides']:
             wikidata += "This app provides: %s" % ', '.join(app['Summary'].split(','))
@@ -847,7 +851,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         addElement('marketvercode', app['Current Version Code'], doc, apel)
 
         if app['AntiFeatures']:
-            af = app['AntiFeatures'].split(',')
+            af = app['AntiFeatures']
             if af:
                 addElementNonEmpty('antifeatures', ','.join(af), doc, apel)
         if app['Provides']:

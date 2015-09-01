@@ -4,21 +4,22 @@
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
 import inspect
+import logging
 import optparse
 import os
 import sys
 import unittest
 
-localmodule = os.path.realpath(os.path.join(
-        os.path.dirname(inspect.getfile(inspect.currentframe())),
-        '..'))
+localmodule = os.path.realpath(
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
 print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
-    sys.path.insert(0,localmodule)
+    sys.path.insert(0, localmodule)
 
 import fdroidserver.common
 import fdroidserver.update
 from fdroidserver.common import FDroidPopen
+
 
 class UpdateTest(unittest.TestCase):
     '''fdroid update'''
@@ -39,13 +40,13 @@ class UpdateTest(unittest.TestCase):
             return sig
         else:
             return None
-        
+
     def testGoodGetsig(self):
         apkfile = os.path.join(os.path.dirname(__file__), 'urzip.apk')
         sig = self.javagetsig(apkfile)
         self.assertIsNotNone(sig, "sig is None")
         pysig = fdroidserver.update.getsig(apkfile)
-        self.assertIsNotNone(pysig, "pysig is None")        
+        self.assertIsNotNone(pysig, "pysig is None")
         self.assertEquals(sig, fdroidserver.update.getsig(apkfile),
                           "python sig not equal to java sig!")
         self.assertEquals(len(sig), len(pysig),

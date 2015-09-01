@@ -17,11 +17,25 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
 import os
 import re
+import sys
 import glob
 import cgi
 import logging
+
+import yaml
+# use libyaml if it is available
+try:
+    from yaml import CLoader
+    YamlLoader = CLoader
+except ImportError:
+    from yaml import Loader
+    YamlLoader = Loader
+
+# use the C implementation when available
+import xml.etree.cElementTree as ElementTree
 
 from collections import OrderedDict
 
@@ -41,7 +55,7 @@ class MetaDataException(Exception):
 # In the order in which they are laid out on files
 app_defaults = OrderedDict([
     ('Disabled', None),
-    ('AntiFeatures', None),
+    ('AntiFeatures', []),
     ('Provides', None),
     ('Categories', ['None']),
     ('License', 'Unknown'),
@@ -78,6 +92,8 @@ app_defaults = OrderedDict([
 
 # In the order in which they are laid out on files
 # Sorted by their action and their place in the build timeline
+# These variables can have varying datatypes. For example, anything with
+# flagtype(v) == 'list' is inited as False, then set as a list of strings.
 flag_defaults = OrderedDict([
     ('disable', False),
     ('commit', None),
@@ -188,14 +204,9 @@ valuetypes = {
                    ["Dogecoin"],
                    []),
 
-    FieldValidator("Boolean",
-                   ['Yes', 'No'], None,
-                   ["Requires Root"],
-                   []),
-
     FieldValidator("bool",
-                   ['yes', 'no'], None,
-                   [],
+                   r'([Yy]es|[Nn]o|[Tt]rue|[Ff]alse)', None,
+                   ["Requires Root"],
                    ['submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
                     'novcheck']),
 
@@ -407,11 +418,9 @@ def description_html(lines, linkres):
     return ps.text_html
 
 
-def parse_srclib(metafile):
+def parse_srclib(metadatapath):
 
     thisinfo = {}
-    if metafile and not isinstance(metafile, file):
-        metafile = open(metafile, "r")
 
     # Defaults for fields that come from metadata
     thisinfo['Repo Type'] = ''
@@ -419,8 +428,10 @@ def parse_srclib(metafile):
     thisinfo['Subdir'] = None
     thisinfo['Prepare'] = None
 
-    if metafile is None:
+    if not os.path.exists(metadatapath):
         return thisinfo
+
+    metafile = open(metadatapath, "r")
 
     n = 0
     for line in metafile:
@@ -464,13 +475,13 @@ def read_srclibs():
     if not os.path.exists(srcdir):
         os.makedirs(srcdir)
 
-    for metafile in sorted(glob.glob(os.path.join(srcdir, '*.txt'))):
-        srclibname = os.path.basename(metafile[:-4])
-        srclibs[srclibname] = parse_srclib(metafile)
+    for metadatapath in sorted(glob.glob(os.path.join(srcdir, '*.txt'))):
+        srclibname = os.path.basename(metadatapath[:-4])
+        srclibs[srclibname] = parse_srclib(metadatapath)
 
 
 # Read all metadata. Returns a list of 'app' objects (which are dictionaries as
-# returned by the parse_metadata function.
+# returned by the parse_txt_metadata function.
 def read_metadata(xref=True):
 
     # Always read the srclibs before the apps, since they can use a srlib as
@@ -483,8 +494,16 @@ def read_metadata(xref=True):
         if not os.path.exists(basedir):
             os.makedirs(basedir)
 
-    for metafile in sorted(glob.glob(os.path.join('metadata', '*.txt'))):
-        appid, appinfo = parse_metadata(metafile)
+    # If there are multiple metadata files for a single appid, then the first
+    # file that is parsed wins over all the others, and the rest throw an
+    # exception. So the original .txt format is parsed first, at least until
+    # newer formats stabilize.
+
+    for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.txt'))
+                               + glob.glob(os.path.join('metadata', '*.json'))
+                               + glob.glob(os.path.join('metadata', '*.xml'))
+                               + glob.glob(os.path.join('metadata', '*.yaml'))):
+        appid, appinfo = parse_metadata(apps, metadatapath)
         check_metadata(appinfo)
         apps[appid] = appinfo
 
@@ -510,7 +529,7 @@ def read_metadata(xref=True):
 def metafieldtype(name):
     if name in ['Description', 'Maintainer Notes']:
         return 'multiline'
-    if name in ['Categories']:
+    if name in ['Categories', 'AntiFeatures']:
         return 'list'
     if name == 'Build Version':
         return 'build'
@@ -560,9 +579,93 @@ def split_list_values(s):
     return [v for v in l if v]
 
 
+def get_default_app_info_list(apps, metadatapath):
+    appid = os.path.splitext(os.path.basename(metadatapath))[0]
+    if appid in apps:
+        logging.critical("'%s' is a duplicate! '%s' is already provided by '%s'"
+                         % (metadatapath, appid, apps[appid]['metadatapath']))
+        sys.exit(1)
+
+    thisinfo = {}
+    thisinfo.update(app_defaults)
+    thisinfo['metadatapath'] = metadatapath
+    if appid is not None:
+        thisinfo['id'] = appid
+
+    # General defaults...
+    thisinfo['builds'] = []
+    thisinfo['comments'] = []
+
+    return appid, thisinfo
+
+
+def post_metadata_parse(thisinfo):
+
+    supported_metadata = app_defaults.keys() + ['comments', 'builds', 'id', 'metadatapath']
+    for k, v in thisinfo.iteritems():
+        if k not in supported_metadata:
+            raise MetaDataException("Unrecognised metadata: {0}: {1}"
+                                    .format(k, v))
+        if type(v) in (float, int):
+            thisinfo[k] = str(v)
+
+    # convert to the odd internal format
+    for k in ('Description', 'Maintainer Notes'):
+        if isinstance(thisinfo[k], basestring):
+            text = thisinfo[k].rstrip().lstrip()
+            thisinfo[k] = text.split('\n')
+
+    supported_flags = (flag_defaults.keys()
+                       + ['vercode', 'version', 'versionCode', 'versionName'])
+    esc_newlines = re.compile('\\\\( |\\n)')
+
+    for build in thisinfo['builds']:
+        for k, v in build.items():
+            if k not in supported_flags:
+                raise MetaDataException("Unrecognised build flag: {0}={1}"
+                                        .format(k, v))
+
+            if k == 'versionCode':
+                build['vercode'] = str(v)
+                del build['versionCode']
+            elif k == 'versionName':
+                build['version'] = str(v)
+                del build['versionName']
+            elif type(v) in (float, int):
+                build[k] = str(v)
+            else:
+                keyflagtype = flagtype(k)
+                if keyflagtype == 'list':
+                    # these can be bools, strings or lists, but ultimately are lists
+                    if isinstance(v, basestring):
+                        build[k] = [v]
+                    elif isinstance(v, bool):
+                        if v:
+                            build[k] = ['yes']
+                        else:
+                            build[k] = ['no']
+                elif keyflagtype == 'script':
+                    build[k] = re.sub(esc_newlines, '', v).lstrip().rstrip()
+                elif keyflagtype == 'bool':
+                    # TODO handle this using <xsd:element type="xsd:boolean> in a schema
+                    if isinstance(v, basestring):
+                        if v == 'true':
+                            build[k] = True
+                        else:
+                            build[k] = False
+
+    if not thisinfo['Description']:
+        thisinfo['Description'].append('No description available')
+
+    for build in thisinfo['builds']:
+        fill_build_defaults(build)
+
+    thisinfo['builds'] = sorted(thisinfo['builds'], key=lambda build: int(build['vercode']))
+
+
 # Parse metadata for a single application.
 #
-#  'metafile' - the filename to read. The package id for the application comes
+#  'metadatapath' - the filename to read. The package id for the application comes
 #               from this filename. Pass None to get a blank entry.
 #
 # Returns a dictionary containing all the details of the application. There are
@@ -576,7 +679,7 @@ def split_list_values(s):
 #  'builds'           - a list of dictionaries containing build information
 #                       for each defined build
 #  'comments'         - a list of comments from the metadata file. Each is
-#                       a tuple of the form (field, comment) where field is
+#                       a list of the form [field, comment] where field is
 #                       the name of the field it preceded in the metadata
 #                       file. Where field is None, the comment goes at the
 #                       end of the file. Alternatively, 'build:version' is
@@ -584,9 +687,141 @@ def split_list_values(s):
 #  'descriptionlines' - original lines of description as formatted in the
 #                       metadata file.
 #
-def parse_metadata(metafile):
 
-    appid = None
+
+def _decode_list(data):
+    '''convert items in a list from unicode to basestring'''
+    rv = []
+    for item in data:
+        if isinstance(item, unicode):
+            item = item.encode('utf-8')
+        elif isinstance(item, list):
+            item = _decode_list(item)
+        elif isinstance(item, dict):
+            item = _decode_dict(item)
+        rv.append(item)
+    return rv
+
+
+def _decode_dict(data):
+    '''convert items in a dict from unicode to basestring'''
+    rv = {}
+    for key, value in data.iteritems():
+        if isinstance(key, unicode):
+            key = key.encode('utf-8')
+        if isinstance(value, unicode):
+            value = value.encode('utf-8')
+        elif isinstance(value, list):
+            value = _decode_list(value)
+        elif isinstance(value, dict):
+            value = _decode_dict(value)
+        rv[key] = value
+    return rv
+
+
+def parse_metadata(apps, metadatapath):
+    root, ext = os.path.splitext(metadatapath)
+    metadataformat = ext[1:]
+    accepted = common.config['accepted_formats']
+    if metadataformat not in accepted:
+        logging.critical('"' + metadatapath
+                         + '" is not in an accepted format, '
+                         + 'convert to: ' + ', '.join(accepted))
+        sys.exit(1)
+
+    if metadataformat == 'txt':
+        return parse_txt_metadata(apps, metadatapath)
+    elif metadataformat == 'json':
+        return parse_json_metadata(apps, metadatapath)
+    elif metadataformat == 'xml':
+        return parse_xml_metadata(apps, metadatapath)
+    elif metadataformat == 'yaml':
+        return parse_yaml_metadata(apps, metadatapath)
+    else:
+        logging.critical('Unknown metadata format: ' + metadatapath)
+        sys.exit(1)
+
+
+def parse_json_metadata(apps, metadatapath):
+
+    appid, thisinfo = get_default_app_info_list(apps, metadatapath)
+
+    # fdroid metadata is only strings and booleans, no floats or ints. And
+    # json returns unicode, and fdroidserver still uses plain python strings
+    # TODO create schema using https://pypi.python.org/pypi/jsonschema
+    jsoninfo = json.load(open(metadatapath, 'r'),
+                         object_hook=_decode_dict,
+                         parse_int=lambda s: s,
+                         parse_float=lambda s: s)
+    thisinfo.update(jsoninfo)
+    post_metadata_parse(thisinfo)
+
+    return (appid, thisinfo)
+
+
+def parse_xml_metadata(apps, metadatapath):
+
+    appid, thisinfo = get_default_app_info_list(apps, metadatapath)
+
+    tree = ElementTree.ElementTree(file=metadatapath)
+    root = tree.getroot()
+
+    if root.tag != 'resources':
+        logging.critical(metadatapath + ' does not have root as <resources></resources>!')
+        sys.exit(1)
+
+    supported_metadata = app_defaults.keys()
+    for child in root:
+        if child.tag != 'builds':
+            # builds does not have name="" attrib
+            name = child.attrib['name']
+            if name not in supported_metadata:
+                raise MetaDataException("Unrecognised metadata: <"
+                                        + child.tag + ' name="' + name + '">'
+                                        + child.text
+                                        + "</" + child.tag + '>')
+
+        if child.tag == 'string':
+            thisinfo[name] = child.text
+        elif child.tag == 'string-array':
+            items = []
+            for item in child:
+                items.append(item.text)
+            thisinfo[name] = items
+        elif child.tag == 'builds':
+            builds = []
+            for build in child:
+                builddict = dict()
+                for key in build:
+                    builddict[key.tag] = key.text
+                builds.append(builddict)
+            thisinfo['builds'] = builds
+
+    # TODO handle this using <xsd:element type="xsd:boolean> in a schema
+    if not isinstance(thisinfo['Requires Root'], bool):
+        if thisinfo['Requires Root'] == 'true':
+            thisinfo['Requires Root'] = True
+        else:
+            thisinfo['Requires Root'] = False
+
+    post_metadata_parse(thisinfo)
+
+    return (appid, thisinfo)
+
+
+def parse_yaml_metadata(apps, metadatapath):
+
+    appid, thisinfo = get_default_app_info_list(apps, metadatapath)
+
+    yamlinfo = yaml.load(open(metadatapath, 'r'), Loader=YamlLoader)
+    thisinfo.update(yamlinfo)
+    post_metadata_parse(thisinfo)
+
+    return (appid, thisinfo)
+
+
+def parse_txt_metadata(apps, metadatapath):
+
     linedesc = None
 
     def add_buildflag(p, thisbuild):
@@ -658,24 +893,11 @@ def parse_metadata(metafile):
         if not curcomments:
             return
         for comment in curcomments:
-            thisinfo['comments'].append((key, comment))
+            thisinfo['comments'].append([key, comment])
         del curcomments[:]
 
-    thisinfo = {}
-    if metafile:
-        if not isinstance(metafile, file):
-            metafile = open(metafile, "r")
-        appid = metafile.name[9:-4]
-
-    thisinfo.update(app_defaults)
-    thisinfo['id'] = appid
-
-    # General defaults...
-    thisinfo['builds'] = []
-    thisinfo['comments'] = []
-
-    if metafile is None:
-        return appid, thisinfo
+    appid, thisinfo = get_default_app_info_list(apps, metadatapath)
+    metafile = open(metadatapath, "r")
 
     mode = 0
     buildlines = []
@@ -788,13 +1010,7 @@ def parse_metadata(metafile):
     elif mode == 3:
         raise MetaDataException("Unterminated build in " + metafile.name)
 
-    if not thisinfo['Description']:
-        thisinfo['Description'].append('No description available')
-
-    for build in thisinfo['builds']:
-        fill_build_defaults(build)
-
-    thisinfo['builds'] = sorted(thisinfo['builds'], key=lambda build: int(build['vercode']))
+    post_metadata_parse(thisinfo)
 
     return (appid, thisinfo)
 
@@ -831,7 +1047,7 @@ def write_metadata(dest, app):
 
     mf = open(dest, 'w')
     writefield_nonempty('Disabled')
-    writefield_nonempty('AntiFeatures')
+    writefield('AntiFeatures')
     writefield_nonempty('Provides')
     writefield('Categories')
     writefield('License')
@@ -854,7 +1070,7 @@ def write_metadata(dest, app):
     mf.write('.\n')
     mf.write('\n')
     if app['Requires Root']:
-        writefield('Requires Root', 'Yes')
+        writefield('Requires Root', 'yes')
         mf.write('\n')
     if app['Repo Type']:
         writefield('Repo Type')

@@ -198,7 +198,7 @@ def main():
         sys.exit(1)
 
     # Construct the metadata...
-    app = metadata.parse_metadata(None)[1]
+    app = metadata.parse_txt_metadata(None)[1]
     app['Web Site'] = website
     app['Source Code'] = sourcecode
     if issuetracker:
@@ -234,9 +234,9 @@ def main():
     with open('build/.fdroidvcs-' + package, 'w') as f:
         f.write(repotype + ' ' + repo)
 
-    metafile = os.path.join('metadata', package + '.txt')
-    metadata.write_metadata(metafile, app)
-    logging.info("Wrote " + metafile)
+    metadatapath = os.path.join('metadata', package + '.txt')
+    metadata.write_metadata(metadatapath, app)
+    logging.info("Wrote " + metadatapath)
 
 
 if __name__ == "__main__":

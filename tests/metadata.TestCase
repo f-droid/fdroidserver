@@ -1,0 +1,55 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+
+# http://www.drdobbs.com/testing/unit-testing-with-python/240165163
+
+import inspect
+import optparse
+import os
+import pickle
+import sys
+import unittest
+
+localmodule = os.path.realpath(
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
+print('localmodule: ' + localmodule)
+if localmodule not in sys.path:
+    sys.path.insert(0, localmodule)
+
+import fdroidserver.common
+import fdroidserver.metadata
+
+
+class MetadataTest(unittest.TestCase):
+    '''fdroidserver/metadata.py'''
+
+    def test_read_metadata(self):
+        testsdir = os.path.dirname(__file__)
+        os.chdir(testsdir)
+
+        self.maxDiff = None
+
+        # these need to be set to prevent code running on None, only
+        # 'accepted_formats' is actually used in metadata.py
+        config = dict()
+        config['sdk_path'] = '/opt/android-sdk'
+        config['ndk_paths'] = dict()
+        config['accepted_formats'] = ['json', 'txt', 'xml', 'yaml']
+        fdroidserver.common.config = config
+
+        apps = fdroidserver.metadata.read_metadata(xref=True)
+        for appid in ('org.smssecure.smssecure', 'org.adaway', 'net.osmand.plus', 'org.videolan.vlc'):
+            frompickle = pickle.load(open(os.path.join('metadata', appid + '.pickle')))
+            self.assertTrue(appid in apps.keys())
+            self.assertEquals(apps[appid], frompickle)
+
+
+if __name__ == "__main__":
+    parser = optparse.OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
+
+    newSuite = unittest.TestSuite()
+    newSuite.addTest(unittest.makeSuite(MetadataTest))
+    unittest.main()
