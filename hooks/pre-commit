@@ -6,7 +6,8 @@
 # Redirect output to stderr.
 exec 1>&2
 
-PY_FILES="fdroid makebuildserver setup.py examples/*.py buildserver/*.py fdroidserver/*.py tests/*.TestCase"
+PY_FILES="fdroid makebuildserver setup.py examples/*.py buildserver/*.py fdroidserver/*.py"
+PY_TEST_FILES="tests/*.TestCase"
 SH_FILES="hooks/pre-commit"
 BASH_FILES="fd-commit jenkins-build docs/update.sh completion/bash-completion"
 RB_FILES="buildserver/cookbooks/*/recipes/*.rb"
@@ -48,11 +49,18 @@ else
 	err "pep8 is not installed!"
 fi
 
-if ! $PYFLAKES $PY_FILES; then
+if ! $PYFLAKES $PY_FILES $PY_TEST_FILES; then
 	err "pyflakes tests failed!"
 fi
 
 if ! $PEP8 --ignore=$PEP8_IGNORE $PY_FILES; then
+	err "pep8 tests failed!"
+fi
+
+# The tests use a little hack in order to cleanly import the fdroidserver
+# package locally like a regular package.  pep8 doesn't see that, so this
+# makes pep8 skip E402 on the test files that need that hack.
+if ! $PEP8 --ignore=$PEP8_IGNORE,E402 $PY_TEST_FILES; then
 	err "pep8 tests failed!"
 fi
 
