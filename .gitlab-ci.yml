@@ -2,7 +2,7 @@ before_script:
   - apt-get -q update -y
   - echo " == Installing required packages"
   - apt-get -q install -y wget tar lib32stdc++6 lib32z1
-      python pyflakes pep8 dash bash ruby
+      python python-virtualenv pyflakes pep8 dash bash ruby
       python-imaging python-libcloud python-logilab-astng python-magic
       python-paramiko python-pip python-pyasn1 python-pyasn1-modules
       python-requests python-yaml
