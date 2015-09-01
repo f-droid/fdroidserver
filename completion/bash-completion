@@ -84,10 +84,10 @@ __vercode() {
 __complete_options() {
 	case "${cur}" in
 		--*)
-			COMPREPLY=( $( compgen -W "--help ${lopts}" -- $cur ) )
+			COMPREPLY=( $( compgen -W "--help --version ${lopts}" -- $cur ) )
 			return 0;;
 		*)
-			COMPREPLY=( $( compgen -W "-h ${opts} --help ${lopts}" -- $cur ) )
+			COMPREPLY=( $( compgen -W "-h ${opts} --help --version ${lopts}" -- $cur ) )
 			return 0;;
 	esac
 }

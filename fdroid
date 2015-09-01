@@ -21,7 +21,7 @@
 import sys
 import logging
 
-from fdroidserver.common import FDroidException
+import fdroidserver.common
 from optparse import OptionError
 
 commands = {
@@ -45,7 +45,7 @@ commands = {
 
 
 def print_help():
-    print "usage: fdroid [-h|--help] <command> [<args>]"
+    print "usage: fdroid [-h|--help|--version] <command> [<args>]"
     print
     print "Valid commands are:"
     for cmd, summary in commands.items():
@@ -63,6 +63,32 @@ def main():
     if command not in commands:
         if command in ('-h', '--help'):
             print_help()
+            sys.exit(0)
+        elif command == '--version':
+            import os.path
+            output = 'no version info found!'
+            cmddir = os.path.realpath(os.path.dirname(__file__))
+            moduledir = os.path.realpath(os.path.dirname(fdroidserver.common.__file__) + '/..')
+            if cmddir == moduledir:
+                # running from git
+                os.chdir(cmddir)
+                if os.path.isdir('.git'):
+                    import subprocess
+                    try:
+                        output = subprocess.check_output(['git', 'describe'],
+                                                         stderr=subprocess.STDOUT)
+                    except subprocess.CalledProcessError:
+                        output = 'git commit ' + subprocess.check_output(['git', 'rev-parse', 'HEAD'])
+                elif os.path.exists('setup.py'):
+                    import re
+                    m = re.search(r'''.*[\s,\(]+version\s*=\s*["']([0-9a-z.]+)["'].*''',
+                                  open('setup.py').read(), flags=re.MULTILINE)
+                    if m:
+                        output = m.group(1) + '\n'
+            else:
+                from pkg_resources import get_distribution
+                output = get_distribution('fdroidserver').version + '\n'
+            print(output),
             sys.exit(0)
         else:
             print "Command '%s' not recognised.\n" % command
@@ -92,7 +118,7 @@ def main():
     try:
         mod.main()
     # These are ours, contain a proper message and are "expected"
-    except FDroidException, e:
+    except fdroidserver.common.FDroidException, e:
         if verbose:
             raise
         else:

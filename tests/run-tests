@@ -103,6 +103,12 @@ done
 
 
 #------------------------------------------------------------------------------#
+echo_header "print fdroid version"
+
+$fdroid --version
+
+
+#------------------------------------------------------------------------------#
 echo_header "build the TeX manual"
 
 cd $WORKSPACE/docs
