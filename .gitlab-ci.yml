@@ -3,9 +3,9 @@ before_script:
   - echo " == Installing required packages"
   - apt-get -q install -y wget tar lib32stdc++6 lib32z1
       python pyflakes pep8 dash bash ruby
-      python-imaging python-libcloud python-magic python-paramiko
-      python-pyasn1 python-pyasn1-modules python-requests
-      python-yaml
+      python-imaging python-libcloud python-logilab-astng python-magic
+      python-paramiko python-pip python-pyasn1 python-pyasn1-modules
+      python-requests python-yaml
       rsync
   - echo " == Installing OpenJDK 7"
   - apt-get -q install -y openjdk-7-jdk
@@ -22,6 +22,5 @@ before_script:
 
 test:
   script:
-    - ./hooks/pre-commit
     - cd tests
-    - ./run-tests
+    - ./complete-ci-tests

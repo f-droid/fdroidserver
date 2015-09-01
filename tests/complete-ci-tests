@@ -1,0 +1,101 @@
+#!/bin/bash
+#
+# this is the script run by the Jenkins and gitlab-ci continuous integration
+# build services.  It is a thorough set of tests that runs all the tests using
+# the various methods of installing/running fdroidserver.  It is separate from
+# ./tests/run-tests because its too heavy for manual use.
+
+if [ `dirname $0` != "." ]; then
+    echo "only run this script like ./`basename $0`"
+    exit
+fi
+
+set -e
+set -x
+
+if [ -z $WORKSPACE ]; then
+    export WORKSPACE=`pwd`/..
+fi
+
+if [ -z $ANDROID_HOME ]; then
+    if [ -e ~/.android/bashrc ]; then
+        . ~/.android/bashrc
+    else
+        echo "ANDROID_HOME must be set!"
+        exit
+    fi
+fi
+
+apksource=$1
+
+#------------------------------------------------------------------------------#
+# cache pypi downloads
+if [ -z $PIP_DOWNLOAD_CACHE ]; then
+    export PIP_DOWNLOAD_CACHE=$HOME/.pip_download_cache
+fi
+
+
+#------------------------------------------------------------------------------#
+# required Java 7 keytool/jarsigner for :file support
+
+export PATH=/usr/lib/jvm/java-7-openjdk-amd64/bin:$PATH
+
+
+#------------------------------------------------------------------------------#
+# run local tests, don't scan fdroidserver/ project for APKs
+
+cd $WORKSPACE/tests
+./run-tests $apksource
+
+
+#------------------------------------------------------------------------------#
+# test building the source tarball, then installing it
+cd $WORKSPACE
+python2 setup.py sdist
+
+rm -rf $WORKSPACE/env
+virtualenv --python=python2 $WORKSPACE/env
+. $WORKSPACE/env/bin/activate
+pip install dist/fdroidserver-*.tar.gz
+
+# run tests in new pip+virtualenv install
+fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests $apksource
+
+
+#------------------------------------------------------------------------------#
+# test install using install direct from git repo
+cd $WORKSPACE
+rm -rf $WORKSPACE/env
+virtualenv --python=python2 --system-site-packages $WORKSPACE/env
+. $WORKSPACE/env/bin/activate
+pip install -e $WORKSPACE
+python2 setup.py install
+
+# run tests in new pip+virtualenv install
+fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests $apksource
+
+
+#------------------------------------------------------------------------------#
+# run git pre-commit hook for pep8, pyflakes, etc
+sh hooks/pre-commit
+
+
+#------------------------------------------------------------------------------#
+# run pylint
+
+cd $WORKSPACE
+set +e
+# use the virtualenv python so pylint checks against its installed libs
+    PYTHONPATH=$WORKSPACE/.pylint-plugins python2 /usr/bin/pylint \
+        --output-format=parseable --reports=n \
+        --load-plugins astng_hashlib \
+        fdroidserver/*.py fdroid makebuildserver setup.py > $WORKSPACE/pylint.parseable
+
+# to only tell jenkins there was an error if we got ERROR or FATAL, uncomment these:
+# running pylint in the virtualenv is causing this FATAL error, which is a bug:
+# https://bitbucket.org/logilab/pylint/issue/73/pylint-is-unable-to-import
+[ $(($? & 1)) = "1" ] && echo "FATALs found"
+[ $(($? & 2)) = "2" ] && exit 2
+[ $(($? & 4)) = "4" ] && exit 4
+set -e
+
