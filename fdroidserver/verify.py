@@ -24,6 +24,7 @@ from optparse import OptionParser
 import logging
 
 import common
+import net
 from common import FDroidException
 
 options = None
@@ -78,7 +79,7 @@ def main():
                 os.remove(remoteapk)
             url = 'https://f-droid.org/repo/' + apkfilename
             logging.info("...retrieving " + url)
-            common.download_file(url, dldir=tmp_dir)
+            net.download_file(url, dldir=tmp_dir)
 
             compare_result = common.compare_apks(
                 os.path.join(unsigned_dir, apkfilename),

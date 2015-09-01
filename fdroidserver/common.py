@@ -17,12 +17,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# common.py is imported by all modules, so do not import third-party
+# libraries here as they will become a requirement for all commands.
+
 import os
 import sys
 import re
 import shutil
 import glob
-import requests
 import stat
 import subprocess
 import time
@@ -1914,20 +1916,6 @@ def string_is_integer(string):
         return True
     except ValueError:
         return False
-
-
-def download_file(url, local_filename=None, dldir='tmp'):
-    filename = url.split('/')[-1]
-    if local_filename is None:
-        local_filename = os.path.join(dldir, filename)
-    # the stream=True parameter keeps memory usage low
-    r = requests.get(url, stream=True)
-    with open(local_filename, 'wb') as f:
-        for chunk in r.iter_content(chunk_size=1024):
-            if chunk:  # filter out keep-alive new chunks
-                f.write(chunk)
-                f.flush()
-    return local_filename
 
 
 def get_per_app_repos():

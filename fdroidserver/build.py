@@ -34,6 +34,7 @@ from distutils.version import LooseVersion
 import logging
 
 import common
+import net
 import metadata
 import scanner
 from common import FDroidException, BuildException, VCSException, FDroidPopen, SdkToolsPopen
@@ -1093,7 +1094,7 @@ def main():
                         logging.info("...retrieving " + url)
                         of = "{0}_{1}.apk.binary".format(app['id'], thisbuild['vercode'])
                         of = os.path.join(output_dir, of)
-                        common.download_file(url, local_filename=of)
+                        net.download_file(url, local_filename=of)
 
                     build_succeeded.append(app)
                     wikilog = "Build succeeded"
