@@ -1,15 +1,21 @@
 before_script:
   - apt-get -q update -y
-  - echo " == Installing required packages"
-  - apt-get -q install -y wget tar lib32stdc++6 lib32z1
-      libjpeg-dev python-dev zlib1g-dev
-      python pyflakes pylint pep8 dash bash ruby
+  - echo " == Installing packages required by this CI script"
+  - apt-get -q install -y wget tar
+  - echo " == Installing packages required by fdroidserver"
+  - apt-get -q install -y python
       python-git python-imaging python-libcloud python-logilab-astng python-magic
       python-paramiko python-pip python-pyasn1 python-pyasn1-modules
       python-requests python-virtualenv python-yaml
       rsync
+  - echo " == Installing packages required by the test suite"
+  - apt-get -q install -y pyflakes pylint pep8 dash bash ruby
+  - echo " == Installing packages required to build Pillow"
+  - apt-get -q install -y python-dev libjpeg-dev zlib1g-dev
   - echo " == Installing OpenJDK 7"
   - apt-get -q install -y openjdk-7-jdk
+  - echo " == Installing packages required by the 32-bit SDK"
+  - apt-get -q install -y lib32stdc++6 lib32z1
   - echo " == Installing the Android SDK"
   - wget -q -O android-sdk.tgz https://dl.google.com/android/android-sdk_r24.3.4-linux.tgz
   - tar -x -z -f android-sdk.tgz
