@@ -267,19 +267,22 @@ __complete_init() {
 	__complete_options
 }
 
-_fdroid() {
-	local cmd cmds
-	cmd=${COMP_WORDS[1]}
-	cmds=" build init install update publish checkupdates import \
-readmeta rewritemeta lint scanner verify stats server signindex "
+__cmds=" build init install update publish checkupdates import readmeta \
+rewritemeta lint scanner verify stats server signindex "
 
-	for c in $cmds; do eval "_fdroid_${c} () {
+for c in $__cmds; do
+	eval "_fdroid_${c} () {
 		local cur prev opts lopts
-		__fdroid_init ${c};
-	}"; done
+		__fdroid_init ${c}
+	}"
+done
 
-	[[ $cmds == *\ $cmd\ * ]] && _fdroid_${cmd} || {
-		(($COMP_CWORD == 1)) && COMPREPLY=( $( compgen -W "${cmds}" -- $cmd ) )
+_fdroid() {
+	local cmd
+	cmd=${COMP_WORDS[1]}
+
+	[[ $__cmds == *\ $cmd\ * ]] && _fdroid_${cmd} || {
+		(($COMP_CWORD == 1)) && COMPREPLY=( $( compgen -W "${__cmds}" -- $cmd ) )
 	}
 }
 
