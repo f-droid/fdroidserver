@@ -29,7 +29,7 @@ import hashlib
 import pickle
 from datetime import datetime, timedelta
 from xml.dom.minidom import Document
-from optparse import OptionParser
+from argparse import ArgumentParser
 import time
 from pyasn1.error import PyAsn1Error
 from pyasn1.codec.der import decoder, encoder
@@ -1048,35 +1048,35 @@ def main():
     global config, options
 
     # Parse command line...
-    parser = OptionParser()
-    parser.add_option("--create-key", action="store_true", default=False,
-                      help="Create a repo signing key in a keystore")
-    parser.add_option("-c", "--create-metadata", action="store_true", default=False,
-                      help="Create skeleton metadata files that are missing")
-    parser.add_option("--delete-unknown", action="store_true", default=False,
-                      help="Delete APKs without metadata from the repo")
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
-    parser.add_option("-q", "--quiet", action="store_true", default=False,
-                      help="Restrict output to warnings and errors")
-    parser.add_option("-b", "--buildreport", action="store_true", default=False,
-                      help="Report on build data status")
-    parser.add_option("-i", "--interactive", default=False, action="store_true",
-                      help="Interactively ask about things that need updating.")
-    parser.add_option("-I", "--icons", action="store_true", default=False,
-                      help="Resize all the icons exceeding the max pixel size and exit")
-    parser.add_option("-e", "--editor", default="/etc/alternatives/editor",
-                      help="Specify editor to use in interactive mode. Default " +
-                      "is /etc/alternatives/editor")
-    parser.add_option("-w", "--wiki", default=False, action="store_true",
-                      help="Update the wiki")
-    parser.add_option("", "--pretty", action="store_true", default=False,
-                      help="Produce human-readable index.xml")
-    parser.add_option("--clean", action="store_true", default=False,
-                      help="Clean update - don't uses caches, reprocess all apks")
-    parser.add_option("--nosign", action="store_true", default=False,
-                      help="When configured for signed indexes, create only unsigned indexes at this stage")
-    (options, args) = parser.parse_args()
+    parser = ArgumentParser()
+    parser.add_argument("--create-key", action="store_true", default=False,
+                        help="Create a repo signing key in a keystore")
+    parser.add_argument("-c", "--create-metadata", action="store_true", default=False,
+                        help="Create skeleton metadata files that are missing")
+    parser.add_argument("--delete-unknown", action="store_true", default=False,
+                        help="Delete APKs without metadata from the repo")
+    parser.add_argument("-v", "--verbose", action="store_true", default=False,
+                        help="Spew out even more information than normal")
+    parser.add_argument("-q", "--quiet", action="store_true", default=False,
+                        help="Restrict output to warnings and errors")
+    parser.add_argument("-b", "--buildreport", action="store_true", default=False,
+                        help="Report on build data status")
+    parser.add_argument("-i", "--interactive", default=False, action="store_true",
+                        help="Interactively ask about things that need updating.")
+    parser.add_argument("-I", "--icons", action="store_true", default=False,
+                        help="Resize all the icons exceeding the max pixel size and exit")
+    parser.add_argument("-e", "--editor", default="/etc/alternatives/editor",
+                        help="Specify editor to use in interactive mode. Default " +
+                        "is /etc/alternatives/editor")
+    parser.add_argument("-w", "--wiki", default=False, action="store_true",
+                        help="Update the wiki")
+    parser.add_argument("--pretty", action="store_true", default=False,
+                        help="Produce human-readable index.xml")
+    parser.add_argument("--clean", action="store_true", default=False,
+                        help="Clean update - don't uses caches, reprocess all apks")
+    parser.add_argument("--nosign", action="store_true", default=False,
+                        help="When configured for signed indexes, create only unsigned indexes at this stage")
+    options = parser.parse_args()
 
     config = common.read_config(options)
 

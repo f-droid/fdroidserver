@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Affero General Public Licen
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from optparse import OptionParser
+from argparse import ArgumentParser
 import re
 import logging
 import common
@@ -150,18 +150,19 @@ def main():
         count['warn'] += 1
 
     # Parse command line...
-    parser = OptionParser(usage="Usage: %prog [options] [APPID [APPID ...]]")
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
-    parser.add_option("-q", "--quiet", action="store_true", default=False,
-                      help="Restrict output to warnings and errors")
-    (options, args) = parser.parse_args()
+    parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
+    parser.add_argument("appid", nargs='*', help="app-id in the form APPID")
+    parser.add_argument("-v", "--verbose", action="store_true", default=False,
+                        help="Spew out even more information than normal")
+    parser.add_argument("-q", "--quiet", action="store_true", default=False,
+                        help="Restrict output to warnings and errors")
+    options = parser.parse_args()
 
     config = common.read_config(options)
 
     # Get all apps...
     allapps = metadata.read_metadata(xref=True)
-    apps = common.read_app_args(args, allapps, False)
+    apps = common.read_app_args(options.appid, allapps, False)
 
     filling_ucms = re.compile('^(Tags.*|RepoManifest.*)')
 

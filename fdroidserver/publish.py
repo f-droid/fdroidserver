@@ -23,7 +23,7 @@ import os
 import shutil
 import md5
 import glob
-from optparse import OptionParser
+from argparse import ArgumentParser
 import logging
 
 import common
@@ -39,13 +39,14 @@ def main():
     global config, options
 
     # Parse command line...
-    parser = OptionParser(usage="Usage: %prog [options] "
-                          "[APPID[:VERCODE] [APPID[:VERCODE] ...]]")
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
-    parser.add_option("-q", "--quiet", action="store_true", default=False,
-                      help="Restrict output to warnings and errors")
-    (options, args) = parser.parse_args()
+    parser = ArgumentParser(usage="%(prog)s [options] "
+                            "[APPID[:VERCODE] [APPID[:VERCODE] ...]]")
+    parser.add_argument("appid", nargs='*', help="app-id with optional versioncode in the form APPID[:VERCODE]")
+    parser.add_argument("-v", "--verbose", action="store_true", default=False,
+                        help="Spew out even more information than normal")
+    parser.add_argument("-q", "--quiet", action="store_true", default=False,
+                        help="Restrict output to warnings and errors")
+    options = parser.parse_args()
 
     config = common.read_config(options)
 
@@ -86,7 +87,7 @@ def main():
     # Nonetheless, to be sure, before publishing we check that there are no
     # collisions, and refuse to do any publishing if that's the case...
     allapps = metadata.read_metadata()
-    vercodes = common.read_pkg_args(args, True)
+    vercodes = common.read_pkg_args(options.appid, True)
     allaliases = []
     for appid in allapps:
         m = md5.new()

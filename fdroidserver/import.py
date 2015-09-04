@@ -22,7 +22,7 @@ import sys
 import os
 import shutil
 import urllib
-from optparse import OptionParser
+from argparse import ArgumentParser
 from ConfigParser import ConfigParser
 import logging
 import common
@@ -75,18 +75,18 @@ def main():
     global config, options
 
     # Parse command line...
-    parser = OptionParser()
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
-    parser.add_option("-q", "--quiet", action="store_true", default=False,
-                      help="Restrict output to warnings and errors")
-    parser.add_option("-u", "--url", default=None,
-                      help="Project URL to import from.")
-    parser.add_option("-s", "--subdir", default=None,
-                      help="Path to main android project subdirectory, if not in root.")
-    parser.add_option("--rev", default=None,
-                      help="Allows a different revision (or git branch) to be specified for the initial import")
-    (options, args) = parser.parse_args()
+    parser = ArgumentParser()
+    parser.add_argument("-v", "--verbose", action="store_true", default=False,
+                        help="Spew out even more information than normal")
+    parser.add_argument("-q", "--quiet", action="store_true", default=False,
+                        help="Restrict output to warnings and errors")
+    parser.add_argument("-u", "--url", default=None,
+                        help="Project URL to import from.")
+    parser.add_argument("-s", "--subdir", default=None,
+                        help="Path to main android project subdirectory, if not in root.")
+    parser.add_argument("--rev", default=None,
+                        help="Allows a different revision (or git branch) to be specified for the initial import")
+    options = parser.parse_args()
 
     config = common.read_config(options)
 
