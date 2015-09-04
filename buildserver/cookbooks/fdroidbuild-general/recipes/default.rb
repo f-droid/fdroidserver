@@ -10,7 +10,7 @@ execute "apt-get-update" do
   command "apt-get update"
 end
 
-%w{ant ant-contrib autoconf autoconf2.13 automake1.11 autopoint bison bzr cmake curl expect faketime flex gettext git-core git-svn gperf graphviz imagemagick inkscape javacc libarchive-zip-perl liblzma-dev librsvg2-bin libsaxonb-java libssl-dev libssl1.0.0 libtool make maven mercurial nasm openjdk-7-jdk optipng pandoc perlmagick pkg-config python python-yaml python-gnupg python-magic python-setuptools python3-gnupg quilt realpath scons subversion swig texinfo transfig unzip vorbis-tools xsltproc yasm zip}.each do |pkg|
+%w{ant ant-contrib autoconf autoconf2.13 automake1.11 autopoint bison bzr cmake curl expect faketime flex gettext git-core git-svn gperf graphviz imagemagick inkscape javacc libarchive-zip-perl liblzma-dev librsvg2-bin libsaxonb-java libssl-dev libssl1.0.0 libtool make maven mercurial nasm openjdk-7-jdk openjdk-8-jdk optipng pandoc perlmagick pkg-config python python-yaml python-gnupg python-magic python-setuptools python3-gnupg quilt realpath scons subversion swig texinfo transfig unzip vorbis-tools xsltproc yasm zip}.each do |pkg|
   package pkg do
     action :install
   end
@@ -35,4 +35,8 @@ execute "add-bsenv" do
   not_if "grep bsenv /home/#{user}/.bashrc"
 end
 
+execute "set-default-java" do
+  user user
+  command "update-java-alternatives --set java-7-openjdk"
+end
 

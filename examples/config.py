@@ -15,6 +15,13 @@
 #     'r10e': "$ANDROID_NDK",
 # }
 
+# If you want to build apps that use retrolambda and Java 1.8, you'll need to
+# have both 1.7 and 1.8 installed.
+# java_paths = {
+#     '1.7': "/usr/lib/jvm/java-7-openjdk",
+#     '1.8': None,
+# }
+
 # Build tools version to be used
 # build_tools = "23.0.1"
 

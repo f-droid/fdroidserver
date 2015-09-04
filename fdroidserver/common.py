@@ -57,6 +57,10 @@ default_config = {
         'r10e': "$ANDROID_NDK",
     },
     'build_tools': "23.0.1",
+    'java_paths': {
+        '1.7': "/usr/lib/jvm/java-7-openjdk",
+        '1.8': None,
+    },
     'ant': "ant",
     'mvn3': "mvn",
     'gradle': 'gradle',
@@ -122,7 +126,7 @@ def fill_config_defaults(thisconfig):
             thisconfig[k] = exp
             thisconfig[k + '_orig'] = v
 
-    for k in ['ndk_paths']:
+    for k in ['ndk_paths', 'java_paths']:
         d = thisconfig[k]
         for k2 in d.copy():
             v = d[k2]
@@ -184,6 +188,11 @@ def read_config(opts, config_file='config.py'):
     orig_path = env['PATH']
     for n in ['ANDROID_HOME', 'ANDROID_SDK']:
         env[n] = config['sdk_path']
+
+    for v in ['7', '8']:
+        cpath = config['java_paths']['1.%s' % v]
+        if cpath:
+            env['JAVA%s_HOME' % v] = cpath
 
     for k in ["keystorepass", "keypass"]:
         if k in config:
