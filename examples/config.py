@@ -7,8 +7,8 @@
 # sdk_path = "/opt/android-sdk"
 
 # Custom paths to various versions of the Android NDK, defaults to 'r10e' set
-# to $ANDROID_NDK.  Most users will have the latest at $ANDROID_NDK, which is
-# used by default.  If a version is missing or assigned to None, it is assumed
+# to $ANDROID_NDK. Most users will have the latest at $ANDROID_NDK, which is
+# used by default. If a version is missing or assigned to None, it is assumed
 # not installed.
 # ndk_paths = {
 #     'r9b': None,
@@ -57,18 +57,18 @@ The repository of older versions of applications from the main demo repository.
 """
 
 # Normally, all apps are collected into a single app repository, like on
-# https://f-droid.org.  For certain situations, it is better to make a repo
-# that is made up of APKs only from a single app.  For example, an automated
+# https://f-droid.org. For certain situations, it is better to make a repo
+# that is made up of APKs only from a single app. For example, an automated
 # build server that publishes nightly builds.
 # per_app_repos = True
 
 # `fdroid update` will create a link to the current version of a given app.
-# This provides a static path to the current APK.  To disable the creation of
+# This provides a static path to the current APK. To disable the creation of
 # this link, uncomment this:
 # make_current_version_link = False
 
 # By default, the "current version" link will be based on the "Name" of the
-# app from the metadata.  You can change it to use a different field from the
+# app from the metadata. You can change it to use a different field from the
 # metadata here:
 # current_version_name_source = 'id'
 
@@ -79,8 +79,8 @@ The repository of older versions of applications from the main demo repository.
 # gpgkey = '1DBA2E89'
 
 # The key (from the keystore defined below) to be used for signing the
-# repository itself.  This is the same name you would give to keytool or
-# jarsigner using -alias.  (Not needed in an unsigned repository).
+# repository itself. This is the same name you would give to keytool or
+# jarsigner using -alias. (Not needed in an unsigned repository).
 # repo_keyalias = "fdroidrepo"
 
 # Optionally, the public key for the key defined by repo_keyalias above can
@@ -94,7 +94,7 @@ The repository of older versions of applications from the main demo repository.
 # somewhere safe and secure, and backed up!  The best way to manage these
 # sensitive keys is to use a "smartcard" (aka Hardware Security Module). To
 # configure F-Droid to use a smartcard, set the keystore file using the keyword
-# "NONE" (i.e. keystore = "NONE").  That makes Java find the keystore on the
+# "NONE" (i.e. keystore = "NONE"). That makes Java find the keystore on the
 # smartcard based on 'smartcardoptions' below.
 # keystore = "~/.local/share/fdroidserver/keystore.jks"
 
@@ -104,14 +104,14 @@ The repository of older versions of applications from the main demo repository.
 #    -providerClass sun.security.pkcs11.SunPKCS11 \
 #    -providerArg opensc-fdroid.cfg"
 
-# The password for the keystore (at least 6 characters).  If this password is
+# The password for the keystore (at least 6 characters). If this password is
 # different than the keypass below, it can be OK to store the password in this
-# file for real use.  But in general, sensitive passwords should not be stored
+# file for real use. But in general, sensitive passwords should not be stored
 # in text files!
 # keystorepass = "password1"
 
 # The password for keys - the same is used for each auto-generated key as well
-# as for the repository key.  You should not normally store this password in a
+# as for the repository key. You should not normally store this password in a
 # file since it is a sensitive password.
 # keypass = "password2"
 
@@ -127,11 +127,11 @@ keyaliases['com.example.app'] = 'example'
 keyaliases['com.example.another.plugin'] = '@com.example.another'
 
 
-# The full path to the root of the repository.  It must be specified in
+# The full path to the root of the repository. It must be specified in
 # rsync/ssh format for a remote host/path. This is used for syncing a locally
-# generated repo to the server that is it hosted on.  It must end in the
+# generated repo to the server that is it hosted on. It must end in the
 # standard public repo name of "/fdroid", but can be in up to three levels of
-# sub-directories (i.e. /var/www/packagerepos/fdroid).  You can include
+# sub-directories (i.e. /var/www/packagerepos/fdroid). You can include
 # multiple servers to sync to by wrapping the whole thing in {} or [], and
 # including the serverwebroot strings in a comma-separated list.
 #
@@ -149,9 +149,9 @@ keyaliases['com.example.another.plugin'] = '@com.example.another'
 
 # If you are running the repo signing process on a completely offline machine,
 # which provides the best security, then you can specify a folder to sync the
-# repo to when running `fdroid server update`.  This is most likely going to
-# be a USB thumb drive, SD Card, or some other kind of removable media.  Make
-# sure it is mounted before running `fdroid server update`.  Using the
+# repo to when running `fdroid server update`. This is most likely going to
+# be a USB thumb drive, SD Card, or some other kind of removable media. Make
+# sure it is mounted before running `fdroid server update`. Using the
 # standard folder called 'fdroid' as the specified folder is recommended, like
 # with serverwebroot.
 #
@@ -160,7 +160,7 @@ keyaliases['com.example.another.plugin'] = '@com.example.another'
 
 # If you are using local_copy_dir on an offline build/signing server, once the
 # thumb drive has been plugged into the online machine, it will need to be
-# synced to the copy on the online machine.  To make that happen
+# synced to the copy on the online machine. To make that happen
 # automatically, set sync_from_local_copy_dir to True:
 #
 # sync_from_local_copy_dir = True
@@ -213,7 +213,7 @@ carbon_port = 2003
 # --server option on dedicated secure build server hosts.
 build_server_always = False
 
-# By default, fdroid will use YAML and the custom .txt metadata formats.  It
+# By default, fdroid will use YAML and the custom .txt metadata formats. It
 # is also possible to have metadata in JSON and XML by adding 'json' and
 # 'xml'.
 # accepted_formats = ['txt', 'yaml']
