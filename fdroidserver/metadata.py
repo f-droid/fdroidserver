@@ -1047,7 +1047,8 @@ def write_metadata(dest, app):
 
     mf = open(dest, 'w')
     writefield_nonempty('Disabled')
-    writefield('AntiFeatures')
+    if app['AntiFeatures']:
+        writefield('AntiFeatures')
     writefield_nonempty('Provides')
     writefield('Categories')
     writefield('License')
