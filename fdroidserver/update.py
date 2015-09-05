@@ -148,7 +148,7 @@ def update_wiki(apps, sortedids, apks):
                 # TODO: Nasty: vercode is a string in the build, and an int elsewhere
                 apklist.append({'versioncode': int(thisbuild['vercode']),
                                 'version': thisbuild['version'],
-                                'buildproblem': thisbuild['disable']
+                                'buildproblem': "The build for this version was manually disabled. Reason: {0}".format(thisbuild['disable']),
                                 })
             else:
                 builtit = False
@@ -160,7 +160,7 @@ def update_wiki(apps, sortedids, apks):
                     buildfails = True
                     apklist.append({'versioncode': int(thisbuild['vercode']),
                                     'version': thisbuild['version'],
-                                    'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(appid, thisbuild['vercode'])
+                                    'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(appid, thisbuild['vercode']),
                                     })
         if app['Current Version Code'] == '0':
             cantupdate = True
