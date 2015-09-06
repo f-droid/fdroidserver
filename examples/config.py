@@ -16,7 +16,7 @@
 # }
 
 # Build tools version to be used
-build_tools = "23.0.0"
+build_tools = "23.0.1"
 
 # Command or path to binary for running Ant
 ant = "ant"
