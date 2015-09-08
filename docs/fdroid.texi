@@ -983,6 +983,9 @@ paths start with any of the paths given here are ignored.
 Similar to scanignore=, but instead of ignoring files under the given paths,
 it tells f-droid to delete the matching files directly.
 
+When scanning the source tree for problems, matching files whose relative
+paths start with any of the paths given here are removed.
+
 @item build=xxxx
 As for 'prebuild', but runs during the actual build phase (but before the
 main Ant/Maven build). Use this only for actions that do actual building.
