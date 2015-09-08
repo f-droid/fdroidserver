@@ -205,6 +205,22 @@ def main():
             if app['Web Site'].lower() == app['Source Code'].lower():
                 warn("Website '%s' is just the app's source code link" % app['Web Site'])
 
+        # Old links
+        usual_sites = [
+            'github.com',
+            'gitlab.com',
+            'bitbucket.org',
+        ]
+        old_sites = [
+            'gitorious.org',
+            'code.google.com',
+            # 'sourceforge.net', # too many false positives as of now
+        ]
+        if any(s in app['Repo'] for s in usual_sites):
+            for f in ['Web Site', 'Source Code', 'Issue Tracker', 'Changelog']:
+                if any(s in app[f] for s in old_sites):
+                    warn("App is in '%s' but has a link to '%s'" % (app['Repo'], app[f]))
+
         if filling_ucms.match(app['Update Check Mode']):
             if all(app[f] == metadata.app_defaults[f] for f in [
                     'Auto Name',

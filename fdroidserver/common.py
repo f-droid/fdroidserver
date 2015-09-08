@@ -991,7 +991,7 @@ def parse_androidmanifests(paths, ignoreversions=None):
 
     vcsearch_g = re.compile(r'.*versionCode *=* *["\']*([0-9]+)["\']*').search
     vnsearch_g = re.compile(r'.*versionName *=* *(["\'])((?:(?=(\\?))\3.)*?)\1.*').search
-    psearch_g = re.compile(r'.*packageName *=* *["\']([^"]+)["\'].*').search
+    psearch_g = re.compile(r'.*(packageName|applicationId) *=* *["\']([^"]+)["\'].*').search
 
     ignoresearch = re.compile(ignoreversions).search if ignoreversions else None
 
@@ -1008,15 +1008,16 @@ def parse_androidmanifests(paths, ignoreversions=None):
         gradle = has_extension(path, 'gradle')
         version = None
         vercode = None
-        # Remember package name, may be defined separately from version+vercode
-        package = max_package
+        package = None
 
         if gradle:
             for line in file(path):
+                # Grab first occurence of each to avoid running into
+                # alternative flavours and builds.
                 if not package:
                     matches = psearch_g(line)
                     if matches:
-                        package = matches.group(1)
+                        package = matches.group(2)
                 if not version:
                     matches = vnsearch_g(line)
                     if matches:
@@ -1037,6 +1038,10 @@ def parse_androidmanifests(paths, ignoreversions=None):
                 a = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"].encode('utf-8')
                 if string_is_integer(a):
                     vercode = a
+
+        # Remember package name, may be defined separately from version+vercode
+        if package is None:
+            package = max_package
 
         logging.debug("..got package={0}, version={1}, vercode={2}"
                       .format(package, version, vercode))
