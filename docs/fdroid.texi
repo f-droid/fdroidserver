@@ -980,11 +980,13 @@ When scanning the source tree for problems, matching files whose relative
 paths start with any of the paths given here are ignored.
 
 @item scandelete=<path1>[,<path2>,...]
-Similar to scanignore=, but instead of ignoring files under the given paths,
-it tells f-droid to delete the matching files directly.
+When running the scan process, any files that trigger errors - like binaries -
+will be removed. It acts just like scanignore=, but instead of ignoring the
+files, it removes them.
 
-When scanning the source tree for problems, matching files whose relative
-paths start with any of the paths given here are removed.
+Useful when a source code repository includes binaries or other unwanted files
+which are not needed for the build. Instead of removing them manually via rm=,
+using scandelete= is easier.
 
 @item build=xxxx
 As for 'prebuild', but runs during the actual build phase (but before the
