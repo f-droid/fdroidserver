@@ -50,13 +50,13 @@ def main():
         metadatapath = app['metadatapath']
         ext = os.path.splitext(metadatapath)[1][1:]
         if ext == 'txt':
-            logging.info("Rewriting " + metadatapath)
+            logging.debug("Rewriting " + metadatapath)
             metadata.write_metadata(metadatapath, app)
         else:
             logging.info("Ignoring %s file at '%s'"
                          % (ext.upper(), metadatapath))
 
-    logging.info("Finished.")
+    logging.debug("Finished.")
 
 if __name__ == "__main__":
     main()
