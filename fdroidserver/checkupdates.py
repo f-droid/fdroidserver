@@ -474,6 +474,9 @@ def checkupdates_app(app, first=True):
                 if not latest or int(build['vercode']) > int(latest['vercode']):
                     latest = build
 
+            if int(latest['vercode']) > int(app['Current Version Code']):
+                logging.info("Refusing to auto update, since the latest build is newer")
+
             if not gotcur:
                 newbuild = latest.copy()
                 if 'origlines' in newbuild:
