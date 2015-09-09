@@ -302,6 +302,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         serverpath = os.path.abspath(os.path.dirname(__file__))
         ftp.put(os.path.join(serverpath, 'build.py'), 'build.py')
         ftp.put(os.path.join(serverpath, 'common.py'), 'common.py')
+        ftp.put(os.path.join(serverpath, 'scanner.py'), 'scanner.py')
+        ftp.put(os.path.join(serverpath, 'net.py'), 'net.py')
         ftp.put(os.path.join(serverpath, 'metadata.py'), 'metadata.py')
         ftp.put(os.path.join(serverpath, '..', 'buildserver',
                              'config.buildserver.py'), 'config.py')
