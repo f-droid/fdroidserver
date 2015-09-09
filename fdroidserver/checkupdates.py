@@ -428,8 +428,10 @@ def checkupdates_app(app, first=True):
             return checkupdates_app(app, first=False)
 
     if version and vercode and app['Vercode Operation']:
-        op = app['Vercode Operation'].replace("%c", str(int(vercode)))
+        oldvercode = str(int(vercode))
+        op = app['Vercode Operation'].replace("%c", oldvercode)
         vercode = str(eval(op))
+        logging.debug("Applied vercode operation: %s -> %s" % (oldvercode, vercode))
 
     updating = False
     if version is None:
