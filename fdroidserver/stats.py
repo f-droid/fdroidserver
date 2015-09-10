@@ -24,7 +24,7 @@ import time
 import traceback
 import glob
 import json
-from optparse import OptionParser
+from argparse import ArgumentParser
 import paramiko
 import socket
 import logging
@@ -50,19 +50,19 @@ def main():
     global options, config
 
     # Parse command line...
-    parser = OptionParser()
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
-    parser.add_option("-q", "--quiet", action="store_true", default=False,
-                      help="Restrict output to warnings and errors")
-    parser.add_option("-d", "--download", action="store_true", default=False,
-                      help="Download logs we don't have")
-    parser.add_option("--recalc", action="store_true", default=False,
-                      help="Recalculate aggregate stats - use when changes "
-                      "have been made that would invalidate old cached data.")
-    parser.add_option("--nologs", action="store_true", default=False,
-                      help="Don't do anything logs-related")
-    (options, args) = parser.parse_args()
+    parser = ArgumentParser()
+    parser.add_argument("-v", "--verbose", action="store_true", default=False,
+                        help="Spew out even more information than normal")
+    parser.add_argument("-q", "--quiet", action="store_true", default=False,
+                        help="Restrict output to warnings and errors")
+    parser.add_argument("-d", "--download", action="store_true", default=False,
+                        help="Download logs we don't have")
+    parser.add_argument("--recalc", action="store_true", default=False,
+                        help="Recalculate aggregate stats - use when changes "
+                        "have been made that would invalidate old cached data.")
+    parser.add_argument("--nologs", action="store_true", default=False,
+                        help="Don't do anything logs-related")
+    options = parser.parse_args()
 
     config = common.read_config(options)
 

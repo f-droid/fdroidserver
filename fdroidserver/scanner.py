@@ -20,7 +20,7 @@
 import os
 import re
 import traceback
-from optparse import OptionParser
+from argparse import ArgumentParser
 import logging
 
 import common
@@ -249,18 +249,19 @@ def main():
     global config, options
 
     # Parse command line...
-    parser = OptionParser(usage="Usage: %prog [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
-    parser.add_option("-q", "--quiet", action="store_true", default=False,
-                      help="Restrict output to warnings and errors")
-    (options, args) = parser.parse_args()
+    parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
+    parser.add_argument("appid", nargs='*', help="app-id with optional versioncode in the form APPID[:VERCODE]")
+    parser.add_argument("-v", "--verbose", action="store_true", default=False,
+                        help="Spew out even more information than normal")
+    parser.add_argument("-q", "--quiet", action="store_true", default=False,
+                        help="Restrict output to warnings and errors")
+    options = parser.parse_args()
 
     config = common.read_config(options)
 
     # Read all app and srclib metadata
     allapps = metadata.read_metadata()
-    apps = common.read_app_args(args, allapps, True)
+    apps = common.read_app_args(options.appid, allapps, True)
 
     probcount = 0
 

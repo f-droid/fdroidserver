@@ -24,7 +24,7 @@ import re
 import urllib2
 import time
 import subprocess
-from optparse import OptionParser
+from argparse import ArgumentParser
 import traceback
 import HTMLParser
 from distutils.version import LooseVersion
@@ -520,27 +520,28 @@ def main():
     global config, options
 
     # Parse command line...
-    parser = OptionParser(usage="Usage: %prog [options] [APPID [APPID ...]]")
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
-    parser.add_option("-q", "--quiet", action="store_true", default=False,
-                      help="Restrict output to warnings and errors")
-    parser.add_option("--auto", action="store_true", default=False,
-                      help="Process auto-updates")
-    parser.add_option("--autoonly", action="store_true", default=False,
-                      help="Only process apps with auto-updates")
-    parser.add_option("--commit", action="store_true", default=False,
-                      help="Commit changes")
-    parser.add_option("--gplay", action="store_true", default=False,
-                      help="Only print differences with the Play Store")
-    (options, args) = parser.parse_args()
+    parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
+    parser.add_argument("appid", nargs='*', help="app-id to check for updates")
+    parser.add_argument("-v", "--verbose", action="store_true", default=False,
+                        help="Spew out even more information than normal")
+    parser.add_argument("-q", "--quiet", action="store_true", default=False,
+                        help="Restrict output to warnings and errors")
+    parser.add_argument("--auto", action="store_true", default=False,
+                        help="Process auto-updates")
+    parser.add_argument("--autoonly", action="store_true", default=False,
+                        help="Only process apps with auto-updates")
+    parser.add_argument("--commit", action="store_true", default=False,
+                        help="Commit changes")
+    parser.add_argument("--gplay", action="store_true", default=False,
+                        help="Only print differences with the Play Store")
+    options = parser.parse_args()
 
     config = common.read_config(options)
 
     # Get all apps...
     allapps = metadata.read_metadata()
 
-    apps = common.read_app_args(args, allapps, False)
+    apps = common.read_app_args(options.appid, allapps, False)
 
     if options.gplay:
         for app in apps:

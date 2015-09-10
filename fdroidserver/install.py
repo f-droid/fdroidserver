@@ -21,7 +21,7 @@
 import sys
 import os
 import glob
-from optparse import OptionParser, OptionError
+from argparse import ArgumentParser
 import logging
 
 import common
@@ -49,17 +49,18 @@ def main():
     global options, config
 
     # Parse command line...
-    parser = OptionParser(usage="Usage: %prog [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
-    parser.add_option("-q", "--quiet", action="store_true", default=False,
-                      help="Restrict output to warnings and errors")
-    parser.add_option("-a", "--all", action="store_true", default=False,
-                      help="Install all signed applications available")
-    (options, args) = parser.parse_args()
+    parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
+    parser.add_argument("appid", nargs='*', help="app-id with optional versioncode in the form APPID[:VERCODE]")
+    parser.add_argument("-v", "--verbose", action="store_true", default=False,
+                        help="Spew out even more information than normal")
+    parser.add_argument("-q", "--quiet", action="store_true", default=False,
+                        help="Restrict output to warnings and errors")
+    parser.add_argument("-a", "--all", action="store_true", default=False,
+                        help="Install all signed applications available")
+    options = parser.parse_args()
 
-    if not args and not options.all:
-        raise OptionError("If you really want to install all the signed apps, use --all", "all")
+    if not options.appid and not options.all:
+        parser.error("option %s: If you really want to install all the signed apps, use --all" % "all")
 
     config = common.read_config(options)
 
@@ -68,9 +69,9 @@ def main():
         logging.info("No signed output directory - nothing to do")
         sys.exit(0)
 
-    if args:
+    if options.appid:
 
-        vercodes = common.read_pkg_args(args, True)
+        vercodes = common.read_pkg_args(options.appid, True)
         apks = {appid: None for appid in vercodes}
 
         # Get the signed apk with the highest vercode
