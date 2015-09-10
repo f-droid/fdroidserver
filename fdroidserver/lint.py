@@ -38,11 +38,9 @@ https_enforcings = [
     enforce_https('github.com'),
     enforce_https('gitlab.com'),
     enforce_https('bitbucket.org'),
-    enforce_https('gitorious.org'),
     enforce_https('apache.org'),
     enforce_https('google.com'),
     enforce_https('svn.code.sf.net'),
-    enforce_https('googlecode.com'),
 ]
 
 
@@ -173,12 +171,10 @@ def main():
         curid = appid
         count['app_total'] += 1
 
-        # enabled_builds = 0
         lowest_vercode = -1
         curbuild = None
         for build in app['builds']:
             if not build['disable']:
-                # enabled_builds += 1
                 vercode = int(build['vercode'])
                 if lowest_vercode == -1 or vercode < lowest_vercode:
                     lowest_vercode = vercode
@@ -215,7 +211,6 @@ def main():
         old_sites = [
             'gitorious.org',
             'code.google.com',
-            # 'sourceforge.net', # too many false positives as of now
         ]
         if any(s in app['Repo'] for s in usual_sites):
             for f in ['Web Site', 'Source Code', 'Issue Tracker', 'Changelog']:
