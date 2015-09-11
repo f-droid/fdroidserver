@@ -16,23 +16,23 @@
 # }
 
 # Build tools version to be used
-build_tools = "23.0.1"
+# build_tools = "23.0.1"
 
 # Command or path to binary for running Ant
-ant = "ant"
+# ant = "ant"
 
 # Command or path to binary for running maven 3
-mvn3 = "mvn"
+# mvn3 = "mvn"
 
 # Command or path to binary for running Gradle
-gradle = "gradle"
+# gradle = "gradle"
 
 # Set the maximum age (in days) of an index that a client should accept from
 # this repo. Setting it to 0 or not setting it at all disables this
 # functionality. If you do set this to a non-zero value, you need to ensure
 # that your index is updated much more frequently than the specified interval.
 # The same policy is applied to the archive repo, if there is one.
-repo_maxage = 0
+# repo_maxage = 0
 
 repo_url = "https://MyFirstFDroidRepo.org/fdroid/repo"
 repo_name = "My First F-Droid Repo Demo"
@@ -116,15 +116,15 @@ The repository of older versions of applications from the main demo repository.
 # keypass = "password2"
 
 # The distinguished name used for all keys.
-keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"
+# keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"
 
 # Use this to override the auto-generated key aliases with specific ones
 # for particular applications. Normally, just leave it empty.
-keyaliases = {}
-keyaliases['com.example.app'] = 'example'
+# keyaliases = {}
+# keyaliases['com.example.app'] = 'example'
 # You can also force an app to use the same key alias as another one, using
 # the @ prefix.
-keyaliases['com.example.another.plugin'] = '@com.example.another'
+# keyaliases['com.example.another.plugin'] = '@com.example.another'
 
 
 # The full path to the root of the repository. It must be specified in
@@ -182,36 +182,36 @@ keyaliases['com.example.another.plugin'] = '@com.example.another'
 # nonstandardwebroot = False
 
 
-# Wiki details
-wiki_protocol = "http"
-wiki_server = "server"
-wiki_path = "/wiki/"
-wiki_user = "login"
-wiki_password = "1234"
+# The build logs can be posted to a mediawiki instance, like on f-droid.org.
+# wiki_protocol = "http"
+# wiki_server = "server"
+# wiki_path = "/wiki/"
+# wiki_user = "login"
+# wiki_password = "1234"
 
 # Only set this to true when running a repository where you want to generate
 # stats, and only then on the master build servers, not a development
 # machine.
-update_stats = False
+# update_stats = True
 
 # When used with stats, this is a list of IP addresses that are ignored for
 # calculation purposes.
-stats_ignore = []
+# stats_ignore = []
 
 # Server stats logs are retrieved from. Required when update_stats is True.
-stats_server = "example.com"
+# stats_server = "example.com"
 
 # User stats logs are retrieved from. Required when update_stats is True.
-stats_user = "bob"
+# stats_user = "bob"
 
 # Use the following to push stats to a Carbon instance:
-stats_to_carbon = False
-carbon_host = '0.0.0.0'
-carbon_port = 2003
+# stats_to_carbon = False
+# carbon_host = '0.0.0.0'
+# carbon_port = 2003
 
 # Set this to true to always use a build server. This saves specifying the
 # --server option on dedicated secure build server hosts.
-build_server_always = False
+# build_server_always = True
 
 # By default, fdroid will use YAML and the custom .txt metadata formats. It
 # is also possible to have metadata in JSON and XML by adding 'json' and
@@ -220,7 +220,7 @@ build_server_always = False
 
 # Limit in number of characters that fields can take up
 # Only the fields listed here are supported, defaults shown
-char_limits = {
-    'Summary': 80,
-    'Description': 4000,
-}
+# char_limits = {
+#     'Summary': 80,
+#     'Description': 4000,
+# }
