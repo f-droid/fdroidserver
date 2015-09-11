@@ -131,6 +131,19 @@ categories = Set([
 desc_url = re.compile("[^[]\[([^ ]+)( |\]|$)")
 
 
+def get_lastbuild(builds):
+    lowest_vercode = -1
+    lastbuild = None
+    for build in builds:
+        if not build['disable']:
+            vercode = int(build['vercode'])
+            if lowest_vercode == -1 or vercode < lowest_vercode:
+                lowest_vercode = vercode
+        if not lastbuild or int(build['vercode']) > int(lastbuild['vercode']):
+            lastbuild = build
+    return lastbuild
+
+
 def main():
 
     global config, options, curid, count
@@ -171,25 +184,18 @@ def main():
         curid = appid
         count['app_total'] += 1
 
-        lowest_vercode = -1
-        curbuild = None
-        for build in app['builds']:
-            if not build['disable']:
-                vercode = int(build['vercode'])
-                if lowest_vercode == -1 or vercode < lowest_vercode:
-                    lowest_vercode = vercode
-            if not curbuild or int(build['vercode']) > int(curbuild['vercode']):
-                curbuild = build
+        lastbuild = get_lastbuild(app['builds'])
 
         # Incorrect UCM
-        if (curbuild and curbuild['commit']
+        if (lastbuild is not None
+                and lastbuild['commit']
                 and app['Update Check Mode'] == 'RepoManifest'
-                and not curbuild['commit'].startswith('unknown')
-                and curbuild['vercode'] == app['Current Version Code']
-                and not curbuild['forcevercode']
-                and any(s in curbuild['commit'] for s in '.,_-/')):
+                and not lastbuild['commit'].startswith('unknown')
+                and lastbuild['vercode'] == app['Current Version Code']
+                and not lastbuild['forcevercode']
+                and any(s in lastbuild['commit'] for s in '.,_-/')):
             warn("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
-                curbuild['commit'], app['Update Check Mode']))
+                lastbuild['commit'], app['Update Check Mode']))
 
         # Summary size limit
         summ_chars = len(app['Summary'])
