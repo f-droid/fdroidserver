@@ -19,11 +19,9 @@
 
 from argparse import ArgumentParser
 import re
-import logging
 import common
 import metadata
 import sys
-from collections import Counter
 from sets import Set
 
 config = None
@@ -54,29 +52,29 @@ http_url_shorteners = [
     forbid_shortener('ur1.ca'),
 ]
 
-http_warnings = https_enforcings + http_url_shorteners + [
+http_checks = https_enforcings + http_url_shorteners + [
     (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
      "Appending .git is not necessary"),
     (re.compile(r'(.*/blob/master/|.*raw\.github.com/[^/]*/[^/]*/master/)'),
      "Use /HEAD/ instead of /master/ to point at a file in the default branch"),
 ]
 
-regex_warnings = {
-    'Web Site': http_warnings + [
+regex_checks = {
+    'Web Site': http_checks + [
     ],
-    'Source Code': http_warnings + [
+    'Source Code': http_checks + [
     ],
     'Repo': https_enforcings + [
     ],
-    'Issue Tracker': http_warnings + [
+    'Issue Tracker': http_checks + [
         (re.compile(r'.*github\.com/[^/]+/[^/]+[/]*$'),
          "/issues is missing"),
     ],
-    'Donate': http_warnings + [
+    'Donate': http_checks + [
         (re.compile(r'.*flattr\.com'),
          "Flattr donation methods belong in the FlattrID flag"),
     ],
-    'Changelog': http_warnings + [
+    'Changelog': http_checks + [
     ],
     'License': [
         (re.compile(r'^(|None|Unknown)$'),
@@ -108,7 +106,102 @@ regex_warnings = {
     ],
 }
 
-categories = Set([
+
+def check_regexes(app):
+    for f, checks in regex_checks.iteritems():
+        for m, r in checks:
+            v = app[f]
+            if type(v) == str:
+                if v is None:
+                    continue
+                if m.match(v):
+                    yield "%s '%s': %s" % (f, v, r)
+            elif type(v) == list:
+                for l in v:
+                    if m.match(l):
+                        yield "%s at line '%s': %s" % (f, l, r)
+
+desc_url = re.compile("[^[]\[([^ ]+)( |\]|$)")
+
+
+def get_lastbuild(builds):
+    lowest_vercode = -1
+    lastbuild = None
+    for build in builds:
+        if not build['disable']:
+            vercode = int(build['vercode'])
+            if lowest_vercode == -1 or vercode < lowest_vercode:
+                lowest_vercode = vercode
+        if not lastbuild or int(build['vercode']) > int(lastbuild['vercode']):
+            lastbuild = build
+    return lastbuild
+
+
+def check_ucm_tags(app):
+    lastbuild = get_lastbuild(app['builds'])
+    if (lastbuild is not None
+            and lastbuild['commit']
+            and app['Update Check Mode'] == 'RepoManifest'
+            and not lastbuild['commit'].startswith('unknown')
+            and lastbuild['vercode'] == app['Current Version Code']
+            and not lastbuild['forcevercode']
+            and any(s in lastbuild['commit'] for s in '.,_-/')):
+        yield "Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
+            lastbuild['commit'], app['Update Check Mode'])
+
+
+def check_char_limits(app):
+    limits = config['char_limits']
+
+    summ_chars = len(app['Summary'])
+    if summ_chars > limits['Summary']:
+        yield "Summary of length %s is over the %i char limit" % (
+            summ_chars, limits['Summary'])
+
+    desc_charcount = sum(len(l) for l in app['Description'])
+    if desc_charcount > limits['Description']:
+        yield "Description of length %s is over the %i char limit" % (
+            desc_charcount, limits['Description'])
+
+
+def check_old_links(app):
+    usual_sites = [
+        'github.com',
+        'gitlab.com',
+        'bitbucket.org',
+    ]
+    old_sites = [
+        'gitorious.org',
+        'code.google.com',
+    ]
+    if any(s in app['Repo'] for s in usual_sites):
+        for f in ['Web Site', 'Source Code', 'Issue Tracker', 'Changelog']:
+            if any(s in app[f] for s in old_sites):
+                yield "App is in '%s' but has a link to '%s'" % (app['Repo'], app[f])
+
+
+def check_useless_fields(app):
+    if app['Update Check Name'] == app['id']:
+        yield "Update Check Name is set to the known app id - it can be removed"
+
+filling_ucms = re.compile('^(Tags.*|RepoManifest.*)')
+
+
+def check_checkupdates_ran(app):
+    if filling_ucms.match(app['Update Check Mode']):
+        if all(app[f] == metadata.app_defaults[f] for f in [
+                'Auto Name',
+                'Current Version',
+                'Current Version Code',
+                ]):
+            yield "UCM is set but it looks like checkupdates hasn't been run yet"
+
+
+def check_empty_fields(app):
+    if not app['Categories']:
+        yield "Categories are not set"
+
+all_categories = Set([
     "Connectivity",
     "Development",
     "Games",
@@ -128,37 +221,105 @@ categories = Set([
     "Writing",
 ])
 
-desc_url = re.compile("[^[]\[([^ ]+)( |\]|$)")
+
+def check_categories(app):
+    for categ in app['Categories']:
+        if categ not in all_categories:
+            yield "Category '%s' is not valid" % categ
 
 
-def get_lastbuild(builds):
-    lowest_vercode = -1
-    lastbuild = None
-    for build in builds:
-        if not build['disable']:
-            vercode = int(build['vercode'])
-            if lowest_vercode == -1 or vercode < lowest_vercode:
-                lowest_vercode = vercode
-        if not lastbuild or int(build['vercode']) > int(lastbuild['vercode']):
-            lastbuild = build
-    return lastbuild
+def check_duplicates(app):
+    if app['Web Site'] and app['Source Code']:
+        if app['Web Site'].lower() == app['Source Code'].lower():
+            yield "Website '%s' is just the app's source code link" % app['Web Site']
+
+    if app['Name'] and app['Name'] == app['Auto Name']:
+        yield "Name '%s' is just the auto name" % app['Name']
+
+    name = app['Name'] or app['Auto Name']
+    if app['Summary'] and name:
+        if app['Summary'].lower() == name.lower():
+            yield "Summary '%s' is just the app's name" % app['Summary']
+
+    desc = app['Description']
+    if app['Summary'] and desc and len(desc) == 1:
+        if app['Summary'].lower() == desc[0].lower():
+            yield "Description '%s' is just the app's summary" % app['Summary']
+
+    seenlines = set()
+    for l in app['Description']:
+        if len(l) < 1:
+            continue
+        if l in seenlines:
+            yield "Description has a duplicate line"
+        seenlines.add(l)
+
+
+def check_text_wrap(app):
+    maxcols = 140
+    for l in app['Description']:
+        if any(l.startswith(c) for c in ['*', '#']):
+            continue
+        if any(len(w) > maxcols for w in l.split(' ')):
+            continue
+        if len(l) > maxcols:
+            yield "Description should be wrapped to 80-120 chars"
+            break
+
+
+def check_mediawiki_links(app):
+    for l in app['Description']:
+        for um in desc_url.finditer(l):
+            url = um.group(1)
+            for m, r in http_checks:
+                if m.match(url):
+                    yield "URL '%s' in Description: %s" % (url, r)
+
+
+def check_extra_spacing(app):
+    desc = app['Description']
+    if (not desc[0] or not desc[-1]
+            or any(not desc[l - 1] and not desc[l] for l in range(1, len(desc)))):
+        yield "Description has an extra empty line"
+
+
+def check_bulleted_lists(app):
+    validchars = ['*', '#']
+    lchar = ''
+    lcount = 0
+    for l in app['Description']:
+        if len(l) < 1:
+            lcount = 0
+            continue
+
+        if l[0] == lchar and l[1] == ' ':
+            lcount += 1
+            if lcount > 2 and lchar not in validchars:
+                yield "Description has a list (%s) but it isn't bulleted (*) nor numbered (#)" % lchar
+                break
+        else:
+            lchar = l[0]
+            lcount = 1
+
+
+def check_builds(app):
+    for build in app['builds']:
+        if build['disable']:
+            continue
+        for s in ['master', 'origin', 'HEAD', 'default', 'trunk']:
+            if build['commit'] and build['commit'].startswith(s):
+                yield "Branch '%s' used as commit in build '%s'" % (s, build['version'])
+            for srclib in build['srclibs']:
+                ref = srclib.split('@')[1].split('/')[0]
+                if ref.startswith(s):
+                    yield "Branch '%s' used as commit in srclib '%s'" % (s, srclib)
 
 
 def main():
 
-    global config, options, curid, count
-    curid = None
+    global config, options
 
-    count = Counter()
-
-    def warn(message):
-        global curid, count
-        if curid:
-            print "%s:" % curid
-            curid = None
-            count['app'] += 1
-        print '    %s' % message
-        count['warn'] += 1
+    anywarns = False
 
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
@@ -175,172 +336,36 @@ def main():
     allapps = metadata.read_metadata(xref=True)
     apps = common.read_app_args(options.appid, allapps, False)
 
-    filling_ucms = re.compile('^(Tags.*|RepoManifest.*)')
-
     for appid, app in apps.iteritems():
         if app['Disabled']:
             continue
 
-        curid = appid
-        count['app_total'] += 1
+        warns = []
 
-        lastbuild = get_lastbuild(app['builds'])
+        for check_func in [
+                check_regexes,
+                check_ucm_tags,
+                check_char_limits,
+                check_old_links,
+                check_checkupdates_ran,
+                check_useless_fields,
+                check_empty_fields,
+                check_categories,
+                check_duplicates,
+                check_text_wrap,
+                check_mediawiki_links,
+                check_extra_spacing,
+                check_bulleted_lists,
+                check_builds,
+                ]:
+            warns += check_func(app)
 
-        # Incorrect UCM
-        if (lastbuild is not None
-                and lastbuild['commit']
-                and app['Update Check Mode'] == 'RepoManifest'
-                and not lastbuild['commit'].startswith('unknown')
-                and lastbuild['vercode'] == app['Current Version Code']
-                and not lastbuild['forcevercode']
-                and any(s in lastbuild['commit'] for s in '.,_-/')):
-            warn("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
-                lastbuild['commit'], app['Update Check Mode']))
+        if warns:
+            anywarns = True
+            for warn in warns:
+                print "%s: %s" % (appid, warn)
 
-        # Summary size limit
-        summ_chars = len(app['Summary'])
-        if summ_chars > config['char_limits']['Summary']:
-            warn("Summary of length %s is over the %i char limit" % (
-                summ_chars, config['char_limits']['Summary']))
-
-        # Redundant info
-        if app['Web Site'] and app['Source Code']:
-            if app['Web Site'].lower() == app['Source Code'].lower():
-                warn("Website '%s' is just the app's source code link" % app['Web Site'])
-
-        # Old links
-        usual_sites = [
-            'github.com',
-            'gitlab.com',
-            'bitbucket.org',
-        ]
-        old_sites = [
-            'gitorious.org',
-            'code.google.com',
-        ]
-        if any(s in app['Repo'] for s in usual_sites):
-            for f in ['Web Site', 'Source Code', 'Issue Tracker', 'Changelog']:
-                if any(s in app[f] for s in old_sites):
-                    warn("App is in '%s' but has a link to '%s'" % (app['Repo'], app[f]))
-
-        if filling_ucms.match(app['Update Check Mode']):
-            if all(app[f] == metadata.app_defaults[f] for f in [
-                    'Auto Name',
-                    'Current Version',
-                    'Current Version Code',
-                    ]):
-                warn("UCM is set but it looks like checkupdates hasn't been run yet")
-
-        if app['Update Check Name'] == appid:
-            warn("Update Check Name is set to the known app id - it can be removed")
-
-        # Missing or incorrect categories
-        if not app['Categories']:
-            warn("Categories are not set")
-        for categ in app['Categories']:
-            if categ not in categories:
-                warn("Category '%s' is not valid" % categ)
-
-        if app['Name'] and app['Name'] == app['Auto Name']:
-            warn("Name '%s' is just the auto name" % app['Name'])
-
-        name = app['Name'] or app['Auto Name']
-        if app['Summary'] and name:
-            if app['Summary'].lower() == name.lower():
-                warn("Summary '%s' is just the app's name" % app['Summary'])
-
-        desc = app['Description']
-        if app['Summary'] and desc and len(desc) == 1:
-            if app['Summary'].lower() == desc[0].lower():
-                warn("Description '%s' is just the app's summary" % app['Summary'])
-
-        # Description size limit
-        desc_charcount = sum(len(l) for l in desc)
-        if desc_charcount > config['char_limits']['Description']:
-            warn("Description of length %s is over the %i char limit" % (
-                desc_charcount, config['char_limits']['Description']))
-
-        maxcols = 140
-        for l in app['Description']:
-            if any(l.startswith(c) for c in ['*', '#']):
-                continue
-            if any(len(w) > maxcols for w in l.split(' ')):
-                continue
-            if len(l) > maxcols:
-                warn("Description should be wrapped to 80-120 chars")
-                break
-
-        if (not desc[0] or not desc[-1]
-                or any(not desc[l - 1] and not desc[l] for l in range(1, len(desc)))):
-            warn("Description has an extra empty line")
-
-        seenlines = set()
-        for l in app['Description']:
-            if len(l) < 1:
-                continue
-            if l in seenlines:
-                warn("Description has a duplicate line")
-            seenlines.add(l)
-
-        for l in app['Description']:
-            for um in desc_url.finditer(l):
-                url = um.group(1)
-                for m, r in http_warnings:
-                    if m.match(url):
-                        warn("URL '%s' in Description: %s" % (url, r))
-
-        # Check for lists using the wrong characters
-        validchars = ['*', '#']
-        lchar = ''
-        lcount = 0
-        for l in app['Description']:
-            if len(l) < 1:
-                lcount = 0
-                continue
-
-            if l[0] == lchar and l[1] == ' ':
-                lcount += 1
-                if lcount > 2 and lchar not in validchars:
-                    warn("Description has a list (%s) but it isn't bulleted (*) nor numbered (#)" % lchar)
-                    break
-            else:
-                lchar = l[0]
-                lcount = 1
-
-        # Regex checks in all kinds of fields
-        for f in regex_warnings:
-            for m, r in regex_warnings[f]:
-                v = app[f]
-                if type(v) == str:
-                    if v is None:
-                        continue
-                    if m.match(v):
-                        warn("%s '%s': %s" % (f, v, r))
-                elif type(v) == list:
-                    for l in v:
-                        if m.match(l):
-                            warn("%s at line '%s': %s" % (f, l, r))
-
-        # Build warnings
-        for build in app['builds']:
-            if build['disable']:
-                continue
-            for s in ['master', 'origin', 'HEAD', 'default', 'trunk']:
-                if build['commit'] and build['commit'].startswith(s):
-                    warn("Branch '%s' used as commit in build '%s'" % (
-                        s, build['version']))
-                for srclib in build['srclibs']:
-                    ref = srclib.split('@')[1].split('/')[0]
-                    if ref.startswith(s):
-                        warn("Branch '%s' used as commit in srclib '%s'" % (
-                            s, srclib))
-
-        if not curid:
-            print
-
-    if count['warn'] > 0:
-        logging.warn("Found a total of %i warnings in %i apps out of %i total." % (
-            count['warn'], count['app'], count['app_total']))
+    if anywarns:
         sys.exit(1)
 
 
