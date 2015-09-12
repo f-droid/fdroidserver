@@ -60,12 +60,9 @@ http_checks = https_enforcings + http_url_shorteners + [
 ]
 
 regex_checks = {
-    'Web Site': http_checks + [
-    ],
-    'Source Code': http_checks + [
-    ],
-    'Repo': https_enforcings + [
-    ],
+    'Web Site': http_checks,
+    'Source Code': http_checks,
+    'Repo': https_enforcings,
     'Issue Tracker': http_checks + [
         (re.compile(r'.*github\.com/[^/]+/[^/]+[/]*$'),
          "/issues is missing"),
@@ -74,8 +71,7 @@ regex_checks = {
         (re.compile(r'.*flattr\.com'),
          "Flattr donation methods belong in the FlattrID flag"),
     ],
-    'Changelog': http_checks + [
-    ],
+    'Changelog': http_checks,
     'License': [
         (re.compile(r'^(|None|Unknown)$'),
          "No license specified"),
