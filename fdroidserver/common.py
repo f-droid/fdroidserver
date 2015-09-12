@@ -531,7 +531,7 @@ class vcs:
             raise VCSException('gettags not supported for this vcs type')
         rtags = []
         for tag in self._gettags():
-            if re.match('[-A-Za-z0-9_. ]+$', tag):
+            if re.match('[-A-Za-z0-9_. /]+$', tag):
                 rtags.append(tag)
         return rtags
 
