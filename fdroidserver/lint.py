@@ -227,12 +227,18 @@ def check_categories(app):
 
 
 def check_duplicates(app):
-    if app['Web Site'] and app['Source Code']:
-        if app['Web Site'].lower() == app['Source Code'].lower():
-            yield "Website '%s' is just the app's source code link" % app['Web Site']
-
     if app['Name'] and app['Name'] == app['Auto Name']:
-        yield "Name '%s' is just the auto name" % app['Name']
+        yield "Name '%s' is just the auto name - remove it" % app['Name']
+
+    links_seen = set()
+    for f in ['Source Code', 'Web Site', 'Issue Tracker', 'Changelog']:
+        if not app[f]:
+            continue
+        v = app[f].lower()
+        if v in links_seen:
+            yield "Duplicate link in '%s': %s" % (f, v)
+        else:
+            links_seen.add(v)
 
     name = app['Name'] or app['Auto Name']
     if app['Summary'] and name:
