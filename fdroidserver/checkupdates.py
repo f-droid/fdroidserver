@@ -433,6 +433,12 @@ def checkupdates_app(app, first=True):
         vercode = str(eval(op))
         logging.debug("Applied vercode operation: %s -> %s" % (oldvercode, vercode))
 
+    if version and any(version.startswith(s) for s in [
+            '${',  # Gradle variable names
+            '@string/',  # Strings we could not resolve
+            ]):
+        version = "Unknown"
+
     updating = False
     if version is None:
         logmsg = "...{0} : {1}".format(app['id'], msg)
