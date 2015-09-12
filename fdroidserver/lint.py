@@ -121,8 +121,6 @@ def check_regexes(app):
                     if m.match(l):
                         yield "%s at line '%s': %s" % (f, l, r)
 
-desc_url = re.compile("[^[]\[([^ ]+)( |\]|$)")
-
 
 def get_lastbuild(builds):
     lowest_vercode = -1
@@ -253,6 +251,9 @@ def check_duplicates(app):
         if l in seenlines:
             yield "Description has a duplicate line"
         seenlines.add(l)
+
+
+desc_url = re.compile("[^[]\[([^ ]+)( |\]|$)")
 
 
 def check_mediawiki_links(app):
