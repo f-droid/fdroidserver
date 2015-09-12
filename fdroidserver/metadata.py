@@ -265,6 +265,7 @@ class DescriptionFormatter:
     state = stNONE
     text_wiki = ''
     text_html = ''
+    text_txt = ''
     linkResolver = None
 
     def __init__(self, linkres):
@@ -366,6 +367,7 @@ class DescriptionFormatter:
 
     def parseline(self, line):
         self.text_wiki += "%s\n" % line
+        self.text_txt += "%s\n" % line
         if not line:
             self.endcur()
         elif line.startswith('* '):
@@ -395,6 +397,16 @@ class DescriptionFormatter:
 
     def end(self):
         self.endcur()
+
+
+# Parse multiple lines of description as written in a metadata file, returning
+# a single string in text format and wrapped to 80 columns.
+def description_txt(lines):
+    ps = DescriptionFormatter(None)
+    for line in lines:
+        ps.parseline(line)
+    ps.end()
+    return ps.text_txt
 
 
 # Parse multiple lines of description as written in a metadata file, returning
@@ -1044,6 +1056,11 @@ def write_metadata(dest, app):
         t = metafieldtype(field)
         if t == 'list':
             value = ','.join(value)
+        elif t == 'multiline':
+            if type(value) == list:
+                value = '\n' + '\n'.join(value) + '\n.'
+            else:
+                value = '\n' + value + '.'
         mf.write("%s:%s\n" % (field, value))
 
     def writefield_nonempty(field, value=None):
@@ -1072,10 +1089,7 @@ def write_metadata(dest, app):
     writefield_nonempty('Name')
     writefield_nonempty('Auto Name')
     writefield('Summary')
-    writefield('Description', '')
-    for line in app['Description']:
-        mf.write("%s\n" % line)
-    mf.write('.\n')
+    writefield('Description', description_txt(app['Description']))
     mf.write('\n')
     if app['Requires Root']:
         writefield('Requires Root', 'yes')
@@ -1126,10 +1140,7 @@ def write_metadata(dest, app):
         mf.write('\n')
 
     if app['Maintainer Notes']:
-        writefield('Maintainer Notes', '')
-        for line in app['Maintainer Notes']:
-            mf.write("%s\n" % line)
-        mf.write('.\n')
+        writefield('Maintainer Notes', app['Maintainer Notes'])
         mf.write('\n')
 
     writefield_nonempty('Archive Policy')
