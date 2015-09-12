@@ -24,6 +24,7 @@ import sys
 import glob
 import cgi
 import logging
+import textwrap
 
 import yaml
 # use libyaml if it is available
@@ -266,6 +267,7 @@ class DescriptionFormatter:
     text_wiki = ''
     text_html = ''
     text_txt = ''
+    para_lines = []
     linkResolver = None
 
     def __init__(self, linkres):
@@ -284,13 +286,18 @@ class DescriptionFormatter:
     def endpara(self):
         self.text_html += '</p>'
         self.state = self.stNONE
+        self.text_txt += textwrap.fill(' '.join(self.para_lines), 80)
+        self.text_txt += '\n\n'
+        del self.para_lines[:]
 
     def endul(self):
         self.text_html += '</ul>'
+        self.text_txt += '\n'
         self.state = self.stNONE
 
     def endol(self):
         self.text_html += '</ol>'
+        self.text_txt += '\n'
         self.state = self.stNONE
 
     def formatted(self, txt, html):
@@ -367,11 +374,11 @@ class DescriptionFormatter:
 
     def parseline(self, line):
         self.text_wiki += "%s\n" % line
-        self.text_txt += "%s\n" % line
         if not line:
             self.endcur()
         elif line.startswith('* '):
             self.endcur([self.stUL])
+            self.text_txt += "%s\n" % line
             if self.state != self.stUL:
                 self.text_html += '<ul>'
                 self.state = self.stUL
@@ -380,6 +387,7 @@ class DescriptionFormatter:
             self.text_html += '</li>'
         elif line.startswith('# '):
             self.endcur([self.stOL])
+            self.text_txt += "%s\n" % line
             if self.state != self.stOL:
                 self.text_html += '<ol>'
                 self.state = self.stOL
@@ -387,6 +395,7 @@ class DescriptionFormatter:
             self.addtext(line[1:])
             self.text_html += '</li>'
         else:
+            self.para_lines.append(line)
             self.endcur([self.stPARA])
             if self.state == self.stNONE:
                 self.text_html += '<p>'
@@ -397,6 +406,7 @@ class DescriptionFormatter:
 
     def end(self):
         self.endcur()
+        self.text_txt = self.text_txt.strip()
 
 
 # Parse multiple lines of description as written in a metadata file, returning
@@ -1060,7 +1070,7 @@ def write_metadata(dest, app):
             if type(value) == list:
                 value = '\n' + '\n'.join(value) + '\n.'
             else:
-                value = '\n' + value + '.'
+                value = '\n' + value + '\n.'
         mf.write("%s:%s\n" % (field, value))
 
     def writefield_nonempty(field, value=None):
