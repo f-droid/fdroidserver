@@ -255,18 +255,6 @@ def check_duplicates(app):
         seenlines.add(l)
 
 
-def check_text_wrap(app):
-    maxcols = 140
-    for l in app['Description']:
-        if any(l.startswith(c) for c in ['*', '#']):
-            continue
-        if any(len(w) > maxcols for w in l.split(' ')):
-            continue
-        if len(l) > maxcols:
-            yield "Description should be wrapped to 80-120 chars"
-            break
-
-
 def check_mediawiki_links(app):
     for l in app['Description']:
         for um in desc_url.finditer(l):
@@ -274,13 +262,6 @@ def check_mediawiki_links(app):
             for m, r in http_checks:
                 if m.match(url):
                     yield "URL '%s' in Description: %s" % (url, r)
-
-
-def check_extra_spacing(app):
-    desc = app['Description']
-    if (not desc[0] or not desc[-1]
-            or any(not desc[l - 1] and not desc[l] for l in range(1, len(desc)))):
-        yield "Description has an extra empty line"
 
 
 def check_bulleted_lists(app):
@@ -352,9 +333,7 @@ def main():
                 check_empty_fields,
                 check_categories,
                 check_duplicates,
-                check_text_wrap,
                 check_mediawiki_links,
-                check_extra_spacing,
                 check_bulleted_lists,
                 check_builds,
                 ]:
