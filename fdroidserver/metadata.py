@@ -288,7 +288,9 @@ class DescriptionFormatter:
         self.state = self.stNONE
         whole_para = ' '.join(self.para_lines)
         self.addtext(whole_para)
-        self.text_txt += textwrap.fill(whole_para, 80) + '\n\n'
+        self.text_txt += textwrap.fill(whole_para, 80,
+                                       break_long_words=False,
+                                       break_on_hyphens=False) + '\n\n'
         del self.para_lines[:]
 
     def endul(self):
