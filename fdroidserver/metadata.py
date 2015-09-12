@@ -602,6 +602,10 @@ def get_default_app_info_list(apps, metadatapath=None):
     return appid, thisinfo
 
 
+def sorted_builds(builds):
+    return sorted(builds, key=lambda build: int(build['vercode']))
+
+
 def post_metadata_parse(thisinfo):
 
     supported_metadata = app_defaults.keys() + ['comments', 'builds', 'id', 'metadatapath']
@@ -663,7 +667,7 @@ def post_metadata_parse(thisinfo):
     for build in thisinfo['builds']:
         fill_build_defaults(build)
 
-    thisinfo['builds'] = sorted(thisinfo['builds'], key=lambda build: int(build['vercode']))
+    thisinfo['builds'] = sorted_builds(thisinfo['builds'])
 
 
 # Parse metadata for a single application.
@@ -1082,7 +1086,7 @@ def write_metadata(dest, app):
         if app['Binaries']:
             writefield('Binaries')
         mf.write('\n')
-    for build in app['builds']:
+    for build in sorted_builds(app['builds']):
 
         if build['version'] == "Ignore":
             continue
