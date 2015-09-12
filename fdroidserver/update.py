@@ -1049,16 +1049,13 @@ def main():
 
     # Parse command line...
     parser = ArgumentParser()
+    common.setup_global_opts(parser)
     parser.add_argument("--create-key", action="store_true", default=False,
                         help="Create a repo signing key in a keystore")
     parser.add_argument("-c", "--create-metadata", action="store_true", default=False,
                         help="Create skeleton metadata files that are missing")
     parser.add_argument("--delete-unknown", action="store_true", default=False,
                         help="Delete APKs without metadata from the repo")
-    parser.add_argument("-v", "--verbose", action="store_true", default=False,
-                        help="Spew out even more information than normal")
-    parser.add_argument("-q", "--quiet", action="store_true", default=False,
-                        help="Restrict output to warnings and errors")
     parser.add_argument("-b", "--buildreport", action="store_true", default=False,
                         help="Report on build data status")
     parser.add_argument("-i", "--interactive", default=False, action="store_true",

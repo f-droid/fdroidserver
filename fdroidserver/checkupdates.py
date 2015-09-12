@@ -527,11 +527,8 @@ def main():
 
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
+    common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help="app-id to check for updates")
-    parser.add_argument("-v", "--verbose", action="store_true", default=False,
-                        help="Spew out even more information than normal")
-    parser.add_argument("-q", "--quiet", action="store_true", default=False,
-                        help="Restrict output to warnings and errors")
     parser.add_argument("--auto", action="store_true", default=False,
                         help="Process auto-updates")
     parser.add_argument("--autoonly", action="store_true", default=False,

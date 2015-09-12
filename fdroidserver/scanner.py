@@ -250,11 +250,8 @@ def main():
 
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
+    common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help="app-id with optional versioncode in the form APPID[:VERCODE]")
-    parser.add_argument("-v", "--verbose", action="store_true", default=False,
-                        help="Spew out even more information than normal")
-    parser.add_argument("-q", "--quiet", action="store_true", default=False,
-                        help="Restrict output to warnings and errors")
     options = parser.parse_args()
 
     config = common.read_config(options)

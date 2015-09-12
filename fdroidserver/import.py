@@ -158,10 +158,7 @@ def main():
 
     # Parse command line...
     parser = ArgumentParser()
-    parser.add_argument("-v", "--verbose", action="store_true", default=False,
-                        help="Spew out even more information than normal")
-    parser.add_argument("-q", "--quiet", action="store_true", default=False,
-                        help="Restrict output to warnings and errors")
+    common.setup_global_opts(parser)
     parser.add_argument("-u", "--url", default=None,
                         help="Project URL to import from.")
     parser.add_argument("-s", "--subdir", default=None,

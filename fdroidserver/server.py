@@ -196,6 +196,7 @@ def main():
 
     # Parse command line...
     parser = ArgumentParser()
+    common.setup_global_opts(parser)
     parser.add_argument("command", help="command to execute, either 'init' or 'update'")
     parser.add_argument("-i", "--identity-file", default=None,
                         help="Specify an identity file to provide to SSH for rsyncing")
@@ -203,10 +204,6 @@ def main():
                         help="Specify a local folder to sync the repo to")
     parser.add_argument("--sync-from-local-copy-dir", action="store_true", default=False,
                         help="Before uploading to servers, sync from local copy dir")
-    parser.add_argument("-v", "--verbose", action="store_true", default=False,
-                        help="Spew out even more information than normal")
-    parser.add_argument("-q", "--quiet", action="store_true", default=False,
-                        help="Restrict output to warnings and errors")
     parser.add_argument("--no-checksum", action="store_true", default=False,
                         help="Don't use rsync checksums")
     options = parser.parse_args()
