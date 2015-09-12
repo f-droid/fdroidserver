@@ -257,12 +257,12 @@ desc_url = re.compile("[^[]\[([^ ]+)( |\]|$)")
 
 
 def check_mediawiki_links(app):
-    for l in app['Description']:
-        for um in desc_url.finditer(l):
-            url = um.group(1)
-            for m, r in http_checks:
-                if m.match(url):
-                    yield "URL '%s' in Description: %s" % (url, r)
+    wholedesc = ' '.join(app['Description'])
+    for um in desc_url.finditer(wholedesc):
+        url = um.group(1)
+        for m, r in http_checks:
+            if m.match(url):
+                yield "URL '%s' in Description: %s" % (url, r)
 
 
 def check_bulleted_lists(app):
