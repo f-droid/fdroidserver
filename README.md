@@ -42,7 +42,7 @@ fingerprint is `6B80 A842 07B3 0AC9 DEE2 35FE F50E ADDD 2234 F563`)
 On OSX, `fdroidserver` is available from third party package managers,
 like Homebrew, MacPorts, and Fink:
 
-	sudo brew install fdroidserver
+	brew install fdroidserver
 
 For Arch-Linux is a package in the AUR available. If you have installed
 `yaourt` or something similiar, you can do:
