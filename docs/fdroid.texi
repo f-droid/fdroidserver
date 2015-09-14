@@ -122,8 +122,6 @@ vagrant-cachier plugin (unpackaged): `vagrant plugin install vagrant-cachier`
 Paramiko (debian package python-paramiko)
 @item
 Imaging (debian package python-imaging)
-@item
-Magic (debian package python-magic)
 @end itemize
 
 On the other hand, if you want to build the apps directly on your system

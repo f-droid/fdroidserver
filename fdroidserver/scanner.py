@@ -31,63 +31,6 @@ config = None
 options = None
 
 
-def init_mime_type():
-    '''
-    There are two incompatible versions of the 'magic' module, one
-    that comes as part of libmagic, which is what Debian includes as
-    python-magic, then another called python-magic that is a separate
-    project that wraps libmagic.  The second is 'magic' on pypi, so
-    both need to be supported.  Then on platforms where libmagic is
-    not easily included, e.g. OSX and Windows, fallback to the
-    built-in 'mimetypes' module so this will work without
-    libmagic. Hence this function with the following hacks:
-    '''
-
-    init_path = ''
-    method = ''
-    ms = None
-
-    def mime_from_file(path):
-        try:
-            return magic.from_file(path, mime=True)
-        except UnicodeError:
-            return None
-
-    def mime_file(path):
-        try:
-            return ms.file(path)
-        except UnicodeError:
-            return None
-
-    def mime_guess_type(path):
-        return mimetypes.guess_type(path, strict=False)
-
-    try:
-        import magic
-        try:
-            ms = magic.open(magic.MIME_TYPE)
-            ms.load()
-            magic.from_file(init_path, mime=True)
-            method = 'from_file'
-        except AttributeError:
-            ms.file(init_path)
-            method = 'file'
-    except ImportError:
-        import mimetypes
-        mimetypes.init()
-        method = 'guess_type'
-
-    logging.info("Using magic method " + method)
-    if method == 'from_file':
-        return mime_from_file
-    if method == 'file':
-        return mime_file
-    if method == 'guess_type':
-        return mime_guess_type
-
-    logging.critical("unknown magic method!")
-
-
 # Scan the source code in the given directory (and all subdirectories)
 # and return the number of fatal problems encountered
 def scan_source(build_dir, root_dir, thisbuild):
@@ -153,7 +96,16 @@ def scan_source(build_dir, root_dir, thisbuild):
         logging.error('Found %s at %s' % (what, fd))
         return 1
 
-    get_mime_type = init_mime_type()
+    def is_executable(path):
+        return os.path.exists(path) and os.access(path, os.X_OK)
+
+    textchars = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7f})
+
+    def is_binary(path):
+        d = None
+        with open(path, 'rb') as f:
+            d = f.read(1024)
+        return bool(d.translate(None, textchars))
 
     # Iterate through all files in the source code
     for r, d, f in os.walk(build_dir, topdown=True):
@@ -169,44 +121,24 @@ def scan_source(build_dir, root_dir, thisbuild):
             fp = os.path.join(r, curfile)
             fd = fp[len(build_dir) + 1:]
 
-            mime = get_mime_type(fp)
+            ext = common.get_extension(fd)
 
-            if mime == 'application/x-sharedlib':
+            if ext == 'so':
                 count += handleproblem('shared library', fd, fp)
-
-            elif mime == 'application/x-archive':
+            elif ext == 'a':
                 count += handleproblem('static library', fd, fp)
-
-            elif mime == 'application/x-executable' or mime == 'application/x-mach-binary':
-                count += handleproblem('binary executable', fd, fp)
-
-            elif mime == 'application/x-java-applet':
+            elif ext == 'class':
                 count += handleproblem('Java compiled class', fd, fp)
+            elif ext == 'apk':
+                removeproblem('APK file', fd, fp)
 
-            elif mime in (
-                    'application/jar',
-                    'application/zip',
-                    'application/java-archive',
-                    'application/octet-stream',
-                    'binary', ):
-
-                if common.has_extension(fp, 'apk'):
-                    removeproblem('APK file', fd, fp)
-
-                elif common.has_extension(fp, 'jar'):
-
-                    if any(suspect.match(curfile) for suspect in usual_suspects):
-                        count += handleproblem('usual supect', fd, fp)
-                    else:
-                        warnproblem('JAR file', fd)
-
-                elif common.has_extension(fp, 'zip'):
-                    warnproblem('ZIP file', fd)
-
+            elif ext == 'jar':
+                if any(suspect.match(curfile) for suspect in usual_suspects):
+                    count += handleproblem('usual supect', fd, fp)
                 else:
-                    warnproblem('unknown compressed or binary file', fd)
+                    warnproblem('JAR file', fd)
 
-            elif common.has_extension(fp, 'java'):
+            elif ext == 'java':
                 if not os.path.isfile(fp):
                     continue
                 for line in file(fp):
@@ -214,7 +146,7 @@ def scan_source(build_dir, root_dir, thisbuild):
                         count += handleproblem('DexClassLoader', fd, fp)
                         break
 
-            elif common.has_extension(fp, 'gradle'):
+            elif ext == 'gradle':
                 if not os.path.isfile(fp):
                     continue
                 for i, line in enumerate(file(fp)):
@@ -222,6 +154,12 @@ def scan_source(build_dir, root_dir, thisbuild):
                     if any(suspect.match(line) for suspect in usual_suspects):
                         count += handleproblem('usual suspect at line %d' % i, fd, fp)
                         break
+
+            elif is_binary(fp):
+                if is_executable(fp):
+                    count += handleproblem('executable binary', fd, fp)
+                elif ext == '':
+                    count += handleproblem('unknown binary', fd, fp)
 
     for p in scanignore:
         if p not in scanignore_worked:
@@ -323,7 +261,7 @@ def main():
             probcount += 1
 
     logging.info("Finished:")
-    print "%d app(s) with problems" % probcount
+    print "%d problems found" % probcount
 
 if __name__ == "__main__":
     main()

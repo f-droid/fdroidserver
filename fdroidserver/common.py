@@ -367,10 +367,16 @@ def read_app_args(args, allapps, allow_vercodes=False):
     return apps
 
 
-def has_extension(filename, extension):
-    name, ext = os.path.splitext(filename)
-    ext = ext.lower()[1:]
-    return ext == extension
+def get_extension(filename):
+    _, ext = os.path.splitext(filename)
+    if not ext:
+        return ''
+    return ext.lower()[1:]
+
+
+def has_extension(filename, ext):
+    return ext == get_extension(filename)
+
 
 apk_regex = None
 

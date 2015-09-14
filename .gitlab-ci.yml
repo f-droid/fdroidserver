@@ -4,7 +4,7 @@ before_script:
   - apt-get -q install -y wget tar
   - echo " == Installing packages required by fdroidserver"
   - apt-get -q install -y python
-      python-git python-imaging python-libcloud python-logilab-astng python-magic
+      python-git python-imaging python-libcloud python-logilab-astng
       python-paramiko python-pip python-pyasn1 python-pyasn1-modules
       python-requests python-virtualenv python-yaml
       rsync
