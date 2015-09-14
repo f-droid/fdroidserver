@@ -155,6 +155,11 @@ def scan_source(build_dir, root_dir, thisbuild):
                         count += handleproblem('usual suspect at line %d' % i, fd, fp)
                         break
 
+            # These files are often found - avoid checking if they are binary
+            # to speed up the scanner
+            elif ext in ['xml', 'md', 'txt', 'html', 'sh', 'png']:
+                pass
+
             elif is_binary(fp):
                 if is_executable(fp):
                     count += handleproblem('executable binary', fd, fp)
