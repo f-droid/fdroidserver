@@ -282,7 +282,10 @@ def main():
 
         try:
 
-            build_dir = 'build/' + appid
+            if app['Repo Type'] == 'srclib':
+                build_dir = os.path.join('build', 'srclib', app['Repo'])
+            else:
+                build_dir = os.path.join('build', appid)
 
             # Set up vcs interface and make sure we have the latest code...
             vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
