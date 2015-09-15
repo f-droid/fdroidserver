@@ -137,10 +137,7 @@ def get_metadata_from_url(app, url):
         shutil.rmtree(src_dir)
     vcs = common.getvcs(repotype, repo, src_dir)
     vcs.gotorevision(options.rev)
-    if options.subdir:
-        root_dir = os.path.join(src_dir, options.subdir)
-    else:
-        root_dir = src_dir
+    root_dir = get_subdir(src_dir)
 
     app['Repo Type'] = repotype
     app['Repo'] = repo
@@ -150,6 +147,13 @@ def get_metadata_from_url(app, url):
 
 config = None
 options = None
+
+
+def get_subdir(src_dir):
+    if options.subdir:
+        return os.path.join(src_dir, options.subdir)
+
+    return src_dir
 
 
 def main():
@@ -173,9 +177,13 @@ def main():
     package, app = metadata.get_default_app_info_list(apps)
     app['Update Check Mode'] = "Tags"
 
+    root_dir = None
+    src_dir = None
+
     if os.path.isdir('.git'):
         if options.url:
             app['Web Site'] = options.url
+        root_dir = get_subdir(os.getcwd())
     elif options.url:
         root_dir, src_dir = get_metadata_from_url(app, options.url)
     else:
