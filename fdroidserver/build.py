@@ -101,7 +101,7 @@ def get_vagrant_sshinfo():
         raise BuildException("Error getting ssh config")
     vagranthost = 'default'  # Host in ssh config file
     sshconfig = paramiko.SSHConfig()
-    sshf = open('builder/sshconfig', 'r')
+    sshf = open(os.path.join('builder', 'sshconfig'), 'r')
     sshconfig.parse(sshf)
     sshf.close()
     sshconfig = sshconfig.lookup(vagranthost)
@@ -180,13 +180,12 @@ def get_clean_vm(reset=False):
         p = subprocess.Popen(['vagrant', '--version'],
                              stdout=subprocess.PIPE)
         vver = p.communicate()[0]
-        if vver.startswith('Vagrant version 1.2'):
-            with open('builder/Vagrantfile', 'w') as vf:
+        with open(os.path.join('builder', 'Vagrantfile'), 'w') as vf:
+            if vver.startswith('Vagrant version 1.2'):
                 vf.write('Vagrant.configure("2") do |config|\n')
                 vf.write('config.vm.box = "buildserver"\n')
                 vf.write('end\n')
-        else:
-            with open('builder/Vagrantfile', 'w') as vf:
+            else:
                 vf.write('Vagrant::Config.run do |config|\n')
                 vf.write('config.vm.box = "buildserver"\n')
                 vf.write('end\n')
@@ -606,7 +605,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 logging.info("Building native code in '%s'" % d)
             else:
                 logging.info("Building native code in the main project")
-            manifest = root_dir + '/' + d + '/AndroidManifest.xml'
+            manifest = os.path.join(root_dir, d, 'AndroidManifest.xml')
             if os.path.exists(manifest):
                 # Read and write the whole AM.xml to fix newlines and avoid
                 # the ndk r8c or later 'wordlist' errors. The outcome of this
@@ -662,7 +661,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         bconfig = ConfigParser(defaults, allow_no_value=True)
         bconfig.read(spec)
 
-        distdir = 'python-for-android/dist/fdroid'
+        distdir = os.path.join('python-for-android', 'dist', 'fdroid')
         if os.path.exists(distdir):
             shutil.rmtree(distdir)
 
@@ -762,8 +761,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         src = m.group(1)
         src = os.path.join(bindir, src) + '.apk'
     elif thisbuild['type'] == 'kivy':
-        src = 'python-for-android/dist/default/bin/{0}-{1}-release.apk'.format(
-            bconfig.get('app', 'title'), bconfig.get('app', 'version'))
+        src = os.path.join('python-for-android', 'dist', 'default', 'bin',
+                           '{0}-{1}-release.apk'.format(
+                               bconfig.get('app', 'title'),
+                               bconfig.get('app', 'version')))
     elif thisbuild['type'] == 'gradle':
 
         if thisbuild['gradlepluginver'] >= LooseVersion('0.11'):

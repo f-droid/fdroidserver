@@ -103,7 +103,7 @@ def check_tags(app, pattern):
             build_dir = os.path.join('build', 'srclib', app['Repo'])
             repotype = common.getsrclibvcs(app['Repo'])
         else:
-            build_dir = os.path.join('build/', app['id'])
+            build_dir = os.path.join('build', app['id'])
             repotype = app['Repo Type']
 
         if repotype not in ('git', 'git-svn', 'hg', 'bzr'):
@@ -187,7 +187,7 @@ def check_repomanifest(app, branch=None):
             build_dir = os.path.join('build', 'srclib', app['Repo'])
             repotype = common.getsrclibvcs(app['Repo'])
         else:
-            build_dir = os.path.join('build/', app['id'])
+            build_dir = os.path.join('build', app['id'])
             repotype = app['Repo Type']
 
         # Set up vcs interface and make sure we have the latest code...
@@ -250,7 +250,7 @@ def check_repotrunk(app, branch=None):
             build_dir = os.path.join('build', 'srclib', app['Repo'])
             repotype = common.getsrclibvcs(app['Repo'])
         else:
-            build_dir = os.path.join('build/', app['id'])
+            build_dir = os.path.join('build', app['id'])
             repotype = app['Repo Type']
 
         if repotype not in ('git-svn', ):
@@ -318,7 +318,7 @@ def check_changed_subdir(app):
     if app['Repo Type'] == 'srclib':
         build_dir = os.path.join('build', 'srclib', app['Repo'])
     else:
-        build_dir = os.path.join('build/', app['id'])
+        build_dir = os.path.join('build', app['id'])
 
     if not os.path.isdir(build_dir):
         return None
@@ -346,7 +346,7 @@ def fetch_autoname(app, tag):
     if app['Repo Type'] == 'srclib':
         app_dir = os.path.join('build', 'srclib', app['Repo'])
     else:
-        app_dir = os.path.join('build/', app['id'])
+        app_dir = os.path.join('build', app['id'])
 
     try:
         vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir)
