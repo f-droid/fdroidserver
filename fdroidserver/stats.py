@@ -197,7 +197,7 @@ def main():
                             count)
             alldownloads += count
         lst.append("ALL " + str(alldownloads))
-        with open(os.path.join('stats', 'total_downloads_app.txt'), 'w') as f:
+        with open(os.path.join(statsdir, 'total_downloads_app.txt'), 'w') as f:
             f.write('# Total downloads by application, since October 2011\n')
             for line in sorted(lst):
                 f.write(line + '\n')
@@ -207,7 +207,7 @@ def main():
             count = appsvercount[appver]
             lst.append(appver + " " + str(count))
 
-        with open(os.path.join('stats', 'total_downloads_app_version.txt'), 'w') as f:
+        with open(os.path.join(statsdir, 'total_downloads_app_version.txt'), 'w') as f:
             f.write('# Total downloads by application and version, '
                     'since October 2011\n')
             for line in sorted(lst):
@@ -221,7 +221,7 @@ def main():
         if rtype == 'srclib':
             rtype = common.getsrclibvcs(app['Repo'])
         repotypes[rtype] += 1
-    with open(os.path.join('stats', 'repotypes.txt'), 'w') as f:
+    with open(os.path.join(statsdir, 'repotypes.txt'), 'w') as f:
         for rtype, count in repotypes.most_common():
             f.write(rtype + ' ' + str(count) + '\n')
 
@@ -235,7 +235,7 @@ def main():
         if checkmode.startswith('Tags '):
             checkmode = checkmode[:4]
         ucms[checkmode] += 1
-    with open(os.path.join('stats', 'update_check_modes.txt'), 'w') as f:
+    with open(os.path.join(statsdir, 'update_check_modes.txt'), 'w') as f:
         for checkmode, count in ucms.most_common():
             f.write(checkmode + ' ' + str(count) + '\n')
 
@@ -244,7 +244,7 @@ def main():
     for app in metaapps:
         for category in app['Categories']:
             ctgs[category] += 1
-    with open(os.path.join('stats', 'categories.txt'), 'w') as f:
+    with open(os.path.join(statsdir, 'categories.txt'), 'w') as f:
         for category, count in ctgs.most_common():
             f.write(category + ' ' + str(count) + '\n')
 
@@ -255,7 +255,7 @@ def main():
             continue
         for antifeature in app['AntiFeatures']:
             afs[antifeature] += 1
-    with open(os.path.join('stats', 'antifeatures.txt'), 'w') as f:
+    with open(os.path.join(statsdir, 'antifeatures.txt'), 'w') as f:
         for antifeature, count in afs.most_common():
             f.write(antifeature + ' ' + str(count) + '\n')
 
@@ -265,21 +265,21 @@ def main():
     for app in metaapps:
         license = app['License']
         licenses[license] += 1
-    with open(os.path.join('stats', 'licenses.txt'), 'w') as f:
+    with open(os.path.join(statsdir, 'licenses.txt'), 'w') as f:
         for license, count in licenses.most_common():
             f.write(license + ' ' + str(count) + '\n')
 
     # Write list of disabled apps...
     logging.info("Processing disabled apps...")
     disabled = [a['id'] for a in allmetaapps if a['Disabled']]
-    with open(os.path.join('stats', 'disabled_apps.txt'), 'w') as f:
+    with open(os.path.join(statsdir, 'disabled_apps.txt'), 'w') as f:
         for appid in sorted(disabled):
             f.write(appid + '\n')
 
     # Write list of latest apps added to the repo...
     logging.info("Processing latest apps...")
     latest = knownapks.getlatest(10)
-    with open(os.path.join('stats', 'latestapps.txt'), 'w') as f:
+    with open(os.path.join(statsdir, 'latestapps.txt'), 'w') as f:
         for appid in latest:
             f.write(appid + '\n')
 
