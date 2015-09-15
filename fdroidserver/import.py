@@ -180,12 +180,12 @@ def main():
     root_dir = None
     src_dir = None
 
-    if os.path.isdir('.git'):
+    if options.url:
+        root_dir, src_dir = get_metadata_from_url(app, options.url)
+    elif os.path.isdir('.git'):
         if options.url:
             app['Web Site'] = options.url
         root_dir = get_subdir(os.getcwd())
-    elif options.url:
-        root_dir, src_dir = get_metadata_from_url(app, options.url)
     else:
         logging.error("Specify project url.")
         sys.exit(1)
