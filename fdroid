@@ -46,12 +46,12 @@ commands = {
 
 
 def print_help():
-    print "usage: fdroid [-h|--help|--version] <command> [<args>]"
-    print
-    print "Valid commands are:"
+    print("usage: fdroid [-h|--help|--version] <command> [<args>]")
+    print("")
+    print("Valid commands are:")
     for cmd, summary in commands.items():
-        print "   " + cmd + ' ' * (15 - len(cmd)) + summary
-    print
+        print("   " + cmd + ' ' * (15 - len(cmd)) + summary)
+    print()
 
 
 def main():
@@ -92,7 +92,7 @@ def main():
             print(output),
             sys.exit(0)
         else:
-            print "Command '%s' not recognised.\n" % command
+            print("Command '%s' not recognised.\n" % command)
             print_help()
             sys.exit(1)
 

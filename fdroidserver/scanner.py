@@ -318,7 +318,7 @@ def main():
             probcount += 1
 
     logging.info("Finished:")
-    print "%d problems found" % probcount
+    print("%d problems found" % probcount)
 
 if __name__ == "__main__":
     main()

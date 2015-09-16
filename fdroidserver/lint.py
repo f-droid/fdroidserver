@@ -348,7 +348,7 @@ def main():
         if warns:
             anywarns = True
             for warn in warns:
-                print "%s: %s" % (appid, warn)
+                print("%s: %s" % (appid, warn))
 
     if anywarns:
         sys.exit(1)

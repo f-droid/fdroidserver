@@ -1949,7 +1949,7 @@ def get_per_app_repos():
     repos = []
     for root, dirs, files in os.walk(os.getcwd()):
         for d in dirs:
-            print 'checking', root, 'for', d
+            print('checking', root, 'for', d)
             if d in ('archive', 'metadata', 'repo', 'srclibs', 'tmp'):
                 # standard parts of an fdroid repo, so never packageNames
                 continue
