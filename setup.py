@@ -39,7 +39,7 @@ setup(name='fdroidserver',
       classifiers=[
           'Development Status :: 3 - Alpha',
           'Intended Audience :: Developers',
-          'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+          'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)'
           'Operating System :: POSIX',
           'Topic :: Utilities',
       ],
