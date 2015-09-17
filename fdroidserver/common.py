@@ -295,7 +295,7 @@ def write_password_file(pwtype, password=None):
     command line argments
     '''
     filename = '.fdroid.' + pwtype + '.txt'
-    fd = os.open(filename, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0600)
+    fd = os.open(filename, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
     if password is None:
         os.write(fd, config[pwtype])
     else:
