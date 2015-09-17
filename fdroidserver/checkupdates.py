@@ -280,9 +280,9 @@ def check_gplay(app):
     try:
         resp = urllib2.urlopen(req, None, 20)
         page = resp.read()
-    except urllib2.HTTPError, e:
+    except urllib2.HTTPError as e:
         return (None, str(e.code))
-    except Exception, e:
+    except Exception as e:
         return (None, 'Failed:' + str(e))
 
     version = None

@@ -800,7 +800,7 @@ def read_metadata(xref=True):
         for appid, app in apps.iteritems():
             try:
                 description_html(app.Description, linkres)
-            except MetaDataException, e:
+            except MetaDataException as e:
                 raise MetaDataException("Problem with description of " + appid +
                                         " - " + str(e))
 

@@ -89,7 +89,7 @@ def main():
             logging.info("...successfully verified")
             verified += 1
 
-        except FDroidException, e:
+        except FDroidException as e:
             logging.info("...NOT verified - {0}".format(e))
             notverified += 1
 
