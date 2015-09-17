@@ -162,7 +162,9 @@ def scan_source(build_dir, root_dir, thisbuild):
 
             # These files are often found - avoid checking if they are binary
             # to speed up the scanner
-            elif ext in ['xml', 'md', 'txt', 'html', 'sh', 'png']:
+            elif ext in [
+                    'xml', 'md', 'txt', 'html', 'sh', 'png', 'jpg',
+                    'ttf', 'otf']:
                 pass
 
             elif is_binary(fp):
