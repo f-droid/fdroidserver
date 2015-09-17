@@ -284,13 +284,13 @@ class DescriptionFormatter:
             self.endol()
 
     def endpara(self):
-        self.text_html += '</p>'
         self.state = self.stNONE
         whole_para = ' '.join(self.para_lines)
         self.addtext(whole_para)
         self.text_txt += textwrap.fill(whole_para, 80,
                                        break_long_words=False,
                                        break_on_hyphens=False) + '\n\n'
+        self.text_html += '</p>'
         del self.para_lines[:]
 
     def endul(self):
@@ -403,8 +403,6 @@ class DescriptionFormatter:
             if self.state == self.stNONE:
                 self.text_html += '<p>'
                 self.state = self.stPARA
-            elif self.state == self.stPARA:
-                self.text_html += ' '
 
     def end(self):
         self.endcur()
