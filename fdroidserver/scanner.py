@@ -38,23 +38,30 @@ def scan_source(build_dir, root_dir, thisbuild):
     count = 0
 
     # Common known non-free blobs (always lower case):
-    usual_suspects = [
-        re.compile(r'.*flurryagent', re.IGNORECASE),
-        re.compile(r'.*paypal.*mpl', re.IGNORECASE),
-        re.compile(r'.*google.*analytics', re.IGNORECASE),
-        re.compile(r'.*admob.*sdk.*android', re.IGNORECASE),
-        re.compile(r'.*google.*ad.*view', re.IGNORECASE),
-        re.compile(r'.*google.*admob', re.IGNORECASE),
-        re.compile(r'.*google.*play.*services', re.IGNORECASE),
-        re.compile(r'.*crittercism', re.IGNORECASE),
-        re.compile(r'.*heyzap', re.IGNORECASE),
-        re.compile(r'.*jpct.*ae', re.IGNORECASE),
-        re.compile(r'.*youtube.*android.*player.*api', re.IGNORECASE),
-        re.compile(r'.*bugsense', re.IGNORECASE),
-        re.compile(r'.*crashlytics', re.IGNORECASE),
-        re.compile(r'.*ouya.*sdk', re.IGNORECASE),
-        re.compile(r'.*libspen23', re.IGNORECASE),
-    ]
+    usual_suspects = {
+        exp: re.compile(r'.*' + exp, re.IGNORECASE) for exp in [
+            r'flurryagent',
+            r'paypal.*mpl',
+            r'google.*analytics',
+            r'admob.*sdk.*android',
+            r'google.*ad.*view',
+            r'google.*admob',
+            r'google.*play.*services',
+            r'crittercism',
+            r'heyzap',
+            r'jpct.*ae',
+            r'youtube.*android.*player.*api',
+            r'bugsense',
+            r'crashlytics',
+            r'ouya.*sdk',
+            r'libspen23',
+        ]
+    }
+
+    def suspects_found(s):
+        for n, r in usual_suspects.iteritems():
+            if r.match(s):
+                yield n
 
     scanignore = common.getpaths(build_dir, thisbuild, 'scanignore')
     scandelete = common.getpaths(build_dir, thisbuild, 'scandelete')
@@ -133,10 +140,9 @@ def scan_source(build_dir, root_dir, thisbuild):
                 removeproblem('APK file', fd, fp)
 
             elif ext == 'jar':
-                if any(suspect.match(curfile) for suspect in usual_suspects):
-                    count += handleproblem('usual supect', fd, fp)
-                else:
-                    warnproblem('JAR file', fd)
+                for name in suspects_found(curfile):
+                    count += handleproblem('usual supect \'%s\'' % name, fd, fp)
+                warnproblem('JAR file', fd)
 
             elif ext == 'java':
                 if not os.path.isfile(fp):
@@ -151,9 +157,8 @@ def scan_source(build_dir, root_dir, thisbuild):
                     continue
                 for i, line in enumerate(file(fp)):
                     i = i + 1
-                    if any(suspect.match(line) for suspect in usual_suspects):
-                        count += handleproblem('usual suspect at line %d' % i, fd, fp)
-                        break
+                    for name in suspects_found(line):
+                        count += handleproblem('usual supect \'%s\' at line %d' % (name, i), fd, fp)
 
             # These files are often found - avoid checking if they are binary
             # to speed up the scanner
