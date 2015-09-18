@@ -31,6 +31,15 @@ config = None
 options = None
 
 
+def get_gradle_compile_commands(thisbuild):
+    compileCommands = ['compile', 'releaseCompile']
+    if thisbuild['gradle'] != ['yes']:
+        compileCommands += [flavor + 'Compile' for flavor in thisbuild['gradle']]
+        compileCommands += [flavor + 'ReleaseCompile' for flavor in thisbuild['gradle']]
+
+    return [re.compile(r'\s*' + c, re.IGNORECASE) for c in compileCommands]
+
+
 # Scan the source code in the given directory (and all subdirectories)
 # and return the number of fatal problems encountered
 def scan_source(build_dir, root_dir, thisbuild):
@@ -114,6 +123,11 @@ def scan_source(build_dir, root_dir, thisbuild):
             d = f.read(1024)
         return bool(d.translate(None, textchars))
 
+    gradle_compile_commands = get_gradle_compile_commands(thisbuild)
+
+    def is_used_by_gradle(line):
+        return any(command.match(line) for command in gradle_compile_commands)
+
     # Iterate through all files in the source code
     for r, d, f in os.walk(build_dir, topdown=True):
 
@@ -157,8 +171,9 @@ def scan_source(build_dir, root_dir, thisbuild):
                     continue
                 for i, line in enumerate(file(fp)):
                     i = i + 1
-                    for name in suspects_found(line):
-                        count += handleproblem('usual supect \'%s\' at line %d' % (name, i), fd, fp)
+                    if is_used_by_gradle(line):
+                        for name in suspects_found(line):
+                            count += handleproblem('usual supect \'%s\' at line %d' % (name, i), fd, fp)
 
             elif ext in ['', 'bin', 'out', 'exe']:
                 if is_binary(fp):
