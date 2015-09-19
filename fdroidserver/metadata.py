@@ -68,7 +68,6 @@ app_defaults = OrderedDict([
     ('FlattrID', None),
     ('Bitcoin', None),
     ('Litecoin', None),
-    ('Dogecoin', None),
     ('Name', None),
     ('Auto Name', ''),
     ('Summary', ''),
@@ -198,11 +197,6 @@ valuetypes = {
     FieldValidator("Litecoin address",
                    r'^L[a-zA-Z0-9]{33}$', None,
                    ["Litecoin"],
-                   []),
-
-    FieldValidator("Dogecoin address",
-                   r'^D[a-zA-Z0-9]{33}$', None,
-                   ["Dogecoin"],
                    []),
 
     FieldValidator("bool",
@@ -1094,7 +1088,6 @@ def write_metadata(dest, app):
     writefield_nonempty('FlattrID')
     writefield_nonempty('Bitcoin')
     writefield_nonempty('Litecoin')
-    writefield_nonempty('Dogecoin')
     mf.write('\n')
     writefield_nonempty('Name')
     writefield_nonempty('Auto Name')

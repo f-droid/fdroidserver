@@ -99,7 +99,7 @@ def update_wiki(apps, sortedids, apks):
             requiresroot = 'Yes'
         else:
             requiresroot = 'No'
-        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|changelog=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|dogecoin=%s|license=%s|root=%s}}\n' % (
+        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|changelog=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s}}\n' % (
             appid,
             app['Name'],
             time.strftime('%Y-%m-%d', app['added']) if 'added' in app else '',
@@ -112,7 +112,6 @@ def update_wiki(apps, sortedids, apks):
             app['FlattrID'],
             app['Bitcoin'],
             app['Litecoin'],
-            app['Dogecoin'],
             app['License'],
             requiresroot)
 
@@ -762,7 +761,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         repoel.setAttribute("url", config['repo_url'])
         addElement('description', config['repo_description'], doc, repoel)
 
-    repoel.setAttribute("version", "13")
+    repoel.setAttribute("version", "14")
     repoel.setAttribute("timestamp", str(int(time.time())))
 
     nosigningkey = False
@@ -841,7 +840,6 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         addElementNonEmpty('donate', app['Donate'], doc, apel)
         addElementNonEmpty('bitcoin', app['Bitcoin'], doc, apel)
         addElementNonEmpty('litecoin', app['Litecoin'], doc, apel)
-        addElementNonEmpty('dogecoin', app['Dogecoin'], doc, apel)
         addElementNonEmpty('flattr', app['FlattrID'], doc, apel)
 
         # These elements actually refer to the current version (i.e. which
