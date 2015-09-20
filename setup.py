@@ -16,7 +16,7 @@ setup(name='fdroidserver',
       author='The F-Droid Project',
       author_email='team@f-droid.org',
       url='https://f-droid.org',
-      packages=['fdroidserver'],
+      packages=['fdroidserver', 'fdroidserver.asynchronousfilereader'],
       scripts=['fdroid', 'fd-commit'],
       data_files=[
           (data_prefix + '/share/doc/fdroidserver/examples',

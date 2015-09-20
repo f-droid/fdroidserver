@@ -30,7 +30,6 @@ import subprocess
 import time
 import operator
 import Queue
-import threading
 import logging
 import hashlib
 import socket
@@ -40,6 +39,8 @@ from distutils.version import LooseVersion
 from zipfile import ZipFile
 
 import metadata
+from fdroidserver.asynchronousfilereader import AsynchronousFileReader
+
 
 XMLElementTree.register_namespace('android', 'http://schemas.android.com/apk/res/android')
 
@@ -1547,31 +1548,6 @@ def isApkDebuggable(apkfile, config):
     return False
 
 
-class AsynchronousFileReader(threading.Thread):
-
-    '''
-    Helper class to implement asynchronous reading of a file
-    in a separate thread. Pushes read lines on a queue to
-    be consumed in another thread.
-    '''
-
-    def __init__(self, fd, queue):
-        assert isinstance(queue, Queue.Queue)
-        assert callable(fd.readline)
-        threading.Thread.__init__(self)
-        self._fd = fd
-        self._queue = queue
-
-    def run(self):
-        '''The body of the tread: read lines and put them on the queue.'''
-        for line in iter(self._fd.readline, ''):
-            self._queue.put(line)
-
-    def eof(self):
-        '''Check whether there is no more content to expect.'''
-        return not self.is_alive() and self._queue.empty()
-
-
 class PopenResult:
     returncode = None
     output = ''
@@ -1612,7 +1588,6 @@ def FDroidPopen(commands, cwd=None, output=True):
 
     stdout_queue = Queue.Queue()
     stdout_reader = AsynchronousFileReader(p.stdout, stdout_queue)
-    stdout_reader.start()
 
     # Check the queue for output (until there is no more to get)
     while not stdout_reader.eof():
