@@ -927,7 +927,7 @@ the revision or tag to use in the respective source control.
 For Ant projects, you can optionally append a number with a colon at the
 beginning of a srclib item to automatically place it in project.properties as
 a library under the specified number. For example, if you specify
-@code{1:somelib@@1.0}, f-droid will automatically do the equivalent of the
+@code{1:somelib@@1.0}, F-Droid will automatically do the equivalent of the
 legacy practice @code{prebuild=echo "android.library.reference.1=$$somelib$$"
 >> project.properties}.
 
@@ -940,6 +940,31 @@ Prepare: can be used for any kind of preparation: in particular if you need to
 update the project with a particular target. You can then also use $$name$$ in
 the init/prebuild/build command to substitute the relative path to the library
 directory, but it could need tweaking if you've changed into another directory.
+
+Currently srclibs are necessary when upstream uses jar files or pulls
+dependencies from non-trusted repositories. While there is no guarantee that
+those binaries are free and correspondent to the source code, F-Droid allows 
+the following known repositories until a source-built alternative is available:
+
+@itemize @bullet
+
+@item
+@samp{mavenCentral} - the original repo, hardcoded in Maven and Gradle.
+
+@item
+@samp{jCenter} - hardcoded in Gradle, this repo by Bintray tries to provide
+easier handling. It should sync with mavenCentral from time to time.
+
+@item
+@samp{OSS Sonatype} - maintained by the people behind mavenCentral, this
+repository focuses on hosting services for open source project binaries.
+
+@item
+@samp{JitPack.io} - builds directly from Github repositories. However,
+they do not provide any option to reproduce or verify the resulting
+binaries. Builds pre-release versions in some cases.
+
+@end itemize
 
 @item patch=x
 Apply patch(es). 'x' names one (or more - comma-seperated) files within a
@@ -1034,7 +1059,7 @@ used. Note that for projects with flavours, you must specify at least one
 valid flavour since 'yes' or 'main' will build all of them separately.
 
 @item maven=yes[@@<dir>]
-Build with Maven instead of Ant. An extra @@<dir> tells f-droid to run Maven
+Build with Maven instead of Ant. An extra @@<dir> tells F-Droid to run Maven
 inside that relative subdirectory. Sometimes it is needed to use @@.. so that
 builds happen correctly.
 
