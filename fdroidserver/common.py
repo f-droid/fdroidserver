@@ -1635,6 +1635,7 @@ def remove_signing_keys(build_dir):
                         i += 1
 
                     if comment.match(line):
+                        o.write(line)
                         continue
 
                     if opened > 0:
