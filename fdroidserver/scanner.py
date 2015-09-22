@@ -33,7 +33,7 @@ options = None
 
 def get_gradle_compile_commands(thisbuild):
     compileCommands = ['compile', 'releaseCompile']
-    if thisbuild['gradle'] != ['yes']:
+    if thisbuild['gradle'] and thisbuild['gradle'] != ['yes']:
         compileCommands += [flavor + 'Compile' for flavor in thisbuild['gradle']]
         compileCommands += [flavor + 'ReleaseCompile' for flavor in thisbuild['gradle']]
 
