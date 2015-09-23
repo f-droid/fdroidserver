@@ -543,6 +543,12 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                              (app['id'], thisbuild['version']), p.output)
 
     for root, dirs, files in os.walk(build_dir):
+        # Even when running clean, gradle stores task/artifact caches in
+        # .gradle/ as binary files. To avoid overcomplicating the scanner,
+        # manually delete them, just like `gradle clean` should have removed
+        # the build/ dirs.
+        if '.gradle' in dirs:
+            shutil.rmtree(os.path.join(root, '.gradle'))
         # Don't remove possibly necessary 'gradle' dirs if 'gradlew' is not there
         if 'gradlew' in files:
             logging.debug("Getting rid of Gradle wrapper stuff in %s" % root)
