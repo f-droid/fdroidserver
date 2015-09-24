@@ -1026,6 +1026,8 @@ def parse_androidmanifests(paths, ignoreversions=None):
 
         if gradle:
             for line in file(path):
+                if gradle_comment.match(line):
+                    continue
                 # Grab first occurence of each to avoid running into
                 # alternative flavours and builds.
                 if not package:
@@ -1605,8 +1607,10 @@ def FDroidPopen(commands, cwd=None, output=True):
     return result
 
 
+gradle_comment = re.compile(r'[ ]*//')
+
+
 def remove_signing_keys(build_dir):
-    comment = re.compile(r'[ ]*//')
     signing_configs = re.compile(r'^[\t ]*signingConfigs[ \t]*{[ \t]*$')
     line_matches = [
         re.compile(r'^[\t ]*signingConfig [^ ]*$'),
@@ -1634,7 +1638,7 @@ def remove_signing_keys(build_dir):
                         line = line.rstrip('\\\n') + lines[i]
                         i += 1
 
-                    if comment.match(line):
+                    if gradle_comment.match(line):
                         o.write(line)
                         continue
 
