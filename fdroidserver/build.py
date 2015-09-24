@@ -299,11 +299,13 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
 
         logging.info("Preparing server for build...")
         serverpath = os.path.abspath(os.path.dirname(__file__))
-        ftp.put(os.path.join(serverpath, 'build.py'), 'build.py')
-        ftp.put(os.path.join(serverpath, 'common.py'), 'common.py')
-        ftp.put(os.path.join(serverpath, 'scanner.py'), 'scanner.py')
-        ftp.put(os.path.join(serverpath, 'net.py'), 'net.py')
-        ftp.put(os.path.join(serverpath, 'metadata.py'), 'metadata.py')
+        ftp.mkdir('fdroidserver')
+        ftp.chdir('fdroidserver')
+        ftp.put(os.path.join(serverpath, '..', 'fdroid'), 'fdroid')
+        ftp.chmod('fdroid', 0o755)
+        send_dir(os.path.join(serverpath))
+        ftp.chdir(homedir)
+
         ftp.put(os.path.join(serverpath, '..', 'buildserver',
                              'config.buildserver.py'), 'config.py')
         ftp.chmod('config.py', 0o600)
@@ -381,7 +383,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         logging.info("Starting build...")
         chan = sshs.get_transport().open_session()
         chan.get_pty()
-        cmdline = 'python build.py --on-server'
+        cmdline = os.path.join(homedir, 'fdroidserver', 'fdroid')
+        cmdline += ' build --on-server'
         if force:
             cmdline += ' --force --test'
         if options.verbose:
