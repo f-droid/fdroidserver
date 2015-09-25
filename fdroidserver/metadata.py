@@ -1040,9 +1040,9 @@ def parse_txt_metadata(apps, metadatapath):
 
 # Write a metadata file.
 #
-# 'dest'    - The path to the output file
+# 'mf'      - Writer interface (file, StringIO, ...)
 # 'app'     - The app data
-def write_metadata(dest, app):
+def write_metadata(mf, app):
 
     def writecomments(key):
         written = 0
@@ -1073,7 +1073,6 @@ def write_metadata(dest, app):
         if value:
             writefield(field, value)
 
-    mf = open(dest, 'w')
     writefield_nonempty('Disabled')
     if app['AntiFeatures']:
         writefield('AntiFeatures')
@@ -1161,4 +1160,3 @@ def write_metadata(dest, app):
         writefield('No Source Since')
         mf.write('\n')
     writecomments(None)
-    mf.close()

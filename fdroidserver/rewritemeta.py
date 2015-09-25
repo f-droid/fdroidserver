@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 from argparse import ArgumentParser
 import logging
 import common
@@ -46,13 +45,14 @@ def main():
 
     for appid, app in apps.iteritems():
         metadatapath = app['metadatapath']
-        ext = os.path.splitext(metadatapath)[1][1:]
-        if ext == 'txt':
-            logging.debug("Rewriting " + metadatapath)
-            metadata.write_metadata(metadatapath, app)
-        else:
+        ext = common.get_extension(metadatapath)
+        if ext not in ['txt']:
             logging.info("Ignoring %s file at '%s'"
                          % (ext.upper(), metadatapath))
+            continue
+        logging.debug("Rewriting " + metadatapath)
+        with open(metadatapath, 'w') as f:
+            metadata.write_metadata(f, app)
 
     logging.debug("Finished.")
 
