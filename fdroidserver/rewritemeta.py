@@ -20,6 +20,8 @@
 
 from argparse import ArgumentParser
 import logging
+import StringIO
+
 import common
 import metadata
 
@@ -34,6 +36,8 @@ def main():
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
     common.setup_global_opts(parser)
+    parser.add_argument("-l", "--list", action="store_true", default=False,
+                        help="List files that would be reformatted")
     parser.add_argument("appid", nargs='*', help="app-id in the form APPID")
     options = parser.parse_args()
 
@@ -51,8 +55,20 @@ def main():
                          % (ext.upper(), metadatapath))
             continue
         logging.debug("Rewriting " + metadatapath)
-        with open(metadatapath, 'w') as f:
-            metadata.write_metadata(f, app)
+        if options.list:
+            s = StringIO.StringIO()
+            # TODO: currently reading entire file again, should reuse first
+            # read in metadata.py
+            with open(metadatapath, 'r') as f:
+                cur_content = f.read()
+            metadata.write_metadata(s, app)
+            content = s.getvalue()
+            s.close()
+            if content != cur_content:
+                print(metadatapath)
+        else:
+            with open(metadatapath, 'w') as f:
+                metadata.write_metadata(f, app)
 
     logging.debug("Finished.")
 

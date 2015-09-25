@@ -184,8 +184,8 @@ __complete_readmeta() {
 }
 
 __complete_rewritemeta() {
-	opts="-v -q"
-	lopts="--verbose --quiet"
+	opts="-v -q -l"
+	lopts="--verbose --quiet --list"
 	case "${cur}" in
 		-*)
 			__complete_options
