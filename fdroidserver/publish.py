@@ -184,7 +184,7 @@ def main():
             p = FDroidPopen(['jarsigner', '-keystore', config['keystore'],
                              '-storepass:file', config['keystorepassfile'],
                              '-keypass:file', config['keypassfile'], '-sigalg',
-                             'MD5withRSA', '-digestalg', 'SHA1',
+                             'SHA1withRSA', '-digestalg', 'SHA1',
                              apkfile, keyalias])
             # TODO keypass should be sent via stdin
             if p.returncode != 0:

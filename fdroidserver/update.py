@@ -955,7 +955,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         else:
             args = ['jarsigner', '-keystore', config['keystore'],
                     '-storepass:file', config['keystorepassfile'],
-                    '-digestalg', 'SHA1', '-sigalg', 'MD5withRSA',
+                    '-digestalg', 'SHA1', '-sigalg', 'SHA1withRSA',
                     signed, config['repo_keyalias']]
             if config['keystore'] == 'NONE':
                 args += config['smartcardoptions']

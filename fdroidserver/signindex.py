@@ -55,7 +55,7 @@ def main():
 
             args = ['jarsigner', '-keystore', config['keystore'],
                     '-storepass:file', config['keystorepassfile'],
-                    '-digestalg', 'SHA1', '-sigalg', 'MD5withRSA',
+                    '-digestalg', 'SHA1', '-sigalg', 'SHA1withRSA',
                     unsigned, config['repo_keyalias']]
             if config['keystore'] == 'NONE':
                 args += config['smartcardoptions']
