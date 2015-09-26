@@ -22,6 +22,7 @@ import sys
 import logging
 
 import fdroidserver.common
+import fdroidserver.metadata
 from argparse import ArgumentError
 
 commands = {
@@ -118,7 +119,8 @@ def main():
     try:
         mod.main()
     # These are ours, contain a proper message and are "expected"
-    except fdroidserver.common.FDroidException, e:
+    except (fdroidserver.common.FDroidException,
+            fdroidserver.metadata.MetaDataException) as e:
         if verbose:
             raise
         else:
