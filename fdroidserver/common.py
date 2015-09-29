@@ -1099,14 +1099,16 @@ class FDroidException(Exception):
         self.value = value
         self.detail = detail
 
+    def limit_size(detail):
+        if len(detail) < 16000:
+            return detail
+        return '[...]\n' + detail[-16000:]
+
     def get_wikitext(self):
         ret = repr(self.value) + "\n"
         if self.detail:
             ret += "=detail=\n"
-            ret += "<pre>\n"
-            txt = self.detail[-8192:] if len(self.detail) > 8192 else self.detail
-            ret += str(txt)
-            ret += "</pre>\n"
+            ret += "<pre>\n" + limit_size(self.detail) + "</pre>\n"
         return ret
 
     def __str__(self):
