@@ -983,36 +983,50 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
 
     for appid, app in apps.iteritems():
 
-        # Get a list of the apks for this app...
-        apklist = []
-        for apk in apks:
-            if apk['id'] == appid:
-                apklist.append(apk)
-
-        # Sort the apk list into version order...
-        apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
-
         if app['Archive Policy']:
             keepversions = int(app['Archive Policy'][:-9])
         else:
             keepversions = defaultkeepversions
 
-        if len(apklist) > keepversions:
+        def filter_apk_list_sorted(apk_list):
+            res = []
+            for apk in apk_list:
+                if apk['id'] == appid:
+                    res.append(apk)
+
+            # Sort the apk list by version code. First is highest/newest.
+            return sorted(res, key=lambda apk: apk['versioncode'], reverse=True)
+
+        def move_file(from_dir, to_dir, filename, ignore_missing):
+            from_path = os.path.join(from_dir, filename)
+            if ignore_missing and not os.path.exists(from_path):
+                return
+            to_path = os.path.join(to_dir, filename)
+            shutil.move(from_path, to_path)
+
+        if len(apks) > keepversions:
+            apklist = filter_apk_list_sorted(apks)
+            # Move back the ones we don't want.
             for apk in apklist[keepversions:]:
                 logging.info("Moving " + apk['apkname'] + " to archive")
-                shutil.move(os.path.join(repodir, apk['apkname']),
-                            os.path.join(archivedir, apk['apkname']))
+                move_file(repodir, archivedir, apk['apkname'], False)
                 if 'srcname' in apk:
-                    shutil.move(os.path.join(repodir, apk['srcname']),
-                                os.path.join(archivedir, apk['srcname']))
-                    # Move GPG signature too...
-                    sigfile = apk['srcname'] + '.asc'
-                    sigsrc = os.path.join(repodir, sigfile)
-                    if os.path.exists(sigsrc):
-                        shutil.move(sigsrc, os.path.join(archivedir, sigfile))
-
+                    move_file(repodir, archivedir, apk['srcname'], False)
+                    move_file(repodir, archivedir, apk['srcname'] + '.asc', True)
                 archapks.append(apk)
                 apks.remove(apk)
+        elif len(apks) < keepversions and len(archapks) > 0:
+            required = keepversions - len(apks)
+            archapklist = filter_apk_list_sorted(archapks)
+            # Move forward the ones we want again.
+            for apk in archapklist[:required]:
+                logging.info("Moving " + apk['apkname'] + " from archive")
+                move_file(archivedir, repodir, apk['apkname'], False)
+                if 'srcname' in apk:
+                    move_file(archivedir, repodir, apk['srcname'], False)
+                    move_file(archivedir, repodir, apk['srcname'] + '.asc', True)
+                archapks.remove(apk)
+                apks.append(apk)
 
 
 def add_apks_to_per_app_repos(repodir, apks):
