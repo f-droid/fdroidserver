@@ -883,6 +883,8 @@ class vcs_bzr(vcs):
 
 
 def unescape_string(string):
+    if len(string) < 2:
+        return string
     if string[0] == '"' and string[-1] == '"':
         return string[1:-1]
 
@@ -890,6 +892,9 @@ def unescape_string(string):
 
 
 def retrieve_string(app_dir, string, xmlfiles=None):
+
+    if not string.startswith('@string/'):
+        return unescape_string(string)
 
     if xmlfiles is None:
         xmlfiles = []
@@ -901,18 +906,21 @@ def retrieve_string(app_dir, string, xmlfiles=None):
                 if os.path.basename(r) == 'values':
                     xmlfiles += [os.path.join(r, x) for x in f if x.endswith('.xml')]
 
-    if not string.startswith('@string/'):
-        return unescape_string(string)
-
     name = string[len('@string/'):]
+
+    def element_content(element):
+        if element.text is None:
+            return ""
+        return element.text.encode('utf-8')
 
     for path in xmlfiles:
         if not os.path.isfile(path):
             continue
         xml = parse_xml(path)
         element = xml.find('string[@name="' + name + '"]')
-        if element is not None and element.text is not None:
-            return retrieve_string(app_dir, element.text.encode('utf-8'), xmlfiles)
+        if element is not None:
+            content = element_content(element)
+            return retrieve_string(app_dir, content, xmlfiles)
 
     return ''
 
