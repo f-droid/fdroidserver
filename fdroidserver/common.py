@@ -911,7 +911,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
     def element_content(element):
         if element.text is None:
             return ""
-        return element.text.encode('utf-8')
+        return XMLElementTree.tostring(element, encoding='utf-8', method='text')
 
     for path in xmlfiles:
         if not os.path.isfile(path):
