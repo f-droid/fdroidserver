@@ -72,8 +72,8 @@ def scan_source(build_dir, root_dir, thisbuild):
             if r.match(s):
                 yield n
 
-    scanignore = common.getpaths(build_dir, thisbuild, 'scanignore')
-    scandelete = common.getpaths(build_dir, thisbuild, 'scandelete')
+    scanignore = common.getpaths(build_dir, thisbuild['scanignore'])
+    scandelete = common.getpaths(build_dir, thisbuild['scandelete'])
 
     scanignore_worked = set()
     scandelete_worked = set()

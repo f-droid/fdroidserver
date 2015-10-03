@@ -1383,7 +1383,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     # Delete unwanted files
     if build['rm']:
         logging.info("Removing specified files")
-        for part in getpaths(build_dir, build, 'rm'):
+        for part in getpaths(build_dir, build['rm']):
             dest = os.path.join(build_dir, part)
             logging.info("Removing {0}".format(part))
             if os.path.lexists(dest):
@@ -1462,14 +1462,25 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     return (root_dir, srclibpaths)
 
 
-# Split and extend via globbing the paths from a field
-def getpaths(build_dir, build, field):
-    paths = []
-    for p in build[field]:
+# Extend via globbing the paths from a field and return them as a map from
+# original path to resulting paths
+def getpaths_map(build_dir, globpaths):
+    paths = dict()
+    for p in globpaths:
         p = p.strip()
         full_path = os.path.join(build_dir, p)
         full_path = os.path.normpath(full_path)
-        paths += [r[len(build_dir) + 1:] for r in glob.glob(full_path)]
+        paths[p] = [r[len(build_dir) + 1:] for r in glob.glob(full_path)]
+    return paths
+
+
+# Extend via globbing the paths from a field and return them as a set
+def getpaths(build_dir, globpaths):
+    paths_map = getpaths_map(build_dir, globpaths)
+    paths = set()
+    for k, v in paths_map.iteritems():
+        for p in v:
+            paths.add(p)
     return paths
 
 
