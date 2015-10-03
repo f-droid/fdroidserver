@@ -91,7 +91,7 @@ def get_metadata_from_url(app, url):
         repo = url
         repotype = 'git'
         app['Source Code'] = url
-        app['issuetracker'] = url + '/issues'
+        app['Issue Tracker'] = url + '/issues'
         app['Web Site'] = ""
     elif url.startswith('https://gitlab.com/'):
         projecttype = 'gitlab'
@@ -102,13 +102,13 @@ def get_metadata_from_url(app, url):
             repo = url + '.git'
         repotype = 'git'
         app['Source Code'] = url + '/tree/HEAD'
-        app['issuetracker'] = url + '/issues'
+        app['Issue Tracker'] = url + '/issues'
     elif url.startswith('https://bitbucket.org/'):
         if url.endswith('/'):
             url = url[:-1]
         projecttype = 'bitbucket'
         app['Source Code'] = url + '/src'
-        app['issuetracker'] = url + '/issues'
+        app['Issue Tracker'] = url + '/issues'
         # Figure out the repo type and adddress...
         repotype, repo = getrepofrompage(app['Source Code'])
         if not repotype:
