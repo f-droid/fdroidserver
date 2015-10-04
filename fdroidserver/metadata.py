@@ -613,7 +613,7 @@ def get_default_app_info_list(apps, metadatapath=None):
 
     # General defaults...
     thisinfo['builds'] = []
-    thisinfo['comments'] = []
+    thisinfo['comments'] = dict()
 
     return appid, thisinfo
 
@@ -913,8 +913,7 @@ def parse_txt_metadata(apps, metadatapath):
     def add_comments(key):
         if not curcomments:
             return
-        for comment in curcomments:
-            thisinfo['comments'].append([key, comment])
+        thisinfo['comments'][key] = list(curcomments)
         del curcomments[:]
 
     appid, thisinfo = get_default_app_info_list(apps, metadatapath)
@@ -954,7 +953,7 @@ def parse_txt_metadata(apps, metadatapath):
             if not line:
                 continue
             if line.startswith("#"):
-                curcomments.append(line)
+                curcomments.append(line[1:].strip())
                 continue
             try:
                 field, value = line.split(':', 1)
@@ -1036,23 +1035,36 @@ def parse_txt_metadata(apps, metadatapath):
     return (appid, thisinfo)
 
 
-def write_metadata(mf, app, w_comment, w_field, w_build):
+def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
+
+    def w_comments(key):
+        if key not in app['comments']:
+            return
+        for line in app['comments'][key]:
+            w_comment(line)
+
+    def w_field_always(field, value=None):
+        if value is None:
+            value = app[field]
+        w_comments(field)
+        w_field(field, value)
 
     def w_field_nonempty(field, value=None):
         if value is None:
             value = app[field]
+        w_comments(field)
         if value:
             w_field(field, value)
 
     w_field_nonempty('Disabled')
     if app['AntiFeatures']:
-        w_field('AntiFeatures')
+        w_field_always('AntiFeatures')
     w_field_nonempty('Provides')
-    w_field('Categories')
-    w_field('License')
-    w_field('Web Site')
-    w_field('Source Code')
-    w_field('Issue Tracker')
+    w_field_always('Categories')
+    w_field_always('License')
+    w_field_always('Web Site')
+    w_field_always('Source Code')
+    w_field_always('Issue Tracker')
     w_field_nonempty('Changelog')
     w_field_nonempty('Donate')
     w_field_nonempty('FlattrID')
@@ -1061,17 +1073,17 @@ def write_metadata(mf, app, w_comment, w_field, w_build):
     mf.write('\n')
     w_field_nonempty('Name')
     w_field_nonempty('Auto Name')
-    w_field('Summary')
-    w_field('Description', description_txt(app['Description']))
+    w_field_always('Summary')
+    w_field_always('Description', description_txt(app['Description']))
     mf.write('\n')
     if app['Requires Root']:
-        w_field('Requires Root', 'yes')
+        w_field_always('Requires Root', 'yes')
         mf.write('\n')
     if app['Repo Type']:
-        w_field('Repo Type')
-        w_field('Repo')
+        w_field_always('Repo Type')
+        w_field_always('Repo')
         if app['Binaries']:
-            w_field('Binaries')
+            w_field_always('Binaries')
         mf.write('\n')
 
     for build in sorted_builds(app['builds']):
@@ -1079,28 +1091,28 @@ def write_metadata(mf, app, w_comment, w_field, w_build):
         if build['version'] == "Ignore":
             continue
 
-        w_comment('build:' + build['vercode'])
+        w_comments('build:' + build['vercode'])
         w_build(build)
         mf.write('\n')
 
     if app['Maintainer Notes']:
-        w_field('Maintainer Notes', app['Maintainer Notes'])
+        w_field_always('Maintainer Notes', app['Maintainer Notes'])
         mf.write('\n')
 
     w_field_nonempty('Archive Policy')
-    w_field('Auto Update Mode')
-    w_field('Update Check Mode')
+    w_field_always('Auto Update Mode')
+    w_field_always('Update Check Mode')
     w_field_nonempty('Update Check Ignore')
     w_field_nonempty('Vercode Operation')
     w_field_nonempty('Update Check Name')
     w_field_nonempty('Update Check Data')
     if app['Current Version']:
-        w_field('Current Version')
-        w_field('Current Version Code')
+        w_field_always('Current Version')
+        w_field_always('Current Version Code')
     if app['No Source Since']:
         mf.write('\n')
-        w_field('No Source Since')
-    w_comment(None)
+        w_field_always('No Source Since')
+    w_comments(None)
 
 
 # Write a metadata file in txt format.
@@ -1109,17 +1121,10 @@ def write_metadata(mf, app, w_comment, w_field, w_build):
 # 'app'     - The app data
 def write_txt_metadata(mf, app):
 
-    def w_comment(key):
-        written = 0
-        for pf, comment in app['comments']:
-            if pf == key:
-                mf.write("%s\n" % comment)
-                written += 1
+    def w_comment(line):
+        mf.write("# %s\n" % line)
 
-    def w_field(field, value=None):
-        w_comment(field)
-        if value is None:
-            value = app[field]
+    def w_field(field, value):
         t = metafieldtype(field)
         if t == 'list':
             value = ','.join(value)
@@ -1154,18 +1159,15 @@ def write_txt_metadata(mf, app):
             mf.write(v)
             mf.write('\n')
 
-    write_metadata(mf, app, w_comment, w_field, w_build)
+    write_plaintext_metadata(mf, app, w_comment, w_field, w_build)
 
 
 def write_yaml_metadata(mf, app):
 
-    def w_comment(key):
-        pass
+    def w_comment(line):
+        mf.write("# %s\n" % line)
 
-    def w_field(field, value=None, prefix='', t=None):
-        w_comment(field)
-        if value is None:
-            value = app[field]
+    def w_field(field, value, prefix='', t=None):
         if t is None:
             t = metafieldtype(field)
         v = ''
@@ -1185,6 +1187,14 @@ def write_yaml_metadata(mf, app):
                     v += prefix + '  ' + l + '\n'
                 else:
                     v += '\n'
+        elif t == 'bool':
+            v = ' yes\n'
+        elif t == 'script':
+            cmds = [s + '&& \\' for s in value.split('&& ')]
+            if len(cmds) > 0:
+                cmds[-1] = cmds[-1][:-len('&& \\')]
+            w_field(field, cmds, prefix, 'multiline')
+            return
         else:
             v = ' ' + value + '\n'
 
@@ -1210,4 +1220,12 @@ def write_yaml_metadata(mf, app):
 
             w_field(key, value, '    ', flagtype(key))
 
-    write_metadata(mf, app, w_comment, w_field, w_build)
+    write_plaintext_metadata(mf, app, w_comment, w_field, w_build)
+
+
+def write_metadata(fmt, mf, app):
+    if fmt == 'txt':
+        return write_txt_metadata(mf, app)
+    if fmt == 'yaml':
+        return write_yaml_metadata(mf, app)
+    raise MetaDataException("Unknown metadata format given")
