@@ -72,24 +72,26 @@ def scan_source(build_dir, root_dir, thisbuild):
             if r.match(s):
                 yield n
 
-    scanignore = common.getpaths(build_dir, thisbuild['scanignore'])
-    scandelete = common.getpaths(build_dir, thisbuild['scandelete'])
+    scanignore = common.getpaths_map(build_dir, thisbuild['scanignore'])
+    scandelete = common.getpaths_map(build_dir, thisbuild['scandelete'])
 
     scanignore_worked = set()
     scandelete_worked = set()
 
     def toignore(fd):
-        for p in scanignore:
-            if fd.startswith(p):
-                scanignore_worked.add(p)
-                return True
+        for k, paths in scanignore.iteritems():
+            for p in paths:
+                if fd.startswith(p):
+                    scanignore_worked.add(k)
+                    return True
         return False
 
     def todelete(fd):
-        for p in scandelete:
-            if fd.startswith(p):
-                scandelete_worked.add(p)
-                return True
+        for k, paths in scandelete.iteritems():
+            for p in paths:
+                if fd.startswith(p):
+                    scandelete_worked.add(k)
+                    return True
         return False
 
     def ignoreproblem(what, fd, fp):
