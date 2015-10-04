@@ -1097,10 +1097,9 @@ def write_metadata(mf, app, w_comment, w_field, w_build):
     if app['Current Version']:
         w_field('Current Version')
         w_field('Current Version Code')
-    mf.write('\n')
     if app['No Source Since']:
-        w_field('No Source Since')
         mf.write('\n')
+        w_field('No Source Since')
     w_comment(None)
 
 
