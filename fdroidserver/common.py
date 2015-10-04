@@ -369,10 +369,10 @@ def read_app_args(args, allapps, allow_vercodes=False):
 
 
 def get_extension(filename):
-    _, ext = os.path.splitext(filename)
+    base, ext = os.path.splitext(filename)
     if not ext:
-        return ''
-    return ext.lower()[1:]
+        return base, ''
+    return base, ext.lower()[1:]
 
 
 def has_extension(filename, ext):

@@ -877,8 +877,6 @@ def parse_txt_metadata(apps, metadatapath):
             value = pv == 'yes'
             if value:
                 thisbuild[pk] = True
-            else:
-                logging.debug("...ignoring bool flag %s" % p)
 
         else:
             raise MetaDataException("Unrecognised build flag type '%s' at %s in %s"
@@ -1038,23 +1036,89 @@ def parse_txt_metadata(apps, metadatapath):
     return (appid, thisinfo)
 
 
+def write_metadata(mf, app, w_comment, w_field, w_build):
+
+    def w_field_nonempty(field, value=None):
+        if value is None:
+            value = app[field]
+        if value:
+            w_field(field, value)
+
+    w_field_nonempty('Disabled')
+    if app['AntiFeatures']:
+        w_field('AntiFeatures')
+    w_field_nonempty('Provides')
+    w_field('Categories')
+    w_field('License')
+    w_field('Web Site')
+    w_field('Source Code')
+    w_field('Issue Tracker')
+    w_field_nonempty('Changelog')
+    w_field_nonempty('Donate')
+    w_field_nonempty('FlattrID')
+    w_field_nonempty('Bitcoin')
+    w_field_nonempty('Litecoin')
+    mf.write('\n')
+    w_field_nonempty('Name')
+    w_field_nonempty('Auto Name')
+    w_field('Summary')
+    w_field('Description', description_txt(app['Description']))
+    mf.write('\n')
+    if app['Requires Root']:
+        w_field('Requires Root', 'yes')
+        mf.write('\n')
+    if app['Repo Type']:
+        w_field('Repo Type')
+        w_field('Repo')
+        if app['Binaries']:
+            w_field('Binaries')
+        mf.write('\n')
+
+    for build in sorted_builds(app['builds']):
+
+        if build['version'] == "Ignore":
+            continue
+
+        w_comment('build:' + build['vercode'])
+        w_build(build)
+        mf.write('\n')
+
+    if app['Maintainer Notes']:
+        w_field('Maintainer Notes', app['Maintainer Notes'])
+        mf.write('\n')
+
+    w_field_nonempty('Archive Policy')
+    w_field('Auto Update Mode')
+    w_field('Update Check Mode')
+    w_field_nonempty('Update Check Ignore')
+    w_field_nonempty('Vercode Operation')
+    w_field_nonempty('Update Check Name')
+    w_field_nonempty('Update Check Data')
+    if app['Current Version']:
+        w_field('Current Version')
+        w_field('Current Version Code')
+    mf.write('\n')
+    if app['No Source Since']:
+        w_field('No Source Since')
+        mf.write('\n')
+    w_comment(None)
+
+
 # Write a metadata file in txt format.
 #
 # 'mf'      - Writer interface (file, StringIO, ...)
 # 'app'     - The app data
 def write_txt_metadata(mf, app):
 
-    def writecomments(key):
+    def w_comment(key):
         written = 0
         for pf, comment in app['comments']:
             if pf == key:
                 mf.write("%s\n" % comment)
                 written += 1
-        if written > 0:
-            logging.debug("...writing comments for " + (key or 'EOF'))
 
-    def writefield(field, value=None):
-        writecomments(field)
+    def w_field(field, value=None):
+        w_comment(field)
         if value is None:
             value = app[field]
         t = metafieldtype(field)
@@ -1067,96 +1131,84 @@ def write_txt_metadata(mf, app):
                 value = '\n' + value + '\n.'
         mf.write("%s:%s\n" % (field, value))
 
-    def writefield_nonempty(field, value=None):
-        if value is None:
-            value = app[field]
-        if value:
-            writefield(field, value)
-
-    writefield_nonempty('Disabled')
-    if app['AntiFeatures']:
-        writefield('AntiFeatures')
-    writefield_nonempty('Provides')
-    writefield('Categories')
-    writefield('License')
-    writefield('Web Site')
-    writefield('Source Code')
-    writefield('Issue Tracker')
-    writefield_nonempty('Changelog')
-    writefield_nonempty('Donate')
-    writefield_nonempty('FlattrID')
-    writefield_nonempty('Bitcoin')
-    writefield_nonempty('Litecoin')
-    mf.write('\n')
-    writefield_nonempty('Name')
-    writefield_nonempty('Auto Name')
-    writefield('Summary')
-    writefield('Description', description_txt(app['Description']))
-    mf.write('\n')
-    if app['Requires Root']:
-        writefield('Requires Root', 'yes')
-        mf.write('\n')
-    if app['Repo Type']:
-        writefield('Repo Type')
-        writefield('Repo')
-        if app['Binaries']:
-            writefield('Binaries')
-        mf.write('\n')
-    for build in sorted_builds(app['builds']):
-
-        if build['version'] == "Ignore":
-            continue
-
-        writecomments('build:' + build['vercode'])
+    def w_build(build):
         mf.write("Build:%s,%s\n" % (build['version'], build['vercode']))
 
-        def write_builditem(key, value):
-
-            if key in ['version', 'vercode']:
-                return
-
+        for key in flag_defaults:
+            value = build[key]
+            if not value:
+                continue
             if value == flag_defaults[key]:
-                return
+                continue
 
             t = flagtype(key)
-
-            logging.debug("...writing {0} : {1}".format(key, value))
-            outline = '    %s=' % key
-
+            v = '    %s=' % key
             if t == 'string':
-                outline += value
+                v += value
             elif t == 'bool':
-                outline += 'yes'
+                v += 'yes'
             elif t == 'script':
-                outline += '&& \\\n        '.join([s.lstrip() for s in value.split('&& ')])
+                v += '&& \\\n        '.join([s.lstrip() for s in value.split('&& ')])
             elif t == 'list':
-                outline += ','.join(value) if type(value) == list else value
+                v += ','.join(value) if type(value) == list else value
 
-            outline += '\n'
-            mf.write(outline)
+            mf.write(v)
+            mf.write('\n')
 
-        for flag in flag_defaults:
-            value = build[flag]
-            if value:
-                write_builditem(flag, value)
-        mf.write('\n')
+    write_metadata(mf, app, w_comment, w_field, w_build)
 
-    if app['Maintainer Notes']:
-        writefield('Maintainer Notes', app['Maintainer Notes'])
-        mf.write('\n')
 
-    writefield_nonempty('Archive Policy')
-    writefield('Auto Update Mode')
-    writefield('Update Check Mode')
-    writefield_nonempty('Update Check Ignore')
-    writefield_nonempty('Vercode Operation')
-    writefield_nonempty('Update Check Name')
-    writefield_nonempty('Update Check Data')
-    if app['Current Version']:
-        writefield('Current Version')
-        writefield('Current Version Code')
-    mf.write('\n')
-    if app['No Source Since']:
-        writefield('No Source Since')
-        mf.write('\n')
-    writecomments(None)
+def write_yaml_metadata(mf, app):
+
+    def w_comment(key):
+        pass
+
+    def w_field(field, value=None, prefix='', t=None):
+        w_comment(field)
+        if value is None:
+            value = app[field]
+        if t is None:
+            t = metafieldtype(field)
+        v = ''
+        if t == 'list':
+            v = '\n'
+            for e in value:
+                v += prefix + ' - ' + e + '\n'
+        elif t == 'multiline':
+            v = ' |\n'
+            lines = []
+            if type(value) == list:
+                lines = value
+            else:
+                lines = value.splitlines()
+            for l in lines:
+                if l:
+                    v += prefix + '  ' + l + '\n'
+                else:
+                    v += '\n'
+        else:
+            v = ' ' + value + '\n'
+
+        mf.write("%s%s:%s" % (prefix, field, v))
+
+    global first_build
+    first_build = True
+
+    def w_build(build):
+        global first_build
+        if first_build:
+            mf.write("builds:\n")
+            first_build = False
+
+        w_field('versionName', build['version'], '  - ', 'string')
+        w_field('versionCode', build['vercode'], '    ', 'strsng')
+        for key in flag_defaults:
+            value = build[key]
+            if not value:
+                continue
+            if value == flag_defaults[key]:
+                continue
+
+            w_field(key, value, '    ', flagtype(key))
+
+    write_metadata(mf, app, w_comment, w_field, w_build)
