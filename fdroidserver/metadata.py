@@ -754,15 +754,15 @@ def parse_metadata(apps, metadatapath):
 
     if metadataformat == 'txt':
         return parse_txt_metadata(apps, metadatapath)
-    elif metadataformat == 'json':
+    if metadataformat == 'json':
         return parse_json_metadata(apps, metadatapath)
-    elif metadataformat == 'xml':
+    if metadataformat == 'xml':
         return parse_xml_metadata(apps, metadatapath)
-    elif metadataformat == 'yaml':
+    if metadataformat == 'yaml':
         return parse_yaml_metadata(apps, metadatapath)
-    else:
-        logging.critical('Unknown metadata format: ' + metadatapath)
-        sys.exit(1)
+
+    logging.critical('Unknown metadata format: ' + metadatapath)
+    sys.exit(1)
 
 
 def parse_json_metadata(apps, metadatapath):
