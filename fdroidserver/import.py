@@ -249,7 +249,7 @@ def main():
 
     metadatapath = os.path.join('metadata', package + '.txt')
     with open(metadatapath, 'w') as f:
-        metadata.write_metadata(f, app)
+        metadata.write_metadata('txt', f, app)
     logging.info("Wrote " + metadatapath)
 
 
