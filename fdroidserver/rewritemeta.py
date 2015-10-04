@@ -61,14 +61,14 @@ def main():
             # read in metadata.py
             with open(metadatapath, 'r') as f:
                 cur_content = f.read()
-            metadata.write_metadata(s, app)
+            metadata.write_txt_metadata(s, app)
             content = s.getvalue()
             s.close()
             if content != cur_content:
                 print(metadatapath)
         else:
             with open(metadatapath, 'w') as f:
-                metadata.write_metadata(f, app)
+                metadata.write_txt_metadata(f, app)
 
     logging.debug("Finished.")
 

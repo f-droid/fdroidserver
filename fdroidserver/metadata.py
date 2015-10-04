@@ -1038,11 +1038,11 @@ def parse_txt_metadata(apps, metadatapath):
     return (appid, thisinfo)
 
 
-# Write a metadata file.
+# Write a metadata file in txt format.
 #
 # 'mf'      - Writer interface (file, StringIO, ...)
 # 'app'     - The app data
-def write_metadata(mf, app):
+def write_txt_metadata(mf, app):
 
     def writecomments(key):
         written = 0
