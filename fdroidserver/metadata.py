@@ -663,10 +663,15 @@ def post_metadata_parse(thisinfo):
                     if isinstance(v, basestring):
                         build[k] = [v]
                     elif isinstance(v, bool):
-                        if v:
-                            build[k] = ['yes']
-                        else:
-                            build[k] = ['no']
+                        build[k] = ['yes' if v else 'no']
+                    elif isinstance(v, list):
+                        build[k] = []
+                        for e in v:
+                            if isinstance(e, bool):
+                                build[k].append('yes' if v else 'no')
+                            else:
+                                build[k].append(e)
+
                 elif keyflagtype == 'script':
                     build[k] = re.sub(esc_newlines, '', v).lstrip().rstrip()
                 elif keyflagtype == 'bool':
@@ -676,6 +681,9 @@ def post_metadata_parse(thisinfo):
                             build[k] = True
                         else:
                             build[k] = False
+                elif keyflagtype == 'string':
+                    if isinstance(v, bool):
+                        build[k] = 'yes' if v else 'no'
 
     if not thisinfo['Description']:
         thisinfo['Description'].append('No description available')
@@ -1167,6 +1175,13 @@ def write_yaml_metadata(mf, app):
     def w_comment(line):
         mf.write("# %s\n" % line)
 
+    def escape(value):
+        if not value:
+            return ''
+        if any(c in value for c in [': ', '%', '@', '*']):
+            return "'" + value.replace("'", "''") + "'"
+        return value
+
     def w_field(field, value, prefix='', t=None):
         if t is None:
             t = metafieldtype(field)
@@ -1174,13 +1189,11 @@ def write_yaml_metadata(mf, app):
         if t == 'list':
             v = '\n'
             for e in value:
-                v += prefix + ' - ' + e + '\n'
+                v += prefix + ' - ' + escape(e) + '\n'
         elif t == 'multiline':
             v = ' |\n'
-            lines = []
-            if type(value) == list:
-                lines = value
-            else:
+            lines = value
+            if type(value) == str:
                 lines = value.splitlines()
             for l in lines:
                 if l:
@@ -1196,9 +1209,12 @@ def write_yaml_metadata(mf, app):
             w_field(field, cmds, prefix, 'multiline')
             return
         else:
-            v = ' ' + value + '\n'
+            v = ' ' + escape(value) + '\n'
 
-        mf.write("%s%s:%s" % (prefix, field, v))
+        mf.write(prefix)
+        mf.write(field)
+        mf.write(":")
+        mf.write(v)
 
     global first_build
     first_build = True
