@@ -147,7 +147,7 @@ def scan_source(build_dir, root_dir, thisbuild):
                 continue
 
             fd = fp[len(build_dir) + 1:]
-            ext = common.get_extension(fd)
+            _, ext = common.get_extension(fd)
 
             if ext == 'so':
                 count += handleproblem('shared library', fd, fp)

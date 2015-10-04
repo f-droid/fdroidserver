@@ -599,7 +599,7 @@ def get_default_app_info_list(apps, metadatapath=None):
     if metadatapath is None:
         appid = None
     else:
-        appid = os.path.splitext(os.path.basename(metadatapath))[0]
+        appid, _ = common.get_extension(os.path.basename(metadatapath))
     if appid in apps:
         logging.critical("'%s' is a duplicate! '%s' is already provided by '%s'"
                          % (metadatapath, appid, apps[appid]['metadatapath']))
@@ -751,22 +751,21 @@ def _decode_dict(data):
 
 
 def parse_metadata(apps, metadatapath):
-    root, ext = os.path.splitext(metadatapath)
-    metadataformat = ext[1:]
+    _, ext = common.get_extension(metadatapath)
     accepted = common.config['accepted_formats']
-    if metadataformat not in accepted:
+    if ext not in accepted:
         logging.critical('"' + metadatapath
                          + '" is not in an accepted format, '
                          + 'convert to: ' + ', '.join(accepted))
         sys.exit(1)
 
-    if metadataformat == 'txt':
+    if ext == 'txt':
         return parse_txt_metadata(apps, metadatapath)
-    if metadataformat == 'json':
+    if ext == 'json':
         return parse_json_metadata(apps, metadatapath)
-    if metadataformat == 'xml':
+    if ext == 'xml':
         return parse_xml_metadata(apps, metadatapath)
-    if metadataformat == 'yaml':
+    if ext == 'yaml':
         return parse_yaml_metadata(apps, metadatapath)
 
     logging.critical('Unknown metadata format: ' + metadatapath)

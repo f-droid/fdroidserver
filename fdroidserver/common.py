@@ -376,7 +376,8 @@ def get_extension(filename):
 
 
 def has_extension(filename, ext):
-    return ext == get_extension(filename)
+    _, f_ext = get_extension(filename)
+    return ext == f_ext
 
 
 apk_regex = None
