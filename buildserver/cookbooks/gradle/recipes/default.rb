@@ -18,7 +18,7 @@ script "add-gradle-verdir" do
   not_if "test -d /opt/gradle/versions"
 end
 
-%w{1.4 1.6 1.7 1.8 1.9 1.10 1.11 1.12 2.1 2.2.1 2.3 2.4 2.5 2.6}.each do |ver|
+%w{1.4 1.6 1.7 1.8 1.9 1.10 1.11 1.12 2.1 2.2.1 2.3 2.4 2.5 2.6 2.7}.each do |ver|
   script "install-gradle-#{ver}" do
     cwd "/tmp"
     interpreter "bash"
