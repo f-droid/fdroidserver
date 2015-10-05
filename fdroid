@@ -99,12 +99,15 @@ def main():
     verbose = any(s in sys.argv for s in ['-v', '--verbose'])
     quiet = any(s in sys.argv for s in ['-q', '--quiet'])
 
+    # Helpful to differentiate warnings from errors even when on quiet
+    logformat = '%(levelname)s: %(message)s'
+    loglevel = logging.INFO
     if verbose:
-        logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
+        loglevel = logging.DEBUG
     elif quiet:
-        logging.basicConfig(format='%(message)s', level=logging.WARN)
-    else:
-        logging.basicConfig(format='%(message)s', level=logging.INFO)
+        loglevel = logging.WARN
+
+    logging.basicConfig(format=logformat, level=loglevel)
 
     if verbose and quiet:
         logging.critical("Specifying --verbose and --quiet and the same time is silly")
