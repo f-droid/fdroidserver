@@ -1010,9 +1010,9 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
             for apk in apklist[keepversions:]:
                 logging.info("Moving " + apk['apkname'] + " to archive")
                 move_file(repodir, archivedir, apk['apkname'], False)
+                move_file(repodir, archivedir, apk['apkname'] + '.asc', True)
                 if 'srcname' in apk:
                     move_file(repodir, archivedir, apk['srcname'], False)
-                    move_file(repodir, archivedir, apk['srcname'] + '.asc', True)
                 archapks.append(apk)
                 apks.remove(apk)
         elif len(apks) < keepversions and len(archapks) > 0:
@@ -1022,9 +1022,9 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
             for apk in archapklist[:required]:
                 logging.info("Moving " + apk['apkname'] + " from archive")
                 move_file(archivedir, repodir, apk['apkname'], False)
+                move_file(archivedir, repodir, apk['apkname'] + '.asc', True)
                 if 'srcname' in apk:
                     move_file(archivedir, repodir, apk['srcname'], False)
-                    move_file(archivedir, repodir, apk['srcname'] + '.asc', True)
                 archapks.remove(apk)
                 apks.append(apk)
 
