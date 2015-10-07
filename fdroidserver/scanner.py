@@ -72,6 +72,17 @@ def scan_source(build_dir, root_dir, thisbuild):
             if r.match(s):
                 yield n
 
+    gradle_mavenrepo = re.compile(r'maven *{ *(url)? *[\'"]?([^ \'"]*)[\'"]?')
+
+    allowed_repos = [re.compile(r'^https?://' + repo + '/*') for repo in [
+        r'repo1.maven.org/maven2',  # mavenCentral()
+        r'jcenter.bintray.com',     # jcenter()
+        r'jitpack.io',
+        r'oss.sonatype.org/content/repositories/snapshots',
+        r'oss.sonatype.org/content/repositories/releases',
+        ]
+    ]
+
     scanignore = common.getpaths_map(build_dir, thisbuild['scanignore'])
     scandelete = common.getpaths_map(build_dir, thisbuild['scandelete'])
 
@@ -174,11 +185,17 @@ def scan_source(build_dir, root_dir, thisbuild):
             elif ext == 'gradle':
                 if not os.path.isfile(fp):
                     continue
-                for i, line in enumerate(file(fp)):
-                    i = i + 1
+                with open(fp, 'r') as f:
+                    lines = f.readlines()
+                for i, line in enumerate(lines):
                     if is_used_by_gradle(line):
                         for name in suspects_found(line):
-                            count += handleproblem('usual supect \'%s\' at line %d' % (name, i), fd, fp)
+                            count += handleproblem('usual supect \'%s\' at line %d' % (name, i+1), fd, fp)
+                joined = re.sub(r'[\n\r\s]+', ' ', ' '.join(lines))
+                for m in gradle_mavenrepo.finditer(joined):
+                    url = m.group(2)
+                    if not any(r.match(url) for r in allowed_repos):
+                        count += handleproblem('unknown maven repo \'%s\'' % url, fd, fp)
 
             elif ext in ['', 'bin', 'out', 'exe']:
                 if is_binary(fp):
