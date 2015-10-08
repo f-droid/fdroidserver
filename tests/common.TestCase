@@ -140,10 +140,12 @@ class CommonTest(unittest.TestCase):
 
         fdroidserver.common.prepare_source(FakeVcs(), app, build, testdir, testdir, testdir)
 
-        filedata = open(os.path.join(testdir, 'build.gradle')).read()
+        with open(os.path.join(testdir, 'build.gradle'), 'r') as f:
+            filedata = f.read()
         self.assertIsNotNone(re.search("\s+compileSdkVersion %s\s+" % testint, filedata))
 
-        filedata = open(os.path.join(testdir, 'AndroidManifest.xml')).read()
+        with open(os.path.join(testdir, 'AndroidManifest.xml')) as f:
+            filedata = f.read()
         self.assertIsNone(re.search('android:debuggable', filedata))
         self.assertIsNotNone(re.search('android:versionName="%s"' % build['version'], filedata))
         self.assertIsNotNone(re.search('android:versionCode="%s"' % build['vercode'], filedata))

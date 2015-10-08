@@ -63,11 +63,13 @@ class BuildTest(unittest.TestCase):
                   'source-files/Zillode/syncthing-silk/build.gradle',
                   'source-files/open-keychain/open-keychain/build.gradle',
                   'source-files/osmandapp/osmand/build.gradle'):
-            filedata = open(os.path.join(testsdir, f)).read()
+            with open(os.path.join(testsdir, f), 'r') as f:
+                filedata = f.read()
             self.assertIsNotNone(pattern.search(filedata))
         tp = os.path.join(testsdir,
                           'source-files/open-keychain/open-keychain/OpenKeychain/build.gradle')
-        filedata = open(tp).read()
+        with open(tp, 'r') as f:
+            filedata = f.read()
         self.assertIsNone(pattern.search(filedata))
 
 if __name__ == "__main__":
