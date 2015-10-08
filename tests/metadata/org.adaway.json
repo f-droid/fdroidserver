@@ -278,7 +278,7 @@
         }
     ],
     "comments": {
-        "build:40": "#RootCommands srclib needs changing on fdroidserver",
-        "build:42": "#RootCommands srclib needs changing on fdroidserver"
+        "build:40": ["#RootCommands srclib needs changing on fdroidserver"],
+        "build:42": ["#RootCommands srclib needs changing on fdroidserver"]
     }
 }
