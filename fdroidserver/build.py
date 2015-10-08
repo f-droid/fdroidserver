@@ -546,20 +546,33 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                              (app['id'], thisbuild['version']), p.output)
 
     for root, dirs, files in os.walk(build_dir):
-        # Even when running clean, gradle stores task/artifact caches in
-        # .gradle/ as binary files. To avoid overcomplicating the scanner,
-        # manually delete them, just like `gradle clean` should have removed
-        # the build/ dirs.
-        if '.gradle' in dirs:
-            shutil.rmtree(os.path.join(root, '.gradle'))
-        # Don't remove possibly necessary 'gradle' dirs if 'gradlew' is not there
-        if 'gradlew' in files:
-            logging.debug("Getting rid of Gradle wrapper stuff in %s" % root)
-            os.remove(os.path.join(root, 'gradlew'))
-            if 'gradlew.bat' in files:
-                os.remove(os.path.join(root, 'gradlew.bat'))
-            if 'gradle' in dirs:
-                shutil.rmtree(os.path.join(root, 'gradle'))
+
+        def del_dirs(dl):
+            for d in dl:
+                if d in dirs:
+                    shutil.rmtree(os.path.join(root, d))
+
+        def del_files(fl):
+            for f in fl:
+                if f in files:
+                    os.remove(os.path.join(root, f))
+
+        if 'build.gradle' in files:
+            # Even when running clean, gradle stores task/artifact caches in
+            # .gradle/ as binary files. To avoid overcomplicating the scanner,
+            # manually delete them, just like `gradle clean` should have removed
+            # the build/ dirs.
+            del_dirs(['build', '.gradle', 'gradle'])
+            del_files(['gradlew', 'gradlew.bat'])
+
+        if 'pom.xml' in files:
+            del_dirs(['target'])
+
+        if any(f in files for f in ['ant.properties', 'project.properties', 'build.xml']):
+            del_dirs(['bin', 'gen'])
+
+        if 'jni' in dirs:
+            del_dirs(['obj'])
 
     if options.skipscan:
         if thisbuild['scandelete']:
