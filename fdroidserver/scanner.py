@@ -74,12 +74,12 @@ def scan_source(build_dir, root_dir, thisbuild):
 
     gradle_mavenrepo = re.compile(r'maven *{ *(url)? *[\'"]?([^ \'"]*)[\'"]?')
 
-    allowed_repos = [re.compile(r'^https?://' + repo + '/*') for repo in [
-        r'repo1.maven.org/maven2',  # mavenCentral()
-        r'jcenter.bintray.com',     # jcenter()
-        r'jitpack.io',
-        r'oss.sonatype.org/content/repositories/snapshots',
-        r'oss.sonatype.org/content/repositories/releases',
+    allowed_repos = [re.compile(r'^https?://' + re.escape(repo) + r'/*') for repo in [
+        'repo1.maven.org/maven2',  # mavenCentral()
+        'jcenter.bintray.com',     # jcenter()
+        'jitpack.io',
+        'oss.sonatype.org/content/repositories/snapshots',
+        'oss.sonatype.org/content/repositories/releases',
         ]
     ]
 
