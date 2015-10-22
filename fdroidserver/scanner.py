@@ -80,6 +80,7 @@ def scan_source(build_dir, root_dir, thisbuild):
         'jitpack.io',
         'oss.sonatype.org/content/repositories/snapshots',
         'oss.sonatype.org/content/repositories/releases',
+        'oss.sonatype.org/content/groups/public',
         ]
     ]
 
