@@ -591,10 +591,10 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 try:
                     im = Image.open(iconpath)
                     dpi = px_to_dpi(im.size[0])
-                    for density in densities:
+                    for density in screen_densities:
                         if density in thisinfo['icons']:
                             break
-                        if density == densities[-1] or dpi >= int(density):
+                        if density == screen_densities[-1] or dpi >= int(density):
                             thisinfo['icons'][density] = iconfilename
                             shutil.move(iconpath,
                                         os.path.join(get_icon_dir(repodir, density), iconfilename))
@@ -610,7 +610,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
             # First try resizing down to not lose quality
             last_density = None
-            for density in densities:
+            for density in screen_densities:
                 if density not in empty_densities:
                     last_density = density
                     continue
@@ -637,7 +637,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
             # Then just copy from the highest resolution available
             last_density = None
-            for density in reversed(densities):
+            for density in reversed(screen_densities):
                 if density not in empty_densities:
                     last_density = density
                     continue
@@ -652,7 +652,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
                 empty_densities.remove(density)
 
-            for density in densities:
+            for density in screen_densities:
                 icon_dir = get_icon_dir(repodir, density)
                 icondest = os.path.join(icon_dir, iconfilename)
                 resize_icon(icondest, density)
