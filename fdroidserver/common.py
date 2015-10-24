@@ -1581,7 +1581,11 @@ def SdkToolsPopen(commands, cwd=None, output=True):
     cmd = commands[0]
     if cmd not in config:
         config[cmd] = find_sdk_tools_cmd(commands[0])
-    return FDroidPopen([config[cmd]] + commands[1:],
+    abscmd = config[cmd]
+    if abscmd is None:
+        logging.critical("Could not find '%s' on your system" % cmd)
+        sys.exit(1)
+    return FDroidPopen(abscmd + commands[1:],
                        cwd=cwd, output=output)
 
 
