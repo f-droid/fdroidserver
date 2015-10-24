@@ -45,9 +45,7 @@ import metadata
 from common import FDroidPopen, SdkToolsPopen
 from metadata import MetaDataException
 
-
-def get_densities():
-    return ['640', '480', '320', '240', '160', '120']
+screen_densities = ['640', '480', '320', '240', '160', '120']
 
 
 def dpi_to_px(density):
@@ -65,7 +63,7 @@ def get_icon_dir(repodir, density):
 
 
 def get_icon_dirs(repodir):
-    for density in get_densities():
+    for density in screen_densities:
         yield get_icon_dir(repodir, density)
     yield os.path.join(repodir, "icons")
 
@@ -327,7 +325,7 @@ def resize_all_icons(repodirs):
     :param repodirs: the repo directories to process
     """
     for repodir in repodirs:
-        for density in get_densities():
+        for density in screen_densities:
             icon_dir = get_icon_dir(repodir, density)
             icon_glob = os.path.join(icon_dir, '*.png')
             for iconpath in glob.glob(icon_glob):
@@ -564,9 +562,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 thisinfo['versioncode'])
 
             # Extract the icon file...
-            densities = get_densities()
             empty_densities = []
-            for density in densities:
+            for density in screen_densities:
                 if density not in thisinfo['icons_src']:
                     empty_densities.append(density)
                     continue
