@@ -649,6 +649,8 @@ class vcs_git(vcs):
             for line in lines:
                 if 'git@github.com' in line:
                     line = line.replace('git@github.com:', 'https://github.com/')
+                if 'git@gitlab.com' in line:
+                    line = line.replace('git@gitlab.com:', 'https://gitlab.com/')
                 f.write(line)
 
         p = FDroidPopen(['git', 'submodule', 'sync'], cwd=self.local, output=False)
