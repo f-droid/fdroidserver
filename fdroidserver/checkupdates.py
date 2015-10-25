@@ -117,10 +117,11 @@ def check_tags(app, pattern):
 
         vcs.gotorevision(None)
 
+        root_dir = build_dir
         flavours = []
         if len(app['builds']) > 0:
             if app['builds'][-1]['subdir']:
-                build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
+                root_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
             if app['builds'][-1]['gradle']:
                 flavours = app['builds'][-1]['gradle']
 
@@ -145,7 +146,7 @@ def check_tags(app, pattern):
             vcs.gotorevision(tag)
 
             # Only process tags where the manifest exists...
-            paths = common.manifest_paths(build_dir, flavours)
+            paths = common.manifest_paths(root_dir, flavours)
             version, vercode, package = \
                 common.parse_androidmanifests(paths, app['Update Check Ignore'])
             if not app_matches_packagename(app, package) or not version or not vercode:
@@ -204,17 +205,18 @@ def check_repomanifest(app, branch=None):
         elif repotype == 'bzr':
             vcs.gotorevision(None)
 
+        root_dir = build_dir
         flavours = []
         if len(app['builds']) > 0:
             if app['builds'][-1]['subdir']:
-                build_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
+                root_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
             if app['builds'][-1]['gradle']:
                 flavours = app['builds'][-1]['gradle']
 
-        if not os.path.isdir(build_dir):
+        if not os.path.isdir(root_dir):
             return (None, "Subdir '" + app['builds'][-1]['subdir'] + "'is not a valid directory")
 
-        paths = common.manifest_paths(build_dir, flavours)
+        paths = common.manifest_paths(root_dir, flavours)
 
         version, vercode, package = \
             common.parse_androidmanifests(paths, app['Update Check Ignore'])

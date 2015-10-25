@@ -132,28 +132,28 @@ def get_metadata_from_url(app, url):
 
     # Get a copy of the source so we can extract some info...
     logging.info('Getting source from ' + repotype + ' repo at ' + repo)
-    src_dir = os.path.join(tmp_dir, 'importer')
-    if os.path.exists(src_dir):
-        shutil.rmtree(src_dir)
-    vcs = common.getvcs(repotype, repo, src_dir)
+    build_dir = os.path.join(tmp_dir, 'importer')
+    if os.path.exists(build_dir):
+        shutil.rmtree(build_dir)
+    vcs = common.getvcs(repotype, repo, build_dir)
     vcs.gotorevision(options.rev)
-    root_dir = get_subdir(src_dir)
+    root_dir = get_subdir(build_dir)
 
     app['Repo Type'] = repotype
     app['Repo'] = repo
 
-    return root_dir, src_dir
+    return root_dir, build_dir
 
 
 config = None
 options = None
 
 
-def get_subdir(src_dir):
+def get_subdir(build_dir):
     if options.subdir:
-        return os.path.join(src_dir, options.subdir)
+        return os.path.join(build_dir, options.subdir)
 
-    return src_dir
+    return build_dir
 
 
 def main():
@@ -178,10 +178,10 @@ def main():
     app['Update Check Mode'] = "Tags"
 
     root_dir = None
-    src_dir = None
+    build_dir = None
 
     if options.url:
-        root_dir, src_dir = get_metadata_from_url(app, options.url)
+        root_dir, build_dir = get_metadata_from_url(app, options.url)
     elif os.path.isdir('.git'):
         if options.url:
             app['Web Site'] = options.url
@@ -242,8 +242,8 @@ def main():
     # Keep the repo directory to save bandwidth...
     if not os.path.exists('build'):
         os.mkdir('build')
-    if src_dir is not None:
-        shutil.move(src_dir, os.path.join('build', package))
+    if build_dir is not None:
+        shutil.move(build_dir, os.path.join('build', package))
     with open('build/.fdroidvcs-' + package, 'w') as f:
         f.write(app['Repo Type'] + ' ' + app['Repo'])
 
