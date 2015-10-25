@@ -201,37 +201,32 @@ def check_repomanifest(app, branch=None):
         elif repotype == 'bzr':
             vcs.gotorevision(None)
 
-        root_dir = build_dir
         flavours = []
         if len(app['builds']) > 0:
-            if app['builds'][-1]['subdir']:
-                root_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
             if app['builds'][-1]['gradle']:
                 flavours = app['builds'][-1]['gradle']
 
-        if not os.path.isdir(root_dir):
-            return (None, "Subdir '" + app['builds'][-1]['subdir'] + "'is not a valid directory")
+        hpak = None
+        hver = None
+        hcode = "0"
+        for subdir in possible_subdirs(app):
+            root_dir = os.path.join(build_dir, subdir)
+            paths = common.manifest_paths(root_dir, flavours)
+            version, vercode, package = \
+                common.parse_androidmanifests(paths, app['Update Check Ignore'])
+            if app_matches_packagename(app, package) and version and vercode:
+                logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
+                              .format(subdir, version, vercode))
+                if int(vercode) > int(hcode):
+                    hpak = package
+                    hcode = str(int(vercode))
+                    hver = version
 
-        paths = common.manifest_paths(root_dir, flavours)
-
-        version, vercode, package = \
-            common.parse_androidmanifests(paths, app['Update Check Ignore'])
-        if not package:
+        if not hpak:
             return (None, "Couldn't find package ID")
-        if not app_matches_packagename(app, package):
-            return (None, "Package ID mismatch - got {0}".format(package))
-        if not version:
-            return (None, "Couldn't find latest version name")
-        if not vercode:
-            if "Ignore" == version:
-                return (None, "Latest version is ignored")
-            return (None, "Couldn't find latest version code")
-
-        vercode = str(int(vercode))
-
-        logging.debug("Manifest exists. Found version {0} ({1})".format(version, vercode))
-
-        return (version, vercode)
+        if hver:
+            return (hver, hcode)
+        return (None, "Couldn't find any version information")
 
     except VCSException as vcse:
         msg = "VCS error while scanning app {0}: {1}".format(app['id'], vcse)
