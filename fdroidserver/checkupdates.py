@@ -150,7 +150,7 @@ def check_tags(app, pattern):
                 paths = common.manifest_paths(root_dir, flavours)
                 version, vercode, package = \
                     common.parse_androidmanifests(paths, app['Update Check Ignore'])
-                if app_matches_packagename(app, package) and version and vercode:
+                if vercode:
                     logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
                                   .format(subdir, version, vercode))
                     if int(vercode) > int(hcode):
@@ -220,7 +220,7 @@ def check_repomanifest(app, branch=None):
             paths = common.manifest_paths(root_dir, flavours)
             version, vercode, package = \
                 common.parse_androidmanifests(paths, app['Update Check Ignore'])
-            if app_matches_packagename(app, package) and version and vercode:
+            if vercode:
                 logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
                               .format(subdir, version, vercode))
                 if int(vercode) > int(hcode):
