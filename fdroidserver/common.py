@@ -1006,19 +1006,20 @@ def remove_debuggable_flags(root_dir):
                         os.path.join(root, 'AndroidManifest.xml'))
 
 
+vcsearch_g = re.compile(r'.*versionCode *=* *["\']*([0-9]+)["\']*').search
+vnsearch_g = re.compile(r'.*versionName *=* *(["\'])((?:(?=(\\?))\3.)*?)\1.*').search
+psearch_g = re.compile(r'.*(packageName|applicationId) *=* *["\']([^"]+)["\'].*').search
+
+
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
 # All values returned are strings.
 def parse_androidmanifests(paths, ignoreversions=None):
 
+    ignoresearch = re.compile(ignoreversions).search if ignoreversions else None
+
     if not paths:
         return (None, None, None)
-
-    vcsearch_g = re.compile(r'.*versionCode *=* *["\']*([0-9]+)["\']*').search
-    vnsearch_g = re.compile(r'.*versionName *=* *(["\'])((?:(?=(\\?))\3.)*?)\1.*').search
-    psearch_g = re.compile(r'.*(packageName|applicationId) *=* *["\']([^"]+)["\'].*').search
-
-    ignoresearch = re.compile(ignoreversions).search if ignoreversions else None
 
     max_version = None
     max_vercode = None
@@ -1203,6 +1204,8 @@ def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
 
     return (name, number, libdir)
 
+gradle_version_regex = re.compile(r"[^/]*'com\.android\.tools\.build:gradle:([^\.]+\.[^\.]+).*'.*")
+
 
 # Prepare the source code for a particular build
 #  'vcs'         - the appropriate vcs object for the application
@@ -1312,7 +1315,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build['type'] == 'gradle':
         flavours = build['gradle']
 
-        version_regex = re.compile(r"[^/]*'com\.android\.tools\.build:gradle:([^\.]+\.[^\.]+).*'.*")
         gradlepluginver = None
 
         gradle_dirs = [root_dir]
@@ -1334,7 +1336,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 if not os.path.isfile(path):
                     continue
                 for line in file(path):
-                    match = version_regex.match(line)
+                    match = gradle_version_regex.match(line)
                     if match:
                         gradlepluginver = match.group(1)
                         break
@@ -1636,17 +1638,17 @@ def FDroidPopen(commands, cwd=None, output=True):
 
 
 gradle_comment = re.compile(r'[ ]*//')
+gradle_signing_configs = re.compile(r'^[\t ]*signingConfigs[ \t]*{[ \t]*$')
+gradle_line_matches = [
+    re.compile(r'^[\t ]*signingConfig [^ ]*$'),
+    re.compile(r'.*android\.signingConfigs\.[^{]*$'),
+    re.compile(r'.*variant\.outputFile = .*'),
+    re.compile(r'.*output\.outputFile = .*'),
+    re.compile(r'.*\.readLine\(.*'),
+]
 
 
 def remove_signing_keys(build_dir):
-    signing_configs = re.compile(r'^[\t ]*signingConfigs[ \t]*{[ \t]*$')
-    line_matches = [
-        re.compile(r'^[\t ]*signingConfig [^ ]*$'),
-        re.compile(r'.*android\.signingConfigs\.[^{]*$'),
-        re.compile(r'.*variant\.outputFile = .*'),
-        re.compile(r'.*output\.outputFile = .*'),
-        re.compile(r'.*\.readLine\(.*'),
-    ]
     for root, dirs, files in os.walk(build_dir):
         if 'build.gradle' in files:
             path = os.path.join(root, 'build.gradle')
@@ -1675,12 +1677,12 @@ def remove_signing_keys(build_dir):
                         opened -= line.count('}')
                         continue
 
-                    if signing_configs.match(line):
+                    if gradle_signing_configs.match(line):
                         changed = True
                         opened += 1
                         continue
 
-                    if any(s.match(line) for s in line_matches):
+                    if any(s.match(line) for s in gradle_line_matches):
                         changed = True
                         continue
 
@@ -1764,6 +1766,8 @@ def place_srclib(root_dir, number, libpath):
         if not placed:
             o.write('android.library.reference.%d=%s\n' % (number, relpath))
 
+apk_sigfile = re.compile(r'META-INF/[0-9A-Za-z]+\.(SF|RSA)')
+
 
 def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     """Verify that two apks are the same
@@ -1778,11 +1782,10 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     :returns: None if the verification is successful, otherwise a string
               describing what went wrong.
     """
-    sigfile = re.compile(r'META-INF/[0-9A-Za-z]+\.(SF|RSA)')
     with ZipFile(signed_apk) as signed_apk_as_zip:
         meta_inf_files = ['META-INF/MANIFEST.MF']
         for f in signed_apk_as_zip.namelist():
-            if sigfile.match(f):
+            if apk_sigfile.match(f):
                 meta_inf_files.append(f)
         if len(meta_inf_files) < 3:
             return "Signature files missing from {0}".format(signed_apk)
@@ -1797,6 +1800,8 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     logging.info("...successfully verified")
     return None
 
+apk_badchars = re.compile('''[/ :;'"]''')
+
 
 def compare_apks(apk1, apk2, tmp_dir):
     """Compare two apks
@@ -1806,9 +1811,8 @@ def compare_apks(apk1, apk2, tmp_dir):
     trying to do the comparison.
     """
 
-    badchars = re.compile('''[/ :;'"]''')
-    apk1dir = os.path.join(tmp_dir, badchars.sub('_', apk1[0:-4]))  # trim .apk
-    apk2dir = os.path.join(tmp_dir, badchars.sub('_', apk2[0:-4]))  # trim .apk
+    apk1dir = os.path.join(tmp_dir, apk_badchars.sub('_', apk1[0:-4]))  # trim .apk
+    apk2dir = os.path.join(tmp_dir, apk_badchars.sub('_', apk2[0:-4]))  # trim .apk
     for d in [apk1dir, apk2dir]:
         if os.path.exists(d):
             shutil.rmtree(d)
