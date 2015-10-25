@@ -462,7 +462,7 @@ def checkupdates_app(app, first=True):
             gotcur = False
             latest = None
             for build in app['builds']:
-                if build['vercode'] == app['Current Version Code']:
+                if build['vercode'] >= app['Current Version Code']:
                     gotcur = True
                 if not latest or int(build['vercode']) > int(latest['vercode']):
                     latest = build
