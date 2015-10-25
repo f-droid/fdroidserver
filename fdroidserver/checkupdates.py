@@ -143,7 +143,10 @@ def check_tags(app, pattern):
             vcs.gotorevision(tag)
 
             for subdir in possible_subdirs(app):
-                root_dir = os.path.join(build_dir, subdir)
+                if subdir == '.':
+                    root_dir = build_dir
+                else:
+                    root_dir = os.path.join(build_dir, subdir)
                 paths = common.manifest_paths(root_dir, flavours)
                 version, vercode, package = \
                     common.parse_androidmanifests(paths, app['Update Check Ignore'])
@@ -210,7 +213,10 @@ def check_repomanifest(app, branch=None):
         hver = None
         hcode = "0"
         for subdir in possible_subdirs(app):
-            root_dir = os.path.join(build_dir, subdir)
+            if subdir == '.':
+                root_dir = build_dir
+            else:
+                root_dir = os.path.join(build_dir, subdir)
             paths = common.manifest_paths(root_dir, flavours)
             version, vercode, package = \
                 common.parse_androidmanifests(paths, app['Update Check Ignore'])
@@ -328,8 +334,6 @@ def possible_subdirs(app):
         package = common.parse_androidmanifests(m_paths, app['Update Check Ignore'])[2]
         if app_matches_packagename(app, package):
             subdir = os.path.relpath(d, build_dir)
-            if subdir == '.':
-                continue
             logging.debug("Adding possible subdir %s" % subdir)
             yield subdir
 
