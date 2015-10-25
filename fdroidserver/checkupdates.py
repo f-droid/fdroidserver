@@ -117,11 +117,8 @@ def check_tags(app, pattern):
 
         vcs.gotorevision(None)
 
-        root_dir = build_dir
         flavours = []
         if len(app['builds']) > 0:
-            if app['builds'][-1]['subdir']:
-                root_dir = os.path.join(build_dir, app['builds'][-1]['subdir'])
             if app['builds'][-1]['gradle']:
                 flavours = app['builds'][-1]['gradle']
 
@@ -145,20 +142,19 @@ def check_tags(app, pattern):
             logging.debug("Check tag: '{0}'".format(tag))
             vcs.gotorevision(tag)
 
-            # Only process tags where the manifest exists...
-            paths = common.manifest_paths(root_dir, flavours)
-            version, vercode, package = \
-                common.parse_androidmanifests(paths, app['Update Check Ignore'])
-            if not app_matches_packagename(app, package) or not version or not vercode:
-                continue
-
-            logging.debug("Manifest exists. Found version {0} ({1})"
-                          .format(version, vercode))
-            if int(vercode) > int(hcode):
-                hpak = package
-                htag = tag
-                hcode = str(int(vercode))
-                hver = version
+            for subdir in possible_subdirs(app):
+                root_dir = os.path.join(build_dir, subdir)
+                paths = common.manifest_paths(root_dir, flavours)
+                version, vercode, package = \
+                    common.parse_androidmanifests(paths, app['Update Check Ignore'])
+                if app_matches_packagename(app, package) and version and vercode:
+                    logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
+                                  .format(subdir, version, vercode))
+                    if int(vercode) > int(hcode):
+                        hpak = package
+                        htag = tag
+                        hcode = str(int(vercode))
+                        hver = version
 
         if not hpak:
             return (None, "Couldn't find package ID", None)
@@ -315,29 +311,32 @@ def dirs_with_manifest(startdir):
 
 # Tries to find a new subdir starting from the root build_dir. Returns said
 # subdir relative to the build dir if found, None otherwise.
-def check_changed_subdir(app):
+def possible_subdirs(app):
 
     if app['Repo Type'] == 'srclib':
         build_dir = os.path.join('build', 'srclib', app['Repo'])
     else:
         build_dir = os.path.join('build', app['id'])
 
-    if not os.path.isdir(build_dir):
-        return None
-
     flavours = []
-    if len(app['builds']) > 0 and app['builds'][-1]['gradle']:
-        flavours = app['builds'][-1]['gradle']
+    if len(app['builds']) > 0:
+        build = app['builds'][-1]
+        if build['gradle']:
+            flavours = build['gradle']
+        subdir = build['subdir']
+        if subdir and os.path.isdir(os.path.join(build_dir, subdir)):
+            logging.debug("Adding possible subdir %s" % subdir)
+            yield subdir
 
     for d in dirs_with_manifest(build_dir):
-        logging.debug("Trying possible dir %s." % d)
         m_paths = common.manifest_paths(d, flavours)
         package = common.parse_androidmanifests(m_paths, app['Update Check Ignore'])[2]
         if app_matches_packagename(app, package):
-            logging.debug("Manifest exists in possible dir %s." % d)
-            return os.path.relpath(d, build_dir)
-
-    return None
+            subdir = os.path.relpath(d, build_dir)
+            if subdir == '.':
+                continue
+            logging.debug("Adding possible subdir %s" % subdir)
+            yield subdir
 
 
 def fetch_autoname(app, tag):
@@ -413,21 +412,6 @@ def checkupdates_app(app, first=True):
     else:
         version = None
         msg = 'Invalid update check method'
-
-    if first and version is None and vercode == "Couldn't find package ID":
-        logging.warn("Couldn't find any version information. Looking for a subdir change...")
-        new_subdir = check_changed_subdir(app)
-        if new_subdir is None:
-            logging.warn("Couldn't find any new subdir.")
-        else:
-            logging.warn("Trying a new subdir: %s" % new_subdir)
-            new_build = {}
-            metadata.fill_build_defaults(new_build)
-            new_build['version'] = "Ignore"
-            new_build['vercode'] = "-1"
-            new_build['subdir'] = new_subdir
-            app['builds'].append(new_build)
-            return checkupdates_app(app, first=False)
 
     if version and vercode and app['Vercode Operation']:
         oldvercode = str(int(vercode))
