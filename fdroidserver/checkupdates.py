@@ -324,10 +324,6 @@ def possible_subdirs(app):
         build = app['builds'][-1]
         if build['gradle']:
             flavours = build['gradle']
-        subdir = build['subdir']
-        if subdir and os.path.isdir(os.path.join(build_dir, subdir)):
-            logging.debug("Adding possible subdir %s" % subdir)
-            yield subdir
 
     for d in dirs_with_manifest(build_dir):
         m_paths = common.manifest_paths(d, flavours)
