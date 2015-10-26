@@ -1283,7 +1283,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     # Update the local.properties file
     localprops = [os.path.join(build_dir, 'local.properties')]
     if build['subdir']:
-        localprops += [os.path.join(root_dir, 'local.properties')]
+        parts = build['subdir'].split(os.sep)
+        cur = build_dir
+        for d in parts:
+            cur = os.path.join(cur, d)
+            localprops += [os.path.join(cur, 'local.properties')]
     for path in localprops:
         props = ""
         if os.path.isfile(path):
