@@ -128,10 +128,15 @@ def check_tags(app, pattern):
         hcode = "0"
 
         tags = vcs.gettags()
+        if not tags:
+            return (None, "No tags found", None)
+
         logging.debug("All tags: " + ','.join(tags))
         if pattern:
             pat = re.compile(pattern)
             tags = [tag for tag in tags if pat.match(tag)]
+            if not tags:
+                return (None, "No matching tags found", None)
             logging.debug("Matching tags: " + ','.join(tags))
 
         if len(tags) > 5 and repotype in ('git',):
