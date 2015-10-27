@@ -134,7 +134,7 @@ def check_tags(app, pattern):
             tags = [tag for tag in tags if pat.match(tag)]
             logging.debug("Matching tags: " + ','.join(tags))
 
-        if repotype in ('git',):
+        if len(tags) > 5 and repotype in ('git',):
             tags = vcs.latesttags(tags, 5)
             logging.debug("Latest tags: " + ','.join(tags))
 
