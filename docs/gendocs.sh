@@ -46,7 +46,7 @@ templateurl="http://savannah.gnu.org/cgi-bin/viewcvs/~checkout~/texinfo/texinfo/
 
 : ${SETLANG="env LANG= LC_MESSAGES= LC_ALL= LANGUAGE="}
 : ${MAKEINFO="makeinfo"}
-: ${TEXI2DVI="texi2dvi -t @finalout"}
+: ${TEXI2DVI="TEX=\"tex -output-comment=''\" texi2dvi --output-comment=\"\" -t @finalout"}
 : ${DOCBOOK2HTML="docbook2html"}
 : ${DOCBOOK2PDF="docbook2pdf"}
 : ${DOCBOOK2TXT="docbook2txt"}
