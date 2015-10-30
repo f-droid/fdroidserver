@@ -40,6 +40,7 @@ scriptversion=2014-10-09.23
 
 prog=`basename "$0"`
 srcdir=`pwd`
+timestamp=${SOURCE_DATE_EPOCH:-$(date +%s)}
 
 scripturl="http://savannah.gnu.org/cgi-bin/viewcvs/~checkout~/texinfo/texinfo/util/gendocs.sh"
 templateurl="http://savannah.gnu.org/cgi-bin/viewcvs/~checkout~/texinfo/texinfo/util/gendocs_template"
@@ -272,10 +273,11 @@ echo "Making output for $srcfile"
 echo " in `pwd`"
 mkdir -p "$outdir/"
 
+taropts="--mtime=@$timestamp --mode=go=rX,u+rw,a-s"
 cmd="$SETLANG $MAKEINFO -o $PACKAGE.info $commonarg $infoarg \"$srcfile\""
 echo "Generating info... ($cmd)"
 eval "$cmd"
-tar --create $PACKAGE.info* | gzip --no-name -f -9 --to-stdout > "$outdir/$PACKAGE.info.tar.gz"
+tar $taropts --create $PACKAGE.info* | gzip --no-name -f -9 --to-stdout > "$outdir/$PACKAGE.info.tar.gz"
 ls -l "$outdir/$PACKAGE.info.tar.gz"
 info_tgz_size=`calcsize "$outdir/$PACKAGE.info.tar.gz"`
 # do not mv the info files, there's no point in having them available
@@ -319,7 +321,7 @@ html_split()
   (
     cd ${split_html_dir} || exit 1
     ln -sf ${PACKAGE}.html index.html
-    tar --create -- *.html | gzip --no-name -f -9 --to-stdout > "$abs_outdir/${PACKAGE}.html_$1.tar.gz"
+    tar $taropts --create -- *.html | gzip --no-name -f -9 --to-stdout > "$abs_outdir/${PACKAGE}.html_$1.tar.gz"
   )
   eval html_$1_tgz_size=`calcsize "$outdir/${PACKAGE}.html_$1.tar.gz"`
   rm -f "$outdir"/html_$1/*.html
@@ -349,7 +351,7 @@ if test -z "$use_texi2html"; then
   copy_images $split_html_dir/ $split_html_dir/*.html
   (
     cd $split_html_dir || exit 1
-    tar --create -- * | gzip --no-name -f -9 --to-stdout > "$abs_outdir/$PACKAGE.html_$split.tar.gz"
+    tar $taropts --create -- * | gzip --no-name -f -9 --to-stdout > "$abs_outdir/$PACKAGE.html_$split.tar.gz"
   )
   eval \
     html_${split}_tgz_size=`calcsize "$outdir/$PACKAGE.html_$split.tar.gz"`
@@ -379,7 +381,7 @@ d=`dirname $srcfile`
 (
   cd "$d"
   srcfiles=`ls -d *.texinfo *.texi *.txi *.eps $source_extra 2>/dev/null` || true
-  tar --create --dereference $srcfiles | gzip --no-name -f -9 --to-stdout > "$abs_outdir/$PACKAGE.texi.tar.gz"
+  tar $taropts --create --dereference $srcfiles | gzip --no-name -f -9 --to-stdout > "$abs_outdir/$PACKAGE.texi.tar.gz"
   ls -l "$abs_outdir/$PACKAGE.texi.tar.gz"
 )
 texi_tgz_size=`calcsize "$outdir/$PACKAGE.texi.tar.gz"`
@@ -401,7 +403,7 @@ if test -n "$docbook"; then
   eval "$cmd"
   (
     cd ${split_html_db_dir} || exit 1
-    tar --create -- *.html | gzip --no-name -f -9 --to-stdout > "$abs_outdir/${PACKAGE}.html_node_db.tar.gz"
+    tar $taropts --create -- *.html | gzip --no-name -f -9 --to-stdout > "$abs_outdir/${PACKAGE}.html_node_db.tar.gz"
   )
   html_node_db_tgz_size=`calcsize "$outdir/${PACKAGE}.html_node_db.tar.gz"`
   rm -f "$outdir"/html_node_db/*.html
@@ -431,7 +433,7 @@ else
   CONDS="/%%ENDIF.*%%/d;/%%IF  *HTML_SECTION%%/d;/%%IF  *HTML_CHAPTER%%/d"
 fi
 
-curdate=`$SETLANG date '+%B %d, %Y'`
+curdate=`$SETLANG date -u '+%B %d, %Y' -d @$timestamp`
 sed \
    -e "s!%%TITLE%%!$MANUAL_TITLE!g" \
    -e "s!%%EMAIL%%!$EMAIL!g" \
