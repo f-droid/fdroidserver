@@ -194,7 +194,7 @@ def main():
     paths = common.manifest_paths(root_dir, [])
     if paths:
 
-        version, vercode, package = common.parse_androidmanifests(paths)
+        version, vercode, package = common.parse_androidmanifests(paths, app)
         if not package:
             logging.error("Couldn't find package ID")
             sys.exit(1)

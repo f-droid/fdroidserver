@@ -1012,11 +1012,21 @@ vnsearch_g = re.compile(r'.*versionName *=* *(["\'])((?:(?=(\\?))\3.)*?)\1.*').s
 psearch_g = re.compile(r'.*(packageName|applicationId) *=* *["\']([^"]+)["\'].*').search
 
 
+def app_matches_packagename(app, package):
+    if not package:
+        return False
+    appid = app['Update Check Name'] or app['id']
+    if appid == "Ignore":
+        return True
+    return appid == package
+
+
 # Extract some information from the AndroidManifest.xml at the given path.
 # Returns (version, vercode, package), any or all of which might be None.
 # All values returned are strings.
-def parse_androidmanifests(paths, ignoreversions=None):
+def parse_androidmanifests(paths, app):
 
+    ignoreversions = app['Update Check Ignore']
     ignoresearch = re.compile(ignoreversions).search if ignoreversions else None
 
     if not paths:
@@ -1046,7 +1056,9 @@ def parse_androidmanifests(paths, ignoreversions=None):
                 if not package:
                     matches = psearch_g(line)
                     if matches:
-                        package = matches.group(2)
+                        s = matches.group(2)
+                        if app_matches_packagename(app, s):
+                            package = s
                 if not version:
                     matches = vnsearch_g(line)
                     if matches:

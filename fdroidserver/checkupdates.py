@@ -80,15 +80,6 @@ def check_http(app):
         return (None, msg)
 
 
-def app_matches_packagename(app, package):
-    if not package:
-        return False
-    appid = app['Update Check Name'] or app['id']
-    if appid == "Ignore":
-        return True
-    return appid == package
-
-
 # Check for a new version by looking at the tags in the source repo.
 # Whether this can be used reliably or not depends on
 # the development procedures used by the project's developers. Use it with
@@ -153,8 +144,7 @@ def check_tags(app, pattern):
                 else:
                     root_dir = os.path.join(build_dir, subdir)
                 paths = common.manifest_paths(root_dir, flavours)
-                version, vercode, package = \
-                    common.parse_androidmanifests(paths, app['Update Check Ignore'])
+                version, vercode, package = common.parse_androidmanifests(paths, app)
                 if vercode:
                     logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
                                   .format(subdir, version, vercode))
@@ -223,8 +213,7 @@ def check_repomanifest(app, branch=None):
             else:
                 root_dir = os.path.join(build_dir, subdir)
             paths = common.manifest_paths(root_dir, flavours)
-            version, vercode, package = \
-                common.parse_androidmanifests(paths, app['Update Check Ignore'])
+            version, vercode, package = common.parse_androidmanifests(paths, app)
             if vercode:
                 logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
                               .format(subdir, version, vercode))
@@ -332,8 +321,8 @@ def possible_subdirs(app):
 
     for d in dirs_with_manifest(build_dir):
         m_paths = common.manifest_paths(d, flavours)
-        package = common.parse_androidmanifests(m_paths, app['Update Check Ignore'])[2]
-        if app_matches_packagename(app, package):
+        package = common.parse_androidmanifests(m_paths, app)[2]
+        if package is not None:
             subdir = os.path.relpath(d, build_dir)
             logging.debug("Adding possible subdir %s" % subdir)
             yield subdir
