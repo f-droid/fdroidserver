@@ -78,6 +78,7 @@ def scan_source(build_dir, root_dir, thisbuild):
         'repo1.maven.org/maven2',  # mavenCentral()
         'jcenter.bintray.com',     # jcenter()
         'jitpack.io',
+        'repo.maven.apache.org/maven2',
         'oss.sonatype.org/content/repositories/snapshots',
         'oss.sonatype.org/content/repositories/releases',
         'oss.sonatype.org/content/groups/public',
