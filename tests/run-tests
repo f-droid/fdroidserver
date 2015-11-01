@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e # quit script on error
-set -x # show each command as it is executed
 
 echo_header() {
     { echo -e "==============================================================================\n$1"; } 2>/dev/null
@@ -87,6 +86,7 @@ if [ -z $python ]; then
     python=python2
 fi
 
+set -x # show each command as it is executed
 
 #------------------------------------------------------------------------------#
 echo_header "run commit hooks"
