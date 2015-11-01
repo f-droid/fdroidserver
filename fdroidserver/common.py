@@ -1070,7 +1070,9 @@ def parse_androidmanifests(paths, app):
         else:
             xml = parse_xml(path)
             if "package" in xml.attrib:
-                package = xml.attrib["package"].encode('utf-8')
+                s = xml.attrib["package"].encode('utf-8')
+                if app_matches_packagename(app, s):
+                    package = s
             if "{http://schemas.android.com/apk/res/android}versionName" in xml.attrib:
                 version = xml.attrib["{http://schemas.android.com/apk/res/android}versionName"].encode('utf-8')
                 base_dir = os.path.dirname(path)
