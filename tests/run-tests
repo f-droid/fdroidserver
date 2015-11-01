@@ -4,8 +4,7 @@ set -e # quit script on error
 set -x # show each command as it is executed
 
 echo_header() {
-    echo "=============================================================================="
-    echo $1
+    { echo -e "==============================================================================\n$1"; } 2>/dev/null
 }
 
 copy_apks_into_repo() {
