@@ -4,7 +4,7 @@
 # your system configuration.
 
 # Custom path to the Android SDK, defaults to $ANDROID_HOME
-# sdk_path = "/opt/android-sdk"
+# sdk_path = "$ANDROID_HOME"
 
 # Custom paths to various versions of the Android NDK, defaults to 'r10e' set
 # to $ANDROID_NDK. Most users will have the latest at $ANDROID_NDK, which is
