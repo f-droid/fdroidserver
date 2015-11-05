@@ -56,7 +56,7 @@ default_config = {
         'r9b': None,
         'r10e': "$ANDROID_NDK",
     },
-    'build_tools': "23.0.1",
+    'build_tools': "23.0.2",
     'java_paths': {
         '1.7': "/usr/lib/jvm/java-7-openjdk",
         '1.8': None,
