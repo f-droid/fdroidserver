@@ -6,6 +6,11 @@ execute 'set_debian_mirror' do
   command "sed -i 's,http://ftp.uk.debian.org/debian/,#{debian_mirror},g' /etc/apt/sources.list"
 end
 
+execute "jessie_backports" do
+  command "echo 'deb http://http.debian.net/debian jessie-backports main' > /etc/apt/sources.list.d/backports.list"
+  only_if "grep jessie /etc/apt/sources.list"
+end
+
 execute "apt-get-update" do
   command "apt-get update"
 end
