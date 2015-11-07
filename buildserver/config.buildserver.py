@@ -4,6 +4,6 @@ ndk_paths = {
     'r10e': "/home/vagrant/android-ndk/r10e",
 }
 java_paths = {
-    '1.7': "/usr/lib/jvm/java-7-openjdk",
-    '1.8': "/usr/lib/jvm/java-8-openjdk",
+    '1.7': "/usr/lib/jvm/java-7-openjdk-i386",
+    '1.8': "/usr/lib/jvm/java-8-openjdk-i386",
 }
