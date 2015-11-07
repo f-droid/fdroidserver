@@ -42,6 +42,6 @@ end
 
 execute "set-default-java" do
   user user
-  command "update-java-alternatives --set java-7-openjdk"
+  command "update-java-alternatives --set java-1.7.0-openjdk-i386"
 end
 
