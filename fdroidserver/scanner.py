@@ -138,6 +138,19 @@ def scan_source(build_dir, root_dir, thisbuild):
             d = f.read(1024)
         return bool(d.translate(None, textchars))
 
+    # False positives patterns for files that are binary and executable.
+    safe_paths = [re.compile(r) for r in [
+        r".*/drawable[^/]*/.*\.png$",  # png drawables
+        r".*/mipmap[^/]*/.*\.png$",    # png mipmaps
+        ]
+    ]
+
+    def safe_path(path):
+        for sp in safe_paths:
+            if sp.match(path):
+                return True
+        return False
+
     gradle_compile_commands = get_gradle_compile_commands(thisbuild)
 
     def is_used_by_gradle(line):
@@ -208,7 +221,7 @@ def scan_source(build_dir, root_dir, thisbuild):
                     count += handleproblem('binary', fd, fp)
 
             elif is_executable(fp):
-                if is_binary(fp):
+                if is_binary(fp) and not safe_path(fd):
                     warnproblem('possible binary', fd)
 
     for p in scanignore:
