@@ -153,6 +153,9 @@ def scan_source(build_dir, root_dir, thisbuild):
 
         for curfile in f:
 
+            if curfile in ['.DS_Store']:
+                continue
+
             # Path (relative) to the file
             fp = os.path.join(r, curfile)
 
