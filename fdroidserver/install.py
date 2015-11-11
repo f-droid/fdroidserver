@@ -35,9 +35,7 @@ def devices():
     p = SdkToolsPopen(['adb', "devices"])
     if p.returncode != 0:
         raise FDroidException("An error occured when finding devices: %s" % p.output)
-    lines = p.output.splitlines()
-    if lines[0].startswith('* daemon not running'):
-        lines = lines[2:]
+    lines = [l for l in p.output.splitlines() if not l.startswith('* ')]
     if len(lines) < 3:
         return []
     lines = lines[1:-1]
