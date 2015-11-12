@@ -117,6 +117,8 @@ def scan_source(build_dir, root_dir, thisbuild):
         return 0
 
     def warnproblem(what, fd):
+        if toignore(fd):
+            return
         logging.warn('Found %s at %s' % (what, fd))
 
     def handleproblem(what, fd, fp):
