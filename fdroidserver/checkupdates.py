@@ -350,12 +350,15 @@ def fetch_autoname(app, tag):
             flavours = app['builds'][-1]['gradle']
 
     logging.debug("...fetch auto name from " + build_dir)
+    new_name = None
     for subdir in possible_subdirs(app):
         if subdir == '.':
             root_dir = build_dir
         else:
             root_dir = os.path.join(build_dir, subdir)
         new_name = common.fetch_real_name(root_dir, flavours)
+        if new_name is not None:
+            break
     commitmsg = None
     if new_name:
         logging.debug("...got autoname '" + new_name + "'")
