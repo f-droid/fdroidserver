@@ -1504,6 +1504,8 @@ def getpaths_map(build_dir, globpaths):
         full_path = os.path.join(build_dir, p)
         full_path = os.path.normpath(full_path)
         paths[p] = [r[len(build_dir) + 1:] for r in glob.glob(full_path)]
+        if not paths[p]:
+            raise FDroidException("glob path '%s' did not match any files/dirs" % p)
     return paths
 
 
