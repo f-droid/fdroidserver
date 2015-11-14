@@ -334,25 +334,28 @@ def fetch_autoname(app, tag):
         return None
 
     if app['Repo Type'] == 'srclib':
-        app_dir = os.path.join('build', 'srclib', app['Repo'])
+        build_dir = os.path.join('build', 'srclib', app['Repo'])
     else:
-        app_dir = os.path.join('build', app['id'])
+        build_dir = os.path.join('build', app['id'])
 
     try:
-        vcs = common.getvcs(app["Repo Type"], app["Repo"], app_dir)
+        vcs = common.getvcs(app["Repo Type"], app["Repo"], build_dir)
         vcs.gotorevision(tag)
     except VCSException:
         return None
 
     flavours = []
     if len(app['builds']) > 0:
-        if app['builds'][-1]['subdir']:
-            app_dir = os.path.join(app_dir, app['builds'][-1]['subdir'])
         if app['builds'][-1]['gradle']:
             flavours = app['builds'][-1]['gradle']
 
-    logging.debug("...fetch auto name from " + app_dir)
-    new_name = common.fetch_real_name(app_dir, flavours)
+    logging.debug("...fetch auto name from " + build_dir)
+    for subdir in possible_subdirs(app):
+        if subdir == '.':
+            root_dir = build_dir
+        else:
+            root_dir = os.path.join(build_dir, subdir)
+        new_name = common.fetch_real_name(root_dir, flavours)
     commitmsg = None
     if new_name:
         logging.debug("...got autoname '" + new_name + "'")
