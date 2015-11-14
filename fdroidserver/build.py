@@ -1121,14 +1121,6 @@ def main():
 
                     build_succeeded.append(app)
                     wikilog = "Build succeeded"
-            except BuildException as be:
-                with open(os.path.join(log_dir, appid + '.log'), 'a+') as f:
-                    f.write(str(be))
-                print("Could not build app %s due to BuildException: %s" % (appid, be))
-                if options.stop:
-                    sys.exit(1)
-                failed_apps[appid] = be
-                wikilog = be.get_wikitext()
             except VCSException as vcse:
                 reason = str(vcse).split('\n', 1)[0] if options.verbose else str(vcse)
                 logging.error("VCS error while building app %s: %s" % (
@@ -1137,6 +1129,14 @@ def main():
                     sys.exit(1)
                 failed_apps[appid] = vcse
                 wikilog = str(vcse)
+            except FDroidException as e:
+                with open(os.path.join(log_dir, appid + '.log'), 'a+') as f:
+                    f.write(str(e))
+                logging.error("Could not build app %s: %s" % (appid, e))
+                if options.stop:
+                    sys.exit(1)
+                failed_apps[appid] = e
+                wikilog = e.get_wikitext()
             except Exception as e:
                 logging.error("Could not build app %s due to unknown error: %s" % (
                     appid, traceback.format_exc()))
