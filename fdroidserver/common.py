@@ -968,6 +968,8 @@ def fetch_real_name(app_dir, flavours):
         logging.debug("fetch_real_name: Checking manifest at " + path)
         xml = parse_xml(path)
         app = xml.find('application')
+        if app is None:
+            continue
         if "{http://schemas.android.com/apk/res/android}label" not in app.attrib:
             continue
         label = app.attrib["{http://schemas.android.com/apk/res/android}label"].encode('utf-8')
