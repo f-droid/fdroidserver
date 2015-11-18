@@ -1027,7 +1027,7 @@ def app_matches_packagename(app, package):
     if not package:
         return False
     appid = app['Update Check Name'] or app['id']
-    if appid == "Ignore":
+    if appid is None or appid == "Ignore":
         return True
     return appid == package
 

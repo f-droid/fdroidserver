@@ -175,6 +175,7 @@ def main():
 
     apps = metadata.read_metadata()
     package, app = metadata.get_default_app_info_list(apps)
+    app['id'] = None
     app['Update Check Mode'] = "Tags"
 
     root_dir = None
