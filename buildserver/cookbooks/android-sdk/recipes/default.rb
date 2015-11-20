@@ -10,8 +10,6 @@ script "setup-android-sdk" do
   code "
     tar zxvf /vagrant/cache/android-sdk_r24.4.1-linux.tgz
     mv android-sdk-linux #{sdk_loc}
-    #{sdk_loc}/tools/android update sdk --no-ui -t platform-tool
-    #{sdk_loc}/tools/android update sdk --no-ui -t tool
   "
   not_if "test -d #{sdk_loc}"
 end
@@ -23,71 +21,56 @@ execute "add-android-sdk-path" do
   not_if "grep PATH-SDK /home/#{user}/.bsenv"
 end
 
-script "add_build_tools" do
-  interpreter "bash"
-  user user
-  ver = "23.0.2"
-  cwd "/tmp"
-  code "
-    if [ -f /vagrant/cache/build-tools/#{ver}.tar.gz ] ; then
-      echo Installing from cache
-      mkdir #{sdk_loc}/build-tools
-      tar -C #{sdk_loc}/build-tools -z -x -f /vagrant/cache/build-tools/#{ver}.tar.gz
-    else
-      #{sdk_loc}/tools/android update sdk --no-ui -a -t build-tools-#{ver} <<X
+%w{
+    tools
+    platform-tools
+    build-tools-17.0.0
+    build-tools-18.0.1
+    build-tools-18.1.0
+    build-tools-18.1.1
+    build-tools-19.0.0
+    build-tools-19.0.1
+    build-tools-19.0.2
+    build-tools-19.0.3
+    build-tools-19.1.0
+    build-tools-20.0.0
+    build-tools-21.0.0
+    build-tools-21.0.1
+    build-tools-21.0.2
+    build-tools-21.1.0
+    build-tools-21.1.1
+    build-tools-21.1.2
+    build-tools-22.0.0
+    build-tools-22.0.1
+    build-tools-23.0.0
+    build-tools-23.0.1
+    build-tools-23.0.2
+    extra-android-support
+    extra-android-m2repository
+}.each do |pkg|
+  script "add_pkg_#{pkg}" do
+    interpreter "bash"
+    user user
+    code "
+      #{sdk_loc}/tools/android update sdk --no-ui -a -t #{pkg} <<X
 y
 
 X
-    fi
-	sed -i '/BTPATH/d' /home/#{user}/.bsenv
-	echo \"export PATH=\\$PATH:#{sdk_loc}/build-tools/#{ver} #BTPATH\" >> /home/#{user}/.bsenv
-  "
-  not_if "test -d #{sdk_loc}/build-tools/#{ver}"
+    "
+  end
+
 end
 
-script "add_platform_tools" do
-  interpreter "bash"
-  user user
-  cwd "/tmp"
-  code "
-    if [ -f /vagrant/cache/platform-tools.tar.gz ] ; then
-      echo Installing from cache
-      mkdir #{sdk_loc}/platform-tools
-      tar -C #{sdk_loc}/platform-tools -z -x -f /vagrant/cache/platform-tools.tar.gz
-    else
-      #{sdk_loc}/tools/android update sdk --no-ui -a -t platform-tools <<X
-y
-
-X
-    fi
-  "
-  not_if "test -d #{sdk_loc}/platform-tools"
-end
-
-%w{android-3 android-4 android-5 android-6 android-7 android-8 android-9
-   android-10 android-11 android-12 android-13 android-14 android-15
-   android-16 android-17 android-18 android-19 android-20 android-21
-   android-22 android-23
-   extra-android-support extra-android-m2repository}.each do |sdk|
-
-  script "add_sdk_#{sdk}" do
+%w{3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23}.each do |api|
+  script "add_sdk_#{api}" do
     interpreter "bash"
     user user
     cwd "/tmp"
     code "
-      if [ -f /vagrant/cache/platforms/#{sdk}.tar.gz ] ; then
-        echo Installing from cache
-        tar -C #{sdk_loc}/platforms -z -x -f /vagrant/cache/platforms/#{sdk}.tar.gz
-      else
-        echo Installing via 'android'
-        #{sdk_loc}/tools/android update sdk --no-ui -a -t #{sdk} <<X
-y
-
-X
-      fi
+      unzip /vagrant/cache/android-platform-#{api}.zip
+      mv android-*/ #{sdk_loc}/platforms/android-#{api}
     "
-    not_if "test -d #{sdk_loc}/platforms/#{sdk}"
+    not_if "test -d #{sdk_loc}/platforms/android-#{api}"
   end
-
 end
 
