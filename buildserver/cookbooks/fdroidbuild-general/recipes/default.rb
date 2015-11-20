@@ -60,6 +60,8 @@ end
     python-setuptools
     python-yaml
     python3-gnupg
+    qt5-default
+    qtbase5-dev
     quilt
     realpath
     scons
