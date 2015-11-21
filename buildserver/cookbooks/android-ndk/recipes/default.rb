@@ -8,11 +8,8 @@ script "setup-android-ndk" do
   user node[:settings][:user]
   cwd "/tmp"
   code "
-    mkdir #{ndk_loc}
+    mkdir -p #{ndk_loc}
   "
-  not_if do
-    File.exists?("#{ndk_loc}")
-  end
 end
 
 script "setup-android-ndk-r9b" do
@@ -30,9 +27,7 @@ script "setup-android-ndk-r9b" do
     tar jxvf /vagrant/cache/android-ndk-r9b-linux-x86$SUFFIX-legacy-toolchains.tar.bz2
     mv android-ndk-r9b #{ndk_loc}/r9b
   "
-  not_if do
-    File.exists?("#{ndk_loc}/r9b")
-  end
+  not_if "test -d #{ndk_loc}/r9b"
 end
 
 script "setup-android-ndk-r10e" do
@@ -50,8 +45,6 @@ script "setup-android-ndk-r10e" do
     /vagrant/cache/android-ndk-r10e-linux-x86$SUFFIX.bin x
     mv android-ndk-r10e #{ndk_loc}/r10e
   "
-  not_if do
-    File.exists?("#{ndk_loc}/r10e")
-  end
+  not_if "test -d #{ndk_loc}/r10e"
 end
 
