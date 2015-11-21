@@ -253,7 +253,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
     except NameError:
         raise BuildException("Paramiko is required to use the buildserver")
     if options.verbose:
-        logging.getLogger("paramiko").setLevel(logging.DEBUG)
+        logging.getLogger("paramiko").setLevel(logging.INFO)
     else:
         logging.getLogger("paramiko").setLevel(logging.WARN)
 
