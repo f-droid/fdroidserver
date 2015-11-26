@@ -1223,17 +1223,17 @@ def main():
         if added:
             app['added'] = added
         else:
-            logging.warn("Don't know when " + appid + " was added")
+            logging.debug("Don't know when " + appid + " was added")
         if lastupdated:
             app['lastupdated'] = lastupdated
         else:
-            logging.warn("Don't know when " + appid + " was last updated")
+            logging.debug("Don't know when " + appid + " was last updated")
 
         if bestver == 0:
             if app['Name'] is None:
                 app['Name'] = app['Auto Name'] or appid
             app['icon'] = None
-            logging.warn("Application " + appid + " has no packages")
+            logging.debug("Application " + appid + " has no packages")
         else:
             if app['Name'] is None:
                 app['Name'] = bestapk['name']
