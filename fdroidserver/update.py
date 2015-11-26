@@ -47,6 +47,8 @@ from metadata import MetaDataException
 
 screen_densities = ['640', '480', '320', '240', '160', '120']
 
+all_screen_densities = ['0'] + screen_densities
+
 
 def dpi_to_px(density):
     return (int(density) * 48) / 160
@@ -57,7 +59,7 @@ def px_to_dpi(px):
 
 
 def get_icon_dir(repodir, density):
-    if density is None:
+    if density == '0':
         return os.path.join(repodir, "icons")
     return os.path.join(repodir, "icons-%s" % density)
 
@@ -65,7 +67,11 @@ def get_icon_dir(repodir, density):
 def get_icon_dirs(repodir):
     for density in screen_densities:
         yield get_icon_dir(repodir, density)
-    yield os.path.join(repodir, "icons")
+
+
+def get_all_icon_dirs(repodir):
+    for density in all_screen_densities:
+        yield get_icon_dir(repodir, density)
 
 
 def update_wiki(apps, sortedids, apks):
@@ -401,8 +407,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
     cachechanged = False
 
-    icon_dirs = get_icon_dirs(repodir)
-    for icon_dir in icon_dirs:
+    for icon_dir in get_all_icon_dirs(repodir):
         if os.path.exists(icon_dir):
             if options.clean:
                 shutil.rmtree(icon_dir)
@@ -585,7 +590,7 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             if '-1' in thisinfo['icons_src']:
                 iconsrc = thisinfo['icons_src']['-1']
                 iconpath = os.path.join(
-                    get_icon_dir(repodir, None), iconfilename)
+                    get_icon_dir(repodir, '0'), iconfilename)
                 with open(iconpath, 'wb') as f:
                     f.write(apk.read(iconsrc))
                 try:
@@ -660,8 +665,9 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             # Copy from icons-mdpi to icons since mdpi is the baseline density
             baseline = os.path.join(get_icon_dir(repodir, '160'), iconfilename)
             if os.path.isfile(baseline):
+                thisinfo['icons']['0'] = iconfilename
                 shutil.copyfile(baseline,
-                                os.path.join(get_icon_dir(repodir, None), iconfilename))
+                                os.path.join(get_icon_dir(repodir, '0'), iconfilename))
 
             # Record in known apks, getting the added date at the same time..
             added = knownapks.recordapk(thisinfo['apkname'], thisinfo['id'])
@@ -1008,6 +1014,12 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
                 logging.info("Moving " + apk['apkname'] + " to archive")
                 move_file(repodir, archivedir, apk['apkname'], False)
                 move_file(repodir, archivedir, apk['apkname'] + '.asc', True)
+                for density in all_screen_densities:
+                    repo_icon_dir = get_icon_dir(repodir, density)
+                    archive_icon_dir = get_icon_dir(archivedir, density)
+                    if density not in apk['icons']:
+                        continue
+                    move_file(repo_icon_dir, archive_icon_dir, apk['icons'][density], True)
                 if 'srcname' in apk:
                     move_file(repodir, archivedir, apk['srcname'], False)
                 archapks.append(apk)
@@ -1020,6 +1032,12 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
                 logging.info("Moving " + apk['apkname'] + " from archive")
                 move_file(archivedir, repodir, apk['apkname'], False)
                 move_file(archivedir, repodir, apk['apkname'] + '.asc', True)
+                for density in all_screen_densities:
+                    repo_icon_dir = get_icon_dir(repodir, density)
+                    archive_icon_dir = get_icon_dir(archivedir, density)
+                    if density not in apk['icons']:
+                        continue
+                    move_file(archive_icon_dir, repo_icon_dir, apk['icons'][density], True)
                 if 'srcname' in apk:
                     move_file(archivedir, repodir, apk['srcname'], False)
                 archapks.remove(apk)
