@@ -291,18 +291,28 @@ def delete_disabled_builds(apps, apkcache, repodirs):
     """
     for appid, app in apps.iteritems():
         for build in app['builds']:
-            if build['disable']:
-                apkfilename = appid + '_' + str(build['vercode']) + '.apk'
-                for repodir in repodirs:
-                    apkpath = os.path.join(repodir, apkfilename)
-                    ascpath = apkpath + ".asc"
-                    srcpath = os.path.join(repodir, apkfilename[:-4] + "_src.tar.gz")
-                    for name in [apkpath, srcpath, ascpath]:
-                        if os.path.exists(name):
-                            logging.warn("Deleting disabled build output " + apkfilename)
-                            os.remove(name)
-                if apkfilename in apkcache:
-                    del apkcache[apkfilename]
+            if not build['disable']:
+                continue
+            apkfilename = appid + '_' + str(build['vercode']) + '.apk'
+            iconfilename = "%s.%s.png" % (
+                appid,
+                build['vercode'])
+            for repodir in repodirs:
+                files = [
+                    os.path.join(repodir, apkfilename),
+                    os.path.join(repodir, apkfilename + '.asc'),
+                    os.path.join(repodir, apkfilename[:-4] + "_src.tar.gz"),
+                ]
+                for density in all_screen_densities:
+                    repo_dir = get_icon_dir(repodir, density)
+                    files.append(os.path.join(repo_dir, iconfilename))
+
+                for f in files:
+                    if os.path.exists(f):
+                        logging.info("Deleting disabled build output " + f)
+                        os.remove(f)
+            if apkfilename in apkcache:
+                del apkcache[apkfilename]
 
 
 def resize_icon(iconpath, density):
