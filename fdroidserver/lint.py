@@ -55,8 +55,8 @@ http_url_shorteners = [
 http_checks = https_enforcings + http_url_shorteners + [
     (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
      "Appending .git is not necessary"),
-    (re.compile(r'(.*/blob/master/|.*raw\.github.com/[^/]*/[^/]*/master/|.*/raw/master/)'),
-     "Use /HEAD/ instead of /master/ to point at a file in the default branch"),
+    (re.compile(r'.*://[^/]*(github|gitlab|bitbucket|rawgit)[^/]*/([^/]+/){1,3}master'),
+     "Use /HEAD instead of /master to point at a file in the default branch"),
 ]
 
 regex_checks = {
