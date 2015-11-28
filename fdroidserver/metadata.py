@@ -519,7 +519,9 @@ def read_metadata(xref=True):
                                + glob.glob(os.path.join('metadata', '*.json'))
                                + glob.glob(os.path.join('metadata', '*.xml'))
                                + glob.glob(os.path.join('metadata', '*.yaml'))):
-        appid, appinfo = parse_metadata(apps, metadatapath)
+        appid, appinfo = parse_metadata(metadatapath)
+        if appid in apps:
+            raise MetaDataException("Found multiple metadata files for " + appid)
         check_metadata(appinfo)
         apps[appid] = appinfo
 
@@ -595,15 +597,11 @@ def split_list_values(s):
     return [v for v in l if v]
 
 
-def get_default_app_info_list(apps, metadatapath=None):
+def get_default_app_info(metadatapath=None):
     if metadatapath is None:
         appid = None
     else:
         appid, _ = common.get_extension(os.path.basename(metadatapath))
-    if appid in apps:
-        logging.critical("'%s' is a duplicate! '%s' is already provided by '%s'"
-                         % (metadatapath, appid, apps[appid]['metadatapath']))
-        sys.exit(1)
 
     thisinfo = {}
     thisinfo.update(app_defaults)
@@ -750,7 +748,7 @@ def _decode_dict(data):
     return rv
 
 
-def parse_metadata(apps, metadatapath):
+def parse_metadata(metadatapath):
     _, ext = common.get_extension(metadatapath)
     accepted = common.config['accepted_formats']
     if ext not in accepted:
@@ -760,21 +758,21 @@ def parse_metadata(apps, metadatapath):
         sys.exit(1)
 
     if ext == 'txt':
-        return parse_txt_metadata(apps, metadatapath)
+        return parse_txt_metadata(metadatapath)
     if ext == 'json':
-        return parse_json_metadata(apps, metadatapath)
+        return parse_json_metadata(metadatapath)
     if ext == 'xml':
-        return parse_xml_metadata(apps, metadatapath)
+        return parse_xml_metadata(metadatapath)
     if ext == 'yaml':
-        return parse_yaml_metadata(apps, metadatapath)
+        return parse_yaml_metadata(metadatapath)
 
     logging.critical('Unknown metadata format: ' + metadatapath)
     sys.exit(1)
 
 
-def parse_json_metadata(apps, metadatapath):
+def parse_json_metadata(metadatapath):
 
-    appid, thisinfo = get_default_app_info_list(apps, metadatapath)
+    appid, thisinfo = get_default_app_info(metadatapath)
 
     # fdroid metadata is only strings and booleans, no floats or ints. And
     # json returns unicode, and fdroidserver still uses plain python strings
@@ -789,9 +787,9 @@ def parse_json_metadata(apps, metadatapath):
     return (appid, thisinfo)
 
 
-def parse_xml_metadata(apps, metadatapath):
+def parse_xml_metadata(metadatapath):
 
-    appid, thisinfo = get_default_app_info_list(apps, metadatapath)
+    appid, thisinfo = get_default_app_info(metadatapath)
 
     tree = ElementTree.ElementTree(file=metadatapath)
     root = tree.getroot()
@@ -839,9 +837,9 @@ def parse_xml_metadata(apps, metadatapath):
     return (appid, thisinfo)
 
 
-def parse_yaml_metadata(apps, metadatapath):
+def parse_yaml_metadata(metadatapath):
 
-    appid, thisinfo = get_default_app_info_list(apps, metadatapath)
+    appid, thisinfo = get_default_app_info(metadatapath)
 
     yamlinfo = yaml.load(open(metadatapath, 'r'), Loader=YamlLoader)
     thisinfo.update(yamlinfo)
@@ -850,7 +848,7 @@ def parse_yaml_metadata(apps, metadatapath):
     return (appid, thisinfo)
 
 
-def parse_txt_metadata(apps, metadatapath):
+def parse_txt_metadata(metadatapath):
 
     linedesc = None
 
@@ -923,7 +921,7 @@ def parse_txt_metadata(apps, metadatapath):
         thisinfo['comments'][key] = list(curcomments)
         del curcomments[:]
 
-    appid, thisinfo = get_default_app_info_list(apps, metadatapath)
+    appid, thisinfo = get_default_app_info(metadatapath)
     metafile = open(metadatapath, "r")
 
     mode = 0

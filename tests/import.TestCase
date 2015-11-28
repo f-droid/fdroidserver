@@ -30,8 +30,7 @@ class ImportTest(unittest.TestCase):
         fdroidserver.common.config['sdk_path'] = '/fake/path/to/android-sdk'
 
         url = 'https://gitlab.com/fdroid/fdroidclient'
-        apps = dict()
-        appid, app = fdroidserver.metadata.get_default_app_info_list(apps)
+        appid, app = fdroidserver.metadata.get_default_app_info()
         app['Update Check Mode'] = "Tags"
         root_dir, src_dir = import_proxy.get_metadata_from_url(app, url)
         self.assertEquals(app['Repo Type'], 'git')
