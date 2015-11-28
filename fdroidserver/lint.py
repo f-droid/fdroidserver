@@ -178,7 +178,7 @@ def check_useless_fields(app):
     if app['Update Check Name'] == app['id']:
         yield "Update Check Name is set to the known app id - it can be removed"
 
-filling_ucms = re.compile('^(Tags.*|RepoManifest.*)')
+filling_ucms = re.compile(r'^(Tags.*|RepoManifest.*)')
 
 
 def check_checkupdates_ran(app):
@@ -255,7 +255,7 @@ def check_duplicates(app):
         seenlines.add(l)
 
 
-desc_url = re.compile("[^[]\[([^ ]+)( |\]|$)")
+desc_url = re.compile(r'(^|[^[])\[([^ ]+)( |\]|$)')
 
 
 def check_mediawiki_links(app):
