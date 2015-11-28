@@ -53,41 +53,126 @@ class MetaDataException(Exception):
     def __str__(self):
         return self.value
 
-# In the order in which they are laid out on files
-app_defaults = OrderedDict([
-    ('Disabled', None),
-    ('AntiFeatures', []),
-    ('Provides', None),
-    ('Categories', ['None']),
-    ('License', 'Unknown'),
-    ('Web Site', ''),
-    ('Source Code', ''),
-    ('Issue Tracker', ''),
-    ('Changelog', ''),
-    ('Donate', None),
-    ('FlattrID', None),
-    ('Bitcoin', None),
-    ('Litecoin', None),
-    ('Name', None),
-    ('Auto Name', ''),
-    ('Summary', ''),
-    ('Description', []),
-    ('Requires Root', False),
-    ('Repo Type', ''),
-    ('Repo', ''),
-    ('Binaries', None),
-    ('Maintainer Notes', []),
-    ('Archive Policy', None),
-    ('Auto Update Mode', 'None'),
-    ('Update Check Mode', 'None'),
-    ('Update Check Ignore', None),
-    ('Vercode Operation', None),
-    ('Update Check Name', None),
-    ('Update Check Data', None),
-    ('Current Version', ''),
-    ('Current Version Code', '0'),
-    ('No Source Since', ''),
+app_fields = set([
+    'Disabled',
+    'AntiFeatures',
+    'Provides',
+    'Categories',
+    'License',
+    'Web Site',
+    'Source Code',
+    'Issue Tracker',
+    'Changelog',
+    'Donate',
+    'FlattrID',
+    'Bitcoin',
+    'Litecoin',
+    'Name',
+    'Auto Name',
+    'Summary',
+    'Description',
+    'Requires Root',
+    'Repo Type',
+    'Repo',
+    'Binaries',
+    'Maintainer Notes',
+    'Archive Policy',
+    'Auto Update Mode',
+    'Update Check Mode',
+    'Update Check Ignore',
+    'Vercode Operation',
+    'Update Check Name',
+    'Update Check Data',
+    'Current Version',
+    'Current Version Code',
+    'No Source Since',
+
+    'comments',  # For formats that don't do inline comments
+    'builds',    # For formats that do builds as a list
 ])
+
+
+class App():
+
+    def __init__(self):
+        self.Disabled = None
+        self.AntiFeatures = []
+        self.Provides = None
+        self.Categories = ['None']
+        self.License = 'Unknown'
+        self.WebSite = ''
+        self.SourceCode = ''
+        self.IssueTracker = ''
+        self.Changelog = ''
+        self.Donate = None
+        self.FlattrID = None
+        self.Bitcoin = None
+        self.Litecoin = None
+        self.Name = None
+        self.AutoName = ''
+        self.Summary = ''
+        self.Description = []
+        self.RequiresRoot = False
+        self.RepoType = ''
+        self.Repo = ''
+        self.Binaries = None
+        self.MaintainerNotes = []
+        self.ArchivePolicy = None
+        self.AutoUpdateMode = 'None'
+        self.UpdateCheckMode = 'None'
+        self.UpdateCheckIgnore = None
+        self.VercodeOperation = None
+        self.UpdateCheckName = None
+        self.UpdateCheckData = None
+        self.CurrentVersion = ''
+        self.CurrentVersionCode = '0'
+        self.NoSourceSince = ''
+
+        self.id = None
+        self.metadatapath = None
+        self.builds = []
+        self.comments = {}
+        self.added = None
+        self.lastupdated = None
+
+    @classmethod
+    def field_to_attr(cls, f):
+        return f.replace(' ', '')
+
+    @classmethod
+    def attr_to_field(cls, k):
+        if k in app_fields:
+            return k
+        f = re.sub(r'([a-z])([A-Z])', r'\1 \2', k)
+        return f
+
+    def field_dict(self):
+        return {App.attr_to_field(k): v for k, v in self.__dict__.iteritems()}
+
+    def get_field(self, f):
+        if f not in app_fields:
+            raise MetaDataException('Unrecognised app field: ' + f)
+        k = App.field_to_attr(f)
+        return getattr(self, k)
+
+    def set_field(self, f, v):
+        if f not in app_fields:
+            raise MetaDataException('Unrecognised app field: ' + f)
+        k = App.field_to_attr(f)
+        self.__dict__[k] = v
+
+    def append_field(self, f, v):
+        if f not in app_fields:
+            raise MetaDataException('Unrecognised app field: ' + f)
+        k = App.field_to_attr(f)
+        if k not in self.__dict__:
+            self.__dict__[k] = [v]
+        else:
+            self.__dict__[k].append(v)
+
+    def update_fields(self, d):
+        for f, v in d.iteritems():
+            self.set_field(f, v)
 
 
 # In the order in which they are laid out on files
@@ -238,13 +323,13 @@ valuetypes = {
 
 
 # Check an app's metadata information for integrity errors
-def check_metadata(info):
+def check_metadata(app):
     for v in valuetypes:
         for field in v.fields:
-            v.check(info[field], info['id'])
-        for build in info['builds']:
+            v.check(app.get_field(field), app.id)
+        for build in app.builds:
             for attr in v.attrs:
-                v.check(build[attr], info['id'])
+                v.check(build[attr], app.id)
 
 
 # Formatter for descriptions. Create an instance, and call parseline() with
@@ -519,11 +604,11 @@ def read_metadata(xref=True):
                                + glob.glob(os.path.join('metadata', '*.json'))
                                + glob.glob(os.path.join('metadata', '*.xml'))
                                + glob.glob(os.path.join('metadata', '*.yaml'))):
-        appid, appinfo = parse_metadata(metadatapath)
-        if appid in apps:
-            raise MetaDataException("Found multiple metadata files for " + appid)
-        check_metadata(appinfo)
-        apps[appid] = appinfo
+        app = parse_metadata(metadatapath)
+        if app.id in apps:
+            raise MetaDataException("Found multiple metadata files for " + app.id)
+        check_metadata(app)
+        apps[app.id] = app
 
     if xref:
         # Parse all descriptions at load time, just to ensure cross-referencing
@@ -535,7 +620,7 @@ def read_metadata(xref=True):
 
         for appid, app in apps.iteritems():
             try:
-                description_html(app['Description'], linkres)
+                description_html(app.Description, linkres)
             except MetaDataException, e:
                 raise MetaDataException("Problem with description of " + appid +
                                         " - " + str(e))
@@ -555,7 +640,7 @@ def metafieldtype(name):
         return 'buildv2'
     if name == 'Use Built':
         return 'obsolete'
-    if name not in app_defaults:
+    if name not in app_fields:
         return 'unknown'
     return 'string'
 
@@ -603,44 +688,38 @@ def get_default_app_info(metadatapath=None):
     else:
         appid, _ = common.get_extension(os.path.basename(metadatapath))
 
-    thisinfo = {}
-    thisinfo.update(app_defaults)
-    thisinfo['metadatapath'] = metadatapath
+    app = App()
+    app.metadatapath = metadatapath
     if appid is not None:
-        thisinfo['id'] = appid
+        app.id = appid
 
-    # General defaults...
-    thisinfo['builds'] = []
-    thisinfo['comments'] = dict()
-
-    return appid, thisinfo
+    return app
 
 
 def sorted_builds(builds):
     return sorted(builds, key=lambda build: int(build['vercode']))
 
 
-def post_metadata_parse(thisinfo):
+def post_metadata_parse(app):
 
-    supported_metadata = app_defaults.keys() + ['comments', 'builds', 'id', 'metadatapath']
-    for k, v in thisinfo.iteritems():
-        if k not in supported_metadata:
-            raise MetaDataException("Unrecognised metadata: {0}: {1}"
-                                    .format(k, v))
+    for f in app_fields:
+        v = app.get_field(f)
         if type(v) in (float, int):
-            thisinfo[k] = str(v)
+            app.set_field(f, str(v))
 
     # convert to the odd internal format
-    for k in ('Description', 'Maintainer Notes'):
-        if isinstance(thisinfo[k], basestring):
-            text = thisinfo[k].rstrip().lstrip()
-            thisinfo[k] = text.split('\n')
+    for f in ('Description', 'Maintainer Notes'):
+        v = app.get_field(f)
+        if isinstance(v, basestring):
+            text = v.rstrip().lstrip()
+            app.set_field(f, text.split('\n'))
 
     supported_flags = (flag_defaults.keys()
-                       + ['vercode', 'version', 'versionCode', 'versionName'])
+                       + ['vercode', 'version', 'versionCode', 'versionName',
+                          'type', 'ndk_path'])
     esc_newlines = re.compile('\\\\( |\\n)')
 
-    for build in thisinfo['builds']:
+    for build in app.builds:
         for k, v in build.items():
             if k not in supported_flags:
                 raise MetaDataException("Unrecognised build flag: {0}={1}"
@@ -683,13 +762,13 @@ def post_metadata_parse(thisinfo):
                     if isinstance(v, bool):
                         build[k] = 'yes' if v else 'no'
 
-    if not thisinfo['Description']:
-        thisinfo['Description'].append('No description available')
+    if not app.Description:
+        app.Description = ['No description available']
 
-    for build in thisinfo['builds']:
+    for build in app.builds:
         fill_build_defaults(build)
 
-    thisinfo['builds'] = sorted_builds(thisinfo['builds'])
+    app.builds = sorted_builds(app.builds)
 
 
 # Parse metadata for a single application.
@@ -772,7 +851,7 @@ def parse_metadata(metadatapath):
 
 def parse_json_metadata(metadatapath):
 
-    appid, thisinfo = get_default_app_info(metadatapath)
+    app = get_default_app_info(metadatapath)
 
     # fdroid metadata is only strings and booleans, no floats or ints. And
     # json returns unicode, and fdroidserver still uses plain python strings
@@ -781,15 +860,15 @@ def parse_json_metadata(metadatapath):
                          object_hook=_decode_dict,
                          parse_int=lambda s: s,
                          parse_float=lambda s: s)
-    thisinfo.update(jsoninfo)
-    post_metadata_parse(thisinfo)
+    app.update_fields(jsoninfo)
+    post_metadata_parse(app)
 
-    return (appid, thisinfo)
+    return app
 
 
 def parse_xml_metadata(metadatapath):
 
-    appid, thisinfo = get_default_app_info(metadatapath)
+    app = get_default_app_info(metadatapath)
 
     tree = ElementTree.ElementTree(file=metadatapath)
     root = tree.getroot()
@@ -798,54 +877,46 @@ def parse_xml_metadata(metadatapath):
         logging.critical(metadatapath + ' does not have root as <resources></resources>!')
         sys.exit(1)
 
-    supported_metadata = app_defaults.keys()
     for child in root:
         if child.tag != 'builds':
             # builds does not have name="" attrib
             name = child.attrib['name']
-            if name not in supported_metadata:
-                raise MetaDataException("Unrecognised metadata: <"
-                                        + child.tag + ' name="' + name + '">'
-                                        + child.text
-                                        + "</" + child.tag + '>')
 
         if child.tag == 'string':
-            thisinfo[name] = child.text
+            app.set_field(name, child.text)
         elif child.tag == 'string-array':
             items = []
             for item in child:
                 items.append(item.text)
-            thisinfo[name] = items
+            app.set_field(name, items)
         elif child.tag == 'builds':
-            builds = []
             for build in child:
                 builddict = dict()
                 for key in build:
                     builddict[key.tag] = key.text
-                builds.append(builddict)
-            thisinfo['builds'] = builds
+                app.builds.append(builddict)
 
     # TODO handle this using <xsd:element type="xsd:boolean> in a schema
-    if not isinstance(thisinfo['Requires Root'], bool):
-        if thisinfo['Requires Root'] == 'true':
-            thisinfo['Requires Root'] = True
+    if not isinstance(app.RequiresRoot, bool):
+        if app.RequiresRoot == 'true':
+            app.RequiresRoot = True
         else:
-            thisinfo['Requires Root'] = False
+            app.RequiresRoot = False
 
-    post_metadata_parse(thisinfo)
+    post_metadata_parse(app)
 
-    return (appid, thisinfo)
+    return app
 
 
 def parse_yaml_metadata(metadatapath):
 
-    appid, thisinfo = get_default_app_info(metadatapath)
+    app = get_default_app_info(metadatapath)
 
     yamlinfo = yaml.load(open(metadatapath, 'r'), Loader=YamlLoader)
-    thisinfo.update(yamlinfo)
-    post_metadata_parse(thisinfo)
+    app.update_fields(yamlinfo)
+    post_metadata_parse(app)
 
-    return (appid, thisinfo)
+    return app
 
 
 def parse_txt_metadata(metadatapath):
@@ -918,10 +989,10 @@ def parse_txt_metadata(metadatapath):
     def add_comments(key):
         if not curcomments:
             return
-        thisinfo['comments'][key] = list(curcomments)
+        app.comments[key] = list(curcomments)
         del curcomments[:]
 
-    appid, thisinfo = get_default_app_info(metadatapath)
+    app = get_default_app_info(metadatapath)
     metafile = open(metadatapath, "r")
 
     mode = 0
@@ -942,7 +1013,7 @@ def parse_txt_metadata(metadatapath):
                     raise MetaDataException("No commit specified for {0} in {1}"
                                             .format(curbuild['version'], linedesc))
 
-                thisinfo['builds'].append(curbuild)
+                app.builds.append(curbuild)
                 add_comments('build:' + curbuild['vercode'])
                 mode = 0
             else:
@@ -978,21 +1049,20 @@ def parse_txt_metadata(metadatapath):
                 add_comments(field)
             if fieldtype == 'multiline':
                 mode = 1
-                thisinfo[field] = []
                 if value:
                     raise MetaDataException("Unexpected text on same line as " + field + " in " + linedesc)
             elif fieldtype == 'string':
-                thisinfo[field] = value
+                app.set_field(field, value)
             elif fieldtype == 'list':
-                thisinfo[field] = split_list_values(value)
+                app.set_field(field, split_list_values(value))
             elif fieldtype == 'build':
                 if value.endswith("\\"):
                     mode = 2
                     buildlines = [value[:-1]]
                 else:
                     curbuild = parse_buildline([value])
-                    thisinfo['builds'].append(curbuild)
-                    add_comments('build:' + thisinfo['builds'][-1]['vercode'])
+                    app.builds.append(curbuild)
+                    add_comments('build:' + app.builds[-1]['vercode'])
             elif fieldtype == 'buildv2':
                 curbuild = {}
                 vv = value.split(',')
@@ -1015,15 +1085,15 @@ def parse_txt_metadata(metadatapath):
             if line == '.':
                 mode = 0
             else:
-                thisinfo[field].append(line)
+                app.append_field(field, line)
         elif mode == 2:     # Line continuation mode in Build Version
             if line.endswith("\\"):
                 buildlines.append(line[:-1])
             else:
                 buildlines.append(line)
                 curbuild = parse_buildline(buildlines)
-                thisinfo['builds'].append(curbuild)
-                add_comments('build:' + thisinfo['builds'][-1]['vercode'])
+                app.builds.append(curbuild)
+                add_comments('build:' + app.builds[-1]['vercode'])
                 mode = 0
     add_comments(None)
 
@@ -1035,34 +1105,34 @@ def parse_txt_metadata(metadatapath):
     elif mode == 3:
         raise MetaDataException("Unterminated build in " + metafile.name)
 
-    post_metadata_parse(thisinfo)
+    post_metadata_parse(app)
 
-    return (appid, thisinfo)
+    return app
 
 
 def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
 
     def w_comments(key):
-        if key not in app['comments']:
+        if key not in app.comments:
             return
-        for line in app['comments'][key]:
+        for line in app.comments[key]:
             w_comment(line)
 
     def w_field_always(field, value=None):
         if value is None:
-            value = app[field]
+            value = app.get_field(field)
         w_comments(field)
         w_field(field, value)
 
     def w_field_nonempty(field, value=None):
         if value is None:
-            value = app[field]
+            value = app.get_field(field)
         w_comments(field)
         if value:
             w_field(field, value)
 
     w_field_nonempty('Disabled')
-    if app['AntiFeatures']:
+    if app.AntiFeatures:
         w_field_always('AntiFeatures')
     w_field_nonempty('Provides')
     w_field_always('Categories')
@@ -1079,19 +1149,19 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
     w_field_nonempty('Name')
     w_field_nonempty('Auto Name')
     w_field_always('Summary')
-    w_field_always('Description', description_txt(app['Description']))
+    w_field_always('Description', description_txt(app.Description))
     mf.write('\n')
-    if app['Requires Root']:
+    if app.RequiresRoot:
         w_field_always('Requires Root', 'yes')
         mf.write('\n')
-    if app['Repo Type']:
+    if app.RepoType:
         w_field_always('Repo Type')
         w_field_always('Repo')
-        if app['Binaries']:
+        if app.Binaries:
             w_field_always('Binaries')
         mf.write('\n')
 
-    for build in sorted_builds(app['builds']):
+    for build in sorted_builds(app.builds):
 
         if build['version'] == "Ignore":
             continue
@@ -1100,8 +1170,8 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
         w_build(build)
         mf.write('\n')
 
-    if app['Maintainer Notes']:
-        w_field_always('Maintainer Notes', app['Maintainer Notes'])
+    if app.MaintainerNotes:
+        w_field_always('Maintainer Notes', app.MaintainerNotes)
         mf.write('\n')
 
     w_field_nonempty('Archive Policy')
@@ -1111,10 +1181,10 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
     w_field_nonempty('Vercode Operation')
     w_field_nonempty('Update Check Name')
     w_field_nonempty('Update Check Data')
-    if app['Current Version']:
+    if app.CurrentVersion:
         w_field_always('Current Version')
         w_field_always('Current Version Code')
-    if app['No Source Since']:
+    if app.NoSourceSince:
         mf.write('\n')
         w_field_always('No Source Since')
     w_comments(None)

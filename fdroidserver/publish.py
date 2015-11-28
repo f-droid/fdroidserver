@@ -117,7 +117,7 @@ def main():
             sys.exit(1)
         app = allapps[appid]
 
-        if app.get('Binaries', None):
+        if app.Binaries is not None:
 
             # It's an app where we build from source, and verify the apk
             # contents against a developer's binary, and then publish their

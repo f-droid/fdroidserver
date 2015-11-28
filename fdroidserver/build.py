@@ -320,11 +320,11 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         ftp.mkdir('metadata')
         ftp.mkdir('srclibs')
         ftp.chdir('metadata')
-        ftp.put(os.path.join('metadata', app['id'] + '.txt'),
-                app['id'] + '.txt')
+        ftp.put(os.path.join('metadata', app.id + '.txt'),
+                app.id + '.txt')
         # And patches if there are any...
-        if os.path.exists(os.path.join('metadata', app['id'])):
-            send_dir(os.path.join('metadata', app['id']))
+        if os.path.exists(os.path.join('metadata', app.id)):
+            send_dir(os.path.join('metadata', app.id))
 
         ftp.chdir(homedir)
         # Create the build directory...
@@ -375,7 +375,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         # (no need if it's a srclib)
         if (not basesrclib) and os.path.exists(build_dir):
             ftp.chdir(homedir + '/build')
-            fv = '.fdroidvcs-' + app['id']
+            fv = '.fdroidvcs-' + app.id
             ftp.put(os.path.join('build', fv), fv)
             send_dir(build_dir)
 
@@ -389,7 +389,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             cmdline += ' --force --test'
         if options.verbose:
             cmdline += ' --verbose'
-        cmdline += " %s:%s" % (app['id'], thisbuild['vercode'])
+        cmdline += " %s:%s" % (app.id, thisbuild['vercode'])
         chan.exec_command('bash -c ". ~/.bsenv && ' + cmdline + '"')
         output = ''
         while not chan.exit_status_ready():
@@ -406,7 +406,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         if returncode != 0:
             raise BuildException(
                 "Build.py failed on server for {0}:{1}".format(
-                    app['id'], thisbuild['version']), output)
+                    app.id, thisbuild['version']), output)
 
         # Retrieve the built files...
         logging.info("Retrieving build output...")
@@ -423,7 +423,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         except:
             raise BuildException(
                 "Build failed for %s:%s - missing output files".format(
-                    app['id'], thisbuild['version']), output)
+                    app.id, thisbuild['version']), output)
         ftp.close()
 
     finally:
@@ -543,7 +543,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     if p is not None and p.returncode != 0:
         raise BuildException("Error cleaning %s:%s" %
-                             (app['id'], thisbuild['version']), p.output)
+                             (app.id, thisbuild['version']), p.output)
 
     for root, dirs, files in os.walk(build_dir):
 
@@ -612,7 +612,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         if p.returncode != 0:
             raise BuildException("Error running build command for %s:%s" %
-                                 (app['id'], thisbuild['version']), p.output)
+                                 (app.id, thisbuild['version']), p.output)
 
     # Build native stuff if required...
     if thisbuild['buildjni'] and thisbuild['buildjni'] != ['no']:
@@ -640,7 +640,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 del manifest_text
             p = FDroidPopen(cmd, cwd=os.path.join(root_dir, d))
             if p.returncode != 0:
-                raise BuildException("NDK build failed for %s:%s" % (app['id'], thisbuild['version']), p.output)
+                raise BuildException("NDK build failed for %s:%s" % (app.id, thisbuild['version']), p.output)
 
     p = None
     # Build the release...
@@ -702,7 +702,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             raise BuildException("Distribute build failed")
 
         cid = bconfig.get('app', 'package.domain') + '.' + bconfig.get('app', 'package.name')
-        if cid != app['id']:
+        if cid != app.id:
             raise BuildException("Package ID mismatch between metadata and spec")
 
         orientation = bconfig.get('app', 'orientation', 'landscape')
@@ -712,7 +712,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         cmd = ['./build.py'
                '--dir', root_dir,
                '--name', bconfig.get('app', 'title'),
-               '--package', app['id'],
+               '--package', app.id,
                '--version', bconfig.get('app', 'version'),
                '--orientation', orientation
                ]
@@ -759,8 +759,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         bindir = os.path.join(root_dir, 'bin')
 
     if p is not None and p.returncode != 0:
-        raise BuildException("Build failed for %s:%s" % (app['id'], thisbuild['version']), p.output)
-    logging.info("Successfully built version " + thisbuild['version'] + ' of ' + app['id'])
+        raise BuildException("Build failed for %s:%s" % (app.id, thisbuild['version']), p.output)
+    logging.info("Successfully built version " + thisbuild['version'] + ' of ' + app.id)
 
     if thisbuild['type'] == 'maven':
         stdout_apk = '\n'.join([
@@ -860,8 +860,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         raise BuildException("Could not find version information in build in output")
     if not foundid:
         raise BuildException("Could not find package ID in output")
-    if foundid != app['id']:
-        raise BuildException("Wrong package ID - build " + foundid + " but expected " + app['id'])
+    if foundid != app.id:
+        raise BuildException("Wrong package ID - build " + foundid + " but expected " + app.id)
 
     # Some apps (e.g. Timeriffic) have had the bonkers idea of
     # including the entire changelog in the version number. Remove
@@ -941,7 +941,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
         return False
 
     logging.info("Building version %s (%s) of %s" % (
-        thisbuild['version'], thisbuild['vercode'], app['id']))
+        thisbuild['version'], thisbuild['vercode'], app.id))
 
     if server:
         # When using server mode, still keep a local cache of the repo, by
@@ -1051,7 +1051,7 @@ def main():
 
     apps = common.read_app_args(options.appid, allapps, True)
     for appid, app in apps.items():
-        if (app['Disabled'] and not options.force) or not app['Repo Type'] or not app['builds']:
+        if (app.Disabled and not options.force) or not app.RepoType or not app.builds:
             del apps[appid]
 
     if not apps:
@@ -1059,10 +1059,10 @@ def main():
 
     if options.latest:
         for app in apps.itervalues():
-            for build in reversed(app['builds']):
+            for build in reversed(app.builds):
                 if build['disable'] and not options.force:
                     continue
-                app['builds'] = [build]
+                app.builds = [build]
                 break
 
     if options.wiki:
@@ -1078,7 +1078,7 @@ def main():
 
         first = True
 
-        for thisbuild in app['builds']:
+        for thisbuild in app.builds:
             wikilog = None
             try:
 
@@ -1086,15 +1086,15 @@ def main():
                 # the source repo. We can reuse it on subsequent builds, if
                 # there are any.
                 if first:
-                    if app['Repo Type'] == 'srclib':
-                        build_dir = os.path.join('build', 'srclib', app['Repo'])
+                    if app.RepoType == 'srclib':
+                        build_dir = os.path.join('build', 'srclib', app.Repo)
                     else:
                         build_dir = os.path.join('build', appid)
 
                     # Set up vcs interface and make sure we have the latest code...
                     logging.debug("Getting {0} vcs interface for {1}"
-                                  .format(app['Repo Type'], app['Repo']))
-                    vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
+                                  .format(app.RepoType, app.Repo))
+                    vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
 
                     first = False
 
@@ -1105,17 +1105,17 @@ def main():
                             options.server, options.force,
                             options.onserver, options.refresh):
 
-                    if app.get('Binaries', None):
+                    if app.Binaries is not None:
                         # This is an app where we build from source, and
                         # verify the apk contents against a developer's
                         # binary. We get that binary now, and save it
                         # alongside our built one in the 'unsigend'
                         # directory.
-                        url = app['Binaries']
+                        url = app.Binaries
                         url = url.replace('%v', thisbuild['version'])
                         url = url.replace('%c', str(thisbuild['vercode']))
                         logging.info("...retrieving " + url)
-                        of = "{0}_{1}.apk.binary".format(app['id'], thisbuild['vercode'])
+                        of = "{0}_{1}.apk.binary".format(app.id, thisbuild['vercode'])
                         of = os.path.join(output_dir, of)
                         net.download_file(url, local_filename=of)
 
@@ -1159,7 +1159,7 @@ def main():
                     logging.error("Error while attempting to publish build log")
 
     for app in build_succeeded:
-        logging.info("success: %s" % (app['id']))
+        logging.info("success: %s" % (app.id))
 
     if not options.verbose:
         for fa in failed_apps:

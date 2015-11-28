@@ -79,20 +79,20 @@ def get_metadata_from_url(app, url):
 
     # Figure out what kind of project it is...
     projecttype = None
-    app['Web Site'] = url  # by default, we might override it
+    app.WebSite = url  # by default, we might override it
     if url.startswith('git://'):
         projecttype = 'git'
         repo = url
         repotype = 'git'
-        app['Source Code'] = ""
-        app['Web Site'] = ""
+        app.SourceCode = ""
+        app.WebSite = ""
     elif url.startswith('https://github.com'):
         projecttype = 'github'
         repo = url
         repotype = 'git'
-        app['Source Code'] = url
-        app['Issue Tracker'] = url + '/issues'
-        app['Web Site'] = ""
+        app.SourceCode = url
+        app.IssueTracker = url + '/issues'
+        app.WebSite = ""
     elif url.startswith('https://gitlab.com/'):
         projecttype = 'gitlab'
         # git can be fussy with gitlab URLs unless they end in .git
@@ -101,16 +101,16 @@ def get_metadata_from_url(app, url):
         else:
             repo = url + '.git'
         repotype = 'git'
-        app['Source Code'] = url + '/tree/HEAD'
-        app['Issue Tracker'] = url + '/issues'
+        app.SourceCode = url + '/tree/HEAD'
+        app.IssueTracker = url + '/issues'
     elif url.startswith('https://bitbucket.org/'):
         if url.endswith('/'):
             url = url[:-1]
         projecttype = 'bitbucket'
-        app['Source Code'] = url + '/src'
-        app['Issue Tracker'] = url + '/issues'
+        app.SourceCode = url + '/src'
+        app.IssueTracker = url + '/issues'
         # Figure out the repo type and adddress...
-        repotype, repo = getrepofrompage(app['Source Code'])
+        repotype, repo = getrepofrompage(app.SourceCode)
         if not repotype:
             logging.error("Unable to determine vcs type. " + repo)
             sys.exit(1)
@@ -139,8 +139,8 @@ def get_metadata_from_url(app, url):
     vcs.gotorevision(options.rev)
     root_dir = get_subdir(build_dir)
 
-    app['Repo Type'] = repotype
-    app['Repo'] = repo
+    app.RepoType = repotype
+    app.Repo = repo
 
     return root_dir, build_dir
 
@@ -175,8 +175,8 @@ def main():
 
     apps = metadata.read_metadata()
     package, app = metadata.get_default_app_info()
-    app['id'] = None
-    app['Update Check Mode'] = "Tags"
+    app.id = None
+    app.UpdateCheckMode = "Tags"
 
     root_dir = None
     build_dir = None
@@ -185,7 +185,7 @@ def main():
         root_dir, build_dir = get_metadata_from_url(app, options.url)
     elif os.path.isdir('.git'):
         if options.url:
-            app['Web Site'] = options.url
+            app.WebSite = options.url
         root_dir = get_subdir(os.getcwd())
     else:
         logging.error("Specify project url.")
@@ -238,7 +238,7 @@ def main():
             continue
         build[flag] = value
 
-    app['builds'].append(build)
+    app.builds.append(build)
 
     # Keep the repo directory to save bandwidth...
     if not os.path.exists('build'):
@@ -246,7 +246,7 @@ def main():
     if build_dir is not None:
         shutil.move(build_dir, os.path.join('build', package))
     with open('build/.fdroidvcs-' + package, 'w') as f:
-        f.write(app['Repo Type'] + ' ' + app['Repo'])
+        f.write(app.RepoType + ' ' + app.Repo)
 
     metadatapath = os.path.join('metadata', package + '.txt')
     with open(metadatapath, 'w') as f:

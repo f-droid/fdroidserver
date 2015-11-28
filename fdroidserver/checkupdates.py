@@ -43,10 +43,10 @@ def check_http(app):
 
     try:
 
-        if 'Update Check Data' not in app:
+        if not app.UpdateCheckData:
             raise FDroidException('Missing Update Check Data')
 
-        urlcode, codeex, urlver, verex = app['Update Check Data'].split('|')
+        urlcode, codeex, urlver, verex = app.UpdateCheckData.split('|')
 
         vercode = "99999999"
         if len(urlcode) > 0:
@@ -76,7 +76,7 @@ def check_http(app):
         return (version, vercode)
 
     except FDroidException:
-        msg = "Could not complete http check for app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
+        msg = "Could not complete http check for app {0} due to unknown error: {1}".format(app.id, traceback.format_exc())
         return (None, msg)
 
 
@@ -90,28 +90,28 @@ def check_tags(app, pattern):
 
     try:
 
-        if app['Repo Type'] == 'srclib':
-            build_dir = os.path.join('build', 'srclib', app['Repo'])
-            repotype = common.getsrclibvcs(app['Repo'])
+        if app.RepoType == 'srclib':
+            build_dir = os.path.join('build', 'srclib', app.Repo)
+            repotype = common.getsrclibvcs(app.Repo)
         else:
-            build_dir = os.path.join('build', app['id'])
-            repotype = app['Repo Type']
+            build_dir = os.path.join('build', app.id)
+            repotype = app.RepoType
 
         if repotype not in ('git', 'git-svn', 'hg', 'bzr'):
             return (None, 'Tags update mode only works for git, hg, bzr and git-svn repositories currently', None)
 
-        if repotype == 'git-svn' and ';' not in app['Repo']:
+        if repotype == 'git-svn' and ';' not in app.Repo:
             return (None, 'Tags update mode used in git-svn, but the repo was not set up with tags', None)
 
         # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
+        vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
 
         vcs.gotorevision(None)
 
         flavours = []
-        if len(app['builds']) > 0:
-            if app['builds'][-1]['gradle']:
-                flavours = app['builds'][-1]['gradle']
+        if len(app.builds) > 0:
+            if app.builds[-1]['gradle']:
+                flavours = app.builds[-1]['gradle']
 
         hpak = None
         htag = None
@@ -161,10 +161,10 @@ def check_tags(app, pattern):
         return (None, "Couldn't find any version information", None)
 
     except VCSException as vcse:
-        msg = "VCS error while scanning app {0}: {1}".format(app['id'], vcse)
+        msg = "VCS error while scanning app {0}: {1}".format(app.id, vcse)
         return (None, msg, None)
     except Exception:
-        msg = "Could not scan app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
+        msg = "Could not scan app {0} due to unknown error: {1}".format(app.id, traceback.format_exc())
         return (None, msg, None)
 
 
@@ -178,15 +178,15 @@ def check_repomanifest(app, branch=None):
 
     try:
 
-        if app['Repo Type'] == 'srclib':
-            build_dir = os.path.join('build', 'srclib', app['Repo'])
-            repotype = common.getsrclibvcs(app['Repo'])
+        if app.RepoType == 'srclib':
+            build_dir = os.path.join('build', 'srclib', app.Repo)
+            repotype = common.getsrclibvcs(app.Repo)
         else:
-            build_dir = os.path.join('build', app['id'])
-            repotype = app['Repo Type']
+            build_dir = os.path.join('build', app.id)
+            repotype = app.RepoType
 
         # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
+        vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
 
         if repotype == 'git':
             if branch:
@@ -200,9 +200,9 @@ def check_repomanifest(app, branch=None):
             vcs.gotorevision(None)
 
         flavours = []
-        if len(app['builds']) > 0:
-            if app['builds'][-1]['gradle']:
-                flavours = app['builds'][-1]['gradle']
+        if len(app.builds) > 0:
+            if app.builds[-1]['gradle']:
+                flavours = app.builds[-1]['gradle']
 
         hpak = None
         hver = None
@@ -229,38 +229,38 @@ def check_repomanifest(app, branch=None):
         return (None, "Couldn't find any version information")
 
     except VCSException as vcse:
-        msg = "VCS error while scanning app {0}: {1}".format(app['id'], vcse)
+        msg = "VCS error while scanning app {0}: {1}".format(app.id, vcse)
         return (None, msg)
     except Exception:
-        msg = "Could not scan app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
+        msg = "Could not scan app {0} due to unknown error: {1}".format(app.id, traceback.format_exc())
         return (None, msg)
 
 
 def check_repotrunk(app, branch=None):
 
     try:
-        if app['Repo Type'] == 'srclib':
-            build_dir = os.path.join('build', 'srclib', app['Repo'])
-            repotype = common.getsrclibvcs(app['Repo'])
+        if app.RepoType == 'srclib':
+            build_dir = os.path.join('build', 'srclib', app.Repo)
+            repotype = common.getsrclibvcs(app.Repo)
         else:
-            build_dir = os.path.join('build', app['id'])
-            repotype = app['Repo Type']
+            build_dir = os.path.join('build', app.id)
+            repotype = app.RepoType
 
         if repotype not in ('git-svn', ):
             return (None, 'RepoTrunk update mode only makes sense in git-svn repositories')
 
         # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
+        vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
 
         vcs.gotorevision(None)
 
         ref = vcs.getref()
         return (ref, ref)
     except VCSException as vcse:
-        msg = "VCS error while scanning app {0}: {1}".format(app['id'], vcse)
+        msg = "VCS error while scanning app {0}: {1}".format(app.id, vcse)
         return (None, msg)
     except Exception:
-        msg = "Could not scan app {0} due to unknown error: {1}".format(app['id'], traceback.format_exc())
+        msg = "Could not scan app {0} due to unknown error: {1}".format(app.id, traceback.format_exc())
         return (None, msg)
 
 
@@ -269,7 +269,7 @@ def check_repotrunk(app, branch=None):
 # the details of the current version.
 def check_gplay(app):
     time.sleep(15)
-    url = 'https://play.google.com/store/apps/details?id=' + app['id']
+    url = 'https://play.google.com/store/apps/details?id=' + app.id
     headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux i686; rv:18.0) Gecko/20100101 Firefox/18.0'}
     req = urllib2.Request(url, None, headers)
     try:
@@ -308,14 +308,14 @@ def dirs_with_manifest(startdir):
 # subdir relative to the build dir if found, None otherwise.
 def possible_subdirs(app):
 
-    if app['Repo Type'] == 'srclib':
-        build_dir = os.path.join('build', 'srclib', app['Repo'])
+    if app.RepoType == 'srclib':
+        build_dir = os.path.join('build', 'srclib', app.Repo)
     else:
-        build_dir = os.path.join('build', app['id'])
+        build_dir = os.path.join('build', app.id)
 
     flavours = []
-    if len(app['builds']) > 0:
-        build = app['builds'][-1]
+    if len(app.builds) > 0:
+        build = app.builds[-1]
         if build['gradle']:
             flavours = build['gradle']
 
@@ -330,24 +330,24 @@ def possible_subdirs(app):
 
 def fetch_autoname(app, tag):
 
-    if not app["Repo Type"] or app['Update Check Mode'] in ('None', 'Static'):
+    if not app.RepoType or app.UpdateCheckMode in ('None', 'Static'):
         return None
 
-    if app['Repo Type'] == 'srclib':
-        build_dir = os.path.join('build', 'srclib', app['Repo'])
+    if app.RepoType == 'srclib':
+        build_dir = os.path.join('build', 'srclib', app.Repo)
     else:
-        build_dir = os.path.join('build', app['id'])
+        build_dir = os.path.join('build', app.id)
 
     try:
-        vcs = common.getvcs(app["Repo Type"], app["Repo"], build_dir)
+        vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
         vcs.gotorevision(tag)
     except VCSException:
         return None
 
     flavours = []
-    if len(app['builds']) > 0:
-        if app['builds'][-1]['gradle']:
-            flavours = app['builds'][-1]['gradle']
+    if len(app.builds) > 0:
+        if app.builds[-1]['gradle']:
+            flavours = app.builds[-1]['gradle']
 
     logging.debug("...fetch auto name from " + build_dir)
     new_name = None
@@ -362,8 +362,8 @@ def fetch_autoname(app, tag):
     commitmsg = None
     if new_name:
         logging.debug("...got autoname '" + new_name + "'")
-        if new_name != app['Auto Name']:
-            app['Auto Name'] = new_name
+        if new_name != app.AutoName:
+            app.AutoName = new_name
             if not commitmsg:
                 commitmsg = "Set autoname of {0}".format(common.getappname(app))
     else:
@@ -382,7 +382,7 @@ def checkupdates_app(app, first=True):
     msg = None
     vercode = None
     noverok = False
-    mode = app['Update Check Mode']
+    mode = app.UpdateCheckMode
     if mode.startswith('Tags'):
         pattern = mode[5:] if len(mode) > 4 else None
         (version, vercode, tag) = check_tags(app, pattern)
@@ -408,9 +408,9 @@ def checkupdates_app(app, first=True):
         version = None
         msg = 'Invalid update check method'
 
-    if version and vercode and app['Vercode Operation']:
+    if version and vercode and app.VercodeOperation:
         oldvercode = str(int(vercode))
-        op = app['Vercode Operation'].replace("%c", oldvercode)
+        op = app.VercodeOperation.replace("%c", oldvercode)
         vercode = str(eval(op))
         logging.debug("Applied vercode operation: %s -> %s" % (oldvercode, vercode))
 
@@ -422,16 +422,16 @@ def checkupdates_app(app, first=True):
 
     updating = False
     if version is None:
-        logmsg = "...{0} : {1}".format(app['id'], msg)
+        logmsg = "...{0} : {1}".format(app.id, msg)
         if noverok:
             logging.info(logmsg)
         else:
             logging.warn(logmsg)
-    elif vercode == app['Current Version Code']:
+    elif vercode == app.CurrentVersionCode:
         logging.info("...up to date")
     else:
-        app['Current Version'] = version
-        app['Current Version Code'] = str(int(vercode))
+        app.CurrentVersion = version
+        app.CurrentVersionCode = str(int(vercode))
         updating = True
 
     commitmsg = fetch_autoname(app, tag)
@@ -443,7 +443,7 @@ def checkupdates_app(app, first=True):
         commitmsg = 'Update CV of %s to %s' % (name, ver)
 
     if options.auto:
-        mode = app['Auto Update Mode']
+        mode = app.AutoUpdateMode
         if mode in ('None', 'Static'):
             pass
         elif mode.startswith('Version '):
@@ -457,13 +457,13 @@ def checkupdates_app(app, first=True):
                 suffix = ''
             gotcur = False
             latest = None
-            for build in app['builds']:
-                if int(build['vercode']) >= int(app['Current Version Code']):
+            for build in app.builds:
+                if int(build['vercode']) >= int(app.CurrentVersionCode):
                     gotcur = True
                 if not latest or int(build['vercode']) > int(latest['vercode']):
                     latest = build
 
-            if int(latest['vercode']) > int(app['Current Version Code']):
+            if int(latest['vercode']) > int(app.CurrentVersionCode):
                 logging.info("Refusing to auto update, since the latest build is newer")
 
             if not gotcur:
@@ -471,21 +471,21 @@ def checkupdates_app(app, first=True):
                 if 'origlines' in newbuild:
                     del newbuild['origlines']
                 newbuild['disable'] = False
-                newbuild['vercode'] = app['Current Version Code']
-                newbuild['version'] = app['Current Version'] + suffix
+                newbuild['vercode'] = app.CurrentVersionCode
+                newbuild['version'] = app.CurrentVersion + suffix
                 logging.info("...auto-generating build for " + newbuild['version'])
                 commit = pattern.replace('%v', newbuild['version'])
                 commit = commit.replace('%c', newbuild['vercode'])
                 newbuild['commit'] = commit
-                app['builds'].append(newbuild)
+                app.builds.append(newbuild)
                 name = common.getappname(app)
                 ver = common.getcvname(app)
                 commitmsg = "Update %s to %s" % (name, ver)
         else:
-            logging.warn('Invalid auto update mode "' + mode + '" on ' + app['id'])
+            logging.warn('Invalid auto update mode "' + mode + '" on ' + app.id)
 
     if commitmsg:
-        metadatapath = os.path.join('metadata', app['id'] + '.txt')
+        metadatapath = os.path.join('metadata', app.id + '.txt')
         with open(metadatapath, 'w') as f:
             metadata.write_metadata('txt', f, app)
         if options.commit:
@@ -537,7 +537,7 @@ def main():
                 else:
                     logging.info("{0} encountered a problem: {1}".format(common.getappname(app), reason))
             if version is not None:
-                stored = app['Current Version']
+                stored = app.CurrentVersion
                 if not stored:
                     logging.info("{0} has no Current Version but has version {1} on the Play Store"
                                  .format(common.getappname(app), version))
@@ -555,7 +555,7 @@ def main():
 
     for appid, app in apps.iteritems():
 
-        if options.autoonly and app['Auto Update Mode'] in ('None', 'Static'):
+        if options.autoonly and app.AutoUpdateMode in ('None', 'Static'):
             logging.debug("Nothing to do for {0}...".format(appid))
             continue
 

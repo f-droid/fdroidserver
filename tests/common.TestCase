@@ -116,8 +116,8 @@ class CommonTest(unittest.TestCase):
         config['sdk_path'] = os.getenv('ANDROID_HOME')
         config['build_tools'] = 'FAKE_BUILD_TOOLS_VERSION'
         fdroidserver.common.config = config
-        app = dict()
-        app['id'] = 'org.fdroid.froid'
+        app = fdroidserver.metadata.App()
+        app.id = 'org.fdroid.froid'
         build = dict(fdroidserver.metadata.flag_defaults)
         build['commit'] = 'master'
         build['forceversion'] = True

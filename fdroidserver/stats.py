@@ -217,9 +217,9 @@ def main():
     logging.info("Processing repo types...")
     repotypes = Counter()
     for app in metaapps:
-        rtype = app['Repo Type'] or 'none'
+        rtype = app.RepoType or 'none'
         if rtype == 'srclib':
-            rtype = common.getsrclibvcs(app['Repo'])
+            rtype = common.getsrclibvcs(app.Repo)
         repotypes[rtype] += 1
     with open(os.path.join(statsdir, 'repotypes.txt'), 'w') as f:
         for rtype, count in repotypes.most_common():
@@ -229,7 +229,7 @@ def main():
     logging.info("Processing update check modes...")
     ucms = Counter()
     for app in metaapps:
-        checkmode = app['Update Check Mode']
+        checkmode = app.UpdateCheckMode
         if checkmode.startswith('RepoManifest/'):
             checkmode = checkmode[:12]
         if checkmode.startswith('Tags '):
@@ -242,7 +242,7 @@ def main():
     logging.info("Processing categories...")
     ctgs = Counter()
     for app in metaapps:
-        for category in app['Categories']:
+        for category in app.Categories:
             ctgs[category] += 1
     with open(os.path.join(statsdir, 'categories.txt'), 'w') as f:
         for category, count in ctgs.most_common():
@@ -251,9 +251,9 @@ def main():
     logging.info("Processing antifeatures...")
     afs = Counter()
     for app in metaapps:
-        if app['AntiFeatures'] is None:
+        if app.AntiFeatures is None:
             continue
-        for antifeature in app['AntiFeatures']:
+        for antifeature in app.AntiFeatures:
             afs[antifeature] += 1
     with open(os.path.join(statsdir, 'antifeatures.txt'), 'w') as f:
         for antifeature, count in afs.most_common():
@@ -263,7 +263,7 @@ def main():
     logging.info("Processing licenses...")
     licenses = Counter()
     for app in metaapps:
-        license = app['License']
+        license = app.License
         licenses[license] += 1
     with open(os.path.join(statsdir, 'licenses.txt'), 'w') as f:
         for license, count in licenses.most_common():

@@ -39,10 +39,15 @@ class MetadataTest(unittest.TestCase):
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
         for appid in ('org.smssecure.smssecure', 'org.adaway', 'net.osmand.plus', 'org.videolan.vlc'):
-            with open(os.path.join('metadata', appid + '.pickle'), 'r') as f:
+            app = apps[appid]
+            savepath = os.path.join('metadata', appid + '.pickle')
+            self.assertTrue(appid in apps)
+            with open(savepath, 'r') as f:
                 frompickle = pickle.load(f)
-            self.assertTrue(appid in apps.keys())
-            self.assertEquals(apps[appid], frompickle)
+            frommeta = app.field_dict()
+            self.assertEquals(frommeta, frompickle)
+            # with open(savepath, 'wb') as f:
+            #     pickle.dump(app, f)
 
 
 if __name__ == "__main__":

@@ -363,10 +363,10 @@ def read_app_args(args, allapps, allow_vercodes=False):
         vc = vercodes[appid]
         if not vc:
             continue
-        app['builds'] = [b for b in app['builds'] if b['vercode'] in vc]
-        if len(app['builds']) != len(vercodes[appid]):
+        app.builds = [b for b in app.builds if b['vercode'] in vc]
+        if len(app.builds) != len(vercodes[appid]):
             error = True
-            allvcs = [b['vercode'] for b in app['builds']]
+            allvcs = [b['vercode'] for b in app.builds]
             for v in vercodes[appid]:
                 if v not in allvcs:
                     logging.critical("No such vercode %s for app %s" % (v, appid))
@@ -419,23 +419,23 @@ def apknameinfo(filename):
 
 
 def getapkname(app, build):
-    return "%s_%s.apk" % (app['id'], build['vercode'])
+    return "%s_%s.apk" % (app.id, build['vercode'])
 
 
 def getsrcname(app, build):
-    return "%s_%s_src.tar.gz" % (app['id'], build['vercode'])
+    return "%s_%s_src.tar.gz" % (app.id, build['vercode'])
 
 
 def getappname(app):
-    if app['Name']:
-        return app['Name']
-    if app['Auto Name']:
-        return app['Auto Name']
-    return app['id']
+    if app.Name:
+        return app.Name
+    if app.AutoName:
+        return app.AutoName
+    return app.id
 
 
 def getcvname(app):
-    return '%s (%s)' % (app['Current Version'], app['Current Version Code'])
+    return '%s (%s)' % (app.CurrentVersion, app.CurrentVersionCode)
 
 
 def getvcs(vcstype, remote, local):
@@ -1026,7 +1026,7 @@ psearch_g = re.compile(r'.*(packageName|applicationId) *=* *["\']([^"]+)["\'].*'
 def app_matches_packagename(app, package):
     if not package:
         return False
-    appid = app['Update Check Name'] or app['id']
+    appid = app.UpdateCheckName or app.id
     if appid is None or appid == "Ignore":
         return True
     return appid == package
@@ -1037,7 +1037,7 @@ def app_matches_packagename(app, package):
 # All values returned are strings.
 def parse_androidmanifests(paths, app):
 
-    ignoreversions = app['Update Check Ignore']
+    ignoreversions = app.UpdateCheckIgnore
     ignoresearch = re.compile(ignoreversions).search if ignoreversions else None
 
     if not paths:
@@ -1277,7 +1277,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running init command for %s:%s" %
-                                 (app['id'], build['version']), p.output)
+                                 (app.id, build['version']), p.output)
 
     # Apply patches if any
     if build['patch']:
@@ -1285,7 +1285,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         for patch in build['patch']:
             patch = patch.strip()
             logging.info("Applying " + patch)
-            patch_path = os.path.join('metadata', app['id'], patch)
+            patch_path = os.path.join('metadata', app.id, patch)
             p = FDroidPopen(['patch', '-p1', '-i', os.path.abspath(patch_path)], cwd=build_dir)
             if p.returncode != 0:
                 raise BuildException("Failed to apply patch %s" % patch_path)
@@ -1460,7 +1460,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running prebuild command for %s:%s" %
-                                 (app['id'], build['version']), p.output)
+                                 (app.id, build['version']), p.output)
 
     # Generate (or update) the ant build file, build.xml...
     if build['update'] and build['update'] != ['no'] and build['type'] == 'ant':

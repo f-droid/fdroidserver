@@ -274,10 +274,10 @@ def main():
 
     for appid, app in apps.iteritems():
 
-        if app['Disabled']:
+        if app.Disabled:
             logging.info("Skipping %s: disabled" % appid)
             continue
-        if not app['builds']:
+        if not app.builds:
             logging.info("Skipping %s: no builds specified" % appid)
             continue
 
@@ -285,15 +285,15 @@ def main():
 
         try:
 
-            if app['Repo Type'] == 'srclib':
-                build_dir = os.path.join('build', 'srclib', app['Repo'])
+            if app.RepoType == 'srclib':
+                build_dir = os.path.join('build', 'srclib', app.Repo)
             else:
                 build_dir = os.path.join('build', appid)
 
             # Set up vcs interface and make sure we have the latest code...
-            vcs = common.getvcs(app['Repo Type'], app['Repo'], build_dir)
+            vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
 
-            for thisbuild in app['builds']:
+            for thisbuild in app.builds:
 
                 if thisbuild['disable']:
                     logging.info("...skipping version %s - %s" % (

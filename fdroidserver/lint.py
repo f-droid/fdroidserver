@@ -106,7 +106,7 @@ regex_checks = {
 def check_regexes(app):
     for f, checks in regex_checks.iteritems():
         for m, r in checks:
-            v = app[f]
+            v = app.get_field(f)
             if type(v) == str:
                 if v is None:
                     continue
@@ -132,27 +132,27 @@ def get_lastbuild(builds):
 
 
 def check_ucm_tags(app):
-    lastbuild = get_lastbuild(app['builds'])
+    lastbuild = get_lastbuild(app.builds)
     if (lastbuild is not None
             and lastbuild['commit']
-            and app['Update Check Mode'] == 'RepoManifest'
+            and app.UpdateCheckMode == 'RepoManifest'
             and not lastbuild['commit'].startswith('unknown')
-            and lastbuild['vercode'] == app['Current Version Code']
+            and lastbuild['vercode'] == app.CurrentVersionCode
             and not lastbuild['forcevercode']
             and any(s in lastbuild['commit'] for s in '.,_-/')):
         yield "Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
-            lastbuild['commit'], app['Update Check Mode'])
+            lastbuild['commit'], app.UpdateCheckMode)
 
 
 def check_char_limits(app):
     limits = config['char_limits']
 
-    summ_chars = len(app['Summary'])
+    summ_chars = len(app.Summary)
     if summ_chars > limits['Summary']:
         yield "Summary of length %s is over the %i char limit" % (
             summ_chars, limits['Summary'])
 
-    desc_charcount = sum(len(l) for l in app['Description'])
+    desc_charcount = sum(len(l) for l in app.Description)
     if desc_charcount > limits['Description']:
         yield "Description of length %s is over the %i char limit" % (
             desc_charcount, limits['Description'])
@@ -168,31 +168,28 @@ def check_old_links(app):
         'gitorious.org',
         'code.google.com',
     ]
-    if any(s in app['Repo'] for s in usual_sites):
+    if any(s in app.Repo for s in usual_sites):
         for f in ['Web Site', 'Source Code', 'Issue Tracker', 'Changelog']:
-            if any(s in app[f] for s in old_sites):
-                yield "App is in '%s' but has a link to '%s'" % (app['Repo'], app[f])
+            v = app.get_field(f)
+            if any(s in v for s in old_sites):
+                yield "App is in '%s' but has a link to '%s'" % (app.Repo, v)
 
 
 def check_useless_fields(app):
-    if app['Update Check Name'] == app['id']:
+    if app.UpdateCheckName == app.id:
         yield "Update Check Name is set to the known app id - it can be removed"
 
 filling_ucms = re.compile(r'^(Tags.*|RepoManifest.*)')
 
 
 def check_checkupdates_ran(app):
-    if filling_ucms.match(app['Update Check Mode']):
-        if all(app[f] == metadata.app_defaults[f] for f in [
-                'Auto Name',
-                'Current Version',
-                'Current Version Code',
-                ]):
+    if filling_ucms.match(app.UpdateCheckMode):
+        if not app.AutoName and not app.CurrentVersion and app.CurrentVersionCode == '0':
             yield "UCM is set but it looks like checkupdates hasn't been run yet"
 
 
 def check_empty_fields(app):
-    if not app['Categories']:
+    if not app.Categories:
         yield "Categories are not set"
 
 all_categories = Set([
@@ -217,37 +214,37 @@ all_categories = Set([
 
 
 def check_categories(app):
-    for categ in app['Categories']:
+    for categ in app.Categories:
         if categ not in all_categories:
             yield "Category '%s' is not valid" % categ
 
 
 def check_duplicates(app):
-    if app['Name'] and app['Name'] == app['Auto Name']:
-        yield "Name '%s' is just the auto name - remove it" % app['Name']
+    if app.Name and app.Name == app.AutoName:
+        yield "Name '%s' is just the auto name - remove it" % app.Name
 
     links_seen = set()
     for f in ['Source Code', 'Web Site', 'Issue Tracker', 'Changelog']:
-        if not app[f]:
+        v = app.get_field(f)
+        if not v:
             continue
-        v = app[f].lower()
+        v = v.lower()
         if v in links_seen:
             yield "Duplicate link in '%s': %s" % (f, v)
         else:
             links_seen.add(v)
 
-    name = app['Name'] or app['Auto Name']
-    if app['Summary'] and name:
-        if app['Summary'].lower() == name.lower():
-            yield "Summary '%s' is just the app's name" % app['Summary']
+    name = app.Name or app.AutoName
+    if app.Summary and name:
+        if app.Summary.lower() == name.lower():
+            yield "Summary '%s' is just the app's name" % app.Summary
 
-    desc = app['Description']
-    if app['Summary'] and desc and len(desc) == 1:
-        if app['Summary'].lower() == desc[0].lower():
-            yield "Description '%s' is just the app's summary" % app['Summary']
+    if app.Summary and app.Description and len(app.Description) == 1:
+        if app.Summary.lower() == app.Description[0].lower():
+            yield "Description '%s' is just the app's summary" % app.Summary
 
     seenlines = set()
-    for l in app['Description']:
+    for l in app.Description:
         if len(l) < 1:
             continue
         if l in seenlines:
@@ -259,7 +256,7 @@ desc_url = re.compile(r'(^|[^[])\[([^ ]+)( |\]|$)')
 
 
 def check_mediawiki_links(app):
-    wholedesc = ' '.join(app['Description'])
+    wholedesc = ' '.join(app.Description)
     for um in desc_url.finditer(wholedesc):
         url = um.group(1)
         for m, r in http_checks:
@@ -271,7 +268,7 @@ def check_bulleted_lists(app):
     validchars = ['*', '#']
     lchar = ''
     lcount = 0
-    for l in app['Description']:
+    for l in app.Description:
         if len(l) < 1:
             lcount = 0
             continue
@@ -287,7 +284,7 @@ def check_bulleted_lists(app):
 
 
 def check_builds(app):
-    for build in app['builds']:
+    for build in app.builds:
         if build['disable']:
             continue
         for s in ['master', 'origin', 'HEAD', 'default', 'trunk']:
@@ -318,7 +315,7 @@ def main():
     apps = common.read_app_args(options.appid, allapps, False)
 
     for appid, app in apps.iteritems():
-        if app['Disabled']:
+        if app.Disabled:
             continue
 
         warns = []

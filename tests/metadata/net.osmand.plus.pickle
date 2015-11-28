@@ -491,12 +491,16 @@ S'metadata/net.osmand.plus.xml'
 p178
 sS'Disabled'
 p179
-NsS'Update Check Name'
+NsS'added'
 p180
-NsS'Vercode Operation'
+NsS'lastupdated'
 p181
-NsS'Current Version'
+NsS'Update Check Name'
 p182
-S'1.9.5'
+NsS'Vercode Operation'
 p183
+NsS'Current Version'
+p184
+S'1.9.5'
+p185
 s.

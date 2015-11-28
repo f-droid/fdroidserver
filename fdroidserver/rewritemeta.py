@@ -59,7 +59,7 @@ def main():
         parser.error("Must give a valid format to --to")
 
     for appid, app in apps.iteritems():
-        metadatapath = app['metadatapath']
+        metadatapath = app.metadatapath
         base, ext = common.get_extension(metadatapath)
         if not options.to and ext not in supported:
             logging.info("Ignoring %s file at '%s'" % (ext, metadatapath))

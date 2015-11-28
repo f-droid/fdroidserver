@@ -5610,14 +5610,18 @@ S'metadata/org.videolan.vlc.yaml'
 p1519
 sS'Disabled'
 p1520
-NsS'Update Check Name'
+NsS'added'
 p1521
-NsS'Vercode Operation'
+NsS'lastupdated'
 p1522
-S'%c + 5'
+NsS'Update Check Name'
 p1523
-sS'Current Version'
+NsS'Vercode Operation'
 p1524
-S'1.2.6'
+S'%c + 5'
 p1525
+sS'Current Version'
+p1526
+S'1.2.6'
+p1527
 s.
