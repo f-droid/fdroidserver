@@ -53,6 +53,8 @@ class MetaDataException(Exception):
     def __str__(self):
         return self.value
 
+# To filter which ones should be written to the metadata files if
+# present
 app_fields = set([
     'Disabled',
     'AntiFeatures',
@@ -135,10 +137,14 @@ class App():
         self.added = None
         self.lastupdated = None
 
+    # Translates human-readable field names to attribute names, e.g.
+    # 'Auto Name' to 'AutoName'
     @classmethod
     def field_to_attr(cls, f):
         return f.replace(' ', '')
 
+    # Translates attribute names to human-readable field names, e.g.
+    # 'AutoName' to 'Auto Name'
     @classmethod
     def attr_to_field(cls, k):
         if k in app_fields:
@@ -146,21 +152,26 @@ class App():
         f = re.sub(r'([a-z])([A-Z])', r'\1 \2', k)
         return f
 
+    # Constructs an old-fashioned dict with the human-readable field
+    # names. Should only be used for tests.
     def field_dict(self):
         return {App.attr_to_field(k): v for k, v in self.__dict__.iteritems()}
 
+    # Gets the value associated to a field name, e.g. 'Auto Name'
     def get_field(self, f):
         if f not in app_fields:
             raise MetaDataException('Unrecognised app field: ' + f)
         k = App.field_to_attr(f)
         return getattr(self, k)
 
+    # Sets the value associated to a field name, e.g. 'Auto Name'
     def set_field(self, f, v):
         if f not in app_fields:
             raise MetaDataException('Unrecognised app field: ' + f)
         k = App.field_to_attr(f)
         self.__dict__[k] = v
 
+    # Appends to the value associated to a field name, e.g. 'Auto Name'
     def append_field(self, f, v):
         if f not in app_fields:
             raise MetaDataException('Unrecognised app field: ' + f)
@@ -170,6 +181,7 @@ class App():
         else:
             self.__dict__[k].append(v)
 
+    # Like dict.update(), but using human-readable field names
     def update_fields(self, d):
         for f, v in d.iteritems():
             self.set_field(f, v)
