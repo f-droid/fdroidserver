@@ -108,10 +108,12 @@ def check_tags(app, pattern):
 
         vcs.gotorevision(None)
 
-        flavours = []
+        last_build = metadata.Build()
         if len(app.builds) > 0:
-            if app.builds[-1]['gradle']:
-                flavours = app.builds[-1]['gradle']
+            last_build = app.builds[-1]
+
+        if last_build.submodules:
+            vcs.initsubmodules()
 
         hpak = None
         htag = None
@@ -143,7 +145,7 @@ def check_tags(app, pattern):
                     root_dir = build_dir
                 else:
                     root_dir = os.path.join(build_dir, subdir)
-                paths = common.manifest_paths(root_dir, flavours)
+                paths = common.manifest_paths(root_dir, last_build.gradle)
                 version, vercode, package = common.parse_androidmanifests(paths, app)
                 if vercode:
                     logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
@@ -199,10 +201,12 @@ def check_repomanifest(app, branch=None):
         elif repotype == 'bzr':
             vcs.gotorevision(None)
 
-        flavours = []
+        last_build = metadata.Build()
         if len(app.builds) > 0:
-            if app.builds[-1]['gradle']:
-                flavours = app.builds[-1]['gradle']
+            last_build = app.builds[-1]
+
+        if last_build.submodules:
+            vcs.initsubmodules()
 
         hpak = None
         hver = None
@@ -212,7 +216,7 @@ def check_repomanifest(app, branch=None):
                 root_dir = build_dir
             else:
                 root_dir = os.path.join(build_dir, subdir)
-            paths = common.manifest_paths(root_dir, flavours)
+            paths = common.manifest_paths(root_dir, last_build.gradle)
             version, vercode, package = common.parse_androidmanifests(paths, app)
             if vercode:
                 logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
@@ -313,14 +317,12 @@ def possible_subdirs(app):
     else:
         build_dir = os.path.join('build', app.id)
 
-    flavours = []
+    last_build = metadata.Build()
     if len(app.builds) > 0:
-        build = app.builds[-1]
-        if build['gradle']:
-            flavours = build['gradle']
+        last_build = app.builds[-1]
 
     for d in dirs_with_manifest(build_dir):
-        m_paths = common.manifest_paths(d, flavours)
+        m_paths = common.manifest_paths(d, last_build.gradle)
         package = common.parse_androidmanifests(m_paths, app)[2]
         if package is not None:
             subdir = os.path.relpath(d, build_dir)
@@ -344,10 +346,9 @@ def fetch_autoname(app, tag):
     except VCSException:
         return None
 
-    flavours = []
+    last_build = metadata.Build()
     if len(app.builds) > 0:
-        if app.builds[-1]['gradle']:
-            flavours = app.builds[-1]['gradle']
+        last_build = app.builds[-1]
 
     logging.debug("...fetch auto name from " + build_dir)
     new_name = None
@@ -356,7 +357,7 @@ def fetch_autoname(app, tag):
             root_dir = build_dir
         else:
             root_dir = os.path.join(build_dir, subdir)
-        new_name = common.fetch_real_name(root_dir, flavours)
+        new_name = common.fetch_real_name(root_dir, last_build.gradle)
         if new_name is not None:
             break
     commitmsg = None
@@ -458,25 +459,25 @@ def checkupdates_app(app, first=True):
             gotcur = False
             latest = None
             for build in app.builds:
-                if int(build['vercode']) >= int(app.CurrentVersionCode):
+                if int(build.vercode) >= int(app.CurrentVersionCode):
                     gotcur = True
-                if not latest or int(build['vercode']) > int(latest['vercode']):
+                if not latest or int(build.vercode) > int(latest.vercode):
                     latest = build
 
-            if int(latest['vercode']) > int(app.CurrentVersionCode):
+            if int(latest.vercode) > int(app.CurrentVersionCode):
                 logging.info("Refusing to auto update, since the latest build is newer")
 
             if not gotcur:
                 newbuild = latest.copy()
-                if 'origlines' in newbuild:
-                    del newbuild['origlines']
-                newbuild['disable'] = False
-                newbuild['vercode'] = app.CurrentVersionCode
-                newbuild['version'] = app.CurrentVersion + suffix
-                logging.info("...auto-generating build for " + newbuild['version'])
-                commit = pattern.replace('%v', newbuild['version'])
-                commit = commit.replace('%c', newbuild['vercode'])
-                newbuild['commit'] = commit
+                if newbuild.origlines:
+                    del newbuild.origlines[:]
+                newbuild.disable = False
+                newbuild.vercode = app.CurrentVersionCode
+                newbuild.version = app.CurrentVersion + suffix
+                logging.info("...auto-generating build for " + newbuild.version)
+                commit = pattern.replace('%v', newbuild.version)
+                commit = commit.replace('%c', newbuild.vercode)
+                newbuild.commit = commit
                 app.builds.append(newbuild)
                 name = common.getappname(app)
                 ver = common.getcvname(app)

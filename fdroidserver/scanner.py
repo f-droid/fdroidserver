@@ -31,18 +31,18 @@ config = None
 options = None
 
 
-def get_gradle_compile_commands(thisbuild):
+def get_gradle_compile_commands(build):
     compileCommands = ['compile', 'releaseCompile']
-    if thisbuild['gradle'] and thisbuild['gradle'] != ['yes']:
-        compileCommands += [flavor + 'Compile' for flavor in thisbuild['gradle']]
-        compileCommands += [flavor + 'ReleaseCompile' for flavor in thisbuild['gradle']]
+    if build.gradle and build.gradle != ['yes']:
+        compileCommands += [flavor + 'Compile' for flavor in build.gradle]
+        compileCommands += [flavor + 'ReleaseCompile' for flavor in build.gradle]
 
     return [re.compile(r'\s*' + c, re.IGNORECASE) for c in compileCommands]
 
 
 # Scan the source code in the given directory (and all subdirectories)
 # and return the number of fatal problems encountered
-def scan_source(build_dir, root_dir, thisbuild):
+def scan_source(build_dir, root_dir, build):
 
     count = 0
 
@@ -85,8 +85,8 @@ def scan_source(build_dir, root_dir, thisbuild):
         ]
     ]
 
-    scanignore = common.getpaths_map(build_dir, thisbuild['scanignore'])
-    scandelete = common.getpaths_map(build_dir, thisbuild['scandelete'])
+    scanignore = common.getpaths_map(build_dir, build.scanignore)
+    scandelete = common.getpaths_map(build_dir, build.scandelete)
 
     scanignore_worked = set()
     scandelete_worked = set()
@@ -153,7 +153,7 @@ def scan_source(build_dir, root_dir, thisbuild):
                 return True
         return False
 
-    gradle_compile_commands = get_gradle_compile_commands(thisbuild)
+    gradle_compile_commands = get_gradle_compile_commands(build)
 
     def is_used_by_gradle(line):
         return any(command.match(line) for command in gradle_compile_commands)
@@ -240,7 +240,7 @@ def scan_source(build_dir, root_dir, thisbuild):
     # indicate a problem (if it's not a problem, explicitly use
     # buildjni=no to bypass this check)
     if (os.path.exists(os.path.join(root_dir, 'jni')) and
-            not thisbuild['buildjni']):
+            not build.buildjni):
         logging.error('Found jni directory, but buildjni is not enabled. Set it to \'no\' to ignore.')
         count += 1
 
@@ -293,24 +293,24 @@ def main():
             # Set up vcs interface and make sure we have the latest code...
             vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
 
-            for thisbuild in app.builds:
+            for build in app.builds:
 
-                if thisbuild['disable']:
+                if build.disable:
                     logging.info("...skipping version %s - %s" % (
-                        thisbuild['version'], thisbuild.get('disable', thisbuild['commit'][1:])))
+                        build.version, build.get('disable', build.commit[1:])))
                 else:
-                    logging.info("...scanning version " + thisbuild['version'])
+                    logging.info("...scanning version " + build.version)
 
                     # Prepare the source code...
-                    root_dir, _ = common.prepare_source(vcs, app, thisbuild,
+                    root_dir, _ = common.prepare_source(vcs, app, build,
                                                         build_dir, srclib_dir,
                                                         extlib_dir, False)
 
                     # Do the scan...
-                    count = scan_source(build_dir, root_dir, thisbuild)
+                    count = scan_source(build_dir, root_dir, build)
                     if count > 0:
                         logging.warn('Scanner found %d problems in %s (%s)' % (
-                            count, appid, thisbuild['vercode']))
+                            count, appid, build.vercode))
                         probcount += count
 
         except BuildException as be:

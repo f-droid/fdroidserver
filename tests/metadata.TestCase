@@ -46,8 +46,9 @@ class MetadataTest(unittest.TestCase):
                 frompickle = pickle.load(f)
             frommeta = app.field_dict()
             self.assertEquals(frommeta, frompickle)
+            # Uncomment to overwrite
             # with open(savepath, 'wb') as f:
-            #     pickle.dump(app, f)
+            #     pickle.dump(frommeta, f)
 
 
 if __name__ == "__main__":

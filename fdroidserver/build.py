@@ -245,7 +245,7 @@ def release_vm():
 
 
 # Note that 'force' here also implies test mode.
-def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
+def build_server(app, build, vcs, build_dir, output_dir, force):
     """Do a build on the build server."""
 
     try:
@@ -333,9 +333,9 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         ftp.mkdir('extlib')
         ftp.mkdir('srclib')
         # Copy any extlibs that are required...
-        if thisbuild['extlibs']:
+        if build.extlibs:
             ftp.chdir(homedir + '/build/extlib')
-            for lib in thisbuild['extlibs']:
+            for lib in build.extlibs:
                 lib = lib.strip()
                 libsrc = os.path.join('build/extlib', lib)
                 if not os.path.exists(libsrc):
@@ -350,8 +350,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
                     ftp.chdir('..')
         # Copy any srclibs that are required...
         srclibpaths = []
-        if thisbuild['srclibs']:
-            for lib in thisbuild['srclibs']:
+        if build.srclibs:
+            for lib in build.srclibs:
                 srclibpaths.append(
                     common.getsrclib(lib, 'build/srclib', basepath=True, prepare=False))
 
@@ -389,7 +389,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             cmdline += ' --force --test'
         if options.verbose:
             cmdline += ' --verbose'
-        cmdline += " %s:%s" % (app.id, thisbuild['vercode'])
+        cmdline += " %s:%s" % (app.id, build.vercode)
         chan.exec_command('bash -c ". ~/.bsenv && ' + cmdline + '"')
         output = ''
         while not chan.exit_status_ready():
@@ -406,7 +406,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         if returncode != 0:
             raise BuildException(
                 "Build.py failed on server for {0}:{1}".format(
-                    app.id, thisbuild['version']), output)
+                    app.id, build.version), output)
 
         # Retrieve the built files...
         logging.info("Retrieving build output...")
@@ -414,8 +414,8 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
             ftp.chdir(homedir + '/tmp')
         else:
             ftp.chdir(homedir + '/unsigned')
-        apkfile = common.getapkname(app, thisbuild)
-        tarball = common.getsrcname(app, thisbuild)
+        apkfile = common.getapkname(app, build)
+        tarball = common.getsrcname(app, build)
         try:
             ftp.get(apkfile, os.path.join(output_dir, apkfile))
             if not options.notarball:
@@ -423,7 +423,7 @@ def build_server(app, thisbuild, vcs, build_dir, output_dir, force):
         except:
             raise BuildException(
                 "Build failed for %s:%s - missing output files".format(
-                    app.id, thisbuild['version']), output)
+                    app.id, build.version), output)
         ftp.close()
 
     finally:
@@ -457,32 +457,33 @@ def capitalize_intact(string):
     return string[0].upper() + string[1:]
 
 
-def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh):
+def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh):
     """Do a build locally."""
 
-    if thisbuild['buildjni'] and thisbuild['buildjni'] != ['no']:
-        if not thisbuild['ndk_path']:
-            logging.critical("Android NDK version '%s' could not be found!" % thisbuild['ndk'])
+    ndk_path = build.ndk_path()
+    if build.buildjni and build.buildjni != ['no']:
+        if not ndk_path:
+            logging.critical("Android NDK version '%s' could not be found!" % build.ndk or 'r10e')
             logging.critical("Configured versions:")
             for k, v in config['ndk_paths'].iteritems():
                 if k.endswith("_orig"):
                     continue
                 logging.critical("  %s: %s" % (k, v))
             sys.exit(3)
-        elif not os.path.isdir(thisbuild['ndk_path']):
-            logging.critical("Android NDK '%s' is not a directory!" % thisbuild['ndk_path'])
+        elif not os.path.isdir(ndk_path):
+            logging.critical("Android NDK '%s' is not a directory!" % ndk_path)
             sys.exit(3)
 
     # Set up environment vars that depend on each build
     for n in ['ANDROID_NDK', 'NDK', 'ANDROID_NDK_HOME']:
-        common.env[n] = thisbuild['ndk_path']
+        common.env[n] = ndk_path
 
     common.reset_env_path()
     # Set up the current NDK to the PATH
-    common.add_to_env_path(thisbuild['ndk_path'])
+    common.add_to_env_path(ndk_path)
 
     # Prepare the source code...
-    root_dir, srclibpaths = common.prepare_source(vcs, app, thisbuild,
+    root_dir, srclibpaths = common.prepare_source(vcs, app, build,
                                                   build_dir, srclib_dir,
                                                   extlib_dir, onserver, refresh)
 
@@ -490,26 +491,27 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     # different from the default ones
     p = None
     gradletasks = []
-    if thisbuild['type'] == 'maven':
+    method = build.method()
+    if method == 'maven':
         logging.info("Cleaning Maven project...")
         cmd = [config['mvn3'], 'clean', '-Dandroid.sdk.path=' + config['sdk_path']]
 
-        if '@' in thisbuild['maven']:
-            maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@', 1)[1])
+        if '@' in build.maven:
+            maven_dir = os.path.join(root_dir, build.maven.split('@', 1)[1])
             maven_dir = os.path.normpath(maven_dir)
         else:
             maven_dir = root_dir
 
         p = FDroidPopen(cmd, cwd=maven_dir)
 
-    elif thisbuild['type'] == 'gradle':
+    elif method == 'gradle':
 
         logging.info("Cleaning Gradle project...")
 
-        if thisbuild['preassemble']:
-            gradletasks += thisbuild['preassemble']
+        if build.preassemble:
+            gradletasks += build.preassemble
 
-        flavours = thisbuild['gradle']
+        flavours = build.gradle
         if flavours == ['yes']:
             flavours = []
 
@@ -522,8 +524,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             adapt_gradle(libpath)
 
         cmd = [config['gradle']]
-        if thisbuild['gradleprops']:
-            cmd += ['-P'+kv for kv in thisbuild['gradleprops']]
+        if build.gradleprops:
+            cmd += ['-P'+kv for kv in build.gradleprops]
 
         for task in gradletasks:
             parts = task.split(':')
@@ -534,16 +536,16 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         p = FDroidPopen(cmd, cwd=root_dir)
 
-    elif thisbuild['type'] == 'kivy':
+    elif method == 'kivy':
         pass
 
-    elif thisbuild['type'] == 'ant':
+    elif method == 'ant':
         logging.info("Cleaning Ant project...")
         p = FDroidPopen(['ant', 'clean'], cwd=root_dir)
 
     if p is not None and p.returncode != 0:
         raise BuildException("Error cleaning %s:%s" %
-                             (app.id, thisbuild['version']), p.output)
+                             (app.id, build.version), p.output)
 
     for root, dirs, files in os.walk(build_dir):
 
@@ -575,12 +577,12 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             del_dirs(['obj'])
 
     if options.skipscan:
-        if thisbuild['scandelete']:
+        if build.scandelete:
             raise BuildException("Refusing to skip source scan since scandelete is present")
     else:
         # Scan before building...
         logging.info("Scanning source for common problems...")
-        count = scanner.scan_source(build_dir, root_dir, thisbuild)
+        count = scanner.scan_source(build_dir, root_dir, build)
         if count > 0:
             if force:
                 logging.warn('Scanner found %d problems' % count)
@@ -590,7 +592,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if not options.notarball:
         # Build the source tarball right before we build the release...
         logging.info("Creating source tarball...")
-        tarname = common.getsrcname(app, thisbuild)
+        tarname = common.getsrcname(app, build)
         tarball = tarfile.open(os.path.join(tmp_dir, tarname), "w:gz")
 
         def tarexc(f):
@@ -599,9 +601,9 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         tarball.close()
 
     # Run a build command if one is required...
-    if thisbuild['build']:
+    if build.build:
         logging.info("Running 'build' commands in %s" % root_dir)
-        cmd = common.replace_config_vars(thisbuild['build'], thisbuild)
+        cmd = common.replace_config_vars(build.build, build)
 
         # Substitute source library paths into commands...
         for name, number, libpath in srclibpaths:
@@ -612,16 +614,16 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         if p.returncode != 0:
             raise BuildException("Error running build command for %s:%s" %
-                                 (app.id, thisbuild['version']), p.output)
+                                 (app.id, build.version), p.output)
 
     # Build native stuff if required...
-    if thisbuild['buildjni'] and thisbuild['buildjni'] != ['no']:
+    if build.buildjni and build.buildjni != ['no']:
         logging.info("Building the native code")
-        jni_components = thisbuild['buildjni']
+        jni_components = build.buildjni
 
         if jni_components == ['yes']:
             jni_components = ['']
-        cmd = [os.path.join(thisbuild['ndk_path'], "ndk-build"), "-j1"]
+        cmd = [os.path.join(ndk_path, "ndk-build"), "-j1"]
         for d in jni_components:
             if d:
                 logging.info("Building native code in '%s'" % d)
@@ -640,15 +642,15 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                 del manifest_text
             p = FDroidPopen(cmd, cwd=os.path.join(root_dir, d))
             if p.returncode != 0:
-                raise BuildException("NDK build failed for %s:%s" % (app.id, thisbuild['version']), p.output)
+                raise BuildException("NDK build failed for %s:%s" % (app.id, build.version), p.output)
 
     p = None
     # Build the release...
-    if thisbuild['type'] == 'maven':
+    if method == 'maven':
         logging.info("Building Maven project...")
 
-        if '@' in thisbuild['maven']:
-            maven_dir = os.path.join(root_dir, thisbuild['maven'].split('@', 1)[1])
+        if '@' in build.maven:
+            maven_dir = os.path.join(root_dir, build.maven.split('@', 1)[1])
         else:
             maven_dir = root_dir
 
@@ -656,12 +658,12 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                   '-Dmaven.jar.sign.skip=true', '-Dmaven.test.skip=true',
                   '-Dandroid.sign.debug=false', '-Dandroid.release=true',
                   'package']
-        if thisbuild['target']:
-            target = thisbuild["target"].split('-')[1]
+        if build.target:
+            target = build.target.split('-')[1]
             common.regsub_file(r'<platform>[0-9]*</platform>',
                                r'<platform>%s</platform>' % target,
                                os.path.join(root_dir, 'pom.xml'))
-            if '@' in thisbuild['maven']:
+            if '@' in build.maven:
                 common.regsub_file(r'<platform>[0-9]*</platform>',
                                    r'<platform>%s</platform>' % target,
                                    os.path.join(maven_dir, 'pom.xml'))
@@ -670,7 +672,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
         bindir = os.path.join(root_dir, 'target')
 
-    elif thisbuild['type'] == 'kivy':
+    elif method == 'kivy':
         logging.info("Building Kivy project...")
 
         spec = os.path.join(root_dir, 'buildozer.spec')
@@ -690,8 +692,8 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         modules = bconfig.get('app', 'requirements').split(',')
 
         cmd = 'ANDROIDSDK=' + config['sdk_path']
-        cmd += ' ANDROIDNDK=' + thisbuild['ndk_path']
-        cmd += ' ANDROIDNDKVER=' + thisbuild['ndk']
+        cmd += ' ANDROIDNDK=' + ndk_path
+        cmd += ' ANDROIDNDKVER=' + build.ndk
         cmd += ' ANDROIDAPI=' + str(bconfig.get('app', 'android.api'))
         cmd += ' VIRTUALENV=virtualenv'
         cmd += ' ./distribute.sh'
@@ -731,27 +733,27 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         cmd.append('release')
         p = FDroidPopen(cmd, cwd=distdir)
 
-    elif thisbuild['type'] == 'gradle':
+    elif method == 'gradle':
         logging.info("Building Gradle project...")
 
         # Avoid having to use lintOptions.abortOnError false
-        if thisbuild['gradlepluginver'] >= LooseVersion('0.7'):
+        if build.gradlepluginver >= LooseVersion('0.7'):
             with open(os.path.join(root_dir, 'build.gradle'), "a") as f:
                 f.write("\nandroid { lintOptions { checkReleaseBuilds false } }\n")
 
         cmd = [config['gradle']]
-        if thisbuild['gradleprops']:
-            cmd += ['-P'+kv for kv in thisbuild['gradleprops']]
+        if build.gradleprops:
+            cmd += ['-P'+kv for kv in build.gradleprops]
 
         cmd += gradletasks
 
         p = FDroidPopen(cmd, cwd=root_dir)
 
-    elif thisbuild['type'] == 'ant':
+    elif method == 'ant':
         logging.info("Building Ant project...")
         cmd = ['ant']
-        if thisbuild['antcommands']:
-            cmd += thisbuild['antcommands']
+        if build.antcommands:
+            cmd += build.antcommands
         else:
             cmd += ['release']
         p = FDroidPopen(cmd, cwd=root_dir)
@@ -759,10 +761,10 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         bindir = os.path.join(root_dir, 'bin')
 
     if p is not None and p.returncode != 0:
-        raise BuildException("Build failed for %s:%s" % (app.id, thisbuild['version']), p.output)
-    logging.info("Successfully built version " + thisbuild['version'] + ' of ' + app.id)
+        raise BuildException("Build failed for %s:%s" % (app.id, build.version), p.output)
+    logging.info("Successfully built version " + build.version + ' of ' + app.id)
 
-    if thisbuild['type'] == 'maven':
+    if method == 'maven':
         stdout_apk = '\n'.join([
             line for line in p.output.splitlines() if any(
                 a in line for a in ('.apk', '.ap_', '.jar'))])
@@ -782,14 +784,14 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
             raise BuildException('Failed to find output')
         src = m.group(1)
         src = os.path.join(bindir, src) + '.apk'
-    elif thisbuild['type'] == 'kivy':
+    elif method == 'kivy':
         src = os.path.join('python-for-android', 'dist', 'default', 'bin',
                            '{0}-{1}-release.apk'.format(
                                bconfig.get('app', 'title'),
                                bconfig.get('app', 'version')))
-    elif thisbuild['type'] == 'gradle':
+    elif method == 'gradle':
 
-        if thisbuild['gradlepluginver'] >= LooseVersion('0.11'):
+        if build.gradlepluginver >= LooseVersion('0.11'):
             apks_dir = os.path.join(root_dir, 'build', 'outputs', 'apk')
         else:
             apks_dir = os.path.join(root_dir, 'build', 'apk')
@@ -801,14 +803,14 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         if len(apks) < 1:
             raise BuildException('Failed to find gradle output in %s' % apks_dir)
         src = apks[0]
-    elif thisbuild['type'] == 'ant':
+    elif method == 'ant':
         stdout_apk = '\n'.join([
             line for line in p.output.splitlines() if '.apk' in line])
         src = re.match(r".*^.*Creating (.+) for release.*$.*", stdout_apk,
                        re.S | re.M).group(1)
         src = os.path.join(bindir, src)
-    elif thisbuild['type'] == 'raw':
-        src = os.path.join(root_dir, thisbuild['output'])
+    elif method == 'raw':
+        src = os.path.join(root_dir, build.output)
         src = os.path.normpath(src)
 
     # Make sure it's not debuggable...
@@ -850,12 +852,12 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
         nativecode = nativecode.strip()
         nativecode = None if not nativecode else nativecode
 
-    if thisbuild['buildjni'] and thisbuild['buildjni'] != ['no']:
+    if build.buildjni and build.buildjni != ['no']:
         if nativecode is None:
             raise BuildException("Native code should have been built but none was packaged")
-    if thisbuild['novcheck']:
-        vercode = thisbuild['vercode']
-        version = thisbuild['version']
+    if build.novcheck:
+        vercode = build.vercode
+        version = build.version
     if not version or not vercode:
         raise BuildException("Could not find version information in build in output")
     if not foundid:
@@ -871,13 +873,13 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
     if index != -1:
         version = version[:index]
 
-    if (version != thisbuild['version'] or
-            vercode != thisbuild['vercode']):
+    if (version != build.version or
+            vercode != build.vercode):
         raise BuildException(("Unexpected version/version code in output;"
                               " APK: '%s' / '%s', "
                               " Expected: '%s' / '%s'")
-                             % (version, str(vercode), thisbuild['version'],
-                                str(thisbuild['vercode']))
+                             % (version, str(vercode), build.version,
+                                str(build.vercode))
                              )
 
     # Add information for 'fdroid verify' to be able to reproduce the build
@@ -895,7 +897,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
 
     # Copy the unsigned apk to our destination directory for further
     # processing (by publish.py)...
-    dest = os.path.join(output_dir, common.getapkname(app, thisbuild))
+    dest = os.path.join(output_dir, common.getapkname(app, build))
     shutil.copyfile(src, dest)
 
     # Move the source tarball into the output directory...
@@ -904,7 +906,7 @@ def build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_d
                     os.path.join(output_dir, tarname))
 
 
-def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, extlib_dir,
+def trybuild(app, build, build_dir, output_dir, also_check_dir, srclib_dir, extlib_dir,
              tmp_dir, repo_dir, vcs, test, server, force, onserver, refresh):
     """
     Build a particular version of an application, if it needs building.
@@ -923,7 +925,7 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
     :returns: True if the build was done, False if it wasn't necessary.
     """
 
-    dest_apk = common.getapkname(app, thisbuild)
+    dest_apk = common.getapkname(app, build)
 
     dest = os.path.join(output_dir, dest_apk)
     dest_repo = os.path.join(repo_dir, dest_apk)
@@ -937,20 +939,20 @@ def trybuild(app, thisbuild, build_dir, output_dir, also_check_dir, srclib_dir, 
             if os.path.exists(dest_also):
                 return False
 
-    if thisbuild['disable'] and not options.force:
+    if build.disable and not options.force:
         return False
 
     logging.info("Building version %s (%s) of %s" % (
-        thisbuild['version'], thisbuild['vercode'], app.id))
+        build.version, build.vercode, app.id))
 
     if server:
         # When using server mode, still keep a local cache of the repo, by
         # grabbing the source now.
-        vcs.gotorevision(thisbuild['commit'])
+        vcs.gotorevision(build.commit)
 
-        build_server(app, thisbuild, vcs, build_dir, output_dir, force)
+        build_server(app, build, vcs, build_dir, output_dir, force)
     else:
-        build_local(app, thisbuild, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh)
+        build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh)
     return True
 
 
@@ -1060,7 +1062,7 @@ def main():
     if options.latest:
         for app in apps.itervalues():
             for build in reversed(app.builds):
-                if build['disable'] and not options.force:
+                if build.disable and not options.force:
                     continue
                 app.builds = [build]
                 break
@@ -1078,7 +1080,7 @@ def main():
 
         first = True
 
-        for thisbuild in app.builds:
+        for build in app.builds:
             wikilog = None
             try:
 
@@ -1098,8 +1100,8 @@ def main():
 
                     first = False
 
-                logging.debug("Checking " + thisbuild['version'])
-                if trybuild(app, thisbuild, build_dir, output_dir,
+                logging.debug("Checking " + build.version)
+                if trybuild(app, build, build_dir, output_dir,
                             also_check_dir, srclib_dir, extlib_dir,
                             tmp_dir, repo_dir, vcs, options.test,
                             options.server, options.force,
@@ -1112,10 +1114,10 @@ def main():
                         # alongside our built one in the 'unsigend'
                         # directory.
                         url = app.Binaries
-                        url = url.replace('%v', thisbuild['version'])
-                        url = url.replace('%c', str(thisbuild['vercode']))
+                        url = url.replace('%v', build.version)
+                        url = url.replace('%c', str(build.vercode))
                         logging.info("...retrieving " + url)
-                        of = "{0}_{1}.apk.binary".format(app.id, thisbuild['vercode'])
+                        of = "{0}_{1}.apk.binary".format(app.id, build.vercode)
                         of = os.path.join(output_dir, of)
                         net.download_file(url, local_filename=of)
 
@@ -1148,7 +1150,7 @@ def main():
             if options.wiki and wikilog:
                 try:
                     # Write a page with the last build log for this version code
-                    lastbuildpage = appid + '/lastbuild_' + thisbuild['vercode']
+                    lastbuildpage = appid + '/lastbuild_' + build.vercode
                     newpage = site.Pages[lastbuildpage]
                     txt = "Build completed at " + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + "\n\n" + wikilog
                     newpage.save(txt, summary='Build log')

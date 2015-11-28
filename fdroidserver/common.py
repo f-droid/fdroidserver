@@ -221,15 +221,6 @@ def read_config(opts, config_file='config.py'):
     return config
 
 
-def get_ndk_path(version):
-    if version is None:
-        version = 'r10e'  # falls back to latest
-    paths = config['ndk_paths']
-    if version not in paths:
-        return ''
-    return paths[version] or ''
-
-
 def find_sdk_tools_cmd(cmd):
     '''find a working path to a tool from the Android SDK'''
 
@@ -363,10 +354,10 @@ def read_app_args(args, allapps, allow_vercodes=False):
         vc = vercodes[appid]
         if not vc:
             continue
-        app.builds = [b for b in app.builds if b['vercode'] in vc]
+        app.builds = [b for b in app.builds if b.vercode in vc]
         if len(app.builds) != len(vercodes[appid]):
             error = True
-            allvcs = [b['vercode'] for b in app.builds]
+            allvcs = [b.vercode for b in app.builds]
             for v in vercodes[appid]:
                 if v not in allvcs:
                     logging.critical("No such vercode %s for app %s" % (v, appid))
@@ -419,11 +410,11 @@ def apknameinfo(filename):
 
 
 def getapkname(app, build):
-    return "%s_%s.apk" % (app.id, build['vercode'])
+    return "%s_%s.apk" % (app.id, build.vercode)
 
 
 def getsrcname(app, build):
-    return "%s_%s_src.tar.gz" % (app.id, build['vercode'])
+    return "%s_%s_src.tar.gz" % (app.id, build.vercode)
 
 
 def getappname(app):
@@ -1250,17 +1241,17 @@ gradle_version_regex = re.compile(r"[^/]*'com\.android\.tools\.build:gradle:([^\
 def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=False, refresh=True):
 
     # Optionally, the actual app source can be in a subdirectory
-    if build['subdir']:
-        root_dir = os.path.join(build_dir, build['subdir'])
+    if build.subdir:
+        root_dir = os.path.join(build_dir, build.subdir)
     else:
         root_dir = build_dir
 
     # Get a working copy of the right revision
-    logging.info("Getting source for revision " + build['commit'])
-    vcs.gotorevision(build['commit'], refresh)
+    logging.info("Getting source for revision " + build.commit)
+    vcs.gotorevision(build.commit, refresh)
 
     # Initialise submodules if required
-    if build['submodules']:
+    if build.submodules:
         logging.info("Initialising submodules")
         vcs.initsubmodules()
 
@@ -1270,19 +1261,19 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         raise BuildException('Missing subdir ' + root_dir)
 
     # Run an init command if one is required
-    if build['init']:
-        cmd = replace_config_vars(build['init'], build)
+    if build.init:
+        cmd = replace_config_vars(build.init, build)
         logging.info("Running 'init' commands in %s" % root_dir)
 
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running init command for %s:%s" %
-                                 (app.id, build['version']), p.output)
+                                 (app.id, build.version), p.output)
 
     # Apply patches if any
-    if build['patch']:
+    if build.patch:
         logging.info("Applying patches")
-        for patch in build['patch']:
+        for patch in build.patch:
             patch = patch.strip()
             logging.info("Applying " + patch)
             patch_path = os.path.join('metadata', app.id, patch)
@@ -1292,9 +1283,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Get required source libraries
     srclibpaths = []
-    if build['srclibs']:
+    if build.srclibs:
         logging.info("Collecting source libraries")
-        for lib in build['srclibs']:
+        for lib in build.srclibs:
             srclibpaths.append(getsrclib(lib, srclib_dir, build, preponly=onserver, refresh=refresh))
 
     for name, number, libpath in srclibpaths:
@@ -1307,8 +1298,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Update the local.properties file
     localprops = [os.path.join(build_dir, 'local.properties')]
-    if build['subdir']:
-        parts = build['subdir'].split(os.sep)
+    if build.subdir:
+        parts = build.subdir.split(os.sep)
         cur = build_dir
         for d in parts:
             cur = os.path.join(cur, d)
@@ -1324,26 +1315,27 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             logging.info("Creating local.properties file at %s" % path)
         # Fix old-fashioned 'sdk-location' by copying
         # from sdk.dir, if necessary
-        if build['oldsdkloc']:
+        if build.oldsdkloc:
             sdkloc = re.match(r".*^sdk.dir=(\S+)$.*", props,
                               re.S | re.M).group(1)
             props += "sdk-location=%s\n" % sdkloc
         else:
             props += "sdk.dir=%s\n" % config['sdk_path']
             props += "sdk-location=%s\n" % config['sdk_path']
-        if build['ndk_path']:
+        ndk_path = build.ndk_path()
+        if ndk_path:
             # Add ndk location
-            props += "ndk.dir=%s\n" % build['ndk_path']
-            props += "ndk-location=%s\n" % build['ndk_path']
+            props += "ndk.dir=%s\n" % ndk_path
+            props += "ndk-location=%s\n" % ndk_path
         # Add java.encoding if necessary
-        if build['encoding']:
-            props += "java.encoding=%s\n" % build['encoding']
+        if build.encoding:
+            props += "java.encoding=%s\n" % build.encoding
         with open(path, 'w') as f:
             f.write(props)
 
     flavours = []
-    if build['type'] == 'gradle':
-        flavours = build['gradle']
+    if build.method() == 'gradle':
+        flavours = build.gradle
 
         gradlepluginver = None
 
@@ -1372,13 +1364,13 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                         break
 
         if gradlepluginver:
-            build['gradlepluginver'] = LooseVersion(gradlepluginver)
+            build.gradlepluginver = LooseVersion(gradlepluginver)
         else:
             logging.warn("Could not fetch the gradle plugin version, defaulting to 0.11")
-            build['gradlepluginver'] = LooseVersion('0.11')
+            build.gradlepluginver = LooseVersion('0.11')
 
-        if build['target']:
-            n = build["target"].split('-')[1]
+        if build.target:
+            n = build.target.split('-')[1]
             regsub_file(r'compileSdkVersion[ =]+[0-9]+',
                         r'compileSdkVersion %s' % n,
                         os.path.join(root_dir, 'build.gradle'))
@@ -1387,38 +1379,38 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     remove_debuggable_flags(root_dir)
 
     # Insert version code and number into the manifest if necessary
-    if build['forceversion']:
+    if build.forceversion:
         logging.info("Changing the version name")
         for path in manifest_paths(root_dir, flavours):
             if not os.path.isfile(path):
                 continue
             if has_extension(path, 'xml'):
                 regsub_file(r'android:versionName="[^"]*"',
-                            r'android:versionName="%s"' % build['version'],
+                            r'android:versionName="%s"' % build.version,
                             path)
             elif has_extension(path, 'gradle'):
                 regsub_file(r"""(\s*)versionName[\s'"=]+.*""",
-                            r"""\1versionName '%s'""" % build['version'],
+                            r"""\1versionName '%s'""" % build.version,
                             path)
 
-    if build['forcevercode']:
+    if build.forcevercode:
         logging.info("Changing the version code")
         for path in manifest_paths(root_dir, flavours):
             if not os.path.isfile(path):
                 continue
             if has_extension(path, 'xml'):
                 regsub_file(r'android:versionCode="[^"]*"',
-                            r'android:versionCode="%s"' % build['vercode'],
+                            r'android:versionCode="%s"' % build.vercode,
                             path)
             elif has_extension(path, 'gradle'):
                 regsub_file(r'versionCode[ =]+[0-9]+',
-                            r'versionCode %s' % build['vercode'],
+                            r'versionCode %s' % build.vercode,
                             path)
 
     # Delete unwanted files
-    if build['rm']:
+    if build.rm:
         logging.info("Removing specified files")
-        for part in getpaths(build_dir, build['rm']):
+        for part in getpaths(build_dir, build.rm):
             dest = os.path.join(build_dir, part)
             logging.info("Removing {0}".format(part))
             if os.path.lexists(dest):
@@ -1432,12 +1424,12 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     remove_signing_keys(build_dir)
 
     # Add required external libraries
-    if build['extlibs']:
+    if build.extlibs:
         logging.info("Collecting prebuilt libraries")
         libsdir = os.path.join(root_dir, 'libs')
         if not os.path.exists(libsdir):
             os.mkdir(libsdir)
-        for lib in build['extlibs']:
+        for lib in build.extlibs:
             lib = lib.strip()
             logging.info("...installing extlib {0}".format(lib))
             libf = os.path.basename(lib)
@@ -1447,10 +1439,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             shutil.copyfile(libsrc, os.path.join(libsdir, libf))
 
     # Run a pre-build command if one is required
-    if build['prebuild']:
+    if build.prebuild:
         logging.info("Running 'prebuild' commands in %s" % root_dir)
 
-        cmd = replace_config_vars(build['prebuild'], build)
+        cmd = replace_config_vars(build.prebuild, build)
 
         # Substitute source library paths into prebuild commands
         for name, number, libpath in srclibpaths:
@@ -1460,20 +1452,20 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running prebuild command for %s:%s" %
-                                 (app.id, build['version']), p.output)
+                                 (app.id, build.version), p.output)
 
     # Generate (or update) the ant build file, build.xml...
-    if build['update'] and build['update'] != ['no'] and build['type'] == 'ant':
+    if build.update and build.update != ['no'] and build.method() == 'ant':
         parms = ['android', 'update', 'lib-project']
         lparms = ['android', 'update', 'project']
 
-        if build['target']:
-            parms += ['-t', build['target']]
-            lparms += ['-t', build['target']]
-        if build['update'] == ['auto']:
-            update_dirs = ant_subprojects(root_dir) + ['.']
+        if build.target:
+            parms += ['-t', build.target]
+            lparms += ['-t', build.target]
+        if build.update:
+            update_dirs = build.update
         else:
-            update_dirs = build['update']
+            update_dirs = ant_subprojects(root_dir) + ['.']
 
         for d in update_dirs:
             subdir = os.path.join(root_dir, d)
@@ -1770,9 +1762,9 @@ def replace_config_vars(cmd, build):
     cmd = cmd.replace('$$NDK$$', env['ANDROID_NDK'])
     cmd = cmd.replace('$$MVN3$$', config['mvn3'])
     if build is not None:
-        cmd = cmd.replace('$$COMMIT$$', build['commit'])
-        cmd = cmd.replace('$$VERSION$$', build['version'])
-        cmd = cmd.replace('$$VERCODE$$', build['vercode'])
+        cmd = cmd.replace('$$COMMIT$$', build.commit)
+        cmd = cmd.replace('$$VERSION$$', build.version)
+        cmd = cmd.replace('$$VERCODE$$', build.vercode)
     return cmd
 
 

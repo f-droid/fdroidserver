@@ -122,11 +122,11 @@ def get_lastbuild(builds):
     lowest_vercode = -1
     lastbuild = None
     for build in builds:
-        if not build['disable']:
-            vercode = int(build['vercode'])
+        if not build.disable:
+            vercode = int(build.vercode)
             if lowest_vercode == -1 or vercode < lowest_vercode:
                 lowest_vercode = vercode
-        if not lastbuild or int(build['vercode']) > int(lastbuild['vercode']):
+        if not lastbuild or int(build.vercode) > int(lastbuild.vercode):
             lastbuild = build
     return lastbuild
 
@@ -134,14 +134,14 @@ def get_lastbuild(builds):
 def check_ucm_tags(app):
     lastbuild = get_lastbuild(app.builds)
     if (lastbuild is not None
-            and lastbuild['commit']
+            and lastbuild.commit
             and app.UpdateCheckMode == 'RepoManifest'
-            and not lastbuild['commit'].startswith('unknown')
-            and lastbuild['vercode'] == app.CurrentVersionCode
-            and not lastbuild['forcevercode']
-            and any(s in lastbuild['commit'] for s in '.,_-/')):
+            and not lastbuild.commit.startswith('unknown')
+            and lastbuild.vercode == app.CurrentVersionCode
+            and not lastbuild.forcevercode
+            and any(s in lastbuild.commit for s in '.,_-/')):
         yield "Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
-            lastbuild['commit'], app.UpdateCheckMode)
+            lastbuild.commit, app.UpdateCheckMode)
 
 
 def check_char_limits(app):
@@ -285,12 +285,12 @@ def check_bulleted_lists(app):
 
 def check_builds(app):
     for build in app.builds:
-        if build['disable']:
+        if build.disable:
             continue
         for s in ['master', 'origin', 'HEAD', 'default', 'trunk']:
-            if build['commit'] and build['commit'].startswith(s):
-                yield "Branch '%s' used as commit in build '%s'" % (s, build['version'])
-            for srclib in build['srclibs']:
+            if build.commit and build.commit.startswith(s):
+                yield "Branch '%s' used as commit in build '%s'" % (s, build.version)
+            for srclib in build.srclibs:
                 ref = srclib.split('@')[1].split('/')[0]
                 if ref.startswith(s):
                     yield "Branch '%s' used as commit in srclib '%s'" % (s, srclib)

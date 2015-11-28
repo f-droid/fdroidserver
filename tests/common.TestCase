@@ -114,20 +114,19 @@ class CommonTest(unittest.TestCase):
 
         config = dict()
         config['sdk_path'] = os.getenv('ANDROID_HOME')
+        config['ndk_paths'] = {'r10d': os.getenv('ANDROID_NDK_HOME')}
         config['build_tools'] = 'FAKE_BUILD_TOOLS_VERSION'
         fdroidserver.common.config = config
         app = fdroidserver.metadata.App()
         app.id = 'org.fdroid.froid'
-        build = dict(fdroidserver.metadata.flag_defaults)
-        build['commit'] = 'master'
-        build['forceversion'] = True
-        build['forcevercode'] = True
-        build['gradle'] = ['yes']
-        build['ndk_path'] = os.getenv('ANDROID_NDK_HOME')
-        build['target'] = 'android-' + str(testint)
-        build['type'] = 'gradle'
-        build['version'] = teststr
-        build['vercode'] = testint
+        build = fdroidserver.metadata.Build()
+        build.commit = 'master'
+        build.forceversion = True
+        build.forcevercode = True
+        build.gradle = ['yes']
+        build.target = 'android-' + str(testint)
+        build.version = teststr
+        build.vercode = testint
 
         class FakeVcs():
             # no need to change to the correct commit here
@@ -147,8 +146,8 @@ class CommonTest(unittest.TestCase):
         with open(os.path.join(testdir, 'AndroidManifest.xml')) as f:
             filedata = f.read()
         self.assertIsNone(re.search('android:debuggable', filedata))
-        self.assertIsNotNone(re.search('android:versionName="%s"' % build['version'], filedata))
-        self.assertIsNotNone(re.search('android:versionCode="%s"' % build['vercode'], filedata))
+        self.assertIsNotNone(re.search('android:versionName="%s"' % build.version, filedata))
+        self.assertIsNotNone(re.search('android:versionCode="%s"' % build.vercode, filedata))
 
 
 if __name__ == "__main__":

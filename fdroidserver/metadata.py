@@ -38,8 +38,6 @@ except ImportError:
 # use the C implementation when available
 import xml.etree.cElementTree as ElementTree
 
-from collections import OrderedDict
-
 import common
 
 srclibs = None
@@ -155,7 +153,16 @@ class App():
     # Constructs an old-fashioned dict with the human-readable field
     # names. Should only be used for tests.
     def field_dict(self):
-        return {App.attr_to_field(k): v for k, v in self.__dict__.iteritems()}
+        d = {}
+        for k, v in self.__dict__.iteritems():
+            if k == 'builds':
+                d['builds'] = []
+                for build in v:
+                    d['builds'].append(build.__dict__)
+            else:
+                k = App.attr_to_field(k)
+                d[k] = v
+        return d
 
     # Gets the value associated to a field name, e.g. 'Auto Name'
     def get_field(self, f):
@@ -184,44 +191,156 @@ class App():
     # Like dict.update(), but using human-readable field names
     def update_fields(self, d):
         for f, v in d.iteritems():
-            self.set_field(f, v)
+            if f == 'builds':
+                for b in v:
+                    build = Build()
+                    build.update_flags(b)
+                    self.builds.append(build)
+            else:
+                self.set_field(f, v)
+
+
+def metafieldtype(name):
+    if name in ['Description', 'Maintainer Notes']:
+        return 'multiline'
+    if name in ['Categories', 'AntiFeatures']:
+        return 'list'
+    if name == 'Build Version':
+        return 'build'
+    if name == 'Build':
+        return 'buildv2'
+    if name == 'Use Built':
+        return 'obsolete'
+    if name not in app_fields:
+        return 'unknown'
+    return 'string'
 
 
 # In the order in which they are laid out on files
-# Sorted by their action and their place in the build timeline
-# These variables can have varying datatypes. For example, anything with
-# flagtype(v) == 'list' is inited as False, then set as a list of strings.
-flag_defaults = OrderedDict([
-    ('disable', False),
-    ('commit', None),
-    ('subdir', None),
-    ('submodules', False),
-    ('init', ''),
-    ('patch', []),
-    ('gradle', False),
-    ('maven', False),
-    ('kivy', False),
-    ('output', None),
-    ('srclibs', []),
-    ('oldsdkloc', False),
-    ('encoding', None),
-    ('forceversion', False),
-    ('forcevercode', False),
-    ('rm', []),
-    ('extlibs', []),
-    ('prebuild', ''),
-    ('update', ['auto']),
-    ('target', None),
-    ('scanignore', []),
-    ('scandelete', []),
-    ('build', ''),
-    ('buildjni', []),
-    ('ndk', 'r10e'),  # defaults to latest
-    ('preassemble', []),
-    ('gradleprops', []),
-    ('antcommands', None),
-    ('novcheck', False),
-])
+build_flags_order = [
+    'disable',
+    'commit',
+    'subdir',
+    'submodules',
+    'init',
+    'patch',
+    'gradle',
+    'maven',
+    'kivy',
+    'output',
+    'srclibs',
+    'oldsdkloc',
+    'encoding',
+    'forceversion',
+    'forcevercode',
+    'rm',
+    'extlibs',
+    'prebuild',
+    'update',
+    'target',
+    'scanignore',
+    'scandelete',
+    'build',
+    'buildjni',
+    'ndk',
+    'preassemble',
+    'gradleprops',
+    'antcommands',
+    'novcheck',
+]
+
+
+build_flags = set(build_flags_order + ['version', 'vercode'])
+
+
+class Build():
+
+    def __init__(self):
+        self.disable = False
+        self.commit = None
+        self.subdir = None
+        self.submodules = False
+        self.init = ''
+        self.patch = []
+        self.gradle = False
+        self.maven = False
+        self.kivy = False
+        self.output = None
+        self.srclibs = []
+        self.oldsdkloc = False
+        self.encoding = None
+        self.forceversion = False
+        self.forcevercode = False
+        self.rm = []
+        self.extlibs = []
+        self.prebuild = ''
+        self.update = None
+        self.target = None
+        self.scanignore = []
+        self.scandelete = []
+        self.build = ''
+        self.buildjni = []
+        self.ndk = None
+        self.preassemble = []
+        self.gradleprops = []
+        self.antcommands = None
+        self.novcheck = False
+
+    def get_flag(self, f):
+        if f not in build_flags:
+            raise MetaDataException('Unrecognised build flag: ' + f)
+        return getattr(self, f)
+
+    def set_flag(self, f, v):
+        if f == 'versionName':
+            f = 'version'
+        if f == 'versionCode':
+            f = 'vercode'
+        if f not in build_flags:
+            raise MetaDataException('Unrecognised build flag: ' + f)
+        setattr(self, f, v)
+
+    def append_flag(self, f, v):
+        if f not in build_flags:
+            raise MetaDataException('Unrecognised build flag: ' + f)
+        if f not in self.__dict__:
+            self.__dict__[f] = [v]
+        else:
+            self.__dict__[f].append(v)
+
+    def method(self):
+        for f in ['maven', 'gradle', 'kivy']:
+            if self.get_flag(f):
+                return f
+        if build.output:
+            return 'raw'
+        return 'ant'
+
+    def ndk_path(self):
+        version = self.ndk
+        if not version:
+            version = 'r10e'  # falls back to latest
+        paths = common.config['ndk_paths']
+        if version not in paths:
+            return ''
+        return paths[version]
+
+    def update_flags(self, d):
+        for f, v in d.iteritems():
+            self.set_flag(f, v)
+
+
+def flagtype(name):
+    if name in ['extlibs', 'srclibs', 'patch', 'rm', 'buildjni', 'preassemble',
+                'update', 'scanignore', 'scandelete', 'gradle', 'antcommands',
+                'gradleprops']:
+        return 'list'
+    if name in ['init', 'prebuild', 'build']:
+        return 'script'
+    if name in ['submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
+                'novcheck']:
+        return 'bool'
+    return 'string'
 
 
 # Designates a metadata field type and checks that it matches
@@ -230,18 +349,18 @@ flag_defaults = OrderedDict([
 # 'matching' - List of possible values or regex expression
 # 'sep'      - Separator to use if value may be a list
 # 'fields'   - Metadata fields (Field:Value) of this type
-# 'attrs'    - Build attributes (attr=value) of this type
+# 'flags'    - Build flags (flag=value) of this type
 #
 class FieldValidator():
 
-    def __init__(self, name, matching, sep, fields, attrs):
+    def __init__(self, name, matching, sep, fields, flags):
         self.name = name
         self.matching = matching
         if type(matching) is str:
             self.compiled = re.compile(matching)
         self.sep = sep
         self.fields = fields
-        self.attrs = attrs
+        self.flags = flags
 
     def _assert_regex(self, values, appid):
         for v in values:
@@ -257,13 +376,13 @@ class FieldValidator():
                                         % (v, self.name, appid) +
                                         "Possible values: %s" % (", ".join(self.matching)))
 
-    def check(self, value, appid):
-        if type(value) is not str or not value:
+    def check(self, v, appid):
+        if type(v) is not str or not v:
             return
         if self.sep is not None:
-            values = value.split(self.sep)
+            values = v.split(self.sep)
         else:
-            values = [value]
+            values = [v]
         if type(self.matching) is list:
             self._assert_list(values, appid)
         else:
@@ -337,11 +456,11 @@ valuetypes = {
 # Check an app's metadata information for integrity errors
 def check_metadata(app):
     for v in valuetypes:
-        for field in v.fields:
-            v.check(app.get_field(field), app.id)
+        for f in v.fields:
+            v.check(app.get_field(f), app.id)
         for build in app.builds:
-            for attr in v.attrs:
-                v.check(build[attr], app.id)
+            for f in v.flags:
+                v.check(build.get_flag(f), app.id)
 
 
 # Formatter for descriptions. Create an instance, and call parseline() with
@@ -554,14 +673,14 @@ def parse_srclib(metadatapath):
             continue
 
         try:
-            field, value = line.split(':', 1)
+            f, v = line.split(':', 1)
         except ValueError:
             raise MetaDataException("Invalid metadata in %s:%d" % (line, n))
 
-        if field == "Subdir":
-            thisinfo[field] = value.split(',')
+        if f == "Subdir":
+            thisinfo[f] = v.split(',')
         else:
-            thisinfo[field] = value
+            thisinfo[f] = v
 
     return thisinfo
 
@@ -640,54 +759,6 @@ def read_metadata(xref=True):
     return apps
 
 
-# Get the type expected for a given metadata field.
-def metafieldtype(name):
-    if name in ['Description', 'Maintainer Notes']:
-        return 'multiline'
-    if name in ['Categories', 'AntiFeatures']:
-        return 'list'
-    if name == 'Build Version':
-        return 'build'
-    if name == 'Build':
-        return 'buildv2'
-    if name == 'Use Built':
-        return 'obsolete'
-    if name not in app_fields:
-        return 'unknown'
-    return 'string'
-
-
-def flagtype(name):
-    if name in ['extlibs', 'srclibs', 'patch', 'rm', 'buildjni', 'preassemble',
-                'update', 'scanignore', 'scandelete', 'gradle', 'antcommands',
-                'gradleprops']:
-        return 'list'
-    if name in ['init', 'prebuild', 'build']:
-        return 'script'
-    if name in ['submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
-                'novcheck']:
-        return 'bool'
-    return 'string'
-
-
-def fill_build_defaults(build):
-
-    def get_build_type():
-        for t in ['maven', 'gradle', 'kivy']:
-            if build[t]:
-                return t
-        if build['output']:
-            return 'raw'
-        return 'ant'
-
-    for flag, value in flag_defaults.iteritems():
-        if flag in build:
-            continue
-        build[flag] = value
-    build['type'] = get_build_type()
-    build['ndk_path'] = common.get_ndk_path(build['ndk'])
-
-
 def split_list_values(s):
     # Port legacy ';' separators
     l = [v.strip() for v in s.replace(';', ',').split(',')]
@@ -709,7 +780,7 @@ def get_default_app_info(metadatapath=None):
 
 
 def sorted_builds(builds):
-    return sorted(builds, key=lambda build: int(build['vercode']))
+    return sorted(builds, key=lambda build: int(build.vercode))
 
 
 def post_metadata_parse(app):
@@ -726,59 +797,29 @@ def post_metadata_parse(app):
             text = v.rstrip().lstrip()
             app.set_field(f, text.split('\n'))
 
-    supported_flags = (flag_defaults.keys()
-                       + ['vercode', 'version', 'versionCode', 'versionName',
-                          'type', 'ndk_path'])
     esc_newlines = re.compile('\\\\( |\\n)')
 
     for build in app.builds:
-        for k, v in build.items():
-            if k not in supported_flags:
-                raise MetaDataException("Unrecognised build flag: {0}={1}"
-                                        .format(k, v))
+        for k in build_flags:
+            v = build.get_flag(k)
 
-            if k == 'versionCode':
-                build['vercode'] = str(v)
-                del build['versionCode']
-            elif k == 'versionName':
-                build['version'] = str(v)
-                del build['versionName']
-            elif type(v) in (float, int):
-                build[k] = str(v)
+            if type(v) in (float, int):
+                build.set_flag(k, v)
             else:
                 keyflagtype = flagtype(k)
-                if keyflagtype == 'list':
-                    # these can be bools, strings or lists, but ultimately are lists
-                    if isinstance(v, basestring):
-                        build[k] = [v]
-                    elif isinstance(v, bool):
-                        build[k] = ['yes' if v else 'no']
-                    elif isinstance(v, list):
-                        build[k] = []
-                        for e in v:
-                            if isinstance(e, bool):
-                                build[k].append('yes' if v else 'no')
-                            else:
-                                build[k].append(e)
 
-                elif keyflagtype == 'script':
-                    build[k] = re.sub(esc_newlines, '', v).lstrip().rstrip()
+                if keyflagtype == 'script':
+                    build.set_flag(k, re.sub(esc_newlines, '', v).lstrip().rstrip())
                 elif keyflagtype == 'bool':
                     # TODO handle this using <xsd:element type="xsd:boolean> in a schema
-                    if isinstance(v, basestring):
-                        if v == 'true':
-                            build[k] = True
-                        else:
-                            build[k] = False
+                    if isinstance(v, basestring) and v == 'true':
+                        build.set_flag(k, 'true')
                 elif keyflagtype == 'string':
-                    if isinstance(v, bool):
-                        build[k] = 'yes' if v else 'no'
+                    if isinstance(v, bool) and v:
+                        build.set_flag(k, 'yes')
 
     if not app.Description:
         app.Description = ['No description available']
-
-    for build in app.builds:
-        fill_build_defaults(build)
 
     app.builds = sorted_builds(app.builds)
 
@@ -826,16 +867,16 @@ def _decode_list(data):
 def _decode_dict(data):
     '''convert items in a dict from unicode to basestring'''
     rv = {}
-    for key, value in data.iteritems():
-        if isinstance(key, unicode):
-            key = key.encode('utf-8')
-        if isinstance(value, unicode):
-            value = value.encode('utf-8')
-        elif isinstance(value, list):
-            value = _decode_list(value)
-        elif isinstance(value, dict):
-            value = _decode_dict(value)
-        rv[key] = value
+    for k, v in data.iteritems():
+        if isinstance(k, unicode):
+            k = k.encode('utf-8')
+        if isinstance(v, unicode):
+            v = v.encode('utf-8')
+        elif isinstance(v, list):
+            v = _decode_list(v)
+        elif isinstance(v, dict):
+            v = _decode_dict(v)
+        rv[k] = v
     return rv
 
 
@@ -897,16 +938,14 @@ def parse_xml_metadata(metadatapath):
         if child.tag == 'string':
             app.set_field(name, child.text)
         elif child.tag == 'string-array':
-            items = []
             for item in child:
-                items.append(item.text)
-            app.set_field(name, items)
+                app.append_field(name, item.text)
         elif child.tag == 'builds':
-            for build in child:
-                builddict = dict()
-                for key in build:
-                    builddict[key.tag] = key.text
-                app.builds.append(builddict)
+            for b in child:
+                build = Build()
+                for key in b:
+                    build.set_flag(key.tag, key.text)
+                app.builds.append(build)
 
     # TODO handle this using <xsd:element type="xsd:boolean> in a schema
     if not isinstance(app.RequiresRoot, bool):
@@ -935,7 +974,7 @@ def parse_txt_metadata(metadatapath):
 
     linedesc = None
 
-    def add_buildflag(p, thisbuild):
+    def add_buildflag(p, build):
         if not p.strip():
             raise MetaDataException("Empty build flag at {1}"
                                     .format(buildlines[0], linedesc))
@@ -943,13 +982,10 @@ def parse_txt_metadata(metadatapath):
         if len(bv) != 2:
             raise MetaDataException("Invalid build flag at {0} in {1}"
                                     .format(buildlines[0], linedesc))
-        pk, pv = bv
-        if pk in thisbuild:
-            raise MetaDataException("Duplicate definition on {0} in version {1} of {2}"
-                                    .format(pk, thisbuild['version'], linedesc))
 
+        pk, pv = bv
         pk = pk.lstrip()
-        if pk not in flag_defaults:
+        if pk not in build_flags:
             raise MetaDataException("Unrecognised build flag at {0} in {1}"
                                     .format(p, linedesc))
         t = flagtype(pk)
@@ -958,45 +994,45 @@ def parse_txt_metadata(metadatapath):
             if pk == 'gradle':
                 if len(pv) == 1 and pv[0] in ['main', 'yes']:
                     pv = ['yes']
-            thisbuild[pk] = pv
+            build.set_flag(pk, pv)
         elif t == 'string' or t == 'script':
-            thisbuild[pk] = pv
+            build.set_flag(pk, pv)
         elif t == 'bool':
-            value = pv == 'yes'
-            if value:
-                thisbuild[pk] = True
+            v = pv == 'yes'
+            if v:
+                build.set_flag(pk, True)
 
         else:
             raise MetaDataException("Unrecognised build flag type '%s' at %s in %s"
                                     % (t, p, linedesc))
 
     def parse_buildline(lines):
-        value = "".join(lines)
+        v = "".join(lines)
         parts = [p.replace("\\,", ",")
-                 for p in re.split(r"(?<!\\),", value)]
+                 for p in re.split(r"(?<!\\),", v)]
         if len(parts) < 3:
-            raise MetaDataException("Invalid build format: " + value + " in " + metafile.name)
-        thisbuild = {}
-        thisbuild['origlines'] = lines
-        thisbuild['version'] = parts[0]
-        thisbuild['vercode'] = parts[1]
+            raise MetaDataException("Invalid build format: " + v + " in " + metafile.name)
+        build = Build()
+        build.origlines = lines
+        build.version = parts[0]
+        build.vercode = parts[1]
         if parts[2].startswith('!'):
             # For backwards compatibility, handle old-style disabling,
             # including attempting to extract the commit from the message
-            thisbuild['disable'] = parts[2][1:]
+            build.disable = parts[2][1:]
             commit = 'unknown - see disabled'
             index = parts[2].rfind('at ')
             if index != -1:
                 commit = parts[2][index + 3:]
                 if commit.endswith(')'):
                     commit = commit[:-1]
-            thisbuild['commit'] = commit
+            build.commit = commit
         else:
-            thisbuild['commit'] = parts[2]
+            build.commit = parts[2]
         for p in parts[3:]:
-            add_buildflag(p, thisbuild)
+            add_buildflag(p, build)
 
-        return thisbuild
+        return build
 
     def add_comments(key):
         if not curcomments:
@@ -1010,7 +1046,7 @@ def parse_txt_metadata(metadatapath):
     mode = 0
     buildlines = []
     curcomments = []
-    curbuild = None
+    build = None
     vc_seen = {}
 
     c = 0
@@ -1020,13 +1056,12 @@ def parse_txt_metadata(metadatapath):
         line = line.rstrip('\r\n')
         if mode == 3:
             if not any(line.startswith(s) for s in (' ', '\t')):
-                commit = curbuild['commit'] if 'commit' in curbuild else None
-                if not commit and 'disable' not in curbuild:
+                if not build.commit and not build.disable:
                     raise MetaDataException("No commit specified for {0} in {1}"
-                                            .format(curbuild['version'], linedesc))
+                                            .format(build.version, linedesc))
 
-                app.builds.append(curbuild)
-                add_comments('build:' + curbuild['vercode'])
+                app.builds.append(build)
+                add_comments('build:' + build.vercode)
                 mode = 0
             else:
                 if line.endswith('\\'):
@@ -1034,7 +1069,7 @@ def parse_txt_metadata(metadatapath):
                 else:
                     buildlines.append(line.lstrip())
                     bl = ''.join(buildlines)
-                    add_buildflag(bl, curbuild)
+                    add_buildflag(bl, build)
                     buildlines = []
 
         if mode == 0:
@@ -1044,74 +1079,74 @@ def parse_txt_metadata(metadatapath):
                 curcomments.append(line[1:].strip())
                 continue
             try:
-                field, value = line.split(':', 1)
+                f, v = line.split(':', 1)
             except ValueError:
                 raise MetaDataException("Invalid metadata in " + linedesc)
-            if field != field.strip() or value != value.strip():
+            if f != f.strip() or v != v.strip():
                 raise MetaDataException("Extra spacing found in " + linedesc)
 
             # Translate obsolete fields...
-            if field == 'Market Version':
-                field = 'Current Version'
-            if field == 'Market Version Code':
-                field = 'Current Version Code'
+            if f == 'Market Version':
+                f = 'Current Version'
+            if f == 'Market Version Code':
+                f = 'Current Version Code'
 
-            fieldtype = metafieldtype(field)
+            fieldtype = metafieldtype(f)
             if fieldtype not in ['build', 'buildv2']:
-                add_comments(field)
+                add_comments(f)
             if fieldtype == 'multiline':
                 mode = 1
-                if value:
-                    raise MetaDataException("Unexpected text on same line as " + field + " in " + linedesc)
+                if v:
+                    raise MetaDataException("Unexpected text on same line as " + f + " in " + linedesc)
             elif fieldtype == 'string':
-                app.set_field(field, value)
+                app.set_field(f, v)
             elif fieldtype == 'list':
-                app.set_field(field, split_list_values(value))
+                app.set_field(f, split_list_values(v))
             elif fieldtype == 'build':
-                if value.endswith("\\"):
+                if v.endswith("\\"):
                     mode = 2
-                    buildlines = [value[:-1]]
+                    buildlines = [v[:-1]]
                 else:
-                    curbuild = parse_buildline([value])
-                    app.builds.append(curbuild)
-                    add_comments('build:' + app.builds[-1]['vercode'])
+                    build = parse_buildline([v])
+                    app.builds.append(build)
+                    add_comments('build:' + app.builds[-1].vercode)
             elif fieldtype == 'buildv2':
-                curbuild = {}
-                vv = value.split(',')
+                build = Build()
+                vv = v.split(',')
                 if len(vv) != 2:
                     raise MetaDataException('Build should have comma-separated version and vercode, not "{0}", in {1}'
-                                            .format(value, linedesc))
-                curbuild['version'] = vv[0]
-                curbuild['vercode'] = vv[1]
-                if curbuild['vercode'] in vc_seen:
+                                            .format(v, linedesc))
+                build.version = vv[0]
+                build.vercode = vv[1]
+                if build.vercode in vc_seen:
                     raise MetaDataException('Duplicate build recipe found for vercode %s in %s' % (
-                                            curbuild['vercode'], linedesc))
-                vc_seen[curbuild['vercode']] = True
+                                            build.vercode, linedesc))
+                vc_seen[build.vercode] = True
                 buildlines = []
                 mode = 3
             elif fieldtype == 'obsolete':
                 pass        # Just throw it away!
             else:
-                raise MetaDataException("Unrecognised field type for " + field + " in " + linedesc)
+                raise MetaDataException("Unrecognised field type for " + f + " in " + linedesc)
         elif mode == 1:     # Multiline field
             if line == '.':
                 mode = 0
             else:
-                app.append_field(field, line)
+                app.append_field(f, line)
         elif mode == 2:     # Line continuation mode in Build Version
             if line.endswith("\\"):
                 buildlines.append(line[:-1])
             else:
                 buildlines.append(line)
-                curbuild = parse_buildline(buildlines)
-                app.builds.append(curbuild)
-                add_comments('build:' + app.builds[-1]['vercode'])
+                build = parse_buildline(buildlines)
+                app.builds.append(build)
+                add_comments('build:' + app.builds[-1].vercode)
                 mode = 0
     add_comments(None)
 
     # Mode at end of file should always be 0...
     if mode == 1:
-        raise MetaDataException(field + " not terminated in " + metafile.name)
+        raise MetaDataException(f + " not terminated in " + metafile.name)
     elif mode == 2:
         raise MetaDataException("Unterminated continuation in " + metafile.name)
     elif mode == 3:
@@ -1130,18 +1165,18 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
         for line in app.comments[key]:
             w_comment(line)
 
-    def w_field_always(field, value=None):
-        if value is None:
-            value = app.get_field(field)
-        w_comments(field)
-        w_field(field, value)
+    def w_field_always(f, v=None):
+        if v is None:
+            v = app.get_field(f)
+        w_comments(f)
+        w_field(f, v)
 
-    def w_field_nonempty(field, value=None):
-        if value is None:
-            value = app.get_field(field)
-        w_comments(field)
-        if value:
-            w_field(field, value)
+    def w_field_nonempty(f, v=None):
+        if v is None:
+            v = app.get_field(f)
+        w_comments(f)
+        if v:
+            w_field(f, v)
 
     w_field_nonempty('Disabled')
     if app.AntiFeatures:
@@ -1175,10 +1210,10 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
 
     for build in sorted_builds(app.builds):
 
-        if build['version'] == "Ignore":
+        if build.version == "Ignore":
             continue
 
-        w_comments('build:' + build['vercode'])
+        w_comments('build:' + build.vercode)
         w_build(build)
         mf.write('\n')
 
@@ -1211,39 +1246,37 @@ def write_txt_metadata(mf, app):
     def w_comment(line):
         mf.write("# %s\n" % line)
 
-    def w_field(field, value):
-        t = metafieldtype(field)
+    def w_field(f, v):
+        t = metafieldtype(f)
         if t == 'list':
-            value = ','.join(value)
+            v = ','.join(v)
         elif t == 'multiline':
-            if type(value) == list:
-                value = '\n' + '\n'.join(value) + '\n.'
+            if type(v) == list:
+                v = '\n' + '\n'.join(v) + '\n.'
             else:
-                value = '\n' + value + '\n.'
-        mf.write("%s:%s\n" % (field, value))
+                v = '\n' + v + '\n.'
+        mf.write("%s:%s\n" % (f, v))
 
     def w_build(build):
-        mf.write("Build:%s,%s\n" % (build['version'], build['vercode']))
+        mf.write("Build:%s,%s\n" % (build.version, build.vercode))
 
-        for key in flag_defaults:
-            value = build[key]
-            if not value:
-                continue
-            if value == flag_defaults[key]:
+        for f in build_flags_order:
+            v = build.get_flag(f)
+            if not v:
                 continue
 
-            t = flagtype(key)
-            v = '    %s=' % key
+            t = flagtype(f)
+            out = '    %s=' % f
             if t == 'string':
-                v += value
+                out += v
             elif t == 'bool':
-                v += 'yes'
+                out += 'yes'
             elif t == 'script':
-                v += '&& \\\n        '.join([s.lstrip() for s in value.split('&& ')])
+                out += '&& \\\n        '.join([s.lstrip() for s in v.split('&& ')])
             elif t == 'list':
-                v += ','.join(value) if type(value) == list else value
+                out += ','.join(v) if type(v) == list else v
 
-            mf.write(v)
+            mf.write(out)
             mf.write('\n')
 
     write_plaintext_metadata(mf, app, w_comment, w_field, w_build)
@@ -1254,26 +1287,26 @@ def write_yaml_metadata(mf, app):
     def w_comment(line):
         mf.write("# %s\n" % line)
 
-    def escape(value):
-        if not value:
+    def escape(v):
+        if not v:
             return ''
-        if any(c in value for c in [': ', '%', '@', '*']):
-            return "'" + value.replace("'", "''") + "'"
-        return value
+        if any(c in v for c in [': ', '%', '@', '*']):
+            return "'" + v.replace("'", "''") + "'"
+        return v
 
-    def w_field(field, value, prefix='', t=None):
+    def w_field(f, v, prefix='', t=None):
         if t is None:
-            t = metafieldtype(field)
+            t = metafieldtype(f)
         v = ''
         if t == 'list':
             v = '\n'
-            for e in value:
+            for e in v:
                 v += prefix + ' - ' + escape(e) + '\n'
         elif t == 'multiline':
             v = ' |\n'
-            lines = value
-            if type(value) == str:
-                lines = value.splitlines()
+            lines = v
+            if type(v) == str:
+                lines = v.splitlines()
             for l in lines:
                 if l:
                     v += prefix + '  ' + l + '\n'
@@ -1282,16 +1315,16 @@ def write_yaml_metadata(mf, app):
         elif t == 'bool':
             v = ' yes\n'
         elif t == 'script':
-            cmds = [s + '&& \\' for s in value.split('&& ')]
+            cmds = [s + '&& \\' for s in v.split('&& ')]
             if len(cmds) > 0:
                 cmds[-1] = cmds[-1][:-len('&& \\')]
-            w_field(field, cmds, prefix, 'multiline')
+            w_field(f, cmds, prefix, 'multiline')
             return
         else:
-            v = ' ' + escape(value) + '\n'
+            v = ' ' + escape(v) + '\n'
 
         mf.write(prefix)
-        mf.write(field)
+        mf.write(f)
         mf.write(":")
         mf.write(v)
 
@@ -1304,16 +1337,14 @@ def write_yaml_metadata(mf, app):
             mf.write("builds:\n")
             first_build = False
 
-        w_field('versionName', build['version'], '  - ', 'string')
-        w_field('versionCode', build['vercode'], '    ', 'strsng')
-        for key in flag_defaults:
-            value = build[key]
-            if not value:
-                continue
-            if value == flag_defaults[key]:
+        w_field('versionName', build.version, '  - ', 'string')
+        w_field('versionCode', build.vercode, '    ', 'strsng')
+        for f in build_flags_order:
+            v = build.get_flag(f)
+            if not v:
                 continue
 
-            w_field(key, value, '    ', flagtype(key))
+            w_field(f, v, '    ', flagtype(f))
 
     write_plaintext_metadata(mf, app, w_comment, w_field, w_build)
 

@@ -144,26 +144,26 @@ def update_wiki(apps, sortedids, apks):
                     gotcurrentver = True
                 apklist.append(apk)
         # Include ones we can't build, as a special case...
-        for thisbuild in app.builds:
-            if thisbuild['disable']:
-                if thisbuild['vercode'] == app.CurrentVersionCode:
+        for build in app.builds:
+            if build.disable:
+                if build.vercode == app.CurrentVersionCode:
                     cantupdate = True
                 # TODO: Nasty: vercode is a string in the build, and an int elsewhere
-                apklist.append({'versioncode': int(thisbuild['vercode']),
-                                'version': thisbuild['version'],
-                                'buildproblem': "The build for this version was manually disabled. Reason: {0}".format(thisbuild['disable']),
+                apklist.append({'versioncode': int(build.vercode),
+                                'version': build.version,
+                                'buildproblem': "The build for this version was manually disabled. Reason: {0}".format(build.disable),
                                 })
             else:
                 builtit = False
                 for apk in apklist:
-                    if apk['versioncode'] == int(thisbuild['vercode']):
+                    if apk['versioncode'] == int(build.vercode):
                         builtit = True
                         break
                 if not builtit:
                     buildfails = True
-                    apklist.append({'versioncode': int(thisbuild['vercode']),
-                                    'version': thisbuild['version'],
-                                    'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(appid, thisbuild['vercode']),
+                    apklist.append({'versioncode': int(build.vercode),
+                                    'version': build.version,
+                                    'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(appid, build.vercode),
                                     })
         if app.CurrentVersionCode == '0':
             cantupdate = True
@@ -291,12 +291,12 @@ def delete_disabled_builds(apps, apkcache, repodirs):
     """
     for appid, app in apps.iteritems():
         for build in app.builds:
-            if not build['disable']:
+            if not build.disable:
                 continue
-            apkfilename = appid + '_' + str(build['vercode']) + '.apk'
+            apkfilename = appid + '_' + str(build.vercode) + '.apk'
             iconfilename = "%s.%s.png" % (
                 appid,
-                build['vercode'])
+                build.vercode)
             for repodir in repodirs:
                 files = [
                     os.path.join(repodir, apkfilename),
@@ -453,8 +453,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
         usecache = False
         if apkfilename in apkcache:
-            thisinfo = apkcache[apkfilename]
-            if thisinfo['sha256'] == shasum:
+            apk = apkcache[apkfilename]
+            if apk['sha256'] == shasum:
                 logging.debug("Reading " + apkfilename + " from cache")
                 usecache = True
             else:
@@ -462,17 +462,17 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
         if not usecache:
             logging.debug("Processing " + apkfilename)
-            thisinfo = {}
-            thisinfo['apkname'] = apkfilename
-            thisinfo['sha256'] = shasum
+            apk = {}
+            apk['apkname'] = apkfilename
+            apk['sha256'] = shasum
             srcfilename = apkfilename[:-4] + "_src.tar.gz"
             if os.path.exists(os.path.join(repodir, srcfilename)):
-                thisinfo['srcname'] = srcfilename
-            thisinfo['size'] = os.path.getsize(apkfile)
-            thisinfo['permissions'] = set()
-            thisinfo['features'] = set()
-            thisinfo['icons_src'] = {}
-            thisinfo['icons'] = {}
+                apk['srcname'] = srcfilename
+            apk['size'] = os.path.getsize(apkfile)
+            apk['permissions'] = set()
+            apk['features'] = set()
+            apk['icons_src'] = {}
+            apk['icons'] = {}
             p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
             if p.returncode != 0:
                 if options.delete_unknown:
@@ -487,51 +487,51 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             for line in p.output.splitlines():
                 if line.startswith("package:"):
                     try:
-                        thisinfo['id'] = re.match(name_pat, line).group(1)
-                        thisinfo['versioncode'] = int(re.match(vercode_pat, line).group(1))
-                        thisinfo['version'] = re.match(vername_pat, line).group(1)
+                        apk['id'] = re.match(name_pat, line).group(1)
+                        apk['versioncode'] = int(re.match(vercode_pat, line).group(1))
+                        apk['version'] = re.match(vername_pat, line).group(1)
                     except Exception, e:
                         logging.error("Package matching failed: " + str(e))
                         logging.info("Line was: " + line)
                         sys.exit(1)
                 elif line.startswith("application:"):
-                    thisinfo['name'] = re.match(label_pat, line).group(1)
+                    apk['name'] = re.match(label_pat, line).group(1)
                     # Keep path to non-dpi icon in case we need it
                     match = re.match(icon_pat_nodpi, line)
                     if match:
-                        thisinfo['icons_src']['-1'] = match.group(1)
+                        apk['icons_src']['-1'] = match.group(1)
                 elif line.startswith("launchable-activity:"):
                     # Only use launchable-activity as fallback to application
-                    if not thisinfo['name']:
-                        thisinfo['name'] = re.match(label_pat, line).group(1)
-                    if '-1' not in thisinfo['icons_src']:
+                    if not apk['name']:
+                        apk['name'] = re.match(label_pat, line).group(1)
+                    if '-1' not in apk['icons_src']:
                         match = re.match(icon_pat_nodpi, line)
                         if match:
-                            thisinfo['icons_src']['-1'] = match.group(1)
+                            apk['icons_src']['-1'] = match.group(1)
                 elif line.startswith("application-icon-"):
                     match = re.match(icon_pat, line)
                     if match:
                         density = match.group(1)
                         path = match.group(2)
-                        thisinfo['icons_src'][density] = path
+                        apk['icons_src'][density] = path
                 elif line.startswith("sdkVersion:"):
                     m = re.match(sdkversion_pat, line)
                     if m is None:
                         logging.error(line.replace('sdkVersion:', '')
                                       + ' is not a valid minSdkVersion!')
                     else:
-                        thisinfo['sdkversion'] = m.group(1)
+                        apk['sdkversion'] = m.group(1)
                 elif line.startswith("maxSdkVersion:"):
-                    thisinfo['maxsdkversion'] = re.match(sdkversion_pat, line).group(1)
+                    apk['maxsdkversion'] = re.match(sdkversion_pat, line).group(1)
                 elif line.startswith("native-code:"):
-                    thisinfo['nativecode'] = []
+                    apk['nativecode'] = []
                     for arch in line[13:].split(' '):
-                        thisinfo['nativecode'].append(arch[1:-1])
+                        apk['nativecode'].append(arch[1:-1])
                 elif line.startswith("uses-permission:"):
                     perm = re.match(string_pat, line).group(1)
                     if perm.startswith("android.permission."):
                         perm = perm[19:]
-                    thisinfo['permissions'].add(perm)
+                    apk['permissions'].add(perm)
                 elif line.startswith("uses-feature:"):
                     perm = re.match(string_pat, line).group(1)
                     # Filter out this, it's only added with the latest SDK tools and
@@ -540,11 +540,11 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                             and perm != "android.hardware.screen.landscape":
                         if perm.startswith("android.feature."):
                             perm = perm[16:]
-                        thisinfo['features'].add(perm)
+                        apk['features'].add(perm)
 
-            if 'sdkversion' not in thisinfo:
+            if 'sdkversion' not in apk:
                 logging.warn("No SDK version information found in {0}".format(apkfile))
-                thisinfo['sdkversion'] = 0
+                apk['sdkversion'] = 0
 
             # Check for debuggable apks...
             if common.isApkDebuggable(apkfile, config):
@@ -552,20 +552,20 @@ def scan_apks(apps, apkcache, repodir, knownapks):
 
             # Get the signature (or md5 of, to be precise)...
             logging.debug('Getting signature of {0}'.format(apkfile))
-            thisinfo['sig'] = getsig(os.path.join(os.getcwd(), apkfile))
-            if not thisinfo['sig']:
+            apk['sig'] = getsig(os.path.join(os.getcwd(), apkfile))
+            if not apk['sig']:
                 logging.critical("Failed to get apk signature")
                 sys.exit(1)
 
-            apk = zipfile.ZipFile(apkfile, 'r')
+            apkzip = zipfile.ZipFile(apkfile, 'r')
 
             # if an APK has files newer than the system time, suggest updating
             # the system clock.  This is useful for offline systems, used for
             # signing, which do not have another source of clock sync info. It
             # has to be more than 24 hours newer because ZIP/APK files do not
             # store timezone info
-            info = apk.getinfo('AndroidManifest.xml')
-            dt_obj = datetime(*info.date_time)
+            manifest = apkzip.getinfo('AndroidManifest.xml')
+            dt_obj = datetime(*manifest.date_time)
             checkdt = dt_obj - timedelta(1)
             if datetime.today() < checkdt:
                 logging.warn('System clock is older than manifest in: '
@@ -573,44 +573,44 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                              + 'sudo date -s "' + str(dt_obj) + '"')
 
             iconfilename = "%s.%s.png" % (
-                thisinfo['id'],
-                thisinfo['versioncode'])
+                apk['id'],
+                apk['versioncode'])
 
             # Extract the icon file...
             empty_densities = []
             for density in screen_densities:
-                if density not in thisinfo['icons_src']:
+                if density not in apk['icons_src']:
                     empty_densities.append(density)
                     continue
-                iconsrc = thisinfo['icons_src'][density]
+                iconsrc = apk['icons_src'][density]
                 icon_dir = get_icon_dir(repodir, density)
                 icondest = os.path.join(icon_dir, iconfilename)
 
                 try:
                     with open(icondest, 'wb') as f:
-                        f.write(apk.read(iconsrc))
-                    thisinfo['icons'][density] = iconfilename
+                        f.write(apkzip.read(iconsrc))
+                    apk['icons'][density] = iconfilename
 
                 except:
                     logging.warn("Error retrieving icon file")
-                    del thisinfo['icons'][density]
-                    del thisinfo['icons_src'][density]
+                    del apk['icons'][density]
+                    del apk['icons_src'][density]
                     empty_densities.append(density)
 
-            if '-1' in thisinfo['icons_src']:
-                iconsrc = thisinfo['icons_src']['-1']
+            if '-1' in apk['icons_src']:
+                iconsrc = apk['icons_src']['-1']
                 iconpath = os.path.join(
                     get_icon_dir(repodir, '0'), iconfilename)
                 with open(iconpath, 'wb') as f:
-                    f.write(apk.read(iconsrc))
+                    f.write(apkzip.read(iconsrc))
                 try:
                     im = Image.open(iconpath)
                     dpi = px_to_dpi(im.size[0])
                     for density in screen_densities:
-                        if density in thisinfo['icons']:
+                        if density in apk['icons']:
                             break
                         if density == screen_densities[-1] or dpi >= int(density):
-                            thisinfo['icons'][density] = iconfilename
+                            apk['icons'][density] = iconfilename
                             shutil.move(iconpath,
                                         os.path.join(get_icon_dir(repodir, density), iconfilename))
                             empty_densities.remove(density)
@@ -618,10 +618,10 @@ def scan_apks(apps, apkcache, repodir, knownapks):
                 except Exception, e:
                     logging.warn("Failed reading {0} - {1}".format(iconpath, e))
 
-            if thisinfo['icons']:
-                thisinfo['icon'] = iconfilename
+            if apk['icons']:
+                apk['icon'] = iconfilename
 
-            apk.close()
+            apkzip.close()
 
             # First try resizing down to not lose quality
             last_density = None
@@ -675,19 +675,19 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             # Copy from icons-mdpi to icons since mdpi is the baseline density
             baseline = os.path.join(get_icon_dir(repodir, '160'), iconfilename)
             if os.path.isfile(baseline):
-                thisinfo['icons']['0'] = iconfilename
+                apk['icons']['0'] = iconfilename
                 shutil.copyfile(baseline,
                                 os.path.join(get_icon_dir(repodir, '0'), iconfilename))
 
             # Record in known apks, getting the added date at the same time..
-            added = knownapks.recordapk(thisinfo['apkname'], thisinfo['id'])
+            added = knownapks.recordapk(apk['apkname'], apk['id'])
             if added:
-                thisinfo['added'] = added
+                apk['added'] = added
 
-            apkcache[apkfilename] = thisinfo
+            apkcache[apkfilename] = apk
             cachechanged = True
 
-        apks.append(thisinfo)
+        apks.append(apk)
 
     return apks, cachechanged
 
