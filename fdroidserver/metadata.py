@@ -793,13 +793,6 @@ def post_metadata_parse(app):
         if type(v) in (float, int):
             app.set_field(f, str(v))
 
-    # convert to the odd internal format
-    for f in ('Description', 'Maintainer Notes'):
-        v = app.get_field(f)
-        if isinstance(v, basestring):
-            text = v.rstrip().lstrip()
-            app.set_field(f, text.split('\n'))
-
     for build in app.builds:
         for k in build_flags:
             v = build.get_flag(k)
@@ -819,6 +812,13 @@ def post_metadata_parse(app):
             elif ftype == 'string':
                 if isinstance(v, bool) and v:
                     build.set_flag(k, 'yes')
+
+    # convert to the odd internal format
+    for f in ('Description', 'Maintainer Notes'):
+        v = app.get_field(f)
+        if isinstance(v, basestring):
+            text = v.rstrip().lstrip()
+            app.set_field(f, text.split('\n'))
 
     if not app.Description:
         app.Description = ['No description available']
@@ -891,17 +891,21 @@ def parse_metadata(metadatapath):
                          + 'convert to: ' + ', '.join(accepted))
         sys.exit(1)
 
+    app = None
     if ext == 'txt':
-        return parse_txt_metadata(metadatapath)
-    if ext == 'json':
-        return parse_json_metadata(metadatapath)
-    if ext == 'xml':
-        return parse_xml_metadata(metadatapath)
-    if ext == 'yaml':
-        return parse_yaml_metadata(metadatapath)
+        app = parse_txt_metadata(metadatapath)
+    elif ext == 'json':
+        app = parse_json_metadata(metadatapath)
+    elif ext == 'xml':
+        app = parse_xml_metadata(metadatapath)
+    elif ext == 'yaml':
+        app = parse_yaml_metadata(metadatapath)
+    else:
+        logging.critical('Unknown metadata format: ' + metadatapath)
+        sys.exit(1)
 
-    logging.critical('Unknown metadata format: ' + metadatapath)
-    sys.exit(1)
+    post_metadata_parse(app)
+    return app
 
 
 def parse_json_metadata(metadatapath):
@@ -916,8 +920,6 @@ def parse_json_metadata(metadatapath):
                          parse_int=lambda s: s,
                          parse_float=lambda s: s)
     app.update_fields(jsoninfo)
-    post_metadata_parse(app)
-
     return app
 
 
@@ -956,8 +958,6 @@ def parse_xml_metadata(metadatapath):
         else:
             app.RequiresRoot = False
 
-    post_metadata_parse(app)
-
     return app
 
 
@@ -967,8 +967,6 @@ def parse_yaml_metadata(metadatapath):
 
     yamlinfo = yaml.load(open(metadatapath, 'r'), Loader=YamlLoader)
     app.update_fields(yamlinfo)
-    post_metadata_parse(app)
-
     return app
 
 
@@ -1155,8 +1153,6 @@ def parse_txt_metadata(metadatapath):
         raise MetaDataException("Unterminated continuation in " + metafile.name)
     elif mode == 3:
         raise MetaDataException("Unterminated build in " + metafile.name)
-
-    post_metadata_parse(app)
 
     return app
 
