@@ -783,6 +783,9 @@ def sorted_builds(builds):
     return sorted(builds, key=lambda build: int(build.vercode))
 
 
+esc_newlines = re.compile('\\\\( |\\n)')
+
+
 def post_metadata_parse(app):
 
     for f in app_fields:
@@ -796,8 +799,6 @@ def post_metadata_parse(app):
         if isinstance(v, basestring):
             text = v.rstrip().lstrip()
             app.set_field(f, text.split('\n'))
-
-    esc_newlines = re.compile('\\\\( |\\n)')
 
     for build in app.builds:
         for k in build_flags:
@@ -970,6 +971,9 @@ def parse_yaml_metadata(metadatapath):
     return app
 
 
+build_line_sep = re.compile(r"(?<!\\),")
+
+
 def parse_txt_metadata(metadatapath):
 
     linedesc = None
@@ -1008,8 +1012,7 @@ def parse_txt_metadata(metadatapath):
 
     def parse_buildline(lines):
         v = "".join(lines)
-        parts = [p.replace("\\,", ",")
-                 for p in re.split(r"(?<!\\),", v)]
+        parts = [p.replace("\\,", ",") for p in re.split(build_line_sep, v)]
         if len(parts) < 3:
             raise MetaDataException("Invalid build format: " + v + " in " + metafile.name)
         build = Build()

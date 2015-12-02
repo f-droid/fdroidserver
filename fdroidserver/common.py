@@ -380,7 +380,7 @@ def has_extension(filename, ext):
     return ext == f_ext
 
 
-apk_regex = None
+apk_regex = re.compile(r"^(.+)_([0-9]+)\.apk$")
 
 
 def clean_description(description):
@@ -397,10 +397,7 @@ def clean_description(description):
 
 
 def apknameinfo(filename):
-    global apk_regex
     filename = os.path.basename(filename)
-    if apk_regex is None:
-        apk_regex = re.compile(r"^(.+)_([0-9]+)\.apk$")
     m = apk_regex.match(filename)
     try:
         result = (m.group(1), m.group(2))
