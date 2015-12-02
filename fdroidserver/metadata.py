@@ -805,19 +805,20 @@ def post_metadata_parse(app):
             v = build.get_flag(k)
 
             if type(v) in (float, int):
-                build.set_flag(k, v)
-            else:
-                keyflagtype = flagtype(k)
+                build.set_flag(k, str(v))
+                continue
 
-                if keyflagtype == 'script':
-                    build.set_flag(k, re.sub(esc_newlines, '', v).lstrip().rstrip())
-                elif keyflagtype == 'bool':
-                    # TODO handle this using <xsd:element type="xsd:boolean> in a schema
-                    if isinstance(v, basestring) and v == 'true':
-                        build.set_flag(k, 'true')
-                elif keyflagtype == 'string':
-                    if isinstance(v, bool) and v:
-                        build.set_flag(k, 'yes')
+            ftype = flagtype(k)
+
+            if ftype == 'script':
+                build.set_flag(k, re.sub(esc_newlines, '', v).lstrip().rstrip())
+            elif ftype == 'bool':
+                # TODO handle this using <xsd:element type="xsd:boolean> in a schema
+                if isinstance(v, basestring) and v == 'true':
+                    build.set_flag(k, True)
+            elif ftype == 'string':
+                if isinstance(v, bool) and v:
+                    build.set_flag(k, 'yes')
 
     if not app.Description:
         app.Description = ['No description available']

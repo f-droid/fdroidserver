@@ -41,10 +41,10 @@ class MetadataTest(unittest.TestCase):
         for appid in ('org.smssecure.smssecure', 'org.adaway', 'net.osmand.plus', 'org.videolan.vlc'):
             app = apps[appid]
             savepath = os.path.join('metadata', appid + '.pickle')
+            frommeta = app.field_dict()
             self.assertTrue(appid in apps)
             with open(savepath, 'r') as f:
                 frompickle = pickle.load(f)
-            frommeta = app.field_dict()
             self.assertEquals(frommeta, frompickle)
             # Uncomment to overwrite
             # with open(savepath, 'wb') as f:
