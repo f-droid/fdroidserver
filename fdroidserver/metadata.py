@@ -20,10 +20,8 @@
 import json
 import os
 import re
-import sys
 import glob
 import cgi
-import logging
 import textwrap
 
 import yaml
@@ -889,10 +887,8 @@ def parse_metadata(metadatapath):
     _, ext = common.get_extension(metadatapath)
     accepted = common.config['accepted_formats']
     if ext not in accepted:
-        logging.critical('"' + metadatapath
-                         + '" is not in an accepted format, '
-                         + 'convert to: ' + ', '.join(accepted))
-        sys.exit(1)
+        raise MetaDataException('"%s" is not an accepted format, convert to: %s' % (
+            metadatapath, ', '.join(accepted)))
 
     app = None
     if ext == 'txt':
@@ -904,8 +900,7 @@ def parse_metadata(metadatapath):
     elif ext == 'yaml':
         app = parse_yaml_metadata(metadatapath)
     else:
-        logging.critical('Unknown metadata format: ' + metadatapath)
-        sys.exit(1)
+        raise MetaDataException('Unknown metadata format: %s' % metadatapath)
 
     post_metadata_parse(app)
     return app
@@ -934,8 +929,7 @@ def parse_xml_metadata(metadatapath):
     root = tree.getroot()
 
     if root.tag != 'resources':
-        logging.critical(metadatapath + ' does not have root as <resources></resources>!')
-        sys.exit(1)
+        raise MetaDataException('%s does not have root as <resources></resources>!' % metadatapath)
 
     for child in root:
         if child.tag != 'builds':
