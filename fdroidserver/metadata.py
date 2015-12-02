@@ -312,7 +312,7 @@ class Build():
         for f in ['maven', 'gradle', 'kivy']:
             if self.get_flag(f):
                 return f
-        if build.output:
+        if self.output:
             return 'raw'
         return 'ant'
 
