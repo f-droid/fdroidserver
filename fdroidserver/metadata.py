@@ -298,7 +298,7 @@ class Build():
             f = 'vercode'
         if f not in build_flags:
             raise MetaDataException('Unrecognised build flag: ' + f)
-        setattr(self, f, v)
+        self.__dict__[f] = v
 
     def append_flag(self, f, v):
         if f not in build_flags:
@@ -329,16 +329,20 @@ class Build():
         for f, v in d.iteritems():
             self.set_flag(f, v)
 
+list_flags = set(['extlibs', 'srclibs', 'patch', 'rm', 'buildjni', 'preassemble',
+                  'update', 'scanignore', 'scandelete', 'gradle', 'antcommands',
+                  'gradleprops'])
+script_flags = set(['init', 'prebuild', 'build'])
+bool_flags = set(['submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
+                  'novcheck'])
+
 
 def flagtype(name):
-    if name in ['extlibs', 'srclibs', 'patch', 'rm', 'buildjni', 'preassemble',
-                'update', 'scanignore', 'scandelete', 'gradle', 'antcommands',
-                'gradleprops']:
+    if name in list_flags:
         return 'list'
-    if name in ['init', 'prebuild', 'build']:
+    if name in script_flags:
         return 'script'
-    if name in ['submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
-                'novcheck']:
+    if name in bool_flags:
         return 'bool'
     return 'string'
 
@@ -786,32 +790,31 @@ def sorted_builds(builds):
 esc_newlines = re.compile('\\\\( |\\n)')
 
 
+# This function uses __dict__ to be faster
 def post_metadata_parse(app):
 
-    for f in app_fields:
-        v = app.get_field(f)
+    for k, v in app.__dict__.iteritems():
         if type(v) in (float, int):
-            app.set_field(f, str(v))
+            app.__dict__[f] = str(v)
 
     for build in app.builds:
-        for k in build_flags:
-            v = build.get_flag(k)
+        for k, v in app.__dict__.iteritems():
 
             if type(v) in (float, int):
-                build.set_flag(k, str(v))
+                build.__dict__[k] = str(v)
                 continue
 
             ftype = flagtype(k)
 
             if ftype == 'script':
-                build.set_flag(k, re.sub(esc_newlines, '', v).lstrip().rstrip())
+                build.__dict__[k] = re.sub(esc_newlines, '', v).lstrip().rstrip()
             elif ftype == 'bool':
                 # TODO handle this using <xsd:element type="xsd:boolean> in a schema
                 if isinstance(v, basestring) and v == 'true':
-                    build.set_flag(k, True)
+                    build.__dict__[k] = True
             elif ftype == 'string':
                 if isinstance(v, bool) and v:
-                    build.set_flag(k, 'yes')
+                    build.__dict__[k] = 'yes'
 
     # convert to the odd internal format
     for f in ('Description', 'Maintainer Notes'):
