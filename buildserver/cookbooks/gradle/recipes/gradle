@@ -30,7 +30,7 @@ d_plugin_v=(2.4 2.3 2.2.1 2.2.1  2.1  2.1 1.12 1.12 1.12 1.11 1.10 1.9 1.8 1.6 1
 plugin_v=(2.9 2.8 2.7 2.6 2.5 2.4 2.3 2.2.1 2.1 1.12 1.11 1.10 1.9 1.8 1.7 1.6 1.4)
 
 # Find the highest version available
-for v in ${plugin_v}; do
+for v in ${plugin_v[*]}; do
 	if contains $v "${v_all[*]}"; then
 		v_def=$v
 		break
