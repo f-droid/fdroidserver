@@ -278,7 +278,7 @@ class Build():
         self.submodules = False
         self.init = ''
         self.patch = []
-        self.gradle = False
+        self.gradle = []
         self.maven = False
         self.kivy = False
         self.output = None
@@ -290,7 +290,7 @@ class Build():
         self.rm = []
         self.extlibs = []
         self.prebuild = ''
-        self.update = None
+        self.update = []
         self.target = None
         self.scanignore = []
         self.scandelete = []
@@ -299,7 +299,7 @@ class Build():
         self.ndk = None
         self.preassemble = []
         self.gradleprops = []
-        self.antcommands = None
+        self.antcommands = []
         self.novcheck = False
 
         self._modified = set()
