@@ -684,6 +684,8 @@ def parse_srclib(metadatapath):
         else:
             thisinfo[f] = v
 
+    metafile.close()
+
     return thisinfo
 
 
@@ -760,11 +762,20 @@ def read_metadata(xref=True):
 
     return apps
 
+# Port legacy ';' separators
+list_sep = re.compile(r'[,;]')
+
 
 def split_list_values(s):
-    # Port legacy ';' separators
-    l = [v.strip() for v in s.replace(';', ',').split(',')]
-    return [v for v in l if v]
+    res = []
+    for v in re.split(list_sep, s):
+        if not v:
+            continue
+        v = v.strip()
+        if not v:
+            continue
+        res.append(v)
+    return res
 
 
 def get_default_app_info(metadatapath=None):
@@ -913,10 +924,11 @@ def parse_json_metadata(metadatapath):
     # fdroid metadata is only strings and booleans, no floats or ints. And
     # json returns unicode, and fdroidserver still uses plain python strings
     # TODO create schema using https://pypi.python.org/pypi/jsonschema
-    jsoninfo = json.load(open(metadatapath, 'r'),
-                         object_hook=_decode_dict,
-                         parse_int=lambda s: s,
-                         parse_float=lambda s: s)
+    jsoninfo = None
+    with open(metadatapath, 'r') as f:
+        jsoninfo = json.load(f, object_hook=_decode_dict,
+                             parse_int=lambda s: s,
+                             parse_float=lambda s: s)
     app.update_fields(jsoninfo)
     return app
 
@@ -962,7 +974,9 @@ def parse_yaml_metadata(metadatapath):
 
     app = get_default_app_info(metadatapath)
 
-    yamlinfo = yaml.load(open(metadatapath, 'r'), Loader=YamlLoader)
+    yamlinfo = None
+    with open(metadatapath, 'r') as f:
+        yamlinfo = yaml.load(f, Loader=YamlLoader)
     app.update_fields(yamlinfo)
     return app
 
@@ -1142,13 +1156,14 @@ def parse_txt_metadata(metadatapath):
                 add_comments('build:' + app.builds[-1].vercode)
                 mode = 0
     add_comments(None)
+    metafile.close()
 
-    # Mode at end of file should always be 0...
+    # Mode at end of file should always be 0
     if mode == 1:
         raise MetaDataException(f + " not terminated in " + metafile.name)
-    elif mode == 2:
+    if mode == 2:
         raise MetaDataException("Unterminated continuation in " + metafile.name)
-    elif mode == 3:
+    if mode == 3:
         raise MetaDataException("Unterminated build in " + metafile.name)
 
     return app
