@@ -437,7 +437,7 @@ valuetypes = {
 
     FieldValidator("HTTP link",
                    r'^http[s]?://', None,
-                   ["Web Site", "Source Code", "Issue Tracker", "Changelog", "Donate"], []),
+                   ["WebSite", "SourceCode", "IssueTracker", "Changelog", "Donate"], []),
 
     FieldValidator("Bitcoin address",
                    r'^[a-zA-Z0-9]{27,34}$', None,
@@ -451,7 +451,7 @@ valuetypes = {
 
     FieldValidator("Repo Type",
                    ['git', 'git-svn', 'svn', 'hg', 'bzr', 'srclib'], None,
-                   ["Repo Type"],
+                   ["RepoType"],
                    []),
 
     FieldValidator("Binaries",
@@ -461,7 +461,7 @@ valuetypes = {
 
     FieldValidator("Archive Policy",
                    r'^[0-9]+ versions$', None,
-                   ["Archive Policy"],
+                   ["ArchivePolicy"],
                    []),
 
     FieldValidator("Anti-Feature",
@@ -471,12 +471,12 @@ valuetypes = {
 
     FieldValidator("Auto Update Mode",
                    r"^(Version .+|None)$", None,
-                   ["Auto Update Mode"],
+                   ["AutoUpdateMode"],
                    []),
 
     FieldValidator("Update Check Mode",
                    r"^(Tags|Tags .+|RepoManifest|RepoManifest/.+|RepoTrunk|HTTP|Static|None)$", None,
-                   ["Update Check Mode"],
+                   ["UpdateCheckMode"],
                    [])
 }
 
@@ -484,11 +484,15 @@ valuetypes = {
 # Check an app's metadata information for integrity errors
 def check_metadata(app):
     for v in valuetypes:
-        for f in v.fields:
-            v.check(app.get_field(f), app.id)
+        for k in v.fields:
+            if k not in app._modified:
+                continue
+            v.check(app.__dict__[k], app.id)
         for build in app.builds:
-            for f in v.flags:
-                v.check(build.get_flag(f), app.id)
+            for k in v.flags:
+                if k not in build._modified:
+                    continue
+                v.check(build.__dict__[k], app.id)
 
 
 # Formatter for descriptions. Create an instance, and call parseline() with
