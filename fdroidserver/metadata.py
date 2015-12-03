@@ -796,7 +796,7 @@ def sorted_builds(builds):
     return sorted(builds, key=lambda build: int(build.vercode))
 
 
-esc_newlines = re.compile('\\\\( |\\n)')
+esc_newlines = re.compile(r'\\( |\n)')
 
 
 # This function uses __dict__ to be faster
@@ -804,15 +804,14 @@ def post_metadata_parse(app):
 
     for k, v in app.__dict__.iteritems():
         if type(v) in (float, int):
-            app.__dict__[f] = str(v)
+            app.__dict__[k] = str(v)
 
     for build in app.builds:
-        for k, v in app.__dict__.iteritems():
+        for k, v in build.__dict__.iteritems():
 
             if type(v) in (float, int):
                 build.__dict__[k] = str(v)
                 continue
-
             ftype = flagtype(k)
 
             if ftype == 'script':
