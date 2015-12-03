@@ -524,41 +524,41 @@ class DescriptionFormatter:
         self.state = self.stNONE
 
     def formatted(self, txt, html):
-        formatted = ''
+        res = ''
         if html:
             txt = cgi.escape(txt)
         while True:
             index = txt.find("''")
             if index == -1:
-                return formatted + txt
-            formatted += txt[:index]
+                return res + txt
+            res += txt[:index]
             txt = txt[index:]
             if txt.startswith("'''"):
                 if html:
                     if self.bold:
-                        formatted += '</b>'
+                        res += '</b>'
                     else:
-                        formatted += '<b>'
+                        res += '<b>'
                 self.bold = not self.bold
                 txt = txt[3:]
             else:
                 if html:
                     if self.ital:
-                        formatted += '</i>'
+                        res += '</i>'
                     else:
-                        formatted += '<i>'
+                        res += '<i>'
                 self.ital = not self.ital
                 txt = txt[2:]
 
     def linkify(self, txt):
-        linkified_plain = ''
-        linkified_html = ''
+        res_plain = ''
+        res_html = ''
         while True:
             index = txt.find("[")
             if index == -1:
-                return (linkified_plain + self.formatted(txt, False), linkified_html + self.formatted(txt, True))
-            linkified_plain += self.formatted(txt[:index], False)
-            linkified_html += self.formatted(txt[:index], True)
+                return (res_plain + self.formatted(txt, False), res_html + self.formatted(txt, True))
+            res_plain += self.formatted(txt[:index], False)
+            res_html += self.formatted(txt[:index], True)
             txt = txt[index:]
             if txt.startswith("[["):
                 index = txt.find("]]")
@@ -569,8 +569,8 @@ class DescriptionFormatter:
                     url, urltext = self.linkResolver(url)
                 else:
                     urltext = url
-                linkified_html += '<a href="' + url + '">' + cgi.escape(urltext) + '</a>'
-                linkified_plain += urltext
+                res_html += '<a href="' + url + '">' + cgi.escape(urltext) + '</a>'
+                res_plain += urltext
                 txt = txt[index + 2:]
             else:
                 index = txt.find("]")
@@ -585,10 +585,10 @@ class DescriptionFormatter:
                     url = url[:index2]
                     if url == urltxt:
                         raise MetaDataException("Url title is just the URL - use [url]")
-                linkified_html += '<a href="' + url + '">' + cgi.escape(urltxt) + '</a>'
-                linkified_plain += urltxt
+                res_html += '<a href="' + url + '">' + cgi.escape(urltxt) + '</a>'
+                res_plain += urltxt
                 if urltxt != url:
-                    linkified_plain += ' (' + url + ')'
+                    res_plain += ' (' + url + ')'
                 txt = txt[index + 1:]
 
     def addtext(self, txt):
