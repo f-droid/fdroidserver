@@ -975,10 +975,7 @@ def parse_xml_metadata(metadatapath):
 
     # TODO handle this using <xsd:element type="xsd:boolean> in a schema
     if not isinstance(app.RequiresRoot, bool):
-        if app.RequiresRoot == 'true':
-            app.RequiresRoot = True
-        else:
-            app.RequiresRoot = False
+        app.RequiresRoot = app.RequiresRoot == 'true'
 
     return app
 
@@ -1064,7 +1061,7 @@ def parse_txt_metadata(metadatapath):
     multiline_lines = []
     curcomments = []
     build = None
-    vc_seen = {}
+    vc_seen = set()
 
     c = 0
     for line in metafile:
@@ -1099,8 +1096,6 @@ def parse_txt_metadata(metadatapath):
                 f, v = line.split(':', 1)
             except ValueError:
                 raise MetaDataException("Invalid metadata in " + linedesc)
-            if f != f.strip() or v != v.strip():
-                raise MetaDataException("Extra spacing found in " + linedesc)
 
             # Translate obsolete fields...
             if f == 'Market Version':
@@ -1129,23 +1124,23 @@ def parse_txt_metadata(metadatapath):
                     app.builds.append(build)
                     add_comments('build:' + app.builds[-1].vercode)
             elif ftype == TYPE_BUILD_V2:
-                build = Build()
                 vv = v.split(',')
                 if len(vv) != 2:
                     raise MetaDataException('Build should have comma-separated version and vercode, not "{0}", in {1}'
                                             .format(v, linedesc))
+                build = Build()
                 build.version = vv[0]
                 build.vercode = vv[1]
                 if build.vercode in vc_seen:
                     raise MetaDataException('Duplicate build recipe found for vercode %s in %s' % (
                                             build.vercode, linedesc))
-                vc_seen[build.vercode] = True
+                vc_seen.add(build.vercode)
                 del buildlines[:]
                 mode = 3
             elif ftype == TYPE_OBSOLETE:
                 pass        # Just throw it away!
             else:
-                raise MetaDataException("Unrecognised field type for " + f + " in " + linedesc)
+                raise MetaDataException("Unrecognised field '" + f + "' in " + linedesc)
         elif mode == 1:     # Multiline field
             if line == '.':
                 mode = 0
