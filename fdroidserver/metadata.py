@@ -387,6 +387,8 @@ class FieldValidator():
         self.matching = matching
         if type(matching) is str:
             self.compiled = re.compile(matching)
+        else:
+            self.matching = set(self.matching)
         self.sep = sep
         self.fields = fields
         self.flags = flags
@@ -394,25 +396,23 @@ class FieldValidator():
     def _assert_regex(self, values, appid):
         for v in values:
             if not self.compiled.match(v):
-                raise MetaDataException("'%s' is not a valid %s in %s. "
-                                        % (v, self.name, appid) +
-                                        "Regex pattern: %s" % (self.matching))
+                raise MetaDataException("'%s' is not a valid %s in %s. Regex pattern: %s"
+                                        % (v, self.name, appid, self.matching))
 
     def _assert_list(self, values, appid):
         for v in values:
             if v not in self.matching:
-                raise MetaDataException("'%s' is not a valid %s in %s. "
-                                        % (v, self.name, appid) +
-                                        "Possible values: %s" % (", ".join(self.matching)))
+                raise MetaDataException("'%s' is not a valid %s in %s. Possible values: %s"
+                                        % (v, self.name, appid, ', '.join(self.matching)))
 
     def check(self, v, appid):
-        if type(v) is not str or not v:
+        if not v:
             return
-        if self.sep is not None:
-            values = v.split(self.sep)
+        if type(v) == list:
+            values = v
         else:
             values = [v]
-        if type(self.matching) is list:
+        if type(self.matching) is set:
             self._assert_list(values, appid)
         else:
             self._assert_regex(values, appid)
@@ -443,12 +443,6 @@ valuetypes = {
                    r'^L[a-zA-Z0-9]{33}$', None,
                    ["Litecoin"],
                    []),
-
-    FieldValidator("bool",
-                   r'([Yy]es|[Nn]o|[Tt]rue|[Ff]alse)', None,
-                   ["Requires Root"],
-                   ['submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
-                    'novcheck']),
 
     FieldValidator("Repo Type",
                    ['git', 'git-svn', 'svn', 'hg', 'bzr', 'srclib'], None,
@@ -857,9 +851,9 @@ def post_metadata_parse(app):
                 build.__dict__[k] = re.sub(esc_newlines, '', v).lstrip().rstrip()
             elif ftype == TYPE_BOOL:
                 # TODO handle this using <xsd:element type="xsd:boolean> in a schema
-                if isinstance(v, basestring) and v == 'true':
-                    build.__dict__[k] = True
-            elif ftype == TYPE_BOOL:
+                if isinstance(v, basestring):
+                    build.__dict__[k] = _decode_bool(v)
+            elif ftype == TYPE_STRING:
                 if isinstance(v, bool) and v:
                     build.__dict__[k] = 'yes'
 
@@ -923,6 +917,18 @@ def _decode_dict(data):
             v = _decode_dict(v)
         rv[k] = v
     return rv
+
+
+bool_true = re.compile(r'([Yy]es|[Tt]rue)')
+bool_false = re.compile(r'([Nn]o|[Ff]alse)')
+
+
+def _decode_bool(s):
+    if bool_true.match(s):
+        return True
+    if bool_false.match(s):
+        return False
+    raise MetaDataException("Invalid bool '%s'" % s)
 
 
 def parse_metadata(metadatapath):
@@ -1038,8 +1044,7 @@ def parse_txt_metadata(metadatapath):
         elif t == TYPE_STRING or t == TYPE_SCRIPT:
             build.set_flag(pk, pv)
         elif t == TYPE_BOOL:
-            if pv == 'yes':
-                build.set_flag(pk, True)
+            build.set_flag(pk, _decode_bool(pv))
 
     def parse_buildline(lines):
         v = "".join(lines)
