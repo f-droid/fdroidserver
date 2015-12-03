@@ -212,21 +212,21 @@ TYPE_MULTILINE = 6
 TYPE_BUILD = 7
 TYPE_BUILD_V2 = 8
 
+fieldtypes = {
+    'Description': TYPE_MULTILINE,
+    'Maintainer Notes': TYPE_MULTILINE,
+    'Categories': TYPE_LIST,
+    'AntiFeatures': TYPE_LIST,
+    'Build Version': TYPE_BUILD,
+    'Build': TYPE_BUILD_V2,
+    'Use Built': TYPE_OBSOLETE,
+}
+
 
 def metafieldtype(name):
-    if name in ['Description', 'Maintainer Notes']:
-        return TYPE_MULTILINE
-    if name in ['Categories', 'AntiFeatures']:
-        return TYPE_LIST
-    if name == 'Build Version':
-        return TYPE_BUILD
-    if name == 'Build':
-        return TYPE_BUILD_V2
-    if name == 'Use Built':
-        return TYPE_OBSOLETE
-    if name in app_fields:
-        return TYPE_STRING
-    return TYPE_UNKNOWN
+    if name in fieldtypes:
+        return fieldtypes[name]
+    return TYPE_STRING
 
 
 # In the order in which they are laid out on files
@@ -342,21 +342,33 @@ class Build():
         for f, v in d.iteritems():
             self.set_flag(f, v)
 
-list_flags = set(['extlibs', 'srclibs', 'patch', 'rm', 'buildjni', 'preassemble',
-                  'update', 'scanignore', 'scandelete', 'gradle', 'antcommands',
-                  'gradleprops'])
-script_flags = set(['init', 'prebuild', 'build'])
-bool_flags = set(['submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
-                  'novcheck'])
+flagtypes = {
+    'extlibs': TYPE_LIST,
+    'srclibs': TYPE_LIST,
+    'patch': TYPE_LIST,
+    'rm': TYPE_LIST,
+    'buildjni': TYPE_LIST,
+    'preassemble': TYPE_LIST,
+    'update': TYPE_LIST,
+    'scanignore': TYPE_LIST,
+    'scandelete': TYPE_LIST,
+    'gradle': TYPE_LIST,
+    'antcommands': TYPE_LIST,
+    'gradleprops': TYPE_LIST,
+    'init': TYPE_SCRIPT,
+    'prebuild': TYPE_SCRIPT,
+    'build': TYPE_SCRIPT,
+    'submodules': TYPE_BOOL,
+    'oldsdkloc': TYPE_BOOL,
+    'forceversion': TYPE_BOOL,
+    'forcevercode': TYPE_BOOL,
+    'novcheck': TYPE_BOOL,
+}
 
 
 def flagtype(name):
-    if name in list_flags:
-        return TYPE_LIST
-    if name in script_flags:
-        return TYPE_SCRIPT
-    if name in bool_flags:
-        return TYPE_BOOL
+    if name in flagtypes:
+        return flagtypes[name]
     return TYPE_STRING
 
 
