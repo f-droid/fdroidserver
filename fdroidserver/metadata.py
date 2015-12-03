@@ -24,6 +24,11 @@ import glob
 import cgi
 import textwrap
 
+try:
+    from cStringIO import StringIO
+except:
+    from StringIO import StringIO
+
 import yaml
 # use libyaml if it is available
 try:
@@ -467,22 +472,24 @@ def check_metadata(app):
 
 # Formatter for descriptions. Create an instance, and call parseline() with
 # each line of the description source from the metadata. At the end, call
-# end() and then text_wiki and text_html will contain the result.
+# end() and then text_txt and text_html will contain the result.
 class DescriptionFormatter:
+
     stNONE = 0
     stPARA = 1
     stUL = 2
     stOL = 3
-    bold = False
-    ital = False
-    state = stNONE
-    text_wiki = ''
-    text_html = ''
-    text_txt = ''
-    para_lines = []
-    linkResolver = None
 
     def __init__(self, linkres):
+        self.bold = False
+        self.ital = False
+        self.state = self.stNONE
+        self.text_html = ''
+        self.text_txt = ''
+        self.html = StringIO()
+        self.text = StringIO()
+        self.para_lines = []
+        self.linkResolver = None
         self.linkResolver = linkres
 
     def endcur(self, notstates=None):
@@ -499,20 +506,21 @@ class DescriptionFormatter:
         self.state = self.stNONE
         whole_para = ' '.join(self.para_lines)
         self.addtext(whole_para)
-        self.text_txt += textwrap.fill(whole_para, 80,
-                                       break_long_words=False,
-                                       break_on_hyphens=False) + '\n\n'
-        self.text_html += '</p>'
+        self.text.write(textwrap.fill(whole_para, 80,
+                                      break_long_words=False,
+                                      break_on_hyphens=False))
+        self.text.write('\n\n')
+        self.html.write('</p>')
         del self.para_lines[:]
 
     def endul(self):
-        self.text_html += '</ul>'
-        self.text_txt += '\n'
+        self.html.write('</ul>')
+        self.text.write('\n')
         self.state = self.stNONE
 
     def endol(self):
-        self.text_html += '</ol>'
-        self.text_txt += '\n'
+        self.html.write('</ol>')
+        self.text.write('\n')
         self.state = self.stNONE
 
     def formatted(self, txt, html):
@@ -585,40 +593,44 @@ class DescriptionFormatter:
 
     def addtext(self, txt):
         p, h = self.linkify(txt)
-        self.text_html += h
+        self.html.write(h)
 
     def parseline(self, line):
-        self.text_wiki += "%s\n" % line
         if not line:
             self.endcur()
         elif line.startswith('* '):
             self.endcur([self.stUL])
-            self.text_txt += "%s\n" % line
+            self.text.write(line)
+            self.text.write('\n')
             if self.state != self.stUL:
-                self.text_html += '<ul>'
+                self.html.write('<ul>')
                 self.state = self.stUL
-            self.text_html += '<li>'
+            self.html.write('<li>')
             self.addtext(line[1:])
-            self.text_html += '</li>'
+            self.html.write('</li>')
         elif line.startswith('# '):
             self.endcur([self.stOL])
-            self.text_txt += "%s\n" % line
+            self.text.write(line)
+            self.text.write('\n')
             if self.state != self.stOL:
-                self.text_html += '<ol>'
+                self.html.write('<ol>')
                 self.state = self.stOL
-            self.text_html += '<li>'
+            self.html.write('<li>')
             self.addtext(line[1:])
-            self.text_html += '</li>'
+            self.html.write('</li>')
         else:
             self.para_lines.append(line)
             self.endcur([self.stPARA])
             if self.state == self.stNONE:
-                self.text_html += '<p>'
+                self.html.write('<p>')
                 self.state = self.stPARA
 
     def end(self):
         self.endcur()
-        self.text_txt = self.text_txt.strip()
+        self.text_txt = self.text.getvalue().rstrip()
+        self.text_html = self.html.getvalue()
+        self.text.close()
+        self.html.close()
 
 
 # Parse multiple lines of description as written in a metadata file, returning
@@ -635,11 +647,7 @@ def description_txt(s):
 # a single string in wiki format. Used for the Maintainer Notes field as well,
 # because it's the same format.
 def description_wiki(s):
-    ps = DescriptionFormatter(None)
-    for line in s.splitlines():
-        ps.parseline(line)
-    ps.end()
-    return ps.text_wiki
+    return s
 
 
 # Parse multiple lines of description as written in a metadata file, returning

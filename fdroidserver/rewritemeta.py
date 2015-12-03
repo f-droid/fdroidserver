@@ -21,7 +21,10 @@
 from argparse import ArgumentParser
 import os
 import logging
-import StringIO
+try:
+    from cStringIO import StringIO
+except:
+    from StringIO import StringIO
 
 import common
 import metadata
@@ -70,7 +73,7 @@ def main():
             to_ext = options.to
 
         if options.list:
-            s = StringIO.StringIO()
+            s = StringIO()
             # TODO: currently reading entire file again, should reuse first
             # read in metadata.py
             with open(metadatapath, 'r') as f:
