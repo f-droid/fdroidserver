@@ -137,6 +137,7 @@ class App():
         self.comments = {}
         self.added = None
         self.lastupdated = None
+        self._modified = set()
 
     # Translates human-readable field names to attribute names, e.g.
     # 'Auto Name' to 'AutoName'
@@ -180,6 +181,7 @@ class App():
             raise MetaDataException('Unrecognised app field: ' + f)
         k = App.field_to_attr(f)
         self.__dict__[k] = v
+        self._modified.add(k)
 
     # Appends to the value associated to a field name, e.g. 'Auto Name'
     def append_field(self, f, v):
@@ -299,6 +301,8 @@ class Build():
         self.antcommands = None
         self.novcheck = False
 
+        self._modified = set()
+
     def get_flag(self, f):
         if f not in build_flags:
             raise MetaDataException('Unrecognised build flag: ' + f)
@@ -312,6 +316,7 @@ class Build():
         if f not in build_flags:
             raise MetaDataException('Unrecognised build flag: ' + f)
         self.__dict__[f] = v
+        self._modified.add(f)
 
     def append_flag(self, f, v):
         if f not in build_flags:
@@ -836,12 +841,16 @@ esc_newlines = re.compile(r'\\( |\n)')
 def post_metadata_parse(app):
 
     for k, v in app.__dict__.iteritems():
+        if k not in app._modified:
+            continue
         if type(v) in (float, int):
             app.__dict__[k] = str(v)
 
     for build in app.builds:
         for k, v in build.__dict__.iteritems():
 
+            if k not in build._modified:
+                continue
             if type(v) in (float, int):
                 build.__dict__[k] = str(v)
                 continue
