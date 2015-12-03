@@ -107,7 +107,7 @@ def check_regexes(app):
     for f, checks in regex_checks.iteritems():
         for m, r in checks:
             v = app.get_field(f)
-            t = metadata.metafieldtype(f)
+            t = metadata.fieldtype(f)
             if t == metadata.TYPE_MULTILINE:
                 for l in v.splitlines():
                     if m.match(l):

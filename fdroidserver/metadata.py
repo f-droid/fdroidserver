@@ -223,7 +223,7 @@ fieldtypes = {
 }
 
 
-def metafieldtype(name):
+def fieldtype(name):
     if name in fieldtypes:
         return fieldtypes[name]
     return TYPE_STRING
@@ -1115,7 +1115,7 @@ def parse_txt_metadata(metadatapath):
             if f == 'Market Version Code':
                 f = 'Current Version Code'
 
-            ftype = metafieldtype(f)
+            ftype = fieldtype(f)
             if ftype not in [TYPE_BUILD, TYPE_BUILD_V2]:
                 add_comments(f)
             if ftype == TYPE_MULTILINE:
@@ -1273,7 +1273,7 @@ def write_txt_metadata(mf, app):
         mf.write("# %s\n" % line)
 
     def w_field(f, v):
-        t = metafieldtype(f)
+        t = fieldtype(f)
         if t == TYPE_LIST:
             v = ','.join(v)
         elif t == TYPE_MULTILINE:
@@ -1319,7 +1319,7 @@ def write_yaml_metadata(mf, app):
 
     def w_field(f, v, prefix='', t=None):
         if t is None:
-            t = metafieldtype(f)
+            t = fieldtype(f)
         v = ''
         if t == TYPE_LIST:
             v = '\n'
