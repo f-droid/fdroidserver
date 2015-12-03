@@ -107,15 +107,16 @@ def check_regexes(app):
     for f, checks in regex_checks.iteritems():
         for m, r in checks:
             v = app.get_field(f)
-            if type(v) == str:
+            t = metadata.metafieldtype(f)
+            if t == 'multiline':
+                for l in v.splitlines():
+                    if m.match(l):
+                        yield "%s at line '%s': %s" % (f, l, r)
+            else:
                 if v is None:
                     continue
                 if m.match(v):
                     yield "%s '%s': %s" % (f, v, r)
-            elif type(v) == list:
-                for l in v:
-                    if m.match(l):
-                        yield "%s at line '%s': %s" % (f, l, r)
 
 
 def get_lastbuild(builds):
@@ -152,8 +153,7 @@ def check_char_limits(app):
         yield "Summary of length %s is over the %i char limit" % (
             summ_chars, limits['Summary'])
 
-    desc_charcount = sum(len(l) for l in app.Description)
-    if desc_charcount > limits['Description']:
+    if len(app.Description) > limits['Description']:
         yield "Description of length %s is over the %i char limit" % (
             desc_charcount, limits['Description'])
 
@@ -244,7 +244,7 @@ def check_duplicates(app):
             yield "Description '%s' is just the app's summary" % app.Summary
 
     seenlines = set()
-    for l in app.Description:
+    for l in app.Description.splitlines():
         if len(l) < 1:
             continue
         if l in seenlines:
@@ -268,7 +268,7 @@ def check_bulleted_lists(app):
     validchars = ['*', '#']
     lchar = ''
     lcount = 0
-    for l in app.Description:
+    for l in app.Description.splitlines():
         if len(l) < 1:
             lcount = 0
             continue

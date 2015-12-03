@@ -109,12 +109,12 @@ class App():
         self.Name = None
         self.AutoName = ''
         self.Summary = ''
-        self.Description = []
+        self.Description = ''
         self.RequiresRoot = False
         self.RepoType = ''
         self.Repo = ''
         self.Binaries = None
-        self.MaintainerNotes = []
+        self.MaintainerNotes = ''
         self.ArchivePolicy = None
         self.AutoUpdateMode = 'None'
         self.UpdateCheckMode = 'None'
@@ -623,9 +623,9 @@ class DescriptionFormatter:
 
 # Parse multiple lines of description as written in a metadata file, returning
 # a single string in text format and wrapped to 80 columns.
-def description_txt(lines):
+def description_txt(s):
     ps = DescriptionFormatter(None)
-    for line in lines:
+    for line in s.splitlines():
         ps.parseline(line)
     ps.end()
     return ps.text_txt
@@ -634,9 +634,9 @@ def description_txt(lines):
 # Parse multiple lines of description as written in a metadata file, returning
 # a single string in wiki format. Used for the Maintainer Notes field as well,
 # because it's the same format.
-def description_wiki(lines):
+def description_wiki(s):
     ps = DescriptionFormatter(None)
-    for line in lines:
+    for line in s.splitlines():
         ps.parseline(line)
     ps.end()
     return ps.text_wiki
@@ -644,9 +644,9 @@ def description_wiki(lines):
 
 # Parse multiple lines of description as written in a metadata file, returning
 # a single string in HTML format.
-def description_html(lines, linkres):
+def description_html(s, linkres):
     ps = DescriptionFormatter(linkres)
-    for line in lines:
+    for line in s.splitlines():
         ps.parseline(line)
     ps.end()
     return ps.text_html
@@ -824,15 +824,8 @@ def post_metadata_parse(app):
                 if isinstance(v, bool) and v:
                     build.__dict__[k] = 'yes'
 
-    # convert to the odd internal format
-    for f in ('Description', 'Maintainer Notes'):
-        v = app.get_field(f)
-        if isinstance(v, basestring):
-            text = v.rstrip().lstrip()
-            app.set_field(f, text.split('\n'))
-
     if not app.Description:
-        app.Description = ['No description available']
+        app.Description = 'No description available'
 
     app.builds = sorted_builds(app.builds)
 
@@ -929,6 +922,9 @@ def parse_json_metadata(metadatapath):
                              parse_int=lambda s: s,
                              parse_float=lambda s: s)
     app.update_fields(jsoninfo)
+    for f in ['Description', 'Maintainer Notes']:
+        v = app.get_field(f)
+        app.set_field(f, '\n'.join(v))
     return app
 
 
@@ -1047,6 +1043,7 @@ def parse_txt_metadata(metadatapath):
 
     mode = 0
     buildlines = []
+    multiline_lines = []
     curcomments = []
     build = None
     vc_seen = {}
@@ -1134,8 +1131,10 @@ def parse_txt_metadata(metadatapath):
         elif mode == 1:     # Multiline field
             if line == '.':
                 mode = 0
+                app.set_field(f, '\n'.join(multiline_lines))
+                del multiline_lines[:]
             else:
-                app.append_field(f, line)
+                multiline_lines.append(line)
         elif mode == 2:     # Line continuation mode in Build Version
             if line.endswith("\\"):
                 buildlines.append(line[:-1])
@@ -1253,10 +1252,7 @@ def write_txt_metadata(mf, app):
         if t == 'list':
             v = ','.join(v)
         elif t == 'multiline':
-            if type(v) == list:
-                v = '\n' + '\n'.join(v) + '\n.'
-            else:
-                v = '\n' + v + '\n.'
+            v = '\n' + v + '\n.'
         mf.write("%s:%s\n" % (f, v))
 
     def w_build(build):
@@ -1306,10 +1302,7 @@ def write_yaml_metadata(mf, app):
                 v += prefix + ' - ' + escape(e) + '\n'
         elif t == 'multiline':
             v = ' |\n'
-            lines = v
-            if type(v) == str:
-                lines = v.splitlines()
-            for l in lines:
+            for l in v.splitlines():
                 if l:
                     v += prefix + '  ' + l + '\n'
                 else:
