@@ -209,9 +209,9 @@ def metafieldtype(name):
         return 'buildv2'
     if name == 'Use Built':
         return 'obsolete'
-    if name not in app_fields:
-        return 'unknown'
-    return 'string'
+    if name in app_fields:
+        return 'string'
+    return 'unknown'
 
 
 # In the order in which they are laid out on files
@@ -1065,7 +1065,7 @@ def parse_txt_metadata(metadatapath):
                     buildlines.append(line.lstrip())
                     bl = ''.join(buildlines)
                     add_buildflag(bl, build)
-                    buildlines = []
+                    del buildlines[:]
             else:
                 if not build.commit and not build.disable:
                     raise MetaDataException("No commit specified for {0} in {1}"
@@ -1094,26 +1094,27 @@ def parse_txt_metadata(metadatapath):
             if f == 'Market Version Code':
                 f = 'Current Version Code'
 
-            fieldtype = metafieldtype(f)
-            if fieldtype not in ['build', 'buildv2']:
+            ftype = metafieldtype(f)
+            if ftype not in ['build', 'buildv2']:
                 add_comments(f)
-            if fieldtype == 'multiline':
+            if ftype == 'multiline':
                 mode = 1
                 if v:
                     raise MetaDataException("Unexpected text on same line as " + f + " in " + linedesc)
-            elif fieldtype == 'string':
+            elif ftype == 'string':
                 app.set_field(f, v)
-            elif fieldtype == 'list':
+            elif ftype == 'list':
                 app.set_field(f, split_list_values(v))
-            elif fieldtype == 'build':
+            elif ftype == 'build':
                 if v.endswith("\\"):
                     mode = 2
-                    buildlines = [v[:-1]]
+                    del buildlines[:]
+                    buildlines.append(v[:-1])
                 else:
                     build = parse_buildline([v])
                     app.builds.append(build)
                     add_comments('build:' + app.builds[-1].vercode)
-            elif fieldtype == 'buildv2':
+            elif ftype == 'buildv2':
                 build = Build()
                 vv = v.split(',')
                 if len(vv) != 2:
@@ -1125,9 +1126,9 @@ def parse_txt_metadata(metadatapath):
                     raise MetaDataException('Duplicate build recipe found for vercode %s in %s' % (
                                             build.vercode, linedesc))
                 vc_seen[build.vercode] = True
-                buildlines = []
+                del buildlines[:]
                 mode = 3
-            elif fieldtype == 'obsolete':
+            elif ftype == 'obsolete':
                 pass        # Just throw it away!
             else:
                 raise MetaDataException("Unrecognised field type for " + f + " in " + linedesc)
