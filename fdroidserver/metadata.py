@@ -162,10 +162,11 @@ class App():
             if k == 'builds':
                 d['builds'] = []
                 for build in v:
-                    d['builds'].append(build.__dict__)
-            else:
-                k = App.attr_to_field(k)
-                d[k] = v
+                    b = {k: v for k, v in build.__dict__.iteritems() if not k.startswith('_')}
+                    d['builds'].append(b)
+            elif not k.startswith('_'):
+                f = App.attr_to_field(k)
+                d[f] = v
         return d
 
     # Gets the value associated to a field name, e.g. 'Auto Name'
