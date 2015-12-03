@@ -506,6 +506,7 @@ class DescriptionFormatter:
         self.bold = False
         self.ital = False
         self.state = self.stNONE
+        self.laststate = self.stNONE
         self.text_html = ''
         self.text_txt = ''
         self.html = StringIO()
@@ -525,24 +526,24 @@ class DescriptionFormatter:
             self.endol()
 
     def endpara(self):
+        self.laststate = self.state
         self.state = self.stNONE
         whole_para = ' '.join(self.para_lines)
         self.addtext(whole_para)
         self.text.write(textwrap.fill(whole_para, 80,
                                       break_long_words=False,
                                       break_on_hyphens=False))
-        self.text.write('\n\n')
         self.html.write('</p>')
         del self.para_lines[:]
 
     def endul(self):
         self.html.write('</ul>')
-        self.text.write('\n')
+        self.laststate = self.state
         self.state = self.stNONE
 
     def endol(self):
         self.html.write('</ol>')
-        self.text.write('\n')
+        self.laststate = self.state
         self.state = self.stNONE
 
     def formatted(self, txt, html):
@@ -622,21 +623,27 @@ class DescriptionFormatter:
             self.endcur()
         elif line.startswith('* '):
             self.endcur([self.stUL])
-            self.text.write(line)
-            self.text.write('\n')
             if self.state != self.stUL:
                 self.html.write('<ul>')
                 self.state = self.stUL
+                if self.laststate != self.stNONE:
+                    self.text.write('\n\n')
+            else:
+                self.text.write('\n')
+            self.text.write(line)
             self.html.write('<li>')
             self.addtext(line[1:])
             self.html.write('</li>')
         elif line.startswith('# '):
             self.endcur([self.stOL])
-            self.text.write(line)
-            self.text.write('\n')
             if self.state != self.stOL:
                 self.html.write('<ol>')
                 self.state = self.stOL
+                if self.laststate != self.stNONE:
+                    self.text.write('\n\n')
+            else:
+                self.text.write('\n')
+            self.text.write(line)
             self.html.write('<li>')
             self.addtext(line[1:])
             self.html.write('</li>')
@@ -644,12 +651,14 @@ class DescriptionFormatter:
             self.para_lines.append(line)
             self.endcur([self.stPARA])
             if self.state == self.stNONE:
-                self.html.write('<p>')
                 self.state = self.stPARA
+                if self.laststate != self.stNONE:
+                    self.text.write('\n\n')
+                self.html.write('<p>')
 
     def end(self):
         self.endcur()
-        self.text_txt = self.text.getvalue().rstrip()
+        self.text_txt = self.text.getvalue()
         self.text_html = self.html.getvalue()
         self.text.close()
         self.html.close()
