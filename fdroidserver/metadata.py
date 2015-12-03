@@ -1000,9 +1000,6 @@ def parse_txt_metadata(metadatapath):
 
         pk, pv = bv
         pk = pk.lstrip()
-        if pk not in build_flags:
-            raise MetaDataException("Unrecognised build flag at {0} in {1}"
-                                    .format(p, linedesc))
         t = flagtype(pk)
         if t == 'list':
             pv = split_list_values(pv)
@@ -1012,10 +1009,6 @@ def parse_txt_metadata(metadatapath):
         elif t == 'bool':
             if pv == 'yes':
                 build.set_flag(pk, True)
-
-        else:
-            raise MetaDataException("Unrecognised build flag type '%s' at %s in %s"
-                                    % (t, p, linedesc))
 
     def parse_buildline(lines):
         v = "".join(lines)
