@@ -1289,17 +1289,22 @@ def write_txt_metadata(mf, app):
                 continue
 
             t = flagtype(f)
-            out = '    %s=' % f
+            mf.write('    %s=' % f)
             if t == TYPE_STRING:
-                out += v
+                mf.write(v)
             elif t == TYPE_BOOL:
-                out += 'yes'
+                mf.write('yes')
             elif t == TYPE_SCRIPT:
-                out += '&& \\\n        '.join([s.lstrip() for s in v.split('&& ')])
+                first = True
+                for s in v.split(' && '):
+                    if first:
+                        first = False
+                    else:
+                        mf.write(' && \\\n        ')
+                    mf.write(s)
             elif t == TYPE_LIST:
-                out += ','.join(v) if type(v) == list else v
+                mf.write(','.join(v))
 
-            mf.write(out)
             mf.write('\n')
 
     write_plaintext_metadata(mf, app, w_comment, w_field, w_build)
