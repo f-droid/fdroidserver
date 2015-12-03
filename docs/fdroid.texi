@@ -1054,9 +1054,9 @@ adding them to 'ndk_paths' in your config file.
 Build with Gradle instead of Ant, specifying what flavours to use. Flavours
 are case sensitive since the path to the output apk is as well.
 
-If only one flavour is given and it is 'yes' or 'main', no flavour will be
-used. Note that for projects with flavours, you must specify at least one
-valid flavour since 'yes' or 'main' will build all of them separately.
+If only one flavour is given and it is 'yes', no flavour will be used.
+Note that for projects with flavours, you must specify at least one
+valid flavour since 'yes' will build all of them separately.
 
 @item maven=yes[@@<dir>]
 Build with Maven instead of Ant. An extra @@<dir> tells F-Droid to run Maven

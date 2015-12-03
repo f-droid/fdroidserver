@@ -981,7 +981,8 @@ def parse_yaml_metadata(metadatapath):
     return app
 
 
-build_line_sep = re.compile(r"(?<!\\),")
+build_line_sep = re.compile(r'(?<!\\),')
+build_cont = re.compile(r'^[ \t]')
 
 
 def parse_txt_metadata(metadatapath):
@@ -1005,15 +1006,11 @@ def parse_txt_metadata(metadatapath):
         t = flagtype(pk)
         if t == 'list':
             pv = split_list_values(pv)
-            if pk == 'gradle':
-                if len(pv) == 1 and pv[0] in ['main', 'yes']:
-                    pv = ['yes']
             build.set_flag(pk, pv)
         elif t == 'string' or t == 'script':
             build.set_flag(pk, pv)
         elif t == 'bool':
-            v = pv == 'yes'
-            if v:
+            if pv == 'yes':
                 build.set_flag(pk, True)
 
         else:
@@ -1068,15 +1065,7 @@ def parse_txt_metadata(metadatapath):
         linedesc = "%s:%d" % (metafile.name, c)
         line = line.rstrip('\r\n')
         if mode == 3:
-            if not any(line.startswith(s) for s in (' ', '\t')):
-                if not build.commit and not build.disable:
-                    raise MetaDataException("No commit specified for {0} in {1}"
-                                            .format(build.version, linedesc))
-
-                app.builds.append(build)
-                add_comments('build:' + build.vercode)
-                mode = 0
-            else:
+            if build_cont.match(line):
                 if line.endswith('\\'):
                     buildlines.append(line[:-1].lstrip())
                 else:
@@ -1084,6 +1073,14 @@ def parse_txt_metadata(metadatapath):
                     bl = ''.join(buildlines)
                     add_buildflag(bl, build)
                     buildlines = []
+            else:
+                if not build.commit and not build.disable:
+                    raise MetaDataException("No commit specified for {0} in {1}"
+                                            .format(build.version, linedesc))
+
+                app.builds.append(build)
+                add_comments('build:' + build.vercode)
+                mode = 0
 
         if mode == 0:
             if not line:
