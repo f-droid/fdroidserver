@@ -202,21 +202,31 @@ class App():
             else:
                 self.set_field(f, v)
 
+TYPE_UNKNOWN = 0
+TYPE_OBSOLETE = 1
+TYPE_STRING = 2
+TYPE_BOOL = 3
+TYPE_LIST = 4
+TYPE_SCRIPT = 5
+TYPE_MULTILINE = 6
+TYPE_BUILD = 7
+TYPE_BUILD_V2 = 8
+
 
 def metafieldtype(name):
     if name in ['Description', 'Maintainer Notes']:
-        return 'multiline'
+        return TYPE_MULTILINE
     if name in ['Categories', 'AntiFeatures']:
-        return 'list'
+        return TYPE_LIST
     if name == 'Build Version':
-        return 'build'
+        return TYPE_BUILD
     if name == 'Build':
-        return 'buildv2'
+        return TYPE_BUILD_V2
     if name == 'Use Built':
-        return 'obsolete'
+        return TYPE_OBSOLETE
     if name in app_fields:
-        return 'string'
-    return 'unknown'
+        return TYPE_STRING
+    return TYPE_UNKNOWN
 
 
 # In the order in which they are laid out on files
@@ -342,12 +352,12 @@ bool_flags = set(['submodules', 'oldsdkloc', 'forceversion', 'forcevercode',
 
 def flagtype(name):
     if name in list_flags:
-        return 'list'
+        return TYPE_LIST
     if name in script_flags:
-        return 'script'
+        return TYPE_SCRIPT
     if name in bool_flags:
-        return 'bool'
-    return 'string'
+        return TYPE_BOOL
+    return TYPE_STRING
 
 
 # Designates a metadata field type and checks that it matches
@@ -822,13 +832,13 @@ def post_metadata_parse(app):
                 continue
             ftype = flagtype(k)
 
-            if ftype == 'script':
+            if ftype == TYPE_SCRIPT:
                 build.__dict__[k] = re.sub(esc_newlines, '', v).lstrip().rstrip()
-            elif ftype == 'bool':
+            elif ftype == TYPE_BOOL:
                 # TODO handle this using <xsd:element type="xsd:boolean> in a schema
                 if isinstance(v, basestring) and v == 'true':
                     build.__dict__[k] = True
-            elif ftype == 'string':
+            elif ftype == TYPE_BOOL:
                 if isinstance(v, bool) and v:
                     build.__dict__[k] = 'yes'
 
@@ -1004,12 +1014,12 @@ def parse_txt_metadata(metadatapath):
         pk, pv = bv
         pk = pk.lstrip()
         t = flagtype(pk)
-        if t == 'list':
+        if t == TYPE_LIST:
             pv = split_list_values(pv)
             build.set_flag(pk, pv)
-        elif t == 'string' or t == 'script':
+        elif t == TYPE_STRING or t == TYPE_SCRIPT:
             build.set_flag(pk, pv)
-        elif t == 'bool':
+        elif t == TYPE_BOOL:
             if pv == 'yes':
                 build.set_flag(pk, True)
 
@@ -1099,17 +1109,17 @@ def parse_txt_metadata(metadatapath):
                 f = 'Current Version Code'
 
             ftype = metafieldtype(f)
-            if ftype not in ['build', 'buildv2']:
+            if ftype not in [TYPE_BUILD, TYPE_BUILD_V2]:
                 add_comments(f)
-            if ftype == 'multiline':
+            if ftype == TYPE_MULTILINE:
                 mode = 1
                 if v:
                     raise MetaDataException("Unexpected text on same line as " + f + " in " + linedesc)
-            elif ftype == 'string':
+            elif ftype == TYPE_STRING:
                 app.set_field(f, v)
-            elif ftype == 'list':
+            elif ftype == TYPE_LIST:
                 app.set_field(f, split_list_values(v))
-            elif ftype == 'build':
+            elif ftype == TYPE_BUILD:
                 if v.endswith("\\"):
                     mode = 2
                     del buildlines[:]
@@ -1118,7 +1128,7 @@ def parse_txt_metadata(metadatapath):
                     build = parse_buildline([v])
                     app.builds.append(build)
                     add_comments('build:' + app.builds[-1].vercode)
-            elif ftype == 'buildv2':
+            elif ftype == TYPE_BUILD_V2:
                 build = Build()
                 vv = v.split(',')
                 if len(vv) != 2:
@@ -1132,7 +1142,7 @@ def parse_txt_metadata(metadatapath):
                 vc_seen[build.vercode] = True
                 del buildlines[:]
                 mode = 3
-            elif ftype == 'obsolete':
+            elif ftype == TYPE_OBSOLETE:
                 pass        # Just throw it away!
             else:
                 raise MetaDataException("Unrecognised field type for " + f + " in " + linedesc)
@@ -1257,9 +1267,9 @@ def write_txt_metadata(mf, app):
 
     def w_field(f, v):
         t = metafieldtype(f)
-        if t == 'list':
+        if t == TYPE_LIST:
             v = ','.join(v)
-        elif t == 'multiline':
+        elif t == TYPE_MULTILINE:
             v = '\n' + v + '\n.'
         mf.write("%s:%s\n" % (f, v))
 
@@ -1273,13 +1283,13 @@ def write_txt_metadata(mf, app):
 
             t = flagtype(f)
             out = '    %s=' % f
-            if t == 'string':
+            if t == TYPE_STRING:
                 out += v
-            elif t == 'bool':
+            elif t == TYPE_BOOL:
                 out += 'yes'
-            elif t == 'script':
+            elif t == TYPE_SCRIPT:
                 out += '&& \\\n        '.join([s.lstrip() for s in v.split('&& ')])
-            elif t == 'list':
+            elif t == TYPE_LIST:
                 out += ','.join(v) if type(v) == list else v
 
             mf.write(out)
@@ -1304,20 +1314,20 @@ def write_yaml_metadata(mf, app):
         if t is None:
             t = metafieldtype(f)
         v = ''
-        if t == 'list':
+        if t == TYPE_LIST:
             v = '\n'
             for e in v:
                 v += prefix + ' - ' + escape(e) + '\n'
-        elif t == 'multiline':
+        elif t == TYPE_MULTILINE:
             v = ' |\n'
             for l in v.splitlines():
                 if l:
                     v += prefix + '  ' + l + '\n'
                 else:
                     v += '\n'
-        elif t == 'bool':
+        elif t == TYPE_BOOL:
             v = ' yes\n'
-        elif t == 'script':
+        elif t == TYPE_SCRIPT:
             cmds = [s + '&& \\' for s in v.split('&& ')]
             if len(cmds) > 0:
                 cmds[-1] = cmds[-1][:-len('&& \\')]
@@ -1340,8 +1350,8 @@ def write_yaml_metadata(mf, app):
             mf.write("builds:\n")
             first_build = False
 
-        w_field('versionName', build.version, '  - ', 'string')
-        w_field('versionCode', build.vercode, '    ', 'strsng')
+        w_field('versionName', build.version, '  - ', TYPE_STRING)
+        w_field('versionCode', build.vercode, '    ', TYPE_STRING)
         for f in build_flags_order:
             v = build.get_flag(f)
             if not v:

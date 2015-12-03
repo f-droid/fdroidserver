@@ -108,7 +108,7 @@ def check_regexes(app):
         for m, r in checks:
             v = app.get_field(f)
             t = metadata.metafieldtype(f)
-            if t == 'multiline':
+            if t == metadata.TYPE_MULTILINE:
                 for l in v.splitlines():
                     if m.match(l):
                         yield "%s at line '%s': %s" % (f, l, r)
