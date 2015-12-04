@@ -236,14 +236,6 @@ def scan_source(build_dir, root_dir, build):
             logging.error('Unused scandelete path: %s' % p)
             count += 1
 
-    # Presence of a jni directory without buildjni=yes might
-    # indicate a problem (if it's not a problem, explicitly use
-    # buildjni=no to bypass this check)
-    if (os.path.exists(os.path.join(root_dir, 'jni')) and
-            not build.buildjni):
-        logging.error('Found jni directory, but buildjni is not enabled. Set it to \'no\' to ignore.')
-        count += 1
-
     return count
 
 
