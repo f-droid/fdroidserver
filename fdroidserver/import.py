@@ -174,7 +174,7 @@ def main():
     config = common.read_config(options)
 
     apps = metadata.read_metadata()
-    package, app = metadata.get_default_app_info()
+    app = metadata.get_default_app_info()
     app.id = None
     app.UpdateCheckMode = "Tags"
 
