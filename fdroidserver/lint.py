@@ -148,14 +148,13 @@ def check_ucm_tags(app):
 def check_char_limits(app):
     limits = config['char_limits']
 
-    summ_chars = len(app.Summary)
-    if summ_chars > limits['Summary']:
+    if len(app.Summary) > limits['Summary']:
         yield "Summary of length %s is over the %i char limit" % (
-            summ_chars, limits['Summary'])
+            len(app.Summary), limits['Summary'])
 
     if len(app.Description) > limits['Description']:
         yield "Description of length %s is over the %i char limit" % (
-            desc_charcount, limits['Description'])
+            len(app.Description), limits['Description'])
 
 
 def check_old_links(app):
