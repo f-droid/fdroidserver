@@ -33,6 +33,18 @@ config = None
 options = None
 
 
+def proper_format(app):
+    s = StringIO()
+    # TODO: currently reading entire file again, should reuse first
+    # read in metadata.py
+    with open(app.metadatapath, 'r') as f:
+        cur_content = f.read()
+    metadata.write_txt_metadata(s, app)
+    content = s.getvalue()
+    s.close()
+    return content == cur_content
+
+
 def main():
 
     global config, options
@@ -62,10 +74,9 @@ def main():
         parser.error("Must give a valid format to --to")
 
     for appid, app in apps.iteritems():
-        metadatapath = app.metadatapath
-        base, ext = common.get_extension(metadatapath)
+        base, ext = common.get_extension(app.metadatapath)
         if not options.to and ext not in supported:
-            logging.info("Ignoring %s file at '%s'" % (ext, metadatapath))
+            logging.info("Ignoring %s file at '%s'" % (ext, app.metadatapath))
             continue
 
         to_ext = ext
@@ -73,23 +84,15 @@ def main():
             to_ext = options.to
 
         if options.list:
-            s = StringIO()
-            # TODO: currently reading entire file again, should reuse first
-            # read in metadata.py
-            with open(metadatapath, 'r') as f:
-                cur_content = f.read()
-            metadata.write_txt_metadata(s, app)
-            content = s.getvalue()
-            s.close()
-            if content != cur_content:
-                print(metadatapath)
+            if not proper_format(app):
+                print app.metadatapath
             continue
 
         with open(base + '.' + to_ext, 'w') as f:
             metadata.write_metadata(to_ext, f, app)
 
         if ext != to_ext:
-            os.remove(metadatapath)
+            os.remove(app.metadatapath)
 
     logging.debug("Finished.")
 

@@ -19,10 +19,12 @@
 
 from argparse import ArgumentParser
 import re
-import common
-import metadata
 import sys
 from sets import Set
+
+import common
+import metadata
+import rewritemeta
 
 config = None
 options = None
@@ -306,6 +308,8 @@ def main():
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
     common.setup_global_opts(parser)
+    parser.add_argument("-f", "--format", action="store_true", default=False,
+                        help="Also warn about formatting issues, like rewritemeta -l")
     parser.add_argument("appid", nargs='*', help="app-id in the form APPID")
     options = parser.parse_args()
 
@@ -336,6 +340,10 @@ def main():
                 check_builds,
                 ]:
             warns += check_func(app)
+
+        if options.format:
+            if not rewritemeta.proper_format(app):
+                warns.append("Run rewritemeta to fix formatting")
 
         if warns:
             anywarns = True
