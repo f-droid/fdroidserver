@@ -952,34 +952,34 @@ def parse_metadata(metadatapath):
         raise MetaDataException('"%s" is not an accepted format, convert to: %s' % (
             metadatapath, ', '.join(accepted)))
 
-    app = None
-    if ext == 'txt':
-        app = parse_txt_metadata(metadatapath)
-    elif ext == 'json':
-        app = parse_json_metadata(metadatapath)
-    elif ext == 'xml':
-        app = parse_xml_metadata(metadatapath)
-    elif ext == 'yaml':
-        app = parse_yaml_metadata(metadatapath)
-    else:
-        raise MetaDataException('Unknown metadata format: %s' % metadatapath)
+    app = App()
+    app.metadatapath = metadatapath
+    app.id, _ = common.get_extension(os.path.basename(metadatapath))
+
+    with open(metadatapath, 'r') as mf:
+        if ext == 'txt':
+            parse_txt_metadata(mf, app)
+        elif ext == 'json':
+            parse_json_metadata(mf, app)
+        elif ext == 'xml':
+            parse_xml_metadata(mf, app)
+        elif ext == 'yaml':
+            parse_yaml_metadata(mf, app)
+        else:
+            raise MetaDataException('Unknown metadata format: %s' % metadatapath)
 
     post_metadata_parse(app)
     return app
 
 
-def parse_json_metadata(metadatapath):
-
-    app = get_default_app_info(metadatapath)
+def parse_json_metadata(mf, app):
 
     # fdroid metadata is only strings and booleans, no floats or ints. And
     # json returns unicode, and fdroidserver still uses plain python strings
     # TODO create schema using https://pypi.python.org/pypi/jsonschema
-    jsoninfo = None
-    with open(metadatapath, 'r') as f:
-        jsoninfo = json.load(f, object_hook=_decode_dict,
-                             parse_int=lambda s: s,
-                             parse_float=lambda s: s)
+    jsoninfo = json.load(mf, object_hook=_decode_dict,
+                         parse_int=lambda s: s,
+                         parse_float=lambda s: s)
     app.update_fields(jsoninfo)
     for f in ['Description', 'Maintainer Notes']:
         v = app.get_field(f)
@@ -987,11 +987,9 @@ def parse_json_metadata(metadatapath):
     return app
 
 
-def parse_xml_metadata(metadatapath):
+def parse_xml_metadata(mf, app):
 
-    app = get_default_app_info(metadatapath)
-
-    tree = ElementTree.ElementTree(file=metadatapath)
+    tree = ElementTree.ElementTree(file=mf)
     root = tree.getroot()
 
     if root.tag != 'resources':
@@ -1021,13 +1019,9 @@ def parse_xml_metadata(metadatapath):
     return app
 
 
-def parse_yaml_metadata(metadatapath):
+def parse_yaml_metadata(mf, app):
 
-    app = get_default_app_info(metadatapath)
-
-    yamlinfo = None
-    with open(metadatapath, 'r') as f:
-        yamlinfo = yaml.load(f, Loader=YamlLoader)
+    yamlinfo = yaml.load(mf, Loader=YamlLoader)
     app.update_fields(yamlinfo)
     return app
 
@@ -1036,7 +1030,7 @@ build_line_sep = re.compile(r'(?<!\\),')
 build_cont = re.compile(r'^[ \t]')
 
 
-def parse_txt_metadata(metadatapath):
+def parse_txt_metadata(mf, app):
 
     linedesc = None
 
@@ -1092,9 +1086,6 @@ def parse_txt_metadata(metadatapath):
         app.comments[key] = list(curcomments)
         del curcomments[:]
 
-    app = get_default_app_info(metadatapath)
-    metafile = open(metadatapath, "r")
-
     mode = 0
     buildlines = []
     multiline_lines = []
@@ -1103,9 +1094,9 @@ def parse_txt_metadata(metadatapath):
     vc_seen = set()
 
     c = 0
-    for line in metafile:
+    for line in mf:
         c += 1
-        linedesc = "%s:%d" % (metafile.name, c)
+        linedesc = "%s:%d" % (mf.name, c)
         line = line.rstrip('\r\n')
         if mode == 3:
             if build_cont.match(line):
@@ -1197,11 +1188,10 @@ def parse_txt_metadata(metadatapath):
                 add_comments('build:' + app.builds[-1].vercode)
                 mode = 0
     add_comments(None)
-    metafile.close()
 
     # Mode at end of file should always be 0
     if mode == 1:
-        raise MetaDataException(f + " not terminated in " + metafile.name)
+        raise MetaDataException(f + " not terminated in " + mf.name)
     if mode == 2:
         raise MetaDataException("Unterminated continuation in " + metafile.name)
     if mode == 3:

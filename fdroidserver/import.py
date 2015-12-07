@@ -174,8 +174,7 @@ def main():
     config = common.read_config(options)
 
     apps = metadata.read_metadata()
-    app = metadata.get_default_app_info()
-    app.id = None
+    app = metadata.App()
     app.UpdateCheckMode = "Tags"
 
     root_dir = None
