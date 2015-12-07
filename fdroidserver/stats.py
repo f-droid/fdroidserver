@@ -68,8 +68,8 @@ def main():
         sys.exit(1)
 
     # Get all metadata-defined apps...
-    allmetaapps = [a for a in metadata.read_metadata().itervalues()]
-    metaapps = [a for a in allmetaapps if not a['Disabled']]
+    allmetaapps = [app for app in metadata.read_metadata().itervalues()]
+    metaapps = [app for app in allmetaapps if not app.Disabled]
 
     statsdir = 'stats'
     logsdir = os.path.join(statsdir, 'logs')
@@ -271,7 +271,7 @@ def main():
 
     # Write list of disabled apps...
     logging.info("Processing disabled apps...")
-    disabled = [a['id'] for a in allmetaapps if a['Disabled']]
+    disabled = [app.id for app in allmetaapps if app.Disabled]
     with open(os.path.join(statsdir, 'disabled_apps.txt'), 'w') as f:
         for appid in sorted(disabled):
             f.write(appid + '\n')
