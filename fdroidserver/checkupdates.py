@@ -29,6 +29,7 @@ import traceback
 import HTMLParser
 from distutils.version import LooseVersion
 import logging
+import copy
 
 import common
 import metadata
@@ -468,9 +469,7 @@ def checkupdates_app(app, first=True):
                 logging.info("Refusing to auto update, since the latest build is newer")
 
             if not gotcur:
-                newbuild = latest.copy()
-                if newbuild.origlines:
-                    del newbuild.origlines[:]
+                newbuild = copy.deepcopy(latest)
                 newbuild.disable = False
                 newbuild.vercode = app.CurrentVersionCode
                 newbuild.version = app.CurrentVersion + suffix

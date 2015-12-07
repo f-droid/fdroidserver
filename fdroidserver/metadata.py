@@ -1066,7 +1066,6 @@ def parse_txt_metadata(metadatapath):
         if len(parts) < 3:
             raise MetaDataException("Invalid build format: " + v + " in " + metafile.name)
         build = Build()
-        build.origlines = lines
         build.version = parts[0]
         build.vercode = parts[1]
         if parts[2].startswith('!'):
