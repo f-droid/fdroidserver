@@ -14,7 +14,9 @@ Copyright @copyright{} 2011 Henrik Tunedal, Michael Haas, John Sullivan
 
 Copyright @copyright{} 2013 David Black
 
-Copyright @copyright{} 2013, 2014 Daniel Martí
+Copyright @copyright{} 2013, 2014, 2015 Daniel Martí
+
+Copyright @copyright{} 2015 Boris Kraut
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -489,6 +491,7 @@ The following sections describe the fields recognised within the file.
 * Maintainer Notes::
 * Repo Type::
 * Repo::
+* Binaries::
 * Build::
 * AntiFeatures::
 * Disabled::
@@ -776,6 +779,7 @@ values are:
 @item
 @samp{srclib}
 @end itemize
+
 @node Repo
 @section Repo
 
@@ -800,6 +804,20 @@ If the Repo Type is @code{srclib}, then you must specify the name of the
 according srclib .txt file. For example if @code{scrlibs/FooBar.txt} exist
 and you want to use this srclib, then you have to set Repo to
 @code{FooBar}.
+
+@node Binaries
+@section Binaries
+
+@cindex Binaries
+
+The location of binaries used in verification process.
+
+If specified, F-Droid will verify the output apk file of a build against the
+one specified. You can use %v and %c to point to the version name and version
+code of the current build. To verify the F-Droid client itself you could use:
+@code{Binaries:https://f-droid.org/repo/org.fdroid.fdroid_%c.apk}
+
+F-Droid will use upstream binaries if the verification succeeded.
 
 @node Build
 @section Build
