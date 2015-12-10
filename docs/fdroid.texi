@@ -704,7 +704,7 @@ A litecoin address for donating to the project.
 @cindex Summary
 
 A brief summary of what the application is. Since the summary is only allowed
-one line on the list of the F-Droid client, keeping it to within 50 characters
+one line on the list of the F-Droid client, keeping it to within 80 characters
 will ensure it fits most screens.
 
 @node Description
