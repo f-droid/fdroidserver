@@ -993,7 +993,7 @@ def parse_xml_metadata(mf, app):
     root = tree.getroot()
 
     if root.tag != 'resources':
-        raise MetaDataException('%s does not have root as <resources></resources>!' % metadatapath)
+        raise MetaDataException('resources file does not have root element <resources/>')
 
     for child in root:
         if child.tag != 'builds':
@@ -1058,7 +1058,7 @@ def parse_txt_metadata(mf, app):
         v = "".join(lines)
         parts = [p.replace("\\,", ",") for p in re.split(build_line_sep, v)]
         if len(parts) < 3:
-            raise MetaDataException("Invalid build format: " + v + " in " + metafile.name)
+            raise MetaDataException("Invalid build format: " + v + " in " + mf.name)
         build = Build()
         build.version = parts[0]
         build.vercode = parts[1]
@@ -1193,9 +1193,9 @@ def parse_txt_metadata(mf, app):
     if mode == 1:
         raise MetaDataException(f + " not terminated in " + mf.name)
     if mode == 2:
-        raise MetaDataException("Unterminated continuation in " + metafile.name)
+        raise MetaDataException("Unterminated continuation in " + mf.name)
     if mode == 3:
-        raise MetaDataException("Unterminated build in " + metafile.name)
+        raise MetaDataException("Unterminated build in " + mf.name)
 
     return app
 
