@@ -736,11 +736,6 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
     elif method == 'gradle':
         logging.info("Building Gradle project...")
 
-        # Avoid having to use lintOptions.abortOnError false
-        if build.gradlepluginver >= LooseVersion('0.7'):
-            with open(os.path.join(root_dir, 'build.gradle'), "a") as f:
-                f.write("\nandroid { lintOptions { checkReleaseBuilds false } }\n")
-
         cmd = [config['gradle']]
         if build.gradleprops:
             cmd += ['-P'+kv for kv in build.gradleprops]
