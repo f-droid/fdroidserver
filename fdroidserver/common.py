@@ -35,7 +35,6 @@ import hashlib
 import socket
 import xml.etree.ElementTree as XMLElementTree
 
-from distutils.version import LooseVersion
 from zipfile import ZipFile
 
 import metadata
@@ -1333,38 +1332,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     flavours = []
     if build.method() == 'gradle':
         flavours = build.gradle
-
-        gradlepluginver = None
-
-        gradle_dirs = [root_dir]
-
-        # Parent dir build.gradle
-        parent_dir = os.path.normpath(os.path.join(root_dir, '..'))
-        if parent_dir.startswith(build_dir):
-            gradle_dirs.append(parent_dir)
-
-        for dir_path in gradle_dirs:
-            if gradlepluginver:
-                break
-            if not os.path.isdir(dir_path):
-                continue
-            for filename in os.listdir(dir_path):
-                if not filename.endswith('.gradle'):
-                    continue
-                path = os.path.join(dir_path, filename)
-                if not os.path.isfile(path):
-                    continue
-                for line in file(path):
-                    match = gradle_version_regex.match(line)
-                    if match:
-                        gradlepluginver = match.group(1)
-                        break
-
-        if gradlepluginver:
-            build.gradlepluginver = LooseVersion(gradlepluginver)
-        else:
-            logging.warn("Could not fetch the gradle plugin version, defaulting to 0.11")
-            build.gradlepluginver = LooseVersion('0.11')
 
         if build.target:
             n = build.target.split('-')[1]

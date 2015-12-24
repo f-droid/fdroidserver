@@ -30,7 +30,6 @@ import time
 import json
 from ConfigParser import ConfigParser
 from argparse import ArgumentParser
-from distutils.version import LooseVersion
 import logging
 
 import common
@@ -785,19 +784,23 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
                                bconfig.get('app', 'title'),
                                bconfig.get('app', 'version')))
     elif method == 'gradle':
+        src = None
+        for apks_dir in [
+                os.path.join(root_dir, 'build', 'outputs', 'apk'),
+                os.path.join(root_dir, 'build', 'apk'),
+                ]:
+            apks = glob.glob(os.path.join(apks_dir, '*-release-unsigned.apk'))
 
-        if build.gradlepluginver >= LooseVersion('0.11'):
-            apks_dir = os.path.join(root_dir, 'build', 'outputs', 'apk')
-        else:
-            apks_dir = os.path.join(root_dir, 'build', 'apk')
+            if len(apks) > 1:
+                raise BuildException('More than one resulting apks found in %s' % apks_dir,
+                                     '\n'.join(apks))
+            if len(apks) == 1:
+                src = apks[0]
+                break
 
-        apks = glob.glob(os.path.join(apks_dir, '*-release-unsigned.apk'))
-        if len(apks) > 1:
-            raise BuildException('More than one resulting apks found in %s' % apks_dir,
-                                 '\n'.join(apks))
-        if len(apks) < 1:
-            raise BuildException('Failed to find gradle output in %s' % apks_dir)
-        src = apks[0]
+        if src is None:
+            raise BuildException('Failed to find any output apks')
+
     elif method == 'ant':
         stdout_apk = '\n'.join([
             line for line in p.output.splitlines() if '.apk' in line])
