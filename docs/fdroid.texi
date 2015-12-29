@@ -1155,6 +1155,11 @@ This does not mean that non-free software is included with the app: Most
 likely, it has been patched in some way to remove the non-free code. However,
 functionality may be missing.
 
+@item
+@samp{NonFreeAssets} - the application contains and makes use of non-free
+assets. The most common case is apps using artwork - images, sounds, music,
+etc - under a non-commercial license.
+
 @end itemize
 
 @node Disabled

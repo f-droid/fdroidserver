@@ -466,7 +466,8 @@ valuetypes = {
                    []),
 
     FieldValidator("Anti-Feature",
-                   ["Ads", "Tracking", "NonFreeNet", "NonFreeDep", "NonFreeAdd", "UpstreamNonFree"], ',',
+                   ["Ads", "Tracking", "NonFreeNet", "NonFreeDep", "NonFreeAdd",
+                       "UpstreamNonFree", "NonFreeAssets"], ',',
                    ["AntiFeatures"],
                    []),
 
