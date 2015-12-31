@@ -789,13 +789,16 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
                 os.path.join(root_dir, 'build', 'outputs', 'apk'),
                 os.path.join(root_dir, 'build', 'apk'),
                 ]:
-            apks = glob.glob(os.path.join(apks_dir, '*-release-unsigned.apk'))
+            for apkglob in ['*-release-unsigned.apk', '*-unsigned.apk', '*.apk']:
+                apks = glob.glob(os.path.join(apks_dir, apkglob))
 
-            if len(apks) > 1:
-                raise BuildException('More than one resulting apks found in %s' % apks_dir,
-                                     '\n'.join(apks))
-            if len(apks) == 1:
-                src = apks[0]
+                if len(apks) > 1:
+                    raise BuildException('More than one resulting apks found in %s' % apks_dir,
+                                         '\n'.join(apks))
+                if len(apks) == 1:
+                    src = apks[0]
+                    break
+            if src is not None:
                 break
 
         if src is None:
