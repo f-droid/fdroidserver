@@ -1,5 +1,4 @@
-F-Droid Server
-==============
+# F-Droid Server
 
 [![build status](https://gitlab.com/ci/projects/6642/status.png?ref=master)](https://gitlab.com/ci/projects/6642?ref=master)
 
@@ -16,15 +15,16 @@ For documentation, please see the docs directory.
 
 Alternatively, visit [https://f-droid.org/manual/](https://f-droid.org/manual/).
 
-What is F-Droid?
-----------------
+### What is F-Droid?
 
 F-Droid is an installable catalogue of FOSS (Free and Open Source Software)
 applications for the Android platform. The client makes it easy to browse,
 install, and keep track of updates on your device.
 
-Installing
-----------
+### Installing
+
+Note that only Python 2 is supported. We recommend version 2.7.7 or
+later.
 
 The easiest way to install the `fdroidserver` tools is on Ubuntu, Mint or other
 Ubuntu based distributions, you can install using:
