@@ -87,6 +87,10 @@ regex_checks = {
          "No need to specify that the app is for Android"),
         (re.compile(r'.*[a-z0-9][.!?]( |$)'),
          "Punctuation should be avoided"),
+        (re.compile(r'^\s'),
+         "Unnecessary leading space"),
+        (re.compile(r'.*\s$'),
+         "Unnecessary trailing space"),
     ],
     'Description': [
         (re.compile(r'^No description available$'),
