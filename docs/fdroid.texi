@@ -474,6 +474,8 @@ The following sections describe the fields recognised within the file.
 
 @menu
 * Categories::
+* Author Name::
+* Author Email::
 * License::
 * Auto Name::
 * Name::
@@ -523,6 +525,28 @@ compatibility, F-Droid will use the first category given as <category> element
 for older clients to at least see one category.
 
 This is converted to (@code{<categories>}) in the public index file.
+
+@node Author Name
+@section Author Name
+
+@cindex Author Name
+
+The name of the author, either full, abbreviated or pseudonym. If
+present, it should represent the name(s) as published by upstream,
+e.g. in their copyright or authors file. This can be omitted (or left
+blank).
+
+This is converted to (@code{<author>}) in the public index file.
+
+@node Author Email
+@section Author Email
+
+@cindex Author Email
+
+The e-mail address of the author(s). This can be omitted (or left
+blank).
+
+This is converted to (@code{<email>}) in the public index file.
 
 @node License
 @section License

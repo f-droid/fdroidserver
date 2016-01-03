@@ -62,6 +62,8 @@ app_fields = set([
     'Provides',
     'Categories',
     'License',
+    'Author Name',
+    'Author Email',
     'Web Site',
     'Source Code',
     'Issue Tracker',
@@ -103,6 +105,8 @@ class App():
         self.Provides = None
         self.Categories = ['None']
         self.License = 'Unknown'
+        self.AuthorName = None
+        self.AuthorEmail = None
         self.WebSite = ''
         self.SourceCode = ''
         self.IssueTracker = ''
@@ -439,6 +443,10 @@ valuetypes = {
     FieldValidator("HTTP link",
                    r'^http[s]?://', None,
                    ["WebSite", "SourceCode", "IssueTracker", "Changelog", "Donate"], []),
+
+    FieldValidator("Email",
+                   r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', None,
+                   ["AuthorEmail"], []),
 
     FieldValidator("Bitcoin address",
                    r'^[a-zA-Z0-9]{27,34}$', None,
@@ -1228,6 +1236,8 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
     w_field_nonempty('Provides')
     w_field_always('Categories')
     w_field_always('License')
+    w_field_nonempty('Author Name')
+    w_field_nonempty('Author Email')
     w_field_always('Web Site')
     w_field_always('Source Code')
     w_field_always('Issue Tracker')

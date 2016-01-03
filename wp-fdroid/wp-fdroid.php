@@ -280,6 +280,12 @@ class FDroid
 					case "license":
 						$license=$el;
 						break;
+					case "author":
+						$author=$el;
+						break;
+					case "email":
+						$email=$el;
+						break;
 					case "source":
 						$source=$el;
 						break;
@@ -399,6 +405,11 @@ class FDroid
 				$out.="<p>";
 				if(strlen($web)>0)
 					$out.='<b>Website:</b> <a href="'.$web.'">'.$web.'</a><br />';
+				if(isset($author) && strlen($author)>0)
+					if(isset($email) && strlen($email)>0)
+						$out.='<b>Author(s):</b> <a href="mailto:'.$email.'">'.$author.'</a><br />';
+					else
+						$out.='<b>Author(s):</b> '.$author.'<br />';
 				if(strlen($issues)>0)
 					$out.='<b>Issue Tracker:</b> <a href="'.$issues.'">'.$issues.'</a><br />';
 				if(strlen($source)>0)
