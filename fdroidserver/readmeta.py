@@ -17,8 +17,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from argparse import ArgumentParser
-import common
-import metadata
+from fdroidserver import common
+from fdroidserver import metadata
 
 
 def main():

@@ -22,8 +22,8 @@ import os
 import logging
 import io
 
-import common
-import metadata
+from fdroidserver import common
+from fdroidserver import metadata
 
 config = None
 options = None
@@ -81,7 +81,7 @@ def main():
 
         if options.list:
             if not proper_format(app):
-                print app.metadatapath
+                print(app.metadatapath)
             continue
 
         with open(base + '.' + to_ext, 'w') as f:
