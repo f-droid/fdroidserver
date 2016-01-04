@@ -102,8 +102,8 @@ def main():
             default_sdk_path = '/opt/android-sdk'
             while not options.no_prompt:
                 try:
-                    s = raw_input('Enter the path to the Android SDK ('
-                                  + default_sdk_path + ') here:\n> ')
+                    s = input('Enter the path to the Android SDK ('
+                              + default_sdk_path + ') here:\n> ')
                 except KeyboardInterrupt:
                     print('')
                     sys.exit(1)

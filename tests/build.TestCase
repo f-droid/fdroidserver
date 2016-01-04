@@ -37,7 +37,7 @@ class BuildTest(unittest.TestCase):
                     break
             return True
         else:
-            print 'no build-tools found: ' + build_tools
+            print('no build-tools found: ' + build_tools)
             return False
 
     def _find_all(self):

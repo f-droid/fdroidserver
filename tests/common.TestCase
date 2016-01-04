@@ -37,7 +37,7 @@ class CommonTest(unittest.TestCase):
                     break
             return True
         else:
-            print 'no build-tools found: ' + build_tools
+            print('no build-tools found: ' + build_tools)
             return False
 
     def _find_all(self):
@@ -61,7 +61,7 @@ class CommonTest(unittest.TestCase):
             if self._set_build_tools():
                 self._find_all()
             else:
-                print 'no build-tools found: ' + build_tools
+                print('no build-tools found: ' + build_tools)
 
     def testIsApkDebuggable(self):
         config = dict()

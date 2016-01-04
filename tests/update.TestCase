@@ -59,7 +59,7 @@ class UpdateTest(unittest.TestCase):
             self.assertEquals(sig.decode('hex'), pysig.decode('hex'),
                               "the length of the two sigs are different!")
         except TypeError as e:
-            print e
+            print(e)
             self.assertTrue(False, 'TypeError!')
 
     def testBadGetsig(self):

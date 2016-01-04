@@ -295,12 +295,12 @@ def main():
             sftp = ssh.open_sftp()
             if os.path.basename(remotepath) \
                     not in sftp.listdir(os.path.dirname(remotepath)):
-                sftp.mkdir(remotepath, mode=0755)
+                sftp.mkdir(remotepath, mode=0o755)
             for repo_section in repo_sections:
                 repo_path = os.path.join(remotepath, repo_section)
                 if os.path.basename(repo_path) \
                         not in sftp.listdir(remotepath):
-                    sftp.mkdir(repo_path, mode=0755)
+                    sftp.mkdir(repo_path, mode=0o755)
             sftp.close()
             ssh.close()
     elif options.command == 'update':

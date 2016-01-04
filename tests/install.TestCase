@@ -32,7 +32,7 @@ class InstallTest(unittest.TestCase):
         devices = fdroidserver.install.devices()
         self.assertIsInstance(devices, list, 'install.devices() did not return a list!')
         for device in devices:
-            self.assertIsInstance(device, basestring)
+            self.assertIsInstance(device, str)
 
 
 if __name__ == "__main__":
