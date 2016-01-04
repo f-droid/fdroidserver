@@ -41,7 +41,7 @@ import logging
 
 from . import common
 from . import metadata
-from .common import FDroidPopen, SdkToolsPopen
+from .common import FDroidPopen, FDroidPopenBytes, SdkToolsPopen
 from .metadata import MetaDataException
 
 screen_densities = ['640', '480', '320', '240', '160', '120']
@@ -720,12 +720,12 @@ def extract_pubkey():
     if 'repo_pubkey' in config:
         pubkey = unhexlify(config['repo_pubkey'])
     else:
-        p = FDroidPopen([config['keytool'], '-exportcert',
-                         '-alias', config['repo_keyalias'],
-                         '-keystore', config['keystore'],
-                         '-storepass:file', config['keystorepassfile']]
-                        + config['smartcardoptions'],
-                        output=False, stderr_to_stdout=False)
+        p = FDroidPopenBytes([config['keytool'], '-exportcert',
+                              '-alias', config['repo_keyalias'],
+                              '-keystore', config['keystore'],
+                              '-storepass:file', config['keystorepassfile']]
+                             + config['smartcardoptions'],
+                             output=False, stderr_to_stdout=False)
         if p.returncode != 0 or len(p.output) < 20:
             msg = "Failed to get repo pubkey!"
             if config['keystore'] == 'NONE':
