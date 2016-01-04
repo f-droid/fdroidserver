@@ -862,7 +862,7 @@ def post_metadata_parse(app):
                 build.__dict__[k] = re.sub(esc_newlines, '', v).lstrip().rstrip()
             elif ftype == TYPE_BOOL:
                 # TODO handle this using <xsd:element type="xsd:boolean> in a schema
-                if isinstance(v, basestring):
+                if isinstance(v, str):
                     build.__dict__[k] = _decode_bool(v)
             elif ftype == TYPE_STRING:
                 if isinstance(v, bool) and v:
@@ -901,7 +901,7 @@ def post_metadata_parse(app):
 
 
 def _decode_list(data):
-    '''convert items in a list from unicode to basestring'''
+    '''convert items in a list from unicode to str'''
     rv = []
     for item in data:
         if isinstance(item, unicode):
@@ -915,7 +915,7 @@ def _decode_list(data):
 
 
 def _decode_dict(data):
-    '''convert items in a dict from unicode to basestring'''
+    '''convert items in a dict from unicode to str'''
     rv = {}
     for k, v in data.items():
         if isinstance(k, unicode):

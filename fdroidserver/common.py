@@ -247,9 +247,9 @@ def read_config(opts, config_file='config.py'):
             config[k] = clean_description(config[k])
 
     if 'serverwebroot' in config:
-        if isinstance(config['serverwebroot'], basestring):
+        if isinstance(config['serverwebroot'], str):
             roots = [config['serverwebroot']]
-        elif all(isinstance(item, basestring) for item in config['serverwebroot']):
+        elif all(isinstance(item, str) for item in config['serverwebroot']):
             roots = config['serverwebroot']
         else:
             raise TypeError('only accepts strings, lists, and tuples')
