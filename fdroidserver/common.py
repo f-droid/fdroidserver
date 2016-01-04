@@ -33,6 +33,7 @@ import operator
 import logging
 import hashlib
 import socket
+import base64
 import xml.etree.ElementTree as XMLElementTree
 
 from queue import Queue
@@ -1923,8 +1924,9 @@ def genpassword():
     '''generate a random password for when generating keys'''
     h = hashlib.sha256()
     h.update(os.urandom(16))  # salt
-    h.update(bytes(socket.getfqdn()))
-    return h.digest().encode('base64').strip()
+    h.update(socket.getfqdn().encode('utf-8'))
+    passwd = base64.b64encode(h.digest()).strip()
+    return passwd.decode('utf-8')
 
 
 def genkeystore(localconfig):
