@@ -554,7 +554,7 @@ def main():
                                      .format(common.getappname(app), version))
         return
 
-    for appid, app in apps.iteritems():
+    for appid, app in apps.items():
 
         if options.autoonly and app.AutoUpdateMode in ('None', 'Static'):
             logging.debug("Nothing to do for {0}...".format(appid))

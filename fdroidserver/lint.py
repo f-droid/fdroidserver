@@ -117,7 +117,7 @@ regex_checks = {
 
 
 def check_regexes(app):
-    for f, checks in regex_checks.iteritems():
+    for f, checks in regex_checks.items():
         for m, r in checks:
             v = app.get_field(f)
             t = metadata.fieldtype(f)
@@ -332,7 +332,7 @@ def main():
     allapps = metadata.read_metadata(xref=True)
     apps = common.read_app_args(options.appid, allapps, False)
 
-    for appid, app in apps.iteritems():
+    for appid, app in apps.items():
         if app.Disabled:
             continue
 

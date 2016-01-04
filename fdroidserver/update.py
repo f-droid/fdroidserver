@@ -291,7 +291,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
     :param apkcache: current apk cache information
     :param repodirs: the repo directories to process
     """
-    for appid, app in apps.iteritems():
+    for appid, app in apps.items():
         for build in app.builds:
             if not build.disable:
                 continue
@@ -1024,7 +1024,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
 
 def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversions):
 
-    for appid, app in apps.iteritems():
+    for appid, app in apps.items():
 
         if app.ArchivePolicy:
             keepversions = int(app.ArchivePolicy[:-9])
@@ -1268,7 +1268,7 @@ def main():
     # level. When doing this, we use the info from the most recent version's apk.
     # We deal with figuring out when the app was added and last updated at the
     # same time.
-    for appid, app in apps.iteritems():
+    for appid, app in apps.items():
         bestver = 0
         for apk in apks + archapks:
             if apk['id'] == appid:
@@ -1308,7 +1308,7 @@ def main():
     # per-app subscription feeds for nightly builds and things like it
     if config['per_app_repos']:
         add_apks_to_per_app_repos(repodirs[0], apks)
-        for appid, app in apps.iteritems():
+        for appid, app in apps.items():
             repodir = os.path.join(appid, 'fdroid', 'repo')
             appdict = dict()
             appdict[appid] = app

@@ -381,7 +381,7 @@ def read_app_args(args, allapps, allow_vercodes=False):
         return allapps
 
     apps = {}
-    for appid, app in allapps.iteritems():
+    for appid, app in allapps.items():
         if appid in vercodes:
             apps[appid] = app
 
@@ -394,7 +394,7 @@ def read_app_args(args, allapps, allow_vercodes=False):
         raise FDroidException("No packages specified")
 
     error = False
-    for appid, app in apps.iteritems():
+    for appid, app in apps.items():
         vc = vercodes[appid]
         if not vc:
             continue
@@ -1519,7 +1519,7 @@ def getpaths_map(build_dir, globpaths):
 def getpaths(build_dir, globpaths):
     paths_map = getpaths_map(build_dir, globpaths)
     paths = set()
-    for k, v in paths_map.iteritems():
+    for k, v in paths_map.items():
         for p in v:
             paths.add(p)
     return paths
@@ -1551,7 +1551,7 @@ class KnownApks:
             os.mkdir('stats')
 
         lst = []
-        for apk, app in self.apks.iteritems():
+        for apk, app in self.apks.items():
             appid, added = app
             line = apk + ' ' + appid
             if added:
@@ -1582,7 +1582,7 @@ class KnownApks:
     # with the most recent first.
     def getlatest(self, num):
         apps = {}
-        for apk, app in self.apks.iteritems():
+        for apk, app in self.apks.items():
             appid, added = app
             if added:
                 if appid in apps:
@@ -1590,7 +1590,7 @@ class KnownApks:
                         apps[appid] = added
                 else:
                     apps[appid] = added
-        sortedapps = sorted(apps.iteritems(), key=operator.itemgetter(1))[-num:]
+        sortedapps = sorted(apps.items(), key=operator.itemgetter(1))[-num:]
         lst = [app for app, _ in sortedapps]
         lst.reverse()
         return lst

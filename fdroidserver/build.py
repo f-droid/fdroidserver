@@ -462,7 +462,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
         if not ndk_path:
             logging.critical("Android NDK version '%s' could not be found!" % build.ndk or 'r10e')
             logging.critical("Configured versions:")
-            for k, v in config['ndk_paths'].iteritems():
+            for k, v in config['ndk_paths'].items():
                 if k.endswith("_orig"):
                     continue
                 logging.critical("  %s: %s" % (k, v))
@@ -1086,7 +1086,7 @@ def main():
     # Build applications...
     failed_apps = {}
     build_succeeded = []
-    for appid, app in apps.iteritems():
+    for appid, app in apps.items():
 
         first = True
 

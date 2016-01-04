@@ -158,11 +158,11 @@ class App():
     # names. Should only be used for tests.
     def field_dict(self):
         d = {}
-        for k, v in self.__dict__.iteritems():
+        for k, v in self.__dict__.items():
             if k == 'builds':
                 d['builds'] = []
                 for build in v:
-                    b = {k: v for k, v in build.__dict__.iteritems() if not k.startswith('_')}
+                    b = {k: v for k, v in build.__dict__.items() if not k.startswith('_')}
                     d['builds'].append(b)
             elif not k.startswith('_'):
                 f = App.attr_to_field(k)
@@ -196,7 +196,7 @@ class App():
 
     # Like dict.update(), but using human-readable field names
     def update_fields(self, d):
-        for f, v in d.iteritems():
+        for f, v in d.items():
             if f == 'builds':
                 for b in v:
                     build = Build()
@@ -354,7 +354,7 @@ class Build():
         return paths[version]
 
     def update_flags(self, d):
-        for f, v in d.iteritems():
+        for f, v in d.items():
             self.set_flag(f, v)
 
 flagtypes = {
@@ -793,7 +793,7 @@ def read_metadata(xref=True):
                 return ("fdroid.app:" + appid, "Dummy name - don't know yet")
             raise MetaDataException("Cannot resolve app id " + appid)
 
-        for appid, app in apps.iteritems():
+        for appid, app in apps.items():
             try:
                 description_html(app.Description, linkres)
             except MetaDataException as e:
@@ -842,14 +842,14 @@ esc_newlines = re.compile(r'\\( |\n)')
 # This function uses __dict__ to be faster
 def post_metadata_parse(app):
 
-    for k, v in app.__dict__.iteritems():
+    for k, v in app.__dict__.items():
         if k not in app._modified:
             continue
         if type(v) in (float, int):
             app.__dict__[k] = str(v)
 
     for build in app.builds:
-        for k, v in build.__dict__.iteritems():
+        for k, v in build.__dict__.items():
 
             if k not in build._modified:
                 continue
@@ -917,7 +917,7 @@ def _decode_list(data):
 def _decode_dict(data):
     '''convert items in a dict from unicode to basestring'''
     rv = {}
-    for k, v in data.iteritems():
+    for k, v in data.items():
         if isinstance(k, unicode):
             k = k.encode('utf-8')
         if isinstance(v, unicode):

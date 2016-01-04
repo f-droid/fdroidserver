@@ -67,7 +67,7 @@ def scan_source(build_dir, root_dir, build):
     }
 
     def suspects_found(s):
-        for n, r in usual_suspects.iteritems():
+        for n, r in usual_suspects.items():
             if r.match(s):
                 yield n
 
@@ -94,7 +94,7 @@ def scan_source(build_dir, root_dir, build):
     scandelete_worked = set()
 
     def toignore(fd):
-        for k, paths in scanignore.iteritems():
+        for k, paths in scanignore.items():
             for p in paths:
                 if fd.startswith(p):
                     scanignore_worked.add(k)
@@ -102,7 +102,7 @@ def scan_source(build_dir, root_dir, build):
         return False
 
     def todelete(fd):
-        for k, paths in scandelete.iteritems():
+        for k, paths in scandelete.items():
             for p in paths:
                 if fd.startswith(p):
                     scandelete_worked.add(k)
@@ -266,7 +266,7 @@ def main():
     srclib_dir = os.path.join(build_dir, 'srclib')
     extlib_dir = os.path.join(build_dir, 'extlib')
 
-    for appid, app in apps.iteritems():
+    for appid, app in apps.items():
 
         if app.Disabled:
             logging.info("Skipping %s: disabled" % appid)
