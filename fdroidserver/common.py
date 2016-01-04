@@ -1672,9 +1672,9 @@ def FDroidPopen(commands, cwd=None, output=True, stderr_to_stdout=True):
             line = stdout_queue.get()
             if output and options.verbose:
                 # Output directly to console
-                sys.stderr.write(line)
+                sys.stderr.buffer.write(line)
                 sys.stderr.flush()
-            result.output += line
+            result.output += line.decode('utf-8')
 
         time.sleep(0.1)
 
