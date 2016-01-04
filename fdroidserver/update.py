@@ -1301,7 +1301,7 @@ def main():
     # Sort the app list by name, then the web site doesn't have to by default.
     # (we had to wait until we'd scanned the apks to do this, because mostly the
     # name comes from there!)
-    sortedids = sorted(apps.iterkeys(), key=lambda appid: apps[appid].Name.upper())
+    sortedids = sorted(apps.keys(), key=lambda appid: apps[appid].Name.upper())
 
     # APKs are placed into multiple repos based on the app package, providing
     # per-app subscription feeds for nightly builds and things like it
