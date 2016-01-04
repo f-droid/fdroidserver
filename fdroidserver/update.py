@@ -712,7 +712,7 @@ repo_pubkey_fingerprint = None
 def cert_fingerprint(data):
     digest = hashlib.sha256(data).digest()
     ret = []
-    ret.append(' '.join("%02X" % ord(b) for b in digest))
+    ret.append(' '.join("%02X" % b for b in bytearray(digest)))
     return " ".join(ret)
 
 
