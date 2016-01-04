@@ -20,12 +20,13 @@
 import sys
 import os
 import re
-import urllib2
+import urllib.request
+import urllib.error
 import time
 import subprocess
 from argparse import ArgumentParser
 import traceback
-import HTMLParser
+from html.parser import HTMLParser
 from distutils.version import LooseVersion
 import logging
 import copy
@@ -51,8 +52,8 @@ def check_http(app):
         vercode = "99999999"
         if len(urlcode) > 0:
             logging.debug("...requesting {0}".format(urlcode))
-            req = urllib2.Request(urlcode, None)
-            resp = urllib2.urlopen(req, None, 20)
+            req = urllib.request.Request(urlcode, None)
+            resp = urllib.request.urlopen(req, None, 20)
             page = resp.read()
 
             m = re.search(codeex, page)
@@ -64,8 +65,8 @@ def check_http(app):
         if len(urlver) > 0:
             if urlver != '.':
                 logging.debug("...requesting {0}".format(urlver))
-                req = urllib2.Request(urlver, None)
-                resp = urllib2.urlopen(req, None, 20)
+                req = urllib.request.Request(urlver, None)
+                resp = urllib.request.urlopen(req, None, 20)
                 page = resp.read()
 
             m = re.search(verex, page)
@@ -275,11 +276,11 @@ def check_gplay(app):
     time.sleep(15)
     url = 'https://play.google.com/store/apps/details?id=' + app.id
     headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux i686; rv:18.0) Gecko/20100101 Firefox/18.0'}
-    req = urllib2.Request(url, None, headers)
+    req = urllib.request.Request(url, None, headers)
     try:
-        resp = urllib2.urlopen(req, None, 20)
+        resp = urllib.request.urlopen(req, None, 20)
         page = resp.read()
-    except urllib2.HTTPError as e:
+    except urllib.error.HTTPError as e:
         return (None, str(e.code))
     except Exception as e:
         return (None, 'Failed:' + str(e))
@@ -288,7 +289,7 @@ def check_gplay(app):
 
     m = re.search('itemprop="softwareVersion">[ ]*([^<]+)[ ]*</div>', page)
     if m:
-        html_parser = HTMLParser.HTMLParser()
+        html_parser = HTMLParser()
         version = html_parser.unescape(m.group(1))
 
     if version == 'Varies with device':

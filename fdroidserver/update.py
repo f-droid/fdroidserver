@@ -26,7 +26,7 @@ import socket
 import zipfile
 import hashlib
 import pickle
-import urlparse
+import urllib.parse
 from datetime import datetime, timedelta
 from xml.dom.minidom import Document
 from argparse import ArgumentParser
@@ -773,7 +773,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
 
     mirrorcheckfailed = False
     for mirror in config.get('mirrors', []):
-        base = os.path.basename(urlparse.urlparse(mirror).path.rstrip('/'))
+        base = os.path.basename(urllib.parse.urlparse(mirror).path.rstrip('/'))
         if config.get('nonstandardwebroot') is not True and base != 'fdroid':
             logging.error("mirror '" + mirror + "' does not end with 'fdroid'!")
             mirrorcheckfailed = True
@@ -787,9 +787,9 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         repoel.setAttribute("icon", os.path.basename(config['archive_icon']))
         repoel.setAttribute("url", config['archive_url'])
         addElement('description', config['archive_description'], doc, repoel)
-        urlbasepath = os.path.basename(urlparse.urlparse(config['archive_url']).path)
+        urlbasepath = os.path.basename(urllib.parse.urlparse(config['archive_url']).path)
         for mirror in config.get('mirrors', []):
-            addElement('mirror', urlparse.urljoin(mirror, urlbasepath), doc, repoel)
+            addElement('mirror', urllib.parse.urljoin(mirror, urlbasepath), doc, repoel)
 
     else:
         repoel.setAttribute("name", config['repo_name'])
@@ -798,9 +798,9 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         repoel.setAttribute("icon", os.path.basename(config['repo_icon']))
         repoel.setAttribute("url", config['repo_url'])
         addElement('description', config['repo_description'], doc, repoel)
-        urlbasepath = os.path.basename(urlparse.urlparse(config['repo_url']).path)
+        urlbasepath = os.path.basename(urllib.parse.urlparse(config['repo_url']).path)
         for mirror in config.get('mirrors', []):
-            addElement('mirror', urlparse.urljoin(mirror, urlbasepath), doc, repoel)
+            addElement('mirror', urllib.parse.urljoin(mirror, urlbasepath), doc, repoel)
 
     repoel.setAttribute("version", "15")
     repoel.setAttribute("timestamp", str(int(time.time())))
