@@ -41,7 +41,7 @@ except ImportError:
 # use the C implementation when available
 import xml.etree.cElementTree as ElementTree
 
-import common
+import fdroidserver.common
 
 srclibs = None
 
@@ -352,7 +352,7 @@ class Build():
         version = self.ndk
         if not version:
             version = 'r10e'  # falls back to latest
-        paths = common.config['ndk_paths']
+        paths = fdroidserver.common.config['ndk_paths']
         if version not in paths:
             return ''
         return paths[version]
@@ -826,7 +826,7 @@ def get_default_app_info(metadatapath=None):
     if metadatapath is None:
         appid = None
     else:
-        appid, _ = common.get_extension(os.path.basename(metadatapath))
+        appid, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
 
     app = App()
     app.metadatapath = metadatapath
@@ -947,15 +947,15 @@ def _decode_bool(s):
 
 
 def parse_metadata(metadatapath):
-    _, ext = common.get_extension(metadatapath)
-    accepted = common.config['accepted_formats']
+    _, ext = fdroidserver.common.get_extension(metadatapath)
+    accepted = fdroidserver.common.config['accepted_formats']
     if ext not in accepted:
         raise MetaDataException('"%s" is not an accepted format, convert to: %s' % (
             metadatapath, ', '.join(accepted)))
 
     app = App()
     app.metadatapath = metadatapath
-    app.id, _ = common.get_extension(os.path.basename(metadatapath))
+    app.id, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
 
     with open(metadatapath, 'r') as mf:
         if ext == 'txt':

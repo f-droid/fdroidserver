@@ -43,7 +43,7 @@ except ImportError:
 
 from zipfile import ZipFile
 
-import metadata
+import fdroidserver.metadata
 from fdroidserver.asynchronousfilereader import AsynchronousFileReader
 
 
@@ -486,9 +486,9 @@ def getvcs(vcstype, remote, local):
 
 
 def getsrclibvcs(name):
-    if name not in metadata.srclibs:
+    if name not in fdroidserver.metadata.srclibs:
         raise VCSException("Missing srclib " + name)
-    return metadata.srclibs[name]['Repo Type']
+    return fdroidserver.metadata.srclibs[name]['Repo Type']
 
 
 class vcs:
@@ -1215,10 +1215,10 @@ def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
         if '/' in name:
             name, subdir = name.split('/', 1)
 
-    if name not in metadata.srclibs:
+    if name not in fdroidserver.metadata.srclibs:
         raise VCSException('srclib ' + name + ' not found.')
 
-    srclib = metadata.srclibs[name]
+    srclib = fdroidserver.metadata.srclibs[name]
 
     sdir = os.path.join(srclib_dir, name)
 
