@@ -19,7 +19,6 @@
 from argparse import ArgumentParser
 import re
 import sys
-from sets import Set
 
 from . import common
 from . import metadata
@@ -204,7 +203,7 @@ def check_empty_fields(app):
     if not app.Categories:
         yield "Categories are not set"
 
-all_categories = Set([
+all_categories = set([
     "Connectivity",
     "Development",
     "Games",
