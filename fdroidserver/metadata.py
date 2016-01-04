@@ -900,36 +900,6 @@ def post_metadata_parse(app):
 #
 
 
-def _decode_list(data):
-    '''convert items in a list from unicode to str'''
-    rv = []
-    for item in data:
-        if isinstance(item, unicode):
-            item = item.encode('utf-8')
-        elif isinstance(item, list):
-            item = _decode_list(item)
-        elif isinstance(item, dict):
-            item = _decode_dict(item)
-        rv.append(item)
-    return rv
-
-
-def _decode_dict(data):
-    '''convert items in a dict from unicode to str'''
-    rv = {}
-    for k, v in data.items():
-        if isinstance(k, unicode):
-            k = k.encode('utf-8')
-        if isinstance(v, unicode):
-            v = v.encode('utf-8')
-        elif isinstance(v, list):
-            v = _decode_list(v)
-        elif isinstance(v, dict):
-            v = _decode_dict(v)
-        rv[k] = v
-    return rv
-
-
 bool_true = re.compile(r'([Yy]es|[Tt]rue)')
 bool_false = re.compile(r'([Nn]o|[Ff]alse)')
 
@@ -971,11 +941,9 @@ def parse_metadata(metadatapath):
 
 def parse_json_metadata(mf, app):
 
-    # fdroid metadata is only strings and booleans, no floats or ints. And
-    # json returns unicode, and fdroidserver still uses plain python strings
+    # fdroid metadata is only strings and booleans, no floats or ints.
     # TODO create schema using https://pypi.python.org/pypi/jsonschema
-    jsoninfo = json.load(mf, object_hook=_decode_dict,
-                         parse_int=lambda s: s,
+    jsoninfo = json.load(mf, parse_int=lambda s: s,
                          parse_float=lambda s: s)
     app.update_fields(jsoninfo)
     for f in ['Description', 'Maintainer Notes']:
