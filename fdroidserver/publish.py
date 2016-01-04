@@ -20,8 +20,8 @@
 import sys
 import os
 import shutil
-import md5
 import glob
+import hashlib
 from argparse import ArgumentParser
 import logging
 
@@ -90,7 +90,7 @@ def main():
     vercodes = common.read_pkg_args(options.appid, True)
     allaliases = []
     for appid in allapps:
-        m = md5.new()
+        m = hashlib.md5()
         m.update(appid)
         keyalias = m.hexdigest()[:8]
         if keyalias in allaliases:
@@ -155,11 +155,11 @@ def main():
                 # For this particular app, the key alias is overridden...
                 keyalias = config['keyaliases'][appid]
                 if keyalias.startswith('@'):
-                    m = md5.new()
+                    m = hashlib.md5()
                     m.update(keyalias[1:])
                     keyalias = m.hexdigest()[:8]
             else:
-                m = md5.new()
+                m = hashlib.md5()
                 m.update(appid)
                 keyalias = m.hexdigest()[:8]
             logging.info("Key alias: " + keyalias)

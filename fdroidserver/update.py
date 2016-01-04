@@ -34,7 +34,6 @@ import time
 from pyasn1.error import PyAsn1Error
 from pyasn1.codec.der import decoder, encoder
 from pyasn1_modules import rfc2315
-from hashlib import md5
 from binascii import hexlify, unhexlify
 
 from PIL import Image
@@ -401,7 +400,7 @@ def getsig(apkpath):
 
     cert_encoded = encoder.encode(certificates)[4:]
 
-    return md5(cert_encoded.encode('hex')).hexdigest()
+    return hashlib.md5(cert_encoded.encode('hex')).hexdigest()
 
 
 def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
