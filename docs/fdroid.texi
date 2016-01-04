@@ -83,9 +83,7 @@ intended usage. At the very least, you'll need:
 @item
 GNU/Linux
 @item
-Python 2.x
-To be sure of being able to process all apk files without error, you need
-2.7.7 or later. See @code{http://bugs.python.org/issue14315}.
+Python 3.4 or later
 @item
 The Android SDK Tools and Build-tools.
 Note that F-Droid does not assume that you have the Android SDK in your

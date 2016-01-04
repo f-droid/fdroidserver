@@ -23,8 +23,7 @@ install, and keep track of updates on your device.
 
 ### Installing
 
-Note that only Python 2 is supported. We recommend version 2.7.7 or
-later.
+Note that only Python 3 is supported. We recommend version 3.4 or later.
 
 The easiest way to install the `fdroidserver` tools is on Ubuntu, Mint or other
 Ubuntu based distributions, you can install using:
@@ -56,7 +55,7 @@ or Cygwin, you can use it:
 
 Python's `pip` also works:
 
-	sudo pip install fdroidserver
+	sudo pip3 install fdroidserver
 
 The combination of `virtualenv` and `pip` is great for testing out the
 latest versions of `fdroidserver`. Using `pip`, `fdroidserver` can
@@ -67,7 +66,7 @@ via other mechanisms like Brew/dnf/pacman/emerge/Fink/MacPorts.
 
 For Debian based distributions:
 
-	apt-get install python-dev python-pip python-virtualenv
+	apt-get install python3-dev python3-pip python3-virtualenv
 
 Then here's how to install:
 
@@ -75,5 +74,5 @@ Then here's how to install:
 	cd fdroidserver
 	virtualenv env/
 	source env/bin/activate
-	pip install -e .
-	python2 setup.py install
+	pip3 install -e .
+	python3 setup.py install
