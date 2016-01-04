@@ -91,7 +91,7 @@ def main():
     allaliases = []
     for appid in allapps:
         m = hashlib.md5()
-        m.update(appid)
+        m.update(appid.encode('utf-8'))
         keyalias = m.hexdigest()[:8]
         if keyalias in allaliases:
             logging.error("There is a keyalias collision - publishing halted")
@@ -156,11 +156,11 @@ def main():
                 keyalias = config['keyaliases'][appid]
                 if keyalias.startswith('@'):
                     m = hashlib.md5()
-                    m.update(keyalias[1:])
+                    m.update(keyalias[1:].encode('utf-8'))
                     keyalias = m.hexdigest()[:8]
             else:
                 m = hashlib.md5()
-                m.update(appid)
+                m.update(appid.encode('utf-8'))
                 keyalias = m.hexdigest()[:8]
             logging.info("Key alias: " + keyalias)
 
