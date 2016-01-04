@@ -400,7 +400,7 @@ def getsig(apkpath):
 
     cert_encoded = encoder.encode(certificates)[4:]
 
-    return hashlib.md5(cert_encoded.encode('hex')).hexdigest()
+    return hashlib.md5(hexlify(cert_encoded)).hexdigest()
 
 
 def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
