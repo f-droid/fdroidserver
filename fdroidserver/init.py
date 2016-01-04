@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # update.py - part of the FDroid server tools
 # Copyright (C) 2010-2013, Ciaran Gultnieks, ciaran@ciarang.com

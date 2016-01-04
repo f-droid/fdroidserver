@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # rewritemeta.py - part of the FDroid server tools
 # This cleans up the original .txt metadata file format.

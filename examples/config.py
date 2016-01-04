@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # Copy this file to config.py, then amend the settings below according to
 # your system configuration.

@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # lint.py - part of the FDroid server tool
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
