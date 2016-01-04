@@ -27,7 +27,7 @@ import sys
 from argparse import ArgumentParser
 import logging
 
-import common
+from . import common
 
 config = {}
 options = None

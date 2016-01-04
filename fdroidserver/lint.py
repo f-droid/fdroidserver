@@ -21,9 +21,9 @@ import re
 import sys
 from sets import Set
 
-import common
-import metadata
-import rewritemeta
+from . import common
+from . import metadata
+from . import rewritemeta
 
 config = None
 options = None

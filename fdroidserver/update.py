@@ -40,10 +40,10 @@ from binascii import hexlify, unhexlify
 from PIL import Image
 import logging
 
-import common
-import metadata
-from common import FDroidPopen, SdkToolsPopen
-from metadata import MetaDataException
+from . import common
+from . import metadata
+from .common import FDroidPopen, SdkToolsPopen
+from .metadata import MetaDataException
 
 screen_densities = ['640', '480', '320', '240', '160', '120']
 

@@ -22,9 +22,9 @@ import glob
 from argparse import ArgumentParser
 import logging
 
-import common
-import net
-from common import FDroidException
+from . import common
+from . import net
+from .common import FDroidException
 
 options = None
 config = None

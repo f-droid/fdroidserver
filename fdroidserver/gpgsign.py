@@ -22,8 +22,8 @@ import glob
 from argparse import ArgumentParser
 import logging
 
-import common
-from common import FDroidPopen
+from . import common
+from .common import FDroidPopen
 
 config = None
 options = None

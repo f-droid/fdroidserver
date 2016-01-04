@@ -22,8 +22,8 @@ import os
 import logging
 import io
 
-from fdroidserver import common
-from fdroidserver import metadata
+from . import common
+from . import metadata
 
 config = None
 options = None

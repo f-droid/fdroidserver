@@ -24,8 +24,9 @@ import urllib
 from argparse import ArgumentParser
 from ConfigParser import ConfigParser
 import logging
-import common
-import metadata
+
+from . import common
+from . import metadata
 
 
 # Get the repo type and address from the given web page. The page is scanned

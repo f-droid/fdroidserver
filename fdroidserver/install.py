@@ -23,8 +23,8 @@ import glob
 from argparse import ArgumentParser
 import logging
 
-import common
-from common import SdkToolsPopen, FDroidException
+from . import common
+from .common import SdkToolsPopen, FDroidException
 
 options = None
 config = None

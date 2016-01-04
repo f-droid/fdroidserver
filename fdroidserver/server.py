@@ -25,7 +25,8 @@ import pwd
 import subprocess
 from argparse import ArgumentParser
 import logging
-import common
+
+from . import common
 
 config = None
 options = None

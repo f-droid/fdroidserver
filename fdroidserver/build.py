@@ -31,11 +31,11 @@ from ConfigParser import ConfigParser
 from argparse import ArgumentParser
 import logging
 
-import common
-import net
-import metadata
-import scanner
-from common import FDroidException, BuildException, VCSException, FDroidPopen, SdkToolsPopen
+from . import common
+from . import net
+from . import metadata
+from . import scanner
+from .common import FDroidException, BuildException, VCSException, FDroidPopen, SdkToolsPopen
 
 try:
     import paramiko

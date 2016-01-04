@@ -25,9 +25,9 @@ import glob
 from argparse import ArgumentParser
 import logging
 
-import common
-import metadata
-from common import FDroidPopen, SdkToolsPopen, BuildException
+from . import common
+from . import metadata
+from .common import FDroidPopen, SdkToolsPopen, BuildException
 
 config = None
 options = None

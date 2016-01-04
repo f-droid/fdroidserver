@@ -30,10 +30,10 @@ from distutils.version import LooseVersion
 import logging
 import copy
 
-import common
-import metadata
-from common import VCSException, FDroidException
-from metadata import MetaDataException
+from . import common
+from . import metadata
+from .common import VCSException, FDroidException
+from .metadata import MetaDataException
 
 
 # Check for a new version by looking at a document retrieved via HTTP.

@@ -27,10 +27,11 @@ from argparse import ArgumentParser
 import paramiko
 import socket
 import logging
-import common
-import metadata
 import subprocess
 from collections import Counter
+
+from . import common
+from . import metadata
 
 
 def carbon_send(key, value):

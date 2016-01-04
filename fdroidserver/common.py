@@ -40,7 +40,7 @@ from queue import Queue
 from zipfile import ZipFile
 
 import fdroidserver.metadata
-from fdroidserver.asynchronousfilereader import AsynchronousFileReader
+from .asynchronousfilereader import AsynchronousFileReader
 
 
 XMLElementTree.register_namespace('android', 'http://schemas.android.com/apk/res/android')
