@@ -952,7 +952,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
         if element.text is None:
             return ""
         s = XMLElementTree.tostring(element, encoding='utf-8', method='text')
-        return s.strip()
+        return s.decode('utf-8').strip()
 
     for path in xmlfiles:
         if not os.path.isfile(path):
@@ -1000,7 +1000,7 @@ def fetch_real_name(app_dir, flavours):
             continue
         if "{http://schemas.android.com/apk/res/android}label" not in app.attrib:
             continue
-        label = app.attrib["{http://schemas.android.com/apk/res/android}label"].encode('utf-8')
+        label = app.attrib["{http://schemas.android.com/apk/res/android}label"]
         result = retrieve_string_singleline(app_dir, label)
         if result:
             result = result.strip()
@@ -1112,15 +1112,15 @@ def parse_androidmanifests(paths, app):
             try:
                 xml = parse_xml(path)
                 if "package" in xml.attrib:
-                    s = xml.attrib["package"].encode('utf-8')
+                    s = xml.attrib["package"]
                     if app_matches_packagename(app, s):
                         package = s
                 if "{http://schemas.android.com/apk/res/android}versionName" in xml.attrib:
-                    version = xml.attrib["{http://schemas.android.com/apk/res/android}versionName"].encode('utf-8')
+                    version = xml.attrib["{http://schemas.android.com/apk/res/android}versionName"]
                     base_dir = os.path.dirname(path)
                     version = retrieve_string_singleline(base_dir, version)
                 if "{http://schemas.android.com/apk/res/android}versionCode" in xml.attrib:
-                    a = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"].encode('utf-8')
+                    a = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"]
                     if string_is_integer(a):
                         vercode = a
             except Exception:
