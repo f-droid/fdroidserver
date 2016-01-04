@@ -23,11 +23,7 @@ import re
 import glob
 import cgi
 import textwrap
-
-try:
-    from cStringIO import StringIO
-except:
-    from StringIO import StringIO
+import io
 
 import yaml
 # use libyaml if it is available
@@ -513,8 +509,8 @@ class DescriptionFormatter:
         self.laststate = self.stNONE
         self.text_html = ''
         self.text_txt = ''
-        self.html = StringIO()
-        self.text = StringIO()
+        self.html = io.StringIO()
+        self.text = io.StringIO()
         self.para_lines = []
         self.linkResolver = None
         self.linkResolver = linkres

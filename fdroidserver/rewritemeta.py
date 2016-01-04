@@ -20,10 +20,7 @@
 from argparse import ArgumentParser
 import os
 import logging
-try:
-    from cStringIO import StringIO
-except:
-    from StringIO import StringIO
+import io
 
 import common
 import metadata
@@ -33,7 +30,7 @@ options = None
 
 
 def proper_format(app):
-    s = StringIO()
+    s = io.StringIO()
     # TODO: currently reading entire file again, should reuse first
     # read in metadata.py
     with open(app.metadatapath, 'r') as f:
