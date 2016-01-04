@@ -75,7 +75,7 @@ def main():
         sys.exit(1)
 
     # Get all metadata-defined apps...
-    allmetaapps = [app for app in metadata.read_metadata().itervalues()]
+    allmetaapps = [app for app in metadata.read_metadata().values()]
     metaapps = [app for app in allmetaapps if not app.Disabled]
 
     statsdir = 'stats'

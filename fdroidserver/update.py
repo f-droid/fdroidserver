@@ -1198,7 +1198,7 @@ def main():
 
     # Generate a list of categories...
     categories = set()
-    for app in apps.itervalues():
+    for app in apps.values():
         categories.update(app.Categories)
 
     # Read known apks data (will be updated and written back when we've finished)

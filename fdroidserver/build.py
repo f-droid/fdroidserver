@@ -1070,7 +1070,7 @@ def main():
         raise FDroidException("No apps to process.")
 
     if options.latest:
-        for app in apps.itervalues():
+        for app in apps.values():
             for build in reversed(app.builds):
                 if build.disable and not options.force:
                     continue
