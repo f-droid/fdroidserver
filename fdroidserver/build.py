@@ -27,7 +27,7 @@ import tarfile
 import traceback
 import time
 import json
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from argparse import ArgumentParser
 import logging
 

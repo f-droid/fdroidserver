@@ -22,7 +22,7 @@ import os
 import shutil
 import urllib
 from argparse import ArgumentParser
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 import logging
 
 from . import common
