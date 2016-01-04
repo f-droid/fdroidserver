@@ -35,12 +35,7 @@ import hashlib
 import socket
 import xml.etree.ElementTree as XMLElementTree
 
-try:
-    # Python 2
-    from Queue import Queue
-except ImportError:
-    # Python 3
-    from queue import Queue
+from queue import Queue
 
 from zipfile import ZipFile
 
