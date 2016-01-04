@@ -1231,8 +1231,7 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
             w_field(f, v)
 
     w_field_nonempty('Disabled')
-    if app.AntiFeatures:
-        w_field_always('AntiFeatures')
+    w_field_nonempty('AntiFeatures')
     w_field_nonempty('Provides')
     w_field_always('Categories')
     w_field_always('License')
