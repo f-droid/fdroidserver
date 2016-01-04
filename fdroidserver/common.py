@@ -1612,8 +1612,9 @@ def isApkDebuggable(apkfile, config):
 
 
 class PopenResult:
-    returncode = None
-    output = ''
+    def __init__(self):
+        self.returncode = None
+        self.output = None
 
 
 def SdkToolsPopen(commands, cwd=None, output=True):
@@ -1628,9 +1629,9 @@ def SdkToolsPopen(commands, cwd=None, output=True):
                        cwd=cwd, output=output)
 
 
-def FDroidPopen(commands, cwd=None, output=True, stderr_to_stdout=True):
+def FDroidPopenBytes(commands, cwd=None, output=True, stderr_to_stdout=True):
     """
-    Run a command and capture the possibly huge output.
+    Run a command and capture the possibly huge output as bytes.
 
     :param commands: command and argument list like in subprocess.Popen
     :param cwd: optionally specifies a working directory
@@ -1661,13 +1662,14 @@ def FDroidPopen(commands, cwd=None, output=True, stderr_to_stdout=True):
         while not stderr_reader.eof():
             while not stderr_queue.empty():
                 line = stderr_queue.get()
-                sys.stderr.write(line)
+                sys.stderr.buffer.write(line)
                 sys.stderr.flush()
 
             time.sleep(0.1)
 
     stdout_queue = Queue()
     stdout_reader = AsynchronousFileReader(p.stdout, stdout_queue)
+    buf = io.BytesIO()
 
     # Check the queue for output (until there is no more to get)
     while not stdout_reader.eof():
@@ -1677,11 +1679,26 @@ def FDroidPopen(commands, cwd=None, output=True, stderr_to_stdout=True):
                 # Output directly to console
                 sys.stderr.buffer.write(line)
                 sys.stderr.flush()
-            result.output += line.decode('utf-8')
+            buf.write(line)
 
         time.sleep(0.1)
 
     result.returncode = p.wait()
+    result.output = buf.getvalue()
+    buf.close()
+    return result
+
+
+def FDroidPopen(commands, cwd=None, output=True, stderr_to_stdout=True):
+    """
+    Run a command and capture the possibly huge output as a str.
+
+    :param commands: command and argument list like in subprocess.Popen
+    :param cwd: optionally specifies a working directory
+    :returns: A PopenResult.
+    """
+    result = FDroidPopenBytes(commands, cwd, output, stderr_to_stdout)
+    result.output = result.output.decode('utf-8')
     return result
 
 
