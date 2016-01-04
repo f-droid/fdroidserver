@@ -199,10 +199,11 @@ def scan_source(build_dir, root_dir, build):
             elif ext == 'java':
                 if not os.path.isfile(fp):
                     continue
-                for line in file(fp):
-                    if 'DexClassLoader' in line:
-                        count += handleproblem('DexClassLoader', fd, fp)
-                        break
+                with open(fp, 'r') as f:
+                    for line in f:
+                        if 'DexClassLoader' in line:
+                            count += handleproblem('DexClassLoader', fd, fp)
+                            break
 
             elif ext == 'gradle':
                 if not os.path.isfile(fp):

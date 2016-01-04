@@ -1013,15 +1013,16 @@ def get_library_references(root_dir):
     proppath = os.path.join(root_dir, 'project.properties')
     if not os.path.isfile(proppath):
         return libraries
-    for line in file(proppath):
-        if not line.startswith('android.library.reference.'):
-            continue
-        path = line.split('=')[1].strip()
-        relpath = os.path.join(root_dir, path)
-        if not os.path.isdir(relpath):
-            continue
-        logging.debug("Found subproject at %s" % path)
-        libraries.append(path)
+    with open(proppath, 'r') as f:
+        for line in f:
+            if not line.startswith('android.library.reference.'):
+                continue
+            path = line.split('=')[1].strip()
+            relpath = os.path.join(root_dir, path)
+            if not os.path.isdir(relpath):
+                continue
+            logging.debug("Found subproject at %s" % path)
+            libraries.append(path)
     return libraries
 
 
@@ -1087,25 +1088,26 @@ def parse_androidmanifests(paths, app):
         package = None
 
         if gradle:
-            for line in file(path):
-                if gradle_comment.match(line):
-                    continue
-                # Grab first occurence of each to avoid running into
-                # alternative flavours and builds.
-                if not package:
-                    matches = psearch_g(line)
-                    if matches:
-                        s = matches.group(2)
-                        if app_matches_packagename(app, s):
-                            package = s
-                if not version:
-                    matches = vnsearch_g(line)
-                    if matches:
-                        version = matches.group(2)
-                if not vercode:
-                    matches = vcsearch_g(line)
-                    if matches:
-                        vercode = matches.group(1)
+            with open(path, 'r') as f:
+                for line in f:
+                    if gradle_comment.match(line):
+                        continue
+                    # Grab first occurence of each to avoid running into
+                    # alternative flavours and builds.
+                    if not package:
+                        matches = psearch_g(line)
+                        if matches:
+                            s = matches.group(2)
+                            if app_matches_packagename(app, s):
+                                package = s
+                    if not version:
+                        matches = vnsearch_g(line)
+                        if matches:
+                            version = matches.group(2)
+                    if not vercode:
+                        matches = vcsearch_g(line)
+                        if matches:
+                            vercode = matches.group(1)
         else:
             try:
                 xml = parse_xml(path)
@@ -1531,12 +1533,13 @@ class KnownApks:
         self.path = os.path.join('stats', 'known_apks.txt')
         self.apks = {}
         if os.path.isfile(self.path):
-            for line in file(self.path):
-                t = line.rstrip().split(' ')
-                if len(t) == 2:
-                    self.apks[t[0]] = (t[1], None)
-                else:
-                    self.apks[t[0]] = (t[1], time.strptime(t[2], '%Y-%m-%d'))
+            with open(self.path, 'r') as f:
+                for line in f:
+                    t = line.rstrip().split(' ')
+                    if len(t) == 2:
+                        self.apks[t[0]] = (t[1], None)
+                    else:
+                        self.apks[t[0]] = (t[1], time.strptime(t[2], '%Y-%m-%d'))
         self.changed = False
 
     def writeifchanged(self):
