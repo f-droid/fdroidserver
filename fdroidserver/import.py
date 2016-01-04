@@ -20,7 +20,7 @@
 import sys
 import os
 import shutil
-import urllib
+import urllib.request
 from argparse import ArgumentParser
 from configparser import ConfigParser
 import logging
@@ -35,7 +35,7 @@ from . import metadata
 # Returns repotype, address, or None, reason
 def getrepofrompage(url):
 
-    req = urllib.urlopen(url)
+    req = urllib.request.urlopen(url)
     if req.getcode() != 200:
         return (None, 'Unable to get ' + url + ' - return code ' + str(req.getcode()))
     page = req.read()
