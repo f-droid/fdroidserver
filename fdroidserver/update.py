@@ -826,7 +826,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             logging.warning("\tfdroid update --create-key")
             sys.exit(1)
 
-    repoel.setAttribute("pubkey", extract_pubkey())
+    repoel.setAttribute("pubkey", extract_pubkey().decode('utf-8'))
     root.appendChild(repoel)
 
     for appid in sortedids:
@@ -966,9 +966,9 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                     os.symlink(sigfile_path, siglinkname)
 
     if options.pretty:
-        output = doc.toprettyxml()
+        output = doc.toprettyxml(encoding='utf-8')
     else:
-        output = doc.toxml()
+        output = doc.toxml(encoding='utf-8')
 
     with open(os.path.join(repodir, 'index.xml'), 'wb') as f:
         f.write(output)
