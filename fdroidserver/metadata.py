@@ -392,28 +392,12 @@ def flagtype(name):
 #
 class FieldValidator():
 
-    def __init__(self, name, matching, sep, fields, flags):
+    def __init__(self, name, matching, fields, flags):
         self.name = name
         self.matching = matching
-        if type(matching) is str:
-            self.compiled = re.compile(matching)
-        else:
-            self.matching = set(self.matching)
-        self.sep = sep
+        self.compiled = re.compile(matching)
         self.fields = fields
         self.flags = flags
-
-    def _assert_regex(self, values, appid):
-        for v in values:
-            if not self.compiled.match(v):
-                raise MetaDataException("'%s' is not a valid %s in %s. Regex pattern: %s"
-                                        % (v, self.name, appid, self.matching))
-
-    def _assert_list(self, values, appid):
-        for v in values:
-            if v not in self.matching:
-                raise MetaDataException("'%s' is not a valid %s in %s. Possible values: %s"
-                                        % (v, self.name, appid, ', '.join(self.matching)))
 
     def check(self, v, appid):
         if not v:
@@ -422,70 +406,68 @@ class FieldValidator():
             values = v
         else:
             values = [v]
-        if type(self.matching) is set:
-            self._assert_list(values, appid)
-        else:
-            self._assert_regex(values, appid)
-
+        for v in values:
+            if not self.compiled.match(v):
+                raise MetaDataException("'%s' is not a valid %s in %s. Regex pattern: %s"
+                                        % (v, self.name, appid, self.matching))
 
 # Generic value types
 valuetypes = {
     FieldValidator("Integer",
-                   r'^[1-9][0-9]*$', None,
+                   r'^[1-9][0-9]*$',
                    [],
                    ['vercode']),
 
     FieldValidator("Hexadecimal",
-                   r'^[0-9a-f]+$', None,
+                   r'^[0-9a-f]+$',
                    ['FlattrID'],
                    []),
 
     FieldValidator("HTTP link",
-                   r'^http[s]?://', None,
+                   r'^http[s]?://',
                    ["WebSite", "SourceCode", "IssueTracker", "Changelog", "Donate"], []),
 
     FieldValidator("Email",
-                   r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', None,
+                   r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
                    ["AuthorEmail"], []),
 
     FieldValidator("Bitcoin address",
-                   r'^[a-zA-Z0-9]{27,34}$', None,
+                   r'^[a-zA-Z0-9]{27,34}$',
                    ["Bitcoin"],
                    []),
 
     FieldValidator("Litecoin address",
-                   r'^L[a-zA-Z0-9]{33}$', None,
+                   r'^L[a-zA-Z0-9]{33}$',
                    ["Litecoin"],
                    []),
 
     FieldValidator("Repo Type",
-                   ['git', 'git-svn', 'svn', 'hg', 'bzr', 'srclib'], None,
+                   r'^(git|git-svn|svn|hg|bzr|srclib)$',
                    ["RepoType"],
                    []),
 
     FieldValidator("Binaries",
-                   r'^http[s]?://', None,
+                   r'^http[s]?://',
                    ["Binaries"],
                    []),
 
     FieldValidator("Archive Policy",
-                   r'^[0-9]+ versions$', None,
+                   r'^[0-9]+ versions$',
                    ["ArchivePolicy"],
                    []),
 
     FieldValidator("Anti-Feature",
-                   ["Ads", "Tracking", "NonFreeNet", "NonFreeDep", "NonFreeAdd",
-                       "UpstreamNonFree", "NonFreeAssets"], ',',
+                   r'^(Ads|Tracking|NonFreeNet|NonFreeDep|NonFreeAdd|UpstreamNonFree|NonFreeAssets)$',
                    ["AntiFeatures"],
                    []),
 
     FieldValidator("Auto Update Mode",
-                   r"^(Version .+|None)$", None,
+                   r"^(Version .+|None)$",
                    ["AutoUpdateMode"],
                    []),
 
     FieldValidator("Update Check Mode",
-                   r"^(Tags|Tags .+|RepoManifest|RepoManifest/.+|RepoTrunk|HTTP|Static|None)$", None,
+                   r"^(Tags|Tags .+|RepoManifest|RepoManifest/.+|RepoTrunk|HTTP|Static|None)$",
                    ["UpdateCheckMode"],
                    [])
 }
