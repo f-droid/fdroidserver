@@ -42,7 +42,7 @@ class MetadataTest(unittest.TestCase):
             savepath = os.path.join('metadata', appid + '.pickle')
             frommeta = app.field_dict()
             self.assertTrue(appid in apps)
-            with open(savepath, 'r') as f:
+            with open(savepath, 'rb') as f:
                 frompickle = pickle.load(f)
             self.assertEquals(frommeta, frompickle)
             # Uncomment to overwrite
