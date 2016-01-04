@@ -8,6 +8,7 @@ import optparse
 import os
 import sys
 import unittest
+from binascii import unhexlify
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -55,7 +56,7 @@ class UpdateTest(unittest.TestCase):
         self.assertEquals(len(sig), len(pysig),
                           "the length of the two sigs are different!")
         try:
-            self.assertEquals(sig.decode('hex'), pysig.decode('hex'),
+            self.assertEquals(unhexlify(sig), unhexlify(pysig),
                               "the length of the two sigs are different!")
         except TypeError as e:
             print(e)
