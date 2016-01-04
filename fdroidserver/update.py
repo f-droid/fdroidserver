@@ -103,7 +103,7 @@ def update_wiki(apps, sortedids, apks):
             requiresroot = 'Yes'
         else:
             requiresroot = 'No'
-        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|changelog=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s}}\n' % (
+        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|changelog=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s|author=%s|email=%s}}\n' % (
             appid,
             app.Name,
             time.strftime('%Y-%m-%d', app.added) if app.added else '',
@@ -117,7 +117,9 @@ def update_wiki(apps, sortedids, apks):
             app.Bitcoin,
             app.Litecoin,
             app.License,
-            requiresroot)
+            requiresroot,
+            app.AuthorName,
+            app.AuthorEmail)
 
         if app.Provides:
             wikidata += "This app provides: %s" % ', '.join(app.Summary.split(','))
@@ -850,6 +852,8 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         addElement('source', app.SourceCode, doc, apel)
         addElement('tracker', app.IssueTracker, doc, apel)
         addElementNonEmpty('changelog', app.Changelog, doc, apel)
+        addElementNonEmpty('author', app.AuthorName, doc, apel)
+        addElementNonEmpty('email', app.AuthorEmail, doc, apel)
         addElementNonEmpty('donate', app.Donate, doc, apel)
         addElementNonEmpty('bitcoin', app.Bitcoin, doc, apel)
         addElementNonEmpty('litecoin', app.Litecoin, doc, apel)
