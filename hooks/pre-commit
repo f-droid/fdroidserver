@@ -46,17 +46,16 @@ else
     done
 fi
 
-# In the default configuration, the checks E123, E226 ignored because
-# they are not rules unanimously accepted
-# On top of those, we ignore:
+# We ignore the following PEP8 warnings
+# * E123: closing bracket does not match indentation of opening bracket's line
+#   - Broken if multiple indentation levels start on a single line
 # * E501: line too long (82 > 79 characters)
 #   - Recommended for readability but not enforced
 #   - Some lines are awkward to wrap around a char limit
 # * W503: line break before binary operator
-#   - It's quite new
 #   - Quite pedantic
 
-PEP8_IGNORE="E123,E226,E501,W503"
+PEP8_IGNORE="E123,E501,W503"
 
 err() {
 	echo ERROR: "$@"
