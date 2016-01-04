@@ -338,9 +338,9 @@ def write_password_file(pwtype, password=None):
     filename = '.fdroid.' + pwtype + '.txt'
     fd = os.open(filename, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
     if password is None:
-        os.write(fd, config[pwtype])
+        os.write(fd, config[pwtype].encode('utf-8'))
     else:
-        os.write(fd, password)
+        os.write(fd, password.encode('utf-8'))
     os.close(fd)
     config[pwtype + 'file'] = filename
 
