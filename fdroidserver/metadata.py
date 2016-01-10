@@ -530,10 +530,10 @@ class DescriptionFormatter:
         self.state = self.stNONE
         whole_para = ' '.join(self.para_lines)
         self.addtext(whole_para)
-        wrapped = textwrap.fill(whole_para.decode('utf-8'), 80,
+        wrapped = textwrap.fill(whole_para, 80,
                                 break_long_words=False,
                                 break_on_hyphens=False)
-        self.text.write(wrapped.encode('utf-8'))
+        self.text.write(wrapped)
         self.html.write('</p>')
         del self.para_lines[:]
 
