@@ -45,6 +45,13 @@ options = None
 config = None
 
 
+def most_common_stable(counts):
+    pairs = []
+    for s in counts:
+        pairs.append((s, counts[s]))
+    return sorted(pairs, key=lambda t: (-t[1], t[0]))
+
+
 def main():
 
     global options, config
@@ -222,7 +229,7 @@ def main():
             rtype = common.getsrclibvcs(app.Repo)
         repotypes[rtype] += 1
     with open(os.path.join(statsdir, 'repotypes.txt'), 'w') as f:
-        for rtype, count in repotypes.most_common():
+        for rtype, count in most_common_stable(repotypes):
             f.write(rtype + ' ' + str(count) + '\n')
 
     # Calculate and write stats for update check modes...
@@ -236,7 +243,7 @@ def main():
             checkmode = checkmode[:4]
         ucms[checkmode] += 1
     with open(os.path.join(statsdir, 'update_check_modes.txt'), 'w') as f:
-        for checkmode, count in ucms.most_common():
+        for checkmode, count in most_common_stable(ucms):
             f.write(checkmode + ' ' + str(count) + '\n')
 
     logging.info("Processing categories...")
@@ -245,7 +252,7 @@ def main():
         for category in app.Categories:
             ctgs[category] += 1
     with open(os.path.join(statsdir, 'categories.txt'), 'w') as f:
-        for category, count in ctgs.most_common():
+        for category, count in most_common_stable(ctgs):
             f.write(category + ' ' + str(count) + '\n')
 
     logging.info("Processing antifeatures...")
@@ -256,7 +263,7 @@ def main():
         for antifeature in app.AntiFeatures:
             afs[antifeature] += 1
     with open(os.path.join(statsdir, 'antifeatures.txt'), 'w') as f:
-        for antifeature, count in afs.most_common():
+        for antifeature, count in most_common_stable(afs):
             f.write(antifeature + ' ' + str(count) + '\n')
 
     # Calculate and write stats for licenses...
@@ -266,7 +273,7 @@ def main():
         license = app.License
         licenses[license] += 1
     with open(os.path.join(statsdir, 'licenses.txt'), 'w') as f:
-        for license, count in licenses.most_common():
+        for license, count in most_common_stable(licenses):
             f.write(license + ' ' + str(count) + '\n')
 
     # Write list of disabled apps...
