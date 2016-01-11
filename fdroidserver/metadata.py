@@ -1217,7 +1217,7 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
             w_field_always('Binaries')
         mf.write('\n')
 
-    for build in sorted_builds(app.builds):
+    for build in app.builds:
 
         if build.version == "Ignore":
             continue
