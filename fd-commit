@@ -3,7 +3,7 @@
 # fd-commit - part of the F-Droid server tools
 # Commits updates to apps, allowing you to edit the commit messages
 #
-# Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
+# Copyright (C) 2013-2014 Daniel Marti <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
