@@ -531,6 +531,7 @@ class vcs:
         # automatically if either of those things changes.
         fdpath = os.path.join(self.local, '..',
                               '.fdroidvcs-' + os.path.basename(self.local))
+        fdpath = os.path.normpath(fdpath)
         cdata = self.repotype() + ' ' + self.remote
         writeback = True
         deleterepo = False
@@ -562,7 +563,8 @@ class vcs:
 
         # If necessary, write the .fdroidvcs file.
         if writeback and not self.clone_failed:
-            with open(fdpath, 'w') as f:
+            os.makedirs(os.path.dirname(fdpath), exist_ok=True)
+            with open(fdpath, 'w+') as f:
                 f.write(cdata)
 
         if exc is not None:
