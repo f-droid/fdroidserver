@@ -45,7 +45,14 @@ parser.add_option("--debian-mirror", default="http://http.debian.net/debian/",
                   help="Use the specified Debian mirror in the box's /etc/apt/sources.list.")
 options, args = parser.parse_args()
 
-config = {}
+# set up default config
+config = {
+    'arch64': False,
+    'basebox': 'jessie32',
+    'baseboxurl': 'https://f-droid.org/jessie32.box',
+    'cpus': 1,
+    'memory': 3584,
+}
 
 # load config file, if present
 if os.path.exists('makebuildserver.config.py'):
