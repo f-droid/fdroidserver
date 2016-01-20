@@ -13,6 +13,12 @@ baseboxurl = "https://f-droid.org/jessie32.box"
 # or if you have a cached local copy, you can use that first:
 # baseboxurl = ["file:///home/fdroid/fdroidserver/cache/jessie32.box", "https://f-droid.org/jessie32.box"]
 
+# To specify which Debian mirror the build server VM should use, by
+# default it uses http.debian.net, which auto-detects which is the
+# best mirror to use.
+#
+# debian_mirror = 'http://ftp.uk.debian.org/debian/'
+
 # The amount of RAM the build server will have
 memory = 3584
 

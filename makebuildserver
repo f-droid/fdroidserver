@@ -41,7 +41,7 @@ parser.add_option("-v", "--verbose", action="store_true", default=False,
                   help="Spew out even more information than normal")
 parser.add_option("-c", "--clean", action="store_true", default=False,
                   help="Build from scratch, rather than attempting to update the existing server")
-parser.add_option("--debian-mirror", default="http://ftp.uk.debian.org/debian/",
+parser.add_option("--debian-mirror", default="http://http.debian.net/debian/",
                   help="Use the specified Debian mirror in the box's /etc/apt/sources.list.")
 options, args = parser.parse_args()
 
