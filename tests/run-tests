@@ -168,7 +168,7 @@ tar xzf `ls -1 $WORKSPACE/dist/fdroidserver-*.tar.gz | sort -n | tail -1`
 cd $REPOROOT
 ./fdroidserver-*/fdroid init
 copy_apks_into_repo $REPOROOT
-./fdroidserver-*/fdroid update --create-metadata
+./fdroidserver-*/fdroid update --create-metadata --verbose
 
 
 #------------------------------------------------------------------------------#
@@ -177,7 +177,7 @@ echo_header "test config checks of local_copy_dir"
 REPOROOT=`create_test_dir`
 cd $REPOROOT
 $fdroid init
-$fdroid update --create-metadata
+$fdroid update --create-metadata --verbose
 $fdroid readmeta
 $fdroid server update --local-copy-dir=/tmp/fdroid
 
@@ -214,7 +214,7 @@ REPOROOT=`create_test_dir`
 cd $REPOROOT
 $fdroid init
 copy_apks_into_repo $REPOROOT
-$fdroid update --create-metadata
+$fdroid update --create-metadata --verbose
 $fdroid readmeta
 grep -F '<application id=' repo/index.xml > /dev/null
 
@@ -318,7 +318,7 @@ cd $REPOROOT
 $fdroid init --keystore $KEYSTORE --android-home $STORED_ANDROID_HOME --no-prompt
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
-$fdroid update --create-metadata
+$fdroid update --create-metadata --verbose
 $fdroid readmeta
 grep -F '<application id=' repo/index.xml > /dev/null
 test -e repo/index.xml
@@ -334,7 +334,7 @@ cd $REPOROOT
 mkdir repo
 copy_apks_into_repo $REPOROOT
 $fdroid init
-$fdroid update --create-metadata
+$fdroid update --create-metadata --verbose
 $fdroid readmeta
 grep -F '<application id=' repo/index.xml > /dev/null
 
@@ -348,7 +348,7 @@ cd $REPOROOT
 $fdroid init --keystore $KEYSTORE
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
-$fdroid update --create-metadata
+$fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
@@ -376,7 +376,7 @@ set -e
 $fdroid update --create-key
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
-$fdroid update --create-metadata
+$fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
@@ -392,14 +392,14 @@ cd $REPOROOT
 $fdroid init --keystore $KEYSTORE
 test -e $KEYSTORE
 copy_apks_into_repo $REPOROOT
-$fdroid update --create-metadata
+$fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 test -e $REPOROOT/repo/info.guardianproject.urzip_100.apk || \
     cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
-$fdroid update --create-metadata
+$fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
@@ -408,7 +408,6 @@ grep -F '<application id=' repo/index.xml > /dev/null
 
 #------------------------------------------------------------------------------#
 echo_header "setup a new repo from scratch with a HSM/smartcard"
-
 REPOROOT=`create_test_dir`
 cd $REPOROOT
 $fdroid init --keystore NONE
@@ -427,7 +426,7 @@ touch fdroid-icon.png
 mkdir repo
 cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
 set +e
-$fdroid update --create-metadata
+$fdroid update --create-metadata --verbose
 if [ $? -eq 0 ]; then
     echo "This should have failed because this repo has no keystore!"
     exit 1
@@ -443,7 +442,7 @@ echo 'repo_keyalias = "foo"' >> config.py
 echo 'keystorepass = "foo"' >> config.py
 echo 'keypass = "foo"' >> config.py
 set +e
-$fdroid update --create-metadata
+$fdroid update --create-metadata --verbose
 if [ $? -eq 0 ]; then
     echo "This should have failed because this repo has a bad/fake keystore!"
     exit 1
@@ -462,7 +461,7 @@ cd $REPOROOT
 $fdroid init --keystore $KEYSTORE
 test -e $KEYSTORE
 cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
-$fdroid update --create-metadata
+$fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar

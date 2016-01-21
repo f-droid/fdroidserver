@@ -21,7 +21,7 @@ include docs/index_versions.md
 include docs/update.sh
 include examples/config.py
 include examples/fdroid-icon.png
-include examples/makebs.config.py
+include examples/makebuildserver.config.py
 include examples/opensc-fdroid.cfg
 include tests/getsig/run.sh
 include tests/getsig/make.sh
