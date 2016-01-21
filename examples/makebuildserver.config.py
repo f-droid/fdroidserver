@@ -14,6 +14,13 @@
 # or if you have a cached local copy, you can use that first:
 # baseboxurl = ["file:///home/fdroid/fdroidserver/cache/jessie32.box", "https://f-droid.org/jessie32.box"]
 
+# In the process of setting up the build server, many gigs of files
+# are downloaded (Android SDK components, gradle, etc).  These are
+# cached so that they are not redownloaded each time. By default,
+# these are stored in ~/.cache/fdroidserver
+#
+# cachedir = 'buildserver/cache'
+
 # To specify which Debian mirror the build server VM should use, by
 # default it uses http.debian.net, which auto-detects which is the
 # best mirror to use.
