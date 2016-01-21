@@ -305,6 +305,9 @@ def sha256_for_file(path):
 
 for f, src, shasum in cachefiles:
     relpath = os.path.join(cachedir, f)
+    # if download fails to connect, it'll make a zero size file
+    if os.path.exists(relpath) and os.stat(relpath).st_size == 0:
+        os.remove(relpath)
     if not os.path.exists(relpath):
         print "Downloading " + f + " to cache"
         if subprocess.call(['wget', src, '-O', f], cwd=cachedir) != 0:
