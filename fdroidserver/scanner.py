@@ -82,6 +82,7 @@ def scan_source(build_dir, root_dir, build):
         'oss.sonatype.org/content/repositories/snapshots',
         'oss.sonatype.org/content/repositories/releases',
         'oss.sonatype.org/content/groups/public',
+        'clojars.org/repo',  # Clojure free software libs
         ]
     ]
 
