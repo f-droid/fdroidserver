@@ -1072,19 +1072,22 @@ def parse_androidmanifests(paths, app):
                     if matches:
                         vercode = matches.group(1)
         else:
-            xml = parse_xml(path)
-            if "package" in xml.attrib:
-                s = xml.attrib["package"].encode('utf-8')
-                if app_matches_packagename(app, s):
-                    package = s
-            if "{http://schemas.android.com/apk/res/android}versionName" in xml.attrib:
-                version = xml.attrib["{http://schemas.android.com/apk/res/android}versionName"].encode('utf-8')
-                base_dir = os.path.dirname(path)
-                version = retrieve_string_singleline(base_dir, version)
-            if "{http://schemas.android.com/apk/res/android}versionCode" in xml.attrib:
-                a = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"].encode('utf-8')
-                if string_is_integer(a):
-                    vercode = a
+            try:
+                xml = parse_xml(path)
+                if "package" in xml.attrib:
+                    s = xml.attrib["package"].encode('utf-8')
+                    if app_matches_packagename(app, s):
+                        package = s
+                if "{http://schemas.android.com/apk/res/android}versionName" in xml.attrib:
+                    version = xml.attrib["{http://schemas.android.com/apk/res/android}versionName"].encode('utf-8')
+                    base_dir = os.path.dirname(path)
+                    version = retrieve_string_singleline(base_dir, version)
+                if "{http://schemas.android.com/apk/res/android}versionCode" in xml.attrib:
+                    a = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"].encode('utf-8')
+                    if string_is_integer(a):
+                        vercode = a
+            except Exception:
+                logging.warning("Problem with xml at {0}".format(path))
 
         # Remember package name, may be defined separately from version+vercode
         if package is None:
