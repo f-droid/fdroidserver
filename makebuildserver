@@ -367,6 +367,13 @@ if 'aptproxy' in config and config['aptproxy']:
   config.vm.provision :shell, :inline => 'sudo echo "Acquire::http {{ Proxy \\"{0}\\"; }};" > /etc/apt/apt.conf.d/02proxy && sudo apt-get update'
 """.format(config['aptproxy'])
 
+# buildserver/ is shared to the VM's /vagrant by default so the old default
+# does not need a custom mount
+if cachedir != 'buildserver/cache':
+    vagrantfile += """
+  config.vm.synced_folder '{0}', '/vagrant/cache'
+""".format(cachedir)
+
 vagrantfile += """
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "cookbooks"
