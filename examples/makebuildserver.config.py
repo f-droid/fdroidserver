@@ -38,3 +38,9 @@
 
 # Set to True if your base box is 64 bit (e.g. testing32.box isn't)
 # arch64 = True
+
+# If this is running on an older machine or on a virtualized system,
+# it can run a lot slower. If the provisioning fails with a warning
+# about the timeout, extend the timeout here. (default: 600 seconds)
+#
+# boot_timeout = 1200
