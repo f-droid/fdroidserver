@@ -53,6 +53,7 @@ config = {
         'file://' + os.path.join(cachedir, 'jessie32.box'),
         'https://f-droid.org/jessie32.box',
     ],
+    'debian_mirror': 'http://http.debian.net/debian/',
     'cachedir': cachedir,
     'cpus': 1,
     'memory': 3584,
