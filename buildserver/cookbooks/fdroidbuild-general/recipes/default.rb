@@ -7,7 +7,7 @@ execute 'set_debian_mirror' do
 end
 
 execute "jessie_backports" do
-  command "echo 'deb http://http.debian.net/debian jessie-backports main' > /etc/apt/sources.list.d/backports.list"
+  command "echo 'deb #{debian_mirror} jessie-backports main' > /etc/apt/sources.list.d/backports.list"
   only_if "grep jessie /etc/apt/sources.list"
 end
 

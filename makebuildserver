@@ -41,16 +41,19 @@ parser.add_option("-v", "--verbose", action="store_true", default=False,
                   help="Spew out even more information than normal")
 parser.add_option("-c", "--clean", action="store_true", default=False,
                   help="Build from scratch, rather than attempting to update the existing server")
-parser.add_option("--debian-mirror", default="http://http.debian.net/debian/",
-                  help="Use the specified Debian mirror in the box's /etc/apt/sources.list.")
 options, args = parser.parse_args()
 
 # set up default config
+cachedir = os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver')
 config = {
     'arch64': False,
     'basebox': 'jessie32',
-    'baseboxurl': 'https://f-droid.org/jessie32.box',
-    'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
+    # TODO in py3, convert this to pathlib.Path(absolute_path_string).as_uri()
+    'baseboxurl': [
+        'file://' + os.path.join(cachedir, 'jessie32.box'),
+        'https://f-droid.org/jessie32.box',
+    ],
+    'cachedir': cachedir,
     'cpus': 1,
     'memory': 3584,
 }
@@ -378,7 +381,7 @@ vagrantfile += """
     chef.add_recipe "kivy"
   end
 end
-""" % (options.debian_mirror)
+""" % (config['debian_mirror'])
 
 # Check against the existing Vagrantfile, and if they differ, we need to
 # create a new box:
