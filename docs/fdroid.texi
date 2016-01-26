@@ -117,7 +117,7 @@ VirtualBox (debian package virtualbox)
 @item
 Ruby (debian packages ruby and rubygems)
 @item
-Vagrant (unpackaged, tested on v1.4.3)
+Vagrant (debian package vagrant - 1.4.x or higher required)
 @item
 vagrant-cachier plugin (unpackaged): `vagrant plugin install vagrant-cachier`
 @item

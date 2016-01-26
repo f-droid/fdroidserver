@@ -178,16 +178,15 @@ def get_clean_vm(reset=False):
 
         p = subprocess.Popen(['vagrant', '--version'],
                              stdout=subprocess.PIPE)
-        vver = p.communicate()[0]
+        vver = p.communicate()[0].strip().split(' ')[1]
+        if vver.split('.')[0] != '1' or int(vver.split('.')[1]) < 4:
+            raise BuildException("Unsupported vagrant version {0}".format(vver))
+
         with open(os.path.join('builder', 'Vagrantfile'), 'w') as vf:
-            if vver.startswith('Vagrant version 1.2'):
-                vf.write('Vagrant.configure("2") do |config|\n')
-                vf.write('config.vm.box = "buildserver"\n')
-                vf.write('end\n')
-            else:
-                vf.write('Vagrant::Config.run do |config|\n')
-                vf.write('config.vm.box = "buildserver"\n')
-                vf.write('end\n')
+            vf.write('Vagrant.configure("2") do |config|\n')
+            vf.write('config.vm.box = "buildserver"\n')
+            vf.write('config.vm.synced_folder ".", "/vagrant", disabled: true\n')
+            vf.write('end\n')
 
         logging.info("Starting new build server")
         retcode, _ = vagrant(['up'], cwd='builder')
