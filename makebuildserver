@@ -54,6 +54,7 @@ config = {
         'https://f-droid.org/jessie32.box',
     ],
     'debian_mirror': 'http://http.debian.net/debian/',
+    'apt_package_cache': False,
     'boot_timeout': 600,
     'cachedir': cachedir,
     'cpus': 1,
@@ -373,6 +374,14 @@ if cachedir != 'buildserver/cache':
     vagrantfile += """
   config.vm.synced_folder '{0}', '/vagrant/cache'
 """.format(cachedir)
+
+# cache .deb packages on the host via a mount trick
+if config['apt_package_cache']:
+    aptcachedir = cachedir + '/apt/archives'
+    vagrantfile += """
+  config.vm.synced_folder "{0}", "/var/cache/apt/archives",
+    owner: 'root', group: 'root', create: true
+""".format(aptcachedir)
 
 vagrantfile += """
   config.vm.provision :chef_solo do |chef|
