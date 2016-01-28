@@ -58,7 +58,7 @@ config = {
     'boot_timeout': 600,
     'cachedir': cachedir,
     'cpus': 1,
-    'memory': 3584,
+    'memory': 1024,
 }
 
 # load config file, if present
