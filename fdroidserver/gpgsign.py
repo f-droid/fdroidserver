@@ -63,6 +63,8 @@ def main():
                            '--detach-sig']
                 if 'gpghome' in config:
                     gpgargs.extend(['--homedir', config['gpghome']])
+                if 'gpgkey' in config:
+                    gpgargs.extend(['--local-user', config['gpgkey']])
                 gpgargs.append(os.path.join(output_dir, apkfilename))
                 p = FDroidPopen(gpgargs)
                 if p.returncode != 0:
