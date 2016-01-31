@@ -194,6 +194,8 @@ class FDroid
 			return 'https://www.gnu.org/licenses/license-list.html#X11License';
 		case 'NewBSD':
 			return 'https://www.gnu.org/licenses/license-list.html#ModifiedBSD';
+		case 'FreeBSD':
+			return 'https://www.gnu.org/licenses/license-list.html#FreeBSD';
 		case 'BSD':
 			return 'https://www.gnu.org/licenses/license-list.html#OriginalBSD';
 		case 'GPLv3':
@@ -207,7 +209,6 @@ class FDroid
 			return 'https://www.gnu.org/licenses/license-list.html#AGPLv3.0';
 		case 'LGPL':
 			return 'https://www.gnu.org/licenses/license-list.html#LGPL';
-		case 'LGPL':
 		case 'LGPLv3':
 			return 'https://www.gnu.org/licenses/license-list.html#LGPLv3';
 		case 'LGPLv2.1':
@@ -216,6 +217,30 @@ class FDroid
 			return 'https://www.gnu.org/licenses/license-list.html#apache2';
 		case 'WTFPL':
 			return 'https://www.gnu.org/licenses/license-list.html#WTFPL';
+		case 'ISC':
+			return 'https://www.gnu.org/licenses/license-list.html#ISC';
+		case 'Expat':
+			return 'https://www.gnu.org/licenses/license-list.html#Expat';
+		case 'Artistic2':
+			return 'https://www.gnu.org/licenses/license-list.html#ArtisticLicense2';
+		case 'CC0':
+			return 'https://www.gnu.org/licenses/license-list.html#CC0';
+		case 'PublicDomain':
+			return 'https://www.gnu.org/licenses/license-list.html#PublicDomain';
+		case 'Unlicense':
+			return 'https://www.gnu.org/licenses/license-list.html#Unlicense';
+		case 'MPL':
+			return 'https://www.gnu.org/licenses/license-list.html#MPL';
+		case 'MPL2':
+			return 'https://www.gnu.org/licenses/license-list.html#MPL-2.0';
+		case 'NCSA':
+			return 'https://www.gnu.org/licenses/license-list.html#NCSA';
+		case 'Zlib':
+			return 'https://www.gnu.org/licenses/license-list.html#ZLib';
+		case 'EPL':
+			return 'https://www.gnu.org/licenses/license-list.html#EPL';
+		case 'EUPL':
+			return 'https://www.gnu.org/licenses/license-list.html#EUPL';
 		default:
 			return null;
 		}
