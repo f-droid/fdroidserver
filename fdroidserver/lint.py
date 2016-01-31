@@ -77,6 +77,8 @@ regex_checks = {
     'Author Name': [
         (re.compile(r'^\s'),
          "Unnecessary leading space"),
+        (re.compile(r'.*\s$'),
+         "Unnecessary trailing space"),
     ],
     'License': [
         (re.compile(r'^(|None|Unknown)$'),
