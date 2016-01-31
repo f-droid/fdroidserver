@@ -74,6 +74,10 @@ regex_checks = {
          "Flattr donation methods belong in the FlattrID flag"),
     ],
     'Changelog': http_checks,
+    'Author Name': [
+        (re.compile(r'^\s'),
+         "Unnecessary leading space"),
+    ],
     'License': [
         (re.compile(r'^(|None|Unknown)$'),
          "No license specified"),
