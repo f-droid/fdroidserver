@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Simple pre-commit hook to check that there are no errors in the fdroidserver
 # source files.
@@ -6,11 +6,45 @@
 # Redirect output to stderr.
 exec 1>&2
 
-PY_FILES="fdroid makebuildserver setup.py examples/*.py buildserver/*.py fdroidserver/*.py"
-PY_TEST_FILES="tests/*.TestCase"
-SH_FILES="hooks/pre-commit"
-BASH_FILES="fd-commit jenkins-build docs/update.sh completion/bash-completion"
-RB_FILES="buildserver/cookbooks/*/recipes/*.rb"
+files=`git diff-index --cached HEAD 2>&1 | sed 's/^:.*     //' | uniq | cut -b100-500`
+if [ -z $files ]; then
+    PY_FILES="fdroid makebuildserver setup.py examples/*.py buildserver/*.py fdroidserver/*.py"
+    PY_TEST_FILES="tests/*.TestCase"
+    SH_FILES="hooks/pre-commit"
+    BASH_FILES="fd-commit jenkins-build docs/update.sh completion/bash-completion"
+    RB_FILES="buildserver/cookbooks/*/recipes/*.rb"
+else
+    # if actually committing right now, then only run on the files
+    # that are going to be committed at this moment
+    PY_FILES=
+    PY_TEST_FILES=
+    SH_FILES=
+    BASH_FILES=
+    RB_FILES=
+
+    for f in $files; do
+        case $f in
+            *.py)
+                PY_FILES+=" $f"
+                ;;
+            *.TestCase)
+                PY_TEST_FILES+=" $f"
+                ;;
+            *.rb)
+                RB_FILES+=" $f"
+                ;;
+            *)
+                if head -1 $f | grep '^#!/bin/sh' > /dev/null 2>&1; then
+                    SH_FILES+=" $f"
+                elif head -1 $f | grep '^#!/bin/bash' > /dev/null 2>&1; then
+                    BASH_FILES+=" $f"
+                elif head -1 $f | grep '^#!.*python' > /dev/null 2>&1; then
+                    PY_FILES+=" $f"
+                fi
+                ;;
+        esac
+    done
+fi
 
 # In the default configuration, the checks E123, E133, E226, E241 and E242 are
 # ignored because they are not rules unanimously accepted
@@ -49,21 +83,26 @@ else
 	err "pep8 is not installed!"
 fi
 
-if ! $PYFLAKES $PY_FILES $PY_TEST_FILES; then
+if [ ! -z $PY_FILES $PY_TEST_FILES ]; then
+    if ! $PYFLAKES $PY_FILES $PY_TEST_FILES; then
 	err "pyflakes tests failed!"
+    fi
 fi
 
-if ! $PEP8 --ignore=$PEP8_IGNORE $PY_FILES; then
+if [ ! -z $PY_FILES ]; then
+    if ! $PEP8 --ignore=$PEP8_IGNORE $PY_FILES; then
 	err "pep8 tests failed!"
+    fi
 fi
 
 # The tests use a little hack in order to cleanly import the fdroidserver
 # package locally like a regular package.  pep8 doesn't see that, so this
 # makes pep8 skip E402 on the test files that need that hack.
-if ! $PEP8 --ignore=$PEP8_IGNORE,E402 $PY_TEST_FILES; then
+if [ ! -z $PY_TEST_FILES ]; then
+    if ! $PEP8 --ignore=$PEP8_IGNORE,E402 $PY_TEST_FILES; then
 	err "pep8 tests failed!"
+    fi
 fi
-
 
 for f in $SH_FILES; do
 	if ! dash -n $f; then
