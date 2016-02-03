@@ -48,3 +48,11 @@ echo "boot_timeout = 1200" >> $WORKSPACE/makebuildserver.config.py
 echo "apt_package_cache = True" >> $WORKSPACE/makebuildserver.config.py
 ./makebuildserver
 
+# this can be handled in the jenkins job, or here:
+if [ ! -e fdroiddata ]; then
+    git clone --depth 1 --branch master --single-branch \
+        https://gitlab.com/fdroid/fdroiddata.git fdroiddata
+fi
+cd fdroiddata
+echo "build_server_always = True" > config.py
+../fdroid build info.guardianproject.checkey
