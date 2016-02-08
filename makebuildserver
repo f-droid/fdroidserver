@@ -54,10 +54,11 @@ config = {
         'https://f-droid.org/jessie32.box',
     ],
     'debian_mirror': 'http://http.debian.net/debian/',
+    'apt_package_cache': False,
     'boot_timeout': 600,
     'cachedir': cachedir,
     'cpus': 1,
-    'memory': 3584,
+    'memory': 1024,
 }
 
 # load config file, if present
@@ -366,6 +367,21 @@ if 'aptproxy' in config and config['aptproxy']:
     vagrantfile += """
   config.vm.provision :shell, :inline => 'sudo echo "Acquire::http {{ Proxy \\"{0}\\"; }};" > /etc/apt/apt.conf.d/02proxy && sudo apt-get update'
 """.format(config['aptproxy'])
+
+# buildserver/ is shared to the VM's /vagrant by default so the old default
+# does not need a custom mount
+if cachedir != 'buildserver/cache':
+    vagrantfile += """
+  config.vm.synced_folder '{0}', '/vagrant/cache'
+""".format(cachedir)
+
+# cache .deb packages on the host via a mount trick
+if config['apt_package_cache']:
+    aptcachedir = cachedir + '/apt/archives'
+    vagrantfile += """
+  config.vm.synced_folder "{0}", "/var/cache/apt/archives",
+    owner: 'root', group: 'root', create: true
+""".format(aptcachedir)
 
 vagrantfile += """
   config.vm.provision :chef_solo do |chef|

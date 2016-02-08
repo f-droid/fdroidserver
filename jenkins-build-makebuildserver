@@ -1,0 +1,58 @@
+#!/bin/bash
+
+if [ `dirname $0` != "." ]; then
+    echo "only run this script like ./`basename $0`"
+    exit
+fi
+
+if [ -z $WORKSPACE ]; then
+    WORKSPACE=`pwd`
+fi
+
+# make sure that no VirtualBox processes are left running
+cleanup_all() {
+    echo "$(date -u) - cleanup in progress..."
+    ps auxww|grep VBox
+    cd $WORKSPACE/buildserver
+    vagrant halt || true
+    sleep 5
+    killall VBoxHeadless || true
+    sleep 5
+    killall -9 VBoxHeadless || true
+    echo "$(date -u) - cleanup done."
+}
+trap cleanup_all INT TERM EXIT
+
+set -e
+set -x
+
+# make sure we have the vagrant box image cached
+test -e ~/.cache/fdroidserver || mkdir -p ~/.cache/fdroidserver
+cd ~/.cache/fdroidserver
+wget --tries=1 --timeout=5 --continue https://f-droid.org/jessie32.box || true
+echo "ff6b0c0bebcb742783becbc51a9dfff5a2a0a839bfcbfd0288dcd3113f33e533  jessie32.box" > jessie32.box.sha256
+sha256sum -c jessie32.box.sha256
+
+# redirect homes to be in the git repo, so they'll get cleaned and reset
+export XDG_CONFIG_HOME=$WORKSPACE
+export VBOX_USER_HOME=$WORKSPACE/VirtualBox
+mkdir $VBOX_USER_HOME
+VBoxManage setproperty machinefolder $WORKSPACE/virtualbox.d
+VBoxManage setproperty logginglevel debug
+export VAGRANT_HOME=$WORKSPACE/vagrant.d
+mkdir $VAGRANT_HOME
+
+cd $WORKSPACE
+echo "debian_mirror = 'http://ftp.uk.debian.org/debian/'" > $WORKSPACE/makebuildserver.config.py
+echo "boot_timeout = 1200" >> $WORKSPACE/makebuildserver.config.py
+echo "apt_package_cache = True" >> $WORKSPACE/makebuildserver.config.py
+./makebuildserver
+
+# this can be handled in the jenkins job, or here:
+if [ ! -e fdroiddata ]; then
+    git clone --depth 1 --branch master --single-branch \
+        https://gitlab.com/fdroid/fdroiddata.git fdroiddata
+fi
+cd fdroiddata
+echo "build_server_always = True" > config.py
+../fdroid build info.guardianproject.checkey
