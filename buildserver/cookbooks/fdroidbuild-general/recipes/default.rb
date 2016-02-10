@@ -38,6 +38,8 @@ end
     inkscape
     javacc
     libarchive-zip-perl
+    libexpat1-dev
+    libglib2.0-dev
     liblzma-dev
     librsvg2-bin
     libsaxonb-java
