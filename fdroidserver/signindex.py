@@ -40,7 +40,7 @@ def main():
 
     config = common.read_config(options)
 
-    if not 'jarsigner' in config:
+    if 'jarsigner' not in config:
         logging.critical('Java jarsigner not found! Install in standard location or set java_paths!')
         sys.exit(1)
 

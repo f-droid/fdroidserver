@@ -157,7 +157,7 @@ def fill_config_defaults(thisconfig):
                         thisconfig['java_paths'][m.group(1)] = d
 
     for java_version in ('7', '8', '9'):
-        if not java_version in thisconfig['java_paths']:
+        if java_version not in thisconfig['java_paths']:
             continue
         java_home = thisconfig['java_paths'][java_version]
         jarsigner = os.path.join(java_home, 'bin', 'jarsigner')
