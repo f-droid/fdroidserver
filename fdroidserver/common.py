@@ -143,6 +143,7 @@ def fill_config_defaults(thisconfig):
                           r'jdk1\.([6-9])\.0_[0-9]+.jdk',  # OSX and Oracle tarball
                           r'jdk([6-9])-openjdk',  # Arch
                           r'java-([6-9])-openjdk',  # Arch
+                          r'java-([6-9])-jdk',  # Arch (oracle)
                           r'java-1\.([6-9])\.0-.*',  # RedHat
                           r'java-([6-9])-oracle',  # Debian WebUpd8
                           r'jdk-([6-9])-oracle-.*',  # Debian make-jpkg
