@@ -367,7 +367,7 @@ def getsig(apkpath):
     cert = None
 
     # verify the jar signature is correct
-    args = ['jarsigner', '-verify', apkpath]
+    args = [config['jarsigner'], '-verify', apkpath]
     p = FDroidPopen(args)
     if p.returncode != 0:
         logging.critical(apkpath + " has a bad signature!")
@@ -711,7 +711,7 @@ def extract_pubkey():
     if 'repo_pubkey' in config:
         pubkey = unhexlify(config['repo_pubkey'])
     else:
-        p = FDroidPopen(['keytool', '-exportcert',
+        p = FDroidPopen([config['keytool'], '-exportcert',
                          '-alias', config['repo_keyalias'],
                          '-keystore', config['keystore'],
                          '-storepass:file', config['keystorepassfile']]
@@ -970,7 +970,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             if os.path.exists(signed):
                 os.remove(signed)
         else:
-            args = ['jarsigner', '-keystore', config['keystore'],
+            args = [config['jarsigner'], '-keystore', config['keystore'],
                     '-storepass:file', config['keystorepassfile'],
                     '-digestalg', 'SHA1', '-sigalg', 'SHA1withRSA',
                     signed, config['repo_keyalias']]
@@ -1117,6 +1117,10 @@ def main():
     options = parser.parse_args()
 
     config = common.read_config(options)
+
+    if not ('jarsigner' in config and 'keytool' in config):
+        logging.critical('Java JDK not found! Install in standard location or set java_paths!')
+        sys.exit(1)
 
     repodirs = ['repo']
     if config['archive_older'] != 0:

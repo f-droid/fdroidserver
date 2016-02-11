@@ -392,6 +392,7 @@ vagrantfile += """
         :sdk_loc => "/home/vagrant/android-sdk",
         :ndk_loc => "/home/vagrant/android-ndk",
         :debian_mirror => "%s",
+        :ubuntu_trusty => "%s",
         :user => "vagrant"
       }
     }
@@ -402,7 +403,8 @@ vagrantfile += """
     chef.add_recipe "kivy"
   end
 end
-""" % (config['debian_mirror'])
+""" % (config['debian_mirror'],
+       str('14.04' in os.uname()[3]).lower())
 
 # Check against the existing Vagrantfile, and if they differ, we need to
 # create a new box:

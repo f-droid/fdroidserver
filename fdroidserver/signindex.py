@@ -40,6 +40,10 @@ def main():
 
     config = common.read_config(options)
 
+    if not 'jarsigner' in config:
+        logging.critical('Java jarsigner not found! Install in standard location or set java_paths!')
+        sys.exit(1)
+
     repodirs = ['repo']
     if config['archive_older'] != 0:
         repodirs.append('archive')
@@ -53,7 +57,7 @@ def main():
         unsigned = os.path.join(output_dir, 'index_unsigned.jar')
         if os.path.exists(unsigned):
 
-            args = ['jarsigner', '-keystore', config['keystore'],
+            args = [config['jarsigner'], '-keystore', config['keystore'],
                     '-storepass:file', config['keystorepassfile'],
                     '-digestalg', 'SHA1', '-sigalg', 'SHA1withRSA',
                     unsigned, config['repo_keyalias']]

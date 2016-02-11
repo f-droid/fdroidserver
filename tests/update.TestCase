@@ -42,6 +42,10 @@ class UpdateTest(unittest.TestCase):
             return None
 
     def testGoodGetsig(self):
+        # config needed to use jarsigner and keytool
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.update.config = config
         apkfile = os.path.join(os.path.dirname(__file__), 'urzip.apk')
         sig = self.javagetsig(apkfile)
         self.assertIsNotNone(sig, "sig is None")
@@ -59,6 +63,10 @@ class UpdateTest(unittest.TestCase):
             self.assertTrue(False, 'TypeError!')
 
     def testBadGetsig(self):
+        # config needed to use jarsigner and keytool
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.update.config = config
         apkfile = os.path.join(os.path.dirname(__file__), 'urzip-badsig.apk')
         sig = self.javagetsig(apkfile)
         self.assertIsNone(sig, "sig should be None: " + str(sig))

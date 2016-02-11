@@ -105,3 +105,11 @@ execute "set-default-java" do
   command "update-java-alternatives --set java-1.7.0-openjdk-i386"
 end
 
+# Ubuntu trusty 14.04's paramiko does not work with jessie's openssh's default settings
+# https://stackoverflow.com/questions/7286929/paramiko-incompatible-ssh-peer-no-acceptable-kex-algorithm/32691055#32691055
+execute "support-ubuntu-trusty-paramiko" do
+  only_if { node[:settings][:ubuntu_trusty] == 'true' }
+  command "echo Ciphers aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes128-ctr >> /etc/ssh/sshd_config"
+  command "echo MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,hmac-sha1 >> /etc/ssh/sshd_config"
+  command "echo KexAlgorithms diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1 >> /etc/ssh/sshd_config"
+end
