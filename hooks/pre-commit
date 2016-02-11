@@ -83,13 +83,13 @@ else
 	err "pep8 is not installed!"
 fi
 
-if [ ! -z $PY_FILES $PY_TEST_FILES ]; then
+if [ "$PY_FILES $PY_TEST_FILES" != " " ]; then
     if ! $PYFLAKES $PY_FILES $PY_TEST_FILES; then
 	err "pyflakes tests failed!"
     fi
 fi
 
-if [ ! -z $PY_FILES ]; then
+if [ "$PY_FILES" != "" ]; then
     if ! $PEP8 --ignore=$PEP8_IGNORE $PY_FILES; then
 	err "pep8 tests failed!"
     fi
@@ -98,7 +98,7 @@ fi
 # The tests use a little hack in order to cleanly import the fdroidserver
 # package locally like a regular package.  pep8 doesn't see that, so this
 # makes pep8 skip E402 on the test files that need that hack.
-if [ ! -z $PY_TEST_FILES ]; then
+if [ "$PY_TEST_FILES" != "" ]; then
     if ! $PEP8 --ignore=$PEP8_IGNORE,E402 $PY_TEST_FILES; then
 	err "pep8 tests failed!"
     fi
