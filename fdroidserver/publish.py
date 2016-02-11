@@ -47,6 +47,10 @@ def main():
 
     config = common.read_config(options)
 
+    if not ('jarsigner' in config and 'keytool' in config):
+        logging.critical('Java JDK not found! Install in standard location or set java_paths!')
+        sys.exit(1)
+
     log_dir = 'logs'
     if not os.path.isdir(log_dir):
         logging.info("Creating log directory")
@@ -163,12 +167,12 @@ def main():
 
             # See if we already have a key for this application, and
             # if not generate one...
-            p = FDroidPopen(['keytool', '-list',
+            p = FDroidPopen([config['keytool'], '-list',
                              '-alias', keyalias, '-keystore', config['keystore'],
                              '-storepass:file', config['keystorepassfile']])
             if p.returncode != 0:
                 logging.info("Key does not exist - generating...")
-                p = FDroidPopen(['keytool', '-genkey',
+                p = FDroidPopen([config['keytool'], '-genkey',
                                  '-keystore', config['keystore'],
                                  '-alias', keyalias,
                                  '-keyalg', 'RSA', '-keysize', '2048',
@@ -181,7 +185,7 @@ def main():
                     raise BuildException("Failed to generate key")
 
             # Sign the application...
-            p = FDroidPopen(['jarsigner', '-keystore', config['keystore'],
+            p = FDroidPopen([config['jarsigner'], '-keystore', config['keystore'],
                              '-storepass:file', config['keystorepassfile'],
                              '-keypass:file', config['keypassfile'], '-sigalg',
                              'SHA1withRSA', '-digestalg', 'SHA1',

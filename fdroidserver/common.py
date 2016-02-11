@@ -154,6 +154,14 @@ def fill_config_defaults(thisconfig):
                     else:
                         thisconfig['java_paths'][m.group(1)] = d
 
+    for java_version in ('7', '8', '9'):
+        java_home = thisconfig['java_paths'][java_version]
+        jarsigner = os.path.join(java_home, 'bin', 'jarsigner')
+        if os.path.exists(jarsigner):
+            thisconfig['jarsigner'] = jarsigner
+            thisconfig['keytool'] = os.path.join(java_home, 'bin', 'keytool')
+            break  # Java7 is preferred, so quit if found
+
     for k in ['ndk_paths', 'java_paths']:
         d = thisconfig[k]
         for k2 in d.copy():
@@ -1810,7 +1818,7 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
         for meta_inf_file in meta_inf_files:
             unsigned_apk_as_zip.write(os.path.join(tmp_dir, meta_inf_file), arcname=meta_inf_file)
 
-    if subprocess.call(['jarsigner', '-verify', unsigned_apk]) != 0:
+    if subprocess.call([config['jarsigner'], '-verify', unsigned_apk]) != 0:
         logging.info("...NOT verified - {0}".format(signed_apk))
         return compare_apks(signed_apk, unsigned_apk, tmp_dir)
     logging.info("...successfully verified")
@@ -1912,7 +1920,7 @@ def genkeystore(localconfig):
 
     write_password_file("keystorepass", localconfig['keystorepass'])
     write_password_file("keypass", localconfig['keypass'])
-    p = FDroidPopen(['keytool', '-genkey',
+    p = FDroidPopen([config['keytool'], '-genkey',
                      '-keystore', localconfig['keystore'],
                      '-alias', localconfig['repo_keyalias'],
                      '-keyalg', 'RSA', '-keysize', '4096',
@@ -1926,7 +1934,7 @@ def genkeystore(localconfig):
         raise BuildException("Failed to generate key", p.output)
     os.chmod(localconfig['keystore'], 0o0600)
     # now show the lovely key that was just generated
-    p = FDroidPopen(['keytool', '-list', '-v',
+    p = FDroidPopen([config['keytool'], '-list', '-v',
                      '-keystore', localconfig['keystore'],
                      '-alias', localconfig['repo_keyalias'],
                      '-storepass:file', config['keystorepassfile']])
