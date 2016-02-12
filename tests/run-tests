@@ -157,6 +157,41 @@ set -e
 
 
 #------------------------------------------------------------------------------#
+echo_header "ensure commands that don't need the JDK work without a JDK configed"
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+mkdir repo
+mkdir metadata
+echo "License:GPL" >> metadata/fake.txt
+echo "Summary:Yup still fake" >> metadata/fake.txt
+echo "Categories:Internet" >> metadata/fake.txt
+echo "Description:" >> metadata/fake.txt
+echo "this is fake" >> metadata/fake.txt
+echo "." >> metadata/fake.txt
+
+# fake that no JDKs are available
+echo 'java_paths = {}' > config.py
+
+LOCAL_COPY_DIR=`create_test_dir`/fdroid
+mkdir -p $LOCAL_COPY_DIR/repo
+echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
+
+$fdroid checkupdates
+$fdroid gpgsign
+$fdroid lint
+$fdroid readmeta
+$fdroid rewritemeta fake
+$fdroid server update
+$fdroid scanner
+
+# run these to get their output, but the are not setup, so don't fail
+$fdroid build || true
+$fdroid import || true
+$fdroid install || true
+
+
+#------------------------------------------------------------------------------#
 echo_header "create a source tarball and use that to build a repo"
 
 cd $WORKSPACE
