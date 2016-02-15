@@ -506,7 +506,7 @@ test -e repo/index.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 
 # now set fake repo_keyalias
-sed -i 's,^ *repo_keyalias.*,repo_keyalias = "fake",' $REPOROOT/config.py
+sed -i.tmp 's,^ *repo_keyalias.*,repo_keyalias = "fake",' $REPOROOT/config.py
 set +e
 $fdroid update
 if [ $? -eq 0 ]; then
