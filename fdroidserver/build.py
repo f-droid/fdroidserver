@@ -489,8 +489,8 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
     # different from the default ones
     p = None
     gradletasks = []
-    method = build.method()
-    if method == 'maven':
+    bmethod = build.build_method()
+    if bmethod == 'maven':
         logging.info("Cleaning Maven project...")
         cmd = [config['mvn3'], 'clean', '-Dandroid.sdk.path=' + config['sdk_path']]
 
@@ -502,7 +502,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
 
         p = FDroidPopen(cmd, cwd=maven_dir)
 
-    elif method == 'gradle':
+    elif bmethod == 'gradle':
 
         logging.info("Cleaning Gradle project...")
 
@@ -529,10 +529,10 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
 
         p = FDroidPopen(cmd, cwd=root_dir)
 
-    elif method == 'kivy':
+    elif bmethod == 'kivy':
         pass
 
-    elif method == 'ant':
+    elif bmethod == 'ant':
         logging.info("Cleaning Ant project...")
         p = FDroidPopen(['ant', 'clean'], cwd=root_dir)
 
@@ -639,7 +639,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
 
     p = None
     # Build the release...
-    if method == 'maven':
+    if bmethod == 'maven':
         logging.info("Building Maven project...")
 
         if '@' in build.maven:
@@ -665,7 +665,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
 
         bindir = os.path.join(root_dir, 'target')
 
-    elif method == 'kivy':
+    elif bmethod == 'kivy':
         logging.info("Building Kivy project...")
 
         spec = os.path.join(root_dir, 'buildozer.spec')
@@ -726,7 +726,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
         cmd.append('release')
         p = FDroidPopen(cmd, cwd=distdir)
 
-    elif method == 'gradle':
+    elif bmethod == 'gradle':
         logging.info("Building Gradle project...")
 
         cmd = [config['gradle']]
@@ -737,7 +737,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
 
         p = FDroidPopen(cmd, cwd=root_dir)
 
-    elif method == 'ant':
+    elif bmethod == 'ant':
         logging.info("Building Ant project...")
         cmd = ['ant']
         if build.antcommands:
@@ -752,7 +752,8 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
         raise BuildException("Build failed for %s:%s" % (app.id, build.version), p.output)
     logging.info("Successfully built version " + build.version + ' of ' + app.id)
 
-    if method == 'maven':
+    omethod = build.output_method()
+    if omethod == 'maven':
         stdout_apk = '\n'.join([
             line for line in p.output.splitlines() if any(
                 a in line for a in ('.apk', '.ap_', '.jar'))])
@@ -772,12 +773,12 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
             raise BuildException('Failed to find output')
         src = m.group(1)
         src = os.path.join(bindir, src) + '.apk'
-    elif method == 'kivy':
+    elif omethod == 'kivy':
         src = os.path.join('python-for-android', 'dist', 'default', 'bin',
                            '{0}-{1}-release.apk'.format(
                                bconfig.get('app', 'title'),
                                bconfig.get('app', 'version')))
-    elif method == 'gradle':
+    elif omethod == 'gradle':
         src = None
         for apks_dir in [
                 os.path.join(root_dir, 'build', 'outputs', 'apk'),
@@ -798,15 +799,23 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
         if src is None:
             raise BuildException('Failed to find any output apks')
 
-    elif method == 'ant':
+    elif omethod == 'ant':
         stdout_apk = '\n'.join([
             line for line in p.output.splitlines() if '.apk' in line])
         src = re.match(r".*^.*Creating (.+) for release.*$.*", stdout_apk,
                        re.S | re.M).group(1)
         src = os.path.join(bindir, src)
-    elif method == 'raw':
-        src = os.path.join(root_dir, build.output)
-        src = os.path.normpath(src)
+    elif omethod == 'raw':
+        globpath = os.path.join(root_dir, build.output)
+        print(globpath)
+        globpath = os.path.normpath(globpath)
+        print(globpath)
+        apks = glob.glob(globpath)
+        if len(apks) > 1:
+            raise BuildException('Multiple apks match %s' % globpath, '\n'.join(apks))
+        if len(apks) < 1:
+            raise BuildException('No apks match %s' % globpath)
+        src = os.path.normpath(apks[0])
 
     # Make sure it's not debuggable...
     if common.isApkDebuggable(src, config):

@@ -331,12 +331,21 @@ class Build():
         else:
             self.__dict__[f].append(v)
 
-    def method(self):
+    def build_method(self):
         for f in ['maven', 'gradle', 'kivy']:
             if self.get_flag(f):
                 return f
         if self.output:
             return 'raw'
+        return 'ant'
+
+    # like build_method, but prioritize output=
+    def output_method(self):
+        if self.output:
+            return 'raw'
+        for f in ['maven', 'gradle', 'kivy']:
+            if self.get_flag(f):
+                return f
         return 'ant'
 
     def ndk_path(self):

@@ -1120,10 +1120,12 @@ For example: @code{gradleprops=enableFoo,someSetting=bar} will result in
 Specify an alternate set of Ant commands (target) instead of the default
 'release'. It can't be given any flags, such as the path to a build.xml.
 
-@item output=path/to/output.apk
-To be used when app is built with a tool other than the ones natively
-supported, like GNU Make. The given path will be where the build= set of
-commands should produce the final unsigned release apk.
+@item output=glob/to/output.apk
+Specify a glob path where the resulting unsigned release apk from the
+build should be. This can be used in combination with build methods like
+@code{gradle=yes} or @code{maven=yes}, but if no build method is
+specified, the build is manual. You should run your build commands, such
+as @code{make}, in @code{build=}.
 
 @item novcheck=yes
 Don't check that the version name and code in the resulting apk are
