@@ -33,7 +33,7 @@ create_fake_android_home() {
 
 create_test_dir() {
     test -e $WORKSPACE/.testfiles || mkdir $WORKSPACE/.testfiles
-    TMPDIR=$WORKSPACE/.testfiles  mktemp -d
+    mktemp -d $WORKSPACE/.testfiles/run-tests.XXXX
 }
 
 create_test_file() {
