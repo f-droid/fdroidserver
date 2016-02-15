@@ -523,7 +523,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
 
         cmd = [config['gradle']]
         if build.gradleprops:
-            cmd += ['-P'+kv for kv in build.gradleprops]
+            cmd += ['-P' + kv for kv in build.gradleprops]
 
         cmd += ['clean']
 
@@ -731,7 +731,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
 
         cmd = [config['gradle']]
         if build.gradleprops:
-            cmd += ['-P'+kv for kv in build.gradleprops]
+            cmd += ['-P' + kv for kv in build.gradleprops]
 
         cmd += gradletasks
 

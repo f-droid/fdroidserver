@@ -1,0 +1,49 @@
+
+# Use the Android base system since it provides the SDK, etc.
+language: java
+
+matrix:
+  allow_failures:
+    - os: linux # this is really about OSX, Ubuntu is just bonus
+  include:
+    - os: linux
+      language: android
+      sudo: required
+      # this doesn't actually work yet https://github.com/travis-ci/travis-ci/issues/5337
+      dist: trusty
+    - os: osx
+      env: ANDROID_HOME=/usr/local/opt/android-sdk
+
+licenses:
+  - 'android-sdk-preview-license-52d11cd2'
+  - 'android-sdk-license-.+'
+
+# the PPA is needed on Ubuntu 14.04 precise, and with python3, trusty too
+# the pip thing is a hack that can go away with trusty
+install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      brew update;
+      brew install android-sdk dash gnu-sed jpeg python;
+      sudo pip install pep8 pyflakes pylint;
+      sudo pip install -e  .;
+      sudo rm -rf fdroidserver.egg-info;
+      echo y | android --verbose update sdk --no-ui --filter platform-tools,build-tools-23.0.2;
+      elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      sudo add-apt-repository ppa:guardianproject/fdroidserver -y;
+      sudo apt-get -q update -y;
+      sudo apt-get -q install -y --no-install-recommends python
+      python-git python-imaging python-libcloud python-logilab-astng
+      python-paramiko python-pip python-pyasn1 python-pyasn1-modules
+      python-requests python-virtualenv python-yaml rsync
+      pylint pep8 dash bash ruby
+      python-dev libjpeg-dev zlib1g-dev;
+      fi
+
+script:
+  - cd tests
+  - ./complete-ci-tests
+
+after_failure:
+  - cd $TRAVIS_BUILD_DIR
+  - ls -lRa env
+  - ls -lR | curl -F 'clbin=<-' https://clbin.com

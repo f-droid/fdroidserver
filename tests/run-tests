@@ -33,7 +33,7 @@ create_fake_android_home() {
 
 create_test_dir() {
     test -e $WORKSPACE/.testfiles || mkdir $WORKSPACE/.testfiles
-    TMPDIR=$WORKSPACE/.testfiles  mktemp -d
+    mktemp -d $WORKSPACE/.testfiles/run-tests.XXXX
 }
 
 create_test_file() {
@@ -115,7 +115,10 @@ $fdroid --version
 echo_header "build the TeX manual"
 
 cd $WORKSPACE/docs
-./gendocs.sh -o html --email admin@f-droid.org fdroid "F-Droid Server Manual"
+# this is only ever generated officially on GNU/Linux
+if [ `uname -s` == "Linux" ]; then
+    ./gendocs.sh -o html --email admin@f-droid.org fdroid "F-Droid Server Manual"
+fi
 
 
 #------------------------------------------------------------------------------#
@@ -503,7 +506,7 @@ test -e repo/index.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 
 # now set fake repo_keyalias
-sed -i 's,^ *repo_keyalias.*,repo_keyalias = "fake",' $REPOROOT/config.py
+sed -i.tmp 's,^ *repo_keyalias.*,repo_keyalias = "fake",' $REPOROOT/config.py
 set +e
 $fdroid update
 if [ $? -eq 0 ]; then

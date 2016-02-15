@@ -7,7 +7,7 @@
 
 if [ `dirname $0` != "." ]; then
     echo "only run this script like ./`basename $0`"
-    exit
+    exit 1
 fi
 
 set -e
@@ -22,7 +22,7 @@ if [ -z $ANDROID_HOME ]; then
         . ~/.android/bashrc
     else
         echo "ANDROID_HOME must be set!"
-        exit
+        exit 1
     fi
 fi
 
