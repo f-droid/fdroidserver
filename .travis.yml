@@ -14,11 +14,6 @@ matrix:
     - os: osx
       env: ANDROID_HOME=/usr/local/opt/android-sdk
 
-#jdk:
-#  - oraclejdk8
-#  - oraclejdk7
-#  - openjdk7
-
 licenses:
   - 'android-sdk-preview-license-52d11cd2'
   - 'android-sdk-license-.+'
@@ -29,20 +24,19 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update;
       brew install android-sdk dash gnu-sed jpeg python;
-      sudo pip install pep8 pyflakes pylint
-      apache-libcloud mwclient paramiko pillow pyasn1 pyasn1-modules
-      pyyaml requests;
+      sudo pip install pep8 pyflakes pylint;
+      sudo pip install -e  .;
+      sudo rm -rf fdroidserver.egg-info;
       echo y | android --verbose update sdk --no-ui --filter platform-tools,build-tools-23.0.2;
       elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       sudo add-apt-repository ppa:guardianproject/fdroidserver -y;
       sudo apt-get -q update -y;
       sudo apt-get -q install -y --no-install-recommends python
       python-git python-imaging python-libcloud python-logilab-astng
-      python-paramiko python-pip python-pyasn1
+      python-paramiko python-pip python-pyasn1 python-pyasn1-modules
       python-requests python-virtualenv python-yaml rsync
       pylint pep8 dash bash ruby
       python-dev libjpeg-dev zlib1g-dev;
-      sudo pip install pyasn1-modules;
       fi
 
 script:
