@@ -807,9 +807,6 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
         src = os.path.join(bindir, src)
     elif omethod == 'raw':
         globpath = os.path.join(root_dir, build.output)
-        print(globpath)
-        globpath = os.path.normpath(globpath)
-        print(globpath)
         apks = glob.glob(globpath)
         if len(apks) > 1:
             raise BuildException('Multiple apks match %s' % globpath, '\n'.join(apks))
