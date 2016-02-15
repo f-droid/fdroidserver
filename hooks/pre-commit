@@ -7,7 +7,7 @@
 exec 1>&2
 
 files=`git diff-index --cached HEAD 2>&1 | sed 's/^:.*     //' | uniq | cut -b100-500`
-if [ -z $files ]; then
+if [ -z "$files" ]; then
     PY_FILES="fdroid makebuildserver setup.py examples/*.py buildserver/*.py fdroidserver/*.py"
     PY_TEST_FILES="tests/*.TestCase"
     SH_FILES="hooks/pre-commit"
