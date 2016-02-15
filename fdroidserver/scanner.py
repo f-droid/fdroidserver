@@ -211,7 +211,7 @@ def scan_source(build_dir, root_dir, build):
                 for i, line in enumerate(lines):
                     if is_used_by_gradle(line):
                         for name in suspects_found(line):
-                            count += handleproblem('usual supect \'%s\' at line %d' % (name, i+1), fd, fp)
+                            count += handleproblem('usual supect \'%s\' at line %d' % (name, i + 1), fd, fp)
                 noncomment_lines = [l for l in lines if not common.gradle_comment.match(l)]
                 joined = re.sub(r'[\n\r\s]+', ' ', ' '.join(noncomment_lines))
                 for m in gradle_mavenrepo.finditer(joined):
