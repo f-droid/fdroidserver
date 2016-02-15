@@ -63,6 +63,10 @@ err() {
 	exit 1
 }
 
+warn() {
+	echo WARNING: "$@"
+}
+
 cmd_exists() {
 	command -v $1 1>/dev/null
 }
@@ -72,7 +76,8 @@ if cmd_exists pyflakes-python2; then
 elif cmd_exists pyflakes; then
 	PYFLAKES=pyflakes
 else
-	err "pyflakes is not installed!"
+	PYFLAKES=echo
+	warn "pyflakes is not installed, using dummy placeholder!"
 fi
 
 if cmd_exists pep8-python2; then
