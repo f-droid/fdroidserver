@@ -27,6 +27,7 @@ import socket
 import zipfile
 import hashlib
 import pickle
+import urlparse
 from datetime import datetime, timedelta
 from xml.dom.minidom import Document
 from argparse import ArgumentParser
@@ -760,6 +761,15 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
 
     repoel = doc.createElement("repo")
 
+    mirrorcheckfailed = False
+    for mirror in config.get('mirrors', []):
+        base = os.path.basename(urlparse.urlparse(mirror).path.rstrip('/'))
+        if config.get('nonstandardwebroot') is not True and base != 'fdroid':
+            logging.error("mirror '" + mirror + "' does not end with 'fdroid'!")
+            mirrorcheckfailed = True
+    if mirrorcheckfailed:
+        sys.exit(1)
+
     if archive:
         repoel.setAttribute("name", config['archive_name'])
         if config['repo_maxage'] != 0:
@@ -767,6 +777,9 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         repoel.setAttribute("icon", os.path.basename(config['archive_icon']))
         repoel.setAttribute("url", config['archive_url'])
         addElement('description', config['archive_description'], doc, repoel)
+        urlbasepath = os.path.basename(urlparse.urlparse(config['archive_url']).path)
+        for mirror in config.get('mirrors', []):
+            addElement('mirror', urlparse.urljoin(mirror, urlbasepath), doc, repoel)
 
     else:
         repoel.setAttribute("name", config['repo_name'])
@@ -775,8 +788,11 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         repoel.setAttribute("icon", os.path.basename(config['repo_icon']))
         repoel.setAttribute("url", config['repo_url'])
         addElement('description', config['repo_description'], doc, repoel)
+        urlbasepath = os.path.basename(urlparse.urlparse(config['repo_url']).path)
+        for mirror in config.get('mirrors', []):
+            addElement('mirror', urlparse.urljoin(mirror, urlbasepath), doc, repoel)
 
-    repoel.setAttribute("version", "14")
+    repoel.setAttribute("version", "15")
     repoel.setAttribute("timestamp", str(int(time.time())))
 
     nosigningkey = False
