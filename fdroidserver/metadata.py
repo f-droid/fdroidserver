@@ -132,7 +132,7 @@ class App():
         self.UpdateCheckName = None
         self.UpdateCheckData = None
         self.CurrentVersion = ''
-        self.CurrentVersionCode = '0'
+        self.CurrentVersionCode = None
         self.NoSourceSince = ''
 
         self.id = None

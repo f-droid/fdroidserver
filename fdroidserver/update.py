@@ -1284,6 +1284,8 @@ def main():
             if app.Name is None:
                 app.Name = bestapk['name']
             app.icon = bestapk['icon'] if 'icon' in bestapk else None
+            if app.CurrentVersionCode is None:
+                app.CurrentVersionCode = str(bestver)
 
     # Sort the app list by name, then the web site doesn't have to by default.
     # (we had to wait until we'd scanned the apks to do this, because mostly the
