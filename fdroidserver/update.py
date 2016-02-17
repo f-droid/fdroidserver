@@ -208,7 +208,7 @@ def update_wiki(apps, sortedids, apks):
         if validapks == 0 and not app.Disabled:
             wikidata += '\n[[Category:Apps with no packages]]\n'
         if cantupdate and not app.Disabled:
-            wikidata += "\n[[Category:Apps we can't update]]\n"
+            wikidata += "\n[[Category:Apps we cannot update]]\n"
         if buildfails and not app.Disabled:
             wikidata += "\n[[Category:Apps with failing builds]]\n"
         elif not gotcurrentver and not cantupdate and not app.Disabled and app.UpdateCheckMode != "Static":
