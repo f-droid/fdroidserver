@@ -1,0 +1,25 @@
+Categories:Development,GuardianProject
+License:GPLv3
+Web Site:https://dev.guardianproject.info/projects/urzip
+Source Code:https://github.com/guardianproject/urzip
+Issue Tracker:https://dev.guardianproject.info/projects/urzip/issues
+Bitcoin:1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk
+
+Auto Name:Urzip：本地应用的信息
+Summary:一个实用工具，获取已安装在您的设备上的应用的有关信息
+Description:
+It’s Urzip 是一个获得已安装 APK 相关信息的实用工具。它从您的设备上已安装的所有应用开始，一键触摸即可显示 APK 的指纹，并且提供到达 virustotal.com 和 androidobservatory.org 的快捷链接，让您方便地了解特定 APK 的档案。它还可以让您导出签名证书和生成 ApkSignaturePin Pin 文件供 TrustedIntents 库使用。
+
+★ Urzip 支持下列语言： Deutsch, English, español, suomi, 日本語, 한국어, Norsk, português (Portugal), Русский, Slovenščina, Türkçe
+没看到您的语言？帮忙翻译本应用吧：
+https://www.transifex.com/projects/p/urzip
+
+★ 致用户：我们还缺少你喜欢的功能？发现了一个 bug？请告诉我们！我们乐于听取您的意见。请发送电子邮件至: support@guardianproject.info 或者加入我们的聊天室 https://guardianproject.info/contact
+.
+
+Repo Type:git
+Repo:https://github.com/guardianproject/urzip.git
+
+
+
+Current Version Code:9999999

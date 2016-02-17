@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 
 # Copy this file to config.py, then amend the settings below according to
 # your system configuration.
@@ -148,6 +149,18 @@ The repository of older versions of applications from the main demo repository.
 #     'bar.info:/var/www/fdroid',
 #     }
 
+# Any mirrors of this repo, for example all of the servers declared in
+# serverwebroot, will automatically be used by the client.  If one
+# mirror is not working, then the client will try another.  If the
+# client has Tor enabled, then the client will prefer mirrors with
+# .onion addresses. This base URL will be used for both the main repo
+# and the archive, if it is enabled.  So these URLs should end in the
+# 'fdroid' base of the F-Droid part of the web server like serverwebroot.
+#
+# mirrors = {
+#     'https://foo.bar/fdroid',
+#     'http://foobarfoobarfoobar.onion/fdroid',
+# }
 
 # optionally specific which identity file to use when using rsync over SSH
 #
