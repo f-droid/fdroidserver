@@ -136,7 +136,7 @@ __complete_update() {
 	opts="-c -v -q -b -i -I -e -w"
 	lopts="--create-metadata --verbose --quiet --buildreport
  --interactive --icons --editor --wiki --pretty --clean --delete-unknown
- --nosign"
+ --nosign --use-date-from-apk"
 	case "${prev}" in
 		-e|--editor)
 			_filedir
