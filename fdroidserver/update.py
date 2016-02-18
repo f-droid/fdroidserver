@@ -568,12 +568,16 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             # has to be more than 24 hours newer because ZIP/APK files do not
             # store timezone info
             manifest = apkzip.getinfo('AndroidManifest.xml')
-            dt_obj = datetime(*manifest.date_time)
-            checkdt = dt_obj - timedelta(1)
-            if datetime.today() < checkdt:
-                logging.warn('System clock is older than manifest in: '
-                             + apkfilename + '\nSet clock to that time using:\n'
-                             + 'sudo date -s "' + str(dt_obj) + '"')
+            if manifest.date_time[1] == 0:  # month can't be zero
+                logging.debug('AndroidManifest.xml has no date')
+            else:
+                dt_obj = datetime(*manifest.date_time)
+                checkdt = dt_obj - timedelta(1)
+                if datetime.today() < checkdt:
+                    logging.warn('System clock is older than manifest in: '
+                                 + apkfilename
+                                 + '\nSet clock to that time using:\n'
+                                 + 'sudo date -s "' + str(dt_obj) + '"')
 
             iconfilename = "%s.%s.png" % (
                 apk['id'],
