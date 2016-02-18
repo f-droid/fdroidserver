@@ -405,7 +405,7 @@ def getsig(apkpath):
     return md5(cert_encoded.encode('hex')).hexdigest()
 
 
-def scan_apks(apps, apkcache, repodir, knownapks):
+def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
     """Scan the apks in the given repo directory.
 
     This also extracts the icons.
@@ -414,6 +414,8 @@ def scan_apks(apps, apkcache, repodir, knownapks):
     :param apkcache: current apk cache information
     :param repodir: repo directory to scan
     :param knownapks: known apks info
+    :param use_date_from_apk: use date from APK (instead of current date)
+                              for newly added APKs
     :returns: (apks, cachechanged) where apks is a list of apk information,
               and cachechanged is True if the apkcache got changed.
     """
@@ -689,6 +691,10 @@ def scan_apks(apps, apkcache, repodir, knownapks):
             # Record in known apks, getting the added date at the same time..
             added = knownapks.recordapk(apk['apkname'], apk['id'])
             if added:
+                if use_date_from_apk and manifest.date_time[1] != 0:
+                    added = datetime(*manifest.date_time).timetuple()
+                    logging.debug("Using date from APK")
+
                 apk['added'] = added
 
             apkcache[apkfilename] = apk
@@ -1134,6 +1140,8 @@ def main():
                         help="Clean update - don't uses caches, reprocess all apks")
     parser.add_argument("--nosign", action="store_true", default=False,
                         help="When configured for signed indexes, create only unsigned indexes at this stage")
+    parser.add_argument("--use-date-from-apk", action="store_true", default=False,
+                        help="Use date from apk instead of current time for newly added apks")
     options = parser.parse_args()
 
     config = common.read_config(options)
@@ -1208,7 +1216,7 @@ def main():
     delete_disabled_builds(apps, apkcache, repodirs)
 
     # Scan all apks in the main repo
-    apks, cachechanged = scan_apks(apps, apkcache, repodirs[0], knownapks)
+    apks, cachechanged = scan_apks(apps, apkcache, repodirs[0], knownapks, options.use_date_from_apk)
 
     # Generate warnings for apk's with no metadata (or create skeleton
     # metadata files, if requested on the command line)
@@ -1250,7 +1258,7 @@ def main():
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
-        archapks, cc = scan_apks(apps, apkcache, repodirs[1], knownapks)
+        archapks, cc = scan_apks(apps, apkcache, repodirs[1], knownapks, options.use_date_from_apk)
         if cc:
             cachechanged = True
     else:
