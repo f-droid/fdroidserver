@@ -1006,6 +1006,12 @@ repository focuses on hosting services for open source project binaries.
 they do not provide any option to reproduce or verify the resulting
 binaries. Builds pre-release versions in some cases.
 
+@item
+@samp{Clojars} - Clojure libraries repo.
+
+@item
+@samp{CommonsWare} - repo holding a collection of open-source libs.
+
 @end itemize
 
 @item patch=x
