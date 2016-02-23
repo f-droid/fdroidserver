@@ -139,22 +139,25 @@ def fill_config_defaults(thisconfig):
                 continue
             j = os.path.basename(d)
             # the last one found will be the canonical one, so order appropriately
-            for regex in (r'1\.([6-9])\.0\.jdk',  # OSX
-                          r'jdk1\.([6-9])\.0_[0-9]+.jdk',  # OSX and Oracle tarball
-                          r'jdk([6-9])-openjdk',  # Arch
-                          r'java-([6-9])-openjdk',  # Arch
-                          r'java-([6-9])-jdk',  # Arch (oracle)
-                          r'java-1\.([6-9])\.0-.*',  # RedHat
-                          r'java-([6-9])-oracle',  # Debian WebUpd8
-                          r'jdk-([6-9])-oracle-.*',  # Debian make-jpkg
-                          r'java-([6-9])-openjdk-[^c][^o][^m].*'):  # Debian
+            for regex in [
+                    r'^1\.([6-9])\.0\.jdk$',  # OSX
+                    r'^jdk1\.([6-9])\.0_[0-9]+.jdk$',  # OSX and Oracle tarball
+                    r'^jdk([6-9])-openjdk$',  # Arch
+                    r'^java-([6-9])-openjdk$',  # Arch
+                    r'^java-([6-9])-jdk$',  # Arch (oracle)
+                    r'^java-1\.([6-9])\.0-.*$',  # RedHat
+                    r'^java-([6-9])-oracle$',  # Debian WebUpd8
+                    r'^jdk-([6-9])-oracle-.*$',  # Debian make-jpkg
+                    r'^java-([6-9])-openjdk-[^c][^o][^m].*$',  # Debian
+                    ]:
                 m = re.match(regex, j)
-                if m:
-                    osxhome = os.path.join(d, 'Contents', 'Home')
-                    if os.path.exists(osxhome):
-                        thisconfig['java_paths'][m.group(1)] = osxhome
-                    else:
-                        thisconfig['java_paths'][m.group(1)] = d
+                if not m:
+                    continue
+                osxhome = os.path.join(d, 'Contents', 'Home')
+                if os.path.exists(osxhome):
+                    thisconfig['java_paths'][m.group(1)] = osxhome
+                else:
+                    thisconfig['java_paths'][m.group(1)] = d
 
     for java_version in ('7', '8', '9'):
         if java_version not in thisconfig['java_paths']:
