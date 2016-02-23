@@ -1009,12 +1009,13 @@ def main():
     options, parser = parse_commandline()
 
     metadata_files = glob.glob('.fdroid.*[a-z]')  # ignore files ending in ~
-    if len(metadata_files) > 1:
+    if os.path.isdir('metadata'):
+        pass
+    elif len(metadata_files) == 0:
+        raise FDroidException("No app metadata found, nothing to process!")
+    elif len(metadata_files) > 1:
         raise FDroidException("Only one local metadata file allowed! Found: "
                               + " ".join(metadata_files))
-
-    if not os.path.isdir('metadata') and len(metadata_files) == 0:
-        raise FDroidException("No app metadata found, nothing to process!")
 
     if not options.appid and not options.all:
         parser.error("option %s: If you really want to build all the apps, use --all" % "all")
