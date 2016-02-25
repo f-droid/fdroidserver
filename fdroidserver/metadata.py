@@ -705,7 +705,7 @@ def parse_srclib(metadatapath):
     if not os.path.exists(metadatapath):
         return thisinfo
 
-    metafile = open(metadatapath, "r")
+    metafile = open(metadatapath, "r", encoding='utf-8')
 
     n = 0
     for line in metafile:
@@ -920,7 +920,7 @@ def parse_metadata(metadatapath):
     app.metadatapath = metadatapath
     app.id, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
 
-    with open(metadatapath, 'r') as mf:
+    with open(metadatapath, 'r', encoding='utf-8') as mf:
         if ext == 'txt':
             parse_txt_metadata(mf, app)
         elif ext == 'json':
