@@ -59,4 +59,5 @@ fi
 
 cd fdroiddata
 echo "build_server_always = True" > config.py
-../fdroid build info.guardianproject.checkey
+# Uses verification
+../fdroid build info.guardianproject.checkey:101
