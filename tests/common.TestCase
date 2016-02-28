@@ -149,6 +149,14 @@ class CommonTest(unittest.TestCase):
         self.assertIsNotNone(re.search('android:versionName="%s"' % build.version, filedata))
         self.assertIsNotNone(re.search('android:versionCode="%s"' % build.vercode, filedata))
 
+    def test_fdroid_popen_stderr_redirect(self):
+        commands = ['sh', '-c', 'echo stdout message && echo stderr message 1>&2']
+
+        p = fdroidserver.common.FDroidPopen(commands)
+        self.assertEqual(p.output, 'stdout message\nstderr message\n')
+
+        p = fdroidserver.common.FDroidPopen(commands, stderr_to_stdout=False)
+        self.assertEqual(p.output, 'stdout message\n')
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()

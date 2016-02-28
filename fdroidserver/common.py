@@ -1626,7 +1626,7 @@ def SdkToolsPopen(commands, cwd=None, output=True):
                        cwd=cwd, output=output)
 
 
-def FDroidPopen(commands, cwd=None, output=True):
+def FDroidPopen(commands, cwd=None, output=True, stderr_to_stdout=True):
     """
     Run a command and capture the possibly huge output.
 
@@ -1642,14 +1642,27 @@ def FDroidPopen(commands, cwd=None, output=True):
         logging.debug("Directory: %s" % cwd)
     logging.debug("> %s" % ' '.join(commands))
 
+    stderr_param = subprocess.STDOUT if stderr_to_stdout else subprocess.PIPE
     result = PopenResult()
     p = None
     try:
         p = subprocess.Popen(commands, cwd=cwd, shell=False, env=env,
-                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                             stdout=subprocess.PIPE, stderr=stderr_param)
     except OSError as e:
         raise BuildException("OSError while trying to execute " +
                              ' '.join(commands) + ': ' + str(e))
+
+    if not stderr_to_stdout and options.verbose:
+        stderr_queue = Queue()
+        stderr_reader = AsynchronousFileReader(p.stderr, stderr_queue)
+
+        while not stderr_reader.eof():
+            while not stderr_queue.empty():
+                line = stderr_queue.get()
+                sys.stderr.write(line)
+                sys.stderr.flush()
+
+            time.sleep(0.1)
 
     stdout_queue = Queue()
     stdout_reader = AsynchronousFileReader(p.stdout, stdout_queue)

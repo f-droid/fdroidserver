@@ -726,7 +726,8 @@ def extract_pubkey():
                          '-alias', config['repo_keyalias'],
                          '-keystore', config['keystore'],
                          '-storepass:file', config['keystorepassfile']]
-                        + config['smartcardoptions'], output=False)
+                        + config['smartcardoptions'],
+                        output=False, stderr_to_stdout=False)
         if p.returncode != 0 or len(p.output) < 20:
             msg = "Failed to get repo pubkey!"
             if config['keystore'] == 'NONE':
