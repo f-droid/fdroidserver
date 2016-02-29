@@ -1,33 +1,5 @@
 image: mvdan/fdroid-ci:latest
 
-before_script:
-  - apt-get -q update -y
-  - echo " == Installing packages required by this CI script"
-  - apt-get -q install -y wget tar
-  - echo " == Installing packages required by fdroidserver"
-  - apt-get -q install -y python
-      python-git python-imaging python-libcloud python-logilab-astng
-      python-paramiko python-pip python-pyasn1 python-pyasn1-modules
-      python-requests python-virtualenv python-yaml
-      rsync
-  - echo " == Installing packages required by the test suite"
-  - apt-get -q install -y pyflakes pylint pep8 dash bash ruby
-  - echo " == Installing packages required to build Pillow"
-  - apt-get -q install -y python-dev libjpeg-dev zlib1g-dev
-  - echo " == Installing OpenJDK 7"
-  - apt-get -q install -y openjdk-7-jdk
-  - test -z "$ANDROID_HOME" &&
-        echo " == Installing Android SDK" &&
-        apt-get -q install -y lib32stdc++6 lib32z1 &&
-        wget -q -O android-sdk.tgz https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz &&
-        tar -xzf android-sdk.tgz &&
-        export ANDROID_HOME=$PWD/android-sdk-linux &&
-        export PATH="$ANDROID_HOME/tools:$PATH" &&
-        echo y | android -s update sdk --no-ui -a -t platform-tools,tools,build-tools-23.0.2 &&
-        export PATH="$ANDROID_HOME/platform-tools:$PATH" &&
-        export PATH="$ANDROID_HOME/build-tools/23.0.2:$PATH" &&
-        echo y | android -s update sdk --no-ui -a -t android-10
-
 test:
   script:
     - cd tests
