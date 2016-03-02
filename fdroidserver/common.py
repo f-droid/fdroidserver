@@ -588,14 +588,8 @@ class vcs:
                 rtags.append(tag)
         return rtags
 
-    def latesttags(self, tags, number):
-        """Get the most recent tags in a given list.
-
-        :param tags: a list of tags
-        :param number: the number to return
-        :returns: A list containing the most recent tags in the provided
-                  list, up to the maximum number given.
-        """
+    # Get a list of all the known tags, sorted from newest to oldest
+    def latesttags(self):
         raise VCSException('latesttags not supported for this vcs type')
 
     # Get current commit reference (hash, revision, etc)
@@ -703,21 +697,21 @@ class vcs_git(vcs):
         p = FDroidPopen(['git', 'tag'], cwd=self.local, output=False)
         return p.output.splitlines()
 
-    def latesttags(self, tags, number):
+    tag_format = re.compile(r'.*tag: ([^),]*).*')
+
+    def latesttags(self):
         self.checkrepo()
-        tl = []
-        for tag in tags:
-            p = FDroidPopen(
-                ['git', 'show', '--format=format:%ct', '-s', tag],
-                cwd=self.local, output=False)
-            # Timestamp is on the last line. For a normal tag, it's the only
-            # line, but for annotated tags, the rest of the info precedes it.
-            ts = int(p.output.splitlines()[-1])
-            tl.append((ts, tag))
-        latest = []
-        for _, t in sorted(tl)[-number:]:
-            latest.append(t)
-        return latest
+        p = FDroidPopen(['git', 'log', '--tags',
+                         '--simplify-by-decoration', '--pretty=format:%d'],
+                        cwd=self.local, output=False)
+        tags = []
+        for line in p.output.splitlines():
+            m = self.tag_format.match(line)
+            if not m:
+                continue
+            tag = m.group(1)
+            tags.append(tag)
+        return tags
 
 
 class vcs_gitsvn(vcs):
