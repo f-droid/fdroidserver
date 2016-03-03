@@ -2,5 +2,7 @@ image: mvdan/fdroid-ci:latest
 
 test:
   script:
+    - apt-get update
+    - apt-get install -y python-dev gcc
     - cd tests
     - ./complete-ci-tests
