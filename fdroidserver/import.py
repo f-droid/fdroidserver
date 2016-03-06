@@ -97,10 +97,10 @@ def get_metadata_from_url(app, url):
         projecttype = 'gitlab'
         # git can be fussy with gitlab URLs unless they end in .git
         if url.endswith('.git'):
-            repo = url
-        else:
-            repo = url + '.git'
+            url = url[:-4]
+        repo = url + '.git'
         repotype = 'git'
+        app.WebSite = url
         app.SourceCode = url + '/tree/HEAD'
         app.IssueTracker = url + '/issues'
     elif url.startswith('https://bitbucket.org/'):
