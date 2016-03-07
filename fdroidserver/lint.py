@@ -66,7 +66,9 @@ regex_checks = {
     'Source Code': http_checks,
     'Repo': https_enforcings,
     'Issue Tracker': http_checks + [
-        (re.compile(r'.*github\.com/[^/]+/[^/]+[/]*$'),
+        (re.compile(r'.*github\.com/[^/]+/[^/]+/*$'),
+         "/issues is missing"),
+        (re.compile(r'.*gitlab\.com/[^/]+/[^/]+/*$'),
          "/issues is missing"),
     ],
     'Donate': http_checks + [
