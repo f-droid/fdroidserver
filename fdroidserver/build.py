@@ -557,7 +557,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
             # .gradle/ as binary files. To avoid overcomplicating the scanner,
             # manually delete them, just like `gradle clean` should have removed
             # the build/ dirs.
-            del_dirs(['build', '.gradle', 'gradle'])
+            del_dirs(['build', '.gradle'])
             del_files(['gradlew', 'gradlew.bat'])
 
         if 'pom.xml' in files:
