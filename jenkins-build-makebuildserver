@@ -49,10 +49,25 @@ echo "apt_package_cache = True" >> $WORKSPACE/makebuildserver.config.py
 ./makebuildserver
 
 # this can be handled in the jenkins job, or here:
-if [ ! -e fdroiddata ]; then
-    git clone --depth 1 --branch master --single-branch \
-        https://gitlab.com/fdroid/fdroiddata.git fdroiddata
+if [ -e fdroiddata ]; then
+    cd fdroiddata
+    git pull
+    cd ..
+else
+    git clone --depth 1 https://gitlab.com/fdroid/fdroiddata.git fdroiddata
 fi
+
 cd fdroiddata
 echo "build_server_always = True" > config.py
-../fdroid build info.guardianproject.checkey
+# Gradle, JNI, preassemble
+../fdroid build org.adaway:55
+# Maven
+../fdroid build org.quantumbadger.redreader:55
+# Ant, submodules and custom prebuild/build
+../fdroid build app.openconnect:959
+# Custom build (make)
+../fdroid build org.xcsoar:101
+# Uses verification
+../fdroid build info.guardianproject.checkey:101
+# Gradle with retrolambda (JDK7 and JDK8)
+../fdroid build com.moez.QKSMS:124
