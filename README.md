@@ -66,7 +66,7 @@ via other mechanisms like Brew/dnf/pacman/emerge/Fink/MacPorts.
 
 For Debian based distributions:
 
-	apt-get install python3-dev python3-pip python3-virtualenv
+	apt-get install python3-dev python3-pip virtualenv
 
 Then here's how to install:
 
