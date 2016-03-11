@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # import.py - part of the FDroid server tools
 # Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
@@ -21,12 +20,13 @@
 import sys
 import os
 import shutil
-import urllib
+import urllib.request
 from argparse import ArgumentParser
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 import logging
-import common
-import metadata
+
+from . import common
+from . import metadata
 
 
 # Get the repo type and address from the given web page. The page is scanned
@@ -35,7 +35,7 @@ import metadata
 # Returns repotype, address, or None, reason
 def getrepofrompage(url):
 
-    req = urllib.urlopen(url)
+    req = urllib.request.urlopen(url)
     if req.getcode() != 200:
         return (None, 'Unable to get ' + url + ' - return code ' + str(req.getcode()))
     page = req.read()

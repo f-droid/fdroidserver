@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # rewritemeta.py - part of the FDroid server tools
 # This cleans up the original .txt metadata file format.
@@ -21,20 +20,17 @@
 from argparse import ArgumentParser
 import os
 import logging
-try:
-    from cStringIO import StringIO
-except:
-    from StringIO import StringIO
+import io
 
-import common
-import metadata
+from . import common
+from . import metadata
 
 config = None
 options = None
 
 
 def proper_format(app):
-    s = StringIO()
+    s = io.StringIO()
     # TODO: currently reading entire file again, should reuse first
     # read in metadata.py
     with open(app.metadatapath, 'r') as f:
@@ -73,7 +69,7 @@ def main():
     if options.to is not None and options.to not in supported:
         parser.error("Must give a valid format to --to")
 
-    for appid, app in apps.iteritems():
+    for appid, app in apps.items():
         base, ext = common.get_extension(app.metadatapath)
         if not options.to and ext not in supported:
             logging.info("Ignoring %s file at '%s'" % (ext, app.metadatapath))
@@ -85,7 +81,7 @@ def main():
 
         if options.list:
             if not proper_format(app):
-                print app.metadatapath
+                print(app.metadatapath)
             continue
 
         with open(base + '.' + to_ext, 'w') as f:

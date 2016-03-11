@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # common.py - part of the FDroid server tools
 # Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
@@ -20,6 +20,7 @@
 # common.py is imported by all modules, so do not import third-party
 # libraries here as they will become a requirement for all commands.
 
+import io
 import os
 import sys
 import re
@@ -32,19 +33,15 @@ import operator
 import logging
 import hashlib
 import socket
+import base64
 import xml.etree.ElementTree as XMLElementTree
 
-try:
-    # Python 2
-    from Queue import Queue
-except ImportError:
-    # Python 3
-    from queue import Queue
+from queue import Queue
 
 from zipfile import ZipFile
 
-import metadata
-from fdroidserver.asynchronousfilereader import AsynchronousFileReader
+import fdroidserver.metadata
+from .asynchronousfilereader import AsynchronousFileReader
 
 
 XMLElementTree.register_namespace('android', 'http://schemas.android.com/apk/res/android')
@@ -206,7 +203,9 @@ def read_config(opts, config_file='config.py'):
     config = {}
 
     logging.debug("Reading %s" % config_file)
-    execfile(config_file, config)
+    with io.open(config_file, "rb") as f:
+        code = compile(f.read(), config_file, 'exec')
+        exec(code, None, config)
 
     # smartcardoptions must be a list since its command line args for Popen
     if 'smartcardoptions' in config:
@@ -244,9 +243,9 @@ def read_config(opts, config_file='config.py'):
             config[k] = clean_description(config[k])
 
     if 'serverwebroot' in config:
-        if isinstance(config['serverwebroot'], basestring):
+        if isinstance(config['serverwebroot'], str):
             roots = [config['serverwebroot']]
-        elif all(isinstance(item, basestring) for item in config['serverwebroot']):
+        elif all(isinstance(item, str) for item in config['serverwebroot']):
             roots = config['serverwebroot']
         else:
             raise TypeError('only accepts strings, lists, and tuples')
@@ -339,9 +338,9 @@ def write_password_file(pwtype, password=None):
     filename = '.fdroid.' + pwtype + '.txt'
     fd = os.open(filename, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
     if password is None:
-        os.write(fd, config[pwtype])
+        os.write(fd, config[pwtype].encode('utf-8'))
     else:
-        os.write(fd, password)
+        os.write(fd, password.encode('utf-8'))
     os.close(fd)
     config[pwtype + 'file'] = filename
 
@@ -378,7 +377,7 @@ def read_app_args(args, allapps, allow_vercodes=False):
         return allapps
 
     apps = {}
-    for appid, app in allapps.iteritems():
+    for appid, app in allapps.items():
         if appid in vercodes:
             apps[appid] = app
 
@@ -391,7 +390,7 @@ def read_app_args(args, allapps, allow_vercodes=False):
         raise FDroidException("No packages specified")
 
     error = False
-    for appid, app in apps.iteritems():
+    for appid, app in apps.items():
         vc = vercodes[appid]
         if not vc:
             continue
@@ -486,9 +485,9 @@ def getvcs(vcstype, remote, local):
 
 
 def getsrclibvcs(name):
-    if name not in metadata.srclibs:
+    if name not in fdroidserver.metadata.srclibs:
         raise VCSException("Missing srclib " + name)
-    return metadata.srclibs[name]['Repo Type']
+    return fdroidserver.metadata.srclibs[name]['Repo Type']
 
 
 class vcs:
@@ -532,6 +531,7 @@ class vcs:
         # automatically if either of those things changes.
         fdpath = os.path.join(self.local, '..',
                               '.fdroidvcs-' + os.path.basename(self.local))
+        fdpath = os.path.normpath(fdpath)
         cdata = self.repotype() + ' ' + self.remote
         writeback = True
         deleterepo = False
@@ -563,7 +563,8 @@ class vcs:
 
         # If necessary, write the .fdroidvcs file.
         if writeback and not self.clone_failed:
-            with open(fdpath, 'w') as f:
+            os.makedirs(os.path.dirname(fdpath), exist_ok=True)
+            with open(fdpath, 'w+') as f:
                 f.write(cdata)
 
         if exc is not None:
@@ -947,7 +948,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
         if element.text is None:
             return ""
         s = XMLElementTree.tostring(element, encoding='utf-8', method='text')
-        return s.strip()
+        return s.decode('utf-8').strip()
 
     for path in xmlfiles:
         if not os.path.isfile(path):
@@ -995,7 +996,7 @@ def fetch_real_name(app_dir, flavours):
             continue
         if "{http://schemas.android.com/apk/res/android}label" not in app.attrib:
             continue
-        label = app.attrib["{http://schemas.android.com/apk/res/android}label"].encode('utf-8')
+        label = app.attrib["{http://schemas.android.com/apk/res/android}label"]
         result = retrieve_string_singleline(app_dir, label)
         if result:
             result = result.strip()
@@ -1008,15 +1009,16 @@ def get_library_references(root_dir):
     proppath = os.path.join(root_dir, 'project.properties')
     if not os.path.isfile(proppath):
         return libraries
-    for line in file(proppath):
-        if not line.startswith('android.library.reference.'):
-            continue
-        path = line.split('=')[1].strip()
-        relpath = os.path.join(root_dir, path)
-        if not os.path.isdir(relpath):
-            continue
-        logging.debug("Found subproject at %s" % path)
-        libraries.append(path)
+    with open(proppath, 'r') as f:
+        for line in f:
+            if not line.startswith('android.library.reference.'):
+                continue
+            path = line.split('=')[1].strip()
+            relpath = os.path.join(root_dir, path)
+            if not os.path.isdir(relpath):
+                continue
+            logging.debug("Found subproject at %s" % path)
+            libraries.append(path)
     return libraries
 
 
@@ -1082,38 +1084,39 @@ def parse_androidmanifests(paths, app):
         package = None
 
         if gradle:
-            for line in file(path):
-                if gradle_comment.match(line):
-                    continue
-                # Grab first occurence of each to avoid running into
-                # alternative flavours and builds.
-                if not package:
-                    matches = psearch_g(line)
-                    if matches:
-                        s = matches.group(2)
-                        if app_matches_packagename(app, s):
-                            package = s
-                if not version:
-                    matches = vnsearch_g(line)
-                    if matches:
-                        version = matches.group(2)
-                if not vercode:
-                    matches = vcsearch_g(line)
-                    if matches:
-                        vercode = matches.group(1)
+            with open(path, 'r') as f:
+                for line in f:
+                    if gradle_comment.match(line):
+                        continue
+                    # Grab first occurence of each to avoid running into
+                    # alternative flavours and builds.
+                    if not package:
+                        matches = psearch_g(line)
+                        if matches:
+                            s = matches.group(2)
+                            if app_matches_packagename(app, s):
+                                package = s
+                    if not version:
+                        matches = vnsearch_g(line)
+                        if matches:
+                            version = matches.group(2)
+                    if not vercode:
+                        matches = vcsearch_g(line)
+                        if matches:
+                            vercode = matches.group(1)
         else:
             try:
                 xml = parse_xml(path)
                 if "package" in xml.attrib:
-                    s = xml.attrib["package"].encode('utf-8')
+                    s = xml.attrib["package"]
                     if app_matches_packagename(app, s):
                         package = s
                 if "{http://schemas.android.com/apk/res/android}versionName" in xml.attrib:
-                    version = xml.attrib["{http://schemas.android.com/apk/res/android}versionName"].encode('utf-8')
+                    version = xml.attrib["{http://schemas.android.com/apk/res/android}versionName"]
                     base_dir = os.path.dirname(path)
                     version = retrieve_string_singleline(base_dir, version)
                 if "{http://schemas.android.com/apk/res/android}versionCode" in xml.attrib:
-                    a = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"].encode('utf-8')
+                    a = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"]
                     if string_is_integer(a):
                         vercode = a
             except Exception:
@@ -1209,10 +1212,10 @@ def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
         if '/' in name:
             name, subdir = name.split('/', 1)
 
-    if name not in metadata.srclibs:
+    if name not in fdroidserver.metadata.srclibs:
         raise VCSException('srclib ' + name + ' not found.')
 
-    srclib = metadata.srclibs[name]
+    srclib = fdroidserver.metadata.srclibs[name]
 
     sdir = os.path.join(srclib_dir, name)
 
@@ -1510,7 +1513,7 @@ def getpaths_map(build_dir, globpaths):
 def getpaths(build_dir, globpaths):
     paths_map = getpaths_map(build_dir, globpaths)
     paths = set()
-    for k, v in paths_map.iteritems():
+    for k, v in paths_map.items():
         for p in v:
             paths.add(p)
     return paths
@@ -1526,12 +1529,13 @@ class KnownApks:
         self.path = os.path.join('stats', 'known_apks.txt')
         self.apks = {}
         if os.path.isfile(self.path):
-            for line in file(self.path):
-                t = line.rstrip().split(' ')
-                if len(t) == 2:
-                    self.apks[t[0]] = (t[1], None)
-                else:
-                    self.apks[t[0]] = (t[1], time.strptime(t[2], '%Y-%m-%d'))
+            with open(self.path, 'r') as f:
+                for line in f:
+                    t = line.rstrip().split(' ')
+                    if len(t) == 2:
+                        self.apks[t[0]] = (t[1], None)
+                    else:
+                        self.apks[t[0]] = (t[1], time.strptime(t[2], '%Y-%m-%d'))
         self.changed = False
 
     def writeifchanged(self):
@@ -1542,7 +1546,7 @@ class KnownApks:
             os.mkdir('stats')
 
         lst = []
-        for apk, app in self.apks.iteritems():
+        for apk, app in self.apks.items():
             appid, added = app
             line = apk + ' ' + appid
             if added:
@@ -1573,7 +1577,7 @@ class KnownApks:
     # with the most recent first.
     def getlatest(self, num):
         apps = {}
-        for apk, app in self.apks.iteritems():
+        for apk, app in self.apks.items():
             appid, added = app
             if added:
                 if appid in apps:
@@ -1581,7 +1585,7 @@ class KnownApks:
                         apps[appid] = added
                 else:
                     apps[appid] = added
-        sortedapps = sorted(apps.iteritems(), key=operator.itemgetter(1))[-num:]
+        sortedapps = sorted(apps.items(), key=operator.itemgetter(1))[-num:]
         lst = [app for app, _ in sortedapps]
         lst.reverse()
         return lst
@@ -1604,8 +1608,9 @@ def isApkDebuggable(apkfile, config):
 
 
 class PopenResult:
-    returncode = None
-    output = ''
+    def __init__(self):
+        self.returncode = None
+        self.output = None
 
 
 def SdkToolsPopen(commands, cwd=None, output=True):
@@ -1620,9 +1625,9 @@ def SdkToolsPopen(commands, cwd=None, output=True):
                        cwd=cwd, output=output)
 
 
-def FDroidPopen(commands, cwd=None, output=True, stderr_to_stdout=True):
+def FDroidPopenBytes(commands, cwd=None, output=True, stderr_to_stdout=True):
     """
-    Run a command and capture the possibly huge output.
+    Run a command and capture the possibly huge output as bytes.
 
     :param commands: command and argument list like in subprocess.Popen
     :param cwd: optionally specifies a working directory
@@ -1653,13 +1658,14 @@ def FDroidPopen(commands, cwd=None, output=True, stderr_to_stdout=True):
         while not stderr_reader.eof():
             while not stderr_queue.empty():
                 line = stderr_queue.get()
-                sys.stderr.write(line)
+                sys.stderr.buffer.write(line)
                 sys.stderr.flush()
 
             time.sleep(0.1)
 
     stdout_queue = Queue()
     stdout_reader = AsynchronousFileReader(p.stdout, stdout_queue)
+    buf = io.BytesIO()
 
     # Check the queue for output (until there is no more to get)
     while not stdout_reader.eof():
@@ -1667,13 +1673,28 @@ def FDroidPopen(commands, cwd=None, output=True, stderr_to_stdout=True):
             line = stdout_queue.get()
             if output and options.verbose:
                 # Output directly to console
-                sys.stderr.write(line)
+                sys.stderr.buffer.write(line)
                 sys.stderr.flush()
-            result.output += line
+            buf.write(line)
 
         time.sleep(0.1)
 
     result.returncode = p.wait()
+    result.output = buf.getvalue()
+    buf.close()
+    return result
+
+
+def FDroidPopen(commands, cwd=None, output=True, stderr_to_stdout=True):
+    """
+    Run a command and capture the possibly huge output as a str.
+
+    :param commands: command and argument list like in subprocess.Popen
+    :param cwd: optionally specifies a working directory
+    :returns: A PopenResult.
+    """
+    result = FDroidPopenBytes(commands, cwd, output, stderr_to_stdout)
+    result.output = result.output.decode('utf-8')
     return result
 
 
@@ -1919,8 +1940,9 @@ def genpassword():
     '''generate a random password for when generating keys'''
     h = hashlib.sha256()
     h.update(os.urandom(16))  # salt
-    h.update(bytes(socket.getfqdn()))
-    return h.digest().encode('base64').strip()
+    h.update(socket.getfqdn().encode('utf-8'))
+    passwd = base64.b64encode(h.digest()).strip()
+    return passwd.decode('utf-8')
 
 
 def genkeystore(localconfig):

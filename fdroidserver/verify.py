@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # verify.py - part of the FDroid server tools
 # Copyright (C) 2013, Ciaran Gultnieks, ciaran@ciarang.com
@@ -23,9 +22,9 @@ import glob
 from argparse import ArgumentParser
 import logging
 
-import common
-import net
-from common import FDroidException
+from . import common
+from . import net
+from .common import FDroidException
 
 options = None
 config = None

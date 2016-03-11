@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # update.py - part of the FDroid server tools
 # Copyright (C) 2010-2013, Ciaran Gultnieks, ciaran@ciarang.com
@@ -28,7 +27,7 @@ import sys
 from argparse import ArgumentParser
 import logging
 
-import common
+from . import common
 
 config = {}
 options = None
@@ -103,8 +102,8 @@ def main():
             default_sdk_path = '/opt/android-sdk'
             while not options.no_prompt:
                 try:
-                    s = raw_input('Enter the path to the Android SDK ('
-                                  + default_sdk_path + ') here:\n> ')
+                    s = input('Enter the path to the Android SDK ('
+                              + default_sdk_path + ') here:\n> ')
                 except KeyboardInterrupt:
                     print('')
                     sys.exit(1)

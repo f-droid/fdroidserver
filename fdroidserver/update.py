@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # update.py - part of the FDroid server tools
 # Copyright (C) 2010-2015, Ciaran Gultnieks, ciaran@ciarang.com
@@ -27,7 +26,7 @@ import socket
 import zipfile
 import hashlib
 import pickle
-import urlparse
+import urllib.parse
 from datetime import datetime, timedelta
 from xml.dom.minidom import Document
 from argparse import ArgumentParser
@@ -35,16 +34,15 @@ import time
 from pyasn1.error import PyAsn1Error
 from pyasn1.codec.der import decoder, encoder
 from pyasn1_modules import rfc2315
-from hashlib import md5
 from binascii import hexlify, unhexlify
 
 from PIL import Image
 import logging
 
-import common
-import metadata
-from common import FDroidPopen, SdkToolsPopen
-from metadata import MetaDataException
+from . import common
+from . import metadata
+from .common import FDroidPopen, FDroidPopenBytes, SdkToolsPopen
+from .metadata import MetaDataException
 
 screen_densities = ['640', '480', '320', '240', '160', '120']
 
@@ -292,7 +290,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
     :param apkcache: current apk cache information
     :param repodirs: the repo directories to process
     """
-    for appid, app in apps.iteritems():
+    for appid, app in apps.items():
         for build in app.builds:
             if not build.disable:
                 continue
@@ -402,7 +400,7 @@ def getsig(apkpath):
 
     cert_encoded = encoder.encode(certificates)[4:]
 
-    return md5(cert_encoded.encode('hex')).hexdigest()
+    return hashlib.md5(hexlify(cert_encoded)).hexdigest()
 
 
 def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
@@ -713,7 +711,7 @@ repo_pubkey_fingerprint = None
 def cert_fingerprint(data):
     digest = hashlib.sha256(data).digest()
     ret = []
-    ret.append(' '.join("%02X" % ord(b) for b in digest))
+    ret.append(' '.join("%02X" % b for b in bytearray(digest)))
     return " ".join(ret)
 
 
@@ -722,12 +720,12 @@ def extract_pubkey():
     if 'repo_pubkey' in config:
         pubkey = unhexlify(config['repo_pubkey'])
     else:
-        p = FDroidPopen([config['keytool'], '-exportcert',
-                         '-alias', config['repo_keyalias'],
-                         '-keystore', config['keystore'],
-                         '-storepass:file', config['keystorepassfile']]
-                        + config['smartcardoptions'],
-                        output=False, stderr_to_stdout=False)
+        p = FDroidPopenBytes([config['keytool'], '-exportcert',
+                              '-alias', config['repo_keyalias'],
+                              '-keystore', config['keystore'],
+                              '-storepass:file', config['keystorepassfile']]
+                             + config['smartcardoptions'],
+                             output=False, stderr_to_stdout=False)
         if p.returncode != 0 or len(p.output) < 20:
             msg = "Failed to get repo pubkey!"
             if config['keystore'] == 'NONE':
@@ -774,7 +772,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
 
     mirrorcheckfailed = False
     for mirror in config.get('mirrors', []):
-        base = os.path.basename(urlparse.urlparse(mirror).path.rstrip('/'))
+        base = os.path.basename(urllib.parse.urlparse(mirror).path.rstrip('/'))
         if config.get('nonstandardwebroot') is not True and base != 'fdroid':
             logging.error("mirror '" + mirror + "' does not end with 'fdroid'!")
             mirrorcheckfailed = True
@@ -788,9 +786,9 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         repoel.setAttribute("icon", os.path.basename(config['archive_icon']))
         repoel.setAttribute("url", config['archive_url'])
         addElement('description', config['archive_description'], doc, repoel)
-        urlbasepath = os.path.basename(urlparse.urlparse(config['archive_url']).path)
+        urlbasepath = os.path.basename(urllib.parse.urlparse(config['archive_url']).path)
         for mirror in config.get('mirrors', []):
-            addElement('mirror', urlparse.urljoin(mirror, urlbasepath), doc, repoel)
+            addElement('mirror', urllib.parse.urljoin(mirror, urlbasepath), doc, repoel)
 
     else:
         repoel.setAttribute("name", config['repo_name'])
@@ -799,9 +797,9 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         repoel.setAttribute("icon", os.path.basename(config['repo_icon']))
         repoel.setAttribute("url", config['repo_url'])
         addElement('description', config['repo_description'], doc, repoel)
-        urlbasepath = os.path.basename(urlparse.urlparse(config['repo_url']).path)
+        urlbasepath = os.path.basename(urllib.parse.urlparse(config['repo_url']).path)
         for mirror in config.get('mirrors', []):
-            addElement('mirror', urlparse.urljoin(mirror, urlbasepath), doc, repoel)
+            addElement('mirror', urllib.parse.urljoin(mirror, urlbasepath), doc, repoel)
 
     repoel.setAttribute("version", "15")
     repoel.setAttribute("timestamp", str(int(time.time())))
@@ -828,7 +826,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             logging.warning("\tfdroid update --create-key")
             sys.exit(1)
 
-    repoel.setAttribute("pubkey", extract_pubkey())
+    repoel.setAttribute("pubkey", extract_pubkey().decode('utf-8'))
     root.appendChild(repoel)
 
     for appid in sortedids:
@@ -968,9 +966,9 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                     os.symlink(sigfile_path, siglinkname)
 
     if options.pretty:
-        output = doc.toprettyxml()
+        output = doc.toprettyxml(encoding='utf-8')
     else:
-        output = doc.toxml()
+        output = doc.toxml(encoding='utf-8')
 
     with open(os.path.join(repodir, 'index.xml'), 'wb') as f:
         f.write(output)
@@ -1025,7 +1023,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
 
 def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversions):
 
-    for appid, app in apps.iteritems():
+    for appid, app in apps.items():
 
         if app.ArchivePolicy:
             keepversions = int(app.ArchivePolicy[:-9])
@@ -1199,7 +1197,7 @@ def main():
 
     # Generate a list of categories...
     categories = set()
-    for app in apps.itervalues():
+    for app in apps.values():
         categories.update(app.Categories)
 
     # Read known apks data (will be updated and written back when we've finished)
@@ -1269,7 +1267,7 @@ def main():
     # level. When doing this, we use the info from the most recent version's apk.
     # We deal with figuring out when the app was added and last updated at the
     # same time.
-    for appid, app in apps.iteritems():
+    for appid, app in apps.items():
         bestver = 0
         for apk in apks + archapks:
             if apk['id'] == appid:
@@ -1303,13 +1301,13 @@ def main():
     # Sort the app list by name, then the web site doesn't have to by default.
     # (we had to wait until we'd scanned the apks to do this, because mostly the
     # name comes from there!)
-    sortedids = sorted(apps.iterkeys(), key=lambda appid: apps[appid].Name.upper())
+    sortedids = sorted(apps.keys(), key=lambda appid: apps[appid].Name.upper())
 
     # APKs are placed into multiple repos based on the app package, providing
     # per-app subscription feeds for nightly builds and things like it
     if config['per_app_repos']:
         add_apks_to_per_app_repos(repodirs[0], apks)
-        for appid, app in apps.iteritems():
+        for appid, app in apps.items():
             repodir = os.path.join(appid, 'fdroid', 'repo')
             appdict = dict()
             appdict[appid] = app
@@ -1338,14 +1336,15 @@ def main():
         # Generate latest apps data for widget
         if os.path.exists(os.path.join('stats', 'latestapps.txt')):
             data = ''
-            for line in file(os.path.join('stats', 'latestapps.txt')):
-                appid = line.rstrip()
-                data += appid + "\t"
-                app = apps[appid]
-                data += app.Name + "\t"
-                if app.icon is not None:
-                    data += app.icon + "\t"
-                data += app.License + "\n"
+            with open(os.path.join('stats', 'latestapps.txt'), 'r') as f:
+                for line in f:
+                    appid = line.rstrip()
+                    data += appid + "\t"
+                    app = apps[appid]
+                    data += app.Name + "\t"
+                    if app.icon is not None:
+                        data += app.icon + "\t"
+                    data += app.License + "\n"
             with open(os.path.join(repodirs[0], 'latestapps.dat'), 'w') as f:
                 f.write(data)
 

@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # build.py - part of the FDroid server tools
 # Copyright (C) 2010-2014, Ciaran Gultnieks, ciaran@ciarang.com
@@ -28,15 +27,15 @@ import tarfile
 import traceback
 import time
 import json
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from argparse import ArgumentParser
 import logging
 
-import common
-import net
-import metadata
-import scanner
-from common import FDroidException, BuildException, VCSException, FDroidPopen, SdkToolsPopen
+from . import common
+from . import net
+from . import metadata
+from . import scanner
+from .common import FDroidException, BuildException, VCSException, FDroidPopen, SdkToolsPopen
 
 try:
     import paramiko
@@ -463,7 +462,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
         if not ndk_path:
             logging.critical("Android NDK version '%s' could not be found!" % build.ndk or 'r10e')
             logging.critical("Configured versions:")
-            for k, v in config['ndk_paths'].iteritems():
+            for k, v in config['ndk_paths'].items():
                 if k.endswith("_orig"):
                     continue
                 logging.critical("  %s: %s" % (k, v))
@@ -1071,7 +1070,7 @@ def main():
         raise FDroidException("No apps to process.")
 
     if options.latest:
-        for app in apps.itervalues():
+        for app in apps.values():
             for build in reversed(app.builds):
                 if build.disable and not options.force:
                     continue
@@ -1087,7 +1086,7 @@ def main():
     # Build applications...
     failed_apps = {}
     build_succeeded = []
-    for appid, app in apps.iteritems():
+    for appid, app in apps.items():
 
         first = True
 

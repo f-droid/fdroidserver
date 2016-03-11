@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # readmeta.py - part of the FDroid server tools
 # Copyright (C) 2014 Daniel Martí <mvdan@mvdan.cc>
@@ -18,8 +17,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from argparse import ArgumentParser
-import common
-import metadata
+from . import common
+from . import metadata
 
 
 def main():

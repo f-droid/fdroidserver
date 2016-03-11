@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
@@ -32,7 +31,7 @@ class InstallTest(unittest.TestCase):
         devices = fdroidserver.install.devices()
         self.assertIsInstance(devices, list, 'install.devices() did not return a list!')
         for device in devices:
-            self.assertIsInstance(device, basestring)
+            self.assertIsInstance(device, str)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
@@ -9,6 +8,7 @@ import optparse
 import os
 import sys
 import unittest
+from binascii import unhexlify
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -56,10 +56,10 @@ class UpdateTest(unittest.TestCase):
         self.assertEquals(len(sig), len(pysig),
                           "the length of the two sigs are different!")
         try:
-            self.assertEquals(sig.decode('hex'), pysig.decode('hex'),
+            self.assertEquals(unhexlify(sig), unhexlify(pysig),
                               "the length of the two sigs are different!")
         except TypeError as e:
-            print e
+            print(e)
             self.assertTrue(False, 'TypeError!')
 
     def testBadGetsig(self):

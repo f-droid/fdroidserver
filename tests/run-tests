@@ -83,7 +83,7 @@ fi
 
 # allow the location of python to be overridden
 if [ -z $python ]; then
-    python=python2
+    python=python3
 fi
 
 set -x # show each command as it is executed

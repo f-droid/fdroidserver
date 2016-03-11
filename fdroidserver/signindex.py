@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # gpgsign.py - part of the FDroid server tools
 # Copyright (C) 2015, Ciaran Gultnieks, ciaran@ciarang.com
@@ -22,8 +21,8 @@ import os
 from argparse import ArgumentParser
 import logging
 
-import common
-from common import FDroidPopen
+from . import common
+from .common import FDroidPopen
 
 config = None
 options = None

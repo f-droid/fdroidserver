@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -26,7 +26,7 @@ def vagrant(params, cwd=None, printout=False):
             line = p.stdout.readline()
             if len(line) == 0:
                 break
-            print line,
+            print(line)
             out += line
         p.wait()
     else:
@@ -63,13 +63,13 @@ config = {
 
 # load config file, if present
 if os.path.exists('makebuildserver.config.py'):
-    execfile('makebuildserver.config.py', config)
+    exec(compile(open('makebuildserver.config.py').read(), 'makebuildserver.config.py', 'exec'), config)
 elif os.path.exists('makebs.config.py'):
     # this is the old name for the config file
-    execfile('makebs.config.py', config)
+    exec(compile(open('makebs.config.py').read(), 'makebs.config.py', 'exec'), config)
 
 if not os.path.exists('makebuildserver') or not os.path.exists(serverdir):
-    print 'This must be run from the correct directory!'
+    print('This must be run from the correct directory!')
     sys.exit(1)
 
 if os.path.exists(boxfile):
@@ -81,7 +81,7 @@ if options.clean:
 # Update cached files.
 cachedir = config['cachedir']
 if not os.path.exists(cachedir):
-    os.makedirs(cachedir, 0755)
+    os.makedirs(cachedir, 0o755)
 
 cachefiles = [
     ('android-sdk_r24.4.1-linux.tgz',
@@ -318,17 +318,17 @@ for f, src, shasum in cachefiles:
     if os.path.exists(relpath) and os.stat(relpath).st_size == 0:
         os.remove(relpath)
     if not os.path.exists(relpath):
-        print "Downloading " + f + " to cache"
+        print("Downloading " + f + " to cache")
         if subprocess.call(['wget', src, '-O', f], cwd=cachedir) != 0:
-            print "...download of " + f + " failed."
+            print("...download of " + f + " failed.")
             sys.exit(1)
     if shasum:
         v = sha256_for_file(relpath)
         if v != shasum:
-            print "Invalid shasum of '" + v + "' detected for " + f
+            print("Invalid shasum of '" + v + "' detected for " + f)
             sys.exit(1)
         else:
-            print "...shasum verified for " + f
+            print("...shasum verified for " + f)
 
     wanted.append(f)
 
@@ -418,57 +418,57 @@ if os.path.exists(vf):
     with open(vf, 'r') as f:
         oldvf = f.read()
     if oldvf != vagrantfile:
-        print "Server configuration has changed, rebuild from scratch is required"
+        print("Server configuration has changed, rebuild from scratch is required")
         vagrant(['destroy', '-f'], serverdir)
     else:
-        print "Re-provisioning existing server"
+        print("Re-provisioning existing server")
         writevf = False
 else:
-    print "No existing server - building from scratch"
+    print("No existing server - building from scratch")
 if writevf:
     with open(vf, 'w') as f:
         f.write(vagrantfile)
 
 
-print "Configuring build server VM"
+print("Configuring build server VM")
 returncode, out = vagrant(['up', '--provision'], serverdir, printout=True)
 with open(os.path.join(serverdir, 'up.log'), 'w') as log:
     log.write(out)
 if returncode != 0:
-    print "Failed to configure server"
+    print("Failed to configure server")
     sys.exit(1)
 
-print "Writing buildserver ID"
+print("Writing buildserver ID")
 p = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE)
 buildserverid = p.communicate()[0].strip()
-print "...ID is " + buildserverid
+print("...ID is " + buildserverid)
 subprocess.call(
     ['vagrant', 'ssh', '-c', 'sh -c "echo {0} >/home/vagrant/buildserverid"'
         .format(buildserverid)],
     cwd=serverdir)
 
-print "Stopping build server VM"
+print("Stopping build server VM")
 vagrant(['halt'], serverdir)
 
-print "Waiting for build server VM to be finished"
+print("Waiting for build server VM to be finished")
 ready = False
 while not ready:
     time.sleep(2)
     returncode, out = vagrant(['status'], serverdir)
     if returncode != 0:
-        print "Error while checking status"
+        print("Error while checking status")
         sys.exit(1)
     for line in out.splitlines():
         if line.startswith("default"):
             if line.find("poweroff") != -1:
                 ready = True
             else:
-                print "Status: " + line
+                print("Status: " + line)
 
-print "Packaging"
+print("Packaging")
 vagrant(['package', '--output', os.path.join('..', boxfile)], serverdir,
         printout=options.verbose)
-print "Adding box"
+print("Adding box")
 vagrant(['box', 'add', 'buildserver', boxfile, '-f'],
         printout=options.verbose)
 

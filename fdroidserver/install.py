@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # install.py - part of the FDroid server tools
 # Copyright (C) 2013, Ciaran Gultnieks, ciaran@ciarang.com
@@ -24,8 +23,8 @@ import glob
 from argparse import ArgumentParser
 import logging
 
-import common
-from common import SdkToolsPopen, FDroidException
+from . import common
+from .common import SdkToolsPopen, FDroidException
 
 options = None
 config = None
@@ -82,7 +81,7 @@ def main():
                 continue
             apks[appid] = apkfile
 
-        for appid, apk in apks.iteritems():
+        for appid, apk in apks.items():
             if not apk:
                 raise FDroidException("No signed apk available for %s" % appid)
 
@@ -91,7 +90,7 @@ def main():
         apks = {common.apknameinfo(apkfile)[0]: apkfile for apkfile in
                 sorted(glob.glob(os.path.join(output_dir, '*.apk')))}
 
-    for appid, apk in apks.iteritems():
+    for appid, apk in apks.items():
         # Get device list each time to avoid device not found errors
         devs = devices()
         if not devs:

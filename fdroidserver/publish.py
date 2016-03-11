@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # publish.py - part of the FDroid server tools
 # Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
@@ -21,14 +20,14 @@
 import sys
 import os
 import shutil
-import md5
 import glob
+import hashlib
 from argparse import ArgumentParser
 import logging
 
-import common
-import metadata
-from common import FDroidPopen, SdkToolsPopen, BuildException
+from . import common
+from . import metadata
+from .common import FDroidPopen, SdkToolsPopen, BuildException
 
 config = None
 options = None
@@ -91,8 +90,8 @@ def main():
     vercodes = common.read_pkg_args(options.appid, True)
     allaliases = []
     for appid in allapps:
-        m = md5.new()
-        m.update(appid)
+        m = hashlib.md5()
+        m.update(appid.encode('utf-8'))
         keyalias = m.hexdigest()[:8]
         if keyalias in allaliases:
             logging.error("There is a keyalias collision - publishing halted")
@@ -156,12 +155,12 @@ def main():
                 # For this particular app, the key alias is overridden...
                 keyalias = config['keyaliases'][appid]
                 if keyalias.startswith('@'):
-                    m = md5.new()
-                    m.update(keyalias[1:])
+                    m = hashlib.md5()
+                    m.update(keyalias[1:].encode('utf-8'))
                     keyalias = m.hexdigest()[:8]
             else:
-                m = md5.new()
-                m.update(appid)
+                m = hashlib.md5()
+                m.update(appid.encode('utf-8'))
                 keyalias = m.hexdigest()[:8]
             logging.info("Key alias: " + keyalias)
 

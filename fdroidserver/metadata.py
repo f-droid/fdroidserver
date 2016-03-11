@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # metadata.py - part of the FDroid server tools
 # Copyright (C) 2013, Ciaran Gultnieks, ciaran@ciarang.com
@@ -23,11 +23,7 @@ import re
 import glob
 import cgi
 import textwrap
-
-try:
-    from cStringIO import StringIO
-except:
-    from StringIO import StringIO
+import io
 
 import yaml
 # use libyaml if it is available
@@ -41,7 +37,7 @@ except ImportError:
 # use the C implementation when available
 import xml.etree.cElementTree as ElementTree
 
-import common
+import fdroidserver.common
 
 srclibs = None
 
@@ -162,11 +158,11 @@ class App():
     # names. Should only be used for tests.
     def field_dict(self):
         d = {}
-        for k, v in self.__dict__.iteritems():
+        for k, v in self.__dict__.items():
             if k == 'builds':
                 d['builds'] = []
                 for build in v:
-                    b = {k: v for k, v in build.__dict__.iteritems() if not k.startswith('_')}
+                    b = {k: v for k, v in build.__dict__.items() if not k.startswith('_')}
                     d['builds'].append(b)
             elif not k.startswith('_'):
                 f = App.attr_to_field(k)
@@ -200,7 +196,7 @@ class App():
 
     # Like dict.update(), but using human-readable field names
     def update_fields(self, d):
-        for f, v in d.iteritems():
+        for f, v in d.items():
             if f == 'builds':
                 for b in v:
                     build = Build()
@@ -352,13 +348,13 @@ class Build():
         version = self.ndk
         if not version:
             version = 'r10e'  # falls back to latest
-        paths = common.config['ndk_paths']
+        paths = fdroidserver.common.config['ndk_paths']
         if version not in paths:
             return ''
         return paths[version]
 
     def update_flags(self, d):
-        for f, v in d.iteritems():
+        for f, v in d.items():
             self.set_flag(f, v)
 
 flagtypes = {
@@ -513,8 +509,8 @@ class DescriptionFormatter:
         self.laststate = self.stNONE
         self.text_html = ''
         self.text_txt = ''
-        self.html = StringIO()
-        self.text = StringIO()
+        self.html = io.StringIO()
+        self.text = io.StringIO()
         self.para_lines = []
         self.linkResolver = None
         self.linkResolver = linkres
@@ -534,10 +530,10 @@ class DescriptionFormatter:
         self.state = self.stNONE
         whole_para = ' '.join(self.para_lines)
         self.addtext(whole_para)
-        wrapped = textwrap.fill(whole_para.decode('utf-8'), 80,
+        wrapped = textwrap.fill(whole_para, 80,
                                 break_long_words=False,
                                 break_on_hyphens=False)
-        self.text.write(wrapped.encode('utf-8'))
+        self.text.write(wrapped)
         self.html.write('</p>')
         del self.para_lines[:]
 
@@ -709,7 +705,7 @@ def parse_srclib(metadatapath):
     if not os.path.exists(metadatapath):
         return thisinfo
 
-    metafile = open(metadatapath, "r")
+    metafile = open(metadatapath, "r", encoding='utf-8')
 
     n = 0
     for line in metafile:
@@ -797,7 +793,7 @@ def read_metadata(xref=True):
                 return ("fdroid.app:" + appid, "Dummy name - don't know yet")
             raise MetaDataException("Cannot resolve app id " + appid)
 
-        for appid, app in apps.iteritems():
+        for appid, app in apps.items():
             try:
                 description_html(app.Description, linkres)
             except MetaDataException as e:
@@ -826,7 +822,7 @@ def get_default_app_info(metadatapath=None):
     if metadatapath is None:
         appid = None
     else:
-        appid, _ = common.get_extension(os.path.basename(metadatapath))
+        appid, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
 
     app = App()
     app.metadatapath = metadatapath
@@ -846,17 +842,14 @@ esc_newlines = re.compile(r'\\( |\n)')
 # This function uses __dict__ to be faster
 def post_metadata_parse(app):
 
-    for k, v in app.__dict__.iteritems():
-        if k not in app._modified:
-            continue
+    for k in app._modified:
+        v = app.__dict__[k]
         if type(v) in (float, int):
             app.__dict__[k] = str(v)
 
     for build in app.builds:
-        for k, v in build.__dict__.iteritems():
-
-            if k not in build._modified:
-                continue
+        for k in build._modified:
+            v = build.__dict__[k]
             if type(v) in (float, int):
                 build.__dict__[k] = str(v)
                 continue
@@ -866,7 +859,7 @@ def post_metadata_parse(app):
                 build.__dict__[k] = re.sub(esc_newlines, '', v).lstrip().rstrip()
             elif ftype == TYPE_BOOL:
                 # TODO handle this using <xsd:element type="xsd:boolean> in a schema
-                if isinstance(v, basestring):
+                if isinstance(v, str):
                     build.__dict__[k] = _decode_bool(v)
             elif ftype == TYPE_STRING:
                 if isinstance(v, bool) and v:
@@ -904,36 +897,6 @@ def post_metadata_parse(app):
 #
 
 
-def _decode_list(data):
-    '''convert items in a list from unicode to basestring'''
-    rv = []
-    for item in data:
-        if isinstance(item, unicode):
-            item = item.encode('utf-8')
-        elif isinstance(item, list):
-            item = _decode_list(item)
-        elif isinstance(item, dict):
-            item = _decode_dict(item)
-        rv.append(item)
-    return rv
-
-
-def _decode_dict(data):
-    '''convert items in a dict from unicode to basestring'''
-    rv = {}
-    for k, v in data.iteritems():
-        if isinstance(k, unicode):
-            k = k.encode('utf-8')
-        if isinstance(v, unicode):
-            v = v.encode('utf-8')
-        elif isinstance(v, list):
-            v = _decode_list(v)
-        elif isinstance(v, dict):
-            v = _decode_dict(v)
-        rv[k] = v
-    return rv
-
-
 bool_true = re.compile(r'([Yy]es|[Tt]rue)')
 bool_false = re.compile(r'([Nn]o|[Ff]alse)')
 
@@ -947,17 +910,17 @@ def _decode_bool(s):
 
 
 def parse_metadata(metadatapath):
-    _, ext = common.get_extension(metadatapath)
-    accepted = common.config['accepted_formats']
+    _, ext = fdroidserver.common.get_extension(metadatapath)
+    accepted = fdroidserver.common.config['accepted_formats']
     if ext not in accepted:
         raise MetaDataException('"%s" is not an accepted format, convert to: %s' % (
             metadatapath, ', '.join(accepted)))
 
     app = App()
     app.metadatapath = metadatapath
-    app.id, _ = common.get_extension(os.path.basename(metadatapath))
+    app.id, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
 
-    with open(metadatapath, 'r') as mf:
+    with open(metadatapath, 'r', encoding='utf-8') as mf:
         if ext == 'txt':
             parse_txt_metadata(mf, app)
         elif ext == 'json':
@@ -975,11 +938,9 @@ def parse_metadata(metadatapath):
 
 def parse_json_metadata(mf, app):
 
-    # fdroid metadata is only strings and booleans, no floats or ints. And
-    # json returns unicode, and fdroidserver still uses plain python strings
+    # fdroid metadata is only strings and booleans, no floats or ints.
     # TODO create schema using https://pypi.python.org/pypi/jsonschema
-    jsoninfo = json.load(mf, object_hook=_decode_dict,
-                         parse_int=lambda s: s,
+    jsoninfo = json.load(mf, parse_int=lambda s: s,
                          parse_float=lambda s: s)
     app.update_fields(jsoninfo)
     for f in ['Description', 'Maintainer Notes']:
@@ -1253,7 +1214,7 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
             w_field_always('Binaries')
         mf.write('\n')
 
-    for build in sorted_builds(app.builds):
+    for build in app.builds:
 
         if build.version == "Ignore":
             continue

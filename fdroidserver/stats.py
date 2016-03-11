@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # stats.py - part of the FDroid server tools
 # Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
@@ -28,10 +27,11 @@ from argparse import ArgumentParser
 import paramiko
 import socket
 import logging
-import common
-import metadata
 import subprocess
 from collections import Counter
+
+from . import common
+from . import metadata
 
 
 def carbon_send(key, value):
@@ -75,7 +75,7 @@ def main():
         sys.exit(1)
 
     # Get all metadata-defined apps...
-    allmetaapps = [app for app in metadata.read_metadata().itervalues()]
+    allmetaapps = [app for app in metadata.read_metadata().values()]
     metaapps = [app for app in allmetaapps if not app.Disabled]
 
     statsdir = 'stats'

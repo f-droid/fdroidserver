@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # server.py - part of the FDroid server tools
 # Copyright (C) 2010-15, Ciaran Gultnieks, ciaran@ciarang.com
@@ -26,7 +25,8 @@ import pwd
 import subprocess
 from argparse import ArgumentParser
 import logging
-import common
+
+from . import common
 
 config = None
 options = None
@@ -296,12 +296,12 @@ def main():
             sftp = ssh.open_sftp()
             if os.path.basename(remotepath) \
                     not in sftp.listdir(os.path.dirname(remotepath)):
-                sftp.mkdir(remotepath, mode=0755)
+                sftp.mkdir(remotepath, mode=0o755)
             for repo_section in repo_sections:
                 repo_path = os.path.join(remotepath, repo_section)
                 if os.path.basename(repo_path) \
                         not in sftp.listdir(remotepath):
-                    sftp.mkdir(repo_path, mode=0755)
+                    sftp.mkdir(repo_path, mode=0o755)
             sftp.close()
             ssh.close()
     elif options.command == 'update':

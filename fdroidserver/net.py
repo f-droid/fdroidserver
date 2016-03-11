@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # net.py - part of the FDroid server tools
 # Copyright (C) 2015 Hans-Christoph Steiner <hans@eds.org>
