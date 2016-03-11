@@ -338,6 +338,20 @@ if type(config['baseboxurl']) in (list, tuple) or config['baseboxurl'][0] in ('(
 else:
     baseboxurl = '"{0}"'.format(config['baseboxurl'])
 
+# use VirtualBox software virtualization if hardware is not available,
+# like if this is being run in kvm or some other VM platform, like
+# http://jenkins.debian.net, the values are 'on' or 'off'
+hwvirtex = 'off'
+if sys.platform.startswith('darwin'):
+    # all < 10 year old Macs work, and OSX servers as VM host are very
+    # rare, but this could also be auto-detected if someone codes it
+    hwvirtex = 'on'
+elif os.path.exists('/proc/cpuinfo'):
+    with open('/proc/cpuinfo') as f:
+        contents = f.read()
+    if 'vmx' in contents or 'svm' in contents:
+        hwvirtex = 'on'
+
 # Generate an appropriate Vagrantfile for the buildserver, based on our
 # settings...
 vagrantfile = """
@@ -356,15 +370,17 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
     v.customize ["modifyvm", :id, "--memory", "{2}"]
     v.customize ["modifyvm", :id, "--cpus", "{3}"]
+    v.customize ["modifyvm", :id, "--hwvirtex", "{4}"]
   end
 
-  config.vm.boot_timeout = {4}
+  config.vm.boot_timeout = {5}
 
   config.vm.provision :shell, :path => "fixpaths.sh"
 """.format(config['basebox'],
            baseboxurl,
            config['memory'],
            config.get('cpus', 1),
+           hwvirtex,
            config['boot_timeout'])
 if 'aptproxy' in config and config['aptproxy']:
     vagrantfile += """
