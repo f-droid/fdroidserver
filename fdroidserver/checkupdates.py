@@ -121,7 +121,11 @@ def check_tags(app, pattern):
         hver = None
         hcode = "0"
 
-        tags = vcs.gettags()
+        tags = []
+        if repotype == 'git':
+            tags = vcs.latesttags()
+        else:
+            tags = vcs.gettags()
         if not tags:
             return (None, "No tags found", None)
 
@@ -133,8 +137,8 @@ def check_tags(app, pattern):
                 return (None, "No matching tags found", None)
             logging.debug("Matching tags: " + ','.join(tags))
 
-        if len(tags) > 5 and repotype in ('git',):
-            tags = vcs.latesttags(tags, 5)
+        if len(tags) > 5 and repotype == 'git':
+            tags = tags[:5]
             logging.debug("Latest tags: " + ','.join(tags))
 
         for tag in tags:
