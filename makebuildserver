@@ -303,7 +303,7 @@ wanted = []
 
 
 def sha256_for_file(path):
-    with open(path, 'r') as f:
+    with open(path, 'rb') as f:
         s = hashlib.sha256()
         while True:
             data = f.read(4096)
