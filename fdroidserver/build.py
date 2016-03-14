@@ -176,6 +176,7 @@ def get_clean_vm(reset=False):
         os.mkdir('builder')
 
         p = subprocess.Popen(['vagrant', '--version'],
+                             universal_newlines=True,
                              stdout=subprocess.PIPE)
         vver = p.communicate()[0].strip().split(' ')[1]
         if vver.split('.')[0] != '1' or int(vver.split('.')[1]) < 4:
