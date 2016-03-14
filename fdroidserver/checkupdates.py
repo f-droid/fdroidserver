@@ -54,7 +54,7 @@ def check_http(app):
             logging.debug("...requesting {0}".format(urlcode))
             req = urllib.request.Request(urlcode, None)
             resp = urllib.request.urlopen(req, None, 20)
-            page = resp.read()
+            page = resp.read().decode('utf-8')
 
             m = re.search(codeex, page)
             if not m:
@@ -67,7 +67,7 @@ def check_http(app):
                 logging.debug("...requesting {0}".format(urlver))
                 req = urllib.request.Request(urlver, None)
                 resp = urllib.request.urlopen(req, None, 20)
-                page = resp.read()
+                page = resp.read().decode('utf-8')
 
             m = re.search(verex, page)
             if not m:
