@@ -1063,7 +1063,7 @@ def main():
     allapps = metadata.read_metadata(xref=not options.onserver)
 
     apps = common.read_app_args(options.appid, allapps, True)
-    for appid, app in apps.items():
+    for appid, app in list(apps.items()):
         if (app.Disabled and not options.force) or not app.RepoType or not app.builds:
             del apps[appid]
 
