@@ -75,7 +75,7 @@ find_command() {
 	for suff in "3" "-python3" ""; do
 		cmd=${1}${suff}
 		if cmd_exists $cmd; then
-			echo -n $cmd
+			echo $cmd
 			return 0
 		fi
 	done

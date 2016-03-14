@@ -19,7 +19,8 @@ def vagrant(params, cwd=None, printout=False):
                is the stdout (and stderr) from vagrant
     """
     p = subprocess.Popen(['vagrant'] + params, cwd=cwd,
-                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                         universal_newlines=True)
     out = ''
     if printout:
         while True:

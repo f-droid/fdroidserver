@@ -76,9 +76,11 @@ def main():
                     import subprocess
                     try:
                         output = subprocess.check_output(['git', 'describe'],
-                                                         stderr=subprocess.STDOUT)
+                                                         stderr=subprocess.STDOUT,
+                                                         universal_newlines=True)
                     except subprocess.CalledProcessError:
-                        output = 'git commit ' + subprocess.check_output(['git', 'rev-parse', 'HEAD'])
+                        output = 'git commit ' + subprocess.check_output(['git', 'rev-parse', 'HEAD'],
+                                                                         universal_newlines=True)
                 elif os.path.exists('setup.py'):
                     import re
                     m = re.search(r'''.*[\s,\(]+version\s*=\s*["']([0-9a-z.]+)["'].*''',
