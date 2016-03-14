@@ -51,6 +51,7 @@ echo "apt_package_cache = True" >> $WORKSPACE/makebuildserver.config.py
 # this can be handled in the jenkins job, or here:
 if [ -e fdroiddata ]; then
     cd fdroiddata
+    git checkout master
     git pull
     cd ..
 else
