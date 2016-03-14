@@ -456,7 +456,8 @@ if returncode != 0:
     sys.exit(1)
 
 print("Writing buildserver ID")
-p = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE)
+p = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE,
+                     universal_newlines=True)
 buildserverid = p.communicate()[0].strip()
 print("...ID is " + buildserverid)
 subprocess.call(
