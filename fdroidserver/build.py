@@ -389,7 +389,7 @@ def build_server(app, build, vcs, build_dir, output_dir, force):
             cmdline += ' --verbose'
         cmdline += " %s:%s" % (app.id, build.vercode)
         chan.exec_command('bash -c ". ~/.bsenv && ' + cmdline + '"')
-        output = ''
+        output = bytes()
         while not chan.exit_status_ready():
             while chan.recv_ready():
                 output += chan.recv(1024)
@@ -404,7 +404,7 @@ def build_server(app, build, vcs, build_dir, output_dir, force):
         if returncode != 0:
             raise BuildException(
                 "Build.py failed on server for {0}:{1}".format(
-                    app.id, build.version), output)
+                    app.id, build.version), str(output, 'utf-8'))
 
         # Retrieve the built files...
         logging.info("Retrieving build output...")
