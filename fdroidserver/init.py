@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# update.py - part of the FDroid server tools
+# init.py - part of the FDroid server tools
 # Copyright (C) 2010-2013, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 # Copyright (C) 2013 Hans-Christoph Steiner <hans@eds.org>
@@ -100,6 +100,9 @@ def main():
         else:
             # if neither --android-home nor the default sdk_path exist, prompt the user
             default_sdk_path = '/opt/android-sdk'
+            if sys.platform == 'win32' or sys.platform == 'cygwin':
+                default_sdk_path = os.path.join(os.getenv('USERPROFILE'),
+                                                'AppData', 'Local', 'Android', 'android-sdk')
             while not options.no_prompt:
                 try:
                     s = input('Enter the path to the Android SDK ('
