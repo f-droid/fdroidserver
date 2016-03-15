@@ -67,7 +67,7 @@ echo "build_server_always = True" > config.py
 # Ant, submodules and custom prebuild/build
 ../fdroid build --stop app.openconnect:959
 # Custom build (make)
-../fdroid build --stop org.xcsoar:101
+../fdroid build --stop com.amaze.filemanager:29
 # Uses verification
 ../fdroid build --stop info.guardianproject.checkey:101
 # Gradle with retrolambda (JDK7 and JDK8)
