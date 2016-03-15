@@ -56,12 +56,12 @@ end
     pandoc
     perlmagick
     pkg-config
-    python
     python-gnupg
     python-magic
     python-setuptools
-    python-yaml
     python3-gnupg
+    python3-requests
+    python3-yaml
     qt5-default
     qtbase5-dev
     quilt
