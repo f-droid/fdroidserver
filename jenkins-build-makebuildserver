@@ -61,14 +61,14 @@ fi
 cd fdroiddata
 echo "build_server_always = True" > config.py
 # Gradle, JNI, preassemble
-../fdroid build org.adaway:55
+../fdroid build --stop org.adaway:55
 # Maven
-../fdroid build org.quantumbadger.redreader:55
+../fdroid build --stop org.quantumbadger.redreader:55
 # Ant, submodules and custom prebuild/build
-../fdroid build app.openconnect:959
+../fdroid build --stop app.openconnect:959
 # Custom build (make)
-../fdroid build org.xcsoar:101
+../fdroid build --stop com.amaze.filemanager:29
 # Uses verification
-../fdroid build info.guardianproject.checkey:101
+../fdroid build --stop info.guardianproject.checkey:101
 # Gradle with retrolambda (JDK7 and JDK8)
-../fdroid build com.moez.QKSMS:124
+../fdroid build --stop com.moez.QKSMS:124

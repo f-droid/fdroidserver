@@ -128,10 +128,16 @@ def fill_config_defaults(thisconfig):
     # find all installed JDKs for keytool, jarsigner, and JAVA[6-9]_HOME env vars
     if thisconfig['java_paths'] is None:
         thisconfig['java_paths'] = dict()
-        for d in sorted(glob.glob('/usr/lib/jvm/j*[6-9]*')
-                        + glob.glob('/usr/java/jdk1.[6-9]*')
-                        + glob.glob('/System/Library/Java/JavaVirtualMachines/1.[6-9].0.jdk')
-                        + glob.glob('/Library/Java/JavaVirtualMachines/*jdk*[6-9]*')):
+        pathlist = []
+        pathlist += glob.glob('/usr/lib/jvm/j*[6-9]*')
+        pathlist += glob.glob('/usr/java/jdk1.[6-9]*')
+        pathlist += glob.glob('/System/Library/Java/JavaVirtualMachines/1.[6-9].0.jdk')
+        pathlist += glob.glob('/Library/Java/JavaVirtualMachines/*jdk*[6-9]*')
+        if os.getenv('JAVA_HOME') is not None:
+            pathlist += os.getenv('JAVA_HOME')
+        if os.getenv('PROGRAMFILES') is not None:
+            pathlist += glob.glob(os.path.join(os.getenv('PROGRAMFILES'), 'Java', 'jdk1.[6-9].*'))
+        for d in sorted(pathlist):
             if os.path.islink(d):
                 continue
             j = os.path.basename(d)
@@ -139,6 +145,7 @@ def fill_config_defaults(thisconfig):
             for regex in [
                     r'^1\.([6-9])\.0\.jdk$',  # OSX
                     r'^jdk1\.([6-9])\.0_[0-9]+.jdk$',  # OSX and Oracle tarball
+                    r'^jdk1\.([6-9])\.0_[0-9]+$',  # Oracle Windows
                     r'^jdk([6-9])-openjdk$',  # Arch
                     r'^java-([6-9])-openjdk$',  # Arch
                     r'^java-([6-9])-jdk$',  # Arch (oracle)
