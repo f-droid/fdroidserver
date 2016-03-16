@@ -705,7 +705,7 @@ class vcs_git(vcs):
         p = FDroidPopen(['git', 'tag'], cwd=self.local, output=False)
         return p.output.splitlines()
 
-    tag_format = re.compile(r'.*tag: ([^),]*).*')
+    tag_format = re.compile(r'tag: ([^),]*)')
 
     def latesttags(self):
         self.checkrepo()
@@ -714,11 +714,8 @@ class vcs_git(vcs):
                         cwd=self.local, output=False)
         tags = []
         for line in p.output.splitlines():
-            m = self.tag_format.match(line)
-            if not m:
-                continue
-            tag = m.group(1)
-            tags.append(tag)
+            for tag in self.tag_format.findall(line):
+                tags.append(tag)
         return tags
 
 
