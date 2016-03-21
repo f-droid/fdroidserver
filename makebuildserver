@@ -27,7 +27,7 @@ def vagrant(params, cwd=None, printout=False):
             line = p.stdout.readline()
             if len(line) == 0:
                 break
-            print(line)
+            print(line.rstrip())
             out += line
         p.wait()
     else:
