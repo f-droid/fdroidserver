@@ -779,10 +779,10 @@ def read_metadata(xref=True):
     for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.txt'))
                                + glob.glob(os.path.join('metadata', '*.json'))
                                + glob.glob(os.path.join('metadata', '*.xml'))
-                               + glob.glob(os.path.join('metadata', '*.yaml'))
+                               + glob.glob(os.path.join('metadata', '*.yml'))
                                + glob.glob('.fdroid.json')
                                + glob.glob('.fdroid.xml')
-                               + glob.glob('.fdroid.yaml')):
+                               + glob.glob('.fdroid.yml')):
         app = parse_metadata(metadatapath)
         if app.id in apps:
             raise MetaDataException("Found multiple metadata files for " + app.id)
@@ -950,7 +950,7 @@ def parse_metadata(metadatapath):
             parse_json_metadata(mf, app)
         elif ext == 'xml':
             parse_xml_metadata(mf, app)
-        elif ext == 'yaml':
+        elif ext == 'yml':
             parse_yaml_metadata(mf, app)
         else:
             raise MetaDataException('Unknown metadata format: %s' % metadatapath)
@@ -1387,6 +1387,6 @@ def write_metadata(metadatapath, app):
     with open(metadatapath, 'w') as mf:
         if ext == 'txt':
             return write_txt(mf, app)
-        elif ext == 'yaml':
+        elif ext == 'yml':
             return write_yaml(mf, app)
     raise MetaDataException('Unknown metadata format: %s' % metadatapath)

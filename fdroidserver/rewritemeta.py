@@ -64,7 +64,7 @@ def main():
     if options.list and options.to is not None:
         parser.error("Cannot use --list and --to at the same time")
 
-    supported = ['txt', 'yaml']
+    supported = ['txt', 'yml']
 
     if options.to is not None and options.to not in supported:
         parser.error("Must give a valid format to --to")

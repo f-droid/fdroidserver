@@ -261,7 +261,7 @@ def main():
     app.builds.append(build)
 
     if write_local_file:
-        metadata.write_metadata('.fdroid.yaml', app)
+        metadata.write_metadata('.fdroid.yml', app)
     else:
         # Keep the repo directory to save bandwidth...
         if not os.path.exists('build'):
