@@ -401,18 +401,31 @@ the signed output directory were modified, you won't be notified.
 @node Importing Applications
 @chapter Importing Applications
 
-To help with starting work on including a new application, @code{fdroid import}
-will take a URL and optionally some other parameters, and attempt to construct
-as much information as possible by analysing the source code. Basic usage is:
+To help with starting work on including a new application, use
+@code{fdroid import} to set up a new template project.  It has two
+modes of operation, starting with a cloned git repo:
+
+@example
+git clone https://gitlab.com/fdroid/fdroidclient
+cd fdroidclient
+fdroid import
+@end example
+
+Or starting with a URL to a project page:
 
 @example
 fdroid import --url=http://address.of.project
 @end example
 
-For this to work, the URL must point to a project format that the script
+When a URL is specified using the @code{--url=} flag, @code{fdroid
+import} will use that URL to find out information about the project,
+and if it finds a git repo, it will also clone that.  For this to
+work, the URL must point to a project format that the script
 understands. Currently this is limited to one of the following:
 
 @enumerate
+@item
+GitLab - @code{https://gitlab.com/PROJECTNAME/REPONAME}
 @item
 Gitorious - @code{https://gitorious.org/PROJECTNAME/REPONAME}
 @item
