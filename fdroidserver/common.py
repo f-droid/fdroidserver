@@ -63,7 +63,7 @@ default_config = {
     'ant': "ant",
     'mvn3': "mvn",
     'gradle': 'gradle',
-    'accepted_formats': ['txt', 'yaml'],
+    'accepted_formats': ['txt', 'yml'],
     'sync_from_local_copy_dir': False,
     'per_app_repos': False,
     'make_current_version_link': True,
@@ -194,25 +194,29 @@ def regsub_file(pattern, repl, path):
 def read_config(opts, config_file='config.py'):
     """Read the repository config
 
-    The config is read from config_file, which is in the current directory when
-    any of the repo management commands are used.
+    The config is read from config_file, which is in the current
+    directory when any of the repo management commands are used. If
+    there is a local metadata file in the git repo, then config.py is
+    not required, just use defaults.
+
     """
-    global config, options, env, orig_path
+    global config, options
 
     if config is not None:
         return config
-    if not os.path.isfile(config_file):
-        logging.critical("Missing config file - is this a repo directory?")
-        sys.exit(2)
 
     options = opts
 
     config = {}
 
-    logging.debug("Reading %s" % config_file)
-    with io.open(config_file, "rb") as f:
-        code = compile(f.read(), config_file, 'exec')
-        exec(code, None, config)
+    if os.path.isfile(config_file):
+        logging.debug("Reading %s" % config_file)
+        with io.open(config_file, "rb") as f:
+            code = compile(f.read(), config_file, 'exec')
+            exec(code, None, config)
+    elif len(get_local_metadata_files()) == 0:
+        logging.critical("Missing config file - is this a repo directory?")
+        sys.exit(2)
 
     # smartcardoptions must be a list since its command line args for Popen
     if 'smartcardoptions' in config:
@@ -230,16 +234,6 @@ def read_config(opts, config_file='config.py'):
             logging.warn("unsafe permissions on {0} (should be 0600)!".format(config_file))
 
     fill_config_defaults(config)
-
-    # There is no standard, so just set up the most common environment
-    # variables
-    env = os.environ
-    orig_path = env['PATH']
-    for n in ['ANDROID_HOME', 'ANDROID_SDK']:
-        env[n] = config['sdk_path']
-
-    for k, v in config['java_paths'].items():
-        env['JAVA%s_HOME' % k] = v
 
     for k in ["keystorepass", "keypass"]:
         if k in config:
@@ -266,6 +260,21 @@ def read_config(opts, config_file='config.py'):
         config['serverwebroot'] = rootlist
 
     return config
+
+
+def get_ndk_path(version):
+    if config is None or 'ndk_paths' not in config:
+        ndk_path = os.getenv('ANDROID_NDK_HOME')
+        if ndk_path is None:
+            logging.error('No NDK found! Either set ANDROID_NDK_HOME or add ndk_path to your config.py')
+        else:
+            return ndk_path
+    if version is None:
+        version = 'r10e'  # falls back to latest
+    paths = config['ndk_paths']
+    if version not in paths:
+        return ''
+    return paths[version] or ''
 
 
 def find_sdk_tools_cmd(cmd):
@@ -350,6 +359,16 @@ def write_password_file(pwtype, password=None):
         os.write(fd, password.encode('utf-8'))
     os.close(fd)
     config[pwtype + 'file'] = filename
+
+
+def get_local_metadata_files():
+    '''get any metadata files local to an app's source repo
+
+    This tries to ignore anything that does not count as app metdata,
+    including emacs cruft ending in ~ and the .fdroid.key*pass.txt files.
+
+    '''
+    return glob.glob('.fdroid.[a-jl-z]*[a-rt-z]')
 
 
 # Given the arguments in the form of multiple appid:[vc] strings, this returns
@@ -1639,6 +1658,8 @@ def FDroidPopenBytes(commands, cwd=None, output=True, stderr_to_stdout=True):
     """
 
     global env
+    if env is None:
+        set_FDroidPopen_env()
 
     if cwd:
         cwd = os.path.normpath(cwd)
@@ -1780,25 +1801,40 @@ def remove_signing_keys(build_dir):
                     logging.info("Cleaned %s of keysigning configs at %s" % (propfile, path))
 
 
-def reset_env_path():
+def set_FDroidPopen_env(build=None):
+    '''
+    set up the environment variables for the build environment
+
+    There is only a weak standard, the variables used by gradle, so also set
+    up the most commonly used environment variables for SDK and NDK
+    '''
     global env, orig_path
-    env['PATH'] = orig_path
 
+    if env is None:
+        env = os.environ
+        orig_path = env['PATH']
+        for n in ['ANDROID_HOME', 'ANDROID_SDK']:
+            env[n] = config['sdk_path']
+        for k, v in config['java_paths'].items():
+            env['JAVA%s_HOME' % k] = v
 
-def add_to_env_path(path):
-    global env
-    paths = env['PATH'].split(os.pathsep)
-    if path in paths:
-        return
-    paths.append(path)
-    env['PATH'] = os.pathsep.join(paths)
+    # Set up environment vars that depend on each build, only set the
+    # NDK env vars if the NDK is not already in the PATH
+    if build is not None:
+        path = build.ndk_path()
+        paths = orig_path.split(os.pathsep)
+        if path in paths:
+            return
+        paths.append(path)
+        env['PATH'] = os.pathsep.join(paths)
+
+        for n in ['ANDROID_NDK', 'NDK', 'ANDROID_NDK_HOME']:
+            env[n] = build.ndk_path()
 
 
 def replace_config_vars(cmd, build):
-    global env
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
-    # env['ANDROID_NDK'] is set in build_local right before prepare_source
-    cmd = cmd.replace('$$NDK$$', env['ANDROID_NDK'])
+    cmd = cmd.replace('$$NDK$$', get_ndk_path(build['ndk']))
     cmd = cmd.replace('$$MVN3$$', config['mvn3'])
     if build is not None:
         cmd = cmd.replace('$$COMMIT$$', build.commit)

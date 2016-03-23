@@ -22,6 +22,7 @@ import os
 import re
 import glob
 import cgi
+import logging
 import textwrap
 import io
 
@@ -778,7 +779,10 @@ def read_metadata(xref=True):
     for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.txt'))
                                + glob.glob(os.path.join('metadata', '*.json'))
                                + glob.glob(os.path.join('metadata', '*.xml'))
-                               + glob.glob(os.path.join('metadata', '*.yaml'))):
+                               + glob.glob(os.path.join('metadata', '*.yml'))
+                               + glob.glob('.fdroid.json')
+                               + glob.glob('.fdroid.xml')
+                               + glob.glob('.fdroid.yml')):
         app = parse_metadata(metadatapath)
         if app.id in apps:
             raise MetaDataException("Found multiple metadata files for " + app.id)
@@ -823,6 +827,25 @@ def get_default_app_info(metadatapath=None):
         appid = None
     else:
         appid, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
+
+    if appid == '.fdroid':  # we have local metadata in the app's source
+        if os.path.exists('AndroidManifest.xml'):
+            manifestroot = fdroidserver.common.parse_xml('AndroidManifest.xml')
+        else:
+            pattern = re.compile(""".*manifest\.srcFile\s+'AndroidManifest\.xml'.*""")
+            for root, dirs, files in os.walk(os.getcwd()):
+                if 'build.gradle' in files:
+                    p = os.path.join(root, 'build.gradle')
+                    with open(p) as f:
+                        data = f.read()
+                    m = pattern.search(data)
+                    if m:
+                        logging.debug('Using: ' + os.path.join(root, 'AndroidManifest.xml'))
+                        manifestroot = fdroidserver.common.parse_xml(os.path.join(root, 'AndroidManifest.xml'))
+                        break
+        if manifestroot is None:
+            raise MetaDataException("Cannot find a packageName for {0}!".format(metadatapath))
+        appid = manifestroot.attrib['package']
 
     app = App()
     app.metadatapath = metadatapath
@@ -927,7 +950,7 @@ def parse_metadata(metadatapath):
             parse_json_metadata(mf, app)
         elif ext == 'xml':
             parse_xml_metadata(mf, app)
-        elif ext == 'yaml':
+        elif ext == 'yml':
             parse_yaml_metadata(mf, app)
         else:
             raise MetaDataException('Unknown metadata format: %s' % metadatapath)
@@ -1247,7 +1270,7 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
 #
 # 'mf'      - Writer interface (file, StringIO, ...)
 # 'app'     - The app data
-def write_txt_metadata(mf, app):
+def write_txt(mf, app):
 
     def w_comment(line):
         mf.write("# %s\n" % line)
@@ -1290,7 +1313,7 @@ def write_txt_metadata(mf, app):
     write_plaintext_metadata(mf, app, w_comment, w_field, w_build)
 
 
-def write_yaml_metadata(mf, app):
+def write_yaml(mf, app):
 
     def w_comment(line):
         mf.write("# %s\n" % line)
@@ -1354,9 +1377,16 @@ def write_yaml_metadata(mf, app):
     write_plaintext_metadata(mf, app, w_comment, w_field, w_build)
 
 
-def write_metadata(fmt, mf, app):
-    if fmt == 'txt':
-        return write_txt_metadata(mf, app)
-    if fmt == 'yaml':
-        return write_yaml_metadata(mf, app)
-    raise MetaDataException("Unknown metadata format given")
+def write_metadata(metadatapath, app):
+    _, ext = fdroidserver.common.get_extension(metadatapath)
+    accepted = fdroidserver.common.config['accepted_formats']
+    if ext not in accepted:
+        raise MetaDataException('Cannot write "%s", not an accepted format, use: %s' % (
+            metadatapath, ', '.join(accepted)))
+
+    with open(metadatapath, 'w') as mf:
+        if ext == 'txt':
+            return write_txt(mf, app)
+        elif ext == 'yml':
+            return write_yaml(mf, app)
+    raise MetaDataException('Unknown metadata format: %s' % metadatapath)

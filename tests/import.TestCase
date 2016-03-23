@@ -25,8 +25,9 @@ class ImportTest(unittest.TestCase):
 
     def test_import_gitlab(self):
         # FDroidPopen needs some config to work
-        fdroidserver.common.config = dict()
-        fdroidserver.common.config['sdk_path'] = '/fake/path/to/android-sdk'
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
 
         url = 'https://gitlab.com/fdroid/fdroidclient'
         app = fdroidserver.metadata.get_default_app_info()

@@ -33,7 +33,7 @@ class MetadataTest(unittest.TestCase):
         config = dict()
         config['sdk_path'] = '/opt/android-sdk'
         config['ndk_paths'] = dict()
-        config['accepted_formats'] = ['json', 'txt', 'xml', 'yaml']
+        config['accepted_formats'] = ['json', 'txt', 'xml', 'yml']
         fdroidserver.common.config = config
 
         apps = fdroidserver.metadata.read_metadata(xref=True)

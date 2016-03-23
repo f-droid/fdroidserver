@@ -64,7 +64,7 @@ class CommonTest(unittest.TestCase):
 
     def testIsApkDebuggable(self):
         config = dict()
-        config['sdk_path'] = os.getenv('ANDROID_HOME')
+        fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         self._set_build_tools()
         config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')

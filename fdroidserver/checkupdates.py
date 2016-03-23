@@ -492,8 +492,7 @@ def checkupdates_app(app, first=True):
 
     if commitmsg:
         metadatapath = os.path.join('metadata', app.id + '.txt')
-        with open(metadatapath, 'w') as f:
-            metadata.write_metadata('txt', f, app)
+        metadata.write_metadata(metadatapath, app)
         if options.commit:
             logging.info("Commiting update for " + metadatapath)
             gitcmd = ["git", "commit", "-m", commitmsg]

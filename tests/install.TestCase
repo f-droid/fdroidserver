@@ -23,7 +23,7 @@ class InstallTest(unittest.TestCase):
 
     def test_devices(self):
         config = dict()
-        config['sdk_path'] = os.getenv('ANDROID_HOME')
+        fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         config['adb'] = fdroidserver.common.find_sdk_tools_cmd('adb')
         self.assertTrue(os.path.exists(config['adb']))
