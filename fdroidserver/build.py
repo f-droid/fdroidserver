@@ -1006,7 +1006,7 @@ def main():
     # different than for the standard metadata/ layout because expectations
     # are different.  In this case, the most common user will be the app
     # developer working on the latest update of the app on their own machine.
-    local_metadata_files = common.get_local_local_metadata_files()
+    local_metadata_files = common.get_local_metadata_files()
     if len(local_metadata_files) == 1:  # there is local metadata in an app's source
         config = dict(common.default_config)
         # `fdroid build` should build only the latest version by default since
