@@ -262,21 +262,6 @@ def read_config(opts, config_file='config.py'):
     return config
 
 
-def get_ndk_path(version):
-    if config is None or 'ndk_paths' not in config:
-        ndk_path = os.getenv('ANDROID_NDK_HOME')
-        if ndk_path is None:
-            logging.error('No NDK found! Either set ANDROID_NDK_HOME or add ndk_path to your config.py')
-        else:
-            return ndk_path
-    if version is None:
-        version = 'r10e'  # falls back to latest
-    paths = config['ndk_paths']
-    if version not in paths:
-        return ''
-    return paths[version] or ''
-
-
 def find_sdk_tools_cmd(cmd):
     '''find a working path to a tool from the Android SDK'''
 
@@ -1834,7 +1819,7 @@ def set_FDroidPopen_env(build=None):
 
 def replace_config_vars(cmd, build):
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
-    cmd = cmd.replace('$$NDK$$', get_ndk_path(build['ndk']))
+    cmd = cmd.replace('$$NDK$$', build.ndk_path())
     cmd = cmd.replace('$$MVN3$$', config['mvn3'])
     if build is not None:
         cmd = cmd.replace('$$COMMIT$$', build.commit)
