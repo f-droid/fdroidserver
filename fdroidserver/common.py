@@ -1206,7 +1206,8 @@ class BuildException(FDroidException):
 # it, which may be a subdirectory of the actual project. If you want the base
 # directory of the project, pass 'basepath=True'.
 def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
-              raw=False, prepare=True, preponly=False, refresh=True):
+              raw=False, prepare=True, preponly=False, refresh=True,
+              build=None):
 
     number = None
     subdir = None
@@ -1255,7 +1256,7 @@ def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
     if prepare:
 
         if srclib["Prepare"]:
-            cmd = replace_config_vars(srclib["Prepare"], None)
+            cmd = replace_config_vars(srclib["Prepare"], build)
 
             p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=libdir)
             if p.returncode != 0:
@@ -1332,7 +1333,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build.srclibs:
         logging.info("Collecting source libraries")
         for lib in build.srclibs:
-            srclibpaths.append(getsrclib(lib, srclib_dir, build, preponly=onserver, refresh=refresh))
+            srclibpaths.append(getsrclib(lib, srclib_dir, build, preponly=onserver,
+                                         refresh=refresh, build=build))
 
     for name, number, libpath in srclibpaths:
         place_srclib(root_dir, int(number) if number else None, libpath)
