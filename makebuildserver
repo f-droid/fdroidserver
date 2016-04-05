@@ -214,6 +214,9 @@ cachefiles = [
     ('build-tools-23.0.2.zip',
      'https://dl.google.com/android/repository/build-tools_r23.0.2-linux.zip',
      '82754f551a6e36eaf516fbdd00c95ff0ccd19f81d1e134125b6ac4916f7ed9b6'),
+    ('build-tools-23.0.3.zip',
+     'https://dl.google.com/android/repository/build-tools_r23.0.3-linux.zip',
+     'd961663d4a9e128841751c0156548a347c882c081c83942e53788d8949bf34e1'),
     # the binaries that Google uses are here:
     # https://android.googlesource.com/platform/tools/external/gradle/+/studio-1.5/
     ('gradle-1.4-bin.zip',
@@ -273,6 +276,9 @@ cachefiles = [
     ('gradle-2.11-bin.zip',
      'https://services.gradle.org/distributions/gradle-2.11-bin.zip',
      '8d7437082356c9fd6309a4479c8db307673965546daea445c6c72759cd6b1ed6'),
+    ('gradle-2.12-bin.zip',
+     'https://services.gradle.org/distributions/gradle-1.12-bin.zip',
+     'e77064981906cd0476ff1e0de3e6fef747bd18e140960f1915cca8ff6c33ab5c'),
     ('Kivy-1.7.2.tar.gz',
      'https://pypi.python.org/packages/source/K/Kivy/Kivy-1.7.2.tar.gz',
      '0485e2ef97b5086df886eb01f8303cb542183d2d71a159466f99ad6c8a1d03f1'),
