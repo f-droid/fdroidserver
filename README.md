@@ -66,7 +66,7 @@ via other mechanisms like Brew/dnf/pacman/emerge/Fink/MacPorts.
 
 For Debian based distributions:
 
-	apt-get install python3-dev python3-pip virtualenv
+	apt-get install python3-dev python3-pip libjpeg-dev zlib1g-dev virtualenv
 
 Then here's how to install:
 
