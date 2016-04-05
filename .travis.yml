@@ -27,7 +27,7 @@ install:
       sudo pip3 install pep8 pyflakes pylint;
       sudo pip3 install -e  .;
       sudo rm -rf fdroidserver.egg-info;
-      echo y | android --verbose update sdk --no-ui --all --filter platform-tools,build-tools-23.0.2;
+      echo y | android --verbose update sdk --no-ui --all --filter platform-tools,build-tools-23.0.3;
       elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       sudo add-apt-repository ppa:guardianproject/fdroidserver -y;
       sudo apt-get -q update -y;
