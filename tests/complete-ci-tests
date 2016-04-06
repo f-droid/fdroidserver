@@ -54,11 +54,11 @@ cd $WORKSPACE
 python3 setup.py sdist
 
 rm -rf $WORKSPACE/env
-virtualenv --python=python3 $WORKSPACE/env
+pyvenv $WORKSPACE/env
 . $WORKSPACE/env/bin/activate
-pip install dist/fdroidserver-*.tar.gz
+pip3 install dist/fdroidserver-*.tar.gz
 
-# run tests in new pip+virtualenv install
+# run tests in new pip+pyvenv install
 fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests $apksource
 
 
@@ -66,12 +66,12 @@ fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests $apksource
 # test install using install direct from git repo
 cd $WORKSPACE
 rm -rf $WORKSPACE/env
-virtualenv --python=python3 --system-site-packages $WORKSPACE/env
+pyvenv --system-site-packages $WORKSPACE/env
 . $WORKSPACE/env/bin/activate
-pip install -e $WORKSPACE
+pip3 install -e $WORKSPACE
 python3 setup.py install
 
-# run tests in new pip+virtualenv install
+# run tests in new pip+pyvenv install
 fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests $apksource
 
 
@@ -85,14 +85,14 @@ sh hooks/pre-commit
 
 cd $WORKSPACE
 set +e
-# use the virtualenv python so pylint checks against its installed libs
+# use the pyvenv so pylint checks against its installed libs
     PYTHONPATH=$WORKSPACE/.pylint-plugins python3 /usr/bin/pylint \
         --output-format=parseable --reports=n \
         --load-plugins astng_hashlib \
         fdroidserver/*.py fdroid makebuildserver setup.py > $WORKSPACE/pylint.parseable
 
 # to only tell jenkins there was an error if we got ERROR or FATAL, uncomment these:
-# running pylint in the virtualenv is causing this FATAL error, which is a bug:
+# running pylint in the pyvenv/virtualenv is causing this FATAL error, which is a bug:
 # https://bitbucket.org/logilab/pylint/issue/73/pylint-is-unable-to-import
 [ $(($? & 1)) = "1" ] && echo "FATALs found"
 [ $(($? & 2)) = "2" ] && exit 2
