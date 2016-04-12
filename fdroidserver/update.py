@@ -1208,7 +1208,7 @@ def main():
     apkcachefile = os.path.join('tmp', 'apkcache')
     if not options.clean and os.path.exists(apkcachefile):
         with open(apkcachefile, 'rb') as cf:
-            apkcache = pickle.load(cf)
+            apkcache = pickle.load(cf, encoding='utf-8')
     else:
         apkcache = {}
 
