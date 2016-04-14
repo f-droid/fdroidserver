@@ -1260,7 +1260,7 @@ of versions kept in the main repo, after which older ones are moved to the
 archive. This app-specific policy setting can override that.
 
 Currently the only supported format is "n versions", where n is the number
-of versions to keep.
+of versions to keep. Defaults to "3 versions".
 
 @node Update Check Mode
 @section Update Check Mode
