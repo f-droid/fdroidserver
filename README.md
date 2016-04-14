@@ -57,22 +57,22 @@ Python's `pip` also works:
 
 	sudo pip3 install fdroidserver
 
-The combination of `virtualenv` and `pip` is great for testing out the
+The combination of `pyvenv` and `pip` is great for testing out the
 latest versions of `fdroidserver`. Using `pip`, `fdroidserver` can
 even be installed straight from git. First, make sure you have
-installed the python header files, virtualenv and pip. They should be
+installed the python header files, venv and pip. They should be
 included in your OS's default package manager or you can install them
 via other mechanisms like Brew/dnf/pacman/emerge/Fink/MacPorts.
 
 For Debian based distributions:
 
-	apt-get install python3-dev python3-pip libjpeg-dev zlib1g-dev virtualenv
+	apt-get install python3-dev python3-pip python3-venv libjpeg-dev zlib1g-dev
 
 Then here's how to install:
 
 	git clone https://gitlab.com/fdroid/fdroidserver.git
 	cd fdroidserver
-	virtualenv env/
+	pyvenv env/
 	source env/bin/activate
 	pip3 install -e .
 	python3 setup.py install
