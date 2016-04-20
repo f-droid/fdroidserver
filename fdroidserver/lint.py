@@ -307,8 +307,6 @@ def check_builds(app):
                 ref = srclib.split('@')[1].split('/')[0]
                 if ref.startswith(s):
                     yield "Branch '%s' used as commit in srclib '%s'" % (s, srclib)
-        if build.target and build.build_method() == 'gradle':
-            yield "target= has no gradle support"
 
 
 def main():
