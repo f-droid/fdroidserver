@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from argparse import ArgumentParser
+import os
 import re
 import sys
 
@@ -309,11 +310,66 @@ def check_builds(app):
                     yield "Branch '%s' used as commit in srclib '%s'" % (s, srclib)
 
 
+def check_files_dir(app):
+    dir_path = os.path.join('metadata', app.id)
+    if not os.path.isdir(dir_path):
+        return
+    files = set()
+    for name in os.listdir(dir_path):
+        path = os.path.join(dir_path, name)
+        if not os.path.isfile(path):
+            yield "Found non-file at %s" % path
+            continue
+        files.add(name)
+
+    used = set()
+    for build in app.builds:
+        for fname in build.patch:
+            if fname not in files:
+                yield "Unknown file %s in build '%s'" % (fname, build.version)
+            else:
+                used.add(fname)
+
+    for name in files.difference(used):
+        yield "Unused file at %s" % os.path.join(dir_path, name)
+
+
+def check_format(app):
+    if options.format and not rewritemeta.proper_format(app):
+        yield "Run rewritemeta to fix formatting"
+
+
+def check_extlib_dir(apps):
+    dir_path = os.path.join('build', 'extlib')
+    files = set()
+    for root, dirs, names in os.walk(dir_path):
+        for name in names:
+            files.add(os.path.join(root, name)[len(dir_path) + 1:])
+
+    used = set()
+    for app in apps:
+        for build in app.builds:
+            for path in build.extlibs:
+                if path not in files:
+                    yield "%s: Unknown extlib %s in build '%s'" % (app.id, path, build.version)
+                else:
+                    used.add(path)
+
+    for path in files.difference(used):
+        if any(path.endswith(s) for s in [
+                '.gitignore',
+                'source.txt', 'origin.txt', 'md5.txt',
+                'LICENSE', 'LICENSE.txt',
+                'COPYING', 'COPYING.txt',
+                'NOTICE', 'NOTICE.txt',
+                ]):
+            continue
+        yield "Unused extlib at %s" % os.path.join(dir_path, path)
+
+
 def main():
 
     global config, options
-
-    anywarns = False
 
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
@@ -329,35 +385,40 @@ def main():
     allapps = metadata.read_metadata(xref=True)
     apps = common.read_app_args(options.appid, allapps, False)
 
+    anywarns = False
+
+    apps_check_funcs = [
+        check_extlib_dir,
+    ]
+    for check_func in apps_check_funcs:
+        for warn in check_func(apps.values()):
+            anywarns = True
+            print(warn)
+
     for appid, app in apps.items():
         if app.Disabled:
             continue
 
-        warns = []
+        app_check_funcs = [
+            check_regexes,
+            check_ucm_tags,
+            check_char_limits,
+            check_old_links,
+            check_checkupdates_ran,
+            check_useless_fields,
+            check_empty_fields,
+            check_categories,
+            check_duplicates,
+            check_mediawiki_links,
+            check_bulleted_lists,
+            check_builds,
+            check_files_dir,
+            check_format,
+        ]
 
-        for check_func in [
-                check_regexes,
-                check_ucm_tags,
-                check_char_limits,
-                check_old_links,
-                check_checkupdates_ran,
-                check_useless_fields,
-                check_empty_fields,
-                check_categories,
-                check_duplicates,
-                check_mediawiki_links,
-                check_bulleted_lists,
-                check_builds,
-                ]:
-            warns += check_func(app)
-
-        if options.format:
-            if not rewritemeta.proper_format(app):
-                warns.append("Run rewritemeta to fix formatting")
-
-        if warns:
-            anywarns = True
-            for warn in warns:
+        for check_func in app_check_funcs:
+            for warn in check_func(app):
+                anywarns = True
                 print("%s: %s" % (appid, warn))
 
     if anywarns:
