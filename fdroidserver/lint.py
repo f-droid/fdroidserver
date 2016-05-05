@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from argparse import ArgumentParser
+import os
 import re
 import sys
 
@@ -309,6 +310,30 @@ def check_builds(app):
                     yield "Branch '%s' used as commit in srclib '%s'" % (s, srclib)
 
 
+def check_files_dir(app):
+    dir_path = os.path.join('metadata', app.id)
+    if not os.path.isdir(dir_path):
+        return
+    files = set()
+    for name in os.listdir(dir_path):
+        path = os.path.join(dir_path, name)
+        if not os.path.isfile(path):
+            yield "Found non-file at %s" % path
+            continue
+        files.add(name)
+
+    used = set()
+    for build in app.builds:
+        for fname in build.patch:
+            if fname not in files:
+                yield "Unknown file %s in build '%s'" % (fname, build.version)
+            else:
+                used.add(fname)
+
+    for name in files.difference(used):
+        yield "Unused file at %s" % os.path.join(dir_path, name)
+
+
 def main():
 
     global config, options
@@ -348,6 +373,7 @@ def main():
                 check_mediawiki_links,
                 check_bulleted_lists,
                 check_builds,
+                check_files_dir,
                 ]:
             warns += check_func(app)
 
