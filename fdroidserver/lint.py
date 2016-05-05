@@ -339,6 +339,34 @@ def check_format(app):
         yield "Run rewritemeta to fix formatting"
 
 
+def check_extlib_dir(apps):
+    dir_path = os.path.join('build', 'extlib')
+    files = set()
+    for root, dirs, names in os.walk(dir_path):
+        for name in names:
+            files.add(os.path.join(root, name)[len(dir_path) + 1:])
+
+    used = set()
+    for app in apps:
+        for build in app.builds:
+            for path in build.extlibs:
+                if path not in files:
+                    yield "%s: Unknown extlib %s in build '%s'" % (app.id, path, build.version)
+                else:
+                    used.add(path)
+
+    for path in files.difference(used):
+        if any(path.endswith(s) for s in [
+                '.gitignore',
+                'source.txt', 'origin.txt', 'md5.txt',
+                'LICENSE', 'LICENSE.txt',
+                'COPYING', 'COPYING.txt',
+                'NOTICE', 'NOTICE.txt',
+                ]):
+            continue
+        yield "Unused extlib at %s" % os.path.join(dir_path, path)
+
+
 def main():
 
     global config, options
@@ -358,6 +386,14 @@ def main():
     apps = common.read_app_args(options.appid, allapps, False)
 
     anywarns = False
+
+    apps_check_funcs = [
+        check_extlib_dir,
+    ]
+    for check_func in apps_check_funcs:
+        for warn in check_func(apps.values()):
+            anywarns = True
+            print(warn)
 
     for appid, app in apps.items():
         if app.Disabled:
