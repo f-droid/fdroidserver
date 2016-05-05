@@ -334,11 +334,14 @@ def check_files_dir(app):
         yield "Unused file at %s" % os.path.join(dir_path, name)
 
 
+def check_format(app):
+    if options.format and not rewritemeta.proper_format(app):
+        yield "Run rewritemeta to fix formatting"
+
+
 def main():
 
     global config, options
-
-    anywarns = False
 
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
@@ -354,36 +357,32 @@ def main():
     allapps = metadata.read_metadata(xref=True)
     apps = common.read_app_args(options.appid, allapps, False)
 
+    anywarns = False
+
     for appid, app in apps.items():
         if app.Disabled:
             continue
 
-        warns = []
+        app_check_funcs = [
+            check_regexes,
+            check_ucm_tags,
+            check_char_limits,
+            check_old_links,
+            check_checkupdates_ran,
+            check_useless_fields,
+            check_empty_fields,
+            check_categories,
+            check_duplicates,
+            check_mediawiki_links,
+            check_bulleted_lists,
+            check_builds,
+            check_files_dir,
+            check_format,
+        ]
 
-        for check_func in [
-                check_regexes,
-                check_ucm_tags,
-                check_char_limits,
-                check_old_links,
-                check_checkupdates_ran,
-                check_useless_fields,
-                check_empty_fields,
-                check_categories,
-                check_duplicates,
-                check_mediawiki_links,
-                check_bulleted_lists,
-                check_builds,
-                check_files_dir,
-                ]:
-            warns += check_func(app)
-
-        if options.format:
-            if not rewritemeta.proper_format(app):
-                warns.append("Run rewritemeta to fix formatting")
-
-        if warns:
-            anywarns = True
-            for warn in warns:
+        for check_func in app_check_funcs:
+            for warn in check_func(app):
+                anywarns = True
                 print("%s: %s" % (appid, warn))
 
     if anywarns:
