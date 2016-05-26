@@ -46,6 +46,7 @@ end
     libssl-dev
     libssl1.0.0
     libtool
+    libtool-bin
     make
     maven
     mercurial
