@@ -34,7 +34,6 @@ end
 
 %w{
     platform-tools
-    extra-android-support
     extra-android-m2repository
 }.each do |pkg|
   script "add_pkg_#{pkg}" do
