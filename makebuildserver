@@ -85,9 +85,9 @@ if not os.path.exists(cachedir):
     os.makedirs(cachedir, 0o755)
 
 cachefiles = [
-    ('android-sdk_r24.4.1-linux.tgz',
-     'https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz',
-     'e16917ad685c1563ccbc5dd782930ee1a700a1b6a6fd3e44b83ac694650435e9'),
+    ('android-sdk-tools.zip',
+     'https://dl.google.com/android/repository/tools_r25.1.7-linux.zip',
+     '3ca053600a86a5a64d5571edfbb1dad27f2bda3bfd2d38e2fe54322610b1ef0b'),
     ('android-platform-3.zip',
      'https://dl.google.com/android/repository/android-1.5_r04-linux.zip',
      '85b6c8f9797e56aa415d3a282428bb640c96b0acb17c11d41621bb2a5302fe64'),
@@ -149,8 +149,8 @@ cachefiles = [
      'https://dl.google.com/android/repository/android-22_r02.zip',
      '45eb581bbe53c9256f34c26b2cea919543c0079140897ac721cf88c0b9f6789e'),
     ('android-platform-23.zip',
-     'https://dl.google.com/android/repository/android-23_r01.zip',
-     '16e828bec35521f5529c998a6d312aaa6155cd4aabb5507d9eb2d4b3c9a1aff0'),
+     'https://dl.google.com/android/repository/platform-23_r03.zip',
+     '4b4bcddead3319708275c54c76294707bfaa953d767e34f1a5b599f3edd0076c'),
     ('build-tools-17.0.0.zip',
      'https://dl.google.com/android/repository/build-tools_r17-linux.zip',
      '4c8444972343a19045236f6924bd7f12046287c70dace96ab88b2159c8ec0e74'),
@@ -279,6 +279,9 @@ cachefiles = [
     ('gradle-2.12-bin.zip',
      'https://services.gradle.org/distributions/gradle-2.12-bin.zip',
      'e77064981906cd0476ff1e0de3e6fef747bd18e140960f1915cca8ff6c33ab5c'),
+    ('gradle-2.13-bin.zip',
+     'https://services.gradle.org/distributions/gradle-2.13-bin.zip',
+     '0f665ec6a5a67865faf7ba0d825afb19c26705ea0597cec80dd191b0f2cbb664'),
     ('Kivy-1.7.2.tar.gz',
      'https://pypi.python.org/packages/source/K/Kivy/Kivy-1.7.2.tar.gz',
      '0485e2ef97b5086df886eb01f8303cb542183d2d71a159466f99ad6c8a1d03f1'),

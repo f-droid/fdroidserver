@@ -8,8 +8,11 @@ script "setup-android-sdk" do
   user user
   cwd "/tmp"
   code "
-    tar zxvf /vagrant/cache/android-sdk_r24.4.1-linux.tgz
-    mv android-sdk-linux #{sdk_loc}
+    unzip /vagrant/cache/android-sdk-tools.zip
+    mkdir #{sdk_loc}
+    mkdir #{sdk_loc}/platforms
+    mkdir #{sdk_loc}/build-tools
+    mv tools #{sdk_loc}/
   "
   not_if "test -d #{sdk_loc}"
 end
@@ -30,9 +33,7 @@ execute "add-android-sdk-path" do
 end
 
 %w{
-    tools
     platform-tools
-    extra-android-support
     extra-android-m2repository
 }.each do |pkg|
   script "add_pkg_#{pkg}" do
