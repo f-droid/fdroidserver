@@ -1046,6 +1046,9 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
             to_path = os.path.join(to_dir, filename)
             shutil.move(from_path, to_path)
 
+        logging.debug("Checking archiving for {0} - apks:{1}, keepversions:{2}, archapks:{3}"
+                      .format(appid, len(apks), keepversions, len(archapks)))
+
         if len(apks) > keepversions:
             apklist = filter_apk_list_sorted(apks)
             # Move back the ones we don't want.
