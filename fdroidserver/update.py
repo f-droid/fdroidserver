@@ -547,7 +547,7 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
 
             if 'minSdkVersion' not in apk:
                 logging.warn("No SDK version information found in {0}".format(apkfile))
-                apk['minSdkVersion'] = 0
+                apk['minSdkVersion'] = 1
 
             # Check for debuggable apks...
             if common.isApkDebuggable(apkfile, config):
