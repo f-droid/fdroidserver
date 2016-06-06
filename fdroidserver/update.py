@@ -525,7 +525,7 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
                     else:
                         apk['sdkversion'] = m.group(1)
                 elif line.startswith("maxSdkVersion:"):
-                    apk['maxsdkversion'] = re.match(sdkversion_pat, line).group(1)
+                    apk['maxSdkVersion'] = re.match(sdkversion_pat, line).group(1)
                 elif line.startswith("native-code:"):
                     apk['nativecode'] = []
                     for arch in line[13:].split(' '):
@@ -937,8 +937,8 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             addElement('sig', apk['sig'], doc, apkel)
             addElement('size', str(apk['size']), doc, apkel)
             addElement('sdkver', str(apk['sdkversion']), doc, apkel)
-            if 'maxsdkversion' in apk:
-                addElement('maxsdkver', str(apk['maxsdkversion']), doc, apkel)
+            if 'maxSdkVersion' in apk:
+                addElement('maxsdkver', str(apk['maxSdkVersion']), doc, apkel)
             if 'added' in apk:
                 addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
             addElementNonEmpty('permissions', ','.join(apk['permissions']), doc, apkel)
