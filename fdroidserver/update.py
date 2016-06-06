@@ -523,7 +523,7 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
                         logging.error(line.replace('sdkVersion:', '')
                                       + ' is not a valid minSdkVersion!')
                     else:
-                        apk['sdkversion'] = m.group(1)
+                        apk['minSdkVersion'] = m.group(1)
                 elif line.startswith("maxSdkVersion:"):
                     apk['maxSdkVersion'] = re.match(sdkversion_pat, line).group(1)
                 elif line.startswith("native-code:"):
@@ -545,9 +545,9 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
                             perm = perm[16:]
                         apk['features'].add(perm)
 
-            if 'sdkversion' not in apk:
+            if 'minSdkVersion' not in apk:
                 logging.warn("No SDK version information found in {0}".format(apkfile))
-                apk['sdkversion'] = 0
+                apk['minSdkVersion'] = 0
 
             # Check for debuggable apks...
             if common.isApkDebuggable(apkfile, config):
@@ -936,7 +936,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                 apkel.appendChild(hashel)
             addElement('sig', apk['sig'], doc, apkel)
             addElement('size', str(apk['size']), doc, apkel)
-            addElement('sdkver', str(apk['sdkversion']), doc, apkel)
+            addElement('sdkver', str(apk['minSdkVersion']), doc, apkel)
             if 'maxSdkVersion' in apk:
                 addElement('maxsdkver', str(apk['maxSdkVersion']), doc, apkel)
             if 'added' in apk:
