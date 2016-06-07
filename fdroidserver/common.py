@@ -1017,7 +1017,7 @@ def get_library_references(root_dir):
     proppath = os.path.join(root_dir, 'project.properties')
     if not os.path.isfile(proppath):
         return libraries
-    with open(proppath, 'r') as f:
+    with open(proppath, 'r', encoding='iso-8859-1') as f:
         for line in f:
             if not line.startswith('android.library.reference.'):
                 continue
@@ -1356,7 +1356,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         props = ""
         if os.path.isfile(path):
             logging.info("Updating local.properties file at %s" % path)
-            with open(path, 'r') as f:
+            with open(path, 'r', encoding='iso-8859-1') as f:
                 props += f.read()
             props += '\n'
         else:
@@ -1378,7 +1378,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         # Add java.encoding if necessary
         if build.encoding:
             props += "java.encoding=%s\n" % build.encoding
-        with open(path, 'w') as f:
+        with open(path, 'w', encoding='iso-8859-1') as f:
             f.write(props)
 
     flavours = []
@@ -1771,12 +1771,12 @@ def remove_signing_keys(build_dir):
             if propfile in files:
                 path = os.path.join(root, propfile)
 
-                with open(path, "r") as o:
+                with open(path, "r", encoding='iso-8859-1') as o:
                     lines = o.readlines()
 
                 changed = False
 
-                with open(path, "w") as o:
+                with open(path, "w", encoding='iso-8859-1') as o:
                     for line in lines:
                         if any(line.startswith(s) for s in ('key.store', 'key.alias')):
                             changed = True
@@ -1838,10 +1838,10 @@ def place_srclib(root_dir, number, libpath):
 
     lines = []
     if os.path.isfile(proppath):
-        with open(proppath, "r") as o:
+        with open(proppath, "r", encoding='iso-8859-1') as o:
             lines = o.readlines()
 
-    with open(proppath, "w") as o:
+    with open(proppath, "w", encoding='iso-8859-1') as o:
         placed = False
         for line in lines:
             if line.startswith('android.library.reference.%d=' % number):
