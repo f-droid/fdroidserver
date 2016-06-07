@@ -1539,7 +1539,7 @@ class KnownApks:
         self.path = os.path.join('stats', 'known_apks.txt')
         self.apks = {}
         if os.path.isfile(self.path):
-            with open(self.path, 'r') as f:
+            with open(self.path, 'r', encoding='utf8') as f:
                 for line in f:
                     t = line.rstrip().split(' ')
                     if len(t) == 2:
@@ -1563,7 +1563,7 @@ class KnownApks:
                 line += ' ' + time.strftime('%Y-%m-%d', added)
             lst.append(line)
 
-        with open(self.path, 'w') as f:
+        with open(self.path, 'w', encoding='utf8') as f:
             for line in sorted(lst, key=natural_key):
                 f.write(line + '\n')
 
@@ -2009,7 +2009,7 @@ def write_to_config(thisconfig, key, value=None):
     if value is None:
         origkey = key + '_orig'
         value = thisconfig[origkey] if origkey in thisconfig else thisconfig[key]
-    with open('config.py', 'r') as f:
+    with open('config.py', 'r', encoding='utf8') as f:
         data = f.read()
     pattern = '\n[\s#]*' + key + '\s*=\s*"[^"]*"'
     repl = '\n' + key + ' = "' + value + '"'
@@ -2020,7 +2020,7 @@ def write_to_config(thisconfig, key, value=None):
     # make sure the file ends with a carraige return
     if not re.match('\n$', data):
         data += '\n'
-    with open('config.py', 'w') as f:
+    with open('config.py', 'w', encoding='utf8') as f:
         f.writelines(data)
 
 

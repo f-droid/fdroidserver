@@ -33,7 +33,7 @@ def proper_format(app):
     s = io.StringIO()
     # TODO: currently reading entire file again, should reuse first
     # read in metadata.py
-    with open(app.metadatapath, 'r') as f:
+    with open(app.metadatapath, 'r', encoding='utf8') as f:
         cur_content = f.read()
     metadata.write_txt(s, app)
     content = s.getvalue()

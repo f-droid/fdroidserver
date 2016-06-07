@@ -1384,7 +1384,7 @@ def write_metadata(metadatapath, app):
         raise MetaDataException('Cannot write "%s", not an accepted format, use: %s' % (
             metadatapath, ', '.join(accepted)))
 
-    with open(metadatapath, 'w') as mf:
+    with open(metadatapath, 'w', encoding='utf8') as mf:
         if ext == 'txt':
             return write_txt(mf, app)
         elif ext == 'yml':
