@@ -184,10 +184,10 @@ def fill_config_defaults(thisconfig):
 
 
 def regsub_file(pattern, repl, path):
-    with open(path, 'r') as f:
+    with open(path, 'rb') as f:
         text = f.read()
-    text = re.sub(pattern, repl, text)
-    with open(path, 'w') as f:
+    text = re.sub(bytes(pattern, 'utf8'), bytes(repl, 'utf8'), text)
+    with open(path, 'wb') as f:
         f.write(text)
 
 
@@ -1724,14 +1724,14 @@ def remove_signing_keys(build_dir):
         if 'build.gradle' in files:
             path = os.path.join(root, 'build.gradle')
 
-            with open(path, "r") as o:
+            with open(path, "r", encoding='utf8') as o:
                 lines = o.readlines()
 
             changed = False
 
             opened = 0
             i = 0
-            with open(path, "w") as o:
+            with open(path, "w", encoding='utf8') as o:
                 while i < len(lines):
                     line = lines[i]
                     i += 1

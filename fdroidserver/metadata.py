@@ -836,7 +836,7 @@ def get_default_app_info(metadatapath=None):
             for root, dirs, files in os.walk(os.getcwd()):
                 if 'build.gradle' in files:
                     p = os.path.join(root, 'build.gradle')
-                    with open(p) as f:
+                    with open(p, 'rb') as f:
                         data = f.read()
                     m = pattern.search(data)
                     if m:
