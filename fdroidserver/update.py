@@ -1017,7 +1017,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
     catdata = ''
     for cat in categories:
         catdata += cat + '\n'
-    with open(os.path.join(repodir, 'categories.txt'), 'w') as f:
+    with open(os.path.join(repodir, 'categories.txt'), 'w', encoding='utf8') as f:
         f.write(catdata)
 
 
@@ -1229,7 +1229,7 @@ def main():
                 if 'name' not in apk:
                     logging.error(apk['id'] + ' does not have a name! Skipping...')
                     continue
-                f = open(os.path.join('metadata', apk['id'] + '.txt'), 'w')
+                f = open(os.path.join('metadata', apk['id'] + '.txt'), 'w', encoding='utf8')
                 f.write("License:Unknown\n")
                 f.write("Web Site:\n")
                 f.write("Source Code:\n")
@@ -1339,7 +1339,7 @@ def main():
         # Generate latest apps data for widget
         if os.path.exists(os.path.join('stats', 'latestapps.txt')):
             data = ''
-            with open(os.path.join('stats', 'latestapps.txt'), 'r') as f:
+            with open(os.path.join('stats', 'latestapps.txt'), 'r', encoding='utf8') as f:
                 for line in f:
                     appid = line.rstrip()
                     data += appid + "\t"
@@ -1348,7 +1348,7 @@ def main():
                     if app.icon is not None:
                         data += app.icon + "\t"
                     data += app.License + "\n"
-            with open(os.path.join(repodirs[0], 'latestapps.dat'), 'w') as f:
+            with open(os.path.join(repodirs[0], 'latestapps.dat'), 'w', encoding='utf8') as f:
                 f.write(data)
 
     if cachechanged:

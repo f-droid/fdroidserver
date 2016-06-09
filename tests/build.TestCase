@@ -57,13 +57,13 @@ class BuildTest(unittest.TestCase):
         fdroidserver.build.config = {}
         fdroidserver.build.config['build_tools'] = teststring
         fdroidserver.build.adapt_gradle(testsdir)
-        pattern = re.compile("buildToolsVersion[\s=]+'%s'\s+" % teststring)
+        pattern = re.compile(bytes("buildToolsVersion[\s=]+'%s'\s+" % teststring, 'utf8'))
         for p in ('source-files/fdroid/fdroidclient/build.gradle',
                   'source-files/Zillode/syncthing-silk/build.gradle',
                   'source-files/open-keychain/open-keychain/build.gradle',
                   'source-files/osmandapp/osmand/build.gradle',
                   'source-files/open-keychain/open-keychain/OpenKeychain/build.gradle'):
-            with open(os.path.join(testsdir, p), 'r') as f:
+            with open(os.path.join(testsdir, p), 'rb') as f:
                 filedata = f.read()
             self.assertIsNotNone(pattern.search(filedata))
 

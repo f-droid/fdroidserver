@@ -184,10 +184,10 @@ def fill_config_defaults(thisconfig):
 
 
 def regsub_file(pattern, repl, path):
-    with open(path, 'r') as f:
+    with open(path, 'rb') as f:
         text = f.read()
-    text = re.sub(pattern, repl, text)
-    with open(path, 'w') as f:
+    text = re.sub(bytes(pattern, 'utf8'), bytes(repl, 'utf8'), text)
+    with open(path, 'wb') as f:
         f.write(text)
 
 
@@ -1017,7 +1017,7 @@ def get_library_references(root_dir):
     proppath = os.path.join(root_dir, 'project.properties')
     if not os.path.isfile(proppath):
         return libraries
-    with open(proppath, 'r') as f:
+    with open(proppath, 'r', encoding='iso-8859-1') as f:
         for line in f:
             if not line.startswith('android.library.reference.'):
                 continue
@@ -1356,7 +1356,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         props = ""
         if os.path.isfile(path):
             logging.info("Updating local.properties file at %s" % path)
-            with open(path, 'r') as f:
+            with open(path, 'r', encoding='iso-8859-1') as f:
                 props += f.read()
             props += '\n'
         else:
@@ -1378,7 +1378,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         # Add java.encoding if necessary
         if build.encoding:
             props += "java.encoding=%s\n" % build.encoding
-        with open(path, 'w') as f:
+        with open(path, 'w', encoding='iso-8859-1') as f:
             f.write(props)
 
     flavours = []
@@ -1539,7 +1539,7 @@ class KnownApks:
         self.path = os.path.join('stats', 'known_apks.txt')
         self.apks = {}
         if os.path.isfile(self.path):
-            with open(self.path, 'r') as f:
+            with open(self.path, 'r', encoding='utf8') as f:
                 for line in f:
                     t = line.rstrip().split(' ')
                     if len(t) == 2:
@@ -1563,7 +1563,7 @@ class KnownApks:
                 line += ' ' + time.strftime('%Y-%m-%d', added)
             lst.append(line)
 
-        with open(self.path, 'w') as f:
+        with open(self.path, 'w', encoding='utf8') as f:
             for line in sorted(lst, key=natural_key):
                 f.write(line + '\n')
 
@@ -1724,14 +1724,14 @@ def remove_signing_keys(build_dir):
         if 'build.gradle' in files:
             path = os.path.join(root, 'build.gradle')
 
-            with open(path, "r") as o:
+            with open(path, "r", encoding='utf8') as o:
                 lines = o.readlines()
 
             changed = False
 
             opened = 0
             i = 0
-            with open(path, "w") as o:
+            with open(path, "w", encoding='utf8') as o:
                 while i < len(lines):
                     line = lines[i]
                     i += 1
@@ -1771,12 +1771,12 @@ def remove_signing_keys(build_dir):
             if propfile in files:
                 path = os.path.join(root, propfile)
 
-                with open(path, "r") as o:
+                with open(path, "r", encoding='iso-8859-1') as o:
                     lines = o.readlines()
 
                 changed = False
 
-                with open(path, "w") as o:
+                with open(path, "w", encoding='iso-8859-1') as o:
                     for line in lines:
                         if any(line.startswith(s) for s in ('key.store', 'key.alias')):
                             changed = True
@@ -1838,10 +1838,10 @@ def place_srclib(root_dir, number, libpath):
 
     lines = []
     if os.path.isfile(proppath):
-        with open(proppath, "r") as o:
+        with open(proppath, "r", encoding='iso-8859-1') as o:
             lines = o.readlines()
 
-    with open(proppath, "w") as o:
+    with open(proppath, "w", encoding='iso-8859-1') as o:
         placed = False
         for line in lines:
             if line.startswith('android.library.reference.%d=' % number):
@@ -2009,7 +2009,7 @@ def write_to_config(thisconfig, key, value=None):
     if value is None:
         origkey = key + '_orig'
         value = thisconfig[origkey] if origkey in thisconfig else thisconfig[key]
-    with open('config.py', 'r') as f:
+    with open('config.py', 'r', encoding='utf8') as f:
         data = f.read()
     pattern = '\n[\s#]*' + key + '\s*=\s*"[^"]*"'
     repl = '\n' + key + ' = "' + value + '"'
@@ -2020,7 +2020,7 @@ def write_to_config(thisconfig, key, value=None):
     # make sure the file ends with a carraige return
     if not re.match('\n$', data):
         data += '\n'
-    with open('config.py', 'w') as f:
+    with open('config.py', 'w', encoding='utf8') as f:
         f.writelines(data)
 
 
