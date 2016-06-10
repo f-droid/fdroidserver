@@ -8,7 +8,8 @@ script "setup-android-sdk" do
   user user
   cwd "/tmp"
   code "
-    unzip /vagrant/cache/android-sdk-tools.zip
+    tools=`ls -1 /vagrant/cache/tools_*.zip | sort -n | tail -1`
+    unzip $tools
     mkdir #{sdk_loc}
     mkdir #{sdk_loc}/platforms
     mkdir #{sdk_loc}/build-tools
@@ -48,31 +49,45 @@ X
   end
 end
 
-%w{3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23}.each do |api|
-  script "add_sdk_#{api}" do
-    interpreter "bash"
-    user user
-    cwd "/tmp"
-    code "
-      unzip /vagrant/cache/android-platform-#{api}.zip
-      mv android-*/ #{sdk_loc}/platforms/android-#{api}
-    "
-    not_if "test -d #{sdk_loc}/platforms/android-#{api}"
-  end
+script "add-platforms" do
+  interpreter "bash"
+  user user
+  cwd "/tmp"
+  code "
+    rm -rf current-platform
+    mkdir current-platform
+    cd current-platform
+    for f in `ls -1 /vagrant/cache/android-[0-9]*.zip /vagrant/cache/platform-[0-9]*.zip`; do
+      unzip $f
+      sdk=`sed -n 's,^ro.build.version.sdk=,,p' */build.prop`
+      rm -rf #{sdk_loc}/platforms/android-$sdk
+      mv * #{sdk_loc}/platforms/android-$sdk
+    done
+  "
 end
 
-%w{17.0.0 18.0.1 18.1.0 18.1.1 19.0.0 19.0.1 19.0.2 19.0.3 19.1.0
-    20.0.0 21.0.0 21.0.1 21.0.2 21.1.0 21.1.1 21.1.2 22.0.0 22.0.1
-    23.0.0 23.0.1 23.0.2 23.0.3
+%w{17 18.0.1 18.1 18.1.1 19 19.0.1 19.0.2 19.0.3 19.1 20 21 21.0.1 21.0.2 21.1
+   21.1.1 21.1.2 22 22.0.1 23 23.0.1 23.0.2 23.0.3
 }.each do |ver|
   script "add_btools_#{ver}" do
     interpreter "bash"
     user user
     cwd "/tmp"
     code "
-      unzip /vagrant/cache/build-tools-#{ver}.zip
-      mv android-*/ #{sdk_loc}/build-tools/#{ver}
+      unzip /vagrant/cache/build-tools_r#{ver}-linux.zip
+      case `echo #{ver} | wc -c` in
+        3)
+            dirver=#{ver}.0.0
+            ;;
+        5)
+            dirver=#{ver}.0
+            ;;
+        7)
+            dirver=#{ver}
+            ;;
+      esac
+      rm -rf #{sdk_loc}/build-tools/${dirver}
+      mv android-*/ #{sdk_loc}/build-tools/${dirver}
     "
-    not_if "test -d #{sdk_loc}/build-tools/#{ver}"
   end
 end

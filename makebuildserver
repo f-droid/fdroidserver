@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 import os
+import requests
 import sys
 import subprocess
 import time
 import hashlib
+from clint.textui import progress
 from optparse import OptionParser
 
 
@@ -85,231 +87,158 @@ if not os.path.exists(cachedir):
     os.makedirs(cachedir, 0o755)
 
 cachefiles = [
-    ('android-sdk-tools.zip',
-     'https://dl.google.com/android/repository/tools_r25.1.7-linux.zip',
+    ('https://dl.google.com/android/repository/tools_r25.1.7-linux.zip',
      '3ca053600a86a5a64d5571edfbb1dad27f2bda3bfd2d38e2fe54322610b1ef0b'),
-    ('android-platform-3.zip',
-     'https://dl.google.com/android/repository/android-1.5_r04-linux.zip',
+    ('https://dl.google.com/android/repository/android-1.5_r04-linux.zip',
      '85b6c8f9797e56aa415d3a282428bb640c96b0acb17c11d41621bb2a5302fe64'),
-    ('android-platform-4.zip',
-     'https://dl.google.com/android/repository/android-1.6_r03-linux.zip',
+    ('https://dl.google.com/android/repository/android-1.6_r03-linux.zip',
      'a8c4e3b32269c6b04c2adeabd112fce42f292dab1a40ef3b08ea7d4212be0df4'),
-    ('android-platform-5.zip',
-     'https://dl.google.com/android/repository/android-2.0_r01-linux.zip',
+    ('https://dl.google.com/android/repository/android-2.0_r01-linux.zip',
      'e70e2151b49613f23f40828c771ab85e241eed361cab037c6312df77f2612f0a'),
-    ('android-platform-6.zip',
-     'https://dl.google.com/android/repository/android-2.0.1_r01-linux.zip',
+    ('https://dl.google.com/android/repository/android-2.0.1_r01-linux.zip',
      'f47b46177b17f6368461f85bc2a27d0d2c437929f588ea27105712bc3185f664'),
-    ('android-platform-7.zip',
-     'https://dl.google.com/android/repository/android-2.1_r03-linux.zip',
+    ('https://dl.google.com/android/repository/android-2.1_r03-linux.zip',
      'b9cc140a9b879586181b22cfc7d4aa18b979251e16e9b17771c5d0acb71ba940'),
-    ('android-platform-8.zip',
-     'https://dl.google.com/android/repository/android-2.2_r03-linux.zip',
+    ('https://dl.google.com/android/repository/android-2.2_r03-linux.zip',
      '7c9ea1bd7cb225504bd085d7c93ae27d52bd88d29b621d28108f82fef68177c0'),
-    ('android-platform-9.zip',
-     'https://dl.google.com/android/repository/android-2.3.1_r02-linux.zip',
+    ('https://dl.google.com/android/repository/android-2.3.1_r02-linux.zip',
      'b2ab4896d0a4857e4f688f69eb08b0e1a8074709d4445a92a83ece7ec7cd198c'),
-    ('android-platform-10.zip',
-     'https://dl.google.com/android/repository/android-2.3.3_r02-linux.zip',
+    ('https://dl.google.com/android/repository/android-2.3.3_r02-linux.zip',
      '54bdb0f1ca06ba5747061ddeea20f431af72c448334fd4d3d7f84ea2ccd29fea'),
-    ('android-platform-11.zip',
-     'https://dl.google.com/android/repository/android-3.0_r02-linux.zip',
+    ('https://dl.google.com/android/repository/android-3.0_r02-linux.zip',
      '1cacae7b6e1b5a5d73c06f5d29d2ea92d16674df8fd5507681290e77d1647a1c'),
-    ('android-platform-12.zip',
-     'https://dl.google.com/android/repository/android-3.1_r03-linux.zip',
+    ('https://dl.google.com/android/repository/android-3.1_r03-linux.zip',
      '7570c86a86488a146aa2141a65a24d81800959c1907ff4f1d2c13bbafab230c5'),
-    ('android-platform-13.zip',
-     'https://dl.google.com/android/repository/android-3.2_r01-linux.zip',
+    ('https://dl.google.com/android/repository/android-3.2_r01-linux.zip',
      'ff6b26ad34d7060a72ba504b0314cef8ba3138005561705adec5ad470a073d9b'),
-    ('android-platform-14.zip',
-     'https://dl.google.com/android/repository/android-14_r04.zip',
+    ('https://dl.google.com/android/repository/android-14_r04.zip',
      'da1af15c77ba41d062eb6d0ef5921cc424ab6167587033b830609d65f04802b6'),
-    ('android-platform-15.zip',
-     'https://dl.google.com/android/repository/android-15_r05.zip',
+    ('https://dl.google.com/android/repository/android-15_r05.zip',
      '5bc1f93aae86b4336ffc4cae9eb8ec41a9a8fd677582dd86a9629798f019bed9'),
-    ('android-platform-16.zip',
-     'https://dl.google.com/android/repository/android-16_r05.zip',
+    ('https://dl.google.com/android/repository/android-16_r05.zip',
      'fd7f269a423d1f1d079eabf9f918ceab49108702a1c6bb2589d57c23393503d3'),
-    ('android-platform-17.zip',
-     'https://dl.google.com/android/repository/android-17_r03.zip',
+    ('https://dl.google.com/android/repository/android-17_r03.zip',
      'b66e73fb2639f8c916fde4369aa29012a5c531e156dbb205fe3788fe998fbbe8'),
-    ('android-platform-18.zip',
-     'https://dl.google.com/android/repository/android-18_r03.zip',
+    ('https://dl.google.com/android/repository/android-18_r03.zip',
      '166ae9cf299747a5faa8f04168f0ee47cd7466a975d8b44acaaa62a43e767568'),
-    ('android-platform-19.zip',
-     'https://dl.google.com/android/repository/android-19_r04.zip',
+    ('https://dl.google.com/android/repository/android-19_r04.zip',
      '5efc3a3a682c1d49128daddb6716c433edf16e63349f32959b6207524ac04039'),
-    ('android-platform-20.zip',
-     'https://dl.google.com/android/repository/android-20_r02.zip',
+    ('https://dl.google.com/android/repository/android-20_r02.zip',
      'ef08c453e16ab6e656cf5d9413ef61cb8c650607d33b24ee4ce08dafdfe965a7'),
-    ('android-platform-21.zip',
-     'https://dl.google.com/android/repository/android-21_r02.zip',
+    ('https://dl.google.com/android/repository/android-21_r02.zip',
      'a76cd7ad3080ac6ce9f037cb935b399a1bad396c0605d4ff42f693695f1dcefe'),
-    ('android-platform-22.zip',
-     'https://dl.google.com/android/repository/android-22_r02.zip',
+    ('https://dl.google.com/android/repository/android-22_r02.zip',
      '45eb581bbe53c9256f34c26b2cea919543c0079140897ac721cf88c0b9f6789e'),
-    ('android-platform-23.zip',
-     'https://dl.google.com/android/repository/platform-23_r03.zip',
+    ('https://dl.google.com/android/repository/platform-23_r03.zip',
      '4b4bcddead3319708275c54c76294707bfaa953d767e34f1a5b599f3edd0076c'),
-    ('build-tools-17.0.0.zip',
-     'https://dl.google.com/android/repository/build-tools_r17-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r17-linux.zip',
      '4c8444972343a19045236f6924bd7f12046287c70dace96ab88b2159c8ec0e74'),
-    ('build-tools-18.0.1.zip',
-     'https://dl.google.com/android/repository/build-tools_r18.0.1-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r18.0.1-linux.zip',
      'a9b7b1bdfd864780fdd03fa1683f3fe712a4276cf200646833808cb9159bafc0'),
-    ('build-tools-18.1.0.zip',
-     'https://dl.google.com/android/repository/build-tools_r18.1-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r18.1-linux.zip',
      '0753606738f31cc346426db1d46b7d021bc1bdaff63085f9ee9d278ee054d3c9'),
-    ('build-tools-18.1.1.zip',
-     'https://dl.google.com/android/repository/build-tools_r18.1.1-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r18.1.1-linux.zip',
      '7e4ed326b53078f4f23276ddab52c400011f7593dfbb6508c0a6671954dba8b0'),
-    ('build-tools-19.0.0.zip',
-     'https://dl.google.com/android/repository/build-tools_r19-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r19-linux.zip',
      '9442e1c5212ed594e344a231fa93e7a017a5ef8cc661117011f1d3142eca7acc'),
-    ('build-tools-19.0.1.zip',
-     'https://dl.google.com/android/repository/build-tools_r19.0.1-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r19.0.1-linux.zip',
      'b068edaff05c3253a63e9c8f0e1786429799b7e4b01514a847a8b291beb9232e'),
-    ('build-tools-19.0.2.zip',
-     'https://dl.google.com/android/repository/build-tools_r19.0.2-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r19.0.2-linux.zip',
      '06124fad0d4bde21191240d61df2059a8546c085064a9a57d024c36fa2c9bebb'),
-    ('build-tools-19.0.3.zip',
-     'https://dl.google.com/android/repository/build-tools_r19.0.3-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r19.0.3-linux.zip',
      'bc9b3db0de4a3e233a170274293359051a758f1e3f0d0d852ff4ad6d90d0a794'),
-    ('build-tools-19.1.0.zip',
-     'https://dl.google.com/android/repository/build-tools_r19.1-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r19.1-linux.zip',
      '3833b409f78c002a83244e220be380ea6fa44d604e0d47de4b7e5daefe7cd3f4'),
-    ('build-tools-20.0.0.zip',
-     'https://dl.google.com/android/repository/build-tools_r20-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r20-linux.zip',
      '296e09d62095d80e6eaa06a64cfa4c6f9f317c2d67ad8da6514523ec66f5c871'),
-    ('build-tools-21.0.0.zip',
-     'https://dl.google.com/android/repository/build-tools_r21-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r21-linux.zip',
      '12b818f38fe1b68091b94545988317438efbf41eb61fd36b72cd79f536044065'),
-    ('build-tools-21.0.1.zip',
-     'https://dl.google.com/android/repository/build-tools_r21.0.1-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r21.0.1-linux.zip',
      'a8922e80d3dd0cf6df14b29a7862448fa111b48086c639168d4b18c92431f559'),
-    ('build-tools-21.0.2.zip',
-     'https://dl.google.com/android/repository/build-tools_r21.0.2-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r21.0.2-linux.zip',
      '859b17a6b65d063dfd86c163489b736b12bdeecd9173fdddb3e9f32e0fe584b7'),
-    ('build-tools-21.1.0.zip',
-     'https://dl.google.com/android/repository/build-tools_r21.1-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r21.1-linux.zip',
      '022a85b92360272379b2f04b8a4d727e754dbe7eb8ab5a9568190e33e480d8f1'),
-    ('build-tools-21.1.1.zip',
-     'https://dl.google.com/android/repository/build-tools_r21.1.1-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r21.1.1-linux.zip',
      '29b612484de6b5cde0df6de655e413f7611b0557b440538397afa69b557e2f08'),
-    ('build-tools-21.1.2.zip',
-     'https://dl.google.com/android/repository/build-tools_r21.1.2-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r21.1.2-linux.zip',
      '3f88efc2d5316fb73f547f35b472610eed5e6f3f56762750ddad1c7d1d81660d'),
-    ('build-tools-22.0.0.zip',
-     'https://dl.google.com/android/repository/build-tools_r22-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r22-linux.zip',
      '061c021243f04c80c19568a6e3a027c00d8e269c9311d7bf07fced60fbde7bd5'),
-    ('build-tools-22.0.1.zip',
-     'https://dl.google.com/android/repository/build-tools_r22.0.1-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r22.0.1-linux.zip',
      '91e5524bf227aad1135ddd10905518ac49f74797d33d48920dcf8364b9fde214'),
-    ('build-tools-23.0.0.zip',
-     'https://dl.google.com/android/repository/build-tools_r23-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r23-linux.zip',
      '56bf4fc6c43638c55fef4a0937bad38281945725459841879b436c6922df786c'),
-    ('build-tools-23.0.1.zip',
-     'https://dl.google.com/android/repository/build-tools_r23.0.1-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r23.0.1-linux.zip',
      'e56b3ef7b760ad06a7cee9b2d52ba7f43133dcecedfa5357f8845b3a80aeeecf'),
-    ('build-tools-23.0.2.zip',
-     'https://dl.google.com/android/repository/build-tools_r23.0.2-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r23.0.2-linux.zip',
      '82754f551a6e36eaf516fbdd00c95ff0ccd19f81d1e134125b6ac4916f7ed9b6'),
-    ('build-tools-23.0.3.zip',
-     'https://dl.google.com/android/repository/build-tools_r23.0.3-linux.zip',
+    ('https://dl.google.com/android/repository/build-tools_r23.0.3-linux.zip',
      'd961663d4a9e128841751c0156548a347c882c081c83942e53788d8949bf34e1'),
     # the binaries that Google uses are here:
     # https://android.googlesource.com/platform/tools/external/gradle/+/studio-1.5/
-    ('gradle-1.4-bin.zip',
-     'https://services.gradle.org/distributions/gradle-1.4-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-1.4-bin.zip',
      'cd99e85fbcd0ae8b99e81c9992a2f10cceb7b5f009c3720ef3a0078f4f92e94e'),
-    ('gradle-1.6-bin.zip',
-     'https://services.gradle.org/distributions/gradle-1.6-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-1.6-bin.zip',
      'de3e89d2113923dcc2e0def62d69be0947ceac910abd38b75ec333230183fac4'),
-    ('gradle-1.7-bin.zip',
-     'https://services.gradle.org/distributions/gradle-1.7-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-1.7-bin.zip',
      '360c97d51621b5a1ecf66748c718594e5f790ae4fbc1499543e0c006033c9d30'),
-    ('gradle-1.8-bin.zip',
-     'https://services.gradle.org/distributions/gradle-1.8-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-1.8-bin.zip',
      'a342bbfa15fd18e2482287da4959588f45a41b60910970a16e6d97959aea5703'),
-    ('gradle-1.9-bin.zip',
-     'https://services.gradle.org/distributions/gradle-1.9-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-1.9-bin.zip',
      '097ddc2bcbc9da2bb08cbf6bf8079585e35ad088bafd42e8716bc96405db98e9'),
-    ('gradle-1.10-bin.zip',
-     'https://services.gradle.org/distributions/gradle-1.10-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-1.10-bin.zip',
      '6e6db4fc595f27ceda059d23693b6f6848583950606112b37dfd0e97a0a0a4fe'),
-    ('gradle-1.11-bin.zip',
-     'https://services.gradle.org/distributions/gradle-1.11-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-1.11-bin.zip',
      '07e235df824964f0e19e73ea2327ce345c44bcd06d44a0123d29ab287fc34091'),
-    ('gradle-1.12-bin.zip',
-     'https://services.gradle.org/distributions/gradle-1.12-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-1.12-bin.zip',
      '8734b13a401f4311ee418173ed6ca8662d2b0a535be8ff2a43ecb1c13cd406ea'),
-    ('gradle-2.1-bin.zip',
-     'https://services.gradle.org/distributions/gradle-2.1-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-2.1-bin.zip',
      '3eee4f9ea2ab0221b89f8e4747a96d4554d00ae46d8d633f11cfda60988bf878'),
-    ('gradle-2.2.1-bin.zip',
-     'https://services.gradle.org/distributions/gradle-2.2.1-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-2.2.1-bin.zip',
      '420aa50738299327b611c10b8304b749e8d3a579407ee9e755b15921d95ff418'),
-    ('gradle-2.3-bin.zip',
-     'https://services.gradle.org/distributions/gradle-2.3-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-2.3-bin.zip',
      '010dd9f31849abc3d5644e282943b1c1c355f8e2635c5789833979ce590a3774'),
-    ('gradle-2.4-bin.zip',
-     'https://services.gradle.org/distributions/gradle-2.4-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-2.4-bin.zip',
      'c4eaecc621a81f567ded1aede4a5ddb281cc02a03a6a87c4f5502add8fc2f16f'),
-    ('gradle-2.5-bin.zip',
-     'https://services.gradle.org/distributions/gradle-2.5-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-2.5-bin.zip',
      '3f953e0cb14bb3f9ebbe11946e84071547bf5dfd575d90cfe9cc4e788da38555'),
-    ('gradle-2.6-bin.zip',
-     'https://services.gradle.org/distributions/gradle-2.6-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-2.6-bin.zip',
      '18a98c560af231dfa0d3f8e0802c20103ae986f12428bb0a6f5396e8f14e9c83'),
-    ('gradle-2.7-bin.zip',
-     'https://services.gradle.org/distributions/gradle-2.7-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-2.7-bin.zip',
      'cde43b90945b5304c43ee36e58aab4cc6fb3a3d5f9bd9449bb1709a68371cb06'),
-    ('gradle-2.8-bin.zip',
-     'https://services.gradle.org/distributions/gradle-2.8-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-2.8-bin.zip',
      'a88db9c2f104defdaa8011c58cf6cda6c114298ae3695ecfb8beb30da3a903cb'),
-    ('gradle-2.9-bin.zip',
-     'https://services.gradle.org/distributions/gradle-2.9-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-2.9-bin.zip',
      'c9159ec4362284c0a38d73237e224deae6139cbde0db4f0f44e1c7691dd3de2f'),
-    ('gradle-2.10-bin.zip',
-     'https://services.gradle.org/distributions/gradle-2.10-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-2.10-bin.zip',
      '66406247f745fc6f05ab382d3f8d3e120c339f34ef54b86f6dc5f6efc18fbb13'),
-    ('gradle-2.11-bin.zip',
-     'https://services.gradle.org/distributions/gradle-2.11-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-2.11-bin.zip',
      '8d7437082356c9fd6309a4479c8db307673965546daea445c6c72759cd6b1ed6'),
-    ('gradle-2.12-bin.zip',
-     'https://services.gradle.org/distributions/gradle-2.12-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-2.12-bin.zip',
      'e77064981906cd0476ff1e0de3e6fef747bd18e140960f1915cca8ff6c33ab5c'),
-    ('gradle-2.13-bin.zip',
-     'https://services.gradle.org/distributions/gradle-2.13-bin.zip',
+    ('https://services.gradle.org/distributions/gradle-2.13-bin.zip',
      '0f665ec6a5a67865faf7ba0d825afb19c26705ea0597cec80dd191b0f2cbb664'),
-    ('Kivy-1.7.2.tar.gz',
-     'https://pypi.python.org/packages/source/K/Kivy/Kivy-1.7.2.tar.gz',
+    ('https://pypi.python.org/packages/source/K/Kivy/Kivy-1.7.2.tar.gz',
      '0485e2ef97b5086df886eb01f8303cb542183d2d71a159466f99ad6c8a1d03f1'),
 ]
 
 if config['arch64']:
     cachefiles.extend([
-        ('android-ndk-r10e-linux-x86_64.bin',
-         'https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin',
+        ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin',
          '102d6723f67ff1384330d12c45854315d6452d6510286f4e5891e00a5a8f1d5a'),
-        ('android-ndk-r9b-linux-x86_64.tar.bz2',
-         'https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64.tar.bz2',
+        ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64.tar.bz2',
          '8956e9efeea95f49425ded8bb697013b66e162b064b0f66b5c75628f76e0f532'),
-        ('android-ndk-r9b-linux-x86_64-legacy-toolchains.tar.bz2',
-         'https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64-legacy-toolchains.tar.bz2',
+        ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64-legacy-toolchains.tar.bz2',
          'de93a394f7c8f3436db44568648f87738a8d09801a52f459dcad3fc047e045a1')])
 else:
     cachefiles.extend([
-        ('android-ndk-r10e-linux-x86.bin',
-         'https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86.bin',
+        ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86.bin',
          '92b07d25aaad9b341a7f2b2a62402d508e948bf2dea3ee7b65a6aeb18bca7df5'),
-        ('android-ndk-r9b-linux-x86.tar.bz2',
-         'https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86.tar.bz2',
+        ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86.tar.bz2',
          '748104b829dd12afb2fdb3044634963abb24cdb0aad3b26030abe2e9e65bfc81'),
-        ('android-ndk-r9b-linux-x86-legacy-toolchains.tar.bz2',
-         'https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86-legacy-toolchains.tar.bz2',
+        ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86-legacy-toolchains.tar.bz2',
          '606aadf815ae28cc7b0154996247c70d609f111b14e44bcbcd6cad4c87fefb6f')])
-wanted = []
 
 
 def sha256_for_file(path):
@@ -322,25 +251,56 @@ def sha256_for_file(path):
             s.update(data)
         return s.hexdigest()
 
-for f, src, shasum in cachefiles:
-    relpath = os.path.join(cachedir, f)
-    # if download fails to connect, it'll make a zero size file
-    if os.path.exists(relpath) and os.stat(relpath).st_size == 0:
-        os.remove(relpath)
-    if not os.path.exists(relpath):
-        print("Downloading " + f + " to cache")
-        if subprocess.call(['wget', src, '-O', f], cwd=cachedir) != 0:
-            print("...download of " + f + " failed.")
-            sys.exit(1)
-    if shasum:
-        v = sha256_for_file(relpath)
-        if v != shasum:
-            print("Invalid shasum of '" + v + "' detected for " + f)
-            sys.exit(1)
-        else:
-            print("...shasum verified for " + f)
+for srcurl, shasum in cachefiles:
+    filename = os.path.basename(srcurl)
+    local_filename = os.path.join(cachedir, filename)
 
-    wanted.append(f)
+    if os.path.exists(local_filename):
+        local_length = os.path.getsize(local_filename)
+    else:
+        local_length = -1
+
+    resume_header = {}
+    download = True
+
+    try:
+        r = requests.head(srcurl, allow_redirects=True, timeout=60)
+        if r.status_code == 200:
+            content_length = int(r.headers.get('content-length'))
+        else:
+            content_length = local_length  # skip the download
+    except requests.exceptions.RequestException as e:
+        content_length = local_length  # skip the download
+        print(e)
+
+    if local_length == content_length:
+        download = False
+    elif local_length > content_length:
+        print('deleting corrupt file from cache: ' + local_filename)
+        os.remove(local_filename)
+        print("Downloading " + filename + " to cache")
+    elif local_length > -1 and local_length < content_length:
+        print("Resuming download of " + local_filename)
+        resume_header = {'Range': 'bytes=%d-%d' % (local_length, content_length)}
+    else:
+        print("Downloading " + filename + " to cache")
+
+    if download:
+        r = requests.get(srcurl, headers=resume_header,
+                         stream=True, verify=False, allow_redirects=True)
+        content_length = int(r.headers.get('content-length'))
+        with open(local_filename, 'ab') as f:
+            for chunk in progress.bar(r.iter_content(chunk_size=1024),
+                                      expected_size=(content_length / 1024) + 1):
+                if chunk:  # filter out keep-alive new chunks
+                    f.write(chunk)
+
+    v = sha256_for_file(local_filename)
+    if v == shasum:
+        print("\t...shasum verified for " + local_filename)
+    else:
+        print("Invalid shasum of '" + v + "' detected for " + local_filename)
+        sys.exit(1)
 
 # allow specifying a list/tuple that includes cached local copy
 if type(config['baseboxurl']) in (list, tuple) or config['baseboxurl'][0] in ('(', '['):
