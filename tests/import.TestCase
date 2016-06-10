@@ -33,9 +33,9 @@ class ImportTest(unittest.TestCase):
         app = fdroidserver.metadata.get_default_app_info()
         app.UpdateCheckMode = "Tags"
         root_dir, src_dir = import_proxy.get_metadata_from_url(app, url)
-        self.assertEquals(app.RepoType, 'git')
-        self.assertEquals(app.WebSite, 'https://gitlab.com/fdroid/fdroidclient')
-        self.assertEquals(app.Repo, 'https://gitlab.com/fdroid/fdroidclient.git')
+        self.assertEqual(app.RepoType, 'git')
+        self.assertEqual(app.WebSite, 'https://gitlab.com/fdroid/fdroidclient')
+        self.assertEqual(app.Repo, 'https://gitlab.com/fdroid/fdroidclient.git')
 
 
 if __name__ == "__main__":

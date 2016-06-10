@@ -55,13 +55,13 @@ class UpdateTest(unittest.TestCase):
         self.assertIsNotNone(sig, "sig is None")
         pysig = fdroidserver.update.getsig(apkfile)
         self.assertIsNotNone(pysig, "pysig is None")
-        self.assertEquals(sig, fdroidserver.update.getsig(apkfile),
-                          "python sig not equal to java sig!")
-        self.assertEquals(len(sig), len(pysig),
-                          "the length of the two sigs are different!")
+        self.assertEqual(sig, fdroidserver.update.getsig(apkfile),
+                         "python sig not equal to java sig!")
+        self.assertEqual(len(sig), len(pysig),
+                         "the length of the two sigs are different!")
         try:
-            self.assertEquals(unhexlify(sig), unhexlify(pysig),
-                              "the length of the two sigs are different!")
+            self.assertEqual(unhexlify(sig), unhexlify(pysig),
+                             "the length of the two sigs are different!")
         except TypeError as e:
             print(e)
             self.assertTrue(False, 'TypeError!')
