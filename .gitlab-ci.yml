@@ -1,4 +1,4 @@
-image: mvdan/fdroid-ci:server-20160429
+image: mvdan/fdroid-ci:server-20160613
 
 test:
   script:
