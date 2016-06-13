@@ -2,7 +2,6 @@ image: mvdan/fdroid-ci:server-20160429
 
 test:
   script:
-    - ls -l /usr/lib/python3*
     - mkdir -p /usr/lib/python3.4/site-packages/
     - pip3 install -e .
     - cd tests
