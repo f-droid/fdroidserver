@@ -18,21 +18,12 @@ script "setup-android-sdk" do
   not_if "test -d #{sdk_loc}"
 end
 
-script "setup-sdk-dirs" do
-  interpreter "bash"
-  user user
-  code "
-    mkdir -p #{sdk_loc}/build-tools
-  "
-end
-
 execute "add-android-sdk-path" do
   user user
   path = "#{sdk_loc}/tools:#{sdk_loc}/platform-tools"
   command "echo \"export PATH=\\$PATH:#{path} #PATH-SDK\" >> /home/#{user}/.bsenv"
   not_if "grep PATH-SDK /home/#{user}/.bsenv"
 end
-
 
 script "add_android_packages" do
   interpreter "bash"
@@ -48,7 +39,6 @@ end
 script "add-platforms" do
   interpreter "bash"
   user user
-  cwd "/tmp"
   code "
     rm -rf current-platform
     mkdir current-platform
@@ -65,7 +55,6 @@ end
 script "add_build_tools" do
   interpreter "bash"
   user user
-  cwd "/tmp"
   code "
     rm -rf current-build-tools
     mkdir current-build-tools
