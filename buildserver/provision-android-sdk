@@ -1,0 +1,53 @@
+#!/bin/bash
+#
+
+set -e
+
+if [ -z $ANDROID_HOME ]; then
+    echo "ANDROID_HOME env var must be set!"
+    exit 1
+fi
+
+# TODO remove the rm, this should work with an existing ANDROID_HOME
+if [ ! -x $ANDROID_HOME/tools/android ]; then
+    rm -rf $ANDROID_HOME
+    mkdir ${ANDROID_HOME}
+    mkdir ${ANDROID_HOME}/temp
+    mkdir ${ANDROID_HOME}/platforms
+    mkdir ${ANDROID_HOME}/build-tools
+    cd $ANDROID_HOME
+
+    tools=`ls -1 /vagrant/cache/tools_*.zip | sort -n | tail -1`
+    unzip -qq $tools
+fi
+
+cd /vagrant/cache
+
+# make hard links for `android update sdk` to use and delete
+for f in android_*.zip android-[0-9]*.zip platform-[0-9]*.zip build-tools_r*-linux.zip; do
+    rm -f ${ANDROID_HOME}/temp/$f
+    ln -s /vagrant/cache/$f ${ANDROID_HOME}/temp/
+done
+
+# install all cached platforms
+cached=""
+for f in `ls -1 android-[0-9]*.zip platform-[0-9]*.zip`; do
+    sdk=`unzip -c $f "*/build.prop" | sed -n 's,^ro.build.version.sdk=,,p'`
+    cached=,android-${sdk}${cached}
+done
+
+# install all cached build-tools
+for f in `ls -1 build-tools*.zip`; do
+    ver=`unzip -c $f "*/source.properties" | sed -n 's,^Pkg.Revision=,,p'`
+    cached=,build-tools-${ver}${cached}
+done
+
+${ANDROID_HOME}/tools/android --silent update sdk --no-ui --all \
+    --filter platform-tools,extra-android-m2repository${cached} <<EOH
+y
+
+EOH
+
+
+chmod -R a+rX $ANDROID_HOME/
+find $ANDROID_HOME/ -type f -executable -print0 | xargs -0 chmod a+x
