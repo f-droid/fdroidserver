@@ -524,6 +524,16 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
                                       + ' is not a valid minSdkVersion!')
                     else:
                         apk['minSdkVersion'] = m.group(1)
+                        # if target not set, default to min
+                        if 'targetSdkVersion' not in apk:
+                            apk['targetSdkVersion'] = m.group(1)
+                elif line.startswith("targetSdkVersion:"):
+                    m = re.match(sdkversion_pat, line)
+                    if m is None:
+                        logging.error(line.replace('targetSdkVersion:', '')
+                                      + ' is not a valid targetSdkVersion!')
+                    else:
+                        apk['targetSdkVersion'] = m.group(1)
                 elif line.startswith("maxSdkVersion:"):
                     apk['maxSdkVersion'] = re.match(sdkversion_pat, line).group(1)
                 elif line.startswith("native-code:"):
@@ -801,7 +811,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         for mirror in config.get('mirrors', []):
             addElement('mirror', urllib.parse.urljoin(mirror, urlbasepath), doc, repoel)
 
-    repoel.setAttribute("version", "15")
+    repoel.setAttribute("version", "16")
     repoel.setAttribute("timestamp", str(int(time.time())))
 
     nosigningkey = False
@@ -937,6 +947,8 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             addElement('sig', apk['sig'], doc, apkel)
             addElement('size', str(apk['size']), doc, apkel)
             addElement('sdkver', str(apk['minSdkVersion']), doc, apkel)
+            if 'targetSdkVersion' in apk:
+                addElement('targetSdkVersion', str(apk['targetSdkVersion']), doc, apkel)
             if 'maxSdkVersion' in apk:
                 addElement('maxsdkver', str(apk['maxSdkVersion']), doc, apkel)
             if 'added' in apk:

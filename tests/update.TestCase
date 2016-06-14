@@ -83,6 +83,32 @@ class UpdateTest(unittest.TestCase):
         pysig = fdroidserver.update.getsig(apkfile)
         self.assertIsNone(pysig, "python sig should be None: " + str(sig))
 
+    def testScanApks(self):
+        os.chdir(os.path.dirname(__file__))
+        if os.path.basename(os.getcwd()) != 'tests':
+            raise Exception('This test must be run in the "tests/" subdir')
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        config['ndk_paths'] = dict()
+        config['accepted_formats'] = ['json', 'txt', 'xml', 'yml']
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+
+        fdroidserver.update.options = type('', (), {})()
+        fdroidserver.update.options.clean = True
+
+        alltestapps = fdroidserver.metadata.read_metadata(xref=True)
+        apps = dict()
+        apps['info.guardianproject.urzip'] = alltestapps['info.guardianproject.urzip']
+        knownapks = fdroidserver.common.KnownApks()
+        apks, cachechanged = fdroidserver.update.scan_apks(apps, {}, 'repo', knownapks, False)
+        self.assertEqual(len(apks), 1)
+        apk = apks[0]
+        self.assertEqual(apk['minSdkVersion'], '4')
+        self.assertEqual(apk['targetSdkVersion'], '18')
+        self.assertFalse('maxSdkVersion' in apk)
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
