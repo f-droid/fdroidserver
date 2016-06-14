@@ -33,20 +33,16 @@ execute "add-android-sdk-path" do
   not_if "grep PATH-SDK /home/#{user}/.bsenv"
 end
 
-%w{
-    platform-tools
-    extra-android-m2repository
-}.each do |pkg|
-  script "add_pkg_#{pkg}" do
-    interpreter "bash"
-    user user
-    code "
-      #{sdk_loc}/tools/android update sdk --no-ui -a -t #{pkg} <<X
+
+script "add_android_packages" do
+  interpreter "bash"
+  user user
+  code "
+    #{sdk_loc}/tools/android update sdk --no-ui --all --filter platform-tools,extra-android-m2repository <<X
 y
 
 X
     "
-  end
 end
 
 script "add-platforms" do
@@ -66,28 +62,29 @@ script "add-platforms" do
   "
 end
 
-%w{17 18.0.1 18.1 18.1.1 19 19.0.1 19.0.2 19.0.3 19.1 20 21 21.0.1 21.0.2 21.1
-   21.1.1 21.1.2 22 22.0.1 23 23.0.1 23.0.2 23.0.3
-}.each do |ver|
-  script "add_btools_#{ver}" do
-    interpreter "bash"
-    user user
-    cwd "/tmp"
-    code "
-      unzip /vagrant/cache/build-tools_r#{ver}-linux.zip
-      case `echo #{ver} | wc -c` in
-        3)
-            dirver=#{ver}.0.0
-            ;;
-        5)
-            dirver=#{ver}.0
-            ;;
-        7)
-            dirver=#{ver}
-            ;;
-      esac
-      rm -rf #{sdk_loc}/build-tools/${dirver}
-      mv android-*/ #{sdk_loc}/build-tools/${dirver}
-    "
-  end
+script "add_build_tools" do
+  interpreter "bash"
+  user user
+  cwd "/tmp"
+  code "
+    rm -rf current-build-tools
+    mkdir current-build-tools
+    cd current-build-tools
+    for ver in 17 18.0.1 18.1 18.1.1 19 19.0.1 19.0.2 19.0.3 19.1 20 21 21.0.1 21.0.2 21.1 21.1.1 21.1.2 22 22.0.1 23 23.0.1 23.0.2 23.0.3; do
+        unzip /vagrant/cache/build-tools_r${ver}-linux.zip
+        case `echo ${ver} | wc -c` in
+            3)
+                dirver=${ver}.0.0
+                ;;
+            5)
+                dirver=${ver}.0
+                ;;
+            7)
+                dirver=${ver}
+                ;;
+        esac
+        rm -rf #{sdk_loc}/build-tools/${dirver}
+        mv android-*/ #{sdk_loc}/build-tools/${dirver}
+    done
+  "
 end
