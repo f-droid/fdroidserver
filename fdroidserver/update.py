@@ -523,9 +523,19 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
                         logging.error(line.replace('sdkVersion:', '')
                                       + ' is not a valid minSdkVersion!')
                     else:
-                        apk['sdkversion'] = m.group(1)
+                        apk['minSdkVersion'] = m.group(1)
+                        # if target not set, default to min
+                        if 'targetSdkVersion' not in apk:
+                            apk['targetSdkVersion'] = m.group(1)
+                elif line.startswith("targetSdkVersion:"):
+                    m = re.match(sdkversion_pat, line)
+                    if m is None:
+                        logging.error(line.replace('targetSdkVersion:', '')
+                                      + ' is not a valid targetSdkVersion!')
+                    else:
+                        apk['targetSdkVersion'] = m.group(1)
                 elif line.startswith("maxSdkVersion:"):
-                    apk['maxsdkversion'] = re.match(sdkversion_pat, line).group(1)
+                    apk['maxSdkVersion'] = re.match(sdkversion_pat, line).group(1)
                 elif line.startswith("native-code:"):
                     apk['nativecode'] = []
                     for arch in line[13:].split(' '):
@@ -545,9 +555,9 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
                             perm = perm[16:]
                         apk['features'].add(perm)
 
-            if 'sdkversion' not in apk:
+            if 'minSdkVersion' not in apk:
                 logging.warn("No SDK version information found in {0}".format(apkfile))
-                apk['sdkversion'] = 0
+                apk['minSdkVersion'] = 1
 
             # Check for debuggable apks...
             if common.isApkDebuggable(apkfile, config):
@@ -801,7 +811,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         for mirror in config.get('mirrors', []):
             addElement('mirror', urllib.parse.urljoin(mirror, urlbasepath), doc, repoel)
 
-    repoel.setAttribute("version", "15")
+    repoel.setAttribute("version", "16")
     repoel.setAttribute("timestamp", str(int(time.time())))
 
     nosigningkey = False
@@ -936,9 +946,11 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                 apkel.appendChild(hashel)
             addElement('sig', apk['sig'], doc, apkel)
             addElement('size', str(apk['size']), doc, apkel)
-            addElement('sdkver', str(apk['sdkversion']), doc, apkel)
-            if 'maxsdkversion' in apk:
-                addElement('maxsdkver', str(apk['maxsdkversion']), doc, apkel)
+            addElement('sdkver', str(apk['minSdkVersion']), doc, apkel)
+            if 'targetSdkVersion' in apk:
+                addElement('targetSdkVersion', str(apk['targetSdkVersion']), doc, apkel)
+            if 'maxSdkVersion' in apk:
+                addElement('maxsdkver', str(apk['maxSdkVersion']), doc, apkel)
             if 'added' in apk:
                 addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
             addElementNonEmpty('permissions', ','.join(apk['permissions']), doc, apkel)
