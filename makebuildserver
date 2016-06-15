@@ -363,7 +363,8 @@ if 'aptproxy' in config and config['aptproxy']:
 # does not need a custom mount
 if cachedir != 'buildserver/cache':
     vagrantfile += """
-  config.vm.synced_folder '{0}', '/vagrant/cache'
+  config.vm.synced_folder '{0}', '/vagrant/cache',
+    owner: 'root', group: 'root', create: true
 """.format(cachedir)
 
 # cache .deb packages on the host via a mount trick
