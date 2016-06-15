@@ -419,6 +419,61 @@ def get_icon_bytes(apkzip, iconsrc):
         return apkzip.read(iconsrc.encode('utf-8').decode('cp437'))
 
 
+def insert_obbs(repodir, apps, apks):
+    """Scans the .obb files in a given repo directory and adds them to the
+    relevant APK instances.
+
+    :param repodir: repo directory to scan
+    :param apps: list of current, valid apps
+    :param apks: current information on all APKs
+    """
+
+    def obbWarnDelete(f, msg):
+        logging.warning(msg + f)
+        if options.delete_unknown:
+            logging.error("Deleting unknown file: " + f)
+            os.remove(f)
+
+    obbs = []
+    java_Integer_MIN_VALUE = -pow(2, 31)
+    for f in glob.glob(os.path.join(repodir, '*.obb')):
+        obbfile = os.path.basename(f)
+        # obbfile looks like: [main|patch].<expansion-version>.<package-name>.obb
+        chunks = obbfile.split('.')
+        if chunks[0] != 'main' and chunks[0] != 'patch':
+            obbWarnDelete(f, 'OBB filename must start with "main." or "patch.": ')
+            continue
+        if not re.match(r'^-?[0-9]+$', chunks[1]):
+            obbWarnDelete('The OBB version code must come after "' + chunks[0] + '.": ')
+            continue
+        versioncode = int(chunks[1])
+        packagename = ".".join(chunks[2:-1])
+
+        highestVersionCode = java_Integer_MIN_VALUE
+        if packagename not in apps.keys():
+            obbWarnDelete(f, "OBB's packagename does not match a supported APK: ")
+            continue
+        for apk in apks:
+            if packagename == apk['id'] and apk['versioncode'] > highestVersionCode:
+                highestVersionCode = apk['versioncode']
+        if versioncode > highestVersionCode:
+            obbWarnDelete(f, 'OBB file has newer versioncode(' + str(versioncode)
+                          + ') than any APK: ')
+            continue
+
+        obbs.append((packagename, versioncode, obbfile))
+
+    for apk in apks:
+        for (packagename, versioncode, obbfile) in sorted(obbs, reverse=True):
+            if versioncode <= apk['versioncode'] and packagename == apk['id']:
+                if obbfile.startswith('main.') and 'obbMainFile' not in apk:
+                    apk['obbMainFile'] = obbfile
+                elif obbfile.startswith('patch.') and 'obbPatchFile' not in apk:
+                    apk['obbPatchFile'] = obbfile
+            if 'obbMainFile' in apk and 'obbPatchFile' in apk:
+                break
+
+
 def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
     """Scan the apks in the given repo directory.
 
@@ -971,6 +1026,8 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                 addElement('targetSdkVersion', str(apk['targetSdkVersion']), doc, apkel)
             if 'maxSdkVersion' in apk:
                 addElement('maxsdkver', str(apk['maxSdkVersion']), doc, apkel)
+            addElementNonEmpty('obbMainFile', apk.get('obbMainFile'), doc, apkel)
+            addElementNonEmpty('obbPatchFile', apk.get('obbPatchFile'), doc, apkel)
             if 'added' in apk:
                 addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
             addElementNonEmpty('permissions', ','.join(apk['permissions']), doc, apkel)
@@ -1156,7 +1213,7 @@ def main():
     parser.add_argument("-c", "--create-metadata", action="store_true", default=False,
                         help="Create skeleton metadata files that are missing")
     parser.add_argument("--delete-unknown", action="store_true", default=False,
-                        help="Delete APKs without metadata from the repo")
+                        help="Delete APKs and/or OBBs without metadata from the repo")
     parser.add_argument("-b", "--buildreport", action="store_true", default=False,
                         help="Report on build data status")
     parser.add_argument("-i", "--interactive", default=False, action="store_true",
@@ -1291,6 +1348,8 @@ def main():
     # update the metadata with the newly created ones included
     if newmetadata:
         apps = metadata.read_metadata()
+
+    insert_obbs(repodirs[0], apps, apks)
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
