@@ -41,9 +41,9 @@ script "setup-android-ndk-r10e" do
     else
        SUFFIX=''
     fi
-    chmod u+x /vagrant/cache/android-ndk-r10e-linux-x86$SUFFIX.bin
-    /vagrant/cache/android-ndk-r10e-linux-x86$SUFFIX.bin x
-    mv android-ndk-r10e #{ndk_loc}/r10e
+    cd #{ndk_loc}
+    7zr x /vagrant/cache/android-ndk-r10e-linux-x86$SUFFIX.bin
+    mv android-ndk-r10e r10e
   "
   not_if "test -d #{ndk_loc}/r10e"
 end

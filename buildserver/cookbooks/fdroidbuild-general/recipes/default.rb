@@ -54,6 +54,7 @@ end
     openjdk-7-jdk
     openjdk-8-jdk
     optipng
+    p7zip
     pandoc
     perlmagick
     pkg-config
