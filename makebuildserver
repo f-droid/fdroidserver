@@ -386,19 +386,18 @@ vagrantfile += """
     chef.log_level = :debug
     chef.json = {
       :settings => {
-        :ndk_loc => "/home/vagrant/android-ndk",
         :debian_mirror => "%s",
         :ubuntu_trusty => "%s",
         :user => "vagrant"
       }
     }
     chef.add_recipe "fdroidbuild-general"
-    chef.add_recipe "android-ndk"
     chef.add_recipe "gradle"
     chef.add_recipe "kivy"
   end
 
   config.vm.provision "shell", path: "provision-android-sdk"
+  config.vm.provision "shell", path: "provision-android-ndk"
 
 end
 """ % (config['debian_mirror'],
