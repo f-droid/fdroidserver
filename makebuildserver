@@ -373,6 +373,12 @@ if config['apt_package_cache']:
 """.format(aptcachedir)
 
 vagrantfile += """
+
+  config.vm.provision "shell" do |shell|
+    shell.path = "setup-env-vars"
+    shell.args = ["/home/vagrant/android-sdk", "/home/vagrant/android-ndk"]
+  end
+
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "cookbooks"
     chef.log_level = :debug

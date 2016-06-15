@@ -40,9 +40,3 @@ EOF
     chmod a+x /opt/gradle/bin/gradle
   "
 end
-
-execute "add-android-ndk-path" do
-  user user
-  command "echo \"export PATH=\\$PATH:/opt/gradle/bin #PATH-GRADLE\" >> /home/#{user}/.bsenv"
-  not_if "grep PATH-GRADLE /home/#{user}/.bsenv"
-end

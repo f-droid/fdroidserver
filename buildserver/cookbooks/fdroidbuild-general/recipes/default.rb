@@ -97,12 +97,6 @@ easy_install_package "compare-locales" do
   action :install
 end
 
-execute "add-bsenv" do
-  user user
-  command "echo \". ./.bsenv \" >> /home/#{user}/.bashrc"
-  not_if "grep bsenv /home/#{user}/.bashrc"
-end
-
 execute "set-default-java" do
   command "update-java-alternatives --set java-1.7.0-openjdk-i386"
 end
