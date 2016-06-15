@@ -23,6 +23,7 @@ else
     RB_FILES=
 
     for f in $files; do
+        test -e $f || continue
         case $f in
             *.py)
                 PY_FILES+=" $f"
