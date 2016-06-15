@@ -64,8 +64,6 @@ echo "build_server_always = True" > config.py
 ../fdroid build --stop org.adaway:55
 # Maven
 ../fdroid build --stop org.quantumbadger.redreader:55
-# Ant, submodules and custom prebuild/build
-../fdroid build --stop app.openconnect:959
 # Custom build (make)
 ../fdroid build --stop com.amaze.filemanager:29
 # Uses verification

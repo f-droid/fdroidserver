@@ -27,6 +27,7 @@ setup(name='fdroidserver',
                   'examples/fdroid-icon.png']),
       ],
       install_requires=[
+          'clint',
           'GitPython',
           'mwclient',
           'paramiko',
