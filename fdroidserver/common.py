@@ -1805,16 +1805,12 @@ def set_FDroidPopen_env(build=None):
         for k, v in config['java_paths'].items():
             env['JAVA%s_HOME' % k] = v
 
-    # Set up environment vars that depend on each build, only set the
-    # NDK env vars if the NDK is not already in the PATH
     if build is not None:
         path = build.ndk_path()
         paths = orig_path.split(os.pathsep)
-        if path in paths:
-            return
-        paths.append(path)
-        env['PATH'] = os.pathsep.join(paths)
-
+        if path not in paths:
+            paths = [path] + paths
+            env['PATH'] = os.pathsep.join(paths)
         for n in ['ANDROID_NDK', 'NDK', 'ANDROID_NDK_HOME']:
             env[n] = build.ndk_path()
 
