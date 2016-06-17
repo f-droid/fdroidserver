@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+test -e /opt/gradle/versions || mkdir -p /opt/gradle/versions
+cd /opt/gradle/versions
+for f in /vagrant/cache/gradle-*.zip; do
+    ver=`echo $f | sed 's,.*gradle-\([0-9][0-9.]*\).*\.zip,\1,'`
+    if [ ! -d /opt/gradle/versions/${ver} ]; then
+        unzip -qq $f
+        mv gradle-${ver} /opt/gradle/versions/${ver}
+    fi
+done
+
+chmod -R a+rX /opt/gradle
+
+test -e /opt/gradle/bin || mkdir -p /opt/gradle/bin
+touch /opt/gradle/bin/gradle
+chown vagrant.vagrant /opt/gradle/bin/gradle
+chmod 0755 /opt/gradle/bin/gradle

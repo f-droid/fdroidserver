@@ -11,7 +11,7 @@ if [ -z "$files" ]; then
     PY_FILES="fdroid makebuildserver setup.py examples/*.py buildserver/*.py fdroidserver/*.py"
     PY_TEST_FILES="tests/*.TestCase"
     SH_FILES="hooks/pre-commit"
-    BASH_FILES="fd-commit jenkins-build docs/update.sh completion/bash-completion"
+    BASH_FILES="fd-commit jenkins-build docs/update.sh completion/bash-completion buildserver/provision-*"
     RB_FILES="buildserver/cookbooks/*/recipes/*.rb"
 else
     # if actually committing right now, then only run on the files
@@ -23,6 +23,7 @@ else
     RB_FILES=
 
     for f in $files; do
+        test -e $f || continue
         case $f in
             *.py)
                 PY_FILES+=" $f"

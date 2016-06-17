@@ -89,6 +89,8 @@ if not os.path.exists(cachedir):
 cachefiles = [
     ('https://dl.google.com/android/repository/tools_r25.1.7-linux.zip',
      '3ca053600a86a5a64d5571edfbb1dad27f2bda3bfd2d38e2fe54322610b1ef0b'),
+    ('https://dl.google.com/android/repository/android_m2repository_r32.zip',
+     'a6a8d7ffb153161f26d5fdebfa9aa1c9c84b29c62851fffff2cdfad9e094b13b'),
     ('https://dl.google.com/android/repository/android-1.5_r04-linux.zip',
      '85b6c8f9797e56aa415d3a282428bb640c96b0acb17c11d41621bb2a5302fe64'),
     ('https://dl.google.com/android/repository/android-1.6_r03-linux.zip',
@@ -97,19 +99,19 @@ cachefiles = [
      'e70e2151b49613f23f40828c771ab85e241eed361cab037c6312df77f2612f0a'),
     ('https://dl.google.com/android/repository/android-2.0.1_r01-linux.zip',
      'f47b46177b17f6368461f85bc2a27d0d2c437929f588ea27105712bc3185f664'),
-    ('https://dl.google.com/android/repository/android-2.1_r03-linux.zip',
+    ('https://dl.google.com/android/repository/android-2.1_r03.zip',
      'b9cc140a9b879586181b22cfc7d4aa18b979251e16e9b17771c5d0acb71ba940'),
-    ('https://dl.google.com/android/repository/android-2.2_r03-linux.zip',
+    ('https://dl.google.com/android/repository/android-2.2_r03.zip',
      '7c9ea1bd7cb225504bd085d7c93ae27d52bd88d29b621d28108f82fef68177c0'),
-    ('https://dl.google.com/android/repository/android-2.3.1_r02-linux.zip',
+    ('https://dl.google.com/android/repository/android-2.3.1_r02.zip',
      'b2ab4896d0a4857e4f688f69eb08b0e1a8074709d4445a92a83ece7ec7cd198c'),
-    ('https://dl.google.com/android/repository/android-2.3.3_r02-linux.zip',
+    ('https://dl.google.com/android/repository/android-2.3.3_r02.zip',
      '54bdb0f1ca06ba5747061ddeea20f431af72c448334fd4d3d7f84ea2ccd29fea'),
-    ('https://dl.google.com/android/repository/android-3.0_r02-linux.zip',
+    ('https://dl.google.com/android/repository/android-3.0_r02.zip',
      '1cacae7b6e1b5a5d73c06f5d29d2ea92d16674df8fd5507681290e77d1647a1c'),
-    ('https://dl.google.com/android/repository/android-3.1_r03-linux.zip',
+    ('https://dl.google.com/android/repository/android-3.1_r03.zip',
      '7570c86a86488a146aa2141a65a24d81800959c1907ff4f1d2c13bbafab230c5'),
-    ('https://dl.google.com/android/repository/android-3.2_r01-linux.zip',
+    ('https://dl.google.com/android/repository/android-3.2_r01.zip',
      'ff6b26ad34d7060a72ba504b0314cef8ba3138005561705adec5ad470a073d9b'),
     ('https://dl.google.com/android/repository/android-14_r04.zip',
      'da1af15c77ba41d062eb6d0ef5921cc424ab6167587033b830609d65f04802b6'),
@@ -361,7 +363,8 @@ if 'aptproxy' in config and config['aptproxy']:
 # does not need a custom mount
 if cachedir != 'buildserver/cache':
     vagrantfile += """
-  config.vm.synced_folder '{0}', '/vagrant/cache'
+  config.vm.synced_folder '{0}', '/vagrant/cache',
+    owner: 'root', group: 'root', create: true
 """.format(cachedir)
 
 # cache .deb packages on the host via a mount trick
@@ -373,24 +376,32 @@ if config['apt_package_cache']:
 """.format(aptcachedir)
 
 vagrantfile += """
+
+  config.vm.provision "shell" do |shell|
+    shell.path = "setup-env-vars"
+    shell.args = ["/home/vagrant/android-sdk", "/home/vagrant/android-ndk"]
+  end
+
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "cookbooks"
     chef.log_level = :debug
     chef.json = {
       :settings => {
-        :sdk_loc => "/home/vagrant/android-sdk",
-        :ndk_loc => "/home/vagrant/android-ndk",
         :debian_mirror => "%s",
         :ubuntu_trusty => "%s",
         :user => "vagrant"
       }
     }
     chef.add_recipe "fdroidbuild-general"
-    chef.add_recipe "android-sdk"
-    chef.add_recipe "android-ndk"
-    chef.add_recipe "gradle"
     chef.add_recipe "kivy"
   end
+
+  config.vm.provision "shell", path: "provision-android-sdk"
+  config.vm.provision "shell", path: "provision-android-ndk"
+  config.vm.provision "shell", path: "provision-gradle"
+  config.vm.provision "file", source: "gradle",
+    destination: "/opt/gradle/bin/gradle"
+
 end
 """ % (config['debian_mirror'],
        str('14.04' in os.uname()[3]).lower())

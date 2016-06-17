@@ -44,6 +44,8 @@ from . import metadata
 from .common import FDroidPopen, FDroidPopenBytes, SdkToolsPopen
 from .metadata import MetaDataException
 
+METADATA_VERSION = 16
+
 screen_densities = ['640', '480', '320', '240', '160', '120']
 
 all_screen_densities = ['0'] + screen_densities
@@ -811,7 +813,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         for mirror in config.get('mirrors', []):
             addElement('mirror', urllib.parse.urljoin(mirror, urlbasepath), doc, repoel)
 
-    repoel.setAttribute("version", "16")
+    repoel.setAttribute("version", str(METADATA_VERSION))
     repoel.setAttribute("timestamp", str(int(time.time())))
 
     nosigningkey = False
@@ -1224,6 +1226,8 @@ def main():
     if not options.clean and os.path.exists(apkcachefile):
         with open(apkcachefile, 'rb') as cf:
             apkcache = pickle.load(cf, encoding='utf-8')
+        if apkcache.get("METADATA_VERSION") != METADATA_VERSION:
+            apkcache = {}
     else:
         apkcache = {}
 
@@ -1364,6 +1368,7 @@ def main():
                 f.write(data)
 
     if cachechanged:
+        apkcache["METADATA_VERSION"] = METADATA_VERSION
         with open(apkcachefile, 'wb') as cf:
             pickle.dump(apkcache, cf)
 

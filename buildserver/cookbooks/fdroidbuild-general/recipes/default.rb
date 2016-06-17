@@ -54,6 +54,7 @@ end
     openjdk-7-jdk
     openjdk-8-jdk
     optipng
+    p7zip
     pandoc
     perlmagick
     pkg-config
@@ -94,12 +95,6 @@ end
 easy_install_package "compare-locales" do
   options "-U"
   action :install
-end
-
-execute "add-bsenv" do
-  user user
-  command "echo \". ./.bsenv \" >> /home/#{user}/.bashrc"
-  not_if "grep bsenv /home/#{user}/.bashrc"
 end
 
 execute "set-default-java" do
