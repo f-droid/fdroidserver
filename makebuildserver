@@ -377,10 +377,8 @@ if config['apt_package_cache']:
 
 vagrantfile += """
 
-  config.vm.provision "shell" do |shell|
-    shell.path = "setup-env-vars"
-    shell.args = ["/home/vagrant/android-sdk", "/home/vagrant/android-ndk"]
-  end
+  config.vm.provision "shell", path: "setup-env-vars",
+    args: ["/home/vagrant/android-sdk"]
 
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "cookbooks"
@@ -397,7 +395,8 @@ vagrantfile += """
   end
 
   config.vm.provision "shell", path: "provision-android-sdk"
-  config.vm.provision "shell", path: "provision-android-ndk"
+  config.vm.provision "shell", path: "provision-android-ndk",
+    args: ["/home/vagrant/android-ndk"]
   config.vm.provision "shell", path: "provision-gradle"
   config.vm.provision "file", source: "gradle",
     destination: "/opt/gradle/bin/gradle"

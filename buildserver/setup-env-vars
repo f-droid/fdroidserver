@@ -10,7 +10,6 @@ bsenv=/etc/profile.d/bsenv.sh
 echo "# generated on "`date` > $bsenv
 
 echo export ANDROID_HOME=$1 >> $bsenv
-echo export ANDROID_NDK_HOME=$2 >> $bsenv
 echo 'export PATH=$PATH:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:/opt/gradle/bin' >> $bsenv
 
 chmod 0644 $bsenv
