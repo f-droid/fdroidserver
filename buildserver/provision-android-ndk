@@ -17,8 +17,8 @@ if [ ! -e $ANDROID_NDK_HOME/r9b ]; then
     else
         SUFFIX=''
     fi
-    tar jxvf /vagrant/cache/android-ndk-r9b-linux-x86$SUFFIX.tar.bz2
-    tar jxvf /vagrant/cache/android-ndk-r9b-linux-x86$SUFFIX-legacy-toolchains.tar.bz2
+    tar xjf /vagrant/cache/android-ndk-r9b-linux-x86$SUFFIX.tar.bz2
+    tar xjf /vagrant/cache/android-ndk-r9b-linux-x86$SUFFIX-legacy-toolchains.tar.bz2
     mv android-ndk-r9b r9b
 fi
 
