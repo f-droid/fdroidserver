@@ -292,8 +292,8 @@ for srcurl, shasum in cachefiles:
                          stream=True, verify=False, allow_redirects=True)
         content_length = int(r.headers.get('content-length'))
         with open(local_filename, 'ab') as f:
-            for chunk in progress.bar(r.iter_content(chunk_size=1024),
-                                      expected_size=(content_length / 1024) + 1):
+            for chunk in progress.bar(r.iter_content(chunk_size=65536),
+                                      expected_size=(content_length / 65536) + 1):
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
 
