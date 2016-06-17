@@ -387,9 +387,10 @@ def main():
 
     anywarns = False
 
-    apps_check_funcs = [
-        check_extlib_dir,
-    ]
+    apps_check_funcs = []
+    if len(options.appid) == 0:
+        # otherwise it finds tons of unused extlibs
+        apps_check_funcs.append(check_extlib_dir)
     for check_func in apps_check_funcs:
         for warn in check_func(apps.values()):
             anywarns = True
