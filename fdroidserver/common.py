@@ -1848,7 +1848,7 @@ def place_srclib(root_dir, number, libpath):
         if not placed:
             o.write('android.library.reference.%d=%s\n' % (number, relpath))
 
-apk_sigfile = re.compile(r'META-INF/[0-9A-Za-z]+\.(SF|RSA)')
+apk_sigfile = re.compile(r'META-INF/[0-9A-Za-z]+\.(SF|RSA|DSA|EC)')
 
 
 def verify_apks(signed_apk, unsigned_apk, tmp_dir):
