@@ -419,13 +419,32 @@ def get_icon_bytes(apkzip, iconsrc):
         return apkzip.read(iconsrc.encode('utf-8').decode('cp437'))
 
 
+def sha256sum(filename):
+    '''Calculate the sha256 of the given file'''
+    sha = hashlib.sha256()
+    with open(filename, 'rb') as f:
+        while True:
+            t = f.read(16384)
+            if len(t) == 0:
+                break
+            sha.update(t)
+    return sha.hexdigest()
+
+
 def insert_obbs(repodir, apps, apks):
     """Scans the .obb files in a given repo directory and adds them to the
-    relevant APK instances.
+    relevant APK instances.  OBB files have versionCodes like APK
+    files, and they are loosely associated.  If there is an OBB file
+    present, then any APK with the same or higher versionCode will use
+    that OBB file.  There are two OBB types: main and patch, each APK
+    can only have only have one of each.
+
+    https://developer.android.com/google/play/expansion-files.html
 
     :param repodir: repo directory to scan
     :param apps: list of current, valid apps
     :param apks: current information on all APKs
+
     """
 
     def obbWarnDelete(f, msg):
@@ -460,16 +479,18 @@ def insert_obbs(repodir, apps, apks):
             obbWarnDelete(f, 'OBB file has newer versioncode(' + str(versioncode)
                           + ') than any APK: ')
             continue
-
-        obbs.append((packagename, versioncode, obbfile))
+        obbsha256 = sha256sum(f)
+        obbs.append((packagename, versioncode, obbfile, obbsha256))
 
     for apk in apks:
-        for (packagename, versioncode, obbfile) in sorted(obbs, reverse=True):
+        for (packagename, versioncode, obbfile, obbsha256) in sorted(obbs, reverse=True):
             if versioncode <= apk['versioncode'] and packagename == apk['id']:
                 if obbfile.startswith('main.') and 'obbMainFile' not in apk:
                     apk['obbMainFile'] = obbfile
+                    apk['obbMainFileSha256'] = obbsha256
                 elif obbfile.startswith('patch.') and 'obbPatchFile' not in apk:
                     apk['obbPatchFile'] = obbfile
+                    apk['obbPatchFileSha256'] = obbsha256
             if 'obbMainFile' in apk and 'obbPatchFile' in apk:
                 break
 
@@ -515,15 +536,7 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
             logging.critical("Spaces in filenames are not allowed.")
             sys.exit(1)
 
-        # Calculate the sha256...
-        sha = hashlib.sha256()
-        with open(apkfile, 'rb') as f:
-            while True:
-                t = f.read(16384)
-                if len(t) == 0:
-                    break
-                sha.update(t)
-            shasum = sha.hexdigest()
+        shasum = sha256sum(apkfile)
 
         usecache = False
         if apkfilename in apkcache:
@@ -1027,7 +1040,9 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             if 'maxSdkVersion' in apk:
                 addElement('maxsdkver', str(apk['maxSdkVersion']), doc, apkel)
             addElementNonEmpty('obbMainFile', apk.get('obbMainFile'), doc, apkel)
+            addElementNonEmpty('obbMainFileSha256', apk.get('obbMainFileSha256'), doc, apkel)
             addElementNonEmpty('obbPatchFile', apk.get('obbPatchFile'), doc, apkel)
+            addElementNonEmpty('obbPatchFileSha256', apk.get('obbPatchFileSha256'), doc, apkel)
             if 'added' in apk:
                 addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
             addElementNonEmpty('permissions', ','.join(apk['permissions']), doc, apkel)
