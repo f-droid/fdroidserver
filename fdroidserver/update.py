@@ -323,8 +323,10 @@ def resize_icon(iconpath, density):
     if not os.path.isfile(iconpath):
         return
 
+    fp = None
     try:
-        im = Image.open(iconpath)
+        fp = open(iconpath, 'rb')
+        im = Image.open(fp)
         size = dpi_to_px(density)
 
         if any(length > size for length in im.size):
@@ -336,6 +338,10 @@ def resize_icon(iconpath, density):
 
     except Exception as e:
         logging.error("Failed resizing {0} - {1}".format(iconpath, e))
+
+    finally:
+        if fp:
+            fp.close()
 
 
 def resize_all_icons(repodirs):
@@ -563,7 +569,7 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
 
             # Check for debuggable apks...
             if common.isApkDebuggable(apkfile, config):
-                logging.warn('{0} is set to android:debuggable="true"'.format(apkfile))
+                logging.warning('{0} is set to android:debuggable="true"'.format(apkfile))
 
             # Get the signature (or md5 of, to be precise)...
             logging.debug('Getting signature of {0}'.format(apkfile))
@@ -657,17 +663,21 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
                     get_icon_dir(repodir, last_density), iconfilename)
                 iconpath = os.path.join(
                     get_icon_dir(repodir, density), iconfilename)
+                fp = None
                 try:
-                    im = Image.open(last_iconpath)
+                    fp = open(last_iconpath, 'rb')
+                    im = Image.open(fp)
+
+                    size = dpi_to_px(density)
+
+                    im.thumbnail((size, size), Image.ANTIALIAS)
+                    im.save(iconpath, "PNG")
+                    empty_densities.remove(density)
                 except:
-                    logging.warn("Invalid image file at %s" % last_iconpath)
-                    continue
-
-                size = dpi_to_px(density)
-
-                im.thumbnail((size, size), Image.ANTIALIAS)
-                im.save(iconpath, "PNG")
-                empty_densities.remove(density)
+                    logging.warning("Invalid image file at %s" % last_iconpath)
+                finally:
+                    if fp:
+                        fp.close()
 
             # Then just copy from the highest resolution available
             last_density = None
