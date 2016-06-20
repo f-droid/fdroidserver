@@ -431,8 +431,7 @@ def build_server(app, build, vcs, build_dir, output_dir, force):
         release_vm()
 
 
-def adapt_gradle(build_dir):
-    filename = 'build.gradle'
+def force_gradle_build_tools(build_dir, build_tools):
     for root, dirs, files in os.walk(build_dir):
         for filename in files:
             if not filename.endswith('.gradle'):
@@ -440,9 +439,9 @@ def adapt_gradle(build_dir):
             path = os.path.join(root, filename)
             if not os.path.isfile(path):
                 continue
-            logging.debug("Adapting %s at %s" % (filename, path))
+            logging.debug("Forcing build-tools %s in %s" % (build_tools, path))
             common.regsub_file(r"""(\s*)buildToolsVersion([\s=]+).*""",
-                               r"""\1buildToolsVersion\2'%s'""" % config['build_tools'],
+                               r"""\1buildToolsVersion\2'%s'""" % build_tools,
                                path)
 
 
@@ -512,9 +511,10 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
 
         gradletasks += ['assemble' + flavours_cmd + 'Release']
 
-        adapt_gradle(build_dir)
-        for name, number, libpath in srclibpaths:
-            adapt_gradle(libpath)
+        if config['force_build_tools']:
+            force_gradle_build_tools(build_dir, config['build_tools'])
+            for name, number, libpath in srclibpaths:
+                force_gradle_build_tools(libpath, config['build_tools'])
 
         cmd = [config['gradle']]
         if build.gradleprops:
