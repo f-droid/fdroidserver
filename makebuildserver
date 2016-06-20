@@ -11,6 +11,7 @@ import hashlib
 import yaml
 from clint.textui import progress
 from optparse import OptionParser
+import fdroidserver.tail
 
 
 if not os.path.exists('makebuildserver') and not os.path.exists('buildserver'):
@@ -362,8 +363,14 @@ elif os.path.exists('/proc/cpuinfo'):
         config['hwvirtex'] = 'on'
 
 logfilename = os.path.join(serverdir, 'up.log')
+if not os.path.exists(logfilename):
+    open(logfilename, 'a').close()  # create blank file
 log_cm = vagrant.make_file_cm(logfilename)
 v = vagrant.Vagrant(root=serverdir, out_cm=log_cm, err_cm=log_cm)
+
+if options.verbose:
+    tail = fdroidserver.tail.Tail(logfilename)
+    tail.start()
 
 if options.clean:
     v.destroy()
@@ -438,3 +445,6 @@ print("Adding box")
 v.box_add('buildserver', boxfile, force=True)
 
 os.remove(boxfile)
+
+if tail is not None:
+    tail.stop()
