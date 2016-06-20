@@ -1,0 +1,12 @@
+Categories:Development
+License:GPLv3
+Source Code:https://github.com/eighthave/urzip
+Bitcoin:1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk
+
+Auto Name:OBB Two Versions
+
+Repo Type:git
+Repo:https://github.com/eighthave/urzip.git
+
+
+Current Version Code:99999999
