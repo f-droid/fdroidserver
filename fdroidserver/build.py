@@ -388,6 +388,7 @@ def build_server(app, build, vcs, build_dir, output_dir, force):
         if options.verbose:
             cmdline += ' --verbose'
         cmdline += " %s:%s" % (app.id, build.vercode)
+        cmdline = '. /etc/profile && ' + cmdline
         chan.exec_command('bash -c "' + cmdline + '"')
         output = bytes()
         while not chan.exit_status_ready():
