@@ -783,9 +783,10 @@ def read_metadata(xref=True):
                                + glob.glob('.fdroid.json')
                                + glob.glob('.fdroid.xml')
                                + glob.glob('.fdroid.yml')):
+        packageName, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
+        if packageName in apps:
+            raise MetaDataException("Found multiple metadata files for " + packageName)
         app = parse_metadata(metadatapath)
-        if app.id in apps:
-            raise MetaDataException("Found multiple metadata files for " + app.id)
         check_metadata(app)
         apps[app.id] = app
 

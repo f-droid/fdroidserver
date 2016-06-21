@@ -46,7 +46,7 @@ class BuildTest(unittest.TestCase):
                 self.assertTrue(os.path.exists(path))
                 self.assertTrue(os.path.isfile(path))
 
-    def test_adapt_gradle(self):
+    def test_force_gradle_build_tools(self):
         testsbase = os.path.join(os.path.dirname(__file__), '..', '.testfiles')
         if not os.path.exists(testsbase):
             os.makedirs(testsbase)
@@ -54,9 +54,7 @@ class BuildTest(unittest.TestCase):
         shutil.copytree(os.path.join(os.path.dirname(__file__), 'source-files'),
                         os.path.join(testsdir, 'source-files'))
         teststring = 'FAKE_VERSION_FOR_TESTING'
-        fdroidserver.build.config = {}
-        fdroidserver.build.config['build_tools'] = teststring
-        fdroidserver.build.adapt_gradle(testsdir)
+        fdroidserver.build.force_gradle_build_tools(testsdir, teststring)
         pattern = re.compile(bytes("buildToolsVersion[\s=]+'%s'\s+" % teststring, 'utf8'))
         for p in ('source-files/fdroid/fdroidclient/build.gradle',
                   'source-files/Zillode/syncthing-silk/build.gradle',
@@ -66,6 +64,7 @@ class BuildTest(unittest.TestCase):
             with open(os.path.join(testsdir, p), 'rb') as f:
                 filedata = f.read()
             self.assertIsNotNone(pattern.search(filedata))
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()

@@ -46,7 +46,7 @@ cd $WORKSPACE
 echo "debian_mirror = 'http://ftp.uk.debian.org/debian/'" > $WORKSPACE/makebuildserver.config.py
 echo "boot_timeout = 1200" >> $WORKSPACE/makebuildserver.config.py
 echo "apt_package_cache = True" >> $WORKSPACE/makebuildserver.config.py
-./makebuildserver
+./makebuildserver --verbose
 
 # this can be handled in the jenkins job, or here:
 if [ -e fdroiddata ]; then

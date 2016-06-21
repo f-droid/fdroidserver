@@ -25,6 +25,10 @@
 # Build tools version to be used
 # build_tools = "23.0.3"
 
+# Force all build to use the above version of build -tools, good for testing
+# builds without having all of the possible build-tools installed.
+# force_build_tools = True
+
 # Command or path to binary for running Ant
 # ant = "ant"
 
@@ -232,10 +236,10 @@ The repository of older versions of applications from the main demo repository.
 # --server option on dedicated secure build server hosts.
 # build_server_always = True
 
-# By default, fdroid will use YAML and the custom .txt metadata formats. It
+# By default, fdroid will use YAML .yml and the custom .txt metadata formats. It
 # is also possible to have metadata in JSON and XML by adding 'json' and
 # 'xml'.
-# accepted_formats = ['txt', 'yaml']
+# accepted_formats = ['txt', 'yml']
 
 # Limit in number of characters that fields can take up
 # Only the fields listed here are supported, defaults shown
