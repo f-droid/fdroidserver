@@ -12,6 +12,7 @@ matrix:
       # this doesn't actually work yet https://github.com/travis-ci/travis-ci/issues/5337
       dist: trusty
     - os: osx
+      osx_image: xcode8
       env: ANDROID_HOME=/usr/local/opt/android-sdk
 
 licenses:
