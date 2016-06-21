@@ -51,8 +51,7 @@ end
     maven
     mercurial
     nasm
-    openjdk-7-jdk
-    openjdk-8-jdk
+    openjdk-8-jdk-headless
     optipng
     p7zip
     pandoc
@@ -98,7 +97,7 @@ easy_install_package "compare-locales" do
 end
 
 execute "set-default-java" do
-  command "update-java-alternatives --set java-1.7.0-openjdk-i386"
+  command "update-java-alternatives --set java-1.8.0-openjdk-i386"
 end
 
 # Ubuntu trusty 14.04's paramiko does not work with jessie's openssh's default settings

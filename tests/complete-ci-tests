@@ -36,9 +36,9 @@ fi
 
 
 #------------------------------------------------------------------------------#
-# required Java 7 keytool/jarsigner for :file support
+# required Java 7 or later keytool/jarsigner for :file support
 
-export PATH=/usr/lib/jvm/java-7-openjdk-amd64/bin:$PATH
+export PATH=/usr/lib/jvm/java-8-openjdk-amd64/bin:$PATH
 
 
 #------------------------------------------------------------------------------#
