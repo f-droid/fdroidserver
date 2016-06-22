@@ -2,6 +2,7 @@
 #
 
 set -e
+set -x
 
 if [ -z $ANDROID_HOME ]; then
     echo "ANDROID_HOME env var must be set!"
@@ -43,7 +44,7 @@ for f in `ls -1 build-tools*.zip`; do
 done
 
 ${ANDROID_HOME}/tools/android update sdk --no-ui --all \
-    --filter platform-tools,extra-android-m2repository${cached} > /dev/null <<EOH
+    --filter platform-tools,extra-android-m2repository${cached} <<EOH
 y
 
 EOH
