@@ -411,6 +411,14 @@ def getsig(apkpath):
     return hashlib.md5(hexlify(cert_encoded)).hexdigest()
 
 
+def get_icon_bytes(apkzip, iconsrc):
+    '''ZIP has no official encoding, UTF-* and CP437 are defacto'''
+    try:
+        return apkzip.read(iconsrc)
+    except KeyError:
+        return apkzip.read(iconsrc.encode('utf-8').decode('cp437'))
+
+
 def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
     """Scan the apks in the given repo directory.
 
@@ -613,7 +621,7 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
 
                 try:
                     with open(icondest, 'wb') as f:
-                        f.write(apkzip.read(iconsrc))
+                        f.write(get_icon_bytes(apkzip, iconsrc))
                     apk['icons'][density] = iconfilename
 
                 except:
@@ -627,7 +635,7 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
                 iconpath = os.path.join(
                     get_icon_dir(repodir, '0'), iconfilename)
                 with open(iconpath, 'wb') as f:
-                    f.write(apkzip.read(iconsrc))
+                    f.write(get_icon_bytes(apkzip, iconsrc))
                 try:
                     im = Image.open(iconpath)
                     dpi = px_to_dpi(im.size[0])
