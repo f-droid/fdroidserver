@@ -293,6 +293,14 @@ def sha256_for_file(path):
         return s.hexdigest()
 
 
+def run_via_vagrant_ssh(v, cmdlist):
+    if (isinstance(cmdlist, str) or isinstance(cmdlist, bytes)):
+        cmd = cmdlist
+    else:
+        cmd = ' '.join(cmdlist)
+    v._run_vagrant_command(['ssh', '-c', cmd])
+
+
 def main():
     global cachedir, cachefiles, config, tail
 
@@ -434,10 +442,7 @@ def main():
                          universal_newlines=True)
     buildserverid = p.communicate()[0].strip()
     print("...ID is " + buildserverid)
-    subprocess.call(
-        ['vagrant', 'ssh', '-c', 'sh -c "echo {0} >/home/vagrant/buildserverid"'
-            .format(buildserverid)],
-        cwd=serverdir)
+    run_via_vagrant_ssh(v, 'sh -c "echo %s >/home/vagrant/buildserverid"' % buildserverid)
 
     print("Stopping build server VM")
     v.halt()
