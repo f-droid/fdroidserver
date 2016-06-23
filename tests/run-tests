@@ -139,6 +139,20 @@ $fdroid update
 
 
 #------------------------------------------------------------------------------#
+echo_header "copy tests/repo, generate a keystore, and update"
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+$fdroid init
+cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $REPOROOT/
+echo "accepted_formats = ['json', 'txt', 'xml', 'yml']" >> config.py
+$fdroid update --verbose
+test -e repo/index.xml
+test -e repo/index.jar
+grep -F '<application id=' repo/index.xml > /dev/null
+
+
+#------------------------------------------------------------------------------#
 echo_header "test metadata checks"
 
 REPOROOT=`create_test_dir`
