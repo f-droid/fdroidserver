@@ -2,6 +2,7 @@
 
 import os
 import pathlib
+import re
 import requests
 import stat
 import sys
@@ -39,6 +40,7 @@ config = {
     ],
     'debian_mirror': 'http://http.debian.net/debian/',
     'apt_package_cache': False,
+    'copy_caches_from_host': False,
     'boot_timeout': 600,
     'cachedir': cachedir,
     'cpus': 1,
@@ -436,6 +438,27 @@ def main():
 
     print("Configuring build server VM")
     v.up(provision=True)
+
+    if config['copy_caches_from_host']:
+        ssh_config = v.ssh_config()
+        user = re.search(r'User ([^ \n]+)', ssh_config).group(1)
+        hostname = re.search(r'HostName ([^ \n]+)', ssh_config).group(1)
+        port = re.search(r'Port ([0-9]+)', ssh_config).group(1)
+        key = re.search(r'IdentityFile ([^ \n]+)', ssh_config).group(1)
+
+        for d in ('.m2', '.gradle/caches', '.gradle/wrapper', '.pip_download_cache'):
+            fullpath = os.path.join(os.getenv('HOME'), d)
+            if os.path.isdir(fullpath):
+                # TODO newer versions of vagrant provide `vagrant rsync`
+                run_via_vagrant_ssh(v, ['cd ~ && test -d', d, '|| mkdir -p', d])
+                subprocess.call(['rsync', '-axv', '--progress', '--delete', '-e',
+                                 'ssh -i {0} -p {1} -oIdentitiesOnly=yes'.format(key, port),
+                                 fullpath + '/',
+                                 user + '@' + hostname + ':~/' + d + '/'])
+
+        # this file changes every time but should not be cached
+        run_via_vagrant_ssh(v, ['rm', '-f', '~/.gradle/caches/modules-2/modules-2.lock'])
+        run_via_vagrant_ssh(v, ['rm', '-fr', '~/.gradle/caches/*/plugin-resolution/'])
 
     print("Writing buildserver ID")
     p = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE,
