@@ -58,7 +58,7 @@ default_config = {
         'r9b': None,
         'r10e': "$ANDROID_NDK",
     },
-    'build_tools': "23.0.3",
+    'build_tools': "24.0.0",
     'force_build_tools': False,
     'java_paths': None,
     'ant': "ant",
