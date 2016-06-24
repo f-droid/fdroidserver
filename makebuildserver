@@ -201,6 +201,8 @@ cachefiles = [
      '8734b13a401f4311ee418173ed6ca8662d2b0a535be8ff2a43ecb1c13cd406ea'),
     ('https://services.gradle.org/distributions/gradle-2.1-bin.zip',
      '3eee4f9ea2ab0221b89f8e4747a96d4554d00ae46d8d633f11cfda60988bf878'),
+    ('https://services.gradle.org/distributions/gradle-2.2-bin.zip',
+     '91e5655fe11ef414449f218c4fa2985b3a49b7903c57556da109c84fa26e1dfb'),
     ('https://services.gradle.org/distributions/gradle-2.2.1-bin.zip',
      '420aa50738299327b611c10b8304b749e8d3a579407ee9e755b15921d95ff418'),
     ('https://services.gradle.org/distributions/gradle-2.3-bin.zip',
@@ -225,6 +227,8 @@ cachefiles = [
      'e77064981906cd0476ff1e0de3e6fef747bd18e140960f1915cca8ff6c33ab5c'),
     ('https://services.gradle.org/distributions/gradle-2.13-bin.zip',
      '0f665ec6a5a67865faf7ba0d825afb19c26705ea0597cec80dd191b0f2cbb664'),
+    ('https://services.gradle.org/distributions/gradle-2.14-bin.zip',
+     '993b4f33b652c689e9721917d8e021cab6bbd3eae81b39ab2fd46fdb19a928d5'),
     ('https://pypi.python.org/packages/source/K/Kivy/Kivy-1.7.2.tar.gz',
      '0485e2ef97b5086df886eb01f8303cb542183d2d71a159466f99ad6c8a1d03f1'),
 ]
