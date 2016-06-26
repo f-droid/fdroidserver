@@ -698,13 +698,14 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
                 shutil.copyfile(baseline,
                                 os.path.join(get_icon_dir(repodir, '0'), iconfilename))
 
-            # Record in known apks, getting the added date at the same time..
-            added = knownapks.recordapk(apk['apkname'], apk['id'])
-            if added:
-                if use_date_from_apk and manifest.date_time[1] != 0:
-                    added = datetime(*manifest.date_time).timetuple()
-                    logging.debug("Using date from APK")
+            if use_date_from_apk and manifest.date_time[1] != 0:
+                default_date_param = datetime(*manifest.date_time).utctimetuple()
+            else:
+                default_date_param = None
 
+            # Record in known apks, getting the added date at the same time..
+            added = knownapks.recordapk(apk['apkname'], apk['id'], default_date=default_date_param)
+            if added:
                 apk['added'] = added
 
             apkcache[apkfilename] = apk

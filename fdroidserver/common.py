@@ -1570,9 +1570,11 @@ class KnownApks:
 
     # Record an apk (if it's new, otherwise does nothing)
     # Returns the date it was added.
-    def recordapk(self, apk, app):
+    def recordapk(self, apk, app, default_date=None):
         if apk not in self.apks:
-            self.apks[apk] = (app, time.gmtime(time.time()))
+            if default_date is None:
+                default_date = time.gmtime(time.time())
+            self.apks[apk] = (app, default_date)
             self.changed = True
         _, added = self.apks[apk]
         return added
