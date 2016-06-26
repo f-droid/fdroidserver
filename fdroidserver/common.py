@@ -1097,7 +1097,7 @@ def parse_androidmanifests(paths, app):
                 for line in f:
                     if gradle_comment.match(line):
                         continue
-                    # Grab first occurence of each to avoid running into
+                    # Grab first occurrence of each to avoid running into
                     # alternative flavours and builds.
                     if not package:
                         matches = psearch_g(line)

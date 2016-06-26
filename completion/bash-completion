@@ -19,7 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # 'fdroid' is completed automatically, but aliases to it are not.
-# For instance, to alias 'fd' to 'fdroid' and have competion available:
+# For instance, to alias 'fd' to 'fdroid' and have completion available:
 #
 #	alias fd='fdroid'
 #	complete -F _fdroid fd

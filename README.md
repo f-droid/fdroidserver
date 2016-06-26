@@ -44,7 +44,7 @@ like Homebrew, MacPorts, and Fink:
 	brew install fdroidserver
 
 For Arch-Linux is a package in the AUR available. If you have installed
-`yaourt` or something similiar, you can do:
+`yaourt` or something similar, you can do:
 
 	yaourt -S fdroidserver
 
