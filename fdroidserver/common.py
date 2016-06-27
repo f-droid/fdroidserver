@@ -1794,7 +1794,8 @@ def set_FDroidPopen_env(build=None):
     set up the environment variables for the build environment
 
     There is only a weak standard, the variables used by gradle, so also set
-    up the most commonly used environment variables for SDK and NDK
+    up the most commonly used environment variables for SDK and NDK.  Also, if
+    there is no locale set, this will set the locale (e.g. LANG) to en_US.UTF-8.
     '''
     global env, orig_path
 
@@ -1805,6 +1806,15 @@ def set_FDroidPopen_env(build=None):
             env[n] = config['sdk_path']
         for k, v in config['java_paths'].items():
             env['JAVA%s_HOME' % k] = v
+
+    missinglocale = True
+    for k, v in env.items():
+        if k == 'LANG' and v != 'C':
+            missinglocale = False
+        elif k == 'LC_ALL':
+            missinglocale = False
+    if missinglocale:
+        env['LANG'] = 'en_US.UTF-8'
 
     if build is not None:
         path = build.ndk_path()
