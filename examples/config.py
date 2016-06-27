@@ -20,7 +20,7 @@
 # }
 
 # Build tools version to be used
-# build_tools = "23.0.3"
+# build_tools = "24.0.0"
 
 # Force all build to use the above version of build -tools, good for testing
 # builds without having all of the possible build-tools installed.
