@@ -438,7 +438,7 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
     icon_pat = re.compile(".*application-icon-([0-9]+):'([^']+?)'.*")
     icon_pat_nodpi = re.compile(".*icon='([^']+?)'.*")
     sdkversion_pat = re.compile(".*'([0-9]*)'.*")
-    string_pat = re.compile(".*'([^']*)'.*")
+    string_pat = re.compile(".* name='([^']*)'.*")
     for apkfile in glob.glob(os.path.join(repodir, '*.apk')):
 
         apkfilename = apkfile[len(repodir) + 1:]
