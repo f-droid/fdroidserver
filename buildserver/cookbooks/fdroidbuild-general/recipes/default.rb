@@ -11,6 +11,12 @@ execute "jessie_backports" do
   only_if "grep jessie /etc/apt/sources.list"
 end
 
+if node['kernel']['machine'] == "x86_64"
+  execute "archi386" do
+    command "dpkg --add-architecture i386"
+  end
+end
+
 execute "apt-get-update" do
   command "apt-get update"
 end
@@ -49,6 +55,13 @@ end
     libtool-bin
     make
     maven
+  }.each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
+%w{
     mercurial
     nasm
     openjdk-8-jdk-headless
@@ -96,8 +109,14 @@ easy_install_package "compare-locales" do
   action :install
 end
 
-execute "set-default-java" do
-  command "update-java-alternatives --set java-1.8.0-openjdk-i386"
+if node['kernel']['machine'] == "x86_64"
+  execute "set-default-java" do
+    command "update-java-alternatives --set java-1.8.0-openjdk-amd64"
+  end
+else
+  execute "set-default-java" do
+    command "update-java-alternatives --set java-1.8.0-openjdk-i386"
+  end
 end
 
 # Ubuntu trusty 14.04's paramiko does not work with jessie's openssh's default settings

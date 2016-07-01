@@ -271,7 +271,7 @@ def build_server(app, build, vcs, build_dir, output_dir, force):
 
         # Get an SFTP connection...
         ftp = sshs.open_sftp()
-        ftp.get_channel().settimeout(15)
+        ftp.get_channel().settimeout(60)
 
         # Put all the necessary files in place...
         ftp.chdir(homedir)
