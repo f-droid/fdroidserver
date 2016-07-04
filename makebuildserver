@@ -377,16 +377,12 @@ vagrantfile += """
 
   config.vm.provision "shell", path: "setup-env-vars",
     args: ["/home/vagrant/android-sdk"]
+  config.vm.provision "shell", path: "provision-apt-get-install",
+    args: ["{0}"]
 
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "cookbooks"
     chef.log_level = :debug
-    chef.json = {
-      :settings => {
-        :debian_mirror => "%s",
-        :user => "vagrant"
-      }
-    }
     chef.add_recipe "fdroidbuild-general"
     chef.add_recipe "kivy"
   end
@@ -404,7 +400,7 @@ vagrantfile += """
   end
 
 end
-""" % config['debian_mirror']
+""".format(config['debian_mirror'])
 
 
 # Check against the existing Vagrantfile, and if they differ, we need to
