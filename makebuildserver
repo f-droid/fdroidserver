@@ -384,7 +384,6 @@ vagrantfile += """
     chef.json = {
       :settings => {
         :debian_mirror => "%s",
-        :ubuntu_trusty => "%s",
         :user => "vagrant"
       }
     }
@@ -399,9 +398,14 @@ vagrantfile += """
   config.vm.provision "file", source: "gradle",
     destination: "/opt/gradle/bin/gradle"
 
+  # let Ubuntu/trusty's paramiko work with the VM instance
+  if `uname -v`.include? "14.04"
+    config.vm.provision "shell", path: "provision-ubuntu-trusty-paramiko"
+  end
+
 end
-""" % (config['debian_mirror'],
-       str('14.04' in os.uname()[3]).lower())
+""" % config['debian_mirror']
+
 
 # Check against the existing Vagrantfile, and if they differ, we need to
 # create a new box:
