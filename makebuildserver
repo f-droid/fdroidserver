@@ -50,11 +50,11 @@ options, args = parser.parse_args()
 cachedir = os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver')
 config = {
     'arch64': False,
-    'basebox': 'jessie32',
+    'basebox': 'jessie64',
     # TODO in py3, convert this to pathlib.Path(absolute_path_string).as_uri()
     'baseboxurl': [
-        'file://' + os.path.join(cachedir, 'jessie32.box'),
-        'https://f-droid.org/jessie32.box',
+        'file://' + os.path.join(cachedir, 'jessie64.box'),
+        'https://f-droid.org/jessie64.box',
     ],
     'debian_mirror': 'http://http.debian.net/debian/',
     'apt_package_cache': False,
