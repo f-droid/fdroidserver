@@ -383,13 +383,14 @@ vagrantfile += """
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "cookbooks"
     chef.log_level = :debug
-    chef.add_recipe "fdroidbuild-general"
     chef.add_recipe "kivy"
   end
 
   config.vm.provision "shell", path: "provision-android-sdk"
   config.vm.provision "shell", path: "provision-android-ndk",
     args: ["/home/vagrant/android-ndk"]
+  config.vm.provision "shell", path: "provision-pip",
+    args: ["compare-locales"]
   config.vm.provision "shell", path: "provision-gradle"
   config.vm.provision "file", source: "gradle",
     destination: "/opt/gradle/bin/gradle"
