@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo $0
+set -e
+
 # Ubuntu trusty 14.04's paramiko does not work with jessie's openssh's default settings
 # https://stackoverflow.com/questions/7286929/paramiko-incompatible-ssh-peer-no-acceptable-kex-algorithm/32691055#32691055
 

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo $0
+
 fixit()
 {
   #Fix sudoers so the PATH gets passed through, otherwise chef
