@@ -29,9 +29,9 @@ set -x
 # make sure we have the vagrant box image cached
 test -e ~/.cache/fdroidserver || mkdir -p ~/.cache/fdroidserver
 cd ~/.cache/fdroidserver
-wget --tries=1 --timeout=5 --continue https://f-droid.org/jessie32.box || true
-echo "ff6b0c0bebcb742783becbc51a9dfff5a2a0a839bfcbfd0288dcd3113f33e533  jessie32.box" > jessie32.box.sha256
-sha256sum -c jessie32.box.sha256
+wget --tries=1 --timeout=5 --continue https://f-droid.org/jessie64.box || true
+echo "de3e3c4a9c13e8c015e30edeea0f583b195d1ee8ff9ad4814e933bbfb560200f  jessie64.box" > jessie64.box.sha256
+sha256sum -c jessie64.box.sha256
 
 # redirect homes to be in the git repo, so they'll get cleaned and reset
 export XDG_CONFIG_HOME=$WORKSPACE
