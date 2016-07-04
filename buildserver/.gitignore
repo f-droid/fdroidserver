@@ -1,4 +1,4 @@
 .vagrant
 up.log
 cache/
-Vagrantfile
+Vagrantfile.yaml

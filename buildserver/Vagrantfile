@@ -1,0 +1,70 @@
+
+require 'yaml'
+configfile = YAML.load_file('Vagrantfile.yaml')
+
+Vagrant.configure("2") do |config|
+
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box
+    config.cache.auto_detect = false
+    config.cache.enable :apt
+    config.cache.enable :chef
+  end
+
+  config.vm.box = configfile['basebox']
+  config.vm.box_url = configfile['baseboxurl']
+
+  config.vm.provider "virtualbox" do |v|
+    v.customize ["modifyvm", :id, "--memory", configfile['memory']]
+    v.customize ["modifyvm", :id, "--cpus", configfile['cpus']]
+    v.customize ["modifyvm", :id, "--hwvirtex", configfile['hwvirtex']]
+  end
+
+  config.vm.boot_timeout = configfile['boot_timeout']
+
+  config.vm.provision :shell, :path => "fixpaths.sh"
+
+  if configfile.has_key? "aptproxy"
+    config.vm.provision :shell, path: "provision-apt-proxy",
+      args: [configfile["aptproxy"]]
+  end
+
+  # buildserver/ is shared to the VM's /vagrant by default so the old
+  # default does not need a custom mount
+  if configfile["cachedir"] != "buildserver/cache"
+    config.vm.synced_folder configfile["cachedir"], '/vagrant/cache',
+      owner: 'root', group: 'root', create: true
+  end
+
+  # cache .deb packages on the host via a mount trick
+  if configfile.has_key? "aptcachedir"
+    config.vm.synced_folder configfile["aptcachedir"], "/var/cache/apt/archives",
+      owner: 'root', group: 'root', create: true
+  end
+
+  config.vm.provision "shell", path: "setup-env-vars",
+    args: ["/home/vagrant/android-sdk"]
+  config.vm.provision "shell", path: "provision-apt-get-install",
+    args: [configfile['debian_mirror']]
+
+  config.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path = "cookbooks"
+    chef.log_level = :debug
+    chef.add_recipe "kivy"
+  end
+
+  config.vm.provision "shell", path: "provision-android-sdk"
+  config.vm.provision "shell", path: "provision-android-ndk",
+    args: ["/home/vagrant/android-ndk"]
+  config.vm.provision "shell", path: "provision-pip",
+    args: ["compare-locales"]
+  config.vm.provision "shell", path: "provision-gradle"
+  config.vm.provision "file", source: "gradle",
+    destination: "/opt/gradle/bin/gradle"
+
+  # let Ubuntu/trusty's paramiko work with the VM instance
+  if `uname -v`.include? "14.04"
+    config.vm.provision "shell", path: "provision-ubuntu-trusty-paramiko"
+  end
+
+end
