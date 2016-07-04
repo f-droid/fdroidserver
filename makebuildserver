@@ -49,7 +49,6 @@ options, args = parser.parse_args()
 # set up default config
 cachedir = os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver')
 config = {
-    'arch64': True,
     'basebox': 'jessie64',
     # TODO in py3, convert this to pathlib.Path(absolute_path_string).as_uri()
     'baseboxurl': [
@@ -231,24 +230,13 @@ cachefiles = [
      '993b4f33b652c689e9721917d8e021cab6bbd3eae81b39ab2fd46fdb19a928d5'),
     ('https://pypi.python.org/packages/source/K/Kivy/Kivy-1.7.2.tar.gz',
      '0485e2ef97b5086df886eb01f8303cb542183d2d71a159466f99ad6c8a1d03f1'),
+    ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin',
+     '102d6723f67ff1384330d12c45854315d6452d6510286f4e5891e00a5a8f1d5a'),
+    ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64.tar.bz2',
+     '8956e9efeea95f49425ded8bb697013b66e162b064b0f66b5c75628f76e0f532'),
+    ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64-legacy-toolchains.tar.bz2',
+     'de93a394f7c8f3436db44568648f87738a8d09801a52f459dcad3fc047e045a1'),
 ]
-
-if config['arch64']:
-    cachefiles.extend([
-        ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin',
-         '102d6723f67ff1384330d12c45854315d6452d6510286f4e5891e00a5a8f1d5a'),
-        ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64.tar.bz2',
-         '8956e9efeea95f49425ded8bb697013b66e162b064b0f66b5c75628f76e0f532'),
-        ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64-legacy-toolchains.tar.bz2',
-         'de93a394f7c8f3436db44568648f87738a8d09801a52f459dcad3fc047e045a1')])
-else:
-    cachefiles.extend([
-        ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86.bin',
-         '92b07d25aaad9b341a7f2b2a62402d508e948bf2dea3ee7b65a6aeb18bca7df5'),
-        ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86.tar.bz2',
-         '748104b829dd12afb2fdb3044634963abb24cdb0aad3b26030abe2e9e65bfc81'),
-        ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86-legacy-toolchains.tar.bz2',
-         '606aadf815ae28cc7b0154996247c70d609f111b14e44bcbcd6cad4c87fefb6f')])
 
 
 def sha256_for_file(path):
