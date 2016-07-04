@@ -19,6 +19,7 @@ tmp/
 tests/repo/icons*
 
 # files used in manual testing
+/buildserver/Vagrantfile.yaml
 /config.py
 /tmp/
 /logs/
