@@ -306,6 +306,7 @@ for srcurl, shasum in cachefiles:
         print("\t...shasum verified for " + local_filename)
     else:
         print("Invalid shasum of '" + v + "' detected for " + local_filename)
+        os.remove(local_filename)
         sys.exit(1)
 
 # use VirtualBox software virtualization if hardware is not available,
