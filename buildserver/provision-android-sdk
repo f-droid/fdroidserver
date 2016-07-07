@@ -1,7 +1,9 @@
 #!/bin/bash
 #
 
+echo $0
 set -e
+set -x
 
 if [ -z $ANDROID_HOME ]; then
     echo "ANDROID_HOME env var must be set!"
@@ -23,7 +25,7 @@ fi
 
 cd /vagrant/cache
 
-# make hard links for `android update sdk` to use and delete
+# make links for `android update sdk` to use and delete
 for f in android_*.zip android-[0-9]*.zip platform-[0-9]*.zip build-tools_r*-linux.zip; do
     rm -f ${ANDROID_HOME}/temp/$f
     ln -s /vagrant/cache/$f ${ANDROID_HOME}/temp/
@@ -42,8 +44,8 @@ for f in `ls -1 build-tools*.zip`; do
     cached=,build-tools-${ver}${cached}
 done
 
-${ANDROID_HOME}/tools/android --silent update sdk --no-ui --all \
-    --filter platform-tools,extra-android-m2repository${cached} > /dev/null <<EOH
+${ANDROID_HOME}/tools/android update sdk --no-ui --all \
+    --filter platform-tools,extra-android-m2repository${cached} <<EOH
 y
 
 EOH

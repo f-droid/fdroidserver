@@ -1,6 +1,4 @@
 
-user = node[:settings][:user]
-
 %w{cython python-pygame python-pip python-virtualenv python-opengl python-gst0.10 python-enchant libgl1-mesa-dev libgles2-mesa-dev}.each do |pkg|
   package pkg do
     action :install

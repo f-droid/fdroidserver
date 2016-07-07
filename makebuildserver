@@ -6,6 +6,7 @@ import sys
 import subprocess
 import time
 import hashlib
+import yaml
 from clint.textui import progress
 from optparse import OptionParser
 
@@ -49,7 +50,6 @@ options, args = parser.parse_args()
 # set up default config
 cachedir = os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver')
 config = {
-    'arch64': True,
     'basebox': 'jessie64',
     # TODO in py3, convert this to pathlib.Path(absolute_path_string).as_uri()
     'baseboxurl': [
@@ -62,6 +62,7 @@ config = {
     'cachedir': cachedir,
     'cpus': 1,
     'memory': 1024,
+    'hwvirtex': 'off',
 }
 
 # load config file, if present
@@ -70,6 +71,7 @@ if os.path.exists('makebuildserver.config.py'):
 elif os.path.exists('makebs.config.py'):
     # this is the old name for the config file
     exec(compile(open('makebs.config.py').read(), 'makebs.config.py', 'exec'), config)
+del(config['__builtins__'])  # added by compile/exec
 
 if not os.path.exists('makebuildserver') or not os.path.exists(serverdir):
     print('This must be run from the correct directory!')
@@ -86,11 +88,16 @@ cachedir = config['cachedir']
 if not os.path.exists(cachedir):
     os.makedirs(cachedir, 0o755)
 
+if config['apt_package_cache']:
+    config['aptcachedir'] = cachedir + '/apt/archives'
+
 cachefiles = [
     ('https://dl.google.com/android/repository/tools_r25.1.7-linux.zip',
      '3ca053600a86a5a64d5571edfbb1dad27f2bda3bfd2d38e2fe54322610b1ef0b'),
-    ('https://dl.google.com/android/repository/android_m2repository_r32.zip',
-     'a6a8d7ffb153161f26d5fdebfa9aa1c9c84b29c62851fffff2cdfad9e094b13b'),
+    ('https://dl.google.com/android/repository/platform-tools_r24-linux.zip',
+     '076368b337d042d163364594dda63b7e778835f636fafb2c8af4d4a604175c32'),
+    ('https://dl.google.com/android/repository/android_m2repository_r33.zip',
+     'be9bb4a27aeefb1c9adb0cade8771f764447c4cbde74426303db2ac6bde1879c'),
     ('https://dl.google.com/android/repository/android-1.5_r04-linux.zip',
      '85b6c8f9797e56aa415d3a282428bb640c96b0acb17c11d41621bb2a5302fe64'),
     ('https://dl.google.com/android/repository/android-1.6_r03-linux.zip',
@@ -231,24 +238,13 @@ cachefiles = [
      '993b4f33b652c689e9721917d8e021cab6bbd3eae81b39ab2fd46fdb19a928d5'),
     ('https://pypi.python.org/packages/source/K/Kivy/Kivy-1.7.2.tar.gz',
      '0485e2ef97b5086df886eb01f8303cb542183d2d71a159466f99ad6c8a1d03f1'),
+    ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin',
+     '102d6723f67ff1384330d12c45854315d6452d6510286f4e5891e00a5a8f1d5a'),
+    ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64.tar.bz2',
+     '8956e9efeea95f49425ded8bb697013b66e162b064b0f66b5c75628f76e0f532'),
+    ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64-legacy-toolchains.tar.bz2',
+     'de93a394f7c8f3436db44568648f87738a8d09801a52f459dcad3fc047e045a1'),
 ]
-
-if config['arch64']:
-    cachefiles.extend([
-        ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin',
-         '102d6723f67ff1384330d12c45854315d6452d6510286f4e5891e00a5a8f1d5a'),
-        ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64.tar.bz2',
-         '8956e9efeea95f49425ded8bb697013b66e162b064b0f66b5c75628f76e0f532'),
-        ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64-legacy-toolchains.tar.bz2',
-         'de93a394f7c8f3436db44568648f87738a8d09801a52f459dcad3fc047e045a1')])
-else:
-    cachefiles.extend([
-        ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86.bin',
-         '92b07d25aaad9b341a7f2b2a62402d508e948bf2dea3ee7b65a6aeb18bca7df5'),
-        ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86.tar.bz2',
-         '748104b829dd12afb2fdb3044634963abb24cdb0aad3b26030abe2e9e65bfc81'),
-        ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86-legacy-toolchains.tar.bz2',
-         '606aadf815ae28cc7b0154996247c70d609f111b14e44bcbcd6cad4c87fefb6f')])
 
 
 def sha256_for_file(path):
@@ -310,118 +306,31 @@ for srcurl, shasum in cachefiles:
         print("\t...shasum verified for " + local_filename)
     else:
         print("Invalid shasum of '" + v + "' detected for " + local_filename)
+        os.remove(local_filename)
         sys.exit(1)
-
-# allow specifying a list/tuple that includes cached local copy
-if type(config['baseboxurl']) in (list, tuple) or config['baseboxurl'][0] in ('(', '['):
-    baseboxurl = config['baseboxurl']
-else:
-    baseboxurl = '"{0}"'.format(config['baseboxurl'])
 
 # use VirtualBox software virtualization if hardware is not available,
 # like if this is being run in kvm or some other VM platform, like
 # http://jenkins.debian.net, the values are 'on' or 'off'
-hwvirtex = 'off'
 if sys.platform.startswith('darwin'):
     # all < 10 year old Macs work, and OSX servers as VM host are very
     # rare, but this could also be auto-detected if someone codes it
-    hwvirtex = 'on'
+    config['hwvirtex'] = 'on'
 elif os.path.exists('/proc/cpuinfo'):
     with open('/proc/cpuinfo') as f:
         contents = f.read()
     if 'vmx' in contents or 'svm' in contents:
-        hwvirtex = 'on'
+        config['hwvirtex'] = 'on'
 
-# Generate an appropriate Vagrantfile for the buildserver, based on our
-# settings...
-vagrantfile = """
-Vagrant.configure("2") do |config|
-
-  if Vagrant.has_plugin?("vagrant-cachier")
-    config.cache.scope = :box
-    config.cache.auto_detect = false
-    config.cache.enable :apt
-    config.cache.enable :chef
-  end
-
-  config.vm.box = "{0}"
-  config.vm.box_url = {1}
-
-  config.vm.provider "virtualbox" do |v|
-    v.customize ["modifyvm", :id, "--memory", "{2}"]
-    v.customize ["modifyvm", :id, "--cpus", "{3}"]
-    v.customize ["modifyvm", :id, "--hwvirtex", "{4}"]
-  end
-
-  config.vm.boot_timeout = {5}
-
-  config.vm.provision :shell, :path => "fixpaths.sh"
-""".format(config['basebox'],
-           baseboxurl,
-           config['memory'],
-           config.get('cpus', 1),
-           hwvirtex,
-           config['boot_timeout'])
-if 'aptproxy' in config and config['aptproxy']:
-    vagrantfile += """
-  config.vm.provision :shell, :inline => 'sudo echo "Acquire::http {{ Proxy \\"{0}\\"; }};" > /etc/apt/apt.conf.d/02proxy && sudo apt-get update'
-""".format(config['aptproxy'])
-
-# buildserver/ is shared to the VM's /vagrant by default so the old default
-# does not need a custom mount
-if cachedir != 'buildserver/cache':
-    vagrantfile += """
-  config.vm.synced_folder '{0}', '/vagrant/cache',
-    owner: 'root', group: 'root', create: true
-""".format(cachedir)
-
-# cache .deb packages on the host via a mount trick
-if config['apt_package_cache']:
-    aptcachedir = cachedir + '/apt/archives'
-    vagrantfile += """
-  config.vm.synced_folder "{0}", "/var/cache/apt/archives",
-    owner: 'root', group: 'root', create: true
-""".format(aptcachedir)
-
-vagrantfile += """
-
-  config.vm.provision "shell", path: "setup-env-vars",
-    args: ["/home/vagrant/android-sdk"]
-
-  config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = "cookbooks"
-    chef.log_level = :debug
-    chef.json = {
-      :settings => {
-        :debian_mirror => "%s",
-        :ubuntu_trusty => "%s",
-        :user => "vagrant"
-      }
-    }
-    chef.add_recipe "fdroidbuild-general"
-    chef.add_recipe "kivy"
-  end
-
-  config.vm.provision "shell", path: "provision-android-sdk"
-  config.vm.provision "shell", path: "provision-android-ndk",
-    args: ["/home/vagrant/android-ndk"]
-  config.vm.provision "shell", path: "provision-gradle"
-  config.vm.provision "file", source: "gradle",
-    destination: "/opt/gradle/bin/gradle"
-
-end
-""" % (config['debian_mirror'],
-       str('14.04' in os.uname()[3]).lower())
-
-# Check against the existing Vagrantfile, and if they differ, we need to
-# create a new box:
-vf = os.path.join(serverdir, 'Vagrantfile')
+# Check against the existing Vagrantfile.yaml, and if they differ, we
+# need to create a new box:
+vf = os.path.join(serverdir, 'Vagrantfile.yaml')
 writevf = True
 if os.path.exists(vf):
     vagrant(['halt'], serverdir)
-    with open(vf, 'r') as f:
-        oldvf = f.read()
-    if oldvf != vagrantfile:
+    with open(vf, 'r', encoding='utf-8') as f:
+        oldconfig = yaml.load(f)
+    if config != oldconfig:
         print("Server configuration has changed, rebuild from scratch is required")
         vagrant(['destroy', '-f'], serverdir)
     else:
@@ -430,9 +339,8 @@ if os.path.exists(vf):
 else:
     print("No existing server - building from scratch")
 if writevf:
-    with open(vf, 'w') as f:
-        f.write(vagrantfile)
-
+    with open(vf, 'w', encoding='utf-8') as f:
+        yaml.dump(config, f)
 
 print("Configuring build server VM")
 returncode, out = vagrant(['up', '--provision'], serverdir, printout=True)

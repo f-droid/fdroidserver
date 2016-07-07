@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo $0
+set -e
+
+rm -f /etc/apt/apt.conf.d/02proxy
+echo "Acquire::ftp::Proxy \"$1\";" >> /etc/apt/apt.conf.d/02proxy
+echo "Acquire::http::Proxy \"$1\";" >> /etc/apt/apt.conf.d/02proxy
+echo "Acquire::https::Proxy \"$1\";" >> /etc/apt/apt.conf.d/02proxy
+
+apt-get update

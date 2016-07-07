@@ -1,0 +1,91 @@
+#!/bin/bash
+
+echo $0
+set -e
+set -x
+
+debian_mirror=$1
+
+sed -i "s,http://ftp.uk.debian.org/debian/,${debian_mirror},g" /etc/apt/sources.list
+
+if grep --quiet jessie /etc/apt/sources.list; then
+    echo "deb $debian_mirror jessie-backports main" > /etc/apt/sources.list.d/backports.list
+fi
+
+dpkg --add-architecture i386
+
+apt-get -y update
+apt-get -y upgrade
+
+packages="
+ ant
+ ant-contrib
+ autoconf
+ autoconf2.13
+ automake1.11
+ autopoint
+ bison
+ bzr
+ cmake
+ curl
+ expect
+ faketime
+ flex
+ gettext
+ git-core
+ git-svn
+ gperf
+ graphviz
+ imagemagick
+ inkscape
+ javacc
+ libarchive-zip-perl
+ libexpat1-dev
+ libgcc1:i386
+ libglib2.0-dev
+ liblzma-dev
+ libncurses5:i386
+ librsvg2-bin
+ libsaxonb-java
+ libssl-dev
+ libssl1.0.0
+ libstdc++6:i386
+ libtool
+ libtool-bin
+ make
+ maven
+ mercurial
+ nasm
+ openjdk-8-jdk-headless
+ optipng
+ p7zip
+ pandoc
+ perlmagick
+ pkg-config
+ python-gnupg
+ python-magic
+ python-setuptools
+ python3-gnupg
+ python3-requests
+ python3-yaml
+ qt5-default
+ qtbase5-dev
+ quilt
+ realpath
+ scons
+ subversion
+ swig
+ texinfo
+ transfig
+ unzip
+ vorbis-tools
+ xsltproc
+ yasm
+ zip
+ zlib1g:i386
+"
+
+apt-get install --yes --no-install-recommends $packages
+
+highestjava=`update-java-alternatives --list | sort -n | tail -1 | cut -d ' ' -f 1`
+update-java-alternatives --set $highestjava

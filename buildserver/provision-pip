@@ -1,0 +1,14 @@
+#!/bin/bash
+
+echo $0
+set -e
+set -x
+
+# cache pypi downloads
+if [ -z $PIP_DOWNLOAD_CACHE ]; then
+    export PIP_DOWNLOAD_CACHE=$HOME/.pip_download_cache
+fi
+
+apt-get install --yes --no-install-recommends python-pip
+
+pip install --upgrade $@
