@@ -63,12 +63,8 @@ echo "build_server_always = True" > config.py
 # if it can't build fdroid, then its really broken
 ../fdroid build --verbose --stop --latest org.fdroid.fdroid
 # Gradle, JNI, preassemble
-../fdroid build --stop org.adaway:55
-# Maven
-#../fdroid build --stop org.quantumbadger.redreader:55
-# Custom build (make)
-#../fdroid build --stop com.amaze.filemanager:29
+../fdroid build --verbose --stop org.adaway:55
 # Uses verification
-#../fdroid build --stop info.guardianproject.checkey:101
-# Gradle with retrolambda (JDK7 and JDK8)
-#../fdroid build --stop com.moez.QKSMS:124
+../fdroid build --verbose --stop info.guardianproject.checkey:101
+# building old versions should still work
+../fdroid build --verbose --stop org.fdroid.fdroid:96150
