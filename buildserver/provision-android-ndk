@@ -10,33 +10,18 @@ test -e $NDK_BASE || mkdir -p $NDK_BASE
 cd $NDK_BASE
 
 if [ ! -e $NDK_BASE/r9b ]; then
-    if [ `uname -m` == 'x86_64' ] ; then
-        SUFFIX='_64'
-    else
-        SUFFIX=''
-    fi
-    tar xjf /vagrant/cache/android-ndk-r9b-linux-x86$SUFFIX.tar.bz2
-    tar xjf /vagrant/cache/android-ndk-r9b-linux-x86$SUFFIX-legacy-toolchains.tar.bz2
+    tar xjf /vagrant/cache/android-ndk-r9b-linux-x86_64.tar.bz2
+    tar xjf /vagrant/cache/android-ndk-r9b-linux-x86_64-legacy-toolchains.tar.bz2
     mv android-ndk-r9b r9b
 fi
 
 if [ ! -e $NDK_BASE/r10e ]; then
-    if [ `uname -m` == 'x86_64' ] ; then
-       SUFFIX='_64'
-    else
-       SUFFIX=''
-    fi
-    7zr x /vagrant/cache/android-ndk-r10e-linux-x86$SUFFIX.bin > /dev/null
+    7zr x /vagrant/cache/android-ndk-r10e-linux-x86_64.bin > /dev/null
     mv android-ndk-r10e r10e
 fi
 
 if [ ! -e $NDK_BASE/r12b ]; then
-    if [ `uname -m` == 'x86_64' ] ; then
-       SUFFIX='_64'
-    else
-       SUFFIX=''
-    fi
-    7zr x /vagrant/cache/android-ndk-r12b-linux-x86$SUFFIX.bin > /dev/null
+    7zr x /vagrant/cache/android-ndk-r12b-linux-x86_64.bin > /dev/null
     mv android-ndk-r12b r12b
 fi
 
