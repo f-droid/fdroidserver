@@ -30,5 +30,15 @@ if [ ! -e $NDK_BASE/r10e ]; then
     mv android-ndk-r10e r10e
 fi
 
+if [ ! -e $NDK_BASE/r12b ]; then
+    if [ `uname -m` == 'x86_64' ] ; then
+       SUFFIX='_64'
+    else
+       SUFFIX=''
+    fi
+    7zr x /vagrant/cache/android-ndk-r12b-linux-x86$SUFFIX.bin > /dev/null
+    mv android-ndk-r12b r12b
+fi
+
 chmod -R a+rX $NDK_BASE/
 find $NDK_BASE/ -type f -executable -print0 | xargs -0 chmod a+x
