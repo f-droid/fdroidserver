@@ -1277,7 +1277,7 @@ Valid modes are:
 @item
 @code{None} - No checking is done because there's no appropriate automated way
 of doing so. Updates should be checked for manually. Use this, for example,
-when deploying betas or patched versions; when builds are done in a directory
+when deploying unstable or patched versions; when builds are done in a directory
 different to where the AndroidManifest.xml is; if the developers use the
 Gradle build system and store version info in a separate file; if the
 developers make a new branch for each release and don't make tags; or if you've
@@ -1320,10 +1320,10 @@ that number.
 source repository is checked, looking for the highest version code. The
 appropriateness of this method depends on the development process used by the
 application's developers. You should not specify this method unless you're sure
-it's appropriate. It shouldn't be used if the developers like to tag betas or
-are known to forget to tag releases. Like RepoManifest, it will not return the
-correct value if the directory containing the AndroidManifest.xml has moved.
-Despite these caveats, it is the often the favourite update check mode.
+it's appropriate. It shouldn't be used if the developers like to tag unstable
+versions or are known to forget to tag releases. Like RepoManifest, it will not
+return the correct value if the directory containing the AndroidManifest.xml has
+moved. Despite these caveats, it is the often the favourite update check mode.
 
 It currently only works for git, hg, bzr and git-svn repositories. In the case
 of the latter, the repo URL must contain the path to the trunk and tags or
@@ -1432,8 +1432,8 @@ above, you would specify that as "Version +-fdroid %v" - "-fdroid" is the suffix
 @cindex Current Version
 
 The name of the version that is current. There may be newer versions of the
-application than this (e.g. betas), and there will almost certainly be older
-ones. This should be the one that is recommended for general use.
+application than this (e.g. unstable versions), and there will almost certainly
+be older ones. This should be the one that is recommended for general use.
 In the event that there is no source code for the current version, or that
 non-free libraries are being used, this would ideally be the latest
 version that is still free, though it may still be expedient to
