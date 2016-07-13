@@ -59,12 +59,12 @@ fi
 PEP8_IGNORE="E123,E501,W503"
 
 err() {
-	echo ERROR: "$@"
+	echo >&2 ERROR: "$@"
 	exit 1
 }
 
 warn() {
-	echo WARNING: "$@"
+	echo >&2 WARNING: "$@"
 }
 
 cmd_exists() {
@@ -81,7 +81,7 @@ find_command() {
 		fi
 	done
 	warn "$1 is not installed, using dummy placeholder!"
-	echo -n echo
+	echo -n :
 }
 
 PYFLAKES=$(find_command pyflakes)
