@@ -3,16 +3,16 @@
 # You may want to alter these before running ./makebuildserver
 
 # Name of the base box to use
-# basebox = "jessie32"
+# basebox = "jessie64"
 
 # Location where testing32.box can be found, if you don't already have
 # it. For security reasons, it's recommended that you make your own
 # in a secure environment using trusted media (see the manual) but
 # you can use this default if you like...
-# baseboxurl = "https://f-droid.org/jessie32.box"
+# baseboxurl = "https://f-droid.org/jessie64.box"
 #
 # or if you have a cached local copy, you can use that first:
-# baseboxurl = ["file:///home/fdroid/fdroidserver/cache/jessie32.box", "https://f-droid.org/jessie32.box"]
+# baseboxurl = ["file:///home/fdroid/fdroidserver/cache/jessie64.box", "https://f-droid.org/jessie64.box"]
 
 # In the process of setting up the build server, many gigs of files
 # are downloaded (Android SDK components, gradle, etc).  These are
@@ -42,9 +42,6 @@
 
 # Debian package proxy server - if you have one
 # aptproxy = "http://192.168.0.19:8000"
-
-# Set to True if your base box is 64 bit (e.g. testing32.box isn't)
-# arch64 = True
 
 # If this is running on an older machine or on a virtualized system,
 # it can run a lot slower. If the provisioning fails with a warning
