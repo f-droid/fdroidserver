@@ -247,6 +247,7 @@ class FDroid
 	}
 	function androidversion($sdkLevel) {
 		switch ($sdkLevel) {
+			case 24: return "7.0";
 			case 23: return "6.0";
 			case 22: return "5.1";
 			case 21: return "5.0";
