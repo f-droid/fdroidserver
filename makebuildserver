@@ -71,7 +71,8 @@ if os.path.exists('makebuildserver.config.py'):
 elif os.path.exists('makebs.config.py'):
     # this is the old name for the config file
     exec(compile(open('makebs.config.py').read(), 'makebs.config.py', 'exec'), config)
-del(config['__builtins__'])  # added by compile/exec
+if '__builtins__' in config:
+    del(config['__builtins__'])  # added by compile/exec
 
 if not os.path.exists('makebuildserver') or not os.path.exists(serverdir):
     print('This must be run from the correct directory!')
