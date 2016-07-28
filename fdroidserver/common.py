@@ -1373,12 +1373,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             props += "sdk.dir=%s\n" % config['sdk_path']
             props += "sdk-location=%s\n" % config['sdk_path']
         ndk_path = build.ndk_path()
-        # if it wasn't expanded correctly (because the NDK is not
-        # installed or $ANDROID_NDK not set properly), don't insert it.
-        # even if not actually used, Gradle will error with a cryptic
-        # message.
+        # if for any reason the path isn't valid or the directory
+        # doesn't exist, some versions of Gradle will error with a
+        # cryptic message (even if the NDK is not even necessary).
         # https://gitlab.com/fdroid/fdroidserver/issues/171
-        if ndk_path and ndk_path[0] != '$':
+        if ndk_path and os.path.exists(ndk_path):
             # Add ndk location
             props += "ndk.dir=%s\n" % ndk_path
             props += "ndk-location=%s\n" % ndk_path
