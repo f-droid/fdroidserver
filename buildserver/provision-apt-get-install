@@ -19,6 +19,7 @@ apt-get -y upgrade
 
 packages="
  ant
+ asn1c
  ant-contrib
  autoconf
  autoconf2.13
@@ -73,6 +74,7 @@ packages="
  quilt
  realpath
  scons
+ sqlite3
  subversion
  swig
  texinfo
