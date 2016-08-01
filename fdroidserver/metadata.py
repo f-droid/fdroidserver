@@ -348,7 +348,7 @@ class Build():
     def ndk_path(self):
         version = self.ndk
         if not version:
-            version = 'r12b'  # falls back to latest
+            version = 'r10e'  # falls back to latest
         paths = fdroidserver.common.config['ndk_paths']
         if version not in paths:
             return ''

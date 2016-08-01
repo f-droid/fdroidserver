@@ -12,8 +12,7 @@
 # not installed.
 # ndk_paths = {
 #     'r9b': None,
-#     'r10e': None,
-#     'r12b': "$ANDROID_NDK",
+#     'r10e': "$ANDROID_NDK",
 # }
 
 # java_paths = {
