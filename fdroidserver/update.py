@@ -238,6 +238,8 @@ def update_wiki(apps, sortedids, apks):
         apppagename = apppagename.replace('{', '')
         apppagename = apppagename.replace('}', ' ')
         apppagename = apppagename.replace(':', ' ')
+        apppagename = apppagename.replace('[', ' ')
+        apppagename = apppagename.replace(']', ' ')
         # Drop double spaces caused mostly by replacing ':' above
         apppagename = apppagename.replace('  ', ' ')
         for expagename in site.allpages(prefix=apppagename,
