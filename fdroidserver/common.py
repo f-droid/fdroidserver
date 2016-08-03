@@ -158,11 +158,9 @@ def fill_config_defaults(thisconfig):
                 m = re.match(regex, j)
                 if not m:
                     continue
-                osxhome = os.path.join(d, 'Contents', 'Home')
-                if os.path.exists(osxhome):
-                    thisconfig['java_paths'][m.group(1)] = osxhome
-                else:
-                    thisconfig['java_paths'][m.group(1)] = d
+                for p in [d, os.path.join(d, 'Contents', 'Home')]:
+                    if os.path.exists(os.path.join(p, 'bin', 'javac')):
+                        thisconfig['java_paths'][m.group(1)] = p
 
     for java_version in ('7', '8', '9'):
         if java_version not in thisconfig['java_paths']:
