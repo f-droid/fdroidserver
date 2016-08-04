@@ -41,6 +41,10 @@ done
 # install all cached build-tools
 for f in `ls -1 build-tools*.zip`; do
     ver=`unzip -c $f "*/source.properties" | sed -n 's,^Pkg.Revision=,,p'`
+    if [[ $ver == 24.0.0 ]] && [[ $f =~ .*r24\.0\.1.* ]]; then
+        # 24.0.1 has the wrong revision in the zip
+        ver=24.0.1
+    fi
     cached=,build-tools-${ver}${cached}
 done
 
