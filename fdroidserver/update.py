@@ -31,6 +31,8 @@ from datetime import datetime, timedelta
 from xml.dom.minidom import Document
 from argparse import ArgumentParser
 import time
+
+import collections
 from pyasn1.error import PyAsn1Error
 from pyasn1.codec.der import decoder, encoder
 from pyasn1_modules import rfc2315
@@ -44,11 +46,14 @@ from . import metadata
 from .common import FDroidPopen, FDroidPopenBytes, SdkToolsPopen
 from .metadata import MetaDataException
 
-METADATA_VERSION = 16
+METADATA_VERSION = 17
 
 screen_densities = ['640', '480', '320', '240', '160', '120']
 
 all_screen_densities = ['0'] + screen_densities
+
+UsesPermission = collections.namedtuple('UsesPermission', ['name', 'maxSdkVersion'])
+UsesPermissionSdk23 = collections.namedtuple('UsesPermissionSdk23', ['name', 'maxSdkVersion'])
 
 
 def dpi_to_px(density):
@@ -530,7 +535,8 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
     icon_pat = re.compile(".*application-icon-([0-9]+):'([^']+?)'.*")
     icon_pat_nodpi = re.compile(".*icon='([^']+?)'.*")
     sdkversion_pat = re.compile(".*'([0-9]*)'.*")
-    string_pat = re.compile(".* name='([^']*)'.*")
+    permission_pat = re.compile(".*(name='(?P<name>.*?)')(.*maxSdkVersion='(?P<maxSdkVersion>.*?)')?.*")
+    feature_pat = re.compile(".*name='([^']*)'.*")
     for apkfile in glob.glob(os.path.join(repodir, '*.apk')):
 
         apkfilename = apkfile[len(repodir) + 1:]
@@ -558,7 +564,8 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
             if os.path.exists(os.path.join(repodir, srcfilename)):
                 apk['srcname'] = srcfilename
             apk['size'] = os.path.getsize(apkfile)
-            apk['permissions'] = set()
+            apk['uses-permission'] = set()
+            apk['uses-permission-sdk-23'] = set()
             apk['features'] = set()
             apk['icons_src'] = {}
             apk['icons'] = {}
@@ -626,20 +633,34 @@ def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
                     apk['nativecode'] = []
                     for arch in line[13:].split(' '):
                         apk['nativecode'].append(arch[1:-1])
-                elif line.startswith("uses-permission:"):
-                    perm = re.match(string_pat, line).group(1)
-                    if perm.startswith("android.permission."):
-                        perm = perm[19:]
-                    apk['permissions'].add(perm)
-                elif line.startswith("uses-feature:"):
-                    perm = re.match(string_pat, line).group(1)
+                elif line.startswith('uses-permission:'):
+                    perm_match = re.match(permission_pat, line).groupdict()
+
+                    permission = UsesPermission(
+                        perm_match['name'],
+                        perm_match['maxSdkVersion']
+                    )
+
+                    apk['uses-permission'].add(permission)
+                elif line.startswith('uses-permission-sdk-23:'):
+                    perm_match = re.match(permission_pat, line).groupdict()
+
+                    permission_sdk_23 = UsesPermissionSdk23(
+                        perm_match['name'],
+                        perm_match['maxSdkVersion']
+                    )
+
+                    apk['uses-permission-sdk-23'].add(permission_sdk_23)
+
+                elif line.startswith('uses-feature:'):
+                    feature = re.match(feature_pat, line).group(1)
                     # Filter out this, it's only added with the latest SDK tools and
                     # causes problems for lots of apps.
-                    if perm != "android.hardware.screen.portrait" \
-                            and perm != "android.hardware.screen.landscape":
-                        if perm.startswith("android.feature."):
-                            perm = perm[16:]
-                        apk['features'].add(perm)
+                    if feature != "android.hardware.screen.portrait" \
+                            and feature != "android.hardware.screen.landscape":
+                        if feature.startswith("android.feature."):
+                            feature = feature[16:]
+                        apk['features'].add(feature)
 
             if 'minSdkVersion' not in apk:
                 logging.warn("No SDK version information found in {0}".format(apkfile))
@@ -1048,7 +1069,28 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             addElementNonEmpty('obbPatchFileSha256', apk.get('obbPatchFileSha256'), doc, apkel)
             if 'added' in apk:
                 addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
-            addElementNonEmpty('permissions', ','.join(apk['permissions']), doc, apkel)
+
+            # TODO: remove old permission format
+            old_permissions = set()
+            for perm in apk['uses-permission']:
+                perm_name = perm.name
+                if perm_name.startswith("android.permission."):
+                    perm_name = perm_name[19:]
+                old_permissions.add(perm_name)
+            addElementNonEmpty('permissions', ','.join(old_permissions), doc, apkel)
+
+            for permission in apk['uses-permission']:
+                permel = doc.createElement('uses-permission')
+                permel.setAttribute('name', permission.name)
+                if permission.maxSdkVersion is not None:
+                    permel.setAttribute('maxSdkVersion', permission.maxSdkVersion)
+                    apkel.appendChild(permel)
+            for permission_sdk_23 in apk['uses-permission-sdk-23']:
+                permel = doc.createElement('uses-permission-sdk-23')
+                permel.setAttribute('name', permission_sdk_23.name)
+                if permission_sdk_23.maxSdkVersion is not None:
+                    permel.setAttribute('maxSdkVersion', permission_sdk_23.maxSdkVersion)
+                    apkel.appendChild(permel)
             if 'nativecode' in apk:
                 addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
             addElementNonEmpty('features', ','.join(apk['features']), doc, apkel)
