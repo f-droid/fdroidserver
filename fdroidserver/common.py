@@ -136,7 +136,7 @@ def fill_config_defaults(thisconfig):
         pathlist += glob.glob('/System/Library/Java/JavaVirtualMachines/1.[6-9].0.jdk')
         pathlist += glob.glob('/Library/Java/JavaVirtualMachines/*jdk*[6-9]*')
         if os.getenv('JAVA_HOME') is not None:
-            pathlist += os.getenv('JAVA_HOME')
+            pathlist.append(os.getenv('JAVA_HOME'))
         if os.getenv('PROGRAMFILES') is not None:
             pathlist += glob.glob(os.path.join(os.getenv('PROGRAMFILES'), 'Java', 'jdk1.[6-9].*'))
         for d in sorted(pathlist):
@@ -159,11 +159,9 @@ def fill_config_defaults(thisconfig):
                 m = re.match(regex, j)
                 if not m:
                     continue
-                osxhome = os.path.join(d, 'Contents', 'Home')
-                if os.path.exists(osxhome):
-                    thisconfig['java_paths'][m.group(1)] = osxhome
-                else:
-                    thisconfig['java_paths'][m.group(1)] = d
+                for p in [d, os.path.join(d, 'Contents', 'Home')]:
+                    if os.path.exists(os.path.join(p, 'bin', 'javac')):
+                        thisconfig['java_paths'][m.group(1)] = p
 
     for java_version in ('7', '8', '9'):
         if java_version not in thisconfig['java_paths']:
