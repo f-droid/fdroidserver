@@ -57,6 +57,7 @@ default_config = {
     'ndk_paths': {
         'r9b': None,
         'r10e': None,
+        'r11c': None,
         'r12b': "$ANDROID_NDK",
     },
     'build_tools': "24.0.1",

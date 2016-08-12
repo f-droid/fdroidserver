@@ -6,13 +6,14 @@
 # Custom path to the Android SDK, defaults to $ANDROID_HOME
 # sdk_path = "$ANDROID_HOME"
 
-# Custom paths to various versions of the Android NDK, defaults to 'r10e' set
+# Custom paths to various versions of the Android NDK, defaults to 'r12b' set
 # to $ANDROID_NDK. Most users will have the latest at $ANDROID_NDK, which is
 # used by default. If a version is missing or assigned to None, it is assumed
 # not installed.
 # ndk_paths = {
 #     'r9b': None,
 #     'r10e': None,
+#     'r11c': None,
 #     'r12b': "$ANDROID_NDK",
 # }
 
