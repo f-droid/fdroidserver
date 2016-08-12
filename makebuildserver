@@ -237,6 +237,8 @@ cachefiles = [
      '0f665ec6a5a67865faf7ba0d825afb19c26705ea0597cec80dd191b0f2cbb664'),
     ('https://services.gradle.org/distributions/gradle-2.14-bin.zip',
      '993b4f33b652c689e9721917d8e021cab6bbd3eae81b39ab2fd46fdb19a928d5'),
+    ('https://services.gradle.org/distributions/gradle-2.14.1-bin.zip',
+     'cfc61eda71f2d12a572822644ce13d2919407595c2aec3e3566d2aab6f97ef39'),
     ('https://pypi.python.org/packages/source/K/Kivy/Kivy-1.7.2.tar.gz',
      '0485e2ef97b5086df886eb01f8303cb542183d2d71a159466f99ad6c8a1d03f1'),
     ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin',
