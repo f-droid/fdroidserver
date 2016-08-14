@@ -20,6 +20,11 @@ if [ ! -e $NDK_BASE/r10e ]; then
     mv android-ndk-r10e r10e
 fi
 
+if [ ! -e $NDK_BASE/r11c ]; then
+    unzip /vagrant/cache/android-ndk-r11c-linux-x86_64.zip > /dev/null
+    mv android-ndk-r11c r11c
+fi
+
 if [ ! -e $NDK_BASE/r12b ]; then
     unzip /vagrant/cache/android-ndk-r12b-linux-x86_64.zip > /dev/null
     mv android-ndk-r12b r12b
