@@ -23,6 +23,7 @@ packages="
  ant-contrib
  autoconf
  autoconf2.13
+ automake
  automake1.11
  autopoint
  bison
