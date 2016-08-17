@@ -246,3 +246,21 @@ The repository of older versions of applications from the main demo repository.
 #     'Summary': 80,
 #     'Description': 4000,
 # }
+
+# It is possible for the server operator to specify lists of apps that
+# must be installed or deleted on the client (aka "push installs).  If
+# the user has opted in, or the device is already setup to respond to
+# these requests, then fdroidclient will automatically install/delete
+# the packageNames listed.  This is protected by the same signing key
+# as the app index metadata.
+#
+# install_list = {
+#     'at.bitfire.davdroid',
+#     'com.fsck.k9',
+#     'us.replicant',
+# }
+#
+# delete_list = {
+#     'com.facebook.orca',
+#     'com.android.vending',
+# }

@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 #
 # update.py - part of the FDroid server tools
-# Copyright (C) 2010-2015, Ciaran Gultnieks, ciaran@ciarang.com
-# Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
+# Copyright (C) 2016, Blue Jay Wireless
+# Copyright (C) 2014-2016, Hans-Christoph Steiner <hans@eds.org>
+# Copyright (C) 2010-2015, Ciaran Gultnieks <ciaran@ciarang.com>
+# Copyright (C) 2013-2014, Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -950,6 +952,21 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
 
     repoel.setAttribute("pubkey", extract_pubkey().decode('utf-8'))
     root.appendChild(repoel)
+
+    for command in ('install', 'delete'):
+        packageNames = []
+        key = command + '_list'
+        if key in config:
+            if isinstance(config[key], str):
+                packageNames = [config[key]]
+            elif all(isinstance(item, str) for item in config[key]):
+                packageNames = config[key]
+            else:
+                raise TypeError('only accepts strings, lists, and tuples')
+        for packageName in packageNames:
+            element = doc.createElement(command)
+            root.appendChild(element)
+            element.setAttribute('packageName', packageName)
 
     for appid in sortedids:
         app = apps[appid]
