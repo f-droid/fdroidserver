@@ -248,9 +248,9 @@ The repository of older versions of applications from the main demo repository.
 # }
 
 # It is possible for the server operator to specify lists of apps that
-# must be installed or deleted on the client (aka "push installs).  If
-# the user has opted in, or the device is already setup to respond to
-# these requests, then fdroidclient will automatically install/delete
+# must be installed or uninstalled on the client (aka "push installs).
+# If the user has opted in, or the device is already setup to respond
+# to these requests, then F-Droid will automatically install/uninstall
 # the packageNames listed.  This is protected by the same signing key
 # as the app index metadata.
 #
@@ -260,7 +260,7 @@ The repository of older versions of applications from the main demo repository.
 #     'us.replicant',
 # }
 #
-# delete_list = {
+# uninstall_list = {
 #     'com.facebook.orca',
 #     'com.android.vending',
 # }

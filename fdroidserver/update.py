@@ -959,7 +959,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
     repoel.setAttribute("pubkey", extract_pubkey().decode('utf-8'))
     root.appendChild(repoel)
 
-    for command in ('install', 'delete'):
+    for command in ('install', 'uninstall'):
         packageNames = []
         key = command + '_list'
         if key in config:
