@@ -895,11 +895,17 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
     repoel = doc.createElement("repo")
 
     mirrorcheckfailed = False
+    mirrors = []
     for mirror in config.get('mirrors', []):
         base = os.path.basename(urllib.parse.urlparse(mirror).path.rstrip('/'))
         if config.get('nonstandardwebroot') is not True and base != 'fdroid':
             logging.error("mirror '" + mirror + "' does not end with 'fdroid'!")
             mirrorcheckfailed = True
+        # must end with / or urljoin strips a whole path segment
+        if mirror.endswith('/'):
+            mirrors.append(mirror)
+        else:
+            mirrors.append(mirror + '/')
     if mirrorcheckfailed:
         sys.exit(1)
 
@@ -911,7 +917,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         repoel.setAttribute("url", config['archive_url'])
         addElement('description', config['archive_description'], doc, repoel)
         urlbasepath = os.path.basename(urllib.parse.urlparse(config['archive_url']).path)
-        for mirror in config.get('mirrors', []):
+        for mirror in mirrors:
             addElement('mirror', urllib.parse.urljoin(mirror, urlbasepath), doc, repoel)
 
     else:
@@ -922,7 +928,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         repoel.setAttribute("url", config['repo_url'])
         addElement('description', config['repo_description'], doc, repoel)
         urlbasepath = os.path.basename(urllib.parse.urlparse(config['repo_url']).path)
-        for mirror in config.get('mirrors', []):
+        for mirror in mirrors:
             addElement('mirror', urllib.parse.urljoin(mirror, urlbasepath), doc, repoel)
 
     repoel.setAttribute("version", str(METADATA_VERSION))
