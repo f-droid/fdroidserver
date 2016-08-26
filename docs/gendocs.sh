@@ -273,7 +273,7 @@ echo "Making output for $srcfile"
 echo " in `pwd`"
 mkdir -p "$outdir/"
 
-taropts="--mtime=@$timestamp --mode=go=rX,u+rw,a-s"
+taropts="--mtime=@$timestamp --mode=go=rX,u+rw,a-s --sort=name"
 cmd="$SETLANG $MAKEINFO -o $PACKAGE.info $commonarg $infoarg \"$srcfile\""
 echo "Generating info... ($cmd)"
 eval "$cmd"
