@@ -4,7 +4,8 @@ configfile = YAML.load_file('Vagrantfile.yaml')
 
 Vagrant.configure("2") do |config|
 
-  if Vagrant.has_plugin?("vagrant-cachier")
+  # these two caching methods conflict, so only use one at a time
+  if Vagrant.has_plugin?("vagrant-cachier") and not configfile.has_key? "aptcachedir"
     config.cache.scope = :box
     config.cache.auto_detect = false
     config.cache.enable :apt
