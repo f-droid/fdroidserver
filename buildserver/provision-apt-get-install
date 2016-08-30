@@ -65,6 +65,7 @@ packages="
  perlmagick
  pkg-config
  python-gnupg
+ python-lxml
  python-magic
  python-setuptools
  python3-gnupg
