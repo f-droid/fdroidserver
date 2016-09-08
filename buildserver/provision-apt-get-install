@@ -50,7 +50,6 @@ packages="
  librsvg2-bin
  libsaxonb-java
  libssl-dev
- libssl1.0.0
  libstdc++6:i386
  libtool
  libtool-bin
