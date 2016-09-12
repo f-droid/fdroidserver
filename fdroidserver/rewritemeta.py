@@ -53,7 +53,9 @@ def main():
     parser.add_argument("-t", "--to", default=None,
                         help="Rewrite to a specific format")
     parser.add_argument("appid", nargs='*', help="app-id in the form APPID")
+    metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
+    metadata.warnings_action = options.W
 
     config = common.read_config(options)
 

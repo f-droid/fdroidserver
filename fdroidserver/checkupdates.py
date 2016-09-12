@@ -524,7 +524,9 @@ def main():
                         help="Commit changes")
     parser.add_argument("--gplay", action="store_true", default=False,
                         help="Only print differences with the Play Store")
+    metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
+    metadata.warnings_action = options.W
 
     config = common.read_config(options)
 

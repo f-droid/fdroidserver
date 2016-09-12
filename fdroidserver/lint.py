@@ -377,7 +377,9 @@ def main():
     parser.add_argument("-f", "--format", action="store_true", default=False,
                         help="Also warn about formatting issues, like rewritemeta -l")
     parser.add_argument("appid", nargs='*', help="app-id in the form APPID")
+    metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
+    metadata.warnings_action = options.W
 
     config = common.read_config(options)
 
