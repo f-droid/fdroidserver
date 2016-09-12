@@ -170,7 +170,9 @@ def main():
                         help="Path to main android project subdirectory, if not in root.")
     parser.add_argument("--rev", default=None,
                         help="Allows a different revision (or git branch) to be specified for the initial import")
+    metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
+    metadata.warnings_action = options.W
 
     config = common.read_config(options)
 

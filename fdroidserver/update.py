@@ -1316,7 +1316,9 @@ def main():
                         help="When configured for signed indexes, create only unsigned indexes at this stage")
     parser.add_argument("--use-date-from-apk", action="store_true", default=False,
                         help="Use date from apk instead of current time for newly added apks")
+    metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
+    metadata.warnings_action = options.W
 
     config = common.read_config(options)
 

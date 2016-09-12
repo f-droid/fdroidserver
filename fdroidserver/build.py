@@ -981,7 +981,9 @@ def parse_commandline():
                         help="Build all applications available")
     parser.add_argument("-w", "--wiki", default=False, action="store_true",
                         help="Update the wiki")
+    metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
+    metadata.warnings_action = options.W
 
     # Force --stop with --on-server to get correct exit code
     if options.onserver:

@@ -20,12 +20,16 @@ from argparse import ArgumentParser
 from . import common
 from . import metadata
 
+options = None
+
 
 def main():
 
     parser = ArgumentParser(usage="%(prog)s")
     common.setup_global_opts(parser)
-    parser.parse_args()
+    metadata.add_metadata_arguments(parser)
+    options = parser.parse_args()
+    metadata.warnings_action = options.W
     common.read_config(None)
 
     metadata.read_metadata(xref=True)

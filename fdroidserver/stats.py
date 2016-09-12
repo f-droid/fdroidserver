@@ -66,7 +66,9 @@ def main():
                         "have been made that would invalidate old cached data.")
     parser.add_argument("--nologs", action="store_true", default=False,
                         help="Don't do anything logs-related")
+    metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
+    metadata.warnings_action = options.W
 
     config = common.read_config(options)
 

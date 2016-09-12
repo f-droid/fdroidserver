@@ -41,6 +41,7 @@ import xml.etree.cElementTree as ElementTree
 import fdroidserver.common
 
 srclibs = None
+warnings_action = None
 
 
 class MetaDataException(Exception):
@@ -50,6 +51,17 @@ class MetaDataException(Exception):
 
     def __str__(self):
         return self.value
+
+
+def warn_or_exception(value):
+    '''output warning or Exception depending on -W'''
+    if warnings_action == 'ignore':
+        pass
+    elif warnings_action == 'error':
+        raise MetaDataException(value)
+    else:
+        logging.warn(value)
+
 
 # To filter which ones should be written to the metadata files if
 # present
@@ -173,14 +185,14 @@ class App():
     # Gets the value associated to a field name, e.g. 'Auto Name'
     def get_field(self, f):
         if f not in app_fields:
-            raise MetaDataException('Unrecognised app field: ' + f)
+            warn_or_exception('Unrecognised app field: ' + f)
         k = App.field_to_attr(f)
         return getattr(self, k)
 
     # Sets the value associated to a field name, e.g. 'Auto Name'
     def set_field(self, f, v):
         if f not in app_fields:
-            raise MetaDataException('Unrecognised app field: ' + f)
+            warn_or_exception('Unrecognised app field: ' + f)
         k = App.field_to_attr(f)
         self.__dict__[k] = v
         self._modified.add(k)
@@ -188,7 +200,7 @@ class App():
     # Appends to the value associated to a field name, e.g. 'Auto Name'
     def append_field(self, f, v):
         if f not in app_fields:
-            raise MetaDataException('Unrecognised app field: ' + f)
+            warn_or_exception('Unrecognised app field: ' + f)
         k = App.field_to_attr(f)
         if k not in self.__dict__:
             self.__dict__[k] = [v]
@@ -307,7 +319,7 @@ class Build():
 
     def get_flag(self, f):
         if f not in build_flags:
-            raise MetaDataException('Unrecognised build flag: ' + f)
+            warn_or_exception('Unrecognised build flag: ' + f)
         return getattr(self, f)
 
     def set_flag(self, f, v):
@@ -316,13 +328,13 @@ class Build():
         if f == 'versionCode':
             f = 'vercode'
         if f not in build_flags:
-            raise MetaDataException('Unrecognised build flag: ' + f)
+            warn_or_exception('Unrecognised build flag: ' + f)
         self.__dict__[f] = v
         self._modified.add(f)
 
     def append_flag(self, f, v):
         if f not in build_flags:
-            raise MetaDataException('Unrecognised build flag: ' + f)
+            warn_or_exception('Unrecognised build flag: ' + f)
         if f not in self.__dict__:
             self.__dict__[f] = [v]
         else:
@@ -414,8 +426,8 @@ class FieldValidator():
             values = [v]
         for v in values:
             if not self.compiled.match(v):
-                raise MetaDataException("'%s' is not a valid %s in %s. Regex pattern: %s"
-                                        % (v, self.name, appid, self.matching))
+                warn_or_exception("'%s' is not a valid %s in %s. Regex pattern: %s"
+                                  % (v, self.name, appid, self.matching))
 
 # Generic value types
 valuetypes = {
@@ -588,7 +600,7 @@ class DescriptionFormatter:
             if txt.startswith("[["):
                 index = txt.find("]]")
                 if index == -1:
-                    raise MetaDataException("Unterminated ]]")
+                    warn_or_exception("Unterminated ]]")
                 url = txt[2:index]
                 if self.linkResolver:
                     url, urltext = self.linkResolver(url)
@@ -600,7 +612,7 @@ class DescriptionFormatter:
             else:
                 index = txt.find("]")
                 if index == -1:
-                    raise MetaDataException("Unterminated ]")
+                    warn_or_exception("Unterminated ]")
                 url = txt[1:index]
                 index2 = url.find(' ')
                 if index2 == -1:
@@ -609,7 +621,7 @@ class DescriptionFormatter:
                     urltxt = url[index2 + 1:]
                     url = url[:index2]
                     if url == urltxt:
-                        raise MetaDataException("Url title is just the URL - use [url]")
+                        warn_or_exception("Url title is just the URL - use [url]")
                 res_html += '<a href="' + url + '">' + cgi.escape(urltxt) + '</a>'
                 res_plain += urltxt
                 if urltxt != url:
@@ -718,7 +730,7 @@ def parse_srclib(metadatapath):
         try:
             f, v = line.split(':', 1)
         except ValueError:
-            raise MetaDataException("Invalid metadata in %s:%d" % (line, n))
+            warn_or_exception("Invalid metadata in %s:%d" % (line, n))
 
         if f == "Subdir":
             thisinfo[f] = v.split(',')
@@ -785,7 +797,7 @@ def read_metadata(xref=True):
                                + glob.glob('.fdroid.yml')):
         packageName, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
         if packageName in apps:
-            raise MetaDataException("Found multiple metadata files for " + packageName)
+            warn_or_exception("Found multiple metadata files for " + packageName)
         app = parse_metadata(metadatapath)
         check_metadata(app)
         apps[app.id] = app
@@ -796,14 +808,14 @@ def read_metadata(xref=True):
         def linkres(appid):
             if appid in apps:
                 return ("fdroid.app:" + appid, "Dummy name - don't know yet")
-            raise MetaDataException("Cannot resolve app id " + appid)
+            warn_or_exception("Cannot resolve app id " + appid)
 
         for appid, app in apps.items():
             try:
                 description_html(app.Description, linkres)
             except MetaDataException as e:
-                raise MetaDataException("Problem with description of " + appid +
-                                        " - " + str(e))
+                warn_or_exception("Problem with description of " + appid +
+                                  " - " + str(e))
 
     return apps
 
@@ -845,7 +857,7 @@ def get_default_app_info(metadatapath=None):
                         manifestroot = fdroidserver.common.parse_xml(os.path.join(root, 'AndroidManifest.xml'))
                         break
         if manifestroot is None:
-            raise MetaDataException("Cannot find a packageName for {0}!".format(metadatapath))
+            warn_or_exception("Cannot find a packageName for {0}!".format(metadatapath))
         appid = manifestroot.attrib['package']
 
     app = App()
@@ -930,14 +942,14 @@ def _decode_bool(s):
         return True
     if bool_false.match(s):
         return False
-    raise MetaDataException("Invalid bool '%s'" % s)
+    warn_or_exception("Invalid bool '%s'" % s)
 
 
 def parse_metadata(metadatapath):
     _, ext = fdroidserver.common.get_extension(metadatapath)
     accepted = fdroidserver.common.config['accepted_formats']
     if ext not in accepted:
-        raise MetaDataException('"%s" is not an accepted format, convert to: %s' % (
+        warn_or_exception('"%s" is not an accepted format, convert to: %s' % (
             metadatapath, ', '.join(accepted)))
 
     app = App()
@@ -954,7 +966,7 @@ def parse_metadata(metadatapath):
         elif ext == 'yml':
             parse_yaml_metadata(mf, app)
         else:
-            raise MetaDataException('Unknown metadata format: %s' % metadatapath)
+            warn_or_exception('Unknown metadata format: %s' % metadatapath)
 
     post_metadata_parse(app)
     return app
@@ -979,7 +991,7 @@ def parse_xml_metadata(mf, app):
     root = tree.getroot()
 
     if root.tag != 'resources':
-        raise MetaDataException('resources file does not have root element <resources/>')
+        warn_or_exception('resources file does not have root element <resources/>')
 
     for child in root:
         if child.tag != 'builds':
@@ -1022,12 +1034,12 @@ def parse_txt_metadata(mf, app):
 
     def add_buildflag(p, build):
         if not p.strip():
-            raise MetaDataException("Empty build flag at {1}"
-                                    .format(buildlines[0], linedesc))
+            warn_or_exception("Empty build flag at {1}"
+                              .format(buildlines[0], linedesc))
         bv = p.split('=', 1)
         if len(bv) != 2:
-            raise MetaDataException("Invalid build flag at {0} in {1}"
-                                    .format(buildlines[0], linedesc))
+            warn_or_exception("Invalid build flag at {0} in {1}"
+                              .format(buildlines[0], linedesc))
 
         pk, pv = bv
         pk = pk.lstrip()
@@ -1044,7 +1056,7 @@ def parse_txt_metadata(mf, app):
         v = "".join(lines)
         parts = [p.replace("\\,", ",") for p in re.split(build_line_sep, v)]
         if len(parts) < 3:
-            raise MetaDataException("Invalid build format: " + v + " in " + mf.name)
+            warn_or_exception("Invalid build format: " + v + " in " + mf.name)
         build = Build()
         build.version = parts[0]
         build.vercode = parts[1]
@@ -1095,8 +1107,8 @@ def parse_txt_metadata(mf, app):
                     del buildlines[:]
             else:
                 if not build.commit and not build.disable:
-                    raise MetaDataException("No commit specified for {0} in {1}"
-                                            .format(build.version, linedesc))
+                    warn_or_exception("No commit specified for {0} in {1}"
+                                      .format(build.version, linedesc))
 
                 app.builds.append(build)
                 add_comments('build:' + build.vercode)
@@ -1111,7 +1123,7 @@ def parse_txt_metadata(mf, app):
             try:
                 f, v = line.split(':', 1)
             except ValueError:
-                raise MetaDataException("Invalid metadata in " + linedesc)
+                warn_or_exception("Invalid metadata in " + linedesc)
 
             # Translate obsolete fields...
             if f == 'Market Version':
@@ -1125,7 +1137,8 @@ def parse_txt_metadata(mf, app):
             if ftype == TYPE_MULTILINE:
                 mode = 1
                 if v:
-                    raise MetaDataException("Unexpected text on same line as " + f + " in " + linedesc)
+                    warn_or_exception("Unexpected text on same line as "
+                                      + f + " in " + linedesc)
             elif ftype == TYPE_STRING:
                 app.set_field(f, v)
             elif ftype == TYPE_LIST:
@@ -1142,21 +1155,22 @@ def parse_txt_metadata(mf, app):
             elif ftype == TYPE_BUILD_V2:
                 vv = v.split(',')
                 if len(vv) != 2:
-                    raise MetaDataException('Build should have comma-separated version and vercode, not "{0}", in {1}'
-                                            .format(v, linedesc))
+                    warn_or_exception('Build should have comma-separated',
+                                      'version and vercode,',
+                                      'not "{0}", in {1}'.format(v, linedesc))
                 build = Build()
                 build.version = vv[0]
                 build.vercode = vv[1]
                 if build.vercode in vc_seen:
-                    raise MetaDataException('Duplicate build recipe found for vercode %s in %s' % (
-                                            build.vercode, linedesc))
+                    warn_or_exception('Duplicate build recipe found for vercode %s in %s'
+                                      % (build.vercode, linedesc))
                 vc_seen.add(build.vercode)
                 del buildlines[:]
                 mode = 3
             elif ftype == TYPE_OBSOLETE:
                 pass        # Just throw it away!
             else:
-                raise MetaDataException("Unrecognised field '" + f + "' in " + linedesc)
+                warn_or_exception("Unrecognised field '" + f + "' in " + linedesc)
         elif mode == 1:     # Multiline field
             if line == '.':
                 mode = 0
@@ -1177,11 +1191,11 @@ def parse_txt_metadata(mf, app):
 
     # Mode at end of file should always be 0
     if mode == 1:
-        raise MetaDataException(f + " not terminated in " + mf.name)
+        warn_or_exception(f + " not terminated in " + mf.name)
     if mode == 2:
-        raise MetaDataException("Unterminated continuation in " + mf.name)
+        warn_or_exception("Unterminated continuation in " + mf.name)
     if mode == 3:
-        raise MetaDataException("Unterminated build in " + mf.name)
+        warn_or_exception("Unterminated build in " + mf.name)
 
     return app
 
@@ -1382,12 +1396,18 @@ def write_metadata(metadatapath, app):
     _, ext = fdroidserver.common.get_extension(metadatapath)
     accepted = fdroidserver.common.config['accepted_formats']
     if ext not in accepted:
-        raise MetaDataException('Cannot write "%s", not an accepted format, use: %s' % (
-            metadatapath, ', '.join(accepted)))
+        warn_or_exception('Cannot write "%s", not an accepted format, use: %s'
+                          % (metadatapath, ', '.join(accepted)))
 
     with open(metadatapath, 'w', encoding='utf8') as mf:
         if ext == 'txt':
             return write_txt(mf, app)
         elif ext == 'yml':
             return write_yaml(mf, app)
-    raise MetaDataException('Unknown metadata format: %s' % metadatapath)
+    warn_or_exception('Unknown metadata format: %s' % metadatapath)
+
+
+def add_metadata_arguments(parser):
+    '''add common command line flags related to metadata processing'''
+    parser.add_argument("-W", default='error',
+                        help="force errors to be warnings, or ignore")
