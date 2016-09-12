@@ -8,6 +8,9 @@ debian_mirror=$1
 
 sed -i "s,http://ftp.uk.debian.org/debian/,${debian_mirror},g" /etc/apt/sources.list
 
+printf 'APT::Install-Recommends "0";\nAPT::Install-Suggests "0";\n' \
+       > /etc/apt/apt.conf.d/99no-install-recommends
+
 if grep --quiet jessie /etc/apt/sources.list; then
     echo "deb $debian_mirror jessie-backports main" > /etc/apt/sources.list.d/backports.list
 fi
@@ -15,6 +18,7 @@ fi
 dpkg --add-architecture i386
 
 apt-get -y update
+apt-get -y upgrade --download-only
 apt-get -y upgrade
 
 packages="
@@ -50,7 +54,6 @@ packages="
  librsvg2-bin
  libsaxonb-java
  libssl-dev
- libssl1.0.0
  libstdc++6:i386
  libtool
  libtool-bin
@@ -88,8 +91,8 @@ packages="
  zip
  zlib1g:i386
 "
-
-apt-get install --yes --no-install-recommends $packages
+apt-get install --yes $packages --download-only
+apt-get install --yes $packages
 
 highestjava=`update-java-alternatives --list | sort -n | tail -1 | cut -d ' ' -f 1`
 update-java-alternatives --set $highestjava

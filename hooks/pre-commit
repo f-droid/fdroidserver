@@ -12,7 +12,7 @@ if [ -z "$files" ]; then
     PY_TEST_FILES="tests/*.TestCase"
     SH_FILES="hooks/pre-commit"
     BASH_FILES="fd-commit jenkins-build docs/update.sh completion/bash-completion buildserver/provision-*"
-    RB_FILES="buildserver/cookbooks/*/recipes/*.rb buildserver/Vagrantfile"
+    RB_FILES="buildserver/Vagrantfile"
 else
     # if actually committing right now, then only run on the files
     # that are going to be committed at this moment

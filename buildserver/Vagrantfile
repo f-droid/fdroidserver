@@ -4,7 +4,8 @@ configfile = YAML.load_file('Vagrantfile.yaml')
 
 Vagrant.configure("2") do |config|
 
-  if Vagrant.has_plugin?("vagrant-cachier")
+  # these two caching methods conflict, so only use one at a time
+  if Vagrant.has_plugin?("vagrant-cachier") and not configfile.has_key? "aptcachedir"
     config.cache.scope = :box
     config.cache.auto_detect = false
     config.cache.enable :apt
@@ -21,8 +22,6 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.boot_timeout = configfile['boot_timeout']
-
-  config.vm.provision :shell, :path => "fixpaths.sh"
 
   if configfile.has_key? "aptproxy"
     config.vm.provision :shell, path: "provision-apt-proxy",
@@ -46,13 +45,6 @@ Vagrant.configure("2") do |config|
     args: ["/home/vagrant/android-sdk"]
   config.vm.provision "shell", path: "provision-apt-get-install",
     args: [configfile['debian_mirror']]
-
-  config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = "cookbooks"
-    chef.log_level = :debug
-    chef.add_recipe "kivy"
-  end
-
   config.vm.provision "shell", path: "provision-android-sdk"
   config.vm.provision "shell", path: "provision-android-ndk",
     args: ["/home/vagrant/android-ndk"]
