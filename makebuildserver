@@ -64,7 +64,19 @@ config = {
     'cpus': 1,
     'memory': 1024,
     'hwvirtex': 'off',
+    'vm_provider': 'virtualbox',
 }
+
+if os.path.isfile('/usr/bin/systemd-detect-virt'):
+    try:
+        virt = subprocess.check_output('/usr/bin/systemd-detect-virt').strip().decode('utf-8')
+    except subprocess.CalledProcessError as e:
+        virt = 'none'
+    if virt == 'qemu' or virt == 'kvm':
+        print('Running in a VM guest, defaulting to QEMU/KVM via libvirt')
+        config['vm_provider'] = 'libvirt'
+    elif virt != 'none':
+        print('Running in an unsupported VM guest (' + virt + ')!')
 
 # load config file, if present
 if os.path.exists('makebuildserver.config.py'):
@@ -346,6 +358,7 @@ elif os.path.exists('/proc/cpuinfo'):
 vf = os.path.join(serverdir, 'Vagrantfile.yaml')
 writevf = True
 if os.path.exists(vf):
+    print('Halting', serverdir)
     vagrant(['halt'], serverdir)
     with open(vf, 'r', encoding='utf-8') as f:
         oldconfig = yaml.load(f)
@@ -360,6 +373,33 @@ else:
 if writevf:
     with open(vf, 'w', encoding='utf-8') as f:
         yaml.dump(config, f)
+
+if config['vm_provider'] == 'libvirt':
+    returncode, out = vagrant(['box', 'list'], serverdir, printout=options.verbose)
+    found_basebox = False
+    needs_mutate = False
+    for line in out.splitlines():
+        if line.startswith(config['basebox']):
+            found_basebox = True
+            if line.split('(')[1].split(',')[0] != 'libvirt':
+                needs_mutate = True
+            continue
+    if not found_basebox:
+        if isinstance(config['baseboxurl'], str):
+            baseboxurl = config['baseboxurl']
+        else:
+            baseboxurl = config['baseboxurl'][0]
+        print('Adding', config['basebox'], 'from', baseboxurl)
+        vagrant(['box', 'add', '--name', config['basebox'], baseboxurl],
+                serverdir, printout=options.verbose)
+        needs_mutate = True
+    if needs_mutate:
+        print('Converting', config['basebox'], 'to libvirt format')
+        vagrant(['mutate', config['basebox'], 'libvirt'],
+                serverdir, printout=options.verbose)
+        print('Removing virtualbox format copy of', config['basebox'])
+        vagrant(['box', 'remove', '--provider', 'virtualbox', config['basebox']],
+                serverdir, printout=options.verbose)
 
 print("Configuring build server VM")
 returncode, out = vagrant(['up', '--provision'], serverdir, printout=True)

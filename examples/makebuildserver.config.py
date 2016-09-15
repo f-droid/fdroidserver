@@ -48,3 +48,11 @@
 # about the timeout, extend the timeout here. (default: 600 seconds)
 #
 # boot_timeout = 1200
+
+# By default, this whole process uses VirtualBox as the provider, but
+# QEMU+KVM is also supported via the libvirt plugin to vagrant. If
+# this is run within a KVM guest, then libvirt's QEMU+KVM will be used
+# automatically.  It can also be manually enabled by uncommenting
+# below:
+#
+# vm_provider = 'libvirt'
