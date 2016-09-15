@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 if [ `dirname $0` != "." ]; then
@@ -11,14 +12,15 @@ fi
 
 # make sure that no VirtualBox processes are left running
 cleanup_all() {
+    set +e
     echo "$(date -u) - cleanup in progress..."
-    ps auxww|grep VBox
+    ps auxww | grep -e VBox -e qemu
     cd $WORKSPACE/buildserver
-    vagrant halt || true
+    vagrant halt
     sleep 5
-    killall VBoxHeadless || true
+    killall VBoxHeadless
     sleep 5
-    killall -9 VBoxHeadless || true
+    killall -9 VBoxHeadless
     echo "$(date -u) - cleanup done."
 }
 trap cleanup_all INT TERM EXIT
@@ -37,8 +39,10 @@ sha256sum -c jessie64.box.sha256
 export XDG_CONFIG_HOME=$WORKSPACE
 export VBOX_USER_HOME=$WORKSPACE/VirtualBox
 mkdir $VBOX_USER_HOME
-VBoxManage setproperty machinefolder $WORKSPACE/virtualbox.d
-VBoxManage setproperty logginglevel debug
+if which VBoxManage; then
+    VBoxManage setproperty machinefolder $WORKSPACE/virtualbox.d
+    VBoxManage setproperty logginglevel debug
+fi
 export VAGRANT_HOME=$WORKSPACE/vagrant.d
 mkdir $VAGRANT_HOME
 
@@ -46,7 +50,7 @@ cd $WORKSPACE
 echo "debian_mirror = 'http://ftp.uk.debian.org/debian/'" > $WORKSPACE/makebuildserver.config.py
 echo "boot_timeout = 1200" >> $WORKSPACE/makebuildserver.config.py
 echo "apt_package_cache = True" >> $WORKSPACE/makebuildserver.config.py
-./makebuildserver --verbose
+./makebuildserver --verbose --clean
 
 # this can be handled in the jenkins job, or here:
 if [ -e fdroiddata ]; then
