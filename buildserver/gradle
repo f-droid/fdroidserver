@@ -30,7 +30,23 @@ v_all=${plugin_v[@]}
 echo "Available gradle versions: ${v_all[@]}"
 
 # Earliest takes priority
-for f in build.gradle ../build.gradle; do
+for f in {.,..}/gradle/wrapper/gradle-wrapper.properties; do
+	[[ -f $f ]] || continue
+	while read l; do
+		if [[ $l == 'distributionUrl='* ]]; then
+			wrapper_ver=$(echo -n "$l" | sed "s/.*gradle-\\([0-9\\.\\+]\\+\\).*/\\1/")
+		fi
+	done < $f
+done
+
+if [[ -n $wrapper_ver ]]; then
+	v_found=$wrapper_ver
+	echo "Found $v_found via distributionUrl"
+	run_gradle
+fi
+
+# Earliest takes priority
+for f in {.,..}/build.gradle; do
 	[[ -f $f ]] || continue
 	while read l; do
 		if [[ -z "$plugin_pver" && $l == *'com.android.tools.build:gradle:'* ]]; then
