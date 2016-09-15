@@ -23,6 +23,22 @@ if [ ! -x $ANDROID_HOME/tools/android ]; then
     unzip -qq $tools
 fi
 
+# disable the repositories of proprietary stuff
+disabled="
+@version@=1
+@disabled@https\://dl.google.com/android/repository/extras/intel/addon.xml=disabled
+@disabled@https\://dl.google.com/android/repository/glass/addon.xml=disabled
+@disabled@https\://dl.google.com/android/repository/sys-img/android/sys-img.xml=disabled
+@disabled@https\://dl.google.com/android/repository/sys-img/android-tv/sys-img.xml=disabled
+@disabled@https\://dl.google.com/android/repository/sys-img/android-wear/sys-img.xml=disabled
+@disabled@https\://dl.google.com/android/repository/sys-img/google_apis/sys-img.xml=disabled
+"
+test -d ${HOME}/.android || mkdir ${HOME}/.android
+for line in $disabled; do
+    echo $line >> ${HOME}/.android/sites-settings.cfg
+done
+
+
 cd /vagrant/cache
 
 # make links for `android update sdk` to use and delete
