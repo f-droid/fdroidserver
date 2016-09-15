@@ -95,8 +95,8 @@ if config['apt_package_cache']:
 cachefiles = [
     ('https://dl.google.com/android/repository/tools_r25.2.2-linux.zip',
      '10d5185af8fee80a7ee093585bf84962d0a877b92a8fef489e2030e910f6a360'),
-    ('https://dl.google.com/android/repository/android_m2repository_r36.zip',
-     '44a45d2f8c4c230f3810e09858153c0c6a2b22efb704750413e29aa6f60a969c'),
+    ('https://dl.google.com/android/repository/android_m2repository_r38.zip',
+     '69660df7b98764065242bf283807c06aff42ff689eac561fa6e8f249af60201f'),
     ('https://dl.google.com/android/repository/android-1.5_r04-linux.zip',
      '85b6c8f9797e56aa415d3a282428bb640c96b0acb17c11d41621bb2a5302fe64'),
     ('https://dl.google.com/android/repository/android-1.6_r03-linux.zip',
