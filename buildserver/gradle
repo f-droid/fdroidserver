@@ -5,9 +5,6 @@ basedir="$(dirname $bindir)"
 verdir="${basedir}/versions"
 args=("$@")
 
-v_all=($(cd "${verdir}" && ls | sort -rV))
-echo "Available gradle versions: ${v_all[@]}"
-
 run_gradle() {
 	"${verdir}/${v_found}/bin/gradle" "${args[@]}"
 	exit $?
@@ -29,13 +26,8 @@ d_plugin_v=(2.14.1 2.14.1 2.12 2.12 2.4 2.4 2.3 2.2.1 2.2.1  2.1  2.1 1.12 1.12 
 # All gradle versions we know about
 plugin_v=(3.0 2.14.1 2.14 2.13 2.12 2.11 2.10 2.9 2.8 2.7 2.6 2.5 2.4 2.3 2.2.1 2.2 2.1 1.12 1.11 1.10 1.9 1.8 1.7 1.6 1.4)
 
-# Find the highest version available
-for v in ${plugin_v[*]}; do
-	if contains $v "${v_all[*]}"; then
-		v_def=$v
-		break
-	fi
-done
+v_all=${plugin_v[@]}
+echo "Available gradle versions: ${v_all[@]}"
 
 # Earliest takes priority
 for f in build.gradle ../build.gradle; do
@@ -71,6 +63,14 @@ if [[ -n $plugin_pver ]]; then
 		echo "Found $v_found via gradle plugin version $k"
 	fi
 fi
+
+# Find the highest version available
+for v in ${plugin_v[*]}; do
+	if contains $v "${v_all[*]}"; then
+		v_def=$v
+		break
+	fi
+done
 
 if [[ -z $v_found ]]; then
 	echo "No suitable gradle version found - defaulting to $v_def"
