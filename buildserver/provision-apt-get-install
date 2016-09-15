@@ -11,6 +11,9 @@ sed -i "s,http://ftp.uk.debian.org/debian/,${debian_mirror},g" /etc/apt/sources.
 printf 'APT::Install-Recommends "0";\nAPT::Install-Suggests "0";\n' \
        > /etc/apt/apt.conf.d/99no-install-recommends
 
+printf 'APT::Acquire::Retries "20";\n' \
+       > /etc/apt/apt.conf.d/99acquire-retries
+
 if grep --quiet jessie /etc/apt/sources.list; then
     echo "deb $debian_mirror jessie-backports main" > /etc/apt/sources.list.d/backports.list
 fi
