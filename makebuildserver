@@ -96,6 +96,9 @@ if os.path.exists(boxfile):
 
 if options.clean:
     vagrant(['destroy', '-f'], cwd=serverdir, printout=options.verbose)
+    if config['vm_provider'] == 'libvirt':
+        subprocess.call(['virsh', 'undefine', 'buildserver_default'])
+        subprocess.call(['virsh', 'vol-delete', '/var/lib/libvirt/images/buildserver_default.img'])
 
 # Update cached files.
 cachedir = config['cachedir']
