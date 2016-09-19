@@ -42,7 +42,8 @@ done
 cd /vagrant/cache
 
 # make links for `android update sdk` to use and delete
-for f in android_*.zip android-[0-9]*.zip platform-[0-9]*.zip build-tools_r*-linux.zip; do
+latestm2=`ls -1 android_m2repository*.zip | sort -n | tail -1`
+for f in $latestm2 android-[0-9]*.zip platform-[0-9]*.zip build-tools_r*-linux.zip; do
     rm -f ${ANDROID_HOME}/temp/$f
     ln -s /vagrant/cache/$f ${ANDROID_HOME}/temp/
 done
