@@ -1581,7 +1581,7 @@ prebuilt image unless instructed otherwise.  If you choose to use the
 prebuilt image, you may safely skip the rest of this section.
 
 Documentation for creating a base box can be found at
-@url{http://docs.vagrantup.com/v1/docs/base_boxes.html}.
+@url{https://www.vagrantup.com/docs/boxes/base.html}.
 
 In addition to carefully following the steps described there, you should
 consider the following:
