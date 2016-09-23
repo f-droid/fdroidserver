@@ -105,14 +105,15 @@ cachedir = config['cachedir']
 if not os.path.exists(cachedir):
     os.makedirs(cachedir, 0o755)
 
-tmp = cachedir
-while tmp != '/':
-    mode = os.stat(tmp).st_mode
-    if not (stat.S_IXUSR & mode and stat.S_IXGRP & mode and stat.S_IXOTH & mode):
-        print('ERROR:', tmp, 'will not be accessible to the VM!  To fix, run:')
-        print('  chmod a+X', tmp)
-        sys.exit(1)
-    tmp = os.path.dirname(tmp)
+if config['vm_provider'] == 'libvirt':
+    tmp = cachedir
+    while tmp != '/':
+        mode = os.stat(tmp).st_mode
+        if not (stat.S_IXUSR & mode and stat.S_IXGRP & mode and stat.S_IXOTH & mode):
+            print('ERROR:', tmp, 'will not be accessible to the VM!  To fix, run:')
+            print('  chmod a+X', tmp)
+            sys.exit(1)
+        tmp = os.path.dirname(tmp)
 
 if config['apt_package_cache']:
     config['aptcachedir'] = cachedir + '/apt/archives'
