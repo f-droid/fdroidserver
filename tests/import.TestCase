@@ -5,6 +5,7 @@
 import inspect
 import optparse
 import os
+import requests
 import sys
 import unittest
 
@@ -30,6 +31,12 @@ class ImportTest(unittest.TestCase):
         fdroidserver.common.config = config
 
         url = 'https://gitlab.com/fdroid/fdroidclient'
+        r = requests.head(url)
+        if r.status_code != 200:
+            print("ERROR", url, 'unreachable (', r.status_code, ')')
+            print('Skipping ImportTest!')
+            return
+
         app = fdroidserver.metadata.get_default_app_info()
         app.UpdateCheckMode = "Tags"
         root_dir, src_dir = import_proxy.get_metadata_from_url(app, url)
