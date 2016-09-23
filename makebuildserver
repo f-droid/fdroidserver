@@ -72,7 +72,7 @@ if os.path.isfile('/usr/bin/systemd-detect-virt'):
         virt = subprocess.check_output('/usr/bin/systemd-detect-virt').strip().decode('utf-8')
     except subprocess.CalledProcessError as e:
         virt = 'none'
-    if virt == 'qemu' or virt == 'kvm':
+    if virt == 'qemu' or virt == 'kvm' or virt == 'bochs':
         print('Running in a VM guest, defaulting to QEMU/KVM via libvirt')
         config['vm_provider'] = 'libvirt'
     elif virt != 'none':
@@ -96,20 +96,24 @@ if os.path.exists(boxfile):
 
 if options.clean:
     vagrant(['destroy', '-f'], cwd=serverdir, printout=options.verbose)
+    if config['vm_provider'] == 'libvirt':
+        subprocess.call(['virsh', 'undefine', 'buildserver_default'])
+        subprocess.call(['virsh', 'vol-delete', '/var/lib/libvirt/images/buildserver_default.img'])
 
 # Update cached files.
 cachedir = config['cachedir']
 if not os.path.exists(cachedir):
     os.makedirs(cachedir, 0o755)
 
-tmp = cachedir
-while tmp != '/':
-    mode = os.stat(tmp).st_mode
-    if not (stat.S_IXUSR & mode and stat.S_IXGRP & mode and stat.S_IXOTH & mode):
-        print('ERROR:', tmp, 'will not be accessible to the VM!  To fix, run:')
-        print('  chmod a+X', tmp)
-        sys.exit(1)
-    tmp = os.path.dirname(tmp)
+if config['vm_provider'] == 'libvirt':
+    tmp = cachedir
+    while tmp != '/':
+        mode = os.stat(tmp).st_mode
+        if not (stat.S_IXUSR & mode and stat.S_IXGRP & mode and stat.S_IXOTH & mode):
+            print('ERROR:', tmp, 'will not be accessible to the VM!  To fix, run:')
+            print('  chmod a+X', tmp)
+            sys.exit(1)
+        tmp = os.path.dirname(tmp)
 
 if config['apt_package_cache']:
     config['aptcachedir'] = cachedir + '/apt/archives'
