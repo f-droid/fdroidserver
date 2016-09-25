@@ -20,7 +20,7 @@ if not os.path.exists('makebuildserver') and not os.path.exists('buildserver'):
 
 
 boxfile = os.path.join(os.getcwd(), 'buildserver.box')
-serverdir = 'buildserver'
+tail = None
 
 parser = OptionParser()
 parser.add_option("-v", "--verbose", action="store_true", default=False,
@@ -293,158 +293,167 @@ def sha256_for_file(path):
         return s.hexdigest()
 
 
-for srcurl, shasum in cachefiles:
-    filename = os.path.basename(srcurl)
-    local_filename = os.path.join(cachedir, filename)
+def main():
+    global cachedir, cachefiles, config, tail
 
-    if os.path.exists(local_filename):
-        local_length = os.path.getsize(local_filename)
-    else:
-        local_length = -1
+    for srcurl, shasum in cachefiles:
+        filename = os.path.basename(srcurl)
+        local_filename = os.path.join(cachedir, filename)
 
-    resume_header = {}
-    download = True
-
-    try:
-        r = requests.head(srcurl, allow_redirects=True, timeout=60)
-        if r.status_code == 200:
-            content_length = int(r.headers.get('content-length'))
+        if os.path.exists(local_filename):
+            local_length = os.path.getsize(local_filename)
         else:
+            local_length = -1
+
+        resume_header = {}
+        download = True
+
+        try:
+            r = requests.head(srcurl, allow_redirects=True, timeout=60)
+            if r.status_code == 200:
+                content_length = int(r.headers.get('content-length'))
+            else:
+                content_length = local_length  # skip the download
+        except requests.exceptions.RequestException as e:
             content_length = local_length  # skip the download
-    except requests.exceptions.RequestException as e:
-        content_length = local_length  # skip the download
-        print(e)
+            print(e)
 
-    if local_length == content_length:
-        download = False
-    elif local_length > content_length:
-        print('deleting corrupt file from cache: ' + local_filename)
-        os.remove(local_filename)
-        print("Downloading " + filename + " to cache")
-    elif local_length > -1 and local_length < content_length:
-        print("Resuming download of " + local_filename)
-        resume_header = {'Range': 'bytes=%d-%d' % (local_length, content_length)}
-    else:
-        print("Downloading " + filename + " to cache")
-
-    if download:
-        r = requests.get(srcurl, headers=resume_header,
-                         stream=True, verify=False, allow_redirects=True)
-        content_length = int(r.headers.get('content-length'))
-        with open(local_filename, 'ab') as f:
-            for chunk in progress.bar(r.iter_content(chunk_size=65536),
-                                      expected_size=(content_length / 65536) + 1):
-                if chunk:  # filter out keep-alive new chunks
-                    f.write(chunk)
-
-    v = sha256_for_file(local_filename)
-    if v == shasum:
-        print("\t...shasum verified for " + local_filename)
-    else:
-        print("Invalid shasum of '" + v + "' detected for " + local_filename)
-        os.remove(local_filename)
-        sys.exit(1)
-
-local_qt_filename = os.path.join(cachedir, 'qt-opensource-linux-x64-android-5.7.0.run')
-print("Setting executable bit for " + local_qt_filename)
-os.chmod(local_qt_filename, 0o755)
-
-# use VirtualBox software virtualization if hardware is not available,
-# like if this is being run in kvm or some other VM platform, like
-# http://jenkins.debian.net, the values are 'on' or 'off'
-if sys.platform.startswith('darwin'):
-    # all < 10 year old Macs work, and OSX servers as VM host are very
-    # rare, but this could also be auto-detected if someone codes it
-    config['hwvirtex'] = 'on'
-elif os.path.exists('/proc/cpuinfo'):
-    with open('/proc/cpuinfo') as f:
-        contents = f.read()
-    if 'vmx' in contents or 'svm' in contents:
-        config['hwvirtex'] = 'on'
-
-logfilename = os.path.join(serverdir, 'up.log')
-if not os.path.exists(logfilename):
-    open(logfilename, 'a').close()  # create blank file
-log_cm = vagrant.make_file_cm(logfilename)
-v = vagrant.Vagrant(root=serverdir, out_cm=log_cm, err_cm=log_cm)
-
-if options.verbose:
-    tail = fdroidserver.tail.Tail(logfilename)
-    tail.start()
-
-if options.clean:
-    v.destroy()
-    if config['vm_provider'] == 'libvirt':
-        subprocess.call(['virsh', 'undefine', 'buildserver_default'])
-        subprocess.call(['virsh', 'vol-delete', '/var/lib/libvirt/images/buildserver_default.img'])
-
-# Check against the existing Vagrantfile.yaml, and if they differ, we
-# need to create a new box:
-vf = os.path.join(serverdir, 'Vagrantfile.yaml')
-writevf = True
-if os.path.exists(vf):
-    print('Halting', serverdir)
-    v.halt()
-    with open(vf, 'r', encoding='utf-8') as f:
-        oldconfig = yaml.load(f)
-    if config != oldconfig:
-        print("Server configuration has changed, rebuild from scratch is required")
-        v.destroy()
-    else:
-        print("Re-provisioning existing server")
-        writevf = False
-else:
-    print("No existing server - building from scratch")
-if writevf:
-    with open(vf, 'w', encoding='utf-8') as f:
-        yaml.dump(config, f)
-
-if config['vm_provider'] == 'libvirt':
-    found_basebox = False
-    needs_mutate = False
-    for box in v.box_list():
-        if box.name == config['basebox']:
-            found_basebox = True
-            if box.provider != 'libvirt':
-                needs_mutate = True
-            continue
-    if not found_basebox:
-        if isinstance(config['baseboxurl'], str):
-            baseboxurl = config['baseboxurl']
+        if local_length == content_length:
+            download = False
+        elif local_length > content_length:
+            print('deleting corrupt file from cache: ' + local_filename)
+            os.remove(local_filename)
+            print("Downloading " + filename + " to cache")
+        elif local_length > -1 and local_length < content_length:
+            print("Resuming download of " + local_filename)
+            resume_header = {'Range': 'bytes=%d-%d' % (local_length, content_length)}
         else:
-            baseboxurl = config['baseboxurl'][0]
-        print('Adding', config['basebox'], 'from', baseboxurl)
-        v.box_add(config['basebox'], baseboxurl)
-        needs_mutate = True
-    if needs_mutate:
-        print('Converting', config['basebox'], 'to libvirt format')
-        v._call_vagrant_command(['mutate', config['basebox'], 'libvirt'])
-        print('Removing virtualbox format copy of', config['basebox'])
-        v.box_remove(config['basebox'], 'virtualbox')
+            print("Downloading " + filename + " to cache")
 
-print("Configuring build server VM")
-v.up(provision=True)
+        if download:
+            r = requests.get(srcurl, headers=resume_header,
+                             stream=True, verify=False, allow_redirects=True)
+            content_length = int(r.headers.get('content-length'))
+            with open(local_filename, 'ab') as f:
+                for chunk in progress.bar(r.iter_content(chunk_size=65536),
+                                          expected_size=(content_length / 65536) + 1):
+                    if chunk:  # filter out keep-alive new chunks
+                        f.write(chunk)
 
-print("Writing buildserver ID")
-p = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE,
-                     universal_newlines=True)
-buildserverid = p.communicate()[0].strip()
-print("...ID is " + buildserverid)
-subprocess.call(
-    ['vagrant', 'ssh', '-c', 'sh -c "echo {0} >/home/vagrant/buildserverid"'
-        .format(buildserverid)],
-    cwd=serverdir)
+        v = sha256_for_file(local_filename)
+        if v == shasum:
+            print("\t...shasum verified for " + local_filename)
+        else:
+            print("Invalid shasum of '" + v + "' detected for " + local_filename)
+            os.remove(local_filename)
+            sys.exit(1)
 
-print("Stopping build server VM")
-v.halt()
+    local_qt_filename = os.path.join(cachedir, 'qt-opensource-linux-x64-android-5.7.0.run')
+    print("Setting executable bit for " + local_qt_filename)
+    os.chmod(local_qt_filename, 0o755)
 
-print("Packaging")
-v.package(output=boxfile)
+    # use VirtualBox software virtualization if hardware is not available,
+    # like if this is being run in kvm or some other VM platform, like
+    # http://jenkins.debian.net, the values are 'on' or 'off'
+    if sys.platform.startswith('darwin'):
+        # all < 10 year old Macs work, and OSX servers as VM host are very
+        # rare, but this could also be auto-detected if someone codes it
+        config['hwvirtex'] = 'on'
+    elif os.path.exists('/proc/cpuinfo'):
+        with open('/proc/cpuinfo') as f:
+            contents = f.read()
+        if 'vmx' in contents or 'svm' in contents:
+            config['hwvirtex'] = 'on'
 
-print("Adding box")
-v.box_add('buildserver', boxfile, force=True)
+    serverdir = os.path.join(os.getcwd(), 'buildserver')
+    logfilename = os.path.join(serverdir, 'up.log')
+    if not os.path.exists(logfilename):
+        open(logfilename, 'a').close()  # create blank file
+    log_cm = vagrant.make_file_cm(logfilename)
+    v = vagrant.Vagrant(root=serverdir, out_cm=log_cm, err_cm=log_cm)
 
-os.remove(boxfile)
+    if options.verbose:
+        tail = fdroidserver.tail.Tail(logfilename)
+        tail.start()
 
-if tail is not None:
-    tail.stop()
+    if options.clean:
+        v.destroy()
+        if config['vm_provider'] == 'libvirt':
+            subprocess.call(['virsh', 'undefine', 'buildserver_default'])
+            subprocess.call(['virsh', 'vol-delete', '/var/lib/libvirt/images/buildserver_default.img'])
+
+    # Check against the existing Vagrantfile.yaml, and if they differ, we
+    # need to create a new box:
+    vf = os.path.join(serverdir, 'Vagrantfile.yaml')
+    writevf = True
+    if os.path.exists(vf):
+        print('Halting', serverdir)
+        v.halt()
+        with open(vf, 'r', encoding='utf-8') as f:
+            oldconfig = yaml.load(f)
+        if config != oldconfig:
+            print("Server configuration has changed, rebuild from scratch is required")
+            v.destroy()
+        else:
+            print("Re-provisioning existing server")
+            writevf = False
+    else:
+        print("No existing server - building from scratch")
+    if writevf:
+        with open(vf, 'w', encoding='utf-8') as f:
+            yaml.dump(config, f)
+
+    if config['vm_provider'] == 'libvirt':
+        found_basebox = False
+        needs_mutate = False
+        for box in v.box_list():
+            if box.name == config['basebox']:
+                found_basebox = True
+                if box.provider != 'libvirt':
+                    needs_mutate = True
+                continue
+        if not found_basebox:
+            if isinstance(config['baseboxurl'], str):
+                baseboxurl = config['baseboxurl']
+            else:
+                baseboxurl = config['baseboxurl'][0]
+            print('Adding', config['basebox'], 'from', baseboxurl)
+            v.box_add(config['basebox'], baseboxurl)
+            needs_mutate = True
+        if needs_mutate:
+            print('Converting', config['basebox'], 'to libvirt format')
+            v._call_vagrant_command(['mutate', config['basebox'], 'libvirt'])
+            print('Removing virtualbox format copy of', config['basebox'])
+            v.box_remove(config['basebox'], 'virtualbox')
+
+    print("Configuring build server VM")
+    v.up(provision=True)
+
+    print("Writing buildserver ID")
+    p = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE,
+                         universal_newlines=True)
+    buildserverid = p.communicate()[0].strip()
+    print("...ID is " + buildserverid)
+    subprocess.call(
+        ['vagrant', 'ssh', '-c', 'sh -c "echo {0} >/home/vagrant/buildserverid"'
+            .format(buildserverid)],
+        cwd=serverdir)
+
+    print("Stopping build server VM")
+    v.halt()
+
+    print("Packaging")
+    v.package(output=boxfile)
+
+    print("Adding box")
+    v.box_add('buildserver', boxfile, force=True)
+
+    os.remove(boxfile)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    finally:
+        if tail is not None:
+            tail.stop()
