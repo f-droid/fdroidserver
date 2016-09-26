@@ -20,7 +20,6 @@ if not os.path.exists('makebuildserver') and not os.path.exists('buildserver'):
     sys.exit(1)
 
 
-boxfile = os.path.join(os.getcwd(), 'buildserver.box')
 tail = None
 
 parser = OptionParser()
@@ -68,9 +67,6 @@ elif os.path.exists('makebs.config.py'):
     exec(compile(open('makebs.config.py').read(), 'makebs.config.py', 'exec'), config)
 if '__builtins__' in config:
     del(config['__builtins__'])  # added by compile/exec
-
-if os.path.exists(boxfile):
-    os.remove(boxfile)
 
 # Update cached files.
 cachedir = config['cachedir']
@@ -471,6 +467,9 @@ def main():
     v.halt()
 
     print("Packaging")
+    boxfile = os.path.join(os.getcwd(), 'buildserver.box')
+    if os.path.exists(boxfile):
+        os.remove(boxfile)
     v.package(output=boxfile)
 
     print("Adding box")
