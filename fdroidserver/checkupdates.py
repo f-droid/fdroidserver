@@ -452,7 +452,9 @@ def checkupdates_app(app, first=True):
 
     if options.auto:
         mode = app.AutoUpdateMode
-        if mode in ('None', 'Static'):
+        if not app.CurrentVersionCode:
+            logging.warn("Can't auto-update app with no current version code: " + app.id)
+        elif mode in ('None', 'Static'):
             pass
         elif mode.startswith('Version '):
             pattern = mode[8:]
