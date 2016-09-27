@@ -291,6 +291,32 @@ def sha256_for_file(path):
         return s.hexdigest()
 
 
+def destroy_current_image(v, serverdir):
+    global config
+
+    # cannot run vagrant without the config in the YAML file
+    if os.path.exists(os.path.join(serverdir, 'Vagrantfile.yaml')):
+        v.destroy()
+    elif options.verbose:
+        print('Cannot run destroy vagrant setup since Vagrantfile.yaml is not setup!')
+    if config['vm_provider'] == 'libvirt':
+        import libvirt
+        try:
+            domain = 'buildserver_default'
+            virConnect = libvirt.open('qemu:///system')
+            virDomain = virConnect.lookupByName(domain)
+            if virDomain:
+                virDomain.undefineFlags(libvirt.VIR_DOMAIN_UNDEFINE_MANAGED_SAVE
+                                        | libvirt.VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA
+                                        | libvirt.VIR_DOMAIN_UNDEFINE_NVRAM)
+            storagePool = virConnect.storagePoolLookupByName('default')
+            if storagePool:
+                for vol in storagePool.listAllVolumes():
+                    vol.delete()
+        except libvirt.libvirtError as e:
+            print(e)
+
+
 def run_via_vagrant_ssh(v, cmdlist):
     if (isinstance(cmdlist, str) or isinstance(cmdlist, bytes)):
         cmd = cmdlist
@@ -383,10 +409,7 @@ def main():
         tail.start()
 
     if options.clean:
-        v.destroy()
-        if config['vm_provider'] == 'libvirt':
-            subprocess.call(['virsh', 'undefine', 'buildserver_default'])
-            subprocess.call(['virsh', 'vol-delete', '/var/lib/libvirt/images/buildserver_default.img'])
+        destroy_current_image(v, serverdir)
 
     # Check against the existing Vagrantfile.yaml, and if they differ, we
     # need to create a new box:
@@ -399,7 +422,7 @@ def main():
             oldconfig = yaml.load(f)
         if config != oldconfig:
             print("Server configuration has changed, rebuild from scratch is required")
-            v.destroy()
+            destroy_current_image(v, serverdir)
         else:
             print("Re-provisioning existing server")
             writevf = False
