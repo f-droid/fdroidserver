@@ -60,6 +60,7 @@ default_config = {
         'r11c': None,
         'r12b': "$ANDROID_NDK",
     },
+    'qt_sdk_path': None,
     'build_tools': "24.0.2",
     'force_build_tools': False,
     'java_paths': None,
@@ -1836,6 +1837,7 @@ def replace_config_vars(cmd, build):
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
     cmd = cmd.replace('$$NDK$$', build.ndk_path())
     cmd = cmd.replace('$$MVN3$$', config['mvn3'])
+    cmd = cmd.replace('$$QT$$', config['qt_sdk_path'] or '')
     if build is not None:
         cmd = cmd.replace('$$COMMIT$$', build.commit)
         cmd = cmd.replace('$$VERSION$$', build.version)

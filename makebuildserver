@@ -281,6 +281,8 @@ cachefiles = [
      'ba85dbe4d370e4de567222f73a3e034d85fc3011b3cbd90697f3e8dcace3ad94'),
     ('https://dl.google.com/android/repository/android-ndk-r12b-linux-x86_64.zip',
      'eafae2d614e5475a3bcfd7c5f201db5b963cc1290ee3e8ae791ff0c66757781e'),
+    ('https://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-linux-x64-android-5.7.0.run',
+     'f7e55b7970e59bdaabb88cb7afc12e9061e933992bda2f076f52600358644586'),
 ]
 
 
@@ -345,6 +347,10 @@ for srcurl, shasum in cachefiles:
         print("Invalid shasum of '" + v + "' detected for " + local_filename)
         os.remove(local_filename)
         sys.exit(1)
+
+local_qt_filename = os.path.join(cachedir, 'qt-opensource-linux-x64-android-5.7.0.run')
+print("Setting executable bit for " + local_qt_filename)
+os.chmod(local_qt_filename, 0o755)
 
 # use VirtualBox software virtualization if hardware is not available,
 # like if this is being run in kvm or some other VM platform, like

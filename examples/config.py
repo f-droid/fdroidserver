@@ -17,6 +17,9 @@
 #     'r12b': "$ANDROID_NDK",
 # }
 
+# Path to the Qt SDK. It is of the form "/path/to/Qt5.7.0/5.7"
+# qt_sdk_path = ""
+
 # java_paths = {
 #     '1.8': "/usr/lib/jvm/java-8-openjdk",
 # }
