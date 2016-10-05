@@ -15,8 +15,15 @@ Vagrant.configure("2") do |config|
   config.vm.box = configfile['basebox']
   config.vm.box_url = configfile['baseboxurl']
 
-  # TODO detect if jessie64.box is libvirt, or `vagrant mutate jessie64 libvirt`
-  if `systemd-detect-virt`.include? "qemu" or configfile["vm_provider"] == "libvirt"
+  if not configfile.has_key? "vm_provider" or configfile["vm_provider"] == "virtualbox"
+    # default to VirtualBox if not set
+    config.vm.provider "virtualbox" do |v|
+      v.customize ["modifyvm", :id, "--memory", configfile['memory']]
+      v.customize ["modifyvm", :id, "--cpus", configfile['cpus']]
+      v.customize ["modifyvm", :id, "--hwvirtex", configfile['hwvirtex']]
+    end
+    synced_folder_type = 'virtualbox'
+  elsif configfile["vm_provider"] == "libvirt"
     # use KVM/QEMU if this is running in KVM/QEMU
     config.vm.provider :libvirt do |libvirt|
       libvirt.driver = "kvm"
@@ -27,14 +34,6 @@ Vagrant.configure("2") do |config|
     end
     config.vm.synced_folder './', '/vagrant', type: '9p'
     synced_folder_type = '9p'
-  elsif not configfile.has_key? "vm_provider" or configfile["vm_provider"] == "virtualbox"
-    # default to VirtualBox if not set
-    config.vm.provider "virtualbox" do |v|
-      v.customize ["modifyvm", :id, "--memory", configfile['memory']]
-      v.customize ["modifyvm", :id, "--cpus", configfile['cpus']]
-      v.customize ["modifyvm", :id, "--hwvirtex", configfile['hwvirtex']]
-    end
-    synced_folder_type = 'virtualbox'
   else
     abort("No supported VM Provider found, set vm_provider in Vagrantfile.yaml!")
   end
