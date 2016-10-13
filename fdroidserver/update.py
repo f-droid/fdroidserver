@@ -1444,12 +1444,15 @@ def main():
     else:
         archapks = []
 
+    # less than the valid range of versionCode, i.e. Java's Integer.MIN_VALUE
+    UNSET_VERSION_CODE = -0x100000000
+
     # Some information from the apks needs to be applied up to the application
     # level. When doing this, we use the info from the most recent version's apk.
     # We deal with figuring out when the app was added and last updated at the
     # same time.
     for appid, app in apps.items():
-        bestver = 0
+        bestver = UNSET_VERSION_CODE
         for apk in apks + archapks:
             if apk['id'] == appid:
                 if apk['versioncode'] > bestver:
@@ -1467,7 +1470,7 @@ def main():
         if not app.lastupdated:
             logging.debug("Don't know when " + appid + " was last updated")
 
-        if bestver == 0:
+        if bestver == UNSET_VERSION_CODE:
             if app.Name is None:
                 app.Name = app.AutoName or appid
             app.icon = None
