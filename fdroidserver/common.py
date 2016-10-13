@@ -1609,6 +1609,12 @@ class KnownApks:
         return lst
 
 
+def get_file_extension(filename):
+    """get the normalized file extension, can be blank string but never None"""
+
+    return os.path.splitext(filename)[1].lower()[1:]
+
+
 def isApkDebuggable(apkfile, config):
     """Returns True if the given apk file is debuggable
 
