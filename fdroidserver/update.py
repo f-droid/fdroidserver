@@ -883,6 +883,12 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             return
         addElement(name, value, doc, parent)
 
+    def addElementIfInApk(name, apk, key, doc, parent):
+        if key not in apk:
+            return
+        value = str(apk[key])
+        addElement(name, value, doc, parent)
+
     def addElementCDATA(name, value, doc, parent):
         el = doc.createElement(name)
         el.appendChild(doc.createCDATASection(value))
@@ -1069,8 +1075,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             addElement('version', apk['version'], doc, apkel)
             addElement('versioncode', str(apk['versioncode']), doc, apkel)
             addElement('apkname', apk['apkname'], doc, apkel)
-            if 'srcname' in apk:
-                addElement('srcname', apk['srcname'], doc, apkel)
+            addElementIfInApk('srcname', apk, 'srcname', doc, apkel)
             for hash_type in ['sha256']:
                 if hash_type not in apk:
                     continue
@@ -1081,14 +1086,18 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             addElement('sig', apk['sig'], doc, apkel)
             addElement('size', str(apk['size']), doc, apkel)
             addElement('sdkver', str(apk['minSdkVersion']), doc, apkel)
-            if 'targetSdkVersion' in apk:
-                addElement('targetSdkVersion', str(apk['targetSdkVersion']), doc, apkel)
-            if 'maxSdkVersion' in apk:
-                addElement('maxsdkver', str(apk['maxSdkVersion']), doc, apkel)
-            addElementNonEmpty('obbMainFile', apk.get('obbMainFile'), doc, apkel)
-            addElementNonEmpty('obbMainFileSha256', apk.get('obbMainFileSha256'), doc, apkel)
-            addElementNonEmpty('obbPatchFile', apk.get('obbPatchFile'), doc, apkel)
-            addElementNonEmpty('obbPatchFileSha256', apk.get('obbPatchFileSha256'), doc, apkel)
+            addElementIfInApk('targetSdkVersion', apk,
+                              'targetSdkVersion', doc, apkel)
+            addElementIfInApk('maxsdkver', apk,
+                              'maxSdkVersion', doc, apkel)
+            addElementIfInApk('obbMainFile', apk,
+                              'obbMainFile', doc, apkel)
+            addElementIfInApk('obbMainFileSha256', apk,
+                              'obbMainFileSha256', doc, apkel)
+            addElementIfInApk('obbPatchFile', apk,
+                              'obbPatchFile', doc, apkel)
+            addElementIfInApk('obbPatchFileSha256', apk,
+                              'obbPatchFileSha256', doc, apkel)
             if 'added' in apk:
                 addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
 
