@@ -504,12 +504,11 @@ def insert_obbs(repodir, apps, apks):
                 break
 
 
-def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
+def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
     """Scan the apks in the given repo directory.
 
     This also extracts the icons.
 
-    :param apps: list of all applications, as per metadata.read_metadata
     :param apkcache: current apk cache information
     :param repodir: repo directory to scan
     :param knownapks: known apks info
@@ -1394,7 +1393,7 @@ def main():
     delete_disabled_builds(apps, apkcache, repodirs)
 
     # Scan all apks in the main repo
-    apks, cachechanged = scan_apks(apps, apkcache, repodirs[0], knownapks, options.use_date_from_apk)
+    apks, cachechanged = scan_apks(apkcache, repodirs[0], knownapks, options.use_date_from_apk)
 
     # Generate warnings for apk's with no metadata (or create skeleton
     # metadata files, if requested on the command line)
@@ -1438,7 +1437,7 @@ def main():
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
-        archapks, cc = scan_apks(apps, apkcache, repodirs[1], knownapks, options.use_date_from_apk)
+        archapks, cc = scan_apks(apkcache, repodirs[1], knownapks, options.use_date_from_apk)
         if cc:
             cachechanged = True
     else:
