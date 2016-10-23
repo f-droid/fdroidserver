@@ -122,8 +122,8 @@ if config['apt_package_cache']:
 cachefiles = [
     ('https://dl.google.com/android/repository/tools_r25.2.2-linux.zip',
      '10d5185af8fee80a7ee093585bf84962d0a877b92a8fef489e2030e910f6a360'),
-    ('https://dl.google.com/android/repository/android_m2repository_r38.zip',
-     '69660df7b98764065242bf283807c06aff42ff689eac561fa6e8f249af60201f'),
+    ('https://dl.google.com/android/repository/android_m2repository_r39.zip',
+     '1feec6fb7cd94a7f804fa8664b517b16fa11c6c851ae592c72bb2f0d24729084'),
     ('https://dl.google.com/android/repository/android-1.5_r04-linux.zip',
      '85b6c8f9797e56aa415d3a282428bb640c96b0acb17c11d41621bb2a5302fe64'),
     ('https://dl.google.com/android/repository/android-1.6_r03-linux.zip',
@@ -168,6 +168,8 @@ cachefiles = [
      '4b4bcddead3319708275c54c76294707bfaa953d767e34f1a5b599f3edd0076c'),
     ('https://dl.google.com/android/repository/platform-24_r02.zip',
      'f268f5945c6ece7ea95c1c252067280854d2a20da924e22ae4720287df8bdbc9'),
+    ('https://dl.google.com/android/repository/platform-25_r01.zip',
+     'da519dc3e07b8cb879265c94f798262c1f90791dfaa8b745d34883891378438e'),
     ('https://dl.google.com/android/repository/build-tools_r17-linux.zip',
      '4c8444972343a19045236f6924bd7f12046287c70dace96ab88b2159c8ec0e74'),
     ('https://dl.google.com/android/repository/build-tools_r18.0.1-linux.zip',
@@ -220,6 +222,8 @@ cachefiles = [
      '924e29b8a189afbd119d44eae450fc0c9f197ed6f835df223931e45007987d95'),
     ('https://dl.google.com/android/repository/build-tools_r24.0.3-linux.zip',
      'f2c02eb1d7e41ce314b5dac50440e7595380c4dd45b41ea1d7b0f86e49516927'),
+    ('https://dl.google.com/android/repository/build-tools_r25-linux.zip',
+     '74eb6931fd7a56859bd8e35d8d73ca8fe7ba6bfd4b7ffe560fe58b7354f2e3aa'),
     # the binaries that Google uses are here:
     # https://android.googlesource.com/platform/tools/external/gradle/+/studio-1.5/
     ('https://services.gradle.org/distributions/gradle-1.4-bin.zip',
