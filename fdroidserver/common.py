@@ -61,7 +61,7 @@ default_config = {
         'r12b': "$ANDROID_NDK",
     },
     'qt_sdk_path': None,
-    'build_tools': "24.0.2",
+    'build_tools': "25.0.0",
     'force_build_tools': False,
     'java_paths': None,
     'ant': "ant",
