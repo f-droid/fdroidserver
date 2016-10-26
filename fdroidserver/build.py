@@ -860,14 +860,6 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
     if foundid != app.id:
         raise BuildException("Wrong package ID - build " + foundid + " but expected " + app.id)
 
-    # Some apps (e.g. Timeriffic) have had the bonkers idea of
-    # including the entire changelog in the version number. Remove
-    # it so we can compare. (TODO: might be better to remove it
-    # before we compile, in fact)
-    index = version.find(" //")
-    if index != -1:
-        version = version[:index]
-
     if (version != build.version or
             vercode != build.vercode):
         raise BuildException(("Unexpected version/version code in output;"
