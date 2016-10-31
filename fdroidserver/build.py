@@ -454,6 +454,54 @@ def capitalize_intact(string):
     return string[0].upper() + string[1:]
 
 
+def get_metadata_from_apk(app, build, apkfile):
+    """get the required metadata from the built APK"""
+
+    p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
+
+    vercode = None
+    version = None
+    foundid = None
+    nativecode = None
+    for line in p.output.splitlines():
+        if line.startswith("package:"):
+            pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
+            m = pat.match(line)
+            if m:
+                foundid = m.group(1)
+            pat = re.compile(".*versionCode='([0-9]*)'.*")
+            m = pat.match(line)
+            if m:
+                vercode = m.group(1)
+            pat = re.compile(".*versionName='([^']*)'.*")
+            m = pat.match(line)
+            if m:
+                version = m.group(1)
+        elif line.startswith("native-code:"):
+            nativecode = line[12:]
+
+    # Ignore empty strings or any kind of space/newline chars that we don't
+    # care about
+    if nativecode is not None:
+        nativecode = nativecode.strip()
+        nativecode = None if not nativecode else nativecode
+
+    if build.buildjni and build.buildjni != ['no']:
+        if nativecode is None:
+            raise BuildException("Native code should have been built but none was packaged")
+    if build.novcheck:
+        vercode = build.vercode
+        version = build.version
+    if not version or not vercode:
+        raise BuildException("Could not find version information in build in output")
+    if not foundid:
+        raise BuildException("Could not find package ID in output")
+    if foundid != app.id:
+        raise BuildException("Wrong package ID - build " + foundid + " but expected " + app.id)
+
+    return vercode, version
+
+
 def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh):
     """Do a build locally."""
 
@@ -809,7 +857,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
         src = os.path.normpath(apks[0])
 
     # Make sure it's not debuggable...
-    if common.isApkDebuggable(src, config):
+    if common.isApkAndDebuggable(src, config):
         raise BuildException("APK is debuggable")
 
     # By way of a sanity check, make sure the version and version
@@ -818,56 +866,17 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
     if not os.path.exists(src):
         raise BuildException("Unsigned apk is not at expected location of " + src)
 
-    p = SdkToolsPopen(['aapt', 'dump', 'badging', src], output=False)
-
-    vercode = None
-    version = None
-    foundid = None
-    nativecode = None
-    for line in p.output.splitlines():
-        if line.startswith("package:"):
-            pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
-            m = pat.match(line)
-            if m:
-                foundid = m.group(1)
-            pat = re.compile(".*versionCode='([0-9]*)'.*")
-            m = pat.match(line)
-            if m:
-                vercode = m.group(1)
-            pat = re.compile(".*versionName='([^']*)'.*")
-            m = pat.match(line)
-            if m:
-                version = m.group(1)
-        elif line.startswith("native-code:"):
-            nativecode = line[12:]
-
-    # Ignore empty strings or any kind of space/newline chars that we don't
-    # care about
-    if nativecode is not None:
-        nativecode = nativecode.strip()
-        nativecode = None if not nativecode else nativecode
-
-    if build.buildjni and build.buildjni != ['no']:
-        if nativecode is None:
-            raise BuildException("Native code should have been built but none was packaged")
-    if build.novcheck:
+    if common.get_file_extension(src) == 'apk':
+        vercode, version = get_metadata_from_apk(app, build, src)
+        if (version != build.version or vercode != build.vercode):
+            raise BuildException(("Unexpected version/version code in output;"
+                                  " APK: '%s' / '%s', "
+                                  " Expected: '%s' / '%s'")
+                                 % (version, str(vercode), build.version,
+                                    str(build.vercode)))
+    else:
         vercode = build.vercode
         version = build.version
-    if not version or not vercode:
-        raise BuildException("Could not find version information in build in output")
-    if not foundid:
-        raise BuildException("Could not find package ID in output")
-    if foundid != app.id:
-        raise BuildException("Wrong package ID - build " + foundid + " but expected " + app.id)
-
-    if (version != build.version or
-            vercode != build.vercode):
-        raise BuildException(("Unexpected version/version code in output;"
-                              " APK: '%s' / '%s', "
-                              " Expected: '%s' / '%s'")
-                             % (version, str(vercode), build.version,
-                                str(build.vercode))
-                             )
 
     # Add information for 'fdroid verify' to be able to reproduce the build
     # environment.

@@ -1618,10 +1618,13 @@ def get_file_extension(filename):
     return os.path.splitext(filename)[1].lower()[1:]
 
 
-def isApkDebuggable(apkfile, config):
-    """Returns True if the given apk file is debuggable
+def isApkAndDebuggable(apkfile, config):
+    """Returns True if the given file is an APK and is debuggable
 
     :param apkfile: full path to the apk to check"""
+
+    if get_file_extension(apkfile) != 'apk':
+        return False
 
     p = SdkToolsPopen(['aapt', 'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
                       output=False)

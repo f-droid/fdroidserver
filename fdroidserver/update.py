@@ -739,7 +739,7 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
                 apk['minSdkVersion'] = 1
 
             # Check for debuggable apks...
-            if common.isApkDebuggable(apkfile, config):
+            if common.isApkAndDebuggable(apkfile, config):
                 logging.warning('{0} is set to android:debuggable="true"'.format(apkfile))
 
             # Get the signature (or md5 of, to be precise)...
