@@ -459,8 +459,11 @@ def apknameinfo(filename):
     return result
 
 
-def getapkname(app, build):
-    return "%s_%s.apk" % (app.id, build.vercode)
+def get_release_filename(app, build):
+    if build.output:
+        return "%s_%s.%s" % (app.id, build.vercode, get_file_extension(build.output))
+    else:
+        return "%s_%s.apk" % (app.id, build.vercode)
 
 
 def getsrcname(app, build):

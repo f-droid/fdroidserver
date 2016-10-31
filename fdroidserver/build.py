@@ -412,7 +412,7 @@ def build_server(app, build, vcs, build_dir, output_dir, force):
             ftp.chdir(homedir + '/tmp')
         else:
             ftp.chdir(homedir + '/unsigned')
-        apkfile = common.getapkname(app, build)
+        apkfile = common.get_release_filename(app, build)
         tarball = common.getsrcname(app, build)
         try:
             ftp.get(apkfile, os.path.join(output_dir, apkfile))
@@ -884,7 +884,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
 
     # Copy the unsigned apk to our destination directory for further
     # processing (by publish.py)...
-    dest = os.path.join(output_dir, common.getapkname(app, build))
+    dest = os.path.join(output_dir, common.get_release_filename(app, build))
     shutil.copyfile(src, dest)
 
     # Move the source tarball into the output directory...
@@ -912,17 +912,17 @@ def trybuild(app, build, build_dir, output_dir, also_check_dir, srclib_dir, extl
     :returns: True if the build was done, False if it wasn't necessary.
     """
 
-    dest_apk = common.getapkname(app, build)
+    dest_file = common.get_release_filename(app, build)
 
-    dest = os.path.join(output_dir, dest_apk)
-    dest_repo = os.path.join(repo_dir, dest_apk)
+    dest = os.path.join(output_dir, dest_file)
+    dest_repo = os.path.join(repo_dir, dest_file)
 
     if not test:
         if os.path.exists(dest) or os.path.exists(dest_repo):
             return False
 
         if also_check_dir:
-            dest_also = os.path.join(also_check_dir, dest_apk)
+            dest_also = os.path.join(also_check_dir, dest_file)
             if os.path.exists(dest_also):
                 return False
 
