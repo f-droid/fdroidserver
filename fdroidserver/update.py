@@ -517,15 +517,16 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
     cachechanged = False
     repo_files = []
     for name in os.listdir(repodir):
-        filename = os.path.join(repodir, name)
-        file_extension = common.get_file_extension(name)
         if name in ['index.jar', 'index.xml', 'index.html', 'categories.txt', ]:
             continue
+        file_extension = common.get_file_extension(name)
         if file_extension == 'apk' or file_extension == 'obb':
             continue
+        filename = os.path.join(repodir, name)
         if not os.path.isfile(filename):
             continue
-        if os.stat(filename).st_size == 0:
+        stat = os.stat(filename)
+        if stat.st_size == 0:
             logging.error(filename + ' is zero size!')
             sys.exit(1)
 
@@ -552,13 +553,13 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             srcfilename = name + ".src.tar.gz"
             if os.path.exists(os.path.join(repodir, srcfilename)):
                 repo_file['srcname'] = srcfilename
-            repo_file['size'] = os.path.getsize(filename)
+            repo_file['size'] = stat.st_size
 
             apkcache[name] = repo_file
             cachechanged = True
 
         if use_date_from_file:
-            timestamp = os.stat(filename).st_ctime
+            timestamp = stat.st_ctime
             default_date_param = datetime.fromtimestamp(timestamp).utctimetuple()
         else:
             default_date_param = None
