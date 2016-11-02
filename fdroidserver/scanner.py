@@ -199,7 +199,7 @@ def scan_source(build_dir, root_dir, build):
             elif ext == 'java':
                 if not os.path.isfile(fp):
                     continue
-                with open(fp, 'r', encoding='utf8') as f:
+                with open(fp, 'r', encoding='utf8', errors='replace') as f:
                     for line in f:
                         if 'DexClassLoader' in line:
                             count += handleproblem('DexClassLoader', fd, fp)
@@ -208,7 +208,7 @@ def scan_source(build_dir, root_dir, build):
             elif ext == 'gradle':
                 if not os.path.isfile(fp):
                     continue
-                with open(fp, 'r', encoding='utf8') as f:
+                with open(fp, 'r', encoding='utf8', errors='replace') as f:
                     lines = f.readlines()
                 for i, line in enumerate(lines):
                     if is_used_by_gradle(line):
