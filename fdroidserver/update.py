@@ -504,12 +504,82 @@ def insert_obbs(repodir, apps, apks):
                 break
 
 
-def scan_apks(apps, apkcache, repodir, knownapks, use_date_from_apk=False):
+def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
+    """Scan a repo for all files with an extension except APK/OBB
+
+    :param apkcache: current cached info about all repo files
+    :param repodir: repo directory to scan
+    :param knownapks: list of all known files, as per metadata.read_metadata
+    :param use_date_from_file: use date from file (instead of current date)
+                               for newly added files
+    """
+
+    cachechanged = False
+    repo_files = []
+    for name in os.listdir(repodir):
+        if name in ['index.jar', 'index.xml', 'index.html', 'categories.txt', ]:
+            continue
+        file_extension = common.get_file_extension(name)
+        if file_extension == 'apk' or file_extension == 'obb':
+            continue
+        filename = os.path.join(repodir, name)
+        if not os.path.isfile(filename):
+            continue
+        stat = os.stat(filename)
+        if stat.st_size == 0:
+            logging.error(filename + ' is zero size!')
+            sys.exit(1)
+
+        shasum = sha256sum(filename)
+        usecache = False
+        if name in apkcache:
+            repo_file = apkcache[name]
+            if repo_file['sha256'] == shasum:
+                logging.debug("Reading " + name + " from cache")
+                usecache = True
+            else:
+                logging.debug("Ignoring stale cache data for " + name)
+        elif not usecache:
+            logging.debug("Processing " + name)
+            repo_file = {}
+            # TODO rename apkname globally to something more generic
+            repo_file['name'] = name
+            repo_file['apkname'] = name
+            repo_file['sha256'] = shasum
+            repo_file['versioncode'] = 0
+            repo_file['version'] = shasum
+            # the static ID is the SHA256 unless it is set in the metadata
+            repo_file['id'] = shasum
+            srcfilename = name + ".src.tar.gz"
+            if os.path.exists(os.path.join(repodir, srcfilename)):
+                repo_file['srcname'] = srcfilename
+            repo_file['size'] = stat.st_size
+
+            apkcache[name] = repo_file
+            cachechanged = True
+
+        if use_date_from_file:
+            timestamp = stat.st_ctime
+            default_date_param = datetime.fromtimestamp(timestamp).utctimetuple()
+        else:
+            default_date_param = None
+
+        # Record in knownapks, getting the added date at the same time..
+        added = knownapks.recordapk(repo_file['apkname'], repo_file['id'],
+                                    default_date=default_date_param)
+        if added:
+            repo_file['added'] = added
+
+        repo_files.append(repo_file)
+
+    return repo_files, cachechanged
+
+
+def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
     """Scan the apks in the given repo directory.
 
     This also extracts the icons.
 
-    :param apps: list of all applications, as per metadata.read_metadata
     :param apkcache: current apk cache information
     :param repodir: repo directory to scan
     :param knownapks: known apks info
@@ -884,6 +954,12 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             return
         addElement(name, value, doc, parent)
 
+    def addElementIfInApk(name, apk, key, doc, parent):
+        if key not in apk:
+            return
+        value = str(apk[key])
+        addElement(name, value, doc, parent)
+
     def addElementCDATA(name, value, doc, parent):
         el = doc.createElement(name)
         el.appendChild(doc.createCDATASection(value))
@@ -1059,6 +1135,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         current_version_code = 0
         current_version_file = None
         for apk in apklist:
+            file_extension = common.get_file_extension(apk['apkname'])
             # find the APK for the "Current Version"
             if current_version_code < apk['versioncode']:
                 current_version_code = apk['versioncode']
@@ -1070,8 +1147,7 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
             addElement('version', apk['version'], doc, apkel)
             addElement('versioncode', str(apk['versioncode']), doc, apkel)
             addElement('apkname', apk['apkname'], doc, apkel)
-            if 'srcname' in apk:
-                addElement('srcname', apk['srcname'], doc, apkel)
+            addElementIfInApk('srcname', apk, 'srcname', doc, apkel)
             for hash_type in ['sha256']:
                 if hash_type not in apk:
                     continue
@@ -1079,44 +1155,49 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
                 hashel.setAttribute("type", hash_type)
                 hashel.appendChild(doc.createTextNode(apk[hash_type]))
                 apkel.appendChild(hashel)
-            addElement('sig', apk['sig'], doc, apkel)
             addElement('size', str(apk['size']), doc, apkel)
             addElement('sdkver', str(apk['minSdkVersion']), doc, apkel)
-            if 'targetSdkVersion' in apk:
-                addElement('targetSdkVersion', str(apk['targetSdkVersion']), doc, apkel)
-            if 'maxSdkVersion' in apk:
-                addElement('maxsdkver', str(apk['maxSdkVersion']), doc, apkel)
-            addElementNonEmpty('obbMainFile', apk.get('obbMainFile'), doc, apkel)
-            addElementNonEmpty('obbMainFileSha256', apk.get('obbMainFileSha256'), doc, apkel)
-            addElementNonEmpty('obbPatchFile', apk.get('obbPatchFile'), doc, apkel)
-            addElementNonEmpty('obbPatchFileSha256', apk.get('obbPatchFileSha256'), doc, apkel)
+            addElementIfInApk('targetSdkVersion', apk,
+                              'targetSdkVersion', doc, apkel)
+            addElementIfInApk('maxsdkver', apk,
+                              'maxSdkVersion', doc, apkel)
+            addElementIfInApk('obbMainFile', apk,
+                              'obbMainFile', doc, apkel)
+            addElementIfInApk('obbMainFileSha256', apk,
+                              'obbMainFileSha256', doc, apkel)
+            addElementIfInApk('obbPatchFile', apk,
+                              'obbPatchFile', doc, apkel)
+            addElementIfInApk('obbPatchFileSha256', apk,
+                              'obbPatchFileSha256', doc, apkel)
             if 'added' in apk:
                 addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
 
-            # TODO: remove old permission format
-            old_permissions = set()
-            for perm in apk['uses-permission']:
-                perm_name = perm.name
-                if perm_name.startswith("android.permission."):
-                    perm_name = perm_name[19:]
-                old_permissions.add(perm_name)
-            addElementNonEmpty('permissions', ','.join(old_permissions), doc, apkel)
+            if file_extension == 'apk':  # sig is required for APKs, but only APKs
+                addElement('sig', apk['sig'], doc, apkel)
 
-            for permission in apk['uses-permission']:
-                permel = doc.createElement('uses-permission')
-                permel.setAttribute('name', permission.name)
-                if permission.maxSdkVersion is not None:
-                    permel.setAttribute('maxSdkVersion', permission.maxSdkVersion)
-                    apkel.appendChild(permel)
-            for permission_sdk_23 in apk['uses-permission-sdk-23']:
-                permel = doc.createElement('uses-permission-sdk-23')
-                permel.setAttribute('name', permission_sdk_23.name)
-                if permission_sdk_23.maxSdkVersion is not None:
-                    permel.setAttribute('maxSdkVersion', permission_sdk_23.maxSdkVersion)
-                    apkel.appendChild(permel)
-            if 'nativecode' in apk:
-                addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
-            addElementNonEmpty('features', ','.join(apk['features']), doc, apkel)
+                old_permissions = set()
+                for perm in apk['uses-permission']:
+                    perm_name = perm.name
+                    if perm_name.startswith("android.permission."):
+                        perm_name = perm_name[19:]
+                    old_permissions.add(perm_name)
+                addElementNonEmpty('permissions', ','.join(old_permissions), doc, apkel)
+
+                for permission in apk['uses-permission']:
+                    permel = doc.createElement('uses-permission')
+                    permel.setAttribute('name', permission.name)
+                    if permission.maxSdkVersion is not None:
+                        permel.setAttribute('maxSdkVersion', permission.maxSdkVersion)
+                        apkel.appendChild(permel)
+                for permission_sdk_23 in apk['uses-permission-sdk-23']:
+                    permel = doc.createElement('uses-permission-sdk-23')
+                    permel.setAttribute('name', permission_sdk_23.name)
+                    if permission_sdk_23.maxSdkVersion is not None:
+                        permel.setAttribute('maxSdkVersion', permission_sdk_23.maxSdkVersion)
+                        apkel.appendChild(permel)
+                if 'nativecode' in apk:
+                    addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
+                addElementNonEmpty('features', ','.join(apk['features']), doc, apkel)
 
         if current_version_file is not None \
                 and config['make_current_version_link'] \
@@ -1394,8 +1475,12 @@ def main():
     delete_disabled_builds(apps, apkcache, repodirs)
 
     # Scan all apks in the main repo
-    apks, cachechanged = scan_apks(apps, apkcache, repodirs[0], knownapks, options.use_date_from_apk)
+    apks, cachechanged = scan_apks(apkcache, repodirs[0], knownapks, options.use_date_from_apk)
 
+    files, fcachechanged = scan_repo_files(apkcache, repodirs[0], knownapks,
+                                           options.use_date_from_apk)
+    cachechanged = cachechanged or fcachechanged
+    apks += files
     # Generate warnings for apk's with no metadata (or create skeleton
     # metadata files, if requested on the command line)
     newmetadata = False
@@ -1438,18 +1523,21 @@ def main():
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
-        archapks, cc = scan_apks(apps, apkcache, repodirs[1], knownapks, options.use_date_from_apk)
+        archapks, cc = scan_apks(apkcache, repodirs[1], knownapks, options.use_date_from_apk)
         if cc:
             cachechanged = True
     else:
         archapks = []
+
+    # less than the valid range of versionCode, i.e. Java's Integer.MIN_VALUE
+    UNSET_VERSION_CODE = -0x100000000
 
     # Some information from the apks needs to be applied up to the application
     # level. When doing this, we use the info from the most recent version's apk.
     # We deal with figuring out when the app was added and last updated at the
     # same time.
     for appid, app in apps.items():
-        bestver = 0
+        bestver = UNSET_VERSION_CODE
         for apk in apks + archapks:
             if apk['id'] == appid:
                 if apk['versioncode'] > bestver:
@@ -1467,7 +1555,7 @@ def main():
         if not app.lastupdated:
             logging.debug("Don't know when " + appid + " was last updated")
 
-        if bestver == 0:
+        if bestver == UNSET_VERSION_CODE:
             if app.Name is None:
                 app.Name = app.AutoName or appid
             app.icon = None

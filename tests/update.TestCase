@@ -101,7 +101,7 @@ class UpdateTest(unittest.TestCase):
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
         knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.scan_apks(apps, {}, 'repo', knownapks, False)
+        apks, cachechanged = fdroidserver.update.scan_apks({}, 'repo', knownapks, False)
         self.assertEqual(len(apks), 6)
         apk = apks[0]
         self.assertEqual(apk['minSdkVersion'], '4')
