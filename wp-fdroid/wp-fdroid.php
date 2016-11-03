@@ -695,6 +695,8 @@ class FDroid
 		$antifeatureDescription['UpstreamNonFree']['description'] = 'The upstream source code is non-free.';
 		$antifeatureDescription['NonFreeAssets']['name'] = 'Non-Free Assets';
 		$antifeatureDescription['NonFreeAssets']['description'] = 'This application contains non-free assets.';
+		$antifeatureDescription['KnownVuln']['name'] = 'Known Vulnerability';
+		$antifeatureDescription['KnownVuln']['description'] = 'This application known security vulnerabilities.';
 
 		if(isset($antifeatureDescription[$antifeature])) {
 			return $antifeatureDescription[$antifeature];
