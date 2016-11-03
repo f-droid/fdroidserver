@@ -2084,3 +2084,14 @@ def get_per_app_repos():
                 repos.append(d)
         break
     return repos
+
+
+def is_repo_file(filename):
+    '''Whether the file in a repo is a build product to be delivered to users'''
+    return os.path.isfile(filename) \
+        and os.path.basename(filename) not in [
+            'index.jar',
+            'index.xml',
+            'index.html',
+            'categories.txt',
+        ]

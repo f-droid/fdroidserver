@@ -86,7 +86,7 @@ The repository of older versions of applications from the main demo repository.
 # current_version_name_source = 'id'
 
 # Optionally, override home directory for gpg
-# gpghome = /home/fdroid/somewhere/else/.gnupg
+# gpghome = '/home/fdroid/somewhere/else/.gnupg'
 
 # The ID of a GPG key for making detached signatures for apks. Optional.
 # gpgkey = '1DBA2E89'

@@ -50,10 +50,13 @@ def main():
             sys.exit(1)
 
         # Process any apks that are waiting to be signed...
-        for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
-
-            apkfilename = os.path.basename(apkfile)
-            sigfilename = apkfilename + ".asc"
+        for f in sorted(glob.glob(os.path.join(output_dir, '*.*'))):
+            if common.get_file_extension(f) == 'asc':
+                continue
+            if not common.is_repo_file(f):
+                continue
+            filename = os.path.basename(f)
+            sigfilename = filename + ".asc"
             sigpath = os.path.join(output_dir, sigfilename)
 
             if not os.path.exists(sigpath):
@@ -64,13 +67,13 @@ def main():
                     gpgargs.extend(['--homedir', config['gpghome']])
                 if 'gpgkey' in config:
                     gpgargs.extend(['--local-user', config['gpgkey']])
-                gpgargs.append(os.path.join(output_dir, apkfilename))
+                gpgargs.append(os.path.join(output_dir, filename))
                 p = FDroidPopen(gpgargs)
                 if p.returncode != 0:
                     logging.error("Signing failed.")
                     sys.exit(1)
 
-                logging.info('Signed ' + apkfilename)
+                logging.info('Signed ' + filename)
 
 
 if __name__ == "__main__":

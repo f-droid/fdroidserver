@@ -517,13 +517,11 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
     cachechanged = False
     repo_files = []
     for name in os.listdir(repodir):
-        if name in ['index.jar', 'index.xml', 'index.html', 'categories.txt', ]:
-            continue
         file_extension = common.get_file_extension(name)
         if file_extension == 'apk' or file_extension == 'obb':
             continue
         filename = os.path.join(repodir, name)
-        if not os.path.isfile(filename):
+        if not common.is_repo_file(name):
             continue
         stat = os.stat(filename)
         if stat.st_size == 0:
