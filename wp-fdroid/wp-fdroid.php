@@ -515,6 +515,9 @@ class FDroid
 					if($srcbuild) {
 						$out.='<br /><a href="https://f-droid.org/repo/'.$apk['srcname'].'">source tarball</a> ';
 						$out.=$this->human_readable_size(filesize($this->site_path.'/repo/'.$apk['srcname']));
+						if(file_exists($this->site_path.'/repo/'.$apk['srcname'].'.asc')) {
+							$out.=' <a href="https://f-droid.org/repo/'.$apk['srcname'].'.asc">GPG Signature</a> ';
+						}
 					}
 
 					if(isset($apk['permissions'])) {
