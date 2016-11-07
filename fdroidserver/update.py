@@ -517,13 +517,11 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
     cachechanged = False
     repo_files = []
     for name in os.listdir(repodir):
-        if name in ['index.jar', 'index.xml', 'index.html', 'categories.txt', ]:
-            continue
         file_extension = common.get_file_extension(name)
         if file_extension == 'apk' or file_extension == 'obb':
             continue
         filename = os.path.join(repodir, name)
-        if not os.path.isfile(filename):
+        if not common.is_repo_file(name):
             continue
         stat = os.stat(filename)
         if stat.st_size == 0:
@@ -739,7 +737,7 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
                 apk['minSdkVersion'] = 1
 
             # Check for debuggable apks...
-            if common.isApkDebuggable(apkfile, config):
+            if common.isApkAndDebuggable(apkfile, config):
                 logging.warning('{0} is set to android:debuggable="true"'.format(apkfile))
 
             # Get the signature (or md5 of, to be precise)...

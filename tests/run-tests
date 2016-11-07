@@ -139,21 +139,33 @@ $fdroid update
 
 
 #------------------------------------------------------------------------------#
-echo_header "copy tests/repo, generate a keystore, and update"
+echo_header "copy tests/repo, generate java/gpg keys, update, and gpgsign"
 
 REPOROOT=`create_test_dir`
+GNUPGHOME=$REPOROOT/gnupghome
 cd $REPOROOT
 $fdroid init
 cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $REPOROOT/
+cp -a $WORKSPACE/tests/gnupghome $GNUPGHOME
+chmod 0700 $GNUPGHOME
 echo "accepted_formats = ['json', 'txt', 'xml', 'yml']" >> config.py
 echo "install_list = 'org.adaway'" >> config.py
 echo "uninstall_list = {'com.android.vending', 'com.facebook.orca',}" >> config.py
+echo "gpghome = '$GNUPGHOME'" >> config.py
+echo "gpgkey = 'CE71F7FB'" >> config.py
 $fdroid update --verbose
 test -e repo/index.xml
 test -e repo/index.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 grep -F '<install packageName=' repo/index.xml > /dev/null
 grep -F '<uninstall packageName=' repo/index.xml > /dev/null
+$fdroid gpgsign --verbose
+$fdroid gpgsign --verbose
+test -e repo/obb.mainpatch.current_1619.apk.asc
+test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc
+! test -e repo/obb.mainpatch.current_1619.apk.asc.asc
+! test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc.asc
+! test -e repo/index.xml.asc
 
 
 #------------------------------------------------------------------------------#

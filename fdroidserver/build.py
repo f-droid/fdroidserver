@@ -412,7 +412,7 @@ def build_server(app, build, vcs, build_dir, output_dir, force):
             ftp.chdir(homedir + '/tmp')
         else:
             ftp.chdir(homedir + '/unsigned')
-        apkfile = common.getapkname(app, build)
+        apkfile = common.get_release_filename(app, build)
         tarball = common.getsrcname(app, build)
         try:
             ftp.get(apkfile, os.path.join(output_dir, apkfile))
@@ -452,6 +452,54 @@ def capitalize_intact(string):
     if len(string) == 1:
         return string.upper()
     return string[0].upper() + string[1:]
+
+
+def get_metadata_from_apk(app, build, apkfile):
+    """get the required metadata from the built APK"""
+
+    p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
+
+    vercode = None
+    version = None
+    foundid = None
+    nativecode = None
+    for line in p.output.splitlines():
+        if line.startswith("package:"):
+            pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
+            m = pat.match(line)
+            if m:
+                foundid = m.group(1)
+            pat = re.compile(".*versionCode='([0-9]*)'.*")
+            m = pat.match(line)
+            if m:
+                vercode = m.group(1)
+            pat = re.compile(".*versionName='([^']*)'.*")
+            m = pat.match(line)
+            if m:
+                version = m.group(1)
+        elif line.startswith("native-code:"):
+            nativecode = line[12:]
+
+    # Ignore empty strings or any kind of space/newline chars that we don't
+    # care about
+    if nativecode is not None:
+        nativecode = nativecode.strip()
+        nativecode = None if not nativecode else nativecode
+
+    if build.buildjni and build.buildjni != ['no']:
+        if nativecode is None:
+            raise BuildException("Native code should have been built but none was packaged")
+    if build.novcheck:
+        vercode = build.vercode
+        version = build.version
+    if not version or not vercode:
+        raise BuildException("Could not find version information in build in output")
+    if not foundid:
+        raise BuildException("Could not find package ID in output")
+    if foundid != app.id:
+        raise BuildException("Wrong package ID - build " + foundid + " but expected " + app.id)
+
+    return vercode, version
 
 
 def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh):
@@ -809,7 +857,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
         src = os.path.normpath(apks[0])
 
     # Make sure it's not debuggable...
-    if common.isApkDebuggable(src, config):
+    if common.isApkAndDebuggable(src, config):
         raise BuildException("APK is debuggable")
 
     # By way of a sanity check, make sure the version and version
@@ -818,64 +866,17 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
     if not os.path.exists(src):
         raise BuildException("Unsigned apk is not at expected location of " + src)
 
-    p = SdkToolsPopen(['aapt', 'dump', 'badging', src], output=False)
-
-    vercode = None
-    version = None
-    foundid = None
-    nativecode = None
-    for line in p.output.splitlines():
-        if line.startswith("package:"):
-            pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
-            m = pat.match(line)
-            if m:
-                foundid = m.group(1)
-            pat = re.compile(".*versionCode='([0-9]*)'.*")
-            m = pat.match(line)
-            if m:
-                vercode = m.group(1)
-            pat = re.compile(".*versionName='([^']*)'.*")
-            m = pat.match(line)
-            if m:
-                version = m.group(1)
-        elif line.startswith("native-code:"):
-            nativecode = line[12:]
-
-    # Ignore empty strings or any kind of space/newline chars that we don't
-    # care about
-    if nativecode is not None:
-        nativecode = nativecode.strip()
-        nativecode = None if not nativecode else nativecode
-
-    if build.buildjni and build.buildjni != ['no']:
-        if nativecode is None:
-            raise BuildException("Native code should have been built but none was packaged")
-    if build.novcheck:
+    if common.get_file_extension(src) == 'apk':
+        vercode, version = get_metadata_from_apk(app, build, src)
+        if (version != build.version or vercode != build.vercode):
+            raise BuildException(("Unexpected version/version code in output;"
+                                  " APK: '%s' / '%s', "
+                                  " Expected: '%s' / '%s'")
+                                 % (version, str(vercode), build.version,
+                                    str(build.vercode)))
+    else:
         vercode = build.vercode
         version = build.version
-    if not version or not vercode:
-        raise BuildException("Could not find version information in build in output")
-    if not foundid:
-        raise BuildException("Could not find package ID in output")
-    if foundid != app.id:
-        raise BuildException("Wrong package ID - build " + foundid + " but expected " + app.id)
-
-    # Some apps (e.g. Timeriffic) have had the bonkers idea of
-    # including the entire changelog in the version number. Remove
-    # it so we can compare. (TODO: might be better to remove it
-    # before we compile, in fact)
-    index = version.find(" //")
-    if index != -1:
-        version = version[:index]
-
-    if (version != build.version or
-            vercode != build.vercode):
-        raise BuildException(("Unexpected version/version code in output;"
-                              " APK: '%s' / '%s', "
-                              " Expected: '%s' / '%s'")
-                             % (version, str(vercode), build.version,
-                                str(build.vercode))
-                             )
 
     # Add information for 'fdroid verify' to be able to reproduce the build
     # environment.
@@ -892,7 +893,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
 
     # Copy the unsigned apk to our destination directory for further
     # processing (by publish.py)...
-    dest = os.path.join(output_dir, common.getapkname(app, build))
+    dest = os.path.join(output_dir, common.get_release_filename(app, build))
     shutil.copyfile(src, dest)
 
     # Move the source tarball into the output directory...
@@ -920,17 +921,17 @@ def trybuild(app, build, build_dir, output_dir, also_check_dir, srclib_dir, extl
     :returns: True if the build was done, False if it wasn't necessary.
     """
 
-    dest_apk = common.getapkname(app, build)
+    dest_file = common.get_release_filename(app, build)
 
-    dest = os.path.join(output_dir, dest_apk)
-    dest_repo = os.path.join(repo_dir, dest_apk)
+    dest = os.path.join(output_dir, dest_file)
+    dest_repo = os.path.join(repo_dir, dest_file)
 
     if not test:
         if os.path.exists(dest) or os.path.exists(dest_repo):
             return False
 
         if also_check_dir:
-            dest_also = os.path.join(also_check_dir, dest_apk)
+            dest_also = os.path.join(also_check_dir, dest_file)
             if os.path.exists(dest_also):
                 return False
 

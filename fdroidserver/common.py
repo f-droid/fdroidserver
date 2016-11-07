@@ -459,8 +459,11 @@ def apknameinfo(filename):
     return result
 
 
-def getapkname(app, build):
-    return "%s_%s.apk" % (app.id, build.vercode)
+def get_release_filename(app, build):
+    if build.output:
+        return "%s_%s.%s" % (app.id, build.vercode, get_file_extension(build.output))
+    else:
+        return "%s_%s.apk" % (app.id, build.vercode)
 
 
 def getsrcname(app, build):
@@ -1615,10 +1618,13 @@ def get_file_extension(filename):
     return os.path.splitext(filename)[1].lower()[1:]
 
 
-def isApkDebuggable(apkfile, config):
-    """Returns True if the given apk file is debuggable
+def isApkAndDebuggable(apkfile, config):
+    """Returns True if the given file is an APK and is debuggable
 
     :param apkfile: full path to the apk to check"""
+
+    if get_file_extension(apkfile) != 'apk':
+        return False
 
     p = SdkToolsPopen(['aapt', 'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
                       output=False)
@@ -2078,3 +2084,14 @@ def get_per_app_repos():
                 repos.append(d)
         break
     return repos
+
+
+def is_repo_file(filename):
+    '''Whether the file in a repo is a build product to be delivered to users'''
+    return os.path.isfile(filename) \
+        and os.path.basename(filename) not in [
+            'index.jar',
+            'index.xml',
+            'index.html',
+            'categories.txt',
+        ]
