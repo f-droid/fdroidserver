@@ -1100,9 +1100,10 @@ def main():
     extlib_dir = os.path.join(build_dir, 'extlib')
 
     # Read all app and srclib metadata
-    allapps = metadata.read_metadata(xref=not options.onserver)
-
+    pkgs = common.read_pkg_args(options.appid, True)
+    allapps = metadata.read_metadata(not options.onserver, pkgs)
     apps = common.read_app_args(options.appid, allapps, True)
+
     for appid, app in list(apps.items()):
         if (app.Disabled and not options.force) or not app.RepoType or not app.builds:
             del apps[appid]
@@ -1141,16 +1142,7 @@ def main():
                 # the source repo. We can reuse it on subsequent builds, if
                 # there are any.
                 if first:
-                    if app.RepoType == 'srclib':
-                        build_dir = os.path.join('build', 'srclib', app.Repo)
-                    else:
-                        build_dir = os.path.join('build', appid)
-
-                    # Set up vcs interface and make sure we have the latest code...
-                    logging.debug("Getting {0} vcs interface for {1}"
-                                  .format(app.RepoType, app.Repo))
-                    vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
-
+                    vcs, build_dir = common.setup_vcs(app)
                     first = False
 
                 logging.debug("Checking " + build.version)

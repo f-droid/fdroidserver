@@ -25,6 +25,7 @@ class ImportTest(unittest.TestCase):
     '''fdroid import'''
 
     def test_import_gitlab(self):
+        os.chdir(os.path.dirname(__file__))
         # FDroidPopen needs some config to work
         config = dict()
         fdroidserver.common.fill_config_defaults(config)

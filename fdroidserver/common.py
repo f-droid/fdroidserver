@@ -486,6 +486,27 @@ def getcvname(app):
     return '%s (%s)' % (app.CurrentVersion, app.CurrentVersionCode)
 
 
+def get_build_dir(app):
+    '''get the dir that this app will be built in'''
+
+    if app.RepoType == 'srclib':
+        return os.path.join('build', 'srclib', app.Repo)
+
+    return os.path.join('build', app.id)
+
+
+def setup_vcs(app):
+    '''checkout code from VCS and return instance of vcs and the build dir'''
+    build_dir = get_build_dir(app)
+
+    # Set up vcs interface and make sure we have the latest code...
+    logging.debug("Getting {0} vcs interface for {1}"
+                  .format(app.RepoType, app.Repo))
+    vcs = getvcs(app.RepoType, app.Repo, build_dir)
+
+    return vcs, build_dir
+
+
 def getvcs(vcstype, remote, local):
     if vcstype == 'git':
         return vcs_git(remote, local)

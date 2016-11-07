@@ -1,0 +1,2 @@
+Repo Type:git
+Repo:https://gitlab.com/eighthave/ci-test-app
