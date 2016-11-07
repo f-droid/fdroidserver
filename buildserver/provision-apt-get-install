@@ -64,6 +64,7 @@ packages="
  maven
  mercurial
  nasm
+ nodejs
  openjdk-8-jdk-headless
  optipng
  p7zip
