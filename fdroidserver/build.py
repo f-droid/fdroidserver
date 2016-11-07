@@ -1186,6 +1186,12 @@ def main():
                 wikilog = str(vcse)
             except FDroidException as e:
                 with open(os.path.join(log_dir, appid + '.log'), 'a+') as f:
+                    f.write('\n\n============================================================\n')
+                    f.write('versionCode: %s\nversionName: %s\ncommit: %s\n' %
+                            (build.vercode, build.version, build.commit))
+                    f.write('Build completed at '
+                            + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + '\n')
+                    f.write('\n' + tools_version_log + '\n')
                     f.write(str(e))
                 logging.error("Could not build app %s: %s" % (appid, e))
                 if options.stop:
