@@ -358,9 +358,11 @@ def get_local_metadata_files():
     return glob.glob('.fdroid.[a-jl-z]*[a-rt-z]')
 
 
-# Given the arguments in the form of multiple appid:[vc] strings, this returns
-# a dictionary with the set of vercodes specified for each package.
 def read_pkg_args(args, allow_vercodes=False):
+    """
+    Given the arguments in the form of multiple appid:[vc] strings, this returns
+    a dictionary with the set of vercodes specified for each package.
+    """
 
     vercodes = {}
     if not args:
@@ -380,9 +382,11 @@ def read_pkg_args(args, allow_vercodes=False):
     return vercodes
 
 
-# On top of what read_pkg_args does, this returns the whole app metadata, but
-# limiting the builds list to the builds matching the vercodes specified.
 def read_app_args(args, allapps, allow_vercodes=False):
+    """
+    On top of what read_pkg_args does, this returns the whole app metadata, but
+    limiting the builds list to the builds matching the vercodes specified.
+    """
 
     vercodes = read_pkg_args(args, allow_vercodes)
 
@@ -979,8 +983,8 @@ def retrieve_string_singleline(app_dir, string, xmlfiles=None):
     return retrieve_string(app_dir, string, xmlfiles).replace('\n', ' ').strip()
 
 
-# Return list of existing files that will be used to find the highest vercode
 def manifest_paths(app_dir, flavours):
+    '''Return list of existing files that will be used to find the highest vercode'''
 
     possible_manifests = \
         [os.path.join(app_dir, 'AndroidManifest.xml'),
@@ -997,8 +1001,8 @@ def manifest_paths(app_dir, flavours):
     return [path for path in possible_manifests if os.path.isfile(path)]
 
 
-# Retrieve the package name. Returns the name, or None if not found.
 def fetch_real_name(app_dir, flavours):
+    '''Retrieve the package name. Returns the name, or None if not found.'''
     for path in manifest_paths(app_dir, flavours):
         if not has_extension(path, 'xml') or not os.path.isfile(path):
             continue
@@ -1070,10 +1074,12 @@ def app_matches_packagename(app, package):
     return appid == package
 
 
-# Extract some information from the AndroidManifest.xml at the given path.
-# Returns (version, vercode, package), any or all of which might be None.
-# All values returned are strings.
 def parse_androidmanifests(paths, app):
+    """
+    Extract some information from the AndroidManifest.xml at the given path.
+    Returns (version, vercode, package), any or all of which might be None.
+    All values returned are strings.
+    """
 
     ignoreversions = app.UpdateCheckIgnore
     ignoresearch = re.compile(ignoreversions).search if ignoreversions else None

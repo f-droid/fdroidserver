@@ -152,24 +152,30 @@ class App():
         self.lastupdated = None
         self._modified = set()
 
-    # Translates human-readable field names to attribute names, e.g.
-    # 'Auto Name' to 'AutoName'
     @classmethod
     def field_to_attr(cls, f):
+        """
+        Translates human-readable field names to attribute names, e.g.
+        'Auto Name' to 'AutoName'
+        """
         return f.replace(' ', '')
 
-    # Translates attribute names to human-readable field names, e.g.
-    # 'AutoName' to 'Auto Name'
     @classmethod
     def attr_to_field(cls, k):
+        """
+        Translates attribute names to human-readable field names, e.g.
+        'AutoName' to 'Auto Name'
+        """
         if k in app_fields:
             return k
         f = re.sub(r'([a-z])([A-Z])', r'\1 \2', k)
         return f
 
-    # Constructs an old-fashioned dict with the human-readable field
-    # names. Should only be used for tests.
     def field_dict(self):
+        """
+        Constructs an old-fashioned dict with the human-readable field
+        names. Should only be used for tests.
+        """
         d = {}
         for k, v in self.__dict__.items():
             if k == 'builds':
@@ -182,23 +188,23 @@ class App():
                 d[f] = v
         return d
 
-    # Gets the value associated to a field name, e.g. 'Auto Name'
     def get_field(self, f):
+        """Gets the value associated to a field name, e.g. 'Auto Name'"""
         if f not in app_fields:
             warn_or_exception('Unrecognised app field: ' + f)
         k = App.field_to_attr(f)
         return getattr(self, k)
 
-    # Sets the value associated to a field name, e.g. 'Auto Name'
     def set_field(self, f, v):
+        """Sets the value associated to a field name, e.g. 'Auto Name'"""
         if f not in app_fields:
             warn_or_exception('Unrecognised app field: ' + f)
         k = App.field_to_attr(f)
         self.__dict__[k] = v
         self._modified.add(k)
 
-    # Appends to the value associated to a field name, e.g. 'Auto Name'
     def append_field(self, f, v):
+        """Appends to the value associated to a field name, e.g. 'Auto Name'"""
         if f not in app_fields:
             warn_or_exception('Unrecognised app field: ' + f)
         k = App.field_to_attr(f)
@@ -207,8 +213,8 @@ class App():
         else:
             self.__dict__[k].append(v)
 
-    # Like dict.update(), but using human-readable field names
     def update_fields(self, d):
+        '''Like dict.update(), but using human-readable field names'''
         for f, v in d.items():
             if f == 'builds':
                 for b in v:
@@ -772,9 +778,11 @@ def read_srclibs():
         srclibs[srclibname] = parse_srclib(metadatapath)
 
 
-# Read all metadata. Returns a list of 'app' objects (which are dictionaries as
-# returned by the parse_txt_metadata function.
 def read_metadata(xref=True):
+    """
+    Read all metadata. Returns a list of 'app' objects (which are dictionaries as
+    returned by the parse_txt_metadata function.
+    """
 
     # Always read the srclibs before the apps, since they can use a srlib as
     # their source repository.
