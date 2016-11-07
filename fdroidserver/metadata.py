@@ -904,6 +904,11 @@ def post_metadata_parse(app):
             elif ftype == TYPE_STRING:
                 if isinstance(v, bool) and v:
                     build.__dict__[k] = 'yes'
+            elif ftype == TYPE_LIST:
+                if isinstance(v, bool) and v:
+                    build.__dict__[k] = ['yes']
+                elif isinstance(v, str):
+                    build.__dict__[k] = [v]
 
     if not app.Description:
         app.Description = 'No description available'
