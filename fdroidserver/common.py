@@ -502,7 +502,11 @@ def setup_vcs(app):
     # Set up vcs interface and make sure we have the latest code...
     logging.debug("Getting {0} vcs interface for {1}"
                   .format(app.RepoType, app.Repo))
-    vcs = getvcs(app.RepoType, app.Repo, build_dir)
+    if app.RepoType == 'git' and os.path.exists('.fdroid.yml'):
+        remote = os.getcwd()
+    else:
+        remote = app.Repo
+    vcs = getvcs(app.RepoType, remote, build_dir)
 
     return vcs, build_dir
 
