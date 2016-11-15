@@ -36,8 +36,8 @@ import socket
 import base64
 import xml.etree.ElementTree as XMLElementTree
 
+from distutils.version import LooseVersion
 from queue import Queue
-
 from zipfile import ZipFile
 
 import fdroidserver.metadata
@@ -291,15 +291,37 @@ def find_sdk_tools_cmd(cmd):
             tooldirs.append(sdk_platform_tools)
     tooldirs.append('/usr/bin')
     for d in tooldirs:
-        if os.path.isfile(os.path.join(d, cmd)):
-            return os.path.join(d, cmd)
+        path = os.path.join(d, cmd)
+        if os.path.isfile(path):
+            if cmd == 'aapt':
+                test_aapt_version(path)
+            return path
     # did not find the command, exit with error message
     ensure_build_tools_exists(config)
+
+
+def test_aapt_version(aapt):
+    '''Check whether the version of aapt is new enough'''
+    output = subprocess.check_output([aapt, 'version'], universal_newlines=True)
+    if output is None or output == '':
+        logging.error(aapt + ' failed to execute!')
+    else:
+        m = re.match(r'.*v([0-9]+)\.([0-9]+)[.-]?([0-9.-]*)', output)
+        if m:
+            major = m.group(1)
+            minor = m.group(2)
+            bugfix = m.group(3)
+            # the Debian package has the version string like "v0.2-23.0.2"
+            if '.' not in bugfix and LooseVersion('.'.join((major, minor, bugfix))) < LooseVersion('0.2.2166767'):
+                logging.warning(aapt + ' is too old, fdroid requires build-tools-23.0.0 or newer!')
+        else:
+            logging.warning('Unknown version of aapt, might cause problems: ' + output)
 
 
 def test_sdk_exists(thisconfig):
     if 'sdk_path' not in thisconfig:
         if 'aapt' in thisconfig and os.path.isfile(thisconfig['aapt']):
+            test_aapt_version(thisconfig['aapt'])
             return True
         else:
             logging.error("'sdk_path' not set in config.py!")
@@ -1684,6 +1706,8 @@ def SdkToolsPopen(commands, cwd=None, output=True):
     if abscmd is None:
         logging.critical("Could not find '%s' on your system" % cmd)
         sys.exit(1)
+    if cmd == 'aapt':
+        test_aapt_version(config['aapt'])
     return FDroidPopen([abscmd] + commands[1:],
                        cwd=cwd, output=output)
 
