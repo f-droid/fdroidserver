@@ -44,6 +44,7 @@ def vagrant(params, cwd=None, printout=False):
         out = p.communicate()[0]
     return (p.returncode, out)
 
+
 boxfile = 'buildserver.box'
 serverdir = 'buildserver'
 
@@ -302,6 +303,7 @@ def sha256_for_file(path):
                 break
             s.update(data)
         return s.hexdigest()
+
 
 for srcurl, shasum in cachefiles:
     filename = os.path.basename(srcurl)

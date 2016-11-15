@@ -218,6 +218,7 @@ class App():
             else:
                 self.set_field(f, v)
 
+
 TYPE_UNKNOWN = 0
 TYPE_OBSOLETE = 1
 TYPE_STRING = 2
@@ -370,6 +371,7 @@ class Build():
         for f, v in d.items():
             self.set_flag(f, v)
 
+
 flagtypes = {
     'extlibs': TYPE_LIST,
     'srclibs': TYPE_LIST,
@@ -428,6 +430,7 @@ class FieldValidator():
             if not self.compiled.match(v):
                 warn_or_exception("'%s' is not a valid %s in %s. Regex pattern: %s"
                                   % (v, self.name, appid, self.matching))
+
 
 # Generic value types
 valuetypes = {
@@ -818,6 +821,7 @@ def read_metadata(xref=True):
                                   " - " + str(e))
 
     return apps
+
 
 # Port legacy ';' separators
 list_sep = re.compile(r'[,;]')

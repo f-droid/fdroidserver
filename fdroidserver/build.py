@@ -995,6 +995,7 @@ def parse_commandline():
 
     return options, parser
 
+
 options = None
 config = None
 
@@ -1190,6 +1191,7 @@ def main():
         logging.info(str(len(failed_apps)) + ' builds failed')
 
     sys.exit(0)
+
 
 if __name__ == "__main__":
     main()
