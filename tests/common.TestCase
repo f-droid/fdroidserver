@@ -157,6 +157,7 @@ class CommonTest(unittest.TestCase):
         p = fdroidserver.common.FDroidPopen(commands, stderr_to_stdout=False)
         self.assertEqual(p.output, 'stdout message\n')
 
+
 if __name__ == "__main__":
     parser = optparse.OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,

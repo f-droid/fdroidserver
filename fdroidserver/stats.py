@@ -41,6 +41,7 @@ def carbon_send(key, value):
     s.sendall(msg)
     s.close()
 
+
 options = None
 config = None
 
@@ -298,6 +299,7 @@ def main():
             logging.info(apk)
 
     logging.info("Finished.")
+
 
 if __name__ == "__main__":
     main()

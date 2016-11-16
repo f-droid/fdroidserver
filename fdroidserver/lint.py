@@ -33,6 +33,7 @@ def enforce_https(domain):
     return (re.compile(r'.*[^sS]://[^/]*' + re.escape(domain) + r'(/.*)?'),
             domain + " URLs should always use https://")
 
+
 https_enforcings = [
     enforce_https('github.com'),
     enforce_https('gitlab.com'),
@@ -46,6 +47,7 @@ https_enforcings = [
 def forbid_shortener(domain):
     return (re.compile(r'https?://[^/]*' + re.escape(domain) + r'/.*'),
             "URL shorteners should not be used")
+
 
 http_url_shorteners = [
     forbid_shortener('goo.gl'),
@@ -191,6 +193,7 @@ def check_useless_fields(app):
     if app.UpdateCheckName == app.id:
         yield "Update Check Name is set to the known app id - it can be removed"
 
+
 filling_ucms = re.compile(r'^(Tags.*|RepoManifest.*)')
 
 
@@ -203,6 +206,7 @@ def check_checkupdates_ran(app):
 def check_empty_fields(app):
     if not app.Categories:
         yield "Categories are not set"
+
 
 all_categories = set([
     "Connectivity",

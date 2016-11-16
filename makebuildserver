@@ -44,6 +44,7 @@ def vagrant(params, cwd=None, printout=False):
         out = p.communicate()[0]
     return (p.returncode, out)
 
+
 boxfile = 'buildserver.box'
 serverdir = 'buildserver'
 
@@ -122,8 +123,8 @@ if config['apt_package_cache']:
 cachefiles = [
     ('https://dl.google.com/android/repository/tools_r25.2.2-linux.zip',
      '10d5185af8fee80a7ee093585bf84962d0a877b92a8fef489e2030e910f6a360'),
-    ('https://dl.google.com/android/repository/android_m2repository_r39.zip',
-     '1feec6fb7cd94a7f804fa8664b517b16fa11c6c851ae592c72bb2f0d24729084'),
+    ('https://dl.google.com/android/repository/android_m2repository_r40.zip',
+     'be4c20cdecba6186d046b4a499895a9a8be1955427dc3f3e7495fa9dcc392d29'),
     ('https://dl.google.com/android/repository/android-1.5_r04-linux.zip',
      '85b6c8f9797e56aa415d3a282428bb640c96b0acb17c11d41621bb2a5302fe64'),
     ('https://dl.google.com/android/repository/android-1.6_r03-linux.zip',
@@ -278,6 +279,8 @@ cachefiles = [
      '39c906941a474444afbddc38144ed44166825acb0a57b0551dddb04bbf157f80'),
     ('https://services.gradle.org/distributions/gradle-3.1-bin.zip',
      'c7de3442432253525902f7e8d7eac8b5fd6ce1623f96d76916af6d0e383010fc'),
+    ('https://services.gradle.org/distributions/gradle-3.2-bin.zip',
+     '5321b36837226dc0377047a328f12010f42c7bf88ee4a3b1cee0c11040082935'),
     ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin',
      '102d6723f67ff1384330d12c45854315d6452d6510286f4e5891e00a5a8f1d5a'),
     ('https://dl.google.com/android/ndk/android-ndk-r9b-linux-x86_64.tar.bz2',
@@ -302,6 +305,7 @@ def sha256_for_file(path):
                 break
             s.update(data)
         return s.hexdigest()
+
 
 for srcurl, shasum in cachefiles:
     filename = os.path.basename(srcurl)

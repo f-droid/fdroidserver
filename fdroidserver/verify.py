@@ -96,5 +96,6 @@ def main():
     logging.info("{0} successfully verified".format(verified))
     logging.info("{0} NOT verified".format(notverified))
 
+
 if __name__ == "__main__":
     main()
