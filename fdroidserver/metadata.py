@@ -423,22 +423,21 @@ def flagtype(name):
     return TYPE_STRING
 
 
-# Designates a metadata field type and checks that it matches
-#
-# 'name'     - The long name of the field type
-# 'matching' - List of possible values or regex expression
-# 'sep'      - Separator to use if value may be a list
-# 'fields'   - Metadata fields (Field:Value) of this type
-# 'flags'    - Build flags (flag=value) of this type
-#
 class FieldValidator():
+    """
+    Designates App metadata field types and checks that it matches
 
-    def __init__(self, name, matching, fields, flags):
+    'name'     - The long name of the field type
+    'matching' - List of possible values or regex expression
+    'sep'      - Separator to use if value may be a list
+    'fields'   - Metadata fields (Field:Value) of this type
+    """
+
+    def __init__(self, name, matching, fields):
         self.name = name
         self.matching = matching
         self.compiled = re.compile(matching)
         self.fields = fields
-        self.flags = flags
 
     def check(self, v, appid):
         if not v:
@@ -455,63 +454,49 @@ class FieldValidator():
 
 # Generic value types
 valuetypes = {
-    FieldValidator("Integer",
-                   r'^[1-9][0-9]*$',
-                   [],
-                   ['vercode']),
-
     FieldValidator("Hexadecimal",
                    r'^[0-9a-f]+$',
-                   ['FlattrID'],
-                   []),
+                   ['FlattrID']),
 
     FieldValidator("HTTP link",
                    r'^http[s]?://',
-                   ["WebSite", "SourceCode", "IssueTracker", "Changelog", "Donate"], []),
+                   ["WebSite", "SourceCode", "IssueTracker", "Changelog", "Donate"]),
 
     FieldValidator("Email",
                    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                   ["AuthorEmail"], []),
+                   ["AuthorEmail"]),
 
     FieldValidator("Bitcoin address",
                    r'^[a-zA-Z0-9]{27,34}$',
-                   ["Bitcoin"],
-                   []),
+                   ["Bitcoin"]),
 
     FieldValidator("Litecoin address",
                    r'^L[a-zA-Z0-9]{33}$',
-                   ["Litecoin"],
-                   []),
+                   ["Litecoin"]),
 
     FieldValidator("Repo Type",
                    r'^(git|git-svn|svn|hg|bzr|srclib)$',
-                   ["RepoType"],
-                   []),
+                   ["RepoType"]),
 
     FieldValidator("Binaries",
                    r'^http[s]?://',
-                   ["Binaries"],
-                   []),
+                   ["Binaries"]),
 
     FieldValidator("Archive Policy",
                    r'^[0-9]+ versions$',
-                   ["ArchivePolicy"],
-                   []),
+                   ["ArchivePolicy"]),
 
     FieldValidator("Anti-Feature",
                    r'^(Ads|Tracking|NonFreeNet|NonFreeDep|NonFreeAdd|UpstreamNonFree|NonFreeAssets|KnownVuln)$',
-                   ["AntiFeatures"],
-                   []),
+                   ["AntiFeatures"]),
 
     FieldValidator("Auto Update Mode",
                    r"^(Version .+|None)$",
-                   ["AutoUpdateMode"],
-                   []),
+                   ["AutoUpdateMode"]),
 
     FieldValidator("Update Check Mode",
                    r"^(Tags|Tags .+|RepoManifest|RepoManifest/.+|RepoTrunk|HTTP|Static|None)$",
-                   ["UpdateCheckMode"],
-                   [])
+                   ["UpdateCheckMode"])
 }
 
 
@@ -522,11 +507,6 @@ def check_metadata(app):
             if k not in app._modified:
                 continue
             v.check(app.__dict__[k], app.id)
-        for build in app.builds:
-            for k in v.flags:
-                if k not in build._modified:
-                    continue
-                v.check(build.__dict__[k], app.id)
 
 
 # Formatter for descriptions. Create an instance, and call parseline() with
@@ -1121,6 +1101,8 @@ def parse_txt_metadata(mf, app):
         build = Build()
         build.version = parts[0]
         build.vercode = parts[1]
+        check_versionCode(build.vercode)
+
         if parts[2].startswith('!'):
             # For backwards compatibility, handle old-style disabling,
             # including attempting to extract the commit from the message
@@ -1138,6 +1120,12 @@ def parse_txt_metadata(mf, app):
             add_buildflag(p, build)
 
         return build
+
+    def check_versionCode(versionCode):
+        try:
+            int(versionCode)
+        except ValueError:
+            warn_or_exception('Invalid versionCode: "' + versionCode + '" is not an integer!')
 
     def add_comments(key):
         if not curcomments:
@@ -1222,6 +1210,7 @@ def parse_txt_metadata(mf, app):
                 build = Build()
                 build.version = vv[0]
                 build.vercode = vv[1]
+                check_versionCode(build.vercode)
                 if build.vercode in vc_seen:
                     warn_or_exception('Duplicate build recipe found for vercode %s in %s'
                                       % (build.vercode, linedesc))
