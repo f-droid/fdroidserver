@@ -239,6 +239,12 @@ class App():
                 self.__dict__[k] = v
                 self._modified.add(k)
 
+    def get_last_build(self):
+        if len(self.builds) > 0:
+            return self.builds[-1]
+        else:
+            return Build()
+
 
 TYPE_UNKNOWN = 0
 TYPE_OBSOLETE = 1

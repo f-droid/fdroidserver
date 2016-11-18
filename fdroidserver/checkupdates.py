@@ -109,9 +109,7 @@ def check_tags(app, pattern):
 
         vcs.gotorevision(None)
 
-        last_build = metadata.Build()
-        if len(app.builds) > 0:
-            last_build = app.builds[-1]
+        last_build = app.get_last_build()
 
         if last_build.submodules:
             vcs.initsubmodules()
@@ -322,9 +320,7 @@ def possible_subdirs(app):
     else:
         build_dir = os.path.join('build', app.id)
 
-    last_build = metadata.Build()
-    if len(app.builds) > 0:
-        last_build = app.builds[-1]
+    last_build = app.get_last_build()
 
     for d in dirs_with_manifest(build_dir):
         m_paths = common.manifest_paths(d, last_build.gradle)
@@ -351,9 +347,7 @@ def fetch_autoname(app, tag):
     except VCSException:
         return None
 
-    last_build = metadata.Build()
-    if len(app.builds) > 0:
-        last_build = app.builds[-1]
+    last_build = app.get_last_build()
 
     logging.debug("...fetch auto name from " + build_dir)
     new_name = None
