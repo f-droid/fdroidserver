@@ -25,6 +25,7 @@ import cgi
 import logging
 import textwrap
 import io
+import pprint
 
 import yaml
 # use libyaml if it is available
@@ -309,7 +310,7 @@ build_flags = set(build_flags_order + ['version', 'vercode'])
 
 class Build():
 
-    def __init__(self):
+    def __init__(self, copydict=None):
         self.disable = False
         self.commit = None
         self.subdir = None
@@ -341,6 +342,16 @@ class Build():
         self.novcheck = False
 
         self._modified = set()
+
+        if copydict:
+            for k, v in copydict.items():
+                self.set_flag(k, v)
+
+    def __str__(self):
+        return pprint.pformat(self.__dict__)
+
+    def __repr__(self):
+        return self.__str__()
 
     def get_flag(self, f):
         if f not in build_flags:
@@ -893,7 +904,12 @@ def post_metadata_parse(app):
         if type(v) in (float, int):
             app.__dict__[k] = str(v)
 
+    builds = []
     for build in app.builds:
+        if not isinstance(build, Build):
+            build = Build(build)
+        builds.append(build)
+
         for k in build._modified:
             v = build.__dict__[k]
             if type(v) in (float, int):
@@ -919,7 +935,7 @@ def post_metadata_parse(app):
     if not app.Description:
         app.Description = 'No description available'
 
-    app.builds = sorted_builds(app.builds)
+    app.builds = sorted_builds(builds)
 
 
 # Parse metadata for a single application.
