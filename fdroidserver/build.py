@@ -393,7 +393,7 @@ def build_server(app, build, vcs, build_dir, output_dir, force):
             cmdline += ' --force --test'
         if options.verbose:
             cmdline += ' --verbose'
-        cmdline += " %s:%s" % (app.id, build.vercode)
+        cmdline += " %s:%s" % (app.id, build.versionCode)
         chan.exec_command('bash --login -c "' + cmdline + '"')
 
         output = bytes()
@@ -413,7 +413,7 @@ def build_server(app, build, vcs, build_dir, output_dir, force):
         if returncode != 0:
             raise BuildException(
                 "Build.py failed on server for {0}:{1}".format(
-                    app.id, build.version), str(output, 'utf-8'))
+                    app.id, build.versionName), str(output, 'utf-8'))
 
         # Retrieve the built files...
         logging.info("Retrieving build output...")
@@ -430,7 +430,7 @@ def build_server(app, build, vcs, build_dir, output_dir, force):
         except:
             raise BuildException(
                 "Build failed for %s:%s - missing output files".format(
-                    app.id, build.version), output)
+                    app.id, build.versionName), output)
         ftp.close()
 
     finally:
@@ -499,8 +499,8 @@ def get_metadata_from_apk(app, build, apkfile):
         if nativecode is None:
             raise BuildException("Native code should have been built but none was packaged")
     if build.novcheck:
-        vercode = build.vercode
-        version = build.version
+        vercode = build.versionCode
+        version = build.versionName
     if not version or not vercode:
         raise BuildException("Could not find version information in build in output")
     if not foundid:
@@ -589,7 +589,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
 
     if p is not None and p.returncode != 0:
         raise BuildException("Error cleaning %s:%s" %
-                             (app.id, build.version), p.output)
+                             (app.id, build.versionName), p.output)
 
     for root, dirs, files in os.walk(build_dir):
 
@@ -658,7 +658,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
 
         if p.returncode != 0:
             raise BuildException("Error running build command for %s:%s" %
-                                 (app.id, build.version), p.output)
+                                 (app.id, build.versionName), p.output)
 
     # Build native stuff if required...
     if build.buildjni and build.buildjni != ['no']:
@@ -686,7 +686,7 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
                 del manifest_text
             p = FDroidPopen(cmd, cwd=os.path.join(root_dir, d))
             if p.returncode != 0:
-                raise BuildException("NDK build failed for %s:%s" % (app.id, build.version), p.output)
+                raise BuildException("NDK build failed for %s:%s" % (app.id, build.versionName), p.output)
 
     p = None
     # Build the release...
@@ -800,8 +800,8 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
         bindir = os.path.join(root_dir, 'bin')
 
     if p is not None and p.returncode != 0:
-        raise BuildException("Build failed for %s:%s" % (app.id, build.version), p.output)
-    logging.info("Successfully built version " + build.version + ' of ' + app.id)
+        raise BuildException("Build failed for %s:%s" % (app.id, build.versionName), p.output)
+    logging.info("Successfully built version " + build.versionName + ' of ' + app.id)
 
     omethod = build.output_method()
     if omethod == 'maven':
@@ -877,15 +877,15 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
 
     if common.get_file_extension(src) == 'apk':
         vercode, version = get_metadata_from_apk(app, build, src)
-        if (version != build.version or vercode != build.vercode):
+        if (version != build.versionName or vercode != build.versionCode):
             raise BuildException(("Unexpected version/version code in output;"
                                   " APK: '%s' / '%s', "
                                   " Expected: '%s' / '%s'")
-                                 % (version, str(vercode), build.version,
-                                    str(build.vercode)))
+                                 % (version, str(vercode), build.versionName,
+                                    str(build.versionCode)))
     else:
-        vercode = build.vercode
-        version = build.version
+        vercode = build.versionCode
+        version = build.versionName
 
     # Add information for 'fdroid verify' to be able to reproduce the build
     # environment.
@@ -948,7 +948,7 @@ def trybuild(app, build, build_dir, output_dir, also_check_dir, srclib_dir, extl
         return False
 
     logging.info("Building version %s (%s) of %s" % (
-        build.version, build.vercode, app.id))
+        build.versionName, build.versionCode, app.id))
 
     if server:
         # When using server mode, still keep a local cache of the repo, by
@@ -1159,7 +1159,7 @@ def main():
                     vcs, build_dir = common.setup_vcs(app)
                     first = False
 
-                logging.debug("Checking " + build.version)
+                logging.debug("Checking " + build.versionName)
                 if trybuild(app, build, build_dir, output_dir,
                             also_check_dir, srclib_dir, extlib_dir,
                             tmp_dir, repo_dir, vcs, options.test,
@@ -1173,10 +1173,10 @@ def main():
                         # alongside our built one in the 'unsigend'
                         # directory.
                         url = app.Binaries
-                        url = url.replace('%v', build.version)
-                        url = url.replace('%c', str(build.vercode))
+                        url = url.replace('%v', build.versionName)
+                        url = url.replace('%c', str(build.versionCode))
                         logging.info("...retrieving " + url)
-                        of = "{0}_{1}.apk.binary".format(app.id, build.vercode)
+                        of = "{0}_{1}.apk.binary".format(app.id, build.versionCode)
                         of = os.path.join(output_dir, of)
                         net.download_file(url, local_filename=of)
 
@@ -1194,7 +1194,7 @@ def main():
                 with open(os.path.join(log_dir, appid + '.log'), 'a+') as f:
                     f.write('\n\n============================================================\n')
                     f.write('versionCode: %s\nversionName: %s\ncommit: %s\n' %
-                            (build.vercode, build.version, build.commit))
+                            (build.versionCode, build.versionName, build.commit))
                     f.write('Build completed at '
                             + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + '\n')
                     f.write('\n' + tools_version_log + '\n')
@@ -1215,7 +1215,7 @@ def main():
             if options.wiki and wikilog:
                 try:
                     # Write a page with the last build log for this version code
-                    lastbuildpage = appid + '/lastbuild_' + build.vercode
+                    lastbuildpage = appid + '/lastbuild_' + build.versionCode
                     newpage = site.Pages[lastbuildpage]
                     with open(os.path.join('tmp', 'fdroidserverid')) as fp:
                         fdroidserverid = fp.read().rstrip()

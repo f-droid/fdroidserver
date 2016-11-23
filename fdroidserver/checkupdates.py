@@ -462,22 +462,22 @@ def checkupdates_app(app, first=True):
             gotcur = False
             latest = None
             for build in app.builds:
-                if int(build.vercode) >= int(app.CurrentVersionCode):
+                if int(build.versionCode) >= int(app.CurrentVersionCode):
                     gotcur = True
-                if not latest or int(build.vercode) > int(latest.vercode):
+                if not latest or int(build.versionCode) > int(latest.versionCode):
                     latest = build
 
-            if int(latest.vercode) > int(app.CurrentVersionCode):
+            if int(latest.versionCode) > int(app.CurrentVersionCode):
                 logging.info("Refusing to auto update, since the latest build is newer")
 
             if not gotcur:
                 newbuild = copy.deepcopy(latest)
                 newbuild.disable = False
-                newbuild.vercode = app.CurrentVersionCode
-                newbuild.version = app.CurrentVersion + suffix
-                logging.info("...auto-generating build for " + newbuild.version)
-                commit = pattern.replace('%v', newbuild.version)
-                commit = commit.replace('%c', newbuild.vercode)
+                newbuild.versionCode = app.CurrentVersionCode
+                newbuild.versionName = app.CurrentVersion + suffix
+                logging.info("...auto-generating build for " + newbuild.versionName)
+                commit = pattern.replace('%v', newbuild.versionName)
+                commit = commit.replace('%c', newbuild.versionCode)
                 newbuild.commit = commit
                 app.builds.append(newbuild)
                 name = common.getappname(app)

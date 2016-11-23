@@ -296,9 +296,9 @@ def main():
 
                 if build.disable:
                     logging.info("...skipping version %s - %s" % (
-                        build.version, build.get('disable', build.commit[1:])))
+                        build.versionName, build.get('disable', build.commit[1:])))
                 else:
-                    logging.info("...scanning version " + build.version)
+                    logging.info("...scanning version " + build.versionName)
 
                     # Prepare the source code...
                     root_dir, _ = common.prepare_source(vcs, app, build,
@@ -309,7 +309,7 @@ def main():
                     count = scan_source(build_dir, root_dir, build)
                     if count > 0:
                         logging.warn('Scanner found %d problems in %s (%s)' % (
-                            count, appid, build.vercode))
+                            count, appid, build.versionCode))
                         probcount += count
 
         except BuildException as be:

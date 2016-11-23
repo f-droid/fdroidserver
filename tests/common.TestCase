@@ -124,8 +124,8 @@ class CommonTest(unittest.TestCase):
         build.forcevercode = True
         build.gradle = ['yes']
         build.target = 'android-' + str(testint)
-        build.version = teststr
-        build.vercode = testint
+        build.versionName = teststr
+        build.versionCode = testint
 
         class FakeVcs():
             # no need to change to the correct commit here
@@ -145,8 +145,8 @@ class CommonTest(unittest.TestCase):
         with open(os.path.join(testdir, 'AndroidManifest.xml')) as f:
             filedata = f.read()
         self.assertIsNone(re.search('android:debuggable', filedata))
-        self.assertIsNotNone(re.search('android:versionName="%s"' % build.version, filedata))
-        self.assertIsNotNone(re.search('android:versionCode="%s"' % build.vercode, filedata))
+        self.assertIsNotNone(re.search('android:versionName="%s"' % build.versionName, filedata))
+        self.assertIsNotNone(re.search('android:versionCode="%s"' % build.versionCode, filedata))
 
     def test_fdroid_popen_stderr_redirect(self):
         commands = ['sh', '-c', 'echo stdout message && echo stderr message 1>&2']

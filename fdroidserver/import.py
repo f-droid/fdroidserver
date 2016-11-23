@@ -230,13 +230,13 @@ def main():
     paths = common.manifest_paths(root_dir, [])
     if paths:
 
-        version, vercode, package = common.parse_androidmanifests(paths, app)
+        versionName, versionCode, package = common.parse_androidmanifests(paths, app)
         if not package:
             logging.error("Couldn't find package ID")
             sys.exit(1)
-        if not version:
+        if not versionName:
             logging.warn("Couldn't find latest version name")
-        if not vercode:
+        if not versionCode:
             logging.warn("Couldn't find latest version code")
     else:
         spec = os.path.join(root_dir, 'buildozer.spec')
@@ -246,8 +246,8 @@ def main():
             bconfig = ConfigParser(defaults, allow_no_value=True)
             bconfig.read(spec)
             package = bconfig.get('app', 'package.domain') + '.' + bconfig.get('app', 'package.name')
-            version = bconfig.get('app', 'version')
-            vercode = None
+            versionName = bconfig.get('app', 'version')
+            versionCode = None
         else:
             logging.error("No android or kivy project could be found. Specify --subdir?")
             sys.exit(1)
@@ -258,8 +258,8 @@ def main():
         sys.exit(1)
 
     # Create a build line...
-    build.version = version or '?'
-    build.vercode = vercode or '?'
+    build.versionName = versionName or '?'
+    build.versionCode = versionCode or '?'
     if options.subdir:
         build.subdir = options.subdir
     if os.path.exists(os.path.join(root_dir, 'jni')):

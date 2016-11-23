@@ -443,10 +443,10 @@ def read_app_args(args, allapps, allow_vercodes=False):
         vc = vercodes[appid]
         if not vc:
             continue
-        app.builds = [b for b in app.builds if b.vercode in vc]
+        app.builds = [b for b in app.builds if b.versionCode in vc]
         if len(app.builds) != len(vercodes[appid]):
             error = True
-            allvcs = [b.vercode for b in app.builds]
+            allvcs = [b.versionCode for b in app.builds]
             for v in vercodes[appid]:
                 if v not in allvcs:
                     logging.critical("No such vercode %s for app %s" % (v, appid))
@@ -497,13 +497,13 @@ def publishednameinfo(filename):
 
 def get_release_filename(app, build):
     if build.output:
-        return "%s_%s.%s" % (app.id, build.vercode, get_file_extension(build.output))
+        return "%s_%s.%s" % (app.id, build.versionCode, get_file_extension(build.output))
     else:
-        return "%s_%s.apk" % (app.id, build.vercode)
+        return "%s_%s.apk" % (app.id, build.versionCode)
 
 
 def getsrcname(app, build):
-    return "%s_%s_src.tar.gz" % (app.id, build.vercode)
+    return "%s_%s_src.tar.gz" % (app.id, build.versionCode)
 
 
 def getappname(app):
@@ -1384,7 +1384,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running init command for %s:%s" %
-                                 (app.id, build.version), p.output)
+                                 (app.id, build.versionName), p.output)
 
     # Apply patches if any
     if build.patch:
@@ -1475,11 +1475,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 continue
             if has_extension(path, 'xml'):
                 regsub_file(r'android:versionName="[^"]*"',
-                            r'android:versionName="%s"' % build.version,
+                            r'android:versionName="%s"' % build.versionName,
                             path)
             elif has_extension(path, 'gradle'):
                 regsub_file(r"""(\s*)versionName[\s'"=]+.*""",
-                            r"""\1versionName '%s'""" % build.version,
+                            r"""\1versionName '%s'""" % build.versionName,
                             path)
 
     if build.forcevercode:
@@ -1489,11 +1489,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 continue
             if has_extension(path, 'xml'):
                 regsub_file(r'android:versionCode="[^"]*"',
-                            r'android:versionCode="%s"' % build.vercode,
+                            r'android:versionCode="%s"' % build.versionCode,
                             path)
             elif has_extension(path, 'gradle'):
                 regsub_file(r'versionCode[ =]+[0-9]+',
-                            r'versionCode %s' % build.vercode,
+                            r'versionCode %s' % build.versionCode,
                             path)
 
     # Delete unwanted files
@@ -1541,7 +1541,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running prebuild command for %s:%s" %
-                                 (app.id, build.version), p.output)
+                                 (app.id, build.versionName), p.output)
 
     # Generate (or update) the ant build file, build.xml...
     if build.build_method() == 'ant' and build.androidupdate != ['no']:
@@ -1918,8 +1918,8 @@ def replace_config_vars(cmd, build):
     cmd = cmd.replace('$$QT$$', config['qt_sdk_path'] or '')
     if build is not None:
         cmd = cmd.replace('$$COMMIT$$', build.commit)
-        cmd = cmd.replace('$$VERSION$$', build.version)
-        cmd = cmd.replace('$$VERCODE$$', build.vercode)
+        cmd = cmd.replace('$$VERSION$$', build.versionName)
+        cmd = cmd.replace('$$VERCODE$$', build.versionCode)
     return cmd
 
 

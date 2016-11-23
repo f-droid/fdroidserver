@@ -457,7 +457,7 @@ def main():
         for build in reversed(app.builds):
             if build.disable:
                 continue
-            if options.latest or vercode == 0 or build.vercode == vercode:
+            if options.latest or vercode == 0 or build.versionCode == vercode:
                 app.builds = [build]
                 break
             continue
@@ -467,7 +467,7 @@ def main():
         for build in app.builds:
             apks = []
             for f in os.listdir(options.repo_path):
-                n = "%v_%v.apk".format(app_id, build.vercode)
+                n = "%v_%v.apk".format(app_id, build.versionCode)
                 if f == n:
                     apks.append(f)
             for apk in sorted(apks):

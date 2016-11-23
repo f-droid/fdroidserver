@@ -96,8 +96,8 @@ builds:
   subdir: null
   submodules: false
   target: null
-  vercode: '5'
-  version: 0.3.3
+  versionCode: '5'
+  versionName: 0.3.3
 - androidupdate: []
   antcommands: []
   build: ''
@@ -131,8 +131,8 @@ builds:
   subdir: null
   submodules: true
   target: null
-  vercode: '6'
-  version: 0.3.3
+  versionCode: '6'
+  versionName: 0.3.3
 - androidupdate: []
   antcommands: []
   build: ''
@@ -165,8 +165,8 @@ builds:
   subdir: null
   submodules: true
   target: null
-  vercode: '9'
-  version: 0.4.2
+  versionCode: '9'
+  versionName: 0.4.2
 - androidupdate: []
   antcommands: []
   build: ''
@@ -199,8 +199,8 @@ builds:
   subdir: null
   submodules: true
   target: null
-  vercode: '11'
-  version: 0.5.1
+  versionCode: '11'
+  versionName: 0.5.1
 - androidupdate: []
   antcommands: []
   build: ''
@@ -232,8 +232,8 @@ builds:
   subdir: null
   submodules: true
   target: null
-  vercode: '12'
-  version: 0.5.2
+  versionCode: '12'
+  versionName: 0.5.2
 - androidupdate: []
   antcommands: []
   build: ''
@@ -265,8 +265,8 @@ builds:
   subdir: null
   submodules: true
   target: null
-  vercode: '100'
-  version: 0.5.3
+  versionCode: '100'
+  versionName: 0.5.3
 - androidupdate: []
   antcommands: []
   build: ''
@@ -298,8 +298,8 @@ builds:
   subdir: null
   submodules: true
   target: null
-  vercode: '101'
-  version: 0.5.4
+  versionCode: '101'
+  versionName: 0.5.4
 - androidupdate: []
   antcommands: []
   build: ''
@@ -331,8 +331,8 @@ builds:
   subdir: null
   submodules: true
   target: null
-  vercode: '102'
-  version: 0.6.0
+  versionCode: '102'
+  versionName: 0.6.0
 comments: {}
 id: org.smssecure.smssecure
 lastupdated: null

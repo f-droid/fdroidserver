@@ -89,8 +89,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 110
-  version: 0.0.11-ARMv7
+  versionCode: 110
+  versionName: 0.0.11-ARMv7
 - androidupdate:
   - .
   - ../java-libs/SlidingMenu
@@ -123,8 +123,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 111
-  version: 0.0.11-ARM
+  versionCode: 111
+  versionName: 0.0.11-ARM
 - androidupdate:
   - .
   - ../java-libs/SlidingMenu
@@ -157,8 +157,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 112
-  version: 0.0.11-x86
+  versionCode: 112
+  versionName: 0.0.11-x86
 - androidupdate:
   - .
   - ../java-libs/SlidingMenu
@@ -191,8 +191,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 113
-  version: 0.0.11-mips
+  versionCode: 113
+  versionName: 0.0.11-mips
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=mips ./compile.sh release
@@ -224,8 +224,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1301
-  version: 0.1.3-MIPS
+  versionCode: 1301
+  versionName: 0.1.3-MIPS
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -257,8 +257,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1302
-  version: 0.1.3-x86
+  versionCode: 1302
+  versionName: 0.1.3-x86
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
@@ -290,8 +290,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1303
-  version: 0.1.3-ARM
+  versionCode: 1303
+  versionName: 0.1.3-ARM
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -323,8 +323,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1304
-  version: 0.1.3-ARMv7
+  versionCode: 1304
+  versionName: 0.1.3-ARMv7
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -355,8 +355,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9002
-  version: 0.9.0
+  versionCode: 9002
+  versionName: 0.9.0
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -387,8 +387,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9004
-  version: 0.9.0
+  versionCode: 9004
+  versionName: 0.9.0
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -419,8 +419,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9102
-  version: 0.9.1
+  versionCode: 9102
+  versionName: 0.9.1
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -451,8 +451,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9104
-  version: 0.9.1
+  versionCode: 9104
+  versionName: 0.9.1
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -483,8 +483,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9502
-  version: 0.9.5
+  versionCode: 9502
+  versionName: 0.9.5
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -515,8 +515,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9504
-  version: 0.9.5
+  versionCode: 9504
+  versionName: 0.9.5
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -547,8 +547,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9602
-  version: 0.9.6
+  versionCode: 9602
+  versionName: 0.9.6
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -579,8 +579,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9604
-  version: 0.9.6
+  versionCode: 9604
+  versionName: 0.9.6
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -611,8 +611,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9702
-  version: 0.9.7
+  versionCode: 9702
+  versionName: 0.9.7
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -643,8 +643,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9704
-  version: 0.9.7
+  versionCode: 9704
+  versionName: 0.9.7
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=mips ./compile.sh release
@@ -675,8 +675,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9711
-  version: 0.9.7.1
+  versionCode: 9711
+  versionName: 0.9.7.1
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -707,8 +707,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9712
-  version: 0.9.7.1
+  versionCode: 9712
+  versionName: 0.9.7.1
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -739,8 +739,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9714
-  version: 0.9.7.1
+  versionCode: 9714
+  versionName: 0.9.7.1
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -771,8 +771,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9802
-  version: 0.9.8
+  versionCode: 9802
+  versionName: 0.9.8
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
@@ -803,8 +803,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9803
-  version: 0.9.8
+  versionCode: 9803
+  versionName: 0.9.8
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -835,8 +835,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9804
-  version: 0.9.8
+  versionCode: 9804
+  versionName: 0.9.8
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -867,8 +867,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9902
-  version: 0.9.9
+  versionCode: 9902
+  versionName: 0.9.9
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
@@ -899,8 +899,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9903
-  version: 0.9.9
+  versionCode: 9903
+  versionName: 0.9.9
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -931,8 +931,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 9904
-  version: 0.9.9
+  versionCode: 9904
+  versionName: 0.9.9
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -963,8 +963,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 10002
-  version: 0.9.10
+  versionCode: 10002
+  versionName: 0.9.10
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
@@ -995,8 +995,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 10003
-  version: 0.9.10
+  versionCode: 10003
+  versionName: 0.9.10
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -1027,8 +1027,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 10004
-  version: 0.9.10
+  versionCode: 10004
+  versionName: 0.9.10
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -1059,8 +1059,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 10006
-  version: 1.0.0
+  versionCode: 10006
+  versionName: 1.0.0
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
@@ -1091,8 +1091,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 10007
-  version: 1.0.0
+  versionCode: 10007
+  versionName: 1.0.0
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -1123,8 +1123,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 10008
-  version: 1.0.0
+  versionCode: 10008
+  versionName: 1.0.0
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -1155,8 +1155,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 10102
-  version: 1.0.1
+  versionCode: 10102
+  versionName: 1.0.1
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
@@ -1187,8 +1187,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 10103
-  version: 1.0.1
+  versionCode: 10103
+  versionName: 1.0.1
 - androidupdate: []
   antcommands: []
   build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -1219,8 +1219,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 10104
-  version: 1.0.1
+  versionCode: 10104
+  versionName: 1.0.1
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi" --release
@@ -1253,8 +1253,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1010303
-  version: 1.1.3
+  versionCode: 1010303
+  versionName: 1.1.3
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -1287,8 +1287,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1010304
-  version: 1.1.3
+  versionCode: 1010304
+  versionName: 1.1.3
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "x86" --release
@@ -1321,8 +1321,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1010305
-  version: 1.1.3
+  versionCode: 1010305
+  versionName: 1.1.3
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi" --release
@@ -1355,8 +1355,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1010503
-  version: 1.1.5
+  versionCode: 1010503
+  versionName: 1.1.5
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -1389,8 +1389,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1010504
-  version: 1.1.5
+  versionCode: 1010504
+  versionName: 1.1.5
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "x86" --release
@@ -1423,8 +1423,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1010505
-  version: 1.1.5
+  versionCode: 1010505
+  versionName: 1.1.5
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi" --release
@@ -1457,8 +1457,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1010603
-  version: 1.1.6
+  versionCode: 1010603
+  versionName: 1.1.6
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -1491,8 +1491,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1010604
-  version: 1.1.6
+  versionCode: 1010604
+  versionName: 1.1.6
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "x86" --release
@@ -1525,8 +1525,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1010605
-  version: 1.1.6
+  versionCode: 1010605
+  versionName: 1.1.6
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi" --release
@@ -1559,8 +1559,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020003
-  version: 1.2.0
+  versionCode: 1020003
+  versionName: 1.2.0
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -1593,8 +1593,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020004
-  version: 1.2.0
+  versionCode: 1020004
+  versionName: 1.2.0
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "x86" --release
@@ -1627,8 +1627,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020005
-  version: 1.2.0
+  versionCode: 1020005
+  versionName: 1.2.0
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi" --release
@@ -1661,8 +1661,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020103
-  version: 1.2.1
+  versionCode: 1020103
+  versionName: 1.2.1
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -1695,8 +1695,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020104
-  version: 1.2.1
+  versionCode: 1020104
+  versionName: 1.2.1
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "x86" --release
@@ -1729,8 +1729,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020105
-  version: 1.2.1
+  versionCode: 1020105
+  versionName: 1.2.1
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi" --release
@@ -1763,8 +1763,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020203
-  version: 1.2.2
+  versionCode: 1020203
+  versionName: 1.2.2
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -1797,8 +1797,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020204
-  version: 1.2.2
+  versionCode: 1020204
+  versionName: 1.2.2
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "x86" --release
@@ -1831,8 +1831,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020205
-  version: 1.2.2
+  versionCode: 1020205
+  versionName: 1.2.2
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi" --release
@@ -1865,8 +1865,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020303
-  version: 1.2.3
+  versionCode: 1020303
+  versionName: 1.2.3
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -1899,8 +1899,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020304
-  version: 1.2.3
+  versionCode: 1020304
+  versionName: 1.2.3
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "x86" --release
@@ -1933,8 +1933,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020305
-  version: 1.2.3
+  versionCode: 1020305
+  versionName: 1.2.3
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi" --release
@@ -1967,8 +1967,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020403
-  version: 1.2.4
+  versionCode: 1020403
+  versionName: 1.2.4
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -2001,8 +2001,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020404
-  version: 1.2.4
+  versionCode: 1020404
+  versionName: 1.2.4
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "x86" --release
@@ -2035,8 +2035,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020405
-  version: 1.2.4
+  versionCode: 1020405
+  versionName: 1.2.4
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi" --release
@@ -2069,8 +2069,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020503
-  version: 1.2.5
+  versionCode: 1020503
+  versionName: 1.2.5
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -2103,8 +2103,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020504
-  version: 1.2.5
+  versionCode: 1020504
+  versionName: 1.2.5
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "x86" --release
@@ -2137,8 +2137,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1020505
-  version: 1.2.5
+  versionCode: 1020505
+  versionName: 1.2.5
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi" --release
@@ -2171,8 +2171,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1030003
-  version: 1.2.6
+  versionCode: 1030003
+  versionName: 1.2.6
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -2205,8 +2205,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1030004
-  version: 1.2.6
+  versionCode: 1030004
+  versionName: 1.2.6
 - androidupdate: []
   antcommands: []
   build: cd ../ && ./compile.sh -a "x86" --release
@@ -2239,8 +2239,8 @@ builds:
   subdir: vlc-android
   submodules: false
   target: null
-  vercode: 1030005
-  version: 1.2.6
+  versionCode: 1030005
+  versionName: 1.2.6
 comments: {}
 id: org.videolan.vlc
 lastupdated: null

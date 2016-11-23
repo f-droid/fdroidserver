@@ -139,10 +139,10 @@ def get_lastbuild(builds):
     lastbuild = None
     for build in builds:
         if not build.disable:
-            vercode = int(build.vercode)
+            vercode = int(build.versionCode)
             if lowest_vercode == -1 or vercode < lowest_vercode:
                 lowest_vercode = vercode
-        if not lastbuild or int(build.vercode) > int(lastbuild.vercode):
+        if not lastbuild or int(build.versionCode) > int(lastbuild.versionCode):
             lastbuild = build
     return lastbuild
 
@@ -153,7 +153,7 @@ def check_ucm_tags(app):
             and lastbuild.commit
             and app.UpdateCheckMode == 'RepoManifest'
             and not lastbuild.commit.startswith('unknown')
-            and lastbuild.vercode == app.CurrentVersionCode
+            and lastbuild.versionCode == app.CurrentVersionCode
             and not lastbuild.forcevercode
             and any(s in lastbuild.commit for s in '.,_-/')):
         yield "Last used commit '%s' looks like a tag, but Update Check Mode is '%s'" % (
@@ -307,7 +307,7 @@ def check_builds(app):
             continue
         for s in ['master', 'origin', 'HEAD', 'default', 'trunk']:
             if build.commit and build.commit.startswith(s):
-                yield "Branch '%s' used as commit in build '%s'" % (s, build.version)
+                yield "Branch '%s' used as commit in build '%s'" % (s, build.versionName)
             for srclib in build.srclibs:
                 ref = srclib.split('@')[1].split('/')[0]
                 if ref.startswith(s):
@@ -330,7 +330,7 @@ def check_files_dir(app):
     for build in app.builds:
         for fname in build.patch:
             if fname not in files:
-                yield "Unknown file %s in build '%s'" % (fname, build.version)
+                yield "Unknown file %s in build '%s'" % (fname, build.versionName)
             else:
                 used.add(fname)
 
@@ -355,7 +355,7 @@ def check_extlib_dir(apps):
         for build in app.builds:
             for path in build.extlibs:
                 if path not in files:
-                    yield "%s: Unknown extlib %s in build '%s'" % (app.id, path, build.version)
+                    yield "%s: Unknown extlib %s in build '%s'" % (app.id, path, build.versionName)
                 else:
                     used.add(path)
 

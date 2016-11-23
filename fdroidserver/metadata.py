@@ -238,7 +238,7 @@ build_flags_order = [
 ]
 
 
-build_flags = set(build_flags_order + ['version', 'vercode'])
+build_flags = set(build_flags_order + ['versionName', 'versionCode'])
 
 
 class Build(dict):
@@ -801,7 +801,7 @@ def get_default_app_info(metadatapath=None):
 
 
 def sorted_builds(builds):
-    return sorted(builds, key=lambda build: int(build.vercode))
+    return sorted(builds, key=lambda build: int(build.versionCode))
 
 
 esc_newlines = re.compile(r'\\( |\n)')
@@ -978,9 +978,9 @@ def parse_txt_metadata(mf, app):
         if len(parts) < 3:
             warn_or_exception("Invalid build format: " + v + " in " + mf.name)
         build = Build()
-        build.version = parts[0]
-        build.vercode = parts[1]
-        check_versionCode(build.vercode)
+        build.versionName = parts[0]
+        build.versionCode = parts[1]
+        check_versionCode(build.versionCode)
 
         if parts[2].startswith('!'):
             # For backwards compatibility, handle old-style disabling,
@@ -1038,10 +1038,10 @@ def parse_txt_metadata(mf, app):
             else:
                 if not build.commit and not build.disable:
                     warn_or_exception("No commit specified for {0} in {1}"
-                                      .format(build.version, linedesc))
+                                      .format(build.versionName, linedesc))
 
                 app.builds.append(build)
-                add_comments('build:' + build.vercode)
+                add_comments('build:' + build.versionCode)
                 mode = 0
 
         if mode == 0:
@@ -1086,21 +1086,22 @@ def parse_txt_metadata(mf, app):
                 else:
                     build = parse_buildline([v])
                     app.builds.append(build)
-                    add_comments('build:' + app.builds[-1].vercode)
+                    add_comments('build:' + app.builds[-1].versionCode)
             elif ftype == TYPE_BUILD_V2:
                 vv = v.split(',')
                 if len(vv) != 2:
                     warn_or_exception('Build should have comma-separated',
-                                      'version and vercode,',
+                                      'versionName and versionCode,',
                                       'not "{0}", in {1}'.format(v, linedesc))
                 build = Build()
-                build.version = vv[0]
-                build.vercode = vv[1]
-                check_versionCode(build.vercode)
-                if build.vercode in vc_seen:
-                    warn_or_exception('Duplicate build recipe found for vercode %s in %s'
-                                      % (build.vercode, linedesc))
-                vc_seen.add(build.vercode)
+                build.versionName = vv[0]
+                build.versionCode = vv[1]
+                check_versionCode(build.versionCode)
+
+                if build.versionCode in vc_seen:
+                    warn_or_exception('Duplicate build recipe found for versionCode %s in %s'
+                                      % (build.versionCode, linedesc))
+                vc_seen.add(build.versionCode)
                 del buildlines[:]
                 mode = 3
             elif ftype == TYPE_OBSOLETE:
@@ -1121,7 +1122,7 @@ def parse_txt_metadata(mf, app):
                 buildlines.append(line)
                 build = parse_buildline(buildlines)
                 app.builds.append(build)
-                add_comments('build:' + app.builds[-1].vercode)
+                add_comments('build:' + app.builds[-1].versionCode)
                 mode = 0
     add_comments(None)
 
@@ -1209,10 +1210,10 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
 
     for build in app.builds:
 
-        if build.version == "Ignore":
+        if build.versionName == "Ignore":
             continue
 
-        w_comments('build:%s' % build.vercode)
+        w_comments('build:%s' % build.versionCode)
         w_build(build)
         mf.write('\n')
 
@@ -1254,7 +1255,7 @@ def write_txt(mf, app):
         mf.write("%s:%s\n" % (f, v))
 
     def w_build(build):
-        mf.write("Build:%s,%s\n" % (build.version, build.vercode))
+        mf.write("Build:%s,%s\n" % (build.versionName, build.versionCode))
 
         for f in build_flags_order:
             v = build.get(f)
@@ -1337,8 +1338,8 @@ def write_yaml(mf, app):
             mf.write("builds:\n")
             first_build = False
 
-        w_field('versionName', build.version, '  - ', TYPE_STRING)
-        w_field('versionCode', build.vercode, '    ', TYPE_STRING)
+        w_field('versionName', build.versionName, '  - ', TYPE_STRING)
+        w_field('versionCode', build.versionCode, '    ', TYPE_STRING)
         for f in build_flags_order:
             v = build.get(f)
             if not v:

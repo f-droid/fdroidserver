@@ -156,24 +156,24 @@ def update_wiki(apps, sortedids, apks):
         # Include ones we can't build, as a special case...
         for build in app.builds:
             if build.disable:
-                if build.vercode == app.CurrentVersionCode:
+                if build.versionCode == app.CurrentVersionCode:
                     cantupdate = True
                 # TODO: Nasty: vercode is a string in the build, and an int elsewhere
-                apklist.append({'versioncode': int(build.vercode),
-                                'version': build.version,
+                apklist.append({'versioncode': int(build.versionCode),
+                                'version': build.versionName,
                                 'buildproblem': "The build for this version was manually disabled. Reason: {0}".format(build.disable),
                                 })
             else:
                 builtit = False
                 for apk in apklist:
-                    if apk['versioncode'] == int(build.vercode):
+                    if apk['versioncode'] == int(build.versionCode):
                         builtit = True
                         break
                 if not builtit:
                     buildfails = True
-                    apklist.append({'versioncode': int(build.vercode),
-                                    'version': build.version,
-                                    'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(appid, build.vercode),
+                    apklist.append({'versioncode': int(build.versionCode),
+                                    'version': build.versionName,
+                                    'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(appid, build.versionCode),
                                     })
         if app.CurrentVersionCode == '0':
             cantupdate = True
@@ -305,10 +305,10 @@ def delete_disabled_builds(apps, apkcache, repodirs):
         for build in app['builds']:
             if not build.disable:
                 continue
-            apkfilename = appid + '_' + str(build.vercode) + '.apk'
+            apkfilename = appid + '_' + str(build.versionCode) + '.apk'
             iconfilename = "%s.%s.png" % (
                 appid,
-                build.vercode)
+                build.versionCode)
             for repodir in repodirs:
                 files = [
                     os.path.join(repodir, apkfilename),
