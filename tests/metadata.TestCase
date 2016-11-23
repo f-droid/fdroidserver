@@ -33,11 +33,11 @@ class MetadataTest(unittest.TestCase):
         config = dict()
         config['sdk_path'] = '/opt/android-sdk'
         config['ndk_paths'] = dict()
-        config['accepted_formats'] = ['json', 'txt', 'xml', 'yml']
+        config['accepted_formats'] = ['json', 'txt', 'yml']
         fdroidserver.common.config = config
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
-        for appid in ('org.smssecure.smssecure', 'org.adaway', 'net.osmand.plus', 'org.videolan.vlc'):
+        for appid in ('org.smssecure.smssecure', 'org.adaway', 'org.videolan.vlc'):
             app = apps[appid]
             savepath = os.path.join('metadata', appid + '.pickle')
             frommeta = app.field_dict()

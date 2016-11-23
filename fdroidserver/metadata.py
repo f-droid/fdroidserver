@@ -35,9 +35,6 @@ except ImportError:
     from yaml import Loader
     YamlLoader = Loader
 
-# use the C implementation when available
-import xml.etree.cElementTree as ElementTree
-
 import fdroidserver.common
 
 srclibs = None
@@ -804,10 +801,8 @@ def read_metadata(xref=True, check_vcs=[]):
 
     for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.txt'))
                                + glob.glob(os.path.join('metadata', '*.json'))
-                               + glob.glob(os.path.join('metadata', '*.xml'))
                                + glob.glob(os.path.join('metadata', '*.yml'))
                                + glob.glob('.fdroid.json')
-                               + glob.glob('.fdroid.xml')
                                + glob.glob('.fdroid.yml')):
         packageName, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
         if packageName in apps:
@@ -987,8 +982,6 @@ def parse_metadata(metadatapath, check_vcs=False):
             parse_txt_metadata(mf, app)
         elif ext == 'json':
             parse_json_metadata(mf, app)
-        elif ext == 'xml':
-            parse_xml_metadata(mf, app)
         elif ext == 'yml':
             parse_yaml_metadata(mf, app)
         else:
@@ -1029,38 +1022,6 @@ def parse_json_metadata(mf, app):
     for f in ['Description', 'Maintainer Notes']:
         v = app.get_field(f)
         app.set_field(f, '\n'.join(v))
-    return app
-
-
-def parse_xml_metadata(mf, app):
-
-    tree = ElementTree.ElementTree(file=mf)
-    root = tree.getroot()
-
-    if root.tag != 'resources':
-        warn_or_exception('resources file does not have root element <resources/>')
-
-    for child in root:
-        if child.tag != 'builds':
-            # builds does not have name="" attrib
-            name = child.attrib['name']
-
-        if child.tag == 'string':
-            app.set_field(name, child.text)
-        elif child.tag == 'string-array':
-            for item in child:
-                app.append_field(name, item.text)
-        elif child.tag == 'builds':
-            for b in child:
-                build = Build()
-                for key in b:
-                    build.set_flag(key.tag, key.text)
-                app.builds.append(build)
-
-    # TODO handle this using <xsd:element type="xsd:boolean> in a schema
-    if not isinstance(app.RequiresRoot, bool):
-        app.RequiresRoot = app.RequiresRoot == 'true'
-
     return app
 
 
