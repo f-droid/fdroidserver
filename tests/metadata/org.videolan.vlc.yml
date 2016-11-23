@@ -1,12 +1,12 @@
 Categories:
   - Multimedia
 License: GPLv3
-Web Site: http://www.videolan.org/vlc/download-android.html
-Source Code: http://git.videolan.org/?p=vlc-ports/android.git;a=summary
-Issue Tracker: "http://www.videolan.org/support/index.html#bugs"
+WebSite: http://www.videolan.org/vlc/download-android.html
+SourceCode: http://git.videolan.org/?p=vlc-ports/android.git;a=summary
+IssueTracker: "http://www.videolan.org/support/index.html#bugs"
 Donate: "http://www.videolan.org/contribute.html#money"
 
-Auto Name: VLC
+AutoName: VLC
 Summary: Media player
 Description: |
   Video and audio player that supports a wide range of formats,
@@ -14,7 +14,7 @@ Description: |
 
   [http://git.videolan.org/?p=vlc-ports/android.git;a=blob_plain;f=NEWS NEWS]
 
-Repo Type: git
+RepoType: git
 Repo: git://git.videolan.org/vlc-ports/android.git
 
 builds:
@@ -875,7 +875,7 @@ builds:
     buildjni: no
     ndk: r10d
 
-Maintainer Notes: |
+MaintainerNotes: |
   Instructions and dependencies here: http://wiki.videolan.org/AndroidCompile
   see http://buildbot.videolan.org/builders/ for version code scheme
   The VLC srclib commit can be found out from TESTED_HASH value in compile.sh
@@ -902,10 +902,10 @@ Maintainer Notes: |
 # +2: x86
 # +3: arm
 # +4: armv7 (CV)
-Archive Policy: 9 versions
-Auto Update Mode: None
-Update Check Mode: Tags
+ArchivePolicy: 9 versions
+AutoUpdateMode: None
+UpdateCheckMode: Tags
 # Only use higher vercode ops, if we do build those arches
-Vercode Operation: "%c + 5"
-Current Version: 1.2.6
-Current Version Code: 1030005
+VercodeOperation: "%c + 5"
+CurrentVersion: 1.2.6
+CurrentVersionCode: 1030005

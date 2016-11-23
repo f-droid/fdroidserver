@@ -98,15 +98,21 @@ app_fields = set([
     'Current Version',
     'Current Version Code',
     'No Source Since',
+    'Build',
 
     'comments',  # For formats that don't do inline comments
     'builds',    # For formats that do builds as a list
 ])
 
 
-class App():
+class App(dict):
 
-    def __init__(self):
+    def __init__(self, copydict=None):
+        if copydict:
+            super().__init__(copydict)
+            return
+        super().__init__()
+
         self.Disabled = None
         self.AntiFeatures = []
         self.Provides = None
@@ -148,94 +154,21 @@ class App():
         self.comments = {}
         self.added = None
         self.lastupdated = None
-        self._modified = set()
 
-    @classmethod
-    def field_to_attr(cls, f):
-        """
-        Translates human-readable field names to attribute names, e.g.
-        'Auto Name' to 'AutoName'
-        """
-        return f.replace(' ', '')
-
-    @classmethod
-    def attr_to_field(cls, k):
-        """
-        Translates attribute names to human-readable field names, e.g.
-        'AutoName' to 'Auto Name'
-        """
-        if k in app_fields:
-            return k
-        f = re.sub(r'([a-z])([A-Z])', r'\1 \2', k)
-        return f
-
-    def field_dict(self):
-        """
-        Constructs an old-fashioned dict with the human-readable field
-        names. Should only be used for tests.
-        """
-        d = {}
-        for k, v in self.__dict__.items():
-            if k == 'builds':
-                d['builds'] = []
-                for build in v:
-                    b = {k: v for k, v in build.__dict__.items() if not k.startswith('_')}
-                    d['builds'].append(b)
-            elif not k.startswith('_'):
-                f = App.attr_to_field(k)
-                d[f] = v
-        return d
-
-    def get_field(self, f):
-        """Gets the value associated to a field name, e.g. 'Auto Name'"""
-        if f not in app_fields:
-            warn_or_exception('Unrecognised app field: ' + f)
-        k = App.field_to_attr(f)
-        return getattr(self, k)
-
-    def set_field(self, f, v):
-        """Sets the value associated to a field name, e.g. 'Auto Name'"""
-        if f not in app_fields:
-            warn_or_exception('Unrecognised app field: ' + f)
-        k = App.field_to_attr(f)
-        self.__dict__[k] = v
-        self._modified.add(k)
-
-    def append_field(self, f, v):
-        """Appends to the value associated to a field name, e.g. 'Auto Name'"""
-        if f not in app_fields:
-            warn_or_exception('Unrecognised app field: ' + f)
-        k = App.field_to_attr(f)
-        if k not in self.__dict__:
-            self.__dict__[k] = [v]
+    def __getattr__(self, name):
+        if name in self:
+            return self[name]
         else:
-            self.__dict__[k].append(v)
+            raise AttributeError("No such attribute: " + name)
 
-    def update_fields(self, d):
-        '''Like dict.update(), but using human-readable field names'''
-        for f, v in d.items():
-            if f == 'builds':
-                for b in v:
-                    build = Build()
-                    build.update_flags(b)
-                    self.builds.append(build)
-            else:
-                self.set_field(f, v)
+    def __setattr__(self, name, value):
+        self[name] = value
 
-    def update(self, d):
-        '''Like dict.update()'''
-        for k, v in d.__dict__.items():
-            if k == '_modified':
-                continue
-            elif k == 'builds':
-                for b in v:
-                    build = Build()
-                    del(b.__dict__['_modified'])
-                    build.update_flags(b.__dict__)
-                    self.builds.append(build)
-            elif v:
-                self.__dict__[k] = v
-                self._modified.add(k)
+    def __delattr__(self, name):
+        if name in self:
+            del self[name]
+        else:
+            raise AttributeError("No such attribute: " + name)
 
     def get_last_build(self):
         if len(self.builds) > 0:
@@ -256,16 +189,17 @@ TYPE_BUILD_V2 = 8
 
 fieldtypes = {
     'Description': TYPE_MULTILINE,
-    'Maintainer Notes': TYPE_MULTILINE,
+    'MaintainerNotes': TYPE_MULTILINE,
     'Categories': TYPE_LIST,
     'AntiFeatures': TYPE_LIST,
-    'Build Version': TYPE_BUILD,
+    'BuildVersion': TYPE_BUILD,
     'Build': TYPE_BUILD_V2,
-    'Use Built': TYPE_OBSOLETE,
+    'UseBuilt': TYPE_OBSOLETE,
 }
 
 
 def fieldtype(name):
+    name = name.replace(' ', '')
     if name in fieldtypes:
         return fieldtypes[name]
     return TYPE_STRING
@@ -518,9 +452,7 @@ valuetypes = {
 def check_metadata(app):
     for v in valuetypes:
         for k in v.fields:
-            if k not in app._modified:
-                continue
-            v.check(app.__dict__[k], app.id)
+            v.check(app[k], app.id)
 
 
 # Formatter for descriptions. Create an instance, and call parseline() with
@@ -896,44 +828,21 @@ def sorted_builds(builds):
 esc_newlines = re.compile(r'\\( |\n)')
 
 
-# This function uses __dict__ to be faster
 def post_metadata_parse(app):
-
-    for k in app._modified:
-        v = app.__dict__[k]
+    # TODO keep native types, convert only for .txt metadata
+    for k, v in app.items():
         if type(v) in (float, int):
-            app.__dict__[k] = str(v)
+            app[k] = str(v)
 
     builds = []
-    for build in app.builds:
-        if not isinstance(build, Build):
-            build = Build(build)
-        builds.append(build)
+    if 'builds' in app:
+        for build in app['builds']:
+            if not isinstance(build, Build):
+                build = Build(build)
+            builds.append(build)
 
-        for k in build._modified:
-            v = build.__dict__[k]
-            if type(v) in (float, int):
-                build.__dict__[k] = str(v)
-                continue
-            ftype = flagtype(k)
-
-            if ftype == TYPE_SCRIPT:
-                build.__dict__[k] = re.sub(esc_newlines, '', v).lstrip().rstrip()
-            elif ftype == TYPE_BOOL:
-                # TODO handle this using <xsd:element type="xsd:boolean> in a schema
-                if isinstance(v, str):
-                    build.__dict__[k] = _decode_bool(v)
-            elif ftype == TYPE_STRING:
-                if isinstance(v, bool) and v:
-                    build.__dict__[k] = 'yes'
-            elif ftype == TYPE_LIST:
-                if isinstance(v, bool) and v:
-                    build.__dict__[k] = ['yes']
-                elif isinstance(v, str):
-                    build.__dict__[k] = [v]
-
-    if not app.Description:
-        app.Description = 'No description available'
+    if not app.get('Description'):
+        app['Description'] = 'No description available'
 
     app.builds = sorted_builds(builds)
 
@@ -1039,17 +948,18 @@ def parse_json_metadata(mf, app):
     # TODO create schema using https://pypi.python.org/pypi/jsonschema
     jsoninfo = json.load(mf, parse_int=lambda s: s,
                          parse_float=lambda s: s)
-    app.update_fields(jsoninfo)
+    app.update(jsoninfo)
     for f in ['Description', 'Maintainer Notes']:
-        v = app.get_field(f)
-        app.set_field(f, '\n'.join(v))
+        v = app.get(f)
+        if v:
+            app[f] = '\n'.join(v)
     return app
 
 
 def parse_yaml_metadata(mf, app):
 
     yamlinfo = yaml.load(mf, Loader=YamlLoader)
-    app.update_fields(yamlinfo)
+    app.update(yamlinfo)
     return app
 
 
@@ -1128,6 +1038,8 @@ def parse_txt_metadata(mf, app):
     build = None
     vc_seen = set()
 
+    app.builds = []
+
     c = 0
     for line in mf:
         c += 1
@@ -1162,11 +1074,16 @@ def parse_txt_metadata(mf, app):
             except ValueError:
                 warn_or_exception("Invalid metadata in " + linedesc)
 
+            if f not in app_fields:
+                warn_or_exception('Unrecognised app field: ' + f)
+
             # Translate obsolete fields...
             if f == 'Market Version':
                 f = 'Current Version'
             if f == 'Market Version Code':
                 f = 'Current Version Code'
+
+            f = f.replace(' ', '')
 
             ftype = fieldtype(f)
             if ftype not in [TYPE_BUILD, TYPE_BUILD_V2]:
@@ -1177,9 +1094,9 @@ def parse_txt_metadata(mf, app):
                     warn_or_exception("Unexpected text on same line as "
                                       + f + " in " + linedesc)
             elif ftype == TYPE_STRING:
-                app.set_field(f, v)
+                app[f] = v
             elif ftype == TYPE_LIST:
-                app.set_field(f, split_list_values(v))
+                app[f] = split_list_values(v)
             elif ftype == TYPE_BUILD:
                 if v.endswith("\\"):
                     mode = 2
@@ -1212,7 +1129,7 @@ def parse_txt_metadata(mf, app):
         elif mode == 1:     # Multiline field
             if line == '.':
                 mode = 0
-                app.set_field(f, '\n'.join(multiline_lines))
+                app[f] = '\n'.join(multiline_lines)
                 del multiline_lines[:]
             else:
                 multiline_lines.append(line)
@@ -1240,6 +1157,23 @@ def parse_txt_metadata(mf, app):
 
 def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
 
+    def field_to_attr(f):
+        """
+        Translates human-readable field names to attribute names, e.g.
+        'Auto Name' to 'AutoName'
+        """
+        return f.replace(' ', '')
+
+    def attr_to_field(k):
+        """
+        Translates attribute names to human-readable field names, e.g.
+        'AutoName' to 'Auto Name'
+        """
+        if k in app_fields:
+            return k
+        f = re.sub(r'([a-z])([A-Z])', r'\1 \2', k)
+        return f
+
     def w_comments(key):
         if key not in app.comments:
             return
@@ -1247,15 +1181,17 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
             w_comment(line)
 
     def w_field_always(f, v=None):
+        key = field_to_attr(f)
         if v is None:
-            v = app.get_field(f)
-        w_comments(f)
+            v = app.get(key)
+        w_comments(key)
         w_field(f, v)
 
     def w_field_nonempty(f, v=None):
+        key = field_to_attr(f)
         if v is None:
-            v = app.get_field(f)
-        w_comments(f)
+            v = app.get(key)
+        w_comments(key)
         if v:
             w_field(f, v)
 

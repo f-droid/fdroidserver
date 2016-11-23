@@ -1,17 +1,17 @@
 AntiFeatures: []
-Archive Policy: null
-Author Email: null
-Author Name: null
-Auto Name: AdAway
-Auto Update Mode: Version v%v
+ArchivePolicy: null
+AuthorEmail: null
+AuthorName: null
+AutoName: AdAway
+AutoUpdateMode: Version v%v
 Binaries: null
 Bitcoin: null
 Categories:
 - System
 - Security
 Changelog: ''
-Current Version: '3.0'
-Current Version Code: '52'
+CurrentVersion: '3.0'
+CurrentVersionCode: '52'
 Description: 'An ad blocker that uses the hosts file. The hosts file
 
   contains a list of mappings between hostnames and IP addresses. When
@@ -38,24 +38,24 @@ Description: 'An ad blocker that uses the hosts file. The hosts file
 Disabled: null
 Donate: http://sufficientlysecure.org/index.php/adaway
 FlattrID: '369138'
-Issue Tracker: https://github.com/dschuermann/ad-away/issues
+IssueTracker: https://github.com/dschuermann/ad-away/issues
 License: GPLv3
 Litecoin: null
-Maintainer Notes: ''
+MaintainerNotes: ''
 Name: null
-No Source Since: ''
+NoSourceSince: ''
 Provides: org.sufficientlysecure.adaway
 Repo: https://github.com/dschuermann/ad-away.git
-Repo Type: git
-Requires Root: true
-Source Code: https://github.com/dschuermann/ad-away
+RepoType: git
+RequiresRoot: true
+SourceCode: https://github.com/dschuermann/ad-away
 Summary: Block advertisements
-Update Check Data: null
-Update Check Ignore: null
-Update Check Mode: Tags
-Update Check Name: null
-Vercode Operation: null
-Web Site: http://sufficientlysecure.org/index.php/adaway
+UpdateCheckData: null
+UpdateCheckIgnore: null
+UpdateCheckMode: Tags
+UpdateCheckName: null
+VercodeOperation: null
+WebSite: http://sufficientlysecure.org/index.php/adaway
 added: null
 builds:
 - antcommands: []

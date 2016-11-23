@@ -1,16 +1,16 @@
 AntiFeatures: []
-Archive Policy: 9 versions
-Author Email: null
-Author Name: null
-Auto Name: VLC
-Auto Update Mode: None
+ArchivePolicy: 9 versions
+AuthorEmail: null
+AuthorName: null
+AutoName: VLC
+AutoUpdateMode: None
 Binaries: null
 Bitcoin: null
 Categories:
 - Multimedia
 Changelog: ''
-Current Version: 1.2.6
-Current Version Code: '1030005'
+CurrentVersion: 1.2.6
+CurrentVersionCode: '1030005'
 Description: 'Video and audio player that supports a wide range of formats,
 
   for both local and remote playback.
@@ -22,10 +22,10 @@ Description: 'Video and audio player that supports a wide range of formats,
 Disabled: null
 Donate: http://www.videolan.org/contribute.html#money
 FlattrID: null
-Issue Tracker: http://www.videolan.org/support/index.html#bugs
+IssueTracker: http://www.videolan.org/support/index.html#bugs
 License: GPLv3
 Litecoin: null
-Maintainer Notes: 'Instructions and dependencies here: http://wiki.videolan.org/AndroidCompile
+MaintainerNotes: 'Instructions and dependencies here: http://wiki.videolan.org/AndroidCompile
 
   see http://buildbot.videolan.org/builders/ for version code scheme
 
@@ -42,19 +42,19 @@ Maintainer Notes: 'Instructions and dependencies here: http://wiki.videolan.org/
 
   '
 Name: null
-No Source Since: ''
+NoSourceSince: ''
 Provides: null
 Repo: git://git.videolan.org/vlc-ports/android.git
-Repo Type: git
-Requires Root: false
-Source Code: http://git.videolan.org/?p=vlc-ports/android.git;a=summary
+RepoType: git
+RequiresRoot: false
+SourceCode: http://git.videolan.org/?p=vlc-ports/android.git;a=summary
 Summary: Media player
-Update Check Data: null
-Update Check Ignore: null
-Update Check Mode: Tags
-Update Check Name: null
-Vercode Operation: '%c + 5'
-Web Site: http://www.videolan.org/vlc/download-android.html
+UpdateCheckData: null
+UpdateCheckIgnore: null
+UpdateCheckMode: Tags
+UpdateCheckName: null
+VercodeOperation: '%c + 5'
+WebSite: http://www.videolan.org/vlc/download-android.html
 added: null
 builds:
 - antcommands: []

@@ -99,7 +99,7 @@ def update_wiki(apps, sortedids, apks):
     generated_redirects = {}
 
     for appid in sortedids:
-        app = apps[appid]
+        app = metadata.App(apps[appid])
 
         wikidata = ''
         if app.Disabled:
@@ -302,7 +302,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
     :param repodirs: the repo directories to process
     """
     for appid, app in apps.items():
-        for build in app.builds:
+        for build in app['builds']:
             if not build.disable:
                 continue
             apkfilename = appid + '_' + str(build.vercode) + '.apk'
@@ -1111,7 +1111,7 @@ def make_index(apps, sortedids, apks, repodir, archive):
             element.setAttribute('packageName', packageName)
 
     for appid in sortedids:
-        app = apps[appid]
+        app = metadata.App(apps[appid])
 
         if app.Disabled is not None:
             continue
@@ -1265,7 +1265,7 @@ def make_index(apps, sortedids, apks, repodir, archive):
                 and config['make_current_version_link'] \
                 and repodir == 'repo':  # only create these
             namefield = config['current_version_name_source']
-            sanitized_name = re.sub('''[ '"&%?+=/]''', '', app.get_field(namefield))
+            sanitized_name = re.sub('''[ '"&%?+=/]''', '', app.get(namefield))
             apklinkname = sanitized_name + '.apk'
             current_version_path = os.path.join(repodir, current_version_file)
             if os.path.islink(apklinkname):
@@ -1621,6 +1621,7 @@ def main():
             logging.debug("Don't know when " + appid + " was last updated")
 
         if bestver == UNSET_VERSION_CODE:
+
             if app.Name is None:
                 app.Name = app.AutoName or appid
             app.icon = None

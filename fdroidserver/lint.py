@@ -63,10 +63,10 @@ http_checks = https_enforcings + http_url_shorteners + [
 ]
 
 regex_checks = {
-    'Web Site': http_checks,
-    'Source Code': http_checks,
+    'WebSite': http_checks,
+    'SourceCode': http_checks,
     'Repo': https_enforcings,
-    'Issue Tracker': http_checks + [
+    'IssueTracker': http_checks + [
         (re.compile(r'.*github\.com/[^/]+/[^/]+/*$'),
          "/issues is missing"),
         (re.compile(r'.*gitlab\.com/[^/]+/[^/]+/*$'),
@@ -121,7 +121,7 @@ regex_checks = {
 def check_regexes(app):
     for f, checks in regex_checks.items():
         for m, r in checks:
-            v = app.get_field(f)
+            v = app.get(f)
             t = metadata.fieldtype(f)
             if t == metadata.TYPE_MULTILINE:
                 for l in v.splitlines():
@@ -183,8 +183,8 @@ def check_old_links(app):
         'code.google.com',
     ]
     if any(s in app.Repo for s in usual_sites):
-        for f in ['Web Site', 'Source Code', 'Issue Tracker', 'Changelog']:
-            v = app.get_field(f)
+        for f in ['WebSite', 'SourceCode', 'IssueTracker', 'Changelog']:
+            v = app.get(f)
             if any(s in v for s in old_sites):
                 yield "App is in '%s' but has a link to '%s'" % (app.Repo, v)
 
@@ -241,7 +241,7 @@ def check_duplicates(app):
 
     links_seen = set()
     for f in ['Source Code', 'Web Site', 'Issue Tracker', 'Changelog']:
-        v = app.get_field(f)
+        v = app.get(f)
         if not v:
             continue
         v = v.lower()
