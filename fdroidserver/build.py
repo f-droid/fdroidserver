@@ -952,6 +952,40 @@ def trybuild(app, build, build_dir, output_dir, also_check_dir, srclib_dir, extl
     return True
 
 
+def get_android_tools_versions(sdk_path, ndk_path=None):
+    '''get a list of the versions of all installed Android SDK/NDK components'''
+
+    if sdk_path[-1] != '/':
+        sdk_path += '/'
+    components = []
+    if ndk_path:
+        ndk_release_txt = os.path.join(ndk_path, 'RELEASE.TXT')
+        if os.path.isfile(ndk_release_txt):
+            with open(ndk_release_txt, 'r') as fp:
+                components.append((os.path.basename(ndk_path), fp.read()[:-1]))
+
+    pattern = re.compile('^Pkg.Revision=(.+)', re.MULTILINE)
+    for root, dirs, files in os.walk(sdk_path):
+        if 'source.properties' in files:
+            source_properties = os.path.join(root, 'source.properties')
+            with open(source_properties, 'r') as fp:
+                m = pattern.search(fp.read())
+                if m:
+                    components.append((root[len(sdk_path):], m.group(1)))
+
+    return components
+
+
+def get_android_tools_version_log(sdk_path, ndk_path):
+    '''get a list of the versions of all installed Android SDK/NDK components'''
+    log = ''
+    components = get_android_tools_versions(sdk_path, ndk_path)
+    for name, version in sorted(components):
+        log += '* ' + name + ' (' + version + ')\n'
+
+    return log
+
+
 def parse_commandline():
     """Parse the command line. Returns options, parser."""
 
@@ -1066,9 +1100,10 @@ def main():
     extlib_dir = os.path.join(build_dir, 'extlib')
 
     # Read all app and srclib metadata
-    allapps = metadata.read_metadata(xref=not options.onserver)
-
+    pkgs = common.read_pkg_args(options.appid, True)
+    allapps = metadata.read_metadata(not options.onserver, pkgs)
     apps = common.read_app_args(options.appid, allapps, True)
+
     for appid, app in list(apps.items()):
         if (app.Disabled and not options.force) or not app.RepoType or not app.builds:
             del apps[appid]
@@ -1099,22 +1134,15 @@ def main():
 
         for build in app.builds:
             wikilog = None
+            tools_version_log = '== Installed Android Tools ==\n\n'
+            tools_version_log += get_android_tools_version_log(config['sdk_path'], build.ndk_path())
             try:
 
                 # For the first build of a particular app, we need to set up
                 # the source repo. We can reuse it on subsequent builds, if
                 # there are any.
                 if first:
-                    if app.RepoType == 'srclib':
-                        build_dir = os.path.join('build', 'srclib', app.Repo)
-                    else:
-                        build_dir = os.path.join('build', appid)
-
-                    # Set up vcs interface and make sure we have the latest code...
-                    logging.debug("Getting {0} vcs interface for {1}"
-                                  .format(app.RepoType, app.Repo))
-                    vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
-
+                    vcs, build_dir = common.setup_vcs(app)
                     first = False
 
                 logging.debug("Checking " + build.version)
@@ -1150,6 +1178,12 @@ def main():
                 wikilog = str(vcse)
             except FDroidException as e:
                 with open(os.path.join(log_dir, appid + '.log'), 'a+') as f:
+                    f.write('\n\n============================================================\n')
+                    f.write('versionCode: %s\nversionName: %s\ncommit: %s\n' %
+                            (build.vercode, build.version, build.commit))
+                    f.write('Build completed at '
+                            + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + '\n')
+                    f.write('\n' + tools_version_log + '\n')
                     f.write(str(e))
                 logging.error("Could not build app %s: %s" % (appid, e))
                 if options.stop:
@@ -1163,6 +1197,9 @@ def main():
                     sys.exit(1)
                 failed_apps[appid] = e
                 wikilog = str(e)
+
+            if wikilog:
+                wikilog = tools_version_log + '\n\n' + wikilog
 
             if options.wiki and wikilog:
                 try:

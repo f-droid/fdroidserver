@@ -100,6 +100,8 @@ echo_header "test python getsig replacement"
 
 cd $WORKSPACE/tests/getsig
 ./make.sh
+
+cd $WORKSPACE/tests
 for testcase in $WORKSPACE/tests/*.TestCase; do
     $testcase
 done
@@ -136,6 +138,19 @@ cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.txt metadata/
 
 $fdroid readmeta
 $fdroid update
+
+
+#------------------------------------------------------------------------------#
+echo_header 'run `fdroid build` in fresh git checkout from import.TestCase'
+
+cd $WORKSPACE/tests/tmp/importer
+if [ -d $ANDROID_HOME/platforms/android-23 ]; then
+    echo "build_tools = '`ls -1 $ANDROID_HOME/build-tools/ | sort -n | tail -1`'" > config.py
+    echo "force_build_tools = True" >> config.py
+    $fdroid build --verbose org.fdroid.ci.test.app:300
+else
+    echo 'WARNING: Skipping `fdroid build` test since android-23 is missing!'
+fi
 
 
 #------------------------------------------------------------------------------#

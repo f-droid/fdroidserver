@@ -152,24 +152,30 @@ class App():
         self.lastupdated = None
         self._modified = set()
 
-    # Translates human-readable field names to attribute names, e.g.
-    # 'Auto Name' to 'AutoName'
     @classmethod
     def field_to_attr(cls, f):
+        """
+        Translates human-readable field names to attribute names, e.g.
+        'Auto Name' to 'AutoName'
+        """
         return f.replace(' ', '')
 
-    # Translates attribute names to human-readable field names, e.g.
-    # 'AutoName' to 'Auto Name'
     @classmethod
     def attr_to_field(cls, k):
+        """
+        Translates attribute names to human-readable field names, e.g.
+        'AutoName' to 'Auto Name'
+        """
         if k in app_fields:
             return k
         f = re.sub(r'([a-z])([A-Z])', r'\1 \2', k)
         return f
 
-    # Constructs an old-fashioned dict with the human-readable field
-    # names. Should only be used for tests.
     def field_dict(self):
+        """
+        Constructs an old-fashioned dict with the human-readable field
+        names. Should only be used for tests.
+        """
         d = {}
         for k, v in self.__dict__.items():
             if k == 'builds':
@@ -182,23 +188,23 @@ class App():
                 d[f] = v
         return d
 
-    # Gets the value associated to a field name, e.g. 'Auto Name'
     def get_field(self, f):
+        """Gets the value associated to a field name, e.g. 'Auto Name'"""
         if f not in app_fields:
             warn_or_exception('Unrecognised app field: ' + f)
         k = App.field_to_attr(f)
         return getattr(self, k)
 
-    # Sets the value associated to a field name, e.g. 'Auto Name'
     def set_field(self, f, v):
+        """Sets the value associated to a field name, e.g. 'Auto Name'"""
         if f not in app_fields:
             warn_or_exception('Unrecognised app field: ' + f)
         k = App.field_to_attr(f)
         self.__dict__[k] = v
         self._modified.add(k)
 
-    # Appends to the value associated to a field name, e.g. 'Auto Name'
     def append_field(self, f, v):
+        """Appends to the value associated to a field name, e.g. 'Auto Name'"""
         if f not in app_fields:
             warn_or_exception('Unrecognised app field: ' + f)
         k = App.field_to_attr(f)
@@ -207,8 +213,8 @@ class App():
         else:
             self.__dict__[k].append(v)
 
-    # Like dict.update(), but using human-readable field names
     def update_fields(self, d):
+        '''Like dict.update(), but using human-readable field names'''
         for f, v in d.items():
             if f == 'builds':
                 for b in v:
@@ -217,6 +223,21 @@ class App():
                     self.builds.append(build)
             else:
                 self.set_field(f, v)
+
+    def update(self, d):
+        '''Like dict.update()'''
+        for k, v in d.__dict__.items():
+            if k == '_modified':
+                continue
+            elif k == 'builds':
+                for b in v:
+                    build = Build()
+                    del(b.__dict__['_modified'])
+                    build.update_flags(b.__dict__)
+                    self.builds.append(build)
+            elif v:
+                self.__dict__[k] = v
+                self._modified.add(k)
 
 
 TYPE_UNKNOWN = 0
@@ -772,9 +793,13 @@ def read_srclibs():
         srclibs[srclibname] = parse_srclib(metadatapath)
 
 
-# Read all metadata. Returns a list of 'app' objects (which are dictionaries as
-# returned by the parse_txt_metadata function.
-def read_metadata(xref=True):
+def read_metadata(xref=True, check_vcs=[]):
+    """
+    Read all metadata. Returns a list of 'app' objects (which are dictionaries as
+    returned by the parse_txt_metadata function.
+
+    check_vcs is the list of packageNames to check for .fdroid.yml in source
+    """
 
     # Always read the srclibs before the apps, since they can use a srlib as
     # their source repository.
@@ -801,7 +826,7 @@ def read_metadata(xref=True):
         packageName, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
         if packageName in apps:
             warn_or_exception("Found multiple metadata files for " + packageName)
-        app = parse_metadata(metadatapath)
+        app = parse_metadata(metadatapath, packageName in check_vcs)
         check_metadata(app)
         apps[app.id] = app
 
@@ -904,6 +929,11 @@ def post_metadata_parse(app):
             elif ftype == TYPE_STRING:
                 if isinstance(v, bool) and v:
                     build.__dict__[k] = 'yes'
+            elif ftype == TYPE_LIST:
+                if isinstance(v, bool) and v:
+                    build.__dict__[k] = ['yes']
+                elif isinstance(v, str):
+                    build.__dict__[k] = [v]
 
     if not app.Description:
         app.Description = 'No description available'
@@ -949,7 +979,9 @@ def _decode_bool(s):
     warn_or_exception("Invalid bool '%s'" % s)
 
 
-def parse_metadata(metadatapath):
+def parse_metadata(metadatapath, check_vcs=False):
+    '''parse metadata file, optionally checking the git repo for metadata first'''
+
     _, ext = fdroidserver.common.get_extension(metadatapath)
     accepted = fdroidserver.common.config['accepted_formats']
     if ext not in accepted:
@@ -958,7 +990,11 @@ def parse_metadata(metadatapath):
 
     app = App()
     app.metadatapath = metadatapath
-    app.id, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
+    name, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
+    if name == '.fdroid':
+        check_vcs = False
+    else:
+        app.id = name
 
     with open(metadatapath, 'r', encoding='utf-8') as mf:
         if ext == 'txt':
@@ -972,7 +1008,28 @@ def parse_metadata(metadatapath):
         else:
             warn_or_exception('Unknown metadata format: %s' % metadatapath)
 
+    if check_vcs and app.Repo:
+        build_dir = fdroidserver.common.get_build_dir(app)
+        metadata_in_repo = os.path.join(build_dir, '.fdroid.yml')
+        if not os.path.isfile(metadata_in_repo):
+            vcs, build_dir = fdroidserver.common.setup_vcs(app)
+            vcs.gotorevision('HEAD')  # HEAD since we can't know where else to go
+        if os.path.isfile(metadata_in_repo):
+            logging.debug('Including metadata from ' + metadata_in_repo)
+            app.update(parse_metadata(metadata_in_repo))
+
     post_metadata_parse(app)
+
+    if not app.id:
+        if app.builds:
+            build = app.builds[-1]
+            if build.subdir:
+                root_dir = build.subdir
+            else:
+                root_dir = '.'
+            paths = fdroidserver.common.manifest_paths(root_dir, build.gradle)
+            _, _, app.id = fdroidserver.common.parse_androidmanifests(paths, app)
+
     return app
 
 
