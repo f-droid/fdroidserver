@@ -59,6 +59,7 @@ default_config = {
         'r10e': None,
         'r11c': None,
         'r12b': "$ANDROID_NDK",
+        'r13b': None,
     },
     'qt_sdk_path': None,
     'build_tools': "25.0.0",
