@@ -831,9 +831,6 @@ def post_metadata_parse(app):
                     build[k] = str(v)
             builds.append(build)
 
-    if not app.get('Description'):
-        app['Description'] = 'No description available'
-
     app.builds = sorted_builds(builds)
 
 

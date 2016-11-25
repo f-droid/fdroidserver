@@ -1159,8 +1159,12 @@ def make_index(apps, sortedids, apks, repodir, archive):
                 return ("fdroid.app:" + appid, apps[appid].Name)
             raise MetaDataException("Cannot resolve app id " + appid)
 
+        if app.get('Description'):
+            description = app.Description
+        else:
+            description = 'No description available'
         addElement('desc',
-                   metadata.description_html(app.Description, linkres),
+                   metadata.description_html(description, linkres),
                    doc, apel)
         addElement('license', app.License, doc, apel)
         if app.Categories:
