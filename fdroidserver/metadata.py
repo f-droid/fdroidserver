@@ -239,8 +239,9 @@ build_flags_order = [
     'novcheck',
 ]
 
-
-build_flags = set(build_flags_order + ['versionName', 'versionCode'])
+# old .txt format has version name/code inline in the 'Build:' line
+# but YAML and JSON have a explicit key for them
+build_flags = ['versionName', 'versionCode'] + build_flags_order
 
 
 class Build(dict):
@@ -959,6 +960,25 @@ def parse_yaml_metadata(mf, app):
     return app
 
 
+def write_yaml(mf, app):
+
+    def _class_as_dict_representer(dumper, data):
+        '''Creates a YAML representation of a App/Build instance'''
+        return dumper.represent_dict(data)
+
+    empty_keys = [k for k, v in app.items() if not v]
+    for k in empty_keys:
+        del app[k]
+
+    for k in ['added', 'lastUpdated', 'id', 'metadatapath']:
+        if k in app:
+            del app[k]
+
+    yaml.add_representer(fdroidserver.metadata.App, _class_as_dict_representer)
+    yaml.add_representer(fdroidserver.metadata.Build, _class_as_dict_representer)
+    yaml.dump(app, mf, default_flow_style=False)
+
+
 build_line_sep = re.compile(r'(?<!\\),')
 build_cont = re.compile(r'^[ \t]')
 
@@ -1300,70 +1320,6 @@ def write_txt(mf, app):
                 mf.write(','.join(v))
 
             mf.write('\n')
-
-    write_plaintext_metadata(mf, app, w_comment, w_field, w_build)
-
-
-def write_yaml(mf, app):
-
-    def w_comment(line):
-        mf.write("# %s\n" % line)
-
-    def escape(v):
-        if not v:
-            return ''
-        if any(c in v for c in [': ', '%', '@', '*']):
-            return "'" + v.replace("'", "''") + "'"
-        return v
-
-    def w_field(f, v, prefix='', t=None):
-        if t is None:
-            t = fieldtype(f)
-        v = ''
-        if t == TYPE_LIST:
-            v = '\n'
-            for e in v:
-                v += prefix + ' - ' + escape(e) + '\n'
-        elif t == TYPE_MULTILINE:
-            v = ' |\n'
-            for l in v.splitlines():
-                if l:
-                    v += prefix + '  ' + l + '\n'
-                else:
-                    v += '\n'
-        elif t == TYPE_BOOL:
-            v = ' yes\n'
-        elif t == TYPE_SCRIPT:
-            cmds = [s + '&& \\' for s in v.split('&& ')]
-            if len(cmds) > 0:
-                cmds[-1] = cmds[-1][:-len('&& \\')]
-            w_field(f, cmds, prefix, 'multiline')
-            return
-        else:
-            v = ' ' + escape(v) + '\n'
-
-        mf.write(prefix)
-        mf.write(f)
-        mf.write(":")
-        mf.write(v)
-
-    global first_build
-    first_build = True
-
-    def w_build(build):
-        global first_build
-        if first_build:
-            mf.write("builds:\n")
-            first_build = False
-
-        w_field('versionName', build.versionName, '  - ', TYPE_STRING)
-        w_field('versionCode', build.versionCode, '    ', TYPE_STRING)
-        for f in build_flags_order:
-            v = build.get(f)
-            if not v:
-                continue
-
-            w_field(f, v, '    ', flagtype(f))
 
     write_plaintext_metadata(mf, app, w_comment, w_field, w_build)
 
