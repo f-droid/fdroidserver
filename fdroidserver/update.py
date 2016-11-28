@@ -565,7 +565,8 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
                 usecache = True
             else:
                 logging.debug("Ignoring stale cache data for " + name)
-        elif not usecache:
+
+        if not usecache:
             logging.debug("Processing " + name)
             repo_file = {}
             # TODO rename apkname globally to something more generic
