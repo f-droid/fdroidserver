@@ -247,7 +247,8 @@ The repository of older versions of applications from the main demo repository.
 
 # Only set this to true when running a repository where you want to generate
 # stats, and only then on the master build servers, not a development
-# machine.
+# machine. If you want to keep the "added" and "last updated" dates for each
+# app and APK in your repo, then you should enable this.
 # update_stats = True
 
 # When used with stats, this is a list of IP addresses that are ignored for

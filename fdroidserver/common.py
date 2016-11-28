@@ -36,6 +36,7 @@ import socket
 import base64
 import xml.etree.ElementTree as XMLElementTree
 
+from datetime import datetime
 from distutils.version import LooseVersion
 from queue import Queue
 from zipfile import ZipFile
@@ -1624,7 +1625,7 @@ class KnownApks:
                     if len(t) == 2:
                         self.apks[t[0]] = (t[1], None)
                     else:
-                        self.apks[t[0]] = (t[1], time.strptime(t[2], '%Y-%m-%d'))
+                        self.apks[t[0]] = (t[1], datetime.strptime(t[2], '%Y-%m-%d'))
         self.changed = False
 
     def writeifchanged(self):
@@ -1639,19 +1640,21 @@ class KnownApks:
             appid, added = app
             line = apk + ' ' + appid
             if added:
-                line += ' ' + time.strftime('%Y-%m-%d', added)
+                line += ' ' + added.strftime('%Y-%m-%d')
             lst.append(line)
 
         with open(self.path, 'w', encoding='utf8') as f:
             for line in sorted(lst, key=natural_key):
                 f.write(line + '\n')
 
-    # Record an apk (if it's new, otherwise does nothing)
-    # Returns the date it was added.
     def recordapk(self, apk, app, default_date=None):
+        '''
+        Record an apk (if it's new, otherwise does nothing)
+        Returns the date it was added as a datetime instance
+        '''
         if apk not in self.apks:
             if default_date is None:
-                default_date = time.gmtime(time.time())
+                default_date = datetime.utcnow()
             self.apks[apk] = (app, default_date)
             self.changed = True
         _, added = self.apks[apk]

@@ -35,7 +35,6 @@ import urllib.parse
 from datetime import datetime, timedelta
 from xml.dom.minidom import Document
 from argparse import ArgumentParser
-import time
 
 import collections
 from pyasn1.error import PyAsn1Error
@@ -117,8 +116,8 @@ def update_wiki(apps, sortedids, apks):
         wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|changelog=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s|author=%s|email=%s}}\n' % (
             appid,
             app.Name,
-            time.strftime('%Y-%m-%d', app.added) if app.added else '',
-            time.strftime('%Y-%m-%d', app.lastUpdated) if app.lastUpdated else '',
+            app.added.strftime('%Y-%m-%d') if app.added else '',
+            app.lastUpdated.strftime('%Y-%m-%d') if app.lastUpdated else '',
             app.SourceCode,
             app.IssueTracker,
             app.WebSite,
@@ -566,6 +565,13 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
         usecache = False
         if name in apkcache:
             repo_file = apkcache[name]
+            # added time is cached as tuple but used here as datetime instance
+            if 'added' in repo_file:
+                a = repo_file['added']
+                if isinstance(a, datetime):
+                    repo_file['added'] = a
+                else:
+                    repo_file['added'] = datetime(*a[:6])
             if repo_file['sha256'] == shasum:
                 logging.debug("Reading " + name + " from cache")
                 usecache = True
@@ -926,7 +932,7 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
                                 os.path.join(get_icon_dir(repodir, '0'), iconfilename))
 
             if use_date_from_apk and manifest.date_time[1] != 0:
-                default_date_param = datetime(*manifest.date_time).utctimetuple()
+                default_date_param = datetime(*manifest.date_time)
             else:
                 default_date_param = None
 
@@ -1258,9 +1264,9 @@ def make_index_v0(apps, apks, repodir, repodict):
 
         addElement('id', app.id, doc, apel)
         if app.added:
-            addElement('added', time.strftime('%Y-%m-%d', app.added), doc, apel)
+            addElement('added', app.added.strftime('%Y-%m-%d'), doc, apel)
         if app.lastUpdated:
-            addElement('lastupdated', time.strftime('%Y-%m-%d', app.lastUpdated), doc, apel)
+            addElement('lastupdated', app.lastUpdated.strftime('%Y-%m-%d'), doc, apel)
         addElement('name', app.Name, doc, apel)
         addElement('summary', app.Summary, doc, apel)
         if app.icon:
@@ -1356,7 +1362,7 @@ def make_index_v0(apps, apks, repodir, repodict):
             addElementIfInApk('obbPatchFileSha256', apk,
                               'obbPatchFileSha256', doc, apkel)
             if 'added' in apk:
-                addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
+                addElement('added', apk['added'].strftime('%Y-%m-%d'), doc, apkel)
 
             if file_extension == 'apk':  # sig is required for APKs, but only APKs
                 addElement('sig', apk['sig'], doc, apkel)
