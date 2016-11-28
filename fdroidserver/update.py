@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import copy
 import sys
 import os
 import shutil
@@ -1013,6 +1014,171 @@ def make_index(apps, sortedids, apks, repodir, archive):
     :param categories: list of categories
     """
 
+    def _resolve_description_link(appid):
+        if appid in apps:
+            return ("fdroid.app:" + appid, apps[appid].Name)
+        raise MetaDataException("Cannot resolve app id " + appid)
+
+    nosigningkey = False
+    if not options.nosign:
+        if 'repo_keyalias' not in config:
+            nosigningkey = True
+            logging.critical("'repo_keyalias' not found in config.py!")
+        if 'keystore' not in config:
+            nosigningkey = True
+            logging.critical("'keystore' not found in config.py!")
+        if 'keystorepass' not in config and 'keystorepassfile' not in config:
+            nosigningkey = True
+            logging.critical("'keystorepass' not found in config.py!")
+        if 'keypass' not in config and 'keypassfile' not in config:
+            nosigningkey = True
+            logging.critical("'keypass' not found in config.py!")
+        if not os.path.exists(config['keystore']):
+            nosigningkey = True
+            logging.critical("'" + config['keystore'] + "' does not exist!")
+        if nosigningkey:
+            logging.warning("`fdroid update` requires a signing key, you can create one using:")
+            logging.warning("\tfdroid update --create-key")
+            sys.exit(1)
+
+    repodict = collections.OrderedDict()
+    repodict['timestamp'] = datetime.utcnow()
+    repodict['version'] = METADATA_VERSION
+
+    if config['repo_maxage'] != 0:
+        repodict['maxage'] = config['repo_maxage']
+
+    if archive:
+        repodict['name'] = config['archive_name']
+        repodict['icon'] = os.path.basename(config['archive_icon'])
+        repodict['address'] = config['archive_url']
+        repodict['description'] = config['archive_description']
+        urlbasepath = os.path.basename(urllib.parse.urlparse(config['archive_url']).path)
+    else:
+        repodict['name'] = config['repo_name']
+        repodict['icon'] = os.path.basename(config['repo_icon'])
+        repodict['address'] = config['repo_url']
+        repodict['description'] = config['repo_description']
+        urlbasepath = os.path.basename(urllib.parse.urlparse(config['repo_url']).path)
+
+    mirrorcheckfailed = False
+    mirrors = []
+    for mirror in sorted(config.get('mirrors', [])):
+        base = os.path.basename(urllib.parse.urlparse(mirror).path.rstrip('/'))
+        if config.get('nonstandardwebroot') is not True and base != 'fdroid':
+            logging.error("mirror '" + mirror + "' does not end with 'fdroid'!")
+            mirrorcheckfailed = True
+        # must end with / or urljoin strips a whole path segment
+        if mirror.endswith('/'):
+            mirrors.append(urllib.parse.urljoin(mirror, urlbasepath))
+        else:
+            mirrors.append(urllib.parse.urljoin(mirror + '/', urlbasepath))
+    for mirror in config.get('servergitmirrors', []):
+        mirror = get_raw_mirror(mirror)
+        if mirror is not None:
+            mirrors.append(mirror + '/')
+    if mirrorcheckfailed:
+        sys.exit(1)
+    if mirrors:
+        repodict['mirrors'] = mirrors
+
+    appsWithPackages = collections.OrderedDict()
+    for packageName in sortedids:
+        app = apps[packageName]
+        if app['Disabled']:
+            continue
+
+        # only include apps with packages
+        for apk in apks:
+            if apk['packageName'] == packageName:
+                newapp = copy.copy(app)  # update wiki needs unmodified description
+                newapp['Description'] = metadata.description_html(app['Description'],
+                                                                  _resolve_description_link)
+                appsWithPackages[packageName] = newapp
+                break
+
+    make_index_v0(appsWithPackages, apks, repodir, repodict)
+    make_index_v1(appsWithPackages, apks, repodir, repodict)
+
+
+def make_index_v1(apps, packages, repodir, repodict):
+
+    def _index_encoder_default(obj):
+        if isinstance(obj, set):
+            return list(obj)
+        if isinstance(obj, datetime):
+            return int(obj.timestamp() * 1000)  # Java expects milliseconds
+        raise TypeError(repr(obj) + " is not JSON serializable")
+
+    output = collections.OrderedDict()
+    output['repo'] = repodict
+
+    appslist = []
+    output['apps'] = appslist
+    for appid, appdict in apps.items():
+        d = collections.OrderedDict()
+        appslist.append(d)
+        for k, v in sorted(appdict.items()):
+            if not v:
+                continue
+            if k in ('builds', 'comments', 'metadatapath',
+                     'ArchivePolicy', 'AutoUpdateMode', 'MaintainerNotes',
+                     'Provides', 'Repo', 'RepoType', 'RequiresRoot',
+                     'UpdateCheckData', 'UpdateCheckIgnore', 'UpdateCheckMode',
+                     'UpdateCheckName', 'NoSourceSince', 'VercodeOperation'):
+                continue
+
+            # name things after the App class fields in fdroidclient
+            if k == 'id':
+                k = 'packageName'
+            elif k == 'CurrentVersionCode':  # TODO make SuggestedVersionCode the canonical name
+                k = 'suggestedVersionCode'
+            elif k == 'CurrentVersion':  # TODO make SuggestedVersionName the canonical name
+                k = 'suggestedVersionName'
+            elif k == 'AutoName':
+                if 'Name' not in apps[appid]:
+                    d['name'] = v
+                continue
+            else:
+                k = k[:1].lower() + k[1:]
+            d[k] = v
+
+    output_packages = dict()
+    output['packages'] = output_packages
+    for package in packages:
+        packageName = package['packageName']
+        if packageName in output_packages:
+            packagelist = output_packages[packageName]
+        else:
+            packagelist = []
+            output_packages[packageName] = packagelist
+        d = collections.OrderedDict()
+        packagelist.append(d)
+        for k, v in sorted(package.items()):
+            if not v:
+                continue
+            if k in ('icon', 'icons', 'icons_src', 'name', ):
+                continue
+            d[k] = v
+
+    json_name = 'index-v1.json'
+    index_file = os.path.join(repodir, json_name)
+    with open(index_file, 'w') as fp:
+        json.dump(output, fp, default=_index_encoder_default)
+
+    if options.nosign:
+        logging.debug('index-v1 must have a signature, signindex will overwrite it!')
+
+    jar_file = os.path.join(repodir, 'index-v1.jar')
+    with zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED) as jar:
+        jar.write(index_file, json_name)
+    signjar(jar_file)
+    os.remove(index_file)
+
+
+def make_index_v0(apps, apks, repodir, repodict):
+    '''aka index.jar aka index.xml'''
+
     doc = Document()
 
     def addElement(name, value, doc, parent):
@@ -1041,71 +1207,17 @@ def make_index(apps, sortedids, apks, repodir, archive):
 
     repoel = doc.createElement("repo")
 
-    mirrorcheckfailed = False
-    mirrors = []
-    for mirror in sorted(config.get('mirrors', [])):
-        base = os.path.basename(urllib.parse.urlparse(mirror).path.rstrip('/'))
-        if config.get('nonstandardwebroot') is not True and base != 'fdroid':
-            logging.error("mirror '" + mirror + "' does not end with 'fdroid'!")
-            mirrorcheckfailed = True
-        # must end with / or urljoin strips a whole path segment
-        if mirror.endswith('/'):
-            mirrors.append(mirror)
-        else:
-            mirrors.append(mirror + '/')
-    for mirror in config.get('servergitmirrors', []):
-        mirror = get_raw_mirror(mirror)
-        if mirror is not None:
-            mirrors.append(mirror + '/')
-    if mirrorcheckfailed:
-        sys.exit(1)
+    repoel.setAttribute("name", repodict['name'])
+    if 'maxage' in repodict:
+        repoel.setAttribute("maxage", str(repodict['maxage']))
+    repoel.setAttribute("icon", os.path.basename(repodict['icon']))
+    repoel.setAttribute("url", repodict['address'])
+    addElement('description', repodict['description'], doc, repoel)
+    for mirror in repodict.get('mirrors', []):
+        addElement('mirror', mirror, doc, repoel)
 
-    if archive:
-        repoel.setAttribute("name", config['archive_name'])
-        if config['repo_maxage'] != 0:
-            repoel.setAttribute("maxage", str(config['repo_maxage']))
-        repoel.setAttribute("icon", os.path.basename(config['archive_icon']))
-        repoel.setAttribute("url", config['archive_url'])
-        addElement('description', config['archive_description'], doc, repoel)
-        urlbasepath = os.path.basename(urllib.parse.urlparse(config['archive_url']).path)
-        for mirror in mirrors:
-            addElement('mirror', urllib.parse.urljoin(mirror, urlbasepath), doc, repoel)
-
-    else:
-        repoel.setAttribute("name", config['repo_name'])
-        if config['repo_maxage'] != 0:
-            repoel.setAttribute("maxage", str(config['repo_maxage']))
-        repoel.setAttribute("icon", os.path.basename(config['repo_icon']))
-        repoel.setAttribute("url", config['repo_url'])
-        addElement('description', config['repo_description'], doc, repoel)
-        urlbasepath = os.path.basename(urllib.parse.urlparse(config['repo_url']).path)
-        for mirror in mirrors:
-            addElement('mirror', urllib.parse.urljoin(mirror, urlbasepath), doc, repoel)
-
-    repoel.setAttribute("version", str(METADATA_VERSION))
-    repoel.setAttribute("timestamp", str(int(time.time())))
-
-    nosigningkey = False
-    if not options.nosign:
-        if 'repo_keyalias' not in config:
-            nosigningkey = True
-            logging.critical("'repo_keyalias' not found in config.py!")
-        if 'keystore' not in config:
-            nosigningkey = True
-            logging.critical("'keystore' not found in config.py!")
-        if 'keystorepass' not in config and 'keystorepassfile' not in config:
-            nosigningkey = True
-            logging.critical("'keystorepass' not found in config.py!")
-        if 'keypass' not in config and 'keypassfile' not in config:
-            nosigningkey = True
-            logging.critical("'keypass' not found in config.py!")
-        if not os.path.exists(config['keystore']):
-            nosigningkey = True
-            logging.critical("'" + config['keystore'] + "' does not exist!")
-        if nosigningkey:
-            logging.warning("`fdroid update` requires a signing key, you can create one using:")
-            logging.warning("\tfdroid update --create-key")
-            sys.exit(1)
+    repoel.setAttribute("version", str(repodict['version']))
+    repoel.setAttribute("timestamp", '%d' % repodict['timestamp'].timestamp())
 
     repoel.setAttribute("pubkey", extract_pubkey().decode('utf-8'))
     root.appendChild(repoel)
@@ -1125,8 +1237,8 @@ def make_index(apps, sortedids, apks, repodir, archive):
             root.appendChild(element)
             element.setAttribute('packageName', packageName)
 
-    for appid in sortedids:
-        app = metadata.App(apps[appid])
+    for appid, appdict in apps.items():
+        app = metadata.App(appdict)
 
         if app.Disabled is not None:
             continue
@@ -1154,18 +1266,11 @@ def make_index(apps, sortedids, apks, repodir, archive):
         if app.icon:
             addElement('icon', app.icon, doc, apel)
 
-        def linkres(appid):
-            if appid in apps:
-                return ("fdroid.app:" + appid, apps[appid].Name)
-            raise MetaDataException("Cannot resolve app id " + appid)
-
         if app.get('Description'):
             description = app.Description
         else:
-            description = 'No description available'
-        addElement('desc',
-                   metadata.description_html(description, linkres),
-                   doc, apel)
+            description = '<p>No description available</p>'
+        addElement('desc', description, doc, apel)
         addElement('license', app.License, doc, apel)
         if app.Categories:
             addElement('categories', ','.join(app.Categories), doc, apel)
@@ -1491,11 +1596,11 @@ def make_binary_transparency_log(repodirs):
         cpdir = os.path.join(btrepo, repodir)
         if not os.path.exists(cpdir):
             os.mkdir(cpdir)
-        for f in ('index.xml', ):
+        for f in ('index.xml', 'index-v1.json'):
             dest = os.path.join(cpdir, f)
             shutil.copyfile(os.path.join(repodir, f), dest)
             gitrepo.index.add([os.path.join(repodir, f), ])
-        for f in ('index.jar', ):
+        for f in ('index.jar', 'index-v1.jar'):
             repof = os.path.join(repodir, f)
             dest = os.path.join(cpdir, f)
             jarin = zipfile.ZipFile(repof, 'r')

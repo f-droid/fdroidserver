@@ -36,6 +36,8 @@ makebuildserver.config.py
 /tests/archive/icons*
 /tests/archive/index.jar
 /tests/archive/index.xml
+/tests/archive/index-v1.jar
 /tests/repo/index.jar
+/tests/repo/index-v1.jar
 /tests/urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234.apk
 /unsigned/

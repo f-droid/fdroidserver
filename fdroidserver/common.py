@@ -2192,5 +2192,7 @@ def is_repo_file(filename):
             'index_unsigned.jar',
             'index.xml',
             'index.html',
+            'index-v1.jar',
+            'index-v1.json',
             'categories.txt',
         ]

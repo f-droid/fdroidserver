@@ -169,6 +169,7 @@ echo "mirrors = ('http://foobarfoobarfoobar.onion/fdroid','https://foo.bar/fdroi
 $fdroid update --verbose --pretty
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 grep -F '<install packageName=' repo/index.xml > /dev/null
 grep -F '<uninstall packageName=' repo/index.xml > /dev/null
@@ -424,6 +425,7 @@ $fdroid readmeta
 grep -F '<application id=' repo/index.xml > /dev/null
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 export ANDROID_HOME=$STORED_ANDROID_HOME
 
 
@@ -453,6 +455,7 @@ $fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -481,6 +484,7 @@ $fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -497,6 +501,7 @@ $fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 test -e $REPOROOT/repo/info.guardianproject.urzip_100.apk || \
     cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
@@ -504,6 +509,7 @@ $fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -569,6 +575,7 @@ echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
 $fdroid update --verbose --pretty
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 cd binary_transparency
 [ `git rev-list --count HEAD` == "2" ]
@@ -587,6 +594,7 @@ $fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 
 # now set fake repo_keyalias
