@@ -152,7 +152,7 @@ class App(dict):
         self.builds = []
         self.comments = {}
         self.added = None
-        self.lastupdated = None
+        self.lastUpdated = None
 
     def __getattr__(self, name):
         if name in self:

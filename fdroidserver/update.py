@@ -115,7 +115,7 @@ def update_wiki(apps, sortedids, apks):
             appid,
             app.Name,
             time.strftime('%Y-%m-%d', app.added) if app.added else '',
-            time.strftime('%Y-%m-%d', app.lastupdated) if app.lastupdated else '',
+            time.strftime('%Y-%m-%d', app.lastUpdated) if app.lastUpdated else '',
             app.SourceCode,
             app.IssueTracker,
             app.WebSite,
@@ -1132,8 +1132,8 @@ def make_index(apps, sortedids, apks, repodir, archive):
         addElement('id', app.id, doc, apel)
         if app.added:
             addElement('added', time.strftime('%Y-%m-%d', app.added), doc, apel)
-        if app.lastupdated:
-            addElement('lastupdated', time.strftime('%Y-%m-%d', app.lastupdated), doc, apel)
+        if app.lastUpdated:
+            addElement('lastupdated', time.strftime('%Y-%m-%d', app.lastUpdated), doc, apel)
         addElement('name', app.Name, doc, apel)
         addElement('summary', app.Summary, doc, apel)
         if app.icon:
@@ -1612,12 +1612,12 @@ def main():
                 if 'added' in apk:
                     if not app.added or apk['added'] < app.added:
                         app.added = apk['added']
-                    if not app.lastupdated or apk['added'] > app.lastupdated:
-                        app.lastupdated = apk['added']
+                    if not app.lastUpdated or apk['added'] > app.lastUpdated:
+                        app.lastUpdated = apk['added']
 
         if not app.added:
             logging.debug("Don't know when " + appid + " was added")
-        if not app.lastupdated:
+        if not app.lastUpdated:
             logging.debug("Don't know when " + appid + " was last updated")
 
         if bestver == UNSET_VERSION_CODE:
