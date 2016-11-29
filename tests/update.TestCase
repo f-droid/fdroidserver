@@ -110,23 +110,23 @@ class UpdateTest(unittest.TestCase):
 
         fdroidserver.update.insert_obbs('repo', apps, apks)
         for apk in apks:
-            if apk['id'] == 'obb.mainpatch.current':
+            if apk['packageName'] == 'obb.mainpatch.current':
                 self.assertEqual(apk.get('obbMainFile'), 'main.1619.obb.mainpatch.current.obb')
                 self.assertEqual(apk.get('obbPatchFile'), 'patch.1619.obb.mainpatch.current.obb')
-            elif apk['id'] == 'obb.main.oldversion':
+            elif apk['packageName'] == 'obb.main.oldversion':
                 self.assertEqual(apk.get('obbMainFile'), 'main.1434483388.obb.main.oldversion.obb')
                 self.assertIsNone(apk.get('obbPatchFile'))
-            elif apk['id'] == 'obb.main.twoversions':
+            elif apk['packageName'] == 'obb.main.twoversions':
                 self.assertIsNone(apk.get('obbPatchFile'))
-                if apk['versioncode'] == 1101613:
+                if apk['versionCode'] == 1101613:
                     self.assertEqual(apk.get('obbMainFile'), 'main.1101613.obb.main.twoversions.obb')
-                elif apk['versioncode'] == 1101615:
+                elif apk['versionCode'] == 1101615:
                     self.assertEqual(apk.get('obbMainFile'), 'main.1101615.obb.main.twoversions.obb')
-                elif apk['versioncode'] == 1101617:
+                elif apk['versionCode'] == 1101617:
                     self.assertEqual(apk.get('obbMainFile'), 'main.1101615.obb.main.twoversions.obb')
                 else:
                     self.assertTrue(False)
-            elif apk['id'] == 'info.guardianproject.urzip':
+            elif apk['packageName'] == 'info.guardianproject.urzip':
                 self.assertIsNone(apk.get('obbMainFile'))
                 self.assertIsNone(apk.get('obbPatchFile'))
 

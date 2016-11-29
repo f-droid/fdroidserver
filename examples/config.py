@@ -84,7 +84,7 @@ The repository of older versions of applications from the main demo repository.
 # By default, the "current version" link will be based on the "Name" of the
 # app from the metadata. You can change it to use a different field from the
 # metadata here:
-# current_version_name_source = 'id'
+# current_version_name_source = 'packageName'
 
 # Optionally, override home directory for gpg
 # gpghome = '/home/fdroid/somewhere/else/.gnupg'

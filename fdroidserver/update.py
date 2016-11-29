@@ -151,8 +151,8 @@ def update_wiki(apps, sortedids, apks):
         cantupdate = False
         buildfails = False
         for apk in apks:
-            if apk['id'] == appid:
-                if str(apk['versioncode']) == app.CurrentVersionCode:
+            if apk['packageName'] == appid:
+                if str(apk['versionCode']) == app.CurrentVersionCode:
                     gotcurrentver = True
                 apklist.append(apk)
         # Include ones we can't build, as a special case...
@@ -161,26 +161,26 @@ def update_wiki(apps, sortedids, apks):
                 if build.versionCode == app.CurrentVersionCode:
                     cantupdate = True
                 # TODO: Nasty: vercode is a string in the build, and an int elsewhere
-                apklist.append({'versioncode': int(build.versionCode),
-                                'version': build.versionName,
+                apklist.append({'versionCode': int(build.versionCode),
+                                'versionName': build.versionName,
                                 'buildproblem': "The build for this version was manually disabled. Reason: {0}".format(build.disable),
                                 })
             else:
                 builtit = False
                 for apk in apklist:
-                    if apk['versioncode'] == int(build.versionCode):
+                    if apk['versionCode'] == int(build.versionCode):
                         builtit = True
                         break
                 if not builtit:
                     buildfails = True
-                    apklist.append({'versioncode': int(build.versionCode),
-                                    'version': build.versionName,
+                    apklist.append({'versionCode': int(build.versionCode),
+                                    'versionName': build.versionName,
                                     'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(appid, build.versionCode),
                                     })
         if app.CurrentVersionCode == '0':
             cantupdate = True
         # Sort with most recent first...
-        apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
+        apklist = sorted(apklist, key=lambda apk: apk['versionCode'], reverse=True)
 
         wikidata += "=Versions=\n"
         if len(apklist) == 0:
@@ -198,7 +198,7 @@ def update_wiki(apps, sortedids, apks):
             wikidata += " (version code " + app.CurrentVersionCode + ").\n\n"
         validapks = 0
         for apk in apklist:
-            wikidata += "==" + apk['version'] + "==\n"
+            wikidata += "==" + apk['versionName'] + "==\n"
 
             if 'buildproblem' in apk:
                 wikidata += "We can't build this version: " + apk['buildproblem'] + "\n\n"
@@ -209,7 +209,7 @@ def update_wiki(apps, sortedids, apks):
                     wikidata += "F-Droid, and guaranteed to correspond to the source tarball published with it.\n\n"
                 else:
                     wikidata += "the original developer.\n\n"
-            wikidata += "Version code: " + str(apk['versioncode']) + '\n'
+            wikidata += "Version code: " + str(apk['versionCode']) + '\n'
 
         wikidata += '\n[[Category:' + wikicat + ']]\n'
         if len(app.NoSourceSince) > 0:
@@ -504,7 +504,7 @@ def insert_obbs(repodir, apps, apks):
         if not re.match(r'^-?[0-9]+$', chunks[1]):
             obbWarnDelete('The OBB version code must come after "' + chunks[0] + '.": ')
             continue
-        versioncode = int(chunks[1])
+        versionCode = int(chunks[1])
         packagename = ".".join(chunks[2:-1])
 
         highestVersionCode = java_Integer_MIN_VALUE
@@ -512,18 +512,18 @@ def insert_obbs(repodir, apps, apks):
             obbWarnDelete(f, "OBB's packagename does not match a supported APK: ")
             continue
         for apk in apks:
-            if packagename == apk['id'] and apk['versioncode'] > highestVersionCode:
-                highestVersionCode = apk['versioncode']
-        if versioncode > highestVersionCode:
-            obbWarnDelete(f, 'OBB file has newer versioncode(' + str(versioncode)
+            if packagename == apk['packageName'] and apk['versionCode'] > highestVersionCode:
+                highestVersionCode = apk['versionCode']
+        if versionCode > highestVersionCode:
+            obbWarnDelete(f, 'OBB file has newer versionCode(' + str(versionCode)
                           + ') than any APK: ')
             continue
         obbsha256 = sha256sum(f)
-        obbs.append((packagename, versioncode, obbfile, obbsha256))
+        obbs.append((packagename, versionCode, obbfile, obbsha256))
 
     for apk in apks:
-        for (packagename, versioncode, obbfile, obbsha256) in sorted(obbs, reverse=True):
-            if versioncode <= apk['versioncode'] and packagename == apk['id']:
+        for (packagename, versionCode, obbfile, obbsha256) in sorted(obbs, reverse=True):
+            if versionCode <= apk['versionCode'] and packagename == apk['packageName']:
                 if obbfile.startswith('main.') and 'obbMainFile' not in apk:
                     apk['obbMainFile'] = obbfile
                     apk['obbMainFileSha256'] = obbsha256
@@ -572,7 +572,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
                     repo_file['added'] = a
                 else:
                     repo_file['added'] = datetime(*a[:6])
-            if repo_file['sha256'] == shasum:
+            if repo_file['hash'] == shasum:
                 logging.debug("Reading " + name + " from cache")
                 usecache = True
             else:
@@ -583,20 +583,21 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             repo_file = {}
             # TODO rename apkname globally to something more generic
             repo_file['name'] = name
-            repo_file['apkname'] = name
-            repo_file['sha256'] = shasum
-            repo_file['versioncode'] = 0
-            repo_file['version'] = shasum
+            repo_file['apkName'] = name
+            repo_file['hash'] = shasum
+            repo_file['hashType'] = 'sha256'
+            repo_file['versionCode'] = 0
+            repo_file['versionName'] = shasum
             # the static ID is the SHA256 unless it is set in the metadata
-            repo_file['id'] = shasum
+            repo_file['packageName'] = shasum
             n = name.split('_')
             if len(n) == 2:
                 packageName = n[0]
                 versionCode = n[1].split('.')[0]
                 if re.match(r'^-?[0-9]+$', versionCode) \
                    and common.is_valid_package_name(name.split('_')[0]):
-                    repo_file['id'] = packageName
-                    repo_file['versioncode'] = int(versionCode)
+                    repo_file['packageName'] = packageName
+                    repo_file['versionCode'] = int(versionCode)
             srcfilename = name + "_src.tar.gz"
             if os.path.exists(os.path.join(repodir, srcfilename)):
                 repo_file['srcname'] = srcfilename
@@ -612,7 +613,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             default_date_param = None
 
         # Record in knownapks, getting the added date at the same time..
-        added = knownapks.recordapk(repo_file['apkname'], repo_file['id'],
+        added = knownapks.recordapk(repo_file['apkName'], repo_file['packageName'],
                                     default_date=default_date_param)
         if added:
             repo_file['added'] = added
@@ -668,7 +669,7 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
         usecache = False
         if apkfilename in apkcache:
             apk = apkcache[apkfilename]
-            if apk['sha256'] == shasum:
+            if apk['hash'] == shasum:
                 logging.debug("Reading " + apkfilename + " from cache")
                 usecache = True
             else:
@@ -677,8 +678,9 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
         if not usecache:
             logging.debug("Processing " + apkfilename)
             apk = {}
-            apk['apkname'] = apkfilename
-            apk['sha256'] = shasum
+            apk['apkName'] = apkfilename
+            apk['hash'] = shasum
+            apk['hashType'] = 'sha256'
             srcfilename = apkfilename[:-4] + "_src.tar.gz"
             if os.path.exists(os.path.join(repodir, srcfilename)):
                 apk['srcname'] = srcfilename
@@ -705,9 +707,9 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
             for line in p.output.splitlines():
                 if line.startswith("package:"):
                     try:
-                        apk['id'] = re.match(name_pat, line).group(1)
-                        apk['versioncode'] = int(re.match(vercode_pat, line).group(1))
-                        apk['version'] = re.match(vername_pat, line).group(1)
+                        apk['packageName'] = re.match(name_pat, line).group(1)
+                        apk['versionCode'] = int(re.match(vercode_pat, line).group(1))
+                        apk['versionName'] = re.match(vername_pat, line).group(1)
                     except Exception as e:
                         logging.error("Package matching failed: " + str(e))
                         logging.info("Line was: " + line)
@@ -821,8 +823,8 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
                                  + 'sudo date -s "' + str(dt_obj) + '"')
 
             iconfilename = "%s.%s.png" % (
-                apk['id'],
-                apk['versioncode'])
+                apk['packageName'],
+                apk['versionCode'])
 
             # Extract the icon file...
             empty_densities = []
@@ -937,7 +939,7 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
                 default_date_param = None
 
             # Record in known apks, getting the added date at the same time..
-            added = knownapks.recordapk(apk['apkname'], apk['id'], default_date=default_date_param)
+            added = knownapks.recordapk(apk['apkName'], apk['packageName'], default_date=default_date_param)
             if added:
                 apk['added'] = added
 
@@ -1252,7 +1254,7 @@ def make_index_v0(apps, apks, repodir, repodict):
         # Get a list of the apks for this app...
         apklist = []
         for apk in apks:
-            if apk['id'] == appid:
+            if apk['packageName'] == appid:
                 apklist.append(apk)
 
         if len(apklist) == 0:
@@ -1309,7 +1311,7 @@ def make_index_v0(apps, apks, repodir, repodict):
 
         # Sort the apk list into version order, just so the web site
         # doesn't have to do any work by default...
-        apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
+        apklist = sorted(apklist, key=lambda apk: apk['versionCode'], reverse=True)
 
         if 'antiFeatures' in apklist[0]:
             app.AntiFeatures.extend(apklist[0]['antiFeatures'])
@@ -1318,34 +1320,33 @@ def make_index_v0(apps, apks, repodir, repodict):
 
         # Check for duplicates - they will make the client unhappy...
         for i in range(len(apklist) - 1):
-            if apklist[i]['versioncode'] == apklist[i + 1]['versioncode']:
+            if apklist[i]['versionCode'] == apklist[i + 1]['versionCode']:
                 logging.critical("duplicate versions: '%s' - '%s'" % (
-                    apklist[i]['apkname'], apklist[i + 1]['apkname']))
+                    apklist[i]['apkName'], apklist[i + 1]['apkName']))
                 sys.exit(1)
 
         current_version_code = 0
         current_version_file = None
         for apk in apklist:
-            file_extension = common.get_file_extension(apk['apkname'])
+            file_extension = common.get_file_extension(apk['apkName'])
             # find the APK for the "Current Version"
-            if current_version_code < apk['versioncode']:
-                current_version_code = apk['versioncode']
+            if current_version_code < apk['versionCode']:
+                current_version_code = apk['versionCode']
             if current_version_code < int(app.CurrentVersionCode):
-                current_version_file = apk['apkname']
+                current_version_file = apk['apkName']
 
             apkel = doc.createElement("package")
             apel.appendChild(apkel)
-            addElement('version', apk['version'], doc, apkel)
-            addElement('versioncode', str(apk['versioncode']), doc, apkel)
-            addElement('apkname', apk['apkname'], doc, apkel)
+            addElement('version', apk['versionName'], doc, apkel)
+            addElement('versioncode', str(apk['versionCode']), doc, apkel)
+            addElement('apkname', apk['apkName'], doc, apkel)
             addElementIfInApk('srcname', apk, 'srcname', doc, apkel)
-            for hash_type in ['sha256']:
-                if hash_type not in apk:
-                    continue
-                hashel = doc.createElement("hash")
-                hashel.setAttribute("type", hash_type)
-                hashel.appendChild(doc.createTextNode(apk[hash_type]))
-                apkel.appendChild(hashel)
+
+            hashel = doc.createElement("hash")
+            hashel.setAttribute('type', 'sha256')
+            hashel.appendChild(doc.createTextNode(apk['hash']))
+            apkel.appendChild(hashel)
+
             addElement('size', str(apk['size']), doc, apkel)
             addElementIfInApk('sdkver', apk,
                               'minSdkVersion', doc, apkel)
@@ -1493,11 +1494,11 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
         def filter_apk_list_sorted(apk_list):
             res = []
             for apk in apk_list:
-                if apk['id'] == appid:
+                if apk['packageName'] == appid:
                     res.append(apk)
 
             # Sort the apk list by version code. First is highest/newest.
-            return sorted(res, key=lambda apk: apk['versioncode'], reverse=True)
+            return sorted(res, key=lambda apk: apk['versionCode'], reverse=True)
 
         def move_file(from_dir, to_dir, filename, ignore_missing):
             from_path = os.path.join(from_dir, filename)
@@ -1513,9 +1514,9 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
             apklist = filter_apk_list_sorted(apks)
             # Move back the ones we don't want.
             for apk in apklist[keepversions:]:
-                logging.info("Moving " + apk['apkname'] + " to archive")
-                move_file(repodir, archivedir, apk['apkname'], False)
-                move_file(repodir, archivedir, apk['apkname'] + '.asc', True)
+                logging.info("Moving " + apk['apkName'] + " to archive")
+                move_file(repodir, archivedir, apk['apkName'], False)
+                move_file(repodir, archivedir, apk['apkName'] + '.asc', True)
                 for density in all_screen_densities:
                     repo_icon_dir = get_icon_dir(repodir, density)
                     archive_icon_dir = get_icon_dir(archivedir, density)
@@ -1531,9 +1532,9 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
             archapklist = filter_apk_list_sorted(archapks)
             # Move forward the ones we want again.
             for apk in archapklist[:required]:
-                logging.info("Moving " + apk['apkname'] + " from archive")
-                move_file(archivedir, repodir, apk['apkname'], False)
-                move_file(archivedir, repodir, apk['apkname'] + '.asc', True)
+                logging.info("Moving " + apk['apkName'] + " from archive")
+                move_file(archivedir, repodir, apk['apkName'], False)
+                move_file(archivedir, repodir, apk['apkName'] + '.asc', True)
                 for density in all_screen_densities:
                     repo_icon_dir = get_icon_dir(repodir, density)
                     archive_icon_dir = get_icon_dir(archivedir, density)
@@ -1549,16 +1550,16 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
 def add_apks_to_per_app_repos(repodir, apks):
     apks_per_app = dict()
     for apk in apks:
-        apk['per_app_dir'] = os.path.join(apk['id'], 'fdroid')
+        apk['per_app_dir'] = os.path.join(apk['packageName'], 'fdroid')
         apk['per_app_repo'] = os.path.join(apk['per_app_dir'], 'repo')
         apk['per_app_icons'] = os.path.join(apk['per_app_repo'], 'icons')
-        apks_per_app[apk['id']] = apk
+        apks_per_app[apk['packageName']] = apk
 
         if not os.path.exists(apk['per_app_icons']):
-            logging.info('Adding new repo for only ' + apk['id'])
+            logging.info('Adding new repo for only ' + apk['packageName'])
             os.makedirs(apk['per_app_icons'])
 
-        apkpath = os.path.join(repodir, apk['apkname'])
+        apkpath = os.path.join(repodir, apk['apkName'])
         shutil.copy(apkpath, apk['per_app_repo'])
         apksigpath = apkpath + '.sig'
         if os.path.exists(apksigpath):
@@ -1766,12 +1767,12 @@ def main():
     # metadata files, if requested on the command line)
     newmetadata = False
     for apk in apks:
-        if apk['id'] not in apps:
+        if apk['packageName'] not in apps:
             if options.create_metadata:
                 if 'name' not in apk:
-                    logging.error(apk['id'] + ' does not have a name! Skipping...')
+                    logging.error(apk['packageName'] + ' does not have a name! Skipping...')
                     continue
-                f = open(os.path.join('metadata', apk['id'] + '.txt'), 'w', encoding='utf8')
+                f = open(os.path.join('metadata', apk['packageName'] + '.txt'), 'w', encoding='utf8')
                 f.write("License:Unknown\n")
                 f.write("Web Site:\n")
                 f.write("Source Code:\n")
@@ -1783,13 +1784,13 @@ def main():
                 f.write(".\n")
                 f.write("Name:" + apk['name'] + "\n")
                 f.close()
-                logging.info("Generated skeleton metadata for " + apk['id'])
+                logging.info("Generated skeleton metadata for " + apk['packageName'])
                 newmetadata = True
             else:
-                msg = apk['apkname'] + " (" + apk['id'] + ") has no metadata!"
+                msg = apk['apkName'] + " (" + apk['packageName'] + ") has no metadata!"
                 if options.delete_unknown:
-                    logging.warn(msg + "\n\tdeleting: repo/" + apk['apkname'])
-                    rmf = os.path.join(repodirs[0], apk['apkname'])
+                    logging.warn(msg + "\n\tdeleting: repo/" + apk['apkName'])
+                    rmf = os.path.join(repodirs[0], apk['apkName'])
                     if not os.path.exists(rmf):
                         logging.error("Could not find {0} to remove it".format(rmf))
                     else:
@@ -1821,9 +1822,9 @@ def main():
     for appid, app in apps.items():
         bestver = UNSET_VERSION_CODE
         for apk in apks + archapks:
-            if apk['id'] == appid:
-                if apk['versioncode'] > bestver:
-                    bestver = apk['versioncode']
+            if apk['packageName'] == appid:
+                if apk['versionCode'] > bestver:
+                    bestver = apk['versionCode']
                     bestapk = apk
 
                 if 'added' in apk:
