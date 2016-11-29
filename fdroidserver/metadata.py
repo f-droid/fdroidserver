@@ -25,7 +25,6 @@ import cgi
 import logging
 import textwrap
 import io
-import pprint
 
 import yaml
 # use libyaml if it is available
@@ -242,9 +241,10 @@ build_flags_order = [
 build_flags = set(build_flags_order + ['version', 'vercode'])
 
 
-class Build():
+class Build(dict):
 
     def __init__(self, copydict=None):
+        super().__init__()
         self.disable = False
         self.commit = None
         self.subdir = None
@@ -263,7 +263,7 @@ class Build():
         self.rm = []
         self.extlibs = []
         self.prebuild = ''
-        self.update = []
+        self.androidupdate = []
         self.target = None
         self.scanignore = []
         self.scandelete = []
@@ -274,45 +274,28 @@ class Build():
         self.gradleprops = []
         self.antcommands = []
         self.novcheck = False
-
-        self._modified = set()
-
         if copydict:
-            for k, v in copydict.items():
-                self.set_flag(k, v)
+            super().__init__(copydict)
+            return
 
-    def __str__(self):
-        return pprint.pformat(self.__dict__)
-
-    def __repr__(self):
-        return self.__str__()
-
-    def get_flag(self, f):
-        if f not in build_flags:
-            warn_or_exception('Unrecognised build flag: ' + f)
-        return getattr(self, f)
-
-    def set_flag(self, f, v):
-        if f == 'versionName':
-            f = 'version'
-        if f == 'versionCode':
-            f = 'vercode'
-        if f not in build_flags:
-            warn_or_exception('Unrecognised build flag: ' + f)
-        self.__dict__[f] = v
-        self._modified.add(f)
-
-    def append_flag(self, f, v):
-        if f not in build_flags:
-            warn_or_exception('Unrecognised build flag: ' + f)
-        if f not in self.__dict__:
-            self.__dict__[f] = [v]
+    def __getattr__(self, name):
+        if name in self:
+            return self[name]
         else:
-            self.__dict__[f].append(v)
+            raise AttributeError("No such attribute: " + name)
+
+    def __setattr__(self, name, value):
+        self[name] = value
+
+    def __delattr__(self, name):
+        if name in self:
+            del self[name]
+        else:
+            raise AttributeError("No such attribute: " + name)
 
     def build_method(self):
         for f in ['maven', 'gradle', 'kivy']:
-            if self.get_flag(f):
+            if self.get(f):
                 return f
         if self.output:
             return 'raw'
@@ -323,7 +306,7 @@ class Build():
         if self.output:
             return 'raw'
         for f in ['maven', 'gradle', 'kivy']:
-            if self.get_flag(f):
+            if self.get(f):
                 return f
         return 'ant'
 
@@ -336,10 +319,6 @@ class Build():
             return ''
         return paths[version]
 
-    def update_flags(self, d):
-        for f, v in d.items():
-            self.set_flag(f, v)
-
 
 flagtypes = {
     'extlibs': TYPE_LIST,
@@ -348,7 +327,7 @@ flagtypes = {
     'rm': TYPE_LIST,
     'buildjni': TYPE_LIST,
     'preassemble': TYPE_LIST,
-    'update': TYPE_LIST,
+    'androidupdate': TYPE_LIST,
     'scanignore': TYPE_LIST,
     'scandelete': TYPE_LIST,
     'gradle': TYPE_LIST,
@@ -982,14 +961,16 @@ def parse_txt_metadata(mf, app):
 
         pk, pv = bv
         pk = pk.lstrip()
+        if pk == 'update':
+            pk = 'androidupdate'  # avoid conflicting with Build(dict).update()
         t = flagtype(pk)
         if t == TYPE_LIST:
             pv = split_list_values(pv)
-            build.set_flag(pk, pv)
+            build[pk] = pv
         elif t == TYPE_STRING or t == TYPE_SCRIPT:
-            build.set_flag(pk, pv)
+            build[pk] = pv
         elif t == TYPE_BOOL:
-            build.set_flag(pk, _decode_bool(pv))
+            build[pk] = _decode_bool(pv)
 
     def parse_buildline(lines):
         v = "".join(lines)
@@ -1231,7 +1212,7 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
         if build.version == "Ignore":
             continue
 
-        w_comments('build:' + build.vercode)
+        w_comments('build:%s' % build.vercode)
         w_build(build)
         mf.write('\n')
 
@@ -1276,11 +1257,13 @@ def write_txt(mf, app):
         mf.write("Build:%s,%s\n" % (build.version, build.vercode))
 
         for f in build_flags_order:
-            v = build.get_flag(f)
+            v = build.get(f)
             if not v:
                 continue
 
             t = flagtype(f)
+            if f == 'androidupdate':
+                f == 'update'  # avoid conflicting with Build(dict).update()
             mf.write('    %s=' % f)
             if t == TYPE_STRING:
                 mf.write(v)
@@ -1357,7 +1340,7 @@ def write_yaml(mf, app):
         w_field('versionName', build.version, '  - ', TYPE_STRING)
         w_field('versionCode', build.vercode, '    ', TYPE_STRING)
         for f in build_flags_order:
-            v = build.get_flag(f)
+            v = build.get(f)
             if not v:
                 continue
 

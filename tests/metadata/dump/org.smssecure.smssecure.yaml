@@ -55,7 +55,8 @@ VercodeOperation: null
 WebSite: http://www.smssecure.org
 added: null
 builds:
-- antcommands: []
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: 66367479a4f57f347b5cbe8f6f8f632adaae7727
@@ -95,10 +96,10 @@ builds:
   subdir: null
   submodules: false
   target: null
-  update: []
   vercode: '5'
   version: 0.3.3
-- antcommands: []
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: 9675ce5eecb929dcaddb43b3d9486fdb88b9ae1a
@@ -130,10 +131,10 @@ builds:
   subdir: null
   submodules: true
   target: null
-  update: []
   vercode: '6'
   version: 0.3.3
-- antcommands: []
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: v0.4.2
@@ -164,10 +165,10 @@ builds:
   subdir: null
   submodules: true
   target: null
-  update: []
   vercode: '9'
   version: 0.4.2
-- antcommands: []
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: v0.5.1
@@ -198,10 +199,10 @@ builds:
   subdir: null
   submodules: true
   target: null
-  update: []
   vercode: '11'
   version: 0.5.1
-- antcommands: []
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: v0.5.2
@@ -231,10 +232,10 @@ builds:
   subdir: null
   submodules: true
   target: null
-  update: []
   vercode: '12'
   version: 0.5.2
-- antcommands: []
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: v0.5.3
@@ -264,10 +265,10 @@ builds:
   subdir: null
   submodules: true
   target: null
-  update: []
   vercode: '100'
   version: 0.5.3
-- antcommands: []
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: v0.5.4
@@ -297,10 +298,10 @@ builds:
   subdir: null
   submodules: true
   target: null
-  update: []
   vercode: '101'
   version: 0.5.4
-- antcommands: []
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: v0.6.0
@@ -330,7 +331,6 @@ builds:
   subdir: null
   submodules: true
   target: null
-  update: []
   vercode: '102'
   version: 0.6.0
 comments: {}

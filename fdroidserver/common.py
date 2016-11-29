@@ -1544,15 +1544,15 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                                  (app.id, build.version), p.output)
 
     # Generate (or update) the ant build file, build.xml...
-    if build.build_method() == 'ant' and build.update != ['no']:
+    if build.build_method() == 'ant' and build.androidupdate != ['no']:
         parms = ['android', 'update', 'lib-project']
         lparms = ['android', 'update', 'project']
 
         if build.target:
             parms += ['-t', build.target]
             lparms += ['-t', build.target]
-        if build.update:
-            update_dirs = build.update
+        if build.androidupdate:
+            update_dirs = build.androidupdate
         else:
             update_dirs = ant_subprojects(root_dir) + ['.']
 

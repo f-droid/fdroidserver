@@ -23,6 +23,11 @@ class MetadataTest(unittest.TestCase):
     '''fdroidserver/metadata.py'''
 
     def test_read_metadata(self):
+
+        def _build_yaml_representer(dumper, data):
+            '''Creates a YAML representation of a Build instance'''
+            return dumper.represent_dict(data)
+
         testsdir = os.path.dirname(__file__)
         os.chdir(testsdir)
 
@@ -46,6 +51,7 @@ class MetadataTest(unittest.TestCase):
             self.assertEqual(frommeta, frompickle)
             # Uncomment to overwrite
             # with open(savepath, 'w') as f:
+            #     yaml.add_representer(fdroidserver.metadata.Build, _build_yaml_representer)
             #     yaml.dump(frommeta, f, default_flow_style=False)
 
 
