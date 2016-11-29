@@ -1028,7 +1028,7 @@ def make_index(apps, sortedids, apks, repodir, archive):
 
     mirrorcheckfailed = False
     mirrors = []
-    for mirror in config.get('mirrors', []):
+    for mirror in sorted(config.get('mirrors', [])):
         base = os.path.basename(urllib.parse.urlparse(mirror).path.rstrip('/'))
         if config.get('nonstandardwebroot') is not True and base != 'fdroid':
             logging.error("mirror '" + mirror + "' does not end with 'fdroid'!")
@@ -1237,28 +1237,29 @@ def make_index(apps, sortedids, apks, repodir, archive):
                 addElement('sig', apk['sig'], doc, apkel)
 
                 old_permissions = set()
-                for perm in apk['uses-permission']:
+                sorted_permissions = sorted(apk['uses-permission'])
+                for perm in sorted_permissions:
                     perm_name = perm.name
                     if perm_name.startswith("android.permission."):
                         perm_name = perm_name[19:]
                     old_permissions.add(perm_name)
                 addElementNonEmpty('permissions', ','.join(old_permissions), doc, apkel)
 
-                for permission in apk['uses-permission']:
+                for permission in sorted_permissions:
                     permel = doc.createElement('uses-permission')
                     permel.setAttribute('name', permission.name)
                     if permission.maxSdkVersion is not None:
                         permel.setAttribute('maxSdkVersion', permission.maxSdkVersion)
                         apkel.appendChild(permel)
-                for permission_sdk_23 in apk['uses-permission-sdk-23']:
+                for permission_sdk_23 in sorted(apk['uses-permission-sdk-23']):
                     permel = doc.createElement('uses-permission-sdk-23')
                     permel.setAttribute('name', permission_sdk_23.name)
                     if permission_sdk_23.maxSdkVersion is not None:
                         permel.setAttribute('maxSdkVersion', permission_sdk_23.maxSdkVersion)
                         apkel.appendChild(permel)
                 if 'nativecode' in apk:
-                    addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
-                addElementNonEmpty('features', ','.join(apk['features']), doc, apkel)
+                    addElement('nativecode', ','.join(sorted(apk['nativecode'])), doc, apkel)
+                addElementNonEmpty('features', ','.join(sorted(apk['features'])), doc, apkel)
 
         if current_version_file is not None \
                 and config['make_current_version_link'] \
@@ -1331,7 +1332,7 @@ def make_index(apps, sortedids, apks, repodir, archive):
 def make_categories_txt(repodir, categories):
     '''Write a category list in the repo to allow quick access'''
     catdata = ''
-    for cat in categories:
+    for cat in sorted(categories):
         catdata += cat + '\n'
     with open(os.path.join(repodir, 'categories.txt'), 'w', encoding='utf8') as f:
         f.write(catdata)
