@@ -737,7 +737,8 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
                         apk['nativecode'].append(arch[1:-1])
                 elif line.startswith('uses-permission:'):
                     perm_match = re.match(permission_pat, line).groupdict()
-
+                    if perm_match['maxSdkVersion']:
+                        perm_match['maxSdkVersion'] = int(perm_match['maxSdkVersion'])
                     permission = UsesPermission(
                         perm_match['name'],
                         perm_match['maxSdkVersion']
@@ -746,7 +747,8 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
                     apk['uses-permission'].add(permission)
                 elif line.startswith('uses-permission-sdk-23:'):
                     perm_match = re.match(permission_pat, line).groupdict()
-
+                    if perm_match['maxSdkVersion']:
+                        perm_match['maxSdkVersion'] = int(perm_match['maxSdkVersion'])
                     permission_sdk_23 = UsesPermissionSdk23(
                         perm_match['name'],
                         perm_match['maxSdkVersion']
@@ -1250,13 +1252,13 @@ def make_index(apps, sortedids, apks, repodir, archive):
                     permel = doc.createElement('uses-permission')
                     permel.setAttribute('name', permission.name)
                     if permission.maxSdkVersion is not None:
-                        permel.setAttribute('maxSdkVersion', permission.maxSdkVersion)
+                        permel.setAttribute('maxSdkVersion', '%d' % permission.maxSdkVersion)
                         apkel.appendChild(permel)
                 for permission_sdk_23 in sorted(apk['uses-permission-sdk-23']):
                     permel = doc.createElement('uses-permission-sdk-23')
                     permel.setAttribute('name', permission_sdk_23.name)
                     if permission_sdk_23.maxSdkVersion is not None:
-                        permel.setAttribute('maxSdkVersion', permission_sdk_23.maxSdkVersion)
+                        permel.setAttribute('maxSdkVersion', '%d' % permission_sdk_23.maxSdkVersion)
                         apkel.appendChild(permel)
                 if 'nativecode' in apk:
                     addElement('nativecode', ','.join(sorted(apk['nativecode'])), doc, apkel)
