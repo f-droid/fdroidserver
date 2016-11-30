@@ -259,7 +259,7 @@ repository, you can build them directly from the source code.
 
 Using this method, it is is possible to verify that the application builds
 correctly, corresponds to the source code, and contains only free software.
-Unforunately, in the Android world, it seems to be very common for an
+Unfortunately, in the Android world, it seems to be very common for an
 application supplied as a binary APK to present itself as Free Software
 when in fact some or all of the following are true:
 
@@ -610,7 +610,7 @@ GNU GPL version 3 or later
 @item
 @samp{GPL}
 An unspecified GPL version. Use this only as a last resort or if there is
-some confusion over compatiblity of component licenses: particularly the use of
+some confusion over compatibility of component licenses: particularly the use of
 Apache libraries with GPLv2 source code.
 
 @item
@@ -1043,7 +1043,7 @@ binaries. Builds pre-release versions in some cases.
 @end itemize
 
 @item patch=x
-Apply patch(es). 'x' names one (or more - comma-seperated) files within a
+Apply patch(es). 'x' names one (or more - comma-separated) files within a
 directory below the metadata, with the same name as the metadata file but
 without the extension. Each of these patches is applied to the code in turn.
 
@@ -1090,7 +1090,7 @@ using scandelete= is easier.
 @item build=xxxx
 As for 'prebuild', but runs during the actual build phase (but before the
 main Ant/Maven build). Use this only for actions that do actual building.
-Any prepartion of the source code should be done using 'init' or 'prebuild'.
+Any preparation of the source code should be done using 'init' or 'prebuild'.
 
 Any building that takes place before build= will be ignored, as either Ant,
 mvn or gradle will be executed to clean the build environment right before

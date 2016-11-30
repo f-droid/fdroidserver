@@ -151,7 +151,7 @@ def main():
             # characters are significant, so we'll use the first 8 from
             # the MD5 of the app's ID and hope there are no collisions.
             # If a collision does occur later, we're going to have to
-            # come up with a new alogrithm, AND rename all existing keys
+            # come up with a new algorithm, AND rename all existing keys
             # in the keystore!
             if appid in config['keyaliases']:
                 # For this particular app, the key alias is overridden...
