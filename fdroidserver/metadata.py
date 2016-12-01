@@ -992,7 +992,8 @@ def parse_metadata(metadatapath, check_vcs=False):
         metadata_in_repo = os.path.join(build_dir, '.fdroid.yml')
         if not os.path.isfile(metadata_in_repo):
             vcs, build_dir = fdroidserver.common.setup_vcs(app)
-            vcs.gotorevision('HEAD')  # HEAD since we can't know where else to go
+            if isinstance(vcs, fdroidserver.common.vcs_git):
+                vcs.gotorevision('HEAD')  # HEAD since we can't know where else to go
         if os.path.isfile(metadata_in_repo):
             logging.debug('Including metadata from ' + metadata_in_repo)
             app.update(parse_metadata(metadata_in_repo))
