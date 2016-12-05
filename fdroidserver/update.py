@@ -1105,11 +1105,24 @@ def make_index(apps, sortedids, apks, repodir, archive):
                 appsWithPackages[packageName] = newapp
                 break
 
-    make_index_v0(appsWithPackages, apks, repodir, repodict)
-    make_index_v1(appsWithPackages, apks, repodir, repodict)
+    requestsdict = dict()
+    for command in ('install', 'uninstall'):
+        packageNames = []
+        key = command + '_list'
+        if key in config:
+            if isinstance(config[key], str):
+                packageNames = [config[key]]
+            elif all(isinstance(item, str) for item in config[key]):
+                packageNames = config[key]
+            else:
+                raise TypeError('only accepts strings, lists, and tuples')
+        requestsdict[command] = packageNames
+
+    make_index_v0(appsWithPackages, apks, repodir, repodict, requestsdict)
+    make_index_v1(appsWithPackages, apks, repodir, repodict, requestsdict)
 
 
-def make_index_v1(apps, packages, repodir, repodict):
+def make_index_v1(apps, packages, repodir, repodict, requestsdict):
 
     def _index_encoder_default(obj):
         if isinstance(obj, set):
@@ -1120,6 +1133,7 @@ def make_index_v1(apps, packages, repodir, repodict):
 
     output = collections.OrderedDict()
     output['repo'] = repodict
+    output['requests'] = requestsdict
 
     appslist = []
     output['apps'] = appslist
@@ -1184,7 +1198,7 @@ def make_index_v1(apps, packages, repodir, repodict):
     os.remove(index_file)
 
 
-def make_index_v0(apps, apks, repodir, repodict):
+def make_index_v0(apps, apks, repodir, repodict, requestsdict):
     '''aka index.jar aka index.xml'''
 
     doc = Document()
@@ -1231,16 +1245,7 @@ def make_index_v0(apps, apks, repodir, repodict):
     root.appendChild(repoel)
 
     for command in ('install', 'uninstall'):
-        packageNames = []
-        key = command + '_list'
-        if key in config:
-            if isinstance(config[key], str):
-                packageNames = [config[key]]
-            elif all(isinstance(item, str) for item in config[key]):
-                packageNames = config[key]
-            else:
-                raise TypeError('only accepts strings, lists, and tuples')
-        for packageName in packageNames:
+        for packageName in requestsdict[command]:
             element = doc.createElement(command)
             root.appendChild(element)
             element.setAttribute('packageName', packageName)
