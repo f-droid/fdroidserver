@@ -124,7 +124,7 @@ sed -i.tmp 's,^ *repo_description.*,repo_description = """获取已安装在您�
 echo "mirrors = ('https://foo.bar/fdroid', 'http://secret.onion/fdroid')" >> config.py
 mkdir metadata
 cp $WORKSPACE/tests/urzip.apk repo/
-cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.txt metadata/
+cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.yml metadata/
 
 $fdroid readmeta
 $fdroid update
