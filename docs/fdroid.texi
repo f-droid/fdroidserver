@@ -57,6 +57,7 @@ Free Documentation License".
 * Update Processing::
 * Build Server::
 * Signing::
+* Vulnerability Scanning::
 * GNU Free Documentation License::
 * Index::
 @end menu
@@ -1697,6 +1698,132 @@ A new key will be generated using these details, for each application that is
 built. (If a specific key is required for a particular application, this system
 can be overridden using the @code{keyaliases} config settings.
 
+@node Vulnerability Scanning
+@chapter Vulnerability Scanning (dscanner)
+
+F-Droid now includes a means of running automated vulnerability scanning
+using @uref{https://github.com/mwrlabs/drozer, Drozer}. This is achieved
+by starting a docker container, with the Android SDK and Emulator
+prepared already, installing drozer into the emulator and scripting the
+knobs to scan any fully built and signed APKs.
+
+Note: if your application is not intended to run within an Android
+emulator, please do not continue with these instructions. At this time,
+the @code{dscanner} feature is fully dependent upon your application
+running properly in an emulated environment.
+
+@section Quick Start
+
+@enumerate
+@item Ensure that your application is a signed release build
+@item @code{fdroid dscanner --init-only} from within the repo
+@item Go for a coffee, this takes a long time and requires approximately
+6 GB of disk space. Once this is complete, you'll be left with a docker
+container running and ready to go.
+@item @code{fdroid dscanner --latest app.pkg.name} from within the repo
+to run drozer on the latest build of @code{app.pkg.name}
+@item If all went well, there should be an ``app.pkg.name_CODE.apk.dscanner''
+file in the repo (next to the original APK file)
+@item When you're all done scanning packages, you can cleanup the docker
+container with: @code{fdroid dscanner --clean-only}
+@end enumerate
+
+You can also run the drozer scan as an optional part of the overall
+@code{fdroid build} operation. This option will trigger a drozer scan of
+all signed APKs found in the repo. See @code{fdroid build --help} for
+more information.
+
+@section Command Line Help
+
+@example
+usage: fdroid dscanner [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]
+
+positional arguments:
+  app_id                app-id with optional versioncode in the form
+                        APPID[:VERCODE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --verbose         Spew out even more information than normal
+  -q, --quiet           Restrict output to warnings and errors
+  -l, --latest          Scan only the latest version of each package
+  --clean-after         Clean after all scans have finished.
+  --clean-before        Clean before the scans start and rebuild the
+                        container.
+  --clean-only          Clean up all containers and then exit.
+  --init-only           Prepare drozer to run a scan
+  --repo-path REPO_PATH
+                        Override repo path for built APK files.
+@end example
+
+@section From Scratch
+
+Because the docker image used to do the Android Emulator and all of that
+takes a considerable amount of time to prepare, one has been uploaded to
+dockerhub.com for general use. However, the astute researcher will be
+weary of any black boxes and want to build their own black box. This
+section elaborates how to build the docker image yourself.
+
+From within the F-Droid Server source code directory, @code{cd
+./docker/} in order to begin.
+
+Within this directory are the custom scripting used within the docker
+image creation. For conveience, there is a simple Makefile that
+wraps the process of creating images into convenient pieces.
+
+@subsection @code{make help}
+
+@example
+usage: make help|build|clean|kill|info
+
+  help    this help screen
+  build   create docker image
+  clean   remove images and containers
+  kill    stop running containers
+  info    details of running container
+@end example
+
+@subsection @code{make clean}
+
+Stops any running containers (@code{make kill}) and then forcully
+removes them from docker. After that, all images associated are also
+explicitly removed.
+
+Note: this will destroy docker images!
+
+@subsection @code{make build}
+
+Builds the actual docker container, tagged
+``dscanner/fdroidserver:latest'' from the local directory. Obviously
+this is operating with the @code{Dockerfile} to build and tie everything
+together nicely.
+
+@subsection @code{make kill}
+
+@code{docker kill} the container tagged ``dscanner''.
+
+@subsection @code{make info}
+
+Prints some useful information about the currently running dscanner
+container (if it is even running). The output of this command is
+confusing and raw but useful none-the-less. See example output below:
+
+@example
+CONTAINER ID        IMAGE                   COMMAND
+CREATED             STATUS              PORTS
+NAMES
+b90a60afe477        dscanner/fdroidserver   "/home/drozer/entrypo"   20
+minutes ago      Up 20 minutes       0.0.0.0:32779->22/tcp,
+0.0.0.0:32778->5037/tcp, 0.0.0.0:32777->5554/tcp,
+0.0.0.0:32776->5555/tcp, 0.0.0.0:32775->5900/tcp,
+0.0.0.0:32774->5901/tcp   dscanner
+Use:
+ adb kill-server
+ adb connect 172.17.0.2:32776
+@end example
+
+Typical usage is for finding the ``adb connect'' line or the ``ssh''
+port (32779 from the @code{0.0.0.0:32779->22/tcp} note).
 
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License
