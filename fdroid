@@ -38,6 +38,7 @@ commands = {
     "rewritemeta": "Rewrite all the metadata files",
     "lint": "Warn about possible metadata errors",
     "scanner": "Scan the source code of a package",
+    "dscanner": "Dynamically scan APKs post build",
     "stats": "Update the stats of the repo",
     "server": "Interact with the repo HTTP server",
     "signindex": "Sign indexes created using update --nosign",
