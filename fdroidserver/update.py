@@ -550,10 +550,43 @@ def insert_graphics(repodir, apps):
     format (en-US, fr-CA, es-MX, etc).  This is following this pattern:
     https://github.com/fastlane/fastlane/blob/1.109.0/supply/README.md#images-and-screenshots
 
+    This will also scan the metadata/ folder and the apps' source repos
+    for standard locations of graphic and screenshot files.  If it finds
+    them, it will copy them into the repo.
+
     :param repodir: repo directory to scan
 
     """
 
+    allowed_extensions = ('png', 'jpg', 'jpeg')
+    graphicnames = ('featureGraphic', 'icon', 'promoGraphic', 'tvBanner')
+    screenshotdirs = ('phoneScreenshots', 'sevenInchScreenshots',
+                      'tenInchScreenshots', 'tvScreenshots', 'wearScreenshots')
+
+    sourcedirs = glob.glob(os.path.join('build', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z][A-Z-.@]*'))
+    sourcedirs += glob.glob(os.path.join('metadata', '[A-Za-z]*', '[a-z][a-z][A-Z-.@]*'))
+
+    for d in sorted(sourcedirs):
+        if not os.path.isdir(d):
+            continue
+        for root, dirs, files in os.walk(d):
+            segments = root.split('/')
+            destdir = os.path.join('repo', segments[1], segments[-1])  # repo/packageName/locale
+            for f in files:
+                base, extension = common.get_extension(f)
+                if base in graphicnames and extension in allowed_extensions:
+                    os.makedirs(destdir, mode=0o755, exist_ok=True)
+                    logging.debug('copying ' + os.path.join(root, f) + ' ' + destdir)
+                    shutil.copy(os.path.join(root, f), destdir)
+            for d in dirs:
+                if d in screenshotdirs:
+                    for f in glob.glob(os.path.join(root, d, '*.*')):
+                        _, extension = common.get_extension(f)
+                        if extension in allowed_extensions:
+                            screenshotdestdir = os.path.join(destdir, d)
+                            os.makedirs(screenshotdestdir, mode=0o755, exist_ok=True)
+                            logging.debug('copying ' + f + ' ' + screenshotdestdir)
+                            shutil.copy(f, screenshotdestdir)
 
     repofiles = sorted(glob.glob(os.path.join('repo', '[A-Za-z]*', '[a-z][a-z][A-Z-.@]*')))
     for d in repofiles:
@@ -577,14 +610,12 @@ def insert_graphics(repodir, apps):
                 apps[packageName]['localized'][locale] = collections.OrderedDict()
             graphics = apps[packageName]['localized'][locale]
 
-            if extension not in ('png', 'jpg', 'jpeg'):
+            if extension not in allowed_extensions:
                 logging.warning('Only PNG and JPEG are supported for graphics, found: ' + f)
-            elif base in ('icon', 'tvBanner', 'promoGraphic', 'featureGraphic'):
+            elif base in graphicnames:
                 # there can only be zero or one of these per locale
                 graphics[base] = filename
-            elif screenshotdir in ('phoneScreenshots', 'sevenInchScreenshots',
-                                   'tenInchScreenshots', 'tvScreenshots',
-                                   'wearScreenshots'):
+            elif screenshotdir in screenshotdirs:
                 # there can any number of these per locale
                 logging.debug('adding ' + base + ':' + f)
                 if screenshotdir not in graphics:
