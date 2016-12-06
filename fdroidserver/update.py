@@ -440,6 +440,34 @@ def sha256sum(filename):
     return sha.hexdigest()
 
 
+def has_old_openssl(filename):
+    '''checks for known vulnerable openssl versions in the APK'''
+
+    # statically load this pattern
+    if not hasattr(has_old_openssl, "pattern"):
+        has_old_openssl.pattern = re.compile(b'.*OpenSSL ([01][0-9a-z.-]+)')
+
+    with zipfile.ZipFile(filename) as zf:
+        for name in zf.namelist():
+            if name.endswith('libcrypto.so') or name.endswith('libssl.so'):
+                lib = zf.open(name)
+                while True:
+                    chunk = lib.read(4096)
+                    if chunk == b'':
+                        break
+                    m = has_old_openssl.pattern.search(chunk)
+                    if m:
+                        version = m.group(1).decode('ascii')
+                        if version.startswith('1.0.1') and version[5] >= 'r' \
+                           or version.startswith('1.0.2') and version[5] >= 'f':
+                            logging.debug('"%s" contains recent %s (%s)', filename, name, version)
+                        else:
+                            logging.warning('"%s" contains outdated %s (%s)', filename, name, version)
+                            return True
+                        break
+    return False
+
+
 def insert_obbs(repodir, apps, apks):
     """Scans the .obb files in a given repo directory and adds them to the
     relevant APK instances.  OBB files have versionCodes like APK
@@ -639,6 +667,9 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
             apk['features'] = set()
             apk['icons_src'] = {}
             apk['icons'] = {}
+            apk['antiFeatures'] = set()
+            if has_old_openssl(apkfile):
+                apk['antiFeatures'].add('KnownVuln')
             p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
             if p.returncode != 0:
                 if options.delete_unknown:
@@ -1109,10 +1140,6 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         addElement('marketversion', app.CurrentVersion, doc, apel)
         addElement('marketvercode', app.CurrentVersionCode, doc, apel)
 
-        if app.AntiFeatures:
-            af = app.AntiFeatures
-            if af:
-                addElementNonEmpty('antifeatures', ','.join(af), doc, apel)
         if app.Provides:
             pv = app.Provides.split(',')
             addElementNonEmpty('provides', ','.join(pv), doc, apel)
@@ -1122,6 +1149,11 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
         # Sort the apk list into version order, just so the web site
         # doesn't have to do any work by default...
         apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
+
+        if 'antiFeatures' in apklist[0]:
+            app.AntiFeatures.extend(apklist[0]['antiFeatures'])
+        if app.AntiFeatures:
+            addElementNonEmpty('antifeatures', ','.join(app.AntiFeatures), doc, apel)
 
         # Check for duplicates - they will make the client unhappy...
         for i in range(len(apklist) - 1):

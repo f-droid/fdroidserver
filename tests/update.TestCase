@@ -91,7 +91,7 @@ class UpdateTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
-        config['accepted_formats'] = ['json', 'txt', 'xml', 'yml']
+        config['accepted_formats'] = ['json', 'txt', 'yml']
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 

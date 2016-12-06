@@ -163,7 +163,7 @@ $fdroid init
 cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $REPOROOT/
 cp -a $WORKSPACE/tests/gnupghome $GNUPGHOME
 chmod 0700 $GNUPGHOME
-echo "accepted_formats = ['json', 'txt', 'xml', 'yml']" >> config.py
+echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
 echo "install_list = 'org.adaway'" >> config.py
 echo "uninstall_list = {'com.android.vending', 'com.facebook.orca',}" >> config.py
 echo "gpghome = '$GNUPGHOME'" >> config.py

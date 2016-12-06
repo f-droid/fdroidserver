@@ -1,0 +1,2247 @@
+AntiFeatures: []
+Archive Policy: 9 versions
+Author Email: null
+Author Name: null
+Auto Name: VLC
+Auto Update Mode: None
+Binaries: null
+Bitcoin: null
+Categories:
+- Multimedia
+Changelog: ''
+Current Version: 1.2.6
+Current Version Code: '1030005'
+Description: 'Video and audio player that supports a wide range of formats,
+
+  for both local and remote playback.
+
+
+  [http://git.videolan.org/?p=vlc-ports/android.git;a=blob_plain;f=NEWS NEWS]
+
+  '
+Disabled: null
+Donate: http://www.videolan.org/contribute.html#money
+FlattrID: null
+Issue Tracker: http://www.videolan.org/support/index.html#bugs
+License: GPLv3
+Litecoin: null
+Maintainer Notes: 'Instructions and dependencies here: http://wiki.videolan.org/AndroidCompile
+
+  see http://buildbot.videolan.org/builders/ for version code scheme
+
+  The VLC srclib commit can be found out from TESTED_HASH value in compile.sh
+
+
+  On new releases remove the updatecheck and force the CV to the last working
+
+  build. This will make sure users don''t get notified about the update until
+
+  the final build from the BS has been reviewed and tested. Once done, undo
+
+  those changes.
+
+  '
+Name: null
+No Source Since: ''
+Provides: null
+Repo: git://git.videolan.org/vlc-ports/android.git
+Repo Type: git
+Requires Root: false
+Source Code: http://git.videolan.org/?p=vlc-ports/android.git;a=summary
+Summary: Media player
+Update Check Data: null
+Update Check Ignore: null
+Update Check Mode: Tags
+Update Check Name: null
+Vercode Operation: '%c + 5'
+Web Site: http://www.videolan.org/vlc/download-android.html
+added: null
+builds:
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
+  buildjni: false
+  commit: 0.0.11
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: true
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '48d' ../Makefile
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update:
+  - .
+  - ../java-libs/SlidingMenu
+  - ../java-libs/ActionBarSherlock
+  vercode: '110'
+  version: 0.0.11-ARMv7
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
+  buildjni: false
+  commit: 0.0.11
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: true
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '48d' ../Makefile
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update:
+  - .
+  - ../java-libs/SlidingMenu
+  - ../java-libs/ActionBarSherlock
+  vercode: '111'
+  version: 0.0.11-ARM
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
+  buildjni: false
+  commit: unknown - see disabled
+  disable: ffmpeg error 0.0.11
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: true
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '48d' ../Makefile
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update:
+  - .
+  - ../java-libs/SlidingMenu
+  - ../java-libs/ActionBarSherlock
+  vercode: '112'
+  version: 0.0.11-x86
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=mips ./compile.sh release
+  buildjni: false
+  commit: 0.0.11
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: true
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '48d' ../Makefile
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update:
+  - .
+  - ../java-libs/SlidingMenu
+  - ../java-libs/ActionBarSherlock
+  vercode: '113'
+  version: 0.0.11-mips
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=mips ./compile.sh release
+  buildjni: false
+  commit: 0.1.3
+  disable: build failing (at 0.1.3)
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: true
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch:
+  - ndkr9.patch
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@7c52aacbe
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1301'
+  version: 0.1.3-MIPS
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
+  buildjni: false
+  commit: 0.1.3
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: true
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch:
+  - ndkr9.patch
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@7c52aacbe
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1302'
+  version: 0.1.3-x86
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
+  buildjni: false
+  commit: 0.1.3
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: true
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch:
+  - ndkr9.patch
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@7c52aacbe
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1303'
+  version: 0.1.3-ARM
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
+  buildjni: false
+  commit: 0.1.3
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: true
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch:
+  - ndkr9.patch
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@7c52aacbe
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1304'
+  version: 0.1.3-ARMv7
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
+  buildjni: false
+  commit: 0.9.0
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@31ffb20309264994
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9002'
+  version: 0.9.0
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
+  buildjni: false
+  commit: 0.9.0
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@31ffb20309264994
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9004'
+  version: 0.9.0
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
+  buildjni: false
+  commit: 0.9.1
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@37e886d113b8b567c15208579fb2f
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9102'
+  version: 0.9.1
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
+  buildjni: false
+  commit: 0.9.1
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@37e886d113b8b567c15208579fb2f
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9104'
+  version: 0.9.1
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
+  buildjni: false
+  commit: 0.9.5
+  disable: can't download gmp
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@052600173f376ff58ff04d53746961a2
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9502'
+  version: 0.9.5
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
+  buildjni: false
+  commit: 0.9.5
+  disable: can't download gmp
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@052600173f376ff58ff04d53746961a2
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9504'
+  version: 0.9.5
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
+  buildjni: false
+  commit: 0.9.6
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@27f4799
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9602'
+  version: 0.9.6
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
+  buildjni: false
+  commit: 0.9.6
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@27f4799
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9604'
+  version: 0.9.6
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
+  buildjni: false
+  commit: 0.9.7
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@9e1c6ff
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9702'
+  version: 0.9.7
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
+  buildjni: false
+  commit: 0.9.7
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@9e1c6ff
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9704'
+  version: 0.9.7
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=mips ./compile.sh release
+  buildjni: false
+  commit: 0.9.7.1
+  disable: build fails
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@57cd36b
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9711'
+  version: 0.9.7.1
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
+  buildjni: false
+  commit: 0.9.7.1
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@57cd36b
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9712'
+  version: 0.9.7.1
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
+  buildjni: false
+  commit: 0.9.7.1
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@57cd36b
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9714'
+  version: 0.9.7.1
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
+  buildjni: false
+  commit: 0.9.8
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@f2db364
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9802'
+  version: 0.9.8
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
+  buildjni: false
+  commit: 0.9.8
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@f2db364
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9803'
+  version: 0.9.8
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
+  buildjni: false
+  commit: 0.9.8
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@f2db364
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9804'
+  version: 0.9.8
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
+  buildjni: false
+  commit: 0.9.9
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@e731dc23a4f8ef6782c7cc2236bbbf41c034dad1
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9902'
+  version: 0.9.9
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
+  buildjni: false
+  commit: 0.9.9
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@e731dc23a4f8ef6782c7cc2236bbbf41c034dad1
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9903'
+  version: 0.9.9
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
+  buildjni: false
+  commit: 0.9.9
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@e731dc23a4f8ef6782c7cc2236bbbf41c034dad1
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '9904'
+  version: 0.9.9
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
+  buildjni: false
+  commit: 0.9.10
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@e33e5de
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '10002'
+  version: 0.9.10
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
+  buildjni: false
+  commit: 0.9.10
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@e33e5de
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '10003'
+  version: 0.9.10
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
+  buildjni: false
+  commit: 0.9.10
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@e33e5de
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '10004'
+  version: 0.9.10
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
+  buildjni: false
+  commit: 1.0.0
+  disable: doesn't build
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@036010e
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '10006'
+  version: 1.0.0
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
+  buildjni: false
+  commit: 1.0.0
+  disable: doesn't build
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@036010e
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '10007'
+  version: 1.0.0
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
+  buildjni: false
+  commit: 1.0.0
+  disable: doesn't build
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@036010e
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '10008'
+  version: 1.0.0
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
+  buildjni: false
+  commit: 1.0.1
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@59409d5
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '10102'
+  version: 1.0.1
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
+  buildjni: false
+  commit: 1.0.1
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@59409d5
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '10103'
+  version: 1.0.1
+- antcommands: []
+  build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
+  buildjni: false
+  commit: 1.0.1
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: true
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC-2.2@59409d5
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '10104'
+  version: 1.0.1
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi" --release
+  buildjni: false
+  commit: 1.1.3
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv6fpu
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@a9b19e4
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1010303'
+  version: 1.1.3
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
+  buildjni: false
+  commit: 1.1.3
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv7
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@a9b19e4
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1010304'
+  version: 1.1.3
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "x86" --release
+  buildjni: false
+  commit: 1.1.3
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaX86
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@a9b19e4
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1010305'
+  version: 1.1.3
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi" --release
+  buildjni: false
+  commit: 1.1.5
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv6fpu
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@e6b4585
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1010503'
+  version: 1.1.5
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
+  buildjni: false
+  commit: 1.1.5
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv7
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@e6b4585
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1010504'
+  version: 1.1.5
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "x86" --release
+  buildjni: false
+  commit: 1.1.5
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaX86
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@e6b4585
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1010505'
+  version: 1.1.5
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi" --release
+  buildjni: false
+  commit: 1.1.6
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv6fpu
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@551b670
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1010603'
+  version: 1.1.6
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
+  buildjni: false
+  commit: 1.1.6
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv7
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@551b670
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1010604'
+  version: 1.1.6
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "x86" --release
+  buildjni: false
+  commit: 1.1.6
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaX86
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@551b670
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1010605'
+  version: 1.1.6
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi" --release
+  buildjni: false
+  commit: 1.2.0
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv6fpu
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@23c8d86
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020003'
+  version: 1.2.0
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
+  buildjni: false
+  commit: 1.2.0
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv7
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@23c8d86
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020004'
+  version: 1.2.0
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "x86" --release
+  buildjni: false
+  commit: 1.2.0
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaX86
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@23c8d86
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020005'
+  version: 1.2.0
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi" --release
+  buildjni: false
+  commit: 1.2.1
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv6fpu
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@23c8d86
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020103'
+  version: 1.2.1
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
+  buildjni: false
+  commit: 1.2.1
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv7
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@23c8d86
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020104'
+  version: 1.2.1
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "x86" --release
+  buildjni: false
+  commit: 1.2.1
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaX86
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@23c8d86
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020105'
+  version: 1.2.1
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi" --release
+  buildjni: false
+  commit: 1.2.2
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv6fpu
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@7491a5f
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020203'
+  version: 1.2.2
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
+  buildjni: false
+  commit: 1.2.2
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv7
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@7491a5f
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020204'
+  version: 1.2.2
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "x86" --release
+  buildjni: false
+  commit: 1.2.2
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaX86
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@7491a5f
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020205'
+  version: 1.2.2
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi" --release
+  buildjni: false
+  commit: 1.2.3
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv6fpu
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@7491a5f
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020303'
+  version: 1.2.3
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
+  buildjni: false
+  commit: 1.2.3
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv7
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@7491a5f
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020304'
+  version: 1.2.3
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "x86" --release
+  buildjni: false
+  commit: 1.2.3
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaX86
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@7491a5f
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020305'
+  version: 1.2.3
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi" --release
+  buildjni: false
+  commit: 1.2.4
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv6fpu
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@7491a5f
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020403'
+  version: 1.2.4
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
+  buildjni: false
+  commit: 1.2.4
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv7
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@7491a5f
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020404'
+  version: 1.2.4
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "x86" --release
+  buildjni: false
+  commit: 1.2.4
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaX86
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@7491a5f
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020405'
+  version: 1.2.4
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi" --release
+  buildjni: false
+  commit: 1.2.5
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv6fpu
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@50accb8
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020503'
+  version: 1.2.5
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
+  buildjni: false
+  commit: 1.2.5
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv7
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@50accb8
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020504'
+  version: 1.2.5
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "x86" --release
+  buildjni: false
+  commit: 1.2.5
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaX86
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@50accb8
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1020505'
+  version: 1.2.5
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi" --release
+  buildjni: false
+  commit: 1.2.6
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv6fpu
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@d59b81a
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1030003'
+  version: 1.2.6
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "armeabi-v7a" --release
+  buildjni: false
+  commit: 1.2.6
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaARMv7
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@d59b81a
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1030004'
+  version: 1.2.6
+- antcommands: []
+  build: cd ../ && ./compile.sh -a "x86" --release
+  buildjni: false
+  commit: 1.2.6
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - VanillaX86
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: r10d
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
+    && ln -s vlc-android/$$VLC$$ ../vlc
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - VLC@d59b81a
+  subdir: vlc-android
+  submodules: false
+  target: null
+  update: []
+  vercode: '1030005'
+  version: 1.2.6
+comments: {}
+id: org.videolan.vlc
+lastupdated: null
+metadatapath: metadata/org.videolan.vlc.yml

@@ -240,8 +240,7 @@ The repository of older versions of applications from the main demo repository.
 # build_server_always = True
 
 # By default, fdroid will use YAML .yml and the custom .txt metadata formats. It
-# is also possible to have metadata in JSON and XML by adding 'json' and
-# 'xml'.
+# is also possible to have metadata in JSON by adding 'json'.
 # accepted_formats = ['txt', 'yml']
 
 # Limit in number of characters that fields can take up

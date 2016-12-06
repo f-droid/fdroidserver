@@ -5,9 +5,9 @@
 import inspect
 import optparse
 import os
-import pickle
 import sys
 import unittest
+import yaml
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -33,21 +33,21 @@ class MetadataTest(unittest.TestCase):
         config = dict()
         config['sdk_path'] = '/opt/android-sdk'
         config['ndk_paths'] = dict()
-        config['accepted_formats'] = ['json', 'txt', 'xml', 'yml']
+        config['accepted_formats'] = ['json', 'txt', 'yml']
         fdroidserver.common.config = config
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
-        for appid in ('org.smssecure.smssecure', 'org.adaway', 'net.osmand.plus', 'org.videolan.vlc'):
+        for appid in ('org.smssecure.smssecure', 'org.adaway', 'org.videolan.vlc'):
             app = apps[appid]
-            savepath = os.path.join('metadata', appid + '.pickle')
+            savepath = os.path.join('metadata', 'dump', appid + '.yaml')
             frommeta = app.field_dict()
             self.assertTrue(appid in apps)
-            with open(savepath, 'rb') as f:
-                frompickle = pickle.load(f)
+            with open(savepath, 'r') as f:
+                frompickle = yaml.load(f)
             self.assertEqual(frommeta, frompickle)
             # Uncomment to overwrite
-            # with open(savepath, 'wb') as f:
-            #     pickle.dump(frommeta, f)
+            # with open(savepath, 'w') as f:
+            #     yaml.dump(frommeta, f, default_flow_style=False)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,1007 @@
+AntiFeatures: []
+Archive Policy: null
+Author Email: null
+Author Name: null
+Auto Name: AdAway
+Auto Update Mode: Version v%v
+Binaries: null
+Bitcoin: null
+Categories:
+- System
+- Security
+Changelog: ''
+Current Version: '3.0'
+Current Version Code: '52'
+Description: 'An ad blocker that uses the hosts file. The hosts file
+
+  contains a list of mappings between hostnames and IP addresses. When
+
+  an app requests an ad, that request is directed to 127.0.0.1 which does
+
+  nothing. There are options to run a web server
+
+  to respond to blocked hostnames and to direct requests to the IP
+
+  address of your choosing. You can download hosts files from the
+
+  app but it is possible to use your own and to add certain sites
+
+  to the white- and black-lists.
+
+
+  [https://github.com/dschuermann/ad-away/raw/HEAD/CHANGELOG Changelog]
+
+
+  Requires root: Yes. The hosts files is located in /system which is normally
+
+  read-only.'
+Disabled: null
+Donate: http://sufficientlysecure.org/index.php/adaway
+FlattrID: '369138'
+Issue Tracker: https://github.com/dschuermann/ad-away/issues
+License: GPLv3
+Litecoin: null
+Maintainer Notes: ''
+Name: null
+No Source Since: ''
+Provides: org.sufficientlysecure.adaway
+Repo: https://github.com/dschuermann/ad-away.git
+Repo Type: git
+Requires Root: true
+Source Code: https://github.com/dschuermann/ad-away
+Summary: Block advertisements
+Update Check Data: null
+Update Check Ignore: null
+Update Check Mode: Tags
+Update Check Name: null
+Vercode Operation: null
+Web Site: http://sufficientlysecure.org/index.php/adaway
+added: null
+builds:
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: ea5378a94ee0dc1d99d2cec95fae7e6d81afb2b9
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '13'
+  version: '1.12'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: 4128e59da2eac5c2904c7c7568d298ca51e79540
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch:
+  - defprop.patch
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '16'
+  version: '1.15'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: 0b9985398b9eef7baf6aadd0dbb12002bc199d2e
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch:
+  - defprop.patch
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '19'
+  version: '1.18'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: ab27f4dab5f3ea5e228cfb4a6b0e1fbf53695f22
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch:
+  - defprop.patch
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '20'
+  version: '1.19'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: 695e3801e4081026c8f7213a2345fc451d5eb89c
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch:
+  - defprop.patch
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '21'
+  version: '1.20'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: 65138c11cc8b6affd28b68e125fbc1dff0886a4e
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch:
+  - defprop.patch
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '22'
+  version: '1.21'
+- antcommands: []
+  build: ''
+  buildjni: []
+  commit: unknown - see disabled
+  disable: no source in repo
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: null
+  submodules: false
+  target: null
+  update: []
+  vercode: '24'
+  version: '1.23'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: f811e53e1e1d2ee047b18715fd7d2072b90ae76b
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: android update project -p ../com_actionbarsherlock
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '25'
+  version: '1.24'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: ff97932761cdee68638dc2550751a64b2cbe18e7
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: android update project -p ../com_actionbarsherlock
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '26'
+  version: '1.25'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: 33d4d80998f30bafc88c04c80cbae00b03916f99
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: android update project -p ../com_actionbarsherlock
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '27'
+  version: '1.26'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: 743d25a7e287505461f33f4b8e57e4cf988fffea
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: android update project -p ../com_actionbarsherlock
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '28'
+  version: '1.27'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: eaa07f4
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '30'
+  version: '1.29'
+- antcommands: []
+  build: ''
+  buildjni: false
+  commit: 71ced3f
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*
+    && rm libs/android-support-v4.jar
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '33'
+  version: '1.32'
+- antcommands: []
+  build: ''
+  buildjni: false
+  commit: 9d63c18
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '34'
+  version: '1.33'
+- antcommands: []
+  build: ''
+  buildjni: false
+  commit: f2568b1
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*
+    && android update project -p ../org_donations
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '35'
+  version: '1.34'
+- antcommands: []
+  build: ''
+  buildjni: false
+  commit: 7442d5d
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*
+    && android update project -p ../org_donations
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '36'
+  version: '1.35'
+- antcommands: []
+  build: ''
+  buildjni: false
+  commit: 83fc713
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*
+    && android update project -p ../org_donations
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '37'
+  version: '1.36'
+- antcommands: []
+  build: ''
+  buildjni: false
+  commit: 70da32b567122b701cdcb1609b780eb85732028f
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*
+    && android update project -p ../org_donations
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: org_adaway/
+  submodules: false
+  target: null
+  update: []
+  vercode: '38'
+  version: '1.37'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: v2.1
+  disable: false
+  encoding: null
+  extlibs:
+  - htmlcleaner/htmlcleaner-2.2.jar
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: rm android-libs/Donations/custom_rules.xml && git clone https://github.com/dschuermann/HtmlSpanner
+    android-libs/HtmlSpanner
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: rm -rf ../update_zip libs/root-commands-1.2.jar libs/htmlspanner-0.2-fork.jar
+    && cp -f libs/htmlcleaner-2.2.jar android-libs/HtmlSpanner/htmlspanner/libs/ &&
+    echo "android.library.reference.3=$$RootCommands$$" >> project.properties && echo
+    "android.library.reference.4=android-libs/HtmlSpanner/htmlspanner" >> project.properties
+    && find . -type f -print0 | xargs -0 sed -i 's/org.rootcommands/org.sufficientlysecure.rootcommands/g'
+    && cp android-libs/Donations/ant-templates/other/DonationsConfig.java android-libs/Donations/src/org/donations/
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - RootCommands@c940b0e503
+  subdir: AdAway
+  submodules: false
+  target: null
+  update:
+  - .
+  - android-libs/Donations
+  - android-libs/ActionBarSherlock
+  - android-libs/HtmlSpanner/htmlspanner
+  vercode: '40'
+  version: '2.1'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: v2.3
+  disable: false
+  encoding: null
+  extlibs:
+  - htmlcleaner/htmlcleaner-2.2.jar
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: rm android-libs/Donations/custom_rules.xml && git clone https://github.com/dschuermann/HtmlSpanner
+    android-libs/HtmlSpanner
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: rm -rf ../update_zip libs/root-commands-1.2.jar libs/htmlspanner-0.2-fork.jar
+    && cp -f libs/htmlcleaner-2.2.jar android-libs/HtmlSpanner/htmlspanner/libs/ &&
+    echo "android.library.reference.3=$$RootCommands$$" >> project.properties && echo
+    "android.library.reference.4=android-libs/HtmlSpanner/htmlspanner" >> project.properties
+    && find . -type f -print0 | xargs -0 sed -i 's/org.rootcommands/org.sufficientlysecure.rootcommands/g'
+    && cp android-libs/Donations/ant-templates/other/DonationsConfig.java android-libs/Donations/src/org/donations/
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - RootCommands@c940b0e503
+  subdir: AdAway
+  submodules: false
+  target: null
+  update:
+  - .
+  - android-libs/Donations
+  - android-libs/ActionBarSherlock
+  - android-libs/HtmlSpanner/htmlspanner
+  vercode: '42'
+  version: '2.3'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: v2.6
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - 'yes'
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble:
+  - renameExecutables
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: AdAway
+  submodules: false
+  target: null
+  update: []
+  vercode: '45'
+  version: '2.6'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: v2.7
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - 'yes'
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble:
+  - renameExecutables
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: AdAway
+  submodules: false
+  target: null
+  update: []
+  vercode: '46'
+  version: '2.7'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: v2.8
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - 'yes'
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble:
+  - renameExecutables
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: AdAway
+  submodules: false
+  target: null
+  update: []
+  vercode: '47'
+  version: '2.8'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: v2.8.1
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - 'yes'
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble:
+  - renameExecutables
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: AdAway
+  submodules: false
+  target: null
+  update: []
+  vercode: '48'
+  version: 2.8.1
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: v2.9
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - 'yes'
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble:
+  - renameExecutables
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: AdAway
+  submodules: false
+  target: null
+  update: []
+  vercode: '49'
+  version: '2.9'
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: v2.9.1
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - 'yes'
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble:
+  - renameExecutables
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: AdAway
+  submodules: false
+  target: null
+  update: []
+  vercode: '50'
+  version: 2.9.1
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: v2.9.2
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - 'yes'
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble:
+  - renameExecutables
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: AdAway
+  submodules: false
+  target: null
+  update: []
+  vercode: '51'
+  version: 2.9.2
+- antcommands: []
+  build: ''
+  buildjni:
+  - 'yes'
+  commit: v3.0
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - 'yes'
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble:
+  - renameExecutables
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: AdAway
+  submodules: false
+  target: null
+  update: []
+  vercode: '52'
+  version: '3.0'
+comments:
+  build:40:
+  - '#RootCommands srclib needs changing on fdroidserver'
+  build:42:
+  - '#RootCommands srclib needs changing on fdroidserver'
+id: org.adaway
+lastupdated: null
+metadatapath: metadata/org.adaway.json
