@@ -494,6 +494,7 @@ def insert_obbs(repodir, apps, apks):
 
     obbs = []
     java_Integer_MIN_VALUE = -pow(2, 31)
+    currentPackageNames = apps.keys()
     for f in glob.glob(os.path.join(repodir, '*.obb')):
         obbfile = os.path.basename(f)
         # obbfile looks like: [main|patch].<expansion-version>.<package-name>.obb
@@ -508,7 +509,7 @@ def insert_obbs(repodir, apps, apks):
         packagename = ".".join(chunks[2:-1])
 
         highestVersionCode = java_Integer_MIN_VALUE
-        if packagename not in apps.keys():
+        if packagename not in currentPackageNames:
             obbWarnDelete(f, "OBB's packagename does not match a supported APK: ")
             continue
         for apk in apks:
@@ -532,6 +533,65 @@ def insert_obbs(repodir, apps, apks):
                     apk['obbPatchFileSha256'] = obbsha256
             if 'obbMainFile' in apk and 'obbPatchFile' in apk:
                 break
+
+
+def insert_graphics(repodir, apps):
+    """Scans for screenshot PNG files in statically defined screenshots
+    directory and adds them to the app metadata.  The screenshots and
+    graphic must be PNG or JPEG files ending with ".png", ".jpg", or ".jpeg"
+    and must be in the following layout:
+
+    repo/packageName/locale/featureGraphic.png
+    repo/packageName/locale/phoneScreenshots/1.png
+    repo/packageName/locale/phoneScreenshots/2.png
+
+    Where "packageName" is the app's packageName and "locale" is the locale
+    of the graphics, e.g. what language they are in, using the IETF RFC5646
+    format (en-US, fr-CA, es-MX, etc).  This is following this pattern:
+    https://github.com/fastlane/fastlane/blob/1.109.0/supply/README.md#images-and-screenshots
+
+    :param repodir: repo directory to scan
+
+    """
+
+
+    repofiles = sorted(glob.glob(os.path.join('repo', '[A-Za-z]*', '[a-z][a-z][A-Z-.@]*')))
+    for d in repofiles:
+        if not os.path.isdir(d):
+            continue
+        for f in sorted(glob.glob(os.path.join(d, '*.*')) + glob.glob(os.path.join(d, '*Screenshots', '*.*'))):
+            if not os.path.isfile(f):
+                continue
+            segments = f.split('/')
+            packageName = segments[1]
+            locale = segments[2]
+            screenshotdir = segments[3]
+            filename = os.path.basename(f)
+            base, extension = common.get_extension(filename)
+
+            if packageName not in apps:
+                apps[packageName] = metadata.App()
+            if 'localized' not in apps[packageName]:
+                apps[packageName]['localized'] = collections.OrderedDict()
+            if locale not in apps[packageName]['localized']:
+                apps[packageName]['localized'][locale] = collections.OrderedDict()
+            graphics = apps[packageName]['localized'][locale]
+
+            if extension not in ('png', 'jpg', 'jpeg'):
+                logging.warning('Only PNG and JPEG are supported for graphics, found: ' + f)
+            elif base in ('icon', 'tvBanner', 'promoGraphic', 'featureGraphic'):
+                # there can only be zero or one of these per locale
+                graphics[base] = filename
+            elif screenshotdir in ('phoneScreenshots', 'sevenInchScreenshots',
+                                   'tenInchScreenshots', 'tvScreenshots',
+                                   'wearScreenshots'):
+                # there can any number of these per locale
+                logging.debug('adding ' + base + ':' + f)
+                if screenshotdir not in graphics:
+                    graphics[screenshotdir] = []
+                graphics[screenshotdir].append(filename)
+            else:
+                logging.warning('Unsupported graphics file found: ' + f)
 
 
 def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
@@ -1808,6 +1868,7 @@ def main():
         apps = metadata.read_metadata()
 
     insert_obbs(repodirs[0], apps, apks)
+    insert_graphics(repodirs[0], apps)
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
