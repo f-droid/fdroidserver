@@ -45,13 +45,15 @@ def main():
 
     global config, options
 
+    supported = ['txt', 'yml']
+
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
     common.setup_global_opts(parser)
     parser.add_argument("-l", "--list", action="store_true", default=False,
                         help="List files that would be reformatted")
     parser.add_argument("-t", "--to", default=None,
-                        help="Rewrite to a specific format")
+                        help="Rewrite to a specific format: " + ', '.join(supported))
     parser.add_argument("appid", nargs='*', help="app-id in the form APPID")
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
@@ -66,10 +68,8 @@ def main():
     if options.list and options.to is not None:
         parser.error("Cannot use --list and --to at the same time")
 
-    supported = ['txt', 'yml']
-
     if options.to is not None and options.to not in supported:
-        parser.error("Must give a valid format to --to")
+        parser.error("Unsupported metadata format, use: --to [" + ' '.join(supported) + "]")
 
     for appid, app in apps.items():
         base, ext = common.get_extension(app.metadatapath)
