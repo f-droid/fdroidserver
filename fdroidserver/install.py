@@ -72,7 +72,7 @@ def main():
         for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
 
             try:
-                appid, vercode = common.apknameinfo(apkfile)
+                appid, vercode = common.publishednameinfo(apkfile)
             except FDroidException:
                 continue
             if appid not in apks:
@@ -87,7 +87,7 @@ def main():
 
     else:
 
-        apks = {common.apknameinfo(apkfile)[0]: apkfile for apkfile in
+        apks = {common.publishednameinfo(apkfile)[0]: apkfile for apkfile in
                 sorted(glob.glob(os.path.join(output_dir, '*.apk')))}
 
     for appid, apk in apks.items():
