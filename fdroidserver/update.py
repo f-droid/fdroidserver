@@ -603,7 +603,9 @@ def insert_graphics(repodir, apps):
             base, extension = common.get_extension(filename)
 
             if packageName not in apps:
-                apps[packageName] = metadata.App()
+                logging.warning('Found "%s" graphic without metadata for app "%s"!'
+                                % (filename, packageName))
+                continue
             if 'localized' not in apps[packageName]:
                 apps[packageName]['localized'] = collections.OrderedDict()
             if locale not in apps[packageName]['localized']:
