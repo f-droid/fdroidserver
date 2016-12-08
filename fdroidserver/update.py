@@ -549,7 +549,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
         if file_extension == 'apk' or file_extension == 'obb':
             continue
         filename = os.path.join(repodir, name)
-        if not common.is_repo_file(name):
+        if not common.is_repo_file(filename):
             continue
         stat = os.stat(filename)
         if stat.st_size == 0:
