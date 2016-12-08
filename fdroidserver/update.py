@@ -1217,7 +1217,8 @@ def make_index(apps, sortedids, apks, repodir, archive):
                 hashel.appendChild(doc.createTextNode(apk[hash_type]))
                 apkel.appendChild(hashel)
             addElement('size', str(apk['size']), doc, apkel)
-            addElement('sdkver', str(apk['minSdkVersion']), doc, apkel)
+            addElementIfInApk('sdkver', apk,
+                              'minSdkVersion', doc, apkel)
             addElementIfInApk('targetSdkVersion', apk,
                               'targetSdkVersion', doc, apkel)
             addElementIfInApk('maxsdkver', apk,
