@@ -10,6 +10,7 @@ import shutil
 import sys
 import tempfile
 import unittest
+from zipfile import ZipFile
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -176,6 +177,46 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.signjar(testfile)
             # these should be resigned, and therefore different
             self.assertNotEqual(open(sourcefile, 'rb').read(), open(testfile, 'rb').read())
+
+    def test_verify_apks(self):
+        fdroidserver.common.config = None
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
+        fdroidserver.common.config = config
+
+        basedir = os.path.dirname(__file__)
+        sourceapk = os.path.join(basedir, 'urzip.apk')
+
+        tmpdir = os.path.join(basedir, '..', '.testfiles')
+        if not os.path.exists(tmpdir):
+            os.makedirs(tmpdir)
+        testdir = tempfile.mkdtemp(prefix='test_verify_apks', dir=tmpdir)
+        print('testdir', testdir)
+
+        copyapk = os.path.join(testdir, 'urzip-copy.apk')
+        shutil.copy(sourceapk, copyapk)
+        self.assertTrue(fdroidserver.common.verify_apk_signature(copyapk))
+        self.assertIsNone(fdroidserver.common.verify_apks(sourceapk, copyapk, tmpdir))
+
+        unsignedapk = os.path.join(testdir, 'urzip-unsigned.apk')
+        with ZipFile(sourceapk, 'r') as apk:
+            with ZipFile(unsignedapk, 'w') as testapk:
+                for info in apk.infolist():
+                    if not info.filename.startswith('META-INF/'):
+                        testapk.writestr(info, apk.read(info.filename))
+        self.assertIsNone(fdroidserver.common.verify_apks(sourceapk, unsignedapk, tmpdir))
+
+        twosigapk = os.path.join(testdir, 'urzip-twosig.apk')
+        otherapk = ZipFile(os.path.join(basedir, 'urzip-release.apk'), 'r')
+        with ZipFile(sourceapk, 'r') as apk:
+            with ZipFile(twosigapk, 'w') as testapk:
+                for info in apk.infolist():
+                    testapk.writestr(info, apk.read(info.filename))
+                    if info.filename.startswith('META-INF/'):
+                        testapk.writestr(info, otherapk.read(info.filename))
+        otherapk.close()
+        self.assertFalse(fdroidserver.common.verify_apk_signature(twosigapk))
+        self.assertIsNone(fdroidserver.common.verify_apks(sourceapk, twosigapk, tmpdir))
 
 
 if __name__ == "__main__":

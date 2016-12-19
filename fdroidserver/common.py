@@ -2012,28 +2012,43 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     One of the inputs is signed, the other is unsigned. The signature metadata
     is transferred from the signed to the unsigned apk, and then jarsigner is
     used to verify that the signature from the signed apk is also varlid for
-    the unsigned one.
+    the unsigned one.  If the APK given as unsigned actually does have a
+    signature, it will be stripped out and ignored.
     :param signed_apk: Path to a signed apk file
     :param unsigned_apk: Path to an unsigned apk file expected to match it
     :param tmp_dir: Path to directory for temporary files
     :returns: None if the verification is successful, otherwise a string
               describing what went wrong.
     """
-    with ZipFile(signed_apk) as signed_apk_as_zip:
-        meta_inf_files = ['META-INF/MANIFEST.MF']
-        for f in signed_apk_as_zip.namelist():
-            if apk_sigfile.match(f):
-                meta_inf_files.append(f)
-        if len(meta_inf_files) < 3:
-            return "Signature files missing from {0}".format(signed_apk)
-        signed_apk_as_zip.extractall(tmp_dir, meta_inf_files)
-    with ZipFile(unsigned_apk, mode='a') as unsigned_apk_as_zip:
-        for meta_inf_file in meta_inf_files:
-            unsigned_apk_as_zip.write(os.path.join(tmp_dir, meta_inf_file), arcname=meta_inf_file)
 
-    if subprocess.call([config['jarsigner'], '-verify', unsigned_apk]) != 0:
-        logging.info("...NOT verified - {0}".format(signed_apk))
-        return compare_apks(signed_apk, unsigned_apk, tmp_dir)
+    signed = ZipFile(signed_apk, 'r')
+    meta_inf_files = ['META-INF/MANIFEST.MF']
+    for f in signed.namelist():
+        if apk_sigfile.match(f):
+            meta_inf_files.append(f)
+    if len(meta_inf_files) < 3:
+        return "Signature files missing from {0}".format(signed_apk)
+
+    tmp_apk = os.path.join(tmp_dir, 'sigcp_' + os.path.basename(unsigned_apk))
+    unsigned = ZipFile(unsigned_apk, 'r')
+    # only read the signature from the signed APK, everything else from unsigned
+    with ZipFile(tmp_apk, 'w') as tmp:
+        for filename in meta_inf_files:
+            tmp.writestr(signed.getinfo(filename), signed.read(filename))
+        for info in unsigned.infolist():
+            if info.filename in meta_inf_files:
+                logging.warning('Ignoring ' + info.filename + ' from ' + unsigned_apk)
+                continue
+            if info.filename in tmp.namelist():
+                return "duplicate filename found: " + info.filename
+            tmp.writestr(info, unsigned.read(info.filename))
+    unsigned.close()
+    signed.close()
+
+    if subprocess.call([config['jarsigner'], '-verify', tmp_apk]) != 0:
+        logging.info("...NOT verified - {0}".format(unsigned_apk))
+        return compare_apks(signed_apk, tmp_apk, tmp_dir)
+
     logging.info("...successfully verified")
     return None
 
