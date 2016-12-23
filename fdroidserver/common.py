@@ -62,7 +62,7 @@ default_config = {
         'r13b': None,
     },
     'qt_sdk_path': None,
-    'build_tools': "25.0.0",
+    'build_tools': "25.0.2",
     'force_build_tools': False,
     'java_paths': None,
     'ant': "ant",

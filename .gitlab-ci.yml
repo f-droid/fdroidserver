@@ -1,4 +1,4 @@
-image: fdroid/ci:server-20161031
+image: fdroid/ci:server-20161223
 
 test:
   script:
