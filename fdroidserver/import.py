@@ -116,6 +116,12 @@ def get_metadata_from_url(app, url):
         if not repotype:
             logging.error("Unable to determine vcs type. " + repo)
             sys.exit(1)
+    elif url.startswith('https://') and url.endswith('.git'):
+        projecttype = 'git'
+        repo = url
+        repotype = 'git'
+        app.SourceCode = ""
+        app.WebSite = ""
     if not projecttype:
         logging.error("Unable to determine the project type.")
         logging.error("The URL you supplied was not in one of the supported formats. Please consult")
