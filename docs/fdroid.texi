@@ -16,7 +16,7 @@ Copyright @copyright{} 2013 David Black
 
 Copyright @copyright{} 2013, 2014, 2015 Daniel Martí
 
-Copyright @copyright{} 2015 Boris Kraut
+Copyright @copyright{} 2015, 2016 Boris Kraut
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -586,55 +586,9 @@ This is converted to (@code{<email>}) in the public index file.
 @cindex license
 
 The overall license for the application, or in certain cases, for the
-source code only.
-
-Common values:
-
-@itemize @bullet
-
-@item
-@samp{GPLv2}
-GNU GPL version 2
-
-@item
-@samp{GPLv2+}
-GNU GPL version 2 or later
-
-@item
-@samp{GPLv3}
-GNU GPL version 3
-
-@item
-@samp{GPLv3+}
-GNU GPL version 3 or later
-
-@item
-@samp{GPL}
-An unspecified GPL version. Use this only as a last resort or if there is
-some confusion over compatiblity of component licenses: particularly the use of
-Apache libraries with GPLv2 source code.
-
-@item
-@samp{AGPL}
-Afferro GPL version 3.
-
-@item
-@samp{Apache2}
-Apache 2
-
-@item
-@samp{MIT}
-MIT X11 license
-
-@item
-@samp{BSD}
-BSD license - the original '4-clause' version.
-
-@item
-@samp{NewBSD}
-BSD license - the new, or modified, version.
-
-@end itemize
+source code only. Values should correspond to short identifiers of the
+@uref{https://spdx.org/licenses/, SPDX} license list. In some cases an
+older, non-standard naming scheme is still used.
 
 This is converted to (@code{<license>}) in the public index file.
 
