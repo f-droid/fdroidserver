@@ -40,7 +40,8 @@ packages="
  expect
  faketime
  flex
- gettext
+ gettext/jessie-backports
+ gettext-base/jessie-backports
  git-core
  git-svn
  gperf
