@@ -2076,12 +2076,7 @@ def compare_apks(apk1, apk2, tmp_dir):
     absapk1 = os.path.abspath(apk1)
     absapk2 = os.path.abspath(apk2)
 
-    # try to find diffoscope in the path, if it hasn't been manually configed
-    if 'diffoscope' not in config:
-        tmp = find_command('diffoscope')
-        if tmp is not None:
-            config['diffoscope'] = tmp
-    if 'diffoscope' in config:
+    if set_command_in_config('diffoscope'):
         htmlfile = absapk1 + '.diffoscope.html'
         textfile = absapk1 + '.diffoscope.txt'
         if subprocess.call([config['diffoscope'],
@@ -2107,12 +2102,7 @@ def compare_apks(apk1, apk2, tmp_dir):
                        cwd=os.path.join(apk2dir, 'jar-xf')) != 0:
         return("Failed to unpack " + apk2)
 
-    # try to find apktool in the path, if it hasn't been manually configed
-    if 'apktool' not in config:
-        tmp = find_command('apktool')
-        if tmp is not None:
-            config['apktool'] = tmp
-    if 'apktool' in config:
+    if set_command_in_config('apktool'):
         if subprocess.call([config['apktool'], 'd', os.path.abspath(apk1), '--output', 'apktool'],
                            cwd=apk1dir) != 0:
             return("Failed to unpack " + apk1)
@@ -2134,6 +2124,22 @@ def compare_apks(apk1, apk2, tmp_dir):
 
     # If we get here, it seems like they're the same!
     return None
+
+
+def set_command_in_config(command):
+    '''Try to find specified command in the path, if it hasn't been
+    manually set in config.py.  If found, it is added to the config
+    dict.  The return value says whether the command is available.
+
+    '''
+    if command in config:
+        return True
+    else:
+        tmp = find_command(command)
+        if tmp is not None:
+            config[command] = tmp
+            return True
+    return False
 
 
 def find_command(command):
