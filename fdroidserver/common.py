@@ -2054,18 +2054,35 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     unsigned.close()
     signed.close()
 
-    if subprocess.call([config['jarsigner'], '-verify', tmp_apk]) != 0:
-        logging.info("...NOT verified - {0}".format(unsigned_apk))
-        return compare_apks(signed_apk, tmp_apk, tmp_dir)
+    verified = verify_apk_signature(tmp_apk)
+
+    if not verified:
+        logging.info("...NOT verified - {0}".format(tmp_apk))
+        return compare_apks(signed_apk, tmp_apk, tmp_dir, os.path.dirname(unsigned_apk))
 
     logging.info("...successfully verified")
     return None
 
 
+def verify_apk_signature(apk):
+    """verify the signature on an APK
+
+    Try to use apksigner whenever possible since jarsigner is very
+    shitty: unsigned APKs pass as "verified"! So this has to turn on
+    -strict then check for result 4.
+
+    """
+    if set_command_in_config('apksigner'):
+        return subprocess.call([config['apksigner'], 'verify', apk]) == 0
+    else:
+        logging.warning("Using Java's jarsigner, not recommended for verifying APKs! Use apksigner")
+        return subprocess.call([config['jarsigner'], '-strict', '-verify', apk]) == 4
+
+
 apk_badchars = re.compile('''[/ :;'"]''')
 
 
-def compare_apks(apk1, apk2, tmp_dir):
+def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
     """Compare two apks
 
     Returns None if the apk content is the same (apart from the signing key),
@@ -2073,12 +2090,16 @@ def compare_apks(apk1, apk2, tmp_dir):
     trying to do the comparison.
     """
 
+    if not log_dir:
+        log_dir = tmp_dir
+
     absapk1 = os.path.abspath(apk1)
     absapk2 = os.path.abspath(apk2)
 
     if set_command_in_config('diffoscope'):
-        htmlfile = absapk1 + '.diffoscope.html'
-        textfile = absapk1 + '.diffoscope.txt'
+        logfilename = os.path.join(log_dir, os.path.basename(absapk1))
+        htmlfile = logfilename + '.diffoscope.html'
+        textfile = logfilename + '.diffoscope.txt'
         if subprocess.call([config['diffoscope'],
                             '--max-report-size', '12345678', '--max-diff-block-lines', '100',
                             '--html', htmlfile, '--text', textfile,

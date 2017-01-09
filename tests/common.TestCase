@@ -178,6 +178,18 @@ class CommonTest(unittest.TestCase):
             # these should be resigned, and therefore different
             self.assertNotEqual(open(sourcefile, 'rb').read(), open(testfile, 'rb').read())
 
+    def test_verify_apk_signature(self):
+        fdroidserver.common.config = None
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
+        fdroidserver.common.config = config
+
+        self.assertTrue(fdroidserver.common.verify_apk_signature('urzip.apk'))
+        self.assertFalse(fdroidserver.common.verify_apk_signature('urzip-badcert.apk'))
+        self.assertFalse(fdroidserver.common.verify_apk_signature('urzip-badsig.apk'))
+        self.assertTrue(fdroidserver.common.verify_apk_signature('urzip-release.apk'))
+        self.assertFalse(fdroidserver.common.verify_apk_signature('urzip-release-unsigned.apk'))
+
     def test_verify_apks(self):
         fdroidserver.common.config = None
         config = fdroidserver.common.read_config(fdroidserver.common.options)
