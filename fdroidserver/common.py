@@ -2014,6 +2014,14 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     used to verify that the signature from the signed apk is also varlid for
     the unsigned one.  If the APK given as unsigned actually does have a
     signature, it will be stripped out and ignored.
+
+    There are two SHA1 git commit IDs that fdroidserver includes in the builds
+    it makes: fdroidserverid and buildserverid.  Originally, these were inserted
+    into AndroidManifest.xml, but that makes the build not reproducible. So
+    instead they are included as separate files in the APK's META-INF/ folder.
+    If those files exist in the signed APK, they will be part of the signature
+    and need to also be included in the unsigned APK for it to validate.
+
     :param signed_apk: Path to a signed apk file
     :param unsigned_apk: Path to an unsigned apk file expected to match it
     :param tmp_dir: Path to directory for temporary files
@@ -2024,7 +2032,8 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     signed = ZipFile(signed_apk, 'r')
     meta_inf_files = ['META-INF/MANIFEST.MF']
     for f in signed.namelist():
-        if apk_sigfile.match(f):
+        if apk_sigfile.match(f) \
+           or f in ['META-INF/fdroidserverid', 'META-INF/buildserverid']:
             meta_inf_files.append(f)
     if len(meta_inf_files) < 3:
         return "Signature files missing from {0}".format(signed_apk)
