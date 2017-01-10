@@ -16,6 +16,8 @@ printf 'APT::Acquire::Retries "20";\n' \
 
 if grep --quiet jessie /etc/apt/sources.list; then
     echo "deb $debian_mirror jessie-backports main" > /etc/apt/sources.list.d/backports.list
+    echo "deb $debian_mirror testing main" > /etc/apt/sources.list.d/testing.list
+    printf "Package: *\nPin: release o=Debian,a=testing\nPin-Priority: -300\n" > /etc/apt/preferences.d/debian-testing
 fi
 
 dpkg --add-architecture i386
@@ -59,8 +61,8 @@ packages="
  libsaxonb-java
  libssl-dev
  libstdc++6:i386
- libtool
- libtool-bin
+ libtool/testing
+ libtool-bin/testing
  make
  maven
  mercurial
