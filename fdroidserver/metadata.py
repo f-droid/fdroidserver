@@ -996,7 +996,11 @@ def parse_metadata(metadatapath, check_vcs=False):
                 vcs.gotorevision('HEAD')  # HEAD since we can't know where else to go
         if os.path.isfile(metadata_in_repo):
             logging.debug('Including metadata from ' + metadata_in_repo)
-            app.update(parse_metadata(metadata_in_repo))
+            # do not include fields already provided by main metadata file
+            app_in_repo = parse_metadata(metadata_in_repo).field_dict()
+            for k, v in app_in_repo.items():
+                if k not in app.field_dict():
+                    app.set_field(k, v)
 
     post_metadata_parse(app)
 
