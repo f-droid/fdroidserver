@@ -60,7 +60,7 @@ def main():
     for apkfile in sorted(glob.glob(os.path.join(unsigned_dir, '*.apk'))):
 
         apkfilename = os.path.basename(apkfile)
-        appid, vercode = common.apknameinfo(apkfile)
+        appid, vercode = common.publishednameinfo(apkfile)
 
         if vercodes and appid not in vercodes:
             continue

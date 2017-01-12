@@ -102,10 +102,11 @@ def main():
     logging.info("{0} apps, {0} key aliases".format(len(allapps),
                                                     len(allaliases)))
 
-    # Process any apks that are waiting to be signed...
-    for apkfile in sorted(glob.glob(os.path.join(unsigned_dir, '*.apk'))):
+    # Process any APKs or ZIPs that are waiting to be signed...
+    for apkfile in sorted(glob.glob(os.path.join(unsigned_dir, '*.apk'))
+                          + glob.glob(os.path.join(unsigned_dir, '*.zip'))):
 
-        appid, vercode = common.apknameinfo(apkfile)
+        appid, vercode = common.publishednameinfo(apkfile)
         apkfilename = os.path.basename(apkfile)
         if vercodes and appid not in vercodes:
             continue
@@ -122,7 +123,7 @@ def main():
             sys.exit(1)
         app = allapps[appid]
 
-        if app.Binaries is not None:
+        if app.Binaries:
 
             # It's an app where we build from source, and verify the apk
             # contents against a developer's binary, and then publish their
@@ -142,6 +143,12 @@ def main():
             # our built version.
             shutil.move(srcapk, os.path.join(output_dir, apkfilename))
             os.remove(apkfile)
+
+        elif apkfile.endswith('.zip'):
+
+            # OTA ZIPs built by fdroid do not need to be signed by jarsigner,
+            # just to be moved into place in the repo
+            shutil.move(apkfile, os.path.join(output_dir, apkfilename))
 
         else:
 

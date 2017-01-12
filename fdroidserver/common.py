@@ -460,7 +460,7 @@ def has_extension(filename, ext):
     return ext == f_ext
 
 
-apk_regex = re.compile(r"^(.+)_([0-9]+)\.apk$")
+publish_name_regex = re.compile(r"^(.+)_([0-9]+)\.(apk|zip)$")
 
 
 def clean_description(description):
@@ -476,13 +476,13 @@ def clean_description(description):
     return returnstring.rstrip('\n')
 
 
-def apknameinfo(filename):
+def publishednameinfo(filename):
     filename = os.path.basename(filename)
-    m = apk_regex.match(filename)
+    m = publish_name_regex.match(filename)
     try:
         result = (m.group(1), m.group(2))
     except AttributeError:
-        raise FDroidException("Invalid apk name: %s" % filename)
+        raise FDroidException("Invalid name for published file: %s" % filename)
     return result
 
 
