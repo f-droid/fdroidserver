@@ -1200,15 +1200,18 @@ def main():
                 failed_apps[appid] = e
                 wikilog = str(e)
 
-            if wikilog:
-                wikilog = tools_version_log + '\n\n' + wikilog
-
             if options.wiki and wikilog:
                 try:
                     # Write a page with the last build log for this version code
                     lastbuildpage = appid + '/lastbuild_' + build.vercode
                     newpage = site.Pages[lastbuildpage]
-                    txt = "Build completed at " + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + "\n\n" + wikilog
+                    with open(os.path.join('tmp', 'fdroidserverid')) as fp:
+                        fdroidserverid = fp.read()
+                    txt = "* build completed at " + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + '\n' \
+                          + '* fdroidserverid: [https://gitlab.com/fdroid/fdroidserver/commit/' \
+                          + fdroidserverid + ' ' + fdroidserverid + ']\n\n' \
+                          + tools_version_log + '\n\n' \
+                          + '== Build Log ==\n\n' + wikilog
                     newpage.save(txt, summary='Build log')
                     # Redirect from /lastbuild to the most recent build log
                     newpage = site.Pages[appid + '/lastbuild']
