@@ -31,7 +31,7 @@ class ImportTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
 
-        url = 'https://gitlab.com/eighthave/ci-test-app'
+        url = 'https://gitlab.com/fdroid/ci-test-app'
         r = requests.head(url)
         if r.status_code != 200:
             print("ERROR", url, 'unreachable (', r.status_code, ')')
@@ -42,8 +42,8 @@ class ImportTest(unittest.TestCase):
         app.UpdateCheckMode = "Tags"
         root_dir, src_dir = import_proxy.get_metadata_from_url(app, url)
         self.assertEqual(app.RepoType, 'git')
-        self.assertEqual(app.WebSite, 'https://gitlab.com/eighthave/ci-test-app')
-        self.assertEqual(app.Repo, 'https://gitlab.com/eighthave/ci-test-app.git')
+        self.assertEqual(app.WebSite, 'https://gitlab.com/fdroid/ci-test-app')
+        self.assertEqual(app.Repo, 'https://gitlab.com/fdroid/ci-test-app.git')
 
 
 if __name__ == "__main__":

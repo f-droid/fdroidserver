@@ -565,7 +565,8 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
                 usecache = True
             else:
                 logging.debug("Ignoring stale cache data for " + name)
-        elif not usecache:
+
+        if not usecache:
             logging.debug("Processing " + name)
             repo_file = {}
             # TODO rename apkname globally to something more generic
@@ -960,8 +961,8 @@ def extract_pubkey():
     return hexlify(pubkey)
 
 
-def make_index(apps, sortedids, apks, repodir, archive, categories):
-    """Make a repo index.
+def make_index(apps, sortedids, apks, repodir, archive):
+    """Generate the repo index files.
 
     :param apps: fully populated apps list
     :param apks: full populated apks list
@@ -1296,7 +1297,9 @@ def make_index(apps, sortedids, apks, repodir, archive, categories):
     iconfilename = os.path.join(icon_dir, os.path.basename(config['repo_icon']))
     shutil.copyfile(config['repo_icon'], iconfilename)
 
-    # Write a category list in the repo to allow quick access...
+
+def make_categories_txt(repodir, categories):
+    '''Write a category list in the repo to allow quick access'''
     catdata = ''
     for cat in categories:
         catdata += cat + '\n'
@@ -1611,7 +1614,7 @@ def main():
             appdict = dict()
             appdict[appid] = app
             if os.path.isdir(repodir):
-                make_index(appdict, [appid], apks, repodir, False, categories)
+                make_index(appdict, [appid], apks, repodir, False)
             else:
                 logging.info('Skipping index generation for ' + appid)
         return
@@ -1620,12 +1623,13 @@ def main():
         archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])
 
     # Make the index for the main repo...
-    make_index(apps, sortedids, apks, repodirs[0], False, categories)
+    make_index(apps, sortedids, apks, repodirs[0], False)
+    make_categories_txt(repodirs[0], categories)
 
     # If there's an archive repo,  make the index for it. We already scanned it
     # earlier on.
     if len(repodirs) > 1:
-        make_index(apps, sortedids, archapks, repodirs[1], True, categories)
+        make_index(apps, sortedids, archapks, repodirs[1], True)
 
     if config['update_stats']:
 
