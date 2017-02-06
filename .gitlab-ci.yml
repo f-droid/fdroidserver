@@ -3,6 +3,8 @@ image: fdroid/ci:server-20161223
 test:
   script:
     - mkdir -p /usr/lib/python3.4/site-packages/
+    # workaround https://github.com/pypa/setuptools/issues/937
+    - pip3 install setuptools==33.1.1
     - pip3 install -e .
     - cd tests
     - ./complete-ci-tests
