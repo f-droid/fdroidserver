@@ -37,6 +37,7 @@ packages="
  autopoint
  bison
  bzr
+ ca-certificates-java/jessie-backports
  cmake
  curl
  expect
@@ -68,6 +69,7 @@ packages="
  mercurial
  nasm
  nodejs
+ openjdk-8-jre-headless
  openjdk-8-jdk-headless
  optipng
  p7zip
