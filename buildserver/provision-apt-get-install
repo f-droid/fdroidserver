@@ -32,13 +32,13 @@ packages="
  ant-contrib
  autoconf
  autoconf2.13
- automake
+ automake/testing
  automake1.11
  autopoint
  bison
  bzr
  ca-certificates-java/jessie-backports
- cmake
+ cmake/jessie-backports
  curl
  expect
  faketime
