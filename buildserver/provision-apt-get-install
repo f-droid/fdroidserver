@@ -32,12 +32,13 @@ packages="
  ant-contrib
  autoconf
  autoconf2.13
- automake
+ automake/testing
  automake1.11
  autopoint
  bison
  bzr
- cmake
+ ca-certificates-java/jessie-backports
+ cmake/jessie-backports
  curl
  expect
  faketime
@@ -68,6 +69,7 @@ packages="
  mercurial
  nasm
  nodejs
+ openjdk-8-jre-headless
  openjdk-8-jdk-headless
  optipng
  p7zip

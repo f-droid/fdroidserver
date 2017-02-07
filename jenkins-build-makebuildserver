@@ -71,3 +71,5 @@ echo "build_server_always = True" > config.py
 ../fdroid build --verbose --stop info.guardianproject.checkey:101
 # building old versions should still work
 ../fdroid build --verbose --stop org.fdroid.fdroid:96150
+# VLC is important, and uses cmake
+../fdroid build --verbose --stop org.videolan.vlc:12000604
