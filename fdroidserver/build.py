@@ -246,6 +246,8 @@ def release_vm():
 def build_server(app, build, vcs, build_dir, output_dir, force):
     """Do a build on the build server."""
 
+    global buildserverid
+
     try:
         paramiko
     except NameError:
@@ -258,6 +260,10 @@ def build_server(app, build, vcs, build_dir, output_dir, force):
     sshinfo = get_clean_vm()
 
     try:
+        if not buildserverid:
+            buildserverid = subprocess.check_output(['vagrant', 'ssh', '-c',
+                                                     'cat /home/vagrant/buildserverid'],
+                                                    cwd='builder').rstrip()
 
         # Open SSH connection...
         logging.info("Connecting to virtual machine...")
@@ -1039,11 +1045,12 @@ def parse_commandline():
 
 options = None
 config = None
+buildserverid = None
 
 
 def main():
 
-    global options, config
+    global options, config, buildserverid
 
     options, parser = parse_commandline()
 
@@ -1214,9 +1221,12 @@ def main():
                         fdroidserverid = fp.read().rstrip()
                     txt = "* build completed at " + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + '\n' \
                           + '* fdroidserverid: [https://gitlab.com/fdroid/fdroidserver/commit/' \
-                          + fdroidserverid + ' ' + fdroidserverid + ']\n\n' \
-                          + tools_version_log + '\n\n' \
-                          + '== Build Log ==\n\n' + wikilog
+                          + fdroidserverid + ' ' + fdroidserverid + ']\n\n'
+                    if options.onserver:
+                        txt += '* buildserverid: [https://gitlab.com/fdroid/fdroidserver/commit/' \
+                               + buildserverid + ' ' + buildserverid + ']\n\n'
+                    txt += tools_version_log + '\n\n'
+                    txt += '== Build Log ==\n\n' + wikilog
                     newpage.save(txt, summary='Build log')
                     # Redirect from /lastbuild to the most recent build log
                     newpage = site.Pages[appid + '/lastbuild']
