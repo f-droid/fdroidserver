@@ -389,7 +389,10 @@ def build_server(app, build, vcs, build_dir, output_dir, force):
             cmdline += ' --verbose'
         cmdline += " %s:%s" % (app.id, build.vercode)
         chan.exec_command('bash --login -c "' + cmdline + '"')
+
         output = bytes()
+        output += b'== Installed Android Tools ==\n\n'
+        output += get_android_tools_version_log(build.ndk_path()).encode()
         while not chan.exit_status_ready():
             while chan.recv_ready():
                 output += chan.recv(1024)
@@ -952,9 +955,11 @@ def trybuild(app, build, build_dir, output_dir, also_check_dir, srclib_dir, extl
     return True
 
 
-def get_android_tools_versions(sdk_path, ndk_path=None):
+def get_android_tools_versions(ndk_path=None):
     '''get a list of the versions of all installed Android SDK/NDK components'''
 
+    global config
+    sdk_path = config['sdk_path']
     if sdk_path[-1] != '/':
         sdk_path += '/'
     components = []
@@ -976,10 +981,10 @@ def get_android_tools_versions(sdk_path, ndk_path=None):
     return components
 
 
-def get_android_tools_version_log(sdk_path, ndk_path):
+def get_android_tools_version_log(ndk_path):
     '''get a list of the versions of all installed Android SDK/NDK components'''
     log = ''
-    components = get_android_tools_versions(sdk_path, ndk_path)
+    components = get_android_tools_versions(ndk_path)
     for name, version in sorted(components):
         log += '* ' + name + ' (' + version + ')\n'
 
@@ -1137,7 +1142,7 @@ def main():
         for build in app.builds:
             wikilog = None
             tools_version_log = '== Installed Android Tools ==\n\n'
-            tools_version_log += get_android_tools_version_log(config['sdk_path'], build.ndk_path())
+            tools_version_log += get_android_tools_version_log(build.ndk_path())
             try:
 
                 # For the first build of a particular app, we need to set up
