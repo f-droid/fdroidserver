@@ -1206,7 +1206,7 @@ def main():
                     lastbuildpage = appid + '/lastbuild_' + build.vercode
                     newpage = site.Pages[lastbuildpage]
                     with open(os.path.join('tmp', 'fdroidserverid')) as fp:
-                        fdroidserverid = fp.read()
+                        fdroidserverid = fp.read().rstrip()
                     txt = "* build completed at " + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + '\n' \
                           + '* fdroidserverid: [https://gitlab.com/fdroid/fdroidserver/commit/' \
                           + fdroidserverid + ' ' + fdroidserverid + ']\n\n' \
