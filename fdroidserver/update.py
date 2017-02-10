@@ -961,6 +961,32 @@ def extract_pubkey():
     return hexlify(pubkey)
 
 
+# Get raw URL from git service for mirroring
+def get_raw_mirror(url):
+    # Divide urls in parts
+    url = url.split("/")
+
+    # Get the hostname
+    hostname = url[2]
+
+    # fdroidserver will use always 'master' branch for git-mirroring
+    branch = "master"
+    folder = "fdroid"
+
+    if hostname == "github.com":
+        # Github like RAW url "https://raw.githubusercontent.com/user/repo/master/fdroid"
+        url[2] = "raw.githubusercontent.com"
+        url.extend([branch, folder])
+    elif hostname == "gitlab.com":
+        # Gitlab like RAW url "https://gitlab.com/user/repo/raw/master/fdroid"
+        url.extend(["raw", branch, folder])
+    else:
+        return None
+
+    url = "/".join(url)
+    return url
+
+
 def make_index(apps, sortedids, apks, repodir, archive):
     """Generate the repo index files.
 
@@ -1011,6 +1037,10 @@ def make_index(apps, sortedids, apks, repodir, archive):
         if mirror.endswith('/'):
             mirrors.append(mirror)
         else:
+            mirrors.append(mirror + '/')
+    for mirror in config.get('servergitmirrors', []):
+        mirror = get_raw_mirror(mirror)
+        if mirror is not None:
             mirrors.append(mirror + '/')
     if mirrorcheckfailed:
         sys.exit(1)
