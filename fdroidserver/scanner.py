@@ -78,6 +78,7 @@ def scan_source(build_dir, root_dir, build):
         'jcenter.bintray.com',     # jcenter()
         'jitpack.io',
         'repo.maven.apache.org/maven2',
+        'oss.jfrog.org/artifactory/oss-snapshot-local',
         'oss.sonatype.org/content/repositories/snapshots',
         'oss.sonatype.org/content/repositories/releases',
         'oss.sonatype.org/content/groups/public',
