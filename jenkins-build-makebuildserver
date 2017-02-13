@@ -54,15 +54,31 @@ echo "apt_package_cache = True" >> $WORKSPACE/makebuildserver.config.py
 # this can be handled in the jenkins job, or here:
 if [ -e fdroiddata ]; then
     cd fdroiddata
+    git remote update -p
     git checkout master
-    git pull
+    git reset --hard origin/master
     cd ..
 else
     git clone --depth 1 https://gitlab.com/fdroid/fdroiddata.git fdroiddata
 fi
 
 cd fdroiddata
-echo "build_server_always = True" > config.py
+
+if [ -z $ANDROID_HOME ]; then
+    if [ -e ~/.android/bashrc ]; then
+        . ~/.android/bashrc
+    else
+        echo "ANDROID_HOME must be set!"
+        exit
+    fi
+fi
+
+../fdroid init --verbose
+export GNUPGHOME=$WORKSPACE/tests/gnupghome
+echo "gpghome = '$GNUPGHOME'" >> config.py
+echo "gpgkey = 'CE71F7FB'" >> config.py
+echo "build_server_always = True" >> config.py
+
 # if it can't build fdroid, then its really broken
 ../fdroid build --verbose --stop --latest org.fdroid.fdroid
 # Gradle, JNI, preassemble
@@ -71,5 +87,13 @@ echo "build_server_always = True" > config.py
 ../fdroid build --verbose --stop info.guardianproject.checkey:101
 # building old versions should still work
 ../fdroid build --verbose --stop org.fdroid.fdroid:96150
-# VLC is important, and uses cmake
-../fdroid build --verbose --stop org.videolan.vlc:12000604
+# test OTA update ZIP build and publish
+../fdroid build --verbose --stop --latest org.fdroid.fdroid.privileged.ota
+
+# publish process when building and signing are on separate machines
+test -d repo || mkdir repo
+test -d archive || mkdir archive
+../fdroid publish --verbose
+../fdroid gpgsign --verbose
+../fdroid update --verbose --nosign
+../fdroid signindex --verbose
