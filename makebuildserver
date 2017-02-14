@@ -4,9 +4,11 @@ import os
 import pathlib
 import re
 import requests
+import shutil
 import stat
 import sys
 import subprocess
+import tarfile
 import vagrant
 import hashlib
 import yaml
@@ -56,6 +58,7 @@ if os.path.isfile('/usr/bin/systemd-detect-virt'):
     if virt == 'qemu' or virt == 'kvm' or virt == 'bochs':
         print('Running in a VM guest, defaulting to QEMU/KVM via libvirt')
         config['vm_provider'] = 'libvirt'
+        config['domain'] = 'buildserver_default'
     elif virt != 'none':
         print('Running in an unsupported VM guest (' + virt + ')!')
 
@@ -302,9 +305,8 @@ def destroy_current_image(v, serverdir):
     if config['vm_provider'] == 'libvirt':
         import libvirt
         try:
-            domain = 'buildserver_default'
             virConnect = libvirt.open('qemu:///system')
-            virDomain = virConnect.lookupByName(domain)
+            virDomain = virConnect.lookupByName(config['domain'])
             if virDomain:
                 virDomain.undefineFlags(libvirt.VIR_DOMAIN_UNDEFINE_MANAGED_SAVE
                                         | libvirt.VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA
@@ -315,6 +317,52 @@ def destroy_current_image(v, serverdir):
                     vol.delete()
         except libvirt.libvirtError as e:
             print(e)
+
+
+def kvm_package(boxfile):
+    '''
+    Hack to replace missing `vagrant package` for kvm, based  on the script
+    `tools/create_box.sh from vagrant-libvirt
+    '''
+    import libvirt
+    virConnect = libvirt.open('qemu:///system')
+    storagePool = virConnect.storagePoolLookupByName('default')
+    if storagePool:
+        vol = storagePool.storageVolLookupByName(config['domain'] + '.img')
+        imagepath = vol.path()
+        # TODO use a libvirt storage pool to ensure the img file is readable
+        subprocess.check_call(['sudo', '/bin/chmod', '-R', 'a+rX', '/var/lib/libvirt/images'])
+        shutil.copy2(imagepath, 'box.img')
+        subprocess.check_call(['qemu-img', 'rebase', '-p', '-b', '', 'box.img'])
+        metadata = """{
+    "provider": "libvirt",
+    "format": "qcow2",
+    "virtual_size": 1000
+}
+"""
+        vagrantfile = """Vagrant.configure("2") do |config|
+
+  config.vm.provider :libvirt do |libvirt|
+
+    libvirt.driver = "kvm"
+    libvirt.host = ""
+    libvirt.connect_via_ssh = false
+    libvirt.storage_pool_name = "default"
+
+  end
+end
+"""
+        with open('metadata.json', 'w') as fp:
+            fp.write(metadata)
+        with open('Vagrantfile', 'w') as fp:
+            fp.write(vagrantfile)
+        with tarfile.open(boxfile, 'w:gz') as tar:
+            tar.add('metadata.json')
+            tar.add('Vagrantfile')
+            tar.add('box.img')
+        os.remove('metadata.json')
+        os.remove('Vagrantfile')
+        os.remove('box.img')
 
 
 def run_via_vagrant_ssh(v, cmdlist):
@@ -493,7 +541,11 @@ def main():
     boxfile = os.path.join(os.getcwd(), 'buildserver.box')
     if os.path.exists(boxfile):
         os.remove(boxfile)
-    v.package(output=boxfile)
+
+    if config['vm_provider'] == 'libvirt':
+        kvm_package(boxfile)
+    else:
+        v.package(output=boxfile)
 
     print("Adding box")
     v.box_add('buildserver', boxfile, force=True)
