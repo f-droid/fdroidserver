@@ -262,6 +262,15 @@ def read_config(opts, config_file='config.py'):
             rootlist.append(rootstr.replace('//', '/'))
         config['serverwebroot'] = rootlist
 
+    if 'servergitmirrors' in config:
+        if isinstance(config['servergitmirrors'], str):
+            roots = [config['servergitmirrors']]
+        elif all(isinstance(item, str) for item in config['servergitmirrors']):
+            roots = config['servergitmirrors']
+        else:
+            raise TypeError('only accepts strings, lists, and tuples')
+        config['servergitmirrors'] = roots
+
     return config
 
 

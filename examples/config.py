@@ -155,8 +155,20 @@ The repository of older versions of applications from the main demo repository.
 #     'bar.info:/var/www/fdroid',
 #     }
 
+# The full URL to a git remote repository. You can include
+# multiple servers to mirror to by wrapping the whole thing in {} or [], and
+# including the servergitmirrors strings in a comma-separated list.
+# Servers listed here will also be automatically inserted in the mirrors list.
+#
+# servergitmirrors = 'https://github.com/user/repo'
+# servergitmirrors = {
+#     'https://github.com/user/repo',
+#     'https://gitlab.com/user/repo',
+#     }
+
 # Any mirrors of this repo, for example all of the servers declared in
-# serverwebroot, will automatically be used by the client.  If one
+# serverwebroot and all the servers declared in servergitmirrors,
+# will automatically be used by the client.  If one
 # mirror is not working, then the client will try another.  If the
 # client has Tor enabled, then the client will prefer mirrors with
 # .onion addresses. This base URL will be used for both the main repo

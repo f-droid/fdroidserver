@@ -25,6 +25,7 @@ import pwd
 import subprocess
 from argparse import ArgumentParser
 import logging
+import shutil
 
 from . import common
 
@@ -191,6 +192,39 @@ def update_localcopy(repo_section, local_copy_dir):
     _local_sync(repo_section, local_copy_dir)
 
 
+def update_servergitmirrors(servergitmirrors, repo_section):
+    # depend on GitPython only if users set a git mirror
+    import git
+    # right now we support only 'repo' git-mirroring
+    if repo_section == 'repo':
+        # create a new git-mirror folder
+        repo_dir = os.path.join('.', 'git-mirror/')
+
+        # remove if already present
+        if os.path.isdir(repo_dir):
+            shutil.rmtree(repo_dir)
+
+        repo = git.Repo.init(repo_dir)
+
+        # take care of each mirror
+        for mirror in servergitmirrors:
+            hostname = mirror.split("/")[2]
+            repo.create_remote(hostname, mirror)
+            logging.info('Mirroring to: ' + mirror)
+
+        # copy local 'repo' to 'git-mirror/fdroid/repo directory' with _local_sync
+        fdroid_repo_path = os.path.join(repo_dir, "fdroid")
+        _local_sync(repo_section, fdroid_repo_path)
+
+        # sadly index.add don't allow the --all parameter
+        repo.git.add(all=True)
+        repo.index.commit("fdroidserver git-mirror")
+
+        # push for every remote. This will overwrite the git history
+        for remote in repo.remotes:
+            remote.push('master', force=True, set_upstream=True)
+
+
 def main():
     global config, options
 
@@ -269,8 +303,9 @@ def main():
 
     if not config.get('awsbucket') \
             and not config.get('serverwebroot') \
+            and not config.get('servergitmirrors') \
             and local_copy_dir is None:
-        logging.warn('No serverwebroot, local_copy_dir, or awsbucket set!'
+        logging.warn('No serverwebroot, local_copy_dir, or awsbucket set! '
                      + 'Edit your config.py to set at least one.')
         sys.exit(1)
 
@@ -313,6 +348,10 @@ def main():
                     update_localcopy(repo_section, local_copy_dir)
             for serverwebroot in config.get('serverwebroot', []):
                 update_serverwebroot(serverwebroot, repo_section)
+            if config.get('servergitmirrors', []):
+                # update_servergitmirrors will take care of multiple mirrors so don't need a foreach
+                servergitmirrors = config.get('servergitmirrors', [])
+                update_servergitmirrors(servergitmirrors, repo_section)
             if config.get('awsbucket'):
                 update_awsbucket(repo_section)
 
