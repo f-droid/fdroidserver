@@ -1563,6 +1563,7 @@ def main():
                 f.write("Description:\n")
                 f.write(apk['name'] + "\n")
                 f.write(".\n")
+                f.write("Name:" + apk['name'] + "\n")
                 f.close()
                 logging.info("Generated skeleton metadata for " + apk['id'])
                 newmetadata = True
