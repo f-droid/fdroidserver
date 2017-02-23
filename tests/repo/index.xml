@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fdroid>
+	<repo icon="fdroid-icon.png" name="My First F-Droid Repo Demo" pubkey="308204e1308202c9a003020102020434597643300d06092a864886f70d01010b050030213110300e060355040b1307462d44726f6964310d300b06035504031304736f7661301e170d3136303931333230313930395a170d3434303133303230313930395a30213110300e060355040b1307462d44726f6964310d300b06035504031304736f766130820222300d06092a864886f70d01010105000382020f003082020a028202010086ef94b5aacf2ba4f38c875f4194b44f5644392e3715575d7c92828577e692c352b567172823851c8c72347fbc9d99684cd7ca3e1db3e4cca126382c53f2a5869fb4c19bdec989b2930501af3e758ff40588915fe96b10076ce3346a193a0277d79e83e30fd8657c20e35260dd085aa32eac7c4b85786ffefbf1555cafe2bc928443430cdbba48cfbe701e12ae86e676477932730d4fc7c00af820aef85038a5b4df084cf6470d110dc4c49ea1b749b80b34709d199b3db516b223625c5de4501e861f7d261b3838f8f616aa78831d618d41d25872dc810c9b2087b5a9e146ca95be740316dcdbcb77314e23ab87d4487913b800b1113c0603ea2294188b71d3e49875df097b56f9151211fc6832f9790c5c83d17481f14ad37915fd164f4fd713f6732a15f4245714b84cd665bdbd085660ea33ad7d7095dcc414f09e3903604a40facc2314a115c0045bb50e9df38efb57e1b8e7cc105f340a26eeb46aba0fa6672953eee7f1f92dcb408e561909bbd4bdf4a4948c4d57c467d21aa238c34ba43be050398be963191fa2b49828bc1e4eeed224b40dbe9dc3e570890a71a974a2f4527edb1b07105071755105edcb2af2f269facfb89180903a572a99b46456e80d4a01685a80b233278805f2c876678e731f4ec4f52075aeef6b2b023efbb8a3637ef507c4c37c27e428152ec1817fcba640ad601cb09f72f0fbe2d274a2410203010001a321301f301d0603551d0e04160414c28bf33dd5a9a17338e5b1d1a6edd8c7d141ed0b300d06092a864886f70d01010b0500038202010084e20458b2aafd7fc27146b0986f9324f4260f244920417a77c9bf15e2e2d22d2725bdd8093ec261c3779c3ca03312516506f9410075b90595b41345956d8eb2786fb5994f195611382c2b99dba13381b0100a30bc9e6e47248bf4325e2f6eec9d789216dc7536e753bf1f4be603d9fa2e6f5e192b4eb988b8cdb0bb1e8668a9225426f7d4636479f73ed24ad1d2657c31e63c93d9679b9080171b3bd1bf10a3b92b80bd790fbf62d3644900cd08eae8b9bf9c2567be98dc8cdd2ae19a8d57a3e3e2de899f81f1279f578989e6af906f80c8c2b67651730ee7e568c1af5bcb845b6d685dc55332a9984aeceaea3b7e883447edf1c76b155d95253e39b9710eaa22efa6c81468829702b5dce7126538f3ca70c2f0ad9a5795435fdb1f715f20d60359ef9a9926c7050116e802df651727447848827815f70bd82af3cedd08783156102d2d8ce995c4c43b8e47e91a3e6927f3505a5d395e6bebb84542c570903eeab4382a1c2151f1471c7a06a34dc4d268d8fa72e93bdcd2dccc4302ecac47b9e7e3d8bc9b46d21cd097874a24d529548018dc190ff568c6aa428f0a5eedff1a347730931c74f19277538e49647a4ad7254f4c1ec7d4da12cce9e1fad9607534e66ab40a56b473d9d7e3d563fd03cad2052bad365c5a29f8ae54f09b60dbca3ea768d7767cbe1c133ca08ce725c1c1370f4aab8e5b6e286f52dc0be8d0982b5a" timestamp="1480431575" url="https://MyFirstFDroidRepo.org/fdroid/repo" version="17">
+		<description>This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/u/fdroid. </description>
+		<mirror>http://foobarfoobarfoobar.onion/fdroid/repo</mirror>
+		<mirror>https://foo.bar/fdroid/repo</mirror>
+	</repo>
+	<install packageName="org.adaway"/>
+	<uninstall packageName="com.android.vending"/>
+	<uninstall packageName="com.facebook.orca"/>
+	<application id="obb.main.oldversion">
+		<id>obb.main.oldversion</id>
+		<added>2013-12-31</added>
+		<lastupdated>2013-12-31</lastupdated>
+		<name>OBB Main Old Version</name>
+		<summary></summary>
+		<icon>obb.main.oldversion.1444412523.png</icon>
+		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
+		<license>GPLv3</license>
+		<categories>Development</categories>
+		<category>Development</category>
+		<web></web>
+		<source>https://github.com/eighthave/urzip</source>
+		<tracker></tracker>
+		<bitcoin>1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk</bitcoin>
+		<marketversion></marketversion>
+		<marketvercode>99999999</marketvercode>
+		<package>
+			<version>0.1</version>
+			<versioncode>1444412523</versioncode>
+			<apkname>obb.main.oldversion_1444412523.apk</apkname>
+			<hash type="sha256">7562a36c9e2b38013b96663cf41f0f290dc7a248a81befa8d89e14f390c94c7f</hash>
+			<size>11470</size>
+			<sdkver>4</sdkver>
+			<targetSdkVersion>18</targetSdkVersion>
+			<obbMainFile>main.1434483388.obb.main.oldversion.obb</obbMainFile>
+			<obbMainFileSha256>d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7</obbMainFileSha256>
+			<added>2013-12-31</added>
+			<sig>b4964fd759edaa54e65bb476d0276880</sig>
+		</package>
+	</application>
+	<application id="obb.main.twoversions">
+		<id>obb.main.twoversions</id>
+		<added>2015-10-12</added>
+		<lastupdated>2016-06-20</lastupdated>
+		<name>OBB Main Two Versions</name>
+		<summary></summary>
+		<icon>obb.main.twoversions.1101617.png</icon>
+		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
+		<license>GPLv3</license>
+		<categories>Development</categories>
+		<category>Development</category>
+		<web></web>
+		<source>https://github.com/eighthave/urzip</source>
+		<tracker></tracker>
+		<bitcoin>1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk</bitcoin>
+		<marketversion></marketversion>
+		<marketvercode>99999999</marketvercode>
+		<package>
+			<version>0.1</version>
+			<versioncode>1101617</versioncode>
+			<apkname>obb.main.twoversions_1101617.apk</apkname>
+			<srcname>obb.main.twoversions_1101617_src.tar.gz</srcname>
+			<hash type="sha256">9bc74566f089ef030ac33e7fbd99d92f1a38f363fb499fed138d9e7b774e821c</hash>
+			<size>11481</size>
+			<sdkver>4</sdkver>
+			<targetSdkVersion>18</targetSdkVersion>
+			<obbMainFile>main.1101615.obb.main.twoversions.obb</obbMainFile>
+			<obbMainFileSha256>d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7</obbMainFileSha256>
+			<added>2016-06-20</added>
+			<sig>b4964fd759edaa54e65bb476d0276880</sig>
+		</package>
+		<package>
+			<version>0.1</version>
+			<versioncode>1101615</versioncode>
+			<apkname>obb.main.twoversions_1101615.apk</apkname>
+			<hash type="sha256">7b0b7b9ba248e15751a16e3a0e01e1e24cbb673686c38422030cb75d5c33f0bb</hash>
+			<size>11480</size>
+			<sdkver>4</sdkver>
+			<targetSdkVersion>18</targetSdkVersion>
+			<obbMainFile>main.1101615.obb.main.twoversions.obb</obbMainFile>
+			<obbMainFileSha256>d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7</obbMainFileSha256>
+			<added>2016-01-01</added>
+			<sig>b4964fd759edaa54e65bb476d0276880</sig>
+		</package>
+		<package>
+			<version>0.1</version>
+			<versioncode>1101613</versioncode>
+			<apkname>obb.main.twoversions_1101613.apk</apkname>
+			<hash type="sha256">cce97a52ff18d843185be7f22ecb1a557c36b7a9f8ba07a8be94e328e00b35dc</hash>
+			<size>11477</size>
+			<sdkver>4</sdkver>
+			<targetSdkVersion>18</targetSdkVersion>
+			<obbMainFile>main.1101613.obb.main.twoversions.obb</obbMainFile>
+			<obbMainFileSha256>d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7</obbMainFileSha256>
+			<added>2015-10-12</added>
+			<sig>b4964fd759edaa54e65bb476d0276880</sig>
+		</package>
+	</application>
+	<application id="obb.mainpatch.current">
+		<id>obb.mainpatch.current</id>
+		<added>2016-04-23</added>
+		<lastupdated>2016-04-23</lastupdated>
+		<name>OBB Main/Patch Current</name>
+		<summary></summary>
+		<icon>obb.mainpatch.current.1619.png</icon>
+		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
+		<license>GPLv3</license>
+		<categories>Development</categories>
+		<category>Development</category>
+		<web></web>
+		<source>https://github.com/eighthave/urzip</source>
+		<tracker></tracker>
+		<bitcoin>1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk</bitcoin>
+		<marketversion></marketversion>
+		<marketvercode>99999999</marketvercode>
+		<package>
+			<version>0.1</version>
+			<versioncode>1619</versioncode>
+			<apkname>obb.mainpatch.current_1619.apk</apkname>
+			<hash type="sha256">eda5fc3ecfdac3252717e36bdbc9820865baeef162264af9ba5db7364f0e7a0c</hash>
+			<size>11479</size>
+			<sdkver>4</sdkver>
+			<targetSdkVersion>18</targetSdkVersion>
+			<obbMainFile>main.1619.obb.mainpatch.current.obb</obbMainFile>
+			<obbMainFileSha256>d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7</obbMainFileSha256>
+			<obbPatchFile>patch.1619.obb.mainpatch.current.obb</obbPatchFile>
+			<obbPatchFileSha256>d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7</obbPatchFileSha256>
+			<added>2016-04-23</added>
+			<sig>b4964fd759edaa54e65bb476d0276880</sig>
+		</package>
+	</application>
+	<application id="info.guardianproject.urzip">
+		<id>info.guardianproject.urzip</id>
+		<added>2016-06-23</added>
+		<lastupdated>2016-06-23</lastupdated>
+		<name>urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234</name>
+		<summary>一个实用工具，获取已安装在您的设备上的应用的有关信息</summary>
+		<icon>info.guardianproject.urzip.100.png</icon>
+		<desc>&lt;p&gt;It’s Urzip 是一个获得已安装 APK 相关信息的实用工具。它从您的设备上已安装的所有应用开始，一键触摸即可显示 APK 的指纹，并且提供到达 virustotal.com 和 androidobservatory.org 的快捷链接，让您方便地了解特定 APK 的档案。它还可以让您导出签名证书和生成 ApkSignaturePin Pin 文件供 TrustedIntents 库使用。&lt;/p&gt;&lt;p&gt;★ Urzip 支持下列语言： Deutsch, English, español, suomi, 日本語, 한국어, Norsk, português (Portugal), Русский, Slovenščina, Türkçe 没看到您的语言？帮忙翻译本应用吧： https://www.transifex.com/projects/p/urzip&lt;/p&gt;&lt;p&gt;★ 致用户：我们还缺少你喜欢的功能？发现了一个 bug？请告诉我们！我们乐于听取您的意见。请发送电子邮件至: support@guardianproject.info 或者加入我们的聊天室 https://guardianproject.info/contact&lt;/p&gt;</desc>
+		<license>GPLv3</license>
+		<categories>Development,GuardianProject</categories>
+		<category>Development</category>
+		<web>https://dev.guardianproject.info/projects/urzip</web>
+		<source>https://github.com/guardianproject/urzip</source>
+		<tracker>https://dev.guardianproject.info/projects/urzip/issues</tracker>
+		<bitcoin>1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk</bitcoin>
+		<marketversion></marketversion>
+		<marketvercode>9999999</marketvercode>
+		<package>
+			<version>0.1</version>
+			<versioncode>100</versioncode>
+			<apkname>urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234.apk</apkname>
+			<hash type="sha256">15c0ec72c74a3791f42cdb43c57df0fb11a4dbb656851bbb8cf05b26a8372789</hash>
+			<size>11471</size>
+			<sdkver>4</sdkver>
+			<targetSdkVersion>18</targetSdkVersion>
+			<added>2016-06-23</added>
+			<sig>b4964fd759edaa54e65bb476d0276880</sig>
+		</package>
+	</application>
+</fdroid>

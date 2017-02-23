@@ -158,17 +158,21 @@ echo_header "copy tests/repo, generate java/gpg keys, update, and gpgsign"
 
 REPOROOT=`create_test_dir`
 GNUPGHOME=$REPOROOT/gnupghome
+KEYSTORE=$WORKSPACE/tests/keystore.jks
 cd $REPOROOT
-$fdroid init
-cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $REPOROOT/
+$fdroid init --keystore $KEYSTORE --repo-keyalias=sova
+echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $REPOROOT/
 cp -a $WORKSPACE/tests/gnupghome $GNUPGHOME
 chmod 0700 $GNUPGHOME
 echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
 echo "install_list = 'org.adaway'" >> config.py
-echo "uninstall_list = {'com.android.vending', 'com.facebook.orca',}" >> config.py
+echo "uninstall_list = ('com.android.vending', 'com.facebook.orca',)" >> config.py
 echo "gpghome = '$GNUPGHOME'" >> config.py
 echo "gpgkey = 'CE71F7FB'" >> config.py
-$fdroid update --verbose
+echo "mirrors = ('http://foobarfoobarfoobar.onion/fdroid','https://foo.bar/fdroid',)" >> config.py
+$fdroid update --verbose --pretty
 test -e repo/index.xml
 test -e repo/index.jar
 grep -F '<application id=' repo/index.xml > /dev/null
@@ -182,6 +186,9 @@ test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc
 ! test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc.asc
 ! test -e repo/index.xml.asc
 
+# we can't easily reproduce the timestamps for things, so just hardcode them
+sed -i --expression='s,timestamp="[0-9]*",timestamp="1480431575",' repo/index.xml
+diff $WORKSPACE/tests/repo/index.xml repo/index.xml
 
 #------------------------------------------------------------------------------#
 echo_header "test metadata checks"
