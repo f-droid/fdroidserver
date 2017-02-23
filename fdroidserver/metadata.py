@@ -818,6 +818,15 @@ def post_metadata_parse(app):
         for build in app['builds']:
             if not isinstance(build, Build):
                 build = Build(build)
+            for k, v in build.items():
+                if flagtype(k) == TYPE_LIST:
+                    if isinstance(v, str):
+                        build[k] = [v]
+                    elif isinstance(v, bool):
+                        if v:
+                            build[k] = ['yes']
+                        else:
+                            build[k] = []
             builds.append(build)
 
     if not app.get('Description'):

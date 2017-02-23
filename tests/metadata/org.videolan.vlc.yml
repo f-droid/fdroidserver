@@ -43,9 +43,7 @@ builds:
       - .
       - ../java-libs/SlidingMenu
       - ../java-libs/ActionBarSherlock
-    build: |
-      cd ../ && \
-      ANDROID_ABI=armeabi ./compile.sh release
+    build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
     buildjni: no
 
   - versionName: 0.0.11-x86
@@ -60,9 +58,7 @@ builds:
       - .
       - ../java-libs/SlidingMenu
       - ../java-libs/ActionBarSherlock
-    build: |
-      cd ../ && \
-      ANDROID_ABI=x86 ./compile.sh release
+    build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
     buildjni: no
 
   - versionName: 0.0.11-mips
@@ -76,9 +72,7 @@ builds:
       - .
       - ../java-libs/SlidingMenu
       - ../java-libs/ActionBarSherlock
-    build: >
-      cd ../ && \
-      ANDROID_ABI=mips ./compile.sh release
+    build: cd ../ && ANDROID_ABI=mips ./compile.sh release
     buildjni: no
 
   - versionName: 0.1.3-MIPS
@@ -90,11 +84,8 @@ builds:
     srclibs: VLC@7c52aacbe
     forceversion: yes
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC$$ ../vlc
-    build: |
-      cd ../ && \
-      ANDROID_ABI=mips ./compile.sh release
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
+    build: cd ../ && ANDROID_ABI=mips ./compile.sh release
     buildjni: no
 
   - versionName: 0.1.3-x86
@@ -105,8 +96,7 @@ builds:
     srclibs: VLC@7c52aacbe
     forceversion: yes
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
     build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
     buildjni: no
 
@@ -118,8 +108,7 @@ builds:
     srclibs: VLC@7c52aacbe
     forceversion: yes
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
     buildjni: no
 
@@ -131,8 +120,7 @@ builds:
     srclibs: VLC@7c52aacbe
     forceversion: yes
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
     buildjni: no
 
@@ -142,8 +130,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC@31ffb20309264994
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
     build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
     buildjni: no
 
@@ -153,8 +140,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC@31ffb20309264994
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
     buildjni: no
 
@@ -164,8 +150,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC@37e886d113b8b567c15208579fb2f
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
     build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
     buildjni: no
 
@@ -175,8 +160,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC@37e886d113b8b567c15208579fb2f
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
     buildjni: no
 
@@ -187,8 +171,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC@052600173f376ff58ff04d53746961a2
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
     build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
     buildjni: no
 
@@ -199,8 +182,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC@052600173f376ff58ff04d53746961a2
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
     buildjni: no
 
@@ -210,8 +192,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@27f4799
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
     buildjni: no
 
@@ -221,8 +202,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@27f4799
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
     buildjni: no
 
@@ -232,8 +212,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@9e1c6ff
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
     buildjni: no
 
@@ -243,8 +222,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@9e1c6ff
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
     buildjni: no
 
@@ -255,8 +233,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@57cd36b
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=mips ./compile.sh release
     buildjni: no
 
@@ -266,8 +243,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@57cd36b
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
     buildjni: no
 
@@ -277,8 +253,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@57cd36b
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
     buildjni: no
 
@@ -288,8 +263,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@f2db364
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
     buildjni: no
 
@@ -299,8 +273,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@f2db364
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
     buildjni: no
 
@@ -310,8 +283,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@f2db364
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
     buildjni: no
 
@@ -321,8 +293,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@e731dc23a4f8ef6782c7cc2236bbbf41c034dad1
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
     buildjni: no
 
@@ -332,8 +303,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@e731dc23a4f8ef6782c7cc2236bbbf41c034dad1
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
     buildjni: no
 
@@ -343,8 +313,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@e731dc23a4f8ef6782c7cc2236bbbf41c034dad1
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
     buildjni: no
 
@@ -354,8 +323,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@e33e5de
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
     buildjni: no
 
@@ -365,8 +333,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@e33e5de
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
     buildjni: no
 
@@ -376,8 +343,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@e33e5de
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
     buildjni: no
 
@@ -389,8 +355,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@036010e
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
     buildjni: no
 
@@ -402,8 +367,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@036010e
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
     buildjni: no
 
@@ -415,8 +379,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@036010e
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
     buildjni: no
 
@@ -426,8 +389,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@59409d5
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
     buildjni: no
 
@@ -437,8 +399,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@59409d5
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
     buildjni: no
 
@@ -448,8 +409,7 @@ builds:
     subdir: vlc-android
     srclibs: VLC-2.2@59409d5
     forcevercode: yes
-    prebuild: sed -i '/ant/d' ../Makefile && \
-        ln -s vlc-android/$$VLC-2.2$$ ../vlc
+    prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
     buildjni: no
 
