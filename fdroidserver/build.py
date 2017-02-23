@@ -46,12 +46,21 @@ except ImportError:
     pass
 
 
-def get_builder_vm_id():
+def get_vm_provider():
+    """Determine vm provider based on .vagrant directory content
+    """
+    if os.path.exists(os.path.join('builder', '.vagrant', 'machines',
+                                   'default', 'libvirt')):
+        return 'libvirt'
+    return 'virtualbox'
+
+
+def get_builder_vm_id(provider):
     vd = os.path.join('builder', '.vagrant')
     if os.path.isdir(vd):
         # Vagrant 1.2 (and maybe 1.1?) it's a directory tree...
         with open(os.path.join(vd, 'machines', 'default',
-                               'virtualbox', 'id')) as vf:
+                               provider, 'id')) as vf:
             id = vf.read()
         return id
     else:
@@ -61,7 +70,7 @@ def get_builder_vm_id():
         return v['active']['default']
 
 
-def got_valid_builder_vm():
+def got_valid_builder_vm(provider):
     """Returns True if we have a valid-looking builder vm
     """
     if not os.path.exists(os.path.join('builder', 'Vagrantfile')):
@@ -74,7 +83,7 @@ def got_valid_builder_vm():
         return True
     # Vagrant 1.2 - the directory can exist, but the id can be missing...
     if not os.path.exists(os.path.join(vd, 'machines', 'default',
-                                       'virtualbox', 'id')):
+                                       provider, 'id')):
         return False
     return True
 
@@ -117,6 +126,44 @@ def get_vagrant_sshinfo():
             'idfile': idfile}
 
 
+def vm_snapshot_list(provider):
+    if provider is 'virtualbox':
+        p = FDroidPopen(['VBoxManage', 'snapshot',
+                         get_builder_vm_id(provider), 'list',
+                         '--details'], cwd='builder')
+    elif provider is 'libvirt':
+        p = FDroidPopen(['virsh', 'snapshot-list',
+                         get_builder_vm_id(provider)])
+    return p.output
+
+
+def vm_snapshot_clean_available(provider):
+    return 'fdroidclean' in vm_snapshot_list(provider)
+
+
+def vm_snapshot_restore(provider):
+    """Does a rollback of the build vm.
+    """
+    if provider is 'virtualbox':
+        p = FDroidPopen(['VBoxManage', 'snapshot',
+                         get_builder_vm_id(provider), 'restore',
+                         'fdroidclean'], cwd='builder')
+    elif provider is 'libvirt':
+        p = FDroidPopen(['virsh', 'snapshot-revert',
+                         get_builder_vm_id(provider), 'fdroidclean'])
+    return p.returncode == 0
+
+def vm_snapshot_create(provider):
+    if provider is 'virtualbox':
+        p = FDroidPopen(['VBoxManage', 'snapshot',
+                         get_builder_vm_id(provider),
+                         'take', 'fdroidclean'], cwd='builder')
+    elif provider is 'libvirt':
+        p = FDroidPopen(['virsh', 'snapshot-create-as',
+                         get_builder_vm_id(provider), 'fdroidclean'])
+    return p.returncode != 0
+
+
 def get_clean_vm(reset=False):
     """Get a clean VM ready to do a buildserver build.
 
@@ -130,17 +177,16 @@ def get_clean_vm(reset=False):
     :returns: A dictionary containing 'hostname', 'port', 'user'
         and 'idfile'
     """
+    provider = get_vm_provider()
+
     # Reset existing builder machine to a clean state if possible.
     vm_ok = False
     if not reset:
         logging.info("Checking for valid existing build server")
 
-        if got_valid_builder_vm():
-            logging.info("...VM is present")
-            p = FDroidPopen(['VBoxManage', 'snapshot',
-                             get_builder_vm_id(), 'list',
-                             '--details'], cwd='builder')
-            if 'fdroidclean' in p.output:
+        if got_valid_builder_vm(provider):
+            logging.info("...VM is present (%s)" % provider)
+            if vm_snapshot_clean_available(provider):
                 logging.info("...snapshot exists - resetting build server to "
                              "clean state")
                 retcode, output = vagrant(['status'], cwd='builder')
@@ -150,11 +196,8 @@ def get_clean_vm(reset=False):
                     vagrant(['suspend'], cwd='builder')
                     logging.info("...waiting a sec...")
                     time.sleep(10)
-                p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(),
-                                 'restore', 'fdroidclean'],
-                                cwd='builder')
 
-                if p.returncode == 0:
+                if vm_snapshot_restore(provider):
                     logging.info("...reset to snapshot - server is valid")
                     retcode, output = vagrant(['up'], cwd='builder')
                     if retcode != 0:
@@ -167,7 +210,8 @@ def get_clean_vm(reset=False):
                     logging.info("...failed to reset to snapshot")
             else:
                 logging.info("...snapshot doesn't exist - "
-                             "VBoxManage snapshot list:\n" + p.output)
+                             "VBoxManage snapshot list:\n" +
+                             vm_snapshot_list(provider))
 
     # If we can't use the existing machine for any reason, make a
     # new one from scratch.
@@ -187,8 +231,8 @@ def get_clean_vm(reset=False):
 
         with open(os.path.join('builder', 'Vagrantfile'), 'w') as vf:
             vf.write('Vagrant.configure("2") do |config|\n')
-            vf.write('config.vm.box = "buildserver"\n')
-            vf.write('config.vm.synced_folder ".", "/vagrant", disabled: true\n')
+            vf.write('    config.vm.box = "buildserver"\n')
+            vf.write('    config.vm.synced_folder ".", "/vagrant", disabled: true\n')
             vf.write('end\n')
 
         logging.info("Starting new build server")
@@ -213,10 +257,7 @@ def get_clean_vm(reset=False):
             raise BuildException("Failed to suspend build server")
         logging.info("...waiting a sec...")
         time.sleep(10)
-        p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(),
-                         'take', 'fdroidclean'],
-                        cwd='builder')
-        if p.returncode != 0:
+        if vm_snapshot_create(provider):
             raise BuildException("Failed to take snapshot")
         logging.info("...waiting a sec...")
         time.sleep(10)
@@ -227,10 +268,7 @@ def get_clean_vm(reset=False):
         logging.info("...waiting a sec...")
         time.sleep(10)
         # Make sure it worked...
-        p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(),
-                         'list', '--details'],
-                        cwd='builder')
-        if 'fdroidclean' not in p.output:
+        if not vm_snapshot_clean_available(provider):
             raise BuildException("Failed to take snapshot.")
 
     return sshinfo
