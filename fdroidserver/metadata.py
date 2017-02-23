@@ -827,6 +827,8 @@ def post_metadata_parse(app):
                             build[k] = ['yes']
                         else:
                             build[k] = []
+                elif flagtype(k) == TYPE_STRING and type(v) in (float, int):
+                    build[k] = str(v)
             builds.append(build)
 
     if not app.get('Description'):
