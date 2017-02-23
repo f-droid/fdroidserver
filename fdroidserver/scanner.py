@@ -63,6 +63,7 @@ def scan_source(build_dir, root_dir, build):
             r'crashlytics',
             r'ouya.*sdk',
             r'libspen23',
+            r'firebase',
         ]
     }
 
