@@ -1,17 +1,17 @@
 AntiFeatures: []
-Archive Policy: null
-Author Email: null
-Author Name: null
-Auto Name: AdAway
-Auto Update Mode: Version v%v
+ArchivePolicy: null
+AuthorEmail: null
+AuthorName: null
+AutoName: AdAway
+AutoUpdateMode: Version v%v
 Binaries: null
 Bitcoin: null
 Categories:
 - System
 - Security
 Changelog: ''
-Current Version: '3.0'
-Current Version Code: '52'
+CurrentVersion: '3.0'
+CurrentVersionCode: '52'
 Description: 'An ad blocker that uses the hosts file. The hosts file
 
   contains a list of mappings between hostnames and IP addresses. When
@@ -38,27 +38,28 @@ Description: 'An ad blocker that uses the hosts file. The hosts file
 Disabled: null
 Donate: http://sufficientlysecure.org/index.php/adaway
 FlattrID: '369138'
-Issue Tracker: https://github.com/dschuermann/ad-away/issues
+IssueTracker: https://github.com/dschuermann/ad-away/issues
 License: GPLv3
 Litecoin: null
-Maintainer Notes: ''
+MaintainerNotes: ''
 Name: null
-No Source Since: ''
+NoSourceSince: ''
 Provides: org.sufficientlysecure.adaway
 Repo: https://github.com/dschuermann/ad-away.git
-Repo Type: git
-Requires Root: true
-Source Code: https://github.com/dschuermann/ad-away
+RepoType: git
+RequiresRoot: true
+SourceCode: https://github.com/dschuermann/ad-away
 Summary: Block advertisements
-Update Check Data: null
-Update Check Ignore: null
-Update Check Mode: Tags
-Update Check Name: null
-Vercode Operation: null
-Web Site: http://sufficientlysecure.org/index.php/adaway
+UpdateCheckData: null
+UpdateCheckIgnore: null
+UpdateCheckMode: Tags
+UpdateCheckName: null
+VercodeOperation: null
+WebSite: http://sufficientlysecure.org/index.php/adaway
 added: null
 builds:
-- antcommands: []
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -87,10 +88,10 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '13'
-  version: '1.12'
-- antcommands: []
+  versionCode: '13'
+  versionName: '1.12'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -120,10 +121,10 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '16'
-  version: '1.15'
-- antcommands: []
+  versionCode: '16'
+  versionName: '1.15'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -153,10 +154,10 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '19'
-  version: '1.18'
-- antcommands: []
+  versionCode: '19'
+  versionName: '1.18'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -186,10 +187,10 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '20'
-  version: '1.19'
-- antcommands: []
+  versionCode: '20'
+  versionName: '1.19'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -219,10 +220,10 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '21'
-  version: '1.20'
-- antcommands: []
+  versionCode: '21'
+  versionName: '1.20'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -252,10 +253,10 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '22'
-  version: '1.21'
-- antcommands: []
+  versionCode: '22'
+  versionName: '1.21'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: unknown - see disabled
@@ -283,10 +284,10 @@ builds:
   subdir: null
   submodules: false
   target: null
-  update: []
-  vercode: '24'
-  version: '1.23'
-- antcommands: []
+  versionCode: '24'
+  versionName: '1.23'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -315,10 +316,10 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '25'
-  version: '1.24'
-- antcommands: []
+  versionCode: '25'
+  versionName: '1.24'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -347,10 +348,10 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '26'
-  version: '1.25'
-- antcommands: []
+  versionCode: '26'
+  versionName: '1.25'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -379,10 +380,10 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '27'
-  version: '1.26'
-- antcommands: []
+  versionCode: '27'
+  versionName: '1.26'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -411,10 +412,10 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '28'
-  version: '1.27'
-- antcommands: []
+  versionCode: '28'
+  versionName: '1.27'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -443,12 +444,12 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '30'
-  version: '1.29'
-- antcommands: []
+  versionCode: '30'
+  versionName: '1.29'
+- androidupdate: []
+  antcommands: []
   build: ''
-  buildjni: false
+  buildjni: []
   commit: 71ced3f
   disable: false
   encoding: null
@@ -475,12 +476,12 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '33'
-  version: '1.32'
-- antcommands: []
+  versionCode: '33'
+  versionName: '1.32'
+- androidupdate: []
+  antcommands: []
   build: ''
-  buildjni: false
+  buildjni: []
   commit: 9d63c18
   disable: false
   encoding: null
@@ -506,12 +507,12 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '34'
-  version: '1.33'
-- antcommands: []
+  versionCode: '34'
+  versionName: '1.33'
+- androidupdate: []
+  antcommands: []
   build: ''
-  buildjni: false
+  buildjni: []
   commit: f2568b1
   disable: false
   encoding: null
@@ -538,12 +539,12 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '35'
-  version: '1.34'
-- antcommands: []
+  versionCode: '35'
+  versionName: '1.34'
+- androidupdate: []
+  antcommands: []
   build: ''
-  buildjni: false
+  buildjni: []
   commit: 7442d5d
   disable: false
   encoding: null
@@ -570,12 +571,12 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '36'
-  version: '1.35'
-- antcommands: []
+  versionCode: '36'
+  versionName: '1.35'
+- androidupdate: []
+  antcommands: []
   build: ''
-  buildjni: false
+  buildjni: []
   commit: 83fc713
   disable: false
   encoding: null
@@ -602,12 +603,12 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '37'
-  version: '1.36'
-- antcommands: []
+  versionCode: '37'
+  versionName: '1.36'
+- androidupdate: []
+  antcommands: []
   build: ''
-  buildjni: false
+  buildjni: []
   commit: 70da32b567122b701cdcb1609b780eb85732028f
   disable: false
   encoding: null
@@ -634,10 +635,14 @@ builds:
   subdir: org_adaway/
   submodules: false
   target: null
-  update: []
-  vercode: '38'
-  version: '1.37'
-- antcommands: []
+  versionCode: '38'
+  versionName: '1.37'
+- androidupdate:
+  - .
+  - android-libs/Donations
+  - android-libs/ActionBarSherlock
+  - android-libs/HtmlSpanner/htmlspanner
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -674,14 +679,14 @@ builds:
   subdir: AdAway
   submodules: false
   target: null
-  update:
+  versionCode: '40'
+  versionName: '2.1'
+- androidupdate:
   - .
   - android-libs/Donations
   - android-libs/ActionBarSherlock
   - android-libs/HtmlSpanner/htmlspanner
-  vercode: '40'
-  version: '2.1'
-- antcommands: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -718,14 +723,10 @@ builds:
   subdir: AdAway
   submodules: false
   target: null
-  update:
-  - .
-  - android-libs/Donations
-  - android-libs/ActionBarSherlock
-  - android-libs/HtmlSpanner/htmlspanner
-  vercode: '42'
-  version: '2.3'
-- antcommands: []
+  versionCode: '42'
+  versionName: '2.3'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -756,10 +757,10 @@ builds:
   subdir: AdAway
   submodules: false
   target: null
-  update: []
-  vercode: '45'
-  version: '2.6'
-- antcommands: []
+  versionCode: '45'
+  versionName: '2.6'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -790,10 +791,10 @@ builds:
   subdir: AdAway
   submodules: false
   target: null
-  update: []
-  vercode: '46'
-  version: '2.7'
-- antcommands: []
+  versionCode: '46'
+  versionName: '2.7'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -824,10 +825,10 @@ builds:
   subdir: AdAway
   submodules: false
   target: null
-  update: []
-  vercode: '47'
-  version: '2.8'
-- antcommands: []
+  versionCode: '47'
+  versionName: '2.8'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -858,10 +859,10 @@ builds:
   subdir: AdAway
   submodules: false
   target: null
-  update: []
-  vercode: '48'
-  version: 2.8.1
-- antcommands: []
+  versionCode: '48'
+  versionName: 2.8.1
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -892,10 +893,10 @@ builds:
   subdir: AdAway
   submodules: false
   target: null
-  update: []
-  vercode: '49'
-  version: '2.9'
-- antcommands: []
+  versionCode: '49'
+  versionName: '2.9'
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -926,10 +927,10 @@ builds:
   subdir: AdAway
   submodules: false
   target: null
-  update: []
-  vercode: '50'
-  version: 2.9.1
-- antcommands: []
+  versionCode: '50'
+  versionName: 2.9.1
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -960,10 +961,10 @@ builds:
   subdir: AdAway
   submodules: false
   target: null
-  update: []
-  vercode: '51'
-  version: 2.9.2
-- antcommands: []
+  versionCode: '51'
+  versionName: 2.9.2
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni:
   - 'yes'
@@ -994,9 +995,8 @@ builds:
   subdir: AdAway
   submodules: false
   target: null
-  update: []
-  vercode: '52'
-  version: '3.0'
+  versionCode: '52'
+  versionName: '3.0'
 comments:
   build:40:
   - '#RootCommands srclib needs changing on fdroidserver'

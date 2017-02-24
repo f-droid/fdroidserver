@@ -38,7 +38,7 @@ class ImportTest(unittest.TestCase):
             print('Skipping ImportTest!')
             return
 
-        app = fdroidserver.metadata.get_default_app_info()
+        app = fdroidserver.metadata.App()
         app.UpdateCheckMode = "Tags"
         root_dir, src_dir = import_proxy.get_metadata_from_url(app, url)
         self.assertEqual(app.RepoType, 'git')

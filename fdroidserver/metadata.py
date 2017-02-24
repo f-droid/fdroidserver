@@ -97,15 +97,21 @@ app_fields = set([
     'Current Version',
     'Current Version Code',
     'No Source Since',
+    'Build',
 
     'comments',  # For formats that don't do inline comments
     'builds',    # For formats that do builds as a list
 ])
 
 
-class App():
+class App(dict):
 
-    def __init__(self):
+    def __init__(self, copydict=None):
+        if copydict:
+            super().__init__(copydict)
+            return
+        super().__init__()
+
         self.Disabled = None
         self.AntiFeatures = []
         self.Provides = None
@@ -147,94 +153,21 @@ class App():
         self.comments = {}
         self.added = None
         self.lastupdated = None
-        self._modified = set()
 
-    @classmethod
-    def field_to_attr(cls, f):
-        """
-        Translates human-readable field names to attribute names, e.g.
-        'Auto Name' to 'AutoName'
-        """
-        return f.replace(' ', '')
-
-    @classmethod
-    def attr_to_field(cls, k):
-        """
-        Translates attribute names to human-readable field names, e.g.
-        'AutoName' to 'Auto Name'
-        """
-        if k in app_fields:
-            return k
-        f = re.sub(r'([a-z])([A-Z])', r'\1 \2', k)
-        return f
-
-    def field_dict(self):
-        """
-        Constructs an old-fashioned dict with the human-readable field
-        names. Should only be used for tests.
-        """
-        d = {}
-        for k, v in self.__dict__.items():
-            if k == 'builds':
-                d['builds'] = []
-                for build in v:
-                    b = {k: v for k, v in build.__dict__.items() if not k.startswith('_')}
-                    d['builds'].append(b)
-            elif not k.startswith('_'):
-                f = App.attr_to_field(k)
-                d[f] = v
-        return d
-
-    def get_field(self, f):
-        """Gets the value associated to a field name, e.g. 'Auto Name'"""
-        if f not in app_fields:
-            warn_or_exception('Unrecognised app field: ' + f)
-        k = App.field_to_attr(f)
-        return getattr(self, k)
-
-    def set_field(self, f, v):
-        """Sets the value associated to a field name, e.g. 'Auto Name'"""
-        if f not in app_fields:
-            warn_or_exception('Unrecognised app field: ' + f)
-        k = App.field_to_attr(f)
-        self.__dict__[k] = v
-        self._modified.add(k)
-
-    def append_field(self, f, v):
-        """Appends to the value associated to a field name, e.g. 'Auto Name'"""
-        if f not in app_fields:
-            warn_or_exception('Unrecognised app field: ' + f)
-        k = App.field_to_attr(f)
-        if k not in self.__dict__:
-            self.__dict__[k] = [v]
+    def __getattr__(self, name):
+        if name in self:
+            return self[name]
         else:
-            self.__dict__[k].append(v)
+            raise AttributeError("No such attribute: " + name)
 
-    def update_fields(self, d):
-        '''Like dict.update(), but using human-readable field names'''
-        for f, v in d.items():
-            if f == 'builds':
-                for b in v:
-                    build = Build()
-                    build.update_flags(b)
-                    self.builds.append(build)
-            else:
-                self.set_field(f, v)
+    def __setattr__(self, name, value):
+        self[name] = value
 
-    def update(self, d):
-        '''Like dict.update()'''
-        for k, v in d.__dict__.items():
-            if k == '_modified':
-                continue
-            elif k == 'builds':
-                for b in v:
-                    build = Build()
-                    del(b.__dict__['_modified'])
-                    build.update_flags(b.__dict__)
-                    self.builds.append(build)
-            elif v:
-                self.__dict__[k] = v
-                self._modified.add(k)
+    def __delattr__(self, name):
+        if name in self:
+            del self[name]
+        else:
+            raise AttributeError("No such attribute: " + name)
 
     def get_last_build(self):
         if len(self.builds) > 0:
@@ -255,16 +188,17 @@ TYPE_BUILD_V2 = 8
 
 fieldtypes = {
     'Description': TYPE_MULTILINE,
-    'Maintainer Notes': TYPE_MULTILINE,
+    'MaintainerNotes': TYPE_MULTILINE,
     'Categories': TYPE_LIST,
     'AntiFeatures': TYPE_LIST,
-    'Build Version': TYPE_BUILD,
+    'BuildVersion': TYPE_BUILD,
     'Build': TYPE_BUILD_V2,
-    'Use Built': TYPE_OBSOLETE,
+    'UseBuilt': TYPE_OBSOLETE,
 }
 
 
 def fieldtype(name):
+    name = name.replace(' ', '')
     if name in fieldtypes:
         return fieldtypes[name]
     return TYPE_STRING
@@ -304,12 +238,13 @@ build_flags_order = [
 ]
 
 
-build_flags = set(build_flags_order + ['version', 'vercode'])
+build_flags = set(build_flags_order + ['versionName', 'versionCode'])
 
 
-class Build():
+class Build(dict):
 
-    def __init__(self):
+    def __init__(self, copydict=None):
+        super().__init__()
         self.disable = False
         self.commit = None
         self.subdir = None
@@ -328,7 +263,7 @@ class Build():
         self.rm = []
         self.extlibs = []
         self.prebuild = ''
-        self.update = []
+        self.androidupdate = []
         self.target = None
         self.scanignore = []
         self.scandelete = []
@@ -339,35 +274,28 @@ class Build():
         self.gradleprops = []
         self.antcommands = []
         self.novcheck = False
+        if copydict:
+            super().__init__(copydict)
+            return
 
-        self._modified = set()
-
-    def get_flag(self, f):
-        if f not in build_flags:
-            warn_or_exception('Unrecognised build flag: ' + f)
-        return getattr(self, f)
-
-    def set_flag(self, f, v):
-        if f == 'versionName':
-            f = 'version'
-        if f == 'versionCode':
-            f = 'vercode'
-        if f not in build_flags:
-            warn_or_exception('Unrecognised build flag: ' + f)
-        self.__dict__[f] = v
-        self._modified.add(f)
-
-    def append_flag(self, f, v):
-        if f not in build_flags:
-            warn_or_exception('Unrecognised build flag: ' + f)
-        if f not in self.__dict__:
-            self.__dict__[f] = [v]
+    def __getattr__(self, name):
+        if name in self:
+            return self[name]
         else:
-            self.__dict__[f].append(v)
+            raise AttributeError("No such attribute: " + name)
+
+    def __setattr__(self, name, value):
+        self[name] = value
+
+    def __delattr__(self, name):
+        if name in self:
+            del self[name]
+        else:
+            raise AttributeError("No such attribute: " + name)
 
     def build_method(self):
         for f in ['maven', 'gradle', 'kivy']:
-            if self.get_flag(f):
+            if self.get(f):
                 return f
         if self.output:
             return 'raw'
@@ -378,7 +306,7 @@ class Build():
         if self.output:
             return 'raw'
         for f in ['maven', 'gradle', 'kivy']:
-            if self.get_flag(f):
+            if self.get(f):
                 return f
         return 'ant'
 
@@ -391,10 +319,6 @@ class Build():
             return ''
         return paths[version]
 
-    def update_flags(self, d):
-        for f, v in d.items():
-            self.set_flag(f, v)
-
 
 flagtypes = {
     'extlibs': TYPE_LIST,
@@ -403,7 +327,7 @@ flagtypes = {
     'rm': TYPE_LIST,
     'buildjni': TYPE_LIST,
     'preassemble': TYPE_LIST,
-    'update': TYPE_LIST,
+    'androidupdate': TYPE_LIST,
     'scanignore': TYPE_LIST,
     'scandelete': TYPE_LIST,
     'gradle': TYPE_LIST,
@@ -507,9 +431,7 @@ valuetypes = {
 def check_metadata(app):
     for v in valuetypes:
         for k in v.fields:
-            if k not in app._modified:
-                continue
-            v.check(app.__dict__[k], app.id)
+            v.check(app[k], app.id)
 
 
 # Formatter for descriptions. Create an instance, and call parseline() with
@@ -879,47 +801,40 @@ def get_default_app_info(metadatapath=None):
 
 
 def sorted_builds(builds):
-    return sorted(builds, key=lambda build: int(build.vercode))
+    return sorted(builds, key=lambda build: int(build.versionCode))
 
 
 esc_newlines = re.compile(r'\\( |\n)')
 
 
-# This function uses __dict__ to be faster
 def post_metadata_parse(app):
-
-    for k in app._modified:
-        v = app.__dict__[k]
+    # TODO keep native types, convert only for .txt metadata
+    for k, v in app.items():
         if type(v) in (float, int):
-            app.__dict__[k] = str(v)
+            app[k] = str(v)
 
-    for build in app.builds:
-        for k in build._modified:
-            v = build.__dict__[k]
-            if type(v) in (float, int):
-                build.__dict__[k] = str(v)
-                continue
-            ftype = flagtype(k)
+    builds = []
+    if 'builds' in app:
+        for build in app['builds']:
+            if not isinstance(build, Build):
+                build = Build(build)
+            for k, v in build.items():
+                if flagtype(k) == TYPE_LIST:
+                    if isinstance(v, str):
+                        build[k] = [v]
+                    elif isinstance(v, bool):
+                        if v:
+                            build[k] = ['yes']
+                        else:
+                            build[k] = []
+                elif flagtype(k) == TYPE_STRING and type(v) in (float, int):
+                    build[k] = str(v)
+            builds.append(build)
 
-            if ftype == TYPE_SCRIPT:
-                build.__dict__[k] = re.sub(esc_newlines, '', v).lstrip().rstrip()
-            elif ftype == TYPE_BOOL:
-                # TODO handle this using <xsd:element type="xsd:boolean> in a schema
-                if isinstance(v, str):
-                    build.__dict__[k] = _decode_bool(v)
-            elif ftype == TYPE_STRING:
-                if isinstance(v, bool) and v:
-                    build.__dict__[k] = 'yes'
-            elif ftype == TYPE_LIST:
-                if isinstance(v, bool) and v:
-                    build.__dict__[k] = ['yes']
-                elif isinstance(v, str):
-                    build.__dict__[k] = [v]
+    if not app.get('Description'):
+        app['Description'] = 'No description available'
 
-    if not app.Description:
-        app.Description = 'No description available'
-
-    app.builds = sorted_builds(app.builds)
+    app.builds = sorted_builds(builds)
 
 
 # Parse metadata for a single application.
@@ -1023,17 +938,18 @@ def parse_json_metadata(mf, app):
     # TODO create schema using https://pypi.python.org/pypi/jsonschema
     jsoninfo = json.load(mf, parse_int=lambda s: s,
                          parse_float=lambda s: s)
-    app.update_fields(jsoninfo)
+    app.update(jsoninfo)
     for f in ['Description', 'Maintainer Notes']:
-        v = app.get_field(f)
-        app.set_field(f, '\n'.join(v))
+        v = app.get(f)
+        if v:
+            app[f] = '\n'.join(v)
     return app
 
 
 def parse_yaml_metadata(mf, app):
 
     yamlinfo = yaml.load(mf, Loader=YamlLoader)
-    app.update_fields(yamlinfo)
+    app.update(yamlinfo)
     return app
 
 
@@ -1056,14 +972,16 @@ def parse_txt_metadata(mf, app):
 
         pk, pv = bv
         pk = pk.lstrip()
+        if pk == 'update':
+            pk = 'androidupdate'  # avoid conflicting with Build(dict).update()
         t = flagtype(pk)
         if t == TYPE_LIST:
             pv = split_list_values(pv)
-            build.set_flag(pk, pv)
+            build[pk] = pv
         elif t == TYPE_STRING or t == TYPE_SCRIPT:
-            build.set_flag(pk, pv)
+            build[pk] = pv
         elif t == TYPE_BOOL:
-            build.set_flag(pk, _decode_bool(pv))
+            build[pk] = _decode_bool(pv)
 
     def parse_buildline(lines):
         v = "".join(lines)
@@ -1071,9 +989,9 @@ def parse_txt_metadata(mf, app):
         if len(parts) < 3:
             warn_or_exception("Invalid build format: " + v + " in " + mf.name)
         build = Build()
-        build.version = parts[0]
-        build.vercode = parts[1]
-        check_versionCode(build.vercode)
+        build.versionName = parts[0]
+        build.versionCode = parts[1]
+        check_versionCode(build.versionCode)
 
         if parts[2].startswith('!'):
             # For backwards compatibility, handle old-style disabling,
@@ -1112,6 +1030,8 @@ def parse_txt_metadata(mf, app):
     build = None
     vc_seen = set()
 
+    app.builds = []
+
     c = 0
     for line in mf:
         c += 1
@@ -1129,10 +1049,10 @@ def parse_txt_metadata(mf, app):
             else:
                 if not build.commit and not build.disable:
                     warn_or_exception("No commit specified for {0} in {1}"
-                                      .format(build.version, linedesc))
+                                      .format(build.versionName, linedesc))
 
                 app.builds.append(build)
-                add_comments('build:' + build.vercode)
+                add_comments('build:' + build.versionCode)
                 mode = 0
 
         if mode == 0:
@@ -1146,11 +1066,16 @@ def parse_txt_metadata(mf, app):
             except ValueError:
                 warn_or_exception("Invalid metadata in " + linedesc)
 
+            if f not in app_fields:
+                warn_or_exception('Unrecognised app field: ' + f)
+
             # Translate obsolete fields...
             if f == 'Market Version':
                 f = 'Current Version'
             if f == 'Market Version Code':
                 f = 'Current Version Code'
+
+            f = f.replace(' ', '')
 
             ftype = fieldtype(f)
             if ftype not in [TYPE_BUILD, TYPE_BUILD_V2]:
@@ -1161,9 +1086,9 @@ def parse_txt_metadata(mf, app):
                     warn_or_exception("Unexpected text on same line as "
                                       + f + " in " + linedesc)
             elif ftype == TYPE_STRING:
-                app.set_field(f, v)
+                app[f] = v
             elif ftype == TYPE_LIST:
-                app.set_field(f, split_list_values(v))
+                app[f] = split_list_values(v)
             elif ftype == TYPE_BUILD:
                 if v.endswith("\\"):
                     mode = 2
@@ -1172,21 +1097,22 @@ def parse_txt_metadata(mf, app):
                 else:
                     build = parse_buildline([v])
                     app.builds.append(build)
-                    add_comments('build:' + app.builds[-1].vercode)
+                    add_comments('build:' + app.builds[-1].versionCode)
             elif ftype == TYPE_BUILD_V2:
                 vv = v.split(',')
                 if len(vv) != 2:
                     warn_or_exception('Build should have comma-separated',
-                                      'version and vercode,',
+                                      'versionName and versionCode,',
                                       'not "{0}", in {1}'.format(v, linedesc))
                 build = Build()
-                build.version = vv[0]
-                build.vercode = vv[1]
-                check_versionCode(build.vercode)
-                if build.vercode in vc_seen:
-                    warn_or_exception('Duplicate build recipe found for vercode %s in %s'
-                                      % (build.vercode, linedesc))
-                vc_seen.add(build.vercode)
+                build.versionName = vv[0]
+                build.versionCode = vv[1]
+                check_versionCode(build.versionCode)
+
+                if build.versionCode in vc_seen:
+                    warn_or_exception('Duplicate build recipe found for versionCode %s in %s'
+                                      % (build.versionCode, linedesc))
+                vc_seen.add(build.versionCode)
                 del buildlines[:]
                 mode = 3
             elif ftype == TYPE_OBSOLETE:
@@ -1196,7 +1122,7 @@ def parse_txt_metadata(mf, app):
         elif mode == 1:     # Multiline field
             if line == '.':
                 mode = 0
-                app.set_field(f, '\n'.join(multiline_lines))
+                app[f] = '\n'.join(multiline_lines)
                 del multiline_lines[:]
             else:
                 multiline_lines.append(line)
@@ -1207,7 +1133,7 @@ def parse_txt_metadata(mf, app):
                 buildlines.append(line)
                 build = parse_buildline(buildlines)
                 app.builds.append(build)
-                add_comments('build:' + app.builds[-1].vercode)
+                add_comments('build:' + app.builds[-1].versionCode)
                 mode = 0
     add_comments(None)
 
@@ -1224,6 +1150,23 @@ def parse_txt_metadata(mf, app):
 
 def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
 
+    def field_to_attr(f):
+        """
+        Translates human-readable field names to attribute names, e.g.
+        'Auto Name' to 'AutoName'
+        """
+        return f.replace(' ', '')
+
+    def attr_to_field(k):
+        """
+        Translates attribute names to human-readable field names, e.g.
+        'AutoName' to 'Auto Name'
+        """
+        if k in app_fields:
+            return k
+        f = re.sub(r'([a-z])([A-Z])', r'\1 \2', k)
+        return f
+
     def w_comments(key):
         if key not in app.comments:
             return
@@ -1231,15 +1174,17 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
             w_comment(line)
 
     def w_field_always(f, v=None):
+        key = field_to_attr(f)
         if v is None:
-            v = app.get_field(f)
-        w_comments(f)
+            v = app.get(key)
+        w_comments(key)
         w_field(f, v)
 
     def w_field_nonempty(f, v=None):
+        key = field_to_attr(f)
         if v is None:
-            v = app.get_field(f)
-        w_comments(f)
+            v = app.get(key)
+        w_comments(key)
         if v:
             w_field(f, v)
 
@@ -1276,10 +1221,10 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
 
     for build in app.builds:
 
-        if build.version == "Ignore":
+        if build.versionName == "Ignore":
             continue
 
-        w_comments('build:' + build.vercode)
+        w_comments('build:%s' % build.versionCode)
         w_build(build)
         mf.write('\n')
 
@@ -1321,14 +1266,16 @@ def write_txt(mf, app):
         mf.write("%s:%s\n" % (f, v))
 
     def w_build(build):
-        mf.write("Build:%s,%s\n" % (build.version, build.vercode))
+        mf.write("Build:%s,%s\n" % (build.versionName, build.versionCode))
 
         for f in build_flags_order:
-            v = build.get_flag(f)
+            v = build.get(f)
             if not v:
                 continue
 
             t = flagtype(f)
+            if f == 'androidupdate':
+                f == 'update'  # avoid conflicting with Build(dict).update()
             mf.write('    %s=' % f)
             if t == TYPE_STRING:
                 mf.write(v)
@@ -1402,10 +1349,10 @@ def write_yaml(mf, app):
             mf.write("builds:\n")
             first_build = False
 
-        w_field('versionName', build.version, '  - ', TYPE_STRING)
-        w_field('versionCode', build.vercode, '    ', TYPE_STRING)
+        w_field('versionName', build.versionName, '  - ', TYPE_STRING)
+        w_field('versionCode', build.versionCode, '    ', TYPE_STRING)
         for f in build_flags_order:
-            v = build.get_flag(f)
+            v = build.get(f)
             if not v:
                 continue
 

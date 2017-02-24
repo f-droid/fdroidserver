@@ -99,7 +99,7 @@ def update_wiki(apps, sortedids, apks):
     generated_redirects = {}
 
     for appid in sortedids:
-        app = apps[appid]
+        app = metadata.App(apps[appid])
 
         wikidata = ''
         if app.Disabled:
@@ -156,24 +156,24 @@ def update_wiki(apps, sortedids, apks):
         # Include ones we can't build, as a special case...
         for build in app.builds:
             if build.disable:
-                if build.vercode == app.CurrentVersionCode:
+                if build.versionCode == app.CurrentVersionCode:
                     cantupdate = True
                 # TODO: Nasty: vercode is a string in the build, and an int elsewhere
-                apklist.append({'versioncode': int(build.vercode),
-                                'version': build.version,
+                apklist.append({'versioncode': int(build.versionCode),
+                                'version': build.versionName,
                                 'buildproblem': "The build for this version was manually disabled. Reason: {0}".format(build.disable),
                                 })
             else:
                 builtit = False
                 for apk in apklist:
-                    if apk['versioncode'] == int(build.vercode):
+                    if apk['versioncode'] == int(build.versionCode):
                         builtit = True
                         break
                 if not builtit:
                     buildfails = True
-                    apklist.append({'versioncode': int(build.vercode),
-                                    'version': build.version,
-                                    'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(appid, build.vercode),
+                    apklist.append({'versioncode': int(build.versionCode),
+                                    'version': build.versionName,
+                                    'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(appid, build.versionCode),
                                     })
         if app.CurrentVersionCode == '0':
             cantupdate = True
@@ -302,13 +302,13 @@ def delete_disabled_builds(apps, apkcache, repodirs):
     :param repodirs: the repo directories to process
     """
     for appid, app in apps.items():
-        for build in app.builds:
+        for build in app['builds']:
             if not build.disable:
                 continue
-            apkfilename = appid + '_' + str(build.vercode) + '.apk'
+            apkfilename = appid + '_' + str(build.versionCode) + '.apk'
             iconfilename = "%s.%s.png" % (
                 appid,
-                build.vercode)
+                build.versionCode)
             for repodir in repodirs:
                 files = [
                     os.path.join(repodir, apkfilename),
@@ -1028,7 +1028,7 @@ def make_index(apps, sortedids, apks, repodir, archive):
 
     mirrorcheckfailed = False
     mirrors = []
-    for mirror in config.get('mirrors', []):
+    for mirror in sorted(config.get('mirrors', [])):
         base = os.path.basename(urllib.parse.urlparse(mirror).path.rstrip('/'))
         if config.get('nonstandardwebroot') is not True and base != 'fdroid':
             logging.error("mirror '" + mirror + "' does not end with 'fdroid'!")
@@ -1111,7 +1111,7 @@ def make_index(apps, sortedids, apks, repodir, archive):
             element.setAttribute('packageName', packageName)
 
     for appid in sortedids:
-        app = apps[appid]
+        app = metadata.App(apps[appid])
 
         if app.Disabled is not None:
             continue
@@ -1237,34 +1237,35 @@ def make_index(apps, sortedids, apks, repodir, archive):
                 addElement('sig', apk['sig'], doc, apkel)
 
                 old_permissions = set()
-                for perm in apk['uses-permission']:
+                sorted_permissions = sorted(apk['uses-permission'])
+                for perm in sorted_permissions:
                     perm_name = perm.name
                     if perm_name.startswith("android.permission."):
                         perm_name = perm_name[19:]
                     old_permissions.add(perm_name)
                 addElementNonEmpty('permissions', ','.join(old_permissions), doc, apkel)
 
-                for permission in apk['uses-permission']:
+                for permission in sorted_permissions:
                     permel = doc.createElement('uses-permission')
                     permel.setAttribute('name', permission.name)
                     if permission.maxSdkVersion is not None:
                         permel.setAttribute('maxSdkVersion', permission.maxSdkVersion)
                         apkel.appendChild(permel)
-                for permission_sdk_23 in apk['uses-permission-sdk-23']:
+                for permission_sdk_23 in sorted(apk['uses-permission-sdk-23']):
                     permel = doc.createElement('uses-permission-sdk-23')
                     permel.setAttribute('name', permission_sdk_23.name)
                     if permission_sdk_23.maxSdkVersion is not None:
                         permel.setAttribute('maxSdkVersion', permission_sdk_23.maxSdkVersion)
                         apkel.appendChild(permel)
                 if 'nativecode' in apk:
-                    addElement('nativecode', ','.join(apk['nativecode']), doc, apkel)
-                addElementNonEmpty('features', ','.join(apk['features']), doc, apkel)
+                    addElement('nativecode', ','.join(sorted(apk['nativecode'])), doc, apkel)
+                addElementNonEmpty('features', ','.join(sorted(apk['features'])), doc, apkel)
 
         if current_version_file is not None \
                 and config['make_current_version_link'] \
                 and repodir == 'repo':  # only create these
             namefield = config['current_version_name_source']
-            sanitized_name = re.sub('''[ '"&%?+=/]''', '', app.get_field(namefield))
+            sanitized_name = re.sub('''[ '"&%?+=/]''', '', app.get(namefield))
             apklinkname = sanitized_name + '.apk'
             current_version_path = os.path.join(repodir, current_version_file)
             if os.path.islink(apklinkname):
@@ -1331,7 +1332,7 @@ def make_index(apps, sortedids, apks, repodir, archive):
 def make_categories_txt(repodir, categories):
     '''Write a category list in the repo to allow quick access'''
     catdata = ''
-    for cat in categories:
+    for cat in sorted(categories):
         catdata += cat + '\n'
     with open(os.path.join(repodir, 'categories.txt'), 'w', encoding='utf8') as f:
         f.write(catdata)
@@ -1620,6 +1621,7 @@ def main():
             logging.debug("Don't know when " + appid + " was last updated")
 
         if bestver == UNSET_VERSION_CODE:
+
             if app.Name is None:
                 app.Name = app.AutoName or appid
             app.icon = None

@@ -1,16 +1,16 @@
 AntiFeatures: []
-Archive Policy: null
-Author Email: null
-Author Name: null
-Auto Name: SMSSecure
-Auto Update Mode: Version v%v
+ArchivePolicy: null
+AuthorEmail: null
+AuthorName: null
+AutoName: SMSSecure
+AutoUpdateMode: Version v%v
 Binaries: null
 Bitcoin: null
 Categories:
 - Phone & SMS
 Changelog: ''
-Current Version: 0.6.0
-Current Version Code: '102'
+CurrentVersion: 0.6.0
+CurrentVersionCode: '102'
 Description: 'SMSSecure is an SMS/MMS application that allows you to protect your
   privacy while communicating with friends.
 
@@ -35,27 +35,28 @@ Description: 'SMSSecure is an SMS/MMS application that allows you to protect you
 Disabled: null
 Donate: null
 FlattrID: null
-Issue Tracker: https://github.com/SMSSecure/SMSSecure/issues
+IssueTracker: https://github.com/SMSSecure/SMSSecure/issues
 License: GPLv3
 Litecoin: null
-Maintainer Notes: ''
+MaintainerNotes: ''
 Name: null
-No Source Since: ''
+NoSourceSince: ''
 Provides: null
 Repo: https://github.com/SMSSecure/SMSSecure
-Repo Type: git
-Requires Root: false
-Source Code: https://github.com/SMSSecure/SMSSecure
+RepoType: git
+RequiresRoot: false
+SourceCode: https://github.com/SMSSecure/SMSSecure
 Summary: Send encrypted text messages (SMS)
-Update Check Data: null
-Update Check Ignore: null
-Update Check Mode: Tags
-Update Check Name: null
-Vercode Operation: null
-Web Site: http://www.smssecure.org
+UpdateCheckData: null
+UpdateCheckIgnore: null
+UpdateCheckMode: Tags
+UpdateCheckName: null
+VercodeOperation: null
+WebSite: http://www.smssecure.org
 added: null
 builds:
-- antcommands: []
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: 66367479a4f57f347b5cbe8f6f8f632adaae7727
@@ -95,10 +96,10 @@ builds:
   subdir: null
   submodules: false
   target: null
-  update: []
-  vercode: '5'
-  version: 0.3.3
-- antcommands: []
+  versionCode: '5'
+  versionName: 0.3.3
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: 9675ce5eecb929dcaddb43b3d9486fdb88b9ae1a
@@ -130,10 +131,10 @@ builds:
   subdir: null
   submodules: true
   target: null
-  update: []
-  vercode: '6'
-  version: 0.3.3
-- antcommands: []
+  versionCode: '6'
+  versionName: 0.3.3
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: v0.4.2
@@ -164,10 +165,10 @@ builds:
   subdir: null
   submodules: true
   target: null
-  update: []
-  vercode: '9'
-  version: 0.4.2
-- antcommands: []
+  versionCode: '9'
+  versionName: 0.4.2
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: v0.5.1
@@ -198,10 +199,10 @@ builds:
   subdir: null
   submodules: true
   target: null
-  update: []
-  vercode: '11'
-  version: 0.5.1
-- antcommands: []
+  versionCode: '11'
+  versionName: 0.5.1
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: v0.5.2
@@ -231,10 +232,10 @@ builds:
   subdir: null
   submodules: true
   target: null
-  update: []
-  vercode: '12'
-  version: 0.5.2
-- antcommands: []
+  versionCode: '12'
+  versionName: 0.5.2
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: v0.5.3
@@ -264,10 +265,10 @@ builds:
   subdir: null
   submodules: true
   target: null
-  update: []
-  vercode: '100'
-  version: 0.5.3
-- antcommands: []
+  versionCode: '100'
+  versionName: 0.5.3
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: v0.5.4
@@ -297,10 +298,10 @@ builds:
   subdir: null
   submodules: true
   target: null
-  update: []
-  vercode: '101'
-  version: 0.5.4
-- antcommands: []
+  versionCode: '101'
+  versionName: 0.5.4
+- androidupdate: []
+  antcommands: []
   build: ''
   buildjni: []
   commit: v0.6.0
@@ -330,9 +331,8 @@ builds:
   subdir: null
   submodules: true
   target: null
-  update: []
-  vercode: '102'
-  version: 0.6.0
+  versionCode: '102'
+  versionName: 0.6.0
 comments: {}
 id: org.smssecure.smssecure
 lastupdated: null

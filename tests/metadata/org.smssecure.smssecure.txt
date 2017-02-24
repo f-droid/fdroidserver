@@ -45,7 +45,7 @@ Build:0.3.3,5
         cp -fR smil/java/org src/ && \
         rm -fR smil && \
         sed -i -e '/org.w3c.smil/d' build.gradle && \
-        cp -fR $$AospMms$$/src/org src/ 
+        cp -fR $$AospMms$$/src/org src/
 
 Build:0.3.3,6
     disable=builds, wait for upstream

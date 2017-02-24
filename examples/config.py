@@ -175,10 +175,10 @@ The repository of older versions of applications from the main demo repository.
 # and the archive, if it is enabled.  So these URLs should end in the
 # 'fdroid' base of the F-Droid part of the web server like serverwebroot.
 #
-# mirrors = {
+# mirrors = (
 #     'https://foo.bar/fdroid',
 #     'http://foobarfoobarfoobar.onion/fdroid',
-# }
+# )
 
 # optionally specific which identity file to use when using rsync over SSH
 #
@@ -253,7 +253,7 @@ The repository of older versions of applications from the main demo repository.
 
 # By default, fdroid will use YAML .yml and the custom .txt metadata formats. It
 # is also possible to have metadata in JSON by adding 'json'.
-# accepted_formats = ['txt', 'yml']
+# accepted_formats = ('txt', 'yml')
 
 # Limit in number of characters that fields can take up
 # Only the fields listed here are supported, defaults shown
@@ -269,13 +269,13 @@ The repository of older versions of applications from the main demo repository.
 # the packageNames listed.  This is protected by the same signing key
 # as the app index metadata.
 #
-# install_list = {
+# install_list = (
 #     'at.bitfire.davdroid',
 #     'com.fsck.k9',
 #     'us.replicant',
-# }
+# )
 #
-# uninstall_list = {
+# uninstall_list = (
 #     'com.facebook.orca',
 #     'com.android.vending',
-# }
+# )
