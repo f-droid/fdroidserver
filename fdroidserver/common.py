@@ -221,6 +221,12 @@ def read_config(opts, config_file='config.py'):
         logging.critical("Missing config file - is this a repo directory?")
         sys.exit(2)
 
+    for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
+        if k in config:
+            if not type(config[k]) in (str, list, tuple):
+                logging.warn('"' + k + '" will be in random order!'
+                             + ' Use () or [] brackets if order is important!')
+
     # smartcardoptions must be a list since its command line args for Popen
     if 'smartcardoptions' in config:
         config['smartcardoptions'] = config['smartcardoptions'].split(' ')

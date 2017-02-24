@@ -131,7 +131,7 @@ cd $REPOROOT
 
 $fdroid init
 sed -i.tmp 's,^ *repo_description.*,repo_description = """获取已安装在您的设备上的应用的,' config.py
-echo "mirrors = {'https://foo.bar/fdroid', 'http://secret.onion/fdroid'}" >> config.py
+echo "mirrors = ('https://foo.bar/fdroid', 'http://secret.onion/fdroid')" >> config.py
 mkdir metadata
 cp $WORKSPACE/tests/urzip.apk repo/
 cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.txt metadata/
