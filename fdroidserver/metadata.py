@@ -224,7 +224,7 @@ build_flags_order = [
     'rm',
     'extlibs',
     'prebuild',
-    'update',
+    'androidupdate',
     'target',
     'scanignore',
     'scandelete',
@@ -1275,7 +1275,7 @@ def write_txt(mf, app):
 
             t = flagtype(f)
             if f == 'androidupdate':
-                f == 'update'  # avoid conflicting with Build(dict).update()
+                f = 'update'  # avoid conflicting with Build(dict).update()
             mf.write('    %s=' % f)
             if t == TYPE_STRING:
                 mf.write(v)
