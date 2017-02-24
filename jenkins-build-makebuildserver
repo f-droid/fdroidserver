@@ -97,3 +97,6 @@ test -d archive || mkdir archive
 ../fdroid gpgsign --verbose
 ../fdroid update --verbose --nosign
 ../fdroid signindex --verbose
+
+../fdroid rewritemeta --verbose
+git --no-pager diff
