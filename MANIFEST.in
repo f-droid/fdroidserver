@@ -15,12 +15,6 @@ include buildserver/provision-qt-sdk
 include buildserver/provision-ubuntu-trusty-paramiko
 include buildserver/Vagrantfile
 include completion/bash-completion
-include docs/fdl.texi
-include docs/fdroid.texi
-include docs/gendocs.sh
-include docs/gendocs_template
-include docs/index_versions.md
-include docs/update.sh
 include examples/config.py
 include examples/fdroid-icon.png
 include examples/makebuildserver.config.py

@@ -114,16 +114,6 @@ $fdroid --version
 
 
 #------------------------------------------------------------------------------#
-echo_header "build the TeX manual"
-
-cd $WORKSPACE/docs
-# this is only ever generated officially on GNU/Linux
-if [ `uname -s` == "Linux" ]; then
-    ./gendocs.sh -o html --email admin@f-droid.org fdroid "F-Droid Server Manual"
-fi
-
-
-#------------------------------------------------------------------------------#
 echo_header "test UTF-8 metadata"
 
 REPOROOT=`create_test_dir`

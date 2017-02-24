@@ -11,9 +11,10 @@ You can use these same tools to create your own additional or alternative
 repository for publishing, or to assist in creating, testing and submitting
 metadata to the main repository.
 
-For documentation, please see the docs directory.
+For documentation, please see <https://f-droid.org/docs/>, or you can
+find the source for the documentation in
+[fdroid/fdroid-website](https://gitlab.com/fdroid/fdroid-website).
 
-Alternatively, visit [https://f-droid.org/manual/](https://f-droid.org/manual/).
 
 ### What is F-Droid?
 
