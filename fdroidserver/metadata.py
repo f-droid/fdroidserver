@@ -912,10 +912,10 @@ def parse_metadata(metadatapath, check_vcs=False):
         if os.path.isfile(metadata_in_repo):
             logging.debug('Including metadata from ' + metadata_in_repo)
             # do not include fields already provided by main metadata file
-            app_in_repo = parse_metadata(metadata_in_repo).field_dict()
+            app_in_repo = parse_metadata(metadata_in_repo)
             for k, v in app_in_repo.items():
-                if k not in app.field_dict():
-                    app.set_field(k, v)
+                if k not in app:
+                    app[k] = v
 
     post_metadata_parse(app)
 
