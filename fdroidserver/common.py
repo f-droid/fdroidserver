@@ -1123,8 +1123,8 @@ def remove_debuggable_flags(root_dir):
                         os.path.join(root, 'AndroidManifest.xml'))
 
 
-vcsearch_g = re.compile(r'.*versionCode *=* *["\']*([0-9]+)["\']*').search
-vnsearch_g = re.compile(r'.*versionName *=* *(["\'])((?:(?=(\\?))\3.)*?)\1.*').search
+vcsearch_g = re.compile(r'''.*[Vv]ersionCode[ =]+["']*([0-9]+)["']*''').search
+vnsearch_g = re.compile(r'.*[Vv]ersionName *=* *(["\'])((?:(?=(\\?))\3.)*?)\1.*').search
 psearch_g = re.compile(r'.*(packageName|applicationId) *=* *["\']([^"]+)["\'].*').search
 
 
@@ -1160,12 +1160,11 @@ def parse_androidmanifests(paths, app):
             continue
 
         logging.debug("Parsing manifest at {0}".format(path))
-        gradle = has_extension(path, 'gradle')
         version = None
         vercode = None
         package = None
 
-        if gradle:
+        if has_extension(path, 'gradle'):
             with open(path, 'r') as f:
                 for line in f:
                     if gradle_comment.match(line):
@@ -1218,7 +1217,8 @@ def parse_androidmanifests(paths, app):
         if max_version is None and version is not None:
             max_version = version
 
-        if max_vercode is None or (vercode is not None and vercode > max_vercode):
+        if vercode is not None \
+           and (max_vercode is None or vercode > max_vercode):
             if not ignoresearch or not ignoresearch(version):
                 if version is not None:
                     max_version = version

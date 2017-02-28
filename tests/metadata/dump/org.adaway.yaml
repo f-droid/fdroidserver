@@ -1003,5 +1003,5 @@ comments:
   build:42:
   - '#RootCommands srclib needs changing on fdroidserver'
 id: org.adaway
-lastupdated: null
+lastUpdated: null
 metadatapath: metadata/org.adaway.json
