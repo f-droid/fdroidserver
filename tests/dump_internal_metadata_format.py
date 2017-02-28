@@ -62,11 +62,14 @@ parser.add_option("-v", "--verbose", action="store_true", default=False,
                   help="Spew out even more information than normal")
 (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
 
-os.chdir('/home/hans/code/fdroid/fdroiddata')
+if not os.path.isdir('metadata'):
+    print("This script must be run in an F-Droid data folder with a 'metadata' subdir!")
+    sys.exit(1)
+
 # these need to be set to prevent code running on None, only
 # 'accepted_formats' is actually used in metadata.py
 config = dict()
-config['sdk_path'] = '/opt/android-sdk'
+config['sdk_path'] = os.getenv('ANDROID_HOME') or '/opt/android-sdk'
 config['ndk_paths'] = dict()
 config['accepted_formats'] = ['txt']
 fdroidserver.common.config = config
@@ -79,7 +82,6 @@ if not os.path.isdir(savedir):
 apps = fdroidserver.metadata.read_metadata(xref=True)
 for appid, app in apps.items():
     savepath = os.path.join(savedir, appid + '.yaml')
-    print('dumping', savepath)
     if hasattr(app, 'attr_to_field'):
         # for 0.7.0 and earlier, before https://gitlab.com/fdroid/fdroidserver/merge_requests/210
         app.__dict__['lastUpdated'] = app.__dict__['lastupdated']
