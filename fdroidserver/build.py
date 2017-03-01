@@ -393,6 +393,8 @@ def build_server(app, build, vcs, build_dir, output_dir, force):
             cmdline += ' --force --test'
         if options.verbose:
             cmdline += ' --verbose'
+        if options.skipscan:
+            cmdline += ' --skip-scan'
         cmdline += " %s:%s" % (app.id, build.versionCode)
         chan.exec_command('bash --login -c "' + cmdline + '"')
 
