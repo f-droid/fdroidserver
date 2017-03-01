@@ -220,6 +220,11 @@ The repository of older versions of applications from the main demo repository.
 # nonstandardwebroot = False
 
 
+# If you want to upload the release apk file to androidobservatory.org
+#
+# uploadto_androidobservatory = False
+
+
 # The build logs can be posted to a mediawiki instance, like on f-droid.org.
 # wiki_protocol = "http"
 # wiki_server = "server"

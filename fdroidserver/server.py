@@ -225,6 +225,42 @@ def update_servergitmirrors(servergitmirrors, repo_section):
             remote.push('master', force=True, set_upstream=True)
 
 
+def upload_to_android_observatory(repo_section):
+    # depend on requests and lxml only if users enable AO
+    import requests
+    from lxml.html import fromstring
+
+    if repo_section == 'repo':
+        for f in glob.glob(os.path.join(repo_section, '*.apk')):
+            fpath = f
+            fname = os.path.basename(f)
+            logging.info('Uploading ' + fname + ' to androidobservatory.org')
+
+            # upload the file with a post request
+            r = requests.post('https://androidobservatory.org/upload', files={'apk': (fname, open(fpath, 'rb'))})
+            response = r.text
+            page = r.url
+
+            # from now on XPath will be used to retrieve the message in the HTML
+            # androidobservatory doesn't have a nice API to talk with
+            # so we must scrape the page content
+            tree = fromstring(response)
+            alert = tree.xpath("//html/body/div[@class='container content-container']/div[@class='alert alert-info']")[0]
+
+            message = ""
+            appurl = page
+            for el in alert:
+                # if the application was added successfully we retrive the url
+                # if the application was already uploaded we use the redirect page url
+                if el.attrib.get("href") is not None:
+                    appurl = page + el.attrib["href"][1:]
+                    message += el.text.replace(" here", "") + el.tail
+                else:
+                    message += el.tail
+            message = message.strip() + " " + appurl
+            logging.info(message)
+
+
 def main():
     global config, options
 
@@ -304,8 +340,9 @@ def main():
     if not config.get('awsbucket') \
             and not config.get('serverwebroot') \
             and not config.get('servergitmirrors') \
+            and not config.get('uploadto_androidobservatory') \
             and local_copy_dir is None:
-        logging.warn('No serverwebroot, local_copy_dir, or awsbucket set! '
+        logging.warn('No serverwebroot, servergitmirrors, local_copy_dir, awsbucket, or uploadto_androidobservatory set! '
                      + 'Edit your config.py to set at least one.')
         sys.exit(1)
 
@@ -354,7 +391,8 @@ def main():
                 update_servergitmirrors(servergitmirrors, repo_section)
             if config.get('awsbucket'):
                 update_awsbucket(repo_section)
-
+            if config.get('uploadto_androidobservatory'):
+                upload_to_android_observatory(repo_section)
     sys.exit(0)
 
 
