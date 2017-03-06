@@ -225,6 +225,12 @@ The repository of older versions of applications from the main demo repository.
 # uploadto_androidobservatory = False
 
 
+# If you want to upload the release apk file to virustotal.com
+# You have to enter your profile apikey to enable the upload.
+#
+# virustotal_apikey = "virustotal_apikey"
+
+
 # The build logs can be posted to a mediawiki instance, like on f-droid.org.
 # wiki_protocol = "http"
 # wiki_server = "server"

@@ -261,6 +261,24 @@ def upload_to_android_observatory(repo_section):
             logging.info(message)
 
 
+def upload_to_virustotal(repo_section, vt_apikey):
+    import requests
+
+    if repo_section == 'repo':
+        for f in glob.glob(os.path.join(repo_section, '*.apk')):
+            fpath = f
+            fname = os.path.basename(f)
+            logging.info('Uploading ' + fname + ' to virustotal.com')
+
+            # upload the file with a post request
+            params = {'apikey': vt_apikey}
+            files = {'file': (fname, open(fpath, 'rb'))}
+            r = requests.post('https://www.virustotal.com/vtapi/v2/file/scan', files=files, params=params)
+            response = r.json()
+
+            logging.info(response['verbose_msg'] + " " + response['permalink'])
+
+
 def main():
     global config, options
 
@@ -341,9 +359,10 @@ def main():
             and not config.get('serverwebroot') \
             and not config.get('servergitmirrors') \
             and not config.get('uploadto_androidobservatory') \
+            and not config.get('virustotal_apikey') \
             and local_copy_dir is None:
-        logging.warn('No serverwebroot, servergitmirrors, local_copy_dir, awsbucket, or uploadto_androidobservatory set! '
-                     + 'Edit your config.py to set at least one.')
+        logging.warn('No option set! Edit your config.py to set at least one among:\n'
+                     + 'serverwebroot, servergitmirrors, local_copy_dir, awsbucket, virustotal_apikey or uploadto_androidobservatory')
         sys.exit(1)
 
     repo_sections = ['repo']
@@ -393,6 +412,8 @@ def main():
                 update_awsbucket(repo_section)
             if config.get('uploadto_androidobservatory'):
                 upload_to_android_observatory(repo_section)
+            if config.get('virustotal_apikey'):
+                upload_to_virustotal(repo_section, config.get('virustotal_apikey'))
     sys.exit(0)
 
 
