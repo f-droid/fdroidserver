@@ -132,7 +132,7 @@ def vm_snapshot_list(provider):
                          get_builder_vm_id(provider), 'list',
                          '--details'], cwd='builder')
     elif provider is 'libvirt':
-        p = FDroidPopen(['virsh', 'snapshot-list',
+        p = FDroidPopen(['virsh', '-c', 'qemu:///system', 'snapshot-list',
                          get_builder_vm_id(provider)])
     return p.output
 
@@ -149,9 +149,10 @@ def vm_snapshot_restore(provider):
                          get_builder_vm_id(provider), 'restore',
                          'fdroidclean'], cwd='builder')
     elif provider is 'libvirt':
-        p = FDroidPopen(['virsh', 'snapshot-revert',
+        p = FDroidPopen(['virsh', '-c', 'qemu:///system', 'snapshot-revert',
                          get_builder_vm_id(provider), 'fdroidclean'])
     return p.returncode == 0
+
 
 def vm_snapshot_create(provider):
     if provider is 'virtualbox':
@@ -159,7 +160,7 @@ def vm_snapshot_create(provider):
                          get_builder_vm_id(provider),
                          'take', 'fdroidclean'], cwd='builder')
     elif provider is 'libvirt':
-        p = FDroidPopen(['virsh', 'snapshot-create-as',
+        p = FDroidPopen(['virsh', '-c', 'qemu:///system', 'snapshot-create-as',
                          get_builder_vm_id(provider), 'fdroidclean'])
     return p.returncode != 0
 
