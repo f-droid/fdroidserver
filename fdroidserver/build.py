@@ -220,6 +220,25 @@ def get_clean_vm(reset=False):
         if os.path.exists('builder'):
             logging.info("Removing broken/incomplete/unwanted build server")
             vagrant(['destroy', '-f'], cwd='builder')
+            if provider == 'libvirt':
+                import libvirt
+                virConnect = None
+                virDomain = None
+                try:
+                    virConnect = libvirt.open('qemu:///system')
+                    virDomain = virConnect.lookupByName('builder_default')
+                except libvirt.libvirtError:
+                    logging.debug("no libvirt domain found, skipping delete attempt")
+                if virDomain:
+                    virDomain.undefineFlags(libvirt.VIR_DOMAIN_UNDEFINE_MANAGED_SAVE
+                                            | libvirt.VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA
+                                            | libvirt.VIR_DOMAIN_UNDEFINE_NVRAM)
+                if virConnect:
+                    storagePool = virConnect.storagePoolLookupByName('default')
+                    if storagePool:
+                        for vol in storagePool.listAllVolumes():
+                            if vol.name().startswith('builder'):
+                                vol.delete()
             shutil.rmtree('builder')
         os.mkdir('builder')
 
