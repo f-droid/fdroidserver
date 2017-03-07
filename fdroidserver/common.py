@@ -2163,8 +2163,11 @@ def get_per_app_repos():
 def is_repo_file(filename):
     '''Whether the file in a repo is a build product to be delivered to users'''
     return os.path.isfile(filename) \
+        and not filename.endswith('.asc') \
+        and not filename.endswith('.sig') \
         and os.path.basename(filename) not in [
             'index.jar',
+            'index_unsigned.jar',
             'index.xml',
             'index.html',
             'categories.txt',

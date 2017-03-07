@@ -1,8 +1,8 @@
-#!/bin/bash
+# fdroid(1) completion                                   -*- shell-script -*-
 #
 # bash-completion - part of the FDroid server tools
-# Bash completion for the fdroid main tools
 #
+# Copyright (C) 2013-2017 Hans-Christoph Steiner <hans@eds.org>
 # Copyright (C) 2013, 2014 Daniel Martí <mvdan@mvdan.cc>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -17,17 +17,6 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-# 'fdroid' is completed automatically, but aliases to it are not.
-# For instance, to alias 'fd' to 'fdroid' and have competion available:
-#
-#	alias fd='fdroid'
-#	complete -F _fdroid fd
-#
-# One can use completion on aliased subcommands as follows:
-#
-#	alias fbuild='fdroid build'
-#	complete -F _fdroid_build fbuild
 
 __fdroid_init() {
 	COMPREPLY=()
