@@ -14,6 +14,8 @@ cleanup_all() {
     set +e
     echo "$(date -u) - cleanup in progress..."
     ps auxww | grep -e VBox -e qemu
+    virsh --connect qemu:///system list --all
+    ls -hl /var/lib/libvirt/images
     cd $WORKSPACE/buildserver
     vagrant halt
     sleep 5
