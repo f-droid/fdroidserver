@@ -259,6 +259,7 @@ def get_clean_vm(reset=False):
         retcode, _ = vagrant(['up'], cwd='builder')
         if retcode != 0:
             raise BuildException("Failed to start build server")
+        provider = get_vm_provider()
 
         # Open SSH connection to make sure it's working and ready...
         logging.info("Connecting to virtual machine...")
