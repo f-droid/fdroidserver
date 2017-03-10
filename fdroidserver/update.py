@@ -588,7 +588,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
                    and common.is_valid_package_name(name.split('_')[0]):
                     repo_file['id'] = packageName
                     repo_file['versioncode'] = int(versionCode)
-            srcfilename = name + ".src.tar.gz"
+            srcfilename = name + "_src.tar.gz"
             if os.path.exists(os.path.join(repodir, srcfilename)):
                 repo_file['srcname'] = srcfilename
             repo_file['size'] = stat.st_size
