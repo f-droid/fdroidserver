@@ -580,6 +580,14 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             repo_file['version'] = shasum
             # the static ID is the SHA256 unless it is set in the metadata
             repo_file['id'] = shasum
+            n = name.split('_')
+            if len(n) == 2:
+                packageName = n[0]
+                versionCode = n[1].split('.')[0]
+                if re.match(r'^-?[0-9]+$', versionCode) \
+                   and common.is_valid_package_name(name.split('_')[0]):
+                    repo_file['id'] = packageName
+                    repo_file['versioncode'] = int(versionCode)
             srcfilename = name + ".src.tar.gz"
             if os.path.exists(os.path.join(repodir, srcfilename)):
                 repo_file['srcname'] = srcfilename
