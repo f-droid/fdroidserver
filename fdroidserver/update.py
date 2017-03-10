@@ -48,7 +48,7 @@ from . import metadata
 from .common import FDroidPopen, FDroidPopenBytes, SdkToolsPopen
 from .metadata import MetaDataException
 
-METADATA_VERSION = 17
+METADATA_VERSION = 18
 
 screen_densities = ['640', '480', '320', '240', '160', '120']
 
@@ -549,6 +549,9 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
         if file_extension == 'apk' or file_extension == 'obb':
             continue
         filename = os.path.join(repodir, name)
+        if filename.endswith('_src.tar.gz'):
+            logging.debug('skipping source tarball:', filename)
+            continue
         if not common.is_repo_file(filename):
             continue
         stat = os.stat(filename)
