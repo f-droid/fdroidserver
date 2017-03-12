@@ -1798,7 +1798,7 @@ def FDroidPopen(commands, cwd=None, output=True, stderr_to_stdout=True):
     :returns: A PopenResult.
     """
     result = FDroidPopenBytes(commands, cwd, output, stderr_to_stdout)
-    result.output = result.output.decode('utf-8')
+    result.output = result.output.decode('utf-8', 'ignore')
     return result
 
 
