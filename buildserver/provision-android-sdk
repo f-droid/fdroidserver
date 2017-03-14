@@ -81,3 +81,7 @@ echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;sup
 
 chmod -R a+rX $ANDROID_HOME/
 find $ANDROID_HOME/ -type f -executable -print0 | xargs -0 chmod a+x
+
+# allow gradle to install newer build-tools versions
+chgrp vagrant $ANDROID_HOME/build-tools
+chmod g+w $ANDROID_HOME/build-tools
