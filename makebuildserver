@@ -320,7 +320,7 @@ def sha256_for_file(path):
             s.update(data)
         return s.hexdigest()
 
-cachefiles = []
+
 for srcurl, shasum in cachefiles:
     filename = os.path.basename(srcurl)
     local_filename = os.path.join(cachedir, filename)
