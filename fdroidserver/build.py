@@ -55,7 +55,7 @@ def get_vm_provider():
     return 'virtualbox'
 
 
-def get_builder_vm_id(provider):
+def vm_get_builder_id(provider):
     vd = os.path.join('builder', '.vagrant')
     if os.path.isdir(vd):
         # Vagrant 1.2 (and maybe 1.1?) it's a directory tree...
@@ -70,7 +70,34 @@ def get_builder_vm_id(provider):
         return v['active']['default']
 
 
-def got_valid_builder_vm(provider):
+def vm_get_builder_status():
+    """Get the current status of builder vm.
+
+    :returns: one of: 'running', 'paused', 'shutoff', 'not created'
+        If something is wrong with vagrant or the vm 'unknown' is returned.
+    """
+    (ret, out) = vagrant(['status'], cwd='builder')
+
+    allowed_providers = 'virtualbox|libvirt'
+    allowed_states = 'running|paused|shutoff|not created'
+
+    r = re.compile('^\s*(?P<vagrant_name>\w+)\s+' +
+                   '(?P<vm_state>' + allowed_states + ')' +
+                   '\s+\((?P<provider>' + allowed_providers + ')\)\s*$')
+
+    for line in out.split('\n'):
+        m = r.match(line)
+        if m:
+            s = m.group('vm_state')
+            if options.verbose:
+                logging.debug('current builder vm status: ' + s)
+            return s
+    if options.verbose:
+        logging.debug('current builder vm status: unknown')
+    return 'unknown'
+
+
+def vm_is_builder_valid(provider):
     """Returns True if we have a valid-looking builder vm
     """
     if not os.path.exists(os.path.join('builder', 'Vagrantfile')):
@@ -93,10 +120,11 @@ def vagrant(params, cwd=None, printout=False):
 
     :param: list of parameters to pass to vagrant
     :cwd: directory to run in, or None for current directory
+    :printout: has not effect
     :returns: (ret, out) where ret is the return code, and out
                is the stdout (and stderr) from vagrant
     """
-    p = FDroidPopen(['vagrant'] + params, cwd=cwd)
+    p = FDroidPopen(['vagrant'] + params, cwd=cwd, output=printout, stderr_to_stdout=printout)
     return (p.returncode, p.output)
 
 
@@ -126,14 +154,25 @@ def get_vagrant_sshinfo():
             'idfile': idfile}
 
 
+def vm_shutdown_builder():
+    """Turn off builder vm.
+    """
+    if options.server:
+        if os.path.exists(os.path.join('builder', 'Vagrantfile')):
+            vagrant(['halt'], cwd='builder')
+
+
 def vm_snapshot_list(provider):
+    output = options.verbose
     if provider is 'virtualbox':
         p = FDroidPopen(['VBoxManage', 'snapshot',
-                         get_builder_vm_id(provider), 'list',
-                         '--details'], cwd='builder')
+                        vm_get_builder_id(provider), 'list',
+                        '--details'], cwd='builder',
+                        output=output, stderr_to_stdout=output)
     elif provider is 'libvirt':
         p = FDroidPopen(['virsh', '-c', 'qemu:///system', 'snapshot-list',
-                         get_builder_vm_id(provider)])
+                        vm_get_builder_id(provider)],
+                        output=output, stderr_to_stdout=output)
     return p.output
 
 
@@ -144,28 +183,46 @@ def vm_snapshot_clean_available(provider):
 def vm_snapshot_restore(provider):
     """Does a rollback of the build vm.
     """
+    output = options.verbose
     if provider is 'virtualbox':
         p = FDroidPopen(['VBoxManage', 'snapshot',
-                         get_builder_vm_id(provider), 'restore',
-                         'fdroidclean'], cwd='builder')
+                        vm_get_builder_id(provider), 'restore',
+                        'fdroidclean'], cwd='builder',
+                        output=output, stderr_to_stdout=output)
     elif provider is 'libvirt':
         p = FDroidPopen(['virsh', '-c', 'qemu:///system', 'snapshot-revert',
-                         get_builder_vm_id(provider), 'fdroidclean'])
+                        vm_get_builder_id(provider), 'fdroidclean'],
+                        output=output, stderr_to_stdout=output)
     return p.returncode == 0
 
 
 def vm_snapshot_create(provider):
+    output = options.verbose
     if provider is 'virtualbox':
         p = FDroidPopen(['VBoxManage', 'snapshot',
-                         get_builder_vm_id(provider),
-                         'take', 'fdroidclean'], cwd='builder')
+                        vm_get_builder_id(provider),
+                        'take', 'fdroidclean'], cwd='builder',
+                        output=output, stderr_to_stdout=output)
     elif provider is 'libvirt':
         p = FDroidPopen(['virsh', '-c', 'qemu:///system', 'snapshot-create-as',
-                         get_builder_vm_id(provider), 'fdroidclean'])
+                        vm_get_builder_id(provider), 'fdroidclean'],
+                        output=output, stderr_to_stdout=output)
     return p.returncode != 0
 
 
-def get_clean_vm(reset=False):
+def vm_test_ssh_into_builder():
+    logging.info("Connecting to virtual machine...")
+    sshinfo = get_vagrant_sshinfo()
+    sshs = paramiko.SSHClient()
+    sshs.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    sshs.connect(sshinfo['hostname'], username=sshinfo['user'],
+                 port=sshinfo['port'], timeout=300,
+                 look_for_keys=False,
+                 key_filename=sshinfo['idfile'])
+    sshs.close()
+
+
+def vm_get_clean_builder(reset=False):
     """Get a clean VM ready to do a buildserver build.
 
     This might involve creating and starting a new virtual machine from
@@ -184,21 +241,34 @@ def get_clean_vm(reset=False):
     vm_ok = False
     if not reset:
         logging.info("Checking for valid existing build server")
-
-        if got_valid_builder_vm(provider):
+        if vm_is_builder_valid(provider):
             logging.info("...VM is present (%s)" % provider)
             if vm_snapshot_clean_available(provider):
-                logging.info("...snapshot exists - resetting build server to "
+                logging.info("...snapshot exists - resetting build server to " +
                              "clean state")
-                retcode, output = vagrant(['status'], cwd='builder')
-
-                if 'running' in output:
-                    logging.info("...suspending")
+                status = vm_get_builder_status()
+                if status == 'running':
+                    vm_test_ssh_into_builder()
+                    logging.info("...suspending builder vm")
                     vagrant(['suspend'], cwd='builder')
                     logging.info("...waiting a sec...")
                     time.sleep(10)
+                elif status == 'shutoff':
+                    logging.info('...starting builder vm')
+                    vagrant(['up'], cwd='builder')
+                    logging.info('...waiting a sec...')
+                    time.sleep(10)
+                    vm_test_ssh_into_builder()
+                    logging.info('...suspending builder vm')
+                    vagrant(['suspend'], cwd='builder')
+                    logging.info("...waiting a sec...")
+                    time.sleep(10)
+                if options.verbose:
+                    vm_get_builder_status()
 
                 if vm_snapshot_restore(provider):
+                    if options.verbose:
+                        vm_get_builder_status()
                     logging.info("...reset to snapshot - server is valid")
                     retcode, output = vagrant(['up'], cwd='builder')
                     if retcode != 0:
@@ -213,33 +283,14 @@ def get_clean_vm(reset=False):
                 logging.info("...snapshot doesn't exist - "
                              "VBoxManage snapshot list:\n" +
                              vm_snapshot_list(provider))
+        else:
+            logging.info('...VM not present')
 
     # If we can't use the existing machine for any reason, make a
     # new one from scratch.
     if not vm_ok:
-        if os.path.exists('builder'):
-            logging.info("Removing broken/incomplete/unwanted build server")
-            vagrant(['destroy', '-f'], cwd='builder')
-            if provider == 'libvirt':
-                import libvirt
-                virConnect = None
-                virDomain = None
-                try:
-                    virConnect = libvirt.open('qemu:///system')
-                    virDomain = virConnect.lookupByName('builder_default')
-                except libvirt.libvirtError:
-                    logging.debug("no libvirt domain found, skipping delete attempt")
-                if virDomain:
-                    virDomain.undefineFlags(libvirt.VIR_DOMAIN_UNDEFINE_MANAGED_SAVE
-                                            | libvirt.VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA
-                                            | libvirt.VIR_DOMAIN_UNDEFINE_NVRAM)
-                if virConnect:
-                    storagePool = virConnect.storagePoolLookupByName('default')
-                    if storagePool:
-                        for vol in storagePool.listAllVolumes():
-                            if vol.name().startswith('builder'):
-                                vol.delete()
-            shutil.rmtree('builder')
+        vm_destroy_builder(provider)
+
         os.mkdir('builder')
 
         p = subprocess.Popen(['vagrant', '--version'],
@@ -260,17 +311,10 @@ def get_clean_vm(reset=False):
         if retcode != 0:
             raise BuildException("Failed to start build server")
         provider = get_vm_provider()
+        sshinfo = get_vagrant_sshinfo()
 
         # Open SSH connection to make sure it's working and ready...
-        logging.info("Connecting to virtual machine...")
-        sshinfo = get_vagrant_sshinfo()
-        sshs = paramiko.SSHClient()
-        sshs.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        sshs.connect(sshinfo['hostname'], username=sshinfo['user'],
-                     port=sshinfo['port'], timeout=300,
-                     look_for_keys=False,
-                     key_filename=sshinfo['idfile'])
-        sshs.close()
+        vm_test_ssh_into_builder()
 
         logging.info("Saving clean state of new build server")
         retcode, _ = vagrant(['suspend'], cwd='builder')
@@ -295,13 +339,27 @@ def get_clean_vm(reset=False):
     return sshinfo
 
 
-def release_vm():
-    """Release the VM previously started with get_clean_vm().
+def vm_suspend_builder():
+    """Release the VM previously started with vm_get_clean_builder().
 
-    This should always be called.
+    This should always be called after each individual app build attempt.
     """
     logging.info("Suspending build server")
     subprocess.call(['vagrant', 'suspend'], cwd='builder')
+
+
+def vm_destroy_builder(provider):
+    """Savely destroy the builder vm.
+
+    """
+    logging.info("Removing broken/incomplete/unwanted build server")
+    if os.path.exists(os.path.join('builder', 'Vagrantfile')):
+        vagrant(['destroy', '-f'], cwd='builder')
+    if os.path.isdir('builder'):
+        shutil.rmtree('builder')
+    # get rid of vm and related disk images
+    FDroidPopen(('virsh', '-c', 'qemu:///system', 'destroy', 'builder_default'))
+    FDroidPopen(('virsh', '-c', 'qemu:///system', 'undefine', 'builder_default', '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
 
 
 # Note that 'force' here also implies test mode.
@@ -327,7 +385,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
     else:
         logging.getLogger("paramiko").setLevel(logging.WARN)
 
-    sshinfo = get_clean_vm()
+    sshinfo = vm_get_clean_builder()
 
     try:
         if not buildserverid:
@@ -516,7 +574,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
     finally:
 
         # Suspend the build server.
-        release_vm()
+        vm_suspend_builder()
 
 
 def force_gradle_build_tools(build_dir, build_tools):
