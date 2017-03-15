@@ -550,7 +550,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             continue
         filename = os.path.join(repodir, name)
         if filename.endswith('_src.tar.gz'):
-            logging.debug('skipping source tarball:', filename)
+            logging.debug('skipping source tarball: ' + filename)
             continue
         if not common.is_repo_file(filename):
             continue
