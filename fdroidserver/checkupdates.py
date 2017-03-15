@@ -59,7 +59,7 @@ def check_http(app):
             m = re.search(codeex, page)
             if not m:
                 raise FDroidException("No RE match for version code")
-            vercode = m.group(1)
+            vercode = m.group(1).strip()
 
         version = "??"
         if len(urlver) > 0:
@@ -432,6 +432,8 @@ def checkupdates_app(app, first=True):
     elif vercode == app.CurrentVersionCode:
         logging.info("...up to date")
     else:
+        logging.debug("...updating - old vercode={0}, new vercode={1}".format(
+            app.CurrentVersionCode, vercode))
         app.CurrentVersion = version
         app.CurrentVersionCode = str(int(vercode))
         updating = True
