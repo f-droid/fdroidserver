@@ -564,7 +564,10 @@ def main():
 
         logging.info("Processing " + appid + '...')
 
-        checkupdates_app(app)
+        try:
+            checkupdates_app(app)
+        except Exception as e:
+            logging.error("...checkupdate failed for {0} : {1}".format(appid, e))
 
     logging.info("Finished.")
 
