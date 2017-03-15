@@ -157,6 +157,26 @@ class CommonTest(unittest.TestCase):
         p = fdroidserver.common.FDroidPopen(commands, stderr_to_stdout=False)
         self.assertEqual(p.output, 'stdout message\n')
 
+    def test_signjar(self):
+        fdroidserver.common.config = None
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
+        fdroidserver.common.config = config
+
+        basedir = os.path.dirname(__file__)
+        tmpdir = os.path.join(basedir, '..', '.testfiles')
+        if not os.path.exists(tmpdir):
+            os.makedirs(tmpdir)
+        sourcedir = os.path.join(basedir, 'signindex')
+        testsdir = tempfile.mkdtemp(prefix='test_signjar', dir=tmpdir)
+        for f in ('testy.jar', 'guardianproject.jar',):
+            sourcefile = os.path.join(sourcedir, f)
+            testfile = os.path.join(testsdir, f)
+            shutil.copy(sourcefile, testsdir)
+            fdroidserver.common.signjar(testfile)
+            # these should be resigned, and therefore different
+            self.assertNotEqual(open(sourcefile, 'rb').read(), open(testfile, 'rb').read())
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()

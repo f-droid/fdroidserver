@@ -22,7 +22,6 @@ from argparse import ArgumentParser
 import logging
 
 from . import common
-from .common import FDroidPopen
 
 config = None
 options = None
@@ -56,18 +55,7 @@ def main():
         unsigned = os.path.join(output_dir, 'index_unsigned.jar')
         if os.path.exists(unsigned):
 
-            args = [config['jarsigner'], '-keystore', config['keystore'],
-                    '-storepass:file', config['keystorepassfile'],
-                    '-digestalg', 'SHA1', '-sigalg', 'SHA1withRSA',
-                    unsigned, config['repo_keyalias']]
-            if config['keystore'] == 'NONE':
-                args += config['smartcardoptions']
-            else:  # smardcards never use -keypass
-                args += ['-keypass:file', config['keypassfile']]
-            p = FDroidPopen(args)
-            if p.returncode != 0:
-                logging.critical("Failed to sign index")
-                sys.exit(1)
+            common.signjar(unsigned)
             os.rename(unsigned, os.path.join(output_dir, 'index.jar'))
             logging.info('Signed index in ' + output_dir)
             signed += 1

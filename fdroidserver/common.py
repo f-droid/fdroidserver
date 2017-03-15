@@ -387,6 +387,29 @@ def write_password_file(pwtype, password=None):
     config[pwtype + 'file'] = filename
 
 
+def signjar(jar):
+    '''
+    sign a JAR file with Java's jarsigner.
+
+    This does use old hashing algorithms, i.e. SHA1, but that's not
+    broken yet for file verification.  This could be set to SHA256,
+    but then Android < 4.3 would not be able to verify it.
+    https://code.google.com/p/android/issues/detail?id=38321
+    '''
+    args = [config['jarsigner'], '-keystore', config['keystore'],
+            '-storepass:file', config['keystorepassfile'],
+            '-digestalg', 'SHA1', '-sigalg', 'SHA1withRSA',
+            jar, config['repo_keyalias']]
+    if config['keystore'] == 'NONE':
+        args += config['smartcardoptions']
+    else:  # smardcards never use -keypass
+        args += ['-keypass:file', config['keypassfile']]
+    p = FDroidPopen(args)
+    if p.returncode != 0:
+        logging.critical("Failed to sign %s!" % jar)
+        sys.exit(1)
+
+
 def get_local_metadata_files():
     '''get any metadata files local to an app's source repo
 

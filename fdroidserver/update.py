@@ -1287,7 +1287,7 @@ def make_index_v1(apps, packages, repodir, repodict, requestsdict):
     jar_file = os.path.join(repodir, 'index-v1.jar')
     with zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED) as jar:
         jar.write(index_file, json_name)
-    signjar(jar_file)
+    common.signjar(jar_file)
     os.remove(index_file)
 
 
@@ -1540,35 +1540,12 @@ def make_index_v0(apps, apks, repodir, repodict, requestsdict):
             if os.path.exists(signed):
                 os.remove(signed)
         else:
-            signjar(signed)
+            common.signjar(signed)
 
     # Copy the repo icon into the repo directory...
     icon_dir = os.path.join(repodir, 'icons')
     iconfilename = os.path.join(icon_dir, os.path.basename(config['repo_icon']))
     shutil.copyfile(config['repo_icon'], iconfilename)
-
-
-def signjar(jar):
-    '''
-    sign a JAR file with Java's jarsigner.
-
-    This does use old hashing algorithms, i.e. SHA1, but that's not
-    broken yet for file verification.  This could be set to SHA256,
-    but then Android < 4.3 would not be able to verify it.
-    https://code.google.com/p/android/issues/detail?id=38321
-    '''
-    args = [config['jarsigner'], '-keystore', config['keystore'],
-            '-storepass:file', config['keystorepassfile'],
-            '-digestalg', 'SHA1', '-sigalg', 'SHA1withRSA',
-            jar, config['repo_keyalias']]
-    if config['keystore'] == 'NONE':
-        args += config['smartcardoptions']
-    else:  # smardcards never use -keypass
-        args += ['-keypass:file', config['keypassfile']]
-    p = FDroidPopen(args)
-    if p.returncode != 0:
-        logging.critical("Failed to sign index")
-        sys.exit(1)
 
 
 def make_categories_txt(repodir, categories):
