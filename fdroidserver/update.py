@@ -29,6 +29,7 @@ import socket
 import zipfile
 import hashlib
 import pickle
+import platform
 import urllib.parse
 from datetime import datetime, timedelta
 from xml.dom.minidom import Document
@@ -1456,6 +1457,11 @@ def make_binary_transparency_log(repodirs):
         if not os.path.exists(btrepo):
             os.mkdir(btrepo)
         gitrepo = git.Repo.init(btrepo)
+
+        gitconfig = gitrepo.config_writer()
+        gitconfig.set_value('user', 'name', 'fdroid update')
+        gitconfig.set_value('user', 'email', 'fdroid@' + platform.node())
+
         url = config['repo_url'].rstrip('/')
         with open(os.path.join(btrepo, 'README.md'), 'w') as fp:
             fp.write("""
