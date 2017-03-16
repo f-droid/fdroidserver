@@ -34,6 +34,7 @@ import logging
 import hashlib
 import socket
 import base64
+import zipfile
 import xml.etree.ElementTree as XMLElementTree
 
 from datetime import datetime
@@ -408,6 +409,24 @@ def signjar(jar):
     if p.returncode != 0:
         logging.critical("Failed to sign %s!" % jar)
         sys.exit(1)
+
+
+def sign_index_v1(repodir, json_name):
+    """
+    sign index-v1.json to make index-v1.jar
+
+    This is a bit different than index.jar: instead of their being index.xml
+    and index_unsigned.jar, the presense of index-v1.json means that there is
+    unsigned data.  That file is then stuck into a jar and signed by the
+    signing process.  index-v1.json is never published to the repo.  It is
+    included in the binary transparency log, if that is enabled.
+    """
+    name, ext = get_extension(json_name)
+    index_file = os.path.join(repodir, json_name)
+    jar_file = os.path.join(repodir, name + '.jar')
+    with zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED) as jar:
+        jar.write(index_file, json_name)
+    signjar(jar_file)
 
 
 def get_local_metadata_files():

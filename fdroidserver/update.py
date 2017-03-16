@@ -1282,13 +1282,9 @@ def make_index_v1(apps, packages, repodir, repodict, requestsdict):
         json.dump(output, fp, default=_index_encoder_default)
 
     if options.nosign:
-        logging.debug('index-v1 must have a signature, signindex will overwrite it!')
-
-    jar_file = os.path.join(repodir, 'index-v1.jar')
-    with zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED) as jar:
-        jar.write(index_file, json_name)
-    common.signjar(jar_file)
-    os.remove(index_file)
+        logging.debug('index-v1 must have a signature, use `fdroid signindex` to create it!')
+    else:
+        common.sign_index_v1(repodir, json_name)
 
 
 def make_index_v0(apps, apks, repodir, repodict, requestsdict):
