@@ -33,7 +33,7 @@ Repo:https://gitlab.com/fdroid/privileged-extension.git
 
 Build:0.2.1,2000
     commit=0.2.1
-    output=app/build/distributions/FDroidPrivilegedExtensionFromBinaries-0.2.1.zip
+    output=app/build/distributions/FDroidPrivilegedExtensionFromBinaries-$$VERSION$$.zip
     build=gradle assembleUpdateZipFromBinariesDebug
 
 Auto Update Mode:Version %v
