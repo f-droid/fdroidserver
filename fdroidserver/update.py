@@ -23,11 +23,13 @@ import sys
 import os
 import shutil
 import glob
+import json
 import re
 import socket
 import zipfile
 import hashlib
 import pickle
+import platform
 import urllib.parse
 from datetime import datetime, timedelta
 from xml.dom.minidom import Document
@@ -1439,6 +1441,80 @@ def add_apks_to_per_app_repos(repodir, apks):
             shutil.copy(apkascpath, apk['per_app_repo'])
 
 
+def make_binary_transparency_log(repodirs):
+    '''Log the indexes in a standalone git repo to serve as a "binary
+    transparency" log.
+
+    see: https://www.eff.org/deeplinks/2014/02/open-letter-to-tech-companies
+
+    '''
+
+    import git
+    btrepo = 'binary_transparency'
+    if os.path.exists(os.path.join(btrepo, '.git')):
+        gitrepo = git.Repo(btrepo)
+    else:
+        if not os.path.exists(btrepo):
+            os.mkdir(btrepo)
+        gitrepo = git.Repo.init(btrepo)
+
+        gitconfig = gitrepo.config_writer()
+        gitconfig.set_value('user', 'name', 'fdroid update')
+        gitconfig.set_value('user', 'email', 'fdroid@' + platform.node())
+
+        url = config['repo_url'].rstrip('/')
+        with open(os.path.join(btrepo, 'README.md'), 'w') as fp:
+            fp.write("""
+# Binary Transparency Log for %s
+
+""" % url[:url.rindex('/')])  # strip '/repo'
+        gitrepo.index.add(['README.md', ])
+        gitrepo.index.commit('add README')
+
+    for repodir in repodirs:
+        cpdir = os.path.join(btrepo, repodir)
+        if not os.path.exists(cpdir):
+            os.mkdir(cpdir)
+        for f in ('index.xml', ):
+            dest = os.path.join(cpdir, f)
+            shutil.copyfile(os.path.join(repodir, f), dest)
+            gitrepo.index.add([os.path.join(repodir, f), ])
+        for f in ('index.jar', ):
+            repof = os.path.join(repodir, f)
+            dest = os.path.join(cpdir, f)
+            jarin = zipfile.ZipFile(repof, 'r')
+            jarout = zipfile.ZipFile(dest, 'w')
+            for info in jarin.infolist():
+                if info.filename.startswith('META-INF/'):
+                    jarout.writestr(info, jarin.read(info.filename))
+            jarout.close()
+            jarin.close()
+            gitrepo.index.add([repof, ])
+
+        files = []
+        for root, dirs, filenames in os.walk(repodir):
+            for f in filenames:
+                files.append(os.path.relpath(os.path.join(root, f), repodir))
+        output = collections.OrderedDict()
+        for f in sorted(files):
+            repofile = os.path.join(repodir, f)
+            stat = os.stat(repofile)
+            output[f] = (
+                stat.st_size,
+                stat.st_ctime_ns,
+                stat.st_mtime_ns,
+                stat.st_mode,
+                stat.st_uid,
+                stat.st_gid,
+            )
+        fslogfile = os.path.join(cpdir, 'filesystemlog.json')
+        with open(fslogfile, 'w') as fp:
+            json.dump(output, fp, indent=2)
+        gitrepo.index.add([os.path.join(repodir, 'filesystemlog.json'), ])
+
+    gitrepo.index.commit('fdroid update')
+
+
 config = None
 options = None
 
@@ -1677,6 +1753,9 @@ def main():
     # earlier on.
     if len(repodirs) > 1:
         make_index(apps, sortedids, archapks, repodirs[1], True)
+
+    if config.get('binary_transparency_remote'):
+        make_binary_transparency_log(repodirs)
 
     if config['update_stats']:
 

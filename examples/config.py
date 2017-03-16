@@ -238,6 +238,13 @@ The repository of older versions of applications from the main demo repository.
 # wiki_user = "login"
 # wiki_password = "1234"
 
+# Keep a log of all generated index files in a git repo to provide a
+# "binary transparency" log for anyone to check the history of the
+# binaries that are published.  This is in the form of a "git remote",
+# which this machine where `fdroid update` is run has already been
+# configured to allow push access (e.g. ssh key, username/password, etc)
+# binary_transparency_remote = "git@gitlab.com:fdroid/binary-transparency-log.git"
+
 # Only set this to true when running a repository where you want to generate
 # stats, and only then on the master build servers, not a development
 # machine.

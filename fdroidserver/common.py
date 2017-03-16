@@ -1998,6 +1998,23 @@ def compare_apks(apk1, apk2, tmp_dir):
     trying to do the comparison.
     """
 
+    absapk1 = os.path.abspath(apk1)
+    absapk2 = os.path.abspath(apk2)
+
+    # try to find diffoscope in the path, if it hasn't been manually configed
+    if 'diffoscope' not in config:
+        tmp = find_command('diffoscope')
+        if tmp is not None:
+            config['diffoscope'] = tmp
+    if 'diffoscope' in config:
+        htmlfile = absapk1 + '.diffoscope.html'
+        textfile = absapk1 + '.diffoscope.txt'
+        if subprocess.call([config['diffoscope'],
+                            '--max-report-size', '12345678', '--max-diff-block-lines', '100',
+                            '--html', htmlfile, '--text', textfile,
+                            absapk1, absapk2]) != 0:
+            return("Failed to unpack " + apk1)
+
     apk1dir = os.path.join(tmp_dir, apk_badchars.sub('_', apk1[0:-4]))  # trim .apk
     apk2dir = os.path.join(tmp_dir, apk_badchars.sub('_', apk2[0:-4]))  # trim .apk
     for d in [apk1dir, apk2dir]:

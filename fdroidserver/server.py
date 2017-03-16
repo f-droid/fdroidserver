@@ -279,6 +279,22 @@ def upload_to_virustotal(repo_section, vt_apikey):
             logging.info(response['verbose_msg'] + " " + response['permalink'])
 
 
+def push_binary_transparency(binary_transparency_remote):
+    '''push the binary transparency git repo to the specifed remote'''
+    import git
+
+    repo = git.Repo('binary_transparency_log')
+    pushremote = None
+    for remote in repo.remotes:
+        if remote.url == binary_transparency_remote:
+            pushremote = remote
+            break
+
+    if not pushremote:
+        pushremote = repo.create_remote('fdroid_server_update', binary_transparency_remote)
+    pushremote.push('master')
+
+
 def main():
     global config, options
 
@@ -414,6 +430,11 @@ def main():
                 upload_to_android_observatory(repo_section)
             if config.get('virustotal_apikey'):
                 upload_to_virustotal(repo_section, config.get('virustotal_apikey'))
+
+            binary_transparency_remote = config.get('binary_transparency_remote')
+            if binary_transparency_remote:
+                push_binary_transparency(binary_transparency_remote)
+
     sys.exit(0)
 
 
