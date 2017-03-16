@@ -6,13 +6,18 @@ set -x
 
 debian_mirror=$1
 
-sed -i "s,http://ftp.uk.debian.org/debian/,${debian_mirror},g" /etc/apt/sources.list
-
 printf 'APT::Install-Recommends "0";\nAPT::Install-Suggests "0";\n' \
        > /etc/apt/apt.conf.d/99no-install-recommends
 
 printf 'APT::Acquire::Retries "20";\n' \
        > /etc/apt/apt.conf.d/99acquire-retries
+
+if echo $debian_mirror | grep '^https' 2>&1 > /dev/null; then
+    apt-get -y update
+    apt-get -y install apt-transport-https
+fi
+
+sed -i "s,http://ftp.uk.debian.org/debian/,${debian_mirror},g" /etc/apt/sources.list
 
 if grep --quiet jessie /etc/apt/sources.list; then
     echo "deb $debian_mirror jessie-backports main" > /etc/apt/sources.list.d/backports.list
