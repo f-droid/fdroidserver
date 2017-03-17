@@ -1917,15 +1917,20 @@ def set_FDroidPopen_env(build=None):
             env[n] = build.ndk_path()
 
 
+def replace_build_vars(cmd, build):
+    cmd = cmd.replace('$$COMMIT$$', build.commit)
+    cmd = cmd.replace('$$VERSION$$', build.versionName)
+    cmd = cmd.replace('$$VERCODE$$', build.versionCode)
+    return cmd
+
+
 def replace_config_vars(cmd, build):
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
     cmd = cmd.replace('$$NDK$$', build.ndk_path())
     cmd = cmd.replace('$$MVN3$$', config['mvn3'])
     cmd = cmd.replace('$$QT$$', config['qt_sdk_path'] or '')
     if build is not None:
-        cmd = cmd.replace('$$COMMIT$$', build.commit)
-        cmd = cmd.replace('$$VERSION$$', build.versionName)
-        cmd = cmd.replace('$$VERCODE$$', build.versionCode)
+        cmd = replace_build_vars(cmd, build)
     return cmd
 
 
