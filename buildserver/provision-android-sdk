@@ -34,6 +34,8 @@ disabled="
 @disabled@https\://dl.google.com/android/repository/sys-img/google_apis/sys-img.xml=disabled
 "
 test -d ${HOME}/.android || mkdir ${HOME}/.android
+# there are currently zero user repos
+echo 'count=0' > ${HOME}/.android/repositories.cfg
 for line in $disabled; do
     echo $line >> ${HOME}/.android/sites-settings.cfg
 done
@@ -85,3 +87,8 @@ find $ANDROID_HOME/ -type f -executable -print0 | xargs -0 chmod a+x
 # allow gradle to install newer build-tools versions
 chgrp vagrant $ANDROID_HOME/build-tools
 chmod g+w $ANDROID_HOME/build-tools
+
+# allow gradle/sdkmanager to install into the new m2repository
+test -d $ANDROID_HOME/extras/m2repository || mkdir -p $ANDROID_HOME/extras/m2repository
+find $ANDROID_HOME/extras/m2repository -type d | xargs chgrp vagrant
+find $ANDROID_HOME/extras/m2repository -type d | xargs chmod g+w

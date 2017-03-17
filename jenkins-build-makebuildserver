@@ -46,7 +46,7 @@ export VAGRANT_HOME=$WORKSPACE/vagrant.d
 mkdir $VAGRANT_HOME
 
 cd $WORKSPACE
-echo "debian_mirror = 'http://ftp.uk.debian.org/debian/'" > $WORKSPACE/makebuildserver.config.py
+echo "debian_mirror = 'https://deb.debian.org/debian/'" > $WORKSPACE/makebuildserver.config.py
 echo "boot_timeout = 1200" >> $WORKSPACE/makebuildserver.config.py
 echo "apt_package_cache = True" >> $WORKSPACE/makebuildserver.config.py
 ./makebuildserver --verbose --clean
