@@ -114,6 +114,33 @@ $fdroid --version
 
 
 #------------------------------------------------------------------------------#
+echo_header 'run process when building and signing are on separate machines'
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+cp $WORKSPACE/tests/keystore.jks $REPOROOT/
+$fdroid init --keystore keystore.jks --repo-keyalias=sova
+echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo "accepted_formats = ['txt', 'yml']" >> config.py
+echo 'keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.py
+test -d archive || mkdir archive
+test -d metadata || mkdir metadata
+cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.yml metadata/
+test -d repo || mkdir repo
+test -d unsigned || mkdir unsigned
+cp $WORKSPACE/tests/urzip-release-unsigned.apk unsigned/info.guardianproject.urzip_100.apk
+$fdroid publish --verbose
+$fdroid update --verbose --nosign
+$fdroid signindex --verbose
+test -e repo/index.xml
+test -e repo/index.jar
+test -e repo/index-v1.jar
+test -L urzip.apk
+grep -F '<application id=' repo/index.xml > /dev/null
+
+
+#------------------------------------------------------------------------------#
 echo_header "test UTF-8 metadata"
 
 REPOROOT=`create_test_dir`
@@ -124,7 +151,7 @@ sed -i.tmp 's,^ *repo_description.*,repo_description = """获取已安装在您�
 echo "mirrors = ('https://foo.bar/fdroid', 'http://secret.onion/fdroid')" >> config.py
 mkdir metadata
 cp $WORKSPACE/tests/urzip.apk repo/
-cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.txt metadata/
+cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.yml metadata/
 
 $fdroid readmeta
 $fdroid update
@@ -169,6 +196,7 @@ echo "mirrors = ('http://foobarfoobarfoobar.onion/fdroid','https://foo.bar/fdroi
 $fdroid update --verbose --pretty
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 grep -F '<install packageName=' repo/index.xml > /dev/null
 grep -F '<uninstall packageName=' repo/index.xml > /dev/null
@@ -424,6 +452,7 @@ $fdroid readmeta
 grep -F '<application id=' repo/index.xml > /dev/null
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 export ANDROID_HOME=$STORED_ANDROID_HOME
 
 
@@ -453,6 +482,7 @@ $fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -481,6 +511,7 @@ $fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -497,6 +528,7 @@ $fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 test -e $REPOROOT/repo/info.guardianproject.urzip_100.apk || \
     cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
@@ -504,6 +536,7 @@ $fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -569,6 +602,7 @@ echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
 $fdroid update --verbose --pretty
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 cd binary_transparency
 [ `git rev-list --count HEAD` == "2" ]
@@ -587,6 +621,7 @@ $fdroid update --create-metadata --verbose
 $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
+test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 
 # now set fake repo_keyalias

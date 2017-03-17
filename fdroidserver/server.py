@@ -137,6 +137,7 @@ def update_serverwebroot(serverwebroot, repo_section):
         rsyncargs += ['-e', 'ssh -i ' + config['identity_file']]
     indexxml = os.path.join(repo_section, 'index.xml')
     indexjar = os.path.join(repo_section, 'index.jar')
+    indexv1jar = os.path.join(repo_section, 'index-v1.jar')
     # Upload the first time without the index files and delay the deletion as
     # much as possible, that keeps the repo functional while this update is
     # running.  Then once it is complete, rerun the command again to upload
@@ -147,6 +148,7 @@ def update_serverwebroot(serverwebroot, repo_section):
     logging.info('rsyncing ' + repo_section + ' to ' + serverwebroot)
     if subprocess.call(rsyncargs +
                        ['--exclude', indexxml, '--exclude', indexjar,
+                        '--exclude', indexv1jar,
                         repo_section, serverwebroot]) != 0:
         sys.exit(1)
     if subprocess.call(rsyncargs + [repo_section, serverwebroot]) != 0:

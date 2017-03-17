@@ -34,8 +34,10 @@ import logging
 import hashlib
 import socket
 import base64
+import zipfile
 import xml.etree.ElementTree as XMLElementTree
 
+from datetime import datetime
 from distutils.version import LooseVersion
 from queue import Queue
 from zipfile import ZipFile
@@ -384,6 +386,47 @@ def write_password_file(pwtype, password=None):
         os.write(fd, password.encode('utf-8'))
     os.close(fd)
     config[pwtype + 'file'] = filename
+
+
+def signjar(jar):
+    '''
+    sign a JAR file with Java's jarsigner.
+
+    This does use old hashing algorithms, i.e. SHA1, but that's not
+    broken yet for file verification.  This could be set to SHA256,
+    but then Android < 4.3 would not be able to verify it.
+    https://code.google.com/p/android/issues/detail?id=38321
+    '''
+    args = [config['jarsigner'], '-keystore', config['keystore'],
+            '-storepass:file', config['keystorepassfile'],
+            '-digestalg', 'SHA1', '-sigalg', 'SHA1withRSA',
+            jar, config['repo_keyalias']]
+    if config['keystore'] == 'NONE':
+        args += config['smartcardoptions']
+    else:  # smardcards never use -keypass
+        args += ['-keypass:file', config['keypassfile']]
+    p = FDroidPopen(args)
+    if p.returncode != 0:
+        logging.critical("Failed to sign %s!" % jar)
+        sys.exit(1)
+
+
+def sign_index_v1(repodir, json_name):
+    """
+    sign index-v1.json to make index-v1.jar
+
+    This is a bit different than index.jar: instead of their being index.xml
+    and index_unsigned.jar, the presense of index-v1.json means that there is
+    unsigned data.  That file is then stuck into a jar and signed by the
+    signing process.  index-v1.json is never published to the repo.  It is
+    included in the binary transparency log, if that is enabled.
+    """
+    name, ext = get_extension(json_name)
+    index_file = os.path.join(repodir, json_name)
+    jar_file = os.path.join(repodir, name + '.jar')
+    with zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED) as jar:
+        jar.write(index_file, json_name)
+    signjar(jar_file)
 
 
 def get_local_metadata_files():
@@ -1624,7 +1667,7 @@ class KnownApks:
                     if len(t) == 2:
                         self.apks[t[0]] = (t[1], None)
                     else:
-                        self.apks[t[0]] = (t[1], time.strptime(t[2], '%Y-%m-%d'))
+                        self.apks[t[0]] = (t[1], datetime.strptime(t[2], '%Y-%m-%d'))
         self.changed = False
 
     def writeifchanged(self):
@@ -1639,19 +1682,21 @@ class KnownApks:
             appid, added = app
             line = apk + ' ' + appid
             if added:
-                line += ' ' + time.strftime('%Y-%m-%d', added)
+                line += ' ' + added.strftime('%Y-%m-%d')
             lst.append(line)
 
         with open(self.path, 'w', encoding='utf8') as f:
             for line in sorted(lst, key=natural_key):
                 f.write(line + '\n')
 
-    # Record an apk (if it's new, otherwise does nothing)
-    # Returns the date it was added.
     def recordapk(self, apk, app, default_date=None):
+        '''
+        Record an apk (if it's new, otherwise does nothing)
+        Returns the date it was added as a datetime instance
+        '''
         if apk not in self.apks:
             if default_date is None:
-                default_date = time.gmtime(time.time())
+                default_date = datetime.utcnow()
             self.apks[apk] = (app, default_date)
             self.changed = True
         _, added = self.apks[apk]
@@ -2192,5 +2237,7 @@ def is_repo_file(filename):
             'index_unsigned.jar',
             'index.xml',
             'index.html',
+            'index-v1.jar',
+            'index-v1.json',
             'categories.txt',
         ]

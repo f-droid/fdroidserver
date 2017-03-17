@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import copy
 import sys
 import os
 import shutil
@@ -34,7 +35,6 @@ import urllib.parse
 from datetime import datetime, timedelta
 from xml.dom.minidom import Document
 from argparse import ArgumentParser
-import time
 
 import collections
 from pyasn1.error import PyAsn1Error
@@ -116,8 +116,8 @@ def update_wiki(apps, sortedids, apks):
         wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|changelog=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s|author=%s|email=%s}}\n' % (
             appid,
             app.Name,
-            time.strftime('%Y-%m-%d', app.added) if app.added else '',
-            time.strftime('%Y-%m-%d', app.lastUpdated) if app.lastUpdated else '',
+            app.added.strftime('%Y-%m-%d') if app.added else '',
+            app.lastUpdated.strftime('%Y-%m-%d') if app.lastUpdated else '',
             app.SourceCode,
             app.IssueTracker,
             app.WebSite,
@@ -151,8 +151,8 @@ def update_wiki(apps, sortedids, apks):
         cantupdate = False
         buildfails = False
         for apk in apks:
-            if apk['id'] == appid:
-                if str(apk['versioncode']) == app.CurrentVersionCode:
+            if apk['packageName'] == appid:
+                if str(apk['versionCode']) == app.CurrentVersionCode:
                     gotcurrentver = True
                 apklist.append(apk)
         # Include ones we can't build, as a special case...
@@ -161,26 +161,26 @@ def update_wiki(apps, sortedids, apks):
                 if build.versionCode == app.CurrentVersionCode:
                     cantupdate = True
                 # TODO: Nasty: vercode is a string in the build, and an int elsewhere
-                apklist.append({'versioncode': int(build.versionCode),
-                                'version': build.versionName,
+                apklist.append({'versionCode': int(build.versionCode),
+                                'versionName': build.versionName,
                                 'buildproblem': "The build for this version was manually disabled. Reason: {0}".format(build.disable),
                                 })
             else:
                 builtit = False
                 for apk in apklist:
-                    if apk['versioncode'] == int(build.versionCode):
+                    if apk['versionCode'] == int(build.versionCode):
                         builtit = True
                         break
                 if not builtit:
                     buildfails = True
-                    apklist.append({'versioncode': int(build.versionCode),
-                                    'version': build.versionName,
+                    apklist.append({'versionCode': int(build.versionCode),
+                                    'versionName': build.versionName,
                                     'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(appid, build.versionCode),
                                     })
         if app.CurrentVersionCode == '0':
             cantupdate = True
         # Sort with most recent first...
-        apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
+        apklist = sorted(apklist, key=lambda apk: apk['versionCode'], reverse=True)
 
         wikidata += "=Versions=\n"
         if len(apklist) == 0:
@@ -198,7 +198,7 @@ def update_wiki(apps, sortedids, apks):
             wikidata += " (version code " + app.CurrentVersionCode + ").\n\n"
         validapks = 0
         for apk in apklist:
-            wikidata += "==" + apk['version'] + "==\n"
+            wikidata += "==" + apk['versionName'] + "==\n"
 
             if 'buildproblem' in apk:
                 wikidata += "We can't build this version: " + apk['buildproblem'] + "\n\n"
@@ -209,7 +209,7 @@ def update_wiki(apps, sortedids, apks):
                     wikidata += "F-Droid, and guaranteed to correspond to the source tarball published with it.\n\n"
                 else:
                     wikidata += "the original developer.\n\n"
-            wikidata += "Version code: " + str(apk['versioncode']) + '\n'
+            wikidata += "Version code: " + str(apk['versionCode']) + '\n'
 
         wikidata += '\n[[Category:' + wikicat + ']]\n'
         if len(app.NoSourceSince) > 0:
@@ -494,6 +494,7 @@ def insert_obbs(repodir, apps, apks):
 
     obbs = []
     java_Integer_MIN_VALUE = -pow(2, 31)
+    currentPackageNames = apps.keys()
     for f in glob.glob(os.path.join(repodir, '*.obb')):
         obbfile = os.path.basename(f)
         # obbfile looks like: [main|patch].<expansion-version>.<package-name>.obb
@@ -504,26 +505,26 @@ def insert_obbs(repodir, apps, apks):
         if not re.match(r'^-?[0-9]+$', chunks[1]):
             obbWarnDelete('The OBB version code must come after "' + chunks[0] + '.": ')
             continue
-        versioncode = int(chunks[1])
+        versionCode = int(chunks[1])
         packagename = ".".join(chunks[2:-1])
 
         highestVersionCode = java_Integer_MIN_VALUE
-        if packagename not in apps.keys():
+        if packagename not in currentPackageNames:
             obbWarnDelete(f, "OBB's packagename does not match a supported APK: ")
             continue
         for apk in apks:
-            if packagename == apk['id'] and apk['versioncode'] > highestVersionCode:
-                highestVersionCode = apk['versioncode']
-        if versioncode > highestVersionCode:
-            obbWarnDelete(f, 'OBB file has newer versioncode(' + str(versioncode)
+            if packagename == apk['packageName'] and apk['versionCode'] > highestVersionCode:
+                highestVersionCode = apk['versionCode']
+        if versionCode > highestVersionCode:
+            obbWarnDelete(f, 'OBB file has newer versionCode(' + str(versionCode)
                           + ') than any APK: ')
             continue
         obbsha256 = sha256sum(f)
-        obbs.append((packagename, versioncode, obbfile, obbsha256))
+        obbs.append((packagename, versionCode, obbfile, obbsha256))
 
     for apk in apks:
-        for (packagename, versioncode, obbfile, obbsha256) in sorted(obbs, reverse=True):
-            if versioncode <= apk['versioncode'] and packagename == apk['id']:
+        for (packagename, versionCode, obbfile, obbsha256) in sorted(obbs, reverse=True):
+            if versionCode <= apk['versionCode'] and packagename == apk['packageName']:
                 if obbfile.startswith('main.') and 'obbMainFile' not in apk:
                     apk['obbMainFile'] = obbfile
                     apk['obbMainFileSha256'] = obbsha256
@@ -532,6 +533,98 @@ def insert_obbs(repodir, apps, apks):
                     apk['obbPatchFileSha256'] = obbsha256
             if 'obbMainFile' in apk and 'obbPatchFile' in apk:
                 break
+
+
+def insert_graphics(repodir, apps):
+    """Scans for screenshot PNG files in statically defined screenshots
+    directory and adds them to the app metadata.  The screenshots and
+    graphic must be PNG or JPEG files ending with ".png", ".jpg", or ".jpeg"
+    and must be in the following layout:
+
+    repo/packageName/locale/featureGraphic.png
+    repo/packageName/locale/phoneScreenshots/1.png
+    repo/packageName/locale/phoneScreenshots/2.png
+
+    Where "packageName" is the app's packageName and "locale" is the locale
+    of the graphics, e.g. what language they are in, using the IETF RFC5646
+    format (en-US, fr-CA, es-MX, etc).  This is following this pattern:
+    https://github.com/fastlane/fastlane/blob/1.109.0/supply/README.md#images-and-screenshots
+
+    This will also scan the metadata/ folder and the apps' source repos
+    for standard locations of graphic and screenshot files.  If it finds
+    them, it will copy them into the repo.
+
+    :param repodir: repo directory to scan
+
+    """
+
+    allowed_extensions = ('png', 'jpg', 'jpeg')
+    graphicnames = ('featureGraphic', 'icon', 'promoGraphic', 'tvBanner')
+    screenshotdirs = ('phoneScreenshots', 'sevenInchScreenshots',
+                      'tenInchScreenshots', 'tvScreenshots', 'wearScreenshots')
+
+    sourcedirs = glob.glob(os.path.join('build', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z][A-Z-.@]*'))
+    sourcedirs += glob.glob(os.path.join('metadata', '[A-Za-z]*', '[a-z][a-z][A-Z-.@]*'))
+
+    for d in sorted(sourcedirs):
+        if not os.path.isdir(d):
+            continue
+        for root, dirs, files in os.walk(d):
+            segments = root.split('/')
+            destdir = os.path.join('repo', segments[1], segments[-1])  # repo/packageName/locale
+            for f in files:
+                base, extension = common.get_extension(f)
+                if base in graphicnames and extension in allowed_extensions:
+                    os.makedirs(destdir, mode=0o755, exist_ok=True)
+                    logging.debug('copying ' + os.path.join(root, f) + ' ' + destdir)
+                    shutil.copy(os.path.join(root, f), destdir)
+            for d in dirs:
+                if d in screenshotdirs:
+                    for f in glob.glob(os.path.join(root, d, '*.*')):
+                        _, extension = common.get_extension(f)
+                        if extension in allowed_extensions:
+                            screenshotdestdir = os.path.join(destdir, d)
+                            os.makedirs(screenshotdestdir, mode=0o755, exist_ok=True)
+                            logging.debug('copying ' + f + ' ' + screenshotdestdir)
+                            shutil.copy(f, screenshotdestdir)
+
+    repofiles = sorted(glob.glob(os.path.join('repo', '[A-Za-z]*', '[a-z][a-z][A-Z-.@]*')))
+    for d in repofiles:
+        if not os.path.isdir(d):
+            continue
+        for f in sorted(glob.glob(os.path.join(d, '*.*')) + glob.glob(os.path.join(d, '*Screenshots', '*.*'))):
+            if not os.path.isfile(f):
+                continue
+            segments = f.split('/')
+            packageName = segments[1]
+            locale = segments[2]
+            screenshotdir = segments[3]
+            filename = os.path.basename(f)
+            base, extension = common.get_extension(filename)
+
+            if packageName not in apps:
+                logging.warning('Found "%s" graphic without metadata for app "%s"!'
+                                % (filename, packageName))
+                continue
+            if 'localized' not in apps[packageName]:
+                apps[packageName]['localized'] = collections.OrderedDict()
+            if locale not in apps[packageName]['localized']:
+                apps[packageName]['localized'][locale] = collections.OrderedDict()
+            graphics = apps[packageName]['localized'][locale]
+
+            if extension not in allowed_extensions:
+                logging.warning('Only PNG and JPEG are supported for graphics, found: ' + f)
+            elif base in graphicnames:
+                # there can only be zero or one of these per locale
+                graphics[base] = filename
+            elif screenshotdir in screenshotdirs:
+                # there can any number of these per locale
+                logging.debug('adding ' + base + ':' + f)
+                if screenshotdir not in graphics:
+                    graphics[screenshotdir] = []
+                graphics[screenshotdir].append(filename)
+            else:
+                logging.warning('Unsupported graphics file found: ' + f)
 
 
 def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
@@ -565,7 +658,14 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
         usecache = False
         if name in apkcache:
             repo_file = apkcache[name]
-            if repo_file['sha256'] == shasum:
+            # added time is cached as tuple but used here as datetime instance
+            if 'added' in repo_file:
+                a = repo_file['added']
+                if isinstance(a, datetime):
+                    repo_file['added'] = a
+                else:
+                    repo_file['added'] = datetime(*a[:6])
+            if repo_file['hash'] == shasum:
                 logging.debug("Reading " + name + " from cache")
                 usecache = True
             else:
@@ -576,20 +676,21 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             repo_file = {}
             # TODO rename apkname globally to something more generic
             repo_file['name'] = name
-            repo_file['apkname'] = name
-            repo_file['sha256'] = shasum
-            repo_file['versioncode'] = 0
-            repo_file['version'] = shasum
+            repo_file['apkName'] = name
+            repo_file['hash'] = shasum
+            repo_file['hashType'] = 'sha256'
+            repo_file['versionCode'] = 0
+            repo_file['versionName'] = shasum
             # the static ID is the SHA256 unless it is set in the metadata
-            repo_file['id'] = shasum
+            repo_file['packageName'] = shasum
             n = name.split('_')
             if len(n) == 2:
                 packageName = n[0]
                 versionCode = n[1].split('.')[0]
                 if re.match(r'^-?[0-9]+$', versionCode) \
                    and common.is_valid_package_name(name.split('_')[0]):
-                    repo_file['id'] = packageName
-                    repo_file['versioncode'] = int(versionCode)
+                    repo_file['packageName'] = packageName
+                    repo_file['versionCode'] = int(versionCode)
             srcfilename = name + "_src.tar.gz"
             if os.path.exists(os.path.join(repodir, srcfilename)):
                 repo_file['srcname'] = srcfilename
@@ -605,7 +706,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             default_date_param = None
 
         # Record in knownapks, getting the added date at the same time..
-        added = knownapks.recordapk(repo_file['apkname'], repo_file['id'],
+        added = knownapks.recordapk(repo_file['apkName'], repo_file['packageName'],
                                     default_date=default_date_param)
         if added:
             repo_file['added'] = added
@@ -661,7 +762,7 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
         usecache = False
         if apkfilename in apkcache:
             apk = apkcache[apkfilename]
-            if apk['sha256'] == shasum:
+            if apk['hash'] == shasum:
                 logging.debug("Reading " + apkfilename + " from cache")
                 usecache = True
             else:
@@ -670,8 +771,9 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
         if not usecache:
             logging.debug("Processing " + apkfilename)
             apk = {}
-            apk['apkname'] = apkfilename
-            apk['sha256'] = shasum
+            apk['apkName'] = apkfilename
+            apk['hash'] = shasum
+            apk['hashType'] = 'sha256'
             srcfilename = apkfilename[:-4] + "_src.tar.gz"
             if os.path.exists(os.path.join(repodir, srcfilename)):
                 apk['srcname'] = srcfilename
@@ -698,9 +800,9 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
             for line in p.output.splitlines():
                 if line.startswith("package:"):
                     try:
-                        apk['id'] = re.match(name_pat, line).group(1)
-                        apk['versioncode'] = int(re.match(vercode_pat, line).group(1))
-                        apk['version'] = re.match(vername_pat, line).group(1)
+                        apk['packageName'] = re.match(name_pat, line).group(1)
+                        apk['versionCode'] = int(re.match(vercode_pat, line).group(1))
+                        apk['versionName'] = re.match(vername_pat, line).group(1)
                     except Exception as e:
                         logging.error("Package matching failed: " + str(e))
                         logging.info("Line was: " + line)
@@ -814,8 +916,8 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
                                  + 'sudo date -s "' + str(dt_obj) + '"')
 
             iconfilename = "%s.%s.png" % (
-                apk['id'],
-                apk['versioncode'])
+                apk['packageName'],
+                apk['versionCode'])
 
             # Extract the icon file...
             empty_densities = []
@@ -925,12 +1027,12 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
                                 os.path.join(get_icon_dir(repodir, '0'), iconfilename))
 
             if use_date_from_apk and manifest.date_time[1] != 0:
-                default_date_param = datetime(*manifest.date_time).utctimetuple()
+                default_date_param = datetime(*manifest.date_time)
             else:
                 default_date_param = None
 
             # Record in known apks, getting the added date at the same time..
-            added = knownapks.recordapk(apk['apkname'], apk['id'], default_date=default_date_param)
+            added = knownapks.recordapk(apk['apkName'], apk['packageName'], default_date=default_date_param)
             if added:
                 apk['added'] = added
 
@@ -1013,6 +1115,181 @@ def make_index(apps, sortedids, apks, repodir, archive):
     :param categories: list of categories
     """
 
+    def _resolve_description_link(appid):
+        if appid in apps:
+            return ("fdroid.app:" + appid, apps[appid].Name)
+        raise MetaDataException("Cannot resolve app id " + appid)
+
+    nosigningkey = False
+    if not options.nosign:
+        if 'repo_keyalias' not in config:
+            nosigningkey = True
+            logging.critical("'repo_keyalias' not found in config.py!")
+        if 'keystore' not in config:
+            nosigningkey = True
+            logging.critical("'keystore' not found in config.py!")
+        if 'keystorepass' not in config and 'keystorepassfile' not in config:
+            nosigningkey = True
+            logging.critical("'keystorepass' not found in config.py!")
+        if 'keypass' not in config and 'keypassfile' not in config:
+            nosigningkey = True
+            logging.critical("'keypass' not found in config.py!")
+        if not os.path.exists(config['keystore']):
+            nosigningkey = True
+            logging.critical("'" + config['keystore'] + "' does not exist!")
+        if nosigningkey:
+            logging.warning("`fdroid update` requires a signing key, you can create one using:")
+            logging.warning("\tfdroid update --create-key")
+            sys.exit(1)
+
+    repodict = collections.OrderedDict()
+    repodict['timestamp'] = datetime.utcnow()
+    repodict['version'] = METADATA_VERSION
+
+    if config['repo_maxage'] != 0:
+        repodict['maxage'] = config['repo_maxage']
+
+    if archive:
+        repodict['name'] = config['archive_name']
+        repodict['icon'] = os.path.basename(config['archive_icon'])
+        repodict['address'] = config['archive_url']
+        repodict['description'] = config['archive_description']
+        urlbasepath = os.path.basename(urllib.parse.urlparse(config['archive_url']).path)
+    else:
+        repodict['name'] = config['repo_name']
+        repodict['icon'] = os.path.basename(config['repo_icon'])
+        repodict['address'] = config['repo_url']
+        repodict['description'] = config['repo_description']
+        urlbasepath = os.path.basename(urllib.parse.urlparse(config['repo_url']).path)
+
+    mirrorcheckfailed = False
+    mirrors = []
+    for mirror in sorted(config.get('mirrors', [])):
+        base = os.path.basename(urllib.parse.urlparse(mirror).path.rstrip('/'))
+        if config.get('nonstandardwebroot') is not True and base != 'fdroid':
+            logging.error("mirror '" + mirror + "' does not end with 'fdroid'!")
+            mirrorcheckfailed = True
+        # must end with / or urljoin strips a whole path segment
+        if mirror.endswith('/'):
+            mirrors.append(urllib.parse.urljoin(mirror, urlbasepath))
+        else:
+            mirrors.append(urllib.parse.urljoin(mirror + '/', urlbasepath))
+    for mirror in config.get('servergitmirrors', []):
+        mirror = get_raw_mirror(mirror)
+        if mirror is not None:
+            mirrors.append(mirror + '/')
+    if mirrorcheckfailed:
+        sys.exit(1)
+    if mirrors:
+        repodict['mirrors'] = mirrors
+
+    appsWithPackages = collections.OrderedDict()
+    for packageName in sortedids:
+        app = apps[packageName]
+        if app['Disabled']:
+            continue
+
+        # only include apps with packages
+        for apk in apks:
+            if apk['packageName'] == packageName:
+                newapp = copy.copy(app)  # update wiki needs unmodified description
+                newapp['Description'] = metadata.description_html(app['Description'],
+                                                                  _resolve_description_link)
+                appsWithPackages[packageName] = newapp
+                break
+
+    requestsdict = dict()
+    for command in ('install', 'uninstall'):
+        packageNames = []
+        key = command + '_list'
+        if key in config:
+            if isinstance(config[key], str):
+                packageNames = [config[key]]
+            elif all(isinstance(item, str) for item in config[key]):
+                packageNames = config[key]
+            else:
+                raise TypeError('only accepts strings, lists, and tuples')
+        requestsdict[command] = packageNames
+
+    make_index_v0(appsWithPackages, apks, repodir, repodict, requestsdict)
+    make_index_v1(appsWithPackages, apks, repodir, repodict, requestsdict)
+
+
+def make_index_v1(apps, packages, repodir, repodict, requestsdict):
+
+    def _index_encoder_default(obj):
+        if isinstance(obj, set):
+            return list(obj)
+        if isinstance(obj, datetime):
+            return int(obj.timestamp() * 1000)  # Java expects milliseconds
+        raise TypeError(repr(obj) + " is not JSON serializable")
+
+    output = collections.OrderedDict()
+    output['repo'] = repodict
+    output['requests'] = requestsdict
+
+    appslist = []
+    output['apps'] = appslist
+    for appid, appdict in apps.items():
+        d = collections.OrderedDict()
+        appslist.append(d)
+        for k, v in sorted(appdict.items()):
+            if not v:
+                continue
+            if k in ('builds', 'comments', 'metadatapath',
+                     'ArchivePolicy', 'AutoUpdateMode', 'MaintainerNotes',
+                     'Provides', 'Repo', 'RepoType', 'RequiresRoot',
+                     'UpdateCheckData', 'UpdateCheckIgnore', 'UpdateCheckMode',
+                     'UpdateCheckName', 'NoSourceSince', 'VercodeOperation'):
+                continue
+
+            # name things after the App class fields in fdroidclient
+            if k == 'id':
+                k = 'packageName'
+            elif k == 'CurrentVersionCode':  # TODO make SuggestedVersionCode the canonical name
+                k = 'suggestedVersionCode'
+            elif k == 'CurrentVersion':  # TODO make SuggestedVersionName the canonical name
+                k = 'suggestedVersionName'
+            elif k == 'AutoName':
+                if 'Name' not in apps[appid]:
+                    d['name'] = v
+                continue
+            else:
+                k = k[:1].lower() + k[1:]
+            d[k] = v
+
+    output_packages = dict()
+    output['packages'] = output_packages
+    for package in packages:
+        packageName = package['packageName']
+        if packageName in output_packages:
+            packagelist = output_packages[packageName]
+        else:
+            packagelist = []
+            output_packages[packageName] = packagelist
+        d = collections.OrderedDict()
+        packagelist.append(d)
+        for k, v in sorted(package.items()):
+            if not v:
+                continue
+            if k in ('icon', 'icons', 'icons_src', 'name', ):
+                continue
+            d[k] = v
+
+    json_name = 'index-v1.json'
+    index_file = os.path.join(repodir, json_name)
+    with open(index_file, 'w') as fp:
+        json.dump(output, fp, default=_index_encoder_default)
+
+    if options.nosign:
+        logging.debug('index-v1 must have a signature, use `fdroid signindex` to create it!')
+    else:
+        common.sign_index_v1(repodir, json_name)
+
+
+def make_index_v0(apps, apks, repodir, repodict, requestsdict):
+    '''aka index.jar aka index.xml'''
+
     doc = Document()
 
     def addElement(name, value, doc, parent):
@@ -1041,92 +1318,29 @@ def make_index(apps, sortedids, apks, repodir, archive):
 
     repoel = doc.createElement("repo")
 
-    mirrorcheckfailed = False
-    mirrors = []
-    for mirror in sorted(config.get('mirrors', [])):
-        base = os.path.basename(urllib.parse.urlparse(mirror).path.rstrip('/'))
-        if config.get('nonstandardwebroot') is not True and base != 'fdroid':
-            logging.error("mirror '" + mirror + "' does not end with 'fdroid'!")
-            mirrorcheckfailed = True
-        # must end with / or urljoin strips a whole path segment
-        if mirror.endswith('/'):
-            mirrors.append(mirror)
-        else:
-            mirrors.append(mirror + '/')
-    for mirror in config.get('servergitmirrors', []):
-        mirror = get_raw_mirror(mirror)
-        if mirror is not None:
-            mirrors.append(mirror + '/')
-    if mirrorcheckfailed:
-        sys.exit(1)
+    repoel.setAttribute("name", repodict['name'])
+    if 'maxage' in repodict:
+        repoel.setAttribute("maxage", str(repodict['maxage']))
+    repoel.setAttribute("icon", os.path.basename(repodict['icon']))
+    repoel.setAttribute("url", repodict['address'])
+    addElement('description', repodict['description'], doc, repoel)
+    for mirror in repodict.get('mirrors', []):
+        addElement('mirror', mirror, doc, repoel)
 
-    if archive:
-        repoel.setAttribute("name", config['archive_name'])
-        if config['repo_maxage'] != 0:
-            repoel.setAttribute("maxage", str(config['repo_maxage']))
-        repoel.setAttribute("icon", os.path.basename(config['archive_icon']))
-        repoel.setAttribute("url", config['archive_url'])
-        addElement('description', config['archive_description'], doc, repoel)
-        urlbasepath = os.path.basename(urllib.parse.urlparse(config['archive_url']).path)
-        for mirror in mirrors:
-            addElement('mirror', urllib.parse.urljoin(mirror, urlbasepath), doc, repoel)
-
-    else:
-        repoel.setAttribute("name", config['repo_name'])
-        if config['repo_maxage'] != 0:
-            repoel.setAttribute("maxage", str(config['repo_maxage']))
-        repoel.setAttribute("icon", os.path.basename(config['repo_icon']))
-        repoel.setAttribute("url", config['repo_url'])
-        addElement('description', config['repo_description'], doc, repoel)
-        urlbasepath = os.path.basename(urllib.parse.urlparse(config['repo_url']).path)
-        for mirror in mirrors:
-            addElement('mirror', urllib.parse.urljoin(mirror, urlbasepath), doc, repoel)
-
-    repoel.setAttribute("version", str(METADATA_VERSION))
-    repoel.setAttribute("timestamp", str(int(time.time())))
-
-    nosigningkey = False
-    if not options.nosign:
-        if 'repo_keyalias' not in config:
-            nosigningkey = True
-            logging.critical("'repo_keyalias' not found in config.py!")
-        if 'keystore' not in config:
-            nosigningkey = True
-            logging.critical("'keystore' not found in config.py!")
-        if 'keystorepass' not in config and 'keystorepassfile' not in config:
-            nosigningkey = True
-            logging.critical("'keystorepass' not found in config.py!")
-        if 'keypass' not in config and 'keypassfile' not in config:
-            nosigningkey = True
-            logging.critical("'keypass' not found in config.py!")
-        if not os.path.exists(config['keystore']):
-            nosigningkey = True
-            logging.critical("'" + config['keystore'] + "' does not exist!")
-        if nosigningkey:
-            logging.warning("`fdroid update` requires a signing key, you can create one using:")
-            logging.warning("\tfdroid update --create-key")
-            sys.exit(1)
+    repoel.setAttribute("version", str(repodict['version']))
+    repoel.setAttribute("timestamp", '%d' % repodict['timestamp'].timestamp())
 
     repoel.setAttribute("pubkey", extract_pubkey().decode('utf-8'))
     root.appendChild(repoel)
 
     for command in ('install', 'uninstall'):
-        packageNames = []
-        key = command + '_list'
-        if key in config:
-            if isinstance(config[key], str):
-                packageNames = [config[key]]
-            elif all(isinstance(item, str) for item in config[key]):
-                packageNames = config[key]
-            else:
-                raise TypeError('only accepts strings, lists, and tuples')
-        for packageName in packageNames:
+        for packageName in requestsdict[command]:
             element = doc.createElement(command)
             root.appendChild(element)
             element.setAttribute('packageName', packageName)
 
-    for appid in sortedids:
-        app = metadata.App(apps[appid])
+    for appid, appdict in apps.items():
+        app = metadata.App(appdict)
 
         if app.Disabled is not None:
             continue
@@ -1134,7 +1348,7 @@ def make_index(apps, sortedids, apks, repodir, archive):
         # Get a list of the apks for this app...
         apklist = []
         for apk in apks:
-            if apk['id'] == appid:
+            if apk['packageName'] == appid:
                 apklist.append(apk)
 
         if len(apklist) == 0:
@@ -1146,22 +1360,19 @@ def make_index(apps, sortedids, apks, repodir, archive):
 
         addElement('id', app.id, doc, apel)
         if app.added:
-            addElement('added', time.strftime('%Y-%m-%d', app.added), doc, apel)
+            addElement('added', app.added.strftime('%Y-%m-%d'), doc, apel)
         if app.lastUpdated:
-            addElement('lastupdated', time.strftime('%Y-%m-%d', app.lastUpdated), doc, apel)
+            addElement('lastupdated', app.lastUpdated.strftime('%Y-%m-%d'), doc, apel)
         addElement('name', app.Name, doc, apel)
         addElement('summary', app.Summary, doc, apel)
         if app.icon:
             addElement('icon', app.icon, doc, apel)
 
-        def linkres(appid):
-            if appid in apps:
-                return ("fdroid.app:" + appid, apps[appid].Name)
-            raise MetaDataException("Cannot resolve app id " + appid)
-
-        addElement('desc',
-                   metadata.description_html(app.Description, linkres),
-                   doc, apel)
+        if app.get('Description'):
+            description = app.Description
+        else:
+            description = '<p>No description available</p>'
+        addElement('desc', description, doc, apel)
         addElement('license', app.License, doc, apel)
         if app.Categories:
             addElement('categories', ','.join(app.Categories), doc, apel)
@@ -1194,7 +1405,7 @@ def make_index(apps, sortedids, apks, repodir, archive):
 
         # Sort the apk list into version order, just so the web site
         # doesn't have to do any work by default...
-        apklist = sorted(apklist, key=lambda apk: apk['versioncode'], reverse=True)
+        apklist = sorted(apklist, key=lambda apk: apk['versionCode'], reverse=True)
 
         if 'antiFeatures' in apklist[0]:
             app.AntiFeatures.extend(apklist[0]['antiFeatures'])
@@ -1203,34 +1414,33 @@ def make_index(apps, sortedids, apks, repodir, archive):
 
         # Check for duplicates - they will make the client unhappy...
         for i in range(len(apklist) - 1):
-            if apklist[i]['versioncode'] == apklist[i + 1]['versioncode']:
+            if apklist[i]['versionCode'] == apklist[i + 1]['versionCode']:
                 logging.critical("duplicate versions: '%s' - '%s'" % (
-                    apklist[i]['apkname'], apklist[i + 1]['apkname']))
+                    apklist[i]['apkName'], apklist[i + 1]['apkName']))
                 sys.exit(1)
 
         current_version_code = 0
         current_version_file = None
         for apk in apklist:
-            file_extension = common.get_file_extension(apk['apkname'])
+            file_extension = common.get_file_extension(apk['apkName'])
             # find the APK for the "Current Version"
-            if current_version_code < apk['versioncode']:
-                current_version_code = apk['versioncode']
+            if current_version_code < apk['versionCode']:
+                current_version_code = apk['versionCode']
             if current_version_code < int(app.CurrentVersionCode):
-                current_version_file = apk['apkname']
+                current_version_file = apk['apkName']
 
             apkel = doc.createElement("package")
             apel.appendChild(apkel)
-            addElement('version', apk['version'], doc, apkel)
-            addElement('versioncode', str(apk['versioncode']), doc, apkel)
-            addElement('apkname', apk['apkname'], doc, apkel)
+            addElement('version', apk['versionName'], doc, apkel)
+            addElement('versioncode', str(apk['versionCode']), doc, apkel)
+            addElement('apkname', apk['apkName'], doc, apkel)
             addElementIfInApk('srcname', apk, 'srcname', doc, apkel)
-            for hash_type in ['sha256']:
-                if hash_type not in apk:
-                    continue
-                hashel = doc.createElement("hash")
-                hashel.setAttribute("type", hash_type)
-                hashel.appendChild(doc.createTextNode(apk[hash_type]))
-                apkel.appendChild(hashel)
+
+            hashel = doc.createElement("hash")
+            hashel.setAttribute('type', 'sha256')
+            hashel.appendChild(doc.createTextNode(apk['hash']))
+            apkel.appendChild(hashel)
+
             addElement('size', str(apk['size']), doc, apkel)
             addElementIfInApk('sdkver', apk,
                               'minSdkVersion', doc, apkel)
@@ -1247,7 +1457,7 @@ def make_index(apps, sortedids, apks, repodir, archive):
             addElementIfInApk('obbPatchFileSha256', apk,
                               'obbPatchFileSha256', doc, apkel)
             if 'added' in apk:
-                addElement('added', time.strftime('%Y-%m-%d', apk['added']), doc, apkel)
+                addElement('added', apk['added'].strftime('%Y-%m-%d'), doc, apkel)
 
             if file_extension == 'apk':  # sig is required for APKs, but only APKs
                 addElement('sig', apk['sig'], doc, apkel)
@@ -1326,18 +1536,7 @@ def make_index(apps, sortedids, apks, repodir, archive):
             if os.path.exists(signed):
                 os.remove(signed)
         else:
-            args = [config['jarsigner'], '-keystore', config['keystore'],
-                    '-storepass:file', config['keystorepassfile'],
-                    '-digestalg', 'SHA1', '-sigalg', 'SHA1withRSA',
-                    signed, config['repo_keyalias']]
-            if config['keystore'] == 'NONE':
-                args += config['smartcardoptions']
-            else:  # smardcards never use -keypass
-                args += ['-keypass:file', config['keypassfile']]
-            p = FDroidPopen(args)
-            if p.returncode != 0:
-                logging.critical("Failed to sign index")
-                sys.exit(1)
+            common.signjar(signed)
 
     # Copy the repo icon into the repo directory...
     icon_dir = os.path.join(repodir, 'icons')
@@ -1366,11 +1565,11 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
         def filter_apk_list_sorted(apk_list):
             res = []
             for apk in apk_list:
-                if apk['id'] == appid:
+                if apk['packageName'] == appid:
                     res.append(apk)
 
             # Sort the apk list by version code. First is highest/newest.
-            return sorted(res, key=lambda apk: apk['versioncode'], reverse=True)
+            return sorted(res, key=lambda apk: apk['versionCode'], reverse=True)
 
         def move_file(from_dir, to_dir, filename, ignore_missing):
             from_path = os.path.join(from_dir, filename)
@@ -1386,9 +1585,9 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
             apklist = filter_apk_list_sorted(apks)
             # Move back the ones we don't want.
             for apk in apklist[keepversions:]:
-                logging.info("Moving " + apk['apkname'] + " to archive")
-                move_file(repodir, archivedir, apk['apkname'], False)
-                move_file(repodir, archivedir, apk['apkname'] + '.asc', True)
+                logging.info("Moving " + apk['apkName'] + " to archive")
+                move_file(repodir, archivedir, apk['apkName'], False)
+                move_file(repodir, archivedir, apk['apkName'] + '.asc', True)
                 for density in all_screen_densities:
                     repo_icon_dir = get_icon_dir(repodir, density)
                     archive_icon_dir = get_icon_dir(archivedir, density)
@@ -1404,9 +1603,9 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
             archapklist = filter_apk_list_sorted(archapks)
             # Move forward the ones we want again.
             for apk in archapklist[:required]:
-                logging.info("Moving " + apk['apkname'] + " from archive")
-                move_file(archivedir, repodir, apk['apkname'], False)
-                move_file(archivedir, repodir, apk['apkname'] + '.asc', True)
+                logging.info("Moving " + apk['apkName'] + " from archive")
+                move_file(archivedir, repodir, apk['apkName'], False)
+                move_file(archivedir, repodir, apk['apkName'] + '.asc', True)
                 for density in all_screen_densities:
                     repo_icon_dir = get_icon_dir(repodir, density)
                     archive_icon_dir = get_icon_dir(archivedir, density)
@@ -1422,16 +1621,16 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
 def add_apks_to_per_app_repos(repodir, apks):
     apks_per_app = dict()
     for apk in apks:
-        apk['per_app_dir'] = os.path.join(apk['id'], 'fdroid')
+        apk['per_app_dir'] = os.path.join(apk['packageName'], 'fdroid')
         apk['per_app_repo'] = os.path.join(apk['per_app_dir'], 'repo')
         apk['per_app_icons'] = os.path.join(apk['per_app_repo'], 'icons')
-        apks_per_app[apk['id']] = apk
+        apks_per_app[apk['packageName']] = apk
 
         if not os.path.exists(apk['per_app_icons']):
-            logging.info('Adding new repo for only ' + apk['id'])
+            logging.info('Adding new repo for only ' + apk['packageName'])
             os.makedirs(apk['per_app_icons'])
 
-        apkpath = os.path.join(repodir, apk['apkname'])
+        apkpath = os.path.join(repodir, apk['apkName'])
         shutil.copy(apkpath, apk['per_app_repo'])
         apksigpath = apkpath + '.sig'
         if os.path.exists(apksigpath):
@@ -1475,11 +1674,11 @@ def make_binary_transparency_log(repodirs):
         cpdir = os.path.join(btrepo, repodir)
         if not os.path.exists(cpdir):
             os.mkdir(cpdir)
-        for f in ('index.xml', ):
+        for f in ('index.xml', 'index-v1.json'):
             dest = os.path.join(cpdir, f)
             shutil.copyfile(os.path.join(repodir, f), dest)
             gitrepo.index.add([os.path.join(repodir, f), ])
-        for f in ('index.jar', ):
+        for f in ('index.jar', 'index-v1.jar'):
             repof = os.path.join(repodir, f)
             dest = os.path.join(cpdir, f)
             jarin = zipfile.ZipFile(repof, 'r')
@@ -1639,12 +1838,12 @@ def main():
     # metadata files, if requested on the command line)
     newmetadata = False
     for apk in apks:
-        if apk['id'] not in apps:
+        if apk['packageName'] not in apps:
             if options.create_metadata:
                 if 'name' not in apk:
-                    logging.error(apk['id'] + ' does not have a name! Skipping...')
+                    logging.error(apk['packageName'] + ' does not have a name! Skipping...')
                     continue
-                f = open(os.path.join('metadata', apk['id'] + '.txt'), 'w', encoding='utf8')
+                f = open(os.path.join('metadata', apk['packageName'] + '.txt'), 'w', encoding='utf8')
                 f.write("License:Unknown\n")
                 f.write("Web Site:\n")
                 f.write("Source Code:\n")
@@ -1656,13 +1855,13 @@ def main():
                 f.write(".\n")
                 f.write("Name:" + apk['name'] + "\n")
                 f.close()
-                logging.info("Generated skeleton metadata for " + apk['id'])
+                logging.info("Generated skeleton metadata for " + apk['packageName'])
                 newmetadata = True
             else:
-                msg = apk['apkname'] + " (" + apk['id'] + ") has no metadata!"
+                msg = apk['apkName'] + " (" + apk['packageName'] + ") has no metadata!"
                 if options.delete_unknown:
-                    logging.warn(msg + "\n\tdeleting: repo/" + apk['apkname'])
-                    rmf = os.path.join(repodirs[0], apk['apkname'])
+                    logging.warn(msg + "\n\tdeleting: repo/" + apk['apkName'])
+                    rmf = os.path.join(repodirs[0], apk['apkName'])
                     if not os.path.exists(rmf):
                         logging.error("Could not find {0} to remove it".format(rmf))
                     else:
@@ -1675,6 +1874,7 @@ def main():
         apps = metadata.read_metadata()
 
     insert_obbs(repodirs[0], apps, apks)
+    insert_graphics(repodirs[0], apps)
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
@@ -1694,9 +1894,9 @@ def main():
     for appid, app in apps.items():
         bestver = UNSET_VERSION_CODE
         for apk in apks + archapks:
-            if apk['id'] == appid:
-                if apk['versioncode'] > bestver:
-                    bestver = apk['versioncode']
+            if apk['packageName'] == appid:
+                if apk['versionCode'] > bestver:
+                    bestver = apk['versionCode']
                     bestapk = apk
 
                 if 'added' in apk:

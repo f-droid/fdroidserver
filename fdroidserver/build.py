@@ -1005,7 +1005,7 @@ def parse_commandline():
 
     parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help="app-id with optional versioncode in the form APPID[:VERCODE]")
+    parser.add_argument("appid", nargs='*', help="app-id with optional versionCode in the form APPID[:VERCODE]")
     parser.add_argument("-l", "--latest", action="store_true", default=False,
                         help="Build only the latest version of each package")
     parser.add_argument("-s", "--stop", action="store_true", default=False,

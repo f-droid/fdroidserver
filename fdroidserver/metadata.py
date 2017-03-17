@@ -813,6 +813,11 @@ def post_metadata_parse(app):
         if type(v) in (float, int):
             app[k] = str(v)
 
+    if isinstance(app.Categories, str):
+        app.Categories = [app.Categories]
+    else:
+        app.Categories = [str(i) for i in app.Categories]
+
     builds = []
     if 'builds' in app:
         for build in app['builds']:
@@ -830,9 +835,6 @@ def post_metadata_parse(app):
                 elif flagtype(k) == TYPE_STRING and type(v) in (float, int):
                     build[k] = str(v)
             builds.append(build)
-
-    if not app.get('Description'):
-        app['Description'] = 'No description available'
 
     app.builds = sorted_builds(builds)
 
