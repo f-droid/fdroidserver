@@ -35,5 +35,10 @@ if [ ! -e $NDK_BASE/r13b ]; then
     mv android-ndk-r13b r13b
 fi
 
+if [ ! -e $NDK_BASE/r14 ]; then
+    unzip /vagrant/cache/android-ndk-r14-linux-x86_64.zip > /dev/null
+    mv android-ndk-r14 r14
+fi
+
 chmod -R a+rX $NDK_BASE/
 find $NDK_BASE/ -type f -executable -print0 | xargs -0 chmod a+x

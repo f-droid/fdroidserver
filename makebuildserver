@@ -305,6 +305,8 @@ cachefiles = [
      'eafae2d614e5475a3bcfd7c5f201db5b963cc1290ee3e8ae791ff0c66757781e'),
     ('https://dl.google.com/android/repository/android-ndk-r13b-linux-x86_64.zip',
      '3524d7f8fca6dc0d8e7073a7ab7f76888780a22841a6641927123146c3ffd29c'),
+    ('https://dl.google.com/android/repository/android-ndk-r14-linux-x86_64.zip',
+     '3e622c2c9943964ea44cd56317d0769ed4c811bb4b40dc45b1f6965e4db9aa44'),
     ('https://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-linux-x64-android-5.7.0.run',
      'f7e55b7970e59bdaabb88cb7afc12e9061e933992bda2f076f52600358644586'),
 ]
