@@ -552,6 +552,10 @@ def get_release_filename(app, build):
         return "%s_%s.apk" % (app.id, build.versionCode)
 
 
+def get_toolsversion_logname(app, build):
+    return "%s_%s_toolsversion.log" % (app.id, build.versionCode)
+
+
 def getsrcname(app, build):
     return "%s_%s_src.tar.gz" % (app.id, build.versionCode)
 

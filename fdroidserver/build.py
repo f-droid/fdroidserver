@@ -243,8 +243,16 @@ def release_vm():
 
 
 # Note that 'force' here also implies test mode.
-def build_server(app, build, vcs, build_dir, output_dir, force):
-    """Do a build on the build server."""
+def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
+    """Do a build on the builder vm.
+
+    :param app: app metadata dict
+    :param build:
+    :param vcs: version control system controller object
+    :param build_dir: local source-code checkout of app
+    :param output_dir: target folder for the build result
+    :param force:
+    """
 
     global buildserverid
 
@@ -417,6 +425,15 @@ def build_server(app, build, vcs, build_dir, output_dir, force):
                 "Build.py failed on server for {0}:{1}".format(
                     app.id, build.versionName), str(output, 'utf-8'))
 
+        # Retreive logs...
+        toolsversion_log = common.get_toolsversion_logname(app, build)
+        try:
+            ftp.chdir(os.path.join(homedir, log_dir))
+            ftp.get(toolsversion_log, os.path.join(log_dir, toolsversion_log))
+            logging.debug('retrieved %s', toolsversion_log)
+        except:
+            logging.warn('could not get %s from builder vm.' % (toolsversion_log))
+
         # Retrieve the built files...
         logging.info("Retrieving build output...")
         if force:
@@ -513,7 +530,7 @@ def get_metadata_from_apk(app, build, apkfile):
     return vercode, version
 
 
-def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh):
+def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh):
     """Do a build locally."""
 
     ndk_path = build.ndk_path()
@@ -531,6 +548,14 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
             sys.exit(3)
 
     common.set_FDroidPopen_env(build)
+
+    # create ..._toolsversion.log when running in builder vm
+    if onserver:
+        log_path = os.path.join(log_dir,
+                                common.get_toolsversion_logname(app, build))
+        with open(log_path, 'w') as f:
+            f.write('== Installed Android Tools ==\n\n')
+            f.write(get_android_tools_version_log(build.ndk_path()))
 
     # Prepare the source code...
     root_dir, srclibpaths = common.prepare_source(vcs, app, build,
@@ -914,8 +939,9 @@ def build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, 
                     os.path.join(output_dir, tarname))
 
 
-def trybuild(app, build, build_dir, output_dir, also_check_dir, srclib_dir, extlib_dir,
-             tmp_dir, repo_dir, vcs, test, server, force, onserver, refresh):
+def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
+             srclib_dir, extlib_dir, tmp_dir, repo_dir, vcs, test,
+             server, force, onserver, refresh):
     """
     Build a particular version of an application, if it needs building.
 
@@ -958,9 +984,9 @@ def trybuild(app, build, build_dir, output_dir, also_check_dir, srclib_dir, extl
         # grabbing the source now.
         vcs.gotorevision(build.commit)
 
-        build_server(app, build, vcs, build_dir, output_dir, force)
+        build_server(app, build, vcs, build_dir, output_dir, log_dir, force)
     else:
-        build_local(app, build, vcs, build_dir, output_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh)
+        build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh)
     return True
 
 
@@ -1151,8 +1177,10 @@ def main():
 
         for build in app.builds:
             wikilog = None
-            tools_version_log = '== Installed Android Tools ==\n\n'
-            tools_version_log += get_android_tools_version_log(build.ndk_path())
+            tools_version_log = ''
+            if not options.onserver:
+                tools_version_log = '== Installed Android Tools ==\n\n'
+                tools_version_log += get_android_tools_version_log(build.ndk_path())
             try:
 
                 # For the first build of a particular app, we need to set up
@@ -1163,11 +1191,17 @@ def main():
                     first = False
 
                 logging.debug("Checking " + build.versionName)
-                if trybuild(app, build, build_dir, output_dir,
+                if trybuild(app, build, build_dir, output_dir, log_dir,
                             also_check_dir, srclib_dir, extlib_dir,
                             tmp_dir, repo_dir, vcs, options.test,
                             options.server, options.force,
                             options.onserver, options.refresh):
+                    toolslog = os.path.join(log_dir,
+                                            common.get_toolsversion_logname(app, build))
+                    if not options.onserver and os.path.exists(toolslog):
+                        with open(toolslog, 'r') as f:
+                            tools_version_log = ''.join(f.readlines())
+                        os.remove(toolslog)
 
                     if app.Binaries is not None:
                         # This is an app where we build from source, and
