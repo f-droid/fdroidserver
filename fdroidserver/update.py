@@ -1107,15 +1107,6 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
 repo_pubkey_fingerprint = None
 
 
-# Generate a certificate fingerprint the same way keytool does it
-# (but with slightly different formatting)
-def cert_fingerprint(data):
-    digest = hashlib.sha256(data).digest()
-    ret = []
-    ret.append(' '.join("%02X" % b for b in bytearray(digest)))
-    return " ".join(ret)
-
-
 def extract_pubkey():
     global repo_pubkey_fingerprint
     if 'repo_pubkey' in config:
@@ -1134,7 +1125,7 @@ def extract_pubkey():
             logging.critical(msg)
             sys.exit(1)
         pubkey = p.output
-    repo_pubkey_fingerprint = cert_fingerprint(pubkey)
+    repo_pubkey_fingerprint = common.get_cert_fingerprint(pubkey)
     return hexlify(pubkey)
 
 

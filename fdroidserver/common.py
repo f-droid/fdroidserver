@@ -37,6 +37,7 @@ import base64
 import zipfile
 import xml.etree.ElementTree as XMLElementTree
 
+from binascii import hexlify
 from datetime import datetime
 from distutils.version import LooseVersion
 from queue import Queue
@@ -2142,7 +2143,10 @@ def genpassword():
 
 
 def genkeystore(localconfig):
-    '''Generate a new key with random passwords and add it to new keystore'''
+    """
+    Generate a new key with password provided in :param localconfig and add it to new keystore
+    :return: hexed public key, public key fingerprint
+    """
     logging.info('Generating a new key in "' + localconfig['keystore'] + '"...')
     keystoredir = os.path.dirname(localconfig['keystore'])
     if keystoredir is None or keystoredir == '':
@@ -2165,12 +2169,35 @@ def genkeystore(localconfig):
     if p.returncode != 0:
         raise BuildException("Failed to generate key", p.output)
     os.chmod(localconfig['keystore'], 0o0600)
-    # now show the lovely key that was just generated
-    p = FDroidPopen([config['keytool'], '-list', '-v',
-                     '-keystore', localconfig['keystore'],
-                     '-alias', localconfig['repo_keyalias'],
-                     '-storepass:file', config['keystorepassfile']])
-    logging.info(p.output.strip() + '\n\n')
+    if not options.quiet:
+        # now show the lovely key that was just generated
+        p = FDroidPopen([config['keytool'], '-list', '-v',
+                         '-keystore', localconfig['keystore'],
+                         '-alias', localconfig['repo_keyalias'],
+                         '-storepass:file', config['keystorepassfile']])
+        logging.info(p.output.strip() + '\n\n')
+    # get the public key
+    p = FDroidPopenBytes([config['keytool'], '-exportcert',
+                          '-keystore', localconfig['keystore'],
+                          '-alias', localconfig['repo_keyalias'],
+                          '-storepass:file', config['keystorepassfile']]
+                         + config['smartcardoptions'],
+                         output=False, stderr_to_stdout=False)
+    if p.returncode != 0 or len(p.output) < 20:
+        raise BuildException("Failed to get public key", p.output)
+    pubkey = p.output
+    fingerprint = get_cert_fingerprint(pubkey)
+    return hexlify(pubkey), fingerprint
+
+
+def get_cert_fingerprint(pubkey):
+    """
+    Generate a certificate fingerprint the same way keytool does it
+    (but with slightly different formatting)
+    """
+    digest = hashlib.sha256(pubkey).digest()
+    ret = [' '.join("%02X" % b for b in bytearray(digest))]
+    return " ".join(ret)
 
 
 def write_to_config(thisconfig, key, value=None):
