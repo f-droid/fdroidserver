@@ -590,7 +590,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         if flavours == ['yes']:
             flavours = []
 
-        flavours_cmd = ''.join([capitalize_intact(f) for f in flavours])
+        flavours_cmd = ''.join([capitalize_intact(flav) for flav in flavours])
 
         gradletasks += ['assemble' + flavours_cmd + 'Release']
 
