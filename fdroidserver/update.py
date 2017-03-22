@@ -300,8 +300,8 @@ def update_wiki(apps, sortedids, apks):
                 try:
                     newpage = site.Pages[pagename]
                     newpage.save(text, summary='Auto-created')
-                except:
-                    logging.error("...FAILED to create page '{0}'".format(pagename))
+                except Exception as e:
+                    logging.error("...FAILED to create page '{0}': {1}".format(pagename, e))
 
     # Purge server cache to ensure counts are up to date
     site.pages['Repository Maintenance'].purge()
@@ -925,8 +925,8 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
                     f.write(get_icon_bytes(apkzip, iconsrc))
                 apk['icons'][density] = iconfilename
 
-            except:
-                logging.warn("Error retrieving icon file")
+            except Exception as e:
+                logging.warn("Error retrieving icon file: %s" % (e))
                 del apk['icons'][density]
                 del apk['icons_src'][density]
                 empty_densities.append(density)
@@ -982,8 +982,8 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
                 im.thumbnail((size, size), Image.ANTIALIAS)
                 im.save(iconpath, "PNG")
                 empty_densities.remove(density)
-            except:
-                logging.warning("Invalid image file at %s" % last_iconpath)
+            except Exception as e:
+                logging.warning("Invalid image file at %s: %s" % (last_iconpath, e))
             finally:
                 if fp:
                     fp.close()

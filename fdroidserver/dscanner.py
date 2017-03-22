@@ -302,7 +302,7 @@ class DockerDriver(object):
                 msg = msg.format(c, t, int(c / t * 100), j)
                 sys.stdout.write(msg)
                 sys.stdout.flush()
-            except:
+            except Exception:
                 pass
         print("\nDONE!\n")
 
