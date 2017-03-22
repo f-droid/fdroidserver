@@ -431,8 +431,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             ftp.chdir(os.path.join(homedir, log_dir))
             ftp.get(toolsversion_log, os.path.join(log_dir, toolsversion_log))
             logging.debug('retrieved %s', toolsversion_log)
-        except:
-            logging.warn('could not get %s from builder vm.' % (toolsversion_log))
+        except Exception as e:
+            logging.warn('could not get %s from builder vm: %s' % (toolsversion_log, e))
 
         # Retrieve the built files...
         logging.info("Retrieving build output...")
@@ -446,7 +446,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             ftp.get(apkfile, os.path.join(output_dir, apkfile))
             if not options.notarball:
                 ftp.get(tarball, os.path.join(output_dir, tarball))
-        except:
+        except Exception:
             raise BuildException(
                 "Build failed for %s:%s - missing output files".format(
                     app.id, build.versionName), output)
@@ -1268,8 +1268,8 @@ def main():
                     # Redirect from /lastbuild to the most recent build log
                     newpage = site.Pages[appid + '/lastbuild']
                     newpage.save('#REDIRECT [[' + lastbuildpage + ']]', summary='Update redirect')
-                except:
-                    logging.error("Error while attempting to publish build log")
+                except Exception as e:
+                    logging.error("Error while attempting to publish build log: %s" % e)
 
     for app in build_succeeded:
         logging.info("success: %s" % (app.id))
