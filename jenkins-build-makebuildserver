@@ -54,6 +54,12 @@ echo "apt_package_cache = True" >> $WORKSPACE/makebuildserver.config.py
 echo "copy_caches_from_host = True" >> $WORKSPACE/makebuildserver.config.py
 ./makebuildserver --verbose --clean
 
+if [ -z "`vagrant box list | egrep '^buildserver\s+\((libvirt|virtualbox), [0-9]+\)$'`" ]; then
+    vagrant box list
+    echo "ERROR: buildserver box does not exist!"
+    exit 1
+fi
+
 # this can be handled in the jenkins job, or here:
 if [ -e fdroiddata ]; then
     cd fdroiddata
@@ -73,7 +79,7 @@ if [ -z $ANDROID_HOME ]; then
         . ~/.android/bashrc
     else
         echo "ANDROID_HOME must be set!"
-        exit
+        exit 1
     fi
 fi
 
