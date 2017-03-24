@@ -304,6 +304,7 @@ def destroy_current_image(v, serverdir):
         v.destroy()
     elif options.verbose:
         print('Cannot run destroy vagrant setup since Vagrantfile.yaml is not setup!')
+        subprocess.check_call(['vagrant', 'global-status', '--prune'])
 
     try:
         shutil.rmtree(os.path.join(serverdir, '.vagrant'))
@@ -346,7 +347,7 @@ def kvm_package(boxfile):
         img_info = json.loads(img_info_raw.decode('utf-8'))
         metadata = {"provider": "libvirt",
                     "format": img_info['format'],
-                    "virtual_size": math.ceil(img_info['virtual-size'] / 1024.**3),
+                    "virtual_size": math.ceil(img_info['virtual-size'] / 1024. ** 3),
                     }
 
         vagrantfile = """Vagrant.configure("2") do |config|
