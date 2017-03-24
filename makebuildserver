@@ -304,6 +304,12 @@ def destroy_current_image(v, serverdir):
         v.destroy()
     elif options.verbose:
         print('Cannot run destroy vagrant setup since Vagrantfile.yaml is not setup!')
+
+    try:
+        shutil.rmtree(os.path.join(serverdir, '.vagrant'))
+    except Exception as e:
+        print("could not delete vagrant dir: %s, %s" % (os.path.join(serverdir, '.vagrant'), e))
+
     if config['vm_provider'] == 'libvirt':
         import libvirt
         try:
