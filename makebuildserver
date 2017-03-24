@@ -14,27 +14,47 @@ import hashlib
 import yaml
 import math
 import json
+import logging
 from clint.textui import progress
 from optparse import OptionParser
 import fdroidserver.tail
 
 
-if not os.path.exists('makebuildserver') and not os.path.exists('buildserver'):
-    print('This must be run as ./makebuildserver in fdroidserver.git!')
-    sys.exit(1)
 
+parser = OptionParser()
+#parser.add_option("-v", "--verbose", action="store_true", default=False,
+parser.add_option('-v', '--verbose', action="count", dest='verbosity', default=1,
+                  help="Spew out even more information than normal")
+parser.add_option('-q', action='store_const', const=0, dest='verbosity')
+parser.add_option("-c", "--clean", action="store_true", default=False,
+                  help="Build from scratch, rather than attempting to update the existing server")
+parser.add_option('--skip-cache-update', action="store_true", default=False,
+                  help="""Skip downloading and checking cache."""
+                       """This assumes that the cache is already downloaded completely.""")
+options, args = parser.parse_args()
+
+logger = logging.getLogger('fdroid-makebuildserver')
+if options.verbosity >= 2:
+    logging.basicConfig(format='%(message)s', level=logging.DEBUG)
+    logger.setLevel(logging.DEBUG)
+elif options.verbosity == 1:
+    logging.basicConfig(format='%(message)s', level=logging.INFO)
+    logger.setLevel(logging.INFO)
+elif options.verbosity <= 0:
+    logging.basicConfig(format='%(message)s', level=logging.WARNING)
+    logger.setLevel(logging.WARNING)
+
+
+if not os.path.exists('makebuildserver') and not os.path.exists('buildserver'):
+    logger.critical('This must be run as ./makebuildserver in fdroidserver.git!')
+    sys.exit(1)
 
 tail = None
 
-parser = OptionParser()
-parser.add_option("-v", "--verbose", action="store_true", default=False,
-                  help="Spew out even more information than normal")
-parser.add_option("-c", "--clean", action="store_true", default=False,
-                  help="Build from scratch, rather than attempting to update the existing server")
-options, args = parser.parse_args()
-
 # set up default config
 cachedir = os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver')
+logger.debug('cachedir set to: %s', cachedir)
+
 config = {
     'basebox': 'jessie64',
     'baseboxurl': [
@@ -58,11 +78,12 @@ if os.path.isfile('/usr/bin/systemd-detect-virt'):
     except subprocess.CalledProcessError as e:
         virt = 'none'
     if virt == 'qemu' or virt == 'kvm' or virt == 'bochs':
-        print('Running in a VM guest, defaulting to QEMU/KVM via libvirt')
+        logger.info('Running in a VM guest, defaulting to QEMU/KVM via libvirt')
         config['vm_provider'] = 'libvirt'
         config['domain'] = 'buildserver_default'
     elif virt != 'none':
-        print('Running in an unsupported VM guest (' + virt + ')!')
+        logger.info('Running in an unsupported VM guest (%s)!', virt)
+logger.debug('deceted virt: %s', virt)
 
 # load config file, if present
 if os.path.exists('makebuildserver.config.py'):
@@ -72,24 +93,28 @@ elif os.path.exists('makebs.config.py'):
     exec(compile(open('makebs.config.py').read(), 'makebs.config.py', 'exec'), config)
 if '__builtins__' in config:
     del(config['__builtins__'])  # added by compile/exec
+logger.debug("makebuildserver.config.py parsed -> %s", json.dumps(config, indent=4, sort_keys=True))
 
 # Update cached files.
 cachedir = config['cachedir']
 if not os.path.exists(cachedir):
     os.makedirs(cachedir, 0o755)
+    logger.debug('created cachedir %s because it did not exists.', cachedir)
 
 if config['vm_provider'] == 'libvirt':
     tmp = cachedir
     while tmp != '/':
         mode = os.stat(tmp).st_mode
         if not (stat.S_IXUSR & mode and stat.S_IXGRP & mode and stat.S_IXOTH & mode):
-            print('ERROR:', tmp, 'will not be accessible to the VM!  To fix, run:')
-            print('  chmod a+X', tmp)
+            logger.critical('ERROR: %s will not be accessible to the VM!  To fix, run:', tmp)
+            logger.critical('  chmod a+X %s', tmp)
             sys.exit(1)
         tmp = os.path.dirname(tmp)
+    logger.debug('cache dir %s is accessible for libvirt vm.', cachedir)
 
 if config['apt_package_cache']:
     config['aptcachedir'] = cachedir + '/apt/archives'
+    logger.debug('aptcachedir is set to %s', config['aptcachedir'])
 
 cachefiles = [
     ('https://dl.google.com/android/repository/tools_r25.2.3-linux.zip',
@@ -299,17 +324,20 @@ def sha256_for_file(path):
 def destroy_current_image(v, serverdir):
     global config
 
+    logger.info('destroying buildserver vm, removing images and vagrand-configs...')
+
     # cannot run vagrant without the config in the YAML file
     if os.path.exists(os.path.join(serverdir, 'Vagrantfile.yaml')):
         v.destroy()
-    elif options.verbose:
-        print('Cannot run destroy vagrant setup since Vagrantfile.yaml is not setup!')
+        logger.debug('vagrant destroy completed')
+    if logger.level <= logging.DEBUG:
+        logger.debug('Cannot run destroy vagrant setup since Vagrantfile.yaml is not setup!')
         subprocess.check_call(['vagrant', 'global-status', '--prune'])
 
     try:
         shutil.rmtree(os.path.join(serverdir, '.vagrant'))
     except Exception as e:
-        print("could not delete vagrant dir: %s, %s" % (os.path.join(serverdir, '.vagrant'), e))
+        logger.debug("could not delete vagrant dir: %s, %s", os.path.join(serverdir, '.vagrant'), e)
 
     if config['vm_provider'] == 'libvirt':
         import libvirt
@@ -325,7 +353,7 @@ def destroy_current_image(v, serverdir):
                 for vol in storagePool.listAllVolumes():
                     vol.delete()
         except libvirt.libvirtError as e:
-            print(e)
+            logger.warn('%s', e)
 
 
 def kvm_package(boxfile):
@@ -385,9 +413,7 @@ def run_via_vagrant_ssh(v, cmdlist):
     v._run_vagrant_command(['ssh', '-c', cmd])
 
 
-def main():
-    global cachedir, cachefiles, config, tail
-
+def update_cache(cachedir, cachefiles):
     for srcurl, shasum in cachefiles:
         filename = os.path.basename(srcurl)
         local_filename = os.path.join(cachedir, filename)
@@ -408,19 +434,19 @@ def main():
                 content_length = local_length  # skip the download
         except requests.exceptions.RequestException as e:
             content_length = local_length  # skip the download
-            print(e)
+            logger.warn('%s', e)
 
         if local_length == content_length:
             download = False
         elif local_length > content_length:
-            print('deleting corrupt file from cache: ' + local_filename)
+            logger.info('deleting corrupt file from cache: %s', local_filename)
             os.remove(local_filename)
-            print("Downloading " + filename + " to cache")
+            logger.info("Downloading %s to cache", filename)
         elif local_length > -1 and local_length < content_length:
-            print("Resuming download of " + local_filename)
+            logger.info("Resuming download of %s", local_filename)
             resume_header = {'Range': 'bytes=%d-%d' % (local_length, content_length)}
         else:
-            print("Downloading " + filename + " to cache")
+            logger.info("Downloading %s to cache", filename)
 
         if download:
             r = requests.get(srcurl, headers=resume_header,
@@ -434,14 +460,37 @@ def main():
 
         v = sha256_for_file(local_filename)
         if v == shasum:
-            print("\t...shasum verified for " + local_filename)
+            logger.info("\t...shasum verified for %s", local_filename)
         else:
-            print("Invalid shasum of '" + v + "' detected for " + local_filename)
+            logger.critical("Invalid shasum of '%s' detected for %s", v, local_filename)
             os.remove(local_filename)
             sys.exit(1)
 
+
+def debug_log_vagrant_vm(vm_dir, vm_name):
+    if options.verbosity >= 3:
+        _vagrant_dir = os.path.join(vm_dir, '.vagrant')
+        logger.debug('check %s dir exists? -> %r', _vagrant_dir, os.path.isdir(_vagrant_dir))
+        logger.debug('> vagrant status')
+        subprocess.call(['vagrant', 'status'], cwd=vm_dir)
+        logger.debug('> vagrant box list')
+        subprocess.call(['vagrant', 'box', 'list'])
+        logger.debug('> virsh -c qmeu:///system list --all')
+        subprocess.call(['virsh', '-c', 'qemu:///system', 'list', '--all'])
+        logger.debug('> virsh -c qemu:///system snapshot-list %s', vm_name)
+        subprocess.call(['virsh', '-c', 'qemu:///system', 'snapshot-list', vm_name])
+
+
+def main():
+    global cachedir, cachefiles, config, tail
+
+    if options.skip_cache_update:
+        logger.info('skipping cache update and verification...')
+    else:
+        update_cache(cachedir, cachefiles)
+
     local_qt_filename = os.path.join(cachedir, 'qt-opensource-linux-x64-android-5.7.0.run')
-    print("Setting executable bit for " + local_qt_filename)
+    logger.info("Setting executable bit for %s", local_qt_filename)
     os.chmod(local_qt_filename, 0o755)
 
     # use VirtualBox software virtualization if hardware is not available,
@@ -451,11 +500,13 @@ def main():
         # all < 10 year old Macs work, and OSX servers as VM host are very
         # rare, but this could also be auto-detected if someone codes it
         config['hwvirtex'] = 'on'
+        logger.info('platform is darwnin -> hwvirtex = \'on\'')
     elif os.path.exists('/proc/cpuinfo'):
         with open('/proc/cpuinfo') as f:
             contents = f.read()
         if 'vmx' in contents or 'svm' in contents:
             config['hwvirtex'] = 'on'
+            logger.info('found \'vmx\' or \'svm\' in /proc/cpuinfo -> hwvirtex = \'on\'')
 
     serverdir = os.path.join(os.getcwd(), 'buildserver')
     logfilename = os.path.join(serverdir, 'up.log')
@@ -464,7 +515,7 @@ def main():
     log_cm = vagrant.make_file_cm(logfilename)
     v = vagrant.Vagrant(root=serverdir, out_cm=log_cm, err_cm=log_cm)
 
-    if options.verbose:
+    if options.verbosity >= 2:
         tail = fdroidserver.tail.Tail(logfilename)
         tail.start()
 
@@ -476,18 +527,18 @@ def main():
     vf = os.path.join(serverdir, 'Vagrantfile.yaml')
     writevf = True
     if os.path.exists(vf):
-        print('Halting', serverdir)
+        logger.info('Halting %s', serverdir)
         v.halt()
         with open(vf, 'r', encoding='utf-8') as f:
             oldconfig = yaml.load(f)
         if config != oldconfig:
-            print("Server configuration has changed, rebuild from scratch is required")
+            logger.info("Server configuration has changed, rebuild from scratch is required")
             destroy_current_image(v, serverdir)
         else:
-            print("Re-provisioning existing server")
+            logger.info("Re-provisioning existing server")
             writevf = False
     else:
-        print("No existing server - building from scratch")
+        logger.info("No existing server - building from scratch")
     if writevf:
         with open(vf, 'w', encoding='utf-8') as f:
             yaml.dump(config, f)
@@ -506,17 +557,19 @@ def main():
                 baseboxurl = config['baseboxurl']
             else:
                 baseboxurl = config['baseboxurl'][0]
-            print('Adding', config['basebox'], 'from', baseboxurl)
+            logger.info('Adding %s from %s', config['basebox'], baseboxurl)
             v.box_add(config['basebox'], baseboxurl)
             needs_mutate = True
         if needs_mutate:
-            print('Converting', config['basebox'], 'to libvirt format')
+            logger.info('Converting %s to libvirt format', config['basebox'])
             v._call_vagrant_command(['mutate', config['basebox'], 'libvirt'])
-            print('Removing virtualbox format copy of', config['basebox'])
+            logger.info('Removing virtualbox format copy of %s', config['basebox'])
             v.box_remove(config['basebox'], 'virtualbox')
 
-    print("Configuring build server VM")
+    logger.info("Configuring build server VM")
+    debug_log_vagrant_vm(serverdir, 'buildserver_default')
     v.up(provision=True)
+    debug_log_vagrant_vm(serverdir, 'buildserver_default')
 
     if config['copy_caches_from_host']:
         ssh_config = v.ssh_config()
@@ -539,17 +592,16 @@ def main():
         run_via_vagrant_ssh(v, ['rm', '-f', '~/.gradle/caches/modules-2/modules-2.lock'])
         run_via_vagrant_ssh(v, ['rm', '-fr', '~/.gradle/caches/*/plugin-resolution/'])
 
-    print("Writing buildserver ID")
     p = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE,
                          universal_newlines=True)
     buildserverid = p.communicate()[0].strip()
-    print("...ID is " + buildserverid)
+    logger.info("Writing buildserver ID ...ID is %s", buildserverid)
     run_via_vagrant_ssh(v, 'sh -c "echo %s >/home/vagrant/buildserverid"' % buildserverid)
 
-    print("Stopping build server VM")
+    logger.info("Stopping build server VM")
     v.halt()
 
-    print("Packaging")
+    logger.info("Packaging")
     boxfile = os.path.join(os.getcwd(), 'buildserver.box')
     if os.path.exists(boxfile):
         os.remove(boxfile)
@@ -559,7 +611,7 @@ def main():
     else:
         v.package(output=boxfile)
 
-    print("Adding box")
+    logger.info("Adding box")
     v.box_add('buildserver', boxfile, force=True)
 
     os.remove(boxfile)
