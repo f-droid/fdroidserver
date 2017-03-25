@@ -324,16 +324,15 @@ def destroy_current_image(v, serverdir):
 
     logger.info('destroying buildserver vm, removing images and vagrant-configs...')
 
-    # cannot run vagrant without the config in the YAML file
-    if os.path.exists(os.path.join(serverdir, 'Vagrantfile.yaml')):
-        try:
-            v.destroy()
-            logger.debug('vagrant destroy completed')
-        except subprocess.CalledProcessError as e:
-            logger.debug('vagrant destroy failed: %s', e)
-    if logger.level <= logging.DEBUG:
-        logger.debug('Cannot run destroy vagrant setup since Vagrantfile.yaml is not setup!')
+    try:
+        v.destroy()
+        logger.debug('vagrant destroy completed')
+    except subprocess.CalledProcessError as e:
+        logger.debug('vagrant destroy failed: %s', e)
+    try:
         subprocess.check_call(['vagrant', 'global-status', '--prune'])
+    except subprocess.CalledProcessError as e:
+        logger.debug('pruning global vagrant status failed: %s', e)
 
     try:
         shutil.rmtree(os.path.join(serverdir, '.vagrant'))
