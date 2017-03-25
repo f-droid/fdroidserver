@@ -344,14 +344,15 @@ def destroy_current_image(v, serverdir):
             try:
                 dom = conn.lookupByName(config['domain'])
                 try:
-                    dom.destroy()
-                except libvirt.libvirtError as e:
-                    logging.info("could not force libvirt domain '%s' off: %s", dom.name(), e)
-                # libvirt python bindings do not support all flags required
-                # for undefining domains correctly.
+                    logger.debug('virsh -c qemu:///system destroy %s', config['domain'])
+                    subprocess.check_call(['virsh', '-c', 'qemu:///system', 'destroy', config['domain']])
+                except subprocess.CalledProcessError as e:
+                    logging.info("could not force libvirt domain '%s' off: %s", config['domain'], e)
                 try:
-                    logger.debug('virsh -c qemu:///system undefine builder_defaul --nvram --managed-save --remove-all-storage --snapshots-metadata')
-                    subprocess.check_call(('virsh', '-c', 'qemu:///system', 'undefine', 'builder_default', '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
+                    # libvirt python bindings do not support all flags required
+                    # for undefining domains correctly.
+                    logger.debug('virsh -c qemu:///system undefine %s --nvram --managed-save --remove-all-storage --snapshots-metadata', config['domain'])
+                    subprocess.check_call(('virsh', '-c', 'qemu:///system', 'undefine', config['domain'], '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
                 except subprocess.CalledProcessError as e:
                     logger.info("could not undefine libvirt domain '%s': %s", dom.name(), e)
             except libvirt.libvirtError as e:
@@ -574,7 +575,6 @@ def main():
     logger.info("Configuring build server VM")
     debug_log_vagrant_vm(serverdir, 'buildserver_default')
     try:
-        #subprocess.check_call(['vagrant', 'up', '--provision'], pwd=serverdir)
         v.up(provision=True)
     except subprocess.CalledProcessError as e:
         debug_log_vagrant_vm(serverdir, 'buildserver_default')
