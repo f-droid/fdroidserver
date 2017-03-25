@@ -353,7 +353,7 @@ def destroy_current_image(v, serverdir):
                     logger.debug('virsh -c qemu:///system undefine builder_defaul --nvram --managed-save --remove-all-storage --snapshots-metadata')
                     subprocess.check_call(('virsh', '-c', 'qemu:///system', 'undefine', 'builder_default', '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
                 except subprocess.CalledProcessError as e:
-                    logger.info("could not undefine libvirt domain'%s': %s", dom.name(), e)
+                    logger.info("could not undefine libvirt domain '%s': %s", dom.name(), e)
             except libvirt.libvirtError as e:
                 logging.info("finding libvirt domain '%s' failed. (%s)", config['domain'], e)
         except libvirt.libvirtError as e:
@@ -573,8 +573,13 @@ def main():
 
     logger.info("Configuring build server VM")
     debug_log_vagrant_vm(serverdir, 'buildserver_default')
-    v.up(provision=True)
-    debug_log_vagrant_vm(serverdir, 'buildserver_default')
+    try:
+        #subprocess.check_call(['vagrant', 'up', '--provision'], pwd=serverdir)
+        v.up(provision=True)
+    except subprocess.CalledProcessError as e:
+        debug_log_vagrant_vm(serverdir, 'buildserver_default')
+        logging.critical('could not bring buildserver vm up. %s', e)
+        sys.exit(1)
 
     if config['copy_caches_from_host']:
         ssh_config = v.ssh_config()
