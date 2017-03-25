@@ -1,6 +1,9 @@
 
 require 'yaml'
-configfile = YAML.load_file('Vagrantfile.yaml')
+require 'pathname'
+
+srvpath = Pathname.new(File.dirname(__FILE__)).realpath
+configfile = YAML.load_file(File.join(srvpath, "/Vagrantfile.yaml"))
 
 Vagrant.configure("2") do |config|
 
