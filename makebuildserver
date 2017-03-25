@@ -20,9 +20,7 @@ from optparse import OptionParser
 import fdroidserver.tail
 
 
-
 parser = OptionParser()
-#parser.add_option("-v", "--verbose", action="store_true", default=False,
 parser.add_option('-v', '--verbose', action="count", dest='verbosity', default=1,
                   help="Spew out even more information than normal")
 parser.add_option('-q', action='store_const', const=0, dest='verbosity')
@@ -342,18 +340,25 @@ def destroy_current_image(v, serverdir):
     if config['vm_provider'] == 'libvirt':
         import libvirt
         try:
-            virConnect = libvirt.open('qemu:///system')
-            virDomain = virConnect.lookupByName(config['domain'])
-            if virDomain:
-                virDomain.undefineFlags(libvirt.VIR_DOMAIN_UNDEFINE_MANAGED_SAVE
-                                        | libvirt.VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA
-                                        | libvirt.VIR_DOMAIN_UNDEFINE_NVRAM)
-            storagePool = virConnect.storagePoolLookupByName('default')
-            if storagePool:
-                for vol in storagePool.listAllVolumes():
-                    vol.delete()
+            conn = libvirt.open('qemu:///system')
+            try:
+                dom = conn.lookupByName(config['domain'])
+                try:
+                    dom.destroy()
+                except libvirt.libvirtError as e:
+                    logging.info("could not force libvirt domain '%s' off: %s", dom.name(), e)
+                # libvirt python bindings do not support all flags required
+                # for undefining domains correctly.
+                try:
+                    logger.debug('virsh -c qemu:///system undefine builder_defaul --nvram --managed-save --remove-all-storage --snapshots-metadata')
+                    subprocess.check_call(('virsh', '-c', 'qemu:///system', 'undefine', 'builder_default', '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
+                except subprocess.CalledProcessError as e:
+                    logger.info("could not undefine libvirt domain'%s': %s", dom.name(), e)
+            except libvirt.libvirtError as e:
+                logging.info("finding libvirt domain '%s' failed. (%s)", config['domain'], e)
         except libvirt.libvirtError as e:
-            logger.warn('%s', e)
+            logging.critical('could not connect to libvirtd: %s', e)
+            sys.exit(1)
 
 
 def kvm_package(boxfile):
