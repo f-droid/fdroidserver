@@ -359,7 +359,11 @@ def vm_destroy_builder(provider):
         shutil.rmtree('builder')
     # get rid of vm and related disk images
     FDroidPopen(('virsh', '-c', 'qemu:///system', 'destroy', 'builder_default'))
+    logging.info("...waiting a sec...")
+    time.sleep(10)
     FDroidPopen(('virsh', '-c', 'qemu:///system', 'undefine', 'builder_default', '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
+    logging.info("...waiting a sec...")
+    time.sleep(10)
 
 
 # Note that 'force' here also implies test mode.

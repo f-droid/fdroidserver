@@ -349,23 +349,23 @@ def destroy_current_image(v, serverdir):
                 try:
                     logger.debug('virsh -c qemu:///system destroy %s', config['domain'])
                     subprocess.check_call(['virsh', '-c', 'qemu:///system', 'destroy', config['domain']])
-                    logging.info("...waiting a sec...")
+                    logger.info("...waiting a sec...")
                     time.sleep(10)
                 except subprocess.CalledProcessError as e:
-                    logging.info("could not force libvirt domain '%s' off: %s", config['domain'], e)
+                    logger.info("could not force libvirt domain '%s' off: %s", config['domain'], e)
                 try:
                     # libvirt python bindings do not support all flags required
                     # for undefining domains correctly.
                     logger.debug('virsh -c qemu:///system undefine %s --nvram --managed-save --remove-all-storage --snapshots-metadata', config['domain'])
                     subprocess.check_call(('virsh', '-c', 'qemu:///system', 'undefine', config['domain'], '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
-                    logging.info("...waiting a sec...")
+                    logger.info("...waiting a sec...")
                     time.sleep(10)
                 except subprocess.CalledProcessError as e:
                     logger.info("could not undefine libvirt domain '%s': %s", dom.name(), e)
             except libvirt.libvirtError as e:
-                logging.info("finding libvirt domain '%s' failed. (%s)", config['domain'], e)
+                logger.info("finding libvirt domain '%s' failed. (%s)", config['domain'], e)
         except libvirt.libvirtError as e:
-            logging.critical('could not connect to libvirtd: %s', e)
+            logger.critical('could not connect to libvirtd: %s', e)
             sys.exit(1)
 
 
@@ -588,7 +588,7 @@ def main():
             v.up(provision=True)
     except subprocess.CalledProcessError as e:
         debug_log_vagrant_vm(serverdir, config['domain'])
-        logging.critical('could not bring buildserver vm up. %s', e)
+        logger.critical('could not bring buildserver vm up. %s', e)
         sys.exit(1)
 
     if config['copy_caches_from_host']:
