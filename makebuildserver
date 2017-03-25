@@ -322,12 +322,15 @@ def sha256_for_file(path):
 def destroy_current_image(v, serverdir):
     global config
 
-    logger.info('destroying buildserver vm, removing images and vagrand-configs...')
+    logger.info('destroying buildserver vm, removing images and vagrant-configs...')
 
     # cannot run vagrant without the config in the YAML file
     if os.path.exists(os.path.join(serverdir, 'Vagrantfile.yaml')):
-        v.destroy()
-        logger.debug('vagrant destroy completed')
+        try:
+            v.destroy()
+            logger.debug('vagrant destroy completed')
+        except subprocess.CalledProcessError as e:
+            logger.debug('vagrant destroy failed: %s', e)
     if logger.level <= logging.DEBUG:
         logger.debug('Cannot run destroy vagrant setup since Vagrantfile.yaml is not setup!')
         subprocess.check_call(['vagrant', 'global-status', '--prune'])
@@ -573,11 +576,14 @@ def main():
             v.box_remove(config['basebox'], 'virtualbox')
 
     logger.info("Configuring build server VM")
-    debug_log_vagrant_vm(serverdir, 'buildserver_default')
+    debug_log_vagrant_vm(serverdir, config['domain'])
     try:
-        v.up(provision=True)
+        try:
+            v.up(provision=True)
+        except subprocess.CalledProcessError as e:
+            v.up(provision=True)
     except subprocess.CalledProcessError as e:
-        debug_log_vagrant_vm(serverdir, 'buildserver_default')
+        debug_log_vagrant_vm(serverdir, config['domain'])
         logging.critical('could not bring buildserver vm up. %s', e)
         sys.exit(1)
 
