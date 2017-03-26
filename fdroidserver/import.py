@@ -105,6 +105,15 @@ def get_metadata_from_url(app, url):
         app.WebSite = url
         app.SourceCode = url + '/tree/HEAD'
         app.IssueTracker = url + '/issues'
+    elif url.startswith('https://notabug.org/'):
+        projecttype = 'notabug'
+        if url.endswith('.git'):
+            url = url[:-4]
+        repo = url + '.git'
+        repotype = 'git'
+        app.SourceCode = url
+        app.IssueTracker = url + '/issues'
+        app.WebSite = ""
     elif url.startswith('https://bitbucket.org/'):
         if url.endswith('/'):
             url = url[:-1]
