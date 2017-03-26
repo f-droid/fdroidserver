@@ -1110,7 +1110,7 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
        this is the 'unsigned' directory.
     :param repo_dir: The repo directory - used for checking if the build is
        necessary.
-    :paaram also_check_dir: An additional location for checking if the build
+    :param also_check_dir: An additional location for checking if the build
        is necessary (usually the archive repo)
     :param test: True if building in test mode, in which case the build will
        always happen, even if the output already exists. In test mode, the

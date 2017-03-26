@@ -19,6 +19,7 @@ import logging
 from clint.textui import progress
 from optparse import OptionParser
 import fdroidserver.tail
+import fdroidserver.vmtools
 
 
 parser = OptionParser()
@@ -32,7 +33,7 @@ parser.add_option('--skip-cache-update', action="store_true", default=False,
                        """This assumes that the cache is already downloaded completely.""")
 options, args = parser.parse_args()
 
-logger = logging.getLogger('fdroid-makebuildserver')
+logger = logging.getLogger('fdroidserver-makebuildserver')
 if options.verbosity >= 2:
     logging.basicConfig(format='%(message)s', level=logging.DEBUG)
     logger.setLevel(logging.DEBUG)
@@ -320,55 +321,6 @@ def sha256_for_file(path):
         return s.hexdigest()
 
 
-def destroy_current_image(v, serverdir):
-    global config
-
-    logger.info('destroying buildserver vm, removing images and vagrant-configs...')
-
-    try:
-        v.destroy()
-        logger.debug('vagrant destroy completed')
-    except subprocess.CalledProcessError as e:
-        logger.debug('vagrant destroy failed: %s', e)
-    try:
-        subprocess.check_call(['vagrant', 'global-status', '--prune'])
-    except subprocess.CalledProcessError as e:
-        logger.debug('pruning global vagrant status failed: %s', e)
-
-    try:
-        shutil.rmtree(os.path.join(serverdir, '.vagrant'))
-    except Exception as e:
-        logger.debug("could not delete vagrant dir: %s, %s", os.path.join(serverdir, '.vagrant'), e)
-
-    if config['vm_provider'] == 'libvirt':
-        import libvirt
-        try:
-            conn = libvirt.open('qemu:///system')
-            try:
-                dom = conn.lookupByName(config['domain'])
-                try:
-                    logger.debug('virsh -c qemu:///system destroy %s', config['domain'])
-                    subprocess.check_call(['virsh', '-c', 'qemu:///system', 'destroy', config['domain']])
-                    logger.info("...waiting a sec...")
-                    time.sleep(10)
-                except subprocess.CalledProcessError as e:
-                    logger.info("could not force libvirt domain '%s' off: %s", config['domain'], e)
-                try:
-                    # libvirt python bindings do not support all flags required
-                    # for undefining domains correctly.
-                    logger.debug('virsh -c qemu:///system undefine %s --nvram --managed-save --remove-all-storage --snapshots-metadata', config['domain'])
-                    subprocess.check_call(('virsh', '-c', 'qemu:///system', 'undefine', config['domain'], '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
-                    logger.info("...waiting a sec...")
-                    time.sleep(10)
-                except subprocess.CalledProcessError as e:
-                    logger.info("could not undefine libvirt domain '%s': %s", dom.name(), e)
-            except libvirt.libvirtError as e:
-                logger.info("finding libvirt domain '%s' failed. (%s)", config['domain'], e)
-        except libvirt.libvirtError as e:
-            logger.critical('could not connect to libvirtd: %s', e)
-            sys.exit(1)
-
-
 def kvm_package(boxfile):
     '''
     Hack to replace missing `vagrant package` for kvm, based  on the script
@@ -532,8 +484,9 @@ def main():
         tail = fdroidserver.tail.Tail(logfilename)
         tail.start()
 
+    vm = fdroidserver.vmtools.get_build_vm(serverdir)
     if options.clean:
-        destroy_current_image(v, serverdir)
+        vm.destroy()
 
     # Check against the existing Vagrantfile.yaml, and if they differ, we
     # need to create a new box:
@@ -546,7 +499,7 @@ def main():
             oldconfig = yaml.load(f)
         if config != oldconfig:
             logger.info("Server configuration has changed, rebuild from scratch is required")
-            destroy_current_image(v, serverdir)
+            vm.destroy()
         else:
             logger.info("Re-provisioning existing server")
             writevf = False
