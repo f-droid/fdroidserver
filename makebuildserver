@@ -483,7 +483,7 @@ def main():
         tail = fdroidserver.tail.Tail(logfilename)
         tail.start()
 
-    vm = fdroidserver.vmtools.get_build_vm(serverdir)
+    vm = fdroidserver.vmtools.get_build_vm(serverdir, provider=config['vm_provider'])
     if options.clean:
         vm.destroy()
 

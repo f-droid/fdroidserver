@@ -47,7 +47,7 @@ def get_build_vm(srvdir, provider=None):
             logger.debug('build vm provider \'virtualbox\' selected')
             return VirtualboxBuildVm(abssrvdir)
         else:
-            logger.warn('unsupported provider \'%s\' requested', provider)
+            logger.warn('build vm provider not supported: \'%s\'', provider)
     has_libvirt_machine = isdir(joinpath(abssrvdir, '.vagrant',
                                          'machines', 'default', 'libvirt'))
     has_vbox_machine = isdir(joinpath(abssrvdir, '.vagrant',
