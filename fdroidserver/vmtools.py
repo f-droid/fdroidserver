@@ -144,8 +144,8 @@ class LibvirtBuildVm(FDroidBuildVm):
         # this is way more easy and therefore fault tolerant.
         # (eg. lookupByName only works on running VMs)
         try:
-            logger.debug('virsh -c qemu:///system destroy', self.srvname)
-            subprocess.check_call(('virsh', '-c', 'qemu:///system', 'destroy'))
+            logger.debug('virsh -c qemu:///system destroy %s', self.srvname)
+            subprocess.check_call(('virsh', '-c', 'qemu:///system', 'destroy', self.srvname))
             logger.info("...waiting a sec...")
             time.sleep(10)
         except subprocess.CalledProcessError as e:
