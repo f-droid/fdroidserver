@@ -37,6 +37,7 @@ from . import common
 from . import net
 from . import metadata
 from . import scanner
+from . import vmtools
 from .common import FDroidPopen, SdkToolsPopen
 from .exception import FDroidException, BuildException, VCSException
 
@@ -289,9 +290,11 @@ def vm_get_clean_builder(reset=False):
     # If we can't use the existing machine for any reason, make a
     # new one from scratch.
     if not vm_ok:
-        vm_destroy_builder(provider)
-
-        os.mkdir('builder')
+        if os.path.isdir('builder'):
+            vm = vmtools.get_build_vm('builder')
+            vm.destroy()
+        else:
+            os.mkdir('builder')
 
         p = subprocess.Popen(['vagrant', '--version'],
                              universal_newlines=True,
@@ -346,24 +349,6 @@ def vm_suspend_builder():
     """
     logging.info("Suspending build server")
     subprocess.call(['vagrant', 'suspend'], cwd='builder')
-
-
-def vm_destroy_builder(provider):
-    """Savely destroy the builder vm.
-
-    """
-    logging.info("Removing broken/incomplete/unwanted build server")
-    if os.path.exists(os.path.join('builder', 'Vagrantfile')):
-        vagrant(['destroy', '-f'], cwd='builder')
-    if os.path.isdir('builder'):
-        shutil.rmtree('builder')
-    # get rid of vm and related disk images
-    FDroidPopen(('virsh', '-c', 'qemu:///system', 'destroy', 'builder_default'))
-    logging.info("...waiting a sec...")
-    time.sleep(10)
-    FDroidPopen(('virsh', '-c', 'qemu:///system', 'undefine', 'builder_default', '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
-    logging.info("...waiting a sec...")
-    time.sleep(10)
 
 
 # Note that 'force' here also implies test mode.
