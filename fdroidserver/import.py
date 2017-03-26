@@ -184,6 +184,10 @@ def main():
                         help="Project URL to import from.")
     parser.add_argument("-s", "--subdir", default=None,
                         help="Path to main android project subdirectory, if not in root.")
+    parser.add_argument("-c", "--categories", default=None,
+                        help="Comma separated list of categories.")
+    parser.add_argument("-l", "--license", default=None,
+                        help="Overall license of the project.")
     parser.add_argument("--rev", default=None,
                         help="Allows a different revision (or git branch) to be specified for the initial import")
     metadata.add_metadata_arguments(parser)
@@ -271,8 +275,14 @@ def main():
     build.versionCode = versionCode or '?'
     if options.subdir:
         build.subdir = options.subdir
+    if options.license:
+        app.License = options.license
+    if options.categories:
+        app.Categories = options.categories
     if os.path.exists(os.path.join(root_dir, 'jni')):
         build.buildjni = ['yes']
+    if os.path.exists(os.path.join(root_dir, 'build.gradle')):
+        build.gradle = ['yes']
 
     metadata.post_metadata_parse(app)
 
