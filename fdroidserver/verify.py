@@ -78,9 +78,9 @@ def main():
             logging.info("...retrieving " + url)
             net.download_file(url, dldir=tmp_dir)
 
-            compare_result = common.compare_apks(
-                os.path.join(unsigned_dir, apkfilename),
+            compare_result = common.verify_apks(
                 remoteapk,
+                os.path.join(unsigned_dir, apkfilename),
                 tmp_dir)
             if compare_result:
                 raise FDroidException(compare_result)

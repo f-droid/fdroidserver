@@ -2012,36 +2012,77 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     One of the inputs is signed, the other is unsigned. The signature metadata
     is transferred from the signed to the unsigned apk, and then jarsigner is
     used to verify that the signature from the signed apk is also varlid for
-    the unsigned one.
+    the unsigned one.  If the APK given as unsigned actually does have a
+    signature, it will be stripped out and ignored.
+
+    There are two SHA1 git commit IDs that fdroidserver includes in the builds
+    it makes: fdroidserverid and buildserverid.  Originally, these were inserted
+    into AndroidManifest.xml, but that makes the build not reproducible. So
+    instead they are included as separate files in the APK's META-INF/ folder.
+    If those files exist in the signed APK, they will be part of the signature
+    and need to also be included in the unsigned APK for it to validate.
+
     :param signed_apk: Path to a signed apk file
     :param unsigned_apk: Path to an unsigned apk file expected to match it
     :param tmp_dir: Path to directory for temporary files
     :returns: None if the verification is successful, otherwise a string
               describing what went wrong.
     """
-    with ZipFile(signed_apk) as signed_apk_as_zip:
-        meta_inf_files = ['META-INF/MANIFEST.MF']
-        for f in signed_apk_as_zip.namelist():
-            if apk_sigfile.match(f):
-                meta_inf_files.append(f)
-        if len(meta_inf_files) < 3:
-            return "Signature files missing from {0}".format(signed_apk)
-        signed_apk_as_zip.extractall(tmp_dir, meta_inf_files)
-    with ZipFile(unsigned_apk, mode='a') as unsigned_apk_as_zip:
-        for meta_inf_file in meta_inf_files:
-            unsigned_apk_as_zip.write(os.path.join(tmp_dir, meta_inf_file), arcname=meta_inf_file)
 
-    if subprocess.call([config['jarsigner'], '-verify', unsigned_apk]) != 0:
-        logging.info("...NOT verified - {0}".format(signed_apk))
-        return compare_apks(signed_apk, unsigned_apk, tmp_dir)
+    signed = ZipFile(signed_apk, 'r')
+    meta_inf_files = ['META-INF/MANIFEST.MF']
+    for f in signed.namelist():
+        if apk_sigfile.match(f) \
+           or f in ['META-INF/fdroidserverid', 'META-INF/buildserverid']:
+            meta_inf_files.append(f)
+    if len(meta_inf_files) < 3:
+        return "Signature files missing from {0}".format(signed_apk)
+
+    tmp_apk = os.path.join(tmp_dir, 'sigcp_' + os.path.basename(unsigned_apk))
+    unsigned = ZipFile(unsigned_apk, 'r')
+    # only read the signature from the signed APK, everything else from unsigned
+    with ZipFile(tmp_apk, 'w') as tmp:
+        for filename in meta_inf_files:
+            tmp.writestr(signed.getinfo(filename), signed.read(filename))
+        for info in unsigned.infolist():
+            if info.filename in meta_inf_files:
+                logging.warning('Ignoring ' + info.filename + ' from ' + unsigned_apk)
+                continue
+            if info.filename in tmp.namelist():
+                return "duplicate filename found: " + info.filename
+            tmp.writestr(info, unsigned.read(info.filename))
+    unsigned.close()
+    signed.close()
+
+    verified = verify_apk_signature(tmp_apk)
+
+    if not verified:
+        logging.info("...NOT verified - {0}".format(tmp_apk))
+        return compare_apks(signed_apk, tmp_apk, tmp_dir, os.path.dirname(unsigned_apk))
+
     logging.info("...successfully verified")
     return None
+
+
+def verify_apk_signature(apk):
+    """verify the signature on an APK
+
+    Try to use apksigner whenever possible since jarsigner is very
+    shitty: unsigned APKs pass as "verified"! So this has to turn on
+    -strict then check for result 4.
+
+    """
+    if set_command_in_config('apksigner'):
+        return subprocess.call([config['apksigner'], 'verify', apk]) == 0
+    else:
+        logging.warning("Using Java's jarsigner, not recommended for verifying APKs! Use apksigner")
+        return subprocess.call([config['jarsigner'], '-strict', '-verify', apk]) == 4
 
 
 apk_badchars = re.compile('''[/ :;'"]''')
 
 
-def compare_apks(apk1, apk2, tmp_dir):
+def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
     """Compare two apks
 
     Returns None if the apk content is the same (apart from the signing key),
@@ -2049,17 +2090,16 @@ def compare_apks(apk1, apk2, tmp_dir):
     trying to do the comparison.
     """
 
+    if not log_dir:
+        log_dir = tmp_dir
+
     absapk1 = os.path.abspath(apk1)
     absapk2 = os.path.abspath(apk2)
 
-    # try to find diffoscope in the path, if it hasn't been manually configed
-    if 'diffoscope' not in config:
-        tmp = find_command('diffoscope')
-        if tmp is not None:
-            config['diffoscope'] = tmp
-    if 'diffoscope' in config:
-        htmlfile = absapk1 + '.diffoscope.html'
-        textfile = absapk1 + '.diffoscope.txt'
+    if set_command_in_config('diffoscope'):
+        logfilename = os.path.join(log_dir, os.path.basename(absapk1))
+        htmlfile = logfilename + '.diffoscope.html'
+        textfile = logfilename + '.diffoscope.txt'
         if subprocess.call([config['diffoscope'],
                             '--max-report-size', '12345678', '--max-diff-block-lines', '100',
                             '--html', htmlfile, '--text', textfile,
@@ -2083,12 +2123,7 @@ def compare_apks(apk1, apk2, tmp_dir):
                        cwd=os.path.join(apk2dir, 'jar-xf')) != 0:
         return("Failed to unpack " + apk2)
 
-    # try to find apktool in the path, if it hasn't been manually configed
-    if 'apktool' not in config:
-        tmp = find_command('apktool')
-        if tmp is not None:
-            config['apktool'] = tmp
-    if 'apktool' in config:
+    if set_command_in_config('apktool'):
         if subprocess.call([config['apktool'], 'd', os.path.abspath(apk1), '--output', 'apktool'],
                            cwd=apk1dir) != 0:
             return("Failed to unpack " + apk1)
@@ -2110,6 +2145,22 @@ def compare_apks(apk1, apk2, tmp_dir):
 
     # If we get here, it seems like they're the same!
     return None
+
+
+def set_command_in_config(command):
+    '''Try to find specified command in the path, if it hasn't been
+    manually set in config.py.  If found, it is added to the config
+    dict.  The return value says whether the command is available.
+
+    '''
+    if command in config:
+        return True
+    else:
+        tmp = find_command(command)
+        if tmp is not None:
+            config[command] = tmp
+            return True
+    return False
 
 
 def find_command(command):
