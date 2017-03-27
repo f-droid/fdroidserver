@@ -52,6 +52,9 @@ from .metadata import MetaDataException
 
 METADATA_VERSION = 18
 
+# less than the valid range of versionCode, i.e. Java's Integer.MIN_VALUE
+UNSET_VERSION_CODE = -0x100000000
+
 APK_NAME_PAT = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
 APK_VERCODE_PAT = re.compile(".*versionCode='([0-9]*)'.*")
 APK_VERNAME_PAT = re.compile(".*versionName='([^']*)'.*")
@@ -431,6 +434,38 @@ def getsig(apkpath):
     cert_encoded = encoder.encode(certificates)[4:]
 
     return hashlib.md5(hexlify(cert_encoded)).hexdigest()
+
+
+def get_cache_file():
+    return os.path.join('tmp', 'apkcache')
+
+
+def get_cache():
+    """
+    Gather information about all the apk files in the repo directory,
+    using cached data if possible.
+    :return: apkcache
+    """
+    apkcachefile = get_cache_file()
+    if not options.clean and os.path.exists(apkcachefile):
+        with open(apkcachefile, 'rb') as cf:
+            apkcache = pickle.load(cf, encoding='utf-8')
+        if apkcache.get("METADATA_VERSION") != METADATA_VERSION:
+            apkcache = {}
+    else:
+        apkcache = {}
+
+    return apkcache
+
+
+def write_cache(apkcache):
+    apkcachefile = get_cache_file()
+    cache_path = os.path.dirname(apkcachefile)
+    if not os.path.exists(cache_path):
+        os.makedirs(cache_path)
+    apkcache["METADATA_VERSION"] = METADATA_VERSION
+    with open(apkcachefile, 'wb') as cf:
+        pickle.dump(apkcache, cf)
 
 
 def get_icon_bytes(apkzip, iconsrc):
@@ -1072,15 +1107,6 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
 repo_pubkey_fingerprint = None
 
 
-# Generate a certificate fingerprint the same way keytool does it
-# (but with slightly different formatting)
-def cert_fingerprint(data):
-    digest = hashlib.sha256(data).digest()
-    ret = []
-    ret.append(' '.join("%02X" % b for b in bytearray(digest)))
-    return " ".join(ret)
-
-
 def extract_pubkey():
     global repo_pubkey_fingerprint
     if 'repo_pubkey' in config:
@@ -1099,8 +1125,47 @@ def extract_pubkey():
             logging.critical(msg)
             sys.exit(1)
         pubkey = p.output
-    repo_pubkey_fingerprint = cert_fingerprint(pubkey)
+    repo_pubkey_fingerprint = common.get_cert_fingerprint(pubkey)
     return hexlify(pubkey)
+
+
+def apply_info_from_latest_apk(apps, apks):
+    """
+    Some information from the apks needs to be applied up to the application level.
+    When doing this, we use the info from the most recent version's apk.
+    We deal with figuring out when the app was added and last updated at the same time.
+    """
+    for appid, app in apps.items():
+        bestver = UNSET_VERSION_CODE
+        for apk in apks:
+            if apk['packageName'] == appid:
+                if apk['versionCode'] > bestver:
+                    bestver = apk['versionCode']
+                    bestapk = apk
+
+                if 'added' in apk:
+                    if not app.added or apk['added'] < app.added:
+                        app.added = apk['added']
+                    if not app.lastUpdated or apk['added'] > app.lastUpdated:
+                        app.lastUpdated = apk['added']
+
+        if not app.added:
+            logging.debug("Don't know when " + appid + " was added")
+        if not app.lastUpdated:
+            logging.debug("Don't know when " + appid + " was last updated")
+
+        if bestver == UNSET_VERSION_CODE:
+
+            if app.Name is None:
+                app.Name = app.AutoName or appid
+            app.icon = None
+            logging.debug("Application " + appid + " has no packages")
+        else:
+            if app.Name is None:
+                app.Name = bestapk['name']
+            app.icon = bestapk['icon'] if 'icon' in bestapk else None
+            if app.CurrentVersionCode is None:
+                app.CurrentVersionCode = str(bestver)
 
 
 # Get raw URL from git service for mirroring
@@ -1839,17 +1904,10 @@ def main():
     # Read known apks data (will be updated and written back when we've finished)
     knownapks = common.KnownApks()
 
-    # Gather information about all the apk files in the repo directory, using
-    # cached data if possible.
-    apkcachefile = os.path.join('tmp', 'apkcache')
-    if not options.clean and os.path.exists(apkcachefile):
-        with open(apkcachefile, 'rb') as cf:
-            apkcache = pickle.load(cf, encoding='utf-8')
-        if apkcache.get("METADATA_VERSION") != METADATA_VERSION:
-            apkcache = {}
-    else:
-        apkcache = {}
+    # Get APK cache
+    apkcache = get_cache()
 
+    # Delete builds for disabled apps
     delete_disabled_builds(apps, apkcache, repodirs)
 
     # Scan all apks in the main repo
@@ -1909,44 +1967,8 @@ def main():
     else:
         archapks = []
 
-    # less than the valid range of versionCode, i.e. Java's Integer.MIN_VALUE
-    UNSET_VERSION_CODE = -0x100000000
-
-    # Some information from the apks needs to be applied up to the application
-    # level. When doing this, we use the info from the most recent version's apk.
-    # We deal with figuring out when the app was added and last updated at the
-    # same time.
-    for appid, app in apps.items():
-        bestver = UNSET_VERSION_CODE
-        for apk in apks + archapks:
-            if apk['packageName'] == appid:
-                if apk['versionCode'] > bestver:
-                    bestver = apk['versionCode']
-                    bestapk = apk
-
-                if 'added' in apk:
-                    if not app.added or apk['added'] < app.added:
-                        app.added = apk['added']
-                    if not app.lastUpdated or apk['added'] > app.lastUpdated:
-                        app.lastUpdated = apk['added']
-
-        if not app.added:
-            logging.debug("Don't know when " + appid + " was added")
-        if not app.lastUpdated:
-            logging.debug("Don't know when " + appid + " was last updated")
-
-        if bestver == UNSET_VERSION_CODE:
-
-            if app.Name is None:
-                app.Name = app.AutoName or appid
-            app.icon = None
-            logging.debug("Application " + appid + " has no packages")
-        else:
-            if app.Name is None:
-                app.Name = bestapk['name']
-            app.icon = bestapk['icon'] if 'icon' in bestapk else None
-            if app.CurrentVersionCode is None:
-                app.CurrentVersionCode = str(bestver)
+    # Apply information from latest apks to the application and update dates
+    apply_info_from_latest_apk(apps, apks + archapks)
 
     # Sort the app list by name, then the web site doesn't have to by default.
     # (we had to wait until we'd scanned the apks to do this, because mostly the
@@ -1983,7 +2005,6 @@ def main():
         make_binary_transparency_log(repodirs)
 
     if config['update_stats']:
-
         # Update known apks info...
         knownapks.writeifchanged()
 
@@ -2003,9 +2024,7 @@ def main():
                 f.write(data)
 
     if cachechanged:
-        apkcache["METADATA_VERSION"] = METADATA_VERSION
-        with open(apkcachefile, 'wb') as cf:
-            pickle.dump(apkcache, cf)
+        write_cache(apkcache)
 
     # Update the wiki...
     if options.wiki:
