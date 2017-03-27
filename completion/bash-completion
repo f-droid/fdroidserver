@@ -236,6 +236,12 @@ __complete_verify() {
 	esac
 }
 
+__complete_btlog() {
+	opts="-u"
+	lopts="--git-remote --git-repo --url"
+	__complete_options
+}
+
 __complete_stats() {
 	opts="-v -q -d"
 	lopts="--verbose --quiet --download"

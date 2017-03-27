@@ -2353,7 +2353,9 @@ def is_repo_file(filename):
         ]
 
 
-def make_binary_transparency_log(repodirs):
+def make_binary_transparency_log(repodirs, btrepo='binary_transparency',
+                                 url=None,
+                                 commit_title='fdroid update'):
     '''Log the indexes in a standalone git repo to serve as a "binary
     transparency" log.
 
@@ -2362,7 +2364,6 @@ def make_binary_transparency_log(repodirs):
     '''
 
     import git
-    btrepo = 'binary_transparency'
     if os.path.exists(os.path.join(btrepo, '.git')):
         gitrepo = git.Repo(btrepo)
     else:
@@ -2371,10 +2372,11 @@ def make_binary_transparency_log(repodirs):
         gitrepo = git.Repo.init(btrepo)
 
         gitconfig = gitrepo.config_writer()
-        gitconfig.set_value('user', 'name', 'fdroid update')
+        gitconfig.set_value('user', 'name', commit_title)
         gitconfig.set_value('user', 'email', 'fdroid@' + platform.node())
 
-        url = config['repo_url'].rstrip('/')
+        if not url:
+            url = config['repo_url'].rstrip('/')
         with open(os.path.join(btrepo, 'README.md'), 'w') as fp:
             fp.write("""
 # Binary Transparency Log for %s
@@ -2388,11 +2390,16 @@ def make_binary_transparency_log(repodirs):
         if not os.path.exists(cpdir):
             os.mkdir(cpdir)
         for f in ('index.xml', 'index-v1.json'):
+            repof = os.path.join(repodir, f)
+            if not os.path.exists(repof):
+                continue
             dest = os.path.join(cpdir, f)
-            shutil.copyfile(os.path.join(repodir, f), dest)
-            gitrepo.index.add([os.path.join(repodir, f), ])
+            shutil.copyfile(repof, dest)
+            gitrepo.index.add([repof, ])
         for f in ('index.jar', 'index-v1.jar'):
             repof = os.path.join(repodir, f)
+            if not os.path.exists(repof):
+                continue
             dest = os.path.join(cpdir, f)
             jarin = ZipFile(repof, 'r')
             jarout = ZipFile(dest, 'w')
@@ -2424,4 +2431,7 @@ def make_binary_transparency_log(repodirs):
             json.dump(output, fp, indent=2)
         gitrepo.index.add([os.path.join(repodir, 'filesystemlog.json'), ])
 
-    gitrepo.index.commit('fdroid update')
+        for f in glob.glob(os.path.join(cpdir, '*.HTTP-headers.json')):
+            gitrepo.index.add([os.path.join(repodir, os.path.basename(f)), ])
+
+    gitrepo.index.commit(commit_title)
