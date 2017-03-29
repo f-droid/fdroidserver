@@ -12,6 +12,8 @@ import tempfile
 import unittest
 from zipfile import ZipFile
 
+import fdroidserver.signindex
+
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
 print('localmodule: ' + localmodule)
@@ -163,6 +165,7 @@ class CommonTest(unittest.TestCase):
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
+        fdroidserver.signindex.config = config
 
         basedir = os.path.dirname(__file__)
         tmpdir = os.path.join(basedir, '..', '.testfiles')
@@ -174,7 +177,7 @@ class CommonTest(unittest.TestCase):
             sourcefile = os.path.join(sourcedir, f)
             testfile = os.path.join(testsdir, f)
             shutil.copy(sourcefile, testsdir)
-            fdroidserver.common.signjar(testfile)
+            fdroidserver.signindex.sign_jar(testfile)
             # these should be resigned, and therefore different
             self.assertNotEqual(open(sourcefile, 'rb').read(), open(testfile, 'rb').read())
 

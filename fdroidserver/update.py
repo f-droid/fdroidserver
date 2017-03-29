@@ -45,6 +45,7 @@ from binascii import hexlify, unhexlify
 from PIL import Image
 import logging
 
+from . import signindex
 from . import common
 from . import metadata
 from .common import FDroidPopen, FDroidPopenBytes, SdkToolsPopen
@@ -1374,7 +1375,8 @@ def make_index_v1(apps, packages, repodir, repodict, requestsdict):
     if options.nosign:
         logging.debug('index-v1 must have a signature, use `fdroid signindex` to create it!')
     else:
-        common.sign_index_v1(repodir, json_name)
+        signindex.config = config
+        signindex.sign_index_v1(repodir, json_name)
 
 
 def make_index_v0(apps, apks, repodir, repodict, requestsdict):
@@ -1626,7 +1628,8 @@ def make_index_v0(apps, apks, repodir, repodict, requestsdict):
             if os.path.exists(signed):
                 os.remove(signed)
         else:
-            common.signjar(signed)
+            signindex.config = config
+            signindex.sign_jar(signed)
 
     # Copy the repo icon into the repo directory...
     icon_dir = os.path.join(repodir, 'icons')
