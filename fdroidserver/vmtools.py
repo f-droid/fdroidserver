@@ -155,9 +155,13 @@ class FDroidBuildVm():
             # TODO: remove box files manually
             # nesessary when Vagrantfile in ~/.vagrant.d/... is broken.
 
-    def _check_call(self, cmd):
+    def _check_call(self, cmd, shell=False):
         logger.debug(' '.join(cmd))
-        return subprocess.check_call(cmd)
+        return subprocess.check_call(cmd, shell=shell)
+
+    def _check_output(self, cmd, shell=False):
+        logger.debug(' '.join(cmd))
+        return subprocess.check_output(cmd, shell=shell)
 
 
 class LibvirtBuildVm(FDroidBuildVm):
@@ -212,10 +216,10 @@ class LibvirtBuildVm(FDroidBuildVm):
             vol = storagePool.storageVolLookupByName(self.srvname + '.img')
             imagepath = vol.path()
             # TODO use a libvirt storage pool to ensure the img file is readable
-            subprocess.check_call(['sudo', '/bin/chmod', '-R', 'a+rX', '/var/lib/libvirt/images'])
+            self._check_call(['sudo', '/bin/chmod', '-R', 'a+rX', '/var/lib/libvirt/images'])
             shutil.copy2(imagepath, 'box.img')
-            subprocess.check_call(['qemu-img', 'rebase', '-p', '-b', '', 'box.img'])
-            img_info_raw = subprocess.check_output('sudo qemu-img info --output=json box.img', shell=True)
+            self._check_call(['qemu-img', 'rebase', '-p', '-b', '', 'box.img'])
+            img_info_raw = self._check_output(['sudo qemu-img info --output=json box.img'], shell=True)
             img_info = json.loads(img_info_raw.decode('utf-8'))
             metadata = {"provider": "libvirt",
                         "format": img_info['format'],
