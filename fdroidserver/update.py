@@ -379,10 +379,6 @@ def resize_all_icons(repodirs):
                 resize_icon(iconpath, density)
 
 
-# A signature block file with a .DSA, .RSA, or .EC extension
-cert_path_regex = re.compile(r'^META-INF/.*\.(DSA|EC|RSA)$')
-
-
 def getsig(apkpath):
     """ Get the signing certificate of an apk. To get the same md5 has that
     Android gets, we encode the .RSA certificate in a specific format and pass
@@ -404,7 +400,7 @@ def getsig(apkpath):
 
     with zipfile.ZipFile(apkpath, 'r') as apk:
 
-        certs = [n for n in apk.namelist() if cert_path_regex.match(n)]
+        certs = [n for n in apk.namelist() if common.CERT_PATH_REGEX.match(n)]
 
         if len(certs) < 1:
             logging.error("Found no signing certificates on %s" % apkpath)

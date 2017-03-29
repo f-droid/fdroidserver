@@ -46,6 +46,9 @@ import fdroidserver.metadata
 from .asynchronousfilereader import AsynchronousFileReader
 
 
+# A signature block file with a .DSA, .RSA, or .EC extension
+CERT_PATH_REGEX = re.compile(r'^META-INF/.*\.(DSA|EC|RSA)$')
+
 XMLElementTree.register_namespace('android', 'http://schemas.android.com/apk/res/android')
 
 config = None
@@ -2027,16 +2030,21 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     return None
 
 
-def verify_apk_signature(apk):
+def verify_apk_signature(apk, jar=False):
     """verify the signature on an APK
 
     Try to use apksigner whenever possible since jarsigner is very
     shitty: unsigned APKs pass as "verified"! So this has to turn on
     -strict then check for result 4.
 
+    You can set :param: jar to True if you want to use this method
+    to verify jar signatures.
     """
     if set_command_in_config('apksigner'):
-        return subprocess.call([config['apksigner'], 'verify', apk]) == 0
+        args = [config['apksigner'], 'verify']
+        if jar:
+            args += ['--min-sdk-version=1']
+        return subprocess.call(args + [apk]) == 0
     else:
         logging.warning("Using Java's jarsigner, not recommended for verifying APKs! Use apksigner")
         return subprocess.call([config['jarsigner'], '-strict', '-verify', apk]) == 4
