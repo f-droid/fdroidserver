@@ -1481,10 +1481,6 @@ def main():
     # name comes from there!)
     sortedids = sorted(apps.keys(), key=lambda appid: apps[appid].Name.upper())
 
-    # pass options and config for repo index handling
-    index.options = options
-    index.config = config
-
     # APKs are placed into multiple repos based on the app package, providing
     # per-app subscription feeds for nightly builds and things like it
     if config['per_app_repos']:

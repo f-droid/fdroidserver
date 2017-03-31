@@ -37,9 +37,6 @@ from fdroidserver import metadata, signindex, common
 from fdroidserver.common import FDroidPopen, FDroidPopenBytes
 from fdroidserver.metadata import MetaDataException
 
-options = None
-config = None
-
 
 def make(apps, sortedids, apks, repodir, archive):
     """Generate the repo index files.
@@ -61,22 +58,22 @@ def make(apps, sortedids, apks, repodir, archive):
         raise MetaDataException("Cannot resolve app id " + appid)
 
     nosigningkey = False
-    if not options.nosign:
-        if 'repo_keyalias' not in config:
+    if not common.options.nosign:
+        if 'repo_keyalias' not in common.config:
             nosigningkey = True
             logging.critical("'repo_keyalias' not found in config.py!")
-        if 'keystore' not in config:
+        if 'keystore' not in common.config:
             nosigningkey = True
             logging.critical("'keystore' not found in config.py!")
-        if 'keystorepass' not in config and 'keystorepassfile' not in config:
+        if 'keystorepass' not in common.config and 'keystorepassfile' not in common.config:
             nosigningkey = True
             logging.critical("'keystorepass' not found in config.py!")
-        if 'keypass' not in config and 'keypassfile' not in config:
+        if 'keypass' not in common.config and 'keypassfile' not in common.config:
             nosigningkey = True
             logging.critical("'keypass' not found in config.py!")
-        if not os.path.exists(config['keystore']):
+        if not os.path.exists(common.config['keystore']):
             nosigningkey = True
-            logging.critical("'" + config['keystore'] + "' does not exist!")
+            logging.critical("'" + common.config['keystore'] + "' does not exist!")
         if nosigningkey:
             logging.warning("`fdroid update` requires a signing key, you can create one using:")
             logging.warning("\tfdroid update --create-key")
@@ -86,27 +83,27 @@ def make(apps, sortedids, apks, repodir, archive):
     repodict['timestamp'] = datetime.utcnow()
     repodict['version'] = METADATA_VERSION
 
-    if config['repo_maxage'] != 0:
-        repodict['maxage'] = config['repo_maxage']
+    if common.config['repo_maxage'] != 0:
+        repodict['maxage'] = common.config['repo_maxage']
 
     if archive:
-        repodict['name'] = config['archive_name']
-        repodict['icon'] = os.path.basename(config['archive_icon'])
-        repodict['address'] = config['archive_url']
-        repodict['description'] = config['archive_description']
-        urlbasepath = os.path.basename(urllib.parse.urlparse(config['archive_url']).path)
+        repodict['name'] = common.config['archive_name']
+        repodict['icon'] = os.path.basename(common.config['archive_icon'])
+        repodict['address'] = common.config['archive_url']
+        repodict['description'] = common.config['archive_description']
+        urlbasepath = os.path.basename(urllib.parse.urlparse(common.config['archive_url']).path)
     else:
-        repodict['name'] = config['repo_name']
-        repodict['icon'] = os.path.basename(config['repo_icon'])
-        repodict['address'] = config['repo_url']
-        repodict['description'] = config['repo_description']
-        urlbasepath = os.path.basename(urllib.parse.urlparse(config['repo_url']).path)
+        repodict['name'] = common.config['repo_name']
+        repodict['icon'] = os.path.basename(common.config['repo_icon'])
+        repodict['address'] = common.config['repo_url']
+        repodict['description'] = common.config['repo_description']
+        urlbasepath = os.path.basename(urllib.parse.urlparse(common.config['repo_url']).path)
 
     mirrorcheckfailed = False
     mirrors = []
-    for mirror in sorted(config.get('mirrors', [])):
+    for mirror in sorted(common.config.get('mirrors', [])):
         base = os.path.basename(urllib.parse.urlparse(mirror).path.rstrip('/'))
-        if config.get('nonstandardwebroot') is not True and base != 'fdroid':
+        if common.config.get('nonstandardwebroot') is not True and base != 'fdroid':
             logging.error("mirror '" + mirror + "' does not end with 'fdroid'!")
             mirrorcheckfailed = True
         # must end with / or urljoin strips a whole path segment
@@ -114,7 +111,7 @@ def make(apps, sortedids, apks, repodir, archive):
             mirrors.append(urllib.parse.urljoin(mirror, urlbasepath))
         else:
             mirrors.append(urllib.parse.urljoin(mirror + '/', urlbasepath))
-    for mirror in config.get('servergitmirrors', []):
+    for mirror in common.config.get('servergitmirrors', []):
         mirror = get_raw_mirror(mirror)
         if mirror is not None:
             mirrors.append(mirror + '/')
@@ -142,11 +139,11 @@ def make(apps, sortedids, apks, repodir, archive):
     for command in ('install', 'uninstall'):
         packageNames = []
         key = command + '_list'
-        if key in config:
-            if isinstance(config[key], str):
-                packageNames = [config[key]]
-            elif all(isinstance(item, str) for item in config[key]):
-                packageNames = config[key]
+        if key in common.config:
+            if isinstance(common.config[key], str):
+                packageNames = [common.config[key]]
+            elif all(isinstance(item, str) for item in common.config[key]):
+                packageNames = common.config[key]
             else:
                 raise TypeError('only accepts strings, lists, and tuples')
         requestsdict[command] = packageNames
@@ -221,10 +218,10 @@ def make_v1(apps, packages, repodir, repodict, requestsdict):
     with open(index_file, 'w') as fp:
         json.dump(output, fp, default=_index_encoder_default)
 
-    if options.nosign:
+    if common.options.nosign:
         logging.debug('index-v1 must have a signature, use `fdroid signindex` to create it!')
     else:
-        signindex.config = config
+        signindex.config = common.config
         signindex.sign_index_v1(repodir, json_name)
 
 
@@ -432,9 +429,9 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
                 addElementNonEmpty('features', ','.join(sorted(apk['features'])), doc, apkel)
 
         if current_version_file is not None \
-                and config['make_current_version_link'] \
+                and common.config['make_current_version_link'] \
                 and repodir == 'repo':  # only create these
-            namefield = config['current_version_name_source']
+            namefield = common.config['current_version_name_source']
             sanitized_name = re.sub('''[ '"&%?+=/]''', '', app.get(namefield))
             apklinkname = sanitized_name + '.apk'
             current_version_path = os.path.join(repodir, current_version_file)
@@ -450,7 +447,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
                         os.remove(siglinkname)
                     os.symlink(sigfile_path, siglinkname)
 
-    if options.pretty:
+    if common.options.pretty:
         output = doc.toprettyxml(encoding='utf-8')
     else:
         output = doc.toxml(encoding='utf-8')
@@ -458,16 +455,16 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
     with open(os.path.join(repodir, 'index.xml'), 'wb') as f:
         f.write(output)
 
-    if 'repo_keyalias' in config:
+    if 'repo_keyalias' in common.config:
 
-        if options.nosign:
+        if common.options.nosign:
             logging.info("Creating unsigned index in preparation for signing")
         else:
             logging.info("Creating signed index with this key (SHA256):")
             logging.info("%s" % repo_pubkey_fingerprint)
 
         # Create a jar of the index...
-        jar_output = 'index_unsigned.jar' if options.nosign else 'index.jar'
+        jar_output = 'index_unsigned.jar' if common.options.nosign else 'index.jar'
         p = FDroidPopen(['jar', 'cf', jar_output, 'index.xml'], cwd=repodir)
         if p.returncode != 0:
             logging.critical("Failed to create {0}".format(jar_output))
@@ -475,18 +472,18 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
 
         # Sign the index...
         signed = os.path.join(repodir, 'index.jar')
-        if options.nosign:
+        if common.options.nosign:
             # Remove old signed index if not signing
             if os.path.exists(signed):
                 os.remove(signed)
         else:
-            signindex.config = config
+            signindex.config = common.config
             signindex.sign_jar(signed)
 
     # Copy the repo icon into the repo directory...
     icon_dir = os.path.join(repodir, 'icons')
-    iconfilename = os.path.join(icon_dir, os.path.basename(config['repo_icon']))
-    shutil.copyfile(config['repo_icon'], iconfilename)
+    iconfilename = os.path.join(icon_dir, os.path.basename(common.config['repo_icon']))
+    shutil.copyfile(common.config['repo_icon'], iconfilename)
 
 
 def extract_pubkey():
@@ -494,18 +491,18 @@ def extract_pubkey():
     Extracts and returns the repository's public key from the keystore.
     :return: public key in hex, repository fingerprint
     """
-    if 'repo_pubkey' in config:
-        pubkey = unhexlify(config['repo_pubkey'])
+    if 'repo_pubkey' in common.config:
+        pubkey = unhexlify(common.config['repo_pubkey'])
     else:
-        p = FDroidPopenBytes([config['keytool'], '-exportcert',
-                              '-alias', config['repo_keyalias'],
-                              '-keystore', config['keystore'],
-                              '-storepass:file', config['keystorepassfile']]
-                             + config['smartcardoptions'],
+        p = FDroidPopenBytes([common.config['keytool'], '-exportcert',
+                              '-alias', common.config['repo_keyalias'],
+                              '-keystore', common.config['keystore'],
+                              '-storepass:file', common.config['keystorepassfile']]
+                             + common.config['smartcardoptions'],
                              output=False, stderr_to_stdout=False)
         if p.returncode != 0 or len(p.output) < 20:
             msg = "Failed to get repo pubkey!"
-            if config['keystore'] == 'NONE':
+            if common.config['keystore'] == 'NONE':
                 msg += ' Is your crypto smartcard plugged in?'
             logging.critical(msg)
             sys.exit(1)
