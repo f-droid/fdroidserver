@@ -31,6 +31,16 @@ from logging import getLogger
 logger = getLogger('fdroidserver-vmtools')
 
 
+def _check_call(cmd, shell=False):
+    logger.debug(' '.join(cmd))
+    return subprocess.check_call(cmd, shell=shell)
+
+
+def _check_output(cmd, shell=False):
+    logger.debug(' '.join(cmd))
+    return subprocess.check_output(cmd, shell=shell)
+
+
 def get_build_vm(srvdir, provider=None):
     """Factory function for getting FDroidBuildVm instances.
 
@@ -43,6 +53,8 @@ def get_build_vm(srvdir, provider=None):
     :returns: FDroidBuildVm instance.
     """
     abssrvdir = abspath(srvdir)
+
+    # use supplied provider
     if provider:
         if provider == 'libvirt':
             logger.debug('build vm provider \'libvirt\' selected')
@@ -52,6 +64,32 @@ def get_build_vm(srvdir, provider=None):
             return VirtualboxBuildVm(abssrvdir)
         else:
             logger.warn('build vm provider not supported: \'%s\'', provider)
+
+    # try guessing provider from installed software
+    try:
+        kvm_installed = 0 == _check_call(['which', 'kvm'])
+    except subprocess.CalledProcessError:
+        kvm_installed = False
+        try:
+            kvm_installed |= 0 == _check_call(['which', 'qemu'])
+        except subprocess.CalledProcessError:
+            pass
+    try:
+        vbox_installed = 0 == _check_call(['which', 'VBoxHeadless'], shell=True)
+    except subprocess.CalledProcessError:
+        vbox_installed = False
+    if kvm_installed and vbox_installed:
+        logger.debug('both kvm and vbox are installed.')
+    elif kvm_installed:
+        logger.debug('libvirt is the sole installed and supported vagrant provider, selecting \'libvirt\'')
+        return LibvirtBuildVm(abssrvdir)
+    elif vbox_installed:
+        logger.debug('virtualbox is the sole installed and supported vagrant provider, selecting \'virtualbox\'')
+        return VirtualboxBuildVm(abssrvdir)
+    else:
+        logger.debug('could not confirm that either virtualbox or kvm/libvirt are installed')
+
+    # try guessing provider from .../srvdir/.vagrant internals
     has_libvirt_machine = isdir(joinpath(abssrvdir, '.vagrant',
                                          'machines', 'default', 'libvirt'))
     has_vbox_machine = isdir(joinpath(abssrvdir, '.vagrant',
@@ -128,12 +166,16 @@ class FDroidBuildVm():
         except Exception as e:
             logger.debug("could not delete vagrant dir: %s, %s", vgrntdir, e)
         try:
-            self._check_call(['vagrant', 'global-status', '--prune'])
+            _check_call(['vagrant', 'global-status', '--prune'])
         except subprocess.CalledProcessError as e:
             logger.debug('pruning global vagrant status failed: %s', e)
 
-    def package(self, output=None, keep_box_file=None):
-        self.vgrnt.package(output=output)
+    def package(self, output=None, vagrantfile=None, keep_box_file=None):
+        previous_tmp_dir = joinpath(self.srvdir, '_tmp_package')
+        if isdir(previous_tmp_dir):
+            logger.info('found previous vagrant package temp dir \'%s\', deleting it', previous_tmp_dir)
+            shutil.rmtree(previous_tmp_dir)
+        self.vgrnt.package(output=output, vagrantfile=vagrantfile)
 
     def box_add(self, boxname, boxfile, force=True):
         """Add vagrant box to vagrant.
@@ -149,19 +191,11 @@ class FDroidBuildVm():
 
     def box_remove(self, boxname):
         try:
-            self._check_call(['vagrant', 'box', 'remove', '--all', '--force', boxname])
+            _check_call(['vagrant', 'box', 'remove', '--all', '--force', boxname])
         except subprocess.CalledProcessError as e:
             logger.debug('tried removing box %s, but is did not exist: %s', boxname, e)
             # TODO: remove box files manually
             # nesessary when Vagrantfile in ~/.vagrant.d/... is broken.
-
-    def _check_call(self, cmd, shell=False):
-        logger.debug(' '.join(cmd))
-        return subprocess.check_call(cmd, shell=shell)
-
-    def _check_output(self, cmd, shell=False):
-        logger.debug(' '.join(cmd))
-        return subprocess.check_output(cmd, shell=shell)
 
 
 class LibvirtBuildVm(FDroidBuildVm):
@@ -182,7 +216,7 @@ class LibvirtBuildVm(FDroidBuildVm):
         # this is way more easy and therefore fault tolerant.
         # (eg. lookupByName only works on running VMs)
         try:
-            self._check_call(('virsh', '-c', 'qemu:///system', 'destroy', self.srvname))
+            _check_call(('virsh', '-c', 'qemu:///system', 'destroy', self.srvname))
             logger.info("...waiting a sec...")
             time.sleep(10)
         except subprocess.CalledProcessError as e:
@@ -190,7 +224,7 @@ class LibvirtBuildVm(FDroidBuildVm):
         try:
             # libvirt python bindings do not support all flags required
             # for undefining domains correctly.
-            self._check_call(('virsh', '-c', 'qemu:///system', 'undefine', self.srvname, '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
+            _check_call(('virsh', '-c', 'qemu:///system', 'undefine', self.srvname, '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
             logger.info("...waiting a sec...")
             time.sleep(10)
         except subprocess.CalledProcessError as e:
@@ -217,10 +251,10 @@ class LibvirtBuildVm(FDroidBuildVm):
             vol = storagePool.storageVolLookupByName(self.srvname + '.img')
             imagepath = vol.path()
             # TODO use a libvirt storage pool to ensure the img file is readable
-            self._check_call(['sudo', '/bin/chmod', '-R', 'a+rX', '/var/lib/libvirt/images'])
+            _check_call(['sudo', '/bin/chmod', '-R', 'a+rX', '/var/lib/libvirt/images'])
             shutil.copy2(imagepath, 'box.img')
-            self._check_call(['qemu-img', 'rebase', '-p', '-b', '', 'box.img'])
-            img_info_raw = self._check_output(['qemu-img', 'info', '--output=json', 'box.img'])
+            _check_call(['qemu-img', 'rebase', '-p', '-b', '', 'box.img'])
+            img_info_raw = _check_output(['qemu-img', 'info', '--output=json', 'box.img'])
             img_info = json.loads(img_info_raw.decode('utf-8'))
             metadata = {"provider": "libvirt",
                         "format": img_info['format'],
@@ -258,7 +292,7 @@ class LibvirtBuildVm(FDroidBuildVm):
     def box_remove(self, boxname):
         super().box_remove(boxname)
         try:
-            self._check_call(['virsh', '-c', 'qemu:///system', 'vol-delete', '--pool', 'default', '%s_vagrant_box_image_0.img' % (boxname)])
+            _check_call(['virsh', '-c', 'qemu:///system', 'vol-delete', '--pool', 'default', '%s_vagrant_box_image_0.img' % (boxname)])
         except subprocess.CalledProcessError as e:
             logger.info('tired removing \'%s\', file was not present in first place: %s', boxname, e)
 
