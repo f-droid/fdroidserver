@@ -220,7 +220,10 @@ def make_v1(apps, packages, repodir, repodict, requestsdict):
     json_name = 'index-v1.json'
     index_file = os.path.join(repodir, json_name)
     with open(index_file, 'w') as fp:
-        json.dump(output, fp, default=_index_encoder_default)
+        if common.options.pretty:
+            json.dump(output, fp, default=_index_encoder_default, indent=2)
+        else:
+            json.dump(output, fp, default=_index_encoder_default)
 
     if common.options.nosign:
         logging.debug('index-v1 must have a signature, use `fdroid signindex` to create it!')

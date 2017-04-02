@@ -2364,6 +2364,8 @@ def make_binary_transparency_log(repodirs, btrepo='binary_transparency',
     '''
 
     import git
+    import xml.dom.minidom
+
     if os.path.exists(os.path.join(btrepo, '.git')):
         gitrepo = git.Repo(btrepo)
     else:
@@ -2394,7 +2396,16 @@ def make_binary_transparency_log(repodirs, btrepo='binary_transparency',
             if not os.path.exists(repof):
                 continue
             dest = os.path.join(cpdir, f)
-            shutil.copyfile(repof, dest)
+            if f.endswith('.xml'):
+                doc = xml.dom.minidom.parse(repof)
+                output = doc.toprettyxml(encoding='utf-8')
+                with open(dest, 'wb') as f:
+                    f.write(output)
+            elif f.endswith('.json'):
+                with open(repof) as fp:
+                    output = json.load(fp, object_pairs_hook=collections.OrderedDict)
+                with open(dest, 'w') as fp:
+                    json.dump(output, fp, indent=2)
             gitrepo.index.add([repof, ])
         for f in ('index.jar', 'index-v1.jar'):
             repof = os.path.join(repodir, f)
