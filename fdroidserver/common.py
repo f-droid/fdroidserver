@@ -2213,24 +2213,55 @@ def get_cert_fingerprint(pubkey):
     return " ".join(ret)
 
 
-def write_to_config(thisconfig, key, value=None):
-    '''write a key/value to the local config.py'''
+def write_to_config(thisconfig, key, value=None, config_file=None):
+    '''write a key/value to the local config.py
+
+    NOTE: only supports writing string variables.
+
+    :param thisconfig: config dictionary
+    :param key: variable name in config.py to be overwritten/added
+    :param value: optional value to be written, instead of fetched
+        from 'thisconfig' dictionary.
+    '''
     if value is None:
         origkey = key + '_orig'
         value = thisconfig[origkey] if origkey in thisconfig else thisconfig[key]
-    with open('config.py', 'r', encoding='utf8') as f:
-        data = f.read()
-    pattern = '\n[\s#]*' + key + '\s*=\s*"[^"]*"'
-    repl = '\n' + key + ' = "' + value + '"'
-    data = re.sub(pattern, repl, data)
-    # if this key is not in the file, append it
-    if not re.match('\s*' + key + '\s*=\s*"', data):
-        data += repl
+    cfg = config_file if config_file else 'config.py'
+
+    # load config file
+    with open(cfg, 'r', encoding="utf-8") as f:
+        lines = f.readlines()
+
     # make sure the file ends with a carraige return
-    if not re.match('\n$', data):
-        data += '\n'
-    with open('config.py', 'w', encoding='utf8') as f:
-        f.writelines(data)
+    if len(lines) > 0:
+        if not lines[-1].endswith('\n'):
+            lines[-1] += '\n'
+
+    # regex for finding and replacing python string variable
+    # definitions/initializations
+    pattern = re.compile('^[\s#]*' + key + '\s*=\s*"[^"]*"')
+    repl = key + ' = "' + value + '"'
+    pattern2 = re.compile('^[\s#]*' + key + "\s*=\s*'[^']*'")
+    repl2 = key + " = '" + value + "'"
+
+    # If we replaced this line once, we make sure won't be a
+    # second instance of this line for this key in the document.
+    didRepl = False
+    # edit config file
+    with open(cfg, 'w', encoding="utf-8") as f:
+        for line in lines:
+            if pattern.match(line) or pattern2.match(line):
+                if not didRepl:
+                    line = pattern.sub(repl, line)
+                    line = pattern2.sub(repl2, line)
+                    f.write(line)
+                    didRepl = True
+            else:
+                f.write(line)
+        if not didRepl:
+            f.write('\n')
+            f.write(repl)
+            f.write('\n')
 
 
 def parse_xml(path):
