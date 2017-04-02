@@ -28,7 +28,6 @@ import re
 import shutil
 import glob
 import json
-import platform
 import stat
 import subprocess
 import time
@@ -2373,16 +2372,19 @@ def make_binary_transparency_log(repodirs, btrepo='binary_transparency',
             os.mkdir(btrepo)
         gitrepo = git.Repo.init(btrepo)
 
-        gitconfig = gitrepo.config_writer()
-        gitconfig.set_value('user', 'name', commit_title)
-        gitconfig.set_value('user', 'email', 'fdroid@' + platform.node())
-
         if not url:
             url = config['repo_url'].rstrip('/')
         with open(os.path.join(btrepo, 'README.md'), 'w') as fp:
             fp.write("""
 # Binary Transparency Log for %s
 
+This is a log of the signed app index metadata.  This is stored in a
+git repo, which serves as an imperfect append-only storage mechanism.
+People can then check that any file that they received from that
+F-Droid repository was a publicly released file.
+
+For more info on this idea:
+* https://wiki.mozilla.org/Security/Binary_Transparency
 """ % url[:url.rindex('/')])  # strip '/repo'
         gitrepo.index.add(['README.md', ])
         gitrepo.index.commit('add README')
