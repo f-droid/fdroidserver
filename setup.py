@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
 from setuptools import setup
+import os
 import sys
 
-# workaround issue on OSX, where sys.prefix is not an installable location
-if sys.platform == 'darwin' and sys.prefix.startswith('/System'):
-    data_prefix = '.'
-else:
+# workaround issue on OSX or --user installs, where sys.prefix is not an installable location
+if os.access(sys.prefix, os.W_OK | os.X_OK):
     data_prefix = sys.prefix
+else:
+    data_prefix = '.'
 
 setup(name='fdroidserver',
       version='0.7.0',
