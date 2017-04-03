@@ -592,12 +592,15 @@ echo_header "copy tests/repo, update with binary transparency log"
 REPOROOT=`create_test_dir`
 GNUPGHOME=$REPOROOT/gnupghome
 KEYSTORE=$WORKSPACE/tests/keystore.jks
+mkdir $REPOROOT/git_remote
+cd $REPOROOT/git_remote
+git init --bare
 cd $REPOROOT
 $fdroid init --keystore $KEYSTORE --repo-keyalias=sova
 cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $REPOROOT/
 echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
 echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo 'binary_transparency_remote = "git@gitlab.com:fdroid-continuous-integration/binary-transparency.git"' >> config.py
+echo "binary_transparency_remote = '$REPOROOT/git_remote'" >> config.py
 echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
 $fdroid update --verbose --pretty
 test -e repo/index.xml
@@ -605,6 +608,8 @@ test -e repo/index.jar
 test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 cd binary_transparency
+[ `git rev-list --count HEAD` == "2" ]
+cd $REPOROOT/git_remote
 [ `git rev-list --count HEAD` == "2" ]
 
 

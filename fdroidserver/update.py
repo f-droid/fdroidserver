@@ -1408,8 +1408,9 @@ def main():
     if len(repodirs) > 1:
         index.make(apps, sortedids, archapks, repodirs[1], True)
 
-    if config.get('binary_transparency_remote'):
-        btlog.make_binary_transparency_log(repodirs, git_remote=config['binary_transparency_remote'])
+    git_remote = config.get('binary_transparency_remote')
+    if git_remote or os.path.isdir(os.path.join('binary_transparency', '.git')):
+        btlog.make_binary_transparency_log(repodirs, git_remote=git_remote)
 
     if config['update_stats']:
         # Update known apks info...
