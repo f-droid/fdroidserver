@@ -436,14 +436,14 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
                 and common.config['make_current_version_link'] \
                 and repodir == 'repo':  # only create these
             namefield = common.config['current_version_name_source']
-            sanitized_name = re.sub('''[ '"&%?+=/]''', '', app.get(namefield))
-            apklinkname = sanitized_name + '.apk'
-            current_version_path = os.path.join(repodir, current_version_file)
+            sanitized_name = re.sub(b'''[ '"&%?+=/]''', b'', app.get(namefield).encode('utf-8'))
+            apklinkname = sanitized_name + b'.apk'
+            current_version_path = os.path.join(repodir, current_version_file).encode('utf-8', 'surrogateescape')
             if os.path.islink(apklinkname):
                 os.remove(apklinkname)
             os.symlink(current_version_path, apklinkname)
             # also symlink gpg signature, if it exists
-            for extension in ('.asc', '.sig'):
+            for extension in (b'.asc', b'.sig'):
                 sigfile_path = current_version_path + extension
                 if os.path.exists(sigfile_path):
                     siglinkname = apklinkname + extension

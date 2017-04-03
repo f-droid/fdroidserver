@@ -1700,7 +1700,8 @@ class KnownApks:
 
 def get_file_extension(filename):
     """get the normalized file extension, can be blank string but never None"""
-
+    if isinstance(filename, bytes):
+        filename = filename.decode('utf-8')
     return os.path.splitext(filename)[1].lower()[1:]
 
 
@@ -2333,15 +2334,17 @@ def get_per_app_repos():
 
 def is_repo_file(filename):
     '''Whether the file in a repo is a build product to be delivered to users'''
+    if isinstance(filename, str):
+        filename = filename.encode('utf-8', errors="surrogateescape")
     return os.path.isfile(filename) \
-        and not filename.endswith('.asc') \
-        and not filename.endswith('.sig') \
+        and not filename.endswith(b'.asc') \
+        and not filename.endswith(b'.sig') \
         and os.path.basename(filename) not in [
-            'index.jar',
-            'index_unsigned.jar',
-            'index.xml',
-            'index.html',
-            'index-v1.jar',
-            'index-v1.json',
-            'categories.txt',
+            b'index.jar',
+            b'index_unsigned.jar',
+            b'index.xml',
+            b'index.html',
+            b'index-v1.jar',
+            b'index-v1.json',
+            b'categories.txt',
         ]

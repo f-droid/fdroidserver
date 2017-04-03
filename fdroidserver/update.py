@@ -656,13 +656,15 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
 
     cachechanged = False
     repo_files = []
+    repodir = repodir.encode('utf-8')
     for name in os.listdir(repodir):
         file_extension = common.get_file_extension(name)
         if file_extension == 'apk' or file_extension == 'obb':
             continue
         filename = os.path.join(repodir, name)
-        if filename.endswith('_src.tar.gz'):
-            logging.debug('skipping source tarball: ' + filename)
+        name_utf8 = name.decode('utf-8')
+        if filename.endswith(b'_src.tar.gz'):
+            logging.debug('skipping source tarball: ' + filename.decode('utf-8'))
             continue
         if not common.is_repo_file(filename):
             continue
@@ -683,34 +685,34 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
                 else:
                     repo_file['added'] = datetime(*a[:6])
             if repo_file.get('hash') == shasum:
-                logging.debug("Reading " + name + " from cache")
+                logging.debug("Reading " + name_utf8 + " from cache")
                 usecache = True
             else:
                 logging.debug("Ignoring stale cache data for " + name)
 
         if not usecache:
-            logging.debug("Processing " + name)
+            logging.debug("Processing " + name_utf8)
             repo_file = collections.OrderedDict()
             # TODO rename apkname globally to something more generic
-            repo_file['name'] = name
-            repo_file['apkName'] = name
+            repo_file['name'] = name_utf8
+            repo_file['apkName'] = name_utf8
             repo_file['hash'] = shasum
             repo_file['hashType'] = 'sha256'
             repo_file['versionCode'] = 0
             repo_file['versionName'] = shasum
             # the static ID is the SHA256 unless it is set in the metadata
             repo_file['packageName'] = shasum
-            n = name.split('_')
+            n = name_utf8.split('_')
             if len(n) == 2:
                 packageName = n[0]
                 versionCode = n[1].split('.')[0]
-                if re.match(r'^-?[0-9]+$', versionCode) \
-                   and common.is_valid_package_name(name.split('_')[0]):
+                if re.match('^-?[0-9]+$', versionCode) \
+                   and common.is_valid_package_name(name_utf8.split('_')[0]):
                     repo_file['packageName'] = packageName
                     repo_file['versionCode'] = int(versionCode)
-            srcfilename = name + "_src.tar.gz"
+            srcfilename = name + b'_src.tar.gz'
             if os.path.exists(os.path.join(repodir, srcfilename)):
-                repo_file['srcname'] = srcfilename
+                repo_file['srcname'] = srcfilename.decode('utf-8')
             repo_file['size'] = stat.st_size
 
             apkcache[name] = repo_file
