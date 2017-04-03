@@ -130,6 +130,25 @@ class UpdateTest(unittest.TestCase):
                 self.assertIsNone(apk.get('obbMainFile'))
                 self.assertIsNone(apk.get('obbPatchFile'))
 
+    def test_scan_invalid_apk(self):
+        os.chdir(os.path.dirname(__file__))
+        if os.path.basename(os.getcwd()) != 'tests':
+            raise Exception('This test must be run in the "tests/" subdir')
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+        fdroidserver.update.options.delete_unknown = False
+
+        knownapks = fdroidserver.common.KnownApks()
+        apk = 'fake.ota.update_1234.zip'  # this is not an APK, scanning should fail
+        (skip, apk, cachechanged) = fdroidserver.update.scan_apk({}, apk, 'repo', knownapks, False)
+
+        self.assertTrue(skip)
+        self.assertIsNone(apk)
+        self.assertFalse(cachechanged)
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()

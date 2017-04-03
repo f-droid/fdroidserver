@@ -793,7 +793,7 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
                     logging.error("Could not find {0} to remove it".format(apkfile))
             else:
                 logging.error("Failed to get apk information, skipping " + apkfile)
-            return True
+            return True, None, False
         for line in p.output.splitlines():
             if line.startswith("package:"):
                 try:
