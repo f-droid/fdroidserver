@@ -37,6 +37,7 @@ from binascii import hexlify
 from PIL import Image
 import logging
 
+from . import btlog
 from . import common
 from . import index
 from . import metadata
@@ -1408,7 +1409,7 @@ def main():
         index.make(apps, sortedids, archapks, repodirs[1], True)
 
     if config.get('binary_transparency_remote'):
-        common.make_binary_transparency_log(repodirs)
+        btlog.make_binary_transparency_log(repodirs)
 
     if config['update_stats']:
         # Update known apks info...

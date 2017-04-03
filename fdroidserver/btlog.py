@@ -26,6 +26,10 @@
 # client app so its not easy for the server to distinguish this from
 # the F-Droid client.
 
+
+import collections
+import git
+import glob
 import os
 import json
 import logging
@@ -33,12 +37,109 @@ import requests
 import shutil
 import sys
 import tempfile
+import xml.dom.minidom
+import zipfile
 from argparse import ArgumentParser
 
 from . import common
 
 
 options = None
+
+
+def make_binary_transparency_log(repodirs, btrepo='binary_transparency',
+                                 url=None,
+                                 commit_title='fdroid update'):
+    '''Log the indexes in a standalone git repo to serve as a "binary
+    transparency" log.
+
+    see: https://www.eff.org/deeplinks/2014/02/open-letter-to-tech-companies
+
+    '''
+
+    if os.path.exists(os.path.join(btrepo, '.git')):
+        gitrepo = git.Repo(btrepo)
+    else:
+        if not os.path.exists(btrepo):
+            os.mkdir(btrepo)
+        gitrepo = git.Repo.init(btrepo)
+
+        if not url:
+            url = common.config['repo_url'].rstrip('/')
+        with open(os.path.join(btrepo, 'README.md'), 'w') as fp:
+            fp.write("""
+# Binary Transparency Log for %s
+
+This is a log of the signed app index metadata.  This is stored in a
+git repo, which serves as an imperfect append-only storage mechanism.
+People can then check that any file that they received from that
+F-Droid repository was a publicly released file.
+
+For more info on this idea:
+* https://wiki.mozilla.org/Security/Binary_Transparency
+""" % url[:url.rindex('/')])  # strip '/repo'
+        gitrepo.index.add(['README.md', ])
+        gitrepo.index.commit('add README')
+
+    for repodir in repodirs:
+        cpdir = os.path.join(btrepo, repodir)
+        if not os.path.exists(cpdir):
+            os.mkdir(cpdir)
+        for f in ('index.xml', 'index-v1.json'):
+            repof = os.path.join(repodir, f)
+            if not os.path.exists(repof):
+                continue
+            dest = os.path.join(cpdir, f)
+            if f.endswith('.xml'):
+                doc = xml.dom.minidom.parse(repof)
+                output = doc.toprettyxml(encoding='utf-8')
+                with open(dest, 'wb') as f:
+                    f.write(output)
+            elif f.endswith('.json'):
+                with open(repof) as fp:
+                    output = json.load(fp, object_pairs_hook=collections.OrderedDict)
+                with open(dest, 'w') as fp:
+                    json.dump(output, fp, indent=2)
+            gitrepo.index.add([repof, ])
+        for f in ('index.jar', 'index-v1.jar'):
+            repof = os.path.join(repodir, f)
+            if not os.path.exists(repof):
+                continue
+            dest = os.path.join(cpdir, f)
+            jarin = zipfile.ZipFile(repof, 'r')
+            jarout = zipfile.ZipFile(dest, 'w')
+            for info in jarin.infolist():
+                if info.filename.startswith('META-INF/'):
+                    jarout.writestr(info, jarin.read(info.filename))
+            jarout.close()
+            jarin.close()
+            gitrepo.index.add([repof, ])
+
+        files = []
+        for root, dirs, filenames in os.walk(repodir):
+            for f in filenames:
+                files.append(os.path.relpath(os.path.join(root, f), repodir))
+        output = collections.OrderedDict()
+        for f in sorted(files):
+            repofile = os.path.join(repodir, f)
+            stat = os.stat(repofile)
+            output[f] = (
+                stat.st_size,
+                stat.st_ctime_ns,
+                stat.st_mtime_ns,
+                stat.st_mode,
+                stat.st_uid,
+                stat.st_gid,
+            )
+        fslogfile = os.path.join(cpdir, 'filesystemlog.json')
+        with open(fslogfile, 'w') as fp:
+            json.dump(output, fp, indent=2)
+        gitrepo.index.add([os.path.join(repodir, 'filesystemlog.json'), ])
+
+        for f in glob.glob(os.path.join(cpdir, '*.HTTP-headers.json')):
+            gitrepo.index.add([os.path.join(repodir, os.path.basename(f)), ])
+
+    gitrepo.index.commit(commit_title)
 
 
 def main():
@@ -112,8 +213,7 @@ def main():
 
     if new_files:
         os.chdir(tempdirbase)
-        common.make_binary_transparency_log(repodirs, options.git_repo, options.url,
-                                            'fdroid btlog')
+        make_binary_transparency_log(repodirs, options.git_repo, options.url, 'fdroid btlog')
     shutil.rmtree(tempdirbase, ignore_errors=True)
 
 if __name__ == "__main__":
