@@ -34,9 +34,6 @@ from datetime import datetime, timedelta
 from argparse import ArgumentParser
 
 import collections
-from pyasn1.error import PyAsn1Error
-from pyasn1.codec.der import decoder, encoder
-from pyasn1_modules import rfc2315
 from binascii import hexlify
 
 from PIL import Image
@@ -45,7 +42,7 @@ import logging
 from . import common
 from . import index
 from . import metadata
-from .common import FDroidPopen, SdkToolsPopen
+from .common import SdkToolsPopen
 
 METADATA_VERSION = 18
 
@@ -379,10 +376,6 @@ def resize_all_icons(repodirs):
                 resize_icon(iconpath, density)
 
 
-# A signature block file with a .DSA, .RSA, or .EC extension
-cert_path_regex = re.compile(r'^META-INF/.*\.(DSA|EC|RSA)$')
-
-
 def getsig(apkpath):
     """ Get the signing certificate of an apk. To get the same md5 has that
     Android gets, we encode the .RSA certificate in a specific format and pass
@@ -393,18 +386,12 @@ def getsig(apkpath):
               if an error occurred.
     """
 
-    cert = None
-
     # verify the jar signature is correct
-    args = [config['jarsigner'], '-verify', apkpath]
-    p = FDroidPopen(args)
-    if p.returncode != 0:
-        logging.critical(apkpath + " has a bad signature!")
+    if not common.verify_apk_signature(apkpath):
         return None
 
     with zipfile.ZipFile(apkpath, 'r') as apk:
-
-        certs = [n for n in apk.namelist() if cert_path_regex.match(n)]
+        certs = [n for n in apk.namelist() if common.CERT_PATH_REGEX.match(n)]
 
         if len(certs) < 1:
             logging.error("Found no signing certificates on %s" % apkpath)
@@ -415,20 +402,7 @@ def getsig(apkpath):
 
         cert = apk.read(certs[0])
 
-    content = decoder.decode(cert, asn1Spec=rfc2315.ContentInfo())[0]
-    if content.getComponentByName('contentType') != rfc2315.signedData:
-        logging.error("Unexpected format.")
-        return None
-
-    content = decoder.decode(content.getComponentByName('content'),
-                             asn1Spec=rfc2315.SignedData())[0]
-    try:
-        certificates = content.getComponentByName('certificates')
-    except PyAsn1Error:
-        logging.error("Certificates not found.")
-        return None
-
-    cert_encoded = encoder.encode(certificates)[4:]
+    cert_encoded = common.get_certificate(cert)
 
     return hashlib.md5(hexlify(cert_encoded)).hexdigest()
 

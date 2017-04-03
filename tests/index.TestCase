@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+import optparse
+import os
+import unittest
+import zipfile
+
+import fdroidserver.common
+import fdroidserver.index
+import fdroidserver.signindex
+
+
+class IndexTest(unittest.TestCase):
+
+    def setUp(self):
+        fdroidserver.common.config = None
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
+        fdroidserver.common.config = config
+        fdroidserver.signindex.config = config
+
+    @staticmethod
+    def test_verify_jar_signature_succeeds():
+        basedir = os.path.dirname(__file__)
+        source_dir = os.path.join(basedir, 'signindex')
+        for f in ('testy.jar', 'guardianproject.jar'):
+            testfile = os.path.join(source_dir, f)
+            fdroidserver.index.verify_jar_signature(testfile)
+
+    def test_verify_jar_signature_fails(self):
+        basedir = os.path.dirname(__file__)
+        source_dir = os.path.join(basedir, 'signindex')
+        testfile = os.path.join(source_dir, 'unsigned.jar')
+        with self.assertRaises(fdroidserver.index.VerificationException):
+            fdroidserver.index.verify_jar_signature(testfile)
+
+    def test_get_public_key_from_jar_succeeds(self):
+        basedir = os.path.dirname(__file__)
+        source_dir = os.path.join(basedir, 'signindex')
+        for f in ('testy.jar', 'guardianproject.jar'):
+            testfile = os.path.join(source_dir, f)
+            jar = zipfile.ZipFile(testfile)
+            _, fingerprint = fdroidserver.index.get_public_key_from_jar(jar)
+            # comparing fingerprints should be sufficient
+            if f == 'testy.jar':
+                self.assertTrue(fingerprint ==
+                                '818E469465F96B704E27BE2FEE4C63AB' +
+                                '9F83DDF30E7A34C7371A4728D83B0BC1')
+            if f == 'guardianproject.jar':
+                self.assertTrue(fingerprint ==
+                                'B7C2EEFD8DAC7806AF67DFCD92EB1812' +
+                                '6BC08312A7F2D6F3862E46013C7A6135')
+
+    def test_get_public_key_from_jar_fails(self):
+        basedir = os.path.dirname(__file__)
+        source_dir = os.path.join(basedir, 'signindex')
+        testfile = os.path.join(source_dir, 'unsigned.jar')
+        jar = zipfile.ZipFile(testfile)
+        with self.assertRaises(fdroidserver.index.VerificationException):
+            fdroidserver.index.get_public_key_from_jar(jar)
+
+    def test_download_repo_index_no_fingerprint(self):
+        with self.assertRaises(fdroidserver.index.VerificationException):
+            fdroidserver.index.download_repo_index("http://example.org")
+
+    def test_download_repo_index_no_jar(self):
+        with self.assertRaises(zipfile.BadZipFile):
+            fdroidserver.index.download_repo_index("http://example.org?fingerprint=nope")
+
+    # TODO test_download_repo_index with an actual repository
+
+
+if __name__ == "__main__":
+    parser = optparse.OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
+
+    newSuite = unittest.TestSuite()
+    newSuite.addTest(unittest.makeSuite(IndexTest))
+    unittest.main()
