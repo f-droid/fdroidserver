@@ -690,7 +690,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
 
         if not usecache:
             logging.debug("Processing " + name)
-            repo_file = {}
+            repo_file = collections.OrderedDict()
             # TODO rename apkname globally to something more generic
             repo_file['name'] = name
             repo_file['apkName'] = name
@@ -775,9 +775,9 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
         if os.path.exists(os.path.join(repodir, srcfilename)):
             apk['srcname'] = srcfilename
         apk['size'] = os.path.getsize(apkfile)
-        apk['uses-permission'] = set()
-        apk['uses-permission-sdk-23'] = set()
-        apk['features'] = set()
+        apk['uses-permission'] = []
+        apk['uses-permission-sdk-23'] = []
+        apk['features'] = []
         apk['icons_src'] = {}
         apk['icons'] = {}
         apk['antiFeatures'] = set()
@@ -1065,7 +1065,7 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
             os.makedirs(icon_dir)
 
     apks = []
-    for apkfile in glob.glob(os.path.join(repodir, '*.apk')):
+    for apkfile in sorted(glob.glob(os.path.join(repodir, '*.apk'))):
         apkfilename = apkfile[len(repodir) + 1:]
         (skip, apk, cachechanged) = scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk)
         if skip:

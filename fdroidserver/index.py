@@ -139,7 +139,7 @@ def make(apps, sortedids, apks, repodir, archive):
                 appsWithPackages[packageName] = newapp
                 break
 
-    requestsdict = dict()
+    requestsdict = collections.OrderedDict()
     for command in ('install', 'uninstall'):
         packageNames = []
         key = command + '_list'
@@ -199,7 +199,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict):
                 k = k[:1].lower() + k[1:]
             d[k] = v
 
-    output_packages = dict()
+    output_packages = collections.OrderedDict()
     output['packages'] = output_packages
     for package in packages:
         packageName = package['packageName']
@@ -414,7 +414,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
                     if perm_name.startswith("android.permission."):
                         perm_name = perm_name[19:]
                     old_permissions.add(perm_name)
-                addElementNonEmpty('permissions', ','.join(old_permissions), doc, apkel)
+                addElementNonEmpty('permissions', ','.join(sorted(old_permissions)), doc, apkel)
 
                 for permission in sorted_permissions:
                     permel = doc.createElement('uses-permission')
