@@ -42,6 +42,10 @@ from distutils.version import LooseVersion
 from queue import Queue
 from zipfile import ZipFile
 
+from pyasn1.codec.der import decoder, encoder
+from pyasn1_modules import rfc2315
+from pyasn1.error import PyAsn1Error
+
 import fdroidserver.metadata
 from .asynchronousfilereader import AsynchronousFileReader
 
@@ -2219,6 +2223,26 @@ def get_cert_fingerprint(pubkey):
     digest = hashlib.sha256(pubkey).digest()
     ret = [' '.join("%02X" % b for b in bytearray(digest))]
     return " ".join(ret)
+
+
+def get_certificate(certificate_file):
+    """
+    Extracts a certificate from the given file.
+    :param certificate_file: file bytes (as string) representing the certificate
+    :return: A binary representation of the certificate's public key, or None in case of error
+    """
+    content = decoder.decode(certificate_file, asn1Spec=rfc2315.ContentInfo())[0]
+    if content.getComponentByName('contentType') != rfc2315.signedData:
+        return None
+    content = decoder.decode(content.getComponentByName('content'),
+                             asn1Spec=rfc2315.SignedData())[0]
+    try:
+        certificates = content.getComponentByName('certificates')
+        cert = certificates[0].getComponentByName('certificate')
+    except PyAsn1Error:
+        logging.error("Certificates not found.")
+        return None
+    return encoder.encode(cert)
 
 
 def write_to_config(thisconfig, key, value=None, config_file=None):

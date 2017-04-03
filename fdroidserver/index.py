@@ -36,8 +36,6 @@ from datetime import datetime
 from xml.dom.minidom import Document
 
 import requests
-from pyasn1.codec.der import decoder, encoder
-from pyasn1_modules import rfc2315
 
 from fdroidserver import metadata, signindex, common
 from fdroidserver.common import FDroidPopen, FDroidPopenBytes
@@ -621,23 +619,7 @@ def get_public_key_from_jar(jar):
         raise VerificationException("Found multiple signing certificates for repository.")
 
     # extract public key from certificate
-    public_key = get_public_key_from_certificate(jar.read(certs[0]))
+    public_key = common.get_certificate(jar.read(certs[0]))
     public_key_fingerprint = common.get_cert_fingerprint(public_key).replace(' ', '')
 
     return public_key, public_key_fingerprint
-
-
-def get_public_key_from_certificate(certificate_file):
-    """
-    Extracts a public key from the given certificate.
-    :param certificate_file: file bytes (as string) representing the certificate
-    :return: A binary representation of the certificate's public key
-    """
-    content = decoder.decode(certificate_file, asn1Spec=rfc2315.ContentInfo())[0]
-    if content.getComponentByName('contentType') != rfc2315.signedData:
-        raise VerificationException("Unexpected certificate format.")
-    content = decoder.decode(content.getComponentByName('content'),
-                             asn1Spec=rfc2315.SignedData())[0]
-    certificates = content.getComponentByName('certificates')
-    cert = certificates[0].getComponentByName('certificate')
-    return encoder.encode(cert)
