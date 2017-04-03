@@ -682,7 +682,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
                     repo_file['added'] = a
                 else:
                     repo_file['added'] = datetime(*a[:6])
-            if repo_file['hash'] == shasum:
+            if repo_file.get('hash') == shasum:
                 logging.debug("Reading " + name + " from cache")
                 usecache = True
             else:
@@ -759,7 +759,7 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
     usecache = False
     if apkfilename in apkcache:
         apk = apkcache[apkfilename]
-        if apk['hash'] == shasum:
+        if apk.get('hash') == shasum:
             logging.debug("Reading " + apkfilename + " from cache")
             usecache = True
         else:
