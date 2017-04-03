@@ -49,7 +49,8 @@ options = None
 
 def make_binary_transparency_log(repodirs, btrepo='binary_transparency',
                                  url=None,
-                                 commit_title='fdroid update'):
+                                 commit_title='fdroid update',
+                                 git_remote=None):
     '''Log the indexes in a standalone git repo to serve as a "binary
     transparency" log.
 
@@ -57,6 +58,7 @@ def make_binary_transparency_log(repodirs, btrepo='binary_transparency',
 
     '''
 
+    logging.info('Committing indexes to ' + btrepo)
     if os.path.exists(os.path.join(btrepo, '.git')):
         gitrepo = git.Repo(btrepo)
     else:
@@ -140,6 +142,17 @@ For more info on this idea:
             gitrepo.index.add([os.path.join(repodir, os.path.basename(f)), ])
 
     gitrepo.index.commit(commit_title)
+    if git_remote:
+        logging.info('Pushing binary transparency log to ' + git_remote)
+        origin = git.remote.Remote(gitrepo, 'origin')
+        if origin in gitrepo.remotes:
+            origin = gitrepo.remote('origin')
+            if 'set_url' in dir(origin):  # added in GitPython 2.x
+                origin.set_url(git_remote)
+        else:
+            origin = gitrepo.create_remote('origin', git_remote)
+        origin.fetch()
+        origin.push('master')
 
 
 def main():
@@ -153,7 +166,7 @@ def main():
     parser.add_argument("-u", "--url", default='https://f-droid.org',
                         help="The base URL for the repo to log (default: https://f-droid.org)")
     parser.add_argument("--git-remote", default=None,
-                        help="Create a repo signing key in a keystore")
+                        help="Push the log to this git remote repository")
     options = parser.parse_args()
 
     if options.verbose:
@@ -213,7 +226,8 @@ def main():
 
     if new_files:
         os.chdir(tempdirbase)
-        make_binary_transparency_log(repodirs, options.git_repo, options.url, 'fdroid btlog')
+        make_binary_transparency_log(repodirs, options.git_repo, options.url, 'fdroid btlog',
+                                     git_remote=options.git_remote)
     shutil.rmtree(tempdirbase, ignore_errors=True)
 
 if __name__ == "__main__":
