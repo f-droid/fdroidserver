@@ -10,9 +10,9 @@ import shutil
 import sys
 import tempfile
 import unittest
+import textwrap
 from zipfile import ZipFile
 
-import fdroidserver.signindex
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -20,6 +20,7 @@ print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
+import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
 
@@ -232,6 +233,53 @@ class CommonTest(unittest.TestCase):
         otherapk.close()
         self.assertFalse(fdroidserver.common.verify_apk_signature(twosigapk))
         self.assertIsNone(fdroidserver.common.verify_apks(sourceapk, twosigapk, tmpdir))
+
+    def test_write_to_config(self):
+        with tempfile.TemporaryDirectory() as tmpPath:
+            cfgPath = os.path.join(tmpPath, 'config.py')
+            with open(cfgPath, 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent("""\
+                    # abc
+                    # test = 'example value'
+                    default_me= '%%%'
+
+                    # comment
+                    do_not_touch = "good value"
+                    default_me="!!!"
+
+                    key="123"    # inline"""))
+
+            cfg = {'key': '111', 'default_me_orig': 'orig'}
+            fdroidserver.common.write_to_config(cfg, 'key', config_file=cfgPath)
+            fdroidserver.common.write_to_config(cfg, 'default_me', config_file=cfgPath)
+            fdroidserver.common.write_to_config(cfg, 'test', value='test value', config_file=cfgPath)
+            fdroidserver.common.write_to_config(cfg, 'new_key', value='new', config_file=cfgPath)
+
+            with open(cfgPath, 'r', encoding='utf-8') as f:
+                self.assertEqual(f.read(), textwrap.dedent("""\
+                    # abc
+                    test = 'test value'
+                    default_me = 'orig'
+
+                    # comment
+                    do_not_touch = "good value"
+
+                    key = "111"    # inline
+
+                    new_key = "new"
+                    """))
+
+    def test_write_to_config_when_empty(self):
+        with tempfile.TemporaryDirectory() as tmpPath:
+            cfgPath = os.path.join(tmpPath, 'config.py')
+            with open(cfgPath, 'w') as f:
+                pass
+            fdroidserver.common.write_to_config({}, 'key', 'val', cfgPath)
+            with open(cfgPath, 'r', encoding='utf-8') as f:
+                self.assertEqual(f.read(), textwrap.dedent("""\
+
+                key = "val"
+                """))
 
 
 if __name__ == "__main__":
