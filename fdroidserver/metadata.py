@@ -815,6 +815,8 @@ def post_metadata_parse(app):
 
     if isinstance(app.Categories, str):
         app.Categories = [app.Categories]
+    elif app.Categories is None:
+        app.Categories = ['None']
     else:
         app.Categories = [str(i) for i in app.Categories]
 
