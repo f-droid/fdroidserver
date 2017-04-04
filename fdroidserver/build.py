@@ -28,6 +28,7 @@ import traceback
 import time
 import json
 import requests
+import tempfile
 from configparser import ConfigParser
 from argparse import ArgumentParser
 import logging
@@ -1218,8 +1219,42 @@ def main():
                         except requests.exceptions.HTTPError as e:
                             raise FDroidException('downloading Binaries from %s failed' % url) from e
 
+                        # Now we check weather the build can be verified to
+                        # match the supplied binary or not. Should the
+                        # comparison fail, we mark this build as a failure
+                        # and remove everything from the unsigend folder.
+                        with tempfile.TemporaryDirectory() as tmpdir:
+                            unsigned_apk = \
+                                '{0}_{1}.apk'.format(appid,
+                                                     build.versionCode)
+                            unsigned_apk = os.path.join(output_dir,
+                                                        unsigned_apk)
+                            compare_result = \
+                                common.compare_apks(of, unsigned_apk,
+                                                    tmpdir, log_dir,
+                                                    skip_manual_diff=True)
+                            if compare_result:
+                                compare_result = compare_result.split('\n')
+                                line_count = len(compare_result)
+                                compare_result = compare_result[:299]
+                                if line_count > len(compare_result):
+                                    line_difference = \
+                                        line_count - len(compare_result)
+                                    compare_result.append('%d more lines ...' %
+                                                          line_difference)
+                                compare_result = '\n'.join(compare_result)
+                                raise FDroidException('compared built binary '
+                                                      'to supplied reference '
+                                                      'binary but failed',
+                                                      compare_result)
+                            else:
+                                logging.info('compared built binary to '
+                                             'supplied reference binary '
+                                             'successfully')
+
                     build_succeeded.append(app)
                     wikilog = "Build succeeded"
+
             except VCSException as vcse:
                 reason = str(vcse).split('\n', 1)[0] if options.verbose else str(vcse)
                 logging.error("VCS error while building app %s: %s" % (

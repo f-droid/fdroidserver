@@ -2049,7 +2049,7 @@ def verify_apk_signature(apk, jar=False):
 apk_badchars = re.compile('''[/ :;'"]''')
 
 
-def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
+def compare_apks(apk1, apk2, tmp_dir, log_dir=None, skip_manual_diff=False):
     """Compare two apks
 
     Returns None if the apk content is the same (apart from the signing key),
@@ -2101,9 +2101,10 @@ def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
     p = FDroidPopen(['diff', '-r', apk1dir, apk2dir], output=False)
     lines = p.output.splitlines()
     if len(lines) != 1 or 'META-INF' not in lines[0]:
-        meld = find_command('meld')
-        if meld is not None:
-            p = FDroidPopen(['meld', apk1dir, apk2dir], output=False)
+        if not skip_manual_diff:
+            meld = find_command('meld')
+            if meld is not None:
+                p = FDroidPopen(['meld', apk1dir, apk2dir], output=False)
         return("Unexpected diff output - " + p.output)
 
     # since everything verifies, delete the comparison to keep cruft down
