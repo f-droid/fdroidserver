@@ -42,6 +42,7 @@ commands = {
     "stats": "Update the stats of the repo",
     "server": "Interact with the repo HTTP server",
     "signindex": "Sign indexes created using update --nosign",
+    "btlog": "Update the binary transparency log for a URL",
 }
 
 
