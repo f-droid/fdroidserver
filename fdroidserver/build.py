@@ -29,6 +29,7 @@ import time
 import json
 import requests
 import tempfile
+import textwrap
 from configparser import ConfigParser
 from argparse import ArgumentParser
 import logging
@@ -223,6 +224,45 @@ def vm_test_ssh_into_builder():
     sshs.close()
 
 
+def vm_new_get_clean_builder(serverdir, reset=False):
+    if not os.path.isdir(serverdir):
+        logging.info("buildserver path does not exists, creating %s", serverdir)
+        os.makedirs(serverdir)
+    vagrantfile = os.path.join(serverdir, 'Vagrantfile')
+    if not os.path.isfile(vagrantfile):
+        with open(os.path.join('builder', 'Vagrantfile'), 'w') as f:
+            f.write(textwrap.dedent("""\
+                # generated file, do not change.
+
+                Vagrant.configure("2") do |config|
+                    config.vm.box = "buildserver"
+                    config.vm.synced_folder ".", "/vagrant", disabled: true
+                end
+                """))
+    vm = vmtools.get_build_vm(serverdir)
+    if reset:
+        logging.info('resetting buildserver by request')
+    elif not vm.check_okay():
+        logging.info('resetting buildserver because it appears to be absent or broken')
+        reset = True
+    elif not vm.snapshot_exists('fdroidclean'):
+        logging.info("resetting buildserver, because snapshot 'fdroidclean' is not present")
+        reset = True
+
+    if reset:
+        vm.destroy()
+    vm.up()
+    vm.suspend()
+
+    if reset:
+        vm.snapshot_create('fdroidclean')
+    else:
+        vm.snapshot_revert('droidclean')
+    vm.resume()
+
+    return get_vagrant_sshinfo()
+
+
 def vm_get_clean_builder(reset=False):
     """Get a clean VM ready to do a buildserver build.
 
@@ -374,7 +414,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
     else:
         logging.getLogger("paramiko").setLevel(logging.WARN)
 
-    sshinfo = vm_get_clean_builder()
+    # sshinfo = vm_get_clean_builder()
+    sshinfo = vm_new_get_clean_builder('builder')
 
     try:
         if not buildserverid:
