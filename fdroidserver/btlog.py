@@ -199,6 +199,7 @@ def main():
             headers = {
                 'User-Agent': 'F-Droid 0.102.3'
             }
+            etag = None
             if os.path.exists(http_headers_file):
                 with open(http_headers_file) as fp:
                     etag = json.load(fp)['ETag']
