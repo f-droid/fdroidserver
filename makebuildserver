@@ -6,6 +6,7 @@ import re
 import requests
 import stat
 import sys
+import shutil
 import subprocess
 import vagrant
 import hashlib
@@ -114,6 +115,14 @@ if config['vm_provider'] == 'libvirt':
 if config['apt_package_cache']:
     config['aptcachedir'] = cachedir + '/apt/archives'
     logger.debug('aptcachedir is set to %s', config['aptcachedir'])
+    aptcachelock = os.path.join(config['aptcachedir'], 'lock')
+    if os.path.isfile(aptcachelock):
+        logger.info('apt cache dir is locked, removing lock')
+        os.remove(aptcachelock)
+    aptcachepartial = os.path.join(config['aptcachedir'], 'partial')
+    if os.path.isdir(aptcachepartial):
+        logger.info('removing partial downloads from apt cache dir')
+        shutil.rmtree(aptcachepartial)
 
 cachefiles = [
     ('https://dl.google.com/android/repository/tools_r25.2.3-linux.zip',
@@ -486,9 +495,9 @@ def main():
     debug_log_vagrant_vm(serverdir, config['domain'])
     try:
         v.up(provision=True)
-    except subprocess.CalledProcessError as e:
+    except fdroidserver.vmtools.FDroidBuildVmException as e:
         debug_log_vagrant_vm(serverdir, config['domain'])
-        logger.critical('could not bring buildserver vm up. %s', e)
+        logger.exception('could not bring buildserver vm up. %s', e)
         sys.exit(1)
 
     if config['copy_caches_from_host']:
