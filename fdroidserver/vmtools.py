@@ -173,7 +173,7 @@ class FDroidBuildVm():
             self.vgrnt.destroy()
             logger.debug('vagrant destroy completed')
         except subprocess.CalledProcessError as e:
-            logger.debug('vagrant destroy failed: %s', e)
+            logger.exception('vagrant destroy failed: %s', e)
         vgrntdir = joinpath(self.srvdir, '.vagrant')
         try:
             shutil.rmtree(vgrntdir)
@@ -325,12 +325,22 @@ class LibvirtBuildVm(FDroidBuildVm):
             logger.warn('could not connect to storage-pool \'default\',' +
                         'skipping packaging buildserver box')
 
+    def box_add(self, boxname, boxfile, force=True):
+        boximg = '%s_vagrant_box_image_0.img' % (boxname)
+        if force:
+            try:
+                _check_call(['virsh', '-c', 'qemu:///system', 'vol-delete', '--pool', 'default', boximg])
+                logger.debug("removed old box image '%s' from libvirt storeage pool", boximg)
+            except subprocess.CalledProcessError as e:
+                logger.debug("tired removing old box image '%s', file was not present in first place", boximg, exc_info=e)
+        super().box_add(boxname, boxfile, force)
+
     def box_remove(self, boxname):
         super().box_remove(boxname)
         try:
             _check_call(['virsh', '-c', 'qemu:///system', 'vol-delete', '--pool', 'default', '%s_vagrant_box_image_0.img' % (boxname)])
         except subprocess.CalledProcessError as e:
-            logger.info('tired removing \'%s\', file was not present in first place: %s', boxname, e)
+            logger.debug("tired removing '%s', file was not present in first place", boxname, exc_info=e)
 
     def snapshot_create(self, snapshot_name):
         logger.info("creating snapshot '%s' for vm '%s'", snapshot_name, self.srvname)
