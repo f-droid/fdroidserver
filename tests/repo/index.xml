@@ -54,14 +54,18 @@
 			<version>0.1</version>
 			<versioncode>1444412523</versioncode>
 			<apkname>obb.main.oldversion_1444412523.apk</apkname>
-			<hash type="sha256">7562a36c9e2b38013b96663cf41f0f290dc7a248a81befa8d89e14f390c94c7f</hash>
-			<size>11470</size>
+			<hash type="sha256">c5f149e526f89c05c62923bdb7bb1e2be5673c46ec85143f41e514340631449c</hash>
+			<size>14323</size>
 			<sdkver>4</sdkver>
 			<targetSdkVersion>18</targetSdkVersion>
 			<obbMainFile>main.1434483388.obb.main.oldversion.obb</obbMainFile>
 			<obbMainFileSha256>d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7</obbMainFileSha256>
 			<added>2013-12-31</added>
-			<sig>b4964fd759edaa54e65bb476d0276880</sig>
+			<sig>eb41d4d6082bb3e81c3d58dbf7fc7332</sig>
+			<permissions>ACCESS_NETWORK_STATE,ACCESS_WIFI_STATE,BLUETOOTH,BLUETOOTH_ADMIN,CHANGE_NETWORK_STATE,CHANGE_WIFI_MULTICAST_STATE,CHANGE_WIFI_STATE,INTERNET,NFC,RECEIVE_BOOT_COMPLETED</permissions>
+			<uses-permission maxSdkVersion="22" name="android.permission.ACCESS_NETWORK_STATE"/>
+			<uses-permission maxSdkVersion="18" name="android.permission.BLUETOOTH_ADMIN"/>
+			<uses-permission-sdk-23 maxSdkVersion="25" name="android.permission.WRITE_SETTINGS"/>
 		</package>
 	</application>
 	<application id="obb.main.twoversions">
