@@ -857,7 +857,7 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
                     perm_match['maxSdkVersion']
                 )
 
-                apk['uses-permission'].add(permission)
+                apk['uses-permission'].append(permission)
             elif line.startswith('uses-permission-sdk-23:'):
                 perm_match = re.match(APK_PERMISSION_PAT, line).groupdict()
                 if perm_match['maxSdkVersion']:
@@ -867,7 +867,7 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
                     perm_match['maxSdkVersion']
                 )
 
-                apk['uses-permission-sdk-23'].add(permission_sdk_23)
+                apk['uses-permission-sdk-23'].append(permission_sdk_23)
 
             elif line.startswith('uses-feature:'):
                 feature = re.match(APK_FEATURE_PAT, line).group(1)
@@ -1410,7 +1410,7 @@ def main():
 
     git_remote = config.get('binary_transparency_remote')
     if git_remote or os.path.isdir(os.path.join('binary_transparency', '.git')):
-        btlog.make_binary_transparency_log(repodirs, git_remote=git_remote)
+        btlog.make_binary_transparency_log(repodirs)
 
     if config['update_stats']:
         # Update known apks info...

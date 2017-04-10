@@ -281,20 +281,20 @@ def upload_to_virustotal(repo_section, vt_apikey):
             logging.info(response['verbose_msg'] + " " + response['permalink'])
 
 
-def push_binary_transparency(binary_transparency_remote):
+def push_binary_transparency(git_repo_path, git_remote):
     '''push the binary transparency git repo to the specifed remote'''
     import git
 
-    repo = git.Repo('binary_transparency_log')
-    pushremote = None
-    for remote in repo.remotes:
-        if remote.url == binary_transparency_remote:
-            pushremote = remote
-            break
-
-    if not pushremote:
-        pushremote = repo.create_remote('fdroid_server_update', binary_transparency_remote)
-    pushremote.push('master')
+    logging.info('Pushing binary transparency log to ' + git_remote)
+    gitrepo = git.Repo(git_repo_path)
+    origin = git.remote.Remote(gitrepo, 'origin')
+    if origin in gitrepo.remotes:
+        origin = gitrepo.remote('origin')
+        if 'set_url' in dir(origin):  # added in GitPython 2.x
+            origin.set_url(git_remote)
+    else:
+        origin = gitrepo.create_remote('origin', git_remote)
+    origin.push('master')
 
 
 def main():
@@ -376,11 +376,12 @@ def main():
     if not config.get('awsbucket') \
             and not config.get('serverwebroot') \
             and not config.get('servergitmirrors') \
-            and not config.get('uploadto_androidobservatory') \
+            and not config.get('androidobservatory') \
+            and not config.get('binary_transparency_remote') \
             and not config.get('virustotal_apikey') \
             and local_copy_dir is None:
         logging.warn('No option set! Edit your config.py to set at least one among:\n'
-                     + 'serverwebroot, servergitmirrors, local_copy_dir, awsbucket, virustotal_apikey or uploadto_androidobservatory')
+                     + 'serverwebroot, servergitmirrors, local_copy_dir, awsbucket, virustotal_apikey, androidobservatory, or binary_transparency_remote')
         sys.exit(1)
 
     repo_sections = ['repo']
@@ -428,14 +429,14 @@ def main():
                 update_servergitmirrors(servergitmirrors, repo_section)
             if config.get('awsbucket'):
                 update_awsbucket(repo_section)
-            if config.get('uploadto_androidobservatory'):
+            if config.get('androidobservatory'):
                 upload_to_android_observatory(repo_section)
             if config.get('virustotal_apikey'):
                 upload_to_virustotal(repo_section, config.get('virustotal_apikey'))
 
             binary_transparency_remote = config.get('binary_transparency_remote')
             if binary_transparency_remote:
-                push_binary_transparency(binary_transparency_remote)
+                push_binary_transparency('binary_transparency', binary_transparency_remote)
 
     sys.exit(0)
 
