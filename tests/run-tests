@@ -352,7 +352,8 @@ $fdroid server update --local-copy-dir=$LOCALCOPYDIR
 NEWREPOROOT=`create_test_dir`
 cd $NEWREPOROOT
 $fdroid init
-$fdroid server update --local-copy-dir=$LOCALCOPYDIR --sync-from-local-copy-dir
+echo "sync_from_local_copy_dir = True" >> config.py
+$fdroid server update --local-copy-dir=$LOCALCOPYDIR
 
 
 #------------------------------------------------------------------------------#

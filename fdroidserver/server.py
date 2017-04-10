@@ -308,8 +308,6 @@ def main():
                         help="Specify an identity file to provide to SSH for rsyncing")
     parser.add_argument("--local-copy-dir", default=None,
                         help="Specify a local folder to sync the repo to")
-    parser.add_argument("--sync-from-local-copy-dir", action="store_true", default=False,
-                        help="Before uploading to servers, sync from local copy dir")
     parser.add_argument("--no-checksum", action="store_true", default=False,
                         help="Don't use rsync checksums")
     options = parser.parse_args()
@@ -417,7 +415,7 @@ def main():
     elif options.command == 'update':
         for repo_section in repo_sections:
             if local_copy_dir is not None:
-                if config['sync_from_local_copy_dir'] and os.path.exists(repo_section):
+                if config['sync_from_local_copy_dir']:
                     sync_from_localcopy(repo_section, local_copy_dir)
                 else:
                     update_localcopy(repo_section, local_copy_dir)
