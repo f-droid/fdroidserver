@@ -376,11 +376,11 @@ def main():
     if not config.get('awsbucket') \
             and not config.get('serverwebroot') \
             and not config.get('servergitmirrors') \
-            and not config.get('uploadto_androidobservatory') \
+            and not config.get('androidobservatory') \
             and not config.get('virustotal_apikey') \
             and local_copy_dir is None:
         logging.warn('No option set! Edit your config.py to set at least one among:\n'
-                     + 'serverwebroot, servergitmirrors, local_copy_dir, awsbucket, virustotal_apikey or uploadto_androidobservatory')
+                     + 'serverwebroot, servergitmirrors, local_copy_dir, awsbucket, virustotal_apikey or androidobservatory')
         sys.exit(1)
 
     repo_sections = ['repo']
@@ -428,7 +428,7 @@ def main():
                 update_servergitmirrors(servergitmirrors, repo_section)
             if config.get('awsbucket'):
                 update_awsbucket(repo_section)
-            if config.get('uploadto_androidobservatory'):
+            if config.get('androidobservatory'):
                 upload_to_android_observatory(repo_section)
             if config.get('virustotal_apikey'):
                 upload_to_virustotal(repo_section, config.get('virustotal_apikey'))

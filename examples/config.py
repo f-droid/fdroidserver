@@ -223,7 +223,7 @@ The repository of older versions of applications from the main demo repository.
 
 # If you want to upload the release apk file to androidobservatory.org
 #
-# uploadto_androidobservatory = False
+# androidobservatory = False
 
 
 # If you want to upload the release apk file to virustotal.com
