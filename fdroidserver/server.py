@@ -32,6 +32,8 @@ from . import common
 config = None
 options = None
 
+BINARY_TRANSPARENCY_DIR = 'binary_transparency'
+
 
 def update_awsbucket(repo_section):
     '''
@@ -182,16 +184,41 @@ def _local_sync(fromdir, todir):
 
 
 def sync_from_localcopy(repo_section, local_copy_dir):
+    '''Syncs the repo from "local copy dir" filesystem to this box
+
+    In setups that use offline signing, this is the last step that
+    syncs the repo from the "local copy dir" e.g. a thumb drive to the
+    repo on the local filesystem.  That local repo is then used to
+    push to all the servers that are configured.
+
+    '''
     logging.info('Syncing from local_copy_dir to this repo.')
     # trailing slashes have a meaning in rsync which is not needed here, so
     # make sure both paths have exactly one trailing slash
     _local_sync(os.path.join(local_copy_dir, repo_section).rstrip('/') + '/',
                 repo_section.rstrip('/') + '/')
 
+    offline_copy = os.path.join(local_copy_dir, BINARY_TRANSPARENCY_DIR)
+    if os.path.exists(os.path.join(offline_copy, '.git')):
+        online_copy = os.path.join(os.getcwd(), BINARY_TRANSPARENCY_DIR)
+        push_binary_transparency(offline_copy, online_copy)
+
 
 def update_localcopy(repo_section, local_copy_dir):
+    '''copy data from offline to the "local copy dir" filesystem
+
+    This updates the copy of this repo used to shuttle data from an
+    offline signing machine to the online machine, e.g. on a thumb
+    drive.
+
+    '''
     # local_copy_dir is guaranteed to have a trailing slash in main() below
     _local_sync(repo_section, local_copy_dir)
+
+    offline_copy = os.path.join(os.getcwd(), BINARY_TRANSPARENCY_DIR)
+    if os.path.isdir(os.path.join(offline_copy, '.git')):
+        online_copy = os.path.join(local_copy_dir, BINARY_TRANSPARENCY_DIR)
+        push_binary_transparency(offline_copy, online_copy)
 
 
 def update_servergitmirrors(servergitmirrors, repo_section):
@@ -282,8 +309,28 @@ def upload_to_virustotal(repo_section, vt_apikey):
 
 
 def push_binary_transparency(git_repo_path, git_remote):
-    '''push the binary transparency git repo to the specifed remote'''
+    '''push the binary transparency git repo to the specifed remote.
+
+    If the remote is a local directory, make sure it exists, and is a
+    git repo.  This is used to move this git repo from an offline
+    machine onto a flash drive, then onto the online machine.
+
+    This is also used in offline signing setups, where it then also
+    creates a "local copy dir" git repo that serves to shuttle the git
+    data from the offline machine to the online machine.  In that
+    case, git_remote is a dir on the local file system, e.g. a thumb
+    drive.
+
+    '''
     import git
+
+    if os.path.isdir(os.path.dirname(git_remote)) \
+       and not os.path.isdir(os.path.join(git_remote, '.git')):
+        os.makedirs(git_remote, exist_ok=True)
+        repo = git.Repo.init(git_remote)
+        config = repo.config_writer()
+        config.set_value('receive', 'denyCurrentBranch', 'updateInstead')
+        config.release()
 
     logging.info('Pushing binary transparency log to ' + git_remote)
     gitrepo = git.Repo(git_repo_path)
@@ -434,7 +481,8 @@ def main():
 
             binary_transparency_remote = config.get('binary_transparency_remote')
             if binary_transparency_remote:
-                push_binary_transparency('binary_transparency', binary_transparency_remote)
+                push_binary_transparency(BINARY_TRANSPARENCY_DIR,
+                                         binary_transparency_remote)
 
     sys.exit(0)
 
