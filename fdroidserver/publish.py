@@ -72,12 +72,9 @@ def main():
         logging.warning("No unsigned directory - nothing to do")
         sys.exit(1)
 
-    for f in [config['keystorepassfile'],
-              config['keystore'],
-              config['keypassfile']]:
-        if not os.path.exists(f):
-            logging.error("Config error - missing '{0}'".format(f))
-            sys.exit(1)
+    if not os.path.exists(config['keystore']):
+        logging.error("Config error - missing '{0}'".format(config['keystore']))
+        sys.exit(1)
 
     # It was suggested at
     #    https://dev.guardianproject.info/projects/bazaar/wiki/FDroid_Audit
@@ -175,9 +172,13 @@ def main():
 
             # See if we already have a key for this application, and
             # if not generate one...
+            env_vars = {
+                'FDROID_KEY_STORE_PASS': config['keystorepass'],
+                'FDROID_KEY_PASS': config['keypass'],
+            }
             p = FDroidPopen([config['keytool'], '-list',
                              '-alias', keyalias, '-keystore', config['keystore'],
-                             '-storepass:file', config['keystorepassfile']])
+                             '-storepass:env', 'FDROID_KEY_STORE_PASS'], envs=env_vars)
             if p.returncode != 0:
                 logging.info("Key does not exist - generating...")
                 p = FDroidPopen([config['keytool'], '-genkey',
@@ -185,20 +186,18 @@ def main():
                                  '-alias', keyalias,
                                  '-keyalg', 'RSA', '-keysize', '2048',
                                  '-validity', '10000',
-                                 '-storepass:file', config['keystorepassfile'],
-                                 '-keypass:file', config['keypassfile'],
-                                 '-dname', config['keydname']])
-                # TODO keypass should be sent via stdin
+                                 '-storepass:env', 'FDROID_KEY_STORE_PASS',
+                                 '-keypass:env', 'FDROID_KEY_PASS',
+                                 '-dname', config['keydname']], envs=env_vars)
                 if p.returncode != 0:
                     raise BuildException("Failed to generate key")
 
             # Sign the application...
             p = FDroidPopen([config['jarsigner'], '-keystore', config['keystore'],
-                             '-storepass:file', config['keystorepassfile'],
-                             '-keypass:file', config['keypassfile'], '-sigalg',
+                             '-storepass:env', 'FDROID_KEY_STORE_PASS',
+                             '-keypass:env', 'FDROID_KEY_PASS', '-sigalg',
                              'SHA1withRSA', '-digestalg', 'SHA1',
-                             apkfile, keyalias])
-            # TODO keypass should be sent via stdin
+                             apkfile, keyalias], envs=env_vars)
             if p.returncode != 0:
                 raise BuildException("Failed to sign application")
 

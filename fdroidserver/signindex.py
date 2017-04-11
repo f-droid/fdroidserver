@@ -40,14 +40,18 @@ def sign_jar(jar):
     https://code.google.com/p/android/issues/detail?id=38321
     """
     args = [config['jarsigner'], '-keystore', config['keystore'],
-            '-storepass:file', config['keystorepassfile'],
+            '-storepass:env', 'FDROID_KEY_STORE_PASS',
             '-digestalg', 'SHA1', '-sigalg', 'SHA1withRSA',
             jar, config['repo_keyalias']]
     if config['keystore'] == 'NONE':
         args += config['smartcardoptions']
     else:  # smardcards never use -keypass
-        args += ['-keypass:file', config['keypassfile']]
-    p = common.FDroidPopen(args)
+        args += ['-keypass:env', 'FDROID_KEY_PASS']
+    env_vars = {
+        'FDROID_KEY_STORE_PASS': config['keystorepass'],
+        'FDROID_KEY_PASS': config['keypass'],
+    }
+    p = common.FDroidPopen(args, envs=env_vars)
     if p.returncode != 0:
         logging.critical("Failed to sign %s!" % jar)
         sys.exit(1)
