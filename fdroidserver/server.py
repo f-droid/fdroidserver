@@ -315,6 +315,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
 
     '''
     import git
+    from clint.textui import progress
     if config.get('local_copy_dir') \
        and not config.get('sync_from_local_copy_dir'):
         logging.debug('Offline machine, skipping git mirror generation until `fdroid server update`')
@@ -340,12 +341,27 @@ def update_servergitmirrors(servergitmirrors, repo_section):
             logging.info('Mirroring to: ' + mirror)
 
         # sadly index.add don't allow the --all parameter
+        logging.debug('Adding all files to git mirror')
         repo.git.add(all=True)
+        logging.debug('Committing all files into git mirror')
         repo.index.commit("fdroidserver git-mirror")
 
+        if options.verbose:
+            bar = progress.Bar()
+
+            class MyProgressPrinter(git.RemoteProgress):
+                def update(self, op_code, current, maximum=None, message=None):
+                    if isinstance(maximum, float):
+                        bar.show(current, maximum)
+            progress = MyProgressPrinter()
+        else:
+            progress = None
         # push for every remote. This will overwrite the git history
         for remote in repo.remotes:
-            remote.push('master', force=True, set_upstream=True)
+            logging.debug('Pushing to ' + remote.url)
+            remote.push('master', force=True, set_upstream=True, progress=progress)
+        if progress:
+            bar.done()
 
 
 def upload_to_android_observatory(repo_section):
