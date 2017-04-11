@@ -24,6 +24,7 @@ import paramiko
 import pwd
 import re
 import subprocess
+import time
 from argparse import ArgumentParser
 import logging
 import shutil
@@ -401,21 +402,53 @@ def upload_to_android_observatory(repo_section):
 
 
 def upload_to_virustotal(repo_section, vt_apikey):
+    import json
     import requests
 
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
+    logging.getLogger("requests").setLevel(logging.WARNING)
+
     if repo_section == 'repo':
-        for f in glob.glob(os.path.join(repo_section, '*.apk')):
-            fpath = f
-            fname = os.path.basename(f)
-            logging.info('Uploading ' + fname + ' to virustotal.com')
+        with open(os.path.join(repo_section, 'index-v1.json')) as fp:
+            index = json.load(fp)
+        for packageName, packages in index['packages'].items():
+            for package in packages:
+                filename = package['apkName']
+                repofilename = os.path.join(repo_section, filename)
+                logging.info('Uploading ' + repofilename + ' to virustotal.com')
 
-            # upload the file with a post request
-            params = {'apikey': vt_apikey}
-            files = {'file': (fname, open(fpath, 'rb'))}
-            r = requests.post('https://www.virustotal.com/vtapi/v2/file/scan', files=files, params=params)
-            response = r.json()
+                headers = {
+                    "User-Agent": "F-Droid"
+                }
+                params = {
+                    'apikey': vt_apikey,
+                    'resource': package['hash'],
+                }
+                download = False
+                while True:
+                    r = requests.post('https://www.virustotal.com/vtapi/v2/file/report',
+                                      params=params, headers=headers)
+                    if r.status_code == 200:
+                        response = r.json()
+                        if response['response_code'] == 0:
+                            download = True
+                        elif response['positives'] > 0:
+                            logging.warning(repofilename + ' has been flagged by virustotal '
+                                            + str(response['positives']) + 'times:'
+                                            + '\n\t' + response['permalink'])
+                        break
+                    elif r.status_code == 204:
+                        time.sleep(10)  # wait for public API rate limiting
 
-            logging.info(response['verbose_msg'] + " " + response['permalink'])
+                if download:
+                    files = {
+                        'file': (filename, open(repofilename, 'rb'))
+                    }
+                    r = requests.post('https://www.virustotal.com/vtapi/v2/file/scan',
+                                      params=params, headers=headers, files=files)
+                    response = r.json()
+
+                    logging.info(response['verbose_msg'] + " " + response['permalink'])
 
 
 def push_binary_transparency(git_repo_path, git_remote):
