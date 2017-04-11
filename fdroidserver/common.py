@@ -254,10 +254,6 @@ def read_config(opts, config_file='config.py'):
 
     fill_config_defaults(config)
 
-    for k in ["keystorepass", "keypass"]:
-        if k in config:
-            write_password_file(k)
-
     for k in ["repo_description", "archive_description"]:
         if k in config:
             config[k] = clean_description(config[k])
@@ -379,21 +375,6 @@ def ensure_build_tools_exists(thisconfig):
         logging.critical('Android Build Tools path "'
                          + versioned_build_tools + '" does not exist!')
         sys.exit(3)
-
-
-def write_password_file(pwtype, password=None):
-    '''
-    writes out passwords to a protected file instead of passing passwords as
-    command line argments
-    '''
-    filename = '.fdroid.' + pwtype + '.txt'
-    fd = os.open(filename, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
-    if password is None:
-        os.write(fd, config[pwtype].encode('utf-8'))
-    else:
-        os.write(fd, password.encode('utf-8'))
-    os.close(fd)
-    config[pwtype + 'file'] = filename
 
 
 def get_local_metadata_files():
@@ -1744,18 +1725,23 @@ def SdkToolsPopen(commands, cwd=None, output=True):
                        cwd=cwd, output=output)
 
 
-def FDroidPopenBytes(commands, cwd=None, output=True, stderr_to_stdout=True):
+def FDroidPopenBytes(commands, cwd=None, envs=None, output=True, stderr_to_stdout=True):
     """
     Run a command and capture the possibly huge output as bytes.
 
     :param commands: command and argument list like in subprocess.Popen
     :param cwd: optionally specifies a working directory
+    :param envs: a optional dictionary of environment variables and their values
     :returns: A PopenResult.
     """
 
     global env
     if env is None:
         set_FDroidPopen_env()
+
+    process_env = env.copy()
+    if envs is not None and len(envs) > 0:
+        process_env.update(envs)
 
     if cwd:
         cwd = os.path.normpath(cwd)
@@ -1766,7 +1752,7 @@ def FDroidPopenBytes(commands, cwd=None, output=True, stderr_to_stdout=True):
     result = PopenResult()
     p = None
     try:
-        p = subprocess.Popen(commands, cwd=cwd, shell=False, env=env,
+        p = subprocess.Popen(commands, cwd=cwd, shell=False, env=process_env,
                              stdout=subprocess.PIPE, stderr=stderr_param)
     except OSError as e:
         raise BuildException("OSError while trying to execute " +
@@ -1806,15 +1792,16 @@ def FDroidPopenBytes(commands, cwd=None, output=True, stderr_to_stdout=True):
     return result
 
 
-def FDroidPopen(commands, cwd=None, output=True, stderr_to_stdout=True):
+def FDroidPopen(commands, cwd=None, envs=None, output=True, stderr_to_stdout=True):
     """
     Run a command and capture the possibly huge output as a str.
 
     :param commands: command and argument list like in subprocess.Popen
     :param cwd: optionally specifies a working directory
+    :param envs: a optional dictionary of environment variables and their values
     :returns: A PopenResult.
     """
-    result = FDroidPopenBytes(commands, cwd, output, stderr_to_stdout)
+    result = FDroidPopenBytes(commands, cwd, envs, output, stderr_to_stdout)
     result.output = result.output.decode('utf-8', 'ignore')
     return result
 
@@ -2180,18 +2167,19 @@ def genkeystore(localconfig):
     if not os.path.exists(keystoredir):
         os.makedirs(keystoredir, mode=0o700)
 
-    write_password_file("keystorepass", localconfig['keystorepass'])
-    write_password_file("keypass", localconfig['keypass'])
+    env_vars = {
+        'FDROID_KEY_STORE_PASS': localconfig['keystorepass'],
+        'FDROID_KEY_PASS': localconfig['keypass'],
+    }
     p = FDroidPopen([config['keytool'], '-genkey',
                      '-keystore', localconfig['keystore'],
                      '-alias', localconfig['repo_keyalias'],
                      '-keyalg', 'RSA', '-keysize', '4096',
                      '-sigalg', 'SHA256withRSA',
                      '-validity', '10000',
-                     '-storepass:file', config['keystorepassfile'],
-                     '-keypass:file', config['keypassfile'],
-                     '-dname', localconfig['keydname']])
-    # TODO keypass should be sent via stdin
+                     '-storepass:env', 'FDROID_KEY_STORE_PASS',
+                     '-keypass:env', 'FDROID_KEY_PASS',
+                     '-dname', localconfig['keydname']], envs=env_vars)
     if p.returncode != 0:
         raise BuildException("Failed to generate key", p.output)
     os.chmod(localconfig['keystore'], 0o0600)
@@ -2200,15 +2188,15 @@ def genkeystore(localconfig):
         p = FDroidPopen([config['keytool'], '-list', '-v',
                          '-keystore', localconfig['keystore'],
                          '-alias', localconfig['repo_keyalias'],
-                         '-storepass:file', config['keystorepassfile']])
+                         '-storepass:env', 'FDROID_KEY_STORE_PASS'], envs=env_vars)
         logging.info(p.output.strip() + '\n\n')
     # get the public key
     p = FDroidPopenBytes([config['keytool'], '-exportcert',
                           '-keystore', localconfig['keystore'],
                           '-alias', localconfig['repo_keyalias'],
-                          '-storepass:file', config['keystorepassfile']]
+                          '-storepass:env', 'FDROID_KEY_STORE_PASS']
                          + config['smartcardoptions'],
-                         output=False, stderr_to_stdout=False)
+                         envs=env_vars, output=False, stderr_to_stdout=False)
     if p.returncode != 0 or len(p.output) < 20:
         raise BuildException("Failed to get public key", p.output)
     pubkey = p.output

@@ -69,10 +69,10 @@ def make(apps, sortedids, apks, repodir, archive):
         if 'keystore' not in common.config:
             nosigningkey = True
             logging.critical("'keystore' not found in config.py!")
-        if 'keystorepass' not in common.config and 'keystorepassfile' not in common.config:
+        if 'keystorepass' not in common.config:
             nosigningkey = True
             logging.critical("'keystorepass' not found in config.py!")
-        if 'keypass' not in common.config and 'keypassfile' not in common.config:
+        if 'keypass' not in common.config:
             nosigningkey = True
             logging.critical("'keypass' not found in config.py!")
         if not os.path.exists(common.config['keystore']):
@@ -501,12 +501,13 @@ def extract_pubkey():
     if 'repo_pubkey' in common.config:
         pubkey = unhexlify(common.config['repo_pubkey'])
     else:
+        env_vars = {'FDROID_KEY_STORE_PASS': common.config['keystorepass']}
         p = FDroidPopenBytes([common.config['keytool'], '-exportcert',
                               '-alias', common.config['repo_keyalias'],
                               '-keystore', common.config['keystore'],
-                              '-storepass:file', common.config['keystorepassfile']]
+                              '-storepass:env', 'FDROID_KEY_STORE_PASS']
                              + common.config['smartcardoptions'],
-                             output=False, stderr_to_stdout=False)
+                             envs=env_vars, output=False, stderr_to_stdout=False)
         if p.returncode != 0 or len(p.output) < 20:
             msg = "Failed to get repo pubkey!"
             if common.config['keystore'] == 'NONE':
