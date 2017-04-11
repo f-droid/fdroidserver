@@ -223,8 +223,23 @@ def update_localcopy(repo_section, local_copy_dir):
 
 
 def update_servergitmirrors(servergitmirrors, repo_section):
-    # depend on GitPython only if users set a git mirror
+    '''update repo mirrors stored in git repos
+
+    This is a hack to use public git repos as F-Droid repos.  It
+    recreates the git repo from scratch each time, so that there is no
+    history.  That keeps the size of the git repo small.  Services
+    like GitHub or GitLab have a size limit of something like 1 gig.
+    This git repo is only a git repo for the purpose of being hosted.
+    For history, there is the archive section, and there is the binary
+    transparency log.
+
+    '''
     import git
+    if config.get('local_copy_dir') \
+       and not config.get('sync_from_local_copy_dir'):
+        logging.debug('Offline machine, skipping git mirror generation until `fdroid server update`')
+        return
+
     # right now we support only 'repo' git-mirroring
     if repo_section == 'repo':
         git_mirror_path = 'git-mirror'

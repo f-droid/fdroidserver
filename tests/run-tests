@@ -591,17 +591,15 @@ set -e
 echo_header "copy tests/repo, update with binary transparency log"
 
 REPOROOT=`create_test_dir`
+GIT_REMOTE=`create_test_dir`
 GNUPGHOME=$REPOROOT/gnupghome
 KEYSTORE=$WORKSPACE/tests/keystore.jks
-mkdir $REPOROOT/git_remote
-cd $REPOROOT/git_remote
-git init --bare
 cd $REPOROOT
 $fdroid init --keystore $KEYSTORE --repo-keyalias=sova
 cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $REPOROOT/
 echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
 echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo "binary_transparency_remote = '$REPOROOT/git_remote'" >> config.py
+echo "binary_transparency_remote = '$GIT_REMOTE'" >> config.py
 echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
 $fdroid update --verbose
 $fdroid server update --verbose
@@ -611,7 +609,7 @@ test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 cd binary_transparency
 [ `git rev-list --count HEAD` == "2" ]
-cd $REPOROOT/git_remote
+cd $GIT_REMOTE
 [ `git rev-list --count HEAD` == "2" ]
 
 
@@ -660,6 +658,61 @@ rm -f $KEYSTORE
 ! test -e $KEYSTORE
 $fdroid update --create-key
 test -e $KEYSTORE
+
+
+#------------------------------------------------------------------------------#
+echo_header "sign binary repo in offline box, then publishing from online box"
+
+OFFLINE_ROOT=`create_test_dir`
+KEYSTORE=$WORKSPACE/tests/keystore.jks
+LOCAL_COPY_DIR=`create_test_dir`/fdroid
+mkdir $LOCAL_COPY_DIR
+ONLINE_ROOT=`create_test_dir`
+SERVERWEBROOT=`create_test_dir`
+
+# create offline binary transparency log
+cd $OFFLINE_ROOT
+mkdir binary_transparency
+cd binary_transparency
+git init
+
+# fake git remote server for binary transparency log
+BINARY_TRANSPARENCY_REMOTE=`create_test_dir`
+
+# fake git remote server for repo mirror
+SERVER_GIT_MIRROR=`create_test_dir`
+cd $SERVER_GIT_MIRROR
+git init
+git config receive.denyCurrentBranch updateInstead
+
+cd $OFFLINE_ROOT
+$fdroid init --keystore $KEYSTORE --repo-keyalias=sova
+cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $OFFLINE_ROOT/
+
+echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo "servergitmirrors = '$SERVER_GIT_MIRROR'" >> config.py
+echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
+echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
+$fdroid update --verbose
+grep -F '<application id=' repo/index.xml > /dev/null
+cd binary_transparency
+[ `git rev-list --count HEAD` == "1" ]
+cd ..
+$fdroid server update --verbose
+grep -F '<application id=' $LOCAL_COPY_DIR/repo/index.xml > /dev/null
+cd $ONLINE_ROOT
+echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
+echo "sync_from_local_copy_dir = True" >> config.py
+echo "serverwebroots = '$SERVERWEBROOT'" >> config.py
+echo "servergitmirrors = '$SERVER_GIT_MIRROR'" >> config.py
+echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
+echo "binary_transparency_remote = '$BINARY_TRANSPARENCY_REMOTE'" >> config.py
+$fdroid server update --verbose
+cd $BINARY_TRANSPARENCY_REMOTE
+[ `git rev-list --count HEAD` == "1" ]
+cd $SERVER_GIT_MIRROR
+[ `git rev-list --count HEAD` == "1" ]
 
 
 #------------------------------------------------------------------------------#
