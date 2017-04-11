@@ -48,6 +48,86 @@ def update_awsbucket(repo_section):
     logging.debug('Syncing "' + repo_section + '" to Amazon S3 bucket "'
                   + config['awsbucket'] + '"')
 
+    if common.set_command_in_config('s3cmd'):
+        update_awsbucket_s3cmd(repo_section)
+    else:
+        update_awsbucket_libcloud(repo_section)
+
+
+def update_awsbucket_s3cmd(repo_section):
+    '''upload using the CLI tool s3cmd, which provides rsync-like sync
+
+    The upload is done in multiple passes to reduce the chance of
+    interfering with an existing client-server interaction.  In the
+    first pass, only new files are uploaded.  In the second pass,
+    changed files are uploaded, overwriting what is on the server.  On
+    the third/last pass, the indexes are uploaded, and any removed
+    files are deleted from the server.  The last pass is the only pass
+    to use a full MD5 checksum of all files to detect changes.
+    '''
+
+    logging.debug('using s3cmd to sync with ' + config['awsbucket'])
+
+    configfilename = '.s3cfg'
+    fd = os.open(configfilename, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
+    os.write(fd, '[default]\n'.encode('utf-8'))
+    os.write(fd, ('access_key = ' + config['awsaccesskeyid'] + '\n').encode('utf-8'))
+    os.write(fd, ('secret_key = ' + config['awssecretkey'] + '\n').encode('utf-8'))
+    os.close(fd)
+
+    s3url = 's3://' + config['awsbucket'] + '/fdroid/'
+    s3cmdargs = [
+        's3cmd',
+        'sync',
+        '--config=' + configfilename,
+        '--acl-public',
+    ]
+    if options.verbose:
+        s3cmdargs += ['--verbose']
+    if options.quiet:
+        s3cmdargs += ['--quiet']
+    indexxml = os.path.join(repo_section, 'index.xml')
+    indexjar = os.path.join(repo_section, 'index.jar')
+    indexv1jar = os.path.join(repo_section, 'index-v1.jar')
+    logging.debug('s3cmd sync new files in ' + repo_section + ' to ' + s3url)
+    if subprocess.call(s3cmdargs +
+                       ['--no-check-md5', '--skip-existing',
+                        '--exclude', indexxml,
+                        '--exclude', indexjar,
+                        '--exclude', indexv1jar,
+                        repo_section, s3url]) != 0:
+        sys.exit(1)
+    logging.debug('s3cmd sync all files in ' + repo_section + ' to ' + s3url)
+    if subprocess.call(s3cmdargs +
+                       ['--no-check-md5',
+                        '--exclude', indexxml,
+                        '--exclude', indexjar,
+                        '--exclude', indexv1jar,
+                        repo_section, s3url]) != 0:
+        sys.exit(1)
+
+    logging.debug('s3cmd sync indexes ' + repo_section + ' to ' + s3url + ' and delete')
+    s3cmdargs.append('--delete-removed')
+    s3cmdargs.append('--delete-after')
+    if options.no_checksum:
+        s3cmdargs.append('--no-check-md5')
+    else:
+        s3cmdargs.append('--check-md5')
+    if subprocess.call(s3cmdargs + [repo_section, s3url]) != 0:
+        sys.exit(1)
+
+
+def update_awsbucket_libcloud(repo_section):
+    '''
+    Upload the contents of the directory `repo_section` (including
+    subdirectories) to the AWS S3 "bucket". The contents of that subdir of the
+    bucket will first be deleted.
+
+    Requires AWS credentials set in config.py: awsaccesskeyid, awssecretkey
+    '''
+
+    logging.debug('using Apache libcloud to sync with ' + config['awsbucket'])
+
     import libcloud.security
     libcloud.security.VERIFY_SSL_CERT = True
     from libcloud.storage.types import Provider, ContainerDoesNotExistError
