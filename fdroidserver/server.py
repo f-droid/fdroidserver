@@ -22,6 +22,7 @@ import hashlib
 import os
 import paramiko
 import pwd
+import re
 import subprocess
 from argparse import ArgumentParser
 import logging
@@ -235,9 +236,8 @@ def update_servergitmirrors(servergitmirrors, repo_section):
 
         repo = git.Repo.init(repo_dir)
 
-        # take care of each mirror
         for mirror in servergitmirrors:
-            hostname = mirror.split("/")[2]
+            hostname = re.sub(r'\W*\w+\W+(\w+).*', r'\1', mirror)
             repo.create_remote(hostname, mirror)
             logging.info('Mirroring to: ' + mirror)
 
