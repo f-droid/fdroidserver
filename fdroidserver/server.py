@@ -227,23 +227,22 @@ def update_servergitmirrors(servergitmirrors, repo_section):
     import git
     # right now we support only 'repo' git-mirroring
     if repo_section == 'repo':
-        # create a new git-mirror folder
-        repo_dir = os.path.join('.', 'git-mirror/')
+        git_mirror_path = 'git-mirror'
+        dotgit = os.path.join(git_mirror_path, '.git')
+        if not os.path.isdir(git_mirror_path):
+            os.mkdir(git_mirror_path)
+        elif os.path.isdir(dotgit):
+            shutil.rmtree(dotgit)
 
-        # remove if already present
-        if os.path.isdir(repo_dir):
-            shutil.rmtree(repo_dir)
+        fdroid_repo_path = os.path.join(git_mirror_path, "fdroid")
+        _local_sync(repo_section, fdroid_repo_path)
 
-        repo = git.Repo.init(repo_dir)
+        repo = git.Repo.init(git_mirror_path)
 
         for mirror in servergitmirrors:
             hostname = re.sub(r'\W*\w+\W+(\w+).*', r'\1', mirror)
             repo.create_remote(hostname, mirror)
             logging.info('Mirroring to: ' + mirror)
-
-        # copy local 'repo' to 'git-mirror/fdroid/repo directory' with _local_sync
-        fdroid_repo_path = os.path.join(repo_dir, "fdroid")
-        _local_sync(repo_section, fdroid_repo_path)
 
         # sadly index.add don't allow the --all parameter
         repo.git.add(all=True)
