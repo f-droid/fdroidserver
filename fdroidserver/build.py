@@ -242,9 +242,6 @@ def vm_new_get_clean_builder(serverdir, reset=False):
     vm = vmtools.get_build_vm(serverdir)
     if reset:
         logging.info('resetting buildserver by request')
-    elif not vm.check_okay():
-        logging.info('resetting buildserver because it appears to be absent or broken')
-        reset = True
     elif not vm.snapshot_exists('fdroidclean'):
         logging.info("resetting buildserver, because snapshot 'fdroidclean' is not present")
         reset = True
@@ -259,7 +256,7 @@ def vm_new_get_clean_builder(serverdir, reset=False):
         vm.snapshot_create('fdroidclean')
     else:
         logging.info('builserver ok: reverting to clean snapshot')
-        vm.snapshot_revert('droidclean')
+        vm.snapshot_revert('fdroidclean')
     vm.up()
 
     return get_vagrant_sshinfo()
