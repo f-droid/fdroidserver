@@ -86,6 +86,8 @@ packages="
  python-magic
  python-setuptools
  python3-gnupg
+ python3-pyasn1
+ python3-pyasn1-modules
  python3-requests
  python3-yaml
  qt5-default
