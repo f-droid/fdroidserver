@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from os import remove as rmfile
-from os.path import isdir, isfile, join as joinpath, basename, abspath, expanduser, exists as pathexists
+from os.path import isdir, isfile, join as joinpath, basename, abspath, expanduser
 import math
 import json
 import tarfile
@@ -30,14 +30,14 @@ from logging import getLogger
 logger = getLogger('fdroidserver-vmtools')
 
 
-def _check_call(cmd, shell=False):
+def _check_call(cmd, shell=False, cwd=None):
     logger.debug(' '.join(cmd))
-    return subprocess.check_call(cmd, shell=shell)
+    return subprocess.check_call(cmd, shell=shell, cwd=cwd)
 
 
-def _check_output(cmd, shell=False):
+def _check_output(cmd, shell=False, cwd=None):
     logger.debug(' '.join(cmd))
-    return subprocess.check_output(cmd, shell=shell)
+    return subprocess.check_output(cmd, shell=shell, cwd=cwd)
 
 
 def get_build_vm(srvdir, provider=None):
@@ -74,7 +74,7 @@ def get_build_vm(srvdir, provider=None):
         except subprocess.CalledProcessError:
             pass
     try:
-        vbox_installed = 0 == _check_call(['which', 'VBoxHeadless'], shell=True)
+        vbox_installed = 0 == _check_call(['which', 'VBoxHeadless'])
     except subprocess.CalledProcessError:
         vbox_installed = False
     if kvm_installed and vbox_installed:
@@ -127,6 +127,7 @@ class FDroidBuildVm():
         self.srvdir = srvdir
         self.srvname = basename(srvdir) + '_default'
         self.vgrntfile = joinpath(srvdir, 'Vagrantfile')
+        self.srvuuid = self._vagrant_fetch_uuid()
         if not isdir(srvdir):
             raise FDroidBuildVmException("Can not init vagrant, directory %s not present" % (srvdir))
         if not isfile(self.vgrntfile):
@@ -139,6 +140,7 @@ class FDroidBuildVm():
             self.vgrnt.up(provision=provision)
             logger.info('...waiting a sec...')
             time.sleep(10)
+            self.srvuuid = self._vagrant_fetch_uuid()
         except subprocess.CalledProcessError as e:
             raise FDroidBuildVmException("could not bring up vm '%s'" % self.srvname) from e
 
@@ -185,6 +187,25 @@ class FDroidBuildVm():
     def _vagrant_file_name(self, name):
         return name.replace('/', '-VAGRANTSLASH-')
 
+    def _vagrant_fetch_uuid(self):
+        if isfile(joinpath(self.srvdir, '.vagrant')):
+            # Vagrant 1.0 - it's a json file...
+            with open(joinpath(self.srvdir, '.vagrant')) as f:
+                id = json.load(f)['active']['default']
+                logger.debug('vm uuid: %s', id)
+            return id
+        elif isfile(joinpath(self.srvdir, '.vagrant', 'machines',
+                             'default', self.provider, 'id')):
+            # Vagrant 1.2 (and maybe 1.1?) it's a directory tree...
+            with open(joinpath(self.srvdir, '.vagrant', 'machines',
+                               'default', self.provider, 'id')) as f:
+                id = f.read()
+                logger.debug('vm uuid: %s', id)
+            return id
+        else:
+            logger.debug('vm uuid is None')
+            return None
+
     def box_add(self, boxname, boxfile, force=True):
         """Add vagrant box to vagrant.
 
@@ -224,8 +245,8 @@ class FDroidBuildVm():
 
 class LibvirtBuildVm(FDroidBuildVm):
     def __init__(self, srvdir):
-        super().__init__(srvdir)
         self.provider = 'libvirt'
+        super().__init__(srvdir)
         import libvirt
 
         try:
@@ -373,13 +394,13 @@ class LibvirtBuildVm(FDroidBuildVm):
 class VirtualboxBuildVm(FDroidBuildVm):
 
     def __init__(self, srvdir):
-        super().__init__(srvdir)
         self.provider = 'virtualbox'
+        super().__init__(srvdir)
 
     def snapshot_create(self, snapshot_name):
         logger.info("creating snapshot '%s' for vm '%s'", snapshot_name, self.srvname)
         try:
-            _check_call(['VBoxManage', 'snapshot', self.srvname, 'take', 'fdroidclean'], cwd=self.srvdir)
+            _check_call(['VBoxManage', 'snapshot', self.srvuuid, 'take', 'fdroidclean'], cwd=self.srvdir)
             logger.info('...waiting a sec...')
             time.sleep(10)
         except subprocess.CalledProcessError as e:
@@ -390,7 +411,7 @@ class VirtualboxBuildVm(FDroidBuildVm):
     def snapshot_list(self):
         try:
             o = _check_output(['VBoxManage', 'snapshot',
-                               self.srvname, 'list',
+                               self.srvuuid, 'list',
                                '--details'], cwd=self.srvdir)
             return o
         except subprocess.CalledProcessError as e:
@@ -399,16 +420,18 @@ class VirtualboxBuildVm(FDroidBuildVm):
                                          % (self.srvname)) from e
 
     def snapshot_exists(self, snapshot_name):
-        return 'fdroidclean' in self.snapshot_list()
+        try:
+            return str(snapshot_name) in str(self.snapshot_list())
+        except FDroidBuildVmException:
+            return False
 
     def snapshot_revert(self, snapshot_name):
         logger.info("reverting vm '%s' to snapshot '%s'",
                     self.srvname, snapshot_name)
         try:
-            p = _check_call(['VBoxManage', 'snapshot', self.srvname,
-                             'restore', 'fdroidclean'], cwd=self.srvdir)
+            _check_call(['VBoxManage', 'snapshot', self.srvuuid,
+                         'restore', 'fdroidclean'], cwd=self.srvdir)
         except subprocess.CalledProcessError as e:
             raise FDroidBuildVmException("could not load snapshot "
                                          "'fdroidclean' for vm '%s'"
                                          % (self.srvname)) from e
-
