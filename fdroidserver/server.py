@@ -409,13 +409,21 @@ def upload_to_virustotal(repo_section, vt_apikey):
     logging.getLogger("requests").setLevel(logging.WARNING)
 
     if repo_section == 'repo':
+        if not os.path.exists('virustotal'):
+            os.mkdir('virustotal')
         with open(os.path.join(repo_section, 'index-v1.json')) as fp:
             index = json.load(fp)
         for packageName, packages in index['packages'].items():
             for package in packages:
+                outputfilename = os.path.join('virustotal',
+                                              packageName + '_' + str(package.get('versionCode'))
+                                              + '_' + package['hash'] + '.json')
+                if os.path.exists(outputfilename):
+                    logging.debug(package['apkName'] + ' results are in ' + outputfilename)
+                    continue
                 filename = package['apkName']
                 repofilename = os.path.join(repo_section, filename)
-                logging.info('Uploading ' + repofilename + ' to virustotal.com')
+                logging.info('Checking if ' + repofilename + ' is on virustotal')
 
                 headers = {
                     "User-Agent": "F-Droid"
@@ -424,23 +432,32 @@ def upload_to_virustotal(repo_section, vt_apikey):
                     'apikey': vt_apikey,
                     'resource': package['hash'],
                 }
-                download = False
+                needs_file_upload = False
                 while True:
                     r = requests.post('https://www.virustotal.com/vtapi/v2/file/report',
                                       params=params, headers=headers)
                     if r.status_code == 200:
                         response = r.json()
                         if response['response_code'] == 0:
-                            download = True
-                        elif response['positives'] > 0:
+                            needs_file_upload = True
+                        else:
+                            response['filename'] = filename
+                            response['packageName'] = packageName
+                            response['versionCode'] = package.get('versionCode')
+                            response['versionName'] = package.get('versionName')
+                            with open(outputfilename, 'w') as fp:
+                                json.dump(response, fp, indent=2, sort_keys=True)
+
+                        if response.get('positives') > 0:
                             logging.warning(repofilename + ' has been flagged by virustotal '
-                                            + str(response['positives']) + 'times:'
+                                            + str(response['positives']) + ' times:'
                                             + '\n\t' + response['permalink'])
                         break
                     elif r.status_code == 204:
                         time.sleep(10)  # wait for public API rate limiting
 
-                if download:
+                if needs_file_upload:
+                    logging.info('Uploading ' + repofilename + ' to virustotal')
                     files = {
                         'file': (filename, open(repofilename, 'rb'))
                     }
