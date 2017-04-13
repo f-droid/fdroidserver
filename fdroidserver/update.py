@@ -551,10 +551,13 @@ def insert_obbs(repodir, apps, apks):
                 break
 
 
-def insert_graphics(repodir, apps):
-    """Scans for screenshot PNG files in statically defined screenshots
-    directory and adds them to the app metadata.  The screenshots and
-    graphic must be PNG or JPEG files ending with ".png", ".jpg", or ".jpeg"
+def insert_localized_app_metadata(apps):
+    """scans standard locations for graphics and localized text
+
+    Scans for localized description files, store graphics, and
+    screenshot PNG files in statically defined screenshots directory
+    and adds them to the app metadata.  The screenshots and graphic
+    must be PNG or JPEG files ending with ".png", ".jpg", or ".jpeg"
     and must be in the following layout:
 
     repo/packageName/locale/featureGraphic.png
@@ -563,16 +566,22 @@ def insert_graphics(repodir, apps):
 
     Where "packageName" is the app's packageName and "locale" is the locale
     of the graphics, e.g. what language they are in, using the IETF RFC5646
-    format (en-US, fr-CA, es-MX, etc).  This is following this pattern:
+    format (en-US, fr-CA, es-MX, etc).
+
+    This will also scan the app's git for a fastlane folder, and the
+    metadata/ folder and the apps' source repos for standard locations
+    of graphic and screenshot files.  If it finds them, it will copy
+    them into the repo.  The fastlane files follow this pattern:
     https://github.com/fastlane/fastlane/blob/1.109.0/supply/README.md#images-and-screenshots
-
-    This will also scan the metadata/ folder and the apps' source repos
-    for standard locations of graphic and screenshot files.  If it finds
-    them, it will copy them into the repo.
-
-    :param repodir: repo directory to scan
-
     """
+
+    def get_localized_dict(apps, packageName, locale):
+        '''get the dict to add localized store metadata to'''
+        if 'localized' not in apps[packageName]:
+            apps[packageName]['localized'] = collections.OrderedDict()
+        if locale not in apps[packageName]['localized']:
+            apps[packageName]['localized'][locale] = collections.OrderedDict()
+        return apps[packageName]['localized'][locale]
 
     allowed_extensions = ('png', 'jpg', 'jpeg')
     graphicnames = ('featureGraphic', 'icon', 'promoGraphic', 'tvBanner')
@@ -582,13 +591,39 @@ def insert_graphics(repodir, apps):
     sourcedirs = glob.glob(os.path.join('build', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z][A-Z-.@]*'))
     sourcedirs += glob.glob(os.path.join('metadata', '[A-Za-z]*', '[a-z][a-z][A-Z-.@]*'))
 
+    char_limits = config['char_limits']
+
     for d in sorted(sourcedirs):
         if not os.path.isdir(d):
             continue
         for root, dirs, files in os.walk(d):
             segments = root.split('/')
-            destdir = os.path.join('repo', segments[1], segments[-1])  # repo/packageName/locale
+            packageName = segments[1]
+            if packageName not in apps:
+                logging.debug(packageName + ' does not have app metadata, skipping l18n scan.')
+                continue
+            locale = segments[-1]
+            destdir = os.path.join('repo', packageName, locale)
             for f in files:
+                key = None
+                if f == 'full_description.txt':
+                    key = 'Description'
+                elif f == 'short_description.txt':
+                    key = 'Summary'
+                elif f == 'title.txt':
+                    key = 'Name'
+                elif f == 'video.txt':
+                    key = 'Video'
+
+                if key:
+                    limit = char_limits[key]
+                    localized = get_localized_dict(apps, packageName, locale)
+                    with open(os.path.join(root, f)) as fp:
+                        text = fp.read()[:limit]
+                        if len(text) > 0:
+                            localized[key] = text
+                    continue
+
                 base, extension = common.get_extension(f)
                 if base in graphicnames and extension in allowed_extensions:
                     os.makedirs(destdir, mode=0o755, exist_ok=True)
@@ -622,11 +657,7 @@ def insert_graphics(repodir, apps):
                 logging.warning('Found "%s" graphic without metadata for app "%s"!'
                                 % (filename, packageName))
                 continue
-            if 'localized' not in apps[packageName]:
-                apps[packageName]['localized'] = collections.OrderedDict()
-            if locale not in apps[packageName]['localized']:
-                apps[packageName]['localized'][locale] = collections.OrderedDict()
-            graphics = apps[packageName]['localized'][locale]
+            graphics = get_localized_dict(apps, packageName, locale)
 
             if extension not in allowed_extensions:
                 logging.warning('Only PNG and JPEG are supported for graphics, found: ' + f)
@@ -1364,7 +1395,7 @@ def main():
         apps = metadata.read_metadata()
 
     insert_obbs(repodirs[0], apps, apks)
-    insert_graphics(repodirs[0], apps)
+    insert_localized_app_metadata(apps)
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
