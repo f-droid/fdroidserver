@@ -1538,7 +1538,7 @@ def main():
             config['keydname'] = 'CN=' + config['repo_keyalias'] + ', OU=F-Droid'
             common.write_to_config(config, 'keydname', config['keydname'])
         if 'keystore' not in config:
-            config['keystore'] = common.default_config.keystore
+            config['keystore'] = common.default_config['keystore']
             common.write_to_config(config, 'keystore', config['keystore'])
 
         password = common.genpassword()
