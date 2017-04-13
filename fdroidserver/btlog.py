@@ -221,5 +221,6 @@ def main():
         server.push_binary_transparency(options.git_repo, options.git_remote)
     shutil.rmtree(tempdirbase, ignore_errors=True)
 
+
 if __name__ == "__main__":
     main()
