@@ -184,6 +184,12 @@ class FDroidBuildVm():
     def package(self, output=None, vagrantfile=None, keep_box_file=None):
         self.vgrnt.package(output=output, vagrantfile=vagrantfile)
 
+    def vagrant_uuid_okay(self):
+        '''Having an uuid means that vagrant up has run successfully.'''
+        if self.srvuuid is None:
+            return False
+        return True
+
     def _vagrant_file_name(self, name):
         return name.replace('/', '-VAGRANTSLASH-')
 
