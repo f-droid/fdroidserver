@@ -41,7 +41,7 @@ from . import btlog
 from . import common
 from . import index
 from . import metadata
-from .common import SdkToolsPopen
+from .common import BuildException, SdkToolsPopen
 
 METADATA_VERSION = 18
 
@@ -60,6 +60,17 @@ APK_PERMISSION_PAT = \
 APK_FEATURE_PAT = re.compile(".*name='([^']*)'.*")
 
 screen_densities = ['640', '480', '320', '240', '160', '120']
+screen_resolutions = {
+    "xxxhdpi": '640',
+    "xxhdpi": '480',
+    "xhdpi": '320',
+    "hdpi": '240',
+    "mdpi": '160',
+    "ldpi": '120',
+    "undefined": '-1',
+    "anydpi": '65534',
+    "nodpi": '65535'
+}
 
 all_screen_densities = ['0'] + screen_densities
 
@@ -871,6 +882,196 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
     return repo_files, cachechanged
 
 
+def scan_apk_aapt(apk, apkfile):
+    p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
+    if p.returncode != 0:
+        if options.delete_unknown:
+            if os.path.exists(apkfile):
+                logging.error("Failed to get apk information, deleting " + apkfile)
+                os.remove(apkfile)
+            else:
+                logging.error("Could not find {0} to remove it".format(apkfile))
+        else:
+            logging.error("Failed to get apk information, skipping " + apkfile)
+        raise BuildException("Invaild APK")
+    for line in p.output.splitlines():
+        if line.startswith("package:"):
+            try:
+                apk['packageName'] = re.match(APK_NAME_PAT, line).group(1)
+                apk['versionCode'] = int(re.match(APK_VERCODE_PAT, line).group(1))
+                apk['versionName'] = re.match(APK_VERNAME_PAT, line).group(1)
+            except Exception as e:
+                logging.error("Package matching failed: " + str(e))
+                logging.info("Line was: " + line)
+                sys.exit(1)
+        elif line.startswith("application:"):
+            apk['name'] = re.match(APK_LABEL_PAT, line).group(1)
+            # Keep path to non-dpi icon in case we need it
+            match = re.match(APK_ICON_PAT_NODPI, line)
+            if match:
+                apk['icons_src']['-1'] = match.group(1)
+        elif line.startswith("launchable-activity:"):
+            # Only use launchable-activity as fallback to application
+            if not apk['name']:
+                apk['name'] = re.match(APK_LABEL_PAT, line).group(1)
+            if '-1' not in apk['icons_src']:
+                match = re.match(APK_ICON_PAT_NODPI, line)
+                if match:
+                    apk['icons_src']['-1'] = match.group(1)
+        elif line.startswith("application-icon-"):
+            match = re.match(APK_ICON_PAT, line)
+            if match:
+                density = match.group(1)
+                path = match.group(2)
+                apk['icons_src'][density] = path
+        elif line.startswith("sdkVersion:"):
+            m = re.match(APK_SDK_VERSION_PAT, line)
+            if m is None:
+                logging.error(line.replace('sdkVersion:', '')
+                              + ' is not a valid minSdkVersion!')
+            else:
+                apk['minSdkVersion'] = m.group(1)
+                # if target not set, default to min
+                if 'targetSdkVersion' not in apk:
+                    apk['targetSdkVersion'] = m.group(1)
+        elif line.startswith("targetSdkVersion:"):
+            m = re.match(APK_SDK_VERSION_PAT, line)
+            if m is None:
+                logging.error(line.replace('targetSdkVersion:', '')
+                              + ' is not a valid targetSdkVersion!')
+            else:
+                apk['targetSdkVersion'] = m.group(1)
+        elif line.startswith("maxSdkVersion:"):
+            apk['maxSdkVersion'] = re.match(APK_SDK_VERSION_PAT, line).group(1)
+        elif line.startswith("native-code:"):
+            apk['nativecode'] = []
+            for arch in line[13:].split(' '):
+                apk['nativecode'].append(arch[1:-1])
+        elif line.startswith('uses-permission:'):
+            perm_match = re.match(APK_PERMISSION_PAT, line).groupdict()
+            if perm_match['maxSdkVersion']:
+                perm_match['maxSdkVersion'] = int(perm_match['maxSdkVersion'])
+            permission = UsesPermission(
+                perm_match['name'],
+                perm_match['maxSdkVersion']
+            )
+
+            apk['uses-permission'].append(permission)
+        elif line.startswith('uses-permission-sdk-23:'):
+            perm_match = re.match(APK_PERMISSION_PAT, line).groupdict()
+            if perm_match['maxSdkVersion']:
+                perm_match['maxSdkVersion'] = int(perm_match['maxSdkVersion'])
+            permission_sdk_23 = UsesPermissionSdk23(
+                perm_match['name'],
+                perm_match['maxSdkVersion']
+            )
+
+            apk['uses-permission-sdk-23'].append(permission_sdk_23)
+
+        elif line.startswith('uses-feature:'):
+            feature = re.match(APK_FEATURE_PAT, line).group(1)
+            # Filter out this, it's only added with the latest SDK tools and
+            # causes problems for lots of apps.
+            if feature != "android.hardware.screen.portrait" \
+                    and feature != "android.hardware.screen.landscape":
+                if feature.startswith("android.feature."):
+                    feature = feature[16:]
+                apk['features'].add(feature)
+
+
+def scan_apk_androguard(apk, apkfile):
+    try:
+        from androguard.core.bytecodes.apk import APK
+        apkobject = APK(apkfile)
+        if apkobject.is_valid_APK():
+            arsc = apkobject.get_android_resources()
+        else:
+            if options.delete_unknown:
+                if os.path.exists(apkfile):
+                    logging.error("Failed to get apk information, deleting " + apkfile)
+                    os.remove(apkfile)
+                else:
+                    logging.error("Could not find {0} to remove it".format(apkfile))
+            else:
+                logging.error("Failed to get apk information, skipping " + apkfile)
+            raise BuildException("Invaild APK")
+    except ImportError:
+        logging.critical("androguard library is not installed and aapt not present")
+        sys.exit(1)
+    except FileNotFoundError:
+        logging.error("Could not open apk file for analysis")
+        raise BuildException("Invaild APK")
+
+    apk['packageName'] = apkobject.get_package()
+    apk['versionCode'] = int(apkobject.get_androidversion_code())
+    apk['versionName'] = apkobject.get_androidversion_name()
+    if apk['versionName'][0] == "@":
+        version_id = int(apk['versionName'].replace("@", "0x"), 16)
+        version_id = arsc.get_id(apk['packageName'], version_id)[1]
+        apk['versionName'] = arsc.get_string(apk['packageName'], version_id)[1]
+    apk['name'] = apkobject.get_app_name()
+
+    if apkobject.get_max_sdk_version() is not None:
+        apk['maxSdkVersion'] = apkobject.get_max_sdk_version()
+    apk['minSdkVersion'] = apkobject.get_min_sdk_version()
+    apk['targetSdkVersion'] = apkobject.get_target_sdk_version()
+
+    icon_id = int(apkobject.get_element("application", "icon").replace("@", "0x"), 16)
+    icon_name = arsc.get_id(apk['packageName'], icon_id)[1]
+
+    density_re = re.compile("^res/(.*)/" + icon_name + ".*$")
+
+    for file in apkobject.get_files():
+        d_re = density_re.match(file)
+        if d_re:
+            folder = d_re.group(1).split('-')
+            if len(folder) > 1:
+                resolution = folder[1]
+            else:
+                resolution = 'mdpi'
+            density = screen_resolutions[resolution]
+            apk['icons_src'][density] = d_re.group(0)
+
+    if apk['icons_src'].get('-1') is None:
+        apk['icons_src']['-1'] = apk['icons_src']['160']
+
+    arch_re = re.compile("^lib/(.*)/.*$")
+    arch = set([arch_re.match(file).group(1) for file in apkobject.get_files() if arch_re.match(file)])
+    if len(arch) >= 1:
+        apk['nativecode'] = []
+        apk['nativecode'].extend(sorted(list(arch)))
+
+    xml = apkobject.get_android_manifest_xml()
+
+    for item in xml.getElementsByTagName('uses-permission'):
+        name = str(item.getAttribute("android:name"))
+        maxSdkVersion = item.getAttribute("android:maxSdkVersion")
+        maxSdkVersion = None if maxSdkVersion is '' else int(maxSdkVersion)
+        permission = UsesPermission(
+            name,
+            maxSdkVersion
+        )
+        apk['uses-permission'].append(permission)
+
+    for item in xml.getElementsByTagName('uses-permission-sdk-23'):
+        name = str(item.getAttribute("android:name"))
+        maxSdkVersion = item.getAttribute("android:maxSdkVersion")
+        maxSdkVersion = None if maxSdkVersion is '' else int(maxSdkVersion)
+        permission_sdk_23 = UsesPermissionSdk23(
+            name,
+            maxSdkVersion
+        )
+        apk['uses-permission-sdk-23'].append(permission_sdk_23)
+
+    for item in xml.getElementsByTagName('uses-feature'):
+        feature = str(item.getAttribute("android:name"))
+        if feature != "android.hardware.screen.portrait" \
+                and feature != "android.hardware.screen.landscape":
+            if feature.startswith("android.feature."):
+                feature = feature[16:]
+        apk['features'].append(feature)
+
+
 def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
     """Scan the apk with the given filename in the given repo directory.
 
@@ -888,7 +1089,7 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
 
     if ' ' in apkfilename:
         logging.critical("Spaces in filenames are not allowed.")
-        sys.exit(1)
+        return True, None, False
 
     apkfile = os.path.join(repodir, apkfilename)
     shasum = sha256sum(apkfile)
@@ -921,100 +1122,16 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
         apk['antiFeatures'] = set()
         if has_old_openssl(apkfile):
             apk['antiFeatures'].add('KnownVuln')
-        p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
-        if p.returncode != 0:
-            if options.delete_unknown:
-                if os.path.exists(apkfile):
-                    logging.error("Failed to get apk information, deleting " + apkfile)
-                    os.remove(apkfile)
-                else:
-                    logging.error("Could not find {0} to remove it".format(apkfile))
+
+        try:
+            if common.set_command_in_config('aapt'):
+                logging.warning("Using AAPT for metadata")
+                scan_apk_aapt(apk, apkfile)
             else:
-                logging.error("Failed to get apk information, skipping " + apkfile)
+                logging.warning("Using androguard for metadata")
+                scan_apk_androguard(apk, apkfile)
+        except BuildException:
             return True, None, False
-        for line in p.output.splitlines():
-            if line.startswith("package:"):
-                try:
-                    apk['packageName'] = re.match(APK_NAME_PAT, line).group(1)
-                    apk['versionCode'] = int(re.match(APK_VERCODE_PAT, line).group(1))
-                    apk['versionName'] = re.match(APK_VERNAME_PAT, line).group(1)
-                except Exception as e:
-                    logging.error("Package matching failed: " + str(e))
-                    logging.info("Line was: " + line)
-                    sys.exit(1)
-            elif line.startswith("application:"):
-                apk['name'] = re.match(APK_LABEL_PAT, line).group(1)
-                # Keep path to non-dpi icon in case we need it
-                match = re.match(APK_ICON_PAT_NODPI, line)
-                if match:
-                    apk['icons_src']['-1'] = match.group(1)
-            elif line.startswith("launchable-activity:"):
-                # Only use launchable-activity as fallback to application
-                if not apk['name']:
-                    apk['name'] = re.match(APK_LABEL_PAT, line).group(1)
-                if '-1' not in apk['icons_src']:
-                    match = re.match(APK_ICON_PAT_NODPI, line)
-                    if match:
-                        apk['icons_src']['-1'] = match.group(1)
-            elif line.startswith("application-icon-"):
-                match = re.match(APK_ICON_PAT, line)
-                if match:
-                    density = match.group(1)
-                    path = match.group(2)
-                    apk['icons_src'][density] = path
-            elif line.startswith("sdkVersion:"):
-                m = re.match(APK_SDK_VERSION_PAT, line)
-                if m is None:
-                    logging.error(line.replace('sdkVersion:', '')
-                                  + ' is not a valid minSdkVersion!')
-                else:
-                    apk['minSdkVersion'] = m.group(1)
-                    # if target not set, default to min
-                    if 'targetSdkVersion' not in apk:
-                        apk['targetSdkVersion'] = m.group(1)
-            elif line.startswith("targetSdkVersion:"):
-                m = re.match(APK_SDK_VERSION_PAT, line)
-                if m is None:
-                    logging.error(line.replace('targetSdkVersion:', '')
-                                  + ' is not a valid targetSdkVersion!')
-                else:
-                    apk['targetSdkVersion'] = m.group(1)
-            elif line.startswith("maxSdkVersion:"):
-                apk['maxSdkVersion'] = re.match(APK_SDK_VERSION_PAT, line).group(1)
-            elif line.startswith("native-code:"):
-                apk['nativecode'] = []
-                for arch in line[13:].split(' '):
-                    apk['nativecode'].append(arch[1:-1])
-            elif line.startswith('uses-permission:'):
-                perm_match = re.match(APK_PERMISSION_PAT, line).groupdict()
-                if perm_match['maxSdkVersion']:
-                    perm_match['maxSdkVersion'] = int(perm_match['maxSdkVersion'])
-                permission = UsesPermission(
-                    perm_match['name'],
-                    perm_match['maxSdkVersion']
-                )
-
-                apk['uses-permission'].append(permission)
-            elif line.startswith('uses-permission-sdk-23:'):
-                perm_match = re.match(APK_PERMISSION_PAT, line).groupdict()
-                if perm_match['maxSdkVersion']:
-                    perm_match['maxSdkVersion'] = int(perm_match['maxSdkVersion'])
-                permission_sdk_23 = UsesPermissionSdk23(
-                    perm_match['name'],
-                    perm_match['maxSdkVersion']
-                )
-
-                apk['uses-permission-sdk-23'].append(permission_sdk_23)
-
-            elif line.startswith('uses-feature:'):
-                feature = re.match(APK_FEATURE_PAT, line).group(1)
-                # Filter out this, it's only added with the latest SDK tools and
-                # causes problems for lots of apps.
-                if feature != "android.hardware.screen.portrait" \
-                        and feature != "android.hardware.screen.landscape":
-                    if feature.startswith("android.feature."):
-                        feature = feature[16:]
-                    apk['features'].add(feature)
 
         if 'minSdkVersion' not in apk:
             logging.warn("No SDK version information found in {0}".format(apkfile))
@@ -1029,7 +1146,7 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
         apk['sig'] = getsig(os.path.join(os.getcwd(), apkfile))
         if not apk['sig']:
             logging.critical("Failed to get apk signature")
-            sys.exit(1)
+            return True, None, False
 
         apkzip = zipfile.ZipFile(apkfile, 'r')
 
@@ -1068,10 +1185,8 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
                 with open(icondest, 'wb') as f:
                     f.write(get_icon_bytes(apkzip, iconsrc))
                 apk['icons'][density] = iconfilename
-
-            except Exception as e:
-                logging.warn("Error retrieving icon file: %s" % (e))
-                del apk['icons'][density]
+            except (zipfile.BadZipFile, ValueError, KeyError) as e:
+                logging.warning("Error retrieving icon file: %s" % (icondest))
                 del apk['icons_src'][density]
                 empty_densities.append(density)
 

@@ -46,6 +46,8 @@ from pyasn1.codec.der import decoder, encoder
 from pyasn1_modules import rfc2315
 from pyasn1.error import PyAsn1Error
 
+from distutils.util import strtobool
+
 import fdroidserver.metadata
 from .asynchronousfilereader import AsynchronousFileReader
 
@@ -1690,14 +1692,7 @@ def get_file_extension(filename):
     return os.path.splitext(filename)[1].lower()[1:]
 
 
-def isApkAndDebuggable(apkfile, config):
-    """Returns True if the given file is an APK and is debuggable
-
-    :param apkfile: full path to the apk to check"""
-
-    if get_file_extension(apkfile) != 'apk':
-        return False
-
+def get_apk_debuggable_aapt(apkfile):
     p = SdkToolsPopen(['aapt', 'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
                       output=False)
     if p.returncode != 0:
@@ -1707,6 +1702,35 @@ def isApkAndDebuggable(apkfile, config):
         if 'android:debuggable' in line and not line.endswith('0x0'):
             return True
     return False
+
+
+def get_apk_debuggable_androguard(apkfile):
+    try:
+        from androguard.core.bytecodes.apk import APK
+    except ImportError:
+        logging.critical("androguard library is not installed and aapt not present")
+        sys.exit(1)
+
+    apkobject = APK(apkfile)
+    if apkobject.is_valid_APK():
+        debuggable = apkobject.get_element("application", "debuggable")
+        if debuggable is not None:
+            return bool(strtobool(debuggable))
+    return False
+
+
+def isApkAndDebuggable(apkfile, config):
+    """Returns True if the given file is an APK and is debuggable
+
+    :param apkfile: full path to the apk to check"""
+
+    if get_file_extension(apkfile) != 'apk':
+        return False
+
+    if set_command_in_config('aapt'):
+        return get_apk_debuggable_aapt(apkfile)
+    else:
+        return get_apk_debuggable_androguard(apkfile)
 
 
 class PopenResult:
