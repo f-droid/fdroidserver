@@ -519,30 +519,38 @@ def extract_pubkey():
     return hexlify(pubkey), repo_pubkey_fingerprint
 
 
-# Get raw URL from git service for mirroring
 def get_raw_mirror(url):
-    # Divide urls in parts
-    url = url.split("/")
+    '''Get direct URL from git service for use by fdroidclient
 
-    # Get the hostname
-    hostname = url[2]
+    Via 'servergitmirrors', fdroidserver can create and push a mirror
+    to certain well known git services like gitlab or github.  This
+    will always use the 'master' branch since that is the default
+    branch in git.
 
-    # fdroidserver will use always 'master' branch for git-mirroring
+    '''
+
+    if url.startswith('git@'):
+        url = re.sub(r'^git@(.*):(.*)', r'https://\1/\2', url)
+
+    segments = url.split("/")
+    hostname = segments[2]
     branch = "master"
     folder = "fdroid"
 
     if hostname == "github.com":
-        # Github like RAW url "https://raw.githubusercontent.com/user/repo/master/fdroid"
-        url[2] = "raw.githubusercontent.com"
-        url.extend([branch, folder])
+        # Github like RAW segments "https://raw.githubusercontent.com/user/repo/master/fdroid"
+        segments[2] = "raw.githubusercontent.com"
+        segments.extend([branch, folder])
     elif hostname == "gitlab.com":
-        # Gitlab like RAW url "https://gitlab.com/user/repo/raw/master/fdroid"
-        url.extend(["raw", branch, folder])
+        # Gitlab like RAW segments "https://gitlab.com/user/repo/raw/master/fdroid"
+        segments.extend(["raw", branch, folder])
     else:
         return None
 
-    url = "/".join(url)
-    return url
+    if segments[4].endswith('.git'):
+        segments[4] = segments[4][:-4]
+
+    return '/'.join(segments)
 
 
 class VerificationException(Exception):

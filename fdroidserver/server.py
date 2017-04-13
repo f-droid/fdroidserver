@@ -22,7 +22,9 @@ import hashlib
 import os
 import paramiko
 import pwd
+import re
 import subprocess
+import time
 from argparse import ArgumentParser
 import logging
 import shutil
@@ -31,6 +33,8 @@ from . import common
 
 config = None
 options = None
+
+BINARY_TRANSPARENCY_DIR = 'binary_transparency'
 
 
 def update_awsbucket(repo_section):
@@ -44,6 +48,86 @@ def update_awsbucket(repo_section):
 
     logging.debug('Syncing "' + repo_section + '" to Amazon S3 bucket "'
                   + config['awsbucket'] + '"')
+
+    if common.set_command_in_config('s3cmd'):
+        update_awsbucket_s3cmd(repo_section)
+    else:
+        update_awsbucket_libcloud(repo_section)
+
+
+def update_awsbucket_s3cmd(repo_section):
+    '''upload using the CLI tool s3cmd, which provides rsync-like sync
+
+    The upload is done in multiple passes to reduce the chance of
+    interfering with an existing client-server interaction.  In the
+    first pass, only new files are uploaded.  In the second pass,
+    changed files are uploaded, overwriting what is on the server.  On
+    the third/last pass, the indexes are uploaded, and any removed
+    files are deleted from the server.  The last pass is the only pass
+    to use a full MD5 checksum of all files to detect changes.
+    '''
+
+    logging.debug('using s3cmd to sync with ' + config['awsbucket'])
+
+    configfilename = '.s3cfg'
+    fd = os.open(configfilename, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
+    os.write(fd, '[default]\n'.encode('utf-8'))
+    os.write(fd, ('access_key = ' + config['awsaccesskeyid'] + '\n').encode('utf-8'))
+    os.write(fd, ('secret_key = ' + config['awssecretkey'] + '\n').encode('utf-8'))
+    os.close(fd)
+
+    s3url = 's3://' + config['awsbucket'] + '/fdroid/'
+    s3cmdargs = [
+        's3cmd',
+        'sync',
+        '--config=' + configfilename,
+        '--acl-public',
+    ]
+    if options.verbose:
+        s3cmdargs += ['--verbose']
+    if options.quiet:
+        s3cmdargs += ['--quiet']
+    indexxml = os.path.join(repo_section, 'index.xml')
+    indexjar = os.path.join(repo_section, 'index.jar')
+    indexv1jar = os.path.join(repo_section, 'index-v1.jar')
+    logging.debug('s3cmd sync new files in ' + repo_section + ' to ' + s3url)
+    if subprocess.call(s3cmdargs +
+                       ['--no-check-md5', '--skip-existing',
+                        '--exclude', indexxml,
+                        '--exclude', indexjar,
+                        '--exclude', indexv1jar,
+                        repo_section, s3url]) != 0:
+        sys.exit(1)
+    logging.debug('s3cmd sync all files in ' + repo_section + ' to ' + s3url)
+    if subprocess.call(s3cmdargs +
+                       ['--no-check-md5',
+                        '--exclude', indexxml,
+                        '--exclude', indexjar,
+                        '--exclude', indexv1jar,
+                        repo_section, s3url]) != 0:
+        sys.exit(1)
+
+    logging.debug('s3cmd sync indexes ' + repo_section + ' to ' + s3url + ' and delete')
+    s3cmdargs.append('--delete-removed')
+    s3cmdargs.append('--delete-after')
+    if options.no_checksum:
+        s3cmdargs.append('--no-check-md5')
+    else:
+        s3cmdargs.append('--check-md5')
+    if subprocess.call(s3cmdargs + [repo_section, s3url]) != 0:
+        sys.exit(1)
+
+
+def update_awsbucket_libcloud(repo_section):
+    '''
+    Upload the contents of the directory `repo_section` (including
+    subdirectories) to the AWS S3 "bucket". The contents of that subdir of the
+    bucket will first be deleted.
+
+    Requires AWS credentials set in config.py: awsaccesskeyid, awssecretkey
+    '''
+
+    logging.debug('using Apache libcloud to sync with ' + config['awsbucket'])
 
     import libcloud.security
     libcloud.security.VERIFY_SSL_CERT = True
@@ -182,49 +266,103 @@ def _local_sync(fromdir, todir):
 
 
 def sync_from_localcopy(repo_section, local_copy_dir):
+    '''Syncs the repo from "local copy dir" filesystem to this box
+
+    In setups that use offline signing, this is the last step that
+    syncs the repo from the "local copy dir" e.g. a thumb drive to the
+    repo on the local filesystem.  That local repo is then used to
+    push to all the servers that are configured.
+
+    '''
     logging.info('Syncing from local_copy_dir to this repo.')
     # trailing slashes have a meaning in rsync which is not needed here, so
     # make sure both paths have exactly one trailing slash
     _local_sync(os.path.join(local_copy_dir, repo_section).rstrip('/') + '/',
                 repo_section.rstrip('/') + '/')
 
+    offline_copy = os.path.join(local_copy_dir, BINARY_TRANSPARENCY_DIR)
+    if os.path.exists(os.path.join(offline_copy, '.git')):
+        online_copy = os.path.join(os.getcwd(), BINARY_TRANSPARENCY_DIR)
+        push_binary_transparency(offline_copy, online_copy)
+
 
 def update_localcopy(repo_section, local_copy_dir):
+    '''copy data from offline to the "local copy dir" filesystem
+
+    This updates the copy of this repo used to shuttle data from an
+    offline signing machine to the online machine, e.g. on a thumb
+    drive.
+
+    '''
     # local_copy_dir is guaranteed to have a trailing slash in main() below
     _local_sync(repo_section, local_copy_dir)
 
+    offline_copy = os.path.join(os.getcwd(), BINARY_TRANSPARENCY_DIR)
+    if os.path.isdir(os.path.join(offline_copy, '.git')):
+        online_copy = os.path.join(local_copy_dir, BINARY_TRANSPARENCY_DIR)
+        push_binary_transparency(offline_copy, online_copy)
+
 
 def update_servergitmirrors(servergitmirrors, repo_section):
-    # depend on GitPython only if users set a git mirror
+    '''update repo mirrors stored in git repos
+
+    This is a hack to use public git repos as F-Droid repos.  It
+    recreates the git repo from scratch each time, so that there is no
+    history.  That keeps the size of the git repo small.  Services
+    like GitHub or GitLab have a size limit of something like 1 gig.
+    This git repo is only a git repo for the purpose of being hosted.
+    For history, there is the archive section, and there is the binary
+    transparency log.
+
+    '''
     import git
+    from clint.textui import progress
+    if config.get('local_copy_dir') \
+       and not config.get('sync_from_local_copy_dir'):
+        logging.debug('Offline machine, skipping git mirror generation until `fdroid server update`')
+        return
+
     # right now we support only 'repo' git-mirroring
     if repo_section == 'repo':
-        # create a new git-mirror folder
-        repo_dir = os.path.join('.', 'git-mirror/')
+        git_mirror_path = 'git-mirror'
+        dotgit = os.path.join(git_mirror_path, '.git')
+        if not os.path.isdir(git_mirror_path):
+            os.mkdir(git_mirror_path)
+        elif os.path.isdir(dotgit):
+            shutil.rmtree(dotgit)
 
-        # remove if already present
-        if os.path.isdir(repo_dir):
-            shutil.rmtree(repo_dir)
+        fdroid_repo_path = os.path.join(git_mirror_path, "fdroid")
+        _local_sync(repo_section, fdroid_repo_path)
 
-        repo = git.Repo.init(repo_dir)
+        repo = git.Repo.init(git_mirror_path)
 
-        # take care of each mirror
         for mirror in servergitmirrors:
-            hostname = mirror.split("/")[2]
+            hostname = re.sub(r'\W*\w+\W+(\w+).*', r'\1', mirror)
             repo.create_remote(hostname, mirror)
             logging.info('Mirroring to: ' + mirror)
 
-        # copy local 'repo' to 'git-mirror/fdroid/repo directory' with _local_sync
-        fdroid_repo_path = os.path.join(repo_dir, "fdroid")
-        _local_sync(repo_section, fdroid_repo_path)
-
         # sadly index.add don't allow the --all parameter
+        logging.debug('Adding all files to git mirror')
         repo.git.add(all=True)
+        logging.debug('Committing all files into git mirror')
         repo.index.commit("fdroidserver git-mirror")
 
+        if options.verbose:
+            bar = progress.Bar()
+
+            class MyProgressPrinter(git.RemoteProgress):
+                def update(self, op_code, current, maximum=None, message=None):
+                    if isinstance(maximum, float):
+                        bar.show(current, maximum)
+            progress = MyProgressPrinter()
+        else:
+            progress = None
         # push for every remote. This will overwrite the git history
         for remote in repo.remotes:
-            remote.push('master', force=True, set_upstream=True)
+            logging.debug('Pushing to ' + remote.url)
+            remote.push('master', force=True, set_upstream=True, progress=progress)
+        if progress:
+            bar.done()
 
 
 def upload_to_android_observatory(repo_section):
@@ -264,26 +402,95 @@ def upload_to_android_observatory(repo_section):
 
 
 def upload_to_virustotal(repo_section, vt_apikey):
+    import json
     import requests
 
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
+    logging.getLogger("requests").setLevel(logging.WARNING)
+
     if repo_section == 'repo':
-        for f in glob.glob(os.path.join(repo_section, '*.apk')):
-            fpath = f
-            fname = os.path.basename(f)
-            logging.info('Uploading ' + fname + ' to virustotal.com')
+        if not os.path.exists('virustotal'):
+            os.mkdir('virustotal')
+        with open(os.path.join(repo_section, 'index-v1.json')) as fp:
+            index = json.load(fp)
+        for packageName, packages in index['packages'].items():
+            for package in packages:
+                outputfilename = os.path.join('virustotal',
+                                              packageName + '_' + str(package.get('versionCode'))
+                                              + '_' + package['hash'] + '.json')
+                if os.path.exists(outputfilename):
+                    logging.debug(package['apkName'] + ' results are in ' + outputfilename)
+                    continue
+                filename = package['apkName']
+                repofilename = os.path.join(repo_section, filename)
+                logging.info('Checking if ' + repofilename + ' is on virustotal')
 
-            # upload the file with a post request
-            params = {'apikey': vt_apikey}
-            files = {'file': (fname, open(fpath, 'rb'))}
-            r = requests.post('https://www.virustotal.com/vtapi/v2/file/scan', files=files, params=params)
-            response = r.json()
+                headers = {
+                    "User-Agent": "F-Droid"
+                }
+                params = {
+                    'apikey': vt_apikey,
+                    'resource': package['hash'],
+                }
+                needs_file_upload = False
+                while True:
+                    r = requests.post('https://www.virustotal.com/vtapi/v2/file/report',
+                                      params=params, headers=headers)
+                    if r.status_code == 200:
+                        response = r.json()
+                        if response['response_code'] == 0:
+                            needs_file_upload = True
+                        else:
+                            response['filename'] = filename
+                            response['packageName'] = packageName
+                            response['versionCode'] = package.get('versionCode')
+                            response['versionName'] = package.get('versionName')
+                            with open(outputfilename, 'w') as fp:
+                                json.dump(response, fp, indent=2, sort_keys=True)
 
-            logging.info(response['verbose_msg'] + " " + response['permalink'])
+                        if response.get('positives') > 0:
+                            logging.warning(repofilename + ' has been flagged by virustotal '
+                                            + str(response['positives']) + ' times:'
+                                            + '\n\t' + response['permalink'])
+                        break
+                    elif r.status_code == 204:
+                        time.sleep(10)  # wait for public API rate limiting
+
+                if needs_file_upload:
+                    logging.info('Uploading ' + repofilename + ' to virustotal')
+                    files = {
+                        'file': (filename, open(repofilename, 'rb'))
+                    }
+                    r = requests.post('https://www.virustotal.com/vtapi/v2/file/scan',
+                                      params=params, headers=headers, files=files)
+                    response = r.json()
+
+                    logging.info(response['verbose_msg'] + " " + response['permalink'])
 
 
 def push_binary_transparency(git_repo_path, git_remote):
-    '''push the binary transparency git repo to the specifed remote'''
+    '''push the binary transparency git repo to the specifed remote.
+
+    If the remote is a local directory, make sure it exists, and is a
+    git repo.  This is used to move this git repo from an offline
+    machine onto a flash drive, then onto the online machine.
+
+    This is also used in offline signing setups, where it then also
+    creates a "local copy dir" git repo that serves to shuttle the git
+    data from the offline machine to the online machine.  In that
+    case, git_remote is a dir on the local file system, e.g. a thumb
+    drive.
+
+    '''
     import git
+
+    if os.path.isdir(os.path.dirname(git_remote)) \
+       and not os.path.isdir(os.path.join(git_remote, '.git')):
+        os.makedirs(git_remote, exist_ok=True)
+        repo = git.Repo.init(git_remote)
+        config = repo.config_writer()
+        config.set_value('receive', 'denyCurrentBranch', 'updateInstead')
+        config.release()
 
     logging.info('Pushing binary transparency log to ' + git_remote)
     gitrepo = git.Repo(git_repo_path)
@@ -308,8 +515,6 @@ def main():
                         help="Specify an identity file to provide to SSH for rsyncing")
     parser.add_argument("--local-copy-dir", default=None,
                         help="Specify a local folder to sync the repo to")
-    parser.add_argument("--sync-from-local-copy-dir", action="store_true", default=False,
-                        help="Before uploading to servers, sync from local copy dir")
     parser.add_argument("--no-checksum", action="store_true", default=False,
                         help="Don't use rsync checksums")
     options = parser.parse_args()
@@ -417,7 +622,7 @@ def main():
     elif options.command == 'update':
         for repo_section in repo_sections:
             if local_copy_dir is not None:
-                if config['sync_from_local_copy_dir'] and os.path.exists(repo_section):
+                if config['sync_from_local_copy_dir']:
                     sync_from_localcopy(repo_section, local_copy_dir)
                 else:
                     update_localcopy(repo_section, local_copy_dir)
@@ -436,7 +641,8 @@ def main():
 
             binary_transparency_remote = config.get('binary_transparency_remote')
             if binary_transparency_remote:
-                push_binary_transparency('binary_transparency', binary_transparency_remote)
+                push_binary_transparency(BINARY_TRANSPARENCY_DIR,
+                                         binary_transparency_remote)
 
     sys.exit(0)
 
