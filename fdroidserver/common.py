@@ -655,7 +655,7 @@ class vcs:
 
     # Derived classes need to implement this. It's called once basic checking
     # has been performend.
-    def gotorevisionx(self, rev):
+    def gotorevisionx(self, rev):  # pylint: disable=unused-argument
         raise VCSException("This VCS type doesn't define gotorevisionx")
 
     # Initialise and update submodules
@@ -1683,7 +1683,7 @@ def get_apk_debuggable_androguard(apkfile):
     return False
 
 
-def isApkAndDebuggable(apkfile, config):
+def isApkAndDebuggable(apkfile):
     """Returns True if the given file is an APK and is debuggable
 
     :param apkfile: full path to the apk to check"""

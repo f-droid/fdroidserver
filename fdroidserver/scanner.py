@@ -39,9 +39,10 @@ def get_gradle_compile_commands(build):
     return [re.compile(r'\s*' + c, re.IGNORECASE) for c in compileCommands]
 
 
-# Scan the source code in the given directory (and all subdirectories)
-# and return the number of fatal problems encountered
-def scan_source(build_dir, root_dir, build):
+def scan_source(build_dir, build):
+    """Scan the source code in the given directory (and all subdirectories)
+    and return the number of fatal problems encountered
+    """
 
     count = 0
 
@@ -111,7 +112,7 @@ def scan_source(build_dir, root_dir, build):
                     return True
         return False
 
-    def ignoreproblem(what, fd, fp):
+    def ignoreproblem(what, fd):
         logging.info('Ignoring %s at %s' % (what, fd))
         return 0
 
@@ -127,7 +128,7 @@ def scan_source(build_dir, root_dir, build):
 
     def handleproblem(what, fd, fp):
         if toignore(fd):
-            return ignoreproblem(what, fd, fp)
+            return ignoreproblem(what, fd)
         if todelete(fd):
             return removeproblem(what, fd, fp)
         logging.error('Found %s at %s' % (what, fd))
@@ -301,12 +302,12 @@ def main():
                     logging.info("...scanning version " + build.versionName)
 
                     # Prepare the source code...
-                    root_dir, _ = common.prepare_source(vcs, app, build,
-                                                        build_dir, srclib_dir,
-                                                        extlib_dir, False)
+                    common.prepare_source(vcs, app, build,
+                                          build_dir, srclib_dir,
+                                          extlib_dir, False)
 
                     # Do the scan...
-                    count = scan_source(build_dir, root_dir, build)
+                    count = scan_source(build_dir, build)
                     if count > 0:
                         logging.warn('Scanner found %d problems in %s (%s)' % (
                             count, appid, build.versionCode))
