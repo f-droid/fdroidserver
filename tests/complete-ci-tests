@@ -87,19 +87,14 @@ sh hooks/pre-commit
 #------------------------------------------------------------------------------#
 # run pylint
 
-cd $WORKSPACE
-set +e
-# use the pyvenv so pylint checks against its installed libs
-    PYTHONPATH=$WORKSPACE/.pylint-plugins python3 /usr/bin/pylint \
-        --output-format=parseable --reports=n \
-        --load-plugins astng_hashlib \
-        fdroidserver/*.py fdroid makebuildserver setup.py > $WORKSPACE/pylint.parseable
-
-# to only tell jenkins there was an error if we got ERROR or FATAL, uncomment these:
-# running pylint in the pyvenv/virtualenv is causing this FATAL error, which is a bug:
-# https://bitbucket.org/logilab/pylint/issue/73/pylint-is-unable-to-import
-[ $(($? & 1)) = "1" ] && echo "FATALs found"
-[ $(($? & 2)) = "2" ] && exit 2
-[ $(($? & 4)) = "4" ] && exit 4
-set -e
-
+# only run it where it will work, for example, the pyvenvs above don't have pylint
+if which pylint3 && python3 -c "import pylint" 2> /dev/null; then
+    cd $WORKSPACE
+    pylint3 --rcfile=.pylint-rcfile --output-format=colorized --reports=n \
+            fdroid \
+            makebuildserver \
+            setup.py \
+            fdroidserver/*.py \
+            tests/*.py \
+            tests/*.TestCase
+fi
