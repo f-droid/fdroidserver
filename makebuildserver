@@ -83,7 +83,7 @@ if os.path.isfile('/usr/bin/systemd-detect-virt'):
         config['domain'] = 'buildserver_default'
     elif virt != 'none':
         logger.info('Running in an unsupported VM guest (%s)!', virt)
-logger.debug('deceted virt: %s', virt)
+    logger.debug('detected virt: %s', virt)
 
 # load config file, if present
 if os.path.exists('makebuildserver.config.py'):
@@ -391,7 +391,7 @@ def update_cache(cachedir, cachefiles):
             sys.exit(1)
 
 
-def debug_log_vagrant_vm(vm_dir, vm_name):
+def debug_log_vagrant_vm(vm_dir, config):
     if options.verbosity >= 3:
         _vagrant_dir = os.path.join(vm_dir, '.vagrant')
         logger.debug('check %s dir exists? -> %r', _vagrant_dir, os.path.isdir(_vagrant_dir))
@@ -399,10 +399,11 @@ def debug_log_vagrant_vm(vm_dir, vm_name):
         subprocess.call(['vagrant', 'status'], cwd=vm_dir)
         logger.debug('> vagrant box list')
         subprocess.call(['vagrant', 'box', 'list'])
-        logger.debug('> virsh -c qmeu:///system list --all')
-        subprocess.call(['virsh', '-c', 'qemu:///system', 'list', '--all'])
-        logger.debug('> virsh -c qemu:///system snapshot-list %s', vm_name)
-        subprocess.call(['virsh', '-c', 'qemu:///system', 'snapshot-list', vm_name])
+        if config['vm_provider'] == 'libvirt':
+            logger.debug('> virsh -c qmeu:///system list --all')
+            subprocess.call(['virsh', '-c', 'qemu:///system', 'list', '--all'])
+            logger.debug('> virsh -c qemu:///system snapshot-list %s', config['domain'])
+            subprocess.call(['virsh', '-c', 'qemu:///system', 'snapshot-list', config['domain']])
 
 
 def main():
@@ -492,11 +493,11 @@ def main():
             v.box_remove(config['basebox'], 'virtualbox')
 
     logger.info("Configuring build server VM")
-    debug_log_vagrant_vm(serverdir, config['domain'])
+    debug_log_vagrant_vm(serverdir, config)
     try:
         v.up(provision=True)
     except fdroidserver.vmtools.FDroidBuildVmException as e:
-        debug_log_vagrant_vm(serverdir, config['domain'])
+        debug_log_vagrant_vm(serverdir, config)
         logger.exception('could not bring buildserver vm up. %s', e)
         sys.exit(1)
 
