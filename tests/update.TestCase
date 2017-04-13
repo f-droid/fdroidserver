@@ -24,6 +24,44 @@ from fdroidserver.common import FDroidPopen
 class UpdateTest(unittest.TestCase):
     '''fdroid update'''
 
+    def testInsertStoreMetadata(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        config['accepted_formats'] = ('txt', 'yml')
+        fdroidserver.update.config = config
+        fdroidserver.update.options = fdroidserver.common.options
+        os.chdir(os.path.join(localmodule, 'tests'))
+
+        apps = dict()
+        for packageName in ('info.guardianproject.urzip', 'org.videolan.vlc', 'obb.mainpatch.current'):
+            apps[packageName] = dict()
+            apps[packageName]['id'] = packageName
+            apps[packageName]['CurrentVersionCode'] = 0xcafebeef
+        apps['info.guardianproject.urzip']['CurrentVersionCode'] = 100
+        fdroidserver.update.insert_localized_app_metadata(apps)
+
+        self.assertEqual(3, len(apps))
+        for packageName, app in apps.items():
+            self.assertTrue('localized' in app)
+            self.assertTrue('en-US' in app['localized'])
+            self.assertEqual(1, len(app['localized']))
+            if packageName == 'info.guardianproject.urzip':
+                self.assertEqual(5, len(app['localized']['en-US']))
+                self.assertEqual('full description\n', app['localized']['en-US']['Description'])
+                self.assertEqual('title\n', app['localized']['en-US']['Name'])
+                self.assertEqual('short description\n', app['localized']['en-US']['Summary'])
+                self.assertEqual('video\n', app['localized']['en-US']['Video'])
+                self.assertEqual('100\n', app['localized']['en-US']['WhatsNew'])
+            elif packageName == 'org.videolan.vlc':
+                self.assertEqual('icon.png', app['localized']['en-US']['icon'])
+                self.assertEqual(9, len(app['localized']['en-US']['phoneScreenshots']))
+                self.assertEqual(15, len(app['localized']['en-US']['sevenInchScreenshots']))
+            elif packageName == 'obb.mainpatch.current':
+                self.assertEqual('icon.png', app['localized']['en-US']['icon'])
+                self.assertEqual('featureGraphic.png', app['localized']['en-US']['featureGraphic'])
+                self.assertEqual(1, len(app['localized']['en-US']['phoneScreenshots']))
+                self.assertEqual(1, len(app['localized']['en-US']['sevenInchScreenshots']))
+
     def javagetsig(self, apkfile):
         getsig_dir = os.path.join(os.path.dirname(__file__), 'getsig')
         if not os.path.exists(getsig_dir + "/getsig.class"):
@@ -84,7 +122,7 @@ class UpdateTest(unittest.TestCase):
         self.assertIsNone(pysig, "python sig should be None: " + str(sig))
 
     def testScanApksAndObbs(self):
-        os.chdir(os.path.dirname(__file__))
+        os.chdir(os.path.join(localmodule, 'tests'))
         if os.path.basename(os.getcwd()) != 'tests':
             raise Exception('This test must be run in the "tests/" subdir')
 
@@ -131,7 +169,7 @@ class UpdateTest(unittest.TestCase):
                 self.assertIsNone(apk.get('obbPatchFile'))
 
     def test_scan_invalid_apk(self):
-        os.chdir(os.path.dirname(__file__))
+        os.chdir(os.path.join(localmodule, 'tests'))
         if os.path.basename(os.getcwd()) != 'tests':
             raise Exception('This test must be run in the "tests/" subdir')
 

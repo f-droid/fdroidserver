@@ -619,6 +619,10 @@ def copy_triple_t_store_metadata(apps):
                         _set_localized_text_entry(app, locale, 'Video',
                                                   os.path.join(root, f))
                         continue
+                    elif f == 'whatsnew':
+                        _set_localized_text_entry(app, segments[-1], 'WhatsNew',
+                                                  os.path.join(root, f))
+                        continue
 
                     base, extension = common.get_extension(f)
                     dirname = os.path.basename(root)
@@ -648,6 +652,18 @@ def insert_localized_app_metadata(apps):
     repo/packageName/locale/phoneScreenshots/1.png
     repo/packageName/locale/phoneScreenshots/2.png
 
+    The changelog files must be text files named with the versionCode
+    ending with ".txt" and must be in the following layout:
+    https://github.com/fastlane/fastlane/blob/1.109.0/supply/README.md#changelogs-whats-new
+
+    repo/packageName/locale/changelogs/12345.txt
+
+    This will scan the each app's source repo then the metadata/ dir
+    for these standard locations of changelog files.  If it finds
+    them, they will be added to the dict of all packages, with the
+    versions in the metadata/ folder taking precendence over the what
+    is in the app's source repo.
+
     Where "packageName" is the app's packageName and "locale" is the locale
     of the graphics, e.g. what language they are in, using the IETF RFC5646
     format (en-US, fr-CA, es-MX, etc).
@@ -657,6 +673,7 @@ def insert_localized_app_metadata(apps):
     of graphic and screenshot files.  If it finds them, it will copy
     them into the repo.  The fastlane files follow this pattern:
     https://github.com/fastlane/fastlane/blob/1.109.0/supply/README.md#images-and-screenshots
+
     """
 
     sourcedirs = glob.glob(os.path.join('build', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z][A-Z-.@]*'))
@@ -688,6 +705,10 @@ def insert_localized_app_metadata(apps):
                     continue
                 elif f == 'video.txt':
                     _set_localized_text_entry(apps[packageName], locale, 'Video',
+                                              os.path.join(root, f))
+                    continue
+                elif f == str(apps[packageName]['CurrentVersionCode']) + '.txt':
+                    _set_localized_text_entry(apps[packageName], segments[-2], 'WhatsNew',
                                               os.path.join(root, f))
                     continue
 
