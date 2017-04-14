@@ -604,9 +604,9 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         ftp.close()
 
     finally:
-
         # Suspend the build server.
-        vm_suspend_builder()
+        vm = vmtools.get_build_vm('builder')
+        vm.suspend()
 
 
 def force_gradle_build_tools(build_dir, build_tools):
