@@ -574,6 +574,14 @@ def _set_localized_text_entry(app, locale, key, f):
             localized[key] = text
 
 
+def _set_author_entry(app, key, f):
+    limit = config['char_limits']['Author']
+    with open(f) as fp:
+        text = fp.read()[:limit]
+        if len(text) > 0:
+            app[key] = text
+
+
 def copy_triple_t_store_metadata(apps):
     """Include store metadata from the app's source repo
 
@@ -622,6 +630,15 @@ def copy_triple_t_store_metadata(apps):
                     elif f == 'whatsnew':
                         _set_localized_text_entry(app, segments[-1], 'WhatsNew',
                                                   os.path.join(root, f))
+                        continue
+                    elif f == 'contactEmail':
+                        _set_author_entry(app, 'AuthorEmail', os.path.join(root, f))
+                        continue
+                    elif f == 'contactPhone':
+                        _set_author_entry(app, 'AuthorPhone', os.path.join(root, f))
+                        continue
+                    elif f == 'contactWebsite':
+                        _set_author_entry(app, 'AuthorWebSite', os.path.join(root, f))
                         continue
 
                     base, extension = common.get_extension(f)

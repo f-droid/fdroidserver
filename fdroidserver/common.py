@@ -93,6 +93,7 @@ default_config = {
     'keystore': 'keystore.jks',
     'smartcardoptions': [],
     'char_limits': {
+        'Author': 256,
         'Name': 30,
         'Summary': 80,
         'Description': 4000,
