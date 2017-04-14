@@ -70,6 +70,7 @@ app_fields = set([
     'License',
     'Author Name',
     'Author Email',
+    'Author Web Site',
     'Web Site',
     'Source Code',
     'Issue Tracker',
@@ -119,6 +120,7 @@ class App(dict):
         self.License = 'Unknown'
         self.AuthorName = None
         self.AuthorEmail = None
+        self.AuthorWebSite = None
         self.WebSite = ''
         self.SourceCode = ''
         self.IssueTracker = ''
@@ -1199,6 +1201,7 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
     w_field_always('License')
     w_field_nonempty('Author Name')
     w_field_nonempty('Author Email')
+    w_field_nonempty('Author Web Site')
     w_field_always('Web Site')
     w_field_always('Source Code')
     w_field_always('Issue Tracker')

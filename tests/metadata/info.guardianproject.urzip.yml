@@ -7,6 +7,7 @@ Categories:
 - 1
 - 2.0
 CurrentVersionCode: 2147483647
+AuthorWebSite: https://guardianproject.info
 Description: |
   It’s Urzip 是一个获得已安装 APK 相关信息的实用工具。它从您的设备上已安装的所有应用开始，一键触摸即可显示 APK 的指纹，并且提供到达 virustotal.com 和 androidobservatory.org 的快捷链接，让您方便地了解特定 APK 的档案。它还可以让您导出签名证书和生成 ApkSignaturePin Pin 文件供 TrustedIntents 库使用。
 

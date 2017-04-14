@@ -2,6 +2,7 @@ AntiFeatures: []
 ArchivePolicy: null
 AuthorEmail: null
 AuthorName: null
+AuthorWebSite: null
 AutoName: SMSSecure
 AutoUpdateMode: Version v%v
 Binaries: null

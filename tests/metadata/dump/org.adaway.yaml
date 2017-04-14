@@ -2,6 +2,7 @@ AntiFeatures: []
 ArchivePolicy: null
 AuthorEmail: null
 AuthorName: null
+AuthorWebSite: null
 AutoName: AdAway
 AutoUpdateMode: Version v%v
 Binaries: null
