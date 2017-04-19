@@ -2,12 +2,16 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
+import git
 import inspect
 import logging
 import optparse
 import os
+import shutil
 import sys
+import tempfile
 import unittest
+import yaml
 from binascii import unhexlify
 
 localmodule = os.path.realpath(
@@ -17,6 +21,7 @@ if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
 import fdroidserver.common
+import fdroidserver.metadata
 import fdroidserver.update
 from fdroidserver.common import FDroidPopen
 
@@ -61,6 +66,57 @@ class UpdateTest(unittest.TestCase):
                 self.assertEqual('featureGraphic.png', app['localized']['en-US']['featureGraphic'])
                 self.assertEqual(1, len(app['localized']['en-US']['phoneScreenshots']))
                 self.assertEqual(1, len(app['localized']['en-US']['sevenInchScreenshots']))
+
+    def test_insert_triple_t_metadata(self):
+        importer = os.path.join(localmodule, 'tests', 'tmp', 'importer')
+        packageName = 'org.fdroid.ci.test.app'
+        if not os.path.isdir(importer):
+            logging.warning('skipping test_insert_triple_t_metadata, import.TestCase must run first!')
+            return
+        tmpdir = os.path.join(localmodule, '.testfiles')
+        if not os.path.exists(tmpdir):
+            os.makedirs(tmpdir)
+        tmptestsdir = tempfile.mkdtemp(prefix='test_insert_triple_t_metadata-', dir=tmpdir)
+        packageDir = os.path.join(tmptestsdir, 'build', packageName)
+        shutil.copytree(importer, packageDir)
+
+        # always use the same commit so these tests work when ci-test-app.git is updated
+        repo = git.Repo(packageDir)
+        for remote in repo.remotes:
+            remote.fetch()
+        repo.git.reset('--hard', 'b9e5d1a0d8d6fc31d4674b2f0514fef10762ed4f')
+        repo.git.clean('-fdx')
+
+        os.mkdir(os.path.join(tmptestsdir, 'metadata'))
+        metadata = dict()
+        metadata['Description'] = 'This is just a test app'
+        with open(os.path.join(tmptestsdir, 'metadata', packageName + '.yml'), 'w') as fp:
+            yaml.dump(metadata, fp)
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        config['accepted_formats'] = ('yml')
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+        fdroidserver.update.options = fdroidserver.common.options
+        os.chdir(tmptestsdir)
+
+        apps = fdroidserver.metadata.read_metadata(xref=True)
+        fdroidserver.update.copy_triple_t_store_metadata(apps)
+
+        # TODO ideally, this would compare the whole dict like in metadata.TestCase's test_read_metadata()
+        correctlocales = [
+            'ar', 'ast_ES', 'az', 'ca', 'ca_ES', 'cs-CZ', 'cs_CZ', 'da',
+            'da-DK', 'de', 'de-DE', 'el', 'en-US', 'es', 'es-ES', 'es_ES', 'et',
+            'fi', 'fr', 'fr-FR', 'he_IL', 'hi-IN', 'hi_IN', 'hu', 'id', 'it',
+            'it-IT', 'it_IT', 'iw-IL', 'ja', 'ja-JP', 'kn_IN', 'ko', 'ko-KR',
+            'ko_KR', 'lt', 'nb', 'nb_NO', 'nl', 'nl-NL', 'no', 'pl', 'pl-PL',
+            'pl_PL', 'pt', 'pt-BR', 'pt-PT', 'pt_BR', 'ro', 'ro_RO', 'ru-RU',
+            'ru_RU', 'sv-SE', 'sv_SE', 'te', 'tr', 'tr-TR', 'uk', 'uk_UA', 'vi',
+            'vi_VN', 'zh-CN', 'zh_CN', 'zh_TW',
+        ]
+        locales = sorted(list(apps['org.fdroid.ci.test.app']['localized'].keys()))
+        self.assertEqual(correctlocales, locales)
 
     def javagetsig(self, apkfile):
         getsig_dir = os.path.join(os.path.dirname(__file__), 'getsig')
