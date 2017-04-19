@@ -66,6 +66,11 @@ all_screen_densities = ['0'] + screen_densities
 UsesPermission = collections.namedtuple('UsesPermission', ['name', 'maxSdkVersion'])
 UsesPermissionSdk23 = collections.namedtuple('UsesPermissionSdk23', ['name', 'maxSdkVersion'])
 
+ALLOWED_EXTENSIONS = ('png', 'jpg', 'jpeg')
+GRAPHIC_NAMES = ('featureGraphic', 'icon', 'promoGraphic', 'tvBanner')
+SCREENSHOT_DIRS = ('phoneScreenshots', 'sevenInchScreenshots',
+                   'tenInchScreenshots', 'tvScreenshots', 'wearScreenshots')
+
 
 def dpi_to_px(density):
     return (int(density) * 48) / 160
@@ -551,54 +556,189 @@ def insert_obbs(repodir, apps, apks):
                 break
 
 
-def insert_graphics(repodir, apps):
-    """Scans for screenshot PNG files in statically defined screenshots
-    directory and adds them to the app metadata.  The screenshots and
-    graphic must be PNG or JPEG files ending with ".png", ".jpg", or ".jpeg"
+def _get_localized_dict(app, locale):
+    '''get the dict to add localized store metadata to'''
+    if 'localized' not in app:
+        app['localized'] = collections.OrderedDict()
+    if locale not in app['localized']:
+        app['localized'][locale] = collections.OrderedDict()
+    return app['localized'][locale]
+
+
+def _set_localized_text_entry(app, locale, key, f):
+    limit = config['char_limits'][key]
+    localized = _get_localized_dict(app, locale)
+    with open(f) as fp:
+        text = fp.read()[:limit]
+        if len(text) > 0:
+            localized[key] = text
+
+
+def _set_author_entry(app, key, f):
+    limit = config['char_limits']['Author']
+    with open(f) as fp:
+        text = fp.read()[:limit]
+        if len(text) > 0:
+            app[key] = text
+
+
+def copy_triple_t_store_metadata(apps):
+    """Include store metadata from the app's source repo
+
+    The Triple-T Gradle Play Publisher is a plugin that has a standard
+    file layout for all of the metadata and graphics that the Google
+    Play Store accepts.  Since F-Droid has the git repo, it can just
+    pluck those files directly.  This method reads any text files into
+    the app dict, then copies any graphics into the fdroid repo
+    directory structure.
+
+    This needs to be run before insert_localized_app_metadata() so that
+    the graphics files that are copied into the fdroid repo get
+    properly indexed.
+
+    https://github.com/Triple-T/gradle-play-publisher#upload-images
+    https://github.com/Triple-T/gradle-play-publisher#play-store-metadata
+
+    """
+
+    if not os.path.isdir('build'):
+        return  # nothing to do
+
+    for packageName, app in apps.items():
+        for d in glob.glob(os.path.join('build', packageName, '*', 'src', '*', 'play')):
+            logging.debug('Triple-T Gradle Play Publisher: ' + d)
+            for root, dirs, files in os.walk(d):
+                segments = root.split('/')
+                locale = segments[-2]
+                for f in files:
+                    if f == 'fulldescription':
+                        _set_localized_text_entry(app, locale, 'Description',
+                                                  os.path.join(root, f))
+                        continue
+                    elif f == 'shortdescription':
+                        _set_localized_text_entry(app, locale, 'Summary',
+                                                  os.path.join(root, f))
+                        continue
+                    elif f == 'title':
+                        _set_localized_text_entry(app, locale, 'Name',
+                                                  os.path.join(root, f))
+                        continue
+                    elif f == 'video':
+                        _set_localized_text_entry(app, locale, 'Video',
+                                                  os.path.join(root, f))
+                        continue
+                    elif f == 'whatsnew':
+                        _set_localized_text_entry(app, segments[-1], 'WhatsNew',
+                                                  os.path.join(root, f))
+                        continue
+                    elif f == 'contactEmail':
+                        _set_author_entry(app, 'AuthorEmail', os.path.join(root, f))
+                        continue
+                    elif f == 'contactPhone':
+                        _set_author_entry(app, 'AuthorPhone', os.path.join(root, f))
+                        continue
+                    elif f == 'contactWebsite':
+                        _set_author_entry(app, 'AuthorWebSite', os.path.join(root, f))
+                        continue
+
+                    base, extension = common.get_extension(f)
+                    dirname = os.path.basename(root)
+                    if dirname in GRAPHIC_NAMES and extension in ALLOWED_EXTENSIONS:
+                        if segments[-2] == 'listing':
+                            locale = segments[-3]
+                        else:
+                            locale = segments[-2]
+                        destdir = os.path.join('repo', packageName, locale)
+                        os.makedirs(destdir, mode=0o755, exist_ok=True)
+                        sourcefile = os.path.join(root, f)
+                        destfile = os.path.join(destdir, dirname + '.' + extension)
+                        logging.debug('copying ' + sourcefile + ' ' + destfile)
+                        shutil.copy(sourcefile, destfile)
+
+
+def insert_localized_app_metadata(apps):
+    """scans standard locations for graphics and localized text
+
+    Scans for localized description files, store graphics, and
+    screenshot PNG files in statically defined screenshots directory
+    and adds them to the app metadata.  The screenshots and graphic
+    must be PNG or JPEG files ending with ".png", ".jpg", or ".jpeg"
     and must be in the following layout:
 
     repo/packageName/locale/featureGraphic.png
     repo/packageName/locale/phoneScreenshots/1.png
     repo/packageName/locale/phoneScreenshots/2.png
 
+    The changelog files must be text files named with the versionCode
+    ending with ".txt" and must be in the following layout:
+    https://github.com/fastlane/fastlane/blob/1.109.0/supply/README.md#changelogs-whats-new
+
+    repo/packageName/locale/changelogs/12345.txt
+
+    This will scan the each app's source repo then the metadata/ dir
+    for these standard locations of changelog files.  If it finds
+    them, they will be added to the dict of all packages, with the
+    versions in the metadata/ folder taking precendence over the what
+    is in the app's source repo.
+
     Where "packageName" is the app's packageName and "locale" is the locale
     of the graphics, e.g. what language they are in, using the IETF RFC5646
-    format (en-US, fr-CA, es-MX, etc).  This is following this pattern:
+    format (en-US, fr-CA, es-MX, etc).
+
+    This will also scan the app's git for a fastlane folder, and the
+    metadata/ folder and the apps' source repos for standard locations
+    of graphic and screenshot files.  If it finds them, it will copy
+    them into the repo.  The fastlane files follow this pattern:
     https://github.com/fastlane/fastlane/blob/1.109.0/supply/README.md#images-and-screenshots
-
-    This will also scan the metadata/ folder and the apps' source repos
-    for standard locations of graphic and screenshot files.  If it finds
-    them, it will copy them into the repo.
-
-    :param repodir: repo directory to scan
 
     """
 
-    allowed_extensions = ('png', 'jpg', 'jpeg')
-    graphicnames = ('featureGraphic', 'icon', 'promoGraphic', 'tvBanner')
-    screenshotdirs = ('phoneScreenshots', 'sevenInchScreenshots',
-                      'tenInchScreenshots', 'tvScreenshots', 'wearScreenshots')
-
-    sourcedirs = glob.glob(os.path.join('build', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z][A-Z-.@]*'))
-    sourcedirs += glob.glob(os.path.join('metadata', '[A-Za-z]*', '[a-z][a-z][A-Z-.@]*'))
+    sourcedirs = glob.glob(os.path.join('build', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z]*'))
+    sourcedirs += glob.glob(os.path.join('metadata', '[A-Za-z]*', '[a-z][a-z]*'))
 
     for d in sorted(sourcedirs):
         if not os.path.isdir(d):
             continue
         for root, dirs, files in os.walk(d):
             segments = root.split('/')
-            destdir = os.path.join('repo', segments[1], segments[-1])  # repo/packageName/locale
+            packageName = segments[1]
+            if packageName not in apps:
+                logging.debug(packageName + ' does not have app metadata, skipping l18n scan.')
+                continue
+            locale = segments[-1]
+            destdir = os.path.join('repo', packageName, locale)
             for f in files:
+                if f == 'full_description.txt':
+                    _set_localized_text_entry(apps[packageName], locale, 'Description',
+                                              os.path.join(root, f))
+                    continue
+                elif f == 'short_description.txt':
+                    _set_localized_text_entry(apps[packageName], locale, 'Summary',
+                                              os.path.join(root, f))
+                    continue
+                elif f == 'title.txt':
+                    _set_localized_text_entry(apps[packageName], locale, 'Name',
+                                              os.path.join(root, f))
+                    continue
+                elif f == 'video.txt':
+                    _set_localized_text_entry(apps[packageName], locale, 'Video',
+                                              os.path.join(root, f))
+                    continue
+                elif f == str(apps[packageName]['CurrentVersionCode']) + '.txt':
+                    _set_localized_text_entry(apps[packageName], segments[-2], 'WhatsNew',
+                                              os.path.join(root, f))
+                    continue
+
                 base, extension = common.get_extension(f)
-                if base in graphicnames and extension in allowed_extensions:
+                if base in GRAPHIC_NAMES and extension in ALLOWED_EXTENSIONS:
                     os.makedirs(destdir, mode=0o755, exist_ok=True)
                     logging.debug('copying ' + os.path.join(root, f) + ' ' + destdir)
                     shutil.copy(os.path.join(root, f), destdir)
             for d in dirs:
-                if d in screenshotdirs:
+                if d in SCREENSHOT_DIRS:
                     for f in glob.glob(os.path.join(root, d, '*.*')):
                         _, extension = common.get_extension(f)
-                        if extension in allowed_extensions:
+                        if extension in ALLOWED_EXTENSIONS:
                             screenshotdestdir = os.path.join(destdir, d)
                             os.makedirs(screenshotdestdir, mode=0o755, exist_ok=True)
                             logging.debug('copying ' + f + ' ' + screenshotdestdir)
@@ -622,18 +762,14 @@ def insert_graphics(repodir, apps):
                 logging.warning('Found "%s" graphic without metadata for app "%s"!'
                                 % (filename, packageName))
                 continue
-            if 'localized' not in apps[packageName]:
-                apps[packageName]['localized'] = collections.OrderedDict()
-            if locale not in apps[packageName]['localized']:
-                apps[packageName]['localized'][locale] = collections.OrderedDict()
-            graphics = apps[packageName]['localized'][locale]
+            graphics = _get_localized_dict(apps[packageName], locale)
 
-            if extension not in allowed_extensions:
+            if extension not in ALLOWED_EXTENSIONS:
                 logging.warning('Only PNG and JPEG are supported for graphics, found: ' + f)
-            elif base in graphicnames:
+            elif base in GRAPHIC_NAMES:
                 # there can only be zero or one of these per locale
                 graphics[base] = filename
-            elif screenshotdir in screenshotdirs:
+            elif screenshotdir in SCREENSHOT_DIRS:
                 # there can any number of these per locale
                 logging.debug('adding ' + base + ':' + f)
                 if screenshotdir not in graphics:
@@ -1363,8 +1499,9 @@ def main():
     if newmetadata:
         apps = metadata.read_metadata()
 
+    copy_triple_t_store_metadata(apps)
     insert_obbs(repodirs[0], apps, apks)
-    insert_graphics(repodirs[0], apps)
+    insert_localized_app_metadata(apps)
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:

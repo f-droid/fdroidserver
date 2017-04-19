@@ -2,6 +2,7 @@ AntiFeatures: []
 ArchivePolicy: 9 versions
 AuthorEmail: null
 AuthorName: null
+AuthorWebSite: null
 AutoName: VLC
 AutoUpdateMode: None
 Binaries: null
