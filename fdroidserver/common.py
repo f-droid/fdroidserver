@@ -1968,7 +1968,7 @@ def place_srclib(root_dir, number, libpath):
 apk_sigfile = re.compile(r'META-INF/[0-9A-Za-z]+\.(SF|RSA|DSA|EC)')
 
 
-def verify_apks(signed_apk, unsigned_apk, tmp_dir):
+def verify_apks(signed_apk, unsigned_apk, tmp_dir, skip_manual_diff=False):
     """Verify that two apks are the same
 
     One of the inputs is signed, the other is unsigned. The signature metadata
@@ -1987,6 +1987,8 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     :param signed_apk: Path to a signed apk file
     :param unsigned_apk: Path to an unsigned apk file expected to match it
     :param tmp_dir: Path to directory for temporary files
+    :param skip_manual_diff: Skipping to displaying defferences between apks
+        with meld, kdiff, etc.
     :returns: None if the verification is successful, otherwise a string
               describing what went wrong.
     """
@@ -2020,7 +2022,9 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
 
     if not verified:
         logging.info("...NOT verified - {0}".format(tmp_apk))
-        return compare_apks(signed_apk, tmp_apk, tmp_dir, os.path.dirname(unsigned_apk))
+        return compare_apks(signed_apk, tmp_apk, tmp_dir,
+                            os.path.dirname(unsigned_apk),
+                            skip_manual_diff=skip_manual_diff)
 
     logging.info("...successfully verified")
     return None

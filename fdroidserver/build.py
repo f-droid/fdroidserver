@@ -1230,9 +1230,8 @@ def main():
                             unsigned_apk = os.path.join(output_dir,
                                                         unsigned_apk)
                             compare_result = \
-                                common.compare_apks(of, unsigned_apk,
-                                                    tmpdir, log_dir,
-                                                    skip_manual_diff=True)
+                                common.verify_apks(of, unsigned_apk, tmpdir,
+                                                   skip_manual_diff=True)
                             if compare_result:
                                 compare_result = compare_result.split('\n')
                                 line_count = len(compare_result)
