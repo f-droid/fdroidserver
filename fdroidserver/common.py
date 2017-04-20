@@ -1968,7 +1968,7 @@ def place_srclib(root_dir, number, libpath):
 apk_sigfile = re.compile(r'META-INF/[0-9A-Za-z]+\.(SF|RSA|DSA|EC)')
 
 
-def verify_apks(signed_apk, unsigned_apk, tmp_dir, skip_manual_diff=False):
+def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     """Verify that two apks are the same
 
     One of the inputs is signed, the other is unsigned. The signature metadata
@@ -1987,8 +1987,6 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir, skip_manual_diff=False):
     :param signed_apk: Path to a signed apk file
     :param unsigned_apk: Path to an unsigned apk file expected to match it
     :param tmp_dir: Path to directory for temporary files
-    :param skip_manual_diff: Skipping to displaying defferences between apks
-        with meld, kdiff, etc.
     :returns: None if the verification is successful, otherwise a string
               describing what went wrong.
     """
@@ -2023,8 +2021,7 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir, skip_manual_diff=False):
     if not verified:
         logging.info("...NOT verified - {0}".format(tmp_apk))
         return compare_apks(signed_apk, tmp_apk, tmp_dir,
-                            os.path.dirname(unsigned_apk),
-                            skip_manual_diff=skip_manual_diff)
+                            os.path.dirname(unsigned_apk))
 
     logging.info("...successfully verified")
     return None
@@ -2053,7 +2050,7 @@ def verify_apk_signature(apk, jar=False):
 apk_badchars = re.compile('''[/ :;'"]''')
 
 
-def compare_apks(apk1, apk2, tmp_dir, log_dir=None, skip_manual_diff=False):
+def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
     """Compare two apks
 
     Returns None if the apk content is the same (apart from the signing key),
@@ -2105,10 +2102,8 @@ def compare_apks(apk1, apk2, tmp_dir, log_dir=None, skip_manual_diff=False):
     p = FDroidPopen(['diff', '-r', apk1dir, apk2dir], output=False)
     lines = p.output.splitlines()
     if len(lines) != 1 or 'META-INF' not in lines[0]:
-        if not skip_manual_diff:
-            meld = find_command('meld')
-            if meld is not None:
-                p = FDroidPopen(['meld', apk1dir, apk2dir], output=False)
+        if set_command_in_config('meld'):
+            p = FDroidPopen([config['meld'], apk1dir, apk2dir], output=False)
         return("Unexpected diff output - " + p.output)
 
     # since everything verifies, delete the comparison to keep cruft down
