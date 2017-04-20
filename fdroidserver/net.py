@@ -26,7 +26,8 @@ def download_file(url, local_filename=None, dldir='tmp'):
     if local_filename is None:
         local_filename = os.path.join(dldir, filename)
     # the stream=True parameter keeps memory usage low
-    r = requests.get(url, stream=True)
+    r = requests.get(url, stream=True, allow_redirects=True)
+    r.raise_for_status()
     with open(local_filename, 'wb') as f:
         for chunk in r.iter_content(chunk_size=1024):
             if chunk:  # filter out keep-alive new chunks
