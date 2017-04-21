@@ -19,6 +19,7 @@
 import sys
 import os
 import glob
+import requests
 from argparse import ArgumentParser
 import logging
 
@@ -76,7 +77,10 @@ def main():
                 os.remove(remoteapk)
             url = 'https://f-droid.org/repo/' + apkfilename
             logging.info("...retrieving " + url)
-            net.download_file(url, dldir=tmp_dir)
+            try:
+                net.download_file(url, dldir=tmp_dir)
+            except requests.exceptions.HTTPError as e:
+                raise FDroidException('downloading %s failed', url) from e
 
             compare_result = common.verify_apks(
                 remoteapk,

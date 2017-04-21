@@ -27,6 +27,7 @@ import tarfile
 import traceback
 import time
 import json
+import requests
 from configparser import ConfigParser
 from argparse import ArgumentParser
 import logging
@@ -1212,7 +1213,10 @@ def main():
                         logging.info("...retrieving " + url)
                         of = "{0}_{1}.apk.binary".format(app.id, build.versionCode)
                         of = os.path.join(output_dir, of)
-                        net.download_file(url, local_filename=of)
+                        try:
+                            net.download_file(url, local_filename=of)
+                        except requests.exceptions.HTTPError as e:
+                            raise FDroidException('downloading Binaries from %s failed' % url) from e
 
                     build_succeeded.append(app)
                     wikilog = "Build succeeded"
