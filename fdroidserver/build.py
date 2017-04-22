@@ -1212,7 +1212,7 @@ def main():
                         url = url.replace('%v', build.versionName)
                         url = url.replace('%c', str(build.versionCode))
                         logging.info("...retrieving " + url)
-                        of = "{0}_{1}.apk.binary".format(app.id, build.versionCode)
+                        of = common.get_release_filename(app, build) + '.binary'
                         of = os.path.join(output_dir, of)
                         try:
                             net.download_file(url, local_filename=of)
@@ -1225,10 +1225,9 @@ def main():
                         # and remove everything from the unsigend folder.
                         with tempfile.TemporaryDirectory() as tmpdir:
                             unsigned_apk = \
-                                '{0}_{1}.apk'.format(appid,
-                                                     build.versionCode)
-                            unsigned_apk = os.path.join(output_dir,
-                                                        unsigned_apk)
+                                common.get_release_filename(app, build)
+                            unsigned_apk = \
+                                os.path.join(output_dir, unsigned_apk)
                             compare_result = \
                                 common.verify_apks(of, unsigned_apk, tmpdir)
                             if compare_result:
