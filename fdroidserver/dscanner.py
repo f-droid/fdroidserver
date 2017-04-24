@@ -467,7 +467,7 @@ def main():
         for build in app.builds:
             apks = []
             for f in os.listdir(options.repo_path):
-                n = "%v_%v.apk".format(app_id, build.versionCode)
+                n = common.get_release_filename(app, build)
                 if f == n:
                     apks.append(f)
             for apk in sorted(apks):

@@ -9,5 +9,5 @@ ndk_paths = {
 }
 qt_sdk_path = "/home/vagrant/qt-sdk/5.7.0/5.7"
 java_paths = {
-    '8': "/usr/lib/jvm/java-8-openjdk-i386",
+    '8': "/usr/lib/jvm/java-8-openjdk-amd64",
 }

@@ -2020,7 +2020,8 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
 
     if not verified:
         logging.info("...NOT verified - {0}".format(tmp_apk))
-        return compare_apks(signed_apk, tmp_apk, tmp_dir, os.path.dirname(unsigned_apk))
+        return compare_apks(signed_apk, tmp_apk, tmp_dir,
+                            os.path.dirname(unsigned_apk))
 
     logging.info("...successfully verified")
     return None
@@ -2101,9 +2102,8 @@ def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
     p = FDroidPopen(['diff', '-r', apk1dir, apk2dir], output=False)
     lines = p.output.splitlines()
     if len(lines) != 1 or 'META-INF' not in lines[0]:
-        meld = find_command('meld')
-        if meld is not None:
-            p = FDroidPopen(['meld', apk1dir, apk2dir], output=False)
+        if set_command_in_config('meld'):
+            p = FDroidPopen([config['meld'], apk1dir, apk2dir], output=False)
         return("Unexpected diff output - " + p.output)
 
     # since everything verifies, delete the comparison to keep cruft down

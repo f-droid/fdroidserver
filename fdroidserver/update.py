@@ -319,7 +319,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
         for build in app['builds']:
             if not build.disable:
                 continue
-            apkfilename = appid + '_' + str(build.versionCode) + '.apk'
+            apkfilename = common.get_release_filename(app, build)
             iconfilename = "%s.%s.png" % (
                 appid,
                 build.versionCode)
