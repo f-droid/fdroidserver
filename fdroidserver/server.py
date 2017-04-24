@@ -216,9 +216,9 @@ def update_serverwebroot(serverwebroot, repo_section):
     if options.quiet:
         rsyncargs += ['--quiet']
     if options.identity_file is not None:
-        rsyncargs += ['-e', 'ssh -i ' + options.identity_file]
-    if 'identity_file' in config:
-        rsyncargs += ['-e', 'ssh -i ' + config['identity_file']]
+        rsyncargs += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + options.identity_file]
+    elif 'identity_file' in config:
+        rsyncargs += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file']]
     indexxml = os.path.join(repo_section, 'index.xml')
     indexjar = os.path.join(repo_section, 'index.jar')
     indexv1jar = os.path.join(repo_section, 'index-v1.jar')
@@ -334,6 +334,13 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         fdroid_repo_path = os.path.join(git_mirror_path, "fdroid")
         _local_sync(repo_section, fdroid_repo_path)
 
+        # use custom SSH command if identity_file specified
+        ssh_cmd = 'ssh -oBatchMode=yes'
+        if options.identity_file is not None:
+            ssh_cmd += ' -oIdentitiesOnly=yes -i "%s"' % options.identity_file
+        elif 'identity_file' in config:
+            ssh_cmd += ' -oIdentitiesOnly=yes -i "%s"' % config['identity_file']
+
         repo = git.Repo.init(git_mirror_path)
 
         for mirror in servergitmirrors:
@@ -360,7 +367,8 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         # push for every remote. This will overwrite the git history
         for remote in repo.remotes:
             logging.debug('Pushing to ' + remote.url)
-            remote.push('master', force=True, set_upstream=True, progress=progress)
+            with repo.git.custom_environment(GIT_SSH_COMMAND=ssh_cmd):
+                remote.push('master', force=True, set_upstream=True, progress=progress)
         if progress:
             bar.done()
 
