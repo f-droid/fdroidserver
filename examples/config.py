@@ -181,7 +181,7 @@ The repository of older versions of applications from the main demo repository.
 #     'http://foobarfoobarfoobar.onion/fdroid',
 # )
 
-# optionally specific which identity file to use when using rsync over SSH
+# optionally specify which identity file to use when using rsync or git over SSH
 #
 # identity_file = '~/.ssh/fdroid_id_rsa'
 
