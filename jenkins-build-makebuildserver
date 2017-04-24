@@ -89,7 +89,7 @@ echo "build_server_always = True" >> config.py
 # building old versions should still work
 ../fdroid build --verbose --stop org.fdroid.fdroid:96150
 # test OTA update ZIP build and publish
-../fdroid build --verbose --stop --latest org.fdroid.fdroid.privileged.ota
+../fdroid build --verbose --stop org.fdroid.fdroid.privileged.ota:2030
 
 # publish process when building and signing are on separate machines
 test -d repo || mkdir repo
