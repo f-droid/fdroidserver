@@ -226,6 +226,8 @@ def vm_test_ssh_into_builder():
 
 def vm_new_get_clean_builder(serverdir, reset=False):
     if not os.path.isdir(serverdir):
+        if os.path.islink(serverdir):
+            os.unlink(serverdir)
         logging.info("buildserver path does not exists, creating %s", serverdir)
         os.makedirs(serverdir)
     vagrantfile = os.path.join(serverdir, 'Vagrantfile')
