@@ -41,6 +41,7 @@ from . import scanner
 from . import vmtools
 from .common import FDroidPopen, SdkToolsPopen
 from .exception import FDroidException, BuildException, VCSException
+from .vmtools import FDroidBuildVmException
 
 try:
     import paramiko
@@ -264,7 +265,16 @@ def vm_new_get_clean_builder(serverdir, reset=False):
         vm.snapshot_revert('fdroidclean')
     vm.up()
 
-    return get_vagrant_sshinfo()
+    try:
+        sshinfo = vm.sshinfo()
+    except FDroidBuildVmException:
+        # workaround because libvirt sometimes likes to forget
+        # about ssh connection info even thou the vm is running
+        vm.halt()
+        vm.up()
+        sshinfo = vm.sshinfo()
+
+    return sshinfo
 
 
 def vm_get_clean_builder(reset=False):

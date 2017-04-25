@@ -236,6 +236,33 @@ class FDroidBuildVm():
                         boxname, boxpath)
             shutil.rmtree(boxpath)
 
+    def sshinfo(self):
+        """Get ssh connection info for a vagrant VM
+
+        :returns: A dictionary containing 'hostname', 'port', 'user'
+            and 'idfile'
+        """
+        import paramiko
+        try:
+            _check_call(['vagrant ssh-config > sshconfig'],
+                        cwd=self.srvdir, shell=True)
+            vagranthost = 'default'  # Host in ssh config file
+            sshconfig = paramiko.SSHConfig()
+            with open(joinpath(self.srvdir, 'sshconfig'), 'r') as f:
+                sshconfig.parse(f)
+            sshconfig = sshconfig.lookup(vagranthost)
+            idfile = sshconfig['identityfile']
+            if isinstance(idfile, list):
+                idfile = idfile[0]
+            elif idfile.startswith('"') and idfile.endswith('"'):
+                idfile = idfile[1:-1]
+            return {'hostname': sshconfig['hostname'],
+                    'port': int(sshconfig['port']),
+                    'user': sshconfig['user'],
+                    'idfile': idfile}
+        except subprocess.CalledProcessError as e:
+            raise FDroidBuildVmException("Error getting ssh config") from e
+
     def snapshot_create(self, snapshot_name):
         raise NotImplementedError('not implemented, please use a sub-type instance')
 
