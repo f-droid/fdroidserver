@@ -1315,7 +1315,7 @@ def write_txt(mf, app):
                         first = False
                     else:
                         mf.write(' && \\\n        ')
-                    mf.write(s)
+                    mf.write(s.strip())
             elif t == TYPE_LIST:
                 mf.write(','.join(v))
 
