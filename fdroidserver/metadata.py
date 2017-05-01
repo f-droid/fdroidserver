@@ -25,7 +25,7 @@ import html
 import logging
 import textwrap
 import io
-
+import ruamel.yaml
 import yaml
 # use libyaml if it is available
 try:
@@ -34,6 +34,8 @@ try:
 except ImportError:
     from yaml import Loader
     YamlLoader = Loader
+
+from collections import OrderedDict
 
 import fdroidserver.common
 from fdroidserver.exception import MetaDataException
@@ -952,6 +954,69 @@ def parse_yaml_metadata(mf, app):
     yamlinfo = yaml.load(mf, Loader=YamlLoader)
     app.update(yamlinfo)
     return app
+
+def write_yaml(mf, app):
+
+    def _class_as_dict_representer(dumper, data):
+        '''Creates a YAML representation of a App/Build instance'''
+        return dumper.represent_dict(data)
+
+    empty_keys = [k for k, v in app.items() if not v]
+    for k in empty_keys:
+        del app[k]
+
+    for k in ['added', 'lastUpdated', 'id', 'metadatapath']:
+        if k in app:
+            del app[k]
+
+    #yaml.add_representer(fdroidserver.metadata.App, _class_as_dict_representer)
+    #ruamel.yaml.add_representer(fdroidserver.metadata.Build, _class_as_dict_representer)
+    #yaml.dump(app.asOrderedDict(), mf, default_flow_style=False, Dumper=yamlordereddictloader.Dumper)
+
+    yaml_app_field_order = [
+        'Categories',
+        'License',
+        'Web Site',
+        'Source Code',
+        'Issue Tracker',
+        'Donate',
+        'Bitcoin',
+        '\n',
+        'Auto Name',
+        'Summary',
+        'Description',
+        '\n',
+        'Repo Type',
+        'Repo',
+        '\n',
+        'Auto Update Mode',
+        'Update Check Mode',
+        'Current Version',
+        'Current Version Code',
+    ]
+
+    preformated = ruamel.yaml.comments.CommentedMap()
+    insert_newline = False
+    for field in yaml_app_field_order:
+        if field is '\n':
+            insert_newline = True
+        else:
+            f = field.replace(' ', '')
+            if hasattr(app, f) and getattr(app, f):
+                if f in ['Description']:
+                    preformated.update({f: ruamel.yaml.scalarstring.preserve_literal(getattr(app, f))})
+                else:
+                    preformated.update({f: getattr(app, f)})
+                if insert_newline:
+                    insert_newline = False
+                    # inserting empty lines is not supported so we add a
+                    # bogus comment and over-write its value
+                    preformated.yaml_set_comment_before_after_key(f, 'bogus')
+                    preformated.ca.items[f][1][0].value = '\n'
+    # TODO implement dump for builds
+    del(preformated['builds'])
+
+    ruamel.yaml.round_trip_dump(preformated, mf, indent=4, block_seq_indent=2)
 
 
 def write_yaml(mf, app):
