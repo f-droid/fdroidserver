@@ -575,7 +575,7 @@ def _set_localized_text_entry(app, locale, key, f):
 
 
 def _set_author_entry(app, key, f):
-    limit = config['char_limits']['Author']
+    limit = config['char_limits']['author']
     with open(f) as fp:
         text = fp.read()[:limit]
         if len(text) > 0:
@@ -612,33 +612,33 @@ def copy_triple_t_store_metadata(apps):
                 locale = segments[-2]
                 for f in files:
                     if f == 'fulldescription':
-                        _set_localized_text_entry(app, locale, 'Description',
+                        _set_localized_text_entry(app, locale, 'description',
                                                   os.path.join(root, f))
                         continue
                     elif f == 'shortdescription':
-                        _set_localized_text_entry(app, locale, 'Summary',
+                        _set_localized_text_entry(app, locale, 'summary',
                                                   os.path.join(root, f))
                         continue
                     elif f == 'title':
-                        _set_localized_text_entry(app, locale, 'Name',
+                        _set_localized_text_entry(app, locale, 'name',
                                                   os.path.join(root, f))
                         continue
                     elif f == 'video':
-                        _set_localized_text_entry(app, locale, 'Video',
+                        _set_localized_text_entry(app, locale, 'video',
                                                   os.path.join(root, f))
                         continue
                     elif f == 'whatsnew':
-                        _set_localized_text_entry(app, segments[-1], 'WhatsNew',
+                        _set_localized_text_entry(app, segments[-1], 'whatsNew',
                                                   os.path.join(root, f))
                         continue
                     elif f == 'contactEmail':
-                        _set_author_entry(app, 'AuthorEmail', os.path.join(root, f))
+                        _set_author_entry(app, 'authorEmail', os.path.join(root, f))
                         continue
                     elif f == 'contactPhone':
-                        _set_author_entry(app, 'AuthorPhone', os.path.join(root, f))
+                        _set_author_entry(app, 'authorPhone', os.path.join(root, f))
                         continue
                     elif f == 'contactWebsite':
-                        _set_author_entry(app, 'AuthorWebSite', os.path.join(root, f))
+                        _set_author_entry(app, 'authorWebSite', os.path.join(root, f))
                         continue
 
                     base, extension = common.get_extension(f)
@@ -664,7 +664,8 @@ def insert_localized_app_metadata(apps):
     and adds them to the app metadata.  The screenshots and graphic
     must be PNG or JPEG files ending with ".png", ".jpg", or ".jpeg"
     and must be in the following layout:
-
+    # TODO replace these docs with link to All_About_Descriptions_Graphics_and_Screenshots
+    # TODO mention that the 'localized' section is not in metadata.yml, so key names are like Java vars: camelCase with first letter lowercase.
     repo/packageName/locale/featureGraphic.png
     repo/packageName/locale/phoneScreenshots/1.png
     repo/packageName/locale/phoneScreenshots/2.png
@@ -709,23 +710,23 @@ def insert_localized_app_metadata(apps):
             destdir = os.path.join('repo', packageName, locale)
             for f in files:
                 if f == 'full_description.txt':
-                    _set_localized_text_entry(apps[packageName], locale, 'Description',
+                    _set_localized_text_entry(apps[packageName], locale, 'description',
                                               os.path.join(root, f))
                     continue
                 elif f == 'short_description.txt':
-                    _set_localized_text_entry(apps[packageName], locale, 'Summary',
+                    _set_localized_text_entry(apps[packageName], locale, 'summary',
                                               os.path.join(root, f))
                     continue
                 elif f == 'title.txt':
-                    _set_localized_text_entry(apps[packageName], locale, 'Name',
+                    _set_localized_text_entry(apps[packageName], locale, 'name',
                                               os.path.join(root, f))
                     continue
                 elif f == 'video.txt':
-                    _set_localized_text_entry(apps[packageName], locale, 'Video',
+                    _set_localized_text_entry(apps[packageName], locale, 'video',
                                               os.path.join(root, f))
                     continue
                 elif f == str(apps[packageName]['CurrentVersionCode']) + '.txt':
-                    _set_localized_text_entry(apps[packageName], segments[-2], 'WhatsNew',
+                    _set_localized_text_entry(apps[packageName], segments[-2], 'whatsNew',
                                               os.path.join(root, f))
                     continue
 
