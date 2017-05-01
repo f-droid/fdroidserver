@@ -35,8 +35,6 @@ except ImportError:
     from yaml import Loader
     YamlLoader = Loader
 
-from collections import OrderedDict
-
 import fdroidserver.common
 from fdroidserver.exception import MetaDataException
 
@@ -955,6 +953,7 @@ def parse_yaml_metadata(mf, app):
     app.update(yamlinfo)
     return app
 
+
 def write_yaml(mf, app):
 
     def _class_as_dict_representer(dumper, data):
@@ -969,9 +968,9 @@ def write_yaml(mf, app):
         if k in app:
             del app[k]
 
-    #yaml.add_representer(fdroidserver.metadata.App, _class_as_dict_representer)
-    #ruamel.yaml.add_representer(fdroidserver.metadata.Build, _class_as_dict_representer)
-    #yaml.dump(app.asOrderedDict(), mf, default_flow_style=False, Dumper=yamlordereddictloader.Dumper)
+    # yaml.add_representer(fdroidserver.metadata.App, _class_as_dict_representer)
+    ruamel.yaml.add_representer(fdroidserver.metadata.Build, _class_as_dict_representer)
+    # yaml.dump(app.asOrderedDict(), mf, default_flow_style=False, Dumper=yamlordereddictloader.Dumper)
 
     yaml_app_field_order = [
         'Categories',
@@ -1013,29 +1012,8 @@ def write_yaml(mf, app):
                     # bogus comment and over-write its value
                     preformated.yaml_set_comment_before_after_key(f, 'bogus')
                     preformated.ca.items[f][1][0].value = '\n'
-    # TODO implement dump for builds
-    del(preformated['builds'])
 
     ruamel.yaml.round_trip_dump(preformated, mf, indent=4, block_seq_indent=2)
-
-
-def write_yaml(mf, app):
-
-    def _class_as_dict_representer(dumper, data):
-        '''Creates a YAML representation of a App/Build instance'''
-        return dumper.represent_dict(data)
-
-    empty_keys = [k for k, v in app.items() if not v]
-    for k in empty_keys:
-        del app[k]
-
-    for k in ['added', 'lastUpdated', 'id', 'metadatapath']:
-        if k in app:
-            del app[k]
-
-    yaml.add_representer(fdroidserver.metadata.App, _class_as_dict_representer)
-    yaml.add_representer(fdroidserver.metadata.Build, _class_as_dict_representer)
-    yaml.dump(app, mf, default_flow_style=False)
 
 
 build_line_sep = re.compile(r'(?<!\\),')

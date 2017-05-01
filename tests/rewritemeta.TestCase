@@ -4,11 +4,8 @@ import inspect
 import optparse
 import os
 import sys
-import shutil
 import unittest
-import yaml
 import tempfile
-import textwrap
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
