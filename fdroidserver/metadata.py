@@ -960,6 +960,26 @@ def write_yaml(mf, app):
         '''Creates a YAML representation of a App/Build instance'''
         return dumper.represent_dict(data)
 
+    def _builds_to_yaml(app):
+
+        fields = ['versionName', 'versionCode']
+        fields.extend(build_flags_order)
+
+        builds = ruamel.yaml.comments.CommentedSeq()
+        for build in app.builds:
+            b = ruamel.yaml.comments.CommentedMap()
+            for field in fields:
+                if hasattr(build, field) and getattr(build, field):
+                    b.update({field: getattr(build, field)})
+            builds.append(b)
+
+        # insert extra empty lines between builds
+        for i in range(1, len(builds)):
+            builds.yaml_set_comment_before_after_key(i, 'bogus')
+            builds.ca.items[i][1][-1].value = '\n'
+
+        return builds
+
     empty_keys = [k for k, v in app.items() if not v]
     for k in empty_keys:
         del app[k]
@@ -975,23 +995,28 @@ def write_yaml(mf, app):
     yaml_app_field_order = [
         'Categories',
         'License',
-        'Web Site',
-        'Source Code',
-        'Issue Tracker',
+        'WebSite',
+        'SourceCode',
+        'IssueTracker',
+        'Changelog',
         'Donate',
+        'FlattrID',
         'Bitcoin',
         '\n',
-        'Auto Name',
+        'AutoName',
         'Summary',
         'Description',
         '\n',
-        'Repo Type',
+        'RepoType',
         'Repo',
         '\n',
-        'Auto Update Mode',
-        'Update Check Mode',
-        'Current Version',
-        'Current Version Code',
+        'Builds',
+        '\n',
+        'ArchivePolicy',
+        'AutoUpdateMode',
+        'UpdateCheckMode',
+        'CurrentVersion',
+        'CurrentVersionCode',
     ]
 
     preformated = ruamel.yaml.comments.CommentedMap()
@@ -1000,18 +1025,20 @@ def write_yaml(mf, app):
         if field is '\n':
             insert_newline = True
         else:
-            f = field.replace(' ', '')
-            if hasattr(app, f) and getattr(app, f):
-                if f in ['Description']:
-                    preformated.update({f: ruamel.yaml.scalarstring.preserve_literal(getattr(app, f))})
+            if (hasattr(app, field) and getattr(app, field)) or field is 'Builds':
+                if field in ['Description']:
+                    preformated.update({field: ruamel.yaml.scalarstring.preserve_literal(getattr(app, field))})
+                elif field is 'Builds':
+                    preformated.update({'Builds': _builds_to_yaml(app)})
                 else:
-                    preformated.update({f: getattr(app, f)})
+                    preformated.update({field: getattr(app, field)})
+
                 if insert_newline:
                     insert_newline = False
                     # inserting empty lines is not supported so we add a
                     # bogus comment and over-write its value
-                    preformated.yaml_set_comment_before_after_key(f, 'bogus')
-                    preformated.ca.items[f][1][-1].value = '\n'
+                    preformated.yaml_set_comment_before_after_key(field, 'bogus')
+                    preformated.ca.items[field][1][-1].value = '\n'
 
     ruamel.yaml.round_trip_dump(preformated, mf, indent=4, block_seq_indent=2)
 

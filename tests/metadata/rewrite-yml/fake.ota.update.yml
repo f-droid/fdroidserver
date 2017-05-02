@@ -31,6 +31,13 @@ Description: |-
 RepoType: git
 Repo: https://gitlab.com/fdroid/privileged-extension.git
 
+Builds:
+  - versionName: 0.2.1
+    versionCode: '2000'
+    commit: 0.2.1
+    output: app/build/distributions/FDroidPrivilegedExtensionFromBinaries-$$VERSION$$.zip
+    build: gradle assembleUpdateZipFromBinariesDebug
+
 AutoUpdateMode: Version %v
 UpdateCheckMode: Tags
 CurrentVersion: 0.2.1

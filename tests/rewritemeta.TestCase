@@ -19,7 +19,7 @@ import fdroidserver.metadata
 class RewritemetaTest(unittest.TestCase):
     '''    fdroidserver/metadata.py'''
 
-    def test_rewrite_yaml(self):
+    def test_rewrite_yaml_fakeotaupdate(self):
 
         # setup/reset test dir if necessary and setup params
         tmpdir = os.path.join(os.path.dirname(__file__), '..', '.testfiles')
@@ -36,9 +36,31 @@ class RewritemetaTest(unittest.TestCase):
 
         # assert rewrite result
         with open(os.path.join(testdir, 'fake.ota.update.yml'), 'r', encoding='utf-8') as result:
-            with open('rewrite-metadata/fake.ota.update.yml', 'r', encoding='utf-8') as orig:
+            with open('metadata/rewrite-yml/fake.ota.update.yml', 'r', encoding='utf-8') as orig:
                 self.maxDiff = None
                 self.assertEqual(result.read(), orig.read())
+
+    def test_rewrite_yaml_fdroidclient(self):
+
+        # setup/reset test dir if necessary and setup params
+        tmpdir = os.path.join(os.path.dirname(__file__), '..', '.testfiles')
+        if not os.path.exists(tmpdir):
+            os.makedirs(tmpdir)
+        testdir = tempfile.mkdtemp(prefix='test_rewrite_metadata_', dir=tmpdir)
+        fdroidserver.common.config = {'accepted_formats': ['txt', 'yml']}
+
+        # rewrite metadata
+        allapps = fdroidserver.metadata.read_metadata(xref=True)
+        for appid, app in allapps.items():
+            if appid == 'org.fdroid.fdroid':
+                fdroidserver.metadata.write_metadata(os.path.join(testdir, appid + '.yml'), app)
+
+        # assert rewrite result
+        with open(os.path.join(testdir, 'org.fdroid.fdroid.yml'), 'r', encoding='utf-8') as result:
+            with open('metadata/rewrite-yml/org.fdroid.fdroid.yml', 'r', encoding='utf-8') as orig:
+                self.maxDiff = None
+                self.assertEqual(result.read(), orig.read())
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
