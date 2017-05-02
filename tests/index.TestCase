@@ -6,6 +6,9 @@ import os
 import sys
 import unittest
 import zipfile
+from unittest.mock import patch
+
+import requests
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -16,6 +19,9 @@ if localmodule not in sys.path:
 import fdroidserver.common
 import fdroidserver.index
 import fdroidserver.signindex
+
+
+GP_FINGERPRINT = 'B7C2EEFD8DAC7806AF67DFCD92EB18126BC08312A7F2D6F3862E46013C7A6135'
 
 
 class IndexTest(unittest.TestCase):
@@ -55,9 +61,7 @@ class IndexTest(unittest.TestCase):
                                 '818E469465F96B704E27BE2FEE4C63AB' +
                                 '9F83DDF30E7A34C7371A4728D83B0BC1')
             if f == 'guardianproject.jar':
-                self.assertTrue(fingerprint ==
-                                'B7C2EEFD8DAC7806AF67DFCD92EB1812' +
-                                '6BC08312A7F2D6F3862E46013C7A6135')
+                self.assertTrue(fingerprint == GP_FINGERPRINT)
 
     def test_get_public_key_from_jar_fails(self):
         basedir = os.path.dirname(__file__)
@@ -72,10 +76,43 @@ class IndexTest(unittest.TestCase):
             fdroidserver.index.download_repo_index("http://example.org")
 
     def test_download_repo_index_no_jar(self):
-        with self.assertRaises(zipfile.BadZipFile):
+        with self.assertRaises(requests.exceptions.HTTPError):
             fdroidserver.index.download_repo_index("http://example.org?fingerprint=nope")
 
-    # TODO test_download_repo_index with an actual repository
+    @patch('requests.head')
+    def test_download_repo_index_same_etag(self, head):
+        url = 'http://example.org?fingerprint=test'
+        etag = '"4de5-54d840ce95cb9"'
+
+        head.return_value.headers = {'ETag': etag}
+        index, new_etag = fdroidserver.index.download_repo_index(url, etag=etag)
+
+        self.assertIsNone(index)
+        self.assertEqual(etag, new_etag)
+
+    @patch('requests.get')
+    @patch('requests.head')
+    def test_download_repo_index_new_etag(self, head, get):
+        url = 'http://example.org?fingerprint=' + GP_FINGERPRINT
+        etag = '"4de5-54d840ce95cb9"'
+
+        # fake HTTP answers
+        head.return_value.headers = {'ETag': 'new_etag'}
+        get.return_value.headers = {'ETag': 'new_etag'}
+        get.return_value.status_code = 200
+        testfile = os.path.join(os.path.dirname(__file__), 'signindex', 'guardianproject-v1.jar')
+        with open(testfile, 'rb') as file:
+            get.return_value.content = file.read()
+
+        index, new_etag = fdroidserver.index.download_repo_index(url, etag=etag)
+
+        # assert that the index was retrieved properly
+        self.assertEqual('Guardian Project Official Releases', index['repo']['name'])
+        self.assertEqual(GP_FINGERPRINT, index['repo']['fingerprint'])
+        self.assertTrue(len(index['repo']['pubkey']) > 500)
+        self.assertEqual(10, len(index['apps']))
+        self.assertEqual(10, len(index['packages']))
+        self.assertEqual('new_etag', new_etag)
 
 
 if __name__ == "__main__":

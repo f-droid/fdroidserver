@@ -35,9 +35,7 @@ from binascii import hexlify, unhexlify
 from datetime import datetime
 from xml.dom.minidom import Document
 
-import requests
-
-from fdroidserver import metadata, signindex, common
+from fdroidserver import metadata, signindex, common, net
 from fdroidserver.common import FDroidPopen, FDroidPopenBytes
 from fdroidserver.metadata import MetaDataException
 
@@ -557,14 +555,16 @@ class VerificationException(Exception):
     pass
 
 
-def download_repo_index(url_str, verify_fingerprint=True):
+def download_repo_index(url_str, etag=None, verify_fingerprint=True):
     """
     Downloads the repository index from the given :param url_str
     and verifies the repository's fingerprint if :param verify_fingerprint is not False.
 
     :raises: VerificationException() if the repository could not be verified
 
-    :return: The index in JSON format.
+    :return: A tuple consisting of:
+        - The index in JSON format or None if the index did not change
+        - The new eTag as returned by the HTTP request
     """
     url = urllib.parse.urlsplit(url_str)
 
@@ -576,11 +576,14 @@ def download_repo_index(url_str, verify_fingerprint=True):
         fingerprint = query['fingerprint'][0]
 
     url = urllib.parse.SplitResult(url.scheme, url.netloc, url.path + '/index-v1.jar', '', '')
-    r = requests.get(url.geturl())
+    download, new_etag = net.http_get(url.geturl(), etag)
+
+    if download is None:
+        return None, new_etag
 
     with tempfile.NamedTemporaryFile() as fp:
         # write and open JAR file
-        fp.write(r.content)
+        fp.write(download)
         jar = zipfile.ZipFile(fp)
 
         # verify that the JAR signature is valid
@@ -601,7 +604,7 @@ def download_repo_index(url_str, verify_fingerprint=True):
         # turn the apps into App objects
         index["apps"] = [metadata.App(app) for app in index["apps"]]
 
-        return index
+        return index, new_etag
 
 
 def verify_jar_signature(file):

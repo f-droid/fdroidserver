@@ -34,3 +34,34 @@ def download_file(url, local_filename=None, dldir='tmp'):
                 f.write(chunk)
                 f.flush()
     return local_filename
+
+
+def http_get(url, etag=None):
+    """
+    Downloads the content from the given URL by making a GET request.
+
+    If an ETag is given, it will do a HEAD request first, to see if the content changed.
+
+    :param url: The URL to download from.
+    :param etag: The last ETag to be used for the request (optional).
+    :return: A tuple consisting of:
+        - The raw content that was downloaded or None if it did not change
+        - The new eTag as returned by the HTTP request
+    """
+    headers = {'User-Agent': 'F-Droid'}
+    # TODO disable TLS Session IDs and TLS Session Tickets
+    #      (plain text cookie visible to anyone who can see the network traffic)
+    if etag:
+        r = requests.head(url, headers=headers)
+        r.raise_for_status()
+        if 'ETag' in r.headers and etag == r.headers['ETag']:
+            return None, etag
+
+    r = requests.get(url, headers=headers)
+    r.raise_for_status()
+
+    new_etag = None
+    if 'ETag' in r.headers:
+        new_etag = r.headers['ETag']
+
+    return r.content, new_etag
