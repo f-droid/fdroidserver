@@ -970,7 +970,10 @@ def write_yaml(mf, app):
             b = ruamel.yaml.comments.CommentedMap()
             for field in fields:
                 if hasattr(build, field) and getattr(build, field):
-                    b.update({field: getattr(build, field)})
+                    if field is 'versionCode':
+                        b.update({field: int(getattr(build, field))})
+                    else:
+                        b.update({field: getattr(build, field)})
             builds.append(b)
 
         # insert extra empty lines between builds
@@ -1029,7 +1032,9 @@ def write_yaml(mf, app):
                 if field in ['Description']:
                     preformated.update({field: ruamel.yaml.scalarstring.preserve_literal(getattr(app, field))})
                 elif field is 'Builds':
-                    preformated.update({'Builds': _builds_to_yaml(app)})
+                    preformated.update({field: _builds_to_yaml(app)})
+                elif field is 'CurrentVersionCode':
+                    preformated.update({field: int(getattr(app, field))})
                 else:
                     preformated.update({field: getattr(app, field)})
 
