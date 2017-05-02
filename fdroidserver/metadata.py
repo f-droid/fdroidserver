@@ -1011,7 +1011,7 @@ def write_yaml(mf, app):
                     # inserting empty lines is not supported so we add a
                     # bogus comment and over-write its value
                     preformated.yaml_set_comment_before_after_key(f, 'bogus')
-                    preformated.ca.items[f][1][0].value = '\n'
+                    preformated.ca.items[f][1][-1].value = '\n'
 
     ruamel.yaml.round_trip_dump(preformated, mf, indent=4, block_seq_indent=2)
 
