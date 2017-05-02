@@ -473,7 +473,7 @@ while not ready:
         sys.exit(1)
     for line in out.splitlines():
         if line.startswith("default"):
-            if line.find("poweroff") != -1:
+            if line.find("poweroff") != -1 or line.find("shutoff") != 1:
                 ready = True
             else:
                 print("Status: " + line)
