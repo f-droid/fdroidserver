@@ -72,9 +72,10 @@ def main():
         parser.error("Unsupported metadata format, use: --to [" + ' '.join(supported) + "]")
 
     for appid, app in apps.items():
-        base, ext = common.get_extension(app.metadatapath)
+        path = app.metadatapath
+        base, ext = common.get_extension(path)
         if not options.to and ext not in supported:
-            logging.info("Ignoring %s file at '%s'" % (ext, app.metadatapath))
+            logging.info("Ignoring %s file at '%s'" % (ext, path))
             continue
 
         to_ext = ext
@@ -83,13 +84,24 @@ def main():
 
         if options.list:
             if not proper_format(app):
-                print(app.metadatapath)
+                print(path)
             continue
+
+        newbuilds = []
+        for build in app.builds:
+            new = metadata.Build()
+            for k in metadata.build_flags:
+                v = build[k]
+                if v is None or v is False or v == [] or v == '':
+                    continue
+                new[k] = v
+            newbuilds.append(new)
+        app.builds = newbuilds
 
         metadata.write_metadata(base + '.' + to_ext, app)
 
         if ext != to_ext:
-            os.remove(app.metadatapath)
+            os.remove(path)
 
     logging.debug("Finished.")
 
