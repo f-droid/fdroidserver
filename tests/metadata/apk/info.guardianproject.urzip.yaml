@@ -1,0 +1,20 @@
+antiFeatures: !!set {}
+features: []
+hash: abfb3adb7496611749e7abfb014c5c789e3a02489e48a5c3665110d1b1acd931
+hashType: sha256
+icon: info.guardianproject.urzip.100.png
+icons:
+  '0': info.guardianproject.urzip.100.png
+  '160': info.guardianproject.urzip.100.png
+icons_src:
+  '-1': res/drawable/ic_launcher.png
+  '160': res/drawable/ic_launcher.png
+minSdkVersion: '4'
+packageName: info.guardianproject.urzip
+sig: e0ecb5fc2d63088e4a07ae410a127722
+size: 9969
+targetSdkVersion: '18'
+uses-permission: []
+uses-permission-sdk-23: []
+versionCode: 100
+versionName: '0.1'

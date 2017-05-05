@@ -224,6 +224,54 @@ class UpdateTest(unittest.TestCase):
                 self.assertIsNone(apk.get('obbMainFile'))
                 self.assertIsNone(apk.get('obbPatchFile'))
 
+    def testScanApkMetadata(self):
+
+        def _build_yaml_representer(dumper, data):
+            '''Creates a YAML representation of a Build instance'''
+            return dumper.represent_dict(data)
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.update.config = config
+        os.chdir(os.path.dirname(__file__))
+        if os.path.basename(os.getcwd()) != 'tests':
+            raise Exception('This test must be run in the "tests/" subdir')
+
+        config['ndk_paths'] = dict()
+        config['accepted_formats'] = ['json', 'txt', 'yml']
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+
+        fdroidserver.update.options = type('', (), {})()
+        fdroidserver.update.options.clean = True
+        fdroidserver.update.options.delete_unknown = True
+
+        for icon_dir in fdroidserver.update.get_all_icon_dirs('repo'):
+            if not os.path.exists(icon_dir):
+                os.makedirs(icon_dir)
+
+        knownapks = fdroidserver.common.KnownApks()
+        apkList = ['../urzip.apk', '../org.dyndns.fules.ck_20.apk']
+
+        for apkName in apkList:
+            _, apk, cachechanged = fdroidserver.update.scan_apk({}, apkName, 'repo', knownapks, False)
+            # Don't care about the date added to the repo and relative apkName
+            del apk['added']
+            del apk['apkName']
+            # avoid AAPT application name bug
+            del apk['name']
+
+            savepath = os.path.join('metadata', 'apk', apk['packageName'] + '.yaml')
+            # Uncomment to save APK metadata
+            # with open(savepath, 'w') as f:
+            #     yaml.add_representer(fdroidserver.metadata.Build, _build_yaml_representer)
+            #     yaml.dump(apk, f, default_flow_style=False)
+
+            with open(savepath, 'r') as f:
+                frompickle = yaml.load(f)
+            self.maxDiff = None
+            self.assertEqual(apk, frompickle)
+
     def test_scan_invalid_apk(self):
         os.chdir(os.path.join(localmodule, 'tests'))
         if os.path.basename(os.getcwd()) != 'tests':

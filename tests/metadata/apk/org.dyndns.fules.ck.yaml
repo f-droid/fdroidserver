@@ -1,0 +1,41 @@
+antiFeatures: !!set {}
+features: []
+hash: 897486e1f857c6c0ee32ccbad0e1b8cd82f6d0e65a44a23f13f852d2b63a18c8
+hashType: sha256
+icon: org.dyndns.fules.ck.20.png
+icons:
+  '0': org.dyndns.fules.ck.20.png
+  '120': org.dyndns.fules.ck.20.png
+  '160': org.dyndns.fules.ck.20.png
+  '240': org.dyndns.fules.ck.20.png
+icons_src:
+  '-1': res/drawable-mdpi-v4/icon_launcher.png
+  '120': res/drawable-ldpi-v4/icon_launcher.png
+  '160': res/drawable-mdpi-v4/icon_launcher.png
+  '240': res/drawable-hdpi-v4/icon_launcher.png
+minSdkVersion: '7'
+nativecode:
+- arm64-v8a
+- armeabi
+- armeabi-v7a
+- mips
+- mips64
+- x86
+- x86_64
+packageName: org.dyndns.fules.ck
+sig: 9bf7a6a67f95688daec75eab4b1436ac
+size: 132453
+targetSdkVersion: '8'
+uses-permission:
+- !!python/object/new:fdroidserver.update.UsesPermission
+  - android.permission.BIND_INPUT_METHOD
+  - null
+- !!python/object/new:fdroidserver.update.UsesPermission
+  - android.permission.READ_EXTERNAL_STORAGE
+  - null
+- !!python/object/new:fdroidserver.update.UsesPermission
+  - android.permission.VIBRATE
+  - null
+uses-permission-sdk-23: []
+versionCode: 20
+versionName: v1.6pre2
