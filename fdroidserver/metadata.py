@@ -49,7 +49,7 @@ def warn_or_exception(value):
     elif warnings_action == 'error':
         raise MetaDataException(value)
     else:
-        logging.warn(value)
+        logging.warning(value)
 
 
 # To filter which ones should be written to the metadata files if
@@ -179,6 +179,7 @@ TYPE_SCRIPT = 5
 TYPE_MULTILINE = 6
 TYPE_BUILD = 7
 TYPE_BUILD_V2 = 8
+TYPE_INT = 9
 
 fieldtypes = {
     'Description': TYPE_MULTILINE,
@@ -318,6 +319,7 @@ class Build(dict):
 
 
 flagtypes = {
+    'versionCode': TYPE_INT,
     'extlibs': TYPE_LIST,
     'srclibs': TYPE_LIST,
     'patch': TYPE_LIST,
@@ -960,40 +962,66 @@ def write_yaml(mf, app):
         '''Creates a YAML representation of a App/Build instance'''
         return dumper.represent_dict(data)
 
-    def _builds_to_yaml(app):
+    def _field_to_yaml(typ, value):
+        if typ is TYPE_STRING:
+            return str(value)
+        elif typ is TYPE_INT:
+            return int(value)
+        elif typ is TYPE_MULTILINE:
+            if '\n' in value:
+                return ruamel.yaml.scalarstring.preserve_literal(str(value))
+            else:
+                return str(value)
+        elif typ is TYPE_SCRIPT:
+            if len(value) > 50:
+                return ruamel.yaml.scalarstring.preserve_literal(value)
+            else:
+                return value
+        else:
+            return value
 
+    def _app_to_yaml(app):
+        cm = ruamel.yaml.comments.CommentedMap()
+        insert_newline = False
+        for field in yaml_app_field_order:
+            if field is '\n':
+                # next iteration will need to insert a newline
+                insert_newline = True
+            else:
+                if (hasattr(app, field) and getattr(app, field)) or field is 'Builds':
+                    if field is 'Builds':
+                        cm.update({field: _builds_to_yaml(app)})
+                    elif field is 'CurrentVersionCode':
+                        cm.update({field: _field_to_yaml(TYPE_INT, getattr(app, field))})
+                    else:
+                        cm.update({field: _field_to_yaml(fieldtype(field), getattr(app, field))})
+
+                    if insert_newline:
+                        # we need to prepend a newline in front of this field
+                        insert_newline = False
+                        # inserting empty lines is not supported so we add a
+                        # bogus comment and over-write its value
+                        cm.yaml_set_comment_before_after_key(field, 'bogus')
+                        cm.ca.items[field][1][-1].value = '\n'
+        return cm
+
+    def _builds_to_yaml(app):
         fields = ['versionName', 'versionCode']
         fields.extend(build_flags_order)
-
         builds = ruamel.yaml.comments.CommentedSeq()
         for build in app.builds:
             b = ruamel.yaml.comments.CommentedMap()
             for field in fields:
                 if hasattr(build, field) and getattr(build, field):
-                    if field is 'versionCode':
-                        b.update({field: int(getattr(build, field))})
-                    else:
-                        b.update({field: getattr(build, field)})
+                    b.update({field: _field_to_yaml(flagtype(field), getattr(build, field))})
             builds.append(b)
 
-        # insert extra empty lines between builds
+        # insert extra empty lines between build entries
         for i in range(1, len(builds)):
             builds.yaml_set_comment_before_after_key(i, 'bogus')
             builds.ca.items[i][1][-1].value = '\n'
 
         return builds
-
-    empty_keys = [k for k, v in app.items() if not v]
-    for k in empty_keys:
-        del app[k]
-
-    for k in ['added', 'lastUpdated', 'id', 'metadatapath']:
-        if k in app:
-            del app[k]
-
-    # yaml.add_representer(fdroidserver.metadata.App, _class_as_dict_representer)
-    ruamel.yaml.add_representer(fdroidserver.metadata.Build, _class_as_dict_representer)
-    # yaml.dump(app.asOrderedDict(), mf, default_flow_style=False, Dumper=yamlordereddictloader.Dumper)
 
     yaml_app_field_order = [
         'Categories',
@@ -1022,30 +1050,8 @@ def write_yaml(mf, app):
         'CurrentVersionCode',
     ]
 
-    preformated = ruamel.yaml.comments.CommentedMap()
-    insert_newline = False
-    for field in yaml_app_field_order:
-        if field is '\n':
-            insert_newline = True
-        else:
-            if (hasattr(app, field) and getattr(app, field)) or field is 'Builds':
-                if field in ['Description']:
-                    preformated.update({field: ruamel.yaml.scalarstring.preserve_literal(getattr(app, field))})
-                elif field is 'Builds':
-                    preformated.update({field: _builds_to_yaml(app)})
-                elif field is 'CurrentVersionCode':
-                    preformated.update({field: int(getattr(app, field))})
-                else:
-                    preformated.update({field: getattr(app, field)})
-
-                if insert_newline:
-                    insert_newline = False
-                    # inserting empty lines is not supported so we add a
-                    # bogus comment and over-write its value
-                    preformated.yaml_set_comment_before_after_key(field, 'bogus')
-                    preformated.ca.items[field][1][-1].value = '\n'
-
-    ruamel.yaml.round_trip_dump(preformated, mf, indent=4, block_seq_indent=2)
+    yaml_app = _app_to_yaml(app)
+    ruamel.yaml.round_trip_dump(yaml_app, mf, indent=4, block_seq_indent=2)
 
 
 build_line_sep = re.compile(r'(?<!\\),')
