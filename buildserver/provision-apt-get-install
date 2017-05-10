@@ -71,7 +71,7 @@ packages="
  libtool-bin/testing
  make
  maven
- mercurial
+ mercurial/jessie-backports
  nasm
  nodejs
  openjdk-8-jre-headless
