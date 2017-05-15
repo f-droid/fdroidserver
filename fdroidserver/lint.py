@@ -121,6 +121,8 @@ regex_checks = {
     ],
 }
 
+locale_pattern = re.compile(r'^[a-z]{2,3}(-[A-Z][A-Z])?$')
+
 
 def check_regexes(app):
     for f, checks in regex_checks.items():
@@ -325,12 +327,12 @@ def check_files_dir(app):
     files = set()
     for name in os.listdir(dir_path):
         path = os.path.join(dir_path, name)
-        if not os.path.isfile(path):
+        if not (os.path.isfile(path) or name == 'signatures' or locale_pattern.match(name)):
             yield "Found non-file at %s" % path
             continue
         files.add(name)
 
-    used = set()
+    used = {'signatures', }
     for build in app.builds:
         for fname in build.patch:
             if fname not in files:
@@ -339,6 +341,8 @@ def check_files_dir(app):
                 used.add(fname)
 
     for name in files.difference(used):
+        if locale_pattern.match(name):
+            continue
         yield "Unused file at %s" % os.path.join(dir_path, name)
 
 
