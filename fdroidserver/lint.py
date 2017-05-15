@@ -53,6 +53,10 @@ http_url_shorteners = [
     forbid_shortener('goo.gl'),
     forbid_shortener('t.co'),
     forbid_shortener('ur1.ca'),
+    forbid_shortener('is.gd'),
+    forbid_shortener('bit.ly'),
+    forbid_shortener('tiny.cc'),
+    forbid_shortener('tinyurl.com'),
 ]
 
 http_checks = https_enforcings + http_url_shorteners + [
