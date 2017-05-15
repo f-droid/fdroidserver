@@ -169,7 +169,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict):
 
     appslist = []
     output['apps'] = appslist
-    for appid, appdict in apps.items():
+    for packageName, appdict in apps.items():
         d = collections.OrderedDict()
         appslist.append(d)
         for k, v in sorted(appdict.items()):
@@ -190,7 +190,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict):
             elif k == 'CurrentVersion':  # TODO make SuggestedVersionName the canonical name
                 k = 'suggestedVersionName'
             elif k == 'AutoName':
-                if 'Name' not in apps[appid]:
+                if 'Name' not in apps[packageName]:
                     d['name'] = v
                 continue
             else:
@@ -201,6 +201,9 @@ def make_v1(apps, packages, repodir, repodict, requestsdict):
     output['packages'] = output_packages
     for package in packages:
         packageName = package['packageName']
+        if packageName not in apps:
+            logging.info('Ignoring package without metadata: ' + package['apkName'])
+            continue
         if packageName in output_packages:
             packagelist = output_packages[packageName]
         else:
