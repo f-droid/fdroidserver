@@ -783,7 +783,7 @@ def insert_localized_app_metadata(apps):
                 graphics[base] = filename
             elif screenshotdir in SCREENSHOT_DIRS:
                 # there can any number of these per locale
-                logging.debug('adding ' + base + ':' + f)
+                logging.debug('adding to ' + screenshotdir + ': ' + f)
                 if screenshotdir not in graphics:
                     graphics[screenshotdir] = []
                 graphics[screenshotdir].append(filename)
@@ -1126,10 +1126,8 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
 
         try:
             if common.set_command_in_config('aapt'):
-                logging.warning("Using AAPT for metadata")
                 scan_apk_aapt(apk, apkfile)
             else:
-                logging.warning("Using androguard for metadata")
                 scan_apk_androguard(apk, apkfile)
         except BuildException:
             return True, None, False
