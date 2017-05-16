@@ -812,6 +812,12 @@ def post_metadata_parse(app):
         if type(v) in (float, int):
             app[k] = str(v)
 
+    if 'Builds' in app:
+        app['builds'] = app.pop('Builds')
+
+    if 'flavours' in app and app['flavours'] == [True]:
+        app['flavours'] = ['yes']
+
     if isinstance(app.Categories, str):
         app.Categories = [app.Categories]
     elif app.Categories is None:
@@ -833,7 +839,8 @@ def post_metadata_parse(app):
                             build[k] = ['yes']
                         else:
                             build[k] = []
-                elif flagtype(k) == TYPE_STRING and type(v) in (float, int):
+                elif (flagtype(k) == TYPE_STRING or flagtype(k) == TYPE_INT) \
+                     and type(v) in (float, int):
                     build[k] = str(v)
             builds.append(build)
 
@@ -950,9 +957,8 @@ def parse_json_metadata(mf, app):
 
 
 def parse_yaml_metadata(mf, app):
-
-    yamlinfo = yaml.load(mf, Loader=YamlLoader)
-    app.update(yamlinfo)
+    yamldata = yaml.load(mf, Loader=YamlLoader)
+    app.update(yamldata)
     return app
 
 

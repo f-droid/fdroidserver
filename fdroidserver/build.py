@@ -136,8 +136,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         ftp.mkdir('metadata')
         ftp.mkdir('srclibs')
         ftp.chdir('metadata')
-        ftp.put(os.path.join('metadata', app.id + '.txt'),
-                app.id + '.txt')
+        metadatapath = common.metadata_relpath(app.id)
+        ftp.put(metadatapath, os.path.basename(metadatapath))
         # And patches if there are any...
         if os.path.exists(os.path.join('metadata', app.id)):
             send_dir(os.path.join('metadata', app.id))
@@ -185,8 +185,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             send_dir(lib)
             # Copy the metadata file too...
             ftp.chdir(homedir + '/srclibs')
-            ftp.put(os.path.join('srclibs', name + '.txt'),
-                    name + '.txt')
+            srclibpath = common.metadata_srclib_relpath(name)
+            ftp.put(srclibpath, os.path.basename(srclibpath))
         # Copy the main app source code
         # (no need if it's a srclib)
         if (not basesrclib) and os.path.exists(build_dir):

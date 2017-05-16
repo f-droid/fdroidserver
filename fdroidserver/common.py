@@ -397,8 +397,8 @@ def get_local_metadata_files():
 
 def read_pkg_args(args, allow_vercodes=False):
     """
-    Given the arguments in the form of multiple appid:[vc] strings, this returns
-    a dictionary with the set of vercodes specified for each package.
+    :param args: arguments in the form of multiple appid:[vc] strings
+    :returns: a dictionary with the set of vercodes specified for each package
     """
 
     vercodes = {}
@@ -472,6 +472,32 @@ def get_extension(filename):
 def has_extension(filename, ext):
     _, f_ext = get_extension(filename)
     return ext == f_ext
+
+
+def metadata_srclib_relpath(name):
+    '''
+    :param name: name of the src lib. (eg. 'HttpClient')
+    :returns: relative path for requested srclib (eg. 'srclib/HttpClient.txt')
+    '''
+    global config
+    for ext in config['accepted_formats']:
+        pth = os.path.join('srclibs', name + '.' + ext)
+        if os.path.isfile(pth):
+            return pth
+    raise FDroidException("could not find srclib metadata file for '{}'".format(name))
+
+
+def metadata_relpath(appid):
+    '''
+    :param appid: an appid. (eg. 'org.fdroid.fdroid')
+    :returns: relative path for requested srclib (eg. 'metadata/org.fdroid.fdroid.txt')
+    '''
+    global config
+    for ext in config['accepted_formats']:
+        pth = os.path.join('metadata', appid + '.' + ext)
+        if os.path.isfile(pth):
+            return pth
+    raise FDroidException("could not find metadata file for '{}'".format(appid))
 
 
 publish_name_regex = re.compile(r"^(.+)_([0-9]+)\.(apk|zip)$")
