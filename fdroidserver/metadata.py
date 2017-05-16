@@ -840,7 +840,7 @@ def post_metadata_parse(app):
                         else:
                             build[k] = []
                 elif (flagtype(k) == TYPE_STRING or flagtype(k) == TYPE_INT) \
-                     and type(v) in (float, int):
+                        and type(v) in (float, int):
                     build[k] = str(v)
             builds.append(build)
 
