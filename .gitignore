@@ -39,5 +39,6 @@ makebuildserver.config.py
 /tests/archive/index-v1.jar
 /tests/repo/index.jar
 /tests/repo/index-v1.jar
+/tests/repo/info.guardianproject.urzip/
 /tests/urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234.apk
 /unsigned/
