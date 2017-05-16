@@ -474,32 +474,6 @@ def has_extension(filename, ext):
     return ext == f_ext
 
 
-def metadata_srclib_relpath(name):
-    '''
-    :param name: name of the src lib. (eg. 'HttpClient')
-    :returns: relative path for requested srclib (eg. 'srclib/HttpClient.txt')
-    '''
-    global config
-    for ext in config['accepted_formats']:
-        pth = os.path.join('srclibs', name + '.' + ext)
-        if os.path.isfile(pth):
-            return pth
-    raise FDroidException("could not find srclib metadata file for '{}'".format(name))
-
-
-def metadata_relpath(appid):
-    '''
-    :param appid: an appid. (eg. 'org.fdroid.fdroid')
-    :returns: relative path for requested srclib (eg. 'metadata/org.fdroid.fdroid.txt')
-    '''
-    global config
-    for ext in config['accepted_formats']:
-        pth = os.path.join('metadata', appid + '.' + ext)
-        if os.path.isfile(pth):
-            return pth
-    raise FDroidException("could not find metadata file for '{}'".format(appid))
-
-
 publish_name_regex = re.compile(r"^(.+)_([0-9]+)\.(apk|zip)$")
 
 
