@@ -369,6 +369,36 @@ def update_servergitmirrors(servergitmirrors, repo_section):
             logging.debug('Pushing to ' + remote.url)
             with repo.git.custom_environment(GIT_SSH_COMMAND=ssh_cmd):
                 remote.push('master', force=True, set_upstream=True, progress=progress)
+
+        # push for every remote. This will overwrite the git history
+        for remote in repo.remotes:
+            branch = 'master'
+            if remote.name == 'gitlab':
+                logging.debug('Writing .gitlab-ci.yml to deploy to GitLab Pages')
+                with open(os.path.join(git_mirror_path, ".gitlab-ci.yml"), "wt") as out_file:
+                    out_file.write("""pages:
+  script:
+   - mkdir .public
+   - cp -r * .public/
+   - mv .public public
+  artifacts:
+    paths:
+    - public
+""")
+
+                repo.git.add(all=True)
+                repo.index.commit("fdroidserver git-mirror: Deploy to GitLab Pages")
+
+            logging.debug('Pushing to ' + remote.url)
+            with repo.git.custom_environment(GIT_SSH_COMMAND=ssh_cmd):
+                remote.push(branch, force=True, set_upstream=True, progress=progress)
+
+            # Reset the gitlab specific stuff before the next remote.
+            if remote.name == 'gitlab':
+                logging.debug('Removing .gitlab-ci.yml now that it has successfully deployed')
+                repo.index.reset('HEAD^')
+                repo.index.checkout()
+
         if progress:
             bar.done()
 

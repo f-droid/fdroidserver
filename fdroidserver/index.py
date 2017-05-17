@@ -114,7 +114,7 @@ def make(apps, sortedids, apks, repodir, archive):
         else:
             mirrors.append(urllib.parse.urljoin(mirror + '/', urlbasepath))
     for mirror in common.config.get('servergitmirrors', []):
-        mirror = get_raw_mirror(mirror)
+        mirror = get_mirror_service_url(mirror)
         if mirror is not None:
             mirrors.append(mirror + '/')
     if mirrorcheckfailed:
@@ -517,7 +517,7 @@ def extract_pubkey():
     return hexlify(pubkey), repo_pubkey_fingerprint
 
 
-def get_raw_mirror(url):
+def get_mirror_service_url(url):
     '''Get direct URL from git service for use by fdroidclient
 
     Via 'servergitmirrors', fdroidserver can create and push a mirror
@@ -531,22 +531,26 @@ def get_raw_mirror(url):
         url = re.sub(r'^git@(.*):(.*)', r'https://\1/\2', url)
 
     segments = url.split("/")
+
+    if segments[4].endswith('.git'):
+        segments[4] = segments[4][:-4]
+
     hostname = segments[2]
+    user = segments[3]
+    repo = segments[4]
     branch = "master"
     folder = "fdroid"
 
     if hostname == "github.com":
-        # Github like RAW segments "https://raw.githubusercontent.com/user/repo/master/fdroid"
+        # Github-like RAW segments "https://raw.githubusercontent.com/user/repo/master/fdroid"
         segments[2] = "raw.githubusercontent.com"
         segments.extend([branch, folder])
     elif hostname == "gitlab.com":
-        # Gitlab like RAW segments "https://gitlab.com/user/repo/raw/master/fdroid"
-        segments.extend(["raw", branch, folder])
+        # Gitlab-like Pages segments "https://user.gitlab.com/repo/fdroid"
+        gitlab_url = ["https:", "", user + ".gitlab.io", repo, folder]
+        segments = gitlab_url
     else:
         return None
-
-    if segments[4].endswith('.git'):
-        segments[4] = segments[4][:-4]
 
     return '/'.join(segments)
 
