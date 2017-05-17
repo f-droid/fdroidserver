@@ -364,11 +364,6 @@ def update_servergitmirrors(servergitmirrors, repo_section):
             progress = MyProgressPrinter()
         else:
             progress = None
-        # push for every remote. This will overwrite the git history
-        for remote in repo.remotes:
-            logging.debug('Pushing to ' + remote.url)
-            with repo.git.custom_environment(GIT_SSH_COMMAND=ssh_cmd):
-                remote.push('master', force=True, set_upstream=True, progress=progress)
 
         # push for every remote. This will overwrite the git history
         for remote in repo.remotes:
