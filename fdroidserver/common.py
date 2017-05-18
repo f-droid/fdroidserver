@@ -1727,7 +1727,7 @@ def isApkAndDebuggable(apkfile, config):
     if get_file_extension(apkfile) != 'apk':
         return False
 
-    if set_command_in_config('aapt'):
+    if SdkToolsPopen(['aapt', 'version'], output=False):
         return get_apk_debuggable_aapt(apkfile)
     else:
         return get_apk_debuggable_androguard(apkfile)

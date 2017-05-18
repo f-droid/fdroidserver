@@ -1128,7 +1128,7 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
             apk['antiFeatures'].add('KnownVuln')
 
         try:
-            if common.set_command_in_config('aapt'):
+            if SdkToolsPopen(['aapt', 'version'], output=False):
                 scan_apk_aapt(apk, apkfile)
             else:
                 scan_apk_androguard(apk, apkfile)
