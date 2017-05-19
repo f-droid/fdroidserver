@@ -816,7 +816,7 @@ def post_metadata_parse(app):
         app['builds'] = app.pop('Builds')
 
     if 'flavours' in app and app['flavours'] == [True]:
-        app['flavours'] = ['yes']
+        app['flavours'] = 'yes'
 
     if isinstance(app.Categories, str):
         app.Categories = [app.Categories]
@@ -825,23 +825,49 @@ def post_metadata_parse(app):
     else:
         app.Categories = [str(i) for i in app.Categories]
 
+    def _yaml_bool_unmapable(v):
+        return v in (True, False, [True], [False])
+
+    def _yaml_bool_unmap(v):
+        if v is True:
+            return 'yes'
+        elif v is False:
+            return 'no'
+        elif v == [True]:
+            return ['yes']
+        elif v == [False]:
+            return ['no']
+
+    _bool_allowed = ('disable', 'kivy', 'maven')
+
     builds = []
     if 'builds' in app:
         for build in app['builds']:
             if not isinstance(build, Build):
                 build = Build(build)
             for k, v in build.items():
-                if flagtype(k) == TYPE_LIST:
-                    if isinstance(v, str):
-                        build[k] = [v]
-                    elif isinstance(v, bool):
-                        if v:
-                            build[k] = ['yes']
+                if not (v is None):
+                    if flagtype(k) == TYPE_LIST:
+                        if _yaml_bool_unmapable(v):
+                            build[k] = _yaml_bool_unmap(v)
+
+                        if isinstance(v, str):
+                            build[k] = [v]
+                        elif isinstance(v, bool):
+                            if v:
+                                build[k] = ['yes']
+                            else:
+                                build[k] = []
+                    elif flagtype(k) is TYPE_INT:
+                        build[k] = str(v)
+                    elif flagtype(k) is TYPE_STRING:
+                        if isinstance(v, bool) and k in _bool_allowed:
+                            build[k] = v
                         else:
-                            build[k] = []
-                elif (flagtype(k) == TYPE_STRING or flagtype(k) == TYPE_INT) \
-                        and type(v) in (float, int):
-                    build[k] = str(v)
+                            if _yaml_bool_unmapable(v):
+                                build[k] = _yaml_bool_unmap(v)
+                            else:
+                                build[k] = str(v)
             builds.append(build)
 
     app.builds = sorted_builds(builds)
@@ -964,12 +990,26 @@ def parse_yaml_metadata(mf, app):
 
 def write_yaml(mf, app):
 
+    _yaml_bools_true = ('y', 'Y', 'yes', 'Yes', 'YES',
+                        'true', 'True', 'TRUE',
+                        'on', 'On', 'ON')
+    _yaml_bools_false = ('n', 'N', 'no', 'No', 'NO',
+                         'false', 'False', 'FALSE',
+                         'off', 'Off', 'OFF')
+    _yaml_bools_plus_lists = []
+    _yaml_bools_plus_lists.extend(_yaml_bools_true)
+    _yaml_bools_plus_lists.extend([[x] for x in _yaml_bools_true])
+    _yaml_bools_plus_lists.extend(_yaml_bools_false)
+    _yaml_bools_plus_lists.extend([[x] for x in _yaml_bools_false])
+
     def _class_as_dict_representer(dumper, data):
         '''Creates a YAML representation of a App/Build instance'''
         return dumper.represent_dict(data)
 
     def _field_to_yaml(typ, value):
         if typ is TYPE_STRING:
+            if value in _yaml_bools_plus_lists:
+                return ruamel.yaml.scalarstring.SingleQuotedScalarString(str(value))
             return str(value)
         elif typ is TYPE_INT:
             return int(value)
@@ -1019,7 +1059,15 @@ def write_yaml(mf, app):
             b = ruamel.yaml.comments.CommentedMap()
             for field in fields:
                 if hasattr(build, field) and getattr(build, field):
-                    b.update({field: _field_to_yaml(flagtype(field), getattr(build, field))})
+                    value = getattr(build, field)
+                    if field == 'gradle' and value == ['off']:
+                        value = [ruamel.yaml.scalarstring.SingleQuotedScalarString('off')]
+                    if field in ('disable', 'kivy', 'maven'):
+                        if value == 'no':
+                            continue
+                        elif value == 'yes':
+                            value = 'yes'
+                    b.update({field: _field_to_yaml(flagtype(field), value)})
             builds.append(b)
 
         # insert extra empty lines between build entries
@@ -1031,7 +1079,7 @@ def write_yaml(mf, app):
 
     yaml_app_field_order = [
         'Disabled',
-        'AnitFeatures',
+        'AntiFeatures',
         'Provides',
         'Categories',
         'License',
