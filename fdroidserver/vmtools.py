@@ -105,6 +105,9 @@ class FDroidBuildVm():
         except subprocess.CalledProcessError as e:
             logger.info('could not bring vm up: %s', e)
 
+    def halt(self):
+        self.vgrnt.halt(force=True)
+
     def destroy(self):
         """Remove every trace of this VM from the system.
 
@@ -125,12 +128,36 @@ class FDroidBuildVm():
         except Exception as e:
             logger.debug("could not delete vagrant dir: %s, %s", vgrntdir, e)
         try:
-            subprocess.check_call(['vagrant', 'global-status', '--prune'])
+            self._check_call(['vagrant', 'global-status', '--prune'])
         except subprocess.CalledProcessError as e:
             logger.debug('pruning global vagrant status failed: %s', e)
 
     def package(self, output=None, keep_box_file=None):
         self.vgrnt.package(output=output)
+
+    def box_add(self, boxname, boxfile, force=True):
+        """Add vagrant box to vagrant.
+
+        :param boxname: name assigned to local deployment of box
+        :param boxfile: path to box file
+        :param force: overwrite existing box image (default: True)
+        """
+        boxfile = abspath(boxfile)
+        if not isfile(boxfile):
+            raise FDroidBuildVmException('supplied boxfile \'%s\' does not exist', boxfile)
+        self.vgrnt.box_add(boxname, abspath(boxfile), force=force)
+
+    def box_remove(self, boxname):
+        try:
+            self._check_call(['vagrant', 'box', 'remove', '--all', '--force', boxname])
+        except subprocess.CalledProcessError as e:
+            logger.debug('tried removing box %s, but is did not exist: %s', boxname, e)
+            # TODO: remove box files manually
+            # nesessary when Vagrantfile in ~/.vagrant.d/... is broken.
+
+    def _check_call(self, cmd):
+        logger.debug(' '.join(cmd))
+        return subprocess.check_call(cmd)
 
 
 class LibvirtBuildVm(FDroidBuildVm):
@@ -141,7 +168,7 @@ class LibvirtBuildVm(FDroidBuildVm):
         try:
             self.conn = libvirt.open('qemu:///system')
         except libvirt.libvirtError as e:
-            logger.critical('could not connect to libvirtd: %s', e)
+            raise FDroidBuildVmException('could not connect to libvirtd: %s' % (e))
 
     def destroy(self):
 
@@ -151,8 +178,7 @@ class LibvirtBuildVm(FDroidBuildVm):
         # this is way more easy and therefore fault tolerant.
         # (eg. lookupByName only works on running VMs)
         try:
-            logger.debug('virsh -c qemu:///system destroy %s', self.srvname)
-            subprocess.check_call(('virsh', '-c', 'qemu:///system', 'destroy', self.srvname))
+            self._check_call(('virsh', '-c', 'qemu:///system', 'destroy', self.srvname))
             logger.info("...waiting a sec...")
             time.sleep(10)
         except subprocess.CalledProcessError as e:
@@ -160,14 +186,13 @@ class LibvirtBuildVm(FDroidBuildVm):
         try:
             # libvirt python bindings do not support all flags required
             # for undefining domains correctly.
-            logger.debug('virsh -c qemu:///system undefine %s --nvram --managed-save --remove-all-storage --snapshots-metadata', self.srvname)
-            subprocess.check_call(('virsh', '-c', 'qemu:///system', 'undefine', self.srvname, '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
+            self._check_call(('virsh', '-c', 'qemu:///system', 'undefine', self.srvname, '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
             logger.info("...waiting a sec...")
             time.sleep(10)
         except subprocess.CalledProcessError as e:
             logger.info("could not undefine libvirt domain '%s': %s", self.srvname, e)
 
-    def package(self, output=None, keep_box_file=False):
+    def package(self, output=None, vagrantfile=None, keep_box_file=False):
         if not output:
             output = "buildserver.box"
             logger.debug('no output name set for packaging \'%s\',' +
@@ -197,20 +222,9 @@ class LibvirtBuildVm(FDroidBuildVm):
                         "virtual_size": math.ceil(img_info['virtual-size'] / (1024. ** 3)) + 1,
                         }
 
-            vagrantfile = """Vagrant.configure("2") do |config|
-  config.ssh.username = "vagrant"
-  config.ssh.password = "vagrant"
+            if not vagrantfile:
+                vagrantfile = 'Vagrant.configure("2") do |config|\nend'
 
-  config.vm.provider :libvirt do |libvirt|
-
-    libvirt.driver = "kvm"
-    libvirt.host = ""
-    libvirt.connect_via_ssh = false
-    libvirt.storage_pool_name = "default"
-
-  end
-end
-"""
             with open('metadata.json', 'w') as fp:
                 fp.write(json.dumps(metadata))
             with open('Vagrantfile', 'w') as fp:
@@ -229,6 +243,13 @@ end
         else:
             logger.warn('could not connect to storage-pool \'default\',' +
                         'skipping packaging buildserver box')
+
+    def box_remove(self, boxname):
+        super().box_remove(boxname)
+        try:
+            self._check_call(['virsh', '-c', 'qemu:///system', 'vol-delete', '--pool', 'default', '%s_vagrant_box_image_0.img' % (boxname)])
+        except subprocess.CalledProcessError as e:
+            logger.info('tired removing \'%s\', file was not present in first place: %s', boxname, e)
 
 
 class VirtualboxBuildVm(FDroidBuildVm):
