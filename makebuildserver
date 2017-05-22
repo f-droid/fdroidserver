@@ -12,6 +12,8 @@ import tarfile
 import vagrant
 import hashlib
 import yaml
+import math
+import json
 from clint.textui import progress
 from optparse import OptionParser
 import fdroidserver.tail
@@ -334,12 +336,13 @@ def kvm_package(boxfile):
         subprocess.check_call(['sudo', '/bin/chmod', '-R', 'a+rX', '/var/lib/libvirt/images'])
         shutil.copy2(imagepath, 'box.img')
         subprocess.check_call(['qemu-img', 'rebase', '-p', '-b', '', 'box.img'])
-        metadata = """{
-    "provider": "libvirt",
-    "format": "qcow2",
-    "virtual_size": 1000
-}
-"""
+        img_info_raw = subprocess.check_output('sudo qemu-img info --output=json box.img', shell=True)
+        img_info = json.loads(img_info_raw.decode('utf-8'))
+        metadata = {"provider": "libvirt",
+                    "format": img_info['format'],
+                    "virtual_size": math.ceil(img_info['virtual-size'] / 1024.**3),
+                    }
+
         vagrantfile = """Vagrant.configure("2") do |config|
   config.ssh.username = "vagrant"
   config.ssh.password = "vagrant"
@@ -355,7 +358,7 @@ def kvm_package(boxfile):
 end
 """
         with open('metadata.json', 'w') as fp:
-            fp.write(metadata)
+            fp.write(json.dumps(metadata))
         with open('Vagrantfile', 'w') as fp:
             fp.write(vagrantfile)
         with tarfile.open(boxfile, 'w:gz') as tar:
