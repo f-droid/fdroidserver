@@ -213,13 +213,14 @@ class LibvirtBuildVm(FDroidBuildVm):
             if isfile('box.img'):
                 rmfile('box.img')
 
+            logger.debug('preparing box.img for box %s', output)
             vol = storagePool.storageVolLookupByName(self.srvname + '.img')
             imagepath = vol.path()
             # TODO use a libvirt storage pool to ensure the img file is readable
             self._check_call(['sudo', '/bin/chmod', '-R', 'a+rX', '/var/lib/libvirt/images'])
             shutil.copy2(imagepath, 'box.img')
             self._check_call(['qemu-img', 'rebase', '-p', '-b', '', 'box.img'])
-            img_info_raw = self._check_output(['sudo qemu-img info --output=json box.img'], shell=True)
+            img_info_raw = self._check_output(['qemu-img', 'info', '--output=json', 'box.img'])
             img_info = json.loads(img_info_raw.decode('utf-8'))
             metadata = {"provider": "libvirt",
                         "format": img_info['format'],
@@ -227,15 +228,21 @@ class LibvirtBuildVm(FDroidBuildVm):
                         }
 
             if not vagrantfile:
+                logger.debug('no Vagrantfile supplied for box, generating a minimal one...')
                 vagrantfile = 'Vagrant.configure("2") do |config|\nend'
 
+            logger.debug('preparing metadata.json for box %s', output)
             with open('metadata.json', 'w') as fp:
                 fp.write(json.dumps(metadata))
+            logger.debug('preparing Vagrantfile for box %s', output)
             with open('Vagrantfile', 'w') as fp:
                 fp.write(vagrantfile)
             with tarfile.open(output, 'w:gz') as tar:
+                logger.debug('adding metadata.json to box %s ...', output)
                 tar.add('metadata.json')
+                logger.debug('adding Vagrantfile to box %s ...', output)
                 tar.add('Vagrantfile')
+                logger.debug('adding box.img to box %s ...', output)
                 tar.add('box.img')
 
             if not keep_box_file:
