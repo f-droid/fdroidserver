@@ -24,7 +24,7 @@ import logging
 
 from . import common
 from . import metadata
-from .common import BuildException, VCSException
+from .exception import BuildException, VCSException
 
 config = None
 options = None

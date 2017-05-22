@@ -35,12 +35,12 @@ import json
 import logging
 import requests
 import shutil
-import sys
 import tempfile
 import xml.dom.minidom
 import zipfile
 from argparse import ArgumentParser
 
+from .exception import FDroidException
 from . import common
 from . import server
 
@@ -166,8 +166,8 @@ def main():
         logging.getLogger("urllib3").setLevel(logging.WARNING)
 
     if not os.path.exists(options.git_repo):
-        logging.error('"' + options.git_repo + '/" does not exist! Create it, or use --git-repo')
-        sys.exit(1)
+        raise FDroidException(
+            '"%s" does not exist! Create it, or use --git-repo' % options.git_repo)
 
     session = requests.Session()
 

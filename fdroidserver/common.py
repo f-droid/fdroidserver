@@ -49,6 +49,7 @@ from pyasn1.error import PyAsn1Error
 from distutils.util import strtobool
 
 import fdroidserver.metadata
+from fdroidserver.exception import FDroidException, VCSException, BuildException
 from .asynchronousfilereader import AsynchronousFileReader
 
 
@@ -234,8 +235,7 @@ def read_config(opts, config_file='config.py'):
             code = compile(f.read(), config_file, 'exec')
             exec(code, None, config)
     elif len(get_local_metadata_files()) == 0:
-        logging.critical("Missing config file - is this a repo directory?")
-        sys.exit(2)
+        raise FDroidException("Missing config file - is this a repo directory?")
 
     for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
         if k in config:
@@ -374,13 +374,12 @@ def test_sdk_exists(thisconfig):
 
 def ensure_build_tools_exists(thisconfig):
     if not test_sdk_exists(thisconfig):
-        sys.exit(3)
+        raise FDroidException("Android SDK not found.")
     build_tools = os.path.join(thisconfig['sdk_path'], 'build-tools')
     versioned_build_tools = os.path.join(build_tools, thisconfig['build_tools'])
     if not os.path.isdir(versioned_build_tools):
-        logging.critical('Android Build Tools path "'
-                         + versioned_build_tools + '" does not exist!')
-        sys.exit(3)
+        raise FDroidException(
+            'Android Build Tools path "' + versioned_build_tools + '" does not exist!')
 
 
 def get_local_metadata_files():
@@ -1243,39 +1242,6 @@ def is_valid_package_name(name):
     return re.match("[A-Za-z_][A-Za-z_0-9.]+$", name)
 
 
-class FDroidException(Exception):
-
-    def __init__(self, value, detail=None):
-        self.value = value
-        self.detail = detail
-
-    def shortened_detail(self):
-        if len(self.detail) < 16000:
-            return self.detail
-        return '[...]\n' + self.detail[-16000:]
-
-    def get_wikitext(self):
-        ret = repr(self.value) + "\n"
-        if self.detail:
-            ret += "=detail=\n"
-            ret += "<pre>\n" + self.shortened_detail() + "</pre>\n"
-        return ret
-
-    def __str__(self):
-        ret = self.value
-        if self.detail:
-            ret += "\n==== detail begin ====\n%s\n==== detail end ====" % self.detail.strip()
-        return ret
-
-
-class VCSException(FDroidException):
-    pass
-
-
-class BuildException(FDroidException):
-    pass
-
-
 # Get the specified source library.
 # Returns the path to it. Normally this is the path to be used when referencing
 # it, which may be a subdirectory of the actual project. If you want the base
@@ -1696,8 +1662,7 @@ def get_apk_debuggable_aapt(apkfile):
     p = SdkToolsPopen(['aapt', 'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
                       output=False)
     if p.returncode != 0:
-        logging.critical("Failed to get apk manifest information")
-        sys.exit(1)
+        raise FDroidException("Failed to get apk manifest information")
     for line in p.output.splitlines():
         if 'android:debuggable' in line and not line.endswith('0x0'):
             return True
@@ -1708,8 +1673,7 @@ def get_apk_debuggable_androguard(apkfile):
     try:
         from androguard.core.bytecodes.apk import APK
     except ImportError:
-        logging.critical("androguard library is not installed and aapt not present")
-        sys.exit(1)
+        raise FDroidException("androguard library is not installed and aapt not present")
 
     apkobject = APK(apkfile)
     if apkobject.is_valid_APK():
@@ -1745,8 +1709,7 @@ def SdkToolsPopen(commands, cwd=None, output=True):
         config[cmd] = find_sdk_tools_cmd(commands[0])
     abscmd = config[cmd]
     if abscmd is None:
-        logging.critical("Could not find '%s' on your system" % cmd)
-        sys.exit(1)
+        raise FDroidException("Could not find '%s' on your system" % cmd)
     if cmd == 'aapt':
         test_aapt_version(config['aapt'])
     return FDroidPopen([abscmd] + commands[1:],

@@ -37,7 +37,8 @@ from . import common
 from . import net
 from . import metadata
 from . import scanner
-from .common import FDroidException, BuildException, VCSException, FDroidPopen, SdkToolsPopen
+from .common import FDroidPopen, SdkToolsPopen
+from .exception import FDroidException, BuildException, VCSException
 
 try:
     import paramiko
@@ -582,10 +583,10 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
                 if k.endswith("_orig"):
                     continue
                 logging.critical("  %s: %s" % (k, v))
-            sys.exit(3)
+            raise FDroidException()
         elif not os.path.isdir(ndk_path):
             logging.critical("Android NDK '%s' is not a directory!" % ndk_path)
-            sys.exit(3)
+            raise FDroidException()
 
     common.set_FDroidPopen_env(build)
 
@@ -1256,7 +1257,8 @@ def main():
                         try:
                             net.download_file(url, local_filename=of)
                         except requests.exceptions.HTTPError as e:
-                            raise FDroidException('downloading Binaries from %s failed' % url) from e
+                            raise FDroidException(
+                                'Downloading Binaries from %s failed. %s' % (url, e))
 
                         # Now we check weather the build can be verified to
                         # match the supplied binary or not. Should the

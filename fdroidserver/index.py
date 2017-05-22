@@ -27,7 +27,6 @@ import logging
 import os
 import re
 import shutil
-import sys
 import tempfile
 import urllib.parse
 import zipfile
@@ -37,7 +36,7 @@ from xml.dom.minidom import Document
 
 from fdroidserver import metadata, signindex, common, net
 from fdroidserver.common import FDroidPopen, FDroidPopenBytes
-from fdroidserver.metadata import MetaDataException
+from fdroidserver.exception import FDroidException, VerificationException, MetaDataException
 
 
 def make(apps, sortedids, apks, repodir, archive):
@@ -77,9 +76,8 @@ def make(apps, sortedids, apks, repodir, archive):
             nosigningkey = True
             logging.critical("'" + common.config['keystore'] + "' does not exist!")
         if nosigningkey:
-            logging.warning("`fdroid update` requires a signing key, you can create one using:")
-            logging.warning("\tfdroid update --create-key")
-            sys.exit(1)
+            raise FDroidException("`fdroid update` requires a signing key, " +
+                                  "you can create one using: fdroid update --create-key")
 
     repodict = collections.OrderedDict()
     repodict['timestamp'] = datetime.utcnow()
@@ -118,7 +116,7 @@ def make(apps, sortedids, apks, repodir, archive):
         if mirror is not None:
             mirrors.append(mirror + '/')
     if mirrorcheckfailed:
-        sys.exit(1)
+        raise FDroidException("Malformed repository mirrors.")
     if mirrors:
         repodict['mirrors'] = mirrors
 
@@ -364,9 +362,8 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
         # Check for duplicates - they will make the client unhappy...
         for i in range(len(apklist) - 1):
             if apklist[i]['versionCode'] == apklist[i + 1]['versionCode']:
-                logging.critical("duplicate versions: '%s' - '%s'" % (
+                raise FDroidException("duplicate versions: '%s' - '%s'" % (
                     apklist[i]['apkName'], apklist[i + 1]['apkName']))
-                sys.exit(1)
 
         current_version_code = 0
         current_version_file = None
@@ -475,8 +472,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
         jar_output = 'index_unsigned.jar' if common.options.nosign else 'index.jar'
         p = FDroidPopen(['jar', 'cf', jar_output, 'index.xml'], cwd=repodir)
         if p.returncode != 0:
-            logging.critical("Failed to create {0}".format(jar_output))
-            sys.exit(1)
+            raise FDroidException("Failed to create {0}".format(jar_output))
 
         # Sign the index...
         signed = os.path.join(repodir, 'index.jar')
@@ -513,8 +509,7 @@ def extract_pubkey():
             msg = "Failed to get repo pubkey!"
             if common.config['keystore'] == 'NONE':
                 msg += ' Is your crypto smartcard plugged in?'
-            logging.critical(msg)
-            sys.exit(1)
+            raise FDroidException(msg)
         pubkey = p.output
     repo_pubkey_fingerprint = common.get_cert_fingerprint(pubkey)
     return hexlify(pubkey), repo_pubkey_fingerprint
@@ -556,10 +551,6 @@ def get_mirror_service_url(url):
         return None
 
     return '/'.join(segments)
-
-
-class VerificationException(Exception):
-    pass
 
 
 def download_repo_index(url_str, etag=None, verify_fingerprint=True):

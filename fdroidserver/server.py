@@ -30,6 +30,7 @@ import logging
 import shutil
 
 from . import common
+from .exception import FDroidException
 
 config = None
 options = None
@@ -97,7 +98,7 @@ def update_awsbucket_s3cmd(repo_section):
                         '--exclude', indexjar,
                         '--exclude', indexv1jar,
                         repo_section, s3url]) != 0:
-        sys.exit(1)
+        raise FDroidException()
     logging.debug('s3cmd sync all files in ' + repo_section + ' to ' + s3url)
     if subprocess.call(s3cmdargs +
                        ['--no-check-md5',
@@ -105,7 +106,7 @@ def update_awsbucket_s3cmd(repo_section):
                         '--exclude', indexjar,
                         '--exclude', indexv1jar,
                         repo_section, s3url]) != 0:
-        sys.exit(1)
+        raise FDroidException()
 
     logging.debug('s3cmd sync indexes ' + repo_section + ' to ' + s3url + ' and delete')
     s3cmdargs.append('--delete-removed')
@@ -115,7 +116,7 @@ def update_awsbucket_s3cmd(repo_section):
     else:
         s3cmdargs.append('--check-md5')
     if subprocess.call(s3cmdargs + [repo_section, s3url]) != 0:
-        sys.exit(1)
+        raise FDroidException()
 
 
 def update_awsbucket_libcloud(repo_section):
@@ -135,8 +136,8 @@ def update_awsbucket_libcloud(repo_section):
     from libcloud.storage.providers import get_driver
 
     if not config.get('awsaccesskeyid') or not config.get('awssecretkey'):
-        logging.error('To use awsbucket, you must set awssecretkey and awsaccesskeyid in config.py!')
-        sys.exit(1)
+        raise FDroidException(
+            'To use awsbucket, you must set awssecretkey and awsaccesskeyid in config.py!')
     awsbucket = config['awsbucket']
 
     cls = get_driver(Provider.S3)
@@ -234,9 +235,9 @@ def update_serverwebroot(serverwebroot, repo_section):
                        ['--exclude', indexxml, '--exclude', indexjar,
                         '--exclude', indexv1jar,
                         repo_section, serverwebroot]) != 0:
-        sys.exit(1)
+        raise FDroidException()
     if subprocess.call(rsyncargs + [repo_section, serverwebroot]) != 0:
-        sys.exit(1)
+        raise FDroidException()
     # upload "current version" symlinks if requested
     if config['make_current_version_link'] and repo_section == 'repo':
         links_to_upload = []
@@ -246,7 +247,7 @@ def update_serverwebroot(serverwebroot, repo_section):
                 links_to_upload.append(f)
         if len(links_to_upload) > 0:
             if subprocess.call(rsyncargs + links_to_upload + [serverwebroot]) != 0:
-                sys.exit(1)
+                raise FDroidException()
 
 
 def _local_sync(fromdir, todir):
@@ -262,7 +263,7 @@ def _local_sync(fromdir, todir):
         rsyncargs += ['--quiet']
     logging.debug(' '.join(rsyncargs + [fromdir, todir]))
     if subprocess.call(rsyncargs + [fromdir, todir]) != 0:
-        sys.exit(1)
+        raise FDroidException()
 
 
 def sync_from_localcopy(repo_section, local_copy_dir):
