@@ -30,7 +30,8 @@ parser.add_option('--skip-cache-update', action="store_true", default=False,
                   help="""Skip downloading and checking cache."""
                        """This assumes that the cache is already downloaded completely.""")
 parser.add_option('--keep-box-file', action="store_true", default=False,
-                  help="""Box file will not be deleted after adding it to box storage.""")
+                  help="""Box file will not be deleted after adding it to box storage"""
+                       """ (KVM-only).""")
 options, args = parser.parse_args()
 
 logger = logging.getLogger('fdroidserver-makebuildserver')
@@ -536,22 +537,7 @@ def main():
     if os.path.exists(boxfile):
         os.remove(boxfile)
 
-    vagrantfile = textwrap.dedent("""\
-                  Vagrant.configure("2") do |config|
-                    config.ssh.username = "vagrant"
-                    config.ssh.password = "vagrant"
-
-                    config.vm.provider :libvirt do |libvirt|
-
-                      libvirt.driver = "kvm"
-                      libvirt.host = ""
-                      libvirt.connect_via_ssh = false
-                      libvirt.storage_pool_name = "default"
-
-                    end
-                  end""")
-
-    vm.package(output=boxfile, vagrantfile=vagrantfile, keep_box_file=options.keep_box_file)
+    vm.package(output=boxfile)
 
     logger.info("Adding box")
     vm.box_add('buildserver', boxfile, force=True)

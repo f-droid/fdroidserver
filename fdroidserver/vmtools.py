@@ -181,8 +181,8 @@ class FDroidBuildVm():
         except subprocess.CalledProcessError as e:
             logger.debug('pruning global vagrant status failed: %s', e)
 
-    def package(self, output=None, vagrantfile=None, keep_box_file=None):
-        self.vgrnt.package(output=output, vagrantfile=vagrantfile)
+    def package(self, output=None):
+        self.vgrnt.package(output=output)
 
     def vagrant_uuid_okay(self):
         '''Having an uuid means that vagrant up has run successfully.'''
@@ -309,7 +309,7 @@ class LibvirtBuildVm(FDroidBuildVm):
         except subprocess.CalledProcessError as e:
             logger.info("could not undefine libvirt domain '%s': %s", self.srvname, e)
 
-    def package(self, output=None, vagrantfile=None, keep_box_file=False):
+    def package(self, output=None, keep_box_file=False):
         if not output:
             output = "buildserver.box"
             logger.debug('no output name set for packaging \'%s\',' +
@@ -338,14 +338,24 @@ class LibvirtBuildVm(FDroidBuildVm):
                         "virtual_size": math.ceil(img_info['virtual-size'] / (1024. ** 3)),
                         }
 
-            if not vagrantfile:
-                logger.debug('no Vagrantfile supplied for box, generating a minimal one...')
-                vagrantfile = 'Vagrant.configure("2") do |config|\nend'
-
             logger.debug('preparing metadata.json for box %s', output)
             with open('metadata.json', 'w') as fp:
                 fp.write(json.dumps(metadata))
             logger.debug('preparing Vagrantfile for box %s', output)
+            vagrantfile = textwrap.dedent("""\
+                  Vagrant.configure("2") do |config|
+                    config.ssh.username = "vagrant"
+                    config.ssh.password = "vagrant"
+
+                    config.vm.provider :libvirt do |libvirt|
+
+                      libvirt.driver = "kvm"
+                      libvirt.host = ""
+                      libvirt.connect_via_ssh = false
+                      libvirt.storage_pool_name = "default"
+
+                    end
+                  end""")
             with open('Vagrantfile', 'w') as fp:
                 fp.write(vagrantfile)
             with tarfile.open(output, 'w:gz') as tar:
