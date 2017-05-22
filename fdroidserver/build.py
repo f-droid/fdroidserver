@@ -255,10 +255,12 @@ def vm_new_get_clean_builder(serverdir, reset=False):
     vm.suspend()
 
     if reset:
+        logging.info('buildserver recreated: taking a clean snapshot')
         vm.snapshot_create('fdroidclean')
     else:
+        logging.info('builserver ok: reverting to clean snapshot')
         vm.snapshot_revert('droidclean')
-    vm.resume()
+    vm.up()
 
     return get_vagrant_sshinfo()
 

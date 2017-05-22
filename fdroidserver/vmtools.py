@@ -140,17 +140,22 @@ class FDroidBuildVm():
     def up(self, provision=True):
         try:
             self.vgrnt.up(provision=provision)
+            logger.info('...waiting a sec...')
+            time.sleep(10)
         except subprocess.CalledProcessError as e:
-            logger.info('could not bring vm up: %s', e)
+            raise FDroidBuildVmException("could not bring up vm '%s'" % self.srvname) from e
 
     def snapshot_create(self, name):
         raise NotImplementedError('not implemented, please use a sub-type instance')
 
     def suspend(self):
-        self.vgrnt.suspend()
-
-    def resume(self):
-        self.vgrnt.resume()
+        logger.info('suspending buildserver')
+        try:
+            self.vgrnt.suspend()
+            logger.info('...waiting a sec...')
+            time.sleep(10)
+        except subprocess.CalledProcessError as e:
+            raise FDroidBuildVmException("could not suspend vm '%s'" % self.srvname) from e
 
     def halt(self):
         self.vgrnt.halt(force=True)
@@ -163,6 +168,7 @@ class FDroidBuildVm():
         * vagrant state informations (eg. `.vagrant` folder)
         * images related to this vm
         """
+        logger.info("destroying vm '%s'", self.srvname)
         try:
             self.vgrnt.destroy()
             logger.debug('vagrant destroy completed')
@@ -327,6 +333,7 @@ class LibvirtBuildVm(FDroidBuildVm):
             logger.info('tired removing \'%s\', file was not present in first place: %s', boxname, e)
 
     def snapshot_create(self, snapshot_name):
+        logger.info("creating snapshot '%s' for vm '%s'", snapshot_name, self.srvname)
         try:
             _check_call(['virsh', '-c', 'qemu:///system', 'snapshot-create-as', self.srvname, snapshot_name])
             logger.info('...waiting a sec...')
@@ -353,6 +360,7 @@ class LibvirtBuildVm(FDroidBuildVm):
             return False
 
     def snapshot_revert(self, snapshot_name):
+        logger.info("reverting vm '%s' to snapshot '%s'", self.srvname, snapshot_name)
         import libvirt
         try:
             dom = self.conn.lookupByName(self.srvname)
