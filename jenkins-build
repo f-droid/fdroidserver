@@ -9,9 +9,77 @@ if [ `dirname $0` != "." ]; then
     exit
 fi
 
+# jenkins.debian.net slaves do not export WORKSPACE
+if [ -z $WORKSPACE ]; then
+    export WORKSPACE=`pwd`
+fi
+
 set -e
 set -x
 
 # this is a local repo on the Guardian Project Jenkins server
 cd tests
-./complete-ci-tests /var/www/fdroid
+#./complete-ci-tests /var/www/fdroid
+
+
+# report info about virtualization
+(dmesg | grep -i -e hypervisor -e qemu -e kvm) || true
+(lspci | grep -i -e virtio -e virtualbox -e qemu -e kvm) || true
+lsmod
+if systemd-detect-virt -q ; then
+        echo "Virtualization is used:" `systemd-detect-virt`
+else
+        echo "No virtualization is used."
+fi
+sudo /bin/chmod -R a+rX /var/lib/libvirt/images
+ls -ld /var/lib/libvirt/images
+ls -l /var/lib/libvirt/images || echo no access
+ls -lR ~/.vagrant.d/ || echo no access
+virsh --connect qemu:///system list --all || echo cannot virsh list
+cat /etc/issue
+
+/sbin/ifconfig || true
+hostname || true
+
+# point to the Vagrant/VirtualBox configs created by reproducible_setup_fdroid_build_environment.sh
+# these variables are actually set in fdroidserver/jenkins-build-makebuildserver
+export SETUP_WORKSPACE=$(dirname $WORKSPACE)/fdroid/fdroidserver
+export XDG_CONFIG_HOME=$SETUP_WORKSPACE
+export VBOX_USER_HOME=$SETUP_WORKSPACE/VirtualBox
+export VAGRANT_HOME=$SETUP_WORKSPACE/vagrant.d
+
+# let's see what is actually there:
+find $SETUP_WORKSPACE | grep -v fdroiddata/metadata/ | cut -b43-9999
+
+# the way we handle jenkins slaves doesn't copy the workspace to the slaves
+# so we need to "manually" clone the git repo here…
+cd $WORKSPACE
+
+# set up Android SDK to use the Debian packages in stretch
+export ANDROID_HOME=/usr/lib/android-sdk
+
+# ignore username/password prompt for non-existant repos
+git config --global url."https://fakeusername:fakepassword@github.com".insteadOf https://github.com
+git config --global url."https://fakeusername:fakepassword@gitlab.com".insteadOf https://gitlab.com
+git config --global url."https://fakeusername:fakepassword@bitbucket.org".insteadOf https://bitbucket.org
+
+# now build the whole archive
+cd $WORKSPACE
+
+# this can be handled in the jenkins job, or here:
+if [ -e fdroiddata ]; then
+    cd fdroiddata
+    git remote update -p
+    git checkout master
+    git reset --hard origin/master
+else
+    git clone https://gitlab.com/fdroid/fdroiddata.git fdroiddata
+    cd fdroiddata
+fi
+
+echo "build_server_always = True" > config.py
+$WORKSPACE/fdroid build --verbose --latest --no-tarball --all
+
+vagrant global-status
+cd builder
+vagrant status
