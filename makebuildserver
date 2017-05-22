@@ -4,15 +4,12 @@ import os
 import pathlib
 import re
 import requests
-import shutil
 import stat
 import sys
 import subprocess
-import tarfile
 import vagrant
 import hashlib
 import yaml
-import math
 import json
 import logging
 from clint.textui import progress
@@ -322,70 +319,6 @@ def sha256_for_file(path):
         return s.hexdigest()
 
 
-def kvm_package(boxfile):
-    '''
-    Hack to replace missing `vagrant package` for kvm, based  on the script
-    `tools/create_box.sh from vagrant-libvirt
-    '''
-    import libvirt
-    virConnect = libvirt.open('qemu:///system')
-    storagePool = virConnect.storagePoolLookupByName('default')
-    if storagePool:
-
-        if os.path.isfile('metadata.json'):
-            os.remove('metadata.json')
-        if os.path.isfile('Vagrantfile'):
-            os.remove('Vagrantfile')
-        if os.path.isfile('box.img'):
-            os.remove('box.img')
-
-        vol = storagePool.storageVolLookupByName(config['domain'] + '.img')
-        imagepath = vol.path()
-        # TODO use a libvirt storage pool to ensure the img file is readable
-        subprocess.check_call(['sudo', '/bin/chmod', '-R', 'a+rX', '/var/lib/libvirt/images'])
-        shutil.copy2(imagepath, 'box.img')
-        subprocess.check_call(['qemu-img', 'rebase', '-p', '-b', '', 'box.img'])
-        img_info_raw = subprocess.check_output('sudo qemu-img info --output=json box.img', shell=True)
-        img_info = json.loads(img_info_raw.decode('utf-8'))
-        metadata = {"provider": "libvirt",
-                    "format": img_info['format'],
-                    "virtual_size": math.ceil(img_info['virtual-size'] / 1024. ** 3),
-                    }
-
-        vagrantfile = """Vagrant.configure("2") do |config|
-  config.ssh.username = "vagrant"
-  config.ssh.password = "vagrant"
-
-  config.vm.provider :libvirt do |libvirt|
-
-    libvirt.driver = "kvm"
-    libvirt.host = ""
-    libvirt.connect_via_ssh = false
-    libvirt.storage_pool_name = "default"
-
-  end
-end
-"""
-
-        with open('metadata.json', 'w') as fp:
-            fp.write(json.dumps(metadata))
-        with open('Vagrantfile', 'w') as fp:
-            fp.write(vagrantfile)
-        with tarfile.open(boxfile, 'w:gz') as tar:
-            tar.add('metadata.json')
-            tar.add('Vagrantfile')
-            tar.add('box.img')
-        if not options.keep_box_file:
-            logger.debug('box packaging complete, removing temporary files.')
-            os.remove('metadata.json')
-            os.remove('Vagrantfile')
-            os.remove('box.img')
-
-    else:
-        logger.warn('could not connect to storage-pool \'default\',' +
-                    'skipping packaging buildserver box')
-
-
 def run_via_vagrant_ssh(v, cmdlist):
     if (isinstance(cmdlist, str) or isinstance(cmdlist, bytes)):
         cmd = cmdlist
@@ -551,10 +484,7 @@ def main():
     logger.info("Configuring build server VM")
     debug_log_vagrant_vm(serverdir, config['domain'])
     try:
-        try:
-            v.up(provision=True)
-        except subprocess.CalledProcessError as e:
-            v.up(provision=True)
+        v.up(provision=True)
     except subprocess.CalledProcessError as e:
         debug_log_vagrant_vm(serverdir, config['domain'])
         logger.critical('could not bring buildserver vm up. %s', e)
@@ -595,13 +525,14 @@ def main():
     if os.path.exists(boxfile):
         os.remove(boxfile)
 
-    if config['vm_provider'] == 'libvirt':
-        kvm_package(boxfile)
-    else:
-        v.package(output=boxfile)
+    vm.package(output=boxfile, debug_keep_box_file=options.debug_keep_box_file)
 
     logger.info("Adding box")
     v.box_add('buildserver', boxfile, force=True)
+
+    if not 'buildserver' in subprocess.check_output(['vagrant', 'box', 'list']).decode('utf-8'):
+        logger.critical('could not add box \'%s\' as \'buildserver\', terminating', boxfile)
+        sys.exit(1)
 
     if not options.keep_box_file:
         logger.debug('box added to vagrant, ' +

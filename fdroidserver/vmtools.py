@@ -16,7 +16,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from os import remove as rmfile
 from os.path import isdir, isfile, join as joinpath, basename, abspath
+import math
+import json
+import tarfile
 import time
 import shutil
 import vagrant
@@ -125,6 +129,9 @@ class FDroidBuildVm():
         except subprocess.CalledProcessError as e:
             logger.debug('pruning global vagrant status failed: %s', e)
 
+    def package(self, output=None, keep_box_file=None):
+        self.vgrnt.package(output=output)
+
 
 class LibvirtBuildVm(FDroidBuildVm):
     def __init__(self, srvdir):
@@ -159,6 +166,69 @@ class LibvirtBuildVm(FDroidBuildVm):
             time.sleep(10)
         except subprocess.CalledProcessError as e:
             logger.info("could not undefine libvirt domain '%s': %s", self.srvname, e)
+
+    def package(self, output=None, keep_box_file=False):
+        if not output:
+            output = "buildserver.box"
+            logger.debug('no output name set for packaging \'%s\',' +
+                         'defaulting to %s', self.srvname, output)
+        import libvirt
+        virConnect = libvirt.open('qemu:///system')
+        storagePool = virConnect.storagePoolLookupByName('default')
+        if storagePool:
+
+            if isfile('metadata.json'):
+                rmfile('metadata.json')
+            if isfile('Vagrantfile'):
+                rmfile('Vagrantfile')
+            if isfile('box.img'):
+                rmfile('box.img')
+
+            vol = storagePool.storageVolLookupByName(self.srvname + '.img')
+            imagepath = vol.path()
+            # TODO use a libvirt storage pool to ensure the img file is readable
+            subprocess.check_call(['sudo', '/bin/chmod', '-R', 'a+rX', '/var/lib/libvirt/images'])
+            shutil.copy2(imagepath, 'box.img')
+            subprocess.check_call(['qemu-img', 'rebase', '-p', '-b', '', 'box.img'])
+            img_info_raw = subprocess.check_output('sudo qemu-img info --output=json box.img', shell=True)
+            img_info = json.loads(img_info_raw.decode('utf-8'))
+            metadata = {"provider": "libvirt",
+                        "format": img_info['format'],
+                        "virtual_size": math.ceil(img_info['virtual-size'] / (1024. ** 3)) + 1,
+                        }
+
+            vagrantfile = """Vagrant.configure("2") do |config|
+  config.ssh.username = "vagrant"
+  config.ssh.password = "vagrant"
+
+  config.vm.provider :libvirt do |libvirt|
+
+    libvirt.driver = "kvm"
+    libvirt.host = ""
+    libvirt.connect_via_ssh = false
+    libvirt.storage_pool_name = "default"
+
+  end
+end
+"""
+            with open('metadata.json', 'w') as fp:
+                fp.write(json.dumps(metadata))
+            with open('Vagrantfile', 'w') as fp:
+                fp.write(vagrantfile)
+            with tarfile.open(output, 'w:gz') as tar:
+                tar.add('metadata.json')
+                tar.add('Vagrantfile')
+                tar.add('box.img')
+
+            if not keep_box_file:
+                logger.debug('box packaging complete, removing temporary files.')
+                rmfile('metadata.json')
+                rmfile('Vagrantfile')
+                rmfile('box.img')
+
+        else:
+            logger.warn('could not connect to storage-pool \'default\',' +
+                        'skipping packaging buildserver box')
 
 
 class VirtualboxBuildVm(FDroidBuildVm):
