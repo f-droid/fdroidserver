@@ -41,7 +41,8 @@ from . import btlog
 from . import common
 from . import index
 from . import metadata
-from .common import BuildException, SdkToolsPopen
+from .common import SdkToolsPopen
+from .exception import BuildException, FDroidException
 
 METADATA_VERSION = 18
 
@@ -820,8 +821,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             continue
         stat = os.stat(filename)
         if stat.st_size == 0:
-            logging.error(filename + ' is zero size!')
-            sys.exit(1)
+            raise FDroidException(filename + ' is zero size!')
 
         shasum = sha256sum(filename)
         usecache = False
@@ -897,7 +897,7 @@ def scan_apk_aapt(apk, apkfile):
                 logging.error("Could not find {0} to remove it".format(apkfile))
         else:
             logging.error("Failed to get apk information, skipping " + apkfile)
-        raise BuildException("Invaild APK")
+        raise BuildException("Invalid APK")
     for line in p.output.splitlines():
         if line.startswith("package:"):
             try:
@@ -905,9 +905,7 @@ def scan_apk_aapt(apk, apkfile):
                 apk['versionCode'] = int(re.match(APK_VERCODE_PAT, line).group(1))
                 apk['versionName'] = re.match(APK_VERNAME_PAT, line).group(1)
             except Exception as e:
-                logging.error("Package matching failed: " + str(e))
-                logging.info("Line was: " + line)
-                sys.exit(1)
+                raise FDroidException("Package matching failed: " + str(e) + "\nLine was: " + line)
         elif line.startswith("application:"):
             apk['name'] = re.match(APK_LABEL_PAT, line).group(1)
             # Keep path to non-dpi icon in case we need it
@@ -1000,11 +998,10 @@ def scan_apk_androguard(apk, apkfile):
                 logging.error("Failed to get apk information, skipping " + apkfile)
             raise BuildException("Invaild APK")
     except ImportError:
-        logging.critical("androguard library is not installed and aapt not present")
-        sys.exit(1)
+        raise FDroidException("androguard library is not installed and aapt not present")
     except FileNotFoundError:
         logging.error("Could not open apk file for analysis")
-        raise BuildException("Invaild APK")
+        raise BuildException("Invalid APK")
 
     apk['packageName'] = apkobject.get_package()
     apk['versionCode'] = int(apkobject.get_androidversion_code())
@@ -1508,8 +1505,7 @@ def main():
     config = common.read_config(options)
 
     if not ('jarsigner' in config and 'keytool' in config):
-        logging.critical('Java JDK not found! Install in standard location or set java_paths!')
-        sys.exit(1)
+        raise FDroidException('Java JDK not found! Install in standard location or set java_paths!')
 
     repodirs = ['repo']
     if config['archive_older'] != 0:

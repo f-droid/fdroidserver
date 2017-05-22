@@ -16,13 +16,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import os
 import zipfile
 from argparse import ArgumentParser
 import logging
 
 from . import common
+from .exception import FDroidException
 
 config = None
 options = None
@@ -53,8 +53,7 @@ def sign_jar(jar):
     }
     p = common.FDroidPopen(args, envs=env_vars)
     if p.returncode != 0:
-        logging.critical("Failed to sign %s!" % jar)
-        sys.exit(1)
+        raise FDroidException("Failed to sign %s!" % jar)
 
 
 def sign_index_v1(repodir, json_name):
@@ -87,8 +86,8 @@ def main():
     config = common.read_config(options)
 
     if 'jarsigner' not in config:
-        logging.critical('Java jarsigner not found! Install in standard location or set java_paths!')
-        sys.exit(1)
+        raise FDroidException(
+            'Java jarsigner not found! Install in standard location or set java_paths!')
 
     repodirs = ['repo']
     if config['archive_older'] != 0:
@@ -97,8 +96,7 @@ def main():
     signed = 0
     for output_dir in repodirs:
         if not os.path.isdir(output_dir):
-            logging.error("Missing output directory '" + output_dir + "'")
-            sys.exit(1)
+            raise FDroidException("Missing output directory '" + output_dir + "'")
 
         unsigned = os.path.join(output_dir, 'index_unsigned.jar')
         if os.path.exists(unsigned):

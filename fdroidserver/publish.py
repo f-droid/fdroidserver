@@ -27,7 +27,8 @@ import logging
 
 from . import common
 from . import metadata
-from .common import FDroidPopen, SdkToolsPopen, BuildException
+from .common import FDroidPopen, SdkToolsPopen
+from .exception import BuildException
 
 config = None
 options = None

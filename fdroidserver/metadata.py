@@ -36,18 +36,10 @@ except ImportError:
     YamlLoader = Loader
 
 import fdroidserver.common
+from fdroidserver.exception import MetaDataException
 
 srclibs = None
 warnings_action = None
-
-
-class MetaDataException(Exception):
-
-    def __init__(self, value):
-        self.value = value
-
-    def __str__(self):
-        return self.value
 
 
 def warn_or_exception(value):

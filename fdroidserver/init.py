@@ -28,6 +28,7 @@ from argparse import ArgumentParser
 import logging
 
 from . import common
+from .exception import FDroidException
 
 config = {}
 options = None
@@ -117,7 +118,7 @@ def main():
                 if common.test_sdk_exists(test_config):
                     break
     if not common.test_sdk_exists(test_config):
-        sys.exit(3)
+        raise FDroidException("Android SDK not found.")
 
     if not os.path.exists('config.py'):
         # 'metadata' and 'tmp' are created in fdroid
@@ -135,7 +136,7 @@ def main():
     else:
         logging.warn('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
         logging.info('Try running `fdroid init` in an empty directory.')
-        sys.exit()
+        raise FDroidException('Repository already exists.')
 
     if 'aapt' not in test_config or not os.path.isfile(test_config['aapt']):
         # try to find a working aapt, in all the recent possible paths

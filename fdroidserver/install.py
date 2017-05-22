@@ -24,7 +24,8 @@ from argparse import ArgumentParser
 import logging
 
 from . import common
-from .common import SdkToolsPopen, FDroidException
+from .common import SdkToolsPopen
+from .exception import FDroidException
 
 options = None
 config = None

@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import os
 import glob
 from argparse import ArgumentParser
@@ -24,6 +23,7 @@ import logging
 
 from . import common
 from .common import FDroidPopen
+from .exception import FDroidException
 
 config = None
 options = None
@@ -46,8 +46,7 @@ def main():
 
     for output_dir in repodirs:
         if not os.path.isdir(output_dir):
-            logging.error("Missing output directory '" + output_dir + "'")
-            sys.exit(1)
+            raise FDroidException("Missing output directory '" + output_dir + "'")
 
         # Process any apks that are waiting to be signed...
         for f in sorted(glob.glob(os.path.join(output_dir, '*.*'))):
@@ -70,8 +69,7 @@ def main():
                 gpgargs.append(os.path.join(output_dir, filename))
                 p = FDroidPopen(gpgargs)
                 if p.returncode != 0:
-                    logging.error("Signing failed.")
-                    sys.exit(1)
+                    raise FDroidException("Signing failed.")
 
                 logging.info('Signed ' + filename)
 

@@ -25,7 +25,7 @@ import logging
 
 from . import common
 from . import net
-from .common import FDroidException
+from .exception import FDroidException
 
 options = None
 config = None
@@ -80,7 +80,7 @@ def main():
             try:
                 net.download_file(url, dldir=tmp_dir)
             except requests.exceptions.HTTPError as e:
-                raise FDroidException('downloading %s failed', url) from e
+                raise FDroidException('Downloading %s failed. %s', (url, e))
 
             compare_result = common.verify_apks(
                 remoteapk,

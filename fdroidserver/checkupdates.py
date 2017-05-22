@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import os
 import re
 import urllib.request
@@ -33,8 +32,7 @@ import copy
 
 from . import common
 from . import metadata
-from .common import VCSException, FDroidException
-from .metadata import MetaDataException
+from .exception import VCSException, FDroidException, MetaDataException
 
 
 # Check for a new version by looking at a document retrieved via HTTP.
@@ -498,8 +496,7 @@ def checkupdates_app(app, first=True):
                 gitcmd.extend(['--author', config['auto_author']])
             gitcmd.extend(["--", metadatapath])
             if subprocess.call(gitcmd) != 0:
-                logging.error("Git commit failed")
-                sys.exit(1)
+                raise FDroidException("Git commit failed")
 
 
 config = None
