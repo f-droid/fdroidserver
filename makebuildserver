@@ -30,6 +30,8 @@ parser.add_option("-c", "--clean", action="store_true", default=False,
 parser.add_option('--skip-cache-update', action="store_true", default=False,
                   help="""Skip downloading and checking cache."""
                        """This assumes that the cache is already downloaded completely.""")
+parser.add_option('--keep-box-file', action="store_true", default=False,
+                  help="""Box file will not be deleted after adding it to box storage.""")
 options, args = parser.parse_args()
 
 logger = logging.getLogger('fdroidserver-makebuildserver')
@@ -329,6 +331,14 @@ def kvm_package(boxfile):
     virConnect = libvirt.open('qemu:///system')
     storagePool = virConnect.storagePoolLookupByName('default')
     if storagePool:
+
+        if os.path.isfile('metadata.json'):
+            os.remove('metadata.json')
+        if os.path.isfile('Vagrantfile'):
+            os.remove('Vagrantfile')
+        if os.path.isfile('box.img'):
+            os.remove('box.img')
+
         vol = storagePool.storageVolLookupByName(config['domain'] + '.img')
         imagepath = vol.path()
         # TODO use a libvirt storage pool to ensure the img file is readable
@@ -356,6 +366,7 @@ def kvm_package(boxfile):
   end
 end
 """
+
         with open('metadata.json', 'w') as fp:
             fp.write(json.dumps(metadata))
         with open('Vagrantfile', 'w') as fp:
@@ -364,9 +375,15 @@ end
             tar.add('metadata.json')
             tar.add('Vagrantfile')
             tar.add('box.img')
-        os.remove('metadata.json')
-        os.remove('Vagrantfile')
-        os.remove('box.img')
+        if not options.keep_box_file:
+            logger.debug('box packaging complete, removing temporary files.')
+            os.remove('metadata.json')
+            os.remove('Vagrantfile')
+            os.remove('box.img')
+
+    else:
+        logger.warn('could not connect to storage-pool \'default\',' +
+                    'skipping packaging buildserver box')
 
 
 def run_via_vagrant_ssh(v, cmdlist):
@@ -586,7 +603,11 @@ def main():
     logger.info("Adding box")
     v.box_add('buildserver', boxfile, force=True)
 
-    os.remove(boxfile)
+    if not options.keep_box_file:
+        logger.debug('box added to vagrant, ' +
+                     'removing generated box file \'%s\'',
+                     boxfile)
+        os.remove(boxfile)
 
 
 if __name__ == '__main__':
