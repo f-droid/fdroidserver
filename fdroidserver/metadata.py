@@ -21,7 +21,7 @@ import json
 import os
 import re
 import glob
-import cgi
+import html
 import logging
 import textwrap
 import io
@@ -492,10 +492,10 @@ class DescriptionFormatter:
         self.laststate = self.state
         self.state = self.stNONE
 
-    def formatted(self, txt, html):
+    def formatted(self, txt, htmlbody):
         res = ''
-        if html:
-            txt = cgi.escape(txt)
+        if htmlbody:
+            txt = html.escape(txt, quote=False)
         while True:
             index = txt.find("''")
             if index == -1:
@@ -503,7 +503,7 @@ class DescriptionFormatter:
             res += txt[:index]
             txt = txt[index:]
             if txt.startswith("'''"):
-                if html:
+                if htmlbody:
                     if self.bold:
                         res += '</b>'
                     else:
@@ -511,7 +511,7 @@ class DescriptionFormatter:
                 self.bold = not self.bold
                 txt = txt[3:]
             else:
-                if html:
+                if htmlbody:
                     if self.ital:
                         res += '</i>'
                     else:
@@ -538,7 +538,7 @@ class DescriptionFormatter:
                     url, urltext = self.linkResolver(url)
                 else:
                     urltext = url
-                res_html += '<a href="' + url + '">' + cgi.escape(urltext) + '</a>'
+                res_html += '<a href="' + url + '">' + html.escape(urltext, quote=False) + '</a>'
                 res_plain += urltext
                 txt = txt[index + 2:]
             else:
@@ -554,7 +554,7 @@ class DescriptionFormatter:
                     url = url[:index2]
                     if url == urltxt:
                         warn_or_exception("Url title is just the URL - use [url]")
-                res_html += '<a href="' + url + '">' + cgi.escape(urltxt) + '</a>'
+                res_html += '<a href="' + url + '">' + html.escape(urltxt, quote=False) + '</a>'
                 res_plain += urltxt
                 if urltxt != url:
                     res_plain += ' (' + url + ')'

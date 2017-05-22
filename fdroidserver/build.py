@@ -544,7 +544,7 @@ def get_apk_metadata_androguard(apkfile):
 def get_metadata_from_apk(app, build, apkfile):
     """get the required metadata from the built APK"""
 
-    if common.set_command_in_config('aapt'):
+    if common.SdkToolsPopen(['aapt', 'version'], output=False):
         vercode, version, foundid, nativecode = get_apk_metadata_aapt(apkfile)
     else:
         vercode, version, foundid, nativecode = get_apk_metadata_androguard(apkfile)

@@ -676,14 +676,14 @@ def insert_localized_app_metadata(apps):
     must be PNG or JPEG files ending with ".png", ".jpg", or ".jpeg"
     and must be in the following layout:
     # TODO replace these docs with link to All_About_Descriptions_Graphics_and_Screenshots
-    # TODO mention that the 'localized' section is not in metadata.yml, so key names are like Java vars: camelCase with first letter lowercase.
+
     repo/packageName/locale/featureGraphic.png
     repo/packageName/locale/phoneScreenshots/1.png
     repo/packageName/locale/phoneScreenshots/2.png
 
     The changelog files must be text files named with the versionCode
     ending with ".txt" and must be in the following layout:
-    https://github.com/fastlane/fastlane/blob/1.109.0/supply/README.md#changelogs-whats-new
+    https://github.com/fastlane/fastlane/blob/2.28.7/supply/README.md#changelogs-whats-new
 
     repo/packageName/locale/changelogs/12345.txt
 
@@ -701,7 +701,7 @@ def insert_localized_app_metadata(apps):
     metadata/ folder and the apps' source repos for standard locations
     of graphic and screenshot files.  If it finds them, it will copy
     them into the repo.  The fastlane files follow this pattern:
-    https://github.com/fastlane/fastlane/blob/1.109.0/supply/README.md#images-and-screenshots
+    https://github.com/fastlane/fastlane/blob/2.28.7/supply/README.md#images-and-screenshots
 
     """
 
@@ -718,7 +718,6 @@ def insert_localized_app_metadata(apps):
                 logging.debug(packageName + ' does not have app metadata, skipping l18n scan.')
                 continue
             locale = segments[-1]
-            destdir = os.path.join('repo', packageName, locale)
             for f in files:
                 if f == 'full_description.txt':
                     _set_localized_text_entry(apps[packageName], locale, 'description',
@@ -737,11 +736,15 @@ def insert_localized_app_metadata(apps):
                                               os.path.join(root, f))
                     continue
                 elif f == str(apps[packageName]['CurrentVersionCode']) + '.txt':
-                    _set_localized_text_entry(apps[packageName], segments[-2], 'whatsNew',
+                    locale = segments[-2]
+                    _set_localized_text_entry(apps[packageName], locale, 'whatsNew',
                                               os.path.join(root, f))
                     continue
 
                 base, extension = common.get_extension(f)
+                if locale == 'images':
+                    locale = segments[-2]
+                destdir = os.path.join('repo', packageName, locale)
                 if base in GRAPHIC_NAMES and extension in ALLOWED_EXTENSIONS:
                     os.makedirs(destdir, mode=0o755, exist_ok=True)
                     logging.debug('copying ' + os.path.join(root, f) + ' ' + destdir)
@@ -783,7 +786,7 @@ def insert_localized_app_metadata(apps):
                 graphics[base] = filename
             elif screenshotdir in SCREENSHOT_DIRS:
                 # there can any number of these per locale
-                logging.debug('adding ' + base + ':' + f)
+                logging.debug('adding to ' + screenshotdir + ': ' + f)
                 if screenshotdir not in graphics:
                     graphics[screenshotdir] = []
                 graphics[screenshotdir].append(filename)
@@ -849,12 +852,13 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             repo_file['versionName'] = shasum
             # the static ID is the SHA256 unless it is set in the metadata
             repo_file['packageName'] = shasum
-            n = name_utf8.split('_')
+
+            n = name_utf8.rsplit('_', maxsplit=1)
             if len(n) == 2:
                 packageName = n[0]
                 versionCode = n[1].split('.')[0]
                 if re.match('^-?[0-9]+$', versionCode) \
-                   and common.is_valid_package_name(name_utf8.split('_')[0]):
+                   and common.is_valid_package_name(n[0]):
                     repo_file['packageName'] = packageName
                     repo_file['versionCode'] = int(versionCode)
             srcfilename = name + b'_src.tar.gz'
@@ -1124,11 +1128,9 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
             apk['antiFeatures'].add('KnownVuln')
 
         try:
-            if common.set_command_in_config('aapt'):
-                logging.warning("Using AAPT for metadata")
+            if SdkToolsPopen(['aapt', 'version'], output=False):
                 scan_apk_aapt(apk, apkfile)
             else:
-                logging.warning("Using androguard for metadata")
                 scan_apk_androguard(apk, apkfile)
         except BuildException:
             return True, None, False

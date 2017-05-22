@@ -4,12 +4,8 @@ import inspect
 import logging
 import optparse
 import os
-import shutil
 import sys
-import tempfile
 import unittest
-import yaml
-from binascii import unhexlify
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -53,9 +49,10 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.clean = True
         fdroidserver.update.options.delete_unknown = True
 
-        self.assertTrue(fdroidserver.common.set_command_in_config('aapt'))
+        self.assertTrue(fdroidserver.common.SdkToolsPopen('aapt'))
         try:
             from androguard.core.bytecodes.apk import APK
+            dir(APK)
         except ImportError:
             raise Exception("androguard not installed!")
 

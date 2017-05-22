@@ -37,6 +37,8 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = fdroidserver.common.options
         os.chdir(os.path.join(localmodule, 'tests'))
 
+        shutil.rmtree(os.path.join('repo', 'info.guardianproject.urzip'), ignore_errors=True)
+
         apps = dict()
         for packageName in ('info.guardianproject.urzip', 'org.videolan.vlc', 'obb.mainpatch.current'):
             apps[packageName] = dict()
@@ -45,17 +47,23 @@ class UpdateTest(unittest.TestCase):
         apps['info.guardianproject.urzip']['CurrentVersionCode'] = 100
         fdroidserver.update.insert_localized_app_metadata(apps)
 
+        appdir = os.path.join('repo', 'info.guardianproject.urzip', 'en-US')
+        self.assertTrue(os.path.isfile(os.path.join(appdir, 'icon.png')))
+        self.assertTrue(os.path.isfile(os.path.join(appdir, 'featureGraphic.png')))
+
         self.assertEqual(3, len(apps))
         for packageName, app in apps.items():
             self.assertTrue('localized' in app)
             self.assertTrue('en-US' in app['localized'])
             self.assertEqual(1, len(app['localized']))
             if packageName == 'info.guardianproject.urzip':
-                self.assertEqual(5, len(app['localized']['en-US']))
+                self.assertEqual(7, len(app['localized']['en-US']))
                 self.assertEqual('full description\n', app['localized']['en-US']['description'])
                 self.assertEqual('title\n', app['localized']['en-US']['name'])
                 self.assertEqual('short description\n', app['localized']['en-US']['summary'])
                 self.assertEqual('video\n', app['localized']['en-US']['video'])
+                self.assertEqual('icon.png', app['localized']['en-US']['icon'])
+                self.assertEqual('featureGraphic.png', app['localized']['en-US']['featureGraphic'])
                 self.assertEqual('100\n', app['localized']['en-US']['whatsNew'])
             elif packageName == 'org.videolan.vlc':
                 self.assertEqual('icon.png', app['localized']['en-US']['icon'])
@@ -244,6 +252,7 @@ class UpdateTest(unittest.TestCase):
 
         fdroidserver.update.options = type('', (), {})()
         fdroidserver.update.options.clean = True
+        fdroidserver.update.options.rename_apks = False
         fdroidserver.update.options.delete_unknown = True
 
         for icon_dir in fdroidserver.update.get_all_icon_dirs('repo'):
