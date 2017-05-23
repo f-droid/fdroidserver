@@ -80,7 +80,6 @@ if os.path.isfile('/usr/bin/systemd-detect-virt'):
     if virt == 'qemu' or virt == 'kvm' or virt == 'bochs':
         logger.info('Running in a VM guest, defaulting to QEMU/KVM via libvirt')
         config['vm_provider'] = 'libvirt'
-        config['domain'] = 'buildserver_default'
     elif virt != 'none':
         logger.info('Running in an unsupported VM guest (%s)!', virt)
     logger.debug('detected virt: %s', virt)
@@ -402,8 +401,9 @@ def debug_log_vagrant_vm(vm_dir, config):
         if config['vm_provider'] == 'libvirt':
             logger.debug('> virsh -c qmeu:///system list --all')
             subprocess.call(['virsh', '-c', 'qemu:///system', 'list', '--all'])
-            logger.debug('> virsh -c qemu:///system snapshot-list %s', config['domain'])
-            subprocess.call(['virsh', '-c', 'qemu:///system', 'snapshot-list', config['domain']])
+            domain = 'buildserver_default'
+            logger.debug('> virsh -c qemu:///system snapshot-list %s', domain)
+            subprocess.call(['virsh', '-c', 'qemu:///system', 'snapshot-list', domain])
 
 
 def main():
