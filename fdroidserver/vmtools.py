@@ -24,6 +24,7 @@ import tarfile
 import time
 import shutil
 import subprocess
+import textwrap
 from .common import FDroidException
 from logging import getLogger
 

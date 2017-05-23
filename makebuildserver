@@ -13,7 +13,6 @@ import hashlib
 import yaml
 import json
 import logging
-import textwrap
 from clint.textui import progress
 from optparse import OptionParser
 import fdroidserver.tail
