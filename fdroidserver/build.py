@@ -26,7 +26,6 @@ import re
 import tarfile
 import traceback
 import time
-import json
 import requests
 import tempfile
 from configparser import ConfigParser
@@ -37,6 +36,7 @@ from . import common
 from . import net
 from . import metadata
 from . import scanner
+from . import vmtools
 from .common import FDroidPopen, SdkToolsPopen
 from .exception import FDroidException, BuildException, VCSException
 
@@ -44,205 +44,6 @@ try:
     import paramiko
 except ImportError:
     pass
-
-
-def get_builder_vm_id():
-    vd = os.path.join('builder', '.vagrant')
-    if os.path.isdir(vd):
-        # Vagrant 1.2 (and maybe 1.1?) it's a directory tree...
-        with open(os.path.join(vd, 'machines', 'default',
-                               'virtualbox', 'id')) as vf:
-            id = vf.read()
-        return id
-    else:
-        # Vagrant 1.0 - it's a json file...
-        with open(os.path.join('builder', '.vagrant')) as vf:
-            v = json.load(vf)
-        return v['active']['default']
-
-
-def got_valid_builder_vm():
-    """Returns True if we have a valid-looking builder vm
-    """
-    if not os.path.exists(os.path.join('builder', 'Vagrantfile')):
-        return False
-    vd = os.path.join('builder', '.vagrant')
-    if not os.path.exists(vd):
-        return False
-    if not os.path.isdir(vd):
-        # Vagrant 1.0 - if the directory is there, it's valid...
-        return True
-    # Vagrant 1.2 - the directory can exist, but the id can be missing...
-    if not os.path.exists(os.path.join(vd, 'machines', 'default',
-                                       'virtualbox', 'id')):
-        return False
-    return True
-
-
-def vagrant(params, cwd=None, printout=False):
-    """Run a vagrant command.
-
-    :param: list of parameters to pass to vagrant
-    :cwd: directory to run in, or None for current directory
-    :returns: (ret, out) where ret is the return code, and out
-               is the stdout (and stderr) from vagrant
-    """
-    p = FDroidPopen(['vagrant'] + params, cwd=cwd)
-    return (p.returncode, p.output)
-
-
-def get_vagrant_sshinfo():
-    """Get ssh connection info for a vagrant VM
-
-    :returns: A dictionary containing 'hostname', 'port', 'user'
-        and 'idfile'
-    """
-    if subprocess.call('vagrant ssh-config >sshconfig',
-                       cwd='builder', shell=True) != 0:
-        raise BuildException("Error getting ssh config")
-    vagranthost = 'default'  # Host in ssh config file
-    sshconfig = paramiko.SSHConfig()
-    sshf = open(os.path.join('builder', 'sshconfig'), 'r')
-    sshconfig.parse(sshf)
-    sshf.close()
-    sshconfig = sshconfig.lookup(vagranthost)
-    idfile = sshconfig['identityfile']
-    if isinstance(idfile, list):
-        idfile = idfile[0]
-    elif idfile.startswith('"') and idfile.endswith('"'):
-        idfile = idfile[1:-1]
-    return {'hostname': sshconfig['hostname'],
-            'port': int(sshconfig['port']),
-            'user': sshconfig['user'],
-            'idfile': idfile}
-
-
-def get_clean_vm(reset=False):
-    """Get a clean VM ready to do a buildserver build.
-
-    This might involve creating and starting a new virtual machine from
-    scratch, or it might be as simple (unless overridden by the reset
-    parameter) as re-using a snapshot created previously.
-
-    A BuildException will be raised if anything goes wrong.
-
-    :reset: True to force creating from scratch.
-    :returns: A dictionary containing 'hostname', 'port', 'user'
-        and 'idfile'
-    """
-    # Reset existing builder machine to a clean state if possible.
-    vm_ok = False
-    if not reset:
-        logging.info("Checking for valid existing build server")
-
-        if got_valid_builder_vm():
-            logging.info("...VM is present")
-            p = FDroidPopen(['VBoxManage', 'snapshot',
-                             get_builder_vm_id(), 'list',
-                             '--details'], cwd='builder')
-            if 'fdroidclean' in p.output:
-                logging.info("...snapshot exists - resetting build server to "
-                             "clean state")
-                retcode, output = vagrant(['status'], cwd='builder')
-
-                if 'running' in output:
-                    logging.info("...suspending")
-                    vagrant(['suspend'], cwd='builder')
-                    logging.info("...waiting a sec...")
-                    time.sleep(10)
-                p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(),
-                                 'restore', 'fdroidclean'],
-                                cwd='builder')
-
-                if p.returncode == 0:
-                    logging.info("...reset to snapshot - server is valid")
-                    retcode, output = vagrant(['up'], cwd='builder')
-                    if retcode != 0:
-                        raise BuildException("Failed to start build server")
-                    logging.info("...waiting a sec...")
-                    time.sleep(10)
-                    sshinfo = get_vagrant_sshinfo()
-                    vm_ok = True
-                else:
-                    logging.info("...failed to reset to snapshot")
-            else:
-                logging.info("...snapshot doesn't exist - "
-                             "VBoxManage snapshot list:\n" + p.output)
-
-    # If we can't use the existing machine for any reason, make a
-    # new one from scratch.
-    if not vm_ok:
-        if os.path.exists('builder'):
-            logging.info("Removing broken/incomplete/unwanted build server")
-            vagrant(['destroy', '-f'], cwd='builder')
-            shutil.rmtree('builder')
-        os.mkdir('builder')
-
-        p = subprocess.Popen(['vagrant', '--version'],
-                             universal_newlines=True,
-                             stdout=subprocess.PIPE)
-        vver = p.communicate()[0].strip().split(' ')[1]
-        if vver.split('.')[0] != '1' or int(vver.split('.')[1]) < 4:
-            raise BuildException("Unsupported vagrant version {0}".format(vver))
-
-        with open(os.path.join('builder', 'Vagrantfile'), 'w') as vf:
-            vf.write('Vagrant.configure("2") do |config|\n')
-            vf.write('config.vm.box = "buildserver"\n')
-            vf.write('config.vm.synced_folder ".", "/vagrant", disabled: true\n')
-            vf.write('end\n')
-
-        logging.info("Starting new build server")
-        retcode, _ = vagrant(['up'], cwd='builder')
-        if retcode != 0:
-            raise BuildException("Failed to start build server")
-
-        # Open SSH connection to make sure it's working and ready...
-        logging.info("Connecting to virtual machine...")
-        sshinfo = get_vagrant_sshinfo()
-        sshs = paramiko.SSHClient()
-        sshs.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        sshs.connect(sshinfo['hostname'], username=sshinfo['user'],
-                     port=sshinfo['port'], timeout=300,
-                     look_for_keys=False,
-                     key_filename=sshinfo['idfile'])
-        sshs.close()
-
-        logging.info("Saving clean state of new build server")
-        retcode, _ = vagrant(['suspend'], cwd='builder')
-        if retcode != 0:
-            raise BuildException("Failed to suspend build server")
-        logging.info("...waiting a sec...")
-        time.sleep(10)
-        p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(),
-                         'take', 'fdroidclean'],
-                        cwd='builder')
-        if p.returncode != 0:
-            raise BuildException("Failed to take snapshot")
-        logging.info("...waiting a sec...")
-        time.sleep(10)
-        logging.info("Restarting new build server")
-        retcode, _ = vagrant(['up'], cwd='builder')
-        if retcode != 0:
-            raise BuildException("Failed to start build server")
-        logging.info("...waiting a sec...")
-        time.sleep(10)
-        # Make sure it worked...
-        p = FDroidPopen(['VBoxManage', 'snapshot', get_builder_vm_id(),
-                         'list', '--details'],
-                        cwd='builder')
-        if 'fdroidclean' not in p.output:
-            raise BuildException("Failed to take snapshot.")
-
-    return sshinfo
-
-
-def release_vm():
-    """Release the VM previously started with get_clean_vm().
-
-    This should always be called.
-    """
-    logging.info("Suspending build server")
-    subprocess.call(['vagrant', 'suspend'], cwd='builder')
 
 
 # Note that 'force' here also implies test mode.
@@ -268,7 +69,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
     else:
         logging.getLogger("paramiko").setLevel(logging.WARN)
 
-    sshinfo = get_clean_vm()
+    sshinfo = vmtools.get_clean_builder('builder')
 
     try:
         if not buildserverid:
@@ -455,9 +256,9 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         ftp.close()
 
     finally:
-
         # Suspend the build server.
-        release_vm()
+        vm = vmtools.get_build_vm('builder')
+        vm.suspend()
 
 
 def force_gradle_build_tools(build_dir, build_tools):
@@ -989,7 +790,7 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
        this is the 'unsigned' directory.
     :param repo_dir: The repo directory - used for checking if the build is
        necessary.
-    :paaram also_check_dir: An additional location for checking if the build
+    :param also_check_dir: An additional location for checking if the build
        is necessary (usually the archive repo)
     :param test: True if building in test mode, in which case the build will
        always happen, even if the output already exists. In test mode, the
