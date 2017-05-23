@@ -28,7 +28,6 @@ import traceback
 import time
 import requests
 import tempfile
-import textwrap
 from configparser import ConfigParser
 from argparse import ArgumentParser
 import logging
@@ -40,64 +39,11 @@ from . import scanner
 from . import vmtools
 from .common import FDroidPopen, SdkToolsPopen
 from .exception import FDroidException, BuildException, VCSException
-from .vmtools import FDroidBuildVmException
 
 try:
     import paramiko
 except ImportError:
     pass
-
-
-def vm_new_get_clean_builder(serverdir, reset=False):
-    if not os.path.isdir(serverdir):
-        if os.path.islink(serverdir):
-            os.unlink(serverdir)
-        logging.info("buildserver path does not exists, creating %s", serverdir)
-        os.makedirs(serverdir)
-    vagrantfile = os.path.join(serverdir, 'Vagrantfile')
-    if not os.path.isfile(vagrantfile):
-        with open(os.path.join('builder', 'Vagrantfile'), 'w') as f:
-            f.write(textwrap.dedent("""\
-                # generated file, do not change.
-
-                Vagrant.configure("2") do |config|
-                    config.vm.box = "buildserver"
-                    config.vm.synced_folder ".", "/vagrant", disabled: true
-                end
-                """))
-    vm = vmtools.get_build_vm(serverdir)
-    if reset:
-        logging.info('resetting buildserver by request')
-    elif not vm.vagrant_uuid_okay():
-        logging.info('resetting buildserver, bceause vagrant vm is not okay.')
-        reset = True
-    elif not vm.snapshot_exists('fdroidclean'):
-        logging.info("resetting buildserver, because snapshot 'fdroidclean' is not present.")
-        reset = True
-
-    if reset:
-        vm.destroy()
-    vm.up()
-    vm.suspend()
-
-    if reset:
-        logging.info('buildserver recreated: taking a clean snapshot')
-        vm.snapshot_create('fdroidclean')
-    else:
-        logging.info('builserver ok: reverting to clean snapshot')
-        vm.snapshot_revert('fdroidclean')
-    vm.up()
-
-    try:
-        sshinfo = vm.sshinfo()
-    except FDroidBuildVmException:
-        # workaround because libvirt sometimes likes to forget
-        # about ssh connection info even thou the vm is running
-        vm.halt()
-        vm.up()
-        sshinfo = vm.sshinfo()
-
-    return sshinfo
 
 
 # Note that 'force' here also implies test mode.
@@ -123,8 +69,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
     else:
         logging.getLogger("paramiko").setLevel(logging.WARN)
 
-    # sshinfo = vm_get_clean_builder()
-    sshinfo = vm_new_get_clean_builder('builder')
+    sshinfo = vmtools.get_clean_builder('builder')
 
     try:
         if not buildserverid:

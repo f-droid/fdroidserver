@@ -18,6 +18,7 @@
 
 from os import remove as rmfile
 from os.path import isdir, isfile, join as joinpath, basename, abspath, expanduser
+import os
 import math
 import json
 import tarfile
@@ -29,6 +30,58 @@ from .common import FDroidException
 from logging import getLogger
 
 logger = getLogger('fdroidserver-vmtools')
+
+
+def get_clean_builder(serverdir, reset=False):
+    if not os.path.isdir(serverdir):
+        if os.path.islink(serverdir):
+            os.unlink(serverdir)
+        logger.info("buildserver path does not exists, creating %s", serverdir)
+        os.makedirs(serverdir)
+    vagrantfile = os.path.join(serverdir, 'Vagrantfile')
+    if not os.path.isfile(vagrantfile):
+        with open(os.path.join('builder', 'Vagrantfile'), 'w') as f:
+            f.write(textwrap.dedent("""\
+                # generated file, do not change.
+
+                Vagrant.configure("2") do |config|
+                    config.vm.box = "buildserver"
+                    config.vm.synced_folder ".", "/vagrant", disabled: true
+                end
+                """))
+    vm = get_build_vm(serverdir)
+    if reset:
+        logger.info('resetting buildserver by request')
+    elif not vm.vagrant_uuid_okay():
+        logger.info('resetting buildserver, bceause vagrant vm is not okay.')
+        reset = True
+    elif not vm.snapshot_exists('fdroidclean'):
+        logger.info("resetting buildserver, because snapshot 'fdroidclean' is not present.")
+        reset = True
+
+    if reset:
+        vm.destroy()
+    vm.up()
+    vm.suspend()
+
+    if reset:
+        logger.info('buildserver recreated: taking a clean snapshot')
+        vm.snapshot_create('fdroidclean')
+    else:
+        logger.info('builserver ok: reverting to clean snapshot')
+        vm.snapshot_revert('fdroidclean')
+    vm.up()
+
+    try:
+        sshinfo = vm.sshinfo()
+    except FDroidBuildVmException:
+        # workaround because libvirt sometimes likes to forget
+        # about ssh connection info even thou the vm is running
+        vm.halt()
+        vm.up()
+        sshinfo = vm.sshinfo()
+
+    return sshinfo
 
 
 def _check_call(cmd, shell=False, cwd=None):
