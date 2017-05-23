@@ -25,7 +25,6 @@ import html
 import logging
 import textwrap
 import io
-import ruamel.yaml
 import yaml
 # use libyaml if it is available
 try:
@@ -989,6 +988,8 @@ def parse_yaml_metadata(mf, app):
 
 
 def write_yaml(mf, app):
+
+    import ruamel.yaml
 
     _yaml_bools_true = ('y', 'Y', 'yes', 'Yes', 'YES',
                         'true', 'True', 'TRUE',
