@@ -61,6 +61,7 @@ packages="
  libexpat1-dev
  libgcc1:i386
  libglib2.0-dev
+ liblwp-protocol-https-perl
  liblzma-dev
  libncurses5:i386
  librsvg2-bin
@@ -94,6 +95,7 @@ packages="
  qtbase5-dev
  quilt
  realpath
+ rsync
  scons
  sqlite3
  subversion
