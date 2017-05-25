@@ -1137,7 +1137,7 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
             apk['minSdkVersion'] = 1
 
         # Check for debuggable apks...
-        if common.isApkAndDebuggable(apkfile, config):
+        if common.isApkAndDebuggable(apkfile):
             logging.warning('{0} is set to android:debuggable="true"'.format(apkfile))
 
         # Get the signature (or md5 of, to be precise)...
@@ -1538,7 +1538,7 @@ def main():
             config['keydname'] = 'CN=' + config['repo_keyalias'] + ', OU=F-Droid'
             common.write_to_config(config, 'keydname', config['keydname'])
         if 'keystore' not in config:
-            config['keystore'] = common.default_config.keystore
+            config['keystore'] = common.default_config['keystore']
             common.write_to_config(config, 'keystore', config['keystore'])
 
         password = common.genpassword()

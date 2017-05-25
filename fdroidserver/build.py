@@ -735,7 +735,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         src = os.path.normpath(apks[0])
 
     # Make sure it's not debuggable...
-    if common.isApkAndDebuggable(src, config):
+    if common.isApkAndDebuggable(src):
         raise BuildException("APK is debuggable")
 
     # By way of a sanity check, make sure the version and version

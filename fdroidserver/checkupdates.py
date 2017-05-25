@@ -241,7 +241,7 @@ def check_repomanifest(app, branch=None):
         return (None, msg)
 
 
-def check_repotrunk(app, branch=None):
+def check_repotrunk(app):
 
     try:
         if app.RepoType == 'srclib':
@@ -370,7 +370,7 @@ def fetch_autoname(app, tag):
     return commitmsg
 
 
-def checkupdates_app(app, first=True):
+def checkupdates_app(app):
 
     # If a change is made, commitmsg should be set to a description of it.
     # Only if this is set will changes be written back to the metadata.
