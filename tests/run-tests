@@ -178,6 +178,28 @@ else
     echo 'WARNING: Skipping `fdroid build` test since android-23 is missing!'
 fi
 
+#------------------------------------------------------------------------------#
+echo_header 'copy git import and run `fdroid scanner` on it'
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+touch config.py
+cp $WORKSPACE/examples/fdroid-icon.png $REPOROOT/
+mkdir metadata
+echo "Auto Name:Just A Test" > metadata/org.fdroid.ci.test.app.txt
+echo "Web Site:" >> metadata/org.fdroid.ci.test.app.txt
+echo "Build:0.3,300" >> metadata/org.fdroid.ci.test.app.txt
+echo "    commit=0.3" >> metadata/org.fdroid.ci.test.app.txt
+echo "    subdir=app" >> metadata/org.fdroid.ci.test.app.txt
+echo "    gradle=yes" >> metadata/org.fdroid.ci.test.app.txt
+echo "" >> metadata/org.fdroid.ci.test.app.txt
+echo "Repo:https://gitlab.com/fdroid/ci-test-app.git" >> metadata/org.fdroid.ci.test.app.txt
+echo "Repo Type:git" >> metadata/org.fdroid.ci.test.app.txt
+mkdir build
+cp -a $WORKSPACE/tests/tmp/importer build/org.fdroid.ci.test.app
+ls -l build/org.fdroid.ci.test.app
+$fdroid scanner org.fdroid.ci.test.app --verbose
+
 
 #------------------------------------------------------------------------------#
 echo_header "copy tests/repo, generate java/gpg keys, update, and gpgsign"
