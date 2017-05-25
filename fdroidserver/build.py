@@ -494,7 +494,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
     else:
         # Scan before building...
         logging.info("Scanning source for common problems...")
-        count = scanner.scan_source(build_dir, root_dir, build)
+        count = scanner.scan_source(build_dir, build)
         if count > 0:
             if force:
                 logging.warn('Scanner found %d problems' % count)
