@@ -87,6 +87,7 @@ def scan_source(build_dir, build):
         'clojars.org/repo',  # Clojure free software libs
         's3.amazonaws.com/repo.commonsware.com',  # CommonsWare
         'plugins.gradle.org/m2',  # Gradle plugin repo
+        'maven.google.com',  # Google Maven Repo, https://developer.android.com/studio/build/dependencies.html#google-maven
         ]
     ]
 
