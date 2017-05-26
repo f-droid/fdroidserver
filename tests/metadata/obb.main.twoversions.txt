@@ -1,5 +1,5 @@
 Categories:Development
-License:GPLv3
+License:GPL-3.0
 Source Code:https://github.com/eighthave/urzip
 Bitcoin:1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk
 
