@@ -232,6 +232,8 @@ cachefiles = [
      '671b4e00f5b986c7355507c7024b725a4b4cadf11ca61fa5b1334ec6ea57d94f'),
     ('https://dl.google.com/android/repository/build-tools_r25.0.2-linux.zip',
      '1d7ac9b6def16fb0254ec23c135c02dd9f6908073352a20315a017e4b2a904b0'),
+    ('https://dl.google.com/android/repository/build-tools_r25.0.3-linux.zip',
+     '152c1b187947edd10c65af8b279d40321ecc106106323e53df3608e578042d65'),
     # the binaries that Google uses are here:
     # https://android.googlesource.com/platform/tools/external/gradle/+/studio-1.5/
     ('https://services.gradle.org/distributions/gradle-1.4-bin.zip',
@@ -310,8 +312,8 @@ cachefiles = [
      'eafae2d614e5475a3bcfd7c5f201db5b963cc1290ee3e8ae791ff0c66757781e'),
     ('https://dl.google.com/android/repository/android-ndk-r13b-linux-x86_64.zip',
      '3524d7f8fca6dc0d8e7073a7ab7f76888780a22841a6641927123146c3ffd29c'),
-    ('https://dl.google.com/android/repository/android-ndk-r14-linux-x86_64.zip',
-     '3e622c2c9943964ea44cd56317d0769ed4c811bb4b40dc45b1f6965e4db9aa44'),
+    ('https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip',
+     '0ecc2017802924cf81fffc0f51d342e3e69de6343da892ac9fa1cd79bc106024'),
     ('https://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-linux-x64-android-5.7.0.run',
      'f7e55b7970e59bdaabb88cb7afc12e9061e933992bda2f076f52600358644586'),
 ]
