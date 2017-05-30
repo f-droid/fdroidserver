@@ -19,6 +19,7 @@
 
 import binascii
 import os
+import re
 import shutil
 import urllib.request
 from argparse import ArgumentParser
@@ -39,9 +40,19 @@ def getrepofrompage(url):
     req = urllib.request.urlopen(url)
     if req.getcode() != 200:
         return (None, 'Unable to get ' + url + ' - return code ' + str(req.getcode()))
-    page = req.read()
+    page = req.read().decode(req.headers.get_content_charset())
 
     # Works for BitBucket
+    m = re.search('data-fetch-url="(.*)"', page)
+    if m is not None:
+        repo = m.group(1)
+
+        if repo.endswith('.git'):
+            return ('git', repo)
+
+        return ('hg', repo)
+
+    # Works for BitBucket (obsolete)
     index = page.find('hg clone')
     if index != -1:
         repotype = 'hg'
@@ -53,7 +64,7 @@ def getrepofrompage(url):
         repo = repo.split('"')[0]
         return (repotype, repo)
 
-    # Works for BitBucket
+    # Works for BitBucket (obsolete)
     index = page.find('git clone')
     if index != -1:
         repotype = 'git'
