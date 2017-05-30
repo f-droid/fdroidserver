@@ -361,9 +361,16 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
 
         # Check for duplicates - they will make the client unhappy...
         for i in range(len(apklist) - 1):
-            if apklist[i]['versionCode'] == apklist[i + 1]['versionCode']:
-                raise FDroidException("duplicate versions: '%s' - '%s'" % (
-                    apklist[i]['apkName'], apklist[i + 1]['apkName']))
+            first = apklist[i]
+            second = apklist[i + 1]
+            if first['versionCode'] == second['versionCode'] \
+               and first['sig'] == second['sig']:
+                if first['hash'] == second['hash']:
+                    raise FDroidException('"{0}/{1}" and "{0}/{2}" are exact duplicates!'.format(
+                        repodir, first['apkName'], second['apkName']))
+                else:
+                    raise FDroidException('duplicates: "{0}/{1}" - "{0}/{2}"'.format(
+                        repodir, first['apkName'], second['apkName']))
 
         current_version_code = 0
         current_version_file = None

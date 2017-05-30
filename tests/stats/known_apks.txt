@@ -4,4 +4,5 @@ obb.main.twoversions_1101613.apk obb.main.twoversions 2015-10-12
 obb.main.twoversions_1101615.apk obb.main.twoversions 2016-01-01
 obb.main.twoversions_1101617.apk obb.main.twoversions 2016-06-20
 obb.mainpatch.current_1619.apk obb.mainpatch.current 2016-04-23
+obb.mainpatch.current_1619_another-release-key.apk obb.mainpatch.current 2017-06-01
 urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234.apk info.guardianproject.urzip 2016-06-23

@@ -485,6 +485,28 @@ export ANDROID_HOME=$STORED_ANDROID_HOME
 
 
 #------------------------------------------------------------------------------#
+echo_header "check duplicate files are properly handled by fdroid update"
+
+REPOROOT=`create_test_dir`
+KEYSTORE=$WORKSPACE/tests/keystore.jks
+cd $REPOROOT
+$fdroid init --keystore $KEYSTORE --repo-keyalias=sova
+echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+mkdir $REPOROOT/metadata
+cp -a $WORKSPACE/tests/metadata/obb.mainpatch.current.txt $REPOROOT/metadata
+echo "accepted_formats = ['txt']" >> config.py
+cp $WORKSPACE/tests/repo/obb.mainpatch.current_1619.apk $REPOROOT/repo/
+cp $WORKSPACE/tests/repo/obb.mainpatch.current_1619_another-release-key.apk $REPOROOT/repo/
+$fdroid update --pretty
+grep -F 'obb.mainpatch.current_1619.apk' repo/index.xml
+grep -F 'obb.mainpatch.current_1619_another-release-key.apk' repo/index.xml
+# die if there are exact duplicates
+cp $WORKSPACE/tests/repo/obb.mainpatch.current_1619.apk $REPOROOT/repo/duplicate.apk
+! $fdroid update
+
+
+#------------------------------------------------------------------------------#
 echo_header "setup new repo from scratch using ANDROID_HOME, putting APKs in repo first"
 
 REPOROOT=`create_test_dir`
