@@ -55,6 +55,8 @@ from .asynchronousfilereader import AsynchronousFileReader
 
 # A signature block file with a .DSA, .RSA, or .EC extension
 CERT_PATH_REGEX = re.compile(r'^META-INF/.*\.(DSA|EC|RSA)$')
+APK_NAME_REGEX = re.compile(r'^([a-zA-Z][\w.]*)_(-?[0-9]+)_?([0-9a-f]{7})?\.apk')
+STANDARD_FILE_NAME_REGEX = re.compile(r'^(\w[\w.]*)_(-?[0-9]+)\.\w+')
 
 XMLElementTree.register_namespace('android', 'http://schemas.android.com/apk/res/android')
 

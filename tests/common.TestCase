@@ -281,6 +281,70 @@ class CommonTest(unittest.TestCase):
                 key = "val"
                 """))
 
+    def test_apk_name_regex(self):
+        good = [
+            'urzipπÇÇπÇÇ现代汉语通用字българскиعربي1234ö_-123456.apk',
+            'urzipπÇÇπÇÇ现代汉语通用字българскиعربي1234ö_123456_abcdef0.apk',
+            'urzip_-123456.apk',
+            'a0_0.apk',
+            'Z0_0.apk',
+            'a0_0_abcdef0.apk',
+            'a_a_a_a_0_abcdef0.apk',
+            'a_____0.apk',
+            'a_____123456_abcdef0.apk',
+            'org.fdroid.fdroid_123456.apk',
+            # valid, but "_99999" is part of packageName rather than versionCode
+            'org.fdroid.fdroid_99999_123456.apk',
+            # should be valid, but I can't figure out the regex since \w includes digits
+            # 'πÇÇπÇÇ现代汉语通用字българскиعربي1234ö_0_123bafd.apk',
+        ]
+        for name in good:
+            m = fdroidserver.common.APK_NAME_REGEX.match(name)
+            self.assertIsNotNone(m)
+            self.assertIn(m.group(2), ('-123456', '0', '123456'))
+            self.assertIn(m.group(3), ('abcdef0', None))
+
+        bad = [
+            'urzipπÇÇπÇÇ现代汉语通用字българскиعربي1234ö_123456_abcdefg.apk',
+            'urzip-_-198274.apk',
+            'urzip-_0_123bafd.apk',
+            'no spaces allowed_123.apk',
+            '0_0.apk',
+            '0_0_abcdef0.apk',
+        ]
+        for name in bad:
+            self.assertIsNone(fdroidserver.common.APK_NAME_REGEX.match(name))
+
+    def test_standard_file_name_regex(self):
+        good = [
+            'urzipπÇÇπÇÇ现代汉语通用字българскиعربي1234ö_-123456.mp3',
+            'urzipπÇÇπÇÇ现代汉语通用字българскиعربي1234ö_123456.mov',
+            'Document_-123456.pdf',
+            'WTF_0.MOV',
+            'Z0_0.ebk',
+            'a_a_a_a_0.txt',
+            'org.fdroid.fdroid.privileged.ota_123456.zip',
+            'πÇÇπÇÇ现代汉语通用字българскиعربي1234ö_0.jpeg',
+            'a_____0.PNG',
+            # valid, but "_99999" is part of packageName rather than versionCode
+            'a_____99999_123456.zip',
+            'org.fdroid.fdroid_99999_123456.zip',
+        ]
+        for name in good:
+            m = fdroidserver.common.STANDARD_FILE_NAME_REGEX.match(name)
+            self.assertIsNotNone(m)
+            self.assertIn(m.group(2), ('-123456', '0', '123456'))
+
+        bad = [
+            'urzipπÇÇπÇÇ现代汉语通用字българскиعربي1234ö_abcdefg.JPEG',
+            'urzip-_-198274.zip',
+            'urzip-_123bafd.pdf',
+            'no spaces allowed_123.foobar',
+            'a_____0.',
+        ]
+        for name in bad:
+            self.assertIsNone(fdroidserver.common.STANDARD_FILE_NAME_REGEX.match(name))
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
