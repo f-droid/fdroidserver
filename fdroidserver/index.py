@@ -294,9 +294,12 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
 
         # Get a list of the apks for this app...
         apklist = []
+        versionCodes = []
         for apk in apks:
             if apk['packageName'] == appid:
-                apklist.append(apk)
+                if apk['versionCode'] not in versionCodes:
+                    apklist.append(apk)
+                    versionCodes.append(apk['versionCode'])
 
         if len(apklist) == 0:
             continue
