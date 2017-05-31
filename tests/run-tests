@@ -239,6 +239,35 @@ test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc
 sed -i --expression='s,timestamp="[0-9]*",timestamp="1480431575",' repo/index.xml
 diff $WORKSPACE/tests/repo/index.xml repo/index.xml
 
+
+#------------------------------------------------------------------------------#
+echo_header 'rename apks with `fdroid update --rename-apks`'
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+cp $WORKSPACE/tests/keystore.jks $REPOROOT/
+$fdroid init --keystore keystore.jks --repo-keyalias=sova
+echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo "accepted_formats = ['txt', 'yml']" >> config.py
+echo 'keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.py
+test -d metadata || mkdir metadata
+cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.yml metadata/
+test -d repo || mkdir repo
+cp $WORKSPACE/tests/urzip.apk "repo/asdfiuhk urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234 ö.apk"
+$fdroid update --rename-apks
+test -e repo/info.guardianproject.urzip_100.apk
+cp $WORKSPACE/tests/urzip-release.apk repo/
+$fdroid update --rename-apks
+test -e repo/info.guardianproject.urzip_100.apk
+test -e repo/info.guardianproject.urzip_100_b4964fd.apk
+cp $WORKSPACE/tests/urzip-release.apk repo/
+$fdroid update --rename-apks
+test -e repo/info.guardianproject.urzip_100.apk
+test -e repo/info.guardianproject.urzip_100_b4964fd.apk
+test -e duplicates/repo/info.guardianproject.urzip_100_b4964fd.apk
+
+
 #------------------------------------------------------------------------------#
 echo_header "test metadata checks"
 

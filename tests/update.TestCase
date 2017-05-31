@@ -200,6 +200,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = type('', (), {})()
         fdroidserver.update.options.clean = True
         fdroidserver.update.options.delete_unknown = True
+        fdroidserver.update.options.rename_apks = False
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
         knownapks = fdroidserver.common.KnownApks()
