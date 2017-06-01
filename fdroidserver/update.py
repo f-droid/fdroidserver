@@ -402,10 +402,6 @@ def getsig(apkpath):
               if an error occurred.
     """
 
-    # verify the jar signature is correct
-    if not common.verify_apk_signature(apkpath):
-        return None
-
     with zipfile.ZipFile(apkpath, 'r') as apk:
         certs = [n for n in apk.namelist() if common.CERT_PATH_REGEX.match(n)]
 
@@ -1118,8 +1114,6 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
         apk['icons_src'] = {}
         apk['icons'] = {}
         apk['antiFeatures'] = set()
-        if has_old_openssl(apkfile):
-            apk['antiFeatures'].add('KnownVuln')
 
         try:
             if SdkToolsPopen(['aapt', 'version'], output=False):
@@ -1172,6 +1166,13 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
         if os.path.exists(os.path.join(repodir, srcfilename)):
             apk['srcname'] = srcfilename
         apk['size'] = os.path.getsize(apkfile)
+
+        # verify the jar signature is correct
+        if not common.verify_apk_signature(apkfile):
+            return True, None, False
+
+        if has_old_openssl(apkfile):
+            apk['antiFeatures'].add('KnownVuln')
 
         apkzip = zipfile.ZipFile(apkfile, 'r')
 
