@@ -369,6 +369,7 @@ class LibvirtBuildVm(FDroidBuildVm):
             logger.debug('no output name set for packaging \'%s\',' +
                          'defaulting to %s', self.srvname, output)
         storagePool = self.conn.storagePoolLookupByName('default')
+        domainInfo = self.conn.lookupByName(self.srvname).info()
         if storagePool:
 
             if isfile('metadata.json'):
@@ -407,9 +408,11 @@ class LibvirtBuildVm(FDroidBuildVm):
                       libvirt.host = ""
                       libvirt.connect_via_ssh = false
                       libvirt.storage_pool_name = "default"
+                      libvirt.cpus = {cpus}
+                      libvirt.memory = {memory}
 
                     end
-                  end""")
+                  end""".format_map({'memory': str(int(domainInfo[1] / 1024)), 'cpus': str(domainInfo[3])}))
             with open('Vagrantfile', 'w') as fp:
                 fp.write(vagrantfile)
             with tarfile.open(output, 'w:gz') as tar:
