@@ -843,8 +843,8 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
         if not usecache:
             logging.debug("Processing " + name_utf8)
             repo_file = collections.OrderedDict()
+            repo_file['name'] = os.path.splitext(name_utf8)[0]
             # TODO rename apkname globally to something more generic
-            repo_file['name'] = name_utf8
             repo_file['apkName'] = name_utf8
             repo_file['hash'] = shasum
             repo_file['hashType'] = 'sha256'

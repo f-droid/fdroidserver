@@ -448,7 +448,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
                 and repodir == 'repo':  # only create these
             namefield = common.config['current_version_name_source']
             sanitized_name = re.sub(b'''[ '"&%?+=/]''', b'', app.get(namefield).encode('utf-8'))
-            apklinkname = sanitized_name + b'.apk'
+            apklinkname = sanitized_name + os.path.splitext(current_version_file)[1].encode('utf-8')
             current_version_path = os.path.join(repodir, current_version_file).encode('utf-8', 'surrogateescape')
             if os.path.islink(apklinkname):
                 os.remove(apklinkname)
