@@ -703,6 +703,7 @@ def insert_localized_app_metadata(apps):
     """
 
     sourcedirs = glob.glob(os.path.join('build', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z]*'))
+    sourcedirs += glob.glob(os.path.join('build', '[A-Za-z]*', 'metadata', '[a-z][a-z]*'))
     sourcedirs += glob.glob(os.path.join('metadata', '[A-Za-z]*', '[a-z][a-z]*'))
 
     for d in sorted(sourcedirs):
