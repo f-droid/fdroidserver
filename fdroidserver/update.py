@@ -717,15 +717,15 @@ def insert_localized_app_metadata(apps):
                 continue
             locale = segments[-1]
             for f in files:
-                if f == 'full_description.txt':
+                if f in ('description.txt', 'full_description.txt'):
                     _set_localized_text_entry(apps[packageName], locale, 'description',
                                               os.path.join(root, f))
                     continue
-                elif f == 'short_description.txt':
+                elif f in ('summary.txt', 'short_description.txt'):
                     _set_localized_text_entry(apps[packageName], locale, 'summary',
                                               os.path.join(root, f))
                     continue
-                elif f == 'title.txt':
+                elif f in ('name.txt', 'title.txt'):
                     _set_localized_text_entry(apps[packageName], locale, 'name',
                                               os.path.join(root, f))
                     continue
