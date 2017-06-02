@@ -55,6 +55,8 @@ from .asynchronousfilereader import AsynchronousFileReader
 
 # A signature block file with a .DSA, .RSA, or .EC extension
 CERT_PATH_REGEX = re.compile(r'^META-INF/.*\.(DSA|EC|RSA)$')
+APK_NAME_REGEX = re.compile(r'^([a-zA-Z][\w.]*)_(-?[0-9]+)_?([0-9a-f]{7})?\.apk')
+STANDARD_FILE_NAME_REGEX = re.compile(r'^(\w[\w.]*)_(-?[0-9]+)\.\w+')
 
 XMLElementTree.register_namespace('android', 'http://schemas.android.com/apk/res/android')
 
@@ -1580,6 +1582,11 @@ def natural_key(s):
 
 
 class KnownApks:
+    """permanent store of existing APKs with the date they were added
+
+    This is currently the only way to permanently store the "updated"
+    date of APKs.
+    """
 
     def __init__(self):
         self.path = os.path.join('stats', 'known_apks.txt')
@@ -1613,17 +1620,17 @@ class KnownApks:
             for line in sorted(lst, key=natural_key):
                 f.write(line + '\n')
 
-    def recordapk(self, apk, app, default_date=None):
+    def recordapk(self, apkName, app, default_date=None):
         '''
         Record an apk (if it's new, otherwise does nothing)
         Returns the date it was added as a datetime instance
         '''
-        if apk not in self.apks:
+        if apkName not in self.apks:
             if default_date is None:
                 default_date = datetime.utcnow()
-            self.apks[apk] = (app, default_date)
+            self.apks[apkName] = (app, default_date)
             self.changed = True
-        _, added = self.apks[apk]
+        _, added = self.apks[apkName]
         return added
 
     # Look up information - given the 'apkname', returns (app id, date added/None).

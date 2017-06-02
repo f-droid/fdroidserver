@@ -1,7 +1,8 @@
-fake.ota.update_1234.zip 897a92a4ccff4f415f6ba275b2af16d4ecaee60a983b215bddcb9f8964e7a24c 2016-03-10
+fake.ota.update_1234.zip fake.ota.update 2016-03-10
 obb.main.oldversion_1444412523.apk obb.main.oldversion 2013-12-31
 obb.main.twoversions_1101613.apk obb.main.twoversions 2015-10-12
 obb.main.twoversions_1101615.apk obb.main.twoversions 2016-01-01
 obb.main.twoversions_1101617.apk obb.main.twoversions 2016-06-20
 obb.mainpatch.current_1619.apk obb.mainpatch.current 2016-04-23
+obb.mainpatch.current_1619_another-release-key.apk obb.mainpatch.current 2017-06-01
 urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234.apk info.guardianproject.urzip 2016-06-23

@@ -402,10 +402,6 @@ def getsig(apkpath):
               if an error occurred.
     """
 
-    # verify the jar signature is correct
-    if not common.verify_apk_signature(apkpath):
-        return None
-
     with zipfile.ZipFile(apkpath, 'r') as apk:
         certs = [n for n in apk.namelist() if common.CERT_PATH_REGEX.match(n)]
 
@@ -843,8 +839,8 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
         if not usecache:
             logging.debug("Processing " + name_utf8)
             repo_file = collections.OrderedDict()
+            repo_file['name'] = os.path.splitext(name_utf8)[0]
             # TODO rename apkname globally to something more generic
-            repo_file['name'] = name_utf8
             repo_file['apkName'] = name_utf8
             repo_file['hash'] = shasum
             repo_file['hashType'] = 'sha256'
@@ -853,14 +849,10 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             # the static ID is the SHA256 unless it is set in the metadata
             repo_file['packageName'] = shasum
 
-            n = name_utf8.rsplit('_', maxsplit=1)
-            if len(n) == 2:
-                packageName = n[0]
-                versionCode = n[1].split('.')[0]
-                if re.match('^-?[0-9]+$', versionCode) \
-                   and common.is_valid_package_name(n[0]):
-                    repo_file['packageName'] = packageName
-                    repo_file['versionCode'] = int(versionCode)
+            m = common.STANDARD_FILE_NAME_REGEX.match(name_utf8)
+            if m:
+                repo_file['packageName'] = m.group(1)
+                repo_file['versionCode'] = int(m.group(2))
             srcfilename = name + b'_src.tar.gz'
             if os.path.exists(os.path.join(repodir, srcfilename)):
                 repo_file['srcname'] = srcfilename.decode('utf-8')
@@ -1089,8 +1081,14 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
     """
 
     if ' ' in apkfilename:
-        logging.critical("Spaces in filenames are not allowed.")
-        return True, None, False
+        if options.rename_apks:
+            newfilename = apkfilename.replace(' ', '_')
+            os.rename(os.path.join(repodir, apkfilename),
+                      os.path.join(repodir, newfilename))
+            apkfilename = newfilename
+        else:
+            logging.critical("Spaces in filenames are not allowed.")
+            return True, None, False
 
     apkfile = os.path.join(repodir, apkfilename)
     shasum = sha256sum(apkfile)
@@ -1108,21 +1106,14 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
     if not usecache:
         logging.debug("Processing " + apkfilename)
         apk = {}
-        apk['apkName'] = apkfilename
         apk['hash'] = shasum
         apk['hashType'] = 'sha256'
-        srcfilename = apkfilename[:-4] + "_src.tar.gz"
-        if os.path.exists(os.path.join(repodir, srcfilename)):
-            apk['srcname'] = srcfilename
-        apk['size'] = os.path.getsize(apkfile)
         apk['uses-permission'] = []
         apk['uses-permission-sdk-23'] = []
         apk['features'] = []
         apk['icons_src'] = {}
         apk['icons'] = {}
         apk['antiFeatures'] = set()
-        if has_old_openssl(apkfile):
-            apk['antiFeatures'].add('KnownVuln')
 
         try:
             if SdkToolsPopen(['aapt', 'version'], output=False):
@@ -1146,6 +1137,42 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
         if not apk['sig']:
             logging.critical("Failed to get apk signature")
             return True, None, False
+
+        if options.rename_apks:
+            n = apk['packageName'] + '_' + str(apk['versionCode']) + '.apk'
+            std_short_name = os.path.join(repodir, n)
+            if apkfile != std_short_name:
+                if os.path.exists(std_short_name):
+                    std_long_name = std_short_name.replace('.apk', '_' + apk['sig'][:7] + '.apk')
+                    if apkfile != std_long_name:
+                        if os.path.exists(std_long_name):
+                            dupdir = os.path.join('duplicates', repodir)
+                            if not os.path.isdir(dupdir):
+                                os.makedirs(dupdir, exist_ok=True)
+                            dupfile = os.path.join('duplicates', std_long_name)
+                            logging.warning('Moving duplicate ' + std_long_name + ' to ' + dupfile)
+                            os.rename(apkfile, dupfile)
+                            return True, None, False
+                        else:
+                            os.rename(apkfile, std_long_name)
+                    apkfile = std_long_name
+                else:
+                    os.rename(apkfile, std_short_name)
+                    apkfile = std_short_name
+                apkfilename = apkfile[len(repodir) + 1:]
+
+        apk['apkName'] = apkfilename
+        srcfilename = apkfilename[:-4] + "_src.tar.gz"
+        if os.path.exists(os.path.join(repodir, srcfilename)):
+            apk['srcname'] = srcfilename
+        apk['size'] = os.path.getsize(apkfile)
+
+        # verify the jar signature is correct
+        if not common.verify_apk_signature(apkfile):
+            return True, None, False
+
+        if has_old_openssl(apkfile):
+            apk['antiFeatures'].add('KnownVuln')
 
         apkzip = zipfile.ZipFile(apkfile, 'r')
 
@@ -1498,6 +1525,8 @@ def main():
                         help="When configured for signed indexes, create only unsigned indexes at this stage")
     parser.add_argument("--use-date-from-apk", action="store_true", default=False,
                         help="Use date from apk instead of current time for newly added apks")
+    parser.add_argument("--rename-apks", action="store_true", default=False,
+                        help="Rename APK files that do not match package.name_123.apk")
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -1516,6 +1545,9 @@ def main():
     if options.icons:
         resize_all_icons(repodirs)
         sys.exit(0)
+
+    if options.rename_apks:
+        options.clean = True
 
     # check that icons exist now, rather than fail at the end of `fdroid update`
     for k in ['repo_icon', 'archive_icon']:

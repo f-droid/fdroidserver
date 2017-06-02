@@ -12,7 +12,7 @@
 		<id>fake.ota.update</id>
 		<added>2016-03-10</added>
 		<lastupdated>2016-03-10</lastupdated>
-		<name>fake.ota.update_1234.zip</name>
+		<name>fake.ota.update_1234</name>
 		<summary>Tests whether OTA ZIP files are being include</summary>
 		<desc>&lt;p&gt;F-Droid can make use of system privileges or permissions to install, update and remove applications on its own. The only way to obtain those privileges is to become a system app.&lt;/p&gt;&lt;p&gt;This is where the Privileged Extension comes in - being a separate app and much smaller, it can be installed as a system app and communicate with the main app via AIDL IPC.&lt;/p&gt;&lt;p&gt;This has several advantages:&lt;/p&gt;&lt;ul&gt;&lt;li&gt; Reduced disk usage in the system partition&lt;/li&gt;&lt;li&gt; System updates don't remove F-Droid&lt;/li&gt;&lt;li&gt; The process of installing into system via root is safer&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;This is packaged as an OTA (Over-The-Air) update ZIP file.  It must be installed using TWRP or other Android recovery that can flash updates to the system from the /data/data/org.fdroid.fdroid folder on the /data partition. The standalone APK is called F-Droid Privileged Extension.&lt;/p&gt;</desc>
 		<license>Apache-2.0</license>
@@ -129,7 +129,7 @@
 	<application id="obb.mainpatch.current">
 		<id>obb.mainpatch.current</id>
 		<added>2016-04-23</added>
-		<lastupdated>2016-04-23</lastupdated>
+		<lastupdated>2017-06-01</lastupdated>
 		<name>OBB Main/Patch Current</name>
 		<summary></summary>
 		<icon>obb.mainpatch.current.1619.png</icon>

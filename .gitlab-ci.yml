@@ -8,3 +8,24 @@ test:
     - pip3 install -e .
     - cd tests
     - ./complete-ci-tests
+
+# Test that the parsing of the .txt format didn't change. The metadata
+# field 'Author Web Site' was added after 0.7.0, so that can't be part
+# of the test.
+metadata_v0:
+  script:
+    - cd tests
+    - cp dump_internal_metadata_format.py dump.py # since this isn't in old commits
+    - git checkout 0.7.0  # or any old commit of your choosing
+    - cd ..
+    - sed -i "s/'Author Email',/'Author Email',\n'Author Web Site',/" fdroidserver/metadata.py
+    - git clone --depth 1 https://gitlab.com/fdroid/fdroiddata
+    - cd fdroiddata
+    - ../tests/dump.py
+    - cd ..
+    - git reset --hard
+    - git checkout master
+    - cd fdroiddata
+    - ../tests/dump.py
+    - sed -i "/AuthorWebSite/d" metadata/dump_*/*.yaml
+    - diff -uw metadata/dump_*

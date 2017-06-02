@@ -178,6 +178,28 @@ else
     echo 'WARNING: Skipping `fdroid build` test since android-23 is missing!'
 fi
 
+#------------------------------------------------------------------------------#
+echo_header 'copy git import and run `fdroid scanner` on it'
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+touch config.py
+cp $WORKSPACE/examples/fdroid-icon.png $REPOROOT/
+mkdir metadata
+echo "Auto Name:Just A Test" > metadata/org.fdroid.ci.test.app.txt
+echo "Web Site:" >> metadata/org.fdroid.ci.test.app.txt
+echo "Build:0.3,300" >> metadata/org.fdroid.ci.test.app.txt
+echo "    commit=0.3" >> metadata/org.fdroid.ci.test.app.txt
+echo "    subdir=app" >> metadata/org.fdroid.ci.test.app.txt
+echo "    gradle=yes" >> metadata/org.fdroid.ci.test.app.txt
+echo "" >> metadata/org.fdroid.ci.test.app.txt
+echo "Repo:https://gitlab.com/fdroid/ci-test-app.git" >> metadata/org.fdroid.ci.test.app.txt
+echo "Repo Type:git" >> metadata/org.fdroid.ci.test.app.txt
+mkdir build
+cp -a $WORKSPACE/tests/tmp/importer build/org.fdroid.ci.test.app
+ls -l build/org.fdroid.ci.test.app
+$fdroid scanner org.fdroid.ci.test.app --verbose
+
 
 #------------------------------------------------------------------------------#
 echo_header "copy tests/repo, generate java/gpg keys, update, and gpgsign"
@@ -216,6 +238,42 @@ test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc
 # we can't easily reproduce the timestamps for things, so just hardcode them
 sed -i --expression='s,timestamp="[0-9]*",timestamp="1480431575",' repo/index.xml
 diff $WORKSPACE/tests/repo/index.xml repo/index.xml
+
+
+#------------------------------------------------------------------------------#
+echo_header 'rename apks with `fdroid update --rename-apks`, --nosign for speed'
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+cp $WORKSPACE/tests/keystore.jks $REPOROOT/
+$fdroid init --keystore keystore.jks --repo-keyalias=sova
+echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo "accepted_formats = ['txt', 'yml']" >> config.py
+echo 'keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.py
+test -d metadata || mkdir metadata
+cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.yml metadata/
+test -d repo || mkdir repo
+cp $WORKSPACE/tests/urzip.apk "repo/asdfiuhk urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234 ö.apk"
+$fdroid update --rename-apks --pretty --nosign
+test -e repo/info.guardianproject.urzip_100.apk
+grep -F 'info.guardianproject.urzip_100.apk' repo/index-v1.json repo/index.xml
+cp $WORKSPACE/tests/urzip-release.apk repo/
+$fdroid update --rename-apks --pretty --nosign
+test -e repo/info.guardianproject.urzip_100.apk
+test -e repo/info.guardianproject.urzip_100_b4964fd.apk
+grep -F 'info.guardianproject.urzip_100.apk' repo/index-v1.json repo/index.xml
+grep -F 'info.guardianproject.urzip_100_b4964fd.apk' repo/index-v1.json
+! grep -F 'info.guardianproject.urzip_100_b4964fd.apk' repo/index.xml
+cp $WORKSPACE/tests/urzip-release.apk repo/
+$fdroid update --rename-apks --pretty --nosign
+test -e repo/info.guardianproject.urzip_100.apk
+test -e repo/info.guardianproject.urzip_100_b4964fd.apk
+test -e duplicates/repo/info.guardianproject.urzip_100_b4964fd.apk
+grep -F 'info.guardianproject.urzip_100.apk' repo/index-v1.json repo/index.xml
+grep -F 'info.guardianproject.urzip_100_b4964fd.apk' repo/index-v1.json
+! grep -F 'info.guardianproject.urzip_100_b4964fd.apk' repo/index.xml
+
 
 #------------------------------------------------------------------------------#
 echo_header "test metadata checks"
@@ -460,6 +518,29 @@ test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
 export ANDROID_HOME=$STORED_ANDROID_HOME
+
+
+#------------------------------------------------------------------------------#
+echo_header "check duplicate files are properly handled by fdroid update"
+
+REPOROOT=`create_test_dir`
+KEYSTORE=$WORKSPACE/tests/keystore.jks
+cd $REPOROOT
+$fdroid init --keystore $KEYSTORE --repo-keyalias=sova
+echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+mkdir $REPOROOT/metadata
+cp -a $WORKSPACE/tests/metadata/obb.mainpatch.current.txt $REPOROOT/metadata
+echo "accepted_formats = ['txt']" >> config.py
+cp $WORKSPACE/tests/repo/obb.mainpatch.current_1619.apk $REPOROOT/repo/
+cp $WORKSPACE/tests/repo/obb.mainpatch.current_1619_another-release-key.apk $REPOROOT/repo/
+$fdroid update --pretty
+grep -F 'obb.mainpatch.current_1619.apk' repo/index.xml repo/index-v1.json
+grep -F 'obb.mainpatch.current_1619_another-release-key.apk' repo/index-v1.json
+! grep -F 'obb.mainpatch.current_1619_another-release-key.apk' repo/index.xml
+# die if there are exact duplicates
+cp $WORKSPACE/tests/repo/obb.mainpatch.current_1619.apk $REPOROOT/repo/duplicate.apk
+! $fdroid update
 
 
 #------------------------------------------------------------------------------#

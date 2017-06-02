@@ -169,21 +169,21 @@ class UpdateTest(unittest.TestCase):
             self.assertTrue(False, 'TypeError!')
 
     def testBadGetsig(self):
+        """getsig() should still be able to fetch the fingerprint of bad signatures"""
         # config needed to use jarsigner and keytool
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.update.config = config
+
         apkfile = os.path.join(os.path.dirname(__file__), 'urzip-badsig.apk')
-        sig = self.javagetsig(apkfile)
-        self.assertIsNone(sig, "sig should be None: " + str(sig))
-        pysig = fdroidserver.update.getsig(apkfile)
-        self.assertIsNone(pysig, "python sig should be None: " + str(sig))
+        sig = fdroidserver.update.getsig(apkfile)
+        self.assertEqual(sig, 'e0ecb5fc2d63088e4a07ae410a127722',
+                         "python sig should be: " + str(sig))
 
         apkfile = os.path.join(os.path.dirname(__file__), 'urzip-badcert.apk')
-        sig = self.javagetsig(apkfile)
-        self.assertIsNone(sig, "sig should be None: " + str(sig))
-        pysig = fdroidserver.update.getsig(apkfile)
-        self.assertIsNone(pysig, "python sig should be None: " + str(sig))
+        sig = fdroidserver.update.getsig(apkfile)
+        self.assertEqual(sig, 'e0ecb5fc2d63088e4a07ae410a127722',
+                         "python sig should be: " + str(sig))
 
     def testScanApksAndObbs(self):
         os.chdir(os.path.join(localmodule, 'tests'))
@@ -200,11 +200,12 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = type('', (), {})()
         fdroidserver.update.options.clean = True
         fdroidserver.update.options.delete_unknown = True
+        fdroidserver.update.options.rename_apks = False
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.scan_apks({}, 'repo', knownapks, False)
-        self.assertEqual(len(apks), 6)
+        self.assertEqual(len(apks), 7)
         apk = apks[0]
         self.assertEqual(apk['minSdkVersion'], '4')
         self.assertEqual(apk['targetSdkVersion'], '18')

@@ -294,9 +294,12 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
 
         # Get a list of the apks for this app...
         apklist = []
+        versionCodes = []
         for apk in apks:
             if apk['packageName'] == appid:
-                apklist.append(apk)
+                if apk['versionCode'] not in versionCodes:
+                    apklist.append(apk)
+                    versionCodes.append(apk['versionCode'])
 
         if len(apklist) == 0:
             continue
@@ -361,9 +364,16 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
 
         # Check for duplicates - they will make the client unhappy...
         for i in range(len(apklist) - 1):
-            if apklist[i]['versionCode'] == apklist[i + 1]['versionCode']:
-                raise FDroidException("duplicate versions: '%s' - '%s'" % (
-                    apklist[i]['apkName'], apklist[i + 1]['apkName']))
+            first = apklist[i]
+            second = apklist[i + 1]
+            if first['versionCode'] == second['versionCode'] \
+               and first['sig'] == second['sig']:
+                if first['hash'] == second['hash']:
+                    raise FDroidException('"{0}/{1}" and "{0}/{2}" are exact duplicates!'.format(
+                        repodir, first['apkName'], second['apkName']))
+                else:
+                    raise FDroidException('duplicates: "{0}/{1}" - "{0}/{2}"'.format(
+                        repodir, first['apkName'], second['apkName']))
 
         current_version_code = 0
         current_version_file = None
@@ -438,7 +448,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
                 and repodir == 'repo':  # only create these
             namefield = common.config['current_version_name_source']
             sanitized_name = re.sub(b'''[ '"&%?+=/]''', b'', app.get(namefield).encode('utf-8'))
-            apklinkname = sanitized_name + b'.apk'
+            apklinkname = sanitized_name + os.path.splitext(current_version_file)[1].encode('utf-8')
             current_version_path = os.path.join(repodir, current_version_file).encode('utf-8', 'surrogateescape')
             if os.path.islink(apklinkname):
                 os.remove(apklinkname)
