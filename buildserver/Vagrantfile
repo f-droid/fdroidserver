@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
   elsif configfile["vm_provider"] == "libvirt"
     # use KVM/QEMU if this is running in KVM/QEMU
     config.vm.provider :libvirt do |libvirt|
-      libvirt.driver = "kvm"
+      libvirt.driver = configfile["hwvirtex"] == "on" ? "kvm" : "qemu"
       libvirt.host = "localhost"
       libvirt.uri = "qemu:///system"
       libvirt.cpus = configfile["cpus"]
