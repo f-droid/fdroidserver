@@ -37,6 +37,18 @@ config = None
 options = None
 
 
+def publish_source_tarball(apkfilename, unsigned_dir, output_dir):
+    """Move the source tarball into the output directory..."""
+
+    tarfilename = apkfilename[:-4] + '_src.tar.gz'
+    tarfile = os.path.join(unsigned_dir, tarfilename)
+    if os.path.exists(tarfile):
+        shutil.move(tarfile, os.path.join(output_dir, tarfilename))
+        logging.debug('...published %s', tarfilename)
+    else:
+        logging.debug('...no source tarball for %s', apkfilename)
+
+
 def main():
 
     global config, options
@@ -138,18 +150,23 @@ def main():
             if compare_result:
                 logging.error("...verification failed - publish skipped : "
                               + compare_result)
-                continue
+            else:
 
-            # Success! So move the downloaded file to the repo, and remove
-            # our built version.
-            shutil.move(srcapk, os.path.join(output_dir, apkfilename))
-            os.remove(apkfile)
+                # Success! So move the downloaded file to the repo, and remove
+                # our built version.
+                shutil.move(srcapk, os.path.join(output_dir, apkfilename))
+                os.remove(apkfile)
+
+                publish_source_tarball(apkfilename, unsigned_dir, output_dir)
+                logging.info('Published ' + apkfilename)
 
         elif apkfile.endswith('.zip'):
 
             # OTA ZIPs built by fdroid do not need to be signed by jarsigner,
             # just to be moved into place in the repo
             shutil.move(apkfile, os.path.join(output_dir, apkfilename))
+            publish_source_tarball(apkfilename, unsigned_dir, output_dir)
+            logging.info('Published ' + apkfilename)
 
         else:
 
@@ -219,13 +236,8 @@ def main():
                 raise BuildException(_("Failed to align application"))
             os.remove(apkfile)
 
-        # Move the source tarball into the output directory...
-        tarfilename = apkfilename[:-4] + '_src.tar.gz'
-        tarfile = os.path.join(unsigned_dir, tarfilename)
-        if os.path.exists(tarfile):
-            shutil.move(tarfile, os.path.join(output_dir, tarfilename))
-
-        logging.info('Published ' + apkfilename)
+            publish_source_tarball(apkfilename, unsigned_dir, output_dir)
+            logging.info('Published ' + apkfilename)
 
 
 if __name__ == "__main__":
