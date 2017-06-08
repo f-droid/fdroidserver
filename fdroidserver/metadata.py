@@ -1225,8 +1225,8 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
     mf.write('\n')
     w_field_nonempty('Name')
     w_field_nonempty('Auto Name')
-    w_field_always('Summary')
-    w_field_always('Description', description_txt(app.Description))
+    w_field_nonempty('Summary')
+    w_field_nonempty('Description', description_txt(app.Description))
     mf.write('\n')
     if app.RequiresRoot:
         w_field_always('Requires Root', 'yes')

@@ -88,8 +88,6 @@ regex_checks = {
          "Unnecessary trailing space"),
     ],
     'Summary': [
-        (re.compile(r'^$'),
-         "Summary yet to be filled"),
         (re.compile(r'.*\b(free software|open source)\b.*', re.IGNORECASE),
          "No need to specify that the app is Free Software"),
         (re.compile(r'.*((your|for).*android|android.*(app|device|client|port|version))', re.IGNORECASE),
@@ -102,8 +100,6 @@ regex_checks = {
          "Unnecessary trailing space"),
     ],
     'Description': [
-        (re.compile(r'^No description available$'),
-         "Description yet to be filled"),
         (re.compile(r'\s*[*#][^ .]'),
          "Invalid bulleted list"),
         (re.compile(r'^\s'),
