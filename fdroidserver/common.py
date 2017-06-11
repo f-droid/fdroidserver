@@ -2088,8 +2088,8 @@ def metadata_get_sigdir(appid, vercode=None):
 def metadata_find_signing_files(appid, vercode):
     """Gets a list of singed manifests and signatures.
 
-    :param appid: id string of that app
-    :param vercode: version code of that app
+    :param appid: app id string
+    :param vercode: app version code
     :returns: a list of triplets for each signing key with following paths:
         (signature_file, singed_file, manifest_file)
     """
@@ -2212,30 +2212,35 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
               describing what went wrong.
     """
 
-    signed = ZipFile(signed_apk, 'r')
-    meta_inf_files = ['META-INF/MANIFEST.MF']
-    for f in signed.namelist():
-        if apk_sigfile.match(f) \
-           or f in ['META-INF/fdroidserverid', 'META-INF/buildserverid']:
-            meta_inf_files.append(f)
-    if len(meta_inf_files) < 3:
-        return "Signature files missing from {0}".format(signed_apk)
+    if not os.path.isfile(signed_apk):
+        return 'can not verify: file does not exists: {}'.format(signed_apk)
 
-    tmp_apk = os.path.join(tmp_dir, 'sigcp_' + os.path.basename(unsigned_apk))
-    unsigned = ZipFile(unsigned_apk, 'r')
-    # only read the signature from the signed APK, everything else from unsigned
-    with ZipFile(tmp_apk, 'w') as tmp:
-        for filename in meta_inf_files:
-            tmp.writestr(signed.getinfo(filename), signed.read(filename))
-        for info in unsigned.infolist():
-            if info.filename in meta_inf_files:
-                logging.warning('Ignoring ' + info.filename + ' from ' + unsigned_apk)
-                continue
-            if info.filename in tmp.namelist():
-                return "duplicate filename found: " + info.filename
-            tmp.writestr(info, unsigned.read(info.filename))
-    unsigned.close()
-    signed.close()
+    if not os.path.isfile(unsigned_apk):
+        return 'can not verify: file does not exists: {}'.format(unsigned_apk)
+
+    with ZipFile(signed_apk, 'r') as signed:
+        meta_inf_files = ['META-INF/MANIFEST.MF']
+        for f in signed.namelist():
+            if apk_sigfile.match(f) \
+               or f in ['META-INF/fdroidserverid', 'META-INF/buildserverid']:
+                meta_inf_files.append(f)
+        if len(meta_inf_files) < 3:
+            return "Signature files missing from {0}".format(signed_apk)
+
+        tmp_apk = os.path.join(tmp_dir, 'sigcp_' + os.path.basename(unsigned_apk))
+        with ZipFile(unsigned_apk, 'r') as unsigned:
+            # only read the signature from the signed APK, everything else from unsigned
+            with ZipFile(tmp_apk, 'w') as tmp:
+                for filename in meta_inf_files:
+                    tmp.writestr(signed.getinfo(filename), signed.read(filename))
+                for info in unsigned.infolist():
+                    if info.filename in meta_inf_files:
+                        logging.warning('Ignoring %s from %s',
+                                        info.filename, unsigned_apk)
+                        continue
+                    if info.filename in tmp.namelist():
+                        return "duplicate filename found: " + info.filename
+                    tmp.writestr(info, unsigned.read(info.filename))
 
     verified = verify_apk_signature(tmp_apk)
 
