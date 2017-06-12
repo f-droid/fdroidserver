@@ -716,6 +716,7 @@ def insert_localized_app_metadata(apps):
                 logging.debug(packageName + ' does not have app metadata, skipping l18n scan.')
                 continue
             locale = segments[-1]
+            destdir = os.path.join('repo', packageName, locale)
             for f in files:
                 if f in ('description.txt', 'full_description.txt'):
                     _set_localized_text_entry(apps[packageName], locale, 'description',
@@ -742,7 +743,7 @@ def insert_localized_app_metadata(apps):
                 base, extension = common.get_extension(f)
                 if locale == 'images':
                     locale = segments[-2]
-                destdir = os.path.join('repo', packageName, locale)
+                    destdir = os.path.join('repo', packageName, locale)
                 if base in GRAPHIC_NAMES and extension in ALLOWED_EXTENSIONS:
                     os.makedirs(destdir, mode=0o755, exist_ok=True)
                     logging.debug('copying ' + os.path.join(root, f) + ' ' + destdir)
