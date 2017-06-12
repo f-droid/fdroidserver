@@ -706,10 +706,10 @@ def insert_localized_app_metadata(apps):
     sourcedirs += glob.glob(os.path.join('build', '[A-Za-z]*', 'metadata', '[a-z][a-z]*'))
     sourcedirs += glob.glob(os.path.join('metadata', '[A-Za-z]*', '[a-z][a-z]*'))
 
-    for d in sorted(sourcedirs):
-        if not os.path.isdir(d):
+    for srcd in sorted(sourcedirs):
+        if not os.path.isdir(srcd):
             continue
-        for root, dirs, files in os.walk(d):
+        for root, dirs, files in os.walk(srcd):
             segments = root.split('/')
             packageName = segments[1]
             if packageName not in apps:
