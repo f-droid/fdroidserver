@@ -171,6 +171,7 @@ def main():
         else:
 
             # It's a 'normal' app, i.e. we sign and publish it...
+            skipsigning = False
 
             # First we handle signatures for this app from local metadata
             signingfiles = common.metadata_find_developer_signing_files(appid, vercode)
@@ -194,6 +195,7 @@ def main():
                 else:
                     os.remove(devsignedtmp)
                     logging.error('...verification failed - skipping: %s', devsigned)
+                    skipsigning = True
 
             # Now we sign with the F-Droid key.
 
@@ -203,66 +205,67 @@ def main():
             # If a collision does occur later, we're going to have to
             # come up with a new alogrithm, AND rename all existing keys
             # in the keystore!
-            if appid in config['keyaliases']:
-                # For this particular app, the key alias is overridden...
-                keyalias = config['keyaliases'][appid]
-                if keyalias.startswith('@'):
+            if not skipsigning:
+                if appid in config['keyaliases']:
+                    # For this particular app, the key alias is overridden...
+                    keyalias = config['keyaliases'][appid]
+                    if keyalias.startswith('@'):
+                        m = hashlib.md5()
+                        m.update(keyalias[1:].encode('utf-8'))
+                        keyalias = m.hexdigest()[:8]
+                else:
                     m = hashlib.md5()
-                    m.update(keyalias[1:].encode('utf-8'))
+                    m.update(appid.encode('utf-8'))
                     keyalias = m.hexdigest()[:8]
-            else:
-                m = hashlib.md5()
-                m.update(appid.encode('utf-8'))
-                keyalias = m.hexdigest()[:8]
-            logging.info("Key alias: " + keyalias)
+                logging.info("Key alias: " + keyalias)
 
-            # See if we already have a key for this application, and
-            # if not generate one...
-            env_vars = {
-                'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                'FDROID_KEY_PASS': config['keypass'],
-            }
-            p = FDroidPopen([config['keytool'], '-list',
-                             '-alias', keyalias, '-keystore', config['keystore'],
-                             '-storepass:env', 'FDROID_KEY_STORE_PASS'], envs=env_vars)
-            if p.returncode != 0:
-                logging.info("Key does not exist - generating...")
-                p = FDroidPopen([config['keytool'], '-genkey',
-                                 '-keystore', config['keystore'],
-                                 '-alias', keyalias,
-                                 '-keyalg', 'RSA', '-keysize', '2048',
-                                 '-validity', '10000',
-                                 '-storepass:env', 'FDROID_KEY_STORE_PASS',
-                                 '-keypass:env', 'FDROID_KEY_PASS',
-                                 '-dname', config['keydname']], envs=env_vars)
+                # See if we already have a key for this application, and
+                # if not generate one...
+                env_vars = {
+                    'FDROID_KEY_STORE_PASS': config['keystorepass'],
+                    'FDROID_KEY_PASS': config['keypass'],
+                }
+                p = FDroidPopen([config['keytool'], '-list',
+                                 '-alias', keyalias, '-keystore', config['keystore'],
+                                 '-storepass:env', 'FDROID_KEY_STORE_PASS'], envs=env_vars)
                 if p.returncode != 0:
-                    raise BuildException("Failed to generate key", p.output)
+                    logging.info("Key does not exist - generating...")
+                    p = FDroidPopen([config['keytool'], '-genkey',
+                                     '-keystore', config['keystore'],
+                                     '-alias', keyalias,
+                                     '-keyalg', 'RSA', '-keysize', '2048',
+                                     '-validity', '10000',
+                                     '-storepass:env', 'FDROID_KEY_STORE_PASS',
+                                     '-keypass:env', 'FDROID_KEY_PASS',
+                                     '-dname', config['keydname']], envs=env_vars)
+                    if p.returncode != 0:
+                        raise BuildException("Failed to generate key", p.output)
 
-            signed_apk_path = os.path.join(output_dir, apkfilename)
-            if os.path.exists(signed_apk_path):
-                raise BuildException("Refusing to sign '{0}' file exists in both "
-                                     "{1} and {2} folder.".format(apkfilename,
-                                                                  unsigned_dir,
-                                                                  output_dir))
+                signed_apk_path = os.path.join(output_dir, apkfilename)
+                if os.path.exists(signed_apk_path):
+                    raise BuildException("Refusing to sign '{0}' file exists in both "
+                                         "{1} and {2} folder.".format(apkfilename,
+                                                                      unsigned_dir,
+                                                                      output_dir))
 
-            # Sign the application...
-            p = FDroidPopen([config['jarsigner'], '-keystore', config['keystore'],
-                             '-storepass:env', 'FDROID_KEY_STORE_PASS',
-                             '-keypass:env', 'FDROID_KEY_PASS', '-sigalg',
-                             'SHA1withRSA', '-digestalg', 'SHA1',
-                             apkfile, keyalias], envs=env_vars)
-            if p.returncode != 0:
-                raise BuildException(_("Failed to sign application"), p.output)
+                # Sign the application...
+                p = FDroidPopen([config['jarsigner'], '-keystore', config['keystore'],
+                                 '-storepass:env', 'FDROID_KEY_STORE_PASS',
+                                 '-keypass:env', 'FDROID_KEY_PASS', '-sigalg',
+                                 'SHA1withRSA', '-digestalg', 'SHA1',
+                                 apkfile, keyalias], envs=env_vars)
+                if p.returncode != 0:
+                    raise BuildException(_("Failed to sign application"), p.output)
 
-            # Zipalign it...
-            p = SdkToolsPopen(['zipalign', '-v', '4', apkfile,
-                               os.path.join(output_dir, apkfilename)])
-            if p.returncode != 0:
-                raise BuildException(_("Failed to align application"))
-            os.remove(apkfile)
+                # Zipalign it...
+                p = SdkToolsPopen(['zipalign', '-v', '4', apkfile,
+                                   os.path.join(output_dir, apkfilename)])
+                if p.returncode != 0:
+                    raise BuildException(_("Failed to align application"))
+                os.remove(apkfile)
 
-            publish_source_tarball(apkfilename, unsigned_dir, output_dir)
-            logging.info('Published ' + apkfilename)
+                publish_source_tarball(apkfilename, unsigned_dir, output_dir)
+                logging.info('Published ' + apkfilename)
 
 
 if __name__ == "__main__":
