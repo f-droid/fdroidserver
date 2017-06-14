@@ -21,6 +21,7 @@ if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
 import fdroidserver.common
+import fdroidserver.exception
 import fdroidserver.metadata
 import fdroidserver.update
 from fdroidserver.common import FDroidPopen
@@ -205,7 +206,7 @@ class UpdateTest(unittest.TestCase):
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
         knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.scan_apks({}, 'repo', knownapks, False)
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
         self.assertEqual(len(apks), 11)
         apk = apks[0]
         self.assertEqual(apk['packageName'], 'com.politedroid')
@@ -242,7 +243,48 @@ class UpdateTest(unittest.TestCase):
                 self.assertIsNone(apk.get('obbMainFile'))
                 self.assertIsNone(apk.get('obbPatchFile'))
 
-    def testScanApkMetadata(self):
+    def test_scan_apk(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.update.config = config
+        os.chdir(os.path.join(localmodule, 'tests'))
+        if os.path.basename(os.getcwd()) != 'tests':
+            raise Exception('This test must be run in the "tests/" subdir')
+
+        apk_info = fdroidserver.update.scan_apk('org.dyndns.fules.ck_20.apk')
+
+        self.assertEqual(apk_info['icons_src'], {'240': 'res/drawable-hdpi-v4/icon_launcher.png',
+                                                 '120': 'res/drawable-ldpi-v4/icon_launcher.png',
+                                                 '160': 'res/drawable-mdpi-v4/icon_launcher.png',
+                                                 '-1': 'res/drawable-mdpi-v4/icon_launcher.png'})
+        self.assertEqual(apk_info['icons'], {})
+        self.assertEqual(apk_info['features'], [])
+        self.assertEqual(apk_info['antiFeatures'], set())
+        self.assertEqual(apk_info['versionName'], 'v1.6pre2')
+        self.assertEqual(apk_info['hash'],
+                         '897486e1f857c6c0ee32ccbad0e1b8cd82f6d0e65a44a23f13f852d2b63a18c8')
+        self.assertEqual(apk_info['packageName'], 'org.dyndns.fules.ck')
+        self.assertEqual(apk_info['versionCode'], 20)
+        self.assertEqual(apk_info['size'], 132453)
+        self.assertEqual(apk_info['nativecode'],
+                         ['arm64-v8a', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'x86', 'x86_64'])
+        self.assertEqual(apk_info['minSdkVersion'], '7')
+        self.assertEqual(apk_info['sig'], '9bf7a6a67f95688daec75eab4b1436ac')
+        self.assertEqual(apk_info['hashType'], 'sha256')
+        self.assertEqual(apk_info['targetSdkVersion'], '8')
+
+    def test_scan_apk_no_sig(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.update.config = config
+        os.chdir(os.path.join(localmodule, 'tests'))
+        if os.path.basename(os.getcwd()) != 'tests':
+            raise Exception('This test must be run in the "tests/" subdir')
+
+        with self.assertRaises(fdroidserver.exception.BuildException):
+            fdroidserver.update.scan_apk('urzip-release-unsigned.apk')
+
+    def test_process_apk(self):
 
         def _build_yaml_representer(dumper, data):
             '''Creates a YAML representation of a Build instance'''
@@ -274,12 +316,24 @@ class UpdateTest(unittest.TestCase):
         apkList = ['../urzip.apk', '../org.dyndns.fules.ck_20.apk']
 
         for apkName in apkList:
-            _, apk, cachechanged = fdroidserver.update.scan_apk({}, apkName, 'repo', knownapks, False)
+            _, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo', knownapks,
+                                                                   False)
             # Don't care about the date added to the repo and relative apkName
             del apk['added']
             del apk['apkName']
             # avoid AAPT application name bug
             del apk['name']
+
+            # ensure that icons have been extracted properly
+            if apkName == '../urzip.apk':
+                self.assertEqual(apk['icon'], 'info.guardianproject.urzip.100.png')
+            if apkName == '../org.dyndns.fules.ck_20.apk':
+                self.assertEqual(apk['icon'], 'org.dyndns.fules.ck.20.png')
+            for density in fdroidserver.update.screen_densities:
+                icon_path = os.path.join(fdroidserver.update.get_icon_dir('repo', density),
+                                         apk['icon'])
+                self.assertTrue(os.path.isfile(icon_path))
+                self.assertTrue(os.path.getsize(icon_path) > 1)
 
             savepath = os.path.join('metadata', 'apk', apk['packageName'] + '.yaml')
             # Uncomment to save APK metadata
@@ -292,7 +346,7 @@ class UpdateTest(unittest.TestCase):
             self.maxDiff = None
             self.assertEqual(apk, frompickle)
 
-    def test_scan_apk_signed_by_disabled_algorithms(self):
+    def test_process_apk_signed_by_disabled_algorithms(self):
         os.chdir(os.path.join(localmodule, 'tests'))
         if os.path.basename(os.getcwd()) != 'tests':
             raise Exception('This test must be run in the "tests/" subdir')
@@ -318,23 +372,25 @@ class UpdateTest(unittest.TestCase):
         tmpdir = os.path.join(localmodule, '.testfiles')
         if not os.path.exists(tmpdir):
             os.makedirs(tmpdir)
-        tmptestsdir = tempfile.mkdtemp(prefix='test_scan_apk_signed_by_disabled_algorithms-', dir=tmpdir)
+        tmptestsdir = tempfile.mkdtemp(prefix='test_process_apk_signed_by_disabled_algorithms-',
+                                       dir=tmpdir)
         print('tmptestsdir', tmptestsdir)
         os.chdir(tmptestsdir)
         os.mkdir('repo')
         os.mkdir('archive')
         # setup the repo, create icons dirs, etc.
-        fdroidserver.update.scan_apks({}, 'repo', knownapks)
-        fdroidserver.update.scan_apks({}, 'archive', knownapks)
+        fdroidserver.update.process_apks({}, 'repo', knownapks)
+        fdroidserver.update.process_apks({}, 'archive', knownapks)
 
         disabledsigs = ['org.bitbucket.tickytacky.mirrormirror_2.apk', ]
         for apkName in disabledsigs:
             shutil.copy(os.path.join(apksourcedir, apkName),
                         os.path.join(tmptestsdir, 'repo'))
 
-            skip, apk, cachechanged = fdroidserver.update.scan_apk({}, apkName, 'repo', knownapks,
-                                                                   allow_disabled_algorithms=True,
-                                                                   archive_bad_sig=False)
+            skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
+                                                                      knownapks,
+                                                                      allow_disabled_algorithms=True,
+                                                                      archive_bad_sig=False)
             self.assertFalse(skip)
             self.assertIsNotNone(apk)
             self.assertTrue(cachechanged)
@@ -343,37 +399,47 @@ class UpdateTest(unittest.TestCase):
 
             # this test only works on systems with fully updated Java/jarsigner
             # that has MD5 listed in jdk.jar.disabledAlgorithms in java.security
-            skip, apk, cachechanged = fdroidserver.update.scan_apk({}, apkName, 'repo', knownapks,
-                                                                   allow_disabled_algorithms=False,
-                                                                   archive_bad_sig=True)
+            skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
+                                                                      knownapks,
+                                                                      allow_disabled_algorithms=False,
+                                                                      archive_bad_sig=True)
             self.assertTrue(skip)
             self.assertIsNone(apk)
             self.assertFalse(cachechanged)
             self.assertTrue(os.path.exists(os.path.join('archive', apkName)))
             self.assertFalse(os.path.exists(os.path.join('repo', apkName)))
 
-            skip, apk, cachechanged = fdroidserver.update.scan_apk({}, apkName, 'archive', knownapks,
-                                                                   allow_disabled_algorithms=False,
-                                                                   archive_bad_sig=False)
+            skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'archive',
+                                                                      knownapks,
+                                                                      allow_disabled_algorithms=False,
+                                                                      archive_bad_sig=False)
             self.assertFalse(skip)
             self.assertIsNotNone(apk)
             self.assertTrue(cachechanged)
             self.assertTrue(os.path.exists(os.path.join('archive', apkName)))
             self.assertFalse(os.path.exists(os.path.join('repo', apkName)))
 
+            # ensure that icons have been moved to the archive as well
+            for density in fdroidserver.update.screen_densities:
+                icon_path = os.path.join(fdroidserver.update.get_icon_dir('archive', density),
+                                         apk['icon'])
+                self.assertTrue(os.path.isfile(icon_path))
+                self.assertTrue(os.path.getsize(icon_path) > 1)
+
         badsigs = ['urzip-badcert.apk', 'urzip-badsig.apk', 'urzip-release-unsigned.apk', ]
         for apkName in badsigs:
             shutil.copy(os.path.join(apksourcedir, apkName),
                         os.path.join(tmptestsdir, 'repo'))
 
-            skip, apk, cachechanged = fdroidserver.update.scan_apk({}, apkName, 'repo', knownapks,
-                                                                   allow_disabled_algorithms=False,
-                                                                   archive_bad_sig=False)
+            skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
+                                                                      knownapks,
+                                                                      allow_disabled_algorithms=False,
+                                                                      archive_bad_sig=False)
             self.assertTrue(skip)
             self.assertIsNone(apk)
             self.assertFalse(cachechanged)
 
-    def test_scan_invalid_apk(self):
+    def test_process_invalid_apk(self):
         os.chdir(os.path.join(localmodule, 'tests'))
         if os.path.basename(os.getcwd()) != 'tests':
             raise Exception('This test must be run in the "tests/" subdir')
@@ -386,7 +452,8 @@ class UpdateTest(unittest.TestCase):
 
         knownapks = fdroidserver.common.KnownApks()
         apk = 'fake.ota.update_1234.zip'  # this is not an APK, scanning should fail
-        (skip, apk, cachechanged) = fdroidserver.update.scan_apk({}, apk, 'repo', knownapks, False)
+        (skip, apk, cachechanged) = fdroidserver.update.process_apk({}, apk, 'repo', knownapks,
+                                                                    False)
 
         self.assertTrue(skip)
         self.assertIsNone(apk)

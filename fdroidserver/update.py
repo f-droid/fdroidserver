@@ -909,6 +909,52 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
     return repo_files, cachechanged
 
 
+def scan_apk(apk_file):
+    """
+    Scans an APK file and returns dictionary with metadata of the APK.
+
+    Attention: This does *not* verify that the APK signature is correct.
+
+    :param apk_file: The (ideally absolute) path to the APK file
+    :raises BuildException
+    :return A dict containing APK metadata
+    """
+    apk = {
+        'hash': sha256sum(apk_file),
+        'hashType': 'sha256',
+        'uses-permission': [],
+        'uses-permission-sdk-23': [],
+        'features': [],
+        'icons_src': {},
+        'icons': {},
+        'antiFeatures': set(),
+    }
+
+    if SdkToolsPopen(['aapt', 'version'], output=False):
+        scan_apk_aapt(apk, apk_file)
+    else:
+        scan_apk_androguard(apk, apk_file)
+
+    # Get the signature
+    logging.debug('Getting signature of {0}'.format(os.path.basename(apk_file)))
+    apk['sig'] = getsig(apk_file)
+    if not apk['sig']:
+        raise BuildException("Failed to get apk signature")
+
+    # Get size of the APK
+    apk['size'] = os.path.getsize(apk_file)
+
+    if 'minSdkVersion' not in apk:
+        logging.warning("No SDK version information found in {0}".format(apk_file))
+        apk['minSdkVersion'] = 1
+
+    # Check for known vulnerabilities
+    if has_known_vulnerability(apk_file):
+        apk['antiFeatures'].add('KnownVuln')
+
+    return apk
+
+
 def scan_apk_aapt(apk, apkfile):
     p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
     if p.returncode != 0:
@@ -1096,9 +1142,9 @@ def scan_apk_androguard(apk, apkfile):
         apk['features'].append(feature)
 
 
-def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
-             allow_disabled_algorithms=False, archive_bad_sig=False):
-    """Scan the apk with the given filename in the given repo directory.
+def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
+                allow_disabled_algorithms=False, archive_bad_sig=False):
+    """Processes the apk with the given filename in the given repo directory.
 
     This also extracts the icons.
 
@@ -1125,14 +1171,14 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
             logging.critical("Spaces in filenames are not allowed.")
             return True, None, False
 
+    apk = {}
     apkfile = os.path.join(repodir, apkfilename)
-    shasum = sha256sum(apkfile)
 
     cachechanged = False
     usecache = False
     if apkfilename in apkcache:
         apk = apkcache[apkfilename]
-        if apk.get('hash') == shasum:
+        if apk.get('hash') == sha256sum(apkfile):
             logging.debug("Reading " + apkfilename + " from cache")
             usecache = True
         else:
@@ -1140,38 +1186,16 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
 
     if not usecache:
         logging.debug("Processing " + apkfilename)
-        apk = {}
-        apk['hash'] = shasum
-        apk['hashType'] = 'sha256'
-        apk['uses-permission'] = []
-        apk['uses-permission-sdk-23'] = []
-        apk['features'] = []
-        apk['icons_src'] = {}
-        apk['icons'] = {}
-        apk['antiFeatures'] = set()
 
         try:
-            if SdkToolsPopen(['aapt', 'version'], output=False):
-                scan_apk_aapt(apk, apkfile)
-            else:
-                scan_apk_androguard(apk, apkfile)
+            apk = scan_apk(apkfile)
         except BuildException:
+            logging.warning('Skipping "%s" with invalid signature!', apkfilename)
             return True, None, False
-
-        if 'minSdkVersion' not in apk:
-            logging.warn("No SDK version information found in {0}".format(apkfile))
-            apk['minSdkVersion'] = 1
 
         # Check for debuggable apks...
         if common.isApkAndDebuggable(apkfile):
             logging.warning('{0} is set to android:debuggable="true"'.format(apkfile))
-
-        # Get the signature (or md5 of, to be precise)...
-        logging.debug('Getting signature of {0}'.format(apkfile))
-        apk['sig'] = getsig(os.path.join(os.getcwd(), apkfile))
-        if not apk['sig']:
-            logging.critical("Failed to get apk signature")
-            return True, None, False
 
         if options.rename_apks:
             n = apk['packageName'] + '_' + str(apk['versionCode']) + '.apk'
@@ -1200,7 +1224,6 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
         srcfilename = apkfilename[:-4] + "_src.tar.gz"
         if os.path.exists(os.path.join(repodir, srcfilename)):
             apk['srcname'] = srcfilename
-        apk['size'] = os.path.getsize(apkfile)
 
         # verify the jar signature is correct, allow deprecated
         # algorithms only if the APK is in the archive.
@@ -1222,10 +1245,6 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
                 logging.warning('Skipping "' + apkfilename + '" with invalid signature!')
             return True, None, False
 
-        if 'KnownVuln' not in apk['antiFeatures']:
-            if has_known_vulnerability(apkfile):
-                apk['antiFeatures'].add('KnownVuln')
-
         apkzip = zipfile.ZipFile(apkfile, 'r')
 
         # if an APK has files newer than the system time, suggest updating
@@ -1240,119 +1259,20 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
             dt_obj = datetime(*manifest.date_time)
             checkdt = dt_obj - timedelta(1)
             if datetime.today() < checkdt:
-                logging.warn('System clock is older than manifest in: '
-                             + apkfilename
-                             + '\nSet clock to that time using:\n'
-                             + 'sudo date -s "' + str(dt_obj) + '"')
+                logging.warning('System clock is older than manifest in: '
+                                + apkfilename
+                                + '\nSet clock to that time using:\n'
+                                + 'sudo date -s "' + str(dt_obj) + '"')
 
-        iconfilename = "%s.%s.png" % (
-            apk['packageName'],
-            apk['versionCode'])
+        # extract icons from APK zip file
+        iconfilename = "%s.%s.png" % (apk['packageName'], apk['versionCode'])
+        try:
+            empty_densities = extract_apk_icons(iconfilename, apk, apkzip, repodir)
+        finally:
+            apkzip.close()  # ensure that APK zip file gets closed
 
-        # Extract the icon file...
-        empty_densities = []
-        for density in screen_densities:
-            if density not in apk['icons_src']:
-                empty_densities.append(density)
-                continue
-            iconsrc = apk['icons_src'][density]
-            icon_dir = get_icon_dir(repodir, density)
-            icondest = os.path.join(icon_dir, iconfilename)
-
-            try:
-                with open(icondest, 'wb') as f:
-                    f.write(get_icon_bytes(apkzip, iconsrc))
-                apk['icons'][density] = iconfilename
-            except (zipfile.BadZipFile, ValueError, KeyError) as e:
-                logging.warning("Error retrieving icon file: %s" % (icondest))
-                del apk['icons_src'][density]
-                empty_densities.append(density)
-
-        if '-1' in apk['icons_src']:
-            iconsrc = apk['icons_src']['-1']
-            iconpath = os.path.join(
-                get_icon_dir(repodir, '0'), iconfilename)
-            with open(iconpath, 'wb') as f:
-                f.write(get_icon_bytes(apkzip, iconsrc))
-            try:
-                im = Image.open(iconpath)
-                dpi = px_to_dpi(im.size[0])
-                for density in screen_densities:
-                    if density in apk['icons']:
-                        break
-                    if density == screen_densities[-1] or dpi >= int(density):
-                        apk['icons'][density] = iconfilename
-                        shutil.move(iconpath,
-                                    os.path.join(get_icon_dir(repodir, density), iconfilename))
-                        empty_densities.remove(density)
-                        break
-            except Exception as e:
-                logging.warn("Failed reading {0} - {1}".format(iconpath, e))
-
-        if apk['icons']:
-            apk['icon'] = iconfilename
-
-        apkzip.close()
-
-        # First try resizing down to not lose quality
-        last_density = None
-        for density in screen_densities:
-            if density not in empty_densities:
-                last_density = density
-                continue
-            if last_density is None:
-                continue
-            logging.debug("Density %s not available, resizing down from %s"
-                          % (density, last_density))
-
-            last_iconpath = os.path.join(
-                get_icon_dir(repodir, last_density), iconfilename)
-            iconpath = os.path.join(
-                get_icon_dir(repodir, density), iconfilename)
-            fp = None
-            try:
-                fp = open(last_iconpath, 'rb')
-                im = Image.open(fp)
-
-                size = dpi_to_px(density)
-
-                im.thumbnail((size, size), Image.ANTIALIAS)
-                im.save(iconpath, "PNG")
-                empty_densities.remove(density)
-            except Exception as e:
-                logging.warning("Invalid image file at %s: %s" % (last_iconpath, e))
-            finally:
-                if fp:
-                    fp.close()
-
-        # Then just copy from the highest resolution available
-        last_density = None
-        for density in reversed(screen_densities):
-            if density not in empty_densities:
-                last_density = density
-                continue
-            if last_density is None:
-                continue
-            logging.debug("Density %s not available, copying from lower density %s"
-                          % (density, last_density))
-
-            shutil.copyfile(
-                os.path.join(get_icon_dir(repodir, last_density), iconfilename),
-                os.path.join(get_icon_dir(repodir, density), iconfilename))
-
-            empty_densities.remove(density)
-
-        for density in screen_densities:
-            icon_dir = get_icon_dir(repodir, density)
-            icondest = os.path.join(icon_dir, iconfilename)
-            resize_icon(icondest, density)
-
-        # Copy from icons-mdpi to icons since mdpi is the baseline density
-        baseline = os.path.join(get_icon_dir(repodir, '160'), iconfilename)
-        if os.path.isfile(baseline):
-            apk['icons']['0'] = iconfilename
-            shutil.copyfile(baseline,
-                            os.path.join(get_icon_dir(repodir, '0'), iconfilename))
+        # resize existing icons for densities missing in the APK
+        fill_missing_icon_densities(empty_densities, iconfilename, apk, repodir)
 
         if use_date_from_apk and manifest.date_time[1] != 0:
             default_date_param = datetime(*manifest.date_time)
@@ -1371,8 +1291,8 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
     return False, apk, cachechanged
 
 
-def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
-    """Scan the apks in the given repo directory.
+def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
+    """Processes the apks in the given repo directory.
 
     This also extracts the icons.
 
@@ -1399,14 +1319,137 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
     for apkfile in sorted(glob.glob(os.path.join(repodir, '*.apk'))):
         apkfilename = apkfile[len(repodir) + 1:]
         ada = options.allow_disabled_algorithms or config['allow_disabled_algorithms']
-        (skip, apk, cachethis) = scan_apk(apkcache, apkfilename, repodir, knownapks,
-                                          use_date_from_apk, ada, True)
+        (skip, apk, cachethis) = process_apk(apkcache, apkfilename, repodir, knownapks,
+                                             use_date_from_apk, ada, True)
         if skip:
             continue
         apks.append(apk)
         cachechanged = cachechanged or cachethis
 
     return apks, cachechanged
+
+
+def extract_apk_icons(icon_filename, apk, apk_zip, repo_dir):
+    """
+    Extracts icons from the given APK zip in various densities,
+    saves them into given repo directory
+    and stores their names in the APK metadata dictionary.
+
+    :param icon_filename: A string representing the icon's file name
+    :param apk: A populated dictionary containing APK metadata.
+                Needs to have 'icons_src' key
+    :param apk_zip: An opened zipfile.ZipFile of the APK file
+    :param repo_dir: The directory of the APK's repository
+    :return: A list of icon densities that are missing
+    """
+    empty_densities = []
+    for density in screen_densities:
+        if density not in apk['icons_src']:
+            empty_densities.append(density)
+            continue
+        icon_src = apk['icons_src'][density]
+        icon_dir = get_icon_dir(repo_dir, density)
+        icon_dest = os.path.join(icon_dir, icon_filename)
+
+        # Extract the icon files per density
+        try:
+            with open(icon_dest, 'wb') as f:
+                f.write(get_icon_bytes(apk_zip, icon_src))
+            apk['icons'][density] = icon_filename
+        except (zipfile.BadZipFile, ValueError, KeyError) as e:
+            logging.warning("Error retrieving icon file: %s %s", icon_dest, e)
+            del apk['icons_src'][density]
+            empty_densities.append(density)
+
+    if '-1' in apk['icons_src']:
+        icon_src = apk['icons_src']['-1']
+        icon_path = os.path.join(get_icon_dir(repo_dir, '0'), icon_filename)
+        with open(icon_path, 'wb') as f:
+            f.write(get_icon_bytes(apk_zip, icon_src))
+        try:
+            im = Image.open(icon_path)
+            dpi = px_to_dpi(im.size[0])
+            for density in screen_densities:
+                if density in apk['icons']:
+                    break
+                if density == screen_densities[-1] or dpi >= int(density):
+                    apk['icons'][density] = icon_filename
+                    shutil.move(icon_path,
+                                os.path.join(get_icon_dir(repo_dir, density), icon_filename))
+                    empty_densities.remove(density)
+                    break
+        except Exception as e:
+            logging.warning("Failed reading {0} - {1}".format(icon_path, e))
+
+    if apk['icons']:
+        apk['icon'] = icon_filename
+
+    return empty_densities
+
+
+def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
+    """
+    Resize existing icons for densities missing in the APK to ensure all densities are available
+
+    :param empty_densities: A list of icon densities that are missing
+    :param icon_filename: A string representing the icon's file name
+    :param apk: A populated dictionary containing APK metadata. Needs to have 'icons' key
+    :param repo_dir: The directory of the APK's repository
+    """
+    # First try resizing down to not lose quality
+    last_density = None
+    for density in screen_densities:
+        if density not in empty_densities:
+            last_density = density
+            continue
+        if last_density is None:
+            continue
+        logging.debug("Density %s not available, resizing down from %s", density, last_density)
+
+        last_icon_path = os.path.join(get_icon_dir(repo_dir, last_density), icon_filename)
+        icon_path = os.path.join(get_icon_dir(repo_dir, density), icon_filename)
+        fp = None
+        try:
+            fp = open(last_icon_path, 'rb')
+            im = Image.open(fp)
+
+            size = dpi_to_px(density)
+
+            im.thumbnail((size, size), Image.ANTIALIAS)
+            im.save(icon_path, "PNG")
+            empty_densities.remove(density)
+        except Exception as e:
+            logging.warning("Invalid image file at %s: %s", last_icon_path, e)
+        finally:
+            if fp:
+                fp.close()
+
+    # Then just copy from the highest resolution available
+    last_density = None
+    for density in reversed(screen_densities):
+        if density not in empty_densities:
+            last_density = density
+            continue
+
+        if last_density is None:
+            continue
+
+        shutil.copyfile(
+            os.path.join(get_icon_dir(repo_dir, last_density), icon_filename),
+            os.path.join(get_icon_dir(repo_dir, density), icon_filename)
+        )
+        empty_densities.remove(density)
+
+    for density in screen_densities:
+        icon_dir = get_icon_dir(repo_dir, density)
+        icon_dest = os.path.join(icon_dir, icon_filename)
+        resize_icon(icon_dest, density)
+
+    # Copy from icons-mdpi to icons since mdpi is the baseline density
+    baseline = os.path.join(get_icon_dir(repo_dir, '160'), icon_filename)
+    if os.path.isfile(baseline):
+        apk['icons']['0'] = icon_filename
+        shutil.copyfile(baseline, os.path.join(get_icon_dir(repo_dir, '0'), icon_filename))
 
 
 def apply_info_from_latest_apk(apps, apks):
@@ -1663,7 +1706,7 @@ def main():
     delete_disabled_builds(apps, apkcache, repodirs)
 
     # Scan all apks in the main repo
-    apks, cachechanged = scan_apks(apkcache, repodirs[0], knownapks, options.use_date_from_apk)
+    apks, cachechanged = process_apks(apkcache, repodirs[0], knownapks, options.use_date_from_apk)
 
     files, fcachechanged = scan_repo_files(apkcache, repodirs[0], knownapks,
                                            options.use_date_from_apk)
@@ -1714,7 +1757,7 @@ def main():
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
-        archapks, cc = scan_apks(apkcache, repodirs[1], knownapks, options.use_date_from_apk)
+        archapks, cc = process_apks(apkcache, repodirs[1], knownapks, options.use_date_from_apk)
         if cc:
             cachechanged = True
     else:
