@@ -67,6 +67,7 @@ if [ -e fdroiddata ]; then
     git remote update -p
     git checkout master
     git reset --hard origin/master
+    git clean -fdx
     cd ..
 else
     git clone --depth 1 https://gitlab.com/fdroid/fdroiddata.git fdroiddata

@@ -72,6 +72,7 @@ if [ -e fdroiddata ]; then
     git remote update -p
     git checkout master
     git reset --hard origin/master
+    # no don't `git clean` here, it'll wipe the APKs in unsigned/
 else
     git clone https://gitlab.com/fdroid/fdroiddata.git fdroiddata
     cd fdroiddata
