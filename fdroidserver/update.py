@@ -37,7 +37,6 @@ from binascii import hexlify
 from PIL import Image
 import logging
 
-from . import btlog
 from . import common
 from . import index
 from . import metadata
@@ -1695,6 +1694,7 @@ def main():
 
     git_remote = config.get('binary_transparency_remote')
     if git_remote or os.path.isdir(os.path.join('binary_transparency', '.git')):
+        from . import btlog
         btlog.make_binary_transparency_log(repodirs)
 
     if config['update_stats']:
