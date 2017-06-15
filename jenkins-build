@@ -43,7 +43,7 @@ hostname || true
 
 # point to the Vagrant/VirtualBox configs created by reproducible_setup_fdroid_build_environment.sh
 # these variables are actually set in fdroidserver/jenkins-build-makebuildserver
-export SETUP_WORKSPACE=$(dirname $WORKSPACE)/fdroid/fdroidserver
+export SETUP_WORKSPACE=$(dirname $WORKSPACE)/reproducible_setup_fdroid_build_environment/fdroidserver
 export XDG_CONFIG_HOME=$SETUP_WORKSPACE
 export VBOX_USER_HOME=$SETUP_WORKSPACE/VirtualBox
 export VAGRANT_HOME=$SETUP_WORKSPACE/vagrant.d
