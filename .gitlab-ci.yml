@@ -27,5 +27,8 @@ metadata_v0:
     - git checkout master
     - cd fdroiddata
     - ../tests/dump.py
-    - sed -i "/AuthorWebSite/d" metadata/dump_*/*.yaml
+    - sed -i -e "/AuthorWebSite/d"
+             -e "/Description: No description available/d"
+             -e "/Description: ''/d"
+             metadata/dump_*/*.yaml
     - diff -uw metadata/dump_*
