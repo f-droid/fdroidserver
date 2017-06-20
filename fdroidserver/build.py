@@ -657,7 +657,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             raise BuildException("Expected to find buildozer-compatible spec at {0}"
                                  .format(spec))
         defaults = {'orientation': 'landscape', 'icon': '',
-                    'permissions': '', 'android.api': "19" }
+                    'permissions': '', 'android.api': "19"}
         bconfig = ConfigParser(defaults, allow_no_value=True)
         bconfig.read(spec)
 
@@ -666,25 +666,25 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         loc_ndk = common.env['ANDROID_NDK']
         loc_sdk = common.env['ANDROID_SDK']
         if loc_ndk == '$ANDROID_NDK':
-            loc_ndk = loc_sdk+'/ndk-bundle'
+            loc_ndk = loc_sdk + '/ndk-bundle'
 
         bc_ndk = None
         bc_sdk = None
         try:
-            bc_ndk = bconfig.get('app','android.sdk_path')
-        except:
+            bc_ndk = bconfig.get('app', 'android.sdk_path')
+        except Exception:
             pass
         try:
-            bc_sdk = bconfig.get('app','android.ndk_path')
-        except:
+            bc_sdk = bconfig.get('app', 'android.ndk_path')
+        except Exception:
             pass
 
         if bc_sdk is None:
-            bconfig.set('app','android.sdk_path',loc_sdk)
+            bconfig.set('app', 'android.sdk_path', loc_sdk)
         if bc_ndk is None:
-            bconfig.set('app','android.ndk_path',loc_ndk)
+            bconfig.set('app', 'android.ndk_path', loc_ndk)
 
-        fspec = open(spec,'w')
+        fspec = open(spec, 'w')
         bconfig.write(fspec)
         fspec.close()
 
@@ -693,21 +693,21 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
         p = None
         # execute buildozer
-        cmd = ['buildozer','android','release']
+        cmd = ['buildozer', 'android', 'release']
         try:
             p = FDroidPopen(cmd, cwd=root_dir)
-        except:
+        except Exception:
             pass
 
         # buidozer not installed ? clone repo and run
-        if (p is None or p.returncode!=0):
-            cmd = ['git','clone','https://github.com/kivy/buildozer.git']
+        if (p is None or p.returncode != 0):
+            cmd = ['git', 'clone', 'https://github.com/kivy/buildozer.git']
             p = subprocess.Popen(cmd, cwd=root_dir, shell=False)
             p.wait()
             if p.returncode != 0:
                 raise BuildException("Distribute build failed")
 
-            cmd = ['python','buildozer/buildozer/scripts/client.py','android','release']
+            cmd = ['python', 'buildozer/buildozer/scripts/client.py', 'android', 'release']
             p = FDroidPopen(cmd, cwd=root_dir)
 
         # expected to fail.
