@@ -209,6 +209,7 @@ build_flags_order = [
     'gradle',
     'maven',
     'kivy',
+    'buildozer',
     'output',
     'srclibs',
     'oldsdkloc',
@@ -249,6 +250,7 @@ class Build(dict):
         self.gradle = []
         self.maven = False
         self.kivy = False
+        self.buildozer = False
         self.output = None
         self.srclibs = []
         self.oldsdkloc = False
@@ -289,7 +291,7 @@ class Build(dict):
             raise AttributeError("No such attribute: " + name)
 
     def build_method(self):
-        for f in ['maven', 'gradle', 'kivy']:
+        for f in ['maven', 'gradle', 'kivy', 'buildozer']:
             if self.get(f):
                 return f
         if self.output:
@@ -300,7 +302,7 @@ class Build(dict):
     def output_method(self):
         if self.output:
             return 'raw'
-        for f in ['maven', 'gradle', 'kivy']:
+        for f in ['maven', 'gradle', 'kivy', 'buildozer']:
             if self.get(f):
                 return f
         return 'ant'
