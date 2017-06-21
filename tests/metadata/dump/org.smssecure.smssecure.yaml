@@ -60,6 +60,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: 66367479a4f57f347b5cbe8f6f8f632adaae7727
   disable: builds, merge changes into upstream
   encoding: null
@@ -103,6 +104,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: 9675ce5eecb929dcaddb43b3d9486fdb88b9ae1a
   disable: builds, wait for upstream
   encoding: null
@@ -138,6 +140,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: v0.4.2
   disable: builds locally, but not on BS
   encoding: null
@@ -172,6 +175,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: v0.5.1
   disable: false
   encoding: null
@@ -206,6 +210,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: v0.5.2
   disable: broken in upstream
   encoding: null
@@ -239,6 +244,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: v0.5.3
   disable: false
   encoding: null
@@ -272,6 +278,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: v0.5.4
   disable: false
   encoding: null
@@ -305,6 +312,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: v0.6.0
   disable: false
   encoding: null

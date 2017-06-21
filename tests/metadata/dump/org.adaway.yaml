@@ -64,6 +64,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: ea5378a94ee0dc1d99d2cec95fae7e6d81afb2b9
   disable: false
   encoding: null
@@ -96,6 +97,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: 4128e59da2eac5c2904c7c7568d298ca51e79540
   disable: false
   encoding: null
@@ -129,6 +131,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: 0b9985398b9eef7baf6aadd0dbb12002bc199d2e
   disable: false
   encoding: null
@@ -162,6 +165,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: ab27f4dab5f3ea5e228cfb4a6b0e1fbf53695f22
   disable: false
   encoding: null
@@ -195,6 +199,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: 695e3801e4081026c8f7213a2345fc451d5eb89c
   disable: false
   encoding: null
@@ -228,6 +233,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: 65138c11cc8b6affd28b68e125fbc1dff0886a4e
   disable: false
   encoding: null
@@ -260,6 +266,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: unknown - see disabled
   disable: no source in repo
   encoding: null
@@ -292,6 +299,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: f811e53e1e1d2ee047b18715fd7d2072b90ae76b
   disable: false
   encoding: null
@@ -324,6 +332,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: ff97932761cdee68638dc2550751a64b2cbe18e7
   disable: false
   encoding: null
@@ -356,6 +365,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: 33d4d80998f30bafc88c04c80cbae00b03916f99
   disable: false
   encoding: null
@@ -388,6 +398,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: 743d25a7e287505461f33f4b8e57e4cf988fffea
   disable: false
   encoding: null
@@ -420,6 +431,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: eaa07f4
   disable: false
   encoding: null
@@ -451,6 +463,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: 71ced3f
   disable: false
   encoding: null
@@ -483,6 +496,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: 9d63c18
   disable: false
   encoding: null
@@ -514,6 +528,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: f2568b1
   disable: false
   encoding: null
@@ -546,6 +561,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: 7442d5d
   disable: false
   encoding: null
@@ -578,6 +594,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: 83fc713
   disable: false
   encoding: null
@@ -610,6 +627,7 @@ builds:
   antcommands: []
   build: ''
   buildjni: []
+  buildozer: false
   commit: 70da32b567122b701cdcb1609b780eb85732028f
   disable: false
   encoding: null
@@ -647,6 +665,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: v2.1
   disable: false
   encoding: null
@@ -691,6 +710,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: v2.3
   disable: false
   encoding: null
@@ -731,6 +751,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: v2.6
   disable: false
   encoding: null
@@ -765,6 +786,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: v2.7
   disable: false
   encoding: null
@@ -799,6 +821,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: v2.8
   disable: false
   encoding: null
@@ -833,6 +856,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: v2.8.1
   disable: false
   encoding: null
@@ -867,6 +891,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: v2.9
   disable: false
   encoding: null
@@ -901,6 +926,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: v2.9.1
   disable: false
   encoding: null
@@ -935,6 +961,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: v2.9.2
   disable: false
   encoding: null
@@ -969,6 +996,7 @@ builds:
   build: ''
   buildjni:
   - 'yes'
+  buildozer: false
   commit: v3.0
   disable: false
   encoding: null
