@@ -470,13 +470,24 @@ def sha256sum(filename):
     return sha.hexdigest()
 
 
-def has_old_openssl(filename):
-    '''checks for known vulnerable openssl versions in the APK'''
+def has_known_vulnerability(filename):
+    """checks for known vulnerabilities in the APK
+
+    Checks OpenSSL .so files in the APK to see if they are a known vulnerable
+    version.  Google also enforces this:
+    https://support.google.com/faqs/answer/6376725?hl=en
+
+    Checks whether there are more than one classes.dex or AndroidManifest.xml
+    files, which is invalid and an essential part of the "Master Key" attack.
+
+    http://www.saurik.com/id/17
+    """
 
     # statically load this pattern
-    if not hasattr(has_old_openssl, "pattern"):
-        has_old_openssl.pattern = re.compile(b'.*OpenSSL ([01][0-9a-z.-]+)')
+    if not hasattr(has_known_vulnerability, "pattern"):
+        has_known_vulnerability.pattern = re.compile(b'.*OpenSSL ([01][0-9a-z.-]+)')
 
+    files_in_apk = set()
     with zipfile.ZipFile(filename) as zf:
         for name in zf.namelist():
             if name.endswith('libcrypto.so') or name.endswith('libssl.so'):
@@ -485,7 +496,7 @@ def has_old_openssl(filename):
                     chunk = lib.read(4096)
                     if chunk == b'':
                         break
-                    m = has_old_openssl.pattern.search(chunk)
+                    m = has_known_vulnerability.pattern.search(chunk)
                     if m:
                         version = m.group(1).decode('ascii')
                         if version.startswith('1.0.1') and version[5] >= 'r' \
@@ -495,6 +506,11 @@ def has_old_openssl(filename):
                             logging.warning('"%s" contains outdated %s (%s)', filename, name, version)
                             return True
                         break
+            elif name == 'AndroidManifest.xml' or name == 'classes.dex' or name.endswith('.so'):
+                if name in files_in_apk:
+                    return True
+                files_in_apk.add(name)
+
     return False
 
 
@@ -1172,7 +1188,7 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
         if not common.verify_apk_signature(apkfile):
             return True, None, False
 
-        if has_old_openssl(apkfile):
+        if has_known_vulnerability(apkfile):
             apk['antiFeatures'].add('KnownVuln')
 
         apkzip = zipfile.ZipFile(apkfile, 'r')
