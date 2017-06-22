@@ -30,5 +30,6 @@ metadata_v0:
     - "sed -i -e '/AuthorWebSite/d'
              -e '/Description: No description available/d'
              -e \"/Description: ''/d\"
+             -e '/buildozer:/d'
              metadata/dump_*/*.yaml"
     - diff -uw metadata/dump_*
