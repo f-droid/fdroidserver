@@ -327,7 +327,9 @@ msgid "Download logs we don't have"
 msgstr ""
 
 #: ../fdroidserver/stats.py:66
-msgid "Recalculate aggregate stats - use when changes "
+msgid ""
+"Recalculate aggregate stats - use when changes "
+"have been made that would invalidate old cached data."
 msgstr ""
 
 #: ../fdroidserver/stats.py:69
