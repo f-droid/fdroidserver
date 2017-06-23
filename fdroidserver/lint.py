@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from argparse import ArgumentParser
+import glob
 import os
 import re
 import sys
@@ -378,6 +379,29 @@ def check_extlib_dir(apps):
         yield "Unused extlib at %s" % os.path.join(dir_path, path)
 
 
+def check_for_unsupported_metadata_files(basedir=""):
+    """Checks whether any non-metadata files are in metadata/"""
+
+    global config
+
+    return_value = False
+    formats = config['accepted_formats']
+    for f in glob.glob(basedir + 'metadata/*') + glob.glob(basedir + 'metadata/.*'):
+        if os.path.isdir(f):
+            exists = False
+            for t in formats:
+                exists = exists or os.path.exists(f + '.' + t)
+            if not exists:
+                print('"' + f + '/" has no matching metadata file!')
+                return_value = True
+        elif not os.path.splitext(f)[1][1:] in formats:
+            print('"' + f.replace(basedir, '')
+                  + '" is not a supported file format: (' + ','.join(formats) + ')')
+            return_value = True
+
+    return return_value
+
+
 def main():
 
     global config, options
@@ -398,7 +422,7 @@ def main():
     allapps = metadata.read_metadata(xref=True)
     apps = common.read_app_args(options.appid, allapps, False)
 
-    anywarns = False
+    anywarns = check_for_unsupported_metadata_files()
 
     apps_check_funcs = []
     if len(options.appid) == 0:
