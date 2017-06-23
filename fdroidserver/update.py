@@ -1421,6 +1421,22 @@ def make_categories_txt(repodir, categories):
 
 def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversions):
 
+    def move_file(from_dir, to_dir, filename, ignore_missing):
+        from_path = os.path.join(from_dir, filename)
+        if ignore_missing and not os.path.exists(from_path):
+            return
+        to_path = os.path.join(to_dir, filename)
+        shutil.move(from_path, to_path)
+
+    def filter_apk_list_sorted(apk_list):
+        res = []
+        for apk in apk_list:
+            if apk['packageName'] == appid:
+                res.append(apk)
+
+        # Sort the apk list by version code. First is highest/newest.
+        return sorted(res, key=lambda apk: apk['versionCode'], reverse=True)
+
     for appid, app in apps.items():
 
         if app.ArchivePolicy:
@@ -1428,29 +1444,13 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
         else:
             keepversions = defaultkeepversions
 
-        def filter_apk_list_sorted(apk_list):
-            res = []
-            for apk in apk_list:
-                if apk['packageName'] == appid:
-                    res.append(apk)
-
-            # Sort the apk list by version code. First is highest/newest.
-            return sorted(res, key=lambda apk: apk['versionCode'], reverse=True)
-
-        def move_file(from_dir, to_dir, filename, ignore_missing):
-            from_path = os.path.join(from_dir, filename)
-            if ignore_missing and not os.path.exists(from_path):
-                return
-            to_path = os.path.join(to_dir, filename)
-            shutil.move(from_path, to_path)
-
         logging.debug("Checking archiving for {0} - apks:{1}, keepversions:{2}, archapks:{3}"
                       .format(appid, len(apks), keepversions, len(archapks)))
 
-        if len(apks) > keepversions:
-            apklist = filter_apk_list_sorted(apks)
+        current_app_apks = filter_apk_list_sorted(apks)
+        if len(current_app_apks) > keepversions:
             # Move back the ones we don't want.
-            for apk in apklist[keepversions:]:
+            for apk in current_app_apks[keepversions:]:
                 logging.info("Moving " + apk['apkName'] + " to archive")
                 move_file(repodir, archivedir, apk['apkName'], False)
                 move_file(repodir, archivedir, apk['apkName'] + '.asc', True)
@@ -1464,11 +1464,12 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
                     move_file(repodir, archivedir, apk['srcname'], False)
                 archapks.append(apk)
                 apks.remove(apk)
-        elif len(apks) < keepversions and len(archapks) > 0:
+
+        current_app_archapks = filter_apk_list_sorted(archapks)
+        if len(current_app_apks) < keepversions and len(current_app_archapks) > 0:
             required = keepversions - len(apks)
-            archapklist = filter_apk_list_sorted(archapks)
             # Move forward the ones we want again.
-            for apk in archapklist[:required]:
+            for apk in current_app_archapks[:required]:
                 logging.info("Moving " + apk['apkName'] + " from archive")
                 move_file(archivedir, repodir, apk['apkName'], False)
                 move_file(archivedir, repodir, apk['apkName'] + '.asc', True)
