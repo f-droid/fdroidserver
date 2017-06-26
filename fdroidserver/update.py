@@ -1421,13 +1421,6 @@ def make_categories_txt(repodir, categories):
 
 def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversions):
 
-    def move_file(from_dir, to_dir, filename, ignore_missing):
-        from_path = os.path.join(from_dir, filename)
-        if ignore_missing and not os.path.exists(from_path):
-            return
-        to_path = os.path.join(to_dir, filename)
-        shutil.move(from_path, to_path)
-
     def filter_apk_list_sorted(apk_list):
         res = []
         for apk in apk_list:
@@ -1451,17 +1444,7 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
         if len(current_app_apks) > keepversions:
             # Move back the ones we don't want.
             for apk in current_app_apks[keepversions:]:
-                logging.info("Moving " + apk['apkName'] + " to archive")
-                move_file(repodir, archivedir, apk['apkName'], False)
-                move_file(repodir, archivedir, apk['apkName'] + '.asc', True)
-                for density in all_screen_densities:
-                    repo_icon_dir = get_icon_dir(repodir, density)
-                    archive_icon_dir = get_icon_dir(archivedir, density)
-                    if density not in apk['icons']:
-                        continue
-                    move_file(repo_icon_dir, archive_icon_dir, apk['icons'][density], True)
-                if 'srcname' in apk:
-                    move_file(repodir, archivedir, apk['srcname'], False)
+                move_apk_between_sections(repodir, archivedir, apk)
                 archapks.append(apk)
                 apks.remove(apk)
 
@@ -1470,19 +1453,32 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
             required = keepversions - len(apks)
             # Move forward the ones we want again.
             for apk in current_app_archapks[:required]:
-                logging.info("Moving " + apk['apkName'] + " from archive")
-                move_file(archivedir, repodir, apk['apkName'], False)
-                move_file(archivedir, repodir, apk['apkName'] + '.asc', True)
-                for density in all_screen_densities:
-                    repo_icon_dir = get_icon_dir(repodir, density)
-                    archive_icon_dir = get_icon_dir(archivedir, density)
-                    if density not in apk['icons']:
-                        continue
-                    move_file(archive_icon_dir, repo_icon_dir, apk['icons'][density], True)
-                if 'srcname' in apk:
-                    move_file(archivedir, repodir, apk['srcname'], False)
+                move_apk_between_sections(archivedir, repodir, apk)
                 archapks.remove(apk)
                 apks.append(apk)
+
+
+def move_apk_between_sections(from_dir, to_dir, apk):
+    """move an APK from repo to archive or vice versa"""
+
+    def _move_file(from_dir, to_dir, filename, ignore_missing):
+        from_path = os.path.join(from_dir, filename)
+        if ignore_missing and not os.path.exists(from_path):
+            return
+        to_path = os.path.join(to_dir, filename)
+        shutil.move(from_path, to_path)
+
+    logging.info("Moving %s from %s to %s" % (apk['apkName'], from_dir, to_dir))
+    _move_file(from_dir, to_dir, apk['apkName'], False)
+    _move_file(from_dir, to_dir, apk['apkName'] + '.asc', True)
+    for density in all_screen_densities:
+        from_icon_dir = get_icon_dir(from_dir, density)
+        to_icon_dir = get_icon_dir(to_dir, density)
+        if density not in apk['icons']:
+            continue
+        _move_file(from_icon_dir, to_icon_dir, apk['icons'][density], True)
+    if 'srcname' in apk:
+        _move_file(from_dir, to_dir, apk['srcname'], False)
 
 
 def add_apks_to_per_app_repos(repodir, apks):
