@@ -205,8 +205,16 @@ class UpdateTest(unittest.TestCase):
         apps = fdroidserver.metadata.read_metadata(xref=True)
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.scan_apks({}, 'repo', knownapks, False)
-        self.assertEqual(len(apks), 7)
+        self.assertEqual(len(apks), 11)
         apk = apks[0]
+        self.assertEqual(apk['packageName'], 'com.politedroid')
+        self.assertEqual(apk['versionCode'], 3)
+        self.assertEqual(apk['minSdkVersion'], '3')
+        self.assertEqual(apk['targetSdkVersion'], '3')
+        self.assertFalse('maxSdkVersion' in apk)
+        apk = apks[4]
+        self.assertEqual(apk['packageName'], 'obb.main.oldversion')
+        self.assertEqual(apk['versionCode'], 1444412523)
         self.assertEqual(apk['minSdkVersion'], '4')
         self.assertEqual(apk['targetSdkVersion'], '18')
         self.assertFalse('maxSdkVersion' in apk)

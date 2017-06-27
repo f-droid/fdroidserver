@@ -159,6 +159,71 @@
 			<sig>b4964fd759edaa54e65bb476d0276880</sig>
 		</package>
 	</application>
+	<application id="com.politedroid">
+		<id>com.politedroid</id>
+		<added>2017-06-23</added>
+		<lastupdated>2017-06-23</lastupdated>
+		<name>Polite Droid</name>
+		<summary>Calendar tool</summary>
+		<icon>com.politedroid.6.png</icon>
+		<desc>&lt;p&gt;Activates silent mode during calendar events.&lt;/p&gt;</desc>
+		<license>GPL-3.0</license>
+		<categories>Time</categories>
+		<category>Time</category>
+		<web></web>
+		<source>https://github.com/miguelvps/PoliteDroid</source>
+		<tracker>https://github.com/miguelvps/PoliteDroid/issues</tracker>
+		<marketversion>1.5</marketversion>
+		<marketvercode>6</marketvercode>
+		<package>
+			<version>1.5</version>
+			<versioncode>6</versioncode>
+			<apkname>com.politedroid_6.apk</apkname>
+			<hash type="sha256">70c2f776a2bac38a58a7d521f96ee0414c6f0fb1de973c3ca8b10862a009247d</hash>
+			<size>16578</size>
+			<sdkver>14</sdkver>
+			<targetSdkVersion>21</targetSdkVersion>
+			<added>2017-06-23</added>
+			<sig>b4964fd759edaa54e65bb476d0276880</sig>
+			<permissions>READ_CALENDAR,RECEIVE_BOOT_COMPLETED</permissions>
+		</package>
+		<package>
+			<version>1.4</version>
+			<versioncode>5</versioncode>
+			<apkname>com.politedroid_5.apk</apkname>
+			<hash type="sha256">5bdbfa071cca4b8d05ced41d6b28763595d6e8096cca5bbf0f9253c9a2622e5d</hash>
+			<size>18817</size>
+			<sdkver>3</sdkver>
+			<targetSdkVersion>10</targetSdkVersion>
+			<added>2017-06-23</added>
+			<sig>b4964fd759edaa54e65bb476d0276880</sig>
+			<permissions>READ_CALENDAR,RECEIVE_BOOT_COMPLETED</permissions>
+		</package>
+		<package>
+			<version>1.3</version>
+			<versioncode>4</versioncode>
+			<apkname>com.politedroid_4.apk</apkname>
+			<hash type="sha256">c809bdff83715fbf919f3840ee09869b038e209378b906e135ee40d3f0e1f075</hash>
+			<size>18489</size>
+			<sdkver>3</sdkver>
+			<targetSdkVersion>3</targetSdkVersion>
+			<added>2017-06-23</added>
+			<sig>b4964fd759edaa54e65bb476d0276880</sig>
+			<permissions>READ_CALENDAR,READ_EXTERNAL_STORAGE,READ_PHONE_STATE,RECEIVE_BOOT_COMPLETED,WRITE_EXTERNAL_STORAGE</permissions>
+		</package>
+		<package>
+			<version>1.2</version>
+			<versioncode>3</versioncode>
+			<apkname>com.politedroid_3.apk</apkname>
+			<hash type="sha256">665d03d61ebc642289fda697f71a59305b0202b16cafc5ffdae91cbe91f0b25d</hash>
+			<size>17552</size>
+			<sdkver>3</sdkver>
+			<targetSdkVersion>3</targetSdkVersion>
+			<added>2017-06-23</added>
+			<sig>b4964fd759edaa54e65bb476d0276880</sig>
+			<permissions>READ_CALENDAR,READ_EXTERNAL_STORAGE,READ_PHONE_STATE,RECEIVE_BOOT_COMPLETED,WRITE_EXTERNAL_STORAGE</permissions>
+		</package>
+	</application>
 	<application id="info.guardianproject.urzip">
 		<id>info.guardianproject.urzip</id>
 		<added>2016-06-23</added>
