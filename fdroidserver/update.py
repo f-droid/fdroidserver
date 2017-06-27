@@ -1493,6 +1493,8 @@ def move_apk_between_sections(from_dir, to_dir, apk):
         if ignore_missing and not os.path.exists(from_path):
             return
         to_path = os.path.join(to_dir, filename)
+        if not os.path.exists(to_dir):
+            os.mkdir(to_dir)
         shutil.move(from_path, to_path)
 
     if from_dir == to_dir:
