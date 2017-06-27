@@ -593,6 +593,40 @@ def insert_obbs(repodir, apps, apks):
                 break
 
 
+def translate_per_build_anti_features(apps, apks):
+    """Grab the anti-features list from the build metadata
+
+    For most Anti-Features, they are really most applicable per-APK,
+    not for an app.  An app can fix a vulnerability, add/remove
+    tracking, etc.  This reads the 'antifeatures' list from the Build
+    entries in the fdroiddata metadata file, then transforms it into
+    the 'antiFeatures' list of unique items for the index.
+
+    The field key is all lower case in the metadata file to match the
+    rest of the Build fields.  It is 'antiFeatures' camel case in the
+    implementation, index, and fdroidclient since it is translated
+    from the build 'antifeatures' field, not directly included.
+
+    """
+
+    antiFeatures = dict()
+    for packageName, app in apps.items():
+        d = dict()
+        for build in app['builds']:
+            afl = build.get('antifeatures')
+            if afl:
+                d[int(build.versionCode)] = afl
+        if len(d) > 0:
+            antiFeatures[packageName] = d
+
+    for apk in apks:
+        d = antiFeatures.get(apk['packageName'])
+        if d:
+            afl = d.get(apk['versionCode'])
+            if afl:
+                apk['antiFeatures'].update(afl)
+
+
 def _get_localized_dict(app, locale):
     '''get the dict to add localized store metadata to'''
     if 'localized' not in app:
@@ -1751,6 +1785,7 @@ def main():
     copy_triple_t_store_metadata(apps)
     insert_obbs(repodirs[0], apps, apks)
     insert_localized_app_metadata(apps)
+    translate_per_build_anti_features(apps, apks)
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:

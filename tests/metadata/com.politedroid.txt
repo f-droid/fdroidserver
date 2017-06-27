@@ -16,6 +16,7 @@ Repo:https://github.com/miguelvps/PoliteDroid.git
 Build:1.2,3
     commit=6a548e4b19
     target=android-10
+    antifeatures=KnownVuln,UpstreamNonFree,NonFreeAssets
 
 Build:1.3,4
     commit=ad865b57bf3ac59580f38485608a9b1dda4fa7dc

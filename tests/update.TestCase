@@ -459,6 +459,38 @@ class UpdateTest(unittest.TestCase):
         self.assertIsNone(apk)
         self.assertFalse(cachechanged)
 
+    def test_translate_per_build_anti_features(self):
+        os.chdir(os.path.join(localmodule, 'tests'))
+        if os.path.basename(os.getcwd()) != 'tests':
+            raise Exception('This test must be run in the "tests/" subdir')
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        config['ndk_paths'] = dict()
+        config['accepted_formats'] = ['json', 'txt', 'yml']
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+
+        fdroidserver.update.options = type('', (), {})()
+        fdroidserver.update.options.clean = True
+        fdroidserver.update.options.delete_unknown = True
+        fdroidserver.update.options.rename_apks = False
+        fdroidserver.update.options.allow_disabled_algorithms = False
+
+        apps = fdroidserver.metadata.read_metadata(xref=True)
+        knownapks = fdroidserver.common.KnownApks()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
+        fdroidserver.update.translate_per_build_anti_features(apps, apks)
+        self.assertEqual(len(apks), 11)
+        foundtest = False
+        for apk in apks:
+            if apk['packageName'] == 'com.politedroid' and apk['versionCode'] == 3:
+                antiFeatures = apk.get('antiFeatures')
+                self.assertTrue('KnownVuln' in antiFeatures)
+                self.assertEqual(3, len(antiFeatures))
+                foundtest = True
+        self.assertTrue(foundtest)
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
