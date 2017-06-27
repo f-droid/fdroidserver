@@ -85,6 +85,7 @@ default_config = {
     'gradle': 'gradle',
     'accepted_formats': ['txt', 'yml'],
     'sync_from_local_copy_dir': False,
+    'allow_disabled_algorithms': False,
     'per_app_repos': False,
     'make_current_version_link': True,
     'current_version_name_source': 'Name',

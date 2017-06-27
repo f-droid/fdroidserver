@@ -1082,7 +1082,8 @@ def scan_apk_androguard(apk, apkfile):
         apk['features'].append(feature)
 
 
-def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
+def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
+             allow_disabled_algorithms=False, archive_bad_sig=False):
     """Scan the apk with the given filename in the given repo directory.
 
     This also extracts the icons.
@@ -1093,6 +1094,9 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
     :param knownapks: known apks info
     :param use_date_from_apk: use date from APK (instead of current date)
                               for newly added APKs
+    :param allow_disabled_algorithms: allow APKs with valid signatures that include
+                                      disabled algorithms in the signature (e.g. MD5)
+    :param archive_bad_sig: move APKs with a bad signature to the archive
     :returns: (skip, apk, cachechanged) where skip is a boolean indicating whether to skip this apk,
      apk is the scanned apk information, and cachechanged is True if the apkcache got changed.
     """
@@ -1186,19 +1190,27 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
 
         # verify the jar signature is correct, allow deprecated
         # algorithms only if the APK is in the archive.
+        skipapk = False
         if not common.verify_apk_signature(apkfile):
-            if repodir == 'archive':
+            if repodir == 'archive' or allow_disabled_algorithms:
                 if common.verify_old_apk_signature(apkfile):
-                    apk['antiFeatures'].add('KnownVuln')
+                    apk['antiFeatures'].update(['KnownVuln', 'DisabledAlgorithm'])
                 else:
-                    return True, None, False
+                    skipapk = True
             else:
-                logging.warning('Archiving "' + apkfilename + '" with invalid signature!')
-                move_apk_between_sections('repo', 'archive', apk)
-                return True, None, False
+                skipapk = True
 
-        if has_known_vulnerability(apkfile):
-            apk['antiFeatures'].add('KnownVuln')
+        if skipapk:
+            if archive_bad_sig:
+                logging.warning('Archiving "' + apkfilename + '" with invalid signature!')
+                move_apk_between_sections(repodir, 'archive', apk)
+            else:
+                logging.warning('Skipping "' + apkfilename + '" with invalid signature!')
+            return True, None, False
+
+        if 'KnownVuln' not in apk['antiFeatures']:
+            if has_known_vulnerability(apkfile):
+                apk['antiFeatures'].add('KnownVuln')
 
         apkzip = zipfile.ZipFile(apkfile, 'r')
 
@@ -1372,7 +1384,9 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
     apks = []
     for apkfile in sorted(glob.glob(os.path.join(repodir, '*.apk'))):
         apkfilename = apkfile[len(repodir) + 1:]
-        (skip, apk, cachechanged) = scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk)
+        ada = options.allow_disabled_algorithms or config['allow_disabled_algorithms']
+        (skip, apk, cachechanged) = scan_apk(apkcache, apkfilename, repodir, knownapks,
+                                             use_date_from_apk, ada, True)
         if skip:
             continue
         apks.append(apk)
@@ -1459,12 +1473,16 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
 
         current_app_archapks = filter_apk_list_sorted(archapks)
         if len(current_app_apks) < keepversions and len(current_app_archapks) > 0:
-            required = keepversions - len(apks)
-            # Move forward the ones we want again.
-            for apk in current_app_archapks[:required]:
-                move_apk_between_sections(archivedir, repodir, apk)
-                archapks.remove(apk)
-                apks.append(apk)
+            kept = 0
+            # Move forward the ones we want again, except DisableAlgorithm
+            for apk in current_app_archapks:
+                if 'DisabledAlgorithm' not in apk['antiFeatures']:
+                    move_apk_between_sections(archivedir, repodir, apk)
+                    archapks.remove(apk)
+                    apks.append(apk)
+                    kept += 1
+                if kept == keepversions:
+                    break
 
 
 def move_apk_between_sections(from_dir, to_dir, apk):
@@ -1476,6 +1494,9 @@ def move_apk_between_sections(from_dir, to_dir, apk):
             return
         to_path = os.path.join(to_dir, filename)
         shutil.move(from_path, to_path)
+
+    if from_dir == to_dir:
+        return
 
     logging.info("Moving %s from %s to %s" % (apk['apkName'], from_dir, to_dir))
     _move_file(from_dir, to_dir, apk['apkName'], False)
@@ -1550,6 +1571,8 @@ def main():
                         help="Use date from apk instead of current time for newly added apks")
     parser.add_argument("--rename-apks", action="store_true", default=False,
                         help="Rename APK files that do not match package.name_123.apk")
+    parser.add_argument("--allow-disabled-algorithms", action="store_true", default=False,
+                        help="Include APKs that are signed with disabled algorithms like MD5")
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
