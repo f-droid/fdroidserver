@@ -1184,9 +1184,18 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
             apk['srcname'] = srcfilename
         apk['size'] = os.path.getsize(apkfile)
 
-        # verify the jar signature is correct
+        # verify the jar signature is correct, allow deprecated
+        # algorithms only if the APK is in the archive.
         if not common.verify_apk_signature(apkfile):
-            return True, None, False
+            if repodir == 'archive':
+                if common.verify_old_apk_signature(apkfile):
+                    apk['antiFeatures'].add('KnownVuln')
+                else:
+                    return True, None, False
+            else:
+                logging.warning('Archiving "' + apkfilename + '" with invalid signature!')
+                move_apk_between_sections('repo', 'archive', apk)
+                return True, None, False
 
         if has_known_vulnerability(apkfile):
             apk['antiFeatures'].add('KnownVuln')
