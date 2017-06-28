@@ -16,6 +16,7 @@ metadata_v0:
   script:
     - cd tests
     - cp dump_internal_metadata_format.py dump.py # since this isn't in old commits
+    - export GITCOMMIT=`git describe`
     - git checkout 0.7.0  # or any old commit of your choosing
     - cd ..
     - sed -i "s/'Author Email',/'Author Email',\n'Author Web Site',/" fdroidserver/metadata.py
@@ -24,7 +25,7 @@ metadata_v0:
     - ../tests/dump.py
     - cd ..
     - git reset --hard
-    - git checkout master
+    - git checkout $GITCOMMIT
     - cd fdroiddata
     - ../tests/dump.py
     - "sed -i -e '/AuthorWebSite/d'
