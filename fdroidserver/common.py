@@ -1317,21 +1317,21 @@ def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
 gradle_version_regex = re.compile(r"[^/]*'com\.android\.tools\.build:gradle:([^\.]+\.[^\.]+).*'.*")
 
 
-# Prepare the source code for a particular build
-#  'vcs'         - the appropriate vcs object for the application
-#  'app'         - the application details from the metadata
-#  'build'       - the build details from the metadata
-#  'build_dir'   - the path to the build directory, usually
-#                   'build/app.id'
-#  'srclib_dir'  - the path to the source libraries directory, usually
-#                   'build/srclib'
-#  'extlib_dir'  - the path to the external libraries directory, usually
-#                   'build/extlib'
-# Returns the (root, srclibpaths) where:
-#   'root' is the root directory, which may be the same as 'build_dir' or may
-#          be a subdirectory of it.
-#   'srclibpaths' is information on the srclibs being used
 def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=False, refresh=True):
+    """ Prepare the source code for a particular build
+
+    :param vcs: the appropriate vcs object for the application
+    :param app: the application details from the metadata
+    :param build: the build details from the metadata
+    :param build_dir: the path to the build directory, usually 'build/app.id'
+    :param srclib_dir: the path to the source libraries directory, usually 'build/srclib'
+    :param extlib_dir: the path to the external libraries directory, usually 'build/extlib'
+
+    Returns the (root, srclibpaths) where:
+    :param root: is the root directory, which may be the same as 'build_dir' or may
+                 be a subdirectory of it.
+    :param srclibpaths: is information on the srclibs being used
+    """
 
     # Optionally, the actual app source can be in a subdirectory
     if build.subdir:

@@ -204,6 +204,7 @@ build_flags_order = [
     'commit',
     'subdir',
     'submodules',
+    'sudo',
     'init',
     'patch',
     'gradle',
@@ -246,6 +247,7 @@ class Build(dict):
         self.commit = None
         self.subdir = None
         self.submodules = False
+        self.sudo = ''
         self.init = ''
         self.patch = []
         self.gradle = []
@@ -333,6 +335,7 @@ flagtypes = {
     'gradle': TYPE_LIST,
     'antcommands': TYPE_LIST,
     'gradleprops': TYPE_LIST,
+    'sudo': TYPE_SCRIPT,
     'init': TYPE_SCRIPT,
     'prebuild': TYPE_SCRIPT,
     'build': TYPE_SCRIPT,

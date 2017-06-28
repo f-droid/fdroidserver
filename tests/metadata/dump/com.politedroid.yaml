@@ -69,6 +69,7 @@ builds:
   srclibs: []
   subdir: null
   submodules: false
+  sudo: ''
   target: android-10
   versionCode: '3'
   versionName: '1.2'
@@ -102,6 +103,7 @@ builds:
   srclibs: []
   subdir: null
   submodules: false
+  sudo: ''
   target: android-15
   versionCode: '4'
   versionName: '1.3'
@@ -135,6 +137,7 @@ builds:
   srclibs: []
   subdir: null
   submodules: false
+  sudo: ''
   target: android-10
   versionCode: '5'
   versionName: '1.4'
@@ -169,6 +172,7 @@ builds:
   srclibs: []
   subdir: null
   submodules: false
+  sudo: echo 'this is just a test'
   target: null
   versionCode: '6'
   versionName: '1.5'

@@ -98,6 +98,7 @@ builds:
   - AospMms@android-5.1.0_r3
   subdir: null
   submodules: false
+  sudo: ''
   target: null
   versionCode: '5'
   versionName: 0.3.3
@@ -135,6 +136,7 @@ builds:
   - GradleWitness@10f1269c0aafdc1d478efc005ed48f3a47d44278
   subdir: null
   submodules: true
+  sudo: ''
   target: null
   versionCode: '6'
   versionName: 0.3.3
@@ -171,6 +173,7 @@ builds:
   srclibs: []
   subdir: null
   submodules: true
+  sudo: ''
   target: null
   versionCode: '9'
   versionName: 0.4.2
@@ -207,6 +210,7 @@ builds:
   srclibs: []
   subdir: null
   submodules: true
+  sudo: ''
   target: null
   versionCode: '11'
   versionName: 0.5.1
@@ -242,6 +246,7 @@ builds:
   srclibs: []
   subdir: null
   submodules: true
+  sudo: ''
   target: null
   versionCode: '12'
   versionName: 0.5.2
@@ -277,6 +282,7 @@ builds:
   srclibs: []
   subdir: null
   submodules: true
+  sudo: ''
   target: null
   versionCode: '100'
   versionName: 0.5.3
@@ -312,6 +318,7 @@ builds:
   srclibs: []
   subdir: null
   submodules: true
+  sudo: ''
   target: null
   versionCode: '101'
   versionName: 0.5.4
@@ -347,6 +354,7 @@ builds:
   srclibs: []
   subdir: null
   submodules: true
+  sudo: ''
   target: null
   versionCode: '102'
   versionName: 0.6.0

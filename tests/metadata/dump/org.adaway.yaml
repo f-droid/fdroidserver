@@ -90,6 +90,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '13'
   versionName: '1.12'
@@ -125,6 +126,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '16'
   versionName: '1.15'
@@ -160,6 +162,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '19'
   versionName: '1.18'
@@ -195,6 +198,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '20'
   versionName: '1.19'
@@ -230,6 +234,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '21'
   versionName: '1.20'
@@ -265,6 +270,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '22'
   versionName: '1.21'
@@ -298,6 +304,7 @@ builds:
   srclibs: []
   subdir: null
   submodules: false
+  sudo: ''
   target: null
   versionCode: '24'
   versionName: '1.23'
@@ -332,6 +339,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '25'
   versionName: '1.24'
@@ -366,6 +374,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '26'
   versionName: '1.25'
@@ -400,6 +409,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '27'
   versionName: '1.26'
@@ -434,6 +444,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '28'
   versionName: '1.27'
@@ -468,6 +479,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '30'
   versionName: '1.29'
@@ -502,6 +514,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '33'
   versionName: '1.32'
@@ -535,6 +548,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '34'
   versionName: '1.33'
@@ -569,6 +583,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '35'
   versionName: '1.34'
@@ -603,6 +618,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '36'
   versionName: '1.35'
@@ -637,6 +653,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '37'
   versionName: '1.36'
@@ -671,6 +688,7 @@ builds:
   srclibs: []
   subdir: org_adaway/
   submodules: false
+  sudo: ''
   target: null
   versionCode: '38'
   versionName: '1.37'
@@ -717,6 +735,7 @@ builds:
   - RootCommands@c940b0e503
   subdir: AdAway
   submodules: false
+  sudo: ''
   target: null
   versionCode: '40'
   versionName: '2.1'
@@ -763,6 +782,7 @@ builds:
   - RootCommands@c940b0e503
   subdir: AdAway
   submodules: false
+  sudo: ''
   target: null
   versionCode: '42'
   versionName: '2.3'
@@ -799,6 +819,7 @@ builds:
   srclibs: []
   subdir: AdAway
   submodules: false
+  sudo: ''
   target: null
   versionCode: '45'
   versionName: '2.6'
@@ -835,6 +856,7 @@ builds:
   srclibs: []
   subdir: AdAway
   submodules: false
+  sudo: ''
   target: null
   versionCode: '46'
   versionName: '2.7'
@@ -871,6 +893,7 @@ builds:
   srclibs: []
   subdir: AdAway
   submodules: false
+  sudo: ''
   target: null
   versionCode: '47'
   versionName: '2.8'
@@ -907,6 +930,7 @@ builds:
   srclibs: []
   subdir: AdAway
   submodules: false
+  sudo: ''
   target: null
   versionCode: '48'
   versionName: 2.8.1
@@ -943,6 +967,7 @@ builds:
   srclibs: []
   subdir: AdAway
   submodules: false
+  sudo: ''
   target: null
   versionCode: '49'
   versionName: '2.9'
@@ -979,6 +1004,7 @@ builds:
   srclibs: []
   subdir: AdAway
   submodules: false
+  sudo: ''
   target: null
   versionCode: '50'
   versionName: 2.9.1
@@ -1015,6 +1041,7 @@ builds:
   srclibs: []
   subdir: AdAway
   submodules: false
+  sudo: ''
   target: null
   versionCode: '51'
   versionName: 2.9.2
@@ -1051,6 +1078,7 @@ builds:
   srclibs: []
   subdir: AdAway
   submodules: false
+  sudo: ''
   target: null
   versionCode: '52'
   versionName: '3.0'
