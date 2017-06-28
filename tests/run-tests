@@ -141,6 +141,8 @@ $fdroid signindex --verbose
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
+test -e tmp/apkcache
+! test -z tmp/apkcache
 test -L urzip.apk
 grep -F '<application id=' repo/index.xml > /dev/null
 
@@ -760,6 +762,8 @@ grep -F '<application id=' repo/index.xml > /dev/null
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
+test -e tmp/apkcache
+! test -z tmp/apkcache
 export ANDROID_HOME=$STORED_ANDROID_HOME
 
 
@@ -813,6 +817,8 @@ $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
+test -e tmp/apkcache
+! test -z tmp/apkcache
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -842,6 +848,8 @@ $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
+test -e tmp/apkcache
+! test -z tmp/apkcache
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -867,6 +875,8 @@ $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
+test -e tmp/apkcache
+! test -z tmp/apkcache
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -960,6 +970,8 @@ $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
+test -e tmp/apkcache
+! test -z tmp/apkcache
 grep -F '<application id=' repo/index.xml > /dev/null
 
 # now set fake repo_keyalias
