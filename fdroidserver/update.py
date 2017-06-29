@@ -423,19 +423,34 @@ def get_cache_file():
 
 
 def get_cache():
-    """
+    """Get the cached dict of the APK index
+
     Gather information about all the apk files in the repo directory,
-    using cached data if possible.
+    using cached data if possible. Some of the index operations take a
+    long time, like calculating the SHA-256 and verifying the APK
+    signature.
+
+    The cache is invalidated if the metadata version is different, or
+    the 'allow_disabled_algorithms' config/option is different.  In
+    those cases, there is no easy way to know what has changed from
+    the cache, so just rerun the whole thing.
+
     :return: apkcache
+
     """
     apkcachefile = get_cache_file()
+    ada = options.allow_disabled_algorithms or config['allow_disabled_algorithms']
     if not options.clean and os.path.exists(apkcachefile):
         with open(apkcachefile, 'rb') as cf:
             apkcache = pickle.load(cf, encoding='utf-8')
-        if apkcache.get("METADATA_VERSION") != METADATA_VERSION:
+        if apkcache.get("METADATA_VERSION") != METADATA_VERSION \
+           or apkcache.get('allow_disabled_algorithms') != ada:
             apkcache = {}
     else:
         apkcache = {}
+
+    apkcache["METADATA_VERSION"] = METADATA_VERSION
+    apkcache['allow_disabled_algorithms'] = ada
 
     return apkcache
 
@@ -445,7 +460,6 @@ def write_cache(apkcache):
     cache_path = os.path.dirname(apkcachefile)
     if not os.path.exists(cache_path):
         os.makedirs(cache_path)
-    apkcache["METADATA_VERSION"] = METADATA_VERSION
     with open(apkcachefile, 'wb') as cf:
         pickle.dump(apkcache, cf)
 
