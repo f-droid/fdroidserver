@@ -1385,11 +1385,12 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
     for apkfile in sorted(glob.glob(os.path.join(repodir, '*.apk'))):
         apkfilename = apkfile[len(repodir) + 1:]
         ada = options.allow_disabled_algorithms or config['allow_disabled_algorithms']
-        (skip, apk, cachechanged) = scan_apk(apkcache, apkfilename, repodir, knownapks,
-                                             use_date_from_apk, ada, True)
+        (skip, apk, cachethis) = scan_apk(apkcache, apkfilename, repodir, knownapks,
+                                          use_date_from_apk, ada, True)
         if skip:
             continue
         apks.append(apk)
+        cachechanged = cachechanged or cachethis
 
     return apks, cachechanged
 
