@@ -1,4 +1,4 @@
-image: registry.gitlab.com/fdroid/ci-images:server-latest
+image: registry.gitlab.com/fdroid/ci-images-server:latest
 
 test:
   script:
