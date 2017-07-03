@@ -85,6 +85,7 @@ default_config = {
     'gradle': 'gradle',
     'accepted_formats': ['txt', 'yml'],
     'sync_from_local_copy_dir': False,
+    'allow_disabled_algorithms': False,
     'per_app_repos': False,
     'make_current_version_link': True,
     'current_version_name_source': 'Name',
@@ -2039,6 +2040,26 @@ def verify_apk_signature(apk, jar=False):
     else:
         logging.warning("Using Java's jarsigner, not recommended for verifying APKs! Use apksigner")
         return subprocess.call([config['jarsigner'], '-strict', '-verify', apk]) == 4
+
+
+def verify_old_apk_signature(apk):
+    """verify the signature on an archived APK, supporting deprecated algorithms
+
+    F-Droid aims to keep every single binary that it ever published.  Therefore,
+    it needs to be able to verify APK signatures that include deprecated/removed
+    algorithms.  For example, jarsigner treats an MD5 signature as unsigned.
+
+    jarsigner passes unsigned APKs as "verified"! So this has to turn
+    on -strict then check for result 4.
+
+    """
+
+    _java_security = os.path.join(os.getcwd(), '.java.security')
+    with open(_java_security, 'w') as fp:
+        fp.write('jdk.jar.disabledAlgorithms=MD2, RSA keySize < 1024')
+
+    return subprocess.call([config['jarsigner'], '-J-Djava.security.properties=' + _java_security,
+                            '-strict', '-verify', apk]) == 4
 
 
 apk_badchars = re.compile('''[/ :;'"]''')

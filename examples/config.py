@@ -71,6 +71,15 @@ archive_description = """
 The repository of older versions of applications from the main demo repository.
 """
 
+# This allows a specific kind of insecure APK to be included in the
+# 'repo' section.  Since April 2017, APK signatures that use MD5 are
+# no longer considered valid, jarsigner and apksigner will return an
+# error when verifying.  `fdroid update` will move APKs with these
+# disabled signatures to the archive.  This option stops that
+# behavior, and lets those APKs stay part of 'repo'.
+#
+# allow_disabled_algorithms = True
+
 # Normally, all apps are collected into a single app repository, like on
 # https://f-droid.org. For certain situations, it is better to make a repo
 # that is made up of APKs only from a single app. For example, an automated

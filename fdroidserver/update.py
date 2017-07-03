@@ -423,19 +423,34 @@ def get_cache_file():
 
 
 def get_cache():
-    """
+    """Get the cached dict of the APK index
+
     Gather information about all the apk files in the repo directory,
-    using cached data if possible.
+    using cached data if possible. Some of the index operations take a
+    long time, like calculating the SHA-256 and verifying the APK
+    signature.
+
+    The cache is invalidated if the metadata version is different, or
+    the 'allow_disabled_algorithms' config/option is different.  In
+    those cases, there is no easy way to know what has changed from
+    the cache, so just rerun the whole thing.
+
     :return: apkcache
+
     """
     apkcachefile = get_cache_file()
+    ada = options.allow_disabled_algorithms or config['allow_disabled_algorithms']
     if not options.clean and os.path.exists(apkcachefile):
         with open(apkcachefile, 'rb') as cf:
             apkcache = pickle.load(cf, encoding='utf-8')
-        if apkcache.get("METADATA_VERSION") != METADATA_VERSION:
+        if apkcache.get("METADATA_VERSION") != METADATA_VERSION \
+           or apkcache.get('allow_disabled_algorithms') != ada:
             apkcache = {}
     else:
         apkcache = {}
+
+    apkcache["METADATA_VERSION"] = METADATA_VERSION
+    apkcache['allow_disabled_algorithms'] = ada
 
     return apkcache
 
@@ -445,7 +460,6 @@ def write_cache(apkcache):
     cache_path = os.path.dirname(apkcachefile)
     if not os.path.exists(cache_path):
         os.makedirs(cache_path)
-    apkcache["METADATA_VERSION"] = METADATA_VERSION
     with open(apkcachefile, 'wb') as cf:
         pickle.dump(apkcache, cf)
 
@@ -1082,7 +1096,8 @@ def scan_apk_androguard(apk, apkfile):
         apk['features'].append(feature)
 
 
-def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
+def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
+             allow_disabled_algorithms=False, archive_bad_sig=False):
     """Scan the apk with the given filename in the given repo directory.
 
     This also extracts the icons.
@@ -1093,6 +1108,9 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
     :param knownapks: known apks info
     :param use_date_from_apk: use date from APK (instead of current date)
                               for newly added APKs
+    :param allow_disabled_algorithms: allow APKs with valid signatures that include
+                                      disabled algorithms in the signature (e.g. MD5)
+    :param archive_bad_sig: move APKs with a bad signature to the archive
     :returns: (skip, apk, cachechanged) where skip is a boolean indicating whether to skip this apk,
      apk is the scanned apk information, and cachechanged is True if the apkcache got changed.
     """
@@ -1184,12 +1202,29 @@ def scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk):
             apk['srcname'] = srcfilename
         apk['size'] = os.path.getsize(apkfile)
 
-        # verify the jar signature is correct
+        # verify the jar signature is correct, allow deprecated
+        # algorithms only if the APK is in the archive.
+        skipapk = False
         if not common.verify_apk_signature(apkfile):
+            if repodir == 'archive' or allow_disabled_algorithms:
+                if common.verify_old_apk_signature(apkfile):
+                    apk['antiFeatures'].update(['KnownVuln', 'DisabledAlgorithm'])
+                else:
+                    skipapk = True
+            else:
+                skipapk = True
+
+        if skipapk:
+            if archive_bad_sig:
+                logging.warning('Archiving "' + apkfilename + '" with invalid signature!')
+                move_apk_between_sections(repodir, 'archive', apk)
+            else:
+                logging.warning('Skipping "' + apkfilename + '" with invalid signature!')
             return True, None, False
 
-        if has_known_vulnerability(apkfile):
-            apk['antiFeatures'].add('KnownVuln')
+        if 'KnownVuln' not in apk['antiFeatures']:
+            if has_known_vulnerability(apkfile):
+                apk['antiFeatures'].add('KnownVuln')
 
         apkzip = zipfile.ZipFile(apkfile, 'r')
 
@@ -1363,10 +1398,13 @@ def scan_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
     apks = []
     for apkfile in sorted(glob.glob(os.path.join(repodir, '*.apk'))):
         apkfilename = apkfile[len(repodir) + 1:]
-        (skip, apk, cachechanged) = scan_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk)
+        ada = options.allow_disabled_algorithms or config['allow_disabled_algorithms']
+        (skip, apk, cachethis) = scan_apk(apkcache, apkfilename, repodir, knownapks,
+                                          use_date_from_apk, ada, True)
         if skip:
             continue
         apks.append(apk)
+        cachechanged = cachechanged or cachethis
 
     return apks, cachechanged
 
@@ -1421,6 +1459,15 @@ def make_categories_txt(repodir, categories):
 
 def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversions):
 
+    def filter_apk_list_sorted(apk_list):
+        res = []
+        for apk in apk_list:
+            if apk['packageName'] == appid:
+                res.append(apk)
+
+        # Sort the apk list by version code. First is highest/newest.
+        return sorted(res, key=lambda apk: apk['versionCode'], reverse=True)
+
     for appid, app in apps.items():
 
         if app.ArchivePolicy:
@@ -1428,60 +1475,57 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
         else:
             keepversions = defaultkeepversions
 
-        def filter_apk_list_sorted(apk_list):
-            res = []
-            for apk in apk_list:
-                if apk['packageName'] == appid:
-                    res.append(apk)
-
-            # Sort the apk list by version code. First is highest/newest.
-            return sorted(res, key=lambda apk: apk['versionCode'], reverse=True)
-
-        def move_file(from_dir, to_dir, filename, ignore_missing):
-            from_path = os.path.join(from_dir, filename)
-            if ignore_missing and not os.path.exists(from_path):
-                return
-            to_path = os.path.join(to_dir, filename)
-            shutil.move(from_path, to_path)
-
         logging.debug("Checking archiving for {0} - apks:{1}, keepversions:{2}, archapks:{3}"
                       .format(appid, len(apks), keepversions, len(archapks)))
 
-        if len(apks) > keepversions:
-            apklist = filter_apk_list_sorted(apks)
+        current_app_apks = filter_apk_list_sorted(apks)
+        if len(current_app_apks) > keepversions:
             # Move back the ones we don't want.
-            for apk in apklist[keepversions:]:
-                logging.info("Moving " + apk['apkName'] + " to archive")
-                move_file(repodir, archivedir, apk['apkName'], False)
-                move_file(repodir, archivedir, apk['apkName'] + '.asc', True)
-                for density in all_screen_densities:
-                    repo_icon_dir = get_icon_dir(repodir, density)
-                    archive_icon_dir = get_icon_dir(archivedir, density)
-                    if density not in apk['icons']:
-                        continue
-                    move_file(repo_icon_dir, archive_icon_dir, apk['icons'][density], True)
-                if 'srcname' in apk:
-                    move_file(repodir, archivedir, apk['srcname'], False)
+            for apk in current_app_apks[keepversions:]:
+                move_apk_between_sections(repodir, archivedir, apk)
                 archapks.append(apk)
                 apks.remove(apk)
-        elif len(apks) < keepversions and len(archapks) > 0:
-            required = keepversions - len(apks)
-            archapklist = filter_apk_list_sorted(archapks)
-            # Move forward the ones we want again.
-            for apk in archapklist[:required]:
-                logging.info("Moving " + apk['apkName'] + " from archive")
-                move_file(archivedir, repodir, apk['apkName'], False)
-                move_file(archivedir, repodir, apk['apkName'] + '.asc', True)
-                for density in all_screen_densities:
-                    repo_icon_dir = get_icon_dir(repodir, density)
-                    archive_icon_dir = get_icon_dir(archivedir, density)
-                    if density not in apk['icons']:
-                        continue
-                    move_file(archive_icon_dir, repo_icon_dir, apk['icons'][density], True)
-                if 'srcname' in apk:
-                    move_file(archivedir, repodir, apk['srcname'], False)
-                archapks.remove(apk)
-                apks.append(apk)
+
+        current_app_archapks = filter_apk_list_sorted(archapks)
+        if len(current_app_apks) < keepversions and len(current_app_archapks) > 0:
+            kept = 0
+            # Move forward the ones we want again, except DisableAlgorithm
+            for apk in current_app_archapks:
+                if 'DisabledAlgorithm' not in apk['antiFeatures']:
+                    move_apk_between_sections(archivedir, repodir, apk)
+                    archapks.remove(apk)
+                    apks.append(apk)
+                    kept += 1
+                if kept == keepversions:
+                    break
+
+
+def move_apk_between_sections(from_dir, to_dir, apk):
+    """move an APK from repo to archive or vice versa"""
+
+    def _move_file(from_dir, to_dir, filename, ignore_missing):
+        from_path = os.path.join(from_dir, filename)
+        if ignore_missing and not os.path.exists(from_path):
+            return
+        to_path = os.path.join(to_dir, filename)
+        if not os.path.exists(to_dir):
+            os.mkdir(to_dir)
+        shutil.move(from_path, to_path)
+
+    if from_dir == to_dir:
+        return
+
+    logging.info("Moving %s from %s to %s" % (apk['apkName'], from_dir, to_dir))
+    _move_file(from_dir, to_dir, apk['apkName'], False)
+    _move_file(from_dir, to_dir, apk['apkName'] + '.asc', True)
+    for density in all_screen_densities:
+        from_icon_dir = get_icon_dir(from_dir, density)
+        to_icon_dir = get_icon_dir(to_dir, density)
+        if density not in apk['icons']:
+            continue
+        _move_file(from_icon_dir, to_icon_dir, apk['icons'][density], True)
+    if 'srcname' in apk:
+        _move_file(from_dir, to_dir, apk['srcname'], False)
 
 
 def add_apks_to_per_app_repos(repodir, apks):
@@ -1544,6 +1588,8 @@ def main():
                         help="Use date from apk instead of current time for newly added apks")
     parser.add_argument("--rename-apks", action="store_true", default=False,
                         help="Rename APK files that do not match package.name_123.apk")
+    parser.add_argument("--allow-disabled-algorithms", action="store_true", default=False,
+                        help="Include APKs that are signed with disabled algorithms like MD5")
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W

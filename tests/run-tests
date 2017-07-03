@@ -141,6 +141,8 @@ $fdroid signindex --verbose
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
+test -e tmp/apkcache
+! test -z tmp/apkcache
 test -L urzip.apk
 grep -F '<application id=' repo/index.xml > /dev/null
 
@@ -237,7 +239,250 @@ test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc
 
 # we can't easily reproduce the timestamps for things, so just hardcode them
 sed -i --expression='s,timestamp="[0-9]*",timestamp="1480431575",' repo/index.xml
-diff $WORKSPACE/tests/repo/index.xml repo/index.xml
+diff -uw $WORKSPACE/tests/repo/index.xml repo/index.xml
+
+
+#------------------------------------------------------------------------------#
+echo_header 'test moving lots of APKs to the archive'
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+cp $WORKSPACE/tests/keystore.jks $REPOROOT/
+$fdroid init --keystore keystore.jks --repo-keyalias=sova
+echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo "accepted_formats = ['txt']" >> config.py
+sed -i '/allow_disabled_algorithms/d' config.py
+test -d metadata || mkdir metadata
+cp $WORKSPACE/tests/metadata/*.txt metadata/
+echo 'Summary:good test version of urzip' > metadata/info.guardianproject.urzip.txt
+echo 'Summary:good MD5 sig, which is disabled algorithm' > metadata/org.bitbucket.tickytacky.mirrormirror.txt
+sed -i '/Archive Policy:/d' metadata/*.txt
+test -d repo || mkdir repo
+cp $WORKSPACE/tests/urzip.apk \
+   $WORKSPACE/tests/org.bitbucket.tickytacky.mirrormirror_[0-9].apk \
+   $WORKSPACE/tests/repo/com.politedroid_[0-9].apk \
+   $WORKSPACE/tests/repo/obb.main.twoversions_110161[357].apk \
+   repo/
+sed -i 's,archive_older = [0-9],archive_older = 3,' config.py
+
+$fdroid update --pretty --nosign
+test `grep '<package>' archive/index.xml | wc -l` -eq 5
+test `grep '<package>' repo/index.xml | wc -l` -eq 7
+
+
+#------------------------------------------------------------------------------#
+echo_header 'test per-app "Archive Policy"'
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+cp $WORKSPACE/tests/keystore.jks $REPOROOT/
+$fdroid init --keystore keystore.jks --repo-keyalias=sova
+echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo "accepted_formats = ['txt']" >> config.py
+test -d metadata || mkdir metadata
+cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
+test -d repo || mkdir repo
+cp $WORKSPACE/tests/repo/com.politedroid_[0-9].apk repo/
+sed -i 's,archive_older = [0-9],archive_older = 3,' config.py
+
+$fdroid update --pretty --nosign
+test `grep '<package>' archive/index.xml | wc -l` -eq 0
+test `grep '<package>' repo/index.xml | wc -l` -eq 4
+grep -F com.politedroid_3.apk repo/index.xml
+grep -F com.politedroid_4.apk repo/index.xml
+grep -F com.politedroid_5.apk repo/index.xml
+grep -F com.politedroid_6.apk repo/index.xml
+test -e repo/com.politedroid_3.apk
+test -e repo/com.politedroid_4.apk
+test -e repo/com.politedroid_5.apk
+test -e repo/com.politedroid_6.apk
+
+echo "enable one app in the repo"
+sed -i 's,^Archive Policy:4,Archive Policy:1,' metadata/com.politedroid.txt
+$fdroid update --pretty --nosign
+test `grep '<package>' archive/index.xml | wc -l` -eq 3
+test `grep '<package>' repo/index.xml | wc -l` -eq 1
+grep -F com.politedroid_3.apk archive/index.xml
+grep -F com.politedroid_4.apk archive/index.xml
+grep -F com.politedroid_5.apk archive/index.xml
+grep -F com.politedroid_6.apk repo/index.xml
+test -e archive/com.politedroid_3.apk
+test -e archive/com.politedroid_4.apk
+test -e archive/com.politedroid_5.apk
+test -e repo/com.politedroid_6.apk
+
+echo "remove all apps from the repo"
+sed -i 's,^Archive Policy:1,Archive Policy:0,' metadata/com.politedroid.txt
+$fdroid update --pretty --nosign
+test `grep '<package>' archive/index.xml | wc -l` -eq 4
+test `grep '<package>' repo/index.xml | wc -l` -eq 0
+grep -F com.politedroid_3.apk archive/index.xml
+grep -F com.politedroid_4.apk archive/index.xml
+grep -F com.politedroid_5.apk archive/index.xml
+grep -F com.politedroid_6.apk archive/index.xml
+test -e archive/com.politedroid_3.apk
+test -e archive/com.politedroid_4.apk
+test -e archive/com.politedroid_5.apk
+test -e archive/com.politedroid_6.apk
+! test -e repo/com.politedroid_6.apk
+
+echo "move back one from archive to the repo"
+sed -i 's,^Archive Policy:0,Archive Policy:1,' metadata/com.politedroid.txt
+$fdroid update --pretty --nosign
+test `grep '<package>' archive/index.xml | wc -l` -eq 3
+test `grep '<package>' repo/index.xml | wc -l` -eq 1
+grep -F com.politedroid_3.apk archive/index.xml
+grep -F com.politedroid_4.apk archive/index.xml
+grep -F com.politedroid_5.apk archive/index.xml
+grep -F com.politedroid_6.apk repo/index.xml
+test -e archive/com.politedroid_3.apk
+test -e archive/com.politedroid_4.apk
+test -e archive/com.politedroid_5.apk
+! test -e archive/com.politedroid_6.apk
+test -e repo/com.politedroid_6.apk
+
+
+
+#------------------------------------------------------------------------------#
+echo_header 'test moving old APKs to and from the archive'
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+cp $WORKSPACE/tests/keystore.jks $REPOROOT/
+$fdroid init --keystore keystore.jks --repo-keyalias=sova
+echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo "accepted_formats = ['txt']" >> config.py
+test -d metadata || mkdir metadata
+cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
+sed -i '/Archive Policy:/d' metadata/com.politedroid.txt
+test -d repo || mkdir repo
+cp $WORKSPACE/tests/repo/com.politedroid_[0-9].apk repo/
+sed -i 's,archive_older = [0-9],archive_older = 3,' config.py
+
+$fdroid update --pretty --nosign
+test `grep '<package>' archive/index.xml | wc -l` -eq 1
+test `grep '<package>' repo/index.xml | wc -l` -eq 3
+grep -F com.politedroid_3.apk archive/index.xml
+grep -F com.politedroid_4.apk repo/index.xml
+grep -F com.politedroid_5.apk repo/index.xml
+grep -F com.politedroid_6.apk repo/index.xml
+test -e archive/com.politedroid_3.apk
+test -e repo/com.politedroid_4.apk
+test -e repo/com.politedroid_5.apk
+test -e repo/com.politedroid_6.apk
+
+sed -i 's,archive_older = 3,archive_older = 1,' config.py
+$fdroid update --pretty --nosign
+test `grep '<package>' archive/index.xml | wc -l` -eq 3
+test `grep '<package>' repo/index.xml | wc -l` -eq 1
+grep -F com.politedroid_3.apk archive/index.xml
+grep -F com.politedroid_4.apk archive/index.xml
+grep -F com.politedroid_5.apk archive/index.xml
+grep -F com.politedroid_6.apk repo/index.xml
+test -e archive/com.politedroid_3.apk
+test -e archive/com.politedroid_4.apk
+test -e archive/com.politedroid_5.apk
+test -e repo/com.politedroid_6.apk
+
+# disabling deletes from the archive
+sed -i 's/Build:1.3,4/Build:1.3,4\n    disable=testing deletion/' metadata/com.politedroid.txt
+$fdroid update --pretty --nosign
+test `grep '<package>' archive/index.xml | wc -l` -eq 2
+test `grep '<package>' repo/index.xml | wc -l` -eq 1
+grep -F com.politedroid_3.apk archive/index.xml
+! grep -F com.politedroid_4.apk archive/index.xml
+grep -F com.politedroid_5.apk archive/index.xml
+grep -F com.politedroid_6.apk repo/index.xml
+test -e archive/com.politedroid_3.apk
+! test -e archive/com.politedroid_4.apk
+test -e archive/com.politedroid_5.apk
+test -e repo/com.politedroid_6.apk
+
+# disabling deletes from the repo, and promotes one from the archive
+sed -i 's/Build:1.5,6/Build:1.5,6\n    disable=testing deletion/' metadata/com.politedroid.txt
+$fdroid update --pretty --nosign
+test `grep '<package>' archive/index.xml | wc -l` -eq 1
+test `grep '<package>' repo/index.xml | wc -l` -eq 1
+grep -F com.politedroid_3.apk archive/index.xml
+grep -F com.politedroid_5.apk repo/index.xml
+! grep -F com.politedroid_6.apk repo/index.xml
+test -e archive/com.politedroid_3.apk
+test -e repo/com.politedroid_5.apk
+! test -e repo/com.politedroid_6.apk
+
+
+#------------------------------------------------------------------------------#
+echo_header 'test allowing disabled signatures in repo and archive'
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+cp $WORKSPACE/tests/keystore.jks $REPOROOT/
+$fdroid init --keystore keystore.jks --repo-keyalias=sova
+echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+echo "accepted_formats = ['txt']" >> config.py
+echo 'allow_disabled_algorithms = True' >> config.py
+sed -i 's,archive_older = [0-9],archive_older = 3,' config.py
+test -d metadata || mkdir metadata
+cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
+echo 'Summary:good test version of urzip' > metadata/info.guardianproject.urzip.txt
+echo 'Summary:good MD5 sig, disabled algorithm' > metadata/org.bitbucket.tickytacky.mirrormirror.txt
+sed -i '/Archive Policy:/d' metadata/*.txt
+test -d repo || mkdir repo
+cp $WORKSPACE/tests/repo/com.politedroid_[0-9].apk \
+   $WORKSPACE/tests/org.bitbucket.tickytacky.mirrormirror_[0-9].apk \
+   $WORKSPACE/tests/urzip-badsig.apk \
+   repo/
+
+$fdroid update --pretty --nosign
+test `grep '<package>' archive/index.xml | wc -l` -eq 2
+test `grep '<package>' repo/index.xml | wc -l` -eq 6
+grep -F com.politedroid_3.apk archive/index.xml
+grep -F com.politedroid_4.apk repo/index.xml
+grep -F com.politedroid_5.apk repo/index.xml
+grep -F com.politedroid_6.apk repo/index.xml
+grep -F org.bitbucket.tickytacky.mirrormirror_1.apk archive/index.xml
+grep -F org.bitbucket.tickytacky.mirrormirror_2.apk repo/index.xml
+grep -F org.bitbucket.tickytacky.mirrormirror_3.apk repo/index.xml
+grep -F org.bitbucket.tickytacky.mirrormirror_4.apk repo/index.xml
+! grep -F urzip-badsig.apk repo/index.xml
+! grep -F urzip-badsig.apk archive/index.xml
+test -e archive/com.politedroid_3.apk
+test -e repo/com.politedroid_4.apk
+test -e repo/com.politedroid_5.apk
+test -e repo/com.politedroid_6.apk
+test -e archive/org.bitbucket.tickytacky.mirrormirror_1.apk
+test -e repo/org.bitbucket.tickytacky.mirrormirror_2.apk
+test -e repo/org.bitbucket.tickytacky.mirrormirror_3.apk
+test -e repo/org.bitbucket.tickytacky.mirrormirror_4.apk
+test -e archive/urzip-badsig.apk
+
+sed -i '/allow_disabled_algorithms/d' config.py
+$fdroid update --pretty --nosign
+test `grep '<package>' archive/index.xml | wc -l` -eq 5
+test `grep '<package>' repo/index.xml | wc -l` -eq 3
+grep -F org.bitbucket.tickytacky.mirrormirror_1.apk archive/index.xml
+grep -F org.bitbucket.tickytacky.mirrormirror_2.apk archive/index.xml
+grep -F org.bitbucket.tickytacky.mirrormirror_3.apk archive/index.xml
+grep -F org.bitbucket.tickytacky.mirrormirror_4.apk archive/index.xml
+grep -F com.politedroid_3.apk archive/index.xml
+grep -F com.politedroid_4.apk repo/index.xml
+grep -F com.politedroid_5.apk repo/index.xml
+grep -F com.politedroid_6.apk repo/index.xml
+! grep -F urzip-badsig.apk repo/index.xml
+! grep -F urzip-badsig.apk archive/index.xml
+test -e archive/org.bitbucket.tickytacky.mirrormirror_1.apk
+test -e archive/org.bitbucket.tickytacky.mirrormirror_2.apk
+test -e archive/org.bitbucket.tickytacky.mirrormirror_3.apk
+test -e archive/org.bitbucket.tickytacky.mirrormirror_4.apk
+test -e archive/com.politedroid_3.apk
+test -e archive/urzip-badsig.apk
+test -e repo/com.politedroid_4.apk
+test -e repo/com.politedroid_5.apk
+test -e repo/com.politedroid_6.apk
 
 
 #------------------------------------------------------------------------------#
@@ -517,6 +762,8 @@ grep -F '<application id=' repo/index.xml > /dev/null
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
+test -e tmp/apkcache
+! test -z tmp/apkcache
 export ANDROID_HOME=$STORED_ANDROID_HOME
 
 
@@ -570,6 +817,8 @@ $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
+test -e tmp/apkcache
+! test -z tmp/apkcache
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -599,6 +848,8 @@ $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
+test -e tmp/apkcache
+! test -z tmp/apkcache
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -624,6 +875,8 @@ $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
+test -e tmp/apkcache
+! test -z tmp/apkcache
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -717,6 +970,8 @@ $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
+test -e tmp/apkcache
+! test -z tmp/apkcache
 grep -F '<application id=' repo/index.xml > /dev/null
 
 # now set fake repo_keyalias
