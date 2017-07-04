@@ -837,7 +837,7 @@ def post_metadata_parse(app):
         elif v == [False]:
             return ['no']
 
-    _bool_allowed = ('disable', 'kivy', 'maven')
+    _bool_allowed = ('disable', 'kivy', 'maven', 'buildozer')
 
     builds = []
     if 'builds' in app:
@@ -1063,7 +1063,7 @@ def write_yaml(mf, app):
                     value = getattr(build, field)
                     if field == 'gradle' and value == ['off']:
                         value = [ruamel.yaml.scalarstring.SingleQuotedScalarString('off')]
-                    if field in ('disable', 'kivy', 'maven'):
+                    if field in ('disable', 'kivy', 'maven', 'buildozer'):
                         if value == 'no':
                             continue
                         elif value == 'yes':
