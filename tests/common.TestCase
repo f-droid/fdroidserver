@@ -434,6 +434,10 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(vercode, None)
         self.assertEqual(sigfp, None)
 
+    def test_metadata_find_developer_signature(self):
+        sig = fdroidserver.common.metadata_find_developer_signature('org.smssecure.smssecure')
+        self.assertEqual('b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868', sig)
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
