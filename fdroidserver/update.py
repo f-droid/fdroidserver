@@ -1363,7 +1363,7 @@ def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
     return apks, cachechanged
 
 
-def extract_apk_icons(icon_filename, apk, apk_zip, repo_dir):
+def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
     """
     Extracts icons from the given APK zip in various densities,
     saves them into given repo directory
@@ -1372,7 +1372,7 @@ def extract_apk_icons(icon_filename, apk, apk_zip, repo_dir):
     :param icon_filename: A string representing the icon's file name
     :param apk: A populated dictionary containing APK metadata.
                 Needs to have 'icons_src' key
-    :param apk_zip: An opened zipfile.ZipFile of the APK file
+    :param apkzip: An opened zipfile.ZipFile of the APK file
     :param repo_dir: The directory of the APK's repository
     :return: A list of icon densities that are missing
     """
@@ -1388,7 +1388,7 @@ def extract_apk_icons(icon_filename, apk, apk_zip, repo_dir):
         # Extract the icon files per density
         try:
             with open(icon_dest, 'wb') as f:
-                f.write(get_icon_bytes(apk_zip, icon_src))
+                f.write(get_icon_bytes(apkzip, icon_src))
             apk['icons'][density] = icon_filename
         except (zipfile.BadZipFile, ValueError, KeyError) as e:
             logging.warning("Error retrieving icon file: %s %s", icon_dest, e)
@@ -1399,7 +1399,7 @@ def extract_apk_icons(icon_filename, apk, apk_zip, repo_dir):
         icon_src = apk['icons_src']['-1']
         icon_path = os.path.join(get_icon_dir(repo_dir, '0'), icon_filename)
         with open(icon_path, 'wb') as f:
-            f.write(get_icon_bytes(apk_zip, icon_src))
+            f.write(get_icon_bytes(apkzip, icon_src))
         try:
             im = Image.open(icon_path)
             dpi = px_to_dpi(im.size[0])
