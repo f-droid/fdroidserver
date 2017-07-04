@@ -397,8 +397,8 @@ def get_local_metadata_files():
 
 def read_pkg_args(args, allow_vercodes=False):
     """
-    Given the arguments in the form of multiple appid:[vc] strings, this returns
-    a dictionary with the set of vercodes specified for each package.
+    :param args: arguments in the form of multiple appid:[vc] strings
+    :returns: a dictionary with the set of vercodes specified for each package
     """
 
     vercodes = {}

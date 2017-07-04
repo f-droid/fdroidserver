@@ -25,7 +25,6 @@ import html
 import logging
 import textwrap
 import io
-
 import yaml
 # use libyaml if it is available
 try:
@@ -49,7 +48,7 @@ def warn_or_exception(value):
     elif warnings_action == 'error':
         raise MetaDataException(value)
     else:
-        logging.warn(value)
+        logging.warning(value)
 
 
 # To filter which ones should be written to the metadata files if
@@ -179,6 +178,7 @@ TYPE_SCRIPT = 5
 TYPE_MULTILINE = 6
 TYPE_BUILD = 7
 TYPE_BUILD_V2 = 8
+TYPE_INT = 9
 
 fieldtypes = {
     'Description': TYPE_MULTILINE,
@@ -318,6 +318,7 @@ class Build(dict):
 
 
 flagtypes = {
+    'versionCode': TYPE_INT,
     'extlibs': TYPE_LIST,
     'srclibs': TYPE_LIST,
     'patch': TYPE_LIST,
@@ -810,6 +811,12 @@ def post_metadata_parse(app):
         if type(v) in (float, int):
             app[k] = str(v)
 
+    if 'Builds' in app:
+        app['builds'] = app.pop('Builds')
+
+    if 'flavours' in app and app['flavours'] == [True]:
+        app['flavours'] = 'yes'
+
     if isinstance(app.Categories, str):
         app.Categories = [app.Categories]
     elif app.Categories is None:
@@ -817,22 +824,49 @@ def post_metadata_parse(app):
     else:
         app.Categories = [str(i) for i in app.Categories]
 
+    def _yaml_bool_unmapable(v):
+        return v in (True, False, [True], [False])
+
+    def _yaml_bool_unmap(v):
+        if v is True:
+            return 'yes'
+        elif v is False:
+            return 'no'
+        elif v == [True]:
+            return ['yes']
+        elif v == [False]:
+            return ['no']
+
+    _bool_allowed = ('disable', 'kivy', 'maven')
+
     builds = []
     if 'builds' in app:
         for build in app['builds']:
             if not isinstance(build, Build):
                 build = Build(build)
             for k, v in build.items():
-                if flagtype(k) == TYPE_LIST:
-                    if isinstance(v, str):
-                        build[k] = [v]
-                    elif isinstance(v, bool):
-                        if v:
-                            build[k] = ['yes']
+                if not (v is None):
+                    if flagtype(k) == TYPE_LIST:
+                        if _yaml_bool_unmapable(v):
+                            build[k] = _yaml_bool_unmap(v)
+
+                        if isinstance(v, str):
+                            build[k] = [v]
+                        elif isinstance(v, bool):
+                            if v:
+                                build[k] = ['yes']
+                            else:
+                                build[k] = []
+                    elif flagtype(k) is TYPE_INT:
+                        build[k] = str(v)
+                    elif flagtype(k) is TYPE_STRING:
+                        if isinstance(v, bool) and k in _bool_allowed:
+                            build[k] = v
                         else:
-                            build[k] = []
-                elif flagtype(k) == TYPE_STRING and type(v) in (float, int):
-                    build[k] = str(v)
+                            if _yaml_bool_unmapable(v):
+                                build[k] = _yaml_bool_unmap(v)
+                            else:
+                                build[k] = str(v)
             builds.append(build)
 
     app.builds = sorted_builds(builds)
@@ -948,29 +982,150 @@ def parse_json_metadata(mf, app):
 
 
 def parse_yaml_metadata(mf, app):
-
-    yamlinfo = yaml.load(mf, Loader=YamlLoader)
-    app.update(yamlinfo)
+    yamldata = yaml.load(mf, Loader=YamlLoader)
+    app.update(yamldata)
     return app
 
 
 def write_yaml(mf, app):
 
+    import ruamel.yaml
+
+    _yaml_bools_true = ('y', 'Y', 'yes', 'Yes', 'YES',
+                        'true', 'True', 'TRUE',
+                        'on', 'On', 'ON')
+    _yaml_bools_false = ('n', 'N', 'no', 'No', 'NO',
+                         'false', 'False', 'FALSE',
+                         'off', 'Off', 'OFF')
+    _yaml_bools_plus_lists = []
+    _yaml_bools_plus_lists.extend(_yaml_bools_true)
+    _yaml_bools_plus_lists.extend([[x] for x in _yaml_bools_true])
+    _yaml_bools_plus_lists.extend(_yaml_bools_false)
+    _yaml_bools_plus_lists.extend([[x] for x in _yaml_bools_false])
+
     def _class_as_dict_representer(dumper, data):
         '''Creates a YAML representation of a App/Build instance'''
         return dumper.represent_dict(data)
 
-    empty_keys = [k for k, v in app.items() if not v]
-    for k in empty_keys:
-        del app[k]
+    def _field_to_yaml(typ, value):
+        if typ is TYPE_STRING:
+            if value in _yaml_bools_plus_lists:
+                return ruamel.yaml.scalarstring.SingleQuotedScalarString(str(value))
+            return str(value)
+        elif typ is TYPE_INT:
+            return int(value)
+        elif typ is TYPE_MULTILINE:
+            if '\n' in value:
+                return ruamel.yaml.scalarstring.preserve_literal(str(value))
+            else:
+                return str(value)
+        elif typ is TYPE_SCRIPT:
+            if len(value) > 50:
+                return ruamel.yaml.scalarstring.preserve_literal(value)
+            else:
+                return value
+        else:
+            return value
 
-    for k in ['added', 'lastUpdated', 'id', 'metadatapath']:
-        if k in app:
-            del app[k]
+    def _app_to_yaml(app):
+        cm = ruamel.yaml.comments.CommentedMap()
+        insert_newline = False
+        for field in yaml_app_field_order:
+            if field is '\n':
+                # next iteration will need to insert a newline
+                insert_newline = True
+            else:
+                if (hasattr(app, field) and getattr(app, field)) or field is 'Builds':
+                    if field is 'Builds':
+                        cm.update({field: _builds_to_yaml(app)})
+                    elif field is 'CurrentVersionCode':
+                        cm.update({field: _field_to_yaml(TYPE_INT, getattr(app, field))})
+                    else:
+                        cm.update({field: _field_to_yaml(fieldtype(field), getattr(app, field))})
 
-    yaml.add_representer(fdroidserver.metadata.App, _class_as_dict_representer)
-    yaml.add_representer(fdroidserver.metadata.Build, _class_as_dict_representer)
-    yaml.dump(app, mf, default_flow_style=False)
+                    if insert_newline:
+                        # we need to prepend a newline in front of this field
+                        insert_newline = False
+                        # inserting empty lines is not supported so we add a
+                        # bogus comment and over-write its value
+                        cm.yaml_set_comment_before_after_key(field, 'bogus')
+                        cm.ca.items[field][1][-1].value = '\n'
+        return cm
+
+    def _builds_to_yaml(app):
+        fields = ['versionName', 'versionCode']
+        fields.extend(build_flags_order)
+        builds = ruamel.yaml.comments.CommentedSeq()
+        for build in app.builds:
+            b = ruamel.yaml.comments.CommentedMap()
+            for field in fields:
+                if hasattr(build, field) and getattr(build, field):
+                    value = getattr(build, field)
+                    if field == 'gradle' and value == ['off']:
+                        value = [ruamel.yaml.scalarstring.SingleQuotedScalarString('off')]
+                    if field in ('disable', 'kivy', 'maven'):
+                        if value == 'no':
+                            continue
+                        elif value == 'yes':
+                            value = 'yes'
+                    b.update({field: _field_to_yaml(flagtype(field), value)})
+            builds.append(b)
+
+        # insert extra empty lines between build entries
+        for i in range(1, len(builds)):
+            builds.yaml_set_comment_before_after_key(i, 'bogus')
+            builds.ca.items[i][1][-1].value = '\n'
+
+        return builds
+
+    yaml_app_field_order = [
+        'Disabled',
+        'AntiFeatures',
+        'Provides',
+        'Categories',
+        'License',
+        'AuthorName',
+        'AuthorEmail',
+        'AuthorWebSite',
+        'WebSite',
+        'SourceCode',
+        'IssueTracker',
+        'Changelog',
+        'Donate',
+        'FlattrID',
+        'Bitcoin',
+        'Litecoin',
+        '\n',
+        'Name',
+        'AutoName',
+        'Summary',
+        'Description',
+        '\n',
+        'RequiresRoot',
+        '\n',
+        'RepoType',
+        'Repo',
+        'Binaries',
+        '\n',
+        'Builds',
+        '\n',
+        'MaintainerNotes',
+        '\n',
+        'ArchivePolicy',
+        'AutoUpdateMode',
+        'UpdateCheckMode',
+        'UpdateCheckIgnore',
+        'VercodeOperation',
+        'UpdateCheckName',
+        'UpdateCheckData',
+        'CurrentVersion',
+        'CurrentVersionCode',
+        '\n',
+        'NoSourceSince',
+    ]
+
+    yaml_app = _app_to_yaml(app)
+    ruamel.yaml.round_trip_dump(yaml_app, mf, indent=4, block_seq_indent=2)
 
 
 build_line_sep = re.compile(r'(?<!\\),')

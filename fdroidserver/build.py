@@ -136,8 +136,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         ftp.mkdir('metadata')
         ftp.mkdir('srclibs')
         ftp.chdir('metadata')
-        ftp.put(os.path.join('metadata', app.id + '.txt'),
-                app.id + '.txt')
+        ftp.put(app.metadatapath, os.path.basename(app.metadatapath))
+
         # And patches if there are any...
         if os.path.exists(os.path.join('metadata', app.id)):
             send_dir(os.path.join('metadata', app.id))

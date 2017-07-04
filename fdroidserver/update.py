@@ -1721,20 +1721,15 @@ def main():
                 if 'name' not in apk:
                     logging.error(apk['packageName'] + ' does not have a name! Skipping...')
                     continue
-                f = open(os.path.join('metadata', apk['packageName'] + '.txt'), 'w', encoding='utf8')
-                f.write("License:Unknown\n")
-                f.write("Web Site:\n")
-                f.write("Source Code:\n")
-                f.write("Issue Tracker:\n")
-                f.write("Changelog:\n")
-                f.write("Summary:" + apk['name'] + "\n")
-                f.write("Description:\n")
-                f.write(apk['name'] + "\n")
-                f.write(".\n")
-                f.write("Name:" + apk['name'] + "\n")
-                f.close()
-                logging.info("Generated skeleton metadata for " + apk['packageName'])
-                newmetadata = True
+                with open(os.path.join('metadata', apk['packageName'] + '.yml'), 'w') as f:
+                    app = metadata.App()
+                    app.Name = apk['name']
+                    app.Summary = apk['name']
+                    app.CurrentVersionCode = 2147483647  # Java's Integer.MAX_VALUE
+                    app.Categories = [os.path.basename(os.path.dirname(os.getcwd()))]
+                    metadata.write_yaml(f, app)
+                    logging.info("Generated skeleton metadata for " + apk['packageName'])
+                    newmetadata = True
             else:
                 msg = apk['apkName'] + " (" + apk['packageName'] + ") has no metadata!"
                 if options.delete_unknown:

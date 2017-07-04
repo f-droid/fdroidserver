@@ -1,0 +1,44 @@
+Categories:
+  - System
+License: Apache-2.0
+WebSite: https://f-droid.org
+SourceCode: https://gitlab.com/fdroid/privileged-extension
+IssueTracker: https://gitlab.com/fdroid/privileged-extension/issues
+Donate: https://f-droid.org/about
+
+AutoName: Fake OTA Update
+Summary: Tests whether OTA ZIP files are being include
+Description: |-
+    F-Droid can make use of system privileges or permissions to
+    install, update and remove applications on its own. The only way to obtain those
+    privileges is to become a system app.
+
+    This is where the Privileged Extension comes in - being a separate app and much
+    smaller, it can be installed as a system app and communicate with the main app
+    via AIDL IPC.
+
+    This has several advantages:
+
+    * Reduced disk usage in the system partition
+    * System updates don't remove F-Droid
+    * The process of installing into system via root is safer
+
+    This is packaged as an OTA (Over-The-Air) update ZIP file.  It must be installed
+    using TWRP or other Android recovery that can flash updates to the system from
+    the /data/data/org.fdroid.fdroid folder on the /data partition. The standalone
+    APK is called F-Droid Privileged Extension.
+
+RepoType: git
+Repo: https://gitlab.com/fdroid/privileged-extension.git
+
+Builds:
+  - versionName: 0.2.1
+    versionCode: 2000
+    commit: 0.2.1
+    output: app/build/distributions/FDroidPrivilegedExtensionFromBinaries-$$VERSION$$.zip
+    build: gradle assembleUpdateZipFromBinariesDebug
+
+AutoUpdateMode: Version %v
+UpdateCheckMode: Tags
+CurrentVersion: 0.2.1
+CurrentVersionCode: 2000
