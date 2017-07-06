@@ -513,8 +513,9 @@ def has_known_vulnerability(filename):
                     m = has_known_vulnerability.pattern.search(chunk)
                     if m:
                         version = m.group(1).decode('ascii')
-                        if version.startswith('1.0.1') and version[5] >= 'r' \
-                           or version.startswith('1.0.2') and version[5] >= 'f':
+                        if (version.startswith('1.0.1') and len(version) > 5 and version[5] >= 'r') \
+                           or (version.startswith('1.0.2') and len(version) > 5 and version[5] >= 'f') \
+                           or re.match(r'[1-9]\.[1-9]\.[0-9].*', version):
                             logging.debug('"%s" contains recent %s (%s)', filename, name, version)
                         else:
                             logging.warning('"%s" contains outdated %s (%s)', filename, name, version)
