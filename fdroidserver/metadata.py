@@ -1051,9 +1051,11 @@ def write_yaml(mf, app):
                 # next iteration will need to insert a newline
                 insert_newline = True
             else:
-                if (hasattr(app, field) and getattr(app, field)) or field is 'Builds':
+                if app.get(field) or field is 'Builds':
+                    # .txt calls it 'builds' internally, everywhere else its 'Builds'
                     if field is 'Builds':
-                        cm.update({field: _builds_to_yaml(app)})
+                        if app.get('builds'):
+                            cm.update({field: _builds_to_yaml(app)})
                     elif field is 'CurrentVersionCode':
                         cm.update({field: _field_to_yaml(TYPE_INT, getattr(app, field))})
                     else:
