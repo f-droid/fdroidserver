@@ -35,7 +35,7 @@ except ImportError:
     YamlLoader = Loader
 
 import fdroidserver.common
-from fdroidserver.exception import MetaDataException
+from fdroidserver.exception import MetaDataException, FDroidException
 
 srclibs = None
 warnings_action = None
@@ -989,7 +989,20 @@ def parse_yaml_metadata(mf, app):
 
 def write_yaml(mf, app):
 
-    import ruamel.yaml
+    # import rumael.yaml and check version
+    try:
+        import ruamel.yaml
+    except ImportError as e:
+        raise FDroidException('ruamel.yaml not instlled, can not write metadata.') from e
+    if not ruamel.yaml.__version__:
+        raise FDroidException('ruamel.yaml.__version__ not accessible. Please make sure a ruamel.yaml >= 0.13 is installed..')
+    m = re.match('(?P<major>[0-9]+)\.(?P<minor>[0-9]+)\.(?P<patch>[0-9]+)(-.+)?',
+                 ruamel.yaml.__version__)
+    if not m:
+        raise FDroidException('ruamel.yaml version malfored, please install an upstream version of ruamel.yaml')
+    if int(m.group('major')) < 0 or int(m.group('minor')) < 13:
+        raise FDroidException('currently installed version of ruamel.yaml ({}) is too old, >= 1.13 required.'.format(ruamel.yaml.__version__))
+    # suiteable version ruamel.yaml imported successfully
 
     _yaml_bools_true = ('y', 'Y', 'yes', 'Yes', 'YES',
                         'true', 'True', 'TRUE',
@@ -1480,11 +1493,16 @@ def write_metadata(metadatapath, app):
         warn_or_exception('Cannot write "%s", not an accepted format, use: %s'
                           % (metadatapath, ', '.join(accepted)))
 
-    with open(metadatapath, 'w', encoding='utf8') as mf:
-        if ext == 'txt':
-            return write_txt(mf, app)
-        elif ext == 'yml':
-            return write_yaml(mf, app)
+    try:
+        with open(metadatapath, 'w', encoding='utf8') as mf:
+            if ext == 'txt':
+                return write_txt(mf, app)
+            elif ext == 'yml':
+                return write_yaml(mf, app)
+    except FDroidException as e:
+        os.remove(metadatapath)
+        raise e
+
     warn_or_exception('Unknown metadata format: %s' % metadatapath)
 
 
