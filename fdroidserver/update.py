@@ -1761,17 +1761,32 @@ def main():
         if apk['packageName'] not in apps:
             if options.create_metadata:
                 with open(os.path.join('metadata', apk['packageName'] + '.yml'), 'w') as f:
-                    app = metadata.App()
+                    # this should use metadata.App() and
+                    # metadata.write_yaml(), but since ruamel.yaml
+                    # 0.13 is not widely distributed yet, and it's
+                    # special tricks are not really needed here, this
+                    # uses the plain YAML lib
+                    app = dict()
                     if 'name' in apk:
-                        app.Name = apk['name']
-                        app.Summary = apk['name']
+                        app['Name'] = apk['name']
                     else:
-                        logging.warn(apk['packageName'] + ' does not have a name! Using package name instead.')
-                        app.Name = apk['packageName']
-                        app.Summary = apk['packageName']
-                    app.CurrentVersionCode = 2147483647  # Java's Integer.MAX_VALUE
-                    app.Categories = [os.path.basename(os.path.dirname(os.getcwd()))]
-                    metadata.write_yaml(f, app)
+                        logging.warning(apk['packageName'] + ' does not have a name! Using package name instead.')
+                        app['Name'] = apk['packageName']
+                    app['Categories'] = [os.path.basename(os.getcwd())]
+                    # include some blanks as part of the template
+                    app['AuthorName'] = ''
+                    app['Summary'] = ''
+                    app['WebSite'] = ''
+                    app['IssueTracker'] = ''
+                    app['SourceCode'] = ''
+                    app['CurrentVersionCode'] = 2147483647  # Java's Integer.MAX_VALUE
+                    try:
+                        import ruamel.yaml
+                        assert ruamel.yaml  # silence pyflakes
+                        metadata.write_yaml(f, metadata.App(app))
+                    except ImportError:
+                        import yaml
+                        yaml.dump(app, f, default_flow_style=False)
                     logging.info("Generated skeleton metadata for " + apk['packageName'])
                     newmetadata = True
             else:
