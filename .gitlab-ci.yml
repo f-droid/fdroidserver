@@ -30,5 +30,6 @@ metadata_v0:
              -e \"/Description: ''/d\"
              -e '/antifeatures:/d'
              -e '/buildozer:/d'
+             -e '/sudo:/d'
              metadata/dump_*/*.yaml"
     - diff -uw metadata/dump_*

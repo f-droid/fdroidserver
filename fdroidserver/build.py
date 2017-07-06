@@ -393,10 +393,23 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
     # create ..._toolsversion.log when running in builder vm
     if onserver:
+        # before doing anything, run the sudo commands to setup the VM
+        if build.sudo:
+            logging.info("Running 'sudo' commands in %s" % os.getcwd())
+
+            p = FDroidPopen(['sudo', 'bash', '-x', '-c', build.sudo])
+            if p.returncode != 0:
+                raise BuildException("Error running sudo command for %s:%s" %
+                                     (app.id, build.versionName), p.output)
+
         log_path = os.path.join(log_dir,
                                 common.get_toolsversion_logname(app, build))
         with open(log_path, 'w') as f:
             f.write(get_android_tools_version_log(build.ndk_path()))
+    else:
+        if build.sudo:
+            logging.warning('%s:%s runs this on the buildserver with sudo:\n\t%s'
+                            % (app.id, build.versionName, build.sudo))
 
     # Prepare the source code...
     root_dir, srclibpaths = common.prepare_source(vcs, app, build,

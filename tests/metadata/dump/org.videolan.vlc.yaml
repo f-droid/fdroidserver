@@ -91,6 +91,7 @@ builds:
   srclibs: []
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '110'
   versionName: 0.0.11-ARMv7
@@ -127,6 +128,7 @@ builds:
   srclibs: []
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '111'
   versionName: 0.0.11-ARM
@@ -163,6 +165,7 @@ builds:
   srclibs: []
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '112'
   versionName: 0.0.11-x86
@@ -199,6 +202,7 @@ builds:
   srclibs: []
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '113'
   versionName: 0.0.11-mips
@@ -234,6 +238,7 @@ builds:
   - VLC@7c52aacbe
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1301'
   versionName: 0.1.3-MIPS
@@ -269,6 +274,7 @@ builds:
   - VLC@7c52aacbe
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1302'
   versionName: 0.1.3-x86
@@ -304,6 +310,7 @@ builds:
   - VLC@7c52aacbe
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1303'
   versionName: 0.1.3-ARM
@@ -339,6 +346,7 @@ builds:
   - VLC@7c52aacbe
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1304'
   versionName: 0.1.3-ARMv7
@@ -373,6 +381,7 @@ builds:
   - VLC@31ffb20309264994
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9002'
   versionName: 0.9.0
@@ -407,6 +416,7 @@ builds:
   - VLC@31ffb20309264994
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9004'
   versionName: 0.9.0
@@ -441,6 +451,7 @@ builds:
   - VLC@37e886d113b8b567c15208579fb2f
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9102'
   versionName: 0.9.1
@@ -475,6 +486,7 @@ builds:
   - VLC@37e886d113b8b567c15208579fb2f
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9104'
   versionName: 0.9.1
@@ -509,6 +521,7 @@ builds:
   - VLC@052600173f376ff58ff04d53746961a2
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9502'
   versionName: 0.9.5
@@ -543,6 +556,7 @@ builds:
   - VLC@052600173f376ff58ff04d53746961a2
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9504'
   versionName: 0.9.5
@@ -577,6 +591,7 @@ builds:
   - VLC-2.2@27f4799
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9602'
   versionName: 0.9.6
@@ -611,6 +626,7 @@ builds:
   - VLC-2.2@27f4799
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9604'
   versionName: 0.9.6
@@ -645,6 +661,7 @@ builds:
   - VLC-2.2@9e1c6ff
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9702'
   versionName: 0.9.7
@@ -679,6 +696,7 @@ builds:
   - VLC-2.2@9e1c6ff
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9704'
   versionName: 0.9.7
@@ -713,6 +731,7 @@ builds:
   - VLC-2.2@57cd36b
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9711'
   versionName: 0.9.7.1
@@ -747,6 +766,7 @@ builds:
   - VLC-2.2@57cd36b
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9712'
   versionName: 0.9.7.1
@@ -781,6 +801,7 @@ builds:
   - VLC-2.2@57cd36b
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9714'
   versionName: 0.9.7.1
@@ -815,6 +836,7 @@ builds:
   - VLC-2.2@f2db364
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9802'
   versionName: 0.9.8
@@ -849,6 +871,7 @@ builds:
   - VLC-2.2@f2db364
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9803'
   versionName: 0.9.8
@@ -883,6 +906,7 @@ builds:
   - VLC-2.2@f2db364
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9804'
   versionName: 0.9.8
@@ -917,6 +941,7 @@ builds:
   - VLC-2.2@e731dc23a4f8ef6782c7cc2236bbbf41c034dad1
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9902'
   versionName: 0.9.9
@@ -951,6 +976,7 @@ builds:
   - VLC-2.2@e731dc23a4f8ef6782c7cc2236bbbf41c034dad1
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9903'
   versionName: 0.9.9
@@ -985,6 +1011,7 @@ builds:
   - VLC-2.2@e731dc23a4f8ef6782c7cc2236bbbf41c034dad1
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '9904'
   versionName: 0.9.9
@@ -1019,6 +1046,7 @@ builds:
   - VLC-2.2@e33e5de
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '10002'
   versionName: 0.9.10
@@ -1053,6 +1081,7 @@ builds:
   - VLC-2.2@e33e5de
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '10003'
   versionName: 0.9.10
@@ -1087,6 +1116,7 @@ builds:
   - VLC-2.2@e33e5de
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '10004'
   versionName: 0.9.10
@@ -1121,6 +1151,7 @@ builds:
   - VLC-2.2@036010e
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '10006'
   versionName: 1.0.0
@@ -1155,6 +1186,7 @@ builds:
   - VLC-2.2@036010e
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '10007'
   versionName: 1.0.0
@@ -1189,6 +1221,7 @@ builds:
   - VLC-2.2@036010e
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '10008'
   versionName: 1.0.0
@@ -1223,6 +1256,7 @@ builds:
   - VLC-2.2@59409d5
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '10102'
   versionName: 1.0.1
@@ -1257,6 +1291,7 @@ builds:
   - VLC-2.2@59409d5
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '10103'
   versionName: 1.0.1
@@ -1291,6 +1326,7 @@ builds:
   - VLC-2.2@59409d5
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '10104'
   versionName: 1.0.1
@@ -1327,6 +1363,7 @@ builds:
   - VLC@a9b19e4
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1010303'
   versionName: 1.1.3
@@ -1363,6 +1400,7 @@ builds:
   - VLC@a9b19e4
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1010304'
   versionName: 1.1.3
@@ -1399,6 +1437,7 @@ builds:
   - VLC@a9b19e4
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1010305'
   versionName: 1.1.3
@@ -1435,6 +1474,7 @@ builds:
   - VLC@e6b4585
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1010503'
   versionName: 1.1.5
@@ -1471,6 +1511,7 @@ builds:
   - VLC@e6b4585
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1010504'
   versionName: 1.1.5
@@ -1507,6 +1548,7 @@ builds:
   - VLC@e6b4585
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1010505'
   versionName: 1.1.5
@@ -1543,6 +1585,7 @@ builds:
   - VLC@551b670
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1010603'
   versionName: 1.1.6
@@ -1579,6 +1622,7 @@ builds:
   - VLC@551b670
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1010604'
   versionName: 1.1.6
@@ -1615,6 +1659,7 @@ builds:
   - VLC@551b670
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1010605'
   versionName: 1.1.6
@@ -1651,6 +1696,7 @@ builds:
   - VLC@23c8d86
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020003'
   versionName: 1.2.0
@@ -1687,6 +1733,7 @@ builds:
   - VLC@23c8d86
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020004'
   versionName: 1.2.0
@@ -1723,6 +1770,7 @@ builds:
   - VLC@23c8d86
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020005'
   versionName: 1.2.0
@@ -1759,6 +1807,7 @@ builds:
   - VLC@23c8d86
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020103'
   versionName: 1.2.1
@@ -1795,6 +1844,7 @@ builds:
   - VLC@23c8d86
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020104'
   versionName: 1.2.1
@@ -1831,6 +1881,7 @@ builds:
   - VLC@23c8d86
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020105'
   versionName: 1.2.1
@@ -1867,6 +1918,7 @@ builds:
   - VLC@7491a5f
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020203'
   versionName: 1.2.2
@@ -1903,6 +1955,7 @@ builds:
   - VLC@7491a5f
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020204'
   versionName: 1.2.2
@@ -1939,6 +1992,7 @@ builds:
   - VLC@7491a5f
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020205'
   versionName: 1.2.2
@@ -1975,6 +2029,7 @@ builds:
   - VLC@7491a5f
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020303'
   versionName: 1.2.3
@@ -2011,6 +2066,7 @@ builds:
   - VLC@7491a5f
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020304'
   versionName: 1.2.3
@@ -2047,6 +2103,7 @@ builds:
   - VLC@7491a5f
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020305'
   versionName: 1.2.3
@@ -2083,6 +2140,7 @@ builds:
   - VLC@7491a5f
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020403'
   versionName: 1.2.4
@@ -2119,6 +2177,7 @@ builds:
   - VLC@7491a5f
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020404'
   versionName: 1.2.4
@@ -2155,6 +2214,7 @@ builds:
   - VLC@7491a5f
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020405'
   versionName: 1.2.4
@@ -2191,6 +2251,7 @@ builds:
   - VLC@50accb8
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020503'
   versionName: 1.2.5
@@ -2227,6 +2288,7 @@ builds:
   - VLC@50accb8
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020504'
   versionName: 1.2.5
@@ -2263,6 +2325,7 @@ builds:
   - VLC@50accb8
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1020505'
   versionName: 1.2.5
@@ -2299,6 +2362,7 @@ builds:
   - VLC@d59b81a
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1030003'
   versionName: 1.2.6
@@ -2335,6 +2399,7 @@ builds:
   - VLC@d59b81a
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1030004'
   versionName: 1.2.6
@@ -2371,6 +2436,7 @@ builds:
   - VLC@d59b81a
   subdir: vlc-android
   submodules: false
+  sudo: ''
   target: null
   versionCode: '1030005'
   versionName: 1.2.6
