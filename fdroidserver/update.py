@@ -1767,7 +1767,7 @@ def main():
                     # special tricks are not really needed here, this
                     # uses the plain YAML lib
                     app = dict()
-                    if 'name' in apk:
+                    if 'name' in apk and apk['name'] != '':
                         app['Name'] = apk['name']
                     else:
                         logging.warning(apk['packageName'] + ' does not have a name! Using package name instead.')
