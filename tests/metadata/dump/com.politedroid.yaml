@@ -1,0 +1,178 @@
+AntiFeatures: []
+ArchivePolicy: 4 versions
+AuthorEmail: null
+AuthorName: null
+AuthorWebSite: null
+AutoName: Polite Droid
+AutoUpdateMode: Version v%v
+Binaries: null
+Bitcoin: null
+Categories:
+- Time
+Changelog: ''
+CurrentVersion: '1.5'
+CurrentVersionCode: '6'
+Description: Activates silent mode during calendar events.
+Disabled: null
+Donate: null
+FlattrID: null
+IssueTracker: https://github.com/miguelvps/PoliteDroid/issues
+License: GPL-3.0
+Litecoin: null
+MaintainerNotes: ''
+Name: null
+NoSourceSince: ''
+Provides: null
+Repo: https://github.com/miguelvps/PoliteDroid.git
+RepoType: git
+RequiresRoot: false
+SourceCode: https://github.com/miguelvps/PoliteDroid
+Summary: Calendar tool
+UpdateCheckData: null
+UpdateCheckIgnore: null
+UpdateCheckMode: Tags
+UpdateCheckName: null
+VercodeOperation: null
+WebSite: ''
+added: null
+builds:
+- androidupdate: []
+  antcommands: []
+  antifeatures:
+  - KnownVuln
+  - UpstreamNonFree
+  - NonFreeAssets
+  build: ''
+  buildjni: []
+  buildozer: false
+  commit: 6a548e4b19
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: null
+  submodules: false
+  target: android-10
+  versionCode: '3'
+  versionName: '1.2'
+- androidupdate: []
+  antcommands: []
+  antifeatures: []
+  build: ''
+  buildjni: []
+  buildozer: false
+  commit: ad865b57bf3ac59580f38485608a9b1dda4fa7dc
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: null
+  submodules: false
+  target: android-15
+  versionCode: '4'
+  versionName: '1.3'
+- androidupdate: []
+  antcommands: []
+  antifeatures: []
+  build: ''
+  buildjni: []
+  buildozer: false
+  commit: 456bd615f3fbe6dff06433928cf7ea20073601fb
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: null
+  submodules: false
+  target: android-10
+  versionCode: '5'
+  versionName: '1.4'
+- androidupdate: []
+  antcommands: []
+  antifeatures: []
+  build: ''
+  buildjni: []
+  buildozer: false
+  commit: v1.5
+  disable: false
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle:
+  - 'yes'
+  gradleprops: []
+  init: ''
+  kivy: false
+  maven: false
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: null
+  submodules: false
+  target: null
+  versionCode: '6'
+  versionName: '1.5'
+comments: {}
+id: com.politedroid
+lastUpdated: null
+metadatapath: metadata/com.politedroid.txt

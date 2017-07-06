@@ -230,6 +230,7 @@ build_flags_order = [
     'gradleprops',
     'antcommands',
     'novcheck',
+    'antifeatures',
 ]
 
 # old .txt format has version name/code inline in the 'Build:' line
@@ -271,6 +272,7 @@ class Build(dict):
         self.gradleprops = []
         self.antcommands = []
         self.novcheck = False
+        self.antifeatures = []
         if copydict:
             super().__init__(copydict)
             return
@@ -339,6 +341,7 @@ flagtypes = {
     'forceversion': TYPE_BOOL,
     'forcevercode': TYPE_BOOL,
     'novcheck': TYPE_BOOL,
+    'antifeatures': TYPE_LIST,
 }
 
 

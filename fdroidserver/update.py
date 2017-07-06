@@ -593,6 +593,40 @@ def insert_obbs(repodir, apps, apks):
                 break
 
 
+def translate_per_build_anti_features(apps, apks):
+    """Grab the anti-features list from the build metadata
+
+    For most Anti-Features, they are really most applicable per-APK,
+    not for an app.  An app can fix a vulnerability, add/remove
+    tracking, etc.  This reads the 'antifeatures' list from the Build
+    entries in the fdroiddata metadata file, then transforms it into
+    the 'antiFeatures' list of unique items for the index.
+
+    The field key is all lower case in the metadata file to match the
+    rest of the Build fields.  It is 'antiFeatures' camel case in the
+    implementation, index, and fdroidclient since it is translated
+    from the build 'antifeatures' field, not directly included.
+
+    """
+
+    antiFeatures = dict()
+    for packageName, app in apps.items():
+        d = dict()
+        for build in app['builds']:
+            afl = build.get('antifeatures')
+            if afl:
+                d[int(build.versionCode)] = afl
+        if len(d) > 0:
+            antiFeatures[packageName] = d
+
+    for apk in apks:
+        d = antiFeatures.get(apk['packageName'])
+        if d:
+            afl = d.get(apk['versionCode'])
+            if afl:
+                apk['antiFeatures'].update(afl)
+
+
 def _get_localized_dict(app, locale):
     '''get the dict to add localized store metadata to'''
     if 'localized' not in app:
@@ -1329,7 +1363,7 @@ def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
     return apks, cachechanged
 
 
-def extract_apk_icons(icon_filename, apk, apk_zip, repo_dir):
+def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
     """
     Extracts icons from the given APK zip in various densities,
     saves them into given repo directory
@@ -1338,7 +1372,7 @@ def extract_apk_icons(icon_filename, apk, apk_zip, repo_dir):
     :param icon_filename: A string representing the icon's file name
     :param apk: A populated dictionary containing APK metadata.
                 Needs to have 'icons_src' key
-    :param apk_zip: An opened zipfile.ZipFile of the APK file
+    :param apkzip: An opened zipfile.ZipFile of the APK file
     :param repo_dir: The directory of the APK's repository
     :return: A list of icon densities that are missing
     """
@@ -1352,9 +1386,16 @@ def extract_apk_icons(icon_filename, apk, apk_zip, repo_dir):
         icon_dest = os.path.join(icon_dir, icon_filename)
 
         # Extract the icon files per density
+        if icon_src.endswith('.xml'):
+            png = os.path.basename(icon_src)[:-4] + '.png'
+            for f in apkzip.namelist():
+                if f.endswith(png):
+                    m = re.match(r'res/drawable-(x*[hlm]dpi).*/', f)
+                    if m and screen_resolutions[m.group(1)] == density:
+                        icon_src = f
         try:
             with open(icon_dest, 'wb') as f:
-                f.write(get_icon_bytes(apk_zip, icon_src))
+                f.write(get_icon_bytes(apkzip, icon_src))
             apk['icons'][density] = icon_filename
         except (zipfile.BadZipFile, ValueError, KeyError) as e:
             logging.warning("Error retrieving icon file: %s %s", icon_dest, e)
@@ -1365,7 +1406,7 @@ def extract_apk_icons(icon_filename, apk, apk_zip, repo_dir):
         icon_src = apk['icons_src']['-1']
         icon_path = os.path.join(get_icon_dir(repo_dir, '0'), icon_filename)
         with open(icon_path, 'wb') as f:
-            f.write(get_icon_bytes(apk_zip, icon_src))
+            f.write(get_icon_bytes(apkzip, icon_src))
         try:
             im = Image.open(icon_path)
             dpi = px_to_dpi(im.size[0])
@@ -1751,6 +1792,7 @@ def main():
     copy_triple_t_store_metadata(apps)
     insert_obbs(repodirs[0], apps, apks)
     insert_localized_app_metadata(apps)
+    translate_per_build_anti_features(apps, apks)
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:

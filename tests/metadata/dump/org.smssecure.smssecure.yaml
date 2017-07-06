@@ -58,6 +58,7 @@ added: null
 builds:
 - androidupdate: []
   antcommands: []
+  antifeatures: []
   build: ''
   buildjni: []
   buildozer: false
@@ -102,6 +103,7 @@ builds:
   versionName: 0.3.3
 - androidupdate: []
   antcommands: []
+  antifeatures: []
   build: ''
   buildjni: []
   buildozer: false
@@ -138,6 +140,7 @@ builds:
   versionName: 0.3.3
 - androidupdate: []
   antcommands: []
+  antifeatures: []
   build: ''
   buildjni: []
   buildozer: false
@@ -173,6 +176,7 @@ builds:
   versionName: 0.4.2
 - androidupdate: []
   antcommands: []
+  antifeatures: []
   build: ''
   buildjni: []
   buildozer: false
@@ -208,6 +212,7 @@ builds:
   versionName: 0.5.1
 - androidupdate: []
   antcommands: []
+  antifeatures: []
   build: ''
   buildjni: []
   buildozer: false
@@ -242,6 +247,7 @@ builds:
   versionName: 0.5.2
 - androidupdate: []
   antcommands: []
+  antifeatures: []
   build: ''
   buildjni: []
   buildozer: false
@@ -276,6 +282,7 @@ builds:
   versionName: 0.5.3
 - androidupdate: []
   antcommands: []
+  antifeatures: []
   build: ''
   buildjni: []
   buildozer: false
@@ -310,6 +317,7 @@ builds:
   versionName: 0.5.4
 - androidupdate: []
   antcommands: []
+  antifeatures: []
   build: ''
   buildjni: []
   buildozer: false

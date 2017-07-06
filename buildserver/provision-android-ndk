@@ -20,30 +20,13 @@ if [ ! -e $NDK_BASE/r10e ]; then
     mv android-ndk-r10e r10e
 fi
 
-if [ ! -e $NDK_BASE/r11c ]; then
-    unzip /vagrant/cache/android-ndk-r11c-linux-x86_64.zip > /dev/null
-    mv android-ndk-r11c r11c
-fi
-
-if [ ! -e $NDK_BASE/r12b ]; then
-    unzip /vagrant/cache/android-ndk-r12b-linux-x86_64.zip > /dev/null
-    mv android-ndk-r12b r12b
-fi
-
-if [ ! -e $NDK_BASE/r13b ]; then
-    unzip /vagrant/cache/android-ndk-r13b-linux-x86_64.zip > /dev/null
-    mv android-ndk-r13b r13b
-fi
-
-if [ ! -e $NDK_BASE/r14b ]; then
-    unzip /vagrant/cache/android-ndk-r14b-linux-x86_64.zip > /dev/null
-    mv android-ndk-r14b r14b
-fi
-
-if [ ! -e $NDK_BASE/r15b ]; then
-    unzip /vagrant/cache/android-ndk-r15b-linux-x86_64.zip > /dev/null
-    mv android-ndk-r15b r15b
-fi
+for f in /vagrant/cache/android-ndk-r[1-9][0-9]*-linux-x86_64.zip; do
+    version=`echo $f |sed  's,.*\(r[1-9][0-9][a-z]\?\).*,\1,'`
+    if [ ! -e ${NDK_BASE}/${version} ]; then
+        unzip /vagrant/cache/android-ndk-${version}-linux-x86_64.zip > /dev/null
+        mv android-ndk-${version} ${version}
+    fi
+done
 
 chmod -R a+rX $NDK_BASE/
 find $NDK_BASE/ -type f -executable -print0 | xargs -0 chmod a+x
