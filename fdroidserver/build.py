@@ -804,6 +804,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
     elif omethod == 'gradle':
         src = None
         for apks_dir in [
+                os.path.join(root_dir, 'build', 'outputs', 'apk', 'release'),
                 os.path.join(root_dir, 'build', 'outputs', 'apk'),
                 os.path.join(root_dir, 'build', 'apk'),
                 ]:
