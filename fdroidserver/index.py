@@ -113,8 +113,8 @@ def make(apps, sortedids, apks, repodir, archive):
             mirrors.append(urllib.parse.urljoin(mirror + '/', urlbasepath))
     for mirror in common.config.get('servergitmirrors', []):
         mirror = get_mirror_service_url(mirror)
-        if mirror is not None:
-            mirrors.append(mirror + '/')
+        if mirror:
+            mirrors.append(mirror + '/' + repodir)
     if mirrorcheckfailed:
         raise FDroidException("Malformed repository mirrors.")
     if mirrors:
