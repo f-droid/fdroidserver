@@ -507,7 +507,8 @@ def push_binary_transparency(git_repo_path, git_remote):
 
     If the remote is a local directory, make sure it exists, and is a
     git repo.  This is used to move this git repo from an offline
-    machine onto a flash drive, then onto the online machine.
+    machine onto a flash drive, then onto the online machine. Also,
+    this pulls because pushing to a non-bare git repo is error prone.
 
     This is also used in offline signing setups, where it then also
     creates a "local copy dir" git repo that serves to shuttle the git
@@ -518,24 +519,36 @@ def push_binary_transparency(git_repo_path, git_remote):
     '''
     import git
 
-    if os.path.isdir(os.path.dirname(git_remote)) \
-       and not os.path.isdir(os.path.join(git_remote, '.git')):
-        os.makedirs(git_remote, exist_ok=True)
-        repo = git.Repo.init(git_remote)
-        config = repo.config_writer()
-        config.set_value('receive', 'denyCurrentBranch', 'updateInstead')
-        config.release()
-
     logging.info('Pushing binary transparency log to ' + git_remote)
-    gitrepo = git.Repo(git_repo_path)
-    origin = git.remote.Remote(gitrepo, 'origin')
-    if origin in gitrepo.remotes:
-        origin = gitrepo.remote('origin')
-        if 'set_url' in dir(origin):  # added in GitPython 2.x
-            origin.set_url(git_remote)
+
+    if os.path.isdir(os.path.dirname(git_remote)):
+        # from offline machine to thumbdrive
+        remote_path = os.path.abspath(git_repo_path)
+        if not os.path.isdir(os.path.join(git_remote, '.git')):
+            os.makedirs(git_remote, exist_ok=True)
+            thumbdriverepo = git.Repo.init(git_remote)
+            local = thumbdriverepo.create_remote('local', remote_path)
+        else:
+            thumbdriverepo = git.Repo(git_remote)
+            local = git.remote.Remote(thumbdriverepo, 'local')
+            if local in thumbdriverepo.remotes:
+                local = thumbdriverepo.remote('local')
+                if 'set_url' in dir(local):  # force remote URL if using GitPython 2.x
+                    local.set_url(remote_path)
+            else:
+                local = thumbdriverepo.create_remote('local', remote_path)
+        local.pull('master')
     else:
-        origin = gitrepo.create_remote('origin', git_remote)
-    origin.push('master')
+        # from online machine to remote on a server on the internet
+        gitrepo = git.Repo(git_repo_path)
+        origin = git.remote.Remote(gitrepo, 'origin')
+        if origin in gitrepo.remotes:
+            origin = gitrepo.remote('origin')
+            if 'set_url' in dir(origin):  # added in GitPython 2.x
+                origin.set_url(git_remote)
+        else:
+            origin = gitrepo.create_remote('origin', git_remote)
+        origin.push('master')
 
 
 def main():
