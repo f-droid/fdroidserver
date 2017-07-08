@@ -1772,19 +1772,19 @@ def main():
                             app = yaml.load(fp)
                     else:
                         app = dict()
+                        app['Categories'] = [os.path.basename(os.getcwd())]
+                        # include some blanks as part of the template
+                        app['AuthorName'] = ''
+                        app['Summary'] = ''
+                        app['WebSite'] = ''
+                        app['IssueTracker'] = ''
+                        app['SourceCode'] = ''
+                        app['CurrentVersionCode'] = 2147483647  # Java's Integer.MAX_VALUE
                     if 'name' in apk and apk['name'] != '':
                         app['Name'] = apk['name']
                     else:
                         logging.warning(apk['packageName'] + ' does not have a name! Using package name instead.')
                         app['Name'] = apk['packageName']
-                    app['Categories'] = [os.path.basename(os.getcwd())]
-                    # include some blanks as part of the template
-                    app['AuthorName'] = ''
-                    app['Summary'] = ''
-                    app['WebSite'] = ''
-                    app['IssueTracker'] = ''
-                    app['SourceCode'] = ''
-                    app['CurrentVersionCode'] = 2147483647  # Java's Integer.MAX_VALUE
                     yaml.dump(app, f, default_flow_style=False)
                     logging.info("Generated skeleton metadata for " + apk['packageName'])
                     newmetadata = True
