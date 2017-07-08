@@ -1760,13 +1760,18 @@ def main():
     for apk in apks:
         if apk['packageName'] not in apps:
             if options.create_metadata:
+                import yaml
                 with open(os.path.join('metadata', apk['packageName'] + '.yml'), 'w') as f:
                     # this should use metadata.App() and
                     # metadata.write_yaml(), but since ruamel.yaml
                     # 0.13 is not widely distributed yet, and it's
                     # special tricks are not really needed here, this
                     # uses the plain YAML lib
-                    app = dict()
+                    if os.path.exists('template.yml'):
+                        with open('template.yml') as fp:
+                            app = yaml.load(fp)
+                    else:
+                        app = dict()
                     if 'name' in apk and apk['name'] != '':
                         app['Name'] = apk['name']
                     else:
@@ -1780,7 +1785,6 @@ def main():
                     app['IssueTracker'] = ''
                     app['SourceCode'] = ''
                     app['CurrentVersionCode'] = 2147483647  # Java's Integer.MAX_VALUE
-                    import yaml
                     yaml.dump(app, f, default_flow_style=False)
                     logging.info("Generated skeleton metadata for " + apk['packageName'])
                     newmetadata = True
