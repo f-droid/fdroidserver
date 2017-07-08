@@ -1780,13 +1780,8 @@ def main():
                     app['IssueTracker'] = ''
                     app['SourceCode'] = ''
                     app['CurrentVersionCode'] = 2147483647  # Java's Integer.MAX_VALUE
-                    try:
-                        import ruamel.yaml
-                        assert ruamel.yaml  # silence pyflakes
-                        metadata.write_yaml(f, metadata.App(app))
-                    except ImportError:
-                        import yaml
-                        yaml.dump(app, f, default_flow_style=False)
+                    import yaml
+                    yaml.dump(app, f, default_flow_style=False)
                     logging.info("Generated skeleton metadata for " + apk['packageName'])
                     newmetadata = True
             else:
