@@ -393,7 +393,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
             if remote.name == 'gitlab':
                 logging.debug('Removing .gitlab-ci.yml now that it has successfully deployed')
                 repo.index.reset('HEAD^')
-                repo.index.checkout()
+                repo.index.checkout(force=True)
 
         if progress:
             bar.done()
