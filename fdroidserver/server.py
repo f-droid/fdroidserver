@@ -304,6 +304,16 @@ def update_localcopy(repo_section, local_copy_dir):
         push_binary_transparency(offline_copy, online_copy)
 
 
+def _get_size(start_path='.'):
+    '''get size of all files in a dir https://stackoverflow.com/a/1392549'''
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(start_path):
+        for f in filenames:
+            fp = os.path.join(dirpath, f)
+            total_size += os.path.getsize(fp)
+    return total_size
+
+
 def update_servergitmirrors(servergitmirrors, repo_section):
     '''update repo mirrors stored in git repos
 
@@ -327,13 +337,15 @@ def update_servergitmirrors(servergitmirrors, repo_section):
     if repo_section == 'repo':
         git_mirror_path = 'git-mirror'
         dotgit = os.path.join(git_mirror_path, '.git')
-        if not os.path.isdir(git_mirror_path):
-            os.mkdir(git_mirror_path)
-        elif os.path.isdir(dotgit):
+        git_repodir = os.path.join(git_mirror_path, 'fdroid', repo_section)
+        if not os.path.isdir(git_repodir):
+            os.makedirs(git_repodir)
+        if os.path.isdir(dotgit) and _get_size(git_mirror_path) > 1000000000:
+            logging.warning('Deleting git-mirror history, repo is too big (1 gig max)')
             shutil.rmtree(dotgit)
 
-        fdroid_repo_path = os.path.join(git_mirror_path, "fdroid")
-        _local_sync(repo_section, fdroid_repo_path)
+        # rsync is very particular about trailing slashes
+        _local_sync(repo_section.rstrip('/') + '/', git_repodir.rstrip('/') + '/')
 
         # use custom SSH command if identity_file specified
         ssh_cmd = 'ssh -oBatchMode=yes'
@@ -344,10 +356,16 @@ def update_servergitmirrors(servergitmirrors, repo_section):
 
         repo = git.Repo.init(git_mirror_path)
 
-        for mirror in servergitmirrors:
-            hostname = re.sub(r'\W*\w+\W+(\w+).*', r'\1', mirror)
-            repo.create_remote(hostname, mirror)
-            logging.info('Mirroring to: ' + mirror)
+        for remote_url in servergitmirrors:
+            hostname = re.sub(r'\W*\w+\W+(\w+).*', r'\1', remote_url)
+            r = git.remote.Remote(repo, hostname)
+            if r in repo.remotes:
+                r = repo.remote(hostname)
+                if 'set_url' in dir(r):  # force remote URL if using GitPython 2.x
+                    r.set_url(remote_url)
+            else:
+                repo.create_remote(hostname, remote_url)
+            logging.info('Mirroring to: ' + remote_url)
 
         # sadly index.add don't allow the --all parameter
         logging.debug('Adding all files to git mirror')
