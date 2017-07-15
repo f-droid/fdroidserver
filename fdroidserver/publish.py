@@ -19,6 +19,7 @@
 
 import sys
 import os
+import re
 import shutil
 import glob
 import hashlib
@@ -128,7 +129,7 @@ def main():
             # version if everything checks out.
             # The binary should already have been retrieved during the build
             # process.
-            srcapk = apkfile + ".binary"
+            srcapk = re.sub(r'.apk$', '.binary.apk', apkfile)
 
             # Compare our unsigned one with the downloaded one...
             compare_result = common.verify_apks(srcapk, apkfile, tmp_dir)
