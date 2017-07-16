@@ -1391,9 +1391,12 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
             png = os.path.basename(icon_src)[:-4] + '.png'
             for f in apkzip.namelist():
                 if f.endswith(png):
-                    m = re.match(r'res/drawable-(x*[hlm]dpi).*/', f)
-                    if m and screen_resolutions[m.group(1)] == density:
+                    m = re.match(r'res/(drawable|mipmap)-(x*[hlm]dpi).*/', f)
+                    if m and screen_resolutions[m.group(2)] == density:
                         icon_src = f
+            if icon_src.endswith('.xml'):
+                empty_densities.append(density)
+                continue
         try:
             with open(icon_dest, 'wb') as f:
                 f.write(get_icon_bytes(apkzip, icon_src))
