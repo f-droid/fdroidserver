@@ -386,7 +386,6 @@ def update_servergitmirrors(servergitmirrors, repo_section):
 
         # push for every remote. This will overwrite the git history
         for remote in repo.remotes:
-            branch = 'master'
             if remote.name == 'gitlab':
                 logging.debug('Writing .gitlab-ci.yml to deploy to GitLab Pages')
                 with open(os.path.join(git_mirror_path, ".gitlab-ci.yml"), "wt") as out_file:
@@ -405,13 +404,16 @@ def update_servergitmirrors(servergitmirrors, repo_section):
 
             logging.debug('Pushing to ' + remote.url)
             with repo.git.custom_environment(GIT_SSH_COMMAND=ssh_cmd):
-                remote.push(branch, force=True, set_upstream=True, progress=progress)
-
-            # Reset the gitlab specific stuff before the next remote.
-            if remote.name == 'gitlab':
-                logging.debug('Removing .gitlab-ci.yml now that it has successfully deployed')
-                repo.index.reset('HEAD^')
-                repo.index.checkout(force=True)
+                pushinfos = remote.push('master', force=True, set_upstream=True, progress=progress)
+                for pushinfo in pushinfos:
+                    if pushinfo.flags & (git.remote.PushInfo.ERROR
+                                         | git.remote.PushInfo.REJECTED
+                                         | git.remote.PushInfo.REMOTE_FAILURE
+                                         | git.remote.PushInfo.REMOTE_REJECTED):
+                        raise FDroidException(remote.url + ' push failed: ' + str(pushinfo.flags)
+                                              + ' ' + pushinfo.summary)
+                    else:
+                        logging.debug(remote.url + ': ' + pushinfo.summary)
 
         if progress:
             bar.done()

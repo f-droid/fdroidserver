@@ -567,7 +567,6 @@ def get_mirror_service_urls(url):
     return urls
 
 
-
 def download_repo_index(url_str, etag=None, verify_fingerprint=True):
     """
     Downloads the repository index from the given :param url_str
