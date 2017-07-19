@@ -7,8 +7,8 @@ test:
     - ./complete-ci-tests
 
 # Test that the parsing of the .txt format didn't change. The metadata
-# field 'Author Web Site' was added after 0.7.0, so that can't be part
-# of the test.
+# fields 'Author Web Site', 'antifeatures=', 'buildozer=', and 'sudo='
+# where added after 0.7.0, so that can't be part of the test.
 metadata_v0:
   script:
     - cd tests
@@ -19,6 +19,10 @@ metadata_v0:
     - sed -i "s/'Author Email',/'Author Email',\n'Author Web Site',/" fdroidserver/metadata.py
     - git clone --depth 1 https://gitlab.com/fdroid/fdroiddata
     - cd fdroiddata
+    - sed -i -e '/antifeatures=/d'
+             -e '/buildozer=/d'
+             -e '/sudo=/d'
+             metadata/*.txt
     - ../tests/dump.py
     - cd ..
     - git reset --hard
