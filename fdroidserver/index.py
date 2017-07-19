@@ -112,9 +112,8 @@ def make(apps, sortedids, apks, repodir, archive):
         else:
             mirrors.append(urllib.parse.urljoin(mirror + '/', urlbasepath))
     for mirror in common.config.get('servergitmirrors', []):
-        mirror = get_mirror_service_url(mirror)
-        if mirror:
-            mirrors.append(mirror + '/' + repodir)
+        for url in get_mirror_service_urls(mirror):
+            mirrors.append(url + '/' + repodir)
     if mirrorcheckfailed:
         raise FDroidException("Malformed repository mirrors.")
     if mirrors:
@@ -525,14 +524,15 @@ def extract_pubkey():
     return hexlify(pubkey), repo_pubkey_fingerprint
 
 
-def get_mirror_service_url(url):
-    '''Get direct URL from git service for use by fdroidclient
+def get_mirror_service_urls(url):
+    '''Get direct URLs from git service for use by fdroidclient
 
     Via 'servergitmirrors', fdroidserver can create and push a mirror
     to certain well known git services like gitlab or github.  This
     will always use the 'master' branch since that is the default
-    branch in git.
-
+    branch in git. The files are then accessible via alternate URLs,
+    where they are served in their raw format via a CDN rather than
+    from git.
     '''
 
     if url.startswith('git@'):
@@ -549,18 +549,23 @@ def get_mirror_service_url(url):
     branch = "master"
     folder = "fdroid"
 
+    urls = []
     if hostname == "github.com":
-        # Github-like RAW segments "https://raw.githubusercontent.com/user/repo/master/fdroid"
+        # Github-like RAW segments "https://raw.githubusercontent.com/user/repo/branch/folder"
         segments[2] = "raw.githubusercontent.com"
         segments.extend([branch, folder])
+        urls.append('/'.join(segments))
     elif hostname == "gitlab.com":
-        # Gitlab-like Pages segments "https://user.gitlab.com/repo/fdroid"
-        gitlab_url = ["https:", "", user + ".gitlab.io", repo, folder]
-        segments = gitlab_url
-    else:
-        return None
+        # Gitlab Raw "https://gitlab.com/user/repo/raw/branch/folder"
+        gitlab_raw = segments + ['raw', branch, folder]
+        urls.append('/'.join(gitlab_raw))
+        # Gitlab-like Pages segments "https://user.gitlab.io/repo/folder"
+        gitlab_pages = ["https:", "", user + ".gitlab.io", repo, folder]
+        urls.append('/'.join(gitlab_pages))
+        return urls
 
-    return '/'.join(segments)
+    return urls
+
 
 
 def download_repo_index(url_str, etag=None, verify_fingerprint=True):
