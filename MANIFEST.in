@@ -5,6 +5,7 @@ include fdroid
 include jenkins-build
 include makebuildserver
 include buildserver/config.buildserver.py
+include buildserver/gradle
 include buildserver/provision-android-ndk
 include buildserver/provision-android-sdk
 include buildserver/provision-apt-get-install
@@ -13,12 +14,15 @@ include buildserver/provision-gradle
 include buildserver/provision-pip
 include buildserver/provision-qt-sdk
 include buildserver/provision-ubuntu-trusty-paramiko
+include buildserver/setup-env-vars
 include buildserver/Vagrantfile
 include completion/bash-completion
 include examples/config.py
 include examples/fdroid-icon.png
 include examples/makebuildserver.config.py
 include examples/opensc-fdroid.cfg
+include examples/public-read-only-s3-bucket-policy.json
+include examples/template.yml
 include tests/getsig/run.sh
 include tests/getsig/make.sh
 include tests/getsig/getsig.java
