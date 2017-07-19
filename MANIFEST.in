@@ -26,8 +26,3 @@ include tests/run-tests
 include tests/update.TestCase
 include tests/urzip.apk
 include tests/urzip-badsig.apk
-include wp-fdroid/AndroidManifest.xml
-include wp-fdroid/android-permissions.php
-include wp-fdroid/readme.txt
-include wp-fdroid/strings.xml
-include wp-fdroid/wp-fdroid.php
