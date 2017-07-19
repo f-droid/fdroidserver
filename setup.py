@@ -11,7 +11,7 @@ else:
     data_prefix = '.'
 
 setup(name='fdroidserver',
-      version='0.7.0',
+      version='0.8',
       description='F-Droid Server Tools',
       long_description=open('README.md').read(),
       author='The F-Droid Project',
