@@ -258,6 +258,35 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
         el.appendChild(doc.createCDATASection(value))
         parent.appendChild(el)
 
+    def addElementCheckLocalized(name, app, key, doc, parent, default=''):
+        '''Fill in field from metadata or localized block
+
+        For name/summary/description, they can come only from the app source,
+        or from a dir in fdroiddata.  They can be entirely missing from the
+        metadata file if there is localized versions.  This will fetch those
+        from the localized version if its not available in the metadata file.
+        '''
+
+        el = doc.createElement(name)
+        value = app.get(key)
+        lkey = key[:1].lower() + key[1:]
+        localized = app.get('localized')
+        if not value and localized:
+            for lang in ['en-US'] + [x for x in localized.keys()]:
+                if not lang.startswith('en'):
+                    continue
+                if lang in localized:
+                    value = localized[lang].get(lkey)
+                    if value:
+                        break
+        if not value and localized and len(localized) > 1:
+            lang = list(localized.keys())[0]
+            value = localized[lang].get(lkey)
+        if not value:
+            value = default
+        el.appendChild(doc.createTextNode(value))
+        parent.appendChild(el)
+
     root = doc.createElement("fdroid")
     doc.appendChild(root)
 
@@ -312,16 +341,16 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
             addElement('added', app.added.strftime('%Y-%m-%d'), doc, apel)
         if app.lastUpdated:
             addElement('lastupdated', app.lastUpdated.strftime('%Y-%m-%d'), doc, apel)
-        addElement('name', app.Name, doc, apel)
-        addElement('summary', app.Summary, doc, apel)
+
+        addElementCheckLocalized('name', app, 'Name', doc, apel)
+        addElementCheckLocalized('summary', app, 'Summary', doc, apel)
+
         if app.icon:
             addElement('icon', app.icon, doc, apel)
 
-        if app.get('Description'):
-            description = app.Description
-        else:
-            description = '<p>No description available</p>'
-        addElement('desc', description, doc, apel)
+        addElementCheckLocalized('desc', app, 'Description', doc, apel,
+                                 '<p>No description available</p>')
+
         addElement('license', app.License, doc, apel)
         if app.Categories:
             addElement('categories', ','.join(app.Categories), doc, apel)
