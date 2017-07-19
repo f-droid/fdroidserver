@@ -81,7 +81,7 @@ def main():
                 net.download_file(url, dldir=tmp_dir)
             except requests.exceptions.HTTPError as e:
                 try:
-                    net.download_file(url.replace('/repo', '/archive/'), dldir=tmp_dir)
+                    net.download_file(url.replace('/repo', '/archive'), dldir=tmp_dir)
                 except requests.exceptions.HTTPError as e:
                     raise FDroidException('Downloading %s failed. %s', (url, e))
 
