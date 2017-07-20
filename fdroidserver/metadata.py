@@ -385,8 +385,8 @@ class FieldValidator():
 
 # Generic value types
 valuetypes = {
-    FieldValidator("Hexadecimal",
-                   r'^[0-9a-f]+$',
+    FieldValidator("Flattr ID",
+                   r'^[0-9a-z]+$',
                    ['FlattrID']),
 
     FieldValidator("HTTP link",
