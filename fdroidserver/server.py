@@ -304,6 +304,16 @@ def update_localcopy(repo_section, local_copy_dir):
         push_binary_transparency(offline_copy, online_copy)
 
 
+def _get_size(start_path='.'):
+    '''get size of all files in a dir https://stackoverflow.com/a/1392549'''
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(start_path):
+        for f in filenames:
+            fp = os.path.join(dirpath, f)
+            total_size += os.path.getsize(fp)
+    return total_size
+
+
 def update_servergitmirrors(servergitmirrors, repo_section):
     '''update repo mirrors stored in git repos
 
@@ -327,13 +337,15 @@ def update_servergitmirrors(servergitmirrors, repo_section):
     if repo_section == 'repo':
         git_mirror_path = 'git-mirror'
         dotgit = os.path.join(git_mirror_path, '.git')
-        if not os.path.isdir(git_mirror_path):
-            os.mkdir(git_mirror_path)
-        elif os.path.isdir(dotgit):
+        git_repodir = os.path.join(git_mirror_path, 'fdroid', repo_section)
+        if not os.path.isdir(git_repodir):
+            os.makedirs(git_repodir)
+        if os.path.isdir(dotgit) and _get_size(git_mirror_path) > 1000000000:
+            logging.warning('Deleting git-mirror history, repo is too big (1 gig max)')
             shutil.rmtree(dotgit)
 
-        fdroid_repo_path = os.path.join(git_mirror_path, "fdroid")
-        _local_sync(repo_section, fdroid_repo_path)
+        # rsync is very particular about trailing slashes
+        _local_sync(repo_section.rstrip('/') + '/', git_repodir.rstrip('/') + '/')
 
         # use custom SSH command if identity_file specified
         ssh_cmd = 'ssh -oBatchMode=yes'
@@ -344,10 +356,16 @@ def update_servergitmirrors(servergitmirrors, repo_section):
 
         repo = git.Repo.init(git_mirror_path)
 
-        for mirror in servergitmirrors:
-            hostname = re.sub(r'\W*\w+\W+(\w+).*', r'\1', mirror)
-            repo.create_remote(hostname, mirror)
-            logging.info('Mirroring to: ' + mirror)
+        for remote_url in servergitmirrors:
+            hostname = re.sub(r'\W*\w+\W+(\w+).*', r'\1', remote_url)
+            r = git.remote.Remote(repo, hostname)
+            if r in repo.remotes:
+                r = repo.remote(hostname)
+                if 'set_url' in dir(r):  # force remote URL if using GitPython 2.x
+                    r.set_url(remote_url)
+            else:
+                repo.create_remote(hostname, remote_url)
+            logging.info('Mirroring to: ' + remote_url)
 
         # sadly index.add don't allow the --all parameter
         logging.debug('Adding all files to git mirror')
@@ -368,7 +386,6 @@ def update_servergitmirrors(servergitmirrors, repo_section):
 
         # push for every remote. This will overwrite the git history
         for remote in repo.remotes:
-            branch = 'master'
             if remote.name == 'gitlab':
                 logging.debug('Writing .gitlab-ci.yml to deploy to GitLab Pages')
                 with open(os.path.join(git_mirror_path, ".gitlab-ci.yml"), "wt") as out_file:
@@ -387,13 +404,16 @@ def update_servergitmirrors(servergitmirrors, repo_section):
 
             logging.debug('Pushing to ' + remote.url)
             with repo.git.custom_environment(GIT_SSH_COMMAND=ssh_cmd):
-                remote.push(branch, force=True, set_upstream=True, progress=progress)
-
-            # Reset the gitlab specific stuff before the next remote.
-            if remote.name == 'gitlab':
-                logging.debug('Removing .gitlab-ci.yml now that it has successfully deployed')
-                repo.index.reset('HEAD^')
-                repo.index.checkout()
+                pushinfos = remote.push('master', force=True, set_upstream=True, progress=progress)
+                for pushinfo in pushinfos:
+                    if pushinfo.flags & (git.remote.PushInfo.ERROR
+                                         | git.remote.PushInfo.REJECTED
+                                         | git.remote.PushInfo.REMOTE_FAILURE
+                                         | git.remote.PushInfo.REMOTE_REJECTED):
+                        raise FDroidException(remote.url + ' push failed: ' + str(pushinfo.flags)
+                                              + ' ' + pushinfo.summary)
+                    else:
+                        logging.debug(remote.url + ': ' + pushinfo.summary)
 
         if progress:
             bar.done()
@@ -507,7 +527,8 @@ def push_binary_transparency(git_repo_path, git_remote):
 
     If the remote is a local directory, make sure it exists, and is a
     git repo.  This is used to move this git repo from an offline
-    machine onto a flash drive, then onto the online machine.
+    machine onto a flash drive, then onto the online machine. Also,
+    this pulls because pushing to a non-bare git repo is error prone.
 
     This is also used in offline signing setups, where it then also
     creates a "local copy dir" git repo that serves to shuttle the git
@@ -518,24 +539,36 @@ def push_binary_transparency(git_repo_path, git_remote):
     '''
     import git
 
-    if os.path.isdir(os.path.dirname(git_remote)) \
-       and not os.path.isdir(os.path.join(git_remote, '.git')):
-        os.makedirs(git_remote, exist_ok=True)
-        repo = git.Repo.init(git_remote)
-        config = repo.config_writer()
-        config.set_value('receive', 'denyCurrentBranch', 'updateInstead')
-        config.release()
-
     logging.info('Pushing binary transparency log to ' + git_remote)
-    gitrepo = git.Repo(git_repo_path)
-    origin = git.remote.Remote(gitrepo, 'origin')
-    if origin in gitrepo.remotes:
-        origin = gitrepo.remote('origin')
-        if 'set_url' in dir(origin):  # added in GitPython 2.x
-            origin.set_url(git_remote)
+
+    if os.path.isdir(os.path.dirname(git_remote)):
+        # from offline machine to thumbdrive
+        remote_path = os.path.abspath(git_repo_path)
+        if not os.path.isdir(os.path.join(git_remote, '.git')):
+            os.makedirs(git_remote, exist_ok=True)
+            thumbdriverepo = git.Repo.init(git_remote)
+            local = thumbdriverepo.create_remote('local', remote_path)
+        else:
+            thumbdriverepo = git.Repo(git_remote)
+            local = git.remote.Remote(thumbdriverepo, 'local')
+            if local in thumbdriverepo.remotes:
+                local = thumbdriverepo.remote('local')
+                if 'set_url' in dir(local):  # force remote URL if using GitPython 2.x
+                    local.set_url(remote_path)
+            else:
+                local = thumbdriverepo.create_remote('local', remote_path)
+        local.pull('master')
     else:
-        origin = gitrepo.create_remote('origin', git_remote)
-    origin.push('master')
+        # from online machine to remote on a server on the internet
+        gitrepo = git.Repo(git_repo_path)
+        origin = git.remote.Remote(gitrepo, 'origin')
+        if origin in gitrepo.remotes:
+            origin = gitrepo.remote('origin')
+            if 'set_url' in dir(origin):  # added in GitPython 2.x
+                origin.set_url(git_remote)
+        else:
+            origin = gitrepo.create_remote('origin', git_remote)
+        origin.push('master')
 
 
 def main():

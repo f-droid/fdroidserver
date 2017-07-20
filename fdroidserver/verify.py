@@ -80,7 +80,10 @@ def main():
             try:
                 net.download_file(url, dldir=tmp_dir)
             except requests.exceptions.HTTPError as e:
-                raise FDroidException('Downloading %s failed. %s', (url, e))
+                try:
+                    net.download_file(url.replace('/repo', '/archive'), dldir=tmp_dir)
+                except requests.exceptions.HTTPError as e:
+                    raise FDroidException('Downloading %s failed. %s', (url, e))
 
             compare_result = common.verify_apks(
                 remoteapk,

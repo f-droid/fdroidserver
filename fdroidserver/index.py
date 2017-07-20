@@ -112,9 +112,8 @@ def make(apps, sortedids, apks, repodir, archive):
         else:
             mirrors.append(urllib.parse.urljoin(mirror + '/', urlbasepath))
     for mirror in common.config.get('servergitmirrors', []):
-        mirror = get_mirror_service_url(mirror)
-        if mirror:
-            mirrors.append(mirror + '/' + repodir)
+        for url in get_mirror_service_urls(mirror):
+            mirrors.append(url + '/' + repodir)
     if mirrorcheckfailed:
         raise FDroidException("Malformed repository mirrors.")
     if mirrors:
@@ -259,6 +258,35 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
         el.appendChild(doc.createCDATASection(value))
         parent.appendChild(el)
 
+    def addElementCheckLocalized(name, app, key, doc, parent, default=''):
+        '''Fill in field from metadata or localized block
+
+        For name/summary/description, they can come only from the app source,
+        or from a dir in fdroiddata.  They can be entirely missing from the
+        metadata file if there is localized versions.  This will fetch those
+        from the localized version if its not available in the metadata file.
+        '''
+
+        el = doc.createElement(name)
+        value = app.get(key)
+        lkey = key[:1].lower() + key[1:]
+        localized = app.get('localized')
+        if not value and localized:
+            for lang in ['en-US'] + [x for x in localized.keys()]:
+                if not lang.startswith('en'):
+                    continue
+                if lang in localized:
+                    value = localized[lang].get(lkey)
+                    if value:
+                        break
+        if not value and localized and len(localized) > 1:
+            lang = list(localized.keys())[0]
+            value = localized[lang].get(lkey)
+        if not value:
+            value = default
+        el.appendChild(doc.createTextNode(value))
+        parent.appendChild(el)
+
     root = doc.createElement("fdroid")
     doc.appendChild(root)
 
@@ -313,16 +341,16 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
             addElement('added', app.added.strftime('%Y-%m-%d'), doc, apel)
         if app.lastUpdated:
             addElement('lastupdated', app.lastUpdated.strftime('%Y-%m-%d'), doc, apel)
-        addElement('name', app.Name, doc, apel)
-        addElement('summary', app.Summary, doc, apel)
+
+        addElementCheckLocalized('name', app, 'Name', doc, apel)
+        addElementCheckLocalized('summary', app, 'Summary', doc, apel)
+
         if app.icon:
             addElement('icon', app.icon, doc, apel)
 
-        if app.get('Description'):
-            description = app.Description
-        else:
-            description = '<p>No description available</p>'
-        addElement('desc', description, doc, apel)
+        addElementCheckLocalized('desc', app, 'Description', doc, apel,
+                                 '<p>No description available</p>')
+
         addElement('license', app.License, doc, apel)
         if app.Categories:
             addElement('categories', ','.join(app.Categories), doc, apel)
@@ -525,14 +553,15 @@ def extract_pubkey():
     return hexlify(pubkey), repo_pubkey_fingerprint
 
 
-def get_mirror_service_url(url):
-    '''Get direct URL from git service for use by fdroidclient
+def get_mirror_service_urls(url):
+    '''Get direct URLs from git service for use by fdroidclient
 
     Via 'servergitmirrors', fdroidserver can create and push a mirror
     to certain well known git services like gitlab or github.  This
     will always use the 'master' branch since that is the default
-    branch in git.
-
+    branch in git. The files are then accessible via alternate URLs,
+    where they are served in their raw format via a CDN rather than
+    from git.
     '''
 
     if url.startswith('git@'):
@@ -549,18 +578,22 @@ def get_mirror_service_url(url):
     branch = "master"
     folder = "fdroid"
 
+    urls = []
     if hostname == "github.com":
-        # Github-like RAW segments "https://raw.githubusercontent.com/user/repo/master/fdroid"
+        # Github-like RAW segments "https://raw.githubusercontent.com/user/repo/branch/folder"
         segments[2] = "raw.githubusercontent.com"
         segments.extend([branch, folder])
+        urls.append('/'.join(segments))
     elif hostname == "gitlab.com":
-        # Gitlab-like Pages segments "https://user.gitlab.com/repo/fdroid"
-        gitlab_url = ["https:", "", user + ".gitlab.io", repo, folder]
-        segments = gitlab_url
-    else:
-        return None
+        # Gitlab Raw "https://gitlab.com/user/repo/raw/branch/folder"
+        gitlab_raw = segments + ['raw', branch, folder]
+        urls.append('/'.join(gitlab_raw))
+        # Gitlab-like Pages segments "https://user.gitlab.io/repo/folder"
+        gitlab_pages = ["https:", "", user + ".gitlab.io", repo, folder]
+        urls.append('/'.join(gitlab_pages))
+        return urls
 
-    return '/'.join(segments)
+    return urls
 
 
 def download_repo_index(url_str, etag=None, verify_fingerprint=True):
