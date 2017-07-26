@@ -491,6 +491,65 @@ class UpdateTest(unittest.TestCase):
                 foundtest = True
         self.assertTrue(foundtest)
 
+    def test_create_metadata_from_template(self):
+        tmpdir = os.path.join(localmodule, '.testfiles')
+        if not os.path.exists(tmpdir):
+            os.makedirs(tmpdir)
+        tmptestsdir = tempfile.mkdtemp(prefix='test_create_metadata_from_template-',
+                                       dir=tmpdir)
+        print('tmptestsdir', tmptestsdir)
+        os.chdir(tmptestsdir)
+        os.mkdir('repo')
+        shutil.copy(os.path.join(localmodule, 'tests', 'urzip.apk'), 'repo')
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        config['ndk_paths'] = dict()
+        config['accepted_formats'] = ['json', 'txt', 'yml']
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+
+        fdroidserver.update.options = type('', (), {})()
+        fdroidserver.update.options.clean = True
+        fdroidserver.update.options.delete_unknown = False
+        fdroidserver.update.options.rename_apks = False
+        fdroidserver.update.options.allow_disabled_algorithms = False
+
+        apps = fdroidserver.metadata.read_metadata(xref=True)
+        self.assertEqual(0, len(apps))
+        knownapks = fdroidserver.common.KnownApks()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
+        self.assertEqual(1, len(apks))
+        apk = apks[0]
+
+        # test using internal template
+        fdroidserver.update.create_metadata_from_template(apk)
+        self.assertTrue(os.path.exists('metadata/info.guardianproject.urzip.yml'))
+        apps = fdroidserver.metadata.read_metadata(xref=True)
+        self.assertEqual(1, len(apps))
+        for app in apps.values():
+            self.assertEqual('urzip', app['Name'])
+            self.assertEqual(1, len(app['Categories']))
+            break
+
+        # test using external template.yml
+        os.remove('metadata/info.guardianproject.urzip.yml')
+        self.assertFalse(os.path.exists('metadata/info.guardianproject.urzip.yml'))
+        shutil.copy(os.path.join(localmodule, 'examples', 'template.yml'), tmptestsdir)
+        fdroidserver.update.create_metadata_from_template(apk)
+        self.assertTrue(os.path.exists('metadata/info.guardianproject.urzip.yml'))
+        apps = fdroidserver.metadata.read_metadata(xref=True)
+        self.assertEqual(1, len(apps))
+        for app in apps.values():
+            self.assertEqual('urzip', app['Name'])
+            self.assertEqual(1, len(app['Categories']))
+            self.assertEqual('Internet', app['Categories'][0])
+            break
+        with open('metadata/info.guardianproject.urzip.yml') as fp:
+            data = yaml.load(fp)
+        self.assertEqual('urzip', data['Name'])
+        self.assertEqual('urzip', data['Summary'])
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()

@@ -1638,6 +1638,53 @@ def add_apks_to_per_app_repos(repodir, apks):
             shutil.copy(apkascpath, apk['per_app_repo'])
 
 
+def create_metadata_from_template(apk):
+    '''create a new metadata file using internal or external template
+
+    Generate warnings for apk's with no metadata (or create skeleton
+    metadata files, if requested on the command line).  Though the
+    template file is YAML, this uses neither pyyaml nor ruamel.yaml
+    since those impose things on the metadata file made from the
+    template: field sort order, empty field value, formatting, etc.
+    '''
+
+    import yaml
+    if os.path.exists('template.yml'):
+        with open('template.yml') as f:
+            metatxt = f.read()
+        if 'name' in apk and apk['name'] != '':
+            metatxt = re.sub(r'^(((Auto)?Name|Summary):).*$',
+                             r'\1 ' + apk['name'],
+                             metatxt,
+                             flags=re.IGNORECASE | re.MULTILINE)
+        else:
+            logging.warning(apk['packageName'] + ' does not have a name! Using package name instead.')
+            metatxt = re.sub(r'^(((Auto)?Name|Summary):).*$',
+                             r'\1 ' + apk['packageName'],
+                             metatxt,
+                             flags=re.IGNORECASE | re.MULTILINE)
+        with open(os.path.join('metadata', apk['packageName'] + '.yml'), 'w') as f:
+            f.write(metatxt)
+    else:
+        app = dict()
+        app['Categories'] = [os.path.basename(os.getcwd())]
+        # include some blanks as part of the template
+        app['AuthorName'] = ''
+        app['Summary'] = ''
+        app['WebSite'] = ''
+        app['IssueTracker'] = ''
+        app['SourceCode'] = ''
+        app['CurrentVersionCode'] = 2147483647  # Java's Integer.MAX_VALUE
+        if 'name' in apk and apk['name'] != '':
+            app['Name'] = apk['name']
+        else:
+            logging.warning(apk['packageName'] + ' does not have a name! Using package name instead.')
+            app['Name'] = apk['packageName']
+        with open(os.path.join('metadata', apk['packageName'] + '.yml'), 'w') as f:
+            yaml.dump(app, f, default_flow_style=False)
+    logging.info("Generated skeleton metadata for " + apk['packageName'])
+
+
 config = None
 options = None
 
@@ -1757,47 +1804,11 @@ def main():
                                            options.use_date_from_apk)
     cachechanged = cachechanged or fcachechanged
     apks += files
-    # Generate warnings for apk's with no metadata (or create skeleton
-    # metadata files, if requested on the command line)
-    newmetadata = False
     for apk in apks:
         if apk['packageName'] not in apps:
             if options.create_metadata:
-                import yaml
-                with open(os.path.join('metadata', apk['packageName'] + '.yml'), 'w') as f:
-                    # this should use metadata.App() and
-                    # metadata.write_yaml(), but since ruamel.yaml
-                    # 0.13 is not widely distributed yet, and it's
-                    # special tricks are not really needed here, this
-                    # uses the plain YAML lib
-                    if os.path.exists('template.yml'):
-                        with open('template.yml') as f:
-                            metatxt = f.read()
-                        if 'name' in apk and apk['name'] != '':
-                            metatxt = re.sub(r'^(((Auto)?Name|Summary):).*$', r'\1 ' + apk['name'], metatxt, flags=re.IGNORECASE | re.MULTILINE)
-                        else:
-                            logging.warning(apk['packageName'] + ' does not have a name! Using package name instead.')
-                            metatxt = re.sub(r'^(((Auto)?Name|Summary):).*$', r'\1 ' + apk['packageName'], metatxt, flags=re.IGNORECASE | re.MULTILINE)
-                        with open(os.path.join('metadata', apk['packageName'] + '.yml'), 'w') as f:
-                            f.write(metatxt)
-                    else:
-                        app = dict()
-                        app['Categories'] = [os.path.basename(os.getcwd())]
-                        # include some blanks as part of the template
-                        app['AuthorName'] = ''
-                        app['Summary'] = ''
-                        app['WebSite'] = ''
-                        app['IssueTracker'] = ''
-                        app['SourceCode'] = ''
-                        app['CurrentVersionCode'] = 2147483647  # Java's Integer.MAX_VALUE
-                        if 'name' in apk and apk['name'] != '':
-                            app['Name'] = apk['name']
-                        else:
-                            logging.warning(apk['packageName'] + ' does not have a name! Using package name instead.')
-                            app['Name'] = apk['packageName']
-                        yaml.dump(app, f, default_flow_style=False)
-                    logging.info("Generated skeleton metadata for " + apk['packageName'])
-                    newmetadata = True
+                create_metadata_from_template(apk)
+                apps = metadata.read_metadata()
             else:
                 msg = apk['apkName'] + " (" + apk['packageName'] + ") has no metadata!"
                 if options.delete_unknown:
@@ -1809,10 +1820,6 @@ def main():
                         os.remove(rmf)
                 else:
                     logging.warn(msg + "\n\tUse `fdroid update -c` to create it.")
-
-    # update the metadata with the newly created ones included
-    if newmetadata:
-        apps = metadata.read_metadata()
 
     copy_triple_t_store_metadata(apps)
     insert_obbs(repodirs[0], apps, apks)
