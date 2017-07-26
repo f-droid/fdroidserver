@@ -1771,8 +1771,15 @@ def main():
                     # special tricks are not really needed here, this
                     # uses the plain YAML lib
                     if os.path.exists('template.yml'):
-                        with open('template.yml') as fp:
-                            app = yaml.load(fp)
+                        with open('template.yml') as f:
+                            metatxt = f.read()
+                        if 'name' in apk and apk['name'] != '':
+                            metatxt = re.sub(r'^(((Auto)?Name|Summary):).*$', r'\1 ' + apk['name'], metatxt, flags=re.IGNORECASE | re.MULTILINE)
+                        else:
+                            logging.warning(apk['packageName'] + ' does not have a name! Using package name instead.')
+                            metatxt = re.sub(r'^(((Auto)?Name|Summary):).*$', r'\1 ' + apk['packageName'], metatxt, flags=re.IGNORECASE | re.MULTILINE)
+                        with open(os.path.join('metadata', apk['packageName'] + '.yml'), 'w') as f:
+                            f.write(metatxt)
                     else:
                         app = dict()
                         app['Categories'] = [os.path.basename(os.getcwd())]
@@ -1783,12 +1790,12 @@ def main():
                         app['IssueTracker'] = ''
                         app['SourceCode'] = ''
                         app['CurrentVersionCode'] = 2147483647  # Java's Integer.MAX_VALUE
-                    if 'name' in apk and apk['name'] != '':
-                        app['Name'] = apk['name']
-                    else:
-                        logging.warning(apk['packageName'] + ' does not have a name! Using package name instead.')
-                        app['Name'] = apk['packageName']
-                    yaml.dump(app, f, default_flow_style=False)
+                        if 'name' in apk and apk['name'] != '':
+                            app['Name'] = apk['name']
+                        else:
+                            logging.warning(apk['packageName'] + ' does not have a name! Using package name instead.')
+                            app['Name'] = apk['packageName']
+                        yaml.dump(app, f, default_flow_style=False)
                     logging.info("Generated skeleton metadata for " + apk['packageName'])
                     newmetadata = True
             else:
