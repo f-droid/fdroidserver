@@ -23,7 +23,7 @@ setup(name='fdroidserver',
           (data_prefix + '/share/doc/fdroidserver/examples',
               ['buildserver/config.buildserver.py',
                'examples/config.py',
-               'examples/fdroid-icon.png'
+               'examples/fdroid-icon.png',
                'examples/makebuildserver.config.py',
                'examples/opensc-fdroid.cfg',
                'examples/public-read-only-s3-bucket-policy.json',
