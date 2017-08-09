@@ -354,6 +354,8 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
             root.appendChild(element)
             element.setAttribute('packageName', packageName)
 
+    fdroid_signed = load_sigkeys(repodir)
+
     for appid, appdict in apps.items():
         app = metadata.App(appdict)
 
@@ -362,12 +364,27 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
 
         # Get a list of the apks for this app...
         apklist = []
-        versionCodes = []
+        apksbyversion = collections.defaultdict(lambda: [])
         for apk in apks:
-            if apk['packageName'] == appid:
-                if apk['versionCode'] not in versionCodes:
-                    apklist.append(apk)
-                    versionCodes.append(apk['versionCode'])
+            if apk.get('versionCode') and apk.get('packageName') == appid:
+                apksbyversion[apk['versionCode']].append(apk)
+        for versionCode, apksforver in apksbyversion.items():
+            fdroidsig = fdroid_signed.get(appid, {}).get('signer')
+            fdroid_signed_apk = None
+            name_match_apk = None
+            for x in apksforver:
+                if fdroidsig and x.get('signer', None) == fdroidsig:
+                    fdroid_signed_apk = x
+                if common.apk_release_filename.match(x.get('apkName', '')):
+                    name_match_apk = x
+            # choose which of the available versions is most
+            # suiteable for index v0
+            if fdroid_signed_apk:
+                apklist.append(fdroid_signed_apk)
+            elif name_match_apk:
+                apklist.append(name_match_apk)
+            else:
+                apklist.append(apksforver[0])
 
         if len(apklist) == 0:
             continue

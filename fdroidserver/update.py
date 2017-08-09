@@ -901,7 +901,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
                 logging.debug("Reading " + name_utf8 + " from cache")
                 usecache = True
             else:
-                logging.debug("Ignoring stale cache data for " + name)
+                logging.debug("Ignoring stale cache data for " + name_utf8)
 
         if not usecache:
             logging.debug(_("Processing {apkfilename}").format(apkfilename=name_utf8))
