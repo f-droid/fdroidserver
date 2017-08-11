@@ -17,7 +17,7 @@
 #     'r12b': "$ANDROID_NDK",
 #     'r13b': None,
 #     'r14b': None,
-#     'r15b': None,
+#     'r15c': None,
 # }
 
 # Path to the Qt SDK. It is of the form "/path/to/Qt5.7.0/5.7"
