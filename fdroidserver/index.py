@@ -163,7 +163,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
 
     def _index_encoder_default(obj):
         if isinstance(obj, set):
-            return list(obj)
+            return sorted(list(obj))
         if isinstance(obj, datetime):
             return int(obj.timestamp() * 1000)  # Java expects milliseconds
         raise TypeError(repr(obj) + " is not JSON serializable")
