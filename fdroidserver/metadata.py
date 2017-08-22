@@ -728,6 +728,7 @@ def read_metadata(xref=True, check_vcs=[]):
     for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.txt'))
                                + glob.glob(os.path.join('metadata', '*.json'))
                                + glob.glob(os.path.join('metadata', '*.yml'))
+                               + glob.glob('.fdroid.txt')
                                + glob.glob('.fdroid.json')
                                + glob.glob('.fdroid.yml')):
         packageName, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
