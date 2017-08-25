@@ -1686,6 +1686,7 @@ class KnownApks:
         if apkName not in self.apks:
             if default_date is None:
                 default_date = datetime.utcnow()
+            default_date = datetime(default_date.year, default_date.month, default_date.day, 0, 0, 0, 0)
             self.apks[apkName] = (app, default_date)
             self.changed = True
         _, added = self.apks[apkName]
