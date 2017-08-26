@@ -803,10 +803,16 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
     elif omethod == 'gradle':
         src = None
         apk_dirs = [
+            # gradle plugin >= 3.0
             os.path.join(root_dir, 'build', 'outputs', 'apk', 'release'),
+            # gradle plugin < 3.0 and >= 0.11
             os.path.join(root_dir, 'build', 'outputs', 'apk'),
+            # really old path
             os.path.join(root_dir, 'build', 'apk'),
             ]
+        # If we build with gradle flavours with gradle plugin >= 3.0 the apk will be in
+        # a subdirectory corresponding to the flavour command used, but with different
+        # capitalization.
         if flavours_cmd:
             apk_dirs.append(os.path.join(root_dir, 'build', 'outputs', 'apk', transform_first_char(flavours_cmd, str.lower), 'release'))
         for apks_dir in apk_dirs:
