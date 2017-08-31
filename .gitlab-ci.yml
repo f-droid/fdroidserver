@@ -6,34 +6,20 @@ test:
     - cd tests
     - ./complete-ci-tests
 
-# Test that the parsing of the .txt format didn't change. The metadata
-# fields 'Author Web Site', 'antifeatures=', 'buildozer=', and 'sudo='
-# where added after 0.7.0, so that can't be part of the test.
+# Test that the parsing of the .txt format didn't change 
+# from last released version.
 metadata_v0:
   script:
     - cd tests
-    - cp dump_internal_metadata_format.py dump.py # since this isn't in old commits
     - export GITCOMMIT=`git describe`
-    - git checkout 0.7.0  # or any old commit of your choosing
+    - git checkout 0.8  # bump after release
     - cd ..
-    - sed -i "s/'Author Email',/'Author Email',\n'Author Web Site',/" fdroidserver/metadata.py
     - git clone --depth 1 https://gitlab.com/fdroid/fdroiddata
     - cd fdroiddata
-    - sed -i -e '/antifeatures=/d'
-             -e '/buildozer=/d'
-             -e '/sudo=/d'
-             metadata/*.txt
-    - ../tests/dump.py
+    - ../tests/dump_internal_metadata_format.py
     - cd ..
     - git reset --hard
     - git checkout $GITCOMMIT
     - cd fdroiddata
-    - ../tests/dump.py
-    - "sed -i -e '/AuthorWebSite/d'
-             -e '/Description: No description available/d'
-             -e \"/Description: ''/d\"
-             -e '/antifeatures:/d'
-             -e '/buildozer:/d'
-             -e '/sudo:/d'
-             metadata/dump_*/*.yaml"
+    - ../tests/dump_internal_metadata_format.py
     - diff -uw metadata/dump_*
