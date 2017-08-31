@@ -28,6 +28,7 @@ import socket
 import zipfile
 import hashlib
 import pickle
+import time
 from datetime import datetime, timedelta
 from argparse import ArgumentParser
 
@@ -930,7 +931,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
 
         if use_date_from_file:
             timestamp = stat.st_ctime
-            default_date_param = datetime.fromtimestamp(timestamp).utctimetuple()
+            default_date_param = time.gmtime(time.mktime(datetime.fromtimestamp(timestamp).timetuple()))
         else:
             default_date_param = None
 
