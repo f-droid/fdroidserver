@@ -275,14 +275,13 @@ def force_gradle_build_tools(build_dir, build_tools):
                                path)
 
 
-def capitalize_intact(string):
-    """Like str.capitalize(), but leave the rest of the string intact without
-    switching it to lowercase."""
+def transform_first_char(string, method):
+    """Uses method() on the first character of string."""
     if len(string) == 0:
         return string
     if len(string) == 1:
-        return string.upper()
-    return string[0].upper() + string[1:]
+        return method(string)
+    return method(string[0]) + string[1:]
 
 
 def has_native_code(apkobj):
@@ -444,7 +443,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         if flavours == ['yes']:
             flavours = []
 
-        flavours_cmd = ''.join([capitalize_intact(flav) for flav in flavours])
+        flavours_cmd = ''.join([transform_first_char(flav, str.upper) for flav in flavours])
 
         gradletasks += ['assemble' + flavours_cmd + 'Release']
 
@@ -803,11 +802,20 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
     elif omethod == 'gradle':
         src = None
-        for apks_dir in [
-                os.path.join(root_dir, 'build', 'outputs', 'apk', 'release'),
-                os.path.join(root_dir, 'build', 'outputs', 'apk'),
-                os.path.join(root_dir, 'build', 'apk'),
-                ]:
+        apk_dirs = [
+            # gradle plugin >= 3.0
+            os.path.join(root_dir, 'build', 'outputs', 'apk', 'release'),
+            # gradle plugin < 3.0 and >= 0.11
+            os.path.join(root_dir, 'build', 'outputs', 'apk'),
+            # really old path
+            os.path.join(root_dir, 'build', 'apk'),
+            ]
+        # If we build with gradle flavours with gradle plugin >= 3.0 the apk will be in
+        # a subdirectory corresponding to the flavour command used, but with different
+        # capitalization.
+        if flavours_cmd:
+            apk_dirs.append(os.path.join(root_dir, 'build', 'outputs', 'apk', transform_first_char(flavours_cmd, str.lower), 'release'))
+        for apks_dir in apk_dirs:
             for apkglob in ['*-release-unsigned.apk', '*-unsigned.apk', '*.apk']:
                 apks = glob.glob(os.path.join(apks_dir, apkglob))
 
