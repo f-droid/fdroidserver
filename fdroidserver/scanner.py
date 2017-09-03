@@ -198,7 +198,10 @@ def scan_source(build_dir, build):
             elif ext == 'jar':
                 for name in suspects_found(curfile):
                     count += handleproblem('usual supect \'%s\'' % name, path_in_build_dir, filepath)
-                warnproblem('JAR file', path_in_build_dir)
+                if curfile == 'gradle-wrapper.jar':
+                    removeproblem('gradle-wrapper.jar', path_in_build_dir, filepath)
+                else:
+                    warnproblem('JAR file', path_in_build_dir)
 
             elif ext == 'aar':
                 warnproblem('AAR file', path_in_build_dir)
