@@ -124,7 +124,7 @@ if config['apt_package_cache']:
         shutil.rmtree(aptcachepartial)
 
 cachefiles = [
-    # Don't update sdk tools beyond 25.2.5. 
+    # Don't update sdk tools beyond 25.2.5.
     # Support for android update project has been removed and there is no replacement.
     # Until we find a solution for that we need to stay at this revision.
     ('https://dl.google.com/android/repository/tools_r25.2.5-linux.zip',
