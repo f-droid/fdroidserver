@@ -201,10 +201,10 @@ def scan_source(build_dir, build):
                 if curfile == 'gradle-wrapper.jar':
                     removeproblem('gradle-wrapper.jar', path_in_build_dir, filepath)
                 else:
-                    warnproblem('JAR file', path_in_build_dir)
+                    count += handleproblem('JAR file', path_in_build_dir, filepath)
 
             elif ext == 'aar':
-                warnproblem('AAR file', path_in_build_dir)
+                count += handleproblem('AAR file', path_in_build_dir, filepath)
 
             elif ext == 'java':
                 if not os.path.isfile(filepath):
