@@ -35,9 +35,9 @@
       "sourceCode": "https://gitlab.com/fdroid/privileged-extension",
       "summary": "Tests whether OTA ZIP files are being include",
       "webSite": "https://f-droid.org",
-      "added": 1457564400000,
+      "added": 1457568000000,
       "packageName": "fake.ota.update",
-      "lastUpdated": 1457564400000
+      "lastUpdated": 1457568000000
     },
     {
       "bitcoin": "1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk",
@@ -48,10 +48,10 @@
       "license": "GPL-3.0",
       "name": "OBB Main Old Version",
       "sourceCode": "https://github.com/eighthave/urzip",
-      "added": 1388444400000,
+      "added": 1388448000000,
       "icon": "obb.main.oldversion.1444412523.png",
       "packageName": "obb.main.oldversion",
-      "lastUpdated": 1388444400000
+      "lastUpdated": 1388448000000
     },
     {
       "bitcoin": "1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk",
@@ -62,10 +62,10 @@
       "license": "GPL-3.0",
       "name": "OBB Main Two Versions",
       "sourceCode": "https://github.com/eighthave/urzip",
-      "added": 1444600800000,
+      "added": 1444608000000,
       "icon": "obb.main.twoversions.1101617.png",
       "packageName": "obb.main.twoversions",
-      "lastUpdated": 1466373600000
+      "lastUpdated": 1466380800000
     },
     {
       "bitcoin": "1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk",
@@ -76,10 +76,10 @@
       "license": "GPL-3.0",
       "name": "OBB Main/Patch Current",
       "sourceCode": "https://github.com/eighthave/urzip",
-      "added": 1461362400000,
+      "added": 1461369600000,
       "icon": "obb.mainpatch.current.1619.png",
       "packageName": "obb.mainpatch.current",
-      "lastUpdated": 1496268000000,
+      "lastUpdated": 1496275200000,
       "localized": {
         "en-US": {
           "featureGraphic": "featureGraphic.png",
@@ -105,10 +105,10 @@
       "name": "Polite Droid",
       "sourceCode": "https://github.com/miguelvps/PoliteDroid",
       "summary": "Calendar tool",
-      "added": 1498168800000,
+      "added": 1498176000000,
       "icon": "com.politedroid.6.png",
       "packageName": "com.politedroid",
-      "lastUpdated": 1498168800000
+      "lastUpdated": 1498176000000
     },
     {
       "authorWebSite": "https://guardianproject.info",
@@ -127,10 +127,10 @@
       "sourceCode": "https://github.com/guardianproject/urzip",
       "summary": "\u4e00\u4e2a\u5b9e\u7528\u5de5\u5177\uff0c\u83b7\u53d6\u5df2\u5b89\u88c5\u5728\u60a8\u7684\u8bbe\u5907\u4e0a\u7684\u5e94\u7528\u7684\u6709\u5173\u4fe1\u606f",
       "webSite": "https://dev.guardianproject.info/projects/urzip",
-      "added": 1466632800000,
+      "added": 1466640000000,
       "icon": "info.guardianproject.urzip.100.png",
       "packageName": "info.guardianproject.urzip",
-      "lastUpdated": 1466632800000,
+      "lastUpdated": 1466640000000,
       "localized": {
         "en-US": {
           "name": "title\n",
@@ -146,7 +146,7 @@
   "packages": {
     "com.politedroid": [
       {
-        "added": 1498168800000,
+        "added": 1498176000000,
         "apkName": "com.politedroid_6.apk",
         "hash": "70c2f776a2bac38a58a7d521f96ee0414c6f0fb1de973c3ca8b10862a009247d",
         "hashType": "sha256",
@@ -170,7 +170,7 @@
         "versionName": "1.5"
       },
       {
-        "added": 1498168800000,
+        "added": 1498176000000,
         "apkName": "com.politedroid_5.apk",
         "hash": "5bdbfa071cca4b8d05ced41d6b28763595d6e8096cca5bbf0f9253c9a2622e5d",
         "hashType": "sha256",
@@ -194,7 +194,7 @@
         "versionName": "1.4"
       },
       {
-        "added": 1498168800000,
+        "added": 1498176000000,
         "apkName": "com.politedroid_4.apk",
         "hash": "c809bdff83715fbf919f3840ee09869b038e209378b906e135ee40d3f0e1f075",
         "hashType": "sha256",
@@ -230,7 +230,7 @@
         "versionName": "1.3"
       },
       {
-        "added": 1498168800000,
+        "added": 1498176000000,
         "antiFeatures": [
           "KnownVuln",
           "NonFreeAssets",
@@ -273,7 +273,7 @@
     ],
     "fake.ota.update": [
       {
-        "added": 1457564400000,
+        "added": 1457568000000,
         "apkName": "fake.ota.update_1234.zip",
         "hash": "897a92a4ccff4f415f6ba275b2af16d4ecaee60a983b215bddcb9f8964e7a24c",
         "hashType": "sha256",
@@ -285,7 +285,7 @@
     ],
     "info.guardianproject.urzip": [
       {
-        "added": 1466632800000,
+        "added": 1466640000000,
         "apkName": "urzip-Sergey Vasilyevich Rakhmaninov; \u0421\u0435\u0440\u0433\u0435\u0301\u0438\u0306 \u0412\u0430\u0441\u0438\u0301\u043b\u044c\u0435\u0432\u0438\u0447 \u0420\u0430\u0445\u043c\u0430\u0301\u043d\u0438\u043d\u043e\u0432, IPA: [s\u02b2\u026ar\u02c8\u0261\u02b2ej r\u0250x\u02c8man\u02b2\u026an\u0259f] \u0633\u064a\u0631\u062c\u064a_\u0631\u062e\u0645\u0627\u0646\u064a\u0646\u0648\u0641 \u8c22\u5c14\u76d6\u00b7\u74e6\u897f\u91cc\u8036\u7ef4\u5947\u00b7\u62c9\u8d6b\u739b.apk\u5c3c\u8bfa\u592b .apk",
         "hash": "15c0ec72c74a3791f42cdb43c57df0fb11a4dbb656851bbb8cf05b26a8372789",
         "hashType": "sha256",
@@ -301,7 +301,7 @@
     ],
     "obb.main.oldversion": [
       {
-        "added": 1388444400000,
+        "added": 1388448000000,
         "apkName": "obb.main.oldversion_1444412523.apk",
         "hash": "c5f149e526f89c05c62923bdb7bb1e2be5673c46ec85143f41e514340631449c",
         "hashType": "sha256",
@@ -371,7 +371,7 @@
     ],
     "obb.main.twoversions": [
       {
-        "added": 1466373600000,
+        "added": 1466380800000,
         "apkName": "obb.main.twoversions_1101617.apk",
         "hash": "9bc74566f089ef030ac33e7fbd99d92f1a38f363fb499fed138d9e7b774e821c",
         "hashType": "sha256",
@@ -388,7 +388,7 @@
         "versionName": "0.1"
       },
       {
-        "added": 1451602800000,
+        "added": 1451606400000,
         "apkName": "obb.main.twoversions_1101615.apk",
         "hash": "7b0b7b9ba248e15751a16e3a0e01e1e24cbb673686c38422030cb75d5c33f0bb",
         "hashType": "sha256",
@@ -404,7 +404,7 @@
         "versionName": "0.1"
       },
       {
-        "added": 1444600800000,
+        "added": 1444608000000,
         "apkName": "obb.main.twoversions_1101613.apk",
         "hash": "cce97a52ff18d843185be7f22ecb1a557c36b7a9f8ba07a8be94e328e00b35dc",
         "hashType": "sha256",
@@ -422,7 +422,7 @@
     ],
     "obb.mainpatch.current": [
       {
-        "added": 1461362400000,
+        "added": 1461369600000,
         "apkName": "obb.mainpatch.current_1619.apk",
         "hash": "eda5fc3ecfdac3252717e36bdbc9820865baeef162264af9ba5db7364f0e7a0c",
         "hashType": "sha256",
@@ -440,7 +440,7 @@
         "versionName": "0.1"
       },
       {
-        "added": 1496268000000,
+        "added": 1496275200000,
         "apkName": "obb.mainpatch.current_1619_another-release-key.apk",
         "hash": "42e7d6d2f8254aaf9fe95ba6ecc233ee8c3cd543a3e4f3f9ebe1b638221122fa",
         "hashType": "sha256",

@@ -30,6 +30,7 @@ import shutil
 import tempfile
 import urllib.parse
 import zipfile
+import calendar
 from binascii import hexlify, unhexlify
 from datetime import datetime
 from xml.dom.minidom import Document
@@ -165,7 +166,9 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         if isinstance(obj, set):
             return sorted(list(obj))
         if isinstance(obj, datetime):
-            return int(obj.timestamp() * 1000)  # Java expects milliseconds
+            # Java prefers milliseconds
+            # we also need to accound for time zone/daylight saving time
+            return int(calendar.timegm(obj.timetuple()) * 1000)
         raise TypeError(repr(obj) + " is not JSON serializable")
 
     output = collections.OrderedDict()
