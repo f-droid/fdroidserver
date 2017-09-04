@@ -23,27 +23,28 @@ import logging
 import fdroidserver.common
 import fdroidserver.metadata
 from argparse import ArgumentError
+from collections import OrderedDict
 
-commands = {
-    "build": "Build a package from source",
-    "init": "Quickly start a new repository",
-    "publish": "Sign and place packages in the repo",
-    "gpgsign": "Add gpg signatures for packages in repo",
-    "update": "Update repo information for new packages",
-    "verify": "Verify the integrity of downloaded packages",
-    "checkupdates": "Check for updates to applications",
-    "import": "Add a new application from its source code",
-    "install": "Install built packages on devices",
-    "readmeta": "Read all the metadata files and exit",
-    "rewritemeta": "Rewrite all the metadata files",
-    "lint": "Warn about possible metadata errors",
-    "scanner": "Scan the source code of a package",
-    "dscanner": "Dynamically scan APKs post build",
-    "stats": "Update the stats of the repo",
-    "server": "Interact with the repo HTTP server",
-    "signindex": "Sign indexes created using update --nosign",
-    "btlog": "Update the binary transparency log for a URL",
-}
+commands = OrderedDict([
+    ("build", "Build a package from source"),
+    ("init", "Quickly start a new repository"),
+    ("publish", "Sign and place packages in the repo"),
+    ("gpgsign", "Add gpg signatures for packages in repo"),
+    ("update", "Update repo information for new packages"),
+    ("verify", "Verify the integrity of downloaded packages"),
+    ("checkupdates", "Check for updates to applications"),
+    ("import", "Add a new application from its source code"),
+    ("install", "Install built packages on devices"),
+    ("readmeta", "Read all the metadata files and exit"),
+    ("rewritemeta", "Rewrite all the metadata files"),
+    ("lint", "Warn about possible metadata errors"),
+    ("scanner", "Scan the source code of a package"),
+    ("dscanner", "Dynamically scan APKs post build"),
+    ("stats", "Update the stats of the repo"),
+    ("server", "Interact with the repo HTTP server"),
+    ("signindex", "Sign indexes created using update --nosign"),
+    ("btlog", "Update the binary transparency log for a URL"),
+])
 
 
 def print_help():
