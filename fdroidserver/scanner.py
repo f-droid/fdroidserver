@@ -165,20 +165,20 @@ def scan_source(build_dir, build):
         return any(command.match(line) for command in gradle_compile_commands)
 
     # Iterate through all files in the source code
-    for r, d, f in os.walk(build_dir, topdown=True):
+    for dirpath, dirnames, filenames in os.walk(build_dir, topdown=True):
 
         # It's topdown, so checking the basename is enough
         for ignoredir in ('.hg', '.git', '.svn', '.bzr'):
-            if ignoredir in d:
-                d.remove(ignoredir)
+            if ignoredir in dirnames:
+                dirnames.remove(ignoredir)
 
-        for curfile in f:
+        for curfile in filenames:
 
             if curfile in ['.DS_Store']:
                 continue
 
             # Path (relative) to the file
-            fp = os.path.join(r, curfile)
+            fp = os.path.join(dirpath, curfile)
 
             if os.path.islink(fp):
                 continue
