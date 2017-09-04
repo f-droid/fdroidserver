@@ -169,6 +169,11 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
             # Java prefers milliseconds
             # we also need to accound for time zone/daylight saving time
             return int(calendar.timegm(obj.timetuple()) * 1000)
+        if isinstance(obj, dict):
+            d = collections.OrderedDict()
+            for key in sorted(obj.keys()):
+                d[key] = obj[key]
+            return d
         raise TypeError(repr(obj) + " is not JSON serializable")
 
     output = collections.OrderedDict()
@@ -207,6 +212,17 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
             else:
                 k = k[:1].lower() + k[1:]
             d[k] = v
+
+    # establish sort order in localized dicts
+    for app in output['apps']:
+        localized = app.get('localized')
+        if localized:
+            lordered = collections.OrderedDict()
+            for lkey, lvalue in sorted(localized.items()):
+                lordered[lkey] = collections.OrderedDict()
+                for ikey, iname in sorted(lvalue.items()):
+                    lordered[lkey][ikey] = iname
+            app['localized'] = lordered
 
     output_packages = collections.OrderedDict()
     output['packages'] = output_packages

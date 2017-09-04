@@ -133,12 +133,12 @@
       "lastUpdated": 1466640000000,
       "localized": {
         "en-US": {
-          "name": "title\n",
-          "summary": "short description\n",
-          "video": "video\n",
           "description": "full description\n",
           "featureGraphic": "featureGraphic.png",
-          "icon": "icon.png"
+          "icon": "icon.png",
+          "name": "title\n",
+          "summary": "short description\n",
+          "video": "video\n"
         }
       }
     }
