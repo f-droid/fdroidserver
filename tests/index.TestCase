@@ -211,8 +211,8 @@ class IndexTest(unittest.TestCase):
                     "signer": "b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6"
                 }
             }
-            os.makedirs('repo')
-            jarfile = 'repo/publishsigkeys.jar'
+            os.makedirs('stats')
+            jarfile = 'stats/publishsigkeys.jar'
             with zipfile.ZipFile(jarfile, 'w', zipfile.ZIP_DEFLATED) as jar:
                 jar.writestr('publishsigkeys.json', json.dumps(sigkeyfps))
             fdroidserver.publish.sign_sig_key_fingerprint_list(jarfile)
