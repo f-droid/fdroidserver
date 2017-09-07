@@ -1789,6 +1789,12 @@ def FDroidPopenBytes(commands, cwd=None, envs=None, output=True, stderr_to_stdou
     result.returncode = p.wait()
     result.output = buf.getvalue()
     buf.close()
+    # make sure all filestreams of the subprocess are closed
+    for streamvar in ['stdin', 'stdout', 'stderr']:
+        if hasattr(p, streamvar):
+            stream = getattr(p, streamvar)
+            if stream:
+                stream.close()
     return result
 
 
