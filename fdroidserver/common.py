@@ -260,7 +260,7 @@ def read_config(opts, config_file='config.py'):
     if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
         st = os.stat(config_file)
         if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
-            logging.warn("unsafe permissions on {0} (should be 0600)!".format(config_file))
+            logging.warning("unsafe permissions on {0} (should be 0600)!".format(config_file))
 
     fill_config_defaults(config)
 
@@ -1706,6 +1706,21 @@ def isApkAndDebuggable(apkfile):
         return get_apk_debuggable_androguard(apkfile)
 
 
+def get_apk_id_aapt(apkfile):
+    """Extrat identification information from APK using aapt.
+
+    :param apkfile: path to an APK file.
+    :returns: triplet (appid, version code, version name)
+    """
+    r = re.compile("package: name='(?P<appid>.*)' versionCode='(?P<vercode>.*)' versionName='(?P<vername>.*)' platformBuildVersionName='.*'")
+    p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
+    for line in p.output.splitlines():
+        m = r.match(line)
+        if m:
+            return m.group('appid'), m.group('vercode'), m.group('vername')
+    raise FDroidException("reading identification failed, APK invalid: '{}'".format(apkfile))
+
+
 class PopenResult:
     def __init__(self):
         self.returncode = None
@@ -1962,6 +1977,30 @@ def place_srclib(root_dir, number, libpath):
 
 
 apk_sigfile = re.compile(r'META-INF/[0-9A-Za-z]+\.(SF|RSA|DSA|EC)')
+
+
+def metadata_get_sigdir(appid, vercode=None):
+    """Get signature directory for app"""
+    if vercode:
+        return os.path.join('metadata', appid, 'signatures', vercode)
+    else:
+        return os.path.join('metadata', appid, 'signatures')
+
+
+def apk_extract_signatures(apkpath, outdir, manifest=True):
+    """Extracts a signature files from APK and puts them into target directory.
+
+    :param apkpath: location of the apk
+    :param outdir: folder where the extracted signature files will be stored
+    :param manifest: (optionally) disable extracting manifest file
+    """
+    with ZipFile(apkpath, 'r') as in_apk:
+        for f in in_apk.infolist():
+            if apk_sigfile.match(f.filename) or \
+                    (manifest and f.filename == 'META-INF/MANIFEST.MF'):
+                newpath = os.path.join(outdir, os.path.basename(f.filename))
+                with open(newpath, 'wb') as out_file:
+                    out_file.write(in_apk.read(f.filename))
 
 
 def verify_apks(signed_apk, unsigned_apk, tmp_dir):

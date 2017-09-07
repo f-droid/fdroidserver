@@ -44,6 +44,7 @@ commands = OrderedDict([
     ("server", "Interact with the repo HTTP server"),
     ("signindex", "Sign indexes created using update --nosign"),
     ("btlog", "Update the binary transparency log for a URL"),
+    ("signatures", "Extract signatures from APKs"),
 ])
 
 
