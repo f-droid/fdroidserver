@@ -97,42 +97,42 @@ def scan_source(build_dir, build):
     scanignore_worked = set()
     scandelete_worked = set()
 
-    def toignore(fd):
+    def toignore(path_in_build_dir):
         for k, paths in scanignore.items():
             for p in paths:
-                if fd.startswith(p):
+                if path_in_build_dir.startswith(p):
                     scanignore_worked.add(k)
                     return True
         return False
 
-    def todelete(fd):
+    def todelete(path_in_build_dir):
         for k, paths in scandelete.items():
             for p in paths:
-                if fd.startswith(p):
+                if path_in_build_dir.startswith(p):
                     scandelete_worked.add(k)
                     return True
         return False
 
-    def ignoreproblem(what, fd):
-        logging.info('Ignoring %s at %s' % (what, fd))
+    def ignoreproblem(what, path_in_build_dir):
+        logging.info('Ignoring %s at %s' % (what, path_in_build_dir))
         return 0
 
-    def removeproblem(what, fd, fp):
-        logging.info('Removing %s at %s' % (what, fd))
-        os.remove(fp)
+    def removeproblem(what, path_in_build_dir, filepath):
+        logging.info('Removing %s at %s' % (what, path_in_build_dir))
+        os.remove(filepath)
         return 0
 
-    def warnproblem(what, fd):
-        if toignore(fd):
+    def warnproblem(what, path_in_build_dir):
+        if toignore(path_in_build_dir):
             return
-        logging.warn('Found %s at %s' % (what, fd))
+        logging.warn('Found %s at %s' % (what, path_in_build_dir))
 
-    def handleproblem(what, fd, fp):
-        if toignore(fd):
-            return ignoreproblem(what, fd)
-        if todelete(fd):
-            return removeproblem(what, fd, fp)
-        logging.error('Found %s at %s' % (what, fd))
+    def handleproblem(what, path_in_build_dir, filepath):
+        if toignore(path_in_build_dir):
+            return ignoreproblem(what, path_in_build_dir)
+        if todelete(path_in_build_dir):
+            return removeproblem(what, path_in_build_dir, filepath)
+        logging.error('Found %s at %s' % (what, path_in_build_dir))
         return 1
 
     def is_executable(path):
@@ -165,73 +165,73 @@ def scan_source(build_dir, build):
         return any(command.match(line) for command in gradle_compile_commands)
 
     # Iterate through all files in the source code
-    for r, d, f in os.walk(build_dir, topdown=True):
+    for dirpath, dirnames, filenames in os.walk(build_dir, topdown=True):
 
         # It's topdown, so checking the basename is enough
         for ignoredir in ('.hg', '.git', '.svn', '.bzr'):
-            if ignoredir in d:
-                d.remove(ignoredir)
+            if ignoredir in dirnames:
+                dirnames.remove(ignoredir)
 
-        for curfile in f:
+        for curfile in filenames:
 
             if curfile in ['.DS_Store']:
                 continue
 
             # Path (relative) to the file
-            fp = os.path.join(r, curfile)
+            filepath = os.path.join(dirpath, curfile)
 
-            if os.path.islink(fp):
+            if os.path.islink(filepath):
                 continue
 
-            fd = fp[len(build_dir) + 1:]
-            _, ext = common.get_extension(fd)
+            path_in_build_dir = os.path.relpath(filepath, build_dir)
+            _, ext = common.get_extension(path_in_build_dir)
 
             if ext == 'so':
-                count += handleproblem('shared library', fd, fp)
+                count += handleproblem('shared library', path_in_build_dir, filepath)
             elif ext == 'a':
-                count += handleproblem('static library', fd, fp)
+                count += handleproblem('static library', path_in_build_dir, filepath)
             elif ext == 'class':
-                count += handleproblem('Java compiled class', fd, fp)
+                count += handleproblem('Java compiled class', path_in_build_dir, filepath)
             elif ext == 'apk':
-                removeproblem('APK file', fd, fp)
+                removeproblem('APK file', path_in_build_dir, filepath)
 
             elif ext == 'jar':
                 for name in suspects_found(curfile):
-                    count += handleproblem('usual supect \'%s\'' % name, fd, fp)
-                warnproblem('JAR file', fd)
+                    count += handleproblem('usual supect \'%s\'' % name, path_in_build_dir, filepath)
+                warnproblem('JAR file', path_in_build_dir)
 
             elif ext == 'java':
-                if not os.path.isfile(fp):
+                if not os.path.isfile(filepath):
                     continue
-                with open(fp, 'r', encoding='utf8', errors='replace') as f:
+                with open(filepath, 'r', encoding='utf8', errors='replace') as f:
                     for line in f:
                         if 'DexClassLoader' in line:
-                            count += handleproblem('DexClassLoader', fd, fp)
+                            count += handleproblem('DexClassLoader', path_in_build_dir, filepath)
                             break
 
             elif ext == 'gradle':
-                if not os.path.isfile(fp):
+                if not os.path.isfile(filepath):
                     continue
-                with open(fp, 'r', encoding='utf8', errors='replace') as f:
+                with open(filepath, 'r', encoding='utf8', errors='replace') as f:
                     lines = f.readlines()
                 for i, line in enumerate(lines):
                     if is_used_by_gradle(line):
                         for name in suspects_found(line):
-                            count += handleproblem('usual supect \'%s\' at line %d' % (name, i + 1), fd, fp)
+                            count += handleproblem('usual supect \'%s\' at line %d' % (name, i + 1), path_in_build_dir, filepath)
                 noncomment_lines = [l for l in lines if not common.gradle_comment.match(l)]
                 joined = re.sub(r'[\n\r\s]+', ' ', ' '.join(noncomment_lines))
                 for m in gradle_mavenrepo.finditer(joined):
                     url = m.group(2)
                     if not any(r.match(url) for r in allowed_repos):
-                        count += handleproblem('unknown maven repo \'%s\'' % url, fd, fp)
+                        count += handleproblem('unknown maven repo \'%s\'' % url, path_in_build_dir, filepath)
 
             elif ext in ['', 'bin', 'out', 'exe']:
-                if is_binary(fp):
-                    count += handleproblem('binary', fd, fp)
+                if is_binary(filepath):
+                    count += handleproblem('binary', path_in_build_dir, filepath)
 
-            elif is_executable(fp):
-                if is_binary(fp) and not safe_path(fd):
-                    warnproblem('possible binary', fd)
+            elif is_executable(filepath):
+                if is_binary(filepath) and not safe_path(path_in_build_dir):
+                    warnproblem('possible binary', path_in_build_dir)
 
     for p in scanignore:
         if p not in scanignore_worked:
