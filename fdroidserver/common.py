@@ -238,8 +238,8 @@ def read_config(opts, config_file='config.py'):
         with io.open(config_file, "rb") as f:
             code = compile(f.read(), config_file, 'exec')
             exec(code, None, config)
-    elif len(get_local_metadata_files()) == 0:
-        raise FDroidException("Missing config file - is this a repo directory?")
+    else:
+        logging.debug("No config.py found - using defaults.")
 
     for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
         if k in config:
