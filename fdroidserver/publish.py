@@ -194,6 +194,13 @@ def main():
                 if p.returncode != 0:
                     raise BuildException("Failed to generate key")
 
+            signed_apk_path = os.path.join(output_dir, apkfilename)
+            if os.path.exists(signed_apk_path):
+                raise BuildException("Refusing to sign '{0}' file exists in both "
+                                     "{1} and {2} folder.".format(apkfilename,
+                                                                  unsigned_dir,
+                                                                  output_dir))
+
             # Sign the application...
             p = FDroidPopen([config['jarsigner'], '-keystore', config['keystore'],
                              '-storepass:env', 'FDROID_KEY_STORE_PASS',
