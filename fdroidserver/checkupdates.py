@@ -25,7 +25,7 @@ import time
 import subprocess
 from argparse import ArgumentParser
 import traceback
-from html.parser import HTMLParser
+import html
 from distutils.version import LooseVersion
 import logging
 import copy
@@ -289,8 +289,7 @@ def check_gplay(app):
 
     m = re.search('itemprop="softwareVersion">[ ]*([^<]+)[ ]*</div>', page)
     if m:
-        html_parser = HTMLParser()
-        version = html_parser.unescape(m.group(1))
+        version = html.unescape(m.group(1))
 
     if version == 'Varies with device':
         return (None, 'Device-variable version, cannot use this method')
