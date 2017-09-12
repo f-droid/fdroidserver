@@ -279,7 +279,7 @@ def check_gplay(app):
     req = urllib.request.Request(url, None, headers)
     try:
         resp = urllib.request.urlopen(req, None, 20)
-        page = resp.read()
+        page = resp.read().decode()
     except urllib.error.HTTPError as e:
         return (None, str(e.code))
     except Exception as e:
@@ -531,7 +531,7 @@ def main():
     apps = common.read_app_args(options.appid, allapps, False)
 
     if options.gplay:
-        for app in apps:
+        for appid, app in apps.items():
             version, reason = check_gplay(app)
             if version is None:
                 if reason == '404':
