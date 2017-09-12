@@ -25,6 +25,7 @@ if localmodule not in sys.path:
 import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
+from fdroidserver.exception import FDroidException
 
 
 class CommonTest(unittest.TestCase):
@@ -400,6 +401,22 @@ class CommonTest(unittest.TestCase):
         for apkfile, keytoolcertfingerprint in testapks:
             self.assertEqual(keytoolcertfingerprint,
                              fdroidserver.common.apk_signer_fingerprint_short(apkfile))
+
+    def test_get_api_id_aapt(self):
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        self._set_build_tools()
+        config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
+
+        appid, vercode, vername = fdroidserver.common.get_apk_id_aapt('repo/obb.main.twoversions_1101613.apk')
+        self.assertEqual('obb.main.twoversions', appid)
+        self.assertEqual('1101613', vercode)
+        self.assertEqual('0.1', vername)
+
+        with self.assertRaises(FDroidException):
+            fdroidserver.common.get_apk_id_aapt('nope')
 
 
 if __name__ == "__main__":
