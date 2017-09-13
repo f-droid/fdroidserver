@@ -27,6 +27,7 @@ import sys
 from argparse import ArgumentParser
 import logging
 
+from . import _
 from . import common
 from .exception import FDroidException
 
@@ -53,15 +54,15 @@ def main():
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument("-d", "--distinguished-name", default=None,
-                        help="X.509 'Distiguished Name' used when generating keys")
+                        help=_("X.509 'Distiguished Name' used when generating keys"))
     parser.add_argument("--keystore", default=None,
-                        help="Path to the keystore for the repo signing key")
+                        help=_("Path to the keystore for the repo signing key"))
     parser.add_argument("--repo-keyalias", default=None,
-                        help="Alias of the repo signing key in the keystore")
+                        help=_("Alias of the repo signing key in the keystore"))
     parser.add_argument("--android-home", default=None,
-                        help="Path to the Android SDK (sometimes set in ANDROID_HOME)")
+                        help=_("Path to the Android SDK (sometimes set in ANDROID_HOME)"))
     parser.add_argument("--no-prompt", action="store_true", default=False,
-                        help="Do not prompt for Android SDK path, just fail")
+                        help=_("Do not prompt for Android SDK path, just fail"))
     options = parser.parse_args()
 
     # find root install prefix
@@ -106,8 +107,7 @@ def main():
                                                 'AppData', 'Local', 'Android', 'android-sdk')
             while not options.no_prompt:
                 try:
-                    s = input('Enter the path to the Android SDK ('
-                              + default_sdk_path + ') here:\n> ')
+                    s = input(_('Enter the path to the Android SDK (%s) here:\n> ') % default_sdk_path)
                 except KeyboardInterrupt:
                     print('')
                     sys.exit(1)
@@ -231,21 +231,20 @@ def main():
         common.write_to_config(test_config, 'keydname', c['keydname'])
         common.genkeystore(c)
 
-    logging.info('Built repo based in "' + fdroiddir + '"')
-    logging.info('with this config:')
-    logging.info('  Android SDK:\t\t\t' + config['sdk_path'])
+    msg = '\n'
+    msg += _('Built repo based in "%s" with this config:') % fdroiddir
+    msg += '\n\n  Android SDK:\t\t\t' + config['sdk_path']
     if aapt:
-        logging.info('  Android SDK Build Tools:\t' + os.path.dirname(aapt))
-    logging.info('  Android NDK r12b (optional):\t$ANDROID_NDK')
-    logging.info('  Keystore for signing key:\t' + keystore)
+        msg += '\n  Android SDK Build Tools:\t' + os.path.dirname(aapt)
+    msg += '\n  Android NDK r12b (optional):\t$ANDROID_NDK'
+    msg += '\n  ' + _('Keystore for signing key:\t') + keystore
     if repo_keyalias is not None:
-        logging.info('  Alias for key in store:\t' + repo_keyalias)
-    logging.info('\nTo complete the setup, add your APKs to "' +
-                 os.path.join(fdroiddir, 'repo') + '"' + '''
+        msg += '\n  Alias for key in store:\t' + repo_keyalias
+    msg += '\n\n' + '''To complete the setup, add your APKs to "%s"
 then run "fdroid update -c; fdroid update".  You might also want to edit
 "config.py" to set the URL, repo name, and more.  You should also set up
 a signing key (a temporary one might have been automatically generated).
 
 For more info: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo
-and https://f-droid.org/docs/Signing_Process
-''')
+and https://f-droid.org/docs/Signing_Process''' % os.path.join(fdroiddir, 'repo')
+    logging.info(msg)

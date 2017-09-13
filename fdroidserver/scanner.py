@@ -22,6 +22,7 @@ import traceback
 from argparse import ArgumentParser
 import logging
 
+from . import _
 from . import common
 from . import metadata
 from .exception import BuildException, VCSException
@@ -256,7 +257,7 @@ def main():
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help="app-id with optional versionCode in the form APPID[:VERCODE]")
+    parser.add_argument("appid", nargs='*', help=_("app-id with optional versionCode in the form APPID[:VERCODE]"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -329,8 +330,8 @@ def main():
                 appid, traceback.format_exc()))
             probcount += 1
 
-    logging.info("Finished:")
-    print("%d problems found" % probcount)
+    logging.info(_("Finished"))
+    print(_("%d problems found") % probcount)
 
 
 if __name__ == "__main__":

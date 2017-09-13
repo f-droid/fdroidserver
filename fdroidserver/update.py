@@ -37,6 +37,7 @@ from binascii import hexlify
 from PIL import Image
 import logging
 
+from . import _
 from . import common
 from . import index
 from . import metadata
@@ -1697,34 +1698,34 @@ def main():
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument("--create-key", action="store_true", default=False,
-                        help="Create a repo signing key in a keystore")
+                        help=_("Create a repo signing key in a keystore"))
     parser.add_argument("-c", "--create-metadata", action="store_true", default=False,
-                        help="Create skeleton metadata files that are missing")
+                        help=_("Create skeleton metadata files that are missing"))
     parser.add_argument("--delete-unknown", action="store_true", default=False,
-                        help="Delete APKs and/or OBBs without metadata from the repo")
+                        help=_("Delete APKs and/or OBBs without metadata from the repo"))
     parser.add_argument("-b", "--buildreport", action="store_true", default=False,
-                        help="Report on build data status")
+                        help=_("Report on build data status"))
     parser.add_argument("-i", "--interactive", default=False, action="store_true",
-                        help="Interactively ask about things that need updating.")
+                        help=_("Interactively ask about things that need updating."))
     parser.add_argument("-I", "--icons", action="store_true", default=False,
-                        help="Resize all the icons exceeding the max pixel size and exit")
+                        help=_("Resize all the icons exceeding the max pixel size and exit"))
     parser.add_argument("-e", "--editor", default="/etc/alternatives/editor",
-                        help="Specify editor to use in interactive mode. Default " +
+                        help=_("Specify editor to use in interactive mode. Default ") +
                         "is /etc/alternatives/editor")
     parser.add_argument("-w", "--wiki", default=False, action="store_true",
-                        help="Update the wiki")
+                        help=_("Update the wiki"))
     parser.add_argument("--pretty", action="store_true", default=False,
-                        help="Produce human-readable index.xml")
+                        help=_("Produce human-readable index.xml"))
     parser.add_argument("--clean", action="store_true", default=False,
-                        help="Clean update - don't uses caches, reprocess all apks")
+                        help=_("Clean update - don't uses caches, reprocess all apks"))
     parser.add_argument("--nosign", action="store_true", default=False,
-                        help="When configured for signed indexes, create only unsigned indexes at this stage")
+                        help=_("When configured for signed indexes, create only unsigned indexes at this stage"))
     parser.add_argument("--use-date-from-apk", action="store_true", default=False,
-                        help="Use date from apk instead of current time for newly added apks")
+                        help=_("Use date from apk instead of current time for newly added apks"))
     parser.add_argument("--rename-apks", action="store_true", default=False,
-                        help="Rename APK files that do not match package.name_123.apk")
+                        help=_("Rename APK files that do not match package.name_123.apk"))
     parser.add_argument("--allow-disabled-algorithms", action="store_true", default=False,
-                        help="Include APKs that are signed with disabled algorithms like MD5")
+                        help=_("Include APKs that are signed with disabled algorithms like MD5"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -1899,7 +1900,7 @@ def main():
     if options.wiki:
         update_wiki(apps, sortedids, apks + archapks)
 
-    logging.info("Finished.")
+    logging.info(_("Finished"))
 
 
 if __name__ == "__main__":

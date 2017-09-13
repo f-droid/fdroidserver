@@ -22,6 +22,7 @@ import os
 import sys
 import logging
 
+from . import _
 from . import common
 from . import net
 from .exception import FDroidException
@@ -52,7 +53,7 @@ def extract(config, options):
         os.mkdir(tmp_dir)
 
     if not options.APK or len(options.APK) <= 0:
-        logging.critical('no APK supplied')
+        logging.critical(_('no APK supplied'))
         sys.exit(1)
 
     # iterate over supplied APKs downlaod and extract them...
@@ -61,21 +62,21 @@ def extract(config, options):
         try:
             if os.path.isfile(apk):
                 sigdir = extract_signature(apk)
-                logging.info('fetched singatures for %s -> %s', apk, sigdir)
+                logging.info(_('fetched signatures for %s -> %s'), apk, sigdir)
             elif httpre.match(apk):
                 if apk.startswith('https') or options.no_check_https:
                     try:
                         tmp_apk = os.path.join(tmp_dir, 'signed.apk')
                         net.download_file(apk, tmp_apk)
                         sigdir = extract_signature(tmp_apk)
-                        logging.info('fetched singatures for %s -> %s', apk, sigdir)
+                        logging.info(_('fetched signatures for %s -> %s'), apk, sigdir)
                     finally:
                         if tmp_apk and os.path.exists(tmp_apk):
                             os.remove(tmp_apk)
                 else:
-                    logging.warn('refuse downloading via insecure http connection (use https or specify --no-https-check): %s', apk)
+                    logging.warn(_('refuse downloading via insecure http connection (use https or specify --no-https-check): %s'), apk)
         except FDroidException as e:
-            logging.warning("failed fetching signatures for '%s': %s", apk, e)
+            logging.warning(_("failed fetching signatures for '%s': %s"), apk, e)
             if e.detail:
                 logging.debug(e.detail)
 
@@ -88,7 +89,7 @@ def main():
     parser = ArgumentParser(usage="%(prog)s [options] APK [APK...]")
     common.setup_global_opts(parser)
     parser.add_argument("APK", nargs='*',
-                        help="signed APK, either a file-path or Https-URL are fine here.")
+                        help=_("signed APK, either a file-path or HTTPS URL."))
     parser.add_argument("--no-check-https", action="store_true", default=False)
     options = parser.parse_args()
 

@@ -30,6 +30,7 @@ import logging
 import subprocess
 from collections import Counter
 
+from . import _
 from . import common
 from . import metadata
 
@@ -61,12 +62,12 @@ def main():
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument("-d", "--download", action="store_true", default=False,
-                        help="Download logs we don't have")
+                        help=_("Download logs we don't have"))
     parser.add_argument("--recalc", action="store_true", default=False,
-                        help="Recalculate aggregate stats - use when changes "
-                        "have been made that would invalidate old cached data.")
+                        help=_("Recalculate aggregate stats - use when changes "
+                               "have been made that would invalidate old cached data."))
     parser.add_argument("--nologs", action="store_true", default=False,
-                        help="Don't do anything logs-related")
+                        help=_("Don't do anything logs-related"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -171,10 +172,10 @@ def main():
                     uri = match.group('uri')
                     if not uri.endswith('.apk'):
                         continue
-                    _, apkname = os.path.split(uri)
+                    _ignored, apkname = os.path.split(uri)
                     app = knownapks.getapp(apkname)
                     if app:
-                        appid, _ = app
+                        appid, _ignored = app
                         today['apps'][appid] += 1
                         # Strip the '.apk' from apkname
                         appver = apkname[:-4]
@@ -298,7 +299,7 @@ def main():
         for apk in unknownapks:
             logging.info(apk)
 
-    logging.info("Finished.")
+    logging.info(_("Finished"))
 
 
 if __name__ == "__main__":

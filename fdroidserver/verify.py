@@ -23,6 +23,7 @@ import requests
 from argparse import ArgumentParser
 import logging
 
+from . import _
 from . import common
 from . import net
 from .exception import FDroidException
@@ -38,19 +39,19 @@ def main():
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help="app-id with optional versionCode in the form APPID[:VERCODE]")
+    parser.add_argument("appid", nargs='*', help=_("app-id with optional versionCode in the form APPID[:VERCODE]"))
     options = parser.parse_args()
 
     config = common.read_config(options)
 
     tmp_dir = 'tmp'
     if not os.path.isdir(tmp_dir):
-        logging.info("Creating temporary directory")
+        logging.info(_("Creating temporary directory"))
         os.makedirs(tmp_dir)
 
     unsigned_dir = 'unsigned'
     if not os.path.isdir(unsigned_dir):
-        logging.error("No unsigned directory - nothing to do")
+        logging.error(_("No unsigned directory - nothing to do"))
         sys.exit(0)
 
     verified = 0
@@ -83,7 +84,7 @@ def main():
                 try:
                     net.download_file(url.replace('/repo', '/archive'), dldir=tmp_dir)
                 except requests.exceptions.HTTPError as e:
-                    raise FDroidException('Downloading %s failed. %s', (url, e))
+                    raise FDroidException(_('Downloading %s failed. %s'), (url, e))
 
             compare_result = common.verify_apks(
                 remoteapk,
@@ -99,7 +100,7 @@ def main():
             logging.info("...NOT verified - {0}".format(e))
             notverified += 1
 
-    logging.info("Finished")
+    logging.info(_("Finished"))
     logging.info("{0} successfully verified".format(verified))
     logging.info("{0} NOT verified".format(notverified))
 

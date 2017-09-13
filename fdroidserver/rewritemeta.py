@@ -22,6 +22,7 @@ import os
 import logging
 import io
 
+from . import _
 from . import common
 from . import metadata
 
@@ -51,10 +52,10 @@ def main():
     parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
     common.setup_global_opts(parser)
     parser.add_argument("-l", "--list", action="store_true", default=False,
-                        help="List files that would be reformatted")
+                        help=_("List files that would be reformatted"))
     parser.add_argument("-t", "--to", default=None,
-                        help="Rewrite to a specific format: " + ', '.join(supported))
-    parser.add_argument("appid", nargs='*', help="app-id in the form APPID")
+                        help=_("Rewrite to a specific format: ") + ', '.join(supported))
+    parser.add_argument("appid", nargs='*', help=_("app-id in the form APPID"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -66,21 +67,21 @@ def main():
     apps = common.read_app_args(options.appid, allapps, False)
 
     if options.list and options.to is not None:
-        parser.error("Cannot use --list and --to at the same time")
+        parser.error(_("Cannot use --list and --to at the same time"))
 
     if options.to is not None and options.to not in supported:
-        parser.error("Unsupported metadata format, use: --to [" + ' '.join(supported) + "]")
+        parser.error(_("Unsupported metadata format, use: --to [%s]") % ' '.join(supported))
 
     for appid, app in apps.items():
         path = app.metadatapath
         base, ext = common.get_extension(path)
         if not options.to and ext not in supported:
-            logging.info("Ignoring %s file at '%s'" % (ext, path))
+            logging.info(_("Ignoring %s file at '%s'") % (ext, path))
             continue
         elif options.to is not None:
-            logging.info("rewriting '%s' to %s" % (appid, options.to))
+            logging.info(_("rewriting '%s' to %s") % (appid, options.to))
         else:
-            logging.info("rewriting '%s'" % (appid))
+            logging.info(_("rewriting '%s'") % (appid))
 
         to_ext = ext
         if options.to is not None:
@@ -107,7 +108,7 @@ def main():
         if ext != to_ext:
             os.remove(path)
 
-    logging.debug("Finished.")
+    logging.debug(_("Finished"))
 
 
 if __name__ == "__main__":

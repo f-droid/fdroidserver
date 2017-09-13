@@ -26,6 +26,7 @@ from argparse import ArgumentParser
 from configparser import ConfigParser
 import logging
 
+from . import _
 from . import common
 from . import metadata
 from .exception import FDroidException
@@ -59,7 +60,7 @@ def getrepofrompage(url):
         repo = page[index + 9:]
         index = repo.find('<')
         if index == -1:
-            return (None, "Error while getting repo address")
+            return (None, _("Error while getting repo address"))
         repo = repo[:index]
         repo = repo.split('"')[0]
         return (repotype, repo)
@@ -71,12 +72,12 @@ def getrepofrompage(url):
         repo = page[index + 10:]
         index = repo.find('<')
         if index == -1:
-            return (None, "Error while getting repo address")
+            return (None, _("Error while getting repo address"))
         repo = repo[:index]
         repo = repo.split('"')[0]
         return (repotype, repo)
 
-    return (None, "No information found." + page)
+    return (None, _("No information found.") + page)
 
 
 config = None
@@ -87,7 +88,7 @@ def get_metadata_from_url(app, url):
 
     tmp_dir = 'tmp'
     if not os.path.isdir(tmp_dir):
-        logging.info("Creating temporary directory")
+        logging.info(_("Creating temporary directory"))
         os.makedirs(tmp_dir)
 
     # Figure out what kind of project it is...
@@ -190,15 +191,15 @@ def main():
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument("-u", "--url", default=None,
-                        help="Project URL to import from.")
+                        help=_("Project URL to import from."))
     parser.add_argument("-s", "--subdir", default=None,
-                        help="Path to main android project subdirectory, if not in root.")
+                        help=_("Path to main android project subdirectory, if not in root."))
     parser.add_argument("-c", "--categories", default=None,
-                        help="Comma separated list of categories.")
+                        help=_("Comma separated list of categories."))
     parser.add_argument("-l", "--license", default=None,
-                        help="Overall license of the project.")
+                        help=_("Overall license of the project."))
     parser.add_argument("--rev", default=None,
-                        help="Allows a different revision (or git branch) to be specified for the initial import")
+                        help=_("Allows a different revision (or git branch) to be specified for the initial import"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -214,7 +215,7 @@ def main():
 
     local_metadata_files = common.get_local_metadata_files()
     if local_metadata_files != []:
-        raise FDroidException("This repo already has local metadata: %s" % local_metadata_files[0])
+        raise FDroidException(_("This repo already has local metadata: %s") % local_metadata_files[0])
 
     if options.url is None and os.path.isdir('.git'):
         app.AutoName = os.path.basename(os.getcwd())
@@ -252,11 +253,11 @@ def main():
 
         versionName, versionCode, package = common.parse_androidmanifests(paths, app)
         if not package:
-            raise FDroidException("Couldn't find package ID")
+            raise FDroidException(_("Couldn't find package ID"))
         if not versionName:
-            logging.warn("Couldn't find latest version name")
+            logging.warn(_("Couldn't find latest version name"))
         if not versionCode:
-            logging.warn("Couldn't find latest version code")
+            logging.warn(_("Couldn't find latest version code"))
     else:
         spec = os.path.join(root_dir, 'buildozer.spec')
         if os.path.exists(spec):
@@ -268,7 +269,7 @@ def main():
             versionName = bconfig.get('app', 'version')
             versionCode = None
         else:
-            raise FDroidException("No android or kivy project could be found. Specify --subdir?")
+            raise FDroidException(_("No android or kivy project could be found. Specify --subdir?"))
 
     # Make sure it's actually new...
     if package in apps:

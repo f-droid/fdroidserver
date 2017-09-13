@@ -32,6 +32,7 @@ from configparser import ConfigParser
 from argparse import ArgumentParser
 import logging
 
+from . import _
 from . import common
 from . import net
 from . import metadata
@@ -162,7 +163,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
                         ftp.mkdir(d)
                     ftp.chdir(d)
                 ftp.put(libsrc, lp[-1])
-                for _ in lp[:-1]:
+                for _ignored in lp[:-1]:
                     ftp.chdir('..')
         # Copy any srclibs that are required...
         srclibpaths = []
@@ -995,33 +996,33 @@ def parse_commandline():
 
     parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help="app-id with optional versionCode in the form APPID[:VERCODE]")
+    parser.add_argument("appid", nargs='*', help=_("app-id with optional versionCode in the form APPID[:VERCODE]"))
     parser.add_argument("-l", "--latest", action="store_true", default=False,
-                        help="Build only the latest version of each package")
+                        help=_("Build only the latest version of each package"))
     parser.add_argument("-s", "--stop", action="store_true", default=False,
-                        help="Make the build stop on exceptions")
+                        help=_("Make the build stop on exceptions"))
     parser.add_argument("-t", "--test", action="store_true", default=False,
-                        help="Test mode - put output in the tmp directory only, and always build, even if the output already exists.")
+                        help=_("Test mode - put output in the tmp directory only, and always build, even if the output already exists."))
     parser.add_argument("--server", action="store_true", default=False,
-                        help="Use build server")
+                        help=_("Use build server"))
     parser.add_argument("--resetserver", action="store_true", default=False,
-                        help="Reset and create a brand new build server, even if the existing one appears to be ok.")
+                        help=_("Reset and create a brand new build server, even if the existing one appears to be ok."))
     parser.add_argument("--on-server", dest="onserver", action="store_true", default=False,
-                        help="Specify that we're running on the build server")
+                        help=_("Specify that we're running on the build server"))
     parser.add_argument("--skip-scan", dest="skipscan", action="store_true", default=False,
-                        help="Skip scanning the source code for binaries and other problems")
+                        help=_("Skip scanning the source code for binaries and other problems"))
     parser.add_argument("--dscanner", action="store_true", default=False,
-                        help="Setup an emulator, install the apk on it and perform a drozer scan")
+                        help=_("Setup an emulator, install the apk on it and perform a drozer scan"))
     parser.add_argument("--no-tarball", dest="notarball", action="store_true", default=False,
-                        help="Don't create a source tarball, useful when testing a build")
+                        help=_("Don't create a source tarball, useful when testing a build"))
     parser.add_argument("--no-refresh", dest="refresh", action="store_false", default=True,
-                        help="Don't refresh the repository, useful when testing a build with no internet connection")
+                        help=_("Don't refresh the repository, useful when testing a build with no internet connection"))
     parser.add_argument("-f", "--force", action="store_true", default=False,
-                        help="Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode.")
+                        help=_("Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode."))
     parser.add_argument("-a", "--all", action="store_true", default=False,
-                        help="Build all applications available")
+                        help=_("Build all applications available"))
     parser.add_argument("-w", "--wiki", default=False, action="store_true",
-                        help="Update the wiki")
+                        help=_("Update the wiki"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -1316,7 +1317,7 @@ def main():
         logging.info("Cleaning up after ourselves.")
         docker.clean()
 
-    logging.info("Finished.")
+    logging.info(_("Finished"))
     if len(build_succeeded) > 0:
         logging.info(str(len(build_succeeded)) + ' builds succeeded')
     if len(failed_apps) > 0:

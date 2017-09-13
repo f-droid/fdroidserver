@@ -24,7 +24,9 @@ from time import sleep
 from argparse import ArgumentParser
 from subprocess import CalledProcessError, check_output
 
-from fdroidserver import common, metadata
+from . import _
+from . import common
+from . import metadata
 
 try:
     from docker import Client
@@ -407,25 +409,25 @@ def main():
 
     parser.add_argument(
         "app_id", nargs='*',
-        help="app-id with optional versioncode in the form APPID[:VERCODE]")
+        help=_("app-id with optional versioncode in the form APPID[:VERCODE]"))
     parser.add_argument(
         "-l", "--latest", action="store_true", default=False,
-        help="Scan only the latest version of each package")
+        help=_("Scan only the latest version of each package"))
     parser.add_argument(
         "--clean-after", default=False, action='store_true',
-        help="Clean after all scans have finished")
+        help=_("Clean after all scans have finished"))
     parser.add_argument(
         "--clean-before", default=False, action='store_true',
-        help="Clean before the scans start and rebuild the container")
+        help=_("Clean before the scans start and rebuild the container"))
     parser.add_argument(
         "--clean-only", default=False, action='store_true',
-        help="Clean up all containers and then exit")
+        help=_("Clean up all containers and then exit"))
     parser.add_argument(
         "--init-only", default=False, action='store_true',
-        help="Prepare drozer to run a scan")
+        help=_("Prepare drozer to run a scan"))
     parser.add_argument(
         "--repo-path", default="repo", action="store",
-        help="Override path for repo APKs (default: ./repo)")
+        help=_("Override path for repo APKs (default: ./repo)"))
 
     options = parser.parse_args()
     config = common.read_config(options)
