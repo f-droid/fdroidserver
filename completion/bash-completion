@@ -300,26 +300,26 @@ __complete_init() {
 	__complete_options
 }
 
-__cmds="
-btlog
-build
-checkupdates
-dscanner
-gpgsign
-import
-init
-install
-lint
-publish
-readmeta
-rewritemeta
-scanner
-server
-signatures
-signindex
-stats
-update
-verify
+__cmds=" \
+btlog \
+build \
+checkupdates \
+dscanner \
+gpgsign \
+import \
+init \
+install \
+lint \
+publish \
+readmeta \
+rewritemeta \
+scanner \
+server \
+signatures \
+signindex \
+stats \
+update \
+verify \
 "
 
 for c in $__cmds; do
