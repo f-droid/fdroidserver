@@ -25,7 +25,7 @@ import time
 import subprocess
 from argparse import ArgumentParser
 import traceback
-from html.parser import HTMLParser
+import html
 from distutils.version import LooseVersion
 import logging
 import copy
@@ -279,7 +279,7 @@ def check_gplay(app):
     req = urllib.request.Request(url, None, headers)
     try:
         resp = urllib.request.urlopen(req, None, 20)
-        page = resp.read()
+        page = resp.read().decode()
     except urllib.error.HTTPError as e:
         return (None, str(e.code))
     except Exception as e:
@@ -289,8 +289,7 @@ def check_gplay(app):
 
     m = re.search('itemprop="softwareVersion">[ ]*([^<]+)[ ]*</div>', page)
     if m:
-        html_parser = HTMLParser()
-        version = html_parser.unescape(m.group(1))
+        version = html.unescape(m.group(1))
 
     if version == 'Varies with device':
         return (None, 'Device-variable version, cannot use this method')
@@ -531,7 +530,7 @@ def main():
     apps = common.read_app_args(options.appid, allapps, False)
 
     if options.gplay:
-        for app in apps:
+        for appid, app in apps.items():
             version, reason = check_gplay(app)
             if version is None:
                 if reason == '404':
