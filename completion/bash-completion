@@ -105,6 +105,28 @@ __complete_build() {
 	esac
 }
 
+__complete_dscanner() {
+	opts="-v -q -l"
+	lopts="--verbose --quiet --clean-after --clean-before --clean-only --init-only --latest --repo-path"
+        case "${cur}" in
+		-*)
+			__complete_options
+			return 0;;
+		*:)
+			__vercode
+			return 0;;
+		*)
+			__package
+			return 0;;
+	esac
+}
+
+__complete_gpgsign() {
+	opts="-v -q"
+	lopts="--verbose --quiet"
+	__complete_options
+}
+
 __complete_install() {
 	opts="-v -q"
 	lopts="--verbose --quiet --all"
@@ -255,6 +277,16 @@ __complete_server() {
 	__complete_options
 }
 
+__complete_signatures() {
+	opts="-v -q"
+	lopts="--verbose --no-check-https"
+	case "${cur}" in
+		-*)
+			__complete_options
+			return 0;;
+	esac
+}
+
 __complete_signindex() {
 	opts="-v -q"
 	lopts="--verbose"
@@ -268,8 +300,27 @@ __complete_init() {
 	__complete_options
 }
 
-__cmds=" build init install update publish checkupdates import readmeta \
-rewritemeta lint scanner verify stats server signindex "
+__cmds="
+btlog
+build
+checkupdates
+dscanner
+gpgsign
+import
+init
+install
+lint
+publish
+readmeta
+rewritemeta
+scanner
+server
+signatures
+signindex
+stats
+update
+verify
+"
 
 for c in $__cmds; do
 	eval "_fdroid_${c} () {
