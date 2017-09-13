@@ -31,6 +31,7 @@ import tempfile
 from configparser import ConfigParser
 from argparse import ArgumentParser
 import logging
+from gettext import ngettext
 
 from . import common
 from . import net
@@ -522,9 +523,12 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         count = scanner.scan_source(build_dir, build)
         if count > 0:
             if force:
-                logging.warn('Scanner found %d problems' % count)
+                logging.warning(ngettext('Scanner found {} problem',
+                                         'Scanner found {} problems', count).format(count))
             else:
-                raise BuildException("Can't build due to %d errors while scanning" % count)
+                raise BuildException(ngettext(
+                    "Can't build due to {} error while scanning",
+                    "Can't build due to {} errors while scanning", count).format(count))
 
     if not options.notarball:
         # Build the source tarball right before we build the release...
@@ -1318,9 +1322,11 @@ def main():
 
     logging.info("Finished.")
     if len(build_succeeded) > 0:
-        logging.info(str(len(build_succeeded)) + ' builds succeeded')
+        logging.info(ngettext("{} build succeeded",
+                              "{} builds succeeded", len(build_succeeded)).format(len(build_succeeded)))
     if len(failed_apps) > 0:
-        logging.info(str(len(failed_apps)) + ' builds failed')
+        logging.info(ngettext("{} build failed",
+                              "{} builds failed", len(failed_apps)).format(len(failed_apps)))
 
     sys.exit(0)
 
