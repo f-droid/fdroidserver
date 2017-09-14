@@ -6,10 +6,12 @@ test:
     - cd tests
     - ./complete-ci-tests
 
-# Test that the parsing of the .txt format didn't change 
-# from last released version.
+# Test that the parsing of the .txt format didn't change from last
+# released version. Ensure that the official tags are included when
+# running these tests on forks as well.
 metadata_v0:
   script:
+    - git fetch https://gitlab.com/fdroid/fdroidserver 0.8
     - cd tests
     - export GITCOMMIT=`git describe`
     - git checkout 0.8  # bump after release
