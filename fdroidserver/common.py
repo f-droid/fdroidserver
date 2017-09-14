@@ -2314,7 +2314,10 @@ def write_to_config(thisconfig, key, value=None, config_file=None):
         value = thisconfig[origkey] if origkey in thisconfig else thisconfig[key]
     cfg = config_file if config_file else 'config.py'
 
-    # load config file
+    # load config file, create one if it doesn't exist
+    if not os.path.exists(cfg):
+        os.mknod(cfg)
+        logging.info("Creating empty " + cfg)
     with open(cfg, 'r', encoding="utf-8") as f:
         lines = f.readlines()
 
