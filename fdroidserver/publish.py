@@ -172,6 +172,31 @@ def main():
 
             # It's a 'normal' app, i.e. we sign and publish it...
 
+            # First we handle signatures for this app from local metadata
+            signingfiles = common.metadata_find_developer_signing_files(appid, vercode)
+            if signingfiles:
+                # There's a signature of the app developer present in our
+                # metadata. This means we're going to prepare both a locally
+                # signed APK and a version signed with the developers key.
+
+                signaturefile, signedfile, manifest = signingfiles
+
+                with open(signaturefile, 'rb') as f:
+                    devfp = common.signer_fingerprint_short(f.read())
+                devsigned = '{}_{}_{}.apk'.format(appid, vercode, devfp)
+                devsignedtmp = os.path.join(tmp_dir, devsigned)
+                shutil.copy(apkfile, devsignedtmp)
+
+                common.apk_implant_signatures(devsignedtmp, signaturefile,
+                                              signedfile, manifest)
+                if common.verify_apk_signature(devsignedtmp):
+                    shutil.move(devsignedtmp, os.path.join(output_dir, devsigned))
+                else:
+                    os.remove(devsignedtmp)
+                    logging.error('...verification failed - skipping: %s', devsigned)
+
+            # Now we sign with the F-Droid key.
+
             # Figure out the key alias name we'll use. Only the first 8
             # characters are significant, so we'll use the first 8 from
             # the MD5 of the app's ID and hope there are no collisions.
@@ -211,7 +236,7 @@ def main():
                                  '-keypass:env', 'FDROID_KEY_PASS',
                                  '-dname', config['keydname']], envs=env_vars)
                 if p.returncode != 0:
-                    raise BuildException("Failed to generate key")
+                    raise BuildException("Failed to generate key", p.output)
 
             signed_apk_path = os.path.join(output_dir, apkfilename)
             if os.path.exists(signed_apk_path):
@@ -227,7 +252,7 @@ def main():
                              'SHA1withRSA', '-digestalg', 'SHA1',
                              apkfile, keyalias], envs=env_vars)
             if p.returncode != 0:
-                raise BuildException(_("Failed to sign application"))
+                raise BuildException(_("Failed to sign application"), p.output)
 
             # Zipalign it...
             p = SdkToolsPopen(['zipalign', '-v', '4', apkfile,
