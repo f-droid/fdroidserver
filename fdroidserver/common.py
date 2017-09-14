@@ -2099,6 +2099,40 @@ def metadata_get_sigdir(appid, vercode=None):
         return os.path.join('metadata', appid, 'signatures')
 
 
+def metadata_find_developer_signature(appid, vercode=None):
+    """Tires to find the developer signature for given appid.
+
+    This picks the first signature file found in metadata an returns its
+    signature.
+
+    :returns: sha256 signing key fingerprint of the developer signing key.
+        None in case no signature can not be found."""
+
+    # fetch list of dirs for all versions of signatures
+    appversigdirs = []
+    if vercode:
+        appversigdirs.append(metadata_get_sigdir(appid, vercode))
+    else:
+        appsigdir = metadata_get_sigdir(appid)
+        if os.path.isdir(appsigdir):
+            numre = re.compile('[0-9]+')
+            for ver in os.listdir(appsigdir):
+                if numre.match(ver):
+                    appversigdir = os.path.join(appsigdir, ver)
+                    appversigdirs.append(appversigdir)
+
+    for sigdir in appversigdirs:
+        sigs = glob.glob(os.path.join(sigdir, '*.DSA')) + \
+            glob.glob(os.path.join(sigdir, '*.EC')) + \
+            glob.glob(os.path.join(sigdir, '*.RSA'))
+        if len(sigs) > 1:
+            raise FDroidException('ambiguous signatures, please make sure there is only one signature in \'{}\'. (The signature has to be the App maintainers signature for version of the APK.)'.format(sigdir))
+        for sig in sigs:
+            with open(sig, 'rb') as f:
+                return signer_fingerprint(f.read())
+    return None
+
+
 def metadata_find_signing_files(appid, vercode):
     """Gets a list of singed manifests and signatures.
 
