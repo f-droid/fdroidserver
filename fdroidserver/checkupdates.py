@@ -302,10 +302,10 @@ def check_gplay(app):
 # Return all directories under startdir that contain any of the manifest
 # files, and thus are probably an Android project.
 def dirs_with_manifest(startdir):
-    for r, d, f in os.walk(startdir):
-        if any(m in f for m in [
+    for root, dirs, files in os.walk(startdir):
+        if any(m in files for m in [
                 'AndroidManifest.xml', 'pom.xml', 'build.gradle']):
-            yield r
+            yield root
 
 
 # Tries to find a new subdir starting from the root build_dir. Returns said

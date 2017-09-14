@@ -96,19 +96,19 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
 
         # Helper to copy the contents of a directory to the server...
         def send_dir(path):
-            root = os.path.dirname(path)
+            startroot = os.path.dirname(path)
             main = os.path.basename(path)
             ftp.mkdir(main)
-            for r, d, f in os.walk(path):
-                rr = os.path.relpath(r, root)
+            for root, dirs, files in os.walk(path):
+                rr = os.path.relpath(root, startroot)
                 ftp.chdir(rr)
-                for dd in d:
-                    ftp.mkdir(dd)
-                for ff in f:
-                    lfile = os.path.join(root, rr, ff)
+                for d in dirs:
+                    ftp.mkdir(d)
+                for f in files:
+                    lfile = os.path.join(startroot, rr, f)
                     if not os.path.islink(lfile):
-                        ftp.put(lfile, ff)
-                        ftp.chmod(ff, os.stat(lfile).st_mode)
+                        ftp.put(lfile, f)
+                        ftp.chmod(f, os.stat(lfile).st_mode)
                 for i in range(len(rr.split('/'))):
                     ftp.chdir('..')
             ftp.chdir('..')

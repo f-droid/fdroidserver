@@ -117,12 +117,12 @@ For more info on this idea:
             jarin.close()
             gitrepo.index.add([repof, ])
 
-        files = []
-        for root, dirs, filenames in os.walk(repodir):
-            for f in filenames:
-                files.append(os.path.relpath(os.path.join(root, f), repodir))
+        output_files = []
+        for root, dirs, files in os.walk(repodir):
+            for f in files:
+                output_files.append(os.path.relpath(os.path.join(root, f), repodir))
         output = collections.OrderedDict()
-        for f in sorted(files):
+        for f in sorted(output_files):
             repofile = os.path.join(repodir, f)
             stat = os.stat(repofile)
             output[f] = (

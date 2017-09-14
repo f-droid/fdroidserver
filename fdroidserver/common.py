@@ -1022,9 +1022,9 @@ def retrieve_string(app_dir, string, xmlfiles=None):
             os.path.join(app_dir, 'res'),
             os.path.join(app_dir, 'src', 'main', 'res'),
         ]:
-            for r, d, f in os.walk(res_dir):
-                if os.path.basename(r) == 'values':
-                    xmlfiles += [os.path.join(r, x) for x in f if x.endswith('.xml')]
+            for root, dirs, files in os.walk(res_dir):
+                if os.path.basename(root) == 'values':
+                    xmlfiles += [os.path.join(root, x) for x in files if x.endswith('.xml')]
 
     name = string[len('@string/'):]
 

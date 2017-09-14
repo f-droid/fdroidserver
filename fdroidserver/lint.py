@@ -358,21 +358,21 @@ def check_license_tag(app):
 
 def check_extlib_dir(apps):
     dir_path = os.path.join('build', 'extlib')
-    files = set()
-    for root, dirs, names in os.walk(dir_path):
-        for name in names:
-            files.add(os.path.join(root, name)[len(dir_path) + 1:])
+    unused_extlib_files = set()
+    for root, dirs, files in os.walk(dir_path):
+        for name in files:
+            unused_extlib_files.add(os.path.join(root, name)[len(dir_path) + 1:])
 
     used = set()
     for app in apps:
         for build in app.builds:
             for path in build.extlibs:
-                if path not in files:
+                if path not in unused_extlib_files:
                     yield "%s: Unknown extlib %s in build '%s'" % (app.id, path, build.versionName)
                 else:
                     used.add(path)
 
-    for path in files.difference(used):
+    for path in unused_extlib_files.difference(used):
         if any(path.endswith(s) for s in [
                 '.gitignore',
                 'source.txt', 'origin.txt', 'md5.txt',

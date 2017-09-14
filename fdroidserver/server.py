@@ -154,7 +154,7 @@ def update_awsbucket_libcloud(repo_section):
         if obj.name.startswith(upload_dir + '/'):
             objs[obj.name] = obj
 
-    for root, _, files in os.walk(os.path.join(os.getcwd(), repo_section)):
+    for root, dirs, files in os.walk(os.path.join(os.getcwd(), repo_section)):
         for name in files:
             upload = False
             file_to_upload = os.path.join(root, name)
@@ -307,9 +307,9 @@ def update_localcopy(repo_section, local_copy_dir):
 def _get_size(start_path='.'):
     '''get size of all files in a dir https://stackoverflow.com/a/1392549'''
     total_size = 0
-    for dirpath, dirnames, filenames in os.walk(start_path):
-        for f in filenames:
-            fp = os.path.join(dirpath, f)
+    for root, dirs, files in os.walk(start_path):
+        for f in files:
+            fp = os.path.join(root, f)
             total_size += os.path.getsize(fp)
     return total_size
 
