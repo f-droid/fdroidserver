@@ -235,13 +235,16 @@ test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 grep -F '<install packageName=' repo/index.xml > /dev/null
 grep -F '<uninstall packageName=' repo/index.xml > /dev/null
-$fdroid gpgsign --verbose
-$fdroid gpgsign --verbose
-test -e repo/obb.mainpatch.current_1619.apk.asc
-test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc
-! test -e repo/obb.mainpatch.current_1619.apk.asc.asc
-! test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc.asc
-! test -e repo/index.xml.asc
+# OSX tests are run on Travis-CI, and gpg fails to launch gpg-agent there
+if [ "$TRAVIS_OS_NAME" != "osx" ]; then
+    $fdroid gpgsign --verbose
+    $fdroid gpgsign --verbose
+    test -e repo/obb.mainpatch.current_1619.apk.asc
+    test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc
+    ! test -e repo/obb.mainpatch.current_1619.apk.asc.asc
+    ! test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc.asc
+    ! test -e repo/index.xml.asc
+fi
 
 # we can't easily reproduce the timestamps for things, so just hardcode them
 $sed -i.tmp -e 's,timestamp="[0-9]*",timestamp="1480431575",' repo/index.xml
