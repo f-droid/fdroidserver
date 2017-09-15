@@ -904,7 +904,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
                 logging.debug("Ignoring stale cache data for " + name)
 
         if not usecache:
-            logging.debug("Processing " + name_utf8)
+            logging.debug(_("Processing {apkfilename}").format(apkfilename=name_utf8))
             repo_file = collections.OrderedDict()
             repo_file['name'] = os.path.splitext(name_utf8)[0]
             # TODO rename apkname globally to something more generic
@@ -1221,12 +1221,13 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
             logging.debug("Ignoring stale cache data for " + apkfilename)
 
     if not usecache:
-        logging.debug("Processing " + apkfilename)
+        logging.debug(_("Processing {apkfilename}").format(apkfilename=apkfilename))
 
         try:
             apk = scan_apk(apkfile)
         except BuildException:
-            logging.warning('Skipping "%s" with invalid signature!', apkfilename)
+            logging.warning(_("Skipping '{apkfilename}' with invalid signature!")
+                            .format(apkfilename=apkfilename))
             return True, None, False
 
         # Check for debuggable apks...

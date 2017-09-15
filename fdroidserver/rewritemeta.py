@@ -70,18 +70,19 @@ def main():
         parser.error(_("Cannot use --list and --to at the same time"))
 
     if options.to is not None and options.to not in supported:
-        parser.error(_("Unsupported metadata format, use: --to [%s]") % ' '.join(supported))
+        parser.error(_("Unsupported metadata format, use: --to [{supported}]")
+                     .format(supported=' '.join(supported)))
 
     for appid, app in apps.items():
         path = app.metadatapath
         base, ext = common.get_extension(path)
         if not options.to and ext not in supported:
-            logging.info(_("Ignoring %s file at '%s'") % (ext, path))
+            logging.info(_("Ignoring {ext} file at '{path}'").format(ext=ext, path=path))
             continue
         elif options.to is not None:
-            logging.info(_("rewriting '%s' to %s") % (appid, options.to))
+            logging.info(_("Rewriting '{appid}' to '{path}'").format(appid=appid, path=options.to))
         else:
-            logging.info(_("rewriting '%s'") % (appid))
+            logging.info(_("Rewriting '{appid}'").format(appid=appid))
 
         to_ext = ext
         if options.to is not None:

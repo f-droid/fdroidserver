@@ -99,7 +99,7 @@ def main():
             raise FDroidException(_("No attached devices found"))
         logging.info(_("Installing %s...") % apk)
         for dev in devs:
-            logging.info(_("Installing %s on %s...") % (apk, dev))
+            logging.info(_("Installing '{apkfilename}' on {dev}...").format(apkfilename=apk, dev=dev))
             p = SdkToolsPopen(['adb', "-s", dev, "install", apk])
             fail = ""
             for line in p.output.splitlines():
@@ -109,10 +109,11 @@ def main():
                 continue
 
             if fail == "INSTALL_FAILED_ALREADY_EXISTS":
-                logging.warn(_("%s is already installed on %s.") % (apk, dev))
+                logging.warn(_("'{apkfilename}' is already installed on {dev}.")
+                             .format(apkfilename=apk, dev=dev))
             else:
-                raise FDroidException(_("Failed to install %s on %s: %s") % (
-                    apk, dev, fail))
+                raise FDroidException(_("Failed to install '{apkfilename}' on {dev}: {error}")
+                                      .format(apkfilename=apk, dev=dev, error=fail))
 
     logging.info('\n' + _('Finished'))
 
