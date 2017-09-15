@@ -1,0 +1,388 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: team@f-droid.org\n"
+"POT-Creation-Date: 2017-06-01 17:23+0200\n"
+"PO-Revision-Date: 2017-07-24 02:40+0000\n"
+"Last-Translator: sima <lin2s@riseup.net>\n"
+"Language-Team: Chinese (Simplified) "
+"<https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
+"Language: zh_Hans\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.16-dev\n"
+
+#: ../fdroid:34
+msgid "Build a package from source"
+msgstr "从源生成包"
+
+#: ../fdroid:35
+msgid "Quickly start a new repository"
+msgstr "快速新建资源库"
+
+#: ../fdroid:36
+msgid "Sign and place packages in the repo"
+msgstr "对包进行签名并将其加入资源库"
+
+#: ../fdroid:37
+msgid "Add gpg signatures for packages in repo"
+msgstr "添加包 gpg 签名至资源库"
+
+#: ../fdroid:38
+msgid "Update repo information for new packages"
+msgstr "更新新包的资源库信息"
+
+#: ../fdroid:39
+msgid "Verify the integrity of downloaded packages"
+msgstr "验证已下载包的完整性"
+
+#: ../fdroid:40
+msgid "Check for updates to applications"
+msgstr "检查应用更新"
+
+#: ../fdroid:41
+msgid "Add a new application from its source code"
+msgstr "从源码添加新的应用程序"
+
+#: ../fdroid:42
+msgid "Install built packages on devices"
+msgstr "在设备上安装生成包"
+
+#: ../fdroid:43
+msgid "Read all the metadata files and exit"
+msgstr "读取全部元数据文件并退出"
+
+#: ../fdroid:44
+msgid "Rewrite all the metadata files"
+msgstr "重写全部元数据文件"
+
+#: ../fdroid:45
+msgid "Warn about possible metadata errors"
+msgstr "有关元数据可能错误的警告"
+
+#: ../fdroid:46
+msgid "Scan the source code of a package"
+msgstr "扫描包源码"
+
+#: ../fdroid:47
+msgid "Dynamically scan APKs post build"
+msgstr "动态扫描已编译的 APKs"
+
+#: ../fdroid:48
+msgid "Update the stats of the repo"
+msgstr "更新资源库统计信息"
+
+#: ../fdroid:49
+msgid "Interact with the repo HTTP server"
+msgstr "与资源库 HTTP 服务器互动"
+
+#: ../fdroid:50
+msgid "Sign indexes created using update --nosign"
+msgstr "签署使用更新创建的索引 --nosign"
+
+#: ../fdroid:51
+msgid "Update the binary transparency log for a URL"
+msgstr "更新 URL 的二进制透明度日志"
+
+#: ../fdroid:56
+msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
+msgstr "用法：fdroid [-h|--help|--version] <command> [<args>]"
+
+#: ../fdroid:58
+msgid "Valid commands are:"
+msgstr "有效的命令为："
+
+#: ../fdroid:104
+#, c-format
+msgid "Command '%s' not recognised.\n"
+msgstr "无法识别命令 '%s'。\n"
+
+#: ../fdroid:150
+msgid "Unknown exception found!"
+msgstr "发生未知异常！"
+
+#: ../fdroidserver/btlog.py:154
+msgid "Path to the git repo to use as the log"
+msgstr "使用的 git 资源库路径在日志上"
+
+#: ../fdroidserver/btlog.py:156
+msgid "The base URL for the repo to log (default: https://f-droid.org)"
+msgstr "资源库基 URL的日志（默认为 https://f-droid.org）"
+
+#: ../fdroidserver/btlog.py:158
+msgid "Push the log to this git remote repository"
+msgstr "拖送日志至 git 远程资源库"
+
+#: ../fdroidserver/build.py:875 ../fdroidserver/install.py:52
+#: ../fdroidserver/publish.py:45 ../fdroidserver/scanner.py:255
+#: ../fdroidserver/verify.py:41
+msgid "app-id with optional versionCode in the form APPID[:VERCODE]"
+msgstr "带有可选项 versionCode 的 app-id，格式：APPID[:VERCODE]"
+
+#: ../fdroidserver/build.py:877
+msgid "Build only the latest version of each package"
+msgstr "仅编译每个包的最新版本"
+
+#: ../fdroidserver/build.py:879
+msgid "Make the build stop on exceptions"
+msgstr "异常时中止编译"
+
+#: ../fdroidserver/build.py:881
+msgid ""
+"Test mode - put output in the tmp directory only, and always build, even if "
+"the output already exists."
+msgstr "测试模式：仅将输出保存至 tmp 目录，即使输出已存在，仍然编译。"
+
+#: ../fdroidserver/build.py:883
+msgid "Use build server"
+msgstr "使用编译服务器"
+
+#: ../fdroidserver/build.py:885
+msgid ""
+"Reset and create a brand new build server, even if the existing one appears "
+"to be ok."
+msgstr "即使已有服务器看起来运行正常，请重置并创建一个全新的编译服务器。"
+
+#: ../fdroidserver/build.py:887
+msgid "Specify that we're running on the build server"
+msgstr "指定在编译服务器上运行"
+
+#: ../fdroidserver/build.py:889
+msgid "Skip scanning the source code for binaries and other problems"
+msgstr "跳过二进制源码扫描和其他问题"
+
+#: ../fdroidserver/build.py:891
+msgid "Setup an emulator, install the apk on it and perform a drozer scan"
+msgstr "设置一个模拟器，然后在其中安装 apk 并执行 drozer 扫描"
+
+#: ../fdroidserver/build.py:893
+msgid "Don't create a source tarball, useful when testing a build"
+msgstr "不创建源码 tarball 文件，便于内部版本测试"
+
+#: ../fdroidserver/build.py:895
+msgid ""
+"Don't refresh the repository, useful when testing a build with no internet "
+"connection"
+msgstr "不刷新资源库，便于没有互联网时的内部版本测试"
+
+#: ../fdroidserver/build.py:897
+msgid ""
+"Force build of disabled apps, and carries on regardless of scan problems. "
+"Only allowed in test mode."
+msgstr "强制编译已禁用应用，忽略扫描出错。仅用于测试模式。"
+
+#: ../fdroidserver/build.py:899
+msgid "Build all applications available"
+msgstr "编译全部可用应用程序"
+
+#: ../fdroidserver/build.py:901 ../fdroidserver/update.py:1519
+msgid "Update the wiki"
+msgstr "更新维基页面"
+
+#: ../fdroidserver/checkupdates.py:513
+msgid "app-id to check for updates"
+msgstr "app-id，用于检查更新"
+
+#: ../fdroidserver/checkupdates.py:515
+msgid "Process auto-updates"
+msgstr "处理自动更新"
+
+#: ../fdroidserver/checkupdates.py:517
+msgid "Only process apps with auto-updates"
+msgstr "仅处理使用自动更新的应用"
+
+#: ../fdroidserver/checkupdates.py:519
+msgid "Commit changes"
+msgstr "提交更改"
+
+#: ../fdroidserver/checkupdates.py:521
+msgid "Only print differences with the Play Store"
+msgstr "仅输出与 Play Store 的差异"
+
+#: ../fdroidserver/common.py:124
+msgid "Spew out even more information than normal"
+msgstr "比一般情况输出更多的信息"
+
+#: ../fdroidserver/common.py:126
+msgid "Restrict output to warnings and errors"
+msgstr "仅输出警告和出错信息"
+
+#: ../fdroidserver/dscanner.py:410
+msgid "app-id with optional versioncode in the form APPID[:VERCODE]"
+msgstr "带有可选项 versioncode 的 app-id，格式：APPID[:VERCODE]"
+
+#: ../fdroidserver/dscanner.py:413
+msgid "Scan only the latest version of each package"
+msgstr "仅扫描每个包的最新版本"
+
+#: ../fdroidserver/dscanner.py:416
+msgid "Clean after all scans have finished"
+msgstr "扫描全部完成后清除"
+
+#: ../fdroidserver/dscanner.py:419
+msgid "Clean before the scans start and rebuild the container"
+msgstr "在扫描启动和容器重新编译之前清除"
+
+#: ../fdroidserver/dscanner.py:422
+msgid "Clean up all containers and then exit"
+msgstr "清除所有容器，然后退出"
+
+#: ../fdroidserver/dscanner.py:425
+msgid "Prepare drozer to run a scan"
+msgstr "准备运行 drozer 扫描"
+
+#: ../fdroidserver/dscanner.py:428
+msgid "Override path for repo APKs (default: ./repo)"
+msgstr "覆盖资源库 APK 路径（默认为 ./repo）"
+
+#: ../fdroidserver/import.py:193
+msgid "Project URL to import from."
+msgstr "项目 URL 导入位置。"
+
+#: ../fdroidserver/import.py:195
+msgid "Path to main android project subdirectory, if not in root."
+msgstr "如果不是位于根目录，路径为 android 主项目的子目录。"
+
+#: ../fdroidserver/import.py:197
+msgid "Comma separated list of categories."
+msgstr "逗号分割的目录列表。"
+
+#: ../fdroidserver/import.py:199
+msgid "Overall license of the project."
+msgstr "项目总体许可证。"
+
+#: ../fdroidserver/import.py:201
+msgid ""
+"Allows a different revision (or git branch) to be specified for the initial "
+"import"
+msgstr "可让运行初始导入时指定不同修订（或 git 分支）"
+
+#: ../fdroidserver/init.py:56
+msgid "X.509 'Distiguished Name' used when generating keys"
+msgstr "X.509 生成密钥时所用的“可分辨名称”"
+
+#: ../fdroidserver/init.py:58
+msgid "Path to the keystore for the repo signing key"
+msgstr "资源库签名密钥的密钥存储(keystore)路径"
+
+#: ../fdroidserver/init.py:60
+msgid "Alias of the repo signing key in the keystore"
+msgstr "密钥存储中资源库签名密钥的别名"
+
+#: ../fdroidserver/init.py:62
+msgid "Path to the Android SDK (sometimes set in ANDROID_HOME)"
+msgstr "Android SDK 路径（有时在 ANDROID_HOME 中设置）"
+
+#: ../fdroidserver/init.py:64
+msgid "Do not prompt for Android SDK path, just fail"
+msgstr "不提示输入 Android SDK 路径，仅显示失败"
+
+#: ../fdroidserver/install.py:54
+msgid "Install all signed applications available"
+msgstr "安装全部可用的已签名应用"
+
+#: ../fdroidserver/lint.py:393
+msgid "Also warn about formatting issues, like rewritemeta -l"
+msgstr "同时提示格式问题，如 rewritemeta -l"
+
+#: ../fdroidserver/lint.py:394 ../fdroidserver/rewritemeta.py:57
+msgid "app-id in the form APPID"
+msgstr "app-id，格式：APPID"
+
+#: ../fdroidserver/metadata.py:1337
+msgid "force errors to be warnings, or ignore"
+msgstr "强制错误提示警告或忽略"
+
+#: ../fdroidserver/rewritemeta.py:54
+msgid "List files that would be reformatted"
+msgstr "列出全部需重新设定格式的文件"
+
+#: ../fdroidserver/rewritemeta.py:56
+msgid "Rewrite to a specific format: "
+msgstr "重写为特定格式： "
+
+#: ../fdroidserver/server.py:547
+msgid "command to execute, either 'init' or 'update'"
+msgstr "执行命令：init 或 update"
+
+#: ../fdroidserver/server.py:549
+msgid "Specify an identity file to provide to SSH for rsyncing"
+msgstr "指定 rsync 同步时 SSH 所用的标识文件"
+
+#: ../fdroidserver/server.py:551
+msgid "Specify a local folder to sync the repo to"
+msgstr "指定资源库同步的本地文件夹"
+
+#: ../fdroidserver/server.py:553
+msgid "Don't use rsync checksums"
+msgstr "请勿使用 rsync 校验和"
+
+#: ../fdroidserver/stats.py:64
+msgid "Download logs we don't have"
+msgstr "下载当前没有的日志"
+
+#: ../fdroidserver/stats.py:66
+msgid "Recalculate aggregate stats - use when changes "
+msgstr "重新计算聚合统计信息（发生更改时使用） "
+
+#: ../fdroidserver/stats.py:69
+msgid "Don't do anything logs-related"
+msgstr "请勿做任何日志相关的操作"
+
+#: ../fdroidserver/update.py:1504
+msgid "Create a repo signing key in a keystore"
+msgstr "在密钥存储中创建资源库签名密钥"
+
+#: ../fdroidserver/update.py:1506
+msgid "Create skeleton metadata files that are missing"
+msgstr "创建缺少的主干元数据文件"
+
+#: ../fdroidserver/update.py:1508
+msgid "Delete APKs and/or OBBs without metadata from the repo"
+msgstr "从资源库中删除没有元数据的 APK 和 OBB"
+
+#: ../fdroidserver/update.py:1510
+msgid "Report on build data status"
+msgstr "报告编译数据状态"
+
+#: ../fdroidserver/update.py:1512
+msgid "Interactively ask about things that need updating."
+msgstr "需更新事项的互动提示。"
+
+#: ../fdroidserver/update.py:1514
+msgid "Resize all the icons exceeding the max pixel size and exit"
+msgstr "对超过像素大小上限的全部图标进行尺寸调整，然后退出"
+
+#: ../fdroidserver/update.py:1516
+#, c-format
+msgid "Specify editor to use in interactive mode. Default %s"
+msgstr "指定编辑器使用互动模式。默认 %s"
+
+#: ../fdroidserver/update.py:1521
+msgid "Produce human-readable index.xml"
+msgstr "生成用户可读的 index.xml"
+
+#: ../fdroidserver/update.py:1523
+msgid "Clean update - don't uses caches, reprocess all apks"
+msgstr "清除更新：不用缓存，重新处理全部 apk"
+
+#: ../fdroidserver/update.py:1525
+msgid ""
+"When configured for signed indexes, create only unsigned indexes at this "
+"stage"
+msgstr "如果已配置为使用签名索引，该阶段仅创建未签名索引"
+
+#: ../fdroidserver/update.py:1527
+msgid "Use date from apk instead of current time for newly added apks"
+msgstr "对于最新添加的 apk，使用来自 apk 的日期，而不是当前时间"
+
+#: ../fdroidserver/update.py:1529
+msgid "Rename APK files that do not match package.name_123.apk"
+msgstr "对于文件名不符合 package.name_123.apk 的文件进行重命名"
