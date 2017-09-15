@@ -732,7 +732,7 @@ def read_metadata(xref=True, check_vcs=[]):
                                + glob.glob('.fdroid.txt')
                                + glob.glob('.fdroid.json')
                                + glob.glob('.fdroid.yml')):
-        packageName, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
+        packageName, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
         if packageName in apps:
             warn_or_exception("Found multiple metadata files for " + packageName)
         app = parse_metadata(metadatapath, packageName in check_vcs)
@@ -777,7 +777,7 @@ def get_default_app_info(metadatapath=None):
     if metadatapath is None:
         appid = None
     else:
-        appid, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
+        appid, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
 
     if appid == '.fdroid':  # we have local metadata in the app's source
         if os.path.exists('AndroidManifest.xml'):
@@ -929,7 +929,7 @@ def parse_metadata(metadatapath, check_vcs=False):
 
     app = App()
     app.metadatapath = metadatapath
-    name, _ = fdroidserver.common.get_extension(os.path.basename(metadatapath))
+    name, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
     if name == '.fdroid':
         check_vcs = False
     else:
