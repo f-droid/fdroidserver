@@ -210,23 +210,33 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         cmdline += " %s:%s" % (app.id, build.versionCode)
         chan.exec_command('bash --login -c "' + cmdline + '"')
 
-        output = bytes()
-        output += get_android_tools_version_log(build.ndk_path()).encode()
-        while not chan.exit_status_ready():
-            while chan.recv_ready():
-                output += chan.recv(1024)
-            time.sleep(0.1)
+        # Fetch build process output ...
+        try:
+            cmd_stdout = chan.makefile('rb', 1024)
+            output = bytes()
+            output += get_android_tools_version_log(build.ndk_path()).encode()
+            while not chan.exit_status_ready():
+                line = cmd_stdout.readline()
+                if line:
+                    if options.verbose:
+                        logging.debug("buildserver > " + str(line, 'utf-8').rstrip())
+                    output += line
+                else:
+                    time.sleep(0.05)
+            for line in cmd_stdout.readlines():
+                if options.verbose:
+                    logging.debug("buildserver > " + str(line, 'utf-8').rstrip())
+                output += line
+        finally:
+            cmd_stdout.close()
+
+        # Check build process exit status ...
         logging.info("...getting exit status")
         returncode = chan.recv_exit_status()
-        while True:
-            get = chan.recv(1024)
-            if len(get) == 0:
-                break
-            output += get
         if returncode != 0:
             raise BuildException(
                 "Build.py failed on server for {0}:{1}".format(
-                    app.id, build.versionName), str(output, 'utf-8'))
+                    app.id, build.versionName), None if options.verbose else str(output, 'utf-8'))
 
         # Retreive logs...
         toolsversion_log = common.get_toolsversion_logname(app, build)
@@ -251,8 +261,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
                 ftp.get(tarball, os.path.join(output_dir, tarball))
         except Exception:
             raise BuildException(
-                "Build failed for %s:%s - missing output files".format(
-                    app.id, build.versionName), output)
+                "Build failed for {0}:{1} - missing output files".format(
+                    app.id, build.versionName), None if options.verbose else str(output, 'utf-8'))
         ftp.close()
 
     finally:
