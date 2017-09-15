@@ -1016,7 +1016,7 @@ def parse_commandline():
     parser.add_argument("--skip-scan", dest="skipscan", action="store_true", default=False,
                         help=_("Skip scanning the source code for binaries and other problems"))
     parser.add_argument("--dscanner", action="store_true", default=False,
-                        help=_("Setup an emulator, install the apk on it and perform a drozer scan"))
+                        help=_("Setup an emulator, install the APK on it and perform a Drozer scan"))
     parser.add_argument("--no-tarball", dest="notarball", action="store_true", default=False,
                         help=_("Don't create a source tarball, useful when testing a build"))
     parser.add_argument("--no-refresh", dest="refresh", action="store_false", default=True,

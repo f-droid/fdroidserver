@@ -31,7 +31,7 @@ commands = OrderedDict([
     ("build", _("Build a package from source")),
     ("init", _("Quickly start a new repository")),
     ("publish", _("Sign and place packages in the repo")),
-    ("gpgsign", _("Add gpg signatures for packages in repo")),
+    ("gpgsign", _("Add PGP signatures using GnuPG for packages in repo")),
     ("update", _("Update repo information for new packages")),
     ("verify", _("Verify the integrity of downloaded packages")),
     ("checkupdates", _("Check for updates to applications")),

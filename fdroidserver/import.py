@@ -193,7 +193,7 @@ def main():
     parser.add_argument("-u", "--url", default=None,
                         help=_("Project URL to import from."))
     parser.add_argument("-s", "--subdir", default=None,
-                        help=_("Path to main android project subdirectory, if not in root."))
+                        help=_("Path to main Android project subdirectory, if not in root."))
     parser.add_argument("-c", "--categories", default=None,
                         help=_("Comma separated list of categories."))
     parser.add_argument("-l", "--license", default=None,

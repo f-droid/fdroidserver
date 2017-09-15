@@ -1717,11 +1717,11 @@ def main():
     parser.add_argument("--pretty", action="store_true", default=False,
                         help=_("Produce human-readable index.xml"))
     parser.add_argument("--clean", action="store_true", default=False,
-                        help=_("Clean update - don't uses caches, reprocess all apks"))
+                        help=_("Clean update - don't uses caches, reprocess all APKs"))
     parser.add_argument("--nosign", action="store_true", default=False,
                         help=_("When configured for signed indexes, create only unsigned indexes at this stage"))
     parser.add_argument("--use-date-from-apk", action="store_true", default=False,
-                        help=_("Use date from apk instead of current time for newly added apks"))
+                        help=_("Use date from APK instead of current time for newly added APKs"))
     parser.add_argument("--rename-apks", action="store_true", default=False,
                         help=_("Rename APK files that do not match package.name_123.apk"))
     parser.add_argument("--allow-disabled-algorithms", action="store_true", default=False,
