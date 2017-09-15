@@ -39,7 +39,7 @@ def main():
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help=_("app-id with optional versionCode in the form APPID[:VERCODE]"))
+    parser.add_argument("appid", nargs='*', help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))
     options = parser.parse_args()
 
     config = common.read_config(options)

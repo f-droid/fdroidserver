@@ -55,7 +55,7 @@ def main():
                         help=_("List files that would be reformatted"))
     parser.add_argument("-t", "--to", default=None,
                         help=_("Rewrite to a specific format: ") + ', '.join(supported))
-    parser.add_argument("appid", nargs='*', help=_("app-id in the form APPID"))
+    parser.add_argument("appid", nargs='*', help=_("applicationId in the form APPID"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W

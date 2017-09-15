@@ -409,7 +409,7 @@ def main():
 
     parser.add_argument(
         "app_id", nargs='*',
-        help=_("app-id with optional versioncode in the form APPID[:VERCODE]"))
+        help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))
     parser.add_argument(
         "-l", "--latest", action="store_true", default=False,
         help=_("Scan only the latest version of each package"))
