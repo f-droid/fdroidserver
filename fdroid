@@ -22,36 +22,38 @@ import logging
 
 import fdroidserver.common
 import fdroidserver.metadata
+from fdroidserver import _
 from argparse import ArgumentError
 from collections import OrderedDict
 
+
 commands = OrderedDict([
-    ("build", "Build a package from source"),
-    ("init", "Quickly start a new repository"),
-    ("publish", "Sign and place packages in the repo"),
-    ("gpgsign", "Add gpg signatures for packages in repo"),
-    ("update", "Update repo information for new packages"),
-    ("verify", "Verify the integrity of downloaded packages"),
-    ("checkupdates", "Check for updates to applications"),
-    ("import", "Add a new application from its source code"),
-    ("install", "Install built packages on devices"),
-    ("readmeta", "Read all the metadata files and exit"),
-    ("rewritemeta", "Rewrite all the metadata files"),
-    ("lint", "Warn about possible metadata errors"),
-    ("scanner", "Scan the source code of a package"),
-    ("dscanner", "Dynamically scan APKs post build"),
-    ("stats", "Update the stats of the repo"),
-    ("server", "Interact with the repo HTTP server"),
-    ("signindex", "Sign indexes created using update --nosign"),
-    ("btlog", "Update the binary transparency log for a URL"),
-    ("signatures", "Extract signatures from APKs"),
+    ("build", _("Build a package from source")),
+    ("init", _("Quickly start a new repository")),
+    ("publish", _("Sign and place packages in the repo")),
+    ("gpgsign", _("Add gpg signatures for packages in repo")),
+    ("update", _("Update repo information for new packages")),
+    ("verify", _("Verify the integrity of downloaded packages")),
+    ("checkupdates", _("Check for updates to applications")),
+    ("import", _("Add a new application from its source code")),
+    ("install", _("Install built packages on devices")),
+    ("readmeta", _("Read all the metadata files and exit")),
+    ("rewritemeta", _("Rewrite all the metadata files")),
+    ("lint", _("Warn about possible metadata errors")),
+    ("scanner", _("Scan the source code of a package")),
+    ("dscanner", _("Dynamically scan APKs post build")),
+    ("stats", _("Update the stats of the repo")),
+    ("server", _("Interact with the repo HTTP server")),
+    ("signindex", _("Sign indexes created using update --nosign")),
+    ("btlog", _("Update the binary transparency log for a URL")),
+    ("signatures", _("Extract signatures from APKs")),
 ])
 
 
 def print_help():
-    print("usage: fdroid [-h|--help|--version] <command> [<args>]")
+    print(_("usage: fdroid [-h|--help|--version] <command> [<args>]"))
     print("")
-    print("Valid commands are:")
+    print(_("Valid commands are:"))
     for cmd, summary in commands.items():
         print("   " + cmd + ' ' * (15 - len(cmd)) + summary)
     print("")
@@ -70,7 +72,7 @@ def main():
             sys.exit(0)
         elif command == '--version':
             import os.path
-            output = 'no version info found!'
+            output = _('no version info found!')
             cmddir = os.path.realpath(os.path.dirname(__file__))
             moduledir = os.path.realpath(os.path.dirname(fdroidserver.common.__file__) + '/..')
             if cmddir == moduledir:
@@ -97,7 +99,7 @@ def main():
             print(output),
             sys.exit(0)
         else:
-            print("Command '%s' not recognised.\n" % command)
+            print(_("Command '%s' not recognised.\n" % command))
             print_help()
             sys.exit(1)
 
@@ -143,7 +145,7 @@ def main():
     # These should only be unexpected crashes due to bugs in the code
     # str(e) often doesn't contain a reason, so just show the backtrace
     except Exception as e:
-        logging.critical("Unknown exception found!")
+        logging.critical(_("Unknown exception found!"))
         raise
     sys.exit(0)
 

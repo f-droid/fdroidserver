@@ -35,6 +35,7 @@ except ImportError:
     YamlLoader = Loader
 
 import fdroidserver.common
+from fdroidserver import _
 from fdroidserver.exception import MetaDataException, FDroidException
 
 srclibs = None
@@ -1519,4 +1520,4 @@ def write_metadata(metadatapath, app):
 def add_metadata_arguments(parser):
     '''add common command line flags related to metadata processing'''
     parser.add_argument("-W", default='error',
-                        help="force errors to be warnings, or ignore")
+                        help=_("force errors to be warnings, or ignore"))

@@ -30,6 +30,7 @@ from distutils.version import LooseVersion
 import logging
 import copy
 
+from . import _
 from . import common
 from . import metadata
 from .exception import VCSException, FDroidException, MetaDataException
@@ -302,10 +303,10 @@ def check_gplay(app):
 # Return all directories under startdir that contain any of the manifest
 # files, and thus are probably an Android project.
 def dirs_with_manifest(startdir):
-    for r, d, f in os.walk(startdir):
-        if any(m in f for m in [
+    for root, dirs, files in os.walk(startdir):
+        if any(m in files for m in [
                 'AndroidManifest.xml', 'pom.xml', 'build.gradle']):
-            yield r
+            yield root
 
 
 # Tries to find a new subdir starting from the root build_dir. Returns said
@@ -509,15 +510,15 @@ def main():
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help="app-id to check for updates")
+    parser.add_argument("appid", nargs='*', help=_("applicationId to check for updates"))
     parser.add_argument("--auto", action="store_true", default=False,
-                        help="Process auto-updates")
+                        help=_("Process auto-updates"))
     parser.add_argument("--autoonly", action="store_true", default=False,
-                        help="Only process apps with auto-updates")
+                        help=_("Only process apps with auto-updates"))
     parser.add_argument("--commit", action="store_true", default=False,
-                        help="Commit changes")
+                        help=_("Commit changes"))
     parser.add_argument("--gplay", action="store_true", default=False,
-                        help="Only print differences with the Play Store")
+                        help=_("Only print differences with the Play Store"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -567,7 +568,7 @@ def main():
         except Exception as e:
             logging.error("...checkupdate failed for {0} : {1}".format(appid, e))
 
-    logging.info("Finished.")
+    logging.info(_("Finished"))
 
 
 if __name__ == "__main__":

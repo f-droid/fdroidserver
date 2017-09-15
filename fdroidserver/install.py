@@ -23,6 +23,7 @@ import glob
 from argparse import ArgumentParser
 import logging
 
+from . import _
 from . import common
 from .common import SdkToolsPopen
 from .exception import FDroidException
@@ -49,19 +50,19 @@ def main():
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help="app-id with optional versionCode in the form APPID[:VERCODE]")
+    parser.add_argument("appid", nargs='*', help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))
     parser.add_argument("-a", "--all", action="store_true", default=False,
-                        help="Install all signed applications available")
+                        help=_("Install all signed applications available"))
     options = parser.parse_args()
 
     if not options.appid and not options.all:
-        parser.error("option %s: If you really want to install all the signed apps, use --all" % "all")
+        parser.error(_("option %s: If you really want to install all the signed apps, use --all") % "all")
 
     config = common.read_config(options)
 
     output_dir = 'repo'
     if not os.path.isdir(output_dir):
-        logging.info("No signed output directory - nothing to do")
+        logging.info(_("No signed output directory - nothing to do"))
         sys.exit(0)
 
     if options.appid:
@@ -84,7 +85,7 @@ def main():
 
         for appid, apk in apks.items():
             if not apk:
-                raise FDroidException("No signed apk available for %s" % appid)
+                raise FDroidException(_("No signed apk available for %s") % appid)
 
     else:
 
@@ -95,10 +96,10 @@ def main():
         # Get device list each time to avoid device not found errors
         devs = devices()
         if not devs:
-            raise FDroidException("No attached devices found")
-        logging.info("Installing %s..." % apk)
+            raise FDroidException(_("No attached devices found"))
+        logging.info(_("Installing %s...") % apk)
         for dev in devs:
-            logging.info("Installing %s on %s..." % (apk, dev))
+            logging.info(_("Installing %s on %s...") % (apk, dev))
             p = SdkToolsPopen(['adb', "-s", dev, "install", apk])
             fail = ""
             for line in p.output.splitlines():
@@ -108,12 +109,12 @@ def main():
                 continue
 
             if fail == "INSTALL_FAILED_ALREADY_EXISTS":
-                logging.warn("%s is already installed on %s." % (apk, dev))
+                logging.warn(_("%s is already installed on %s.") % (apk, dev))
             else:
-                raise FDroidException("Failed to install %s on %s: %s" % (
+                raise FDroidException(_("Failed to install %s on %s: %s") % (
                     apk, dev, fail))
 
-    logging.info("\nFinished")
+    logging.info('\n' + _('Finished'))
 
 
 if __name__ == "__main__":

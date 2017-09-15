@@ -34,7 +34,11 @@ from binascii import hexlify, unhexlify
 from datetime import datetime
 from xml.dom.minidom import Document
 
-from fdroidserver import metadata, signindex, common, net
+from . import _
+from . import common
+from . import metadata
+from . import net
+from . import signindex
 from fdroidserver.common import FDroidPopen, FDroidPopenBytes
 from fdroidserver.exception import FDroidException, VerificationException, MetaDataException
 
@@ -62,16 +66,16 @@ def make(apps, sortedids, apks, repodir, archive):
     if not common.options.nosign:
         if 'repo_keyalias' not in common.config:
             nosigningkey = True
-            logging.critical("'repo_keyalias' not found in config.py!")
+            logging.critical(_("'repo_keyalias' not found in config.py!"))
         if 'keystore' not in common.config:
             nosigningkey = True
-            logging.critical("'keystore' not found in config.py!")
+            logging.critical(_("'keystore' not found in config.py!"))
         if 'keystorepass' not in common.config:
             nosigningkey = True
-            logging.critical("'keystorepass' not found in config.py!")
+            logging.critical(_("'keystorepass' not found in config.py!"))
         if 'keypass' not in common.config:
             nosigningkey = True
-            logging.critical("'keypass' not found in config.py!")
+            logging.critical(_("'keypass' not found in config.py!"))
         if not os.path.exists(common.config['keystore']):
             nosigningkey = True
             logging.critical("'" + common.config['keystore'] + "' does not exist!")
@@ -104,7 +108,7 @@ def make(apps, sortedids, apks, repodir, archive):
     for mirror in sorted(common.config.get('mirrors', [])):
         base = os.path.basename(urllib.parse.urlparse(mirror).path.rstrip('/'))
         if common.config.get('nonstandardwebroot') is not True and base != 'fdroid':
-            logging.error("mirror '" + mirror + "' does not end with 'fdroid'!")
+            logging.error(_("mirror '%s' does not end with 'fdroid'!") % mirror)
             mirrorcheckfailed = True
         # must end with / or urljoin strips a whole path segment
         if mirror.endswith('/'):
@@ -115,7 +119,7 @@ def make(apps, sortedids, apks, repodir, archive):
         for url in get_mirror_service_urls(mirror):
             mirrors.append(url + '/' + repodir)
     if mirrorcheckfailed:
-        raise FDroidException("Malformed repository mirrors.")
+        raise FDroidException(_("Malformed repository mirrors."))
     if mirrors:
         repodict['mirrors'] = mirrors
 
@@ -144,7 +148,7 @@ def make(apps, sortedids, apks, repodir, archive):
             elif all(isinstance(item, str) for item in common.config[key]):
                 packageNames = common.config[key]
             else:
-                raise TypeError('only accepts strings, lists, and tuples')
+                raise TypeError(_('only accepts strings, lists, and tuples'))
         requestsdict[command] = packageNames
 
     make_v0(appsWithPackages, apks, repodir, repodict, requestsdict)
@@ -199,7 +203,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict):
     for package in packages:
         packageName = package['packageName']
         if packageName not in apps:
-            logging.info('Ignoring package without metadata: ' + package['apkName'])
+            logging.info(_('Ignoring package without metadata: ') + package['apkName'])
             continue
         if packageName in output_packages:
             packagelist = output_packages[packageName]
@@ -224,7 +228,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict):
             json.dump(output, fp, default=_index_encoder_default)
 
     if common.options.nosign:
-        logging.debug('index-v1 must have a signature, use `fdroid signindex` to create it!')
+        logging.debug(_('index-v1 must have a signature, use `fdroid signindex` to create it!'))
     else:
         signindex.config = common.config
         signindex.sign_index_v1(repodir, json_name)
@@ -501,9 +505,9 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
     if 'repo_keyalias' in common.config:
 
         if common.options.nosign:
-            logging.info("Creating unsigned index in preparation for signing")
+            logging.info(_("Creating unsigned index in preparation for signing"))
         else:
-            logging.info("Creating signed index with this key (SHA256):")
+            logging.info(_("Creating signed index with this key (SHA256):"))
             logging.info("%s" % repo_pubkey_fingerprint)
 
         # Create a jar of the index...
@@ -613,7 +617,7 @@ def download_repo_index(url_str, etag=None, verify_fingerprint=True):
     if verify_fingerprint:
         query = urllib.parse.parse_qs(url.query)
         if 'fingerprint' not in query:
-            raise VerificationException("No fingerprint in URL.")
+            raise VerificationException(_("No fingerprint in URL."))
         fingerprint = query['fingerprint'][0]
 
     url = urllib.parse.SplitResult(url.scheme, url.netloc, url.path + '/index-v1.jar', '', '')
@@ -635,7 +639,7 @@ def download_repo_index(url_str, etag=None, verify_fingerprint=True):
 
         # compare the fingerprint if verify_fingerprint is True
         if verify_fingerprint and fingerprint.upper() != public_key_fingerprint:
-            raise VerificationException("The repository's fingerprint does not match.")
+            raise VerificationException(_("The repository's fingerprint does not match."))
 
         # load repository index from JSON
         index = json.loads(jar.read('index-v1.json').decode("utf-8"))
@@ -655,7 +659,7 @@ def verify_jar_signature(file):
     :raises: VerificationException() if the JAR's signature could not be verified
     """
     if not common.verify_apk_signature(file, jar=True):
-        raise VerificationException("The repository's index could not be verified.")
+        raise VerificationException(_("The repository's index could not be verified."))
 
 
 def get_public_key_from_jar(jar):
@@ -670,9 +674,9 @@ def get_public_key_from_jar(jar):
     # extract certificate from jar
     certs = [n for n in jar.namelist() if common.CERT_PATH_REGEX.match(n)]
     if len(certs) < 1:
-        raise VerificationException("Found no signing certificates for repository.")
+        raise VerificationException(_("Found no signing certificates for repository."))
     if len(certs) > 1:
-        raise VerificationException("Found multiple signing certificates for repository.")
+        raise VerificationException(_("Found multiple signing certificates for repository."))
 
     # extract public key from certificate
     public_key = common.get_certificate(jar.read(certs[0]))

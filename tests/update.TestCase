@@ -8,11 +8,13 @@ import logging
 import optparse
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
 import yaml
 from binascii import unhexlify
+from distutils.version import LooseVersion
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -397,8 +399,15 @@ class UpdateTest(unittest.TestCase):
             self.assertFalse(os.path.exists(os.path.join('archive', apkName)))
             self.assertTrue(os.path.exists(os.path.join('repo', apkName)))
 
+            javac = config['jarsigner'].replace('jarsigner', 'javac')
+            v = subprocess.check_output([javac, '-version'], stderr=subprocess.STDOUT)[6:-1].decode('utf-8')
+            if LooseVersion(v) < LooseVersion('1.8.0_132'):
+                print('SKIPPING: running tests with old Java (' + v + ')')
+                return
+
             # this test only works on systems with fully updated Java/jarsigner
             # that has MD5 listed in jdk.jar.disabledAlgorithms in java.security
+            # https://blogs.oracle.com/java-platform-group/oracle-jre-will-no-longer-trust-md5-signed-code-by-default
             skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
                                                                       knownapks,
                                                                       allow_disabled_algorithms=False,

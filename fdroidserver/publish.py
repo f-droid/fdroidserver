@@ -26,6 +26,7 @@ import hashlib
 from argparse import ArgumentParser
 import logging
 
+from . import _
 from . import common
 from . import metadata
 from .common import FDroidPopen, SdkToolsPopen
@@ -43,7 +44,7 @@ def main():
     parser = ArgumentParser(usage="%(prog)s [options] "
                             "[APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help="app-id with optional versionCode in the form APPID[:VERCODE]")
+    parser.add_argument("appid", nargs='*', help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -51,27 +52,27 @@ def main():
     config = common.read_config(options)
 
     if not ('jarsigner' in config and 'keytool' in config):
-        logging.critical('Java JDK not found! Install in standard location or set java_paths!')
+        logging.critical(_('Java JDK not found! Install in standard location or set java_paths!'))
         sys.exit(1)
 
     log_dir = 'logs'
     if not os.path.isdir(log_dir):
-        logging.info("Creating log directory")
+        logging.info(_("Creating log directory"))
         os.makedirs(log_dir)
 
     tmp_dir = 'tmp'
     if not os.path.isdir(tmp_dir):
-        logging.info("Creating temporary directory")
+        logging.info(_("Creating temporary directory"))
         os.makedirs(tmp_dir)
 
     output_dir = 'repo'
     if not os.path.isdir(output_dir):
-        logging.info("Creating output directory")
+        logging.info(_("Creating output directory"))
         os.makedirs(output_dir)
 
     unsigned_dir = 'unsigned'
     if not os.path.isdir(unsigned_dir):
-        logging.warning("No unsigned directory - nothing to do")
+        logging.warning(_("No unsigned directory - nothing to do"))
         sys.exit(1)
 
     if not os.path.exists(config['keystore']):
@@ -95,7 +96,7 @@ def main():
         m.update(appid.encode('utf-8'))
         keyalias = m.hexdigest()[:8]
         if keyalias in allaliases:
-            logging.error("There is a keyalias collision - publishing halted")
+            logging.error(_("There is a keyalias collision - publishing halted"))
             sys.exit(1)
         allaliases.append(keyalias)
     logging.info("{0} apps, {0} key aliases".format(len(allapps),
@@ -208,13 +209,13 @@ def main():
                              'SHA1withRSA', '-digestalg', 'SHA1',
                              apkfile, keyalias], envs=env_vars)
             if p.returncode != 0:
-                raise BuildException("Failed to sign application")
+                raise BuildException(_("Failed to sign application"))
 
             # Zipalign it...
             p = SdkToolsPopen(['zipalign', '-v', '4', apkfile,
                                os.path.join(output_dir, apkfilename)])
             if p.returncode != 0:
-                raise BuildException("Failed to align application")
+                raise BuildException(_("Failed to align application"))
             os.remove(apkfile)
 
         # Move the source tarball into the output directory...

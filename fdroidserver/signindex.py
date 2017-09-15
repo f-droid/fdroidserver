@@ -21,6 +21,7 @@ import zipfile
 from argparse import ArgumentParser
 import logging
 
+from . import _
 from . import common
 from .exception import FDroidException
 
@@ -87,7 +88,7 @@ def main():
 
     if 'jarsigner' not in config:
         raise FDroidException(
-            'Java jarsigner not found! Install in standard location or set java_paths!')
+            _('Java jarsigner not found! Install in standard location or set java_paths!'))
 
     repodirs = ['repo']
     if config['archive_older'] != 0:
@@ -114,7 +115,7 @@ def main():
             signed += 1
 
     if signed == 0:
-        logging.info("Nothing to do")
+        logging.info(_("Nothing to do"))
 
 
 if __name__ == "__main__":

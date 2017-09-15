@@ -21,6 +21,7 @@ import glob
 from argparse import ArgumentParser
 import logging
 
+from . import _
 from . import common
 from .common import FDroidPopen
 from .exception import FDroidException
@@ -46,7 +47,7 @@ def main():
 
     for output_dir in repodirs:
         if not os.path.isdir(output_dir):
-            raise FDroidException("Missing output directory '" + output_dir + "'")
+            raise FDroidException(_("Missing output directory") + " '" + output_dir + "'")
 
         # Process any apks that are waiting to be signed...
         for f in sorted(glob.glob(os.path.join(output_dir, '*.*'))):

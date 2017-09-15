@@ -29,6 +29,7 @@ from argparse import ArgumentParser
 import logging
 import shutil
 
+from . import _
 from . import common
 from .exception import FDroidException
 
@@ -154,7 +155,7 @@ def update_awsbucket_libcloud(repo_section):
         if obj.name.startswith(upload_dir + '/'):
             objs[obj.name] = obj
 
-    for root, _, files in os.walk(os.path.join(os.getcwd(), repo_section)):
+    for root, dirs, files in os.walk(os.path.join(os.getcwd(), repo_section)):
         for name in files:
             upload = False
             file_to_upload = os.path.join(root, name)
@@ -307,9 +308,9 @@ def update_localcopy(repo_section, local_copy_dir):
 def _get_size(start_path='.'):
     '''get size of all files in a dir https://stackoverflow.com/a/1392549'''
     total_size = 0
-    for dirpath, dirnames, filenames in os.walk(start_path):
-        for f in filenames:
-            fp = os.path.join(dirpath, f)
+    for root, dirs, files in os.walk(start_path):
+        for f in files:
+            fp = os.path.join(root, f)
             total_size += os.path.getsize(fp)
     return total_size
 
@@ -577,19 +578,19 @@ def main():
     # Parse command line...
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    parser.add_argument("command", help="command to execute, either 'init' or 'update'")
+    parser.add_argument("command", help=_("command to execute, either 'init' or 'update'"))
     parser.add_argument("-i", "--identity-file", default=None,
-                        help="Specify an identity file to provide to SSH for rsyncing")
+                        help=_("Specify an identity file to provide to SSH for rsyncing"))
     parser.add_argument("--local-copy-dir", default=None,
-                        help="Specify a local folder to sync the repo to")
+                        help=_("Specify a local folder to sync the repo to"))
     parser.add_argument("--no-checksum", action="store_true", default=False,
-                        help="Don't use rsync checksums")
+                        help=_("Don't use rsync checksums"))
     options = parser.parse_args()
 
     config = common.read_config(options)
 
     if options.command != 'init' and options.command != 'update':
-        logging.critical("The only commands currently supported are 'init' and 'update'")
+        logging.critical(_("The only commands currently supported are 'init' and 'update'"))
         sys.exit(1)
 
     if config.get('nonstandardwebroot') is True:
@@ -605,7 +606,7 @@ def main():
         elif len(s) == 2:
             host, fdroiddir = s
         else:
-            logging.error('Malformed serverwebroot line: ' + serverwebroot)
+            logging.error(_('Malformed serverwebroot line:') + ' ' + serverwebroot)
             sys.exit(1)
         repobase = os.path.basename(fdroiddir)
         if standardwebroot and repobase != 'fdroid':
@@ -624,7 +625,7 @@ def main():
     if local_copy_dir is not None:
         fdroiddir = local_copy_dir.rstrip('/')
         if os.path.exists(fdroiddir) and not os.path.isdir(fdroiddir):
-            logging.error('local_copy_dir must be directory, not a file!')
+            logging.error(_('local_copy_dir must be directory, not a file!'))
             sys.exit(1)
         if not os.path.exists(os.path.dirname(fdroiddir)):
             logging.error('The root dir for local_copy_dir "'
@@ -632,7 +633,7 @@ def main():
                           + '" does not exist!')
             sys.exit(1)
         if not os.path.isabs(fdroiddir):
-            logging.error('local_copy_dir must be an absolute path!')
+            logging.error(_('local_copy_dir must be an absolute path!'))
             sys.exit(1)
         repobase = os.path.basename(fdroiddir)
         if standardwebroot and repobase != 'fdroid':
@@ -652,8 +653,8 @@ def main():
             and not config.get('binary_transparency_remote') \
             and not config.get('virustotal_apikey') \
             and local_copy_dir is None:
-        logging.warn('No option set! Edit your config.py to set at least one among:\n'
-                     + 'serverwebroot, servergitmirrors, local_copy_dir, awsbucket, virustotal_apikey, androidobservatory, or binary_transparency_remote')
+        logging.warn(_('No option set! Edit your config.py to set at least one of these:')
+                     + '\nserverwebroot, servergitmirrors, local_copy_dir, awsbucket, virustotal_apikey, androidobservatory, or binary_transparency_remote')
         sys.exit(1)
 
     repo_sections = ['repo']

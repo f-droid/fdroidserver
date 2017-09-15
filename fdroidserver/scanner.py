@@ -22,6 +22,7 @@ import traceback
 from argparse import ArgumentParser
 import logging
 
+from . import _
 from . import common
 from . import metadata
 from .exception import BuildException, VCSException
@@ -165,20 +166,20 @@ def scan_source(build_dir, build):
         return any(command.match(line) for command in gradle_compile_commands)
 
     # Iterate through all files in the source code
-    for dirpath, dirnames, filenames in os.walk(build_dir, topdown=True):
+    for root, dirs, files in os.walk(build_dir, topdown=True):
 
         # It's topdown, so checking the basename is enough
         for ignoredir in ('.hg', '.git', '.svn', '.bzr'):
-            if ignoredir in dirnames:
-                dirnames.remove(ignoredir)
+            if ignoredir in dirs:
+                dirs.remove(ignoredir)
 
-        for curfile in filenames:
+        for curfile in files:
 
             if curfile in ['.DS_Store']:
                 continue
 
             # Path (relative) to the file
-            filepath = os.path.join(dirpath, curfile)
+            filepath = os.path.join(root, curfile)
 
             if os.path.islink(filepath):
                 continue
@@ -256,7 +257,7 @@ def main():
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help="app-id with optional versionCode in the form APPID[:VERCODE]")
+    parser.add_argument("appid", nargs='*', help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -329,8 +330,8 @@ def main():
                 appid, traceback.format_exc()))
             probcount += 1
 
-    logging.info("Finished:")
-    print("%d problems found" % probcount)
+    logging.info(_("Finished"))
+    print(_("%d problems found") % probcount)
 
 
 if __name__ == "__main__":

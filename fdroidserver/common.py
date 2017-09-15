@@ -49,6 +49,7 @@ from pyasn1.error import PyAsn1Error
 from distutils.util import strtobool
 
 import fdroidserver.metadata
+from fdroidserver import _
 from fdroidserver.exception import FDroidException, VCSException, BuildException
 from .asynchronousfilereader import AsynchronousFileReader
 
@@ -123,9 +124,9 @@ default_config = {
 
 def setup_global_opts(parser):
     parser.add_argument("-v", "--verbose", action="store_true", default=False,
-                        help="Spew out even more information than normal")
+                        help=_("Spew out even more information than normal"))
     parser.add_argument("-q", "--quiet", action="store_true", default=False,
-                        help="Restrict output to warnings and errors")
+                        help=_("Restrict output to warnings and errors"))
 
 
 def fill_config_defaults(thisconfig):
@@ -1022,9 +1023,9 @@ def retrieve_string(app_dir, string, xmlfiles=None):
             os.path.join(app_dir, 'res'),
             os.path.join(app_dir, 'src', 'main', 'res'),
         ]:
-            for r, d, f in os.walk(res_dir):
-                if os.path.basename(r) == 'values':
-                    xmlfiles += [os.path.join(r, x) for x in f if x.endswith('.xml')]
+            for root, dirs, files in os.walk(res_dir):
+                if os.path.basename(root) == 'values':
+                    xmlfiles += [os.path.join(root, x) for x in files if x.endswith('.xml')]
 
     name = string[len('@string/'):]
 

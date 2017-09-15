@@ -40,9 +40,10 @@ import xml.dom.minidom
 import zipfile
 from argparse import ArgumentParser
 
-from .exception import FDroidException
+from . import _
 from . import common
 from . import server
+from .exception import FDroidException
 
 
 options = None
@@ -117,12 +118,12 @@ For more info on this idea:
             jarin.close()
             gitrepo.index.add([repof, ])
 
-        files = []
-        for root, dirs, filenames in os.walk(repodir):
-            for f in filenames:
-                files.append(os.path.relpath(os.path.join(root, f), repodir))
+        output_files = []
+        for root, dirs, files in os.walk(repodir):
+            for f in files:
+                output_files.append(os.path.relpath(os.path.join(root, f), repodir))
         output = collections.OrderedDict()
-        for f in sorted(files):
+        for f in sorted(output_files):
             repofile = os.path.join(repodir, f)
             stat = os.stat(repofile)
             output[f] = (
@@ -151,11 +152,11 @@ def main():
     common.setup_global_opts(parser)
     parser.add_argument("--git-repo",
                         default=os.path.join(os.getcwd(), 'binary_transparency'),
-                        help="Path to the git repo to use as the log")
+                        help=_("Path to the git repo to use as the log"))
     parser.add_argument("-u", "--url", default='https://f-droid.org',
-                        help="The base URL for the repo to log (default: https://f-droid.org)")
+                        help=_("The base URL for the repo to log (default: https://f-droid.org)"))
     parser.add_argument("--git-remote", default=None,
-                        help="Push the log to this git remote repository")
+                        help=_("Push the log to this git remote repository"))
     options = parser.parse_args()
 
     if options.verbose:
