@@ -94,8 +94,6 @@ echo "build_server_always = True" >> config.py
 ../fdroid build --verbose --stop --latest org.fdroid.fdroid
 # Gradle, JNI, preassemble
 ../fdroid build --verbose --stop org.adaway:55
-# Uses verification
-../fdroid build --verbose --stop info.guardianproject.checkey:101
 # building old versions should still work
 ../fdroid build --verbose --stop org.fdroid.fdroid:96150
 # test OTA update ZIP build and publish
