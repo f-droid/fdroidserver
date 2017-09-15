@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-01 17:23+0200\n"
+"Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
+"Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
+"POT-Creation-Date: 2017-09-15 23:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,372 +17,709 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../fdroid:34
-msgid "Build a package from source"
+#, python-format
+msgid "\"%s/\" has no matching metadata file!"
 msgstr ""
 
-#: ../fdroid:35
-msgid "Quickly start a new repository"
+#, python-format
+msgid "%d problems found"
 msgstr ""
 
-#: ../fdroid:36
-msgid "Sign and place packages in the repo"
+#, python-format
+msgid "%s is not an accepted build field"
 msgstr ""
 
-#: ../fdroid:37
-msgid "Add gpg signatures for packages in repo"
+msgid "'keypass' not found in config.py!"
 msgstr ""
 
-#: ../fdroid:38
-msgid "Update repo information for new packages"
+msgid "'keystore' not found in config.py!"
 msgstr ""
 
-#: ../fdroid:39
-msgid "Verify the integrity of downloaded packages"
+msgid "'keystorepass' not found in config.py!"
 msgstr ""
 
-#: ../fdroid:40
-msgid "Check for updates to applications"
+msgid "'repo_keyalias' not found in config.py!"
 msgstr ""
 
-#: ../fdroid:41
+#, python-brace-format
+msgid "'{apkfilename}' is already installed on {dev}."
+msgstr ""
+
+#, python-brace-format
+msgid "...checkupdate failed for {appid} : {error}"
+msgstr ""
+
+msgid "/issues is missing"
+msgstr ""
+
+msgid "Add PGP signatures for packages in repo using GnuPG"
+msgstr ""
+
 msgid "Add a new application from its source code"
 msgstr ""
 
-#: ../fdroid:42
-msgid "Install built packages on devices"
+msgid "Add gpg signatures for packages in repo"
 msgstr ""
 
-#: ../fdroid:43
-msgid "Read all the metadata files and exit"
+msgid "Alias of the repo signing key in the keystore"
 msgstr ""
 
-#: ../fdroid:44
-msgid "Rewrite all the metadata files"
-msgstr ""
-
-#: ../fdroid:45
-msgid "Warn about possible metadata errors"
-msgstr ""
-
-#: ../fdroid:46
-msgid "Scan the source code of a package"
-msgstr ""
-
-#: ../fdroid:47
-msgid "Dynamically scan APKs post build"
-msgstr ""
-
-#: ../fdroid:48
-msgid "Update the stats of the repo"
-msgstr ""
-
-#: ../fdroid:49
-msgid "Interact with the repo HTTP server"
-msgstr ""
-
-#: ../fdroid:50
-msgid "Sign indexes created using update --nosign"
-msgstr ""
-
-#: ../fdroid:51
-msgid "Update the binary transparency log for a URL"
-msgstr ""
-
-#: ../fdroid:56
-msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
-msgstr ""
-
-#: ../fdroid:58
-msgid "Valid commands are:"
-msgstr ""
-
-#: ../fdroid:104
-#, c-format
-msgid "Command '%s' not recognised.\n"
-msgstr ""
-
-#: ../fdroid:150
-msgid "Unknown exception found!"
-msgstr ""
-
-#: ../fdroidserver/btlog.py:154
-msgid "Path to the git repo to use as the log"
-msgstr ""
-
-#: ../fdroidserver/btlog.py:156
-msgid "The base URL for the repo to log (default: https://f-droid.org)"
-msgstr ""
-
-#: ../fdroidserver/btlog.py:158
-msgid "Push the log to this git remote repository"
-msgstr ""
-
-#: ../fdroidserver/build.py:875 ../fdroidserver/install.py:52
-#: ../fdroidserver/publish.py:45 ../fdroidserver/scanner.py:255
-#: ../fdroidserver/verify.py:41
-msgid "app-id with optional versionCode in the form APPID[:VERCODE]"
-msgstr ""
-
-#: ../fdroidserver/build.py:877
-msgid "Build only the latest version of each package"
-msgstr ""
-
-#: ../fdroidserver/build.py:879
-msgid "Make the build stop on exceptions"
-msgstr ""
-
-#: ../fdroidserver/build.py:881
-msgid ""
-"Test mode - put output in the tmp directory only, and always build, even if "
-"the output already exists."
-msgstr ""
-
-#: ../fdroidserver/build.py:883
-msgid "Use build server"
-msgstr ""
-
-#: ../fdroidserver/build.py:885
-msgid ""
-"Reset and create a brand new build server, even if the existing one appears "
-"to be ok."
-msgstr ""
-
-#: ../fdroidserver/build.py:887
-msgid "Specify that we're running on the build server"
-msgstr ""
-
-#: ../fdroidserver/build.py:889
-msgid "Skip scanning the source code for binaries and other problems"
-msgstr ""
-
-#: ../fdroidserver/build.py:891
-msgid "Setup an emulator, install the apk on it and perform a drozer scan"
-msgstr ""
-
-#: ../fdroidserver/build.py:893
-msgid "Don't create a source tarball, useful when testing a build"
-msgstr ""
-
-#: ../fdroidserver/build.py:895
-msgid ""
-"Don't refresh the repository, useful when testing a build with no internet "
-"connection"
-msgstr ""
-
-#: ../fdroidserver/build.py:897
-msgid ""
-"Force build of disabled apps, and carries on regardless of scan problems. "
-"Only allowed in test mode."
-msgstr ""
-
-#: ../fdroidserver/build.py:899
-msgid "Build all applications available"
-msgstr ""
-
-#: ../fdroidserver/build.py:901 ../fdroidserver/update.py:1519
-msgid "Update the wiki"
-msgstr ""
-
-#: ../fdroidserver/checkupdates.py:513
-msgid "app-id to check for updates"
-msgstr ""
-
-#: ../fdroidserver/checkupdates.py:515
-msgid "Process auto-updates"
-msgstr ""
-
-#: ../fdroidserver/checkupdates.py:517
-msgid "Only process apps with auto-updates"
-msgstr ""
-
-#: ../fdroidserver/checkupdates.py:519
-msgid "Commit changes"
-msgstr ""
-
-#: ../fdroidserver/checkupdates.py:521
-msgid "Only print differences with the Play Store"
-msgstr ""
-
-#: ../fdroidserver/common.py:124
-msgid "Spew out even more information than normal"
-msgstr ""
-
-#: ../fdroidserver/common.py:126
-msgid "Restrict output to warnings and errors"
-msgstr ""
-
-#: ../fdroidserver/dscanner.py:410
-msgid "app-id with optional versioncode in the form APPID[:VERCODE]"
-msgstr ""
-
-#: ../fdroidserver/dscanner.py:413
-msgid "Scan only the latest version of each package"
-msgstr ""
-
-#: ../fdroidserver/dscanner.py:416
-msgid "Clean after all scans have finished"
-msgstr ""
-
-#: ../fdroidserver/dscanner.py:419
-msgid "Clean before the scans start and rebuild the container"
-msgstr ""
-
-#: ../fdroidserver/dscanner.py:422
-msgid "Clean up all containers and then exit"
-msgstr ""
-
-#: ../fdroidserver/dscanner.py:425
-msgid "Prepare drozer to run a scan"
-msgstr ""
-
-#: ../fdroidserver/dscanner.py:428
-msgid "Override path for repo APKs (default: ./repo)"
-msgstr ""
-
-#: ../fdroidserver/import.py:193
-msgid "Project URL to import from."
-msgstr ""
-
-#: ../fdroidserver/import.py:195
-msgid "Path to main android project subdirectory, if not in root."
-msgstr ""
-
-#: ../fdroidserver/import.py:197
-msgid "Comma separated list of categories."
-msgstr ""
-
-#: ../fdroidserver/import.py:199
-msgid "Overall license of the project."
-msgstr ""
-
-#: ../fdroidserver/import.py:201
 msgid ""
 "Allows a different revision (or git branch) to be specified for the initial "
 "import"
 msgstr ""
 
-#: ../fdroidserver/init.py:56
-msgid "X.509 'Distiguished Name' used when generating keys"
-msgstr ""
-
-#: ../fdroidserver/init.py:58
-msgid "Path to the keystore for the repo signing key"
-msgstr ""
-
-#: ../fdroidserver/init.py:60
-msgid "Alias of the repo signing key in the keystore"
-msgstr ""
-
-#: ../fdroidserver/init.py:62
-msgid "Path to the Android SDK (sometimes set in ANDROID_HOME)"
-msgstr ""
-
-#: ../fdroidserver/init.py:64
-msgid "Do not prompt for Android SDK path, just fail"
-msgstr ""
-
-#: ../fdroidserver/install.py:54
-msgid "Install all signed applications available"
-msgstr ""
-
-#: ../fdroidserver/lint.py:393
 msgid "Also warn about formatting issues, like rewritemeta -l"
 msgstr ""
 
-#: ../fdroidserver/lint.py:394 ../fdroidserver/rewritemeta.py:57
-msgid "app-id in the form APPID"
+#, python-brace-format
+msgid "App is in '{repo}' but has a link to {url}"
 msgstr ""
 
-#: ../fdroidserver/metadata.py:1337
-msgid "force errors to be warnings, or ignore"
+msgid "Appending .git is not necessary"
 msgstr ""
 
-#: ../fdroidserver/rewritemeta.py:54
-msgid "List files that would be reformatted"
+#, python-brace-format
+msgid "Branch '{branch}' used as commit in build '{versionName}'"
 msgstr ""
 
-#: ../fdroidserver/rewritemeta.py:56
-msgid "Rewrite to a specific format: "
+#, python-brace-format
+msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
 msgstr ""
 
-#: ../fdroidserver/server.py:547
-msgid "command to execute, either 'init' or 'update'"
+msgid "Build a package from source"
 msgstr ""
 
-#: ../fdroidserver/server.py:549
-msgid "Specify an identity file to provide to SSH for rsyncing"
+msgid "Build all applications available"
 msgstr ""
 
-#: ../fdroidserver/server.py:551
-msgid "Specify a local folder to sync the repo to"
+msgid "Build generated by `fdroid import` - remove disable line once ready"
 msgstr ""
 
-#: ../fdroidserver/server.py:553
-msgid "Don't use rsync checksums"
+msgid "Build only the latest version of each package"
 msgstr ""
 
-#: ../fdroidserver/stats.py:64
-msgid "Download logs we don't have"
+#, python-format
+msgid "Built repo based in \"%s\" with this config:"
 msgstr ""
 
-#: ../fdroidserver/stats.py:66
-msgid ""
-"Recalculate aggregate stats - use when changes "
-"have been made that would invalidate old cached data."
+msgid "Cannot use --list and --to at the same time"
 msgstr ""
 
-#: ../fdroidserver/stats.py:69
-msgid "Don't do anything logs-related"
+msgid "Categories are not set"
 msgstr ""
 
-#: ../fdroidserver/update.py:1504
+#, python-format
+msgid "Category '%s' is not valid"
+msgstr ""
+
+msgid "Check for updates to applications"
+msgstr ""
+
+msgid "Clean after all scans have finished"
+msgstr ""
+
+msgid "Clean before the scans start and rebuild the container"
+msgstr ""
+
+msgid "Clean up all containers and then exit"
+msgstr ""
+
+msgid "Clean update - don't uses caches, reprocess all APKs"
+msgstr ""
+
+msgid "Clean update - don't uses caches, reprocess all apks"
+msgstr ""
+
+msgid "Comma separated list of categories."
+msgstr ""
+
+#, c-format, python-format
+msgid "Command '%s' not recognised.\n"
+msgstr ""
+
+msgid "Commit changes"
+msgstr ""
+
+msgid "Couldn't find latest version code"
+msgstr ""
+
+msgid "Couldn't find latest version name"
+msgstr ""
+
+msgid "Couldn't find package ID"
+msgstr ""
+
 msgid "Create a repo signing key in a keystore"
 msgstr ""
 
-#: ../fdroidserver/update.py:1506
 msgid "Create skeleton metadata files that are missing"
 msgstr ""
 
-#: ../fdroidserver/update.py:1508
+msgid "Creating log directory"
+msgstr ""
+
+msgid "Creating output directory"
+msgstr ""
+
+msgid "Creating signed index with this key (SHA256):"
+msgstr ""
+
+msgid "Creating temporary directory"
+msgstr ""
+
+msgid "Creating unsigned index in preparation for signing"
+msgstr ""
+
 msgid "Delete APKs and/or OBBs without metadata from the repo"
 msgstr ""
 
-#: ../fdroidserver/update.py:1510
-msgid "Report on build data status"
+#, python-format
+msgid "Description '%s' is just the app's summary"
 msgstr ""
 
-#: ../fdroidserver/update.py:1512
+msgid "Description has a duplicate line"
+msgstr ""
+
+#, python-format
+msgid "Description has a list (%s) but it isn't bulleted (*) nor numbered (#)"
+msgstr ""
+
+#, python-brace-format
+msgid "Description of length {length} is over the {limit} char limit"
+msgstr ""
+
+msgid "Do not prompt for Android SDK path, just fail"
+msgstr ""
+
+msgid "Don't create a source tarball, useful when testing a build"
+msgstr ""
+
+msgid "Don't do anything logs-related"
+msgstr ""
+
+msgid ""
+"Don't refresh the repository, useful when testing a build with no internet "
+"connection"
+msgstr ""
+
+msgid "Don't use rsync checksums"
+msgstr ""
+
+msgid "Download logs we don't have"
+msgstr ""
+
+#, python-brace-format
+msgid "Downloading {url} failed. {error}"
+msgstr ""
+
+#, python-brace-format
+msgid "Duplicate link in '{field}': {url}"
+msgstr ""
+
+msgid "Dynamically scan APKs post build"
+msgstr ""
+
+#, python-format
+msgid ""
+"Enter the path to the Android SDK (%s) here:\n"
+"> "
+msgstr ""
+
+msgid "Error while getting repo address"
+msgstr ""
+
+msgid "Extract signatures from APKs"
+msgstr ""
+
+#, python-brace-format
+msgid "Failed fetching signatures for '{apkfilename}': {error}"
+msgstr ""
+
+msgid "Failed to align application"
+msgstr ""
+
+#, python-brace-format
+msgid "Failed to install '{apkfilename}' on {dev}: {error}"
+msgstr ""
+
+msgid "Failed to sign application"
+msgstr ""
+
+#, python-brace-format
+msgid "Fetched signatures for '{apkfilename}' -> '{sigdir}'"
+msgstr ""
+
+msgid "Finished"
+msgstr ""
+
+msgid "Flattr donation methods belong in the FlattrID flag"
+msgstr ""
+
+msgid ""
+"Force build of disabled apps, and carries on regardless of scan problems. "
+"Only allowed in test mode."
+msgstr ""
+
+msgid "Found multiple signing certificates for repository."
+msgstr ""
+
+msgid "Found no signing certificates for repository."
+msgstr ""
+
+#, python-format
+msgid "Found non-file at %s"
+msgstr ""
+
+msgid "Ignoring package without metadata: "
+msgstr ""
+
+#, python-brace-format
+msgid "Ignoring {ext} file at '{path}'"
+msgstr ""
+
+msgid "Include APKs that are signed with disabled algorithms like MD5"
+msgstr ""
+
+msgid "Install all signed applications available"
+msgstr ""
+
+msgid "Install built packages on devices"
+msgstr ""
+
+#, python-format
+msgid "Installing %s..."
+msgstr ""
+
+#, python-brace-format
+msgid "Installing '{apkfilename}' on {dev}..."
+msgstr ""
+
+msgid "Interact with the repo HTTP server"
+msgstr ""
+
 msgid "Interactively ask about things that need updating."
 msgstr ""
 
-#: ../fdroidserver/update.py:1514
+msgid "Invalid bulleted list"
+msgstr ""
+
+#, python-format
+msgid ""
+"Invalid license tag \"%s\"! Use only tags from https://spdx.org/license-list"
+msgstr ""
+
+msgid "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"
+msgstr ""
+
+msgid "Java JDK not found! Install in standard location or set java_paths!"
+msgstr ""
+
+msgid ""
+"Java jarsigner not found! Install in standard location or set java_paths!"
+msgstr ""
+
+msgid "Keystore for signing key:\t"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Last used commit '{commit}' looks like a tag, but Update Check Mode is "
+"'{ucm}'"
+msgstr ""
+
+msgid "List files that would be reformatted"
+msgstr ""
+
+msgid "Make the build stop on exceptions"
+msgstr ""
+
+msgid "Malformed repository mirrors."
+msgstr ""
+
+msgid "Malformed serverwebroot line:"
+msgstr ""
+
+msgid "Missing output directory"
+msgstr ""
+
+#, python-format
+msgid "Name '%s' is just the auto name - remove it"
+msgstr ""
+
+msgid "No android or kivy project could be found. Specify --subdir?"
+msgstr ""
+
+msgid "No attached devices found"
+msgstr ""
+
+msgid "No fingerprint in URL."
+msgstr ""
+
+msgid "No information found."
+msgstr ""
+
+msgid "No need to specify that the app is Free Software"
+msgstr ""
+
+msgid "No need to specify that the app is for Android"
+msgstr ""
+
+msgid "No option set! Edit your config.py to set at least one of these:"
+msgstr ""
+
+#, python-format
+msgid "No signed apk available for %s"
+msgstr ""
+
+msgid "No signed output directory - nothing to do"
+msgstr ""
+
+msgid "No unsigned directory - nothing to do"
+msgstr ""
+
+msgid "Nothing to do"
+msgstr ""
+
+#, python-brace-format
+msgid "Nothing to do for {appid}."
+msgstr ""
+
+msgid "Only print differences with the Play Store"
+msgstr ""
+
+msgid "Only process apps with auto-updates"
+msgstr ""
+
+msgid "Overall license of the project."
+msgstr ""
+
+msgid "Override path for repo APKs (default: ./repo)"
+msgstr ""
+
+msgid "Path to main Android project subdirectory, if not in root."
+msgstr ""
+
+msgid "Path to main android project subdirectory, if not in root."
+msgstr ""
+
+msgid "Path to the Android SDK (sometimes set in ANDROID_HOME)"
+msgstr ""
+
+msgid "Path to the git repo to use as the log"
+msgstr ""
+
+msgid "Path to the keystore for the repo signing key"
+msgstr ""
+
+msgid "Prepare Drozer to run a scan"
+msgstr ""
+
+msgid "Prepare drozer to run a scan"
+msgstr ""
+
+msgid "Process auto-updates"
+msgstr ""
+
+#, python-brace-format
+msgid "Processing {apkfilename}"
+msgstr ""
+
+#, python-brace-format
+msgid "Processing {appid}"
+msgstr ""
+
+msgid "Produce human-readable index.xml"
+msgstr ""
+
+msgid "Project URL to import from."
+msgstr ""
+
+msgid "Punctuation should be avoided"
+msgstr ""
+
+msgid "Push the log to this git remote repository"
+msgstr ""
+
+msgid "Quickly start a new repository"
+msgstr ""
+
+msgid "Read all the metadata files and exit"
+msgstr ""
+
+msgid ""
+"Recalculate aggregate stats - use when changes have been made that would "
+"invalidate old cached data."
+msgstr ""
+
+msgid "Rename APK files that do not match package.name_123.apk"
+msgstr ""
+
+msgid "Report on build data status"
+msgstr ""
+
+msgid ""
+"Reset and create a brand new build server, even if the existing one appears "
+"to be ok."
+msgstr ""
+
 msgid "Resize all the icons exceeding the max pixel size and exit"
 msgstr ""
 
-#: ../fdroidserver/update.py:1516
+msgid "Restrict output to warnings and errors"
+msgstr ""
+
+msgid "Rewrite all the metadata files"
+msgstr ""
+
+msgid "Rewrite to a specific format: "
+msgstr ""
+
+#, python-brace-format
+msgid "Rewriting '{appid}'"
+msgstr ""
+
+#, python-brace-format
+msgid "Rewriting '{appid}' to '{path}'"
+msgstr ""
+
+msgid "Run rewritemeta to fix formatting"
+msgstr ""
+
+msgid "Scan only the latest version of each package"
+msgstr ""
+
+msgid "Scan the source code of a package"
+msgstr ""
+
+msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
+msgstr ""
+
+msgid "Setup an emulator, install the apk on it and perform a drozer scan"
+msgstr ""
+
+msgid "Sign and place packages in the repo"
+msgstr ""
+
+msgid "Sign indexes created using update --nosign"
+msgstr ""
+
+msgid "Skip scanning the source code for binaries and other problems"
+msgstr ""
+
+#, python-brace-format
+msgid "Skipping '{apkfilename}' with invalid signature!"
+msgstr ""
+
+#, python-brace-format
+msgid "Skipping {appid}: disabled"
+msgstr ""
+
+#, python-brace-format
+msgid "Skipping {appid}: no builds specified"
+msgstr ""
+
+msgid "Specify a local folder to sync the repo to"
+msgstr ""
+
+msgid "Specify an identity file to provide to SSH for rsyncing"
+msgstr ""
+
+msgid "Specify editor to use in interactive mode. Default "
+msgstr ""
+
 #, c-format
 msgid "Specify editor to use in interactive mode. Default %s"
 msgstr ""
 
-#: ../fdroidserver/update.py:1521
-msgid "Produce human-readable index.xml"
+msgid "Specify that we're running on the build server"
 msgstr ""
 
-#: ../fdroidserver/update.py:1523
-msgid "Clean update - don't uses caches, reprocess all apks"
+msgid "Spew out even more information than normal"
 msgstr ""
 
-#: ../fdroidserver/update.py:1525
+#, python-format
+msgid "Summary '%s' is just the app's name"
+msgstr ""
+
+#, python-brace-format
+msgid "Summary of length {length} is over the {limit} char limit"
+msgstr ""
+
+msgid ""
+"Test mode - put output in the tmp directory only, and always build, even if "
+"the output already exists."
+msgstr ""
+
+msgid "The base URL for the repo to log (default: https://f-droid.org)"
+msgstr ""
+
+msgid "The only commands currently supported are 'init' and 'update'"
+msgstr ""
+
+msgid "The repository's fingerprint does not match."
+msgstr ""
+
+msgid "The repository's index could not be verified."
+msgstr ""
+
+msgid "There is a keyalias collision - publishing halted"
+msgstr ""
+
+#, python-format
+msgid "This repo already has local metadata: %s"
+msgstr ""
+
+msgid "UCM is set but it looks like checkupdates hasn't been run yet"
+msgstr ""
+
+msgid "URL shorteners should not be used"
+msgstr ""
+
+#, python-brace-format
+msgid "URL {url} in Description: {error}"
+msgstr ""
+
+msgid "Unknown exception found!"
+msgstr ""
+
+#, python-brace-format
+msgid "Unknown file '{filename}' in build '{versionName}'"
+msgstr ""
+
+msgid "Unlinkified link - use [http://foo.bar Link title] or [http://foo.bar]"
+msgstr ""
+
+msgid "Unnecessary leading space"
+msgstr ""
+
+msgid "Unnecessary trailing space"
+msgstr ""
+
+#, python-brace-format
+msgid "Unsupported metadata format, use: --to [{supported}]"
+msgstr ""
+
+#, python-format
+msgid "Unused extlib at %s"
+msgstr ""
+
+#, python-format
+msgid "Unused file at %s"
+msgstr ""
+
+msgid "Update Check Name is set to the known app id - it can be removed"
+msgstr ""
+
+msgid "Update repo information for new packages"
+msgstr ""
+
+msgid "Update the binary transparency log for a URL"
+msgstr ""
+
+msgid "Update the stats of the repo"
+msgstr ""
+
+msgid "Update the wiki"
+msgstr ""
+
+msgid "Use /HEAD instead of /master to point at a file in the default branch"
+msgstr ""
+
+msgid "Use build server"
+msgstr ""
+
+msgid "Use date from APK instead of current time for newly added APKs"
+msgstr ""
+
+msgid "Use date from apk instead of current time for newly added apks"
+msgstr ""
+
+msgid "Valid commands are:"
+msgstr ""
+
+msgid "Verify the integrity of downloaded packages"
+msgstr ""
+
+msgid "Warn about possible metadata errors"
+msgstr ""
+
 msgid ""
 "When configured for signed indexes, create only unsigned indexes at this "
 "stage"
 msgstr ""
 
-#: ../fdroidserver/update.py:1527
-msgid "Use date from apk instead of current time for newly added apks"
+msgid "X.509 'Distiguished Name' used when generating keys"
 msgstr ""
 
-#: ../fdroidserver/update.py:1529
-msgid "Rename APK files that do not match package.name_123.apk"
+msgid "X.509 'Distinguished Name' used when generating keys"
+msgstr ""
+
+msgid "app-id in the form APPID"
+msgstr ""
+
+msgid "app-id to check for updates"
+msgstr ""
+
+msgid "app-id with optional versionCode in the form APPID[:VERCODE]"
+msgstr ""
+
+msgid "app-id with optional versioncode in the form APPID[:VERCODE]"
+msgstr ""
+
+msgid "applicationId in the form APPID"
+msgstr ""
+
+msgid "applicationId to check for updates"
+msgstr ""
+
+msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
+msgstr ""
+
+msgid "command to execute, either 'init' or 'update'"
+msgstr ""
+
+msgid "force errors to be warnings, or ignore"
+msgstr ""
+
+msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
+msgstr ""
+
+msgid "local_copy_dir must be an absolute path!"
+msgstr ""
+
+msgid "local_copy_dir must be directory, not a file!"
+msgstr ""
+
+#, python-format
+msgid "mirror '%s' does not end with 'fdroid'!"
+msgstr ""
+
+msgid "no APK supplied"
+msgstr ""
+
+msgid "no version info found!"
+msgstr ""
+
+msgid "only accepts strings, lists, and tuples"
+msgstr ""
+
+#, python-format
+msgid "option %s: If you really want to install all the signed apps, use --all"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"refuse downloading via insecure http connection (use https or specify --no-"
+"https-check): {apkfilename}"
+msgstr ""
+
+msgid "signed APK, either a file-path or HTTPS URL."
+msgstr ""
+
+msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
+msgstr ""
+
+#, python-brace-format
+msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
 msgstr ""
