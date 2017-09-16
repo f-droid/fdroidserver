@@ -239,8 +239,8 @@ def read_config(opts, config_file='config.py'):
         with io.open(config_file, "rb") as f:
             code = compile(f.read(), config_file, 'exec')
             exec(code, None, config)
-    elif len(get_local_metadata_files()) == 0:
-        raise FDroidException("Missing config file - is this a repo directory?")
+    else:
+        logging.debug("No config.py found - using defaults.")
 
     for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
         if k in config:
@@ -2315,7 +2315,10 @@ def write_to_config(thisconfig, key, value=None, config_file=None):
         value = thisconfig[origkey] if origkey in thisconfig else thisconfig[key]
     cfg = config_file if config_file else 'config.py'
 
-    # load config file
+    # load config file, create one if it doesn't exist
+    if not os.path.exists(cfg):
+        os.mknod(cfg)
+        logging.info("Creating empty " + cfg)
     with open(cfg, 'r', encoding="utf-8") as f:
         lines = f.readlines()
 
