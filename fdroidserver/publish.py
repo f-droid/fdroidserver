@@ -25,6 +25,7 @@ import glob
 import hashlib
 from argparse import ArgumentParser
 import logging
+from gettext import ngettext
 
 from . import _
 from . import common
@@ -99,8 +100,8 @@ def main():
             logging.error(_("There is a keyalias collision - publishing halted"))
             sys.exit(1)
         allaliases.append(keyalias)
-    logging.info("{0} apps, {0} key aliases".format(len(allapps),
-                                                    len(allaliases)))
+    logging.info(ngettext('{0} app, {1} key aliases',
+                          '{0} apps, {1} key aliases', len(allapps)).format(len(allapps), len(allaliases)))
 
     # Process any APKs or ZIPs that are waiting to be signed...
     for apkfile in sorted(glob.glob(os.path.join(unsigned_dir, '*.apk'))
