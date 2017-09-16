@@ -240,7 +240,7 @@ def read_config(opts, config_file='config.py'):
             code = compile(f.read(), config_file, 'exec')
             exec(code, None, config)
     else:
-        logging.debug("No config.py found - using defaults.")
+        logging.warning("No config.py found - using defaults.")
 
     for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
         if k in config:
