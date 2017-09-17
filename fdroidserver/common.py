@@ -2325,7 +2325,7 @@ def write_to_config(thisconfig, key, value=None, config_file=None):
 
     # load config file, create one if it doesn't exist
     if not os.path.exists(cfg):
-        os.mknod(cfg)
+        open(cfg, 'a').close()
         logging.info("Creating empty " + cfg)
     with open(cfg, 'r', encoding="utf-8") as f:
         lines = f.readlines()
