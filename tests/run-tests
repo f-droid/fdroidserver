@@ -8,7 +8,7 @@ echo_header() {
 
 copy_apks_into_repo() {
     set +x
-    for f in `find $APKDIR -name '*.apk' | grep -F -v -e unaligned -e unsigned -e badsig -e badcert`; do
+    for f in `find $APKDIR -name '*.apk' | grep -F -v -e unaligned -e unsigned -e badsig -e badcert -e bad-unicode`; do
         name=$(basename $(dirname `dirname $f`))
         apk=`$aapt dump badging "$f" | sed -n "s,^package: name='\(.*\)' versionCode='\([0-9][0-9]*\)' .*,\1_\2.apk,p"`
         test $f -nt repo/$apk && rm -f repo/$apk  # delete existing if $f is newer
@@ -157,7 +157,7 @@ $fdroid init
 sed -i.tmp 's,^ *repo_description.*,repo_description = """获取已安装在您的设备上的应用的,' config.py
 echo "mirrors = ('https://foo.bar/fdroid', 'http://secret.onion/fdroid')" >> config.py
 mkdir metadata
-cp $WORKSPACE/tests/urzip.apk repo/
+cp $WORKSPACE/tests/urzip.apk $WORKSPACE/tests/bad-unicode*.apk repo/
 cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.yml metadata/
 
 $fdroid readmeta
