@@ -39,14 +39,14 @@ class IndexTest(unittest.TestCase):
         source_dir = os.path.join(basedir, 'signindex')
         for f in ('testy.jar', 'guardianproject.jar'):
             testfile = os.path.join(source_dir, f)
-            fdroidserver.index.verify_jar_signature(testfile)
+            fdroidserver.common.verify_jar_signature(testfile)
 
     def test_verify_jar_signature_fails(self):
         basedir = os.path.dirname(__file__)
         source_dir = os.path.join(basedir, 'signindex')
         testfile = os.path.join(source_dir, 'unsigned.jar')
         with self.assertRaises(fdroidserver.index.VerificationException):
-            fdroidserver.index.verify_jar_signature(testfile)
+            fdroidserver.common.verify_jar_signature(testfile)
 
     def test_get_public_key_from_jar_succeeds(self):
         basedir = os.path.dirname(__file__)

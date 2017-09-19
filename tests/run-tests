@@ -266,6 +266,7 @@ cp $WORKSPACE/tests/urzip.apk \
 sed -i 's,archive_older = [0-9],archive_older = 3,' config.py
 
 $fdroid update --pretty --nosign
+echo "This will fail when jarsigner allows MD5 for APK signatures"
 test `grep '<package>' archive/index.xml | wc -l` -eq 5
 test `grep '<package>' repo/index.xml | wc -l` -eq 7
 

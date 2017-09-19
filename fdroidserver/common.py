@@ -50,7 +50,7 @@ from distutils.util import strtobool
 
 import fdroidserver.metadata
 from fdroidserver import _
-from fdroidserver.exception import FDroidException, VCSException, BuildException
+from fdroidserver.exception import FDroidException, VCSException, BuildException, VerificationException
 from .asynchronousfilereader import AsynchronousFileReader
 
 
@@ -2077,24 +2077,41 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     return None
 
 
-def verify_apk_signature(apk, jar=False):
+def verify_jar_signature(jar):
+    """Verifies the signature of a given JAR file.
+
+    jarsigner is very shitty: unsigned JARs pass as "verified"! So
+    this has to turn on -strict then check for result 4, since this
+    does not expect the signature to be from a CA-signed certificate.
+
+    :raises: VerificationException() if the JAR's signature could not be verified
+
+    """
+
+    if subprocess.call([config['jarsigner'], '-strict', '-verify', jar]) != 4:
+        raise VerificationException(_("The repository's index could not be verified."))
+
+
+def verify_apk_signature(apk, min_sdk_version=None):
     """verify the signature on an APK
 
     Try to use apksigner whenever possible since jarsigner is very
-    shitty: unsigned APKs pass as "verified"! So this has to turn on
-    -strict then check for result 4.
-
-    You can set :param: jar to True if you want to use this method
-    to verify jar signatures.
+    shitty: unsigned APKs pass as "verified"!  Warning, this does
+    not work on JARs with apksigner >= 0.7 (build-tools 26.0.1)
     """
     if set_command_in_config('apksigner'):
         args = [config['apksigner'], 'verify']
-        if jar:
-            args += ['--min-sdk-version=1']
+        if min_sdk_version:
+            args += ['--min-sdk-version=' + min_sdk_version]
         return subprocess.call(args + [apk]) == 0
     else:
         logging.warning("Using Java's jarsigner, not recommended for verifying APKs! Use apksigner")
-        return subprocess.call([config['jarsigner'], '-strict', '-verify', apk]) == 4
+        try:
+            verify_jar_signature(apk)
+            return True
+        except:
+            pass
+    return False
 
 
 def verify_old_apk_signature(apk):

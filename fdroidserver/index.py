@@ -632,7 +632,7 @@ def download_repo_index(url_str, etag=None, verify_fingerprint=True):
         jar = zipfile.ZipFile(fp)
 
         # verify that the JAR signature is valid
-        verify_jar_signature(fp.name)
+        common.verify_jar_signature(fp.name)
 
         # get public key and its fingerprint from JAR
         public_key, public_key_fingerprint = get_public_key_from_jar(jar)
@@ -650,16 +650,6 @@ def download_repo_index(url_str, etag=None, verify_fingerprint=True):
         index["apps"] = [metadata.App(app) for app in index["apps"]]
 
         return index, new_etag
-
-
-def verify_jar_signature(file):
-    """
-    Verifies the signature of a given JAR file.
-
-    :raises: VerificationException() if the JAR's signature could not be verified
-    """
-    if not common.verify_apk_signature(file, jar=True):
-        raise VerificationException(_("The repository's index could not be verified."))
 
 
 def get_public_key_from_jar(jar):
