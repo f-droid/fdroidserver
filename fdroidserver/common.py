@@ -1599,6 +1599,13 @@ class KnownApks:
     """
 
     def __init__(self):
+        '''Load filename/date info about previously seen APKs
+
+        Since the appid and date strings both will never have spaces,
+        this is parsed as a list from the end to allow the filename to
+        have any combo of spaces.
+        '''
+
         self.path = os.path.join('stats', 'known_apks.txt')
         self.apks = {}
         if os.path.isfile(self.path):
@@ -1608,7 +1615,10 @@ class KnownApks:
                     if len(t) == 2:
                         self.apks[t[0]] = (t[1], None)
                     else:
-                        self.apks[t[0]] = (t[1], datetime.strptime(t[2], '%Y-%m-%d'))
+                        appid = t[-2]
+                        date = datetime.strptime(t[-1], '%Y-%m-%d')
+                        filename = line[0:line.rfind(appid) - 1]
+                        self.apks[filename] = (appid, date)
         self.changed = False
 
     def writeifchanged(self):

@@ -8,14 +8,14 @@ echo_header() {
 
 copy_apks_into_repo() {
     set +x
-    for f in `find $APKDIR -name '*.apk' | grep -F -v -e unaligned -e unsigned -e badsig -e badcert -e bad-unicode`; do
-        name=$(basename $(dirname `dirname $f`))
+    find $APKDIR -type f -name '*.apk' -print0 | while IFS= read -r -d '' f; do
+        echo $f | grep -F -v -e unaligned -e unsigned -e badsig -e badcert -e bad-unicode || continue
         apk=`$aapt dump badging "$f" | sed -n "s,^package: name='\(.*\)' versionCode='\([0-9][0-9]*\)' .*,\1_\2.apk,p"`
-        test $f -nt repo/$apk && rm -f repo/$apk  # delete existing if $f is newer
+        test "$f" -nt repo/$apk && rm -f repo/$apk  # delete existing if $f is newer
         if [ ! -e repo/$apk ] && [ ! -e archive/$apk ]; then
             echo "$f --> repo/$apk"
-            ln $f $1/repo/$apk || \
-                rsync -axv $f $1/repo/$apk # rsync if hard link is not possible
+            ln "$f" $1/repo/$apk || \
+                rsync -axv "$f" $1/repo/$apk # rsync if hard link is not possible
         fi
     done
     set -x
