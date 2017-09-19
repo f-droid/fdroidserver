@@ -156,20 +156,20 @@ def check_ucm_tags(app):
             and lastbuild.versionCode == app.CurrentVersionCode
             and not lastbuild.forcevercode
             and any(s in lastbuild.commit for s in '.,_-/')):
-        yield _("Last used commit '%s' looks like a tag, but Update Check Mode is '%s'") % (
-            lastbuild.commit, app.UpdateCheckMode)
+        yield _("Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'")\
+            .format(commit=lastbuild.commit, ucm=app.UpdateCheckMode)
 
 
 def check_char_limits(app):
     limits = config['char_limits']
 
     if len(app.Summary) > limits['summary']:
-        yield _("Summary of length %s is over the %i char limit") % (
-            len(app.Summary), limits['summary'])
+        yield _("Summary of length {length} is over the {limit} char limit")\
+            .format(length=len(app.Summary), limit=limits['summary'])
 
     if len(app.Description) > limits['description']:
-        yield _("Description of length %s is over the %i char limit") % (
-            len(app.Description), limits['description'])
+        yield _("Description of length {length} is over the {limit} char limit")\
+            .format(length=len(app.Description), limit=limits['description'])
 
 
 def check_old_links(app):
@@ -186,7 +186,8 @@ def check_old_links(app):
         for f in ['WebSite', 'SourceCode', 'IssueTracker', 'Changelog']:
             v = app.get(f)
             if any(s in v for s in old_sites):
-                yield _("App is in '%s' but has a link to '%s'") % (app.Repo, v)
+                yield _("App is in '{repo}' but has a link to {url}")\
+                    .format(repo=app.Repo, url=v)
 
 
 def check_useless_fields(app):
@@ -246,7 +247,7 @@ def check_duplicates(app):
             continue
         v = v.lower()
         if v in links_seen:
-            yield _("Duplicate link in '%s': %s") % (f, v)
+            yield _("Duplicate link in '{field}': {url}").format(field=f, url=v)
         else:
             links_seen.add(v)
 
@@ -277,7 +278,7 @@ def check_mediawiki_links(app):
         url = um.group(1)
         for m, r in http_checks:
             if m.match(url):
-                yield _("URL '%s' in Description: %s") % (url, r)
+                yield _("URL {url} in Description: {error}").format(url=url, error=r)
 
 
 def check_bulleted_lists(app):
@@ -309,11 +310,13 @@ def check_builds(app):
             continue
         for s in ['master', 'origin', 'HEAD', 'default', 'trunk']:
             if build.commit and build.commit.startswith(s):
-                yield _("Branch '%s' used as commit in build '%s'") % (s, build.versionName)
+                yield _("Branch '{branch}' used as commit in build '{versionName}'")\
+                    .format(branch=s, versionName=build.versionName)
             for srclib in build.srclibs:
                 ref = srclib.split('@')[1].split('/')[0]
                 if ref.startswith(s):
-                    yield _("Branch '%s' used as commit in srclib '%s'") % (s, srclib)
+                    yield _("Branch '{branch}' used as commit in srclib '{srclib}'")\
+                        .format(branch=s, srclib=srclib)
         for key in build.keys():
             if key not in supported_flags:
                 yield _('%s is not an accepted build field') % key
@@ -335,7 +338,8 @@ def check_files_dir(app):
     for build in app.builds:
         for fname in build.patch:
             if fname not in files:
-                yield _("Unknown file %s in build '%s'") % (fname, build.versionName)
+                yield _("Unknown file '{filename}' in build '{versionName}'")\
+                    .format(filename=fname, versionName=build.versionName)
             else:
                 used.add(fname)
 
@@ -369,7 +373,8 @@ def check_extlib_dir(apps):
         for build in app.builds:
             for path in build.extlibs:
                 if path not in unused_extlib_files:
-                    yield _("%s: Unknown extlib %s in build '%s'") % (app.id, path, build.versionName)
+                    yield _("{appid}: Unknown extlib {path} in build '{versionName}'")\
+                        .format(appid=app.id, path=path, versionName=build.versionName)
                 else:
                     used.add(path)
 

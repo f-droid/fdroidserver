@@ -904,7 +904,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
                 logging.debug("Ignoring stale cache data for " + name)
 
         if not usecache:
-            logging.debug("Processing " + name_utf8)
+            logging.debug(_("Processing {apkfilename}").format(apkfilename=name_utf8))
             repo_file = collections.OrderedDict()
             repo_file['name'] = os.path.splitext(name_utf8)[0]
             # TODO rename apkname globally to something more generic
@@ -1221,12 +1221,13 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
             logging.debug("Ignoring stale cache data for " + apkfilename)
 
     if not usecache:
-        logging.debug("Processing " + apkfilename)
+        logging.debug(_("Processing {apkfilename}").format(apkfilename=apkfilename))
 
         try:
             apk = scan_apk(apkfile)
         except BuildException:
-            logging.warning('Skipping "%s" with invalid signature!', apkfilename)
+            logging.warning(_("Skipping '{apkfilename}' with invalid signature!")
+                            .format(apkfilename=apkfilename))
             return True, None, False
 
         # Check for debuggable apks...
@@ -1717,11 +1718,11 @@ def main():
     parser.add_argument("--pretty", action="store_true", default=False,
                         help=_("Produce human-readable index.xml"))
     parser.add_argument("--clean", action="store_true", default=False,
-                        help=_("Clean update - don't uses caches, reprocess all apks"))
+                        help=_("Clean update - don't uses caches, reprocess all APKs"))
     parser.add_argument("--nosign", action="store_true", default=False,
                         help=_("When configured for signed indexes, create only unsigned indexes at this stage"))
     parser.add_argument("--use-date-from-apk", action="store_true", default=False,
-                        help=_("Use date from apk instead of current time for newly added apks"))
+                        help=_("Use date from APK instead of current time for newly added APKs"))
     parser.add_argument("--rename-apks", action="store_true", default=False,
                         help=_("Rename APK files that do not match package.name_123.apk"))
     parser.add_argument("--allow-disabled-algorithms", action="store_true", default=False,

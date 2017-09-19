@@ -558,15 +558,16 @@ def main():
     for appid, app in apps.items():
 
         if options.autoonly and app.AutoUpdateMode in ('None', 'Static'):
-            logging.debug("Nothing to do for {0}...".format(appid))
+            logging.debug(_("Nothing to do for {appid}.").format(appid=appid))
             continue
 
-        logging.info("Processing " + appid + '...')
+        logging.info(_("Processing {appid}").format(appid=appid))
 
         try:
             checkupdates_app(app)
         except Exception as e:
-            logging.error("...checkupdate failed for {0} : {1}".format(appid, e))
+            logging.error(_("...checkupdate failed for {appid} : {error}")
+                          .format(appid=appid, error=e))
 
     logging.info(_("Finished"))
 

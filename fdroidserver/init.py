@@ -54,7 +54,7 @@ def main():
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument("-d", "--distinguished-name", default=None,
-                        help=_("X.509 'Distiguished Name' used when generating keys"))
+                        help=_("X.509 'Distinguished Name' used when generating keys"))
     parser.add_argument("--keystore", default=None,
                         help=_("Path to the keystore for the repo signing key"))
     parser.add_argument("--repo-keyalias", default=None,

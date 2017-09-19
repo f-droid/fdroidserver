@@ -71,7 +71,7 @@ def main():
 
         try:
 
-            logging.info("Processing " + apkfilename)
+            logging.info("Processing {apkfilename}".format(apkfilename=apkfilename))
 
             remoteapk = os.path.join(tmp_dir, apkfilename)
             if os.path.exists(remoteapk):
@@ -84,7 +84,8 @@ def main():
                 try:
                     net.download_file(url.replace('/repo', '/archive'), dldir=tmp_dir)
                 except requests.exceptions.HTTPError as e:
-                    raise FDroidException(_('Downloading %s failed. %s'), (url, e))
+                    raise FDroidException(_('Downloading {url} failed. {error}')
+                                          .format(url=url, error=e))
 
             compare_result = common.verify_apks(
                 remoteapk,

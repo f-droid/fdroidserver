@@ -424,7 +424,7 @@ def main():
         help=_("Clean up all containers and then exit"))
     parser.add_argument(
         "--init-only", default=False, action='store_true',
-        help=_("Prepare drozer to run a scan"))
+        help=_("Prepare Drozer to run a scan"))
     parser.add_argument(
         "--repo-path", default="repo", action="store",
         help=_("Override path for repo APKs (default: ./repo)"))

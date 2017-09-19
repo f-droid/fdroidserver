@@ -235,18 +235,19 @@ def read_config(opts, config_file='config.py'):
     config = {}
 
     if os.path.isfile(config_file):
-        logging.debug("Reading %s" % config_file)
+        logging.debug(_("Reading '{config_file}'").format(config_file=config_file))
         with io.open(config_file, "rb") as f:
             code = compile(f.read(), config_file, 'exec')
             exec(code, None, config)
     else:
-        logging.warning("No config.py found - using defaults.")
+        logging.warning(_("No 'config.py' found, using defaults."))
 
     for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
         if k in config:
             if not type(config[k]) in (str, list, tuple):
-                logging.warn('"' + k + '" will be in random order!'
-                             + ' Use () or [] brackets if order is important!')
+                logging.warning(
+                    _("'{field}' will be in random order! Use () or [] brackets if order is important!")
+                    .format(field=k))
 
     # smartcardoptions must be a list since its command line args for Popen
     if 'smartcardoptions' in config:
@@ -261,7 +262,8 @@ def read_config(opts, config_file='config.py'):
     if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
         st = os.stat(config_file)
         if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
-            logging.warning("unsafe permissions on {0} (should be 0600)!".format(config_file))
+            logging.warning(_("unsafe permissions on '{config_file}' (should be 0600)!")
+                            .format(config_file=config_file))
 
     fill_config_defaults(config)
 
@@ -275,7 +277,7 @@ def read_config(opts, config_file='config.py'):
         elif all(isinstance(item, str) for item in config['serverwebroot']):
             roots = config['serverwebroot']
         else:
-            raise TypeError('only accepts strings, lists, and tuples')
+            raise TypeError(_('only accepts strings, lists, and tuples'))
         rootlist = []
         for rootstr in roots:
             # since this is used with rsync, where trailing slashes have
@@ -291,7 +293,7 @@ def read_config(opts, config_file='config.py'):
         elif all(isinstance(item, str) for item in config['servergitmirrors']):
             roots = config['servergitmirrors']
         else:
-            raise TypeError('only accepts strings, lists, and tuples')
+            raise TypeError(_('only accepts strings, lists, and tuples'))
         config['servergitmirrors'] = roots
 
     return config
@@ -336,7 +338,7 @@ def test_aapt_version(aapt):
     '''Check whether the version of aapt is new enough'''
     output = subprocess.check_output([aapt, 'version'], universal_newlines=True)
     if output is None or output == '':
-        logging.error(aapt + ' failed to execute!')
+        logging.error(_("'{path}' failed to execute!").format(path=aapt))
     else:
         m = re.match(r'.*v([0-9]+)\.([0-9]+)[.-]?([0-9.-]*)', output)
         if m:
@@ -345,9 +347,10 @@ def test_aapt_version(aapt):
             bugfix = m.group(3)
             # the Debian package has the version string like "v0.2-23.0.2"
             if '.' not in bugfix and LooseVersion('.'.join((major, minor, bugfix))) < LooseVersion('0.2.2166767'):
-                logging.warning(aapt + ' is too old, fdroid requires build-tools-23.0.0 or newer!')
+                logging.warning(_("'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!")
+                                .format(aapt=aapt))
         else:
-            logging.warning('Unknown version of aapt, might cause problems: ' + output)
+            logging.warning(_('Unknown version of aapt, might cause problems: ') + output)
 
 
 def test_sdk_exists(thisconfig):
@@ -356,35 +359,38 @@ def test_sdk_exists(thisconfig):
             test_aapt_version(thisconfig['aapt'])
             return True
         else:
-            logging.error("'sdk_path' not set in config.py!")
+            logging.error(_("'sdk_path' not set in 'config.py'!"))
             return False
     if thisconfig['sdk_path'] == default_config['sdk_path']:
-        logging.error('No Android SDK found!')
-        logging.error('You can use ANDROID_HOME to set the path to your SDK, i.e.:')
+        logging.error(_('No Android SDK found!'))
+        logging.error(_('You can use ANDROID_HOME to set the path to your SDK, i.e.:'))
         logging.error('\texport ANDROID_HOME=/opt/android-sdk')
         return False
     if not os.path.exists(thisconfig['sdk_path']):
-        logging.critical('Android SDK path "' + thisconfig['sdk_path'] + '" does not exist!')
+        logging.critical(_("Android SDK path '{path}' does not exist!")
+                         .format(path=thisconfig['sdk_path']))
         return False
     if not os.path.isdir(thisconfig['sdk_path']):
-        logging.critical('Android SDK path "' + thisconfig['sdk_path'] + '" is not a directory!')
+        logging.critical(_("Android SDK path '{path}' is not a directory!")
+                         .format(path=thisconfig['sdk_path']))
         return False
     for d in ['build-tools', 'platform-tools', 'tools']:
         if not os.path.isdir(os.path.join(thisconfig['sdk_path'], d)):
-            logging.critical('Android SDK path "%s" does not contain "%s/"!' % (
-                thisconfig['sdk_path'], d))
+            logging.critical(_("Android SDK '{path}' does not have '{dirname}' installed!")
+                             .format(path=thisconfig['sdk_path'], dirname=d))
             return False
     return True
 
 
 def ensure_build_tools_exists(thisconfig):
     if not test_sdk_exists(thisconfig):
-        raise FDroidException("Android SDK not found.")
+        raise FDroidException(_("Android SDK not found!"))
     build_tools = os.path.join(thisconfig['sdk_path'], 'build-tools')
     versioned_build_tools = os.path.join(build_tools, thisconfig['build_tools'])
     if not os.path.isdir(versioned_build_tools):
         raise FDroidException(
-            'Android Build Tools path "' + versioned_build_tools + '" does not exist!')
+            _("Android Build Tools path '{path}' does not exist!")
+            .format(path=versioned_build_tools))
 
 
 def get_local_metadata_files():
@@ -440,10 +446,10 @@ def read_app_args(args, allapps, allow_vercodes=False):
     if len(apps) != len(vercodes):
         for p in vercodes:
             if p not in allapps:
-                logging.critical("No such package: %s" % p)
-        raise FDroidException("Found invalid app ids in arguments")
+                logging.critical(_("No such package: %s") % p)
+        raise FDroidException(_("Found invalid appids in arguments"))
     if not apps:
-        raise FDroidException("No packages specified")
+        raise FDroidException(_("No packages specified"))
 
     error = False
     for appid, app in apps.items():
@@ -456,10 +462,11 @@ def read_app_args(args, allapps, allow_vercodes=False):
             allvcs = [b.versionCode for b in app.builds]
             for v in vercodes[appid]:
                 if v not in allvcs:
-                    logging.critical("No such vercode %s for app %s" % (v, appid))
+                    logging.critical(_("No such versionCode {versionCode} for app {appid}")
+                                     .format(versionCode=v, appid=appid))
 
     if error:
-        raise FDroidException("Found invalid vercodes for some apps")
+        raise FDroidException(_("Found invalid versionCodes for some apps"))
 
     return apps
 
@@ -498,7 +505,7 @@ def publishednameinfo(filename):
     try:
         result = (m.group(1), m.group(2))
     except AttributeError:
-        raise FDroidException("Invalid name for published file: %s" % filename)
+        raise FDroidException(_("Invalid name for published file: %s") % filename)
     return result
 
 
@@ -590,7 +597,7 @@ class vcs:
                     raise VCSException("Authentication is not supported for git-svn")
                 self.username, remote = remote.split('@')
                 if ':' not in self.username:
-                    raise VCSException("Password required with username")
+                    raise VCSException(_("Password required with username"))
                 self.username, self.password = self.username.split(':')
 
         self.remote = remote
@@ -612,7 +619,7 @@ class vcs:
     def gotorevision(self, rev, refresh=True):
 
         if self.clone_failed:
-            raise VCSException("Downloading the repository already failed once, not trying again.")
+            raise VCSException(_("Downloading the repository already failed once, not trying again."))
 
         # The .fdroidvcs-id file for a repo tells us what VCS type
         # and remote that directory was created from, allowing us to drop it
@@ -720,48 +727,48 @@ class vcs_git(vcs):
             p = FDroidPopen(['git', 'submodule', 'foreach', '--recursive',
                              'git', 'reset', '--hard'], cwd=self.local, output=False)
             if p.returncode != 0:
-                raise VCSException("Git reset failed", p.output)
+                raise VCSException(_("Git reset failed"), p.output)
             # Remove untracked files now, in case they're tracked in the target
             # revision (it happens!)
             p = FDroidPopen(['git', 'submodule', 'foreach', '--recursive',
                              'git', 'clean', '-dffx'], cwd=self.local, output=False)
             if p.returncode != 0:
-                raise VCSException("Git clean failed", p.output)
+                raise VCSException(_("Git clean failed"), p.output)
             if not self.refreshed:
                 # Get latest commits and tags from remote
                 p = FDroidPopen(['git', 'fetch', 'origin'], cwd=self.local)
                 if p.returncode != 0:
-                    raise VCSException("Git fetch failed", p.output)
+                    raise VCSException(_("Git fetch failed"), p.output)
                 p = FDroidPopen(['git', 'fetch', '--prune', '--tags', 'origin'], cwd=self.local, output=False)
                 if p.returncode != 0:
-                    raise VCSException("Git fetch failed", p.output)
+                    raise VCSException(_("Git fetch failed"), p.output)
                 # Recreate origin/HEAD as git clone would do it, in case it disappeared
                 p = FDroidPopen(['git', 'remote', 'set-head', 'origin', '--auto'], cwd=self.local, output=False)
                 if p.returncode != 0:
                     lines = p.output.splitlines()
                     if 'Multiple remote HEAD branches' not in lines[0]:
-                        raise VCSException("Git remote set-head failed", p.output)
+                        raise VCSException(_("Git remote set-head failed"), p.output)
                     branch = lines[1].split(' ')[-1]
                     p2 = FDroidPopen(['git', 'remote', 'set-head', 'origin', branch], cwd=self.local, output=False)
                     if p2.returncode != 0:
-                        raise VCSException("Git remote set-head failed", p.output + '\n' + p2.output)
+                        raise VCSException(_("Git remote set-head failed"), p.output + '\n' + p2.output)
                 self.refreshed = True
         # origin/HEAD is the HEAD of the remote, e.g. the "default branch" on
         # a github repo. Most of the time this is the same as origin/master.
         rev = rev or 'origin/HEAD'
         p = FDroidPopen(['git', 'checkout', '-f', rev], cwd=self.local, output=False)
         if p.returncode != 0:
-            raise VCSException("Git checkout of '%s' failed" % rev, p.output)
+            raise VCSException(_("Git checkout of '%s' failed") % rev, p.output)
         # Get rid of any uncontrolled files left behind
         p = FDroidPopen(['git', 'clean', '-dffx'], cwd=self.local, output=False)
         if p.returncode != 0:
-            raise VCSException("Git clean failed", p.output)
+            raise VCSException(_("Git clean failed"), p.output)
 
     def initsubmodules(self):
         self.checkrepo()
         submfile = os.path.join(self.local, '.gitmodules')
         if not os.path.isfile(submfile):
-            raise VCSException("No git submodules available")
+            raise VCSException(_("No git submodules available"))
 
         # fix submodules not accessible without an account and public key auth
         with open(submfile, 'r') as f:
@@ -776,10 +783,10 @@ class vcs_git(vcs):
 
         p = FDroidPopen(['git', 'submodule', 'sync'], cwd=self.local, output=False)
         if p.returncode != 0:
-            raise VCSException("Git submodule sync failed", p.output)
+            raise VCSException(_("Git submodule sync failed"), p.output)
         p = FDroidPopen(['git', 'submodule', 'update', '--init', '--force', '--recursive'], cwd=self.local)
         if p.returncode != 0:
-            raise VCSException("Git submodule update failed", p.output)
+            raise VCSException(_("Git submodule update failed"), p.output)
 
     def _gettags(self):
         self.checkrepo()
@@ -902,12 +909,12 @@ class vcs_gitsvn(vcs):
                     # Check out the git rev equivalent to the svn rev
                     p = FDroidPopen(['git', 'checkout', git_rev], cwd=self.local, output=False)
                     if p.returncode != 0:
-                        raise VCSException("Git checkout of '%s' failed" % rev, p.output)
+                        raise VCSException(_("Git checkout of '%s' failed") % rev, p.output)
 
         # Get rid of any uncontrolled files left behind
         p = FDroidPopen(['git', 'clean', '-dffx'], cwd=self.local, output=False)
         if p.returncode != 0:
-            raise VCSException("Git clean failed", p.output)
+            raise VCSException(_("Git clean failed"), p.output)
 
     def _gettags(self):
         self.checkrepo()
@@ -1164,7 +1171,7 @@ def parse_androidmanifests(paths, app):
         if not os.path.isfile(path):
             continue
 
-        logging.debug("Parsing manifest at {0}".format(path))
+        logging.debug(_("Parsing manifest at '{path}'").format(path=path))
         version = None
         vercode = None
         package = None
@@ -1206,7 +1213,7 @@ def parse_androidmanifests(paths, app):
                     if string_is_integer(a):
                         vercode = a
             except Exception:
-                logging.warning("Problem with xml at {0}".format(path))
+                logging.warning(_("Problem with xml at '{path}'").format(path=path))
 
         # Remember package name, may be defined separately from version+vercode
         if package is None:
@@ -1238,7 +1245,7 @@ def parse_androidmanifests(paths, app):
         max_version = "Unknown"
 
     if max_package and not is_valid_package_name(max_package):
-        raise FDroidException("Invalid package name {0}".format(max_package))
+        raise FDroidException(_("Invalid package name {0}").format(max_package))
 
     return (max_version, max_vercode, max_package)
 
@@ -1346,7 +1353,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Initialise submodules if required
     if build.submodules:
-        logging.info("Initialising submodules")
+        logging.info(_("Initialising submodules"))
         vcs.initsubmodules()
 
     # Check that a subdir (if we're using one) exists. This has to happen
@@ -1476,7 +1483,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Delete unwanted files
     if build.rm:
-        logging.info("Removing specified files")
+        logging.info(_("Removing specified files"))
         for part in getpaths(build_dir, build.rm):
             dest = os.path.join(build_dir, part)
             logging.info("Removing {0}".format(part))
@@ -1656,7 +1663,7 @@ class KnownApks:
                 else:
                     apps[appid] = added
         sortedapps = sorted(apps.items(), key=operator.itemgetter(1))[-num:]
-        lst = [app for app, _ in sortedapps]
+        lst = [app for app, _ignored in sortedapps]
         lst.reverse()
         return lst
 
@@ -1672,7 +1679,7 @@ def get_apk_debuggable_aapt(apkfile):
     p = SdkToolsPopen(['aapt', 'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
                       output=False)
     if p.returncode != 0:
-        raise FDroidException("Failed to get apk manifest information")
+        raise FDroidException(_("Failed to get APK manifest information"))
     for line in p.output.splitlines():
         if 'android:debuggable' in line and not line.endswith('0x0'):
             return True
@@ -1719,7 +1726,8 @@ def get_apk_id_aapt(apkfile):
         m = r.match(line)
         if m:
             return m.group('appid'), m.group('vercode'), m.group('vername')
-    raise FDroidException("reading identification failed, APK invalid: '{}'".format(apkfile))
+    raise FDroidException(_("Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'")
+                          .format(apkfilename=apkfile))
 
 
 class PopenResult:
@@ -1734,7 +1742,7 @@ def SdkToolsPopen(commands, cwd=None, output=True):
         config[cmd] = find_sdk_tools_cmd(commands[0])
     abscmd = config[cmd]
     if abscmd is None:
-        raise FDroidException("Could not find '%s' on your system" % cmd)
+        raise FDroidException(_("Could not find '{command}' on your system").format(command=cmd))
     if cmd == 'aapt':
         test_aapt_version(config['aapt'])
     return FDroidPopen([abscmd] + commands[1:],

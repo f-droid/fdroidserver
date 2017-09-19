@@ -280,13 +280,13 @@ def main():
     for appid, app in apps.items():
 
         if app.Disabled:
-            logging.info("Skipping %s: disabled" % appid)
+            logging.info(_("Skipping {appid}: disabled").format(appid=appid))
             continue
         if not app.builds:
-            logging.info("Skipping %s: no builds specified" % appid)
+            logging.info(_("Skipping {appid}: no builds specified").format(appid=appid))
             continue
 
-        logging.info("Processing " + appid)
+        logging.info(_("Processing {appid}").format(appid=appid))
 
         try:
 

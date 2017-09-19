@@ -36,7 +36,7 @@ def extract_signature(apkpath):
         raise FDroidException("no valid signature in '{}'".format(apkpath))
     logging.debug('signature okay: %s', apkpath)
 
-    appid, vercode, _ = common.get_apk_id_aapt(apkpath)
+    appid, vercode, _ignored = common.get_apk_id_aapt(apkpath)
     sigdir = common.metadata_get_sigdir(appid, vercode)
     if not os.path.exists(sigdir):
         os.makedirs(sigdir)
@@ -62,21 +62,24 @@ def extract(config, options):
         try:
             if os.path.isfile(apk):
                 sigdir = extract_signature(apk)
-                logging.info(_('fetched signatures for %s -> %s'), apk, sigdir)
+                logging.info(_("Fetched signatures for '{apkfilename}' -> '{sigdir}'")
+                             .format(apkfilename=apk, sigdir=sigdir))
             elif httpre.match(apk):
                 if apk.startswith('https') or options.no_check_https:
                     try:
                         tmp_apk = os.path.join(tmp_dir, 'signed.apk')
                         net.download_file(apk, tmp_apk)
                         sigdir = extract_signature(tmp_apk)
-                        logging.info(_('fetched signatures for %s -> %s'), apk, sigdir)
+                        logging.info(_("Fetched signatures for '{apkfilename}' -> '{sigdir}'")
+                                     .format(apkfilename=apk, sigdir=sigdir))
                     finally:
                         if tmp_apk and os.path.exists(tmp_apk):
                             os.remove(tmp_apk)
                 else:
-                    logging.warn(_('refuse downloading via insecure http connection (use https or specify --no-https-check): %s'), apk)
+                    logging.warn(_('refuse downloading via insecure http connection (use https or specify --no-https-check): {apkfilename}').format(apkfilename=apk))
         except FDroidException as e:
-            logging.warning(_("failed fetching signatures for '%s': %s"), apk, e)
+            logging.warning(_("Failed fetching signatures for '{apkfilename}': {error}")
+                            .format(apkfilename=apk, error=e))
             if e.detail:
                 logging.debug(e.detail)
 

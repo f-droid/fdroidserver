@@ -114,7 +114,7 @@ def main():
         if appid in vercodes and vercodes[appid]:
             if vercode not in vercodes[appid]:
                 continue
-        logging.info("Processing " + apkfile)
+        logging.info(_("Processing {apkfilename}").format(apkfilename=apkfile))
 
         # There ought to be valid metadata for this app, otherwise why are we
         # trying to publish it?
