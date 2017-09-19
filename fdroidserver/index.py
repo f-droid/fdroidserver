@@ -242,6 +242,13 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
 
 
 def v1_sort_packages(packages, repodir, fdroid_signing_key_fingerprints):
+    """Sorts the supplied list to ensure a deterministic sort order for
+    package entries in the index file. This sort-order also expresses
+    installation preference to the clients.
+    (First in this list = first to install)
+
+    :param packages: list of packages which need to be sorted before but into index file.
+    """
 
     GROUP_DEV_SIGNED = 1
     GROUP_FDROID_SIGNED = 2
@@ -270,7 +277,7 @@ def v1_sort_packages(packages, repodir, fdroid_signing_key_fingerprints):
     packages.sort(key=v1_sort_keys)
 
 
-def make_v0(apps, apks, repodir, repodict, requestsdict):
+def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fingerprints):
     """
     aka index.jar aka index.xml
     """
@@ -354,8 +361,6 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
             root.appendChild(element)
             element.setAttribute('packageName', packageName)
 
-    fdroid_signed = load_sigkeys(repodir)
-
     for appid, appdict in apps.items():
         app = metadata.App(appdict)
 
@@ -369,7 +374,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict):
             if apk.get('versionCode') and apk.get('packageName') == appid:
                 apksbyversion[apk['versionCode']].append(apk)
         for versionCode, apksforver in apksbyversion.items():
-            fdroidsig = fdroid_signed.get(appid, {}).get('signer')
+            fdroidsig = fdroid_signing_key_fingerprints.get(appid, {}).get('signer')
             fdroid_signed_apk = None
             name_match_apk = None
             for x in apksforver:

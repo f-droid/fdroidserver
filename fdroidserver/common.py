@@ -517,6 +517,18 @@ apk_release_filename_with_sigfp = re.compile('(?P<appid>[a-zA-Z0-9_\.]+)_(?P<ver
 
 
 def apk_parse_release_filename(apkname):
+    """Parses the name of an APK file according the F-Droids APK naming
+    scheme and returns the tokens.
+
+    WARNING: Returned values don't necessarily represent the APKs actual
+    properties, the are just paresed from the file name.
+
+    :returns: A triplet containing (appid, versionCode, signer), where appid
+        should be the package name, versionCode should be the integer
+        represion of the APKs version and signer should be the first 7 hex
+        digists of the sha256 signing key fingerprint which was used to sign
+        this APK.
+    """
     m = apk_release_filename_with_sigfp.match(apkname)
     if m:
         return m.group('appid'), m.group('vercode'), m.group('sigfp')
@@ -2037,7 +2049,7 @@ def signer_fingerprint_short(sig):
     Extracts the first 7 hexadecimal digits of sha256 signing-key fingerprint
     for a given pkcs7 signature.
 
-    :param sig: Contents of an APK signature.
+    :param sig: Contents of an APK signing certificate.
     :returns: shortened signing-key fingerprint.
     """
     return signer_fingerprint(sig)[:7]
@@ -2194,7 +2206,7 @@ def apk_strip_signatures(signed_apk, strip_manifest=False):
 
 
 def apk_implant_signatures(apkpath, signaturefile, signedfile, manifest):
-    """Implats a signature from out metadata into an APK.
+    """Implats a signature from metadata into an APK.
 
     Note: this changes there supplied APK in place. So copy it if you
     need the original to be preserved.
