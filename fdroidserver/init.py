@@ -100,11 +100,21 @@ def main():
             # make sure at least aapt is found, since this can't do anything without it
             test_config['aapt'] = common.find_sdk_tools_cmd('aapt')
         else:
-            # if neither --android-home nor the default sdk_path exist, prompt the user
+            # if neither --android-home nor the default sdk_path
+            # exist, prompt the user using platform-specific default
             default_sdk_path = '/opt/android-sdk'
             if sys.platform == 'win32' or sys.platform == 'cygwin':
-                default_sdk_path = os.path.join(os.getenv('USERPROFILE'),
-                                                'AppData', 'Local', 'Android', 'android-sdk')
+                p = os.path.join(os.getenv('USERPROFILE'),
+                                 'AppData', 'Local', 'Android', 'android-sdk')
+            elif sys.platform == 'darwin':
+                # on OSX, Homebrew is common and has an easy path to detect
+                p = '/usr/local/opt/android-sdk'
+            else:
+                # if the Debian packages are installed, suggest them
+                p = '/usr/lib/android-sdk'
+            if os.path.exists(p):
+                default_sdk_path = p
+
             while not options.no_prompt:
                 try:
                     s = input(_('Enter the path to the Android SDK (%s) here:\n> ') % default_sdk_path)
