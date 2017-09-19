@@ -50,8 +50,9 @@ android:
 install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update > /dev/null;
-      brew install dash bash python3 gradle;
+      brew install dash bash python3 gradle jenv;
       brew install gnu-sed --with-default-names;
+      brew cask reinstall java;
       brew cask install android-sdk;
 
       mkdir -p "$ANDROID_HOME/licenses";
@@ -66,6 +67,7 @@ install:
 
       echo $PATH;
       echo $JAVA_HOME;
+      jenv versions;
       /usr/libexec/java_home;
       java -version;
       which java;
