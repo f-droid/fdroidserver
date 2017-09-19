@@ -24,14 +24,17 @@ import shutil
 import glob
 import hashlib
 from argparse import ArgumentParser
+from collections import OrderedDict
 import logging
 from gettext import ngettext
+import json
+import zipfile
 
 from . import _
 from . import common
 from . import metadata
 from .common import FDroidPopen, SdkToolsPopen
-from .exception import BuildException
+from .exception import BuildException, FDroidException
 
 config = None
 options = None
@@ -47,6 +50,92 @@ def publish_source_tarball(apkfilename, unsigned_dir, output_dir):
         logging.debug('...published %s', tarfilename)
     else:
         logging.debug('...no source tarball for %s', apkfilename)
+
+
+def key_alias(appid, resolve=False):
+    """Get the alias which which F-Droid uses to indentify the singing key
+    for this App in F-Droids keystore.
+    """
+    if config and 'keyaliases' in config and appid in config['keyaliases']:
+        # For this particular app, the key alias is overridden...
+        keyalias = config['keyaliases'][appid]
+        if keyalias.startswith('@'):
+            m = hashlib.md5()
+            m.update(keyalias[1:].encode('utf-8'))
+            keyalias = m.hexdigest()[:8]
+        return keyalias
+    else:
+        m = hashlib.md5()
+        m.update(appid.encode('utf-8'))
+        return m.hexdigest()[:8]
+
+
+def read_fingerprints_from_keystore():
+    """Obtain a dictionary containing all singning-key fingerprints which
+    are managed by F-Droid, grouped by appid.
+    """
+    env_vars = {'LC_ALL': 'C',
+                'FDROID_KEY_STORE_PASS': config['keystorepass'],
+                'FDROID_KEY_PASS': config['keypass']}
+    p = FDroidPopen([config['keytool'], '-list',
+                     '-v', '-keystore', config['keystore'],
+                     '-storepass:env', 'FDROID_KEY_STORE_PASS'],
+                    envs=env_vars, output=False)
+    if p.returncode != 0:
+        raise FDroidException('could not read keysotre {}'.format(config['keystore']))
+
+    realias = re.compile('Alias name: (?P<alias>.+)\n')
+    resha256 = re.compile('\s+SHA256: (?P<sha256>[:0-9A-F]{95})\n')
+    fps = {}
+    for block in p.output.split(('*' * 43) + '\n' + '*' * 43):
+        s_alias = realias.search(block)
+        s_sha256 = resha256.search(block)
+        if s_alias and s_sha256:
+            sigfp = s_sha256.group('sha256').replace(':', '').lower()
+            fps[s_alias.group('alias')] = sigfp
+    return fps
+
+
+def sign_sig_key_fingerprint_list(jar_file):
+    """sign the list of app-signing key fingerprints which is
+    used primaryily by fdroid update to determine which APKs
+    where built and signed by F-Droid and which ones were
+    manually added by users.
+    """
+    cmd = [config['jarsigner']]
+    cmd += '-keystore', config['keystore']
+    cmd += '-storepass:env', 'FDROID_KEY_STORE_PASS'
+    cmd += '-digestalg', 'SHA1'
+    cmd += '-sigalg', 'SHA1withRSA'
+    cmd += jar_file, config['repo_keyalias']
+    if config['keystore'] == 'NONE':
+        cmd += config['smartcardoptions']
+    else:  # smardcards never use -keypass
+        cmd += '-keypass:env', 'FDROID_KEY_PASS'
+    env_vars = {'FDROID_KEY_STORE_PASS': config['keystorepass'],
+                'FDROID_KEY_PASS': config['keypass']}
+    p = common.FDroidPopen(cmd, envs=env_vars)
+    if p.returncode != 0:
+        raise FDroidException("Failed to sign '{}'!".format(jar_file))
+
+
+def store_stats_fdroid_signing_key_fingerprints(appids, indent=None):
+    """Store list of all signing-key fingerprints for given appids to HD.
+    This list will later on be needed by fdroid update.
+    """
+    if not os.path.exists('stats'):
+        os.makedirs('stats')
+    data = OrderedDict()
+    fps = read_fingerprints_from_keystore()
+    for appid in sorted(appids):
+        alias = key_alias(appid)
+        if alias in fps:
+            data[appid] = {'signer': fps[key_alias(appid)]}
+
+    jar_file = os.path.join('stats', 'publishsigkeys.jar')
+    with zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED) as jar:
+        jar.writestr('publishsigkeys.json', json.dumps(data, indent=indent))
+    sign_sig_key_fingerprint_list(jar_file)
 
 
 def main():

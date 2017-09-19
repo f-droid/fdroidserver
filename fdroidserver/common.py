@@ -36,6 +36,7 @@ import socket
 import base64
 import zipfile
 import tempfile
+import json
 import xml.etree.ElementTree as XMLElementTree
 
 from binascii import hexlify
@@ -2550,6 +2551,34 @@ def get_certificate(certificate_file):
         logging.error("Certificates not found.")
         return None
     return encoder.encode(cert)
+
+
+def load_stats_fdroid_signing_key_fingerprints():
+    """Load list of signing-key fingerprints stored by fdroid publish from file.
+
+    :returns: list of dictionanryies containing the singing-key fingerprints.
+    """
+    jar_file = os.path.join('stats', 'publishsigkeys.jar')
+    if not os.path.isfile(jar_file):
+        return {}
+    cmd = [config['jarsigner'], '-strict', '-verify', jar_file]
+    p = FDroidPopen(cmd, output=False)
+    if p.returncode != 4:
+        raise FDroidException("Signature validation of '{}' failed! "
+                              "Please run publish again to rebuild this file.".format(jar_file))
+
+    jar_sigkey = apk_signer_fingerprint(jar_file)
+    repo_key_sig = config.get('repo_key_sha256')
+    if repo_key_sig:
+        if jar_sigkey != repo_key_sig:
+            raise FDroidException("Signature key fingerprint of file '{}' does not match repo_key_sha256 in config.py (found fingerprint: '{}')".format(jar_file, jar_sigkey))
+    else:
+        logging.warning("repo_key_sha256 not in config.py, setting it to the signature key fingerprint of '{}'".format(jar_file))
+        config['repo_key_sha256'] = jar_sigkey
+        write_to_config(config, 'repo_key_sha256')
+
+    with zipfile.ZipFile(jar_file, 'r') as f:
+        return json.loads(str(f.read('publishsigkeys.json'), 'utf-8'))
 
 
 def write_to_config(thisconfig, key, value=None, config_file=None):
