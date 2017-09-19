@@ -53,7 +53,7 @@ def publish_source_tarball(apkfilename, unsigned_dir, output_dir):
 
 
 def key_alias(appid, resolve=False):
-    """Get the alias which which F-Droid uses to indentify the singing key
+    """Get the alias which F-Droid uses to indentify the singing key
     for this App in F-Droids keystore.
     """
     if config and 'keyaliases' in config and appid in config['keyaliases']:
@@ -355,6 +355,9 @@ def main():
 
                 publish_source_tarball(apkfilename, unsigned_dir, output_dir)
                 logging.info('Published ' + apkfilename)
+
+    store_stats_fdroid_signing_key_fingerprints(allapps.keys())
+    logging.info('published list signing-key fingerprints')
 
 
 if __name__ == "__main__":

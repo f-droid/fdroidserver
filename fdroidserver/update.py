@@ -971,13 +971,15 @@ def scan_apk(apk_file):
     else:
         scan_apk_androguard(apk, apk_file)
 
-    # Get the signature
+    # Get the signature, or rather the signing key fingerprints
     logging.debug('Getting signature of {0}'.format(os.path.basename(apk_file)))
     apk['sig'] = getsig(apk_file)
     if not apk['sig']:
         raise BuildException("Failed to get apk signature")
     apk['signer'] = common.apk_signer_fingerprint(os.path.join(os.getcwd(),
                                                                apk_file))
+    if not apk.get('signer'):
+        raise BuildException("Failed to get apk signing key fingerprint")
 
     # Get size of the APK
     apk['size'] = os.path.getsize(apk_file)

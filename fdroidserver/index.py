@@ -39,7 +39,7 @@ from . import common
 from . import metadata
 from . import net
 from . import signindex
-from fdroidserver.common import FDroidPopen, FDroidPopenBytes
+from fdroidserver.common import FDroidPopen, FDroidPopenBytes, load_stats_fdroid_signing_key_fingerprints
 from fdroidserver.exception import FDroidException, VerificationException, MetaDataException
 
 
@@ -151,11 +151,15 @@ def make(apps, sortedids, apks, repodir, archive):
                 raise TypeError(_('only accepts strings, lists, and tuples'))
         requestsdict[command] = packageNames
 
-    make_v0(appsWithPackages, apks, repodir, repodict, requestsdict)
-    make_v1(appsWithPackages, apks, repodir, repodict, requestsdict)
+    fdroid_signing_key_fingerprints = load_stats_fdroid_signing_key_fingerprints()
+
+    make_v0(appsWithPackages, apks, repodir, repodict, requestsdict,
+            fdroid_signing_key_fingerprints)
+    make_v1(appsWithPackages, apks, repodir, repodict, requestsdict,
+            fdroid_signing_key_fingerprints)
 
 
-def make_v1(apps, packages, repodir, repodict, requestsdict):
+def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_fingerprints):
 
     def _index_encoder_default(obj):
         if isinstance(obj, set):
@@ -167,6 +171,9 @@ def make_v1(apps, packages, repodir, repodict, requestsdict):
     output = collections.OrderedDict()
     output['repo'] = repodict
     output['requests'] = requestsdict
+
+    # establish sort order of the index
+    v1_sort_packages(packages, repodir, fdroid_signing_key_fingerprints)
 
     appslist = []
     output['apps'] = appslist
@@ -232,6 +239,35 @@ def make_v1(apps, packages, repodir, repodict, requestsdict):
     else:
         signindex.config = common.config
         signindex.sign_index_v1(repodir, json_name)
+
+
+def v1_sort_packages(packages, repodir, fdroid_signing_key_fingerprints):
+
+    GROUP_DEV_SIGNED = 1
+    GROUP_FDROID_SIGNED = 2
+    GROUP_OTHER_SIGNED = 3
+
+    def v1_sort_keys(package):
+        packageName = package.get('packageName', None)
+
+        sig = package.get('signer', None)
+
+        dev_sig = common.metadata_find_developer_signature(packageName)
+        group = GROUP_OTHER_SIGNED
+        if dev_sig and dev_sig == sig:
+            group = GROUP_DEV_SIGNED
+        else:
+            fdroidsig = fdroid_signing_key_fingerprints.get(packageName, {}).get('signer')
+            if fdroidsig and fdroidsig == sig:
+                group = GROUP_FDROID_SIGNED
+
+        versionCode = None
+        if package.get('versionCode', None):
+            versionCode = -int(package['versionCode'])
+
+        return(packageName, group, sig, versionCode)
+
+    packages.sort(key=v1_sort_keys)
 
 
 def make_v0(apps, apks, repodir, repodict, requestsdict):
