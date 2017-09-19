@@ -3,22 +3,39 @@
 language: java
 
 matrix:
-  allow_failures:
-    - os: linux # this is really about OSX, Ubuntu is just bonus
   include:
     - os: linux
       language: android
-      sudo: required
-      # this doesn't actually work yet https://github.com/travis-ci/travis-ci/issues/5337
-      dist: trusty
     - os: osx
       osx_image: xcode9
       env: ANDROID_SDK_ROOT=/usr/local/share/android-sdk
       env: ANDROID_HOME=/usr/local/share/android-sdk
 
-licenses:
-  - 'android-sdk-preview-license-52d11cd2'
-  - 'android-sdk-license-.+'
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:fdroid/fdroidserver'
+    packages:
+    - bash
+    - dash
+    - pylint
+    - pep8
+    - python3-dev
+    - python3-pip
+    - python3-ruamel.yaml
+    - python3-setuptools
+    - python3.4-venv
+    - libjpeg-dev
+    - zlib1g-dev
+    - fdroidserver
+
+android:
+  components:
+    - android-23  # required for `fdroid build` test
+    - build-tools-25.0.3  # required for `fdroid build` test
+  licenses:
+    - 'android-sdk-preview-.+'
+    - 'android-sdk-license-.+'
 
 # the PPA is needed on Ubuntu 14.04 precise, and with python3, trusty too
 # the pip thing is a hack that can go away with trusty
