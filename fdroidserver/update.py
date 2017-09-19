@@ -44,7 +44,7 @@ from . import metadata
 from .common import SdkToolsPopen
 from .exception import BuildException, FDroidException
 
-METADATA_VERSION = 18
+METADATA_VERSION = 19
 
 # less than the valid range of versionCode, i.e. Java's Integer.MIN_VALUE
 UNSET_VERSION_CODE = -0x100000000
@@ -976,6 +976,8 @@ def scan_apk(apk_file):
     apk['sig'] = getsig(apk_file)
     if not apk['sig']:
         raise BuildException("Failed to get apk signature")
+    apk['signer'] = common.apk_signer_fingerprint(os.path.join(os.getcwd(),
+                                                               apk_file))
 
     # Get size of the APK
     apk['size'] = os.path.getsize(apk_file)
