@@ -46,6 +46,11 @@ have_git_2_3() {
     python3 -c "import sys; from distutils.version import LooseVersion as V; sys.exit(V(sys.argv[3]) < V('2.3'))" `git --version`
 }
 
+is_MD5_disabled() {
+    javac $WORKSPACE/tests/IsMD5Disabled.java && java -cp $WORKSPACE/tests IsMD5Disabled
+    return $?
+}
+
 #------------------------------------------------------------------------------#
 # "main"
 
