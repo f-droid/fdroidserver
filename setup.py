@@ -2,6 +2,7 @@
 
 from setuptools import setup
 import os
+import shutil
 import sys
 
 # workaround issue on OSX or --user installs, where sys.prefix is not an installable location
@@ -10,10 +11,21 @@ if os.access(sys.prefix, os.W_OK | os.X_OK):
 else:
     data_prefix = '.'
 
+# PyPI accepts reST not Markdown
+if shutil.which('pandoc'):
+    print('Using reST README')
+    import subprocess
+    readme = subprocess.check_output(['pandoc', '--from=markdown', '--to=rst', 'README.md'],
+                                     universal_newlines=True)
+else:
+    print('Using Markdown README')
+    with open('README.md') as fp:
+        readme = fp.read()
+
 setup(name='fdroidserver',
       version='0.8',
       description='F-Droid Server Tools',
-      long_description=open('README.md').read(),
+      long_description=readme,
       author='The F-Droid Project',
       author_email='team@f-droid.org',
       url='https://f-droid.org',
