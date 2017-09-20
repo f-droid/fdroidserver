@@ -609,14 +609,16 @@ class vcs:
     def repotype(self):
         return None
 
-    # Take the local repository to a clean version of the given revision, which
-    # is specificed in the VCS's native format. Beforehand, the repository can
-    # be dirty, or even non-existent. If the repository does already exist
-    # locally, it will be updated from the origin, but only once in the
-    # lifetime of the vcs object.
-    # None is acceptable for 'rev' if you know you are cloning a clean copy of
-    # the repo - otherwise it must specify a valid revision.
     def gotorevision(self, rev, refresh=True):
+        """Take the local repository to a clean version of the given
+        revision, which is specificed in the VCS's native
+        format. Beforehand, the repository can be dirty, or even
+        non-existent. If the repository does already exist locally, it
+        will be updated from the origin, but only once in the lifetime
+        of the vcs object.  None is acceptable for 'rev' if you know
+        you are cloning a clean copy of the repo - otherwise it must
+        specify a valid revision.
+        """
 
         if self.clone_failed:
             raise VCSException(_("Downloading the repository already failed once, not trying again."))
@@ -665,9 +667,11 @@ class vcs:
         if exc is not None:
             raise exc
 
-    # Derived classes need to implement this. It's called once basic checking
-    # has been performend.
     def gotorevisionx(self, rev):  # pylint: disable=unused-argument
+        """Derived classes need to implement this.
+
+        It's called once basic checking has been performed.
+        """
         raise VCSException("This VCS type doesn't define gotorevisionx")
 
     # Initialise and update submodules
@@ -684,17 +688,16 @@ class vcs:
                 rtags.append(tag)
         return rtags
 
-    # Get a list of all the known tags, sorted from newest to oldest
     def latesttags(self):
+        """Get a list of all the known tags, sorted from newest to oldest"""
         raise VCSException('latesttags not supported for this vcs type')
 
-    # Get current commit reference (hash, revision, etc)
     def getref(self):
+        """Get current commit reference (hash, revision, etc)"""
         raise VCSException('getref not supported for this vcs type')
 
-    # Returns the srclib (name, path) used in setting up the current
-    # revision, or None.
     def getsrclib(self):
+        """Returns the srclib (name, path) used in setting up the current revision, or None."""
         return self.srclib
 
 
@@ -703,11 +706,14 @@ class vcs_git(vcs):
     def repotype(self):
         return 'git'
 
-    # If the local directory exists, but is somehow not a git repository, git
-    # will traverse up the directory tree until it finds one that is (i.e.
-    # fdroidserver) and then we'll proceed to destroy it! This is called as
-    # a safety check.
     def checkrepo(self):
+        """If the local directory exists, but is somehow not a git repository,
+        git will traverse up the directory tree until it finds one
+        that is (i.e.  fdroidserver) and then we'll proceed to destroy
+        it!  This is called as a safety check.
+
+        """
+
         p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local, output=False)
         result = p.output.rstrip()
         if not result.endswith(self.local):
@@ -812,11 +818,13 @@ class vcs_gitsvn(vcs):
     def repotype(self):
         return 'git-svn'
 
-    # If the local directory exists, but is somehow not a git repository, git
-    # will traverse up the directory tree until it finds one that is (i.e.
-    # fdroidserver) and then we'll proceed to destory it! This is called as
-    # a safety check.
     def checkrepo(self):
+        """If the local directory exists, but is somehow not a git repository,
+        git will traverse up the directory tree until it finds one that
+        is (i.e.  fdroidserver) and then we'll proceed to destory it!
+        This is called as a safety check.
+
+        """
         p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local, output=False)
         result = p.output.rstrip()
         if not result.endswith(self.local):
@@ -1254,14 +1262,16 @@ def is_valid_package_name(name):
     return re.match("[A-Za-z_][A-Za-z_0-9.]+$", name)
 
 
-# Get the specified source library.
-# Returns the path to it. Normally this is the path to be used when referencing
-# it, which may be a subdirectory of the actual project. If you want the base
-# directory of the project, pass 'basepath=True'.
 def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
               raw=False, prepare=True, preponly=False, refresh=True,
               build=None):
+    """Get the specified source library.
 
+    Returns the path to it. Normally this is the path to be used when
+    referencing it, which may be a subdirectory of the actual project. If
+    you want the base directory of the project, pass 'basepath=True'.
+
+    """
     number = None
     subdir = None
     if raw:
@@ -1563,9 +1573,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     return (root_dir, srclibpaths)
 
 
-# Extend via globbing the paths from a field and return them as a map from
-# original path to resulting paths
 def getpaths_map(build_dir, globpaths):
+    """Extend via globbing the paths from a field and return them as a map from original path to resulting paths"""
     paths = dict()
     for p in globpaths:
         p = p.strip()
@@ -1577,8 +1586,8 @@ def getpaths_map(build_dir, globpaths):
     return paths
 
 
-# Extend via globbing the paths from a field and return them as a set
 def getpaths(build_dir, globpaths):
+    """Extend via globbing the paths from a field and return them as a set"""
     paths_map = getpaths_map(build_dir, globpaths)
     paths = set()
     for k, v in paths_map.items():
@@ -1653,16 +1662,17 @@ class KnownApks:
         _, added = self.apks[apkName]
         return added
 
-    # Look up information - given the 'apkname', returns (app id, date added/None).
-    # Or returns None for an unknown apk.
     def getapp(self, apkname):
+        """Look up information - given the 'apkname', returns (app id, date added/None).
+
+        Or returns None for an unknown apk.
+        """
         if apkname in self.apks:
             return self.apks[apkname]
         return None
 
-    # Get the most recent 'num' apps added to the repo, as a list of package ids
-    # with the most recent first.
     def getlatest(self, num):
+        """Get the most recent 'num' apps added to the repo, as a list of package ids with the most recent first"""
         apps = {}
         for apk, app in self.apks.items():
             appid, added = app
@@ -2108,6 +2118,8 @@ def verify_apk_signature(apk, min_sdk_version=None):
     Try to use apksigner whenever possible since jarsigner is very
     shitty: unsigned APKs pass as "verified"!  Warning, this does
     not work on JARs with apksigner >= 0.7 (build-tools 26.0.1)
+
+    :returns: boolean whether the APK was verified
     """
     if set_command_in_config('apksigner'):
         args = [config['apksigner'], 'verify']
@@ -2134,6 +2146,7 @@ def verify_old_apk_signature(apk):
     jarsigner passes unsigned APKs as "verified"! So this has to turn
     on -strict then check for result 4.
 
+    :returns: boolean whether the APK was verified
     """
 
     _java_security = os.path.join(os.getcwd(), '.java.security')
