@@ -47,6 +47,18 @@ export PATH=/usr/lib/jvm/java-8-openjdk-amd64/bin:$PATH
 cd $WORKSPACE/tests
 ./run-tests $apksource
 
+#------------------------------------------------------------------------------#
+# find pyvenv, to support Ubuntu/trusty's python3.4-venv
+
+if which pyvenv; then
+    pyvenv=pyvenv
+elif which pyvenv-3.4; then
+    pyvenv=pyvenv-3.4
+else
+    echo "pyvenv required to run this test suite!"
+    exit 1
+fi
+
 
 #------------------------------------------------------------------------------#
 # test building the source tarball, then installing it
@@ -54,7 +66,7 @@ cd $WORKSPACE
 python3 setup.py sdist
 
 rm -rf $WORKSPACE/env
-pyvenv $WORKSPACE/env
+$pyvenv $WORKSPACE/env
 . $WORKSPACE/env/bin/activate
 # workaround https://github.com/pypa/setuptools/issues/937
 pip3 install setuptools==33.1.1
@@ -68,7 +80,7 @@ fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests $apksource
 # test install using install direct from git repo
 cd $WORKSPACE
 rm -rf $WORKSPACE/env
-pyvenv $WORKSPACE/env
+$pyvenv $WORKSPACE/env
 . $WORKSPACE/env/bin/activate
 # workaround https://github.com/pypa/setuptools/issues/937
 pip3 install setuptools==33.1.1

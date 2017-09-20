@@ -1197,16 +1197,6 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
      apk is the scanned apk information, and cachechanged is True if the apkcache got changed.
     """
 
-    if ' ' in apkfilename:
-        if options.rename_apks:
-            newfilename = apkfilename.replace(' ', '_')
-            os.rename(os.path.join(repodir, apkfilename),
-                      os.path.join(repodir, newfilename))
-            apkfilename = newfilename
-        else:
-            logging.critical("Spaces in filenames are not allowed.")
-            return True, None, False
-
     apk = {}
     apkfile = os.path.join(repodir, apkfilename)
 

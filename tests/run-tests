@@ -8,14 +8,14 @@ echo_header() {
 
 copy_apks_into_repo() {
     set +x
-    for f in `find $APKDIR -name '*.apk' | grep -F -v -e unaligned -e unsigned -e badsig -e badcert`; do
-        name=$(basename $(dirname `dirname $f`))
+    find $APKDIR -type f -name '*.apk' -print0 | while IFS= read -r -d '' f; do
+        echo $f | grep -F -v -e unaligned -e unsigned -e badsig -e badcert -e bad-unicode || continue
         apk=`$aapt dump badging "$f" | sed -n "s,^package: name='\(.*\)' versionCode='\([0-9][0-9]*\)' .*,\1_\2.apk,p"`
-        test $f -nt repo/$apk && rm -f repo/$apk  # delete existing if $f is newer
+        test "$f" -nt repo/$apk && rm -f repo/$apk  # delete existing if $f is newer
         if [ ! -e repo/$apk ] && [ ! -e archive/$apk ]; then
             echo "$f --> repo/$apk"
-            ln $f $1/repo/$apk || \
-                rsync -axv $f $1/repo/$apk # rsync if hard link is not possible
+            ln "$f" $1/repo/$apk || \
+                rsync -axv "$f" $1/repo/$apk # rsync if hard link is not possible
         fi
     done
     set -x
@@ -44,6 +44,11 @@ create_test_file() {
 # the < is reverse since 0 means success in exit codes
 have_git_2_3() {
     python3 -c "import sys; from distutils.version import LooseVersion as V; sys.exit(V(sys.argv[3]) < V('2.3'))" `git --version`
+}
+
+is_MD5_disabled() {
+    javac $WORKSPACE/tests/IsMD5Disabled.java && java -cp $WORKSPACE/tests IsMD5Disabled
+    return $?
 }
 
 #------------------------------------------------------------------------------#
@@ -89,6 +94,13 @@ fi
 # allow the location of python to be overridden
 if [ -z $python ]; then
     python=python3
+fi
+
+# try to use GNU sed on OSX/BSD cuz BSD sed sucks
+if which gsed; then
+    sed=gsed
+else
+    sed=sed
 fi
 
 set -x # show each command as it is executed
@@ -154,10 +166,10 @@ REPOROOT=`create_test_dir`
 cd $REPOROOT
 
 $fdroid init
-sed -i.tmp 's,^ *repo_description.*,repo_description = """获取已安装在您的设备上的应用的,' config.py
+$sed -i.tmp 's,^ *repo_description.*,repo_description = """获取已安装在您的设备上的应用的,' config.py
 echo "mirrors = ('https://foo.bar/fdroid', 'http://secret.onion/fdroid')" >> config.py
 mkdir metadata
-cp $WORKSPACE/tests/urzip.apk repo/
+cp $WORKSPACE/tests/urzip.apk $WORKSPACE/tests/bad-unicode*.apk repo/
 cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.yml metadata/
 
 $fdroid readmeta
@@ -165,23 +177,23 @@ $fdroid update
 
 
 #------------------------------------------------------------------------------#
-echo_header 'run `fdroid build` in fresh git checkout from import.TestCase'
+echo_header 'run "fdroid build" in fresh git checkout from import.TestCase'
 
 cd $WORKSPACE/tests/tmp/importer
 git remote update -p
 git clean -fdx
 # stick with known working commit, in case future commits break things for this code
-git reset --hard cecf00c08aec56ae7a5eba444150c4d1ae868814
+git reset --hard 985aa135524ab7dd1e70335fd47b22fa628b81b3
 if [ -d $ANDROID_HOME/platforms/android-23 ]; then
     echo "build_tools = '`ls -1 $ANDROID_HOME/build-tools/ | sort -n | tail -1`'" > config.py
     echo "force_build_tools = True" >> config.py
     $fdroid build --verbose org.fdroid.ci.test.app:300
 else
-    echo 'WARNING: Skipping `fdroid build` test since android-23 is missing!'
+    echo 'WARNING: Skipping "fdroid build" test since android-23 is missing!'
 fi
 
 #------------------------------------------------------------------------------#
-echo_header 'copy git import and run `fdroid scanner` on it'
+echo_header 'copy git import and run "fdroid scanner" on it'
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
@@ -228,16 +240,19 @@ test -e repo/index-v1.jar
 grep -F '<application id=' repo/index.xml > /dev/null
 grep -F '<install packageName=' repo/index.xml > /dev/null
 grep -F '<uninstall packageName=' repo/index.xml > /dev/null
-$fdroid gpgsign --verbose
-$fdroid gpgsign --verbose
-test -e repo/obb.mainpatch.current_1619.apk.asc
-test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc
-! test -e repo/obb.mainpatch.current_1619.apk.asc.asc
-! test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc.asc
-! test -e repo/index.xml.asc
+# OSX tests are run on Travis-CI, and gpg fails to launch gpg-agent there
+if [ "$TRAVIS_OS_NAME" != "osx" ]; then
+    $fdroid gpgsign --verbose
+    $fdroid gpgsign --verbose
+    test -e repo/obb.mainpatch.current_1619.apk.asc
+    test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc
+    ! test -e repo/obb.mainpatch.current_1619.apk.asc.asc
+    ! test -e repo/obb.main.twoversions_1101617_src.tar.gz.asc.asc
+    ! test -e repo/index.xml.asc
+fi
 
 # we can't easily reproduce the timestamps for things, so just hardcode them
-sed -i --expression='s,timestamp="[0-9]*",timestamp="1480431575",' repo/index.xml
+$sed -i.tmp -e 's,timestamp="[0-9]*",timestamp="1480431575",' repo/index.xml
 diff -uw $WORKSPACE/tests/repo/index.xml repo/index.xml
 
 
@@ -251,21 +266,22 @@ $fdroid init --keystore keystore.jks --repo-keyalias=sova
 echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
 echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
 echo "accepted_formats = ['txt']" >> config.py
-sed -i '/allow_disabled_algorithms/d' config.py
+$sed -i.tmp '/allow_disabled_algorithms/d' config.py
 test -d metadata || mkdir metadata
 cp $WORKSPACE/tests/metadata/*.txt metadata/
 echo 'Summary:good test version of urzip' > metadata/info.guardianproject.urzip.txt
 echo 'Summary:good MD5 sig, which is disabled algorithm' > metadata/org.bitbucket.tickytacky.mirrormirror.txt
-sed -i '/Archive Policy:/d' metadata/*.txt
+$sed -i.tmp '/Archive Policy:/d' metadata/*.txt
 test -d repo || mkdir repo
 cp $WORKSPACE/tests/urzip.apk \
    $WORKSPACE/tests/org.bitbucket.tickytacky.mirrormirror_[0-9].apk \
    $WORKSPACE/tests/repo/com.politedroid_[0-9].apk \
    $WORKSPACE/tests/repo/obb.main.twoversions_110161[357].apk \
    repo/
-sed -i 's,archive_older = [0-9],archive_older = 3,' config.py
+$sed -i.tmp 's,archive_older = [0-9],archive_older = 3,' config.py
 
 $fdroid update --pretty --nosign
+echo "This will fail when jarsigner allows MD5 for APK signatures"
 test `grep '<package>' archive/index.xml | wc -l` -eq 5
 test `grep '<package>' repo/index.xml | wc -l` -eq 7
 
@@ -284,7 +300,7 @@ test -d metadata || mkdir metadata
 cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
 test -d repo || mkdir repo
 cp $WORKSPACE/tests/repo/com.politedroid_[0-9].apk repo/
-sed -i 's,archive_older = [0-9],archive_older = 3,' config.py
+$sed -i.tmp 's,archive_older = [0-9],archive_older = 3,' config.py
 
 $fdroid update --pretty --nosign
 test `grep '<package>' archive/index.xml | wc -l` -eq 0
@@ -299,7 +315,7 @@ test -e repo/com.politedroid_5.apk
 test -e repo/com.politedroid_6.apk
 
 echo "enable one app in the repo"
-sed -i 's,^Archive Policy:4,Archive Policy:1,' metadata/com.politedroid.txt
+$sed -i.tmp 's,^Archive Policy:4,Archive Policy:1,' metadata/com.politedroid.txt
 $fdroid update --pretty --nosign
 test `grep '<package>' archive/index.xml | wc -l` -eq 3
 test `grep '<package>' repo/index.xml | wc -l` -eq 1
@@ -313,7 +329,7 @@ test -e archive/com.politedroid_5.apk
 test -e repo/com.politedroid_6.apk
 
 echo "remove all apps from the repo"
-sed -i 's,^Archive Policy:1,Archive Policy:0,' metadata/com.politedroid.txt
+$sed -i.tmp 's,^Archive Policy:1,Archive Policy:0,' metadata/com.politedroid.txt
 $fdroid update --pretty --nosign
 test `grep '<package>' archive/index.xml | wc -l` -eq 4
 test `grep '<package>' repo/index.xml | wc -l` -eq 0
@@ -328,7 +344,7 @@ test -e archive/com.politedroid_6.apk
 ! test -e repo/com.politedroid_6.apk
 
 echo "move back one from archive to the repo"
-sed -i 's,^Archive Policy:0,Archive Policy:1,' metadata/com.politedroid.txt
+$sed -i.tmp 's,^Archive Policy:0,Archive Policy:1,' metadata/com.politedroid.txt
 $fdroid update --pretty --nosign
 test `grep '<package>' archive/index.xml | wc -l` -eq 3
 test `grep '<package>' repo/index.xml | wc -l` -eq 1
@@ -356,10 +372,10 @@ echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
 echo "accepted_formats = ['txt']" >> config.py
 test -d metadata || mkdir metadata
 cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
-sed -i '/Archive Policy:/d' metadata/com.politedroid.txt
+$sed -i.tmp '/Archive Policy:/d' metadata/com.politedroid.txt
 test -d repo || mkdir repo
 cp $WORKSPACE/tests/repo/com.politedroid_[0-9].apk repo/
-sed -i 's,archive_older = [0-9],archive_older = 3,' config.py
+$sed -i.tmp 's,archive_older = [0-9],archive_older = 3,' config.py
 
 $fdroid update --pretty --nosign
 test `grep '<package>' archive/index.xml | wc -l` -eq 1
@@ -373,7 +389,7 @@ test -e repo/com.politedroid_4.apk
 test -e repo/com.politedroid_5.apk
 test -e repo/com.politedroid_6.apk
 
-sed -i 's,archive_older = 3,archive_older = 1,' config.py
+$sed -i.tmp 's,archive_older = 3,archive_older = 1,' config.py
 $fdroid update --pretty --nosign
 test `grep '<package>' archive/index.xml | wc -l` -eq 3
 test `grep '<package>' repo/index.xml | wc -l` -eq 1
@@ -387,7 +403,7 @@ test -e archive/com.politedroid_5.apk
 test -e repo/com.politedroid_6.apk
 
 # disabling deletes from the archive
-sed -i 's/Build:1.3,4/Build:1.3,4\n    disable=testing deletion/' metadata/com.politedroid.txt
+$sed -i.tmp 's/Build:1.3,4/Build:1.3,4\n    disable=testing deletion/' metadata/com.politedroid.txt
 $fdroid update --pretty --nosign
 test `grep '<package>' archive/index.xml | wc -l` -eq 2
 test `grep '<package>' repo/index.xml | wc -l` -eq 1
@@ -401,7 +417,7 @@ test -e archive/com.politedroid_5.apk
 test -e repo/com.politedroid_6.apk
 
 # disabling deletes from the repo, and promotes one from the archive
-sed -i 's/Build:1.5,6/Build:1.5,6\n    disable=testing deletion/' metadata/com.politedroid.txt
+$sed -i.tmp 's/Build:1.5,6/Build:1.5,6\n    disable=testing deletion/' metadata/com.politedroid.txt
 $fdroid update --pretty --nosign
 test `grep '<package>' archive/index.xml | wc -l` -eq 1
 test `grep '<package>' repo/index.xml | wc -l` -eq 1
@@ -424,12 +440,12 @@ echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.p
 echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
 echo "accepted_formats = ['txt']" >> config.py
 echo 'allow_disabled_algorithms = True' >> config.py
-sed -i 's,archive_older = [0-9],archive_older = 3,' config.py
+$sed -i.tmp 's,archive_older = [0-9],archive_older = 3,' config.py
 test -d metadata || mkdir metadata
 cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
 echo 'Summary:good test version of urzip' > metadata/info.guardianproject.urzip.txt
 echo 'Summary:good MD5 sig, disabled algorithm' > metadata/org.bitbucket.tickytacky.mirrormirror.txt
-sed -i '/Archive Policy:/d' metadata/*.txt
+$sed -i.tmp '/Archive Policy:/d' metadata/*.txt
 test -d repo || mkdir repo
 cp $WORKSPACE/tests/repo/com.politedroid_[0-9].apk \
    $WORKSPACE/tests/org.bitbucket.tickytacky.mirrormirror_[0-9].apk \
@@ -459,7 +475,7 @@ test -e repo/org.bitbucket.tickytacky.mirrormirror_3.apk
 test -e repo/org.bitbucket.tickytacky.mirrormirror_4.apk
 test -e archive/urzip-badsig.apk
 
-sed -i '/allow_disabled_algorithms/d' config.py
+$sed -i.tmp '/allow_disabled_algorithms/d' config.py
 $fdroid update --pretty --nosign
 test `grep '<package>' archive/index.xml | wc -l` -eq 5
 test `grep '<package>' repo/index.xml | wc -l` -eq 3
@@ -971,7 +987,7 @@ test -e tmp/apkcache
 grep -F '<application id=' repo/index.xml > /dev/null
 
 # now set fake repo_keyalias
-sed -i.tmp 's,^ *repo_keyalias.*,repo_keyalias = "fake",' $REPOROOT/config.py
+$sed -i.tmp 's,^ *repo_keyalias.*,repo_keyalias = "fake",' $REPOROOT/config.py
 set +e
 $fdroid update
 if [ $? -eq 0 ]; then
