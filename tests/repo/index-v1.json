@@ -1,0 +1,462 @@
+{
+  "repo": {
+    "timestamp": 1502845383782,
+    "version": 19,
+    "name": "My First F-Droid Repo Demo",
+    "icon": "fdroid-icon.png",
+    "address": "https://MyFirstFDroidRepo.org/fdroid/repo",
+    "description": "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/u/fdroid. ",
+    "mirrors": [
+      "http://foobarfoobarfoobar.onion/fdroid/repo",
+      "https://foo.bar/fdroid/repo"
+    ]
+  },
+  "requests": {
+    "install": [
+      "org.adaway"
+    ],
+    "uninstall": [
+      "com.android.vending",
+      "com.facebook.orca"
+    ]
+  },
+  "apps": [
+    {
+      "categories": [
+        "System"
+      ],
+      "suggestedVersionName": "0.2.1",
+      "suggestedVersionCode": "2000",
+      "description": "<p>F-Droid can make use of system privileges or permissions to install, update and remove applications on its own. The only way to obtain those privileges is to become a system app.</p><p>This is where the Privileged Extension comes in - being a separate app and much smaller, it can be installed as a system app and communicate with the main app via AIDL IPC.</p><p>This has several advantages:</p><ul><li> Reduced disk usage in the system partition</li><li> System updates don't remove F-Droid</li><li> The process of installing into system via root is safer</li></ul><p>This is packaged as an OTA (Over-The-Air) update ZIP file.  It must be installed using TWRP or other Android recovery that can flash updates to the system from the /data/data/org.fdroid.fdroid folder on the /data partition. The standalone APK is called F-Droid Privileged Extension.</p>",
+      "donate": "https://f-droid.org/about",
+      "issueTracker": "https://gitlab.com/fdroid/privileged-extension/issues",
+      "license": "Apache-2.0",
+      "name": "fake.ota.update_1234",
+      "sourceCode": "https://gitlab.com/fdroid/privileged-extension",
+      "summary": "Tests whether OTA ZIP files are being include",
+      "webSite": "https://f-droid.org",
+      "added": 1457564400000,
+      "packageName": "fake.ota.update",
+      "lastUpdated": 1457564400000
+    },
+    {
+      "bitcoin": "1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk",
+      "categories": [
+        "Development"
+      ],
+      "suggestedVersionCode": "99999999",
+      "license": "GPL-3.0",
+      "name": "OBB Main Old Version",
+      "sourceCode": "https://github.com/eighthave/urzip",
+      "added": 1388444400000,
+      "icon": "obb.main.oldversion.1444412523.png",
+      "packageName": "obb.main.oldversion",
+      "lastUpdated": 1388444400000
+    },
+    {
+      "bitcoin": "1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk",
+      "categories": [
+        "Development"
+      ],
+      "suggestedVersionCode": "99999999",
+      "license": "GPL-3.0",
+      "name": "OBB Main Two Versions",
+      "sourceCode": "https://github.com/eighthave/urzip",
+      "added": 1444600800000,
+      "icon": "obb.main.twoversions.1101617.png",
+      "packageName": "obb.main.twoversions",
+      "lastUpdated": 1466373600000
+    },
+    {
+      "bitcoin": "1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk",
+      "categories": [
+        "Development"
+      ],
+      "suggestedVersionCode": "99999999",
+      "license": "GPL-3.0",
+      "name": "OBB Main/Patch Current",
+      "sourceCode": "https://github.com/eighthave/urzip",
+      "added": 1461362400000,
+      "icon": "obb.mainpatch.current.1619.png",
+      "packageName": "obb.mainpatch.current",
+      "lastUpdated": 1496268000000,
+      "localized": {
+        "en-US": {
+          "featureGraphic": "featureGraphic.png",
+          "icon": "icon.png",
+          "phoneScreenshots": [
+            "screenshot-main.png"
+          ],
+          "sevenInchScreenshots": [
+            "screenshot-tablet-main.png"
+          ]
+        }
+      }
+    },
+    {
+      "categories": [
+        "Time"
+      ],
+      "suggestedVersionName": "1.5",
+      "suggestedVersionCode": "6",
+      "description": "<p>Activates silent mode during calendar events.</p>",
+      "issueTracker": "https://github.com/miguelvps/PoliteDroid/issues",
+      "license": "GPL-3.0",
+      "name": "Polite Droid",
+      "sourceCode": "https://github.com/miguelvps/PoliteDroid",
+      "summary": "Calendar tool",
+      "added": 1498168800000,
+      "icon": "com.politedroid.6.png",
+      "packageName": "com.politedroid",
+      "lastUpdated": 1498168800000
+    },
+    {
+      "authorWebSite": "https://guardianproject.info",
+      "bitcoin": "1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk",
+      "categories": [
+        "Development",
+        "GuardianProject",
+        "1",
+        "2.0"
+      ],
+      "suggestedVersionCode": "2147483647",
+      "description": "<p>It\u2019s Urzip \u662f\u4e00\u4e2a\u83b7\u5f97\u5df2\u5b89\u88c5 APK \u76f8\u5173\u4fe1\u606f\u7684\u5b9e\u7528\u5de5\u5177\u3002\u5b83\u4ece\u60a8\u7684\u8bbe\u5907\u4e0a\u5df2\u5b89\u88c5\u7684\u6240\u6709\u5e94\u7528\u5f00\u59cb\uff0c\u4e00\u952e\u89e6\u6478\u5373\u53ef\u663e\u793a APK \u7684\u6307\u7eb9\uff0c\u5e76\u4e14\u63d0\u4f9b\u5230\u8fbe virustotal.com \u548c androidobservatory.org \u7684\u5feb\u6377\u94fe\u63a5\uff0c\u8ba9\u60a8\u65b9\u4fbf\u5730\u4e86\u89e3\u7279\u5b9a APK \u7684\u6863\u6848\u3002\u5b83\u8fd8\u53ef\u4ee5\u8ba9\u60a8\u5bfc\u51fa\u7b7e\u540d\u8bc1\u4e66\u548c\u751f\u6210 ApkSignaturePin Pin \u6587\u4ef6\u4f9b TrustedIntents \u5e93\u4f7f\u7528\u3002</p><p>\u2605 Urzip \u652f\u6301\u4e0b\u5217\u8bed\u8a00\uff1a Deutsch, English, espa\u00f1ol, suomi, \u65e5\u672c\u8a9e, \ud55c\uad6d\uc5b4, Norsk, portugu\u00eas (Portugal), \u0420\u0443\u0441\u0441\u043a\u0438\u0439, Sloven\u0161\u010dina, T\u00fcrk\u00e7e \u6ca1\u770b\u5230\u60a8\u7684\u8bed\u8a00\uff1f\u5e2e\u5fd9\u7ffb\u8bd1\u672c\u5e94\u7528\u5427\uff1a https://www.transifex.com/projects/p/urzip</p><p>\u2605 \u81f4\u7528\u6237\uff1a\u6211\u4eec\u8fd8\u7f3a\u5c11\u4f60\u559c\u6b22\u7684\u529f\u80fd\uff1f\u53d1\u73b0\u4e86\u4e00\u4e2a bug\uff1f\u8bf7\u544a\u8bc9\u6211\u4eec\uff01\u6211\u4eec\u4e50\u4e8e\u542c\u53d6\u60a8\u7684\u610f\u89c1\u3002\u8bf7\u53d1\u9001\u7535\u5b50\u90ae\u4ef6\u81f3: support@guardianproject.info \u6216\u8005\u52a0\u5165\u6211\u4eec\u7684\u804a\u5929\u5ba4 https://guardianproject.info/contact</p>",
+      "issueTracker": "https://dev.guardianproject.info/projects/urzip/issues",
+      "license": "GPL-3.0",
+      "name": "urzip-\u03c0\u00c7\u00c7\u03c0\u00c7\u00c7\u73b0\u4ee3\u6c49\u8bed\u901a\u7528\u5b57-\u0431\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438-\u0639\u0631\u0628\u064a1234",
+      "sourceCode": "https://github.com/guardianproject/urzip",
+      "summary": "\u4e00\u4e2a\u5b9e\u7528\u5de5\u5177\uff0c\u83b7\u53d6\u5df2\u5b89\u88c5\u5728\u60a8\u7684\u8bbe\u5907\u4e0a\u7684\u5e94\u7528\u7684\u6709\u5173\u4fe1\u606f",
+      "webSite": "https://dev.guardianproject.info/projects/urzip",
+      "added": 1466632800000,
+      "icon": "info.guardianproject.urzip.100.png",
+      "packageName": "info.guardianproject.urzip",
+      "lastUpdated": 1466632800000,
+      "localized": {
+        "en-US": {
+          "name": "title\n",
+          "summary": "short description\n",
+          "video": "video\n",
+          "description": "full description\n",
+          "featureGraphic": "featureGraphic.png",
+          "icon": "icon.png"
+        }
+      }
+    }
+  ],
+  "packages": {
+    "com.politedroid": [
+      {
+        "added": 1498168800000,
+        "apkName": "com.politedroid_6.apk",
+        "hash": "70c2f776a2bac38a58a7d521f96ee0414c6f0fb1de973c3ca8b10862a009247d",
+        "hashType": "sha256",
+        "minSdkVersion": "14",
+        "packageName": "com.politedroid",
+        "sig": "b4964fd759edaa54e65bb476d0276880",
+        "signer": "32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6",
+        "size": 16578,
+        "targetSdkVersion": "21",
+        "uses-permission": [
+          [
+            "android.permission.READ_CALENDAR",
+            null
+          ],
+          [
+            "android.permission.RECEIVE_BOOT_COMPLETED",
+            null
+          ]
+        ],
+        "versionCode": 6,
+        "versionName": "1.5"
+      },
+      {
+        "added": 1498168800000,
+        "apkName": "com.politedroid_5.apk",
+        "hash": "5bdbfa071cca4b8d05ced41d6b28763595d6e8096cca5bbf0f9253c9a2622e5d",
+        "hashType": "sha256",
+        "minSdkVersion": "3",
+        "packageName": "com.politedroid",
+        "sig": "b4964fd759edaa54e65bb476d0276880",
+        "signer": "32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6",
+        "size": 18817,
+        "targetSdkVersion": "10",
+        "uses-permission": [
+          [
+            "android.permission.READ_CALENDAR",
+            null
+          ],
+          [
+            "android.permission.RECEIVE_BOOT_COMPLETED",
+            null
+          ]
+        ],
+        "versionCode": 5,
+        "versionName": "1.4"
+      },
+      {
+        "added": 1498168800000,
+        "apkName": "com.politedroid_4.apk",
+        "hash": "c809bdff83715fbf919f3840ee09869b038e209378b906e135ee40d3f0e1f075",
+        "hashType": "sha256",
+        "minSdkVersion": "3",
+        "packageName": "com.politedroid",
+        "sig": "b4964fd759edaa54e65bb476d0276880",
+        "signer": "32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6",
+        "size": 18489,
+        "targetSdkVersion": "3",
+        "uses-permission": [
+          [
+            "android.permission.READ_CALENDAR",
+            null
+          ],
+          [
+            "android.permission.RECEIVE_BOOT_COMPLETED",
+            null
+          ],
+          [
+            "android.permission.WRITE_EXTERNAL_STORAGE",
+            null
+          ],
+          [
+            "android.permission.READ_PHONE_STATE",
+            null
+          ],
+          [
+            "android.permission.READ_EXTERNAL_STORAGE",
+            null
+          ]
+        ],
+        "versionCode": 4,
+        "versionName": "1.3"
+      },
+      {
+        "added": 1498168800000,
+        "antiFeatures": [
+          "KnownVuln",
+          "NonFreeAssets",
+          "UpstreamNonFree"
+        ],
+        "apkName": "com.politedroid_3.apk",
+        "hash": "665d03d61ebc642289fda697f71a59305b0202b16cafc5ffdae91cbe91f0b25d",
+        "hashType": "sha256",
+        "minSdkVersion": "3",
+        "packageName": "com.politedroid",
+        "sig": "b4964fd759edaa54e65bb476d0276880",
+        "signer": "32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6",
+        "size": 17552,
+        "targetSdkVersion": "3",
+        "uses-permission": [
+          [
+            "android.permission.READ_CALENDAR",
+            null
+          ],
+          [
+            "android.permission.RECEIVE_BOOT_COMPLETED",
+            null
+          ],
+          [
+            "android.permission.WRITE_EXTERNAL_STORAGE",
+            null
+          ],
+          [
+            "android.permission.READ_PHONE_STATE",
+            null
+          ],
+          [
+            "android.permission.READ_EXTERNAL_STORAGE",
+            null
+          ]
+        ],
+        "versionCode": 3,
+        "versionName": "1.2"
+      }
+    ],
+    "fake.ota.update": [
+      {
+        "added": 1457564400000,
+        "apkName": "fake.ota.update_1234.zip",
+        "hash": "897a92a4ccff4f415f6ba275b2af16d4ecaee60a983b215bddcb9f8964e7a24c",
+        "hashType": "sha256",
+        "packageName": "fake.ota.update",
+        "size": 233,
+        "versionCode": 1234,
+        "versionName": "897a92a4ccff4f415f6ba275b2af16d4ecaee60a983b215bddcb9f8964e7a24c"
+      }
+    ],
+    "info.guardianproject.urzip": [
+      {
+        "added": 1466632800000,
+        "apkName": "urzip-Sergey Vasilyevich Rakhmaninov; \u0421\u0435\u0440\u0433\u0435\u0301\u0438\u0306 \u0412\u0430\u0441\u0438\u0301\u043b\u044c\u0435\u0432\u0438\u0447 \u0420\u0430\u0445\u043c\u0430\u0301\u043d\u0438\u043d\u043e\u0432, IPA: [s\u02b2\u026ar\u02c8\u0261\u02b2ej r\u0250x\u02c8man\u02b2\u026an\u0259f] \u0633\u064a\u0631\u062c\u064a_\u0631\u062e\u0645\u0627\u0646\u064a\u0646\u0648\u0641 \u8c22\u5c14\u76d6\u00b7\u74e6\u897f\u91cc\u8036\u7ef4\u5947\u00b7\u62c9\u8d6b\u739b.apk\u5c3c\u8bfa\u592b .apk",
+        "hash": "15c0ec72c74a3791f42cdb43c57df0fb11a4dbb656851bbb8cf05b26a8372789",
+        "hashType": "sha256",
+        "minSdkVersion": "4",
+        "packageName": "info.guardianproject.urzip",
+        "sig": "b4964fd759edaa54e65bb476d0276880",
+        "signer": "32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6",
+        "size": 11471,
+        "targetSdkVersion": "18",
+        "versionCode": 100,
+        "versionName": "0.1"
+      }
+    ],
+    "obb.main.oldversion": [
+      {
+        "added": 1388444400000,
+        "apkName": "obb.main.oldversion_1444412523.apk",
+        "hash": "c5f149e526f89c05c62923bdb7bb1e2be5673c46ec85143f41e514340631449c",
+        "hashType": "sha256",
+        "minSdkVersion": "4",
+        "obbMainFile": "main.1434483388.obb.main.oldversion.obb",
+        "obbMainFileSha256": "d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7",
+        "packageName": "obb.main.oldversion",
+        "sig": "eb41d4d6082bb3e81c3d58dbf7fc7332",
+        "signer": "818e469465f96b704e27be2fee4c63ab9f83ddf30e7a34c7371a4728d83b0bc1",
+        "size": 14323,
+        "targetSdkVersion": "18",
+        "uses-permission": [
+          [
+            "android.permission.INTERNET",
+            null
+          ],
+          [
+            "android.permission.ACCESS_NETWORK_STATE",
+            22
+          ],
+          [
+            "android.permission.ACCESS_WIFI_STATE",
+            null
+          ],
+          [
+            "android.permission.CHANGE_WIFI_MULTICAST_STATE",
+            null
+          ],
+          [
+            "android.permission.CHANGE_NETWORK_STATE",
+            null
+          ],
+          [
+            "android.permission.CHANGE_WIFI_STATE",
+            null
+          ],
+          [
+            "android.permission.BLUETOOTH",
+            null
+          ],
+          [
+            "android.permission.BLUETOOTH_ADMIN",
+            18
+          ],
+          [
+            "android.permission.RECEIVE_BOOT_COMPLETED",
+            null
+          ],
+          [
+            "android.permission.NFC",
+            null
+          ]
+        ],
+        "uses-permission-sdk-23": [
+          [
+            "android.permission.WRITE_EXTERNAL_STORAGE",
+            null
+          ],
+          [
+            "android.permission.WRITE_SETTINGS",
+            25
+          ]
+        ],
+        "versionCode": 1444412523,
+        "versionName": "0.1"
+      }
+    ],
+    "obb.main.twoversions": [
+      {
+        "added": 1466373600000,
+        "apkName": "obb.main.twoversions_1101617.apk",
+        "hash": "9bc74566f089ef030ac33e7fbd99d92f1a38f363fb499fed138d9e7b774e821c",
+        "hashType": "sha256",
+        "minSdkVersion": "4",
+        "obbMainFile": "main.1101615.obb.main.twoversions.obb",
+        "obbMainFileSha256": "d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7",
+        "packageName": "obb.main.twoversions",
+        "sig": "b4964fd759edaa54e65bb476d0276880",
+        "signer": "32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6",
+        "size": 11481,
+        "srcname": "obb.main.twoversions_1101617_src.tar.gz",
+        "targetSdkVersion": "18",
+        "versionCode": 1101617,
+        "versionName": "0.1"
+      },
+      {
+        "added": 1451602800000,
+        "apkName": "obb.main.twoversions_1101615.apk",
+        "hash": "7b0b7b9ba248e15751a16e3a0e01e1e24cbb673686c38422030cb75d5c33f0bb",
+        "hashType": "sha256",
+        "minSdkVersion": "4",
+        "obbMainFile": "main.1101615.obb.main.twoversions.obb",
+        "obbMainFileSha256": "d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7",
+        "packageName": "obb.main.twoversions",
+        "sig": "b4964fd759edaa54e65bb476d0276880",
+        "signer": "32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6",
+        "size": 11480,
+        "targetSdkVersion": "18",
+        "versionCode": 1101615,
+        "versionName": "0.1"
+      },
+      {
+        "added": 1444600800000,
+        "apkName": "obb.main.twoversions_1101613.apk",
+        "hash": "cce97a52ff18d843185be7f22ecb1a557c36b7a9f8ba07a8be94e328e00b35dc",
+        "hashType": "sha256",
+        "minSdkVersion": "4",
+        "obbMainFile": "main.1101613.obb.main.twoversions.obb",
+        "obbMainFileSha256": "d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7",
+        "packageName": "obb.main.twoversions",
+        "sig": "b4964fd759edaa54e65bb476d0276880",
+        "signer": "32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6",
+        "size": 11477,
+        "targetSdkVersion": "18",
+        "versionCode": 1101613,
+        "versionName": "0.1"
+      }
+    ],
+    "obb.mainpatch.current": [
+      {
+        "added": 1461362400000,
+        "apkName": "obb.mainpatch.current_1619.apk",
+        "hash": "eda5fc3ecfdac3252717e36bdbc9820865baeef162264af9ba5db7364f0e7a0c",
+        "hashType": "sha256",
+        "minSdkVersion": "4",
+        "obbMainFile": "main.1619.obb.mainpatch.current.obb",
+        "obbMainFileSha256": "d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7",
+        "obbPatchFile": "patch.1619.obb.mainpatch.current.obb",
+        "obbPatchFileSha256": "d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7",
+        "packageName": "obb.mainpatch.current",
+        "sig": "b4964fd759edaa54e65bb476d0276880",
+        "signer": "32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6",
+        "size": 11479,
+        "targetSdkVersion": "18",
+        "versionCode": 1619,
+        "versionName": "0.1"
+      },
+      {
+        "added": 1496268000000,
+        "apkName": "obb.mainpatch.current_1619_another-release-key.apk",
+        "hash": "42e7d6d2f8254aaf9fe95ba6ecc233ee8c3cd543a3e4f3f9ebe1b638221122fa",
+        "hashType": "sha256",
+        "minSdkVersion": "4",
+        "obbMainFile": "main.1619.obb.mainpatch.current.obb",
+        "obbMainFileSha256": "d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7",
+        "obbPatchFile": "patch.1619.obb.mainpatch.current.obb",
+        "obbPatchFileSha256": "d3eb539a556352f3f47881d71fb0e5777b2f3e9a4251d283c18c67ce996774b7",
+        "packageName": "obb.mainpatch.current",
+        "sig": "4cbb9827107da5ab4f34228fa997fbf8",
+        "signer": "ce9e200667f02d96d49891a2e08a3c178870e91853d61bdd33ef5f0b54701aa5",
+        "size": 10541,
+        "targetSdkVersion": "18",
+        "versionCode": 1619,
+        "versionName": "0.1"
+      }
+    ]
+  }
+}
