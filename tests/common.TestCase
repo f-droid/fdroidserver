@@ -418,6 +418,22 @@ class CommonTest(unittest.TestCase):
         with self.assertRaises(FDroidException):
             fdroidserver.common.get_apk_id_aapt('nope')
 
+    def test_apk_release_name(self):
+        appid, vercode, sigfp = fdroidserver.common.apk_parse_release_filename('com.serwylo.lexica_905.apk')
+        self.assertEqual(appid, 'com.serwylo.lexica')
+        self.assertEqual(vercode, '905')
+        self.assertEqual(sigfp, None)
+
+        appid, vercode, sigfp = fdroidserver.common.apk_parse_release_filename('com.serwylo.lexica_905_c82e0f6.apk')
+        self.assertEqual(appid, 'com.serwylo.lexica')
+        self.assertEqual(vercode, '905')
+        self.assertEqual(sigfp, 'c82e0f6')
+
+        appid, vercode, sigfp = fdroidserver.common.apk_parse_release_filename('beverly_hills-90210.apk')
+        self.assertEqual(appid, None)
+        self.assertEqual(vercode, None)
+        self.assertEqual(sigfp, None)
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()

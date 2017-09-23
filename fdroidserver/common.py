@@ -511,6 +511,20 @@ def publishednameinfo(filename):
     return result
 
 
+apk_release_filename = re.compile('(?P<appid>[a-z0-9_\.]+)_(?P<vercode>[0-9]+)\.apk')
+apk_release_filename_with_sigfp = re.compile('(?P<appid>[a-z0-9_\.]+)_(?P<vercode>[0-9]+)_(?P<sigfp>[0-9a-f]{7})\.apk')
+
+
+def apk_parse_release_filename(apkname):
+    m = apk_release_filename_with_sigfp.match(apkname)
+    if m:
+        return m.group('appid'), m.group('vercode'), m.group('sigfp')
+    m = apk_release_filename.match(apkname)
+    if m:
+        return m.group('appid'), m.group('vercode'), None
+    return None, None, None
+
+
 def get_release_filename(app, build):
     if build.output:
         return "%s_%s.%s" % (app.id, build.versionCode, get_file_extension(build.output))
