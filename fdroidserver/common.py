@@ -34,6 +34,7 @@ import logging
 import hashlib
 import socket
 import base64
+import zipfile
 import xml.etree.ElementTree as XMLElementTree
 
 from binascii import hexlify
@@ -2012,6 +2013,43 @@ def place_srclib(root_dir, number, libpath):
 
 
 apk_sigfile = re.compile(r'META-INF/[0-9A-Za-z]+\.(SF|RSA|DSA|EC)')
+
+
+def signer_fingerprint(sig):
+    """Obtain sha256 signing-key fingerprint for pkcs7 signature.
+
+    Extracts hexadecimal sha256 signing-key fingerprint string
+    for a given pkcs7 signature.
+
+    :param: Contents of an APK signature.
+    :returns: shortened signature fingerprint.
+    """
+    cert_encoded = get_certificate(sig)
+    return hashlib.sha256(cert_encoded).hexdigest()
+
+
+def apk_signer_fingerprint(apk_path):
+    """Obtain sha256 signing-key fingerprint for APK.
+
+    Extracts hexadecimal sha256 signing-key fingerprint string
+    for a given APK.
+
+    :param apkpath: path to APK
+    :returns: signature fingerprint
+    """
+
+    with zipfile.ZipFile(apk_path, 'r') as apk:
+        certs = [n for n in apk.namelist() if CERT_PATH_REGEX.match(n)]
+
+        if len(certs) < 1:
+            logging.error("Found no signing certificates on %s" % apk_path)
+            return None
+        if len(certs) > 1:
+            logging.error("Found multiple signing certificates on %s" % apk_path)
+            return None
+
+        cert = apk.read(certs[0])
+        return signer_fingerprint(cert)
 
 
 def metadata_get_sigdir(appid, vercode=None):

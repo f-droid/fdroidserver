@@ -376,6 +376,20 @@ class CommonTest(unittest.TestCase):
         for name in bad:
             self.assertIsNone(fdroidserver.common.STANDARD_FILE_NAME_REGEX.match(name))
 
+    def test_apk_signer_fingerprint(self):
+
+        # fingerprints fetched with: keytool -printcert -file ____.RSA
+        testapks = (('repo/obb.main.oldversion_1444412523.apk',
+                     '818e469465f96b704e27be2fee4c63ab9f83ddf30e7a34c7371a4728d83b0bc1'),
+                    ('repo/obb.main.twoversions_1101613.apk',
+                     '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6'),
+                    ('repo/obb.main.twoversions_1101617.apk',
+                     '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6'))
+
+        for apkfile, keytoolcertfingerprint in testapks:
+            self.assertEqual(keytoolcertfingerprint,
+                             fdroidserver.common.apk_signer_fingerprint(apkfile))
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
