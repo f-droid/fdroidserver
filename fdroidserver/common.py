@@ -35,6 +35,7 @@ import hashlib
 import socket
 import base64
 import zipfile
+import tempfile
 import xml.etree.ElementTree as XMLElementTree
 
 from binascii import hexlify
@@ -2015,6 +2016,18 @@ def place_srclib(root_dir, number, libpath):
 apk_sigfile = re.compile(r'META-INF/[0-9A-Za-z]+\.(SF|RSA|DSA|EC)')
 
 
+def signer_fingerprint_short(sig):
+    """Obtain shortened sha256 signing-key fingerprint for pkcs7 signature.
+
+    Extracts the first 7 hexadecimal digits of sha256 signing-key fingerprint
+    for a given pkcs7 signature.
+
+    :param sig: Contents of an APK signature.
+    :returns: shortened signing-key fingerprint.
+    """
+    return signer_fingerprint(sig)[:7]
+
+
 def signer_fingerprint(sig):
     """Obtain sha256 signing-key fingerprint for pkcs7 signature.
 
@@ -2052,12 +2065,112 @@ def apk_signer_fingerprint(apk_path):
         return signer_fingerprint(cert)
 
 
+def apk_signer_fingerprint_short(apk_path):
+    """Obtain shortened sha256 signing-key fingerprint for APK.
+
+    Extracts the first 7 hexadecimal digits of sha256 signing-key fingerprint
+    for a given pkcs7 APK.
+
+    :param apk_path: path to APK
+    :returns: shortened signing-key fingerprint
+    """
+    return apk_signer_fingerprint(apk_path)[:7]
+
+
 def metadata_get_sigdir(appid, vercode=None):
     """Get signature directory for app"""
     if vercode:
         return os.path.join('metadata', appid, 'signatures', vercode)
     else:
         return os.path.join('metadata', appid, 'signatures')
+
+
+def metadata_find_signing_files(appid, vercode):
+    """Gets a list of singed manifests and signatures.
+
+    :param appid: id string of that app
+    :param vercode: version code of that app
+    :returns: a list of triplets for each signing key with following paths:
+        (signature_file, singed_file, manifest_file)
+    """
+    ret = []
+    sigdir = metadata_get_sigdir(appid, vercode)
+    sigs = glob.glob(os.path.join(sigdir, '*.DSA')) + \
+        glob.glob(os.path.join(sigdir, '*.EC')) + \
+        glob.glob(os.path.join(sigdir, '*.RSA'))
+    extre = re.compile('(\.DSA|\.EC|\.RSA)$')
+    for sig in sigs:
+        sf = extre.sub('.SF', sig)
+        if os.path.isfile(sf):
+            mf = os.path.join(sigdir, 'MANIFEST.MF')
+            if os.path.isfile(mf):
+                ret.append((sig, sf, mf))
+    return ret
+
+
+def metadata_find_developer_signing_files(appid, vercode):
+    """Get developer signature files for specified app from metadata.
+
+    :returns: A triplet of paths for signing files from metadata:
+        (signature_file, singed_file, manifest_file)
+    """
+    allsigningfiles = metadata_find_signing_files(appid, vercode)
+    if allsigningfiles and len(allsigningfiles) == 1:
+        return allsigningfiles[0]
+    else:
+        return None
+
+
+def apk_strip_signatures(signed_apk, strip_manifest=False):
+    """Removes signatures from APK.
+
+    :param signed_apk: path to apk file.
+    :param strip_manifest: when set to True also the manifest file will
+        be removed from the APK.
+    """
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_apk = os.path.join(tmpdir, 'tmp.apk')
+        os.rename(signed_apk, tmp_apk)
+        with ZipFile(tmp_apk, 'r') as in_apk:
+            with ZipFile(signed_apk, 'w') as out_apk:
+                for f in in_apk.infolist():
+                    if not apk_sigfile.match(f.filename):
+                        if strip_manifest:
+                            if f.filename != 'META-INF/MANIFEST.MF':
+                                buf = in_apk.read(f.filename)
+                                out_apk.writestr(f.filename, buf)
+                        else:
+                            buf = in_apk.read(f.filename)
+                            out_apk.writestr(f.filename, buf)
+
+
+def apk_implant_signatures(apkpath, signaturefile, signedfile, manifest):
+    """Implats a signature from out metadata into an APK.
+
+    Note: this changes there supplied APK in place. So copy it if you
+    need the original to be preserved.
+
+    :param apkpath: location of the apk
+    """
+    # get list of available signature files in metadata
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # orig_apk = os.path.join(tmpdir, 'orig.apk')
+        # os.rename(apkpath, orig_apk)
+        apkwithnewsig = os.path.join(tmpdir, 'newsig.apk')
+        with ZipFile(apkpath, 'r') as in_apk:
+            with ZipFile(apkwithnewsig, 'w') as out_apk:
+                for sig_file in [signaturefile, signedfile, manifest]:
+                    out_apk.write(sig_file, arcname='META-INF/' +
+                                  os.path.basename(sig_file))
+                for f in in_apk.infolist():
+                    if not apk_sigfile.match(f.filename):
+                        if f.filename != 'META-INF/MANIFEST.MF':
+                            buf = in_apk.read(f.filename)
+                            out_apk.writestr(f.filename, buf)
+        os.remove(apkpath)
+        p = SdkToolsPopen(['zipalign', '-v', '4', apkwithnewsig, apkpath])
+        if p.returncode != 0:
+            raise BuildException("Failed to align application")
 
 
 def apk_extract_signatures(apkpath, outdir, manifest=True):
