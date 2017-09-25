@@ -12,6 +12,7 @@ import sys
 import tempfile
 import unittest
 import textwrap
+import yaml
 from zipfile import ZipFile
 
 
@@ -157,6 +158,34 @@ class CommonTest(unittest.TestCase):
         self.assertIsNone(re.search('android:debuggable', filedata))
         self.assertIsNotNone(re.search('android:versionName="%s"' % build.versionName, filedata))
         self.assertIsNotNone(re.search('android:versionCode="%s"' % build.versionCode, filedata))
+
+    def test_prepare_sources_refresh(self):
+        packageName = 'org.fdroid.ci.test.app'
+        testdir = tempfile.mkdtemp(prefix='test_verify_apks', dir=self.tmpdir)
+        print('testdir', testdir)
+        os.chdir(testdir)
+        os.mkdir('build')
+        os.mkdir('metadata')
+
+        # use a local copy if available to avoid hitting the network
+        tmprepo = os.path.join(self.basedir, 'tmp', 'importer')
+        if os.path.exists(tmprepo):
+            git_url = tmprepo
+        else:
+            git_url = 'https://gitlab.com/fdroid/ci-test-app.git'
+
+        metadata = dict()
+        metadata['Description'] = 'This is just a test app'
+        metadata['RepoType'] = 'git'
+        metadata['Repo'] = git_url
+        with open(os.path.join('metadata', packageName + '.yml'), 'w') as fp:
+            yaml.dump(metadata, fp)
+
+        gitrepo = os.path.join(testdir, 'build', packageName)
+        vcs0 = fdroidserver.common.getvcs('git', git_url, gitrepo)
+        vcs0.gotorevision('0.3', refresh=True)
+        vcs1 = fdroidserver.common.getvcs('git', git_url, gitrepo)
+        vcs1.gotorevision('0.3', refresh=False)
 
     def test_fdroid_popen_stderr_redirect(self):
         config = dict()
