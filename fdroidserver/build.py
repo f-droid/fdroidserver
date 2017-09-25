@@ -1231,6 +1231,7 @@ def main():
                 logging.error("VCS error while building app %s: %s" % (
                     appid, reason))
                 if options.stop:
+                    logging.debug("Error encoutered, stopping by user request.")
                     sys.exit(1)
                 failed_apps[appid] = vcse
                 wikilog = str(vcse)
@@ -1245,6 +1246,7 @@ def main():
                     f.write(str(e))
                 logging.error("Could not build app %s: %s" % (appid, e))
                 if options.stop:
+                    logging.debug("Error encoutered, stopping by user request.")
                     sys.exit(1)
                 failed_apps[appid] = e
                 wikilog = e.get_wikitext()
@@ -1252,6 +1254,7 @@ def main():
                 logging.error("Could not build app %s due to unknown error: %s" % (
                     appid, traceback.format_exc()))
                 if options.stop:
+                    logging.debug("Error encoutered, stopping by user request.")
                     sys.exit(1)
                 failed_apps[appid] = e
                 wikilog = str(e)
@@ -1305,10 +1308,11 @@ def main():
                         break
 
                 if not apk_path:
-                    raise Exception("No signed APK found at path: {0}".format(apk_path))
+                    raise Exception("No signed APK found at path: {path}".format(path=apk_path))
 
                 if not os.path.isdir(repo_dir):
-                    exit(1)
+                    logging.critical("directory does not exists '{path}'".format(path=repo_dir))
+                    sys.exit(1)
 
                 logging.info("Performing Drozer scan on {0}.".format(app))
                 docker.perform_drozer_scan(apk_path, app.id, repo_dir)
