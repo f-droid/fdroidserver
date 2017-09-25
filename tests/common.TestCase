@@ -3,6 +3,7 @@
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
 import inspect
+import logging
 import optparse
 import os
 import re
@@ -27,6 +28,14 @@ import fdroidserver.metadata
 
 class CommonTest(unittest.TestCase):
     '''fdroidserver/common.py'''
+
+    def setUp(self):
+        logging.basicConfig(level=logging.DEBUG)
+        self.basedir = os.path.join(localmodule, 'tests')
+        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
+        if not os.path.exists(self.tmpdir):
+            os.makedirs(self.tmpdir)
+        os.chdir(self.basedir)
 
     def _set_build_tools(self):
         build_tools = os.path.join(fdroidserver.common.config['sdk_path'], 'build-tools')
@@ -74,17 +83,17 @@ class CommonTest(unittest.TestCase):
         config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
         # these are set debuggable
         testfiles = []
-        testfiles.append(os.path.join(os.path.dirname(__file__), 'urzip.apk'))
-        testfiles.append(os.path.join(os.path.dirname(__file__), 'urzip-badsig.apk'))
-        testfiles.append(os.path.join(os.path.dirname(__file__), 'urzip-badcert.apk'))
+        testfiles.append(os.path.join(self.basedir, 'urzip.apk'))
+        testfiles.append(os.path.join(self.basedir, 'urzip-badsig.apk'))
+        testfiles.append(os.path.join(self.basedir, 'urzip-badcert.apk'))
         for apkfile in testfiles:
             debuggable = fdroidserver.common.isApkAndDebuggable(apkfile)
             self.assertTrue(debuggable,
                             "debuggable APK state was not properly parsed!")
         # these are set NOT debuggable
         testfiles = []
-        testfiles.append(os.path.join(os.path.dirname(__file__), 'urzip-release.apk'))
-        testfiles.append(os.path.join(os.path.dirname(__file__), 'urzip-release-unsigned.apk'))
+        testfiles.append(os.path.join(self.basedir, 'urzip-release.apk'))
+        testfiles.append(os.path.join(self.basedir, 'urzip-release-unsigned.apk'))
         for apkfile in testfiles:
             debuggable = fdroidserver.common.isApkAndDebuggable(apkfile)
             self.assertFalse(debuggable,
@@ -106,11 +115,8 @@ class CommonTest(unittest.TestCase):
         testint = 99999999
         teststr = 'FAKE_STR_FOR_TESTING'
 
-        tmpdir = os.path.join(os.path.dirname(__file__), '..', '.testfiles')
-        if not os.path.exists(tmpdir):
-            os.makedirs(tmpdir)
-        tmptestsdir = tempfile.mkdtemp(prefix='test_prepare_sources', dir=tmpdir)
-        shutil.copytree(os.path.join(os.path.dirname(__file__), 'source-files'),
+        tmptestsdir = tempfile.mkdtemp(prefix='test_prepare_sources', dir=self.tmpdir)
+        shutil.copytree(os.path.join(self.basedir, 'source-files'),
                         os.path.join(tmptestsdir, 'source-files'))
 
         testdir = os.path.join(tmptestsdir, 'source-files', 'fdroid', 'fdroidclient')
@@ -153,6 +159,10 @@ class CommonTest(unittest.TestCase):
         self.assertIsNotNone(re.search('android:versionCode="%s"' % build.versionCode, filedata))
 
     def test_fdroid_popen_stderr_redirect(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+
         commands = ['sh', '-c', 'echo stdout message && echo stderr message 1>&2']
 
         p = fdroidserver.common.FDroidPopen(commands)
@@ -168,12 +178,8 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.signindex.config = config
 
-        basedir = os.path.dirname(__file__)
-        tmpdir = os.path.join(basedir, '..', '.testfiles')
-        if not os.path.exists(tmpdir):
-            os.makedirs(tmpdir)
-        sourcedir = os.path.join(basedir, 'signindex')
-        testsdir = tempfile.mkdtemp(prefix='test_signjar', dir=tmpdir)
+        sourcedir = os.path.join(self.basedir, 'signindex')
+        testsdir = tempfile.mkdtemp(prefix='test_signjar', dir=self.tmpdir)
         for f in ('testy.jar', 'guardianproject.jar',):
             sourcefile = os.path.join(sourcedir, f)
             testfile = os.path.join(testsdir, f)
@@ -200,19 +206,15 @@ class CommonTest(unittest.TestCase):
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
 
-        basedir = os.path.dirname(__file__)
-        sourceapk = os.path.join(basedir, 'urzip.apk')
+        sourceapk = os.path.join(self.basedir, 'urzip.apk')
 
-        tmpdir = os.path.join(basedir, '..', '.testfiles')
-        if not os.path.exists(tmpdir):
-            os.makedirs(tmpdir)
-        testdir = tempfile.mkdtemp(prefix='test_verify_apks', dir=tmpdir)
+        testdir = tempfile.mkdtemp(prefix='test_verify_apks', dir=self.tmpdir)
         print('testdir', testdir)
 
         copyapk = os.path.join(testdir, 'urzip-copy.apk')
         shutil.copy(sourceapk, copyapk)
         self.assertTrue(fdroidserver.common.verify_apk_signature(copyapk))
-        self.assertIsNone(fdroidserver.common.verify_apks(sourceapk, copyapk, tmpdir))
+        self.assertIsNone(fdroidserver.common.verify_apks(sourceapk, copyapk, self.tmpdir))
 
         unsignedapk = os.path.join(testdir, 'urzip-unsigned.apk')
         with ZipFile(sourceapk, 'r') as apk:
@@ -220,10 +222,10 @@ class CommonTest(unittest.TestCase):
                 for info in apk.infolist():
                     if not info.filename.startswith('META-INF/'):
                         testapk.writestr(info, apk.read(info.filename))
-        self.assertIsNone(fdroidserver.common.verify_apks(sourceapk, unsignedapk, tmpdir))
+        self.assertIsNone(fdroidserver.common.verify_apks(sourceapk, unsignedapk, self.tmpdir))
 
         twosigapk = os.path.join(testdir, 'urzip-twosig.apk')
-        otherapk = ZipFile(os.path.join(basedir, 'urzip-release.apk'), 'r')
+        otherapk = ZipFile(os.path.join(self.basedir, 'urzip-release.apk'), 'r')
         with ZipFile(sourceapk, 'r') as apk:
             with ZipFile(twosigapk, 'w') as testapk:
                 for info in apk.infolist():
@@ -232,7 +234,7 @@ class CommonTest(unittest.TestCase):
                         testapk.writestr(info, otherapk.read(info.filename))
         otherapk.close()
         self.assertFalse(fdroidserver.common.verify_apk_signature(twosigapk))
-        self.assertIsNone(fdroidserver.common.verify_apks(sourceapk, twosigapk, tmpdir))
+        self.assertIsNone(fdroidserver.common.verify_apks(sourceapk, twosigapk, self.tmpdir))
 
     def test_write_to_config(self):
         with tempfile.TemporaryDirectory() as tmpPath:
