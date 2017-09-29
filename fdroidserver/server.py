@@ -79,22 +79,29 @@ def update_awsbucket_s3cmd(repo_section):
     os.write(fd, ('secret_key = ' + config['awssecretkey'] + '\n').encode('utf-8'))
     os.close(fd)
 
-    s3url = 's3://' + config['awsbucket'] + '/fdroid/'
-    s3cmdargs = [
-        's3cmd',
-        'sync',
-        '--config=' + configfilename,
-        '--acl-public',
-    ]
+    s3bucketurl = 's3://' + config['awsbucket']
+    s3cmd = [config['s3cmd'], '--config=' + configfilename]
+    if subprocess.call(s3cmd + ['info', s3bucketurl]) != 0:
+        logging.warning(_('Creating new S3 bucket: {url}')
+                        .format(url=s3bucketurl))
+        if subprocess.call(s3cmd + ['mb', s3bucketurl]) != 0:
+            logging.error(_('Failed to create S3 bucket: {url}')
+                          .format(url=s3bucketurl))
+            raise FDroidException()
+
+    s3cmd_sync = s3cmd + ['sync', '--acl-public']
     if options.verbose:
-        s3cmdargs += ['--verbose']
+        s3cmd_sync += ['--verbose']
     if options.quiet:
-        s3cmdargs += ['--quiet']
+        s3cmd_sync += ['--quiet']
     indexxml = os.path.join(repo_section, 'index.xml')
     indexjar = os.path.join(repo_section, 'index.jar')
     indexv1jar = os.path.join(repo_section, 'index-v1.jar')
+
+    s3url = s3bucketurl + '/fdroid/'
     logging.debug('s3cmd sync new files in ' + repo_section + ' to ' + s3url)
-    if subprocess.call(s3cmdargs +
+    logging.debug(_('Running first pass with MD5 checking disabled'))
+    if subprocess.call(s3cmd_sync +
                        ['--no-check-md5', '--skip-existing',
                         '--exclude', indexxml,
                         '--exclude', indexjar,
@@ -102,7 +109,7 @@ def update_awsbucket_s3cmd(repo_section):
                         repo_section, s3url]) != 0:
         raise FDroidException()
     logging.debug('s3cmd sync all files in ' + repo_section + ' to ' + s3url)
-    if subprocess.call(s3cmdargs +
+    if subprocess.call(s3cmd_sync +
                        ['--no-check-md5',
                         '--exclude', indexxml,
                         '--exclude', indexjar,
@@ -110,14 +117,15 @@ def update_awsbucket_s3cmd(repo_section):
                         repo_section, s3url]) != 0:
         raise FDroidException()
 
-    logging.debug('s3cmd sync indexes ' + repo_section + ' to ' + s3url + ' and delete')
-    s3cmdargs.append('--delete-removed')
-    s3cmdargs.append('--delete-after')
+    logging.debug(_('s3cmd sync indexes {path} to {url} and delete')
+                  .format(path=repo_section, url=s3url))
+    s3cmd_sync.append('--delete-removed')
+    s3cmd_sync.append('--delete-after')
     if options.no_checksum:
-        s3cmdargs.append('--no-check-md5')
+        s3cmd_sync.append('--no-check-md5')
     else:
-        s3cmdargs.append('--check-md5')
-    if subprocess.call(s3cmdargs + [repo_section, s3url]) != 0:
+        s3cmd_sync.append('--check-md5')
+    if subprocess.call(s3cmd_sync + [repo_section, s3url]) != 0:
         raise FDroidException()
 
 
