@@ -498,7 +498,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
                 if f in files:
                     os.remove(os.path.join(root, f))
 
-        if 'build.gradle' in files:
+        if any(f in files for f in ['build.gradle', 'settings.gradle']):
             # Even when running clean, gradle stores task/artifact caches in
             # .gradle/ as binary files. To avoid overcomplicating the scanner,
             # manually delete them, just like `gradle clean` should have removed
