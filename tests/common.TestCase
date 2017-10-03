@@ -25,6 +25,7 @@ if localmodule not in sys.path:
 import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
+from fdroidserver.exception import FDroidException
 
 
 class CommonTest(unittest.TestCase):
@@ -375,6 +376,67 @@ class CommonTest(unittest.TestCase):
         ]
         for name in bad:
             self.assertIsNone(fdroidserver.common.STANDARD_FILE_NAME_REGEX.match(name))
+
+    def test_apk_signer_fingerprint(self):
+
+        # fingerprints fetched with: keytool -printcert -file ____.RSA
+        testapks = (('repo/obb.main.oldversion_1444412523.apk',
+                     '818e469465f96b704e27be2fee4c63ab9f83ddf30e7a34c7371a4728d83b0bc1'),
+                    ('repo/obb.main.twoversions_1101613.apk',
+                     '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6'),
+                    ('repo/obb.main.twoversions_1101617.apk',
+                     '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6'))
+
+        for apkfile, keytoolcertfingerprint in testapks:
+            self.assertEqual(keytoolcertfingerprint,
+                             fdroidserver.common.apk_signer_fingerprint(apkfile))
+
+    def test_apk_signer_fingerprint_short(self):
+
+        # fingerprints fetched with: keytool -printcert -file ____.RSA
+        testapks = (('repo/obb.main.oldversion_1444412523.apk', '818e469'),
+                    ('repo/obb.main.twoversions_1101613.apk', '32a2362'),
+                    ('repo/obb.main.twoversions_1101617.apk', '32a2362'))
+
+        for apkfile, keytoolcertfingerprint in testapks:
+            self.assertEqual(keytoolcertfingerprint,
+                             fdroidserver.common.apk_signer_fingerprint_short(apkfile))
+
+    def test_get_api_id_aapt(self):
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        self._set_build_tools()
+        config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
+
+        appid, vercode, vername = fdroidserver.common.get_apk_id_aapt('repo/obb.main.twoversions_1101613.apk')
+        self.assertEqual('obb.main.twoversions', appid)
+        self.assertEqual('1101613', vercode)
+        self.assertEqual('0.1', vername)
+
+        with self.assertRaises(FDroidException):
+            fdroidserver.common.get_apk_id_aapt('nope')
+
+    def test_apk_release_name(self):
+        appid, vercode, sigfp = fdroidserver.common.apk_parse_release_filename('com.serwylo.lexica_905.apk')
+        self.assertEqual(appid, 'com.serwylo.lexica')
+        self.assertEqual(vercode, '905')
+        self.assertEqual(sigfp, None)
+
+        appid, vercode, sigfp = fdroidserver.common.apk_parse_release_filename('com.serwylo.lexica_905_c82e0f6.apk')
+        self.assertEqual(appid, 'com.serwylo.lexica')
+        self.assertEqual(vercode, '905')
+        self.assertEqual(sigfp, 'c82e0f6')
+
+        appid, vercode, sigfp = fdroidserver.common.apk_parse_release_filename('beverly_hills-90210.apk')
+        self.assertEqual(appid, None)
+        self.assertEqual(vercode, None)
+        self.assertEqual(sigfp, None)
+
+    def test_metadata_find_developer_signature(self):
+        sig = fdroidserver.common.metadata_find_developer_signature('org.smssecure.smssecure')
+        self.assertEqual('b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868', sig)
 
 
 if __name__ == "__main__":

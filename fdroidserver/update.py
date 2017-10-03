@@ -44,7 +44,7 @@ from . import metadata
 from .common import SdkToolsPopen
 from .exception import BuildException, FDroidException
 
-METADATA_VERSION = 18
+METADATA_VERSION = 19
 
 # less than the valid range of versionCode, i.e. Java's Integer.MIN_VALUE
 UNSET_VERSION_CODE = -0x100000000
@@ -901,7 +901,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
                 logging.debug("Reading " + name_utf8 + " from cache")
                 usecache = True
             else:
-                logging.debug("Ignoring stale cache data for " + name)
+                logging.debug("Ignoring stale cache data for " + name_utf8)
 
         if not usecache:
             logging.debug(_("Processing {apkfilename}").format(apkfilename=name_utf8))
@@ -971,11 +971,15 @@ def scan_apk(apk_file):
     else:
         scan_apk_androguard(apk, apk_file)
 
-    # Get the signature
+    # Get the signature, or rather the signing key fingerprints
     logging.debug('Getting signature of {0}'.format(os.path.basename(apk_file)))
     apk['sig'] = getsig(apk_file)
     if not apk['sig']:
         raise BuildException("Failed to get apk signature")
+    apk['signer'] = common.apk_signer_fingerprint(os.path.join(os.getcwd(),
+                                                               apk_file))
+    if not apk.get('signer'):
+        raise BuildException("Failed to get apk signing key fingerprint")
 
     # Get size of the APK
     apk['size'] = os.path.getsize(apk_file)

@@ -7,8 +7,10 @@ import sys
 import unittest
 import zipfile
 from unittest.mock import patch
-
 import requests
+import tempfile
+import json
+import shutil
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -19,6 +21,8 @@ if localmodule not in sys.path:
 import fdroidserver.common
 import fdroidserver.index
 import fdroidserver.signindex
+import fdroidserver.publish
+from testcommon import TmpCwd
 
 
 GP_FINGERPRINT = 'B7C2EEFD8DAC7806AF67DFCD92EB18126BC08312A7F2D6F3862E46013C7A6135'
@@ -114,8 +118,117 @@ class IndexTest(unittest.TestCase):
         self.assertEqual(10, len(index['packages']))
         self.assertEqual('new_etag', new_etag)
 
+    def test_v1_sort_packages(self):
+
+        i = [{'packageName': 'org.smssecure.smssecure',
+              'apkName': 'org.smssecure.smssecure_134.apk',
+              'signer': 'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+              'versionCode': 134},
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'org.smssecure.smssecure_134_b30bb97.apk',
+              'signer': 'b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868',
+              'versionCode': 134},
+             {'packageName': 'b075b32b4ef1e8a869e00edb136bd48e34a0382b85ced8628f164d1199584e4e'},
+             {'packageName': '43af70d1aca437c2f9974c4634cc5abe45bdc4d5d71529ac4e553488d3bb3ff6'},
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'org.smssecure.smssecure_135_b30bb97.apk',
+              'signer': 'b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868',
+              'versionCode': 135},
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'org.smssecure.smssecure_135.apk',
+              'signer': 'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+              'versionCode': 135},
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'org.smssecure.smssecure_133.apk',
+              'signer': 'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+              'versionCode': 133},
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'smssecure-weird-version.apk',
+              'signer': '99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff',
+              'versionCode': 133},
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'smssecure-custom.apk',
+              'signer': '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+              'versionCode': 133},
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'smssecure-new-custom.apk',
+              'signer': '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+              'versionCode': 135}]
+
+        o = [{'packageName': '43af70d1aca437c2f9974c4634cc5abe45bdc4d5d71529ac4e553488d3bb3ff6'},
+             {'packageName': 'b075b32b4ef1e8a869e00edb136bd48e34a0382b85ced8628f164d1199584e4e'},
+             # app test data
+             # # packages with reproducible developer signature
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'org.smssecure.smssecure_135_b30bb97.apk',
+              'signer': 'b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868',
+              'versionCode': 135},
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'org.smssecure.smssecure_134_b30bb97.apk',
+              'signer': 'b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868',
+              'versionCode': 134},
+             # # packages build and signed by fdroid
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'org.smssecure.smssecure_135.apk',
+              'signer': 'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+              'versionCode': 135},
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'org.smssecure.smssecure_134.apk',
+              'signer': 'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+              'versionCode': 134},
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'org.smssecure.smssecure_133.apk',
+              'signer': 'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+              'versionCode': 133},
+             # # packages signed with unkown keys
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'smssecure-new-custom.apk',
+              'signer': '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+              'versionCode': 135},
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'smssecure-custom.apk',
+              'signer': '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+              'versionCode': 133},
+             {'packageName': 'org.smssecure.smssecure',
+              'apkName': 'smssecure-weird-version.apk',
+              'signer': '99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff',
+              'versionCode': 133}]
+
+        fdroidserver.common.config = {}
+        fdroidserver.common.fill_config_defaults(fdroidserver.common.config)
+        fdroidserver.publish.config = fdroidserver.common.config
+        fdroidserver.publish.config['keystorepass'] = '123456'
+        fdroidserver.publish.config['keypass'] = '123456'
+        fdroidserver.publish.config['keystore'] = os.path.join(os.getcwd(),
+                                                               'dummy-keystore.jks')
+        fdroidserver.publish.config['repo_keyalias'] = 'repokey'
+
+        testsmetadir = os.path.join(os.getcwd(), 'metadata')
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            shutil.copytree(testsmetadir, 'metadata')
+            sigkeyfps = {
+                "org.smssecure.smssecure": {
+                    "signer": "b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6"
+                }
+            }
+            os.makedirs('stats')
+            jarfile = 'stats/publishsigkeys.jar'
+            with zipfile.ZipFile(jarfile, 'w', zipfile.ZIP_DEFLATED) as jar:
+                jar.writestr('publishsigkeys.json', json.dumps(sigkeyfps))
+            fdroidserver.publish.sign_sig_key_fingerprint_list(jarfile)
+            with open('config.py', 'w'):
+                pass
+
+            fdroidserver.index.v1_sort_packages(
+                i, 'repo', fdroidserver.common.load_stats_fdroid_signing_key_fingerprints())
+            self.maxDiff = None
+            self.assertEqual(json.dumps(i, indent=2), json.dumps(o, indent=2))
+
 
 if __name__ == "__main__":
+    if os.path.basename(os.getcwd()) != 'tests' and os.path.isdir('tests'):
+        os.chdir('tests')
+
     parser = optparse.OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")

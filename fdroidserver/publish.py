@@ -24,17 +24,118 @@ import shutil
 import glob
 import hashlib
 from argparse import ArgumentParser
+from collections import OrderedDict
 import logging
 from gettext import ngettext
+import json
+import zipfile
 
 from . import _
 from . import common
 from . import metadata
 from .common import FDroidPopen, SdkToolsPopen
-from .exception import BuildException
+from .exception import BuildException, FDroidException
 
 config = None
 options = None
+
+
+def publish_source_tarball(apkfilename, unsigned_dir, output_dir):
+    """Move the source tarball into the output directory..."""
+
+    tarfilename = apkfilename[:-4] + '_src.tar.gz'
+    tarfile = os.path.join(unsigned_dir, tarfilename)
+    if os.path.exists(tarfile):
+        shutil.move(tarfile, os.path.join(output_dir, tarfilename))
+        logging.debug('...published %s', tarfilename)
+    else:
+        logging.debug('...no source tarball for %s', apkfilename)
+
+
+def key_alias(appid, resolve=False):
+    """Get the alias which F-Droid uses to indentify the singing key
+    for this App in F-Droids keystore.
+    """
+    if config and 'keyaliases' in config and appid in config['keyaliases']:
+        # For this particular app, the key alias is overridden...
+        keyalias = config['keyaliases'][appid]
+        if keyalias.startswith('@'):
+            m = hashlib.md5()
+            m.update(keyalias[1:].encode('utf-8'))
+            keyalias = m.hexdigest()[:8]
+        return keyalias
+    else:
+        m = hashlib.md5()
+        m.update(appid.encode('utf-8'))
+        return m.hexdigest()[:8]
+
+
+def read_fingerprints_from_keystore():
+    """Obtain a dictionary containing all singning-key fingerprints which
+    are managed by F-Droid, grouped by appid.
+    """
+    env_vars = {'LC_ALL': 'C',
+                'FDROID_KEY_STORE_PASS': config['keystorepass'],
+                'FDROID_KEY_PASS': config['keypass']}
+    p = FDroidPopen([config['keytool'], '-list',
+                     '-v', '-keystore', config['keystore'],
+                     '-storepass:env', 'FDROID_KEY_STORE_PASS'],
+                    envs=env_vars, output=False)
+    if p.returncode != 0:
+        raise FDroidException('could not read keysotre {}'.format(config['keystore']))
+
+    realias = re.compile('Alias name: (?P<alias>.+)\n')
+    resha256 = re.compile('\s+SHA256: (?P<sha256>[:0-9A-F]{95})\n')
+    fps = {}
+    for block in p.output.split(('*' * 43) + '\n' + '*' * 43):
+        s_alias = realias.search(block)
+        s_sha256 = resha256.search(block)
+        if s_alias and s_sha256:
+            sigfp = s_sha256.group('sha256').replace(':', '').lower()
+            fps[s_alias.group('alias')] = sigfp
+    return fps
+
+
+def sign_sig_key_fingerprint_list(jar_file):
+    """sign the list of app-signing key fingerprints which is
+    used primaryily by fdroid update to determine which APKs
+    where built and signed by F-Droid and which ones were
+    manually added by users.
+    """
+    cmd = [config['jarsigner']]
+    cmd += '-keystore', config['keystore']
+    cmd += '-storepass:env', 'FDROID_KEY_STORE_PASS'
+    cmd += '-digestalg', 'SHA1'
+    cmd += '-sigalg', 'SHA1withRSA'
+    cmd += jar_file, config['repo_keyalias']
+    if config['keystore'] == 'NONE':
+        cmd += config['smartcardoptions']
+    else:  # smardcards never use -keypass
+        cmd += '-keypass:env', 'FDROID_KEY_PASS'
+    env_vars = {'FDROID_KEY_STORE_PASS': config['keystorepass'],
+                'FDROID_KEY_PASS': config['keypass']}
+    p = common.FDroidPopen(cmd, envs=env_vars)
+    if p.returncode != 0:
+        raise FDroidException("Failed to sign '{}'!".format(jar_file))
+
+
+def store_stats_fdroid_signing_key_fingerprints(appids, indent=None):
+    """Store list of all signing-key fingerprints for given appids to HD.
+    This list will later on be needed by fdroid update.
+    """
+    if not os.path.exists('stats'):
+        os.makedirs('stats')
+    data = OrderedDict()
+    fps = read_fingerprints_from_keystore()
+    for appid in sorted(appids):
+        alias = key_alias(appid)
+        if alias in fps:
+            data[appid] = {'signer': fps[key_alias(appid)]}
+
+    jar_file = os.path.join('stats', 'publishsigkeys.jar')
+    with zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED) as jar:
+        jar.writestr('publishsigkeys.json', json.dumps(data, indent=indent))
+    sign_sig_key_fingerprint_list(jar_file)
 
 
 def main():
@@ -138,22 +239,54 @@ def main():
             if compare_result:
                 logging.error("...verification failed - publish skipped : "
                               + compare_result)
-                continue
+            else:
 
-            # Success! So move the downloaded file to the repo, and remove
-            # our built version.
-            shutil.move(srcapk, os.path.join(output_dir, apkfilename))
-            os.remove(apkfile)
+                # Success! So move the downloaded file to the repo, and remove
+                # our built version.
+                shutil.move(srcapk, os.path.join(output_dir, apkfilename))
+                os.remove(apkfile)
+
+                publish_source_tarball(apkfilename, unsigned_dir, output_dir)
+                logging.info('Published ' + apkfilename)
 
         elif apkfile.endswith('.zip'):
 
             # OTA ZIPs built by fdroid do not need to be signed by jarsigner,
             # just to be moved into place in the repo
             shutil.move(apkfile, os.path.join(output_dir, apkfilename))
+            publish_source_tarball(apkfilename, unsigned_dir, output_dir)
+            logging.info('Published ' + apkfilename)
 
         else:
 
             # It's a 'normal' app, i.e. we sign and publish it...
+            skipsigning = False
+
+            # First we handle signatures for this app from local metadata
+            signingfiles = common.metadata_find_developer_signing_files(appid, vercode)
+            if signingfiles:
+                # There's a signature of the app developer present in our
+                # metadata. This means we're going to prepare both a locally
+                # signed APK and a version signed with the developers key.
+
+                signaturefile, signedfile, manifest = signingfiles
+
+                with open(signaturefile, 'rb') as f:
+                    devfp = common.signer_fingerprint_short(f.read())
+                devsigned = '{}_{}_{}.apk'.format(appid, vercode, devfp)
+                devsignedtmp = os.path.join(tmp_dir, devsigned)
+                shutil.copy(apkfile, devsignedtmp)
+
+                common.apk_implant_signatures(devsignedtmp, signaturefile,
+                                              signedfile, manifest)
+                if common.verify_apk_signature(devsignedtmp):
+                    shutil.move(devsignedtmp, os.path.join(output_dir, devsigned))
+                else:
+                    os.remove(devsignedtmp)
+                    logging.error('...verification failed - skipping: %s', devsigned)
+                    skipsigning = True
+
+            # Now we sign with the F-Droid key.
 
             # Figure out the key alias name we'll use. Only the first 8
             # characters are significant, so we'll use the first 8 from
@@ -161,71 +294,70 @@ def main():
             # If a collision does occur later, we're going to have to
             # come up with a new alogrithm, AND rename all existing keys
             # in the keystore!
-            if appid in config['keyaliases']:
-                # For this particular app, the key alias is overridden...
-                keyalias = config['keyaliases'][appid]
-                if keyalias.startswith('@'):
+            if not skipsigning:
+                if appid in config['keyaliases']:
+                    # For this particular app, the key alias is overridden...
+                    keyalias = config['keyaliases'][appid]
+                    if keyalias.startswith('@'):
+                        m = hashlib.md5()
+                        m.update(keyalias[1:].encode('utf-8'))
+                        keyalias = m.hexdigest()[:8]
+                else:
                     m = hashlib.md5()
-                    m.update(keyalias[1:].encode('utf-8'))
+                    m.update(appid.encode('utf-8'))
                     keyalias = m.hexdigest()[:8]
-            else:
-                m = hashlib.md5()
-                m.update(appid.encode('utf-8'))
-                keyalias = m.hexdigest()[:8]
-            logging.info("Key alias: " + keyalias)
+                logging.info("Key alias: " + keyalias)
 
-            # See if we already have a key for this application, and
-            # if not generate one...
-            env_vars = {
-                'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                'FDROID_KEY_PASS': config['keypass'],
-            }
-            p = FDroidPopen([config['keytool'], '-list',
-                             '-alias', keyalias, '-keystore', config['keystore'],
-                             '-storepass:env', 'FDROID_KEY_STORE_PASS'], envs=env_vars)
-            if p.returncode != 0:
-                logging.info("Key does not exist - generating...")
-                p = FDroidPopen([config['keytool'], '-genkey',
-                                 '-keystore', config['keystore'],
-                                 '-alias', keyalias,
-                                 '-keyalg', 'RSA', '-keysize', '2048',
-                                 '-validity', '10000',
-                                 '-storepass:env', 'FDROID_KEY_STORE_PASS',
-                                 '-keypass:env', 'FDROID_KEY_PASS',
-                                 '-dname', config['keydname']], envs=env_vars)
+                # See if we already have a key for this application, and
+                # if not generate one...
+                env_vars = {
+                    'FDROID_KEY_STORE_PASS': config['keystorepass'],
+                    'FDROID_KEY_PASS': config['keypass'],
+                }
+                p = FDroidPopen([config['keytool'], '-list',
+                                 '-alias', keyalias, '-keystore', config['keystore'],
+                                 '-storepass:env', 'FDROID_KEY_STORE_PASS'], envs=env_vars)
                 if p.returncode != 0:
-                    raise BuildException("Failed to generate key")
+                    logging.info("Key does not exist - generating...")
+                    p = FDroidPopen([config['keytool'], '-genkey',
+                                     '-keystore', config['keystore'],
+                                     '-alias', keyalias,
+                                     '-keyalg', 'RSA', '-keysize', '2048',
+                                     '-validity', '10000',
+                                     '-storepass:env', 'FDROID_KEY_STORE_PASS',
+                                     '-keypass:env', 'FDROID_KEY_PASS',
+                                     '-dname', config['keydname']], envs=env_vars)
+                    if p.returncode != 0:
+                        raise BuildException("Failed to generate key", p.output)
 
-            signed_apk_path = os.path.join(output_dir, apkfilename)
-            if os.path.exists(signed_apk_path):
-                raise BuildException("Refusing to sign '{0}' file exists in both "
-                                     "{1} and {2} folder.".format(apkfilename,
-                                                                  unsigned_dir,
-                                                                  output_dir))
+                signed_apk_path = os.path.join(output_dir, apkfilename)
+                if os.path.exists(signed_apk_path):
+                    raise BuildException("Refusing to sign '{0}' file exists in both "
+                                         "{1} and {2} folder.".format(apkfilename,
+                                                                      unsigned_dir,
+                                                                      output_dir))
 
-            # Sign the application...
-            p = FDroidPopen([config['jarsigner'], '-keystore', config['keystore'],
-                             '-storepass:env', 'FDROID_KEY_STORE_PASS',
-                             '-keypass:env', 'FDROID_KEY_PASS', '-sigalg',
-                             'SHA1withRSA', '-digestalg', 'SHA1',
-                             apkfile, keyalias], envs=env_vars)
-            if p.returncode != 0:
-                raise BuildException(_("Failed to sign application"))
+                # Sign the application...
+                p = FDroidPopen([config['jarsigner'], '-keystore', config['keystore'],
+                                 '-storepass:env', 'FDROID_KEY_STORE_PASS',
+                                 '-keypass:env', 'FDROID_KEY_PASS', '-sigalg',
+                                 'SHA1withRSA', '-digestalg', 'SHA1',
+                                 apkfile, keyalias], envs=env_vars)
+                if p.returncode != 0:
+                    raise BuildException(_("Failed to sign application"), p.output)
 
-            # Zipalign it...
-            p = SdkToolsPopen(['zipalign', '-v', '4', apkfile,
-                               os.path.join(output_dir, apkfilename)])
-            if p.returncode != 0:
-                raise BuildException(_("Failed to align application"))
-            os.remove(apkfile)
+                # Zipalign it...
+                p = SdkToolsPopen(['zipalign', '-v', '4', apkfile,
+                                   os.path.join(output_dir, apkfilename)])
+                if p.returncode != 0:
+                    raise BuildException(_("Failed to align application"))
+                os.remove(apkfile)
 
-        # Move the source tarball into the output directory...
-        tarfilename = apkfilename[:-4] + '_src.tar.gz'
-        tarfile = os.path.join(unsigned_dir, tarfilename)
-        if os.path.exists(tarfile):
-            shutil.move(tarfile, os.path.join(output_dir, tarfilename))
+                publish_source_tarball(apkfilename, unsigned_dir, output_dir)
+                logging.info('Published ' + apkfilename)
 
-        logging.info('Published ' + apkfilename)
+    store_stats_fdroid_signing_key_fingerprints(allapps.keys())
+    logging.info('published list signing-key fingerprints')
 
 
 if __name__ == "__main__":

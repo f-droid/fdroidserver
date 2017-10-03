@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+
+#
+#  command which created the keystore used in this test case:
+#
+#  $ for ALIAS in 'repokey a163ec9b d2d51ff2 dc3b169e 78688a0f'; \
+#        do keytool -genkey -keystore dummy-keystore.jks \
+#        -alias $ALIAS -keyalg 'RSA' -keysize '2048' \
+#        -validity '10000' -storepass 123456 \
+#        -keypass 123456 -dname 'CN=test, OU=F-Droid'; done
+#
+
+import inspect
+import optparse
+import os
+import sys
+import unittest
+import tempfile
+import textwrap
+
+localmodule = os.path.realpath(
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
+print('localmodule: ' + localmodule)
+if localmodule not in sys.path:
+    sys.path.insert(0, localmodule)
+
+from fdroidserver import publish
+from fdroidserver import common
+from fdroidserver.exception import FDroidException
+
+
+class PublishTest(unittest.TestCase):
+    '''fdroidserver/publish.py'''
+
+    def test_key_alias(self):
+        publish.config = {}
+        self.assertEqual('a163ec9b', publish.key_alias('com.example.app'))
+        self.assertEqual('d2d51ff2', publish.key_alias('com.example.anotherapp'))
+        self.assertEqual('dc3b169e', publish.key_alias('org.test.testy'))
+        self.assertEqual('78688a0f', publish.key_alias('org.org.org'))
+
+        publish.config = {'keyaliases': {'yep.app': '@org.org.org',
+                                         'com.example.app': '1a2b3c4d'}}
+        self.assertEqual('78688a0f', publish.key_alias('yep.app'))
+        self.assertEqual('1a2b3c4d', publish.key_alias('com.example.app'))
+
+    def test_read_fingerprints_from_keystore(self):
+        common.config = {}
+        common.fill_config_defaults(common.config)
+        publish.config = common.config
+        publish.config['keystorepass'] = '123456'
+        publish.config['keypass'] = '123456'
+        publish.config['keystore'] = 'dummy-keystore.jks'
+
+        expected = {'78688a0f': '277655a6235bc6b0ef2d824396c51ba947f5ebc738c293d887e7083ff338af82',
+                    'd2d51ff2': 'fa3f6a017541ee7fe797be084b1bcfbf92418a7589ef1f7fdeb46741b6d2e9c3',
+                    'dc3b169e': '6ae5355157a47ddcc3834a71f57f6fb5a8c2621c8e0dc739e9ddf59f865e497c',
+                    'a163ec9b': 'd34f678afbaa8f2fa6cc0edd6f0c2d1d2e2e9eb08bea521b24c740806016bff4',
+                    'repokey': 'c58460800c7b250a619c30c13b07b7359a43e5af71a4352d86c58ae18c9f6d41'}
+        result = publish.read_fingerprints_from_keystore()
+        self.maxDiff = None
+        self.assertEqual(expected, result)
+
+    def test_store_and_load_fdroid_signing_key_fingerprints(self):
+        common.config = {}
+        common.fill_config_defaults(common.config)
+        publish.config = common.config
+        publish.config['keystorepass'] = '123456'
+        publish.config['keypass'] = '123456'
+        publish.config['keystore'] = os.path.join(os.getcwd(),
+                                                  'dummy-keystore.jks')
+        publish.config['repo_keyalias'] = 'repokey'
+
+        appids = ['com.example.app',
+                  'net.unavailable',
+                  'org.test.testy',
+                  'com.example.anotherapp',
+                  'org.org.org']
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            orig_cwd = os.getcwd()
+            try:
+                os.chdir(tmpdir)
+                with open('config.py', 'w') as f:
+                    pass
+
+                publish.store_stats_fdroid_signing_key_fingerprints(appids, indent=2)
+
+                self.maxDiff = None
+                expected = {
+                    "com.example.anotherapp": {
+                        "signer": "fa3f6a017541ee7fe797be084b1bcfbf92418a7589ef1f7fdeb46741b6d2e9c3"
+                    },
+                    "com.example.app": {
+                        "signer": "d34f678afbaa8f2fa6cc0edd6f0c2d1d2e2e9eb08bea521b24c740806016bff4"
+                    },
+                    "org.org.org": {
+                        "signer": "277655a6235bc6b0ef2d824396c51ba947f5ebc738c293d887e7083ff338af82"
+                    },
+                    "org.test.testy": {
+                        "signer": "6ae5355157a47ddcc3834a71f57f6fb5a8c2621c8e0dc739e9ddf59f865e497c"
+                    }
+                }
+                self.assertEqual(expected, common.load_stats_fdroid_signing_key_fingerprints())
+
+                with open('config.py', 'r') as f:
+                    self.assertEqual(textwrap.dedent('''\
+
+                        repo_key_sha256 = "c58460800c7b250a619c30c13b07b7359a43e5af71a4352d86c58ae18c9f6d41"
+                        '''), f.read())
+            finally:
+                os.chdir(orig_cwd)
+
+    def test_store_and_load_fdroid_signing_key_fingerprints_with_missmatch(self):
+        common.config = {}
+        common.fill_config_defaults(common.config)
+        publish.config = common.config
+        publish.config['keystorepass'] = '123456'
+        publish.config['keypass'] = '123456'
+        publish.config['keystore'] = os.path.join(os.getcwd(),
+                                                  'dummy-keystore.jks')
+        publish.config['repo_keyalias'] = 'repokey'
+        publish.config['repo_key_sha256'] = 'bad bad bad bad bad bad bad bad bad bad bad bad'
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            orig_cwd = os.getcwd()
+            try:
+                os.chdir(tmpdir)
+                publish.store_stats_fdroid_signing_key_fingerprints({}, indent=2)
+                with self.assertRaises(FDroidException):
+                    common.load_stats_fdroid_signing_key_fingerprints()
+            finally:
+                os.chdir(orig_cwd)
+
+
+if __name__ == "__main__":
+    if os.path.basename(os.getcwd()) != 'tests' and os.path.isdir('tests'):
+        os.chdir('tests')
+
+    parser = optparse.OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    (common.options, args) = parser.parse_args(['--verbose'])
+
+    newSuite = unittest.TestSuite()
+    newSuite.addTest(unittest.makeSuite(PublishTest))
+    unittest.main()
