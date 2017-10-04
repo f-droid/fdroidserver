@@ -2348,7 +2348,7 @@ def verify_apk_signature(apk, min_sdk_version=None):
         try:
             verify_jar_signature(apk)
             return True
-        except:
+        except Exception:
             pass
     return False
 
