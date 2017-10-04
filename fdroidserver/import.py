@@ -133,7 +133,7 @@ def get_metadata_from_url(app, url):
         app.SourceCode = url + '/src'
         app.IssueTracker = url + '/issues'
         # Figure out the repo type and adddress...
-        repotype, repo = getrepofrompage(app.SourceCode)
+        repotype, repo = getrepofrompage(url)
         if not repotype:
             raise FDroidException("Unable to determine vcs type. " + repo)
     elif url.startswith('https://') and url.endswith('.git'):
