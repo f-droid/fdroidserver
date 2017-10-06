@@ -586,6 +586,7 @@ def setup_vcs(app):
     else:
         remote = app.Repo
     vcs = getvcs(app.RepoType, remote, build_dir)
+    logging.debug("Using %s" % vcs.clientversion())
 
     return vcs, build_dir
 
@@ -636,6 +637,13 @@ class vcs:
         self.srclib = None
 
     def repotype(self):
+        return None
+
+    def clientversion(self):
+        versionstr = FDroidPopen(self.clientversioncmd()).output
+        return versionstr[0:versionstr.find('\n')]
+
+    def clientversioncmd(self):
         return None
 
     def gotorevision(self, rev, refresh=True):
@@ -734,6 +742,9 @@ class vcs_git(vcs):
 
     def repotype(self):
         return 'git'
+
+    def clientversioncmd(self):
+        return ['git', '--version']
 
     def checkrepo(self):
         """If the local directory exists, but is somehow not a git repository,
@@ -846,6 +857,9 @@ class vcs_gitsvn(vcs):
 
     def repotype(self):
         return 'git-svn'
+
+    def clientversioncmd(self):
+        return ['git', 'svn', '--version']
 
     def checkrepo(self):
         """If the local directory exists, but is somehow not a git repository,
@@ -973,6 +987,9 @@ class vcs_hg(vcs):
     def repotype(self):
         return 'hg'
 
+    def clientversioncmd(self):
+        return ['hg', '--version']
+
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             p = FDroidPopen(['hg', 'clone', self.remote, self.local], output=False)
@@ -1019,6 +1036,9 @@ class vcs_bzr(vcs):
 
     def repotype(self):
         return 'bzr'
+
+    def clientversioncmd(self):
+        return ['bzr', '--version']
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
