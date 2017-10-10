@@ -817,6 +817,9 @@ def insert_localized_app_metadata(apps):
                     shutil.copy(os.path.join(root, f), destdir)
             for d in dirs:
                 if d in SCREENSHOT_DIRS:
+                    if locale == 'images':
+                        locale = segments[-2]
+                        destdir = os.path.join('repo', packageName, locale)
                     for f in glob.glob(os.path.join(root, d, '*.*')):
                         _, extension = common.get_extension(f)
                         if extension in ALLOWED_EXTENSIONS:
