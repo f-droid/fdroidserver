@@ -1,5 +1,8 @@
 
-FILES = ../fdroid $(wildcard ../fdroidserver/*.py)
+FILES = ../fdroid $(wildcard ../fdroidserver/*.py) \
+	$(wildcard /usr/lib/python3.*/argparse.py) \
+	$(wildcard /usr/lib/python3.*/optparse.py) \
+	$(wildcard /usr/lib/python3.*/getopt.py)
 
 # these are the supported languages
 ALL_LINGUAS = de es pt_BR pt_PT tr zh_Hans zh_Hant
