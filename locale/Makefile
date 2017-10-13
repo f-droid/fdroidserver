@@ -23,7 +23,7 @@ template: $(TEMPLATE)
 $(TEMPLATE): $(FILES)
 	xgettext --join-existing --from-code=UTF-8 \
 		--language=Python --keyword=_ \
-		--sort-output --no-location --output=$(TEMPLATE) \
+		--sort-output --add-location=file --output=$(TEMPLATE) \
 		--package-name="fdroidserver" --package-version=$(VERSION) \
 		--foreign-user \
 		--msgid-bugs-address=https://gitlab.com/fdroid/fdroidserver/issues \
