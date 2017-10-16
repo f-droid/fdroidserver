@@ -302,6 +302,30 @@ def read_config(opts, config_file='config.py'):
     return config
 
 
+def assert_config_keystore(config):
+    """Check weather keystore is configured correctly and raise exception if not."""
+
+    nosigningkey = False
+    if 'repo_keyalias' not in config:
+        nosigningkey = True
+        logging.critical(_("'repo_keyalias' not found in config.py!"))
+    if 'keystore' not in config:
+        nosigningkey = True
+        logging.critical(_("'keystore' not found in config.py!"))
+    elif not os.path.exists(config['keystore']):
+        nosigningkey = True
+        logging.critical("'" + config['keystore'] + "' does not exist!")
+    if 'keystorepass' not in config:
+        nosigningkey = True
+        logging.critical(_("'keystorepass' not found in config.py!"))
+    if 'keypass' not in config:
+        nosigningkey = True
+        logging.critical(_("'keypass' not found in config.py!"))
+    if nosigningkey:
+        raise FDroidException("This command requires a signing key, " +
+                              "you can create one using: fdroid update --create-key")
+
+
 def find_sdk_tools_cmd(cmd):
     '''find a working path to a tool from the Android SDK'''
 
