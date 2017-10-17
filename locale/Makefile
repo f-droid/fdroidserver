@@ -1,5 +1,8 @@
 
-FILES = ../fdroid $(wildcard ../fdroidserver/*.py)
+FILES = ../fdroid $(wildcard ../fdroidserver/*.py) \
+	$(wildcard /usr/lib/python3.*/argparse.py) \
+	$(wildcard /usr/lib/python3.*/optparse.py) \
+	$(wildcard /usr/lib/python3.*/getopt.py)
 
 # these are the supported languages
 ALL_LINGUAS = de es pt_BR pt_PT tr zh_Hans zh_Hant
@@ -23,7 +26,7 @@ template: $(TEMPLATE)
 $(TEMPLATE): $(FILES)
 	xgettext --join-existing --from-code=UTF-8 \
 		--language=Python --keyword=_ \
-		--sort-output --no-location --output=$(TEMPLATE) \
+		--sort-output --add-location=file --output=$(TEMPLATE) \
 		--package-name="fdroidserver" --package-version=$(VERSION) \
 		--foreign-user \
 		--msgid-bugs-address=https://gitlab.com/fdroid/fdroidserver/issues \

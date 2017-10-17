@@ -717,15 +717,16 @@ def copy_triple_t_store_metadata(apps):
 
                     base, extension = common.get_extension(f)
                     dirname = os.path.basename(root)
-                    if dirname in GRAPHIC_NAMES and extension in ALLOWED_EXTENSIONS:
+                    if extension in ALLOWED_EXTENSIONS \
+                       and (dirname in GRAPHIC_NAMES or dirname in SCREENSHOT_DIRS):
                         if segments[-2] == 'listing':
                             locale = segments[-3]
                         else:
                             locale = segments[-2]
-                        destdir = os.path.join('repo', packageName, locale)
+                        destdir = os.path.join('repo', packageName, locale, dirname)
                         os.makedirs(destdir, mode=0o755, exist_ok=True)
                         sourcefile = os.path.join(root, f)
-                        destfile = os.path.join(destdir, dirname + '.' + extension)
+                        destfile = os.path.join(destdir, os.path.basename(f))
                         logging.debug('copying ' + sourcefile + ' ' + destfile)
                         shutil.copy(sourcefile, destfile)
 
@@ -816,6 +817,9 @@ def insert_localized_app_metadata(apps):
                     shutil.copy(os.path.join(root, f), destdir)
             for d in dirs:
                 if d in SCREENSHOT_DIRS:
+                    if locale == 'images':
+                        locale = segments[-2]
+                        destdir = os.path.join('repo', packageName, locale)
                     for f in glob.glob(os.path.join(root, d, '*.*')):
                         _, extension = common.get_extension(f)
                         if extension in ALLOWED_EXTENSIONS:

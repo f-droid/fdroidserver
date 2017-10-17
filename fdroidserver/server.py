@@ -69,7 +69,8 @@ def update_awsbucket_s3cmd(repo_section):
     to use a full MD5 checksum of all files to detect changes.
     '''
 
-    logging.debug('using s3cmd to sync with ' + config['awsbucket'])
+    logging.debug(_('Using s3cmd to sync with: {url}')
+                  .format(url=config['awsbucket']))
 
     configfilename = '.s3cfg'
     fd = os.open(configfilename, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
@@ -78,22 +79,29 @@ def update_awsbucket_s3cmd(repo_section):
     os.write(fd, ('secret_key = ' + config['awssecretkey'] + '\n').encode('utf-8'))
     os.close(fd)
 
-    s3url = 's3://' + config['awsbucket'] + '/fdroid/'
-    s3cmdargs = [
-        's3cmd',
-        'sync',
-        '--config=' + configfilename,
-        '--acl-public',
-    ]
+    s3bucketurl = 's3://' + config['awsbucket']
+    s3cmd = [config['s3cmd'], '--config=' + configfilename]
+    if subprocess.call(s3cmd + ['info', s3bucketurl]) != 0:
+        logging.warning(_('Creating new S3 bucket: {url}')
+                        .format(url=s3bucketurl))
+        if subprocess.call(s3cmd + ['mb', s3bucketurl]) != 0:
+            logging.error(_('Failed to create S3 bucket: {url}')
+                          .format(url=s3bucketurl))
+            raise FDroidException()
+
+    s3cmd_sync = s3cmd + ['sync', '--acl-public']
     if options.verbose:
-        s3cmdargs += ['--verbose']
+        s3cmd_sync += ['--verbose']
     if options.quiet:
-        s3cmdargs += ['--quiet']
+        s3cmd_sync += ['--quiet']
     indexxml = os.path.join(repo_section, 'index.xml')
     indexjar = os.path.join(repo_section, 'index.jar')
     indexv1jar = os.path.join(repo_section, 'index-v1.jar')
+
+    s3url = s3bucketurl + '/fdroid/'
     logging.debug('s3cmd sync new files in ' + repo_section + ' to ' + s3url)
-    if subprocess.call(s3cmdargs +
+    logging.debug(_('Running first pass with MD5 checking disabled'))
+    if subprocess.call(s3cmd_sync +
                        ['--no-check-md5', '--skip-existing',
                         '--exclude', indexxml,
                         '--exclude', indexjar,
@@ -101,7 +109,7 @@ def update_awsbucket_s3cmd(repo_section):
                         repo_section, s3url]) != 0:
         raise FDroidException()
     logging.debug('s3cmd sync all files in ' + repo_section + ' to ' + s3url)
-    if subprocess.call(s3cmdargs +
+    if subprocess.call(s3cmd_sync +
                        ['--no-check-md5',
                         '--exclude', indexxml,
                         '--exclude', indexjar,
@@ -109,14 +117,15 @@ def update_awsbucket_s3cmd(repo_section):
                         repo_section, s3url]) != 0:
         raise FDroidException()
 
-    logging.debug('s3cmd sync indexes ' + repo_section + ' to ' + s3url + ' and delete')
-    s3cmdargs.append('--delete-removed')
-    s3cmdargs.append('--delete-after')
+    logging.debug(_('s3cmd sync indexes {path} to {url} and delete')
+                  .format(path=repo_section, url=s3url))
+    s3cmd_sync.append('--delete-removed')
+    s3cmd_sync.append('--delete-after')
     if options.no_checksum:
-        s3cmdargs.append('--no-check-md5')
+        s3cmd_sync.append('--no-check-md5')
     else:
-        s3cmdargs.append('--check-md5')
-    if subprocess.call(s3cmdargs + [repo_section, s3url]) != 0:
+        s3cmd_sync.append('--check-md5')
+    if subprocess.call(s3cmd_sync + [repo_section, s3url]) != 0:
         raise FDroidException()
 
 
@@ -129,7 +138,8 @@ def update_awsbucket_libcloud(repo_section):
     Requires AWS credentials set in config.py: awsaccesskeyid, awssecretkey
     '''
 
-    logging.debug('using Apache libcloud to sync with ' + config['awsbucket'])
+    logging.debug(_('using Apache libcloud to sync with {url}')
+                  .format(url=config['awsbucket']))
 
     import libcloud.security
     libcloud.security.VERIFY_SSL_CERT = True
@@ -138,7 +148,7 @@ def update_awsbucket_libcloud(repo_section):
 
     if not config.get('awsaccesskeyid') or not config.get('awssecretkey'):
         raise FDroidException(
-            'To use awsbucket, you must set awssecretkey and awsaccesskeyid in config.py!')
+            _('To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.py!'))
     awsbucket = config['awsbucket']
 
     cls = get_driver(Provider.S3)
@@ -147,7 +157,8 @@ def update_awsbucket_libcloud(repo_section):
         container = driver.get_container(container_name=awsbucket)
     except ContainerDoesNotExistError:
         container = driver.create_container(container_name=awsbucket)
-        logging.info('Created new container "' + container.name + '"')
+        logging.info(_('Created new container "{name}"')
+                     .format(name=container.name))
 
     upload_dir = 'fdroid/' + repo_section
     objs = dict()
@@ -403,7 +414,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
                 repo.git.add(all=True)
                 repo.index.commit("fdroidserver git-mirror: Deploy to GitLab Pages")
 
-            logging.debug('Pushing to ' + remote.url)
+            logging.debug(_('Pushing to {url}').format(url=remote.url))
             with repo.git.custom_environment(GIT_SSH_COMMAND=ssh_cmd):
                 pushinfos = remote.push('master', force=True, set_upstream=True, progress=progress)
                 for pushinfo in pushinfos:
@@ -540,7 +551,8 @@ def push_binary_transparency(git_repo_path, git_remote):
     '''
     import git
 
-    logging.info('Pushing binary transparency log to ' + git_remote)
+    logging.info(_('Pushing binary transparency log to {url}')
+                 .format(url=git_remote))
 
     if os.path.isdir(os.path.dirname(git_remote)):
         # from offline machine to thumbdrive
@@ -628,17 +640,17 @@ def main():
             logging.error(_('local_copy_dir must be directory, not a file!'))
             sys.exit(1)
         if not os.path.exists(os.path.dirname(fdroiddir)):
-            logging.error('The root dir for local_copy_dir "'
-                          + os.path.dirname(fdroiddir)
-                          + '" does not exist!')
+            logging.error(_('The root dir for local_copy_dir "{path}" does not exist!')
+                          .format(path=os.path.dirname(fdroiddir)))
             sys.exit(1)
         if not os.path.isabs(fdroiddir):
             logging.error(_('local_copy_dir must be an absolute path!'))
             sys.exit(1)
         repobase = os.path.basename(fdroiddir)
         if standardwebroot and repobase != 'fdroid':
-            logging.error('local_copy_dir does not end with "fdroid", '
-                          + 'perhaps you meant: ' + fdroiddir + '/fdroid')
+            logging.error(_('local_copy_dir does not end with "fdroid", '
+                            + 'perhaps you meant: "{path}"')
+                          .format(path=fdroiddir + '/fdroid'))
             sys.exit(1)
         if local_copy_dir[-1] != '/':
             local_copy_dir += '/'
