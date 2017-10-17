@@ -6,7 +6,7 @@ FILES = ../fdroid $(wildcard ../fdroidserver/*.py) \
 
 # these are the supported languages
 ALL_LINGUAS = de es pt_BR pt_PT tr zh_Hans zh_Hant
-POFILES = $(ALL_LINGUAS:=/LC_MESSAGES/fdroidserver.po)
+POFILES = $(wildcard */LC_MESSAGES/fdroidserver.po)
 MOFILES = $(ALL_LINGUAS:=/LC_MESSAGES/fdroidserver.mo)
 
 TEMPLATE = fdroidserver.pot
@@ -20,8 +20,8 @@ clean-local:
 	-rm -f -- $(MOFILES)
 	-rm -f -- $(POFILES:=~)
 
-# refresh the template from the source code
-template: $(TEMPLATE)
+# refresh everything from the source code
+update: $(POFILES)
 
 $(TEMPLATE): $(FILES)
 	xgettext --join-existing --from-code=UTF-8 \
@@ -32,6 +32,9 @@ $(TEMPLATE): $(FILES)
 		--msgid-bugs-address=https://gitlab.com/fdroid/fdroidserver/issues \
 		$(FILES)
 	sed -i 's,CHARSET,UTF-8,' $(TEMPLATE)
+
+%.po: $(TEMPLATE)
+	msgmerge --sort-output --add-location=file --update $@ $(TEMPLATE)
 
 %/LC_MESSAGES/fdroidserver.mo: %/LC_MESSAGES/fdroidserver.po
 	msgfmt --check -o $@ $(@:mo=po)
