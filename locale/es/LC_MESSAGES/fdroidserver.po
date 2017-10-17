@@ -19,123 +19,123 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2.16-dev\n"
 
-#: ../fdroid:34
+#: ../fdroid
 msgid "Build a package from source"
 msgstr "Crear un paquete desde la fuente"
 
-#: ../fdroid:35
+#: ../fdroid
 msgid "Quickly start a new repository"
 msgstr "Iniciar rápidamente un nuevo repositorio"
 
-#: ../fdroid:36
+#: ../fdroid
 msgid "Sign and place packages in the repo"
 msgstr "Firmar y colocar paquetes en el repositorio"
 
-#: ../fdroid:37
+#: ../fdroid
 msgid "Add gpg signatures for packages in repo"
 msgstr "Añadir las firmas gpg para los paquetes en el repositorio"
 
-#: ../fdroid:38
+#: ../fdroid
 msgid "Update repo information for new packages"
 msgstr "Actualizar la información del repositorio para nuevos paquetes"
 
-#: ../fdroid:39
+#: ../fdroid
 msgid "Verify the integrity of downloaded packages"
 msgstr "Verificar la integridad de los paquetes descargados"
 
-#: ../fdroid:40
+#: ../fdroid
 msgid "Check for updates to applications"
 msgstr "Buscar actualizaciones de aplicaciones"
 
-#: ../fdroid:41
+#: ../fdroid
 msgid "Add a new application from its source code"
 msgstr "Añadir una nueva aplicación desde su código fuente"
 
-#: ../fdroid:42
+#: ../fdroid
 msgid "Install built packages on devices"
 msgstr "Instalar paquetes constuídos en el dispositivo"
 
-#: ../fdroid:43
+#: ../fdroid
 msgid "Read all the metadata files and exit"
 msgstr "Leer todos los archivos de metadatos y salir"
 
-#: ../fdroid:44
+#: ../fdroid
 msgid "Rewrite all the metadata files"
 msgstr "Reescribir todos los archivos de metadatos"
 
-#: ../fdroid:45
+#: ../fdroid
 msgid "Warn about possible metadata errors"
 msgstr "Alertar sobre posibles errores de metadatos"
 
-#: ../fdroid:46
+#: ../fdroid
 msgid "Scan the source code of a package"
 msgstr "Escanear el código fuente de un paquete"
 
-#: ../fdroid:47
+#: ../fdroid
 msgid "Dynamically scan APKs post build"
 msgstr "Ejecutar Fdroid dscanner de una aplicación APK, previamente construída,"
 
-#: ../fdroid:48
+#: ../fdroid
 msgid "Update the stats of the repo"
 msgstr "Actualizar las estadísticas del repositorio"
 
-#: ../fdroid:49
+#: ../fdroid
 msgid "Interact with the repo HTTP server"
 msgstr "Interactuar con el servidor HTTP del repositorio"
 
-#: ../fdroid:50
+#: ../fdroid
 msgid "Sign indexes created using update --nosign"
 msgstr "Firmar los índices creados usando update -nosign"
 
-#: ../fdroid:51
+#: ../fdroid
 msgid "Update the binary transparency log for a URL"
 msgstr "Actualizar el registro de transparencia binario para una URL"
 
-#: ../fdroid:56
+#: ../fdroid
 msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
 msgstr "Uso: fdroid [-h|--help|--version] <command> [<args>]"
 
-#: ../fdroid:58
+#: ../fdroid
 msgid "Valid commands are:"
 msgstr "Los comandos válidos son:"
 
-#: ../fdroid:104
+#: ../fdroid
 #, c-format
 msgid "Command '%s' not recognised.\n"
 msgstr "Comando %s no reconocido\n"
 
-#: ../fdroid:150
+#: ../fdroid
 msgid "Unknown exception found!"
 msgstr "¡Se encontró una excepción desconocida!"
 
-#: ../fdroidserver/btlog.py:154
+#: ../fdroidserver/btlog.py
 msgid "Path to the git repo to use as the log"
 msgstr "Ruta de acceso al reporte git para usarlo como registro"
 
-#: ../fdroidserver/btlog.py:156
+#: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
 msgstr ""
 "El URL base para  el registro del repositorio  (default: https://f-droid.org)"
 
-#: ../fdroidserver/btlog.py:158
+#: ../fdroidserver/btlog.py
 msgid "Push the log to this git remote repository"
 msgstr "Pulse  el registro a este repositorio remoto git"
 
-#: ../fdroidserver/build.py:875 ../fdroidserver/install.py:52
-#: ../fdroidserver/publish.py:45 ../fdroidserver/scanner.py:255
-#: ../fdroidserver/verify.py:41
+#: ../fdroidserver/build.py:875 ../fdroidserver/install.py
+#: ../fdroidserver/publish.py:45 ../fdroidserver/scanner.py
+#: ../fdroidserver/verify.py
 msgid "app-id with optional versionCode in the form APPID[:VERCODE]"
 msgstr "APP-ID con código de versión opcional en la forma APPID [: VERCODE]"
 
-#: ../fdroidserver/build.py:877
+#: ../fdroidserver/build.py
 msgid "Build only the latest version of each package"
 msgstr "Construir sólo la última versión de cada paquete"
 
-#: ../fdroidserver/build.py:879
+#: ../fdroidserver/build.py
 msgid "Make the build stop on exceptions"
 msgstr "Hacer que la construcción se detenga en las excepciones"
 
-#: ../fdroidserver/build.py:881
+#: ../fdroidserver/build.py
 msgid ""
 "Test mode - put output in the tmp directory only, and always build, even if "
 "the output already exists."
@@ -143,11 +143,11 @@ msgstr ""
 "Modo de prueba: ponga la salida solo en el directorio tmp y siga "
 "desarrollando, incluso si la salida ya existe."
 
-#: ../fdroidserver/build.py:883
+#: ../fdroidserver/build.py
 msgid "Use build server"
 msgstr "Use un servidor de compilación"
 
-#: ../fdroidserver/build.py:885
+#: ../fdroidserver/build.py
 msgid ""
 "Reset and create a brand new build server, even if the existing one appears "
 "to be ok."
@@ -155,26 +155,26 @@ msgstr ""
 "Restablecer y crear un nuevo servidor de compilación, incluso si el "
 "existente parece estar bien."
 
-#: ../fdroidserver/build.py:887
+#: ../fdroidserver/build.py
 msgid "Specify that we're running on the build server"
 msgstr "Especificar que estamos ejecutando en el servidor de compilación"
 
-#: ../fdroidserver/build.py:889
+#: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
 msgstr ""
 "Omitir el escaneo del código fuente por problemas binarios u otros problemas"
 
-#: ../fdroidserver/build.py:891
+#: ../fdroidserver/build.py
 msgid "Setup an emulator, install the apk on it and perform a drozer scan"
 msgstr ""
 "Configurar un emulador, instalar la aplicación APK en él y realizar una \""
 "Drozer\" scan"
 
-#: ../fdroidserver/build.py:893
+#: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "No cree un tarball de origen, útil al probar una compilación"
 
-#: ../fdroidserver/build.py:895
+#: ../fdroidserver/build.py
 msgid ""
 "Don't refresh the repository, useful when testing a build with no internet "
 "connection"
@@ -182,7 +182,7 @@ msgstr ""
 "No actualizar el repositorio, útil al probar una compilación sin conexión a "
 "Internet"
 
-#: ../fdroidserver/build.py:897
+#: ../fdroidserver/build.py
 msgid ""
 "Force build of disabled apps, and carries on regardless of scan problems. "
 "Only allowed in test mode."
@@ -190,88 +190,88 @@ msgstr ""
 "Forzar la creación de compilaciones deshabilitadas, independientemente de "
 "los problemas de escaneo. Sólo se permite en modo de prueba."
 
-#: ../fdroidserver/build.py:899
+#: ../fdroidserver/build.py
 msgid "Build all applications available"
 msgstr "Compilar todas las aplicaciones disponibles"
 
-#: ../fdroidserver/build.py:901 ../fdroidserver/update.py:1519
+#: ../fdroidserver/build.py:901 ../fdroidserver/update.py
 msgid "Update the wiki"
 msgstr "Actualizar el wiki"
 
-#: ../fdroidserver/checkupdates.py:513
+#: ../fdroidserver/checkupdates.py
 msgid "app-id to check for updates"
 msgstr "APP-ID para buscar actualizaciones"
 
-#: ../fdroidserver/checkupdates.py:515
+#: ../fdroidserver/checkupdates.py
 msgid "Process auto-updates"
 msgstr "Actualizaciones automáticas de procesos"
 
-#: ../fdroidserver/checkupdates.py:517
+#: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
 msgstr "Solo procesar aplicaciones con actualizaciones automáticas"
 
-#: ../fdroidserver/checkupdates.py:519
+#: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
 msgstr "Aplicar cambios"
 
-#: ../fdroidserver/checkupdates.py:521
+#: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
 msgstr "Solo imprimir diferencias con el Play Store"
 
-#: ../fdroidserver/common.py:124
+#: ../fdroidserver/common.py
 msgid "Spew out even more information than normal"
 msgstr "Diseminar más información de lo normal"
 
-#: ../fdroidserver/common.py:126
+#: ../fdroidserver/common.py
 msgid "Restrict output to warnings and errors"
 msgstr "Restringir los resultados a advertencias y errores"
 
-#: ../fdroidserver/dscanner.py:410
+#: ../fdroidserver/dscanner.py
 msgid "app-id with optional versioncode in the form APPID[:VERCODE]"
 msgstr "APP-ID con código de versión opcional en la forma APPID [: VERCODE]"
 
-#: ../fdroidserver/dscanner.py:413
+#: ../fdroidserver/dscanner.py
 msgid "Scan only the latest version of each package"
 msgstr "Escanear solo la última versión de cada paquete"
 
-#: ../fdroidserver/dscanner.py:416
+#: ../fdroidserver/dscanner.py
 msgid "Clean after all scans have finished"
 msgstr "Limpiar después de que todos los análisis hayan finalizado"
 
-#: ../fdroidserver/dscanner.py:419
+#: ../fdroidserver/dscanner.py
 msgid "Clean before the scans start and rebuild the container"
 msgstr "Limpiar antes de que los análisis inicien y reconstruir el contenedor"
 
-#: ../fdroidserver/dscanner.py:422
+#: ../fdroidserver/dscanner.py
 msgid "Clean up all containers and then exit"
 msgstr "Limpiar todos los contenedores y luego salir"
 
-#: ../fdroidserver/dscanner.py:425
+#: ../fdroidserver/dscanner.py
 msgid "Prepare drozer to run a scan"
 msgstr "Preparar \"Drozer\" para ejecutar un análisis"
 
-#: ../fdroidserver/dscanner.py:428
+#: ../fdroidserver/dscanner.py
 msgid "Override path for repo APKs (default: ./repo)"
 msgstr "Ruta de remplazo par el repositorio de APK (default: ./repo)"
 
-#: ../fdroidserver/import.py:193
+#: ../fdroidserver/import.py
 msgid "Project URL to import from."
 msgstr "importar desde.URL del proyecto."
 
-#: ../fdroidserver/import.py:195
+#: ../fdroidserver/import.py
 msgid "Path to main android project subdirectory, if not in root."
 msgstr ""
 "Ruta al subdirectorio principal del proyecto Android, si no es en la raíz."
 
-#: ../fdroidserver/import.py:197
+#: ../fdroidserver/import.py
 msgid "Comma separated list of categories."
 msgstr "Lista de categorías separadas por comas."
 
-#: ../fdroidserver/import.py:199
+#: ../fdroidserver/import.py
 msgid "Overall license of the project."
 msgstr "Licencia general del proyecto."
 
-#: ../fdroidserver/import.py:201
+#: ../fdroidserver/import.py
 msgid ""
 "Allows a different revision (or git branch) to be specified for the initial "
 "import"
@@ -279,121 +279,121 @@ msgstr ""
 "Permite especificar una revisión diferente (o git sector) para la "
 "importación inicial"
 
-#: ../fdroidserver/init.py:56
+#: ../fdroidserver/init.py
 msgid "X.509 'Distiguished Name' used when generating keys"
 msgstr "X.509 'Nombre Distintivo' (DN) usado al generar claves"
 
-#: ../fdroidserver/init.py:58
+#: ../fdroidserver/init.py
 msgid "Path to the keystore for the repo signing key"
 msgstr "Ruta al depósito de claves para la clave de firma de repositorio"
 
-#: ../fdroidserver/init.py:60
+#: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
 msgstr "Alias de la clave de firma de repositorio en el depósitio de claves"
 
-#: ../fdroidserver/init.py:62
+#: ../fdroidserver/init.py
 msgid "Path to the Android SDK (sometimes set in ANDROID_HOME)"
 msgstr "Ruta al Android SDK (a veces ubicado en ANDROID_HOME)"
 
-#: ../fdroidserver/init.py:64
+#: ../fdroidserver/init.py
 msgid "Do not prompt for Android SDK path, just fail"
 msgstr "No solicitar la ruta al Android SDK, si falla"
 
-#: ../fdroidserver/install.py:54
+#: ../fdroidserver/install.py
 msgid "Install all signed applications available"
 msgstr "Instalar todas las aplicaciones firmadas disponibles"
 
-#: ../fdroidserver/lint.py:393
+#: ../fdroidserver/lint.py
 msgid "Also warn about formatting issues, like rewritemeta -l"
 msgstr "También advierta sobre problemas de formato, como r rewritemeta-l"
 
-#: ../fdroidserver/lint.py:394 ../fdroidserver/rewritemeta.py:57
+#: ../fdroidserver/lint.py:394 ../fdroidserver/rewritemeta.py
 msgid "app-id in the form APPID"
 msgstr "APP-ID en el formato APPID"
 
-#: ../fdroidserver/metadata.py:1337
+#: ../fdroidserver/metadata.py
 msgid "force errors to be warnings, or ignore"
 msgstr "Forzar a los errores a ser advertencias o ignorarlas"
 
-#: ../fdroidserver/rewritemeta.py:54
+#: ../fdroidserver/rewritemeta.py
 msgid "List files that would be reformatted"
 msgstr "Lista de archivos que se reformatearán"
 
-#: ../fdroidserver/rewritemeta.py:56
+#: ../fdroidserver/rewritemeta.py
 msgid "Rewrite to a specific format: "
 msgstr "Reescribir a un formato específico: "
 
-#: ../fdroidserver/server.py:547
+#: ../fdroidserver/server.py
 msgid "command to execute, either 'init' or 'update'"
 msgstr "Comando para ejecutar, ya sea 'init' o 'update'"
 
-#: ../fdroidserver/server.py:549
+#: ../fdroidserver/server.py
 msgid "Specify an identity file to provide to SSH for rsyncing"
 msgstr "Especifique un fichero de identidad que ofrezca SSH para rsync"
 
-#: ../fdroidserver/server.py:551
+#: ../fdroidserver/server.py
 msgid "Specify a local folder to sync the repo to"
 msgstr "Especifique una carpeta local para sincronizar el"
 
-#: ../fdroidserver/server.py:553
+#: ../fdroidserver/server.py
 msgid "Don't use rsync checksums"
 msgstr "No use rsync checksums"
 
-#: ../fdroidserver/stats.py:64
+#: ../fdroidserver/stats.py
 msgid "Download logs we don't have"
 msgstr "Descargar registros que no tenemos"
 
-#: ../fdroidserver/stats.py:66
+#: ../fdroidserver/stats.py
 msgid "Recalculate aggregate stats - use when changes "
 msgstr "Recalcular agregación de estados - usar cuando cambie "
 
-#: ../fdroidserver/stats.py:69
+#: ../fdroidserver/stats.py
 msgid "Don't do anything logs-related"
 msgstr "No haga nada con registros relacionados"
 
-#: ../fdroidserver/update.py:1504
+#: ../fdroidserver/update.py
 msgid "Create a repo signing key in a keystore"
 msgstr "Cree una clave de firmado de repositorios en un llavero de claves"
 
-#: ../fdroidserver/update.py:1506
+#: ../fdroidserver/update.py
 msgid "Create skeleton metadata files that are missing"
 msgstr "Crear esqueleto de metadatos de archivos que faltan"
 
-#: ../fdroidserver/update.py:1508
+#: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
 msgstr "Borrar del repositorio archivos APK y/o OBB sin metadatos"
 
-#: ../fdroidserver/update.py:1510
+#: ../fdroidserver/update.py
 msgid "Report on build data status"
 msgstr "Informe sobre el estado de los datos de compilación"
 
-#: ../fdroidserver/update.py:1512
+#: ../fdroidserver/update.py
 msgid "Interactively ask about things that need updating."
 msgstr ""
 "Pregunte de forma interactiva sobre temas que necesitan una actualización."
 
-#: ../fdroidserver/update.py:1514
+#: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
 msgstr ""
 "Cambiar el tamaño de todos los iconos que exceden el tamaño máximo del "
 "pixeles y salir"
 
-#: ../fdroidserver/update.py:1516
+#: ../fdroidserver/update.py
 #, c-format
 msgid "Specify editor to use in interactive mode. Default %s"
 msgstr ""
 "Especifique el editor para utilizar en modo interactivo. Predeterminado %s"
 
-#: ../fdroidserver/update.py:1521
+#: ../fdroidserver/update.py
 msgid "Produce human-readable index.xml"
 msgstr "Produce un índice legible index.xml"
 
-#: ../fdroidserver/update.py:1523
+#: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all apks"
 msgstr ""
 "Actualización limpia, no usa caché, reprocesa todas las aplicaciones  APK"
 
-#: ../fdroidserver/update.py:1525
+#: ../fdroidserver/update.py
 msgid ""
 "When configured for signed indexes, create only unsigned indexes at this "
 "stage"
@@ -401,13 +401,13 @@ msgstr ""
 "Cuando está configurado para índices firmados, crear solo índices sin signo "
 "en esta etapa"
 
-#: ../fdroidserver/update.py:1527
+#: ../fdroidserver/update.py
 msgid "Use date from apk instead of current time for newly added apks"
 msgstr ""
 "Use la fecha del «apk» en vez de la fecha actual para los nuevos «apk» "
 "añadidos"
 
-#: ../fdroidserver/update.py:1529
+#: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr ""
 "Cambiar el nombre de archivos APK que no coinciden con el formato "

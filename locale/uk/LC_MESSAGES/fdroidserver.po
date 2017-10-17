@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: team@f-droid.org\n"
 "POT-Creation-Date: 2017-06-01 17:23+0200\n"
-"PO-Revision-Date: 2017-09-15 19:29+0000\n"
+"PO-Revision-Date: 2017-10-01 11:53+0000\n"
 "Last-Translator: Володимир Бриняк <bardvv@gmail.com>\n"
 "Language-Team: Ukrainian "
 "<https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
@@ -20,373 +20,392 @@ msgstr ""
 "4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 2.17-dev\n"
 
-#: ../fdroid:34
+#: ../fdroid
 msgid "Build a package from source"
-msgstr ""
+msgstr "Побудуйте пакет з джерела"
 
-#: ../fdroid:35
+#: ../fdroid
 msgid "Quickly start a new repository"
-msgstr ""
+msgstr "Швидкий запуск нового сховища"
 
-#: ../fdroid:36
+#: ../fdroid
 msgid "Sign and place packages in the repo"
-msgstr ""
+msgstr "Записати та розмістити пакети в репозиторії"
 
-#: ../fdroid:37
+#: ../fdroid
 msgid "Add gpg signatures for packages in repo"
-msgstr ""
+msgstr "Додайте підписи gpg для пакетів у репозиторії"
 
-#: ../fdroid:38
+#: ../fdroid
 msgid "Update repo information for new packages"
-msgstr ""
+msgstr "Оновіть інформацію репозиторю для нових пакетів"
 
-#: ../fdroid:39
+#: ../fdroid
 msgid "Verify the integrity of downloaded packages"
-msgstr ""
+msgstr "Перевірте цілісність завантажених пакетів"
 
-#: ../fdroid:40
+#: ../fdroid
 msgid "Check for updates to applications"
-msgstr ""
+msgstr "Перевірте наявність оновлень для застосунків"
 
-#: ../fdroid:41
+#: ../fdroid
 msgid "Add a new application from its source code"
-msgstr ""
+msgstr "Додайте новий застосунку зі свого вихідного коду"
 
-#: ../fdroid:42
+#: ../fdroid
 msgid "Install built packages on devices"
-msgstr ""
+msgstr "Встановити побудовані пакети на пристрої"
 
-#: ../fdroid:43
+#: ../fdroid
 msgid "Read all the metadata files and exit"
-msgstr ""
+msgstr "Прочитайте всі файли метаданих і вийдіть"
 
-#: ../fdroid:44
+#: ../fdroid
 msgid "Rewrite all the metadata files"
-msgstr ""
+msgstr "Перепишіть усі файли метаданих"
 
-#: ../fdroid:45
+#: ../fdroid
 msgid "Warn about possible metadata errors"
-msgstr ""
+msgstr "Попереджати про можливі помилки метаданих"
 
-#: ../fdroid:46
+#: ../fdroid
 msgid "Scan the source code of a package"
-msgstr ""
+msgstr "Сканування вихідного коду пакета"
 
-#: ../fdroid:47
+#: ../fdroid
 msgid "Dynamically scan APKs post build"
-msgstr ""
+msgstr "Динамічне сканування створення APKs допису"
 
-#: ../fdroid:48
+#: ../fdroid
 msgid "Update the stats of the repo"
-msgstr ""
+msgstr "Оновити статистику репозиторію"
 
-#: ../fdroid:49
+#: ../fdroid
 msgid "Interact with the repo HTTP server"
-msgstr ""
+msgstr "Взаємодія з HTTP-сервером репозиторію"
 
-#: ../fdroid:50
-#, fuzzy
+#: ../fdroid
 msgid "Sign indexes created using update --nosign"
-msgstr "Запис індексів, створених за допомогою оновлення --nosign"
+msgstr "Запис індексів, створених за допомогою update --nosign"
 
-#: ../fdroid:51
+#: ../fdroid
 msgid "Update the binary transparency log for a URL"
 msgstr "Оновити бінарний журнал прозорості для URL-адреси"
 
-#: ../fdroid:56
+#: ../fdroid
 msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
-msgstr "використання: fdroid [-h|--help|--version] <command> [<args>]"
+msgstr "використання: fdroid [-h|--help|--version] <команда> [<аргументи>]"
 
-#: ../fdroid:58
+#: ../fdroid
 msgid "Valid commands are:"
 msgstr "Дійсні команди:"
 
-#: ../fdroid:104
+#: ../fdroid
 #, c-format
 msgid "Command '%s' not recognised.\n"
 msgstr "Команда '%s' не визнана.\n"
 
-#: ../fdroid:150
+#: ../fdroid
 msgid "Unknown exception found!"
-msgstr ""
+msgstr "Виявлено невідому виняткову ситуацію!"
 
-#: ../fdroidserver/btlog.py:154
+#: ../fdroidserver/btlog.py
 msgid "Path to the git repo to use as the log"
-msgstr ""
+msgstr "Шлях до git репозиторію для використання в якості входу"
 
-#: ../fdroidserver/btlog.py:156
+#: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
 msgstr ""
+"Базова URL-адреса для входу в репозиторій (за замовчуванням: "
+"https://f-droid.org)"
 
-#: ../fdroidserver/btlog.py:158
+#: ../fdroidserver/btlog.py
 msgid "Push the log to this git remote repository"
-msgstr ""
+msgstr "Натисніть вхід цього віддаленого сховища git"
 
-#: ../fdroidserver/build.py:875 ../fdroidserver/install.py:52
-#: ../fdroidserver/publish.py:45 ../fdroidserver/scanner.py:255
-#: ../fdroidserver/verify.py:41
+#: ../fdroidserver/build.py:875 ../fdroidserver/install.py
+#: ../fdroidserver/publish.py:45 ../fdroidserver/scanner.py
+#: ../fdroidserver/verify.py
 msgid "app-id with optional versionCode in the form APPID[:VERCODE]"
-msgstr ""
+msgstr "app-id з необов'язковою версією коду у формі APPID[:VERCODE]"
 
-#: ../fdroidserver/build.py:877
+#: ../fdroidserver/build.py
 msgid "Build only the latest version of each package"
-msgstr ""
+msgstr "Створіть лише останню версію кожного пакета"
 
-#: ../fdroidserver/build.py:879
+#: ../fdroidserver/build.py
 msgid "Make the build stop on exceptions"
-msgstr ""
+msgstr "Зробити зупинку створення за винятками"
 
-#: ../fdroidserver/build.py:881
+#: ../fdroidserver/build.py
 msgid ""
 "Test mode - put output in the tmp directory only, and always build, even if "
 "the output already exists."
 msgstr ""
+"Режим тесту - надсилайте випуск тільки в каталог  tmp, і завжди створюйте, "
+"навіть якщо випуск вже існує."
 
-#: ../fdroidserver/build.py:883
+#: ../fdroidserver/build.py
 msgid "Use build server"
-msgstr ""
+msgstr "Використовуйте сервер створення"
 
-#: ../fdroidserver/build.py:885
+#: ../fdroidserver/build.py
 msgid ""
 "Reset and create a brand new build server, even if the existing one appears "
 "to be ok."
 msgstr ""
+"Перезавантажте та створіть новий сервер створення, навіть якщо наявний існує."
 
-#: ../fdroidserver/build.py:887
+#: ../fdroidserver/build.py
 msgid "Specify that we're running on the build server"
-msgstr ""
+msgstr "Вкажіть, що ми працюємо на сервері створення"
 
-#: ../fdroidserver/build.py:889
+#: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
 msgstr ""
+"Пропустити сканування вихідного коду для двійкових файлів та інших проблем"
 
-#: ../fdroidserver/build.py:891
+#: ../fdroidserver/build.py
 msgid "Setup an emulator, install the apk on it and perform a drozer scan"
 msgstr ""
+"Налаштуйте емулятор, встановіть apk на нього та виконайте drozer сканування"
 
-#: ../fdroidserver/build.py:893
+#: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
-msgstr ""
+msgstr "Не створюйте вихідний код, корисно під час тестування створення"
 
-#: ../fdroidserver/build.py:895
+#: ../fdroidserver/build.py
 msgid ""
 "Don't refresh the repository, useful when testing a build with no internet "
 "connection"
 msgstr ""
+"Не оновлюйте сховище, корисне під час тестування створення без підключення "
+"до Інтернету"
 
-#: ../fdroidserver/build.py:897
+#: ../fdroidserver/build.py
 msgid ""
 "Force build of disabled apps, and carries on regardless of scan problems. "
 "Only allowed in test mode."
 msgstr ""
+"Примусити створювати інвалідні додатки, і здійснювати розміщення незалежно "
+"від проблем сканування. Лише дозволено в тестовому режимі."
 
-#: ../fdroidserver/build.py:899
+#: ../fdroidserver/build.py
 msgid "Build all applications available"
-msgstr ""
+msgstr "Створіть всі доступні застосунки"
 
-#: ../fdroidserver/build.py:901 ../fdroidserver/update.py:1519
+#: ../fdroidserver/build.py:901 ../fdroidserver/update.py
 msgid "Update the wiki"
-msgstr ""
+msgstr "Оновити вікі"
 
-#: ../fdroidserver/checkupdates.py:513
+#: ../fdroidserver/checkupdates.py
 msgid "app-id to check for updates"
-msgstr ""
+msgstr "app-id для перевірки наявність оновлень"
 
-#: ../fdroidserver/checkupdates.py:515
+#: ../fdroidserver/checkupdates.py
 msgid "Process auto-updates"
-msgstr ""
+msgstr "Процес автоматичних оновлень"
 
-#: ../fdroidserver/checkupdates.py:517
+#: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
-msgstr ""
+msgstr "Обробляти застосунки лише за допомогою автоматичних оновлень"
 
-#: ../fdroidserver/checkupdates.py:519
+#: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
-msgstr ""
+msgstr "Прийняти зміни"
 
-#: ../fdroidserver/checkupdates.py:521
+#: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
-msgstr ""
+msgstr "Друкувати відмінності тільки з Play Store"
 
-#: ../fdroidserver/common.py:124
+#: ../fdroidserver/common.py
 msgid "Spew out even more information than normal"
-msgstr ""
+msgstr "Випишіть ще більше інформації, ніж звичайно"
 
-#: ../fdroidserver/common.py:126
+#: ../fdroidserver/common.py
 msgid "Restrict output to warnings and errors"
-msgstr ""
+msgstr "Обмеження виводу на попередження і помилки"
 
-#: ../fdroidserver/dscanner.py:410
+#: ../fdroidserver/dscanner.py
 msgid "app-id with optional versioncode in the form APPID[:VERCODE]"
-msgstr ""
+msgstr "app-id з необов'язковим кодом версії у формі APPID[:VERCODE]"
 
-#: ../fdroidserver/dscanner.py:413
+#: ../fdroidserver/dscanner.py
 msgid "Scan only the latest version of each package"
-msgstr ""
+msgstr "Сканувати лише останню версію кожного пакета"
 
-#: ../fdroidserver/dscanner.py:416
+#: ../fdroidserver/dscanner.py
 msgid "Clean after all scans have finished"
-msgstr ""
+msgstr "Очистити після завершення сканування"
 
-#: ../fdroidserver/dscanner.py:419
+#: ../fdroidserver/dscanner.py
 msgid "Clean before the scans start and rebuild the container"
-msgstr ""
+msgstr "Очистити перед початком сканування і перебудуйте контейнер"
 
-#: ../fdroidserver/dscanner.py:422
+#: ../fdroidserver/dscanner.py
 msgid "Clean up all containers and then exit"
-msgstr ""
+msgstr "Очистити усі контейнери, а потім вийти"
 
-#: ../fdroidserver/dscanner.py:425
+#: ../fdroidserver/dscanner.py
 msgid "Prepare drozer to run a scan"
-msgstr ""
+msgstr "Підготувати drozer для запуску сканування"
 
-#: ../fdroidserver/dscanner.py:428
+#: ../fdroidserver/dscanner.py
 msgid "Override path for repo APKs (default: ./repo)"
-msgstr ""
+msgstr "Перевизначити шлях для репозиторію APKs (default: ./repo)"
 
-#: ../fdroidserver/import.py:193
+#: ../fdroidserver/import.py
 msgid "Project URL to import from."
-msgstr ""
+msgstr "URL-адреса проекту для імпорту."
 
-#: ../fdroidserver/import.py:195
+#: ../fdroidserver/import.py
 msgid "Path to main android project subdirectory, if not in root."
-msgstr ""
+msgstr "Шлях до основного підкаталогу андроїда, якщо не в кореневому каталозі."
 
-#: ../fdroidserver/import.py:197
+#: ../fdroidserver/import.py
 msgid "Comma separated list of categories."
-msgstr ""
+msgstr "Список категорій, розділених комами."
 
-#: ../fdroidserver/import.py:199
+#: ../fdroidserver/import.py
 msgid "Overall license of the project."
-msgstr ""
+msgstr "Загальна ліцензія проекту."
 
-#: ../fdroidserver/import.py:201
+#: ../fdroidserver/import.py
 msgid ""
 "Allows a different revision (or git branch) to be specified for the initial "
 "import"
-msgstr ""
+msgstr "Дозволяє вказати іншу версію (або git гілку) для початкового імпорту"
 
-#: ../fdroidserver/init.py:56
+#: ../fdroidserver/init.py
 msgid "X.509 'Distiguished Name' used when generating keys"
-msgstr ""
+msgstr "X.509 'Distiguished Name' використовується при створенні ключів"
 
-#: ../fdroidserver/init.py:58
+#: ../fdroidserver/init.py
 msgid "Path to the keystore for the repo signing key"
-msgstr ""
+msgstr "Шлях до сховища ключа для підписного ключа репозиторія"
 
-#: ../fdroidserver/init.py:60
+#: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
-msgstr ""
+msgstr "Псевдонім підписного ключа репозиторія в сховищі ключів"
 
-#: ../fdroidserver/init.py:62
+#: ../fdroidserver/init.py
 msgid "Path to the Android SDK (sometimes set in ANDROID_HOME)"
-msgstr ""
+msgstr "Шлях до Android SDK (іноді встановлено в ANDROID_HOME)"
 
-#: ../fdroidserver/init.py:64
+#: ../fdroidserver/init.py
 msgid "Do not prompt for Android SDK path, just fail"
-msgstr ""
+msgstr "Не точний шлях Android SDK, просто збій"
 
-#: ../fdroidserver/install.py:54
+#: ../fdroidserver/install.py
 msgid "Install all signed applications available"
-msgstr ""
+msgstr "Встановити всі доступні підписані застосунки"
 
-#: ../fdroidserver/lint.py:393
+#: ../fdroidserver/lint.py
 msgid "Also warn about formatting issues, like rewritemeta -l"
-msgstr ""
+msgstr "Також попередити про проблеми форматування, наприклад rewritemeta -l"
 
-#: ../fdroidserver/lint.py:394 ../fdroidserver/rewritemeta.py:57
+#: ../fdroidserver/lint.py:394 ../fdroidserver/rewritemeta.py
 msgid "app-id in the form APPID"
-msgstr ""
+msgstr "app-id у формі APPID"
 
-#: ../fdroidserver/metadata.py:1337
+#: ../fdroidserver/metadata.py
 msgid "force errors to be warnings, or ignore"
-msgstr ""
+msgstr "примусити попереджувати помилки, або ігнорувати"
 
-#: ../fdroidserver/rewritemeta.py:54
+#: ../fdroidserver/rewritemeta.py
 msgid "List files that would be reformatted"
-msgstr ""
+msgstr "Список файлів, які будуть переформатовані"
 
-#: ../fdroidserver/rewritemeta.py:56
+#: ../fdroidserver/rewritemeta.py
 msgid "Rewrite to a specific format: "
-msgstr ""
+msgstr "Переписати в певний формат: "
 
-#: ../fdroidserver/server.py:547
+#: ../fdroidserver/server.py
 msgid "command to execute, either 'init' or 'update'"
-msgstr ""
+msgstr "команда виконати, 'init' або 'update'"
 
-#: ../fdroidserver/server.py:549
+#: ../fdroidserver/server.py
 msgid "Specify an identity file to provide to SSH for rsyncing"
-msgstr ""
+msgstr "Вкажіть файл ідентифікатора для надання SSH для rsyncing"
 
-#: ../fdroidserver/server.py:551
+#: ../fdroidserver/server.py
 msgid "Specify a local folder to sync the repo to"
-msgstr ""
+msgstr "Вкажіть локальну папку, щоб синхронізувати репозиторій в"
 
-#: ../fdroidserver/server.py:553
+#: ../fdroidserver/server.py
 msgid "Don't use rsync checksums"
-msgstr ""
+msgstr "Не використовуйте контрольні суми rsync"
 
-#: ../fdroidserver/stats.py:64
+#: ../fdroidserver/stats.py
 msgid "Download logs we don't have"
-msgstr ""
+msgstr "Журналів завантаження у нас немає"
 
-#: ../fdroidserver/stats.py:66
+#: ../fdroidserver/stats.py
 msgid ""
 "Recalculate aggregate stats - use when changes "
 "have been made that would invalidate old cached data."
 msgstr ""
+"Перерахуйте сукупну статистику - використовуйте, коли були внесені зміни, "
+"які призведуть до втрати старих кешованих даних."
 
-#: ../fdroidserver/stats.py:69
+#: ../fdroidserver/stats.py
 msgid "Don't do anything logs-related"
-msgstr ""
+msgstr "Не робіть нічого пов'язаного з журналами"
 
-#: ../fdroidserver/update.py:1504
+#: ../fdroidserver/update.py
 msgid "Create a repo signing key in a keystore"
-msgstr ""
+msgstr "Створіть ключ підписування репозиторію у сховищі ключів"
 
-#: ../fdroidserver/update.py:1506
+#: ../fdroidserver/update.py
 msgid "Create skeleton metadata files that are missing"
-msgstr ""
+msgstr "Створення скелетів файлів метаданих, які відсутні"
 
-#: ../fdroidserver/update.py:1508
+#: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
-msgstr ""
+msgstr "Видаліть APKs і/або OBBs без метаданих з репозиторію"
 
-#: ../fdroidserver/update.py:1510
+#: ../fdroidserver/update.py
 msgid "Report on build data status"
-msgstr ""
+msgstr "Звіт про статус створення даних"
 
-#: ../fdroidserver/update.py:1512
+#: ../fdroidserver/update.py
 msgid "Interactively ask about things that need updating."
-msgstr ""
+msgstr "Інтерактивно запитайте про речі, які потребують оновлення."
 
-#: ../fdroidserver/update.py:1514
+#: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
 msgstr ""
+"Змінити розмір усіх значків, що перевищують максимальний розмір пікселя та "
+"вийти"
 
-#: ../fdroidserver/update.py:1516
+#: ../fdroidserver/update.py
 #, c-format
 msgid "Specify editor to use in interactive mode. Default %s"
 msgstr ""
+"Вкажіть редактор для використання в інтерактивному режимі. За замовчуванням "
+"%s"
 
-#: ../fdroidserver/update.py:1521
+#: ../fdroidserver/update.py
 msgid "Produce human-readable index.xml"
-msgstr ""
+msgstr "Створити зручний для сприйняття index.xml"
 
-#: ../fdroidserver/update.py:1523
+#: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all apks"
-msgstr ""
+msgstr "Очистити оновлення - не використовує кеш, повторно обробляє всі apks"
 
-#: ../fdroidserver/update.py:1525
+#: ../fdroidserver/update.py
 msgid ""
 "When configured for signed indexes, create only unsigned indexes at this "
 "stage"
 msgstr ""
+"Коли налаштовано для підписаних індексів, на цьому етапі створюйте лише "
+"непідписані індекси"
 
-#: ../fdroidserver/update.py:1527
+#: ../fdroidserver/update.py
 msgid "Use date from apk instead of current time for newly added apks"
 msgstr ""
+"Використовуйте дату з apk, замість поточного часу для нових доданих apks"
 
-#: ../fdroidserver/update.py:1529
+#: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
-msgstr ""
+msgstr "Перейменування файлів APK, які не відповідають package.name_123.apk"
