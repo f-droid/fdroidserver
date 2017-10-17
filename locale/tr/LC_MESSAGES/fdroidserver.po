@@ -19,122 +19,122 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 2.15-dev\n"
 
-#: ../fdroid:34
+#: ../fdroid
 msgid "Build a package from source"
 msgstr "Kaynaktan bir paket oluştur"
 
-#: ../fdroid:35
+#: ../fdroid
 msgid "Quickly start a new repository"
 msgstr "Hızlıca yeni bir depo başlat"
 
-#: ../fdroid:36
+#: ../fdroid
 msgid "Sign and place packages in the repo"
 msgstr "Paketleri imzala ve depoya yerleştir"
 
-#: ../fdroid:37
+#: ../fdroid
 msgid "Add gpg signatures for packages in repo"
 msgstr "Depodaki paketler için GPG imzaları ekle"
 
-#: ../fdroid:38
+#: ../fdroid
 msgid "Update repo information for new packages"
 msgstr "Yeni paketler için depo bilgisini güncelle"
 
-#: ../fdroid:39
+#: ../fdroid
 msgid "Verify the integrity of downloaded packages"
 msgstr "İndirilen paketlerin bütünlüğünü doğrula"
 
-#: ../fdroid:40
+#: ../fdroid
 msgid "Check for updates to applications"
 msgstr "Uygulama güncellemelerini denetle"
 
-#: ../fdroid:41
+#: ../fdroid
 msgid "Add a new application from its source code"
 msgstr "Kaynak kodundan yeni bir uygulama ekle"
 
-#: ../fdroid:42
+#: ../fdroid
 msgid "Install built packages on devices"
 msgstr "Oluşturulan paketleri aygıtlara kur"
 
-#: ../fdroid:43
+#: ../fdroid
 msgid "Read all the metadata files and exit"
 msgstr "Tüm meta veri dosyalarını oku ve çık"
 
-#: ../fdroid:44
+#: ../fdroid
 msgid "Rewrite all the metadata files"
 msgstr "Tüm meta veri dosyalarını yeniden yaz"
 
-#: ../fdroid:45
+#: ../fdroid
 msgid "Warn about possible metadata errors"
 msgstr "Olası meta veri hataları hakkında uyar"
 
-#: ../fdroid:46
+#: ../fdroid
 msgid "Scan the source code of a package"
 msgstr "Bir paketin kaynak kodunu tara"
 
-#: ../fdroid:47
+#: ../fdroid
 msgid "Dynamically scan APKs post build"
 msgstr "Oluşturma sonrası APKları dinamik olarak tara"
 
-#: ../fdroid:48
+#: ../fdroid
 msgid "Update the stats of the repo"
 msgstr "Depo istatistikleri güncelleştir"
 
-#: ../fdroid:49
+#: ../fdroid
 msgid "Interact with the repo HTTP server"
 msgstr "Depo HTTP sunucusu ile etkileşim kur"
 
-#: ../fdroid:50
+#: ../fdroid
 msgid "Sign indexes created using update --nosign"
 msgstr "update -nosign ile yaratılan indeksleri imzala"
 
-#: ../fdroid:51
+#: ../fdroid
 msgid "Update the binary transparency log for a URL"
 msgstr "Bir URL için çalıştırılabilir şeffaflık günlüğünü güncelle"
 
-#: ../fdroid:56
+#: ../fdroid
 msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
 msgstr "kullanım: fdroid [-h|--help|--version] <komut>[<argümanlar>]"
 
-#: ../fdroid:58
+#: ../fdroid
 msgid "Valid commands are:"
 msgstr "Geçerli komutlar:"
 
-#: ../fdroid:104
+#: ../fdroid
 #, c-format
 msgid "Command '%s' not recognised.\n"
 msgstr "Komut '%s' tanınmıyor.\n"
 
-#: ../fdroid:150
+#: ../fdroid
 msgid "Unknown exception found!"
 msgstr "Bilinmeyen özel durum bulundu!"
 
-#: ../fdroidserver/btlog.py:154
+#: ../fdroidserver/btlog.py
 msgid "Path to the git repo to use as the log"
 msgstr "Günlük olarak kullanılacak git deposunun konumu"
 
-#: ../fdroidserver/btlog.py:156
+#: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
 msgstr "Günlüklenecek depo için taban URLsi (öntanımlı: https://f-droid.org)"
 
-#: ../fdroidserver/btlog.py:158
+#: ../fdroidserver/btlog.py
 msgid "Push the log to this git remote repository"
 msgstr "Günlüğü bu git uzak deposuna it"
 
-#: ../fdroidserver/build.py:875 ../fdroidserver/install.py:52
-#: ../fdroidserver/publish.py:45 ../fdroidserver/scanner.py:255
-#: ../fdroidserver/verify.py:41
+#: ../fdroidserver/build.py:875 ../fdroidserver/install.py
+#: ../fdroidserver/publish.py:45 ../fdroidserver/scanner.py
+#: ../fdroidserver/verify.py
 msgid "app-id with optional versionCode in the form APPID[:VERCODE]"
 msgstr "APPID[:VERCODE] biçiminde app-id, isteğe bağlı versionCode ile"
 
-#: ../fdroidserver/build.py:877
+#: ../fdroidserver/build.py
 msgid "Build only the latest version of each package"
 msgstr "Her paketin sadece son sürümünü oluştur"
 
-#: ../fdroidserver/build.py:879
+#: ../fdroidserver/build.py
 msgid "Make the build stop on exceptions"
 msgstr "Özel durumlarda oluşturmayı durdur"
 
-#: ../fdroidserver/build.py:881
+#: ../fdroidserver/build.py
 msgid ""
 "Test mode - put output in the tmp directory only, and always build, even if "
 "the output already exists."
@@ -142,11 +142,11 @@ msgstr ""
 "Sınama kipi - çıkışı sadece tmp dizinine koy, ve her zaman oluştur, çıkış "
 "zaten var olsa bile."
 
-#: ../fdroidserver/build.py:883
+#: ../fdroidserver/build.py
 msgid "Use build server"
 msgstr "Oluşturma sunucusu kullan"
 
-#: ../fdroidserver/build.py:885
+#: ../fdroidserver/build.py
 msgid ""
 "Reset and create a brand new build server, even if the existing one appears "
 "to be ok."
@@ -154,24 +154,24 @@ msgstr ""
 "Sıfırla ve yeni bir oluşturma sunucusu yarat, var olan iyi görünüyor olsa "
 "bile."
 
-#: ../fdroidserver/build.py:887
+#: ../fdroidserver/build.py
 msgid "Specify that we're running on the build server"
 msgstr "Oluşturma sunucusunda çalıştığımızı belirtin"
 
-#: ../fdroidserver/build.py:889
+#: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
 msgstr ""
 "Kaynak kodu, çalıştırılabilir dosyalar ve diğer sorunlar için taramayı atla"
 
-#: ../fdroidserver/build.py:891
+#: ../fdroidserver/build.py
 msgid "Setup an emulator, install the apk on it and perform a drozer scan"
 msgstr "Bir emülatör kur, APKyı ona kur ve bir Drozer taraması yap"
 
-#: ../fdroidserver/build.py:893
+#: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "Bir kaynak tar dosyası yaratma, bir oluşturma sınanırken yararlıdır"
 
-#: ../fdroidserver/build.py:895
+#: ../fdroidserver/build.py
 msgid ""
 "Don't refresh the repository, useful when testing a build with no internet "
 "connection"
@@ -179,7 +179,7 @@ msgstr ""
 "Depoyu yenileme, bir oluşturma internet bağlantısı olmadan sınanırken "
 "yararlıdır"
 
-#: ../fdroidserver/build.py:897
+#: ../fdroidserver/build.py
 msgid ""
 "Force build of disabled apps, and carries on regardless of scan problems. "
 "Only allowed in test mode."
@@ -187,87 +187,87 @@ msgstr ""
 "Devre dışı uygulamaların oluşturulmasını zorunlu kıl, ve tarama problemi "
 "olsa bile devam et. Sadece sınama kipinde izin verilir."
 
-#: ../fdroidserver/build.py:899
+#: ../fdroidserver/build.py
 msgid "Build all applications available"
 msgstr "Kullanılabilir tüm uygulamaları oluştur"
 
-#: ../fdroidserver/build.py:901 ../fdroidserver/update.py:1519
+#: ../fdroidserver/build.py:901 ../fdroidserver/update.py
 msgid "Update the wiki"
 msgstr "Viki'yi güncelle"
 
-#: ../fdroidserver/checkupdates.py:513
+#: ../fdroidserver/checkupdates.py
 msgid "app-id to check for updates"
 msgstr "Güncellemeleri denetlemek için app-id"
 
-#: ../fdroidserver/checkupdates.py:515
+#: ../fdroidserver/checkupdates.py
 msgid "Process auto-updates"
 msgstr "Kendiliğinden güncellemeleri işle"
 
-#: ../fdroidserver/checkupdates.py:517
+#: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
 msgstr "Yalnızca kendiliğinden güncellemesi olan uygulamaları işle"
 
-#: ../fdroidserver/checkupdates.py:519
+#: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
 msgstr "Değişiklikleri işle"
 
-#: ../fdroidserver/checkupdates.py:521
+#: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
 msgstr "Yalnızca Play Store ile olan farkları yazdır"
 
-#: ../fdroidserver/common.py:124
+#: ../fdroidserver/common.py
 msgid "Spew out even more information than normal"
 msgstr "Olağandan daha da çok bilgi çıkart"
 
-#: ../fdroidserver/common.py:126
+#: ../fdroidserver/common.py
 msgid "Restrict output to warnings and errors"
 msgstr "Çıkışı uyarılara ve hatalara kısıtla"
 
-#: ../fdroidserver/dscanner.py:410
+#: ../fdroidserver/dscanner.py
 msgid "app-id with optional versioncode in the form APPID[:VERCODE]"
 msgstr "APPID[:VERCODE] biçiminde app-id, isteğe bağlı versioncode ile"
 
-#: ../fdroidserver/dscanner.py:413
+#: ../fdroidserver/dscanner.py
 msgid "Scan only the latest version of each package"
 msgstr "Her paketin sadece en son sürümünü tara"
 
-#: ../fdroidserver/dscanner.py:416
+#: ../fdroidserver/dscanner.py
 msgid "Clean after all scans have finished"
 msgstr "Tüm taramalar bitince temizle"
 
-#: ../fdroidserver/dscanner.py:419
+#: ../fdroidserver/dscanner.py
 msgid "Clean before the scans start and rebuild the container"
 msgstr "Taramalar başlamadan önce temizle ve konteyneri yeniden oluştur"
 
-#: ../fdroidserver/dscanner.py:422
+#: ../fdroidserver/dscanner.py
 msgid "Clean up all containers and then exit"
 msgstr "Bütün konteynerleri temizle ve sonra çık"
 
-#: ../fdroidserver/dscanner.py:425
+#: ../fdroidserver/dscanner.py
 msgid "Prepare drozer to run a scan"
 msgstr "Drozer'i bir tarama çalıştırmak için hazırla"
 
-#: ../fdroidserver/dscanner.py:428
+#: ../fdroidserver/dscanner.py
 msgid "Override path for repo APKs (default: ./repo)"
 msgstr "Depo APKları için konumu geçersiz kıl (öntanımlı: ./repo)"
 
-#: ../fdroidserver/import.py:193
+#: ../fdroidserver/import.py
 msgid "Project URL to import from."
 msgstr "İçe aktarma için proje URL'si."
 
-#: ../fdroidserver/import.py:195
+#: ../fdroidserver/import.py
 msgid "Path to main android project subdirectory, if not in root."
 msgstr "Kökte değilse, ana Android proje alt dizininin konumu."
 
-#: ../fdroidserver/import.py:197
+#: ../fdroidserver/import.py
 msgid "Comma separated list of categories."
 msgstr "Kategorilerin virgülle ayrılmış listesi."
 
-#: ../fdroidserver/import.py:199
+#: ../fdroidserver/import.py
 msgid "Overall license of the project."
 msgstr "Projenin genel lisansı."
 
-#: ../fdroidserver/import.py:201
+#: ../fdroidserver/import.py
 msgid ""
 "Allows a different revision (or git branch) to be specified for the initial "
 "import"
@@ -275,118 +275,118 @@ msgstr ""
 "İlk içe aktarım için farklı bir revizyonun (veya git dalının) belirtilmesine "
 "izin verir"
 
-#: ../fdroidserver/init.py:56
+#: ../fdroidserver/init.py
 msgid "X.509 'Distiguished Name' used when generating keys"
 msgstr "Anahtarlar üretilirken X.509 'Distinguished Name' kullanılır"
 
-#: ../fdroidserver/init.py:58
+#: ../fdroidserver/init.py
 msgid "Path to the keystore for the repo signing key"
 msgstr "Depo imzalama anahtarı için anahtar deposunun konumu"
 
-#: ../fdroidserver/init.py:60
+#: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
 msgstr "Depo imzalama anahtarının anahtar deposundaki takma adı"
 
-#: ../fdroidserver/init.py:62
+#: ../fdroidserver/init.py
 msgid "Path to the Android SDK (sometimes set in ANDROID_HOME)"
 msgstr "Android SDK konumu (bazen ANDROID_HOME'da ayarlıdır)"
 
-#: ../fdroidserver/init.py:64
+#: ../fdroidserver/init.py
 msgid "Do not prompt for Android SDK path, just fail"
 msgstr "Android SDK konumunu sorma, sadece başarısız ol"
 
-#: ../fdroidserver/install.py:54
+#: ../fdroidserver/install.py
 msgid "Install all signed applications available"
 msgstr "Kullanılabilir tüm imzalı uygulamaları kur"
 
-#: ../fdroidserver/lint.py:393
+#: ../fdroidserver/lint.py
 msgid "Also warn about formatting issues, like rewritemeta -l"
 msgstr "Ayrıca biçimlendirme sorunları hakkında uyar, rewritemeta -l gibi"
 
-#: ../fdroidserver/lint.py:394 ../fdroidserver/rewritemeta.py:57
+#: ../fdroidserver/lint.py:394 ../fdroidserver/rewritemeta.py
 msgid "app-id in the form APPID"
 msgstr "APPID biçiminde app-id"
 
-#: ../fdroidserver/metadata.py:1337
+#: ../fdroidserver/metadata.py
 msgid "force errors to be warnings, or ignore"
 msgstr "hataları uyarı olmaya zorla veya yok say"
 
-#: ../fdroidserver/rewritemeta.py:54
+#: ../fdroidserver/rewritemeta.py
 msgid "List files that would be reformatted"
 msgstr "Yeniden biçimlendirilecek olan dosyaları listele"
 
-#: ../fdroidserver/rewritemeta.py:56
+#: ../fdroidserver/rewritemeta.py
 msgid "Rewrite to a specific format: "
 msgstr "Belirli bir biçimde yeniden yaz: "
 
-#: ../fdroidserver/server.py:547
+#: ../fdroidserver/server.py
 msgid "command to execute, either 'init' or 'update'"
 msgstr "çalıştırılacak komut, 'init' ya da 'update'"
 
-#: ../fdroidserver/server.py:549
+#: ../fdroidserver/server.py
 msgid "Specify an identity file to provide to SSH for rsyncing"
 msgstr "Rsync için SSH'a sağlanacak bir kimlik dosyası belirtin"
 
-#: ../fdroidserver/server.py:551
+#: ../fdroidserver/server.py
 msgid "Specify a local folder to sync the repo to"
 msgstr "Deponun eşleneceği yerel bir klasör belirtin"
 
-#: ../fdroidserver/server.py:553
+#: ../fdroidserver/server.py
 msgid "Don't use rsync checksums"
 msgstr "Rsync sağlama toplamlarını kullanma"
 
-#: ../fdroidserver/stats.py:64
+#: ../fdroidserver/stats.py
 msgid "Download logs we don't have"
 msgstr "Bizde olmayan günlükleri indir"
 
-#: ../fdroidserver/stats.py:66
+#: ../fdroidserver/stats.py
 msgid "Recalculate aggregate stats - use when changes "
 msgstr ""
 "Toplam istatistikleri yeniden hesapla - eski önbelleklenen veriyi geçersiz "
 "kılacak değişiklikler yapıldığında kullanın "
 
-#: ../fdroidserver/stats.py:69
+#: ../fdroidserver/stats.py
 msgid "Don't do anything logs-related"
 msgstr "Günlüklerle ilgili bir şey yapma"
 
-#: ../fdroidserver/update.py:1504
+#: ../fdroidserver/update.py
 msgid "Create a repo signing key in a keystore"
 msgstr "Bir anahtar deposunda, depo imzalama anahtarı yaratır"
 
-#: ../fdroidserver/update.py:1506
+#: ../fdroidserver/update.py
 msgid "Create skeleton metadata files that are missing"
 msgstr "Eksik olan iskelet meta veri dosyalarını yarat"
 
-#: ../fdroidserver/update.py:1508
+#: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
 msgstr "Depodan meta verisi olmayan APKları ve/veya OBBleri sil"
 
-#: ../fdroidserver/update.py:1510
+#: ../fdroidserver/update.py
 msgid "Report on build data status"
 msgstr "Oluşturma veri durumu hakkında bildir"
 
-#: ../fdroidserver/update.py:1512
+#: ../fdroidserver/update.py
 msgid "Interactively ask about things that need updating."
 msgstr "Güncelleme gerektiren şeyler hakkında etkileşimli olarak sor."
 
-#: ../fdroidserver/update.py:1514
+#: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
 msgstr "Piksel boyut sınırını aşan tüm simgeleri yeniden boyutlandır ve çık"
 
-#: ../fdroidserver/update.py:1516
+#: ../fdroidserver/update.py
 #, c-format
 msgid "Specify editor to use in interactive mode. Default %s"
 msgstr "Etkileşimli kipte kullanılacak editörü belirtin. Öntanımlı %s"
 
-#: ../fdroidserver/update.py:1521
+#: ../fdroidserver/update.py
 msgid "Produce human-readable index.xml"
 msgstr "Okunabilir index.xml üret"
 
-#: ../fdroidserver/update.py:1523
+#: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all apks"
 msgstr "Temiz güncelleme - önbellekleri kullanmaz, tüm APKları yeniden işler"
 
-#: ../fdroidserver/update.py:1525
+#: ../fdroidserver/update.py
 msgid ""
 "When configured for signed indexes, create only unsigned indexes at this "
 "stage"
@@ -394,10 +394,10 @@ msgstr ""
 "İmzalı indeksler için yapılandırıldığında, bu aşamada sadece imzasız "
 "indeksleri yarat"
 
-#: ../fdroidserver/update.py:1527
+#: ../fdroidserver/update.py
 msgid "Use date from apk instead of current time for newly added apks"
 msgstr "Yeni eklenen APKlar için o anki zaman yerine APK tarihini kullan"
 
-#: ../fdroidserver/update.py:1529
+#: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "paket.ad_123.apk ile eşleşmeyen tüm APK dosyalarını yeniden adlandır"
