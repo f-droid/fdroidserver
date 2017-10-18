@@ -63,26 +63,8 @@ def make(apps, sortedids, apks, repodir, archive):
             return "fdroid.app:" + appid, apps[appid].Name
         raise MetaDataException("Cannot resolve app id " + appid)
 
-    nosigningkey = False
     if not common.options.nosign:
-        if 'repo_keyalias' not in common.config:
-            nosigningkey = True
-            logging.critical(_("'repo_keyalias' not found in config.py!"))
-        if 'keystore' not in common.config:
-            nosigningkey = True
-            logging.critical(_("'keystore' not found in config.py!"))
-        if 'keystorepass' not in common.config:
-            nosigningkey = True
-            logging.critical(_("'keystorepass' not found in config.py!"))
-        if 'keypass' not in common.config:
-            nosigningkey = True
-            logging.critical(_("'keypass' not found in config.py!"))
-        if not os.path.exists(common.config['keystore']):
-            nosigningkey = True
-            logging.critical("'" + common.config['keystore'] + "' does not exist!")
-        if nosigningkey:
-            raise FDroidException("`fdroid update` requires a signing key, " +
-                                  "you can create one using: fdroid update --create-key")
+        common.assert_config_keystore(common.config)
 
     repodict = collections.OrderedDict()
     repodict['timestamp'] = datetime.utcnow()

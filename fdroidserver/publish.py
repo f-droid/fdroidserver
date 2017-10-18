@@ -157,6 +157,8 @@ def main():
         logging.critical(_('Java JDK not found! Install in standard location or set java_paths!'))
         sys.exit(1)
 
+    common.assert_config_keystore(config)
+
     log_dir = 'logs'
     if not os.path.isdir(log_dir):
         logging.info(_("Creating log directory"))

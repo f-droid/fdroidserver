@@ -25,6 +25,7 @@ if localmodule not in sys.path:
 import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
+from testcommon import TmpCwd
 from fdroidserver.exception import FDroidException
 
 
@@ -38,6 +39,20 @@ class CommonTest(unittest.TestCase):
         if not os.path.exists(self.tmpdir):
             os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
+
+    def test_assert_config_keystore(self):
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with self.assertRaises(FDroidException):
+                fdroidserver.common.assert_config_keystore({})
+
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            c = {'repo_keyalias': 'localhost',
+                 'keystore': 'keystore.jks',
+                 'keystorepass': '12345',
+                 'keypass': '12345'}
+            with open('keystore.jks', 'w'):
+                pass
+            fdroidserver.common.assert_config_keystore(c)
 
     def _set_build_tools(self):
         build_tools = os.path.join(fdroidserver.common.config['sdk_path'], 'build-tools')
