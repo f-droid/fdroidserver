@@ -164,7 +164,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "Android Build Tools path '{path}' does not exist!"
+msgid "Android build-tools path '{path}' does not exist!"
 msgstr ""
 
 #: ../fdroidserver/common.py
