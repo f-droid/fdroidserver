@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2017-10-19 20:52+0200\n"
+"POT-Creation-Date: 2017-10-19 22:13+0200\n"
 "PO-Revision-Date: 2017-10-01 11:53+0000\n"
 "Last-Translator: Володимир Бриняк <bardvv@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/"
@@ -96,6 +96,9 @@ msgstr ""
 msgid "'sdk_path' not set in 'config.py'!"
 msgstr ""
 
+#. Translators: "build-tools" is the file name of a package from
+#. Google, it is part of the Android SDK. So it probably shouldn't be
+#. translated or transliterated.
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
@@ -131,10 +134,6 @@ msgstr ""
 msgid "/issues is missing"
 msgstr ""
 
-#, fuzzy
-msgid "Add PGP signatures for packages in repo using GnuPG"
-msgstr "Додайте підписи gpg для пакетів у репозиторії"
-
 #: ../fdroid
 #, fuzzy
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -143,9 +142,6 @@ msgstr "Додайте підписи gpg для пакетів у репози�
 #: ../fdroid
 msgid "Add a new application from its source code"
 msgstr "Додайте новий застосунку зі свого вихідного коду"
-
-msgid "Add gpg signatures for packages in repo"
-msgstr "Додайте підписи gpg для пакетів у репозиторії"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -168,11 +164,6 @@ msgstr "Також попередити про проблеми форматув
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "Android build-tools path '{path}' does not exist!"
-msgstr ""
-
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "Android SDK '{path}' does not have '{dirname}' installed!"
 msgstr ""
 
@@ -188,6 +179,14 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' is not a directory!"
+msgstr ""
+
+#. Translators: "build-tools" is the file name of a package from
+#. Google, it is part of the Android SDK. So it probably shouldn't be
+#. translated or transliterated.
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Android build-tools path '{path}' does not exist!"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -208,6 +207,7 @@ msgstr ""
 msgid "Archiving {apkfilename} with invalid signature!"
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
@@ -287,9 +287,6 @@ msgstr "Очистити усі контейнери, а потім вийти"
 msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr "Очистити оновлення - не використовує кеш, повторно обробляє всі apks"
 
-msgid "Clean update - don't uses caches, reprocess all apks"
-msgstr "Очистити оновлення - не використовує кеш, повторно обробляє всі apks"
-
 #: ../fdroidserver/import.py
 msgid "Comma separated list of categories."
 msgstr "Список категорій, розділених комами."
@@ -317,10 +314,12 @@ msgstr ""
 msgid "Could not open apk file for analysis"
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
 msgid "Couldn't find latest version code"
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import.py
 msgid "Couldn't find latest version name"
 msgstr ""
@@ -533,10 +532,16 @@ msgstr ""
 "Примусити створювати інвалідні додатки, і здійснювати розміщення незалежно "
 "від проблем сканування. Лише дозволено в тестовому режимі."
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
+msgstr ""
+
 #: ../fdroidserver/common.py
 msgid "Found invalid appids in arguments"
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Found invalid versionCodes for some apps"
 msgstr ""
@@ -778,6 +783,7 @@ msgstr ""
 msgid "No such package: %s"
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "No such versionCode {versionCode} for app {appid}"
@@ -796,6 +802,7 @@ msgstr ""
 msgid "Nothing to do for {appid}."
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "OBB file has newer versionCode({integer}) than any APK:"
@@ -807,6 +814,11 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "OBB's packagename does not match a supported APK:"
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Only PNG and JPEG are supported for graphics, found: {path}"
 msgstr ""
 
 #: ../fdroidserver/checkupdates.py
@@ -924,6 +936,8 @@ msgstr "Прочитайте всі файли метаданих і вийді�
 msgid "Reading '{config_file}'"
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
+#. https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid ""
@@ -1117,6 +1131,7 @@ msgstr ""
 "Режим тесту - надсилайте випуск тільки в каталог  tmp, і завжди створюйте, "
 "навіть якщо випуск вже існує."
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
@@ -1178,6 +1193,7 @@ msgstr ""
 msgid "Unknown exception found!"
 msgstr "Виявлено невідому виняткову ситуацію!"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
@@ -1197,6 +1213,11 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary trailing space"
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Unsupported graphics file found: {path}"
 msgstr ""
 
 #: ../fdroidserver/rewritemeta.py
@@ -1302,6 +1323,11 @@ msgstr "X.509 'Distiguished Name' використовується при ств
 msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
 msgstr ""
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "adding to {name}: {path}"
+msgstr ""
+
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
@@ -1311,18 +1337,6 @@ msgstr ""
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr ""
-
-msgid "app-id in the form APPID"
-msgstr "app-id у формі APPID"
-
-msgid "app-id to check for updates"
-msgstr "app-id для перевірки наявність оновлень"
-
-msgid "app-id with optional versionCode in the form APPID[:VERCODE]"
-msgstr "app-id з необов'язковою версією коду у формі APPID[:VERCODE]"
-
-msgid "app-id with optional versioncode in the form APPID[:VERCODE]"
-msgstr "app-id з необов'язковим кодом версії у формі APPID[:VERCODE]"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #, fuzzy
@@ -1334,6 +1348,7 @@ msgstr "app-id у формі APPID"
 msgid "applicationId to check for updates"
 msgstr "app-id для перевірки наявність оновлень"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 #: ../fdroidserver/dscanner.py ../fdroidserver/build.py
 #: ../fdroidserver/scanner.py ../fdroidserver/install.py
@@ -1644,6 +1659,7 @@ msgstr ""
 msgid "{appid} does not have a name! Using package name instead."
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
@@ -1672,3 +1688,26 @@ msgid_plural "{} builds succeeded"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#, fuzzy
+#~ msgid "Add PGP signatures for packages in repo using GnuPG"
+#~ msgstr "Додайте підписи gpg для пакетів у репозиторії"
+
+#~ msgid "Add gpg signatures for packages in repo"
+#~ msgstr "Додайте підписи gpg для пакетів у репозиторії"
+
+#~ msgid "Clean update - don't uses caches, reprocess all apks"
+#~ msgstr ""
+#~ "Очистити оновлення - не використовує кеш, повторно обробляє всі apks"
+
+#~ msgid "app-id in the form APPID"
+#~ msgstr "app-id у формі APPID"
+
+#~ msgid "app-id to check for updates"
+#~ msgstr "app-id для перевірки наявність оновлень"
+
+#~ msgid "app-id with optional versionCode in the form APPID[:VERCODE]"
+#~ msgstr "app-id з необов'язковою версією коду у формі APPID[:VERCODE]"
+
+#~ msgid "app-id with optional versioncode in the form APPID[:VERCODE]"
+#~ msgstr "app-id з необов'язковим кодом версії у формі APPID[:VERCODE]"

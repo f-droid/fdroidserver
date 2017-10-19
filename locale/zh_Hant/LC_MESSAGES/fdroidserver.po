@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2017-10-19 20:50+0200\n"
+"POT-Creation-Date: 2017-10-19 22:13+0200\n"
 "PO-Revision-Date: 2017-08-31 02:59+0000\n"
 "Last-Translator: ezjerry liao <ezjerry@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/f-"
@@ -93,6 +93,9 @@ msgstr ""
 msgid "'sdk_path' not set in 'config.py'!"
 msgstr ""
 
+#. Translators: "build-tools" is the file name of a package from
+#. Google, it is part of the Android SDK. So it probably shouldn't be
+#. translated or transliterated.
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
@@ -128,10 +131,6 @@ msgstr ""
 msgid "/issues is missing"
 msgstr ""
 
-#, fuzzy
-msgid "Add PGP signatures for packages in repo using GnuPG"
-msgstr "在軟體倉庫中加入套件包的 gpg 簽署"
-
 #: ../fdroid
 #, fuzzy
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -140,9 +139,6 @@ msgstr "在軟體倉庫中加入套件包的 gpg 簽署"
 #: ../fdroid
 msgid "Add a new application from its source code"
 msgstr "從原始程式碼增加一個新的應用程式"
-
-msgid "Add gpg signatures for packages in repo"
-msgstr "在軟體倉庫中加入套件包的 gpg 簽署"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -165,11 +161,6 @@ msgstr "還要提醒格式化問題，如 rewritemeta -l"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "Android build-tools path '{path}' does not exist!"
-msgstr ""
-
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "Android SDK '{path}' does not have '{dirname}' installed!"
 msgstr ""
 
@@ -185,6 +176,14 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' is not a directory!"
+msgstr ""
+
+#. Translators: "build-tools" is the file name of a package from
+#. Google, it is part of the Android SDK. So it probably shouldn't be
+#. translated or transliterated.
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Android build-tools path '{path}' does not exist!"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -205,6 +204,7 @@ msgstr ""
 msgid "Archiving {apkfilename} with invalid signature!"
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
@@ -282,9 +282,6 @@ msgstr "清除所有容器，然後退出"
 msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr "清除更新 - 不使用快取，重新處理全部的 apk"
 
-msgid "Clean update - don't uses caches, reprocess all apks"
-msgstr "清除更新 - 不使用快取，重新處理全部的 apk"
-
 #: ../fdroidserver/import.py
 msgid "Comma separated list of categories."
 msgstr "以逗號分隔類別清單。"
@@ -312,10 +309,12 @@ msgstr ""
 msgid "Could not open apk file for analysis"
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
 msgid "Couldn't find latest version code"
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import.py
 msgid "Couldn't find latest version name"
 msgstr ""
@@ -524,10 +523,16 @@ msgid ""
 "Only allowed in test mode."
 msgstr "強制停用應用程式的構建，並且忽視掃描問題而繼續。只允許在測試模式下。"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
+msgstr ""
+
 #: ../fdroidserver/common.py
 msgid "Found invalid appids in arguments"
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Found invalid versionCodes for some apps"
 msgstr ""
@@ -769,6 +774,7 @@ msgstr ""
 msgid "No such package: %s"
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "No such versionCode {versionCode} for app {appid}"
@@ -787,6 +793,7 @@ msgstr ""
 msgid "Nothing to do for {appid}."
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "OBB file has newer versionCode({integer}) than any APK:"
@@ -798,6 +805,11 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "OBB's packagename does not match a supported APK:"
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Only PNG and JPEG are supported for graphics, found: {path}"
 msgstr ""
 
 #: ../fdroidserver/checkupdates.py
@@ -915,6 +927,8 @@ msgstr "讀取所有的中介資料檔案並退出"
 msgid "Reading '{config_file}'"
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
+#. https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid ""
@@ -1091,6 +1105,7 @@ msgid ""
 "the output already exists."
 msgstr "測試模式 - 將輸出只放在 tmp 目錄中，即使輸出已經存在，仍然構建。"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
@@ -1150,6 +1165,7 @@ msgstr ""
 msgid "Unknown exception found!"
 msgstr "發現未知的異常！"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
@@ -1169,6 +1185,11 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary trailing space"
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Unsupported graphics file found: {path}"
 msgstr ""
 
 #: ../fdroidserver/rewritemeta.py
@@ -1270,6 +1291,11 @@ msgstr "產生金鑰時使用 X.509 '專有名稱'"
 msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
 msgstr ""
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "adding to {name}: {path}"
+msgstr ""
+
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
@@ -1279,18 +1305,6 @@ msgstr ""
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr ""
-
-msgid "app-id in the form APPID"
-msgstr "app-id，格式為 APPID"
-
-msgid "app-id to check for updates"
-msgstr "以 app-id 檢查更新"
-
-msgid "app-id with optional versionCode in the form APPID[:VERCODE]"
-msgstr "app-id 具有任選的 versionCode 在此格式為 APPID [:VERCODE]"
-
-msgid "app-id with optional versioncode in the form APPID[:VERCODE]"
-msgstr "app-id 具有任選的 versioncode 在此格式為 APPID [:VERCODE]"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #, fuzzy
@@ -1302,6 +1316,7 @@ msgstr "app-id，格式為 APPID"
 msgid "applicationId to check for updates"
 msgstr "以 app-id 檢查更新"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 #: ../fdroidserver/dscanner.py ../fdroidserver/build.py
 #: ../fdroidserver/scanner.py ../fdroidserver/install.py
@@ -1606,6 +1621,7 @@ msgstr ""
 msgid "{appid} does not have a name! Using package name instead."
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
@@ -1630,3 +1646,25 @@ msgstr[0] ""
 msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] ""
+
+#, fuzzy
+#~ msgid "Add PGP signatures for packages in repo using GnuPG"
+#~ msgstr "在軟體倉庫中加入套件包的 gpg 簽署"
+
+#~ msgid "Add gpg signatures for packages in repo"
+#~ msgstr "在軟體倉庫中加入套件包的 gpg 簽署"
+
+#~ msgid "Clean update - don't uses caches, reprocess all apks"
+#~ msgstr "清除更新 - 不使用快取，重新處理全部的 apk"
+
+#~ msgid "app-id in the form APPID"
+#~ msgstr "app-id，格式為 APPID"
+
+#~ msgid "app-id to check for updates"
+#~ msgstr "以 app-id 檢查更新"
+
+#~ msgid "app-id with optional versionCode in the form APPID[:VERCODE]"
+#~ msgstr "app-id 具有任選的 versionCode 在此格式為 APPID [:VERCODE]"
+
+#~ msgid "app-id with optional versioncode in the form APPID[:VERCODE]"
+#~ msgstr "app-id 具有任選的 versioncode 在此格式為 APPID [:VERCODE]"
