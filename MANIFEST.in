@@ -27,7 +27,7 @@ include examples/template.yml
 include fdroid
 include LICENSE
 include makebuildserver
-include README.md
+include README.rst
 include tests/androguard_test.py
 include tests/bad-unicode-*.apk
 include tests/build.TestCase

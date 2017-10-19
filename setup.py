@@ -12,15 +12,20 @@ else:
     data_prefix = '.'
 
 # PyPI accepts reST not Markdown
-if shutil.which('pandoc'):
-    print('Using reST README')
-    import subprocess
-    readme = subprocess.check_output(['pandoc', '--from=markdown', '--to=rst', 'README.md'],
-                                     universal_newlines=True)
+if os.path.exists('README.md'):
+    if shutil.which('pandoc'):
+        print('Using reST README')
+        import subprocess
+        subprocess.check_call(['pandoc', '--from=markdown', '--to=rst', 'README.md',
+                               '--output=README.rst'], universal_newlines=True)
+        with open('README.rst') as fp:
+            readme = fp.read()
+    else:
+        print('Using Markdown README')
+        with open('README.md') as fp:
+            readme = fp.read()
 else:
-    print('Using Markdown README')
-    with open('README.md') as fp:
-        readme = fp.read()
+    readme = ''
 
 setup(name='fdroidserver',
       version='0.8',
