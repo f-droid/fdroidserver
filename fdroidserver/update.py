@@ -846,24 +846,24 @@ def insert_localized_app_metadata(apps):
             base, extension = common.get_extension(filename)
 
             if packageName not in apps:
-                logging.warning('Found "%s" graphic without metadata for app "%s"!'
-                                % (filename, packageName))
+                logging.warning(_('Found "{path}" graphic without metadata for app "{name}"!')
+                                .format(path=filename, name=packageName))
                 continue
             graphics = _get_localized_dict(apps[packageName], locale)
 
             if extension not in ALLOWED_EXTENSIONS:
-                logging.warning('Only PNG and JPEG are supported for graphics, found: ' + f)
+                logging.warning(_('Only PNG and JPEG are supported for graphics, found: {path}').format(path=f))
             elif base in GRAPHIC_NAMES:
                 # there can only be zero or one of these per locale
                 graphics[base] = filename
             elif screenshotdir in SCREENSHOT_DIRS:
                 # there can any number of these per locale
-                logging.debug('adding to ' + screenshotdir + ': ' + f)
+                logging.debug(_('adding to {name}: {path}').format(name=screenshotdir, path=f))
                 if screenshotdir not in graphics:
                     graphics[screenshotdir] = []
                 graphics[screenshotdir].append(filename)
             else:
-                logging.warning('Unsupported graphics file found: ' + f)
+                logging.warning(_('Unsupported graphics file found: {path}').format(path=f))
 
 
 def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
