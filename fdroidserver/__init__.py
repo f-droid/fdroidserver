@@ -8,7 +8,7 @@ import sys
 # support running straight from git and standard installs
 rootpaths = [
     os.path.realpath(os.path.join(os.path.dirname(__file__), '..')),
-    sys.prefix + 'share',
+    os.path.join(sys.prefix, 'share'),
 ]
 
 localedir = None
