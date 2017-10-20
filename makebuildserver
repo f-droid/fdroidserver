@@ -58,8 +58,7 @@ logger.debug('cachedir set to: %s', cachedir)
 config = {
     'basebox': 'jessie64',
     'baseboxurl': [
-        pathlib.Path(os.path.join(cachedir, 'jessie64.box')).as_uri(),
-        'https://f-droid.org/jessie64.box',
+        pathlib.Path(os.path.join(cachedir, 'jessie64.box')).as_uri()
     ],
     'debian_mirror': 'http://http.debian.net/debian/',
     'apt_package_cache': False,
@@ -525,9 +524,9 @@ def main():
     debug_log_vagrant_vm(serverdir, config)
     try:
         v.up(provision=True)
-    except fdroidserver.vmtools.FDroidBuildVmException as e:
+    except subprocess.CalledProcessError:
         debug_log_vagrant_vm(serverdir, config)
-        logger.exception('could not bring buildserver vm up. %s', e)
+        logger.error("'vagrant up' failed, is the base box missing?")
         sys.exit(1)
 
     if config['copy_caches_from_host']:
