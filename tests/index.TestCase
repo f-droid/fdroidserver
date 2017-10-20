@@ -236,4 +236,4 @@ if __name__ == "__main__":
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(IndexTest))
-    unittest.main()
+    unittest.main(failfast=False)

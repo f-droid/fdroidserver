@@ -53,4 +53,4 @@ if __name__ == "__main__":
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(LintTest))
-    unittest.main()
+    unittest.main(failfast=False)
