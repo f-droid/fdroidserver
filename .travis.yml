@@ -19,6 +19,9 @@ matrix:
       env: ANDROID_SDK_ROOT=/usr/local/share/android-sdk
       env: ANDROID_HOME=/usr/local/share/android-sdk
 
+# On Ubuntu/trusty 14.04, the PPA is needed on to provide lots of the
+# dependencies, but this then also serves as a test of the PPA, which
+# is used on Windows Subsystem for Linux.
 addons:
   apt:
     sources:
@@ -46,15 +49,13 @@ android:
     - 'android-sdk-preview-.+'
     - 'android-sdk-license-.+'
 
-# the PPA is needed on Ubuntu 14.04 precise, and with python3, trusty too
-# the pip thing is a hack that can go away with trusty.
-#
 # * ensure java8 is installed since Android SDK doesn't work with Java9
 # * Java needs to be at least 1.8.0_131 to have MD5 properly disabled
 #   https://blogs.oracle.com/java-platform-group/oracle-jre-will-no-longer-trust-md5-signed-code-by-default
 #   https://opsech.io/posts/2017/Jun/09/openjdk-april-2017-security-update-131-8u131-and-md5-signed-jars.html
 install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      set -x;
       brew update > /dev/null;
       brew install dash bash python3 gradle jenv;
       brew install gnu-sed --with-default-names;
@@ -86,11 +87,19 @@ install:
       which jarsigner;
       keytool -help;
       which keytool;
+      set +x;
     fi
 
+# The OSX tests seem to run slower, they often timeout.  So only run
+# the test suite with the installed version of fdroid, instead of the
+# three rounds that ./complete-ci-tests does.
 script:
   - cd tests
-  - ./complete-ci-tests
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      ./run-tests;
+    else
+      ./complete-ci-tests;
+    fi
 
 after_failure:
   - cd $TRAVIS_BUILD_DIR
