@@ -132,6 +132,41 @@ def setup_global_opts(parser):
                         help=_("Restrict output to warnings and errors"))
 
 
+def _add_java_paths_to_config(pathlist, thisconfig):
+    def path_version_key(s):
+        versionlist = []
+        for u in re.split('[^0-9]+', s):
+            try:
+                versionlist.append(int(u))
+            except ValueError:
+                pass
+        return versionlist
+
+    for d in sorted(pathlist, key=path_version_key):
+        if os.path.islink(d):
+            continue
+        j = os.path.basename(d)
+        # the last one found will be the canonical one, so order appropriately
+        for regex in [
+                r'^1\.([6-9])\.0\.jdk$',  # OSX
+                r'^jdk1\.([6-9])\.0_[0-9]+.jdk$',  # OSX and Oracle tarball
+                r'^jdk1\.([6-9])\.0_[0-9]+$',  # Oracle Windows
+                r'^jdk([6-9])-openjdk$',  # Arch
+                r'^java-([6-9])-openjdk$',  # Arch
+                r'^java-([6-9])-jdk$',  # Arch (oracle)
+                r'^java-1\.([6-9])\.0-.*$',  # RedHat
+                r'^java-([6-9])-oracle$',  # Debian WebUpd8
+                r'^jdk-([6-9])-oracle-.*$',  # Debian make-jpkg
+                r'^java-([6-9])-openjdk-[^c][^o][^m].*$',  # Debian
+                ]:
+            m = re.match(regex, j)
+            if not m:
+                continue
+            for p in [d, os.path.join(d, 'Contents', 'Home')]:
+                if os.path.exists(os.path.join(p, 'bin', 'javac')):
+                    thisconfig['java_paths'][m.group(1)] = p
+
+
 def fill_config_defaults(thisconfig):
     for k, v in default_config.items():
         if k not in thisconfig:
@@ -167,29 +202,7 @@ def fill_config_defaults(thisconfig):
             pathlist.append(os.getenv('JAVA_HOME'))
         if os.getenv('PROGRAMFILES') is not None:
             pathlist += glob.glob(os.path.join(os.getenv('PROGRAMFILES'), 'Java', 'jdk1.[6-9].*'))
-        for d in sorted(pathlist):
-            if os.path.islink(d):
-                continue
-            j = os.path.basename(d)
-            # the last one found will be the canonical one, so order appropriately
-            for regex in [
-                    r'^1\.([6-9])\.0\.jdk$',  # OSX
-                    r'^jdk1\.([6-9])\.0_[0-9]+.jdk$',  # OSX and Oracle tarball
-                    r'^jdk1\.([6-9])\.0_[0-9]+$',  # Oracle Windows
-                    r'^jdk([6-9])-openjdk$',  # Arch
-                    r'^java-([6-9])-openjdk$',  # Arch
-                    r'^java-([6-9])-jdk$',  # Arch (oracle)
-                    r'^java-1\.([6-9])\.0-.*$',  # RedHat
-                    r'^java-([6-9])-oracle$',  # Debian WebUpd8
-                    r'^jdk-([6-9])-oracle-.*$',  # Debian make-jpkg
-                    r'^java-([6-9])-openjdk-[^c][^o][^m].*$',  # Debian
-                    ]:
-                m = re.match(regex, j)
-                if not m:
-                    continue
-                for p in [d, os.path.join(d, 'Contents', 'Home')]:
-                    if os.path.exists(os.path.join(p, 'bin', 'javac')):
-                        thisconfig['java_paths'][m.group(1)] = p
+        _add_java_paths_to_config(pathlist, thisconfig)
 
     for java_version in ('7', '8', '9'):
         if java_version not in thisconfig['java_paths']:

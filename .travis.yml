@@ -75,6 +75,8 @@ install:
       sudo pip3 install --quiet --editable . ;
       sudo rm -rf fdroidserver.egg-info;
 
+      ls -l /System/Library/Java/JavaVirtualMachines || true;
+      ls -l /Library/Java/JavaVirtualMachines || true;
       echo $PATH;
       echo $JAVA_HOME;
       jenv versions;
