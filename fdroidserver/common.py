@@ -2251,15 +2251,15 @@ def apk_strip_signatures(signed_apk, strip_manifest=False):
         os.rename(signed_apk, tmp_apk)
         with ZipFile(tmp_apk, 'r') as in_apk:
             with ZipFile(signed_apk, 'w') as out_apk:
-                for f in in_apk.infolist():
-                    if not apk_sigfile.match(f.filename):
+                for info in in_apk.infolist():
+                    if not apk_sigfile.match(info.filename):
                         if strip_manifest:
-                            if f.filename != 'META-INF/MANIFEST.MF':
-                                buf = in_apk.read(f.filename)
-                                out_apk.writestr(f.filename, buf)
+                            if info.filename != 'META-INF/MANIFEST.MF':
+                                buf = in_apk.read(info.filename)
+                                out_apk.writestr(info, buf)
                         else:
-                            buf = in_apk.read(f.filename)
-                            out_apk.writestr(f.filename, buf)
+                            buf = in_apk.read(info.filename)
+                            out_apk.writestr(info, buf)
 
 
 def apk_implant_signatures(apkpath, signaturefile, signedfile, manifest):
@@ -2272,19 +2272,21 @@ def apk_implant_signatures(apkpath, signaturefile, signedfile, manifest):
     """
     # get list of available signature files in metadata
     with tempfile.TemporaryDirectory() as tmpdir:
-        # orig_apk = os.path.join(tmpdir, 'orig.apk')
-        # os.rename(apkpath, orig_apk)
         apkwithnewsig = os.path.join(tmpdir, 'newsig.apk')
         with ZipFile(apkpath, 'r') as in_apk:
             with ZipFile(apkwithnewsig, 'w') as out_apk:
                 for sig_file in [signaturefile, signedfile, manifest]:
-                    out_apk.write(sig_file, arcname='META-INF/' +
-                                  os.path.basename(sig_file))
-                for f in in_apk.infolist():
-                    if not apk_sigfile.match(f.filename):
-                        if f.filename != 'META-INF/MANIFEST.MF':
-                            buf = in_apk.read(f.filename)
-                            out_apk.writestr(f.filename, buf)
+                    with open(sig_file, 'rb') as fp:
+                        buf = fp.read()
+                    info = zipfile.ZipInfo('META-INF/' + os.path.basename(sig_file))
+                    info.compress_type = zipfile.ZIP_DEFLATED
+                    info.create_system = 0  # "Windows" aka "FAT", what Android SDK uses
+                    out_apk.writestr(info, buf)
+                for info in in_apk.infolist():
+                    if not apk_sigfile.match(info.filename):
+                        if info.filename != 'META-INF/MANIFEST.MF':
+                            buf = in_apk.read(info.filename)
+                            out_apk.writestr(info, buf)
         os.remove(apkpath)
         p = SdkToolsPopen(['zipalign', '-v', '4', apkwithnewsig, apkpath])
         if p.returncode != 0:
