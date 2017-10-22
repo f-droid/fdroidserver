@@ -13,7 +13,7 @@
 # GNU Affero General Public License for more details.
 #
 # You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from argparse import ArgumentParser
 
@@ -47,7 +47,7 @@ def extract_signature(apkpath):
 
 def extract(config, options):
 
-    # Create tmp dir if missing...
+    # Create tmp dir if missing…
     tmp_dir = 'tmp'
     if not os.path.exists(tmp_dir):
         os.mkdir(tmp_dir)
@@ -56,7 +56,7 @@ def extract(config, options):
         logging.critical(_('no APK supplied'))
         sys.exit(1)
 
-    # iterate over supplied APKs downlaod and extract them...
+    # iterate over supplied APKs downlaod and extract them…
     httpre = re.compile('https?:\/\/')
     for apk in options.APK:
         try:
@@ -76,7 +76,7 @@ def extract(config, options):
                         if tmp_apk and os.path.exists(tmp_apk):
                             os.remove(tmp_apk)
                 else:
-                    logging.warn(_('refuse downloading via insecure http connection (use https or specify --no-https-check): {apkfilename}').format(apkfilename=apk))
+                    logging.warn(_('refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}').format(apkfilename=apk))
         except FDroidException as e:
             logging.warning(_("Failed fetching signatures for '{apkfilename}': {error}")
                             .format(apkfilename=apk, error=e))
