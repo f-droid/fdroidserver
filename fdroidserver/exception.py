@@ -17,7 +17,10 @@ class FDroidException(Exception):
         return ret
 
     def __str__(self):
-        ret = self.value
+        if self.value is None:
+            ret = __name__
+        else:
+            ret = str(self.value)
         if self.detail:
             ret += "\n==== detail begin ====\n%s\n==== detail end ====" % ''.join(self.detail).strip()
         return ret

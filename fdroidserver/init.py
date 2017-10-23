@@ -69,10 +69,11 @@ def main():
     tmp = os.path.dirname(sys.argv[0])
     examplesdir = None
     if os.path.basename(tmp) == 'bin':
-        egg_link = os.path.join(tmp, '..', 'local/lib/python2.7/site-packages/fdroidserver.egg-link')
-        if os.path.exists(egg_link):
+        egg_links = glob.glob(os.path.join(tmp, '..',
+                                           'local/lib/python3.*/site-packages/fdroidserver.egg-link'))
+        if egg_links:
             # installed from local git repo
-            examplesdir = os.path.join(open(egg_link).readline().rstrip(), 'examples')
+            examplesdir = os.path.join(open(egg_links[0]).readline().rstrip(), 'examples')
         else:
             # try .egg layout
             examplesdir = os.path.dirname(os.path.dirname(__file__)) + '/share/doc/fdroidserver/examples'

@@ -7,7 +7,7 @@ matrix:
     - os: linux
       language: android
     - os: osx
-      osx_image: xcode9
+      osx_image: xcode9.1
       env: ANDROID_SDK_ROOT=/usr/local/share/android-sdk
       env: ANDROID_HOME=/usr/local/share/android-sdk
     - os: osx
@@ -28,6 +28,7 @@ addons:
     - dash
     - pylint
     - pep8
+    - python3-babel
     - python3-dev
     - python3-pip
     - python3-ruamel.yaml
@@ -46,13 +47,21 @@ android:
     - 'android-sdk-license-.+'
 
 # the PPA is needed on Ubuntu 14.04 precise, and with python3, trusty too
-# the pip thing is a hack that can go away with trusty
+# the pip thing is a hack that can go away with trusty.
+#
+# * ensure java8 is installed since Android SDK doesn't work with Java9
+# * Java needs to be at least 1.8.0_131 to have MD5 properly disabled
+#   https://blogs.oracle.com/java-platform-group/oracle-jre-will-no-longer-trust-md5-signed-code-by-default
+#   https://opsech.io/posts/2017/Jun/09/openjdk-april-2017-security-update-131-8u131-and-md5-signed-jars.html
 install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update > /dev/null;
       brew install dash bash python3 gradle jenv;
       brew install gnu-sed --with-default-names;
-      brew cask reinstall java;
+      if ! ruby -e 'v = `javac -version 2>&1`.split()[1].gsub("_", "."); exit Gem::Dependency.new("", "~> 1.8.0.131").match?("", v)'; then
+        brew cask uninstall java --force;
+        brew cask install caskroom/versions/java8;
+      fi;
       brew cask install android-sdk;
 
       mkdir -p "$ANDROID_HOME/licenses";

@@ -416,7 +416,7 @@ def ensure_build_tools_exists(thisconfig):
     versioned_build_tools = os.path.join(build_tools, thisconfig['build_tools'])
     if not os.path.isdir(versioned_build_tools):
         raise FDroidException(
-            _("Android Build Tools path '{path}' does not exist!")
+            _("Android build-tools path '{path}' does not exist!")
             .format(path=versioned_build_tools))
 
 

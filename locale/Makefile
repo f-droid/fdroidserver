@@ -13,15 +13,15 @@ TEMPLATE = fdroidserver.pot
 
 VERSION = $(shell git describe)
 
-# generate .mo files from the .po files
-all-local: $(MOFILES)
-
-clean-local:
-	-rm -f -- $(MOFILES)
-	-rm -f -- $(POFILES:=~)
-
 # refresh everything from the source code
 update: $(POFILES)
+
+# generate .mo files from the .po files
+compile: $(MOFILES)
+
+clean:
+	-rm -f -- $(MOFILES)
+	-rm -f -- $(POFILES:=~)
 
 $(TEMPLATE): $(FILES)
 	xgettext --join-existing --from-code=UTF-8 \
@@ -40,4 +40,4 @@ $(TEMPLATE): $(FILES)
 	msgfmt --check -o $@ $(@:mo=po)
 
 
-.PHONY = all-local clean-local template
+.PHONY = compile clean update

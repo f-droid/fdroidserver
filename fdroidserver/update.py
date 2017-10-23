@@ -373,7 +373,7 @@ def resize_icon(iconpath, density):
             im.save(iconpath, "PNG")
 
     except Exception as e:
-        logging.error("Failed resizing {0} - {1}".format(iconpath, e))
+        logging.error(_("Failed resizing {path}: {error}".format(path=iconpath, error=e)))
 
     finally:
         if fp:
@@ -407,10 +407,10 @@ def getsig(apkpath):
         certs = [n for n in apk.namelist() if common.CERT_PATH_REGEX.match(n)]
 
         if len(certs) < 1:
-            logging.error("Found no signing certificates on %s" % apkpath)
+            logging.error(_("No signing certificates found in {path}").format(path=apkpath))
             return None
         if len(certs) > 1:
-            logging.error("Found multiple signing certificates on %s" % apkpath)
+            logging.error(_("Found multiple signing certificates in {path}").format(path=apkpath))
             return None
 
         cert = apk.read(certs[0])
@@ -518,9 +518,11 @@ def has_known_vulnerability(filename):
                         if (version.startswith('1.0.1') and len(version) > 5 and version[5] >= 'r') \
                            or (version.startswith('1.0.2') and len(version) > 5 and version[5] >= 'f') \
                            or re.match(r'[1-9]\.[1-9]\.[0-9].*', version):
-                            logging.debug('"%s" contains recent %s (%s)', filename, name, version)
+                            logging.debug(_('"{path}" contains recent {name} ({version})')
+                                          .format(path=filename, name=name, version=version))
                         else:
-                            logging.warning('"%s" contains outdated %s (%s)', filename, name, version)
+                            logging.warning(_('"{path}" contains outdated {name} ({version})')
+                                            .format(path=filename, name=name, version=version))
                             return True
                         break
             elif name == 'AndroidManifest.xml' or name == 'classes.dex' or name.endswith('.so'):
@@ -548,9 +550,9 @@ def insert_obbs(repodir, apps, apks):
     """
 
     def obbWarnDelete(f, msg):
-        logging.warning(msg + f)
+        logging.warning(msg + ' ' + f)
         if options.delete_unknown:
-            logging.error("Deleting unknown file: " + f)
+            logging.error(_("Deleting unknown file: {path}").format(path=f))
             os.remove(f)
 
     obbs = []
@@ -561,24 +563,25 @@ def insert_obbs(repodir, apps, apks):
         # obbfile looks like: [main|patch].<expansion-version>.<package-name>.obb
         chunks = obbfile.split('.')
         if chunks[0] != 'main' and chunks[0] != 'patch':
-            obbWarnDelete(f, 'OBB filename must start with "main." or "patch.": ')
+            obbWarnDelete(f, _('OBB filename must start with "main." or "patch.":'))
             continue
         if not re.match(r'^-?[0-9]+$', chunks[1]):
-            obbWarnDelete('The OBB version code must come after "' + chunks[0] + '.": ')
+            obbWarnDelete(f, _('The OBB version code must come after "{name}.":')
+                          .format(name=chunks[0]))
             continue
         versionCode = int(chunks[1])
         packagename = ".".join(chunks[2:-1])
 
         highestVersionCode = java_Integer_MIN_VALUE
         if packagename not in currentPackageNames:
-            obbWarnDelete(f, "OBB's packagename does not match a supported APK: ")
+            obbWarnDelete(f, _("OBB's packagename does not match a supported APK:"))
             continue
         for apk in apks:
             if packagename == apk['packageName'] and apk['versionCode'] > highestVersionCode:
                 highestVersionCode = apk['versionCode']
         if versionCode > highestVersionCode:
-            obbWarnDelete(f, 'OBB file has newer versionCode(' + str(versionCode)
-                          + ') than any APK: ')
+            obbWarnDelete(f, _('OBB file has newer versionCode({integer}) than any APK:')
+                          .format(integer=str(versionCode)))
             continue
         obbsha256 = sha256sum(f)
         obbs.append((packagename, versionCode, obbfile, obbsha256))
@@ -883,13 +886,15 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
         filename = os.path.join(repodir, name)
         name_utf8 = name.decode('utf-8')
         if filename.endswith(b'_src.tar.gz'):
-            logging.debug('skipping source tarball: ' + filename.decode('utf-8'))
+            logging.debug(_('skipping source tarball: {path}')
+                          .format(path=filename.decode('utf-8')))
             continue
         if not common.is_repo_file(filename):
             continue
         stat = os.stat(filename)
         if stat.st_size == 0:
-            raise FDroidException(filename + ' is zero size!')
+            raise FDroidException(_('{path} is zero size!')
+                                  .format(path=filename))
 
         shasum = sha256sum(filename)
         usecache = False
@@ -903,10 +908,12 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
                 else:
                     repo_file['added'] = datetime(*a[:6])
             if repo_file.get('hash') == shasum:
-                logging.debug("Reading " + name_utf8 + " from cache")
+                logging.debug(_("Reading {apkfilename} from cache")
+                              .format(apkfilename=name_utf8))
                 usecache = True
             else:
-                logging.debug("Ignoring stale cache data for " + name_utf8)
+                logging.debug(_("Ignoring stale cache data for {apkfilename}")
+                              .format(apkfilename=name_utf8))
 
         if not usecache:
             logging.debug(_("Processing {apkfilename}").format(apkfilename=name_utf8))
@@ -1005,13 +1012,13 @@ def scan_apk_aapt(apk, apkfile):
     if p.returncode != 0:
         if options.delete_unknown:
             if os.path.exists(apkfile):
-                logging.error("Failed to get apk information, deleting " + apkfile)
+                logging.error(_("Failed to get apk information, deleting {path}").format(path=apkfile))
                 os.remove(apkfile)
             else:
                 logging.error("Could not find {0} to remove it".format(apkfile))
         else:
-            logging.error("Failed to get apk information, skipping " + apkfile)
-        raise BuildException("Invalid APK")
+            logging.error(_("Failed to get apk information, skipping {path}").format(path=apkfile))
+        raise BuildException(_("Invalid APK"))
     for line in p.output.splitlines():
         if line.startswith("package:"):
             try:
@@ -1104,18 +1111,21 @@ def scan_apk_androguard(apk, apkfile):
         else:
             if options.delete_unknown:
                 if os.path.exists(apkfile):
-                    logging.error("Failed to get apk information, deleting " + apkfile)
+                    logging.error(_("Failed to get apk information, deleting {path}")
+                                  .format(path=apkfile))
                     os.remove(apkfile)
                 else:
-                    logging.error("Could not find {0} to remove it".format(apkfile))
+                    logging.error(_("Could not find {path} to remove it")
+                                  .format(path=apkfile))
             else:
-                logging.error("Failed to get apk information, skipping " + apkfile)
-            raise BuildException("Invaild APK")
+                logging.error(_("Failed to get apk information, skipping {path}")
+                              .format(path=apkfile))
+            raise BuildException(_("Invalid APK"))
     except ImportError:
         raise FDroidException("androguard library is not installed and aapt not present")
     except FileNotFoundError:
-        logging.error("Could not open apk file for analysis")
-        raise BuildException("Invalid APK")
+        logging.error(_("Could not open apk file for analysis"))
+        raise BuildException(_("Invalid APK"))
 
     apk['packageName'] = apkobject.get_package()
     apk['versionCode'] = int(apkobject.get_androidversion_code())
@@ -1214,10 +1224,12 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
     if apkfilename in apkcache:
         apk = apkcache[apkfilename]
         if apk.get('hash') == sha256sum(apkfile):
-            logging.debug("Reading " + apkfilename + " from cache")
+            logging.debug(_("Reading {apkfilename} from cache")
+                          .format(apkfilename=apkfilename))
             usecache = True
         else:
-            logging.debug("Ignoring stale cache data for " + apkfilename)
+            logging.debug(_("Ignoring stale cache data for {apkfilename}")
+                          .format(apkfilename=apkfilename))
 
     if not usecache:
         logging.debug(_("Processing {apkfilename}").format(apkfilename=apkfilename))
@@ -1275,10 +1287,12 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
 
         if skipapk:
             if archive_bad_sig:
-                logging.warning('Archiving "' + apkfilename + '" with invalid signature!')
+                logging.warning(_('Archiving {apkfilename} with invalid signature!')
+                                .format(apkfilename=apkfilename))
                 move_apk_between_sections(repodir, 'archive', apk)
             else:
-                logging.warning('Skipping "' + apkfilename + '" with invalid signature!')
+                logging.warning(_('Skipping {apkfilename} with invalid signature!')
+                                .format(apkfilename=apkfilename))
             return True, None, False
 
         apkzip = zipfile.ZipFile(apkfile, 'r')
@@ -1290,7 +1304,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
         # store timezone info
         manifest = apkzip.getinfo('AndroidManifest.xml')
         if manifest.date_time[1] == 0:  # month can't be zero
-            logging.debug('AndroidManifest.xml has no date')
+            logging.debug(_('AndroidManifest.xml has no date'))
         else:
             dt_obj = datetime(*manifest.date_time)
             checkdt = dt_obj - timedelta(1)
@@ -1425,7 +1439,8 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
                     empty_densities.remove(density)
                     break
         except Exception as e:
-            logging.warning("Failed reading {0} - {1}".format(icon_path, e))
+            logging.warning(_("Failed reading {path}: {error}")
+                            .format(path=icon_path, error=e))
 
     if apk['icons']:
         apk['icon'] = icon_filename
@@ -1564,8 +1579,8 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
         else:
             keepversions = defaultkeepversions
 
-        logging.debug("Checking archiving for {0} - apks:{1}, keepversions:{2}, archapks:{3}"
-                      .format(appid, len(apks), keepversions, len(archapks)))
+        logging.debug(_("Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}")
+                      .format(appid=appid, integer=len(apks), keep=keepversions, arch=len(archapks)))
 
         current_app_apks = filter_apk_list_sorted(apks)
         if len(current_app_apks) > keepversions:
@@ -1626,7 +1641,7 @@ def add_apks_to_per_app_repos(repodir, apks):
         apks_per_app[apk['packageName']] = apk
 
         if not os.path.exists(apk['per_app_icons']):
-            logging.info('Adding new repo for only ' + apk['packageName'])
+            logging.info(_('Adding new repo for only {name}').format(name=apk['packageName']))
             os.makedirs(apk['per_app_icons'])
 
         apkpath = os.path.join(repodir, apk['apkName'])
@@ -1659,7 +1674,8 @@ def create_metadata_from_template(apk):
                              metatxt,
                              flags=re.IGNORECASE | re.MULTILINE)
         else:
-            logging.warning(apk['packageName'] + ' does not have a name! Using package name instead.')
+            logging.warning(_('{appid} does not have a name! Using package name instead.')
+                            .format(appid=apk['packageName']))
             metatxt = re.sub(r'^(((Auto)?Name|Summary):).*$',
                              r'\1 ' + apk['packageName'],
                              metatxt,
@@ -1679,11 +1695,12 @@ def create_metadata_from_template(apk):
         if 'name' in apk and apk['name'] != '':
             app['Name'] = apk['name']
         else:
-            logging.warning(apk['packageName'] + ' does not have a name! Using package name instead.')
+            logging.warning(_('{appid} does not have a name! Using package name instead.')
+                            .format(appid=apk['packageName']))
             app['Name'] = apk['packageName']
         with open(os.path.join('metadata', apk['packageName'] + '.yml'), 'w') as f:
             yaml.dump(app, f, default_flow_style=False)
-    logging.info("Generated skeleton metadata for " + apk['packageName'])
+    logging.info(_("Generated skeleton metadata for {appid}").format(appid=apk['packageName']))
 
 
 config = None
@@ -1710,8 +1727,8 @@ def main():
     parser.add_argument("-I", "--icons", action="store_true", default=False,
                         help=_("Resize all the icons exceeding the max pixel size and exit"))
     parser.add_argument("-e", "--editor", default="/etc/alternatives/editor",
-                        help=_("Specify editor to use in interactive mode. Default ") +
-                        "is /etc/alternatives/editor")
+                        help=_("Specify editor to use in interactive mode. Default " +
+                               "is {path}").format(path='/etc/alternatives/editor'))
     parser.add_argument("-w", "--wiki", default=False, action="store_true",
                         help=_("Update the wiki"))
     parser.add_argument("--pretty", action="store_true", default=False,
@@ -1733,7 +1750,7 @@ def main():
     config = common.read_config(options)
 
     if not ('jarsigner' in config and 'keytool' in config):
-        raise FDroidException('Java JDK not found! Install in standard location or set java_paths!')
+        raise FDroidException(_('Java JDK not found! Install in standard location or set java_paths!'))
 
     repodirs = ['repo']
     if config['archive_older'] != 0:
@@ -1752,13 +1769,14 @@ def main():
     for k in ['repo_icon', 'archive_icon']:
         if k in config:
             if not os.path.exists(config[k]):
-                logging.critical(k + ' "' + config[k] + '" does not exist! Correct it in config.py.')
+                logging.critical(_('{name} "{path}" does not exist! Correct it in config.py.')
+                                 .format(name=k, path=config[k]))
                 sys.exit(1)
 
     # if the user asks to create a keystore, do it now, reusing whatever it can
     if options.create_key:
         if os.path.exists(config['keystore']):
-            logging.critical("Cowardily refusing to overwrite existing signing key setup!")
+            logging.critical(_("Cowardily refusing to overwrite existing signing key setup!"))
             logging.critical("\t'" + config['keystore'] + "'")
             sys.exit(1)
 
@@ -1811,16 +1829,18 @@ def main():
                 create_metadata_from_template(apk)
                 apps = metadata.read_metadata()
             else:
-                msg = apk['apkName'] + " (" + apk['packageName'] + ") has no metadata!"
+                msg = _("{apkfilename} ({appid}) has no metadata!") \
+                    .format(apkfilename=apk['apkName'], appid=apk['packageName'])
                 if options.delete_unknown:
-                    logging.warn(msg + "\n\tdeleting: repo/" + apk['apkName'])
+                    logging.warn(msg + '\n\t' + _("deleting: repo/{apkfilename}")
+                                 .format(apkfilename=apk['apkName']))
                     rmf = os.path.join(repodirs[0], apk['apkName'])
                     if not os.path.exists(rmf):
-                        logging.error("Could not find {0} to remove it".format(rmf))
+                        logging.error(_("Could not find {path} to remove it").format(path=rmf))
                     else:
                         os.remove(rmf)
                 else:
-                    logging.warn(msg + "\n\tUse `fdroid update -c` to create it.")
+                    logging.warn(msg + '\n\t' + _("Use `fdroid update -c` to create it."))
 
     copy_triple_t_store_metadata(apps)
     insert_obbs(repodirs[0], apps, apks)
@@ -1854,7 +1874,7 @@ def main():
             if os.path.isdir(repodir):
                 index.make(appdict, [appid], apks, repodir, False)
             else:
-                logging.info('Skipping index generation for ' + appid)
+                logging.info(_('Skipping index generation for {appid}').format(appid=appid))
         return
 
     if len(repodirs) > 1:
