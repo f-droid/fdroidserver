@@ -921,7 +921,7 @@ def _decode_bool(s):
 def parse_metadata(metadatapath, check_vcs=False):
     '''parse metadata file, optionally checking the git repo for metadata first'''
 
-    _, ext = fdroidserver.common.get_extension(metadatapath)
+    _ignored, ext = fdroidserver.common.get_extension(metadatapath)
     accepted = fdroidserver.common.config['accepted_formats']
     if ext not in accepted:
         warn_or_exception('"%s" is not an accepted format, convert to: %s' % (
@@ -970,7 +970,7 @@ def parse_metadata(metadatapath, check_vcs=False):
             else:
                 root_dir = '.'
             paths = fdroidserver.common.manifest_paths(root_dir, build.gradle)
-            _, _, app.id = fdroidserver.common.parse_androidmanifests(paths, app)
+            _ignored, _ignored, app.id = fdroidserver.common.parse_androidmanifests(paths, app)
 
     return app
 
@@ -1498,7 +1498,7 @@ def write_txt(mf, app):
 
 
 def write_metadata(metadatapath, app):
-    _, ext = fdroidserver.common.get_extension(metadatapath)
+    _ignored, ext = fdroidserver.common.get_extension(metadatapath)
     accepted = fdroidserver.common.config['accepted_formats']
     if ext not in accepted:
         warn_or_exception('Cannot write "%s", not an accepted format, use: %s'

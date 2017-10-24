@@ -519,7 +519,7 @@ def get_extension(filename):
 
 
 def has_extension(filename, ext):
-    _, f_ext = get_extension(filename)
+    _ignored, f_ext = get_extension(filename)
     return ext == f_ext
 
 
@@ -1745,7 +1745,7 @@ class KnownApks:
                 default_date = datetime.utcnow()
             self.apks[apkName] = (app, default_date)
             self.changed = True
-        _, added = self.apks[apkName]
+        _ignored, added = self.apks[apkName]
         return added
 
     def getapp(self, apkname):
