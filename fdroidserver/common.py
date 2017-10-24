@@ -1210,7 +1210,7 @@ def remove_debuggable_flags(root_dir):
     # Remove forced debuggable flags
     logging.debug("Removing debuggable flags from %s" % root_dir)
     for root, dirs, files in os.walk(root_dir):
-        if 'AndroidManifest.xml' in files:
+        if 'AndroidManifest.xml' in files and os.path.isfile(os.path.join(root, 'AndroidManifest.xml')):
             regsub_file(r'android:debuggable="[^"]*"',
                         '',
                         os.path.join(root, 'AndroidManifest.xml'))
