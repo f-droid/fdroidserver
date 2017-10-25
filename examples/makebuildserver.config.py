@@ -44,7 +44,7 @@
 #
 # debian_mirror = 'http://ftp.uk.debian.org/debian/'
 
-# The amount of RAM the build server will have (default: 1024)
+# The amount of RAM the build server will have (default: 2048)
 # memory = 3584
 
 # The number of CPUs the build server will have
