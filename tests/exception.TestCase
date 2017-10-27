@@ -62,4 +62,4 @@ if __name__ == "__main__":
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(ExceptionTest))
-    unittest.main()
+    unittest.main(failfast=False)

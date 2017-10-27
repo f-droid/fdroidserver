@@ -132,6 +132,41 @@ def setup_global_opts(parser):
                         help=_("Restrict output to warnings and errors"))
 
 
+def _add_java_paths_to_config(pathlist, thisconfig):
+    def path_version_key(s):
+        versionlist = []
+        for u in re.split('[^0-9]+', s):
+            try:
+                versionlist.append(int(u))
+            except ValueError:
+                pass
+        return versionlist
+
+    for d in sorted(pathlist, key=path_version_key):
+        if os.path.islink(d):
+            continue
+        j = os.path.basename(d)
+        # the last one found will be the canonical one, so order appropriately
+        for regex in [
+                r'^1\.([6-9])\.0\.jdk$',  # OSX
+                r'^jdk1\.([6-9])\.0_[0-9]+.jdk$',  # OSX and Oracle tarball
+                r'^jdk1\.([6-9])\.0_[0-9]+$',  # Oracle Windows
+                r'^jdk([6-9])-openjdk$',  # Arch
+                r'^java-([6-9])-openjdk$',  # Arch
+                r'^java-([6-9])-jdk$',  # Arch (oracle)
+                r'^java-1\.([6-9])\.0-.*$',  # RedHat
+                r'^java-([6-9])-oracle$',  # Debian WebUpd8
+                r'^jdk-([6-9])-oracle-.*$',  # Debian make-jpkg
+                r'^java-([6-9])-openjdk-[^c][^o][^m].*$',  # Debian
+                ]:
+            m = re.match(regex, j)
+            if not m:
+                continue
+            for p in [d, os.path.join(d, 'Contents', 'Home')]:
+                if os.path.exists(os.path.join(p, 'bin', 'javac')):
+                    thisconfig['java_paths'][m.group(1)] = p
+
+
 def fill_config_defaults(thisconfig):
     for k, v in default_config.items():
         if k not in thisconfig:
@@ -167,29 +202,7 @@ def fill_config_defaults(thisconfig):
             pathlist.append(os.getenv('JAVA_HOME'))
         if os.getenv('PROGRAMFILES') is not None:
             pathlist += glob.glob(os.path.join(os.getenv('PROGRAMFILES'), 'Java', 'jdk1.[6-9].*'))
-        for d in sorted(pathlist):
-            if os.path.islink(d):
-                continue
-            j = os.path.basename(d)
-            # the last one found will be the canonical one, so order appropriately
-            for regex in [
-                    r'^1\.([6-9])\.0\.jdk$',  # OSX
-                    r'^jdk1\.([6-9])\.0_[0-9]+.jdk$',  # OSX and Oracle tarball
-                    r'^jdk1\.([6-9])\.0_[0-9]+$',  # Oracle Windows
-                    r'^jdk([6-9])-openjdk$',  # Arch
-                    r'^java-([6-9])-openjdk$',  # Arch
-                    r'^java-([6-9])-jdk$',  # Arch (oracle)
-                    r'^java-1\.([6-9])\.0-.*$',  # RedHat
-                    r'^java-([6-9])-oracle$',  # Debian WebUpd8
-                    r'^jdk-([6-9])-oracle-.*$',  # Debian make-jpkg
-                    r'^java-([6-9])-openjdk-[^c][^o][^m].*$',  # Debian
-                    ]:
-                m = re.match(regex, j)
-                if not m:
-                    continue
-                for p in [d, os.path.join(d, 'Contents', 'Home')]:
-                    if os.path.exists(os.path.join(p, 'bin', 'javac')):
-                        thisconfig['java_paths'][m.group(1)] = p
+        _add_java_paths_to_config(pathlist, thisconfig)
 
     for java_version in ('7', '8', '9'):
         if java_version not in thisconfig['java_paths']:
@@ -506,7 +519,7 @@ def get_extension(filename):
 
 
 def has_extension(filename, ext):
-    _, f_ext = get_extension(filename)
+    _ignored, f_ext = get_extension(filename)
     return ext == f_ext
 
 
@@ -1732,7 +1745,7 @@ class KnownApks:
                 default_date = datetime.utcnow()
             self.apks[apkName] = (app, default_date)
             self.changed = True
-        _, added = self.apks[apkName]
+        _ignored, added = self.apks[apkName]
         return added
 
     def getapp(self, apkname):
@@ -2238,15 +2251,15 @@ def apk_strip_signatures(signed_apk, strip_manifest=False):
         os.rename(signed_apk, tmp_apk)
         with ZipFile(tmp_apk, 'r') as in_apk:
             with ZipFile(signed_apk, 'w') as out_apk:
-                for f in in_apk.infolist():
-                    if not apk_sigfile.match(f.filename):
+                for info in in_apk.infolist():
+                    if not apk_sigfile.match(info.filename):
                         if strip_manifest:
-                            if f.filename != 'META-INF/MANIFEST.MF':
-                                buf = in_apk.read(f.filename)
-                                out_apk.writestr(f.filename, buf)
+                            if info.filename != 'META-INF/MANIFEST.MF':
+                                buf = in_apk.read(info.filename)
+                                out_apk.writestr(info, buf)
                         else:
-                            buf = in_apk.read(f.filename)
-                            out_apk.writestr(f.filename, buf)
+                            buf = in_apk.read(info.filename)
+                            out_apk.writestr(info, buf)
 
 
 def apk_implant_signatures(apkpath, signaturefile, signedfile, manifest):
@@ -2259,19 +2272,21 @@ def apk_implant_signatures(apkpath, signaturefile, signedfile, manifest):
     """
     # get list of available signature files in metadata
     with tempfile.TemporaryDirectory() as tmpdir:
-        # orig_apk = os.path.join(tmpdir, 'orig.apk')
-        # os.rename(apkpath, orig_apk)
         apkwithnewsig = os.path.join(tmpdir, 'newsig.apk')
         with ZipFile(apkpath, 'r') as in_apk:
             with ZipFile(apkwithnewsig, 'w') as out_apk:
                 for sig_file in [signaturefile, signedfile, manifest]:
-                    out_apk.write(sig_file, arcname='META-INF/' +
-                                  os.path.basename(sig_file))
-                for f in in_apk.infolist():
-                    if not apk_sigfile.match(f.filename):
-                        if f.filename != 'META-INF/MANIFEST.MF':
-                            buf = in_apk.read(f.filename)
-                            out_apk.writestr(f.filename, buf)
+                    with open(sig_file, 'rb') as fp:
+                        buf = fp.read()
+                    info = zipfile.ZipInfo('META-INF/' + os.path.basename(sig_file))
+                    info.compress_type = zipfile.ZIP_DEFLATED
+                    info.create_system = 0  # "Windows" aka "FAT", what Android SDK uses
+                    out_apk.writestr(info, buf)
+                for info in in_apk.infolist():
+                    if not apk_sigfile.match(info.filename):
+                        if info.filename != 'META-INF/MANIFEST.MF':
+                            buf = in_apk.read(info.filename)
+                            out_apk.writestr(info, buf)
         os.remove(apkpath)
         p = SdkToolsPopen(['zipalign', '-v', '4', apkwithnewsig, apkpath])
         if p.returncode != 0:

@@ -92,6 +92,41 @@ class CommonTest(unittest.TestCase):
             else:
                 print('no build-tools found: ' + build_tools)
 
+    def test_find_java_root_path(self):
+        tmptestsdir = tempfile.mkdtemp(prefix='test_find_java_root_path', dir=self.tmpdir)
+        os.chdir(tmptestsdir)
+
+        all_pathlists = [
+            ([  # Debian
+                '/usr/lib/jvm/java-1.5.0-gcj-5-amd64',
+                '/usr/lib/jvm/java-8-openjdk-amd64',
+                '/usr/lib/jvm/java-1.8.0-openjdk-amd64',
+            ], '/usr/lib/jvm/java-8-openjdk-amd64'),
+            ([  # OSX
+                '/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk',
+                '/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk',
+                '/System/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk',
+            ], '/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk'),
+        ]
+
+        for pathlist, choice in all_pathlists:
+            # strip leading / to make relative paths to test without root
+            pathlist = [p[1:] for p in pathlist]
+
+            # create test file used in common._add_java_paths_to_config()
+            for p in pathlist:
+                if p.startswith('/System') or p.startswith('/Library'):
+                    basedir = os.path.join(p, 'Contents', 'Home', 'bin')
+                else:
+                    basedir = os.path.join(p, 'bin')
+                os.makedirs(basedir)
+                open(os.path.join(basedir, 'javac'), 'w').close()
+
+            config = dict()
+            config['java_paths'] = dict()
+            fdroidserver.common._add_java_paths_to_config(pathlist, config)
+            self.assertEqual(config['java_paths']['8'], choice[1:])
+
     def testIsApkDebuggable(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -177,7 +212,7 @@ class CommonTest(unittest.TestCase):
 
     def test_prepare_sources_refresh(self):
         packageName = 'org.fdroid.ci.test.app'
-        testdir = tempfile.mkdtemp(prefix='test_verify_apks', dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(prefix='test_prepare_sources_refresh', dir=self.tmpdir)
         print('testdir', testdir)
         os.chdir(testdir)
         os.mkdir('build')
@@ -462,4 +497,4 @@ if __name__ == "__main__":
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(CommonTest))
-    unittest.main()
+    unittest.main(failfast=True)

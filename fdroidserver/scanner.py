@@ -185,7 +185,7 @@ def scan_source(build_dir, build):
                 continue
 
             path_in_build_dir = os.path.relpath(filepath, build_dir)
-            _, ext = common.get_extension(path_in_build_dir)
+            _ignored, ext = common.get_extension(path_in_build_dir)
 
             if ext == 'so':
                 count += handleproblem('shared library', path_in_build_dir, filepath)
