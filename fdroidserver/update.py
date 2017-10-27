@@ -132,7 +132,7 @@ def update_wiki(apps, sortedids, apks):
         if app.Disabled:
             wikidata += '{{Disabled|' + app.Disabled + '}}\n'
         if app.AntiFeatures:
-            for af in app.AntiFeatures:
+            for af in sorted(app.AntiFeatures):
                 wikidata += '{{AntiFeature|' + af + '}}\n'
         if app.RequiresRoot:
             requiresroot = 'Yes'
