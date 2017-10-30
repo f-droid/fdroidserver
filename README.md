@@ -1,4 +1,6 @@
 
+<a name="build-status"></a>
+
 | <small>CI Builds</small> | <small>Debian</small> | <small>macOS & Ubuntu/LTS</small> |
 |----------------------|:-----------------:|:-----------------------------:|
 | _fdroidserver_ | [![fdroidserver status on Debian](https://gitlab.com/fdroid/fdroidserver/badges/master/build.svg)](https://gitlab.com/fdroid/fdroidserver/builds) | [![fdroidserver status on macOS & Ubuntu/LTS](https://travis-ci.org/f-droid/fdroidserver.svg?branch=master)](https://travis-ci.org/f-droid/fdroidserver) |
