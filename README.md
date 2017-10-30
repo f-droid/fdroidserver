@@ -1,6 +1,11 @@
-# F-Droid Server
 
-[![build status](https://gitlab.com/fdroid/fdroidserver/badges/master/build.svg)](https://gitlab.com/fdroid/fdroidserver/builds)
+| <small>CI Builds</small> | <small>Debian</small> | <small>macOS & Ubuntu/LTS</small> |
+|----------------------|:-----------------:|:-----------------------------:|
+| _fdroidserver_ | [![fdroidserver status on Debian](https://gitlab.com/fdroid/fdroidserver/badges/master/build.svg)](https://gitlab.com/fdroid/fdroidserver/builds) | [![fdroidserver status on macOS & Ubuntu/LTS](https://travis-ci.org/f-droid/fdroidserver.svg?branch=master)](https://travis-ci.org/f-droid/fdroidserver) |
+| _buildserver_ | [![buildserver status](https://jenkins.debian.net/job/reproducible_setup_fdroid_build_environment/badge/icon)](https://jenkins.debian.net/job/reproducible_setup_fdroid_build_environment) | |
+| _fdroid build --all_ | [![fdroid build all status](https://jenkins.debian.net/job/reproducible_fdroid_build_apps/badge/icon)](https://jenkins.debian.net/job/reproducible_fdroid_build_apps/) | |
+
+# F-Droid Server
 
 Server for [F-Droid](https://f-droid.org), the Free Software repository system
 for Android.
