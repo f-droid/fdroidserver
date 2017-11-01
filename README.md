@@ -54,3 +54,10 @@ Newer versions of docker-py might have this fixed already.
 For Debian based distributions:
 
 	apt-get install libffi-dev libssl-dev python-docker
+
+## Translation
+
+Everything can be translated.  See
+[Translation and Localization](https://f-droid.org/docs/Translation_and_Localization)
+for more info.
+[![translation status](https://hosted.weblate.org/widgets/f-droid/-/fdroidserver/multi-auto.svg)](https://hosted.weblate.org/engage/f-droid/?utm_source=widget)
