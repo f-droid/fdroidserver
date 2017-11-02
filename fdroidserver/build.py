@@ -1156,6 +1156,7 @@ def main():
                 # there are any.
                 if first:
                     vcs, build_dir = common.setup_vcs(app)
+                    logging.info("Using %s" % vcs.clientversion())
                     first = False
 
                 logging.debug("Checking " + build.versionName)

@@ -623,7 +623,6 @@ def setup_vcs(app):
     else:
         remote = app.Repo
     vcs = getvcs(app.RepoType, remote, build_dir)
-    logging.debug("Using %s" % vcs.clientversion())
 
     return vcs, build_dir
 
