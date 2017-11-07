@@ -32,6 +32,7 @@ else
         echo "No virtualization is used."
 fi
 sudo /bin/chmod -R a+rX /var/lib/libvirt/images
+ulimit -n 2048
 echo 'maximum allowed number of open file descriptors: ' `ulimit -n`
 ls -ld /var/lib/libvirt/images
 ls -l /var/lib/libvirt/images || echo no access
@@ -44,13 +45,13 @@ hostname || true
 
 # point to the Vagrant/VirtualBox configs created by reproducible_setup_fdroid_build_environment.sh
 # these variables are actually set in fdroidserver/jenkins-build-makebuildserver
-export SETUP_WORKSPACE=$(dirname $WORKSPACE)/reproducible_setup_fdroid_build_environment/fdroidserver
+export SETUP_WORKSPACE=$(dirname $WORKSPACE)/reproducible_setup_fdroid_build_environment
 export XDG_CONFIG_HOME=$SETUP_WORKSPACE
 export VBOX_USER_HOME=$SETUP_WORKSPACE/VirtualBox
 export VAGRANT_HOME=$SETUP_WORKSPACE/vagrant.d
 
-# let's see what is actually there:
-find $SETUP_WORKSPACE | grep -v fdroiddata/metadata/ | cut -b43-9999
+# make sure we have the right buildserver paths and its ready for use
+vagrant global-status | grep reproducible_setup_fdroid_build_environment
 
 # the way we handle jenkins slaves doesn't copy the workspace to the slaves
 # so we need to "manually" clone the git repo here…
@@ -73,7 +74,8 @@ if [ -e fdroiddata ]; then
     git remote update -p
     git checkout master
     git reset --hard origin/master
-    # no don't `git clean` here, it'll wipe the APKs in unsigned/
+    # keep all the cloned source repos
+    git clean -fdx --exclude build
 else
     git clone https://gitlab.com/fdroid/fdroiddata.git fdroiddata
     cd fdroiddata
