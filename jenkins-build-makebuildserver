@@ -52,6 +52,8 @@ echo "debian_mirror = 'https://deb.debian.org/debian/'" > $WORKSPACE/makebuildse
 echo "boot_timeout = 1200" >> $WORKSPACE/makebuildserver.config.py
 echo "apt_package_cache = True" >> $WORKSPACE/makebuildserver.config.py
 echo "copy_caches_from_host = True" >> $WORKSPACE/makebuildserver.config.py
+echo "memory = 6144" >> $WORKSPACE/makebuildserver.config.py
+echo "cpus = 2" >> $WORKSPACE/makebuildserver.config.py
 ./makebuildserver -vv --clean
 
 if [ -z "`vagrant box list | egrep '^buildserver\s+\((libvirt|virtualbox), [0-9]+\)$'`" ]; then
