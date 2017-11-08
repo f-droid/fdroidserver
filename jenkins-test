@@ -20,14 +20,13 @@ fi
 set -e
 set -x
 
-cd tests
-./run-tests $WORKSPACE/fdroiddata/unsigned
-
 # set up Android SDK to use the Debian packages in stretch
 export ANDROID_HOME=/usr/lib/android-sdk
 
-# the way we handle jenkins slaves doesn't copy the workspace to the slaves
-# so we need to "manually" clone the git repo here…
+cd tests
+./run-tests $WORKSPACE/fdroiddata/unsigned
+
+# this is set up and managed by jenkins-build-all
 cd $WORKSPACE/fdroiddata
 
 test -e config.py || ../fdroid init --verbose
