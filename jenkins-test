@@ -40,12 +40,12 @@ echo "gpgkey = 'CE71F7FB'" >> config.py
 test -d repo || mkdir repo
 test -d archive || mkdir archive
 # when everything is copied over to run on SIGN machine
-../fdroid publish --verbose
-../fdroid gpgsign --verbose
+../fdroid publish
+../fdroid gpgsign
 # when everything is copied over to run on BUILD machine
-../fdroid update --verbose --nosign
+../fdroid update --nosign
 # when everything is copied over to run on SIGN machine
 ../fdroid signindex --verbose
 
-../fdroid rewritemeta --verbose
+../fdroid rewritemeta --quiet
 git --no-pager diff
