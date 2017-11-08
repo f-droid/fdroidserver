@@ -1,0 +1,49 @@
+#!/bin/bash
+#
+# this is the script run by the Jenkins server to run the tools tests.  Be
+# sure to always run it in its dir, i.e. ./jenkins-test, otherwise it might
+# remove things that you don't want it to.
+
+if [ `dirname $0` != "." ]; then
+    echo "only run this script like ./`basename $0`"
+    exit
+fi
+
+# jenkins.debian.net slaves do not export WORKSPACE
+if [ -z $WORKSPACE ]; then
+    export WORKSPACE=`pwd`
+fi
+
+set -e
+set -x
+
+cd tests
+./run-tests $WORKSPACE/fdroiddata/unsigned
+
+# set up Android SDK to use the Debian packages in stretch
+export ANDROID_HOME=/usr/lib/android-sdk
+
+# the way we handle jenkins slaves doesn't copy the workspace to the slaves
+# so we need to "manually" clone the git repo here…
+cd $WORKSPACE/fdroiddata
+
+test -e config.py || ../fdroid init --verbose
+
+export GNUPGHOME=$WORKSPACE/tests/gnupghome
+echo "build_server_always = True" > config.py
+echo "gpghome = '$GNUPGHOME'" >> config.py
+echo "gpgkey = 'CE71F7FB'" >> config.py
+
+# publish process when building and signing are on separate machines
+test -d repo || mkdir repo
+test -d archive || mkdir archive
+# when everything is copied over to run on SIGN machine
+../fdroid publish --verbose
+../fdroid gpgsign --verbose
+# when everything is copied over to run on BUILD machine
+../fdroid update --verbose --nosign
+# when everything is copied over to run on SIGN machine
+../fdroid signindex --verbose
+
+../fdroid rewritemeta --verbose
+git --no-pager diff

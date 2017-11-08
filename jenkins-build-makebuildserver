@@ -86,12 +86,6 @@ if [ -z $ANDROID_HOME ]; then
     fi
 fi
 
-../fdroid init --verbose
-export GNUPGHOME=$WORKSPACE/tests/gnupghome
-echo "gpghome = '$GNUPGHOME'" >> config.py
-echo "gpgkey = 'CE71F7FB'" >> config.py
-echo "build_server_always = True" >> config.py
-
 # if it can't build fdroid, then its really broken
 ../fdroid build --verbose --stop --latest org.fdroid.fdroid
 # Gradle, JNI, preassemble
@@ -100,17 +94,3 @@ echo "build_server_always = True" >> config.py
 ../fdroid build --verbose --stop org.fdroid.fdroid:96150
 # test OTA update ZIP build and publish
 ../fdroid build --verbose --stop org.fdroid.fdroid.privileged.ota:2070
-
-# publish process when building and signing are on separate machines
-test -d repo || mkdir repo
-test -d archive || mkdir archive
-# copy everything over to run on SIGN machine
-../fdroid publish --verbose
-../fdroid gpgsign --verbose
-# copy everything over to run on BUILD machine
-../fdroid update --verbose --nosign
-# copy everything over to run on SIGN machine
-../fdroid signindex --verbose
-
-../fdroid rewritemeta --verbose
-git --no-pager diff

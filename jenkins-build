@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# this is the script run by the Jenkins server to run the build and tests.  Be
-# sure to always run it in its dir, i.e. ./jenkins-build.sh, otherwise it might
+# this is the script run by the Jenkins server to run the build tests.  Be
+# sure to always run it in its dir, i.e. ./jenkins-build, otherwise it might
 # remove things that you don't want it to.
 
 if [ `dirname $0` != "." ]; then
@@ -16,11 +16,6 @@ fi
 
 set -e
 set -x
-
-# this is a local repo on the Guardian Project Jenkins server
-cd tests
-#./complete-ci-tests /var/www/fdroid
-
 
 # report info about virtualization
 (dmesg | grep -i -e hypervisor -e qemu -e kvm) || true
