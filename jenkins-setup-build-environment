@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# runs here:
+# https://jenkins.debian.net/job/reproducible_setup_fdroid_build_environment
 
 if [ `dirname $0` != "." ]; then
     echo "only run this script like ./`basename $0`"

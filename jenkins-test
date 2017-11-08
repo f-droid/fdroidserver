@@ -3,6 +3,9 @@
 # this is the script run by the Jenkins server to run the tools tests.  Be
 # sure to always run it in its dir, i.e. ./jenkins-test, otherwise it might
 # remove things that you don't want it to.
+#
+# runs here:
+# https://jenkins.debian.net/job/reproducible_fdroid_test
 
 if [ `dirname $0` != "." ]; then
     echo "only run this script like ./`basename $0`"
