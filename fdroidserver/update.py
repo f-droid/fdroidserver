@@ -1715,9 +1715,9 @@ def main():
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument("--create-key", action="store_true", default=False,
-                        help=_("Create a repo signing key in a keystore"))
+                        help=_("Add a repo signing key to an unsigned repo"))
     parser.add_argument("-c", "--create-metadata", action="store_true", default=False,
-                        help=_("Create skeleton metadata files that are missing"))
+                        help=_("Add skeleton metadata files for APKs that are missing them"))
     parser.add_argument("--delete-unknown", action="store_true", default=False,
                         help=_("Delete APKs and/or OBBs without metadata from the repo"))
     parser.add_argument("-b", "--buildreport", action="store_true", default=False,
@@ -1732,7 +1732,7 @@ def main():
     parser.add_argument("-w", "--wiki", default=False, action="store_true",
                         help=_("Update the wiki"))
     parser.add_argument("--pretty", action="store_true", default=False,
-                        help=_("Produce human-readable index.xml"))
+                        help=_("Produce human-readable XML/JSON for index files"))
     parser.add_argument("--clean", action="store_true", default=False,
                         help=_("Clean update - don't uses caches, reprocess all APKs"))
     parser.add_argument("--nosign", action="store_true", default=False,
