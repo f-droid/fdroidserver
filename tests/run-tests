@@ -183,7 +183,7 @@ cd $WORKSPACE/tests/tmp/importer
 git remote update -p
 git clean -fdx
 # stick with known working commit, in case future commits break things for this code
-git reset --hard 985aa135524ab7dd1e70335fd47b22fa628b81b3
+git reset --hard fea54e1161d5eb9eb1a54e26253ef84d3ab63705
 if [ -d $ANDROID_HOME/platforms/android-23 ]; then
     echo "build_tools = '`ls -1 $ANDROID_HOME/build-tools/ | sort -n | tail -1`'" > config.py
     echo "force_build_tools = True" >> config.py
