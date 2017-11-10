@@ -24,7 +24,7 @@ set -x
 export ANDROID_HOME=/usr/lib/android-sdk
 
 cd tests
-./run-tests $WORKSPACE/fdroiddata/unsigned
+./run-tests $WORKSPACE
 
 # this is set up and managed by jenkins-build-all
 cd $WORKSPACE/fdroiddata
