@@ -74,7 +74,7 @@ if [ -e fdroiddata ]; then
     git checkout master
     git reset --hard origin/master
     # keep all the cloned source repos
-    git clean -fdx --exclude build
+    git clean -fdx --exclude build --exclude repo --exclude unsigned
 else
     git clone https://gitlab.com/fdroid/fdroiddata.git fdroiddata
     cd fdroiddata

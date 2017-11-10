@@ -30,11 +30,13 @@ cd tests
 cd $WORKSPACE/fdroiddata
 
 test -e config.py || ../fdroid init --verbose
+test -e keystore.jks || ../fdroid update --create-key
 
 export GNUPGHOME=$WORKSPACE/tests/gnupghome
 echo "build_server_always = True" > config.py
 echo "gpghome = '$GNUPGHOME'" >> config.py
 echo "gpgkey = 'CE71F7FB'" >> config.py
+chmod 0600 config.py
 
 # publish process when building and signing are on separate machines
 test -d repo || mkdir repo
