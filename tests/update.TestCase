@@ -42,19 +42,37 @@ class UpdateTest(unittest.TestCase):
 
         shutil.rmtree(os.path.join('repo', 'info.guardianproject.urzip'), ignore_errors=True)
 
+        shutil.rmtree(os.path.join('build', 'com.nextcloud.client'), ignore_errors=True)
+        shutil.copytree(os.path.join('source-files', 'com.nextcloud.client'), os.path.join('build', 'com.nextcloud.client'))
+
+        shutil.rmtree(os.path.join('build', 'com.nextcloud.client.dev'), ignore_errors=True)
+        shutil.copytree(os.path.join('source-files', 'com.nextcloud.client.dev'),
+                        os.path.join('build', 'com.nextcloud.client.dev'))
+
         apps = dict()
-        for packageName in ('info.guardianproject.urzip', 'org.videolan.vlc', 'obb.mainpatch.current'):
-            apps[packageName] = dict()
+        for packageName in ('info.guardianproject.urzip', 'org.videolan.vlc', 'obb.mainpatch.current',
+                            'com.nextcloud.client', 'com.nextcloud.client.dev'):
+            apps[packageName] = fdroidserver.metadata.App()
             apps[packageName]['id'] = packageName
             apps[packageName]['CurrentVersionCode'] = 0xcafebeef
+
         apps['info.guardianproject.urzip']['CurrentVersionCode'] = 100
+
+        buildnextcloudclient = fdroidserver.metadata.Build()
+        buildnextcloudclient.gradle = ['generic']
+        apps['com.nextcloud.client']['builds'] = [buildnextcloudclient]
+
+        buildnextclouddevclient = fdroidserver.metadata.Build()
+        buildnextclouddevclient.gradle = ['versionDev']
+        apps['com.nextcloud.client.dev']['builds'] = [buildnextclouddevclient]
+
         fdroidserver.update.insert_localized_app_metadata(apps)
 
         appdir = os.path.join('repo', 'info.guardianproject.urzip', 'en-US')
         self.assertTrue(os.path.isfile(os.path.join(appdir, 'icon.png')))
         self.assertTrue(os.path.isfile(os.path.join(appdir, 'featureGraphic.png')))
 
-        self.assertEqual(3, len(apps))
+        self.assertEqual(5, len(apps))
         for packageName, app in apps.items():
             self.assertTrue('localized' in app)
             self.assertTrue('en-US' in app['localized'])
@@ -77,6 +95,14 @@ class UpdateTest(unittest.TestCase):
                 self.assertEqual('featureGraphic.png', app['localized']['en-US']['featureGraphic'])
                 self.assertEqual(1, len(app['localized']['en-US']['phoneScreenshots']))
                 self.assertEqual(1, len(app['localized']['en-US']['sevenInchScreenshots']))
+            elif packageName == 'com.nextcloud.client':
+                self.assertEqual('Nextcloud', app['localized']['en-US']['name'])
+                self.assertEqual(1073, len(app['localized']['en-US']['description']))
+                self.assertEqual(78, len(app['localized']['en-US']['summary']))
+            elif packageName == 'com.nextcloud.client.dev':
+                self.assertEqual('Nextcloud Dev', app['localized']['en-US']['name'])
+                self.assertEqual(586, len(app['localized']['en-US']['description']))
+                self.assertEqual(79, len(app['localized']['en-US']['summary']))
 
     def test_insert_triple_t_metadata(self):
         importer = os.path.join(localmodule, 'tests', 'tmp', 'importer')
