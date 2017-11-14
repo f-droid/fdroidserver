@@ -86,9 +86,9 @@ chgrp vagrant $ANDROID_HOME
 chmod g+w $ANDROID_HOME
 find $ANDROID_HOME/ -type f -executable -print0 | xargs -0 chmod a+x
 
-# allow gradle to install newer build-tools versions
-chgrp vagrant $ANDROID_HOME/build-tools
-chmod g+w $ANDROID_HOME/build-tools
+# allow gradle to install newer build-tools and platforms
+chgrp vagrant $ANDROID_HOME/{build-tools,platforms}
+chmod g+w $ANDROID_HOME/{build-tools,platforms}
 
 # allow gradle/sdkmanager to install into the new m2repository
 test -d $ANDROID_HOME/extras/m2repository || mkdir -p $ANDROID_HOME/extras/m2repository
