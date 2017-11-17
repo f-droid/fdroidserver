@@ -65,28 +65,10 @@ def main():
                         help=_("Do not prompt for Android SDK path, just fail"))
     options = parser.parse_args()
 
-    # find root install prefix
-    tmp = os.path.dirname(sys.argv[0])
-    examplesdir = None
-    if os.path.basename(tmp) == 'bin':
-        egg_links = glob.glob(os.path.join(tmp, '..',
-                                           'local/lib/python3.*/site-packages/fdroidserver.egg-link'))
-        if egg_links:
-            # installed from local git repo
-            examplesdir = os.path.join(open(egg_links[0]).readline().rstrip(), 'examples')
-        else:
-            # try .egg layout
-            examplesdir = os.path.dirname(os.path.dirname(__file__)) + '/share/doc/fdroidserver/examples'
-            if not os.path.exists(examplesdir):  # use UNIX layout
-                examplesdir = os.path.dirname(tmp) + '/share/doc/fdroidserver/examples'
-    else:
-        # we're running straight out of the git repo
-        prefix = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
-        examplesdir = prefix + '/examples'
-
     aapt = None
     fdroiddir = os.getcwd()
     test_config = dict()
+    examplesdir = common.get_examples_dir()
     common.fill_config_defaults(test_config)
 
     # track down where the Android SDK is, the default is to use the path set

@@ -2756,3 +2756,26 @@ def is_repo_file(filename):
             b'index-v1.json',
             b'categories.txt',
         ]
+
+
+def get_examples_dir():
+    '''Return the dir where the fdroidserver example files are available'''
+    examplesdir = None
+    tmp = os.path.dirname(sys.argv[0])
+    if os.path.basename(tmp) == 'bin':
+        egg_links = glob.glob(os.path.join(tmp, '..',
+                                           'local/lib/python3.*/site-packages/fdroidserver.egg-link'))
+        if egg_links:
+            # installed from local git repo
+            examplesdir = os.path.join(open(egg_links[0]).readline().rstrip(), 'examples')
+        else:
+            # try .egg layout
+            examplesdir = os.path.dirname(os.path.dirname(__file__)) + '/share/doc/fdroidserver/examples'
+            if not os.path.exists(examplesdir):  # use UNIX layout
+                examplesdir = os.path.dirname(tmp) + '/share/doc/fdroidserver/examples'
+    else:
+        # we're running straight out of the git repo
+        prefix = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
+        examplesdir = prefix + '/examples'
+
+    return examplesdir
