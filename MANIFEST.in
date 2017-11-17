@@ -7,7 +7,6 @@ include buildserver/provision-apt-proxy
 include buildserver/provision-gradle
 include buildserver/provision-pip
 include buildserver/provision-qt-sdk
-include buildserver/provision-ubuntu-trusty-paramiko
 include buildserver/setup-env-vars
 include buildserver/Vagrantfile
 include completion/bash-completion
