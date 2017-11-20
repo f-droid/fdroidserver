@@ -2717,6 +2717,28 @@ def string_is_integer(string):
         return False
 
 
+def local_rsync(options, fromdir, todir):
+    '''Rsync method for local to local copying of things
+
+    This is an rsync wrapper with all the settings for safe use within
+    the various fdroidserver use cases. This uses stricter rsync
+    checking on all files since people using offline mode are already
+    prioritizing security above ease and speed.
+
+    '''
+    rsyncargs = ['rsync', '--recursive', '--safe-links', '--times', '--perms',
+                 '--one-file-system', '--delete', '--chmod=Da+rx,Fa-x,a+r,u+w']
+    if not options.no_checksum:
+        rsyncargs.append('--checksum')
+    if options.verbose:
+        rsyncargs += ['--verbose']
+    if options.quiet:
+        rsyncargs += ['--quiet']
+    logging.debug(' '.join(rsyncargs + [fromdir, todir]))
+    if subprocess.call(rsyncargs + [fromdir, todir]) != 0:
+        raise FDroidException()
+
+
 def get_per_app_repos():
     '''per-app repos are dirs named with the packageName of a single app'''
 

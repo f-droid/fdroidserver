@@ -262,22 +262,6 @@ def update_serverwebroot(serverwebroot, repo_section):
                 raise FDroidException()
 
 
-def _local_sync(fromdir, todir):
-    rsyncargs = ['rsync', '--recursive', '--safe-links', '--times', '--perms',
-                 '--one-file-system', '--delete', '--chmod=Da+rx,Fa-x,a+r,u+w']
-    # use stricter rsync checking on all files since people using offline mode
-    # are already prioritizing security above ease and speed
-    if not options.no_checksum:
-        rsyncargs.append('--checksum')
-    if options.verbose:
-        rsyncargs += ['--verbose']
-    if options.quiet:
-        rsyncargs += ['--quiet']
-    logging.debug(' '.join(rsyncargs + [fromdir, todir]))
-    if subprocess.call(rsyncargs + [fromdir, todir]) != 0:
-        raise FDroidException()
-
-
 def sync_from_localcopy(repo_section, local_copy_dir):
     '''Syncs the repo from "local copy dir" filesystem to this box
 
@@ -290,8 +274,9 @@ def sync_from_localcopy(repo_section, local_copy_dir):
     logging.info('Syncing from local_copy_dir to this repo.')
     # trailing slashes have a meaning in rsync which is not needed here, so
     # make sure both paths have exactly one trailing slash
-    _local_sync(os.path.join(local_copy_dir, repo_section).rstrip('/') + '/',
-                repo_section.rstrip('/') + '/')
+    common.local_rsync(options,
+                       os.path.join(local_copy_dir, repo_section).rstrip('/') + '/',
+                       repo_section.rstrip('/') + '/')
 
     offline_copy = os.path.join(local_copy_dir, BINARY_TRANSPARENCY_DIR)
     if os.path.exists(os.path.join(offline_copy, '.git')):
@@ -308,7 +293,7 @@ def update_localcopy(repo_section, local_copy_dir):
 
     '''
     # local_copy_dir is guaranteed to have a trailing slash in main() below
-    _local_sync(repo_section, local_copy_dir)
+    common.local_rsync(options, repo_section, local_copy_dir)
 
     offline_copy = os.path.join(os.getcwd(), BINARY_TRANSPARENCY_DIR)
     if os.path.isdir(os.path.join(offline_copy, '.git')):
@@ -357,7 +342,9 @@ def update_servergitmirrors(servergitmirrors, repo_section):
             shutil.rmtree(dotgit)
 
         # rsync is very particular about trailing slashes
-        _local_sync(repo_section.rstrip('/') + '/', git_repodir.rstrip('/') + '/')
+        common.local_rsync(options,
+                           repo_section.rstrip('/') + '/',
+                           git_repodir.rstrip('/') + '/')
 
         # use custom SSH command if identity_file specified
         ssh_cmd = 'ssh -oBatchMode=yes'
