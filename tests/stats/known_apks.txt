@@ -9,4 +9,4 @@ obb.main.twoversions_1101615.apk obb.main.twoversions 2016-01-01
 obb.main.twoversions_1101617.apk obb.main.twoversions 2016-06-20
 obb.mainpatch.current_1619.apk obb.mainpatch.current 2016-04-23
 obb.mainpatch.current_1619_another-release-key.apk obb.mainpatch.current 2017-06-01
-urzip-Sergey Vasilyevich Rakhmaninov; Серге́й Васи́льевич Рахма́нинов, IPA: [sʲɪrˈɡʲej rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢尔盖·瓦西里耶维奇·拉赫玛.apk尼诺夫 .apk info.guardianproject.urzip 2016-06-23
+urzip-Rakhmaninov; Рахма́нинов, IPA: [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢尔盖·瓦西里耶维奇·拉赫玛.apk尼诺夫 .apk info.guardianproject.urzip 2016-06-23
