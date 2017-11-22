@@ -264,6 +264,12 @@ __complete_btlog() {
 	__complete_options
 }
 
+__complete_nightly() {
+	opts="-v -q"
+	lopts="--show-secret-var"
+	__complete_options
+}
+
 __complete_stats() {
 	opts="-v -q -d"
 	lopts="--verbose --quiet --download"
@@ -310,6 +316,7 @@ import \
 init \
 install \
 lint \
+nightly \
 publish \
 readmeta \
 rewritemeta \

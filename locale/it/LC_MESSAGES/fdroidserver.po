@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2017-10-19 22:13+0200\n"
+"POT-Creation-Date: 2017-11-22 23:24+0100\n"
 "PO-Revision-Date: 2017-07-12 15:24+0000\n"
 "Last-Translator: Roberto Albano De Rosa <robertoalbano@protonmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/"
@@ -18,6 +18,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2.16-dev\n"
+
+#: ../fdroidserver/nightly.py
+msgid ""
+"\n"
+"SSH Public Key to be used as Deploy Key:"
+msgstr ""
+
+#: ../fdroidserver/nightly.py
+#, python-brace-format
+msgid ""
+"\n"
+"{path} encoded for the DEBUG_KEYSTORE secret variable:"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -32,6 +45,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "\"{path}\" is not an accepted format, convert to: {formats}"
 msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
@@ -119,6 +137,11 @@ msgstr ""
 msgid "'{path}' failed to execute!"
 msgstr ""
 
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
+msgstr ""
+
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
@@ -139,6 +162,14 @@ msgstr ""
 #: ../fdroid
 msgid "Add a new application from its source code"
 msgstr "Aggiungi una nuova applicazione dal suo codice sorgente"
+
+#: ../fdroidserver/update.py
+msgid "Add a repo signing key to an unsigned repo"
+msgstr ""
+
+#: ../fdroidserver/update.py
+msgid "Add skeleton metadata files for APKs that are missing them"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -231,6 +262,13 @@ msgstr ""
 msgid "Build only the latest version of each package"
 msgstr ""
 
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid ""
+"Build should have comma-separated versionName and versionCode, not "
+"\"{value}\", in {linedesc}"
+msgstr ""
+
 #: ../fdroidserver/init.py
 #, python-format
 msgid "Built repo based in \"%s\" with this config:"
@@ -242,8 +280,23 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] ""
 msgstr[1] ""
 
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Cannot find a packageName for {path}!"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Cannot resolve app id {appid}"
+msgstr ""
+
 #: ../fdroidserver/rewritemeta.py
 msgid "Cannot use --list and --to at the same time"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Cannot write \"{path}\", not an accepted format, use: {formats}"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -366,6 +419,10 @@ msgstr ""
 msgid "Creating unsigned index in preparation for signing"
 msgstr ""
 
+#: ../fdroidserver/nightly.py
+msgid "DEBUG_KEYSTORE is not set or the value is incomplete"
+msgstr ""
+
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
 msgstr ""
@@ -412,7 +469,7 @@ msgid ""
 "connection"
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/server.py ../fdroidserver/nightly.py
 msgid "Don't use rsync checksums"
 msgstr ""
 
@@ -429,6 +486,12 @@ msgstr ""
 msgid "Downloading {url} failed. {error}"
 msgstr ""
 
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid ""
+"Duplicate build recipe found for versionCode {versionCode} in {linedesc}"
+msgstr ""
+
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
@@ -436,6 +499,15 @@ msgstr ""
 
 #: ../fdroid
 msgid "Dynamically scan APKs post build"
+msgstr ""
+
+#: ../fdroidserver/nightly.py
+msgid "ERROR: unsupported CI type, patches welcome!"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Empty build flag at {linedesc}"
 msgstr ""
 
 #: ../fdroidserver/init.py
@@ -534,6 +606,11 @@ msgstr ""
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Found invalid versionCodes for some apps"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Found multiple metadata files for {appid}"
 msgstr ""
 
 #: ../fdroidserver/index.py
@@ -640,6 +717,21 @@ msgstr ""
 msgid "Invalid APK"
 msgstr ""
 
+#: ../fdroidserver/metadata.py
+#, python-format
+msgid "Invalid boolean '%s'"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Invalid build flag at {line} in {linedesc}"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Invalid build format: {value} in {name}"
+msgstr ""
+
 #: ../fdroidserver/lint.py
 msgid "Invalid bulleted list"
 msgstr ""
@@ -654,6 +746,15 @@ msgstr ""
 msgid "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"
 msgstr ""
 
+#: ../fdroidserver/metadata.py
+#, python-format
+msgid "Invalid metadata in %s:%d"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+msgid "Invalid metadata in: "
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Invalid name for published file: %s"
@@ -662,6 +763,11 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid package name {0}"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Invalid versionCode: \"{versionCode}\" is not an integer!"
 msgstr ""
 
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
@@ -723,6 +829,11 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 msgid "No attached devices found"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "No commit specified for {versionName} in {linedesc}"
 msgstr ""
 
 #: ../fdroidserver/index.py
@@ -865,6 +976,15 @@ msgstr ""
 msgid "Prepare drozer to run a scan"
 msgstr ""
 
+#: ../fdroidserver/nightly.py
+msgid "Print the secret variable to the terminal for easy copy/paste"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Problem with description of {appid}: {error}"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Problem with xml at '{path}'"
@@ -882,6 +1002,10 @@ msgstr ""
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Processing {appid}"
+msgstr ""
+
+#: ../fdroidserver/update.py
+msgid "Produce human-readable XML/JSON for index files"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -1009,6 +1133,10 @@ msgid_plural "Scanner found {} problems"
 msgstr[0] ""
 msgstr[1] ""
 
+#: ../fdroid
+msgid "Set up an app build for a nightly build repo"
+msgstr ""
+
 #: ../fdroidserver/build.py
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
 msgstr ""
@@ -1125,6 +1253,10 @@ msgstr ""
 msgid "The root dir for local_copy_dir \"{path}\" does not exist!"
 msgstr ""
 
+#: ../fdroidserver/nightly.py
+msgid "The the file to be included in the repo (path or glob)"
+msgstr ""
+
 #: ../fdroidserver/publish.py
 msgid "There is a keyalias collision - publishing halted"
 msgstr ""
@@ -1148,9 +1280,18 @@ msgstr ""
 msgid "URL shorteners should not be used"
 msgstr ""
 
+#: ../fdroidserver/metadata.py
+msgid "URL title is just the URL, use brackets: [URL]"
+msgstr ""
+
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "URL {url} in Description: {error}"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Unexpected text on same line as {field} in {linedesc}"
 msgstr ""
 
 #: ../fdroid
@@ -1161,6 +1302,16 @@ msgstr "Eccezione sconosciuta trovata!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-format
+msgid "Unknown metadata format: %s"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Unknown metadata format: {path}"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1179,6 +1330,15 @@ msgstr ""
 msgid "Unnecessary trailing space"
 msgstr ""
 
+#: ../fdroidserver/metadata.py
+msgid "Unrecognised app field: "
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Unrecognised field '{field}' in {linedesc}"
+msgstr ""
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported graphics file found: {path}"
@@ -1187,6 +1347,24 @@ msgstr ""
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Unsupported metadata format, use: --to [{supported}]"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+msgid "Unterminated ]"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+msgid "Unterminated ]]"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Unterminated build in {name}"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Unterminated continuation in {name}"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -1281,6 +1459,11 @@ msgstr ""
 msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
 msgstr ""
 
+#: ../fdroidserver/nightly.py
+#, python-brace-format
+msgid "adding IdentityFile to {path}"
+msgstr ""
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "adding to {name}: {path}"
@@ -1316,6 +1499,10 @@ msgstr ""
 msgid "argument \"-\" with mode %r"
 msgstr ""
 
+#: ../fdroidserver/nightly.py
+msgid "attempting bare ssh connection to test deploy key:"
+msgstr ""
+
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "can't open '%s': %s"
@@ -1328,6 +1515,15 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
+msgstr ""
+
+#: ../fdroidserver/nightly.py
+msgid "cannot publish update, did you set the deploy key?"
+msgstr ""
+
+#: ../fdroidserver/nightly.py
+#, python-brace-format
+msgid "cloning {url}"
 msgstr ""
 
 #: ../fdroidserver/server.py
@@ -1344,6 +1540,11 @@ msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] ""
 msgstr[1] ""
+
+#: ../fdroidserver/nightly.py
+#, python-brace-format
+msgid "copying {apkfilename} into {path}"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1521,8 +1722,20 @@ msgstr ""
 msgid "optional arguments"
 msgstr ""
 
+#: ../fdroidserver/nightly.py
+#, python-brace-format
+msgid "overwriting existing {path}"
+msgstr ""
+
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "positional arguments"
+msgstr ""
+
+#: ../fdroidserver/signatures.py
+#, python-brace-format
+msgid ""
+"refuse downloading via insecure HTTP connection (use HTTPS or specify --no-"
+"https-check): {apkfilename}"
 msgstr ""
 
 #: ../fdroidserver/signatures.py
@@ -1614,6 +1827,11 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "{field} not terminated in {name}"
 msgstr ""
 
 #: ../fdroidserver/update.py
