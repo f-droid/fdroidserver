@@ -2717,6 +2717,28 @@ def string_is_integer(string):
         return False
 
 
+def local_rsync(options, fromdir, todir):
+    '''Rsync method for local to local copying of things
+
+    This is an rsync wrapper with all the settings for safe use within
+    the various fdroidserver use cases. This uses stricter rsync
+    checking on all files since people using offline mode are already
+    prioritizing security above ease and speed.
+
+    '''
+    rsyncargs = ['rsync', '--recursive', '--safe-links', '--times', '--perms',
+                 '--one-file-system', '--delete', '--chmod=Da+rx,Fa-x,a+r,u+w']
+    if not options.no_checksum:
+        rsyncargs.append('--checksum')
+    if options.verbose:
+        rsyncargs += ['--verbose']
+    if options.quiet:
+        rsyncargs += ['--quiet']
+    logging.debug(' '.join(rsyncargs + [fromdir, todir]))
+    if subprocess.call(rsyncargs + [fromdir, todir]) != 0:
+        raise FDroidException()
+
+
 def get_per_app_repos():
     '''per-app repos are dirs named with the packageName of a single app'''
 
@@ -2756,3 +2778,26 @@ def is_repo_file(filename):
             b'index-v1.json',
             b'categories.txt',
         ]
+
+
+def get_examples_dir():
+    '''Return the dir where the fdroidserver example files are available'''
+    examplesdir = None
+    tmp = os.path.dirname(sys.argv[0])
+    if os.path.basename(tmp) == 'bin':
+        egg_links = glob.glob(os.path.join(tmp, '..',
+                                           'local/lib/python3.*/site-packages/fdroidserver.egg-link'))
+        if egg_links:
+            # installed from local git repo
+            examplesdir = os.path.join(open(egg_links[0]).readline().rstrip(), 'examples')
+        else:
+            # try .egg layout
+            examplesdir = os.path.dirname(os.path.dirname(__file__)) + '/share/doc/fdroidserver/examples'
+            if not os.path.exists(examplesdir):  # use UNIX layout
+                examplesdir = os.path.dirname(tmp) + '/share/doc/fdroidserver/examples'
+    else:
+        # we're running straight out of the git repo
+        prefix = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
+        examplesdir = prefix + '/examples'
+
+    return examplesdir

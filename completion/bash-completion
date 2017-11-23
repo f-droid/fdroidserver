@@ -145,7 +145,7 @@ __complete_install() {
 
 __complete_update() {
 	opts="-c -v -q -b -i -I -e -w"
-	lopts="--create-metadata --create-key --verbose --quiet --buildreport
+	lopts="--create-metadata --verbose --quiet --buildreport
  --interactive --icons --editor --wiki --pretty --clean --delete-unknown
  --nosign --rename-apks --use-date-from-apk"
 	case "${prev}" in
@@ -264,6 +264,12 @@ __complete_btlog() {
 	__complete_options
 }
 
+__complete_nightly() {
+	opts="-v -q"
+	lopts="--show-secret-var"
+	__complete_options
+}
+
 __complete_stats() {
 	opts="-v -q -d"
 	lopts="--verbose --quiet --download"
@@ -310,6 +316,7 @@ import \
 init \
 install \
 lint \
+nightly \
 publish \
 readmeta \
 rewritemeta \

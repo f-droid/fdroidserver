@@ -14,7 +14,8 @@ set -e
 set -x
 
 if [ -z $WORKSPACE ]; then
-    export WORKSPACE=`pwd`/..
+    WORKSPACE=`cd $(dirname $0)/.. && pwd`
+    echo "Setting Workspace to $WORKSPACE"
 fi
 
 if [ -z $ANDROID_HOME ]; then
@@ -58,6 +59,19 @@ else
     echo "pyvenv required to run this test suite!"
     exit 1
 fi
+
+
+#------------------------------------------------------------------------------#
+# make sure that translations do not cause stacktraces
+cd $WORKSPACE/locale
+for locale in *; do
+    if [ ! -d $locale ]; then
+        continue
+    fi
+    for cmd in `sed -n 's/.*("\(.*\)", *_.*/\1/p' $WORKSPACE/fdroid`; do
+        LANGUAGE=$locale $WORKSPACE/fdroid $cmd --help > /dev/null
+    done
+done
 
 
 #------------------------------------------------------------------------------#
