@@ -50,8 +50,8 @@ packages="
  flex
  gettext/jessie-backports
  gettext-base/jessie-backports
- git-core
- git-svn
+ git-core/jessie-backports
+ git-svn/jessie-backports
  gperf
  graphviz
  imagemagick
