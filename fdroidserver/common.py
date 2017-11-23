@@ -782,6 +782,30 @@ class vcs_git(vcs):
     def clientversioncmd(self):
         return ['git', '--version']
 
+    def GitFetchFDroidPopen(self, gitargs, envs=dict(), cwd=None, output=True):
+        '''Prevent git fetch/clone/submodule from hanging at the username/password prompt
+
+        While fetch/pull/clone respect the command line option flags,
+        it seems that submodule commands do not.  They do seem to
+        follow whatever is in env vars, if the version of git is new
+        enough.  So we just throw the kitchen sink at it to see what
+        sticks.
+
+        '''
+        if cwd is None:
+            cwd = self.local
+        git_config = []
+        for domain in ('bitbucket.org', 'github.com', 'gitlab.com'):
+            git_config.append('-c')
+            git_config.append('url.https://u:p@' + domain + '/.insteadOf=git@' + domain + ':')
+            git_config.append('-c')
+            git_config.append('url.https://u:p@' + domain + '.insteadOf=git://' + domain)
+            git_config.append('-c')
+            git_config.append('url.https://u:p@' + domain + '.insteadOf=https://' + domain)
+        envs.update({'GIT_TERMINAL_PROMPT': '0'})  # supported in git >= 2.3
+        return FDroidPopen(['git', ] + git_config + gitargs,
+                           envs=envs, cwd=cwd, output=output)
+
     def checkrepo(self):
         """If the local directory exists, but is somehow not a git repository,
         git will traverse up the directory tree until it finds one
@@ -798,7 +822,7 @@ class vcs_git(vcs):
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout
-            p = FDroidPopen(['git', 'clone', self.remote, self.local])
+            p = FDroidPopen(['git', 'clone', self.remote, self.local], cwd=None)
             if p.returncode != 0:
                 self.clone_failed = True
                 raise VCSException("Git clone failed", p.output)
@@ -818,10 +842,10 @@ class vcs_git(vcs):
                 raise VCSException(_("Git clean failed"), p.output)
             if not self.refreshed:
                 # Get latest commits and tags from remote
-                p = FDroidPopen(['git', 'fetch', 'origin'], cwd=self.local)
+                p = self.GitFetchFDroidPopen(['fetch', 'origin'])
                 if p.returncode != 0:
                     raise VCSException(_("Git fetch failed"), p.output)
-                p = FDroidPopen(['git', 'fetch', '--prune', '--tags', 'origin'], cwd=self.local, output=False)
+                p = self.GitFetchFDroidPopen(['fetch', '--prune', '--tags', 'origin'], output=False)
                 if p.returncode != 0:
                     raise VCSException(_("Git fetch failed"), p.output)
                 # Recreate origin/HEAD as git clone would do it, in case it disappeared
@@ -857,16 +881,14 @@ class vcs_git(vcs):
             lines = f.readlines()
         with open(submfile, 'w') as f:
             for line in lines:
-                if 'git@github.com' in line:
-                    line = line.replace('git@github.com:', 'https://github.com/')
-                if 'git@gitlab.com' in line:
-                    line = line.replace('git@gitlab.com:', 'https://gitlab.com/')
+                for domain in ('bitbucket.org', 'github.com', 'gitlab.com'):
+                    line = re.sub('git@' + domain + ':', 'https://u:p@' + domain + '/', line)
                 f.write(line)
 
         p = FDroidPopen(['git', 'submodule', 'sync'], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException(_("Git submodule sync failed"), p.output)
-        p = FDroidPopen(['git', 'submodule', 'update', '--init', '--force', '--recursive'], cwd=self.local)
+        p = self.GitFetchFDroidPopen(['submodule', 'update', '--init', '--force', '--recursive'])
         if p.returncode != 0:
             raise VCSException(_("Git submodule update failed"), p.output)
 
