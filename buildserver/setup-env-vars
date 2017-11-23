@@ -13,3 +13,7 @@ echo export ANDROID_HOME=$1 >> $bsenv
 echo 'export PATH=$PATH:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:/opt/gradle/bin' >> $bsenv
 
 chmod 0644 $bsenv
+
+# make sure that SSH never hangs at a password or key prompt
+printf '    StrictHostKeyChecking yes' >> /etc/ssh/ssh_config
+printf '    BatchMode yes' >> /etc/ssh/config

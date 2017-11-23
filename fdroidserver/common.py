@@ -802,7 +802,14 @@ class vcs_git(vcs):
             git_config.append('url.https://u:p@' + domain + '.insteadOf=git://' + domain)
             git_config.append('-c')
             git_config.append('url.https://u:p@' + domain + '.insteadOf=https://' + domain)
-        envs.update({'GIT_TERMINAL_PROMPT': '0'})  # supported in git >= 2.3
+        # add helpful tricks supported in git >= 2.3
+        ssh_command = 'ssh -oBatchMode=yes -oStrictHostKeyChecking=yes'
+        git_config.append('-c')
+        git_config.append('core.sshCommand="' + ssh_command + '"')  # git >= 2.10
+        envs.update({
+            'GIT_TERMINAL_PROMPT': '0',
+            'GIT_SSH_COMMAND': ssh_command,  # git >= 2.3
+        })
         return FDroidPopen(['git', ] + git_config + gitargs,
                            envs=envs, cwd=cwd, output=output)
 
