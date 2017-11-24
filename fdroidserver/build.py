@@ -98,22 +98,19 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
 
         # Helper to copy the contents of a directory to the server...
         def send_dir(path):
-            startroot = os.path.dirname(path)
-            main = os.path.basename(path)
-            ftp.mkdir(main)
-            for root, dirs, files in os.walk(path):
-                rr = os.path.relpath(root, startroot)
-                ftp.chdir(rr)
-                for d in dirs:
-                    ftp.mkdir(d)
-                for f in files:
-                    lfile = os.path.join(startroot, rr, f)
-                    if not os.path.islink(lfile):
-                        ftp.put(lfile, f)
-                        ftp.chmod(f, os.stat(lfile).st_mode)
-                for i in range(len(rr.split('/'))):
-                    ftp.chdir('..')
-            ftp.chdir('..')
+            logging.debug("rsyncing " + path + " to " + ftp.getcwd())
+            subprocess.check_call(['rsync', '-rple',
+                                   'ssh -o StrictHostKeyChecking=no' +
+                                   ' -o UserKnownHostsFile=/dev/null' +
+                                   ' -o LogLevel=FATAL' +
+                                   ' -o IdentitiesOnly=yes' +
+                                   ' -o PasswordAuthentication=no' +
+                                   ' -p ' + str(sshinfo['port']) +
+                                   ' -i ' + sshinfo['idfile'],
+                                   path,
+                                   sshinfo['user'] +
+                                   "@" + sshinfo['hostname'] +
+                                   ":" + ftp.getcwd()])
 
         logging.info("Preparing server for build...")
         serverpath = os.path.abspath(os.path.dirname(__file__))
