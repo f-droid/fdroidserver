@@ -146,7 +146,7 @@ def get_build_vm(srvdir, provider=None):
     has_libvirt_machine = isdir(joinpath(abssrvdir, '.vagrant',
                                          'machines', 'default', 'libvirt'))
     has_vbox_machine = isdir(joinpath(abssrvdir, '.vagrant',
-                                      'machines', 'default', 'libvirt'))
+                                      'machines', 'default', 'virtualbox'))
     if has_libvirt_machine and has_vbox_machine:
         logger.info('build vm provider lookup found virtualbox and libvirt, defaulting to \'virtualbox\'')
         return VirtualboxBuildVm(abssrvdir)
