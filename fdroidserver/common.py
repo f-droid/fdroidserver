@@ -1583,10 +1583,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             dest = os.path.join(build_dir, part)
             logging.info("Removing {0}".format(part))
             if os.path.lexists(dest):
-                if os.path.islink(dest):
-                    FDroidPopen(['unlink', dest], output=False)
+                # rmtree can only handle directories that are not symlinks, so catch anything else
+                if not os.path.isdir(dest) or os.path.islink(dest):
+                    os.remove(dest)
                 else:
-                    FDroidPopen(['rm', '-rf', dest], output=False)
+                    shutil.rmtree(dest)
             else:
                 logging.info("...but it didn't exist")
 
