@@ -7,6 +7,7 @@ ndk_paths = {
     'r13b': "/home/vagrant/android-ndk/r13b",
     'r14b': "/home/vagrant/android-ndk/r14b",
     'r15c': "/home/vagrant/android-ndk/r15c",
+    'r16': "/home/vagrant/android-ndk/r16",
 }
 qt_sdk_path = "/home/vagrant/qt-sdk/5.7.0/5.7"
 java_paths = {
