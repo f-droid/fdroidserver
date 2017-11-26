@@ -29,8 +29,9 @@ cd tests
 # this is set up and managed by jenkins-build-all
 cd $WORKSPACE/fdroiddata
 
-test -e config.py || ../fdroid init --verbose
-test -e keystore.jks || ../fdroid update --create-key
+rm -f config.py
+../fdroid init --verbose
+../fdroid update
 
 export GNUPGHOME=$WORKSPACE/tests/gnupghome
 echo "build_server_always = True" > config.py
