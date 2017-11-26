@@ -18,6 +18,7 @@
 #     'r13b': None,
 #     'r14b': None,
 #     'r15c': None,
+#     'r16': None,
 # }
 
 # Path to the Qt SDK. It is of the form "/path/to/Qt5.7.0/5.7"

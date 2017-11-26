@@ -80,6 +80,7 @@ default_config = {
         'r13b': None,
         'r14b': None,
         'r15c': None,
+        'r16': None,
     },
     'qt_sdk_path': None,
     'build_tools': "25.0.2",
