@@ -79,6 +79,7 @@ else
 fi
 
 cd fdroiddata
+echo "build_server_always = True" > config.py
 
 if [ -z $ANDROID_HOME ]; then
     if [ -e ~/.android/bashrc ]; then
