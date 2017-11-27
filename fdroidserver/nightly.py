@@ -159,7 +159,7 @@ def main():
             logging.debug(_('cloning {url}').format(url=clone_url))
             try:
                 git.Repo.clone_from(clone_url, git_mirror_path)
-            except:
+            except Exception:
                 pass
         if not os.path.isdir(git_mirror_repodir):
             os.makedirs(git_mirror_repodir, mode=0o755)
@@ -192,7 +192,7 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             img = qrcode.make('Some data here')
             with open(icon_path, 'wb') as fp:
                 fp.write(img)
-        except:
+        except Exception:
             exampleicon = os.path.join(common.get_examples_dir(), 'fdroid-icon.png')
             shutil.copy(exampleicon, icon_path)
         mirror_git_repo.git.add(all=True)
@@ -251,13 +251,13 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
                 subprocess.check_call(['ssh', '-Tvi', ssh_private_key_file,
                                        '-oIdentitiesOnly=yes', '-oStrictHostKeyChecking=no',
                                        servergitmirror.split(':')[0]])
-            except:
+            except subprocess.CalledProcessError:
                 pass
 
         subprocess.check_call(['fdroid', 'update', '--rename-apks', '--verbose'], cwd=repo_basedir)
         try:
             subprocess.check_call(['fdroid', 'server', 'update', '--verbose'], cwd=repo_basedir)
-        except:
+        except subprocess.CalledProcessError:
             logging.error(_('cannot publish update, did you set the deploy key?')
                           + '\n' + deploy_key_url)
             sys.exit(1)
