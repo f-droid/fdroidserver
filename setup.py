@@ -66,7 +66,7 @@ else:
     readme = ''
 
 setup(name='fdroidserver',
-      version='1.0.dev0',
+      version='0.9.1',
       description='F-Droid Server Tools',
       long_description=readme,
       author='The F-Droid Project',
