@@ -1,18 +1,23 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Kabyle (F-Droid)\n"
+"Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2017-11-22 23:24+0100\n"
-"PO-Revision-Date: 2017-08-11 19:09+0100\n"
-"Last-Translator: Belkacem Mohammed <belkacem77@gmail.com>\n"
-"Language-Team: Kabyle <https://hosted.weblate.org/projects/f-droid/"
-"fdroidserver/kab/>\n"
+"POT-Creation-Date: 2017-11-10 07:47+0200\n"
+"PO-Revision-Date: 2017-11-10 09:07+0000\n"
+"Last-Translator: Muḥend Belqasem <belkacem77@gmail.com>\n"
+"Language-Team: Kabyle "
+"<https://hosted.weblate.org/projects/f-droid/fdroidserver/kab/>\n"
 "Language: kab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Weblate 2.18-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -85,27 +90,27 @@ msgstr ""
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keypass' not found in config.py!"
-msgstr ""
+msgstr "'keypass' ulac-it di config.py!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystore' not found in config.py!"
-msgstr ""
+msgstr "'keystore' ulac-it di config.py!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.py!"
-msgstr ""
+msgstr "'keystorepass' ulac-it di config.py!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.py!"
-msgstr ""
+msgstr "'repo_keyalias' ulac-it di config.py!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'required' d taɣiret ur iṣeḥḥan ara i usideg"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in 'config.py'!"
-msgstr ""
+msgstr "'sdk_path' ur yettwasbadu ara 'config.py'!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -113,12 +118,12 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
-msgstr ""
+msgstr "'{aapt}' d aqbuṛ, fdroid yesra build-tools-23.0.0 neɣ amaynut!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "'{apkfilename}' is already installed on {dev}."
-msgstr ""
+msgstr "'{apkfilename}' yebded yakan ɣef {dev}."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -126,11 +131,13 @@ msgid ""
 "'{field}' will be in random order! Use () or [] brackets if order is "
 "important!"
 msgstr ""
+"'{field}' ad yili s usmizzwer agacuran ! Seqdec () neɣ tuccar [] ma yella "
+"ilaq usmizzwer!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{path}' failed to execute!"
-msgstr ""
+msgstr "'{path}' ur izmir ara ad yettwaselkem!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -140,11 +147,11 @@ msgstr ""
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
-msgstr ""
+msgstr "...anadi n ileqman ur yeddi ara i {appid} : {error}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() ur yettwasbadu ara"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
@@ -577,7 +584,7 @@ msgstr ""
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
 msgid "Finished"
-msgstr ""
+msgstr "Immed"
 
 #: ../fdroidserver/lint.py
 msgid "Flattr donation methods belong in the FlattrID flag"
@@ -693,7 +700,7 @@ msgstr ""
 #: ../fdroidserver/install.py
 #, python-format
 msgid "Installing %s..."
-msgstr ""
+msgstr "Asbeddi n %s..."
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -926,7 +933,7 @@ msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "Options"
-msgstr ""
+msgstr "Iɣewwaṛen"
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
@@ -1394,7 +1401,7 @@ msgstr "Leqqem awiki"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "Usage"
-msgstr ""
+msgstr "Aseqdec"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
@@ -1593,7 +1600,7 @@ msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "integer"
-msgstr ""
+msgstr "amḍan ummid"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
@@ -1789,7 +1796,7 @@ msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 msgid "usage: "
-msgstr ""
+msgstr "aqseqdac: "
 
 #: ../fdroid
 msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"

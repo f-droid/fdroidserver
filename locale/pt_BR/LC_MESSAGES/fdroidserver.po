@@ -1,23 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2017-11-22 23:24+0100\n"
-"PO-Revision-Date: 2017-09-02 13:48+0000\n"
-"Last-Translator: Edgar Moraes Diniz <edgar.diniz@posteo.net>\n"
-"Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-"
-"droid/fdroidserver/pt_BR/>\n"
+"POT-Creation-Date: 2017-10-17 17:48+0200\n"
+"PO-Revision-Date: 2017-11-27 12:41+0100\n"
+"Last-Translator: Guilherme Peev dos Santos <guilherme.peev@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) "
+"<https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.17-dev\n"
+"X-Generator: Weblate 2.18-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -35,7 +34,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr ""
+msgstr "\"%s/\" não tem arquivo de metadados correspondente!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -56,37 +55,37 @@ msgstr ""
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "opção %(option)s necessita %(number)d argumento"
+msgstr[1] "opção %(option)s necessita %(number)d argumentos"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: erro: %(message)s\n"
 
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "%d problems found"
-msgstr ""
+msgstr "%d problemas encontrados"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "%prog [options]"
-msgstr ""
+msgstr "%prog [opções]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r não é chamável"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "%s is not an accepted build field"
-msgstr ""
+msgstr "%s não é um campo criado aceito"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "%s option does not take a value"
-msgstr ""
+msgstr "opção %s não leva um valor"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keypass' not found in config.py!"
@@ -94,19 +93,19 @@ msgstr ""
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystore' not found in config.py!"
-msgstr ""
+msgstr "'keystore' não encontrada em config.py!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.py!"
-msgstr ""
+msgstr "'keystorepass' não encontrada em config.py!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.py!"
-msgstr ""
+msgstr "'repo_keyalias' não encontrada em config.py!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'required' é um argumento inválido para posicionadores"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in 'config.py'!"
@@ -149,7 +148,7 @@ msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__ligação__() não definida"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
@@ -944,7 +943,7 @@ msgstr "Processar apenas aplicativos com atualizações automáticas"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "Options"
-msgstr ""
+msgstr "Opções"
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
@@ -1433,12 +1432,12 @@ msgstr "Atualizar a wiki"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "Usage"
-msgstr ""
+msgstr "Uso"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "Usage: %s\n"
-msgstr ""
+msgstr "Uso: %s\n"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
@@ -1514,12 +1513,12 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "opção ambígua: %(option)s poderia corresponder %(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
-msgstr ""
+msgstr "opção ambígua: %s (%s?)"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #, fuzzy
@@ -1552,7 +1551,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "não dá pra abrir '%s': %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "cannot have multiple subparser arguments"
@@ -1699,7 +1698,7 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "no such option: %s"
-msgstr ""
+msgstr "não tem tal opção: %s"
 
 #: ../fdroid
 #, fuzzy
@@ -1743,17 +1742,17 @@ msgstr "Comando '%s' não é reconhecido\n"
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option -%s requires argument"
-msgstr ""
+msgstr "Opção -%s necessita argumento"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
-msgstr ""
+msgstr "opção --%s não pode ter argumento"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
-msgstr ""
+msgstr "opção --%s não é prefixo único"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, fuzzy, python-format
@@ -1763,11 +1762,11 @@ msgstr "Comando '%s' não é reconhecido\n"
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option --%s requires argument"
-msgstr ""
+msgstr "opção --%s necessita argumento"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "optional arguments"
-msgstr ""
+msgstr "argumentos opcionais"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1776,7 +1775,7 @@ msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "positional arguments"
-msgstr ""
+msgstr "argumentos posicionais"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
@@ -1799,12 +1798,12 @@ msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "mostrar versão do programa e sair"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
 msgid "show this help message and exit"
-msgstr ""
+msgstr "mostrar esta mensagem de ajuda e sair"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
@@ -1818,12 +1817,12 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "os seguintes argumentos são necessários: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "opção de cadeia de texto inesperada: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
@@ -1833,16 +1832,16 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "argumentos não reconhecidos: %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
-msgstr ""
+msgstr "permissões inseguras em '{config_file}' (deveria ser 0600)!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 msgid "usage: "
-msgstr ""
+msgstr "uso: "
 
 #: ../fdroid
 msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"

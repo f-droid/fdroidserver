@@ -1,23 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2017-11-22 23:24+0100\n"
-"PO-Revision-Date: 2017-08-31 02:59+0000\n"
+"POT-Creation-Date: 2017-10-17 17:48+0200\n"
+"PO-Revision-Date: 2017-11-27 12:41+0100\n"
 "Last-Translator: ezjerry liao <ezjerry@gmail.com>\n"
-"Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/f-"
-"droid/fdroidserver/zh_Hant/>\n"
+"Language-Team: Chinese (Traditional) "
+"<https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2.17-dev\n"
+"X-Generator: Weblate 2.18-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -35,7 +34,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr ""
+msgstr "\"%s 1/\" 沒有符合的中介資料檔案！"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -56,26 +55,26 @@ msgstr ""
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] ""
+msgstr[0] "%(option)s 的選項需要 %(number)d 參數"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s：錯誤：%(message)s\n"
 
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "%d problems found"
-msgstr ""
+msgstr "發現 %d 個問題"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "%prog [options]"
-msgstr ""
+msgstr "%prog [選項]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r 不可呼叫"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -148,16 +147,15 @@ msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() 未定義"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
 msgstr ""
 
 #: ../fdroid
-#, fuzzy
 msgid "Add PGP signatures using GnuPG for packages in repo"
-msgstr "在軟體倉庫中加入套件包的 gpg 簽署"
+msgstr "在軟體倉庫中加入使用 GnuPG 套件包的 gpg 簽署"
 
 #: ../fdroid
 msgid "Add a new application from its source code"
@@ -333,9 +331,8 @@ msgid "Clean up all containers and then exit"
 msgstr "清除所有容器，然後退出"
 
 #: ../fdroidserver/update.py
-#, fuzzy
 msgid "Clean update - don't uses caches, reprocess all APKs"
-msgstr "清除更新 - 不使用快取，重新處理全部的 apk"
+msgstr "清除更新 - 不使用快取，重新處理全部的 APK"
 
 #: ../fdroidserver/import.py
 msgid "Comma separated list of categories."
@@ -543,9 +540,8 @@ msgid "Failed resizing {path}: {error}"
 msgstr ""
 
 #: ../fdroidserver/publish.py
-#, fuzzy
 msgid "Failed to align application"
-msgstr "構建所有可用的應用程式"
+msgstr "校正應用程式失敗"
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -783,9 +779,8 @@ msgid ""
 msgstr ""
 
 #: ../fdroidserver/init.py
-#, fuzzy
 msgid "Keystore for signing key:\t"
-msgstr "給軟體倉庫簽署金鑰的金鑰庫路徑"
+msgstr "金鑰庫的簽署金鑰：\t"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -935,7 +930,7 @@ msgstr "只處理具有自動更新的應用程式"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "Options"
-msgstr ""
+msgstr "選項"
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
@@ -955,7 +950,6 @@ msgid "Password required with username"
 msgstr ""
 
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Path to main Android project subdirectory, if not in root."
 msgstr "如果不在根目錄下，路徑為 android 主要專案的子目錄。"
 
@@ -975,7 +969,6 @@ msgid "Path to the keystore for the repo signing key"
 msgstr "給軟體倉庫簽署金鑰的金鑰庫路徑"
 
 #: ../fdroidserver/dscanner.py
-#, fuzzy
 msgid "Prepare Drozer to run a scan"
 msgstr "準備 drozer 以執行掃描"
 
@@ -1032,9 +1025,9 @@ msgid "Push the log to this git remote repository"
 msgstr "將日誌推送到 git 遠端軟體倉庫"
 
 #: ../fdroidserver/server.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Pushing binary transparency log to {url}"
-msgstr "為網址更新二進制的透明日誌"
+msgstr "推二進制的透明日誌到{url}"
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -1069,11 +1062,10 @@ msgid "Reading {apkfilename} from cache"
 msgstr ""
 
 #: ../fdroidserver/stats.py
-#, fuzzy
 msgid ""
 "Recalculate aggregate stats - use when changes have been made that would "
 "invalidate old cached data."
-msgstr "重新計算集合統計 - 更改時使用 "
+msgstr "重新計算集合統計 - 使用時進行更改，這會使得舊的快取資料無效。"
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1120,9 +1112,8 @@ msgid "Rewriting '{appid}' to '{path}'"
 msgstr ""
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Run rewritemeta to fix formatting"
-msgstr "重寫為特定的格式： "
+msgstr "執行 rewritemeta 到固定格式"
 
 #: ../fdroidserver/server.py
 msgid "Running first pass with MD5 checking disabled"
@@ -1146,9 +1137,8 @@ msgid "Set up an app build for a nightly build repo"
 msgstr ""
 
 #: ../fdroidserver/build.py
-#, fuzzy
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
-msgstr "設置一個模擬器，在其上安裝 apk 並執行 drozer 掃描"
+msgstr "設置一個模擬器，在其上安裝 APK 並執行 drozer 掃描"
 
 msgid "Setup an emulator, install the apk on it and perform a drozer scan"
 msgstr "設置一個模擬器，在其上安裝 apk 並執行 drozer 掃描"
@@ -1199,9 +1189,8 @@ msgid "Specify an identity file to provide to SSH for rsyncing"
 msgstr "指定一個身份檔案以提供給 SSH 進行 rsync"
 
 #: ../fdroidserver/update.py
-#, fuzzy
 msgid "Specify editor to use in interactive mode. Default "
-msgstr "指定編輯器在互動模式使用。預設 %s"
+msgstr "指定編輯器在交互模式使用。預設 "
 
 #, c-format
 msgid "Specify editor to use in interactive mode. Default %s"
@@ -1247,9 +1236,8 @@ msgid "The base URL for the repo to log (default: https://f-droid.org)"
 msgstr "軟體倉庫日誌的總部網址（預設：https://f-droid.org）"
 
 #: ../fdroidserver/server.py
-#, fuzzy
 msgid "The only commands currently supported are 'init' and 'update'"
-msgstr "命令執行，'init' 或 'update' 中的任何一個"
+msgstr "目前支援的命令僅 'init' 或 'update'"
 
 #: ../fdroidserver/index.py
 msgid "The repository's fingerprint does not match."
@@ -1410,12 +1398,12 @@ msgstr "更新維基百科"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "Usage"
-msgstr ""
+msgstr "使用"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "Usage: %s\n"
-msgstr ""
+msgstr "使用：%s\n"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
@@ -1430,9 +1418,8 @@ msgid "Use build server"
 msgstr "使用構建伺服器"
 
 #: ../fdroidserver/update.py
-#, fuzzy
 msgid "Use date from APK instead of current time for newly added APKs"
-msgstr "新增的 apk 使用日期，來自 apk 而不是目前時間"
+msgstr "使用來自 APK 的日期，而不是新增之 APK 目前的時間"
 
 msgid "Use date from apk instead of current time for newly added apks"
 msgstr "新增的 apk 使用日期，來自 apk 而不是目前時間"
@@ -1464,9 +1451,8 @@ msgid "X.509 'Distiguished Name' used when generating keys"
 msgstr "產生金鑰時使用 X.509 '專有名稱'"
 
 #: ../fdroidserver/init.py
-#, fuzzy
 msgid "X.509 'Distinguished Name' used when generating keys"
-msgstr "產生金鑰時使用 X.509 '專有名稱'"
+msgstr "產生金鑰時使用 X.509 的'專有名稱'"
 
 #: ../fdroidserver/common.py
 msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
@@ -1485,30 +1471,27 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "模糊選項：%(option)s 可以相配 %(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
-msgstr ""
+msgstr "不明確的選項：%s (%s？)"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
-#, fuzzy
 msgid "applicationId in the form APPID"
-msgstr "app-id，格式為 APPID"
+msgstr "applicationId 格式為 APPID"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "applicationId to check for updates"
-msgstr "以 app-id 檢查更新"
+msgstr "以 applicationId 檢查更新"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 #: ../fdroidserver/dscanner.py ../fdroidserver/build.py
 #: ../fdroidserver/scanner.py ../fdroidserver/install.py
-#, fuzzy
 msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
-msgstr "app-id 具有任選的 versionCode 在此格式為 APPID [:VERCODE]"
+msgstr "applicationId 具有任選的 versionCode 在此格式為 APPID [:VERCODE]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
@@ -1522,7 +1505,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "無法打開 '%s'：%s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "cannot have multiple subparser arguments"
@@ -1667,12 +1650,11 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "no such option: %s"
-msgstr ""
+msgstr "沒這樣的選項：%s"
 
 #: ../fdroid
-#, fuzzy
 msgid "no version info found!"
-msgstr "發現未知的異常！"
+msgstr "未發現版本資訊！"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
@@ -1704,38 +1686,38 @@ msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr ""
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#, fuzzy, python-format
+#, python-format
 msgid "option -%s not recognized"
-msgstr "不能承認命令「%s」。\n"
+msgstr "不能識別選項 -%s"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option -%s requires argument"
-msgstr ""
+msgstr "選項 -%s 需要參數"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
-msgstr ""
+msgstr "選項 --%s 不能有參數"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
-msgstr ""
+msgstr "選項 --%s 不是單獨的字首"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#, fuzzy, python-format
+#, python-format
 msgid "option --%s not recognized"
-msgstr "不能承認命令「%s」。\n"
+msgstr "不能識別選項 --%s"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option --%s requires argument"
-msgstr ""
+msgstr "選項 --%s 需要參數"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "optional arguments"
-msgstr ""
+msgstr "可選參數"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1744,7 +1726,7 @@ msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "positional arguments"
-msgstr ""
+msgstr "位置參數"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
@@ -1767,12 +1749,12 @@ msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "顯示程式的版本號碼並離開"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
 msgid "show this help message and exit"
-msgstr ""
+msgstr "顯示此幫助訊息並離開"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
@@ -1786,7 +1768,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "需要下列參數：%s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
@@ -1810,7 +1792,7 @@ msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 msgid "usage: "
-msgstr ""
+msgstr "使用： "
 
 #: ../fdroid
 msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
