@@ -186,10 +186,10 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         mirror_git_repo.git.add(all=True)
         mirror_git_repo.index.commit("update README")
 
-        icon_path = os.path.join(repo_basedir, 'icon.png')
+        icon_path = os.path.join(git_mirror_path, 'icon.png')
         try:
             import qrcode
-            img = qrcode.make('Some data here')
+            img = qrcode.make(repo_url)
             with open(icon_path, 'wb') as fp:
                 fp.write(img)
         except Exception:
@@ -197,6 +197,7 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             shutil.copy(exampleicon, icon_path)
         mirror_git_repo.git.add(all=True)
         mirror_git_repo.index.commit("update repo/website icon")
+        shutil.copy(icon_path, repo_basedir)
 
         os.chdir(repo_basedir)
         common.local_rsync(options, git_mirror_repodir + '/', 'repo/')
