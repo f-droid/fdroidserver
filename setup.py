@@ -1,10 +1,31 @@
 #!/usr/bin/env python3
 
+from setuptools import Command
 from setuptools import setup
 import os
 import re
 import shutil
 import sys
+
+
+class VersionCheckCommand(Command):
+    """Make sure git tag and version match before uploading"""
+    user_options = []
+
+    def initialize_options(self):
+        """Abstract method that is required to be overwritten"""
+
+    def finalize_options(self):
+        """Abstract method that is required to be overwritten"""
+
+    def run(self):
+        version = self.distribution.get_version()
+        version_git = subprocess.check_output(['git', 'describe', '--tags', '--always']).rstrip().decode('utf-8')
+        if version != version_git:
+            print('ERROR: Release version mismatch! setup.py (%s) does not match git (%s)'
+                  % (version, version_git))
+            sys.exit(1)
+        print('Upload using: twine upload dist/fdroidserver*.tar.gz*')
 
 
 def get_data_files():
@@ -56,6 +77,7 @@ setup(name='fdroidserver',
       scripts=['fdroid', 'fd-commit', 'makebuildserver'],
       data_files=get_data_files(),
       python_requires='>=3.4',
+      cmdclass={'versioncheck': VersionCheckCommand},
       install_requires=[
           'clint',
           'GitPython',
