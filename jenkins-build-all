@@ -65,7 +65,7 @@ cd $WORKSPACE
 # this can be handled in the jenkins job, or here:
 if [ -e fdroiddata ]; then
     cd fdroiddata
-    git remote update -p
+    while ! git fetch origin --tags --prune; do sleep 10; done
     git checkout master
     git reset --hard origin/master
     # keep all the cloned source repos

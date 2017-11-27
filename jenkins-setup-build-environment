@@ -68,7 +68,7 @@ fi
 # this can be handled in the jenkins job, or here:
 if [ -e fdroiddata ]; then
     cd fdroiddata
-    while ! git fetch; do sleep 1; done
+    while ! git fetch origin --tags --prune; do sleep 10; done
     git remote update -p
     git checkout master
     git reset --hard origin/master
