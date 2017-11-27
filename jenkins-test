@@ -23,6 +23,7 @@ set -x
 # set up Android SDK to use the Debian packages in stretch
 export ANDROID_HOME=/usr/lib/android-sdk
 
+rm -rf $WORKSPACE/.testfiles
 cd tests
 ./run-tests $WORKSPACE
 
@@ -34,7 +35,7 @@ rm -f config.py
 ../fdroid update
 
 export GNUPGHOME=$WORKSPACE/tests/gnupghome
-echo "build_server_always = True" > config.py
+echo "build_server_always = True" >> config.py
 echo "gpghome = '$GNUPGHOME'" >> config.py
 echo "gpgkey = 'CE71F7FB'" >> config.py
 chmod 0600 config.py
