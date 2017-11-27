@@ -155,6 +155,7 @@ def main():
         repo_url = repo_base + '/repo'
         git_mirror_path = os.path.join(repo_basedir, 'git-mirror')
         git_mirror_repodir = os.path.join(git_mirror_path, 'fdroid', 'repo')
+        git_mirror_metadatadir = os.path.join(git_mirror_path, 'fdroid', 'metadata')
         if not os.path.isdir(git_mirror_repodir):
             logging.debug(_('cloning {url}').format(url=clone_url))
             try:
@@ -200,7 +201,10 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         shutil.copy(icon_path, repo_basedir)
 
         os.chdir(repo_basedir)
-        common.local_rsync(options, git_mirror_repodir + '/', 'repo/')
+        if os.path.isdir(git_mirror_repodir):
+            common.local_rsync(options, git_mirror_repodir + '/', 'repo/')
+        if os.path.isdir(git_mirror_metadatadir):
+            common.local_rsync(options, git_mirror_metadatadir + '/', 'metadata/')
 
         ssh_private_key_file = _ssh_key_from_debug_keystore()
         # this is needed for GitPython to find the SSH key
@@ -255,7 +259,11 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             except subprocess.CalledProcessError:
                 pass
 
-        subprocess.check_call(['fdroid', 'update', '--rename-apks', '--verbose'], cwd=repo_basedir)
+        subprocess.check_call(['fdroid', 'update', '--rename-apks', '--create-metadata', '--verbose'],
+                              cwd=repo_basedir)
+        common.local_rsync(options, repo_basedir + '/metadata/', git_mirror_metadatadir + '/')
+        mirror_git_repo.git.add(all=True)
+        mirror_git_repo.index.commit("update app metadata")
         try:
             subprocess.check_call(['fdroid', 'server', 'update', '--verbose'], cwd=repo_basedir)
         except subprocess.CalledProcessError:
