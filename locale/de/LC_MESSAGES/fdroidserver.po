@@ -1,23 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2017-11-22 23:24+0100\n"
-"PO-Revision-Date: 2017-07-16 20:06+0000\n"
-"Last-Translator: Claus Rüdinger <Mail-an-CR@web.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/f-droid/"
-"fdroidserver/de/>\n"
+"POT-Creation-Date: 2017-10-17 17:48+0200\n"
+"PO-Revision-Date: 2017-11-27 12:39+0100\n"
+"Last-Translator: Tobias Bannert <tobannert@gmail.com>\n"
+"Language-Team: German "
+"<https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.16-dev\n"
+"X-Generator: Weblate 2.18-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -62,21 +61,21 @@ msgstr[1] ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: Fehler: %(message)s\n"
 
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "%d problems found"
-msgstr ""
+msgstr "%d Probleme gefunden"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "%prog [options]"
-msgstr ""
+msgstr "%prog [Optionen]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r ist nicht abrufbar"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -149,16 +148,15 @@ msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() nicht festgelegt"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
 msgstr ""
 
 #: ../fdroid
-#, fuzzy
 msgid "Add PGP signatures using GnuPG for packages in repo"
-msgstr "GPG-Signaturen für Programmpakete in der Paketquelle hinzufügen"
+msgstr "GnuPG PGP-Signaturen für Programmpakete in der Paketquelle hinzufügen"
 
 #: ../fdroid
 msgid "Add a new application from its source code"
@@ -202,17 +200,17 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
-msgstr ""
+msgstr "Android-SDK nicht gefunden!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' does not exist!"
-msgstr ""
+msgstr "Android-SDK-Pfad »{path}« nicht vorhanden!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' is not a directory!"
-msgstr ""
+msgstr "Android-SDK-Pfad »{path}« ist kein Verzeichnis!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -311,7 +309,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Category '%s' is not valid"
-msgstr ""
+msgstr "Kategorie »%s« ist nicht gültig"
 
 #: ../fdroid
 msgid "Check for updates to applications"
@@ -337,10 +335,9 @@ msgid "Clean up all containers and then exit"
 msgstr "Alle Container bereinigen und danach beenden"
 
 #: ../fdroidserver/update.py
-#, fuzzy
 msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr ""
-"Sauber - ohne Verwendung der Zwischenspeicher - aktualisieren, alle APKs "
+"Sauber aktualisieren - ohne Verwendung der Zwischenspeicher, alle APKs "
 "wiederaufbereiten"
 
 #: ../fdroidserver/import.py
@@ -457,7 +454,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Description of length {length} is over the {limit} char limit"
-msgstr ""
+msgstr "Beschreibung der Länge {length} ist über dem {limit}-Zeichen Limit"
 
 #: ../fdroidserver/init.py
 msgid "Do not prompt for Android SDK path, just fail"
@@ -551,9 +548,8 @@ msgid "Failed resizing {path}: {error}"
 msgstr ""
 
 #: ../fdroidserver/publish.py
-#, fuzzy
 msgid "Failed to align application"
-msgstr "Alle verfügbaren Anwendungen erstellen"
+msgstr "Anwendung konnte nicht angepasst werden"
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -793,9 +789,8 @@ msgid ""
 msgstr ""
 
 #: ../fdroidserver/init.py
-#, fuzzy
 msgid "Keystore for signing key:\t"
-msgstr "Pfad zum Schlüsselspeicher für den Repository-Signierschlüssel"
+msgstr "Schlüsselspeicher für den Signierschlüssel:\t"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -945,7 +940,7 @@ msgstr "Nur Apps mit automatischen Aktualisierungen verarbeiten"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "Options"
-msgstr ""
+msgstr "Optionen"
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
@@ -965,10 +960,9 @@ msgid "Password required with username"
 msgstr ""
 
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Path to main Android project subdirectory, if not in root."
 msgstr ""
-"Pfad zum zentralen Androidprojekt-Unterverzeichnis, wenn es nicht im "
+"Pfad zum Unterverzeichnis des Android-Hauptprojekts, wenn es nicht im "
 "Stammverzeichnis ist."
 
 msgid "Path to main android project subdirectory, if not in root."
@@ -991,9 +985,8 @@ msgid "Path to the keystore for the repo signing key"
 msgstr "Pfad zum Schlüsselspeicher für den Repository-Signierschlüssel"
 
 #: ../fdroidserver/dscanner.py
-#, fuzzy
 msgid "Prepare Drozer to run a scan"
-msgstr "Drozer auf einen Scan vorbereiten"
+msgstr "Drozer auf einen Suchlauf vorbereiten"
 
 msgid "Prepare drozer to run a scan"
 msgstr "Drozer auf einen Scan vorbereiten"
@@ -1048,9 +1041,9 @@ msgid "Push the log to this git remote repository"
 msgstr "Anmeldung an diesem Git-Repository durchführen"
 
 #: ../fdroidserver/server.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Pushing binary transparency log to {url}"
-msgstr "Binäres Transparency-Log einer URL aktualisieren"
+msgstr "Binäres Transparenz-Log nach {url} pushen"
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -1085,11 +1078,12 @@ msgid "Reading {apkfilename} from cache"
 msgstr ""
 
 #: ../fdroidserver/stats.py
-#, fuzzy
 msgid ""
 "Recalculate aggregate stats - use when changes have been made that would "
 "invalidate old cached data."
-msgstr "Sammelstatistik neu berechnen - nach Änderungen anwenden "
+msgstr ""
+"Sammelstatistik neu berechnen - nach Änderungen anwenden, die alte "
+"zwischengespeicherte Daten entwerten würden."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1142,9 +1136,8 @@ msgid "Rewriting '{appid}' to '{path}'"
 msgstr ""
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Run rewritemeta to fix formatting"
-msgstr "In ein spezielles Format umschreiben: "
+msgstr "Metadaten neu schreiben, um Formatierungen zu korrigieren"
 
 #: ../fdroidserver/server.py
 msgid "Running first pass with MD5 checking disabled"
@@ -1169,7 +1162,6 @@ msgid "Set up an app build for a nightly build repo"
 msgstr ""
 
 #: ../fdroidserver/build.py
-#, fuzzy
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
 msgstr ""
 "Einen Emulator einrichten, die APK installieren und mit ihm eine "
@@ -1231,11 +1223,9 @@ msgstr ""
 "wird"
 
 #: ../fdroidserver/update.py
-#, fuzzy
 msgid "Specify editor to use in interactive mode. Default "
 msgstr ""
 "Editor festlegen, der im interaktiven Modus verwendet werden soll. Standard "
-"%s"
 
 #, c-format
 msgid "Specify editor to use in interactive mode. Default %s"
@@ -1288,9 +1278,8 @@ msgstr ""
 "Basis-Adresse zur Anmeldung am Repository (Standard: https://f-droid.org)"
 
 #: ../fdroidserver/server.py
-#, fuzzy
 msgid "The only commands currently supported are 'init' and 'update'"
-msgstr "Ausführungsbefehl, entweder 'init' oder 'update'"
+msgstr "Derzeit werden nur die Befehle „init” und „update” unterstützt"
 
 #: ../fdroidserver/index.py
 msgid "The repository's fingerprint does not match."
@@ -1451,12 +1440,12 @@ msgstr "Wiki aktualisieren"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "Usage"
-msgstr ""
+msgstr "Verwendung"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "Usage: %s\n"
-msgstr ""
+msgstr "Verwendung: %s\n"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
@@ -1471,7 +1460,6 @@ msgid "Use build server"
 msgstr "Build-Server verwenden"
 
 #: ../fdroidserver/update.py
-#, fuzzy
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "APK-Datum statt der aktuellen Zeit für neu hinzugefügte APKs verwenden"
 
@@ -1507,9 +1495,8 @@ msgid "X.509 'Distiguished Name' used when generating keys"
 msgstr "X.509 'Angesehener Name' wenn Schlüssel generiert werden"
 
 #: ../fdroidserver/init.py
-#, fuzzy
 msgid "X.509 'Distinguished Name' used when generating keys"
-msgstr "X.509 'Angesehener Name' wenn Schlüssel generiert werden"
+msgstr "X.509 'Distinguished Name' zum Erzeugen von Schlüsseln"
 
 #: ../fdroidserver/common.py
 msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
@@ -1528,7 +1515,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "Mehrdeutige Option: %(option)s könnte übereinstimmen mit %(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
@@ -1536,12 +1523,10 @@ msgid "ambiguous option: %s (%s?)"
 msgstr ""
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
-#, fuzzy
 msgid "applicationId in the form APPID"
 msgstr "App-ID in der Form APPID"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "applicationId to check for updates"
 msgstr "App-ID, um auf Aktualisierungen zu prüfen"
 
@@ -1549,7 +1534,6 @@ msgstr "App-ID, um auf Aktualisierungen zu prüfen"
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 #: ../fdroidserver/dscanner.py ../fdroidserver/build.py
 #: ../fdroidserver/scanner.py ../fdroidserver/install.py
-#, fuzzy
 msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
 msgstr "App-ID mit optionalem Versionscode in der Form APPID[:VERCODE]"
 
@@ -1565,7 +1549,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "»%s« kann nicht geöffnet werden: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "cannot have multiple subparser arguments"
@@ -1715,9 +1699,8 @@ msgid "no such option: %s"
 msgstr ""
 
 #: ../fdroid
-#, fuzzy
 msgid "no version info found!"
-msgstr "Unbekannter Fehler aufgetreten!"
+msgstr "Keine Versionsinformationen gefunden!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
@@ -1749,14 +1732,14 @@ msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr ""
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#, fuzzy, python-format
+#, python-format
 msgid "option -%s not recognized"
-msgstr "Befehl '%s' nicht erkannt.\n"
+msgstr "Option -%s nicht erkannt"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option -%s requires argument"
-msgstr ""
+msgstr "Option -%s erfordert Argument"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
@@ -1769,9 +1752,9 @@ msgid "option --%s not a unique prefix"
 msgstr ""
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#, fuzzy, python-format
+#, python-format
 msgid "option --%s not recognized"
-msgstr "Befehl '%s' nicht erkannt.\n"
+msgstr "Option --%s nicht erkannt"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
@@ -1780,7 +1763,7 @@ msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "optional arguments"
-msgstr ""
+msgstr "optionale Argumente"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1812,12 +1795,12 @@ msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "Versionsnummer der Anwendung anzeigen und beenden"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
 msgid "show this help message and exit"
-msgstr ""
+msgstr "diese Hilfemeldung anzeigen und beenden"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
@@ -1855,7 +1838,7 @@ msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 msgid "usage: "
-msgstr ""
+msgstr "Verwendung: "
 
 #: ../fdroid
 msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
