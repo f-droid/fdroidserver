@@ -73,7 +73,7 @@ cmd_exists() {
 
 find_command() {
 	for name in $@; do
-		for suff in "3" "-python3" ""; do
+		for suff in "3" "-3" "-python3" ""; do
 			cmd=${name}${suff}
 			if cmd_exists $cmd; then
 				echo $cmd
