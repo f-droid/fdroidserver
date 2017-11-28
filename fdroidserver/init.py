@@ -178,6 +178,7 @@ def main():
                              + '" does not exist, creating a new keystore there.')
     common.write_to_config(test_config, 'keystore', keystore)
     repo_keyalias = None
+    keydname = None
     if options.repo_keyalias:
         repo_keyalias = options.repo_keyalias
         common.write_to_config(test_config, 'repo_keyalias', repo_keyalias)
@@ -211,7 +212,16 @@ def main():
                                    flags=re.MULTILINE)
             with open('opensc-fdroid.cfg', 'w') as f:
                 f.write(opensc_fdroid)
-    elif not os.path.exists(keystore):
+    elif os.path.exists(keystore):
+        to_set = ['keystorepass', 'keypass', 'repo_keyalias', 'keydname']
+        if repo_keyalias:
+            to_set.remove('repo_keyalias')
+        if keydname:
+            to_set.remove('keydname')
+        logging.warning('\n' + _('Using existing keystore "{path}"').format(path=keystore)
+                        + '\n' + _('Now set these in config.py:') + ' '
+                        + ', '.join(to_set) + '\n')
+    else:
         password = common.genpassword()
         c = dict(test_config)
         c['keystorepass'] = password
