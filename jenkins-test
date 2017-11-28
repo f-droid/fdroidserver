@@ -30,7 +30,7 @@ cd tests
 # this is set up and managed by jenkins-build-all
 cd $WORKSPACE/fdroiddata
 
-rm -f config.py
+rm -f config.py keystore.jks
 ../fdroid init --verbose
 ../fdroid update
 
