@@ -444,17 +444,16 @@ def get_local_metadata_files():
     return glob.glob('.fdroid.[a-jl-z]*[a-rt-z]')
 
 
-def read_pkg_args(args, allow_vercodes=False):
+def read_pkg_args(appid_versionCode_pairs, allow_vercodes=False):
     """
-    :param args: arguments in the form of multiple appid:[vc] strings
+    :param appids: arguments in the form of multiple appid:[vc] strings
     :returns: a dictionary with the set of vercodes specified for each package
     """
-
     vercodes = {}
-    if not args:
+    if not appid_versionCode_pairs:
         return vercodes
 
-    for p in args:
+    for p in appid_versionCode_pairs:
         if allow_vercodes and ':' in p:
             package, vercode = p.split(':')
         else:
@@ -468,13 +467,17 @@ def read_pkg_args(args, allow_vercodes=False):
     return vercodes
 
 
-def read_app_args(args, allapps, allow_vercodes=False):
-    """
-    On top of what read_pkg_args does, this returns the whole app metadata, but
-    limiting the builds list to the builds matching the vercodes specified.
+def read_app_args(appid_versionCode_pairs, allapps, allow_vercodes=False):
+    """Build a list of App instances for processing
+
+    On top of what read_pkg_args does, this returns the whole app
+    metadata, but limiting the builds list to the builds matching the
+    appid_versionCode_pairs and vercodes specified.  If no appid_versionCode_pairs are specified, then
+    all App and Build instances are returned.
+
     """
 
-    vercodes = read_pkg_args(args, allow_vercodes)
+    vercodes = read_pkg_args(appid_versionCode_pairs, allow_vercodes)
 
     if not vercodes:
         return allapps
