@@ -38,6 +38,9 @@ options = None
 
 BINARY_TRANSPARENCY_DIR = 'binary_transparency'
 
+AUTO_S3CFG = '.fdroid-server-update-s3cfg'
+USER_S3CFG = 's3cfg'
+
 
 def update_awsbucket(repo_section):
     '''
@@ -72,12 +75,17 @@ def update_awsbucket_s3cmd(repo_section):
     logging.debug(_('Using s3cmd to sync with: {url}')
                   .format(url=config['awsbucket']))
 
-    configfilename = '.s3cfg'
-    fd = os.open(configfilename, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
-    os.write(fd, '[default]\n'.encode('utf-8'))
-    os.write(fd, ('access_key = ' + config['awsaccesskeyid'] + '\n').encode('utf-8'))
-    os.write(fd, ('secret_key = ' + config['awssecretkey'] + '\n').encode('utf-8'))
-    os.close(fd)
+    if os.path.exists(USER_S3CFG):
+        logging.info(_('Using "{path}" for configuring s3cmd.').format(path=USER_S3CFG))
+        configfilename = USER_S3CFG
+    else:
+        fd = os.open(AUTO_S3CFG, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
+        logging.debug(_('Creating "{path}" for configuring s3cmd.').format(path=AUTO_S3CFG))
+        os.write(fd, '[default]\n'.encode('utf-8'))
+        os.write(fd, ('access_key = ' + config['awsaccesskeyid'] + '\n').encode('utf-8'))
+        os.write(fd, ('secret_key = ' + config['awssecretkey'] + '\n').encode('utf-8'))
+        os.close(fd)
+        configfilename = AUTO_S3CFG
 
     s3bucketurl = 's3://' + config['awsbucket']
     s3cmd = [config['s3cmd'], '--config=' + configfilename]
@@ -150,6 +158,10 @@ def update_awsbucket_libcloud(repo_section):
         raise FDroidException(
             _('To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.py!'))
     awsbucket = config['awsbucket']
+
+    if os.path.exists(USER_S3CFG):
+        raise FDroidException(_('"{path}" exists but s3cmd is not installed!')
+                              .format(path=USER_S3CFG))
 
     cls = get_driver(Provider.S3)
     driver = cls(config['awsaccesskeyid'], config['awssecretkey'])
