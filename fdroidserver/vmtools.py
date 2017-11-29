@@ -29,6 +29,8 @@ import textwrap
 from .common import FDroidException
 from logging import getLogger
 
+from fdroidserver import _
+
 logger = getLogger('fdroidserver-vmtools')
 
 
@@ -383,7 +385,9 @@ class LibvirtBuildVm(FDroidBuildVm):
             vol = storagePool.storageVolLookupByName(self.srvname + '.img')
             imagepath = vol.path()
             # TODO use a libvirt storage pool to ensure the img file is readable
-            _check_call(['sudo', '/bin/chmod', '-R', 'a+rX', '/var/lib/libvirt/images'])
+            if not os.access(imagepath, os.R_OK):
+                logger.warning(_('Cannot read "{path}"!').format(path=imagepath))
+                _check_call(['sudo', '/bin/chmod', '-R', 'a+rX', '/var/lib/libvirt/images'])
             shutil.copy2(imagepath, 'box.img')
             _check_call(['qemu-img', 'rebase', '-p', '-b', '', 'box.img'])
             img_info_raw = _check_output(['qemu-img', 'info', '--output=json', 'box.img'])
