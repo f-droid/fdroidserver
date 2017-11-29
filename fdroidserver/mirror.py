@@ -23,7 +23,7 @@ options = None
 def main():
     global options
 
-    parser = ArgumentParser(usage="%(prog)s [options] url")
+    parser = ArgumentParser(usage=_("%(prog)s [options] url"))
     common.setup_global_opts(parser)
     parser.add_argument("url", nargs='?', help=_("Base URL to mirror"))
     parser.add_argument("--archive", action='store_true', default=False,
@@ -31,6 +31,11 @@ def main():
     parser.add_argument("--output-dir", default=os.getcwd(),
                         help=_("The directory to write the mirror to"))
     options = parser.parse_args()
+
+    if options.url is None:
+        logging.error(_('A URL is required as an argument!') + '\n')
+        parser.print_help()
+        sys.exit(1)
 
     baseurl = options.url
     basedir = options.output_dir
