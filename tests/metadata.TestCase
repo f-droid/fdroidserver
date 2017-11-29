@@ -2,9 +2,12 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
+import glob
 import inspect
 import optparse
 import os
+import random
+import shutil
 import sys
 import unittest
 import yaml
@@ -119,6 +122,36 @@ class MetadataTest(unittest.TestCase):
             with open('metadata-rewrite-yml/app.with.special.build.params.yml', 'r', encoding='utf-8') as orig:
                 self.maxDiff = None
                 self.assertEqual(result.read(), orig.read())
+
+    def test_read_metadata_sort_by_time(self):
+        # setup/reset test dir if necessary and setup params
+        testbasedir = os.path.dirname(__file__)
+        tmpdir = os.path.join(testbasedir, '..', '.testfiles')
+        if not os.path.exists(tmpdir):
+            os.makedirs(tmpdir)
+        testdir = tempfile.mkdtemp(prefix='test_read_metadata_sort_by_time_', dir=tmpdir)
+        metadatadir = os.path.join(testdir, 'metadata')
+        os.makedirs(metadatadir)
+        fdroidserver.common.config = {'accepted_formats': ['txt']}
+
+        randomlist = []
+        randomapps = glob.glob(os.path.join(testbasedir, 'metadata', '*.txt'))
+        random.shuffle(randomapps)
+        i = 1
+        for f in randomapps:
+            shutil.copy(f, metadatadir)
+            new = os.path.join(metadatadir, os.path.basename(f))
+            stat = os.stat(new)
+            os.utime(new, (stat.st_ctime, stat.st_mtime + i))
+            # prepend new item so newest is always first
+            randomlist = [os.path.basename(f)[:-4]] + randomlist
+            i += 1
+        os.chdir(testdir)
+        allapps = fdroidserver.metadata.read_metadata(xref=True, sort_by_time=True)
+        allappids = []
+        for appid, app in allapps.items():
+            allappids.append(appid)
+        self.assertEqual(randomlist, allappids)
 
 
 if __name__ == "__main__":

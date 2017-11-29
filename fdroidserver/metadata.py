@@ -26,6 +26,7 @@ import logging
 import textwrap
 import io
 import yaml
+from collections import OrderedDict
 # use libyaml if it is available
 try:
     from yaml import CLoader
@@ -703,35 +704,50 @@ def read_srclibs():
         srclibs[srclibname] = parse_srclib(metadatapath)
 
 
-def read_metadata(xref=True, check_vcs=[]):
-    """
-    Read all metadata. Returns a list of 'app' objects (which are dictionaries as
-    returned by the parse_txt_metadata function.
+def read_metadata(xref=True, check_vcs=[], sort_by_time=False):
+    """Return a list of App instances sorted newest first
+
+    This reads all of the metadata files in a 'data' repository, then
+    builds a list of App instances from those files.  The list is
+    sorted based on creation time, newest first.  Most of the time,
+    the newer files are the most interesting.
+
+    If there are multiple metadata files for a single appid, then the first
+    file that is parsed wins over all the others, and the rest throw an
+    exception. So the original .txt format is parsed first, at least until
+    newer formats stabilize.
 
     check_vcs is the list of packageNames to check for .fdroid.yml in source
+
     """
 
     # Always read the srclibs before the apps, since they can use a srlib as
     # their source repository.
     read_srclibs()
 
-    apps = {}
+    apps = OrderedDict()
 
     for basedir in ('metadata', 'tmp'):
         if not os.path.exists(basedir):
             os.makedirs(basedir)
 
-    # If there are multiple metadata files for a single appid, then the first
-    # file that is parsed wins over all the others, and the rest throw an
-    # exception. So the original .txt format is parsed first, at least until
-    # newer formats stabilize.
+    metadatafiles = (glob.glob(os.path.join('metadata', '*.txt'))
+                     + glob.glob(os.path.join('metadata', '*.json'))
+                     + glob.glob(os.path.join('metadata', '*.yml'))
+                     + glob.glob('.fdroid.txt')
+                     + glob.glob('.fdroid.json')
+                     + glob.glob('.fdroid.yml'))
 
-    for metadatapath in sorted(glob.glob(os.path.join('metadata', '*.txt'))
-                               + glob.glob(os.path.join('metadata', '*.json'))
-                               + glob.glob(os.path.join('metadata', '*.yml'))
-                               + glob.glob('.fdroid.txt')
-                               + glob.glob('.fdroid.json')
-                               + glob.glob('.fdroid.yml')):
+    if sort_by_time:
+        entries = ((os.stat(path).st_mtime, path) for path in metadatafiles)
+        metadatafiles = []
+        for _ignored, path in sorted(entries, reverse=True):
+            metadatafiles.append(path)
+    else:
+        # most things want the index alpha sorted for stability
+        metadatafiles = sorted(metadatafiles)
+
+    for metadatapath in metadatafiles:
         packageName, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
         if packageName in apps:
             warn_or_exception(_("Found multiple metadata files for {appid}")
