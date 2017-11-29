@@ -24,6 +24,10 @@ def _run_wget(path, urls):
     else:
         verbose = '--no-verbose'
 
+    if not urls:
+        return
+    logging.debug(_('Running wget in {path}').format(path=path))
+    os.makedirs(path, exist_ok=True)
     os.chdir(path)
     urls_file = '.fdroid-mirror-wget-input-file'
     with open(urls_file, 'w') as fp:
@@ -142,22 +146,27 @@ def main():
                        or (f.endswith('.apk') and os.path.getsize(f) != package['size']):
                         urls.append(_append_to_url_path(section, f))
                         urls.append(_append_to_url_path(section, f + '.asc'))
+        _run_wget(sectiondir, urls)
 
         for app in data['apps']:
             localized = app.get('localized')
             if localized:
                 for locale, d in localized.items():
+                    urls = []
+                    components = (section, app['packageName'], locale)
                     for k in update.GRAPHIC_NAMES:
                         f = d.get(k)
                         if f:
-                            urls.append(_append_to_url_path(section, app['packageName'], locale, f))
+                            urls.append(_append_to_url_path(*components, f))
+                    _run_wget(os.path.join(basedir, *components), urls)
                     for k in update.SCREENSHOT_DIRS:
+                        urls = []
                         filelist = d.get(k)
                         if filelist:
+                            components = (section, app['packageName'], locale, k)
                             for f in filelist:
-                                urls.append(_append_to_url_path(section, app['packageName'], locale, k, f))
-
-        _run_wget(sectiondir, urls)
+                                urls.append(_append_to_url_path(*components, f))
+                            _run_wget(os.path.join(basedir, *components), urls)
 
         urls = dict()
         for app in data['apps']:
