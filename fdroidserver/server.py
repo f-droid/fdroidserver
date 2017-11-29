@@ -513,7 +513,7 @@ def upload_to_virustotal(repo_section, vt_apikey):
                             with open(outputfilename, 'w') as fp:
                                 json.dump(response, fp, indent=2, sort_keys=True)
 
-                        if response.get('positives') > 0:
+                        if response.get('positives', 0) > 0:
                             logging.warning(repofilename + ' has been flagged by virustotal '
                                             + str(response['positives']) + ' times:'
                                             + '\n\t' + response['permalink'])
