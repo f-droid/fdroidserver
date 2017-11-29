@@ -216,11 +216,12 @@ The repository of older versions of applications from the main demo repository.
 # sync_from_local_copy_dir = True
 
 
-# To upload the repo to an Amazon S3 bucket using `fdroid server update`.
-# Warning, this deletes and recreates the whole fdroid/ directory each
-# time. This is based on apache-libcloud, which supports basically all cloud
-# storage services, so it should be easy to port the fdroid server tools to
-# any of them.
+# To upload the repo to an Amazon S3 bucket using `fdroid server
+# update`.  Warning, this deletes and recreates the whole fdroid/
+# directory each time. This prefers s3cmd, but can also use
+# apache-libcloud.  To customize how s3cmd interacts with the cloud
+# provider, create a 's3cfg' file next to this file (config.py), and
+# those settings will be used instead of any 'aws' variable below.
 #
 # awsbucket = 'myawsfdroid'
 # awsaccesskeyid = 'SEE0CHAITHEIMAUR2USA'
