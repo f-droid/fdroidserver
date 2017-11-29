@@ -18,6 +18,22 @@ from . import update
 options = None
 
 
+def _run_wget(path, urls):
+    if options.verbose:
+        verbose = '--verbose'
+    else:
+        verbose = '--no-verbose'
+
+    os.chdir(path)
+    urls_file = '.fdroid-mirror-wget-input-file'
+    with open(urls_file, 'w') as fp:
+        for url in urls:
+            fp.write(url.split('?')[0] + '\n')  # wget puts query string in the filename
+    subprocess.call(['wget', verbose, '--continue', '--user-agent="fdroid mirror"',
+                     '--input-file=' + urls_file])
+    os.remove(urls_file)
+
+
 def main():
     global options
 
@@ -141,12 +157,7 @@ def main():
                             for f in filelist:
                                 urls.append(_append_to_url_path(section, app['packageName'], locale, k, f))
 
-        with open(urls_file, 'w') as fp:
-            for url in urls:
-                fp.write(url.split('?')[0] + '\n')  # wget puts query string in the filename
-        subprocess.call(['wget', '--continue', '--user-agent="fdroid mirror"',
-                         '--input-file=' + urls_file])
-        os.remove(urls_file)
+        _run_wget(sectiondir, urls)
 
         urls = dict()
         for app in data['apps']:
@@ -161,12 +172,7 @@ def main():
                 urls[icondir].append(url)
 
         for icondir in icondirs:
-            os.chdir(os.path.join(basedir, section, icondir))
-            with open(urls_file, 'w') as fp:
-                for url in urls[icondir]:
-                    fp.write(url.split('?')[0] + '\n')  # wget puts query string in the filename
-            subprocess.call(['wget', '--continue', '--input-file=' + urls_file])
-            os.remove(urls_file)
+            _run_wget(os.path.join(basedir, section, icondir), urls[icondir])
 
 
 if __name__ == "__main__":
