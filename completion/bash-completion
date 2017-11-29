@@ -264,6 +264,12 @@ __complete_btlog() {
 	__complete_options
 }
 
+__complete_mirror() {
+	opts="-v"
+	lopts="--archive --output-dir"
+	__complete_options
+}
+
 __complete_nightly() {
 	opts="-v -q"
 	lopts="--show-secret-var"
@@ -316,6 +322,7 @@ import \
 init \
 install \
 lint \
+mirror \
 nightly \
 publish \
 readmeta \
