@@ -235,6 +235,8 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         with open('config.py', 'w') as fp:
             fp.write(config)
         os.chmod('config.py', 0o600)
+        config = common.read_config(options)
+        common.assert_config_keystore(config)
 
         for root, dirs, files in os.walk(cibase):
             for d in ('fdroid', '.git', '.gradle'):
@@ -243,12 +245,14 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             for f in files:
                 if f.endswith('-debug.apk'):
                     apkfilename = os.path.join(root, f)
-                    logging.debug(_('copying {apkfilename} into {path}')
-                                  .format(apkfilename=apkfilename, path=repodir))
+                    logging.debug(_('Striping mystery signature from {apkfilename}')
+                                  .format(apkfilename=apkfilename))
                     destapk = os.path.join(repodir, os.path.basename(f))
-                    shutil.copyfile(apkfilename, destapk)
-                    shutil.copystat(apkfilename, destapk)
-                    os.chmod(destapk, 0o644)
+                    os.chmod(apkfilename, 0o644)
+                    logging.debug(_('Resigning {apkfilename} with provided debug.keystore')
+                                  .format(apkfilename=os.path.basename(apkfilename)))
+                    common.apk_strip_signatures(apkfilename, strip_manifest=True)
+                    common.sign_apk(apkfilename, destapk, KEY_ALIAS)
 
         if options.verbose:
             logging.debug(_('attempting bare ssh connection to test deploy key:'))
