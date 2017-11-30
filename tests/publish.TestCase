@@ -11,6 +11,7 @@
 #
 
 import inspect
+import logging
 import optparse
 import os
 import sys
@@ -31,6 +32,14 @@ from fdroidserver.exception import FDroidException
 
 class PublishTest(unittest.TestCase):
     '''fdroidserver/publish.py'''
+
+    def setUp(self):
+        logging.basicConfig(level=logging.DEBUG)
+        self.basedir = os.path.join(localmodule, 'tests')
+        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
+        if not os.path.exists(self.tmpdir):
+            os.makedirs(self.tmpdir)
+        os.chdir(self.basedir)
 
     def test_key_alias(self):
         publish.config = {}
@@ -77,39 +86,35 @@ class PublishTest(unittest.TestCase):
                   'com.example.anotherapp',
                   'org.org.org']
 
-        with tempfile.TemporaryDirectory() as tmpdir:
-            orig_cwd = os.getcwd()
-            try:
-                os.chdir(tmpdir)
-                with open('config.py', 'w') as f:
-                    pass
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        with open('config.py', 'w') as f:
+            pass
 
-                publish.store_stats_fdroid_signing_key_fingerprints(appids, indent=2)
+        publish.store_stats_fdroid_signing_key_fingerprints(appids, indent=2)
 
-                self.maxDiff = None
-                expected = {
-                    "com.example.anotherapp": {
-                        "signer": "fa3f6a017541ee7fe797be084b1bcfbf92418a7589ef1f7fdeb46741b6d2e9c3"
-                    },
-                    "com.example.app": {
-                        "signer": "d34f678afbaa8f2fa6cc0edd6f0c2d1d2e2e9eb08bea521b24c740806016bff4"
-                    },
-                    "org.org.org": {
-                        "signer": "277655a6235bc6b0ef2d824396c51ba947f5ebc738c293d887e7083ff338af82"
-                    },
-                    "org.test.testy": {
-                        "signer": "6ae5355157a47ddcc3834a71f57f6fb5a8c2621c8e0dc739e9ddf59f865e497c"
-                    }
-                }
-                self.assertEqual(expected, common.load_stats_fdroid_signing_key_fingerprints())
+        self.maxDiff = None
+        expected = {
+            "com.example.anotherapp": {
+                "signer": "fa3f6a017541ee7fe797be084b1bcfbf92418a7589ef1f7fdeb46741b6d2e9c3"
+            },
+            "com.example.app": {
+                "signer": "d34f678afbaa8f2fa6cc0edd6f0c2d1d2e2e9eb08bea521b24c740806016bff4"
+            },
+            "org.org.org": {
+                "signer": "277655a6235bc6b0ef2d824396c51ba947f5ebc738c293d887e7083ff338af82"
+            },
+            "org.test.testy": {
+                "signer": "6ae5355157a47ddcc3834a71f57f6fb5a8c2621c8e0dc739e9ddf59f865e497c"
+            }
+        }
+        self.assertEqual(expected, common.load_stats_fdroid_signing_key_fingerprints())
 
-                with open('config.py', 'r') as f:
-                    self.assertEqual(textwrap.dedent('''\
+        with open('config.py', 'r') as f:
+            self.assertEqual(textwrap.dedent('''\
 
-                        repo_key_sha256 = "c58460800c7b250a619c30c13b07b7359a43e5af71a4352d86c58ae18c9f6d41"
-                        '''), f.read())
-            finally:
-                os.chdir(orig_cwd)
+                repo_key_sha256 = "c58460800c7b250a619c30c13b07b7359a43e5af71a4352d86c58ae18c9f6d41"
+                '''), f.read())
 
     def test_store_and_load_fdroid_signing_key_fingerprints_with_missmatch(self):
         common.config = {}
@@ -122,21 +127,14 @@ class PublishTest(unittest.TestCase):
         publish.config['repo_keyalias'] = 'repokey'
         publish.config['repo_key_sha256'] = 'bad bad bad bad bad bad bad bad bad bad bad bad'
 
-        with tempfile.TemporaryDirectory() as tmpdir:
-            orig_cwd = os.getcwd()
-            try:
-                os.chdir(tmpdir)
-                publish.store_stats_fdroid_signing_key_fingerprints({}, indent=2)
-                with self.assertRaises(FDroidException):
-                    common.load_stats_fdroid_signing_key_fingerprints()
-            finally:
-                os.chdir(orig_cwd)
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        publish.store_stats_fdroid_signing_key_fingerprints({}, indent=2)
+        with self.assertRaises(FDroidException):
+            common.load_stats_fdroid_signing_key_fingerprints()
 
 
 if __name__ == "__main__":
-    if os.path.basename(os.getcwd()) != 'tests' and os.path.isdir('tests'):
-        os.chdir('tests')
-
     parser = optparse.OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
