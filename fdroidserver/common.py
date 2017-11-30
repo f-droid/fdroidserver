@@ -1302,27 +1302,58 @@ def parse_androidmanifests(paths, app):
         vercode = None
         package = None
 
+        flavour = ""
+        if app.builds and 'gradle' in app.builds[-1] and app.builds[-1].gradle:
+                flavour = app.builds[-1].gradle[-1]
+
         if has_extension(path, 'gradle'):
+            # first try to get version name and code from correct flavour
             with open(path, 'r') as f:
-                for line in f:
-                    if gradle_comment.match(line):
-                        continue
-                    # Grab first occurence of each to avoid running into
-                    # alternative flavours and builds.
-                    if not package:
-                        matches = psearch_g(line)
-                        if matches:
-                            s = matches.group(2)
-                            if app_matches_packagename(app, s):
-                                package = s
-                    if not version:
-                        matches = vnsearch_g(line)
-                        if matches:
-                            version = matches.group(2)
-                    if not vercode:
-                        matches = vcsearch_g(line)
-                        if matches:
-                            vercode = matches.group(1)
+                buildfile = f.read()
+
+                regex_string = r"" + flavour + ".*?}"
+                search = re.compile(regex_string, re.DOTALL)
+                result = search.search(buildfile)
+
+            if result is not None:
+                resultgroup = result.group()
+
+                if not package:
+                    matches = psearch_g(resultgroup)
+                    if matches:
+                        s = matches.group(2)
+                        if app_matches_packagename(app, s):
+                            package = s
+                if not version:
+                    matches = vnsearch_g(resultgroup)
+                    if matches:
+                        version = matches.group(2)
+                if not vercode:
+                    matches = vcsearch_g(resultgroup)
+                    if matches:
+                        vercode = matches.group(1)
+            else:
+                # fall back to parse file line by line
+                with open(path, 'r') as f:
+                    for line in f:
+                        if gradle_comment.match(line):
+                            continue
+                        # Grab first occurence of each to avoid running into
+                        # alternative flavours and builds.
+                        if not package:
+                            matches = psearch_g(line)
+                            if matches:
+                                s = matches.group(2)
+                                if app_matches_packagename(app, s):
+                                    package = s
+                        if not version:
+                            matches = vnsearch_g(line)
+                            if matches:
+                                version = matches.group(2)
+                        if not vercode:
+                            matches = vcsearch_g(line)
+                            if matches:
+                                vercode = matches.group(1)
         else:
             try:
                 xml = parse_xml(path)
