@@ -157,7 +157,8 @@ def main():
                     for k in update.GRAPHIC_NAMES:
                         f = d.get(k)
                         if f:
-                            urls.append(_append_to_url_path(*components, f))
+                            filepath_tuple = components + (f, )
+                            urls.append(_append_to_url_path(*filepath_tuple))
                     _run_wget(os.path.join(basedir, *components), urls)
                     for k in update.SCREENSHOT_DIRS:
                         urls = []
@@ -165,7 +166,8 @@ def main():
                         if filelist:
                             components = (section, app['packageName'], locale, k)
                             for f in filelist:
-                                urls.append(_append_to_url_path(*components, f))
+                                filepath_tuple = components + (f, )
+                                urls.append(_append_to_url_path(*filepath_tuple))
                             _run_wget(os.path.join(basedir, *components), urls)
 
         urls = dict()
