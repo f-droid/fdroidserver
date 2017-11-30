@@ -96,8 +96,8 @@ class CommonTest(unittest.TestCase):
                 print('no build-tools found: ' + build_tools)
 
     def test_find_java_root_path(self):
-        tmptestsdir = tempfile.mkdtemp(prefix='test_find_java_root_path', dir=self.tmpdir)
-        os.chdir(tmptestsdir)
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
 
         all_pathlists = [
             ([  # Debian
@@ -215,7 +215,7 @@ class CommonTest(unittest.TestCase):
 
     def test_prepare_sources_refresh(self):
         packageName = 'org.fdroid.ci.test.app'
-        testdir = tempfile.mkdtemp(prefix='test_prepare_sources_refresh', dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         print('testdir', testdir)
         os.chdir(testdir)
         os.mkdir('build')
@@ -262,7 +262,7 @@ class CommonTest(unittest.TestCase):
         fdroidserver.signindex.config = config
 
         sourcedir = os.path.join(self.basedir, 'signindex')
-        testsdir = tempfile.mkdtemp(prefix='test_signjar', dir=self.tmpdir)
+        testsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         for f in ('testy.jar', 'guardianproject.jar',):
             sourcefile = os.path.join(sourcedir, f)
             testfile = os.path.join(testsdir, f)
@@ -291,7 +291,7 @@ class CommonTest(unittest.TestCase):
 
         sourceapk = os.path.join(self.basedir, 'urzip.apk')
 
-        testdir = tempfile.mkdtemp(prefix='test_verify_apks', dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         print('testdir', testdir)
 
         copyapk = os.path.join(testdir, 'urzip-copy.apk')
