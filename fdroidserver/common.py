@@ -40,7 +40,7 @@ import json
 import xml.etree.ElementTree as XMLElementTree
 
 from binascii import hexlify
-from datetime import datetime
+from datetime import datetime, timedelta
 from distutils.version import LooseVersion
 from queue import Queue
 from zipfile import ZipFile
@@ -444,17 +444,16 @@ def get_local_metadata_files():
     return glob.glob('.fdroid.[a-jl-z]*[a-rt-z]')
 
 
-def read_pkg_args(args, allow_vercodes=False):
+def read_pkg_args(appid_versionCode_pairs, allow_vercodes=False):
     """
-    :param args: arguments in the form of multiple appid:[vc] strings
+    :param appids: arguments in the form of multiple appid:[vc] strings
     :returns: a dictionary with the set of vercodes specified for each package
     """
-
     vercodes = {}
-    if not args:
+    if not appid_versionCode_pairs:
         return vercodes
 
-    for p in args:
+    for p in appid_versionCode_pairs:
         if allow_vercodes and ':' in p:
             package, vercode = p.split(':')
         else:
@@ -468,13 +467,17 @@ def read_pkg_args(args, allow_vercodes=False):
     return vercodes
 
 
-def read_app_args(args, allapps, allow_vercodes=False):
-    """
-    On top of what read_pkg_args does, this returns the whole app metadata, but
-    limiting the builds list to the builds matching the vercodes specified.
+def read_app_args(appid_versionCode_pairs, allapps, allow_vercodes=False):
+    """Build a list of App instances for processing
+
+    On top of what read_pkg_args does, this returns the whole app
+    metadata, but limiting the builds list to the builds matching the
+    appid_versionCode_pairs and vercodes specified.  If no appid_versionCode_pairs are specified, then
+    all App and Build instances are returned.
+
     """
 
-    vercodes = read_pkg_args(args, allow_vercodes)
+    vercodes = read_pkg_args(appid_versionCode_pairs, allow_vercodes)
 
     if not vercodes:
         return allapps
@@ -1716,6 +1719,23 @@ def natural_key(s):
     return [int(sp) if sp.isdigit() else sp for sp in re.split(r'(\d+)', s)]
 
 
+def check_system_clock(dt_obj, path):
+    """Check if system clock is updated based on provided date
+
+    If an APK has files newer than the system time, suggest updating
+    the system clock.  This is useful for offline systems, used for
+    signing, which do not have another source of clock sync info. It
+    has to be more than 24 hours newer because ZIP/APK files do not
+    store timezone info
+
+    """
+    checkdt = dt_obj - timedelta(1)
+    if datetime.today() < checkdt:
+        logging.warning(_('System clock is older than date in {path}!').format(path=path)
+                        + '\n' + _('Set clock to that time using:') + '\n'
+                        + 'sudo date -s "' + str(dt_obj) + '"')
+
+
 class KnownApks:
     """permanent store of existing APKs with the date they were added
 
@@ -1744,6 +1764,7 @@ class KnownApks:
                         date = datetime.strptime(t[-1], '%Y-%m-%d')
                         filename = line[0:line.rfind(appid) - 1]
                         self.apks[filename] = (appid, date)
+                        check_system_clock(date, self.path)
         self.changed = False
 
     def writeifchanged(self):

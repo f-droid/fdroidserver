@@ -31,7 +31,6 @@ else
         echo "No virtualization is used."
 fi
 sudo /bin/chmod -R a+rX /var/lib/libvirt/images
-ulimit -n 2048
 echo 'maximum allowed number of open file descriptors: ' `ulimit -n`
 ls -ld /var/lib/libvirt/images
 ls -l /var/lib/libvirt/images || echo no access

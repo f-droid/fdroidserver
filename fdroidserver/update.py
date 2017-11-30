@@ -29,7 +29,7 @@ import zipfile
 import hashlib
 import pickle
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 from argparse import ArgumentParser
 
 import collections
@@ -1297,22 +1297,11 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
 
         apkzip = zipfile.ZipFile(apkfile, 'r')
 
-        # if an APK has files newer than the system time, suggest updating
-        # the system clock.  This is useful for offline systems, used for
-        # signing, which do not have another source of clock sync info. It
-        # has to be more than 24 hours newer because ZIP/APK files do not
-        # store timezone info
         manifest = apkzip.getinfo('AndroidManifest.xml')
         if manifest.date_time[1] == 0:  # month can't be zero
             logging.debug(_('AndroidManifest.xml has no date'))
         else:
-            dt_obj = datetime(*manifest.date_time)
-            checkdt = dt_obj - timedelta(1)
-            if datetime.today() < checkdt:
-                logging.warning('System clock is older than manifest in: '
-                                + apkfilename
-                                + '\nSet clock to that time using:\n'
-                                + 'sudo date -s "' + str(dt_obj) + '"')
+            common.check_system_clock(datetime(*manifest.date_time), apkfilename)
 
         # extract icons from APK zip file
         iconfilename = "%s.%s.png" % (apk['packageName'], apk['versionCode'])
