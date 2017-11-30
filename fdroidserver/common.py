@@ -1299,7 +1299,9 @@ def parse_androidmanifests(paths, app):
         vercode = None
         package = None
 
-        flavour = app.builds[-1].gradle[-1]
+        flavour = ""
+        if app.builds and 'gradle' in app.builds[-1] and app.builds[-1].gradle:
+                flavour = app.builds[-1].gradle[-1]
 
         if has_extension(path, 'gradle'):
             # first try to get version name and code from correct flavour
