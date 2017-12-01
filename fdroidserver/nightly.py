@@ -51,7 +51,9 @@ def _ssh_key_from_debug_keystore():
     privkey = os.path.join(tmp_dir, '.privkey')
     key_pem = os.path.join(tmp_dir, '.key.pem')
     p12 = os.path.join(tmp_dir, '.keystore.p12')
-    subprocess.check_call([common.config['keytool'], '-importkeystore',
+    _config = dict()
+    common.fill_config_defaults(_config)
+    subprocess.check_call([_config['keytool'], '-importkeystore',
                            '-srckeystore', KEYSTORE_FILE, '-srcalias', KEY_ALIAS,
                            '-srcstorepass', PASSWORD, '-srckeypass', PASSWORD,
                            '-destkeystore', p12, '-destalias', KEY_ALIAS,
@@ -91,7 +93,6 @@ def main():
                         help=_("Don't use rsync checksums"))
     # TODO add --with-btlog
     options = parser.parse_args()
-    common.read_config(None)
 
     # force a tighter umask since this writes private key material
     umask = os.umask(0o077)
