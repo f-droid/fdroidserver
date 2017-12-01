@@ -2368,7 +2368,7 @@ def apk_strip_signatures(signed_apk, strip_manifest=False):
     """
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_apk = os.path.join(tmpdir, 'tmp.apk')
-        os.rename(signed_apk, tmp_apk)
+        shutil.move(signed_apk, tmp_apk)
         with ZipFile(tmp_apk, 'r') as in_apk:
             with ZipFile(signed_apk, 'w') as out_apk:
                 for info in in_apk.infolist():
