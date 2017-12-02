@@ -22,7 +22,6 @@ import os
 import math
 import json
 import tarfile
-import time
 import shutil
 import subprocess
 import textwrap
@@ -194,8 +193,6 @@ class FDroidBuildVm():
     def up(self, provision=True):
         try:
             self.vgrnt.up(provision=provision)
-            logger.info('...waiting a sec...')
-            time.sleep(10)
             self.srvuuid = self._vagrant_fetch_uuid()
         except subprocess.CalledProcessError as e:
             raise FDroidBuildVmException("could not bring up vm '%s'" % self.srvname) from e
@@ -204,8 +201,6 @@ class FDroidBuildVm():
         logger.info('suspending buildserver')
         try:
             self.vgrnt.suspend()
-            logger.info('...waiting a sec...')
-            time.sleep(10)
         except subprocess.CalledProcessError as e:
             raise FDroidBuildVmException("could not suspend vm '%s'" % self.srvname) from e
 
@@ -352,16 +347,12 @@ class LibvirtBuildVm(FDroidBuildVm):
         # (eg. lookupByName only works on running VMs)
         try:
             _check_call(('virsh', '-c', 'qemu:///system', 'destroy', self.srvname))
-            logger.info("...waiting a sec...")
-            time.sleep(10)
         except subprocess.CalledProcessError as e:
             logger.info("could not force libvirt domain '%s' off: %s", self.srvname, e)
         try:
             # libvirt python bindings do not support all flags required
             # for undefining domains correctly.
             _check_call(('virsh', '-c', 'qemu:///system', 'undefine', self.srvname, '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
-            logger.info("...waiting a sec...")
-            time.sleep(10)
         except subprocess.CalledProcessError as e:
             logger.info("could not undefine libvirt domain '%s': %s", self.srvname, e)
 
@@ -458,8 +449,6 @@ class LibvirtBuildVm(FDroidBuildVm):
         logger.info("creating snapshot '%s' for vm '%s'", snapshot_name, self.srvname)
         try:
             _check_call(['virsh', '-c', 'qemu:///system', 'snapshot-create-as', self.srvname, snapshot_name])
-            logger.info('...waiting a sec...')
-            time.sleep(10)
         except subprocess.CalledProcessError as e:
             raise FDroidBuildVmException("could not cerate snapshot '%s' "
                                          "of libvirt vm '%s'"
@@ -488,8 +477,6 @@ class LibvirtBuildVm(FDroidBuildVm):
             dom = self.conn.lookupByName(self.srvname)
             snap = dom.snapshotLookupByName(snapshot_name)
             dom.revertToSnapshot(snap)
-            logger.info('...waiting a sec...')
-            time.sleep(10)
         except libvirt.libvirtError as e:
             raise FDroidBuildVmException('could not revert domain \'%s\' to snapshot \'%s\''
                                          % (self.srvname, snapshot_name)) from e
@@ -505,8 +492,6 @@ class VirtualboxBuildVm(FDroidBuildVm):
         logger.info("creating snapshot '%s' for vm '%s'", snapshot_name, self.srvname)
         try:
             _check_call(['VBoxManage', 'snapshot', self.srvuuid, 'take', 'fdroidclean'], cwd=self.srvdir)
-            logger.info('...waiting a sec...')
-            time.sleep(10)
         except subprocess.CalledProcessError as e:
             raise FDroidBuildVmException('could not cerate snapshot '
                                          'of virtualbox vm %s'
