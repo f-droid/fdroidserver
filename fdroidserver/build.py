@@ -1345,7 +1345,10 @@ def main():
         logging.info(ngettext("{} build failed",
                               "{} builds failed", len(failed_apps)).format(len(failed_apps)))
 
-    sys.exit(0)
+    # hack to ensure this exits, even is some threads are still running
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(0)
 
 
 if __name__ == "__main__":

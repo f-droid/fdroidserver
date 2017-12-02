@@ -1970,6 +1970,7 @@ def FDroidPopenBytes(commands, cwd=None, envs=None, output=True, stderr_to_stdou
         raise BuildException("OSError while trying to execute " +
                              ' '.join(commands) + ': ' + str(e))
 
+    # TODO are these AsynchronousFileReader threads always exiting?
     if not stderr_to_stdout and options.verbose:
         stderr_queue = Queue()
         stderr_reader = AsynchronousFileReader(p.stderr, stderr_queue)
