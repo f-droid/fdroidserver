@@ -1153,9 +1153,9 @@ def main():
                 # there are any.
                 if first:
                     vcs, build_dir = common.setup_vcs(app)
-                    logging.info("Using %s" % vcs.clientversion())
                     first = False
 
+                logging.info("Using %s" % vcs.clientversion())
                 logging.debug("Checking " + build.versionName)
                 if trybuild(app, build, build_dir, output_dir, log_dir,
                             also_check_dir, srclib_dir, extlib_dir,
