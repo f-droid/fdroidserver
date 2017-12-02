@@ -772,7 +772,8 @@ def insert_localized_app_metadata(apps):
 
     """
 
-    sourcedirs = glob.glob(os.path.join('build', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z]*'))
+    sourcedirs = glob.glob(os.path.join('build', '[A-Za-z]*', 'src', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z]*'))
+    sourcedirs += glob.glob(os.path.join('build', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z]*'))
     sourcedirs += glob.glob(os.path.join('build', '[A-Za-z]*', 'metadata', '[a-z][a-z]*'))
     sourcedirs += glob.glob(os.path.join('metadata', '[A-Za-z]*', '[a-z][a-z]*'))
 
@@ -787,6 +788,17 @@ def insert_localized_app_metadata(apps):
                 continue
             locale = segments[-1]
             destdir = os.path.join('repo', packageName, locale)
+
+            # flavours specified in build receipt
+            build_flavours = ""
+            if apps[packageName] and 'builds' in apps[packageName] and len(apps[packageName].builds) > 0\
+                    and 'gradle' in apps[packageName].builds[-1]:
+                build_flavours = apps[packageName].builds[-1].gradle
+
+            if len(segments) >= 5 and segments[4] == "fastlane" and segments[3] not in build_flavours:
+                logging.debug("ignoring due to wrong flavour")
+                continue
+
             for f in files:
                 if f in ('description.txt', 'full_description.txt'):
                     _set_localized_text_entry(apps[packageName], locale, 'description',
