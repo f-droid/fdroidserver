@@ -96,8 +96,8 @@ class CommonTest(unittest.TestCase):
                 print('no build-tools found: ' + build_tools)
 
     def test_find_java_root_path(self):
-        tmptestsdir = tempfile.mkdtemp(prefix='test_find_java_root_path', dir=self.tmpdir)
-        os.chdir(tmptestsdir)
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
 
         all_pathlists = [
             ([  # Debian
@@ -170,11 +170,11 @@ class CommonTest(unittest.TestCase):
         testint = 99999999
         teststr = 'FAKE_STR_FOR_TESTING'
 
-        tmptestsdir = tempfile.mkdtemp(prefix='test_prepare_sources', dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         shutil.copytree(os.path.join(self.basedir, 'source-files'),
-                        os.path.join(tmptestsdir, 'source-files'))
+                        os.path.join(testdir, 'source-files'))
 
-        testdir = os.path.join(tmptestsdir, 'source-files', 'fdroid', 'fdroidclient')
+        fdroidclient_testdir = os.path.join(testdir, 'source-files', 'fdroid', 'fdroidclient')
 
         config = dict()
         config['sdk_path'] = os.getenv('ANDROID_HOME')
@@ -201,13 +201,14 @@ class CommonTest(unittest.TestCase):
             def getsrclib(self):
                 return None
 
-        fdroidserver.common.prepare_source(FakeVcs(), app, build, testdir, testdir, testdir)
+        fdroidserver.common.prepare_source(FakeVcs(), app, build,
+                                           fdroidclient_testdir, fdroidclient_testdir, fdroidclient_testdir)
 
-        with open(os.path.join(testdir, 'build.gradle'), 'r') as f:
+        with open(os.path.join(fdroidclient_testdir, 'build.gradle'), 'r') as f:
             filedata = f.read()
         self.assertIsNotNone(re.search("\s+compileSdkVersion %s\s+" % testint, filedata))
 
-        with open(os.path.join(testdir, 'AndroidManifest.xml')) as f:
+        with open(os.path.join(fdroidclient_testdir, 'AndroidManifest.xml')) as f:
             filedata = f.read()
         self.assertIsNone(re.search('android:debuggable', filedata))
         self.assertIsNotNone(re.search('android:versionName="%s"' % build.versionName, filedata))
@@ -215,7 +216,7 @@ class CommonTest(unittest.TestCase):
 
     def test_prepare_sources_refresh(self):
         packageName = 'org.fdroid.ci.test.app'
-        testdir = tempfile.mkdtemp(prefix='test_prepare_sources_refresh', dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         print('testdir', testdir)
         os.chdir(testdir)
         os.mkdir('build')
@@ -262,7 +263,7 @@ class CommonTest(unittest.TestCase):
         fdroidserver.signindex.config = config
 
         sourcedir = os.path.join(self.basedir, 'signindex')
-        testsdir = tempfile.mkdtemp(prefix='test_signjar', dir=self.tmpdir)
+        testsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         for f in ('testy.jar', 'guardianproject.jar',):
             sourcefile = os.path.join(sourcedir, f)
             testfile = os.path.join(testsdir, f)
@@ -291,7 +292,7 @@ class CommonTest(unittest.TestCase):
 
         sourceapk = os.path.join(self.basedir, 'urzip.apk')
 
-        testdir = tempfile.mkdtemp(prefix='test_verify_apks', dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         print('testdir', testdir)
 
         copyapk = os.path.join(testdir, 'urzip-copy.apk')
@@ -529,4 +530,4 @@ if __name__ == "__main__":
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(CommonTest))
-    unittest.main(failfast=True)
+    unittest.main(failfast=False)

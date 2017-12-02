@@ -3,6 +3,7 @@
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
 import inspect
+import logging
 import optparse
 import os
 import requests
@@ -24,8 +25,15 @@ import import_proxy
 class ImportTest(unittest.TestCase):
     '''fdroid import'''
 
+    def setUp(self):
+        logging.basicConfig(level=logging.DEBUG)
+        self.basedir = os.path.join(localmodule, 'tests')
+        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
+        if not os.path.exists(self.tmpdir):
+            os.makedirs(self.tmpdir)
+        os.chdir(self.basedir)
+
     def test_import_gitlab(self):
-        os.chdir(os.path.dirname(__file__))
         # FDroidPopen needs some config to work
         config = dict()
         fdroidserver.common.fill_config_defaults(config)

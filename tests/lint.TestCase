@@ -32,8 +32,7 @@ class LintTest(unittest.TestCase):
         self.assertTrue(fdroidserver.lint.check_for_unsupported_metadata_files())
 
         tmpdir = os.path.join(localmodule, '.testfiles')
-        tmptestsdir = tempfile.mkdtemp(prefix='test_check_for_unsupported_metadata_files-',
-                                       dir=tmpdir)
+        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=tmpdir)
         self.assertFalse(fdroidserver.lint.check_for_unsupported_metadata_files(tmptestsdir + '/'))
         shutil.copytree(os.path.join(localmodule, 'tests', 'metadata'),
                         os.path.join(tmptestsdir, 'metadata'),

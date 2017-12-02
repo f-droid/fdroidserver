@@ -2,9 +2,13 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
+import glob
 import inspect
+import logging
 import optparse
 import os
+import random
+import shutil
 import sys
 import unittest
 import yaml
@@ -23,14 +27,19 @@ import fdroidserver.metadata
 class MetadataTest(unittest.TestCase):
     '''fdroidserver/metadata.py'''
 
+    def setUp(self):
+        logging.basicConfig(level=logging.DEBUG)
+        self.basedir = os.path.join(localmodule, 'tests')
+        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
+        if not os.path.exists(self.tmpdir):
+            os.makedirs(self.tmpdir)
+        os.chdir(self.basedir)
+
     def test_read_metadata(self):
 
         def _build_yaml_representer(dumper, data):
             '''Creates a YAML representation of a Build instance'''
             return dumper.represent_dict(data)
-
-        testsdir = os.path.dirname(__file__)
-        os.chdir(testsdir)
 
         self.maxDiff = None
 
@@ -58,12 +67,7 @@ class MetadataTest(unittest.TestCase):
             #     yaml.dump(frommeta, f, default_flow_style=False)
 
     def test_rewrite_yaml_fakeotaupdate(self):
-
-        # setup/reset test dir if necessary and setup params
-        tmpdir = os.path.join(os.path.dirname(__file__), '..', '.testfiles')
-        if not os.path.exists(tmpdir):
-            os.makedirs(tmpdir)
-        testdir = tempfile.mkdtemp(prefix='test_rewrite_metadata_', dir=tmpdir)
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         fdroidserver.common.config = {'accepted_formats': ['txt', 'yml']}
 
         # rewrite metadata
@@ -79,12 +83,7 @@ class MetadataTest(unittest.TestCase):
                 self.assertEqual(result.read(), orig.read())
 
     def test_rewrite_yaml_fdroidclient(self):
-
-        # setup/reset test dir if necessary and setup params
-        tmpdir = os.path.join(os.path.dirname(__file__), '..', '.testfiles')
-        if not os.path.exists(tmpdir):
-            os.makedirs(tmpdir)
-        testdir = tempfile.mkdtemp(prefix='test_rewrite_metadata_', dir=tmpdir)
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         fdroidserver.common.config = {'accepted_formats': ['txt', 'yml']}
 
         # rewrite metadata
@@ -100,12 +99,7 @@ class MetadataTest(unittest.TestCase):
                 self.assertEqual(result.read(), orig.read())
 
     def test_rewrite_yaml_special_build_params(self):
-
-        # setup/reset test dir if necessary and setup params
-        tmpdir = os.path.join(os.path.dirname(__file__), '..', '.testfiles')
-        if not os.path.exists(tmpdir):
-            os.makedirs(tmpdir)
-        testdir = tempfile.mkdtemp(prefix='test_rewrite_metadata_', dir=tmpdir)
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         fdroidserver.common.config = {'accepted_formats': ['txt', 'yml']}
 
         # rewrite metadata
@@ -119,6 +113,31 @@ class MetadataTest(unittest.TestCase):
             with open('metadata-rewrite-yml/app.with.special.build.params.yml', 'r', encoding='utf-8') as orig:
                 self.maxDiff = None
                 self.assertEqual(result.read(), orig.read())
+
+    def test_read_metadata_sort_by_time(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        metadatadir = os.path.join(testdir, 'metadata')
+        os.makedirs(metadatadir)
+        fdroidserver.common.config = {'accepted_formats': ['txt']}
+
+        randomlist = []
+        randomapps = glob.glob(os.path.join(self.basedir, 'metadata', '*.txt'))
+        random.shuffle(randomapps)
+        i = 1
+        for f in randomapps:
+            shutil.copy(f, metadatadir)
+            new = os.path.join(metadatadir, os.path.basename(f))
+            stat = os.stat(new)
+            os.utime(new, (stat.st_ctime, stat.st_mtime + i))
+            # prepend new item so newest is always first
+            randomlist = [os.path.basename(f)[:-4]] + randomlist
+            i += 1
+        os.chdir(testdir)
+        allapps = fdroidserver.metadata.read_metadata(xref=True, sort_by_time=True)
+        allappids = []
+        for appid, app in allapps.items():
+            allappids.append(appid)
+        self.assertEqual(randomlist, allappids)
 
 
 if __name__ == "__main__":

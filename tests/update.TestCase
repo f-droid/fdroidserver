@@ -87,7 +87,7 @@ class UpdateTest(unittest.TestCase):
         tmpdir = os.path.join(localmodule, '.testfiles')
         if not os.path.exists(tmpdir):
             os.makedirs(tmpdir)
-        tmptestsdir = tempfile.mkdtemp(prefix='test_insert_triple_t_metadata-', dir=tmpdir)
+        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=tmpdir)
         packageDir = os.path.join(tmptestsdir, 'build', packageName)
         shutil.copytree(importer, packageDir)
 
@@ -374,7 +374,7 @@ class UpdateTest(unittest.TestCase):
         tmpdir = os.path.join(localmodule, '.testfiles')
         if not os.path.exists(tmpdir):
             os.makedirs(tmpdir)
-        tmptestsdir = tempfile.mkdtemp(prefix='test_process_apk_signed_by_disabled_algorithms-',
+        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
                                        dir=tmpdir)
         print('tmptestsdir', tmptestsdir)
         os.chdir(tmptestsdir)
@@ -504,7 +504,7 @@ class UpdateTest(unittest.TestCase):
         tmpdir = os.path.join(localmodule, '.testfiles')
         if not os.path.exists(tmpdir):
             os.makedirs(tmpdir)
-        tmptestsdir = tempfile.mkdtemp(prefix='test_create_metadata_from_template-',
+        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
                                        dir=tmpdir)
         print('tmptestsdir', tmptestsdir)
         os.chdir(tmptestsdir)

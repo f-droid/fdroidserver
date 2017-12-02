@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import inspect
+import logging
 import optparse
 import os
 import sys
@@ -31,30 +32,33 @@ GP_FINGERPRINT = 'B7C2EEFD8DAC7806AF67DFCD92EB18126BC08312A7F2D6F3862E46013C7A61
 class IndexTest(unittest.TestCase):
 
     def setUp(self):
+        logging.basicConfig(level=logging.DEBUG)
+        self.basedir = os.path.join(localmodule, 'tests')
+        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
+        if not os.path.exists(self.tmpdir):
+            os.makedirs(self.tmpdir)
+        os.chdir(self.basedir)
+
         fdroidserver.common.config = None
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
         fdroidserver.signindex.config = config
 
-    @staticmethod
-    def test_verify_jar_signature_succeeds():
-        basedir = os.path.dirname(__file__)
-        source_dir = os.path.join(basedir, 'signindex')
+    def test_verify_jar_signature_succeeds(self):
+        source_dir = os.path.join(self.basedir, 'signindex')
         for f in ('testy.jar', 'guardianproject.jar'):
             testfile = os.path.join(source_dir, f)
             fdroidserver.common.verify_jar_signature(testfile)
 
     def test_verify_jar_signature_fails(self):
-        basedir = os.path.dirname(__file__)
-        source_dir = os.path.join(basedir, 'signindex')
+        source_dir = os.path.join(self.basedir, 'signindex')
         testfile = os.path.join(source_dir, 'unsigned.jar')
         with self.assertRaises(fdroidserver.index.VerificationException):
             fdroidserver.common.verify_jar_signature(testfile)
 
     def test_get_public_key_from_jar_succeeds(self):
-        basedir = os.path.dirname(__file__)
-        source_dir = os.path.join(basedir, 'signindex')
+        source_dir = os.path.join(self.basedir, 'signindex')
         for f in ('testy.jar', 'guardianproject.jar'):
             testfile = os.path.join(source_dir, f)
             jar = zipfile.ZipFile(testfile)
@@ -68,8 +72,7 @@ class IndexTest(unittest.TestCase):
                 self.assertTrue(fingerprint == GP_FINGERPRINT)
 
     def test_get_public_key_from_jar_fails(self):
-        basedir = os.path.dirname(__file__)
-        source_dir = os.path.join(basedir, 'signindex')
+        source_dir = os.path.join(self.basedir, 'signindex')
         testfile = os.path.join(source_dir, 'unsigned.jar')
         jar = zipfile.ZipFile(testfile)
         with self.assertRaises(fdroidserver.index.VerificationException):
@@ -226,9 +229,6 @@ class IndexTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    if os.path.basename(os.getcwd()) != 'tests' and os.path.isdir('tests'):
-        os.chdir('tests')
-
     parser = optparse.OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
