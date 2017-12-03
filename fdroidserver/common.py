@@ -833,7 +833,7 @@ class vcs_git(vcs):
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout
-            p = FDroidPopen(['git', 'clone', self.remote, self.local], cwd=None)
+            p = self.GitFetchFDroidPopen(['clone', self.remote, self.local], cwd=None)
             if p.returncode != 0:
                 self.clone_failed = True
                 raise VCSException("Git clone failed", p.output)
