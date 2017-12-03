@@ -796,8 +796,6 @@ class vcs_git(vcs):
         sticks.
 
         '''
-        if cwd is None:
-            cwd = self.local
         git_config = []
         for domain in ('bitbucket.org', 'github.com', 'gitlab.com'):
             git_config.append('-c')
@@ -833,7 +831,7 @@ class vcs_git(vcs):
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout
-            p = self.GitFetchFDroidPopen(['clone', self.remote, self.local], cwd=None)
+            p = self.GitFetchFDroidPopen(['clone', self.remote, self.local])
             if p.returncode != 0:
                 self.clone_failed = True
                 raise VCSException("Git clone failed", p.output)
@@ -853,10 +851,10 @@ class vcs_git(vcs):
                 raise VCSException(_("Git clean failed"), p.output)
             if not self.refreshed:
                 # Get latest commits and tags from remote
-                p = self.GitFetchFDroidPopen(['fetch', 'origin'])
+                p = self.GitFetchFDroidPopen(['fetch', 'origin'], cwd=self.local)
                 if p.returncode != 0:
                     raise VCSException(_("Git fetch failed"), p.output)
-                p = self.GitFetchFDroidPopen(['fetch', '--prune', '--tags', 'origin'], output=False)
+                p = self.GitFetchFDroidPopen(['fetch', '--prune', '--tags', 'origin'], output=False, cwd=self.local)
                 if p.returncode != 0:
                     raise VCSException(_("Git fetch failed"), p.output)
                 # Recreate origin/HEAD as git clone would do it, in case it disappeared
@@ -899,7 +897,7 @@ class vcs_git(vcs):
         p = FDroidPopen(['git', 'submodule', 'sync'], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException(_("Git submodule sync failed"), p.output)
-        p = self.GitFetchFDroidPopen(['submodule', 'update', '--init', '--force', '--recursive'])
+        p = self.GitFetchFDroidPopen(['submodule', 'update', '--init', '--force', '--recursive'], cwd=self.local)
         if p.returncode != 0:
             raise VCSException(_("Git submodule update failed"), p.output)
 
