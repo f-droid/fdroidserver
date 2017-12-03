@@ -86,11 +86,8 @@ class CommonTest(unittest.TestCase):
         sdk_path = os.getenv('ANDROID_HOME')
         if os.path.exists(sdk_path):
             fdroidserver.common.config['sdk_path'] = sdk_path
-            if os.path.exists('/usr/bin/aapt'):
-                # this test only works when /usr/bin/aapt is installed
-                self._find_all()
             build_tools = os.path.join(sdk_path, 'build-tools')
-            if self._set_build_tools():
+            if self._set_build_tools() or os.path.exists('/usr/bin/aapt'):
                 self._find_all()
             else:
                 print('no build-tools found: ' + build_tools)
