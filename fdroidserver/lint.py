@@ -109,7 +109,7 @@ regex_checks = {
         (re.compile(r'.*\s$'),
          _("Unnecessary trailing space")),
     ],
-    'Description': [
+    'Description': https_enforcings + http_url_shorteners + [
         (re.compile(r'\s*[*#][^ .]'),
          _("Invalid bulleted list")),
         (re.compile(r'^\s'),
