@@ -116,10 +116,6 @@ regex_checks = {
          _("Unnecessary leading space")),
         (re.compile(r'.*\s$'),
          _("Unnecessary trailing space")),
-        (re.compile(r'.*([^[]|^)\[[^:[\]]+( |\]|$)'),
-         _("Invalid link - use [http://foo.bar Link title] or [http://foo.bar]")),
-        (re.compile(r'(^|.* )https?://[^ ]+'),
-         _("Unlinkified link - use [http://foo.bar Link title] or [http://foo.bar]")),
     ],
 }
 
