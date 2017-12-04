@@ -1,6 +1,6 @@
-image: registry.gitlab.com/fdroid/ci-images-server:latest
 
 test:
+  image: registry.gitlab.com/fdroid/ci-images-server:latest
   script:
     - pip3 install -e .
     - cd tests
@@ -10,6 +10,7 @@ test:
 # released version. Ensure that the official tags are included when
 # running these tests on forks as well.
 metadata_v0:
+  image: registry.gitlab.com/fdroid/ci-images-server:latest
   script:
     - git fetch https://gitlab.com/fdroid/fdroidserver 0.8
     - cd tests
@@ -25,3 +26,67 @@ metadata_v0:
     - cd fdroiddata
     - ../tests/dump_internal_metadata_format.py
     - diff -uw metadata/dump_*
+
+debian_testing:
+  image: debian:testing
+  only:
+    - master@fdroid/fdroidserver
+  script:
+    - apt update -y
+    - apt dist-upgrade -y
+    - apt-get install -y --no-install-recommends
+        aapt adb android-platform-tools-base android-sdk-common fdroidserver
+        git gnupg python3-setuptools zipalign
+    - export ANDROID_HOME=/usr/lib/android-sdk
+    - export LANG=C.UTF-8
+    - cd tests
+    - rm -f install.TestCase  # fails frequently and is unimportant
+    - ./run-tests
+
+ubuntu_lts:
+  image: ubuntu:latest
+  only:
+    - master@fdroid/fdroidserver
+  script:
+    - apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-key 9AAC253193B65D4DF1D0A13EEC4632C79C5E0151
+    - export RELEASE=`sed -n 's,^deb [^ ][^ ]* \([a-z]*\).*,\1,p' /etc/apt/sources.list | head -1`
+    - echo "deb http://ppa.launchpad.net/fdroid/fdroidserver/ubuntu $RELEASE main" >> /etc/apt/sources.list
+    - apt update -y
+    - apt dist-upgrade -y
+    - apt-get install -y --no-install-recommends
+        aapt adb android-platform-tools-base android-sdk-common fdroidserver
+        git gnupg python3-setuptools unzip wget zipalign
+    - export ANDROID_HOME=/usr/lib/android-sdk
+    # xenial's aapt is too old
+    - wget --no-verbose https://dl.google.com/android/repository/build-tools_r27.0.1-linux.zip
+    - unzip -q build-tools_r27.0.1-linux.zip
+    - rm build-tools_r27.0.1-linux.zip
+    - mv android-8.1.0 $ANDROID_HOME/build-tools/27.0.1
+    - export LANG=C.UTF-8
+    - cd tests
+    - ./run-tests
+
+fedora_latest:
+  image: fedora:latest
+  only:
+    - master@fdroid/fdroidserver
+  script:
+    - dnf -y update
+    - dnf -y install git gnupg java-1.8.0-openjdk-devel python3 python3-pip rsync unzip wget
+    - pip3 install -e .
+    - wget --no-verbose -O tools.zip https://dl.google.com/android/repository/tools_r25.2.4-linux.zip
+    - unzip -q tools.zip
+    - rm tools.zip
+    - export ANDROID_HOME=~/android-sdk
+    - mkdir $ANDROID_HOME
+    - mv tools $ANDROID_HOME/
+    - mkdir -p $ANDROID_HOME/licenses/
+    - printf "\n8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e" > $ANDROID_HOME/licenses/android-sdk-license
+    - printf "\n84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_HOME/licenses/android-sdk-preview-license
+    - printf "\n79120722343a6f314e0719f863036c702b0e6b2a\n84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_HOME/licenses/android-sdk-preview-license-old
+    - mkdir ~/.android
+    - touch ~/.android/repositories.cfg
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platform-tools"
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;25.0.2"
+    - cd tests
+    - ./run-tests
