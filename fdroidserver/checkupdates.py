@@ -33,7 +33,7 @@ import copy
 from . import _
 from . import common
 from . import metadata
-from .exception import VCSException, FDroidException, MetaDataException
+from .exception import VCSException, NoSubmodulesException, FDroidException, MetaDataException
 
 
 # Check for a new version by looking at a document retrieved via HTTP.
@@ -110,8 +110,7 @@ def check_tags(app, pattern):
 
         last_build = app.get_last_build()
 
-        if last_build.submodules:
-            vcs.initsubmodules()
+        try_init_submodules(app, last_build, vcs)
 
         hpak = None
         htag = None
@@ -207,8 +206,7 @@ def check_repomanifest(app, branch=None):
         if len(app.builds) > 0:
             last_build = app.builds[-1]
 
-        if last_build.submodules:
-            vcs.initsubmodules()
+        try_init_submodules(app, last_build, vcs)
 
         hpak = None
         hver = None
@@ -298,6 +296,19 @@ def check_gplay(app):
     if not version:
         return (None, "Couldn't find version")
     return (version.strip(), None)
+
+
+def try_init_submodules(app, last_build, vcs):
+    """Try to init submodules if the last build entry used them.
+    They might have been removed from the app's repo in the meantime,
+    so if we can't find any submodules we continue with the updates check.
+    If there is any other error in initializing them then we stop the check.
+    """
+    if last_build.submodules:
+        try:
+            vcs.initsubmodules()
+        except NoSubmodulesException:
+            logging.info("No submodules present for {}".format(app.Name))
 
 
 # Return all directories under startdir that contain any of the manifest

@@ -53,7 +53,8 @@ from distutils.util import strtobool
 
 import fdroidserver.metadata
 from fdroidserver import _
-from fdroidserver.exception import FDroidException, VCSException, BuildException, VerificationException
+from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesException,\
+    BuildException, VerificationException
 from .asynchronousfilereader import AsynchronousFileReader
 
 
@@ -883,7 +884,7 @@ class vcs_git(vcs):
         self.checkrepo()
         submfile = os.path.join(self.local, '.gitmodules')
         if not os.path.isfile(submfile):
-            raise VCSException(_("No git submodules available"))
+            raise NoSubmodulesException(_("No git submodules available"))
 
         # fix submodules not accessible without an account and public key auth
         with open(submfile, 'r') as f:
