@@ -42,7 +42,15 @@ https_enforcings = [
     enforce_https('bitbucket.org'),
     enforce_https('apache.org'),
     enforce_https('google.com'),
+    enforce_https('git.code.sf.net'),
     enforce_https('svn.code.sf.net'),
+    enforce_https('anongit.kde.org'),
+    enforce_https('savannah.nongnu.org'),
+    enforce_https('git.savannah.nongnu.org'),
+    enforce_https('download.savannah.nongnu.org'),
+    enforce_https('savannah.gnu.org'),
+    enforce_https('git.savannah.gnu.org'),
+    enforce_https('download.savannah.gnu.org'),
 ]
 
 
