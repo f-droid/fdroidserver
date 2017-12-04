@@ -787,7 +787,7 @@ class vcs_git(vcs):
     def clientversioncmd(self):
         return ['git', '--version']
 
-    def GitFetchFDroidPopen(self, gitargs, envs=dict(), cwd=None, output=True):
+    def git(self, args, envs=dict(), cwd=None, output=True):
         '''Prevent git fetch/clone/submodule from hanging at the username/password prompt
 
         While fetch/pull/clone respect the command line option flags,
@@ -796,8 +796,14 @@ class vcs_git(vcs):
         enough.  So we just throw the kitchen sink at it to see what
         sticks.
 
+        Also, because of CVE-2017-1000117, block all SSH URLs.
         '''
-        git_config = []
+        #
+        # supported in git >= 2.3
+        git_config = [
+            '-c', 'core.sshCommand=false',
+            '-c', 'url.https://.insteadOf=ssh://',
+        ]
         for domain in ('bitbucket.org', 'github.com', 'gitlab.com'):
             git_config.append('-c')
             git_config.append('url.https://u:p@' + domain + '/.insteadOf=git@' + domain + ':')
@@ -805,15 +811,11 @@ class vcs_git(vcs):
             git_config.append('url.https://u:p@' + domain + '.insteadOf=git://' + domain)
             git_config.append('-c')
             git_config.append('url.https://u:p@' + domain + '.insteadOf=https://' + domain)
-        # add helpful tricks supported in git >= 2.3
-        ssh_command = 'ssh -oBatchMode=yes -oStrictHostKeyChecking=yes'
-        git_config.append('-c')
-        git_config.append('core.sshCommand="' + ssh_command + '"')  # git >= 2.10
         envs.update({
             'GIT_TERMINAL_PROMPT': '0',
-            'GIT_SSH_COMMAND': ssh_command,  # git >= 2.3
+            'GIT_SSH': 'false',  # for git < 2.3
         })
-        return FDroidPopen(['git', ] + git_config + gitargs,
+        return FDroidPopen(['git', ] + git_config + args,
                            envs=envs, cwd=cwd, output=output)
 
     def checkrepo(self):
@@ -832,7 +834,7 @@ class vcs_git(vcs):
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout
-            p = self.GitFetchFDroidPopen(['clone', self.remote, self.local])
+            p = self.git(['clone', self.remote, self.local])
             if p.returncode != 0:
                 self.clone_failed = True
                 raise VCSException("Git clone failed", p.output)
@@ -852,10 +854,10 @@ class vcs_git(vcs):
                 raise VCSException(_("Git clean failed"), p.output)
             if not self.refreshed:
                 # Get latest commits and tags from remote
-                p = self.GitFetchFDroidPopen(['fetch', 'origin'], cwd=self.local)
+                p = self.git(['fetch', 'origin'], cwd=self.local)
                 if p.returncode != 0:
                     raise VCSException(_("Git fetch failed"), p.output)
-                p = self.GitFetchFDroidPopen(['fetch', '--prune', '--tags', 'origin'], output=False, cwd=self.local)
+                p = self.git(['fetch', '--prune', '--tags', 'origin'], output=False, cwd=self.local)
                 if p.returncode != 0:
                     raise VCSException(_("Git fetch failed"), p.output)
                 # Recreate origin/HEAD as git clone would do it, in case it disappeared
@@ -898,7 +900,7 @@ class vcs_git(vcs):
         p = FDroidPopen(['git', 'submodule', 'sync'], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException(_("Git submodule sync failed"), p.output)
-        p = self.GitFetchFDroidPopen(['submodule', 'update', '--init', '--force', '--recursive'], cwd=self.local)
+        p = self.git(['submodule', 'update', '--init', '--force', '--recursive'], cwd=self.local)
         if p.returncode != 0:
             raise VCSException(_("Git submodule update failed"), p.output)
 
@@ -941,10 +943,23 @@ class vcs_gitsvn(vcs):
         if not result.endswith(self.local):
             raise VCSException('Repository mismatch')
 
+    def git(self, args, envs=dict(), cwd=None, output=True):
+        '''Prevent git fetch/clone/submodule from hanging at the username/password prompt
+        '''
+        # CVE-2017-1000117 block all SSH URLs (supported in git >= 2.3)
+        config = ['-c', 'core.sshCommand=false']
+        envs.update({
+            'GIT_TERMINAL_PROMPT': '0',
+            'GIT_SSH': 'false',  # for git < 2.3
+            'SVN_SSH': 'false',
+        })
+        return FDroidPopen(['git', ] + config + args,
+                           envs=envs, cwd=cwd, output=output)
+
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout
-            gitsvn_args = ['git', 'svn', 'clone']
+            gitsvn_args = ['svn', 'clone']
             if ';' in self.remote:
                 remote_split = self.remote.split(';')
                 for i in remote_split[1:]:
@@ -955,13 +970,13 @@ class vcs_gitsvn(vcs):
                     elif i.startswith('branches='):
                         gitsvn_args.extend(['-b', i[9:]])
                 gitsvn_args.extend([remote_split[0], self.local])
-                p = FDroidPopen(gitsvn_args, output=False)
+                p = self.git(gitsvn_args, output=False)
                 if p.returncode != 0:
                     self.clone_failed = True
                     raise VCSException("Git svn clone failed", p.output)
             else:
                 gitsvn_args.extend([self.remote, self.local])
-                p = FDroidPopen(gitsvn_args, output=False)
+                p = self.git(gitsvn_args, output=False)
                 if p.returncode != 0:
                     self.clone_failed = True
                     raise VCSException("Git svn clone failed", p.output)
@@ -969,20 +984,20 @@ class vcs_gitsvn(vcs):
         else:
             self.checkrepo()
             # Discard any working tree changes
-            p = FDroidPopen(['git', 'reset', '--hard'], cwd=self.local, output=False)
+            p = self.git(['reset', '--hard'], cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException("Git reset failed", p.output)
             # Remove untracked files now, in case they're tracked in the target
             # revision (it happens!)
-            p = FDroidPopen(['git', 'clean', '-dffx'], cwd=self.local, output=False)
+            p = self.git(['clean', '-dffx'], cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException("Git clean failed", p.output)
             if not self.refreshed:
                 # Get new commits, branches and tags from repo
-                p = FDroidPopen(['git', 'svn', 'fetch'], cwd=self.local, output=False)
+                p = self.git(['svn', 'fetch'], cwd=self.local, output=False)
                 if p.returncode != 0:
                     raise VCSException("Git svn fetch failed")
-                p = FDroidPopen(['git', 'svn', 'rebase'], cwd=self.local, output=False)
+                p = self.git(['svn', 'rebase'], cwd=self.local, output=False)
                 if p.returncode != 0:
                     raise VCSException("Git svn rebase failed", p.output)
                 self.refreshed = True
@@ -992,7 +1007,7 @@ class vcs_gitsvn(vcs):
             nospaces_rev = rev.replace(' ', '%20')
             # Try finding a svn tag
             for treeish in ['origin/', '']:
-                p = FDroidPopen(['git', 'checkout', treeish + 'tags/' + nospaces_rev], cwd=self.local, output=False)
+                p = self.git(['checkout', treeish + 'tags/' + nospaces_rev], cwd=self.local, output=False)
                 if p.returncode == 0:
                     break
             if p.returncode != 0:
@@ -1013,7 +1028,7 @@ class vcs_gitsvn(vcs):
 
                     svn_rev = svn_rev if svn_rev[0] == 'r' else 'r' + svn_rev
 
-                    p = FDroidPopen(['git', 'svn', 'find-rev', '--before', svn_rev, treeish], cwd=self.local, output=False)
+                    p = self.git(['svn', 'find-rev', '--before', svn_rev, treeish], cwd=self.local, output=False)
                     git_rev = p.output.rstrip()
 
                     if p.returncode == 0 and git_rev:
@@ -1021,17 +1036,17 @@ class vcs_gitsvn(vcs):
 
                 if p.returncode != 0 or not git_rev:
                     # Try a plain git checkout as a last resort
-                    p = FDroidPopen(['git', 'checkout', rev], cwd=self.local, output=False)
+                    p = self.git(['checkout', rev], cwd=self.local, output=False)
                     if p.returncode != 0:
                         raise VCSException("No git treeish found and direct git checkout of '%s' failed" % rev, p.output)
                 else:
                     # Check out the git rev equivalent to the svn rev
-                    p = FDroidPopen(['git', 'checkout', git_rev], cwd=self.local, output=False)
+                    p = self.git(['checkout', git_rev], cwd=self.local, output=False)
                     if p.returncode != 0:
                         raise VCSException(_("Git checkout of '%s' failed") % rev, p.output)
 
         # Get rid of any uncontrolled files left behind
-        p = FDroidPopen(['git', 'clean', '-dffx'], cwd=self.local, output=False)
+        p = self.git(['clean', '-dffx'], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException(_("Git clean failed"), p.output)
 
@@ -1060,7 +1075,7 @@ class vcs_hg(vcs):
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
-            p = FDroidPopen(['hg', 'clone', self.remote, self.local], output=False)
+            p = FDroidPopen(['hg', 'clone', '--ssh', 'false', self.remote, self.local], output=False)
             if p.returncode != 0:
                 self.clone_failed = True
                 raise VCSException("Hg clone failed", p.output)
@@ -1073,7 +1088,7 @@ class vcs_hg(vcs):
                     raise VCSException("Unexpected output from hg status -uS: " + line)
                 FDroidPopen(['rm', '-rf', line[2:]], cwd=self.local, output=False)
             if not self.refreshed:
-                p = FDroidPopen(['hg', 'pull'], cwd=self.local, output=False)
+                p = FDroidPopen(['hg', 'pull'], '--ssh', 'false', cwd=self.local, output=False)
                 if p.returncode != 0:
                     raise VCSException("Hg pull failed", p.output)
                 self.refreshed = True
@@ -1108,29 +1123,36 @@ class vcs_bzr(vcs):
     def clientversioncmd(self):
         return ['bzr', '--version']
 
+    def bzr(self, args, envs=dict(), cwd=None, output=True):
+        '''Prevent bzr from ever using SSH to avoid security vulns'''
+        envs.update({
+            'BZR_SSH': 'false',
+        })
+        return FDroidPopen(['bzr', ] + args, envs=envs, cwd=cwd, output=output)
+
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
-            p = FDroidPopen(['bzr', 'branch', self.remote, self.local], output=False)
+            p = self.bzr(['branch', self.remote, self.local], output=False)
             if p.returncode != 0:
                 self.clone_failed = True
                 raise VCSException("Bzr branch failed", p.output)
         else:
-            p = FDroidPopen(['bzr', 'clean-tree', '--force', '--unknown', '--ignored'], cwd=self.local, output=False)
+            p = self.bzr(['clean-tree', '--force', '--unknown', '--ignored'], cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException("Bzr revert failed", p.output)
             if not self.refreshed:
-                p = FDroidPopen(['bzr', 'pull'], cwd=self.local, output=False)
+                p = self.bzr(['pull'], cwd=self.local, output=False)
                 if p.returncode != 0:
                     raise VCSException("Bzr update failed", p.output)
                 self.refreshed = True
 
         revargs = list(['-r', rev] if rev else [])
-        p = FDroidPopen(['bzr', 'revert'] + revargs, cwd=self.local, output=False)
+        p = self.bzr(['revert'] + revargs, cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException("Bzr revert of '%s' failed" % rev, p.output)
 
     def _gettags(self):
-        p = FDroidPopen(['bzr', 'tags'], cwd=self.local, output=False)
+        p = self.bzr(['tags'], cwd=self.local, output=False)
         return [tag.split('   ')[0].strip() for tag in
                 p.output.splitlines()]
 
