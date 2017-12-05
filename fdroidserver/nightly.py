@@ -51,7 +51,9 @@ def _ssh_key_from_debug_keystore():
     privkey = os.path.join(tmp_dir, '.privkey')
     key_pem = os.path.join(tmp_dir, '.key.pem')
     p12 = os.path.join(tmp_dir, '.keystore.p12')
-    subprocess.check_call([common.config['keytool'], '-importkeystore',
+    _config = dict()
+    common.fill_config_defaults(_config)
+    subprocess.check_call([_config['keytool'], '-importkeystore',
                            '-srckeystore', KEYSTORE_FILE, '-srcalias', KEY_ALIAS,
                            '-srcstorepass', PASSWORD, '-srckeypass', PASSWORD,
                            '-destkeystore', p12, '-destalias', KEY_ALIAS,
@@ -68,7 +70,7 @@ def _ssh_key_from_debug_keystore():
     rsakey = paramiko.RSAKey.from_private_key_file(privkey)
     fingerprint = base64.b64encode(hashlib.sha256(rsakey.asbytes()).digest()).decode('ascii').rstrip('=')
     ssh_private_key_file = os.path.join(tmp_dir, 'debug_keystore_' + fingerprint + '_id_rsa')
-    os.rename(privkey, ssh_private_key_file)
+    shutil.move(privkey, ssh_private_key_file)
 
     pub = rsakey.get_name() + ' ' + rsakey.get_base64() + ' ' + ssh_private_key_file
     with open(ssh_private_key_file + '.pub', 'w') as fp:
@@ -91,7 +93,6 @@ def main():
                         help=_("Don't use rsync checksums"))
     # TODO add --with-btlog
     options = parser.parse_args()
-    common.read_config(None)
 
     # force a tighter umask since this writes private key material
     umask = os.umask(0o077)
@@ -235,6 +236,8 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         with open('config.py', 'w') as fp:
             fp.write(config)
         os.chmod('config.py', 0o600)
+        config = common.read_config(options)
+        common.assert_config_keystore(config)
 
         for root, dirs, files in os.walk(cibase):
             for d in ('fdroid', '.git', '.gradle'):
@@ -243,12 +246,14 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             for f in files:
                 if f.endswith('-debug.apk'):
                     apkfilename = os.path.join(root, f)
-                    logging.debug(_('copying {apkfilename} into {path}')
-                                  .format(apkfilename=apkfilename, path=repodir))
+                    logging.debug(_('Striping mystery signature from {apkfilename}')
+                                  .format(apkfilename=apkfilename))
                     destapk = os.path.join(repodir, os.path.basename(f))
-                    shutil.copyfile(apkfilename, destapk)
-                    shutil.copystat(apkfilename, destapk)
-                    os.chmod(destapk, 0o644)
+                    os.chmod(apkfilename, 0o644)
+                    logging.debug(_('Resigning {apkfilename} with provided debug.keystore')
+                                  .format(apkfilename=os.path.basename(apkfilename)))
+                    common.apk_strip_signatures(apkfilename, strip_manifest=True)
+                    common.sign_apk(apkfilename, destapk, KEY_ALIAS)
 
         if options.verbose:
             logging.debug(_('attempting bare ssh connection to test deploy key:'))
@@ -278,8 +283,8 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         os.makedirs(os.path.dirname(ssh_dir), exist_ok=True)
         privkey = _ssh_key_from_debug_keystore()
         ssh_private_key_file = os.path.join(ssh_dir, os.path.basename(privkey))
-        os.rename(privkey, ssh_private_key_file)
-        os.rename(privkey + '.pub', ssh_private_key_file + '.pub')
+        shutil.move(privkey, ssh_private_key_file)
+        shutil.move(privkey + '.pub', ssh_private_key_file + '.pub')
         if shutil.rmtree.avoids_symlink_attacks:
             shutil.rmtree(os.path.dirname(privkey))
 

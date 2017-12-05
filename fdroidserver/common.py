@@ -1939,6 +1939,22 @@ def get_apk_id_aapt(apkfile):
                           .format(apkfilename=apkfile))
 
 
+def get_minSdkVersion_aapt(apkfile):
+    """Extract the minimum supported Android SDK from an APK using aapt
+
+    :param apkfile: path to an APK file.
+    :returns: the integer representing the SDK version
+    """
+    r = re.compile(r"^sdkVersion:'([0-9]+)'")
+    p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
+    for line in p.output.splitlines():
+        m = r.match(line)
+        if m:
+            return int(m.group(1))
+    raise FDroidException(_('Reading minSdkVersion failed: "{apkfilename}"')
+                          .format(apkfilename=apkfile))
+
+
 class PopenResult:
     def __init__(self):
         self.returncode = None
@@ -2352,7 +2368,7 @@ def apk_strip_signatures(signed_apk, strip_manifest=False):
     """
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_apk = os.path.join(tmpdir, 'tmp.apk')
-        os.rename(signed_apk, tmp_apk)
+        shutil.move(signed_apk, tmp_apk)
         with ZipFile(tmp_apk, 'r') as in_apk:
             with ZipFile(signed_apk, 'w') as out_apk:
                 for info in in_apk.infolist():
@@ -2411,6 +2427,40 @@ def apk_extract_signatures(apkpath, outdir, manifest=True):
                 newpath = os.path.join(outdir, os.path.basename(f.filename))
                 with open(newpath, 'wb') as out_file:
                     out_file.write(in_apk.read(f.filename))
+
+
+def sign_apk(unsigned_path, signed_path, keyalias):
+    """Sign and zipalign an unsigned APK, then save to a new file, deleting the unsigned
+
+    android-18 (4.3) finally added support for reasonable hash
+    algorithms, like SHA-256, before then, the only options were MD5
+    and SHA1 :-/ This aims to use SHA-256 when the APK does not target
+    older Android versions, and is therefore safe to do so.
+
+    https://issuetracker.google.com/issues/36956587
+    https://android-review.googlesource.com/c/platform/libcore/+/44491
+
+    """
+
+    if get_minSdkVersion_aapt(unsigned_path) < 18:
+        signature_algorithm = ['-sigalg', 'SHA1withRSA', '-digestalg', 'SHA1']
+    else:
+        signature_algorithm = ['-sigalg', 'SHA256withRSA', '-digestalg', 'SHA256']
+
+    p = FDroidPopen([config['jarsigner'], '-keystore', config['keystore'],
+                     '-storepass:env', 'FDROID_KEY_STORE_PASS',
+                     '-keypass:env', 'FDROID_KEY_PASS']
+                    + signature_algorithm + [unsigned_path, keyalias],
+                    envs={
+                        'FDROID_KEY_STORE_PASS': config['keystorepass'],
+                        'FDROID_KEY_PASS': config['keypass'], })
+    if p.returncode != 0:
+        raise BuildException(_("Failed to sign application"), p.output)
+
+    p = SdkToolsPopen(['zipalign', '-v', '4', unsigned_path, signed_path])
+    if p.returncode != 0:
+        raise BuildException(_("Failed to zipalign application"))
+    os.remove(unsigned_path)
 
 
 def verify_apks(signed_apk, unsigned_apk, tmp_dir):

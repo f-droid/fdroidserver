@@ -339,6 +339,7 @@ def main():
                                                                       unsigned_dir,
                                                                       output_dir))
 
+                # TODO replace below with common.sign_apk() once it has proven stable
                 # Sign the application...
                 p = FDroidPopen([config['jarsigner'], '-keystore', config['keystore'],
                                  '-storepass:env', 'FDROID_KEY_STORE_PASS',
