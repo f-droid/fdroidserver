@@ -70,7 +70,7 @@ def _ssh_key_from_debug_keystore():
     rsakey = paramiko.RSAKey.from_private_key_file(privkey)
     fingerprint = base64.b64encode(hashlib.sha256(rsakey.asbytes()).digest()).decode('ascii').rstrip('=')
     ssh_private_key_file = os.path.join(tmp_dir, 'debug_keystore_' + fingerprint + '_id_rsa')
-    os.rename(privkey, ssh_private_key_file)
+    shutil.move(privkey, ssh_private_key_file)
 
     pub = rsakey.get_name() + ' ' + rsakey.get_base64() + ' ' + ssh_private_key_file
     with open(ssh_private_key_file + '.pub', 'w') as fp:
@@ -283,8 +283,8 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         os.makedirs(os.path.dirname(ssh_dir), exist_ok=True)
         privkey = _ssh_key_from_debug_keystore()
         ssh_private_key_file = os.path.join(ssh_dir, os.path.basename(privkey))
-        os.rename(privkey, ssh_private_key_file)
-        os.rename(privkey + '.pub', ssh_private_key_file + '.pub')
+        shutil.move(privkey, ssh_private_key_file)
+        shutil.move(privkey + '.pub', ssh_private_key_file + '.pub')
         if shutil.rmtree.avoids_symlink_attacks:
             shutil.rmtree(os.path.dirname(privkey))
 
