@@ -1088,7 +1088,7 @@ class vcs_hg(vcs):
                     raise VCSException("Unexpected output from hg status -uS: " + line)
                 FDroidPopen(['rm', '-rf', line[2:]], cwd=self.local, output=False)
             if not self.refreshed:
-                p = FDroidPopen(['hg', 'pull'], '--ssh', 'false', cwd=self.local, output=False)
+                p = FDroidPopen(['hg', 'pull', '--ssh', 'false'], cwd=self.local, output=False)
                 if p.returncode != 0:
                     raise VCSException("Hg pull failed", p.output)
                 self.refreshed = True
