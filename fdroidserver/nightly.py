@@ -290,6 +290,16 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             shutil.rmtree(os.path.dirname(ssh_private_key_file))
 
     else:
+        if not os.path.isfile(KEYSTORE_FILE):
+            androiddir = os.path.dirname(KEYSTORE_FILE)
+            if not os.path.exists(androiddir):
+                os.mkdir(androiddir)
+                logging.info(_('created {path}').format(path=androiddir))
+            logging.error(_('{path} does not exist!  Create it by running:').format(path=KEYSTORE_FILE)
+                          + '\n    keytool -genkey -v -keystore ' + KEYSTORE_FILE + ' -storepass android \\'
+                          + '\n     -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 \\'
+                          + '\n     -dname "CN=Android Debug,O=Android,C=US"')
+            sys.exit(1)
         ssh_dir = os.path.join(os.getenv('HOME'), '.ssh')
         os.makedirs(os.path.dirname(ssh_dir), exist_ok=True)
         privkey = _ssh_key_from_debug_keystore()
