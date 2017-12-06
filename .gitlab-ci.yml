@@ -91,12 +91,16 @@ fedora_latest:
     - master@fdroid/fdroidserver
   script:
     - dnf -y update
-    - dnf -y install git gnupg java-1.8.0-openjdk-devel python3 python3-pip rsync unzip wget
-    - pip3 install -e .
+    - dnf -y install git gnupg java-1.8.0-openjdk-devel python3 python3-babel
+                     python3-pip rsync unzip wget
+    - ./setup.py compile_catalog sdist
+    - useradd -m -c "test account" --password "fakepassword"  testuser
+    - su testuser --login --command "cd `pwd`; pip3 install --user dist/fdroidserver-*.tar.gz"
+    - test -e ~testuser/.local/share/locale/de/LC_MESSAGES/fdroidserver.mo
     - wget --no-verbose -O tools.zip https://dl.google.com/android/repository/tools_r25.2.4-linux.zip
     - unzip -q tools.zip
     - rm tools.zip
-    - export ANDROID_HOME=~/android-sdk
+    - export ANDROID_HOME=`pwd`/android-sdk
     - mkdir $ANDROID_HOME
     - mv tools $ANDROID_HOME/
     - mkdir -p $ANDROID_HOME/licenses/
@@ -107,5 +111,7 @@ fedora_latest:
     - touch ~/.android/repositories.cfg
     - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platform-tools"
     - echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;25.0.2"
+    - chown -R testuser .
     - cd tests
-    - ./run-tests
+    - su testuser --login --command
+        "cd `pwd`; export ANDROID_HOME=$ANDROID_HOME; fdroid=~testuser/.local/bin/fdroid ./run-tests"
