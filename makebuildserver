@@ -553,10 +553,16 @@ def main():
         for d in ('.m2', '.gradle/caches', '.gradle/wrapper', '.pip_download_cache'):
             fullpath = os.path.join(os.getenv('HOME'), d)
             if os.path.isdir(fullpath):
-                # TODO newer versions of vagrant provide `vagrant rsync`
+                ssh_command = ' '.join('ssh -i {0} -p {1}'.format(key, port),
+                                       '-o StrictHostKeyChecking=no',
+                                       '-o UserKnownHostsFile=/dev/null',
+                                       '-o LogLevel=FATAL',
+                                       '-o IdentitiesOnly=yes',
+                                       '-o PasswordAuthentication=no')
+                # TODO vagrant 1.5+ provides `vagrant rsync`
                 run_via_vagrant_ssh(v, ['cd ~ && test -d', d, '|| mkdir -p', d])
                 subprocess.call(['rsync', '-axv', '--progress', '--delete', '-e',
-                                 'ssh -i {0} -p {1} -oIdentitiesOnly=yes'.format(key, port),
+                                 ssh_command,
                                  fullpath + '/',
                                  user + '@' + hostname + ':~/' + d + '/'])
 

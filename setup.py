@@ -78,6 +78,9 @@ setup(name='fdroidserver',
       data_files=get_data_files(),
       python_requires='>=3.4',
       cmdclass={'versioncheck': VersionCheckCommand},
+      setup_requires=[
+          'babel',
+      ],
       install_requires=[
           'clint',
           'GitPython',

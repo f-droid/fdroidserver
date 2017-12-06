@@ -75,28 +75,6 @@ done
 
 
 #------------------------------------------------------------------------------#
-# test building the source tarball, then installing it
-cd $WORKSPACE
-python3 setup.py compile_catalog sdist
-
-# make sure translation files got compiled and included
-tar tzf dist/fdroidserver-*.tar.gz | grep locale/de/LC_MESSAGES/fdroidserver.mo
-
-rm -rf $WORKSPACE/env
-$pyvenv $WORKSPACE/env
-. $WORKSPACE/env/bin/activate
-# workaround https://github.com/pypa/setuptools/issues/937
-pip3 install --quiet setuptools==33.1.1
-pip3 install --quiet dist/fdroidserver-*.tar.gz
-
-# make sure translation files were installed
-test -e $WORKSPACE/env/share/locale/de/LC_MESSAGES/fdroidserver.mo
-
-# run tests in new pip+pyvenv install
-fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests $apksource
-
-
-#------------------------------------------------------------------------------#
 # test install using install direct from git repo
 cd $WORKSPACE
 rm -rf $WORKSPACE/env

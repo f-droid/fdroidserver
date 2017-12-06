@@ -388,8 +388,14 @@ def test_aapt_version(aapt):
             minor = m.group(2)
             bugfix = m.group(3)
             # the Debian package has the version string like "v0.2-23.0.2"
-            if '.' not in bugfix and LooseVersion('.'.join((major, minor, bugfix))) < LooseVersion('0.2.2166767'):
-                logging.warning(_("'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!")
+            too_old = False
+            if '.' in bugfix:
+                if LooseVersion(bugfix) < LooseVersion('24.0.0'):
+                    too_old = True
+            elif LooseVersion('.'.join((major, minor, bugfix))) < LooseVersion('0.2.2964546'):
+                too_old = True
+            if too_old:
+                logging.warning(_("'{aapt}' is too old, fdroid requires build-tools-24.0.0 or newer!")
                                 .format(aapt=aapt))
         else:
             logging.warning(_('Unknown version of aapt, might cause problems: ') + output)

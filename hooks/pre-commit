@@ -85,8 +85,10 @@ find_command() {
 	echo :
 }
 
+DASH=$(find_command dash)
 PYFLAKES=$(find_command pyflakes)
 PEP8=$(find_command pycodestyle pep8)
+RUBY=$(find_command ruby)
 
 if [ "$PY_FILES $PY_TEST_FILES" != " " ]; then
     if ! $PYFLAKES $PY_FILES $PY_TEST_FILES; then
@@ -110,7 +112,7 @@ if [ "$PY_TEST_FILES" != "" ]; then
 fi
 
 for f in $SH_FILES; do
-	if ! dash -n $f; then
+	if ! $DASH -n $f; then
 		err "dash tests failed!"
 	fi
 done
@@ -122,7 +124,7 @@ for f in $BASH_FILES; do
 done
 
 for f in $RB_FILES; do
-	if ! ruby -c $f 1>/dev/null; then
+	if ! $RUBY -c $f 1>/dev/null; then
 		err "ruby tests failed!"
 	fi
 done

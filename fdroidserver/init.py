@@ -144,7 +144,7 @@ def main():
             if os.path.isfile(os.path.join(d, 'aapt')):
                 aapt = os.path.join(d, 'aapt')
                 break
-        if os.path.isfile(aapt):
+        if aapt and os.path.isfile(aapt):
             dirname = os.path.basename(os.path.dirname(aapt))
             if dirname == 'build-tools':
                 # this is the old layout, before versioned build-tools
