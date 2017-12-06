@@ -100,6 +100,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         # Helper to copy the contents of a directory to the server...
         def send_dir(path):
             logging.debug("rsyncing " + path + " to " + ftp.getcwd())
+            # TODO this should move to `vagrant rsync` from >= v1.5
             try:
                 subprocess.check_output(['rsync', '--recursive', '--perms', '--links', '--quiet', '--rsh=' +
                                          'ssh -o StrictHostKeyChecking=no' +
