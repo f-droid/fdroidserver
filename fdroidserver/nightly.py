@@ -28,6 +28,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import yaml
 from urllib.parse import urlparse
 from argparse import ArgumentParser
 
@@ -263,6 +264,18 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
                                        servergitmirror.split(':')[0]])
             except subprocess.CalledProcessError:
                 pass
+
+        app_url = clone_url[:-len(NIGHTLY)]
+        template = dict()
+        template['AuthorName'] = clone_url.split('/')[4]
+        template['AuthorWebSite'] = '/'.join(clone_url.split('/')[:4])
+        template['Categories'] = ['nightly']
+        template['SourceCode'] = app_url
+        template['IssueTracker'] = app_url + '/issues'
+        template['Summary'] = 'Nightly build of ' + urlparse(app_url).path[1:]
+        template['Description'] = template['Summary']
+        with open('template.yml', 'w') as fp:
+            yaml.dump(template, fp)
 
         subprocess.check_call(['fdroid', 'update', '--rename-apks', '--create-metadata', '--verbose'],
                               cwd=repo_basedir)
