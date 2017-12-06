@@ -192,9 +192,7 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         icon_path = os.path.join(git_mirror_path, 'icon.png')
         try:
             import qrcode
-            img = qrcode.make(repo_url)
-            with open(icon_path, 'wb') as fp:
-                fp.write(img)
+            qrcode.make(repo_url).save(icon_path)
         except Exception:
             exampleicon = os.path.join(common.get_examples_dir(), 'fdroid-icon.png')
             shutil.copy(exampleicon, icon_path)
