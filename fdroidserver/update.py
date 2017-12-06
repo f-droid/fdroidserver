@@ -1670,7 +1670,7 @@ def create_metadata_from_template(apk):
         with open('template.yml') as f:
             metatxt = f.read()
         if 'name' in apk and apk['name'] != '':
-            metatxt = re.sub(r'^(((Auto)?Name|Summary):).*$',
+            metatxt = re.sub(r'''^(((Auto)?Name|Summary):)[ '"\.]*$''',
                              r'\1 ' + apk['name'],
                              metatxt,
                              flags=re.IGNORECASE | re.MULTILINE)
