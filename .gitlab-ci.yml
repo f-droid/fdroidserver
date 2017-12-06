@@ -66,6 +66,25 @@ ubuntu_lts:
     - cd tests
     - ./run-tests
 
+pip_install:
+  image: archlinux/base
+  only:
+    - master@fdroid/fdroidserver
+  script:
+    - pacman --sync --sysupgrade --refresh --noconfirm grep python-pip python-virtualenv tar
+    # setup venv to act as release build machine
+    - python -m venv sdist-env
+    - . sdist-env/bin/activate
+    - ./setup.py compile_catalog sdist
+    - deactivate
+    - tar tzf dist/fdroidserver-*.tar.gz | grep locale/de/LC_MESSAGES/fdroidserver.mo
+    # back to bare machine to act as user's install machine
+    - pip install dist/fdroidserver-*.tar.gz
+    - test -e /usr/share/locale/de/LC_MESSAGES/fdroidserver.mo
+    - fdroid
+    - fdroid readmeta
+    - fdroid update --help
+
 fedora_latest:
   image: fedora:latest
   only:
