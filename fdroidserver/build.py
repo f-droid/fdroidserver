@@ -100,18 +100,20 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         # Helper to copy the contents of a directory to the server...
         def send_dir(path):
             logging.debug("rsyncing " + path + " to " + ftp.getcwd())
-            subprocess.check_call(['rsync', '-rple',
-                                   'ssh -o StrictHostKeyChecking=no' +
-                                   ' -o UserKnownHostsFile=/dev/null' +
-                                   ' -o LogLevel=FATAL' +
-                                   ' -o IdentitiesOnly=yes' +
-                                   ' -o PasswordAuthentication=no' +
-                                   ' -p ' + str(sshinfo['port']) +
-                                   ' -i ' + sshinfo['idfile'],
-                                   path,
-                                   sshinfo['user'] +
-                                   "@" + sshinfo['hostname'] +
-                                   ":" + ftp.getcwd()])
+            try:
+                subprocess.check_output(['rsync', '--recursive', '--perms', '--links', '--quiet', '--rsh=' +
+                                         'ssh -o StrictHostKeyChecking=no' +
+                                         ' -o UserKnownHostsFile=/dev/null' +
+                                         ' -o LogLevel=FATAL' +
+                                         ' -o IdentitiesOnly=yes' +
+                                         ' -o PasswordAuthentication=no' +
+                                         ' -p ' + str(sshinfo['port']) +
+                                         ' -i ' + sshinfo['idfile'],
+                                         path,
+                                         sshinfo['user'] + "@" + sshinfo['hostname'] + ":" + ftp.getcwd()],
+                                        stderr=subprocess.STDOUT)
+            except subprocess.CalledProcessError as e:
+                raise FDroidException(str(e), e.output.decode())
 
         logging.info("Preparing server for build...")
         serverpath = os.path.abspath(os.path.dirname(__file__))
