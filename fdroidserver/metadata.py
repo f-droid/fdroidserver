@@ -1545,5 +1545,5 @@ def write_metadata(metadatapath, app):
 
 def add_metadata_arguments(parser):
     '''add common command line flags related to metadata processing'''
-    parser.add_argument("-W", default='error',
-                        help=_("force errors to be warnings, or ignore"))
+    parser.add_argument("-W", choices=['error', 'warn', 'ignore'], default='error',
+                        help=_("force metadata errors (default) to be warnings, or to be ignored."))
