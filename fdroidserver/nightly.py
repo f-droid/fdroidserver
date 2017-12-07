@@ -70,7 +70,8 @@ def _ssh_key_from_debug_keystore():
 
     rsakey = paramiko.RSAKey.from_private_key_file(privkey)
     fingerprint = base64.b64encode(hashlib.sha256(rsakey.asbytes()).digest()).decode('ascii').rstrip('=')
-    ssh_private_key_file = os.path.join(tmp_dir, 'debug_keystore_' + fingerprint + '_id_rsa')
+    ssh_private_key_file = os.path.join(tmp_dir, 'debug_keystore_'
+                                        + fingerprint.replace('/', '_') + '_id_rsa')
     shutil.move(privkey, ssh_private_key_file)
 
     pub = rsakey.get_name() + ' ' + rsakey.get_base64() + ' ' + ssh_private_key_file
