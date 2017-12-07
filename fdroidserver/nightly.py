@@ -28,6 +28,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import yaml
 from urllib.parse import urlparse
 from argparse import ArgumentParser
 
@@ -69,7 +70,8 @@ def _ssh_key_from_debug_keystore():
 
     rsakey = paramiko.RSAKey.from_private_key_file(privkey)
     fingerprint = base64.b64encode(hashlib.sha256(rsakey.asbytes()).digest()).decode('ascii').rstrip('=')
-    ssh_private_key_file = os.path.join(tmp_dir, 'debug_keystore_' + fingerprint + '_id_rsa')
+    ssh_private_key_file = os.path.join(tmp_dir, 'debug_keystore_'
+                                        + fingerprint.replace('/', '_') + '_id_rsa')
     shutil.move(privkey, ssh_private_key_file)
 
     pub = rsakey.get_name() + ' ' + rsakey.get_base64() + ' ' + ssh_private_key_file
@@ -191,9 +193,7 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         icon_path = os.path.join(git_mirror_path, 'icon.png')
         try:
             import qrcode
-            img = qrcode.make(repo_url)
-            with open(icon_path, 'wb') as fp:
-                fp.write(img)
+            qrcode.make(repo_url).save(icon_path)
         except Exception:
             exampleicon = os.path.join(common.get_examples_dir(), 'fdroid-icon.png')
             shutil.copy(exampleicon, icon_path)
@@ -264,6 +264,18 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             except subprocess.CalledProcessError:
                 pass
 
+        app_url = clone_url[:-len(NIGHTLY)]
+        template = dict()
+        template['AuthorName'] = clone_url.split('/')[4]
+        template['AuthorWebSite'] = '/'.join(clone_url.split('/')[:4])
+        template['Categories'] = ['nightly']
+        template['SourceCode'] = app_url
+        template['IssueTracker'] = app_url + '/issues'
+        template['Summary'] = 'Nightly build of ' + urlparse(app_url).path[1:]
+        template['Description'] = template['Summary']
+        with open('template.yml', 'w') as fp:
+            yaml.dump(template, fp)
+
         subprocess.check_call(['fdroid', 'update', '--rename-apks', '--create-metadata', '--verbose'],
                               cwd=repo_basedir)
         common.local_rsync(options, repo_basedir + '/metadata/', git_mirror_metadatadir + '/')
@@ -279,6 +291,16 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             shutil.rmtree(os.path.dirname(ssh_private_key_file))
 
     else:
+        if not os.path.isfile(KEYSTORE_FILE):
+            androiddir = os.path.dirname(KEYSTORE_FILE)
+            if not os.path.exists(androiddir):
+                os.mkdir(androiddir)
+                logging.info(_('created {path}').format(path=androiddir))
+            logging.error(_('{path} does not exist!  Create it by running:').format(path=KEYSTORE_FILE)
+                          + '\n    keytool -genkey -v -keystore ' + KEYSTORE_FILE + ' -storepass android \\'
+                          + '\n     -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 \\'
+                          + '\n     -dname "CN=Android Debug,O=Android,C=US"')
+            sys.exit(1)
         ssh_dir = os.path.join(os.getenv('HOME'), '.ssh')
         os.makedirs(os.path.dirname(ssh_dir), exist_ok=True)
         privkey = _ssh_key_from_debug_keystore()
