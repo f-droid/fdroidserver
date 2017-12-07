@@ -352,11 +352,6 @@ _fdroid() {
 	}
 }
 
-_fd-commit() {
-	__package
-}
-
 complete -F _fdroid fdroid
-complete -F _fd-commit fd-commit
 
 return 0
