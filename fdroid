@@ -53,7 +53,7 @@ commands = OrderedDict([
 
 
 def print_help():
-    print(_("usage: ") + _("fdroid [-h|--help|--version] <command> [<args>]"))
+    print(_("usage: ") + _("fdroid [<command>] [-h|--help|--version|<args>]"))
     print("")
     print(_("Valid commands are:"))
     for cmd, summary in commands.items():
