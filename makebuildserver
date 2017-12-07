@@ -561,7 +561,7 @@ def main():
                                         '-o PasswordAuthentication=no'))
                 # TODO vagrant 1.5+ provides `vagrant rsync`
                 run_via_vagrant_ssh(v, ['cd ~ && test -d', d, '|| mkdir -p', d])
-                subprocess.call(['rsync', '-axv', '--progress', '--delete', '-e',
+                subprocess.call(['rsync', '-ax', '--delete', '-e',
                                  ssh_command,
                                  fullpath + '/',
                                  user + '@' + hostname + ':~/' + d + '/'])
