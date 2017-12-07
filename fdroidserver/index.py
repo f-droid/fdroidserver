@@ -691,6 +691,7 @@ def download_repo_index(url_str, etag=None, verify_fingerprint=True):
         jar = zipfile.ZipFile(fp)
 
         # verify that the JAR signature is valid
+        logging.debug(_('Verifying index signature:'))
         common.verify_jar_signature(fp.name)
 
         # get public key and its fingerprint from JAR

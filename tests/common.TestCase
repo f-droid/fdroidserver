@@ -22,6 +22,7 @@ print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
+import fdroidserver.index
 import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
@@ -275,11 +276,55 @@ class CommonTest(unittest.TestCase):
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
 
+        self.assertTrue(fdroidserver.common.verify_apk_signature('bad-unicode-πÇÇ现代通用字-български-عربي1.apk'))
+        self.assertFalse(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_1.apk'))
+        self.assertFalse(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_2.apk'))
+        self.assertFalse(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_3.apk'))
+        self.assertFalse(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_4.apk'))
+        self.assertTrue(fdroidserver.common.verify_apk_signature('org.dyndns.fules.ck_20.apk'))
         self.assertTrue(fdroidserver.common.verify_apk_signature('urzip.apk'))
         self.assertFalse(fdroidserver.common.verify_apk_signature('urzip-badcert.apk'))
         self.assertFalse(fdroidserver.common.verify_apk_signature('urzip-badsig.apk'))
         self.assertTrue(fdroidserver.common.verify_apk_signature('urzip-release.apk'))
         self.assertFalse(fdroidserver.common.verify_apk_signature('urzip-release-unsigned.apk'))
+
+    def test_verify_old_apk_signature(self):
+        fdroidserver.common.config = None
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
+        fdroidserver.common.config = config
+
+        self.assertTrue(fdroidserver.common.verify_old_apk_signature('bad-unicode-πÇÇ现代通用字-български-عربي1.apk'))
+        self.assertTrue(fdroidserver.common.verify_old_apk_signature('org.bitbucket.tickytacky.mirrormirror_1.apk'))
+        self.assertTrue(fdroidserver.common.verify_old_apk_signature('org.bitbucket.tickytacky.mirrormirror_2.apk'))
+        self.assertTrue(fdroidserver.common.verify_old_apk_signature('org.bitbucket.tickytacky.mirrormirror_3.apk'))
+        self.assertTrue(fdroidserver.common.verify_old_apk_signature('org.bitbucket.tickytacky.mirrormirror_4.apk'))
+        self.assertTrue(fdroidserver.common.verify_old_apk_signature('org.dyndns.fules.ck_20.apk'))
+        self.assertTrue(fdroidserver.common.verify_old_apk_signature('urzip.apk'))
+        self.assertFalse(fdroidserver.common.verify_old_apk_signature('urzip-badcert.apk'))
+        self.assertFalse(fdroidserver.common.verify_old_apk_signature('urzip-badsig.apk'))
+        self.assertTrue(fdroidserver.common.verify_old_apk_signature('urzip-release.apk'))
+        self.assertFalse(fdroidserver.common.verify_old_apk_signature('urzip-release-unsigned.apk'))
+
+    def test_verify_jar_signature_succeeds(self):
+        fdroidserver.common.config = None
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
+        fdroidserver.common.config = config
+        source_dir = os.path.join(self.basedir, 'signindex')
+        for f in ('testy.jar', 'guardianproject.jar'):
+            testfile = os.path.join(source_dir, f)
+            fdroidserver.common.verify_jar_signature(testfile)
+
+    def test_verify_jar_signature_fails(self):
+        fdroidserver.common.config = None
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
+        fdroidserver.common.config = config
+        source_dir = os.path.join(self.basedir, 'signindex')
+        testfile = os.path.join(source_dir, 'unsigned.jar')
+        with self.assertRaises(fdroidserver.index.VerificationException):
+            fdroidserver.common.verify_jar_signature(testfile)
 
     def test_verify_apks(self):
         fdroidserver.common.config = None

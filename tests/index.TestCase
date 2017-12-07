@@ -45,18 +45,6 @@ class IndexTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.signindex.config = config
 
-    def test_verify_jar_signature_succeeds(self):
-        source_dir = os.path.join(self.basedir, 'signindex')
-        for f in ('testy.jar', 'guardianproject.jar'):
-            testfile = os.path.join(source_dir, f)
-            fdroidserver.common.verify_jar_signature(testfile)
-
-    def test_verify_jar_signature_fails(self):
-        source_dir = os.path.join(self.basedir, 'signindex')
-        testfile = os.path.join(source_dir, 'unsigned.jar')
-        with self.assertRaises(fdroidserver.index.VerificationException):
-            fdroidserver.common.verify_jar_signature(testfile)
-
     def test_get_public_key_from_jar_succeeds(self):
         source_dir = os.path.join(self.basedir, 'signindex')
         for f in ('testy.jar', 'guardianproject.jar'):
