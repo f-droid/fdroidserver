@@ -601,6 +601,35 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual('urzip', data['Name'])
         self.assertEqual('urzip', data['Summary'])
 
+    def test_has_known_vulnerability(self):
+        good = [
+            'org.bitbucket.tickytacky.mirrormirror_1.apk',
+            'org.bitbucket.tickytacky.mirrormirror_2.apk',
+            'org.bitbucket.tickytacky.mirrormirror_3.apk',
+            'org.bitbucket.tickytacky.mirrormirror_4.apk',
+            'org.dyndns.fules.ck_20.apk',
+            'urzip.apk',
+            'urzip-badcert.apk',
+            'urzip-badsig.apk',
+            'urzip-release.apk',
+            'urzip-release-unsigned.apk',
+            'repo/com.politedroid_3.apk',
+            'repo/com.politedroid_4.apk',
+            'repo/com.politedroid_5.apk',
+            'repo/com.politedroid_6.apk',
+            'repo/obb.main.oldversion_1444412523.apk',
+            'repo/obb.mainpatch.current_1619_another-release-key.apk',
+            'repo/obb.mainpatch.current_1619.apk',
+            'repo/obb.main.twoversions_1101613.apk',
+            'repo/obb.main.twoversions_1101615.apk',
+            'repo/obb.main.twoversions_1101617.apk',
+            'repo/urzip-; Рахма́нинов, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢尔盖·.apk',
+        ]
+        for f in good:
+            self.assertFalse(fdroidserver.update.has_known_vulnerability(f))
+        with self.assertRaises(fdroidserver.exception.FDroidException):
+            fdroidserver.update.has_known_vulnerability('janus.apk')
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()

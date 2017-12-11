@@ -496,8 +496,10 @@ def has_known_vulnerability(filename):
 
     Checks whether there are more than one classes.dex or AndroidManifest.xml
     files, which is invalid and an essential part of the "Master Key" attack.
-
     http://www.saurik.com/id/17
+
+    Janus is similar to Master Key but is perhaps easier to scan for.
+    https://www.guardsquare.com/en/blog/new-android-vulnerability-allows-attackers-modify-apps-without-affecting-their-signatures
     """
 
     found_vuln = False
@@ -505,6 +507,13 @@ def has_known_vulnerability(filename):
     # statically load this pattern
     if not hasattr(has_known_vulnerability, "pattern"):
         has_known_vulnerability.pattern = re.compile(b'.*OpenSSL ([01][0-9a-z.-]+)')
+
+    with open(filename.encode(), 'rb') as fp:
+        first4 = fp.read(4)
+    if first4 != b'\x50\x4b\x03\x04':
+        raise FDroidException(_('{path} has bad file signature "{pattern}", possible Janus exploit!')
+                              .format(path=filename, pattern=first4.decode().replace('\n', ' ')) + '\n'
+                              + 'https://www.guardsquare.com/en/blog/new-android-vulnerability-allows-attackers-modify-apps-without-affecting-their-signatures')
 
     files_in_apk = set()
     with zipfile.ZipFile(filename) as zf:
