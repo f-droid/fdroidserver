@@ -500,6 +500,8 @@ def has_known_vulnerability(filename):
     http://www.saurik.com/id/17
     """
 
+    found_vuln = False
+
     # statically load this pattern
     if not hasattr(has_known_vulnerability, "pattern"):
         has_known_vulnerability.pattern = re.compile(b'.*OpenSSL ([01][0-9a-z.-]+)')
@@ -524,14 +526,15 @@ def has_known_vulnerability(filename):
                         else:
                             logging.warning(_('"{path}" contains outdated {name} ({version})')
                                             .format(path=filename, name=name, version=version))
-                            return True
+                            found_vuln = True
                         break
             elif name == 'AndroidManifest.xml' or name == 'classes.dex' or name.endswith('.so'):
                 if name in files_in_apk:
-                    return True
+                    logging.warning(_('{apkfilename} has multiple {name} files, looks like Master Key exploit!')
+                                    .format(apkfilename=filename, name=name))
+                    found_vuln = True
                 files_in_apk.add(name)
-
-    return False
+    return found_vuln
 
 
 def insert_obbs(repodir, apps, apks):
