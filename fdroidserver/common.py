@@ -2544,8 +2544,16 @@ def verify_jar_signature(jar):
 
     """
 
-    if subprocess.call([config['jarsigner'], '-strict', '-verify', jar]) != 4:
-        raise VerificationException(_("The repository's index could not be verified."))
+    error = _('JAR signature failed to verify: {path}').format(path=jar)
+    try:
+        output = subprocess.check_output([config['jarsigner'], '-strict', '-verify', jar],
+                                         stderr=subprocess.STDOUT)
+        raise VerificationException(error + '\n' + output.decode('utf-8'))
+    except subprocess.CalledProcessError as e:
+        if e.returncode == 4:
+            logging.debug(_('JAR signature verified: {path}').format(path=jar))
+        else:
+            raise VerificationException(error + '\n' + e.output.decode('utf-8'))
 
 
 def verify_apk_signature(apk, min_sdk_version=None):
@@ -2561,14 +2569,24 @@ def verify_apk_signature(apk, min_sdk_version=None):
         args = [config['apksigner'], 'verify']
         if min_sdk_version:
             args += ['--min-sdk-version=' + min_sdk_version]
-        return subprocess.call(args + [apk]) == 0
+        if options.verbose:
+            args += ['--verbose']
+        try:
+            output = subprocess.check_output(args + [apk])
+            if options.verbose:
+                logging.debug(apk + ': ' + output.decode('utf-8'))
+            return True
+        except subprocess.CalledProcessError as e:
+            logging.error('\n' + apk + ': ' + e.output.decode('utf-8'))
     else:
-        logging.warning("Using Java's jarsigner, not recommended for verifying APKs! Use apksigner")
+        if not config.get('jarsigner_warning_displayed'):
+            config['jarsigner_warning_displayed'] = True
+            logging.warning(_("Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"))
         try:
             verify_jar_signature(apk)
             return True
-        except Exception:
-            pass
+        except Exception as e:
+            logging.error(e)
     return False
 
 
@@ -2589,8 +2607,23 @@ def verify_old_apk_signature(apk):
     with open(_java_security, 'w') as fp:
         fp.write('jdk.jar.disabledAlgorithms=MD2, RSA keySize < 1024')
 
-    return subprocess.call([config['jarsigner'], '-J-Djava.security.properties=' + _java_security,
-                            '-strict', '-verify', apk]) == 4
+    try:
+        cmd = [
+            config['jarsigner'],
+            '-J-Djava.security.properties=' + _java_security,
+            '-strict', '-verify', apk
+        ]
+        output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        if e.returncode != 4:
+            output = e.output
+        else:
+            logging.debug(_('JAR signature verified: {path}').format(path=apk))
+            return True
+
+    logging.error(_('Old APK signature failed to verify: {path}').format(path=apk)
+                  + '\n' + output.decode('utf-8'))
+    return False
 
 
 apk_badchars = re.compile('''[/ :;'"]''')

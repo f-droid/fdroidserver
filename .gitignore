@@ -28,6 +28,7 @@ tmp/
 makebuildserver.config.py
 /tests/.fdroid.keypass.txt
 /tests/.fdroid.keystorepass.txt
+/tests/.java.security
 /tests/fdroid-icon.png
 /tests/OBBMainOldVersion.apk
 /tests/OBBMainPatchCurrent.apk
