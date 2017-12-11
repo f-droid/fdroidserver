@@ -35,7 +35,7 @@ __by_ext() {
 }
 
 __package() {
-	files="$(__by_ext txt) $(__by_ext yml) $(__by_ext json) $(__by_ext xml)"
+	files="$(__by_ext txt) $(__by_ext yml) $(__by_ext json)"
 	COMPREPLY=( $( compgen -W "$files" -- $cur ) )
 }
 

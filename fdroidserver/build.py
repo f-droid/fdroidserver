@@ -414,6 +414,11 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
                 raise BuildException("Error running sudo command for %s:%s" %
                                      (app.id, build.versionName), p.output)
 
+        p = FDroidPopen(['sudo', 'apt-get', '-y', 'purge', 'sudo'])
+        if p.returncode != 0:
+            raise BuildException("Error removing sudo for %s:%s" %
+                                 (app.id, build.versionName), p.output)
+
         log_path = os.path.join(log_dir,
                                 common.get_toolsversion_logname(app, build))
         with open(log_path, 'w') as f:

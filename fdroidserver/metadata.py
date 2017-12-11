@@ -748,6 +748,8 @@ def read_metadata(xref=True, check_vcs=[], sort_by_time=False):
         metadatafiles = sorted(metadatafiles)
 
     for metadatapath in metadatafiles:
+        if metadatapath == '.fdroid.txt':
+            warn_or_exception(_('.fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json.'))
         packageName, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
         if packageName in apps:
             warn_or_exception(_("Found multiple metadata files for {appid}")
