@@ -135,6 +135,8 @@ regex_checks = {
     'Donate': http_checks + [
         (re.compile(r'.*flattr\.com'),
          _("Flattr donation methods belong in the FlattrID flag")),
+        (re.compile(r'.*liberapay\.com'),
+         _("Liberapay donation methods belong in the LiberapayID flag")),
     ],
     'Changelog': http_checks,
     'Author Name': [

@@ -586,6 +586,10 @@ msgstr ""
 msgid "Flattr donation methods belong in the FlattrID flag"
 msgstr ""
 
+#: ../fdroidserver/lint.py
+msgid "Liberapay donation methods belong in the LiberapayID flag"
+msgstr ""
+
 #: ../fdroidserver/build.py
 msgid ""
 "Force build of disabled apps, and carries on regardless of scan problems. "

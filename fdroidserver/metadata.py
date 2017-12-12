@@ -70,6 +70,7 @@ app_fields = set([
     'Changelog',
     'Donate',
     'FlattrID',
+    'LiberapayID',
     'Bitcoin',
     'Litecoin',
     'Name',
@@ -120,6 +121,7 @@ class App(dict):
         self.Changelog = ''
         self.Donate = None
         self.FlattrID = None
+        self.LiberapayID = None
         self.Bitcoin = None
         self.Litecoin = None
         self.Name = None
@@ -390,6 +392,10 @@ valuetypes = {
     FieldValidator("Flattr ID",
                    r'^[0-9a-z]+$',
                    ['FlattrID']),
+
+    FieldValidator("Liberapay ID",
+                   r'^[0-9]+$',
+                   ['LiberapayID']),
 
     FieldValidator("HTTP link",
                    r'^http[s]?://',
@@ -1138,6 +1144,7 @@ def write_yaml(mf, app):
         'Changelog',
         'Donate',
         'FlattrID',
+        'LiberapayID',
         'Bitcoin',
         'Litecoin',
         '\n',
@@ -1429,6 +1436,7 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
     w_field_nonempty('Changelog')
     w_field_nonempty('Donate')
     w_field_nonempty('FlattrID')
+    w_field_nonempty('LiberapayID')
     w_field_nonempty('Bitcoin')
     w_field_nonempty('Litecoin')
     mf.write('\n')
