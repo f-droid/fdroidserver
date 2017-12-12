@@ -138,7 +138,7 @@ def update_wiki(apps, sortedids, apks):
             requiresroot = 'Yes'
         else:
             requiresroot = 'No'
-        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|changelog=%s|donate=%s|flattr=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s|author=%s|email=%s}}\n' % (
+        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|changelog=%s|donate=%s|flattr=%s|liberapay=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s|author=%s|email=%s}}\n' % (
             appid,
             app.Name,
             app.added.strftime('%Y-%m-%d') if app.added else '',
@@ -149,6 +149,7 @@ def update_wiki(apps, sortedids, apks):
             app.Changelog,
             app.Donate,
             app.FlattrID,
+            app.LiberapayID,
             app.Bitcoin,
             app.Litecoin,
             app.License,
