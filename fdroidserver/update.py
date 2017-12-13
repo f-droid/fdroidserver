@@ -672,6 +672,27 @@ def _set_author_entry(app, key, f):
             app[key] = text
 
 
+def _strip_and_copy_image(inpath, outpath):
+    """Remove any metadata from image and copy it to new path
+
+    Sadly, image metadata like EXIF can be used to exploit devices.
+    It is not used at all in the F-Droid ecosystem, so its much safer
+    just to remove it entirely.  PNG does not have the same kind of
+    issues.
+
+    """
+
+    if common.has_extension(inpath, 'png'):
+        shutil.copy(inpath, outpath)
+    else:
+        with open(inpath) as fp:
+            in_image = Image.open(fp)
+            data = list(in_image.getdata())
+            out_image = Image.new(in_image.mode, in_image.size)
+        out_image.putdata(data)
+        out_image.save(outpath, "JPEG", optimize=True)
+
+
 def copy_triple_t_store_metadata(apps):
     """Include store metadata from the app's source repo
 
@@ -744,7 +765,7 @@ def copy_triple_t_store_metadata(apps):
                         sourcefile = os.path.join(root, f)
                         destfile = os.path.join(destdir, os.path.basename(f))
                         logging.debug('copying ' + sourcefile + ' ' + destfile)
-                        shutil.copy(sourcefile, destfile)
+                        _strip_and_copy_image(sourcefile, destfile)
 
 
 def insert_localized_app_metadata(apps):
@@ -842,7 +863,7 @@ def insert_localized_app_metadata(apps):
                 if base in GRAPHIC_NAMES and extension in ALLOWED_EXTENSIONS:
                     os.makedirs(destdir, mode=0o755, exist_ok=True)
                     logging.debug('copying ' + os.path.join(root, f) + ' ' + destdir)
-                    shutil.copy(os.path.join(root, f), destdir)
+                    _strip_and_copy_image(os.path.join(root, f), destdir)
             for d in dirs:
                 if d in SCREENSHOT_DIRS:
                     if locale == 'images':
@@ -854,7 +875,7 @@ def insert_localized_app_metadata(apps):
                             screenshotdestdir = os.path.join(destdir, d)
                             os.makedirs(screenshotdestdir, mode=0o755, exist_ok=True)
                             logging.debug('copying ' + f + ' ' + screenshotdestdir)
-                            shutil.copy(f, screenshotdestdir)
+                            _strip_and_copy_image(f, screenshotdestdir)
 
     repofiles = sorted(glob.glob(os.path.join('repo', '[A-Za-z]*', '[a-z][a-z][A-Z-.@]*')))
     for d in repofiles:
