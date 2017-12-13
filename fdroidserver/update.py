@@ -1487,6 +1487,8 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
         except Exception as e:
             logging.warning(_("Failed reading {path}: {error}")
                             .format(path=icon_path, error=e))
+        finally:
+            im.close()
 
     if apk['icons']:
         apk['icon'] = icon_filename
