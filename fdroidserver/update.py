@@ -35,7 +35,7 @@ from argparse import ArgumentParser
 import collections
 from binascii import hexlify
 
-from PIL import Image
+from PIL import Image, PngImagePlugin
 import logging
 
 from . import _
@@ -83,6 +83,8 @@ ALLOWED_EXTENSIONS = ('png', 'jpg', 'jpeg')
 GRAPHIC_NAMES = ('featureGraphic', 'icon', 'promoGraphic', 'tvBanner')
 SCREENSHOT_DIRS = ('phoneScreenshots', 'sevenInchScreenshots',
                    'tenInchScreenshots', 'tvScreenshots', 'wearScreenshots')
+
+BLANK_PNG_INFO = PngImagePlugin.PngInfo()
 
 
 def dpi_to_px(density):
@@ -371,7 +373,8 @@ def resize_icon(iconpath, density):
             im.thumbnail((size, size), Image.ANTIALIAS)
             logging.debug("%s was too large at %s - new size is %s" % (
                 iconpath, oldsize, im.size))
-            im.save(iconpath, "PNG")
+            im.save(iconpath, "PNG", optimize=True,
+                    pnginfo=BLANK_PNG_INFO, icc_profile=None)
 
     except Exception as e:
         logging.error(_("Failed resizing {path}: {error}".format(path=iconpath, error=e)))
@@ -677,20 +680,28 @@ def _strip_and_copy_image(inpath, outpath):
 
     Sadly, image metadata like EXIF can be used to exploit devices.
     It is not used at all in the F-Droid ecosystem, so its much safer
-    just to remove it entirely.  PNG does not have the same kind of
-    issues.
+    just to remove it entirely.
 
     """
 
-    if common.has_extension(inpath, 'png'):
-        shutil.copy(inpath, outpath)
-    else:
-        with open(inpath) as fp:
+    extension = common.get_extension(inpath)[1]
+    if os.path.isdir(outpath):
+        outpath = os.path.join(outpath, os.path.basename(inpath))
+    if extension == 'png':
+        with open(inpath, 'rb') as fp:
+            in_image = Image.open(fp)
+            in_image.save(outpath, "PNG", optimize=True,
+                          pnginfo=BLANK_PNG_INFO, icc_profile=None)
+    elif extension == 'jpg' or extension == 'jpeg':
+        with open(inpath, 'rb') as fp:
             in_image = Image.open(fp)
             data = list(in_image.getdata())
             out_image = Image.new(in_image.mode, in_image.size)
         out_image.putdata(data)
         out_image.save(outpath, "JPEG", optimize=True)
+    else:
+        raise FDroidException(_('Unsupported file type "{extension}" for repo graphic')
+                              .format(extension=extension))
 
 
 def copy_triple_t_store_metadata(apps):
@@ -1512,7 +1523,8 @@ def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
             size = dpi_to_px(density)
 
             im.thumbnail((size, size), Image.ANTIALIAS)
-            im.save(icon_path, "PNG")
+            im.save(icon_path, "PNG", optimize=True,
+                    pnginfo=BLANK_PNG_INFO, icc_profile=None)
             empty_densities.remove(density)
         except Exception as e:
             logging.warning("Invalid image file at %s: %s", last_icon_path, e)
