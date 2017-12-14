@@ -39,6 +39,7 @@ echo "build_server_always = True" >> config.py
 echo "gpghome = '$GNUPGHOME'" >> config.py
 echo "gpgkey = 'CE71F7FB'" >> config.py
 chmod 0600 config.py
+sed -i '/\s*repo_key_sha256\s*=.*/d' config.py
 
 # publish process when building and signing are on separate machines
 test -d repo || mkdir repo
