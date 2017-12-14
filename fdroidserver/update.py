@@ -1355,10 +1355,13 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
         apkzip = zipfile.ZipFile(apkfile, 'r')
 
         manifest = apkzip.getinfo('AndroidManifest.xml')
-        if manifest.date_time[1] == 0:  # month can't be zero
-            logging.debug(_('AndroidManifest.xml has no date'))
-        else:
-            common.check_system_clock(datetime(*manifest.date_time), apkfilename)
+        # 1980-0-0 means zeroed out, any other invalid date should trigger a warning
+        if (1980, 0, 0) != manifest.date_time[0:3]:
+            try:
+                common.check_system_clock(datetime(*manifest.date_time), apkfilename)
+            except ValueError as e:
+                logging.warning(_("{apkfilename}'s AndroidManifest.xml has a bad date: ")
+                                .format(apkfilename=apkfile) + str(e))
 
         # extract icons from APK zip file
         iconfilename = "%s.%s.png" % (apk['packageName'], apk['versionCode'])
