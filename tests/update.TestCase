@@ -32,6 +32,14 @@ from fdroidserver.common import FDroidPopen
 class UpdateTest(unittest.TestCase):
     '''fdroid update'''
 
+    def setUp(self):
+        logging.basicConfig(level=logging.INFO)
+        self.basedir = os.path.join(localmodule, 'tests')
+        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
+        if not os.path.exists(self.tmpdir):
+            os.makedirs(self.tmpdir)
+        os.chdir(self.basedir)
+
     def testInsertStoreMetadata(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -117,15 +125,13 @@ class UpdateTest(unittest.TestCase):
                 self.assertEqual('Conversations', app['localized']['en-US']['name'])
 
     def test_insert_triple_t_metadata(self):
-        importer = os.path.join(localmodule, 'tests', 'tmp', 'importer')
+        importer = os.path.join(self.basedir, 'tmp', 'importer')
         packageName = 'org.fdroid.ci.test.app'
         if not os.path.isdir(importer):
             logging.warning('skipping test_insert_triple_t_metadata, import.TestCase must run first!')
             return
-        tmpdir = os.path.join(localmodule, '.testfiles')
-        if not os.path.exists(tmpdir):
-            os.makedirs(tmpdir)
-        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=tmpdir)
+        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
+                                       dir=self.tmpdir)
         packageDir = os.path.join(tmptestsdir, 'build', packageName)
         shutil.copytree(importer, packageDir)
 
@@ -387,10 +393,6 @@ class UpdateTest(unittest.TestCase):
             self.assertEqual(apk, frompickle)
 
     def test_process_apk_signed_by_disabled_algorithms(self):
-        os.chdir(os.path.join(localmodule, 'tests'))
-        if os.path.basename(os.getcwd()) != 'tests':
-            raise Exception('This test must be run in the "tests/" subdir')
-
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.update.config = config
@@ -408,12 +410,9 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.allow_disabled_algorithms = False
 
         knownapks = fdroidserver.common.KnownApks()
-        apksourcedir = os.getcwd()
-        tmpdir = os.path.join(localmodule, '.testfiles')
-        if not os.path.exists(tmpdir):
-            os.makedirs(tmpdir)
+
         tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
-                                       dir=tmpdir)
+                                       dir=self.tmpdir)
         print('tmptestsdir', tmptestsdir)
         os.chdir(tmptestsdir)
         os.mkdir('repo')
@@ -424,7 +423,7 @@ class UpdateTest(unittest.TestCase):
 
         disabledsigs = ['org.bitbucket.tickytacky.mirrormirror_2.apk', ]
         for apkName in disabledsigs:
-            shutil.copy(os.path.join(apksourcedir, apkName),
+            shutil.copy(os.path.join(self.basedir, apkName),
                         os.path.join(tmptestsdir, 'repo'))
 
             skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
@@ -475,7 +474,7 @@ class UpdateTest(unittest.TestCase):
 
         badsigs = ['urzip-badcert.apk', 'urzip-badsig.apk', 'urzip-release-unsigned.apk', ]
         for apkName in badsigs:
-            shutil.copy(os.path.join(apksourcedir, apkName),
+            shutil.copy(os.path.join(self.basedir, apkName),
                         os.path.join(tmptestsdir, 'repo'))
 
             skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
@@ -539,11 +538,8 @@ class UpdateTest(unittest.TestCase):
         self.assertTrue(foundtest)
 
     def test_create_metadata_from_template(self):
-        tmpdir = os.path.join(localmodule, '.testfiles')
-        if not os.path.exists(tmpdir):
-            os.makedirs(tmpdir)
         tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
-                                       dir=tmpdir)
+                                       dir=self.tmpdir)
         print('tmptestsdir', tmptestsdir)
         os.chdir(tmptestsdir)
         os.mkdir('repo')
