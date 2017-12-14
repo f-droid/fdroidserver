@@ -49,7 +49,8 @@ export VBOX_USER_HOME=$SETUP_WORKSPACE/VirtualBox
 export VAGRANT_HOME=$SETUP_WORKSPACE/vagrant.d
 
 # make sure we have the right buildserver paths and its ready for use
-vagrant global-status | grep reproducible_setup_fdroid_build_environment
+vagrant global-status \
+    | grep -F -e reproducible_setup_fdroid_build_environment -o -e fdroiddata/builder
 
 # the way we handle jenkins slaves doesn't copy the workspace to the slaves
 # so we need to "manually" clone the git repo here…
