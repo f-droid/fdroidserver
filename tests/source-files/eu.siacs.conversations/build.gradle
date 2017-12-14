@@ -1,0 +1,128 @@
+// Top-level build file where you can add configuration options common to all
+// sub-projects/modules.
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+    }
+}
+
+apply plugin: 'com.android.application'
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url 'https://maven.google.com'
+    }
+}
+
+configurations {
+    playstoreCompile
+    freeCompile
+}
+
+ext {
+    supportLibVersion = '27.0.2'
+}
+
+dependencies {
+    compile project(':libs:MemorizingTrustManager')
+    playstoreCompile 'com.google.android.gms:play-services-gcm:11.6.2'
+    compile 'org.sufficientlysecure:openpgp-api:10.0'
+    compile 'com.soundcloud.android:android-crop:1.0.1@aar'
+    compile "com.android.support:support-v13:$supportLibVersion"
+    compile "com.android.support:appcompat-v7:$supportLibVersion"
+    compile "com.android.support:support-emoji:$supportLibVersion"
+    freeCompile "com.android.support:support-emoji-bundled:$supportLibVersion"
+    compile 'org.bouncycastle:bcmail-jdk15on:1.52'
+    compile 'org.jitsi:org.otr4j:0.22'
+    compile 'org.gnu.inet:libidn:1.15'
+    compile 'com.google.zxing:core:3.2.1'
+    compile 'com.google.zxing:android-integration:3.2.1'
+    compile 'de.measite.minidns:minidns-hla:0.2.4'
+    compile 'de.timroes.android:EnhancedListView:0.3.4'
+    compile 'me.leolin:ShortcutBadger:1.1.19@aar'
+    compile 'com.kyleduo.switchbutton:library:1.2.8'
+    compile 'org.whispersystems:signal-protocol-java:2.6.2'
+    compile 'com.makeramen:roundedimageview:2.3.0'
+    compile "com.wefika:flowlayout:0.4.1"
+    compile 'net.ypresto.androidtranscoder:android-transcoder:0.2.0'
+
+}
+
+ext {
+    travisBuild = System.getenv("TRAVIS") == "true"
+    preDexEnabled = System.getProperty("pre-dex", "true")
+}
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 25
+        versionCode 245
+        versionName "1.23.1"
+        archivesBaseName += "-$versionName"
+        applicationId "eu.siacs.conversations"
+    }
+
+    dexOptions {
+        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
+        preDexLibraries = preDexEnabled && !travisBuild
+        jumboMode true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    productFlavors {
+        playstore
+        free
+    }
+
+
+    if(new File("signing.properties").exists()) {
+        Properties props = new Properties()
+        props.load(new FileInputStream(file("signing.properties")))
+
+        signingConfigs {
+            release {
+                storeFile file(props['keystore'])
+                storePassword props['keystore.password']
+                keyAlias props['keystore.alias']
+                keyPassword props['keystore.password']
+            }
+        }
+        buildTypes.release.signingConfig = signingConfigs.release
+    }
+
+    lintOptions {
+        disable 'MissingTranslation', 'InvalidPackage', 'MissingQuantity', 'AppCompatResource'
+    }
+
+    subprojects {
+
+        afterEvaluate {
+            if (getPlugins().hasPlugin('android') ||
+                    getPlugins().hasPlugin('android-library')) {
+
+                configure(android.lintOptions) {
+                    disable 'AndroidGradlePluginVersion', 'MissingTranslation'
+                }
+            }
+
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/BCKEY.DSA'
+        exclude 'META-INF/BCKEY.SF'
+    }
+}

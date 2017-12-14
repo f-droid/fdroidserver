@@ -582,6 +582,7 @@ class CommonTest(unittest.TestCase):
 
     def test_parse_androidmanifests_with_flavor(self):
         source_files_dir = os.path.join(os.path.dirname(__file__), 'source-files')
+
         app = fdroidserver.metadata.App()
         build = fdroidserver.metadata.Build()
         build.gradle = ['devVersion']
@@ -594,6 +595,19 @@ class CommonTest(unittest.TestCase):
         for path in paths:
             self.assertTrue(os.path.isfile(path))
         self.assertEqual(('0.95-dev', '949', 'org.fdroid.fdroid.dev'),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.gradle = ['free']
+        app.builds = [build]
+        app.id = 'eu.siacs.conversations'
+        paths = [
+            os.path.join(source_files_dir, 'eu.siacs.conversations', 'build.gradle'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('1.23.1', '245', 'eu.siacs.conversations'),
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
 
