@@ -43,15 +43,21 @@ class UpdateTest(unittest.TestCase):
         shutil.rmtree(os.path.join('repo', 'info.guardianproject.urzip'), ignore_errors=True)
 
         shutil.rmtree(os.path.join('build', 'com.nextcloud.client'), ignore_errors=True)
-        shutil.copytree(os.path.join('source-files', 'com.nextcloud.client'), os.path.join('build', 'com.nextcloud.client'))
+        shutil.copytree(os.path.join('source-files', 'com.nextcloud.client'),
+                        os.path.join('build', 'com.nextcloud.client'))
 
         shutil.rmtree(os.path.join('build', 'com.nextcloud.client.dev'), ignore_errors=True)
         shutil.copytree(os.path.join('source-files', 'com.nextcloud.client.dev'),
                         os.path.join('build', 'com.nextcloud.client.dev'))
 
+        shutil.rmtree(os.path.join('build', 'eu.siacs.conversations'), ignore_errors=True)
+        shutil.copytree(os.path.join('source-files', 'eu.siacs.conversations'),
+                        os.path.join('build', 'eu.siacs.conversations'))
+
         apps = dict()
         for packageName in ('info.guardianproject.urzip', 'org.videolan.vlc', 'obb.mainpatch.current',
-                            'com.nextcloud.client', 'com.nextcloud.client.dev'):
+                            'com.nextcloud.client', 'com.nextcloud.client.dev',
+                            'eu.siacs.conversations'):
             apps[packageName] = fdroidserver.metadata.App()
             apps[packageName]['id'] = packageName
             apps[packageName]['CurrentVersionCode'] = 0xcafebeef
@@ -66,13 +72,17 @@ class UpdateTest(unittest.TestCase):
         buildnextclouddevclient.gradle = ['versionDev']
         apps['com.nextcloud.client.dev']['builds'] = [buildnextclouddevclient]
 
+        build_conversations = fdroidserver.metadata.Build()
+        build_conversations.gradle = ['free']
+        apps['eu.siacs.conversations']['builds'] = [build_conversations]
+
         fdroidserver.update.insert_localized_app_metadata(apps)
 
         appdir = os.path.join('repo', 'info.guardianproject.urzip', 'en-US')
         self.assertTrue(os.path.isfile(os.path.join(appdir, 'icon.png')))
         self.assertTrue(os.path.isfile(os.path.join(appdir, 'featureGraphic.png')))
 
-        self.assertEqual(5, len(apps))
+        self.assertEqual(6, len(apps))
         for packageName, app in apps.items():
             self.assertTrue('localized' in app)
             self.assertTrue('en-US' in app['localized'])
@@ -103,6 +113,8 @@ class UpdateTest(unittest.TestCase):
                 self.assertEqual('Nextcloud Dev', app['localized']['en-US']['name'])
                 self.assertEqual(586, len(app['localized']['en-US']['description']))
                 self.assertEqual(79, len(app['localized']['en-US']['summary']))
+            elif packageName == 'eu.siacs.conversations':
+                self.assertEqual('Conversations', app['localized']['en-US']['name'])
 
     def test_insert_triple_t_metadata(self):
         importer = os.path.join(localmodule, 'tests', 'tmp', 'importer')

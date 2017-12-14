@@ -1338,7 +1338,7 @@ def parse_androidmanifests(paths, app):
             with open(path, 'r') as f:
                 buildfile = f.read()
 
-                regex_string = r"" + flavour + ".*?}"
+                regex_string = r"" + flavour + "[^}]*?{.*?}"
                 search = re.compile(regex_string, re.DOTALL)
                 result = search.search(buildfile)
 
