@@ -414,7 +414,12 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
                 raise BuildException("Error running sudo command for %s:%s" %
                                      (app.id, build.versionName), p.output)
 
-        p = FDroidPopen(['sudo', 'apt-get', '-y', 'purge', 'sudo'])
+        p = FDroidPopen(['sudo', 'passwd', '--lock', 'root'])
+        if p.returncode != 0:
+            raise BuildException("Error locking root account for %s:%s" %
+                                 (app.id, build.versionName), p.output)
+
+        p = FDroidPopen(['sudo', 'SUDO_FORCE_REMOVE=yes', 'apt-get', '-y', 'purge', 'sudo'])
         if p.returncode != 0:
             raise BuildException("Error removing sudo for %s:%s" %
                                  (app.id, build.versionName), p.output)
