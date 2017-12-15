@@ -35,7 +35,7 @@ from argparse import ArgumentParser
 import collections
 from binascii import hexlify
 
-from PIL import Image
+from PIL import Image, PngImagePlugin
 import logging
 
 from . import _
@@ -83,6 +83,8 @@ ALLOWED_EXTENSIONS = ('png', 'jpg', 'jpeg')
 GRAPHIC_NAMES = ('featureGraphic', 'icon', 'promoGraphic', 'tvBanner')
 SCREENSHOT_DIRS = ('phoneScreenshots', 'sevenInchScreenshots',
                    'tenInchScreenshots', 'tvScreenshots', 'wearScreenshots')
+
+BLANK_PNG_INFO = PngImagePlugin.PngInfo()
 
 
 def dpi_to_px(density):
@@ -371,7 +373,8 @@ def resize_icon(iconpath, density):
             im.thumbnail((size, size), Image.ANTIALIAS)
             logging.debug("%s was too large at %s - new size is %s" % (
                 iconpath, oldsize, im.size))
-            im.save(iconpath, "PNG")
+            im.save(iconpath, "PNG", optimize=True,
+                    pnginfo=BLANK_PNG_INFO, icc_profile=None)
 
     except Exception as e:
         logging.error(_("Failed resizing {path}: {error}".format(path=iconpath, error=e)))
@@ -496,13 +499,24 @@ def has_known_vulnerability(filename):
 
     Checks whether there are more than one classes.dex or AndroidManifest.xml
     files, which is invalid and an essential part of the "Master Key" attack.
-
     http://www.saurik.com/id/17
+
+    Janus is similar to Master Key but is perhaps easier to scan for.
+    https://www.guardsquare.com/en/blog/new-android-vulnerability-allows-attackers-modify-apps-without-affecting-their-signatures
     """
+
+    found_vuln = False
 
     # statically load this pattern
     if not hasattr(has_known_vulnerability, "pattern"):
         has_known_vulnerability.pattern = re.compile(b'.*OpenSSL ([01][0-9a-z.-]+)')
+
+    with open(filename.encode(), 'rb') as fp:
+        first4 = fp.read(4)
+    if first4 != b'\x50\x4b\x03\x04':
+        raise FDroidException(_('{path} has bad file signature "{pattern}", possible Janus exploit!')
+                              .format(path=filename, pattern=first4.decode().replace('\n', ' ')) + '\n'
+                              + 'https://www.guardsquare.com/en/blog/new-android-vulnerability-allows-attackers-modify-apps-without-affecting-their-signatures')
 
     files_in_apk = set()
     with zipfile.ZipFile(filename) as zf:
@@ -524,14 +538,15 @@ def has_known_vulnerability(filename):
                         else:
                             logging.warning(_('"{path}" contains outdated {name} ({version})')
                                             .format(path=filename, name=name, version=version))
-                            return True
+                            found_vuln = True
                         break
             elif name == 'AndroidManifest.xml' or name == 'classes.dex' or name.endswith('.so'):
                 if name in files_in_apk:
-                    return True
+                    logging.warning(_('{apkfilename} has multiple {name} files, looks like Master Key exploit!')
+                                    .format(apkfilename=filename, name=name))
+                    found_vuln = True
                 files_in_apk.add(name)
-
-    return False
+    return found_vuln
 
 
 def insert_obbs(repodir, apps, apks):
@@ -660,6 +675,35 @@ def _set_author_entry(app, key, f):
             app[key] = text
 
 
+def _strip_and_copy_image(inpath, outpath):
+    """Remove any metadata from image and copy it to new path
+
+    Sadly, image metadata like EXIF can be used to exploit devices.
+    It is not used at all in the F-Droid ecosystem, so its much safer
+    just to remove it entirely.
+
+    """
+
+    extension = common.get_extension(inpath)[1]
+    if os.path.isdir(outpath):
+        outpath = os.path.join(outpath, os.path.basename(inpath))
+    if extension == 'png':
+        with open(inpath, 'rb') as fp:
+            in_image = Image.open(fp)
+            in_image.save(outpath, "PNG", optimize=True,
+                          pnginfo=BLANK_PNG_INFO, icc_profile=None)
+    elif extension == 'jpg' or extension == 'jpeg':
+        with open(inpath, 'rb') as fp:
+            in_image = Image.open(fp)
+            data = list(in_image.getdata())
+            out_image = Image.new(in_image.mode, in_image.size)
+        out_image.putdata(data)
+        out_image.save(outpath, "JPEG", optimize=True)
+    else:
+        raise FDroidException(_('Unsupported file type "{extension}" for repo graphic')
+                              .format(extension=extension))
+
+
 def copy_triple_t_store_metadata(apps):
     """Include store metadata from the app's source repo
 
@@ -732,7 +776,7 @@ def copy_triple_t_store_metadata(apps):
                         sourcefile = os.path.join(root, f)
                         destfile = os.path.join(destdir, os.path.basename(f))
                         logging.debug('copying ' + sourcefile + ' ' + destfile)
-                        shutil.copy(sourcefile, destfile)
+                        _strip_and_copy_image(sourcefile, destfile)
 
 
 def insert_localized_app_metadata(apps):
@@ -830,7 +874,7 @@ def insert_localized_app_metadata(apps):
                 if base in GRAPHIC_NAMES and extension in ALLOWED_EXTENSIONS:
                     os.makedirs(destdir, mode=0o755, exist_ok=True)
                     logging.debug('copying ' + os.path.join(root, f) + ' ' + destdir)
-                    shutil.copy(os.path.join(root, f), destdir)
+                    _strip_and_copy_image(os.path.join(root, f), destdir)
             for d in dirs:
                 if d in SCREENSHOT_DIRS:
                     if locale == 'images':
@@ -842,7 +886,7 @@ def insert_localized_app_metadata(apps):
                             screenshotdestdir = os.path.join(destdir, d)
                             os.makedirs(screenshotdestdir, mode=0o755, exist_ok=True)
                             logging.debug('copying ' + f + ' ' + screenshotdestdir)
-                            shutil.copy(f, screenshotdestdir)
+                            _strip_and_copy_image(f, screenshotdestdir)
 
     repofiles = sorted(glob.glob(os.path.join('repo', '[A-Za-z]*', '[a-z][a-z][A-Z-.@]*')))
     for d in repofiles:
@@ -1311,10 +1355,13 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
         apkzip = zipfile.ZipFile(apkfile, 'r')
 
         manifest = apkzip.getinfo('AndroidManifest.xml')
-        if manifest.date_time[1] == 0:  # month can't be zero
-            logging.debug(_('AndroidManifest.xml has no date'))
-        else:
-            common.check_system_clock(datetime(*manifest.date_time), apkfilename)
+        # 1980-0-0 means zeroed out, any other invalid date should trigger a warning
+        if (1980, 0, 0) != manifest.date_time[0:3]:
+            try:
+                common.check_system_clock(datetime(*manifest.date_time), apkfilename)
+            except ValueError as e:
+                logging.warning(_("{apkfilename}'s AndroidManifest.xml has a bad date: ")
+                                .format(apkfilename=apkfile) + str(e))
 
         # extract icons from APK zip file
         iconfilename = "%s.%s.png" % (apk['packageName'], apk['versionCode'])
@@ -1443,6 +1490,8 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
         except Exception as e:
             logging.warning(_("Failed reading {path}: {error}")
                             .format(path=icon_path, error=e))
+        finally:
+            im.close()
 
     if apk['icons']:
         apk['icon'] = icon_filename
@@ -1479,7 +1528,8 @@ def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
             size = dpi_to_px(density)
 
             im.thumbnail((size, size), Image.ANTIALIAS)
-            im.save(icon_path, "PNG")
+            im.save(icon_path, "PNG", optimize=True,
+                    pnginfo=BLANK_PNG_INFO, icc_profile=None)
             empty_densities.remove(density)
         except Exception as e:
             logging.warning("Invalid image file at %s: %s", last_icon_path, e)
