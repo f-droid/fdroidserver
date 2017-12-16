@@ -1475,6 +1475,7 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
         icon_path = os.path.join(get_icon_dir(repo_dir, '0'), icon_filename)
         with open(icon_path, 'wb') as f:
             f.write(get_icon_bytes(apkzip, icon_src))
+        im = None
         try:
             im = Image.open(icon_path)
             dpi = px_to_dpi(im.size[0])
@@ -1491,7 +1492,8 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
             logging.warning(_("Failed reading {path}: {error}")
                             .format(path=icon_path, error=e))
         finally:
-            im.close()
+            if im:
+                im.close()
 
     if apk['icons']:
         apk['icon'] = icon_filename
