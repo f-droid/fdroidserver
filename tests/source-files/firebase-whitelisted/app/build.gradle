@@ -1,0 +1,5 @@
+dependencies {
+    compile 'com.firebase:firebase-jobdispatcher:0.8.4'
+
+    testCompile 'junit:junit:4.12'
+}

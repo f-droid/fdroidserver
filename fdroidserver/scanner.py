@@ -69,9 +69,18 @@ def scan_source(build_dir, build):
         ]
     }
 
+    whitelisted = [
+        'firebase-jobdispatcher',  # https://github.com/firebase/firebase-jobdispatcher-android/blob/master/LICENSE
+        'com.firebaseui',          # https://github.com/firebase/FirebaseUI-Android/blob/master/LICENSE
+        'geofire-android'          # https://github.com/firebase/geofire-java/blob/master/LICENSE
+    ]
+
+    def is_whitelisted(s):
+        return any(wl in s for wl in whitelisted)
+
     def suspects_found(s):
         for n, r in usual_suspects.items():
-            if r.match(s):
+            if r.match(s) and not is_whitelisted(s):
                 yield n
 
     gradle_mavenrepo = re.compile(r'maven *{ *(url)? *[\'"]?([^ \'"]*)[\'"]?')
@@ -198,7 +207,7 @@ def scan_source(build_dir, build):
 
             elif ext == 'jar':
                 for name in suspects_found(curfile):
-                    count += handleproblem('usual supect \'%s\'' % name, path_in_build_dir, filepath)
+                    count += handleproblem('usual suspect \'%s\'' % name, path_in_build_dir, filepath)
                 if curfile == 'gradle-wrapper.jar':
                     removeproblem('gradle-wrapper.jar', path_in_build_dir, filepath)
                 else:
@@ -224,7 +233,7 @@ def scan_source(build_dir, build):
                 for i, line in enumerate(lines):
                     if is_used_by_gradle(line):
                         for name in suspects_found(line):
-                            count += handleproblem('usual supect \'%s\' at line %d' % (name, i + 1), path_in_build_dir, filepath)
+                            count += handleproblem('usual suspect \'%s\' at line %d' % (name, i + 1), path_in_build_dir, filepath)
                 noncomment_lines = [l for l in lines if not common.gradle_comment.match(l)]
                 joined = re.sub(r'[\n\r\s]+', ' ', ' '.join(noncomment_lines))
                 for m in gradle_mavenrepo.finditer(joined):
