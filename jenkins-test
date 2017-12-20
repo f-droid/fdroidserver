@@ -35,6 +35,8 @@ rm -f config.py keystore.jks
 ../fdroid update
 
 export GNUPGHOME=$WORKSPACE/tests/gnupghome
+gpg --import $GNUPGHOME/secring.gpg
+
 echo "build_server_always = True" >> config.py
 echo "gpghome = '$GNUPGHOME'" >> config.py
 echo "gpgkey = 'CE71F7FB'" >> config.py
