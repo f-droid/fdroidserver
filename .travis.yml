@@ -73,6 +73,7 @@ install:
       echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;25.0.2";
       echo y | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-23";
 
+      sudo pip3 install babel;
       sudo pip3 install --quiet --editable . ;
       sudo rm -rf fdroidserver.egg-info;
 
