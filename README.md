@@ -40,6 +40,39 @@ https://f-droid.org/docs/Installing_the_Server_and_Repo_Tools
 All sorts of other documentation lives there as well.
 
 
+### Tests
+
+There are many components to all of the tests for the components in
+this git repo.  The most commonly used parts of well tested, while
+some parts still lack tests.  This test suite has built over time a
+bit haphazardly, so it is not as clean, organized, or complete as it
+could be.  We welcome contributions.  Before rearchitecting any parts
+of it, be sure to [contact us](https://f-droid.org/about) to discuss
+the changes beforehand.
+
+
+#### `fdroid` commands
+
+The test suite for all of the `fdroid` commands is in the _tests/_
+subdir.  _.gitlab-ci.yml_ and _.travis.yml_ run this test suite on
+various configurations.
+
+* _tests/complete-ci-tests_ runs _pylint_ and all tests on two
+  different pyvenvs
+* _tests/run-tests_ runs the whole test suite
+* _tests/*.TestCase_ are individual unit tests for all of the `fdroid`
+  commands, which can be run separately, e.g. `./update.TestCase`.
+
+
+#### buildserver
+
+The tests for the whole build server setup are entirely separate
+because they require at least 200GB of disk space, and 8GB of
+RAM. These test scripts are in the root of the project, all starting
+with _jenkins-_ since they are run on https://jenkins.debian.net.
+
+
+
 ### Drozer Scanner
 
 There is a new feature under development that can scan any APK in a
