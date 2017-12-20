@@ -93,11 +93,6 @@ fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests $apksource
 
 
 #------------------------------------------------------------------------------#
-# run git pre-commit hook for pep8, pyflakes, etc
-sh hooks/pre-commit
-
-
-#------------------------------------------------------------------------------#
 # run pylint
 
 # only run it where it will work, for example, the pyvenvs above don't have pylint

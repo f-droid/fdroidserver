@@ -41,6 +41,17 @@ create_test_file() {
     TMPDIR=$WORKSPACE/.testfiles  mktemp
 }
 
+fdroid_init_with_prebuilt_keystore() {
+    if [ -z "$1" ]; then
+        keystore=$WORKSPACE/tests/keystore.jks
+    else
+        keystore="$1"
+    fi
+    $fdroid init --keystore $keystore --repo-keyalias=sova
+    echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+    echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+}
+
 # the < is reverse since 0 means success in exit codes
 have_git_2_3() {
     python3 -c "import sys; from distutils.version import LooseVersion as V; sys.exit(V(sys.argv[3]) < V('2.3'))" `git --version`
@@ -89,11 +100,6 @@ fi
 # allow the location of aapt to be overridden
 if [ -z $aapt ]; then
     aapt=`ls -1 $ANDROID_HOME/build-tools/*/aapt | sort | tail -1`
-fi
-
-# allow the location of python to be overridden
-if [ -z $python ]; then
-    python=python3
 fi
 
 # try to use GNU sed on OSX/BSD cuz BSD sed sucks
@@ -165,7 +171,7 @@ echo_header "test UTF-8 metadata"
 REPOROOT=`create_test_dir`
 cd $REPOROOT
 
-$fdroid init
+fdroid_init_with_prebuilt_keystore
 $sed -i.tmp 's,^ *repo_description.*,repo_description = """获取已安装在您的设备上的应用的,' config.py
 echo "mirrors = ('https://foo.bar/fdroid', 'http://secret.onion/fdroid')" >> config.py
 mkdir metadata
@@ -219,11 +225,8 @@ echo_header "copy tests/repo, generate java/gpg keys, update, and gpgsign"
 
 REPOROOT=`create_test_dir`
 GNUPGHOME=$REPOROOT/gnupghome
-KEYSTORE=$WORKSPACE/tests/keystore.jks
 cd $REPOROOT
-$fdroid init --keystore $KEYSTORE --repo-keyalias=sova
-echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+fdroid_init_with_prebuilt_keystore
 cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $REPOROOT/
 cp -a $WORKSPACE/tests/gnupghome $GNUPGHOME
 chmod 0700 $GNUPGHOME
@@ -263,10 +266,7 @@ echo_header 'test moving lots of APKs to the archive'
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
-cp $WORKSPACE/tests/keystore.jks $REPOROOT/
-$fdroid init --keystore keystore.jks --repo-keyalias=sova
-echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+fdroid_init_with_prebuilt_keystore
 echo "accepted_formats = ['txt']" >> config.py
 $sed -i.tmp '/allow_disabled_algorithms/d' config.py
 test -d metadata || mkdir metadata
@@ -293,10 +293,7 @@ echo_header 'test per-app "Archive Policy"'
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
-cp $WORKSPACE/tests/keystore.jks $REPOROOT/
-$fdroid init --keystore keystore.jks --repo-keyalias=sova
-echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+fdroid_init_with_prebuilt_keystore
 echo "accepted_formats = ['txt']" >> config.py
 test -d metadata || mkdir metadata
 cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
@@ -367,10 +364,7 @@ echo_header 'test moving old APKs to and from the archive'
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
-cp $WORKSPACE/tests/keystore.jks $REPOROOT/
-$fdroid init --keystore keystore.jks --repo-keyalias=sova
-echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+fdroid_init_with_prebuilt_keystore
 echo "accepted_formats = ['txt']" >> config.py
 test -d metadata || mkdir metadata
 cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
@@ -436,10 +430,7 @@ echo_header 'test allowing disabled signatures in repo and archive'
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
-cp $WORKSPACE/tests/keystore.jks $REPOROOT/
-$fdroid init --keystore keystore.jks --repo-keyalias=sova
-echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+fdroid_init_with_prebuilt_keystore
 echo "accepted_formats = ['txt']" >> config.py
 echo 'allow_disabled_algorithms = True' >> config.py
 $sed -i.tmp 's,archive_older = [0-9],archive_older = 3,' config.py
@@ -507,10 +498,7 @@ echo_header 'rename apks with `fdroid update --rename-apks`, --nosign for speed'
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
-cp $WORKSPACE/tests/keystore.jks $REPOROOT/
-$fdroid init --keystore keystore.jks --repo-keyalias=sova
-echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+fdroid_init_with_prebuilt_keystore
 echo "accepted_formats = ['txt', 'yml']" >> config.py
 echo 'keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.py
 test -d metadata || mkdir metadata
@@ -610,10 +598,10 @@ $fdroid install || true
 
 
 #------------------------------------------------------------------------------#
-echo_header "create a source tarball and use that to build a repo"
+echo_header "create a source tarball"
 
 cd $WORKSPACE
-$python setup.py sdist
+./setup.py compile_catalog sdist
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
@@ -665,7 +653,7 @@ echo_header "setup a new repo from scratch using ANDROID_HOME and do a local syn
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
-$fdroid init
+fdroid_init_with_prebuilt_keystore
 copy_apks_into_repo $REPOROOT
 $fdroid update --create-metadata --verbose
 $fdroid readmeta
@@ -675,7 +663,7 @@ LOCALCOPYDIR=`create_test_dir`/fdroid
 $fdroid server update --local-copy-dir=$LOCALCOPYDIR
 NEWREPOROOT=`create_test_dir`
 cd $NEWREPOROOT
-$fdroid init
+fdroid_init_with_prebuilt_keystore
 echo "sync_from_local_copy_dir = True" >> config.py
 $fdroid server update --local-copy-dir=$LOCALCOPYDIR
 
@@ -787,11 +775,8 @@ export ANDROID_HOME=$STORED_ANDROID_HOME
 echo_header "check duplicate files are properly handled by fdroid update"
 
 REPOROOT=`create_test_dir`
-KEYSTORE=$WORKSPACE/tests/keystore.jks
 cd $REPOROOT
-$fdroid init --keystore $KEYSTORE --repo-keyalias=sova
-echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+fdroid_init_with_prebuilt_keystore
 mkdir $REPOROOT/metadata
 cp -a $WORKSPACE/tests/metadata/obb.mainpatch.current.txt $REPOROOT/metadata
 echo "accepted_formats = ['txt']" >> config.py
@@ -813,7 +798,7 @@ REPOROOT=`create_test_dir`
 cd $REPOROOT
 mkdir repo
 copy_apks_into_repo $REPOROOT
-$fdroid init
+fdroid_init_with_prebuilt_keystore
 $fdroid update --create-metadata --verbose
 $fdroid readmeta
 grep -F '<application id=' repo/index.xml > /dev/null
@@ -946,12 +931,9 @@ echo_header "copy tests/repo, update with binary transparency log"
 REPOROOT=`create_test_dir`
 GIT_REMOTE=`create_test_dir`
 GNUPGHOME=$REPOROOT/gnupghome
-KEYSTORE=$WORKSPACE/tests/keystore.jks
 cd $REPOROOT
-$fdroid init --keystore $KEYSTORE --repo-keyalias=sova
+fdroid_init_with_prebuilt_keystore
 cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $REPOROOT/
-echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
 echo "binary_transparency_remote = '$GIT_REMOTE'" >> config.py
 echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
 $fdroid update --verbose
@@ -976,7 +958,8 @@ echo_header "setup a new repo with keystore with APK, update, then without key"
 REPOROOT=`create_test_dir`
 KEYSTORE=$REPOROOT/keystore.jks
 cd $REPOROOT
-$fdroid init --keystore $KEYSTORE
+cp $WORKSPACE/tests/keystore.jks $KEYSTORE
+fdroid_init_with_prebuilt_keystore $KEYSTORE
 test -e $KEYSTORE
 cp $WORKSPACE/tests/urzip.apk $REPOROOT/repo/
 $fdroid update --create-metadata --verbose
@@ -1047,11 +1030,9 @@ if have_git_2_3; then
 fi
 
 cd $OFFLINE_ROOT
-$fdroid init --keystore $KEYSTORE --repo-keyalias=sova
+fdroid_init_with_prebuilt_keystore
 cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $OFFLINE_ROOT/
 
-echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
 echo "mirrors = ['http://foo.bar/fdroid', 'http://asdflkdsfjafdsdfhkjh.onion/fdroid']" >> config.py
 echo "servergitmirrors = '$SERVER_GIT_MIRROR'" >> config.py
 echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
