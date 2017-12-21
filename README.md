@@ -64,6 +64,20 @@ various configurations.
   commands, which can be run separately, e.g. `./update.TestCase`.
 
 
+#### Additional tests for different linux distributions
+
+These tests are also run on various distributions through GitLab CI. This is
+only enabled for `master@fdroid/fdroidserver` because it'll take longer to
+complete than the regular CI tests.  Most of the time you won't need to worry
+about them but sometimes it might make sense to also run them for your merge
+request. In that case you need to remove [these lines from
+.gitlab-ci.yml](https://gitlab.com/fdroid/fdroidserver/blob/master/.gitlab-ci.yml#L34-35)
+and push this to a new branch of your fork.
+
+Alternatively [run them
+locally](https://docs.gitlab.com/runner/commands/README.html#gitlab-runner-exec)
+like this: `gitlab-runner exec docker ubuntu_lts`
+
 #### buildserver
 
 The tests for the whole build server setup are entirely separate
