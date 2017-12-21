@@ -47,7 +47,7 @@ DISTINGUISHED_NAME = 'CN=Android Debug,O=Android,C=US'
 NIGHTLY = '-nightly'
 
 
-def _ssh_key_from_debug_keystore():
+def _ssh_key_from_debug_keystore(keystore=KEYSTORE_FILE):
     tmp_dir = tempfile.mkdtemp(prefix='.')
     privkey = os.path.join(tmp_dir, '.privkey')
     key_pem = os.path.join(tmp_dir, '.key.pem')
@@ -55,7 +55,7 @@ def _ssh_key_from_debug_keystore():
     _config = dict()
     common.fill_config_defaults(_config)
     subprocess.check_call([_config['keytool'], '-importkeystore',
-                           '-srckeystore', KEYSTORE_FILE, '-srcalias', KEY_ALIAS,
+                           '-srckeystore', keystore, '-srcalias', KEY_ALIAS,
                            '-srcstorepass', PASSWORD, '-srckeypass', PASSWORD,
                            '-destkeystore', p12, '-destalias', KEY_ALIAS,
                            '-deststorepass', PASSWORD, '-destkeypass', PASSWORD,
@@ -87,6 +87,8 @@ def main():
 
     parser = ArgumentParser(usage="%(prog)s")
     common.setup_global_opts(parser)
+    parser.add_argument("--keystore", default=KEYSTORE_FILE,
+                        help=_("Specify which debug keystore file to use."))
     parser.add_argument("--show-secret-var", action="store_true", default=False,
                         help=_("Print the secret variable to the terminal for easy copy/paste"))
     parser.add_argument("--file", default='app/build/outputs/apk/*.apk',
@@ -291,19 +293,19 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             shutil.rmtree(os.path.dirname(ssh_private_key_file))
 
     else:
-        if not os.path.isfile(KEYSTORE_FILE):
-            androiddir = os.path.dirname(KEYSTORE_FILE)
+        if not os.path.isfile(options.keystore):
+            androiddir = os.path.dirname(options.keystore)
             if not os.path.exists(androiddir):
                 os.mkdir(androiddir)
                 logging.info(_('created {path}').format(path=androiddir))
-            logging.error(_('{path} does not exist!  Create it by running:').format(path=KEYSTORE_FILE)
-                          + '\n    keytool -genkey -v -keystore ' + KEYSTORE_FILE + ' -storepass android \\'
+            logging.error(_('{path} does not exist!  Create it by running:').format(path=options.keystore)
+                          + '\n    keytool -genkey -v -keystore ' + options.keystore + ' -storepass android \\'
                           + '\n     -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 \\'
                           + '\n     -dname "CN=Android Debug,O=Android,C=US"')
             sys.exit(1)
         ssh_dir = os.path.join(os.getenv('HOME'), '.ssh')
         os.makedirs(os.path.dirname(ssh_dir), exist_ok=True)
-        privkey = _ssh_key_from_debug_keystore()
+        privkey = _ssh_key_from_debug_keystore(options.keystore)
         ssh_private_key_file = os.path.join(ssh_dir, os.path.basename(privkey))
         shutil.move(privkey, ssh_private_key_file)
         shutil.move(privkey + '.pub', ssh_private_key_file + '.pub')
@@ -311,10 +313,10 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             shutil.rmtree(os.path.dirname(privkey))
 
         if options.show_secret_var:
-            with open(KEYSTORE_FILE, 'rb') as fp:
+            with open(options.keystore, 'rb') as fp:
                 debug_keystore = base64.standard_b64encode(fp.read()).decode('ascii')
             print(_('\n{path} encoded for the DEBUG_KEYSTORE secret variable:')
-                  .format(path=KEYSTORE_FILE))
+                  .format(path=options.keystore))
             print(debug_keystore)
 
     os.umask(umask)
