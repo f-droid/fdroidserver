@@ -57,6 +57,9 @@ from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesEx
     BuildException, VerificationException
 from .asynchronousfilereader import AsynchronousFileReader
 
+# this is the build-tools version, aapt has a separate version that
+# has to be manually set in test_aapt_version()
+MINIMUM_AAPT_VERSION = '26.0.0'
 
 # A signature block file with a .DSA, .RSA, or .EC extension
 CERT_PATH_REGEX = re.compile(r'^META-INF/.*\.(DSA|EC|RSA)$')
@@ -84,7 +87,7 @@ default_config = {
         'r16': None,
     },
     'qt_sdk_path': None,
-    'build_tools': "25.0.2",
+    'build_tools': MINIMUM_AAPT_VERSION,
     'force_build_tools': False,
     'java_paths': None,
     'ant': "ant",
@@ -397,13 +400,13 @@ def test_aapt_version(aapt):
             # the Debian package has the version string like "v0.2-23.0.2"
             too_old = False
             if '.' in bugfix:
-                if LooseVersion(bugfix) < LooseVersion('24.0.0'):
+                if LooseVersion(bugfix) < LooseVersion(MINIMUM_AAPT_VERSION):
                     too_old = True
-            elif LooseVersion('.'.join((major, minor, bugfix))) < LooseVersion('0.2.2964546'):
+            elif LooseVersion('.'.join((major, minor, bugfix))) < LooseVersion('0.2.4062713'):
                 too_old = True
             if too_old:
-                logging.warning(_("'{aapt}' is too old, fdroid requires build-tools-24.0.0 or newer!")
-                                .format(aapt=aapt))
+                logging.warning(_("'{aapt}' is too old, fdroid requires build-tools-{version} or newer!")
+                                .format(aapt=aapt, version=MINIMUM_AAPT_VERSION))
         else:
             logging.warning(_('Unknown version of aapt, might cause problems: ') + output)
 

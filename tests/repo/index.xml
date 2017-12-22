@@ -8,6 +8,38 @@
 	<install packageName="org.adaway"/>
 	<uninstall packageName="com.android.vending"/>
 	<uninstall packageName="com.facebook.orca"/>
+	<application id="duplicate.permisssions">
+		<id>duplicate.permisssions</id>
+		<added>2017-12-22</added>
+		<lastupdated>2017-12-22</lastupdated>
+		<name>Duplicate Permisssions</name>
+		<summary>Test app for all possible &lt;uses-permissions&gt;</summary>
+		<icon>duplicate.permisssions.9999999.png</icon>
+		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
+		<license>Unknown</license>
+		<categories>tests</categories>
+		<category>tests</category>
+		<web></web>
+		<source></source>
+		<tracker></tracker>
+		<marketversion></marketversion>
+		<marketvercode>9999999</marketvercode>
+		<package>
+			<version>0.3-7-gb817ac8</version>
+			<versioncode>9999999</versioncode>
+			<apkname>duplicate.permisssions_9999999.apk</apkname>
+			<hash type="sha256">9ffc7e9b2740ce664059194805b2fbfc08b7970c8448a22b8bd828dfd6ad161c</hash>
+			<size>11988</size>
+			<sdkver>18</sdkver>
+			<targetSdkVersion>27</targetSdkVersion>
+			<added>2017-12-22</added>
+			<sig>2d337e40aef77564bf62781ac424595c</sig>
+			<permissions>ACCESS_NETWORK_STATE,ACCESS_WIFI_STATE,CHANGE_WIFI_MULTICAST_STATE,INTERNET,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE</permissions>
+			<uses-permission maxSdkVersion="18" name="android.permission.READ_EXTERNAL_STORAGE"/>
+			<uses-permission maxSdkVersion="18" name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+			<uses-permission-sdk-23 maxSdkVersion="27" name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+		</package>
+	</application>
 	<application id="fake.ota.update">
 		<id>fake.ota.update</id>
 		<added>2016-03-10</added>
