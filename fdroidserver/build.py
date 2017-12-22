@@ -1164,7 +1164,11 @@ def main():
     # Build applications...
     failed_apps = {}
     build_succeeded = []
+    max_apps_per_run = 10
     for appid, app in apps.items():
+        max_apps_per_run -= 1
+        if max_apps_per_run < 1:
+            break
 
         first = True
 
