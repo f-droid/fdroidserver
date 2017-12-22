@@ -521,6 +521,18 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(os.path.isfile(unsigned))
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
 
+        # now sign an APK with minSdkVersion >= 18
+        unsigned = os.path.join(testdir, 'duplicate.permisssions_9999999-unsigned.apk')
+        signed = os.path.join(testdir, 'duplicate.permisssions_9999999.apk')
+        shutil.copy(os.path.join(self.basedir, 'repo', 'duplicate.permisssions_9999999.apk'),
+                    os.path.join(unsigned))
+        fdroidserver.common.apk_strip_signatures(unsigned, strip_manifest=True)
+        fdroidserver.common.sign_apk(unsigned, signed, config['keyalias'])
+        self.assertTrue(os.path.isfile(signed))
+        self.assertFalse(os.path.isfile(unsigned))
+        self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
+        self.assertEqual(18, fdroidserver.common.get_minSdkVersion_aapt(signed))
+
     def test_get_api_id_aapt(self):
 
         config = dict()

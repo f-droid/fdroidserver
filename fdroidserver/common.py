@@ -2466,7 +2466,7 @@ def sign_apk(unsigned_path, signed_path, keyalias):
     if get_minSdkVersion_aapt(unsigned_path) < 18:
         signature_algorithm = ['-sigalg', 'SHA1withRSA', '-digestalg', 'SHA1']
     else:
-        signature_algorithm = ['-sigalg', 'SHA256withRSA', '-digestalg', 'SHA256']
+        signature_algorithm = ['-sigalg', 'SHA256withRSA', '-digestalg', 'SHA-256']
 
     p = FDroidPopen([config['jarsigner'], '-keystore', config['keystore'],
                      '-storepass:env', 'FDROID_KEY_STORE_PASS',
