@@ -1336,27 +1336,63 @@ def parse_androidmanifests(paths, app):
         vercode = None
         package = None
 
+        flavour = None
+        if app.builds and 'gradle' in app.builds[-1] and app.builds[-1].gradle:
+            flavour = app.builds[-1].gradle[-1]
+
         if has_extension(path, 'gradle'):
             with open(path, 'r') as f:
+                inside_flavour_group = 0
+                inside_required_flavour = 0
                 for line in f:
                     if gradle_comment.match(line):
                         continue
-                    # Grab first occurence of each to avoid running into
-                    # alternative flavours and builds.
-                    if not package:
-                        matches = psearch_g(line)
-                        if matches:
-                            s = matches.group(2)
-                            if app_matches_packagename(app, s):
-                                package = s
-                    if not version:
-                        matches = vnsearch_g(line)
-                        if matches:
-                            version = matches.group(2)
-                    if not vercode:
-                        matches = vcsearch_g(line)
-                        if matches:
-                            vercode = matches.group(1)
+
+                    if inside_flavour_group > 0:
+                        if inside_required_flavour > 0:
+                            matches = psearch_g(line)
+                            if matches:
+                                s = matches.group(2)
+                                if app_matches_packagename(app, s):
+                                    package = s
+
+                            matches = vnsearch_g(line)
+                            if matches:
+                                version = matches.group(2)
+
+                            matches = vcsearch_g(line)
+                            if matches:
+                                vercode = matches.group(1)
+
+                            if '{' in line:
+                                inside_required_flavour += 1
+                            if '}' in line:
+                                inside_required_flavour -= 1
+                        else:
+                            if flavour and (flavour in line):
+                                inside_required_flavour = 1
+
+                        if '{' in line:
+                            inside_flavour_group += 1
+                        if '}' in line:
+                            inside_flavour_group -= 1
+                    else:
+                        if "productFlavors" in line:
+                            inside_flavour_group = 1
+                        if not package:
+                            matches = psearch_g(line)
+                            if matches:
+                                s = matches.group(2)
+                                if app_matches_packagename(app, s):
+                                    package = s
+                        if not version:
+                            matches = vnsearch_g(line)
+                            if matches:
+                                version = matches.group(2)
+                        if not vercode:
+                            matches = vcsearch_g(line)
+                            if matches:
+                                vercode = matches.group(1)
         else:
             try:
                 xml = parse_xml(path)
