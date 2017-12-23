@@ -612,49 +612,6 @@ class CommonTest(unittest.TestCase):
         sig = fdroidserver.common.metadata_find_developer_signature('org.smssecure.smssecure')
         self.assertEqual('b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868', sig)
 
-    def test_parse_androidmanifests(self):
-        source_files_dir = os.path.join(os.path.dirname(__file__), 'source-files')
-        app = fdroidserver.metadata.App()
-        app.id = 'org.fdroid.fdroid'
-        paths = [
-            os.path.join(source_files_dir, 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
-            os.path.join(source_files_dir, 'fdroid', 'fdroidclient', 'build.gradle'),
-        ]
-        for path in paths:
-            self.assertTrue(os.path.isfile(path))
-        self.assertEqual(('0.94-test', '940', 'org.fdroid.fdroid'),
-                         fdroidserver.common.parse_androidmanifests(paths, app))
-
-    def test_parse_androidmanifests_with_flavor(self):
-        source_files_dir = os.path.join(os.path.dirname(__file__), 'source-files')
-
-        app = fdroidserver.metadata.App()
-        build = fdroidserver.metadata.Build()
-        build.gradle = ['devVersion']
-        app.builds = [build]
-        app.id = 'org.fdroid.fdroid.dev'
-        paths = [
-            os.path.join(source_files_dir, 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
-            os.path.join(source_files_dir, 'fdroid', 'fdroidclient', 'build.gradle'),
-        ]
-        for path in paths:
-            self.assertTrue(os.path.isfile(path))
-        self.assertEqual(('0.95-dev', '949', 'org.fdroid.fdroid.dev'),
-                         fdroidserver.common.parse_androidmanifests(paths, app))
-
-        app = fdroidserver.metadata.App()
-        build = fdroidserver.metadata.Build()
-        build.gradle = ['free']
-        app.builds = [build]
-        app.id = 'eu.siacs.conversations'
-        paths = [
-            os.path.join(source_files_dir, 'eu.siacs.conversations', 'build.gradle'),
-        ]
-        for path in paths:
-            self.assertTrue(os.path.isfile(path))
-        self.assertEqual(('1.23.1', '245', 'eu.siacs.conversations'),
-                         fdroidserver.common.parse_androidmanifests(paths, app))
-
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
