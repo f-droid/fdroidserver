@@ -655,6 +655,45 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(('1.23.1', '245', 'eu.siacs.conversations'),
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.gradle = ['generic']
+        app.builds = [build]
+        app.id = 'com.nextcloud.client'
+        paths = [
+            os.path.join(source_files_dir, 'com.nextcloud.client', 'build.gradle'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('2.0.0', '20000099', 'com.nextcloud.client'),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.gradle = ['versionDev']
+        app.builds = [build]
+        app.id = 'com.nextcloud.android.beta'
+        paths = [
+            os.path.join(source_files_dir, 'com.nextcloud.client', 'build.gradle'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('20171223', '20171223', 'com.nextcloud.android.beta'),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.gradle = ['standard']
+        app.builds = [build]
+        app.id = 'at.bitfire.davdroid'
+        paths = [
+            os.path.join(source_files_dir, 'at.bitfire.davdroid', 'build.gradle'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('1.9.8.1-ose', '197', 'at.bitfire.davdroid'),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
