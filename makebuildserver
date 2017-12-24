@@ -178,8 +178,6 @@ cachefiles = [
      '9b742d34590fe73fb7229e34835ecffb1846ca389d9f924f0b2a37de525dc6b8'),
     ('https://dl.google.com/android/repository/platform-26_r02.zip',
      '2aafa7d19c5e9c4b643ee6ade3d85ef89dc2f79e8383efdb9baf7fddad74b52a'),
-    ('https://dl.google.com/android/repository/platform-27_r01.zip',
-     'cbba6f8fcf025e1b533326746763aa1d6e2cf4001b1b441602bb44d253bc49ac'),
     ('https://dl.google.com/android/repository/build-tools_r17-linux.zip',
      '4c8444972343a19045236f6924bd7f12046287c70dace96ab88b2159c8ec0e74'),
     ('https://dl.google.com/android/repository/build-tools_r18.0.1-linux.zip',
