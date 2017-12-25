@@ -962,7 +962,7 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
     if server:
         # When using server mode, still keep a local cache of the repo, by
         # grabbing the source now.
-        vcs.gotorevision(build.commit)
+        vcs.gotorevision(build.commit, refresh)
 
         build_server(app, build, vcs, build_dir, output_dir, log_dir, force)
     else:
@@ -1124,7 +1124,7 @@ def main():
 
     # Read all app and srclib metadata
     pkgs = common.read_pkg_args(options.appid, True)
-    allapps = metadata.read_metadata(not options.onserver, pkgs, sort_by_time=True)
+    allapps = metadata.read_metadata(not options.onserver, pkgs, options.refresh, sort_by_time=True)
     apps = common.read_app_args(options.appid, allapps, True)
 
     for appid, app in list(apps.items()):

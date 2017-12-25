@@ -710,7 +710,7 @@ def read_srclibs():
         srclibs[srclibname] = parse_srclib(metadatapath)
 
 
-def read_metadata(xref=True, check_vcs=[], sort_by_time=False):
+def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
     """Return a list of App instances sorted newest first
 
     This reads all of the metadata files in a 'data' repository, then
@@ -760,7 +760,7 @@ def read_metadata(xref=True, check_vcs=[], sort_by_time=False):
         if packageName in apps:
             warn_or_exception(_("Found multiple metadata files for {appid}")
                               .format(path=packageName))
-        app = parse_metadata(metadatapath, packageName in check_vcs)
+        app = parse_metadata(metadatapath, packageName in check_vcs, refresh)
         check_metadata(app)
         apps[app.id] = app
 
@@ -944,7 +944,7 @@ def _decode_bool(s):
     warn_or_exception(_("Invalid boolean '%s'") % s)
 
 
-def parse_metadata(metadatapath, check_vcs=False):
+def parse_metadata(metadatapath, check_vcs=False, refresh=True):
     '''parse metadata file, optionally checking the git repo for metadata first'''
 
     _ignored, ext = fdroidserver.common.get_extension(metadatapath)
@@ -978,7 +978,7 @@ def parse_metadata(metadatapath, check_vcs=False):
         if not os.path.isfile(metadata_in_repo):
             vcs, build_dir = fdroidserver.common.setup_vcs(app)
             if isinstance(vcs, fdroidserver.common.vcs_git):
-                vcs.gotorevision('HEAD')  # HEAD since we can't know where else to go
+                vcs.gotorevision('HEAD', refresh)  # HEAD since we can't know where else to go
         if os.path.isfile(metadata_in_repo):
             logging.debug('Including metadata from ' + metadata_in_repo)
             # do not include fields already provided by main metadata file
