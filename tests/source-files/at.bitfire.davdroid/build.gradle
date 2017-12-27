@@ -1,0 +1,108 @@
+/*
+ * Copyright (c) Ricki Hirner (bitfire web engineering).
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Public License v3.0
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/gpl.html
+ */
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'org.jetbrains.dokka-android'
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion '27.0.1'
+
+    defaultConfig {
+        applicationId "at.bitfire.davdroid"
+
+        versionCode 197
+        buildConfigField "long", "buildTime", System.currentTimeMillis() + "L"
+        buildConfigField "boolean", "customCerts", "true"
+
+        minSdkVersion 19        // Android 4.4
+        targetSdkVersion 27     // Android 8.1
+
+        // when using this, make sure that notification icons are real bitmaps
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    flavorDimensions "type"
+
+    productFlavors {
+        standard {
+            versionName "1.9.8.1-ose"
+
+            buildConfigField "boolean", "customCerts", "true"
+            buildConfigField "boolean", "customCertsUI", "true"
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    lintOptions {
+        disable 'GoogleAppIndexingWarning'      // we don't need Google indexing, thanks
+        disable 'ImpliedQuantity', 'MissingQuantity'		// quantities from Transifex may vary
+        disable 'MissingTranslation', 'ExtraTranslation'	// translations from Transifex are not always up to date
+        disable "OnClick"     // doesn't recognize Kotlin onClick methods
+        disable 'Recycle'           // doesn't understand Lombok's @Cleanup
+        disable 'RtlEnabled'
+        disable 'RtlHardcoded'
+        disable 'Typos'
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+    }
+
+    defaultConfig {
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+}
+
+dependencies {
+    compile project(':cert4android')
+    compile project(':dav4android')
+    compile project(':ical4android')
+    compile project(':vcard4android')
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile 'com.android.support:cardview-v7:27.0.2'
+    compile 'com.android.support:design:27.0.2'
+    compile 'com.android.support:preference-v14:27.0.2'
+
+    compile 'com.github.yukuku:ambilwarna:2.0.1'
+
+    compile 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    compile 'commons-io:commons-io:2.6'
+    compile 'dnsjava:dnsjava:2.1.8'
+    compile 'org.apache.commons:commons-lang3:3.6'
+    compile 'org.apache.commons:commons-collections4:4.1'
+
+    // for tests
+    //noinspection GradleDynamicVersion
+    androidTestCompile('com.android.support.test:runner:+') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    //noinspection GradleDynamicVersion
+    androidTestCompile('com.android.support.test:rules:+') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile 'junit:junit:4.12'
+    androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.9.1'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.squareup.okhttp3:mockwebserver:3.9.1'
+}

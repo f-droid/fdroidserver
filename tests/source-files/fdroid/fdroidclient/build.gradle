@@ -129,6 +129,21 @@ android {
     compileSdkVersion 21
     buildToolsVersion '22.0.1'
 
+    defaultConfig {
+
+        flavorDimensions "default"
+
+        productFlavors {
+            devVersion {
+                applicationId "org.fdroid.fdroid.dev"
+                dimension "default"
+                versionCode 949
+                versionName "0.95-dev"
+            }
+        }
+
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'

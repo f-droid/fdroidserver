@@ -1,0 +1,253 @@
+// Gradle build file
+//
+// This project was started in Eclipse and later moved to Android Studio. In the transition, both IDEs were supported.
+// Due to this, the files layout is not the usual in new projects created with Android Studio / gradle. This file
+// merges declarations usually split in two separates build.gradle file, one for global settings of the project in
+// its root folder, another one for the app module in subfolder of root.
+
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.google.gms:google-services:3.0.0'
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
+apply plugin: 'findbugs'
+
+configurations.all {
+    // check for updates every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+ext {
+    supportLibraryVersion = '26.1.0'
+    googleLibraryVersion = '11.2.2'
+
+    travisBuild = System.getenv("TRAVIS") == "true"
+
+    // allows for -Dpre-dex=false to be set
+    preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
+}
+
+repositories {
+    jcenter()
+    maven { url "https://jitpack.io" }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    google()
+
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+android {
+    lintOptions {
+        abortOnError false
+        htmlReport true
+        htmlOutput file("$project.buildDir/reports/lint/lint.html")
+        disable 'MissingTranslation'
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
+
+    defaultConfig {
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // arguments to be passed to functional tests
+        testInstrumentationRunnerArgument "TEST_USER", "\"$System.env.OCTEST_APP_USERNAME\""
+        testInstrumentationRunnerArgument "TEST_PASSWORD", "\"$System.env.OCTEST_APP_PASSWORD\""
+        testInstrumentationRunnerArgument "TEST_SERVER_URL", "\"$System.env.OCTEST_SERVER_BASE_URL\""
+
+        multiDexEnabled true
+
+        versionCode = 20000099
+        versionName = "2.0.0"
+
+        // adapt structure from Eclipse to Gradle/Android Studio expectations;
+        // see http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Configuring-the-Structure
+
+        flavorDimensions "default"
+
+        productFlavors {
+            // used for f-droid
+            generic {
+                applicationId 'com.nextcloud.client'
+                dimension "default"
+            }
+
+            gplay {
+                applicationId 'com.nextcloud.client'
+                dimension "default"
+            }
+
+            modified {
+                // structure is:
+                // domain tld
+                // domain name
+                // .client
+                applicationId 'com.custom.client'
+                dimension "default"
+            }
+
+            versionDev {
+                applicationId "com.nextcloud.android.beta"
+                dimension "default"
+                versionCode 20171223
+                versionName "20171223"
+            }
+        }
+
+        configurations {
+            modifiedCompile
+        }
+    }
+
+
+    // adapt structure from Eclipse to Gradle/Android Studio expectations;
+    // see http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Configuring-the-Structure
+
+    dexOptions {
+        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
+        preDexLibraries = preDexEnabled && !travisBuild
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+    }
+
+    task checkstyle(type: Checkstyle) {
+        configFile = file("${rootProject.projectDir}/checkstyle.xml")
+        configProperties.checkstyleSuppressionsPath = file("${project.rootDir}/config/quality/checkstyle/suppressions.xml").absolutePath
+        source 'src'
+        include '**/*.java'
+        exclude '**/gen/**'
+        classpath = files()
+    }
+
+    task pmd(type: Pmd) {
+        ruleSetFiles = files("${project.rootDir}/pmd-ruleset.xml")
+        ignoreFailures = false
+        ruleSets = []
+
+        source 'src'
+        include '**/*.java'
+        exclude '**/gen/**'
+
+        reports {
+            xml.enabled = false
+            html.enabled = true
+            xml {
+                destination = file("$project.buildDir/reports/pmd/pmd.xml")
+            }
+            html {
+                destination = file("$project.buildDir/reports/pmd/pmd.html")
+            }
+        }
+    }
+
+    task findbugs(type: FindBugs) {
+        ignoreFailures = false
+        effort = "max"
+        reportLevel = "high"
+        classes = files("$project.buildDir/intermediates/classes")
+        excludeFilter = new File("${project.rootDir}/findbugs-filter.xml")
+        source 'src'
+        include '**/*.java'
+        exclude '**/gen/**'
+
+        reports {
+            xml.enabled = false
+            html.enabled = true
+            html {
+                destination  = file("$project.buildDir/reports/findbugs/findbugs.html")
+            }
+        }
+        classpath = files()
+    }
+    check.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint'
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    /// dependencies for app building
+    implementation 'com.android.support:multidex:1.0.2'
+    implementation 'com.github.nextcloud:android-library:1.0.33'
+    versionDevImplementation 'com.github.nextcloud:android-library:master-SNAPSHOT' // use always latest master
+    implementation "com.android.support:support-v4:${supportLibraryVersion}"
+    implementation "com.android.support:design:${supportLibraryVersion}"
+    implementation 'com.jakewharton:disklrucache:2.0.2'
+    implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
+    implementation "com.android.support:cardview-v7:${supportLibraryVersion}"
+    implementation "com.android.support:exifinterface:${supportLibraryVersion}"
+    implementation 'com.github.tobiasKaminsky:android-floating-action-button:1.10.2'
+    implementation 'com.github.albfernandez:juniversalchardet:v2.0.0'
+    implementation 'com.google.code.findbugs:annotations:2.0.1'
+    implementation 'commons-io:commons-io:2.5'
+    implementation 'com.github.evernote:android-job:v1.2.0'
+    implementation 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'com.googlecode.ez-vcard:ez-vcard:0.10.2'
+    implementation 'org.lukhnos:nnio:0.2'
+    // uncomment for gplay, modified
+    // implementation "com.google.firebase:firebase-messaging:${googleLibraryVersion}"
+    // implementation "com.google.android.gms:play-services-base:${googleLibraryVersion}"
+    // implementation "com.google.android.gms:play-services-gcm:${googleLibraryVersion}"
+    // implementation "com.google.firebase:firebase-core:${googleLibraryVersion}"
+    implementation 'org.parceler:parceler-api:1.1.6'
+    annotationProcessor 'org.parceler:parceler:1.1.6'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.caverock:androidsvg:1.2.1'
+    implementation "com.android.support:support-annotations:${supportLibraryVersion}"
+
+    /// dependencies for local unit tests
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:1.10.19'
+    /// dependencies for instrumented tests
+    // JUnit4 Rules
+    androidTestImplementation 'com.android.support.test:rules:1.0.1'
+    // Android JUnit Runner
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+
+    // Espresso core
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    // UIAutomator - for cross-app UI tests, and to grant screen is turned on in Espresso tests
+    //androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+    // fix conflict in dependencies; see http://g.co/androidstudio/app-test-app-conflict for details
+    //androidTestImplementation "com.android.support:support-annotations:${supportLibraryVersion}"
+    implementation 'org.jetbrains:annotations:15.0'
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+tasks.withType(Test) {
+    /// increased logging for tests
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+// uncomment for gplay, modified (must be at the bottom)
+//apply plugin: 'com.google.gms.google-services'
