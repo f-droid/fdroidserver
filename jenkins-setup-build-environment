@@ -55,6 +55,11 @@ virsh -c qemu:///system undefine buildserver_default \
       --nvram --managed-save --remove-all-storage --snapshots-metadata || true
 virsh -c qemu:///system undefine builder_default \
       --nvram --managed-save --remove-all-storage --snapshots-metadata || true
+virsh -c qemu:///system vol-delete --pool default \
+      /var/lib/libvirt/images/buildserver_vagrant_box_image_0.img || true
+virsh -c qemu:///system vol-delete --pool default \
+      /var/lib/libvirt/images/jessie64_vagrant_box_image_0.img || true
+rm -rf "$WORKSPACE"/../*/.testfiles
 
 cd $WORKSPACE
 echo "debian_mirror = 'https://deb.debian.org/debian/'" > $WORKSPACE/makebuildserver.config.py
