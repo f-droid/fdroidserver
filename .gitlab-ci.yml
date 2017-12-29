@@ -43,7 +43,7 @@ debian_testing:
     - export LANG=C.UTF-8
     - cd tests
     - rm -f install.TestCase  # fails frequently and is unimportant
-    - # Debian's build-tools is too old, remove once the package has been updated
+    - echo "Debian's build-tools is too old, remove once the package has been updated"
     - sed -i '/android.permission.READ_EXTERNAL_STORAGE/d' tests/repo/index.xml
     - sed -i '/^diff -uw .*index-v1.json$/d' tests/run-tests
     - ./run-tests
