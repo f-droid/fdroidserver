@@ -112,7 +112,7 @@ fedora_latest:
     - mkdir ~/.android
     - touch ~/.android/repositories.cfg
     - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platform-tools"
-    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;25.0.2"
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.2"
     - chown -R testuser .
     - cd tests
     - su testuser --login --command
