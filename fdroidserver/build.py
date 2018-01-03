@@ -79,6 +79,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             buildserverid = subprocess.check_output(['vagrant', 'ssh', '-c',
                                                      'cat /home/vagrant/buildserverid'],
                                                     cwd='builder').rstrip()
+            logging.debug(_('Fetched buildserverid from VM: ') + buildserverid)
 
         # Open SSH connection...
         logging.info("Connecting to virtual machine...")
@@ -286,6 +287,10 @@ def force_gradle_build_tools(build_dir, build_tools):
             common.regsub_file(r"""(\s*)buildToolsVersion([\s=]+).*""",
                                r"""\1buildToolsVersion\2'%s'""" % build_tools,
                                path)
+
+
+def _get_build_timestamp():
+    return time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime())
 
 
 def transform_first_char(string, method):
@@ -1055,6 +1060,7 @@ def parse_commandline():
 options = None
 config = None
 buildserverid = None
+starttime = _get_build_timestamp()
 
 
 def main():
@@ -1174,6 +1180,7 @@ def main():
 
         for build in app.builds:
             wikilog = None
+            build_starttime = _get_build_timestamp()
             tools_version_log = ''
             if not options.onserver:
                 tools_version_log = get_android_tools_version_log(build.ndk_path())
@@ -1270,7 +1277,7 @@ def main():
                     f.write('versionCode: %s\nversionName: %s\ncommit: %s\n' %
                             (build.versionCode, build.versionName, build.commit))
                     f.write('Build completed at '
-                            + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + '\n')
+                            + _get_build_timestamp() + '\n')
                     f.write('\n' + tools_version_log + '\n')
                     f.write(str(e))
                 logging.error("Could not build app %s: %s" % (appid, e))
@@ -1295,10 +1302,12 @@ def main():
                     newpage = site.Pages[lastbuildpage]
                     with open(os.path.join('tmp', 'fdroidserverid')) as fp:
                         fdroidserverid = fp.read().rstrip()
-                    txt = "* build completed at " + time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime()) + '\n' \
+                    txt = "* build session started at " + starttime + '\n' \
+                          + "* this build started at " + build_starttime + '\n' \
+                          + "* this build completed at " + _get_build_timestamp() + '\n' \
                           + '* fdroidserverid: [https://gitlab.com/fdroid/fdroidserver/commit/' \
                           + fdroidserverid + ' ' + fdroidserverid + ']\n\n'
-                    if options.onserver:
+                    if buildserverid:
                         txt += '* buildserverid: [https://gitlab.com/fdroid/fdroidserver/commit/' \
                                + buildserverid + ' ' + buildserverid + ']\n\n'
                     txt += tools_version_log + '\n\n'
