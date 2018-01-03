@@ -79,6 +79,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             buildserverid = subprocess.check_output(['vagrant', 'ssh', '-c',
                                                      'cat /home/vagrant/buildserverid'],
                                                     cwd='builder').rstrip()
+            logging.debug(_('Fetched buildserverid from VM: ') + buildserverid)
 
         # Open SSH connection...
         logging.info("Connecting to virtual machine...")
@@ -1306,7 +1307,7 @@ def main():
                           + "* this build completed at " + _get_build_timestamp() + '\n' \
                           + '* fdroidserverid: [https://gitlab.com/fdroid/fdroidserver/commit/' \
                           + fdroidserverid + ' ' + fdroidserverid + ']\n\n'
-                    if options.onserver:
+                    if buildserverid:
                         txt += '* buildserverid: [https://gitlab.com/fdroid/fdroidserver/commit/' \
                                + buildserverid + ' ' + buildserverid + ']\n\n'
                     txt += tools_version_log + '\n\n'
