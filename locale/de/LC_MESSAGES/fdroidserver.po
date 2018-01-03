@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
-"Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
+"Report-Msgid-Bugs-To: team@f-droid.org\n"
 "POT-Creation-Date: 2017-10-17 17:48+0200\n"
-"PO-Revision-Date: 2017-11-27 12:39+0100\n"
-"Last-Translator: Tobias Bannert <tobannert@gmail.com>\n"
+"PO-Revision-Date: 2017-12-22 08:51+0000\n"
+"Last-Translator: Tobias_Groza <tobias.groza@outlook.de>\n"
 "Language-Team: German "
 "<https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.18-dev\n"
+"X-Generator: Weblate 2.19-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -365,7 +365,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Could not open apk file for analysis"
-msgstr ""
+msgstr "Konnte APK-Datei nicht für Analyse öffnen"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
@@ -400,7 +400,7 @@ msgstr ""
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
-msgstr ""
+msgstr "Erstelle Log Verzeichnis"
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -418,7 +418,7 @@ msgstr ""
 #: ../fdroidserver/import.py ../fdroidserver/verify.py
 #: ../fdroidserver/publish.py
 msgid "Creating temporary directory"
-msgstr ""
+msgstr "Erstelle temporäres Verzeichnis"
 
 #: ../fdroidserver/index.py
 msgid "Creating unsigned index in preparation for signing"
@@ -435,12 +435,12 @@ msgstr "APKs und/oder OBBs ohne Metadaten aus dem Repository löschen"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Deleting unknown file: {path}"
-msgstr ""
+msgstr "Lösche unbekannte Datei: {path}"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Description '%s' is just the app's summary"
-msgstr ""
+msgstr "Die Beschreibung '%s' ist nur die Zusammenfassung der App"
 
 #: ../fdroidserver/lint.py
 msgid "Description has a duplicate line"
@@ -487,11 +487,13 @@ msgstr "Herunterladung von Logs welche wir nicht haben"
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
 msgstr ""
+"Herunterladen des Repositories bereits einmal fehlgeschlagen, versuche es "
+"nicht nochmal."
 
 #: ../fdroidserver/verify.py
 #, python-brace-format
 msgid "Downloading {url} failed. {error}"
-msgstr ""
+msgstr "Herunterladen von {url} fehlgeschlagen. {error}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -707,7 +709,7 @@ msgstr "Erstellte Programmpakete auf Geräten installieren"
 #: ../fdroidserver/install.py
 #, python-format
 msgid "Installing %s..."
-msgstr ""
+msgstr "Installiere"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -724,7 +726,7 @@ msgstr "Angelegenheiten, die Aktualisierungen erfordern, interaktiv abfragen."
 
 #: ../fdroidserver/update.py
 msgid "Invalid APK"
-msgstr ""
+msgstr "Ungültige APK"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -855,7 +857,7 @@ msgstr ""
 
 #: ../fdroidserver/import.py
 msgid "No information found."
-msgstr ""
+msgstr "Keine Informationen gefunden."
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
@@ -1061,7 +1063,7 @@ msgstr "Alle Metadaten-Dateien betrachten und beenden"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading '{config_file}'"
-msgstr ""
+msgstr "Lese '{config_file}'"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #. https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
@@ -1520,7 +1522,7 @@ msgstr "Mehrdeutige Option: %(option)s könnte übereinstimmen mit %(matches)s"
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
-msgstr ""
+msgstr "unklare Option: %s (%s?)"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
@@ -1587,7 +1589,7 @@ msgstr[1] ""
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "copying {apkfilename} into {path}"
-msgstr ""
+msgstr "Kopiere {apkfilename} nach {path}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1696,7 +1698,7 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "no such option: %s"
-msgstr ""
+msgstr "keine solche Option: %s"
 
 #: ../fdroid
 msgid "no version info found!"
@@ -1759,7 +1761,7 @@ msgstr "Option --%s nicht erkannt"
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option --%s requires argument"
-msgstr ""
+msgstr "Option -%s erfordert Argument"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "optional arguments"
@@ -1814,7 +1816,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "die Folgenden Argumente  sind erforderlich: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
