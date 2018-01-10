@@ -518,8 +518,14 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             # Even when running clean, gradle stores task/artifact caches in
             # .gradle/ as binary files. To avoid overcomplicating the scanner,
             # manually delete them, just like `gradle clean` should have removed
-            # the build/ dirs.
-            del_dirs(['build', '.gradle'])
+            # the build/* dirs.
+            del_dirs([os.path.join('build', 'android-profile'),
+                      os.path.join('build', 'generated'),
+                      os.path.join('build', 'intermediates'),
+                      os.path.join('build', 'outputs'),
+                      os.path.join('build', 'reports'),
+                      os.path.join('build', 'tmp'),
+                      '.gradle'])
             del_files(['gradlew', 'gradlew.bat'])
 
         if 'pom.xml' in files:
