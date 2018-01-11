@@ -91,5 +91,7 @@ fi
 $WORKSPACE/fdroid build --verbose --latest --no-tarball --all $wikiflag
 
 vagrant global-status
-cd builder
-vagrant status
+if [ -d builder ]; then
+    cd builder
+    vagrant status
+fi
