@@ -76,7 +76,19 @@ else
 fi
 
 echo "build_server_always = True" > config.py
-$WORKSPACE/fdroid build --verbose --latest --no-tarball --all
+# if the local mediawiki is available, then use it
+if nc -z -w1 localhost 32445; then
+    wikiflag="--wiki"
+    echo "wiki_protocol = 'http'" >> config.py
+    echo "wiki_server = 'localhost:32445'" >> config.py
+    echo "wiki_path = '/mediawiki/'" >> config.py
+    echo "wiki_user = 'fdroid'" >> config.py
+    echo "wiki_password = 'update.TestCase'" >> config.py
+else
+    sed -i '/^wiki_/d' config.py
+fi
+
+$WORKSPACE/fdroid build --verbose --latest --no-tarball --all $wikiflag
 
 vagrant global-status
 cd builder
