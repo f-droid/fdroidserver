@@ -1473,6 +1473,12 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
     if '-1' in apk['icons_src']:
         icon_src = apk['icons_src']['-1']
         icon_path = os.path.join(get_icon_dir(repo_dir, '0'), icon_filename)
+        if icon_src.endswith('.xml'):
+            for f in apkzip.namelist():
+                if f.endswith(png):
+                    m = re.match(r'res/(drawable|mipmap)-(x*[hlm]dpi).*/', f)
+                    if m:
+                        icon_src = f
         with open(icon_path, 'wb') as f:
             f.write(get_icon_bytes(apkzip, icon_src))
         im = None
