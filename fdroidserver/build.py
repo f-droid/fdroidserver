@@ -25,6 +25,7 @@ import re
 import resource
 import sys
 import tarfile
+import threading
 import traceback
 import time
 import requests
@@ -978,6 +979,13 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
     return True
 
 
+def force_halt_build():
+    """Halt the currently running Vagrant VM, to be called from a Timer"""
+    logging.error(_('Force halting build after timeout!'))
+    vm = vmtools.get_build_vm('builder')
+    vm.halt()
+
+
 def parse_commandline():
     """Parse the command line. Returns options, parser."""
 
@@ -1143,6 +1151,12 @@ def main():
         first = True
 
         for build in app.builds:
+            if options.server:  # enable watchdog timer
+                timer = threading.Timer(7200, force_halt_build)
+                timer.start()
+            else:
+                timer = None
+
             wikilog = None
             build_starttime = common.get_wiki_timestamp()
             tools_version_log = ''
@@ -1282,6 +1296,9 @@ def main():
                     newpage.save('#REDIRECT [[' + lastbuildpage + ']]', summary='Update redirect')
                 except Exception as e:
                     logging.error("Error while attempting to publish build log: %s" % e)
+
+            if timer:
+                timer.cancel()  # kill the watchdog timer
 
     for app in build_succeeded:
         logging.info("success: %s" % (app.id))

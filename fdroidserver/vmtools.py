@@ -29,6 +29,9 @@ from .common import FDroidException
 from logging import getLogger
 
 from fdroidserver import _
+import threading
+
+lock = threading.Lock()
 
 logger = getLogger('fdroidserver-vmtools')
 
@@ -175,7 +178,6 @@ class FDroidBuildVm():
     This is intended to be a hypervisor independant, fault tolerant
     wrapper around the vagrant functions we use.
     """
-
     def __init__(self, srvdir):
         """Create new server class.
         """
@@ -191,21 +193,27 @@ class FDroidBuildVm():
         self.vgrnt = vagrant.Vagrant(root=srvdir, out_cm=vagrant.stdout_cm, err_cm=vagrant.stdout_cm)
 
     def up(self, provision=True):
-        try:
-            self.vgrnt.up(provision=provision)
-            self.srvuuid = self._vagrant_fetch_uuid()
-        except subprocess.CalledProcessError as e:
-            raise FDroidBuildVmException("could not bring up vm '%s'" % self.srvname) from e
+        global lock
+        with lock:
+            try:
+                self.vgrnt.up(provision=provision)
+                self.srvuuid = self._vagrant_fetch_uuid()
+            except subprocess.CalledProcessError as e:
+                raise FDroidBuildVmException("could not bring up vm '%s'" % self.srvname) from e
 
     def suspend(self):
-        logger.info('suspending buildserver')
-        try:
-            self.vgrnt.suspend()
-        except subprocess.CalledProcessError as e:
-            raise FDroidBuildVmException("could not suspend vm '%s'" % self.srvname) from e
+        global lock
+        with lock:
+            logger.info('suspending buildserver')
+            try:
+                self.vgrnt.suspend()
+            except subprocess.CalledProcessError as e:
+                raise FDroidBuildVmException("could not suspend vm '%s'" % self.srvname) from e
 
     def halt(self):
-        self.vgrnt.halt(force=True)
+        global lock
+        with lock:
+            self.vgrnt.halt(force=True)
 
     def destroy(self):
         """Remove every trace of this VM from the system.
