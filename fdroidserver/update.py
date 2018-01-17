@@ -331,6 +331,7 @@ def update_wiki(apps, sortedids, apks):
     txt += "* started at " + common.get_wiki_timestamp(start_timestamp) + '\n'
     txt += "* completed at " + common.get_wiki_timestamp() + '\n'
     txt += "\n\n"
+    txt += common.get_android_tools_version_log()
     newpage.save(txt, summary='Run log')
     newpage = site.Pages['update']
     newpage.save('#REDIRECT [[' + wiki_page_path + ']]', summary='Update redirect')

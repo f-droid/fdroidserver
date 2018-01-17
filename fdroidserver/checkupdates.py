@@ -603,6 +603,8 @@ def main():
             txt += "* started at " + common.get_wiki_timestamp(start_timestamp) + '\n'
             txt += "* completed at " + common.get_wiki_timestamp() + '\n'
             txt += "\n\n"
+            txt += common.get_android_tools_version_log()
+            txt += "\n\n"
             if gplaylog:
                 txt += '== --gplay check ==\n\n'
                 txt += gplaylog
