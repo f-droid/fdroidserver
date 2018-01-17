@@ -219,7 +219,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         try:
             cmd_stdout = chan.makefile('rb', 1024)
             output = bytes()
-            output += get_android_tools_version_log(build.ndk_path()).encode()
+            output += common.get_android_tools_version_log(build.ndk_path()).encode()
             while not chan.exit_status_ready():
                 line = cmd_stdout.readline()
                 if line:
@@ -429,7 +429,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         log_path = os.path.join(log_dir,
                                 common.get_toolsversion_logname(app, build))
         with open(log_path, 'w') as f:
-            f.write(get_android_tools_version_log(build.ndk_path()))
+            f.write(common.get_android_tools_version_log(build.ndk_path()))
     else:
         if build.sudo:
             logging.warning('%s:%s runs this on the buildserver with sudo:\n\t%s'
@@ -978,42 +978,6 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
     return True
 
 
-def get_android_tools_versions(ndk_path=None):
-    '''get a list of the versions of all installed Android SDK/NDK components'''
-
-    global config
-    sdk_path = config['sdk_path']
-    if sdk_path[-1] != '/':
-        sdk_path += '/'
-    components = []
-    if ndk_path:
-        ndk_release_txt = os.path.join(ndk_path, 'RELEASE.TXT')
-        if os.path.isfile(ndk_release_txt):
-            with open(ndk_release_txt, 'r') as fp:
-                components.append((os.path.basename(ndk_path), fp.read()[:-1]))
-
-    pattern = re.compile('^Pkg.Revision=(.+)', re.MULTILINE)
-    for root, dirs, files in os.walk(sdk_path):
-        if 'source.properties' in files:
-            source_properties = os.path.join(root, 'source.properties')
-            with open(source_properties, 'r') as fp:
-                m = pattern.search(fp.read())
-                if m:
-                    components.append((root[len(sdk_path):], m.group(1)))
-
-    return components
-
-
-def get_android_tools_version_log(ndk_path):
-    '''get a list of the versions of all installed Android SDK/NDK components'''
-    log = '== Installed Android Tools ==\n\n'
-    components = get_android_tools_versions(ndk_path)
-    for name, version in sorted(components):
-        log += '* ' + name + ' (' + version + ')\n'
-
-    return log
-
-
 def parse_commandline():
     """Parse the command line. Returns options, parser."""
 
@@ -1186,7 +1150,7 @@ def main():
             build_starttime = common.get_wiki_timestamp()
             tools_version_log = ''
             if not options.onserver:
-                tools_version_log = get_android_tools_version_log(build.ndk_path())
+                tools_version_log = common.get_android_tools_version_log(build.ndk_path())
             try:
 
                 # For the first build of a particular app, we need to set up
