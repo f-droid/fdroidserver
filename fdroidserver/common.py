@@ -3012,6 +3012,9 @@ def get_examples_dir():
     return examplesdir
 
 
-def get_wiki_timestamp():
+def get_wiki_timestamp(timestamp=None):
     """Return current time in the standard format for posting to the wiki"""
-    return time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime())
+
+    if timestamp is None:
+        timestamp = time.gmtime()
+    return time.strftime("%Y-%m-%d %H:%M:%SZ", timestamp)

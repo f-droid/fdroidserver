@@ -23,6 +23,7 @@ import urllib.request
 import urllib.error
 import time
 import subprocess
+import sys
 from argparse import ArgumentParser
 import traceback
 import html
@@ -512,6 +513,7 @@ def checkupdates_app(app):
 
 config = None
 options = None
+start_timestamp = time.gmtime()
 
 
 def main():
@@ -579,6 +581,27 @@ def main():
         except Exception as e:
             logging.error(_("...checkupdate failed for {appid} : {error}")
                           .format(appid=appid, error=e))
+
+    if config.get('wiki_server') and config.get('wiki_path'):
+        try:
+            import mwclient
+            site = mwclient.Site((config['wiki_protocol'], config['wiki_server']),
+                                 path=config['wiki_path'])
+            site.login(config['wiki_user'], config['wiki_password'])
+
+            # Write a page with the last build log for this version code
+            wiki_page_path = 'checkupdates_' + time.strftime('%s', start_timestamp)
+            newpage = site.Pages[wiki_page_path]
+            txt = ''
+            txt += "* command line: <code>" + ' '.join(sys.argv) + "</code>\n"
+            txt += "* started at " + common.get_wiki_timestamp(start_timestamp) + '\n'
+            txt += "* completed at " + common.get_wiki_timestamp() + '\n'
+            txt += "\n\n"
+            newpage.save(txt, summary='Run log')
+            newpage = site.Pages['checkupdates']
+            newpage.save('#REDIRECT [[' + wiki_page_path + ']]', summary='Update redirect')
+        except Exception as e:
+            logging.error(_('Error while attempting to publish log: %s') % e)
 
     logging.info(_("Finished"))
 
