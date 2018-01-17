@@ -649,12 +649,17 @@ def get_mirror_service_urls(url):
         segments.extend([branch, folder])
         urls.append('/'.join(segments))
     elif hostname == "gitlab.com":
-        # Gitlab Raw "https://gitlab.com/user/repo/raw/branch/folder"
-        gitlab_raw = segments + ['raw', branch, folder]
-        urls.append('/'.join(gitlab_raw))
+        # Both these Gitlab URLs will work with F-Droid, but only the first will work in the browser
+        # This is because the `raw` URLs are not served with the correct mime types, so any
+        # index.html which is put in the repo will not be rendered. Putting an index.html file in
+        # the repo root is a common way for to make information about the repo available to end user.
+
         # Gitlab-like Pages segments "https://user.gitlab.io/repo/folder"
         gitlab_pages = ["https:", "", user + ".gitlab.io", repo, folder]
         urls.append('/'.join(gitlab_pages))
+        # Gitlab Raw "https://gitlab.com/user/repo/raw/branch/folder"
+        gitlab_raw = segments + ['raw', branch, folder]
+        urls.append('/'.join(gitlab_raw))
         return urls
 
     return urls
