@@ -3010,3 +3010,8 @@ def get_examples_dir():
         examplesdir = prefix + '/examples'
 
     return examplesdir
+
+
+def get_wiki_timestamp():
+    """Return current time in the standard format for posting to the wiki"""
+    return time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime())
