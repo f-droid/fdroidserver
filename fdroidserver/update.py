@@ -321,7 +321,7 @@ def update_wiki(apps, sortedids, apks):
                     logging.error("...FAILED to create page '{0}': {1}".format(pagename, e))
 
     # Purge server cache to ensure counts are up to date
-    site.pages['Repository Maintenance'].purge()
+    site.Pages['Repository Maintenance'].purge()
 
 
 def delete_disabled_builds(apps, apkcache, repodirs):
