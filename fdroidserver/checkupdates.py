@@ -543,8 +543,10 @@ def main():
 
     apps = common.read_app_args(options.appid, allapps, False)
 
+    gplaylog = ''
     if options.gplay:
         for appid, app in apps.items():
+            gplaylog += '* ' + appid + '\n'
             version, reason = check_gplay(app)
             if version is None:
                 if reason == '404':
@@ -568,19 +570,23 @@ def main():
                                      .format(common.getappname(app), version))
         return
 
+    locallog = ''
     for appid, app in apps.items():
 
         if options.autoonly and app.AutoUpdateMode in ('None', 'Static'):
             logging.debug(_("Nothing to do for {appid}.").format(appid=appid))
             continue
 
-        logging.info(_("Processing {appid}").format(appid=appid))
+        msg = _("Processing {appid}").format(appid=appid)
+        logging.info(msg)
+        locallog += '* ' + msg + '\n'
 
         try:
             checkupdates_app(app)
         except Exception as e:
-            logging.error(_("...checkupdate failed for {appid} : {error}")
-                          .format(appid=appid, error=e))
+            msg = _("...checkupdate failed for {appid} : {error}").format(appid=appid, error=e)
+            logging.error(msg)
+            locallog += msg + '\n'
 
     if config.get('wiki_server') and config.get('wiki_path'):
         try:
@@ -597,6 +603,12 @@ def main():
             txt += "* started at " + common.get_wiki_timestamp(start_timestamp) + '\n'
             txt += "* completed at " + common.get_wiki_timestamp() + '\n'
             txt += "\n\n"
+            if gplaylog:
+                txt += '== --gplay check ==\n\n'
+                txt += gplaylog
+            if locallog:
+                txt += '== local source check ==\n\n'
+                txt += locallog
             newpage.save(txt, summary='Run log')
             newpage = site.Pages['checkupdates']
             newpage.save('#REDIRECT [[' + wiki_page_path + ']]', summary='Update redirect')
