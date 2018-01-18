@@ -1470,7 +1470,7 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
             del apk['icons_src'][density]
             empty_densities.append(density)
 
-    if '-1' in apk['icons_src']:
+    if '-1' in apk['icons_src'] and not apk['icons_src']['-1'].endswith('.xml'):
         icon_src = apk['icons_src']['-1']
         icon_path = os.path.join(get_icon_dir(repo_dir, '0'), icon_filename)
         with open(icon_path, 'wb') as f:
