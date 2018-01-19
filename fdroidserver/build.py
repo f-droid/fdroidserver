@@ -1151,11 +1151,17 @@ def main():
     # Build applications...
     failed_apps = {}
     build_succeeded = []
+    # Only build for 12 hours, then stop gracefully
+    endtime = time.time() + 12 * 60 * 60
+    max_build_time_reached = False
     for appid, app in apps.items():
 
         first = True
 
         for build in app.builds:
+            if time.time() > endtime:
+                max_build_time_reached = True
+                break
             if options.server:  # enable watchdog timer
                 timer = threading.Timer(7200, force_halt_build)
                 timer.start()
@@ -1304,6 +1310,10 @@ def main():
 
             if timer:
                 timer.cancel()  # kill the watchdog timer
+
+        if max_build_time_reached:
+            logging.info("Stopping after global build timeout...")
+            break
 
     for app in build_succeeded:
         logging.info("success: %s" % (app.id))
