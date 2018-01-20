@@ -240,9 +240,12 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         logging.info("...getting exit status")
         returncode = chan.recv_exit_status()
         if returncode != 0:
-            raise BuildException(
-                "Build.py failed on server for {0}:{1}".format(
-                    app.id, build.versionName), None if options.verbose else str(output, 'utf-8'))
+            if timeout_event.is_set():
+                message = "Timeout exceeded! Build VM force-stopped for {0}:{1}"
+            else:
+                message = "Build.py failed on server for {0}:{1}"
+            raise BuildException(message.format(app.id, build.versionName),
+                                 None if options.verbose else str(output, 'utf-8'))
 
         # Retreive logs...
         toolsversion_log = common.get_toolsversion_logname(app, build)
@@ -982,6 +985,7 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
 def force_halt_build():
     """Halt the currently running Vagrant VM, to be called from a Timer"""
     logging.error(_('Force halting build after timeout!'))
+    timeout_event.set()
     vm = vmtools.get_build_vm('builder')
     vm.halt()
 
@@ -1037,6 +1041,7 @@ config = None
 buildserverid = None
 fdroidserverid = None
 start_timestamp = time.gmtime()
+timeout_event = threading.Event()
 
 
 def main():
