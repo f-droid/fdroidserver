@@ -12,6 +12,9 @@ printf 'APT::Install-Recommends "0";\nAPT::Install-Suggests "0";\n' \
 printf 'APT::Acquire::Retries "20";\n' \
        > /etc/apt/apt.conf.d/99acquire-retries
 
+printf 'APT::Periodic::Update-Package-Lists "0";\nAPT::Periodic::Unattended-Upgrade "0";\n' \
+       > /etc/apt/apt.conf.d/99no-auto-updates
+
 if echo $debian_mirror | grep '^https' 2>&1 > /dev/null; then
     apt-get -y update
     apt-get -y install apt-transport-https

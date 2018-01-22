@@ -321,7 +321,20 @@ def update_wiki(apps, sortedids, apks):
                     logging.error("...FAILED to create page '{0}': {1}".format(pagename, e))
 
     # Purge server cache to ensure counts are up to date
-    site.pages['Repository Maintenance'].purge()
+    site.Pages['Repository Maintenance'].purge()
+
+    # Write a page with the last build log for this version code
+    wiki_page_path = 'update_' + time.strftime('%s', start_timestamp)
+    newpage = site.Pages[wiki_page_path]
+    txt = ''
+    txt += "* command line: <code>" + ' '.join(sys.argv) + "</code>\n"
+    txt += "* started at " + common.get_wiki_timestamp(start_timestamp) + '\n'
+    txt += "* completed at " + common.get_wiki_timestamp() + '\n'
+    txt += "\n\n"
+    txt += common.get_android_tools_version_log()
+    newpage.save(txt, summary='Run log')
+    newpage = site.Pages['update']
+    newpage.save('#REDIRECT [[' + wiki_page_path + ']]', summary='Update redirect')
 
 
 def delete_disabled_builds(apps, apkcache, repodirs):
@@ -1759,6 +1772,7 @@ def create_metadata_from_template(apk):
 
 config = None
 options = None
+start_timestamp = time.gmtime()
 
 
 def main():

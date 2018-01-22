@@ -17,13 +17,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import os
 import shutil
 import glob
 import subprocess
 import re
 import resource
+import sys
 import tarfile
 import traceback
 import time
@@ -219,7 +219,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         try:
             cmd_stdout = chan.makefile('rb', 1024)
             output = bytes()
-            output += get_android_tools_version_log(build.ndk_path()).encode()
+            output += common.get_android_tools_version_log(build.ndk_path()).encode()
             while not chan.exit_status_ready():
                 line = cmd_stdout.readline()
                 if line:
@@ -288,10 +288,6 @@ def force_gradle_build_tools(build_dir, build_tools):
             common.regsub_file(r"""(\s*)buildToolsVersion([\s=]+).*""",
                                r"""\1buildToolsVersion\2'%s'""" % build_tools,
                                path)
-
-
-def _get_build_timestamp():
-    return time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime())
 
 
 def transform_first_char(string, method):
@@ -433,7 +429,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         log_path = os.path.join(log_dir,
                                 common.get_toolsversion_logname(app, build))
         with open(log_path, 'w') as f:
-            f.write(get_android_tools_version_log(build.ndk_path()))
+            f.write(common.get_android_tools_version_log(build.ndk_path()))
     else:
         if build.sudo:
             logging.warning('%s:%s runs this on the buildserver with sudo:\n\t%s'
@@ -982,42 +978,6 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
     return True
 
 
-def get_android_tools_versions(ndk_path=None):
-    '''get a list of the versions of all installed Android SDK/NDK components'''
-
-    global config
-    sdk_path = config['sdk_path']
-    if sdk_path[-1] != '/':
-        sdk_path += '/'
-    components = []
-    if ndk_path:
-        ndk_release_txt = os.path.join(ndk_path, 'RELEASE.TXT')
-        if os.path.isfile(ndk_release_txt):
-            with open(ndk_release_txt, 'r') as fp:
-                components.append((os.path.basename(ndk_path), fp.read()[:-1]))
-
-    pattern = re.compile('^Pkg.Revision=(.+)', re.MULTILINE)
-    for root, dirs, files in os.walk(sdk_path):
-        if 'source.properties' in files:
-            source_properties = os.path.join(root, 'source.properties')
-            with open(source_properties, 'r') as fp:
-                m = pattern.search(fp.read())
-                if m:
-                    components.append((root[len(sdk_path):], m.group(1)))
-
-    return components
-
-
-def get_android_tools_version_log(ndk_path):
-    '''get a list of the versions of all installed Android SDK/NDK components'''
-    log = '== Installed Android Tools ==\n\n'
-    components = get_android_tools_versions(ndk_path)
-    for name, version in sorted(components):
-        log += '* ' + name + ' (' + version + ')\n'
-
-    return log
-
-
 def parse_commandline():
     """Parse the command line. Returns options, parser."""
 
@@ -1067,12 +1027,13 @@ def parse_commandline():
 options = None
 config = None
 buildserverid = None
-starttime = _get_build_timestamp()
+fdroidserverid = None
+start_timestamp = time.gmtime()
 
 
 def main():
 
-    global options, config, buildserverid
+    global options, config, buildserverid, fdroidserverid
 
     options, parser = parse_commandline()
 
@@ -1187,10 +1148,10 @@ def main():
 
         for build in app.builds:
             wikilog = None
-            build_starttime = _get_build_timestamp()
+            build_starttime = common.get_wiki_timestamp()
             tools_version_log = ''
             if not options.onserver:
-                tools_version_log = get_android_tools_version_log(build.ndk_path())
+                tools_version_log = common.get_android_tools_version_log(build.ndk_path())
             try:
 
                 # For the first build of a particular app, we need to set up
@@ -1284,7 +1245,7 @@ def main():
                     f.write('versionCode: %s\nversionName: %s\ncommit: %s\n' %
                             (build.versionCode, build.versionName, build.commit))
                     f.write('Build completed at '
-                            + _get_build_timestamp() + '\n')
+                            + common.get_wiki_timestamp() + '\n')
                     f.write('\n' + tools_version_log + '\n')
                     f.write(str(e))
                 logging.error("Could not build app %s: %s" % (appid, e))
@@ -1309,9 +1270,9 @@ def main():
                     newpage = site.Pages[lastbuildpage]
                     with open(os.path.join('tmp', 'fdroidserverid')) as fp:
                         fdroidserverid = fp.read().rstrip()
-                    txt = "* build session started at " + starttime + '\n' \
+                    txt = "* build session started at " + common.get_wiki_timestamp(start_timestamp) + '\n' \
                           + "* this build started at " + build_starttime + '\n' \
-                          + "* this build completed at " + _get_build_timestamp() + '\n' \
+                          + "* this build completed at " + common.get_wiki_timestamp() + '\n' \
                           + '* fdroidserverid: [https://gitlab.com/fdroid/fdroidserver/commit/' \
                           + fdroidserverid + ' ' + fdroidserverid + ']\n\n'
                     if buildserverid:
@@ -1377,6 +1338,35 @@ def main():
     if len(failed_apps) > 0:
         logging.info(ngettext("{} build failed",
                               "{} builds failed", len(failed_apps)).format(len(failed_apps)))
+
+    if options.wiki:
+        wiki_page_path = 'build_' + time.strftime('%s', start_timestamp)
+        newpage = site.Pages[wiki_page_path]
+        txt = ''
+        txt += "* command line: <code>%s</code>\n" % ' '.join(sys.argv)
+        txt += "* started at %s\n" % common.get_wiki_timestamp(start_timestamp)
+        txt += "* completed at %s\n" % common.get_wiki_timestamp()
+        if buildserverid:
+            txt += ('* buildserverid: [https://gitlab.com/fdroid/fdroidserver/commit/{id} {id}]\n'
+                    .format(id=buildserverid))
+        if fdroidserverid:
+            txt += ('* fdroidserverid: [https://gitlab.com/fdroid/fdroidserver/commit/{id} {id}]\n'
+                    .format(id=fdroidserverid))
+        if os.cpu_count():
+            txt += "* host processors: %d\n" % os.cpu_count()
+        if os.path.isfile('/proc/meminfo') and os.access('/proc/meminfo', os.R_OK):
+            with open('/proc/meminfo') as fp:
+                for line in fp:
+                    m = re.search(r'MemTotal:\s*([0-9].*)', line)
+                    if m:
+                        txt += "* host RAM: %s\n" % m.group(1)
+                        break
+        txt += "* successful builds: %d\n" % len(build_succeeded)
+        txt += "* failed builds: %d\n" % len(failed_apps)
+        txt += "\n\n"
+        newpage.save(txt, summary='Run log')
+        newpage = site.Pages['build']
+        newpage.save('#REDIRECT [[' + wiki_page_path + ']]', summary='Update redirect')
 
     # hack to ensure this exits, even is some threads are still running
     sys.stdout.flush()

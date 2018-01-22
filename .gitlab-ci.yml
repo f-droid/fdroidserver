@@ -7,15 +7,21 @@ test:
     - ./complete-ci-tests
 
 # Test that the parsing of the .txt format didn't change from last
-# released version. Ensure that the official tags are included when
-# running these tests on forks as well.
+# released version. This uses the commit ID of the release tags,
+# rather than the release tag itself so that contributor forks do not
+# need to include the tags in them for this test to work.
+#
+# The COMMIT_ID should be bumped after each release, so that the list
+# of sed hacks needed does not continuously grow.
 metadata_v0:
   image: registry.gitlab.com/fdroid/ci-images-server:latest
+  variables:
+    RELEASE_COMMIT_ID: 6d69dcddd95fe08ffe431e305932cfdeafd6fc9d  # 1.0.0
   script:
-    - git fetch https://gitlab.com/fdroid/fdroidserver 0.8
+    - git fetch https://gitlab.com/fdroid/fdroidserver $RELEASE_COMMIT_ID
     - cd tests
     - export GITCOMMIT=`git describe`
-    - git checkout 0.8  # bump after release
+    - git checkout $RELEASE_COMMIT_ID
     - cd ..
     - git clone --depth 1 https://gitlab.com/fdroid/fdroiddata
     - cd fdroiddata
@@ -25,8 +31,6 @@ metadata_v0:
     - git checkout $GITCOMMIT
     - cd fdroiddata
     - ../tests/dump_internal_metadata_format.py
-    - sed -i -e '/LiberapayID/d'
-          metadata/dump_*/*.yaml
     - diff -uw metadata/dump_*
 
 debian_testing:

@@ -3010,3 +3010,47 @@ def get_examples_dir():
         examplesdir = prefix + '/examples'
 
     return examplesdir
+
+
+def get_wiki_timestamp(timestamp=None):
+    """Return current time in the standard format for posting to the wiki"""
+
+    if timestamp is None:
+        timestamp = time.gmtime()
+    return time.strftime("%Y-%m-%d %H:%M:%SZ", timestamp)
+
+
+def get_android_tools_versions(ndk_path=None):
+    '''get a list of the versions of all installed Android SDK/NDK components'''
+
+    global config
+    sdk_path = config['sdk_path']
+    if sdk_path[-1] != '/':
+        sdk_path += '/'
+    components = []
+    if ndk_path:
+        ndk_release_txt = os.path.join(ndk_path, 'RELEASE.TXT')
+        if os.path.isfile(ndk_release_txt):
+            with open(ndk_release_txt, 'r') as fp:
+                components.append((os.path.basename(ndk_path), fp.read()[:-1]))
+
+    pattern = re.compile('^Pkg.Revision=(.+)', re.MULTILINE)
+    for root, dirs, files in os.walk(sdk_path):
+        if 'source.properties' in files:
+            source_properties = os.path.join(root, 'source.properties')
+            with open(source_properties, 'r') as fp:
+                m = pattern.search(fp.read())
+                if m:
+                    components.append((root[len(sdk_path):], m.group(1)))
+
+    return components
+
+
+def get_android_tools_version_log(ndk_path=None):
+    '''get a list of the versions of all installed Android SDK/NDK components'''
+    log = '== Installed Android Tools ==\n\n'
+    components = get_android_tools_versions(ndk_path)
+    for name, version in sorted(components):
+        log += '* ' + name + ' (' + version + ')\n'
+
+    return log

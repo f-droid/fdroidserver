@@ -23,6 +23,7 @@ import urllib.request
 import urllib.error
 import time
 import subprocess
+import sys
 from argparse import ArgumentParser
 import traceback
 import html
@@ -510,8 +511,40 @@ def checkupdates_app(app):
                 raise FDroidException("Git commit failed")
 
 
+def update_wiki(gplaylog, locallog):
+    if config.get('wiki_server') and config.get('wiki_path'):
+        try:
+            import mwclient
+            site = mwclient.Site((config['wiki_protocol'], config['wiki_server']),
+                                 path=config['wiki_path'])
+            site.login(config['wiki_user'], config['wiki_password'])
+
+            # Write a page with the last build log for this version code
+            wiki_page_path = 'checkupdates_' + time.strftime('%s', start_timestamp)
+            newpage = site.Pages[wiki_page_path]
+            txt = ''
+            txt += "* command line: <code>" + ' '.join(sys.argv) + "</code>\n"
+            txt += "* started at " + common.get_wiki_timestamp(start_timestamp) + '\n'
+            txt += "* completed at " + common.get_wiki_timestamp() + '\n'
+            txt += "\n\n"
+            txt += common.get_android_tools_version_log()
+            txt += "\n\n"
+            if gplaylog:
+                txt += '== --gplay check ==\n\n'
+                txt += gplaylog
+            if locallog:
+                txt += '== local source check ==\n\n'
+                txt += locallog
+            newpage.save(txt, summary='Run log')
+            newpage = site.Pages['checkupdates']
+            newpage.save('#REDIRECT [[' + wiki_page_path + ']]', summary='Update redirect')
+        except Exception as e:
+            logging.error(_('Error while attempting to publish log: %s') % e)
+
+
 config = None
 options = None
+start_timestamp = time.gmtime()
 
 
 def main():
@@ -541,8 +574,10 @@ def main():
 
     apps = common.read_app_args(options.appid, allapps, False)
 
+    gplaylog = ''
     if options.gplay:
         for appid, app in apps.items():
+            gplaylog += '* ' + appid + '\n'
             version, reason = check_gplay(app)
             if version is None:
                 if reason == '404':
@@ -564,21 +599,28 @@ def main():
                     else:
                         logging.info("{0} has the same version {1} on the Play Store"
                                      .format(common.getappname(app), version))
+        update_wiki(gplaylog, None)
         return
 
+    locallog = ''
     for appid, app in apps.items():
 
         if options.autoonly and app.AutoUpdateMode in ('None', 'Static'):
             logging.debug(_("Nothing to do for {appid}.").format(appid=appid))
             continue
 
-        logging.info(_("Processing {appid}").format(appid=appid))
+        msg = _("Processing {appid}").format(appid=appid)
+        logging.info(msg)
+        locallog += '* ' + msg + '\n'
 
         try:
             checkupdates_app(app)
         except Exception as e:
-            logging.error(_("...checkupdate failed for {appid} : {error}")
-                          .format(appid=appid, error=e))
+            msg = _("...checkupdate failed for {appid} : {error}").format(appid=appid, error=e)
+            logging.error(msg)
+            locallog += msg + '\n'
+
+    update_wiki(None, locallog)
 
     logging.info(_("Finished"))
 
