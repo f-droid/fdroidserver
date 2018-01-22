@@ -25,6 +25,7 @@ import re
 import resource
 import sys
 import tarfile
+import threading
 import traceback
 import time
 import requests
@@ -239,9 +240,12 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         logging.info("...getting exit status")
         returncode = chan.recv_exit_status()
         if returncode != 0:
-            raise BuildException(
-                "Build.py failed on server for {0}:{1}".format(
-                    app.id, build.versionName), None if options.verbose else str(output, 'utf-8'))
+            if timeout_event.is_set():
+                message = "Timeout exceeded! Build VM force-stopped for {0}:{1}"
+            else:
+                message = "Build.py failed on server for {0}:{1}"
+            raise BuildException(message.format(app.id, build.versionName),
+                                 None if options.verbose else str(output, 'utf-8'))
 
         # Retreive logs...
         toolsversion_log = common.get_toolsversion_logname(app, build)
@@ -978,6 +982,14 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
     return True
 
 
+def force_halt_build():
+    """Halt the currently running Vagrant VM, to be called from a Timer"""
+    logging.error(_('Force halting build after timeout!'))
+    timeout_event.set()
+    vm = vmtools.get_build_vm('builder')
+    vm.halt()
+
+
 def parse_commandline():
     """Parse the command line. Returns options, parser."""
 
@@ -1029,6 +1041,7 @@ config = None
 buildserverid = None
 fdroidserverid = None
 start_timestamp = time.gmtime()
+timeout_event = threading.Event()
 
 
 def main():
@@ -1138,15 +1151,23 @@ def main():
     # Build applications...
     failed_apps = {}
     build_succeeded = []
-    max_apps_per_run = 50
+    # Only build for 12 hours, then stop gracefully
+    endtime = time.time() + 12 * 60 * 60
+    max_build_time_reached = False
     for appid, app in apps.items():
-        max_apps_per_run -= 1
-        if max_apps_per_run < 1:
-            break
 
         first = True
 
         for build in app.builds:
+            if time.time() > endtime:
+                max_build_time_reached = True
+                break
+            if options.server:  # enable watchdog timer
+                timer = threading.Timer(7200, force_halt_build)
+                timer.start()
+            else:
+                timer = None
+
             wikilog = None
             build_starttime = common.get_wiki_timestamp()
             tools_version_log = ''
@@ -1286,6 +1307,13 @@ def main():
                     newpage.save('#REDIRECT [[' + lastbuildpage + ']]', summary='Update redirect')
                 except Exception as e:
                     logging.error("Error while attempting to publish build log: %s" % e)
+
+            if timer:
+                timer.cancel()  # kill the watchdog timer
+
+        if max_build_time_reached:
+            logging.info("Stopping after global build timeout...")
+            break
 
     for app in build_succeeded:
         logging.info("success: %s" % (app.id))
