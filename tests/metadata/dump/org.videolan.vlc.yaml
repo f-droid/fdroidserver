@@ -77,7 +77,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -114,7 +113,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -151,7 +149,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -188,7 +185,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -222,7 +218,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -258,7 +253,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -294,7 +288,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -330,7 +323,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -366,7 +358,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -401,7 +392,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -436,7 +426,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -471,7 +460,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -506,7 +494,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -541,7 +528,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -576,7 +562,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -611,7 +596,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -646,7 +630,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -681,7 +664,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -716,7 +698,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -751,7 +732,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -786,7 +766,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -821,7 +800,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -856,7 +834,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -891,7 +868,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -926,7 +902,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -961,7 +936,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -996,7 +970,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -1031,7 +1004,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -1066,7 +1038,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -1101,7 +1072,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -1136,7 +1106,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -1171,7 +1140,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -1206,7 +1174,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -1241,7 +1208,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -1276,7 +1242,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -1311,7 +1276,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -1347,7 +1311,6 @@ builds:
   - VanillaARMv6fpu
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1384,7 +1347,6 @@ builds:
   - VanillaARMv7
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1421,7 +1383,6 @@ builds:
   - VanillaX86
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1458,7 +1419,6 @@ builds:
   - VanillaARMv6fpu
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1495,7 +1455,6 @@ builds:
   - VanillaARMv7
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1532,7 +1491,6 @@ builds:
   - VanillaX86
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1569,7 +1527,6 @@ builds:
   - VanillaARMv6fpu
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1606,7 +1563,6 @@ builds:
   - VanillaARMv7
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1643,7 +1599,6 @@ builds:
   - VanillaX86
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1680,7 +1635,6 @@ builds:
   - VanillaARMv6fpu
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1717,7 +1671,6 @@ builds:
   - VanillaARMv7
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1754,7 +1707,6 @@ builds:
   - VanillaX86
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1791,7 +1743,6 @@ builds:
   - VanillaARMv6fpu
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1828,7 +1779,6 @@ builds:
   - VanillaARMv7
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1865,7 +1815,6 @@ builds:
   - VanillaX86
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1902,7 +1851,6 @@ builds:
   - VanillaARMv6fpu
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1939,7 +1887,6 @@ builds:
   - VanillaARMv7
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -1976,7 +1923,6 @@ builds:
   - VanillaX86
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -2013,7 +1959,6 @@ builds:
   - VanillaARMv6fpu
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -2050,7 +1995,6 @@ builds:
   - VanillaARMv7
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -2087,7 +2031,6 @@ builds:
   - VanillaX86
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -2124,7 +2067,6 @@ builds:
   - VanillaARMv6fpu
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -2161,7 +2103,6 @@ builds:
   - VanillaARMv7
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -2198,7 +2139,6 @@ builds:
   - VanillaX86
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -2235,7 +2175,6 @@ builds:
   - VanillaARMv6fpu
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -2272,7 +2211,6 @@ builds:
   - VanillaARMv7
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -2309,7 +2247,6 @@ builds:
   - VanillaX86
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -2346,7 +2283,6 @@ builds:
   - VanillaARMv6fpu
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -2383,7 +2319,6 @@ builds:
   - VanillaARMv7
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false
@@ -2420,7 +2355,6 @@ builds:
   - VanillaX86
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: r10d
   novcheck: false

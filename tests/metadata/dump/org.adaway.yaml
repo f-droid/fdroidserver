@@ -76,7 +76,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -111,7 +110,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -147,7 +145,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -183,7 +180,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -219,7 +215,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -255,7 +250,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -290,7 +284,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -325,7 +318,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -360,7 +352,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -395,7 +386,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -430,7 +420,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -465,7 +454,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -499,7 +487,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -534,7 +521,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -568,7 +554,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -603,7 +588,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -638,7 +622,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -673,7 +656,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -715,7 +697,6 @@ builds:
   gradleprops: []
   init: rm android-libs/Donations/custom_rules.xml && git clone https://github.com/dschuermann/HtmlSpanner
     android-libs/HtmlSpanner
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -762,7 +743,6 @@ builds:
   gradleprops: []
   init: rm android-libs/Donations/custom_rules.xml && git clone https://github.com/dschuermann/HtmlSpanner
     android-libs/HtmlSpanner
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -804,7 +784,6 @@ builds:
   - 'yes'
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -841,7 +820,6 @@ builds:
   - 'yes'
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -878,7 +856,6 @@ builds:
   - 'yes'
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -915,7 +892,6 @@ builds:
   - 'yes'
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -952,7 +928,6 @@ builds:
   - 'yes'
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -989,7 +964,6 @@ builds:
   - 'yes'
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -1026,7 +1000,6 @@ builds:
   - 'yes'
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -1063,7 +1036,6 @@ builds:
   - 'yes'
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false

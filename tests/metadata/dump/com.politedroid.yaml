@@ -55,7 +55,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -89,7 +88,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -123,7 +121,6 @@ builds:
   gradle: []
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false
@@ -158,7 +155,6 @@ builds:
   - 'yes'
   gradleprops: []
   init: ''
-  kivy: false
   maven: false
   ndk: null
   novcheck: false

@@ -489,9 +489,6 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
         p = FDroidPopen(cmd, cwd=root_dir)
 
-    elif bmethod == 'kivy':
-        pass
-
     elif bmethod == 'buildozer':
         pass
 
@@ -637,67 +634,6 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
         bindir = os.path.join(root_dir, 'target')
 
-    elif bmethod == 'kivy':
-        logging.info("Building Kivy project...")
-
-        spec = os.path.join(root_dir, 'buildozer.spec')
-        if not os.path.exists(spec):
-            raise BuildException("Expected to find buildozer-compatible spec at {0}"
-                                 .format(spec))
-
-        defaults = {'orientation': 'landscape', 'icon': '',
-                    'permissions': '', 'android.api': "18"}
-        bconfig = ConfigParser(defaults, allow_no_value=True)
-        bconfig.read(spec)
-
-        distdir = os.path.join('python-for-android', 'dist', 'fdroid')
-        if os.path.exists(distdir):
-            shutil.rmtree(distdir)
-
-        modules = bconfig.get('app', 'requirements').split(',')
-
-        cmd = 'ANDROIDSDK=' + config['sdk_path']
-        cmd += ' ANDROIDNDK=' + ndk_path
-        cmd += ' ANDROIDNDKVER=' + build.ndk
-        cmd += ' ANDROIDAPI=' + str(bconfig.get('app', 'android.api'))
-        cmd += ' VIRTUALENV=virtualenv'
-        cmd += ' ./distribute.sh'
-        cmd += ' -m ' + "'" + ' '.join(modules) + "'"
-        cmd += ' -d fdroid'
-        p = subprocess.Popen(cmd, cwd='python-for-android', shell=True)
-        if p.returncode != 0:
-            raise BuildException("Distribute build failed")
-
-        cid = bconfig.get('app', 'package.domain') + '.' + bconfig.get('app', 'package.name')
-        if cid != app.id:
-            raise BuildException("Package ID mismatch between metadata and spec")
-
-        orientation = bconfig.get('app', 'orientation', 'landscape')
-        if orientation == 'all':
-            orientation = 'sensor'
-
-        cmd = ['./build.py'
-               '--dir', root_dir,
-               '--name', bconfig.get('app', 'title'),
-               '--package', app.id,
-               '--version', bconfig.get('app', 'version'),
-               '--orientation', orientation
-               ]
-
-        perms = bconfig.get('app', 'permissions')
-        for perm in perms.split(','):
-            cmd.extend(['--permission', perm])
-
-        if config.get('app', 'fullscreen') == 0:
-            cmd.append('--window')
-
-        icon = bconfig.get('app', 'icon.filename')
-        if icon:
-            cmd.extend(['--icon', os.path.join(root_dir, icon)])
-
-        cmd.append('release')
-        p = FDroidPopen(cmd, cwd=distdir)
-
     elif bmethod == 'buildozer':
         logging.info("Building Kivy project using buildozer...")
 
@@ -812,11 +748,6 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             raise BuildException('Failed to find output')
         src = m.group(1)
         src = os.path.join(bindir, src) + '.apk'
-    elif omethod == 'kivy':
-        src = os.path.join('python-for-android', 'dist', 'default', 'bin',
-                           '{0}-{1}-release.apk'.format(
-                               bconfig.get('app', 'title'),
-                               bconfig.get('app', 'version')))
 
     elif omethod == 'buildozer':
         src = None
