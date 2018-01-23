@@ -88,14 +88,14 @@ def get_clean_builder(serverdir, reset=False):
     return sshinfo
 
 
-def _check_call(cmd, shell=False, cwd=None):
+def _check_call(cmd, cwd=None):
     logger.debug(' '.join(cmd))
-    return subprocess.check_call(cmd, shell=shell, cwd=cwd)
+    return subprocess.check_call(cmd, shell=False, cwd=cwd)
 
 
-def _check_output(cmd, shell=False, cwd=None):
+def _check_output(cmd, cwd=None):
     logger.debug(' '.join(cmd))
-    return subprocess.check_output(cmd, shell=shell, cwd=cwd)
+    return subprocess.check_output(cmd, shell=False, cwd=cwd)
 
 
 def get_build_vm(srvdir, provider=None):
@@ -303,11 +303,13 @@ class FDroidBuildVm():
         """
         import paramiko
         try:
-            _check_call(['vagrant ssh-config > sshconfig'],
-                        cwd=self.srvdir, shell=True)
+            sshconfig_path = os.path.join(self.srvdir, 'sshconfig')
+            with open(sshconfig_path, 'wb') as fp:
+                fp.write(_check_output(['vagrant', 'ssh-config'],
+                                       cwd=self.srvdir))
             vagranthost = 'default'  # Host in ssh config file
             sshconfig = paramiko.SSHConfig()
-            with open(joinpath(self.srvdir, 'sshconfig'), 'r') as f:
+            with open(sshconfig_path, 'r') as f:
                 sshconfig.parse(f)
             sshconfig = sshconfig.lookup(vagranthost)
             idfile = sshconfig['identityfile']
