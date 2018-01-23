@@ -849,7 +849,7 @@ class vcs_git(vcs):
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout
-            p = self.git(['clone', self.remote, self.local])
+            p = self.git(['clone', '--', self.remote, self.local])
             if p.returncode != 0:
                 self.clone_failed = True
                 raise VCSException("Git clone failed", p.output)
@@ -882,7 +882,8 @@ class vcs_git(vcs):
                     if 'Multiple remote HEAD branches' not in lines[0]:
                         raise VCSException(_("Git remote set-head failed"), p.output)
                     branch = lines[1].split(' ')[-1]
-                    p2 = FDroidPopen(['git', 'remote', 'set-head', 'origin', branch], cwd=self.local, output=False)
+                    p2 = FDroidPopen(['git', 'remote', 'set-head', 'origin', '--', branch],
+                                     cwd=self.local, output=False)
                     if p2.returncode != 0:
                         raise VCSException(_("Git remote set-head failed"), p.output + '\n' + p2.output)
                 self.refreshed = True
@@ -1090,7 +1091,8 @@ class vcs_hg(vcs):
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
-            p = FDroidPopen(['hg', 'clone', '--ssh', 'false', self.remote, self.local], output=False)
+            p = FDroidPopen(['hg', 'clone', '--ssh', 'false', '--', self.remote, self.local],
+                            output=False)
             if p.returncode != 0:
                 self.clone_failed = True
                 raise VCSException("Hg clone failed", p.output)
@@ -1101,7 +1103,7 @@ class vcs_hg(vcs):
             for line in p.output.splitlines():
                 if not line.startswith('? '):
                     raise VCSException("Unexpected output from hg status -uS: " + line)
-                FDroidPopen(['rm', '-rf', line[2:]], cwd=self.local, output=False)
+                FDroidPopen(['rm', '-rf', '--', line[2:]], cwd=self.local, output=False)
             if not self.refreshed:
                 p = FDroidPopen(['hg', 'pull', '--ssh', 'false'], cwd=self.local, output=False)
                 if p.returncode != 0:
@@ -1111,7 +1113,7 @@ class vcs_hg(vcs):
         rev = rev or 'default'
         if not rev:
             return
-        p = FDroidPopen(['hg', 'update', '-C', rev], cwd=self.local, output=False)
+        p = FDroidPopen(['hg', 'update', '-C', '--', rev], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException("Hg checkout of '%s' failed" % rev, p.output)
         p = FDroidPopen(['hg', 'purge', '--all'], cwd=self.local, output=False)
@@ -1511,7 +1513,7 @@ def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
         if srclib["Prepare"]:
             cmd = replace_config_vars(srclib["Prepare"], build)
 
-            p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=libdir)
+            p = FDroidPopen(['bash', '-x', '-c', '--', cmd], cwd=libdir)
             if p.returncode != 0:
                 raise BuildException("Error running prepare command for srclib %s"
                                      % name, p.output)
@@ -1566,7 +1568,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         cmd = replace_config_vars(build.init, build)
         logging.info("Running 'init' commands in %s" % root_dir)
 
-        p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
+        p = FDroidPopen(['bash', '-x', '-c', '--', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running init command for %s:%s" %
                                  (app.id, build.versionName), p.output)
@@ -1724,7 +1726,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             libpath = os.path.relpath(libpath, root_dir)
             cmd = cmd.replace('$$' + name + '$$', libpath)
 
-        p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
+        p = FDroidPopen(['bash', '-x', '-c', '--', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running prebuild command for %s:%s" %
                                  (app.id, build.versionName), p.output)
