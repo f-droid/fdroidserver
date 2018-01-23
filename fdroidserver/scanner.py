@@ -40,7 +40,7 @@ def get_gradle_compile_commands(build):
     return [re.compile(r'\s*' + c, re.IGNORECASE) for c in compileCommands]
 
 
-def scan_source(build_dir, build):
+def scan_source(build_dir, build=metadata.Build()):
     """Scan the source code in the given directory (and all subdirectories)
     and return the number of fatal problems encountered
     """
@@ -294,18 +294,24 @@ def main():
         if app.Disabled:
             logging.info(_("Skipping {appid}: disabled").format(appid=appid))
             continue
-        if not app.builds:
-            logging.info(_("Skipping {appid}: no builds specified").format(appid=appid))
-            continue
-
-        logging.info(_("Processing {appid}").format(appid=appid))
 
         try:
-
             if app.RepoType == 'srclib':
                 build_dir = os.path.join('build', 'srclib', app.Repo)
             else:
                 build_dir = os.path.join('build', appid)
+
+            if app.builds:
+                logging.info(_("Processing {appid}").format(appid=appid))
+            else:
+                logging.info(_("{appid}: no builds specified, running on current source state")
+                             .format(appid=appid))
+                count = scan_source(build_dir)
+                if count > 0:
+                    logging.warn(_('Scanner found {count} problems in {appid}:')
+                                 .format(count=count, appid=appid))
+                    probcount += count
+                continue
 
             # Set up vcs interface and make sure we have the latest code...
             vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
@@ -315,20 +321,19 @@ def main():
                 if build.disable:
                     logging.info("...skipping version %s - %s" % (
                         build.versionName, build.get('disable', build.commit[1:])))
-                else:
-                    logging.info("...scanning version " + build.versionName)
+                    continue
 
-                    # Prepare the source code...
-                    common.prepare_source(vcs, app, build,
-                                          build_dir, srclib_dir,
-                                          extlib_dir, False)
+                logging.info("...scanning version " + build.versionName)
+                # Prepare the source code...
+                common.prepare_source(vcs, app, build,
+                                      build_dir, srclib_dir,
+                                      extlib_dir, False)
 
-                    # Do the scan...
-                    count = scan_source(build_dir, build)
-                    if count > 0:
-                        logging.warn('Scanner found %d problems in %s (%s)' % (
-                            count, appid, build.versionCode))
-                        probcount += count
+                count = scan_source(build_dir, build)
+                if count > 0:
+                    logging.warn(_('Scanner found {count} problems in {appid}:{versionCode}:')
+                                 .format(count=count, appid=appid, versionCode=build.versionCode))
+                    probcount += count
 
         except BuildException as be:
             logging.warn("Could not scan app %s due to BuildException: %s" % (
