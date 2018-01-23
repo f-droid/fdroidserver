@@ -86,7 +86,6 @@ default_config = {
         'r15c': None,
         'r16': None,
     },
-    'qt_sdk_path': None,
     'build_tools': MINIMUM_AAPT_VERSION,
     'force_build_tools': False,
     'java_paths': None,
@@ -2209,7 +2208,6 @@ def replace_config_vars(cmd, build):
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
     cmd = cmd.replace('$$NDK$$', build.ndk_path())
     cmd = cmd.replace('$$MVN3$$', config['mvn3'])
-    cmd = cmd.replace('$$QT$$', config['qt_sdk_path'] or '')
     if build is not None:
         cmd = replace_build_vars(cmd, build)
     return cmd
