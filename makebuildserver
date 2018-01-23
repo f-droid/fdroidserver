@@ -358,8 +358,6 @@ cachefiles = [
      'f01788946733bf6294a36727b99366a18369904eb068a599dde8cca2c1d2ba3c'),
     ('https://dl.google.com/android/repository/android-ndk-r16-linux-x86_64.zip',
      'a8550b81771c67cc6ab7b479a6918d29aa78de3482901762b4f9e0132cd9672e'),
-    ('https://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-linux-x64-android-5.7.0.run',
-     'f7e55b7970e59bdaabb88cb7afc12e9061e933992bda2f076f52600358644586'),
 ]
 
 
@@ -459,10 +457,6 @@ def main():
         logger.info('skipping cache update and verification...')
     else:
         update_cache(cachedir, cachefiles)
-
-    local_qt_filename = os.path.join(cachedir, 'qt-opensource-linux-x64-android-5.7.0.run')
-    logger.info("Setting executable bit for %s", local_qt_filename)
-    os.chmod(local_qt_filename, 0o755)
 
     # use VirtualBox software virtualization if hardware is not available,
     # like if this is being run in kvm or some other VM platform, like

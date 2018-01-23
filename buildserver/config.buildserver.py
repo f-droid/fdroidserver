@@ -9,7 +9,6 @@ ndk_paths = {
     'r15c': "/home/vagrant/android-ndk/r15c",
     'r16': "/home/vagrant/android-ndk/r16",
 }
-qt_sdk_path = "/home/vagrant/qt-sdk/5.7.0/5.7"
 java_paths = {
     '8': "/usr/lib/jvm/java-8-openjdk-amd64",
 }
