@@ -721,7 +721,7 @@ def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
     exception. So the original .txt format is parsed first, at least until
     newer formats stabilize.
 
-    check_vcs is the list of packageNames to check for .fdroid.yml in source
+    check_vcs is the list of appids to check for .fdroid.yml in source
 
     """
 
@@ -754,11 +754,11 @@ def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
     for metadatapath in metadatafiles:
         if metadatapath == '.fdroid.txt':
             warn_or_exception(_('.fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json.'))
-        packageName, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
-        if packageName in apps:
+        appid, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
+        if appid in apps:
             warn_or_exception(_("Found multiple metadata files for {appid}")
-                              .format(path=packageName))
-        app = parse_metadata(metadatapath, packageName in check_vcs, refresh)
+                              .format(appid=appid))
+        app = parse_metadata(metadatapath, appid in check_vcs, refresh)
         check_metadata(app)
         apps[app.id] = app
 
@@ -818,7 +818,7 @@ def get_default_app_info(metadatapath=None):
                         manifestroot = fdroidserver.common.parse_xml(os.path.join(root, 'AndroidManifest.xml'))
                         break
         if manifestroot is None:
-            warn_or_exception(_("Cannot find a packageName for {path}!")
+            warn_or_exception(_("Cannot find an appid for {path}!")
                               .format(path=metadatapath))
         appid = manifestroot.attrib['package']
 
@@ -906,8 +906,9 @@ def post_metadata_parse(app):
 
 # Parse metadata for a single application.
 #
-#  'metadatapath' - the filename to read. The package id for the application comes
-#               from this filename. Pass None to get a blank entry.
+#  'metadatapath' - the filename to read. The "Application ID" aka
+#               "Package Name" for the application comes from this
+#               filename. Pass None to get a blank entry.
 #
 # Returns a dictionary containing all the details of the application. There are
 # two major kinds of information in the dictionary. Keys beginning with capital
