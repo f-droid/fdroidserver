@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from os import remove as rmfile
 from os.path import isdir, isfile, basename, abspath, expanduser
 import os
 import math
@@ -376,11 +375,11 @@ class LibvirtBuildVm(FDroidBuildVm):
         if storagePool:
 
             if isfile('metadata.json'):
-                rmfile('metadata.json')
+                os.remove('metadata.json')
             if isfile('Vagrantfile'):
-                rmfile('Vagrantfile')
+                os.remove('Vagrantfile')
             if isfile('box.img'):
-                rmfile('box.img')
+                os.remove('box.img')
 
             logger.debug('preparing box.img for box %s', output)
             vol = storagePool.storageVolLookupByName(self.srvname + '.img')
@@ -430,9 +429,9 @@ class LibvirtBuildVm(FDroidBuildVm):
 
             if not keep_box_file:
                 logger.debug('box packaging complete, removing temporary files.')
-                rmfile('metadata.json')
-                rmfile('Vagrantfile')
-                rmfile('box.img')
+                os.remove('metadata.json')
+                os.remove('Vagrantfile')
+                os.remove('box.img')
 
         else:
             logger.warn('could not connect to storage-pool \'default\',' +
