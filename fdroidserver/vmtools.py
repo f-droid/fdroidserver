@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from os import remove as rmfile
-from os.path import isdir, isfile, join as joinpath, basename, abspath, expanduser
+from os.path import isdir, isfile, basename, abspath, expanduser
 import os
 import math
 import json
@@ -147,10 +147,10 @@ def get_build_vm(srvdir, provider=None):
         logger.debug('could not confirm that either virtualbox or kvm/libvirt are installed')
 
     # try guessing provider from .../srvdir/.vagrant internals
-    has_libvirt_machine = isdir(joinpath(abssrvdir, '.vagrant',
-                                         'machines', 'default', 'libvirt'))
-    has_vbox_machine = isdir(joinpath(abssrvdir, '.vagrant',
-                                      'machines', 'default', 'virtualbox'))
+    has_libvirt_machine = isdir(os.path.join(abssrvdir, '.vagrant',
+                                             'machines', 'default', 'libvirt'))
+    has_vbox_machine = isdir(os.path.join(abssrvdir, '.vagrant',
+                                          'machines', 'default', 'virtualbox'))
     if has_libvirt_machine and has_vbox_machine:
         logger.info('build vm provider lookup found virtualbox and libvirt, defaulting to \'virtualbox\'')
         return VirtualboxBuildVm(abssrvdir)
@@ -183,7 +183,7 @@ class FDroidBuildVm():
         """
         self.srvdir = srvdir
         self.srvname = basename(srvdir) + '_default'
-        self.vgrntfile = joinpath(srvdir, 'Vagrantfile')
+        self.vgrntfile = os.path.join(srvdir, 'Vagrantfile')
         self.srvuuid = self._vagrant_fetch_uuid()
         if not isdir(srvdir):
             raise FDroidBuildVmException("Can not init vagrant, directory %s not present" % (srvdir))
@@ -229,7 +229,7 @@ class FDroidBuildVm():
             logger.debug('vagrant destroy completed')
         except subprocess.CalledProcessError as e:
             logger.exception('vagrant destroy failed: %s', e)
-        vgrntdir = joinpath(self.srvdir, '.vagrant')
+        vgrntdir = os.path.join(self.srvdir, '.vagrant')
         try:
             shutil.rmtree(vgrntdir)
             logger.debug('deleted vagrant dir: %s', vgrntdir)
@@ -253,17 +253,17 @@ class FDroidBuildVm():
         return name.replace('/', '-VAGRANTSLASH-')
 
     def _vagrant_fetch_uuid(self):
-        if isfile(joinpath(self.srvdir, '.vagrant')):
+        if isfile(os.path.join(self.srvdir, '.vagrant')):
             # Vagrant 1.0 - it's a json file...
-            with open(joinpath(self.srvdir, '.vagrant')) as f:
+            with open(os.path.join(self.srvdir, '.vagrant')) as f:
                 id = json.load(f)['active']['default']
                 logger.debug('vm uuid: %s', id)
             return id
-        elif isfile(joinpath(self.srvdir, '.vagrant', 'machines',
-                             'default', self.provider, 'id')):
+        elif isfile(os.path.join(self.srvdir, '.vagrant', 'machines',
+                                 'default', self.provider, 'id')):
             # Vagrant 1.2 (and maybe 1.1?) it's a directory tree...
-            with open(joinpath(self.srvdir, '.vagrant', 'machines',
-                               'default', self.provider, 'id')) as f:
+            with open(os.path.join(self.srvdir, '.vagrant', 'machines',
+                                   'default', self.provider, 'id')) as f:
                 id = f.read()
                 logger.debug('vm uuid: %s', id)
             return id
@@ -288,8 +288,8 @@ class FDroidBuildVm():
             _check_call(['vagrant', 'box', 'remove', '--all', '--force', boxname])
         except subprocess.CalledProcessError as e:
             logger.debug('tried removing box %s, but is did not exist: %s', boxname, e)
-        boxpath = joinpath(expanduser('~'), '.vagrant',
-                           self._vagrant_file_name(boxname))
+        boxpath = os.path.join(expanduser('~'), '.vagrant',
+                               self._vagrant_file_name(boxname))
         if isdir(boxpath):
             logger.info("attempting to remove box '%s' by deleting: %s",
                         boxname, boxpath)
