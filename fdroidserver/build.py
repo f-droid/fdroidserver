@@ -913,9 +913,9 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
     return True
 
 
-def force_halt_build():
+def force_halt_build(timeout):
     """Halt the currently running Vagrant VM, to be called from a Timer"""
-    logging.error(_('Force halting build after timeout!'))
+    logging.error(_('Force halting build after {0} sec timeout!').format(timeout))
     timeout_event.set()
     vm = vmtools.get_build_vm('builder')
     vm.halt()
@@ -1093,8 +1093,15 @@ def main():
             if time.time() > endtime:
                 max_build_time_reached = True
                 break
-            if options.server:  # enable watchdog timer
-                timer = threading.Timer(7200, force_halt_build)
+
+            # Enable watchdog timer (2 hours by default).
+            if build.timeout is None:
+                timeout = 7200
+            else:
+                timeout = int(build.timeout)
+            if options.server and timeout > 0:
+                logging.debug(_('Setting {0} sec timeout for this build').format(timeout))
+                timer = threading.Timer(timeout, force_halt_build, [timeout])
                 timer.start()
             else:
                 timer = None

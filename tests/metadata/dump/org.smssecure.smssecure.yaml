@@ -100,6 +100,7 @@ builds:
   submodules: false
   sudo: ''
   target: null
+  timeout: null
   versionCode: '5'
   versionName: 0.3.3
 - androidupdate: []
@@ -137,6 +138,7 @@ builds:
   submodules: true
   sudo: ''
   target: null
+  timeout: null
   versionCode: '6'
   versionName: 0.3.3
 - androidupdate: []
@@ -173,6 +175,7 @@ builds:
   submodules: true
   sudo: ''
   target: null
+  timeout: null
   versionCode: '9'
   versionName: 0.4.2
 - androidupdate: []
@@ -209,6 +212,7 @@ builds:
   submodules: true
   sudo: ''
   target: null
+  timeout: null
   versionCode: '11'
   versionName: 0.5.1
 - androidupdate: []
@@ -244,6 +248,7 @@ builds:
   submodules: true
   sudo: ''
   target: null
+  timeout: null
   versionCode: '12'
   versionName: 0.5.2
 - androidupdate: []
@@ -279,6 +284,7 @@ builds:
   submodules: true
   sudo: ''
   target: null
+  timeout: null
   versionCode: '100'
   versionName: 0.5.3
 - androidupdate: []
@@ -314,6 +320,7 @@ builds:
   submodules: true
   sudo: ''
   target: null
+  timeout: null
   versionCode: '101'
   versionName: 0.5.4
 - androidupdate: []
@@ -349,6 +356,7 @@ builds:
   submodules: true
   sudo: ''
   target: null
+  timeout: null
   versionCode: '102'
   versionName: 0.6.0
 comments: {}
