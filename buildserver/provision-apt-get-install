@@ -89,10 +89,13 @@ packages="
  python-lxml
  python-magic
  python-setuptools
+ python3-git/jessie-backports
+ python3-gitdb/jessie-backports
  python3-gnupg
  python3-pyasn1
  python3-pyasn1-modules
  python3-requests
+ python3-smmap/jessie-backports
  python3-yaml
  python3-ruamel.yaml
  quilt

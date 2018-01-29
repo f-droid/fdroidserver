@@ -35,8 +35,8 @@ apk="${dldir}/FDroid.apk"
 asc="${apk}.asc"
 log=/var/www/html/check-fdroid-apk/`date +%s`.txt
 
-$curl https://f-droid.org/FDroid.apk > $apk
-$curl https://f-droid.org/FDroid.apk.asc > $asc
+$curl --user-agent F-Droid https://f-droid.org/FDroid.apk > $apk
+$curl --user-agent F-Droid https://f-droid.org/FDroid.apk.asc > $asc
 
 fingerprint=37D2C98789D8311948394E3E41E7044E1DBA2E89
 

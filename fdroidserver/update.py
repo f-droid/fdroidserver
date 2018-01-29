@@ -140,7 +140,7 @@ def update_wiki(apps, sortedids, apks):
             requiresroot = 'Yes'
         else:
             requiresroot = 'No'
-        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|changelog=%s|donate=%s|flattr=%s|liberapay=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s|author=%s|email=%s}}\n' % (
+        wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|changelog=%s|donate=%s|flattr=%s|liberapay=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s|author=%s|email=%s|activity=%s}}\n' % (
             appid,
             app.Name,
             app.added.strftime('%Y-%m-%d') if app.added else '',
@@ -157,7 +157,9 @@ def update_wiki(apps, sortedids, apks):
             app.License,
             requiresroot,
             app.AuthorName,
-            app.AuthorEmail)
+            app.AuthorEmail,
+            'https://gitlab.com/search?group_id=28397&scope=issues&search=' + appid,
+        )
 
         if app.Provides:
             wikidata += "This app provides: %s" % ', '.join(app.Summary.split(','))

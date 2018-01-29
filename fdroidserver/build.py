@@ -133,9 +133,9 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         ftp.chmod('config.py', 0o600)
 
         # Copy over the ID (head commit hash) of the fdroidserver in use...
-        subprocess.call('git rev-parse HEAD >' +
-                        os.path.join(os.getcwd(), 'tmp', 'fdroidserverid'),
-                        shell=True, cwd=serverpath)
+        with open(os.path.join(os.getcwd(), 'tmp', 'fdroidserverid'), 'wb') as fp:
+            fp.write(subprocess.check_output(['git', 'rev-parse', 'HEAD'],
+                                             cwd=serverpath))
         ftp.put('tmp/fdroidserverid', 'fdroidserverid')
 
         # Copy the metadata - just the file for this app...
@@ -1263,7 +1263,7 @@ def main():
             for app in build_succeeded:
 
                 logging.info("Need to sign the app before we can install it.")
-                subprocess.call("fdroid publish {0}".format(app.id), shell=True)
+                subprocess.call("fdroid publish {0}".format(app.id))
 
                 apk_path = None
 
