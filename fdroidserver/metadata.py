@@ -206,6 +206,7 @@ def fieldtype(name):
 build_flags_order = [
     'disable',
     'commit',
+    'timeout',
     'subdir',
     'submodules',
     'sudo',
@@ -248,6 +249,7 @@ class Build(dict):
         super().__init__()
         self.disable = False
         self.commit = None
+        self.timeout = None
         self.subdir = None
         self.submodules = False
         self.sudo = ''
@@ -347,6 +349,7 @@ flagtypes = {
     'forcevercode': TYPE_BOOL,
     'novcheck': TYPE_BOOL,
     'antifeatures': TYPE_LIST,
+    'timeout': TYPE_INT,
 }
 
 
@@ -1208,6 +1211,8 @@ def parse_txt_metadata(mf, app):
             build[pk] = pv
         elif t == TYPE_BOOL:
             build[pk] = _decode_bool(pv)
+        elif t == TYPE_INT:
+            build[pk] = int(pv)
 
     def parse_buildline(lines):
         v = "".join(lines)
