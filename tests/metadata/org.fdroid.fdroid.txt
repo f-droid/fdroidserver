@@ -3,6 +3,7 @@ License:GPL-3.0+
 Web Site:https://f-droid.org
 Source Code:https://gitlab.com/fdroid/fdroidclient
 Issue Tracker:https://gitlab.com/fdroid/fdroidclient/issues
+Translation:https://hosted.weblate.org/projects/f-droid/f-droid
 Changelog:https://gitlab.com/fdroid/fdroidclient/raw/HEAD/CHANGELOG.md
 Donate:https://f-droid.org/about
 FlattrID:343053

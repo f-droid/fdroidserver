@@ -3,6 +3,7 @@ License:GPL-3.0
 Web Site:http://www.smssecure.org
 Source Code:https://github.com/SMSSecure/SMSSecure
 Issue Tracker:https://github.com/SMSSecure/SMSSecure/issues
+Translation:https://www.transifex.com/silence/silence
 
 Auto Name:SMSSecure
 Summary:Send encrypted text messages (SMS)

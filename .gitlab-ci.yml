@@ -32,6 +32,7 @@ metadata_v0:
     - cd fdroiddata
     - ../tests/dump_internal_metadata_format.py
     - sed -i
+          -e '/Translation:/d'
           -e '/kivy:\sfalse/d'
           -e '/timeout:\s/d'
           metadata/dump_*/*.yaml

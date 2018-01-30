@@ -49,6 +49,7 @@ RepoType: git
 RequiresRoot: false
 SourceCode: https://github.com/SMSSecure/SMSSecure
 Summary: Send encrypted text messages (SMS)
+Translation: https://www.transifex.com/silence/silence
 UpdateCheckData: null
 UpdateCheckIgnore: null
 UpdateCheckMode: Tags
