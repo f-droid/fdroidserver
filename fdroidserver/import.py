@@ -304,7 +304,7 @@ def main():
         with open('build/.fdroidvcs-' + package, 'w') as f:
             f.write(app.RepoType + ' ' + app.Repo)
 
-        metadatapath = os.path.join('metadata', package + '.txt')
+        metadatapath = os.path.join('metadata', package + '.yml')
         metadata.write_metadata(metadatapath, app)
         logging.info("Wrote " + metadatapath)
 
