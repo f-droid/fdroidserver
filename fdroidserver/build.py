@@ -73,7 +73,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
     else:
         logging.getLogger("paramiko").setLevel(logging.WARN)
 
-    sshinfo = vmtools.get_clean_builder('builder')
+    sshinfo = vmtools.get_clean_builder('builder', options.resetserver)
 
     try:
         if not buildserverid:
