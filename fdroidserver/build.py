@@ -73,7 +73,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
     else:
         logging.getLogger("paramiko").setLevel(logging.WARN)
 
-    sshinfo = vmtools.get_clean_builder('builder')
+    sshinfo = vmtools.get_clean_builder('builder', options.reset_server)
 
     try:
         if not buildserverid:
@@ -935,7 +935,7 @@ def parse_commandline():
                         help=_("Test mode - put output in the tmp directory only, and always build, even if the output already exists."))
     parser.add_argument("--server", action="store_true", default=False,
                         help=_("Use build server"))
-    parser.add_argument("--resetserver", action="store_true", default=False,
+    parser.add_argument("--reset-server", action="store_true", default=False,
                         help=_("Reset and create a brand new build server, even if the existing one appears to be ok."))
     parser.add_argument("--on-server", dest="onserver", action="store_true", default=False,
                         help=_("Specify that we're running on the build server"))
@@ -1005,8 +1005,8 @@ def main():
 
     if config['build_server_always']:
         options.server = True
-    if options.resetserver and not options.server:
-        parser.error("option %s: Using --resetserver without --server makes no sense" % "resetserver")
+    if options.reset_server and not options.server:
+        parser.error("option %s: Using --reset-server without --server makes no sense" % "reset-server")
 
     log_dir = 'logs'
     if not os.path.isdir(log_dir):
