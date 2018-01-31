@@ -369,10 +369,13 @@ def check_builds(app):
                 yield _("Branch '{branch}' used as commit in build '{versionName}'")\
                     .format(branch=s, versionName=build.versionName)
             for srclib in build.srclibs:
-                ref = srclib.split('@')[1].split('/')[0]
-                if ref.startswith(s):
-                    yield _("Branch '{branch}' used as commit in srclib '{srclib}'")\
-                        .format(branch=s, srclib=srclib)
+                if '@' in srclib:
+                    ref = srclib.split('@')[1].split('/')[0]
+                    if ref.startswith(s):
+                        yield _("Branch '{branch}' used as commit in srclib '{srclib}'")\
+                            .format(branch=s, srclib=srclib)
+                else:
+                    yield _('srclibs missing name and/or @') + ' (srclibs: ' + srclib + ')'
         for key in build.keys():
             if key not in supported_flags:
                 yield _('%s is not an accepted build field') % key
