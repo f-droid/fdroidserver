@@ -231,7 +231,7 @@ def main():
         app.AutoName = os.path.basename(os.getcwd())
         app.RepoType = 'git'
 
-        build = {}
+        build = metadata.Build()
         root_dir = get_subdir(os.getcwd())
         if os.path.exists('build.gradle'):
             build.gradle = ['yes']
