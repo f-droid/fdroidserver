@@ -2024,7 +2024,8 @@ def FDroidPopenBytes(commands, cwd=None, envs=None, output=True, stderr_to_stdou
     p = None
     try:
         p = subprocess.Popen(commands, cwd=cwd, shell=False, env=process_env,
-                             stdout=subprocess.PIPE, stderr=stderr_param)
+                             stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                             stderr=stderr_param)
     except OSError as e:
         raise BuildException("OSError while trying to execute " +
                              ' '.join(commands) + ': ' + str(e))
