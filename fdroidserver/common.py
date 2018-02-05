@@ -975,6 +975,7 @@ class vcs_gitsvn(vcs):
         if not os.path.exists(self.local):
             # Brand new checkout
             gitsvn_args = ['svn', 'clone']
+            remote = None
             if ';' in self.remote:
                 remote_split = self.remote.split(';')
                 for i in remote_split[1:]:
@@ -984,17 +985,15 @@ class vcs_gitsvn(vcs):
                         gitsvn_args.extend(['-t', i[5:]])
                     elif i.startswith('branches='):
                         gitsvn_args.extend(['-b', i[9:]])
-                gitsvn_args.extend([remote_split[0], self.local])
-                p = self.git(gitsvn_args, output=False)
-                if p.returncode != 0:
-                    self.clone_failed = True
-                    raise VCSException("Git svn clone failed", p.output)
+                remote = remote_split[0]
             else:
-                gitsvn_args.extend([self.remote, self.local])
-                p = self.git(gitsvn_args, output=False)
-                if p.returncode != 0:
-                    self.clone_failed = True
-                    raise VCSException("Git svn clone failed", p.output)
+                remote = self.remote
+
+            gitsvn_args.extend(['--', remote, self.local])
+            p = self.git(gitsvn_args)
+            if p.returncode != 0:
+                self.clone_failed = True
+                raise VCSException(_('git svn clone failed'), p.output)
             self.checkrepo()
         else:
             self.checkrepo()
