@@ -67,6 +67,7 @@ app_fields = set([
     'Web Site',
     'Source Code',
     'Issue Tracker',
+    'Translation',
     'Changelog',
     'Donate',
     'FlattrID',
@@ -118,6 +119,7 @@ class App(dict):
         self.WebSite = ''
         self.SourceCode = ''
         self.IssueTracker = ''
+        self.Translation = ''
         self.Changelog = ''
         self.Donate = None
         self.FlattrID = None
@@ -400,7 +402,7 @@ valuetypes = {
 
     FieldValidator("HTTP link",
                    r'^http[s]?://',
-                   ["WebSite", "SourceCode", "IssueTracker", "Changelog", "Donate"]),
+                   ["WebSite", "SourceCode", "IssueTracker", "Translation", "Changelog", "Donate"]),
 
     FieldValidator("Email",
                    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
@@ -1143,6 +1145,7 @@ def write_yaml(mf, app):
         'WebSite',
         'SourceCode',
         'IssueTracker',
+        'Translation',
         'Changelog',
         'Donate',
         'FlattrID',
@@ -1437,6 +1440,7 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
     w_field_always('Web Site')
     w_field_always('Source Code')
     w_field_always('Issue Tracker')
+    w_field_nonempty('Translation')
     w_field_nonempty('Changelog')
     w_field_nonempty('Donate')
     w_field_nonempty('FlattrID')

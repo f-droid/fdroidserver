@@ -51,6 +51,7 @@ RepoType: git
 RequiresRoot: false
 SourceCode: http://git.videolan.org/?p=vlc-ports/android.git;a=summary
 Summary: Media player
+Translation: ''
 UpdateCheckData: null
 UpdateCheckIgnore: null
 UpdateCheckMode: Tags

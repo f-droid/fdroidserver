@@ -52,6 +52,7 @@ RepoType: git
 RequiresRoot: true
 SourceCode: https://github.com/dschuermann/ad-away
 Summary: Block advertisements
+Translation: https://www.transifex.com/dominikschuermann/adaway
 UpdateCheckData: null
 UpdateCheckIgnore: null
 UpdateCheckMode: Tags

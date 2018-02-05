@@ -29,6 +29,7 @@ RepoType: git
 RequiresRoot: false
 SourceCode: https://github.com/miguelvps/PoliteDroid
 Summary: Calendar tool
+Translation: ''
 UpdateCheckData: null
 UpdateCheckIgnore: null
 UpdateCheckMode: Tags
