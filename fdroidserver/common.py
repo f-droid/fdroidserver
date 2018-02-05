@@ -815,7 +815,7 @@ class vcs_git(vcs):
         #
         # supported in git >= 2.3
         git_config = [
-            '-c', 'core.sshCommand=false',
+            '-c', 'core.sshCommand=/bin/false',
             '-c', 'url.https://.insteadOf=ssh://',
         ]
         for domain in ('bitbucket.org', 'github.com', 'gitlab.com'):
@@ -827,7 +827,7 @@ class vcs_git(vcs):
             git_config.append('url.https://u:p@' + domain + '.insteadOf=https://' + domain)
         envs.update({
             'GIT_TERMINAL_PROMPT': '0',
-            'GIT_SSH': 'false',  # for git < 2.3
+            'GIT_SSH': '/bin/false',  # for git < 2.3
         })
         return FDroidPopen(['git', ] + git_config + args,
                            envs=envs, cwd=cwd, output=output)
@@ -965,8 +965,8 @@ class vcs_gitsvn(vcs):
         config = ['-c', 'core.sshCommand=false']
         envs.update({
             'GIT_TERMINAL_PROMPT': '0',
-            'GIT_SSH': 'false',  # for git < 2.3
-            'SVN_SSH': 'false',
+            'GIT_SSH': '/bin/false',  # for git < 2.3
+            'SVN_SSH': '/bin/false',
         })
         return FDroidPopen(['git', ] + config + args,
                            envs=envs, cwd=cwd, output=output)
