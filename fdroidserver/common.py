@@ -1004,6 +1004,9 @@ class vcs_gitsvn(vcs):
             else:
                 remote = self.remote
 
+            if not remote.startswith('https://'):
+                raise VCSException(_('HTTPS must be used with Subversion URLs!'))
+
             gitsvn_args.extend(['--', remote, self.local])
             p = self.git(gitsvn_args)
             if p.returncode != 0:
