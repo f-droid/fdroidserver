@@ -815,6 +815,7 @@ class vcs_git(vcs):
         #
         # supported in git >= 2.3
         git_config = [
+            '-c', 'core.askpass=/bin/true',
             '-c', 'core.sshCommand=/bin/false',
             '-c', 'url.https://.insteadOf=ssh://',
         ]
@@ -827,6 +828,8 @@ class vcs_git(vcs):
             git_config.append('url.https://u:p@' + domain + '.insteadOf=https://' + domain)
         envs.update({
             'GIT_TERMINAL_PROMPT': '0',
+            'GIT_ASKPASS': '/bin/true',
+            'SSH_ASKPASS': '/bin/true',
             'GIT_SSH': '/bin/false',  # for git < 2.3
         })
         return FDroidPopen(['git', ] + git_config + args,
@@ -960,15 +963,27 @@ class vcs_gitsvn(vcs):
 
     def git(self, args, envs=dict(), cwd=None, output=True):
         '''Prevent git fetch/clone/submodule from hanging at the username/password prompt
+
+        AskPass is set to /bin/true to let the process try to connect
+        without a username/password.
+
+        The SSH command is set to /bin/false to block all SSH URLs
+        (supported in git >= 2.3).  This protects against
+        CVE-2017-1000117.
+
         '''
-        # CVE-2017-1000117 block all SSH URLs (supported in git >= 2.3)
-        config = ['-c', 'core.sshCommand=false']
+        git_config = [
+            '-c', 'core.askpass=/bin/true',
+            '-c', 'core.sshCommand=/bin/false',
+        ]
         envs.update({
             'GIT_TERMINAL_PROMPT': '0',
+            'GIT_ASKPASS': '/bin/true',
+            'SSH_ASKPASS': '/bin/true',
             'GIT_SSH': '/bin/false',  # for git < 2.3
             'SVN_SSH': '/bin/false',
         })
-        return FDroidPopen(['git', ] + config + args,
+        return FDroidPopen(['git', ] + git_config + args,
                            envs=envs, cwd=cwd, output=output)
 
     def gotorevisionx(self, rev):
