@@ -365,8 +365,8 @@ cachefiles = [
      '0ecc2017802924cf81fffc0f51d342e3e69de6343da892ac9fa1cd79bc106024'),
     ('https://dl.google.com/android/repository/android-ndk-r15c-linux-x86_64.zip',
      'f01788946733bf6294a36727b99366a18369904eb068a599dde8cca2c1d2ba3c'),
-    ('https://dl.google.com/android/repository/android-ndk-r16-linux-x86_64.zip',
-     'a8550b81771c67cc6ab7b479a6918d29aa78de3482901762b4f9e0132cd9672e'),
+    ('https://dl.google.com/android/repository/android-ndk-r16b-linux-x86_64.zip',
+     'bcdea4f5353773b2ffa85b5a9a2ae35544ce88ec5b507301d8cf6a76b765d901'),
 ]
 
 
