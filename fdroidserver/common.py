@@ -815,7 +815,8 @@ class vcs_git(vcs):
         #
         # supported in git >= 2.3
         git_config = [
-            '-c', 'core.sshCommand=false',
+            '-c', 'core.askpass=/bin/true',
+            '-c', 'core.sshCommand=/bin/false',
             '-c', 'url.https://.insteadOf=ssh://',
         ]
         for domain in ('bitbucket.org', 'github.com', 'gitlab.com'):
@@ -827,7 +828,9 @@ class vcs_git(vcs):
             git_config.append('url.https://u:p@' + domain + '.insteadOf=https://' + domain)
         envs.update({
             'GIT_TERMINAL_PROMPT': '0',
-            'GIT_SSH': 'false',  # for git < 2.3
+            'GIT_ASKPASS': '/bin/true',
+            'SSH_ASKPASS': '/bin/true',
+            'GIT_SSH': '/bin/false',  # for git < 2.3
         })
         return FDroidPopen(['git', ] + git_config + args,
                            envs=envs, cwd=cwd, output=output)
@@ -960,21 +963,34 @@ class vcs_gitsvn(vcs):
 
     def git(self, args, envs=dict(), cwd=None, output=True):
         '''Prevent git fetch/clone/submodule from hanging at the username/password prompt
+
+        AskPass is set to /bin/true to let the process try to connect
+        without a username/password.
+
+        The SSH command is set to /bin/false to block all SSH URLs
+        (supported in git >= 2.3).  This protects against
+        CVE-2017-1000117.
+
         '''
-        # CVE-2017-1000117 block all SSH URLs (supported in git >= 2.3)
-        config = ['-c', 'core.sshCommand=false']
+        git_config = [
+            '-c', 'core.askpass=/bin/true',
+            '-c', 'core.sshCommand=/bin/false',
+        ]
         envs.update({
             'GIT_TERMINAL_PROMPT': '0',
-            'GIT_SSH': 'false',  # for git < 2.3
-            'SVN_SSH': 'false',
+            'GIT_ASKPASS': '/bin/true',
+            'SSH_ASKPASS': '/bin/true',
+            'GIT_SSH': '/bin/false',  # for git < 2.3
+            'SVN_SSH': '/bin/false',
         })
-        return FDroidPopen(['git', ] + config + args,
+        return FDroidPopen(['git', ] + git_config + args,
                            envs=envs, cwd=cwd, output=output)
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout
             gitsvn_args = ['svn', 'clone']
+            remote = None
             if ';' in self.remote:
                 remote_split = self.remote.split(';')
                 for i in remote_split[1:]:
@@ -984,17 +1000,23 @@ class vcs_gitsvn(vcs):
                         gitsvn_args.extend(['-t', i[5:]])
                     elif i.startswith('branches='):
                         gitsvn_args.extend(['-b', i[9:]])
-                gitsvn_args.extend([remote_split[0], self.local])
-                p = self.git(gitsvn_args, output=False)
-                if p.returncode != 0:
-                    self.clone_failed = True
-                    raise VCSException("Git svn clone failed", p.output)
+                remote = remote_split[0]
             else:
-                gitsvn_args.extend([self.remote, self.local])
-                p = self.git(gitsvn_args, output=False)
-                if p.returncode != 0:
-                    self.clone_failed = True
-                    raise VCSException("Git svn clone failed", p.output)
+                remote = self.remote
+
+            if not remote.startswith('https://'):
+                raise VCSException(_('HTTPS must be used with Subversion URLs!'))
+
+            # git-svn sucks at certificate validation, this throws useful errors:
+            import requests
+            r = requests.head(remote)
+            r.raise_for_status()
+
+            gitsvn_args.extend(['--', remote, self.local])
+            p = self.git(gitsvn_args)
+            if p.returncode != 0:
+                self.clone_failed = True
+                raise VCSException(_('git svn clone failed'), p.output)
             self.checkrepo()
         else:
             self.checkrepo()
