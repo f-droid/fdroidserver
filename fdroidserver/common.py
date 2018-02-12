@@ -77,7 +77,6 @@ orig_path = None
 default_config = {
     'sdk_path': "$ANDROID_HOME",
     'ndk_paths': {
-        'r9b': None,
         'r10e': None,
         'r11c': None,
         'r12b': "$ANDROID_NDK",

@@ -11,7 +11,6 @@
 # used by default. If a version is missing or assigned to None, it is assumed
 # not installed.
 # ndk_paths = {
-#     'r9b': None,
 #     'r10e': None,
 #     'r11c': None,
 #     'r12b': "$ANDROID_NDK",
