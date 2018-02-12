@@ -84,7 +84,7 @@ default_config = {
         'r13b': None,
         'r14b': None,
         'r15c': None,
-        'r16': None,
+        'r16b': None,
     },
     'build_tools': MINIMUM_AAPT_VERSION,
     'force_build_tools': False,
