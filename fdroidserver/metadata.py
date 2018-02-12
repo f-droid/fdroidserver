@@ -1521,7 +1521,7 @@ def write_txt(mf, app):
             if f == 'androidupdate':
                 f = 'update'  # avoid conflicting with Build(dict).update()
             mf.write('    %s=' % f)
-            if t == TYPE_STRING:
+            if t == TYPE_STRING or t == TYPE_INT:
                 mf.write(v)
             elif t == TYPE_BOOL:
                 mf.write('yes')
