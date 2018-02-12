@@ -1102,6 +1102,7 @@ def main():
             if options.server and timeout > 0:
                 logging.debug(_('Setting {0} sec timeout for this build').format(timeout))
                 timer = threading.Timer(timeout, force_halt_build, [timeout])
+                timeout_event.clear()
                 timer.start()
             else:
                 timer = None
