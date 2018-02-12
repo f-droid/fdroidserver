@@ -1082,8 +1082,8 @@ def main():
     # Build applications...
     failed_apps = {}
     build_succeeded = []
-    # Only build for 12 hours, then stop gracefully
-    endtime = time.time() + 12 * 60 * 60
+    # Only build for 36 hours, then stop gracefully.
+    endtime = time.time() + 36 * 60 * 60
     max_build_time_reached = False
     for appid, app in apps.items():
 
