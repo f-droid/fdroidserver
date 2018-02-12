@@ -32,6 +32,9 @@ from . import metadata
 from .exception import FDroidException
 
 
+SETTINGS_GRADLE = re.compile('''include\s+['"]:([^'"]*)['"]''')
+
+
 # Get the repo type and address from the given web page. The page is scanned
 # in a rather naive manner for 'git clone xxxx', 'hg clone xxxx', etc, and
 # when one of these is found it's assumed that's the information we want.
@@ -180,6 +183,13 @@ def get_subdir(build_dir):
     if options.subdir:
         return os.path.join(build_dir, options.subdir)
 
+    settings_gradle = os.path.join(build_dir, 'settings.gradle')
+    if os.path.exists(settings_gradle):
+        with open(settings_gradle) as fp:
+            m = SETTINGS_GRADLE.search(fp.read())
+            if m:
+                return os.path.join(build_dir, m.group(1))
+
     return build_dir
 
 
@@ -221,7 +231,7 @@ def main():
         app.AutoName = os.path.basename(os.getcwd())
         app.RepoType = 'git'
 
-        build = {}
+        build = metadata.Build()
         root_dir = get_subdir(os.getcwd())
         if os.path.exists('build.gradle'):
             build.gradle = ['yes']
@@ -304,7 +314,7 @@ def main():
         with open('build/.fdroidvcs-' + package, 'w') as f:
             f.write(app.RepoType + ' ' + app.Repo)
 
-        metadatapath = os.path.join('metadata', package + '.txt')
+        metadatapath = os.path.join('metadata', package + '.yml')
         metadata.write_metadata(metadatapath, app)
         logging.info("Wrote " + metadatapath)
 
