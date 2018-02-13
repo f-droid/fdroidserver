@@ -26,7 +26,7 @@ clean:
 $(TEMPLATE): $(FILES)
 	xgettext --join-existing --from-code=UTF-8 \
 		--language=Python --keyword=_ \
-		--sort-output --add-location=file --output=$(TEMPLATE) \
+		--no-wrap --sort-output --add-location=file --output=$(TEMPLATE) \
 		--package-name="fdroidserver" --package-version=$(VERSION) \
 		--foreign-user \
 		--msgid-bugs-address=https://gitlab.com/fdroid/fdroidserver/issues \
@@ -34,7 +34,7 @@ $(TEMPLATE): $(FILES)
 	sed -i 's,CHARSET,UTF-8,' $(TEMPLATE)
 
 %.po: $(TEMPLATE)
-	msgmerge --sort-output --add-location=file --update $@ $(TEMPLATE)
+	msgmerge --no-wrap --sort-output --add-location=file --update $@ $(TEMPLATE)
 
 %/LC_MESSAGES/fdroidserver.mo: %/LC_MESSAGES/fdroidserver.po
 	msgfmt --check -o $@ $(@:mo=po)
