@@ -3,36 +3,20 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: fdroidserver 0.9\n"
-"Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2018-02-13 09:01+0100\n"
-"PO-Revision-Date: 2017-11-29 10:55+0000\n"
-"Last-Translator: Lobsang <lobsangsither@gmail.com>\n"
-"Language-Team: Tibetan <https://hosted.weblate.org/projects/f-droid/fdroidserver/bo/>\n"
-"Language: bo\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2.18-dev\n"
+msgstr "Project-Id-Version: fdroidserver 0.9\nReport-Msgid-Bugs-To: team@f-droid.org\nPOT-Creation-Date: 2018-02-13 09:01+0100\nPO-Revision-Date: 2018-02-13 08:34+0000\nLast-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\nLanguage-Team: Tibetan <https://hosted.weblate.org/projects/f-droid/fdroidserver/bo/>\nLanguage: bo\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 2.19-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
 "\n"
 "SSH Public Key to be used as Deploy Key:"
-msgstr ""
-"\n"
-"SSHདམངས་ཀྱི་ལྡེ་མིག་དེ་ཕྱོགས་སྐྱོད་ལྡ་ེམིག་ལ་བེད་སྤྱོད་བྱེད།"
+msgstr "\nSSHདམངས་ཀྱི་ལྡེ་མིག་དེ་ཕྱོགས་སྐྱོད་ལྡ་ེམིག་ལ་བེད་སྤྱོད་བྱེད།:"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid ""
 "\n"
 "{path} encoded for the DEBUG_KEYSTORE secret variable:"
-msgstr ""
-"\n"
-"{path} DEBUG_KEYSTOREགསང་རྟགས་ཀྱི་ཆེད་དུ་ཨང་སྒྲིག"
+msgstr "\n{path} DEBUG_KEYSTOREགསང་རྟགས་ཀྱི་ཆེད་དུ་ཨང་སྒྲིག:"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -139,7 +123,7 @@ msgstr "'{aapt}1' འདི་ཧ་ཅང་གི་རྙིང་པ་ར�
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "'{apkfilename}' is already installed on {dev}."
-msgstr "'{apkfilename}1' འདི་{dev}2.ནང་སྔོན་ཚོད་ནས་སྒྲིག་བཅུག་བྱས་ཟིན།"
+msgstr "'{apkfilename}' འདི་{dev}.ནང་སྔོན་ཚོད་ནས་སྒྲིག་བཅུག་བྱས་ཟིན།."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -227,7 +211,7 @@ msgstr "ཨེན་ཀྲོཌ་ SDK རྙེད་སོན་བྱུང�
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' does not exist!"
-msgstr "ཨེན་ཀྲོཌ་SDK ཐབས་ལམ་ '{path}'མིན་འདུག"
+msgstr "ཨེན་ཀྲོཌ་SDK ཐབས་ལམ་ '{path}'མིན་འདུག!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -258,7 +242,7 @@ msgstr "Appending .git ངེས་པར་དགོས་ཀྱི་མེད
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Archiving {apkfilename} with invalid signature!"
-msgstr "མཛོད་ཁང་{apkfilename} ལ་ཁུངས་ལྡན་མིན་པའི་མིང་རྟགས་"
+msgstr "མཛོད་ཁང་{apkfilename} ལ་ཁུངས་ལྡན་མིན་པའི་མིང་རྟགས་!"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -309,7 +293,7 @@ msgstr[0] "ཚགས་རྒྱབ་པའི་སྐབས་སུ་ནོ
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Cannot find a packageName for {path}!"
-msgstr "{path}!གྱི་ཆེད་དུ་ཐུམ་སྒྲིལ་གྱི་མིང་རྙེད་མ་སོང་།"
+msgstr "{path}གྱི་ཆེད་དུ་ཐུམ་སྒྲིལ་གྱི་མིང་རྙེད་མ་སོང་།!"
 
 #: ../fdroidserver/metadata.py
 #, fuzzy, python-brace-format
@@ -371,7 +355,7 @@ msgstr "གསར་བསྒྱུར་གཙང་བཟོ།-ཡིག་�
 
 #: ../fdroidserver/import.py
 msgid "Comma separated list of categories."
-msgstr "སྡེ་ཚན་སོ་སོའི་ཐོ་གཞུང་ལ་བར་མཚམས་རེ་འཇོག།"
+msgstr "སྡེ་ཚན་སོ་སོའི་ཐོ་གཞུང་ལ་བར་མཚམས་རེ་འཇོག།."
 
 #: ../fdroid
 #, c-format, python-format
@@ -412,7 +396,7 @@ msgstr "ཐུམ་སྒྲིལ་ངོས་འཛིན་རྙེད་
 
 #: ../fdroidserver/update.py
 msgid "Cowardily refusing to overwrite existing signing key setup!"
-msgstr "མིང་རྟགས་ལྡེ་མིག་སྒྲིག་བཀོད་ལ་སྐྱར་བྲིས་བྱེད་མི་བདེ་བ།"
+msgstr "མིང་རྟགས་ལྡེ་མིག་སྒྲིག་བཀོད་ལ་སྐྱར་བྲིས་བྱེད་མི་བདེ་བ།!"
 
 #: ../fdroidserver/update.py
 msgid "Create a repo signing key in a keystore"
@@ -664,7 +648,7 @@ msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode."
-msgstr "ནུས་མེད་མཉེན་ཆས་ལ་ཐོན་སྐྱེད་ཆེད་དུ་མངགས་ཏེ་བཟོས། འདི་འཚག་རྒྱབ་ཀྱི་དཀའ་ངལ་ཡོད་མིན་ལ་མ་ལྟོས་པར་མུ་མཐུད་དུ་འགྲོ་ཐུབ། འདི་ཚོད་ལྟའི་ཚུལ་ཁ་ོནར་ཆོག་མཆན་སྤྲད།"
+msgstr "ནུས་མེད་མཉེན་ཆས་ལ་ཐོན་སྐྱེད་ཆེད་དུ་མངགས་ཏེ་བཟོས། འདི་འཚག་རྒྱབ་ཀྱི་དཀའ་ངལ་ཡོད་མིན་ལ་མ་ལྟོས་པར་མུ་མཐུད་དུ་འགྲོ་ཐུབ། འདི་ཚོད་ལྟའི་ཚུལ་ཁ་ོནར་ཆོག་མཆན་སྤྲད།."
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -674,7 +658,7 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
-msgstr "\"{name}\" བརྐོད་རིས་མེད་པའི་མཉེས་ཆས་ཀྱི་རྒྱབ་ལྗོངས་ཡིག་ཆ་\"{path}\"རྙེད་སོང་།"
+msgstr "\"{name}\" བརྐོད་རིས་མེད་པའི་མཉེས་ཆས་ཀྱི་རྒྱབ་ལྗོངས་ཡིག་ཆ་\"{path}\"རྙེད་སོང་།!"
 
 #: ../fdroidserver/common.py
 msgid "Found invalid appids in arguments"
@@ -1453,7 +1437,7 @@ msgstr "{linedesc}ནང་། {field}་ཁ་ཕྱོགས་དེ་ག་
 
 #: ../fdroid
 msgid "Unknown exception found!"
-msgstr "ཆ་རྒྱུས་མེད་པའི་དམིགས་བསལ་ཞིག་རྙེད་སོང་།"
+msgstr "ཆ་རྒྱུས་མེད་པའི་དམིགས་བསལ་ཞིག་རྙེད་སོང་།!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
