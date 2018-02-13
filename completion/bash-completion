@@ -282,10 +282,10 @@ __complete_stats() {
 	__complete_options
 }
 
-__complete_server() {
+__complete_deploy() {
 	opts="-i -v -q"
 	lopts="--identity-file --local-copy-dir --sync-from-local-copy-dir
- --verbose --quiet --no-checksum update"
+ --verbose --quiet --no-checksum"
 	__complete_options
 }
 
@@ -316,6 +316,7 @@ __cmds=" \
 btlog \
 build \
 checkupdates \
+deploy \
 dscanner \
 gpgsign \
 import \
@@ -328,7 +329,6 @@ publish \
 readmeta \
 rewritemeta \
 scanner \
-server \
 signatures \
 signindex \
 stats \
