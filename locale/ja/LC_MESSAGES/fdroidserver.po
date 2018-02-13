@@ -1,23 +1,20 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is put in the public domain.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: fdroidserver 0.9\n"
-"Report-Msgid-Bugs-To: team@f-droid.org\n"
+"Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
+"Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2017-11-22 23:24+0100\n"
-"PO-Revision-Date: 2018-01-22 13:30+0000\n"
-"Last-Translator: Alireza A. A. <alir425p@gmail.com>\n"
-"Language-Team: Persian "
-"<https://hosted.weblate.org/projects/f-droid/fdroidserver/fa/>\n"
-"Language: fa\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.19-dev\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -57,7 +54,6 @@ msgstr ""
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
 msgstr[0] ""
-msgstr[1] ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
@@ -278,7 +274,6 @@ msgstr ""
 msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -586,6 +581,10 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Flattr donation methods belong in the FlattrID flag"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+msgid "Liberapay donation methods belong in the LiberapayID flag"
 msgstr ""
 
 #: ../fdroidserver/build.py
@@ -931,7 +930,7 @@ msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "Options"
-msgstr "تنظیمات"
+msgstr ""
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
@@ -1131,7 +1130,6 @@ msgstr ""
 msgid "Scanner found {} problem"
 msgid_plural "Scanner found {} problems"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../fdroid
 msgid "Set up an app build for a nightly build repo"
@@ -1539,7 +1537,6 @@ msgstr ""
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1561,7 +1558,6 @@ msgstr ""
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
 msgstr[0] ""
-msgstr[1] ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "expected at least one argument"
@@ -1810,7 +1806,6 @@ msgstr ""
 msgid "{0} app, {1} key aliases"
 msgid_plural "{0} apps, {1} key aliases"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1847,10 +1842,8 @@ msgstr ""
 msgid "{} build failed"
 msgid_plural "{} builds failed"
 msgstr[0] ""
-msgstr[1] ""
 
 #: ../fdroidserver/build.py
 msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] ""
-msgstr[1] ""

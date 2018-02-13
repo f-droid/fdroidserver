@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: team@f-droid.org\n"
 "POT-Creation-Date: 2017-11-22 23:24+0100\n"
-"PO-Revision-Date: 2018-01-03 14:39+0000\n"
-"Last-Translator: Davide Neri <davnerix@gmail.com>\n"
+"PO-Revision-Date: 2018-01-30 18:37+0000\n"
+"Last-Translator: Luca D'Amico <damico.luca91@live.it>\n"
 "Language-Team: Italian "
 "<https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
@@ -495,22 +495,25 @@ msgstr "Non usare checksum rsync"
 
 #: ../fdroidserver/stats.py
 msgid "Download logs we don't have"
-msgstr ""
+msgstr "Scarica registri che non abbiamo"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
 msgstr ""
+"Lo scaricamento del repository è gia fallito una volta, non verrà riprovato."
 
 #: ../fdroidserver/verify.py
 #, python-brace-format
 msgid "Downloading {url} failed. {error}"
-msgstr ""
+msgstr "Scaricamento di {url} fallito. {error}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid ""
 "Duplicate build recipe found for versionCode {versionCode} in {linedesc}"
 msgstr ""
+"Trovata ricetta di costruzione duplicata per versionCode {versionCode} in "
+"{linedesc}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -539,7 +542,7 @@ msgstr ""
 
 #: ../fdroidserver/import.py
 msgid "Error while getting repo address"
-msgstr ""
+msgstr "Errore nell'ottenere l'indirizzo del repo"
 
 #: ../fdroid
 msgid "Extract signatures from APKs"
