@@ -1049,10 +1049,12 @@ def scan_apk(apk_file):
         'antiFeatures': set(),
     }
 
-    if SdkToolsPopen(['aapt', 'version'], output=False):
-        scan_apk_aapt(apk, apk_file)
-    else:
+    try:
+        import androguard
+        androguard  # silence pyflakes
         scan_apk_androguard(apk, apk_file)
+    except ImportError:
+        scan_apk_aapt(apk, apk_file)
 
     # Get the signature, or rather the signing key fingerprints
     logging.debug('Getting signature of {0}'.format(os.path.basename(apk_file)))
