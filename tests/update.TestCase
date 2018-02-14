@@ -253,14 +253,14 @@ class UpdateTest(unittest.TestCase):
         apps = fdroidserver.metadata.read_metadata(xref=True)
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
-        self.assertEqual(len(apks), 12)
+        self.assertEqual(len(apks), 13)
         apk = apks[0]
         self.assertEqual(apk['packageName'], 'com.politedroid')
         self.assertEqual(apk['versionCode'], 3)
         self.assertEqual(apk['minSdkVersion'], '3')
         self.assertEqual(apk['targetSdkVersion'], '3')
         self.assertFalse('maxSdkVersion' in apk)
-        apk = apks[5]
+        apk = apks[6]
         self.assertEqual(apk['packageName'], 'obb.main.oldversion')
         self.assertEqual(apk['versionCode'], 1444412523)
         self.assertEqual(apk['minSdkVersion'], '4')
@@ -298,7 +298,6 @@ class UpdateTest(unittest.TestCase):
             raise Exception('This test must be run in the "tests/" subdir')
 
         apk_info = fdroidserver.update.scan_apk('org.dyndns.fules.ck_20.apk')
-
         self.assertEqual(apk_info['icons_src'], {'240': 'res/drawable-hdpi-v4/icon_launcher.png',
                                                  '120': 'res/drawable-ldpi-v4/icon_launcher.png',
                                                  '160': 'res/drawable-mdpi-v4/icon_launcher.png',
@@ -318,6 +317,21 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(apk_info['sig'], '9bf7a6a67f95688daec75eab4b1436ac')
         self.assertEqual(apk_info['hashType'], 'sha256')
         self.assertEqual(apk_info['targetSdkVersion'], '8')
+
+        apk_info = fdroidserver.update.scan_apk('org.bitbucket.tickytacky.mirrormirror_4.apk')
+        self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable-mdpi/mirror.png',
+                                                 '-1': 'res/drawable-mdpi/mirror.png'})
+
+        apk_info = fdroidserver.update.scan_apk('repo/info.zwanenburg.caffeinetile_4.apk')
+        self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_coffee_on.xml',
+                                                 '-1': 'res/drawable/ic_coffee_on.xml'})
+
+        apk_info = fdroidserver.update.scan_apk('repo/com.politedroid_6.apk')
+        self.assertEqual(apk_info['icons_src'], {'120': 'res/drawable-ldpi-v4/icon.png',
+                                                 '160': 'res/drawable-mdpi-v4/icon.png',
+                                                 '240': 'res/drawable-hdpi-v4/icon.png',
+                                                 '320': 'res/drawable-xhdpi-v4/icon.png',
+                                                 '-1': 'res/drawable-mdpi-v4/icon.png'})
 
     def test_scan_apk_no_sig(self):
         config = dict()
@@ -527,7 +541,7 @@ class UpdateTest(unittest.TestCase):
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
         fdroidserver.update.translate_per_build_anti_features(apps, apks)
-        self.assertEqual(len(apks), 12)
+        self.assertEqual(len(apks), 13)
         foundtest = False
         for apk in apks:
             if apk['packageName'] == 'com.politedroid' and apk['versionCode'] == 3:

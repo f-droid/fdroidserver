@@ -61,7 +61,7 @@ APK_PERMISSION_PAT = \
     re.compile(".*(name='(?P<name>.*?)')(.*maxSdkVersion='(?P<maxSdkVersion>.*?)')?.*")
 APK_FEATURE_PAT = re.compile(".*name='([^']*)'.*")
 
-screen_densities = ['640', '480', '320', '240', '160', '120']
+screen_densities = ['65534', '640', '480', '320', '240', '160', '120']
 screen_resolutions = {
     "xxxhdpi": '640',
     "xxhdpi": '480',
@@ -96,9 +96,10 @@ def px_to_dpi(px):
 
 
 def get_icon_dir(repodir, density):
-    if density == '0':
+    if density == '0' or density == '65534':
         return os.path.join(repodir, "icons")
-    return os.path.join(repodir, "icons-%s" % density)
+    else:
+        return os.path.join(repodir, "icons-%s" % density)
 
 
 def get_icon_dirs(repodir):
@@ -1377,7 +1378,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
                                 .format(apkfilename=apkfile) + str(e))
 
         # extract icons from APK zip file
-        iconfilename = "%s.%s.png" % (apk['packageName'], apk['versionCode'])
+        iconfilename = "%s.%s" % (apk['packageName'], apk['versionCode'])
         try:
             empty_densities = extract_apk_icons(iconfilename, apk, apkzip, repodir)
         finally:
@@ -1464,6 +1465,8 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
         if m and m.group(4) == 'png':
             density = screen_resolutions[m.group(2)]
             pngs[m.group(3) + '/' + density] = m.group(0)
+
+    icon_type = None
     empty_densities = []
     for density in screen_densities:
         if density not in apk['icons_src']:
@@ -1471,7 +1474,7 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
             continue
         icon_src = apk['icons_src'][density]
         icon_dir = get_icon_dir(repo_dir, density)
-        icon_dest = os.path.join(icon_dir, icon_filename)
+        icon_type = '.png'
 
         # Extract the icon files per density
         if icon_src.endswith('.xml'):
@@ -1482,59 +1485,68 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
                     icon_src = name
             if icon_src.endswith('.xml'):
                 empty_densities.append(density)
-                continue
+                icon_type = '.xml'
+        icon_dest = os.path.join(icon_dir, icon_filename + icon_type)
+
         try:
             with open(icon_dest, 'wb') as f:
                 f.write(get_icon_bytes(apkzip, icon_src))
-            apk['icons'][density] = icon_filename
+            apk['icons'][density] = icon_filename + icon_type
         except (zipfile.BadZipFile, ValueError, KeyError) as e:
             logging.warning("Error retrieving icon file: %s %s", icon_dest, e)
             del apk['icons_src'][density]
             empty_densities.append(density)
 
-    if '-1' in apk['icons_src'] and not apk['icons_src']['-1'].endswith('.xml'):
+    # '-1' here is a remnant of the parsing of aapt output, meaning "no DPI specified"
+    if '-1' in apk['icons_src']:
         icon_src = apk['icons_src']['-1']
-        icon_path = os.path.join(get_icon_dir(repo_dir, '0'), icon_filename)
+        icon_type = icon_src[-4:]
+        icon_path = os.path.join(get_icon_dir(repo_dir, '0'), icon_filename + icon_type)
         with open(icon_path, 'wb') as f:
             f.write(get_icon_bytes(apkzip, icon_src))
-        im = None
-        try:
-            im = Image.open(icon_path)
-            dpi = px_to_dpi(im.size[0])
-            for density in screen_densities:
-                if density in apk['icons']:
-                    break
-                if density == screen_densities[-1] or dpi >= int(density):
-                    apk['icons'][density] = icon_filename
-                    shutil.move(icon_path,
-                                os.path.join(get_icon_dir(repo_dir, density), icon_filename))
-                    empty_densities.remove(density)
-                    break
-        except Exception as e:
-            logging.warning(_("Failed reading {path}: {error}")
-                            .format(path=icon_path, error=e))
-        finally:
-            if im and hasattr(im, 'close'):
-                im.close()
+        if icon_type == '.png':
+            im = None
+            try:
+                im = Image.open(icon_path)
+                dpi = px_to_dpi(im.size[0])
+                for density in screen_densities:
+                    if density in apk['icons']:
+                        break
+                    if density == screen_densities[-1] or dpi >= int(density):
+                        apk['icons'][density] = icon_filename
+                        shutil.move(icon_path,
+                                    os.path.join(get_icon_dir(repo_dir, density), icon_filename))
+                        empty_densities.remove(density)
+                        break
+            except Exception as e:
+                logging.warning(_("Failed reading {path}: {error}")
+                                .format(path=icon_path, error=e))
+            finally:
+                if im and hasattr(im, 'close'):
+                    im.close()
 
     if apk['icons']:
-        apk['icon'] = icon_filename
+        apk['icon'] = icon_filename + icon_type
 
     return empty_densities
 
 
 def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
     """
-    Resize existing icons for densities missing in the APK to ensure all densities are available
+    Resize existing PNG icons for densities missing in the APK to ensure all densities are available
 
     :param empty_densities: A list of icon densities that are missing
     :param icon_filename: A string representing the icon's file name
     :param apk: A populated dictionary containing APK metadata. Needs to have 'icons' key
     :param repo_dir: The directory of the APK's repository
+
     """
+    icon_filename += '.png'
     # First try resizing down to not lose quality
     last_density = None
     for density in screen_densities:
+        if density == '65534':  # not possible to generate 'anydpi' from other densities
+            continue
         if density not in empty_densities:
             last_density = density
             continue
