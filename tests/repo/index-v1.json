@@ -54,7 +54,6 @@
       "name": "Caffeine Tile",
       "summary": "Test app for extracting icons when an XML one is default",
       "added": 1539129600000,
-      "icon": "info.zwanenburg.caffeinetile.4.xml",
       "packageName": "info.zwanenburg.caffeinetile",
       "lastUpdated": 1539129600000
     },
