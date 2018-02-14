@@ -1240,28 +1240,28 @@ def scan_apk_androguard(apk, apkfile):
 
     xml = apkobject.get_android_manifest_xml()
 
-    for item in xml.getElementsByTagName('uses-permission'):
-        name = str(item.getAttribute("android:name"))
-        maxSdkVersion = item.getAttribute("android:maxSdkVersion")
-        maxSdkVersion = None if maxSdkVersion is '' else int(maxSdkVersion)
+    for item in xml.findall('uses-permission'):
+        name = str(item.attrib['{' + xml.nsmap['android'] + '}name'])
+        maxSdkVersion = item.attrib.get('{' + xml.nsmap['android'] + '}maxSdkVersion')
+        maxSdkVersion = int(maxSdkVersion) if maxSdkVersion else None
         permission = UsesPermission(
             name,
             maxSdkVersion
         )
         apk['uses-permission'].append(permission)
 
-    for item in xml.getElementsByTagName('uses-permission-sdk-23'):
-        name = str(item.getAttribute("android:name"))
-        maxSdkVersion = item.getAttribute("android:maxSdkVersion")
-        maxSdkVersion = None if maxSdkVersion is '' else int(maxSdkVersion)
+    for item in xml.findall('uses-permission-sdk-23'):
+        name = str(item.attrib['{' + xml.nsmap['android'] + '}name'])
+        maxSdkVersion = item.attrib.get('{' + xml.nsmap['android'] + '}maxSdkVersion')
+        maxSdkVersion = int(maxSdkVersion) if maxSdkVersion else None
         permission_sdk_23 = UsesPermissionSdk23(
             name,
             maxSdkVersion
         )
         apk['uses-permission-sdk-23'].append(permission_sdk_23)
 
-    for item in xml.getElementsByTagName('uses-feature'):
-        feature = str(item.getAttribute("android:name"))
+    for item in xml.findall('uses-feature'):
+        feature = str(item.attrib['{' + xml.nsmap['android'] + '}name'])
         if feature != "android.hardware.screen.portrait" \
                 and feature != "android.hardware.screen.landscape":
             if feature.startswith("android.feature."):
