@@ -707,8 +707,7 @@ class UpdateTest(unittest.TestCase):
 
         apk_info = fdroidserver.update.scan_apk('repo/info.zwanenburg.caffeinetile_4.apk')
         self.assertEqual(apk_info.get('versionName'), '1.3')
-        self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_coffee_on.xml',
-                                                 '-1': 'res/drawable/ic_coffee_on.xml'})
+        self.assertEqual(apk_info['icons_src'], {})
 
         apk_info = fdroidserver.update.scan_apk('repo/com.politedroid_6.apk')
         self.assertEqual(apk_info.get('versionName'), '1.5')

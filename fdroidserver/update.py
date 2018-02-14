@@ -1423,7 +1423,7 @@ def _get_apk_icons_src(apkfile, icon_name):
 
     """
     icons_src = dict()
-    density_re = re.compile(r'^res/(.*)/{}\.(png|xml)$'.format(icon_name))
+    density_re = re.compile(r'^res/(.*)/{}\.png$'.format(icon_name))
     with zipfile.ZipFile(apkfile) as zf:
         for filename in zf.namelist():
             m = density_re.match(filename)
@@ -1686,7 +1686,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
                                 .format(apkfilename=apkfile) + str(e))
 
         # extract icons from APK zip file
-        iconfilename = "%s.%s" % (apk['packageName'], apk['versionCode'])
+        iconfilename = "%s.%s.png" % (apk['packageName'], apk['versionCode'])
         try:
             empty_densities = extract_apk_icons(iconfilename, apk, apkzip, repodir)
         finally:
@@ -1773,8 +1773,6 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
         if m and m.group(4) == 'png':
             density = screen_resolutions[m.group(2)]
             pngs[m.group(3) + '/' + density] = m.group(0)
-
-    icon_type = None
     empty_densities = []
     for density in screen_densities:
         if density not in apk['icons_src']:
@@ -1782,7 +1780,7 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
             continue
         icon_src = apk['icons_src'][density]
         icon_dir = get_icon_dir(repo_dir, density)
-        icon_type = '.png'
+        icon_dest = os.path.join(icon_dir, icon_filename)
 
         # Extract the icon files per density
         if icon_src.endswith('.xml'):
@@ -1793,48 +1791,44 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
                     icon_src = name
             if icon_src.endswith('.xml'):
                 empty_densities.append(density)
-                icon_type = '.xml'
-        icon_dest = os.path.join(icon_dir, icon_filename + icon_type)
-
+                continue
         try:
             with open(icon_dest, 'wb') as f:
                 f.write(get_icon_bytes(apkzip, icon_src))
-            apk['icons'][density] = icon_filename + icon_type
+            apk['icons'][density] = icon_filename
         except (zipfile.BadZipFile, ValueError, KeyError) as e:
             logging.warning("Error retrieving icon file: %s %s", icon_dest, e)
             del apk['icons_src'][density]
             empty_densities.append(density)
 
     # '-1' here is a remnant of the parsing of aapt output, meaning "no DPI specified"
-    if '-1' in apk['icons_src']:
+    if '-1' in apk['icons_src'] and not apk['icons_src']['-1'].endswith('.xml'):
         icon_src = apk['icons_src']['-1']
-        icon_type = icon_src[-4:]
-        icon_path = os.path.join(get_icon_dir(repo_dir, '0'), icon_filename + icon_type)
+        icon_path = os.path.join(get_icon_dir(repo_dir, '0'), icon_filename)
         with open(icon_path, 'wb') as f:
             f.write(get_icon_bytes(apkzip, icon_src))
-        if icon_type == '.png':
-            im = None
-            try:
-                im = Image.open(icon_path)
-                dpi = px_to_dpi(im.size[0])
-                for density in screen_densities:
-                    if density in apk['icons']:
-                        break
-                    if density == screen_densities[-1] or dpi >= int(density):
-                        apk['icons'][density] = icon_filename + icon_type
-                        shutil.move(icon_path,
-                                    os.path.join(get_icon_dir(repo_dir, density), icon_filename + icon_type))
-                        empty_densities.remove(density)
-                        break
-            except Exception as e:
-                logging.warning(_("Failed reading {path}: {error}")
-                                .format(path=icon_path, error=e))
-            finally:
-                if im and hasattr(im, 'close'):
-                    im.close()
+        im = None
+        try:
+            im = Image.open(icon_path)
+            dpi = px_to_dpi(im.size[0])
+            for density in screen_densities:
+                if density in apk['icons']:
+                    break
+                if density == screen_densities[-1] or dpi >= int(density):
+                    apk['icons'][density] = icon_filename
+                    shutil.move(icon_path,
+                                os.path.join(get_icon_dir(repo_dir, density), icon_filename))
+                    empty_densities.remove(density)
+                    break
+        except Exception as e:
+            logging.warning(_("Failed reading {path}: {error}")
+                            .format(path=icon_path, error=e))
+        finally:
+            if im and hasattr(im, 'close'):
+                im.close()
 
     if apk['icons']:
-        apk['icon'] = icon_filename + icon_type
+        apk['icon'] = icon_filename
 
     return empty_densities
 
@@ -1849,7 +1843,6 @@ def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
     :param repo_dir: The directory of the APK's repository
 
     """
-    icon_filename += '.png'
     # First try resizing down to not lose quality
     last_density = None
     for density in screen_densities:
