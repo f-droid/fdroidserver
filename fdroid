@@ -34,6 +34,7 @@ commands = OrderedDict([
     ("publish", _("Sign and place packages in the repo")),
     ("gpgsign", _("Add PGP signatures using GnuPG for packages in repo")),
     ("update", _("Update repo information for new packages")),
+    ("deploy", _("Interact with the repo HTTP server")),
     ("verify", _("Verify the integrity of downloaded packages")),
     ("checkupdates", _("Check for updates to applications")),
     ("import", _("Add a new application from its source code")),
@@ -44,7 +45,7 @@ commands = OrderedDict([
     ("scanner", _("Scan the source code of a package")),
     ("dscanner", _("Dynamically scan APKs post build")),
     ("stats", _("Update the stats of the repo")),
-    ("server", _("Interact with the repo HTTP server")),
+    ("server", _("Old, deprecated name for fdroid deploy")),
     ("signindex", _("Sign indexes created using update --nosign")),
     ("btlog", _("Update the binary transparency log for a URL")),
     ("signatures", _("Extract signatures from APKs")),
@@ -121,6 +122,11 @@ def main():
     if verbose and quiet:
         logging.critical("Specifying --verbose and --quiet and the same time is silly")
         sys.exit(1)
+
+    # temporary workaround until server.py becomes deploy.py
+    if command == 'deploy':
+        command = 'server'
+        sys.argv.insert(1, 'update')
 
     # Trick optparse into displaying the right usage when --help is used.
     sys.argv[0] += ' ' + command
