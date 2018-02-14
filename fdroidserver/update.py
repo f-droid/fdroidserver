@@ -1069,7 +1069,9 @@ def scan_apk(apk_file):
 
     if 'minSdkVersion' not in apk:
         logging.warning("No SDK version information found in {0}".format(apk_file))
-        apk['minSdkVersion'] = 1
+        apk['minSdkVersion'] = 3  # aapt defaults to 3 as the min
+    if 'targetSdkVersion' not in apk:
+        apk['targetSdkVersion'] = apk['minSdkVersion']
 
     # Check for known vulnerabilities
     if has_known_vulnerability(apk_file):
@@ -1125,9 +1127,6 @@ def scan_apk_aapt(apk, apkfile):
                               + ' is not a valid minSdkVersion!')
             else:
                 apk['minSdkVersion'] = m.group(1)
-                # if target not set, default to min
-                if 'targetSdkVersion' not in apk:
-                    apk['targetSdkVersion'] = m.group(1)
         elif line.startswith("targetSdkVersion:"):
             m = re.match(APK_SDK_VERSION_PAT, line)
             if m is None:
@@ -1209,8 +1208,10 @@ def scan_apk_androguard(apk, apkfile):
 
     if apkobject.get_max_sdk_version() is not None:
         apk['maxSdkVersion'] = apkobject.get_max_sdk_version()
-    apk['minSdkVersion'] = apkobject.get_min_sdk_version()
-    apk['targetSdkVersion'] = apkobject.get_target_sdk_version()
+    if apkobject.get_min_sdk_version() is not None:
+        apk['minSdkVersion'] = apkobject.get_min_sdk_version()
+    if apkobject.get_target_sdk_version() is not None:
+        apk['targetSdkVersion'] = apkobject.get_target_sdk_version()
 
     icon_id = int(apkobject.get_element("application", "icon").replace("@", "0x"), 16)
     icon_name = arsc.get_id(apk['packageName'], icon_id)[1]
