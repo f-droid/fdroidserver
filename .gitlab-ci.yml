@@ -46,15 +46,13 @@ debian_testing:
     - apt update -y
     - apt dist-upgrade -y
     - apt-get install -y --no-install-recommends
-        aapt adb android-platform-tools-base android-sdk-common fdroidserver
+        aapt adb androguard android-platform-tools-base android-sdk-common fdroidserver
         git gnupg python3-setuptools zipalign
+    - python3 -c 'import fdroidserver'
+    - python3 -c 'import androguard'
     - export ANDROID_HOME=/usr/lib/android-sdk
     - export LANG=C.UTF-8
     - cd tests
-    - rm -f install.TestCase  # fails frequently and is unimportant
-    - echo "Debian's build-tools is too old, remove once the package has been updated"
-    - sed -i '/android.permission.READ_EXTERNAL_STORAGE/d' repo/index.xml
-    - sed -i '/^diff -uw .*index-v1.json$/d' run-tests
     - ./run-tests
 
 ubuntu_lts:
