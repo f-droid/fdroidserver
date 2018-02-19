@@ -1049,10 +1049,12 @@ def scan_apk(apk_file):
         'antiFeatures': set(),
     }
 
-    if SdkToolsPopen(['aapt', 'version'], output=False):
-        scan_apk_aapt(apk, apk_file)
-    else:
+    try:
+        import androguard
+        androguard  # silence pyflakes
         scan_apk_androguard(apk, apk_file)
+    except ImportError:
+        scan_apk_aapt(apk, apk_file)
 
     # Get the signature, or rather the signing key fingerprints
     logging.debug('Getting signature of {0}'.format(os.path.basename(apk_file)))
@@ -1069,7 +1071,9 @@ def scan_apk(apk_file):
 
     if 'minSdkVersion' not in apk:
         logging.warning("No SDK version information found in {0}".format(apk_file))
-        apk['minSdkVersion'] = 1
+        apk['minSdkVersion'] = 3  # aapt defaults to 3 as the min
+    if 'targetSdkVersion' not in apk:
+        apk['targetSdkVersion'] = apk['minSdkVersion']
 
     # Check for known vulnerabilities
     if has_known_vulnerability(apk_file):
@@ -1125,9 +1129,6 @@ def scan_apk_aapt(apk, apkfile):
                               + ' is not a valid minSdkVersion!')
             else:
                 apk['minSdkVersion'] = m.group(1)
-                # if target not set, default to min
-                if 'targetSdkVersion' not in apk:
-                    apk['targetSdkVersion'] = m.group(1)
         elif line.startswith("targetSdkVersion:"):
             m = re.match(APK_SDK_VERSION_PAT, line)
             if m is None:
@@ -1209,8 +1210,10 @@ def scan_apk_androguard(apk, apkfile):
 
     if apkobject.get_max_sdk_version() is not None:
         apk['maxSdkVersion'] = apkobject.get_max_sdk_version()
-    apk['minSdkVersion'] = apkobject.get_min_sdk_version()
-    apk['targetSdkVersion'] = apkobject.get_target_sdk_version()
+    if apkobject.get_min_sdk_version() is not None:
+        apk['minSdkVersion'] = apkobject.get_min_sdk_version()
+    if apkobject.get_target_sdk_version() is not None:
+        apk['targetSdkVersion'] = apkobject.get_target_sdk_version()
 
     icon_id = int(apkobject.get_element("application", "icon").replace("@", "0x"), 16)
     icon_name = arsc.get_id(apk['packageName'], icon_id)[1]
@@ -1239,28 +1242,28 @@ def scan_apk_androguard(apk, apkfile):
 
     xml = apkobject.get_android_manifest_xml()
 
-    for item in xml.getElementsByTagName('uses-permission'):
-        name = str(item.getAttribute("android:name"))
-        maxSdkVersion = item.getAttribute("android:maxSdkVersion")
-        maxSdkVersion = None if maxSdkVersion is '' else int(maxSdkVersion)
+    for item in xml.findall('uses-permission'):
+        name = str(item.attrib['{' + xml.nsmap['android'] + '}name'])
+        maxSdkVersion = item.attrib.get('{' + xml.nsmap['android'] + '}maxSdkVersion')
+        maxSdkVersion = int(maxSdkVersion) if maxSdkVersion else None
         permission = UsesPermission(
             name,
             maxSdkVersion
         )
         apk['uses-permission'].append(permission)
 
-    for item in xml.getElementsByTagName('uses-permission-sdk-23'):
-        name = str(item.getAttribute("android:name"))
-        maxSdkVersion = item.getAttribute("android:maxSdkVersion")
-        maxSdkVersion = None if maxSdkVersion is '' else int(maxSdkVersion)
+    for item in xml.findall('uses-permission-sdk-23'):
+        name = str(item.attrib['{' + xml.nsmap['android'] + '}name'])
+        maxSdkVersion = item.attrib.get('{' + xml.nsmap['android'] + '}maxSdkVersion')
+        maxSdkVersion = int(maxSdkVersion) if maxSdkVersion else None
         permission_sdk_23 = UsesPermissionSdk23(
             name,
             maxSdkVersion
         )
         apk['uses-permission-sdk-23'].append(permission_sdk_23)
 
-    for item in xml.getElementsByTagName('uses-feature'):
-        feature = str(item.getAttribute("android:name"))
+    for item in xml.findall('uses-feature'):
+        feature = str(item.attrib['{' + xml.nsmap['android'] + '}name'])
         if feature != "android.hardware.screen.portrait" \
                 and feature != "android.hardware.screen.landscape":
             if feature.startswith("android.feature."):
