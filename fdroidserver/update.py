@@ -1516,9 +1516,9 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
                     if density in apk['icons']:
                         break
                     if density == screen_densities[-1] or dpi >= int(density):
-                        apk['icons'][density] = icon_filename
+                        apk['icons'][density] = icon_filename + icon_type
                         shutil.move(icon_path,
-                                    os.path.join(get_icon_dir(repo_dir, density), icon_filename))
+                                    os.path.join(get_icon_dir(repo_dir, density), icon_filename + icon_type))
                         empty_densities.remove(density)
                         break
             except Exception as e:
