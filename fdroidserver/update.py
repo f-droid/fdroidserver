@@ -1268,7 +1268,9 @@ def scan_apk_androguard(apk, apkfile):
                 and feature != "android.hardware.screen.landscape":
             if feature.startswith("android.feature."):
                 feature = feature[16:]
-        apk['features'].append(feature)
+        required = item.attrib.get('{' + xml.nsmap['android'] + '}required')
+        if required is None or required == 'true':
+            apk['features'].append(feature)
 
 
 def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
