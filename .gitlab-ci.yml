@@ -72,10 +72,10 @@ ubuntu_lts:
         git gnupg python3-setuptools unzip wget zipalign
     - export ANDROID_HOME=/usr/lib/android-sdk
     # xenial's aapt is too old
-    - wget --no-verbose https://dl.google.com/android/repository/build-tools_r27.0.1-linux.zip
-    - unzip -q build-tools_r27.0.1-linux.zip
-    - rm build-tools_r27.0.1-linux.zip
-    - mv android-8.1.0 $ANDROID_HOME/build-tools/27.0.1
+    - wget --no-verbose https://dl.google.com/android/repository/build-tools_r27.0.3-linux.zip
+    - unzip -q build-tools_r27.0.3-linux.zip
+    - rm build-tools_r27.0.3-linux.zip
+    - mv android-8.1.0 $ANDROID_HOME/build-tools/27.0.3
     - export LANG=C.UTF-8
     - cd tests
     - ./run-tests
