@@ -1251,6 +1251,12 @@ def scan_apk_androguard(apk, apkfile):
             maxSdkVersion
         )
         apk['uses-permission'].append(permission)
+    for name, maxSdkVersion in apkobject.get_uses_implied_permission_list():
+        permission = UsesPermission(
+            name,
+            maxSdkVersion
+        )
+        apk['uses-permission'].append(permission)
 
     for item in xml.findall('uses-permission-sdk-23'):
         name = str(item.attrib['{' + xml.nsmap['android'] + '}name'])
