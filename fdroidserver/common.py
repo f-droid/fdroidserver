@@ -2278,7 +2278,7 @@ def place_srclib(root_dir, number, libpath):
             o.write('android.library.reference.%d=%s\n' % (number, relpath))
 
 
-apk_sigfile = re.compile(r'META-INF/[0-9A-Za-z]+\.(SF|RSA|DSA|EC)')
+apk_sigfile = re.compile(r'META-INF/[0-9A-Za-z_\-]+\.(SF|RSA|DSA|EC)')
 
 
 def signer_fingerprint_short(sig):
