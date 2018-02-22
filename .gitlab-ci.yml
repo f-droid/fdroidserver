@@ -62,7 +62,7 @@ ubuntu_lts:
   only:
     - master@fdroid/fdroidserver
   script:
-    - apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-key 9AAC253193B65D4DF1D0A13EEC4632C79C5E0151
+    - while ! apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-key 9AAC253193B65D4DF1D0A13EEC4632C79C5E0151; do sleep 15; done
     - export RELEASE=`sed -n 's,^deb [^ ][^ ]* \([a-z]*\).*,\1,p' /etc/apt/sources.list | head -1`
     - echo "deb http://ppa.launchpad.net/fdroid/fdroidserver/ubuntu $RELEASE main" >> /etc/apt/sources.list
     - apt update -y
