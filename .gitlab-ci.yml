@@ -43,18 +43,18 @@ debian_testing:
   only:
     - master@fdroid/fdroidserver
   script:
-    - apt update -y
-    - apt dist-upgrade -y
-    - apt-get install -y --no-install-recommends
-        aapt adb android-platform-tools-base android-sdk-common fdroidserver
-        git gnupg python3-setuptools zipalign
+    - apt-get -qy update
+    - apt-get -qy dist-upgrade
+    - apt-get -qy install --no-install-recommends
+        fdroidserver git gnupg python3-setuptools
+    - sed -i -e 's,testing,sid,g' -e  's,testing,sid,g' /etc/apt/sources.list
+    - apt-get -qy update
+    - apt-get install -y --no-install-recommends aapt androguard android-platform-tools-base zipalign
+    - python3 -c 'import fdroidserver'
+    - python3 -c 'import androguard'
     - export ANDROID_HOME=/usr/lib/android-sdk
     - export LANG=C.UTF-8
     - cd tests
-    - rm -f install.TestCase  # fails frequently and is unimportant
-    - echo "Debian's build-tools is too old, remove once the package has been updated"
-    - sed -i '/android.permission.READ_EXTERNAL_STORAGE/d' repo/index.xml
-    - sed -i '/^diff -uw .*index-v1.json$/d' run-tests
     - ./run-tests
 
 ubuntu_lts:
@@ -62,20 +62,20 @@ ubuntu_lts:
   only:
     - master@fdroid/fdroidserver
   script:
-    - apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-key 9AAC253193B65D4DF1D0A13EEC4632C79C5E0151
+    - while ! apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-key 9AAC253193B65D4DF1D0A13EEC4632C79C5E0151; do sleep 15; done
     - export RELEASE=`sed -n 's,^deb [^ ][^ ]* \([a-z]*\).*,\1,p' /etc/apt/sources.list | head -1`
     - echo "deb http://ppa.launchpad.net/fdroid/fdroidserver/ubuntu $RELEASE main" >> /etc/apt/sources.list
-    - apt update -y
-    - apt dist-upgrade -y
-    - apt-get install -y --no-install-recommends
+    - apt-get -qy update
+    - apt-get -qy dist-upgrade
+    - apt-get -qy install --no-install-recommends
         aapt adb android-platform-tools-base android-sdk-common fdroidserver
         git gnupg python3-setuptools unzip wget zipalign
     - export ANDROID_HOME=/usr/lib/android-sdk
     # xenial's aapt is too old
-    - wget --no-verbose https://dl.google.com/android/repository/build-tools_r27.0.1-linux.zip
-    - unzip -q build-tools_r27.0.1-linux.zip
-    - rm build-tools_r27.0.1-linux.zip
-    - mv android-8.1.0 $ANDROID_HOME/build-tools/27.0.1
+    - wget --no-verbose https://dl.google.com/android/repository/build-tools_r27.0.3-linux.zip
+    - unzip -q build-tools_r27.0.3-linux.zip
+    - rm build-tools_r27.0.3-linux.zip
+    - mv android-8.1.0 $ANDROID_HOME/build-tools/27.0.3
     - export LANG=C.UTF-8
     - cd tests
     - ./run-tests

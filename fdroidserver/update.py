@@ -1049,11 +1049,9 @@ def scan_apk(apk_file):
         'antiFeatures': set(),
     }
 
-    try:
-        import androguard
-        androguard  # silence pyflakes
+    if common.use_androguard():
         scan_apk_androguard(apk, apk_file)
-    except ImportError:
+    else:
         scan_apk_aapt(apk, apk_file)
 
     # Get the signature, or rather the signing key fingerprints
@@ -1251,6 +1249,12 @@ def scan_apk_androguard(apk, apkfile):
             maxSdkVersion
         )
         apk['uses-permission'].append(permission)
+    for name, maxSdkVersion in apkobject.get_uses_implied_permission_list():
+        permission = UsesPermission(
+            name,
+            maxSdkVersion
+        )
+        apk['uses-permission'].append(permission)
 
     for item in xml.findall('uses-permission-sdk-23'):
         name = str(item.attrib['{' + xml.nsmap['android'] + '}name'])
@@ -1268,7 +1272,9 @@ def scan_apk_androguard(apk, apkfile):
                 and feature != "android.hardware.screen.landscape":
             if feature.startswith("android.feature."):
                 feature = feature[16:]
-        apk['features'].append(feature)
+        required = item.attrib.get('{' + xml.nsmap['android'] + '}required')
+        if required is None or required == 'true':
+            apk['features'].append(feature)
 
 
 def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
@@ -1316,7 +1322,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
             return True, None, False
 
         # Check for debuggable apks...
-        if common.isApkAndDebuggable(apkfile):
+        if common.is_apk_and_debuggable(apkfile):
             logging.warning('{0} is set to android:debuggable="true"'.format(apkfile))
 
         if options.rename_apks:
