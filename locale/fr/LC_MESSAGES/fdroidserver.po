@@ -3,25 +3,14 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: fdroidserver 0.9\n"
-"Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2018-02-13 09:01+0100\n"
-"PO-Revision-Date: 2017-11-27 12:40+0100\n"
-"Last-Translator: Ldm Public <ldmpub@gmail.com>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
-"Language: fr\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.18-dev\n"
+msgstr "Project-Id-Version: fdroidserver 0.9\nReport-Msgid-Bugs-To: team@f-droid.org\nPOT-Creation-Date: 2018-02-13 09:01+0100\nPO-Revision-Date: 2018-02-20 15:34+0000\nLast-Translator: Anthony Chaput <thonyc4@mailoo.org>\nLanguage-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\nLanguage: fr\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n > 1;\nX-Generator: Weblate 2.19.1\n"
 
 #: ../fdroidserver/nightly.py
+#, fuzzy
 msgid ""
 "\n"
 "SSH Public Key to be used as Deploy Key:"
-msgstr ""
+msgstr "\nClé Publique SSH à utiliser comme Clé de Déploiement :"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -33,39 +22,39 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr ""
+msgstr "\"%s/\" n'a pas de fichier de métadonnées correspondant !"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains outdated {name} ({version})"
-msgstr ""
+msgstr "\"{path}\" contient {name} obsolète ({version})"
 
 #: ../fdroidserver/update.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
-msgstr ""
+msgstr "\"{path}\" contient {name} récent ({version})"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr ""
+msgstr "\"{path}\" existe mais s3cmd n'est pas installé !"
 
 #: ../fdroidserver/metadata.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "\"{path}\" is not an accepted format, convert to: {formats}"
-msgstr ""
+msgstr "\"{path}\" n'est pas un format autorisé, convertir en : {formats}"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "L'option %(option)s requiert %(number)d argument"
+msgstr[1] "L'option %(option)s requiert %(number)d arguments"
 
 #: ../fdroidserver/mirror.py
-#, fuzzy, python-format
+#, python-format
 msgid "%(prog)s [options] url"
-msgstr "%prog [options]"
+msgstr "%(prog)s [options] url"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
@@ -118,20 +107,20 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in 'config.py'!"
-msgstr ""
+msgstr "'sdk_path' n'est pas configuré dans 'config.py' !"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
 #. translated or transliterated.
 #: ../fdroidserver/common.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
-msgstr ""
+msgstr "'{aapt}' est obsolète, fdroid requiert buid-tools-23.0.0 ou plus !"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
-msgstr ""
+msgstr "'{aapt}' est obsolète, fdroid requiert build-tools-{version} ou plus !"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -168,7 +157,7 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
-msgstr ""
+msgstr "/issues est manquant"
 
 #: ../fdroidserver/mirror.py
 #, fuzzy
@@ -1907,7 +1896,7 @@ msgstr "L'option %s ne doit pas avoir d'argument"
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
-msgstr ""
+msgstr "option --%s pas un unique préfixe "
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
@@ -1992,7 +1981,7 @@ msgstr "arguments non reconnu : %s"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
-msgstr ""
+msgstr "permissions dangereuses sur '{config_file}' (doit être 0600) !"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 msgid "usage: "
