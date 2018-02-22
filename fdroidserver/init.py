@@ -131,7 +131,9 @@ def main():
         logging.info('Try running `fdroid init` in an empty directory.')
         raise FDroidException('Repository already exists.')
 
-    if 'aapt' not in test_config or not os.path.isfile(test_config['aapt']):
+    if common.use_androguard():
+        pass
+    elif 'aapt' not in test_config or not os.path.isfile(test_config['aapt']):
         # try to find a working aapt, in all the recent possible paths
         build_tools = os.path.join(test_config['sdk_path'], 'build-tools')
         aaptdirs = []
