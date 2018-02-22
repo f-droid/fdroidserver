@@ -140,7 +140,7 @@ class CommonTest(unittest.TestCase):
         testfiles.append(os.path.join(self.basedir, 'urzip-badsig.apk'))
         testfiles.append(os.path.join(self.basedir, 'urzip-badcert.apk'))
         for apkfile in testfiles:
-            debuggable = fdroidserver.common.isApkAndDebuggable(apkfile)
+            debuggable = fdroidserver.common.is_apk_and_debuggable(apkfile)
             self.assertTrue(debuggable,
                             "debuggable APK state was not properly parsed!")
         # these are set NOT debuggable
@@ -148,7 +148,7 @@ class CommonTest(unittest.TestCase):
         testfiles.append(os.path.join(self.basedir, 'urzip-release.apk'))
         testfiles.append(os.path.join(self.basedir, 'urzip-release-unsigned.apk'))
         for apkfile in testfiles:
-            debuggable = fdroidserver.common.isApkAndDebuggable(apkfile)
+            debuggable = fdroidserver.common.is_apk_and_debuggable(apkfile)
             self.assertFalse(debuggable,
                              "debuggable APK state was not properly parsed!")
 

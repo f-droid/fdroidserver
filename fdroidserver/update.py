@@ -1324,7 +1324,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
             return True, None, False
 
         # Check for debuggable apks...
-        if common.isApkAndDebuggable(apkfile):
+        if common.is_apk_and_debuggable(apkfile):
             logging.warning('{0} is set to android:debuggable="true"'.format(apkfile))
 
         if options.rename_apks:

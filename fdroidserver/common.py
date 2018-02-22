@@ -1927,7 +1927,25 @@ def get_file_extension(filename):
     return os.path.splitext(filename)[1].lower()[1:]
 
 
-def get_apk_debuggable_aapt(apkfile):
+def use_androguard():
+    """Report if androguard is available, and config its debug logging"""
+
+    try:
+        import androguard
+        if use_androguard.show_path:
+            logging.debug(_('Using androguard from "{path}"').format(path=androguard.__file__))
+            use_androguard.show_path = False
+        if options and options.verbose:
+            logging.getLogger("androguard.axml").setLevel(logging.INFO)
+        return True
+    except ImportError:
+        return False
+
+
+use_androguard.show_path = True
+
+
+def is_apk_and_debuggable_aapt(apkfile):
     p = SdkToolsPopen(['aapt', 'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
                       output=False)
     if p.returncode != 0:
@@ -1938,7 +1956,7 @@ def get_apk_debuggable_aapt(apkfile):
     return False
 
 
-def get_apk_debuggable_androguard(apkfile):
+def is_apk_and_debuggable_androguard(apkfile):
     try:
         from androguard.core.bytecodes.apk import APK
     except ImportError:
@@ -1952,7 +1970,7 @@ def get_apk_debuggable_androguard(apkfile):
     return False
 
 
-def isApkAndDebuggable(apkfile):
+def is_apk_and_debuggable(apkfile):
     """Returns True if the given file is an APK and is debuggable
 
     :param apkfile: full path to the apk to check"""
@@ -1960,10 +1978,10 @@ def isApkAndDebuggable(apkfile):
     if get_file_extension(apkfile) != 'apk':
         return False
 
-    if SdkToolsPopen(['aapt', 'version'], output=False):
-        return get_apk_debuggable_aapt(apkfile)
+    if use_androguard():
+        return is_apk_and_debuggable_androguard(apkfile)
     else:
-        return get_apk_debuggable_androguard(apkfile)
+        return is_apk_and_debuggable_aapt(apkfile)
 
 
 def get_apk_id_aapt(apkfile):
