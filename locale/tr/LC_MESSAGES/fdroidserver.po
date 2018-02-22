@@ -3,37 +3,25 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: fdroidserver 0.9\n"
-"Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2018-02-13 09:01+0100\n"
-"PO-Revision-Date: 2018-01-10 18:40+0000\n"
-"Last-Translator: monolifed <monolifed@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
-"Language: tr\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.19-dev\n"
+msgstr "Project-Id-Version: fdroidserver 0.9\nReport-Msgid-Bugs-To: team@f-droid.org\nPOT-Creation-Date: 2018-02-13 09:01+0100\nPO-Revision-Date: 2018-02-14 15:44+0000\nLast-Translator: monolifed <monolifed@gmail.com>\nLanguage-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\nLanguage: tr\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 2.19-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
 "\n"
 "SSH Public Key to be used as Deploy Key:"
-msgstr ""
+msgstr "\nDağıtım Anahtarı olarak kullanılacak SSH Açık Anahtar:"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid ""
 "\n"
 "{path} encoded for the DEBUG_KEYSTORE secret variable:"
-msgstr ""
+msgstr "\nDEBUG_KEYSTORE gizli değişkeni için kodlanmış {path}:"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr ""
+msgstr "\"%s/\" eşleşen üst veri dosyasına sahip değil!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -48,7 +36,7 @@ msgstr "\"{path}\" en son {name} ({version}) içeriyor"
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr ""
+msgstr "\"{path}\" var ancak s3cmd kurulu değil!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -59,13 +47,13 @@ msgstr "\"{path}\" kabul edilebilir bir tür değil, şuna dönüştürün: {for
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(option)s seçeneği %(number)d argüman gerektirir"
+msgstr[1] "%(option)s seçeneği %(number)d argüman gerektirir"
 
 #: ../fdroidserver/mirror.py
-#, fuzzy, python-format
+#, python-format
 msgid "%(prog)s [options] url"
-msgstr "%prog [options]"
+msgstr "%(prog)s [seçenekler] url"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
@@ -75,7 +63,7 @@ msgstr "%(prog)s: hata: %(message)s\n"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "%d problems found"
-msgstr ""
+msgstr "%d sorun bulundu"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "%prog [options]"
@@ -129,9 +117,9 @@ msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
 msgstr "'{aapt}' çok eski, fdroid build-tools-23.0.0 veya daha yenisini gerektirir!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
-msgstr "'{aapt}' çok eski, fdroid build-tools-23.0.0 veya daha yenisini gerektirir!"
+msgstr "'{aapt}' çok eski, fdroid build-tools-{version} veya daha yenisini gerektirir!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -141,7 +129,7 @@ msgstr "'{apkfilename}' zaten {dev} üzerinde kurulu."
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{field}' will be in random order! Use () or [] brackets if order is important!"
-msgstr ""
+msgstr "'{field}' rastgele sırada olacak! Sıra önemliyse () veya [] parantez kullanın!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -151,7 +139,7 @@ msgstr "'{path}' yürütülemedi!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
-msgstr ""
+msgstr "'{value}' {appid} içinde geçerli {field} değil. Regex ifadesi: {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -171,9 +159,8 @@ msgid "/issues is missing"
 msgstr "/issues eksik"
 
 #: ../fdroidserver/mirror.py
-#, fuzzy
 msgid "A URL is required as an argument!"
-msgstr "şeçenek -%s argüman gerektirir"
+msgstr "Bir URL, argüman olarak gereklidir!"
 
 #: ../fdroid
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -629,9 +616,8 @@ msgid "Failed to sign application"
 msgstr ""
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Failed to zipalign application"
-msgstr "Uygulama hizalama başarısız oldu"
+msgstr "Uygulama zipalign başarısız oldu"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -995,9 +981,8 @@ msgid "Nothing to do for {appid}."
 msgstr ""
 
 #: ../fdroidserver/init.py
-#, fuzzy
 msgid "Now set these in config.py:"
-msgstr "'sdk_path' 'config.py' içinde ayarlı değil!"
+msgstr "Şimdi bunları config.py içinde ayarlayın:"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -1759,9 +1744,8 @@ msgid "fdroid [-h|--help|--version] <command> [<args>]"
 msgstr "fdroid [-h|--help|--version] <komut>[<argümanlar>]"
 
 #: ../fdroid
-#, fuzzy
 msgid "fdroid [<command>] [-h|--help|--version|<args>]"
-msgstr "fdroid [-h|--help|--version] <komut>[<argümanlar>]"
+msgstr "fdroid [<komut>] [-h|--help|--version|<argümanlar>]"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "floating-point"
@@ -1772,9 +1756,8 @@ msgid "force errors to be warnings, or ignore"
 msgstr "hataları uyarı olmaya zorla veya yok say"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy
 msgid "force metadata errors (default) to be warnings, or to be ignored."
-msgstr "hataları uyarı olmaya zorla veya yok say"
+msgstr "üst veri hatalarının (öntanımlı) uyarı olmasını veya yok sayılmasını zorunlu kıl."
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"

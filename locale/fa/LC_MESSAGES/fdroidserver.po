@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: fdroidserver 0.9\n"
-"Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2018-02-13 09:01+0100\n"
-"PO-Revision-Date: 2018-01-22 13:30+0000\n"
-"Last-Translator: Alireza A. A. <alir425p@gmail.com>\n"
-"Language-Team: Persian <https://hosted.weblate.org/projects/f-droid/fdroidserver/fa/>\n"
-"Language: fa\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.19-dev\n"
+msgstr "Project-Id-Version: fdroidserver 0.9\nReport-Msgid-Bugs-To: team@f-droid.org\nPOT-Creation-Date: 2018-02-13 09:01+0100\nPO-Revision-Date: 2018-02-14 15:41+0000\nLast-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\nLanguage-Team: Persian <https://hosted.weblate.org/projects/f-droid/fdroidserver/fa/>\nLanguage: fa\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n > 1;\nX-Generator: Weblate 2.19-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1031,7 +1019,7 @@ msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "Options"
-msgstr "تنظیمات"
+msgstr "انتخاب‌ها"
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
