@@ -1990,7 +1990,7 @@ def get_apk_id_aapt(apkfile):
     :param apkfile: path to an APK file.
     :returns: triplet (appid, version code, version name)
     """
-    r = re.compile("package: name='(?P<appid>.*)' versionCode='(?P<vercode>.*)' versionName='(?P<vername>.*)' platformBuildVersionName='.*'")
+    r = re.compile("^package: name='(?P<appid>.*)' versionCode='(?P<vercode>.*)' versionName='(?P<vername>.*)'.*")
     p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
     for line in p.output.splitlines():
         m = r.match(line)
