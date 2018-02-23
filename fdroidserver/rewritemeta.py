@@ -36,7 +36,11 @@ def proper_format(app):
     # read in metadata.py
     with open(app.metadatapath, 'r', encoding='utf8') as f:
         cur_content = f.read()
-    metadata.write_txt(s, app)
+    _ignored, extension = common.get_extension(app.metadatapath)
+    if extension == 'yml':
+        metadata.write_yaml(s, app)
+    elif extension == 'txt':
+        metadata.write_txt(s, app)
     content = s.getvalue()
     s.close()
     return content == cur_content
