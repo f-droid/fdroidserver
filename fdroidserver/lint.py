@@ -164,7 +164,7 @@ regex_checks = {
          _("Unnecessary leading space")),
         (re.compile(r'.*\s$'),
          _("Unnecessary trailing space")),
-        (re.compile(r'.*<(iframe|link|script).*'),
+        (re.compile(r'.*<(applet|base|body|button|embed|form|head|html|iframe|img|input|link|object|picture|script|source|style|svg|video).*', re.IGNORECASE),
          _("Forbidden HTML tags")),
         (re.compile(r'''.*\s+src=["']javascript:.*'''),
          _("Javascript in HTML src attributes")),

@@ -53,9 +53,7 @@ UNSET_VERSION_CODE = -0x100000000
 APK_NAME_PAT = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
 APK_VERCODE_PAT = re.compile(".*versionCode='([0-9]*)'.*")
 APK_VERNAME_PAT = re.compile(".*versionName='([^']*)'.*")
-APK_LABEL_PAT = re.compile(".*label='(.*?)'(\n| [a-z]*?=).*")
-APK_ICON_PAT = re.compile(".*application-icon-([0-9]+):'([^']+?)'.*")
-APK_ICON_PAT_NODPI = re.compile(".*icon='([^']+?)'.*")
+APK_LABEL_ICON_PAT = re.compile(".*\s+label='(.*)'\s+icon='(.*)'")
 APK_SDK_VERSION_PAT = re.compile(".*'([0-9]*)'.*")
 APK_PERMISSION_PAT = \
     re.compile(".*(name='(?P<name>.*?)')(.*maxSdkVersion='(?P<maxSdkVersion>.*?)')?.*")
@@ -1080,6 +1078,27 @@ def scan_apk(apk_file):
     return apk
 
 
+def _get_apk_icons_src(apkfile, icon_name):
+    """Extract the paths to the app icon in all available densities
+
+    """
+    icons_src = dict()
+    density_re = re.compile('^res/(.*)/' + icon_name + '\.(png|xml)$')
+    with zipfile.ZipFile(apkfile) as zf:
+        for filename in zf.namelist():
+            m = density_re.match(filename)
+            if m:
+                folder = m.group(1).split('-')
+                if len(folder) > 1:
+                    density = screen_resolutions[folder[1]]
+                else:
+                    density = '160'
+                icons_src[density] = m.group(0)
+    if icons_src.get('-1') is None:
+        icons_src['-1'] = icons_src['160']
+    return icons_src
+
+
 def scan_apk_aapt(apk, apkfile):
     p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
     if p.returncode != 0:
@@ -1092,6 +1111,7 @@ def scan_apk_aapt(apk, apkfile):
         else:
             logging.error(_("Failed to get apk information, skipping {path}").format(path=apkfile))
         raise BuildException(_("Invalid APK"))
+    icon_name = None
     for line in p.output.splitlines():
         if line.startswith("package:"):
             try:
@@ -1101,25 +1121,13 @@ def scan_apk_aapt(apk, apkfile):
             except Exception as e:
                 raise FDroidException("Package matching failed: " + str(e) + "\nLine was: " + line)
         elif line.startswith("application:"):
-            apk['name'] = re.match(APK_LABEL_PAT, line).group(1)
-            # Keep path to non-dpi icon in case we need it
-            match = re.match(APK_ICON_PAT_NODPI, line)
-            if match:
-                apk['icons_src']['-1'] = match.group(1)
-        elif line.startswith("launchable-activity:"):
+            m = re.match(APK_LABEL_ICON_PAT, line)
+            if m:
+                apk['name'] = m.group(1)
+                icon_name = os.path.splitext(os.path.basename(m.group(2)))[0]
+        elif not apk.get('name') and line.startswith("launchable-activity:"):
             # Only use launchable-activity as fallback to application
-            if not apk['name']:
-                apk['name'] = re.match(APK_LABEL_PAT, line).group(1)
-            if '-1' not in apk['icons_src']:
-                match = re.match(APK_ICON_PAT_NODPI, line)
-                if match:
-                    apk['icons_src']['-1'] = match.group(1)
-        elif line.startswith("application-icon-"):
-            match = re.match(APK_ICON_PAT, line)
-            if match:
-                density = match.group(1)
-                path = match.group(2)
-                apk['icons_src'][density] = path
+            apk['name'] = re.match(APK_LABEL_ICON_PAT, line).group(1)
         elif line.startswith("sdkVersion:"):
             m = re.match(APK_SDK_VERSION_PAT, line)
             if m is None:
@@ -1170,6 +1178,7 @@ def scan_apk_aapt(apk, apkfile):
                 if feature.startswith("android.feature."):
                     feature = feature[16:]
                 apk['features'].add(feature)
+    apk['icons_src'] = _get_apk_icons_src(apkfile, icon_name)
 
 
 def scan_apk_androguard(apk, apkfile):
@@ -1215,22 +1224,7 @@ def scan_apk_androguard(apk, apkfile):
 
     icon_id = int(apkobject.get_element("application", "icon").replace("@", "0x"), 16)
     icon_name = arsc.get_id(apk['packageName'], icon_id)[1]
-
-    density_re = re.compile("^res/(.*)/" + icon_name + ".*$")
-
-    for file in apkobject.get_files():
-        d_re = density_re.match(file)
-        if d_re:
-            folder = d_re.group(1).split('-')
-            if len(folder) > 1:
-                resolution = folder[1]
-            else:
-                resolution = 'mdpi'
-            density = screen_resolutions[resolution]
-            apk['icons_src'][density] = d_re.group(0)
-
-    if apk['icons_src'].get('-1') is None:
-        apk['icons_src']['-1'] = apk['icons_src']['160']
+    apk['icons_src'] = _get_apk_icons_src(apkfile, icon_name)
 
     arch_re = re.compile("^lib/(.*)/.*$")
     arch = set([arch_re.match(file).group(1) for file in apkobject.get_files() if arch_re.match(file)])
