@@ -21,6 +21,7 @@ import glob
 import os
 import re
 import sys
+import urllib.parse
 
 from . import _
 from . import common
@@ -205,6 +206,19 @@ def get_lastbuild(builds):
         if not lastbuild or int(build.versionCode) > int(lastbuild.versionCode):
             lastbuild = build
     return lastbuild
+
+
+def check_update_check_data_url(app):
+    """UpdateCheckData must have a valid HTTPS URL to protect checkupdates runs
+    """
+    if app.UpdateCheckData:
+        urlcode, codeex, urlver, verex = app.UpdateCheckData.split('|')
+        for url in (urlcode, urlver):
+            parsed = urllib.parse.urlparse(url)
+            if not parsed.scheme or not parsed.netloc:
+                yield _('UpdateCheckData not a valid URL: {url}').format(url=url)
+            if parsed.scheme != 'https':
+                yield _('UpdateCheckData must use HTTPS URL: {url}').format(url=url)
 
 
 def check_ucm_tags(app):
@@ -513,6 +527,7 @@ def main():
 
         app_check_funcs = [
             check_regexes,
+            check_update_check_data_url,
             check_ucm_tags,
             check_char_limits,
             check_old_links,
