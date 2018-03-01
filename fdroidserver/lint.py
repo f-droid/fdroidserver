@@ -32,7 +32,7 @@ options = None
 
 
 def enforce_https(domain):
-    return (re.compile(r'.*[^sS]://[^/]*' + re.escape(domain) + r'(/.*)?'),
+    return (re.compile(r'^[^h][^t][^t][^p][^s]://[^/]*' + re.escape(domain) + r'(/.*)?', re.IGNORECASE),
             domain + " URLs should always use https://")
 
 
@@ -51,6 +51,9 @@ https_enforcings = [
     enforce_https('savannah.gnu.org'),
     enforce_https('git.savannah.gnu.org'),
     enforce_https('download.savannah.gnu.org'),
+    enforce_https('github.io'),
+    enforce_https('gitlab.io'),
+    enforce_https('githubusercontent.com'),
 ]
 
 
@@ -126,6 +129,7 @@ regex_checks = {
     'WebSite': http_checks,
     'SourceCode': http_checks,
     'Repo': https_enforcings,
+    'UpdateCheckMode': https_enforcings,
     'IssueTracker': http_checks + [
         (re.compile(r'.*github\.com/[^/]+/[^/]+/*$'),
          _("/issues is missing")),
