@@ -1011,6 +1011,10 @@ class vcs_gitsvn(vcs):
             import requests
             r = requests.head(remote)
             r.raise_for_status()
+            location = r.headers.get('location')
+            if location and not location.startswith('https://'):
+                raise VCSException(_('Invalid redirect to non-HTTPS: {before} -> {after} ')
+                                   .format(before=remote, after=location))
 
             gitsvn_args.extend(['--', remote, self.local])
             p = self.git(gitsvn_args)
