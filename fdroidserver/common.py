@@ -1116,7 +1116,7 @@ class vcs_hg(vcs):
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
-            p = FDroidPopen(['hg', 'clone', '--ssh', 'false', '--', self.remote, self.local],
+            p = FDroidPopen(['hg', 'clone', '--ssh', '/bin/false', '--', self.remote, self.local],
                             output=False)
             if p.returncode != 0:
                 self.clone_failed = True
@@ -1130,7 +1130,7 @@ class vcs_hg(vcs):
                     raise VCSException("Unexpected output from hg status -uS: " + line)
                 FDroidPopen(['rm', '-rf', '--', line[2:]], cwd=self.local, output=False)
             if not self.refreshed:
-                p = FDroidPopen(['hg', 'pull', '--ssh', 'false'], cwd=self.local, output=False)
+                p = FDroidPopen(['hg', 'pull', '--ssh', '/bin/false'], cwd=self.local, output=False)
                 if p.returncode != 0:
                     raise VCSException("Hg pull failed", p.output)
                 self.refreshed = True
