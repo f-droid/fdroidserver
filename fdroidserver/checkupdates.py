@@ -429,6 +429,9 @@ def checkupdates_app(app):
         msg = 'Invalid update check method'
 
     if version and vercode and app.VercodeOperation:
+        if not common.VERCODE_OPERATION_RE.match(app.VercodeOperation):
+            raise MetaDataException(_('Invalid VercodeOperation: {field}')
+                                    .format(field=app.VercodeOperation))
         oldvercode = str(int(vercode))
         op = app.VercodeOperation.replace("%c", oldvercode)
         vercode = str(eval(op))

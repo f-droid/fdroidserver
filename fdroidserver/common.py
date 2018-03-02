@@ -61,6 +61,8 @@ from .asynchronousfilereader import AsynchronousFileReader
 # has to be manually set in test_aapt_version()
 MINIMUM_AAPT_VERSION = '26.0.0'
 
+VERCODE_OPERATION_RE = re.compile(r'^([ 0-9/*+-]|%c)+$')
+
 # A signature block file with a .DSA, .RSA, or .EC extension
 CERT_PATH_REGEX = re.compile(r'^META-INF/.*\.(DSA|EC|RSA)$')
 APK_NAME_REGEX = re.compile(r'^([a-zA-Z][\w.]*)_(-?[0-9]+)_?([0-9a-f]{7})?\.apk')
