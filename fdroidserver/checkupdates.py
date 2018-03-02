@@ -30,6 +30,7 @@ import html
 from distutils.version import LooseVersion
 import logging
 import copy
+import urllib.parse
 
 from . import _
 from . import common
@@ -48,6 +49,13 @@ def check_http(app):
             raise FDroidException('Missing Update Check Data')
 
         urlcode, codeex, urlver, verex = app.UpdateCheckData.split('|')
+        parsed = urllib.parse.urlparse(urlcode)
+        if not parsed.netloc or not parsed.scheme or parsed.scheme != 'https':
+            raise FDroidException(_('UpdateCheckData has invalid URL: {url}').format(url=urlcode))
+        if urlver != '.':
+            parsed = urllib.parse.urlparse(urlver)
+            if not parsed.netloc or not parsed.scheme or parsed.scheme != 'https':
+                raise FDroidException(_('UpdateCheckData has invalid URL: {url}').format(url=urlcode))
 
         vercode = "99999999"
         if len(urlcode) > 0:

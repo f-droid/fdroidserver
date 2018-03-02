@@ -21,6 +21,7 @@ import glob
 import os
 import re
 import sys
+import urllib.parse
 
 from . import _
 from . import common
@@ -32,7 +33,7 @@ options = None
 
 
 def enforce_https(domain):
-    return (re.compile(r'.*[^sS]://[^/]*' + re.escape(domain) + r'(/.*)?'),
+    return (re.compile(r'^[^h][^t][^t][^p][^s]://[^/]*' + re.escape(domain) + r'(/.*)?', re.IGNORECASE),
             domain + " URLs should always use https://")
 
 
@@ -51,6 +52,9 @@ https_enforcings = [
     enforce_https('savannah.gnu.org'),
     enforce_https('git.savannah.gnu.org'),
     enforce_https('download.savannah.gnu.org'),
+    enforce_https('github.io'),
+    enforce_https('gitlab.io'),
+    enforce_https('githubusercontent.com'),
 ]
 
 
@@ -126,6 +130,7 @@ regex_checks = {
     'WebSite': http_checks,
     'SourceCode': http_checks,
     'Repo': https_enforcings,
+    'UpdateCheckMode': https_enforcings,
     'IssueTracker': http_checks + [
         (re.compile(r'.*github\.com/[^/]+/[^/]+/*$'),
          _("/issues is missing")),
@@ -201,6 +206,19 @@ def get_lastbuild(builds):
         if not lastbuild or int(build.versionCode) > int(lastbuild.versionCode):
             lastbuild = build
     return lastbuild
+
+
+def check_update_check_data_url(app):
+    """UpdateCheckData must have a valid HTTPS URL to protect checkupdates runs
+    """
+    if app.UpdateCheckData:
+        urlcode, codeex, urlver, verex = app.UpdateCheckData.split('|')
+        for url in (urlcode, urlver):
+            parsed = urllib.parse.urlparse(url)
+            if not parsed.scheme or not parsed.netloc:
+                yield _('UpdateCheckData not a valid URL: {url}').format(url=url)
+            if parsed.scheme != 'https':
+                yield _('UpdateCheckData must use HTTPS URL: {url}').format(url=url)
 
 
 def check_ucm_tags(app):
@@ -509,6 +527,7 @@ def main():
 
         app_check_funcs = [
             check_regexes,
+            check_update_check_data_url,
             check_ucm_tags,
             check_char_limits,
             check_old_links,
