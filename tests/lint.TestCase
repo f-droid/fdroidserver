@@ -19,6 +19,7 @@ if localmodule not in sys.path:
 
 import fdroidserver.common
 import fdroidserver.lint
+import fdroidserver.metadata
 
 
 class LintTest(unittest.TestCase):
@@ -68,6 +69,52 @@ class LintTest(unittest.TestCase):
             anywarns = True
             logging.debug(warn)
         self.assertTrue(anywarns)
+
+    def test_check_vercode_operation(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.lint.config = config
+
+        app = fdroidserver.metadata.App()
+        app.Name = 'Bad App'
+        app.Summary = 'We pwn you'
+        app.Description = 'These are some back'
+
+        good_fields = [
+            '6%c',
+            '%c - 1',
+            '%c + 10',
+            '%c*10',
+            '%c*10 + 3',
+            '%c*10 + 8',
+            '%c + 2 ',
+            '%c + 3',
+            '%c + 7',
+        ]
+        bad_fields = [
+            'open("/etc/passwd")',
+            '%C + 1',
+            '%%c * 123',
+            '123 + %%',
+            '%c % 7',
+        ]
+
+        anywarns = False
+        for good in good_fields:
+            app.VercodeOperation = good
+            for warn in fdroidserver.lint.check_vercode_operation(app):
+                anywarns = True
+                logging.debug(warn)
+            self.assertFalse(anywarns)
+
+        for bad in bad_fields:
+            anywarns = False
+            app.VercodeOperation = bad
+            for warn in fdroidserver.lint.check_vercode_operation(app):
+                anywarns = True
+                logging.debug(warn)
+            self.assertTrue(anywarns)
 
 
 if __name__ == "__main__":

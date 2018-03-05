@@ -222,6 +222,11 @@ def check_update_check_data_url(app):
                     yield _('UpdateCheckData must use HTTPS URL: {url}').format(url=url)
 
 
+def check_vercode_operation(app):
+    if app.VercodeOperation and not common.VERCODE_OPERATION_RE.match(app.VercodeOperation):
+        yield _('Invalid VercodeOperation: {field}').format(field=app.VercodeOperation)
+
+
 def check_ucm_tags(app):
     lastbuild = get_lastbuild(app.builds)
     if (lastbuild is not None
@@ -529,6 +534,7 @@ def main():
         app_check_funcs = [
             check_regexes,
             check_update_check_data_url,
+            check_vercode_operation,
             check_ucm_tags,
             check_char_limits,
             check_old_links,
