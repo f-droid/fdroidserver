@@ -535,6 +535,7 @@ def update_wiki(gplaylog, locallog):
             newpage = site.Pages[wiki_page_path]
             txt = ''
             txt += "* command line: <code>" + ' '.join(sys.argv) + "</code>\n"
+            txt += common.get_git_describe_link()
             txt += "* started at " + common.get_wiki_timestamp(start_timestamp) + '\n'
             txt += "* completed at " + common.get_wiki_timestamp() + '\n'
             txt += "\n\n"

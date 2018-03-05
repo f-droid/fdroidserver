@@ -1233,6 +1233,7 @@ def main():
                     txt = "* build session started at " + common.get_wiki_timestamp(start_timestamp) + '\n' \
                           + "* this build started at " + build_starttime + '\n' \
                           + "* this build completed at " + common.get_wiki_timestamp() + '\n' \
+                          + common.get_git_describe_link() \
                           + '* fdroidserverid: [https://gitlab.com/fdroid/fdroidserver/commit/' \
                           + fdroidserverid + ' ' + fdroidserverid + ']\n\n'
                     if buildserverid:
