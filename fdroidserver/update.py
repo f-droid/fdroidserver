@@ -329,6 +329,7 @@ def update_wiki(apps, sortedids, apks):
     txt += "* command line: <code>" + ' '.join(sys.argv) + "</code>\n"
     txt += "* started at " + common.get_wiki_timestamp(start_timestamp) + '\n'
     txt += "* completed at " + common.get_wiki_timestamp() + '\n'
+    txt += common.get_git_describe_link()
     txt += "\n\n"
     txt += common.get_android_tools_version_log()
     newpage.save(txt, summary='Run log')

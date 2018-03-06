@@ -535,6 +535,7 @@ def update_wiki(gplaylog, locallog):
             newpage = site.Pages[wiki_page_path]
             txt = ''
             txt += "* command line: <code>" + ' '.join(sys.argv) + "</code>\n"
+            txt += common.get_git_describe_link()
             txt += "* started at " + common.get_wiki_timestamp(start_timestamp) + '\n'
             txt += "* completed at " + common.get_wiki_timestamp() + '\n'
             txt += "\n\n"
@@ -572,6 +573,8 @@ def main():
                         help=_("Only process apps with auto-updates"))
     parser.add_argument("--commit", action="store_true", default=False,
                         help=_("Commit changes"))
+    parser.add_argument("--allow-dirty", action="store_true", default=False,
+                        help=_("Run on git repo that has uncommitted changes"))
     parser.add_argument("--gplay", action="store_true", default=False,
                         help=_("Only print differences with the Play Store"))
     metadata.add_metadata_arguments(parser)
@@ -579,6 +582,12 @@ def main():
     metadata.warnings_action = options.W
 
     config = common.read_config(options)
+
+    if not options.allow_dirty:
+        status = subprocess.check_output(['git', 'status', '--porcelain'])
+        if status:
+            logging.error(_('Build metadata git repo has uncommited changes!'))
+            sys.exit(1)
 
     # Get all apps...
     allapps = metadata.read_metadata()
