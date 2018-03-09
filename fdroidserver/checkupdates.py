@@ -510,14 +510,13 @@ def checkupdates_app(app):
             logging.warn('Invalid auto update mode "' + mode + '" on ' + app.id)
 
     if commitmsg:
-        metadatapath = os.path.join('metadata', app.id + '.txt')
-        metadata.write_metadata(metadatapath, app)
+        metadata.write_metadata(app.metadatapath, app)
         if options.commit:
-            logging.info("Commiting update for " + metadatapath)
+            logging.info("Commiting update for " + app.metadatapath)
             gitcmd = ["git", "commit", "-m", commitmsg]
             if 'auto_author' in config:
                 gitcmd.extend(['--author', config['auto_author']])
-            gitcmd.extend(["--", metadatapath])
+            gitcmd.extend(["--", app.metadatapath])
             if subprocess.call(gitcmd) != 0:
                 raise FDroidException("Git commit failed")
 
