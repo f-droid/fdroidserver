@@ -25,9 +25,6 @@ export ANDROID_HOME=/usr/lib/android-sdk
 
 rm -rf "$WORKSPACE/.testfiles"
 cd tests
-echo "Debian's build-tools is too old, remove once the package has been updated"
-sed -i '/android.permission.READ_EXTERNAL_STORAGE/d' repo/index.xml
-sed -i '/^diff -uw .*index-v1.json$/d' run-tests
 ./run-tests $WORKSPACE/fdroiddata/repo
 
 # this is set up and managed by jenkins-build-all
