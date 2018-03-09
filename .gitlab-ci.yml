@@ -57,6 +57,7 @@ debian_testing:
     - cd tests
     - ./run-tests
 
+# test using LTS set up with the PPA, including Recommends
 ubuntu_lts:
   image: ubuntu:latest
   only:
@@ -67,15 +68,8 @@ ubuntu_lts:
     - echo "deb http://ppa.launchpad.net/fdroid/fdroidserver/ubuntu $RELEASE main" >> /etc/apt/sources.list
     - apt-get -qy update
     - apt-get -qy dist-upgrade
-    - apt-get -qy install --no-install-recommends
-        aapt adb android-platform-tools-base android-sdk-common fdroidserver
-        git gnupg python3-setuptools unzip wget zipalign
+    - apt-get -qy install fdroidserver git python3-setuptools
     - export ANDROID_HOME=/usr/lib/android-sdk
-    # xenial's aapt is too old
-    - wget --no-verbose https://dl.google.com/android/repository/build-tools_r27.0.3-linux.zip
-    - unzip -q build-tools_r27.0.3-linux.zip
-    - rm build-tools_r27.0.3-linux.zip
-    - mv android-8.1.0 $ANDROID_HOME/build-tools/27.0.3
     - export LANG=C.UTF-8
     - cd tests
     - ./run-tests
