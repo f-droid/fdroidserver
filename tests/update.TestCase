@@ -333,6 +333,9 @@ class UpdateTest(unittest.TestCase):
                                                  '320': 'res/drawable-xhdpi-v4/icon.png',
                                                  '-1': 'res/drawable-mdpi-v4/icon.png'})
 
+        apk_info = fdroidserver.update.scan_apk('SpeedoMeterApp.main_1.apk')
+        self.assertEqual(apk_info['icons_src'], {})
+
     def test_scan_apk_no_sig(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
