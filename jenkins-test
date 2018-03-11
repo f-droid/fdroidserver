@@ -63,3 +63,5 @@ sed -i '/^repo_pubkey = /d' config.py
 
 ../fdroid rewritemeta --quiet
 git --no-pager diff
+
+../fdroid checkupdates --auto --autoonly --commit
