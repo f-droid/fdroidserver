@@ -1264,7 +1264,10 @@ def scan_apk_androguard(apk, apkfile):
         apk['uses-permission-sdk-23'].append(permission_sdk_23)
 
     for item in xml.findall('uses-feature'):
-        feature = str(item.attrib['{' + xml.nsmap['android'] + '}name'])
+        key = '{' + xml.nsmap['android'] + '}name'
+        if key not in item.attrib:
+            continue
+        feature = str(item.attrib[key])
         if feature != "android.hardware.screen.portrait" \
                 and feature != "android.hardware.screen.landscape":
             if feature.startswith("android.feature."):
