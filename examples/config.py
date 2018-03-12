@@ -21,7 +21,7 @@
 # }
 
 # java_paths = {
-#     '1.8': "/usr/lib/jvm/java-8-openjdk",
+#     '8': "/usr/lib/jvm/java-8-openjdk",
 # }
 
 # Build tools version to be used
