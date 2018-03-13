@@ -1095,7 +1095,7 @@ def _get_apk_icons_src(apkfile, icon_name):
                 else:
                     density = '160'
                 icons_src[density] = m.group(0)
-    if icons_src.get('-1') is None:
+    if icons_src.get('-1') is None and '160' in icons_src:
         icons_src['-1'] = icons_src['160']
     return icons_src
 
