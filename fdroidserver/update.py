@@ -60,6 +60,7 @@ APK_PERMISSION_PAT = \
 APK_FEATURE_PAT = re.compile(".*name='([^']*)'.*")
 
 screen_densities = ['65534', '640', '480', '320', '240', '160', '120']
+# resolutions must end with 'dpi'
 screen_resolutions = {
     "xxxhdpi": '640',
     "xxhdpi": '480',
@@ -67,7 +68,7 @@ screen_resolutions = {
     "hdpi": '240',
     "mdpi": '160',
     "ldpi": '120',
-    "undefined": '-1',
+    "undefineddpi": '-1',
     "anydpi": '65534',
     "nodpi": '65535'
 }
@@ -1090,12 +1091,12 @@ def _get_apk_icons_src(apkfile, icon_name):
             m = density_re.match(filename)
             if m:
                 folder = m.group(1).split('-')
-                if len(folder) > 1:
+                if len(folder) > 1 and folder[1].endswith('dpi'):
                     density = screen_resolutions[folder[1]]
                 else:
                     density = '160'
                 icons_src[density] = m.group(0)
-    if icons_src.get('-1') is None:
+    if icons_src.get('-1') is None and '160' in icons_src:
         icons_src['-1'] = icons_src['160']
     return icons_src
 
@@ -1223,9 +1224,11 @@ def scan_apk_androguard(apk, apkfile):
     if apkobject.get_target_sdk_version() is not None:
         apk['targetSdkVersion'] = apkobject.get_target_sdk_version()
 
-    icon_id = int(apkobject.get_element("application", "icon").replace("@", "0x"), 16)
-    icon_name = arsc.get_id(apk['packageName'], icon_id)[1]
-    apk['icons_src'] = _get_apk_icons_src(apkfile, icon_name)
+    icon_id_str = apkobject.get_element("application", "icon")
+    if icon_id_str:
+        icon_id = int(icon_id_str.replace("@", "0x"), 16)
+        icon_name = arsc.get_id(apk['packageName'], icon_id)[1]
+        apk['icons_src'] = _get_apk_icons_src(apkfile, icon_name)
 
     arch_re = re.compile("^lib/(.*)/.*$")
     arch = set([arch_re.match(file).group(1) for file in apkobject.get_files() if arch_re.match(file)])
@@ -1262,7 +1265,10 @@ def scan_apk_androguard(apk, apkfile):
         apk['uses-permission-sdk-23'].append(permission_sdk_23)
 
     for item in xml.findall('uses-feature'):
-        feature = str(item.attrib['{' + xml.nsmap['android'] + '}name'])
+        key = '{' + xml.nsmap['android'] + '}name'
+        if key not in item.attrib:
+            continue
+        feature = str(item.attrib[key])
         if feature != "android.hardware.screen.portrait" \
                 and feature != "android.hardware.screen.landscape":
             if feature.startswith("android.feature."):
