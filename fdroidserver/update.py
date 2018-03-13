@@ -60,6 +60,7 @@ APK_PERMISSION_PAT = \
 APK_FEATURE_PAT = re.compile(".*name='([^']*)'.*")
 
 screen_densities = ['65534', '640', '480', '320', '240', '160', '120']
+# resolutions must end with 'dpi'
 screen_resolutions = {
     "xxxhdpi": '640',
     "xxhdpi": '480',
@@ -67,7 +68,7 @@ screen_resolutions = {
     "hdpi": '240',
     "mdpi": '160',
     "ldpi": '120',
-    "undefined": '-1',
+    "undefineddpi": '-1',
     "anydpi": '65534',
     "nodpi": '65535'
 }
@@ -1090,7 +1091,7 @@ def _get_apk_icons_src(apkfile, icon_name):
             m = density_re.match(filename)
             if m:
                 folder = m.group(1).split('-')
-                if len(folder) > 1:
+                if len(folder) > 1 and folder[1].endswith('dpi'):
                     density = screen_resolutions[folder[1]]
                 else:
                     density = '160'
