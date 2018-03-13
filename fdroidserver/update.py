@@ -68,6 +68,7 @@ screen_resolutions = {
     "hdpi": '240',
     "mdpi": '160',
     "ldpi": '120',
+    "tvdpi": '213',
     "undefineddpi": '-1',
     "anydpi": '65534',
     "nodpi": '65535'
