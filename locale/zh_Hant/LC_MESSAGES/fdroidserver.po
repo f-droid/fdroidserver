@@ -3,7 +3,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr "Project-Id-Version: fdroidserver 0.9\nReport-Msgid-Bugs-To: team@f-droid.org\nPOT-Creation-Date: 2018-02-13 09:01+0100\nPO-Revision-Date: 2018-02-19 16:58+0000\nLast-Translator: ezjerry liao <ezjerry@gmail.com>\nLanguage-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hant/>\nLanguage: zh_Hant\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 2.19\n"
+msgstr "Project-Id-Version: fdroidserver 0.9\nReport-Msgid-Bugs-To: team@f-droid.org\nPOT-Creation-Date: 2018-02-13 09:01+0100\nPO-Revision-Date: 2018-03-04 00:22+0000\nLast-Translator: Jeff Huang <s8321414@gmail.com>\nLanguage-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hant/>\nLanguage: zh_Hant\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 2.20-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1377,7 +1377,7 @@ msgstr "軟體庫日誌的總部網址（預設：https://f-droid.org）"
 
 #: ../fdroidserver/mirror.py
 msgid "The directory to write the mirror to"
-msgstr ""
+msgstr "寫入目錄的鏡像到"
 
 #: ../fdroidserver/server.py
 msgid "The only commands currently supported are 'init' and 'update'"
@@ -1578,7 +1578,7 @@ msgstr "使用 \"{path}\" 對 s3cmd 組態。"
 
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
-msgstr ""
+msgstr "使用 Java 的 jarsigner，這並不建議用於驗證 APK！使用 apksigner"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
@@ -1998,7 +1998,7 @@ msgstr "{apkfilename} ({appid}) 沒有中介資料!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename} has multiple {name} files, looks like Master Key exploit!"
-msgstr ""
+msgstr "{apkfilename} 有多個 {name} 檔案，看起來可能是主金鑰洩漏了！"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2024,7 +2024,7 @@ msgstr "{appid}: 不明的 extlib {path} 編譯在 '{versionName}'"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "{appid}: no builds specified, running on current source state"
-msgstr ""
+msgstr "{appid}：沒有指定構建，在目前的原始碼狀態執行"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2044,7 +2044,7 @@ msgstr "\"{path}\" 不存在！經由執行建立它："
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} has bad file signature \"{pattern}\", possible Janus exploit!"
-msgstr ""
+msgstr "{path} 有不正確的檔案簽章「{pattern}」，可能是 Janus 漏洞！"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
