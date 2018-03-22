@@ -79,7 +79,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         if not buildserverid:
             buildserverid = subprocess.check_output(['vagrant', 'ssh', '-c',
                                                      'cat /home/vagrant/buildserverid'],
-                                                    cwd='builder').rstrip().decode()
+                                                    cwd='builder').strip().decode()
             logging.debug(_('Fetched buildserverid from VM: {buildserverid}')
                           .format(buildserverid=buildserverid))
 
