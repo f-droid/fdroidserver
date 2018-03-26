@@ -740,6 +740,45 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(('1.9.8.1-ose', '197', 'at.bitfire.davdroid'),
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.gradle = ['libre']
+        app.builds = [build]
+        app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.libre'
+        paths = [
+            os.path.join(source_files_dir, 'com.kunzisoft.testcase', 'build.gradle'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('1.0-libre', '1', 'com.kunzisoft.fdroidtest.applicationidsuffix.libre'),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.gradle = ['pro']
+        app.builds = [build]
+        app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.pro'
+        paths = [
+            os.path.join(source_files_dir, 'com.kunzisoft.testcase', 'build.gradle'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('20180430-pro', '20180430', 'com.kunzisoft.fdroidtest.applicationidsuffix.pro'),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.gradle = ['free']
+        app.builds = [build]
+        app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix'
+        paths = [
+            os.path.join(source_files_dir, 'com.kunzisoft.testcase', 'build.gradle'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('1.0-free', '1', 'com.kunzisoft.fdroidtest.applicationidsuffix'),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
