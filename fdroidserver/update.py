@@ -1086,7 +1086,7 @@ def _get_apk_icons_src(apkfile, icon_name):
 
     """
     icons_src = dict()
-    density_re = re.compile('^res/(.*)/' + icon_name + '\.(png|xml)$')
+    density_re = re.compile('^res/(.*)/{}\.(png|xml)$'.format(icon_name))
     with zipfile.ZipFile(apkfile) as zf:
         for filename in zf.namelist():
             m = density_re.match(filename)
