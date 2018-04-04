@@ -170,6 +170,8 @@ def _add_java_paths_to_config(pathlist, thisconfig):
                 r'^java-([6-9])-oracle$',  # Debian WebUpd8
                 r'^jdk-([6-9])-oracle-.*$',  # Debian make-jpkg
                 r'^java-([6-9])-openjdk-[^c][^o][^m].*$',  # Debian
+                r'^oracle-jdk-bin-1\.([7-9]).*$',  # Gentoo (oracle)
+                r'^icedtea-bin-([7-9]).*$',  # Gentoo (openjdk)
                 ]:
             m = re.match(regex, j)
             if not m:
@@ -210,6 +212,8 @@ def fill_config_defaults(thisconfig):
         pathlist += glob.glob('/usr/java/jdk1.[6-9]*')
         pathlist += glob.glob('/System/Library/Java/JavaVirtualMachines/1.[6-9].0.jdk')
         pathlist += glob.glob('/Library/Java/JavaVirtualMachines/*jdk*[6-9]*')
+        pathlist += glob.glob('/opt/oracle-jdk-*1.[7-9]*')
+        pathlist += glob.glob('/opt/icedtea-*[7-9]*')
         if os.getenv('JAVA_HOME') is not None:
             pathlist.append(os.getenv('JAVA_HOME'))
         if os.getenv('PROGRAMFILES') is not None:
