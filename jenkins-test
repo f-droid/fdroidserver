@@ -42,6 +42,7 @@ fi
 gpg --import $GNUPGHOME/secring.gpg
 
 echo "build_server_always = True" >> config.py
+echo "make_current_version_link = False" >> config.py
 echo "gpghome = '$GNUPGHOME'" >> config.py
 echo "gpgkey = 'CE71F7FB'" >> config.py
 chmod 0600 config.py
@@ -63,5 +64,7 @@ sed -i '/^repo_pubkey = /d' config.py
 
 ../fdroid rewritemeta --quiet
 git --no-pager diff
+git status
+ls -lR cache || true
 
 ../fdroid checkupdates --auto --autoonly --commit
