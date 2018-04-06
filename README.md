@@ -1,4 +1,3 @@
-
 <a name="build-status"></a>
 
 | CI Builds                |  fdroidserver | buildserver | fdroid build --all | publishing tools |
@@ -33,7 +32,7 @@ install, and keep track of updates on your device.
 
 ### Installing
 
-There are many was to install _fdroidserver_, they are documented on
+There are many ways to install _fdroidserver_, they are documented on
 the website:
 https://f-droid.org/docs/Installing_the_Server_and_Repo_Tools
 
