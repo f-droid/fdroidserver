@@ -302,7 +302,7 @@ def update_wiki(apps, sortedids, apks):
         for page in catpages:
             existingpages.append(page.name)
             if page.name in genp:
-                pagetxt = page.edit()
+                pagetxt = page.text()
                 if pagetxt != genp[page.name]:
                     logging.debug("Updating modified page " + page.name)
                     page.save(genp[page.name], summary='Auto-updated')
