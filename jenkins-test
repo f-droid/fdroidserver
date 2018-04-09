@@ -32,7 +32,6 @@ cd $WORKSPACE/fdroiddata
 
 rm -f config.py keystore.jks
 ../fdroid init --verbose
-../fdroid update
 
 export GNUPGHOME=$WORKSPACE/tests/gnupghome
 if [ ! -e $GNUPGHOME/private-keys-v1.d ]; then
