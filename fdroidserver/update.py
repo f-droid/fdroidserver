@@ -272,12 +272,9 @@ def update_wiki(apps, sortedids, apks):
         # Make a redirect from the name to the ID too, unless there's
         # already an existing page with the name and it isn't a redirect.
         noclobber = False
-        apppagename = app.Name.replace('_', ' ')
-        apppagename = apppagename.replace('{', '')
-        apppagename = apppagename.replace('}', ' ')
-        apppagename = apppagename.replace(':', ' ')
-        apppagename = apppagename.replace('[', ' ')
-        apppagename = apppagename.replace(']', ' ')
+        apppagename = app.Name
+        for ch in '_{}:[]|':
+            apppagename = apppagename.replace(ch, ' ')
         # Drop double spaces caused mostly by replacing ':' above
         apppagename = apppagename.replace('  ', ' ')
         for expagename in site.allpages(prefix=apppagename,
