@@ -53,7 +53,7 @@ UNSET_VERSION_CODE = -0x100000000
 APK_NAME_PAT = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
 APK_VERCODE_PAT = re.compile(".*versionCode='([0-9]*)'.*")
 APK_VERNAME_PAT = re.compile(".*versionName='([^']*)'.*")
-APK_LABEL_ICON_PAT = re.compile(".*\s+label='(.*)'\s+icon='(.*)'")
+APK_LABEL_ICON_PAT = re.compile(".*\s+label='(.*)'\s+icon='(.*?)'")
 APK_SDK_VERSION_PAT = re.compile(".*'([0-9]*)'.*")
 APK_PERMISSION_PAT = \
     re.compile(".*(name='(?P<name>.*?)')(.*maxSdkVersion='(?P<maxSdkVersion>.*?)')?.*")
