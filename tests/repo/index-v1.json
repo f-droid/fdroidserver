@@ -288,13 +288,13 @@
       {
         "added": 1513900800000,
         "apkName": "duplicate.permisssions_9999999.apk",
-        "hash": "9ffc7e9b2740ce664059194805b2fbfc08b7970c8448a22b8bd828dfd6ad161c",
+        "hash": "3d5db5f1ee6fd1d5d9e3c97cc9139b447f538bacd9907f648ba96cfd0848321d",
         "hashType": "sha256",
         "minSdkVersion": "18",
         "packageName": "duplicate.permisssions",
-        "sig": "2d337e40aef77564bf62781ac424595c",
-        "signer": "f49af3f11efddf20dffd70f5e3117b9976674167adca280e6b1932a0601b26f6",
-        "size": 11988,
+        "sig": "056c9f1554c40ba59a2103009c82b420",
+        "signer": "659e1fd284549f70d13fb02c620100e27eeea3420558cce62b0f5d4cf2b77d84",
+        "size": 27507,
         "targetSdkVersion": "27",
         "uses-permission": [
           [
