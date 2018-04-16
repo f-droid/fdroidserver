@@ -993,7 +993,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             repo_file['hash'] = shasum
             repo_file['hashType'] = 'sha256'
             repo_file['versionCode'] = 0
-            repo_file['versionName'] = shasum
+            repo_file['versionName'] = shasum[0:7]
             # the static ID is the SHA256 unless it is set in the metadata
             repo_file['packageName'] = shasum
 

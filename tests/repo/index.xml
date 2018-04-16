@@ -57,7 +57,7 @@
 		<marketversion>0.2.1</marketversion>
 		<marketvercode>2000</marketvercode>
 		<package>
-			<version>897a92a4ccff4f415f6ba275b2af16d4ecaee60a983b215bddcb9f8964e7a24c</version>
+			<version>897a92a</version>
 			<versioncode>1234</versioncode>
 			<apkname>fake.ota.update_1234.zip</apkname>
 			<hash type="sha256">897a92a4ccff4f415f6ba275b2af16d4ecaee60a983b215bddcb9f8964e7a24c</hash>
