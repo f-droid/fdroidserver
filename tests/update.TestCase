@@ -292,10 +292,15 @@ class UpdateTest(unittest.TestCase):
     def test_scan_apk(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
         fdroidserver.update.config = config
         os.chdir(os.path.join(localmodule, 'tests'))
         if os.path.basename(os.getcwd()) != 'tests':
             raise Exception('This test must be run in the "tests/" subdir')
+
+        apk_info = fdroidserver.update.scan_apk('repo/duplicate.permisssions_9999999.apk')
+        self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_launcher.png',
+                                                 '-1': 'res/drawable/ic_launcher.png'})
 
         apk_info = fdroidserver.update.scan_apk('org.dyndns.fules.ck_20.apk')
         self.assertEqual(apk_info['icons_src'], {'240': 'res/drawable-hdpi-v4/icon_launcher.png',
