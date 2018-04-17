@@ -993,7 +993,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             repo_file['hash'] = shasum
             repo_file['hashType'] = 'sha256'
             repo_file['versionCode'] = 0
-            repo_file['versionName'] = shasum
+            repo_file['versionName'] = shasum[0:7]
             # the static ID is the SHA256 unless it is set in the metadata
             repo_file['packageName'] = shasum
 
@@ -1208,12 +1208,17 @@ def scan_apk_androguard(apk, apkfile):
 
     apk['packageName'] = apkobject.get_package()
     apk['versionCode'] = int(apkobject.get_androidversion_code())
-    apk['versionName'] = apkobject.get_androidversion_name()
-    if apk['versionName'][0] == "@":
-        version_id = int(apk['versionName'].replace("@", "0x"), 16)
-        version_id = arsc.get_id(apk['packageName'], version_id)[1]
-        apk['versionName'] = arsc.get_string(apk['packageName'], version_id)[1]
     apk['name'] = apkobject.get_app_name()
+
+    versionName = apkobject.get_androidversion_name()
+    if versionName:
+        apk['versionName'] = versionName
+        try:  # can be a literal value or a resId
+            res_id = int(versionName.replace("@", "0x"), 16)
+            res_id = arsc.get_id(apk['packageName'], res_id)[1]
+            apk['versionName'] = arsc.get_string(apk['packageName'], res_id)[1]
+        except ValueError:
+            pass
 
     if apkobject.get_max_sdk_version() is not None:
         apk['maxSdkVersion'] = apkobject.get_max_sdk_version()
