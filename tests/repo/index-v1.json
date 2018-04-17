@@ -288,13 +288,13 @@
       {
         "added": 1513900800000,
         "apkName": "duplicate.permisssions_9999999.apk",
-        "hash": "3d5db5f1ee6fd1d5d9e3c97cc9139b447f538bacd9907f648ba96cfd0848321d",
+        "hash": "8367857fe75f85321ce2c344b34804d0bc193707f6ba03710d025d9030803434",
         "hashType": "sha256",
         "minSdkVersion": "18",
         "packageName": "duplicate.permisssions",
         "sig": "056c9f1554c40ba59a2103009c82b420",
         "signer": "659e1fd284549f70d13fb02c620100e27eeea3420558cce62b0f5d4cf2b77d84",
-        "size": 27507,
+        "size": 27446,
         "targetSdkVersion": "27",
         "uses-permission": [
           [
@@ -336,8 +336,7 @@
             null
           ]
         ],
-        "versionCode": 9999999,
-        "versionName": "0.3-7-gb817ac8"
+        "versionCode": 9999999
       }
     ],
     "fake.ota.update": [

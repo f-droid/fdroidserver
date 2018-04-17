@@ -25,11 +25,10 @@
 		<marketversion></marketversion>
 		<marketvercode>9999999</marketvercode>
 		<package>
-			<version>0.3-7-gb817ac8</version>
 			<versioncode>9999999</versioncode>
 			<apkname>duplicate.permisssions_9999999.apk</apkname>
-			<hash type="sha256">3d5db5f1ee6fd1d5d9e3c97cc9139b447f538bacd9907f648ba96cfd0848321d</hash>
-			<size>27507</size>
+			<hash type="sha256">8367857fe75f85321ce2c344b34804d0bc193707f6ba03710d025d9030803434</hash>
+			<size>27446</size>
 			<sdkver>18</sdkver>
 			<targetSdkVersion>27</targetSdkVersion>
 			<added>2017-12-22</added>

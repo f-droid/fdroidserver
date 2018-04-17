@@ -213,6 +213,16 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         if packageName not in apps:
             logging.info(_('Ignoring package without metadata: ') + package['apkName'])
             continue
+        if not package.get('versionName'):
+            app = apps[packageName]
+            versionCodeStr = str(package['versionCode'])  # TODO build.versionCode should be int!
+            for build in app['builds']:
+                if build['versionCode'] == versionCodeStr:
+                    versionName = build.get('versionName')
+                    logging.info(_('Overriding blank versionName in {apkfilename} from metadata: {version}')
+                                 .format(apkfilename=package['apkName'], version=versionName))
+                    package['versionName'] = versionName
+                    break
         if packageName in output_packages:
             packagelist = output_packages[packageName]
         else:
@@ -479,7 +489,17 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
 
             apkel = doc.createElement("package")
             apel.appendChild(apkel)
-            addElement('version', apk['versionName'], doc, apkel)
+
+            versionName = apk.get('versionName')
+            if not versionName:
+                versionCodeStr = str(apk['versionCode'])  # TODO build.versionCode should be int!
+                for build in app.builds:
+                    if build['versionCode'] == versionCodeStr and 'versionName' in build:
+                        versionName = build['versionName']
+                        break
+            if versionName:
+                addElement('version', versionName, doc, apkel)
+
             addElement('versioncode', str(apk['versionCode']), doc, apkel)
             addElement('apkname', apk['apkName'], doc, apkel)
             addElementIfInApk('srcname', apk, 'srcname', doc, apkel)
