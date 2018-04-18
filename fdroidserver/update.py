@@ -1213,12 +1213,13 @@ def scan_apk_androguard(apk, apkfile):
     versionName = apkobject.get_androidversion_name()
     if versionName:
         apk['versionName'] = versionName
-        try:  # can be a literal value or a resId
-            res_id = int(versionName.replace("@", "0x"), 16)
-            res_id = arsc.get_id(apk['packageName'], res_id)[1]
-            apk['versionName'] = arsc.get_string(apk['packageName'], res_id)[1]
-        except ValueError:
-            pass
+        if versionName[0] == '@':
+            try:  # can be a literal value or a resId
+                res_id = int(versionName.replace("@", "0x"), 16)
+                res_id = arsc.get_id(apk['packageName'], res_id)[1]
+                apk['versionName'] = arsc.get_string(apk['packageName'], res_id)[1]
+            except ValueError:
+                pass
 
     if apkobject.get_max_sdk_version() is not None:
         apk['maxSdkVersion'] = apkobject.get_max_sdk_version()
