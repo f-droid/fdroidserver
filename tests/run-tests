@@ -258,6 +258,10 @@ if [ "$TRAVIS_OS_NAME" != "osx" ]; then
     ! test -e repo/index.xml.asc
 fi
 
+v0timestamp=`$sed -n -e 's,.*timestamp="\([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\)".*,\1,p' repo/index.xml`
+v1timestamp=`$sed -n -e 's,.*"timestamp": \([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\).*,\1,p' repo/index-v1.json`
+test $v0timestamp -eq $v1timestamp
+
 # we can't easily reproduce the timestamps for things, so just hardcode them
 $sed -i.tmp -e 's,timestamp="[0-9]*",timestamp="1480431575",' repo/index.xml
 diff -uw $WORKSPACE/tests/repo/index.xml repo/index.xml

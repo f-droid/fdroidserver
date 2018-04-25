@@ -32,7 +32,7 @@ import urllib.parse
 import zipfile
 import calendar
 from binascii import hexlify, unhexlify
-from datetime import datetime
+from datetime import datetime, timezone
 from xml.dom.minidom import Document
 
 from . import _
@@ -67,7 +67,7 @@ def make(apps, sortedids, apks, repodir, archive):
         common.assert_config_keystore(common.config)
 
     repodict = collections.OrderedDict()
-    repodict['timestamp'] = datetime.utcnow()
+    repodict['timestamp'] = datetime.utcnow().replace(tzinfo=timezone.utc)
     repodict['version'] = METADATA_VERSION
 
     if common.config['repo_maxage'] != 0:
