@@ -8,6 +8,37 @@
 	<install packageName="org.adaway"/>
 	<uninstall packageName="com.android.vending"/>
 	<uninstall packageName="com.facebook.orca"/>
+	<application id="souch.smsbypass">
+		<id>souch.smsbypass</id>
+		<added>2018-04-26</added>
+		<lastupdated>2018-04-26</lastupdated>
+		<name>Battery level</name>
+		<summary>Filter SMS and show them in a fake app</summary>
+		<icon>souch.smsbypass.9.png</icon>
+		<desc>&lt;p&gt;In order to keep away curious eyes, SMS-bypass filters incoming SMS messages before they reach your inbox. Based on bughunter2.smsfilter.&lt;/p&gt;&lt;p&gt;Features:&lt;/p&gt;&lt;ul&gt;&lt;li&gt; Discrete fake app &quot;Battery level&quot;: Long tap on Battery percentage will show SMS.&lt;/li&gt;&lt;li&gt; Filter incoming SMS specified address: redirect the SMS to SMS-bypass messages list; remove SMS arrival sound or vibration; show a discreet notification icon (battery level); vibrate if checked in settings&lt;/li&gt;&lt;li&gt; Add contact from contact list&lt;/li&gt;&lt;li&gt; Export messages to a text file&lt;/li&gt;&lt;/ul&gt;</desc>
+		<license>GPL-3.0</license>
+		<categories>Phone &amp; SMS</categories>
+		<category>Phone &amp; SMS</category>
+		<web>https://gitlab.com/souch/SMSbypass</web>
+		<source>https://gitlab.com/souch/SMSbypass/tree/HEAD</source>
+		<tracker>https://gitlab.com/souch/SMSbypass/issues</tracker>
+		<donate>http://rodolphe.souchaud.free.fr/donate</donate>
+		<flattr>cad90e036b975ed129a3ce80a0750466</flattr>
+		<marketversion>0.9</marketversion>
+		<marketvercode>9</marketvercode>
+		<package>
+			<version>0.9</version>
+			<versioncode>9</versioncode>
+			<apkname>souch.smsbypass_9.apk</apkname>
+			<hash type="sha256">80b0ae68a1189baa3ee6717092e3dbf1a4210165f7f7e5f2f9616bd63a2ec01d</hash>
+			<size>81295</size>
+			<sdkver>8</sdkver>
+			<targetSdkVersion>18</targetSdkVersion>
+			<added>2018-04-26</added>
+			<sig>e50c99753cd45e2736d52cb49be07581</sig>
+			<permissions>READ_CONTACTS,READ_EXTERNAL_STORAGE,RECEIVE_SMS,SEND_SMS,VIBRATE,WRITE_EXTERNAL_STORAGE</permissions>
+		</package>
+	</application>
 	<application id="duplicate.permisssions">
 		<id>duplicate.permisssions</id>
 		<added>2017-12-22</added>

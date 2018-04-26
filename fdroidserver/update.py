@@ -1181,6 +1181,25 @@ def scan_apk_aapt(apk, apkfile):
     apk['icons_src'] = _get_apk_icons_src(apkfile, icon_name)
 
 
+def _sanitize_sdk_version(value):
+    """Sanitize the raw values from androguard to handle bad values
+
+    minSdkVersion/targetSdkVersion/maxSdkVersion must be integers,
+    but that doesn't stop devs from doing strange things like
+    setting them using Android XML strings.
+
+    https://gitlab.com/souch/SMSbypass/blob/v0.9/app/src/main/AndroidManifest.xml#L29
+    https://gitlab.com/souch/SMSbypass/blob/v0.9/app/src/main/res/values/strings.xml#L27
+    """
+    try:
+        sdk_version = int(value)
+        if sdk_version > 0:
+            return str(sdk_version)  # heinous, but this is still str in the codebase
+    except (TypeError, ValueError):
+        pass
+    return None
+
+
 def scan_apk_androguard(apk, apkfile):
     try:
         from androguard.core.bytecodes.apk import APK
@@ -1221,12 +1240,17 @@ def scan_apk_androguard(apk, apkfile):
             except ValueError:
                 pass
 
-    if apkobject.get_max_sdk_version() is not None:
-        apk['maxSdkVersion'] = apkobject.get_max_sdk_version()
-    if apkobject.get_min_sdk_version() is not None:
-        apk['minSdkVersion'] = apkobject.get_min_sdk_version()
-    if apkobject.get_target_sdk_version() is not None:
-        apk['targetSdkVersion'] = apkobject.get_target_sdk_version()
+    minSdkVersion = _sanitize_sdk_version(apkobject.get_min_sdk_version())
+    if minSdkVersion is not None:
+        apk['minSdkVersion'] = minSdkVersion
+
+    targetSdkVersion = _sanitize_sdk_version(apkobject.get_target_sdk_version())
+    if targetSdkVersion is not None:
+        apk['targetSdkVersion'] = targetSdkVersion
+
+    maxSdkVersion = _sanitize_sdk_version(apkobject.get_max_sdk_version())
+    if maxSdkVersion is not None:
+        apk['maxSdkVersion'] = maxSdkVersion
 
     icon_id_str = apkobject.get_element("application", "icon")
     if icon_id_str:

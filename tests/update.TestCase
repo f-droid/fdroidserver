@@ -253,7 +253,7 @@ class UpdateTest(unittest.TestCase):
         apps = fdroidserver.metadata.read_metadata(xref=True)
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
-        self.assertEqual(len(apks), 13)
+        self.assertEqual(len(apks), 14)
         apk = apks[0]
         self.assertEqual(apk['packageName'], 'com.politedroid')
         self.assertEqual(apk['versionCode'], 3)
@@ -297,6 +297,10 @@ class UpdateTest(unittest.TestCase):
         os.chdir(os.path.join(localmodule, 'tests'))
         if os.path.basename(os.getcwd()) != 'tests':
             raise Exception('This test must be run in the "tests/" subdir')
+
+        apk_info = fdroidserver.update.scan_apk('repo/souch.smsbypass_9.apk')
+        self.assertIsNone(apk_info.get('maxSdkVersion'))
+        self.assertEqual(apk_info.get('versionName'), '0.9')
 
         apk_info = fdroidserver.update.scan_apk('repo/duplicate.permisssions_9999999.apk')
         self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_launcher.png',
@@ -549,7 +553,7 @@ class UpdateTest(unittest.TestCase):
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
         fdroidserver.update.translate_per_build_anti_features(apps, apks)
-        self.assertEqual(len(apks), 13)
+        self.assertEqual(len(apks), 14)
         foundtest = False
         for apk in apks:
             if apk['packageName'] == 'com.politedroid' and apk['versionCode'] == 3:
