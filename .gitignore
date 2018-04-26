@@ -36,9 +36,12 @@ makebuildserver.config.py
 /tests/archive/categories.txt
 /tests/archive/icons*
 /tests/archive/index.jar
+/tests/archive/index_unsigned.jar
 /tests/archive/index.xml
 /tests/archive/index-v1.jar
+/tests/archive/index-v1.json
 /tests/repo/index.jar
+/tests/repo/index_unsigned.jar
 /tests/repo/index-v1.jar
 /tests/repo/info.guardianproject.urzip/
 /tests/repo/info.guardianproject.checkey/en-US/phoneScreenshots/checkey-phone.png
