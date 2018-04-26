@@ -23,6 +23,26 @@
   "apps": [
     {
       "categories": [
+        "Phone & SMS"
+      ],
+      "suggestedVersionName": "0.9",
+      "suggestedVersionCode": "9",
+      "description": "<p>In order to keep away curious eyes, SMS-bypass filters incoming SMS messages before they reach your inbox. Based on bughunter2.smsfilter.</p><p>Features:</p><ul><li> Discrete fake app \"Battery level\": Long tap on Battery percentage will show SMS.</li><li> Filter incoming SMS specified address: redirect the SMS to SMS-bypass messages list; remove SMS arrival sound or vibration; show a discreet notification icon (battery level); vibrate if checked in settings</li><li> Add contact from contact list</li><li> Export messages to a text file</li></ul>",
+      "donate": "http://rodolphe.souchaud.free.fr/donate",
+      "flattrID": "cad90e036b975ed129a3ce80a0750466",
+      "issueTracker": "https://gitlab.com/souch/SMSbypass/issues",
+      "license": "GPL-3.0",
+      "name": "Battery level",
+      "sourceCode": "https://gitlab.com/souch/SMSbypass/tree/HEAD",
+      "summary": "Filter SMS and show them in a fake app",
+      "webSite": "https://gitlab.com/souch/SMSbypass",
+      "added": 1524700800000,
+      "icon": "souch.smsbypass.9.png",
+      "packageName": "souch.smsbypass",
+      "lastUpdated": 1524700800000
+    },
+    {
+      "categories": [
         "tests"
       ],
       "suggestedVersionCode": "9999999",
@@ -524,6 +544,48 @@
         "targetSdkVersion": "18",
         "versionCode": 1619,
         "versionName": "0.1"
+      }
+    ],
+    "souch.smsbypass": [
+      {
+        "added": 1524700800000,
+        "apkName": "souch.smsbypass_9.apk",
+        "hash": "80b0ae68a1189baa3ee6717092e3dbf1a4210165f7f7e5f2f9616bd63a2ec01d",
+        "hashType": "sha256",
+        "minSdkVersion": "8",
+        "packageName": "souch.smsbypass",
+        "sig": "e50c99753cd45e2736d52cb49be07581",
+        "signer": "d3aec784b1fd71549fc22c999789122e3639895db6bd585da5835fbe3db6985c",
+        "size": 81295,
+        "targetSdkVersion": "18",
+        "uses-permission": [
+          [
+            "android.permission.RECEIVE_SMS",
+            null
+          ],
+          [
+            "android.permission.SEND_SMS",
+            null
+          ],
+          [
+            "android.permission.READ_CONTACTS",
+            null
+          ],
+          [
+            "android.permission.WRITE_EXTERNAL_STORAGE",
+            null
+          ],
+          [
+            "android.permission.VIBRATE",
+            null
+          ],
+          [
+            "android.permission.READ_EXTERNAL_STORAGE",
+            null
+          ]
+        ],
+        "versionCode": 9,
+        "versionName": "0.9"
       }
     ]
   }

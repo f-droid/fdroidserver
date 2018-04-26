@@ -253,7 +253,7 @@ class UpdateTest(unittest.TestCase):
         apps = fdroidserver.metadata.read_metadata(xref=True)
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
-        self.assertEqual(len(apks), 13)
+        self.assertEqual(len(apks), 14)
         apk = apks[0]
         self.assertEqual(apk['packageName'], 'com.politedroid')
         self.assertEqual(apk['versionCode'], 3)
@@ -298,7 +298,12 @@ class UpdateTest(unittest.TestCase):
         if os.path.basename(os.getcwd()) != 'tests':
             raise Exception('This test must be run in the "tests/" subdir')
 
+        apk_info = fdroidserver.update.scan_apk('repo/souch.smsbypass_9.apk')
+        self.assertIsNone(apk_info.get('maxSdkVersion'))
+        self.assertEqual(apk_info.get('versionName'), '0.9')
+
         apk_info = fdroidserver.update.scan_apk('repo/duplicate.permisssions_9999999.apk')
+        self.assertIsNone(apk_info.get('versionName'))
         self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_launcher.png',
                                                  '-1': 'res/drawable/ic_launcher.png'})
 
@@ -324,14 +329,17 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(apk_info['targetSdkVersion'], '8')
 
         apk_info = fdroidserver.update.scan_apk('org.bitbucket.tickytacky.mirrormirror_4.apk')
+        self.assertEqual(apk_info.get('versionName'), '1.0.3')
         self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable-mdpi/mirror.png',
                                                  '-1': 'res/drawable-mdpi/mirror.png'})
 
         apk_info = fdroidserver.update.scan_apk('repo/info.zwanenburg.caffeinetile_4.apk')
+        self.assertEqual(apk_info.get('versionName'), '1.3')
         self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_coffee_on.xml',
                                                  '-1': 'res/drawable/ic_coffee_on.xml'})
 
         apk_info = fdroidserver.update.scan_apk('repo/com.politedroid_6.apk')
+        self.assertEqual(apk_info.get('versionName'), '1.5')
         self.assertEqual(apk_info['icons_src'], {'120': 'res/drawable-ldpi-v4/icon.png',
                                                  '160': 'res/drawable-mdpi-v4/icon.png',
                                                  '240': 'res/drawable-hdpi-v4/icon.png',
@@ -339,6 +347,7 @@ class UpdateTest(unittest.TestCase):
                                                  '-1': 'res/drawable-mdpi-v4/icon.png'})
 
         apk_info = fdroidserver.update.scan_apk('SpeedoMeterApp.main_1.apk')
+        self.assertEqual(apk_info.get('versionName'), '1.0')
         self.assertEqual(apk_info['icons_src'], {})
 
     def test_scan_apk_no_sig(self):
@@ -549,7 +558,7 @@ class UpdateTest(unittest.TestCase):
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
         fdroidserver.update.translate_per_build_anti_features(apps, apks)
-        self.assertEqual(len(apks), 13)
+        self.assertEqual(len(apks), 14)
         foundtest = False
         for apk in apks:
             if apk['packageName'] == 'com.politedroid' and apk['versionCode'] == 3:
