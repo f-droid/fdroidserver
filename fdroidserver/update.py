@@ -1181,6 +1181,27 @@ def scan_apk_aapt(apk, apkfile):
     apk['icons_src'] = _get_apk_icons_src(apkfile, icon_name)
 
 
+def _ensure_final_value(packageName, arsc, value):
+    """Ensure incoming value is always the value, not the resid
+
+    androguard will sometimes return the Android "resId" aka
+    Resource ID instead of the actual value.  This checks whether
+    the value is actually a resId, then performs the Android
+    Resource lookup as needed.
+
+    """
+    if value:
+        returnValue = value
+        if value[0] == '@':
+            try:  # can be a literal value or a resId
+                res_id = int(value.replace("@", "0x"), 16)
+                res_id = arsc.get_id(packageName, res_id)[1]
+                returnValue = arsc.get_string(packageName, res_id)[1]
+            except ValueError:
+                pass
+        return returnValue
+
+
 def _sanitize_sdk_version(value):
     """Sanitize the raw values from androguard to handle bad values
 
@@ -1229,16 +1250,8 @@ def scan_apk_androguard(apk, apkfile):
     apk['versionCode'] = int(apkobject.get_androidversion_code())
     apk['name'] = apkobject.get_app_name()
 
-    versionName = apkobject.get_androidversion_name()
-    if versionName:
-        apk['versionName'] = versionName
-        if versionName[0] == '@':
-            try:  # can be a literal value or a resId
-                res_id = int(versionName.replace("@", "0x"), 16)
-                res_id = arsc.get_id(apk['packageName'], res_id)[1]
-                apk['versionName'] = arsc.get_string(apk['packageName'], res_id)[1]
-            except ValueError:
-                pass
+    apk['versionName'] = _ensure_final_value(apk['packageName'], arsc,
+                                             apkobject.get_androidversion_name())
 
     minSdkVersion = _sanitize_sdk_version(apkobject.get_min_sdk_version())
     if minSdkVersion is not None:
