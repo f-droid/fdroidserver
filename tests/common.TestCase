@@ -533,7 +533,7 @@ class CommonTest(unittest.TestCase):
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
         self.assertEqual(18, fdroidserver.common.get_minSdkVersion_aapt(signed))
 
-    def test_get_api_id_aapt(self):
+    def test_get_api_id(self):
 
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -568,13 +568,20 @@ class CommonTest(unittest.TestCase):
             ('repo/urzip-; Рахма́нинов, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢尔盖·.apk', 'info.guardianproject.urzip', '100', '0.1'),
         ]
         for apkfilename, appid, versionCode, versionName in testcases:
-            a, vc, vn = fdroidserver.common.get_apk_id_aapt(apkfilename)
-            self.assertEqual(appid, a)
-            self.assertEqual(versionCode, vc)
-            self.assertEqual(versionName, vn)
+            print('\n\nAPKFILENAME\n', apkfilename)
+            if 'aapt' in config:
+                a, vc, vn = fdroidserver.common.get_apk_id_aapt(apkfilename)
+                self.assertEqual(appid, a)
+                self.assertEqual(versionCode, vc)
+                self.assertEqual(versionName, vn)
+            if fdroidserver.common.use_androguard():
+                a, vc, vn = fdroidserver.common.get_apk_id_androguard(apkfilename)
+                self.assertEqual(appid, a)
+                self.assertEqual(versionCode, vc)
+                self.assertEqual(versionName, vn)
 
         with self.assertRaises(FDroidException):
-            fdroidserver.common.get_apk_id_aapt('nope')
+            fdroidserver.common.get_apk_id('nope')
 
     def test_get_minSdkVersion_aapt(self):
 

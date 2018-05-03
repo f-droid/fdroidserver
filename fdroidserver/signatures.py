@@ -36,7 +36,7 @@ def extract_signature(apkpath):
         raise FDroidException("no valid signature in '{}'".format(apkpath))
     logging.debug('signature okay: %s', apkpath)
 
-    appid, vercode, _ignored = common.get_apk_id_aapt(apkpath)
+    appid, vercode, _ignored = common.get_apk_id(apkpath)
     sigdir = common.metadata_get_sigdir(appid, vercode)
     if not os.path.exists(sigdir):
         os.makedirs(sigdir)
