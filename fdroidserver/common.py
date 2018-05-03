@@ -1995,12 +1995,12 @@ def is_apk_and_debuggable(apkfile):
 
 
 def get_apk_id_aapt(apkfile):
-    """Extrat identification information from APK using aapt.
+    """Extract identification information from APK using aapt.
 
     :param apkfile: path to an APK file.
     :returns: triplet (appid, version code, version name)
     """
-    r = re.compile("^package: name='(?P<appid>.*)' versionCode='(?P<vercode>.*)' versionName='(?P<vername>.*)'.*")
+    r = re.compile("^package: name='(?P<appid>.*)' versionCode='(?P<vercode>.*)' versionName='(?P<vername>.*?)'(?: platformBuildVersionName='.*')?")
     p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
     for line in p.output.splitlines():
         m = r.match(line)
