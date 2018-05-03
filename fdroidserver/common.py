@@ -2665,12 +2665,20 @@ def verify_old_apk_signature(apk):
     jarsigner passes unsigned APKs as "verified"! So this has to turn
     on -strict then check for result 4.
 
+    Just to be safe, this never reuses the file, and locks down the
+    file permissions while in use.  That should prevent a bad actor
+    from changing the settings during operation.
+
     :returns: boolean whether the APK was verified
+
     """
 
     _java_security = os.path.join(os.getcwd(), '.java.security')
+    if os.path.exists(_java_security):
+        os.remove(_java_security)
     with open(_java_security, 'w') as fp:
         fp.write('jdk.jar.disabledAlgorithms=MD2, RSA keySize < 1024')
+    os.chmod(_java_security, 0o400)
 
     try:
         cmd = [
@@ -2685,6 +2693,10 @@ def verify_old_apk_signature(apk):
         else:
             logging.debug(_('JAR signature verified: {path}').format(path=apk))
             return True
+    finally:
+        if os.path.exists(_java_security):
+            os.chmod(_java_security, 0o600)
+            os.remove(_java_security)
 
     logging.error(_('Old APK signature failed to verify: {path}').format(path=apk)
                   + '\n' + output.decode('utf-8'))
