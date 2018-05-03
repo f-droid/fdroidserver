@@ -75,6 +75,8 @@ def main():
     # in ANDROID_HOME if that exists, otherwise None
     if options.android_home is not None:
         test_config['sdk_path'] = options.android_home
+    elif common.use_androguard():
+        pass
     elif not common.test_sdk_exists(test_config):
         if os.path.isfile('/usr/bin/aapt'):
             # remove sdk_path and build_tools, they are not required
@@ -110,7 +112,8 @@ def main():
                     test_config['sdk_path'] = s
                 if common.test_sdk_exists(test_config):
                     break
-    if not common.test_sdk_exists(test_config):
+    if (options.android_home is not None or not common.use_androguard()) \
+       and not common.test_sdk_exists(test_config):
         raise FDroidException("Android SDK not found.")
 
     if not os.path.exists('config.py'):
