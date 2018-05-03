@@ -1955,6 +1955,36 @@ def use_androguard():
 use_androguard.show_path = True
 
 
+def _get_androguard_APK(apkfile):
+    try:
+        from androguard.core.bytecodes.apk import APK
+    except ImportError:
+        raise FDroidException("androguard library is not installed and aapt not present")
+
+    return APK(apkfile)
+
+
+def ensure_final_value(packageName, arsc, value):
+    """Ensure incoming value is always the value, not the resid
+
+    androguard will sometimes return the Android "resId" aka
+    Resource ID instead of the actual value.  This checks whether
+    the value is actually a resId, then performs the Android
+    Resource lookup as needed.
+
+    """
+    if value:
+        returnValue = value
+        if value[0] == '@':
+            try:  # can be a literal value or a resId
+                res_id = int('0x' + value[1:], 16)
+                res_id = arsc.get_id(packageName, res_id)[1]
+                returnValue = arsc.get_string(packageName, res_id)[1]
+            except ValueError:
+                pass
+        return returnValue
+
+
 def is_apk_and_debuggable_aapt(apkfile):
     p = SdkToolsPopen(['aapt', 'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
                       output=False)
@@ -1967,12 +1997,7 @@ def is_apk_and_debuggable_aapt(apkfile):
 
 
 def is_apk_and_debuggable_androguard(apkfile):
-    try:
-        from androguard.core.bytecodes.apk import APK
-    except ImportError:
-        raise FDroidException("androguard library is not installed and aapt not present")
-
-    apkobject = APK(apkfile)
+    apkobject = _get_androguard_APK(apkfile)
     if apkobject.is_valid_APK():
         debuggable = apkobject.get_element("application", "debuggable")
         if debuggable is not None:
@@ -1994,13 +2019,31 @@ def is_apk_and_debuggable(apkfile):
         return is_apk_and_debuggable_aapt(apkfile)
 
 
-def get_apk_id_aapt(apkfile):
-    """Extrat identification information from APK using aapt.
+def get_apk_id(apkfile):
+    """Extract identification information from APK using aapt.
 
     :param apkfile: path to an APK file.
     :returns: triplet (appid, version code, version name)
     """
-    r = re.compile("^package: name='(?P<appid>.*)' versionCode='(?P<vercode>.*)' versionName='(?P<vername>.*)'.*")
+    if use_androguard():
+        return get_apk_id_androguard(apkfile)
+    else:
+        return get_apk_id_aapt(apkfile)
+
+
+def get_apk_id_androguard(apkfile):
+    if not os.path.exists(apkfile):
+        raise FDroidException(_("Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'")
+                              .format(apkfilename=apkfile))
+    a = _get_androguard_APK(apkfile)
+    versionName = ensure_final_value(a.package, a.get_android_resources(), a.get_androidversion_name())
+    if not versionName:
+        versionName = ''  # versionName is expected to always be a str
+    return a.package, a.get_androidversion_code(), versionName
+
+
+def get_apk_id_aapt(apkfile):
+    r = re.compile("^package: name='(?P<appid>.*)' versionCode='(?P<vercode>.*)' versionName='(?P<vername>.*?)'(?: platformBuildVersionName='.*')?")
     p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
     for line in p.output.splitlines():
         m = r.match(line)
@@ -2665,12 +2708,20 @@ def verify_old_apk_signature(apk):
     jarsigner passes unsigned APKs as "verified"! So this has to turn
     on -strict then check for result 4.
 
+    Just to be safe, this never reuses the file, and locks down the
+    file permissions while in use.  That should prevent a bad actor
+    from changing the settings during operation.
+
     :returns: boolean whether the APK was verified
+
     """
 
     _java_security = os.path.join(os.getcwd(), '.java.security')
+    if os.path.exists(_java_security):
+        os.remove(_java_security)
     with open(_java_security, 'w') as fp:
         fp.write('jdk.jar.disabledAlgorithms=MD2, RSA keySize < 1024')
+    os.chmod(_java_security, 0o400)
 
     try:
         cmd = [
@@ -2685,6 +2736,10 @@ def verify_old_apk_signature(apk):
         else:
             logging.debug(_('JAR signature verified: {path}').format(path=apk))
             return True
+    finally:
+        if os.path.exists(_java_security):
+            os.chmod(_java_security, 0o600)
+            os.remove(_java_security)
 
     logging.error(_('Old APK signature failed to verify: {path}').format(path=apk)
                   + '\n' + output.decode('utf-8'))

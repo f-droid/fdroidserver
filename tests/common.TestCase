@@ -533,7 +533,7 @@ class CommonTest(unittest.TestCase):
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
         self.assertEqual(18, fdroidserver.common.get_minSdkVersion_aapt(signed))
 
-    def test_get_api_id_aapt(self):
+    def test_get_api_id(self):
 
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -543,8 +543,6 @@ class CommonTest(unittest.TestCase):
 
         testcases = [
             ('repo/obb.main.twoversions_1101613.apk', 'obb.main.twoversions', '1101613', '0.1'),
-            ('OBBMainPatchCurrent.apk', 'obb.mainpatch.current', '1619', '0.1'),
-            ('OBBMainTwoVersions.apk', 'obb.main.twoversions', '1101613', '0.1'),
             ('org.bitbucket.tickytacky.mirrormirror_1.apk', 'org.bitbucket.tickytacky.mirrormirror', '1', '1.0'),
             ('org.bitbucket.tickytacky.mirrormirror_2.apk', 'org.bitbucket.tickytacky.mirrormirror', '2', '1.0.1'),
             ('org.bitbucket.tickytacky.mirrormirror_3.apk', 'org.bitbucket.tickytacky.mirrormirror', '3', '1.0.2'),
@@ -555,12 +553,11 @@ class CommonTest(unittest.TestCase):
             ('urzip-badsig.apk', 'info.guardianproject.urzip', '100', '0.1'),
             ('urzip-release.apk', 'info.guardianproject.urzip', '100', '0.1'),
             ('urzip-release-unsigned.apk', 'info.guardianproject.urzip', '100', '0.1'),
-            ('urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234.apk', 'info.guardianproject.urzip', '100', '0.1'),
             ('repo/com.politedroid_3.apk', 'com.politedroid', '3', '1.2'),
             ('repo/com.politedroid_4.apk', 'com.politedroid', '4', '1.3'),
             ('repo/com.politedroid_5.apk', 'com.politedroid', '5', '1.4'),
             ('repo/com.politedroid_6.apk', 'com.politedroid', '6', '1.5'),
-            ('repo/duplicate.permisssions_9999999.apk', 'duplicate.permisssions', '9999999', '0.3-7-gb817ac8'),
+            ('repo/duplicate.permisssions_9999999.apk', 'duplicate.permisssions', '9999999', ''),
             ('repo/info.zwanenburg.caffeinetile_4.apk', 'info.zwanenburg.caffeinetile', '4', '1.3'),
             ('repo/obb.main.oldversion_1444412523.apk', 'obb.main.oldversion', '1444412523', '0.1'),
             ('repo/obb.mainpatch.current_1619_another-release-key.apk', 'obb.mainpatch.current', '1619', '0.1'),
@@ -571,13 +568,20 @@ class CommonTest(unittest.TestCase):
             ('repo/urzip-; Рахма́нинов, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢尔盖·.apk', 'info.guardianproject.urzip', '100', '0.1'),
         ]
         for apkfilename, appid, versionCode, versionName in testcases:
-            a, vc, vn = fdroidserver.common.get_apk_id_aapt(apkfilename)
-            self.assertEqual(appid, a)
-            self.assertEqual(versionCode, vc)
-            self.assertEqual(versionName, vn)
+            print('\n\nAPKFILENAME\n', apkfilename)
+            if 'aapt' in config:
+                a, vc, vn = fdroidserver.common.get_apk_id_aapt(apkfilename)
+                self.assertEqual(appid, a)
+                self.assertEqual(versionCode, vc)
+                self.assertEqual(versionName, vn)
+            if fdroidserver.common.use_androguard():
+                a, vc, vn = fdroidserver.common.get_apk_id_androguard(apkfilename)
+                self.assertEqual(appid, a)
+                self.assertEqual(versionCode, vc)
+                self.assertEqual(versionName, vn)
 
         with self.assertRaises(FDroidException):
-            fdroidserver.common.get_apk_id_aapt('nope')
+            fdroidserver.common.get_apk_id('nope')
 
     def test_get_minSdkVersion_aapt(self):
 
