@@ -220,7 +220,7 @@ def fill_config_defaults(thisconfig):
             pathlist += glob.glob(os.path.join(os.getenv('PROGRAMFILES'), 'Java', 'jdk1.[16-9][0-9]?.*'))
         _add_java_paths_to_config(pathlist, thisconfig)
 
-    for java_version in ('7', '8', '9'):
+    for java_version in ('14', '13', '12', '11', '10', '9', '8', '7'):
         if java_version not in thisconfig['java_paths']:
             continue
         java_home = thisconfig['java_paths'][java_version]
@@ -228,7 +228,7 @@ def fill_config_defaults(thisconfig):
         if os.path.exists(jarsigner):
             thisconfig['jarsigner'] = jarsigner
             thisconfig['keytool'] = os.path.join(java_home, 'bin', 'keytool')
-            break  # Java7 is preferred, so quit if found
+            break
 
     for k in ['ndk_paths', 'java_paths']:
         d = thisconfig[k]
