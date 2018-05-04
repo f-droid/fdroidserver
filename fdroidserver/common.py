@@ -1332,7 +1332,9 @@ def remove_debuggable_flags(root_dir):
 
 vcsearch_g = re.compile(r'''.*[Vv]ersionCode\s*=?\s*["']*([0-9]+)["']*''').search
 vnsearch_g = re.compile(r'''.*[Vv]ersionName\s*=?\s*(["'])((?:(?=(\\?))\3.)*?)\1.*''').search
+vnssearch_g = re.compile(r'''.*[Vv]ersionNameSuffix\s*=?\s*(["'])((?:(?=(\\?))\3.)*?)\1.*''').search
 psearch_g = re.compile(r'''.*(packageName|applicationId)\s*=*\s*["']([^"']+)["'].*''').search
+fsearch_g = re.compile(r'''.*(applicationIdSuffix)\s*=*\s*["']([^"']+)["'].*''').search
 
 
 def app_matches_packagename(app, package):
@@ -1372,6 +1374,8 @@ def parse_androidmanifests(paths, app):
         package = None
 
         flavour = None
+        temp_app_id = None
+        temp_version_name = None
         if app.builds and 'gradle' in app.builds[-1] and app.builds[-1].gradle:
             flavour = app.builds[-1].gradle[-1]
 
@@ -1383,6 +1387,16 @@ def parse_androidmanifests(paths, app):
                     if gradle_comment.match(line):
                         continue
 
+                    if "applicationId" in line and not temp_app_id:
+                        matches = psearch_g(line)
+                        if matches:
+                            temp_app_id = matches.group(2)
+
+                    if "versionName" in line and not temp_version_name:
+                        matches = vnsearch_g(line)
+                        if matches:
+                            temp_version_name = matches.group(2)
+
                     if inside_flavour_group > 0:
                         if inside_required_flavour > 0:
                             matches = psearch_g(line)
@@ -1390,10 +1404,24 @@ def parse_androidmanifests(paths, app):
                                 s = matches.group(2)
                                 if app_matches_packagename(app, s):
                                     package = s
+                            else:
+                                # If build.gradle contains applicationIdSuffix add it to the end of package name
+                                matches = fsearch_g(line)
+                                if matches and temp_app_id:
+                                    suffix = matches.group(2)
+                                    temp_app_id = temp_app_id + suffix
+                                    if app_matches_packagename(app, temp_app_id):
+                                        package = temp_app_id
 
                             matches = vnsearch_g(line)
                             if matches:
                                 version = matches.group(2)
+                            else:
+                                # If build.gradle contains applicationNameSuffix add it to the end of version name
+                                matches = vnssearch_g(line)
+                                if matches and temp_version_name:
+                                    name_suffix = matches.group(2)
+                                    version = temp_version_name + name_suffix
 
                             matches = vcsearch_g(line)
                             if matches:
