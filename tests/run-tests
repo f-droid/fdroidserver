@@ -6,11 +6,19 @@ echo_header() {
     { echo -e "==============================================================================\n$1"; } 2>/dev/null
 }
 
+get_fdroid_apk_filename() {
+    if [ -z $aapt ]; then
+        python3 -c "from androguard.core.bytecodes.apk import APK; a=APK('$1'); print(a.package+'_'+a.get_androidversion_code()+'.apk')"
+    else
+        $aapt dump badging "$1" | sed -n "s,^package: name='\(.*\)' versionCode='\([0-9][0-9]*\)' .*,\1_\2.apk,p"
+    fi
+}
+
 copy_apks_into_repo() {
     set +x
     find $APKDIR -type f -name '*.apk' -print0 | while IFS= read -r -d '' f; do
         echo $f | grep -F -v -e unaligned -e unsigned -e badsig -e badcert -e bad-unicode -e janus.apk || continue
-        apk=`$aapt dump badging "$f" | sed -n "s,^package: name='\(.*\)' versionCode='\([0-9][0-9]*\)' .*,\1_\2.apk,p"`
+        apk=`get_fdroid_apk_filename "$f"`
         test "$f" -nt repo/$apk && rm -f repo/$apk  # delete existing if $f is newer
         if [ ! -e repo/$apk ] && [ ! -e archive/$apk ]; then
             echo "$f --> repo/$apk"
@@ -72,9 +80,14 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
 fi
 
 if [ -z "$ANDROID_HOME" ]; then
-    echo "ANDROID_HOME must be set with the path to the Android SDK, i.e.: "
-    echo "  export ANDROID_HOME=/opt/android-sdk"
-    exit 1
+    if python3 -c "import androguard"; then
+        echo "ANDROID_HOME is not set, using androguard"
+    else
+        echo "ERROR: ANDROID_HOME is not set, androguard is not available!"
+        exit 1
+    fi
+else
+    echo "Using ANDROID_HOME=$ANDROID_HOME"
 fi
 
 if [ -d tests ]; then
@@ -715,8 +728,8 @@ $fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME
 #------------------------------------------------------------------------------#
 echo_header "check that 'fdroid init' fails when build-tools cannot be found"
 
-if [ -e /usr/bin/aapt ]; then
-    echo "/usr/bin/aapt exists, not running test"
+if [ -e /usr/bin/aapt ] || python3 -c 'import androguard'; then
+    echo "/usr/bin/aapt or androguard installed, not running test"
 else
     REPOROOT=`create_test_dir`
     FAKE_ANDROID_HOME=`create_test_dir`
@@ -755,29 +768,32 @@ set -e
 # by --android-home over the one in ANDROID_HOME, therefore if it uses the one
 # in ANDROID_HOME, it won't work because it is a fake one.  Only
 # --android-home provides a working one.
-echo_header "setup a new repo from scratch with keystore and android-home set on cmd line"
+if [ -z "$ANDROID_HOME" ]; then
+    echo_header "SKIP setup a new repo from scratch with keystore and android-home set on cmd line"
+else
+    echo_header "setup a new repo from scratch with keystore and android-home set on cmd line"
 
-REPOROOT=`create_test_dir`
-KEYSTORE=$REPOROOT/keystore.jks
-FAKE_ANDROID_HOME=`create_test_dir`
-create_fake_android_home $FAKE_ANDROID_HOME
-STORED_ANDROID_HOME=$ANDROID_HOME
-unset ANDROID_HOME
-echo "ANDROID_HOME: $ANDROID_HOME"
-cd $REPOROOT
-$fdroid init --keystore $KEYSTORE --android-home $STORED_ANDROID_HOME --no-prompt
-test -e $KEYSTORE
-copy_apks_into_repo $REPOROOT
-$fdroid update --create-metadata --verbose
-$fdroid readmeta
-grep -F '<application id=' repo/index.xml > /dev/null
-test -e repo/index.xml
-test -e repo/index.jar
-test -e repo/index-v1.jar
-test -e tmp/apkcache
-! test -z tmp/apkcache
-export ANDROID_HOME=$STORED_ANDROID_HOME
-
+    REPOROOT=`create_test_dir`
+    KEYSTORE=$REPOROOT/keystore.jks
+    FAKE_ANDROID_HOME=`create_test_dir`
+    create_fake_android_home $FAKE_ANDROID_HOME
+    STORED_ANDROID_HOME=$ANDROID_HOME
+    unset ANDROID_HOME
+    echo "ANDROID_HOME: $ANDROID_HOME"
+    cd $REPOROOT
+    $fdroid init --keystore $KEYSTORE --android-home $STORED_ANDROID_HOME --no-prompt
+    test -e $KEYSTORE
+    copy_apks_into_repo $REPOROOT
+    $fdroid update --create-metadata --verbose
+    $fdroid readmeta
+    grep -F '<application id=' repo/index.xml > /dev/null
+    test -e repo/index.xml
+    test -e repo/index.jar
+    test -e repo/index-v1.jar
+    test -e tmp/apkcache
+    ! test -z tmp/apkcache
+    export ANDROID_HOME=$STORED_ANDROID_HOME
+fi
 
 #------------------------------------------------------------------------------#
 echo_header "check duplicate files are properly handled by fdroid update"

@@ -62,13 +62,18 @@ ubuntu_lts:
   image: ubuntu:latest
   only:
     - master@fdroid/fdroidserver
+  variables:
+    DEBIAN_FRONTEND: noninteractive
   script:
+    - echo Etc/UTC > /etc/timezone
+    - apt-get -qy update
+    - apt-get -qy install gnupg
     - while ! apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-key 9AAC253193B65D4DF1D0A13EEC4632C79C5E0151; do sleep 15; done
     - export RELEASE=`sed -n 's,^deb [^ ][^ ]* \([a-z]*\).*,\1,p' /etc/apt/sources.list | head -1`
     - echo "deb http://ppa.launchpad.net/fdroid/fdroidserver/ubuntu $RELEASE main" >> /etc/apt/sources.list
     - apt-get -qy update
     - apt-get -qy dist-upgrade
-    - apt-get -qy install fdroidserver git python3-setuptools
+    - apt-get -qy install --install-recommends fdroidserver git python3-setuptools
     - export ANDROID_HOME=/usr/lib/android-sdk
     - export LANG=C.UTF-8
     - cd tests
