@@ -98,6 +98,14 @@ pip_install:
     - fdroid readmeta
     - fdroid update --help
 
+pyup_io_safety_check:
+  image: archlinux/base
+  script:
+    - pacman --sync --sysupgrade --refresh --noconfirm grep python-pip python-virtualenv tar
+    - ./setup.py compile_catalog install
+    - pip install safety
+    - safety check --full-report
+
 fedora_latest:
   image: fedora:latest
   only:
