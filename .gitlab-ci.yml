@@ -30,6 +30,7 @@ metadata_v0:
     - git reset --hard
     - git checkout $GITCOMMIT
     - cd fdroiddata
+    - echo "accepted_formats = ('txt', 'yml')" >> config.py
     - ../tests/dump_internal_metadata_format.py
     - sed -i
           -e '/Translation:/d'
