@@ -24,27 +24,18 @@ matrix:
 # is used on Windows Subsystem for Linux.
 addons:
   apt:
+    update: true
     sources:
       - sourceline: 'ppa:fdroid/fdroidserver'
     packages:
-    - bash
-    - dash
-    - pylint
-    - pep8
-    - python3-babel
-    - python3-dev
-    - python3-pip
-    - python3-ruamel.yaml
-    - python3-setuptools
-    - python3.4-venv
-    - libjpeg-dev
-    - zlib1g-dev
-    - fdroidserver
+      - python3-babel
+      - python3-setuptools
+      - fdroidserver
 
 android:
   components:
     - android-23  # required for `fdroid build` test
-    - build-tools-25.0.3  # required for `fdroid build` test
+    - build-tools-27.0.3  # required for `fdroid build` test
   licenses:
     - 'android-sdk-preview-.+'
     - 'android-sdk-license-.+'
@@ -101,15 +92,12 @@ install:
     fi
 
 # The OSX tests seem to run slower, they often timeout.  So only run
-# the test suite with the installed version of fdroid, instead of the
-# three rounds that ./complete-ci-tests does.
+# the test suite with the installed version of fdroid.
+#
+# Supporting pip on Ubuntu/trusty was too painful here, since it seems
+# that pip installs conflict with the Ubuntu packages.
 script:
-  - cd tests
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      ./run-tests;
-    else
-      ./complete-ci-tests;
-    fi
+  - ./tests/run-tests
 
 after_failure:
   - cd $TRAVIS_BUILD_DIR
