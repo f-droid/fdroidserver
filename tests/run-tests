@@ -156,31 +156,32 @@ $fdroid --version
 #------------------------------------------------------------------------------#
 echo_header 'run process when building and signing are on separate machines'
 
-REPOROOT=`create_test_dir`
-cd $REPOROOT
-cp $WORKSPACE/tests/keystore.jks $REPOROOT/
-$fdroid init --keystore keystore.jks --repo-keyalias=sova
-echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo "accepted_formats = ['txt', 'yml']" >> config.py
-echo 'keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.py
-test -d archive || mkdir archive
-test -d metadata || mkdir metadata
-cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.yml metadata/
-test -d repo || mkdir repo
-test -d unsigned || mkdir unsigned
-cp $WORKSPACE/tests/urzip-release-unsigned.apk unsigned/info.guardianproject.urzip_100.apk
-$fdroid publish --verbose
-$fdroid update --verbose --nosign
-$fdroid signindex --verbose
-test -e repo/index.xml
-test -e repo/index.jar
-test -e repo/index-v1.jar
-test -e tmp/apkcache
-! test -z tmp/apkcache
-test -L urzip.apk
-grep -F '<application id=' repo/index.xml > /dev/null
-
+if which zipalign || ls -1 $ANDROID_HOME/build-tools/*/zipalign; then
+    REPOROOT=`create_test_dir`
+    cd $REPOROOT
+    cp $WORKSPACE/tests/keystore.jks $REPOROOT/
+    $fdroid init --keystore keystore.jks --repo-keyalias=sova
+    echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+    echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+    echo "accepted_formats = ['txt', 'yml']" >> config.py
+    echo 'keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.py
+    test -d archive || mkdir archive
+    test -d metadata || mkdir metadata
+    cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.yml metadata/
+    test -d repo || mkdir repo
+    test -d unsigned || mkdir unsigned
+    cp $WORKSPACE/tests/urzip-release-unsigned.apk unsigned/info.guardianproject.urzip_100.apk
+    $fdroid publish --verbose
+    $fdroid update --verbose --nosign
+    $fdroid signindex --verbose
+    test -e repo/index.xml
+    test -e repo/index.jar
+    test -e repo/index-v1.jar
+    test -e tmp/apkcache
+    ! test -z tmp/apkcache
+    test -L urzip.apk
+    grep -F '<application id=' repo/index.xml > /dev/null
+fi
 
 #------------------------------------------------------------------------------#
 echo_header "test UTF-8 metadata"
