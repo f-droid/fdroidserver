@@ -107,6 +107,22 @@ pyup_io_safety_check:
     - pip install safety
     - safety check --full-report
 
+pylint:
+  image: alpine:3.7
+  variables:
+    LANG: C.UTF-8
+  script:
+    - apk add --no-cache ca-certificates python3
+    - python3 -m ensurepip
+    - pip3 install pylint
+    - pylint --rcfile=.pylint-rcfile --output-format=colorized --reports=n
+            fdroid
+            makebuildserver
+            setup.py
+            fdroidserver/*.py
+            tests/*.py
+            tests/*.TestCase
+
 fedora_latest:
   image: fedora:latest
   only:

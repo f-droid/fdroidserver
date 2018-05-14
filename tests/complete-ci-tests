@@ -74,19 +74,3 @@ test -e $WORKSPACE/env/share/locale/de/LC_MESSAGES/fdroidserver.mo
 
 # run tests in new pip+pyvenv install
 fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests $apksource
-
-
-#------------------------------------------------------------------------------#
-# run pylint
-
-# only run it where it will work, for example, the pyvenvs above don't have pylint
-if which pylint3 && python3 -c "import pylint" 2> /dev/null; then
-    cd $WORKSPACE
-    pylint3 --rcfile=.pylint-rcfile --output-format=colorized --reports=n \
-            fdroid \
-            makebuildserver \
-            setup.py \
-            fdroidserver/*.py \
-            tests/*.py \
-            tests/*.TestCase
-fi
