@@ -52,7 +52,7 @@ def publish_source_tarball(apkfilename, unsigned_dir, output_dir):
         logging.debug('...no source tarball for %s', apkfilename)
 
 
-def key_alias(appid, resolve=False):
+def key_alias(appid):
     """Get the alias which F-Droid uses to indentify the singing key
     for this App in F-Droids keystore.
     """

@@ -211,7 +211,7 @@ class IndexTest(unittest.TestCase):
                 pass
 
             fdroidserver.index.v1_sort_packages(
-                i, 'repo', fdroidserver.common.load_stats_fdroid_signing_key_fingerprints())
+                i, fdroidserver.common.load_stats_fdroid_signing_key_fingerprints())
             self.maxDiff = None
             self.assertEqual(json.dumps(i, indent=2), json.dumps(o, indent=2))
 

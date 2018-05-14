@@ -45,7 +45,7 @@ def extract_signature(apkpath):
     return sigdir
 
 
-def extract(config, options):
+def extract(options):
 
     # Create tmp dir if missing…
     tmp_dir = 'tmp'
