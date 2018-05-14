@@ -82,6 +82,7 @@ setup(name='fdroidserver',
           'babel',
       ],
       install_requires=[
+          'androguard >= 3.1.0rc2',
           'clint',
           'GitPython',
           'mwclient',
