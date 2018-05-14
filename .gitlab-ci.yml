@@ -80,6 +80,28 @@ ubuntu_lts:
     - cd tests
     - ./run-tests
 
+# test using TrustyLTS with all depends from pypi
+ubuntu_trusty_pip:
+  image: ubuntu:trusty
+  only:
+    - master@fdroid/fdroidserver
+  variables:
+    DEBIAN_FRONTEND: noninteractive
+    LANG: C.UTF-8
+  script:
+    - echo Etc/UTC > /etc/timezone
+    - apt-get -qy update
+    - apt-get -qy dist-upgrade
+    - apt-get -qy install git default-jdk python3-pip python3.4-venv
+    - rm -rf env
+    - pyvenv-3.4 env
+    - . env/bin/activate
+    - echo sed -i "s/'requests.*',$/'requests',/" setup.py
+    - pip3 install --upgrade babel pip setuptools
+    - pip3 install -e .
+    - ./setup.py compile_catalog
+    - ./tests/run-tests
+
 pip_install:
   image: archlinux/base
   only:
