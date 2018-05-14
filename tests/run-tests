@@ -1030,61 +1030,61 @@ test -e $KEYSTORE
 #------------------------------------------------------------------------------#
 echo_header "sign binary repo in offline box, then publishing from online box"
 
-OFFLINE_ROOT=`create_test_dir`
-KEYSTORE=$WORKSPACE/tests/keystore.jks
-LOCAL_COPY_DIR=`create_test_dir`/fdroid
-mkdir $LOCAL_COPY_DIR
-ONLINE_ROOT=`create_test_dir`
-SERVERWEBROOT=`create_test_dir`
-
-# create offline binary transparency log
-cd $OFFLINE_ROOT
-mkdir binary_transparency
-cd binary_transparency
-git init
-
-# fake git remote server for binary transparency log
-BINARY_TRANSPARENCY_REMOTE=`create_test_dir`
-
-# fake git remote server for repo mirror
-SERVER_GIT_MIRROR=`create_test_dir`
-cd $SERVER_GIT_MIRROR
-git init
 if have_git_2_3; then
+    OFFLINE_ROOT=`create_test_dir`
+    KEYSTORE=$WORKSPACE/tests/keystore.jks
+    LOCAL_COPY_DIR=`create_test_dir`/fdroid
+    mkdir $LOCAL_COPY_DIR
+    ONLINE_ROOT=`create_test_dir`
+    SERVERWEBROOT=`create_test_dir`
+
+    # create offline binary transparency log
+    cd $OFFLINE_ROOT
+    mkdir binary_transparency
+    cd binary_transparency
+    git init
+
+    # fake git remote server for binary transparency log
+    BINARY_TRANSPARENCY_REMOTE=`create_test_dir`
+
+    # fake git remote server for repo mirror
+    SERVER_GIT_MIRROR=`create_test_dir`
+    cd $SERVER_GIT_MIRROR
+    git init
     git config receive.denyCurrentBranch updateInstead
+
+    cd $OFFLINE_ROOT
+    fdroid_init_with_prebuilt_keystore
+    cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $OFFLINE_ROOT/
+
+    echo "mirrors = ['http://foo.bar/fdroid', 'http://asdflkdsfjafdsdfhkjh.onion/fdroid']" >> config.py
+    echo "servergitmirrors = '$SERVER_GIT_MIRROR'" >> config.py
+    echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
+    echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
+    $fdroid update --pretty
+    grep -F '<application id=' repo/index.xml > /dev/null
+    grep -F '/fdroid/repo</mirror>' repo/index.xml
+    grep -F '/fdroid/archive</mirror>' archive/index.xml
+    test `grep '<mirror>' repo/index.xml | wc -l` -eq 2
+    test `grep '<mirror>' archive/index.xml | wc -l` -eq 2
+    cd binary_transparency
+    [ `git rev-list --count HEAD` == "1" ]
+    cd ..
+    $fdroid server update --verbose
+    grep -F '<application id=' $LOCAL_COPY_DIR/repo/index.xml > /dev/null
+    cd $ONLINE_ROOT
+    echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
+    echo "sync_from_local_copy_dir = True" >> config.py
+    echo "serverwebroots = '$SERVERWEBROOT'" >> config.py
+    echo "servergitmirrors = '$SERVER_GIT_MIRROR'" >> config.py
+    echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
+    echo "binary_transparency_remote = '$BINARY_TRANSPARENCY_REMOTE'" >> config.py
+    $fdroid server update --verbose
+    cd $BINARY_TRANSPARENCY_REMOTE
+    [ `git rev-list --count HEAD` == "1" ]
+    cd $SERVER_GIT_MIRROR
+    [ `git rev-list --count HEAD` == "1" ]
 fi
-
-cd $OFFLINE_ROOT
-fdroid_init_with_prebuilt_keystore
-cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $OFFLINE_ROOT/
-
-echo "mirrors = ['http://foo.bar/fdroid', 'http://asdflkdsfjafdsdfhkjh.onion/fdroid']" >> config.py
-echo "servergitmirrors = '$SERVER_GIT_MIRROR'" >> config.py
-echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
-echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
-$fdroid update --pretty
-grep -F '<application id=' repo/index.xml > /dev/null
-grep -F '/fdroid/repo</mirror>' repo/index.xml
-grep -F '/fdroid/archive</mirror>' archive/index.xml
-test `grep '<mirror>' repo/index.xml | wc -l` -eq 2
-test `grep '<mirror>' archive/index.xml | wc -l` -eq 2
-cd binary_transparency
-[ `git rev-list --count HEAD` == "1" ]
-cd ..
-$fdroid server update --verbose
-grep -F '<application id=' $LOCAL_COPY_DIR/repo/index.xml > /dev/null
-cd $ONLINE_ROOT
-echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
-echo "sync_from_local_copy_dir = True" >> config.py
-echo "serverwebroots = '$SERVERWEBROOT'" >> config.py
-echo "servergitmirrors = '$SERVER_GIT_MIRROR'" >> config.py
-echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
-echo "binary_transparency_remote = '$BINARY_TRANSPARENCY_REMOTE'" >> config.py
-$fdroid server update --verbose
-cd $BINARY_TRANSPARENCY_REMOTE
-[ `git rev-list --count HEAD` == "1" ]
-cd $SERVER_GIT_MIRROR
-[ `git rev-list --count HEAD` == "1" ]
 
 
 #------------------------------------------------------------------------------#
