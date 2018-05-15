@@ -36,7 +36,7 @@ class SignaturesTest(unittest.TestCase):
             APK = [os.path.abspath(os.path.join('repo', 'com.politedroid_3.apk'))]
 
         with TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            signatures.extract(common.config, OptionsFixture())
+            signatures.extract(OptionsFixture())
 
             # check if extracted signatures are where they are supposed to be
             # also verify weather if extracted file contian what they should

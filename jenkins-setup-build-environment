@@ -107,5 +107,3 @@ fi
 ../fdroid build --verbose --stop org.adaway:55
 # building old versions should still work
 ../fdroid build --verbose --stop org.fdroid.fdroid:96150
-# test OTA update ZIP build and publish
-../fdroid build --verbose --stop org.fdroid.fdroid.privileged.ota:2070

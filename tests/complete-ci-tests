@@ -27,6 +27,11 @@ if [ -z $ANDROID_HOME ]; then
     fi
 fi
 
+if ! which pyvenv; then
+    echo "pyvenv required to run this test suite!"
+    exit 1
+fi
+
 apksource=$1
 
 #------------------------------------------------------------------------------#
@@ -35,30 +40,11 @@ if [ -z $PIP_DOWNLOAD_CACHE ]; then
     export PIP_DOWNLOAD_CACHE=$HOME/.pip_download_cache
 fi
 
-
-#------------------------------------------------------------------------------#
-# required Java 7 or later keytool/jarsigner for :file support
-
-export PATH=/usr/lib/jvm/java-8-openjdk-amd64/bin:$PATH
-
-
 #------------------------------------------------------------------------------#
 # run local tests, don't scan fdroidserver/ project for APKs
 
 cd $WORKSPACE/tests
 ./run-tests $apksource
-
-#------------------------------------------------------------------------------#
-# find pyvenv, to support Ubuntu/trusty's python3.4-venv
-
-if which pyvenv; then
-    pyvenv=pyvenv
-elif which pyvenv-3.4; then
-    pyvenv=pyvenv-3.4
-else
-    echo "pyvenv required to run this test suite!"
-    exit 1
-fi
 
 
 #------------------------------------------------------------------------------#
@@ -78,10 +64,8 @@ done
 # test install using install direct from git repo
 cd $WORKSPACE
 rm -rf $WORKSPACE/env
-$pyvenv $WORKSPACE/env
+pyvenv $WORKSPACE/env
 . $WORKSPACE/env/bin/activate
-# workaround https://github.com/pypa/setuptools/issues/937
-pip3 install --quiet setuptools==33.1.1 Babel
 pip3 install --quiet -e $WORKSPACE
 python3 setup.py compile_catalog install
 
@@ -90,19 +74,3 @@ test -e $WORKSPACE/env/share/locale/de/LC_MESSAGES/fdroidserver.mo
 
 # run tests in new pip+pyvenv install
 fdroid=$WORKSPACE/env/bin/fdroid $WORKSPACE/tests/run-tests $apksource
-
-
-#------------------------------------------------------------------------------#
-# run pylint
-
-# only run it where it will work, for example, the pyvenvs above don't have pylint
-if which pylint3 && python3 -c "import pylint" 2> /dev/null; then
-    cd $WORKSPACE
-    pylint3 --rcfile=.pylint-rcfile --output-format=colorized --reports=n \
-            fdroid \
-            makebuildserver \
-            setup.py \
-            fdroidserver/*.py \
-            tests/*.py \
-            tests/*.TestCase
-fi

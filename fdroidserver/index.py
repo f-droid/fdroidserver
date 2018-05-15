@@ -163,7 +163,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
     output['requests'] = requestsdict
 
     # establish sort order of the index
-    v1_sort_packages(packages, repodir, fdroid_signing_key_fingerprints)
+    v1_sort_packages(packages, fdroid_signing_key_fingerprints)
 
     appslist = []
     output['apps'] = appslist
@@ -252,7 +252,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         signindex.sign_index_v1(repodir, json_name)
 
 
-def v1_sort_packages(packages, repodir, fdroid_signing_key_fingerprints):
+def v1_sort_packages(packages, fdroid_signing_key_fingerprints):
     """Sorts the supplied list to ensure a deterministic sort order for
     package entries in the index file. This sort-order also expresses
     installation preference to the clients.

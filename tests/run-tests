@@ -156,31 +156,32 @@ $fdroid --version
 #------------------------------------------------------------------------------#
 echo_header 'run process when building and signing are on separate machines'
 
-REPOROOT=`create_test_dir`
-cd $REPOROOT
-cp $WORKSPACE/tests/keystore.jks $REPOROOT/
-$fdroid init --keystore keystore.jks --repo-keyalias=sova
-echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-echo "accepted_formats = ['txt', 'yml']" >> config.py
-echo 'keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.py
-test -d archive || mkdir archive
-test -d metadata || mkdir metadata
-cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.yml metadata/
-test -d repo || mkdir repo
-test -d unsigned || mkdir unsigned
-cp $WORKSPACE/tests/urzip-release-unsigned.apk unsigned/info.guardianproject.urzip_100.apk
-$fdroid publish --verbose
-$fdroid update --verbose --nosign
-$fdroid signindex --verbose
-test -e repo/index.xml
-test -e repo/index.jar
-test -e repo/index-v1.jar
-test -e tmp/apkcache
-! test -z tmp/apkcache
-test -L urzip.apk
-grep -F '<application id=' repo/index.xml > /dev/null
-
+if which zipalign || ls -1 $ANDROID_HOME/build-tools/*/zipalign; then
+    REPOROOT=`create_test_dir`
+    cd $REPOROOT
+    cp $WORKSPACE/tests/keystore.jks $REPOROOT/
+    $fdroid init --keystore keystore.jks --repo-keyalias=sova
+    echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+    echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
+    echo "accepted_formats = ['txt', 'yml']" >> config.py
+    echo 'keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.py
+    test -d archive || mkdir archive
+    test -d metadata || mkdir metadata
+    cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.yml metadata/
+    test -d repo || mkdir repo
+    test -d unsigned || mkdir unsigned
+    cp $WORKSPACE/tests/urzip-release-unsigned.apk unsigned/info.guardianproject.urzip_100.apk
+    $fdroid publish --verbose
+    $fdroid update --verbose --nosign
+    $fdroid signindex --verbose
+    test -e repo/index.xml
+    test -e repo/index.jar
+    test -e repo/index-v1.jar
+    test -e tmp/apkcache
+    ! test -z tmp/apkcache
+    test -L urzip.apk
+    grep -F '<application id=' repo/index.xml > /dev/null
+fi
 
 #------------------------------------------------------------------------------#
 echo_header "test UTF-8 metadata"
@@ -1029,61 +1030,61 @@ test -e $KEYSTORE
 #------------------------------------------------------------------------------#
 echo_header "sign binary repo in offline box, then publishing from online box"
 
-OFFLINE_ROOT=`create_test_dir`
-KEYSTORE=$WORKSPACE/tests/keystore.jks
-LOCAL_COPY_DIR=`create_test_dir`/fdroid
-mkdir $LOCAL_COPY_DIR
-ONLINE_ROOT=`create_test_dir`
-SERVERWEBROOT=`create_test_dir`
-
-# create offline binary transparency log
-cd $OFFLINE_ROOT
-mkdir binary_transparency
-cd binary_transparency
-git init
-
-# fake git remote server for binary transparency log
-BINARY_TRANSPARENCY_REMOTE=`create_test_dir`
-
-# fake git remote server for repo mirror
-SERVER_GIT_MIRROR=`create_test_dir`
-cd $SERVER_GIT_MIRROR
-git init
 if have_git_2_3; then
+    OFFLINE_ROOT=`create_test_dir`
+    KEYSTORE=$WORKSPACE/tests/keystore.jks
+    LOCAL_COPY_DIR=`create_test_dir`/fdroid
+    mkdir $LOCAL_COPY_DIR
+    ONLINE_ROOT=`create_test_dir`
+    SERVERWEBROOT=`create_test_dir`
+
+    # create offline binary transparency log
+    cd $OFFLINE_ROOT
+    mkdir binary_transparency
+    cd binary_transparency
+    git init
+
+    # fake git remote server for binary transparency log
+    BINARY_TRANSPARENCY_REMOTE=`create_test_dir`
+
+    # fake git remote server for repo mirror
+    SERVER_GIT_MIRROR=`create_test_dir`
+    cd $SERVER_GIT_MIRROR
+    git init
     git config receive.denyCurrentBranch updateInstead
+
+    cd $OFFLINE_ROOT
+    fdroid_init_with_prebuilt_keystore
+    cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $OFFLINE_ROOT/
+
+    echo "mirrors = ['http://foo.bar/fdroid', 'http://asdflkdsfjafdsdfhkjh.onion/fdroid']" >> config.py
+    echo "servergitmirrors = '$SERVER_GIT_MIRROR'" >> config.py
+    echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
+    echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
+    $fdroid update --pretty
+    grep -F '<application id=' repo/index.xml > /dev/null
+    grep -F '/fdroid/repo</mirror>' repo/index.xml
+    grep -F '/fdroid/archive</mirror>' archive/index.xml
+    test `grep '<mirror>' repo/index.xml | wc -l` -eq 2
+    test `grep '<mirror>' archive/index.xml | wc -l` -eq 2
+    cd binary_transparency
+    [ `git rev-list --count HEAD` == "1" ]
+    cd ..
+    $fdroid server update --verbose
+    grep -F '<application id=' $LOCAL_COPY_DIR/repo/index.xml > /dev/null
+    cd $ONLINE_ROOT
+    echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
+    echo "sync_from_local_copy_dir = True" >> config.py
+    echo "serverwebroots = '$SERVERWEBROOT'" >> config.py
+    echo "servergitmirrors = '$SERVER_GIT_MIRROR'" >> config.py
+    echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
+    echo "binary_transparency_remote = '$BINARY_TRANSPARENCY_REMOTE'" >> config.py
+    $fdroid server update --verbose
+    cd $BINARY_TRANSPARENCY_REMOTE
+    [ `git rev-list --count HEAD` == "1" ]
+    cd $SERVER_GIT_MIRROR
+    [ `git rev-list --count HEAD` == "1" ]
 fi
-
-cd $OFFLINE_ROOT
-fdroid_init_with_prebuilt_keystore
-cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $OFFLINE_ROOT/
-
-echo "mirrors = ['http://foo.bar/fdroid', 'http://asdflkdsfjafdsdfhkjh.onion/fdroid']" >> config.py
-echo "servergitmirrors = '$SERVER_GIT_MIRROR'" >> config.py
-echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
-echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
-$fdroid update --pretty
-grep -F '<application id=' repo/index.xml > /dev/null
-grep -F '/fdroid/repo</mirror>' repo/index.xml
-grep -F '/fdroid/archive</mirror>' archive/index.xml
-test `grep '<mirror>' repo/index.xml | wc -l` -eq 2
-test `grep '<mirror>' archive/index.xml | wc -l` -eq 2
-cd binary_transparency
-[ `git rev-list --count HEAD` == "1" ]
-cd ..
-$fdroid server update --verbose
-grep -F '<application id=' $LOCAL_COPY_DIR/repo/index.xml > /dev/null
-cd $ONLINE_ROOT
-echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
-echo "sync_from_local_copy_dir = True" >> config.py
-echo "serverwebroots = '$SERVERWEBROOT'" >> config.py
-echo "servergitmirrors = '$SERVER_GIT_MIRROR'" >> config.py
-echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
-echo "binary_transparency_remote = '$BINARY_TRANSPARENCY_REMOTE'" >> config.py
-$fdroid server update --verbose
-cd $BINARY_TRANSPARENCY_REMOTE
-[ `git rev-list --count HEAD` == "1" ]
-cd $SERVER_GIT_MIRROR
-[ `git rev-list --count HEAD` == "1" ]
 
 
 #------------------------------------------------------------------------------#

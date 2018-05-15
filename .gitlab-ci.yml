@@ -30,6 +30,7 @@ metadata_v0:
     - git reset --hard
     - git checkout $GITCOMMIT
     - cd fdroiddata
+    - echo "accepted_formats = ('txt', 'yml')" >> config.py
     - ../tests/dump_internal_metadata_format.py
     - sed -i
           -e '/Translation:/d'
@@ -79,6 +80,28 @@ ubuntu_lts:
     - cd tests
     - ./run-tests
 
+# test using TrustyLTS with all depends from pypi
+ubuntu_trusty_pip:
+  image: ubuntu:trusty
+  only:
+    - master@fdroid/fdroidserver
+  variables:
+    DEBIAN_FRONTEND: noninteractive
+    LANG: C.UTF-8
+  script:
+    - echo Etc/UTC > /etc/timezone
+    - apt-get -qy update
+    - apt-get -qy dist-upgrade
+    - apt-get -qy install git default-jdk python3-pip python3.4-venv
+    - rm -rf env
+    - pyvenv-3.4 env
+    - . env/bin/activate
+    - echo sed -i "s/'requests.*',$/'requests',/" setup.py
+    - pip3 install --upgrade babel pip setuptools
+    - pip3 install -e .
+    - ./setup.py compile_catalog
+    - ./tests/run-tests
+
 pip_install:
   image: archlinux/base
   only:
@@ -97,6 +120,30 @@ pip_install:
     - fdroid
     - fdroid readmeta
     - fdroid update --help
+
+pyup_io_safety_check:
+  image: archlinux/base
+  script:
+    - pacman --sync --sysupgrade --refresh --noconfirm grep python-pip python-virtualenv tar
+    - ./setup.py compile_catalog install
+    - pip install safety
+    - safety check --full-report
+
+pylint:
+  image: alpine:3.7
+  variables:
+    LANG: C.UTF-8
+  script:
+    - apk add --no-cache ca-certificates python3
+    - python3 -m ensurepip
+    - pip3 install pylint
+    - pylint --rcfile=.pylint-rcfile --output-format=colorized --reports=n
+            fdroid
+            makebuildserver
+            setup.py
+            fdroidserver/*.py
+            tests/*.py
+            tests/*.TestCase
 
 fedora_latest:
   image: fedora:latest
