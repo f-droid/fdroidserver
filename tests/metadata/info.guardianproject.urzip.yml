@@ -18,7 +18,7 @@ Description: |
   ★ 致用户：我们还缺少你喜欢的功能？发现了一个 bug？请告诉我们！我们乐于听取您的意见。请发送电子邮件至: support@guardianproject.info 或者加入我们的聊天室 https://guardianproject.info/contact
 
 IssueTracker: https://dev.guardianproject.info/projects/urzip/issues
-License: GPL-3.0
+License: GPL-3.0-only
 Repo: https://github.com/guardianproject/urzip.git
 RepoType: git
 SourceCode: https://github.com/guardianproject/urzip

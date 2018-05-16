@@ -16,7 +16,7 @@
 		<summary>Filter SMS and show them in a fake app</summary>
 		<icon>souch.smsbypass.9.png</icon>
 		<desc>&lt;p&gt;In order to keep away curious eyes, SMS-bypass filters incoming SMS messages before they reach your inbox. Based on bughunter2.smsfilter.&lt;/p&gt;&lt;p&gt;Features:&lt;/p&gt;&lt;ul&gt;&lt;li&gt; Discrete fake app &quot;Battery level&quot;: Long tap on Battery percentage will show SMS.&lt;/li&gt;&lt;li&gt; Filter incoming SMS specified address: redirect the SMS to SMS-bypass messages list; remove SMS arrival sound or vibration; show a discreet notification icon (battery level); vibrate if checked in settings&lt;/li&gt;&lt;li&gt; Add contact from contact list&lt;/li&gt;&lt;li&gt; Export messages to a text file&lt;/li&gt;&lt;/ul&gt;</desc>
-		<license>GPL-3.0</license>
+		<license>GPL-3.0-only</license>
 		<categories>Phone &amp; SMS</categories>
 		<category>Phone &amp; SMS</category>
 		<web>https://gitlab.com/souch/SMSbypass</web>
@@ -103,7 +103,7 @@
 		<summary></summary>
 		<icon>obb.main.oldversion.1444412523.png</icon>
 		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
-		<license>GPL-3.0</license>
+		<license>GPL-3.0-only</license>
 		<categories>Development</categories>
 		<category>Development</category>
 		<web></web>
@@ -138,7 +138,7 @@
 		<summary></summary>
 		<icon>obb.main.twoversions.1101617.png</icon>
 		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
-		<license>GPL-3.0</license>
+		<license>GPL-3.0-only</license>
 		<categories>Development</categories>
 		<category>Development</category>
 		<web></web>
@@ -196,7 +196,7 @@
 		<summary></summary>
 		<icon>obb.mainpatch.current.1619.png</icon>
 		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
-		<license>GPL-3.0</license>
+		<license>GPL-3.0-only</license>
 		<categories>Development</categories>
 		<category>Development</category>
 		<web></web>
@@ -229,7 +229,7 @@
 		<summary>Calendar tool</summary>
 		<icon>com.politedroid.6.png</icon>
 		<desc>&lt;p&gt;Activates silent mode during calendar events.&lt;/p&gt;</desc>
-		<license>GPL-3.0</license>
+		<license>GPL-3.0-only</license>
 		<categories>Time</categories>
 		<category>Time</category>
 		<web></web>
@@ -294,7 +294,7 @@
 		<summary>一个实用工具，获取已安装在您的设备上的应用的有关信息</summary>
 		<icon>info.guardianproject.urzip.100.png</icon>
 		<desc>&lt;p&gt;It’s Urzip 是一个获得已安装 APK 相关信息的实用工具。它从您的设备上已安装的所有应用开始，一键触摸即可显示 APK 的指纹，并且提供到达 virustotal.com 和 androidobservatory.org 的快捷链接，让您方便地了解特定 APK 的档案。它还可以让您导出签名证书和生成 ApkSignaturePin Pin 文件供 TrustedIntents 库使用。&lt;/p&gt;&lt;p&gt;★ Urzip 支持下列语言： Deutsch, English, español, suomi, 日本語, 한국어, Norsk, português (Portugal), Русский, Slovenščina, Türkçe 没看到您的语言？帮忙翻译本应用吧： https://www.transifex.com/projects/p/urzip&lt;/p&gt;&lt;p&gt;★ 致用户：我们还缺少你喜欢的功能？发现了一个 bug？请告诉我们！我们乐于听取您的意见。请发送电子邮件至: support@guardianproject.info 或者加入我们的聊天室 https://guardianproject.info/contact&lt;/p&gt;</desc>
-		<license>GPL-3.0</license>
+		<license>GPL-3.0-only</license>
 		<categories>Development,GuardianProject,1,2.0</categories>
 		<category>Development</category>
 		<web>https://dev.guardianproject.info/projects/urzip</web>

@@ -1,5 +1,5 @@
 Categories:Development,GuardianProject
-License:GPL-3.0
+License:GPL-3.0-only
 Web Site:https://dev.guardianproject.info/projects/checkey
 Source Code:https://github.com/guardianproject/checkey
 Issue Tracker:https://dev.guardianproject.info/projects/checkey/issues

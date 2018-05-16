@@ -1,5 +1,5 @@
 Categories:System
-License:GPL-3.0+
+License:GPL-3.0-or-later
 Web Site:https://f-droid.org
 Source Code:https://gitlab.com/fdroid/fdroidclient
 Issue Tracker:https://gitlab.com/fdroid/fdroidclient/issues

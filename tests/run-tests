@@ -591,7 +591,7 @@ REPOROOT=`create_test_dir`
 cd $REPOROOT
 mkdir repo
 mkdir metadata
-echo "License:GPL-2.0" >> metadata/fake.txt
+echo "License:GPL-2.0-only" >> metadata/fake.txt
 echo "Summary:Yup still fake" >> metadata/fake.txt
 echo "Categories:Internet" >> metadata/fake.txt
 echo "Description:" >> metadata/fake.txt

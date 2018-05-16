@@ -1,6 +1,6 @@
 Categories:
   - Multimedia
-License: GPL-3.0
+License: GPL-3.0-only
 WebSite: http://www.videolan.org/vlc/download-android.html
 SourceCode: http://git.videolan.org/?p=vlc-ports/android.git;a=summary
 IssueTracker: "http://www.videolan.org/support/index.html#bugs"

@@ -22,7 +22,7 @@
     "Donate": "http://sufficientlysecure.org/index.php/adaway",
     "FlattrID": "369138",
     "IssueTracker": "https://github.com/dschuermann/ad-away/issues",
-    "License": "GPL-3.0",
+    "License": "GPL-3.0-only",
     "Provides": "org.sufficientlysecure.adaway",
     "Repo": "https://github.com/dschuermann/ad-away.git",
     "RepoType": "git",
