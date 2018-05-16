@@ -1,5 +1,5 @@
 Categories:Phone & SMS
-License:GPL-3.0
+License:GPL-3.0-only
 Web Site:https://gitlab.com/souch/SMSbypass
 Source Code:https://gitlab.com/souch/SMSbypass/tree/HEAD
 Issue Tracker:https://gitlab.com/souch/SMSbypass/issues

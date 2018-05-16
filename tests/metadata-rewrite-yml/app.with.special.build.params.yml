@@ -2,7 +2,7 @@ AntiFeatures:
   - UpstreamNonFree
 Categories:
   - System
-License: GPL-3.0
+License: GPL-3.0-only
 SourceCode: https://github.com/loadrunner/Facebook-Contact-Sync
 IssueTracker: https://github.com/loadrunner/Facebook-Contact-Sync/issues
 

@@ -1,5 +1,5 @@
 Categories:Phone & SMS
-License:GPL-3.0
+License:GPL-3.0-only
 Web Site:http://www.smssecure.org
 Source Code:https://github.com/SMSSecure/SMSSecure
 Issue Tracker:https://github.com/SMSSecure/SMSSecure/issues

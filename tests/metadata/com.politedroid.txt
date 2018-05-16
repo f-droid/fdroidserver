@@ -1,5 +1,5 @@
 Categories:Time
-License:GPL-3.0
+License:GPL-3.0-only
 Web Site:
 Source Code:https://github.com/miguelvps/PoliteDroid
 Issue Tracker:https://github.com/miguelvps/PoliteDroid/issues
