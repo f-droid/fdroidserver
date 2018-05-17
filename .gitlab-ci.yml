@@ -122,11 +122,13 @@ pip_install:
     - fdroid update --help
 
 pyup_io_safety_check:
-  image: archlinux/base
+  image: alpine:3.7
+  variables:
+    LANG: C.UTF-8
   script:
-    - pacman --sync --sysupgrade --refresh --noconfirm grep python-pip python-virtualenv tar
-    - ./setup.py compile_catalog install
-    - pip install safety
+    - apk add --no-cache ca-certificates python3
+    - python3 -m ensurepip
+    - pip3 install safety
     - safety check --full-report
 
 pylint:
