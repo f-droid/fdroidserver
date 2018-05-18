@@ -149,7 +149,7 @@ include tests/repo/org.videolan.vlc/en-US/sevenInchScreenshots/screenshot5.png
 include tests/repo/org.videolan.vlc/en-US/sevenInchScreenshots/screenshot6.png
 include tests/repo/org.videolan.vlc/en-US/sevenInchScreenshots/screenshot8.png
 include tests/repo/patch.1619.obb.mainpatch.current.obb
-include tests/repo/urzip-Rakhmaninov*.apk
+include tests/repo/urzip-*.apk
 include tests/run-tests
 include tests/signatures.TestCase
 include tests/signindex/guardianproject.jar
