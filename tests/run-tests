@@ -112,7 +112,7 @@ fi
 
 # allow the location of aapt to be overridden
 if [ -z $aapt ]; then
-    aapt=`ls -1 $ANDROID_HOME/build-tools/*/aapt | sort | tail -1`
+    aapt=`ls -1 $ANDROID_HOME/build-tools/*/aapt 2> /dev/null | sort | tail -1`
 fi
 
 # try to use GNU sed on OSX/BSD cuz BSD sed sucks
