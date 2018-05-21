@@ -828,28 +828,12 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
     if common.get_file_extension(src) == 'apk':
         vercode, version = get_metadata_from_apk(app, build, src)
-        if (version != build.versionName or vercode != build.versionCode):
+        if version != build.versionName or vercode != build.versionCode:
             raise BuildException(("Unexpected version/version code in output;"
                                   " APK: '%s' / '%s', "
                                   " Expected: '%s' / '%s'")
                                  % (version, str(vercode), build.versionName,
                                     str(build.versionCode)))
-    else:
-        vercode = build.versionCode
-        version = build.versionName
-
-    # Add information for 'fdroid verify' to be able to reproduce the build
-    # environment.
-    if onserver:
-        metadir = os.path.join(tmp_dir, 'META-INF')
-        if not os.path.exists(metadir):
-            os.mkdir(metadir)
-        homedir = os.path.expanduser('~')
-        for fn in ['buildserverid', 'fdroidserverid']:
-            shutil.copyfile(os.path.join(homedir, fn),
-                            os.path.join(metadir, fn))
-            subprocess.call(['jar', 'uf', os.path.abspath(src),
-                             'META-INF/' + fn], cwd=tmp_dir)
 
     # Copy the unsigned apk to our destination directory for further
     # processing (by publish.py)...
