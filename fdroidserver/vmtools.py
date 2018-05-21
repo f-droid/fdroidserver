@@ -444,7 +444,7 @@ class LibvirtBuildVm(FDroidBuildVm):
                 _check_call(['virsh', '-c', 'qemu:///system', 'vol-delete', '--pool', 'default', boximg])
                 logger.debug("removed old box image '%s' from libvirt storeage pool", boximg)
             except subprocess.CalledProcessError as e:
-                logger.debug("tired removing old box image '%s', file was not present in first place", boximg, exc_info=e)
+                logger.debug("tried removing old box image '%s', file was not present in first place", boximg, exc_info=e)
         super().box_add(boxname, boxfile, force)
 
     def box_remove(self, boxname):
@@ -452,7 +452,7 @@ class LibvirtBuildVm(FDroidBuildVm):
         try:
             _check_call(['virsh', '-c', 'qemu:///system', 'vol-delete', '--pool', 'default', '%s_vagrant_box_image_0.img' % (boxname)])
         except subprocess.CalledProcessError as e:
-            logger.debug("tired removing '%s', file was not present in first place", boxname, exc_info=e)
+            logger.debug("tried removing '%s', file was not present in first place", boxname, exc_info=e)
 
     def snapshot_create(self, snapshot_name):
         logger.info("creating snapshot '%s' for vm '%s'", snapshot_name, self.srvname)
