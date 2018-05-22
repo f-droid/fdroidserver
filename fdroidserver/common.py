@@ -24,6 +24,7 @@ import io
 import os
 import sys
 import re
+import ast
 import shutil
 import glob
 import stat
@@ -3205,3 +3206,26 @@ def get_git_describe_link():
     else:
         logging.error(_("'{path}' failed to execute!").format(path='git describe'))
         return ''
+
+
+def calculate_math_string(expr):
+    ops = {ast.Add: operator.add, ast.Sub: operator.sub,
+           ast.Mult: operator.mul}
+
+    def execute_ast(node):
+        if isinstance(node, ast.Num):  # <number>
+            return node.n
+        elif isinstance(node, ast.BinOp):  # <left> <operator> <right>
+            return ops[type(node.op)](execute_ast(node.left),
+                                      execute_ast(node.right))
+        elif isinstance(node, ast.UnaryOp):  # <operator> <operand> e.g., -1
+            return ops[type(node.op)](eval(node.operand))
+        else:
+            raise SyntaxError(node)
+
+    try:
+        return execute_ast(ast.parse(expr, mode='eval').body)
+    except SyntaxError as e:
+        raise SyntaxError("could not parse expression '{expr}', "
+                          "only basic math operations are allowed (+, -, *)"
+                          .format(expr=expr))
