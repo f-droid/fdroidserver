@@ -3224,6 +3224,8 @@ def calculate_math_string(expr):
             raise SyntaxError(node)
 
     try:
+        if '#' in expr:
+            raise SyntaxError('no comments allowed')
         return execute_ast(ast.parse(expr, mode='eval').body)
     except SyntaxError as e:
         raise SyntaxError("could not parse expression '{expr}', "
