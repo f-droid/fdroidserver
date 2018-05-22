@@ -434,7 +434,7 @@ def checkupdates_app(app):
                                     .format(field=app.VercodeOperation))
         oldvercode = str(int(vercode))
         op = app.VercodeOperation.replace("%c", oldvercode)
-        vercode = str(eval(op))
+        vercode = str(common.calculate_math_string(op))
         logging.debug("Applied vercode operation: %s -> %s" % (oldvercode, vercode))
 
     if version and any(version.startswith(s) for s in [
