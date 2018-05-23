@@ -183,6 +183,8 @@ cachefiles = [
     # For reference the older one from Nov 8 has a sha256sum of cbba6f8fcf025e1b533326746763aa1d6e2cf4001b1b441602bb44d253bc49ac
     ('https://verification.f-droid.org/build-metadata/96ddff1a5034fcc4340f2d482635eeaccaa6707b6b0f82d26d1435476a2f52e5/platform-27_r01.zip',
      '96ddff1a5034fcc4340f2d482635eeaccaa6707b6b0f82d26d1435476a2f52e5'),
+    ('https://dl.google.com/android/repository/platform-27_r03.zip',
+     '020c4c090bc82ce87ebaae5d1a922e21b39a1d03c78ffa43f0c3e42fc7d28169'),
     ('https://dl.google.com/android/repository/build-tools_r17-linux.zip',
      '4c8444972343a19045236f6924bd7f12046287c70dace96ab88b2159c8ec0e74'),
     ('https://dl.google.com/android/repository/build-tools_r18.0.1-linux.zip',
