@@ -2360,7 +2360,7 @@ def place_srclib(root_dir, number, libpath):
             o.write('android.library.reference.%d=%s\n' % (number, relpath))
 
 
-apk_sigfile = re.compile(r'META-INF/[0-9A-Za-z_\-]+\.(SF|RSA|DSA|EC)')
+APK_SIGNATURE_FILES = re.compile(r'META-INF/[0-9A-Za-z_\-]+\.(SF|RSA|DSA|EC)')
 
 
 def signer_fingerprint_short(sig):
@@ -2515,7 +2515,7 @@ def apk_strip_signatures(signed_apk, strip_manifest=False):
         with ZipFile(tmp_apk, 'r') as in_apk:
             with ZipFile(signed_apk, 'w') as out_apk:
                 for info in in_apk.infolist():
-                    if not apk_sigfile.match(info.filename):
+                    if not APK_SIGNATURE_FILES.match(info.filename):
                         if strip_manifest:
                             if info.filename != 'META-INF/MANIFEST.MF':
                                 buf = in_apk.read(info.filename)
@@ -2546,7 +2546,7 @@ def apk_implant_signatures(apkpath, signaturefile, signedfile, manifest):
                     info.create_system = 0  # "Windows" aka "FAT", what Android SDK uses
                     out_apk.writestr(info, buf)
                 for info in in_apk.infolist():
-                    if not apk_sigfile.match(info.filename):
+                    if not APK_SIGNATURE_FILES.match(info.filename):
                         if info.filename != 'META-INF/MANIFEST.MF':
                             buf = in_apk.read(info.filename)
                             out_apk.writestr(info, buf)
@@ -2565,7 +2565,7 @@ def apk_extract_signatures(apkpath, outdir, manifest=True):
     """
     with ZipFile(apkpath, 'r') as in_apk:
         for f in in_apk.infolist():
-            if apk_sigfile.match(f.filename) or \
+            if APK_SIGNATURE_FILES.match(f.filename) or \
                     (manifest and f.filename == 'META-INF/MANIFEST.MF'):
                 newpath = os.path.join(outdir, os.path.basename(f.filename))
                 with open(newpath, 'wb') as out_file:
@@ -2615,13 +2615,6 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     the unsigned one.  If the APK given as unsigned actually does have a
     signature, it will be stripped out and ignored.
 
-    There are two SHA1 git commit IDs that fdroidserver includes in the builds
-    it makes: fdroidserverid and buildserverid.  Originally, these were inserted
-    into AndroidManifest.xml, but that makes the build not reproducible. So
-    instead they are included as separate files in the APK's META-INF/ folder.
-    If those files exist in the signed APK, they will be part of the signature
-    and need to also be included in the unsigned APK for it to validate.
-
     :param signed_apk: Path to a signed apk file
     :param unsigned_apk: Path to an unsigned apk file expected to match it
     :param tmp_dir: Path to directory for temporary files
@@ -2638,8 +2631,7 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     with ZipFile(signed_apk, 'r') as signed:
         meta_inf_files = ['META-INF/MANIFEST.MF']
         for f in signed.namelist():
-            if apk_sigfile.match(f) \
-               or f in ['META-INF/fdroidserverid', 'META-INF/buildserverid']:
+            if APK_SIGNATURE_FILES.match(f):
                 meta_inf_files.append(f)
         if len(meta_inf_files) < 3:
             return "Signature files missing from {0}".format(signed_apk)
@@ -2652,8 +2644,7 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
                     tmp.writestr(signed.getinfo(filename), signed.read(filename))
                 for info in unsigned.infolist():
                     if info.filename in meta_inf_files:
-                        logging.warning('Ignoring %s from %s',
-                                        info.filename, unsigned_apk)
+                        logging.warning('Ignoring %s from %s', info.filename, unsigned_apk)
                         continue
                     if info.filename in tmp.namelist():
                         return "duplicate filename found: " + info.filename
@@ -2800,7 +2791,7 @@ def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
                             '--max-report-size', '12345678', '--max-diff-block-lines', '100',
                             '--html', htmlfile, '--text', textfile,
                             absapk1, absapk2]) != 0:
-            return("Failed to unpack " + apk1)
+            return("Failed to run diffoscope " + apk1)
 
     apk1dir = os.path.join(tmp_dir, apk_badchars.sub('_', apk1[0:-4]))  # trim .apk
     apk2dir = os.path.join(tmp_dir, apk_badchars.sub('_', apk2[0:-4]))  # trim .apk
@@ -2808,31 +2799,28 @@ def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
         if os.path.exists(d):
             shutil.rmtree(d)
         os.mkdir(d)
-        os.mkdir(os.path.join(d, 'jar-xf'))
+        os.mkdir(os.path.join(d, 'content'))
 
-    if subprocess.call(['jar', 'xf',
-                        os.path.abspath(apk1)],
-                       cwd=os.path.join(apk1dir, 'jar-xf')) != 0:
-        return("Failed to unpack " + apk1)
-    if subprocess.call(['jar', 'xf',
-                        os.path.abspath(apk2)],
-                       cwd=os.path.join(apk2dir, 'jar-xf')) != 0:
-        return("Failed to unpack " + apk2)
+    # extract APK contents for comparision
+    with ZipFile(absapk1, 'r') as f:
+        f.extractall(path=os.path.join(apk1dir, 'content'))
+    with ZipFile(absapk2, 'r') as f:
+        f.extractall(path=os.path.join(apk2dir, 'content'))
 
     if set_command_in_config('apktool'):
-        if subprocess.call([config['apktool'], 'd', os.path.abspath(apk1), '--output', 'apktool'],
+        if subprocess.call([config['apktool'], 'd', absapk1, '--output', 'apktool'],
                            cwd=apk1dir) != 0:
-            return("Failed to unpack " + apk1)
-        if subprocess.call([config['apktool'], 'd', os.path.abspath(apk2), '--output', 'apktool'],
+            return("Failed to run apktool " + apk1)
+        if subprocess.call([config['apktool'], 'd', absapk2, '--output', 'apktool'],
                            cwd=apk2dir) != 0:
-            return("Failed to unpack " + apk2)
+            return("Failed to run apktool " + apk2)
 
     p = FDroidPopen(['diff', '-r', apk1dir, apk2dir], output=False)
     lines = p.output.splitlines()
     if len(lines) != 1 or 'META-INF' not in lines[0]:
         if set_command_in_config('meld'):
             p = FDroidPopen([config['meld'], apk1dir, apk2dir], output=False)
-        return("Unexpected diff output - " + p.output)
+        return("Unexpected diff output:\n" + p.output)
 
     # since everything verifies, delete the comparison to keep cruft down
     shutil.rmtree(apk1dir)
