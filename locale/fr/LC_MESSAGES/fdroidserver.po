@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2018-02-13 09:01+0100\n"
-"PO-Revision-Date: 2018-04-25 14:38+0000\n"
-"Last-Translator: Étienne Deparis <etienne@depar.is>\n"
+"PO-Revision-Date: 2018-05-21 15:54+0000\n"
+"Last-Translator: Ldm Public <ldmpub@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/"
 "fdroidserver/fr/>\n"
 "Language: fr\n"
@@ -389,7 +389,7 @@ msgstr ""
 
 #: ../fdroidserver/dscanner.py
 msgid "Clean up all containers and then exit"
-msgstr ""
+msgstr "Vider tous les conteneurs puis sortir"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
@@ -398,7 +398,7 @@ msgstr ""
 
 #: ../fdroidserver/import.py
 msgid "Comma separated list of categories."
-msgstr ""
+msgstr "Liste de catégories séparées par des virgules."
 
 #: ../fdroid
 #, c-format, python-format
@@ -421,7 +421,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Could not open apk file for analysis"
-msgstr ""
+msgstr "Impossible d'ouvrir le fichier apk pour analyse"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
@@ -435,7 +435,7 @@ msgstr "Impossible de trouver le nom de la dernière version"
 
 #: ../fdroidserver/import.py
 msgid "Couldn't find package ID"
-msgstr ""
+msgstr "Impossible de trouver l'ID du paquet"
 
 #: ../fdroidserver/update.py
 msgid "Cowardily refusing to overwrite existing signing key setup!"
@@ -470,7 +470,7 @@ msgstr ""
 
 #: ../fdroidserver/publish.py
 msgid "Creating output directory"
-msgstr ""
+msgstr "Création du répertoire de sortie"
 
 #: ../fdroidserver/index.py
 msgid "Creating signed index with this key (SHA256):"
@@ -501,7 +501,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Description '%s' is just the app's summary"
-msgstr ""
+msgstr "Description de '%s' n'est qu'un résumé de l'application"
 
 #: ../fdroidserver/lint.py
 msgid "Description has a duplicate line"
@@ -547,7 +547,7 @@ msgstr ""
 #: ../fdroidserver/server.py ../fdroidserver/nightly.py
 #: ../fdroidserver/upload.py
 msgid "Don't use rsync checksums"
-msgstr ""
+msgstr "Ne pas utiliser les sommes de contrôle rsync"
 
 #: ../fdroid
 msgid "Download complete mirrors of small repos"
@@ -555,11 +555,12 @@ msgstr ""
 
 #: ../fdroidserver/stats.py
 msgid "Download logs we don't have"
-msgstr ""
+msgstr "Télécharger les journaux que n'avons pas"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
 msgstr ""
+"Le téléchargement du référentiel a déjà échoué une fois, ne pas réessayer."
 
 #: ../fdroidserver/verify.py
 #, python-brace-format
