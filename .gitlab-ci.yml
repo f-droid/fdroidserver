@@ -121,24 +121,17 @@ pip_install:
     - fdroid readmeta
     - fdroid update --help
 
-pyup_io_safety_check:
+lint_format_safety_checks:
   image: alpine:3.7
   variables:
     LANG: C.UTF-8
   script:
-    - apk add --no-cache ca-certificates python3
+    - apk add --no-cache bash dash ca-certificates python3
     - python3 -m ensurepip
-    - pip3 install safety
-    - safety check --full-report
-
-pylint:
-  image: alpine:3.7
-  variables:
-    LANG: C.UTF-8
-  script:
-    - apk add --no-cache ca-certificates python3
-    - python3 -m ensurepip
-    - pip3 install pylint
+    - pip3 install pep8 pyflakes pylint safety
+    - export EXITVALUE=0
+    - ./hooks/pre-commit || export EXITVALUE=1
+    - safety check --full-report || export EXITVALUE=1
     - pylint --rcfile=.pylint-rcfile --output-format=colorized --reports=n
             fdroid
             makebuildserver
@@ -146,6 +139,8 @@ pylint:
             fdroidserver/*.py
             tests/*.py
             tests/*.TestCase
+        || export EXITVALUE=1
+    - exit $EXITVALUE
 
 fedora_latest:
   image: fedora:latest

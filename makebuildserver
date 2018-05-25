@@ -74,7 +74,7 @@ config = {
 if os.path.isfile('/usr/bin/systemd-detect-virt'):
     try:
         virt = subprocess.check_output('/usr/bin/systemd-detect-virt').strip().decode('utf-8')
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         virt = 'none'
     if virt == 'qemu' or virt == 'kvm' or virt == 'bochs':
         logger.info('Running in a VM guest, defaulting to QEMU/KVM via libvirt')

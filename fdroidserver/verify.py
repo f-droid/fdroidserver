@@ -40,6 +40,8 @@ def main():
     parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))
+    parser.add_argument("--reuse-remote-apk", action="store_true", default=False,
+                        help=_("Verify against locally cached copy rather than redownloading."))
     options = parser.parse_args()
 
     config = common.read_config(options)
@@ -74,18 +76,19 @@ def main():
             logging.info("Processing {apkfilename}".format(apkfilename=apkfilename))
 
             remoteapk = os.path.join(tmp_dir, apkfilename)
-            if os.path.exists(remoteapk):
-                os.remove(remoteapk)
-            url = 'https://f-droid.org/repo/' + apkfilename
-            logging.info("...retrieving " + url)
-            try:
-                net.download_file(url, dldir=tmp_dir)
-            except requests.exceptions.HTTPError as e:
+            if not options.reuse_remote_apk or not os.path.exists(remoteapk):
+                if os.path.exists(remoteapk):
+                    os.remove(remoteapk)
+                url = 'https://f-droid.org/repo/' + apkfilename
+                logging.info("...retrieving " + url)
                 try:
-                    net.download_file(url.replace('/repo', '/archive'), dldir=tmp_dir)
-                except requests.exceptions.HTTPError as e:
-                    raise FDroidException(_('Downloading {url} failed. {error}')
-                                          .format(url=url, error=e))
+                    net.download_file(url, dldir=tmp_dir)
+                except requests.exceptions.HTTPError:
+                    try:
+                        net.download_file(url.replace('/repo', '/archive'), dldir=tmp_dir)
+                    except requests.exceptions.HTTPError as e:
+                        raise FDroidException(_('Downloading {url} failed. {error}')
+                                              .format(url=url, error=e))
 
             compare_result = common.verify_apks(
                 remoteapk,
@@ -101,9 +104,11 @@ def main():
             logging.info("...NOT verified - {0}".format(e))
             notverified += 1
 
-    logging.info(_("Finished"))
-    logging.info("{0} successfully verified".format(verified))
-    logging.info("{0} NOT verified".format(notverified))
+    if verified > 0:
+        logging.info("{0} successfully verified".format(verified))
+    if notverified > 0:
+        logging.info("{0} NOT verified".format(notverified))
+    sys.exit(notverified)
 
 
 if __name__ == "__main__":
