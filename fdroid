@@ -156,7 +156,7 @@ def main():
     # str(e) often doesn't contain a reason, so just show the backtrace
     except Exception as e:
         logging.critical(_("Unknown exception found!"))
-        raise
+        raise e
     sys.exit(0)
 
 

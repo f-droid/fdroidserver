@@ -83,7 +83,7 @@ def main():
                 logging.info("...retrieving " + url)
                 try:
                     net.download_file(url, dldir=tmp_dir)
-                except requests.exceptions.HTTPError as e:
+                except requests.exceptions.HTTPError:
                     try:
                         net.download_file(url.replace('/repo', '/archive'), dldir=tmp_dir)
                     except requests.exceptions.HTTPError as e:
