@@ -112,7 +112,7 @@ fi
 
 # allow the location of aapt to be overridden
 if [ -z $aapt ]; then
-    aapt=`ls -1 $ANDROID_HOME/build-tools/*/aapt | sort | tail -1`
+    aapt=`ls -1 $ANDROID_HOME/build-tools/*/aapt 2> /dev/null | sort | tail -1`
 fi
 
 # try to use GNU sed on OSX/BSD cuz BSD sed sucks
@@ -610,6 +610,7 @@ $fdroid gpgsign
 $fdroid lint
 $fdroid readmeta
 $fdroid rewritemeta fake
+$fdroid deploy
 $fdroid server update
 $fdroid scanner
 
@@ -643,6 +644,7 @@ $fdroid init
 $fdroid update --create-metadata --verbose
 $fdroid readmeta
 $fdroid server update --local-copy-dir=/tmp/fdroid
+$fdroid deploy --local-copy-dir=/tmp/fdroid --verbose
 
 # now test the errors work
 set +e

@@ -126,7 +126,7 @@ def main():
     # temporary workaround until server.py becomes deploy.py
     if command == 'deploy':
         command = 'server'
-        sys.argv.insert(1, 'update')
+        sys.argv.insert(2, 'update')
 
     # Trick optparse into displaying the right usage when --help is used.
     sys.argv[0] += ' ' + command
