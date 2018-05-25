@@ -448,6 +448,21 @@ test -e repo/com.politedroid_5.apk
 
 
 #------------------------------------------------------------------------------#
+echo_header 'test that verify can succeed and fail'
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+test -d tmp || mkdir tmp
+test -d unsigned || mkdir unsigned
+cp $WORKSPACE/tests/repo/com.politedroid_6.apk tmp/
+cp $WORKSPACE/tests/repo/com.politedroid_6.apk unsigned/
+$fdroid verify --reuse-remote-apk --verbose com.politedroid
+# force a fail
+cp $WORKSPACE/tests/repo/com.politedroid_5.apk unsigned/com.politedroid_6.apk
+! $fdroid verify --reuse-remote-apk --verbose com.politedroid
+
+
+#------------------------------------------------------------------------------#
 echo_header 'test allowing disabled signatures in repo and archive'
 
 REPOROOT=`create_test_dir`

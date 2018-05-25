@@ -104,9 +104,11 @@ def main():
             logging.info("...NOT verified - {0}".format(e))
             notverified += 1
 
-    logging.info(_("Finished"))
-    logging.info("{0} successfully verified".format(verified))
-    logging.info("{0} NOT verified".format(notverified))
+    if verified > 0:
+        logging.info("{0} successfully verified".format(verified))
+    if notverified > 0:
+        logging.info("{0} NOT verified".format(notverified))
+    sys.exit(notverified)
 
 
 if __name__ == "__main__":
