@@ -565,7 +565,7 @@ class CommonTest(unittest.TestCase):
             ('repo/obb.main.twoversions_1101613.apk', 'obb.main.twoversions', '1101613', '0.1'),
             ('repo/obb.main.twoversions_1101615.apk', 'obb.main.twoversions', '1101615', '0.1'),
             ('repo/obb.main.twoversions_1101617.apk', 'obb.main.twoversions', '1101617', '0.1'),
-            ('repo/urzip-; Рахма́нинов, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢尔盖·.apk', 'info.guardianproject.urzip', '100', '0.1'),
+            ('repo/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk', 'info.guardianproject.urzip', '100', '0.1'),
         ]
         for apkfilename, appid, versionCode, versionName in testcases:
             print('\n\nAPKFILENAME\n', apkfilename)
@@ -633,7 +633,7 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(4, minSdkVersion)
         minSdkVersion = fdroidserver.common.get_minSdkVersion_aapt('repo/obb.main.twoversions_1101617.apk')
         self.assertEqual(4, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion_aapt('repo/urzip-; Рахма́нинов, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢尔盖·.apk')
+        minSdkVersion = fdroidserver.common.get_minSdkVersion_aapt('repo/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk')
 
         with self.assertRaises(FDroidException):
             fdroidserver.common.get_minSdkVersion_aapt('nope')

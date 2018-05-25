@@ -654,7 +654,7 @@ class UpdateTest(unittest.TestCase):
             'repo/obb.main.twoversions_1101613.apk',
             'repo/obb.main.twoversions_1101615.apk',
             'repo/obb.main.twoversions_1101617.apk',
-            'repo/urzip-; Рахма́нинов, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢尔盖·.apk',
+            'repo/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk',
         ]
         for f in good:
             self.assertFalse(fdroidserver.update.has_known_vulnerability(f))
