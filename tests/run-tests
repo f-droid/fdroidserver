@@ -610,6 +610,7 @@ $fdroid gpgsign
 $fdroid lint
 $fdroid readmeta
 $fdroid rewritemeta fake
+$fdroid deploy
 $fdroid server update
 $fdroid scanner
 
@@ -643,6 +644,7 @@ $fdroid init
 $fdroid update --create-metadata --verbose
 $fdroid readmeta
 $fdroid server update --local-copy-dir=/tmp/fdroid
+$fdroid deploy --local-copy-dir=/tmp/fdroid --verbose
 
 # now test the errors work
 set +e
