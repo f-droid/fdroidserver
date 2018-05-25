@@ -2788,7 +2788,7 @@ def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
         htmlfile = logfilename + '.diffoscope.html'
         textfile = logfilename + '.diffoscope.txt'
         if subprocess.call([config['diffoscope'],
-                            '--max-report-size', '12345678', '--max-diff-block-lines', '100',
+                            '--max-report-size', '12345678', '--max-diff-block-lines', '128',
                             '--html', htmlfile, '--text', textfile,
                             absapk1, absapk2]) != 0:
             return("Failed to run diffoscope " + apk1)
