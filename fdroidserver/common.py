@@ -3215,7 +3215,7 @@ def calculate_math_string(expr):
         if '#' in expr:
             raise SyntaxError('no comments allowed')
         return execute_ast(ast.parse(expr, mode='eval').body)
-    except SyntaxError as e:
+    except SyntaxError:
         raise SyntaxError("could not parse expression '{expr}', "
                           "only basic math operations are allowed (+, -, *)"
                           .format(expr=expr))
