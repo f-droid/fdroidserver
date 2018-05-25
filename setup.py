@@ -4,7 +4,7 @@ from setuptools import Command
 from setuptools import setup
 import os
 import re
-import shutil
+import subprocess
 import sys
 
 
@@ -49,26 +49,11 @@ def get_data_files():
     return data_files
 
 
-# PyPI accepts reST not Markdown
-if os.path.exists('README.md'):
-    if shutil.which('pandoc'):
-        print('Using reST README')
-        import subprocess
-        subprocess.check_call(['pandoc', '--from=markdown', '--to=rst', 'README.md',
-                               '--output=README.rst'], universal_newlines=True)
-        with open('README.rst') as fp:
-            readme = fp.read()
-    else:
-        print('Using Markdown README')
-        with open('README.md') as fp:
-            readme = fp.read()
-else:
-    readme = ''
-
 setup(name='fdroidserver',
       version='1.0.5',
       description='F-Droid Server Tools',
-      long_description=readme,
+      long_description='README.md',
+      long_description_content_type='text/markdown',
       author='The F-Droid Project',
       author_email='team@f-droid.org',
       url='https://f-droid.org',
