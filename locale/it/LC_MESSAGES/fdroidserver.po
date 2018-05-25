@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2018-02-13 09:01+0100\n"
-"PO-Revision-Date: 2018-04-21 16:38+0000\n"
-"Last-Translator: Ale-Ma <alemassimiani@gmail.com>\n"
+"PO-Revision-Date: 2018-05-21 15:54+0000\n"
+"Last-Translator: random r <epsilin@yopmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/"
 "fdroidserver/it/>\n"
 "Language: it\n"
@@ -337,14 +337,14 @@ msgid "Cannot find a packageName for {path}!"
 msgstr "Impossibile trovare un packageName per {path}!"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot find an appid for {path}!"
-msgstr "Impossibile trovare un packageName per {path}!"
+msgstr "Impossibile trovare un appid per {path}!"
 
 #: ../fdroidserver/vmtools.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read \"{path}\"!"
-msgstr "Impossibile trovare l'app id {appid}"
+msgstr "Impossibile leggere \"{path}\"!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -611,9 +611,9 @@ msgstr ""
 
 #: ../fdroidserver/server.py ../fdroidserver/checkupdates.py
 #: ../fdroidserver/upload.py
-#, fuzzy, python-format
+#, python-format
 msgid "Error while attempting to publish log: %s"
-msgstr "Errore nell'ottenere l'indirizzo del repo"
+msgstr "Errore tentando di pubblicare il log: %s"
 
 #: ../fdroidserver/import.py
 msgid "Error while getting repo address"
@@ -1241,7 +1241,7 @@ msgstr ""
 #: ../fdroidserver/nightly.py
 #, fuzzy, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
-msgstr "Archiviando {apkfilename} con una firma invalida!"
+msgstr "Archiviando {apkfilename} con il debug.keystore fornito"
 
 #: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
@@ -1818,9 +1818,8 @@ msgid "fdroid [-h|--help|--version] <command> [<args>]"
 msgstr ""
 
 #: ../fdroid
-#, fuzzy
 msgid "fdroid [<command>] [-h|--help|--version|<args>]"
-msgstr "utilizzo: fdroid [-h|--help|--version] <comando> [<argomenti>]"
+msgstr "fdroid [<command>] [-h|--help|--version|<args>]"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "floating-point"
@@ -1831,9 +1830,8 @@ msgid "force errors to be warnings, or ignore"
 msgstr "forza gli errori ad essere avvisi, o ignora"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy
 msgid "force metadata errors (default) to be warnings, or to be ignored."
-msgstr "forza gli errori ad essere avvisi, o ignora"
+msgstr "forza gli errori di metadati (predefinito) come avvisi, o da ignorare."
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
