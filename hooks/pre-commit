@@ -129,7 +129,7 @@ for f in $RB_FILES; do
 	fi
 done
 
-if grep --line-number 'shell=True' fdroidserver/[a-ce-z]*.py; then
+if grep -C 3 'shell=True' fdroidserver/[a-ce-z]*.py; then
     err "shell=True is too dangerous, there are unfiltered user inputs!"
 fi
 
