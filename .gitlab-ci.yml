@@ -128,7 +128,7 @@ lint_format_safety_checks:
   script:
     - apk add --no-cache bash dash ca-certificates python3
     - python3 -m ensurepip
-    - pip3 install pep8 pyflakes pylint safety
+    - pip3 install pycodestyle pyflakes pylint safety
     - export EXITVALUE=0
     - ./hooks/pre-commit || export EXITVALUE=1
     - safety check --full-report || export EXITVALUE=1
