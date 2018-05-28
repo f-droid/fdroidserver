@@ -374,7 +374,7 @@
     "info.guardianproject.urzip": [
       {
         "added": 1466640000000,
-        "apkName": "urzip-; \u0420\u0430\u0445\u043c\u0430\u0301\u043d\u0438\u043d\u043e\u0432, [r\u0250x\u02c8man\u02b2\u026an\u0259f] \u0633\u064a\u0631\u062c\u064a_\u0631\u062e\u0645\u0627\u0646\u064a\u0646\u0648\u0641 \u8c22\u5c14\u76d6\u00b7.apk",
+        "apkName": "urzip-; \u0420\u0430\u0445\u043c\u0430\u0301, [r\u0250x\u02c8man\u02b2\u026an\u0259f] \u0633\u064a\u0631\u062c\u064a_\u0631\u062e\u0645\u0627\u0646\u064a\u0646\u0648\u0641 \u8c22\u00b7.apk",
         "hash": "15c0ec72c74a3791f42cdb43c57df0fb11a4dbb656851bbb8cf05b26a8372789",
         "hashType": "sha256",
         "minSdkVersion": "4",
