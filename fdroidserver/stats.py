@@ -113,8 +113,8 @@ def main():
 
                     destpath = os.path.join(logsdir, f)
                     destsize = ftp.stat(f).st_size
-                    if (not os.path.exists(destpath) or
-                            os.path.getsize(destpath) != destsize):
+                    if not os.path.exists(destpath) \
+                       or os.path.getsize(destpath) != destsize:
                         logging.debug("...retrieving " + f)
                         ftp.get(f, destpath)
         except Exception:

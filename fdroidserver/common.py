@@ -352,8 +352,8 @@ def assert_config_keystore(config):
         nosigningkey = True
         logging.critical(_("'keypass' not found in config.py!"))
     if nosigningkey:
-        raise FDroidException("This command requires a signing key, " +
-                              "you can create one using: fdroid update --create-key")
+        raise FDroidException("This command requires a signing key, "
+                              + "you can create one using: fdroid update --create-key")
 
 
 def find_sdk_tools_cmd(cmd):
@@ -2148,8 +2148,8 @@ def FDroidPopenBytes(commands, cwd=None, envs=None, output=True, stderr_to_stdou
                              stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
                              stderr=stderr_param)
     except OSError as e:
-        raise BuildException("OSError while trying to execute " +
-                             ' '.join(commands) + ': ' + str(e))
+        raise BuildException("OSError while trying to execute "
+                             + ' '.join(commands) + ': ' + str(e))
 
     # TODO are these AsynchronousFileReader threads always exiting?
     if not stderr_to_stdout and options.verbose:
