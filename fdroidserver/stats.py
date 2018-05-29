@@ -135,9 +135,9 @@ def main():
         logging.info('Processing logs...')
         appscount = Counter()
         appsvercount = Counter()
-        logexpr = '(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] ' + \
-            '"GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) ' + \
-            '\d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
+        logexpr = r'(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] ' \
+            + r'"GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) ' \
+            + r'\d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
         logsearch = re.compile(logexpr).search
         for logfile in glob.glob(os.path.join(logsdir, 'access-*.log.gz')):
             logging.debug('...' + logfile)

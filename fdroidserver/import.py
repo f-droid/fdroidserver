@@ -32,7 +32,7 @@ from . import metadata
 from .exception import FDroidException
 
 
-SETTINGS_GRADLE = re.compile('''include\s+['"]:([^'"]*)['"]''')
+SETTINGS_GRADLE = re.compile(r'''include\s+['"]:([^'"]*)['"]''')
 
 
 # Get the repo type and address from the given web page. The page is scanned

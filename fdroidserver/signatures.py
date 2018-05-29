@@ -57,7 +57,7 @@ def extract(options):
         sys.exit(1)
 
     # iterate over supplied APKs downlaod and extract them…
-    httpre = re.compile('https?:\/\/')
+    httpre = re.compile(r'https?:\/\/')
     for apk in options.APK:
         try:
             if os.path.isfile(apk):

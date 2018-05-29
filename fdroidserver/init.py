@@ -39,7 +39,7 @@ def disable_in_config(key, value):
     '''write a key/value to the local config.py, then comment it out'''
     with open('config.py', 'r', encoding='utf8') as f:
         data = f.read()
-    pattern = '\n[\s#]*' + key + '\s*=\s*"[^"]*"'
+    pattern = r'\n[\s#]*' + key + r'\s*=\s*"[^"]*"'
     repl = '\n#' + key + ' = "' + value + '"'
     data = re.sub(pattern, repl, data)
     with open('config.py', 'w', encoding='utf8') as f:
@@ -106,7 +106,7 @@ def main():
                 except KeyboardInterrupt:
                     print('')
                     sys.exit(1)
-                if re.match('^\s*$', s) is not None:
+                if re.match(r'^\s*$', s) is not None:
                     test_config['sdk_path'] = default_sdk_path
                 else:
                     test_config['sdk_path'] = s
