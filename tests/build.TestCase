@@ -61,13 +61,13 @@ class BuildTest(unittest.TestCase):
                         os.path.join(testdir, 'source-files'))
         teststring = 'FAKE_VERSION_FOR_TESTING'
         fdroidserver.build.force_gradle_build_tools(testdir, teststring)
-        pattern = re.compile(bytes("buildToolsVersion[\s=]+'%s'\s+" % teststring, 'utf8'))
+        pattern = re.compile(r"buildToolsVersion[\s=]+'%s'\s+" % teststring)
         for p in ('source-files/fdroid/fdroidclient/build.gradle',
                   'source-files/Zillode/syncthing-silk/build.gradle',
                   'source-files/open-keychain/open-keychain/build.gradle',
                   'source-files/osmandapp/osmand/build.gradle',
                   'source-files/open-keychain/open-keychain/OpenKeychain/build.gradle'):
-            with open(os.path.join(testdir, p), 'rb') as f:
+            with open(os.path.join(testdir, p), 'r') as f:
                 filedata = f.read()
             self.assertIsNotNone(pattern.search(filedata))
 

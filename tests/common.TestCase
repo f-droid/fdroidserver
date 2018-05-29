@@ -204,7 +204,7 @@ class CommonTest(unittest.TestCase):
 
         with open(os.path.join(fdroidclient_testdir, 'build.gradle'), 'r') as f:
             filedata = f.read()
-        self.assertIsNotNone(re.search("\s+compileSdkVersion %s\s+" % testint, filedata))
+        self.assertIsNotNone(re.search(r"\s+compileSdkVersion %s\s+" % testint, filedata))
 
         with open(os.path.join(fdroidclient_testdir, 'AndroidManifest.xml')) as f:
             filedata = f.read()

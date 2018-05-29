@@ -53,7 +53,7 @@ UNSET_VERSION_CODE = -0x100000000
 APK_NAME_PAT = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
 APK_VERCODE_PAT = re.compile(".*versionCode='([0-9]*)'.*")
 APK_VERNAME_PAT = re.compile(".*versionName='([^']*)'.*")
-APK_LABEL_ICON_PAT = re.compile(".*\s+label='(.*)'\s+icon='(.*?)'")
+APK_LABEL_ICON_PAT = re.compile(r".*\s+label='(.*)'\s+icon='(.*?)'")
 APK_SDK_VERSION_PAT = re.compile(".*'([0-9]*)'.*")
 APK_PERMISSION_PAT = \
     re.compile(".*(name='(?P<name>.*?)')(.*maxSdkVersion='(?P<maxSdkVersion>.*?)')?.*")
@@ -1083,7 +1083,7 @@ def _get_apk_icons_src(apkfile, icon_name):
 
     """
     icons_src = dict()
-    density_re = re.compile('^res/(.*)/{}\.(png|xml)$'.format(icon_name))
+    density_re = re.compile(r'^res/(.*)/{}\.(png|xml)$'.format(icon_name))
     with zipfile.ZipFile(apkfile) as zf:
         for filename in zf.namelist():
             m = density_re.match(filename)
@@ -1853,8 +1853,8 @@ def main():
     parser.add_argument("-I", "--icons", action="store_true", default=False,
                         help=_("Resize all the icons exceeding the max pixel size and exit"))
     parser.add_argument("-e", "--editor", default="/etc/alternatives/editor",
-                        help=_("Specify editor to use in interactive mode. Default " +
-                               "is {path}").format(path='/etc/alternatives/editor'))
+                        help=_("Specify editor to use in interactive mode. Default is {path}")
+                        .format(path='/etc/alternatives/editor'))
     parser.add_argument("-w", "--wiki", default=False, action="store_true",
                         help=_("Update the wiki"))
     parser.add_argument("--pretty", action="store_true", default=False,

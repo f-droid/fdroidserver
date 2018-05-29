@@ -811,7 +811,7 @@ def get_default_app_info(metadatapath=None):
         if os.path.exists('AndroidManifest.xml'):
             manifestroot = fdroidserver.common.parse_xml('AndroidManifest.xml')
         else:
-            pattern = re.compile(""".*manifest\.srcFile\s+'AndroidManifest\.xml'.*""")
+            pattern = re.compile(r""".*manifest\.srcFile\s+'AndroidManifest\.xml'.*""")
             for root, dirs, files in os.walk(os.getcwd()):
                 if 'build.gradle' in files:
                     p = os.path.join(root, 'build.gradle')
@@ -1036,7 +1036,7 @@ def write_yaml(mf, app):
         raise FDroidException('ruamel.yaml not instlled, can not write metadata.') from e
     if not ruamel.yaml.__version__:
         raise FDroidException('ruamel.yaml.__version__ not accessible. Please make sure a ruamel.yaml >= 0.13 is installed..')
-    m = re.match('(?P<major>[0-9]+)\.(?P<minor>[0-9]+)\.(?P<patch>[0-9]+)(-.+)?',
+    m = re.match(r'(?P<major>[0-9]+)\.(?P<minor>[0-9]+)\.(?P<patch>[0-9]+)(-.+)?',
                  ruamel.yaml.__version__)
     if not m:
         raise FDroidException('ruamel.yaml version malfored, please install an upstream version of ruamel.yaml')

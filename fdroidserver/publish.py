@@ -85,7 +85,7 @@ def read_fingerprints_from_keystore():
         raise FDroidException('could not read keysotre {}'.format(config['keystore']))
 
     realias = re.compile('Alias name: (?P<alias>.+)\n')
-    resha256 = re.compile('\s+SHA256: (?P<sha256>[:0-9A-F]{95})\n')
+    resha256 = re.compile(r'\s+SHA256: (?P<sha256>[:0-9A-F]{95})\n')
     fps = {}
     for block in p.output.split(('*' * 43) + '\n' + '*' * 43):
         s_alias = realias.search(block)

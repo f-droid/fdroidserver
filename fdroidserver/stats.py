@@ -113,8 +113,8 @@ def main():
 
                     destpath = os.path.join(logsdir, f)
                     destsize = ftp.stat(f).st_size
-                    if (not os.path.exists(destpath) or
-                            os.path.getsize(destpath) != destsize):
+                    if not os.path.exists(destpath) \
+                       or os.path.getsize(destpath) != destsize:
                         logging.debug("...retrieving " + f)
                         ftp.get(f, destpath)
         except Exception:
@@ -135,9 +135,9 @@ def main():
         logging.info('Processing logs...')
         appscount = Counter()
         appsvercount = Counter()
-        logexpr = '(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] ' + \
-            '"GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) ' + \
-            '\d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
+        logexpr = r'(?P<ip>[.:0-9a-fA-F]+) - - \[(?P<time>.*?)\] ' \
+            + r'"GET (?P<uri>.*?) HTTP/1.\d" (?P<statuscode>\d+) ' \
+            + r'\d+ "(?P<referral>.*?)" "(?P<useragent>.*?)"'
         logsearch = re.compile(logexpr).search
         for logfile in glob.glob(os.path.join(logsdir, 'access-*.log.gz')):
             logging.debug('...' + logfile)

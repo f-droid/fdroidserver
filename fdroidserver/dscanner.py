@@ -179,8 +179,8 @@ class DockerDriver(object):
             )['Id']
         output = self.cli.exec_start(exec_id).decode('utf-8')
 
-        if ("Could not access the Package Manager" in output or
-                "device offline" in output):
+        if ("Could not access the Package Manager" in output
+                or "device offline" in output):
             logging.info("Device or package manager isn't up")
 
         if app_id.split('_')[0] in output:   # TODO: this is a temporary fix

@@ -32,7 +32,7 @@ from . import metadata
 from .exception import FDroidException
 
 
-SETTINGS_GRADLE = re.compile('''include\s+['"]:([^'"]*)['"]''')
+SETTINGS_GRADLE = re.compile(r'''include\s+['"]:([^'"]*)['"]''')
 
 
 # Get the repo type and address from the given web page. The page is scanned
@@ -146,18 +146,18 @@ def get_metadata_from_url(app, url):
         app.SourceCode = ""
         app.WebSite = ""
     if not projecttype:
-        raise FDroidException("Unable to determine the project type. " +
-                              "The URL you supplied was not in one of the supported formats. " +
-                              "Please consult the manual for a list of supported formats, " +
-                              "and supply one of those.")
+        raise FDroidException("Unable to determine the project type. "
+                              + "The URL you supplied was not in one of the supported formats. "
+                              + "Please consult the manual for a list of supported formats, "
+                              + "and supply one of those.")
 
     # Ensure we have a sensible-looking repo address at this point. If not, we
     # might have got a page format we weren't expecting. (Note that we
     # specifically don't want git@...)
-    if ((repotype != 'bzr' and (not repo.startswith('http://') and
-        not repo.startswith('https://') and
-        not repo.startswith('git://'))) or
-            ' ' in repo):
+    if ((repotype != 'bzr' and (not repo.startswith('http://')
+        and not repo.startswith('https://')
+        and not repo.startswith('git://')))
+            or ' ' in repo):
         raise FDroidException("Repo address '{0}' does not seem to be valid".format(repo))
 
     # Get a copy of the source so we can extract some info...

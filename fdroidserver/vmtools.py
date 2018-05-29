@@ -368,8 +368,8 @@ class LibvirtBuildVm(FDroidBuildVm):
     def package(self, output=None, keep_box_file=False):
         if not output:
             output = "buildserver.box"
-            logger.debug('no output name set for packaging \'%s\',' +
-                         'defaulting to %s', self.srvname, output)
+            logger.debug('no output name set for packaging \'%s\','
+                         + 'defaulting to %s', self.srvname, output)
         storagePool = self.conn.storagePoolLookupByName('default')
         domainInfo = self.conn.lookupByName(self.srvname).info()
         if storagePool:
@@ -434,8 +434,8 @@ class LibvirtBuildVm(FDroidBuildVm):
                 os.remove('box.img')
 
         else:
-            logger.warn('could not connect to storage-pool \'default\',' +
-                        'skipping packaging buildserver box')
+            logger.warn('could not connect to storage-pool \'default\','
+                        + 'skipping packaging buildserver box')
 
     def box_add(self, boxname, boxfile, force=True):
         boximg = '%s_vagrant_box_image_0.img' % (boxname)

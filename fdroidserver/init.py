@@ -39,7 +39,7 @@ def disable_in_config(key, value):
     '''write a key/value to the local config.py, then comment it out'''
     with open('config.py', 'r', encoding='utf8') as f:
         data = f.read()
-    pattern = '\n[\s#]*' + key + '\s*=\s*"[^"]*"'
+    pattern = r'\n[\s#]*' + key + r'\s*=\s*"[^"]*"'
     repl = '\n#' + key + ' = "' + value + '"'
     data = re.sub(pattern, repl, data)
     with open('config.py', 'w', encoding='utf8') as f:
@@ -106,7 +106,7 @@ def main():
                 except KeyboardInterrupt:
                     print('')
                     sys.exit(1)
-                if re.match('^\s*$', s) is not None:
+                if re.match(r'^\s*$', s) is not None:
                     test_config['sdk_path'] = default_sdk_path
                 else:
                     test_config['sdk_path'] = s
@@ -209,8 +209,8 @@ def main():
                     opensc_so = files[0]
                 else:
                     opensc_so = '/usr/lib/opensc-pkcs11.so'
-                    logging.warn('No OpenSC PKCS#11 module found, ' +
-                                 'install OpenSC then edit "opensc-fdroid.cfg"!')
+                    logging.warn('No OpenSC PKCS#11 module found, '
+                                 + 'install OpenSC then edit "opensc-fdroid.cfg"!')
             with open(os.path.join(examplesdir, 'opensc-fdroid.cfg'), 'r') as f:
                 opensc_fdroid = f.read()
             opensc_fdroid = re.sub('^library.*', 'library = ' + opensc_so, opensc_fdroid,

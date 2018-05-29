@@ -110,20 +110,20 @@ def update_awsbucket_s3cmd(repo_section):
     s3url = s3bucketurl + '/fdroid/'
     logging.debug('s3cmd sync new files in ' + repo_section + ' to ' + s3url)
     logging.debug(_('Running first pass with MD5 checking disabled'))
-    if subprocess.call(s3cmd_sync +
-                       ['--no-check-md5', '--skip-existing',
-                        '--exclude', indexxml,
-                        '--exclude', indexjar,
-                        '--exclude', indexv1jar,
-                        repo_section, s3url]) != 0:
+    if subprocess.call(s3cmd_sync
+                       + ['--no-check-md5', '--skip-existing',
+                          '--exclude', indexxml,
+                          '--exclude', indexjar,
+                          '--exclude', indexv1jar,
+                          repo_section, s3url]) != 0:
         raise FDroidException()
     logging.debug('s3cmd sync all files in ' + repo_section + ' to ' + s3url)
-    if subprocess.call(s3cmd_sync +
-                       ['--no-check-md5',
-                        '--exclude', indexxml,
-                        '--exclude', indexjar,
-                        '--exclude', indexv1jar,
-                        repo_section, s3url]) != 0:
+    if subprocess.call(s3cmd_sync
+                       + ['--no-check-md5',
+                          '--exclude', indexxml,
+                          '--exclude', indexjar,
+                          '--exclude', indexv1jar,
+                          repo_section, s3url]) != 0:
         raise FDroidException()
 
     logging.debug(_('s3cmd sync indexes {path} to {url} and delete')
@@ -256,10 +256,11 @@ def update_serverwebroot(serverwebroot, repo_section):
     # the one rsync command that is allowed to run in ~/.ssh/authorized_keys.
     # (serverwebroot is guaranteed to have a trailing slash in common.py)
     logging.info('rsyncing ' + repo_section + ' to ' + serverwebroot)
-    if subprocess.call(rsyncargs +
-                       ['--exclude', indexxml, '--exclude', indexjar,
-                        '--exclude', indexv1jar,
-                        repo_section, serverwebroot]) != 0:
+    if subprocess.call(rsyncargs
+                       + ['--exclude', indexxml,
+                          '--exclude', indexjar,
+                          '--exclude', indexv1jar,
+                          repo_section, serverwebroot]) != 0:
         raise FDroidException()
     if subprocess.call(rsyncargs + [repo_section, serverwebroot]) != 0:
         raise FDroidException()

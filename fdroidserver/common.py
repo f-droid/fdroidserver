@@ -352,8 +352,8 @@ def assert_config_keystore(config):
         nosigningkey = True
         logging.critical(_("'keypass' not found in config.py!"))
     if nosigningkey:
-        raise FDroidException("This command requires a signing key, " +
-                              "you can create one using: fdroid update --create-key")
+        raise FDroidException("This command requires a signing key, "
+                              + "you can create one using: fdroid update --create-key")
 
 
 def find_sdk_tools_cmd(cmd):
@@ -560,7 +560,7 @@ def clean_description(description):
         paragraph = re.sub('\r', '', paragraph)
         paragraph = re.sub('\n', ' ', paragraph)
         paragraph = re.sub(' {2,}', ' ', paragraph)
-        paragraph = re.sub('^\s*(\w)', r'\1', paragraph)
+        paragraph = re.sub(r'^\s*(\w)', r'\1', paragraph)
         returnstring += paragraph + '\n\n'
     return returnstring.rstrip('\n')
 
@@ -575,8 +575,8 @@ def publishednameinfo(filename):
     return result
 
 
-apk_release_filename = re.compile('(?P<appid>[a-zA-Z0-9_\.]+)_(?P<vercode>[0-9]+)\.apk')
-apk_release_filename_with_sigfp = re.compile('(?P<appid>[a-zA-Z0-9_\.]+)_(?P<vercode>[0-9]+)_(?P<sigfp>[0-9a-f]{7})\.apk')
+apk_release_filename = re.compile(r'(?P<appid>[a-zA-Z0-9_\.]+)_(?P<vercode>[0-9]+)\.apk')
+apk_release_filename_with_sigfp = re.compile(r'(?P<appid>[a-zA-Z0-9_\.]+)_(?P<vercode>[0-9]+)_(?P<sigfp>[0-9a-f]{7})\.apk')
 
 
 def apk_parse_release_filename(apkname):
@@ -2148,8 +2148,8 @@ def FDroidPopenBytes(commands, cwd=None, envs=None, output=True, stderr_to_stdou
                              stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
                              stderr=stderr_param)
     except OSError as e:
-        raise BuildException("OSError while trying to execute " +
-                             ' '.join(commands) + ': ' + str(e))
+        raise BuildException("OSError while trying to execute "
+                             + ' '.join(commands) + ': ' + str(e))
 
     # TODO are these AsynchronousFileReader threads always exiting?
     if not stderr_to_stdout and options.verbose:
@@ -2479,7 +2479,7 @@ def metadata_find_signing_files(appid, vercode):
     sigs = glob.glob(os.path.join(sigdir, '*.DSA')) + \
         glob.glob(os.path.join(sigdir, '*.EC')) + \
         glob.glob(os.path.join(sigdir, '*.RSA'))
-    extre = re.compile('(\.DSA|\.EC|\.RSA)$')
+    extre = re.compile(r'(\.DSA|\.EC|\.RSA)$')
     for sig in sigs:
         sf = extre.sub('.SF', sig)
         if os.path.isfile(sf):
@@ -3011,9 +3011,9 @@ def write_to_config(thisconfig, key, value=None, config_file=None):
 
     # regex for finding and replacing python string variable
     # definitions/initializations
-    pattern = re.compile('^[\s#]*' + key + '\s*=\s*"[^"]*"')
+    pattern = re.compile(r'^[\s#]*' + key + r'\s*=\s*"[^"]*"')
     repl = key + ' = "' + value + '"'
-    pattern2 = re.compile('^[\s#]*' + key + "\s*=\s*'[^']*'")
+    pattern2 = re.compile(r'^[\s#]*' + key + r"\s*=\s*'[^']*'")
     repl2 = key + " = '" + value + "'"
 
     # If we replaced this line once, we make sure won't be a

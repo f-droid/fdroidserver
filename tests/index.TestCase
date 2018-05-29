@@ -53,9 +53,9 @@ class IndexTest(unittest.TestCase):
             _, fingerprint = fdroidserver.index.get_public_key_from_jar(jar)
             # comparing fingerprints should be sufficient
             if f == 'testy.jar':
-                self.assertTrue(fingerprint ==
-                                '818E469465F96B704E27BE2FEE4C63AB' +
-                                '9F83DDF30E7A34C7371A4728D83B0BC1')
+                self.assertEqual(fingerprint,
+                                 '818E469465F96B704E27BE2FEE4C63AB'
+                                 + '9F83DDF30E7A34C7371A4728D83B0BC1')
             if f == 'guardianproject.jar':
                 self.assertTrue(fingerprint == GP_FINGERPRINT)
 

@@ -105,14 +105,14 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             logging.debug("rsyncing " + path + " to " + ftp.getcwd())
             # TODO this should move to `vagrant rsync` from >= v1.5
             try:
-                subprocess.check_output(['rsync', '--recursive', '--perms', '--links', '--quiet', '--rsh=' +
-                                         'ssh -o StrictHostKeyChecking=no' +
-                                         ' -o UserKnownHostsFile=/dev/null' +
-                                         ' -o LogLevel=FATAL' +
-                                         ' -o IdentitiesOnly=yes' +
-                                         ' -o PasswordAuthentication=no' +
-                                         ' -p ' + str(sshinfo['port']) +
-                                         ' -i ' + sshinfo['idfile'],
+                subprocess.check_output(['rsync', '--recursive', '--perms', '--links', '--quiet', '--rsh='
+                                         + 'ssh -o StrictHostKeyChecking=no'
+                                         + ' -o UserKnownHostsFile=/dev/null'
+                                         + ' -o LogLevel=FATAL'
+                                         + ' -o IdentitiesOnly=yes'
+                                         + ' -o PasswordAuthentication=no'
+                                         + ' -p ' + str(sshinfo['port'])
+                                         + ' -i ' + sshinfo['idfile'],
                                          path,
                                          sshinfo['user'] + "@" + sshinfo['hostname'] + ":" + ftp.getcwd()],
                                         stderr=subprocess.STDOUT)

@@ -602,8 +602,7 @@ def main():
         sys.exit(1)
 
     if not options.keep_box_file:
-        logger.debug('box added to vagrant, ' +
-                     'removing generated box file \'%s\'',
+        logger.debug("""box added to vagrant, removing generated box file '%s'""",
                      boxfile)
         os.remove(boxfile)
 
