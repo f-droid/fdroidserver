@@ -520,14 +520,9 @@ def main():
             yaml.dump(config, f)
 
     if config['vm_provider'] == 'libvirt':
-        found_basebox = False
-        needs_mutate = False
-        for box in v.box_list():
-            if box.name == config['basebox']:
-                found_basebox = True
-                if box.provider != 'libvirt':
-                    needs_mutate = True
-                continue
+        available_providers = [x.provider for x in v.box_list() if x.name == config['basebox']]
+        found_basebox = len(available_providers) > 0
+        needs_mutate = 'libvirt' not in available_providers
         if not found_basebox:
             if isinstance(config['baseboxurl'], str):
                 baseboxurl = config['baseboxurl']
