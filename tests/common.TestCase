@@ -659,12 +659,11 @@ class CommonTest(unittest.TestCase):
         self.assertEqual('b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868', sig)
 
     def test_parse_androidmanifests(self):
-        source_files_dir = os.path.join(os.path.dirname(__file__), 'source-files')
         app = fdroidserver.metadata.App()
         app.id = 'org.fdroid.fdroid'
         paths = [
-            os.path.join(source_files_dir, 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
-            os.path.join(source_files_dir, 'fdroid', 'fdroidclient', 'build.gradle'),
+            os.path.join('source-files', 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
+            os.path.join('source-files', 'fdroid', 'fdroidclient', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -672,16 +671,14 @@ class CommonTest(unittest.TestCase):
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
     def test_parse_androidmanifests_with_flavor(self):
-        source_files_dir = os.path.join(os.path.dirname(__file__), 'source-files')
-
         app = fdroidserver.metadata.App()
         build = fdroidserver.metadata.Build()
         build.gradle = ['devVersion']
         app.builds = [build]
         app.id = 'org.fdroid.fdroid.dev'
         paths = [
-            os.path.join(source_files_dir, 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
-            os.path.join(source_files_dir, 'fdroid', 'fdroidclient', 'build.gradle'),
+            os.path.join('source-files', 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
+            os.path.join('source-files', 'fdroid', 'fdroidclient', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -694,7 +691,7 @@ class CommonTest(unittest.TestCase):
         app.builds = [build]
         app.id = 'eu.siacs.conversations'
         paths = [
-            os.path.join(source_files_dir, 'eu.siacs.conversations', 'build.gradle'),
+            os.path.join('source-files', 'eu.siacs.conversations', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -707,7 +704,7 @@ class CommonTest(unittest.TestCase):
         app.builds = [build]
         app.id = 'com.nextcloud.client'
         paths = [
-            os.path.join(source_files_dir, 'com.nextcloud.client', 'build.gradle'),
+            os.path.join('source-files', 'com.nextcloud.client', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -720,7 +717,7 @@ class CommonTest(unittest.TestCase):
         app.builds = [build]
         app.id = 'com.nextcloud.android.beta'
         paths = [
-            os.path.join(source_files_dir, 'com.nextcloud.client', 'build.gradle'),
+            os.path.join('source-files', 'com.nextcloud.client', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -733,7 +730,7 @@ class CommonTest(unittest.TestCase):
         app.builds = [build]
         app.id = 'at.bitfire.davdroid'
         paths = [
-            os.path.join(source_files_dir, 'at.bitfire.davdroid', 'build.gradle'),
+            os.path.join('source-files', 'at.bitfire.davdroid', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -746,7 +743,7 @@ class CommonTest(unittest.TestCase):
         app.builds = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.libre'
         paths = [
-            os.path.join(source_files_dir, 'com.kunzisoft.testcase', 'build.gradle'),
+            os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -759,7 +756,7 @@ class CommonTest(unittest.TestCase):
         app.builds = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.pro'
         paths = [
-            os.path.join(source_files_dir, 'com.kunzisoft.testcase', 'build.gradle'),
+            os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -772,7 +769,7 @@ class CommonTest(unittest.TestCase):
         app.builds = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix'
         paths = [
-            os.path.join(source_files_dir, 'com.kunzisoft.testcase', 'build.gradle'),
+            os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -794,6 +791,8 @@ class CommonTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+
     parser = optparse.OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
