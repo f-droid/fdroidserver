@@ -25,6 +25,7 @@ import os
 import sys
 import re
 import ast
+import gzip
 import shutil
 import glob
 import stat
@@ -100,6 +101,7 @@ default_config = {
     'per_app_repos': False,
     'make_current_version_link': True,
     'current_version_name_source': 'Name',
+    'publish_build_logs': False,
     'update_stats': False,
     'stats_ignore': [],
     'stats_server': None,
@@ -3068,6 +3070,48 @@ def local_rsync(options, fromdir, todir):
     logging.debug(' '.join(rsyncargs + [fromdir, todir]))
     if subprocess.call(rsyncargs + [fromdir, todir]) != 0:
         raise FDroidException()
+
+
+def publish_build_log_with_rsync(appid, vercode, log_path, timestamp=int(time.time())):
+    """Upload build log of one individual app build to an fdroid repository."""
+
+    # check if publishing logs is enabled in config
+    if 'publish_build_logs' not in config:
+        logging.debug('publishing full build logs not enabled')
+        return
+
+    if not os.path.isfile(log_path):
+        logging.warning('skip uploading "{}" (not a file)'.format(log_path))
+        return
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # gzip compress log file
+        log_gz_path = os.path.join(
+            tmpdir, '{pkg}_{ver}_{ts}.log.gz'.format(pkg=appid,
+                                                     ver=vercode,
+                                                     ts=timestamp))
+        with open(log_path, 'rb') as i, gzip.open(log_gz_path, 'wb') as o:
+            shutil.copyfileobj(i, o)
+
+        # TODO: sign compressed log file, if a signing key is configured
+
+        for webroot in config.get('serverwebroot', []):
+            dest_path = os.path.join(webroot, "buildlogs")
+            cmd = ['rsync',
+                   '--archive',
+                   '--delete-after',
+                   '--safe-links']
+            if options.verbose:
+                cmd += ['--verbose']
+            if options.quiet:
+                cmd += ['--quiet']
+            if 'identity_file' in config:
+                cmd += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file']]
+            cmd += [log_gz_path, dest_path]
+
+            # TODO: also publish signature file if present
+
+            subprocess.call(cmd)
 
 
 def get_per_app_repos():

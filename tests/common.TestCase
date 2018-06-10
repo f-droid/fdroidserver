@@ -14,6 +14,7 @@ import unittest
 import textwrap
 import yaml
 from zipfile import ZipFile
+from unittest import mock
 
 
 localmodule = os.path.realpath(
@@ -788,6 +789,67 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.calculate_math_string('1+1; print(1)')
         with self.assertRaises(SyntaxError):
             fdroidserver.common.calculate_math_string('1-1 # no comment')
+
+    def test_publish_build_log_with_rsync_with_id_file(self):
+
+        mocklogcontent = textwrap.dedent("""\
+            build started
+            building...
+            build completed
+            profit!""")
+
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.verbose = False
+        fdroidserver.common.options.quiet = False
+        fdroidserver.common.config = {}
+        fdroidserver.common.config['serverwebroot'] = [
+            'example.com:/var/www/fdroid/repo/',
+            'example.com:/var/www/fdroid/archive/']
+        fdroidserver.common.config['publish_build_logs'] = True
+        fdroidserver.common.config['identity_file'] = 'ssh/id_rsa'
+
+        assert_subprocess_call_iteration = 0
+
+        def assert_subprocess_call(cmd):
+            nonlocal assert_subprocess_call_iteration
+            logging.debug(cmd)
+            if assert_subprocess_call_iteration == 0:
+                self.assertListEqual(['rsync',
+                                      '--archive',
+                                      '--delete-after',
+                                      '--safe-links',
+                                      '-e',
+                                      'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ssh/id_rsa',
+                                      cmd[6],
+                                      'example.com:/var/www/fdroid/repo/buildlogs'],
+                                     cmd)
+                self.assertTrue(cmd[6].endswith('/com.example.app_4711_1.log.gz'))
+            elif assert_subprocess_call_iteration == 1:
+                self.assertListEqual(['rsync',
+                                      '--archive',
+                                      '--delete-after',
+                                      '--safe-links',
+                                      '-e',
+                                      'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ssh/id_rsa',
+                                      cmd[6],
+                                      'example.com:/var/www/fdroid/archive/buildlogs'],
+                                     cmd)
+                self.assertTrue(cmd[6].endswith('/com.example.app_4711_1.log.gz'))
+            else:
+                self.fail('unexpected subprocess.call invocation ({})'
+                          .format(assert_subprocess_call_iteration))
+            assert_subprocess_call_iteration += 1
+            return 0
+
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            log_path = os.path.join(tmpdir, 'mock.log')
+            with open(log_path, 'w') as f:
+                f.write(mocklogcontent)
+
+            with mock.patch('subprocess.call',
+                            side_effect=assert_subprocess_call):
+                fdroidserver.common.publish_build_log_with_rsync(
+                    'com.example.app', '4711', log_path, 1)
 
 
 if __name__ == "__main__":
