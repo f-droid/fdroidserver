@@ -102,6 +102,7 @@ def scan_source(build_dir, build=metadata.Build()):
         'repo1.maven.org/maven2',  # mavenCentral()
         'jcenter.bintray.com',     # jcenter()
         'jitpack.io',
+        'www.jitpack.io',
         'repo.maven.apache.org/maven2',
         'oss.jfrog.org/artifactory/oss-snapshot-local',
         'oss.sonatype.org/content/repositories/snapshots',
