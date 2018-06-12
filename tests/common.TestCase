@@ -13,6 +13,7 @@ import tempfile
 import unittest
 import textwrap
 import yaml
+import gzip
 from zipfile import ZipFile
 from unittest import mock
 
@@ -792,11 +793,11 @@ class CommonTest(unittest.TestCase):
 
     def test_publish_build_log_with_rsync_with_id_file(self):
 
-        mocklogcontent = textwrap.dedent("""\
+        mocklogcontent = bytes(textwrap.dedent("""\
             build started
             building...
             build completed
-            profit!""")
+            profit!"""), 'utf-8')
 
         fdroidserver.common.options = mock.Mock()
         fdroidserver.common.options.verbose = False
@@ -824,6 +825,8 @@ class CommonTest(unittest.TestCase):
                                       'example.com:/var/www/fdroid/repo/buildlogs'],
                                      cmd)
                 self.assertTrue(cmd[6].endswith('/com.example.app_4711_1.log.gz'))
+                with gzip.open(cmd[6], 'r') as f:
+                    self.assertTrue(f.read(), mocklogcontent)
             elif assert_subprocess_call_iteration == 1:
                 self.assertListEqual(['rsync',
                                       '--archive',
@@ -835,21 +838,18 @@ class CommonTest(unittest.TestCase):
                                       'example.com:/var/www/fdroid/archive/buildlogs'],
                                      cmd)
                 self.assertTrue(cmd[6].endswith('/com.example.app_4711_1.log.gz'))
+                with gzip.open(cmd[6], 'r') as f:
+                    self.assertTrue(f.read(), mocklogcontent)
             else:
                 self.fail('unexpected subprocess.call invocation ({})'
                           .format(assert_subprocess_call_iteration))
             assert_subprocess_call_iteration += 1
             return 0
 
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            log_path = os.path.join(tmpdir, 'mock.log')
-            with open(log_path, 'w') as f:
-                f.write(mocklogcontent)
-
-            with mock.patch('subprocess.call',
-                            side_effect=assert_subprocess_call):
-                fdroidserver.common.publish_build_log_with_rsync(
-                    'com.example.app', '4711', log_path, 1)
+        with mock.patch('subprocess.call',
+                        side_effect=assert_subprocess_call):
+            fdroidserver.common.publish_build_log_with_rsync(
+                'com.example.app', '4711', mocklogcontent, 1.1)
 
 
 if __name__ == "__main__":

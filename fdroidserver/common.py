@@ -3072,31 +3072,49 @@ def local_rsync(options, fromdir, todir):
         raise FDroidException()
 
 
-def publish_build_log_with_rsync(appid, vercode, log_path, timestamp=int(time.time())):
-    """Upload build log of one individual app build to an fdroid repository."""
+def publish_build_log_with_rsync(appid, vercode, log_content,
+                                 timestamp=int(time.time())):
+    """Upload build log of one individual app build to an fdroid repository.
+
+    :param appid: package name for dientifying to which app this log belongs.
+    :param vercode: version of the app to which this build belongs.
+    :param log_content: Content of the log which is about to be posted.
+                        Should be either a string or bytes. (bytes will
+                        be decoded as 'utf-8')
+    :param timestamp: timestamp for avoiding logfile name collisions.
+    """
 
     # check if publishing logs is enabled in config
-    if 'publish_build_logs' not in config:
-        logging.debug('publishing full build logs not enabled')
+    if not config.get('publish_build_logs', False):
+        logging.debug('skip publishing full build logs: not enabled in config')
         return
 
-    if not os.path.isfile(log_path):
-        logging.warning('skip uploading "{}" (not a file)'.format(log_path))
+    if not log_content:
+        logging.warning('skip publishing full build logs: log content is empty')
         return
+
+    if not (isinstance(timestamp, int) or isinstance(timestamp, float)):
+        raise ValueError("supplied timestamp '{}' is not a unix timestamp"
+                         .format(timestamp))
 
     with tempfile.TemporaryDirectory() as tmpdir:
         # gzip compress log file
         log_gz_path = os.path.join(
             tmpdir, '{pkg}_{ver}_{ts}.log.gz'.format(pkg=appid,
                                                      ver=vercode,
-                                                     ts=timestamp))
-        with open(log_path, 'rb') as i, gzip.open(log_gz_path, 'wb') as o:
-            shutil.copyfileobj(i, o)
+                                                     ts=int(timestamp)))
+        with gzip.open(log_gz_path, 'wb') as f:
+            if isinstance(log_content, str):
+                f.write(bytes(log_content, 'utf-8'))
+            else:
+                f.write(log_content)
 
         # TODO: sign compressed log file, if a signing key is configured
 
         for webroot in config.get('serverwebroot', []):
             dest_path = os.path.join(webroot, "buildlogs")
+            if not dest_path.endswith('/'):
+                dest_path += '/'  # make sure rsync knows this is a directory
             cmd = ['rsync',
                    '--archive',
                    '--delete-after',
@@ -3111,7 +3129,11 @@ def publish_build_log_with_rsync(appid, vercode, log_path, timestamp=int(time.ti
 
             # TODO: also publish signature file if present
 
-            subprocess.call(cmd)
+            retcode = subprocess.call(cmd)
+            if retcode:
+                logging.warning("failded publishing build logs to '{}'".format(webroot))
+            else:
+                logging.info("published build logs to '{}'".format(webroot))
 
 
 def get_per_app_repos():
