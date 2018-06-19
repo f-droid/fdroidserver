@@ -120,18 +120,9 @@ def get_build_vm(srvdir, provider=None):
             logging.warn('build vm provider not supported: \'%s\'', provider)
 
     # try guessing provider from installed software
-    try:
-        kvm_installed = 0 == _check_call(['which', 'kvm'])
-    except subprocess.CalledProcessError:
-        kvm_installed = False
-        try:
-            kvm_installed |= 0 == _check_call(['which', 'qemu'])
-        except subprocess.CalledProcessError:
-            pass
-    try:
-        vbox_installed = 0 == _check_call(['which', 'VBoxHeadless'])
-    except subprocess.CalledProcessError:
-        vbox_installed = False
+    kvm_installed = shutil.which('kvm') is not None
+    kvm_installed |= shutil.which('qemu') is not None
+    vbox_installed = shutil.which('VBoxHeadless') is not None
     if kvm_installed and vbox_installed:
         logging.debug('both kvm and vbox are installed.')
     elif kvm_installed:
