@@ -163,12 +163,12 @@ The repository of older versions of applications from the main demo repository.
 #     'bar.info:/var/www/fdroid',
 #     }
 
-# Uncomment this option if you want to publish build logs to your repository
-# server(s). Logs get published to all servers configured in 'serverwebroot'.
-# This feature only supports publishing logs from build-jobs running
-# inside a buildserver VM.
+# Uncomment this option if you want to logs of builds and other processes to
+# your repository server(s). Logs get published to all servers configured in
+# 'serverwebroot'. For builds, only logs from build-jobs running inside a
+# buildserver VM are supported.
 #
-# publish_build_logs = True
+# deploy_process_logs = True
 
 # The full URL to a git remote repository. You can include
 # multiple servers to mirror to by wrapping the whole thing in {} or [], and

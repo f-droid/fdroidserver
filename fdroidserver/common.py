@@ -101,7 +101,7 @@ default_config = {
     'per_app_repos': False,
     'make_current_version_link': True,
     'current_version_name_source': 'Name',
-    'publish_build_logs': False,
+    'deploy_process_logs': False,
     'update_stats': False,
     'stats_ignore': [],
     'stats_server': None,
@@ -3072,8 +3072,8 @@ def local_rsync(options, fromdir, todir):
         raise FDroidException()
 
 
-def publish_build_log_with_rsync(appid, vercode, log_content,
-                                 timestamp=int(time.time())):
+def deploy_build_log_with_rsync(appid, vercode, log_content,
+                                timestamp=int(time.time())):
     """Upload build log of one individual app build to an fdroid repository.
 
     :param appid: package name for dientifying to which app this log belongs.
@@ -3084,18 +3084,18 @@ def publish_build_log_with_rsync(appid, vercode, log_content,
     :param timestamp: timestamp for avoiding logfile name collisions.
     """
 
-    # check if publishing logs is enabled in config
-    if not config.get('publish_build_logs', False):
-        logging.debug('skip publishing full build logs: not enabled in config')
+    # check if deploying logs is enabled in config
+    if not config.get('deploy_process_logs', False):
+        logging.debug(_('skip deploying full build logs: not enabled in config'))
         return
 
     if not log_content:
-        logging.warning('skip publishing full build logs: log content is empty')
+        logging.warning(_('skip deploying full build logs: log content is empty'))
         return
 
     if not (isinstance(timestamp, int) or isinstance(timestamp, float)):
-        raise ValueError("supplied timestamp '{}' is not a unix timestamp"
-                         .format(timestamp))
+        raise ValueError(_("supplied timestamp value '{timestamp}' is not a unix timestamp"
+                           .format(timestamp=timestamp)))
 
     with tempfile.TemporaryDirectory() as tmpdir:
         # gzip compress log file
@@ -3127,13 +3127,13 @@ def publish_build_log_with_rsync(appid, vercode, log_content,
                 cmd += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file']]
             cmd += [log_gz_path, dest_path]
 
-            # TODO: also publish signature file if present
+            # TODO: also deploy signature file if present
 
             retcode = subprocess.call(cmd)
             if retcode:
-                logging.warning("failded publishing build logs to '{}'".format(webroot))
+                logging.warning(_("failed deploying build logs to '{path}'").format(path=webroot))
             else:
-                logging.info("published build logs to '{}'".format(webroot))
+                logging.info(_("deployeded build logs to '{path}'").format(path=webroot))
 
 
 def get_per_app_repos():

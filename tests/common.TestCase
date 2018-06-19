@@ -791,7 +791,7 @@ class CommonTest(unittest.TestCase):
         with self.assertRaises(SyntaxError):
             fdroidserver.common.calculate_math_string('1-1 # no comment')
 
-    def test_publish_build_log_with_rsync_with_id_file(self):
+    def test_deploy_build_log_with_rsync_with_id_file(self):
 
         mocklogcontent = bytes(textwrap.dedent("""\
             build started
@@ -806,7 +806,7 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.config['serverwebroot'] = [
             'example.com:/var/www/fdroid/repo/',
             'example.com:/var/www/fdroid/archive/']
-        fdroidserver.common.config['publish_build_logs'] = True
+        fdroidserver.common.config['deploy_process_logs'] = True
         fdroidserver.common.config['identity_file'] = 'ssh/id_rsa'
 
         assert_subprocess_call_iteration = 0
@@ -848,7 +848,7 @@ class CommonTest(unittest.TestCase):
 
         with mock.patch('subprocess.call',
                         side_effect=assert_subprocess_call):
-            fdroidserver.common.publish_build_log_with_rsync(
+            fdroidserver.common.deploy_build_log_with_rsync(
                 'com.example.app', '4711', mocklogcontent, 1.1)
 
 
