@@ -24,22 +24,20 @@ import tarfile
 import shutil
 import subprocess
 import textwrap
+import logging
 from .common import FDroidException
-from logging import getLogger
 
 from fdroidserver import _
 import threading
 
 lock = threading.Lock()
 
-logger = getLogger('fdroidserver-vmtools')
-
 
 def get_clean_builder(serverdir, reset=False):
     if not os.path.isdir(serverdir):
         if os.path.islink(serverdir):
             os.unlink(serverdir)
-        logger.info("buildserver path does not exists, creating %s", serverdir)
+        logging.info("buildserver path does not exists, creating %s", serverdir)
         os.makedirs(serverdir)
     vagrantfile = os.path.join(serverdir, 'Vagrantfile')
     if not os.path.isfile(vagrantfile):
@@ -54,12 +52,12 @@ def get_clean_builder(serverdir, reset=False):
                 """))
     vm = get_build_vm(serverdir)
     if reset:
-        logger.info('resetting buildserver by request')
+        logging.info('resetting buildserver by request')
     elif not vm.vagrant_uuid_okay():
-        logger.info('resetting buildserver, because vagrant vm is not okay.')
+        logging.info('resetting buildserver, because vagrant vm is not okay.')
         reset = True
     elif not vm.snapshot_exists('fdroidclean'):
-        logger.info("resetting buildserver, because snapshot 'fdroidclean' is not present.")
+        logging.info("resetting buildserver, because snapshot 'fdroidclean' is not present.")
         reset = True
 
     if reset:
@@ -68,10 +66,10 @@ def get_clean_builder(serverdir, reset=False):
     vm.suspend()
 
     if reset:
-        logger.info('buildserver recreated: taking a clean snapshot')
+        logging.info('buildserver recreated: taking a clean snapshot')
         vm.snapshot_create('fdroidclean')
     else:
-        logger.info('builserver ok: reverting to clean snapshot')
+        logging.info('builserver ok: reverting to clean snapshot')
         vm.snapshot_revert('fdroidclean')
     vm.up()
 
@@ -88,12 +86,12 @@ def get_clean_builder(serverdir, reset=False):
 
 
 def _check_call(cmd, cwd=None):
-    logger.debug(' '.join(cmd))
+    logging.debug(' '.join(cmd))
     return subprocess.check_call(cmd, shell=False, cwd=cwd)
 
 
 def _check_output(cmd, cwd=None):
-    logger.debug(' '.join(cmd))
+    logging.debug(' '.join(cmd))
     return subprocess.check_output(cmd, shell=False, cwd=cwd)
 
 
@@ -113,37 +111,28 @@ def get_build_vm(srvdir, provider=None):
     # use supplied provider
     if provider:
         if provider == 'libvirt':
-            logger.debug('build vm provider \'libvirt\' selected')
+            logging.debug('build vm provider \'libvirt\' selected')
             return LibvirtBuildVm(abssrvdir)
         elif provider == 'virtualbox':
-            logger.debug('build vm provider \'virtualbox\' selected')
+            logging.debug('build vm provider \'virtualbox\' selected')
             return VirtualboxBuildVm(abssrvdir)
         else:
-            logger.warn('build vm provider not supported: \'%s\'', provider)
+            logging.warn('build vm provider not supported: \'%s\'', provider)
 
     # try guessing provider from installed software
-    try:
-        kvm_installed = 0 == _check_call(['which', 'kvm'])
-    except subprocess.CalledProcessError:
-        kvm_installed = False
-        try:
-            kvm_installed |= 0 == _check_call(['which', 'qemu'])
-        except subprocess.CalledProcessError:
-            pass
-    try:
-        vbox_installed = 0 == _check_call(['which', 'VBoxHeadless'])
-    except subprocess.CalledProcessError:
-        vbox_installed = False
+    kvm_installed = shutil.which('kvm') is not None
+    kvm_installed |= shutil.which('qemu') is not None
+    vbox_installed = shutil.which('VBoxHeadless') is not None
     if kvm_installed and vbox_installed:
-        logger.debug('both kvm and vbox are installed.')
+        logging.debug('both kvm and vbox are installed.')
     elif kvm_installed:
-        logger.debug('libvirt is the sole installed and supported vagrant provider, selecting \'libvirt\'')
+        logging.debug('libvirt is the sole installed and supported vagrant provider, selecting \'libvirt\'')
         return LibvirtBuildVm(abssrvdir)
     elif vbox_installed:
-        logger.debug('virtualbox is the sole installed and supported vagrant provider, selecting \'virtualbox\'')
+        logging.debug('virtualbox is the sole installed and supported vagrant provider, selecting \'virtualbox\'')
         return VirtualboxBuildVm(abssrvdir)
     else:
-        logger.debug('could not confirm that either virtualbox or kvm/libvirt are installed')
+        logging.debug('could not confirm that either virtualbox or kvm/libvirt are installed')
 
     # try guessing provider from .../srvdir/.vagrant internals
     has_libvirt_machine = isdir(os.path.join(abssrvdir, '.vagrant',
@@ -151,16 +140,16 @@ def get_build_vm(srvdir, provider=None):
     has_vbox_machine = isdir(os.path.join(abssrvdir, '.vagrant',
                                           'machines', 'default', 'virtualbox'))
     if has_libvirt_machine and has_vbox_machine:
-        logger.info('build vm provider lookup found virtualbox and libvirt, defaulting to \'virtualbox\'')
+        logging.info('build vm provider lookup found virtualbox and libvirt, defaulting to \'virtualbox\'')
         return VirtualboxBuildVm(abssrvdir)
     elif has_libvirt_machine:
-        logger.debug('build vm provider lookup found \'libvirt\'')
+        logging.debug('build vm provider lookup found \'libvirt\'')
         return LibvirtBuildVm(abssrvdir)
     elif has_vbox_machine:
-        logger.debug('build vm provider lookup found \'virtualbox\'')
+        logging.debug('build vm provider lookup found \'virtualbox\'')
         return VirtualboxBuildVm(abssrvdir)
 
-    logger.info('build vm provider lookup could not determine provider, defaulting to \'virtualbox\'')
+    logging.info('build vm provider lookup could not determine provider, defaulting to \'virtualbox\'')
     return VirtualboxBuildVm(abssrvdir)
 
 
@@ -203,7 +192,7 @@ class FDroidBuildVm():
     def suspend(self):
         global lock
         with lock:
-            logger.info('suspending buildserver')
+            logging.info('suspending buildserver')
             try:
                 self.vgrnt.suspend()
             except subprocess.CalledProcessError as e:
@@ -222,22 +211,22 @@ class FDroidBuildVm():
         * vagrant state informations (eg. `.vagrant` folder)
         * images related to this vm
         """
-        logger.info("destroying vm '%s'", self.srvname)
+        logging.info("destroying vm '%s'", self.srvname)
         try:
             self.vgrnt.destroy()
-            logger.debug('vagrant destroy completed')
+            logging.debug('vagrant destroy completed')
         except subprocess.CalledProcessError as e:
-            logger.exception('vagrant destroy failed: %s', e)
+            logging.exception('vagrant destroy failed: %s', e)
         vgrntdir = os.path.join(self.srvdir, '.vagrant')
         try:
             shutil.rmtree(vgrntdir)
-            logger.debug('deleted vagrant dir: %s', vgrntdir)
+            logging.debug('deleted vagrant dir: %s', vgrntdir)
         except Exception as e:
-            logger.debug("could not delete vagrant dir: %s, %s", vgrntdir, e)
+            logging.debug("could not delete vagrant dir: %s, %s", vgrntdir, e)
         try:
             _check_call(['vagrant', 'global-status', '--prune'])
         except subprocess.CalledProcessError as e:
-            logger.debug('pruning global vagrant status failed: %s', e)
+            logging.debug('pruning global vagrant status failed: %s', e)
 
     def package(self, output=None):
         self.vgrnt.package(output=output)
@@ -256,7 +245,7 @@ class FDroidBuildVm():
             # Vagrant 1.0 - it's a json file...
             with open(os.path.join(self.srvdir, '.vagrant')) as f:
                 id = json.load(f)['active']['default']
-                logger.debug('vm uuid: %s', id)
+                logging.debug('vm uuid: %s', id)
             return id
         elif isfile(os.path.join(self.srvdir, '.vagrant', 'machines',
                                  'default', self.provider, 'id')):
@@ -264,10 +253,10 @@ class FDroidBuildVm():
             with open(os.path.join(self.srvdir, '.vagrant', 'machines',
                                    'default', self.provider, 'id')) as f:
                 id = f.read()
-                logger.debug('vm uuid: %s', id)
+                logging.debug('vm uuid: %s', id)
             return id
         else:
-            logger.debug('vm uuid is None')
+            logging.debug('vm uuid is None')
             return None
 
     def box_add(self, boxname, boxfile, force=True):
@@ -286,12 +275,12 @@ class FDroidBuildVm():
         try:
             _check_call(['vagrant', 'box', 'remove', '--all', '--force', boxname])
         except subprocess.CalledProcessError as e:
-            logger.debug('tried removing box %s, but is did not exist: %s', boxname, e)
+            logging.debug('tried removing box %s, but is did not exist: %s', boxname, e)
         boxpath = os.path.join(expanduser('~'), '.vagrant',
                                self._vagrant_file_name(boxname))
         if isdir(boxpath):
-            logger.info("attempting to remove box '%s' by deleting: %s",
-                        boxname, boxpath)
+            logging.info("attempting to remove box '%s' by deleting: %s",
+                         boxname, boxpath)
             shutil.rmtree(boxpath)
 
     def sshinfo(self):
@@ -357,19 +346,19 @@ class LibvirtBuildVm(FDroidBuildVm):
         try:
             _check_call(('virsh', '-c', 'qemu:///system', 'destroy', self.srvname))
         except subprocess.CalledProcessError as e:
-            logger.info("could not force libvirt domain '%s' off: %s", self.srvname, e)
+            logging.info("could not force libvirt domain '%s' off: %s", self.srvname, e)
         try:
             # libvirt python bindings do not support all flags required
             # for undefining domains correctly.
             _check_call(('virsh', '-c', 'qemu:///system', 'undefine', self.srvname, '--nvram', '--managed-save', '--remove-all-storage', '--snapshots-metadata'))
         except subprocess.CalledProcessError as e:
-            logger.info("could not undefine libvirt domain '%s': %s", self.srvname, e)
+            logging.info("could not undefine libvirt domain '%s': %s", self.srvname, e)
 
     def package(self, output=None, keep_box_file=False):
         if not output:
             output = "buildserver.box"
-            logger.debug('no output name set for packaging \'%s\','
-                         + 'defaulting to %s', self.srvname, output)
+            logging.debug("no output name set for packaging '%s', "
+                          "defaulting to %s", self.srvname, output)
         storagePool = self.conn.storagePoolLookupByName('default')
         domainInfo = self.conn.lookupByName(self.srvname).info()
         if storagePool:
@@ -381,12 +370,12 @@ class LibvirtBuildVm(FDroidBuildVm):
             if isfile('box.img'):
                 os.remove('box.img')
 
-            logger.debug('preparing box.img for box %s', output)
+            logging.debug('preparing box.img for box %s', output)
             vol = storagePool.storageVolLookupByName(self.srvname + '.img')
             imagepath = vol.path()
             # TODO use a libvirt storage pool to ensure the img file is readable
             if not os.access(imagepath, os.R_OK):
-                logger.warning(_('Cannot read "{path}"!').format(path=imagepath))
+                logging.warning(_('Cannot read "{path}"!').format(path=imagepath))
                 _check_call(['sudo', '/bin/chmod', '-R', 'a+rX', '/var/lib/libvirt/images'])
             shutil.copy2(imagepath, 'box.img')
             _check_call(['qemu-img', 'rebase', '-p', '-b', '', 'box.img'])
@@ -397,10 +386,10 @@ class LibvirtBuildVm(FDroidBuildVm):
                         "virtual_size": math.ceil(img_info['virtual-size'] / (1024. ** 3)),
                         }
 
-            logger.debug('preparing metadata.json for box %s', output)
+            logging.debug('preparing metadata.json for box %s', output)
             with open('metadata.json', 'w') as fp:
                 fp.write(json.dumps(metadata))
-            logger.debug('preparing Vagrantfile for box %s', output)
+            logging.debug('preparing Vagrantfile for box %s', output)
             vagrantfile = textwrap.dedent("""\
                   Vagrant.configure("2") do |config|
                     config.ssh.username = "vagrant"
@@ -420,31 +409,34 @@ class LibvirtBuildVm(FDroidBuildVm):
             with open('Vagrantfile', 'w') as fp:
                 fp.write(vagrantfile)
             with tarfile.open(output, 'w:gz') as tar:
-                logger.debug('adding metadata.json to box %s ...', output)
+                logging.debug('adding metadata.json to box %s ...', output)
                 tar.add('metadata.json')
-                logger.debug('adding Vagrantfile to box %s ...', output)
+                logging.debug('adding Vagrantfile to box %s ...', output)
                 tar.add('Vagrantfile')
-                logger.debug('adding box.img to box %s ...', output)
+                logging.debug('adding box.img to box %s ...', output)
                 tar.add('box.img')
 
             if not keep_box_file:
-                logger.debug('box packaging complete, removing temporary files.')
+                logging.debug('box packaging complete, removing temporary files.')
                 os.remove('metadata.json')
                 os.remove('Vagrantfile')
                 os.remove('box.img')
 
         else:
-            logger.warn('could not connect to storage-pool \'default\','
-                        + 'skipping packaging buildserver box')
+            logging.warn("could not connect to storage-pool 'default', "
+                         "skip packaging buildserver box")
 
     def box_add(self, boxname, boxfile, force=True):
         boximg = '%s_vagrant_box_image_0.img' % (boxname)
         if force:
             try:
                 _check_call(['virsh', '-c', 'qemu:///system', 'vol-delete', '--pool', 'default', boximg])
-                logger.debug("removed old box image '%s' from libvirt storeage pool", boximg)
+                logging.debug("removed old box image '%s'"
+                              "from libvirt storeage pool", boximg)
             except subprocess.CalledProcessError as e:
-                logger.debug("tried removing old box image '%s', file was not present in first place", boximg, exc_info=e)
+                logging.debug("tried removing old box image '%s',"
+                              "file was not present in first place",
+                              boximg, exc_info=e)
         super().box_add(boxname, boxfile, force)
 
     def box_remove(self, boxname):
@@ -452,10 +444,10 @@ class LibvirtBuildVm(FDroidBuildVm):
         try:
             _check_call(['virsh', '-c', 'qemu:///system', 'vol-delete', '--pool', 'default', '%s_vagrant_box_image_0.img' % (boxname)])
         except subprocess.CalledProcessError as e:
-            logger.debug("tried removing '%s', file was not present in first place", boxname, exc_info=e)
+            logging.debug("tried removing '%s', file was not present in first place", boxname, exc_info=e)
 
     def snapshot_create(self, snapshot_name):
-        logger.info("creating snapshot '%s' for vm '%s'", snapshot_name, self.srvname)
+        logging.info("creating snapshot '%s' for vm '%s'", snapshot_name, self.srvname)
         try:
             _check_call(['virsh', '-c', 'qemu:///system', 'snapshot-create-as', self.srvname, snapshot_name])
         except subprocess.CalledProcessError as e:
@@ -480,7 +472,7 @@ class LibvirtBuildVm(FDroidBuildVm):
             return False
 
     def snapshot_revert(self, snapshot_name):
-        logger.info("reverting vm '%s' to snapshot '%s'", self.srvname, snapshot_name)
+        logging.info("reverting vm '%s' to snapshot '%s'", self.srvname, snapshot_name)
         import libvirt
         try:
             dom = self.conn.lookupByName(self.srvname)
@@ -498,7 +490,7 @@ class VirtualboxBuildVm(FDroidBuildVm):
         super().__init__(srvdir)
 
     def snapshot_create(self, snapshot_name):
-        logger.info("creating snapshot '%s' for vm '%s'", snapshot_name, self.srvname)
+        logging.info("creating snapshot '%s' for vm '%s'", snapshot_name, self.srvname)
         try:
             _check_call(['VBoxManage', 'snapshot', self.srvuuid, 'take', 'fdroidclean'], cwd=self.srvdir)
         except subprocess.CalledProcessError as e:
@@ -524,8 +516,8 @@ class VirtualboxBuildVm(FDroidBuildVm):
             return False
 
     def snapshot_revert(self, snapshot_name):
-        logger.info("reverting vm '%s' to snapshot '%s'",
-                    self.srvname, snapshot_name)
+        logging.info("reverting vm '%s' to snapshot '%s'",
+                     self.srvname, snapshot_name)
         try:
             _check_call(['VBoxManage', 'snapshot', self.srvuuid,
                          'restore', 'fdroidclean'], cwd=self.srvdir)
