@@ -25,6 +25,7 @@ import os
 import sys
 import re
 import ast
+import gzip
 import shutil
 import glob
 import stat
@@ -100,6 +101,7 @@ default_config = {
     'per_app_repos': False,
     'make_current_version_link': True,
     'current_version_name_source': 'Name',
+    'deploy_process_logs': False,
     'update_stats': False,
     'stats_ignore': [],
     'stats_server': None,
@@ -3068,6 +3070,70 @@ def local_rsync(options, fromdir, todir):
     logging.debug(' '.join(rsyncargs + [fromdir, todir]))
     if subprocess.call(rsyncargs + [fromdir, todir]) != 0:
         raise FDroidException()
+
+
+def deploy_build_log_with_rsync(appid, vercode, log_content,
+                                timestamp=int(time.time())):
+    """Upload build log of one individual app build to an fdroid repository.
+
+    :param appid: package name for dientifying to which app this log belongs.
+    :param vercode: version of the app to which this build belongs.
+    :param log_content: Content of the log which is about to be posted.
+                        Should be either a string or bytes. (bytes will
+                        be decoded as 'utf-8')
+    :param timestamp: timestamp for avoiding logfile name collisions.
+    """
+
+    # check if deploying logs is enabled in config
+    if not config.get('deploy_process_logs', False):
+        logging.debug(_('skip deploying full build logs: not enabled in config'))
+        return
+
+    if not log_content:
+        logging.warning(_('skip deploying full build logs: log content is empty'))
+        return
+
+    if not (isinstance(timestamp, int) or isinstance(timestamp, float)):
+        raise ValueError(_("supplied timestamp value '{timestamp}' is not a unix timestamp"
+                           .format(timestamp=timestamp)))
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # gzip compress log file
+        log_gz_path = os.path.join(
+            tmpdir, '{pkg}_{ver}_{ts}.log.gz'.format(pkg=appid,
+                                                     ver=vercode,
+                                                     ts=int(timestamp)))
+        with gzip.open(log_gz_path, 'wb') as f:
+            if isinstance(log_content, str):
+                f.write(bytes(log_content, 'utf-8'))
+            else:
+                f.write(log_content)
+
+        # TODO: sign compressed log file, if a signing key is configured
+
+        for webroot in config.get('serverwebroot', []):
+            dest_path = os.path.join(webroot, "buildlogs")
+            if not dest_path.endswith('/'):
+                dest_path += '/'  # make sure rsync knows this is a directory
+            cmd = ['rsync',
+                   '--archive',
+                   '--delete-after',
+                   '--safe-links']
+            if options.verbose:
+                cmd += ['--verbose']
+            if options.quiet:
+                cmd += ['--quiet']
+            if 'identity_file' in config:
+                cmd += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file']]
+            cmd += [log_gz_path, dest_path]
+
+            # TODO: also deploy signature file if present
+
+            retcode = subprocess.call(cmd)
+            if retcode:
+                logging.warning(_("failed deploying build logs to '{path}'").format(path=webroot))
+            else:
+                logging.info(_("deployeded build logs to '{path}'").format(path=webroot))
 
 
 def get_per_app_repos():

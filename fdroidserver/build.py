@@ -75,6 +75,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
 
     sshinfo = vmtools.get_clean_builder('builder', options.reset_server)
 
+    output = None
     try:
         if not buildserverid:
             buildserverid = subprocess.check_output(['vagrant', 'ssh', '-c',
@@ -278,6 +279,13 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         # Suspend the build server.
         vm = vmtools.get_build_vm('builder')
         vm.suspend()
+
+        # deploy logfile to repository web server
+        if output:
+            common.publish_build_log_with_rsync(app.id, build.versionCode, output)
+        else:
+            logging.debug('skip publishing full build logs: '
+                          'no output present')
 
 
 def force_gradle_build_tools(build_dir, build_tools):
@@ -1137,7 +1145,7 @@ def main():
                             raise FDroidException(
                                 'Downloading Binaries from %s failed. %s' % (url, e))
 
-                        # Now we check weather the build can be verified to
+                        # Now we check whether the build can be verified to
                         # match the supplied binary or not. Should the
                         # comparison fail, we mark this build as a failure
                         # and remove everything from the unsigend folder.

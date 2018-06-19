@@ -13,7 +13,9 @@ import tempfile
 import unittest
 import textwrap
 import yaml
+import gzip
 from zipfile import ZipFile
+from unittest import mock
 
 
 localmodule = os.path.realpath(
@@ -659,12 +661,11 @@ class CommonTest(unittest.TestCase):
         self.assertEqual('b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868', sig)
 
     def test_parse_androidmanifests(self):
-        source_files_dir = os.path.join(os.path.dirname(__file__), 'source-files')
         app = fdroidserver.metadata.App()
         app.id = 'org.fdroid.fdroid'
         paths = [
-            os.path.join(source_files_dir, 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
-            os.path.join(source_files_dir, 'fdroid', 'fdroidclient', 'build.gradle'),
+            os.path.join('source-files', 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
+            os.path.join('source-files', 'fdroid', 'fdroidclient', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -672,16 +673,14 @@ class CommonTest(unittest.TestCase):
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
     def test_parse_androidmanifests_with_flavor(self):
-        source_files_dir = os.path.join(os.path.dirname(__file__), 'source-files')
-
         app = fdroidserver.metadata.App()
         build = fdroidserver.metadata.Build()
         build.gradle = ['devVersion']
         app.builds = [build]
         app.id = 'org.fdroid.fdroid.dev'
         paths = [
-            os.path.join(source_files_dir, 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
-            os.path.join(source_files_dir, 'fdroid', 'fdroidclient', 'build.gradle'),
+            os.path.join('source-files', 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
+            os.path.join('source-files', 'fdroid', 'fdroidclient', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -694,7 +693,7 @@ class CommonTest(unittest.TestCase):
         app.builds = [build]
         app.id = 'eu.siacs.conversations'
         paths = [
-            os.path.join(source_files_dir, 'eu.siacs.conversations', 'build.gradle'),
+            os.path.join('source-files', 'eu.siacs.conversations', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -707,7 +706,7 @@ class CommonTest(unittest.TestCase):
         app.builds = [build]
         app.id = 'com.nextcloud.client'
         paths = [
-            os.path.join(source_files_dir, 'com.nextcloud.client', 'build.gradle'),
+            os.path.join('source-files', 'com.nextcloud.client', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -720,7 +719,7 @@ class CommonTest(unittest.TestCase):
         app.builds = [build]
         app.id = 'com.nextcloud.android.beta'
         paths = [
-            os.path.join(source_files_dir, 'com.nextcloud.client', 'build.gradle'),
+            os.path.join('source-files', 'com.nextcloud.client', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -733,7 +732,7 @@ class CommonTest(unittest.TestCase):
         app.builds = [build]
         app.id = 'at.bitfire.davdroid'
         paths = [
-            os.path.join(source_files_dir, 'at.bitfire.davdroid', 'build.gradle'),
+            os.path.join('source-files', 'at.bitfire.davdroid', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -746,7 +745,7 @@ class CommonTest(unittest.TestCase):
         app.builds = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.libre'
         paths = [
-            os.path.join(source_files_dir, 'com.kunzisoft.testcase', 'build.gradle'),
+            os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -759,7 +758,7 @@ class CommonTest(unittest.TestCase):
         app.builds = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.pro'
         paths = [
-            os.path.join(source_files_dir, 'com.kunzisoft.testcase', 'build.gradle'),
+            os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -772,7 +771,7 @@ class CommonTest(unittest.TestCase):
         app.builds = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix'
         paths = [
-            os.path.join(source_files_dir, 'com.kunzisoft.testcase', 'build.gradle'),
+            os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -792,8 +791,70 @@ class CommonTest(unittest.TestCase):
         with self.assertRaises(SyntaxError):
             fdroidserver.common.calculate_math_string('1-1 # no comment')
 
+    def test_deploy_build_log_with_rsync_with_id_file(self):
+
+        mocklogcontent = bytes(textwrap.dedent("""\
+            build started
+            building...
+            build completed
+            profit!"""), 'utf-8')
+
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.verbose = False
+        fdroidserver.common.options.quiet = False
+        fdroidserver.common.config = {}
+        fdroidserver.common.config['serverwebroot'] = [
+            'example.com:/var/www/fdroid/repo/',
+            'example.com:/var/www/fdroid/archive/']
+        fdroidserver.common.config['deploy_process_logs'] = True
+        fdroidserver.common.config['identity_file'] = 'ssh/id_rsa'
+
+        assert_subprocess_call_iteration = 0
+
+        def assert_subprocess_call(cmd):
+            nonlocal assert_subprocess_call_iteration
+            logging.debug(cmd)
+            if assert_subprocess_call_iteration == 0:
+                self.assertListEqual(['rsync',
+                                      '--archive',
+                                      '--delete-after',
+                                      '--safe-links',
+                                      '-e',
+                                      'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ssh/id_rsa',
+                                      cmd[6],
+                                      'example.com:/var/www/fdroid/repo/buildlogs'],
+                                     cmd)
+                self.assertTrue(cmd[6].endswith('/com.example.app_4711_1.log.gz'))
+                with gzip.open(cmd[6], 'r') as f:
+                    self.assertTrue(f.read(), mocklogcontent)
+            elif assert_subprocess_call_iteration == 1:
+                self.assertListEqual(['rsync',
+                                      '--archive',
+                                      '--delete-after',
+                                      '--safe-links',
+                                      '-e',
+                                      'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ssh/id_rsa',
+                                      cmd[6],
+                                      'example.com:/var/www/fdroid/archive/buildlogs'],
+                                     cmd)
+                self.assertTrue(cmd[6].endswith('/com.example.app_4711_1.log.gz'))
+                with gzip.open(cmd[6], 'r') as f:
+                    self.assertTrue(f.read(), mocklogcontent)
+            else:
+                self.fail('unexpected subprocess.call invocation ({})'
+                          .format(assert_subprocess_call_iteration))
+            assert_subprocess_call_iteration += 1
+            return 0
+
+        with mock.patch('subprocess.call',
+                        side_effect=assert_subprocess_call):
+            fdroidserver.common.deploy_build_log_with_rsync(
+                'com.example.app', '4711', mocklogcontent, 1.1)
+
 
 if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+
     parser = optparse.OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
