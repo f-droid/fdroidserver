@@ -33,7 +33,7 @@ import zipfile
 from . import _
 from . import common
 from . import metadata
-from .common import FDroidPopen, SdkToolsPopen
+from .common import FDroidPopen
 from .exception import BuildException, FDroidException
 
 config = None
@@ -350,10 +350,7 @@ def main():
                     raise BuildException(_("Failed to sign application"), p.output)
 
                 # Zipalign it...
-                p = SdkToolsPopen(['zipalign', '-v', '4', apkfile,
-                                   os.path.join(output_dir, apkfilename)])
-                if p.returncode != 0:
-                    raise BuildException(_("Failed to align application"))
+                common._zipalign(apkfile, os.path.join(output_dir, apkfilename))
                 os.remove(apkfile)
 
                 publish_source_tarball(apkfilename, unsigned_dir, output_dir)

@@ -2527,6 +2527,18 @@ def apk_strip_signatures(signed_apk, strip_manifest=False):
                             out_apk.writestr(info, buf)
 
 
+def _zipalign(unsigned_apk, aligned_apk):
+    """run 'zipalign' using standard flags used by Gradle Android Plugin
+
+    -p was added in build-tools-23.0.0
+
+    https://developer.android.com/studio/publish/app-signing#sign-manually
+    """
+    p = SdkToolsPopen(['zipalign', '-v', '-p', '4', unsigned_apk, aligned_apk])
+    if p.returncode != 0:
+        raise BuildException("Failed to align application")
+
+
 def apk_implant_signatures(apkpath, signaturefile, signedfile, manifest):
     """Implats a signature from metadata into an APK.
 
@@ -2553,9 +2565,7 @@ def apk_implant_signatures(apkpath, signaturefile, signedfile, manifest):
                             buf = in_apk.read(info.filename)
                             out_apk.writestr(info, buf)
         os.remove(apkpath)
-        p = SdkToolsPopen(['zipalign', '-v', '4', apkwithnewsig, apkpath])
-        if p.returncode != 0:
-            raise BuildException("Failed to align application")
+        _zipalign(apkwithnewsig, apkpath)
 
 
 def apk_extract_signatures(apkpath, outdir, manifest=True):
@@ -2602,9 +2612,7 @@ def sign_apk(unsigned_path, signed_path, keyalias):
     if p.returncode != 0:
         raise BuildException(_("Failed to sign application"), p.output)
 
-    p = SdkToolsPopen(['zipalign', '-v', '4', unsigned_path, signed_path])
-    if p.returncode != 0:
-        raise BuildException(_("Failed to zipalign application"))
+    _zipalign(unsigned_path, signed_path)
     os.remove(unsigned_path)
 
 
