@@ -165,6 +165,8 @@ The repository of older versions of applications from the main demo repository.
 
 # Uncomment this option if you want to publish build logs to your repository
 # server(s). Logs get published to all servers configured in 'serverwebroot'.
+# This feature only supports publishing logs from build-jobs running
+# inside a buildserver VM.
 #
 # publish_build_logs = True
 
