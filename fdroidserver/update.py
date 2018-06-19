@@ -1875,7 +1875,8 @@ def main():
 
     config = common.read_config(options)
 
-    if not ('jarsigner' in config and 'keytool' in config):
+    if not (('jarsigner' in config or 'apksigner' in config)
+            and 'keytool' in config):
         raise FDroidException(_('Java JDK not found! Install in standard location or set java_paths!'))
 
     repodirs = ['repo']
