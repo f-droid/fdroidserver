@@ -91,6 +91,10 @@ def main():
                         help=_("Specify which debug keystore file to use."))
     parser.add_argument("--show-secret-var", action="store_true", default=False,
                         help=_("Print the secret variable to the terminal for easy copy/paste"))
+    parser.add_argument("--keep-private-keys", action="store_true", default=False,
+                        help=_("Do not remove the private keys generated from the keystore"))
+    parser.add_argument("--no-deploy", action="store_true", default=False,
+                        help=_("Do not deploy the new files to the repo"))
     parser.add_argument("--file", default='app/build/outputs/apk/*.apk',
                         help=_('The the file to be included in the repo (path or glob)'))
     parser.add_argument("--no-checksum", action="store_true", default=False,
@@ -283,14 +287,19 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         common.local_rsync(options, repo_basedir + '/metadata/', git_mirror_metadatadir + '/')
         mirror_git_repo.git.add(all=True)
         mirror_git_repo.index.commit("update app metadata")
-        try:
-            subprocess.check_call(['fdroid', 'server', 'update', '--verbose'], cwd=repo_basedir)
-        except subprocess.CalledProcessError:
-            logging.error(_('cannot publish update, did you set the deploy key?')
-                          + '\n' + deploy_key_url)
-            sys.exit(1)
-        if shutil.rmtree.avoids_symlink_attacks:
-            shutil.rmtree(os.path.dirname(ssh_private_key_file))
+
+        if not options.no_deploy:
+            try:
+                subprocess.check_call(['fdroid', 'server', 'update', '--verbose'], cwd=repo_basedir)
+            except subprocess.CalledProcessError:
+                logging.error(_('cannot publish update, did you set the deploy key?')
+                              + '\n' + deploy_key_url)
+                sys.exit(1)
+
+        if not options.keep_private_keys:
+            os.remove(KEYSTORE_FILE)
+            if shutil.rmtree.avoids_symlink_attacks:
+                shutil.rmtree(os.path.dirname(ssh_private_key_file))
 
     else:
         if not os.path.isfile(options.keystore):
