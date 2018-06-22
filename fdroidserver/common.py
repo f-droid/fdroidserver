@@ -437,11 +437,6 @@ def test_sdk_exists(thisconfig):
         logging.critical(_("Android SDK path '{path}' is not a directory!")
                          .format(path=thisconfig['sdk_path']))
         return False
-    for d in ['build-tools', 'platform-tools', 'tools']:
-        if not os.path.isdir(os.path.join(thisconfig['sdk_path'], d)):
-            logging.critical(_("Android SDK '{path}' does not have '{dirname}' installed!")
-                             .format(path=thisconfig['sdk_path'], dirname=d))
-            return False
     return True
 
 

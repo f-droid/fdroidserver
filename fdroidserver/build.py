@@ -1000,6 +1000,12 @@ def main():
     if options.reset_server and not options.server:
         parser.error("option %s: Using --reset-server without --server makes no sense" % "reset-server")
 
+    if options.onserver or not options.server:
+        for d in ['build-tools', 'platform-tools', 'tools']:
+            if not os.path.isdir(os.path.join(config['sdk_path'], d)):
+                raise FDroidException(_("Android SDK '{path}' does not have '{dirname}' installed!")
+                                      .format(path=config['sdk_path'], dirname=d))
+
     log_dir = 'logs'
     if not os.path.isdir(log_dir):
         logging.info("Creating log directory")
