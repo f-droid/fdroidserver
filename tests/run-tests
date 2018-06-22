@@ -262,7 +262,7 @@ grep -F '<application id=' repo/index.xml > /dev/null
 grep -F '<install packageName=' repo/index.xml > /dev/null
 grep -F '<uninstall packageName=' repo/index.xml > /dev/null
 # OSX tests are run on Travis-CI, and gpg fails to launch gpg-agent there
-if [ "$TRAVIS_OS_NAME" != "osx" ]; then
+if [ "$TRAVIS_OS_NAME" != "osx" ] && which gpg; then
     $fdroid gpgsign --verbose
     $fdroid gpgsign --verbose
     test -e repo/obb.mainpatch.current_1619.apk.asc
@@ -621,7 +621,7 @@ mkdir -p $LOCAL_COPY_DIR/repo
 echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
 
 $fdroid checkupdates --allow-dirty
-$fdroid gpgsign
+which gpg && $fdroid gpgsign
 $fdroid lint
 $fdroid readmeta
 $fdroid rewritemeta fake
