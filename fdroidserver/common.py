@@ -50,8 +50,6 @@ from pyasn1.codec.der import decoder, encoder
 from pyasn1_modules import rfc2315
 from pyasn1.error import PyAsn1Error
 
-from distutils.util import strtobool
-
 import fdroidserver.metadata
 from fdroidserver import _
 from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesException,\
@@ -2029,8 +2027,8 @@ def is_apk_and_debuggable_androguard(apkfile):
     apkobject = _get_androguard_APK(apkfile)
     if apkobject.is_valid_APK():
         debuggable = apkobject.get_element("application", "debuggable")
-        if debuggable is not None:
-            return bool(strtobool(debuggable))
+        if debuggable == 'true':
+            return True
     return False
 
 
