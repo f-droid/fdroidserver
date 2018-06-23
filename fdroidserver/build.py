@@ -282,7 +282,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
 
         # deploy logfile to repository web server
         if output:
-            common.publish_build_log_with_rsync(app.id, build.versionCode, output)
+            common.deploy_build_log_with_rsync(app.id, build.versionCode, output)
         else:
             logging.debug('skip publishing full build logs: '
                           'no output present')
