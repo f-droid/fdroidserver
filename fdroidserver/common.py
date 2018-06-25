@@ -51,8 +51,6 @@ from pyasn1.codec.der import decoder, encoder
 from pyasn1_modules import rfc2315
 from pyasn1.error import PyAsn1Error
 
-from distutils.util import strtobool
-
 import fdroidserver.metadata
 from fdroidserver import _
 from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesException,\
@@ -439,11 +437,6 @@ def test_sdk_exists(thisconfig):
         logging.critical(_("Android SDK path '{path}' is not a directory!")
                          .format(path=thisconfig['sdk_path']))
         return False
-    for d in ['build-tools', 'platform-tools', 'tools']:
-        if not os.path.isdir(os.path.join(thisconfig['sdk_path'], d)):
-            logging.critical(_("Android SDK '{path}' does not have '{dirname}' installed!")
-                             .format(path=thisconfig['sdk_path'], dirname=d))
-            return False
     return True
 
 
@@ -2031,8 +2024,8 @@ def is_apk_and_debuggable_androguard(apkfile):
     apkobject = _get_androguard_APK(apkfile)
     if apkobject.is_valid_APK():
         debuggable = apkobject.get_element("application", "debuggable")
-        if debuggable is not None:
-            return bool(strtobool(debuggable))
+        if debuggable == 'true':
+            return True
     return False
 
 
