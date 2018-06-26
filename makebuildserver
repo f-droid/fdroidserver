@@ -180,6 +180,8 @@ cachefiles = [
      '2aafa7d19c5e9c4b643ee6ade3d85ef89dc2f79e8383efdb9baf7fddad74b52a'),
     ('https://dl.google.com/android/repository/platform-27_r03.zip',
      '020c4c090bc82ce87ebaae5d1a922e21b39a1d03c78ffa43f0c3e42fc7d28169'),
+    ('https://dl.google.com/android/repository/platform-28_r04.zip',
+     '967f8ca99b71d337aa9c7781f9d65dd8110bf5c4746f44304047bf71b20d0ded'),
     ('https://dl.google.com/android/repository/build-tools_r17-linux.zip',
      '4c8444972343a19045236f6924bd7f12046287c70dace96ab88b2159c8ec0e74'),
     ('https://dl.google.com/android/repository/build-tools_r18.0.1-linux.zip',
@@ -256,6 +258,8 @@ cachefiles = [
      'e73674e065a93ffb05c30a15c8021c0d72ea7c3c206eb9020eb93e49e42ce851'),
     ('https://dl.google.com/android/repository/build-tools_r27.0.3-linux.zip',
      '5e1f4fc5203f13de120c56f9cc103bb2e57d940959547506196ab10ddc9e6b97'),
+    ('https://dl.google.com/android/repository/build-tools_r28-linux.zip',
+     'a7c6b73661836a6c50e32c06e7b8e8d6ef8c96f6812f269b9c90470dfb37753c'),
     # the binaries that Google uses are here:
     # https://android.googlesource.com/platform/tools/external/gradle/+/studio-1.5/
     ('https://services.gradle.org/distributions/gradle-1.4-bin.zip',
@@ -354,6 +358,8 @@ cachefiles = [
      'fca5087dc8b50c64655c000989635664a73b11b9bd3703c7d6cabd31b7dcdb04'),
     ('https://downloads.gradle.org/distributions/gradle-4.8-bin.zip',
      'f3e29692a8faa94eb0b02ebf36fa263a642b3ae8694ef806c45c345b8683f1ba'),
+    ('https://downloads.gradle.org/distributions/gradle-4.8.1-bin.zip',
+     'af334d994b5e69e439ab55b5d2b7d086da5ea6763d78054f49f147b06370ed71'),
     ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin',
      '102d6723f67ff1384330d12c45854315d6452d6510286f4e5891e00a5a8f1d5a'),
     ('https://dl.google.com/android/repository/android-ndk-r11c-linux-x86_64.zip',
@@ -368,8 +374,8 @@ cachefiles = [
      'f01788946733bf6294a36727b99366a18369904eb068a599dde8cca2c1d2ba3c'),
     ('https://dl.google.com/android/repository/android-ndk-r16b-linux-x86_64.zip',
      'bcdea4f5353773b2ffa85b5a9a2ae35544ce88ec5b507301d8cf6a76b765d901'),
-    ('https://dl.google.com/android/repository/android-ndk-r17-linux-x86_64.zip',
-     'ba3d813b47de75bc32a2f3de087f72599c6cb36fdc9686b96f517f5492ff43ca'),
+    ('https://dl.google.com/android/repository/android-ndk-r17b-linux-x86_64.zip',
+     '5dfbbdc2d3ba859fed90d0e978af87c71a91a5be1f6e1c40ba697503d48ccecd'),
 ]
 
 
