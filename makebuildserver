@@ -258,6 +258,8 @@ cachefiles = [
      'e73674e065a93ffb05c30a15c8021c0d72ea7c3c206eb9020eb93e49e42ce851'),
     ('https://dl.google.com/android/repository/build-tools_r27.0.3-linux.zip',
      '5e1f4fc5203f13de120c56f9cc103bb2e57d940959547506196ab10ddc9e6b97'),
+    ('https://dl.google.com/android/repository/build-tools_r28-linux.zip',
+     'a7c6b73661836a6c50e32c06e7b8e8d6ef8c96f6812f269b9c90470dfb37753c'),
     # the binaries that Google uses are here:
     # https://android.googlesource.com/platform/tools/external/gradle/+/studio-1.5/
     ('https://services.gradle.org/distributions/gradle-1.4-bin.zip',
