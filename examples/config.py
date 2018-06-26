@@ -231,7 +231,10 @@ The repository of older versions of applications from the main demo repository.
 # awssecretkey = 'yourverysecretkeywordpassphraserighthere'
 
 
-# If you want to force 'fdroid server' to use a non-standard serverwebroot
+# If you want to force 'fdroid server' to use a non-standard serverwebroot.
+# This will allow you to have 'serverwebroot' entries which do not end in
+# '/fdroid'. (Please note that some client features expect repository URLs
+# to end in '/fdroid/repo'.)
 #
 # nonstandardwebroot = False
 
