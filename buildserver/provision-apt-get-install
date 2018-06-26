@@ -20,7 +20,7 @@ if echo $debian_mirror | grep '^https' 2>&1 > /dev/null; then
     apt-get -y install apt-transport-https
 fi
 
-sed -i "s,http://ftp.uk.debian.org/debian/,${debian_mirror},g" /etc/apt/sources.list
+sed -Ei "s,^deb [a-z]+://\S+,deb ${debian_mirror}," /etc/apt/sources.list
 
 if grep --quiet stretch /etc/apt/sources.list; then
     echo "deb $debian_mirror stretch-backports main" > /etc/apt/sources.list.d/stretch-backports.list
