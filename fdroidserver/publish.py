@@ -210,6 +210,10 @@ def main():
     for apkfile in sorted(glob.glob(os.path.join(unsigned_dir, '*.apk'))
                           + glob.glob(os.path.join(unsigned_dir, '*.zip'))):
 
+        # skip over developer supplied reference binaries for reproducible builds
+        if apkfile.endswith('.binary.apk'):
+            continue
+
         appid, vercode = common.publishednameinfo(apkfile)
         apkfilename = os.path.basename(apkfile)
         if vercodes and appid not in vercodes:
