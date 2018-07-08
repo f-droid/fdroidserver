@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 test -e /opt/gradle/versions || mkdir -p /opt/gradle/versions
 cd /opt/gradle/versions
@@ -15,6 +15,7 @@ done
 chmod -R a+rX /opt/gradle
 
 test -e /opt/gradle/bin || mkdir -p /opt/gradle/bin
-touch /opt/gradle/bin/gradle
-chown vagrant.vagrant /opt/gradle/bin/gradle
-chmod 0755 /opt/gradle/bin/gradle
+ln -fs /home/vagrant/fdroidserver/gradlew-fdroid /opt/gradle/bin/gradle
+chown -h vagrant.vagrant /opt/gradle/bin/gradle
+chown vagrant.vagrant /opt/gradle/versions
+chmod 0755 /opt/gradle/versions

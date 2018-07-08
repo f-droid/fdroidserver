@@ -125,7 +125,9 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         ftp.mkdir('fdroidserver')
         ftp.chdir('fdroidserver')
         ftp.put(os.path.join(serverpath, '..', 'fdroid'), 'fdroid')
+        ftp.put(os.path.join(serverpath, '..', 'gradlew-fdroid'), 'gradlew-fdroid')
         ftp.chmod('fdroid', 0o755)
+        ftp.chmod('gradlew-fdroid', 0o755)
         send_dir(os.path.join(serverpath))
         ftp.chdir(homedir)
 
@@ -496,8 +498,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             cmd += ['-P' + kv for kv in build.gradleprops]
 
         cmd += ['clean']
-
-        p = FDroidPopen(cmd, cwd=root_dir)
+        p = FDroidPopen(cmd, cwd=root_dir, envs={"GRADLE_VERSION_DIR": config['gradle_version_dir'], "CACHEDIR": config['cachedir']})
 
     elif bmethod == 'buildozer':
         pass
@@ -720,7 +721,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
         cmd += gradletasks
 
-        p = FDroidPopen(cmd, cwd=root_dir)
+        p = FDroidPopen(cmd, cwd=root_dir, envs={"GRADLE_VERSION_DIR": config['gradle_version_dir'], "CACHEDIR": config['cachedir']})
 
     elif bmethod == 'ant':
         logging.info("Building Ant project...")

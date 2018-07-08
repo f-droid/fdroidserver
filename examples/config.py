@@ -21,6 +21,10 @@
 #     'r17b': None,
 # }
 
+# Directory to store downloaded tools in (i.e. gradle versions)
+# By default, these are stored in ~/.cache/fdroidserver
+# cachedir = cache
+
 # java_paths = {
 #     '8': "/usr/lib/jvm/java-8-openjdk",
 # }
@@ -39,6 +43,7 @@
 # mvn3 = "mvn"
 
 # Command or path to binary for running Gradle
+# Defaults to using an internal gradle wrapper (gradlew-fdroid).
 # gradle = "gradle"
 
 # Set the maximum age (in days) of an index that a client should accept from
