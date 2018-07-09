@@ -214,6 +214,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             cmdline += ' --verbose'
         if options.skipscan:
             cmdline += ' --skip-scan'
+        if options.notarball:
+            cmdline += ' --no-tarball'
         cmdline += " %s:%s" % (app.id, build.versionCode)
         chan.exec_command('bash --login -c "' + cmdline + '"')
 
