@@ -228,7 +228,6 @@ echo_header 'copy git import and run "fdroid scanner" on it'
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
-cp $WORKSPACE/examples/fdroid-icon.png $REPOROOT/
 mkdir metadata
 echo "AutoName: Just A Test" > metadata/org.fdroid.ci.test.app.yml
 echo "WebSite: " >> metadata/org.fdroid.ci.test.app.yml
@@ -942,7 +941,6 @@ echo_header "setup a new repo manually and generate a keystore"
 REPOROOT=`create_test_dir`
 KEYSTORE=$REPOROOT/keystore.p12
 cd $REPOROOT
-cp $WORKSPACE/examples/fdroid-icon.png $REPOROOT/
 ! test -e $KEYSTORE
 set +e
 $fdroid update

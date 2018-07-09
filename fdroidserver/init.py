@@ -120,8 +120,17 @@ def main():
         # 'metadata' and 'tmp' are created in fdroid
         if not os.path.exists('repo'):
             os.mkdir('repo')
-        shutil.copy(os.path.join(examplesdir, 'fdroid-icon.png'), fdroiddir)
-        shutil.copyfile(os.path.join(examplesdir, 'config.yml'), 'config.yml')
+        example_config_yml = os.path.join(examplesdir, 'config.yml')
+        if os.path.exists(example_config_yml):
+            shutil.copyfile(example_config_yml, 'config.yml')
+        else:
+            from pkg_resources import get_distribution
+            versionstr = get_distribution('fdroidserver').version
+            if not versionstr:
+                versionstr = 'master'
+            with open('config.yml', 'w') as fp:
+                fp.write('# see https://gitlab.com/fdroid/fdroidserver/blob/'
+                         + versionstr + '/examples/config.yml\n')
         os.chmod('config.yml', 0o0600)
         # If android_home is None, test_config['sdk_path'] will be used and
         # "$ANDROID_HOME" may be used if the env var is set up correctly.

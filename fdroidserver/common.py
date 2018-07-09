@@ -147,7 +147,7 @@ default_config = {
     'keyaliases': {},
     'repo_url': "https://MyFirstFDroidRepo.org/fdroid/repo",
     'repo_name': "My First FDroid Repo Demo",
-    'repo_icon': "fdroid-icon.png",
+    'repo_icon': "icon.png",
     'repo_description': _('''
         This is a repository of apps to be used with FDroid. Applications in this
         repository are either official binaries built by the original application
@@ -228,7 +228,7 @@ def fill_config_defaults(thisconfig):
             return None
         return path
 
-    for k in ['sdk_path', 'ant', 'mvn3', 'gradle', 'keystore', 'repo_icon']:
+    for k in ['sdk_path', 'ant', 'mvn3', 'gradle', 'keystore']:
         v = thisconfig[k]
         exp = expand_path(v)
         if exp is not None:
