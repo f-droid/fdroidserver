@@ -1652,6 +1652,9 @@ def apply_info_from_latest_apk(apps, apks):
                     bestver = apk['versionCode']
                     bestapk = apk
 
+                if app.NoSourceSince:
+                    apk['antiFeatures'].add('NoSourceSince')
+
                 if 'added' in apk:
                     if not app.added or apk['added'] < app.added:
                         app.added = apk['added']

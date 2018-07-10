@@ -237,6 +237,7 @@
 		<tracker>https://github.com/miguelvps/PoliteDroid/issues</tracker>
 		<marketversion>1.5</marketversion>
 		<marketvercode>6</marketvercode>
+		<antifeatures>NoSourceSince</antifeatures>
 		<package>
 			<version>1.5</version>
 			<versioncode>6</versioncode>
