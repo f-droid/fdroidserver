@@ -28,11 +28,13 @@ Build:1.4,5
 
 Build:1.5,6
     commit=v1.5
-    gradle=yes
     sudo=echo 'this is just a test'
+    gradle=yes
 
 Archive Policy:4 versions
 Auto Update Mode:Version v%v
 Update Check Mode:Tags
 Current Version:1.5
 Current Version Code:6
+
+No Source Since:1.5

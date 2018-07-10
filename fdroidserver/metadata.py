@@ -993,9 +993,6 @@ def parse_metadata(metadatapath, check_vcs=False, refresh=True):
 
     post_metadata_parse(app)
 
-    if app.NoSourceSince:
-        app.AntiFeatures.append('NoSourceSince')
-
     if not app.id:
         if app.builds:
             build = app.builds[-1]
