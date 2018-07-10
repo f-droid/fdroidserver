@@ -16,7 +16,7 @@ test:
 metadata_v0:
   image: registry.gitlab.com/fdroid/ci-images-server:latest
   variables:
-    RELEASE_COMMIT_ID: 2f563f533b3571c80f7a09c6fbb453398658f723  # 1.0.2
+    RELEASE_COMMIT_ID: 90e3a67cefe89b27afecbdab8e07c9f37ee77a0c  # 1.1a~
   script:
     - git fetch https://gitlab.com/fdroid/fdroidserver $RELEASE_COMMIT_ID
     - cd tests
@@ -33,9 +33,7 @@ metadata_v0:
     - echo "accepted_formats = ('txt', 'yml')" >> config.py
     - ../tests/dump_internal_metadata_format.py
     - sed -i
-          -e '/Translation:/d'
           -e '/kivy:\sfalse/d'
-          -e '/timeout:\s/d'
           metadata/dump_*/*.yaml
     - diff -uw metadata/dump_*
 
