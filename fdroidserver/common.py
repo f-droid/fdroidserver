@@ -57,6 +57,9 @@ from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesEx
     BuildException, VerificationException
 from .asynchronousfilereader import AsynchronousFileReader
 
+# The path to this fdroidserver distribution
+FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+
 # this is the build-tools version, aapt has a separate version that
 # has to be manually set in test_aapt_version()
 MINIMUM_AAPT_VERSION = '26.0.0'
@@ -87,12 +90,14 @@ default_config = {
         'r15c': None,
         'r16b': None,
     },
+    'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
     'build_tools': MINIMUM_AAPT_VERSION,
     'force_build_tools': False,
     'java_paths': None,
     'ant': "ant",
     'mvn3': "mvn",
-    'gradle': 'gradle',
+    'gradle': os.path.join(FDROID_PATH, 'gradlew-fdroid'),
+    'gradle_version_dir': os.path.join(os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'), 'gradle'),
     'accepted_formats': ['txt', 'yml'],
     'sync_from_local_copy_dir': False,
     'allow_disabled_algorithms': False,

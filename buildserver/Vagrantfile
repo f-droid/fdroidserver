@@ -75,7 +75,5 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "provision-pip",
     args: ["compare-locales"]
   config.vm.provision "shell", path: "provision-gradle"
-  config.vm.provision "file", source: "gradle",
-    destination: "/opt/gradle/bin/gradle"
 
 end

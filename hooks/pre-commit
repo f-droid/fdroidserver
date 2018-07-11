@@ -11,7 +11,7 @@ if [ -z "$files" ]; then
     PY_FILES="fdroid makebuildserver setup.py examples/*.py buildserver/*.py fdroidserver/*.py"
     PY_TEST_FILES="tests/*.TestCase"
     SH_FILES="hooks/pre-commit"
-    BASH_FILES="jenkins-build-all jenkins-setup-build-environment jenkins-test completion/bash-completion buildserver/provision-*"
+    BASH_FILES="gradlew-fdroid jenkins-build-all jenkins-setup-build-environment jenkins-test completion/bash-completion buildserver/provision-*"
     RB_FILES="buildserver/Vagrantfile"
 else
     # if actually committing right now, then only run on the files
