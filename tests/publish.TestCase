@@ -14,6 +14,7 @@ import inspect
 import logging
 import optparse
 import os
+import shutil
 import sys
 import unittest
 import tempfile
@@ -132,6 +133,32 @@ class PublishTest(unittest.TestCase):
         publish.store_stats_fdroid_signing_key_fingerprints({}, indent=2)
         with self.assertRaises(FDroidException):
             common.load_stats_fdroid_signing_key_fingerprints()
+
+    def test_reproducible_binaries_process(self):
+        common.config = {}
+        common.fill_config_defaults(common.config)
+        publish.config = common.config
+        publish.config['keystore'] = 'keystore.jks'
+        publish.config['repo_keyalias'] = 'sova'
+        publish.config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        publish.config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+
+        shutil.copy('keystore.jks', testdir)
+        os.mkdir(os.path.join(testdir, 'repo'))
+        metadata_dir = os.path.join(testdir, 'metadata')
+        os.mkdir(metadata_dir)
+        shutil.copy(os.path.join('metadata', 'com.politedroid.txt'), metadata_dir)
+        with open(os.path.join(metadata_dir, 'com.politedroid.txt'), 'a') as fp:
+            fp.write('\nBinaries:https://placeholder/foo%v.apk\n')
+        os.mkdir(os.path.join(testdir, 'unsigned'))
+        shutil.copy('repo/com.politedroid_6.apk', os.path.join(testdir, 'unsigned'))
+        os.mkdir(os.path.join(testdir, 'unsigned', 'binaries'))
+        shutil.copy('repo/com.politedroid_6.apk',
+                    os.path.join(testdir, 'unsigned', 'binaries', 'com.politedroid_6.binary.apk'))
+
+        os.chdir(testdir)
+        publish.main()
 
 
 if __name__ == "__main__":
