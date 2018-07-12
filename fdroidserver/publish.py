@@ -236,7 +236,7 @@ def main():
             # The binary should already have been retrieved during the build
             # process.
 
-            srcapk = re.sub(r'.apk$', '.binary.apk', apkfile)
+            srcapk = re.sub(r'\.apk$', '.binary.apk', apkfile)
             srcapk = srcapk.replace(unsigned_dir, binaries_dir)
 
             if not os.path.isfile(srcapk):
