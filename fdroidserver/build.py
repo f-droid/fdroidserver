@@ -1146,7 +1146,7 @@ def main():
                         if not os.path.isdir(binaries_dir):
                             os.makedirs(binaries_dir)
                             logging.info("Created directory for storing "
-                                         "devleoper supplied reference "
+                                         "developer supplied reference "
                                          "binaries: '{path}'"
                                          .format(path=binaries_dir))
                         url = app.Binaries

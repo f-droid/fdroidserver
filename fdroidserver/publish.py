@@ -82,7 +82,7 @@ def read_fingerprints_from_keystore():
                      '-storepass:env', 'FDROID_KEY_STORE_PASS'],
                     envs=env_vars, output=False)
     if p.returncode != 0:
-        raise FDroidException('could not read keysotre {}'.format(config['keystore']))
+        raise FDroidException('could not read keystore {}'.format(config['keystore']))
 
     realias = re.compile('Alias name: (?P<alias>.+)\n')
     resha256 = re.compile(r'\s+SHA256: (?P<sha256>[:0-9A-F]{95})\n')
@@ -249,7 +249,7 @@ def main():
                     logging.error("...verification failed - publish skipped : "
                                   "{result}".format(result=compare_result))
                     os.remove(srcapk)
-                    logging.debug('remvoed developer supplied reference binary: {path}'
+                    logging.debug('removed developer supplied reference binary: {path}'
                                   .format(path=srcapk))
                 else:
                     # Success! So move the downloaded file to the repo, and remove
