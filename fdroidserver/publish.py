@@ -178,6 +178,7 @@ def main():
     if not os.path.isdir(unsigned_dir):
         logging.warning(_("No unsigned directory - nothing to do"))
         sys.exit(1)
+    binaries_dir = os.path.join(unsigned_dir, 'binaries')
 
     if not os.path.exists(config['keystore']):
         logging.error("Config error - missing '{0}'".format(config['keystore']))
@@ -210,10 +211,6 @@ def main():
     for apkfile in sorted(glob.glob(os.path.join(unsigned_dir, '*.apk'))
                           + glob.glob(os.path.join(unsigned_dir, '*.zip'))):
 
-        # skip over developer supplied reference binaries for reproducible builds
-        if apkfile.endswith('.binary.apk'):
-            continue
-
         appid, vercode = common.publishednameinfo(apkfile)
         apkfilename = os.path.basename(apkfile)
         if vercodes and appid not in vercodes:
@@ -238,22 +235,27 @@ def main():
             # version if everything checks out.
             # The binary should already have been retrieved during the build
             # process.
+
             srcapk = re.sub(r'.apk$', '.binary.apk', apkfile)
+            srcapk = srcapk.replace(unsigned_dir, binaries_dir)
 
-            # Compare our unsigned one with the downloaded one...
-            compare_result = common.verify_apks(srcapk, apkfile, tmp_dir)
-            if compare_result:
-                logging.error("...verification failed - publish skipped : "
-                              + compare_result)
+            if not os.path.isfile(srcapk):
+                logging.error("...reference binary missing - publish skipped: "
+                              "'{refpath}'".format(refpath=srcapk))
             else:
+                # Compare our unsigned one with the downloaded one...
+                compare_result = common.verify_apks(srcapk, apkfile, tmp_dir)
+                if compare_result:
+                    logging.error("...verification failed - publish skipped : "
+                                  "{result}".format(result=compare_result))
+                else:
+                    # Success! So move the downloaded file to the repo, and remove
+                    # our built version.
+                    shutil.move(srcapk, os.path.join(output_dir, apkfilename))
+                    os.remove(apkfile)
 
-                # Success! So move the downloaded file to the repo, and remove
-                # our built version.
-                shutil.move(srcapk, os.path.join(output_dir, apkfilename))
-                os.remove(apkfile)
-
-                publish_source_tarball(apkfilename, unsigned_dir, output_dir)
-                logging.info('Published ' + apkfilename)
+                    publish_source_tarball(apkfilename, unsigned_dir, output_dir)
+                    logging.info('Published ' + apkfilename)
 
         elif apkfile.endswith('.zip'):
 
