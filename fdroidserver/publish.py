@@ -248,9 +248,6 @@ def main():
                 if compare_result:
                     logging.error("...verification failed - publish skipped : "
                                   "{result}".format(result=compare_result))
-                    os.remove(srcapk)
-                    logging.debug('removed developer supplied reference binary: {path}'
-                                  .format(path=srcapk))
                 else:
                     # Success! So move the downloaded file to the repo, and remove
                     # our built version.
