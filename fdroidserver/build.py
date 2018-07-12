@@ -1026,6 +1026,7 @@ def main():
         if not os.path.isdir(output_dir):
             logging.info("Creating output directory")
             os.makedirs(output_dir)
+    binaries_dir = os.path.join(output_dir, 'binaries')
 
     if config['archive_older'] != 0:
         also_check_dir = 'archive'
@@ -1142,12 +1143,18 @@ def main():
                         # binary. We get that binary now, and save it
                         # alongside our built one in the 'unsigend'
                         # directory.
+                        if not os.path.isdir(binaries_dir):
+                            os.makedirs(binaries_dir)
+                            logging.info("Created directory for storing "
+                                         "developer supplied reference "
+                                         "binaries: '{path}'"
+                                         .format(path=binaries_dir))
                         url = app.Binaries
                         url = url.replace('%v', build.versionName)
                         url = url.replace('%c', str(build.versionCode))
                         logging.info("...retrieving " + url)
                         of = re.sub(r'.apk$', '.binary.apk', common.get_release_filename(app, build))
-                        of = os.path.join(output_dir, of)
+                        of = os.path.join(binaries_dir, of)
                         try:
                             net.download_file(url, local_filename=of)
                         except requests.exceptions.HTTPError as e:
