@@ -1851,13 +1851,8 @@ def main():
                         help=_("Delete APKs and/or OBBs without metadata from the repo"))
     parser.add_argument("-b", "--buildreport", action="store_true", default=False,
                         help=_("Report on build data status"))
-    parser.add_argument("-i", "--interactive", default=False, action="store_true",
-                        help=_("Interactively ask about things that need updating."))
     parser.add_argument("-I", "--icons", action="store_true", default=False,
                         help=_("Resize all the icons exceeding the max pixel size and exit"))
-    parser.add_argument("-e", "--editor", default="/etc/alternatives/editor",
-                        help=_("Specify editor to use in interactive mode. Default is {path}")
-                        .format(path='/etc/alternatives/editor'))
     parser.add_argument("-w", "--wiki", default=False, action="store_true",
                         help=_("Update the wiki"))
     parser.add_argument("--pretty", action="store_true", default=False,

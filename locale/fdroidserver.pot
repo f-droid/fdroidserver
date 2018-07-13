@@ -785,10 +785,6 @@ msgid "Interact with the repo HTTP server"
 msgstr ""
 
 #: ../fdroidserver/update.py
-msgid "Interactively ask about things that need updating."
-msgstr ""
-
-#: ../fdroidserver/update.py
 msgid "Invalid APK"
 msgstr ""
 
@@ -1323,19 +1319,6 @@ msgstr ""
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 msgid "Specify an identity file to provide to SSH for rsyncing"
-msgstr ""
-
-#: ../fdroidserver/update.py
-msgid "Specify editor to use in interactive mode. Default "
-msgstr ""
-
-#, c-format
-msgid "Specify editor to use in interactive mode. Default %s"
-msgstr ""
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "Specify editor to use in interactive mode. Default is {path}"
 msgstr ""
 
 #: ../fdroidserver/build.py

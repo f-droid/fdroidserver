@@ -146,7 +146,7 @@ __complete_install() {
 __complete_update() {
 	opts="-c -v -q -b -i -I -e -w"
 	lopts="--create-metadata --verbose --quiet --buildreport
- --interactive --icons --editor --wiki --pretty --clean --delete-unknown
+ --icons --wiki --pretty --clean --delete-unknown
  --nosign --rename-apks --use-date-from-apk"
 	case "${prev}" in
 		-e|--editor)
