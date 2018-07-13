@@ -17,6 +17,7 @@ run_gradle() {
     if [ ! -d "${gradle_version_dir}/${v_found}" ]; then
         download_gradle ${v_found}
     fi
+    echo "Running ${gradle_version_dir}/${v_found}/bin/gradle ${args[@]}"
 	"${gradle_version_dir}/${v_found}/bin/gradle" "${args[@]}"
 	exit $?
 }
