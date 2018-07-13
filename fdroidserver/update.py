@@ -1260,7 +1260,8 @@ def scan_apk_androguard(apk, apkfile):
         if resource_id:
             icon_name = arsc.get_id(apk['packageName'], icon_id)[1]
         else:
-            icon_name = os.path.splitext(os.path.basename(apkobject.get_app_icon()))[0]
+            # don't use 'anydpi' aka 0xFFFE aka 65534 since it is XML
+            icon_name = os.path.splitext(os.path.basename(apkobject.get_app_icon(max_dpi=65534 - 1)))[0]
         apk['icons_src'] = _get_apk_icons_src(apkfile, icon_name)
 
     arch_re = re.compile("^lib/(.*)/.*$")
