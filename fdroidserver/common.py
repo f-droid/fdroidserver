@@ -2002,7 +2002,7 @@ def ensure_final_value(packageName, arsc, value):
                 res_id = int('0x' + value[1:], 16)
                 res_id = arsc.get_id(packageName, res_id)[1]
                 returnValue = arsc.get_string(packageName, res_id)[1]
-            except ValueError:
+            except (ValueError, TypeError):
                 pass
         return returnValue
 
