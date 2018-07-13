@@ -17,8 +17,9 @@ run_gradle() {
     if [ ! -d "${gradle_version_dir}/${v_found}" ]; then
         download_gradle ${v_found}
     fi
-	"${gradle_version_dir}/${v_found}/bin/gradle" "${args[@]}"
-	exit $?
+    echo "Running ${gradle_version_dir}/${v_found}/bin/gradle ${args[@]}"
+    "${gradle_version_dir}/${v_found}/bin/gradle" "${args[@]}"
+    exit $?
 }
 
 download_gradle() {
@@ -41,8 +42,8 @@ download_gradle() {
         else
             tmpdir=$(mktemp -d)
         fi
-        curl -o "${tmpdir}/gradle.zip" --silent --fail --show-error --location "${URL}"
-        gradle_zip="${tmpdir}/gradle.zip"
+        curl -o "${tmpdir}/gradle-$1-bin.zip" --silent --fail --show-error --location "${URL}"
+        gradle_zip="${tmpdir}/gradle-$1-bin.zip"
     fi
     echo "${shasum} ${gradle_zip}" | sha256sum -c -
     if [ $? != 0 ]; then
@@ -111,11 +112,11 @@ get_sha() {
 }
 
 contains() {
-	local e
-	for e in $2; do
-		[[ $e == $1 ]] && return 0;
-	done
-	return 1
+    local e
+    for e in $2; do
+        [[ $e == $1 ]] && return 0;
+    done
+    return 1
 }
 
 # key-value pairs of what gradle version (value) each gradle plugin version
@@ -132,66 +133,66 @@ v_all=${plugin_v[@]}
 
 # Earliest takes priority
 for f in {.,..}/gradle/wrapper/gradle-wrapper.properties; do
-	[[ -f $f ]] || continue
-	while read l; do
-		if [[ $l == 'distributionUrl='* ]]; then
-			wrapper_ver=$(echo -n "$l" | sed "s/.*gradle-\\([0-9\\.\\+]\\+\\).*/\\1/")
-		fi
-	done < $f
+    [[ -f $f ]] || continue
+    while read l; do
+        if [[ $l == 'distributionUrl='* ]]; then
+            wrapper_ver=$(echo -n "$l" | sed "s/.*gradle-\\([0-9\\.\\+]\\+\\).*/\\1/")
+        fi
+    done < $f
 done
 
 if [[ -n $wrapper_ver ]]; then
-	v_found=$wrapper_ver
-	echo "Found $v_found via distributionUrl"
-	run_gradle
+    v_found=$wrapper_ver
+    echo "Found $v_found via distributionUrl"
+    run_gradle
 fi
 
 # Earliest takes priority
 for f in {.,..}/build.gradle; do
-	[[ -f $f ]] || continue
-	while read l; do
-		if [[ -z "$plugin_pver" && $l == *'com.android.tools.build:gradle:'* ]]; then
-			plugin_pver=$(echo -n "$l" | sed "s/.*com.android.tools.build:gradle:\\([0-9\\.\\+]\\+\\).*/\\1/")
-		elif [[ -z "$wrapper_ver" && $l == *'gradleVersion = '* ]]; then
-			wrapper_ver=$(echo -n "$l" | sed "s/.*gradleVersion *=* *[\"']\\([0-9\\.]\\+\\)[\"'].*/\\1/")
-		fi
-	done < $f
+    [[ -f $f ]] || continue
+    while read l; do
+        if [[ -z "$plugin_pver" && $l == *'com.android.tools.build:gradle:'* ]]; then
+            plugin_pver=$(echo -n "$l" | sed "s/.*com.android.tools.build:gradle:\\([0-9\\.\\+]\\+\\).*/\\1/")
+        elif [[ -z "$wrapper_ver" && $l == *'gradleVersion = '* ]]; then
+            wrapper_ver=$(echo -n "$l" | sed "s/.*gradleVersion *=* *[\"']\\([0-9\\.]\\+\\)[\"'].*/\\1/")
+        fi
+    done < $f
 done
 
 if [[ -n $wrapper_ver ]]; then
-	v_found=$wrapper_ver
-	echo "Found $v_found via gradleVersion"
-	run_gradle
+    v_found=$wrapper_ver
+    echo "Found $v_found via gradleVersion"
+    run_gradle
 fi
 
 if [[ -n $plugin_pver ]]; then
-	i=0
-	match=false
-	for k in ${d_plugin_k[@]}; do
-		if [[ $plugin_pver == ${k}* ]]; then
-			plugin_ver=${d_plugin_v[$i]}
-			match=true
-			break
-		fi
-		let i++
-	done
-	if $match; then
-		v_found=$plugin_ver
-		echo "Found $v_found via gradle plugin version $k"
-	fi
+    i=0
+    match=false
+    for k in ${d_plugin_k[@]}; do
+        if [[ $plugin_pver == ${k}* ]]; then
+            plugin_ver=${d_plugin_v[$i]}
+            match=true
+            break
+        fi
+        let i++
+    done
+    if $match; then
+        v_found=$plugin_ver
+        echo "Found $v_found via gradle plugin version $k"
+    fi
 fi
 
 # Find the highest version available
 for v in ${plugin_v[*]}; do
-	if contains $v "${v_all[*]}"; then
-		v_def=$v
-		break
-	fi
+    if contains $v "${v_all[*]}"; then
+        v_def=$v
+        break
+    fi
 done
 
 if [[ -z $v_found ]]; then
-	echo "No suitable gradle version found - defaulting to $v_def"
-	v_found=$v_def
+    echo "No suitable gradle version found - defaulting to $v_def"
+    v_found=$v_def
 fi
 
 run_gradle
