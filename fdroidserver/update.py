@@ -1231,7 +1231,11 @@ def scan_apk_androguard(apk, apkfile):
         raise BuildException(_("Invalid APK"))
 
     apk['packageName'] = apkobject.get_package()
-    apk['versionCode'] = int(apkobject.get_androidversion_code())
+    vcstr = apkobject.get_androidversion_code()
+    if vcstr.startswith('0x'):
+        apk['versionCode'] = int(vcstr, 16)
+    else:
+        apk['versionCode'] = int(vcstr)
     apk['name'] = apkobject.get_app_name()
 
     apk['versionName'] = common.ensure_final_value(apk['packageName'], arsc,
