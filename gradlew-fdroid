@@ -35,6 +35,9 @@ download_gradle() {
         echo "Downloading missing gradle version $1"
         if [ -n "${cachedir}" ]; then
             tmpdir="${cachedir}"
+            if [ ! -d ${tmpdir} ]; then
+                mkdir -p "${cachedir}"
+            fi
         else
             tmpdir=$(mktemp -d)
         fi
