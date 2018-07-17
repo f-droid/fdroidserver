@@ -1231,7 +1231,19 @@ def scan_apk_androguard(apk, apkfile):
         raise BuildException(_("Invalid APK"))
 
     apk['packageName'] = apkobject.get_package()
-    vcstr = apkobject.get_androidversion_code()
+
+    xml = apkobject.get_android_manifest_xml()
+    androidmanifest_xml = apkobject.xml['AndroidManifest.xml']
+    if len(xml.nsmap) > 0:
+        # one of them surely will be the Android one, or its corrupt
+        xmlns = '{http://schemas.android.com/apk/res/android}'
+    else:
+        # strange but sometimes the namespace is blank.  This seems to
+        # only happen with the Bromite/Chromium APKs
+        xmlns = '{}'
+
+    vcstr = androidmanifest_xml.get(xmlns + 'versionCode')
+
     if vcstr.startswith('0x'):
         apk['versionCode'] = int(vcstr, 16)
     else:
@@ -1239,7 +1251,7 @@ def scan_apk_androguard(apk, apkfile):
     apk['name'] = apkobject.get_app_name()
 
     apk['versionName'] = common.ensure_final_value(apk['packageName'], arsc,
-                                                   apkobject.get_androidversion_name())
+                                                   androidmanifest_xml.get(xmlns + 'versionName'))
 
     minSdkVersion = _sanitize_sdk_version(apkobject.get_min_sdk_version())
     if minSdkVersion is not None:
@@ -1270,14 +1282,9 @@ def scan_apk_androguard(apk, apkfile):
         apk['nativecode'] = []
         apk['nativecode'].extend(sorted(list(arch)))
 
-    xml = apkobject.get_android_manifest_xml()
-    xmlns = xml.nsmap.get('android')
-    if not xmlns:
-        xmlns = 'http://schemas.android.com/apk/res/android'
-
     for item in xml.findall('uses-permission'):
-        name = str(item.attrib['{' + xmlns + '}name'])
-        maxSdkVersion = item.attrib.get('{' + xmlns + '}maxSdkVersion')
+        name = str(item.attrib[xmlns + 'name'])
+        maxSdkVersion = item.attrib.get(xmlns + 'maxSdkVersion')
         maxSdkVersion = int(maxSdkVersion) if maxSdkVersion else None
         permission = UsesPermission(
             name,
@@ -1292,8 +1299,8 @@ def scan_apk_androguard(apk, apkfile):
         apk['uses-permission'].append(permission)
 
     for item in xml.findall('uses-permission-sdk-23'):
-        name = str(item.attrib['{' + xmlns + '}name'])
-        maxSdkVersion = item.attrib.get('{' + xmlns + '}maxSdkVersion')
+        name = str(item.attrib[xmlns + 'name'])
+        maxSdkVersion = item.attrib.get(xmlns + 'maxSdkVersion')
         maxSdkVersion = int(maxSdkVersion) if maxSdkVersion else None
         permission_sdk_23 = UsesPermissionSdk23(
             name,
@@ -1302,7 +1309,7 @@ def scan_apk_androguard(apk, apkfile):
         apk['uses-permission-sdk-23'].append(permission_sdk_23)
 
     for item in xml.findall('uses-feature'):
-        key = '{' + xmlns + '}name'
+        key = xmlns + 'name'
         if key not in item.attrib:
             continue
         feature = str(item.attrib[key])
@@ -1310,7 +1317,7 @@ def scan_apk_androguard(apk, apkfile):
                 and feature != "android.hardware.screen.landscape":
             if feature.startswith("android.feature."):
                 feature = feature[16:]
-        required = item.attrib.get('{' + xmlns + '}required')
+        required = item.attrib.get(xmlns + 'required')
         if required is None or required == 'true':
             apk['features'].append(feature)
 
