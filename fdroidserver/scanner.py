@@ -21,6 +21,7 @@ import re
 import traceback
 from argparse import ArgumentParser
 import logging
+import itertools
 
 from . import _
 from . import common
@@ -38,19 +39,14 @@ def get_gradle_compile_commands(build):
                        'implementation',
                        'api',
                        'compileOnly',
-                       'runtimeOnly',
-                       'releaseCompile',
-                       'releaseProvided',
-                       'releaseApk',
-                       'releaseImplementation',
-                       'releaseApi',
-                       'releaseCompileOnly',
-                       'releaseRuntimeOnly']
+                       'runtimeOnly']
+    buildTypes = ['', 'release']
+    flavors = ['']
     if build.gradle and build.gradle != ['yes']:
-        compileCommands += [flavor + 'Compile' for flavor in build.gradle]
-        compileCommands += [flavor + 'ReleaseCompile' for flavor in build.gradle]
+        flavors += build.gradle
 
-    return [re.compile(r'\s*' + c, re.IGNORECASE) for c in compileCommands]
+    commands = [''.join(c) for c in itertools.product(flavors, buildTypes, compileCommands)]
+    return [re.compile(r'\s*' + c, re.IGNORECASE) for c in commands]
 
 
 def scan_source(build_dir, build=metadata.Build()):
