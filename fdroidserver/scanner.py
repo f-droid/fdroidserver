@@ -33,18 +33,18 @@ options = None
 
 def get_gradle_compile_commands(build):
     compileCommands = ['compile',
-                       'provided'
-                       'apk'
-                       'implementation'
-                       'api'
-                       'compileOnly'
+                       'provided',
+                       'apk',
+                       'implementation',
+                       'api',
+                       'compileOnly',
                        'runtimeOnly',
-                       'releaseCompile'
-                       'releaseProvided'
-                       'releaseApk'
-                       'releaseImplementation'
-                       'releaseApi'
-                       'releaseCompileOnly'
+                       'releaseCompile',
+                       'releaseProvided',
+                       'releaseApk',
+                       'releaseImplementation',
+                       'releaseApi',
+                       'releaseCompileOnly',
                        'releaseRuntimeOnly']
     if build.gradle and build.gradle != ['yes']:
         compileCommands += [flavor + 'Compile' for flavor in build.gradle]
