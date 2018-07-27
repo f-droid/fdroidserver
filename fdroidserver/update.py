@@ -29,6 +29,7 @@ import zipfile
 import hashlib
 import pickle
 import time
+import copy
 from datetime import datetime
 from argparse import ArgumentParser
 
@@ -2029,7 +2030,9 @@ def main():
     # If there's an archive repo,  make the index for it. We already scanned it
     # earlier on.
     if len(repodirs) > 1:
-        index.make(apps, sortedids, archapks, repodirs[1], True)
+        archived_apps = copy.deepcopy(apps)
+        apply_info_from_latest_apk(archived_apps, archapks)
+        index.make(archived_apps, sortedids, archapks, repodirs[1], True)
 
     git_remote = config.get('binary_transparency_remote')
     if git_remote or os.path.isdir(os.path.join('binary_transparency', '.git')):
