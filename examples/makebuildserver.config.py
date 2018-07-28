@@ -2,7 +2,11 @@
 #
 # You may want to alter these before running ./makebuildserver
 
-# Name of the base box to use
+# Name of the Vagrant basebox to use, by default it will be downloaded
+# from Vagrant Cloud.  For release builds setup, generate the basebox
+# locally using https://gitlab.com/fdroid/basebox, add it to Vagrant,
+# then set this to the local basebox name.
+#
 # basebox = "fdroid-stretch64"
 
 # In the process of setting up the build server, many gigs of files
