@@ -99,4 +99,4 @@ def main():
     # Read config.py...
     config = common.read_config(options)
 
-    extract(config, options)
+    extract(options)
