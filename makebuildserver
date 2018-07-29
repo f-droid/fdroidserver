@@ -56,7 +56,7 @@ logger.debug('cachedir set to: %s', cachedir)
 
 config = {
     'basebox': 'fdroid-stretch64',
-    'debian_mirror': 'http://http.debian.net/debian/',
+    'debian_mirror': 'http://deb.debian.org/debian/',
     'apt_package_cache': False,
     'copy_caches_from_host': False,
     'boot_timeout': 600,
