@@ -342,7 +342,7 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
-msgid "Category '%s' is not valid"
+msgid "Categories '%s' is not valid"
 msgstr ""
 
 #: ../fdroid
