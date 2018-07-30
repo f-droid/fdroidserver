@@ -313,7 +313,7 @@ all_categories = set([
 def check_categories(app):
     for categ in app.Categories:
         if categ not in all_categories:
-            yield _("Category '%s' is not valid" % categ)
+            yield _("Categories '%s' is not valid" % categ)
 
 
 def check_duplicates(app):
