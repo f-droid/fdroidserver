@@ -86,8 +86,6 @@ def extract(options):
 
 def main():
 
-    global config, options
-
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] APK [APK...]")
     common.setup_global_opts(parser)
@@ -97,6 +95,6 @@ def main():
     options = parser.parse_args()
 
     # Read config.py...
-    config = common.read_config(options)
+    common.read_config(options)
 
     extract(options)
