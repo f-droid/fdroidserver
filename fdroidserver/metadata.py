@@ -249,7 +249,7 @@ class Build(dict):
 
     def __init__(self, copydict=None):
         super().__init__()
-        self.disable = False
+        self.disable = ''
         self.commit = None
         self.timeout = None
         self.subdir = None
@@ -874,7 +874,7 @@ def post_metadata_parse(app):
         elif v == [False]:
             return ['no']
 
-    _bool_allowed = ('disable', 'maven', 'buildozer')
+    _bool_allowed = ('maven', 'buildozer')
 
     builds = []
     if 'builds' in app:
@@ -1118,7 +1118,7 @@ def write_yaml(mf, app):
                     value = getattr(build, field)
                     if field == 'gradle' and value == ['off']:
                         value = [ruamel.yaml.scalarstring.SingleQuotedScalarString('off')]
-                    if field in ('disable', 'maven', 'buildozer'):
+                    if field in ('maven', 'buildozer'):
                         if value == 'no':
                             continue
                         elif value == 'yes':
