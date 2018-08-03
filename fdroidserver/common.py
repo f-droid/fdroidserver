@@ -2895,10 +2895,9 @@ def genkeystore(localconfig):
     if not os.path.exists(keystoredir):
         os.makedirs(keystoredir, mode=0o700)
 
-    env_vars = {
-        'FDROID_KEY_STORE_PASS': localconfig['keystorepass'],
-        'FDROID_KEY_PASS': localconfig['keypass'],
-    }
+    env_vars = {'LC_ALL': 'C.UTF-8',
+                'FDROID_KEY_STORE_PASS': localconfig['keystorepass'],
+                'FDROID_KEY_PASS': localconfig['keypass']}
     p = FDroidPopen([config['keytool'], '-genkey',
                      '-keystore', localconfig['keystore'],
                      '-alias', localconfig['repo_keyalias'],
