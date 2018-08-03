@@ -620,7 +620,8 @@ def extract_pubkey():
     if 'repo_pubkey' in common.config:
         pubkey = unhexlify(common.config['repo_pubkey'])
     else:
-        env_vars = {'FDROID_KEY_STORE_PASS': common.config['keystorepass']}
+        env_vars = {'LC_ALL': 'C.UTF-8',
+                    'FDROID_KEY_STORE_PASS': common.config['keystorepass']}
         p = FDroidPopenBytes([common.config['keytool'], '-exportcert',
                               '-alias', common.config['repo_keyalias'],
                               '-keystore', common.config['keystore'],

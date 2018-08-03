@@ -74,7 +74,7 @@ def read_fingerprints_from_keystore():
     """Obtain a dictionary containing all singning-key fingerprints which
     are managed by F-Droid, grouped by appid.
     """
-    env_vars = {'LC_ALL': 'C',
+    env_vars = {'LC_ALL': 'C.UTF-8',
                 'FDROID_KEY_STORE_PASS': config['keystorepass'],
                 'FDROID_KEY_PASS': config['keypass']}
     p = FDroidPopen([config['keytool'], '-list',
@@ -318,10 +318,9 @@ def main():
 
                 # See if we already have a key for this application, and
                 # if not generate one...
-                env_vars = {
-                    'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                    'FDROID_KEY_PASS': config['keypass'],
-                }
+                env_vars = {'LC_ALL': 'C.UTF-8',
+                            'FDROID_KEY_STORE_PASS': config['keystorepass'],
+                            'FDROID_KEY_PASS': config['keypass']}
                 p = FDroidPopen([config['keytool'], '-list',
                                  '-alias', keyalias, '-keystore', config['keystore'],
                                  '-storepass:env', 'FDROID_KEY_STORE_PASS'], envs=env_vars)

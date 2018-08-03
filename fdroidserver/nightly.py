@@ -59,11 +59,14 @@ def _ssh_key_from_debug_keystore(keystore=KEYSTORE_FILE):
                            '-srcstorepass', PASSWORD, '-srckeypass', PASSWORD,
                            '-destkeystore', p12, '-destalias', KEY_ALIAS,
                            '-deststorepass', PASSWORD, '-destkeypass', PASSWORD,
-                           '-deststoretype', 'PKCS12'])
+                           '-deststoretype', 'PKCS12'],
+                          env={'LC_ALL': 'C.UTF-8'})
     subprocess.check_call(['openssl', 'pkcs12', '-in', p12, '-out', key_pem,
-                           '-passin', 'pass:' + PASSWORD, '-passout', 'pass:' + PASSWORD])
+                           '-passin', 'pass:' + PASSWORD, '-passout', 'pass:' + PASSWORD],
+                          env={'LC_ALL': 'C.UTF-8'})
     subprocess.check_call(['openssl', 'rsa', '-in', key_pem, '-out', privkey,
-                           '-passin', 'pass:' + PASSWORD])
+                           '-passin', 'pass:' + PASSWORD],
+                          env={'LC_ALL': 'C.UTF-8'})
     os.remove(key_pem)
     os.remove(p12)
     os.chmod(privkey, 0o600)  # os.umask() should cover this, but just in case
