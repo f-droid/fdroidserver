@@ -99,6 +99,57 @@ app_fields = set([
     'builds',    # For formats that do builds as a list
 ])
 
+yaml_app_field_order = [
+    'Disabled',
+    'AntiFeatures',
+    'Provides',
+    'Categories',
+    'License',
+    'AuthorName',
+    'AuthorEmail',
+    'AuthorWebSite',
+    'WebSite',
+    'SourceCode',
+    'IssueTracker',
+    'Translation',
+    'Changelog',
+    'Donate',
+    'FlattrID',
+    'LiberapayID',
+    'Bitcoin',
+    'Litecoin',
+    '\n',
+    'Name',
+    'AutoName',
+    'Summary',
+    'Description',
+    '\n',
+    'RequiresRoot',
+    '\n',
+    'RepoType',
+    'Repo',
+    'Binaries',
+    '\n',
+    'Builds',
+    '\n',
+    'MaintainerNotes',
+    '\n',
+    'ArchivePolicy',
+    'AutoUpdateMode',
+    'UpdateCheckMode',
+    'UpdateCheckIgnore',
+    'VercodeOperation',
+    'UpdateCheckName',
+    'UpdateCheckData',
+    'CurrentVersion',
+    'CurrentVersionCode',
+    '\n',
+    'NoSourceSince',
+]
+
+
+yaml_app_fields = [x for x in yaml_app_field_order if x != '\n']
+
 
 class App(dict):
 
@@ -1022,6 +1073,20 @@ def parse_json_metadata(mf, app):
 
 def parse_yaml_metadata(mf, app):
     yamldata = yaml.load(mf, Loader=YamlLoader)
+
+    for field in yamldata:
+        if field not in yaml_app_fields:
+            warn_or_exception(_('Unrecognised app field: {fieldname}')
+                              .format(fieldname=field))
+    if 'Builds' not in yamldata.keys():
+        warn_or_exception(_('Missing app field: {fieldname}')
+                          .format(fieldname='Builds'))
+    for build in yamldata['Builds']:
+        for build_flag in build.keys():
+            if build_flag not in build_flags:
+                warn_or_exception(_('Unrecognised build flag: {build_flag}')
+                                  .format(build_flag=build_flag))
+
     if yamldata:
         app.update(yamldata)
     return app
@@ -1132,54 +1197,6 @@ def write_yaml(mf, app):
             builds.ca.items[i][1][-1].value = '\n'
 
         return builds
-
-    yaml_app_field_order = [
-        'Disabled',
-        'AntiFeatures',
-        'Provides',
-        'Categories',
-        'License',
-        'AuthorName',
-        'AuthorEmail',
-        'AuthorWebSite',
-        'WebSite',
-        'SourceCode',
-        'IssueTracker',
-        'Translation',
-        'Changelog',
-        'Donate',
-        'FlattrID',
-        'LiberapayID',
-        'Bitcoin',
-        'Litecoin',
-        '\n',
-        'Name',
-        'AutoName',
-        'Summary',
-        'Description',
-        '\n',
-        'RequiresRoot',
-        '\n',
-        'RepoType',
-        'Repo',
-        'Binaries',
-        '\n',
-        'Builds',
-        '\n',
-        'MaintainerNotes',
-        '\n',
-        'ArchivePolicy',
-        'AutoUpdateMode',
-        'UpdateCheckMode',
-        'UpdateCheckIgnore',
-        'VercodeOperation',
-        'UpdateCheckName',
-        'UpdateCheckData',
-        'CurrentVersion',
-        'CurrentVersionCode',
-        '\n',
-        'NoSourceSince',
-    ]
 
     yaml_app = _app_to_yaml(app)
     ruamel.yaml.round_trip_dump(yaml_app, mf, indent=4, block_seq_indent=2)
