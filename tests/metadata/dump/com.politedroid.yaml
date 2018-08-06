@@ -22,7 +22,7 @@ License: GPL-3.0-only
 Litecoin: null
 MaintainerNotes: ''
 Name: null
-NoSourceSince: ''
+NoSourceSince: '1.5'
 Provides: null
 Repo: https://github.com/miguelvps/PoliteDroid.git
 RepoType: git

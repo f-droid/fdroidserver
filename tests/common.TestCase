@@ -822,7 +822,7 @@ class CommonTest(unittest.TestCase):
                                       '-e',
                                       'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ssh/id_rsa',
                                       cmd[6],
-                                      'example.com:/var/www/fdroid/repo/buildlogs'],
+                                      'example.com:/var/www/fdroid/repo/buildlogs/'],
                                      cmd)
                 self.assertTrue(cmd[6].endswith('/com.example.app_4711_1.log.gz'))
                 with gzip.open(cmd[6], 'r') as f:
@@ -835,7 +835,7 @@ class CommonTest(unittest.TestCase):
                                       '-e',
                                       'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ssh/id_rsa',
                                       cmd[6],
-                                      'example.com:/var/www/fdroid/archive/buildlogs'],
+                                      'example.com:/var/www/fdroid/archive/buildlogs/'],
                                      cmd)
                 self.assertTrue(cmd[6].endswith('/com.example.app_4711_1.log.gz'))
                 with gzip.open(cmd[6], 'r') as f:
