@@ -186,7 +186,7 @@ builds:
   buildjni: []
   buildozer: false
   commit: v0.5.1
-  disable: false
+  disable: ''
   encoding: null
   extlibs: []
   forcevercode: false
@@ -259,7 +259,7 @@ builds:
   buildjni: []
   buildozer: false
   commit: v0.5.3
-  disable: false
+  disable: ''
   encoding: null
   extlibs: []
   forcevercode: false
@@ -295,7 +295,7 @@ builds:
   buildjni: []
   buildozer: false
   commit: v0.5.4
-  disable: false
+  disable: ''
   encoding: null
   extlibs: []
   forcevercode: false
@@ -331,7 +331,7 @@ builds:
   buildjni: []
   buildozer: false
   commit: v0.6.0
-  disable: false
+  disable: ''
   encoding: null
   extlibs: []
   forcevercode: false

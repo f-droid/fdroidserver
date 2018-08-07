@@ -138,7 +138,7 @@ cd $WORKSPACE/tests/getsig
 ./make.sh
 
 cd $WORKSPACE/tests
-for testcase in $WORKSPACE/tests/i*.TestCase; do
+for testcase in $WORKSPACE/tests/*.TestCase; do
     if [ $testcase == $WORKSPACE/tests/install.TestCase ]; then
         echo "skipping install.TestCase, its too troublesome in CI builds"
         continue

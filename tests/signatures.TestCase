@@ -49,7 +49,9 @@ class SignaturesTest(unittest.TestCase):
                  '99fbb3211ef5d7c1253f3a7ad4836eadc9905103ce6a75916c40de2831958284'),
             )
             for path, checksum in filesAndHashes:
-                self.assertTrue(os.path.isfile(path))
+                self.assertTrue(os.path.isfile(path),
+                                msg="check whether '{path}' was extracted "
+                                    "correctly.".format(path=path))
                 with open(path, 'rb') as f:
                     self.assertEqual(hashlib.sha256(f.read()).hexdigest(), checksum)
 

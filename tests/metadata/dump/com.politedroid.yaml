@@ -22,7 +22,7 @@ License: GPL-3.0-only
 Litecoin: null
 MaintainerNotes: ''
 Name: null
-NoSourceSince: ''
+NoSourceSince: '1.5'
 Provides: null
 Repo: https://github.com/miguelvps/PoliteDroid.git
 RepoType: git
@@ -48,7 +48,7 @@ builds:
   buildjni: []
   buildozer: false
   commit: 6a548e4b19
-  disable: false
+  disable: ''
   encoding: null
   extlibs: []
   forcevercode: false
@@ -82,7 +82,7 @@ builds:
   buildjni: []
   buildozer: false
   commit: ad865b57bf3ac59580f38485608a9b1dda4fa7dc
-  disable: false
+  disable: ''
   encoding: null
   extlibs: []
   forcevercode: false
@@ -116,7 +116,7 @@ builds:
   buildjni: []
   buildozer: false
   commit: 456bd615f3fbe6dff06433928cf7ea20073601fb
-  disable: false
+  disable: ''
   encoding: null
   extlibs: []
   forcevercode: false
@@ -150,7 +150,7 @@ builds:
   buildjni: []
   buildozer: false
   commit: v1.5
-  disable: false
+  disable: ''
   encoding: null
   extlibs: []
   forcevercode: false
