@@ -3,6 +3,7 @@
 # metadata.py - part of the FDroid server tools
 # Copyright (C) 2013, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
+# Copyright (C) 2017-2018 Michael Pöhn <michael.poehn@fsfe.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -1078,11 +1079,16 @@ def parse_yaml_metadata(mf, app):
         if field not in yaml_app_fields:
             warn_or_exception(_('Unrecognised app field: {fieldname}')
                               .format(fieldname=field))
-    if 'Builds' not in yamldata.keys():
+    if not yamldata.get('Builds', None):
         warn_or_exception(_('Missing app field: {fieldname}')
                           .format(fieldname='Builds'))
-    for build in yamldata['Builds']:
+    for build in yamldata.get('Builds', []):
+        # put all build flag keywords into a set to avoid
+        # excessive looping action
+        build_flag_set = set()
         for build_flag in build.keys():
+            build_flag_set.add(build_flag)
+        for build_flag in build_flag_set:
             if build_flag not in build_flags:
                 warn_or_exception(_('Unrecognised build flag: {build_flag}')
                                   .format(build_flag=build_flag))

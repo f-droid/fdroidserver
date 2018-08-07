@@ -2,6 +2,7 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
+import io
 import glob
 import inspect
 import logging
@@ -13,6 +14,8 @@ import sys
 import unittest
 import yaml
 import tempfile
+import textwrap
+from unittest import mock
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -22,6 +25,7 @@ if localmodule not in sys.path:
 
 import fdroidserver.common
 import fdroidserver.metadata
+from fdroidserver.exception import MetaDataException
 
 
 class MetadataTest(unittest.TestCase):
@@ -138,6 +142,26 @@ class MetadataTest(unittest.TestCase):
         for appid, app in allapps.items():
             allappids.append(appid)
         self.assertEqual(randomlist, allappids)
+
+    def test_parse_yaml_metadata_unknown_app_field(self):
+        mf = io.StringIO(textwrap.dedent("""\
+            AutoName: F-Droid
+            RepoType: git
+            Builds: []
+            bad: value"""))
+        with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
+            with self.assertRaises(MetaDataException):
+                fdroidserver.metadata.parse_yaml_metadata(mf, {})
+
+    def test_parse_yaml_metadata_unknown_build_flag(self):
+        mf = io.StringIO(textwrap.dedent("""\
+            AutoName: F-Droid
+            RepoType: git
+            Builds:
+              - bad: value"""))
+        with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
+            with self.assertRaises(MetaDataException):
+                fdroidserver.metadata.parse_yaml_metadata(mf, {})
 
 
 if __name__ == "__main__":
