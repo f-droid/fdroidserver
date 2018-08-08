@@ -17,7 +17,7 @@ Description: |
 RepoType: git
 Repo: git://git.videolan.org/vlc-ports/android.git
 
-builds:
+Builds:
   - versionName: 0.0.11-ARMv7
     versionCode: 110
     commit: 0.0.11
