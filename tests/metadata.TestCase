@@ -149,6 +149,7 @@ class MetadataTest(unittest.TestCase):
             RepoType: git
             Builds: []
             bad: value"""))
+        mf.name = 'mock_filename.yaml'
         with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
             with self.assertRaises(MetaDataException):
                 fdroidserver.metadata.parse_yaml_metadata(mf, {})
@@ -159,6 +160,7 @@ class MetadataTest(unittest.TestCase):
             RepoType: git
             Builds:
               - bad: value"""))
+        mf.name = 'mock_filename.yaml'
         with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
             with self.assertRaises(MetaDataException):
                 fdroidserver.metadata.parse_yaml_metadata(mf, {})

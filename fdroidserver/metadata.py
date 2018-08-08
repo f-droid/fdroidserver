@@ -1078,21 +1078,22 @@ def parse_yaml_metadata(mf, app):
     if yamldata:
         for field in yamldata:
             if field not in yaml_app_fields:
-                warn_or_exception(_('Unrecognised app field: {fieldname}')
-                                  .format(fieldname=field))
-        if not yamldata.get('Builds', None):
-            warn_or_exception(_('Missing app field: {fieldname}')
-                              .format(fieldname='Builds'))
-        for build in yamldata.get('Builds', []):
-            # put all build flag keywords into a set to avoid
-            # excessive looping action
-            build_flag_set = set()
-            for build_flag in build.keys():
-                build_flag_set.add(build_flag)
-            for build_flag in build_flag_set:
-                if build_flag not in build_flags:
-                    warn_or_exception(_('Unrecognised build flag: {build_flag}')
-                                      .format(build_flag=build_flag))
+                warn_or_exception(_("Unrecognised app field '{fieldname}' "
+                                    "in '{path}'").format(fieldname=field,
+                                                          path=mf.name))
+        if yamldata.get('Builds', None):
+            for build in yamldata.get('Builds', []):
+                # put all build flag keywords into a set to avoid
+                # excessive looping action
+                build_flag_set = set()
+                for build_flag in build.keys():
+                    build_flag_set.add(build_flag)
+                for build_flag in build_flag_set:
+                    if build_flag not in build_flags:
+                        warn_or_exception(
+                            _("Unrecognised build flag '{build_flag}' "
+                              "in '{path}'").format(build_flag=build_flag,
+                                                    path=mf.name))
         app.update(yamldata)
     return app
 
