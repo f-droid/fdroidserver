@@ -302,8 +302,12 @@ The repository of older versions of applications from the main demo repository.
 # Limit in number of characters that fields can take up
 # Only the fields listed here are supported, defaults shown
 # char_limits = {
-#     'Summary': 80,
-#     'Description': 4000,
+#     'author': 256,
+#     'name': 30,
+#     'summary': 80,
+#     'description': 4000,
+#     'video': 256,
+#     'whatsNew': 500,
 # }
 
 # It is possible for the server operator to specify lists of apps that
