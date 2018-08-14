@@ -135,7 +135,11 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         self._set_build_tools()
-        config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
+        try:
+            config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
+        except fdroidserver.exception.FDroidException:
+            pass  # aapt is not required if androguard is present
+
         # these are set debuggable
         testfiles = []
         testfiles.append(os.path.join(self.basedir, 'urzip.apk'))
@@ -501,6 +505,12 @@ class CommonTest(unittest.TestCase):
                              fdroidserver.common.apk_signer_fingerprint_short(apkfile))
 
     def test_sign_apk(self):
+        try:
+            fdroidserver.common.find_sdk_tools_cmd('zipalign')
+        except fdroidserver.exception.FDroidException:
+            print('\n\nSKIPPING test_sign_apk, zipalign is not installed!\n')
+            return
+
         fdroidserver.common.config = None
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
@@ -533,7 +543,12 @@ class CommonTest(unittest.TestCase):
         self.assertTrue(os.path.isfile(signed))
         self.assertFalse(os.path.isfile(unsigned))
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
-        self.assertEqual(18, fdroidserver.common.get_minSdkVersion_aapt(signed))
+        try:
+            fdroidserver.common.find_sdk_tools_cmd('aapt')
+            self.assertEqual(18, fdroidserver.common.get_minSdkVersion_aapt(signed))
+        except fdroidserver.exception.FDroidException:
+            print('\n\nSKIPPING test_sign_apk min SDK check, aapt is not installed!\n')
+            return
 
     def test_get_api_id(self):
 
@@ -541,7 +556,10 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         self._set_build_tools()
-        config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
+        try:
+            config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
+        except fdroidserver.exception.FDroidException:
+            pass  # aapt is not required if androguard is present
 
         testcases = [
             ('repo/obb.main.twoversions_1101613.apk', 'obb.main.twoversions', '1101613', '0.1'),
@@ -586,12 +604,15 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.get_apk_id('nope')
 
     def test_get_minSdkVersion_aapt(self):
-
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         self._set_build_tools()
-        config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
+        try:  # get_minSdkVersion_aapt requires aapt
+            config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
+        except fdroidserver.exception.FDroidException:
+            print('\n\nSKIPPING test_sign_apk, aapt is not installed!\n')
+            return
 
         minSdkVersion = fdroidserver.common.get_minSdkVersion_aapt('bad-unicode-πÇÇ现代通用字-български-عربي1.apk')
         self.assertEqual(4, minSdkVersion)
