@@ -2012,6 +2012,7 @@ def ensure_final_value(packageName, arsc, value):
             except (ValueError, TypeError):
                 pass
         return returnValue
+    return ''
 
 
 def is_apk_and_debuggable_aapt(apkfile):

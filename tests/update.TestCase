@@ -174,7 +174,7 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(correctlocales, locales)
 
     def javagetsig(self, apkfile):
-        getsig_dir = os.path.join(os.path.dirname(__file__), 'getsig')
+        getsig_dir = 'getsig'
         if not os.path.exists(getsig_dir + "/getsig.class"):
             logging.critical("getsig.class not found. To fix: cd '%s' && ./make.sh" % getsig_dir)
             sys.exit(1)
@@ -182,8 +182,8 @@ class UpdateTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        p = FDroidPopen(['java', '-cp', os.path.join(os.path.dirname(__file__), 'getsig'),
-                         'getsig', os.path.join(os.getcwd(), apkfile)])
+        p = FDroidPopen(['java', '-cp', 'getsig',
+                         'getsig', apkfile])
         sig = None
         for line in p.output.splitlines():
             if line.startswith('Result:'):
@@ -199,7 +199,7 @@ class UpdateTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.update.config = config
-        apkfile = os.path.join(os.path.dirname(__file__), 'urzip.apk')
+        apkfile = 'urzip.apk'
         sig = self.javagetsig(apkfile)
         self.assertIsNotNone(sig, "sig is None")
         pysig = fdroidserver.update.getsig(apkfile)
@@ -222,12 +222,12 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.update.config = config
 
-        apkfile = os.path.join(os.path.dirname(__file__), 'urzip-badsig.apk')
+        apkfile = 'urzip-badsig.apk'
         sig = fdroidserver.update.getsig(apkfile)
         self.assertEqual(sig, 'e0ecb5fc2d63088e4a07ae410a127722',
                          "python sig should be: " + str(sig))
 
-        apkfile = os.path.join(os.path.dirname(__file__), 'urzip-badcert.apk')
+        apkfile = 'urzip-badcert.apk'
         sig = fdroidserver.update.getsig(apkfile)
         self.assertEqual(sig, 'e0ecb5fc2d63088e4a07ae410a127722',
                          "python sig should be: " + str(sig))
@@ -303,7 +303,7 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(apk_info.get('versionName'), '0.9')
 
         apk_info = fdroidserver.update.scan_apk('repo/duplicate.permisssions_9999999.apk')
-        self.assertIsNone(apk_info.get('versionName'))
+        self.assertEqual(apk_info.get('versionName'), '')
         self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_launcher.png',
                                                  '-1': 'res/drawable/ic_launcher.png'})
 
@@ -673,6 +673,8 @@ class UpdateTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+
     parser = optparse.OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")

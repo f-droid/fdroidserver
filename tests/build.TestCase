@@ -57,7 +57,7 @@ class BuildTest(unittest.TestCase):
 
     def test_force_gradle_build_tools(self):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
-        shutil.copytree(os.path.join(os.path.dirname(__file__), 'source-files'),
+        shutil.copytree(os.path.join('source-files'),
                         os.path.join(testdir, 'source-files'))
         teststring = 'FAKE_VERSION_FOR_TESTING'
         fdroidserver.build.force_gradle_build_tools(testdir, teststring)
@@ -73,6 +73,8 @@ class BuildTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+
     parser = optparse.OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
