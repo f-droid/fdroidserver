@@ -3,6 +3,7 @@
 # metadata.py - part of the FDroid server tools
 # Copyright (C) 2013, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
+# Copyright (C) 2017-2018 Michael Pöhn <michael.poehn@fsfe.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -98,6 +99,57 @@ app_fields = set([
     'comments',  # For formats that don't do inline comments
     'builds',    # For formats that do builds as a list
 ])
+
+yaml_app_field_order = [
+    'Disabled',
+    'AntiFeatures',
+    'Provides',
+    'Categories',
+    'License',
+    'AuthorName',
+    'AuthorEmail',
+    'AuthorWebSite',
+    'WebSite',
+    'SourceCode',
+    'IssueTracker',
+    'Translation',
+    'Changelog',
+    'Donate',
+    'FlattrID',
+    'LiberapayID',
+    'Bitcoin',
+    'Litecoin',
+    '\n',
+    'Name',
+    'AutoName',
+    'Summary',
+    'Description',
+    '\n',
+    'RequiresRoot',
+    '\n',
+    'RepoType',
+    'Repo',
+    'Binaries',
+    '\n',
+    'Builds',
+    '\n',
+    'MaintainerNotes',
+    '\n',
+    'ArchivePolicy',
+    'AutoUpdateMode',
+    'UpdateCheckMode',
+    'UpdateCheckIgnore',
+    'VercodeOperation',
+    'UpdateCheckName',
+    'UpdateCheckData',
+    'CurrentVersion',
+    'CurrentVersionCode',
+    '\n',
+    'NoSourceSince',
+]
+
+
+yaml_app_fields = [x for x in yaml_app_field_order if x != '\n']
 
 
 class App(dict):
@@ -1022,7 +1074,26 @@ def parse_json_metadata(mf, app):
 
 def parse_yaml_metadata(mf, app):
     yamldata = yaml.load(mf, Loader=YamlLoader)
+
     if yamldata:
+        for field in yamldata:
+            if field not in yaml_app_fields:
+                warn_or_exception(_("Unrecognised app field '{fieldname}' "
+                                    "in '{path}'").format(fieldname=field,
+                                                          path=mf.name))
+        if yamldata.get('Builds', None):
+            for build in yamldata.get('Builds', []):
+                # put all build flag keywords into a set to avoid
+                # excessive looping action
+                build_flag_set = set()
+                for build_flag in build.keys():
+                    build_flag_set.add(build_flag)
+                for build_flag in build_flag_set:
+                    if build_flag not in build_flags:
+                        warn_or_exception(
+                            _("Unrecognised build flag '{build_flag}' "
+                              "in '{path}'").format(build_flag=build_flag,
+                                                    path=mf.name))
         app.update(yamldata)
     return app
 
@@ -1132,54 +1203,6 @@ def write_yaml(mf, app):
             builds.ca.items[i][1][-1].value = '\n'
 
         return builds
-
-    yaml_app_field_order = [
-        'Disabled',
-        'AntiFeatures',
-        'Provides',
-        'Categories',
-        'License',
-        'AuthorName',
-        'AuthorEmail',
-        'AuthorWebSite',
-        'WebSite',
-        'SourceCode',
-        'IssueTracker',
-        'Translation',
-        'Changelog',
-        'Donate',
-        'FlattrID',
-        'LiberapayID',
-        'Bitcoin',
-        'Litecoin',
-        '\n',
-        'Name',
-        'AutoName',
-        'Summary',
-        'Description',
-        '\n',
-        'RequiresRoot',
-        '\n',
-        'RepoType',
-        'Repo',
-        'Binaries',
-        '\n',
-        'Builds',
-        '\n',
-        'MaintainerNotes',
-        '\n',
-        'ArchivePolicy',
-        'AutoUpdateMode',
-        'UpdateCheckMode',
-        'UpdateCheckIgnore',
-        'VercodeOperation',
-        'UpdateCheckName',
-        'UpdateCheckData',
-        'CurrentVersion',
-        'CurrentVersionCode',
-        '\n',
-        'NoSourceSince',
-    ]
 
     yaml_app = _app_to_yaml(app)
     ruamel.yaml.round_trip_dump(yaml_app, mf, indent=4, block_seq_indent=2)
