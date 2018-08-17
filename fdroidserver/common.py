@@ -236,17 +236,10 @@ def fill_config_defaults(thisconfig):
             thisconfig['keytool'] = os.path.join(java_home, 'bin', 'keytool')
             break
 
+
     if 'jarsigner' not in thisconfig:
-        for path in os.environ['PATH'].split(':'):
-            jarsigner = os.path.join(path, 'jarsigner')
-            if os.path.exists(jarsigner):
-                thisconfig['jarsigner'] = jarsigner
-            else: 
-                continue
-            keytool = os.path.join(path, 'keytool')
-            if os.path.exists(keytool):
-                thisconfig['keytool'] = keytool
-                break
+        thisconfig['jarsigner'] = shutil.which('jarsigner')
+        thisconfig['keytool'] = shutil.which('keytool')
 
     for k in ['ndk_paths', 'java_paths']:
         d = thisconfig[k]
