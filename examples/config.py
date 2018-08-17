@@ -118,9 +118,6 @@ The repository of older versions of applications from the main demo repository.
 # keystore.
 # repo_pubkey = "..."
 
-# The keytool command to run to get Java's keytool version
-keytool = "keytool"
-
 # The keystore to use for release keys when building. This needs to be
 # somewhere safe and secure, and backed up!  The best way to manage these
 # sensitive keys is to use a "smartcard" (aka Hardware Security Module). To
