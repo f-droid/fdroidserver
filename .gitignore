@@ -11,10 +11,12 @@ TAGS
 build/
 dist/
 env/
+ENV/
 fdroidserver.egg-info/
 pylint.parseable
 /.testfiles/
 README.rst
+/.eggs/
 
 # editor tmp files
 .*.swp
