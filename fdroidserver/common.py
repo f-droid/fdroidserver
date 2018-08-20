@@ -236,7 +236,6 @@ def fill_config_defaults(thisconfig):
             thisconfig['keytool'] = os.path.join(java_home, 'bin', 'keytool')
             break
 
-
     if 'jarsigner' not in thisconfig:
         thisconfig['jarsigner'] = shutil.which('jarsigner')
         thisconfig['keytool'] = shutil.which('keytool')
@@ -2913,7 +2912,7 @@ def genkeystore(localconfig):
                      '-storepass:env', 'FDROID_KEY_STORE_PASS',
                      '-keypass:env', 'FDROID_KEY_PASS',
                      '-dname', localconfig['keydname'],
-		     '-J-Duser.language=en'], envs=env_vars)
+                     '-J-Duser.language=en'], envs=env_vars)
     if p.returncode != 0:
         raise BuildException("Failed to generate key", p.output)
     os.chmod(localconfig['keystore'], 0o0600)
