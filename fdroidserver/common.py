@@ -236,6 +236,10 @@ def fill_config_defaults(thisconfig):
             thisconfig['keytool'] = os.path.join(java_home, 'bin', 'keytool')
             break
 
+    if 'jarsigner' not in thisconfig:
+        thisconfig['jarsigner'] = shutil.which('jarsigner')
+        thisconfig['keytool'] = shutil.which('keytool')
+
     for k in ['ndk_paths', 'java_paths']:
         d = thisconfig[k]
         for k2 in d.copy():
@@ -2907,7 +2911,8 @@ def genkeystore(localconfig):
                      '-validity', '10000',
                      '-storepass:env', 'FDROID_KEY_STORE_PASS',
                      '-keypass:env', 'FDROID_KEY_PASS',
-                     '-dname', localconfig['keydname']], envs=env_vars)
+                     '-dname', localconfig['keydname'],
+                     '-J-Duser.language=en'], envs=env_vars)
     if p.returncode != 0:
         raise BuildException("Failed to generate key", p.output)
     os.chmod(localconfig['keystore'], 0o0600)
@@ -2916,7 +2921,7 @@ def genkeystore(localconfig):
         p = FDroidPopen([config['keytool'], '-list', '-v',
                          '-keystore', localconfig['keystore'],
                          '-alias', localconfig['repo_keyalias'],
-                         '-storepass:env', 'FDROID_KEY_STORE_PASS'], envs=env_vars)
+                         '-storepass:env', 'FDROID_KEY_STORE_PASS', '-J-Duser.language=en'], envs=env_vars)
         logging.info(p.output.strip() + '\n\n')
     # get the public key
     p = FDroidPopenBytes([config['keytool'], '-exportcert',
