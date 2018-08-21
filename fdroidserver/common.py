@@ -236,8 +236,9 @@ def fill_config_defaults(thisconfig):
             thisconfig['keytool'] = os.path.join(java_home, 'bin', 'keytool')
             break
 
-    if 'jarsigner' not in thisconfig:
+    if 'jarsigner' not in thisconfig and shutil.which('jarsigner'):
         thisconfig['jarsigner'] = shutil.which('jarsigner')
+    if 'keytool' not in thisconfig and shutil.which('keytool'):
         thisconfig['keytool'] = shutil.which('keytool')
 
     for k in ['ndk_paths', 'java_paths']:
