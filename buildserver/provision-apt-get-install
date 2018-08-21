@@ -120,3 +120,6 @@ apt-get install --yes $packages
 
 highestjava=`update-java-alternatives --list | sort -n | tail -1 | cut -d ' ' -f 1`
 update-java-alternatives --set $highestjava
+
+# configure headless openjdk to work without gtk accessability dependencies
+sed -i -e 's@\(assistive_technologies=org.GNOME.Accessibility.AtkWrapper\)@#\1@' /etc/java-8-openjdk/accessibility.properties
