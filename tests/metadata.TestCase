@@ -209,7 +209,7 @@ class MetadataTest(unittest.TestCase):
             UpdateCheckMode: Tags
             """))
 
-    def test_parse_yaml_metadata_prebuild(self):
+    def test_parse_yaml_metadata_prebuild_list(self):
         mf = io.StringIO(textwrap.dedent("""\
             AutoName: F-Droid
             RepoType: git
@@ -231,6 +231,28 @@ class MetadataTest(unittest.TestCase):
                                       'Builds': [{'versionCode': 1,
                                                   'versionName': 'v0.1.0',
                                                   'prebuild': 'a && b && c'}]})
+
+    def test_parse_yaml_metadata_prebuild_string(self):
+        mf = io.StringIO(textwrap.dedent("""\
+            AutoName: F-Droid
+            RepoType: git
+            Builds:
+                - versionCode: 1
+                  versionName: v0.1.0
+                  prebuild: |-
+                    a && b && sed -i 's,a,b,'
+            """))
+        mf.name = 'mock_filename.yaml'
+        mf.seek(0)
+        result = {}
+        with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
+            fdroidserver.metadata.parse_yaml_metadata(mf, result)
+        self.assertDictEqual(result, {'AutoName': 'F-Droid',
+                                      'RepoType': 'git',
+                                      'Builds': [{'versionCode': 1,
+                                                  'versionName': 'v0.1.0',
+                                                  'prebuild': "a && b && "
+                                                              "sed -i 's,a,b,'"}]})
 
     def test_write_yaml_prebuild(self):
         mf = io.StringIO()
