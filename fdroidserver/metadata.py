@@ -1091,6 +1091,10 @@ def parse_yaml_metadata(mf, app):
                             _("Unrecognised build flag '{build_flag}' "
                               "in '{path}'").format(build_flag=build_flag,
                                                     path=mf.name))
+
+                if 'prebuild' in build and type(build['prebuild']) == list:
+                    build['prebuild'] = ' && '.join(build['prebuild'])
+
         app.update(yamldata)
     return app
 
@@ -1194,6 +1198,8 @@ def write_yaml(mf, app):
                             continue
                         elif value == 'yes':
                             value = 'yes'
+                    if field == 'prebuild':
+                        value = value.split(' && ')
                     b.update({field: _field_to_yaml(flagtype(field), value)})
             builds.append(b)
 

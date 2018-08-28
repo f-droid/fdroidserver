@@ -209,6 +209,58 @@ class MetadataTest(unittest.TestCase):
             UpdateCheckMode: Tags
             """))
 
+    def test_parse_yaml_metadata_prebuild(self):
+        mf = io.StringIO(textwrap.dedent("""\
+            AutoName: F-Droid
+            RepoType: git
+            Builds:
+                - versionCode: 1
+                  versionName: v0.1.0
+                  prebuild:
+                    - a
+                    - b
+                    - c
+            """))
+        mf.name = 'mock_filename.yaml'
+        mf.seek(0)
+        result = {}
+        with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
+            fdroidserver.metadata.parse_yaml_metadata(mf, result)
+        self.assertDictEqual(result, {'AutoName': 'F-Droid',
+                                      'RepoType': 'git',
+                                      'Builds': [{'versionCode': 1,
+                                                  'versionName': 'v0.1.0',
+                                                  'prebuild': 'a && b && c'}]})
+
+    def test_write_yaml_prebuild(self):
+        mf = io.StringIO()
+        app = fdroidserver.metadata.App()
+        app.builds = []
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 102030
+        build.versionName = 'v1.2.3'
+        build.prebuild = 'a && b % c && d `echo \'$e\'` && f'
+        app.builds.append(build)
+        fdroidserver.metadata.write_yaml(mf, app)
+        mf.seek(0)
+        self.assertEqual(mf.read(), textwrap.dedent("""\
+            Categories:
+              - None
+            License: Unknown
+
+            Builds:
+              - versionName: v1.2.3
+                versionCode: 102030
+                prebuild:
+                  - a
+                  - b % c
+                  - d `echo '$e'`
+                  - f
+
+            AutoUpdateMode: None
+            UpdateCheckMode: None
+            """))
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
