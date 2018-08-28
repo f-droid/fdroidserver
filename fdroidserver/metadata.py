@@ -1021,7 +1021,7 @@ def parse_json_metadata(mf, app):
 
 
 def parse_yaml_metadata(mf, app):
-    yamldata = yaml.load(mf, Loader=YamlLoader)
+    yamldata = yaml.safe_load(mf)
     if yamldata:
         app.update(yamldata)
     return app
