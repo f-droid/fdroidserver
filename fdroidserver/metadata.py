@@ -1199,7 +1199,10 @@ def write_yaml(mf, app):
                         elif value == 'yes':
                             value = 'yes'
                     if field == 'prebuild':
-                        value = value.split(' && ')
+                        prebuild_tokens = value.split(' && ')
+                        # when theres just 1 entry keep string rather than a list
+                        if len(prebuild_tokens) > 1:
+                            value = prebuild_tokens
                     b.update({field: _field_to_yaml(flagtype(field), value)})
             builds.append(b)
 
