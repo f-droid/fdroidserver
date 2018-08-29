@@ -780,13 +780,26 @@ class CommonTest(unittest.TestCase):
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
     def test_calculate_math_string(self):
-        self.assertEqual(1234, fdroidserver.common.calculate_math_string('1234'))
-        self.assertEqual(4, fdroidserver.common.calculate_math_string('(1+1)*2'))
-        self.assertEqual(2, fdroidserver.common.calculate_math_string('(1-1)*2+3*1-1'))
+        self.assertEqual(1234,
+                         fdroidserver.common.calculate_math_string('1234'))
+        self.assertEqual((1 + 1) * 2,
+                         fdroidserver.common.calculate_math_string('(1 + 1) * 2'))
+        self.assertEqual((1 - 1) * 2 + 3 * 1 - 1,
+                         fdroidserver.common.calculate_math_string('(1 - 1) * 2 + 3 * 1 - 1'))
+        self.assertEqual(0 - 12345,
+                         fdroidserver.common.calculate_math_string('0 - 12345'))
+        self.assertEqual(0xffff,
+                         fdroidserver.common.calculate_math_string('0xffff'))
+        self.assertEqual(0xcafe * 123,
+                         fdroidserver.common.calculate_math_string('0xcafe * 123'))
+        self.assertEqual(-1,
+                         fdroidserver.common.calculate_math_string('-1'))
         with self.assertRaises(SyntaxError):
             fdroidserver.common.calculate_math_string('__import__("urllib")')
         with self.assertRaises(SyntaxError):
             fdroidserver.common.calculate_math_string('self')
+        with self.assertRaises(SyntaxError):
+            fdroidserver.common.calculate_math_string('Ox9()')
         with self.assertRaises(SyntaxError):
             fdroidserver.common.calculate_math_string('1+1; print(1)')
         with self.assertRaises(SyntaxError):
