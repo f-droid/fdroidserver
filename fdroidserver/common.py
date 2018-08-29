@@ -39,7 +39,7 @@ import base64
 import zipfile
 import tempfile
 import json
-import xml.etree.ElementTree as XMLElementTree
+import defusedxml.ElementTree as XMLElementTree
 
 from binascii import hexlify
 from datetime import datetime, timedelta
@@ -74,7 +74,6 @@ STANDARD_FILE_NAME_REGEX = re.compile(r'^(\w[\w.]*)_(-?[0-9]+)\.\w+')
 MAX_VERSION_CODE = 0x7fffffff  # Java's Integer.MAX_VALUE (2147483647)
 
 XMLNS_ANDROID = '{http://schemas.android.com/apk/res/android}'
-XMLElementTree.register_namespace('android', 'http://schemas.android.com/apk/res/android')
 
 config = None
 options = None

@@ -69,6 +69,7 @@ setup(name='fdroidserver',
       install_requires=[
           'androguard >= 3.1.0rc2',
           'clint',
+          'defusedxml',
           'GitPython',
           'mwclient',
           'paramiko',
