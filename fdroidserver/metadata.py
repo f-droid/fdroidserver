@@ -28,13 +28,6 @@ import textwrap
 import io
 import yaml
 from collections import OrderedDict
-# use libyaml if it is available
-try:
-    from yaml import CLoader
-    YamlLoader = CLoader
-except ImportError:
-    from yaml import Loader
-    YamlLoader = Loader
 
 import fdroidserver.common
 from fdroidserver import _
