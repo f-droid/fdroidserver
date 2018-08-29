@@ -127,8 +127,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         ftp.chdir('fdroidserver')
         ftp.put(os.path.join(serverpath, '..', 'fdroid'), 'fdroid')
         ftp.put(os.path.join(serverpath, '..', 'gradlew-fdroid'), 'gradlew-fdroid')
-        ftp.chmod('fdroid', 0o755)
-        ftp.chmod('gradlew-fdroid', 0o755)
+        ftp.chmod('fdroid', 0o755)  # nosec B103 permissions are appropriate
+        ftp.chmod('gradlew-fdroid', 0o755)  # nosec B103 permissions are appropriate
         send_dir(os.path.join(serverpath))
         ftp.chdir(homedir)
 
