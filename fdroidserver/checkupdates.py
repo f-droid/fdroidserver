@@ -57,7 +57,7 @@ def check_http(app):
             if not parsed.netloc or not parsed.scheme or parsed.scheme != 'https':
                 raise FDroidException(_('UpdateCheckData has invalid URL: {url}').format(url=urlcode))
 
-        vercode = "99999999"
+        vercode = None
         if len(urlcode) > 0:
             logging.debug("...requesting {0}".format(urlcode))
             req = urllib.request.Request(urlcode, None)
