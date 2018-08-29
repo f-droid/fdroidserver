@@ -220,7 +220,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         if options.notarball:
             cmdline += ' --no-tarball'
         cmdline += " %s:%s" % (app.id, build.versionCode)
-        chan.exec_command('bash --login -c "' + cmdline + '"')
+        chan.exec_command('bash --login -c "' + cmdline + '"')  # nosec B601 inputs are sanitized
 
         # Fetch build process output ...
         try:
