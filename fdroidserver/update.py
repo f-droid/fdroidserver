@@ -1237,7 +1237,7 @@ def scan_apk_androguard(apk, apkfile):
     androidmanifest_xml = apkobject.xml['AndroidManifest.xml']
     if len(xml.nsmap) > 0:
         # one of them surely will be the Android one, or its corrupt
-        xmlns = '{http://schemas.android.com/apk/res/android}'
+        xmlns = common.XMLNS_ANDROID
     else:
         # strange but sometimes the namespace is blank.  This seems to
         # only happen with the Bromite/Chromium APKs

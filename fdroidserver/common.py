@@ -73,6 +73,7 @@ STANDARD_FILE_NAME_REGEX = re.compile(r'^(\w[\w.]*)_(-?[0-9]+)\.\w+')
 
 MAX_VERSION_CODE = 0x7fffffff  # Java's Integer.MAX_VALUE (2147483647)
 
+XMLNS_ANDROID = '{http://schemas.android.com/apk/res/android}'
 XMLElementTree.register_namespace('android', 'http://schemas.android.com/apk/res/android')
 
 config = None
@@ -1289,9 +1290,9 @@ def fetch_real_name(app_dir, flavours):
         app = xml.find('application')
         if app is None:
             continue
-        if "{http://schemas.android.com/apk/res/android}label" not in app.attrib:
+        if XMLNS_ANDROID + "label" not in app.attrib:
             continue
-        label = app.attrib["{http://schemas.android.com/apk/res/android}label"]
+        label = app.attrib[XMLNS_ANDROID + "label"]
         result = retrieve_string_singleline(app_dir, label)
         if result:
             result = result.strip()
@@ -1471,12 +1472,12 @@ def parse_androidmanifests(paths, app):
                     s = xml.attrib["package"]
                     if app_matches_packagename(app, s):
                         package = s
-                if "{http://schemas.android.com/apk/res/android}versionName" in xml.attrib:
-                    version = xml.attrib["{http://schemas.android.com/apk/res/android}versionName"]
+                if XMLNS_ANDROID + "versionName" in xml.attrib:
+                    version = xml.attrib[XMLNS_ANDROID + "versionName"]
                     base_dir = os.path.dirname(path)
                     version = retrieve_string_singleline(base_dir, version)
-                if "{http://schemas.android.com/apk/res/android}versionCode" in xml.attrib:
-                    a = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"]
+                if XMLNS_ANDROID + "versionCode" in xml.attrib:
+                    a = xml.attrib[XMLNS_ANDROID + "versionCode"]
                     if string_is_integer(a):
                         vercode = a
             except Exception:
