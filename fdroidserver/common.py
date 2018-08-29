@@ -3275,8 +3275,12 @@ def get_git_describe_link():
 
 
 def calculate_math_string(expr):
-    ops = {ast.Add: operator.add, ast.Sub: operator.sub,
-           ast.Mult: operator.mul}
+    ops = {
+        ast.Add: operator.add,
+        ast.Mult: operator.mul,
+        ast.Sub: operator.sub,
+        ast.USub: operator.neg,
+    }
 
     def execute_ast(node):
         if isinstance(node, ast.Num):  # <number>
@@ -3285,7 +3289,7 @@ def calculate_math_string(expr):
             return ops[type(node.op)](execute_ast(node.left),
                                       execute_ast(node.right))
         elif isinstance(node, ast.UnaryOp):  # <operator> <operand> e.g., -1
-            return ops[type(node.op)](eval(node.operand))
+            return ops[type(node.op)](ast.literal_eval(node.operand))
         else:
             raise SyntaxError(node)
 
