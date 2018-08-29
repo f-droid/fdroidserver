@@ -192,7 +192,7 @@ def update_awsbucket_libcloud(repo_section):
                     upload = True
                 else:
                     # if the sizes match, then compare by MD5
-                    md5 = hashlib.md5()
+                    md5 = hashlib.md5()  # nosec AWS uses MD5
                     with open(file_to_upload, 'rb') as f:
                         while True:
                             data = f.read(8192)

@@ -434,7 +434,7 @@ def getsig(apkpath):
 
     cert_encoded = common.get_certificate(cert)
 
-    return hashlib.md5(hexlify(cert_encoded)).hexdigest()
+    return hashlib.md5(hexlify(cert_encoded)).hexdigest()  # nosec just used as ID for signing key
 
 
 def get_cache_file():
