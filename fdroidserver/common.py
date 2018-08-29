@@ -283,7 +283,7 @@ def read_config(opts, config_file='config.py'):
         logging.debug(_("Reading '{config_file}'").format(config_file=config_file))
         with io.open(config_file, "rb") as f:
             code = compile(f.read(), config_file, 'exec')
-            exec(code, None, config)
+            exec(code, None, config)  # nosec TODO switch to YAML file
     else:
         logging.warning(_("No 'config.py' found, using defaults."))
 

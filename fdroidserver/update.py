@@ -27,7 +27,7 @@ import re
 import socket
 import zipfile
 import hashlib
-import pickle
+import pickle  # nosec TODO
 import time
 import copy
 from datetime import datetime
@@ -461,7 +461,7 @@ def get_cache():
     ada = options.allow_disabled_algorithms or config['allow_disabled_algorithms']
     if not options.clean and os.path.exists(apkcachefile):
         with open(apkcachefile, 'rb') as cf:
-            apkcache = pickle.load(cf, encoding='utf-8')
+            apkcache = pickle.load(cf, encoding='utf-8')  # nosec TODO
         if apkcache.get("METADATA_VERSION") != METADATA_VERSION \
            or apkcache.get('allow_disabled_algorithms') != ada:
             apkcache = {}
