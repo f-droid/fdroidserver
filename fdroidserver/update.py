@@ -27,7 +27,7 @@ import re
 import socket
 import zipfile
 import hashlib
-import pickle
+import pickle  # nosec TODO
 import time
 import copy
 from datetime import datetime
@@ -434,7 +434,7 @@ def getsig(apkpath):
 
     cert_encoded = common.get_certificate(cert)
 
-    return hashlib.md5(hexlify(cert_encoded)).hexdigest()
+    return hashlib.md5(hexlify(cert_encoded)).hexdigest()  # nosec just used as ID for signing key
 
 
 def get_cache_file():
@@ -461,7 +461,7 @@ def get_cache():
     ada = options.allow_disabled_algorithms or config['allow_disabled_algorithms']
     if not options.clean and os.path.exists(apkcachefile):
         with open(apkcachefile, 'rb') as cf:
-            apkcache = pickle.load(cf, encoding='utf-8')
+            apkcache = pickle.load(cf, encoding='utf-8')  # nosec TODO
         if apkcache.get("METADATA_VERSION") != METADATA_VERSION \
            or apkcache.get('allow_disabled_algorithms') != ada:
             apkcache = {}
@@ -1237,7 +1237,7 @@ def scan_apk_androguard(apk, apkfile):
     androidmanifest_xml = apkobject.xml['AndroidManifest.xml']
     if len(xml.nsmap) > 0:
         # one of them surely will be the Android one, or its corrupt
-        xmlns = '{http://schemas.android.com/apk/res/android}'
+        xmlns = common.XMLNS_ANDROID
     else:
         # strange but sometimes the namespace is blank.  This seems to
         # only happen with the Bromite/Chromium APKs

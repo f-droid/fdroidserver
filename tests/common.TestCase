@@ -681,6 +681,12 @@ class CommonTest(unittest.TestCase):
         sig = fdroidserver.common.metadata_find_developer_signature('org.smssecure.smssecure')
         self.assertEqual('b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868', sig)
 
+    def test_parse_xml(self):
+        manifest = os.path.join('source-files', 'fdroid', 'fdroidclient', 'AndroidManifest.xml')
+        parsed = fdroidserver.common.parse_xml(manifest)
+        self.assertIsNotNone(parsed)
+        self.assertEqual(str(type(parsed)), "<class 'xml.etree.ElementTree.Element'>")
+
     def test_parse_androidmanifests(self):
         app = fdroidserver.metadata.App()
         app.id = 'org.fdroid.fdroid'
@@ -800,13 +806,26 @@ class CommonTest(unittest.TestCase):
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
     def test_calculate_math_string(self):
-        self.assertEqual(1234, fdroidserver.common.calculate_math_string('1234'))
-        self.assertEqual(4, fdroidserver.common.calculate_math_string('(1+1)*2'))
-        self.assertEqual(2, fdroidserver.common.calculate_math_string('(1-1)*2+3*1-1'))
+        self.assertEqual(1234,
+                         fdroidserver.common.calculate_math_string('1234'))
+        self.assertEqual((1 + 1) * 2,
+                         fdroidserver.common.calculate_math_string('(1 + 1) * 2'))
+        self.assertEqual((1 - 1) * 2 + 3 * 1 - 1,
+                         fdroidserver.common.calculate_math_string('(1 - 1) * 2 + 3 * 1 - 1'))
+        self.assertEqual(0 - 12345,
+                         fdroidserver.common.calculate_math_string('0 - 12345'))
+        self.assertEqual(0xffff,
+                         fdroidserver.common.calculate_math_string('0xffff'))
+        self.assertEqual(0xcafe * 123,
+                         fdroidserver.common.calculate_math_string('0xcafe * 123'))
+        self.assertEqual(-1,
+                         fdroidserver.common.calculate_math_string('-1'))
         with self.assertRaises(SyntaxError):
             fdroidserver.common.calculate_math_string('__import__("urllib")')
         with self.assertRaises(SyntaxError):
             fdroidserver.common.calculate_math_string('self')
+        with self.assertRaises(SyntaxError):
+            fdroidserver.common.calculate_math_string('Ox9()')
         with self.assertRaises(SyntaxError):
             fdroidserver.common.calculate_math_string('1+1; print(1)')
         with self.assertRaises(SyntaxError):

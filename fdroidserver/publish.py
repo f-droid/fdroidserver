@@ -60,12 +60,12 @@ def key_alias(appid):
         # For this particular app, the key alias is overridden...
         keyalias = config['keyaliases'][appid]
         if keyalias.startswith('@'):
-            m = hashlib.md5()
+            m = hashlib.md5()  # nosec just used to generate a keyalias
             m.update(keyalias[1:].encode('utf-8'))
             keyalias = m.hexdigest()[:8]
         return keyalias
     else:
-        m = hashlib.md5()
+        m = hashlib.md5()  # nosec just used to generate a keyalias
         m.update(appid.encode('utf-8'))
         return m.hexdigest()[:8]
 
@@ -197,7 +197,7 @@ def main():
     vercodes = common.read_pkg_args(options.appid, True)
     allaliases = []
     for appid in allapps:
-        m = hashlib.md5()
+        m = hashlib.md5()  # nosec just used to generate a keyalias
         m.update(appid.encode('utf-8'))
         keyalias = m.hexdigest()[:8]
         if keyalias in allaliases:
@@ -307,11 +307,11 @@ def main():
                     # For this particular app, the key alias is overridden...
                     keyalias = config['keyaliases'][appid]
                     if keyalias.startswith('@'):
-                        m = hashlib.md5()
+                        m = hashlib.md5()  # nosec just used to generate a keyalias
                         m.update(keyalias[1:].encode('utf-8'))
                         keyalias = m.hexdigest()[:8]
                 else:
-                    m = hashlib.md5()
+                    m = hashlib.md5()  # nosec just used to generate a keyalias
                     m.update(appid.encode('utf-8'))
                     keyalias = m.hexdigest()[:8]
                 logging.info("Key alias: " + keyalias)

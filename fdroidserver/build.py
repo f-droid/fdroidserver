@@ -21,6 +21,7 @@ import os
 import shutil
 import glob
 import subprocess
+import posixpath
 import re
 import resource
 import sys
@@ -92,7 +93,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
                      port=sshinfo['port'], timeout=300,
                      look_for_keys=False, key_filename=sshinfo['idfile'])
 
-        homedir = '/home/' + sshinfo['user']
+        homedir = posixpath.join('/home', sshinfo['user'])
 
         # Get an SFTP connection...
         ftp = sshs.open_sftp()
@@ -126,8 +127,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         ftp.chdir('fdroidserver')
         ftp.put(os.path.join(serverpath, '..', 'fdroid'), 'fdroid')
         ftp.put(os.path.join(serverpath, '..', 'gradlew-fdroid'), 'gradlew-fdroid')
-        ftp.chmod('fdroid', 0o755)
-        ftp.chmod('gradlew-fdroid', 0o755)
+        ftp.chmod('fdroid', 0o755)  # nosec B103 permissions are appropriate
+        ftp.chmod('gradlew-fdroid', 0o755)  # nosec B103 permissions are appropriate
         send_dir(os.path.join(serverpath))
         ftp.chdir(homedir)
 
@@ -159,7 +160,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         ftp.mkdir('srclib')
         # Copy any extlibs that are required...
         if build.extlibs:
-            ftp.chdir(homedir + '/build/extlib')
+            ftp.chdir(posixpath.join(homedir, 'build', 'extlib'))
             for lib in build.extlibs:
                 lib = lib.strip()
                 libsrc = os.path.join('build/extlib', lib)
@@ -186,20 +187,20 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             srclibpaths.append(basesrclib)
         for name, number, lib in srclibpaths:
             logging.info("Sending srclib '%s'" % lib)
-            ftp.chdir(homedir + '/build/srclib')
+            ftp.chdir(posixpath.join(homedir, 'build', 'srclib'))
             if not os.path.exists(lib):
                 raise BuildException("Missing srclib directory '" + lib + "'")
             fv = '.fdroidvcs-' + name
             ftp.put(os.path.join('build/srclib', fv), fv)
             send_dir(lib)
             # Copy the metadata file too...
-            ftp.chdir(homedir + '/srclibs')
+            ftp.chdir(posixpath.join(homedir, 'srclibs'))
             ftp.put(os.path.join('srclibs', name + '.txt'),
                     name + '.txt')
         # Copy the main app source code
         # (no need if it's a srclib)
         if (not basesrclib) and os.path.exists(build_dir):
-            ftp.chdir(homedir + '/build')
+            ftp.chdir(posixpath.join(homedir, 'build'))
             fv = '.fdroidvcs-' + app.id
             ftp.put(os.path.join('build', fv), fv)
             send_dir(build_dir)
@@ -208,7 +209,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         logging.info("Starting build...")
         chan = sshs.get_transport().open_session()
         chan.get_pty()
-        cmdline = os.path.join(homedir, 'fdroidserver', 'fdroid')
+        cmdline = posixpath.join(homedir, 'fdroidserver', 'fdroid')
         cmdline += ' build --on-server'
         if force:
             cmdline += ' --force --test'
@@ -219,7 +220,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         if options.notarball:
             cmdline += ' --no-tarball'
         cmdline += " %s:%s" % (app.id, build.versionCode)
-        chan.exec_command('bash --login -c "' + cmdline + '"')
+        chan.exec_command('bash --login -c "' + cmdline + '"')  # nosec B601 inputs are sanitized
 
         # Fetch build process output ...
         try:
@@ -255,7 +256,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         # Retreive logs...
         toolsversion_log = common.get_toolsversion_logname(app, build)
         try:
-            ftp.chdir(os.path.join(homedir, log_dir))
+            ftp.chdir(posixpath.join(homedir, log_dir))
             ftp.get(toolsversion_log, os.path.join(log_dir, toolsversion_log))
             logging.debug('retrieved %s', toolsversion_log)
         except Exception as e:
@@ -264,9 +265,9 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         # Retrieve the built files...
         logging.info("Retrieving build output...")
         if force:
-            ftp.chdir(homedir + '/tmp')
+            ftp.chdir(posixpath.join(homedir, 'tmp'))
         else:
-            ftp.chdir(homedir + '/unsigned')
+            ftp.chdir(posixpath.join(homedir, 'unsigned'))
         apkfile = common.get_release_filename(app, build)
         tarball = common.getsrcname(app, build)
         try:

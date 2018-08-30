@@ -28,6 +28,7 @@
 
 
 import collections
+import defusedxml.minidom
 import git
 import glob
 import os
@@ -36,7 +37,6 @@ import logging
 import requests
 import shutil
 import tempfile
-import xml.dom.minidom
 import zipfile
 from argparse import ArgumentParser
 
@@ -94,7 +94,7 @@ For more info on this idea:
                 continue
             dest = os.path.join(cpdir, f)
             if f.endswith('.xml'):
-                doc = xml.dom.minidom.parse(repof)
+                doc = defusedxml.minidom.parse(repof)
                 output = doc.toprettyxml(encoding='utf-8')
                 with open(dest, 'wb') as f:
                     f.write(output)

@@ -39,7 +39,7 @@ import base64
 import zipfile
 import tempfile
 import json
-import xml.etree.ElementTree as XMLElementTree
+import defusedxml.ElementTree as XMLElementTree
 
 from binascii import hexlify
 from datetime import datetime, timedelta
@@ -71,7 +71,9 @@ CERT_PATH_REGEX = re.compile(r'^META-INF/.*\.(DSA|EC|RSA)$')
 APK_NAME_REGEX = re.compile(r'^([a-zA-Z][\w.]*)_(-?[0-9]+)_?([0-9a-f]{7})?\.apk')
 STANDARD_FILE_NAME_REGEX = re.compile(r'^(\w[\w.]*)_(-?[0-9]+)\.\w+')
 
-XMLElementTree.register_namespace('android', 'http://schemas.android.com/apk/res/android')
+MAX_VERSION_CODE = 0x7fffffff  # Java's Integer.MAX_VALUE (2147483647)
+
+XMLNS_ANDROID = '{http://schemas.android.com/apk/res/android}'
 
 config = None
 options = None
@@ -281,7 +283,7 @@ def read_config(opts, config_file='config.py'):
         logging.debug(_("Reading '{config_file}'").format(config_file=config_file))
         with io.open(config_file, "rb") as f:
             code = compile(f.read(), config_file, 'exec')
-            exec(code, None, config)
+            exec(code, None, config)  # nosec TODO switch to YAML file
     else:
         logging.warning(_("No 'config.py' found, using defaults."))
 
@@ -1287,9 +1289,9 @@ def fetch_real_name(app_dir, flavours):
         app = xml.find('application')
         if app is None:
             continue
-        if "{http://schemas.android.com/apk/res/android}label" not in app.attrib:
+        if XMLNS_ANDROID + "label" not in app.attrib:
             continue
-        label = app.attrib["{http://schemas.android.com/apk/res/android}label"]
+        label = app.attrib[XMLNS_ANDROID + "label"]
         result = retrieve_string_singleline(app_dir, label)
         if result:
             result = result.strip()
@@ -1469,12 +1471,12 @@ def parse_androidmanifests(paths, app):
                     s = xml.attrib["package"]
                     if app_matches_packagename(app, s):
                         package = s
-                if "{http://schemas.android.com/apk/res/android}versionName" in xml.attrib:
-                    version = xml.attrib["{http://schemas.android.com/apk/res/android}versionName"]
+                if XMLNS_ANDROID + "versionName" in xml.attrib:
+                    version = xml.attrib[XMLNS_ANDROID + "versionName"]
                     base_dir = os.path.dirname(path)
                     version = retrieve_string_singleline(base_dir, version)
-                if "{http://schemas.android.com/apk/res/android}versionCode" in xml.attrib:
-                    a = xml.attrib["{http://schemas.android.com/apk/res/android}versionCode"]
+                if XMLNS_ANDROID + "versionCode" in xml.attrib:
+                    a = xml.attrib[XMLNS_ANDROID + "versionCode"]
                     if string_is_integer(a):
                         vercode = a
             except Exception:
@@ -3275,8 +3277,12 @@ def get_git_describe_link():
 
 
 def calculate_math_string(expr):
-    ops = {ast.Add: operator.add, ast.Sub: operator.sub,
-           ast.Mult: operator.mul}
+    ops = {
+        ast.Add: operator.add,
+        ast.Mult: operator.mul,
+        ast.Sub: operator.sub,
+        ast.USub: operator.neg,
+    }
 
     def execute_ast(node):
         if isinstance(node, ast.Num):  # <number>
@@ -3285,7 +3291,7 @@ def calculate_math_string(expr):
             return ops[type(node.op)](execute_ast(node.left),
                                       execute_ast(node.right))
         elif isinstance(node, ast.UnaryOp):  # <operator> <operand> e.g., -1
-            return ops[type(node.op)](eval(node.operand))
+            return ops[type(node.op)](ast.literal_eval(node.operand))
         else:
             raise SyntaxError(node)
 
