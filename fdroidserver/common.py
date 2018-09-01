@@ -1518,7 +1518,19 @@ def parse_androidmanifests(paths, app):
 
 
 def is_valid_package_name(name):
-    return re.match("[A-Za-z_][A-Za-z_0-9.]+$", name)
+    """Check whether name is a valid fdroid package name
+
+    APKs and manually defined package names must use a valid Java
+    Package Name.  Automatically generated package names for non-APK
+    files use the SHA-256 sum.
+
+    """
+    return re.match("^([a-f0-9]+|[A-Za-z_][A-Za-z_0-9.]+)$", name)
+
+
+def is_valid_java_package_name(name):
+    """Check whether name is a valid Java package name aka Application ID"""
+    return re.match("^[A-Za-z_][A-Za-z_0-9.]+$", name)
 
 
 def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
