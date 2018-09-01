@@ -1511,7 +1511,7 @@ def parse_androidmanifests(paths, app):
     if max_version is None:
         max_version = "Unknown"
 
-    if max_package and not is_valid_package_name(max_package):
+    if max_package and not is_valid_java_package_name(max_package):
         raise FDroidException(_("Invalid package name {0}").format(max_package))
 
     return (max_version, max_vercode, max_package)
