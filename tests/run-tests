@@ -177,8 +177,8 @@ if which zipalign || ls -1 $ANDROID_HOME/build-tools/*/zipalign; then
     test -e repo/index.xml
     test -e repo/index.jar
     test -e repo/index-v1.jar
-    test -e tmp/apkcache
-    ! test -z tmp/apkcache
+    test -e tmp/apkcache.json
+    ! test -z tmp/apkcache.json
     test -L urzip.apk
     grep -F '<application id=' repo/index.xml > /dev/null
 fi
@@ -808,8 +808,8 @@ else
     test -e repo/index.xml
     test -e repo/index.jar
     test -e repo/index-v1.jar
-    test -e tmp/apkcache
-    ! test -z tmp/apkcache
+    test -e tmp/apkcache.json
+    ! test -z tmp/apkcache.json
     export ANDROID_HOME=$STORED_ANDROID_HOME
 fi
 
@@ -860,8 +860,8 @@ $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
-test -e tmp/apkcache
-! test -z tmp/apkcache
+test -e tmp/apkcache.json
+! test -z tmp/apkcache.json
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -890,8 +890,8 @@ $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
-test -e tmp/apkcache
-! test -z tmp/apkcache
+test -e tmp/apkcache.json
+! test -z tmp/apkcache.json
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -917,8 +917,8 @@ $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
-test -e tmp/apkcache
-! test -z tmp/apkcache
+test -e tmp/apkcache.json
+! test -z tmp/apkcache.json
 grep -F '<application id=' repo/index.xml > /dev/null
 
 
@@ -1009,8 +1009,8 @@ $fdroid readmeta
 test -e repo/index.xml
 test -e repo/index.jar
 test -e repo/index-v1.jar
-test -e tmp/apkcache
-! test -z tmp/apkcache
+test -e tmp/apkcache.json
+! test -z tmp/apkcache.json
 grep -F '<application id=' repo/index.xml > /dev/null
 
 # now set fake repo_keyalias

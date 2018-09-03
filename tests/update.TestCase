@@ -3,6 +3,7 @@
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
 import git
+import glob
 import inspect
 import logging
 import optparse
@@ -288,6 +289,45 @@ class UpdateTest(unittest.TestCase):
             elif apk['packageName'] == 'info.guardianproject.urzip':
                 self.assertIsNone(apk.get('obbMainFile'))
                 self.assertIsNone(apk.get('obbPatchFile'))
+
+    def test_apkcache_json(self):
+        """test the migration from pickle to json"""
+        os.chdir(os.path.join(localmodule, 'tests'))
+        if os.path.basename(os.getcwd()) != 'tests':
+            raise Exception('This test must be run in the "tests/" subdir')
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        config['ndk_paths'] = dict()
+        config['accepted_formats'] = ['json', 'txt', 'yml']
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+
+        fdroidserver.update.options = type('', (), {})()
+        fdroidserver.update.options.clean = True
+        fdroidserver.update.options.delete_unknown = True
+        fdroidserver.update.options.rename_apks = False
+        fdroidserver.update.options.allow_disabled_algorithms = False
+
+        fdroidserver.metadata.read_metadata(xref=True)
+        knownapks = fdroidserver.common.KnownApks()
+        apkcache = fdroidserver.update.get_cache()
+        self.assertEqual(2, len(apkcache))
+        self.assertEqual(fdroidserver.update.METADATA_VERSION, apkcache["METADATA_VERSION"])
+        self.assertEqual(fdroidserver.update.options.allow_disabled_algorithms,
+                         apkcache['allow_disabled_algorithms'])
+        apks, cachechanged = fdroidserver.update.process_apks(apkcache, 'repo', knownapks, False)
+        fdroidserver.update.write_cache(apkcache)
+
+        fdroidserver.update.options.clean = False
+        read_from_json = fdroidserver.update.get_cache()
+        self.assertEqual(16, len(read_from_json))
+        for f in glob.glob('repo/*.apk'):
+            self.assertTrue(os.path.basename(f) in read_from_json)
+
+        fdroidserver.update.options.clean = True
+        reset = fdroidserver.update.get_cache()
+        self.assertEqual(2, len(reset))
 
     def test_scan_apk(self):
         config = dict()
