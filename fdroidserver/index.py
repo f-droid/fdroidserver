@@ -533,7 +533,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
                 old_permissions = set()
                 sorted_permissions = sorted(apk['uses-permission'])
                 for perm in sorted_permissions:
-                    perm_name = perm.name
+                    perm_name = perm[0]
                     if perm_name.startswith("android.permission."):
                         perm_name = perm_name[19:]
                     old_permissions.add(perm_name)
@@ -541,15 +541,15 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
 
                 for permission in sorted_permissions:
                     permel = doc.createElement('uses-permission')
-                    permel.setAttribute('name', permission.name)
-                    if permission.maxSdkVersion is not None:
-                        permel.setAttribute('maxSdkVersion', '%d' % permission.maxSdkVersion)
+                    permel.setAttribute('name', permission[0])
+                    if permission[1] is not None:
+                        permel.setAttribute('maxSdkVersion', '%d' % permission[1])
                         apkel.appendChild(permel)
                 for permission_sdk_23 in sorted(apk['uses-permission-sdk-23']):
                     permel = doc.createElement('uses-permission-sdk-23')
-                    permel.setAttribute('name', permission_sdk_23.name)
-                    if permission_sdk_23.maxSdkVersion is not None:
-                        permel.setAttribute('maxSdkVersion', '%d' % permission_sdk_23.maxSdkVersion)
+                    permel.setAttribute('name', permission_sdk_23[0])
+                    if permission_sdk_23[1] is not None:
+                        permel.setAttribute('maxSdkVersion', '%d' % permission_sdk_23[1])
                         apkel.appendChild(permel)
                 if 'nativecode' in apk:
                     addElement('nativecode', ','.join(sorted(apk['nativecode'])), doc, apkel)

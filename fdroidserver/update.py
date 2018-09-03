@@ -27,7 +27,7 @@ import re
 import socket
 import zipfile
 import hashlib
-import pickle  # nosec TODO
+import json
 import time
 import copy
 from datetime import datetime
@@ -46,7 +46,7 @@ from . import metadata
 from .common import SdkToolsPopen
 from .exception import BuildException, FDroidException
 
-METADATA_VERSION = 19
+METADATA_VERSION = 20
 
 # less than the valid range of versionCode, i.e. Java's Integer.MIN_VALUE
 UNSET_VERSION_CODE = -0x100000000
@@ -56,8 +56,7 @@ APK_VERCODE_PAT = re.compile(".*versionCode='([0-9]*)'.*")
 APK_VERNAME_PAT = re.compile(".*versionName='([^']*)'.*")
 APK_LABEL_ICON_PAT = re.compile(r".*\s+label='(.*)'\s+icon='(.*?)'")
 APK_SDK_VERSION_PAT = re.compile(".*'([0-9]*)'.*")
-APK_PERMISSION_PAT = \
-    re.compile(".*(name='(?P<name>.*?)')(.*maxSdkVersion='(?P<maxSdkVersion>.*?)')?.*")
+APK_PERMISSION_PAT = re.compile(".*(name='(.*)')(.*maxSdkVersion='(.*)')?.*")
 APK_FEATURE_PAT = re.compile(".*name='([^']*)'.*")
 
 screen_densities = ['65534', '640', '480', '320', '240', '160', '120']
@@ -438,7 +437,7 @@ def getsig(apkpath):
 
 
 def get_cache_file():
-    return os.path.join('tmp', 'apkcache')
+    return os.path.join('tmp', 'apkcache.json')
 
 
 def get_cache():
@@ -460,27 +459,46 @@ def get_cache():
     apkcachefile = get_cache_file()
     ada = options.allow_disabled_algorithms or config['allow_disabled_algorithms']
     if not options.clean and os.path.exists(apkcachefile):
-        with open(apkcachefile, 'rb') as cf:
-            apkcache = pickle.load(cf, encoding='utf-8')  # nosec TODO
+        with open(apkcachefile) as fp:
+            apkcache = json.load(fp, object_pairs_hook=collections.OrderedDict)
         if apkcache.get("METADATA_VERSION") != METADATA_VERSION \
            or apkcache.get('allow_disabled_algorithms') != ada:
-            apkcache = {}
+            apkcache = collections.OrderedDict()
     else:
-        apkcache = {}
+        apkcache = collections.OrderedDict()
 
     apkcache["METADATA_VERSION"] = METADATA_VERSION
     apkcache['allow_disabled_algorithms'] = ada
+
+    for k, v in apkcache.items():
+        if not isinstance(v, dict):
+            continue
+        if 'antiFeatures' in v:
+            v['antiFeatures'] = set(v['antiFeatures'])
+        if 'added' in v:
+            v['added'] = datetime.fromtimestamp(v['added'])
 
     return apkcache
 
 
 def write_cache(apkcache):
+    class Encoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, set):
+                return ['SET'] + list(obj)
+            elif isinstance(obj, datetime):
+                return obj.timestamp()
+            return super().default(obj)
+
     apkcachefile = get_cache_file()
     cache_path = os.path.dirname(apkcachefile)
     if not os.path.exists(cache_path):
         os.makedirs(cache_path)
-    with open(apkcachefile, 'wb') as cf:
-        pickle.dump(apkcache, cf)
+    for k, v in apkcache.items():
+        if isinstance(k, bytes):
+            print('BYTES: ' + str(k) + ' ' + str(v))
+    with open(apkcachefile, 'w') as fp:
+        json.dump(apkcache, fp, cls=Encoder, indent=2)
 
 
 def get_icon_bytes(apkzip, iconsrc):
@@ -948,16 +966,16 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
 
     cachechanged = False
     repo_files = []
-    repodir = repodir.encode('utf-8')
+    repodir = repodir.encode()
     for name in os.listdir(repodir):
         file_extension = common.get_file_extension(name)
         if file_extension == 'apk' or file_extension == 'obb':
             continue
         filename = os.path.join(repodir, name)
-        name_utf8 = name.decode('utf-8')
+        name_utf8 = name.decode()
         if filename.endswith(b'_src.tar.gz'):
             logging.debug(_('skipping source tarball: {path}')
-                          .format(path=filename.decode('utf-8')))
+                          .format(path=filename.decode()))
             continue
         if not common.is_repo_file(filename):
             continue
@@ -968,15 +986,8 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
 
         shasum = sha256sum(filename)
         usecache = False
-        if name in apkcache:
-            repo_file = apkcache[name]
-            # added time is cached as tuple but used here as datetime instance
-            if 'added' in repo_file:
-                a = repo_file['added']
-                if isinstance(a, datetime):
-                    repo_file['added'] = a
-                else:
-                    repo_file['added'] = datetime(*a[:6])
+        if name_utf8 in apkcache:
+            repo_file = apkcache[name_utf8]
             if repo_file.get('hash') == shasum:
                 logging.debug(_("Reading {apkfilename} from cache")
                               .format(apkfilename=name_utf8))
@@ -1004,10 +1015,10 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
                 repo_file['versionCode'] = int(m.group(2))
             srcfilename = name + b'_src.tar.gz'
             if os.path.exists(os.path.join(repodir, srcfilename)):
-                repo_file['srcname'] = srcfilename.decode('utf-8')
+                repo_file['srcname'] = srcfilename.decode()
             repo_file['size'] = stat.st_size
 
-            apkcache[name] = repo_file
+            apkcache[name_utf8] = repo_file
             cachechanged = True
 
         if use_date_from_file:
