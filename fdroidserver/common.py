@@ -39,7 +39,12 @@ import base64
 import zipfile
 import tempfile
 import json
-import defusedxml.ElementTree as XMLElementTree
+
+# TODO change to only import defusedxml once its installed everywhere
+try:
+    import defusedxml.ElementTree as XMLElementTree
+except ImportError:
+    import xml.etree.ElementTree as XMLElementTree  # nosec this is a fallback only
 
 from binascii import hexlify
 from datetime import datetime, timedelta
