@@ -805,6 +805,9 @@ def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
         if metadatapath == '.fdroid.txt':
             warn_or_exception(_('.fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json.'))
         appid, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
+        if appid != '.fdroid' and not fdroidserver.common.is_valid_package_name(appid):
+            warn_or_exception(_("{appid} from {path} is not a valid Java Package Name!")
+                              .format(appid=appid, path=metadatapath))
         if appid in apps:
             warn_or_exception(_("Found multiple metadata files for {appid}")
                               .format(appid=appid))

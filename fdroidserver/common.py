@@ -39,7 +39,12 @@ import base64
 import zipfile
 import tempfile
 import json
-import defusedxml.ElementTree as XMLElementTree
+
+# TODO change to only import defusedxml once its installed everywhere
+try:
+    import defusedxml.ElementTree as XMLElementTree
+except ImportError:
+    import xml.etree.ElementTree as XMLElementTree  # nosec this is a fallback only
 
 from binascii import hexlify
 from datetime import datetime, timedelta
@@ -1511,14 +1516,26 @@ def parse_androidmanifests(paths, app):
     if max_version is None:
         max_version = "Unknown"
 
-    if max_package and not is_valid_package_name(max_package):
+    if max_package and not is_valid_java_package_name(max_package):
         raise FDroidException(_("Invalid package name {0}").format(max_package))
 
     return (max_version, max_vercode, max_package)
 
 
 def is_valid_package_name(name):
-    return re.match("[A-Za-z_][A-Za-z_0-9.]+$", name)
+    """Check whether name is a valid fdroid package name
+
+    APKs and manually defined package names must use a valid Java
+    Package Name.  Automatically generated package names for non-APK
+    files use the SHA-256 sum.
+
+    """
+    return re.match("^([a-f0-9]+|[A-Za-z_][A-Za-z_0-9.]+)$", name)
+
+
+def is_valid_java_package_name(name):
+    """Check whether name is a valid Java package name aka Application ID"""
+    return re.match("^[A-Za-z_][A-Za-z_0-9.]+$", name)
 
 
 def getsrclib(spec, srclib_dir, subdir=None, basepath=False,

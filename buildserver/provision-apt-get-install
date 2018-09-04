@@ -89,6 +89,7 @@ packages="
  python-lxml
  python-magic
  python-setuptools
+ python3-defusedxml
  python3-git/jessie-backports
  python3-gitdb/jessie-backports
  python3-gnupg
