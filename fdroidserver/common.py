@@ -39,6 +39,7 @@ import socket
 import base64
 import urllib.parse
 import urllib.request
+import yaml
 import zipfile
 import tempfile
 import json
@@ -284,13 +285,17 @@ def regsub_file(pattern, repl, path):
         f.write(text)
 
 
-def read_config(opts, config_file='config.py'):
+def read_config(opts):
     """Read the repository config
 
     The config is read from config_file, which is in the current
     directory when any of the repo management commands are used. If
-    there is a local metadata file in the git repo, then config.py is
+    there is a local metadata file in the git repo, then the config is
     not required, just use defaults.
+
+    config.yml is the preferred form because no code is executed when
+    reading it.  config.py is deprecated and supported for backwards
+    compatibility.
 
     """
     global config, options
@@ -301,12 +306,23 @@ def read_config(opts, config_file='config.py'):
     options = opts
 
     config = {}
+    config_file = 'config.yml'
+    old_config_file = 'config.py'
 
-    if os.path.isfile(config_file):
+    if os.path.exists(config_file) and os.path.exists(old_config_file):
+        logging.error(_("""Conflicting config files! Using {newfile}, ignoring {oldfile}!""")
+                      .format(oldfile=old_config_file, newfile=config_file))
+
+    if os.path.exists(config_file):
         logging.debug(_("Reading '{config_file}'").format(config_file=config_file))
-        with io.open(config_file, "rb") as f:
-            code = compile(f.read(), config_file, 'exec')
-            exec(code, None, config)  # nosec TODO switch to YAML file
+        with open(config_file) as fp:
+            config = yaml.safe_load(fp)
+    elif os.path.exists(old_config_file):
+        logging.warning(_("""{oldfile} is deprecated, use {newfile}""")
+                        .format(oldfile=old_config_file, newfile=config_file))
+        with io.open(old_config_file, "rb") as fp:
+            code = compile(fp.read(), old_config_file, 'exec')
+            exec(code, None, config)  # nosec TODO automatically migrate
     else:
         logging.warning(_("No 'config.py' found, using defaults."))
 
@@ -329,10 +345,14 @@ def read_config(opts, config_file='config.py'):
                                       '-providerArg', 'opensc-fdroid.cfg']
 
     if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
-        st = os.stat(config_file)
+        if os.path.exists(config_file):
+            f = config_file
+        elif os.path.exists(old_config_file):
+            f = old_config_file
+        st = os.stat(f)
         if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
             logging.warning(_("unsafe permissions on '{config_file}' (should be 0600)!")
-                            .format(config_file=config_file))
+                            .format(config_file=f))
 
     fill_config_defaults(config)
 
