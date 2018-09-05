@@ -23,8 +23,10 @@ import sys
 import os
 import shutil
 import glob
+import logging
 import re
 import socket
+import warnings
 import zipfile
 import hashlib
 import json
@@ -36,15 +38,16 @@ from argparse import ArgumentParser
 import collections
 from binascii import hexlify
 
-from PIL import Image, PngImagePlugin
-import logging
-
 from . import _
 from . import common
 from . import index
 from . import metadata
 from .common import SdkToolsPopen
 from .exception import BuildException, FDroidException
+
+from PIL import Image, PngImagePlugin
+warnings.simplefilter('error', Image.DecompressionBombWarning)
+Image.MAX_IMAGE_PIXELS = 0xffffff  # 4096x4096
 
 METADATA_VERSION = 20
 
