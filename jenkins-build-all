@@ -50,7 +50,8 @@ export VAGRANT_HOME=$SETUP_WORKSPACE/vagrant.d
 
 # make sure we have the right buildserver paths and its ready for use
 vagrant global-status \
-    | grep -F -e reproducible_setup_fdroid_build_environment -o -e fdroiddata/builder
+    | grep -F -e reproducible_setup_fdroid_build_environment -o -e fdroiddata/builder \
+    || (echo ERROR no buildserver VM found, exiting; exit 1)
 
 # the way we handle jenkins slaves doesn't copy the workspace to the slaves
 # so we need to "manually" clone the git repo here…
