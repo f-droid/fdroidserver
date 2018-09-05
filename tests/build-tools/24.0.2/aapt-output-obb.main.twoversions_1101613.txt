@@ -1,0 +1,15 @@
+package: name='obb.main.twoversions' versionCode='1101613' versionName='0.1' platformBuildVersionName='4.3.1-1425645'
+sdkVersion:'4'
+targetSdkVersion:'18'
+application-icon-160:'res/drawable/ic_launcher.png'
+application: label='' icon='res/drawable/ic_launcher.png'
+launchable-activity: name='info.guardianproject.urzip.MainActivity'  label='OBB Main Two Versions' icon=''
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+main
+other-activities
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales:
+densities: '160'

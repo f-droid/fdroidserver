@@ -1,0 +1,20 @@
+package: name='com.politedroid' versionCode='6' versionName='1.5' platformBuildVersionName='5.0.1-1624448'
+sdkVersion:'14'
+targetSdkVersion:'21'
+uses-permission: name='android.permission.READ_CALENDAR'
+uses-permission: name='android.permission.RECEIVE_BOOT_COMPLETED'
+application-icon-120:'res/drawable-ldpi-v4/icon.png'
+application-icon-160:'res/drawable-mdpi-v4/icon.png'
+application-icon-240:'res/drawable-hdpi-v4/icon.png'
+application-icon-320:'res/drawable-xhdpi-v4/icon.png'
+application: label='' icon='res/drawable-mdpi-v4/icon.png'
+launchable-activity: name='com.politedroid.Preferences'  label='Polite Droid' icon=''
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+main
+other-receivers
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales:
+densities: '120' '160' '240' '320'

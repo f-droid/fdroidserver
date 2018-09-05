@@ -1,0 +1,15 @@
+package: name='info.guardianproject.urzip' versionCode='100' versionName='0.1'
+sdkVersion:'4'
+targetSdkVersion:'18'
+application-label:'urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234'
+application-icon-160:'res/drawable/ic_launcher.png'
+application: label='urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234' icon='res/drawable/ic_launcher.png'
+launchable-activity: name='info.guardianproject.urzip.MainActivity'  label='urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234' icon=''
+uses-feature:'android.hardware.touchscreen'
+uses-implied-feature:'android.hardware.touchscreen','assumed you require a touch screen unless explicitly made optional'
+main
+other-activities
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--'
+densities: '160'
