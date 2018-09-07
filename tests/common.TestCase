@@ -159,8 +159,10 @@ class CommonTest(unittest.TestCase):
                              "debuggable APK state was not properly parsed!")
 
     def test_is_valid_package_name(self):
-        for name in ["org.fdroid.fdroid",
+        for name in ["cafebabe",
+                     "org.fdroid.fdroid",
                      "org.f_droid.fdr0ID",
+                     "SpeedoMeterApp.main",
                      "05041684efd9b16c2888b1eddbadd0359f655f311b89bdd1737f560a10d20fb8"]:
             self.assertTrue(fdroidserver.common.is_valid_package_name(name),
                             "{0} should be a valid package name".format(name))
@@ -171,18 +173,22 @@ class CommonTest(unittest.TestCase):
             self.assertFalse(fdroidserver.common.is_valid_package_name(name),
                              "{0} should not be a valid package name".format(name))
 
-    def test_is_valid_java_package_name(self):
+    def test_is_strict_application_id(self):
+        """see also tests/valid-package-names/"""
         for name in ["org.fdroid.fdroid",
                      "org.f_droid.fdr0ID"]:
-            self.assertTrue(fdroidserver.common.is_valid_java_package_name(name),
-                            "{0} should be a valid package name".format(name))
+            self.assertTrue(fdroidserver.common.is_strict_application_id(name),
+                            "{0} should be a strict application id".format(name))
         for name in ["0rg.fdroid.fdroid",
                      ".f_droid.fdr0ID",
+                     "oneword",
+                     "cafebabe",
+                     "SpeedoMeterApp.main",
                      "org.fdroid/fdroid",
                      "/org.fdroid.fdroid",
                      "05041684efd9b16c2888b1eddbadd0359f655f311b89bdd1737f560a10d20fb8"]:
-            self.assertFalse(fdroidserver.common.is_valid_java_package_name(name),
-                             "{0} should not be a valid package name".format(name))
+            self.assertFalse(fdroidserver.common.is_strict_application_id(name),
+                             "{0} should not be a strict application id".format(name))
 
     def test_prepare_sources(self):
         testint = 99999999

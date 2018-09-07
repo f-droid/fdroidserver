@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+set -x
+
+export CLASSPATH=/usr/share/java/commons-lang3.jar:.
+
+cd $(dirname $0)
+javac -classpath $CLASSPATH RandomPackageNames.java
+java -classpath $CLASSPATH  RandomPackageNames

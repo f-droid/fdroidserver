@@ -75,6 +75,10 @@ VERCODE_OPERATION_RE = re.compile(r'^([ 0-9/*+-]|%c)+$')
 CERT_PATH_REGEX = re.compile(r'^META-INF/.*\.(DSA|EC|RSA)$')
 APK_NAME_REGEX = re.compile(r'^([a-zA-Z][\w.]*)_(-?[0-9]+)_?([0-9a-f]{7})?\.apk')
 STANDARD_FILE_NAME_REGEX = re.compile(r'^(\w[\w.]*)_(-?[0-9]+)\.\w+')
+FDROID_PACKAGE_NAME_REGEX = re.compile(r'''^[a-f0-9]+$''', re.IGNORECASE)
+STRICT_APPLICATION_ID_REGEX = re.compile(r'''(?:^[a-z_]+(?:\d*[a-zA-Z_]*)*)(?:\.[a-z_]+(?:\d*[a-zA-Z_]*)*)*$''')
+VALID_APPLICATION_ID_REGEX = re.compile(r'''(?:^[a-z_]+(?:\d*[a-zA-Z_]*)*)(?:\.[a-z_]+(?:\d*[a-zA-Z_]*)*)*$''',
+                                        re.IGNORECASE)
 
 MAX_VERSION_CODE = 0x7fffffff  # Java's Integer.MAX_VALUE (2147483647)
 
@@ -1516,8 +1520,12 @@ def parse_androidmanifests(paths, app):
     if max_version is None:
         max_version = "Unknown"
 
-    if max_package and not is_valid_java_package_name(max_package):
-        raise FDroidException(_("Invalid package name {0}").format(max_package))
+    if max_package:
+        msg = _("Invalid package name {0}").format(max_package)
+        if not is_valid_package_name(max_package):
+            raise FDroidException(msg)
+        elif not is_strict_application_id(max_package):
+            logging.warning(msg)
 
     return (max_version, max_vercode, max_package)
 
@@ -1530,12 +1538,25 @@ def is_valid_package_name(name):
     files use the SHA-256 sum.
 
     """
-    return re.match("^([a-f0-9]+|[A-Za-z_][A-Za-z_0-9.]+)$", name)
+    return VALID_APPLICATION_ID_REGEX.match(name) is not None \
+        or FDROID_PACKAGE_NAME_REGEX.match(name) is not None
 
 
-def is_valid_java_package_name(name):
-    """Check whether name is a valid Java package name aka Application ID"""
-    return re.match("^[A-Za-z_][A-Za-z_0-9.]+$", name)
+def is_strict_application_id(name):
+    """Check whether name is a valid Android Application ID
+
+    The Android ApplicationID is basically a Java Package Name, but
+    with more restrictive naming rules:
+
+    * It must have at least two segments (one or more dots).
+    * Each segment must start with a letter.
+    * All characters must be alphanumeric or an underscore [a-zA-Z0-9_].
+
+    https://developer.android.com/studio/build/application-id
+
+    """
+    return STRICT_APPLICATION_ID_REGEX.match(name) is not None \
+        and '.' in name
 
 
 def getsrclib(spec, srclib_dir, subdir=None, basepath=False,

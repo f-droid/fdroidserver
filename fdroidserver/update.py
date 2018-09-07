@@ -23,8 +23,10 @@ import sys
 import os
 import shutil
 import glob
+import logging
 import re
 import socket
+import warnings
 import zipfile
 import hashlib
 import json
@@ -36,15 +38,16 @@ from argparse import ArgumentParser
 import collections
 from binascii import hexlify
 
-from PIL import Image, PngImagePlugin
-import logging
-
 from . import _
 from . import common
 from . import index
 from . import metadata
 from .common import SdkToolsPopen
 from .exception import BuildException, FDroidException
+
+from PIL import Image, PngImagePlugin
+warnings.simplefilter('error', Image.DecompressionBombWarning)
+Image.MAX_IMAGE_PIXELS = 0xffffff  # 4096x4096
 
 METADATA_VERSION = 20
 
@@ -1064,9 +1067,12 @@ def scan_apk(apk_file):
     else:
         scan_apk_aapt(apk, apk_file)
 
-    if not common.is_valid_java_package_name(apk['packageName']):
+    if not common.is_valid_package_name(apk['packageName']):
         raise BuildException(_("{appid} from {path} is not a valid Java Package Name!")
                              .format(appid=apk['packageName'], path=apk_file))
+    elif not common.is_strict_application_id(apk['packageName']):
+        logging.warning(_("{appid} from {path} is not a valid Java Package Name!")
+                        .format(appid=apk['packageName'], path=apk_file))
 
     # Get the signature, or rather the signing key fingerprints
     logging.debug('Getting signature of {0}'.format(os.path.basename(apk_file)))
