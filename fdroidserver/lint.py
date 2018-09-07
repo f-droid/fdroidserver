@@ -488,7 +488,13 @@ def check_for_unsupported_metadata_files(basedir=""):
             if not exists:
                 print(_('"%s/" has no matching metadata file!') % f)
                 return_value = True
-        elif not os.path.splitext(f)[1][1:] in formats:
+        elif os.path.splitext(f)[1][1:] in formats:
+            packageName = os.path.splitext(os.path.basename(f))[0]
+            if not common.is_valid_package_name(packageName):
+                print('"' + packageName + '" is an invalid package name!\n'
+                      + 'https://developer.android.com/studio/build/application-id')
+                return_value = True
+        else:
             print('"' + f.replace(basedir, '')
                   + '" is not a supported file format: (' + ','.join(formats) + ')')
             return_value = True
