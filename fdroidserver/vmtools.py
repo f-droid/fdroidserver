@@ -184,7 +184,7 @@ class FDroidBuildVm():
         global lock
         with lock:
             try:
-                self.vgrnt.up(provision=provision)
+                self.vgrnt.up(provision=provision, provider=self.provider)
                 self.srvuuid = self._vagrant_fetch_uuid()
             except subprocess.CalledProcessError as e:
                 raise FDroidBuildVmException("could not bring up vm '%s'" % self.srvname) from e
