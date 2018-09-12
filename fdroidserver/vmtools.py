@@ -149,8 +149,25 @@ def get_build_vm(srvdir, provider=None):
         logging.debug('build vm provider lookup found \'virtualbox\'')
         return VirtualboxBuildVm(abssrvdir)
 
-    logging.info('build vm provider lookup could not determine provider, defaulting to \'virtualbox\'')
-    return VirtualboxBuildVm(abssrvdir)
+    # try guessing provider from available buildserver boxes
+    available_boxes = []
+    import vagrant
+    boxes = vagrant.Vagrant().box_list()
+    for box in boxes:
+        if box.name == "buildserver":
+            available_boxes.append(box.provider)
+    if "libvirt" in available_boxes and "virtualbox" in available_boxes:
+        logging.info('basebox lookup found virtualbox and libvirt boxes, defaulting to \'virtualbox\'')
+        return VirtualboxBuildVm(abssrvdir)
+    elif "libvirt" in available_boxes:
+        logging.info('\'libvirt\' buildserver box available, using that')
+        return LibvirtBuildVm(abssrvdir)
+    elif "virtualbox" in available_boxes:
+        logging.info('\'virtualbox\' buildserver box available, using that')
+        return VirtualboxBuildVm(abssrvdir)
+    else:
+        logging.error('No available \'buildserver\' box. Cannot proceed')
+        os._exit(1)
 
 
 class FDroidBuildVmException(FDroidException):
