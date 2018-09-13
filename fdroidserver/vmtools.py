@@ -103,7 +103,7 @@ def get_build_vm(srvdir, provider=None):
 
     :param srvdir: path to a directory which contains a Vagrantfile
     :param provider: optionally this parameter allows specifiying an
-        spesific vagrant provider.
+        specific vagrant provider.
     :returns: FDroidBuildVm instance.
     """
     abssrvdir = abspath(srvdir)
@@ -163,7 +163,7 @@ class FDroidBuildVm():
     Use the factory method `fdroidserver.vmtools.get_build_vm()` for
     getting correct instances of this class.
 
-    This is intended to be a hypervisor independant, fault tolerant
+    This is intended to be a hypervisor independent, fault tolerant
     wrapper around the vagrant functions we use.
     """
     def __init__(self, srvdir):
@@ -184,7 +184,7 @@ class FDroidBuildVm():
         global lock
         with lock:
             try:
-                self.vgrnt.up(provision=provision)
+                self.vgrnt.up(provision=provision, provider=self.provider)
                 self.srvuuid = self._vagrant_fetch_uuid()
             except subprocess.CalledProcessError as e:
                 raise FDroidBuildVmException("could not bring up vm '%s'" % self.srvname) from e
@@ -451,7 +451,7 @@ class LibvirtBuildVm(FDroidBuildVm):
         try:
             _check_call(['virsh', '-c', 'qemu:///system', 'snapshot-create-as', self.srvname, snapshot_name])
         except subprocess.CalledProcessError as e:
-            raise FDroidBuildVmException("could not cerate snapshot '%s' "
+            raise FDroidBuildVmException("could not create snapshot '%s' "
                                          "of libvirt vm '%s'"
                                          % (snapshot_name, self.srvname)) from e
 
