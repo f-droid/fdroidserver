@@ -67,8 +67,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
 
     try:
         paramiko
-    except NameError:
-        raise BuildException("Paramiko is required to use the buildserver")
+    except NameError as e:
+        raise BuildException("Paramiko is required to use the buildserver") from e
     if options.verbose:
         logging.getLogger("paramiko").setLevel(logging.INFO)
     else:
@@ -79,11 +79,18 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
     output = None
     try:
         if not buildserverid:
-            buildserverid = subprocess.check_output(['vagrant', 'ssh', '-c',
-                                                     'cat /home/vagrant/buildserverid'],
-                                                    cwd='builder').strip().decode()
-            logging.debug(_('Fetched buildserverid from VM: {buildserverid}')
-                          .format(buildserverid=buildserverid))
+            try:
+                buildserverid = subprocess.check_output(['vagrant', 'ssh', '-c',
+                                                         'cat /home/vagrant/buildserverid'],
+                                                        cwd='builder').strip().decode()
+                logging.debug(_('Fetched buildserverid from VM: {buildserverid}')
+                              .format(buildserverid=buildserverid))
+            except Exception as e:
+                if type(buildserverid) is not str or not re.match('^[0-9a-f]{40}$', buildserverid):
+                    logging.info(subprocess.check_output(['vagrant', 'status'], cwd="builder"))
+                    raise FDroidException("Could not obtain buildserverid from buldserver VM. "
+                                          "(stored inside the buildserver VM at '/home/vagrant/buildserverid') "
+                                          "Please reset your buildserver, the setup VM is broken.") from e
 
         # Open SSH connection...
         logging.info("Connecting to virtual machine...")
@@ -1160,7 +1167,7 @@ def main():
                             net.download_file(url, local_filename=of)
                         except requests.exceptions.HTTPError as e:
                             raise FDroidException(
-                                'Downloading Binaries from %s failed. %s' % (url, e))
+                                'Downloading Binaries from %s failed.' % url) from e
 
                         # Now we check whether the build can be verified to
                         # match the supplied binary or not. Should the

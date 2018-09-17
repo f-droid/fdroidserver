@@ -32,12 +32,7 @@ trap cleanup_all INT TERM EXIT
 set -e
 set -x
 
-# make sure we have the vagrant box image cached
 test -e ~/.cache/fdroidserver || mkdir -p ~/.cache/fdroidserver
-cd ~/.cache/fdroidserver
-wget --tries=1 --timeout=5 --continue https://f-droid.org/jessie64.box || true
-echo "de3e3c4a9c13e8c015e30edeea0f583b195d1ee8ff9ad4814e933bbfb560200f  jessie64.box" > jessie64.box.sha256
-sha256sum -c jessie64.box.sha256
 
 # redirect homes to be in the git repo, so they'll get cleaned and reset
 export XDG_CONFIG_HOME=$WORKSPACE
@@ -60,6 +55,8 @@ virsh -c qemu:///system vol-delete --pool default \
 virsh -c qemu:///system vol-delete --pool default \
       /var/lib/libvirt/images/jessie64_vagrant_box_image_0.img || true
 rm -rf "$WORKSPACE"/../*/.testfiles
+
+vagrant box add --force fdroid-stretch64 ~/.cache/fdroidserver/fdroid-stretch64-libvirt.box
 
 cd $WORKSPACE
 echo "debian_mirror = 'https://deb.debian.org/debian/'" > $WORKSPACE/makebuildserver.config.py

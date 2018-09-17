@@ -2,17 +2,12 @@
 #
 # You may want to alter these before running ./makebuildserver
 
-# Name of the base box to use
-# basebox = "jessie64"
-
-# Location where testing32.box can be found, if you don't already have
-# it. For security reasons, it's recommended that you make your own
-# in a secure environment using trusted media (see the manual) but
-# you can use this default if you like...
-# baseboxurl = "https://f-droid.org/jessie64.box"
+# Name of the Vagrant basebox to use, by default it will be downloaded
+# from Vagrant Cloud.  For release builds setup, generate the basebox
+# locally using https://gitlab.com/fdroid/basebox, add it to Vagrant,
+# then set this to the local basebox name.
 #
-# or if you have a cached local copy, you can use that first:
-# baseboxurl = ["file:///home/fdroid/fdroidserver/cache/jessie64.box", "https://f-droid.org/jessie64.box"]
+# basebox = "fdroid-stretch64"
 
 # In the process of setting up the build server, many gigs of files
 # are downloaded (Android SDK components, gradle, etc).  These are

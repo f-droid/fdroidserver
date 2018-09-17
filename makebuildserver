@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import pathlib
 import re
 import requests
 import stat
@@ -56,11 +55,8 @@ cachedir = os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver')
 logger.debug('cachedir set to: %s', cachedir)
 
 config = {
-    'basebox': 'jessie64',
-    'baseboxurl': [
-        pathlib.Path(os.path.join(cachedir, 'jessie64.box')).as_uri()
-    ],
-    'debian_mirror': 'http://http.debian.net/debian/',
+    'basebox': 'fdroid-stretch64',
+    'debian_mirror': 'http://deb.debian.org/debian/',
     'apt_package_cache': False,
     'copy_caches_from_host': False,
     'boot_timeout': 600,
@@ -535,23 +531,25 @@ def main():
         with open(vf, 'w', encoding='utf-8') as f:
             yaml.dump(config, f)
 
-    if config['vm_provider'] == 'libvirt':
-        available_providers = [x.provider for x in v.box_list() if x.name == config['basebox']]
-        found_basebox = len(available_providers) > 0
-        needs_mutate = 'libvirt' not in available_providers
-        if not found_basebox:
-            if isinstance(config['baseboxurl'], str):
-                baseboxurl = config['baseboxurl']
-            else:
-                baseboxurl = config['baseboxurl'][0]
-            logger.info('Adding %s from %s', config['basebox'], baseboxurl)
-            v.box_add(config['basebox'], baseboxurl)
-            needs_mutate = True
-        if needs_mutate:
-            logger.info('Converting %s to libvirt format', config['basebox'])
-            v._call_vagrant_command(['mutate', config['basebox'], 'libvirt'])
-            logger.info('Removing virtualbox format copy of %s', config['basebox'])
-            v.box_remove(config['basebox'], 'virtualbox')
+    # Check if selected provider is supported
+    if config['vm_provider'] not in ['libvirt', 'virtualbox']:
+        logger.critical("Currently selected VM provider '{vm_provider}' "
+                        "is not supported. (please choose from: "
+                        "virtualbox, libvirt)"
+                        .format(vm_provider=config['cm_provider']))
+        sys.exit(1)
+    # Check if selected basebox is available
+    available_boxes_by_provider = [x.name for x in v.box_list() if x.provider == config['vm_provider']]
+    if '/' not in config['basebox'] and config['basebox'] not in available_boxes_by_provider:
+        logger.critical("Vagrant box '{basebox}' not available "
+                        "for '{vm_provider}' VM provider. "
+                        "Please make sure it's added to vagrant. "
+                        "(If you need a basebox to begin with, "
+                        "here is how we're bootstrapping it: "
+                        "https://gitlab.com/fdroid/basebox)"
+                        .format(vm_provider=config['vm_provider'],
+                                basebox=config['basebox']))
+        sys.exit(1)
 
     logger.info("Configuring build server VM")
     debug_log_vagrant_vm(serverdir, config)
@@ -559,7 +557,7 @@ def main():
         v.up(provision=True)
     except subprocess.CalledProcessError:
         debug_log_vagrant_vm(serverdir, config)
-        logger.error("'vagrant up' failed, is the base box missing?")
+        logger.error("'vagrant up' failed.")
         sys.exit(1)
 
     if config['copy_caches_from_host']:
