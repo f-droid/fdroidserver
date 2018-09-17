@@ -59,7 +59,7 @@ APK_VERCODE_PAT = re.compile(".*versionCode='([0-9]*)'.*")
 APK_VERNAME_PAT = re.compile(".*versionName='([^']*)'.*")
 APK_LABEL_ICON_PAT = re.compile(r".*\s+label='(.*)'\s+icon='(.*?)'")
 APK_SDK_VERSION_PAT = re.compile(".*'([0-9]*)'.*")
-APK_PERMISSION_PAT = re.compile(".*(name='(.*)')(.*maxSdkVersion='(.*)')?.*")
+APK_PERMISSION_PAT = re.compile(r".*(name='(.*)')(.*maxSdkVersion='(.*)')?.*")
 APK_FEATURE_PAT = re.compile(".*name='([^']*)'.*")
 
 screen_densities = ['65534', '640', '480', '320', '240', '160', '120']
@@ -1176,22 +1176,22 @@ def scan_apk_aapt(apk, apkfile):
             for arch in line[13:].split(' '):
                 apk['nativecode'].append(arch[1:-1])
         elif line.startswith('uses-permission:'):
-            perm_match = re.match(APK_PERMISSION_PAT, line).groupdict()
-            if perm_match['maxSdkVersion']:
-                perm_match['maxSdkVersion'] = int(perm_match['maxSdkVersion'])
+            perm_match = re.match(APK_PERMISSION_PAT, line).groups()
+            if perm_match[2]:
+                perm_match[2] = int(perm_match[2])  # maxSdkVersion is an int
             permission = UsesPermission(
-                perm_match['name'],
-                perm_match['maxSdkVersion']
+                perm_match[1],  # name
+                perm_match[2],  # maxSdkVersion
             )
 
             apk['uses-permission'].append(permission)
         elif line.startswith('uses-permission-sdk-23:'):
-            perm_match = re.match(APK_PERMISSION_PAT, line).groupdict()
-            if perm_match['maxSdkVersion']:
-                perm_match['maxSdkVersion'] = int(perm_match['maxSdkVersion'])
+            perm_match = re.match(APK_PERMISSION_PAT, line).groups()
+            if perm_match[2]:
+                perm_match[2] = int(perm_match[2])  # maxSdkVersion is an int
             permission_sdk_23 = UsesPermissionSdk23(
-                perm_match['name'],
-                perm_match['maxSdkVersion']
+                perm_match[1],  # name
+                perm_match[2],  # maxSdkVersion
             )
 
             apk['uses-permission-sdk-23'].append(permission_sdk_23)
