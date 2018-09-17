@@ -338,57 +338,82 @@ class UpdateTest(unittest.TestCase):
         if os.path.basename(os.getcwd()) != 'tests':
             raise Exception('This test must be run in the "tests/" subdir')
 
-        apk_info = fdroidserver.update.scan_apk('repo/souch.smsbypass_9.apk')
-        self.assertIsNone(apk_info.get('maxSdkVersion'))
-        self.assertEqual(apk_info.get('versionName'), '0.9')
+        try:
+            config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
+        except fdroidserver.exception.FDroidException:
+            pass  # aapt is not required if androguard is present
 
-        apk_info = fdroidserver.update.scan_apk('repo/duplicate.permisssions_9999999.apk')
-        self.assertEqual(apk_info.get('versionName'), '')
-        self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_launcher.png',
-                                                 '-1': 'res/drawable/ic_launcher.png'})
+        for use_androguard in (True, False):
+            print('USE_ANDROGUARD', use_androguard)
+            if use_androguard:
+                try:
+                    import androguard
+                    androguard
 
-        apk_info = fdroidserver.update.scan_apk('org.dyndns.fules.ck_20.apk')
-        self.assertEqual(apk_info['icons_src'], {'240': 'res/drawable-hdpi-v4/icon_launcher.png',
-                                                 '120': 'res/drawable-ldpi-v4/icon_launcher.png',
-                                                 '160': 'res/drawable-mdpi-v4/icon_launcher.png',
-                                                 '-1': 'res/drawable-mdpi-v4/icon_launcher.png'})
-        self.assertEqual(apk_info['icons'], {})
-        self.assertEqual(apk_info['features'], [])
-        self.assertEqual(apk_info['antiFeatures'], set())
-        self.assertEqual(apk_info['versionName'], 'v1.6pre2')
-        self.assertEqual(apk_info['hash'],
-                         '897486e1f857c6c0ee32ccbad0e1b8cd82f6d0e65a44a23f13f852d2b63a18c8')
-        self.assertEqual(apk_info['packageName'], 'org.dyndns.fules.ck')
-        self.assertEqual(apk_info['versionCode'], 20)
-        self.assertEqual(apk_info['size'], 132453)
-        self.assertEqual(apk_info['nativecode'],
-                         ['arm64-v8a', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'x86', 'x86_64'])
-        self.assertEqual(apk_info['minSdkVersion'], '7')
-        self.assertEqual(apk_info['sig'], '9bf7a6a67f95688daec75eab4b1436ac')
-        self.assertEqual(apk_info['hashType'], 'sha256')
-        self.assertEqual(apk_info['targetSdkVersion'], '8')
+                    def func():
+                        return True
+                    fdroidserver.common.use_androguard = func
+                except ImportError:
+                    continue
+            else:
+                if 'aapt' in config:
+                    def func():
+                        return False
+                    fdroidserver.common.use_androguard = func
+                else:
+                    continue
 
-        apk_info = fdroidserver.update.scan_apk('org.bitbucket.tickytacky.mirrormirror_4.apk')
-        self.assertEqual(apk_info.get('versionName'), '1.0.3')
-        self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable-mdpi/mirror.png',
-                                                 '-1': 'res/drawable-mdpi/mirror.png'})
+            apk_info = fdroidserver.update.scan_apk('repo/souch.smsbypass_9.apk')
+            self.assertIsNone(apk_info.get('maxSdkVersion'))
+            self.assertEqual(apk_info.get('versionName'), '0.9')
 
-        apk_info = fdroidserver.update.scan_apk('repo/info.zwanenburg.caffeinetile_4.apk')
-        self.assertEqual(apk_info.get('versionName'), '1.3')
-        self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_coffee_on.xml',
-                                                 '-1': 'res/drawable/ic_coffee_on.xml'})
+            apk_info = fdroidserver.update.scan_apk('repo/duplicate.permisssions_9999999.apk')
+            self.assertEqual(apk_info.get('versionName'), '')
+            self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_launcher.png',
+                                                     '-1': 'res/drawable/ic_launcher.png'})
 
-        apk_info = fdroidserver.update.scan_apk('repo/com.politedroid_6.apk')
-        self.assertEqual(apk_info.get('versionName'), '1.5')
-        self.assertEqual(apk_info['icons_src'], {'120': 'res/drawable-ldpi-v4/icon.png',
-                                                 '160': 'res/drawable-mdpi-v4/icon.png',
-                                                 '240': 'res/drawable-hdpi-v4/icon.png',
-                                                 '320': 'res/drawable-xhdpi-v4/icon.png',
-                                                 '-1': 'res/drawable-mdpi-v4/icon.png'})
+            apk_info = fdroidserver.update.scan_apk('org.dyndns.fules.ck_20.apk')
+            self.assertEqual(apk_info['icons_src'], {'240': 'res/drawable-hdpi-v4/icon_launcher.png',
+                                                     '120': 'res/drawable-ldpi-v4/icon_launcher.png',
+                                                     '160': 'res/drawable-mdpi-v4/icon_launcher.png',
+                                                     '-1': 'res/drawable-mdpi-v4/icon_launcher.png'})
+            self.assertEqual(apk_info['icons'], {})
+            self.assertEqual(apk_info['features'], [])
+            self.assertEqual(apk_info['antiFeatures'], set())
+            self.assertEqual(apk_info['versionName'], 'v1.6pre2')
+            self.assertEqual(apk_info['hash'],
+                             '897486e1f857c6c0ee32ccbad0e1b8cd82f6d0e65a44a23f13f852d2b63a18c8')
+            self.assertEqual(apk_info['packageName'], 'org.dyndns.fules.ck')
+            self.assertEqual(apk_info['versionCode'], 20)
+            self.assertEqual(apk_info['size'], 132453)
+            self.assertEqual(apk_info['nativecode'],
+                             ['arm64-v8a', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'x86', 'x86_64'])
+            self.assertEqual(apk_info['minSdkVersion'], '7')
+            self.assertEqual(apk_info['sig'], '9bf7a6a67f95688daec75eab4b1436ac')
+            self.assertEqual(apk_info['hashType'], 'sha256')
+            self.assertEqual(apk_info['targetSdkVersion'], '8')
 
-        apk_info = fdroidserver.update.scan_apk('SpeedoMeterApp.main_1.apk')
-        self.assertEqual(apk_info.get('versionName'), '1.0')
-        self.assertEqual(apk_info['icons_src'], {})
+            apk_info = fdroidserver.update.scan_apk('org.bitbucket.tickytacky.mirrormirror_4.apk')
+            self.assertEqual(apk_info.get('versionName'), '1.0.3')
+            self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable-mdpi/mirror.png',
+                                                     '-1': 'res/drawable-mdpi/mirror.png'})
+
+            apk_info = fdroidserver.update.scan_apk('repo/info.zwanenburg.caffeinetile_4.apk')
+            self.assertEqual(apk_info.get('versionName'), '1.3')
+            self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_coffee_on.xml',
+                                                     '-1': 'res/drawable/ic_coffee_on.xml'})
+
+            apk_info = fdroidserver.update.scan_apk('repo/com.politedroid_6.apk')
+            self.assertEqual(apk_info.get('versionName'), '1.5')
+            self.assertEqual(apk_info['icons_src'], {'120': 'res/drawable-ldpi-v4/icon.png',
+                                                     '160': 'res/drawable-mdpi-v4/icon.png',
+                                                     '240': 'res/drawable-hdpi-v4/icon.png',
+                                                     '320': 'res/drawable-xhdpi-v4/icon.png',
+                                                     '-1': 'res/drawable-mdpi-v4/icon.png'})
+
+            apk_info = fdroidserver.update.scan_apk('SpeedoMeterApp.main_1.apk')
+            self.assertEqual(apk_info.get('versionName'), '1.0')
+            self.assertEqual(apk_info['icons_src'], {})
 
     def test_scan_apk_no_sig(self):
         config = dict()
