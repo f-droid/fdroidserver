@@ -2128,6 +2128,19 @@ def get_apk_id_aapt(apkfile):
                           .format(apkfilename=apkfile))
 
 
+def get_native_code(apkfile):
+    """aapt checks if there are architecture folders under the lib/ folder
+    so we are simulating the same behaviour"""
+    arch_re = re.compile("^lib/(.*)/.*$")
+    archset = set()
+    with ZipFile(apkfile) as apk:
+        for filename in apk.namelist():
+            m = arch_re.match(filename)
+            if m:
+                archset.add(m.group(1))
+    return sorted(list(archset))
+
+
 def get_minSdkVersion_aapt(apkfile):
     """Extract the minimum supported Android SDK from an APK using aapt
 

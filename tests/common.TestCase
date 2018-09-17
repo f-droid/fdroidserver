@@ -636,6 +636,37 @@ class CommonTest(unittest.TestCase):
                 else:
                     self.fail('could not parse aapt output: {}'.format(f))
 
+    def test_get_native_code(self):
+        testcases = [
+            ('repo/obb.main.twoversions_1101613.apk', []),
+            ('org.bitbucket.tickytacky.mirrormirror_1.apk', []),
+            ('org.bitbucket.tickytacky.mirrormirror_2.apk', []),
+            ('org.bitbucket.tickytacky.mirrormirror_3.apk', []),
+            ('org.bitbucket.tickytacky.mirrormirror_4.apk', []),
+            ('org.dyndns.fules.ck_20.apk', ['arm64-v8a', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'x86', 'x86_64']),
+            ('urzip.apk', []),
+            ('urzip-badcert.apk', []),
+            ('urzip-badsig.apk', []),
+            ('urzip-release.apk', []),
+            ('urzip-release-unsigned.apk', []),
+            ('repo/com.politedroid_3.apk', []),
+            ('repo/com.politedroid_4.apk', []),
+            ('repo/com.politedroid_5.apk', []),
+            ('repo/com.politedroid_6.apk', []),
+            ('repo/duplicate.permisssions_9999999.apk', []),
+            ('repo/info.zwanenburg.caffeinetile_4.apk', []),
+            ('repo/obb.main.oldversion_1444412523.apk', []),
+            ('repo/obb.mainpatch.current_1619_another-release-key.apk', []),
+            ('repo/obb.mainpatch.current_1619.apk', []),
+            ('repo/obb.main.twoversions_1101613.apk', []),
+            ('repo/obb.main.twoversions_1101615.apk', []),
+            ('repo/obb.main.twoversions_1101617.apk', []),
+            ('repo/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk', []),
+        ]
+        for apkfilename, native_code in testcases:
+            nc = fdroidserver.common.get_native_code(apkfilename)
+            self.assertEqual(native_code, nc)
+
     def test_get_minSdkVersion_aapt(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
