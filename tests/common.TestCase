@@ -2,6 +2,7 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
+import glob
 import inspect
 import logging
 import optparse
@@ -570,7 +571,7 @@ class CommonTest(unittest.TestCase):
             print('\n\nSKIPPING test_sign_apk min SDK check, aapt is not installed!\n')
             return
 
-    def test_get_api_id(self):
+    def test_get_apk_id(self):
 
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -608,7 +609,6 @@ class CommonTest(unittest.TestCase):
             ('repo/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk', 'info.guardianproject.urzip', '100', '0.1'),
         ]
         for apkfilename, appid, versionCode, versionName in testcases:
-            print('\n\nAPKFILENAME\n', apkfilename)
             if 'aapt' in config:
                 a, vc, vn = fdroidserver.common.get_apk_id_aapt(apkfilename)
                 self.assertEqual(appid, a)
@@ -622,6 +622,19 @@ class CommonTest(unittest.TestCase):
 
         with self.assertRaises(FDroidException):
             fdroidserver.common.get_apk_id('nope')
+
+    def test_get_apk_id_aapt_regex(self):
+        files = glob.glob(os.path.join(self.basedir, 'build-tools', '[1-9]*.*', '*.txt'))
+        self.assertNotEqual(0, len(files))
+        for f in files:
+            appid, versionCode = os.path.splitext(os.path.basename(f))[0][12:].split('_')
+            with open(f) as fp:
+                m = fdroidserver.common.APK_ID_TRIPLET_REGEX.match(fp.read())
+                if m:
+                    self.assertEqual(appid, m.group(1))
+                    self.assertEqual(versionCode, m.group(2))
+                else:
+                    self.fail('could not parse aapt output: {}'.format(f))
 
     def test_get_minSdkVersion_aapt(self):
         config = dict()

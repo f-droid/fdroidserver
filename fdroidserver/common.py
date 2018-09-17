@@ -74,6 +74,7 @@ VERCODE_OPERATION_RE = re.compile(r'^([ 0-9/*+-]|%c)+$')
 # A signature block file with a .DSA, .RSA, or .EC extension
 CERT_PATH_REGEX = re.compile(r'^META-INF/.*\.(DSA|EC|RSA)$')
 APK_NAME_REGEX = re.compile(r'^([a-zA-Z][\w.]*)_(-?[0-9]+)_?([0-9a-f]{7})?\.apk')
+APK_ID_TRIPLET_REGEX = re.compile(r"^package: name='(\w[^']*)' versionCode='([^']+)' versionName='([^']*)'")
 STANDARD_FILE_NAME_REGEX = re.compile(r'^(\w[\w.]*)_(-?[0-9]+)\.\w+')
 FDROID_PACKAGE_NAME_REGEX = re.compile(r'''^[a-f0-9]+$''', re.IGNORECASE)
 STRICT_APPLICATION_ID_REGEX = re.compile(r'''(?:^[a-z_]+(?:\d*[a-zA-Z_]*)*)(?:\.[a-z_]+(?:\d*[a-zA-Z_]*)*)*$''')
@@ -2118,12 +2119,11 @@ def get_apk_id_androguard(apkfile):
 
 
 def get_apk_id_aapt(apkfile):
-    r = re.compile("^package: name='(?P<appid>.*)' versionCode='(?P<vercode>.*)' versionName='(?P<vername>.*?)'(?: platformBuildVersionName='.*')?")
     p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
     for line in p.output.splitlines():
-        m = r.match(line)
+        m = APK_ID_TRIPLET_REGEX.match(line)
         if m:
-            return m.group('appid'), m.group('vercode'), m.group('vername')
+            return m.group(1), m.group(2), m.group(3)
     raise FDroidException(_("Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'")
                           .format(apkfilename=apkfile))
 
