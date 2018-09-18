@@ -6,8 +6,10 @@
 # from Vagrant Cloud.  For release builds setup, generate the basebox
 # locally using https://gitlab.com/fdroid/basebox, add it to Vagrant,
 # then set this to the local basebox name.
+# This defaults to "fdroid/basebox-stretch64" which will download a
+# prebuilt basebox from https://app.vagrantup.com/fdroid.
 #
-# basebox = "fdroid-stretch64"
+# basebox = "basebox-stretch64"
 
 # In the process of setting up the build server, many gigs of files
 # are downloaded (Android SDK components, gradle, etc).  These are
