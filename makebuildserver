@@ -55,7 +55,7 @@ cachedir = os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver')
 logger.debug('cachedir set to: %s', cachedir)
 
 config = {
-    'basebox': 'fdroid-stretch64',
+    'basebox': 'fdroid/basebox-stretch64',
     'debian_mirror': 'http://deb.debian.org/debian/',
     'apt_package_cache': False,
     'copy_caches_from_host': False,
