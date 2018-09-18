@@ -2120,10 +2120,9 @@ def get_apk_id_androguard(apkfile):
 
 def get_apk_id_aapt(apkfile):
     p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
-    for line in p.output.splitlines():
-        m = APK_ID_TRIPLET_REGEX.match(line)
-        if m:
-            return m.group(1), m.group(2), m.group(3)
+    m = APK_ID_TRIPLET_REGEX.match(p.output[0:p.output.index('\n')])
+    if m:
+        return m.group(1), m.group(2), m.group(3)
     raise FDroidException(_("Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'")
                           .format(apkfilename=apkfile))
 
