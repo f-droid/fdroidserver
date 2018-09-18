@@ -45,7 +45,7 @@ debian_testing:
     - apt-get -qy update
     - apt-get -qy dist-upgrade
     - apt-get -qy install --no-install-recommends
-        fdroidserver git gnupg python3-setuptools
+        fdroidserver git gnupg python3-defusedxml python3-setuptools
     - sed -i -e 's,testing,sid,g' -e  's,testing,sid,g' /etc/apt/sources.list
     - apt-get -qy update
     - apt-get install -y --no-install-recommends aapt androguard android-platform-tools-base zipalign
@@ -72,7 +72,7 @@ ubuntu_lts:
     - echo "deb http://ppa.launchpad.net/fdroid/fdroidserver/ubuntu $RELEASE main" >> /etc/apt/sources.list
     - apt-get -qy update
     - apt-get -qy dist-upgrade
-    - apt-get -qy install --install-recommends fdroidserver git python3-setuptools
+    - apt-get -qy install --install-recommends fdroidserver git python3-defusedxml python3-setuptools
     - export ANDROID_HOME=/usr/lib/android-sdk
     - export LANG=C.UTF-8
     - cd tests
