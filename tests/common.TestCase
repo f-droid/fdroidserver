@@ -131,7 +131,7 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common._add_java_paths_to_config(pathlist, config)
             self.assertEqual(config['java_paths']['8'], choice[1:])
 
-    def testIsApkDebuggable(self):
+    def test_is_apk_and_debuggable(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -150,6 +150,13 @@ class CommonTest(unittest.TestCase):
             debuggable = fdroidserver.common.is_apk_and_debuggable(apkfile)
             self.assertTrue(debuggable,
                             "debuggable APK state was not properly parsed!")
+            if 'aapt' in config:
+                self.assertTrue(fdroidserver.common.is_apk_and_debuggable_aapt(apkfile),
+                                'aapt parsing missed <application android:debuggable="">!')
+            if fdroidserver.common.use_androguard():
+                self.assertTrue(fdroidserver.common.is_apk_and_debuggable_androguard(apkfile),
+                                'androguard missed <application android:debuggable="">!')
+
         # these are set NOT debuggable
         testfiles = []
         testfiles.append(os.path.join(self.basedir, 'urzip-release.apk'))
@@ -158,6 +165,12 @@ class CommonTest(unittest.TestCase):
             debuggable = fdroidserver.common.is_apk_and_debuggable(apkfile)
             self.assertFalse(debuggable,
                              "debuggable APK state was not properly parsed!")
+            if 'aapt' in config:
+                self.assertFalse(fdroidserver.common.is_apk_and_debuggable_aapt(apkfile),
+                                 'aapt parsing missed <application android:debuggable="">!')
+            if fdroidserver.common.use_androguard():
+                self.assertFalse(fdroidserver.common.is_apk_and_debuggable_androguard(apkfile),
+                                 'androguard missed <application android:debuggable="">!')
 
     def test_is_valid_package_name(self):
         for name in ["cafebabe",

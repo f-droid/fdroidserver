@@ -2073,11 +2073,25 @@ def is_apk_and_debuggable_aapt(apkfile):
 
 
 def is_apk_and_debuggable_androguard(apkfile):
-    apkobject = _get_androguard_APK(apkfile)
-    if apkobject.is_valid_APK():
-        debuggable = apkobject.get_element("application", "debuggable")
-        if debuggable == 'true':
-            return True
+    """Parse only <application android:debuggable=""> from the APK"""
+    from androguard.core.bytecodes.axml import AXMLParser, format_value, START_TAG
+    with ZipFile(apkfile) as apk:
+        with apk.open('AndroidManifest.xml') as manifest:
+            axml = AXMLParser(manifest.read())
+            while axml.is_valid():
+                _type = next(axml)
+                if _type == START_TAG and axml.getName() == 'application':
+                    for i in range(0, axml.getAttributeCount()):
+                        name = axml.getAttributeName(i)
+                        if name == 'debuggable':
+                            _type = axml.getAttributeValueType(i)
+                            _data = axml.getAttributeValueData(i)
+                            value = format_value(_type, _data, lambda _: axml.getAttributeValue(i))
+                            if value == 'true':
+                                return True
+                            else:
+                                return False
+                    break
     return False
 
 
