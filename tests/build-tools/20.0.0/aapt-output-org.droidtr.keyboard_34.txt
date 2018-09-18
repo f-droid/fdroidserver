@@ -1,0 +1,16 @@
+package: name='org.droidtr.keyboard' versionCode='34' versionName='5.5'
+sdkVersion:'8'
+targetSdkVersion:'28'
+uses-permission:'android.permission.VIBRATE'
+application-label:'DroidTR keyboard'
+application-label-tr:'DroidTR Klavye'
+application-icon-160:'res/drawable/ic_launcher.png'
+application: label='DroidTR keyboard' icon='res/drawable/ic_launcher.png'
+uses-feature:'android.hardware.touchscreen'
+uses-implied-feature:'android.hardware.touchscreen','assumed you require a touch screen unless explicitly made optional'
+main
+ime
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--' 'tr'
+densities: '160'

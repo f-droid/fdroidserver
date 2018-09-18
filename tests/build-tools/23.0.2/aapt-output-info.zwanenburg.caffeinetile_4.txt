@@ -1,0 +1,16 @@
+package: name='info.zwanenburg.caffeinetile' versionCode='4' versionName='1.3' platformBuildVersionName='7.1.1'
+sdkVersion:'24'
+targetSdkVersion:'25'
+uses-permission: name='android.permission.WAKE_LOCK'
+application-label:'Caffeine Tile'
+application-icon-160:'res/drawable/ic_coffee_on.xml'
+application: label='Caffeine Tile' icon='res/drawable/ic_coffee_on.xml'
+feature-group: label=''
+  uses-feature: name='android.hardware.touchscreen'
+  uses-implied-feature: name='android.hardware.touchscreen' reason='default feature for all apps'
+other-activities
+other-services
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--'
+densities: '160'

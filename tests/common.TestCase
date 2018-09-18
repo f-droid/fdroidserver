@@ -2,6 +2,7 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
+import glob
 import inspect
 import logging
 import optparse
@@ -570,7 +571,7 @@ class CommonTest(unittest.TestCase):
             print('\n\nSKIPPING test_sign_apk min SDK check, aapt is not installed!\n')
             return
 
-    def test_get_api_id(self):
+    def test_get_apk_id(self):
 
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -608,7 +609,6 @@ class CommonTest(unittest.TestCase):
             ('repo/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk', 'info.guardianproject.urzip', '100', '0.1'),
         ]
         for apkfilename, appid, versionCode, versionName in testcases:
-            print('\n\nAPKFILENAME\n', apkfilename)
             if 'aapt' in config:
                 a, vc, vn = fdroidserver.common.get_apk_id_aapt(apkfilename)
                 self.assertEqual(appid, a)
@@ -622,6 +622,50 @@ class CommonTest(unittest.TestCase):
 
         with self.assertRaises(FDroidException):
             fdroidserver.common.get_apk_id('nope')
+
+    def test_get_apk_id_aapt_regex(self):
+        files = glob.glob(os.path.join(self.basedir, 'build-tools', '[1-9]*.*', '*.txt'))
+        self.assertNotEqual(0, len(files))
+        for f in files:
+            appid, versionCode = os.path.splitext(os.path.basename(f))[0][12:].split('_')
+            with open(f) as fp:
+                m = fdroidserver.common.APK_ID_TRIPLET_REGEX.match(fp.read())
+                if m:
+                    self.assertEqual(appid, m.group(1))
+                    self.assertEqual(versionCode, m.group(2))
+                else:
+                    self.fail('could not parse aapt output: {}'.format(f))
+
+    def test_get_native_code(self):
+        testcases = [
+            ('repo/obb.main.twoversions_1101613.apk', []),
+            ('org.bitbucket.tickytacky.mirrormirror_1.apk', []),
+            ('org.bitbucket.tickytacky.mirrormirror_2.apk', []),
+            ('org.bitbucket.tickytacky.mirrormirror_3.apk', []),
+            ('org.bitbucket.tickytacky.mirrormirror_4.apk', []),
+            ('org.dyndns.fules.ck_20.apk', ['arm64-v8a', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'x86', 'x86_64']),
+            ('urzip.apk', []),
+            ('urzip-badcert.apk', []),
+            ('urzip-badsig.apk', []),
+            ('urzip-release.apk', []),
+            ('urzip-release-unsigned.apk', []),
+            ('repo/com.politedroid_3.apk', []),
+            ('repo/com.politedroid_4.apk', []),
+            ('repo/com.politedroid_5.apk', []),
+            ('repo/com.politedroid_6.apk', []),
+            ('repo/duplicate.permisssions_9999999.apk', []),
+            ('repo/info.zwanenburg.caffeinetile_4.apk', []),
+            ('repo/obb.main.oldversion_1444412523.apk', []),
+            ('repo/obb.mainpatch.current_1619_another-release-key.apk', []),
+            ('repo/obb.mainpatch.current_1619.apk', []),
+            ('repo/obb.main.twoversions_1101613.apk', []),
+            ('repo/obb.main.twoversions_1101615.apk', []),
+            ('repo/obb.main.twoversions_1101617.apk', []),
+            ('repo/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk', []),
+        ]
+        for apkfilename, native_code in testcases:
+            nc = fdroidserver.common.get_native_code(apkfilename)
+            self.assertEqual(native_code, nc)
 
     def test_get_minSdkVersion_aapt(self):
         config = dict()

@@ -42,7 +42,7 @@ from . import net
 from . import metadata
 from . import scanner
 from . import vmtools
-from .common import FDroidPopen, SdkToolsPopen
+from .common import FDroidPopen
 from .exception import FDroidException, BuildException, VCSException
 
 try:
@@ -323,92 +323,28 @@ def transform_first_char(string, method):
     return method(string[0]) + string[1:]
 
 
-def has_native_code(apkobj):
-    """aapt checks if there are architecture folders under the lib/ folder
-    so we are simulating the same behaviour"""
-    arch_re = re.compile("^lib/(.*)/.*$")
-    arch = [file for file in apkobj.get_files() if arch_re.match(file)]
-    return False if not arch else True
-
-
-def get_apk_metadata_aapt(apkfile):
-    """aapt function to extract versionCode, versionName, packageName and nativecode"""
-    vercode = None
-    version = None
-    foundid = None
-    nativecode = None
-
-    p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
-
-    for line in p.output.splitlines():
-        if line.startswith("package:"):
-            pat = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
-            m = pat.match(line)
-            if m:
-                foundid = m.group(1)
-            pat = re.compile(".*versionCode='([0-9]*)'.*")
-            m = pat.match(line)
-            if m:
-                vercode = m.group(1)
-            pat = re.compile(".*versionName='([^']*)'.*")
-            m = pat.match(line)
-            if m:
-                version = m.group(1)
-        elif line.startswith("native-code:"):
-            nativecode = line[12:]
-
-    return vercode, version, foundid, nativecode
-
-
-def get_apk_metadata_androguard(apkfile):
-    """androguard function to extract versionCode, versionName, packageName and nativecode"""
-    try:
-        from androguard.core.bytecodes.apk import APK
-        apkobject = APK(apkfile)
-    except ImportError:
-        raise BuildException("androguard library is not installed and aapt binary not found")
-    except FileNotFoundError:
-        raise BuildException("Could not open apk file for metadata analysis")
-
-    if not apkobject.is_valid_APK():
-        raise BuildException("Invalid APK provided")
-
-    foundid = apkobject.get_package()
-    vercode = apkobject.get_androidversion_code()
-    version = apkobject.get_androidversion_name()
-    nativecode = has_native_code(apkobject)
-
-    return vercode, version, foundid, nativecode
-
-
 def get_metadata_from_apk(app, build, apkfile):
-    """get the required metadata from the built APK"""
+    """get the required metadata from the built APK
 
-    if common.SdkToolsPopen(['aapt', 'version'], output=False):
-        vercode, version, foundid, nativecode = get_apk_metadata_aapt(apkfile)
-    else:
-        vercode, version, foundid, nativecode = get_apk_metadata_androguard(apkfile)
+    versionName is allowed to be a blank string, i.e. ''
+    """
 
-    # Ignore empty strings or any kind of space/newline chars that we don't
-    # care about
-    if nativecode is not None:
-        nativecode = nativecode.strip()
-        nativecode = None if not nativecode else nativecode
+    appid, versionCode, versionName = common.get_apk_id(apkfile)
+    native_code = common.get_native_code(apkfile)
 
-    if build.buildjni and build.buildjni != ['no']:
-        if nativecode is None:
-            raise BuildException("Native code should have been built but none was packaged")
+    if build.buildjni and build.buildjni != ['no'] and not native_code:
+        raise BuildException("Native code should have been built but none was packaged")
     if build.novcheck:
-        vercode = build.versionCode
-        version = build.versionName
-    if not version or not vercode:
+        versionCode = build.versionCode
+        versionName = build.versionName
+    if not versionCode or versionName is None:
         raise BuildException("Could not find version information in build in output")
-    if not foundid:
+    if not appid:
         raise BuildException("Could not find package ID in output")
-    if foundid != app.id:
-        raise BuildException("Wrong package ID - build " + foundid + " but expected " + app.id)
+    if appid != app.id:
+        raise BuildException("Wrong package ID - build " + appid + " but expected " + app.id)
 
-    return vercode, version
+    return versionCode, versionName
 
 
 def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh):

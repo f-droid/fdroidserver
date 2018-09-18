@@ -1,0 +1,15 @@
+package: name='obb.main.twoversions' versionCode='1101615' versionName='0.1'
+sdkVersion:'4'
+targetSdkVersion:'18'
+application-label:'OBB Main Two Versions'
+application-icon-160:'res/drawable/ic_launcher.png'
+application: label='OBB Main Two Versions' icon='res/drawable/ic_launcher.png'
+launchable-activity: name='info.guardianproject.urzip.MainActivity'  label='OBB Main Two Versions' icon=''
+uses-feature:'android.hardware.touchscreen'
+uses-implied-feature:'android.hardware.touchscreen','assumed you require a touch screen unless explicitly made optional'
+main
+other-activities
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--'
+densities: '160'
