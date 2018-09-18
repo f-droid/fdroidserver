@@ -49,7 +49,7 @@ from PIL import Image, PngImagePlugin
 warnings.simplefilter('error', Image.DecompressionBombWarning)
 Image.MAX_IMAGE_PIXELS = 0xffffff  # 4096x4096
 
-METADATA_VERSION = 20
+METADATA_VERSION = 21
 
 # less than the valid range of versionCode, i.e. Java's Integer.MIN_VALUE
 UNSET_VERSION_CODE = -0x100000000
@@ -488,7 +488,7 @@ def write_cache(apkcache):
     class Encoder(json.JSONEncoder):
         def default(self, obj):
             if isinstance(obj, set):
-                return ['SET'] + list(obj)
+                return list(obj)
             elif isinstance(obj, datetime):
                 return obj.timestamp()
             return super().default(obj)
