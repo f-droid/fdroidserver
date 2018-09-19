@@ -17,7 +17,7 @@ printf 'APT::Periodic::Update-Package-Lists "0";\nAPT::Periodic::Unattended-Upgr
 
 if echo $debian_mirror | grep '^https' 2>&1 > /dev/null; then
     apt-get -y update
-    apt-get -y install apt-transport-https
+    apt-get -y install apt-transport-https ca-certificates
 fi
 
 sed -Ei "s,^deb [a-z]+://\S+,deb ${debian_mirror}," /etc/apt/sources.list
