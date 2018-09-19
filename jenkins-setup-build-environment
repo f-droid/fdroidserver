@@ -50,17 +50,23 @@ virsh -c qemu:///system undefine buildserver_default \
       --nvram --managed-save --remove-all-storage --snapshots-metadata || true
 virsh -c qemu:///system undefine builder_default \
       --nvram --managed-save --remove-all-storage --snapshots-metadata || true
+virsh -c qemu:///system undefine basebox-stretch64 \
+      --nvram --managed-save --remove-all-storage --snapshots-metadata || true
+
 virsh -c qemu:///system vol-delete --pool default \
       /var/lib/libvirt/images/buildserver_vagrant_box_image_0.img || true
 virsh -c qemu:///system vol-delete --pool default \
+      /var/lib/libvirt/images/basebox-stretch64_vagrant_box_image_0.img || true
+virsh -c qemu:///system vol-delete --pool default \
       /var/lib/libvirt/images/jessie64_vagrant_box_image_0.img || true
+
 rm -rf "$WORKSPACE"/../*/.testfiles
 
-vagrant box add --force fdroid-stretch64 ~/.cache/fdroidserver/fdroid-stretch64-libvirt.box
+vagrant box add --force basebox-stretch64 ~/.cache/fdroidserver/basebox-stretch64-libvirt.box
 
 cd $WORKSPACE
 echo "debian_mirror = 'https://deb.debian.org/debian/'" > $WORKSPACE/makebuildserver.config.py
-echo 'basebox = "fdroid-stretch64"' >> $WORKSPACE/makebuildserver.config.py
+echo 'basebox = "basebox-stretch64"' >> $WORKSPACE/makebuildserver.config.py
 echo "boot_timeout = 1200" >> $WORKSPACE/makebuildserver.config.py
 echo "apt_package_cache = True" >> $WORKSPACE/makebuildserver.config.py
 echo "copy_caches_from_host = True" >> $WORKSPACE/makebuildserver.config.py
