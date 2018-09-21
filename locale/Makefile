@@ -13,11 +13,17 @@ TEMPLATE = fdroidserver.pot
 
 VERSION = $(shell git describe)
 
+default:
+	@printf "Build the translation files using: ./setup.py compile_catalog\n\n"
+
+message:
+	@printf "\nYou probably want to use this instead: ./setup.py compile_catalog\n\n"
+
 # refresh everything from the source code
 update: $(POFILES)
 
 # generate .mo files from the .po files
-compile: $(MOFILES)
+compile: message $(MOFILES)
 
 clean:
 	-rm -f -- $(MOFILES)

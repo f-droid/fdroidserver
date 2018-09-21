@@ -2073,11 +2073,25 @@ def is_apk_and_debuggable_aapt(apkfile):
 
 
 def is_apk_and_debuggable_androguard(apkfile):
-    apkobject = _get_androguard_APK(apkfile)
-    if apkobject.is_valid_APK():
-        debuggable = apkobject.get_element("application", "debuggable")
-        if debuggable == 'true':
-            return True
+    """Parse only <application android:debuggable=""> from the APK"""
+    from androguard.core.bytecodes.axml import AXMLParser, format_value, START_TAG
+    with ZipFile(apkfile) as apk:
+        with apk.open('AndroidManifest.xml') as manifest:
+            axml = AXMLParser(manifest.read())
+            while axml.is_valid():
+                _type = next(axml)
+                if _type == START_TAG and axml.getName() == 'application':
+                    for i in range(0, axml.getAttributeCount()):
+                        name = axml.getAttributeName(i)
+                        if name == 'debuggable':
+                            _type = axml.getAttributeValueType(i)
+                            _data = axml.getAttributeValueData(i)
+                            value = format_value(_type, _data, lambda _: axml.getAttributeValue(i))
+                            if value == 'true':
+                                return True
+                            else:
+                                return False
+                    break
     return False
 
 
@@ -2096,34 +2110,90 @@ def is_apk_and_debuggable(apkfile):
 
 
 def get_apk_id(apkfile):
-    """Extract identification information from APK using aapt.
+    """Extract identification information from APK.
+
+    Androguard is preferred since it is more reliable and a lot
+    faster.  Occasionally, when androguard can't get the info from the
+    APK, aapt still can.  So aapt is also used as the final fallback
+    method.
 
     :param apkfile: path to an APK file.
     :returns: triplet (appid, version code, version name)
+
     """
     if use_androguard():
-        return get_apk_id_androguard(apkfile)
+        try:
+            return get_apk_id_androguard(apkfile)
+        except zipfile.BadZipFile as e:
+            logging.error(apkfile + ': ' + str(e))
+            if 'aapt' in config:
+                return get_apk_id_aapt(apkfile)
     else:
         return get_apk_id_aapt(apkfile)
 
 
 def get_apk_id_androguard(apkfile):
+    """Read (appid, versionCode, versionName) from an APK
+
+    This first tries to do quick binary XML parsing to just get the
+    values that are needed.  It will fallback to full androguard
+    parsing, which is slow, if it can't find the versionName value or
+    versionName is set to a Android String Resource (e.g. an integer
+    hex value that starts with @).
+
+    """
     if not os.path.exists(apkfile):
         raise FDroidException(_("Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'")
                               .format(apkfilename=apkfile))
-    a = _get_androguard_APK(apkfile)
-    versionName = ensure_final_value(a.package, a.get_android_resources(), a.get_androidversion_name())
+
+    from androguard.core.bytecodes.axml import AXMLParser, format_value, START_TAG, END_TAG, TEXT, END_DOCUMENT
+
+    appid = None
+    versionCode = None
+    versionName = None
+    with zipfile.ZipFile(apkfile) as apk:
+        with apk.open('AndroidManifest.xml') as manifest:
+            axml = AXMLParser(manifest.read())
+            count = 0
+            while axml.is_valid():
+                _type = next(axml)
+                count += 1
+                if _type == START_TAG:
+                    for i in range(0, axml.getAttributeCount()):
+                        name = axml.getAttributeName(i)
+                        _type = axml.getAttributeValueType(i)
+                        _data = axml.getAttributeValueData(i)
+                        value = format_value(_type, _data, lambda _: axml.getAttributeValue(i))
+                        if appid is None and name == 'package':
+                            appid = value
+                        elif versionCode is None and name == 'versionCode':
+                            if value.startswith('0x'):
+                                versionCode = str(int(value, 16))
+                            else:
+                                versionCode = value
+                        elif versionName is None and name == 'versionName':
+                            versionName = value
+
+                    if axml.getName() == 'manifest':
+                        break
+                elif _type == END_TAG or _type == TEXT or _type == END_DOCUMENT:
+                    raise RuntimeError('{path}: <manifest> must be the first element in AndroidManifest.xml'
+                                       .format(path=apkfile))
+
+    if not versionName or versionName[0] == '@':
+        a = _get_androguard_APK(apkfile)
+        versionName = ensure_final_value(a.package, a.get_android_resources(), a.get_androidversion_name())
     if not versionName:
         versionName = ''  # versionName is expected to always be a str
-    return a.package, a.get_androidversion_code(), versionName
+
+    return appid, versionCode, versionName.strip('\0')
 
 
 def get_apk_id_aapt(apkfile):
     p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
-    for line in p.output.splitlines():
-        m = APK_ID_TRIPLET_REGEX.match(line)
-        if m:
-            return m.group(1), m.group(2), m.group(3)
+    m = APK_ID_TRIPLET_REGEX.match(p.output[0:p.output.index('\n')])
+    if m:
+        return m.group(1), m.group(2), m.group(3)
     raise FDroidException(_("Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'")
                           .format(apkfilename=apkfile))
 
