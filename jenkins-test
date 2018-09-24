@@ -17,6 +17,11 @@ if [ -z $WORKSPACE ]; then
     export WORKSPACE=`pwd`
 fi
 
+if [ -z $LC_ALL ] || [ $LC_ALL == "C.UTF-8" ] || [[ $LC_ALL != *.UTF-8 ]]; then
+    export LC_ALL=en_US.UTF-8
+    echo "Forcing locale to $LC_ALL"
+fi
+
 set -e
 set -x
 

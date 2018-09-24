@@ -12,6 +12,11 @@ if [ -z $WORKSPACE ]; then
     WORKSPACE=`pwd`
 fi
 
+if [ -z $LC_ALL ] || [ $LC_ALL == "C.UTF-8" ] || [[ $LC_ALL != *.UTF-8 ]]; then
+    export LC_ALL=en_US.UTF-8
+    echo "Forcing locale to $LC_ALL"
+fi
+
 # make sure that no VirtualBox processes are left running
 cleanup_all() {
     set +e
