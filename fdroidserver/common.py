@@ -3268,7 +3268,7 @@ def deploy_build_log_with_rsync(appid, vercode, log_content,
             if retcode:
                 logging.warning(_("failed deploying build logs to '{path}'").format(path=webroot))
             else:
-                logging.info(_("deployeded build logs to '{path}'").format(path=webroot))
+                logging.info(_("deployed build logs to '{path}'").format(path=webroot))
 
 
 def get_per_app_repos():

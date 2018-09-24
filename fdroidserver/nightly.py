@@ -99,7 +99,7 @@ def main():
     parser.add_argument("--no-deploy", action="store_true", default=False,
                         help=_("Do not deploy the new files to the repo"))
     parser.add_argument("--file", default='app/build/outputs/apk/*.apk',
-                        help=_('The the file to be included in the repo (path or glob)'))
+                        help=_('The file to be included in the repo (path or glob)'))
     parser.add_argument("--no-checksum", action="store_true", default=False,
                         help=_("Don't use rsync checksums"))
     # TODO add --with-btlog

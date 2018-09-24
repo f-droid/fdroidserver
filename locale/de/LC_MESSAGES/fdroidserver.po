@@ -1530,7 +1530,7 @@ msgid "The root dir for local_copy_dir \"{path}\" does not exist!"
 msgstr "Das Wurzelverzeichnis für local_copy_dir \"{path}\" existiert nicht!"
 
 #: ../fdroidserver/nightly.py
-msgid "The the file to be included in the repo (path or glob)"
+msgid "The file to be included in the repo (path or glob)"
 msgstr "Die in das Repo aufzunehmende Datei (Pfad oder Glob)"
 
 #: ../fdroidserver/publish.py

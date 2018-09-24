@@ -1483,7 +1483,7 @@ msgid "The root dir for local_copy_dir \"{path}\" does not exist!"
 msgstr "dir གྱི་རྩ་བ་ for local_copy_dir \"{path}\" མིན་འདུག!"
 
 #: ../fdroidserver/nightly.py
-msgid "The the file to be included in the repo (path or glob)"
+msgid "The file to be included in the repo (path or glob)"
 msgstr "(path or glob)རེ་པོ་ནང་ཚུད་པའི་ཡིག་ཆ།"
 
 #: ../fdroidserver/publish.py
