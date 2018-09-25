@@ -16,7 +16,9 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.box = configfile['basebox']
-  config.vm.box_url = configfile['baseboxurl']
+  if configfile.has_key? "basebox_version"
+    config.vm.box_version = configfile['basebox_version']
+  end
 
   if not configfile.has_key? "vm_provider" or configfile["vm_provider"] == "virtualbox"
     # default to VirtualBox if not set
