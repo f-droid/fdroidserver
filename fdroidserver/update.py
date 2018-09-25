@@ -1071,7 +1071,7 @@ def scan_apk(apk_file):
         raise BuildException(_("{appid} from {path} is not a valid Java Package Name!")
                              .format(appid=apk['packageName'], path=apk_file))
     elif not common.is_strict_application_id(apk['packageName']):
-        logging.warning(_("{appid} from {path} is not a valid Java Package Name!")
+        logging.warning(_("{appid} from {path} is not a valid Android Package Name!")
                         .format(appid=apk['packageName'], path=apk_file))
 
     # Get the signature, or rather the signing key fingerprints

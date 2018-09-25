@@ -1424,7 +1424,7 @@ msgid "The root dir for local_copy_dir \"{path}\" does not exist!"
 msgstr ""
 
 #: ../fdroidserver/nightly.py
-msgid "The the file to be included in the repo (path or glob)"
+msgid "The file to be included in the repo (path or glob)"
 msgstr ""
 
 #: ../fdroidserver/publish.py
@@ -1771,7 +1771,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "deployeded build logs to '{path}'"
+msgid "deployed build logs to '{path}'"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py

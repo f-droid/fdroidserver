@@ -172,16 +172,38 @@ class CommonTest(unittest.TestCase):
                 self.assertFalse(fdroidserver.common.is_apk_and_debuggable_androguard(apkfile),
                                  'androguard missed <application android:debuggable="">!')
 
+    VALID_STRICT_PACKAGE_NAMES = [
+        "An.stop",
+        "SpeedoMeterApp.main",
+        "a2dp.Vol",
+        "au.com.darkside.XServer",
+        "click.dummer.UartSmartwatch",
+        "com.Bisha.TI89EmuDonation",
+        "com.MarcosDiez.shareviahttp",
+        "com.Pau.ImapNotes2",
+        "com.app.Zensuren",
+        "com.darshancomputing.BatteryIndicator",
+        "com.geecko.QuickLyric",
+        "com.genonbeta.TrebleShot",
+        "com.gpl.rpg.AndorsTrail",
+        "com.hobbyone.HashDroid",
+        "com.moez.QKSMS",
+        "com.platypus.SAnd",
+        "com.prhlt.aemus.Read4SpeechExperiments",
+        "de.syss.MifareClassicTool",
+        "org.fdroid.fdroid",
+        "org.f_droid.fdr0ID",
+    ]
+
     def test_is_valid_package_name(self):
-        for name in ["cafebabe",
-                     "org.fdroid.fdroid",
-                     "org.f_droid.fdr0ID",
-                     "SpeedoMeterApp.main",
-                     "05041684efd9b16c2888b1eddbadd0359f655f311b89bdd1737f560a10d20fb8"]:
+        for name in self.VALID_STRICT_PACKAGE_NAMES + [
+                "_SpeedoMeterApp.main",
+                "05041684efd9b16c2888b1eddbadd0359f655f311b89bdd1737f560a10d20fb8"]:
             self.assertTrue(fdroidserver.common.is_valid_package_name(name),
                             "{0} should be a valid package name".format(name))
         for name in ["0rg.fdroid.fdroid",
                      ".f_droid.fdr0ID",
+                     "trailingdot.",
                      "org.fdroid/fdroid",
                      "/org.fdroid.fdroid"]:
             self.assertFalse(fdroidserver.common.is_valid_package_name(name),
@@ -189,17 +211,17 @@ class CommonTest(unittest.TestCase):
 
     def test_is_strict_application_id(self):
         """see also tests/valid-package-names/"""
-        for name in ["org.fdroid.fdroid",
-                     "org.f_droid.fdr0ID"]:
+        for name in self.VALID_STRICT_PACKAGE_NAMES:
             self.assertTrue(fdroidserver.common.is_strict_application_id(name),
                             "{0} should be a strict application id".format(name))
         for name in ["0rg.fdroid.fdroid",
                      ".f_droid.fdr0ID",
                      "oneword",
+                     "trailingdot.",
                      "cafebabe",
-                     "SpeedoMeterApp.main",
                      "org.fdroid/fdroid",
                      "/org.fdroid.fdroid",
+                     "_SpeedoMeterApp.main",
                      "05041684efd9b16c2888b1eddbadd0359f655f311b89bdd1737f560a10d20fb8"]:
             self.assertFalse(fdroidserver.common.is_strict_application_id(name),
                              "{0} should not be a strict application id".format(name))
