@@ -156,7 +156,7 @@ class App(dict):
         self.Disabled = None
         self.AntiFeatures = []
         self.Provides = None
-        self.Categories = ['None']
+        self.Categories = []
         self.License = 'Unknown'
         self.AuthorName = None
         self.AuthorEmail = None
@@ -903,8 +903,6 @@ def post_metadata_parse(app):
 
     if isinstance(app.Categories, str):
         app.Categories = [app.Categories]
-    elif app.Categories is None:
-        app.Categories = ['None']
     else:
         app.Categories = [str(i) for i in app.Categories]
 
