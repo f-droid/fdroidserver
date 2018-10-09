@@ -901,10 +901,14 @@ def post_metadata_parse(app):
     if 'flavours' in app and app['flavours'] == [True]:
         app['flavours'] = 'yes'
 
-    if isinstance(app.Categories, str):
-        app.Categories = [app.Categories]
-    else:
-        app.Categories = [str(i) for i in app.Categories]
+    for field, fieldtype in fieldtypes.items():
+        if fieldtype != TYPE_LIST:
+            continue
+        value = app.get(field)
+        if isinstance(value, str):
+            app[field] = [value, ]
+        elif value is not None:
+            app[field] = [str(i) for i in value]
 
     def _yaml_bool_unmapable(v):
         return v in (True, False, [True], [False])
