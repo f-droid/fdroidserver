@@ -473,6 +473,29 @@ def check_extlib_dir(apps):
         yield _("Unused extlib at %s") % os.path.join(dir_path, path)
 
 
+def check_app_field_types(app):
+    """Check the fields have valid data types"""
+
+    for field in app.keys():
+        v = app.get(field)
+        t = metadata.fieldtype(field)
+        if v is None:
+            continue
+        elif field == 'builds':
+            if not isinstance(v, list):
+                yield(_("{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!")
+                      .format(appid=app.id, field=field,
+                              type='list', fieldtype=v.__class__.__name__))
+        elif t == metadata.TYPE_LIST and not isinstance(v, list):
+            yield(_("{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'")
+                  .format(appid=app.id, field=field,
+                          type='list', fieldtype=v.__class__.__name__))
+        elif t == metadata.TYPE_STRING and not type(v) in (str, bool, dict):
+            yield(_("{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!")
+                  .format(appid=app.id, field=field,
+                          type='str', fieldtype=v.__class__.__name__))
+
+
 def check_for_unsupported_metadata_files(basedir=""):
     """Checks whether any non-metadata files are in metadata/"""
 
@@ -538,6 +561,7 @@ def main():
             continue
 
         app_check_funcs = [
+            check_app_field_types,
             check_regexes,
             check_update_check_data_url,
             check_vercode_operation,

@@ -70,6 +70,59 @@ class LintTest(unittest.TestCase):
             logging.debug(warn)
         self.assertTrue(anywarns)
 
+    def test_check_app_field_types(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.lint.config = config
+
+        app = fdroidserver.metadata.App()
+        app.id = 'fake.app'
+        app.Name = 'Bad App'
+        app.Summary = 'We pwn you'
+        app.Description = 'These are some back'
+
+        fields = {
+            'AntiFeatures': {
+                'good': [
+                    ['KnownVuln', ],
+                    ['NonFreeNet', 'KnownVuln'],
+                ],
+                'bad': [
+                    'KnownVuln',
+                    'NonFreeNet,KnownVuln',
+                ],
+            },
+            'Categories': {
+                'good': [
+                    ['Sports & Health', ],
+                    ['Multimedia', 'Graphics'],
+                ],
+                'bad': [
+                    'Science & Education',
+                    'Multimedia,Graphics',
+                ],
+            },
+        }
+
+        for field, values in fields.items():
+
+            for bad in values['bad']:
+                anywarns = False
+                app[field] = bad
+                for warn in fdroidserver.lint.check_app_field_types(app):
+                    anywarns = True
+                    logging.debug(warn)
+                self.assertTrue(anywarns)
+
+            for good in values['good']:
+                anywarns = False
+                app[field] = good
+                for warn in fdroidserver.lint.check_app_field_types(app):
+                    anywarns = True
+                    logging.debug(warn)
+                self.assertFalse(anywarns)
+
     def test_check_vercode_operation(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)

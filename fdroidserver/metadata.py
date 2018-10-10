@@ -156,7 +156,7 @@ class App(dict):
         self.Disabled = None
         self.AntiFeatures = []
         self.Provides = None
-        self.Categories = ['None']
+        self.Categories = []
         self.License = 'Unknown'
         self.AuthorName = None
         self.AuthorEmail = None
@@ -228,16 +228,15 @@ TYPE_LIST = 4
 TYPE_SCRIPT = 5
 TYPE_MULTILINE = 6
 TYPE_BUILD = 7
-TYPE_BUILD_V2 = 8
-TYPE_INT = 9
+TYPE_INT = 8
 
 fieldtypes = {
     'Description': TYPE_MULTILINE,
     'MaintainerNotes': TYPE_MULTILINE,
     'Categories': TYPE_LIST,
     'AntiFeatures': TYPE_LIST,
-    'BuildVersion': TYPE_BUILD,
-    'Build': TYPE_BUILD_V2,
+    'Build': TYPE_BUILD,
+    'BuildVersion': TYPE_OBSOLETE,
     'UseBuilt': TYPE_OBSOLETE,
 }
 
@@ -902,12 +901,14 @@ def post_metadata_parse(app):
     if 'flavours' in app and app['flavours'] == [True]:
         app['flavours'] = 'yes'
 
-    if isinstance(app.Categories, str):
-        app.Categories = [app.Categories]
-    elif app.Categories is None:
-        app.Categories = ['None']
-    else:
-        app.Categories = [str(i) for i in app.Categories]
+    for field, fieldtype in fieldtypes.items():
+        if fieldtype != TYPE_LIST:
+            continue
+        value = app.get(field)
+        if isinstance(value, str):
+            app[field] = [value, ]
+        elif value is not None:
+            app[field] = [str(i) for i in value]
 
     def _yaml_bool_unmapable(v):
         return v in (True, False, [True], [False])
@@ -1333,7 +1334,7 @@ def parse_txt_metadata(mf, app):
             f = f.replace(' ', '')
 
             ftype = fieldtype(f)
-            if ftype not in [TYPE_BUILD, TYPE_BUILD_V2]:
+            if ftype not in [TYPE_BUILD]:
                 add_comments(f)
             if ftype == TYPE_MULTILINE:
                 mode = 1
@@ -1345,15 +1346,6 @@ def parse_txt_metadata(mf, app):
             elif ftype == TYPE_LIST:
                 app[f] = split_list_values(v)
             elif ftype == TYPE_BUILD:
-                if v.endswith("\\"):
-                    mode = 2
-                    del buildlines[:]
-                    buildlines.append(v[:-1])
-                else:
-                    build = parse_buildline([v])
-                    app.builds.append(build)
-                    add_comments('build:' + app.builds[-1].versionCode)
-            elif ftype == TYPE_BUILD_V2:
                 vv = v.split(',')
                 if len(vv) != 2:
                     warn_or_exception(_('Build should have comma-separated '
@@ -1372,7 +1364,9 @@ def parse_txt_metadata(mf, app):
                 del buildlines[:]
                 mode = 3
             elif ftype == TYPE_OBSOLETE:
-                pass        # Just throw it away!
+                warn_or_exception(_("'{field}' in {linedesc} is obsolete, see docs for current fields:")
+                                  .format(field=f, linedesc=linedesc)
+                                  + '\nhttps://f-droid.org/docs/')
             else:
                 warn_or_exception(_("Unrecognised field '{field}' in {linedesc}")
                                   .format(field=f, linedesc=linedesc))
