@@ -39,6 +39,35 @@
 			<permissions>READ_CONTACTS,READ_EXTERNAL_STORAGE,RECEIVE_SMS,SEND_SMS,VIBRATE,WRITE_EXTERNAL_STORAGE</permissions>
 		</package>
 	</application>
+	<application id="info.zwanenburg.caffeinetile">
+		<id>info.zwanenburg.caffeinetile</id>
+		<added>2018-10-10</added>
+		<lastupdated>2018-10-10</lastupdated>
+		<name>Caffeine Tile</name>
+		<summary>Test app for extracting icons when an XML one is default</summary>
+		<icon>info.zwanenburg.caffeinetile.4.xml</icon>
+		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
+		<license>Unknown</license>
+		<categories>Development</categories>
+		<category>Development</category>
+		<web></web>
+		<source></source>
+		<tracker></tracker>
+		<marketversion></marketversion>
+		<marketvercode>4</marketvercode>
+		<package>
+			<version>1.3</version>
+			<versioncode>4</versioncode>
+			<apkname>info.zwanenburg.caffeinetile_4.apk</apkname>
+			<hash type="sha256">dbbdd7deadb038862f426b71efe4a64df8c3edf25d669e935f349510e16f65db</hash>
+			<size>11740</size>
+			<sdkver>24</sdkver>
+			<targetSdkVersion>25</targetSdkVersion>
+			<added>2018-10-10</added>
+			<sig>03f9b2f848d22fd1d8d1331e8b1b486d</sig>
+			<permissions>WAKE_LOCK</permissions>
+		</package>
+	</application>
 	<application id="duplicate.permisssions">
 		<id>duplicate.permisssions</id>
 		<added>2017-12-22</added>
