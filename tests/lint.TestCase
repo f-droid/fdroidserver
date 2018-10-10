@@ -103,6 +103,16 @@ class LintTest(unittest.TestCase):
                     'Multimedia,Graphics',
                 ],
             },
+            'WebSite': {
+                'good': [
+                    'https://homepage.com',
+                ],
+                'bad': [
+                    [],
+                    ['nope', ],
+                    29,
+                ],
+            },
         }
 
         for field, values in fields.items():
