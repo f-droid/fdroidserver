@@ -1,0 +1,3 @@
+Categories: [Development]
+Name: No minSdkVersion or targetSdkVersion
+Summary: An APK without any <uses-sdk> block in AndroidManifest.xml

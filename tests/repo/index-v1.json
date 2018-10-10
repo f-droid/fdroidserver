@@ -73,6 +73,19 @@
       "lastUpdated": 1457568000000
     },
     {
+      "categories": [
+        "Development"
+      ],
+      "suggestedVersionCode": "987",
+      "license": "Unknown",
+      "name": "No minSdkVersion or targetSdkVersion",
+      "summary": "An APK without any <uses-sdk> block in AndroidManifest.xml",
+      "added": 1539129600000,
+      "icon": "no.min.target.sdk.987.png",
+      "packageName": "no.min.target.sdk",
+      "lastUpdated": 1539129600000
+    },
+    {
       "bitcoin": "1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk",
       "categories": [
         "Development"
@@ -248,7 +261,6 @@
         "sig": "b4964fd759edaa54e65bb476d0276880",
         "signer": "32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6",
         "size": 18489,
-        "targetSdkVersion": "3",
         "uses-permission": [
           [
             "android.permission.READ_CALENDAR",
@@ -290,7 +302,6 @@
         "sig": "b4964fd759edaa54e65bb476d0276880",
         "signer": "32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6",
         "size": 17552,
-        "targetSdkVersion": "3",
         "uses-permission": [
           [
             "android.permission.READ_CALENDAR",
@@ -398,6 +409,35 @@
         "targetSdkVersion": "18",
         "versionCode": 100,
         "versionName": "0.1"
+      }
+    ],
+    "no.min.target.sdk": [
+      {
+        "added": 1539129600000,
+        "apkName": "no.min.target.sdk_987.apk",
+        "hash": "e2e1dc1d550df2b5bc383860139207258645b5540abeccd305ed8b2cb6459d2c",
+        "hashType": "sha256",
+        "minSdkVersion": 3,
+        "packageName": "no.min.target.sdk",
+        "sig": "b4964fd759edaa54e65bb476d0276880",
+        "signer": "32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6",
+        "size": 14102,
+        "uses-permission": [
+          [
+            "android.permission.WRITE_EXTERNAL_STORAGE",
+            null
+          ],
+          [
+            "android.permission.READ_PHONE_STATE",
+            null
+          ],
+          [
+            "android.permission.READ_EXTERNAL_STORAGE",
+            null
+          ]
+        ],
+        "versionCode": 987,
+        "versionName": "1.2-fake"
       }
     ],
     "obb.main.oldversion": [

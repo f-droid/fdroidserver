@@ -259,9 +259,9 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(apk['packageName'], 'com.politedroid')
         self.assertEqual(apk['versionCode'], 3)
         self.assertEqual(apk['minSdkVersion'], '3')
-        self.assertEqual(apk['targetSdkVersion'], '3')
+        self.assertIsNone(apk.get('targetSdkVersion'))
         self.assertFalse('maxSdkVersion' in apk)
-        apk = apks[6]
+        apk = apks[7]
         self.assertEqual(apk['packageName'], 'obb.main.oldversion')
         self.assertEqual(apk['versionCode'], 1444412523)
         self.assertEqual(apk['minSdkVersion'], '4')

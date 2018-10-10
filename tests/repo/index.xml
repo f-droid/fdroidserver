@@ -95,6 +95,34 @@
 			<added>2016-03-10</added>
 		</package>
 	</application>
+	<application id="no.min.target.sdk">
+		<id>no.min.target.sdk</id>
+		<added>2018-10-10</added>
+		<lastupdated>2018-10-10</lastupdated>
+		<name>No minSdkVersion or targetSdkVersion</name>
+		<summary>An APK without any &lt;uses-sdk&gt; block in AndroidManifest.xml</summary>
+		<icon>no.min.target.sdk.987.png</icon>
+		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
+		<license>Unknown</license>
+		<categories>Development</categories>
+		<category>Development</category>
+		<web></web>
+		<source></source>
+		<tracker></tracker>
+		<marketversion></marketversion>
+		<marketvercode>987</marketvercode>
+		<package>
+			<version>1.2-fake</version>
+			<versioncode>987</versioncode>
+			<apkname>no.min.target.sdk_987.apk</apkname>
+			<hash type="sha256">e2e1dc1d550df2b5bc383860139207258645b5540abeccd305ed8b2cb6459d2c</hash>
+			<size>14102</size>
+			<sdkver>3</sdkver>
+			<added>2018-10-10</added>
+			<sig>b4964fd759edaa54e65bb476d0276880</sig>
+			<permissions>READ_EXTERNAL_STORAGE,READ_PHONE_STATE,WRITE_EXTERNAL_STORAGE</permissions>
+		</package>
+	</application>
 	<application id="obb.main.oldversion">
 		<id>obb.main.oldversion</id>
 		<added>2013-12-31</added>
@@ -269,7 +297,6 @@
 			<hash type="sha256">c809bdff83715fbf919f3840ee09869b038e209378b906e135ee40d3f0e1f075</hash>
 			<size>18489</size>
 			<sdkver>3</sdkver>
-			<targetSdkVersion>3</targetSdkVersion>
 			<added>2017-06-23</added>
 			<sig>b4964fd759edaa54e65bb476d0276880</sig>
 			<permissions>READ_CALENDAR,READ_EXTERNAL_STORAGE,READ_PHONE_STATE,RECEIVE_BOOT_COMPLETED,WRITE_EXTERNAL_STORAGE</permissions>
@@ -281,7 +308,6 @@
 			<hash type="sha256">665d03d61ebc642289fda697f71a59305b0202b16cafc5ffdae91cbe91f0b25d</hash>
 			<size>17552</size>
 			<sdkver>3</sdkver>
-			<targetSdkVersion>3</targetSdkVersion>
 			<added>2017-06-23</added>
 			<sig>b4964fd759edaa54e65bb476d0276880</sig>
 			<permissions>READ_CALENDAR,READ_EXTERNAL_STORAGE,READ_PHONE_STATE,RECEIVE_BOOT_COMPLETED,WRITE_EXTERNAL_STORAGE</permissions>
