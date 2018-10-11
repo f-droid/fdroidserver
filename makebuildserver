@@ -65,8 +65,6 @@ config = {
     'memory': 2048,
     'hwvirtex': 'off',
     'vm_provider': 'virtualbox',
-    'libvirt_disk_bus': 'virtio',
-    'libvirt_nic_model_type': 'virtio',
 }
 
 if os.path.isfile('/usr/bin/systemd-detect-virt'):
