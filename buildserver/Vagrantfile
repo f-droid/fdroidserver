@@ -34,6 +34,8 @@ Vagrant.configure("2") do |config|
       libvirt.uri = "qemu:///system"
       libvirt.cpus = configfile["cpus"]
       libvirt.memory = configfile["memory"]
+      libvirt.disk_bus = configfile["libvirt_disk_bus"]
+      libvirt.nic_model_type = configfile["libvirt_nic_model_type"]
     end
     config.vm.synced_folder './', '/vagrant', type: '9p'
     synced_folder_type = '9p'
