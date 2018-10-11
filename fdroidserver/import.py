@@ -292,7 +292,7 @@ def main():
     if options.license:
         app.License = options.license
     if options.categories:
-        app.Categories = options.categories
+        app.Categories = options.categories.split(',')
     if os.path.exists(os.path.join(root_dir, 'jni')):
         build.buildjni = ['yes']
     if os.path.exists(os.path.join(root_dir, 'build.gradle')):
