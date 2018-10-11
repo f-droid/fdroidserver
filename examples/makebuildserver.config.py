@@ -63,3 +63,11 @@
 # below:
 #
 # vm_provider = 'libvirt'
+
+# By default libvirt uses 'virtio' for both network and disk drivers.
+# Some systems (eg. nesting VMware ESXi) do not support virtio. As a
+# workaround for such rare cases, this setting allows to configure
+# KVM/libvirt to emulate hardware rather than using virtio.
+#
+# libvirt_disk_bus = 'sata'
+# libvirt_nic_model_type = 'rtl8139'
