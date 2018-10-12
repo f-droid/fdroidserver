@@ -17,6 +17,8 @@ archive_description = """
 The repository of older versions of applications from the main demo repository.
 """
 
+make_current_version_link = False
+
 repo_keyalias = "sova"
 keystore = "keystore.jks"
 keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="

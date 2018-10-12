@@ -186,10 +186,14 @@ __complete_checkupdates() {
 }
 
 __complete_import() {
-	opts="-u -s -q"
-	lopts="--url --subdir --rev --quiet"
+	opts="-c -h -l -q -s -u -v -W"
+	lopts="--categories --license --quiet --rev --subdir --url"
 	case "${prev}" in
-		-u|--url|-s|--subdir|--rev) return 0;;
+		-c|-l|-s|-u|--categories|--license|--quiet|--rev|--subdir|--url)
+		return 0;;
+		-W)
+		COMPREPLY=( $( compgen -W "error warn ignore" -- $cur ) )
+		return 0;;
 	esac
 	__complete_options
 }

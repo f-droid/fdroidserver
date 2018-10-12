@@ -1096,6 +1096,11 @@ def parse_yaml_metadata(mf, app):
 
 
 def write_yaml(mf, app):
+    """Write metadata in yaml format.
+
+    :param mf: active file discriptor for writing
+    :param app: app metadata to written to the yaml file
+    """
 
     # import rumael.yaml and check version
     try:
@@ -1176,12 +1181,10 @@ def write_yaml(mf, app):
         return cm
 
     def _builds_to_yaml(app):
-        fields = ['versionName', 'versionCode']
-        fields.extend(build_flags_order)
         builds = ruamel.yaml.comments.CommentedSeq()
         for build in app.builds:
             b = ruamel.yaml.comments.CommentedMap()
-            for field in fields:
+            for field in build_flags:
                 if hasattr(build, field) and getattr(build, field):
                     value = getattr(build, field)
                     if field == 'gradle' and value == ['off']:

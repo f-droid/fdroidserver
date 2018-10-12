@@ -39,6 +39,35 @@
 			<permissions>READ_CONTACTS,READ_EXTERNAL_STORAGE,RECEIVE_SMS,SEND_SMS,VIBRATE,WRITE_EXTERNAL_STORAGE</permissions>
 		</package>
 	</application>
+	<application id="info.zwanenburg.caffeinetile">
+		<id>info.zwanenburg.caffeinetile</id>
+		<added>2018-10-10</added>
+		<lastupdated>2018-10-10</lastupdated>
+		<name>Caffeine Tile</name>
+		<summary>Test app for extracting icons when an XML one is default</summary>
+		<icon>info.zwanenburg.caffeinetile.4.xml</icon>
+		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
+		<license>Unknown</license>
+		<categories>Development</categories>
+		<category>Development</category>
+		<web></web>
+		<source></source>
+		<tracker></tracker>
+		<marketversion></marketversion>
+		<marketvercode>4</marketvercode>
+		<package>
+			<version>1.3</version>
+			<versioncode>4</versioncode>
+			<apkname>info.zwanenburg.caffeinetile_4.apk</apkname>
+			<hash type="sha256">dbbdd7deadb038862f426b71efe4a64df8c3edf25d669e935f349510e16f65db</hash>
+			<size>11740</size>
+			<sdkver>24</sdkver>
+			<targetSdkVersion>25</targetSdkVersion>
+			<added>2018-10-10</added>
+			<sig>03f9b2f848d22fd1d8d1331e8b1b486d</sig>
+			<permissions>WAKE_LOCK</permissions>
+		</package>
+	</application>
 	<application id="duplicate.permisssions">
 		<id>duplicate.permisssions</id>
 		<added>2017-12-22</added>
@@ -93,6 +122,34 @@
 			<hash type="sha256">897a92a4ccff4f415f6ba275b2af16d4ecaee60a983b215bddcb9f8964e7a24c</hash>
 			<size>233</size>
 			<added>2016-03-10</added>
+		</package>
+	</application>
+	<application id="no.min.target.sdk">
+		<id>no.min.target.sdk</id>
+		<added>2018-10-10</added>
+		<lastupdated>2018-10-10</lastupdated>
+		<name>No minSdkVersion or targetSdkVersion</name>
+		<summary>An APK without any &lt;uses-sdk&gt; block in AndroidManifest.xml</summary>
+		<icon>no.min.target.sdk.987.png</icon>
+		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
+		<license>Unknown</license>
+		<categories>Development</categories>
+		<category>Development</category>
+		<web></web>
+		<source></source>
+		<tracker></tracker>
+		<marketversion></marketversion>
+		<marketvercode>987</marketvercode>
+		<package>
+			<version>1.2-fake</version>
+			<versioncode>987</versioncode>
+			<apkname>no.min.target.sdk_987.apk</apkname>
+			<hash type="sha256">e2e1dc1d550df2b5bc383860139207258645b5540abeccd305ed8b2cb6459d2c</hash>
+			<size>14102</size>
+			<sdkver>3</sdkver>
+			<added>2018-10-10</added>
+			<sig>b4964fd759edaa54e65bb476d0276880</sig>
+			<permissions>READ_EXTERNAL_STORAGE,READ_PHONE_STATE,WRITE_EXTERNAL_STORAGE</permissions>
 		</package>
 	</application>
 	<application id="obb.main.oldversion">
@@ -269,7 +326,6 @@
 			<hash type="sha256">c809bdff83715fbf919f3840ee09869b038e209378b906e135ee40d3f0e1f075</hash>
 			<size>18489</size>
 			<sdkver>3</sdkver>
-			<targetSdkVersion>3</targetSdkVersion>
 			<added>2017-06-23</added>
 			<sig>b4964fd759edaa54e65bb476d0276880</sig>
 			<permissions>READ_CALENDAR,READ_EXTERNAL_STORAGE,READ_PHONE_STATE,RECEIVE_BOOT_COMPLETED,WRITE_EXTERNAL_STORAGE</permissions>
@@ -281,7 +337,6 @@
 			<hash type="sha256">665d03d61ebc642289fda697f71a59305b0202b16cafc5ffdae91cbe91f0b25d</hash>
 			<size>17552</size>
 			<sdkver>3</sdkver>
-			<targetSdkVersion>3</targetSdkVersion>
 			<added>2017-06-23</added>
 			<sig>b4964fd759edaa54e65bb476d0276880</sig>
 			<permissions>READ_CALENDAR,READ_EXTERNAL_STORAGE,READ_PHONE_STATE,RECEIVE_BOOT_COMPLETED,WRITE_EXTERNAL_STORAGE</permissions>
