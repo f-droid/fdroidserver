@@ -13,8 +13,12 @@ if [ -z $WORKSPACE ]; then
 fi
 
 if [ -z $LC_ALL ] || [ $LC_ALL == "C.UTF-8" ] || [[ $LC_ALL != *.UTF-8 ]]; then
+    for var in `set | grep -Eo '^(LANG|LC_[A-Z]+)' | sort -u`; do
+        unset $var
+    done
     export LC_ALL=en_US.UTF-8
-    echo "Forcing locale to $LC_ALL"
+    echo "Forced locale to ${LC_ALL}:"
+    set | grep -E '^(LANG|LC_[A-Z]+)'
 fi
 
 # make sure that no VirtualBox processes are left running
