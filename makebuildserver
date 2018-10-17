@@ -54,8 +54,39 @@ tail = None
 cachedir = os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver')
 logger.debug('cachedir set to: %s', cachedir)
 
+BASEBOX_DEFAULT = 'fdroid/basebox-stretch64'
+BASEBOX_VERSION_DEFAULT = '0.5'
+BASEBOX_CHECKSUMS = {
+    '0.5': {
+        'virtualbox': {
+            'box-disk1.vmdk': '8834d5eb78758437c2517f83282172fd5e3842d88f657d577592d0917cd02f89',
+            'box.ovf': 'cbdd6315187d4ce8ff15ed5a00a2c8b0d33abe6b0356439ce4d8d9ac3724f875',
+            'metadata.json': '098439524f76cafe026140b787ca419297a055a3f6006b9d60e6d5326d18ba99',
+            'Vagrantfile': 'ae50c3d152c3016e853176005d1a5da7a8e6ae424c9074e93b1a1015aa2f2e14',
+        },
+        'libvirt': {
+            'box.img': '2ef5f1fdc98c24a4f67cecb526d21e1d73dedf5a0072ceff528a0e75da3ff452',
+            'metadata.json': 'da79a5e2327dcf81a18a9d66a6e91205a20e440f23d3928e633fd39d60c641e5',
+            'Vagrantfile': 'cc7b8edb26481c158b2c28d15d32f7e146de892847c9308ac262678cf0ae8260',
+        }
+    },
+    '0.3': {
+        'libvirt': {
+            'box.img': '24f06f415dde4cdb01d68c904fc57386ea060ba7b94e700670c58694b3d3635e',
+            'metadata.json': '0965955659082fd2e67723deb3311ba253c96153d3176d856db1b3e6e461cf23',
+            'Vagrantfile': 'cc7b8edb26481c158b2c28d15d32f7e146de892847c9308ac262678cf0ae8260',
+        },
+        'virtualbox': {
+            'box-disk1.vmdk': '103114977f1a36f7121ef9b3a1495129baa10bfedfada61a13345c8863c4dcd6',
+            'box.ovf': '33a5fbaf3dba443237baefcba6d56ca7a76121ca530f1140aa8263a69d7d3695',
+            'metadata.json': '098439524f76cafe026140b787ca419297a055a3f6006b9d60e6d5326d18ba99',
+            'Vagrantfile': 'ae50c3d152c3016e853176005d1a5da7a8e6ae424c9074e93b1a1015aa2f2e14',
+        }
+    }
+}
+
 config = {
-    'basebox': 'fdroid/basebox-stretch64',
+    'basebox': BASEBOX_DEFAULT,
     'debian_mirror': 'http://deb.debian.org/debian/',
     'apt_package_cache': False,
     'copy_caches_from_host': False,
@@ -88,6 +119,14 @@ elif os.path.exists('makebs.config.py'):
 if '__builtins__' in config:
     del(config['__builtins__'])  # added by compile/exec
 logger.debug("makebuildserver.config.py parsed -> %s", json.dumps(config, indent=4, sort_keys=True))
+if config['basebox'] == BASEBOX_DEFAULT and 'basebox_version' not in config:
+    config['basebox_version'] = BASEBOX_VERSION_DEFAULT
+# note: vagrant allows putting '/' into the name of a local box,
+# so this check is not completely relyable, but better than nothing
+if 'basebox_version' in config and 'basebox' in config and '/' not in config['basebox']:
+    logger.critical("Can not get version '{version}' for basebox '{box}', "
+                    "vagrant does not support versioning for locally added boxes."
+                    .format(box=config['basebox'], version=config['basebox_version']))
 
 # Update cached files.
 cachedir = config['cachedir']
@@ -398,6 +437,24 @@ def sha256_for_file(path):
         return s.hexdigest()
 
 
+def verify_file_sha256(path, sha256):
+    if sha256_for_file(path) != sha256:
+        logger.critical("File verification for '{path}' failed! "
+                        "expected sha256 checksum: {checksum}"
+                        .format(path=path, checksum=sha256))
+        sys.exit(1)
+    else:
+        logger.debug("sucessfully verifyed file '{path}' "
+                     "('{checksum}')".format(path=path,
+                                             checksum=sha256))
+
+
+def get_vagrant_home():
+    return os.environ.get('VAGRANT_HOME',
+                          os.path.join(os.path.expanduser('~'),
+                                       '.vagrant.d'))
+
+
 def run_via_vagrant_ssh(v, cmdlist):
     if (isinstance(cmdlist, str) or isinstance(cmdlist, bytes)):
         cmd = cmdlist
@@ -554,6 +611,49 @@ def main():
                         .format(vm_provider=config['vm_provider'],
                                 basebox=config['basebox']))
         sys.exit(1)
+
+    # download and verfiy fdroid pre-built basebox
+    if config['basebox'] == BASEBOX_DEFAULT:
+        buildserver_not_created = any([True for x in v.status() if x.state == 'not_created' and x.name == 'default'])
+        if buildserver_not_created or options.clean:
+            # make vagrant download and add basebox
+            target_basebox_installed = any([x for x in v.box_list() if x.name == BASEBOX_DEFAULT and x.provider == config['vm_provider'] and x.version == config['basebox_version']])
+            if not target_basebox_installed:
+                cmd = [shutil.which('vagrant'), 'box', 'add', BASEBOX_DEFAULT,
+                       '--box-version=' + config['basebox_version'],
+                       '--provider=' + config['vm_provider']]
+                ret_val = subprocess.call(cmd)
+                if ret_val != 0:
+                    logger.critical("downloading basebox '{box}' "
+                                    "({provider}, version {version}) failed."
+                                    .format(box=config['basebox'],
+                                            provider=config['vm_provider'],
+                                            version=config['basebox_version']))
+                    sys.exit(1)
+            # verify box
+            if config['basebox_version'] not in BASEBOX_CHECKSUMS.keys():
+                logger.critical("can not verify '{box}', "
+                                "unknown basebox version '{version}'"
+                                .format(box=config['basebox'],
+                                        version=config['basebox_version']))
+                sys.exit(1)
+            for filename, sha256 in BASEBOX_CHECKSUMS[config['basebox_version']][config['vm_provider']].items():
+                verify_file_sha256(os.path.join(get_vagrant_home(),
+                                                'boxes',
+                                                BASEBOX_DEFAULT.replace('/', '-VAGRANTSLASH-'),
+                                                config['basebox_version'],
+                                                config['vm_provider'],
+                                                filename),
+                                   sha256)
+            logger.info("successfully verified: '{box}' "
+                        "({provider}, version {version})"
+                        .format(box=config['basebox'],
+                                provider=config['vm_provider'],
+                                version=config['basebox_version']))
+        else:
+            logger.debug('not updating basebox ...')
+    else:
+        logger.debug('using unverified basebox ...')
 
     logger.info("Configuring build server VM")
     debug_log_vagrant_vm(serverdir, config)

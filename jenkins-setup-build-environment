@@ -67,11 +67,8 @@ virsh -c qemu:///system vol-delete --pool default \
 
 rm -rf "$WORKSPACE"/../*/.testfiles
 
-vagrant box add --force basebox-stretch64 ~/.cache/fdroidserver/basebox-stretch64-libvirt.box
-
 cd $WORKSPACE
 echo "debian_mirror = 'https://deb.debian.org/debian/'" > $WORKSPACE/makebuildserver.config.py
-echo 'basebox = "basebox-stretch64"' >> $WORKSPACE/makebuildserver.config.py
 echo "boot_timeout = 1200" >> $WORKSPACE/makebuildserver.config.py
 echo "apt_package_cache = True" >> $WORKSPACE/makebuildserver.config.py
 echo "copy_caches_from_host = True" >> $WORKSPACE/makebuildserver.config.py
