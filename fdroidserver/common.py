@@ -1934,7 +1934,7 @@ class KnownApks:
         self.path = os.path.join('stats', 'known_apks.txt')
         self.apks = {}
         if os.path.isfile(self.path):
-            with open(self.path, 'r', encoding='utf8') as f:
+            with open(self.path, 'r') as f:
                 for line in f:
                     t = line.rstrip().split(' ')
                     if len(t) == 2:
@@ -1962,7 +1962,7 @@ class KnownApks:
                 line += ' ' + added.strftime('%Y-%m-%d')
             lst.append(line)
 
-        with open(self.path, 'w', encoding='utf8') as f:
+        with open(self.path, 'w') as f:
             for line in sorted(lst, key=natural_key):
                 f.write(line + '\n')
 
@@ -2349,14 +2349,14 @@ def remove_signing_keys(build_dir):
         if 'build.gradle' in files:
             path = os.path.join(root, 'build.gradle')
 
-            with open(path, "r", encoding='utf8') as o:
+            with open(path, "r") as o:
                 lines = o.readlines()
 
             changed = False
 
             opened = 0
             i = 0
-            with open(path, "w", encoding='utf8') as o:
+            with open(path, "w") as o:
                 while i < len(lines):
                     line = lines[i]
                     i += 1
@@ -3138,7 +3138,7 @@ def write_to_config(thisconfig, key, value=None, config_file=None):
     if not os.path.exists(cfg):
         open(cfg, 'a').close()
         logging.info("Creating empty " + cfg)
-    with open(cfg, 'r', encoding="utf-8") as f:
+    with open(cfg, 'r') as f:
         lines = f.readlines()
 
     # make sure the file ends with a carraige return
@@ -3157,7 +3157,7 @@ def write_to_config(thisconfig, key, value=None, config_file=None):
     # second instance of this line for this key in the document.
     didRepl = False
     # edit config file
-    with open(cfg, 'w', encoding="utf-8") as f:
+    with open(cfg, 'w') as f:
         for line in lines:
             if pattern.match(line) or pattern2.match(line):
                 if not didRepl:

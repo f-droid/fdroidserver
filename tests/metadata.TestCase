@@ -81,8 +81,8 @@ class MetadataTest(unittest.TestCase):
                 fdroidserver.metadata.write_metadata(os.path.join(testdir, appid + '.yml'), app)
 
         # assert rewrite result
-        with open(os.path.join(testdir, 'fake.ota.update.yml'), 'r', encoding='utf-8') as result:
-            with open('metadata-rewrite-yml/fake.ota.update.yml', 'r', encoding='utf-8') as orig:
+        with open(os.path.join(testdir, 'fake.ota.update.yml'), 'r') as result:
+            with open('metadata-rewrite-yml/fake.ota.update.yml', 'r') as orig:
                 self.maxDiff = None
                 self.assertEqual(result.read(), orig.read())
 
@@ -97,8 +97,8 @@ class MetadataTest(unittest.TestCase):
                 fdroidserver.metadata.write_metadata(os.path.join(testdir, appid + '.yml'), app)
 
         # assert rewrite result
-        with open(os.path.join(testdir, 'org.fdroid.fdroid.yml'), 'r', encoding='utf-8') as result:
-            with open('metadata-rewrite-yml/org.fdroid.fdroid.yml', 'r', encoding='utf-8') as orig:
+        with open(os.path.join(testdir, 'org.fdroid.fdroid.yml'), 'r') as result:
+            with open('metadata-rewrite-yml/org.fdroid.fdroid.yml', 'r') as orig:
                 self.maxDiff = None
                 self.assertEqual(result.read(), orig.read())
 
@@ -113,8 +113,8 @@ class MetadataTest(unittest.TestCase):
                 fdroidserver.metadata.write_metadata(os.path.join(testdir, appid + '.yml'), app)
 
         # assert rewrite result
-        with open(os.path.join(testdir, 'app.with.special.build.params.yml'), 'r', encoding='utf-8') as result:
-            with open('metadata-rewrite-yml/app.with.special.build.params.yml', 'r', encoding='utf-8') as orig:
+        with open(os.path.join(testdir, 'app.with.special.build.params.yml'), 'r') as result:
+            with open('metadata-rewrite-yml/app.with.special.build.params.yml', 'r') as orig:
                 self.maxDiff = None
                 self.assertEqual(result.read(), orig.read())
 

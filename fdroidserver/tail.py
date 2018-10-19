@@ -67,7 +67,7 @@ class Tail(object):
         Arguments:
             s - Number of seconds to wait between each iteration; Defaults to 1. '''
 
-        with open(self.tailed_file, encoding='utf8') as file_:
+        with open(self.tailed_file) as file_:
             # Go to the end of file
             file_.seek(0, 2)
             while not self.t_stop.is_set():

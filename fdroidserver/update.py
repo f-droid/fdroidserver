@@ -1722,7 +1722,7 @@ def make_categories_txt(repodir, categories):
     catdata = ''
     for cat in sorted(categories):
         catdata += cat + '\n'
-    with open(os.path.join(repodir, 'categories.txt'), 'w', encoding='utf8') as f:
+    with open(os.path.join(repodir, 'categories.txt'), 'w') as f:
         f.write(catdata)
 
 
@@ -2065,7 +2065,7 @@ def main():
         # Generate latest apps data for widget
         if os.path.exists(os.path.join('stats', 'latestapps.txt')):
             data = ''
-            with open(os.path.join('stats', 'latestapps.txt'), 'r', encoding='utf8') as f:
+            with open(os.path.join('stats', 'latestapps.txt'), 'r') as f:
                 for line in f:
                     appid = line.rstrip()
                     data += appid + "\t"
@@ -2074,7 +2074,7 @@ def main():
                     if app.icon is not None:
                         data += app.icon + "\t"
                     data += app.License + "\n"
-            with open(os.path.join(repodirs[0], 'latestapps.dat'), 'w', encoding='utf8') as f:
+            with open(os.path.join(repodirs[0], 'latestapps.dat'), 'w') as f:
                 f.write(data)
 
     if cachechanged:
