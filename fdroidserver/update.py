@@ -695,7 +695,7 @@ def _get_localized_dict(app, locale):
 def _set_localized_text_entry(app, locale, key, f):
     limit = config['char_limits'][key]
     localized = _get_localized_dict(app, locale)
-    with open(f) as fp:
+    with open(f, errors='replace') as fp:
         text = fp.read()[:limit]
         if len(text) > 0:
             localized[key] = text
@@ -703,7 +703,7 @@ def _set_localized_text_entry(app, locale, key, f):
 
 def _set_author_entry(app, key, f):
     limit = config['char_limits']['author']
-    with open(f) as fp:
+    with open(f, errors='replace') as fp:
         text = fp.read()[:limit]
         if len(text) > 0:
             app[key] = text
