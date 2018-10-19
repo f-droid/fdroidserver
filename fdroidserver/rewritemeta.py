@@ -34,7 +34,7 @@ def proper_format(app):
     s = io.StringIO()
     # TODO: currently reading entire file again, should reuse first
     # read in metadata.py
-    with open(app.metadatapath, 'r', encoding='utf8') as f:
+    with open(app.metadatapath, 'r') as f:
         cur_content = f.read()
     _ignored, extension = common.get_extension(app.metadatapath)
     if extension == 'yml':

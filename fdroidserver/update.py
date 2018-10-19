@@ -695,7 +695,7 @@ def _get_localized_dict(app, locale):
 def _set_localized_text_entry(app, locale, key, f):
     limit = config['char_limits'][key]
     localized = _get_localized_dict(app, locale)
-    with open(f) as fp:
+    with open(f, errors='replace') as fp:
         text = fp.read()[:limit]
         if len(text) > 0:
             localized[key] = text
@@ -703,7 +703,7 @@ def _set_localized_text_entry(app, locale, key, f):
 
 def _set_author_entry(app, key, f):
     limit = config['char_limits']['author']
-    with open(f) as fp:
+    with open(f, errors='replace') as fp:
         text = fp.read()[:limit]
         if len(text) > 0:
             app[key] = text
@@ -1722,7 +1722,7 @@ def make_categories_txt(repodir, categories):
     catdata = ''
     for cat in sorted(categories):
         catdata += cat + '\n'
-    with open(os.path.join(repodir, 'categories.txt'), 'w', encoding='utf8') as f:
+    with open(os.path.join(repodir, 'categories.txt'), 'w') as f:
         f.write(catdata)
 
 
@@ -2065,7 +2065,7 @@ def main():
         # Generate latest apps data for widget
         if os.path.exists(os.path.join('stats', 'latestapps.txt')):
             data = ''
-            with open(os.path.join('stats', 'latestapps.txt'), 'r', encoding='utf8') as f:
+            with open(os.path.join('stats', 'latestapps.txt'), 'r') as f:
                 for line in f:
                     appid = line.rstrip()
                     data += appid + "\t"
@@ -2074,7 +2074,7 @@ def main():
                     if app.icon is not None:
                         data += app.icon + "\t"
                     data += app.License + "\n"
-            with open(os.path.join(repodirs[0], 'latestapps.dat'), 'w', encoding='utf8') as f:
+            with open(os.path.join(repodirs[0], 'latestapps.dat'), 'w') as f:
                 f.write(data)
 
     if cachechanged:

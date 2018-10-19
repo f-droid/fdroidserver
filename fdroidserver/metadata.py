@@ -706,7 +706,7 @@ def parse_srclib(metadatapath):
     if not os.path.exists(metadatapath):
         return thisinfo
 
-    metafile = open(metadatapath, "r", encoding='utf-8')
+    metafile = open(metadatapath, "r")
 
     n = 0
     for line in metafile:
@@ -1014,7 +1014,7 @@ def parse_metadata(metadatapath, check_vcs=False, refresh=True):
     else:
         app.id = name
 
-    with open(metadatapath, 'r', encoding='utf-8') as mf:
+    with open(metadatapath, 'r') as mf:
         if ext == 'txt':
             parse_txt_metadata(mf, app)
         elif ext == 'json':
@@ -1565,7 +1565,7 @@ def write_metadata(metadatapath, app):
                           .format(path=metadatapath, formats=', '.join(accepted)))
 
     try:
-        with open(metadatapath, 'w', encoding='utf8') as mf:
+        with open(metadatapath, 'w') as mf:
             if ext == 'txt':
                 return write_txt(mf, app)
             elif ext == 'yml':

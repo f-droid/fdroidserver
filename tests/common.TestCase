@@ -427,7 +427,7 @@ class CommonTest(unittest.TestCase):
     def test_write_to_config(self):
         with tempfile.TemporaryDirectory() as tmpPath:
             cfgPath = os.path.join(tmpPath, 'config.py')
-            with open(cfgPath, 'w', encoding='utf-8') as f:
+            with open(cfgPath, 'w') as f:
                 f.write(textwrap.dedent("""\
                     # abc
                     # test = 'example value'
@@ -445,7 +445,7 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.write_to_config(cfg, 'test', value='test value', config_file=cfgPath)
             fdroidserver.common.write_to_config(cfg, 'new_key', value='new', config_file=cfgPath)
 
-            with open(cfgPath, 'r', encoding='utf-8') as f:
+            with open(cfgPath, 'r') as f:
                 self.assertEqual(f.read(), textwrap.dedent("""\
                     # abc
                     test = 'test value'
@@ -465,7 +465,7 @@ class CommonTest(unittest.TestCase):
             with open(cfgPath, 'w') as f:
                 pass
             fdroidserver.common.write_to_config({}, 'key', 'val', cfgPath)
-            with open(cfgPath, 'r', encoding='utf-8') as f:
+            with open(cfgPath, 'r') as f:
                 self.assertEqual(f.read(), textwrap.dedent("""\
 
                 key = "val"

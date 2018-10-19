@@ -37,12 +37,12 @@ options = None
 
 def disable_in_config(key, value):
     '''write a key/value to the local config.py, then comment it out'''
-    with open('config.py', 'r', encoding='utf8') as f:
+    with open('config.py', 'r') as f:
         data = f.read()
     pattern = r'\n[\s#]*' + key + r'\s*=\s*"[^"]*"'
     repl = '\n#' + key + ' = "' + value + '"'
     data = re.sub(pattern, repl, data)
-    with open('config.py', 'w', encoding='utf8') as f:
+    with open('config.py', 'w') as f:
         f.writelines(data)
 
 
