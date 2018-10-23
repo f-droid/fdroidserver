@@ -104,18 +104,6 @@ config = {
     'vm_provider': 'virtualbox',
 }
 
-if os.path.isfile('/usr/bin/systemd-detect-virt'):
-    try:
-        virt = subprocess.check_output('/usr/bin/systemd-detect-virt').strip().decode('utf-8')
-    except subprocess.CalledProcessError:
-        virt = 'none'
-    if virt == 'qemu' or virt == 'kvm' or virt == 'bochs':
-        logging.info('Running in a VM guest, defaulting to QEMU/KVM via libvirt')
-        config['vm_provider'] = 'libvirt'
-    elif virt != 'none':
-        logging.info('Running in an unsupported VM guest (%s)!', virt)
-    logging.debug('detected virt: %s', virt)
-
 # load config file, if present
 if os.path.exists('makebuildserver.config.py'):
     exec(compile(open('makebuildserver.config.py').read(), 'makebuildserver.config.py', 'exec'), config)
@@ -688,6 +676,18 @@ if __name__ == '__main__':
     if not os.path.exists('makebuildserver') and not os.path.exists('buildserver'):
         logging.critical('This must be run as ./makebuildserver in fdroidserver.git!')
         sys.exit(1)
+
+    if os.path.isfile('/usr/bin/systemd-detect-virt'):
+        try:
+            virt = subprocess.check_output('/usr/bin/systemd-detect-virt').strip().decode('utf-8')
+        except subprocess.CalledProcessError:
+            virt = 'none'
+        if virt == 'qemu' or virt == 'kvm' or virt == 'bochs':
+            logging.info('Running in a VM guest, defaulting to QEMU/KVM via libvirt')
+            config['vm_provider'] = 'libvirt'
+        elif virt != 'none':
+            logging.info('Running in an unsupported VM guest (%s)!', virt)
+        logging.debug('detected virt: %s', virt)
 
     try:
         main()
