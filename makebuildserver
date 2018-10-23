@@ -41,11 +41,6 @@ elif options.verbosity <= 0:
     loglevel = logging.WARNING
 logging.basicConfig(format=logformat, level=loglevel)
 
-
-if not os.path.exists('makebuildserver') and not os.path.exists('buildserver'):
-    logging.critical('This must be run as ./makebuildserver in fdroidserver.git!')
-    sys.exit(1)
-
 tail = None
 
 # set up default config
@@ -689,6 +684,11 @@ def main():
 
 
 if __name__ == '__main__':
+
+    if not os.path.exists('makebuildserver') and not os.path.exists('buildserver'):
+        logging.critical('This must be run as ./makebuildserver in fdroidserver.git!')
+        sys.exit(1)
+
     try:
         main()
     finally:
