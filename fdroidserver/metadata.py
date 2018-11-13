@@ -1150,10 +1150,17 @@ def write_yaml(mf, app):
             else:
                 return str(value)
         elif typ is TYPE_SCRIPT:
-            if len(value) > 50:
-                return ruamel.yaml.scalarstring.preserve_literal(value)
+            if type(value) == list:
+                if len(value) == 1:
+                    return value[0]
+                else:
+                    return value
             else:
-                return value
+                script_lines = value.split(' && ')
+                if len(script_lines) > 1:
+                    return script_lines
+                else:
+                    return value
         else:
             return value
 
@@ -1189,8 +1196,8 @@ def write_yaml(mf, app):
         for build in app.builds:
             b = ruamel.yaml.comments.CommentedMap()
             for field in build_flags:
-                if hasattr(build, field) and getattr(build, field):
-                    value = getattr(build, field)
+                value = getattr(build, field)
+                if hasattr(build, field) and value:
                     if field == 'gradle' and value == ['off']:
                         value = [ruamel.yaml.scalarstring.SingleQuotedScalarString('off')]
                     if field in ('maven', 'buildozer'):
@@ -1198,11 +1205,6 @@ def write_yaml(mf, app):
                             continue
                         elif value == 'yes':
                             value = 'yes'
-                    if field == 'prebuild':
-                        prebuild_tokens = value.split(' && ')
-                        # when theres just 1 entry keep string rather than a list
-                        if len(prebuild_tokens) > 1:
-                            value = prebuild_tokens
                     b.update({field: _field_to_yaml(flagtype(field), value)})
             builds.append(b)
 

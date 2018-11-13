@@ -254,7 +254,7 @@ class MetadataTest(unittest.TestCase):
                                                   'prebuild': "a && b && "
                                                               "sed -i 's,a,b,'"}]})
 
-    def test_write_yaml_prebuild(self):
+    def test_write_yaml_1_line_scripts_as_string(self):
         mf = io.StringIO()
         app = fdroidserver.metadata.App()
         app.Categories = ['None']
@@ -262,7 +262,10 @@ class MetadataTest(unittest.TestCase):
         build = fdroidserver.metadata.Build()
         build.versionCode = 102030
         build.versionName = 'v1.2.3'
-        build.prebuild = 'a && b % c && d `echo \'$e\'` && f'
+        build.sudo = "chmod +rwx /opt"
+        build.init = "sed -i -e 'g/what/ever/' /some/file"
+        build.prebuild = "sed -i 'd/that wrong config/' gradle.properties"
+        build.build = "./gradlew compile"
         app.builds.append(build)
         fdroidserver.metadata.write_yaml(mf, app)
         mf.seek(0)
@@ -274,11 +277,132 @@ class MetadataTest(unittest.TestCase):
             Builds:
               - versionName: v1.2.3
                 versionCode: 102030
+                sudo: chmod +rwx /opt
+                init: sed -i -e 'g/what/ever/' /some/file
+                prebuild: sed -i 'd/that wrong config/' gradle.properties
+                build: ./gradlew compile
+
+            AutoUpdateMode: None
+            UpdateCheckMode: None
+            """))
+
+    def test_write_yaml_1_line_scripts_as_list(self):
+        mf = io.StringIO()
+        app = fdroidserver.metadata.App()
+        app.Categories = ['None']
+        app.builds = []
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 102030
+        build.versionName = 'v1.2.3'
+        build.sudo = ["chmod +rwx /opt"]
+        build.init = ["sed -i -e 'g/what/ever/' /some/file"]
+        build.prebuild = ["sed -i 'd/that wrong config/' gradle.properties"]
+        build.build = ["./gradlew compile"]
+        app.builds.append(build)
+        fdroidserver.metadata.write_yaml(mf, app)
+        mf.seek(0)
+        self.assertEqual(mf.read(), textwrap.dedent("""\
+            Categories:
+              - None
+            License: Unknown
+
+            Builds:
+              - versionName: v1.2.3
+                versionCode: 102030
+                sudo: chmod +rwx /opt
+                init: sed -i -e 'g/what/ever/' /some/file
+                prebuild: sed -i 'd/that wrong config/' gradle.properties
+                build: ./gradlew compile
+
+            AutoUpdateMode: None
+            UpdateCheckMode: None
+            """))
+
+    def test_write_yaml_multiline_scripts_from_list(self):
+        mf = io.StringIO()
+        app = fdroidserver.metadata.App()
+        app.Categories = ['None']
+        app.builds = []
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 102030
+        build.versionName = 'v1.2.3'
+        build.sudo = ["apt-get update",
+                      "apt-get install -y whatever",
+                      "sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml"]
+        build.init = ["bash generate_some_file.sh",
+                      "sed -i -e 'g/what/ever/' /some/file"]
+        build.prebuild = ["npm something",
+                          "echo 'important setting' >> /a/file"]
+        build.build = ["./gradlew someSpecialTask",
+                       "sed -i 'd/that wrong config/' gradle.properties",
+                       "./gradlew compile"]
+        app.builds.append(build)
+        fdroidserver.metadata.write_yaml(mf, app)
+        mf.seek(0)
+        self.assertEqual(mf.read(), textwrap.dedent("""\
+            Categories:
+              - None
+            License: Unknown
+
+            Builds:
+              - versionName: v1.2.3
+                versionCode: 102030
+                sudo:
+                  - apt-get update
+                  - apt-get install -y whatever
+                  - sed -i -e 's/<that attr="bad"/<that attr="good"/' ~/.whatever/config.xml
+                init:
+                  - bash generate_some_file.sh
+                  - sed -i -e 'g/what/ever/' /some/file
                 prebuild:
-                  - a
-                  - b % c
-                  - d `echo '$e'`
-                  - f
+                  - npm something
+                  - echo 'important setting' >> /a/file
+                build:
+                  - ./gradlew someSpecialTask
+                  - sed -i 'd/that wrong config/' gradle.properties
+                  - ./gradlew compile
+
+            AutoUpdateMode: None
+            UpdateCheckMode: None
+            """))
+
+    def test_write_yaml_multiline_scripts_from_string(self):
+        mf = io.StringIO()
+        app = fdroidserver.metadata.App()
+        app.Categories = ['None']
+        app.builds = []
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 102030
+        build.versionName = 'v1.2.3'
+        build.sudo = "apt-get update && apt-get install -y whatever && sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml"
+        build.init = "bash generate_some_file.sh && sed -i -e 'g/what/ever/' /some/file"
+        build.prebuild = "npm something && echo 'important setting' >> /a/file"
+        build.build = "./gradlew someSpecialTask && sed -i 'd/that wrong config/' gradle.properties && ./gradlew compile"
+        app.builds.append(build)
+        fdroidserver.metadata.write_yaml(mf, app)
+        mf.seek(0)
+        self.assertEqual(mf.read(), textwrap.dedent("""\
+            Categories:
+              - None
+            License: Unknown
+
+            Builds:
+              - versionName: v1.2.3
+                versionCode: 102030
+                sudo:
+                  - apt-get update
+                  - apt-get install -y whatever
+                  - sed -i -e 's/<that attr="bad"/<that attr="good"/' ~/.whatever/config.xml
+                init:
+                  - bash generate_some_file.sh
+                  - sed -i -e 'g/what/ever/' /some/file
+                prebuild:
+                  - npm something
+                  - echo 'important setting' >> /a/file
+                build:
+                  - ./gradlew someSpecialTask
+                  - sed -i 'd/that wrong config/' gradle.properties
+                  - ./gradlew compile
 
             AutoUpdateMode: None
             UpdateCheckMode: None
