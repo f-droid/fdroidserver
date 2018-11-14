@@ -216,21 +216,74 @@ class MetadataTest(unittest.TestCase):
             Builds:
                 - versionCode: 1
                   versionName: v0.1.0
+                  sudo:
+                    - apt-get update
+                    - apt-get install -y whatever
+                    - sed -i -e 's/<that attr="bad"/<that attr="good"/' ~/.whatever/config.xml
+                  init:
+                    - bash generate_some_file.sh
+                    - sed -i -e 'g/what/ever/' /some/file
                   prebuild:
-                    - a
-                    - b
-                    - c
+                    - npm something
+                    - echo 'important setting' >> /a/file
+                  build:
+                    - ./gradlew someSpecialTask
+                    - sed -i 'd/that wrong config/' gradle.properties
+                    - ./gradlew compile
             """))
         mf.name = 'mock_filename.yaml'
         mf.seek(0)
         result = {}
         with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
             fdroidserver.metadata.parse_yaml_metadata(mf, result)
+        self.maxDiff = None
         self.assertDictEqual(result, {'AutoName': 'F-Droid',
                                       'RepoType': 'git',
                                       'Builds': [{'versionCode': 1,
                                                   'versionName': 'v0.1.0',
-                                                  'prebuild': 'a && b && c'}]})
+                                                  'sudo': "apt-get update && "
+                                                          "apt-get install -y whatever && "
+                                                          "sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml",
+                                                  'init': "bash generate_some_file.sh && "
+                                                          "sed -i -e 'g/what/ever/' /some/file",
+                                                  'prebuild': "npm something && echo 'important setting' >> /a/file",
+                                                  'build': "./gradlew someSpecialTask && "
+                                                           "sed -i 'd/that wrong config/' gradle.properties && "
+                                                           "./gradlew compile"}]})
+
+    def test_parse_yaml_metadata_prebuild_strings(self):
+        mf = io.StringIO(textwrap.dedent("""\
+            AutoName: F-Droid
+            RepoType: git
+            Builds:
+                - versionCode: 1
+                  versionName: v0.1.0
+                  sudo: |-
+                    apt-get update && apt-get install -y whatever && sed -i -e 's/<that attr="bad"/<that attr="good"/' ~/.whatever/config.xml
+                  init: bash generate_some_file.sh && sed -i -e 'g/what/ever/' /some/file
+                  prebuild: npm something && echo 'important setting' >> /a/file
+                  build: |-
+                    ./gradlew someSpecialTask && sed -i 'd/that wrong config/' gradle.properties && ./gradlew compile
+            """))
+        mf.name = 'mock_filename.yaml'
+        mf.seek(0)
+        result = {}
+        with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
+            fdroidserver.metadata.parse_yaml_metadata(mf, result)
+        self.maxDiff = None
+        self.assertDictEqual(result, {'AutoName': 'F-Droid',
+                                      'RepoType': 'git',
+                                      'Builds': [{'versionCode': 1,
+                                                  'versionName': 'v0.1.0',
+                                                  'sudo': "apt-get update && "
+                                                          "apt-get install -y whatever && "
+                                                          "sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml",
+                                                  'init': "bash generate_some_file.sh && "
+                                                          "sed -i -e 'g/what/ever/' /some/file",
+                                                  'prebuild': "npm something && echo 'important setting' >> /a/file",
+                                                  'build': "./gradlew someSpecialTask && "
+                                                           "sed -i 'd/that wrong config/' gradle.properties && "
+                                                           "./gradlew compile"}]})
 
     def test_parse_yaml_metadata_prebuild_string(self):
         mf = io.StringIO(textwrap.dedent("""\

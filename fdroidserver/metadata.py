@@ -1091,12 +1091,21 @@ def parse_yaml_metadata(mf, app):
                             _("Unrecognised build flag '{build_flag}' "
                               "in '{path}'").format(build_flag=build_flag,
                                                     path=mf.name))
-
-                if 'prebuild' in build and type(build['prebuild']) == list:
-                    build['prebuild'] = ' && '.join(build['prebuild'])
-
+        post_parse_yaml_metadata(yamldata)
         app.update(yamldata)
     return app
+
+
+def post_parse_yaml_metadata(yamldata):
+    """transform yaml metadata to our internal data format"""
+    for build in yamldata.get('Builds', []):
+        for flag in build.keys():
+            _flagtype = flagtype(flag)
+
+            # concatenate script flags into a single string if they are stored as list
+            if _flagtype is TYPE_SCRIPT:
+                if isinstance(build[flag], list):
+                    build[flag] = ' && '.join(build[flag])
 
 
 def write_yaml(mf, app):
