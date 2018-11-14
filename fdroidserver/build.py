@@ -1148,7 +1148,7 @@ def main():
                     appid, reason))
                 if options.stop:
                     logging.debug("Error encoutered, stopping by user request.")
-                    sys.exit(1)
+                    common.force_exit(1)
                 failed_apps[appid] = vcse
                 wikilog = str(vcse)
             except FDroidException as e:
@@ -1163,7 +1163,7 @@ def main():
                 logging.error("Could not build app %s: %s" % (appid, e))
                 if options.stop:
                     logging.debug("Error encoutered, stopping by user request.")
-                    sys.exit(1)
+                    common.force_exit(1)
                 failed_apps[appid] = e
                 wikilog = e.get_wikitext()
             except Exception as e:
@@ -1171,7 +1171,7 @@ def main():
                     appid, traceback.format_exc()))
                 if options.stop:
                     logging.debug("Error encoutered, stopping by user request.")
-                    sys.exit(1)
+                    common.force_exit(1)
                 failed_apps[appid] = e
                 wikilog = str(e)
 
@@ -1238,7 +1238,7 @@ def main():
 
                 if not os.path.isdir(repo_dir):
                     logging.critical("directory does not exists '{path}'".format(path=repo_dir))
-                    sys.exit(1)
+                    common.force_exit(1)
 
                 logging.info("Performing Drozer scan on {0}.".format(app))
                 docker.perform_drozer_scan(apk_path, app.id, repo_dir)
@@ -1289,9 +1289,7 @@ def main():
         newpage.save('#REDIRECT [[' + wiki_page_path + ']]', summary='Update redirect')
 
     # hack to ensure this exits, even is some threads are still running
-    sys.stdout.flush()
-    sys.stderr.flush()
-    os._exit(0)
+    common.force_exit()
 
 
 if __name__ == "__main__":

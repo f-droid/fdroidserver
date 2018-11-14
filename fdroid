@@ -149,9 +149,7 @@ def main():
         sys.exit(1)
     except KeyboardInterrupt:
         print('')
-        sys.stdout.flush()
-        sys.stderr.flush()
-        os._exit(1)
+        fdroidserver.common.force_exit(1)
     # These should only be unexpected crashes due to bugs in the code
     # str(e) often doesn't contain a reason, so just show the backtrace
     except Exception as e:
