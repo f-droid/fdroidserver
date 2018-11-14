@@ -3424,3 +3424,16 @@ def calculate_math_string(expr):
         raise SyntaxError("could not parse expression '{expr}', "
                           "only basic math operations are allowed (+, -, *)"
                           .format(expr=expr))
+
+
+def force_exit(exitvalue=0):
+    """force exit when thread operations could block the exit
+
+    The build command has to use some threading stuff to handle the
+    timeout and locks.  This seems to prevent the command from
+    exiting, unless this hack is used.
+
+    """
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(exitvalue)
