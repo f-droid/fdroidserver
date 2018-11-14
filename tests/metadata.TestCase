@@ -257,6 +257,7 @@ class MetadataTest(unittest.TestCase):
     def test_write_yaml_prebuild(self):
         mf = io.StringIO()
         app = fdroidserver.metadata.App()
+        app.Categories = ['None']
         app.builds = []
         build = fdroidserver.metadata.Build()
         build.versionCode = 102030
