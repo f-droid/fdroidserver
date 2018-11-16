@@ -135,10 +135,14 @@ def get_build_vm(srvdir, provider=None):
         logging.debug('could not confirm that either virtualbox or kvm/libvirt are installed')
 
     # try guessing provider from .../srvdir/.vagrant internals
-    has_libvirt_machine = isdir(os.path.join(abssrvdir, '.vagrant',
-                                             'machines', 'default', 'libvirt'))
-    has_vbox_machine = isdir(os.path.join(abssrvdir, '.vagrant',
-                                          'machines', 'default', 'virtualbox'))
+    vagrant_libvirt_path = os.path.join(abssrvdir, '.vagrant', 'machines',
+                                        'default', 'libvirt')
+    has_libvirt_machine = isdir(vagrant_libvirt_path) \
+        and len(os.listdir(vagrant_libvirt_path)) > 0
+    vagrant_virtualbox_path = os.path.join(abssrvdir, '.vagrant', 'machines',
+                                           'default', 'virtualbox')
+    has_vbox_machine = isdir(vagrant_virtualbox_path) \
+        and len(os.listdir(vagrant_virtualbox_path)) > 0
     if has_libvirt_machine and has_vbox_machine:
         logging.info('build vm provider lookup found virtualbox and libvirt, defaulting to \'virtualbox\'')
         return VirtualboxBuildVm(abssrvdir)
