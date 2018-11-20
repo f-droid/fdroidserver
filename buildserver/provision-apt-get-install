@@ -88,14 +88,17 @@ packages="
  python-gnupg
  python-lxml
  python-magic
+ python-pip
  python-setuptools
  python3-defusedxml
  python3-git
  python3-gitdb
  python3-gnupg
+ python3-pip
  python3-pyasn1
  python3-pyasn1-modules
  python3-requests
+ python3-setuptools
  python3-smmap
  python3-yaml
  python3-ruamel.yaml
