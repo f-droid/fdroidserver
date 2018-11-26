@@ -42,7 +42,7 @@ packages="
  ant-contrib
  autoconf
  autoconf2.13
- automake/testing
+ automake
  automake1.11
  autopoint
  bison
@@ -73,8 +73,8 @@ packages="
  libsaxonb-java
  libssl-dev
  libstdc++6:i386
- libtool/testing
- libtool-bin/testing
+ libtool
+ libtool-bin
  make
  maven
  mercurial
