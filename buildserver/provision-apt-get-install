@@ -5,6 +5,7 @@ set -e
 set -x
 
 debian_mirror=$1
+export DEBIAN_FRONTEND=noninteractive 
 
 printf 'APT::Install-Recommends "0";\nAPT::Install-Suggests "0";\n' \
        > /etc/apt/apt.conf.d/99no-install-recommends
