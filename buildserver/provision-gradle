@@ -2,11 +2,18 @@
 
 set -ex
 
+
+# version compare magic
+vergte() {
+    printf '%s\n%s' "$1" "$2" | sort -C -V -r
+}
+
 test -e /opt/gradle/versions || mkdir -p /opt/gradle/versions
 cd /opt/gradle/versions
 for f in /vagrant/cache/gradle-*.zip; do
     ver=`echo $f | sed 's,.*gradle-\([0-9][0-9.]*\).*\.zip,\1,'`
-    if [ ! -d /opt/gradle/versions/${ver} ]; then
+    # only use versions greater or equal 2.2.1
+    if vergte $ver 2.2.1 && [ ! -d /opt/gradle/versions/${ver} ]; then
         unzip -qq $f
         mv gradle-${ver} /opt/gradle/versions/${ver}
     fi
