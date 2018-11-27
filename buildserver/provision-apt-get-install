@@ -16,9 +16,12 @@ printf 'APT::Acquire::Retries "20";\n' \
 printf 'APT::Periodic::Update-Package-Lists "0";\nAPT::Periodic::Unattended-Upgrade "0";\n' \
        > /etc/apt/apt.conf.d/99no-auto-updates
 
+printf 'APT::Get::Assume-Yes "true";\n' \
+       > /etc/apt/apt.conf.d/99assumeyes
+
 if echo $debian_mirror | grep '^https' 2>&1 > /dev/null; then
-    apt-get -y update || apt-get -y update
-    apt-get -y install apt-transport-https ca-certificates
+    apt-get update || apt-get update
+    apt-get install apt-transport-https ca-certificates
 fi
 
 cat << EOF > /etc/apt/sources.list
@@ -32,9 +35,9 @@ printf "Package: *\nPin: release o=Debian,a=testing\nPin-Priority: -300\n" > /et
 
 dpkg --add-architecture i386
 
-apt-get -y update || apt-get -y update
-apt-get -y upgrade --download-only
-apt-get -y upgrade
+apt-get update || apt-get update
+apt-get upgrade --download-only
+apt-get upgrade
 
 packages="
  ant
@@ -109,8 +112,8 @@ packages="
  zip
  zlib1g:i386
 "
-apt-get install --yes $packages --download-only
-apt-get install --yes $packages
+apt-get install $packages --download-only
+apt-get install $packages
 
 highestjava=`update-java-alternatives --list | sort -n | tail -1 | cut -d ' ' -f 1`
 update-java-alternatives --set $highestjava
