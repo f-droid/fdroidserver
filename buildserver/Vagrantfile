@@ -80,8 +80,6 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "provision-android-sdk"
   config.vm.provision "shell", path: "provision-android-ndk",
     args: ["/home/vagrant/android-ndk"]
-  config.vm.provision "shell", path: "provision-pip",
-    args: ["compare-locales"]
   config.vm.provision "shell", path: "provision-gradle"
 
 end
