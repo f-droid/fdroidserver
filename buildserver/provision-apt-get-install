@@ -58,15 +58,11 @@ packages="
  git-core
  git-svn
  gperf
- graphviz
- imagemagick
- inkscape
  javacc
  libarchive-zip-perl
  libexpat1-dev
  libgcc1:i386
  libglib2.0-dev
- liblwp-protocol-https-perl
  liblzma-dev
  libncurses5:i386
  librsvg2-bin
@@ -79,13 +75,10 @@ packages="
  maven
  mercurial
  nasm
- nodejs
  openjdk-8-jre-headless
  openjdk-8-jdk-headless
  optipng
  p7zip
- pandoc
- perlmagick
  pkg-config
  python-gnupg
  python-lxml
@@ -105,16 +98,12 @@ packages="
  python3-yaml
  python3-ruamel.yaml
  quilt
- realpath
  rsync
  scons
  sqlite3
  subversion
  swig
- texinfo
- transfig
  unzip
- vorbis-tools
  xsltproc
  yasm
  zip
