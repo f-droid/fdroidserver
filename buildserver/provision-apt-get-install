@@ -38,7 +38,6 @@ dpkg --add-architecture i386
 apt-get update || apt-get update
 apt-get upgrade --download-only
 apt-get upgrade
-apt-get dist-upgrade
 
 packages="
  ant
