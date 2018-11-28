@@ -3,6 +3,7 @@
 
 echo $0
 set -e
+set -x
 
 NDK_BASE=$1
 
