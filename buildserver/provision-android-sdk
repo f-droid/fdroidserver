@@ -44,10 +44,31 @@ done
 cd /vagrant/cache
 
 # make links for `android update sdk` to use and delete
+blacklist="build-tools_r17-linux.zip
+           build-tools_r18.0.1-linux.zip
+           build-tools_r18.1-linux.zip
+           build-tools_r18.1.1-linux.zip
+           build-tools_r19-linux.zip
+           build-tools_r19.0.1-linux.zip
+           build-tools_r19.0.2-linux.zip
+           build-tools_r19.0.3-linux.zip
+           build-tools_r21-linux.zip
+           build-tools_r21.0.1-linux.zip
+           build-tools_r21.0.2-linux.zip
+           build-tools_r21.1-linux.zip
+           build-tools_r21.1.1-linux.zip
+           build-tools_r22-linux.zip
+           build-tools_r23-linux.zip
+           android-1.5_r04-linux.zip
+           android-1.6_r03-linux.zip
+           android-2.0_r01-linux.zip
+           android-2.0.1_r01-linux.zip"
 latestm2=`ls -1 android_m2repository*.zip | sort -n | tail -1`
 for f in $latestm2 android-[0-9]*.zip platform-[0-9]*.zip build-tools_r*-linux.zip; do
     rm -f ${ANDROID_HOME}/temp/$f
-    ln -s /vagrant/cache/$f ${ANDROID_HOME}/temp/
+    if [[ $blacklist != *$f* ]]; then
+        ln -s /vagrant/cache/$f ${ANDROID_HOME}/temp/
+    fi
 done
 
 # install all cached platforms
