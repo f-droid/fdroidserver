@@ -1091,8 +1091,21 @@ def parse_yaml_metadata(mf, app):
                             _("Unrecognised build flag '{build_flag}' "
                               "in '{path}'").format(build_flag=build_flag,
                                                     path=mf.name))
+        post_parse_yaml_metadata(yamldata)
         app.update(yamldata)
     return app
+
+
+def post_parse_yaml_metadata(yamldata):
+    """transform yaml metadata to our internal data format"""
+    for build in yamldata.get('Builds', []):
+        for flag in build.keys():
+            _flagtype = flagtype(flag)
+
+            # concatenate script flags into a single string if they are stored as list
+            if _flagtype is TYPE_SCRIPT:
+                if isinstance(build[flag], list):
+                    build[flag] = ' && '.join(build[flag])
 
 
 def write_yaml(mf, app):
@@ -1146,10 +1159,17 @@ def write_yaml(mf, app):
             else:
                 return str(value)
         elif typ is TYPE_SCRIPT:
-            if len(value) > 50:
-                return ruamel.yaml.scalarstring.preserve_literal(value)
+            if type(value) == list:
+                if len(value) == 1:
+                    return value[0]
+                else:
+                    return value
             else:
-                return value
+                script_lines = value.split(' && ')
+                if len(script_lines) > 1:
+                    return script_lines
+                else:
+                    return value
         else:
             return value
 
@@ -1185,8 +1205,8 @@ def write_yaml(mf, app):
         for build in app.builds:
             b = ruamel.yaml.comments.CommentedMap()
             for field in build_flags:
-                if hasattr(build, field) and getattr(build, field):
-                    value = getattr(build, field)
+                value = getattr(build, field)
+                if hasattr(build, field) and value:
                     if field == 'gradle' and value == ['off']:
                         value = [ruamel.yaml.scalarstring.SingleQuotedScalarString('off')]
                     if field in ('maven', 'buildozer'):
