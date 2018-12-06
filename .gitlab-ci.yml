@@ -152,8 +152,17 @@ fedora_latest:
     - master@fdroid/fdroidserver
   script:
     - dnf -y update
-    - dnf -y install git gnupg java-1.8.0-openjdk-devel python3 python3-babel
-                     python3-pip rsync unzip wget
+    - dnf -y install findutils
+                     git
+                     gnupg
+                     java-1.8.0-openjdk-devel
+                     python3
+                     python3-babel
+                     python3-pip
+                     rsync
+                     unzip
+                     wget
+                     which
     - ./setup.py compile_catalog sdist
     - useradd -m -c "test account" --password "fakepassword"  testuser
     - su testuser --login --command "cd `pwd`; pip3 install --user dist/fdroidserver-*.tar.gz"
@@ -162,6 +171,7 @@ fedora_latest:
     - unzip -q tools.zip
     - rm tools.zip
     - export AAPT_VERSION=`sed -n "s,^MINIMUM_AAPT_VERSION\s*=\s*['\"]\(.*\)[['\"],\1,p" fdroidserver/common.py`
+    - export JAVA_HOME=/etc/alternatives/jre
     - export ANDROID_HOME=`pwd`/android-sdk
     - mkdir $ANDROID_HOME
     - mv tools $ANDROID_HOME/
