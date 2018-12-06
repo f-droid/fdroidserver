@@ -29,6 +29,7 @@ addons:
       - sourceline: 'ppa:fdroid/fdroidserver'
     packages:
       - python3-babel
+      - python3-defusedxml
       - python3-setuptools
       - fdroidserver
 
