@@ -3,7 +3,7 @@
 | CI Builds                |  fdroidserver | buildserver | fdroid build --all | publishing tools |
 |--------------------------|:-------------:|:-----------:|:------------------:|:----------------:|
 | Debian                   | [![fdroidserver status on Debian](https://gitlab.com/fdroid/fdroidserver/badges/master/build.svg)](https://gitlab.com/fdroid/fdroidserver/builds) | [![buildserver status](https://jenkins.debian.net/job/reproducible_setup_fdroid_build_environment/badge/icon)](https://jenkins.debian.net/job/reproducible_setup_fdroid_build_environment) | [![fdroid build all status](https://jenkins.debian.net/job/reproducible_fdroid_build_apps/badge/icon)](https://jenkins.debian.net/job/reproducible_fdroid_build_apps/) | [![fdroid test status](https://jenkins.debian.net/job/reproducible_fdroid_test/badge/icon)](https://jenkins.debian.net/job/reproducible_fdroid_test/) |
-| macOS & Ubuntu/LTS       | [![fdroidserver status on macOS & Ubuntu/LTS](https://travis-ci.org/f-droid/fdroidserver.svg?branch=master)](https://travis-ci.org/f-droid/fdroidserver) | | | |
+| macOS & Ubuntu/trusty    | [![fdroidserver status on macOS & Ubuntu/LTS](https://travis-ci.org/fdroidtravis/fdroidserver.svg?branch=master)](https://travis-ci.org/fdroidtravis/fdroidserver) | | | |
 
 
 # F-Droid Server
