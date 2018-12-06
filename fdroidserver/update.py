@@ -46,7 +46,8 @@ from .common import SdkToolsPopen
 from .exception import BuildException, FDroidException
 
 from PIL import Image, PngImagePlugin
-warnings.simplefilter('error', Image.DecompressionBombWarning)
+if hasattr(Image, 'DecompressionBombWarning'):
+    warnings.simplefilter('error', Image.DecompressionBombWarning)
 Image.MAX_IMAGE_PIXELS = 0xffffff  # 4096x4096
 
 METADATA_VERSION = 21
