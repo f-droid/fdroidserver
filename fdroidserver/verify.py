@@ -75,10 +75,10 @@ def main():
 
             logging.info("Processing {apkfilename}".format(apkfilename=apkfilename))
 
-            remoteapk = os.path.join(tmp_dir, apkfilename)
-            if not options.reuse_remote_apk or not os.path.exists(remoteapk):
-                if os.path.exists(remoteapk):
-                    os.remove(remoteapk)
+            remote_apk = os.path.join(tmp_dir, apkfilename)
+            if not options.reuse_remote_apk or not os.path.exists(remote_apk):
+                if os.path.exists(remote_apk):
+                    os.remove(remote_apk)
                 url = 'https://f-droid.org/repo/' + apkfilename
                 logging.info("...retrieving " + url)
                 try:
@@ -91,7 +91,7 @@ def main():
                                               .format(url=url, error=e))
 
             compare_result = common.verify_apks(
-                remoteapk,
+                remote_apk,
                 os.path.join(unsigned_dir, apkfilename),
                 tmp_dir)
             if compare_result:
