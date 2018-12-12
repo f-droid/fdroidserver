@@ -13,8 +13,11 @@ printf 'APT::Install-Recommends "0";\nAPT::Install-Suggests "0";\n' \
 printf 'APT::Acquire::Retries "20";\n' \
        > /etc/apt/apt.conf.d/99acquire-retries
 
-printf 'APT::Periodic::Update-Package-Lists "0";\nAPT::Periodic::Unattended-Upgrade "0";\n' \
-       > /etc/apt/apt.conf.d/99no-auto-updates
+cat <<EOF > /etc/apt/apt.conf.d/99no-auto-updates
+APT::Periodic::Enable "0";
+APT::Periodic::Update-Package-Lists "0";
+APT::Periodic::Unattended-Upgrade "0";
+EOF
 
 printf 'APT::Get::Assume-Yes "true";\n' \
        > /etc/apt/apt.conf.d/99assumeyes
