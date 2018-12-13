@@ -43,8 +43,12 @@ Vagrant.configure("2") do |config|
         libvirt.nic_model_type = configfile["libvirt_nic_model_type"]
       end
     end
-    config.vm.synced_folder './', '/vagrant', type: '9p'
-    synced_folder_type = '9p'
+    if configfile.has_key? "synced_folder_type"
+      synced_folder_type = configfile["synced_folder_type"]
+    else
+      synced_folder_type = '9p'
+    end
+    config.vm.synced_folder './', '/vagrant', type: synced_folder_type
   else
     abort("No supported VM Provider found, set vm_provider in Vagrantfile.yaml!")
   end

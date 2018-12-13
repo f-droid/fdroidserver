@@ -85,3 +85,10 @@
 #
 # libvirt_disk_bus = 'sata'
 # libvirt_nic_model_type = 'rtl8139'
+
+# Sometimes, it is not possible to use the 9p synced folder type with
+# libvirt, like if running a KVM buildserver instance inside of a
+# VMware ESXi guest.  In that case, using NFS or another method is
+# required.
+#
+# synced_folder_type = 'nfs'
