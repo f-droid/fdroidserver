@@ -36,7 +36,7 @@ def download_file(url, local_filename=None, dldir='tmp'):
     return local_filename
 
 
-def http_get(url, etag=None):
+def http_get(url, etag=None, timeout=600):
     """
     Downloads the content from the given URL by making a GET request.
 
@@ -52,12 +52,12 @@ def http_get(url, etag=None):
     # TODO disable TLS Session IDs and TLS Session Tickets
     #      (plain text cookie visible to anyone who can see the network traffic)
     if etag:
-        r = requests.head(url, headers=headers)
+        r = requests.head(url, headers=headers, timeout=timeout)
         r.raise_for_status()
         if 'ETag' in r.headers and etag == r.headers['ETag']:
             return None, etag
 
-    r = requests.get(url, headers=headers)
+    r = requests.get(url, headers=headers, timeout=timeout)
     r.raise_for_status()
 
     new_etag = None

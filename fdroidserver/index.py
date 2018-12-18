@@ -686,7 +686,7 @@ def get_mirror_service_urls(url):
     return urls
 
 
-def download_repo_index(url_str, etag=None, verify_fingerprint=True):
+def download_repo_index(url_str, etag=None, verify_fingerprint=True, timeout=600):
     """Downloads and verifies index file, then returns its data.
 
     Downloads the repository index from the given :param url_str and
@@ -710,7 +710,7 @@ def download_repo_index(url_str, etag=None, verify_fingerprint=True):
         fingerprint = query['fingerprint'][0]
 
     url = urllib.parse.SplitResult(url.scheme, url.netloc, url.path + '/index-v1.jar', '', '')
-    download, new_etag = net.http_get(url.geturl(), etag)
+    download, new_etag = net.http_get(url.geturl(), etag, timeout)
 
     if download is None:
         return None, new_etag
