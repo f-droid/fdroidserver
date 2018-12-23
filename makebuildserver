@@ -347,6 +347,8 @@ cachefiles = [
      'e53ce3a01cf016b5d294eef20977ad4e3c13e761ac1e475f1ffad4c6141a92bd'),
     ('https://downloads.gradle.org/distributions/gradle-4.10.2-bin.zip',
      'b49c6da1b2cb67a0caf6c7480630b51c70a11ca2016ff2f555eaeda863143a29'),
+    ('https://downloads.gradle.org/distributions/gradle-4.10.3-bin.zip',
+     '8626cbf206b4e201ade7b87779090690447054bc93f052954c78480fa6ed186e'),
     ('https://downloads.gradle.org/distributions/gradle-5.0-bin.zip',
      '6157ac9f3410bc63644625b3b3e9e96c963afd7910ae0697792db57813ee79a6'),
     ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin',
