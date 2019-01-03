@@ -165,6 +165,8 @@ regex_checks = {
     'Description': https_enforcings + http_url_shorteners + [
         (re.compile(r'\s*[*#][^ .]'),
          _("Invalid bulleted list")),
+        (re.compile(r'https://f-droid.org/[a-z][a-z](_[A-Za-z]{2,4})?/'),
+         _("Locale included in f-droid.org URL")),
         (re.compile(r'^\s'),
          _("Unnecessary leading space")),
         (re.compile(r'.*\s$'),
