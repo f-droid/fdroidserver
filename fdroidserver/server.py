@@ -31,6 +31,7 @@ import shutil
 
 from . import _
 from . import common
+from . import index
 from .exception import FDroidException
 
 config = None
@@ -478,9 +479,14 @@ def upload_to_virustotal(repo_section, vt_apikey):
     if repo_section == 'repo':
         if not os.path.exists('virustotal'):
             os.mkdir('virustotal')
-        with open(os.path.join(repo_section, 'index-v1.json')) as fp:
-            index = json.load(fp)
-        for packageName, packages in index['packages'].items():
+
+        if os.path.exists(os.path.join(repo_section, 'index-v1.json')):
+            with open(os.path.join(repo_section, 'index-v1.json')) as fp:
+                data = json.load(fp)
+        else:
+            data, _ignored, _ignored = index.get_index_from_jar(os.path.join(repo_section, 'index-v1.jar'))
+
+        for packageName, packages in data['packages'].items():
             for package in packages:
                 outputfilename = os.path.join('virustotal',
                                               packageName + '_' + str(package.get('versionCode'))

@@ -687,15 +687,18 @@ def get_mirror_service_urls(url):
 
 
 def download_repo_index(url_str, etag=None, verify_fingerprint=True):
-    """
-    Downloads the repository index from the given :param url_str
-    and verifies the repository's fingerprint if :param verify_fingerprint is not False.
+    """Downloads and verifies index file, then returns its data.
+
+    Downloads the repository index from the given :param url_str and
+    verifies the repository's fingerprint if :param verify_fingerprint
+    is not False.
 
     :raises: VerificationException() if the repository could not be verified
 
     :return: A tuple consisting of:
         - The index in JSON format or None if the index did not change
         - The new eTag as returned by the HTTP request
+
     """
     url = urllib.parse.urlsplit(url_str)
 
@@ -713,30 +716,29 @@ def download_repo_index(url_str, etag=None, verify_fingerprint=True):
         return None, new_etag
 
     with tempfile.NamedTemporaryFile() as fp:
-        # write and open JAR file
         fp.write(download)
-        jar = zipfile.ZipFile(fp)
-
-        # verify that the JAR signature is valid
-        logging.debug(_('Verifying index signature:'))
-        common.verify_jar_signature(fp.name)
-
-        # get public key and its fingerprint from JAR
-        public_key, public_key_fingerprint = get_public_key_from_jar(jar)
-
-        # compare the fingerprint if verify_fingerprint is True
-        if verify_fingerprint and fingerprint.upper() != public_key_fingerprint:
-            raise VerificationException(_("The repository's fingerprint does not match."))
-
-        # load repository index from JSON
-        index = json.loads(jar.read('index-v1.json').decode("utf-8"))
-        index["repo"]["pubkey"] = hexlify(public_key).decode("utf-8")
+        index, public_key, public_key_fingerprint = get_index_from_jar(fp.name, fingerprint)
+        index["repo"]["pubkey"] = hexlify(public_key).decode()
         index["repo"]["fingerprint"] = public_key_fingerprint
-
-        # turn the apps into App objects
         index["apps"] = [metadata.App(app) for app in index["apps"]]
-
         return index, new_etag
+
+
+def get_index_from_jar(jarfile, fingerprint=None):
+    """Returns the data, public key, and fingerprint from index-v1.jar
+
+    :raises: VerificationException() if the repository could not be verified
+    """
+
+    logging.debug(_('Verifying index signature:'))
+    common.verify_jar_signature(jarfile)
+    with zipfile.ZipFile(jarfile) as jar:
+        public_key, public_key_fingerprint = get_public_key_from_jar(jar)
+        if fingerprint is not None:
+            if fingerprint.upper() != public_key_fingerprint:
+                raise VerificationException(_("The repository's fingerprint does not match."))
+        data = json.loads(jar.read('index-v1.json').decode())
+        return data, public_key, public_key_fingerprint
 
 
 def get_public_key_from_jar(jar):
