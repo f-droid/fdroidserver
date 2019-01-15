@@ -392,7 +392,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             f.write(common.get_android_tools_version_log(build.ndk_path()))
     else:
         if build.sudo:
-            logging.warning('%s:%s runs this on the buildserver with sudo:\n\t%s'
+            logging.warning('%s:%s runs this on the buildserver with sudo:\n\t%s\nThese commands were skipped because fdroid build is running without the --on-server option.'
                             % (app.id, build.versionName, build.sudo))
 
     # Prepare the source code...
