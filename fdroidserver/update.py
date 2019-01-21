@@ -55,7 +55,7 @@ METADATA_VERSION = 21
 # less than the valid range of versionCode, i.e. Java's Integer.MIN_VALUE
 UNSET_VERSION_CODE = -0x100000000
 
-APK_NAME_PAT = re.compile(".*name='([a-zA-Z0-9._]*)'.*")
+APK_NAME_PAT = re.compile(r".*\Wname='([a-zA-Z0-9._]*)'.*")
 APK_VERCODE_PAT = re.compile(".*versionCode='([0-9]*)'.*")
 APK_VERNAME_PAT = re.compile(".*versionName='([^']*)'.*")
 APK_LABEL_ICON_PAT = re.compile(r".*\s+label='(.*)'\s+icon='(.*?)'")

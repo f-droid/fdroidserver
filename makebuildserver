@@ -261,6 +261,8 @@ cachefiles = [
      '4825b52a6258a9c2ab073720a5e91e2fa81b552b48024ee81887b863397416af'),
     ('https://dl.google.com/android/repository/build-tools_r28.0.2-linux.zip',
      '12cebcafd8f30119c7ef53ffb3562a5b5b9f776c9399038587c18df44ea6452b'),
+    ('https://dl.google.com/android/repository/build-tools_r28.0.3-linux.zip',
+     '7954956a40633c88f693d638cbc23f68e9e2499dc7a4b7dfdaf6a3e91387749a'),
     ('https://services.gradle.org/distributions/gradle-2.2.1-bin.zip',
      '420aa50738299327b611c10b8304b749e8d3a579407ee9e755b15921d95ff418'),
     ('https://services.gradle.org/distributions/gradle-2.3-bin.zip',
