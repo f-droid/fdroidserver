@@ -527,6 +527,35 @@ def check_for_unsupported_metadata_files(basedir=""):
     return return_value
 
 
+def check_current_version_code(app):
+    """Check that the CurrentVersionCode is currently available"""
+
+    archive_policy = app.get('ArchivePolicy')
+    if archive_policy and archive_policy.split()[0] == "0":
+        return
+    cv = app.get('CurrentVersionCode')
+    if cv is not None and int(cv) == 0:
+        return
+
+    builds = app.get('builds')
+    active_builds = 0
+    min_versionCode = None
+    if builds:
+        for build in builds:
+            vc = int(build['versionCode'])
+            if min_versionCode is None or min_versionCode > vc:
+                min_versionCode = vc
+            if not build.get('disable'):
+                active_builds += 1
+            if cv == build['versionCode']:
+                break
+    if active_builds == 0:
+        return  # all builds are disabled
+    if cv is not None and int(cv) < min_versionCode:
+        yield(_('CurrentVersionCode {cv} is less than oldest build entry {versionCode}')
+              .format(cv=cv, versionCode=min_versionCode))
+
+
 def main():
 
     global config, options
@@ -581,6 +610,7 @@ def main():
             check_files_dir,
             check_format,
             check_license_tag,
+            check_current_version_code,
         ]
 
         for check_func in app_check_funcs:
