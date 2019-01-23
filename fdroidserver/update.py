@@ -817,39 +817,55 @@ def copy_triple_t_store_metadata(apps):
 def insert_localized_app_metadata(apps):
     """scans standard locations for graphics and localized text
 
-    Scans for localized description files, store graphics, and
-    screenshot PNG files in statically defined screenshots directory
-    and adds them to the app metadata.  The screenshots and graphic
-    must be PNG or JPEG files ending with ".png", ".jpg", or ".jpeg"
-    and must be in the following layout:
-    # TODO replace these docs with link to All_About_Descriptions_Graphics_and_Screenshots
-
-    repo/packageName/locale/featureGraphic.png
-    repo/packageName/locale/phoneScreenshots/1.png
-    repo/packageName/locale/phoneScreenshots/2.png
-
-    The changelog files must be text files named with the versionCode
-    ending with ".txt" and must be in the following layout:
-    https://github.com/fastlane/fastlane/blob/2.28.7/supply/README.md#changelogs-whats-new
-
-    repo/packageName/locale/changelogs/12345.txt
-
-    This will scan the each app's source repo then the metadata/ dir
-    for these standard locations of changelog files.  If it finds
-    them, they will be added to the dict of all packages, with the
-    versions in the metadata/ folder taking precendence over the what
+    Scans for localized description files, changelogs, store graphics, and
+    screenshots and adds them to the app metadata. Each app's source repo root
+    checked out at /build/<packageName> is scanned at the following standard
+    locations for these files...
+    
+    metadata/<locale>/
+    fastlane/metadata/android/<locale>/
+    src/<buildFlavor>/fastlane/metadata/android/<locale>/
+    
+    ...as well as the /metadata/<packageName>/<locale> directory.
+    
+    If it finds them, they will be added to the dict of all packages, with the
+    versions in the /metadata/ folder taking precendence over the what
     is in the app's source repo.
-
-    Where "packageName" is the app's packageName and "locale" is the locale
-    of the graphics, e.g. what language they are in, using the IETF RFC5646
-    format (en-US, fr-CA, es-MX, etc).
-
-    This will also scan the app's git for a fastlane folder, and the
-    metadata/ folder and the apps' source repos for standard locations
-    of graphic and screenshot files.  If it finds them, it will copy
-    them into the repo.  The fastlane files follow this pattern:
-    https://github.com/fastlane/fastlane/blob/2.28.7/supply/README.md#images-and-screenshots
-
+    
+    The <locale> is the locale of the files supplied in that directory, using 
+    the IETF RFC5646 format (e.g. en, en-US, ast, etc).
+    
+    For each <locale> directory, this script searches for the following files: 
+    
+    full_description.txt  (or description.txt)
+    short_description.txt (or summary.txt)
+    title.txt (or name.txt)
+    video.txt
+    images/
+    ├── featureGraphic.png
+    ├── icon.png
+    ├── promoGraphic.png
+    └── tvBanner.png
+    changelogs/
+    ├── <versionCode>.txt
+    └── <versionCode>.txt
+    phoneScreenshots/
+    └── *.png, *.jpg or *.jpeg
+    sevenInchScreenshots/
+    └── *.png, *.jpg or *.jpeg
+    tenInchScreenshots/
+    └── *.png, *.jpg or *.jpeg
+    tvScreenshots/
+    └── *.png, *.jpg or *.jpeg
+    wearScreenshots/
+    └── *.png, *.jpg or *.jpeg
+    
+    The screenshots directories may either be within the images/ directory or
+    in the root directory for the locale (as shown here).
+    
+    See also this documentation page:
+    https://f-droid.org/en/docs/All_About_Descriptions_Graphics_and_Screenshots/#in-the-apps-build-metadata-in-an-fdroiddata-collection
+    
     """
 
     sourcedirs = glob.glob(os.path.join('build', '[A-Za-z]*', 'src', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z]*'))
@@ -923,7 +939,7 @@ def insert_localized_app_metadata(apps):
                             logging.debug('copying ' + f + ' ' + screenshotdestdir)
                             _strip_and_copy_image(f, screenshotdestdir)
 
-    repofiles = sorted(glob.glob(os.path.join('repo', '[A-Za-z]*', '[a-z][a-z][A-Z-.@]*')))
+    repofiles = sorted(glob.glob(os.path.join('repo', '[A-Za-z]*', '[a-z][a-z]*')))
     for d in repofiles:
         if not os.path.isdir(d):
             continue
