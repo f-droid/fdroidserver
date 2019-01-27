@@ -145,6 +145,7 @@ for f in {.,..}/gradle/wrapper/gradle-wrapper.properties; do
     while read l; do
         if [[ $l == 'distributionUrl='* ]]; then
             wrapper_ver=$(echo -n "$l" | sed "s/.*gradle-\\([0-9\\.\\+]\\+\\).*/\\1/")
+            break 2
         fi
     done < $f
 done
