@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-135-g16dd6d28\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2018-02-13 09:01+0100\n"
-"PO-Revision-Date: 2018-04-17 13:03+0000\n"
-"Last-Translator: Myeongjin Lee <aranet100@gmail.com>\n"
+"POT-Creation-Date: 2018-07-13 11:05+0200\n"
+"PO-Revision-Date: 2019-01-19 22:57+0000\n"
+"Last-Translator: Seokyong Jung <syjung6967@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/f-droid/"
 "fdroidserver/ko/>\n"
 "Language: ko\n"
@@ -16,13 +16,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.0-dev\n"
+"X-Generator: Weblate 3.4-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
 "\n"
 "SSH Public Key to be used as Deploy Key:"
 msgstr ""
+"\n"
+"배포 키로 사용될 SSH 공개 키:"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -30,26 +32,28 @@ msgid ""
 "\n"
 "{path} encoded for the DEBUG_KEYSTORE secret variable:"
 msgstr ""
+"\n"
+"{path}는 DEBUG_KEYSTORE 비밀 변수를 위해 인코딩됩니다:"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr ""
+msgstr "\"%s/\"에 일치하는 메타데이터 파일이 없습니다!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains outdated {name} ({version})"
-msgstr ""
+msgstr "\"{path}\"는 오래된 {name} ({version})를 포함합니다"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
-msgstr ""
+msgstr "\"{path}\"는 최근 {name} ({version})를 포함합니다"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr ""
+msgstr "\"{path}\"는 존재하지만 s3cmd는 설치되어 있지 않습니다!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -60,7 +64,7 @@ msgstr ""
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] ""
+msgstr[0] "%(option)s 옵션은 %(number)d 인자가 필요합니다"
 
 #: ../fdroidserver/mirror.py
 #, python-format
@@ -75,7 +79,7 @@ msgstr "%(prog)s: 오류: %(message)s\n"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "%d problems found"
-msgstr ""
+msgstr "문제 %d개를 찾음"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "%prog [options]"
@@ -84,41 +88,41 @@ msgstr "%prog [옵션]"
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r는 호출할 수 없습니다"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "%s is not an accepted build field"
-msgstr ""
+msgstr "%s는 빌드 필드 값으로 허용되지 않습니다"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "%s option does not take a value"
-msgstr ""
+msgstr "%s 옵션은 값을 받지 않습니다"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keypass' not found in config.py!"
-msgstr ""
+msgstr "'keypass'를 config.py에서 찾을 수 없습니다!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystore' not found in config.py!"
-msgstr ""
+msgstr "'keystore'를 config.py에서 찾을 수 없습니다!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.py!"
-msgstr ""
+msgstr "'keystorepass'를 config.py에서 찾을 수 없습니다!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.py!"
-msgstr ""
+msgstr "'repo_keyalias'를 config.py에서 찾을 수 없습니다!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'required'는 고정적을 위한 잘못된 인수입니다"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in 'config.py'!"
-msgstr ""
+msgstr "'sdk_path'를 'config.py'에서 설정할 수 없습니다!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -127,16 +131,20 @@ msgstr ""
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
 msgstr ""
+"'{aapt}'는 너무 오래되었습니다, fdroid는 build-tools-23.0.0 이후가 필요합니"
+"다!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
 msgstr ""
+"'{aapt}'는 너무 오래되었습니다, fdroid는 build-tools-{version} 이후가 필요합"
+"니다!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "'{apkfilename}' is already installed on {dev}."
-msgstr ""
+msgstr "'{apkfilename}'는 이미 {dev}에 설치되어 있습니다."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -144,41 +152,46 @@ msgid ""
 "'{field}' will be in random order! Use () or [] brackets if order is "
 "important!"
 msgstr ""
+"'{field}'는 순서가 무작위로 변합니다! 순서가 중요하면 괄호 ()나 대괄호 []를 "
+"사용하세요!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{path}' failed to execute!"
-msgstr ""
+msgstr "'{path}'를 실행하는 데 실패했습니다!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr ""
+"'{value}'는 {appid}에서 올바른 {field}가 아닙니다. 정규식 패턴: {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
-msgstr ""
+msgstr "...{appid}를 위한 checkupdate가 실패됨 : {error}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__()이 정의되지 않음"
 
 #: ../fdroidserver/metadata.py
 msgid ".fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json."
 msgstr ""
+".fdroid.txt는 지원되지 않습니다!  .fdroid.yml 또는 .fdroid.json으로 변환하세"
+"요."
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
-msgstr ""
+msgstr "/이슈가 없습니다"
 
 #: ../fdroidserver/mirror.py
 msgid "A URL is required as an argument!"
-msgstr ""
+msgstr "URL은 인수로서 필요합니다!"
 
 #: ../fdroid
 msgid "Add PGP signatures using GnuPG for packages in repo"
-msgstr ""
+msgstr "저장소의 패키지를 위해 GnuPG를 사용하여 PGP 서명을 추가합니다"
 
 #: ../fdroid
 msgid "Add a new application from its source code"
@@ -186,7 +199,7 @@ msgstr "새 애플리케이션의 소스 코드로부터 그것을 추가합니�
 
 #: ../fdroidserver/update.py
 msgid "Add a repo signing key to an unsigned repo"
-msgstr ""
+msgstr "서명되지 않은 저장소에 저장소 서명 키를 추가합니다"
 
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
@@ -195,11 +208,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Adding new repo for only {name}"
-msgstr ""
+msgstr "{name}를 위해서만 새 저장소를 추가하기"
 
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
-msgstr ""
+msgstr "키스토어에서 저장소 서명 키의 별칭"
 
 #: ../fdroidserver/import.py
 msgid ""
@@ -209,16 +222,16 @@ msgstr ""
 
 #: ../fdroidserver/mirror.py
 msgid "Also mirror the full archive section"
-msgstr ""
+msgstr "또한 전체 보존 절을 미러합니다"
 
 #: ../fdroidserver/lint.py
 msgid "Also warn about formatting issues, like rewritemeta -l"
-msgstr ""
+msgstr "또한 rewritemeta -l와 같이, 포맷팅 이슈에 대해 경고합니다"
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/build.py
 #, python-brace-format
 msgid "Android SDK '{path}' does not have '{dirname}' installed!"
-msgstr ""
+msgstr "Android SDK '{path}'는 설치된 '{dirname}'가 없습니다!"
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
@@ -227,12 +240,12 @@ msgstr "Android SDK를 찾을 수 없습니다!"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' does not exist!"
-msgstr "Android SDK 경로 '{path}' 존재하지 않습니다!"
+msgstr "Android SDK 경로 '{path}'는 존재하지 않습니다!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' is not a directory!"
-msgstr "Android SDK 경로 '{path}' 디렉터리가 아닙니다!"
+msgstr "Android SDK 경로 '{path}'는 디렉터리가 아닙니다!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -240,25 +253,25 @@ msgstr "Android SDK 경로 '{path}' 디렉터리가 아닙니다!"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android build-tools path '{path}' does not exist!"
-msgstr "Android 빌드 도구 경로 '{path}' 존재하지 않습니다!"
+msgstr "Android 빌드 도구 경로 '{path}'는 존재하지 않습니다!"
 
 #: ../fdroidserver/update.py
 msgid "AndroidManifest.xml has no date"
-msgstr ""
+msgstr "AndroidManifest.xml에 날짜가 없습니다"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "App is in '{repo}' but has a link to {url}"
-msgstr ""
+msgstr "앱은 '{repo}'에 있지만 {url}로의 연결이 있습니다"
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
-msgstr ""
+msgstr ".git 추가가 필요하지 않습니다"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Archiving {apkfilename} with invalid signature!"
-msgstr ""
+msgstr "올바르지 않은 서명으로 {apkfilename}를 보존 중입니다!"
 
 #: ../fdroidserver/mirror.py
 msgid ""
@@ -270,12 +283,12 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
-msgstr ""
+msgstr "브랜치 '{branch}'는 빌드 '{versionName}'에서 커밋으로 사용됩니다"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
-msgstr ""
+msgstr "브랜치 '{branch}'는 srclib '{srclib}'에서 커밋으로 사용됩니다"
 
 #: ../fdroid
 msgid "Build a package from source"
@@ -287,6 +300,10 @@ msgstr "사용 가능한 모든 애플리케이션을 빌드합니다"
 
 #: ../fdroidserver/lint.py
 msgid "Build generated by `fdroid import` - remove disable line once ready"
+msgstr ""
+
+#: ../fdroidserver/checkupdates.py
+msgid "Build metadata git repo has uncommited changes!"
 msgstr ""
 
 #: ../fdroidserver/build.py
@@ -313,26 +330,26 @@ msgstr[0] ""
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Cannot find a packageName for {path}!"
-msgstr ""
+msgstr "{path}를 위한 packageName을 찾을 수 없습니다!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Cannot find an appid for {path}!"
-msgstr ""
+msgstr "{path}를 위한 appid를 찾을 수 없습니다!"
 
 #: ../fdroidserver/vmtools.py
 #, python-brace-format
 msgid "Cannot read \"{path}\"!"
-msgstr ""
+msgstr "\"{path}\"를 읽을 수 없습니다!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Cannot resolve app id {appid}"
-msgstr ""
+msgstr "앱 id {appid}를 해결할 수 없습니다"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Cannot use --list and --to at the same time"
-msgstr ""
+msgstr "--list 와 --to는 동시에 사용할 수 없습니다"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -341,12 +358,12 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Categories are not set"
-msgstr ""
+msgstr "카테고리가 설정되어 있지 않습니다"
 
 #: ../fdroidserver/lint.py
 #, python-format
-msgid "Category '%s' is not valid"
-msgstr ""
+msgid "Categories '%s' is not valid"
+msgstr "카테고리 '%s'는 올바르지 않습니다"
 
 #: ../fdroid
 msgid "Check for updates to applications"
@@ -382,11 +399,11 @@ msgstr ""
 #: ../fdroid
 #, c-format, python-format
 msgid "Command '%s' not recognised.\n"
-msgstr ""
+msgstr "명령 '%s'은 인식되지 않습니다.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
-msgstr ""
+msgstr "번경사항 커밋"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -426,7 +443,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Create skeleton metadata files that are missing"
-msgstr ""
+msgstr "누락된 skeleton 메타데이터 파일을 만듭니다"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -440,7 +457,7 @@ msgstr ""
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
-msgstr ""
+msgstr "기록 디렉터리 만들기"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -449,7 +466,7 @@ msgstr ""
 
 #: ../fdroidserver/publish.py
 msgid "Creating output directory"
-msgstr ""
+msgstr "출력 디렉터리 만들기"
 
 #: ../fdroidserver/index.py
 msgid "Creating signed index with this key (SHA256):"
@@ -458,7 +475,7 @@ msgstr ""
 #: ../fdroidserver/import.py ../fdroidserver/verify.py
 #: ../fdroidserver/publish.py
 msgid "Creating temporary directory"
-msgstr ""
+msgstr "임시 디렉터리 만들기"
 
 #: ../fdroidserver/index.py
 msgid "Creating unsigned index in preparation for signing"
@@ -475,7 +492,7 @@ msgstr "저장소에서 메타데이터 없이 APK 및/또는 OBB를 삭제합�
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Deleting unknown file: {path}"
-msgstr ""
+msgstr "알 수 없는 파일 삭제하기: {path}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -496,6 +513,10 @@ msgstr ""
 msgid "Description of length {length} is over the {limit} char limit"
 msgstr ""
 
+#: ../fdroidserver/nightly.py
+msgid "Do not deploy the new files to the repo"
+msgstr ""
+
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Do not include \"{path}\" in URL!"
@@ -503,6 +524,10 @@ msgstr ""
 
 #: ../fdroidserver/init.py
 msgid "Do not prompt for Android SDK path, just fail"
+msgstr ""
+
+#: ../fdroidserver/nightly.py
+msgid "Do not remove the private keys generated from the keystore"
 msgstr ""
 
 #: ../fdroidserver/build.py
@@ -554,7 +579,7 @@ msgstr ""
 
 #: ../fdroid
 msgid "Dynamically scan APKs post build"
-msgstr ""
+msgstr "동적으로 APK 게시 빌드를 스캔합니다"
 
 #: ../fdroidserver/mirror.py
 msgid ""
@@ -658,7 +683,7 @@ msgstr ""
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
 msgid "Finished"
-msgstr ""
+msgstr "마침"
 
 #: ../fdroidserver/lint.py
 msgid "Flattr donation methods belong in the FlattrID flag"
@@ -682,7 +707,7 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
-msgstr ""
+msgstr "앱 \"{name}\"를 위한 메타데이터가 없이 \"{path}\" 그래픽을 찾았습니다!"
 
 #: ../fdroidserver/common.py
 msgid "Found invalid appids in arguments"
@@ -774,90 +799,99 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
-msgstr ""
+msgstr "하위 모듈을 초기 설정 중"
 
 #: ../fdroidserver/install.py
 msgid "Install all signed applications available"
-msgstr ""
+msgstr "사용 가능한 모든 서명된 애플리케이션 설치"
 
 #: ../fdroid
 msgid "Install built packages on devices"
-msgstr ""
+msgstr "기기에 내장된 패키지 설치"
 
 #: ../fdroidserver/install.py
 #, python-format
 msgid "Installing %s..."
-msgstr ""
+msgstr "%s 설치 중..."
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
-msgstr ""
+msgstr "{dev}에서 '{apkfilename}' 설치 중..."
 
 #: ../fdroid
 msgid "Interact with the repo HTTP server"
-msgstr ""
-
-#: ../fdroidserver/update.py
-msgid "Interactively ask about things that need updating."
-msgstr ""
+msgstr "저장소 HTTP 서버와의 상호 작용"
 
 #: ../fdroidserver/update.py
 msgid "Invalid APK"
-msgstr ""
+msgstr "올바르지 않은 APK"
+
+#: ../fdroidserver/lint.py ../fdroidserver/checkupdates.py
+#, python-brace-format
+msgid "Invalid VercodeOperation: {field}"
+msgstr "잘못된 Vercode연산: {field}"
 
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Invalid boolean '%s'"
-msgstr ""
+msgstr "올바르지 않은 부울 '%s'"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid build flag at {line} in {linedesc}"
-msgstr ""
+msgstr "{linedesc}의 {line}에서 잘못된 빌드 플래그"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid build format: {value} in {name}"
-msgstr ""
+msgstr "잘못된 빌드 형식: {name}에서 {value}"
 
 #: ../fdroidserver/lint.py
 msgid "Invalid bulleted list"
-msgstr ""
+msgstr "잘못된 글머리 기호 목록"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid ""
 "Invalid license tag \"%s\"! Use only tags from https://spdx.org/license-list"
 msgstr ""
+"잘못된 라이선스 태그 \"%s\"! https://spdx.org/license-list 에서의 태그만을 사"
+"용하세요"
 
 #: ../fdroidserver/lint.py
 msgid "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"
 msgstr ""
+"잘못된 링크 - [http://foo.bar 링크 제목] 또는 [http://foo.bar]를 사용하세요"
 
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Invalid metadata in %s:%d"
-msgstr ""
+msgstr "%s:%d에서 잘못된 메타데이터"
 
 #: ../fdroidserver/metadata.py
 msgid "Invalid metadata in: "
-msgstr ""
+msgstr "다음 안에서 잘못된 메타데이터: "
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Invalid name for published file: %s"
-msgstr ""
+msgstr "게시된 파일을 위한 잘못된 이름: %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid package name {0}"
-msgstr ""
+msgstr "잘못된 패키지 이름 {0}"
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
+msgstr "HTTPS가 아닌 곳으로의 잘못된 리다이렉트: {before} -> {after} "
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid versionCode: \"{versionCode}\" is not an integer!"
-msgstr ""
+msgstr "잘못된 versionCode: \"{versionCode}\"은 정수가 아닙니다!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -885,7 +919,7 @@ msgstr ""
 
 #: ../fdroidserver/init.py
 msgid "Keystore for signing key:\t"
-msgstr ""
+msgstr "서명 키를 위한 키저장소:\t"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1033,10 +1067,14 @@ msgstr ""
 msgid "Old APK signature failed to verify: {path}"
 msgstr ""
 
+#: ../fdroid
+msgid "Old, deprecated name for fdroid deploy"
+msgstr ""
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
-msgstr ""
+msgstr "PNG와 JPEG만 그래픽을 위해 지원됩니다, 찾았습니다: {path}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
@@ -1056,6 +1094,11 @@ msgstr ""
 
 #: ../fdroidserver/dscanner.py
 msgid "Override path for repo APKs (default: ./repo)"
+msgstr "저장소 APK를 위한 경로 재정의 (기본값: ./repo)"
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1188,6 +1231,8 @@ msgid ""
 "Recalculate aggregate stats - use when changes have been made that would "
 "invalidate old cached data."
 msgstr ""
+"집계 통계 재계산 - 오래된 캐시된 데이터를 무효로 하는 변경사항이 있을 때 사용"
+"합니다."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1195,7 +1240,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
-msgstr ""
+msgstr "package.name_123.apk와 일치하지 않는 APK 파일의 이름을 바꿉니다"
 
 #: ../fdroidserver/update.py
 msgid "Report on build data status"
@@ -1236,6 +1281,10 @@ msgstr ""
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}' to '{path}'"
+msgstr ""
+
+#: ../fdroidserver/checkupdates.py
+msgid "Run on git repo that has uncommitted changes"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -1305,11 +1354,11 @@ msgstr ""
 
 #: ../fdroid
 msgid "Sign and place packages in the repo"
-msgstr ""
+msgstr "저장소에서 패키지를 서명하고 배치합니다"
 
 #: ../fdroid
 msgid "Sign indexes created using update --nosign"
-msgstr ""
+msgstr "update --nosign을 사용하여 만들어진 색인을 서명합니다"
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
@@ -1346,19 +1395,6 @@ msgstr ""
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 msgid "Specify an identity file to provide to SSH for rsyncing"
-msgstr ""
-
-#: ../fdroidserver/update.py
-msgid "Specify editor to use in interactive mode. Default "
-msgstr ""
-
-#, c-format
-msgid "Specify editor to use in interactive mode. Default %s"
-msgstr ""
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "Specify editor to use in interactive mode. Default is {path}"
 msgstr ""
 
 #: ../fdroidserver/build.py
@@ -1473,23 +1509,23 @@ msgstr ""
 
 #: ../fdroid
 msgid "Unknown exception found!"
-msgstr ""
+msgstr "알 수 없는 예외가 찾아졌습니다!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
-msgstr ""
+msgstr "빌드 '{versionName}'에서 알 수 없는 파일 '{filename}'"
 
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Unknown metadata format: %s"
-msgstr ""
+msgstr "알 수 없는 메타데이터 형식: %s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unknown metadata format: {path}"
-msgstr ""
+msgstr "알 수 없는 메타데이터 형식: {path}"
 
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
@@ -1519,17 +1555,17 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported file type \"{extension}\" for repo graphic"
-msgstr ""
+msgstr "저장소 그래픽을 위한 파일 형식 \"{extension}\"가 지원되지 않습니다"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported graphics file found: {path}"
-msgstr ""
+msgstr "지원되지 않는 그래픽 파일을 찾았습니다: {path}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Unsupported metadata format, use: --to [{supported}]"
-msgstr ""
+msgstr "지원되지 않는 메타데이터 형식, 사용: --to [{supported}]"
 
 #: ../fdroidserver/metadata.py
 msgid "Unterminated ]"
@@ -1552,12 +1588,12 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Unused extlib at %s"
-msgstr ""
+msgstr "%s에서 사용되지 않은 extlib"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Unused file at %s"
-msgstr ""
+msgstr "%s에서 사용되지 않은 파일"
 
 #: ../fdroidserver/lint.py
 msgid "Update Check Name is set to the known app id - it can be removed"
@@ -1569,24 +1605,39 @@ msgstr "새 패키지를 위한 저장소 정보를 업데이트합니다"
 
 #: ../fdroid
 msgid "Update the binary transparency log for a URL"
-msgstr ""
+msgstr "URL을 위한 바이너리 투명성 기록을 업데이트합니다"
 
 #: ../fdroid
 msgid "Update the stats of the repo"
-msgstr ""
+msgstr "저장소의 통계를 업데이트"
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
 msgid "Update the wiki"
-msgstr ""
+msgstr "위키를 업데이트합니다"
+
+#: ../fdroidserver/checkupdates.py
+#, python-brace-format
+msgid "UpdateCheckData has invalid URL: {url}"
+msgstr "UpdateCheckData에 올바르지 않은 URL이 있습니다: {url}"
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "UpdateCheckData must use HTTPS URL: {url}"
+msgstr "UpdateCheckData는 HTTPS URL을 사용해야 합니다: {url}"
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "UpdateCheckData not a valid URL: {url}"
+msgstr "UpdateCheckData는 올바른 URL이 아닙니다: {url}"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "Usage"
-msgstr ""
+msgstr "사용법"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "Usage: %s\n"
-msgstr ""
+msgstr "사용법: %s\n"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
@@ -1594,50 +1645,61 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
-msgstr ""
+msgstr "그것을 만드려면 `fdroid update -c`를 사용하세요."
 
 #: ../fdroidserver/build.py
 msgid "Use build server"
-msgstr ""
+msgstr "빌드 서버를 사용합니다"
 
 #: ../fdroidserver/update.py
 msgid "Use date from APK instead of current time for newly added APKs"
-msgstr ""
+msgstr "새로 추가된 APK를 위해 현재 시간 대신에 APK에서의 날짜를 사용합니다"
 
 msgid "Use date from apk instead of current time for newly added apks"
-msgstr ""
+msgstr "새로 추가된 apk를 위해 현재 시간 대신에 apk에서의 날짜를 사용합니다"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Using \"{path}\" for configuring s3cmd."
-msgstr ""
+msgstr "s3cmd를 구성하기 위해 \"{path}\" 사용."
 
 #: ../fdroidserver/common.py
 msgid ""
 "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
 msgstr ""
+"Java의 jarsigner를 사용하여, APK를 검증하는 것은 권장되지 않습니다! apksigner"
+"를 사용하세요"
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Using androguard from \"{path}\""
+msgstr "\"{path}\"에서 androguard를 사용 중"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
-msgstr ""
+msgstr "기존 키스토어 \"{path}\"를 사용 중"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Using s3cmd to sync with: {url}"
-msgstr ""
+msgstr "다음과 동기화하는 데 s3cmd 사용: {url}"
 
 #: ../fdroid
 msgid "Valid commands are:"
 msgstr "올바른 명령은:"
 
+#: ../fdroidserver/verify.py
+msgid "Verify against locally cached copy rather than redownloading."
+msgstr "로컬에 캐시된 복사본을 다시 다운로드하는 대신에 검증합니다."
+
 #: ../fdroid
 msgid "Verify the integrity of downloaded packages"
-msgstr ""
+msgstr "다운로드된 패키지의 무결성 확인"
 
 #: ../fdroidserver/index.py
 msgid "Verifying index signature:"
-msgstr ""
+msgstr "색인 서명을 검증 중:"
 
 #: ../fdroid
 msgid "Warn about possible metadata errors"
@@ -1659,41 +1721,43 @@ msgstr ""
 #: ../fdroidserver/common.py
 msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
 msgstr ""
+"당신은 당신의 SDK에 경로를 설정하기 위해 ANDROID_HOME을 사용할 수 있습니다, "
+"즉:"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "adding IdentityFile to {path}"
-msgstr ""
+msgstr "{path}에 IdentityFile을 추가 중"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "adding to {name}: {path}"
-msgstr ""
+msgstr "{name}에 추가 중: {path}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "모호한 옵션: %(option)s은 %(matches)s와 일치했을 수 있습니다"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
-msgstr ""
+msgstr "모호한 옵션: %s (%s?)"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
-msgstr ""
+msgstr "양식 APPID의 applicationId"
 
 #: ../fdroidserver/checkupdates.py
 msgid "applicationId to check for updates"
-msgstr ""
+msgstr "업데이트를 확인할 applicationId"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 #: ../fdroidserver/dscanner.py ../fdroidserver/build.py
 #: ../fdroidserver/scanner.py ../fdroidserver/install.py
 msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
-msgstr ""
+msgstr "양식 APPID[:VERCODE]에서 선택적인 versionCode로 된 applicationId"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
@@ -1707,7 +1771,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "can't open '%s': %s"
-msgstr "'%s'을(를) 열 수 없습니다: %s"
+msgstr "'%s'를 열 수 없습니다: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "cannot have multiple subparser arguments"
@@ -1716,7 +1780,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "작동을 병합할 수 없습니다 - 두 그룹은 %r로 이름지어져 있습니다"
 
 #: ../fdroidserver/nightly.py
 msgid "cannot publish update, did you set the deploy key?"
@@ -1725,41 +1789,46 @@ msgstr ""
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "cloning {url}"
-msgstr ""
+msgstr "{url}를 복제 중"
 
 #: ../fdroidserver/server.py
 msgid "command to execute, either 'init' or 'update'"
-msgstr ""
+msgstr "실행할 명령, 'init' 또는 'update' 중 하나"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "complex"
-msgstr ""
+msgstr "복잡"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
+msgstr[0] "충돌하는 옵션 문자열: %s"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "copying {apkfilename} into {path}"
-msgstr ""
+msgstr "{path} 안으로 {apkfilename}을 복사 중"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "created {path}"
-msgstr ""
+msgstr "{path}가 만들어짐"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "deleting: repo/{apkfilename}"
+msgstr "삭제 중: repo/{apkfilename}"
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "deployed build logs to '{path}'"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "dest=는 %r과 같은 옵션을 위해 필요합니다"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
@@ -1779,6 +1848,11 @@ msgstr ""
 msgid "expected one argument"
 msgstr ""
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "failed deploying build logs to '{path}'"
+msgstr ""
+
 #: ../fdroid
 msgid "fdroid [-h|--help|--version] <command> [<args>]"
 msgstr "fdroid [-h|--help|--version] <명령> [<인수>]"
@@ -1789,19 +1863,19 @@ msgstr "fdroid [<명령>] [-h|--help|--version|<인수>]"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "floating-point"
-msgstr ""
+msgstr "부동소수점"
 
 #: ../fdroidserver/metadata.py
 msgid "force errors to be warnings, or ignore"
-msgstr ""
+msgstr "경고하거나 무시할 강제 오류"
 
 #: ../fdroidserver/metadata.py
 msgid "force metadata errors (default) to be warnings, or to be ignored."
-msgstr ""
+msgstr "경고하거나 무시되는 강제 메타데이터 오류 (기본값)."
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
-msgstr ""
+msgstr "git svn 복제에 실패됨"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
@@ -1811,25 +1885,27 @@ msgstr ""
 #: ../fdroidserver/index.py
 msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
 msgstr ""
+"index-v1은 서명이 있어야 합니다, 그것을 만드려면 `fdroid signindex`를 사용하"
+"세요!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "integer"
-msgstr ""
+msgstr "정수"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr ""
+msgstr "올바르지 않은 %(type)s 값: %(value)r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr ""
+msgstr "올바르지 않은 선택: %(value)r (%(choices)s에서 선택하세요)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "올바르지 않은 conflict_resolution 값: %r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
@@ -1837,6 +1913,7 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
+"올바르지 않은 옵션 문자열 %(option)r: 문자 %(prefix_chars)r로 시작해야 합니다"
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -1850,12 +1927,12 @@ msgstr ""
 
 #: ../fdroidserver/server.py
 msgid "local_copy_dir must be directory, not a file!"
-msgstr ""
+msgstr "local_copy_dir는 파일이 아니라, 디렉터리여야 합니다!"
 
 #: ../fdroidserver/index.py
 #, python-format
 msgid "mirror '%s' does not end with 'fdroid'!"
-msgstr ""
+msgstr "미러 '%s'는 'fdroid'로 끝나지 않습니다!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "mutually exclusive arguments must be optional"
@@ -1864,11 +1941,11 @@ msgstr ""
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "no \"icon\" in {appid}"
-msgstr ""
+msgstr "{appid}에 \"icon\"이 없습니다"
 
 #: ../fdroidserver/signatures.py
 msgid "no APK supplied"
-msgstr ""
+msgstr "제공된 APK가 없습니다"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
@@ -1877,7 +1954,7 @@ msgstr "이러한 옵션이 없습니다: %s"
 
 #: ../fdroid
 msgid "no version info found!"
-msgstr ""
+msgstr "버전 정보를 찾지 못했습니다!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
@@ -1897,59 +1974,60 @@ msgstr ""
 #, python-format
 msgid "option %s: If you really want to install all the signed apps, use --all"
 msgstr ""
+"옵션 %s: 당신이 정말 모든 서명된 앱을 설치하기를 원한다면, --all을 사용하세요"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "option %s: invalid %s value: %r"
-msgstr ""
+msgstr "옵션 %s: 올바르지 않은 %s 값: %r"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr ""
+msgstr "옵션 %s: 올바르지 않은 선택: %r (%s에서 선택하세요)"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option -%s not recognized"
-msgstr ""
+msgstr "옵션 -%s은 인식되지 않습니다"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option -%s requires argument"
-msgstr ""
+msgstr "옵션 -%s은 인수가 필요합니다"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
-msgstr ""
+msgstr "옵션 --%s은 인수를 가지지 않아야 합니다"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
-msgstr ""
+msgstr "옵션 --%s는 고유한 접두어가 아닙니다"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option --%s not recognized"
-msgstr ""
+msgstr "옵션 --%s은 인식되지 않습니다"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #, python-format
 msgid "option --%s requires argument"
-msgstr ""
+msgstr "옵션 --%s은 인수가 필요합니다"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "optional arguments"
-msgstr ""
+msgstr "선택적 인수"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "overwriting existing {path}"
-msgstr ""
+msgstr "기존 {path}를 덮어쓰는 중"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 msgid "positional arguments"
-msgstr ""
+msgstr "고정적 인수"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
@@ -1968,7 +2046,7 @@ msgstr ""
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
-msgstr ""
+msgstr "s3cmd 동기화는 {url}로 {path}를 색인하고 삭제합나다"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 msgid "show program's version number and exit"
@@ -1981,41 +2059,54 @@ msgstr "이 도움말 메시지를 보여주고 종료합니다"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
+msgstr "서명된 APK, 파일 경로 또는 HTTPS URL 중 하나."
+
+#: ../fdroidserver/common.py
+msgid "skip deploying full build logs: log content is empty"
+msgstr ""
+
+#: ../fdroidserver/common.py
+msgid "skip deploying full build logs: not enabled in config"
 msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "skipping source tarball: {path}"
-msgstr ""
+msgstr "소스 타르볼을 건너뛰는 중: {path}"
 
 #: ../fdroidserver/lint.py
 msgid "srclibs missing name and/or @"
-msgstr ""
+msgstr "srclibs 없는 이름 및/또는 @"
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "supplied timestamp value '{timestamp}' is not a unix timestamp"
+msgstr "제공된 타임스탬프 값 '{timestamp}'는 유닉스 타임스탬프가 아닙니다"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "다음 인수들이 필요합니다: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "예기치 않은 옵션 문자열: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "알 수 없는 파서 %(parser_name)r (선택: %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "인식할 수 없는 인수: %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
-msgstr ""
+msgstr "'{config_file}'에 안전하지 않은 권한 (0600이어야 합니다)!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 msgid "usage: "
@@ -2034,12 +2125,12 @@ msgstr ""
 #, python-brace-format
 msgid "{0} app, {1} key aliases"
 msgid_plural "{0} apps, {1} key aliases"
-msgstr[0] ""
+msgstr[0] "앱 {0}개, 키 별칭 {1}개"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename} ({appid}) has no metadata!"
-msgstr ""
+msgstr "{apkfilename} ({appid})에 메타데이터가 없습니다!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2049,23 +2140,23 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
-msgstr ""
+msgstr "{apkfilename}의 AndroidManifest.xml에 잘못된 날짜가 있습니다: "
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} does not have a name! Using package name instead."
-msgstr ""
+msgstr "{appid}는 이름을 가지지 않습니다! 대신 패키지 이름 사용."
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "{appid} is missing {name}"
-msgstr ""
+msgstr "{appid}는 없는 {name}입니다"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
-msgstr ""
+msgstr "{appid}: 빌드 '{versionName}'에서 알 수 없는 extlib {path}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -2080,12 +2171,12 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{name} \"{path}\" does not exist! Correct it in config.py."
-msgstr ""
+msgstr "{name} \"{path}\"는 존재하지 않습니다! config.py에서 그것을 고치세요."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "{path} does not exist!  Create it by running:"
-msgstr ""
+msgstr "{path}는 존재하지 않습니다!  실행하여 그것을 만드세요:"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2095,22 +2186,22 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} is zero size!"
-msgstr ""
+msgstr "{path}는 영 크기입니다!"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "{url} does not end with \"fdroid\", check the URL path!"
-msgstr ""
+msgstr "{url}는 \"fdroid\"로 끝나지 않습니다, URL 경로를 확인하세요!"
 
 #: ../fdroidserver/build.py
 msgid "{} build failed"
 msgid_plural "{} builds failed"
-msgstr[0] ""
+msgstr[0] "{} 빌드 실패됨"
 
 #: ../fdroidserver/build.py
 msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
-msgstr[0] ""
+msgstr[0] "{} 빌드 성공됨"
 
 #~ msgid "Add gpg signatures for packages in repo"
 #~ msgstr "저장소에서 패키지에 gpg 서명을 추가합니다"
