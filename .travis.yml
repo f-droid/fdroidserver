@@ -46,6 +46,10 @@ android:
 #   https://blogs.oracle.com/java-platform-group/oracle-jre-will-no-longer-trust-md5-signed-code-by-default
 #   https://opsech.io/posts/2017/Jun/09/openjdk-april-2017-security-update-131-8u131-and-md5-signed-jars.html
 install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      echo "Skipping Uyghur locale, this has too old a gettext to support it";
+      rm -rf locale/ug;
+    fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       set -x;
       brew update > /dev/null;
