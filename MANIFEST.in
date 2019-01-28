@@ -26,11 +26,16 @@ include gradlew-fdroid
 include LICENSE
 include locale/bo/LC_MESSAGES/fdroidserver.mo
 include locale/de/LC_MESSAGES/fdroidserver.mo
-include locale/es_AR/LC_MESSAGES/fdroidserver.mo
 include locale/es/LC_MESSAGES/fdroidserver.mo
 include locale/fr/LC_MESSAGES/fdroidserver.mo
+include locale/hu/LC_MESSAGES/fdroidserver.mo
+include locale/it/LC_MESSAGES/fdroidserver.mo
+include locale/ko/LC_MESSAGES/fdroidserver.mo
 include locale/nb_NO/LC_MESSAGES/fdroidserver.mo
+include locale/pl/LC_MESSAGES/fdroidserver.mo
 include locale/pt_BR/LC_MESSAGES/fdroidserver.mo
+include locale/pt_PT/LC_MESSAGES/fdroidserver.mo
+include locale/ru/LC_MESSAGES/fdroidserver.mo
 include locale/tr/LC_MESSAGES/fdroidserver.mo
 include locale/uk/LC_MESSAGES/fdroidserver.mo
 include locale/zh_Hans/LC_MESSAGES/fdroidserver.mo
