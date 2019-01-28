@@ -617,7 +617,7 @@ msgstr ""
 #: ../fdroidserver/upload.py
 #, fuzzy, python-format
 msgid "Error while attempting to publish log: %s"
-msgstr "Помилка при отриманні адреси репозиторія"
+msgstr "Помилка при отриманні адреси репозиторія: %s"
 
 #: ../fdroidserver/import.py
 msgid "Error while getting repo address"

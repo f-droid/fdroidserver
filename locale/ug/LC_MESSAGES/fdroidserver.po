@@ -352,7 +352,7 @@ msgstr "تۈرلەر قۇرۇلمىغان"
 #: ../fdroidserver/lint.py
 #, fuzzy, python-format
 msgid "Categories '%s' is not valid"
-msgstr "تۈرلەر قۇرۇلمىغان"
+msgstr "تۈرلەر قۇرۇلمىغان '%s'"
 
 #: ../fdroid
 msgid "Check for updates to applications"
