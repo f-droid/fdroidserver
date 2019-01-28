@@ -619,7 +619,7 @@ msgstr ""
 #: ../fdroidserver/upload.py
 #, fuzzy, python-format
 msgid "Error while attempting to publish log: %s"
-msgstr "རེ་པོ་ཁ་བྱང་ལེན་སྐབས་ནོར་སྐྱོན།"
+msgstr "རེ་པོ་ཁ་བྱང་ལེན་སྐབས་ནོར་སྐྱོན།: %s"
 
 #: ../fdroidserver/import.py
 msgid "Error while getting repo address"
