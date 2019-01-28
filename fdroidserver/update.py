@@ -835,37 +835,12 @@ def insert_localized_app_metadata(apps):
     The <locale> is the locale of the files supplied in that directory, using 
     the IETF RFC5646 format (e.g. en, en-US, ast, etc).
     
-    For each <locale> directory, this script searches for the following files: 
-    
-    full_description.txt  (or description.txt)
-    short_description.txt (or summary.txt)
-    title.txt (or name.txt)
-    video.txt
-    images/
-    ├── featureGraphic.png
-    ├── icon.png
-    ├── promoGraphic.png
-    └── tvBanner.png
-    changelogs/
-    ├── <versionCode>.txt
-    └── <versionCode>.txt
-    phoneScreenshots/
-    └── *.png, *.jpg or *.jpeg
-    sevenInchScreenshots/
-    └── *.png, *.jpg or *.jpeg
-    tenInchScreenshots/
-    └── *.png, *.jpg or *.jpeg
-    tvScreenshots/
-    └── *.png, *.jpg or *.jpeg
-    wearScreenshots/
-    └── *.png, *.jpg or *.jpeg
-    
-    The screenshots directories may either be within the images/ directory or
-    in the root directory for the locale (as shown here).
-    
-    See also this documentation page:
+    For each <locale> directory, this script searches for the following files
+    in the directory structure as supplied by fastlane. See 
+    https://docs.fastlane.tools/actions/supply/#images-and-screenshots
+
+    See also our documentation page: 
     https://f-droid.org/en/docs/All_About_Descriptions_Graphics_and_Screenshots/#in-the-apps-build-metadata-in-an-fdroiddata-collection
-    
     """
 
     sourcedirs = glob.glob(os.path.join('build', '[A-Za-z]*', 'src', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z]*'))
