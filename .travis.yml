@@ -46,6 +46,10 @@ android:
 #   https://blogs.oracle.com/java-platform-group/oracle-jre-will-no-longer-trust-md5-signed-code-by-default
 #   https://opsech.io/posts/2017/Jun/09/openjdk-april-2017-security-update-131-8u131-and-md5-signed-jars.html
 install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      echo "Skipping Uyghur locale, this has too old a gettext to support it";
+      rm -rf locale/ug;
+    fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       set -x;
       brew update > /dev/null;
@@ -54,8 +58,8 @@ install:
       else
         brew install python3;
       fi;
-      brew install dash bash gradle jenv;
-      brew install gnu-sed --with-default-names;
+      brew install dash bash gnu-sed gradle jenv;
+      export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH";
       if ! ruby -e 'v = `javac -version 2>&1`.split()[1].gsub("_", "."); exit Gem::Dependency.new("", "~> 1.8.0.131").match?("", v)'; then
         brew cask uninstall java --force;
         brew cask install caskroom/versions/java8;

@@ -1177,16 +1177,16 @@ def write_yaml(mf, app):
         cm = ruamel.yaml.comments.CommentedMap()
         insert_newline = False
         for field in yaml_app_field_order:
-            if field is '\n':
+            if field == '\n':
                 # next iteration will need to insert a newline
                 insert_newline = True
             else:
-                if app.get(field) or field is 'Builds':
+                if app.get(field) or field == 'Builds':
                     # .txt calls it 'builds' internally, everywhere else its 'Builds'
-                    if field is 'Builds':
+                    if field == 'Builds':
                         if app.get('builds'):
                             cm.update({field: _builds_to_yaml(app)})
-                    elif field is 'CurrentVersionCode':
+                    elif field == 'CurrentVersionCode':
                         cm.update({field: _field_to_yaml(TYPE_INT, getattr(app, field))})
                     else:
                         cm.update({field: _field_to_yaml(fieldtype(field), getattr(app, field))})

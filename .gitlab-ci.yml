@@ -109,6 +109,7 @@ pip_install:
     # setup venv to act as release build machine
     - python -m venv sdist-env
     - . sdist-env/bin/activate
+    - ! (./setup.py compile_catalog 2>&1 | grep -F "error:")
     - ./setup.py compile_catalog sdist
     - deactivate
     - tar tzf dist/fdroidserver-*.tar.gz | grep locale/de/LC_MESSAGES/fdroidserver.mo
@@ -144,6 +145,8 @@ lint_format_safety_bandit_checks:
             tests/*.py
             tests/*.TestCase
         || export EXITVALUE=1
+    - apk add --no-cache gettext make
+    - make -C locale compile
     - exit $EXITVALUE
 
 fedora_latest:
