@@ -31,8 +31,8 @@ import traceback
 import time
 import requests
 import tempfile
+import argparse
 from configparser import ConfigParser
-from argparse import ArgumentParser
 import logging
 from gettext import ngettext
 
@@ -863,7 +863,7 @@ def force_halt_build(timeout):
 def parse_commandline():
     """Parse the command line. Returns options, parser."""
 
-    parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
+    parser = argparse.ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))
     parser.add_argument("-l", "--latest", action="store_true", default=False,
@@ -876,8 +876,10 @@ def parse_commandline():
                         help=_("Use build server"))
     parser.add_argument("--reset-server", action="store_true", default=False,
                         help=_("Reset and create a brand new build server, even if the existing one appears to be ok."))
+    # this option is internal API for telling fdroid that
+    # it's running inside a buildserver vm.
     parser.add_argument("--on-server", dest="onserver", action="store_true", default=False,
-                        help=_("Specify that we're running on the build server"))
+                        help=argparse.SUPPRESS)
     parser.add_argument("--skip-scan", dest="skipscan", action="store_true", default=False,
                         help=_("Skip scanning the source code for binaries and other problems"))
     parser.add_argument("--dscanner", action="store_true", default=False,
