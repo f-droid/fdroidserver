@@ -423,6 +423,9 @@ def update_cache(cachedir, cachefiles):
         local_filename = os.path.join(cachedir, filename)
 
         if os.path.exists(local_filename):
+            if sha256_for_file(local_filename) == shasum:
+                logger.info("\t...shasum verified for %s", local_filename)
+                continue
             local_length = os.path.getsize(local_filename)
         else:
             local_length = -1
