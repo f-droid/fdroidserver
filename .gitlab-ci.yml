@@ -109,7 +109,6 @@ pip_install:
     # setup venv to act as release build machine
     - python -m venv sdist-env
     - . sdist-env/bin/activate
-    - ! (./setup.py compile_catalog 2>&1 | grep -F "error:")
     - ./setup.py compile_catalog sdist
     - deactivate
     - tar tzf dist/fdroidserver-*.tar.gz | grep locale/de/LC_MESSAGES/fdroidserver.mo
@@ -127,7 +126,7 @@ lint_format_safety_bandit_checks:
   script:
     - apk add --no-cache bash dash ca-certificates python3
     - python3 -m ensurepip
-    - pip3 install bandit pycodestyle pyflakes 'pylint<2.0' safety
+    - pip3 install Babel bandit pycodestyle pyflakes 'pylint<2.0' safety
     - export EXITVALUE=0
     - ./hooks/pre-commit || export EXITVALUE=1
     - bandit
@@ -146,7 +145,9 @@ lint_format_safety_bandit_checks:
             tests/*.TestCase
         || export EXITVALUE=1
     - apk add --no-cache gettext make
-    - make -C locale compile
+    - make -C locale compile || export EXITVALUE=1
+    - rm -f locale/*/*/*.mo
+    - pybabel compile --domain=fdroidserver --directory locale 2>&1 | (grep -F "error:" && exit 1) || true
     - exit $EXITVALUE
 
 fedora_latest:
