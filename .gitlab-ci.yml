@@ -155,7 +155,12 @@ fedora_latest:
   only:
     - master@fdroid/fdroidserver
   script:
-    - dnf -y update
+    # tricks to hopefully make runs more reliable
+    - echo "timeout=600" >> /etc/dnf/dnf.conf
+    - echo "retries=50" >> /etc/dnf/dnf.conf
+    - echo "keepcache=True" >> /etc/dnf/dnf.conf
+
+    - dnf -y update || dnf -y update
     - dnf -y install findutils
                      git
                      gnupg
