@@ -839,13 +839,13 @@ msgstr "Instalar pacotes prontos nos dispositivos"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "Installing %s..."
-msgstr "Instalando %s ..."
+msgid "Installing %s…"
+msgstr "Instalando %s …"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
-msgid "Installing '{apkfilename}' on {dev}..."
-msgstr "Instalando '{apkfilename}' em {dev} ..."
+msgid "Installing '{apkfilename}' on {dev}…"
+msgstr "Instalando '{apkfilename}' em {dev} …"
 
 #: ../fdroid
 msgid "Interact with the repo HTTP server"

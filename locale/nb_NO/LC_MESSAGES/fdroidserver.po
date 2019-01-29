@@ -854,12 +854,12 @@ msgstr "Installer bygde pakker på enheter"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "Installing %s..."
+msgid "Installing %s…"
 msgstr "Installerer %s…"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
-msgid "Installing '{apkfilename}' on {dev}..."
+msgid "Installing '{apkfilename}' on {dev}…"
 msgstr "Installerer '{apkfilename}' på {dev}…"
 
 #: ../fdroid

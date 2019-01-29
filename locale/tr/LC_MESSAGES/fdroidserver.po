@@ -831,13 +831,13 @@ msgstr "İnşa edilen paketleri aygıtlara kur"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "Installing %s..."
-msgstr "%s kuruluyor..."
+msgid "Installing %s…"
+msgstr "%s kuruluyor…"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
-msgid "Installing '{apkfilename}' on {dev}..."
-msgstr "'{apkfilename}' {dev} üstüne kuruluyor..."
+msgid "Installing '{apkfilename}' on {dev}…"
+msgstr "'{apkfilename}' {dev} üstüne kuruluyor…"
 
 #: ../fdroid
 msgid "Interact with the repo HTTP server"

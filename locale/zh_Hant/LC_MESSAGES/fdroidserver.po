@@ -808,13 +808,13 @@ msgstr "在裝置上安裝構建套件包"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "Installing %s..."
-msgstr "安裝 %s..."
+msgid "Installing %s…"
+msgstr "安裝 %s…"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
-msgid "Installing '{apkfilename}' on {dev}..."
-msgstr "在 {dev} 安裝 '{apkfilename}' ..."
+msgid "Installing '{apkfilename}' on {dev}…"
+msgstr "在 {dev} 安裝 '{apkfilename}' …"
 
 #: ../fdroid
 msgid "Interact with the repo HTTP server"

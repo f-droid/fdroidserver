@@ -804,13 +804,13 @@ msgstr "Zainstaluj wbudowane pakiety na urządzeniach"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "Installing %s..."
-msgstr "Instalowanie %s..."
+msgid "Installing %s…"
+msgstr "Instalowanie %s…"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
-msgid "Installing '{apkfilename}' on {dev}..."
-msgstr "Instalowanie '{apkfilename}' na {dev}..."
+msgid "Installing '{apkfilename}' on {dev}…"
+msgstr "Instalowanie '{apkfilename}' na {dev}…"
 
 #: ../fdroid
 msgid "Interact with the repo HTTP server"

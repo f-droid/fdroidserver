@@ -853,12 +853,12 @@ msgstr "Установить собранные пакеты на устройс
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "Installing %s..."
+msgid "Installing %s…"
 msgstr "Установка %s…"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
-msgid "Installing '{apkfilename}' on {dev}..."
+msgid "Installing '{apkfilename}' on {dev}…"
 msgstr "Установка '{apkfilename}' на устройство {dev}…"
 
 #: ../fdroid

@@ -843,12 +843,12 @@ msgstr "Installer les paquets compilés sur le(s) périphérique(s)"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "Installing %s..."
+msgid "Installing %s…"
 msgstr "Installation de %s …"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
-msgid "Installing '{apkfilename}' on {dev}..."
+msgid "Installing '{apkfilename}' on {dev}…"
 msgstr ""
 
 #: ../fdroid

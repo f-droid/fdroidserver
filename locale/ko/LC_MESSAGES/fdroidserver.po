@@ -811,13 +811,13 @@ msgstr "기기에 내장된 패키지 설치"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "Installing %s..."
-msgstr "%s 설치 중..."
+msgid "Installing %s…"
+msgstr "%s 설치 중…"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
-msgid "Installing '{apkfilename}' on {dev}..."
-msgstr "{dev}에서 '{apkfilename}' 설치 중..."
+msgid "Installing '{apkfilename}' on {dev}…"
+msgstr "{dev}에서 '{apkfilename}' 설치 중…"
 
 #: ../fdroid
 msgid "Interact with the repo HTTP server"

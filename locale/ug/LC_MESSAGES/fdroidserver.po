@@ -800,12 +800,12 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "Installing %s..."
+msgid "Installing %s…"
 msgstr ""
 
 #: ../fdroidserver/install.py
 #, python-brace-format
-msgid "Installing '{apkfilename}' on {dev}..."
+msgid "Installing '{apkfilename}' on {dev}…"
 msgstr ""
 
 #: ../fdroid

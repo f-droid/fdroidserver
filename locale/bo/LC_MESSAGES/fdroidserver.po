@@ -826,12 +826,12 @@ msgstr "ཡོ་བྱད་སྒང་གི་ཐུམ་སྒྲིལ་
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "Installing %s..."
-msgstr "སྒྲིག་བཅུག་བྱེད་བཞིན་པ།%s 1..."
+msgid "Installing %s…"
+msgstr "སྒྲིག་བཅུག་བྱེད་བཞིན་པ།%s 1…"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
-msgid "Installing '{apkfilename}' on {dev}..."
+msgid "Installing '{apkfilename}' on {dev}…"
 msgstr "'{apkfilename}' སྒྲིག་བཅུག་བྱེད་བཞིན་པ{dev}གྱི་སྒང་ལ་…"
 
 #: ../fdroid
