@@ -821,25 +821,25 @@ def insert_localized_app_metadata(apps):
     screenshots and adds them to the app metadata. Each app's source repo root
     checked out at /build/<packageName> is scanned at the following standard
     locations for these files...
-    
+
     metadata/<locale>/
     fastlane/metadata/android/<locale>/
     src/<buildFlavor>/fastlane/metadata/android/<locale>/
-    
+
     ...as well as the /metadata/<packageName>/<locale> directory.
-    
+
     If it finds them, they will be added to the dict of all packages, with the
     versions in the /metadata/ folder taking precendence over the what
     is in the app's source repo.
-    
-    The <locale> is the locale of the files supplied in that directory, using 
-    the IETF RFC5646 format (e.g. en, en-US, ast, etc).
-    
-    For each <locale> directory, this script searches for the following files
-    in the directory structure as supplied by fastlane. See 
-    https://docs.fastlane.tools/actions/supply/#images-and-screenshots
 
-    See also our documentation page: 
+    The <locale> is the locale of the files supplied in that directory, using
+    the IETF RFC5646 format (e.g. en, en-US, ast, etc).
+
+    For each <locale> directory, this script searches for the following files
+    in the directory structure as supplied by fastlane. See
+    https://github.com/fastlane/fastlane/blob/2.28.7/supply/README.md#images-and-screenshots
+
+    See also our documentation page:
     https://f-droid.org/en/docs/All_About_Descriptions_Graphics_and_Screenshots/#in-the-apps-build-metadata-in-an-fdroiddata-collection
     """
 
