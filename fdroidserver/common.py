@@ -2516,28 +2516,45 @@ def signer_fingerprint(cert_encoded):
     return hashlib.sha256(cert_encoded).hexdigest()
 
 
+def get_first_signer_certificate(apkpath):
+    """Get the first signing certificate from the APK,  DER-encoded"""
+    certs = None
+    cert_encoded = None
+    with zipfile.ZipFile(apkpath, 'r') as apk:
+        cert_files = [n for n in apk.namelist() if SIGNATURE_BLOCK_FILE_REGEX.match(n)]
+        if len(cert_files) > 1:
+            logging.error(_("Found multiple JAR Signature Block Files in {path}").format(path=apkpath))
+            return None
+        elif len(cert_files) == 1:
+            cert_encoded = get_certificate(apk.read(cert_files[0]))
+
+    if cert_encoded is None:
+        apkobject = _get_androguard_APK(apkpath)
+        certs = apkobject.get_certificates_der_v2()
+        if len(certs) > 0:
+            logging.info(_('Using APK v2 Signature'))
+            cert_encoded = certs[0]
+
+    if not cert_encoded:
+        logging.error(_("No signing certificates found in {path}").format(path=apkpath))
+        return None
+    return cert_encoded
+
+
 def apk_signer_fingerprint(apk_path):
     """Obtain sha256 signing-key fingerprint for APK.
 
     Extracts hexadecimal sha256 signing-key fingerprint string
     for a given APK.
 
-    :param apkpath: path to APK
+    :param apk_path: path to APK
     :returns: signature fingerprint
     """
 
-    with zipfile.ZipFile(apk_path, 'r') as apk:
-        certs = [n for n in apk.namelist() if SIGNATURE_BLOCK_FILE_REGEX.match(n)]
-
-        if len(certs) < 1:
-            logging.error("Found no signing certificates on %s" % apk_path)
-            return None
-        if len(certs) > 1:
-            logging.error("Found multiple signing certificates on %s" % apk_path)
-            return None
-
-        cert_encoded = get_certificate(apk.read(certs[0]))
-        return signer_fingerprint(cert_encoded)
+    cert_encoded = get_first_signer_certificate(apk_path)
+    if not cert_encoded:
+        return None
+    return signer_fingerprint(cert_encoded)
 
 
 def apk_signer_fingerprint_short(apk_path):
