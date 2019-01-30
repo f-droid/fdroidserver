@@ -2528,12 +2528,17 @@ def get_first_signer_certificate(apkpath):
         elif len(cert_files) == 1:
             cert_encoded = get_certificate(apk.read(cert_files[0]))
 
-    if cert_encoded is None:
+    if not cert_encoded:
         apkobject = _get_androguard_APK(apkpath)
         certs = apkobject.get_certificates_der_v2()
         if len(certs) > 0:
-            logging.info(_('Using APK v2 Signature'))
+            logging.info(_('Using APK Signature v2'))
             cert_encoded = certs[0]
+        if not cert_encoded:
+            certs = apkobject.get_certificates_der_v3()
+            if len(certs) > 0:
+                logging.info(_('Using APK Signature v3'))
+                cert_encoded = certs[0]
 
     if not cert_encoded:
         logging.error(_("No signing certificates found in {path}").format(path=apkpath))
