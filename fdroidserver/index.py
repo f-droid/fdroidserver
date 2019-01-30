@@ -751,7 +751,7 @@ def get_public_key_from_jar(jar):
     :return: the public key from the jar and its fingerprint
     """
     # extract certificate from jar
-    certs = [n for n in jar.namelist() if common.CERT_PATH_REGEX.match(n)]
+    certs = [n for n in jar.namelist() if common.SIGNATURE_BLOCK_FILE_REGEX.match(n)]
     if len(certs) < 1:
         raise VerificationException(_("Found no signing certificates for repository."))
     if len(certs) > 1:

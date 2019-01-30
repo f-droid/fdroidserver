@@ -424,7 +424,7 @@ def getsig(apkpath):
     """
 
     with zipfile.ZipFile(apkpath, 'r') as apk:
-        certs = [n for n in apk.namelist() if common.CERT_PATH_REGEX.match(n)]
+        certs = [n for n in apk.namelist() if common.SIGNATURE_BLOCK_FILE_REGEX.match(n)]
 
         if len(certs) < 1:
             logging.error(_("No signing certificates found in {path}").format(path=apkpath))
