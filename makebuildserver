@@ -55,8 +55,21 @@ cachedir = os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver')
 logger.debug('cachedir set to: %s', cachedir)
 
 BASEBOX_DEFAULT = 'fdroid/basebox-stretch64'
-BASEBOX_VERSION_DEFAULT = '0.5'
+BASEBOX_VERSION_DEFAULT = '0.5.1'
 BASEBOX_CHECKSUMS = {
+    '0.5.1': {
+        'libvirt': {
+            'box.img': 'ad015940b866e36a593ef5fa0035ec6703f74a7f082ab76a1d2bd9463714cd4a',
+            'metadata.json': '5ced8ecf886722a5152095e099b778b1d2b859c2e1dcf834182274034b8a629d',
+            'Vagrantfile': 'cc7b8edb26481c158b2c28d15d32f7e146de892847c9308ac262678cf0ae8260',
+        },
+        'virtualbox': {
+            'box-disk1.vmdk': 'cba36a9c9814bdff9aabaea8786c27477ef8958cf6ee65ad844cb2726bdab93e',
+            'box.ovf': 'cbdd6315187d4ce8ff15ed5a00a2c8b0d33abe6b0356439ce4d8d9ac3724f875',
+            'metadata.json': '098439524f76cafe026140b787ca419297a055a3f6006b9d60e6d5326d18ba99',
+            'Vagrantfile': 'ae50c3d152c3016e853176005d1a5da7a8e6ae424c9074e93b1a1015aa2f2e14',
+        }
+    },
     '0.5': {
         'virtualbox': {
             'box-disk1.vmdk': '8834d5eb78758437c2517f83282172fd5e3842d88f657d577592d0917cd02f89',
