@@ -388,7 +388,6 @@ class UpdateTest(unittest.TestCase):
             pass  # aapt is not required if androguard is present
 
         for use_androguard in (True, False):
-            print('USE_ANDROGUARD', use_androguard)
             if use_androguard:
                 try:
                     import androguard
@@ -407,15 +406,20 @@ class UpdateTest(unittest.TestCase):
                 else:
                     continue
 
+            print('USE_ANDROGUARD', use_androguard)
+
+            apksigner = fdroidserver.common.find_sdk_tools_cmd('apksigner')
+            if use_androguard and apksigner:  # v2 parsing needs both
+                config['apksigner'] = apksigner
+                apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
+                self.assertIsNone(apk_info.get('maxSdkVersion'))
+                self.assertEqual(apk_info.get('versionName'), 'v2-only')
+                self.assertEqual(apk_info.get('versionCode'), 2)
+
             apk_info = fdroidserver.update.scan_apk('repo/v1.v2.sig_1020.apk')
             self.assertIsNone(apk_info.get('maxSdkVersion'))
             self.assertEqual(apk_info.get('versionName'), 'v1+2')
             self.assertEqual(apk_info.get('versionCode'), 1020)
-
-            apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
-            self.assertIsNone(apk_info.get('maxSdkVersion'))
-            self.assertEqual(apk_info.get('versionName'), 'v2-only')
-            self.assertEqual(apk_info.get('versionCode'), 2)
 
             apk_info = fdroidserver.update.scan_apk('repo/souch.smsbypass_9.apk')
             self.assertIsNone(apk_info.get('maxSdkVersion'))
