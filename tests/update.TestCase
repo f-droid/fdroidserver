@@ -14,6 +14,7 @@ import sys
 import tempfile
 import unittest
 import yaml
+import zipfile
 from binascii import unhexlify
 from distutils.version import LooseVersion
 
@@ -233,6 +234,45 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(sig, 'e0ecb5fc2d63088e4a07ae410a127722',
                          "python sig should be: " + str(sig))
 
+    def test_getsig(self):
+        # config needed to use jarsigner and keytool
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.update.config = config
+
+        sig = fdroidserver.update.getsig('urzip-release-unsigned.apk')
+        self.assertIsNone(sig)
+
+        good_fingerprint = 'b4964fd759edaa54e65bb476d0276880'
+
+        apkpath = 'urzip-release.apk'  # v1 only
+        sig = fdroidserver.update.getsig(apkpath)
+        self.assertEqual(good_fingerprint, sig,
+                         'python sig was: ' + str(sig))
+
+        apkpath = 'repo/v1.v2.sig_1020.apk'
+        sig = fdroidserver.update.getsig(apkpath)
+        self.assertEqual(good_fingerprint, sig,
+                         'python sig was: ' + str(sig))
+        # check that v1 and v2 have the same certificate
+        import hashlib
+        from binascii import hexlify
+        from androguard.core.bytecodes.apk import APK
+        apkobject = APK(apkpath)
+        cert_encoded = apkobject.get_certificates_der_v2()[0]
+        self.assertEqual(good_fingerprint, sig,
+                         hashlib.md5(hexlify(cert_encoded)).hexdigest())  # nosec just used as ID for signing key
+
+        filename = 'v2.only.sig_2.apk'
+        with zipfile.ZipFile(filename) as z:
+            self.assertTrue('META-INF/MANIFEST.MF' in z.namelist(), 'META-INF/MANIFEST.MF required')
+            for f in z.namelist():
+                # ensure there are no v1 signature files
+                self.assertIsNone(fdroidserver.common.SIGNATURE_BLOCK_FILE_REGEX.match(f))
+        sig = fdroidserver.update.getsig(filename)
+        self.assertEqual(good_fingerprint, sig,
+                         "python sig was: " + str(sig))
+
     def testScanApksAndObbs(self):
         os.chdir(os.path.join(localmodule, 'tests'))
         if os.path.basename(os.getcwd()) != 'tests':
@@ -254,7 +294,7 @@ class UpdateTest(unittest.TestCase):
         apps = fdroidserver.metadata.read_metadata(xref=True)
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
-        self.assertEqual(len(apks), 16)
+        self.assertEqual(len(apks), 17)
         apk = apks[1]
         self.assertEqual(apk['packageName'], 'com.politedroid')
         self.assertEqual(apk['versionCode'], 3)
@@ -321,7 +361,7 @@ class UpdateTest(unittest.TestCase):
 
         fdroidserver.update.options.clean = False
         read_from_json = fdroidserver.update.get_cache()
-        self.assertEqual(18, len(read_from_json))
+        self.assertEqual(19, len(read_from_json))
         for f in glob.glob('repo/*.apk'):
             self.assertTrue(os.path.basename(f) in read_from_json)
 
@@ -362,6 +402,16 @@ class UpdateTest(unittest.TestCase):
                     fdroidserver.common.use_androguard = func
                 else:
                     continue
+
+            apk_info = fdroidserver.update.scan_apk('repo/v1.v2.sig_1020.apk')
+            self.assertIsNone(apk_info.get('maxSdkVersion'))
+            self.assertEqual(apk_info.get('versionName'), 'v1+2')
+            self.assertEqual(apk_info.get('versionCode'), 1020)
+
+            apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
+            self.assertIsNone(apk_info.get('maxSdkVersion'))
+            self.assertEqual(apk_info.get('versionName'), 'v2-only')
+            self.assertEqual(apk_info.get('versionCode'), 2)
 
             apk_info = fdroidserver.update.scan_apk('repo/souch.smsbypass_9.apk')
             self.assertIsNone(apk_info.get('maxSdkVersion'))
@@ -623,7 +673,7 @@ class UpdateTest(unittest.TestCase):
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
         fdroidserver.update.translate_per_build_anti_features(apps, apks)
-        self.assertEqual(len(apks), 16)
+        self.assertEqual(len(apks), 17)
         foundtest = False
         for apk in apks:
             if apk['packageName'] == 'com.politedroid' and apk['versionCode'] == 3:

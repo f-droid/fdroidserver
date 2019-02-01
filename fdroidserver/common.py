@@ -72,7 +72,7 @@ MINIMUM_AAPT_VERSION = '26.0.0'
 VERCODE_OPERATION_RE = re.compile(r'^([ 0-9/*+-]|%c)+$')
 
 # A signature block file with a .DSA, .RSA, or .EC extension
-CERT_PATH_REGEX = re.compile(r'^META-INF/.*\.(DSA|EC|RSA)$')
+SIGNATURE_BLOCK_FILE_REGEX = re.compile(r'^META-INF/.*\.(DSA|EC|RSA)$')
 APK_NAME_REGEX = re.compile(r'^([a-zA-Z][\w.]*)_(-?[0-9]+)_?([0-9a-f]{7})?\.apk')
 APK_ID_TRIPLET_REGEX = re.compile(r"^package: name='(\w[^']*)' versionCode='([^']+)' versionName='([^']*)'")
 STANDARD_FILE_NAME_REGEX = re.compile(r'^(\w[\w.]*)_(-?[0-9]+)\.\w+')
@@ -2492,20 +2492,20 @@ def place_srclib(root_dir, number, libpath):
 APK_SIGNATURE_FILES = re.compile(r'META-INF/[0-9A-Za-z_\-]+\.(SF|RSA|DSA|EC)')
 
 
-def signer_fingerprint_short(sig):
-    """Obtain shortened sha256 signing-key fingerprint for pkcs7 signature.
+def signer_fingerprint_short(cert_encoded):
+    """Obtain shortened sha256 signing-key fingerprint for pkcs7 DER certficate.
 
     Extracts the first 7 hexadecimal digits of sha256 signing-key fingerprint
     for a given pkcs7 signature.
 
-    :param sig: Contents of an APK signing certificate.
+    :param cert_encoded: Contents of an APK signing certificate.
     :returns: shortened signing-key fingerprint.
     """
-    return signer_fingerprint(sig)[:7]
+    return signer_fingerprint(cert_encoded)[:7]
 
 
-def signer_fingerprint(sig):
-    """Obtain sha256 signing-key fingerprint for pkcs7 signature.
+def signer_fingerprint(cert_encoded):
+    """Obtain sha256 signing-key fingerprint for pkcs7 DER certificate.
 
     Extracts hexadecimal sha256 signing-key fingerprint string
     for a given pkcs7 signature.
@@ -2513,8 +2513,37 @@ def signer_fingerprint(sig):
     :param: Contents of an APK signature.
     :returns: shortened signature fingerprint.
     """
-    cert_encoded = get_certificate(sig)
     return hashlib.sha256(cert_encoded).hexdigest()
+
+
+def get_first_signer_certificate(apkpath):
+    """Get the first signing certificate from the APK,  DER-encoded"""
+    certs = None
+    cert_encoded = None
+    with zipfile.ZipFile(apkpath, 'r') as apk:
+        cert_files = [n for n in apk.namelist() if SIGNATURE_BLOCK_FILE_REGEX.match(n)]
+        if len(cert_files) > 1:
+            logging.error(_("Found multiple JAR Signature Block Files in {path}").format(path=apkpath))
+            return None
+        elif len(cert_files) == 1:
+            cert_encoded = get_certificate(apk.read(cert_files[0]))
+
+    if not cert_encoded:
+        apkobject = _get_androguard_APK(apkpath)
+        certs = apkobject.get_certificates_der_v2()
+        if len(certs) > 0:
+            logging.info(_('Using APK Signature v2'))
+            cert_encoded = certs[0]
+        if not cert_encoded:
+            certs = apkobject.get_certificates_der_v3()
+            if len(certs) > 0:
+                logging.info(_('Using APK Signature v3'))
+                cert_encoded = certs[0]
+
+    if not cert_encoded:
+        logging.error(_("No signing certificates found in {path}").format(path=apkpath))
+        return None
+    return cert_encoded
 
 
 def apk_signer_fingerprint(apk_path):
@@ -2523,22 +2552,14 @@ def apk_signer_fingerprint(apk_path):
     Extracts hexadecimal sha256 signing-key fingerprint string
     for a given APK.
 
-    :param apkpath: path to APK
+    :param apk_path: path to APK
     :returns: signature fingerprint
     """
 
-    with zipfile.ZipFile(apk_path, 'r') as apk:
-        certs = [n for n in apk.namelist() if CERT_PATH_REGEX.match(n)]
-
-        if len(certs) < 1:
-            logging.error("Found no signing certificates on %s" % apk_path)
-            return None
-        if len(certs) > 1:
-            logging.error("Found multiple signing certificates on %s" % apk_path)
-            return None
-
-        cert = apk.read(certs[0])
-        return signer_fingerprint(cert)
+    cert_encoded = get_first_signer_certificate(apk_path)
+    if not cert_encoded:
+        return None
+    return signer_fingerprint(cert_encoded)
 
 
 def apk_signer_fingerprint_short(apk_path):
@@ -2591,7 +2612,7 @@ def metadata_find_developer_signature(appid, vercode=None):
             raise FDroidException('ambiguous signatures, please make sure there is only one signature in \'{}\'. (The signature has to be the App maintainers signature for version of the APK.)'.format(sigdir))
         for sig in sigs:
             with open(sig, 'rb') as f:
-                return signer_fingerprint(f.read())
+                return signer_fingerprint(get_certificate(f.read()))
     return None
 
 
@@ -3071,13 +3092,17 @@ def get_cert_fingerprint(pubkey):
     return " ".join(ret)
 
 
-def get_certificate(certificate_file):
+def get_certificate(signature_block_file):
+    """Extracts a DER certificate from JAR Signature's "Signature Block File".
+
+    :param signature_block_file: file bytes (as string) representing the
+    certificate, as read directly out of the APK/ZIP
+
+    :return: A binary representation of the certificate's public key,
+    or None in case of error
+
     """
-    Extracts a certificate from the given file.
-    :param certificate_file: file bytes (as string) representing the certificate
-    :return: A binary representation of the certificate's public key, or None in case of error
-    """
-    content = decoder.decode(certificate_file, asn1Spec=rfc2315.ContentInfo())[0]
+    content = decoder.decode(signature_block_file, asn1Spec=rfc2315.ContentInfo())[0]
     if content.getComponentByName('contentType') != rfc2315.signedData:
         return None
     content = decoder.decode(content.getComponentByName('content'),

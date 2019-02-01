@@ -161,6 +161,7 @@ class CommonTest(unittest.TestCase):
         testfiles = []
         testfiles.append(os.path.join(self.basedir, 'urzip-release.apk'))
         testfiles.append(os.path.join(self.basedir, 'urzip-release-unsigned.apk'))
+        testfiles.append(os.path.join(self.basedir, 'v2.only.sig_2.apk'))
         for apkfile in testfiles:
             debuggable = fdroidserver.common.is_apk_and_debuggable(apkfile)
             self.assertFalse(debuggable,

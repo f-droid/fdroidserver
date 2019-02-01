@@ -414,29 +414,26 @@ def resize_all_icons(repodirs):
 
 
 def getsig(apkpath):
-    """ Get the signing certificate of an apk. To get the same md5 has that
-    Android gets, we encode the .RSA certificate in a specific format and pass
-    it hex-encoded to the md5 digest algorithm.
+    """Get the unique ID for the signing certificate of an APK.
+
+    This uses a strange algorithm that was devised at the very
+    beginning of F-Droid.  Since it is only used for checking
+    signature compatibility, it does not matter much that it uses MD5.
+
+    To get the same MD5 has that fdroidclient gets, we encode the .RSA
+    certificate in a specific format and pass it hex-encoded to the
+    md5 digest algorithm.  This is not the same as the standard X.509
+    certificate fingerprint.
 
     :param apkpath: path to the apk
     :returns: A string containing the md5 of the signature of the apk or None
               if an error occurred.
+
     """
 
-    with zipfile.ZipFile(apkpath, 'r') as apk:
-        certs = [n for n in apk.namelist() if common.CERT_PATH_REGEX.match(n)]
-
-        if len(certs) < 1:
-            logging.error(_("No signing certificates found in {path}").format(path=apkpath))
-            return None
-        if len(certs) > 1:
-            logging.error(_("Found multiple signing certificates in {path}").format(path=apkpath))
-            return None
-
-        cert = apk.read(certs[0])
-
-    cert_encoded = common.get_certificate(cert)
-
+    cert_encoded = common.get_first_signer_certificate(apkpath)
+    if not cert_encoded:
+        return None
     return hashlib.md5(hexlify(cert_encoded)).hexdigest()  # nosec just used as ID for signing key
 
 
