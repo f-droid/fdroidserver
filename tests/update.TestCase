@@ -255,9 +255,13 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(good_fingerprint, sig,
                          'python sig was: ' + str(sig))
         # check that v1 and v2 have the same certificate
-        import hashlib
-        from binascii import hexlify
-        from androguard.core.bytecodes.apk import APK
+        try:
+            import hashlib
+            from binascii import hexlify
+            from androguard.core.bytecodes.apk import APK
+        except ImportError:
+            print('WARNING: skipping rest of test since androguard is missing!')
+            return
         apkobject = APK(apkpath)
         cert_encoded = apkobject.get_certificates_der_v2()[0]
         self.assertEqual(good_fingerprint, sig,

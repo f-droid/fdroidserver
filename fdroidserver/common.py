@@ -2528,7 +2528,7 @@ def get_first_signer_certificate(apkpath):
         elif len(cert_files) == 1:
             cert_encoded = get_certificate(apk.read(cert_files[0]))
 
-    if not cert_encoded:
+    if not cert_encoded and use_androguard():
         apkobject = _get_androguard_APK(apkpath)
         certs = apkobject.get_certificates_der_v2()
         if len(certs) > 0:
