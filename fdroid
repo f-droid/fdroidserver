@@ -19,6 +19,7 @@
 
 import sys
 import os
+import locale
 import logging
 
 import fdroidserver.common
@@ -120,7 +121,8 @@ def main():
     logging.basicConfig(format=logformat, level=loglevel)
 
     if verbose and quiet:
-        logging.critical("Specifying --verbose and --quiet and the same time is silly")
+        logging.critical(_("Conflicting arguments: '--verbose' and '--quiet' "
+                           "can not be specified at the same time."))
         sys.exit(1)
 
     # temporary workaround until server.py becomes deploy.py
@@ -133,6 +135,12 @@ def main():
 
     del sys.argv[1]
     mod = __import__('fdroidserver.' + command, None, None, [command])
+
+    system_langcode, system_encoding = locale.getdefaultlocale()
+    if system_encoding.lower() not in ('utf-8', 'utf8'):
+        logging.warn(_("Encoding is set to '{enc}' fdroid might run "
+                       "into encoding issues. Please set it to 'UTF-8' "
+                       "for best results.".format(enc=system_encoding)))
 
     try:
         mod.main()
