@@ -1203,7 +1203,7 @@ def _sanitize_sdk_version(value):
     try:
         sdk_version = int(value)
         if sdk_version > 0:
-            return str(sdk_version)  # heinous, but this is still str in the codebase
+            return sdk_version
     except (TypeError, ValueError):
         pass
     return None

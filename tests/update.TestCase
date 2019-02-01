@@ -298,14 +298,14 @@ class UpdateTest(unittest.TestCase):
         apk = apks[1]
         self.assertEqual(apk['packageName'], 'com.politedroid')
         self.assertEqual(apk['versionCode'], 3)
-        self.assertEqual(apk['minSdkVersion'], '3')
+        self.assertEqual(apk['minSdkVersion'], 3)
         self.assertIsNone(apk.get('targetSdkVersion'))
         self.assertFalse('maxSdkVersion' in apk)
         apk = apks[8]
         self.assertEqual(apk['packageName'], 'obb.main.oldversion')
         self.assertEqual(apk['versionCode'], 1444412523)
-        self.assertEqual(apk['minSdkVersion'], '4')
-        self.assertEqual(apk['targetSdkVersion'], '18')
+        self.assertEqual(apk['minSdkVersion'], 4)
+        self.assertEqual(apk['targetSdkVersion'], 18)
         self.assertFalse('maxSdkVersion' in apk)
 
         fdroidserver.update.insert_obbs('repo', apps, apks)
@@ -438,10 +438,10 @@ class UpdateTest(unittest.TestCase):
             self.assertEqual(apk_info['size'], 132453)
             self.assertEqual(apk_info['nativecode'],
                              ['arm64-v8a', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'x86', 'x86_64'])
-            self.assertEqual(apk_info['minSdkVersion'], '7')
+            self.assertEqual(apk_info['minSdkVersion'], 7)
             self.assertEqual(apk_info['sig'], '9bf7a6a67f95688daec75eab4b1436ac')
             self.assertEqual(apk_info['hashType'], 'sha256')
-            self.assertEqual(apk_info['targetSdkVersion'], '8')
+            self.assertEqual(apk_info['targetSdkVersion'], 8)
 
             apk_info = fdroidserver.update.scan_apk('org.bitbucket.tickytacky.mirrormirror_4.apk')
             self.assertEqual(apk_info.get('versionName'), '1.0.3')
@@ -464,6 +464,38 @@ class UpdateTest(unittest.TestCase):
             apk_info = fdroidserver.update.scan_apk('SpeedoMeterApp.main_1.apk')
             self.assertEqual(apk_info.get('versionName'), '1.0')
             self.assertEqual(apk_info['icons_src'], {})
+
+    def test_scan_apk_no_min_target(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+        apk_info = fdroidserver.update.scan_apk('repo/no.min.target.sdk_987.apk')
+        self.maxDiff = None
+        self.assertDictEqual(apk_info, {
+            'icons': {},
+            'icons_src': {'-1': 'res/drawable/ic_launcher.png',
+                          '160': 'res/drawable/ic_launcher.png'},
+            'name': 'No minSdkVersion or targetSdkVersion',
+            'signer': '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+            'hashType': 'sha256',
+            'packageName': 'no.min.target.sdk',
+            'features': [],
+            'antiFeatures': set(),
+            'size': 14102,
+            'sig': 'b4964fd759edaa54e65bb476d0276880',
+            'versionName': '1.2-fake',
+            'uses-permission-sdk-23': [],
+            'hash': 'e2e1dc1d550df2b5bc383860139207258645b5540abeccd305ed8b2cb6459d2c',
+            'versionCode': 987,
+            'minSdkVersion': 3,
+            'uses-permission': [
+                fdroidserver.update.UsesPermission(name='android.permission.WRITE_EXTERNAL_STORAGE',
+                                                   maxSdkVersion=None),
+                fdroidserver.update.UsesPermission(name='android.permission.READ_PHONE_STATE',
+                                                   maxSdkVersion=None),
+                fdroidserver.update.UsesPermission(name='android.permission.READ_EXTERNAL_STORAGE',
+                                                   maxSdkVersion=None)]})
 
     def test_scan_apk_no_sig(self):
         config = dict()
@@ -534,9 +566,9 @@ class UpdateTest(unittest.TestCase):
             #     yaml.dump(apk, f, default_flow_style=False)
 
             with open(savepath, 'r') as f:
-                frompickle = yaml.load(f)
+                from_yaml = yaml.load(f)
             self.maxDiff = None
-            self.assertEqual(apk, frompickle)
+            self.assertEqual(apk, from_yaml)
 
     def test_process_apk_signed_by_disabled_algorithms(self):
         config = dict()
