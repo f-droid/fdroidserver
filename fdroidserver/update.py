@@ -1148,16 +1148,16 @@ def scan_apk_aapt(apk, apkfile):
                 logging.error(line.replace('sdkVersion:', '')
                               + ' is not a valid minSdkVersion!')
             else:
-                apk['minSdkVersion'] = m.group(1)
+                apk['minSdkVersion'] = int(m.group(1))
         elif line.startswith("targetSdkVersion:"):
             m = re.match(APK_SDK_VERSION_PAT, line)
             if m is None:
                 logging.error(line.replace('targetSdkVersion:', '')
                               + ' is not a valid targetSdkVersion!')
             else:
-                apk['targetSdkVersion'] = m.group(1)
+                apk['targetSdkVersion'] = int(m.group(1))
         elif line.startswith("maxSdkVersion:"):
-            apk['maxSdkVersion'] = re.match(APK_SDK_VERSION_PAT, line).group(1)
+            apk['maxSdkVersion'] = int(re.match(APK_SDK_VERSION_PAT, line).group(1))
         elif line.startswith("native-code:"):
             apk['nativecode'] = []
             for arch in line[13:].split(' '):
@@ -1193,17 +1193,19 @@ def scan_apk_aapt(apk, apkfile):
 def _sanitize_sdk_version(value):
     """Sanitize the raw values from androguard to handle bad values
 
-    minSdkVersion/targetSdkVersion/maxSdkVersion must be integers,
-    but that doesn't stop devs from doing strange things like
-    setting them using Android XML strings.
+    minSdkVersion/targetSdkVersion/maxSdkVersion must be integers, but
+    that doesn't stop devs from doing strange things like setting them
+    using Android XML strings. This method makes the Androguard output
+    match the output from `aapt dump badging`: bad values are ignored.
 
     https://gitlab.com/souch/SMSbypass/blob/v0.9/app/src/main/AndroidManifest.xml#L29
     https://gitlab.com/souch/SMSbypass/blob/v0.9/app/src/main/res/values/strings.xml#L27
+
     """
     try:
         sdk_version = int(value)
         if sdk_version > 0:
-            return str(sdk_version)  # heinous, but this is still str in the codebase
+            return sdk_version
     except (TypeError, ValueError):
         pass
     return None

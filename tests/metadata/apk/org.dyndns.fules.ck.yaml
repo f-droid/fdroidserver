@@ -13,7 +13,7 @@ icons_src:
   '120': res/drawable-ldpi-v4/icon_launcher.png
   '160': res/drawable-mdpi-v4/icon_launcher.png
   '240': res/drawable-hdpi-v4/icon_launcher.png
-minSdkVersion: '7'
+minSdkVersion: 7
 nativecode:
 - arm64-v8a
 - armeabi
@@ -26,7 +26,7 @@ packageName: org.dyndns.fules.ck
 sig: 9bf7a6a67f95688daec75eab4b1436ac
 signer: 9326a2cc1a2f148202bc7837a0af3b81200bd37fd359c9e13a2296a71d342056
 size: 132453
-targetSdkVersion: '8'
+targetSdkVersion: 8
 uses-permission:
 - !!python/object/new:fdroidserver.update.UsesPermission
   - android.permission.BIND_INPUT_METHOD
