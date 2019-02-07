@@ -76,6 +76,7 @@ def scan_source(build_dir, build=metadata.Build()):
             r'libspen23',
             r'firebase',
             r'''["']com.facebook.android['":]''',
+            r'cloudrail',
         ]
     }
 
