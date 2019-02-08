@@ -1283,6 +1283,17 @@ def main():
                     if m:
                         txt += "* host RAM: %s\n" % m.group(1)
                         break
+        fdroid_path = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+        buildserver_config = os.path.join(fdroid_path, 'makebuildserver.config.py')
+        if os.path.isfile(buildserver_config) and os.access(buildserver_config, os.R_OK):
+            with open(buildserver_config) as configfile:
+                for line in configfile:
+                    m = re.search(r'cpus\s*=\s*([0-9].*)', line)
+                    if m:
+                        txt += "* guest processors: %s\n" % m.group(1)
+                    m = re.search(r'memory\s*=\s*([0-9].*)', line)
+                    if m:
+                        txt += "* guest RAM: %s MB\n" % m.group(1)
         txt += "* successful builds: %d\n" % len(build_succeeded)
         txt += "* failed builds: %d\n" % len(failed_apps)
         txt += "\n\n"
