@@ -102,4 +102,4 @@ fi
 # Gradle, JNI, preassemble
 ../fdroid build --verbose --stop org.adaway:55
 # building old versions should still work
-../fdroid build --verbose --stop org.fdroid.fdroid:96150
+../fdroid build --verbose --stop org.fdroid.fdroid:102350
