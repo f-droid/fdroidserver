@@ -39,12 +39,8 @@ if systemd-detect-virt -q ; then
 else
         echo "No virtualization is used."
 fi
-sudo /bin/chmod -R a+rX /var/lib/libvirt/images
 echo 'maximum allowed number of open file descriptors: ' `ulimit -n`
-ls -ld /var/lib/libvirt/images
-ls -l /var/lib/libvirt/images || echo no access
 ls -lR ~/.vagrant.d/ || echo no access
-virsh --connect qemu:///system list --all || echo cannot virsh list
 cat /etc/issue
 
 /sbin/ifconfig || true

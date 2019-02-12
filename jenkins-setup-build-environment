@@ -26,7 +26,6 @@ cleanup_all() {
     set +e
     echo "$(date -u) - cleanup in progress..."
     ps auxww | grep -e VBox -e qemu
-    virsh --connect qemu:///system list --all
     ls -hl /var/lib/libvirt/images
     cd $WORKSPACE/buildserver
     vagrant halt
@@ -53,21 +52,6 @@ if which VBoxManage; then
 fi
 export VAGRANT_HOME=$WORKSPACE/vagrant.d
 mkdir $VAGRANT_HOME
-
-# delete leftovers from previous run
-virsh -c qemu:///system undefine buildserver_default \
-      --nvram --managed-save --remove-all-storage --snapshots-metadata || true
-virsh -c qemu:///system undefine builder_default \
-      --nvram --managed-save --remove-all-storage --snapshots-metadata || true
-virsh -c qemu:///system undefine basebox-stretch64 \
-      --nvram --managed-save --remove-all-storage --snapshots-metadata || true
-
-virsh -c qemu:///system vol-delete --pool default \
-      /var/lib/libvirt/images/buildserver_vagrant_box_image_0.img || true
-virsh -c qemu:///system vol-delete --pool default \
-      /var/lib/libvirt/images/basebox-stretch64_vagrant_box_image_0.img || true
-virsh -c qemu:///system vol-delete --pool default \
-      /var/lib/libvirt/images/jessie64_vagrant_box_image_0.img || true
 
 rm -rf "$WORKSPACE"/../*/.testfiles
 
