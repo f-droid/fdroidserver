@@ -56,12 +56,14 @@ mkdir $VAGRANT_HOME
 rm -rf "$WORKSPACE"/../*/.testfiles
 
 cd $WORKSPACE
-echo "debian_mirror = 'https://deb.debian.org/debian/'" > $WORKSPACE/makebuildserver.config.py
-echo "boot_timeout = 1200" >> $WORKSPACE/makebuildserver.config.py
-echo "apt_package_cache = True" >> $WORKSPACE/makebuildserver.config.py
-echo "copy_caches_from_host = True" >> $WORKSPACE/makebuildserver.config.py
-echo "memory = 6144" >> $WORKSPACE/makebuildserver.config.py
-echo "cpus = 2" >> $WORKSPACE/makebuildserver.config.py
+cat <<EOF > $WORKSPACE/makebuildserver.config.py
+debian_mirror = 'http://deb.debian.org/debian/'"
+boot_timeout = 1200
+apt_package_cache = True
+copy_caches_from_host = True
+memory = 8192
+cpus = 6
+EOF
 ./makebuildserver -vv --clean
 
 if [ -z "`vagrant box list | egrep '^buildserver\s+\((libvirt|virtualbox), [0-9]+\)$'`" ]; then
