@@ -388,8 +388,8 @@ cachefiles = [
      '5dfbbdc2d3ba859fed90d0e978af87c71a91a5be1f6e1c40ba697503d48ccecd'),
     ('https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip',
      '4f61cbe4bbf6406aa5ef2ae871def78010eed6271af72de83f8bd0b07a9fd3fd'),
-    ('https://dl.google.com/android/repository/android-ndk-r19-linux-x86_64.zip',
-     'c0a2425206191252197b97ea5fcc7eab9f693a576e69ef4773a9ed1690feed53'),
+    ('https://dl.google.com/android/repository/android-ndk-r19b-linux-x86_64.zip',
+     '0fbb1645d0f1de4dde90a4ff79ca5ec4899c835e729d692f433fda501623257a'),
 ]
 
 
