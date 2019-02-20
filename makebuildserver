@@ -151,7 +151,7 @@ if config['apt_package_cache']:
         logging.info('removing partial downloads from apt cache dir')
         shutil.rmtree(aptcachepartial)
 
-cachefiles = [
+CACHE_FILES = [
     # Don't update sdk tools beyond 25.2.5.
     # Support for android update project has been removed and there is no replacement.
     # Until we find a solution for that we need to stay at this revision.
@@ -411,8 +411,8 @@ def run_via_vagrant_ssh(v, cmdlist):
     v._run_vagrant_command(['ssh', '-c', cmd])
 
 
-def update_cache(cachedir, cachefiles):
-    for srcurl, shasum in cachefiles:
+def update_cache(cachedir):
+    for srcurl, shasum in CACHE_FILES:
         filename = os.path.basename(srcurl)
         local_filename = os.path.join(cachedir, filename)
 
@@ -485,12 +485,12 @@ def debug_log_vagrant_vm(vm_dir, config):
 
 
 def main():
-    global cachedir, cachefiles, config, tail
+    global cachedir, config, tail
 
     if options.skip_cache_update:
         logging.info('skipping cache update and verification...')
     else:
-        update_cache(cachedir, cachefiles)
+        update_cache(cachedir)
 
     # use VirtualBox software virtualization if hardware is not available,
     # like if this is being run in kvm or some other VM platform, like
