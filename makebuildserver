@@ -43,10 +43,6 @@ logging.basicConfig(format=logformat, level=loglevel)
 
 tail = None
 
-# set up default config
-cachedir = os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver')
-logging.debug('cachedir set to: %s', cachedir)
-
 BASEBOX_DEFAULT = 'fdroid/basebox-stretch64'
 BASEBOX_VERSION_DEFAULT = '0.5.1'
 BASEBOX_CHECKSUMS = {
@@ -97,7 +93,7 @@ config = {
     'apt_package_cache': False,
     'copy_caches_from_host': False,
     'boot_timeout': 600,
-    'cachedir': cachedir,
+    'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
     'cpus': 1,
     'memory': 2048,
     'hwvirtex': 'off',
@@ -123,13 +119,12 @@ if 'basebox_version' in config and 'basebox' in config and '/' not in config['ba
                      .format(box=config['basebox'], version=config['basebox_version']))
 
 # Update cached files.
-cachedir = config['cachedir']
-if not os.path.exists(cachedir):
-    os.makedirs(cachedir, 0o755)
-    logging.debug('created cachedir %s because it did not exists.', cachedir)
+if not os.path.exists(config['cachedir']):
+    os.makedirs(config['cachedir'], 0o755)
+    logging.debug('created cachedir {} because it did not exists.'.format(config['cachedir']))
 
 if config['vm_provider'] == 'libvirt':
-    tmp = cachedir
+    tmp = config['cachedir']
     while tmp != '/':
         mode = os.stat(tmp).st_mode
         if not (stat.S_IXUSR & mode and stat.S_IXGRP & mode and stat.S_IXOTH & mode):
@@ -137,10 +132,10 @@ if config['vm_provider'] == 'libvirt':
             logging.critical('  chmod a+X %s', tmp)
             sys.exit(1)
         tmp = os.path.dirname(tmp)
-    logging.debug('cache dir %s is accessible for libvirt vm.', cachedir)
+    logging.debug('cache dir %s is accessible for libvirt vm.', config['cachedir'])
 
 if config['apt_package_cache']:
-    config['aptcachedir'] = cachedir + '/apt/archives'
+    config['aptcachedir'] = config['cachedir'] + '/apt/archives'
     logging.debug('aptcachedir is set to %s', config['aptcachedir'])
     aptcachelock = os.path.join(config['aptcachedir'], 'lock')
     if os.path.isfile(aptcachelock):
@@ -485,12 +480,12 @@ def debug_log_vagrant_vm(vm_dir, config):
 
 
 def main():
-    global cachedir, config, tail
+    global config, tail
 
     if options.skip_cache_update:
         logging.info('skipping cache update and verification...')
     else:
-        update_cache(cachedir)
+        update_cache(config['cachedir'])
 
     # use VirtualBox software virtualization if hardware is not available,
     # like if this is being run in kvm or some other VM platform, like
