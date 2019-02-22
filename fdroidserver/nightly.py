@@ -249,8 +249,8 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         common.assert_config_keystore(config)
 
         for root, dirs, files in os.walk(cibase):
-            for d in ('fdroid', '.git', '.gradle'):
-                if d in dirs:
+            for d in dirs:
+                if d == '.git' or d == '.gradle' or (d == 'fdroid' and root == cibase):
                     dirs.remove(d)
             for f in files:
                 if f.endswith('-debug.apk'):

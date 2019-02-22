@@ -88,7 +88,7 @@ def make(apps, sortedids, apks, repodir, archive):
 
     mirrorcheckfailed = False
     mirrors = []
-    for mirror in sorted(common.config.get('mirrors', [])):
+    for mirror in common.config.get('mirrors', []):
         base = os.path.basename(urllib.parse.urlparse(mirror).path.rstrip('/'))
         if common.config.get('nonstandardwebroot') is not True and base != 'fdroid':
             logging.error(_("mirror '%s' does not end with 'fdroid'!") % mirror)
