@@ -762,9 +762,32 @@ def copy_triple_t_store_metadata(apps):
     tt_graphic_names = ('feature-graphic', 'icon', 'promo-graphic', 'tv-banner')
     tt_screenshot_dirs = ('phone-screenshots', 'tablet-screenshots',
                           'large-tablet-screenshots', 'tv-screenshots', 'wear-screenshots')
+    setting_gradle_pattern = re.compile(r"""\s*include\s+["']:([^"']+)["'](?:,[\n\s]*["']:([^"']+)["'])*""")
 
     for packageName, app in apps.items():
-        for d in glob.glob(os.path.join('build', packageName, '*', 'src', '*', 'play')):
+        settings_gradle = os.path.join('build', packageName, 'settings.gradle')
+        gradle_subdirs = set()
+        if os.path.exists(settings_gradle):
+            with open(settings_gradle) as fp:
+                data = fp.read()
+            for matches in setting_gradle_pattern.findall(data):
+                for m in matches:
+                    if m:
+                        gradle_path = m.replace(':', '/')
+                        p = os.path.join('build', packageName, gradle_path, 'src', 'main', 'play')
+                        if os.path.exists(p):
+                            gradle_subdirs.add(p)
+                        flavors = set()
+                        if app.builds:
+                            flavors = app.builds[0].gradle
+                        for flavor in flavors:
+                            if flavor not in ('yes', 'no'):
+                                p = os.path.join('build', packageName, gradle_path, 'src', flavor, 'play')
+                            gradle_subdirs.add(p)
+        if not gradle_subdirs:
+            gradle_subdirs.update(glob.glob(os.path.join('build', packageName, '*', 'src', '*', 'play')))
+
+        for d in gradle_subdirs:
             logging.debug('Triple-T Gradle Play Publisher: ' + d)
             for root, dirs, files in os.walk(d):
                 segments = root.split('/')
