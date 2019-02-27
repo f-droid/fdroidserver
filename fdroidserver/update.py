@@ -750,34 +750,62 @@ def copy_triple_t_store_metadata(apps):
     the graphics files that are copied into the fdroid repo get
     properly indexed.
 
-    https://github.com/Triple-T/gradle-play-publisher#upload-images
-    https://github.com/Triple-T/gradle-play-publisher#play-store-metadata
+    https://github.com/Triple-T/gradle-play-publisher/blob/1.2.2/README.md#uploading-images
+    https://github.com/Triple-T/gradle-play-publisher/blob/1.2.2/README.md#play-store-metadata
+    https://github.com/Triple-T/gradle-play-publisher/blob/2.1.0/README.md#publishing-listings
 
     """
 
     if not os.path.isdir('build'):
         return  # nothing to do
 
+    tt_graphic_names = ('feature-graphic', 'icon', 'promo-graphic', 'tv-banner')
+    tt_screenshot_dirs = ('phone-screenshots', 'tablet-screenshots',
+                          'large-tablet-screenshots', 'tv-screenshots', 'wear-screenshots')
+    setting_gradle_pattern = re.compile(r"""\s*include\s+["']:([^"']+)["'](?:,[\n\s]*["']:([^"']+)["'])*""")
+
     for packageName, app in apps.items():
-        for d in glob.glob(os.path.join('build', packageName, '*', 'src', '*', 'play')):
+        settings_gradle = os.path.join('build', packageName, 'settings.gradle')
+        gradle_subdirs = set()
+        if os.path.exists(settings_gradle):
+            with open(settings_gradle) as fp:
+                data = fp.read()
+            for matches in setting_gradle_pattern.findall(data):
+                for m in matches:
+                    if m:
+                        gradle_path = m.replace(':', '/')
+                        p = os.path.join('build', packageName, gradle_path, 'src', 'main', 'play')
+                        if os.path.exists(p):
+                            gradle_subdirs.add(p)
+                        flavors = set()
+                        if app.builds:
+                            flavors = app.builds[0].gradle
+                        for flavor in flavors:
+                            if flavor not in ('yes', 'no'):
+                                p = os.path.join('build', packageName, gradle_path, 'src', flavor, 'play')
+                            gradle_subdirs.add(p)
+        if not gradle_subdirs:
+            gradle_subdirs.update(glob.glob(os.path.join('build', packageName, '*', 'src', '*', 'play')))
+
+        for d in gradle_subdirs:
             logging.debug('Triple-T Gradle Play Publisher: ' + d)
             for root, dirs, files in os.walk(d):
                 segments = root.split('/')
                 locale = segments[-2]
                 for f in files:
-                    if f == 'fulldescription':
+                    if f == 'fulldescription' or f == 'full-description.txt':
                         _set_localized_text_entry(app, locale, 'description',
                                                   os.path.join(root, f))
                         continue
-                    elif f == 'shortdescription':
+                    elif f == 'shortdescription' or f == 'short-description.txt':
                         _set_localized_text_entry(app, locale, 'summary',
                                                   os.path.join(root, f))
                         continue
-                    elif f == 'title':
+                    elif f == 'title' or f == 'title.txt':
                         _set_localized_text_entry(app, locale, 'name',
                                                   os.path.join(root, f))
                         continue
-                    elif f == 'video':
+                    elif f == 'video' or f == 'video-url.txt':
                         _set_localized_text_entry(app, locale, 'video',
                                                   os.path.join(root, f))
                         continue
@@ -785,28 +813,38 @@ def copy_triple_t_store_metadata(apps):
                         _set_localized_text_entry(app, segments[-1], 'whatsNew',
                                                   os.path.join(root, f))
                         continue
-                    elif f == 'contactEmail':
+                    elif f == 'contactEmail' or f == 'contact-email.txt':
                         _set_author_entry(app, 'authorEmail', os.path.join(root, f))
                         continue
-                    elif f == 'contactPhone':
+                    elif f == 'contactPhone' or f == 'contact-phone.txt':
                         _set_author_entry(app, 'authorPhone', os.path.join(root, f))
                         continue
-                    elif f == 'contactWebsite':
+                    elif f == 'contactWebsite' or f == 'contact-website.txt':
                         _set_author_entry(app, 'authorWebSite', os.path.join(root, f))
                         continue
 
                     base, extension = common.get_extension(f)
                     dirname = os.path.basename(root)
                     if extension in ALLOWED_EXTENSIONS \
-                       and (dirname in GRAPHIC_NAMES or dirname in SCREENSHOT_DIRS):
+                       and (dirname in GRAPHIC_NAMES or dirname in tt_graphic_names
+                            or dirname in SCREENSHOT_DIRS or dirname in tt_screenshot_dirs):
+                        repofilename = os.path.basename(f)
                         if segments[-2] == 'listing':
                             locale = segments[-3]
+                        elif segments[-4] == 'listings':  # v2.x
+                            locale = segments[-3]
+                            if dirname in tt_graphic_names:
+                                repofilename = GRAPHIC_NAMES[tt_graphic_names.index(dirname)]
+                                repofilename += '.' + extension
+                                dirname = ''
+                            else:
+                                dirname = SCREENSHOT_DIRS[tt_screenshot_dirs.index(dirname)]
                         else:
                             locale = segments[-2]
                         destdir = os.path.join('repo', packageName, locale, dirname)
                         os.makedirs(destdir, mode=0o755, exist_ok=True)
                         sourcefile = os.path.join(root, f)
-                        destfile = os.path.join(destdir, os.path.basename(f))
+                        destfile = os.path.join(destdir, repofilename)
                         logging.debug('copying ' + sourcefile + ' ' + destfile)
                         _strip_and_copy_image(sourcefile, destfile)
 
