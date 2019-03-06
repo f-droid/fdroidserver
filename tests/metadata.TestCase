@@ -307,6 +307,68 @@ class MetadataTest(unittest.TestCase):
                                                   'prebuild': "a && b && "
                                                               "sed -i 's,a,b,'"}]})
 
+    def test_write_yaml_description_with_trailing_whitespace(self):
+        mf = io.StringIO()
+        app = fdroidserver.metadata.App()
+        app.Categories = ['None']
+        app.Description = "this evil description has a trailing whitespace   "
+        app.builds = []
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 102030
+        build.versionName = 'v1.2.3'
+        build.build = "./gradlew compile"
+        app.builds.append(build)
+        fdroidserver.metadata.write_yaml(mf, app)
+        mf.seek(0)
+        self.maxDiff = None
+        self.assertEqual(mf.read(), textwrap.dedent("""\
+            Categories:
+              - None
+            License: Unknown
+
+            Description: |-
+                this evil description has a trailing whitespace
+
+            Builds:
+              - versionName: v1.2.3
+                versionCode: 102030
+                build: ./gradlew compile
+
+            AutoUpdateMode: None
+            UpdateCheckMode: None
+            """))
+
+    def test_write_yaml_long_description(self):
+        mf = io.StringIO()
+        app = fdroidserver.metadata.App()
+        app.Categories = ['None']
+        app.Description = "long description is long; " * 20
+        app.builds = []
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 102030
+        build.versionName = 'v1.2.3'
+        build.build = "./gradlew compile"
+        app.builds.append(build)
+        fdroidserver.metadata.write_yaml(mf, app)
+        mf.seek(0)
+        self.maxDiff = None
+        self.assertEqual(mf.read(), textwrap.dedent("""\
+            Categories:
+              - None
+            License: Unknown
+
+            Description: |-
+                long description is long; long description is long; long description is long; long description is long; long description is long; long description is long; long description is long; long description is long; long description is long; long description is long; long description is long; long description is long; long description is long; long description is long; long description is long; long description is long; long description is long; long description is long; long description is long; long description is long;
+
+            Builds:
+              - versionName: v1.2.3
+                versionCode: 102030
+                build: ./gradlew compile
+
+            AutoUpdateMode: None
+            UpdateCheckMode: None
+            """))
+
     def test_write_yaml_1_line_scripts_as_string(self):
         mf = io.StringIO()
         app = fdroidserver.metadata.App()
@@ -456,6 +518,37 @@ class MetadataTest(unittest.TestCase):
                   - ./gradlew someSpecialTask
                   - sed -i 'd/that wrong config/' gradle.properties
                   - ./gradlew compile
+
+            AutoUpdateMode: None
+            UpdateCheckMode: None
+            """))
+
+    def test_write_yaml_very_long_script(self):
+        mf = io.StringIO()
+        app = fdroidserver.metadata.App()
+        app.Categories = ['None']
+        app.builds = []
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 102030
+        build.versionName = 'v1.2.3'
+        build.build = "./gradlew someSpecialTask && sed -i 'd/that wrong config/' gradle.properties && ./gradlew compile && long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long;"
+        app.builds.append(build)
+        fdroidserver.metadata.write_yaml(mf, app)
+        mf.seek(0)
+        self.maxDiff = None
+        self.assertEqual(mf.read(), textwrap.dedent("""\
+            Categories:
+              - None
+            License: Unknown
+
+            Builds:
+              - versionName: v1.2.3
+                versionCode: 102030
+                build:
+                  - ./gradlew someSpecialTask
+                  - sed -i 'd/that wrong config/' gradle.properties
+                  - ./gradlew compile
+                  - long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long; long script is very long;
 
             AutoUpdateMode: None
             UpdateCheckMode: None

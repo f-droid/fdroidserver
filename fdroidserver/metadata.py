@@ -248,6 +248,13 @@ def fieldtype(name):
     return TYPE_STRING
 
 
+def yml_fieldtype(name):
+    if name == 'CurrentVersionCode':
+        return TYPE_INT
+    else:
+        return fieldtype(name)
+
+
 # In the order in which they are laid out on files
 build_flags_order = [
     'disable',
@@ -1115,117 +1122,123 @@ def write_yaml(mf, app):
     :param app: app metadata to written to the yaml file
     """
 
-    # import rumael.yaml and check version
-    try:
-        import ruamel.yaml
-    except ImportError as e:
-        raise FDroidException('ruamel.yaml not instlled, can not write metadata.') from e
-    if not ruamel.yaml.__version__:
-        raise FDroidException('ruamel.yaml.__version__ not accessible. Please make sure a ruamel.yaml >= 0.13 is installed..')
-    m = re.match(r'(?P<major>[0-9]+)\.(?P<minor>[0-9]+)\.(?P<patch>[0-9]+)(-.+)?',
-                 ruamel.yaml.__version__)
-    if not m:
-        raise FDroidException('ruamel.yaml version malfored, please install an upstream version of ruamel.yaml')
-    if int(m.group('major')) < 0 or int(m.group('minor')) < 13:
-        raise FDroidException('currently installed version of ruamel.yaml ({}) is too old, >= 1.13 required.'.format(ruamel.yaml.__version__))
-    # suiteable version ruamel.yaml imported successfully
+    def format_yml_field(field, value, typ, width=80, offset=0):
+        # TODO: use CSafeDumper if available
 
-    _yaml_bools_true = ('y', 'Y', 'yes', 'Yes', 'YES',
-                        'true', 'True', 'TRUE',
-                        'on', 'On', 'ON')
-    _yaml_bools_false = ('n', 'N', 'no', 'No', 'NO',
-                         'false', 'False', 'FALSE',
-                         'off', 'Off', 'OFF')
-    _yaml_bools_plus_lists = []
-    _yaml_bools_plus_lists.extend(_yaml_bools_true)
-    _yaml_bools_plus_lists.extend([[x] for x in _yaml_bools_true])
-    _yaml_bools_plus_lists.extend(_yaml_bools_false)
-    _yaml_bools_plus_lists.extend([[x] for x in _yaml_bools_false])
+        bool_list_hack = ['gradle']
 
-    def _class_as_dict_representer(dumper, data):
-        '''Creates a YAML representation of a App/Build instance'''
-        return dumper.represent_dict(data)
+        data = {}
+        default_style = None
 
-    def _field_to_yaml(typ, value):
-        if typ is TYPE_STRING:
-            if value in _yaml_bools_plus_lists:
-                return ruamel.yaml.scalarstring.SingleQuotedScalarString(str(value))
-            return str(value)
-        elif typ is TYPE_INT:
-            return int(value)
-        elif typ is TYPE_MULTILINE:
-            if '\n' in value:
-                return ruamel.yaml.scalarstring.preserve_literal(str(value))
+        if typ == TYPE_INT:
+            data[field] = int(value)
+        elif typ == TYPE_BOOL:
+            data[field] = bool(value)
+        elif typ == TYPE_SCRIPT:
+            if type(value) != list:
+                value = value.split(' && ')
+            if len(value) > 1:
+                data[field] = value
             else:
-                return str(value)
-        elif typ is TYPE_SCRIPT:
-            if type(value) == list:
-                if len(value) == 1:
-                    return value[0]
-                else:
-                    return value
-            else:
-                script_lines = value.split(' && ')
-                if len(script_lines) > 1:
-                    return script_lines
-                else:
-                    return value
+                data[field] = value[0]
+        elif typ == TYPE_LIST:
+            if field in bool_list_hack:
+                if value in [True, 'yes', ['yes']]:
+                    value = [True]
+            data[field] = value
+        elif typ == TYPE_MULTILINE:
+            default_style = '|'
+            data[field] = value.strip()
         else:
-            return value
+            data[field] = value
 
-    def _app_to_yaml(app):
-        cm = ruamel.yaml.comments.CommentedMap()
-        insert_newline = False
-        for field in yaml_app_field_order:
-            if field == '\n':
-                # next iteration will need to insert a newline
-                insert_newline = True
-            else:
-                if app.get(field) or field == 'Builds':
-                    # .txt calls it 'builds' internally, everywhere else its 'Builds'
-                    if field == 'Builds':
-                        if app.get('builds'):
-                            cm.update({field: _builds_to_yaml(app)})
-                    elif field == 'CurrentVersionCode':
-                        cm.update({field: _field_to_yaml(TYPE_INT, getattr(app, field))})
+        raw_yml = yaml.dump(data, Dumper=yaml.SafeDumper,
+                            default_flow_style=False, width=width,
+                            default_style=default_style, indent=4)
+
+        # this is just for debugging purposes remove in production code
+        # debug_print_yaml_item(typ, data, default_style, offset, raw_yml)
+
+        if raw_yml:
+
+            # remove all encapsulation newlines
+            raw_yml = re.sub('\n+$', '', raw_yml)
+            raw_yml = re.sub('^\n+', '', raw_yml)
+
+            if offset > 0:
+                lines = raw_yml.split('\n')
+                for i in range(len(lines)):
+                    if lines[i] != '':
+                        lines[i] = ' ' * offset + lines[i]
+                raw_yml = '\n'.join(lines)
+
+            if typ == TYPE_LIST or typ == TYPE_SCRIPT:
+                # indent sequence items by 2 spaces
+                new_raw_yml = []
+                for line in raw_yml.split('\n'):
+                    if re.match(r'^\s*$', line):
+                        new_raw_yml.append('')
+                    elif len(new_raw_yml) > 0:
+                        new_raw_yml.append('  ' + line)
                     else:
-                        cm.update({field: _field_to_yaml(fieldtype(field), getattr(app, field))})
+                        new_raw_yml.append(line)
+                raw_yml = '\n'.join(new_raw_yml)
+            elif typ == TYPE_MULTILINE:
+                # remove quotes from mulit line keys
+                raw_yml = re.sub(r'^(\s*)"([a-zA-Z0-9]+)":(\s*\|-)$', '\\1\\2:\\3', raw_yml, flags=re.MULTILINE)
 
-                    if insert_newline:
-                        # we need to prepend a newline in front of this field
-                        insert_newline = False
-                        # inserting empty lines is not supported so we add a
-                        # bogus comment and over-write its value
-                        cm.yaml_set_comment_before_after_key(field, 'bogus')
-                        cm.ca.items[field][1][-1].value = '\n'
-        return cm
+            return raw_yml
 
-    def _builds_to_yaml(app):
-        builds = ruamel.yaml.comments.CommentedSeq()
-        for build in app.builds:
-            b = ruamel.yaml.comments.CommentedMap()
-            for field in build_flags:
-                value = getattr(build, field)
-                if hasattr(build, field) and value:
-                    if field == 'gradle' and value == ['off']:
-                        value = [ruamel.yaml.scalarstring.SingleQuotedScalarString('off')]
-                    if field in ('maven', 'buildozer'):
-                        if value == 'no':
-                            continue
-                        elif value == 'yes':
-                            value = 'yes'
-                    b.update({field: _field_to_yaml(flagtype(field), value)})
-            builds.append(b)
+    def format_yml_build_entry(build):
+        result = []
+        for field in build_flags:
+            value = getattr(build, field, None)
+            if value:
+                typ = flagtype(field)
+                line = format_yml_field(field, value, typ, width=0xffffffff, offset=4)
+                if re.match(r'^\s+$', line):
+                    result.append('')
+                else:
+                    result.append(line)
+        result[0] = '  - ' + result[0][4:]
+        return '\n'.join(result)
 
-        # insert extra empty lines between build entries
-        for i in range(1, len(builds)):
-            builds.yaml_set_comment_before_after_key(i, 'bogus')
-            builds.ca.items[i][1][-1].value = '\n'
+    result = []
+    for field in yaml_app_field_order:
+        if field == '\n':
+            if result[-1] != '':
+                result.append('')
+            continue
+        else:
+            value = app.get(field)
+            if field == 'Builds' and app.builds:
+                result.append('Builds:')
+                first_build_entry = True
+                for build in app.builds:
+                    if first_build_entry:
+                        first_build_entry = False
+                    else:
+                        result.append('')
+                    result.append(format_yml_build_entry(build))
+            if value:
+                result.append(format_yml_field(field, value, yml_fieldtype(field)))
+    mf.write('\n'.join(result))
 
-        return builds
 
-    yaml_app = _app_to_yaml(app)
-    ruamel.yaml.round_trip_dump(yaml_app, mf, indent=4, block_seq_indent=2)
+def debug_print_yaml_item(typ, data, default_style, offset, raw_yml):
+    """function debugging indiviudal lines during yaml writing"""
+    typTable = {0: 'TYPE_UNKNOWN',
+                1: 'TYPE_OBSOLETE',
+                2: 'TYPE_STRING',
+                3: 'TYPE_BOOL',
+                4: 'TYPE_LIST',
+                5: 'TYPE_SCRIPT',
+                6: 'TYPE_MULTILINE',
+                7: 'TYPE_BUILD',
+                8: 'TYPE_INT'}
+    print('###', '(' + typTable[typ] + ', default_style='
+          + str(default_style) + ', offset=' + str(offset) + ')\n',
+          data, '->', raw_yml if raw_yml else '')
 
 
 build_line_sep = re.compile(r'(?<!\\),')
