@@ -70,6 +70,195 @@ class MetadataTest(unittest.TestCase):
             #     yaml.add_representer(fdroidserver.metadata.Build, _build_yaml_representer)
             #     yaml.dump(frommeta, f, default_flow_style=False)
 
+    def test_write_yaml_allfields(self):
+
+        mf = io.StringIO()
+
+        app = fdroidserver.metadata.App()
+        app.Disabled = True
+        app.AntiFeatures = ['Karl', 'Bert']
+        app.Provides = "org.fdroid.fdroid"
+        app.Categories = ['Secret', 'Stuff']
+        app.License = 'GPL-3.0-or-later'
+        app.AuthorName = 'He who must not be named.'
+        app.AuthorEmail = 'tom@f-droid.org'
+        app.AuthorWebSite = 'https://f-droid.org/~theDarkLord'
+        app.WebSite = 'https://f-droid.org'
+        app.SourceCode = 'https://gitlab.com/fdroid/fdroidclient.git'
+        app.IssueTracker = "https://gitlab.com/fdroid/fdroidclient/issues"
+        app.Translation = 'https://hosted.weblate.org/projects/f-droid/f-droid'
+        app.Changelog = 'https://example.com/fdroidclient/raw/master/CHANGELOG.md'
+        app.Donate = 'https://f-droid.org/about'
+        app.FlattrID = '343053'
+        app.LiberapayID = '27859'
+        app.Bitcoin = '15u8aAPK4jJ5N8wpWJ5gutAyyeHtKX5i18'
+        app.Litecoin = '000000000000000000000000000000000'
+        app.Name = 'F-Droid'
+        app.AutoName = 'F-Droid'
+        app.Summary = 'The app store that respects freedom and privacy'
+        app.Description = 'The app store that respects freedom and privacy'
+        app.RequiresRoot = True
+        app.RepoType = 'git'
+        app.Repo = 'https://gitlab.com/fdroid/fdroidclient.git'
+        app.Binaries = 'https://f-droid.org/fdroid-%v.apk'
+        app.builds = []
+
+        build = fdroidserver.metadata.Build()
+        build.versionName = '1.0.1'
+        build.versionCode = 101
+        build.disable = 'for this reason'
+        build.commit = '1.0.1'
+        build.timeout = 12345
+        build.subdir = 'app'
+        build.submodules = True
+        build.sudo = 'apt-get update -y && apt-get upgrade -y'
+        build.init = 'sed -i -e "/replace this/with that/" build.gradle'
+        build.patch = ['remove-play-services.patch', 'add-other-service.patch']
+        build.gradle = 'flavor'
+        build.maven = True
+        build.buildozer = True
+        build.output = 'app/build/fdroid-$$VERSION$$.zip'
+        build.scrlibs = ['DragSort@0.6.1,3', 'SlidingMenu@7ebe32772']
+        build.oldsdkloc = True
+        build.encoding = 'utf-8'
+        build.forceversion = True
+        build.forcevercode = True
+        build.rm = ['app/file1', 'app/file2', 'app/other*']
+        build.extlibs = ['android/android-support-v4.jar', 'android/android-support-v13.jar']
+        build.prebuild = 'sed -i -e "/replace this/with that/" build.gradle'
+        build.androidupdate = [False]
+        build.target = 'android-99'
+        build.scanignore = ['libs/a.so', 'libs/b.so']
+        build.scandelete = ['bin/exec', 'bin/run']
+        build.build = 'export NDK_DIR=$$NDK$$'
+        build.buildjni = True
+        build.ndk = 'r99b'
+        build.preassemble = ':gradleTask'
+        build.gradleprops = 'prop4gradle'
+        build.antcommands = 'package'
+        build.novcheck = True
+        build.antifeatures = ['Karl', 'Hank']
+        app.builds.append(build)
+
+        app.MaintainerNotes = 'Great app, highly recommended.'
+        app.ArchivePolicy = '3 versions'
+        app.AutoUpdateMode = 'None'
+        app.UpdateCheckMode = 'Tags'
+        app.UpdateCheckIgnore = '(alpha|beta|rc|RC|dev)'
+        app.VercodeOperation = '%c + 2'
+        app.UpdateCheckName = 'org.fdroid.fdroid'
+        app.UpdateCheckData = 'https://raw.githubusercontent.com/proj/app/master/AndroidManifest.xml|android:versionCode="([0-9]*)"|.|android:versionCode="([0-9]*)"'
+        app.CurrentVersion = '1.0.1'
+        app.CurrentVersionCode = 101
+        app.NoSourceSince = '1.0.1'
+
+        fdroidserver.metadata.write_yaml(mf, app)
+        mf.seek(0)
+
+        self.maxDiff = None
+        self.assertEqual(mf.read(), textwrap.dedent("""\
+            Disabled: true
+            AntiFeatures:
+              - Karl
+              - Bert
+            Provides: org.fdroid.fdroid
+            Categories:
+              - Secret
+              - Stuff
+            License: GPL-3.0-or-later
+            AuthorName: He who must not be named.
+            AuthorEmail: tom@f-droid.org
+            AuthorWebSite: https://f-droid.org/~theDarkLord
+            WebSite: https://f-droid.org
+            SourceCode: https://gitlab.com/fdroid/fdroidclient.git
+            IssueTracker: https://gitlab.com/fdroid/fdroidclient/issues
+            Translation: https://hosted.weblate.org/projects/f-droid/f-droid
+            Changelog: https://example.com/fdroidclient/raw/master/CHANGELOG.md
+            Donate: https://f-droid.org/about
+            FlattrID: '343053'
+            LiberapayID: '27859'
+            Bitcoin: 15u8aAPK4jJ5N8wpWJ5gutAyyeHtKX5i18
+            Litecoin: '000000000000000000000000000000000'
+
+            Name: F-Droid
+            AutoName: F-Droid
+            Summary: The app store that respects freedom and privacy
+            Description: |-
+                The app store that respects freedom and privacy
+
+            RequiresRoot: true
+
+            RepoType: git
+            Repo: https://gitlab.com/fdroid/fdroidclient.git
+            Binaries: https://f-droid.org/fdroid-%v.apk
+
+            Builds:
+              - versionName: 1.0.1
+                versionCode: 101
+                disable: for this reason
+                commit: 1.0.1
+                timeout: 12345
+                subdir: app
+                submodules: true
+                sudo:
+                  - apt-get update -y
+                  - apt-get upgrade -y
+                init: sed -i -e "/replace this/with that/" build.gradle
+                patch:
+                  - remove-play-services.patch
+                  - add-other-service.patch
+                gradle: flavor
+                maven: true
+                buildozer: true
+                output: app/build/fdroid-$$VERSION$$.zip
+                oldsdkloc: true
+                encoding: utf-8
+                forceversion: true
+                forcevercode: true
+                rm:
+                  - app/file1
+                  - app/file2
+                  - app/other*
+                extlibs:
+                  - android/android-support-v4.jar
+                  - android/android-support-v13.jar
+                prebuild: sed -i -e "/replace this/with that/" build.gradle
+                androidupdate:
+                  - false
+                target: android-99
+                scanignore:
+                  - libs/a.so
+                  - libs/b.so
+                scandelete:
+                  - bin/exec
+                  - bin/run
+                build: export NDK_DIR=$$NDK$$
+                buildjni: true
+                ndk: r99b
+                preassemble: :gradleTask
+                gradleprops: prop4gradle
+                antcommands: package
+                novcheck: true
+                antifeatures:
+                  - Karl
+                  - Hank
+
+            MaintainerNotes: |-
+                Great app, highly recommended.
+
+            ArchivePolicy: 3 versions
+            AutoUpdateMode: None
+            UpdateCheckMode: Tags
+            UpdateCheckIgnore: (alpha|beta|rc|RC|dev)
+            VercodeOperation: '%c + 2'
+            UpdateCheckName: org.fdroid.fdroid
+            UpdateCheckData: https://raw.githubusercontent.com/proj/app/master/AndroidManifest.xml|android:versionCode="([0-9]*)"|.|android:versionCode="([0-9]*)"
+            CurrentVersion: 1.0.1
+            CurrentVersionCode: 101
+            
+            NoSourceSince: 1.0.1"""))
+
+
     def test_rewrite_yaml_fakeotaupdate(self):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         fdroidserver.common.config = {'accepted_formats': ['txt', 'yml']}
