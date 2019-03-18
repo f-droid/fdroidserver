@@ -161,7 +161,8 @@ fedora_latest:
     - echo "keepcache=True" >> /etc/dnf/dnf.conf
 
     - dnf -y update || dnf -y update
-    - dnf -y install findutils
+    - dnf -y install @development-tools
+                     findutils
                      git
                      gnupg
                      java-1.8.0-openjdk-devel
