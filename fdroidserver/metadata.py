@@ -1115,93 +1115,94 @@ def post_parse_yaml_metadata(yamldata):
                     build[flag] = ' && '.join(build[flag])
 
 
+def _format_yml_field(field, value, typ, width=80, offset=0):
+
+    bool_list_hack = ['gradle']
+
+    data = {}
+    default_style = None
+
+    if typ == TYPE_INT:
+        data[field] = int(value)
+    elif typ == TYPE_BOOL:
+        data[field] = bool(value)
+    elif typ == TYPE_SCRIPT:
+        if type(value) != list:
+            value = value.split(' && ')
+        if len(value) > 1:
+            data[field] = value
+        else:
+            data[field] = value[0]
+    elif typ == TYPE_LIST:
+        if field in bool_list_hack:
+            if value in [True, 'yes', ['yes']]:
+                value = [True]
+        data[field] = value
+    elif typ == TYPE_MULTILINE:
+        default_style = '|'
+        data[field] = value.strip()
+    else:
+        data[field] = value
+
+    raw_yml = yaml.dump(data, Dumper=yaml.SafeDumper,
+                        default_flow_style=False, width=width,
+                        default_style=default_style, indent=4)
+
+    # this is just for debugging purposes remove in production code
+    # debug_print_yaml_item(typ, data, default_style, offset, raw_yml)
+
+    if raw_yml:
+
+        # remove all encapsulation newlines
+        raw_yml = re.sub('\n+$', '', raw_yml)
+        raw_yml = re.sub('^\n+', '', raw_yml)
+
+        if offset > 0:
+            lines = raw_yml.split('\n')
+            for i in range(len(lines)):
+                if lines[i] != '':
+                    lines[i] = ' ' * offset + lines[i]
+            raw_yml = '\n'.join(lines)
+
+        if typ == TYPE_LIST or typ == TYPE_SCRIPT:
+            # indent sequence items by 2 spaces
+            new_raw_yml = []
+            for line in raw_yml.split('\n'):
+                if re.match(r'^\s*$', line):
+                    new_raw_yml.append('')
+                elif len(new_raw_yml) > 0:
+                    new_raw_yml.append('  ' + line)
+                else:
+                    new_raw_yml.append(line)
+            raw_yml = '\n'.join(new_raw_yml)
+        elif typ == TYPE_MULTILINE:
+            # remove quotes from mulit line keys
+            raw_yml = re.sub(r'^(\s*)"([a-zA-Z0-9]+)":(\s*\|-)$', '\\1\\2:\\3', raw_yml, flags=re.MULTILINE)
+
+        return raw_yml
+
+
+def _format_yml_build_entry(build):
+    result = []
+    for field in build_flags:
+        value = getattr(build, field, None)
+        if value:
+            typ = flagtype(field)
+            line = _format_yml_field(field, value, typ, width=0xffffffff, offset=4)
+            if re.match(r'^\s+$', line):
+                result.append('')
+            else:
+                result.append(line)
+    result[0] = '  - ' + result[0][4:]
+    return '\n'.join(result)
+
+
 def write_yaml(mf, app):
     """Write metadata in yaml format.
 
     :param mf: active file discriptor for writing
     :param app: app metadata to written to the yaml file
     """
-
-    def format_yml_field(field, value, typ, width=80, offset=0):
-        # TODO: use CSafeDumper if available
-
-        bool_list_hack = ['gradle']
-
-        data = {}
-        default_style = None
-
-        if typ == TYPE_INT:
-            data[field] = int(value)
-        elif typ == TYPE_BOOL:
-            data[field] = bool(value)
-        elif typ == TYPE_SCRIPT:
-            if type(value) != list:
-                value = value.split(' && ')
-            if len(value) > 1:
-                data[field] = value
-            else:
-                data[field] = value[0]
-        elif typ == TYPE_LIST:
-            if field in bool_list_hack:
-                if value in [True, 'yes', ['yes']]:
-                    value = [True]
-            data[field] = value
-        elif typ == TYPE_MULTILINE:
-            default_style = '|'
-            data[field] = value.strip()
-        else:
-            data[field] = value
-
-        raw_yml = yaml.dump(data, Dumper=yaml.SafeDumper,
-                            default_flow_style=False, width=width,
-                            default_style=default_style, indent=4)
-
-        # this is just for debugging purposes remove in production code
-        # debug_print_yaml_item(typ, data, default_style, offset, raw_yml)
-
-        if raw_yml:
-
-            # remove all encapsulation newlines
-            raw_yml = re.sub('\n+$', '', raw_yml)
-            raw_yml = re.sub('^\n+', '', raw_yml)
-
-            if offset > 0:
-                lines = raw_yml.split('\n')
-                for i in range(len(lines)):
-                    if lines[i] != '':
-                        lines[i] = ' ' * offset + lines[i]
-                raw_yml = '\n'.join(lines)
-
-            if typ == TYPE_LIST or typ == TYPE_SCRIPT:
-                # indent sequence items by 2 spaces
-                new_raw_yml = []
-                for line in raw_yml.split('\n'):
-                    if re.match(r'^\s*$', line):
-                        new_raw_yml.append('')
-                    elif len(new_raw_yml) > 0:
-                        new_raw_yml.append('  ' + line)
-                    else:
-                        new_raw_yml.append(line)
-                raw_yml = '\n'.join(new_raw_yml)
-            elif typ == TYPE_MULTILINE:
-                # remove quotes from mulit line keys
-                raw_yml = re.sub(r'^(\s*)"([a-zA-Z0-9]+)":(\s*\|-)$', '\\1\\2:\\3', raw_yml, flags=re.MULTILINE)
-
-            return raw_yml
-
-    def format_yml_build_entry(build):
-        result = []
-        for field in build_flags:
-            value = getattr(build, field, None)
-            if value:
-                typ = flagtype(field)
-                line = format_yml_field(field, value, typ, width=0xffffffff, offset=4)
-                if re.match(r'^\s+$', line):
-                    result.append('')
-                else:
-                    result.append(line)
-        result[0] = '  - ' + result[0][4:]
-        return '\n'.join(result)
 
     result = []
     for field in yaml_app_field_order:
@@ -1219,9 +1220,9 @@ def write_yaml(mf, app):
                         first_build_entry = False
                     else:
                         result.append('')
-                    result.append(format_yml_build_entry(build))
+                    result.append(_format_yml_build_entry(build))
             if value:
-                result.append(format_yml_field(field, value, yml_fieldtype(field)))
+                result.append(_format_yml_field(field, value, yml_fieldtype(field)))
     mf.write('\n'.join(result))
 
 

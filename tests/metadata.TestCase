@@ -255,9 +255,8 @@ class MetadataTest(unittest.TestCase):
             UpdateCheckData: https://raw.githubusercontent.com/proj/app/master/AndroidManifest.xml|android:versionCode="([0-9]*)"|.|android:versionCode="([0-9]*)"
             CurrentVersion: 1.0.1
             CurrentVersionCode: 101
-            
-            NoSourceSince: 1.0.1"""))
 
+            NoSourceSince: 1.0.1"""))
 
     def test_rewrite_yaml_fakeotaupdate(self):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
