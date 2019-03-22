@@ -717,6 +717,7 @@ def download_repo_index(url_str, etag=None, verify_fingerprint=True, timeout=600
 
     with tempfile.NamedTemporaryFile() as fp:
         fp.write(download)
+        fp.flush()
         index, public_key, public_key_fingerprint = get_index_from_jar(fp.name, fingerprint)
         index["repo"]["pubkey"] = hexlify(public_key).decode()
         index["repo"]["fingerprint"] = public_key_fingerprint
