@@ -501,14 +501,14 @@ def upload_to_virustotal(repo_section, vt_apikey):
                 headers = {
                     "User-Agent": "F-Droid"
                 }
-                params = {
+                data = {
                     'apikey': vt_apikey,
                     'resource': package['hash'],
                 }
                 needs_file_upload = False
                 while True:
                     r = requests.post('https://www.virustotal.com/vtapi/v2/file/report',
-                                      params=params, headers=headers)
+                                      data=data, headers=headers)
                     if r.status_code == 200:
                         response = r.json()
                         if response['response_code'] == 0:
@@ -535,7 +535,10 @@ def upload_to_virustotal(repo_section, vt_apikey):
                         'file': (filename, open(repofilename, 'rb'))
                     }
                     r = requests.post('https://www.virustotal.com/vtapi/v2/file/scan',
-                                      params=params, headers=headers, files=files)
+                                      data=data, headers=headers, files=files)
+                    logging.debug('If this upload fails, try manually uploading here:\n'
+                                  + 'https://www.virustotal.com/')
+                    r.raise_for_status()
                     response = r.json()
 
                     logging.info(response['verbose_msg'] + " " + response['permalink'])
