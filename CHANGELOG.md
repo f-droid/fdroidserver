@@ -1,4 +1,8 @@
 
+### 1.1.2 (2019-03-29)
+
+* fix bug while downloading repo index ([!636](https://gitlab.com/fdroid/fdroidserver/merge_requests/636))
+
 ### 1.1.1 (2019-02-03)
 
 * support APK Signature v2 and v3
