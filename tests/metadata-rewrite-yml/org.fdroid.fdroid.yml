@@ -199,14 +199,14 @@ Builds:
     commit: 0.53-test
     submodules: true
     scandelete:
-      - yes
+      - 'yes'
 
   - versionName: '0.54'
     versionCode: 540
     commit: '0.54'
     submodules: true
     scandelete:
-      - yes
+      - 'yes'
 
   - versionName: '0.55'
     versionCode: 550
@@ -498,7 +498,7 @@ Builds:
     subdir: F-Droid
     submodules: true
     gradle:
-      - yes
+      - true
 
   - versionName: 0.95-alpha1
     versionCode: 95001
@@ -506,7 +506,7 @@ Builds:
     subdir: F-Droid
     submodules: true
     gradle:
-      - yes
+      - true
 
   - versionName: 0.95-alpha2
     versionCode: 95002
@@ -514,7 +514,7 @@ Builds:
     subdir: F-Droid
     submodules: true
     gradle:
-      - yes
+      - true
 
   - versionName: '0.95'
     versionCode: 95050
@@ -522,7 +522,7 @@ Builds:
     subdir: F-Droid
     submodules: true
     gradle:
-      - yes
+      - true
 
   - versionName: 0.95.1
     versionCode: 95150
@@ -530,56 +530,56 @@ Builds:
     subdir: F-Droid
     submodules: true
     gradle:
-      - yes
+      - true
 
   - versionName: 0.96-alpha1
     versionCode: 96001
     commit: v0.96-alpha1
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.96-alpha2
     versionCode: 96002
     commit: v0.96-alpha2
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.96-alpha3
     versionCode: 96003
     commit: v0.96-alpha3
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.96-alpha4
     versionCode: 96004
     commit: v0.96-alpha4
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.96-alpha5
     versionCode: 96005
     commit: v0.96-alpha5
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.96-alpha6
     versionCode: 96006
     commit: v0.96-alpha6
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: '0.96'
     versionCode: 96050
     commit: v0.96
     subdir: F-Droid
     gradle:
-      - yes
+      - true
     scanignore:
       - extern/AndroidPinning/res/raw/cacerts
 
@@ -588,7 +588,7 @@ Builds:
     commit: v0.96.1
     subdir: F-Droid
     gradle:
-      - yes
+      - true
     scanignore:
       - extern/AndroidPinning/res/raw/cacerts
 
@@ -597,7 +597,7 @@ Builds:
     commit: v0.97-alpha1
     subdir: F-Droid
     gradle:
-      - yes
+      - true
     scanignore:
       - extern/AndroidPinning/res/raw/cacerts
 
@@ -606,343 +606,343 @@ Builds:
     commit: v0.97-alpha2
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.97-alpha3
     versionCode: 97003
     commit: v0.97-alpha3
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.97-alpha4
     versionCode: 97004
     commit: v0.97-alpha4
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.97-alpha5
     versionCode: 97005
     commit: v0.97-alpha5
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.97-alpha6
     versionCode: 97006
     commit: v0.97-alpha6
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.97-alpha7
     versionCode: 97007
     commit: v0.97-alpha7
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.97-alpha8
     versionCode: 97008
     commit: v0.97-alpha8
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: '0.97'
     versionCode: 97050
     commit: v0.97
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.98-alpha1
     versionCode: 98001
     commit: v0.98-alpha1
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.98-alpha2
     versionCode: 98002
     commit: v0.98-alpha2
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.98-alpha3
     versionCode: 98003
     commit: v0.98-alpha3
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.98-alpha4
     versionCode: 98004
     commit: v0.98-alpha4
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.98-alpha5
     versionCode: 98005
     commit: v0.98-alpha5
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.98-alpha6
     versionCode: 98006
     commit: v0.98-alpha6
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.98-alpha7
     versionCode: 98007
     commit: v0.98-alpha7
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: '0.98'
     versionCode: 98050
     commit: v0.98
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.98.1
     versionCode: 98150
     commit: v0.98.1
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.99-alpha1
     versionCode: 99001
     commit: v0.99-alpha1
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.99-alpha2
     versionCode: 99002
     commit: v0.99-alpha2
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: '0.99'
     versionCode: 99050
     commit: v0.99
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.99.1
     versionCode: 99150
     commit: v0.99.1
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.99.2
     versionCode: 99250
     commit: v0.99.2
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.100-alpha1
     versionCode: 100001
     commit: v0.100-alpha1
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.100-alpha2
     versionCode: 100002
     commit: v0.100-alpha2
     subdir: F-Droid
     gradle:
-      - yes
+      - true
 
   - versionName: 0.100-alpha3
     versionCode: 100003
     commit: v0.100-alpha3
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.100-alpha4
     versionCode: 100004
     commit: v0.100-alpha4
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.100-alpha5
     versionCode: 100005
     commit: v0.100-alpha5
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.100-alpha6
     versionCode: 100006
     commit: v0.100-alpha6
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.100-alpha7
     versionCode: 100007
     commit: v0.100-alpha7
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.100-alpha8
     versionCode: 100008
     commit: v0.100-alpha8
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: '0.100'
     versionCode: 100050
     commit: v0.100
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.100.1
     versionCode: 100150
     commit: v0.100.1
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.101-alpha1
     versionCode: 101001
     commit: v0.101-alpha1
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.101-alpha2
     versionCode: 101002
     commit: v0.101-alpha2
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.101-alpha3
     versionCode: 101003
     commit: v0.101-alpha3
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.101-alpha4
     versionCode: 101004
     commit: v0.101-alpha4
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.101-alpha5
     versionCode: 101005
     commit: v0.101-alpha5
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.101-alpha6
     versionCode: 101006
     commit: v0.101-alpha6
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: '0.101'
     versionCode: 101050
     commit: v0.101
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.102-alpha1
     versionCode: 102001
     commit: v0.102-alpha1
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.102-alpha2
     versionCode: 102002
     commit: v0.102-alpha2
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.102-alpha3
     versionCode: 102003
     commit: v0.102-alpha3
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: '0.102'
     versionCode: 102050
     commit: v0.102
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.102.1
     versionCode: 102150
     commit: v0.102.1
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.102.2
     versionCode: 102250
     commit: v0.102.2
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.102.3
     versionCode: 102350
     commit: v0.102.3
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.103-alpha1
     versionCode: 103001
     commit: v0.103-alpha1
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.103-alpha2
     versionCode: 103002
     commit: v0.103-alpha2
     subdir: app
     gradle:
-      - yes
+      - true
 
   - versionName: 0.103-alpha3
     versionCode: 103003
     commit: v0.103-alpha3
     subdir: app
     gradle:
-      - yes
+      - true
 
 ArchivePolicy: 12 versions
 AutoUpdateMode: None
