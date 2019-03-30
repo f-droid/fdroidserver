@@ -107,10 +107,10 @@ class CommonTest(unittest.TestCase):
                 '/usr/lib/jvm/java-1.8.0-openjdk-amd64',
             ], '/usr/lib/jvm/java-8-openjdk-amd64'),
             ([  # OSX
-                '/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk',
+                '/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk',
                 '/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk',
-                '/System/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk',
-            ], '/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk'),
+                '/System/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk',
+            ], '/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk'),
         ]
 
         for pathlist, choice in all_pathlists:

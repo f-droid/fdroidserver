@@ -18,9 +18,9 @@
 #     'r14b': None,
 #     'r15c': None,
 #     'r16b': None,
-#     'r17b': None,
+#     'r17c': None,
 #     'r18b': None,
-#     'r19b': None,
+#     'r19c': None,
 # }
 
 # Directory to store downloaded tools in (i.e. gradle versions)
@@ -32,7 +32,7 @@
 # }
 
 # Build tools version to be used
-# build_tools = "25.0.2"
+# build_tools = "28.0.3"
 
 # Force all build to use the above version of build -tools, good for testing
 # builds without having all of the possible build-tools installed.
