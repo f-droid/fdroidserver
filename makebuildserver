@@ -32,27 +32,16 @@ parser.add_option('--keep-box-file', action="store_true", default=False,
                        """ (KVM-only).""")
 options, args = parser.parse_args()
 
-logger = logging.getLogger('fdroidserver-makebuildserver')
-if options.verbosity >= 2:
-    logging.basicConfig(format='%(message)s', level=logging.DEBUG)
-    logger.setLevel(logging.DEBUG)
-elif options.verbosity == 1:
-    logging.basicConfig(format='%(message)s', level=logging.INFO)
-    logger.setLevel(logging.INFO)
+
+logformat = '%(levelname)s: %(message)s'
+loglevel = logging.DEBUG
+if options.verbosity == 1:
+    loglevel = logging.INFO
 elif options.verbosity <= 0:
-    logging.basicConfig(format='%(message)s', level=logging.WARNING)
-    logger.setLevel(logging.WARNING)
-
-
-if not os.path.exists('makebuildserver') and not os.path.exists('buildserver'):
-    logger.critical('This must be run as ./makebuildserver in fdroidserver.git!')
-    sys.exit(1)
+    loglevel = logging.WARNING
+logging.basicConfig(format=logformat, level=loglevel)
 
 tail = None
-
-# set up default config
-cachedir = os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver')
-logger.debug('cachedir set to: %s', cachedir)
 
 BASEBOX_DEFAULT = 'fdroid/basebox-stretch64'
 BASEBOX_VERSION_DEFAULT = '0.5.1'
@@ -104,24 +93,12 @@ config = {
     'apt_package_cache': False,
     'copy_caches_from_host': False,
     'boot_timeout': 600,
-    'cachedir': cachedir,
+    'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
     'cpus': 1,
     'memory': 2048,
     'hwvirtex': 'off',
     'vm_provider': 'virtualbox',
 }
-
-if os.path.isfile('/usr/bin/systemd-detect-virt'):
-    try:
-        virt = subprocess.check_output('/usr/bin/systemd-detect-virt').strip().decode('utf-8')
-    except subprocess.CalledProcessError:
-        virt = 'none'
-    if virt == 'qemu' or virt == 'kvm' or virt == 'bochs':
-        logger.info('Running in a VM guest, defaulting to QEMU/KVM via libvirt')
-        config['vm_provider'] = 'libvirt'
-    elif virt != 'none':
-        logger.info('Running in an unsupported VM guest (%s)!', virt)
-    logger.debug('detected virt: %s', virt)
 
 # load config file, if present
 if os.path.exists('makebuildserver.config.py'):
@@ -131,46 +108,45 @@ elif os.path.exists('makebs.config.py'):
     exec(compile(open('makebs.config.py').read(), 'makebs.config.py', 'exec'), config)
 if '__builtins__' in config:
     del(config['__builtins__'])  # added by compile/exec
-logger.debug("makebuildserver.config.py parsed -> %s", json.dumps(config, indent=4, sort_keys=True))
+logging.debug("makebuildserver.config.py parsed -> %s", json.dumps(config, indent=4, sort_keys=True))
 if config['basebox'] == BASEBOX_DEFAULT and 'basebox_version' not in config:
     config['basebox_version'] = BASEBOX_VERSION_DEFAULT
 # note: vagrant allows putting '/' into the name of a local box,
 # so this check is not completely relyable, but better than nothing
 if 'basebox_version' in config and 'basebox' in config and '/' not in config['basebox']:
-    logger.critical("Can not get version '{version}' for basebox '{box}', "
-                    "vagrant does not support versioning for locally added boxes."
-                    .format(box=config['basebox'], version=config['basebox_version']))
+    logging.critical("Can not get version '{version}' for basebox '{box}', "
+                     "vagrant does not support versioning for locally added boxes."
+                     .format(box=config['basebox'], version=config['basebox_version']))
 
 # Update cached files.
-cachedir = config['cachedir']
-if not os.path.exists(cachedir):
-    os.makedirs(cachedir, 0o755)
-    logger.debug('created cachedir %s because it did not exists.', cachedir)
+if not os.path.exists(config['cachedir']):
+    os.makedirs(config['cachedir'], 0o755)
+    logging.debug('created cachedir {} because it did not exists.'.format(config['cachedir']))
 
 if config['vm_provider'] == 'libvirt':
-    tmp = cachedir
+    tmp = config['cachedir']
     while tmp != '/':
         mode = os.stat(tmp).st_mode
         if not (stat.S_IXUSR & mode and stat.S_IXGRP & mode and stat.S_IXOTH & mode):
-            logger.critical('ERROR: %s will not be accessible to the VM!  To fix, run:', tmp)
-            logger.critical('  chmod a+X %s', tmp)
+            logging.critical('ERROR: %s will not be accessible to the VM!  To fix, run:', tmp)
+            logging.critical('  chmod a+X %s', tmp)
             sys.exit(1)
         tmp = os.path.dirname(tmp)
-    logger.debug('cache dir %s is accessible for libvirt vm.', cachedir)
+    logging.debug('cache dir %s is accessible for libvirt vm.', config['cachedir'])
 
 if config['apt_package_cache']:
-    config['aptcachedir'] = cachedir + '/apt/archives'
-    logger.debug('aptcachedir is set to %s', config['aptcachedir'])
+    config['aptcachedir'] = config['cachedir'] + '/apt/archives'
+    logging.debug('aptcachedir is set to %s', config['aptcachedir'])
     aptcachelock = os.path.join(config['aptcachedir'], 'lock')
     if os.path.isfile(aptcachelock):
-        logger.info('apt cache dir is locked, removing lock')
+        logging.info('apt cache dir is locked, removing lock')
         os.remove(aptcachelock)
     aptcachepartial = os.path.join(config['aptcachedir'], 'partial')
     if os.path.isdir(aptcachepartial):
-        logger.info('removing partial downloads from apt cache dir')
+        logging.info('removing partial downloads from apt cache dir')
         shutil.rmtree(aptcachepartial)
 
-cachefiles = [
+CACHE_FILES = [
     # Don't update sdk tools beyond 25.2.5.
     # Support for android update project has been removed and there is no replacement.
     # Until we find a solution for that we need to stay at this revision.
@@ -406,14 +382,14 @@ def sha256_for_file(path):
 
 def verify_file_sha256(path, sha256):
     if sha256_for_file(path) != sha256:
-        logger.critical("File verification for '{path}' failed! "
-                        "expected sha256 checksum: {checksum}"
-                        .format(path=path, checksum=sha256))
+        logging.critical("File verification for '{path}' failed! "
+                         "expected sha256 checksum: {checksum}"
+                         .format(path=path, checksum=sha256))
         sys.exit(1)
     else:
-        logger.debug("sucessfully verifyed file '{path}' "
-                     "('{checksum}')".format(path=path,
-                                             checksum=sha256))
+        logging.debug("sucessfully verifyed file '{path}' "
+                      "('{checksum}')".format(path=path,
+                                              checksum=sha256))
 
 
 def get_vagrant_home():
@@ -430,14 +406,14 @@ def run_via_vagrant_ssh(v, cmdlist):
     v._run_vagrant_command(['ssh', '-c', cmd])
 
 
-def update_cache(cachedir, cachefiles):
-    for srcurl, shasum in cachefiles:
+def update_cache(cachedir):
+    for srcurl, shasum in CACHE_FILES:
         filename = os.path.basename(srcurl)
         local_filename = os.path.join(cachedir, filename)
 
         if os.path.exists(local_filename):
             if sha256_for_file(local_filename) == shasum:
-                logger.info("\t...shasum verified for %s", local_filename)
+                logging.info("\t...shasum verified for %s", local_filename)
                 continue
             local_length = os.path.getsize(local_filename)
         else:
@@ -454,19 +430,19 @@ def update_cache(cachedir, cachefiles):
                 content_length = local_length  # skip the download
         except requests.exceptions.RequestException as e:
             content_length = local_length  # skip the download
-            logger.warn('%s', e)
+            logging.warn('%s', e)
 
         if local_length == content_length:
             download = False
         elif local_length > content_length:
-            logger.info('deleting corrupt file from cache: %s', local_filename)
+            logging.info('deleting corrupt file from cache: %s', local_filename)
             os.remove(local_filename)
-            logger.info("Downloading %s to cache", filename)
+            logging.info("Downloading %s to cache", filename)
         elif local_length > -1 and local_length < content_length:
-            logger.info("Resuming download of %s", local_filename)
+            logging.info("Resuming download of %s", local_filename)
             resume_header = {'Range': 'bytes=%d-%d' % (local_length, content_length)}
         else:
-            logger.info("Downloading %s to cache", filename)
+            logging.info("Downloading %s to cache", filename)
 
         if download:
             r = requests.get(srcurl, headers=resume_header,
@@ -480,9 +456,9 @@ def update_cache(cachedir, cachefiles):
 
         v = sha256_for_file(local_filename)
         if v == shasum:
-            logger.info("\t...shasum verified for %s", local_filename)
+            logging.info("\t...shasum verified for %s", local_filename)
         else:
-            logger.critical("Invalid shasum of '%s' detected for %s", v, local_filename)
+            logging.critical("Invalid shasum of '%s' detected for %s", v, local_filename)
             os.remove(local_filename)
             sys.exit(1)
 
@@ -490,26 +466,26 @@ def update_cache(cachedir, cachefiles):
 def debug_log_vagrant_vm(vm_dir, config):
     if options.verbosity >= 3:
         _vagrant_dir = os.path.join(vm_dir, '.vagrant')
-        logger.debug('check %s dir exists? -> %r', _vagrant_dir, os.path.isdir(_vagrant_dir))
-        logger.debug('> vagrant status')
+        logging.debug('check %s dir exists? -> %r', _vagrant_dir, os.path.isdir(_vagrant_dir))
+        logging.debug('> vagrant status')
         subprocess.call(['vagrant', 'status'], cwd=vm_dir)
-        logger.debug('> vagrant box list')
+        logging.debug('> vagrant box list')
         subprocess.call(['vagrant', 'box', 'list'])
         if config['vm_provider'] == 'libvirt':
-            logger.debug('> virsh -c qmeu:///system list --all')
+            logging.debug('> virsh -c qmeu:///system list --all')
             subprocess.call(['virsh', '-c', 'qemu:///system', 'list', '--all'])
             domain = 'buildserver_default'
-            logger.debug('> virsh -c qemu:///system snapshot-list %s', domain)
+            logging.debug('> virsh -c qemu:///system snapshot-list %s', domain)
             subprocess.call(['virsh', '-c', 'qemu:///system', 'snapshot-list', domain])
 
 
 def main():
-    global cachedir, cachefiles, config, tail
+    global config, tail
 
     if options.skip_cache_update:
-        logger.info('skipping cache update and verification...')
+        logging.info('skipping cache update and verification...')
     else:
-        update_cache(cachedir, cachefiles)
+        update_cache(config['cachedir'])
 
     # use VirtualBox software virtualization if hardware is not available,
     # like if this is being run in kvm or some other VM platform, like
@@ -518,13 +494,13 @@ def main():
         # all < 10 year old Macs work, and OSX servers as VM host are very
         # rare, but this could also be auto-detected if someone codes it
         config['hwvirtex'] = 'on'
-        logger.info('platform is darwnin -> hwvirtex = \'on\'')
+        logging.info('platform is darwnin -> hwvirtex = \'on\'')
     elif os.path.exists('/proc/cpuinfo'):
         with open('/proc/cpuinfo') as f:
             contents = f.read()
         if 'vmx' in contents or 'svm' in contents:
             config['hwvirtex'] = 'on'
-            logger.info('found \'vmx\' or \'svm\' in /proc/cpuinfo -> hwvirtex = \'on\'')
+            logging.info('found \'vmx\' or \'svm\' in /proc/cpuinfo -> hwvirtex = \'on\'')
 
     serverdir = os.path.join(os.getcwd(), 'buildserver')
     logfilename = os.path.join(serverdir, 'up.log')
@@ -546,40 +522,40 @@ def main():
     vf = os.path.join(serverdir, 'Vagrantfile.yaml')
     writevf = True
     if os.path.exists(vf):
-        logger.info('Halting %s', serverdir)
+        logging.info('Halting %s', serverdir)
         v.halt()
         with open(vf, 'r', encoding='utf-8') as f:
             oldconfig = yaml.load(f)
         if config != oldconfig:
-            logger.info("Server configuration has changed, rebuild from scratch is required")
+            logging.info("Server configuration has changed, rebuild from scratch is required")
             vm.destroy()
         else:
-            logger.info("Re-provisioning existing server")
+            logging.info("Re-provisioning existing server")
             writevf = False
     else:
-        logger.info("No existing server - building from scratch")
+        logging.info("No existing server - building from scratch")
     if writevf:
         with open(vf, 'w', encoding='utf-8') as f:
             yaml.dump(config, f)
 
     # Check if selected provider is supported
     if config['vm_provider'] not in ['libvirt', 'virtualbox']:
-        logger.critical("Currently selected VM provider '{vm_provider}' "
-                        "is not supported. (please choose from: "
-                        "virtualbox, libvirt)"
-                        .format(vm_provider=config['cm_provider']))
+        logging.critical("Currently selected VM provider '{vm_provider}' "
+                         "is not supported. (please choose from: "
+                         "virtualbox, libvirt)"
+                         .format(vm_provider=config['cm_provider']))
         sys.exit(1)
     # Check if selected basebox is available
     available_boxes_by_provider = [x.name for x in v.box_list() if x.provider == config['vm_provider']]
     if '/' not in config['basebox'] and config['basebox'] not in available_boxes_by_provider:
-        logger.critical("Vagrant box '{basebox}' not available "
-                        "for '{vm_provider}' VM provider. "
-                        "Please make sure it's added to vagrant. "
-                        "(If you need a basebox to begin with, "
-                        "here is how we're bootstrapping it: "
-                        "https://gitlab.com/fdroid/basebox)"
-                        .format(vm_provider=config['vm_provider'],
-                                basebox=config['basebox']))
+        logging.critical("Vagrant box '{basebox}' not available "
+                         "for '{vm_provider}' VM provider. "
+                         "Please make sure it's added to vagrant. "
+                         "(If you need a basebox to begin with, "
+                         "here is how we're bootstrapping it: "
+                         "https://gitlab.com/fdroid/basebox)"
+                         .format(vm_provider=config['vm_provider'],
+                                 basebox=config['basebox']))
         sys.exit(1)
 
     # download and verfiy fdroid pre-built basebox
@@ -594,18 +570,18 @@ def main():
                        '--provider=' + config['vm_provider']]
                 ret_val = subprocess.call(cmd)
                 if ret_val != 0:
-                    logger.critical("downloading basebox '{box}' "
-                                    "({provider}, version {version}) failed."
-                                    .format(box=config['basebox'],
-                                            provider=config['vm_provider'],
-                                            version=config['basebox_version']))
+                    logging.critical("downloading basebox '{box}' "
+                                     "({provider}, version {version}) failed."
+                                     .format(box=config['basebox'],
+                                             provider=config['vm_provider'],
+                                             version=config['basebox_version']))
                     sys.exit(1)
             # verify box
             if config['basebox_version'] not in BASEBOX_CHECKSUMS.keys():
-                logger.critical("can not verify '{box}', "
-                                "unknown basebox version '{version}'"
-                                .format(box=config['basebox'],
-                                        version=config['basebox_version']))
+                logging.critical("can not verify '{box}', "
+                                 "unknown basebox version '{version}'"
+                                 .format(box=config['basebox'],
+                                         version=config['basebox_version']))
                 sys.exit(1)
             for filename, sha256 in BASEBOX_CHECKSUMS[config['basebox_version']][config['vm_provider']].items():
                 verify_file_sha256(os.path.join(get_vagrant_home(),
@@ -615,23 +591,23 @@ def main():
                                                 config['vm_provider'],
                                                 filename),
                                    sha256)
-            logger.info("successfully verified: '{box}' "
-                        "({provider}, version {version})"
-                        .format(box=config['basebox'],
-                                provider=config['vm_provider'],
-                                version=config['basebox_version']))
+            logging.info("successfully verified: '{box}' "
+                         "({provider}, version {version})"
+                         .format(box=config['basebox'],
+                                 provider=config['vm_provider'],
+                                 version=config['basebox_version']))
         else:
-            logger.debug('not updating basebox ...')
+            logging.debug('not updating basebox ...')
     else:
-        logger.debug('using unverified basebox ...')
+        logging.debug('using unverified basebox ...')
 
-    logger.info("Configuring build server VM")
+    logging.info("Configuring build server VM")
     debug_log_vagrant_vm(serverdir, config)
     try:
         v.up(provision=True)
     except subprocess.CalledProcessError:
         debug_log_vagrant_vm(serverdir, config)
-        logger.error("'vagrant up' failed.")
+        logging.error("'vagrant up' failed.")
         sys.exit(1)
 
     if config['copy_caches_from_host']:
@@ -664,33 +640,50 @@ def main():
     p = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE,
                          universal_newlines=True)
     buildserverid = p.communicate()[0].strip()
-    logger.info("Writing buildserver ID ...ID is %s", buildserverid)
+    logging.info("Writing buildserver ID ...ID is %s", buildserverid)
     run_via_vagrant_ssh(v, 'sh -c "echo %s >/home/vagrant/buildserverid"' % buildserverid)
 
-    logger.info("Stopping build server VM")
+    logging.info("Stopping build server VM")
     v.halt()
 
-    logger.info("Packaging")
+    logging.info("Packaging")
     boxfile = os.path.join(os.getcwd(), 'buildserver.box')
     if os.path.exists(boxfile):
         os.remove(boxfile)
 
     vm.package(output=boxfile)
 
-    logger.info("Adding box")
+    logging.info("Adding box")
     vm.box_add('buildserver', boxfile, force=True)
 
     if 'buildserver' not in subprocess.check_output(['vagrant', 'box', 'list']).decode('utf-8'):
-        logger.critical('could not add box \'%s\' as \'buildserver\', terminating', boxfile)
+        logging.critical('could not add box \'%s\' as \'buildserver\', terminating', boxfile)
         sys.exit(1)
 
     if not options.keep_box_file:
-        logger.debug("""box added to vagrant, removing generated box file '%s'""",
-                     boxfile)
+        logging.debug("""box added to vagrant, removing generated box file '%s'""",
+                      boxfile)
         os.remove(boxfile)
 
 
 if __name__ == '__main__':
+
+    if not os.path.exists('makebuildserver') and not os.path.exists('buildserver'):
+        logging.critical('This must be run as ./makebuildserver in fdroidserver.git!')
+        sys.exit(1)
+
+    if os.path.isfile('/usr/bin/systemd-detect-virt'):
+        try:
+            virt = subprocess.check_output('/usr/bin/systemd-detect-virt').strip().decode('utf-8')
+        except subprocess.CalledProcessError:
+            virt = 'none'
+        if virt == 'qemu' or virt == 'kvm' or virt == 'bochs':
+            logging.info('Running in a VM guest, defaulting to QEMU/KVM via libvirt')
+            config['vm_provider'] = 'libvirt'
+        elif virt != 'none':
+            logging.info('Running in an unsupported VM guest (%s)!', virt)
+        logging.debug('detected virt: %s', virt)
+
     try:
         main()
     finally:
