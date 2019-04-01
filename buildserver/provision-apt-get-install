@@ -103,6 +103,7 @@ packages="
  python3-setuptools
  python3-smmap
  python3-yaml
+ python3-ruamel.yaml
  quilt
  rsync
  scons
