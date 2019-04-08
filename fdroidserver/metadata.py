@@ -1119,7 +1119,7 @@ def write_yaml(mf, app):
     try:
         import ruamel.yaml
     except ImportError as e:
-        raise FDroidException('ruamel.yaml not instlled, can not write metadata.') from e
+        raise FDroidException('ruamel.yaml not installed, can not write metadata.') from e
     if not ruamel.yaml.__version__:
         raise FDroidException('ruamel.yaml.__version__ not accessible. Please make sure a ruamel.yaml >= 0.13 is installed..')
     m = re.match(r'(?P<major>[0-9]+)\.(?P<minor>[0-9]+)\.(?P<patch>[0-9]+)(-.+)?',
