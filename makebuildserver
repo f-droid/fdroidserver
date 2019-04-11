@@ -346,6 +346,8 @@ CACHE_FILES = [
      '4953323605c5d7b89e97d0dc7779e275bccedefcdac090aec123375eae0cc798'),
     ('https://downloads.gradle.org/distributions/gradle-5.2.1-bin.zip',
      '748c33ff8d216736723be4037085b8dc342c6a0f309081acf682c9803e407357'),
+    ('https://downloads.gradle.org/distributions/gradle-5.3.1-bin.zip',
+     '1c59a17a054e9c82f0dd881871c9646e943ec4c71dd52ebc6137d17f82337436'),
     ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin',
      '102d6723f67ff1384330d12c45854315d6452d6510286f4e5891e00a5a8f1d5a'),
     ('https://dl.google.com/android/repository/android-ndk-r11c-linux-x86_64.zip',
@@ -360,12 +362,12 @@ CACHE_FILES = [
      'f01788946733bf6294a36727b99366a18369904eb068a599dde8cca2c1d2ba3c'),
     ('https://dl.google.com/android/repository/android-ndk-r16b-linux-x86_64.zip',
      'bcdea4f5353773b2ffa85b5a9a2ae35544ce88ec5b507301d8cf6a76b765d901'),
-    ('https://dl.google.com/android/repository/android-ndk-r17b-linux-x86_64.zip',
-     '5dfbbdc2d3ba859fed90d0e978af87c71a91a5be1f6e1c40ba697503d48ccecd'),
+    ('https://dl.google.com/android/repository/android-ndk-r17c-linux-x86_64.zip',
+     '3f541adbd0330a9205ba12697f6d04ec90752c53d6b622101a2a8a856e816589'),
     ('https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip',
      '4f61cbe4bbf6406aa5ef2ae871def78010eed6271af72de83f8bd0b07a9fd3fd'),
-    ('https://dl.google.com/android/repository/android-ndk-r19b-linux-x86_64.zip',
-     '0fbb1645d0f1de4dde90a4ff79ca5ec4899c835e729d692f433fda501623257a'),
+    ('https://dl.google.com/android/repository/android-ndk-r19c-linux-x86_64.zip',
+     '4c62514ec9c2309315fd84da6d52465651cdb68605058f231f1e480fcf2692e1'),
 ]
 
 
