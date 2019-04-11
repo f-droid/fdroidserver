@@ -1105,6 +1105,35 @@ fi
 
 
 #------------------------------------------------------------------------------#
+echo_header 'test extracting and publishing with developer signature'
+
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+fdroid_init_with_prebuilt_keystore
+echo "accepted_formats = ['txt']" >> config.py
+echo 'keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.py
+test -d metadata || mkdir metadata
+cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
+test -d repo || mkdir repo
+test -d unsigned || mkdir unsigned
+cp $WORKSPACE/tests/repo/com.politedroid_6.apk unsigned/
+$fdroid signatures unsigned/com.politedroid_6.apk
+test -d metadata/com.politedroid/signatures/6
+test -f metadata/com.politedroid/signatures/6/MANIFEST.MF
+test -f metadata/com.politedroid/signatures/6/RELEASE.RSA
+test -f metadata/com.politedroid/signatures/6/RELEASE.SF
+! test -f repo/com.politedroid_6.apk
+$fdroid publish
+test -f repo/com.politedroid_6.apk
+if which jarsigner; then
+    jarsigner -verify repo/com.politedroid_6.apk
+fi
+if which apksigner; then
+    apksigner verify repo/com.politedroid_6.apk
+fi
+
+
+#------------------------------------------------------------------------------#
 
 # remove this to prevent git conflicts and complaining
 rm -rf $WORKSPACE/fdroidserver.egg-info/
