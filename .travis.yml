@@ -64,7 +64,7 @@ install:
       fi;
       brew install dash bash gnu-sed gradle jenv;
       export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH";
-      if ! ruby -e 'v = `javac -version 2>&1`.split()[1].gsub("_", "."); exit Gem::Dependency.new("", "~> 1.8.0.202").match?("", v)'; then
+      if ! ruby -e 'v = `javac -version 2>&1`.split()[1].gsub("_", "."); exit Gem::Dependency.new("", "~> 1.8.0.131").match?("", v)'; then
         brew cask uninstall java --force;
         brew cask install caskroom/versions/java8;
       fi;
