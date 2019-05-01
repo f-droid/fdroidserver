@@ -355,6 +355,10 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         if os.path.isdir(dotgit) and _get_size(git_mirror_path) > 1000000000:
             logging.warning('Deleting git-mirror history, repo is too big (1 gig max)')
             shutil.rmtree(dotgit)
+        if options.no_keep_git_mirror_archive and _get_size(git_mirror_path) > 1000000000:
+            logging.warning('Deleting archive, repo is too big (1 gig max)')
+            archive_path = os.path.join(git_mirror_path, 'fdroid', 'archive')
+            shutil.rmtree(archive_path, ignore_errors=True)
 
         # rsync is very particular about trailing slashes
         common.local_rsync(options,
@@ -629,6 +633,8 @@ def main():
                         help=_("Specify a local folder to sync the repo to"))
     parser.add_argument("--no-checksum", action="store_true", default=False,
                         help=_("Don't use rsync checksums"))
+    parser.add_argument("--no-keep-git-mirror-archive", action="store_true", default=False,
+                        help=_("If a git mirror gets to big, allow the archive to be deleted"))
     options = parser.parse_args()
 
     config = common.read_config(options)
