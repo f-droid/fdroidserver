@@ -102,6 +102,8 @@ def main():
                         help=_('The file to be included in the repo (path or glob)'))
     parser.add_argument("--no-checksum", action="store_true", default=False,
                         help=_("Don't use rsync checksums"))
+    parser.add_argument("--archive-older", default=20,
+                        help=_("Set maximum releases in repo before older ones are archived"))
     # TODO add --with-btlog
     options = parser.parse_args()
 
@@ -233,6 +235,7 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         config += "archive_name = '%s'\n" % (repo_git_base + ' archive')
         config += "archive_url = '%s'\n" % (repo_base + '/archive')
         config += "archive_icon = 'icon.png'\n"
+        config += "archive_older = %i\n" % options.archive_older
         config += "servergitmirrors = '%s'\n" % servergitmirror
         config += "keystore = '%s'\n" % KEYSTORE_FILE
         config += "repo_keyalias = '%s'\n" % KEY_ALIAS
@@ -293,7 +296,8 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
 
         if not options.no_deploy:
             try:
-                subprocess.check_call(['fdroid', 'server', 'update', '--verbose'], cwd=repo_basedir)
+                cmd = ['fdroid', 'server', 'update', '--verbose', '--no-keep-git-mirror-archive']
+                subprocess.check_call(cmd, cwd=repo_basedir)
             except subprocess.CalledProcessError:
                 logging.error(_('cannot publish update, did you set the deploy key?')
                               + '\n' + deploy_key_url)
