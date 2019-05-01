@@ -110,6 +110,7 @@ def scan_source(build_dir, build=metadata.Build()):
         's3.amazonaws.com/repo.commonsware.com',  # CommonsWare
         'plugins.gradle.org/m2',  # Gradle plugin repo
         'maven.google.com',  # Google Maven Repo, https://developer.android.com/studio/build/dependencies.html#google-maven
+        'file:///usr/share/maven-repo',  # local repo on Debian installs
         ]
     ]
 
