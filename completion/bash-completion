@@ -275,7 +275,7 @@ __complete_mirror() {
 
 __complete_nightly() {
 	opts="-v -q"
-	lopts="--show-secret-var"
+	lopts="--show-secret-var --archive-older"
 	__complete_options
 }
 
@@ -288,7 +288,7 @@ __complete_stats() {
 __complete_deploy() {
 	opts="-i -v -q"
 	lopts="--identity-file --local-copy-dir --sync-from-local-copy-dir
- --verbose --quiet --no-checksum"
+ --verbose --quiet --no-checksum --no-keep-git-mirror-archive"
 	__complete_options
 }
 
