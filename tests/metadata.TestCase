@@ -39,6 +39,35 @@ class MetadataTest(unittest.TestCase):
             os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
 
+    def test_FieldValidator(self):
+        validator = None
+        for vali in fdroidserver.metadata.valuetypes:
+            if vali.name == 'Bitcoin address':
+                validator = vali
+                break
+        self.assertIsNotNone(validator, "could not find 'Bitcoin address' validator")
+
+        fdroidserver.metadata.warnings_action = 'error'
+
+        # some valid addresses (P2PKH, P2SH, Bech32)
+        self.assertIsNone(validator.check('1BrrrrErsrWetrTrnrrrrm4GFg7xJaNVN2', 'fake.app.id'))
+        self.assertIsNone(validator.check('3JrrrrWrEZr3rNrrvrecrnyirrnqRhWNLy', 'fake.app.id'))
+        self.assertIsNone(validator.check('bc1qar0srrr7xrkvr5lr43lrdnwrre5rgtrzrf5rrq', 'fake.app.id'))
+
+        # some invalid addresses (various special use/testnet addresses)
+        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
+                          '21BvMrSYsrWrtrrrn5Au4m4GFr7rrarrN2', 'fake.app.id')
+        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
+                          '5Hrgr3ur5rGLrfKrrrrrrHSrqJrroGrrzrQrrrrrrLNrsrDrrrA', 'fake.app.id')
+        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
+                          '92rr46rUrgTrrromrVrirW6r1rrrdrerrdbJrrrhrCsYrrrrrrc', 'fake.app.id')
+        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
+                          'K1BvMrSYsrWrtrrrn5Au4m4GFr7rrarrN2', 'fake.app.id')
+        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
+                          'L1BvMrSYsrWrtrrrn5Au4m4GFr7rrarrN2', 'fake.app.id')
+        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
+                          'tb1qw5r8drrejxrrg4y5rrrrrraryrrrrwrkxrjrsx', 'fake.app.id')
+
     def test_read_metadata(self):
 
         def _build_yaml_representer(dumper, data):
@@ -54,6 +83,7 @@ class MetadataTest(unittest.TestCase):
         config['ndk_paths'] = dict()
         config['accepted_formats'] = ['json', 'txt', 'yml']
         fdroidserver.common.config = config
+        fdroidserver.metadata.warnings_action = None
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
         for appid in ('org.smssecure.smssecure', 'org.adaway',
@@ -73,6 +103,7 @@ class MetadataTest(unittest.TestCase):
     def test_rewrite_yaml_fakeotaupdate(self):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         fdroidserver.common.config = {'accepted_formats': ['txt', 'yml']}
+        fdroidserver.metadata.warnings_action = None
 
         # rewrite metadata
         allapps = fdroidserver.metadata.read_metadata(xref=True)

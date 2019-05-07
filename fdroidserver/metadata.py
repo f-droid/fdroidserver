@@ -453,7 +453,7 @@ valuetypes = {
                    ["AuthorEmail"]),
 
     FieldValidator("Bitcoin address",
-                   r'^[a-zA-Z0-9]{27,34}$',
+                   r'^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$',
                    ["Bitcoin"]),
 
     FieldValidator("Litecoin address",
