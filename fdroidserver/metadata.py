@@ -457,7 +457,7 @@ valuetypes = {
                    ["Bitcoin"]),
 
     FieldValidator("Litecoin address",
-                   r'^L[a-zA-Z0-9]{33}$',
+                   r'^[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}$',
                    ["Litecoin"]),
 
     FieldValidator("Repo Type",
