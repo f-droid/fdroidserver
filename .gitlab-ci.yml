@@ -126,7 +126,7 @@ lint_format_safety_bandit_checks:
   script:
     - apk add --no-cache bash dash ca-certificates python3
     - python3 -m ensurepip
-    - pip3 install Babel bandit pycodestyle pyflakes 'pylint<2.0' safety
+    - pip3 install Babel 'bandit<1.6.0' pycodestyle pyflakes 'pylint<2.0' safety
     - export EXITVALUE=0
     - ./hooks/pre-commit || export EXITVALUE=1
     - bandit
