@@ -413,13 +413,14 @@ def run_via_vagrant_ssh(v, cmdlist):
 
 
 def update_cache(cachedir):
+    count_files = 0
     for srcurl, shasum in CACHE_FILES:
         filename = os.path.basename(srcurl)
         local_filename = os.path.join(cachedir, filename)
-
+        count_files = count_files + 1
         if os.path.exists(local_filename):
             if sha256_for_file(local_filename) == shasum:
-                logging.info("\t...shasum verified for %s", local_filename)
+                logging.info("\t...shasum verified for '{filename}'\t({filecounter} of {filesum} files)".format(filename=local_filename, filecounter=count_files, filesum=len(CACHE_FILES)))
                 continue
             local_length = os.path.getsize(local_filename)
         else:
@@ -462,7 +463,7 @@ def update_cache(cachedir):
 
         v = sha256_for_file(local_filename)
         if v == shasum:
-            logging.info("\t...shasum verified for %s", local_filename)
+            logging.info("\t...shasum verified for '{filename}'\t({filecounter} of {filesum} files)".format(filename=local_filename, filecounter=count_files, filesum=len(CACHE_FILES)))
         else:
             logging.critical("Invalid shasum of '%s' detected for %s", v, local_filename)
             os.remove(local_filename)
