@@ -39,7 +39,7 @@ class MetadataTest(unittest.TestCase):
             os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
 
-    def test_FieldValidator(self):
+    def test_FieldValidator_BitcoinAddress(self):
         validator = None
         for vali in fdroidserver.metadata.valuetypes:
             if vali.name == 'Bitcoin address':
@@ -54,9 +54,9 @@ class MetadataTest(unittest.TestCase):
         self.assertIsNone(validator.check('3JrrrrWrEZr3rNrrvrecrnyirrnqRhWNLy', 'fake.app.id'))
         self.assertIsNone(validator.check('bc1qar0srrr7xrkvr5lr43lrdnwrre5rgtrzrf5rrq', 'fake.app.id'))
 
-        # some invalid addresses (various special use/testnet addresses)
+        # some invalid addresses
         self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
-                          '21BvMrSYsrWrtrrrn5Au4m4GFr7rrarrN2', 'fake.app.id')
+                          '21BvMrSYsrWrtrrlL5A10mlGFr7rrarrN2', 'fake.app.id')
         self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
                           '5Hrgr3ur5rGLrfKrrrrrrHSrqJrroGrrzrQrrrrrrLNrsrDrrrA', 'fake.app.id')
         self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
@@ -65,6 +65,35 @@ class MetadataTest(unittest.TestCase):
                           'K1BvMrSYsrWrtrrrn5Au4m4GFr7rrarrN2', 'fake.app.id')
         self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
                           'L1BvMrSYsrWrtrrrn5Au4m4GFr7rrarrN2', 'fake.app.id')
+        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
+                          'tb1qw5r8drrejxrrg4y5rrrrrraryrrrrwrkxrjrsx', 'fake.app.id')
+
+    def test_FieldValidator_LitecoinAddress(self):
+        validator = None
+        for vali in fdroidserver.metadata.valuetypes:
+            if vali.name == 'Litecoin address':
+                validator = vali
+                break
+        self.assertIsNotNone(validator, "could not find 'Litecoin address' validator")
+
+        fdroidserver.metadata.warnings_action = 'error'
+
+        # some valid addresses (L, M, 3)
+        self.assertIsNone(validator.check('LgeGrrrrJAxyXprrPrrBrrX5Qrrrrrrrrd', 'fake.app.id'))
+        self.assertIsNone(validator.check('MrrrrrrrJAxyXpanPtrrRAX5QHxvUJo8id', 'fake.app.id'))
+        self.assertIsNone(validator.check('3rereVr9rAryrranrrrrrAXrrHx', 'fake.app.id'))
+
+        # some invalid addresses (various special use/testnet addresses, invalid chars)
+        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
+                          '21BvMrSYsrWrtrrrn5Au4l4GFr7rrarrN2', 'fake.app.id')
+        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
+                          '5Hrgr3ur5rGLrfKrrrrrr1SrqJrroGrrzrQrrrrrrLNrsrDrrrA', 'fake.app.id')
+        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
+                          '92rr46rUrgTrrromrVrirW6r1rrrdrerrdbJrrrhrCsYrrrrrrc', 'fake.app.id')
+        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
+                          'K1BvMrSYsrWrtrrrn5Au4m4GFr7rrarrN2', 'fake.app.id')
+        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
+                          'L0000rSYsrWrtrrrn5Au4m4GFr7rrarrN2', 'fake.app.id')
         self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
                           'tb1qw5r8drrejxrrg4y5rrrrrraryrrrrwrkxrjrsx', 'fake.app.id')
 
