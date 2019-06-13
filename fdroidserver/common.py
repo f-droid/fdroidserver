@@ -1348,11 +1348,11 @@ def remove_debuggable_flags(root_dir):
                         os.path.join(root, 'AndroidManifest.xml'))
 
 
-vcsearch_g = re.compile(r'''.*[Vv]ersionCode\s*=?\s*["']*([0-9]+)["']*''').search
-vnsearch_g = re.compile(r'''.*[Vv]ersionName\s*=?\s*(["'])((?:(?=(\\?))\3.)*?)\1.*''').search
-vnssearch_g = re.compile(r'''.*[Vv]ersionNameSuffix\s*=?\s*(["'])((?:(?=(\\?))\3.)*?)\1.*''').search
-psearch_g = re.compile(r'''.*(packageName|applicationId)\s*=*\s*["']([^"']+)["'].*''').search
-fsearch_g = re.compile(r'''.*(applicationIdSuffix)\s*=*\s*["']([^"']+)["'].*''').search
+vcsearch_g = re.compile(r'''\b[Vv]ersionCode\s*=?\s*["']*([0-9]+)["']*''').search
+vnsearch_g = re.compile(r'''\b[Vv]ersionName\s*=?\s*(["'])((?:(?=(\\?))\3.)*?)\1''').search
+vnssearch_g = re.compile(r'''\b[Vv]ersionNameSuffix\s*=?\s*(["'])((?:(?=(\\?))\3.)*?)\1''').search
+psearch_g = re.compile(r'''\b(packageName|applicationId)\s*=*\s*["']([^"']+)["']''').search
+fsearch_g = re.compile(r'''\b(applicationIdSuffix)\s*=*\s*["']([^"']+)["']''').search
 
 
 def app_matches_packagename(app, package):
