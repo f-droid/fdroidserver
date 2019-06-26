@@ -3272,7 +3272,7 @@ def deploy_build_log_with_rsync(appid, vercode, log_content,
         # TODO: sign compressed log file, if a signing key is configured
 
         for webroot in config.get('serverwebroot', []):
-            dest_path = os.path.join(webroot, "buildlogs")
+            dest_path = os.path.join(webroot, "repo")
             if not dest_path.endswith('/'):
                 dest_path += '/'  # make sure rsync knows this is a directory
             cmd = ['rsync',
