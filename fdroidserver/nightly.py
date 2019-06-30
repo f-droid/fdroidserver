@@ -39,7 +39,7 @@ from . import common
 # hard coded defaults for Android ~/.android/debug.keystore files
 # https://developers.google.com/android/guides/client-auth
 KEYSTORE_FILE = os.path.join(os.getenv('HOME'), '.android', 'debug.keystore')
-PASSWORD = 'android'
+PASSWORD = 'android'  # nosec B105 standard hardcoded password for debug keystores
 KEY_ALIAS = 'androiddebugkey'
 DISTINGUISHED_NAME = 'CN=Android Debug,O=Android,C=US'
 
