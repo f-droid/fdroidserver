@@ -33,10 +33,14 @@ android:
 # * Java needs to be at least 1.8.0_131 to have MD5 properly disabled
 #   https://blogs.oracle.com/java-platform-group/oracle-jre-will-no-longer-trust-md5-signed-code-by-default
 #   https://opsech.io/posts/2017/Jun/09/openjdk-april-2017-security-update-131-8u131-and-md5-signed-jars.html
+# * mercurial is unused and requires Python 2.x
 install:
   - export HOMEBREW_CURL_RETRIES=10
   - brew update > /dev/null
-  - if [ "`sw_vers -productVersion | sed 's,10\.\([0-9]*\).*,\1,'`" -gt 10 ]; then
+  - if [ "`sw_vers -productVersion | sed 's,10\.\([0-9]*\).*,\1,'`" -ge 14 ]; then
+        python3 --version;
+    elif [ "`sw_vers -productVersion | sed 's,10\.\([0-9]*\).*,\1,'`" -gt 10 ]; then
+        brew uninstall mercurial --force;
         brew upgrade python;
     else
         brew install python3;
