@@ -78,9 +78,9 @@ ubuntu_lts:
     - cd tests
     - ./run-tests
 
-# test using TrustyLTS with all depends from pypi
-ubuntu_trusty_pip:
-  image: ubuntu:trusty
+# test using Xenial LTS with all depends from pypi
+ubuntu_xenial_pip:
+  image: ubuntu:xenial
   only:
     - master@fdroid/fdroidserver
   variables:
@@ -90,11 +90,10 @@ ubuntu_trusty_pip:
     - echo Etc/UTC > /etc/timezone
     - apt-get -qy update
     - apt-get -qy dist-upgrade
-    - apt-get -qy install git default-jdk python3-pip python3.4-venv
+    - apt-get -qy install --no-install-recommends git default-jdk-headless python3-pip python3-venv rsync zipalign
     - rm -rf env
-    - pyvenv-3.4 env
+    - pyvenv env
     - . env/bin/activate
-    - echo sed -i "s/'requests.*',$/'requests',/" setup.py
     - pip3 install --upgrade babel pip setuptools
     - pip3 install -e .
     - ./setup.py compile_catalog
