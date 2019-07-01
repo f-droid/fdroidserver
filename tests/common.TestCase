@@ -569,6 +569,7 @@ class CommonTest(unittest.TestCase):
 
     def test_sign_apk(self):
         try:
+            fdroidserver.common.find_sdk_tools_cmd('aapt')
             fdroidserver.common.find_sdk_tools_cmd('zipalign')
         except fdroidserver.exception.FDroidException:
             print('\n\nSKIPPING test_sign_apk, zipalign is not installed!\n')
