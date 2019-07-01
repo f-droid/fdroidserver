@@ -34,6 +34,7 @@ android:
 #   https://blogs.oracle.com/java-platform-group/oracle-jre-will-no-longer-trust-md5-signed-code-by-default
 #   https://opsech.io/posts/2017/Jun/09/openjdk-april-2017-security-update-131-8u131-and-md5-signed-jars.html
 install:
+  - export HOMEBREW_CURL_RETRIES=10
   - brew update > /dev/null
   - if [ "`sw_vers -productVersion | sed 's,10\.\([0-9]*\).*,\1,'`" -gt 10 ]; then
         brew upgrade python;
@@ -42,8 +43,10 @@ install:
     fi
   - brew install dash bash gnu-sed gradle jenv
   - export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
-  - brew cask uninstall java --force
-  - brew cask install caskroom/versions/java8
+  - brew uninstall java --force || true
+  - brew cask uninstall java --force || true
+  - brew tap adoptopenjdk/openjdk
+  - brew cask install adoptopenjdk8
   - brew cask install android-sdk
 
   - export AAPT_VERSION=`sed -n "s,^MINIMUM_AAPT_VERSION\s*=\s*['\"]\(.*\)[['\"],\1,p" fdroidserver/common.py`
@@ -62,6 +65,7 @@ install:
 
   - ls -l /System/Library/Java/JavaVirtualMachines || true
   - ls -l /Library/Java/JavaVirtualMachines || true
+  - for f in /Library/Java/JavaVirtualMachines/*.jdk; do jenv add $f; done
   - echo $PATH
   - echo $JAVA_HOME
   - jenv versions
@@ -74,6 +78,7 @@ install:
   - which jarsigner
   - keytool -help
   - which keytool
+  - sudo rm -rf /Library/Java/JavaVirtualMachines/jdk1.8.0_1*.jdk || true
 
 # The OSX tests seem to run slower, they often timeout.  So only run
 # the test suite with the installed version of fdroid.
