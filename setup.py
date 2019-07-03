@@ -25,7 +25,7 @@ class VersionCheckCommand(Command):
             print('ERROR: Release version mismatch! setup.py (%s) does not match git (%s)'
                   % (version, version_git))
             sys.exit(1)
-        print('Upload using: twine upload dist/fdroidserver*.tar.gz*')
+        print('Upload using: twine upload --sign dist/fdroidserver-%s.tar.gz' % version)
 
 
 def get_data_files():
