@@ -57,12 +57,14 @@ debian_testing:
     - ./run-tests
 
 # test using LTS set up with the PPA, including Recommends
-ubuntu_lts:
+ubuntu_lts_ppa:
   image: ubuntu:latest
   only:
     - master@fdroid/fdroidserver
   variables:
+    ANDROID_HOME: /usr/lib/android-sdk
     DEBIAN_FRONTEND: noninteractive
+    LANG: C.UTF-8
   script:
     - echo Etc/UTC > /etc/timezone
     - apt-get -qy update
@@ -72,15 +74,15 @@ ubuntu_lts:
     - echo "deb http://ppa.launchpad.net/fdroid/fdroidserver/ubuntu $RELEASE main" >> /etc/apt/sources.list
     - apt-get -qy update
     - apt-get -qy dist-upgrade
-    - apt-get -qy install --install-recommends fdroidserver git python3-defusedxml python3-setuptools
-    - export ANDROID_HOME=/usr/lib/android-sdk
-    - export LANG=C.UTF-8
+    - apt-get -qy install --install-recommends binfmt-support fdroidserver git python3-defusedxml python3-setuptools
+    - grep binfmt /proc/modules || apt -qy purge apksigner
     - cd tests
     - ./run-tests
 
-# test using TrustyLTS with all depends from pypi
-ubuntu_trusty_pip:
-  image: ubuntu:trusty
+# test using Xenial LTS with all depends from pypi
+# apksigner is recommended, but requires binfmt support in the kernel
+ubuntu_xenial_pip:
+  image: ubuntu:xenial
   only:
     - master@fdroid/fdroidserver
   variables:
@@ -90,11 +92,10 @@ ubuntu_trusty_pip:
     - echo Etc/UTC > /etc/timezone
     - apt-get -qy update
     - apt-get -qy dist-upgrade
-    - apt-get -qy install git default-jdk python3-pip python3.4-venv
+    - apt-get -qy install --no-install-recommends git default-jdk-headless python3-pip python3-venv rsync zipalign
     - rm -rf env
-    - pyvenv-3.4 env
+    - pyvenv env
     - . env/bin/activate
-    - echo sed -i "s/'requests.*',$/'requests',/" setup.py
     - pip3 install --upgrade babel pip setuptools
     - pip3 install -e .
     - ./setup.py compile_catalog

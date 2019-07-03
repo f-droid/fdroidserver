@@ -4,8 +4,6 @@ language: java
 
 matrix:
   include:
-    - os: linux
-      language: android
     - os: osx
       osx_image: xcode10.2
       env: ANDROID_SDK_ROOT=/usr/local/share/android-sdk
@@ -15,27 +13,9 @@ matrix:
       env: ANDROID_SDK_ROOT=/usr/local/share/android-sdk
       env: ANDROID_HOME=/usr/local/share/android-sdk
     - os: osx
-      osx_image: xcode9.2
-      env: ANDROID_SDK_ROOT=/usr/local/share/android-sdk
-      env: ANDROID_HOME=/usr/local/share/android-sdk
-    - os: osx
       osx_image: xcode8.3
       env: ANDROID_SDK_ROOT=/usr/local/share/android-sdk
       env: ANDROID_HOME=/usr/local/share/android-sdk
-
-# On Ubuntu/trusty 14.04, the PPA is needed on to provide lots of the
-# dependencies, but this then also serves as a test of the PPA, which
-# is used on Windows Subsystem for Linux.
-addons:
-  apt:
-    update: true
-    sources:
-      - sourceline: 'ppa:fdroid/fdroidserver'
-    packages:
-      - python3-babel
-      - python3-defusedxml
-      - python3-setuptools
-      - fdroidserver
 
 android:
   components:
@@ -49,63 +29,59 @@ android:
 # * Java needs to be at least 1.8.0_131 to have MD5 properly disabled
 #   https://blogs.oracle.com/java-platform-group/oracle-jre-will-no-longer-trust-md5-signed-code-by-default
 #   https://opsech.io/posts/2017/Jun/09/openjdk-april-2017-security-update-131-8u131-and-md5-signed-jars.html
+# * mercurial is unused and requires Python 2.x
 install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      echo "Skipping Uyghur locale, this has too old a gettext to support it";
-      rm -rf locale/ug;
-    fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      set -x;
-      brew update > /dev/null;
-      if [ "`sw_vers -productVersion | sed 's,10\.\([0-9]*\).*,\1,'`" -gt 10 ]; then
+  - export HOMEBREW_CURL_RETRIES=10
+  - brew update > /dev/null
+  - if [ "`sw_vers -productVersion | sed 's,10\.\([0-9]*\).*,\1,'`" -ge 14 ]; then
+        python3 --version;
+    elif [ "`sw_vers -productVersion | sed 's,10\.\([0-9]*\).*,\1,'`" -gt 10 ]; then
+        brew uninstall mercurial --force;
         brew upgrade python;
-      else
+    else
         brew install python3;
-      fi;
-      brew install dash bash gnu-sed gradle jenv;
-      export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH";
-      if ! ruby -e 'v = `javac -version 2>&1`.split()[1].gsub("_", "."); exit Gem::Dependency.new("", "~> 1.8.0.131").match?("", v)'; then
-        brew cask uninstall java --force;
-        brew cask install caskroom/versions/java8;
-      fi;
-      brew cask install android-sdk;
-
-      export AAPT_VERSION=`sed -n "s,^MINIMUM_AAPT_VERSION\s*=\s*['\"]\(.*\)[['\"],\1,p" fdroidserver/common.py`;
-      mkdir -p "$ANDROID_HOME/licenses";
-      echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license";
-      echo -e "\nd56f5187479451eabf01fb78af6dfcb131a6481e" >> "$ANDROID_HOME/licenses/android-sdk-license";
-      echo -e "\n24333f8a63b6825ea9c5514f83c2829b004d1fee" >> "$ANDROID_HOME/licenses/android-sdk-license";
-      echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license";
-      echo y | $ANDROID_HOME/tools/bin/sdkmanager "platform-tools";
-      echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;$AAPT_VERSION";
-      echo y | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-23";
-
-      sudo pip3 install babel;
-      sudo pip3 install --quiet --editable . ;
-      sudo rm -rf fdroidserver.egg-info;
-
-      ls -l /System/Library/Java/JavaVirtualMachines || true;
-      ls -l /Library/Java/JavaVirtualMachines || true;
-      echo $PATH;
-      echo $JAVA_HOME;
-      jenv versions;
-      /usr/libexec/java_home;
-      java -version;
-      which java;
-      javac -version;
-      which javac;
-      jarsigner -help;
-      which jarsigner;
-      keytool -help;
-      which keytool;
-      set +x;
     fi
+  - brew install dash bash gnu-sed gradle jenv
+  - export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+  - brew uninstall java --force || true
+  - brew cask uninstall java --force || true
+  - brew tap adoptopenjdk/openjdk
+  - brew cask install adoptopenjdk8
+  - brew cask install android-sdk
+
+  - export AAPT_VERSION=`sed -n "s,^MINIMUM_AAPT_VERSION\s*=\s*['\"]\(.*\)[['\"],\1,p" fdroidserver/common.py`
+  - mkdir -p "$ANDROID_HOME/licenses"
+  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\nd56f5187479451eabf01fb78af6dfcb131a6481e" >> "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\n24333f8a63b6825ea9c5514f83c2829b004d1fee" >> "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+  - echo y | travis_retry $ANDROID_HOME/tools/bin/sdkmanager "platform-tools" > /dev/null
+  - echo y | travis_retry $ANDROID_HOME/tools/bin/sdkmanager "build-tools;$AAPT_VERSION" > /dev/null
+  - echo y | travis_retry $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-23" > /dev/null
+
+  - travis_retry sudo pip3 install --progress-bar off babel
+  - travis_retry sudo pip3 install --quiet --progress-bar off --editable .
+  - sudo rm -rf fdroidserver.egg-info
+
+  - ls -l /System/Library/Java/JavaVirtualMachines || true
+  - ls -l /Library/Java/JavaVirtualMachines || true
+  - for f in /Library/Java/JavaVirtualMachines/*.jdk; do jenv add $f; done
+  - echo $PATH
+  - echo $JAVA_HOME
+  - jenv versions
+  - /usr/libexec/java_home
+  - java -version
+  - which java
+  - javac -version
+  - which javac
+  - jarsigner -help
+  - which jarsigner
+  - keytool -help
+  - which keytool
+  - sudo rm -rf /Library/Java/JavaVirtualMachines/jdk1.8.0_1*.jdk || true
 
 # The OSX tests seem to run slower, they often timeout.  So only run
 # the test suite with the installed version of fdroid.
-#
-# Supporting pip on Ubuntu/trusty was too painful here, since it seems
-# that pip installs conflict with the Ubuntu packages.
 script:
   - ./tests/run-tests
 

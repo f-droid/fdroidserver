@@ -340,10 +340,16 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.config = config
 
         self.assertTrue(fdroidserver.common.verify_apk_signature('bad-unicode-πÇÇ现代通用字-български-عربي1.apk'))
-        self.assertFalse(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_1.apk'))
-        self.assertFalse(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_2.apk'))
-        self.assertFalse(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_3.apk'))
-        self.assertFalse(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_4.apk'))
+        if 'apksigner' in fdroidserver.common.config:  # apksigner considers MD5 signatures valid
+            self.assertTrue(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_1.apk'))
+            self.assertTrue(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_2.apk'))
+            self.assertTrue(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_3.apk'))
+            self.assertTrue(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_4.apk'))
+        else:
+            self.assertFalse(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_1.apk'))
+            self.assertFalse(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_2.apk'))
+            self.assertFalse(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_3.apk'))
+            self.assertFalse(fdroidserver.common.verify_apk_signature('org.bitbucket.tickytacky.mirrormirror_4.apk'))
         self.assertTrue(fdroidserver.common.verify_apk_signature('org.dyndns.fules.ck_20.apk'))
         self.assertTrue(fdroidserver.common.verify_apk_signature('urzip.apk'))
         self.assertFalse(fdroidserver.common.verify_apk_signature('urzip-badcert.apk'))
@@ -563,6 +569,7 @@ class CommonTest(unittest.TestCase):
 
     def test_sign_apk(self):
         try:
+            fdroidserver.common.find_sdk_tools_cmd('aapt')
             fdroidserver.common.find_sdk_tools_cmd('zipalign')
         except fdroidserver.exception.FDroidException:
             print('\n\nSKIPPING test_sign_apk, zipalign is not installed!\n')
