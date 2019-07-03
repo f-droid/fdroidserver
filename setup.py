@@ -50,7 +50,7 @@ def get_data_files():
 
 
 setup(name='fdroidserver',
-      version='1.1.2',
+      version='1.1.3',
       description='F-Droid Server Tools',
       long_description='README.md',
       long_description_content_type='text/markdown',
