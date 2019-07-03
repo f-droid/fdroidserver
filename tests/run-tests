@@ -128,7 +128,7 @@ set -x # show each command as it is executed
 echo_header "run commit hooks"
 
 cd $WORKSPACE
-./hooks/pre-commit
+test -x ./hooks/pre-commit && ./hooks/pre-commit
 
 
 #------------------------------------------------------------------------------#
