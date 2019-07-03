@@ -971,7 +971,7 @@ class CommonTest(unittest.TestCase):
                                       cmd[6],
                                       'example.com:/var/www/fdroid/repo/'],
                                      cmd)
-                self.assertTrue(cmd[6].endswith('/com.example.app_4711_1.log.gz'))
+                self.assertTrue(cmd[6].endswith('/com.example.app_4711.log.gz'))
                 with gzip.open(cmd[6], 'r') as f:
                     self.assertTrue(f.read(), mocklogcontent)
             elif assert_subprocess_call_iteration == 1:
@@ -984,7 +984,7 @@ class CommonTest(unittest.TestCase):
                                       cmd[6],
                                       'example.com:/var/www/fbot/repo/'],
                                      cmd)
-                self.assertTrue(cmd[6].endswith('/com.example.app_4711_1.log.gz'))
+                self.assertTrue(cmd[6].endswith('/com.example.app_4711.log.gz'))
                 with gzip.open(cmd[6], 'r') as f:
                     self.assertTrue(f.read(), mocklogcontent)
             else:
@@ -996,7 +996,7 @@ class CommonTest(unittest.TestCase):
         with mock.patch('subprocess.call',
                         side_effect=assert_subprocess_call):
             fdroidserver.common.deploy_build_log_with_rsync(
-                'com.example.app', '4711', mocklogcontent, 1.1)
+                'com.example.app', '4711', mocklogcontent)
 
 
 if __name__ == "__main__":

@@ -173,8 +173,8 @@ The repository of older versions of applications from the main demo repository.
 
 # Uncomment this option if you want to logs of builds and other processes to
 # your repository server(s). Logs get published to all servers configured in
-# 'serverwebroot'. For builds, only logs from build-jobs running inside a
-# buildserver VM are supported.
+# 'serverwebroot'. The name scheme is: .../repo/$APPID_$VERCODE.log.gz
+# Only logs from build-jobs running inside a buildserver VM are supported.
 #
 # deploy_process_logs = True
 
