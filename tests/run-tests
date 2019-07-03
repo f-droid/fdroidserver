@@ -636,19 +636,21 @@ $fdroid install || true
 
 
 #------------------------------------------------------------------------------#
-echo_header "create a source tarball"
+# only run this test if running from a git repo, not all files are in the tarball
+if [ -e .git/config ]; then
+    echo_header "create a source tarball"
 
-cd $WORKSPACE
-./setup.py compile_catalog sdist
+    cd $WORKSPACE
+    ./setup.py compile_catalog sdist
 
-REPOROOT=`create_test_dir`
-cd $REPOROOT
-tar xzf `ls -1 $WORKSPACE/dist/fdroidserver-*.tar.gz | sort -n | tail -1`
-cd $REPOROOT
-./fdroidserver-*/fdroid init
-copy_apks_into_repo $REPOROOT
-./fdroidserver-*/fdroid update --create-metadata --verbose
-
+    REPOROOT=`create_test_dir`
+    cd $REPOROOT
+    tar xzf `ls -1 $WORKSPACE/dist/fdroidserver-*.tar.gz | sort -n | tail -1`
+    cd $REPOROOT
+    ./fdroidserver-*/fdroid init
+    copy_apks_into_repo $REPOROOT
+    ./fdroidserver-*/fdroid update --create-metadata --verbose
+fi
 
 #------------------------------------------------------------------------------#
 echo_header "test config checks of local_copy_dir"
