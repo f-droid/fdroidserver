@@ -625,6 +625,10 @@ class UpdateTest(unittest.TestCase):
             self.assertFalse(os.path.exists(os.path.join('archive', apkName)))
             self.assertTrue(os.path.exists(os.path.join('repo', apkName)))
 
+            if os.path.exists('/usr/bin/apksigner') or 'apksigner' in config:
+                print('SKIPPING: apksigner installed and it allows MD5 signatures')
+                return
+
             javac = config['jarsigner'].replace('jarsigner', 'javac')
             v = subprocess.check_output([javac, '-version'], stderr=subprocess.STDOUT)[6:-1].decode('utf-8')
             if LooseVersion(v) < LooseVersion('1.8.0_132'):
