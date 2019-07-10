@@ -52,7 +52,7 @@ def warn_or_exception(value):
 app_fields = set([
     'Disabled',
     'AntiFeatures',
-    'Provides',
+    'Provides',  # deprecated, txt only
     'Categories',
     'License',
     'Author Name',
@@ -96,7 +96,6 @@ app_fields = set([
 yaml_app_field_order = [
     'Disabled',
     'AntiFeatures',
-    'Provides',
     'Categories',
     'License',
     'AuthorName',
