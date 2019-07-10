@@ -951,8 +951,8 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.options.quiet = False
         fdroidserver.common.config = {}
         fdroidserver.common.config['serverwebroot'] = [
-            'example.com:/var/www/fdroid/repo/',
-            'example.com:/var/www/fdroid/archive/']
+            'example.com:/var/www/fdroid/',
+            'example.com:/var/www/fbot/']
         fdroidserver.common.config['deploy_process_logs'] = True
         fdroidserver.common.config['identity_file'] = 'ssh/id_rsa'
 
@@ -969,9 +969,9 @@ class CommonTest(unittest.TestCase):
                                       '-e',
                                       'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ssh/id_rsa',
                                       cmd[6],
-                                      'example.com:/var/www/fdroid/repo/buildlogs/'],
+                                      'example.com:/var/www/fdroid/repo/'],
                                      cmd)
-                self.assertTrue(cmd[6].endswith('/com.example.app_4711_1.log.gz'))
+                self.assertTrue(cmd[6].endswith('/com.example.app_4711.log.gz'))
                 with gzip.open(cmd[6], 'r') as f:
                     self.assertTrue(f.read(), mocklogcontent)
             elif assert_subprocess_call_iteration == 1:
@@ -982,9 +982,9 @@ class CommonTest(unittest.TestCase):
                                       '-e',
                                       'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ssh/id_rsa',
                                       cmd[6],
-                                      'example.com:/var/www/fdroid/archive/buildlogs/'],
+                                      'example.com:/var/www/fbot/repo/'],
                                      cmd)
-                self.assertTrue(cmd[6].endswith('/com.example.app_4711_1.log.gz'))
+                self.assertTrue(cmd[6].endswith('/com.example.app_4711.log.gz'))
                 with gzip.open(cmd[6], 'r') as f:
                     self.assertTrue(f.read(), mocklogcontent)
             else:
@@ -996,7 +996,7 @@ class CommonTest(unittest.TestCase):
         with mock.patch('subprocess.call',
                         side_effect=assert_subprocess_call):
             fdroidserver.common.deploy_build_log_with_rsync(
-                'com.example.app', '4711', mocklogcontent, 1.1)
+                'com.example.app', '4711', mocklogcontent)
 
 
 if __name__ == "__main__":

@@ -3232,8 +3232,7 @@ def local_rsync(options, fromdir, todir):
         raise FDroidException()
 
 
-def deploy_build_log_with_rsync(appid, vercode, log_content,
-                                timestamp=int(time.time())):
+def deploy_build_log_with_rsync(appid, vercode, log_content):
     """Upload build log of one individual app build to an fdroid repository.
 
     :param appid: package name for dientifying to which app this log belongs.
@@ -3241,7 +3240,6 @@ def deploy_build_log_with_rsync(appid, vercode, log_content,
     :param log_content: Content of the log which is about to be posted.
                         Should be either a string or bytes. (bytes will
                         be decoded as 'utf-8')
-    :param timestamp: timestamp for avoiding logfile name collisions.
     """
 
     # check if deploying logs is enabled in config
@@ -3253,16 +3251,11 @@ def deploy_build_log_with_rsync(appid, vercode, log_content,
         logging.warning(_('skip deploying full build logs: log content is empty'))
         return
 
-    if not (isinstance(timestamp, int) or isinstance(timestamp, float)):
-        raise ValueError(_("supplied timestamp value '{timestamp}' is not a unix timestamp"
-                           .format(timestamp=timestamp)))
-
     with tempfile.TemporaryDirectory() as tmpdir:
         # gzip compress log file
         log_gz_path = os.path.join(
-            tmpdir, '{pkg}_{ver}_{ts}.log.gz'.format(pkg=appid,
-                                                     ver=vercode,
-                                                     ts=int(timestamp)))
+            tmpdir, '{pkg}_{ver}.log.gz'.format(pkg=appid,
+                                                ver=vercode))
         with gzip.open(log_gz_path, 'wb') as f:
             if isinstance(log_content, str):
                 f.write(bytes(log_content, 'utf-8'))
@@ -3272,7 +3265,7 @@ def deploy_build_log_with_rsync(appid, vercode, log_content,
         # TODO: sign compressed log file, if a signing key is configured
 
         for webroot in config.get('serverwebroot', []):
-            dest_path = os.path.join(webroot, "buildlogs")
+            dest_path = os.path.join(webroot, "repo")
             if not dest_path.endswith('/'):
                 dest_path += '/'  # make sure rsync knows this is a directory
             cmd = ['rsync',
