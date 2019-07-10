@@ -305,80 +305,85 @@ cp $WORKSPACE/tests/urzip.apk \
 $sed -i.tmp 's,archive_older = [0-9],archive_older = 3,' config.py
 
 $fdroid update --pretty --nosign
-echo "This will fail when jarsigner allows MD5 for APK signatures"
-test `grep '<package>' archive/index.xml | wc -l` -eq 5
-test `grep '<package>' repo/index.xml | wc -l` -eq 7
-
+if which apksigner; then
+    test `grep '<package>' archive/index.xml | wc -l` -eq 2
+    test `grep '<package>' repo/index.xml | wc -l` -eq 10
+else
+    echo "This will fail when jarsigner allows MD5 for APK signatures"
+    test `grep '<package>' archive/index.xml | wc -l` -eq 5
+    test `grep '<package>' repo/index.xml | wc -l` -eq 7
+fi
 
 #------------------------------------------------------------------------------#
-echo_header 'test per-app "Archive Policy"'
+if ! which apksigner; then
+    echo_header 'test per-app "Archive Policy"'
 
-REPOROOT=`create_test_dir`
-cd $REPOROOT
-fdroid_init_with_prebuilt_keystore
-echo "accepted_formats = ['txt']" >> config.py
-test -d metadata || mkdir metadata
-cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
-test -d repo || mkdir repo
-cp $WORKSPACE/tests/repo/com.politedroid_[0-9].apk repo/
-$sed -i.tmp 's,archive_older = [0-9],archive_older = 3,' config.py
+    REPOROOT=`create_test_dir`
+    cd $REPOROOT
+    fdroid_init_with_prebuilt_keystore
+    echo "accepted_formats = ['txt']" >> config.py
+    test -d metadata || mkdir metadata
+    cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
+    test -d repo || mkdir repo
+    cp $WORKSPACE/tests/repo/com.politedroid_[0-9].apk repo/
+    $sed -i.tmp 's,archive_older = [0-9],archive_older = 3,' config.py
 
-$fdroid update --pretty --nosign
-test `grep '<package>' archive/index.xml | wc -l` -eq 0
-test `grep '<package>' repo/index.xml | wc -l` -eq 4
-grep -F com.politedroid_3.apk repo/index.xml
-grep -F com.politedroid_4.apk repo/index.xml
-grep -F com.politedroid_5.apk repo/index.xml
-grep -F com.politedroid_6.apk repo/index.xml
-test -e repo/com.politedroid_3.apk
-test -e repo/com.politedroid_4.apk
-test -e repo/com.politedroid_5.apk
-test -e repo/com.politedroid_6.apk
+    $fdroid update --pretty --nosign
+    test `grep '<package>' archive/index.xml | wc -l` -eq 0
+    test `grep '<package>' repo/index.xml | wc -l` -eq 4
+    grep -F com.politedroid_3.apk repo/index.xml
+    grep -F com.politedroid_4.apk repo/index.xml
+    grep -F com.politedroid_5.apk repo/index.xml
+    grep -F com.politedroid_6.apk repo/index.xml
+    test -e repo/com.politedroid_3.apk
+    test -e repo/com.politedroid_4.apk
+    test -e repo/com.politedroid_5.apk
+    test -e repo/com.politedroid_6.apk
 
-echo "enable one app in the repo"
-$sed -i.tmp 's,^Archive Policy:4,Archive Policy:1,' metadata/com.politedroid.txt
-$fdroid update --pretty --nosign
-test `grep '<package>' archive/index.xml | wc -l` -eq 3
-test `grep '<package>' repo/index.xml | wc -l` -eq 1
-grep -F com.politedroid_3.apk archive/index.xml
-grep -F com.politedroid_4.apk archive/index.xml
-grep -F com.politedroid_5.apk archive/index.xml
-grep -F com.politedroid_6.apk repo/index.xml
-test -e archive/com.politedroid_3.apk
-test -e archive/com.politedroid_4.apk
-test -e archive/com.politedroid_5.apk
-test -e repo/com.politedroid_6.apk
+    echo "enable one app in the repo"
+    $sed -i.tmp 's,^Archive Policy:4,Archive Policy:1,' metadata/com.politedroid.txt
+    $fdroid update --pretty --nosign
+    test `grep '<package>' archive/index.xml | wc -l` -eq 3
+    test `grep '<package>' repo/index.xml | wc -l` -eq 1
+    grep -F com.politedroid_3.apk archive/index.xml
+    grep -F com.politedroid_4.apk archive/index.xml
+    grep -F com.politedroid_5.apk archive/index.xml
+    grep -F com.politedroid_6.apk repo/index.xml
+    test -e archive/com.politedroid_3.apk
+    test -e archive/com.politedroid_4.apk
+    test -e archive/com.politedroid_5.apk
+    test -e repo/com.politedroid_6.apk
 
-echo "remove all apps from the repo"
-$sed -i.tmp 's,^Archive Policy:1,Archive Policy:0,' metadata/com.politedroid.txt
-$fdroid update --pretty --nosign
-test `grep '<package>' archive/index.xml | wc -l` -eq 4
-test `grep '<package>' repo/index.xml | wc -l` -eq 0
-grep -F com.politedroid_3.apk archive/index.xml
-grep -F com.politedroid_4.apk archive/index.xml
-grep -F com.politedroid_5.apk archive/index.xml
-grep -F com.politedroid_6.apk archive/index.xml
-test -e archive/com.politedroid_3.apk
-test -e archive/com.politedroid_4.apk
-test -e archive/com.politedroid_5.apk
-test -e archive/com.politedroid_6.apk
-! test -e repo/com.politedroid_6.apk
+    echo "remove all apps from the repo"
+    $sed -i.tmp 's,^Archive Policy:1,Archive Policy:0,' metadata/com.politedroid.txt
+    $fdroid update --pretty --nosign
+    test `grep '<package>' archive/index.xml | wc -l` -eq 4
+    test `grep '<package>' repo/index.xml | wc -l` -eq 0
+    grep -F com.politedroid_3.apk archive/index.xml
+    grep -F com.politedroid_4.apk archive/index.xml
+    grep -F com.politedroid_5.apk archive/index.xml
+    grep -F com.politedroid_6.apk archive/index.xml
+    test -e archive/com.politedroid_3.apk
+    test -e archive/com.politedroid_4.apk
+    test -e archive/com.politedroid_5.apk
+    test -e archive/com.politedroid_6.apk
+    ! test -e repo/com.politedroid_6.apk
 
-echo "move back one from archive to the repo"
-$sed -i.tmp 's,^Archive Policy:0,Archive Policy:1,' metadata/com.politedroid.txt
-$fdroid update --pretty --nosign
-test `grep '<package>' archive/index.xml | wc -l` -eq 3
-test `grep '<package>' repo/index.xml | wc -l` -eq 1
-grep -F com.politedroid_3.apk archive/index.xml
-grep -F com.politedroid_4.apk archive/index.xml
-grep -F com.politedroid_5.apk archive/index.xml
-grep -F com.politedroid_6.apk repo/index.xml
-test -e archive/com.politedroid_3.apk
-test -e archive/com.politedroid_4.apk
-test -e archive/com.politedroid_5.apk
-! test -e archive/com.politedroid_6.apk
-test -e repo/com.politedroid_6.apk
-
+    echo "move back one from archive to the repo"
+    $sed -i.tmp 's,^Archive Policy:0,Archive Policy:1,' metadata/com.politedroid.txt
+    $fdroid update --pretty --nosign
+    test `grep '<package>' archive/index.xml | wc -l` -eq 3
+    test `grep '<package>' repo/index.xml | wc -l` -eq 1
+    grep -F com.politedroid_3.apk archive/index.xml
+    grep -F com.politedroid_4.apk archive/index.xml
+    grep -F com.politedroid_5.apk archive/index.xml
+    grep -F com.politedroid_6.apk repo/index.xml
+    test -e archive/com.politedroid_3.apk
+    test -e archive/com.politedroid_4.apk
+    test -e archive/com.politedroid_5.apk
+    ! test -e archive/com.politedroid_6.apk
+    test -e repo/com.politedroid_6.apk
+fi
 
 
 #------------------------------------------------------------------------------#
@@ -505,29 +510,31 @@ test -e repo/org.bitbucket.tickytacky.mirrormirror_3.apk
 test -e repo/org.bitbucket.tickytacky.mirrormirror_4.apk
 test -e archive/urzip-badsig.apk
 
-$sed -i.tmp '/allow_disabled_algorithms/d' config.py
-$fdroid update --pretty --nosign
-test `grep '<package>' archive/index.xml | wc -l` -eq 5
-test `grep '<package>' repo/index.xml | wc -l` -eq 3
-grep -F org.bitbucket.tickytacky.mirrormirror_1.apk archive/index.xml
-grep -F org.bitbucket.tickytacky.mirrormirror_2.apk archive/index.xml
-grep -F org.bitbucket.tickytacky.mirrormirror_3.apk archive/index.xml
-grep -F org.bitbucket.tickytacky.mirrormirror_4.apk archive/index.xml
-grep -F com.politedroid_3.apk archive/index.xml
-grep -F com.politedroid_4.apk repo/index.xml
-grep -F com.politedroid_5.apk repo/index.xml
-grep -F com.politedroid_6.apk repo/index.xml
-! grep -F urzip-badsig.apk repo/index.xml
-! grep -F urzip-badsig.apk archive/index.xml
-test -e archive/org.bitbucket.tickytacky.mirrormirror_1.apk
-test -e archive/org.bitbucket.tickytacky.mirrormirror_2.apk
-test -e archive/org.bitbucket.tickytacky.mirrormirror_3.apk
-test -e archive/org.bitbucket.tickytacky.mirrormirror_4.apk
-test -e archive/com.politedroid_3.apk
-test -e archive/urzip-badsig.apk
-test -e repo/com.politedroid_4.apk
-test -e repo/com.politedroid_5.apk
-test -e repo/com.politedroid_6.apk
+if ! which apksigner; then
+    $sed -i.tmp '/allow_disabled_algorithms/d' config.py
+    $fdroid update --pretty --nosign
+    test `grep '<package>' archive/index.xml | wc -l` -eq 5
+    test `grep '<package>' repo/index.xml | wc -l` -eq 3
+    grep -F org.bitbucket.tickytacky.mirrormirror_1.apk archive/index.xml
+    grep -F org.bitbucket.tickytacky.mirrormirror_2.apk archive/index.xml
+    grep -F org.bitbucket.tickytacky.mirrormirror_3.apk archive/index.xml
+    grep -F org.bitbucket.tickytacky.mirrormirror_4.apk archive/index.xml
+    grep -F com.politedroid_3.apk archive/index.xml
+    grep -F com.politedroid_4.apk repo/index.xml
+    grep -F com.politedroid_5.apk repo/index.xml
+    grep -F com.politedroid_6.apk repo/index.xml
+    ! grep -F urzip-badsig.apk repo/index.xml
+    ! grep -F urzip-badsig.apk archive/index.xml
+    test -e archive/org.bitbucket.tickytacky.mirrormirror_1.apk
+    test -e archive/org.bitbucket.tickytacky.mirrormirror_2.apk
+    test -e archive/org.bitbucket.tickytacky.mirrormirror_3.apk
+    test -e archive/org.bitbucket.tickytacky.mirrormirror_4.apk
+    test -e archive/com.politedroid_3.apk
+    test -e archive/urzip-badsig.apk
+    test -e repo/com.politedroid_4.apk
+    test -e repo/com.politedroid_5.apk
+    test -e repo/com.politedroid_6.apk
+fi
 
 
 #------------------------------------------------------------------------------#
