@@ -367,7 +367,7 @@ class MetadataTest(unittest.TestCase):
                                                   'prebuild': "a && b && "
                                                               "sed -i 's,a,b,'"}]})
 
-    def test_parse_yaml_provides_should_raise_exception(self):
+    def test_parse_yaml_provides_should_be_ignored(self):
         mf = io.StringIO(textwrap.dedent("""\
             Provides: this.is.deprecated
             AutoName: F-Droid
@@ -382,8 +382,9 @@ class MetadataTest(unittest.TestCase):
         mf.seek(0)
         result = {}
         with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
-            with self.assertRaises(fdroidserver.metadata.MetaDataException):
-                fdroidserver.metadata.parse_yaml_metadata(mf, result)
+            fdroidserver.metadata.parse_yaml_metadata(mf, result)
+            self.assertNotIn('Provides', result)
+            self.assertNotIn('provides', result)
 
     def test_write_yaml_1_line_scripts_as_string(self):
         mf = io.StringIO()
