@@ -1869,6 +1869,11 @@ def create_metadata_from_template(apk):
                              r'\1 ' + apk['packageName'],
                              metatxt,
                              flags=re.IGNORECASE | re.MULTILINE)
+        # make sure unset string values will be interpreted as blank strings
+        str_fields = [x for x in metadata.yaml_app_fields if metadata.fieldtype(x) == metadata.TYPE_STRING]
+        metatxt = re.sub(r'^(' + '|'.join(str_fields) + '):\\s*$',
+                         r"\1: ''", metatxt,
+                         flags=re.MULTILINE)
         with open(os.path.join('metadata', apk['packageName'] + '.yml'), 'w') as f:
             f.write(metatxt)
     else:
