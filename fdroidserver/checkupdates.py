@@ -355,7 +355,8 @@ def possible_subdirs(app):
 
 def fetch_autoname(app, tag):
 
-    if not app.RepoType or app.UpdateCheckMode in ('None', 'Static'):
+    if not app.RepoType or app.UpdateCheckMode in ('None', 'Static') \
+       or app.UpdateCheckName == "Ignore":
         return None
 
     if app.RepoType == 'srclib':
