@@ -108,10 +108,14 @@ def main():
             newbuilds.append(new)
         app.builds = newbuilds
 
-        metadata.write_metadata(base + '.' + to_ext, app)
-
-        if ext != to_ext:
-            os.remove(path)
+        try:
+            metadata.write_metadata(base + '.' + to_ext, app)
+            # remove old format metadata if there was  a format change
+            # and rewriting to the new format worked
+            if ext != to_ext:
+                os.remove(path)
+        finally:
+            pass
 
     logging.debug(_("Finished"))
 

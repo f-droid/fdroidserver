@@ -1584,15 +1584,11 @@ def write_metadata(metadatapath, app):
         warn_or_exception(_('Cannot write "{path}", not an accepted format, use: {formats}')
                           .format(path=metadatapath, formats=', '.join(accepted)))
 
-    try:
-        with open(metadatapath, 'w') as mf:
-            if ext == 'txt':
-                return write_txt(mf, app)
-            elif ext == 'yml':
-                return write_yaml(mf, app)
-    except FDroidException as e:
-        os.remove(metadatapath)
-        raise e
+    with open(metadatapath, 'w') as mf:
+        if ext == 'txt':
+            return write_txt(mf, app)
+        elif ext == 'yml':
+            return write_yaml(mf, app)
 
     warn_or_exception(_('Unknown metadata format: %s') % metadatapath)
 
