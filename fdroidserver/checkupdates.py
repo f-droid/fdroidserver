@@ -85,9 +85,13 @@ def check_http(app):
                 raise FDroidException("No RE match for version")
             version = m.group(1)
 
-        if version and ignoresearch and not ignoresearch(version):
+        if ignoresearch and version:
+            if not ignoresearch(version):
+                return (version, vercode)
+            else:
+                return (None, ("Version {version} is ignored").format(version=version))
+        else:
             return (version, vercode)
-        return (None, ("Version {version} is ignored").format(version=version))
     except FDroidException:
         msg = "Could not complete http check for app {0} due to unknown error: {1}".format(app.id, traceback.format_exc())
         return (None, msg)
