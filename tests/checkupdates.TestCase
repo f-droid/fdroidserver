@@ -53,6 +53,23 @@ class CommonTest(unittest.TestCase):
                     fdroidserver.checkupdates.checkupdates_app(app)
                 wrmock.assert_called_with(app.metadatapath, app)
 
+    def test_check_http(self):
+        fdroidserver.checkupdates.options = mock.Mock()
+
+        app = fdroidserver.metadata.App()
+        app.id = 'loop.starts.shooting'
+        app.metadatapath = 'metadata/' + app.id + '.yml'
+        app.CurrentVersionCode = 10108
+        app.UpdateCheckMode = 'HTTP'
+        app.UpdateCheckData = 'https://a.net/b.txt|c(.*)|https://d.net/e.txt|v(.*)'
+
+        respmock = mock.Mock()
+        respmock.read = lambda: 'v1.1.9\nc10109'.encode('utf-8')
+        with mock.patch('urllib.request.urlopen', lambda a, b, c: respmock):
+            vername, vercode = fdroidserver.checkupdates.check_http(app)
+            self.assertEqual(vername, '1.1.9')
+            self.assertEqual(vercode, '10109')
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
