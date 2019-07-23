@@ -62,6 +62,7 @@ class CommonTest(unittest.TestCase):
         app.CurrentVersionCode = 10108
         app.UpdateCheckMode = 'HTTP'
         app.UpdateCheckData = 'https://a.net/b.txt|c(.*)|https://d.net/e.txt|v(.*)'
+        app.UpdateCheckIgnore = 'beta'
 
         respmock = mock.Mock()
         respmock.read = lambda: 'v1.1.9\nc10109'.encode('utf-8')
@@ -69,6 +70,24 @@ class CommonTest(unittest.TestCase):
             vername, vercode = fdroidserver.checkupdates.check_http(app)
             self.assertEqual(vername, '1.1.9')
             self.assertEqual(vercode, '10109')
+
+    def test_check_http_ignore(self):
+        fdroidserver.checkupdates.options = mock.Mock()
+
+        app = fdroidserver.metadata.App()
+        app.id = 'loop.starts.shooting'
+        app.metadatapath = 'metadata/' + app.id + '.yml'
+        app.CurrentVersionCode = 10108
+        app.UpdateCheckMode = 'HTTP'
+        app.UpdateCheckData = 'https://a.net/b.txt|c(.*)|https://d.net/e.txt|v(.*)'
+        app.UpdateCheckIgnore = 'beta'
+
+        respmock = mock.Mock()
+        respmock.read = lambda: 'v1.1.9-beta\nc10109'.encode('utf-8')
+        with mock.patch('urllib.request.urlopen', lambda a, b, c: respmock):
+            vername, vercode = fdroidserver.checkupdates.check_http(app)
+            self.assertEqual(vername, None)
+            self.assertEqual(vercode, 'Version 1.1.9-beta is ignored')
 
 
 if __name__ == "__main__":
