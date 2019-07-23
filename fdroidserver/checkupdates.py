@@ -85,9 +85,13 @@ def check_http(app):
                 raise FDroidException("No RE match for version")
             version = m.group(1)
 
-        if version and ignoresearch and not ignoresearch(version):
+        if ignoresearch and version:
+            if not ignoresearch(version):
+                return (version, vercode)
+            else:
+                return (None, ("Version {version} is ignored").format(version=version))
+        else:
             return (version, vercode)
-        return (None, ("Version {version} is ignored").format(version=version))
     except FDroidException:
         msg = "Could not complete http check for app {0} due to unknown error: {1}".format(app.id, traceback.format_exc())
         return (None, msg)
@@ -454,7 +458,7 @@ def checkupdates_app(app):
         if noverok:
             logging.info(logmsg)
         else:
-            logging.warn(logmsg)
+            logging.warning(logmsg)
     elif vercode == app.CurrentVersionCode:
         logging.info("...up to date")
     else:
@@ -475,7 +479,7 @@ def checkupdates_app(app):
     if options.auto:
         mode = app.AutoUpdateMode
         if not app.CurrentVersionCode:
-            logging.warn("Can't auto-update app with no current version code: " + app.id)
+            logging.warning("Can't auto-update app with no current version code: " + app.id)
         elif mode in ('None', 'Static'):
             pass
         elif mode.startswith('Version '):
@@ -512,7 +516,7 @@ def checkupdates_app(app):
                 ver = common.getcvname(app)
                 commitmsg = "Update %s to %s" % (name, ver)
         else:
-            logging.warn('Invalid auto update mode "' + mode + '" on ' + app.id)
+            logging.warning('Invalid auto update mode "' + mode + '" on ' + app.id)
 
     if commitmsg:
         metadata.write_metadata(app.metadatapath, app)

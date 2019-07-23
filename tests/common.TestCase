@@ -806,6 +806,19 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(('0.94-test', '940', 'org.fdroid.fdroid'),
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
+    def test_parse_androidmanifests_ignore(self):
+        app = fdroidserver.metadata.App()
+        app.id = 'org.fdroid.fdroid'
+        app.UpdateCheckIgnore = '-test'
+        paths = [
+            os.path.join('source-files', 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
+            os.path.join('source-files', 'fdroid', 'fdroidclient', 'build.gradle'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('Ignore', None, 'org.fdroid.fdroid'),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
     def test_parse_androidmanifests_with_flavor(self):
         app = fdroidserver.metadata.App()
         build = fdroidserver.metadata.Build()

@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+
+# http://www.drdobbs.com/testing/unit-testing-with-python/240165163
+
+import inspect
+import logging
+import optparse
+import os
+import sys
+import unittest
+from unittest import mock
+
+
+localmodule = os.path.realpath(
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
+print('localmodule: ' + localmodule)
+if localmodule not in sys.path:
+    sys.path.insert(0, localmodule)
+
+import fdroidserver.checkupdates
+import fdroidserver.metadata
+
+
+class CommonTest(unittest.TestCase):
+    '''fdroidserver/common.py'''
+
+    def setUp(self):
+        logging.basicConfig(level=logging.DEBUG)
+        self.basedir = os.path.join(localmodule, 'tests')
+        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
+        if not os.path.exists(self.tmpdir):
+            os.makedirs(self.tmpdir)
+        os.chdir(self.basedir)
+
+    def test_checkupdates_app_http(self):
+        fdroidserver.checkupdates.options = mock.Mock()
+        fdroidserver.checkupdates.options.auto = 'bleh'
+        fdroidserver.checkupdates.config = {}
+
+        app = fdroidserver.metadata.App()
+        app.id = 'loop.starts.shooting'
+        app.metadatapath = 'metadata/' + app.id + '.yml'
+        app.CurrentVersionCode = 10108
+        app.UpdateCheckMode = 'HTTP'
+        app.UpdateCheckData = 'mock'
+
+        with mock.patch('fdroidserver.checkupdates.check_http', lambda app: (None, 'bla')):
+            fdroidserver.checkupdates.checkupdates_app(app)
+
+        with mock.patch('fdroidserver.checkupdates.check_http', lambda app: ('1.1.9', 10109)):
+            with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()) as wrmock:
+                with mock.patch('subprocess.call', lambda cmd: 0):
+                    fdroidserver.checkupdates.checkupdates_app(app)
+                wrmock.assert_called_with(app.metadatapath, app)
+
+    def test_check_http(self):
+        fdroidserver.checkupdates.options = mock.Mock()
+
+        app = fdroidserver.metadata.App()
+        app.id = 'loop.starts.shooting'
+        app.metadatapath = 'metadata/' + app.id + '.yml'
+        app.CurrentVersionCode = 10108
+        app.UpdateCheckMode = 'HTTP'
+        app.UpdateCheckData = 'https://a.net/b.txt|c(.*)|https://d.net/e.txt|v(.*)'
+        app.UpdateCheckIgnore = 'beta'
+
+        respmock = mock.Mock()
+        respmock.read = lambda: 'v1.1.9\nc10109'.encode('utf-8')
+        with mock.patch('urllib.request.urlopen', lambda a, b, c: respmock):
+            vername, vercode = fdroidserver.checkupdates.check_http(app)
+            self.assertEqual(vername, '1.1.9')
+            self.assertEqual(vercode, '10109')
+
+    def test_check_http_ignore(self):
+        fdroidserver.checkupdates.options = mock.Mock()
+
+        app = fdroidserver.metadata.App()
+        app.id = 'loop.starts.shooting'
+        app.metadatapath = 'metadata/' + app.id + '.yml'
+        app.CurrentVersionCode = 10108
+        app.UpdateCheckMode = 'HTTP'
+        app.UpdateCheckData = 'https://a.net/b.txt|c(.*)|https://d.net/e.txt|v(.*)'
+        app.UpdateCheckIgnore = 'beta'
+
+        respmock = mock.Mock()
+        respmock.read = lambda: 'v1.1.9-beta\nc10109'.encode('utf-8')
+        with mock.patch('urllib.request.urlopen', lambda a, b, c: respmock):
+            vername, vercode = fdroidserver.checkupdates.check_http(app)
+            self.assertEqual(vername, None)
+            self.assertEqual(vercode, 'Version 1.1.9-beta is ignored')
+
+
+if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+
+    parser = optparse.OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
+
+    newSuite = unittest.TestSuite()
+    newSuite.addTest(unittest.makeSuite(CommonTest))
+    unittest.main(failfast=False)
