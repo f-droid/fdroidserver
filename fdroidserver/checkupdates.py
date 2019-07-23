@@ -43,6 +43,9 @@ from .exception import VCSException, NoSubmodulesException, FDroidException, Met
 # required.
 def check_http(app):
 
+    ignoreversions = app.UpdateCheckIgnore
+    ignoresearch = re.compile(ignoreversions).search if ignoreversions else None
+
     try:
 
         if not app.UpdateCheckData:
@@ -82,8 +85,9 @@ def check_http(app):
                 raise FDroidException("No RE match for version")
             version = m.group(1)
 
-        return (version, vercode)
-
+        if version and ignoresearch and not ignoresearch(version):
+            return (version, vercode)
+        return (None, ("Version {version} is ignored").format(version=version))
     except FDroidException:
         msg = "Could not complete http check for app {0} due to unknown error: {1}".format(app.id, traceback.format_exc())
         return (None, msg)
@@ -351,7 +355,8 @@ def possible_subdirs(app):
 
 def fetch_autoname(app, tag):
 
-    if not app.RepoType or app.UpdateCheckMode in ('None', 'Static'):
+    if not app.RepoType or app.UpdateCheckMode in ('None', 'Static') \
+       or app.UpdateCheckName == "Ignore":
         return None
 
     if app.RepoType == 'srclib':

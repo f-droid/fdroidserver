@@ -1508,7 +1508,7 @@ def parse_androidmanifests(paths, app):
 
         if vercode is not None \
            and (max_vercode is None or vercode > max_vercode):
-            if not ignoresearch or not ignoresearch(version):
+            if version and (not ignoresearch or not ignoresearch(version)):
                 if version is not None:
                     max_version = version
                 if vercode is not None:
