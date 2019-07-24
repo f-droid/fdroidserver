@@ -30,6 +30,9 @@ config = None
 options = None
 
 
+SUPPORTED_FORMATS = ['txt', 'yml']
+
+
 def proper_format(app):
     s = io.StringIO()
     # TODO: currently reading entire file again, should reuse first
@@ -50,15 +53,13 @@ def main():
 
     global config, options
 
-    supported = ['txt', 'yml']
-
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
     common.setup_global_opts(parser)
     parser.add_argument("-l", "--list", action="store_true", default=False,
                         help=_("List files that would be reformatted"))
     parser.add_argument("-t", "--to", default=None,
-                        help=_("Rewrite to a specific format: ") + ', '.join(supported))
+                        help=_("Rewrite to a specific format: ") + ', '.join(SUPPORTED_FORMATS))
     parser.add_argument("appid", nargs='*', help=_("applicationId in the form APPID"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
@@ -73,14 +74,14 @@ def main():
     if options.list and options.to is not None:
         parser.error(_("Cannot use --list and --to at the same time"))
 
-    if options.to is not None and options.to not in supported:
+    if options.to is not None and options.to not in SUPPORTED_FORMATS:
         parser.error(_("Unsupported metadata format, use: --to [{supported}]")
-                     .format(supported=' '.join(supported)))
+                     .format(supported=' '.join(SUPPORTED_FORMATS)))
 
     for appid, app in apps.items():
         path = app.metadatapath
         base, ext = common.get_extension(path)
-        if not options.to and ext not in supported:
+        if not options.to and ext not in SUPPORTED_FORMATS:
             logging.info(_("Ignoring {ext} file at '{path}'").format(ext=ext, path=path))
             continue
         elif options.to is not None:
