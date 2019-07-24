@@ -15,8 +15,10 @@ import tempfile
 import unittest
 import yaml
 import zipfile
+import textwrap
 from binascii import unhexlify
 from distutils.version import LooseVersion
+from testcommon import TmpCwd
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -832,6 +834,87 @@ class UpdateTest(unittest.TestCase):
         # pylint: disable=protected-access
         icons_src = fdroidserver.update._get_apk_icons_src('urzip-release.apk', None)
         assert icons_src == {}
+
+    def test_create_metadata_from_template_empty_keys(self):
+        apk = {'packageName': 'rocks.janicerand'}
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.mkdir('metadata')
+            with open('template.yml', 'w') as f:
+                f.write(textwrap.dedent('''\
+                    Disabled:
+                    Provides:
+                    License:
+                    AuthorName:
+                    AuthorEmail:
+                    AuthorWebSite:
+                    WebSite:
+                    SourceCode:
+                    IssueTracker:
+                    Translation:
+                    Changelog:
+                    Donate:
+                    FlattrID:
+                    LiberapayID:
+                    Bitcoin:
+                    Litecoin:
+                    Name:
+                    AutoName:
+                    Summary:
+                    RequiresRoot:
+                    RepoType:
+                    Repo:
+                    Binaries:
+                    Builds:
+                    ArchivePolicy:
+                    AutoUpdateMode:
+                    UpdateCheckMode:
+                    UpdateCheckIgnore:
+                    VercodeOperation:
+                    UpdateCheckName:
+                    UpdateCheckData:
+                    CurrentVersion:
+                    CurrentVersionCode:
+                    NoSourceSince:
+                    '''))
+            fdroidserver.update.create_metadata_from_template(apk)
+            with open(os.path.join('metadata', 'rocks.janicerand.yml')) as f:
+                metadata_content = yaml.load(f)
+                self.maxDiff = None
+                self.assertDictEqual(metadata_content,
+                                     {'ArchivePolicy': '',
+                                      'AuthorEmail': '',
+                                      'AuthorName': '',
+                                      'AuthorWebSite': '',
+                                      'AutoName': 'rocks.janicerand',
+                                      'AutoUpdateMode': '',
+                                      'Binaries': '',
+                                      'Bitcoin': '',
+                                      'Builds': '',
+                                      'Changelog': '',
+                                      'CurrentVersion': '',
+                                      'CurrentVersionCode': '',
+                                      'Disabled': '',
+                                      'Donate': '',
+                                      'FlattrID': '',
+                                      'IssueTracker': '',
+                                      'LiberapayID': '',
+                                      'License': '',
+                                      'Litecoin': '',
+                                      'Name': 'rocks.janicerand',
+                                      'NoSourceSince': '',
+                                      'Provides': '',
+                                      'Repo': '',
+                                      'RepoType': '',
+                                      'RequiresRoot': '',
+                                      'SourceCode': '',
+                                      'Summary': 'rocks.janicerand',
+                                      'Translation': '',
+                                      'UpdateCheckData': '',
+                                      'UpdateCheckIgnore': '',
+                                      'UpdateCheckMode': '',
+                                      'UpdateCheckName': '',
+                                      'VercodeOperation': '',
+                                      'WebSite': ''})
 
 
 if __name__ == "__main__":
