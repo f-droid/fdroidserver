@@ -1,0 +1,152 @@
+#!/usr/bin/env python3
+
+#
+#  command which created the keystore used in this test case:
+#
+#  $ for ALIAS in 'repokey a163ec9b d2d51ff2 dc3b169e 78688a0f'; \
+#        do keytool -genkey -keystore dummy-keystore.jks \
+#        -alias $ALIAS -keyalg 'RSA' -keysize '2048' \
+#        -validity '10000' -storepass 123456 \
+#        -keypass 123456 -dname 'CN=test, OU=F-Droid'; done
+#
+
+import inspect
+import logging
+import optparse
+import os
+import sys
+import unittest
+import tempfile
+import textwrap
+from unittest import mock
+from testcommon import TmpCwd
+
+localmodule = os.path.realpath(
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
+print('localmodule: ' + localmodule)
+if localmodule not in sys.path:
+    sys.path.insert(0, localmodule)
+
+from fdroidserver import common
+from fdroidserver import rewritemeta
+from fdroidserver.exception import FDroidException
+
+
+class RewriteMetaTest(unittest.TestCase):
+    '''fdroidserver/publish.py'''
+
+    def setUp(self):
+        logging.basicConfig(level=logging.DEBUG)
+        self.basedir = os.path.join(localmodule, 'tests')
+        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
+        if not os.path.exists(self.tmpdir):
+            os.makedirs(self.tmpdir)
+        os.chdir(self.basedir)
+
+    def test_rewrite_scenario_trivial(self):
+
+        sys.argv.append('a')
+        sys.argv.append('b')
+
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.mkdir('metadata')
+            with open('metadata/a.txt', 'w') as f:
+                f.write('Auto Name:a')
+            with open('metadata/b.yml', 'w') as f:
+                f.write('AutoName: b')
+
+            rewritemeta.main()
+
+            with open('metadata/a.txt') as f:
+                self.assertEqual(f.read(), textwrap.dedent('''\
+                    Categories:
+                    License:Unknown
+                    Web Site:
+                    Source Code:
+                    Issue Tracker:
+
+                    Auto Name:a
+
+                    Auto Update Mode:None
+                    Update Check Mode:None
+                    '''))
+
+            with open('metadata/b.yml') as f:
+                self.assertEqual(f.read(), textwrap.dedent('''\
+                    License: Unknown
+
+                    AutoName: b
+
+                    AutoUpdateMode: None
+                    UpdateCheckMode: None
+                    '''))
+
+        # cleanup argv
+        sys.argv.remove('b')
+        sys.argv.remove('a')
+
+    def test_rewrite_scenario_txt_to_yml(self):
+
+        sys.argv.append('--to')
+        sys.argv.append('yml')
+        sys.argv.append('a')
+
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.mkdir('metadata')
+            with open('metadata/a.txt', 'w') as f:
+                f.write('Auto Name:a')
+
+            rewritemeta.main()
+
+            with open('metadata/a.yml') as f:
+                self.assertEqual(f.read(), textwrap.dedent('''\
+                    License: Unknown
+
+                    AutoName: a
+
+                    AutoUpdateMode: None
+                    UpdateCheckMode: None
+                    '''))
+
+        sys.argv.remove('a')
+        sys.argv.remove('yml')
+        sys.argv.remove('--to')
+
+    def test_rewrite_scenario_txt_to_yml_no_ruamel(self):
+
+        sys.argv.append('--to')
+        sys.argv.append('yml')
+        sys.argv.append('a')
+
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.mkdir('metadata')
+            with open('metadata/a.txt', 'w') as f:
+                f.write('Auto Name:a')
+
+            def boom(mf, app):
+                raise FDroidException()
+
+            with mock.patch('fdroidserver.metadata.write_yaml', boom):
+                with self.assertRaises(FDroidException):
+                    rewritemeta.main()
+
+            with open('metadata/a.txt') as f:
+                self.assertEqual(f.read(), textwrap.dedent('''\
+                    Auto Name:a'''))
+
+        sys.argv.remove('a')
+        sys.argv.remove('yml')
+        sys.argv.remove('--to')
+
+
+if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+
+    parser = optparse.OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    (common.options, args) = parser.parse_args(['--verbose'])
+
+    newSuite = unittest.TestSuite()
+    newSuite.addTest(unittest.makeSuite(RewriteMetaTest))
+    unittest.main(failfast=False)
