@@ -110,8 +110,8 @@ class RewriteMetaTest(unittest.TestCase):
             with open('metadata/a.txt', 'w') as f:
                 f.write('Auto Name:a')
 
-            def boom(mf, app):
-                raise FDroidException()
+            def boom(*args):
+                raise FDroidException(' '.join((str(x) for x in args)))
 
             with mock.patch('fdroidserver.metadata.write_yaml', boom):
                 with self.assertRaises(FDroidException):
@@ -128,10 +128,10 @@ class RewriteMetaTest(unittest.TestCase):
             with open('metadata/a.yml', 'w') as f:
                 f.write('AutoName: a')
 
-            def boom(mf, app):
-                raise FDroidException()
+            def boom(*args):
+                raise FDroidException(' '.join((str(x) for x in args)))
 
-            with mock.patch('fdroidserver.metadata.write_yaml', boom):
+            with mock.patch('importlib.util.find_spec', boom):
                 with self.assertRaises(FDroidException):
                     rewritemeta.main()
 
