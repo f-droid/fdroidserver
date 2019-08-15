@@ -1,4 +1,16 @@
 
+### 1.1.4 (2019-08-15)
+
+* include bitcoin validation regex required by fdroiddata
+
+* merged Debian patches to fix test suite there
+
+### 1.1.3 (2019-07-03)
+
+* fixed test suite when run from source tarball
+
+* fixed test runs in Debian
+
 ### 1.1.2 (2019-03-29)
 
 * fix bug while downloading repo index ([!636](https://gitlab.com/fdroid/fdroidserver/merge_requests/636))
