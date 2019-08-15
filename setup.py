@@ -48,11 +48,13 @@ def get_data_files():
         data_files.append((d, [f, ]))
     return data_files
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 
 setup(name='fdroidserver',
       version='1.1.4',
       description='F-Droid Server Tools',
-      long_description='README.md',
+      long_description=long_description,
       long_description_content_type='text/markdown',
       author='The F-Droid Project',
       author_email='team@f-droid.org',
