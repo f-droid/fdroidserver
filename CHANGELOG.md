@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## [Unreleased]
+### Added
+* makebuildserver: added ndk r20
+  ([!663](https://gitlab.com/fdroid/fdroidserver/merge_requests/663))
+* added support for gradle 5.5.1
+  ([!656](https://gitlab.com/fdroid/fdroidserver/merge_requests/656))
+
+### Fixed
+* checkupdates: UpdateCheckIngore gets properly observed now
+  ([!659](https://gitlab.com/fdroid/fdroidserver/merge_requests/659),
+  [!660](https://gitlab.com/fdroid/fdroidserver/merge_requests/660))
+* import: `template.yml` now supports omitting values
+  ([!657](https://gitlab.com/fdroid/fdroidserver/merge_requests/657))
+* build: deploying buildlogs with rsync
+  ([!651](https://gitlab.com/fdroid/fdroidserver/merge_requests/651))
+
 ## [1.1.4] - 2019-08-15
 ### Fixed
 * include bitcoin validation regex required by fdroiddata
@@ -16,7 +32,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## [1.1.2] - 2019-03-29
 ### Fixed
-* fix bug while downloading repo index ([!636](https://gitlab.com/fdroid/fdroidserver/merge_requests/636))
+* fix bug while downloading repo index
+  ([!636](https://gitlab.com/fdroid/fdroidserver/merge_requests/636))
 
 ## [1.1.1] - 2019-02-03
 ### Fixed
