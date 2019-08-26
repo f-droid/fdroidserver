@@ -52,7 +52,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(name='fdroidserver',
-      version='1.1.4',
+      version='1.1.5',
       description='F-Droid Server Tools',
       long_description=long_description,
       long_description_content_type='text/markdown',
