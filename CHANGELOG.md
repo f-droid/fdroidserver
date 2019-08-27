@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 * checkupdates: UpdateCheckIngore gets properly observed now
   ([!659](https://gitlab.com/fdroid/fdroidserver/merge_requests/659),
   [!660](https://gitlab.com/fdroid/fdroidserver/merge_requests/660))
+* keep yaml metadata when rewrite failed
+  ([!658](https://gitlab.com/fdroid/fdroidserver/merge_requests/658))
 * import: `template.yml` now supports omitting values
   ([!657](https://gitlab.com/fdroid/fdroidserver/merge_requests/657))
 * build: deploying buildlogs with rsync
