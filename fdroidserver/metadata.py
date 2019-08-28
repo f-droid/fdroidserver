@@ -27,6 +27,7 @@ import logging
 import textwrap
 import io
 import yaml
+import importlib
 from collections import OrderedDict
 
 import fdroidserver.common
@@ -1584,15 +1585,15 @@ def write_metadata(metadatapath, app):
         warn_or_exception(_('Cannot write "{path}", not an accepted format, use: {formats}')
                           .format(path=metadatapath, formats=', '.join(accepted)))
 
-    try:
+    if ext == 'txt':
         with open(metadatapath, 'w') as mf:
-            if ext == 'txt':
-                return write_txt(mf, app)
-            elif ext == 'yml':
+            return write_txt(mf, app)
+    elif ext == 'yml':
+        if importlib.util.find_spec('ruamel.yaml'):
+            with open(metadatapath, 'w') as mf:
                 return write_yaml(mf, app)
-    except FDroidException as e:
-        os.remove(metadatapath)
-        raise e
+        else:
+            raise FDroidException('ruamel.yaml not installed, can not write metadata.')
 
     warn_or_exception(_('Unknown metadata format: %s') % metadatapath)
 
