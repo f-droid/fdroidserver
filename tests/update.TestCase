@@ -66,9 +66,10 @@ class UpdateTest(unittest.TestCase):
         shutil.copytree(os.path.join('source-files', 'eu.siacs.conversations'),
                         os.path.join('build', 'eu.siacs.conversations'))
 
+        testfilename = 'icon_yAfSvPRJukZzMMfUzvbYqwaD1XmHXNtiPBtuPVHW-6s=.png'
         testfile = os.path.join('repo', 'org.videolan.vlc', 'en-US', 'icon.png')
         cpdir = os.path.join('metadata', 'org.videolan.vlc', 'en-US')
-        cpfile = os.path.join(cpdir, 'icon.png')
+        cpfile = os.path.join(cpdir, testfilename)
         os.makedirs(cpdir, exist_ok=True)
         shutil.copy(testfile, cpfile)
         shutil.copystat(testfile, cpfile)
@@ -98,8 +99,12 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.insert_localized_app_metadata(apps)
 
         appdir = os.path.join('repo', 'info.guardianproject.urzip', 'en-US')
-        self.assertTrue(os.path.isfile(os.path.join(appdir, 'icon.png')))
-        self.assertTrue(os.path.isfile(os.path.join(appdir, 'featureGraphic.png')))
+        self.assertTrue(os.path.isfile(os.path.join(
+            appdir,
+            'icon_NJXNzMcyf-v9i5a1ElJi0j9X1LvllibCa48xXYPlOqQ=.png')))
+        self.assertTrue(os.path.isfile(os.path.join(
+            appdir,
+            'featureGraphic_GFRT5BovZsENGpJq1HqPODGWBRPWQsx25B95Ol5w_wU=.png')))
 
         self.assertEqual(6, len(apps))
         for packageName, app in apps.items():
@@ -112,16 +117,20 @@ class UpdateTest(unittest.TestCase):
                 self.assertEqual('title\n', app['localized']['en-US']['name'])
                 self.assertEqual('short description\n', app['localized']['en-US']['summary'])
                 self.assertEqual('video\n', app['localized']['en-US']['video'])
-                self.assertEqual('icon.png', app['localized']['en-US']['icon'])
-                self.assertEqual('featureGraphic.png', app['localized']['en-US']['featureGraphic'])
+                self.assertEqual('icon_NJXNzMcyf-v9i5a1ElJi0j9X1LvllibCa48xXYPlOqQ=.png',
+                                 app['localized']['en-US']['icon'])
+                self.assertEqual('featureGraphic_GFRT5BovZsENGpJq1HqPODGWBRPWQsx25B95Ol5w_wU=.png',
+                                 app['localized']['en-US']['featureGraphic'])
                 self.assertEqual('100\n', app['localized']['en-US']['whatsNew'])
             elif packageName == 'org.videolan.vlc':
-                self.assertEqual('icon.png', app['localized']['en-US']['icon'])
+                self.assertEqual(testfilename, app['localized']['en-US']['icon'])
                 self.assertEqual(9, len(app['localized']['en-US']['phoneScreenshots']))
                 self.assertEqual(15, len(app['localized']['en-US']['sevenInchScreenshots']))
             elif packageName == 'obb.mainpatch.current':
-                self.assertEqual('icon.png', app['localized']['en-US']['icon'])
-                self.assertEqual('featureGraphic.png', app['localized']['en-US']['featureGraphic'])
+                self.assertEqual('icon_WI0pkO3LsklrsTAnRr-OQSxkkoMY41lYe2-fAvXLiLg=.png',
+                                 app['localized']['en-US']['icon'])
+                self.assertEqual('featureGraphic_ffhLaojxbGAfu9ROe1MJgK5ux8d0OVc6b65nmvOBaTk=.png',
+                                 app['localized']['en-US']['featureGraphic'])
                 self.assertEqual(1, len(app['localized']['en-US']['phoneScreenshots']))
                 self.assertEqual(1, len(app['localized']['en-US']['sevenInchScreenshots']))
             elif packageName == 'com.nextcloud.client':
