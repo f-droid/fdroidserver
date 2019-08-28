@@ -842,7 +842,6 @@ class UpdateTest(unittest.TestCase):
             with open('template.yml', 'w') as f:
                 f.write(textwrap.dedent('''\
                     Disabled:
-                    Provides:
                     License:
                     AuthorName:
                     AuthorEmail:
@@ -902,7 +901,6 @@ class UpdateTest(unittest.TestCase):
                                       'Litecoin': '',
                                       'Name': 'rocks.janicerand',
                                       'NoSourceSince': '',
-                                      'Provides': '',
                                       'Repo': '',
                                       'RepoType': '',
                                       'RequiresRoot': '',
