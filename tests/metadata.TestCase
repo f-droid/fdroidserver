@@ -367,6 +367,25 @@ class MetadataTest(unittest.TestCase):
                                                   'prebuild': "a && b && "
                                                               "sed -i 's,a,b,'"}]})
 
+    def test_parse_yaml_provides_should_be_ignored(self):
+        mf = io.StringIO(textwrap.dedent("""\
+            Provides: this.is.deprecated
+            AutoName: F-Droid
+            RepoType: git
+            Builds:
+                - versionCode: 1
+                  versionName: v0.1.0
+                  prebuild: |-
+                    a && b && sed -i 's,a,b,'
+            """))
+        mf.name = 'mock_filename.yaml'
+        mf.seek(0)
+        result = {}
+        with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
+            fdroidserver.metadata.parse_yaml_metadata(mf, result)
+            self.assertNotIn('Provides', result)
+            self.assertNotIn('provides', result)
+
     def test_write_yaml_1_line_scripts_as_string(self):
         mf = io.StringIO()
         app = fdroidserver.metadata.App()
@@ -516,6 +535,34 @@ class MetadataTest(unittest.TestCase):
                   - ./gradlew someSpecialTask
                   - sed -i 'd/that wrong config/' gradle.properties
                   - ./gradlew compile
+
+            AutoUpdateMode: None
+            UpdateCheckMode: None
+            """))
+
+    def test_write_yaml_make_sure_provides_does_not_get_written(self):
+        mf = io.StringIO()
+        app = fdroidserver.metadata.App()
+        app.Categories = ['None']
+        app.Provides = 'this.is.deprecated'
+        app.builds = []
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 102030
+        build.versionName = 'v1.2.3'
+        build.gradle = ['yes']
+        app.builds.append(build)
+        fdroidserver.metadata.write_yaml(mf, app)
+        mf.seek(0)
+        self.assertEqual(mf.read(), textwrap.dedent("""\
+            Categories:
+              - None
+            License: Unknown
+
+            Builds:
+              - versionName: v1.2.3
+                versionCode: 102030
+                gradle:
+                  - yes
 
             AutoUpdateMode: None
             UpdateCheckMode: None

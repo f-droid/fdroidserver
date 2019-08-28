@@ -53,7 +53,7 @@ def warn_or_exception(value):
 app_fields = set([
     'Disabled',
     'AntiFeatures',
-    'Provides',
+    'Provides',  # deprecated, txt only
     'Categories',
     'License',
     'Author Name',
@@ -97,7 +97,6 @@ app_fields = set([
 yaml_app_field_order = [
     'Disabled',
     'AntiFeatures',
-    'Provides',
     'Categories',
     'License',
     'AuthorName',
@@ -1073,12 +1072,25 @@ def parse_json_metadata(mf, app):
 def parse_yaml_metadata(mf, app):
     yamldata = yaml.safe_load(mf)
 
+    deprecated_in_yaml = ['Provides']
+
     if yamldata:
         for field in yamldata:
             if field not in yaml_app_fields:
-                warn_or_exception(_("Unrecognised app field '{fieldname}' "
-                                    "in '{path}'").format(fieldname=field,
-                                                          path=mf.name))
+                if field not in deprecated_in_yaml:
+                    warn_or_exception(_("Unrecognised app field "
+                                        "'{fieldname}' in '{path}'")
+                                      .format(fieldname=field,
+                                              path=mf.name))
+
+        for deprecated_field in deprecated_in_yaml:
+            if deprecated_field in yamldata:
+                logging.warning(_("Ignoring '{field}' in '{metapath}' "
+                                  "metadata because it is deprecated.")
+                                .format(field=deprecated_field,
+                                        metapath=mf.name))
+                del(yamldata[deprecated_field])
+
         if yamldata.get('Builds', None):
             for build in yamldata.get('Builds', []):
                 # put all build flag keywords into a set to avoid
