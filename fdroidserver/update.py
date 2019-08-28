@@ -707,33 +707,52 @@ def _set_author_entry(app, key, f):
             app[key] = text
 
 
-def _strip_and_copy_image(inpath, outpath):
+def _strip_and_copy_image(in_file, outpath):
     """Remove any metadata from image and copy it to new path
 
     Sadly, image metadata like EXIF can be used to exploit devices.
     It is not used at all in the F-Droid ecosystem, so its much safer
     just to remove it entirely.
 
-    """
+    This uses size+mtime to check for a new file since this process
+    actually modifies the resulting file to strip out the EXIF.
 
-    extension = common.get_extension(inpath)[1]
+    outpath can be path to either a file or dir.  The dir that outpath
+    refers to must exist before calling this.
+
+    """
+    logging.debug('copying ' + in_file + ' ' + outpath)
+
     if os.path.isdir(outpath):
-        outpath = os.path.join(outpath, os.path.basename(inpath))
+        out_file = os.path.join(outpath, os.path.basename(in_file))
+    else:
+        out_file = outpath
+
+    if os.path.exists(out_file):
+        in_stat = os.stat(in_file)
+        out_stat = os.stat(out_file)
+        if in_stat.st_size == out_stat.st_size \
+           and in_stat.st_mtime == out_stat.st_mtime:
+            return
+
+    extension = common.get_extension(in_file)[1]
     if extension == 'png':
-        with open(inpath, 'rb') as fp:
+        with open(in_file, 'rb') as fp:
             in_image = Image.open(fp)
-            in_image.save(outpath, "PNG", optimize=True,
+            in_image.save(out_file, "PNG", optimize=True,
                           pnginfo=BLANK_PNG_INFO, icc_profile=None)
     elif extension == 'jpg' or extension == 'jpeg':
-        with open(inpath, 'rb') as fp:
+        with open(in_file, 'rb') as fp:
             in_image = Image.open(fp)
             data = list(in_image.getdata())
             out_image = Image.new(in_image.mode, in_image.size)
         out_image.putdata(data)
-        out_image.save(outpath, "JPEG", optimize=True)
+        out_image.save(out_file, "JPEG", optimize=True)
     else:
         raise FDroidException(_('Unsupported file type "{extension}" for repo graphic')
                               .format(extension=extension))
+    stat_result = os.stat(in_file)
+    os.utime(out_file, times=(stat_result.st_atime, stat_result.st_mtime))
 
 
 def copy_triple_t_store_metadata(apps):
@@ -845,7 +864,6 @@ def copy_triple_t_store_metadata(apps):
                         os.makedirs(destdir, mode=0o755, exist_ok=True)
                         sourcefile = os.path.join(root, f)
                         destfile = os.path.join(destdir, repofilename)
-                        logging.debug('copying ' + sourcefile + ' ' + destfile)
                         _strip_and_copy_image(sourcefile, destfile)
 
 
@@ -934,7 +952,6 @@ def insert_localized_app_metadata(apps):
                     destdir = os.path.join('repo', packageName, locale)
                 if base in GRAPHIC_NAMES and extension in ALLOWED_EXTENSIONS:
                     os.makedirs(destdir, mode=0o755, exist_ok=True)
-                    logging.debug('copying ' + os.path.join(root, f) + ' ' + destdir)
                     _strip_and_copy_image(os.path.join(root, f), destdir)
             for d in dirs:
                 if d in SCREENSHOT_DIRS:
@@ -946,7 +963,6 @@ def insert_localized_app_metadata(apps):
                         if extension in ALLOWED_EXTENSIONS:
                             screenshotdestdir = os.path.join(destdir, d)
                             os.makedirs(screenshotdestdir, mode=0o755, exist_ok=True)
-                            logging.debug('copying ' + f + ' ' + screenshotdestdir)
                             _strip_and_copy_image(f, screenshotdestdir)
 
     repofiles = sorted(glob.glob(os.path.join('repo', '[A-Za-z]*', '[a-z][a-z]*')))

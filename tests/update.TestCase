@@ -66,6 +66,13 @@ class UpdateTest(unittest.TestCase):
         shutil.copytree(os.path.join('source-files', 'eu.siacs.conversations'),
                         os.path.join('build', 'eu.siacs.conversations'))
 
+        testfile = os.path.join('repo', 'org.videolan.vlc', 'en-US', 'icon.png')
+        cpdir = os.path.join('metadata', 'org.videolan.vlc', 'en-US')
+        cpfile = os.path.join(cpdir, 'icon.png')
+        os.makedirs(cpdir, exist_ok=True)
+        shutil.copy(testfile, cpfile)
+        shutil.copystat(testfile, cpfile)
+
         apps = dict()
         for packageName in ('info.guardianproject.urzip', 'org.videolan.vlc', 'obb.mainpatch.current',
                             'com.nextcloud.client', 'com.nextcloud.client.dev',
