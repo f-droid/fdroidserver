@@ -2,6 +2,7 @@
 liberapay: F-Droid-Data
 github:
     - eighthave
+tidelift: pypi/fdroidserver
 custom:
     - https://f-droid.org/about/
     - https://www.hellotux.com/f-droid
