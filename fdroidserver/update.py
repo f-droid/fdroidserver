@@ -34,6 +34,7 @@ import time
 import copy
 from datetime import datetime
 from argparse import ArgumentParser
+from base64 import urlsafe_b64encode
 
 import collections
 from binascii import hexlify
@@ -522,6 +523,18 @@ def sha256sum(filename):
     return sha.hexdigest()
 
 
+def sha256base64(filename):
+    '''Calculate the sha256 of the given file as URL-safe base64'''
+    hasher = hashlib.sha256()
+    with open(filename, 'rb') as f:
+        while True:
+            t = f.read(16384)
+            if len(t) == 0:
+                break
+            hasher.update(t)
+    return urlsafe_b64encode(hasher.digest()).decode()
+
+
 def has_known_vulnerability(filename):
     """checks for known vulnerabilities in the APK
 
@@ -707,33 +720,62 @@ def _set_author_entry(app, key, f):
             app[key] = text
 
 
-def _strip_and_copy_image(inpath, outpath):
+def _strip_and_copy_image(in_file, outpath):
     """Remove any metadata from image and copy it to new path
 
     Sadly, image metadata like EXIF can be used to exploit devices.
     It is not used at all in the F-Droid ecosystem, so its much safer
     just to remove it entirely.
 
-    """
+    This uses size+mtime to check for a new file since this process
+    actually modifies the resulting file to strip out the EXIF.
 
-    extension = common.get_extension(inpath)[1]
+    outpath can be path to either a file or dir.  The dir that outpath
+    refers to must exist before calling this.
+
+    """
+    logging.debug('copying ' + in_file + ' ' + outpath)
+
     if os.path.isdir(outpath):
-        outpath = os.path.join(outpath, os.path.basename(inpath))
+        out_file = os.path.join(outpath, os.path.basename(in_file))
+    else:
+        out_file = outpath
+
+    if os.path.exists(out_file):
+        in_stat = os.stat(in_file)
+        out_stat = os.stat(out_file)
+        if in_stat.st_size == out_stat.st_size \
+           and in_stat.st_mtime == out_stat.st_mtime:
+            return
+
+    extension = common.get_extension(in_file)[1]
     if extension == 'png':
-        with open(inpath, 'rb') as fp:
+        with open(in_file, 'rb') as fp:
             in_image = Image.open(fp)
-            in_image.save(outpath, "PNG", optimize=True,
+            in_image.save(out_file, "PNG", optimize=True,
                           pnginfo=BLANK_PNG_INFO, icc_profile=None)
     elif extension == 'jpg' or extension == 'jpeg':
-        with open(inpath, 'rb') as fp:
+        with open(in_file, 'rb') as fp:
             in_image = Image.open(fp)
             data = list(in_image.getdata())
             out_image = Image.new(in_image.mode, in_image.size)
         out_image.putdata(data)
-        out_image.save(outpath, "JPEG", optimize=True)
+        out_image.save(out_file, "JPEG", optimize=True)
     else:
         raise FDroidException(_('Unsupported file type "{extension}" for repo graphic')
                               .format(extension=extension))
+    stat_result = os.stat(in_file)
+    os.utime(out_file, times=(stat_result.st_atime, stat_result.st_mtime))
+
+
+def _get_base_hash_extension(f):
+    '''split a graphic/screenshot filename into base, sha256, and extension
+    '''
+    base, extension = common.get_extension(f)
+    sha256_index = base.find('_')
+    if sha256_index > 0:
+        return base[:sha256_index], base[sha256_index + 1:], extension
+    return base, None, extension
 
 
 def copy_triple_t_store_metadata(apps):
@@ -845,7 +887,6 @@ def copy_triple_t_store_metadata(apps):
                         os.makedirs(destdir, mode=0o755, exist_ok=True)
                         sourcefile = os.path.join(root, f)
                         destfile = os.path.join(destdir, repofilename)
-                        logging.debug('copying ' + sourcefile + ' ' + destfile)
                         _strip_and_copy_image(sourcefile, destfile)
 
 
@@ -934,7 +975,6 @@ def insert_localized_app_metadata(apps):
                     destdir = os.path.join('repo', packageName, locale)
                 if base in GRAPHIC_NAMES and extension in ALLOWED_EXTENSIONS:
                     os.makedirs(destdir, mode=0o755, exist_ok=True)
-                    logging.debug('copying ' + os.path.join(root, f) + ' ' + destdir)
                     _strip_and_copy_image(os.path.join(root, f), destdir)
             for d in dirs:
                 if d in SCREENSHOT_DIRS:
@@ -946,11 +986,10 @@ def insert_localized_app_metadata(apps):
                         if extension in ALLOWED_EXTENSIONS:
                             screenshotdestdir = os.path.join(destdir, d)
                             os.makedirs(screenshotdestdir, mode=0o755, exist_ok=True)
-                            logging.debug('copying ' + f + ' ' + screenshotdestdir)
                             _strip_and_copy_image(f, screenshotdestdir)
 
-    repofiles = sorted(glob.glob(os.path.join('repo', '[A-Za-z]*', '[a-z][a-z]*')))
-    for d in repofiles:
+    repodirs = sorted(glob.glob(os.path.join('repo', '[A-Za-z]*', '[a-z][a-z]*')))
+    for d in repodirs:
         if not os.path.isdir(d):
             continue
         for f in sorted(glob.glob(os.path.join(d, '*.*')) + glob.glob(os.path.join(d, '*Screenshots', '*.*'))):
@@ -961,7 +1000,7 @@ def insert_localized_app_metadata(apps):
             locale = segments[2]
             screenshotdir = segments[3]
             filename = os.path.basename(f)
-            base, extension = common.get_extension(filename)
+            base, sha256, extension = _get_base_hash_extension(filename)
 
             if packageName not in apps:
                 logging.warning(_('Found "{path}" graphic without metadata for app "{name}"!')
@@ -973,7 +1012,18 @@ def insert_localized_app_metadata(apps):
                 logging.warning(_('Only PNG and JPEG are supported for graphics, found: {path}').format(path=f))
             elif base in GRAPHIC_NAMES:
                 # there can only be zero or one of these per locale
-                graphics[base] = filename
+                basename = base + '.' + extension
+                basepath = os.path.join(os.path.dirname(f), basename)
+                if sha256:
+                    if not os.path.samefile(f, basepath):
+                        os.unlink(f)
+                else:
+                    sha256 = sha256base64(f)
+                    filename = base + '_' + sha256 + '.' + extension
+                    index_file = os.path.join(os.path.dirname(f), filename)
+                    if not os.path.exists(index_file):
+                        os.link(f, index_file, follow_symlinks=False)
+                    graphics[base] = filename
             elif screenshotdir in SCREENSHOT_DIRS:
                 # there can any number of these per locale
                 logging.debug(_('adding to {name}: {path}').format(name=screenshotdir, path=f))

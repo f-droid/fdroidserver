@@ -46,12 +46,16 @@ makebuildserver.config.py
 /tests/archive/index.xml
 /tests/archive/index-v1.jar
 /tests/archive/index-v1.json
+/tests/metadata/org.videolan.vlc/en-US/icon*.png
 /tests/repo/index.jar
 /tests/repo/index_unsigned.jar
 /tests/repo/index-v1.jar
 /tests/repo/info.guardianproject.urzip/
 /tests/repo/info.guardianproject.checkey/en-US/phoneScreenshots/checkey-phone.png
 /tests/repo/info.guardianproject.checkey/en-US/phoneScreenshots/checkey.png
+/tests/repo/obb.mainpatch.current/en-US/featureGraphic_ffhLaojxbGAfu9ROe1MJgK5ux8d0OVc6b65nmvOBaTk=.png
+/tests/repo/obb.mainpatch.current/en-US/icon_WI0pkO3LsklrsTAnRr-OQSxkkoMY41lYe2-fAvXLiLg=.png
+/tests/repo/org.videolan.vlc/en-US/icon_yAfSvPRJukZzMMfUzvbYqwaD1XmHXNtiPBtuPVHW-6s=.png
 /tests/urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234.apk
 /unsigned/
 
