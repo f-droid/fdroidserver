@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
   ([!669](https://gitlab.com/fdroid/fdroidserver/merge_requests/669))
 
 ### Fixed
+* do not crash when system encoding can not be retrieved
+  ([!671](https://gitlab.com/fdroid/fdroidserver/merge_requests/671))
 * checkupdates: UpdateCheckIngore gets properly observed now
   ([!659](https://gitlab.com/fdroid/fdroidserver/merge_requests/659),
   [!660](https://gitlab.com/fdroid/fdroidserver/merge_requests/660))
