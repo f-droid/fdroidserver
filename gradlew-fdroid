@@ -152,9 +152,10 @@ v_all=${plugin_v[@]}
 # Earliest takes priority
 for f in {.,..}/gradle/wrapper/gradle-wrapper.properties; do
     [[ -f $f ]] || continue
-    while read l; do
-        if [[ $l == 'distributionUrl='* ]]; then
-            wrapper_ver=$(echo -n "$l" | sed "s/.*gradle-\\([0-9\\.\\+]\\+\\).*/\\1/")
+    while read -r line; do
+        if [[ $line == 'distributionUrl='* ]]; then
+            wrapper_ver=${line#*/gradle-}
+            wrapper_ver=${wrapper_ver%-*.zip}
             break 2
         fi
     done < $f
@@ -169,11 +170,13 @@ fi
 # Earliest takes priority
 for f in {.,..}/build.gradle; do
     [[ -f $f ]] || continue
-    while read l; do
-        if [[ -z "$plugin_pver" && $l == *'com.android.tools.build:gradle:'* ]]; then
-            plugin_pver=$(echo -n "$l" | sed "s/.*com.android.tools.build:gradle:\\([0-9\\.\\+]\\+\\).*/\\1/")
-        elif [[ -z "$wrapper_ver" && $l == *'gradleVersion = '* ]]; then
-            wrapper_ver=$(echo -n "$l" | sed "s/.*gradleVersion *=* *[\"']\\([0-9\\.]\\+\\)[\"'].*/\\1/")
+    while read -r line; do
+        if [[ -z "$plugin_pver" && $line == *'com.android.tools.build:gradle:'* ]]; then
+            plugin_pver=${line#*[\'\"]com.android.tools.build:gradle:}
+            plugin_pver=${plugin_pver%[\'\"]*}
+        elif [[ -z "$wrapper_ver" && $line == *'gradleVersion = '* ]]; then
+            wrapper_ver=${line#*gradleVersion*=*[\'\"]}
+            wrapper_ver=${wrapper_ver%[\'\"]*}
         fi
     done < $f
 done
