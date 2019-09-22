@@ -56,78 +56,77 @@ download_gradle() {
 }
 
 get_sha() {
-    declare -A gradle_hashes
-    gradle_hashes=( ["1.4"]="cd99e85fbcd0ae8b99e81c9992a2f10cceb7b5f009c3720ef3a0078f4f92e94e" \
-                    ["1.6"]="de3e89d2113923dcc2e0def62d69be0947ceac910abd38b75ec333230183fac4" \
-                    ["1.7"]="360c97d51621b5a1ecf66748c718594e5f790ae4fbc1499543e0c006033c9d30" \
-                    ["1.8"]="a342bbfa15fd18e2482287da4959588f45a41b60910970a16e6d97959aea5703" \
-                    ["1.9"]="097ddc2bcbc9da2bb08cbf6bf8079585e35ad088bafd42e8716bc96405db98e9" \
-                    ["1.10"]="6e6db4fc595f27ceda059d23693b6f6848583950606112b37dfd0e97a0a0a4fe" \
-                    ["1.11"]="07e235df824964f0e19e73ea2327ce345c44bcd06d44a0123d29ab287fc34091" \
-                    ["1.12"]="8734b13a401f4311ee418173ed6ca8662d2b0a535be8ff2a43ecb1c13cd406ea" \
-                    ["2.1"]="3eee4f9ea2ab0221b89f8e4747a96d4554d00ae46d8d633f11cfda60988bf878" \
-                    ["2.2"]="91e5655fe11ef414449f218c4fa2985b3a49b7903c57556da109c84fa26e1dfb" \
-                    ["2.2.1"]="420aa50738299327b611c10b8304b749e8d3a579407ee9e755b15921d95ff418" \
-                    ["2.3"]="010dd9f31849abc3d5644e282943b1c1c355f8e2635c5789833979ce590a3774" \
-                    ["2.4"]="c4eaecc621a81f567ded1aede4a5ddb281cc02a03a6a87c4f5502add8fc2f16f" \
-                    ["2.5"]="3f953e0cb14bb3f9ebbe11946e84071547bf5dfd575d90cfe9cc4e788da38555" \
-                    ["2.6"]="18a98c560af231dfa0d3f8e0802c20103ae986f12428bb0a6f5396e8f14e9c83" \
-                    ["2.7"]="cde43b90945b5304c43ee36e58aab4cc6fb3a3d5f9bd9449bb1709a68371cb06" \
-                    ["2.8"]="a88db9c2f104defdaa8011c58cf6cda6c114298ae3695ecfb8beb30da3a903cb" \
-                    ["2.9"]="c9159ec4362284c0a38d73237e224deae6139cbde0db4f0f44e1c7691dd3de2f" \
-                    ["2.10"]="66406247f745fc6f05ab382d3f8d3e120c339f34ef54b86f6dc5f6efc18fbb13" \
-                    ["2.11"]="8d7437082356c9fd6309a4479c8db307673965546daea445c6c72759cd6b1ed6" \
-                    ["2.12"]="e77064981906cd0476ff1e0de3e6fef747bd18e140960f1915cca8ff6c33ab5c" \
-                    ["2.13"]="0f665ec6a5a67865faf7ba0d825afb19c26705ea0597cec80dd191b0f2cbb664" \
-                    ["2.14"]="993b4f33b652c689e9721917d8e021cab6bbd3eae81b39ab2fd46fdb19a928d5" \
-                    ["2.14.1"]="cfc61eda71f2d12a572822644ce13d2919407595c2aec3e3566d2aab6f97ef39" \
-                    ["3.0"]="39c906941a474444afbddc38144ed44166825acb0a57b0551dddb04bbf157f80" \
-                    ["3.1"]="c7de3442432253525902f7e8d7eac8b5fd6ce1623f96d76916af6d0e383010fc" \
-                    ["3.2"]="5321b36837226dc0377047a328f12010f42c7bf88ee4a3b1cee0c11040082935" \
-                    ["3.2.1"]="9843a3654d3e57dce54db06d05f18b664b95c22bf90c6becccb61fc63ce60689" \
-                    ["3.3"]="c58650c278d8cf0696cab65108ae3c8d95eea9c1938e0eb8b997095d5ca9a292" \
-                    ["3.4"]="72d0cd4dcdd5e3be165eb7cd7bbd25cf8968baf400323d9ab1bba622c3f72205" \
-                    ["3.4.1"]="db1db193d479cc1202be843f17e4526660cfb0b21b57d62f3a87f88c878af9b2" \
-                    ["3.5"]="0b7450798c190ff76b9f9a3d02e18b33d94553f708ebc08ebe09bdf99111d110" \
-                    ["3.5.1"]="8dce35f52d4c7b4a4946df73aa2830e76ba7148850753d8b5e94c5dc325ceef8" \
-                    ["4.0"]="56bd2dde29ba2a93903c557da1745cafd72cdd8b6b0b83c05a40ed7896b79dfe" \
-                    ["4.0.1"]="d717e46200d1359893f891dab047fdab98784143ac76861b53c50dbd03b44fd4" \
-                    ["4.0.2"]="79ac421342bd11f6a4f404e0988baa9c1f5fabf07e3c6fa65b0c15c1c31dda22" \
-                    ["4.1"]="d55dfa9cfb5a3da86a1c9e75bb0b9507f9a8c8c100793ccec7beb6e259f9ed43" \
-                    ["4.2"]="515dd63d32e55a9c05667809c5e40a947529de3054444ad274b3b75af5582eae" \
-                    ["4.2.1"]="b551cc04f2ca51c78dd14edb060621f0e5439bdfafa6fd167032a09ac708fbc0" \
-                    ["4.3"]="8dcbf44eef92575b475dcb1ce12b5f19d38dc79e84c662670248dc8b8247654c" \
-                    ["4.3.1"]="15ebe098ce0392a2d06d252bff24143cc88c4e963346582c8d88814758d93ac7" \
-                    ["4.4"]="fa4873ae2c7f5e8c02ec6948ba95848cedced6134772a0169718eadcb39e0a2f" \
-                    ["4.4.1"]="e7cf7d1853dfc30c1c44f571d3919eeeedef002823b66b6a988d27e919686389" \
-                    ["4.5"]="03f2a43a314ff0fb843a85ef68078e06d181c4549c1e5fb983f289382b59b5e3" \
-                    ["4.5.1"]="3e2ea0d8b96605b7c528768f646e0975bd9822f06df1f04a64fd279b1a17805e" \
-                    ["4.6"]="98bd5fd2b30e070517e03c51cbb32beee3e2ee1a84003a5a5d748996d4b1b915" \
-                    ["4.7"]="fca5087dc8b50c64655c000989635664a73b11b9bd3703c7d6cabd31b7dcdb04" \
-                    ["4.8"]="f3e29692a8faa94eb0b02ebf36fa263a642b3ae8694ef806c45c345b8683f1ba" \
-                    ["4.8.1"]="af334d994b5e69e439ab55b5d2b7d086da5ea6763d78054f49f147b06370ed71" \
-                    ["4.9"]="e66e69dce8173dd2004b39ba93586a184628bc6c28461bc771d6835f7f9b0d28" \
-                    ["4.10"]="248cfd92104ce12c5431ddb8309cf713fe58de8e330c63176543320022f59f18" \
-                    ["4.10.1"]="e53ce3a01cf016b5d294eef20977ad4e3c13e761ac1e475f1ffad4c6141a92bd" \
-                    ["4.10.2"]="b49c6da1b2cb67a0caf6c7480630b51c70a11ca2016ff2f555eaeda863143a29" \
-                    ["4.10.3"]="8626cbf206b4e201ade7b87779090690447054bc93f052954c78480fa6ed186e" \
-                    ["5.0"]="6157ac9f3410bc63644625b3b3e9e96c963afd7910ae0697792db57813ee79a6" \
-                    ["5.1"]="7506638a380092a0406364c79d6c87d03d23017fc25a5770379d1ce23c3fcd4d" \
-                    ["5.1.1"]="4953323605c5d7b89e97d0dc7779e275bccedefcdac090aec123375eae0cc798" \
-                    ["5.2"]="ff322863250159595e93b5a4d17a6f0d21c59a1a0497c1e1cf1d53826485503f" \
-                    ["5.2.1"]="748c33ff8d216736723be4037085b8dc342c6a0f309081acf682c9803e407357" \
-                    ["5.3"]="bed2bdd3955be5a09ca7e0201e9d131f194f7f6c466e1795a733733ccfb09f25" \
-                    ["5.3.1"]="1c59a17a054e9c82f0dd881871c9646e943ec4c71dd52ebc6137d17f82337436" \
-                    ["5.4"]="c8c17574245ecee9ed7fe4f6b593b696d1692d1adbfef425bef9b333e3a0e8de" \
-                    ["5.4.1"]="7bdbad1e4f54f13c8a78abc00c26d44dd8709d4aedb704d913fb1bb78ac025dc" \
-                    ["5.5"]="8d78b2ed63e7f07ad169c1186d119761c4773e681f332cfe1901045b1b0141bc" \
-                    ["5.5.1"]="222a03fcf2fcaf3691767ce9549f78ebd4a77e73f9e23a396899fb70b420cd00" \
-                    ["5.6"]="15c02ef5dd3631ec02ac52e8725703e0285d9a7eecbf4e5939aa9e924604d01d" \
-                    ["5.6.1"]="0986244820e4a35d32d91df2ec4b768b5ba5d6c8246753794f85159f9963ec12" \
-                    ["5.6.2"]="32fce6628848f799b0ad3205ae8db67d0d828c10ffe62b748a7c0d9f4a5d9ee0" \
-                    )
-    [ ! ${gradle_hashes[$1]+abc} ] && exit 1
-    echo "${gradle_hashes["$1"]}"
+    case $1 in
+        '1.4')    echo 'cd99e85fbcd0ae8b99e81c9992a2f10cceb7b5f009c3720ef3a0078f4f92e94e' ;;
+        '1.6')    echo 'de3e89d2113923dcc2e0def62d69be0947ceac910abd38b75ec333230183fac4' ;;
+        '1.7')    echo '360c97d51621b5a1ecf66748c718594e5f790ae4fbc1499543e0c006033c9d30' ;;
+        '1.8')    echo 'a342bbfa15fd18e2482287da4959588f45a41b60910970a16e6d97959aea5703' ;;
+        '1.9')    echo '097ddc2bcbc9da2bb08cbf6bf8079585e35ad088bafd42e8716bc96405db98e9' ;;
+        '1.10')   echo '6e6db4fc595f27ceda059d23693b6f6848583950606112b37dfd0e97a0a0a4fe' ;;
+        '1.11')   echo '07e235df824964f0e19e73ea2327ce345c44bcd06d44a0123d29ab287fc34091' ;;
+        '1.12')   echo '8734b13a401f4311ee418173ed6ca8662d2b0a535be8ff2a43ecb1c13cd406ea' ;;
+        '2.1')    echo '3eee4f9ea2ab0221b89f8e4747a96d4554d00ae46d8d633f11cfda60988bf878' ;;
+        '2.2')    echo '91e5655fe11ef414449f218c4fa2985b3a49b7903c57556da109c84fa26e1dfb' ;;
+        '2.2.1')  echo '420aa50738299327b611c10b8304b749e8d3a579407ee9e755b15921d95ff418' ;;
+        '2.3')    echo '010dd9f31849abc3d5644e282943b1c1c355f8e2635c5789833979ce590a3774' ;;
+        '2.4')    echo 'c4eaecc621a81f567ded1aede4a5ddb281cc02a03a6a87c4f5502add8fc2f16f' ;;
+        '2.5')    echo '3f953e0cb14bb3f9ebbe11946e84071547bf5dfd575d90cfe9cc4e788da38555' ;;
+        '2.6')    echo '18a98c560af231dfa0d3f8e0802c20103ae986f12428bb0a6f5396e8f14e9c83' ;;
+        '2.7')    echo 'cde43b90945b5304c43ee36e58aab4cc6fb3a3d5f9bd9449bb1709a68371cb06' ;;
+        '2.8')    echo 'a88db9c2f104defdaa8011c58cf6cda6c114298ae3695ecfb8beb30da3a903cb' ;;
+        '2.9')    echo 'c9159ec4362284c0a38d73237e224deae6139cbde0db4f0f44e1c7691dd3de2f' ;;
+        '2.10')   echo '66406247f745fc6f05ab382d3f8d3e120c339f34ef54b86f6dc5f6efc18fbb13' ;;
+        '2.11')   echo '8d7437082356c9fd6309a4479c8db307673965546daea445c6c72759cd6b1ed6' ;;
+        '2.12')   echo 'e77064981906cd0476ff1e0de3e6fef747bd18e140960f1915cca8ff6c33ab5c' ;;
+        '2.13')   echo '0f665ec6a5a67865faf7ba0d825afb19c26705ea0597cec80dd191b0f2cbb664' ;;
+        '2.14')   echo '993b4f33b652c689e9721917d8e021cab6bbd3eae81b39ab2fd46fdb19a928d5' ;;
+        '2.14.1') echo 'cfc61eda71f2d12a572822644ce13d2919407595c2aec3e3566d2aab6f97ef39' ;;
+        '3.0')    echo '39c906941a474444afbddc38144ed44166825acb0a57b0551dddb04bbf157f80' ;;
+        '3.1')    echo 'c7de3442432253525902f7e8d7eac8b5fd6ce1623f96d76916af6d0e383010fc' ;;
+        '3.2')    echo '5321b36837226dc0377047a328f12010f42c7bf88ee4a3b1cee0c11040082935' ;;
+        '3.2.1')  echo '9843a3654d3e57dce54db06d05f18b664b95c22bf90c6becccb61fc63ce60689' ;;
+        '3.3')    echo 'c58650c278d8cf0696cab65108ae3c8d95eea9c1938e0eb8b997095d5ca9a292' ;;
+        '3.4')    echo '72d0cd4dcdd5e3be165eb7cd7bbd25cf8968baf400323d9ab1bba622c3f72205' ;;
+        '3.4.1')  echo 'db1db193d479cc1202be843f17e4526660cfb0b21b57d62f3a87f88c878af9b2' ;;
+        '3.5')    echo '0b7450798c190ff76b9f9a3d02e18b33d94553f708ebc08ebe09bdf99111d110' ;;
+        '3.5.1')  echo '8dce35f52d4c7b4a4946df73aa2830e76ba7148850753d8b5e94c5dc325ceef8' ;;
+        '4.0')    echo '56bd2dde29ba2a93903c557da1745cafd72cdd8b6b0b83c05a40ed7896b79dfe' ;;
+        '4.0.1')  echo 'd717e46200d1359893f891dab047fdab98784143ac76861b53c50dbd03b44fd4' ;;
+        '4.0.2')  echo '79ac421342bd11f6a4f404e0988baa9c1f5fabf07e3c6fa65b0c15c1c31dda22' ;;
+        '4.1')    echo 'd55dfa9cfb5a3da86a1c9e75bb0b9507f9a8c8c100793ccec7beb6e259f9ed43' ;;
+        '4.2')    echo '515dd63d32e55a9c05667809c5e40a947529de3054444ad274b3b75af5582eae' ;;
+        '4.2.1')  echo 'b551cc04f2ca51c78dd14edb060621f0e5439bdfafa6fd167032a09ac708fbc0' ;;
+        '4.3')    echo '8dcbf44eef92575b475dcb1ce12b5f19d38dc79e84c662670248dc8b8247654c' ;;
+        '4.3.1')  echo '15ebe098ce0392a2d06d252bff24143cc88c4e963346582c8d88814758d93ac7' ;;
+        '4.4')    echo 'fa4873ae2c7f5e8c02ec6948ba95848cedced6134772a0169718eadcb39e0a2f' ;;
+        '4.4.1')  echo 'e7cf7d1853dfc30c1c44f571d3919eeeedef002823b66b6a988d27e919686389' ;;
+        '4.5')    echo '03f2a43a314ff0fb843a85ef68078e06d181c4549c1e5fb983f289382b59b5e3' ;;
+        '4.5.1')  echo '3e2ea0d8b96605b7c528768f646e0975bd9822f06df1f04a64fd279b1a17805e' ;;
+        '4.6')    echo '98bd5fd2b30e070517e03c51cbb32beee3e2ee1a84003a5a5d748996d4b1b915' ;;
+        '4.7')    echo 'fca5087dc8b50c64655c000989635664a73b11b9bd3703c7d6cabd31b7dcdb04' ;;
+        '4.8')    echo 'f3e29692a8faa94eb0b02ebf36fa263a642b3ae8694ef806c45c345b8683f1ba' ;;
+        '4.8.1')  echo 'af334d994b5e69e439ab55b5d2b7d086da5ea6763d78054f49f147b06370ed71' ;;
+        '4.9')    echo 'e66e69dce8173dd2004b39ba93586a184628bc6c28461bc771d6835f7f9b0d28' ;;
+        '4.10')   echo '248cfd92104ce12c5431ddb8309cf713fe58de8e330c63176543320022f59f18' ;;
+        '4.10.1') echo 'e53ce3a01cf016b5d294eef20977ad4e3c13e761ac1e475f1ffad4c6141a92bd' ;;
+        '4.10.2') echo 'b49c6da1b2cb67a0caf6c7480630b51c70a11ca2016ff2f555eaeda863143a29' ;;
+        '4.10.3') echo '8626cbf206b4e201ade7b87779090690447054bc93f052954c78480fa6ed186e' ;;
+        '5.0')    echo '6157ac9f3410bc63644625b3b3e9e96c963afd7910ae0697792db57813ee79a6' ;;
+        '5.1')    echo '7506638a380092a0406364c79d6c87d03d23017fc25a5770379d1ce23c3fcd4d' ;;
+        '5.1.1')  echo '4953323605c5d7b89e97d0dc7779e275bccedefcdac090aec123375eae0cc798' ;;
+        '5.2')    echo 'ff322863250159595e93b5a4d17a6f0d21c59a1a0497c1e1cf1d53826485503f' ;;
+        '5.2.1')  echo '748c33ff8d216736723be4037085b8dc342c6a0f309081acf682c9803e407357' ;;
+        '5.3')    echo 'bed2bdd3955be5a09ca7e0201e9d131f194f7f6c466e1795a733733ccfb09f25' ;;
+        '5.3.1')  echo '1c59a17a054e9c82f0dd881871c9646e943ec4c71dd52ebc6137d17f82337436' ;;
+        '5.4')    echo 'c8c17574245ecee9ed7fe4f6b593b696d1692d1adbfef425bef9b333e3a0e8de' ;;
+        '5.4.1')  echo '7bdbad1e4f54f13c8a78abc00c26d44dd8709d4aedb704d913fb1bb78ac025dc' ;;
+        '5.5')    echo '8d78b2ed63e7f07ad169c1186d119761c4773e681f332cfe1901045b1b0141bc' ;;
+        '5.5.1')  echo '222a03fcf2fcaf3691767ce9549f78ebd4a77e73f9e23a396899fb70b420cd00' ;;
+        '5.6')    echo '15c02ef5dd3631ec02ac52e8725703e0285d9a7eecbf4e5939aa9e924604d01d' ;;
+        '5.6.1')  echo '0986244820e4a35d32d91df2ec4b768b5ba5d6c8246753794f85159f9963ec12' ;;
+        '5.6.2')  echo '32fce6628848f799b0ad3205ae8db67d0d828c10ffe62b748a7c0d9f4a5d9ee0' ;;
+        *) exit 1
+    esac
 }
 
 contains() {
