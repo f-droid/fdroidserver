@@ -45,10 +45,14 @@ debian_testing:
     - apt-get -qy update
     - apt-get -qy dist-upgrade
     - apt-get -qy install --no-install-recommends
-        fdroidserver git gnupg python3-defusedxml python3-setuptools
-    - sed -i -e 's,testing,sid,g' -e  's,testing,sid,g' /etc/apt/sources.list
-    - apt-get -qy update
-    - apt-get install -y --no-install-recommends aapt androguard android-platform-tools-base zipalign
+        aapt
+        androguard
+        fdroidserver
+        git
+        gnupg
+        python3-defusedxml
+        python3-setuptools
+        zipalign
     - python3 -c 'import fdroidserver'
     - python3 -c 'import androguard'
     - export ANDROID_HOME=/usr/lib/android-sdk
