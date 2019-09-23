@@ -82,7 +82,12 @@ install:
 
 # The OSX tests seem to run slower, they often timeout.  So only run
 # the test suite with the installed version of fdroid.
+#
+# macOS sticks with bash 3.x because of licenses, so avoid use new bash syntax
 script:
+  - /bin/bash --version
+  - /bin/bash -n gradlew-fdroid tests/run-tests
+
   - ./tests/run-tests
 
 after_failure:
