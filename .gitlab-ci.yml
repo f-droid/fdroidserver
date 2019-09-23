@@ -37,14 +37,29 @@ metadata_v0:
           metadata/dump_*/*.yaml
     - diff -uw metadata/dump_*
 
+.apt-template: &apt-template
+  variables:
+    DEBIAN_FRONTEND: noninteractive
+    LANG: C.UTF-8
+  before_script:
+    - echo Etc/UTC > /etc/timezone
+    - echo 'APT::Install-Recommends "0";'
+           'APT::Install-Suggests "0";'
+           'APT::Acquire::Retries "20";'
+           'APT::Get::Assume-Yes "true";'
+           'Dpkg::Use-Pty "0";'
+           'quiet "1";'
+        >> /etc/apt/apt.conf.d/99gitlab
+    - apt-get update
+    - apt-get dist-upgrade
+
 debian_testing:
   image: debian:testing
+  <<: *apt-template
   only:
     - master@fdroid/fdroidserver
   script:
-    - apt-get -qy update
-    - apt-get -qy dist-upgrade
-    - apt-get -qy install --no-install-recommends
+    - apt-get install
         aapt
         androguard
         fdroidserver
@@ -55,30 +70,24 @@ debian_testing:
         zipalign
     - python3 -c 'import fdroidserver'
     - python3 -c 'import androguard'
-    - export ANDROID_HOME=/usr/lib/android-sdk
-    - export LANG=C.UTF-8
     - cd tests
     - ./run-tests
 
 # test using LTS set up with the PPA, including Recommends
 ubuntu_lts_ppa:
   image: ubuntu:latest
+  <<: *apt-template
   only:
     - master@fdroid/fdroidserver
-  variables:
-    ANDROID_HOME: /usr/lib/android-sdk
-    DEBIAN_FRONTEND: noninteractive
-    LANG: C.UTF-8
   script:
-    - echo Etc/UTC > /etc/timezone
-    - apt-get -qy update
-    - apt-get -qy install gnupg
+    - export ANDROID_HOME=/usr/lib/android-sdk
+    - apt-get install gnupg
     - while ! apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-key 9AAC253193B65D4DF1D0A13EEC4632C79C5E0151; do sleep 15; done
     - export RELEASE=`sed -n 's,^deb [^ ][^ ]* \([a-z]*\).*,\1,p' /etc/apt/sources.list | head -1`
     - echo "deb http://ppa.launchpad.net/fdroid/fdroidserver/ubuntu $RELEASE main" >> /etc/apt/sources.list
-    - apt-get -qy update
-    - apt-get -qy dist-upgrade
-    - apt-get -qy install --install-recommends binfmt-support fdroidserver git python3-defusedxml python3-setuptools
+    - apt-get update
+    - apt-get dist-upgrade
+    - apt-get install --install-recommends binfmt-support fdroidserver git python3-defusedxml python3-setuptools
     - grep binfmt /proc/modules || apt -qy purge apksigner
     - cd tests
     - ./run-tests
@@ -87,16 +96,11 @@ ubuntu_lts_ppa:
 # apksigner is recommended, but requires binfmt support in the kernel
 ubuntu_xenial_pip:
   image: ubuntu:xenial
+  <<: *apt-template
   only:
     - master@fdroid/fdroidserver
-  variables:
-    DEBIAN_FRONTEND: noninteractive
-    LANG: C.UTF-8
   script:
-    - echo Etc/UTC > /etc/timezone
-    - apt-get -qy update
-    - apt-get -qy dist-upgrade
-    - apt-get -qy install --no-install-recommends git default-jdk-headless python3-pip python3-venv rsync zipalign
+    - apt-get install git default-jdk-headless python3-pip python3-venv rsync zipalign
     - rm -rf env
     - pyvenv env
     - . env/bin/activate
