@@ -46,8 +46,8 @@ install:
   - brew uninstall java --force || true
   - brew cask uninstall java --force || true
   - brew tap adoptopenjdk/openjdk
-  - brew cask install adoptopenjdk8
-  - brew cask install android-sdk
+  - travis_retry brew cask install adoptopenjdk8
+  - travis_retry brew cask install android-sdk
 
   - export AAPT_VERSION=`sed -n "s,^MINIMUM_AAPT_VERSION\s*=\s*['\"]\(.*\)[['\"],\1,p" fdroidserver/common.py`
   - mkdir -p "$ANDROID_HOME/licenses"
@@ -82,7 +82,12 @@ install:
 
 # The OSX tests seem to run slower, they often timeout.  So only run
 # the test suite with the installed version of fdroid.
+#
+# macOS sticks with bash 3.x because of licenses, so avoid use new bash syntax
 script:
+  - /bin/bash --version
+  - /bin/bash -n gradlew-fdroid tests/run-tests
+
   - ./tests/run-tests
 
 after_failure:
