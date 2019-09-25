@@ -2403,7 +2403,7 @@ class KnownApks:
         self.path = os.path.join('stats', 'known_apks.txt')
         self.apks = {}
         if os.path.isfile(self.path):
-            with open(self.path, 'r') as f:
+            with open(self.path, 'r', encoding='utf-8') as f:
                 for line in f:
                     t = line.rstrip().split(' ')
                     if len(t) == 2:
