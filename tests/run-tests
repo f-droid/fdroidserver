@@ -99,6 +99,10 @@ if [ -z "$1" ]; then
 else
     APKDIR=$1
 fi
+if [ ! -d "$APKDIR" ]; then
+    echo "ERROR: '$APKDIR' does not exist!"
+    exit 1
+fi
 
 if [ -z $WORKSPACE ]; then
     WORKSPACE=`dirname $(pwd)`
