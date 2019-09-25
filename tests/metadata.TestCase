@@ -231,8 +231,8 @@ class MetadataTest(unittest.TestCase):
             self.maxDiff = None
             file_name = 'fake.ota.update.yml'
             self.assertEqual(
-                (testdir / file_name).read_text(),
-                (Path('metadata-rewrite-yml') / file_name).read_text(),
+                (testdir / file_name).read_text(encoding='utf-8'),
+                (Path('metadata-rewrite-yml') / file_name).read_text(encoding='utf-8'),
             )
 
     def test_rewrite_yaml_fdroidclient(self):
@@ -253,8 +253,8 @@ class MetadataTest(unittest.TestCase):
             self.maxDiff = None
             file_name = 'org.fdroid.fdroid.yml'
             self.assertEqual(
-                (testdir / file_name).read_text(),
-                (Path('metadata-rewrite-yml') / file_name).read_text(),
+                (testdir / file_name).read_text(encoding='utf-8'),
+                (Path('metadata-rewrite-yml') / file_name).read_text(encoding='utf-8'),
             )
 
     def test_rewrite_yaml_special_build_params(self):
@@ -274,8 +274,8 @@ class MetadataTest(unittest.TestCase):
             self.maxDiff = None
             file_name = 'app.with.special.build.params.yml'
             self.assertEqual(
-                (testdir / file_name).read_text(),
-                (Path('metadata-rewrite-yml') / file_name).read_text(),
+                (testdir / file_name).read_text(encoding='utf-8'),
+                (Path('metadata-rewrite-yml') / file_name).read_text(encoding='utf-8'),
             )
 
     def test_post_parse_yaml_metadata(self):

@@ -1859,7 +1859,7 @@ def get_gradle_subdir(build_dir, paths):
         if not first_gradle_dir:
             first_gradle_dir = path.parent.relative_to(build_dir)
         if path.exists() and SETTINGS_GRADLE_REGEX.match(str(path.name)):
-            for m in GRADLE_SUBPROJECT_REGEX.finditer(path.read_text()):
+            for m in GRADLE_SUBPROJECT_REGEX.finditer(path.read_text(encoding='utf-8')):
                 for f in (path.parent / m.group(1)).glob('build.gradle*'):
                     with f.open() as fp:
                         for line in fp.readlines():
