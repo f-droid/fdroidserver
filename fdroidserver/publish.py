@@ -88,10 +88,10 @@ def read_fingerprints_from_keystore():
     if p.returncode != 0:
         raise FDroidException('could not read keystore {}'.format(config['keystore']))
 
-    realias = re.compile('Alias name: (?P<alias>.+)\n')
-    resha256 = re.compile(r'\s+SHA256: (?P<sha256>[:0-9A-F]{95})\n')
+    realias = re.compile('Alias name: (?P<alias>.+)' + os.linesep)
+    resha256 = re.compile(r'\s+SHA256: (?P<sha256>[:0-9A-F]{95})' + os.linesep)
     fps = {}
-    for block in p.output.split(('*' * 43) + '\n' + '*' * 43):
+    for block in p.output.split(('*' * 43) + os.linesep + '*' * 43):
         s_alias = realias.search(block)
         s_sha256 = resha256.search(block)
         if s_alias and s_sha256:
