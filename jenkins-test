@@ -37,7 +37,7 @@ cd tests
 if [ ! -e $WORKSPACE/fdroiddata/repo ]; then
     echo "WARNING: $WORKSPACE/fdroiddata/repo does not exist, making placeholder!"
     mkdir $WORKSPACE/fdroiddata/repo
-    cp $WORKSPACE/tests/repo/*.apk $WORKSPACE/fdroiddata/repo/
+    cp $WORKSPACE/tests/repo/*obb.*.apk $WORKSPACE/fdroiddata/repo/
 fi
 ./run-tests $WORKSPACE/fdroiddata/repo
 
