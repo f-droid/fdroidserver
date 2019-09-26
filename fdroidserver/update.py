@@ -733,6 +733,8 @@ def _strip_and_copy_image(in_file, outpath):
     outpath can be path to either a file or dir.  The dir that outpath
     refers to must exist before calling this.
 
+    Potential source of Python code to strip JPEGs without dependencies:
+    http://www.fetidcascade.com/public/minimal_exif_writer.py
     """
     logging.debug('copying ' + in_file + ' ' + outpath)
 
@@ -750,17 +752,25 @@ def _strip_and_copy_image(in_file, outpath):
 
     extension = common.get_extension(in_file)[1]
     if extension == 'png':
-        with open(in_file, 'rb') as fp:
-            in_image = Image.open(fp)
-            in_image.save(out_file, "PNG", optimize=True,
-                          pnginfo=BLANK_PNG_INFO, icc_profile=None)
+        try:
+            with open(in_file, 'rb') as fp:
+                in_image = Image.open(fp)
+                in_image.save(out_file, "PNG", optimize=True,
+                              pnginfo=BLANK_PNG_INFO, icc_profile=None)
+        except Exception as e:
+            logging.error(_("Failed copying {path}: {error}".format(path=in_file, error=e)))
+            return
     elif extension == 'jpg' or extension == 'jpeg':
-        with open(in_file, 'rb') as fp:
-            in_image = Image.open(fp)
-            data = list(in_image.getdata())
-            out_image = Image.new(in_image.mode, in_image.size)
-        out_image.putdata(data)
-        out_image.save(out_file, "JPEG", optimize=True)
+        try:
+            with open(in_file, 'rb') as fp:
+                in_image = Image.open(fp)
+                data = list(in_image.getdata())
+                out_image = Image.new(in_image.mode, in_image.size)
+            out_image.putdata(data)
+            out_image.save(out_file, "JPEG", optimize=True)
+        except Exception as e:
+            logging.error(_("Failed copying {path}: {error}".format(path=in_file, error=e)))
+            return
     else:
         raise FDroidException(_('Unsupported file type "{extension}" for repo graphic')
                               .format(extension=extension))

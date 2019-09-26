@@ -851,6 +851,20 @@ class UpdateTest(unittest.TestCase):
         icons_src = fdroidserver.update._get_apk_icons_src('urzip-release.apk', None)
         assert icons_src == {}
 
+    def test_strip_and_copy_image(self):
+        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
+                                       dir=self.tmpdir)
+
+        in_file = os.path.join(self.basedir, 'metadata', 'info.guardianproject.urzip', 'en-US', 'images', 'icon.png')
+        out_file = os.path.join(tmptestsdir, 'icon.png')
+        fdroidserver.update._strip_and_copy_image(in_file, out_file)
+        self.assertTrue(os.path.exists(out_file))
+
+        in_file = os.path.join(self.basedir, 'corrupt-featureGraphic.png')
+        out_file = os.path.join(tmptestsdir, 'corrupt-featureGraphic.png')
+        fdroidserver.update._strip_and_copy_image(in_file, out_file)
+        self.assertFalse(os.path.exists(out_file))
+
     def test_create_metadata_from_template_empty_keys(self):
         apk = {'packageName': 'rocks.janicerand'}
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
