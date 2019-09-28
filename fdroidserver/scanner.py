@@ -77,6 +77,7 @@ def scan_source(build_dir, build=metadata.Build()):
             r'firebase',
             r'''["']com.facebook.android['":]''',
             r'cloudrail',
+            r'com.tencent.bugly',
         ]
     }
 
