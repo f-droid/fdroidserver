@@ -70,6 +70,49 @@ class LintTest(unittest.TestCase):
             logging.debug(warn)
         self.assertTrue(anywarns)
 
+    def test_source_urls(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.lint.config = config
+
+        app = {
+            'Name': 'My App',
+            'Summary': 'just a placeholder',
+            'Description': 'This app does all sorts of useful stuff',
+        }
+        good_urls = [
+            'https://github.com/Matteljay/mastermindy-android',
+            'https://gitlab.com/origin/master',
+            'https://gitlab.com/group/subgroup/masterthing',
+            'https://raw.githubusercontent.com/Seva-coder/Finder/HEAD/ChangeLog.txt',
+            'https://github.com/scoutant/blokish/blob/HEAD/README.md#changelog',
+            'https://git.ieval.ro/?p=fonbot.git;a=blob;f=Changes;hb=HEAD',
+            'https://htmlpreview.github.io/?https://github.com/YasuakiHonda/Maxima-on-Android-AS/blob/HEAD/app/src/main/assets/About_MoA/index.html',
+            '',
+        ]
+
+        anywarns = False
+        for url in good_urls:
+            app['SourceCode'] = url
+            for warn in fdroidserver.lint.check_regexes(app):
+                anywarns = True
+                logging.debug(warn)
+        self.assertFalse(anywarns)
+
+        bad_urls = [
+            'https://raw.githubusercontent.com/Seva-coder/Finder/master/ChangeLog.txt',
+            'https://github.com/scoutant/blokish/blob/master/README.md#changelog',
+        ]
+        anywarns = False
+        logging.debug('bad urls:')
+        for url in bad_urls:
+            app['SourceCode'] = url
+            for warn in fdroidserver.lint.check_regexes(app):
+                anywarns = True
+                logging.debug(warn)
+        self.assertTrue(anywarns)
+
     def test_check_app_field_types(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
