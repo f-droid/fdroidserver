@@ -120,7 +120,11 @@ http_url_shorteners = [
 ]
 
 http_checks = https_enforcings + http_url_shorteners + [
-    (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
+    (re.compile(r'^(?!https?://)[^/]+'),
+     _("URL must start with https:// or http://")),
+    (re.compile(r'^http://[^.]+\.(github|gitlab)\.io/'),
+     _("URL must start with https://")),
+    (re.compile(r'^https://(github|gitlab)\.com(/[^/]+){2,3}\.git'),
      _("Appending .git is not necessary")),
     (re.compile(r'^https://[^/]*(github|gitlab|bitbucket|rawgit)\.[a-zA-Z]+/([^/]+/){2,3}master/'),
      _("Use /HEAD instead of /master to point at a file in the default branch")),
