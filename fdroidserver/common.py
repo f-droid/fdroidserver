@@ -57,6 +57,7 @@ from pyasn1_modules import rfc2315
 from pyasn1.error import PyAsn1Error
 
 import fdroidserver.metadata
+import fdroidserver.lint
 from fdroidserver import _
 from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesException,\
     BuildException, VerificationException
@@ -145,6 +146,7 @@ default_config = {
         using the tools on https://gitlab.com/u/fdroid.
         ''',
     'archive_older': 0,
+    'lint_licenses': fdroidserver.lint.APPROVED_LICENSES,
 }
 
 
