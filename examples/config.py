@@ -330,3 +330,20 @@ The repository of older versions of applications from the main demo repository.
 #     'com.facebook.orca',
 #     'com.android.vending',
 # )
+
+# `fdroid lint` checks licenses in metadata against a built white list.  By
+# default we will require license metadata to be present and only allow
+# licenses approved either by FSF or OSI.  We're using the standardized SPDX
+# license IDs.  (https://spdx.org/licenses/)
+#
+# We use `python3 -m spdx-license-list print --filter-fsf-or-osi` for
+# generating our default list.  (https://pypi.org/project/spdx-license-list)
+#
+# You can override our default list of allowed licenes by setting this option.
+# Just supply a custom list of licene names you would like to allow. Setting
+# this to `None` disables this lint check.
+#
+# lint_licenses = (
+#     'Custom-License-A',
+#     'Another-License',
+# )

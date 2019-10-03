@@ -179,6 +179,100 @@ class LintTest(unittest.TestCase):
                 logging.debug(warn)
             self.assertTrue(anywarns)
 
+    def test_check_license_tag_no_custom_pass(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.lint.config = config
+
+        app = fdroidserver.metadata.App()
+        app.License = "GPL-3.0-or-later"
+
+        anywarns = False
+        for warn in fdroidserver.lint.check_license_tag(app):
+            anywarns = True
+            logging.debug(warn)
+        self.assertFalse(anywarns)
+
+    def test_check_license_tag_no_custom_fail(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.lint.config = config
+
+        app = fdroidserver.metadata.App()
+        app.License = "Adobe-2006"
+
+        anywarns = False
+        for warn in fdroidserver.lint.check_license_tag(app):
+            anywarns = True
+            logging.debug(warn)
+        self.assertTrue(anywarns)
+
+    def test_check_license_tag_with_custom_pass(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.lint.config = config
+        config['lint_licenses'] = ['fancy-license', 'GPL-3.0-or-later']
+
+        app = fdroidserver.metadata.App()
+        app.License = "fancy-license"
+
+        anywarns = False
+        for warn in fdroidserver.lint.check_license_tag(app):
+            anywarns = True
+            logging.debug(warn)
+        self.assertFalse(anywarns)
+
+    def test_check_license_tag_with_custom_fail(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.lint.config = config
+        config['lint_licenses'] = ['fancy-license', 'GPL-3.0-or-later']
+
+        app = fdroidserver.metadata.App()
+        app.License = "Apache-2.0"
+
+        anywarns = False
+        for warn in fdroidserver.lint.check_license_tag(app):
+            anywarns = True
+            logging.debug(warn)
+        self.assertTrue(anywarns)
+
+    def test_check_license_tag_with_custom_empty(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.lint.config = config
+        config['lint_licenses'] = []
+
+        app = fdroidserver.metadata.App()
+        app.License = "Apache-2.0"
+
+        anywarns = False
+        for warn in fdroidserver.lint.check_license_tag(app):
+            anywarns = True
+            logging.debug(warn)
+        self.assertTrue(anywarns)
+
+    def test_check_license_tag_disabled(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.lint.config = config
+        config['lint_licenses'] = None
+
+        app = fdroidserver.metadata.App()
+        app.License = "Apache-2.0"
+
+        anywarns = False
+        for warn in fdroidserver.lint.check_license_tag(app):
+            anywarns = True
+            logging.debug(warn)
+        self.assertFalse(anywarns)
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
