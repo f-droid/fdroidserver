@@ -102,20 +102,22 @@ class LintTest(unittest.TestCase):
 
         bad_urls = [
             'github.com/my/proj',
+            'http://github.com/not/secure',
             'https://github.com/foo/bar.git',
             'https://gitlab.com/group/subgroup/project.git',
             'https://raw.githubusercontent.com/Seva-coder/Finder/master/ChangeLog.txt',
             'https://github.com/scoutant/blokish/blob/master/README.md#changelog',
             'http://htmlpreview.github.io/?https://github.com/my/project/blob/HEAD/index.html',
+            'http://fdroid.gitlab.io/fdroid-website',
         ]
-        anywarns = False
         logging.debug('bad urls:')
         for url in bad_urls:
+            anywarns = False
             app['SourceCode'] = url
             for warn in fdroidserver.lint.check_regexes(app):
                 anywarns = True
                 logging.debug(warn)
-        self.assertTrue(anywarns)
+            self.assertTrue(anywarns, url + " does not fail lint!")
 
     def test_check_app_field_types(self):
         config = dict()
