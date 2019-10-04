@@ -717,7 +717,7 @@ def _set_author_entry(app, key, f):
     with open(f, errors='replace') as fp:
         text = fp.read()[:limit]
         if len(text) > 0:
-            app[key] = text
+            app[key] = text.strip()
 
 
 def _strip_and_copy_image(in_file, outpath):
