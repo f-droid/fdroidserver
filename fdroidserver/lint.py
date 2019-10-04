@@ -728,6 +728,7 @@ APPROVED_LICENSES = [
     'LiLiQ-Rplus-1.1',
     'MIT',
     'MIT-0',
+    'MIT-CMU',
     'MPL-1.0',
     'MPL-1.1',
     'MPL-2.0',
