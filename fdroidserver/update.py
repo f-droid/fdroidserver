@@ -843,7 +843,11 @@ def copy_triple_t_store_metadata(apps):
             logging.debug('Triple-T Gradle Play Publisher: ' + d)
             for root, dirs, files in os.walk(d):
                 segments = root.split('/')
-                locale = segments[-2]
+                if segments[-2] == 'listings' or segments[-2] == 'release-notes':
+                    locale = segments[-1]
+                else:
+                    locale = segments[-2]
+
                 for f in files:
                     if f == 'fulldescription' or f == 'full-description.txt':
                         _set_localized_text_entry(app, locale, 'description',
@@ -863,6 +867,10 @@ def copy_triple_t_store_metadata(apps):
                         continue
                     elif f == 'whatsnew':
                         _set_localized_text_entry(app, segments[-1], 'whatsNew',
+                                                  os.path.join(root, f))
+                        continue
+                    elif f == 'default.txt' and segments[-2] == 'release-notes':
+                        _set_localized_text_entry(app, locale, 'whatsNew',
                                                   os.path.join(root, f))
                         continue
                     elif f == 'contactEmail' or f == 'contact-email.txt':

@@ -1,0 +1,5 @@
+<resources>
+
+    <string name="account_type" translatable="false">org.piwigo.account_debug</string>
+
+</resources>

@@ -1,0 +1,5 @@
+Piwigo is a native Android Application for the free and open source photo hosting platform Piwigo. With this app you can browse you self-hosted gallery and upload photos from your smart device.
+
+Piwigo is built by an active community of users and developers.
+
+Piwigo empowers you to create your own photo gallery on the web and includes many powerful features such as albums, tags, geolocation, many levels of customization, upload by visitors, privacy, calendar or statistics.

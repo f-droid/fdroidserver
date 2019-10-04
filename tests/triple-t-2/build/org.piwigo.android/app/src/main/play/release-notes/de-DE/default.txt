@@ -1,0 +1,7 @@
+Dies ist eine Beta-Version, mit großen Verbesserungen, aber noch nicht für den produktiven Einsatz vorgesehen. Seien Sie vorsichtig und stellen Sie sicher, ein vollständiges Backup zu haben.
+
+In dieser Version haben wir
+- die Unterstützung für Android 4.0 und 4.1 entfernt
+- neues Design und weitere Sprachen hinzugefügt
+- Unterstützung der Erstellung von Alben
+- automatische Korrektur der Galerie-Seite hinzugefügt (falls möglich wird automatisch HTTPS verwendet)
