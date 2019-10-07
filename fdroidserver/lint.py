@@ -33,7 +33,7 @@ options = None
 
 
 def enforce_https(domain):
-    return (re.compile(r'^[^h][^t][^t][^p][^s]://[^/]*' + re.escape(domain) + r'(/.*)?', re.IGNORECASE),
+    return (re.compile(r'^http://([^/]*\.)?' + re.escape(domain) + r'(/.*)?', re.IGNORECASE),
             domain + " URLs should always use https://")
 
 
@@ -120,9 +120,11 @@ http_url_shorteners = [
 ]
 
 http_checks = https_enforcings + http_url_shorteners + [
-    (re.compile(r'.*github\.com/[^/]+/[^/]+\.git'),
+    (re.compile(r'^(?!https?://)[^/]+'),
+     _("URL must start with https:// or http://")),
+    (re.compile(r'^https://(github|gitlab)\.com(/[^/]+){2,3}\.git'),
      _("Appending .git is not necessary")),
-    (re.compile(r'.*://[^/]*(github|gitlab|bitbucket|rawgit)[^/]*/([^/]+/){1,3}master'),
+    (re.compile(r'^https://[^/]*(github|gitlab|bitbucket|rawgit|githubusercontent)\.[a-zA-Z]+/([^/]+/){2,3}master/'),
      _("Use /HEAD instead of /master to point at a file in the default branch")),
 ]
 
@@ -726,6 +728,7 @@ APPROVED_LICENSES = [
     'LiLiQ-Rplus-1.1',
     'MIT',
     'MIT-0',
+    'MIT-CMU',
     'MPL-1.0',
     'MPL-1.1',
     'MPL-2.0',

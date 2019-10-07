@@ -82,6 +82,7 @@ else
 fi
 
 echo "build_server_always = True" > config.py
+echo "deploy_process_logs = True" >> config.py
 # if the local mediawiki is available, then use it
 if nc -z -w1 localhost 32445; then
     wikiflag="--wiki"
