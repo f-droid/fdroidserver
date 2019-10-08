@@ -1,0 +1,29 @@
+Categories:
+  - Graphics
+  - Multimedia
+License: GPL-3.0-or-later
+AuthorName: Piwigo Mobile Apps Team
+AuthorEmail: android@piwigo.org
+WebSite: https://piwigo.org/
+SourceCode: https://github.com/Piwigo/Piwigo-Android
+IssueTracker: https://github.com/Piwigo/Piwigo-Android/issues
+Translation: https://crowdin.com/project/piwigo-android
+
+AutoName: Piwigo
+
+RepoType: git
+Repo: https://github.com/Piwigo/Piwigo-Android
+
+Builds:
+  - versionName: 0.9.5-beta
+    versionCode: 95
+    commit: v0.9.5
+    subdir: app
+    gradle:
+      - yes
+
+AutoUpdateMode: Version v%v
+UpdateCheckMode: Tags
+UpdateCheckIgnore: (alpha|beta|rc|RC|dev)
+CurrentVersion: 0.9.5-beta
+CurrentVersionCode: 95
