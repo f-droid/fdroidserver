@@ -1008,8 +1008,14 @@ class CommonTest(unittest.TestCase):
 
         with mock.patch('subprocess.call',
                         side_effect=assert_subprocess_call):
-            fdroidserver.common.deploy_build_log_with_rsync(
-                'com.example.app', '4711', mocklogcontent)
+            with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+                fdroidserver.common.deploy_build_log_with_rsync(
+                    'com.example.app', '4711', mocklogcontent)
+
+                expected_log_path = os.path.join(tmpdir, 'repo', 'com.example.app_4711.log.gz')
+                self.assertTrue(os.path.isfile(expected_log_path))
+                with gzip.open(expected_log_path, 'r') as f:
+                    self.assertEqual(f.read(), mocklogcontent)
 
 
 if __name__ == "__main__":

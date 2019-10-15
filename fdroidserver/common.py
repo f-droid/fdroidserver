@@ -3253,6 +3253,9 @@ def deploy_build_log_with_rsync(appid, vercode, log_content):
         logging.warning(_('skip deploying full build logs: log content is empty'))
         return
 
+    if not os.path.exists('repo'):
+        os.mkdir('repo')
+
     # gzip compress log file
     log_gz_path = os.path.join('repo',
                                '{pkg}_{ver}.log.gz'.format(pkg=appid,
