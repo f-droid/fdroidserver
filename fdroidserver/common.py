@@ -3253,42 +3253,41 @@ def deploy_build_log_with_rsync(appid, vercode, log_content):
         logging.warning(_('skip deploying full build logs: log content is empty'))
         return
 
-    with tempfile.TemporaryDirectory() as tmpdir:
-        # gzip compress log file
-        log_gz_path = os.path.join(
-            tmpdir, '{pkg}_{ver}.log.gz'.format(pkg=appid,
-                                                ver=vercode))
-        with gzip.open(log_gz_path, 'wb') as f:
-            if isinstance(log_content, str):
-                f.write(bytes(log_content, 'utf-8'))
-            else:
-                f.write(log_content)
+    # gzip compress log file
+    log_gz_path = os.path.join('repo',
+                               '{pkg}_{ver}.log.gz'.format(pkg=appid,
+                                                           ver=vercode))
+    with gzip.open(log_gz_path, 'wb') as f:
+        if isinstance(log_content, str):
+            f.write(bytes(log_content, 'utf-8'))
+        else:
+            f.write(log_content)
 
-        # TODO: sign compressed log file, if a signing key is configured
+    # TODO: sign compressed log file, if a signing key is configured
 
-        for webroot in config.get('serverwebroot', []):
-            dest_path = os.path.join(webroot, "repo")
-            if not dest_path.endswith('/'):
-                dest_path += '/'  # make sure rsync knows this is a directory
-            cmd = ['rsync',
-                   '--archive',
-                   '--delete-after',
-                   '--safe-links']
-            if options.verbose:
-                cmd += ['--verbose']
-            if options.quiet:
-                cmd += ['--quiet']
-            if 'identity_file' in config:
-                cmd += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file']]
-            cmd += [log_gz_path, dest_path]
+    for webroot in config.get('serverwebroot', []):
+        dest_path = os.path.join(webroot, "repo")
+        if not dest_path.endswith('/'):
+            dest_path += '/'  # make sure rsync knows this is a directory
+        cmd = ['rsync',
+               '--archive',
+               '--delete-after',
+               '--safe-links']
+        if options.verbose:
+            cmd += ['--verbose']
+        if options.quiet:
+            cmd += ['--quiet']
+        if 'identity_file' in config:
+            cmd += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file']]
+        cmd += [log_gz_path, dest_path]
 
-            # TODO: also deploy signature file if present
+        # TODO: also deploy signature file if present
 
-            retcode = subprocess.call(cmd)
-            if retcode:
-                logging.warning(_("failed deploying build logs to '{path}'").format(path=webroot))
-            else:
-                logging.info(_("deployed build logs to '{path}'").format(path=webroot))
+        retcode = subprocess.call(cmd)
+        if retcode:
+            logging.warning(_("failed deploying build logs to '{path}'").format(path=webroot))
+        else:
+            logging.info(_("deployed build logs to '{path}'").format(path=webroot))
 
 
 def get_per_app_repos():
@@ -3321,6 +3320,7 @@ def is_repo_file(filename):
     return os.path.isfile(filename) \
         and not filename.endswith(b'.asc') \
         and not filename.endswith(b'.sig') \
+        and not filename.endswith(b'.log.gz') \
         and os.path.basename(filename) not in [
             b'index.jar',
             b'index_unsigned.jar',
