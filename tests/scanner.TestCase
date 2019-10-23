@@ -29,13 +29,16 @@ class ScannerTest(unittest.TestCase):
         source_files = os.path.join(self.basedir, 'source-files')
         projects = {
             'Zillode': 1,
-            'firebase-suspect': 1
+            'firebase-suspect': 1,
+            'org.mozilla.rocket': 4,
+            'realm': 1,
         }
         for d in glob.glob(os.path.join(source_files, '*')):
             build = fdroidserver.metadata.Build()
             fatal_problems = fdroidserver.scanner.scan_source(d, build)
-            self.assertEqual(projects.get(os.path.basename(d), 0),
-                             fatal_problems)
+            should = projects.get(os.path.basename(d), 0)
+            self.assertEqual(should, fatal_problems,
+                             "%s should have %d errors!" % (d, should))
 
 
 if __name__ == "__main__":

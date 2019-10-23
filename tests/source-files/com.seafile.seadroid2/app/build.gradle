@@ -1,0 +1,122 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId 'com.seafile.seadroid2'
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 93
+        versionName "2.2.18"
+        multiDexEnabled true
+        resValue "string", "authorities", applicationId + '.cameraupload.provider'
+        resValue "string", "account_type", "com.seafile.seadroid2.account.api2"
+        buildConfigField "String", "ACCOUNT_TYPE", '"com.seafile.seadroid2.account.api2"'
+        ndk {
+            abiFilters 'armeabi', 'armeabi-v7a', 'x86'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+        disable 'MissingTranslation'
+    }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    signingConfigs {
+        debug {
+//            def props = new Properties()
+//            props.load(new FileInputStream(project.file("debugkey.properties")))
+//            storeFile project.file(props.keyStore)
+//            storePassword props.keyStorePassword
+//            keyAlias props.keyAlias
+//            keyPassword props.keyAliasPassword
+        }
+        release {
+//            Signing code for manual signing
+//            storeFile file(System.console().readLine("\n\$ Enter keystore path: "))
+//            storePassword System.console().readPassword("\n\$ Enter keystore password: ").toString()
+//            keyAlias System.console().readLine("\n\$ Enter key alias: ")
+//            keyPassword System.console().readPassword("\n\$ Enter key password: ").toString()
+
+            def props = new Properties()
+            props.load(new FileInputStream(project.file("key.properties")))
+            storeFile project.file(props.keyStore)
+            storePassword props.keyStorePassword
+            keyAlias props.keyAlias
+            keyPassword props.keyAliasPassword
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            applicationIdSuffix ".debug"
+            resValue "string", "authorities", defaultConfig.applicationId + '.debug.cameraupload.provider'
+            resValue "string", "account_type", "com.seafile.seadroid2.debug.account.api2"
+            buildConfigField "String", "ACCOUNT_TYPE", '"com.seafile.seadroid2.debug.account.api2"'
+            signingConfig signingConfigs.debug
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
+                        if (variant.name == "debug")
+                            outputFileName = "seafile-debug-" + defaultConfig.versionName + ".apk"
+                    }
+                }
+            }
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
+                        if (variant.name == "release") {
+                            outputFileName = "seafile-" + defaultConfig.versionName + ".apk"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    allprojects {
+        repositories {
+            maven { url 'https://jitpack.io' }
+        }
+    }
+    dependencies {
+        implementation fileTree(include: ['*.jar'], dir: 'libs')
+        implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+        implementation "com.android.support:design:${rootProject.ext.supportLibVersion}"
+        implementation 'com.github.JakeWharton:ViewPagerIndicator:2.4.1'
+        implementation 'com.github.kevinsawicki:http-request:6.0'
+        implementation 'commons-io:commons-io:2.4'
+        implementation 'com.google.guava:guava:18.0'
+        implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
+        implementation 'com.cocosw:bottomsheet:1.3.1'
+        implementation 'com.commit451:PhotoView:1.2.4'
+        implementation 'com.joanzapata.iconify:android-iconify-material-community:2.2.1'
+        testImplementation 'junit:junit:4.12'
+        testImplementation 'org.robolectric:robolectric:3.0'
+        implementation 'com.madgag.spongycastle:core:1.54.0.0'
+        implementation 'com.madgag.spongycastle:prov:1.54.0.0'
+        implementation 'com.shuyu:gsyVideoPlayer-java:2.1.0'
+        implementation 'com.shuyu:gsyVideoPlayer-ex_so:2.1.0'
+        implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+
+        implementation 'com.yydcdut:markdown-processor:0.1.3'
+        implementation 'ren.qinc.edit:lib:0.0.5'//editor undo redo
+        implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
+    }
+}
+

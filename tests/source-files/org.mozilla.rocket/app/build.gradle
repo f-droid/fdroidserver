@@ -1,0 +1,414 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+apply from: '../buildSrc/pmd.gradle'
+apply from: '../buildSrc/checkstyle.gradle'
+apply from: '../buildSrc/findbugs.gradle'
+apply from: 'buildscripts/l10n.gradle'
+
+
+android {
+    compileSdkVersion Versions.compile_sdk
+    buildToolsVersion Versions.build_tools
+    defaultConfig {
+        applicationId "org.mozilla"
+        minSdkVersion Versions.min_sdk
+        targetSdkVersion Versions.target_sdk
+        versionCode Versions.version_code
+        versionName Versions.version_name
+        if (SystemEnv.auto_screenshot == "1") {
+            testInstrumentationRunner "org.mozilla.focus.test.runner.ScreenshotTestRunner"
+            testInstrumentationRunnerArguments clearPackageData: 'true'
+        } else {
+            // general UI test, using notAnnotation to filter out auto screenshot classes
+            testInstrumentationRunner "org.mozilla.focus.test.runner.CustomTestRunner"
+            testInstrumentationRunnerArguments clearPackageData: 'true', notAnnotation: 'org.mozilla.focus.annotation.ScreengrabOnly,android.support.test.filters.FlakyTest'
+        }
+        testInstrumentationRunnerArgument 'disableAnalytics', 'true'
+
+        multiDexEnabled true
+
+        vectorDrawables {
+            useSupportLibrary false
+            generatedDensities = []
+        }
+
+        def bitrise_build_number = System.getenv("BITRISE_BUILD_NUMBER")
+        if (bitrise_build_number?.trim()) {
+            versionCode bitrise_build_number.toInteger()
+            versionNameSuffix "(" + bitrise_build_number + ")"
+        }
+
+        // used by Room, to test migrations
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+    }
+
+    dexOptions {
+        preDexLibraries true
+    }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
+        density {
+            enableSplit = false
+        }
+        abi {
+            enableSplit = true
+        }
+    }
+
+    // We have a three dimensional build configuration:
+    // BUILD TYPE (debug, release)
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            matchingFallbacks = ["firebase"]
+        }
+        debug {
+            def userName = System.getenv("USER")
+            applicationIdSuffix ".debug." + userName
+            versionNameSuffix applicationIdSuffix
+            matchingFallbacks = ["firebase_no_op"]
+        }
+        // Use a separate buildType for coverage: testCoverageEnabled produces slower code (4-5x slower
+        // in places that I've benchmarked), and more importantly seems to break debugging with Android Studio
+        // for some developers (i.e. variables can't be inspected or seen).
+        coverage {
+            initWith debug
+            applicationIdSuffix ".coverage"
+            testCoverageEnabled true
+            matchingFallbacks = ["debug", "firebase_no_op"]
+        }
+        // special build type to develop Firebase related stuff
+        firebase {
+            initWith debug
+            applicationIdSuffix ".debug.firebase"
+
+            versionNameSuffix applicationIdSuffix
+            matchingFallbacks = ["debug", "firebase"]
+        }
+    }
+
+    testBuildType "firebase"
+
+    testOptions {
+        animationsDisabled = true
+        unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
+        execution 'ANDROID_TEST_ORCHESTRATOR'
+    }
+
+    // used by Room, to test migrations
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+
+    flavorDimensions "product", "engine"
+
+    productFlavors {
+        focus {
+            resConfigs Localization.KEPT_LOCALE
+            dimension "product"
+
+            applicationIdSuffix ".rocket"
+        }
+
+        preview {
+            dimension "product"
+            applicationId "gro.allizom.zelda.beta"
+            applicationIdSuffix ""
+            versionNameSuffix ".nightly"
+        }
+
+        // We can build with two engines: webkit or gecko
+        webkit {
+            dimension "engine"
+        }
+
+    }
+
+    variantFilter { variant ->
+        def flavors = variant.flavors*.name
+        // We only need a nightly release for now
+        if (flavors.contains("preview") && variant.buildType.name != "release") {
+            setIgnore(true)
+        }
+    }
+
+    sourceSets {
+        test {
+            resources {
+                // Make the default asset folder available as test resource folder. Robolectric seems
+                // to fail to read assets for our setup. With this we can just read the files directly
+                // and do not need to rely on Robolectric.
+                srcDir "${projectDir}/src/main/assets/"
+            }
+        }
+
+        preview {
+            res.srcDir 'src/preview/res'
+        }
+
+        // used by Room, to test migrations
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':telemetry-annotation')
+    kapt project(':telemetry-compiler')
+
+    implementation project(':third_party:subsampling-scale-image-view')
+    implementation project(':third_party:glide:annotation')
+    implementation project(':third_party:glide:library')
+    kapt "com.github.bumptech.glide:compiler:${Versions.glide}"
+
+    implementation project(':firebase')
+    implementation project(':feature-tabs')
+    implementation project(':HttpRequest')
+    implementation project(':httptask')
+    implementation project(':urlutils')
+    implementation project(':fileutils')
+    implementation project(':icon')
+    implementation project(':logger')
+    implementation project(':threadutils')
+    implementation project(':cachedrequestloader')
+    implementation project(':permissionhandler')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
+
+    // We didn't use CustomTabs so far. This is a build hack to force Android-Components to use
+    // same version of support library as we are. Android-Components depends on CustomTabs which
+    // version will be override by this.
+    // We can get rid of this once Android-Components' issue #404 has been resolve.
+    implementation "com.android.support:customtabs:${Versions.support}"
+    implementation "com.android.support:support-v4:${Versions.support}"
+    implementation "com.android.support:appcompat-v7:${Versions.support}"
+    implementation "com.android.support:design:${Versions.support}"
+    implementation "com.android.support:cardview-v7:${Versions.support}"
+    implementation "com.android.support:recyclerview-v7:${Versions.support}"
+    implementation "com.android.support.constraint:constraint-layout:${Versions.constraint}"
+    implementation "android.arch.work:work-runtime:${Versions.arch_work}"
+
+
+    // Architecture components
+    implementation "android.arch.lifecycle:extensions:${Versions.lifecycle}"
+    implementation "android.arch.lifecycle:common-java8:${Versions.lifecycle}"
+    implementation "android.arch.persistence.room:runtime:${Versions.room}"
+    implementation "android.arch.navigation:navigation-fragment:${Versions.navigation}"
+    kapt "android.arch.persistence.room:compiler:${Versions.room}"
+
+    implementation("com.google.code.findbugs:annotations:${Versions.findbugs}", {
+        // We really only need the SuppressFBWarnings annotation, everything else can be ignored.
+        // Without this we get weird failures due to dependencies.
+        transitive = false
+    })
+
+    implementation "org.mozilla.components:browser-session:${Versions.android_components}"
+    implementation "org.mozilla.components:service-telemetry:${Versions.android_components}"
+    implementation "org.mozilla.components:browser-domains:${Versions.android_components}"
+    implementation "org.mozilla.components:ui-autocomplete:${Versions.android_components}"
+
+    implementation "com.adjust.sdk:adjust-android:${Versions.adjust}"
+    implementation "com.google.android.gms:play-services-analytics:${Versions.firebase}" // Required by Adjust
+    // Required by Adjust
+
+    implementation "com.airbnb.android:lottie:${Versions.lottie}"
+
+    testImplementation "junit:junit:${Versions.junit}"
+    testImplementation "org.robolectric:robolectric:${Versions.robolectric}"
+    testImplementation "org.mockito:mockito-core:${Versions.mockito}"
+
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:${Versions.espresso}", {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestImplementation "com.android.support.test:runner:${Versions.test_runner}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-idling-resource:${Versions.espresso}"
+    androidTestImplementation "com.android.support:support-annotations:${Versions.support}"
+    androidTestImplementation "com.android.support.test.uiautomator:uiautomator-v18:${Versions.uiautomator}"
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:${Versions.mockwebserver}"
+    androidTestImplementation "android.arch.persistence.room:testing:${Versions.room}"
+    androidTestImplementation "android.arch.core:core-testing:${Versions.arch_core}"
+    androidTestImplementation("com.android.support.test.espresso:espresso-contrib:${Versions.espresso}", {
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude module: 'recyclerview-v7'
+    })
+    androidTestImplementation "com.android.support.test.espresso:espresso-web:${Versions.espresso}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:${Versions.espresso}"
+    androidTestImplementation "tools.fastlane:screengrab:${Versions.fastlane_screengrab}"
+    androidTestImplementation "com.jraska:falcon:${Versions.jraska_falcon}"
+    androidTestUtil "com.android.support.test:orchestrator:${Versions.test_runner}"
+
+    // LeakCanary
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}"
+    coverageImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${Versions.leakcanary}"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${Versions.leakcanary}"
+    firebaseImplementation "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}"
+
+    implementation project(':bhaskar')
+    implementation project(':newspoint')
+    implementation project(':partnerrepository')
+}
+
+// -------------------------------------------------------------------------------------------------
+// LeakCanary - Ensure the no-op dependency is always used in JVM tests.
+// -------------------------------------------------------------------------------------------------
+
+configurations.all { config ->
+    if (config.name.contains('UnitTest') || config.name.contains('AndroidTest')) {
+        config.resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'com.squareup.leakcanary' && details.requested.name == 'leakcanary-android') {
+                details.useTarget(group: details.requested.group, name: 'leakcanary-android-no-op', version: details.requested.version)
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------------------------------------------------
+// Generate blocklists
+// -------------------------------------------------------------------------------------------------
+
+def blockListOutputDir = 'src/webkit/res/raw'
+
+task buildBlocklists(type: Copy) {
+    from('../shavar-prod-lists') {
+        include '*.json'
+    }
+    into blockListOutputDir
+
+    // Android can't handle dashes in the filename, so we need to rename:
+    rename 'disconnect-blacklist.json', 'blocklist.json'
+    rename 'disconnect-entitylist.json', 'entitylist.json'
+    // google_mapping.json already has an expected name
+}
+
+clean.doLast {
+    file(blockListOutputDir).deleteDir()
+}
+
+tasks.whenTaskAdded { task ->
+    def name = task.name
+    if (name.contains("generate") && name.contains("Webkit") && name.contains("Resources")) {
+        task.dependsOn buildBlocklists
+    }
+}
+
+// -------------------------------------------------------------------------------------------------
+// Adjust: Read token from environment variable (Only release builds)
+// -------------------------------------------------------------------------------------------------
+
+android.applicationVariants.all { variant ->
+    def variantName = variant.getName()
+
+    print(variantName + ": ")
+
+    // release and nightly will have Adjust. just nightly will use sandbox environment.
+    if (variantName.contains("Release")) {
+        def token = System.getenv("ADJUST_TOKEN_FOCUS") ?: null
+
+        if (token != null) {
+            buildConfigField 'String', 'ADJUST_TOKEN', '"' + token + '"'
+            if (variantName.contains("preview")) {
+                buildConfigField 'String', 'ADJUST_ENVIRONMENT', 'com.adjust.sdk.AdjustConfig.ENVIRONMENT_SANDBOX'
+            } else if (variantName.contains("focus")) {
+                buildConfigField 'String', 'ADJUST_ENVIRONMENT', 'com.adjust.sdk.AdjustConfig.ENVIRONMENT_PRODUCTION'
+            } else {
+                buildConfigField 'String', 'ADJUST_ENVIRONMENT', 'null'
+            }
+            println "Added adjust token set from environment variable"
+
+            def tracker = System.getenv("ADJUST_SIDELOAD_TRACKER") ?: null
+            if (tracker != null) {
+                buildConfigField 'String', 'ADJUST_DEFAULT_TRACKER', '"' + tracker + '"'
+            } else {
+                buildConfigField 'String', 'ADJUST_DEFAULT_TRACKER', 'null'
+                logger.error(variant.getName() + ": Not setting adjust default tracker (environment variable not set)")
+            }
+        } else {
+            buildConfigField 'String', 'ADJUST_TOKEN', 'null'
+            buildConfigField 'String', 'ADJUST_ENVIRONMENT', 'null'
+            buildConfigField 'String', 'ADJUST_DEFAULT_TRACKER', 'null'
+            println("Not setting adjust token (environment variable not set)")
+        }
+    } else {
+        buildConfigField 'String', 'ADJUST_TOKEN', 'null'
+        buildConfigField 'String', 'ADJUST_ENVIRONMENT', 'null'
+        buildConfigField 'String', 'ADJUST_DEFAULT_TRACKER', 'null'
+
+        println("Not setting adjust token (Not a focus release build)")
+    }
+    if (variant.buildType.name == "release" || variant.buildType.name == "firebase") {
+        variant.assemble.doFirst {
+            if (SystemEnv.google_app_id == null || SystemEnv.default_web_client_id == null ||
+                    SystemEnv.firebase_database_url == null || SystemEnv.gcm_defaultSenderId == null ||
+                    SystemEnv.google_api_key == null || SystemEnv.google_crash_reporting_api_key == null ||
+                    SystemEnv.project_id == null) {
+                logger.warn("If you want to enable Firebase, please follow the steps:")
+                logger.warn("1. Download google-services.json and put it in the folder where you run below command.")
+                logger.warn("2. Run 'python./tools/firebase/firebase_setup.py' and follow the steps.\n")
+            }
+        }
+    }
+}
+
+tasks.whenTaskAdded { task ->
+    if (name.contains("compile")) {
+        task.dependsOn generatePreviewLocaleList
+        task.dependsOn generateFocusLocaleList
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        kotlinOptions.allWarningsAsErrors = true
+    }
+}
+
+
+
+afterEvaluate {
+    check.dependsOn 'findbugs', 'pmd', 'checkstyle', 'checkTelemetryDocDirty', 'ktlint'
+}
+
+task checkTelemetryDocDirty() {
+
+    doLast {
+        Process p = Runtime.getRuntime().exec("git diff ./docs/events.md");
+        p.waitFor();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+        StringBuilder sb = new StringBuilder();
+        String line = "";
+        while ((line = reader.readLine()) != null) {
+            sb.append(line + "\n");
+        }
+        if (sb.length() > 0) {
+            throw new GradleException("events.md is drity, please commit the change first.\n" + sb.toString())
+        }
+    }
+}

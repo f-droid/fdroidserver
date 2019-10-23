@@ -1,0 +1,41 @@
+apply plugin: 'android'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.1"
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 21
+        versionCode 14
+        versionName "1.65"
+    }
+    signingConfigs{
+        releaseSign{
+            storeFile file("/Users/reecestevens/keys/keystore.jks")
+            //storePassword System.console().readLine("\nKeystore password: ")
+            storePassword System.getenv("KSTOREPWD")
+            keyAlias "AppKey"
+            //keyPassword System.console().readLine("\nKey password: ")
+            keyPassword System.getenv("KEYPWD")
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true;
+            debuggable false
+            signingConfig signingConfigs.releaseSign
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:21.0.2'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.0.9'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
