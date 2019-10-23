@@ -361,6 +361,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
                     os.path.join(repodir, apkfilename),
                     os.path.join(repodir, apkfilename + '.asc'),
                     os.path.join(repodir, apkfilename[:-4] + "_src.tar.gz"),
+                    os.path.join(repodir, apkfilename[:-4] + ".log.gz"),
                 ]
                 for density in all_screen_densities:
                     repo_dir = get_icon_dir(repodir, density)
@@ -1879,6 +1880,7 @@ def move_apk_between_sections(from_dir, to_dir, apk):
     logging.info("Moving %s from %s to %s" % (apk['apkName'], from_dir, to_dir))
     _move_file(from_dir, to_dir, apk['apkName'], False)
     _move_file(from_dir, to_dir, apk['apkName'] + '.asc', True)
+    _move_file(from_dir, to_dir, apk['apkName'][:-4] + '.log.gz', True)
     for density in all_screen_densities:
         from_icon_dir = get_icon_dir(from_dir, density)
         to_icon_dir = get_icon_dir(to_dir, density)
