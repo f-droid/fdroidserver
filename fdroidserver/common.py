@@ -2342,7 +2342,7 @@ gradle_signing_configs = re.compile(r'^[\t ]*signingConfigs[ \t]*{[ \t]*$')
 gradle_line_matches = [
     re.compile(r'^[\t ]*signingConfig [^ ]*$'),
     re.compile(r'.*android\.signingConfigs\.[^{]*$'),
-    re.compile(r'.*\.readLine\(.*'),
+    re.compile(r'.*release\.signingConfig *= *'),
 ]
 
 

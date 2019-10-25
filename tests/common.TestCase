@@ -2,6 +2,7 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
+import difflib
 import glob
 import inspect
 import logging
@@ -924,6 +925,64 @@ class CommonTest(unittest.TestCase):
             self.assertTrue(os.path.isfile(path))
         self.assertEqual(('1.0-free', '1', 'com.kunzisoft.fdroidtest.applicationidsuffix'),
                          fdroidserver.common.parse_androidmanifests(paths, app))
+
+    def test_remove_signing_keys(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        print(testdir)
+        shutil.copytree(os.path.join(self.basedir, 'source-files'),
+                        os.path.join(testdir, 'source-files'))
+        os.chdir(testdir)
+        with_signingConfigs = [
+            'source-files/com.seafile.seadroid2/app/build.gradle',
+            'source-files/eu.siacs.conversations/build.gradle',
+            'source-files/info.guardianproject.ripple/build.gradle',
+            'source-files/open-keychain/open-keychain/build.gradle',
+            'source-files/open-keychain/open-keychain/OpenKeychain/build.gradle',
+            'source-files/osmandapp/osmand/build.gradle',
+            'source-files/ut.ewh.audiometrytest/app/build.gradle',
+        ]
+        for f in with_signingConfigs:
+            build_dir = os.path.join(*f.split(os.sep)[:2])
+            if not os.path.isdir(build_dir):
+                continue
+            fdroidserver.common.remove_signing_keys(build_dir)
+            fromfile = os.path.join(self.basedir, f)
+            with open(f) as fp:
+                content = fp.read()
+            if 'signingConfig' in content:
+                with open(f) as fp:
+                    b = fp.readlines()
+                with open(fromfile) as fp:
+                    a = fp.readlines()
+                diff = difflib.unified_diff(a, b, fromfile, f)
+                sys.stdout.writelines(diff)
+                self.assertFalse(True)
+        do_not_modify = [
+            'source-files/Zillode/syncthing-silk/build.gradle',
+            'source-files/at.bitfire.davdroid/build.gradle',
+            'source-files/com.kunzisoft.testcase/build.gradle',
+            'source-files/com.nextcloud.client/build.gradle',
+            'source-files/fdroid/fdroidclient/build.gradle',
+            'source-files/firebase-suspect/app/build.gradle',
+            'source-files/firebase-suspect/build.gradle',
+            'source-files/firebase-whitelisted/app/build.gradle',
+            'source-files/firebase-whitelisted/build.gradle',
+            'source-files/org.mozilla.rocket/app/build.gradle',
+            'source-files/realm/react-native/android/build.gradle',
+            'triple-t-2/build/org.piwigo.android/app/build.gradle',
+        ]
+        for f in do_not_modify:
+            build_dir = os.path.join(*f.split(os.sep)[:2])
+            if not os.path.isdir(build_dir):
+                continue
+            fdroidserver.common.remove_signing_keys(build_dir)
+            fromfile = os.path.join(self.basedir, f)
+            with open(fromfile) as fp:
+                a = fp.readlines()
+            with open(f) as fp:
+                b = fp.readlines()
+            diff = list(difflib.unified_diff(a, b, fromfile, f))
+            self.assertEqual(0, len(diff), 'This file should not have been modified:\n' + ''.join(diff))
 
     def test_calculate_math_string(self):
         self.assertEqual(1234,
