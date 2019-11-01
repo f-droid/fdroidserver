@@ -3261,8 +3261,9 @@ def deploy_build_log_with_rsync(appid, vercode, log_content):
 
     # gzip compress log file
     log_gz_path = os.path.join('repo',
-                               '{pkg}_{ver}.log.gz'.format(pkg=appid,
-                                                           ver=vercode))
+                               '{appid}_{versionCode}.log.gz'.format(appid=appid,
+                                                                     versionCode=vercode))
+
     with gzip.open(log_gz_path, 'wb') as f:
         if isinstance(log_content, str):
             f.write(bytes(log_content, 'utf-8'))
