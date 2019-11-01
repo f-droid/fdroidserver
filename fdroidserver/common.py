@@ -2537,12 +2537,12 @@ def get_first_signer_certificate(apkpath):
         apkobject = _get_androguard_APK(apkpath)
         certs = apkobject.get_certificates_der_v2()
         if len(certs) > 0:
-            logging.info(_('Using APK Signature v2'))
+            logging.debug(_('Using APK Signature v2'))
             cert_encoded = certs[0]
         if not cert_encoded:
             certs = apkobject.get_certificates_der_v3()
             if len(certs) > 0:
-                logging.info(_('Using APK Signature v3'))
+                logging.debug(_('Using APK Signature v3'))
                 cert_encoded = certs[0]
 
     if not cert_encoded:
