@@ -30,7 +30,7 @@ class ScannerTest(unittest.TestCase):
         projects = {
             'Zillode': 1,
             'firebase-suspect': 1,
-            'org.mozilla.rocket': 4,
+            'org.mozilla.rocket': 3,
             'realm': 1,
         }
         for d in glob.glob(os.path.join(source_files, '*')):
