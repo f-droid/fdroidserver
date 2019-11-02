@@ -61,7 +61,6 @@ def scan_source(build_dir, build=metadata.Build()):
         exp: re.compile(r'.*' + exp, re.IGNORECASE) for exp in [
             r'flurryagent',
             r'paypal.*mpl',
-            r'google.*analytics',
             r'admob.*sdk.*android',
             r'google.*ad.*view',
             r'google.*admob',
