@@ -171,6 +171,7 @@ fedora_latest:
 
     - dnf -y update || dnf -y update
     - dnf -y install @development-tools
+                     diffutils
                      findutils
                      git
                      gnupg
