@@ -41,6 +41,10 @@ from fdroidserver.exception import MetaDataException, FDroidException
 srclibs = None
 warnings_action = None
 
+# validates usernames based on a loose collection of rules from GitHub, GitLab,
+# Liberapay and issuehunt.  This is mostly to block abuse.
+VALID_USERNAME_REGEX = re.compile(r'^[a-z\d](?:[a-z\d/._-]){0,38}$', re.IGNORECASE)
+
 
 def warn_or_exception(value, cause=None):
     '''output warning or Exception depending on -W'''
@@ -455,7 +459,7 @@ valuetypes = {
                    ['LiberapayID']),
 
     FieldValidator("Open Collective",
-                   r'^[0-9a-zA-Z_-]+$',
+                   VALID_USERNAME_REGEX,
                    ['OpenCollective']),
 
     FieldValidator("HTTP link",

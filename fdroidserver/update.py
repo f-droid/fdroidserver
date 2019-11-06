@@ -31,10 +31,15 @@ import zipfile
 import hashlib
 import json
 import time
+import yaml
 import copy
 from datetime import datetime
 from argparse import ArgumentParser
 from base64 import urlsafe_b64encode
+try:
+    from yaml import CSafeLoader as SafeLoader
+except ImportError:
+    from yaml import SafeLoader
 
 import collections
 from binascii import hexlify
@@ -852,6 +857,118 @@ def _get_base_hash_extension(f):
     if sha256_index > 0:
         return base[:sha256_index], base[sha256_index + 1:], extension
     return base, None, extension
+
+
+def sanitize_funding_yml_entry(entry):
+    """FUNDING.yml comes from upstream repos, entries must be sanitized"""
+    if type(entry) not in (bytes, int, float, list, str):
+        return
+    if isinstance(entry, bytes):
+        entry = entry.decode()
+    elif isinstance(entry, list):
+        if entry:
+            entry = entry[0]
+        else:
+            return
+    try:
+        entry = str(entry)
+    except (TypeError, ValueError):
+        return
+    if len(entry) > 2048:
+        logging.warning(_('Ignoring FUNDING.yml entry longer than 2048: %s') % entry[:2048])
+        return
+    if '\n' in entry:
+        return
+    return entry.strip()
+
+
+def sanitize_funding_yml_name(name):
+    """Sanitize usernames that come from FUNDING.yml"""
+    entry = sanitize_funding_yml_entry(name)
+    if entry:
+        m = metadata.VALID_USERNAME_REGEX.match(entry)
+        if m:
+            return m.group()
+    return
+
+
+def insert_funding_yml_donation_links(apps):
+    """include donation links from FUNDING.yml in app's source repo
+
+    GitHub made a standard file format for declaring donation
+    links. This parses that format from upstream repos to include in
+    metadata here.  GitHub supports mostly proprietary services, so
+    this logic adds proprietary services only as Donate: links.
+
+    FUNDING.yml can be either in the root of the project, or in the
+    ".github" subdir.
+
+    https://help.github.com/en/articles/displaying-a-sponsor-button-in-your-repository#about-funding-files
+
+    """
+
+    if not os.path.isdir('build'):
+        return  # nothing to do
+    for packageName, app in apps.items():
+        sourcedir = os.path.join('build', packageName)
+        if not os.path.isdir(sourcedir):
+            continue
+        for f in ([os.path.join(sourcedir, 'FUNDING.yml'), ]
+                  + glob.glob(os.path.join(sourcedir, '.github', 'FUNDING.yml'))):
+            if not os.path.isfile(f):
+                continue
+            data = None
+            try:
+                with open(f) as fp:
+                    data = yaml.load(fp, Loader=SafeLoader)
+            except yaml.YAMLError as e:
+                logging.error(_('Found bad funding file "{path}" for "{name}":')
+                              .format(path=f, name=packageName))
+                logging.error(e)
+            if not data or type(data) != dict:
+                continue
+            if not app.get('OpenCollective') and 'open_collective' in data:
+                s = sanitize_funding_yml_name(data['open_collective'])
+                if s:
+                    app['OpenCollective'] = s
+            if not app.get('Donate'):
+                del(data['liberapay'])
+                del(data['open_collective'])
+                # this tuple provides a preference ordering
+                for k in ('custom', 'github', 'patreon', 'community_bridge', 'ko_fi', 'issuehunt'):
+                    v = data.get(k)
+                    if not v:
+                        continue
+                    if k == 'custom':
+                        s = sanitize_funding_yml_entry(v)
+                        if s:
+                            app['Donate'] = s
+                            break
+                    elif k == 'community_bridge':
+                        s = sanitize_funding_yml_name(v)
+                        if s:
+                            app['Donate'] = 'https://funding.communitybridge.org/projects/' + s
+                            break
+                    elif k == 'github':
+                        s = sanitize_funding_yml_name(v)
+                        if s:
+                            app['Donate'] = 'https://github.com/sponsors/' + s
+                            break
+                    elif k == 'issuehunt':
+                        s = sanitize_funding_yml_name(v)
+                        if s:
+                            app['Donate'] = 'https://issuehunt.io/r/' + s
+                            break
+                    elif k == 'ko_fi':
+                        s = sanitize_funding_yml_name(v)
+                        if s:
+                            app['Donate'] = 'https://ko-fi.com/' + s
+                            break
+                    elif k == 'patreon':
+                        s = sanitize_funding_yml_name(v)
+                        if s:
+                            app['Donate'] = 'https://patreon.com/' + s
+                            break
 
 
 def copy_triple_t_store_metadata(apps):
@@ -2179,6 +2296,7 @@ def main():
                 else:
                     logging.warning(msg + '\n\t' + _('Use `fdroid update -c` to create it.'))
 
+    insert_funding_yml_donation_links(apps)
     copy_triple_t_store_metadata(apps)
     insert_obbs(repodirs[0], apps, apks)
     insert_localized_app_metadata(apps)
