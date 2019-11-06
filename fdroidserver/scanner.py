@@ -96,7 +96,7 @@ def scan_source(build_dir, build=metadata.Build()):
 
     gradle_mavenrepo = re.compile(r'maven *{ *(url)? *[\'"]?([^ \'"]*)[\'"]?')
 
-    allowed_repos = [re.compile(r'^https?://' + re.escape(repo) + r'/*') for repo in [
+    allowed_repos = [re.compile(r'^https://' + re.escape(repo) + r'/*') for repo in [
         'repo1.maven.org/maven2',  # mavenCentral()
         'jcenter.bintray.com',     # jcenter()
         'jitpack.io',
