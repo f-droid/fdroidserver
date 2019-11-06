@@ -352,10 +352,13 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         git_repodir = os.path.join(git_mirror_path, 'fdroid', repo_section)
         if not os.path.isdir(git_repodir):
             os.makedirs(git_repodir)
-        if os.path.isdir(dotgit) and _get_size(git_mirror_path) > 1000000000:
+        # github/gitlab use bare git repos, so only count the .git folder
+        # test: generate giant APKs by including AndroidManifest.xml and and large
+        # file from /dev/urandom, then sign it.  Then add those to the git repo.
+        if os.path.isdir(dotgit) and _get_size(dotgit) > 1000000000:
             logging.warning('Deleting git-mirror history, repo is too big (1 gig max)')
             shutil.rmtree(dotgit)
-        if options.no_keep_git_mirror_archive and _get_size(git_mirror_path) > 1000000000:
+        if options.no_keep_git_mirror_archive and _get_size(dotgit) > 1000000000:
             logging.warning('Deleting archive, repo is too big (1 gig max)')
             archive_path = os.path.join(git_mirror_path, 'fdroid', 'archive')
             shutil.rmtree(archive_path, ignore_errors=True)
