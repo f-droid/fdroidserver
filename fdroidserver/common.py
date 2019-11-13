@@ -1034,9 +1034,12 @@ class vcs_gitsvn(vcs):
                 raise VCSException(_('HTTPS must be used with Subversion URLs!'))
 
             # git-svn sucks at certificate validation, this throws useful errors:
-            import requests
-            r = requests.head(remote)
-            r.raise_for_status()
+            try:
+                import requests
+                r = requests.head(remote)
+                r.raise_for_status()
+            except Exception as e:
+                raise VCSException('SVN certificate pre-validation failed: ' + str(e))
             location = r.headers.get('location')
             if location and not location.startswith('https://'):
                 raise VCSException(_('Invalid redirect to non-HTTPS: {before} -> {after} ')
@@ -2534,12 +2537,12 @@ def get_first_signer_certificate(apkpath):
         apkobject = _get_androguard_APK(apkpath)
         certs = apkobject.get_certificates_der_v2()
         if len(certs) > 0:
-            logging.info(_('Using APK Signature v2'))
+            logging.debug(_('Using APK Signature v2'))
             cert_encoded = certs[0]
         if not cert_encoded:
             certs = apkobject.get_certificates_der_v3()
             if len(certs) > 0:
-                logging.info(_('Using APK Signature v3'))
+                logging.debug(_('Using APK Signature v3'))
                 cert_encoded = certs[0]
 
     if not cert_encoded:
@@ -3258,8 +3261,9 @@ def deploy_build_log_with_rsync(appid, vercode, log_content):
 
     # gzip compress log file
     log_gz_path = os.path.join('repo',
-                               '{pkg}_{ver}.log.gz'.format(pkg=appid,
-                                                           ver=vercode))
+                               '{appid}_{versionCode}.log.gz'.format(appid=appid,
+                                                                     versionCode=vercode))
+
     with gzip.open(log_gz_path, 'wb') as f:
         if isinstance(log_content, str):
             f.write(bytes(log_content, 'utf-8'))
