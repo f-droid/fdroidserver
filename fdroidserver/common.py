@@ -1034,9 +1034,12 @@ class vcs_gitsvn(vcs):
                 raise VCSException(_('HTTPS must be used with Subversion URLs!'))
 
             # git-svn sucks at certificate validation, this throws useful errors:
-            import requests
-            r = requests.head(remote)
-            r.raise_for_status()
+            try:
+                import requests
+                r = requests.head(remote)
+                r.raise_for_status()
+            except Exception as e:
+                raise VCSException('SVN certificate pre-validation failed: ' + str(e))
             location = r.headers.get('location')
             if location and not location.startswith('https://'):
                 raise VCSException(_('Invalid redirect to non-HTTPS: {before} -> {after} ')
