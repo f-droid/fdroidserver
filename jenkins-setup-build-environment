@@ -55,15 +55,27 @@ mkdir $VAGRANT_HOME
 
 rm -rf "$WORKSPACE"/../*/.testfiles
 
-cd $WORKSPACE
+memtotal=$(grep ^MemTotal: /proc/meminfo | awk '{print $2}')
+if [ $memtotal -gt 8092876 ]; then
+    memory=8192
+else
+    memory=$(((memtotal / 1024) - 1024))
+fi
+if [ `nproc` -le 6 ]; then
+    cpus=$((`nproc` - 1))
+else
+    cpus=6
+fi
 cat <<EOF > $WORKSPACE/makebuildserver.config.py
 debian_mirror = 'http://deb.debian.org/debian/'
 boot_timeout = 1200
 apt_package_cache = True
 copy_caches_from_host = True
-memory = 8192
-cpus = 6
+memory = $memory
+cpus = $cpus
 EOF
+
+cd $WORKSPACE
 ./makebuildserver -vv --clean
 
 if [ -z "`vagrant box list | egrep '^buildserver\s+\((libvirt|virtualbox), [0-9]+\)$'`" ]; then
