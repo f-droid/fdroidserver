@@ -3209,10 +3209,14 @@ def parse_xml(path):
 
 def string_is_integer(string):
     try:
-        int(string)
+        int(string, 0)
         return True
     except ValueError:
-        return False
+        try:
+            int(string)
+            return True
+        except ValueError:
+            return False
 
 
 def local_rsync(options, fromdir, todir):

@@ -168,10 +168,18 @@ def check_tags(app, pattern):
                 if vercode:
                     logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
                                   .format(subdir, version, vercode))
-                    if int(vercode) > int(hcode):
+                    try:
+                        i_vercode = int(vercode, 0)
+                    except ValueError:
+                        i_vercode = int(vercode)
+                    try:
+                        i_hcode = int(hcode, 0)
+                    except ValueError:
+                        i_hcode = int(hcode)
+                    if i_vercode > i_hcode:
                         hpak = package
                         htag = tag
-                        hcode = str(int(vercode))
+                        hcode = str(i_vercode)
                         hver = version
 
         if not hpak:
