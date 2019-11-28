@@ -497,6 +497,11 @@ def read_pkg_args(appid_versionCode_pairs, allow_vercodes=False):
     for p in appid_versionCode_pairs:
         if allow_vercodes and ':' in p:
             package, vercode = p.split(':')
+            try:
+                i_vercode = int(vercode, 0)
+            except ValueError:
+                i_vercode = int(vercode)
+            vercode = str(i_vercode)
         else:
             package, vercode = p, None
         if package not in vercodes:
