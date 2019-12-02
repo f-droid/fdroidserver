@@ -232,9 +232,11 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         config += "repo_name = '%s'\n" % repo_git_base
         config += "repo_url = '%s'\n" % repo_url
         config += "repo_icon = 'icon.png'\n"
+        config += "repo_description = 'Nightly builds from %s'\n" % git_user_email
         config += "archive_name = '%s'\n" % (repo_git_base + ' archive')
         config += "archive_url = '%s'\n" % (repo_base + '/archive')
         config += "archive_icon = 'icon.png'\n"
+        config += "archive_description = 'Old nightly builds that have been archived.'\n"
         config += "archive_older = %i\n" % options.archive_older
         config += "servergitmirrors = '%s'\n" % servergitmirror
         config += "keystore = '%s'\n" % KEYSTORE_FILE
