@@ -139,12 +139,12 @@ default_config = {
     'repo_url': "https://MyFirstFDroidRepo.org/fdroid/repo",
     'repo_name': "My First FDroid Repo Demo",
     'repo_icon': "fdroid-icon.png",
-    'repo_description': '''
+    'repo_description': _('''
         This is a repository of apps to be used with FDroid. Applications in this
         repository are either official binaries built by the original application
-        developers, or are binaries built from source by the admin of f-droid.org
-        using the tools on https://gitlab.com/u/fdroid.
-        ''',
+        developers, or are binaries built from source by f-droid.org using the
+        tools on https://gitlab.com/fdroid.
+        '''),
     'archive_description': _('These are the apps that have been archived from the main repo.'),
     'archive_older': 0,
     'lint_licenses': fdroidserver.lint.APPROVED_LICENSES,
