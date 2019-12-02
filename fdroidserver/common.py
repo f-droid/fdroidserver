@@ -145,6 +145,7 @@ default_config = {
         developers, or are binaries built from source by the admin of f-droid.org
         using the tools on https://gitlab.com/u/fdroid.
         ''',
+    'archive_description': _('These are the apps that have been archived from the main repo.'),
     'archive_older': 0,
     'lint_licenses': fdroidserver.lint.APPROVED_LICENSES,
 }
