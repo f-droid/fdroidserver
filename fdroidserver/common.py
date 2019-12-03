@@ -3224,6 +3224,14 @@ def string_is_integer(string):
             return False
 
 
+def version_code_string_to_int(vercode):
+    """Convert an version code string of any base into an int"""
+    try:
+        return int(vercode, 0)
+    except ValueError:
+        return int(vercode)
+
+
 def local_rsync(options, fromdir, todir):
     '''Rsync method for local to local copying of things
 

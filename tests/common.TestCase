@@ -1084,6 +1084,14 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(fdroidserver.common.string_is_integer('01g'))
         self.assertFalse(fdroidserver.common.string_is_integer('o123'))
 
+    def test_version_code_string_to_int(self):
+        self.assertEqual(16, fdroidserver.common.version_code_string_to_int('0x10'))
+        self.assertEqual(198712389, fdroidserver.common.version_code_string_to_int('198712389'))
+        self.assertEqual(8, fdroidserver.common.version_code_string_to_int('0o10'))
+        self.assertEqual(10, fdroidserver.common.version_code_string_to_int('010'))
+        self.assertEqual(123, fdroidserver.common.version_code_string_to_int('0000123'))
+        self.assertEqual(-42, fdroidserver.common.version_code_string_to_int('-42'))
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
