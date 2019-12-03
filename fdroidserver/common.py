@@ -497,6 +497,11 @@ def read_pkg_args(appid_versionCode_pairs, allow_vercodes=False):
     for p in appid_versionCode_pairs:
         if allow_vercodes and ':' in p:
             package, vercode = p.split(':')
+            try:
+                i_vercode = int(vercode, 0)
+            except ValueError:
+                i_vercode = int(vercode)
+            vercode = str(i_vercode)
         else:
             package, vercode = p, None
         if package not in vercodes:
@@ -3209,10 +3214,22 @@ def parse_xml(path):
 
 def string_is_integer(string):
     try:
-        int(string)
+        int(string, 0)
         return True
     except ValueError:
-        return False
+        try:
+            int(string)
+            return True
+        except ValueError:
+            return False
+
+
+def version_code_string_to_int(vercode):
+    """Convert an version code string of any base into an int"""
+    try:
+        return int(vercode, 0)
+    except ValueError:
+        return int(vercode)
 
 
 def local_rsync(options, fromdir, todir):
