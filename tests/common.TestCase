@@ -1076,6 +1076,14 @@ class CommonTest(unittest.TestCase):
                 with gzip.open(expected_log_path, 'r') as f:
                     self.assertEqual(f.read(), mocklogcontent)
 
+    def test_string_is_integer(self):
+        self.assertTrue(fdroidserver.common.string_is_integer('0x10'))
+        self.assertTrue(fdroidserver.common.string_is_integer('010'))
+        self.assertTrue(fdroidserver.common.string_is_integer('123'))
+        self.assertFalse(fdroidserver.common.string_is_integer('0xgg'))
+        self.assertFalse(fdroidserver.common.string_is_integer('01g'))
+        self.assertFalse(fdroidserver.common.string_is_integer('o123'))
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
