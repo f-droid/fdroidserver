@@ -704,7 +704,7 @@ def description_html(s, linkres):
     return ps.text_html
 
 
-def parse_srclib(metadatapath):
+def parse_txt_srclib(metadatapath):
 
     thisinfo = {}
 
@@ -746,7 +746,7 @@ def read_srclibs():
 
     The information read will be accessible as metadata.srclibs, which is a
     dictionary, keyed on srclib name, with the values each being a dictionary
-    in the same format as that returned by the parse_srclib function.
+    in the same format as that returned by the parse_txt_srclib function.
 
     A MetaDataException is raised if there are any problems with the srclib
     metadata.
@@ -765,7 +765,7 @@ def read_srclibs():
 
     for metadatapath in sorted(glob.glob(os.path.join(srcdir, '*.txt'))):
         srclibname = os.path.basename(metadatapath[:-4])
-        srclibs[srclibname] = parse_srclib(metadatapath)
+        srclibs[srclibname] = parse_txt_srclib(metadatapath)
 
 
 def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):

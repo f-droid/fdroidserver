@@ -23,6 +23,8 @@ print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
+from testcommon import TmpCwd
+
 import fdroidserver.common
 import fdroidserver.metadata
 from fdroidserver.exception import MetaDataException
@@ -567,6 +569,29 @@ class MetadataTest(unittest.TestCase):
             AutoUpdateMode: None
             UpdateCheckMode: None
             """))
+
+    def test_parse_txt_srclib(self):
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('JSoup.txt', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    # Source details (the only mandatory fields)
+                    Repo Type:git
+                    Repo:https://github.com/jhy/jsoup.git
+
+                    # Comma-separated list of subdirs to use. The first existing subdirectory
+                    # found between those given will be used. If none is found or provided, the
+                    # root of the repo directory will be used instead.
+                    Subdir:
+
+                    # Any extra commands to prepare the source library
+                    Prepare:
+                    '''))
+            srclib = fdroidserver.metadata.parse_txt_srclib('JSoup.txt')
+            self.assertDictEqual({'Repo': 'https://github.com/jhy/jsoup.git',
+                                  'Repo Type': 'git',
+                                  'Subdir': [''],
+                                  'Prepare': ''},
+                                 srclib)
 
 
 if __name__ == "__main__":
