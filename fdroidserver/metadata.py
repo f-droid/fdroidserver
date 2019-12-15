@@ -709,7 +709,7 @@ def parse_txt_srclib(metadatapath):
     thisinfo = {}
 
     # Defaults for fields that come from metadata
-    thisinfo['Repo Type'] = ''
+    thisinfo['RepoType'] = ''
     thisinfo['Repo'] = ''
     thisinfo['Subdir'] = None
     thisinfo['Prepare'] = None
@@ -730,6 +730,9 @@ def parse_txt_srclib(metadatapath):
             f, v = line.split(':', 1)
         except ValueError:
             warn_or_exception(_("Invalid metadata in %s:%d") % (line, n))
+
+        # collapse whitespaces in field names
+        f = f.replace(' ', '')
 
         if f == "Subdir":
             thisinfo[f] = v.split(',')

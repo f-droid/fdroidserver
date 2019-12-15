@@ -773,7 +773,7 @@ def getvcs(vcstype, remote, local):
 def getsrclibvcs(name):
     if name not in fdroidserver.metadata.srclibs:
         raise VCSException("Missing srclib " + name)
-    return fdroidserver.metadata.srclibs[name]['Repo Type']
+    return fdroidserver.metadata.srclibs[name]['RepoType']
 
 
 class vcs:
@@ -1838,7 +1838,7 @@ def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
     sdir = os.path.join(srclib_dir, name)
 
     if not preponly:
-        vcs = getvcs(srclib["Repo Type"], srclib["Repo"], sdir)
+        vcs = getvcs(srclib["RepoType"], srclib["Repo"], sdir)
         vcs.srclib = (name, number, sdir)
         if ref:
             vcs.gotorevision(ref, refresh)

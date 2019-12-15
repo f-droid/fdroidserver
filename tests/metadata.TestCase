@@ -588,7 +588,7 @@ class MetadataTest(unittest.TestCase):
                     '''))
             srclib = fdroidserver.metadata.parse_txt_srclib('JSoup.txt')
             self.assertDictEqual({'Repo': 'https://github.com/jhy/jsoup.git',
-                                  'Repo Type': 'git',
+                                  'RepoType': 'git',
                                   'Subdir': [''],
                                   'Prepare': ''},
                                  srclib)
