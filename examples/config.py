@@ -21,7 +21,7 @@
 #     'r17c': None,
 #     'r18b': None,
 #     'r19c': None,
-#     'r20': None,
+#     'r20b': None,
 # }
 
 # Directory to store downloaded tools in (i.e. gradle versions)
