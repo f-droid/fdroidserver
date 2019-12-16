@@ -34,7 +34,7 @@ import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
 from testcommon import TmpCwd
-from fdroidserver.exception import FDroidException
+from fdroidserver.exception import FDroidException, VCSException
 
 
 class CommonTest(unittest.TestCase):
@@ -1240,6 +1240,16 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(10, fdroidserver.common.version_code_string_to_int('010'))
         self.assertEqual(123, fdroidserver.common.version_code_string_to_int('0000123'))
         self.assertEqual(-42, fdroidserver.common.version_code_string_to_int('-42'))
+
+    def test_getsrclibvcs(self):
+        fdroidserver.metadata.srclibs = {'somelib': {'RepoType': 'git'},
+                                         'yeslib': {'RepoType': 'hg'},
+                                         'nolib': {'RepoType': 'git-svn'}}
+        self.assertEqual(fdroidserver.common.getsrclibvcs('somelib'), 'git')
+        self.assertEqual(fdroidserver.common.getsrclibvcs('yeslib'), 'hg')
+        self.assertEqual(fdroidserver.common.getsrclibvcs('nolib'), 'git-svn')
+        with self.assertRaises(VCSException):
+            fdroidserver.common.getsrclibvcs('nonexistentlib')
 
 
 if __name__ == "__main__":
