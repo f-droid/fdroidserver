@@ -25,6 +25,7 @@ import pwd
 import re
 import subprocess
 import time
+import urllib
 from argparse import ArgumentParser
 import logging
 import shutil
@@ -536,18 +537,40 @@ def upload_to_virustotal(repo_section, virustotal_apikey):
                     elif r.status_code == 204:
                         time.sleep(10)  # wait for public API rate limiting
 
+                upload_url = None
                 if needs_file_upload:
-                    logging.info('Uploading ' + repofilename + ' to virustotal')
+                    manual_url = 'https://www.virustotal.com/'
+                    size = os.path.getsize(repofilename)
+                    if size > 200000000:
+                        # VirusTotal API 200MB hard limit
+                        logging.error(_('{path} more than 200MB, manually upload: {url}')
+                                      .format(path=repofilename, url=manual_url))
+                    elif size > 32000000:
+                        # VirusTotal API requires fetching a URL to upload bigger files
+                        r = requests.get('https://www.virustotal.com/vtapi/v2/file/scan/upload_url?'
+                                         + urllib.parse.urlencode(data), headers=headers)
+                        if r.status_code == 200:
+                            upload_url = r.json().get('upload_url')
+                        elif r.status_code == 403:
+                            logging.error(_('VirusTotal API key cannot upload files larger than 32MB, '
+                                            + 'use {url} to upload {path}.')
+                                          .format(path=repofilename, url=manual_url))
+                        else:
+                            r.raise_for_status()
+                    else:
+                        upload_url = 'https://www.virustotal.com/vtapi/v2/file/scan'
+
+                if upload_url:
+                    logging.info(_('Uploading {apkfilename} to virustotal')
+                                 .format(apkfilename=repofilename))
                     files = {
                         'file': (filename, open(repofilename, 'rb'))
                     }
-                    r = requests.post('https://www.virustotal.com/vtapi/v2/file/scan',
-                                      data=data, headers=headers, files=files)
-                    logging.debug('If this upload fails, try manually uploading here:\n'
-                                  + 'https://www.virustotal.com/')
+                    r = requests.post(upload_url, data=data, headers=headers, files=files)
+                    logging.debug(_('If this upload fails, try manually uploading to {url}')
+                                  .format(url=manual_url))
                     r.raise_for_status()
                     response = r.json()
-
                     logging.info(response['verbose_msg'] + " " + response['permalink'])
 
 
