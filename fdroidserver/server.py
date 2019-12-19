@@ -476,7 +476,7 @@ def upload_to_android_observatory(repo_section):
             logging.info(message)
 
 
-def upload_to_virustotal(repo_section, vt_apikey):
+def upload_to_virustotal(repo_section, virustotal_apikey):
     import json
     import requests
 
@@ -509,13 +509,13 @@ def upload_to_virustotal(repo_section, vt_apikey):
                     "User-Agent": "F-Droid"
                 }
                 data = {
-                    'apikey': vt_apikey,
+                    'apikey': virustotal_apikey,
                     'resource': package['hash'],
                 }
                 needs_file_upload = False
                 while True:
-                    r = requests.post('https://www.virustotal.com/vtapi/v2/file/report',
-                                      data=data, headers=headers)
+                    r = requests.get('https://www.virustotal.com/vtapi/v2/file/report?'
+                                     + urllib.parse.urlencode(data), headers=headers)
                     if r.status_code == 200:
                         response = r.json()
                         if response['response_code'] == 0:
