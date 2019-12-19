@@ -1251,6 +1251,53 @@ class CommonTest(unittest.TestCase):
         with self.assertRaises(VCSException):
             fdroidserver.common.getsrclibvcs('nonexistentlib')
 
+    def test_getsrclib_not_found(self):
+        fdroidserver.common.config = {'sdk_path': '',
+                                      'java_paths': {}}
+        fdroidserver.metadata.srclibs = {}
+
+        with self.assertRaisesRegex(VCSException, 'srclib SDL not found.'):
+            fdroidserver.common.getsrclib('SDL@release-2.0.3', 'srclib')
+
+    def test_getsrclib_gotorevision_raw(self):
+        fdroidserver.common.config = {'sdk_path': '',
+                                      'java_paths': {}}
+        fdroidserver.metadata.srclibs = {'SDL': {'RepoType': 'git',
+                                                 'Repo': ''}}
+
+        vcs = mock.Mock()
+
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.makedirs(os.path.join('srclib', 'SDL'))
+            with mock.patch('fdroidserver.common.getvcs', return_value=vcs):
+                ret = fdroidserver.common.getsrclib('SDL', 'srclib', raw=True)
+                self.assertEqual(vcs.srclib, ('SDL', None, 'srclib/SDL'))
+                self.assertEqual(ret, vcs)
+
+    def test_getsrclib_gotorevision_ref(self):
+        fdroidserver.common.config = {'sdk_path': '',
+                                      'java_paths': {}}
+        fdroidserver.metadata.srclibs = {'ACRA': {'RepoType': 'git',
+                                                  'Repo': 'https://github.com/ACRA/acra.git',
+                                                  'Subdir': None,
+                                                  'Prepare': None}}
+
+        vcs = mock.Mock()
+        skm = mock.Mock()
+        dfm = mock.Mock()
+
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.makedirs(os.path.join('srclib', 'ACRA'))
+            with mock.patch('fdroidserver.common.getvcs', return_value=vcs):
+                with mock.patch('fdroidserver.common.remove_signing_keys', skm):
+                    with mock.patch('fdroidserver.common.remove_debuggable_flags', dfm):
+                        ret = fdroidserver.common.getsrclib('ACRA@acra-4.6.2', 'srclib')
+                        self.assertEqual(vcs.srclib, ('ACRA', None, 'srclib/ACRA'))
+                        vcs.gotorevision.assert_called_once_with('acra-4.6.2', True)
+                        skm.assert_called_once_with('srclib/ACRA')
+                        dfm.assert_called_once_with('srclib/ACRA')
+                        self.assertEqual(ret, ('ACRA', None, 'srclib/ACRA'))
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
