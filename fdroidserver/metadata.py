@@ -848,40 +848,6 @@ def split_list_values(s):
     return res
 
 
-def get_default_app_info(metadatapath=None):
-    if metadatapath is None:
-        appid = None
-    else:
-        appid, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
-
-    if appid == '.fdroid':  # we have local metadata in the app's source
-        if os.path.exists('AndroidManifest.xml'):
-            manifestroot = fdroidserver.common.parse_xml('AndroidManifest.xml')
-        else:
-            pattern = re.compile(r""".*manifest\.srcFile\s+'AndroidManifest\.xml'.*""")
-            for root, dirs, files in os.walk(os.getcwd()):
-                if 'build.gradle' in files:
-                    p = os.path.join(root, 'build.gradle')
-                    with open(p, 'rb') as f:
-                        data = f.read()
-                    m = pattern.search(data)
-                    if m:
-                        logging.debug('Using: ' + os.path.join(root, 'AndroidManifest.xml'))
-                        manifestroot = fdroidserver.common.parse_xml(os.path.join(root, 'AndroidManifest.xml'))
-                        break
-        if manifestroot is None:
-            warn_or_exception(_("Cannot find an appid for {path}!")
-                              .format(path=metadatapath))
-        appid = manifestroot.attrib['package']
-
-    app = App()
-    app.metadatapath = metadatapath
-    if appid is not None:
-        app.id = appid
-
-    return app
-
-
 def sorted_builds(builds):
     return sorted(builds, key=lambda build: int(build.versionCode))
 
