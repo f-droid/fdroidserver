@@ -744,6 +744,43 @@ def parse_txt_srclib(metadatapath):
     return thisinfo
 
 
+def parse_yml_srclib(metadatapath):
+
+    thisinfo = {'RepoType': '',
+                'Repo': '',
+                'Subdir': None,
+                'Prepare': None}
+
+    if not os.path.exists(metadatapath):
+        warn_or_exception(_("Invalid scrlib metadata: '{file}' "
+                            "does not exist"
+                            .format(file=metadatapath)))
+        return thisinfo
+
+    with open(metadatapath, "r", encoding="utf-8") as f:
+        try:
+            data = yaml.load(f, Loader=SafeLoader)
+        except yaml.error.YAMLError as e:
+            warn_or_exception(_("Invalid srclib metadata: could not "
+                                "parse '{file}'"
+                                .format(file=metadatapath)))
+            return thisinfo
+
+    for key in data.keys():
+        if key not in thisinfo.keys():
+            warn_or_exception(_("Invalid srclib metadata: unknown key "
+                                "'{key}' in '{file}'")
+                                .format(key=key, file=metadatapath))
+            return thisinfo
+        else:
+            if key == 'Subdir':
+                thisinfo[key] = str(data[key] or '').split(',')
+            else:
+                thisinfo[key] = str(data[key] or '')
+
+    return thisinfo
+
+
 def read_srclibs():
     """Read all srclib metadata.
 
@@ -769,6 +806,10 @@ def read_srclibs():
     for metadatapath in sorted(glob.glob(os.path.join(srcdir, '*.txt'))):
         srclibname = os.path.basename(metadatapath[:-4])
         srclibs[srclibname] = parse_txt_srclib(metadatapath)
+
+    for metadatapath in sorted(glob.glob(os.path.join(srcdir, '*.yml'))):
+        srclibname = os.path.basename(metadatapath[:-4])
+        srclibs[srclibname] = parse_yml_srclib(metadatapath)
 
 
 def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
