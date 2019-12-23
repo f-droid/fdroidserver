@@ -906,7 +906,7 @@ class vcs_git(vcs):
                 p = self.git(['fetch', 'origin'], cwd=self.local)
                 if p.returncode != 0:
                     raise VCSException(_("Git fetch failed"), p.output)
-                p = self.git(['fetch', '--prune', '--tags', 'origin'], output=False, cwd=self.local)
+                p = self.git(['fetch', '--prune', '--tags', '--force', 'origin'], output=False, cwd=self.local)
                 if p.returncode != 0:
                     raise VCSException(_("Git fetch failed"), p.output)
                 # Recreate origin/HEAD as git clone would do it, in case it disappeared
