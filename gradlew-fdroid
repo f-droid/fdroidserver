@@ -174,7 +174,7 @@ if [[ -n $wrapper_ver ]]; then
 fi
 
 # Earliest takes priority
-for f in {.,..}/build.gradle; do
+for f in {.,..}/build.gradle{,.kts}; do
     [[ -f $f ]] || continue
     while IFS='' read -r line || [ -n "$line" ]; do
         if [[ -z "$plugin_pver" && $line == *'com.android.tools.build:gradle:'* ]]; then

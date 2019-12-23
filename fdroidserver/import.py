@@ -299,7 +299,8 @@ def main():
         app.Categories = options.categories.split(',')
     if os.path.exists(os.path.join(subdir, 'jni')):
         build.buildjni = ['yes']
-    if os.path.exists(os.path.join(subdir, 'build.gradle')):
+    if os.path.exists(os.path.join(subdir, 'build.gradle')) \
+       or os.path.exists(os.path.join(subdir, 'build.gradle')):
         build.gradle = ['yes']
 
     package_json = os.path.join(build_dir, 'package.json')  # react-native
