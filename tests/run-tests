@@ -387,6 +387,21 @@ if ! which apksigner; then
     test -e archive/com.politedroid_5.apk
     ! test -e archive/com.politedroid_6.apk
     test -e repo/com.politedroid_6.apk
+
+    echo "set an earlier version as CVC and test that it's the only one not archived"
+    $sed -i.tmp 's,^Current Version Code:6,Current Version Code:5,' metadata/com.politedroid.txt
+    $fdroid update --pretty --nosign
+    test `grep '<package>' archive/index.xml | wc -l` -eq 3
+    test `grep '<package>' repo/index.xml | wc -l` -eq 1
+    grep -F com.politedroid_3.apk archive/index.xml
+    grep -F com.politedroid_4.apk archive/index.xml
+    grep -F com.politedroid_5.apk repo/index.xml
+    grep -F com.politedroid_6.apk archive/index.xml
+    test -e archive/com.politedroid_3.apk
+    test -e archive/com.politedroid_4.apk
+    test -e repo/com.politedroid_5.apk
+    ! test -e repo/com.politedroid_6.apk
+    test -e archive/com.politedroid_6.apk
 fi
 
 
