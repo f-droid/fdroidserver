@@ -27,6 +27,10 @@ import logging
 import textwrap
 import io
 import yaml
+try:
+    from yaml import CSafeLoader as SafeLoader
+except ImportError:
+    from yaml import SafeLoader
 import importlib
 from collections import OrderedDict
 
@@ -1036,7 +1040,7 @@ def parse_json_metadata(mf, app):
 
 
 def parse_yaml_metadata(mf, app):
-    yamldata = yaml.safe_load(mf)
+    yamldata = yaml.load(mf, Loader=SafeLoader)
 
     deprecated_in_yaml = ['Provides']
 
