@@ -42,12 +42,15 @@ srclibs = None
 warnings_action = None
 
 
-def warn_or_exception(value):
+def warn_or_exception(value, cause=None):
     '''output warning or Exception depending on -W'''
     if warnings_action == 'ignore':
         pass
     elif warnings_action == 'error':
-        raise MetaDataException(value)
+        if cause:
+            raise MetaDataException(value) from cause
+        else:
+            raise MetaDataException(value)
     else:
         logging.warning(value)
 
@@ -763,14 +766,15 @@ def parse_yml_srclib(metadatapath):
         except yaml.error.YAMLError as e:
             warn_or_exception(_("Invalid srclib metadata: could not "
                                 "parse '{file}'"
-                                .format(file=metadatapath)))
+                              .format(file=metadatapath)),
+                              e)
             return thisinfo
 
     for key in data.keys():
         if key not in thisinfo.keys():
             warn_or_exception(_("Invalid srclib metadata: unknown key "
                                 "'{key}' in '{file}'")
-                                .format(key=key, file=metadatapath))
+                              .format(key=key, file=metadatapath))
             return thisinfo
         else:
             if key == 'Subdir':
