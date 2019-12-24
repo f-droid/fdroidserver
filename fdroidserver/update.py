@@ -117,6 +117,10 @@ def get_all_icon_dirs(repodir):
         yield get_icon_dir(repodir, density)
 
 
+def disabled_algorithms_allowed():
+    return options.allow_disabled_algorithms or config['allow_disabled_algorithms']
+
+
 def update_wiki(apps, sortedids, apks):
     """Update the wiki
 
@@ -460,7 +464,7 @@ def get_cache():
 
     """
     apkcachefile = get_cache_file()
-    ada = options.allow_disabled_algorithms or config['allow_disabled_algorithms']
+    ada = disabled_algorithms_allowed()
     if not options.clean and os.path.exists(apkcachefile):
         with open(apkcachefile) as fp:
             apkcache = json.load(fp, object_pairs_hook=collections.OrderedDict)
@@ -1598,7 +1602,7 @@ def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
     apks = []
     for apkfile in sorted(glob.glob(os.path.join(repodir, '*.apk'))):
         apkfilename = apkfile[len(repodir) + 1:]
-        ada = options.allow_disabled_algorithms or config['allow_disabled_algorithms']
+        ada = disabled_algorithms_allowed()
         (skip, apk, cachethis) = process_apk(apkcache, apkfilename, repodir, knownapks,
                                              use_date_from_apk, ada, True)
         if skip:
@@ -1857,7 +1861,7 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
                 break
             if 'antiFeatures' not in apk:
                 keep.append(apk)
-            elif 'DisabledAlgorithm' not in apk['antiFeatures']:
+            elif 'DisabledAlgorithm' not in apk['antiFeatures'] or disabled_algorithms_allowed():
                 keep.append(apk)
 
         # actually move apks to the target section
