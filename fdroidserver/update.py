@@ -117,6 +117,10 @@ def get_all_icon_dirs(repodir):
         yield get_icon_dir(repodir, density)
 
 
+def disabled_algorithms_allowed():
+    return options.allow_disabled_algorithms or config['allow_disabled_algorithms']
+
+
 def update_wiki(apps, sortedids, apks):
     """Update the wiki
 
@@ -460,7 +464,7 @@ def get_cache():
 
     """
     apkcachefile = get_cache_file()
-    ada = options.allow_disabled_algorithms or config['allow_disabled_algorithms']
+    ada = disabled_algorithms_allowed()
     if not options.clean and os.path.exists(apkcachefile):
         with open(apkcachefile) as fp:
             apkcache = json.load(fp, object_pairs_hook=collections.OrderedDict)
@@ -1598,7 +1602,7 @@ def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
     apks = []
     for apkfile in sorted(glob.glob(os.path.join(repodir, '*.apk'))):
         apkfilename = apkfile[len(repodir) + 1:]
-        ada = options.allow_disabled_algorithms or config['allow_disabled_algorithms']
+        ada = disabled_algorithms_allowed()
         (skip, apk, cachethis) = process_apk(apkcache, apkfilename, repodir, knownapks,
                                              use_date_from_apk, ada, True)
         if skip:
@@ -1823,12 +1827,20 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
 
     def filter_apk_list_sorted(apk_list):
         res = []
+        currentVersionApk = None
         for apk in apk_list:
             if apk['packageName'] == appid:
+                if apk['versionCode'] == common.version_code_string_to_int(app.CurrentVersionCode):
+                    currentVersionApk = apk
+                    continue
                 res.append(apk)
 
         # Sort the apk list by version code. First is highest/newest.
-        return sorted(res, key=lambda apk: apk['versionCode'], reverse=True)
+        sorted_list = sorted(res, key=lambda apk: apk['versionCode'], reverse=True)
+        if currentVersionApk:
+            # Insert apk which corresponds to currentVersion at the front
+            sorted_list.insert(0, currentVersionApk)
+        return sorted_list
 
     for appid, app in apps.items():
 
@@ -1840,26 +1852,28 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
         logging.debug(_("Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}")
                       .format(appid=appid, integer=len(apks), keep=keepversions, arch=len(archapks)))
 
-        current_app_apks = filter_apk_list_sorted(apks)
-        if len(current_app_apks) > keepversions:
-            # Move back the ones we don't want.
-            for apk in current_app_apks[keepversions:]:
-                move_apk_between_sections(repodir, archivedir, apk)
-                archapks.append(apk)
-                apks.remove(apk)
+        all_app_apks = filter_apk_list_sorted(apks + archapks)
 
-        current_app_archapks = filter_apk_list_sorted(archapks)
-        if len(current_app_apks) < keepversions and len(current_app_archapks) > 0:
-            kept = 0
-            # Move forward the ones we want again, except DisableAlgorithm
-            for apk in current_app_archapks:
-                if 'DisabledAlgorithm' not in apk['antiFeatures']:
-                    move_apk_between_sections(archivedir, repodir, apk)
-                    archapks.remove(apk)
-                    apks.append(apk)
-                    kept += 1
-                if kept == keepversions:
-                    break
+        # determine which apks to keep in repo
+        keep = []
+        for apk in all_app_apks:
+            if len(keep) == keepversions:
+                break
+            if 'antiFeatures' not in apk:
+                keep.append(apk)
+            elif 'DisabledAlgorithm' not in apk['antiFeatures'] or disabled_algorithms_allowed():
+                keep.append(apk)
+
+        # actually move apks to the target section
+        for apk in all_app_apks:
+            if apk in apks and apk not in keep:
+                apks.remove(apk)
+                archapks.append(apk)
+                move_apk_between_sections(repodir, archivedir, apk)
+            elif apk in archapks and apk in keep:
+                archapks.remove(apk)
+                apks.append(apk)
+                move_apk_between_sections(archivedir, repodir, apk)
 
 
 def move_apk_between_sections(from_dir, to_dir, apk):
