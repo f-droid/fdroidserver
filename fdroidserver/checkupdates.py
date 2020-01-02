@@ -485,13 +485,13 @@ def checkupdates_app(app):
             pass
         elif mode.startswith('Version '):
             pattern = mode[8:]
+            suffix = ''
             if pattern.startswith('+'):
                 try:
-                    suffix, pattern = pattern.split(' ', 1)
+                    suffix, pattern = pattern[1:].split(' ', 1)
                 except ValueError:
                     raise MetaDataException("Invalid AUM: " + mode)
-            else:
-                suffix = ''
+
             gotcur = False
             latest = None
             for build in app.builds:
@@ -507,9 +507,9 @@ def checkupdates_app(app):
                 newbuild = copy.deepcopy(latest)
                 newbuild.disable = False
                 newbuild.versionCode = app.CurrentVersionCode
-                newbuild.versionName = app.CurrentVersion + suffix
+                newbuild.versionName = app.CurrentVersion + suffix.replace('%c', newbuild.versionCode)
                 logging.info("...auto-generating build for " + newbuild.versionName)
-                commit = pattern.replace('%v', newbuild.versionName)
+                commit = pattern.replace('%v', app.CurrentVersion)
                 commit = commit.replace('%c', newbuild.versionCode)
                 newbuild.commit = commit
                 app.builds.append(newbuild)
