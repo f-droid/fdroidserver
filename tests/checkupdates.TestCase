@@ -32,6 +32,58 @@ class CommonTest(unittest.TestCase):
             os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
 
+    def test_autoupdatemode_no_suffix(self):
+        fdroidserver.checkupdates.options = mock.Mock()
+        fdroidserver.checkupdates.options.auto = 'bleh'
+        fdroidserver.checkupdates.config = {}
+
+        app = fdroidserver.metadata.App()
+        app.id = 'loop.starts.shooting'
+        app.metadatapath = 'metadata/' + app.id + '.yml'
+        app.CurrentVersion = '1.1.8-fdroid'
+        app.CurrentVersionCode = 10108
+        app.UpdateCheckMode = 'HTTP'
+        app.AutoUpdateMode = 'Version %v'
+
+        build = fdroidserver.metadata.Build()
+        build.versionCode = app.CurrentVersionCode
+        build.versionName = app.CurrentVersion
+        app.builds.append(build)
+
+        with mock.patch('fdroidserver.checkupdates.check_http', lambda app: ('1.1.9', 10109)):
+            with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
+                with mock.patch('subprocess.call', lambda cmd: 0):
+                    fdroidserver.checkupdates.checkupdates_app(app)
+                build = app.builds[-1]
+                self.assertEqual(build.versionName, '1.1.9')
+                self.assertEqual(build.commit, '1.1.9')
+
+    def test_autoupdatemode_suffix(self):
+        fdroidserver.checkupdates.options = mock.Mock()
+        fdroidserver.checkupdates.options.auto = 'bleh'
+        fdroidserver.checkupdates.config = {}
+
+        app = fdroidserver.metadata.App()
+        app.id = 'loop.starts.shooting'
+        app.metadatapath = 'metadata/' + app.id + '.yml'
+        app.CurrentVersion = '1.1.8-fdroid'
+        app.CurrentVersionCode = 10108
+        app.UpdateCheckMode = 'HTTP'
+        app.AutoUpdateMode = 'Version +.%c-fdroid v%v_%c'
+
+        build = fdroidserver.metadata.Build()
+        build.versionCode = app.CurrentVersionCode
+        build.versionName = app.CurrentVersion
+        app.builds.append(build)
+
+        with mock.patch('fdroidserver.checkupdates.check_http', lambda app: ('1.1.9', 10109)):
+            with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
+                with mock.patch('subprocess.call', lambda cmd: 0):
+                    fdroidserver.checkupdates.checkupdates_app(app)
+                build = app.builds[-1]
+                self.assertEqual(build.versionName, '1.1.9.10109-fdroid')
+                self.assertEqual(build.commit, 'v1.1.9_10109')
+
     def test_checkupdates_app_http(self):
         fdroidserver.checkupdates.options = mock.Mock()
         fdroidserver.checkupdates.options.auto = 'bleh'
