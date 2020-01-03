@@ -557,9 +557,12 @@ def find_sdk_tools_cmd(cmd):
         sdk_platform_tools = os.path.join(config['sdk_path'], 'platform-tools')
         if os.path.exists(sdk_platform_tools):
             tooldirs.append(sdk_platform_tools)
-    tooldirs.append('/usr/bin')
+    if os.path.exists('/usr/bin'):
+        tooldirs.append('/usr/bin')
     for d in tooldirs:
         path = os.path.join(d, cmd)
+        if not os.path.isfile(path):
+            path += '.exe'
         if os.path.isfile(path):
             if cmd == 'aapt':
                 test_aapt_version(path)
