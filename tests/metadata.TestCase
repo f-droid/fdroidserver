@@ -15,6 +15,7 @@ import unittest
 import yaml
 import tempfile
 import textwrap
+from collections import OrderedDict
 from unittest import mock
 
 localmodule = os.path.realpath(
@@ -179,6 +180,50 @@ class MetadataTest(unittest.TestCase):
             with open('metadata-rewrite-yml/app.with.special.build.params.yml', 'r') as orig:
                 self.maxDiff = None
                 self.assertEqual(result.read(), orig.read())
+
+    def test_post_parse_yaml_metadata(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        yamldata = OrderedDict()
+        builds = []
+        yamldata['Builds'] = builds
+        build = OrderedDict()
+        builds.append(build)
+
+        build['versionCode'] = 1.1
+        self.assertRaises(fdroidserver.exception.MetaDataException,
+                          fdroidserver.metadata.post_parse_yaml_metadata, yamldata)
+
+        build['versionCode'] = '1'
+        self.assertRaises(fdroidserver.exception.MetaDataException,
+                          fdroidserver.metadata.post_parse_yaml_metadata, yamldata)
+
+        build['versionCode'] = 1
+        build['versionName'] = 1
+        fdroidserver.metadata.post_parse_yaml_metadata(yamldata)
+        self.assertNotEqual(1, yamldata['Builds'][0]['versionName'])
+        self.assertEqual('1', yamldata['Builds'][0]['versionName'])
+        self.assertEqual(1, yamldata['Builds'][0]['versionCode'])
+
+        build['versionName'] = 1.0
+        fdroidserver.metadata.post_parse_yaml_metadata(yamldata)
+        self.assertNotEqual(1.0, yamldata['Builds'][0]['versionName'])
+        self.assertEqual('1.0', yamldata['Builds'][0]['versionName'])
+
+        build['commit'] = 1.0
+        fdroidserver.metadata.post_parse_yaml_metadata(yamldata)
+        self.assertNotEqual(1.0, yamldata['Builds'][0]['commit'])
+        self.assertEqual('1.0', yamldata['Builds'][0]['commit'])
+
+        teststr = '98234fab134b'
+        build['commit'] = teststr
+        fdroidserver.metadata.post_parse_yaml_metadata(yamldata)
+        self.assertEqual(teststr, yamldata['Builds'][0]['commit'])
+
+        testcommitid = 1234567890
+        build['commit'] = testcommitid
+        fdroidserver.metadata.post_parse_yaml_metadata(yamldata)
+        self.assertNotEqual(testcommitid, yamldata['Builds'][0]['commit'])
+        self.assertEqual('1234567890', yamldata['Builds'][0]['commit'])
 
     def test_read_metadata_sort_by_time(self):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)

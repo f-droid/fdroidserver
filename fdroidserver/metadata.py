@@ -1159,10 +1159,19 @@ def post_parse_yaml_metadata(yamldata):
         for flag in build.keys():
             _flagtype = flagtype(flag)
 
-            # concatenate script flags into a single string if they are stored as list
             if _flagtype is TYPE_SCRIPT:
+                # concatenate script flags into a single string if they are stored as list
                 if isinstance(build[flag], list):
                     build[flag] = ' && '.join(build[flag])
+            elif _flagtype is TYPE_STRING:
+                # things like versionNames are strings, but without quotes can be numbers
+                if isinstance(build[flag], float) or isinstance(build[flag], int):
+                    build[flag] = str(build[flag])
+            elif _flagtype is TYPE_INT:
+                # versionCode must be int
+                if not isinstance(build[flag], int):
+                    warn_or_exception(_('{build_flag} must be an integer, found: {value}')
+                                      .format(build_flag=flag, value=build[flag]))
 
 
 def write_yaml(mf, app):
