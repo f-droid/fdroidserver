@@ -2,7 +2,7 @@ AuthorName: .
 WebSite: ''
 Bitcoin: null
 Litecoin: null
-Donation: null
+Donate: null
 
 License: Unknown
 Categories:
@@ -17,5 +17,5 @@ Summary: .
 Description: |
     .
 
-Archive Policy: 2 versions
-Requires Root: No
+ArchivePolicy: 2 versions
+RequiresRoot: No
