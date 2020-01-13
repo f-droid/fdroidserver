@@ -48,6 +48,10 @@ def main():
                                + 'using the query string: ?fingerprint='))
     parser.add_argument("--archive", action='store_true', default=False,
                         help=_("Also mirror the full archive section"))
+    parser.add_argument("--build-logs", action='store_true', default=False,
+                        help=_("Include the build logs in the mirror"))
+    parser.add_argument("--src-tarballs", action='store_true', default=False,
+                        help=_("Include the source tarballs in the mirror"))
     parser.add_argument("--output-dir", default=None,
                         help=_("The directory to write the mirror to"))
     options = parser.parse_args()
@@ -135,7 +139,10 @@ def main():
         for packageName, packageList in data['packages'].items():
             for package in packageList:
                 to_fetch = []
-                for k in ('apkName', 'srcname'):
+                keys = ['apkName', ]
+                if options.src_tarballs:
+                    keys.append('srcname')
+                for k in keys:
                     if k in package:
                         to_fetch.append(package[k])
                     elif k == 'apkName':
@@ -146,6 +153,9 @@ def main():
                        or (f.endswith('.apk') and os.path.getsize(f) != package['size']):
                         urls.append(_append_to_url_path(section, f))
                         urls.append(_append_to_url_path(section, f + '.asc'))
+                        if options.build_logs and f.endswith('.apk'):
+                            urls.append(_append_to_url_path(section, f[:-4] + '.log.gz'))
+
         _run_wget(sectiondir, urls)
 
         for app in data['apps']:
