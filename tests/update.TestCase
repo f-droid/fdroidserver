@@ -114,9 +114,9 @@ class UpdateTest(unittest.TestCase):
             if packageName == 'info.guardianproject.urzip':
                 self.assertEqual(7, len(app['localized']['en-US']))
                 self.assertEqual('full description\n', app['localized']['en-US']['description'])
-                self.assertEqual('title\n', app['localized']['en-US']['name'])
-                self.assertEqual('short description\n', app['localized']['en-US']['summary'])
-                self.assertEqual('video\n', app['localized']['en-US']['video'])
+                self.assertEqual('title', app['localized']['en-US']['name'])
+                self.assertEqual('short description', app['localized']['en-US']['summary'])
+                self.assertEqual('video', app['localized']['en-US']['video'])
                 self.assertEqual('icon_NJXNzMcyf-v9i5a1ElJi0j9X1LvllibCa48xXYPlOqQ=.png',
                                  app['localized']['en-US']['icon'])
                 self.assertEqual('featureGraphic_GFRT5BovZsENGpJq1HqPODGWBRPWQsx25B95Ol5w_wU=.png',
@@ -140,7 +140,7 @@ class UpdateTest(unittest.TestCase):
             elif packageName == 'com.nextcloud.client.dev':
                 self.assertEqual('Nextcloud Dev', app['localized']['en-US']['name'])
                 self.assertEqual(586, len(app['localized']['en-US']['description']))
-                self.assertEqual(79, len(app['localized']['en-US']['summary']))
+                self.assertEqual(78, len(app['localized']['en-US']['summary']))
             elif packageName == 'eu.siacs.conversations':
                 self.assertEqual('Conversations', app['localized']['en-US']['name'])
 

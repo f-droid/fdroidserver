@@ -198,9 +198,9 @@
           "description": "full description\n",
           "featureGraphic": "featureGraphic_GFRT5BovZsENGpJq1HqPODGWBRPWQsx25B95Ol5w_wU=.png",
           "icon": "icon_NJXNzMcyf-v9i5a1ElJi0j9X1LvllibCa48xXYPlOqQ=.png",
-          "name": "title\n",
-          "summary": "short description\n",
-          "video": "video\n"
+          "name": "title",
+          "summary": "short description",
+          "video": "video"
         }
       }
     }
