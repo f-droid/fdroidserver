@@ -371,7 +371,7 @@ APK is called F-Droid Privileged Extension.</desc>
 		<id>info.guardianproject.urzip</id>
 		<added>2016-06-23</added>
 		<lastupdated>2016-06-23</lastupdated>
-		<name>urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234</name>
+		<name>title</name>
 		<summary>一个实用工具，获取已安装在您的设备上的应用的有关信息</summary>
 		<icon>info.guardianproject.urzip.100.png</icon>
 		<desc>It’s Urzip 是一个获得已安装 APK 相关信息的实用工具。它从您的设备上已安装的所有应用开始，一键触摸即可显示 APK 的指纹，并且提供到达 virustotal.com 和 androidobservatory.org 的快捷链接，让您方便地了解特定 APK 的档案。它还可以让您导出签名证书和生成 ApkSignaturePin Pin 文件供 TrustedIntents 库使用。

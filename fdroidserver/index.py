@@ -159,7 +159,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
             if not v:
                 continue
             if k in ('Builds', 'comments', 'metadatapath',
-                     'ArchivePolicy', 'AutoUpdateMode', 'MaintainerNotes',
+                     'ArchivePolicy', 'AutoName', 'AutoUpdateMode', 'MaintainerNotes',
                      'Provides', 'Repo', 'RepoType', 'RequiresRoot',
                      'UpdateCheckData', 'UpdateCheckIgnore', 'UpdateCheckMode',
                      'UpdateCheckName', 'NoSourceSince', 'VercodeOperation'):
@@ -172,10 +172,6 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
                 k = 'suggestedVersionCode'
             elif k == 'CurrentVersion':  # TODO make SuggestedVersionName the canonical name
                 k = 'suggestedVersionName'
-            elif k == 'AutoName':
-                if 'Name' not in apps[packageName]:
-                    d['name'] = v
-                continue
             else:
                 k = k[:1].lower() + k[1:]
             d[k] = v
@@ -326,6 +322,8 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
             value = localized[lang].get(lkey)
         if not value:
             value = default
+        if not value and name == 'name' and app.get('AutoName'):
+            value = app['AutoName']
         el.appendChild(doc.createTextNode(value))
         parent.appendChild(el)
 
@@ -363,10 +361,13 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
 
         # Get a list of the apks for this app...
         apklist = []
+        name_from_apk = None
         apksbyversion = collections.defaultdict(lambda: [])
         for apk in apks:
             if apk.get('versionCode') and apk.get('packageName') == appid:
                 apksbyversion[apk['versionCode']].append(apk)
+                if name_from_apk is None:
+                    name_from_apk = apk.get('name')
         for versionCode, apksforver in apksbyversion.items():
             fdroidsig = fdroid_signing_key_fingerprints.get(appid, {}).get('signer')
             fdroid_signed_apk = None
@@ -398,7 +399,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         if app.lastUpdated:
             addElement('lastupdated', app.lastUpdated.strftime('%Y-%m-%d'), doc, apel)
 
-        addElementCheckLocalized('name', app, 'Name', doc, apel)
+        addElementCheckLocalized('name', app, 'Name', doc, apel, name_from_apk)
         addElementCheckLocalized('summary', app, 'Summary', doc, apel)
 
         if app.icon:
@@ -543,7 +544,12 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
                 and common.config['make_current_version_link'] \
                 and repodir == 'repo':  # only create these
             namefield = common.config['current_version_name_source']
-            sanitized_name = re.sub(b'''[ '"&%?+=/]''', b'', app.get(namefield).encode('utf-8'))
+            name = app.get(namefield)
+            if not name and namefield == 'Name':
+                name = app.get('localized', {}).get('en-US', {}).get('name')
+            if not name:
+                name = app.id
+            sanitized_name = re.sub(b'''[ '"&%?+=/]''', b'', name.encode('utf-8'))
             apklinkname = sanitized_name + os.path.splitext(current_version_file)[1].encode('utf-8')
             current_version_path = os.path.join(repodir, current_version_file).encode('utf-8', 'surrogateescape')
             if os.path.islink(apklinkname):

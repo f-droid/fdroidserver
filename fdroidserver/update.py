@@ -1905,15 +1905,10 @@ def apply_info_from_latest_apk(apps, apks):
             logging.debug("Don't know when " + appid + " was last updated")
 
         if bestver == UNSET_VERSION_CODE:
-
-            if app.get('Name') is None:
-                app['Name'] = app['AutoName'] or appid
             app['icon'] = None
             logging.debug("Application " + appid + " has no packages")
         else:
-            if app.get('Name') is None:
-                app['Name'] = bestapk['name']
-            app['icon'] = bestapk['icon'] if 'icon' in bestapk else None
+            app.icon = bestapk['icon'] if 'icon' in bestapk else None
             if app.get('CurrentVersionCode') is None:
                 app['CurrentVersionCode'] = str(bestver)
 
@@ -2106,23 +2101,45 @@ def read_added_date_from_all_apks(apps, apks):
                         app['lastUpdated'] = apk['added']
 
 
-def read_names_from_apks(apps, apks):
-    """This is a stripped down copy of apply_info_from_latest_apk that only parses app names"""
+def insert_missing_app_names_from_apks(apps, apks):
+    """Use app name from APK if it is not set in the metadata
+
+    Name -> localized -> from APK
+
+    The name from the APK is set as the default name for the app if
+    there is no other default set, e.g. app['Name'] or
+    app['localized']['en-US']['name'].  The en-US locale is defined in
+    the F-Droid ecosystem as the locale of last resort, as in the one
+    that should always be present.  en-US is used since it is the
+    locale of the source strings.
+
+    This should only be used for index v0 and v1.  Later versions of
+    the index should be sorted by Application ID, since it is
+    guaranteed to always be there.  Before, the index was stored by
+    the app name (aka <application android:label="">) to save the
+    website from having to sort the entries.  That is no longer
+    relevant since the website switched from Wordpress to Jekyll.
+
+    """
     for appid, app in apps.items():
+        if app.get('Name') is not None:
+            continue
+        if app.get('localized', {}).get('en-US', {}).get('name') is not None:
+            continue
+
         bestver = UNSET_VERSION_CODE
         for apk in apks:
             if apk['packageName'] == appid:
-                if apk['versionCode'] > bestver:
+                if apk.get('name') and apk['versionCode'] > bestver:
                     bestver = apk['versionCode']
                     bestapk = apk
 
-        if bestver == UNSET_VERSION_CODE:
-            if app.Name is None:
-                app.Name = common.get_app_display_name(app)
-            app.icon = None
-        else:
-            if app.Name is None:
-                app.Name = bestapk['name']
+        if bestver != UNSET_VERSION_CODE:
+            if 'localized' not in app:
+                app['localized'] = {}
+            if 'en-US' not in app['localized']:
+                app['localized']['en-US'] = {}
+            app['localized']['en-US']['name'] = bestapk.get('name')
 
 
 def get_apps_with_packages(apps, apks):
@@ -2161,6 +2178,7 @@ def prepare_apps(apps, apks, repodir):
     translate_per_build_anti_features(apps_with_packages, apks)
     if repodir == 'repo':
         insert_localized_app_metadata(apps_with_packages)
+    insert_missing_app_names_from_apks(apps_with_packages, apks)
     return apps_with_packages
 
 
@@ -2306,12 +2324,6 @@ def main():
             cachechanged = True
     else:
         archapks = []
-
-    # We need app.Name populated for all apps regardless of which repo they end up in
-    # for the old-style inter-app links, so let's do it before we do anything else.
-    # This will be done again (as part of apply_info_from_latest_apk) for repo and archive
-    # separately later on, but it's fairly cheap anyway.
-    read_names_from_apks(apps, apks + archapks)
 
     if cachechanged:
         write_cache(apkcache)

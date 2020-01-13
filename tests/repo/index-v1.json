@@ -32,14 +32,18 @@
       "flattrID": "cad90e036b975ed129a3ce80a0750466",
       "issueTracker": "https://gitlab.com/souch/SMSbypass/issues",
       "license": "GPL-3.0-only",
-      "name": "Battery level",
       "sourceCode": "https://gitlab.com/souch/SMSbypass/tree/HEAD",
       "summary": "Filter SMS and show them in a fake app",
       "webSite": "https://gitlab.com/souch/SMSbypass",
       "added": 1524700800000,
       "icon": "souch.smsbypass.9.png",
       "packageName": "souch.smsbypass",
-      "lastUpdated": 1524700800000
+      "lastUpdated": 1524700800000,
+      "localized": {
+        "en-US": {
+          "name": "Battery level"
+        }
+      }
     },
     {
       "categories": [
@@ -77,13 +81,17 @@
       "donate": "https://f-droid.org/about",
       "issueTracker": "https://gitlab.com/fdroid/privileged-extension/issues",
       "license": "Apache-2.0",
-      "name": "fake.ota.update_1234",
       "sourceCode": "https://gitlab.com/fdroid/privileged-extension",
       "summary": "Tests whether OTA ZIP files are being include",
       "webSite": "https://f-droid.org",
       "added": 1457568000000,
       "packageName": "fake.ota.update",
-      "lastUpdated": 1457568000000
+      "lastUpdated": 1457568000000,
+      "localized": {
+        "en-US": {
+          "name": "fake.ota.update_1234"
+        }
+      }
     },
     {
       "categories": [
@@ -106,12 +114,16 @@
       "suggestedVersionCode": "99999999",
       "liberapay": "12334",
       "license": "GPL-3.0-only",
-      "name": "OBB Main Old Version",
       "sourceCode": "https://github.com/eighthave/urzip",
       "added": 1388448000000,
       "icon": "obb.main.oldversion.1444412523.png",
       "packageName": "obb.main.oldversion",
-      "lastUpdated": 1388448000000
+      "lastUpdated": 1388448000000,
+      "localized": {
+        "en-US": {
+          "name": "OBB Main Old Version"
+        }
+      }
     },
     {
       "bitcoin": "1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk",
@@ -120,12 +132,16 @@
       ],
       "suggestedVersionCode": "99999999",
       "license": "GPL-3.0-only",
-      "name": "OBB Main Two Versions",
       "sourceCode": "https://github.com/eighthave/urzip",
       "added": 1444608000000,
       "icon": "obb.main.twoversions.1101617.png",
       "packageName": "obb.main.twoversions",
-      "lastUpdated": 1466380800000
+      "lastUpdated": 1466380800000,
+      "localized": {
+        "en-US": {
+          "name": "OBB Main Two Versions"
+        }
+      }
     },
     {
       "bitcoin": "1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk",
@@ -134,7 +150,6 @@
       ],
       "suggestedVersionCode": "99999999",
       "license": "GPL-3.0-only",
-      "name": "OBB Main/Patch Current",
       "sourceCode": "https://github.com/eighthave/urzip",
       "added": 1461369600000,
       "icon": "obb.mainpatch.current.1619.png",
@@ -144,6 +159,7 @@
         "en-US": {
           "featureGraphic": "featureGraphic_ffhLaojxbGAfu9ROe1MJgK5ux8d0OVc6b65nmvOBaTk=.png",
           "icon": "icon_WI0pkO3LsklrsTAnRr-OQSxkkoMY41lYe2-fAvXLiLg=.png",
+          "name": "OBB Main/Patch Current",
           "phoneScreenshots": [
             "screenshot-main.png"
           ],
@@ -165,13 +181,17 @@
       "description": "Activates silent mode during calendar events.",
       "issueTracker": "https://github.com/miguelvps/PoliteDroid/issues",
       "license": "GPL-3.0-only",
-      "name": "Polite Droid",
       "sourceCode": "https://github.com/miguelvps/PoliteDroid",
       "summary": "Calendar tool",
       "added": 1498176000000,
       "icon": "com.politedroid.6.png",
       "packageName": "com.politedroid",
-      "lastUpdated": 1498176000000
+      "lastUpdated": 1498176000000,
+      "localized": {
+        "en-US": {
+          "name": "Polite Droid"
+        }
+      }
     },
     {
       "authorWebSite": "https://guardianproject.info",
@@ -187,7 +207,6 @@
       "issueTracker": "https://dev.guardianproject.info/projects/urzip/issues",
       "liberapayID": "9999999",
       "license": "GPL-3.0-only",
-      "name": "urzip-\u03c0\u00c7\u00c7\u03c0\u00c7\u00c7\u73b0\u4ee3\u6c49\u8bed\u901a\u7528\u5b57-\u0431\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438-\u0639\u0631\u0628\u064a1234",
       "openCollective": "f-droid-just-testing",
       "sourceCode": "https://github.com/guardianproject/urzip",
       "summary": "\u4e00\u4e2a\u5b9e\u7528\u5de5\u5177\uff0c\u83b7\u53d6\u5df2\u5b89\u88c5\u5728\u60a8\u7684\u8bbe\u5907\u4e0a\u7684\u5e94\u7528\u7684\u6709\u5173\u4fe1\u606f",

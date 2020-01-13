@@ -323,9 +323,6 @@ def check_categories(app):
 
 
 def check_duplicates(app):
-    if app.Name and app.Name == app.AutoName:
-        yield _("Name '%s' is just the auto name - remove it") % app.Name
-
     links_seen = set()
     for f in ['Source Code', 'Web Site', 'Issue Tracker', 'Changelog']:
         v = app.get(f)
