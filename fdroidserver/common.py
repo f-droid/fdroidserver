@@ -664,18 +664,6 @@ def getsrcname(app, build):
     return "%s_%s_src.tar.gz" % (app.id, build.versionCode)
 
 
-def getappname(app):
-    if app.Name:
-        return app.Name
-    if app.AutoName:
-        return app.AutoName
-    return app.id
-
-
-def getcvname(app):
-    return '%s (%s)' % (app.CurrentVersion, app.CurrentVersionCode)
-
-
 def get_build_dir(app):
     '''get the dir that this app will be built in'''
 

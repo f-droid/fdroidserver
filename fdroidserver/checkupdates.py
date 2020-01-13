@@ -358,6 +358,18 @@ def possible_subdirs(app):
             yield subdir
 
 
+def _getappname(app):
+    if app.Name:
+        return app.Name
+    if app.AutoName:
+        return app.AutoName
+    return app.id
+
+
+def _getcvname(app):
+    return '%s (%s)' % (app.CurrentVersion, app.CurrentVersionCode)
+
+
 def fetch_autoname(app, tag):
 
     if not app.RepoType or app.UpdateCheckMode in ('None', 'Static') \
@@ -393,7 +405,7 @@ def fetch_autoname(app, tag):
         if new_name != app.AutoName:
             app.AutoName = new_name
             if not commitmsg:
-                commitmsg = "Set autoname of {0}".format(common.getappname(app))
+                commitmsg = "Set autoname of {0}".format(_getappname(app))
     else:
         logging.debug("...couldn't get autoname")
 
@@ -472,8 +484,8 @@ def checkupdates_app(app):
     commitmsg = fetch_autoname(app, tag)
 
     if updating:
-        name = common.getappname(app)
-        ver = common.getcvname(app)
+        name = _getappname(app)
+        ver = _getcvname(app)
         logging.info('...updating to version %s' % ver)
         commitmsg = 'Update CV of %s to %s' % (name, ver)
 
@@ -513,8 +525,8 @@ def checkupdates_app(app):
                 commit = commit.replace('%c', newbuild.versionCode)
                 newbuild.commit = commit
                 app.builds.append(newbuild)
-                name = common.getappname(app)
-                ver = common.getcvname(app)
+                name = _getappname(app)
+                ver = _getcvname(app)
                 commitmsg = "Update %s to %s" % (name, ver)
         else:
             logging.warning('Invalid auto update mode "' + mode + '" on ' + app.id)
@@ -610,24 +622,24 @@ def main():
             version, reason = check_gplay(app)
             if version is None:
                 if reason == '404':
-                    logging.info("{0} is not in the Play Store".format(common.getappname(app)))
+                    logging.info("{0} is not in the Play Store".format(_getappname(app)))
                 else:
-                    logging.info("{0} encountered a problem: {1}".format(common.getappname(app), reason))
+                    logging.info("{0} encountered a problem: {1}".format(_getappname(app), reason))
             if version is not None:
                 stored = app.CurrentVersion
                 if not stored:
                     logging.info("{0} has no Current Version but has version {1} on the Play Store"
-                                 .format(common.getappname(app), version))
+                                 .format(_getappname(app), version))
                 elif LooseVersion(stored) < LooseVersion(version):
                     logging.info("{0} has version {1} on the Play Store, which is bigger than {2}"
-                                 .format(common.getappname(app), version, stored))
+                                 .format(_getappname(app), version, stored))
                 else:
                     if stored != version:
                         logging.info("{0} has version {1} on the Play Store, which differs from {2}"
-                                     .format(common.getappname(app), version, stored))
+                                     .format(_getappname(app), version, stored))
                     else:
                         logging.info("{0} has the same version {1} on the Play Store"
-                                     .format(common.getappname(app), version))
+                                     .format(_getappname(app), version))
         update_wiki(gplaylog, None)
         return
 
