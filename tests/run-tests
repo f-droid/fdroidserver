@@ -1097,6 +1097,59 @@ test -e $KEYSTORE
 
 
 #------------------------------------------------------------------------------#
+echo_header "setup a new repo from scratch using ANDROID_HOME with git mirror"
+
+# fake git remote server for repo mirror
+SERVER_GIT_MIRROR=`create_test_dir`
+cd $SERVER_GIT_MIRROR
+git init
+git config receive.denyCurrentBranch updateInstead
+
+REPOROOT=`create_test_dir`
+GIT_MIRROR=$REPOROOT/git-mirror
+cd $REPOROOT
+fdroid_init_with_prebuilt_keystore
+echo "servergitmirrors = '$SERVER_GIT_MIRROR'" >> config.py
+
+cp $WORKSPACE/tests/repo/com.politedroid_[345].apk repo/
+$fdroid update --create-metadata
+$fdroid deploy
+test -e $GIT_MIRROR/fdroid/repo/com.politedroid_3.apk
+test -e $GIT_MIRROR/fdroid/repo/com.politedroid_4.apk
+test -e $GIT_MIRROR/fdroid/repo/com.politedroid_5.apk
+test -e $SERVER_GIT_MIRROR/fdroid/repo/com.politedroid_3.apk
+test -e $SERVER_GIT_MIRROR/fdroid/repo/com.politedroid_4.apk
+test -e $SERVER_GIT_MIRROR/fdroid/repo/com.politedroid_5.apk
+date > $GIT_MIRROR/.git/test-stamp
+
+# add one more APK to trigger archiving
+cp $WORKSPACE/tests/repo/com.politedroid_6.apk repo/
+$fdroid update
+$fdroid deploy
+test -e $REPOROOT/archive/com.politedroid_3.apk
+! test -e $GIT_MIRROR/fdroid/archive/com.politedroid_3.apk
+! test -e $SERVER_GIT_MIRROR/fdroid/archive/com.politedroid_3.apk
+test -e $GIT_MIRROR/fdroid/repo/com.politedroid_4.apk
+test -e $GIT_MIRROR/fdroid/repo/com.politedroid_5.apk
+test -e $GIT_MIRROR/fdroid/repo/com.politedroid_6.apk
+test -e $SERVER_GIT_MIRROR/fdroid/repo/com.politedroid_4.apk
+test -e $SERVER_GIT_MIRROR/fdroid/repo/com.politedroid_5.apk
+test -e $SERVER_GIT_MIRROR/fdroid/repo/com.politedroid_6.apk
+before=`du -s --bytes $GIT_MIRROR/.git/ | awk '{print $1}'`
+
+echo "git_mirror_size_limit = '60kb'" >> config.py
+$fdroid update
+$fdroid deploy
+test -e $REPOROOT/archive/com.politedroid_3.apk
+! test -e $SERVER_GIT_MIRROR/fdroid/archive/com.politedroid_3.apk
+after=`du -s --bytes $GIT_MIRROR/.git/ | awk '{print $1}'`
+! test -e $GIT_MIRROR/.git/test-stamp
+git -C $GIT_MIRROR gc
+git -C $SERVER_GIT_MIRROR gc
+test $before -gt $after
+
+
+#------------------------------------------------------------------------------#
 echo_header "sign binary repo in offline box, then publishing from online box"
 
 if have_git_2_3; then
