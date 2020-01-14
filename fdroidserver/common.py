@@ -148,6 +148,7 @@ default_config = {
     'archive_description': _('These are the apps that have been archived from the main repo.'),
     'archive_older': 0,
     'lint_licenses': fdroidserver.lint.APPROVED_LICENSES,
+    'git_mirror_size_limit': 10000000000,
 }
 
 
@@ -354,7 +355,29 @@ def read_config(opts, config_file='config.py'):
             raise TypeError(_('only accepts strings, lists, and tuples'))
         config['servergitmirrors'] = roots
 
+        limit = config['git_mirror_size_limit']
+        config['git_mirror_size_limit'] = parse_human_readable_size(limit)
+
     return config
+
+
+def parse_human_readable_size(size):
+    units = {
+        'b': 1,
+        'kb': 1000, 'mb': 1000**2, 'gb': 1000**3, 'tb': 1000**4,
+        'kib': 1024, 'mib': 1024**2, 'gib': 1024**3, 'tib': 1024**4,
+    }
+    try:
+        return int(float(size))
+    except (ValueError, TypeError):
+        if type(size) != str:
+            raise ValueError(_('Could not parse size "{size}", wrong type "{type}"')
+                             .format(size=size, type=type(size)))
+        s = size.lower().replace(' ', '')
+        m = re.match(r'^(?P<value>[0-9][0-9.]+) *(?P<unit>' + r'|'.join(units.keys()) + r')$', s)
+        if not m:
+            raise ValueError(_('Not a valid size definition: "{}"').format(size))
+        return int(float(m.group("value")) * units[m.group("unit")])
 
 
 def assert_config_keystore(config):

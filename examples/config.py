@@ -190,6 +190,13 @@ The repository of older versions of applications from the main demo repository.
 #     'https://gitlab.com/user/repo',
 #     }
 
+# Most git hosting services have hard size limits for each git repo.
+# `fdroid deploy` will delete the git history when the git mirror repo
+# approaches this limit to ensure that the repo will still fit when
+# pushed.  GitHub recommends 1GB, gitlab.com recommends 10GB.
+#
+# git_mirror_size_limit = '10GB'
+
 # Any mirrors of this repo, for example all of the servers declared in
 # serverwebroot and all the servers declared in servergitmirrors,
 # will automatically be used by the client.  If one

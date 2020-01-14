@@ -45,6 +45,15 @@ class CommonTest(unittest.TestCase):
             os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
 
+    def test_parse_human_readable_size(self):
+        for k, v in ((9827, 9827), (123.456, 123), ('123b', 123), ('1.2', 1),
+                     ('10.43 KiB', 10680), ('11GB', 11000000000), ('59kb', 59000),
+                     ('343.1 mb', 343100000), ('99.9GiB', 107266808217)):
+            self.assertEqual(fdroidserver.common.parse_human_readable_size(k), v)
+        for v in ((12, 123), '0xfff', [], None, '12,123', '123GG', '982374bb', self):
+            with self.assertRaises(ValueError):
+                fdroidserver.common.parse_human_readable_size(v)
+
     def test_assert_config_keystore(self):
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             with self.assertRaises(FDroidException):

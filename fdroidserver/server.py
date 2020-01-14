@@ -25,6 +25,7 @@ import pwd
 import re
 import subprocess
 import time
+import urllib
 from argparse import ArgumentParser
 import logging
 import shutil
@@ -352,11 +353,18 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         git_repodir = os.path.join(git_mirror_path, 'fdroid', repo_section)
         if not os.path.isdir(git_repodir):
             os.makedirs(git_repodir)
-        if os.path.isdir(dotgit) and _get_size(git_mirror_path) > 1000000000:
-            logging.warning('Deleting git-mirror history, repo is too big (1 gig max)')
+        # github/gitlab use bare git repos, so only count the .git folder
+        # test: generate giant APKs by including AndroidManifest.xml and and large
+        # file from /dev/urandom, then sign it.  Then add those to the git repo.
+        dotgit_size = _get_size(dotgit)
+        dotgit_over_limit = dotgit_size > config['git_mirror_size_limit']
+        if os.path.isdir(dotgit) and dotgit_over_limit:
+            logging.warning(_('Deleting git-mirror history, repo is too big ({size} max {limit})')
+                            .format(size=dotgit_size, limit=config['git_mirror_size_limit']))
             shutil.rmtree(dotgit)
-        if options.no_keep_git_mirror_archive and _get_size(git_mirror_path) > 1000000000:
-            logging.warning('Deleting archive, repo is too big (1 gig max)')
+        if options.no_keep_git_mirror_archive and dotgit_over_limit:
+            logging.warning(_('Deleting archive, repo is too big ({size} max {limit})')
+                            .format(size=dotgit_size, limit=config['git_mirror_size_limit']))
             archive_path = os.path.join(git_mirror_path, 'fdroid', 'archive')
             shutil.rmtree(archive_path, ignore_errors=True)
 
@@ -473,7 +481,7 @@ def upload_to_android_observatory(repo_section):
             logging.info(message)
 
 
-def upload_to_virustotal(repo_section, vt_apikey):
+def upload_to_virustotal(repo_section, virustotal_apikey):
     import json
     import requests
 
@@ -506,13 +514,13 @@ def upload_to_virustotal(repo_section, vt_apikey):
                     "User-Agent": "F-Droid"
                 }
                 data = {
-                    'apikey': vt_apikey,
+                    'apikey': virustotal_apikey,
                     'resource': package['hash'],
                 }
                 needs_file_upload = False
                 while True:
-                    r = requests.post('https://www.virustotal.com/vtapi/v2/file/report',
-                                      data=data, headers=headers)
+                    r = requests.get('https://www.virustotal.com/vtapi/v2/file/report?'
+                                     + urllib.parse.urlencode(data), headers=headers)
                     if r.status_code == 200:
                         response = r.json()
                         if response['response_code'] == 0:
@@ -533,18 +541,40 @@ def upload_to_virustotal(repo_section, vt_apikey):
                     elif r.status_code == 204:
                         time.sleep(10)  # wait for public API rate limiting
 
+                upload_url = None
                 if needs_file_upload:
-                    logging.info('Uploading ' + repofilename + ' to virustotal')
+                    manual_url = 'https://www.virustotal.com/'
+                    size = os.path.getsize(repofilename)
+                    if size > 200000000:
+                        # VirusTotal API 200MB hard limit
+                        logging.error(_('{path} more than 200MB, manually upload: {url}')
+                                      .format(path=repofilename, url=manual_url))
+                    elif size > 32000000:
+                        # VirusTotal API requires fetching a URL to upload bigger files
+                        r = requests.get('https://www.virustotal.com/vtapi/v2/file/scan/upload_url?'
+                                         + urllib.parse.urlencode(data), headers=headers)
+                        if r.status_code == 200:
+                            upload_url = r.json().get('upload_url')
+                        elif r.status_code == 403:
+                            logging.error(_('VirusTotal API key cannot upload files larger than 32MB, '
+                                            + 'use {url} to upload {path}.')
+                                          .format(path=repofilename, url=manual_url))
+                        else:
+                            r.raise_for_status()
+                    else:
+                        upload_url = 'https://www.virustotal.com/vtapi/v2/file/scan'
+
+                if upload_url:
+                    logging.info(_('Uploading {apkfilename} to virustotal')
+                                 .format(apkfilename=repofilename))
                     files = {
                         'file': (filename, open(repofilename, 'rb'))
                     }
-                    r = requests.post('https://www.virustotal.com/vtapi/v2/file/scan',
-                                      data=data, headers=headers, files=files)
-                    logging.debug('If this upload fails, try manually uploading here:\n'
-                                  + 'https://www.virustotal.com/')
+                    r = requests.post(upload_url, data=data, headers=headers, files=files)
+                    logging.debug(_('If this upload fails, try manually uploading to {url}')
+                                  .format(url=manual_url))
                     r.raise_for_status()
                     response = r.json()
-
                     logging.info(response['verbose_msg'] + " " + response['permalink'])
 
 
