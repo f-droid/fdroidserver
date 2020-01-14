@@ -253,7 +253,7 @@ __complete_btlog() {
 
 __complete_mirror() {
 	opts="-v"
-	lopts="--archive --output-dir"
+	lopts="--all --archive --build-logs --pgp-signatures --src-tarballs --output-dir"
 	__complete_options
 }
 
