@@ -313,7 +313,7 @@ The repository of older versions of applications from the main demo repository.
 # Only the fields listed here are supported, defaults shown
 # char_limits = {
 #     'author': 256,
-#     'name': 30,
+#     'name': 50,
 #     'summary': 80,
 #     'description': 4000,
 #     'video': 256,

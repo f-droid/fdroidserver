@@ -129,7 +129,7 @@ default_config = {
     'smartcardoptions': [],
     'char_limits': {
         'author': 256,
-        'name': 30,
+        'name': 50,
         'summary': 80,
         'description': 4000,
         'video': 256,
