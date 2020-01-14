@@ -531,6 +531,10 @@ def main():
         open(logfilename, 'a').close()  # create blank file
     log_cm = vagrant.make_file_cm(logfilename)
     v = vagrant.Vagrant(root=serverdir, out_cm=log_cm, err_cm=log_cm)
+    # https://phoenhex.re/2018-03-25/not-a-vagrant-bug
+    os_env = os.environ.copy()
+    os_env['VAGRANT_DISABLE_VBOXSYMLINKCREATE'] = '1'
+    v.env = os_env
 
     if options.verbosity >= 2:
         tail = fdroidserver.tail.Tail(logfilename)
