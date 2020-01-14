@@ -5,7 +5,7 @@ set -e
 set -x
 
 debian_mirror=$1
-export DEBIAN_FRONTEND=noninteractive 
+export DEBIAN_FRONTEND=noninteractive
 
 printf 'APT::Install-Recommends "0";\nAPT::Install-Suggests "0";\n' \
        > /etc/apt/apt.conf.d/99no-install-recommends
@@ -21,6 +21,11 @@ EOF
 
 printf 'APT::Get::Assume-Yes "true";\n' \
        > /etc/apt/apt.conf.d/99assumeyes
+
+cat <<EOF > /etc/apt/apt.conf.d/99quiet
+Dpkg::Use-Pty "0";'
+quiet "1";'
+EOF
 
 if echo $debian_mirror | grep '^https' 2>&1 > /dev/null; then
     apt-get update || apt-get update
