@@ -26,3 +26,17 @@ ln -fs /home/vagrant/fdroidserver/gradlew-fdroid /opt/gradle/bin/gradle
 chown -h vagrant.vagrant /opt/gradle/bin/gradle
 chown vagrant.vagrant /opt/gradle/versions
 chmod 0755 /opt/gradle/versions
+
+GRADLE_HOME=/home/vagrant/.gradle
+test -d $GRADLE_HOME/ || mkdir $GRADLE_HOME/
+cat <<EOF > $GRADLE_HOME/gradle.properties
+# builds are not reused, so the daemon is a waste of time
+org.gradle.daemon=false
+
+# fake info to block HTTP repos
+systemProp.http.nonProxyHosts=
+systemProp.http.proxyHost=127.127.127.127
+systemProp.http.proxyPort=12345
+EOF
+chown -R vagrant.vagrant $GRADLE_HOME/
+chmod -R a+rX $GRADLE_HOME/
