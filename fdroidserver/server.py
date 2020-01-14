@@ -33,6 +33,7 @@ import shutil
 from . import _
 from . import common
 from . import index
+from . import update
 from .exception import FDroidException
 
 config = None
@@ -450,35 +451,48 @@ def upload_to_android_observatory(repo_section):
     import requests
     from lxml.html import fromstring
 
+    if options.verbose:
+        logging.getLogger("requests").setLevel(logging.INFO)
+        logging.getLogger("urllib3").setLevel(logging.INFO)
+    else:
+        logging.getLogger("requests").setLevel(logging.WARNING)
+        logging.getLogger("urllib3").setLevel(logging.WARNING)
+
     if repo_section == 'repo':
-        for f in glob.glob(os.path.join(repo_section, '*.apk')):
+        for f in sorted(glob.glob(os.path.join(repo_section, '*.apk'))):
             fpath = f
             fname = os.path.basename(f)
-            logging.info('Uploading ' + fname + ' to androidobservatory.org')
+            r = requests.post('https://androidobservatory.org/',
+                              data={'q': update.sha256sum(f), 'searchby': 'hash'})
+            if r.status_code == 200:
+                # from now on XPath will be used to retrieve the message in the HTML
+                # androidobservatory doesn't have a nice API to talk with
+                # so we must scrape the page content
+                tree = fromstring(r.text)
+
+                href = None
+                for element in tree.xpath("//html/body/div/div/table/tbody/tr/td/a"):
+                    a = element.attrib.get('href')
+                    if a:
+                        m = re.match(r'^/app/[0-9A-F]{40}$', a)
+                        if m:
+                            href = m.group()
+
+                page = 'https://androidobservatory.org'
+                message = ''
+                if href:
+                    message = (_('Found {apkfilename} at {url}')
+                               .format(apkfilename=fname, url=(page + href)))
+                if message:
+                    logging.debug(message)
+                    continue
 
             # upload the file with a post request
-            r = requests.post('https://androidobservatory.org/upload', files={'apk': (fname, open(fpath, 'rb'))})
-            response = r.text
-            page = r.url
-
-            # from now on XPath will be used to retrieve the message in the HTML
-            # androidobservatory doesn't have a nice API to talk with
-            # so we must scrape the page content
-            tree = fromstring(response)
-            alert = tree.xpath("//html/body/div[@class='container content-container']/div[@class='alert alert-info']")[0]
-
-            message = ""
-            appurl = page
-            for el in alert:
-                # if the application was added successfully we retrive the url
-                # if the application was already uploaded we use the redirect page url
-                if el.attrib.get("href") is not None:
-                    appurl = page + el.attrib["href"][1:]
-                    message += el.text.replace(" here", "") + el.tail
-                else:
-                    message += el.tail
-            message = message.strip() + " " + appurl
-            logging.info(message)
+            logging.info(_('Uploading {apkfilename} to androidobservatory.org')
+                         .format(apkfilename=fname))
+            r = requests.post('https://androidobservatory.org/upload',
+                              files={'apk': (fname, open(fpath, 'rb'))},
+                              allow_redirects=False)
 
 
 def upload_to_virustotal(repo_section, virustotal_apikey):
