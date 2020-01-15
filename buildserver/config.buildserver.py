@@ -11,7 +11,6 @@ ndk_paths = {
     'r18b': "/home/vagrant/android-ndk/r18b",
     'r19c': "/home/vagrant/android-ndk/r19c",
     'r20b': "/home/vagrant/android-ndk/r20b",
-    'r21': "/home/vagrant/android-ndk/r21",
 }
 java_paths = {
     '8': "/usr/lib/jvm/java-8-openjdk-amd64",
