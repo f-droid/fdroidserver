@@ -129,6 +129,7 @@ get_sha() {
         '5.6.4')  echo '1f3067073041bc44554d0efe5d402a33bc3d3c93cc39ab684f308586d732a80d' ;;
         '6.0')    echo '5a3578b9f0bb162f5e08cf119f447dfb8fa950cedebb4d2a977e912a11a74b91' ;;
         '6.0.1')  echo 'd364b7098b9f2e58579a3603dc0a12a1991353ac58ed339316e6762b21efba44' ;;
+        '6.1')    echo 'd0c43d14e1c70a48b82442f435d06186351a2d290d72afd5b8866f15e6d7038a' ;;
         *) exit 1
     esac
 }
