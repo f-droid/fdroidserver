@@ -77,7 +77,7 @@ def main():
             sys.exit(0)
         elif command == '--version':
             output = _('no version info found!')
-            cmddir = os.path.realpath(os.path.dirname(__file__))
+            cmddir = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
             moduledir = os.path.realpath(os.path.dirname(fdroidserver.common.__file__) + '/..')
             if cmddir == moduledir:
                 # running from git
