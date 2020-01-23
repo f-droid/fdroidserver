@@ -4,8 +4,11 @@ import inspect
 import optparse
 import os
 import sys
+import textwrap
 import unittest
+import tempfile
 from unittest import mock
+from testcommon import TmpCwd, TmpPyPath
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -17,7 +20,7 @@ from fdroidserver import common
 import fdroidserver.__main__
 
 
-class FdroidTest(unittest.TestCase):
+class MainTest(unittest.TestCase):
     '''this tests fdroid.py'''
 
     def test_commands(self):
@@ -49,17 +52,42 @@ class FdroidTest(unittest.TestCase):
         co = mock.Mock()
         with mock.patch('sys.argv', ['', 'init', '-h']):
             with mock.patch('fdroidserver.init.main', co):
-                with mock.patch('sys.exit', lambda x: None):
+                with mock.patch('sys.exit') as exit_mock:
                     fdroidserver.__main__.main()
+                    exit_mock.assert_called_once_with(0)
         co.assert_called_once_with()
 
     def test_call_deploy(self):
         co = mock.Mock()
         with mock.patch('sys.argv', ['', 'deploy', '-h']):
             with mock.patch('fdroidserver.server.main', co):
-                with mock.patch('sys.exit', lambda x: None):
+                with mock.patch('sys.exit') as exit_mock:
                     fdroidserver.__main__.main()
+                    exit_mock.assert_called_once_with(0)
         co.assert_called_once_with()
+
+    def test_find_plugins(self):
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('fdroid_testy.py', 'w') as f:
+                f.write(textwrap.dedent("""\
+                        fdroid_summary = "ttt"
+                        main = lambda: 'all good'"""))
+            with TmpPyPath(tmpdir):
+                plugins = fdroidserver.__main__.find_plugins()
+            self.assertIn('testy', plugins.keys())
+            self.assertEqual(plugins['testy']['summary'], 'ttt')
+            self.assertEqual(plugins['testy']['module'].main(), 'all good')
+
+    def test_main_plugin(self):
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('fdroid_testy.py', 'w') as f:
+                f.write(textwrap.dedent("""\
+                        fdroid_summary = "ttt"
+                        main = lambda: pritn('all good')"""))
+            with mock.patch('sys.argv', ['', 'testy']):
+                with mock.patch('sys.exit') as exit_mock:
+                    fdroidserver.__main__.main()
+                    exit_mock.assert_called_once_with(0)
 
 
 if __name__ == "__main__":
@@ -71,5 +99,5 @@ if __name__ == "__main__":
     (common.options, args) = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(FdroidTest))
+    newSuite.addTest(unittest.makeSuite(MainTest))
     unittest.main(failfast=False)

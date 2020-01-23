@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #
 # fdroidserver/__main__.py - part of the FDroid server tools
+# Copyright (C) 2020 Michael Pöhn <michael.poehn@fsfe.org>
 # Copyright (C) 2010-2015, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Marti <mvdan@mvdan.cc>
 #
@@ -20,7 +21,9 @@
 import sys
 import os
 import locale
+import pkgutil
 import logging
+import importlib
 
 import fdroidserver.common
 import fdroidserver.metadata
@@ -54,25 +57,49 @@ commands = OrderedDict([
 ])
 
 
-def print_help():
+def print_help(fdroid_modules=None):
     print(_("usage: ") + _("fdroid [<command>] [-h|--help|--version|<args>]"))
     print("")
     print(_("Valid commands are:"))
     for cmd, summary in commands.items():
         print("   " + cmd + ' ' * (15 - len(cmd)) + summary)
+    if fdroid_modules:
+        print(_('commands from plugin modules:'))
+        for command in sorted(fdroid_modules.keys()):
+            print('   {:15}{}'.format(command, fdroid_modules[command]['summary']))
     print("")
 
 
+def find_plugins():
+    fdroid_modules = [x[1] for x in pkgutil.iter_modules() if x[1].startswith('fdroid_')]
+    commands = {}
+    for module_name in fdroid_modules:
+        try:
+            command_name = module_name[7:]
+            module = importlib.import_module(module_name)
+            if hasattr(module, 'fdroid_summary') and hasattr(module, 'main'):
+                commands[command_name] = {'summary': module.fdroid_summary,
+                                          'module': module}
+        except IOError:
+            # We need to keep module lookup fault tolerant because buggy
+            # modules must not prevent fdroidserver from functioning
+            # TODO: think about warning users or debug logs for notifying devs
+            pass
+    return commands
+
+
 def main():
+    sys.path.append(os.getcwd())
+    fdroid_modules = find_plugins()
 
     if len(sys.argv) <= 1:
-        print_help()
+        print_help(fdroid_modules=fdroid_modules)
         sys.exit(0)
 
     command = sys.argv[1]
-    if command not in commands:
+    if command not in commands and command not in fdroid_modules.keys():
         if command in ('-h', '--help'):
-            print_help()
+            print_help(fdroid_modules=fdroid_modules)
             sys.exit(0)
         elif command == '--version':
             output = _('no version info found!')
@@ -103,7 +130,7 @@ def main():
             sys.exit(0)
         else:
             print(_("Command '%s' not recognised.\n" % command))
-            print_help()
+            print_help(fdroid_modules=fdroid_modules)
             sys.exit(1)
 
     verbose = any(s in sys.argv for s in ['-v', '--verbose'])
@@ -133,7 +160,10 @@ def main():
     sys.argv[0] += ' ' + command
 
     del sys.argv[1]
-    mod = __import__('fdroidserver.' + command, None, None, [command])
+    if command in commands.keys():
+        mod = __import__('fdroidserver.' + command, None, None, [command])
+    else:
+        mod = fdroid_modules[command]['module']
 
     system_langcode, system_encoding = locale.getdefaultlocale()
     if system_encoding is None or system_encoding.lower() not in ('utf-8', 'utf8'):

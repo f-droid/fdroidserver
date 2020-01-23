@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 
 
 class TmpCwd():
@@ -32,3 +33,18 @@ class TmpCwd():
 
     def __exit__(self, a, b, c):
         os.chdir(self.orig_cwd)
+
+
+class TmpPyPath():
+    """Context-manager for temporarily changing the current working
+    directory.
+    """
+
+    def __init__(self, additional_path):
+        self.additional_path = additional_path
+
+    def __enter__(self):
+        sys.path.append(self.additional_path)
+
+    def __exit__(self, a, b, c):
+        sys.path.remove(self.additional_path)
