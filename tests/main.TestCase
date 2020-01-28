@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+
+import inspect
+import optparse
+import os
+import sys
+import unittest
+from unittest import mock
+
+localmodule = os.path.realpath(
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
+print('localmodule: ' + localmodule)
+if localmodule not in sys.path:
+    sys.path.insert(0, localmodule)
+
+from fdroidserver import common
+import fdroidserver.__main__
+
+
+class FdroidTest(unittest.TestCase):
+    '''this tests fdroid.py'''
+
+    def test_commands(self):
+        """make sure the built in sub-command defs didn't change unintentionally"""
+        self.assertListEqual([x for x in fdroidserver.__main__.commands.keys()],
+                             ['build',
+                              'init',
+                              'publish',
+                              'gpgsign',
+                              'update',
+                              'deploy',
+                              'verify',
+                              'checkupdates',
+                              'import',
+                              'install',
+                              'readmeta',
+                              'rewritemeta',
+                              'lint',
+                              'scanner',
+                              'dscanner',
+                              'stats',
+                              'server',
+                              'signindex',
+                              'btlog',
+                              'signatures',
+                              'nightly',
+                              'mirror'])
+
+    def test_call_init(self):
+        co = mock.Mock()
+        with mock.patch('sys.argv', ['', 'init', '-h']):
+            with mock.patch('fdroidserver.init.main', co):
+                with mock.patch('sys.exit', lambda x: None):
+                    fdroidserver.__main__.main()
+        co.assert_called_once_with()
+
+    def test_call_deploy(self):
+        co = mock.Mock()
+        with mock.patch('sys.argv', ['', 'deploy', '-h']):
+            with mock.patch('fdroidserver.server.main', co):
+                with mock.patch('sys.exit', lambda x: None):
+                    fdroidserver.__main__.main()
+        co.assert_called_once_with()
+
+
+if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+
+    parser = optparse.OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    (common.options, args) = parser.parse_args(['--verbose'])
+
+    newSuite = unittest.TestSuite()
+    newSuite.addTest(unittest.makeSuite(FdroidTest))
+    unittest.main(failfast=False)
