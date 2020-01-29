@@ -91,7 +91,6 @@ def find_plugins():
 
 
 def main():
-    sys.path.append(os.getcwd())
     fdroid_modules = find_plugins()
 
     if len(sys.argv) <= 1:

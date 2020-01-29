@@ -84,10 +84,13 @@ class MainTest(unittest.TestCase):
                 f.write(textwrap.dedent("""\
                         fdroid_summary = "ttt"
                         main = lambda: pritn('all good')"""))
-            with mock.patch('sys.argv', ['', 'testy']):
-                with mock.patch('sys.exit') as exit_mock:
-                    fdroidserver.__main__.main()
-                    exit_mock.assert_called_once_with(0)
+            test_path = sys.path.copy()
+            test_path.append(tmpdir)
+            with mock.patch('sys.path', test_path):
+                with mock.patch('sys.argv', ['', 'testy']):
+                    with mock.patch('sys.exit') as exit_mock:
+                        fdroidserver.__main__.main()
+                        exit_mock.assert_called_once_with(0)
 
 
 if __name__ == "__main__":
