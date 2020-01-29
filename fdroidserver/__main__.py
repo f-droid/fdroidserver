@@ -74,17 +74,19 @@ def find_plugins():
     fdroid_modules = [x[1] for x in pkgutil.iter_modules() if x[1].startswith('fdroid_')]
     commands = {}
     for module_name in fdroid_modules:
+        command_name = module_name[7:]
         try:
-            command_name = module_name[7:]
             module = importlib.import_module(module_name)
             if hasattr(module, 'fdroid_summary') and hasattr(module, 'main'):
                 commands[command_name] = {'summary': module.fdroid_summary,
                                           'module': module}
-        except IOError:
+        except Exception as e:
             # We need to keep module lookup fault tolerant because buggy
             # modules must not prevent fdroidserver from functioning
-            # TODO: think about warning users or debug logs for notifying devs
-            pass
+            if len(sys.argv) > 1 and sys.argv[1] == command_name:
+                # only raise exeption when a user specifies the broken
+                # plugin in explicitly in command line
+                raise e
     return commands
 
 
