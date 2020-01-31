@@ -141,7 +141,6 @@ lint_format_safety_bandit_checks:
     - bandit
         -ii
         -s B110,B310,B322,B404,B408,B410,B603,B607
-        -x fdroidserver/dscanner.py,docker/install_agent.py,docker/drozer.py
         -r $CI_PROJECT_DIR fdroid
         || export EXITVALUE=1
     - safety check --full-report || export EXITVALUE=1
