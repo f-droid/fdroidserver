@@ -882,8 +882,6 @@ def parse_commandline():
                         help=argparse.SUPPRESS)
     parser.add_argument("--skip-scan", dest="skipscan", action="store_true", default=False,
                         help=_("Skip scanning the source code for binaries and other problems"))
-    parser.add_argument("--dscanner", action="store_true", default=False,
-                        help=_("Setup an emulator, install the APK on it and perform a Drozer scan"))
     parser.add_argument("--no-tarball", dest="notarball", action="store_true", default=False,
                         help=_("Don't create a source tarball, useful when testing a build"))
     parser.add_argument("--no-refresh", dest="refresh", action="store_false", default=True,
@@ -1215,43 +1213,6 @@ def main():
     if not options.verbose:
         for fa in failed_apps:
             logging.info("Build for app %s failed:\n%s" % (fa, failed_apps[fa]))
-
-    # perform a drozer scan of all successful builds
-    if options.dscanner and build_succeeded:
-        from .dscanner import DockerDriver
-
-        docker = DockerDriver()
-
-        try:
-            for app in build_succeeded:
-
-                logging.info("Need to sign the app before we can install it.")
-                subprocess.call("fdroid publish {0}".format(app.id))
-
-                apk_path = None
-
-                for f in os.listdir(repo_dir):
-                    if f.endswith('.apk') and f.startswith(app.id):
-                        apk_path = os.path.join(repo_dir, f)
-                        break
-
-                if not apk_path:
-                    raise Exception("No signed APK found at path: {path}".format(path=apk_path))
-
-                if not os.path.isdir(repo_dir):
-                    logging.critical("directory does not exists '{path}'".format(path=repo_dir))
-                    common.force_exit(1)
-
-                logging.info("Performing Drozer scan on {0}.".format(app))
-                docker.perform_drozer_scan(apk_path, app.id, repo_dir)
-        except Exception as e:
-            logging.error(str(e))
-            logging.error("An exception happened. Making sure to clean up")
-        else:
-            logging.info("Scan succeeded.")
-
-        logging.info("Cleaning up after ourselves.")
-        docker.clean()
 
     logging.info(_("Finished"))
     if len(build_succeeded) > 0:

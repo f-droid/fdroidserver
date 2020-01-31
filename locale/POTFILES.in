@@ -3,7 +3,6 @@ fdroidserver/btlog.py
 fdroidserver/build.py
 fdroidserver/checkupdates.py
 fdroidserver/common.py
-fdroidserver/dscanner.py
 fdroidserver/import.py
 fdroidserver/init.py
 fdroidserver/install.py

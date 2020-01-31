@@ -104,22 +104,6 @@ __complete_build() {
 	esac
 }
 
-__complete_dscanner() {
-	opts="-v -q -l"
-	lopts="--verbose --quiet --clean-after --clean-before --clean-only --init-only --latest --repo-path"
-        case "${cur}" in
-		-*)
-			__complete_options
-			return 0;;
-		*:)
-			__vercode
-			return 0;;
-		*)
-			__package
-			return 0;;
-	esac
-}
-
 __complete_gpgsign() {
 	opts="-v -q"
 	lopts="--verbose --quiet"

@@ -86,7 +86,6 @@ setup(name='fdroidserver',
           'qrcode',
           'ruamel.yaml >= 0.15',
           'requests >= 2.5.2, != 2.11.0, != 2.12.2, != 2.18.0',
-          'docker-py >= 1.9, < 2.0',
       ],
       classifiers=[
           'Development Status :: 4 - Beta',

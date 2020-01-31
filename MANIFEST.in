@@ -8,13 +8,6 @@ include buildserver/setup-env-vars
 include buildserver/Vagrantfile
 include CHANGELOG.md
 include completion/bash-completion
-include docker/Dockerfile
-include docker/drozer.py
-include docker/enable_service.py
-include docker/entrypoint.sh
-include docker/install_agent.py
-include docker/Makefile
-include docker/README.md
 include examples/config.py
 include examples/fdroid-icon.png
 include examples/makebuildserver.config.py
