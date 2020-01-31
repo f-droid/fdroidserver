@@ -7,8 +7,11 @@ import logging
 import optparse
 import os
 import requests
+import shutil
 import sys
+import tempfile
 import unittest
+from unittest import mock
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -48,10 +51,75 @@ class ImportTest(unittest.TestCase):
 
         app = fdroidserver.metadata.App()
         app.UpdateCheckMode = "Tags"
-        root_dir, src_dir = import_proxy.get_metadata_from_url(app, url)
+        build_dir = import_proxy.get_metadata_from_url(app, url)
         self.assertEqual(app.RepoType, 'git')
         self.assertEqual(app.WebSite, 'https://gitlab.com/fdroid/ci-test-app')
         self.assertEqual(app.Repo, 'https://gitlab.com/fdroid/ci-test-app.git')
+
+    def test_get_all_gradle_and_manifests(self):
+        a = import_proxy.get_all_gradle_and_manifests(os.path.join('source-files', 'cn.wildfirechat.chat'))
+        paths = [
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'avenginekit', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'chat', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'client', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'client', 'src', 'main', 'AndroidManifest.xml'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'emojilibrary', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'gradle', 'build_libraries.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'imagepicker', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'mars-core-release', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'push', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'settings.gradle'),
+        ]
+        self.assertEqual(sorted(paths), sorted(a))
+
+    def test_get_gradle_subdir(self):
+        subdirs = {
+            'cn.wildfirechat.chat': 'chat',
+            'com.anpmech.launcher': 'app',
+            'org.tasks': 'app',
+            'ut.ewh.audiometrytest': 'app',
+        }
+        for f in ('cn.wildfirechat.chat', 'com.anpmech.launcher', 'org.tasks', 'ut.ewh.audiometrytest'):
+            build_dir = os.path.join('source-files', f)
+            paths = import_proxy.get_all_gradle_and_manifests(build_dir)
+            logging.info(paths)
+            subdir = import_proxy.get_gradle_subdir(build_dir, paths)
+            self.assertEqual(subdirs[f], subdir)
+
+    def test_get_metadata_from_url(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        os.mkdir(os.path.join(testdir, 'tmp'))
+        tmp_importer = os.path.join(testdir, 'tmp', 'importer')
+        data = (
+            ('cn.wildfirechat.chat', 'https://github.com/wildfirechat/android-chat', '0.6.9', '23'),
+            ('com.anpmech.launcher', 'https://github.com/KeikaiLauncher/KeikaiLauncher', 'Unknown', None),
+            ('ut.ewh.audiometrytest', 'https://github.com/ReeceStevens/ut_ewh_audiometer_2014', '1.65', '14'),
+        )
+        for appid, url, vn, vc in data:
+            shutil.rmtree(tmp_importer, ignore_errors=True)
+            shutil.copytree(os.path.join(self.basedir, 'source-files', appid),
+                            tmp_importer)
+
+            app = fdroidserver.metadata.App()
+            app.UpdateCheckMode = "Tags"
+            with mock.patch('fdroidserver.common.getvcs',
+                            lambda a, b, c: fdroidserver.common.vcs(url, testdir)):
+                with mock.patch('fdroidserver.common.vcs.gotorevision',
+                                lambda s, rev: None):
+                    with mock.patch('shutil.rmtree', lambda a: None):
+                        build_dir = import_proxy.get_metadata_from_url(app, url)
+            self.assertEqual('git', app.RepoType)
+            self.assertEqual(url, app.Repo)
+            self.assertEqual(url, app.SourceCode)
+            logging.info(build_dir)
+            paths = import_proxy.get_all_gradle_and_manifests(build_dir)
+            self.assertNotEqual(paths, [])
+            versionName, versionCode, package = fdroidserver.common.parse_androidmanifests(paths, app)
+            self.assertEqual(vn, versionName)
+            self.assertEqual(vc, versionCode)
+            self.assertEqual(appid, package)
 
 
 if __name__ == "__main__":

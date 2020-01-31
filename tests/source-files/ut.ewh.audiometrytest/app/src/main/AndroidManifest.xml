@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ut.ewh.audiometrytest"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="ut.ewh.audiometrytest.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="ut.ewh.audiometrytest.PreTestInformation"
+            android:label="@string/title_activity_pre_test_information"
+            android:screenOrientation="portrait"
+            android:parentActivityName="ut.ewh.audiometrytest.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ut.ewh.audiometrytest.MainActivity" />
+        </activity>
+        <activity
+            android:name="ut.ewh.audiometrytest.TestProctoring"
+            android:label="@string/title_activity_test_proctoring"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ut.ewh.audiometrytest.TestComplete"
+            android:label="@string/title_activity_test_complete"
+            android:screenOrientation="portrait"
+            android:parentActivityName="ut.ewh.audiometrytest.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ut.ewh.audiometrytest.MainActivity" />
+        </activity>
+        <activity
+            android:name="ut.ewh.audiometrytest.ExportData"
+            android:label="@string/title_activity_export_data"
+            android:parentActivityName="ut.ewh.audiometrytest.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ut.ewh.audiometrytest.MainActivity" />
+        </activity>
+        <activity
+            android:name="ut.ewh.audiometrytest.Pre_Calibration"
+            android:label="@string/title_activity_pre__calibration"
+            android:screenOrientation="portrait"
+            android:parentActivityName="ut.ewh.audiometrytest.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ut.ewh.audiometrytest.MainActivity" />
+        </activity>
+        <activity
+            android:name="ut.ewh.audiometrytest.Calibration"
+            android:label="@string/title_activity_calibration"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ut.ewh.audiometrytest.ExportComplete"
+            android:label="@string/title_activity_export_complete"
+            android:screenOrientation="portrait"
+            android:parentActivityName="ut.ewh.audiometrytest.ExportData" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ut.ewh.audiometrytest.ExportData" />
+        </activity>
+        <activity
+            android:name="ut.ewh.audiometrytest.CalibrationComplete"
+            android:label="@string/title_activity_calibration_complete"
+            android:screenOrientation="portrait"
+            android:parentActivityName="ut.ewh.audiometrytest.Pre_Calibration" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ut.ewh.audiometrytest.Pre_Calibration" />
+        </activity>
+        <activity
+            android:name="ut.ewh.audiometrytest.Acknowledgements"
+            android:label="@string/title_activity_acknowledgements"
+            android:screenOrientation="portrait"
+            android:parentActivityName="ut.ewh.audiometrytest.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ut.ewh.audiometrytest.MainActivity" />
+        </activity>
+        <activity
+            android:name="ut.ewh.audiometrytest.ExportError"
+            android:label="@string/title_activity_export_error"
+            android:parentActivityName="ut.ewh.audiometrytest.ExportData" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ut.ewh.audiometrytest.ExportData" />
+        </activity>
+        <activity
+            android:name="ut.ewh.audiometrytest.TestLookup"
+            android:label="@string/title_activity_test_lookup"
+            android:parentActivityName="ut.ewh.audiometrytest.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="MainActivity" />
+        </activity>
+        <activity
+            android:name="ut.ewh.audiometrytest.TestData"
+            android:label="@string/title_activity_test_data"
+            android:parentActivityName="ut.ewh.audiometrytest.TestLookup">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="TestLookup" />
+        </activity>
+    </application>
+
+</manifest>

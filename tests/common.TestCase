@@ -816,6 +816,30 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(('0.94-test', '940', 'org.fdroid.fdroid'),
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
+        app = fdroidserver.metadata.App()
+        app.AutoName = 'android-chat'
+        app.RepoType = 'git'
+        url = 'https://github.com/wildfirechat/android-chat.git'
+        app.SourceCode = url.rstrip('.git')
+        app.Repo = url
+        paths = [
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'avenginekit', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'client', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'client', 'src', 'main', 'AndroidManifest.xml'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'emojilibrary', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'gradle', 'build_libraries.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'imagepicker', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'mars-core-release', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'push', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'settings.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'chat', 'build.gradle'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('0.6.9', '23', 'cn.wildfirechat.chat'),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
     def test_parse_androidmanifests_ignore(self):
         app = fdroidserver.metadata.App()
         app.id = 'org.fdroid.fdroid'
