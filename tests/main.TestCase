@@ -37,7 +37,6 @@ class FdroidTest(unittest.TestCase):
                               'rewritemeta',
                               'lint',
                               'scanner',
-                              'dscanner',
                               'stats',
                               'server',
                               'signindex',

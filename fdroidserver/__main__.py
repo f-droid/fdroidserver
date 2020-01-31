@@ -44,7 +44,6 @@ commands = OrderedDict([
     ("rewritemeta", _("Rewrite all the metadata files")),
     ("lint", _("Warn about possible metadata errors")),
     ("scanner", _("Scan the source code of a package")),
-    ("dscanner", _("Dynamically scan APKs post build")),
     ("stats", _("Update the stats of the repo")),
     ("server", _("Old, deprecated name for fdroid deploy")),
     ("signindex", _("Sign indexes created using update --nosign")),

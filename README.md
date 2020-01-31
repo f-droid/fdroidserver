@@ -85,22 +85,6 @@ RAM. These test scripts are in the root of the project, all starting
 with _jenkins-_ since they are run on https://jenkins.debian.net.
 
 
-
-### Drozer Scanner
-
-There is a new feature under development that can scan any APK in a
-repo, or any build, using Drozer.  Drozer is a dynamic exploit
-scanner, it runs an app in the emulator and runs known exploits on it.
-
-This setup requires specific versions of two Python modules:
-_docker-py_ 1.9.0 and _requests_ older than 2.11.  Other versions
-might cause the docker-py connection to break with the containers.
-Newer versions of docker-py might have this fixed already.
-
-For Debian based distributions:
-
-	apt-get install libffi-dev libssl-dev python-docker
-
 ## Translation
 
 Everything can be translated.  See
