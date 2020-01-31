@@ -22,8 +22,8 @@ import fdroidserver.metadata
 from fdroidserver.exception import FDroidException
 
 
-class CommonTest(unittest.TestCase):
-    '''fdroidserver/common.py'''
+class CheckupdatesTest(unittest.TestCase):
+    '''fdroidserver/checkupdates.py'''
 
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
@@ -163,5 +163,5 @@ if __name__ == "__main__":
     (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(CommonTest))
+    newSuite.addTest(unittest.makeSuite(CheckupdatesTest))
     unittest.main(failfast=False)
