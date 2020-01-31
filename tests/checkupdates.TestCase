@@ -19,6 +19,7 @@ if localmodule not in sys.path:
 
 import fdroidserver.checkupdates
 import fdroidserver.metadata
+from fdroidserver.exception import FDroidException
 
 
 class CommonTest(unittest.TestCase):
@@ -122,6 +123,17 @@ class CommonTest(unittest.TestCase):
             vername, vercode = fdroidserver.checkupdates.check_http(app)
             self.assertEqual(vername, '1.1.9')
             self.assertEqual(vercode, '10109')
+
+    def test_check_http_blocks_unknown_schemes(self):
+        app = fdroidserver.metadata.App()
+        for scheme in ('file', 'ssh', 'http', ';pwn'):
+            app.id = scheme
+            faked = scheme + '://fake.url/for/testing/scheme'
+            app.UpdateCheckData = faked + '|ignored|' + faked + '|ignored'
+            app.metadatapath = 'metadata/' + app.id + '.yml'
+            vername, vercode = fdroidserver.checkupdates.check_http(app)
+            self.assertIsNone(vername)
+            self.assertTrue(FDroidException.__name__ in vercode)
 
     def test_check_http_ignore(self):
         fdroidserver.checkupdates.options = mock.Mock()

@@ -64,7 +64,7 @@ def check_http(app):
         if len(urlcode) > 0:
             logging.debug("...requesting {0}".format(urlcode))
             req = urllib.request.Request(urlcode, None)
-            resp = urllib.request.urlopen(req, None, 20)
+            resp = urllib.request.urlopen(req, None, 20)  # nosec B310 scheme is filtered above
             page = resp.read().decode('utf-8')
 
             m = re.search(codeex, page)
@@ -77,7 +77,7 @@ def check_http(app):
             if urlver != '.':
                 logging.debug("...requesting {0}".format(urlver))
                 req = urllib.request.Request(urlver, None)
-                resp = urllib.request.urlopen(req, None, 20)
+                resp = urllib.request.urlopen(req, None, 20)  # nosec B310 scheme is filtered above
                 page = resp.read().decode('utf-8')
 
             m = re.search(verex, page)
@@ -295,7 +295,7 @@ def check_gplay(app):
     headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux i686; rv:18.0) Gecko/20100101 Firefox/18.0'}
     req = urllib.request.Request(url, None, headers)
     try:
-        resp = urllib.request.urlopen(req, None, 20)
+        resp = urllib.request.urlopen(req, None, 20)  # nosec B310 URL base is hardcoded above
         page = resp.read().decode()
     except urllib.error.HTTPError as e:
         return (None, str(e.code))
