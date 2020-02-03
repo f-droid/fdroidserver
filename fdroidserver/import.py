@@ -19,13 +19,20 @@
 
 import binascii
 import glob
+import json
 import os
 import re
 import shutil
 import urllib.parse
 import urllib.request
+import yaml
 from argparse import ArgumentParser
 import logging
+
+try:
+    from yaml import CSafeLoader as SafeLoader
+except ImportError:
+    from yaml import SafeLoader
 
 from . import _
 from . import common
@@ -295,6 +302,36 @@ def main():
         build.buildjni = ['yes']
     if os.path.exists(os.path.join(subdir, 'build.gradle')):
         build.gradle = ['yes']
+
+    package_json = os.path.join(build_dir, 'package.json')  # react-native
+    pubspec_yaml = os.path.join(build_dir, 'pubspec.yaml')  # flutter
+    if os.path.exists(package_json):
+        build.sudo = ['apt-get install npm', 'npm install -g react-native-cli']
+        build.init = ['npm install']
+        with open(package_json) as fp:
+            data = json.load(fp)
+        app.AutoName = data.get('name', app.AutoName)
+        app.License = data.get('license', app.License)
+        app.Description = data.get('description', app.Description)
+        app.WebSite = data.get('homepage', app.WebSite)
+        app_json = os.path.join(build_dir, 'app.json')
+        if os.path.exists(app_json):
+            with open(app_json) as fp:
+                data = json.load(fp)
+            app.AutoName = data.get('name', app.AutoName)
+    if os.path.exists(pubspec_yaml):
+        with open(pubspec_yaml) as fp:
+            data = yaml.load(fp, Loader=SafeLoader)
+        app.AutoName = data.get('name', app.AutoName)
+        app.License = data.get('license', app.License)
+        app.Description = data.get('description', app.Description)
+        build.srclibs = ['flutter@stable']
+        build.output = 'build/app/outputs/apk/release/app-release.apk'
+        build.build = [
+            '$$flutter$$/bin/flutter config --no-analytics',
+            '$$flutter$$/bin/flutter packages pub get',
+            '$$flutter$$/bin/flutter build apk',
+        ]
 
     metadata.post_metadata_parse(app)
 
