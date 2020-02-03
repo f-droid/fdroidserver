@@ -29,6 +29,7 @@ class ScannerTest(unittest.TestCase):
         source_files = os.path.join(self.basedir, 'source-files')
         projects = {
             'cn.wildfirechat.chat': 4,
+            'com.integreight.onesheeld': 11,
             'Zillode': 1,
             'firebase-suspect': 1,
             'org.mozilla.rocket': 3,

@@ -840,6 +840,27 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(('0.6.9', '23', 'cn.wildfirechat.chat'),
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
+        app = fdroidserver.metadata.App()
+        app.Repo = 'https://github.com/Integreight/1Sheeld-Android-App'
+        paths = [
+            os.path.join('source-files', 'com.integreight.onesheeld', 'pagerIndicator', 'src', 'main', 'AndroidManifest.xml'),
+            os.path.join('source-files', 'com.integreight.onesheeld', 'pagerIndicator', 'build.gradle'),
+            os.path.join('source-files', 'com.integreight.onesheeld', 'oneSheeld', 'src', 'main', 'AndroidManifest.xml'),
+            os.path.join('source-files', 'com.integreight.onesheeld', 'oneSheeld', 'build.gradle'),
+            os.path.join('source-files', 'com.integreight.onesheeld', 'localeapi', 'src', 'main', 'AndroidManifest.xml'),
+            os.path.join('source-files', 'com.integreight.onesheeld', 'localeapi', 'build.gradle'),
+            os.path.join('source-files', 'com.integreight.onesheeld', 'build.gradle'),
+            os.path.join('source-files', 'com.integreight.onesheeld', 'settings.gradle'),
+            os.path.join('source-files', 'com.integreight.onesheeld', 'quickReturnHeader', 'src', 'main', 'AndroidManifest.xml'),
+            os.path.join('source-files', 'com.integreight.onesheeld', 'quickReturnHeader', 'build.gradle'),
+            os.path.join('source-files', 'com.integreight.onesheeld', 'pullToRefreshlibrary', 'src', 'main', 'AndroidManifest.xml'),
+            os.path.join('source-files', 'com.integreight.onesheeld', 'pullToRefreshlibrary', 'build.gradle'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('1.9.0', '170521', 'com.integreight.onesheeld'),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
     def test_parse_androidmanifests_ignore(self):
         app = fdroidserver.metadata.App()
         app.id = 'org.fdroid.fdroid'

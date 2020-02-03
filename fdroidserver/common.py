@@ -81,6 +81,7 @@ FDROID_PACKAGE_NAME_REGEX = re.compile(r'''^[a-f0-9]+$''', re.IGNORECASE)
 STRICT_APPLICATION_ID_REGEX = re.compile(r'''(?:^[a-zA-Z]+(?:\d*[a-zA-Z_]*)*)(?:\.[a-zA-Z]+(?:\d*[a-zA-Z_]*)*)+$''')
 VALID_APPLICATION_ID_REGEX = re.compile(r'''(?:^[a-z_]+(?:\d*[a-zA-Z_]*)*)(?:\.[a-z_]+(?:\d*[a-zA-Z_]*)*)*$''',
                                         re.IGNORECASE)
+ANDROID_PLUGIN_REGEX = re.compile(r'''\s*(:?apply plugin:|id)\(?\s*['"](android|com\.android\.application)['"]\s*\)?''')
 
 MAX_VERSION_CODE = 0x7fffffff  # Java's Integer.MAX_VALUE (2147483647)
 
@@ -1421,6 +1422,7 @@ def parse_androidmanifests(paths, app):
 
         if has_extension(path, 'gradle'):
             with open(path, 'r') as f:
+                android_plugin_file = False
                 inside_flavour_group = 0
                 inside_required_flavour = 0
                 for line in f:
@@ -1496,6 +1498,17 @@ def parse_androidmanifests(paths, app):
                             matches = vcsearch_g(line)
                             if matches:
                                 vercode = matches.group(1)
+                    if not android_plugin_file and ANDROID_PLUGIN_REGEX.match(line):
+                        android_plugin_file = True
+            if android_plugin_file:
+                if package:
+                    max_package = package
+                if version:
+                    max_version = version
+                if vercode:
+                    max_vercode = vercode
+                if max_package and max_version and max_vercode:
+                    break
         else:
             try:
                 xml = parse_xml(path)
