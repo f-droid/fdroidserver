@@ -18,8 +18,9 @@ class Options:
 module = __import__('fdroidserver.import')
 for name, obj in inspect.getmembers(module):
     if name == 'import':
+        clone_to_tmp_dir = obj.clone_to_tmp_dir
         get_all_gradle_and_manifests = obj.get_all_gradle_and_manifests
-        get_metadata_from_url = obj.get_metadata_from_url
+        get_app_from_url = obj.get_app_from_url
         get_gradle_subdir = obj.get_gradle_subdir
         obj.options = Options()
         options = obj.options

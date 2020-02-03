@@ -49,9 +49,8 @@ class ImportTest(unittest.TestCase):
             print('Skipping ImportTest!')
             return
 
-        app = fdroidserver.metadata.App()
-        app.UpdateCheckMode = "Tags"
-        build_dir = import_proxy.get_metadata_from_url(app, url)
+        app = import_proxy.get_app_from_url(url)
+        import_proxy.clone_to_tmp_dir(app)
         self.assertEqual(app.RepoType, 'git')
         self.assertEqual(app.WebSite, 'https://gitlab.com/fdroid/ci-test-app')
         self.assertEqual(app.Repo, 'https://gitlab.com/fdroid/ci-test-app.git')
@@ -87,7 +86,7 @@ class ImportTest(unittest.TestCase):
             subdir = import_proxy.get_gradle_subdir(build_dir, paths)
             self.assertEqual(subdirs[f], subdir)
 
-    def test_get_metadata_from_url(self):
+    def test_get_app_from_url(self):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         os.chdir(testdir)
         os.mkdir(os.path.join(testdir, 'tmp'))
@@ -102,14 +101,13 @@ class ImportTest(unittest.TestCase):
             shutil.copytree(os.path.join(self.basedir, 'source-files', appid),
                             tmp_importer)
 
-            app = fdroidserver.metadata.App()
-            app.UpdateCheckMode = "Tags"
+            app = import_proxy.get_app_from_url(url)
             with mock.patch('fdroidserver.common.getvcs',
                             lambda a, b, c: fdroidserver.common.vcs(url, testdir)):
                 with mock.patch('fdroidserver.common.vcs.gotorevision',
                                 lambda s, rev: None):
                     with mock.patch('shutil.rmtree', lambda a: None):
-                        build_dir = import_proxy.get_metadata_from_url(app, url)
+                        build_dir = import_proxy.clone_to_tmp_dir(app)
             self.assertEqual('git', app.RepoType)
             self.assertEqual(url, app.Repo)
             self.assertEqual(url, app.SourceCode)
