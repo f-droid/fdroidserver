@@ -725,16 +725,17 @@ class MetadataTest(unittest.TestCase):
                     Prepare: "[ -f project.properties ] || echo 'source.dir=java' > ant.properties && echo -e 'android.library=true\\\\ntarget=android-19' > project.properties"
                     '''))
             srclib = fdroidserver.metadata.parse_yml_srclib('Changelog-cketti.yml')
-            self.assertDictEqual({'Repo': 'https://github.com/cketti/ckChangeLog',
+            self.assertDictEqual(srclib,
+                                 {'Repo': 'https://github.com/cketti/ckChangeLog',
                                   'RepoType': 'git',
                                   'Subdir': ['library', 'ckChangeLog/src/main'],
                                   'Prepare': "[ -f project.properties ] || echo 'source.dir=java' > "
                                              "ant.properties && echo -e "
-                                             "'android.library=true\\ntarget=android-19' > project.properties"},
-                                 srclib)
+                                             "'android.library=true\\ntarget=android-19' > project.properties"})
 
     def test_read_srclibs(self):
         fdroidserver.metadata.warnings_action = 'error'
+        fdroidserver.metadata.srclibs = None
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             os.mkdir('srclibs')
             with open('srclibs/simple.yml', 'w', encoding='utf-8') as f:
@@ -752,7 +753,6 @@ class MetadataTest(unittest.TestCase):
                     Prepare:
                     '''))
             fdroidserver.metadata.read_srclibs()
-        print(fdroidserver.metadata.srclibs)
         self.assertDictEqual(fdroidserver.metadata.srclibs,
                              {'simple-wb': {'RepoType': 'git',
                                             'Repo': 'https://git.host/repo.git',
