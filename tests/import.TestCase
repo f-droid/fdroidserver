@@ -52,7 +52,6 @@ class ImportTest(unittest.TestCase):
         app = import_proxy.get_app_from_url(url)
         import_proxy.clone_to_tmp_dir(app)
         self.assertEqual(app.RepoType, 'git')
-        self.assertEqual(app.WebSite, 'https://gitlab.com/fdroid/ci-test-app')
         self.assertEqual(app.Repo, 'https://gitlab.com/fdroid/ci-test-app.git')
 
     def test_get_all_gradle_and_manifests(self):
@@ -85,6 +84,17 @@ class ImportTest(unittest.TestCase):
             logging.info(paths)
             subdir = import_proxy.get_gradle_subdir(build_dir, paths)
             self.assertEqual(subdirs[f], subdir)
+
+    def test_bad_urls(self):
+        for url in ('asdf',
+                    'file://thing.git',
+                    'https:///github.com/my/project',
+                    'git:///so/many/slashes',
+                    'ssh:/notabug.org/missing/a/slash',
+                    'git:notabug.org/missing/some/slashes',
+                    'https//github.com/bar/baz'):
+            with self.assertRaises(ValueError):
+                import_proxy.get_app_from_url(url)
 
     def test_get_app_from_url(self):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)

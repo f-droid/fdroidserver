@@ -22,6 +22,7 @@ import glob
 import os
 import re
 import shutil
+import urllib.parse
 import urllib.request
 from argparse import ArgumentParser
 import logging
@@ -90,80 +91,63 @@ options = None
 
 
 def get_app_from_url(url):
+    """Guess basic app metadata from the URL.
+
+    The URL must include a network hostname, unless it is an lp:,
+    file:, or git/ssh URL.  This throws ValueError on bad URLs to
+    match urlparse().
+
+    """
+
+    parsed = urllib.parse.urlparse(url)
+    invalid_url = False
+    if not parsed.scheme or not parsed.path:
+        invalid_url = True
 
     app = metadata.App()
-
-    # Figure out what kind of project it is...
-    projecttype = None
-    app.WebSite = url  # by default, we might override it
-    if url.startswith('git://'):
-        projecttype = 'git'
-        repo = url
-        repotype = 'git'
-        app.SourceCode = ""
-        app.WebSite = ""
-    elif url.startswith('https://github.com'):
-        projecttype = 'github'
-        repo = url
-        repotype = 'git'
+    app.Repo = url
+    if url.startswith('git://') or url.startswith('git@'):
+        app.RepoType = 'git'
+    elif parsed.netloc == 'github.com':
+        app.RepoType = 'git'
         app.SourceCode = url
         app.IssueTracker = url + '/issues'
-        app.WebSite = ""
-    elif url.startswith('https://gitlab.com/'):
-        projecttype = 'gitlab'
+    elif parsed.netloc == 'gitlab.com':
         # git can be fussy with gitlab URLs unless they end in .git
         if url.endswith('.git'):
             url = url[:-4]
-        repo = url + '.git'
-        repotype = 'git'
-        app.WebSite = url
-        app.SourceCode = url + '/tree/HEAD'
-        app.IssueTracker = url + '/issues'
-    elif url.startswith('https://notabug.org/'):
-        projecttype = 'notabug'
-        if url.endswith('.git'):
-            url = url[:-4]
-        repo = url + '.git'
-        repotype = 'git'
+        app.Repo = url + '.git'
+        app.RepoType = 'git'
         app.SourceCode = url
         app.IssueTracker = url + '/issues'
-        app.WebSite = ""
-    elif url.startswith('https://bitbucket.org/'):
+    elif parsed.netloc == 'notabug.org':
+        if url.endswith('.git'):
+            url = url[:-4]
+        app.Repo = url + '.git'
+        app.RepoType = 'git'
+        app.SourceCode = url
+        app.IssueTracker = url + '/issues'
+    elif parsed.netloc == 'bitbucket.org':
         if url.endswith('/'):
             url = url[:-1]
-        projecttype = 'bitbucket'
         app.SourceCode = url + '/src'
         app.IssueTracker = url + '/issues'
         # Figure out the repo type and adddress...
-        repotype, repo = getrepofrompage(url)
-        if not repotype:
-            raise FDroidException("Unable to determine vcs type. " + repo)
+        app.RepoType, app.Repo = getrepofrompage(url)
     elif url.startswith('https://') and url.endswith('.git'):
-        projecttype = 'git'
-        repo = url
-        repotype = 'git'
-        app.SourceCode = ""
-        app.WebSite = ""
-    if not projecttype:
-        raise FDroidException("Unable to determine the project type. "
-                              + "The URL you supplied was not in one of the supported formats. "
-                              + "Please consult the manual for a list of supported formats, "
-                              + "and supply one of those.")
+        app.RepoType = 'git'
 
-    # Ensure we have a sensible-looking repo address at this point. If not, we
-    # might have got a page format we weren't expecting. (Note that we
-    # specifically don't want git@...)
-    if ((repotype != 'bzr' and (not repo.startswith('http://')
-        and not repo.startswith('https://')
-        and not repo.startswith('git://')))
-            or ' ' in repo):
-        raise FDroidException("Repo address '{0}' does not seem to be valid".format(repo))
+    if not parsed.netloc and parsed.scheme in ('git', 'http', 'https', 'ssh'):
+        invalid_url = True
 
+    if invalid_url:
+        raise ValueError(_('"{url}" is not a valid URL!'.format(url=url)))
 
-    app.RepoType = repotype
-    app.Repo = repo
+    if not app.RepoType:
+        raise FDroidException("Unable to determine vcs type. " + app.Repo)
 
     return app
+
 
 def clone_to_tmp_dir(app):
     tmp_dir = 'tmp'
