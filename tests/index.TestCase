@@ -71,7 +71,7 @@ class IndexTest(unittest.TestCase):
             fdroidserver.index.download_repo_index("http://example.org")
 
     def test_download_repo_index_no_jar(self):
-        with self.assertRaises(requests.exceptions.HTTPError):
+        with self.assertRaises(requests.exceptions.RequestException):
             fdroidserver.index.download_repo_index("http://example.org?fingerprint=nope")
 
     @patch('requests.head')
