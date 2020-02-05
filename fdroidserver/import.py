@@ -40,8 +40,9 @@ SETTINGS_GRADLE = re.compile(r'''include\s+['"]:([^'"]*)['"]''')
 # when one of these is found it's assumed that's the information we want.
 # Returns repotype, address, or None, reason
 def getrepofrompage(url):
-
-    req = urllib.request.urlopen(url)
+    if not url.startswith('http'):
+        return (None, _('{url} does not start with "http"!'.format(url=url)))
+    req = urllib.request.urlopen(url)  # nosec B310 non-http URLs are filtered out
     if req.getcode() != 200:
         return (None, 'Unable to get ' + url + ' - return code ' + str(req.getcode()))
     page = req.read().decode(req.headers.get_content_charset())

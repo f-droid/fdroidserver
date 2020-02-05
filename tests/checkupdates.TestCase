@@ -19,10 +19,11 @@ if localmodule not in sys.path:
 
 import fdroidserver.checkupdates
 import fdroidserver.metadata
+from fdroidserver.exception import FDroidException
 
 
-class CommonTest(unittest.TestCase):
-    '''fdroidserver/common.py'''
+class CheckupdatesTest(unittest.TestCase):
+    '''fdroidserver/checkupdates.py'''
 
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
@@ -123,6 +124,17 @@ class CommonTest(unittest.TestCase):
             self.assertEqual(vername, '1.1.9')
             self.assertEqual(vercode, '10109')
 
+    def test_check_http_blocks_unknown_schemes(self):
+        app = fdroidserver.metadata.App()
+        for scheme in ('file', 'ssh', 'http', ';pwn'):
+            app.id = scheme
+            faked = scheme + '://fake.url/for/testing/scheme'
+            app.UpdateCheckData = faked + '|ignored|' + faked + '|ignored'
+            app.metadatapath = 'metadata/' + app.id + '.yml'
+            vername, vercode = fdroidserver.checkupdates.check_http(app)
+            self.assertIsNone(vername)
+            self.assertTrue(FDroidException.__name__ in vercode)
+
     def test_check_http_ignore(self):
         fdroidserver.checkupdates.options = mock.Mock()
 
@@ -151,5 +163,5 @@ if __name__ == "__main__":
     (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(CommonTest))
+    newSuite.addTest(unittest.makeSuite(CheckupdatesTest))
     unittest.main(failfast=False)

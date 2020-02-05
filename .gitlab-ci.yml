@@ -1,8 +1,12 @@
 
+variables:
+  pip: pip3 --timeout 100 --retries 10
+
+
 test:
   image: registry.gitlab.com/fdroid/ci-images-server:latest
   script:
-    - pip3 install -e .
+    - $pip install -e .
     - cd tests
     - ./complete-ci-tests
 
@@ -104,8 +108,8 @@ ubuntu_xenial_pip:
     - rm -rf env
     - pyvenv env
     - . env/bin/activate
-    - pip3 install --upgrade babel pip setuptools
-    - pip3 install -e .
+    - $pip install --upgrade babel pip setuptools
+    - $pip install -e .
     - ./setup.py compile_catalog
     - ./tests/run-tests
 
@@ -135,13 +139,12 @@ lint_format_safety_bandit_checks:
   script:
     - apk add --no-cache bash dash ca-certificates python3
     - python3 -m ensurepip
-    - pip3 install Babel 'bandit<1.6.0' pycodestyle pyflakes 'pylint<2.0' safety
+    - $pip install Babel 'bandit<1.6.0' pycodestyle pyflakes 'pylint<2.0' safety
     - export EXITVALUE=0
     - ./hooks/pre-commit || export EXITVALUE=1
     - bandit
         -ii
-        -s B110,B310,B322,B404,B408,B410,B603,B607
-        -x fdroidserver/dscanner.py,docker/install_agent.py,docker/drozer.py
+        -s B110,B322,B404,B408,B410,B603,B607
         -r $CI_PROJECT_DIR fdroid
         || export EXITVALUE=1
     - safety check --full-report || export EXITVALUE=1
@@ -185,7 +188,7 @@ fedora_latest:
                      which
     - ./setup.py compile_catalog sdist
     - useradd -m -c "test account" --password "fakepassword"  testuser
-    - su testuser --login --command "cd `pwd`; pip3 install --user dist/fdroidserver-*.tar.gz"
+    - su testuser --login --command "cd `pwd`; $pip install --user dist/fdroidserver-*.tar.gz"
     - test -e ~testuser/.local/share/locale/de/LC_MESSAGES/fdroidserver.mo
     - wget --no-verbose -O tools.zip https://dl.google.com/android/repository/tools_r25.2.5-linux.zip
     - unzip -q tools.zip
@@ -223,5 +226,5 @@ gradle:
         test -z "$CHANGED" && exit;
       fi
     - python3 -m ensurepip
-    - pip3 install beautifulsoup4 requests
+    - $pip install beautifulsoup4 requests
     - ./tests/gradle-release-checksums.py

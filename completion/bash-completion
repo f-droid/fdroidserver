@@ -73,7 +73,7 @@ __vercode() {
 			line="${line#*,}"
 			printf "${line%%,*} "
 		fi
-		done < "metadata/${p}.txt" )" -- $cur ) )
+		done < "metadata/${p}.yml" )" -- $cur ) )
 }
 
 __complete_options() {
@@ -253,7 +253,7 @@ __complete_btlog() {
 
 __complete_mirror() {
 	opts="-v"
-	lopts="--archive --output-dir"
+	lopts="--all --archive --build-logs --pgp-signatures --src-tarballs --output-dir"
 	__complete_options
 }
 

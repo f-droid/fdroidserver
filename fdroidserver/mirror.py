@@ -46,15 +46,25 @@ def main():
     parser.add_argument("url", nargs='?',
                         help=_('Base URL to mirror, can include the index signing key '
                                + 'using the query string: ?fingerprint='))
+    parser.add_argument("--all", action='store_true', default=False,
+                        help=_("Mirror the full repo and archive, all file types."))
     parser.add_argument("--archive", action='store_true', default=False,
                         help=_("Also mirror the full archive section"))
     parser.add_argument("--build-logs", action='store_true', default=False,
                         help=_("Include the build logs in the mirror"))
+    parser.add_argument("--pgp-signatures", action='store_true', default=False,
+                        help=_("Include the PGP signature .asc files in the mirror"))
     parser.add_argument("--src-tarballs", action='store_true', default=False,
                         help=_("Include the source tarballs in the mirror"))
     parser.add_argument("--output-dir", default=None,
                         help=_("The directory to write the mirror to"))
     options = parser.parse_args()
+
+    if options.all:
+        options.archive = True
+        options.build_logs = True
+        options.pgp_signatures = True
+        options.src_tarballs = True
 
     if options.url is None:
         logging.error(_('A URL is required as an argument!') + '\n')
@@ -152,7 +162,8 @@ def main():
                     if not os.path.exists(f) \
                        or (f.endswith('.apk') and os.path.getsize(f) != package['size']):
                         urls.append(_append_to_url_path(section, f))
-                        urls.append(_append_to_url_path(section, f + '.asc'))
+                        if options.pgp_signatures:
+                            urls.append(_append_to_url_path(section, f + '.asc'))
                         if options.build_logs and f.endswith('.apk'):
                             urls.append(_append_to_url_path(section, f[:-4] + '.log.gz'))
 

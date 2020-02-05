@@ -714,7 +714,10 @@ def _set_localized_text_entry(app, locale, key, f):
     with open(f, errors='replace') as fp:
         text = fp.read()[:limit]
         if len(text) > 0:
-            localized[key] = text
+            if key in ('name', 'summary', 'video'):  # hardcoded as a single line
+                localized[key] = text.strip('\n')
+            else:
+                localized[key] = text
 
 
 def _set_author_entry(app, key, f):

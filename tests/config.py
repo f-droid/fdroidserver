@@ -26,8 +26,8 @@ keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="
 keydname = "CN=sova, OU=F-Droid"
 
 mirrors = (
-    'https://foo.bar/fdroid',
     'http://foobarfoobarfoobar.onion/fdroid',
+    'https://foo.bar/fdroid',
 )
 
 update_stats = True
