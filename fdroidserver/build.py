@@ -371,7 +371,8 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         if build.sudo:
             logging.info("Running 'sudo' commands in %s" % os.getcwd())
 
-            p = FDroidPopen(['sudo', 'bash', '-x', '-c', build.sudo])
+            p = FDroidPopen(['sudo', '--preserve-env=DEBIAN_FRONTEND',
+                             'bash', '-x', '-c', build.sudo])
             if p.returncode != 0:
                 raise BuildException("Error running sudo command for %s:%s" %
                                      (app.id, build.versionName), p.output)
