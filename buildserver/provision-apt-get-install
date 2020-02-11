@@ -23,8 +23,8 @@ printf 'APT::Get::Assume-Yes "true";\n' \
        > /etc/apt/apt.conf.d/99assumeyes
 
 cat <<EOF > /etc/apt/apt.conf.d/99quiet
-Dpkg::Use-Pty "0";'
-quiet "1";'
+Dpkg::Use-Pty "0";
+quiet "1";
 EOF
 
 if echo $debian_mirror | grep '^https' 2>&1 > /dev/null; then
