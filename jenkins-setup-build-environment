@@ -56,7 +56,7 @@ mkdir $VAGRANT_HOME
 rm -rf "$WORKSPACE"/../*/.testfiles
 
 memtotal=$(grep ^MemTotal: /proc/meminfo | awk '{print $2}')
-if [ $memtotal -gt 8092876 ]; then
+if [ $memtotal -gt 9437184 ]; then
     memory=8192
 else
     memory=$(((memtotal / 1024) - 1024))
