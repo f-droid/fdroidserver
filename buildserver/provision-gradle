@@ -33,6 +33,13 @@ cat <<EOF > $GRADLE_HOME/gradle.properties
 # builds are not reused, so the daemon is a waste of time
 org.gradle.daemon=false
 
+# set network timeouts to 10 minutes
+# https://github.com/gradle/gradle/pull/3371/files
+systemProp.http.connectionTimeout=600000
+systemProp.http.socketTimeout=600000
+systemProp.org.gradle.internal.http.connectionTimeout=600000
+systemProp.org.gradle.internal.http.socketTimeout=600000
+
 # fake info to block HTTP repos
 systemProp.http.nonProxyHosts=
 systemProp.http.proxyHost=127.127.127.127
