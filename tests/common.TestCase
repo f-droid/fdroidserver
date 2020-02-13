@@ -992,6 +992,7 @@ class CommonTest(unittest.TestCase):
             'source-files/info.guardianproject.ripple/build.gradle',
             'source-files/open-keychain/open-keychain/build.gradle',
             'source-files/open-keychain/open-keychain/OpenKeychain/build.gradle',
+            'source-files/org.tasks/app/build.gradle.kts',
             'source-files/osmandapp/osmand/build.gradle',
             'source-files/ut.ewh.audiometrytest/app/build.gradle',
         ]

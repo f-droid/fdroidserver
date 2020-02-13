@@ -2380,7 +2380,7 @@ def FDroidPopen(commands, cwd=None, envs=None, output=True, stderr_to_stdout=Tru
 gradle_comment = re.compile(r'[ ]*//')
 gradle_signing_configs = re.compile(r'^[\t ]*signingConfigs[ \t]*{[ \t]*$')
 gradle_line_matches = [
-    re.compile(r'^[\t ]*signingConfig [^ ]*$'),
+    re.compile(r'^[\t ]*signingConfig\s*[= ]\s*[^ ]*$'),
     re.compile(r'.*android\.signingConfigs\.[^{]*$'),
     re.compile(r'.*release\.signingConfig *= *'),
 ]
