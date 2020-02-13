@@ -1,0 +1,57 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.github.wildfirechat'
+
+android {
+    compileSdkVersion 28
+
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        // testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            // TODO: changes this for your application if needed
+            moduleName = "mmnet"
+            //abiFilter "armeabi" //去掉armeabi架构，armeabi-v7a可以兼容armeabi架构。
+            abiFilter "armeabi-v7a"
+            abiFilter "arm64-v8a"
+            abiFilter "x86"
+            abiFilter "x86_64"
+        }
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+}
+
+
+dependencies {
+    api project(':mars-core-release')
+    def lifecycle_version = '2.0.0-beta01'
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+}

@@ -286,6 +286,8 @@ def main():
     parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))
+    parser.add_argument("-f", "--force", action="store_true", default=False,
+                        help=_("Force scan of disabled apps and builds."))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -307,7 +309,7 @@ def main():
 
     for appid, app in apps.items():
 
-        if app.Disabled:
+        if app.Disabled and not options.force:
             logging.info(_("Skipping {appid}: disabled").format(appid=appid))
             continue
 
@@ -334,7 +336,7 @@ def main():
 
             for build in app.builds:
 
-                if build.disable:
+                if build.disable and not options.force:
                     logging.info("...skipping version %s - %s" % (
                         build.versionName, build.get('disable', build.commit[1:])))
                     continue

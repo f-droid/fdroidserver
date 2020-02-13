@@ -18,21 +18,30 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import binascii
+import glob
+import json
 import os
 import re
 import shutil
+import urllib.parse
 import urllib.request
+import yaml
 from argparse import ArgumentParser
-from configparser import ConfigParser
 import logging
+
+try:
+    from yaml import CSafeLoader as SafeLoader
+except ImportError:
+    from yaml import SafeLoader
 
 from . import _
 from . import common
 from . import metadata
 from .exception import FDroidException
 
-
-SETTINGS_GRADLE = re.compile(r'''include\s+['"]:([^'"]*)['"]''')
+SETTINGS_GRADLE = re.compile(r'settings\.gradle(?:\.kts)?')
+GRADLE_SUBPROJECT = re.compile(r'''['"]:([^'"]+)['"]''')
+ANDROID_PLUGIN = re.compile(r'''\s*(:?apply plugin:|id)\(?\s*['"](android|com\.android\.application)['"]\s*\)?''')
 
 
 # Get the repo type and address from the given web page. The page is scanned
@@ -88,110 +97,112 @@ config = None
 options = None
 
 
-def get_metadata_from_url(app, url):
+def get_app_from_url(url):
+    """Guess basic app metadata from the URL.
 
+    The URL must include a network hostname, unless it is an lp:,
+    file:, or git/ssh URL.  This throws ValueError on bad URLs to
+    match urlparse().
+
+    """
+
+    parsed = urllib.parse.urlparse(url)
+    invalid_url = False
+    if not parsed.scheme or not parsed.path:
+        invalid_url = True
+
+    app = metadata.App()
+    app.Repo = url
+    if url.startswith('git://') or url.startswith('git@'):
+        app.RepoType = 'git'
+    elif parsed.netloc == 'github.com':
+        app.RepoType = 'git'
+        app.SourceCode = url
+        app.IssueTracker = url + '/issues'
+    elif parsed.netloc == 'gitlab.com':
+        # git can be fussy with gitlab URLs unless they end in .git
+        if url.endswith('.git'):
+            url = url[:-4]
+        app.Repo = url + '.git'
+        app.RepoType = 'git'
+        app.SourceCode = url
+        app.IssueTracker = url + '/issues'
+    elif parsed.netloc == 'notabug.org':
+        if url.endswith('.git'):
+            url = url[:-4]
+        app.Repo = url + '.git'
+        app.RepoType = 'git'
+        app.SourceCode = url
+        app.IssueTracker = url + '/issues'
+    elif parsed.netloc == 'bitbucket.org':
+        if url.endswith('/'):
+            url = url[:-1]
+        app.SourceCode = url + '/src'
+        app.IssueTracker = url + '/issues'
+        # Figure out the repo type and adddress...
+        app.RepoType, app.Repo = getrepofrompage(url)
+    elif url.startswith('https://') and url.endswith('.git'):
+        app.RepoType = 'git'
+
+    if not parsed.netloc and parsed.scheme in ('git', 'http', 'https', 'ssh'):
+        invalid_url = True
+
+    if invalid_url:
+        raise ValueError(_('"{url}" is not a valid URL!'.format(url=url)))
+
+    if not app.RepoType:
+        raise FDroidException("Unable to determine vcs type. " + app.Repo)
+
+    return app
+
+
+def clone_to_tmp_dir(app):
     tmp_dir = 'tmp'
     if not os.path.isdir(tmp_dir):
         logging.info(_("Creating temporary directory"))
         os.makedirs(tmp_dir)
 
-    # Figure out what kind of project it is...
-    projecttype = None
-    app.WebSite = url  # by default, we might override it
-    if url.startswith('git://'):
-        projecttype = 'git'
-        repo = url
-        repotype = 'git'
-        app.SourceCode = ""
-        app.WebSite = ""
-    elif url.startswith('https://github.com'):
-        projecttype = 'github'
-        repo = url
-        repotype = 'git'
-        app.SourceCode = url
-        app.IssueTracker = url + '/issues'
-        app.WebSite = ""
-    elif url.startswith('https://gitlab.com/'):
-        projecttype = 'gitlab'
-        # git can be fussy with gitlab URLs unless they end in .git
-        if url.endswith('.git'):
-            url = url[:-4]
-        repo = url + '.git'
-        repotype = 'git'
-        app.WebSite = url
-        app.SourceCode = url + '/tree/HEAD'
-        app.IssueTracker = url + '/issues'
-    elif url.startswith('https://notabug.org/'):
-        projecttype = 'notabug'
-        if url.endswith('.git'):
-            url = url[:-4]
-        repo = url + '.git'
-        repotype = 'git'
-        app.SourceCode = url
-        app.IssueTracker = url + '/issues'
-        app.WebSite = ""
-    elif url.startswith('https://bitbucket.org/'):
-        if url.endswith('/'):
-            url = url[:-1]
-        projecttype = 'bitbucket'
-        app.SourceCode = url + '/src'
-        app.IssueTracker = url + '/issues'
-        # Figure out the repo type and adddress...
-        repotype, repo = getrepofrompage(url)
-        if not repotype:
-            raise FDroidException("Unable to determine vcs type. " + repo)
-    elif url.startswith('https://') and url.endswith('.git'):
-        projecttype = 'git'
-        repo = url
-        repotype = 'git'
-        app.SourceCode = ""
-        app.WebSite = ""
-    if not projecttype:
-        raise FDroidException("Unable to determine the project type. "
-                              + "The URL you supplied was not in one of the supported formats. "
-                              + "Please consult the manual for a list of supported formats, "
-                              + "and supply one of those.")
-
-    # Ensure we have a sensible-looking repo address at this point. If not, we
-    # might have got a page format we weren't expecting. (Note that we
-    # specifically don't want git@...)
-    if ((repotype != 'bzr' and (not repo.startswith('http://')
-        and not repo.startswith('https://')
-        and not repo.startswith('git://')))
-            or ' ' in repo):
-        raise FDroidException("Repo address '{0}' does not seem to be valid".format(repo))
-
-    # Get a copy of the source so we can extract some info...
-    logging.info('Getting source from ' + repotype + ' repo at ' + repo)
-    build_dir = os.path.join(tmp_dir, 'importer')
-    if os.path.exists(build_dir):
-        shutil.rmtree(build_dir)
-    vcs = common.getvcs(repotype, repo, build_dir)
+    tmp_dir = os.path.join(tmp_dir, 'importer')
+    if os.path.exists(tmp_dir):
+        shutil.rmtree(tmp_dir)
+    vcs = common.getvcs(app.RepoType, app.Repo, tmp_dir)
     vcs.gotorevision(options.rev)
-    root_dir = get_subdir(build_dir)
 
-    app.RepoType = repotype
-    app.Repo = repo
-
-    return root_dir, build_dir
+    return tmp_dir
 
 
-config = None
-options = None
+def get_all_gradle_and_manifests(build_dir):
+    paths = []
+    for root, dirs, files in os.walk(build_dir):
+        for f in sorted(files):
+            if f == 'AndroidManifest.xml' \
+               or f.endswith('.gradle') or f.endswith('.gradle.kts'):
+                full = os.path.join(root, f)
+                paths.append(full)
+    return paths
 
 
-def get_subdir(build_dir):
-    if options.subdir:
-        return os.path.join(build_dir, options.subdir)
+def get_gradle_subdir(build_dir, paths):
+    """get the subdir where the gradle build is based"""
+    first_gradle_dir = None
+    for path in paths:
+        if not first_gradle_dir:
+            first_gradle_dir = os.path.relpath(os.path.dirname(path), build_dir)
+        if os.path.exists(path) and SETTINGS_GRADLE.match(os.path.basename(path)):
+            with open(path) as fp:
+                for m in GRADLE_SUBPROJECT.finditer(fp.read()):
+                    for f in glob.glob(os.path.join(os.path.dirname(path), m.group(1), 'build.gradle*')):
+                        with open(f) as fp:
+                            while True:
+                                line = fp.readline()
+                                if not line:
+                                    break
+                                if ANDROID_PLUGIN.match(line):
+                                    return os.path.relpath(os.path.dirname(f), build_dir)
+    if first_gradle_dir and first_gradle_dir != '.':
+        return first_gradle_dir
 
-    settings_gradle = os.path.join(build_dir, 'settings.gradle')
-    if os.path.exists(settings_gradle):
-        with open(settings_gradle) as fp:
-            m = SETTINGS_GRADLE.search(fp.read())
-            if m:
-                return os.path.join(build_dir, m.group(1))
-
-    return build_dir
+    return ''
 
 
 def main():
@@ -218,10 +229,8 @@ def main():
     config = common.read_config(options)
 
     apps = metadata.read_metadata()
-    app = metadata.App()
-    app.UpdateCheckMode = "Tags"
+    app = None
 
-    root_dir = None
     build_dir = None
 
     local_metadata_files = common.get_local_metadata_files()
@@ -230,15 +239,16 @@ def main():
 
     build = metadata.Build()
     if options.url is None and os.path.isdir('.git'):
+        app = metadata.App()
         app.AutoName = os.path.basename(os.getcwd())
         app.RepoType = 'git'
+        app.UpdateCheckMode = "Tags"
 
-        root_dir = get_subdir(os.getcwd())
         if os.path.exists('build.gradle'):
             build.gradle = ['yes']
 
         import git
-        repo = git.repo.Repo(root_dir)  # git repo
+        repo = git.repo.Repo(os.getcwd())  # git repo
         for remote in git.Remote.iter_items(repo):
             if remote.name == 'origin':
                 url = repo.remotes.origin.url
@@ -250,7 +260,8 @@ def main():
         build.commit = binascii.hexlify(bytearray(repo.head.commit.binsha))
         write_local_file = True
     elif options.url:
-        root_dir, build_dir = get_metadata_from_url(app, options.url)
+        app = get_app_from_url(options.url)
+        build_dir = clone_to_tmp_dir(app)
         build.commit = '?'
         build.disable = 'Generated by import.py - check/set version fields and commit id'
         write_local_file = False
@@ -258,9 +269,9 @@ def main():
         raise FDroidException("Specify project url.")
 
     # Extract some information...
-    paths = common.manifest_paths(root_dir, [])
+    paths = get_all_gradle_and_manifests(build_dir)
+    subdir = get_gradle_subdir(build_dir, paths)
     if paths:
-
         versionName, versionCode, package = common.parse_androidmanifests(paths, app)
         if not package:
             raise FDroidException(_("Couldn't find package ID"))
@@ -269,17 +280,7 @@ def main():
         if not versionCode:
             logging.warn(_("Couldn't find latest version code"))
     else:
-        spec = os.path.join(root_dir, 'buildozer.spec')
-        if os.path.exists(spec):
-            defaults = {'orientation': 'landscape', 'icon': '',
-                        'permissions': '', 'android.api': "18"}
-            bconfig = ConfigParser(defaults, allow_no_value=True)
-            bconfig.read(spec)
-            package = bconfig.get('app', 'package.domain') + '.' + bconfig.get('app', 'package.name')
-            versionName = bconfig.get('app', 'version')
-            versionCode = None
-        else:
-            raise FDroidException(_("No android or kivy project could be found. Specify --subdir?"))
+        raise FDroidException(_("No gradle project could be found. Specify --subdir?"))
 
     # Make sure it's actually new...
     if package in apps:
@@ -290,14 +291,47 @@ def main():
     build.versionCode = versionCode or '0'  # TODO heinous but this is still a str
     if options.subdir:
         build.subdir = options.subdir
+    elif subdir:
+        build.subdir = subdir
+
     if options.license:
         app.License = options.license
     if options.categories:
         app.Categories = options.categories.split(',')
-    if os.path.exists(os.path.join(root_dir, 'jni')):
+    if os.path.exists(os.path.join(subdir, 'jni')):
         build.buildjni = ['yes']
-    if os.path.exists(os.path.join(root_dir, 'build.gradle')):
+    if os.path.exists(os.path.join(subdir, 'build.gradle')):
         build.gradle = ['yes']
+
+    package_json = os.path.join(build_dir, 'package.json')  # react-native
+    pubspec_yaml = os.path.join(build_dir, 'pubspec.yaml')  # flutter
+    if os.path.exists(package_json):
+        build.sudo = ['apt-get install npm', 'npm install -g react-native-cli']
+        build.init = ['npm install']
+        with open(package_json) as fp:
+            data = json.load(fp)
+        app.AutoName = data.get('name', app.AutoName)
+        app.License = data.get('license', app.License)
+        app.Description = data.get('description', app.Description)
+        app.WebSite = data.get('homepage', app.WebSite)
+        app_json = os.path.join(build_dir, 'app.json')
+        if os.path.exists(app_json):
+            with open(app_json) as fp:
+                data = json.load(fp)
+            app.AutoName = data.get('name', app.AutoName)
+    if os.path.exists(pubspec_yaml):
+        with open(pubspec_yaml) as fp:
+            data = yaml.load(fp, Loader=SafeLoader)
+        app.AutoName = data.get('name', app.AutoName)
+        app.License = data.get('license', app.License)
+        app.Description = data.get('description', app.Description)
+        build.srclibs = ['flutter@stable']
+        build.output = 'build/app/outputs/apk/release/app-release.apk'
+        build.build = [
+            '$$flutter$$/bin/flutter config --no-analytics',
+            '$$flutter$$/bin/flutter packages pub get',
+            '$$flutter$$/bin/flutter build apk',
+        ]
 
     metadata.post_metadata_parse(app)
 
