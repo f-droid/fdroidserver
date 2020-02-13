@@ -34,6 +34,7 @@ class ScannerTest(unittest.TestCase):
             'firebase-suspect': 1,
             'org.mozilla.rocket': 3,
             'realm': 1,
+            'se.manyver': 2,
         }
         for d in glob.glob(os.path.join(source_files, '*')):
             build = fdroidserver.metadata.Build()

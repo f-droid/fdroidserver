@@ -142,6 +142,7 @@ lint_format_safety_bandit_checks:
     - $pip install Babel 'bandit<1.6.0' pycodestyle pyflakes 'pylint<2.0' safety
     - export EXITVALUE=0
     - ./hooks/pre-commit || export EXITVALUE=1
+    - ./tests/test-gradlew-fdroid || export EXITVALUE=1
     - bandit
         -ii
         -s B110,B322,B404,B408,B410,B603,B607
