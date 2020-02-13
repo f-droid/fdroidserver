@@ -243,7 +243,7 @@ def main():
         app.RepoType = 'git'
         app.UpdateCheckMode = "Tags"
 
-        if os.path.exists('build.gradle'):
+        if os.path.exists('build.gradle') or os.path.exists('build.gradle.kts'):
             build.gradle = ['yes']
 
         import git

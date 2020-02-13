@@ -1421,7 +1421,7 @@ def parse_androidmanifests(paths, app):
         if app.builds and 'gradle' in app.builds[-1] and app.builds[-1].gradle:
             flavour = app.builds[-1].gradle[-1]
 
-        if has_extension(path, 'gradle'):
+        if path.endswith('.gradle') or path.endswith('.gradle.kts'):
             with open(path, 'r') as f:
                 android_plugin_file = False
                 inside_flavour_group = 0
