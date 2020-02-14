@@ -41,7 +41,6 @@ from .exception import FDroidException
 
 SETTINGS_GRADLE = re.compile(r'settings\.gradle(?:\.kts)?')
 GRADLE_SUBPROJECT = re.compile(r'''['"]:([^'"]+)['"]''')
-ANDROID_PLUGIN = re.compile(r'''\s*(:?apply plugin:|id)\(?\s*['"](android|com\.android\.application)['"]\s*\)?''')
 
 
 # Get the repo type and address from the given web page. The page is scanned
@@ -197,7 +196,7 @@ def get_gradle_subdir(build_dir, paths):
                                 line = fp.readline()
                                 if not line:
                                     break
-                                if ANDROID_PLUGIN.match(line):
+                                if common.ANDROID_PLUGIN_REGEX.match(line):
                                     return os.path.relpath(os.path.dirname(f), build_dir)
     if first_gradle_dir and first_gradle_dir != '.':
         return first_gradle_dir
@@ -244,7 +243,7 @@ def main():
         app.RepoType = 'git'
         app.UpdateCheckMode = "Tags"
 
-        if os.path.exists('build.gradle'):
+        if os.path.exists('build.gradle') or os.path.exists('build.gradle.kts'):
             build.gradle = ['yes']
 
         import git
@@ -300,7 +299,8 @@ def main():
         app.Categories = options.categories.split(',')
     if os.path.exists(os.path.join(subdir, 'jni')):
         build.buildjni = ['yes']
-    if os.path.exists(os.path.join(subdir, 'build.gradle')):
+    if os.path.exists(os.path.join(subdir, 'build.gradle')) \
+       or os.path.exists(os.path.join(subdir, 'build.gradle')):
         build.gradle = ['yes']
 
     package_json = os.path.join(build_dir, 'package.json')  # react-native

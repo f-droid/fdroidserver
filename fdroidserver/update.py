@@ -825,9 +825,10 @@ def copy_triple_t_store_metadata(apps):
     setting_gradle_pattern = re.compile(r"""\s*include\s+["']:([^"']+)["'](?:,[\n\s]*["']:([^"']+)["'])*""")
 
     for packageName, app in apps.items():
-        settings_gradle = os.path.join('build', packageName, 'settings.gradle')
         gradle_subdirs = set()
-        if os.path.exists(settings_gradle):
+        sg_list = glob.glob(os.path.join('build', packageName, 'settings.gradle*'))
+        if sg_list:
+            settings_gradle = sg_list[0]
             with open(settings_gradle) as fp:
                 data = fp.read()
             for matches in setting_gradle_pattern.findall(data):

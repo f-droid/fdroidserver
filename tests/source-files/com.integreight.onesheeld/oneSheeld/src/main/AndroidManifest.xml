@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.integreight.onesheeld">
+
+
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission
+        android:name="android.permission.FLASHLIGHT"
+        android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
+        android:protectionLevel="normal" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+
+
+    <permission
+        android:name="com.integreight.onesheeld.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.integreight.onesheeld.permission.C2D_MESSAGE" />
+
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.network"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
+
+    <application
+        android:name="com.integreight.onesheeld.OneSheeldApplication"
+        android:allowBackup="true"
+        android:allowClearUserData="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:resizeableActivity="false"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="com.integreight.onesheeld.MainActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|locale|fontScale|layoutDirection|screenLayout|screenSize|smallestScreenSize|uiMode"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+
+        </activity>
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/app_name" />
+        <meta-data android:name="com.facebook.sdk.ApplicationName"
+            android:value="@string/app_name" />
+        <provider android:authorities="com.facebook.app.FacebookContentProvider1423548367865538"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
+        <receiver android:name="com.integreight.onesheeld.utils.FacebookBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.facebook.platform.AppCallResultBroadcast" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.integreight.onesheeld.services.OneSheeldService"
+            android:exported="false"
+            android:singleUser="false" />
+
+        <activity
+            android:name="com.integreight.onesheeld.plugin.action.ActionActivity"
+            android:configChanges="orientation"
+            android:exported="true"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/plugin_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light"
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="ExportedActivity">
+
+            <!-- this Intent filter allows the plug-in to be discovered by Locale -->
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.integreight.onesheeld.plugin.condition.ConditionActivity"
+            android:configChanges="orientation"
+            android:exported="true"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/plugin_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light"
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="ExportedActivity">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_CONDITION" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".shields.controller.utils.NfcUtils"
+            android:allowTaskReparenting="true"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:taskAffinity=":nfc"
+            android:theme="@style/Theme.Transparent"/>
+
+        <activity-alias
+            android:name="NFCUtils-alias"
+            android:enabled="true"
+            android:exported="true"
+            android:targetActivity=".shields.controller.utils.NfcUtils">
+
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:scheme="tel" />
+                <data android:scheme="mailto" />
+                <data android:scheme="ftp" />
+                <data android:scheme="ftps" />
+                <data android:scheme="sftp" />
+                <data android:scheme="smb" />
+                <data android:scheme="nfs" />
+                <data android:scheme="dav" />
+                <data android:scheme="news" />
+                <data android:scheme="telnet" />
+                <data android:scheme="imap" />
+                <data android:scheme="rtsp" />
+                <data android:scheme="urn" />
+                <data android:scheme="pop" />
+                <data android:scheme="sip" />
+                <data android:scheme="sips" />
+                <data android:scheme="tftp" />
+                <data android:scheme="btspp" />
+                <data android:scheme="btl2cap" />
+                <data android:scheme="btgoep" />
+                <data android:scheme="tcpobex" />
+                <data android:scheme="irdaobex" />
+                <data android:scheme="file" />
+                <data android:scheme="urn:epc:id" />
+                <data android:scheme="urn:epc:tag" />
+                <data android:scheme="urn:epc:pat" />
+                <data android:scheme="urn:epc:raw" />
+                <data android:scheme="urn:epc" />
+                <data android:scheme="urn:nfc" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc_supported_technologies" />
+        </activity-alias>
+
+
+        <receiver
+            android:name="com.integreight.onesheeld.plugin.action.FireReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+
+            <!-- this Intent filter allows the plug-in to discovered by Locale -->
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.integreight.onesheeld.plugin.condition.QueryReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+
+            <!-- this Intent filter allows the plug-in to discovered by Locale and be queried -->
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.QUERY_CONDITION" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.integreight.onesheeld.shields.controller.utils.CameraHeadService"
+            android:label="My CameraHeadService"
+            android:process=":camera"
+            android:singleUser="true"/>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+
+        <activity
+            android:name="Tutorial"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar"/>
+
+        <service android:name="com.integreight.onesheeld.shields.controller.utils.SpeechRecognitionService" />
+        <service
+            android:name="com.integreight.onesheeld.push.PushMessagesReceiver">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+    </application>
+</manifest>

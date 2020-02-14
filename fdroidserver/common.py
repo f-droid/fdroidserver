@@ -81,6 +81,7 @@ FDROID_PACKAGE_NAME_REGEX = re.compile(r'''^[a-f0-9]+$''', re.IGNORECASE)
 STRICT_APPLICATION_ID_REGEX = re.compile(r'''(?:^[a-zA-Z]+(?:\d*[a-zA-Z_]*)*)(?:\.[a-zA-Z]+(?:\d*[a-zA-Z_]*)*)+$''')
 VALID_APPLICATION_ID_REGEX = re.compile(r'''(?:^[a-z_]+(?:\d*[a-zA-Z_]*)*)(?:\.[a-z_]+(?:\d*[a-zA-Z_]*)*)*$''',
                                         re.IGNORECASE)
+ANDROID_PLUGIN_REGEX = re.compile(r'''\s*(:?apply plugin:|id)\(?\s*['"](android|com\.android\.application)['"]\s*\)?''')
 
 MAX_VERSION_CODE = 0x7fffffff  # Java's Integer.MAX_VALUE (2147483647)
 
@@ -1300,7 +1301,8 @@ def manifest_paths(app_dir, flavours):
         [os.path.join(app_dir, 'AndroidManifest.xml'),
          os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml'),
          os.path.join(app_dir, 'src', 'AndroidManifest.xml'),
-         os.path.join(app_dir, 'build.gradle')]
+         os.path.join(app_dir, 'build.gradle'),
+         os.path.join(app_dir, 'build.gradle.kts')]
 
     for flavour in flavours:
         if flavour == 'yes':
@@ -1419,8 +1421,9 @@ def parse_androidmanifests(paths, app):
         if app.builds and 'gradle' in app.builds[-1] and app.builds[-1].gradle:
             flavour = app.builds[-1].gradle[-1]
 
-        if has_extension(path, 'gradle'):
+        if path.endswith('.gradle') or path.endswith('.gradle.kts'):
             with open(path, 'r') as f:
+                android_plugin_file = False
                 inside_flavour_group = 0
                 inside_required_flavour = 0
                 for line in f:
@@ -1496,6 +1499,17 @@ def parse_androidmanifests(paths, app):
                             matches = vcsearch_g(line)
                             if matches:
                                 vercode = matches.group(1)
+                    if not android_plugin_file and ANDROID_PLUGIN_REGEX.match(line):
+                        android_plugin_file = True
+            if android_plugin_file:
+                if package:
+                    max_package = package
+                if version:
+                    max_version = version
+                if vercode:
+                    max_vercode = vercode
+                if max_package and max_version and max_vercode:
+                    break
         else:
             try:
                 xml = parse_xml(path)
@@ -1775,9 +1789,15 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
         if build.target:
             n = build.target.split('-')[1]
+            build_gradle = os.path.join(root_dir, "build.gradle")
+            build_gradle_kts = build_gradle + ".kts"
+            if os.path.exists(build_gradle):
+                gradlefile = build_gradle
+            elif os.path.exist(build_gradle_kts):
+                gradlefile = build_gradle_kts
             regsub_file(r'compileSdkVersion[ =]+[0-9]+',
                         r'compileSdkVersion %s' % n,
-                        os.path.join(root_dir, 'build.gradle'))
+                        gradlefile)
 
     # Remove forced debuggable flags
     remove_debuggable_flags(root_dir)
@@ -2360,7 +2380,7 @@ def FDroidPopen(commands, cwd=None, envs=None, output=True, stderr_to_stdout=Tru
 gradle_comment = re.compile(r'[ ]*//')
 gradle_signing_configs = re.compile(r'^[\t ]*signingConfigs[ \t]*{[ \t]*$')
 gradle_line_matches = [
-    re.compile(r'^[\t ]*signingConfig [^ ]*$'),
+    re.compile(r'^[\t ]*signingConfig\s*[= ]\s*[^ ]*$'),
     re.compile(r'.*android\.signingConfigs\.[^{]*$'),
     re.compile(r'.*release\.signingConfig *= *'),
 ]
@@ -2368,9 +2388,13 @@ gradle_line_matches = [
 
 def remove_signing_keys(build_dir):
     for root, dirs, files in os.walk(build_dir):
+        gradlefile = None
         if 'build.gradle' in files:
-            path = os.path.join(root, 'build.gradle')
-
+            gradlefile = "build.gradle"
+        elif 'build.gradle.kts' in files:
+            gradlefile = "build.gradle.kts"
+        if gradlefile:
+            path = os.path.join(root, gradlefile)
             with open(path, "r") as o:
                 lines = o.readlines()
 
@@ -2408,7 +2432,7 @@ def remove_signing_keys(build_dir):
                         o.write(line)
 
             if changed:
-                logging.info("Cleaned build.gradle of keysigning configs at %s" % path)
+                logging.info("Cleaned %s of keysigning configs at %s" % (gradlefile, path))
 
         for propfile in [
                 'project.properties',

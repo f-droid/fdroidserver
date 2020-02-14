@@ -334,7 +334,7 @@ def try_init_submodules(app, last_build, vcs):
 def dirs_with_manifest(startdir):
     for root, dirs, files in os.walk(startdir):
         if any(m in files for m in [
-                'AndroidManifest.xml', 'pom.xml', 'build.gradle']):
+                'AndroidManifest.xml', 'pom.xml', 'build.gradle', 'build.gradle.kts']):
             yield root
 
 
