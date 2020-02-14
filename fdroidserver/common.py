@@ -587,15 +587,11 @@ def read_app_args(appid_versionCode_pairs, allapps, allow_vercodes=False):
 
 
 def get_extension(filename):
+    """get name and extension of filename, with extension always lower case"""
     base, ext = os.path.splitext(filename)
     if not ext:
         return base, ''
     return base, ext.lower()[1:]
-
-
-def has_extension(filename, ext):
-    _ignored, f_ext = get_extension(filename)
-    return ext == f_ext
 
 
 publish_name_regex = re.compile(r"^(.+)_([0-9]+)\.(apk|zip)$")
@@ -1316,7 +1312,7 @@ def manifest_paths(app_dir, flavours):
 def fetch_real_name(app_dir, flavours):
     '''Retrieve the package name. Returns the name, or None if not found.'''
     for path in manifest_paths(app_dir, flavours):
-        if not has_extension(path, 'xml') or not os.path.isfile(path):
+        if not path.endswith('.xml') or not os.path.isfile(path):
             continue
         logging.debug("fetch_real_name: Checking manifest at " + path)
         xml = parse_xml(path)
@@ -1808,11 +1804,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         for path in manifest_paths(root_dir, flavours):
             if not os.path.isfile(path):
                 continue
-            if has_extension(path, 'xml'):
+            if path.endswith('.xml'):
                 regsub_file(r'android:versionName="[^"]*"',
                             r'android:versionName="%s"' % build.versionName,
                             path)
-            elif has_extension(path, 'gradle'):
+            elif path.endswith('.gradle'):
                 regsub_file(r"""(\s*)versionName[\s'"=]+.*""",
                             r"""\1versionName '%s'""" % build.versionName,
                             path)
@@ -1822,11 +1818,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         for path in manifest_paths(root_dir, flavours):
             if not os.path.isfile(path):
                 continue
-            if has_extension(path, 'xml'):
+            if path.endswith('.xml'):
                 regsub_file(r'android:versionCode="[^"]*"',
                             r'android:versionCode="%s"' % build.versionCode,
                             path)
-            elif has_extension(path, 'gradle'):
+            elif path.endswith('.gradle'):
                 regsub_file(r'versionCode[ =]+[0-9]+',
                             r'versionCode %s' % build.versionCode,
                             path)
