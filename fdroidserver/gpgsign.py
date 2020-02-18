@@ -20,6 +20,7 @@ import os
 import glob
 from argparse import ArgumentParser
 import logging
+import time
 
 from . import _
 from . import common
@@ -28,6 +29,17 @@ from .exception import FDroidException
 
 config = None
 options = None
+start_timestamp = time.gmtime()
+
+
+def status_update_json(signed):
+    """Output a JSON file with metadata about this run"""
+
+    logging.debug(_('Outputting JSON'))
+    output = common.setup_status_output(start_timestamp)
+    if signed:
+        output['signed'] = signed
+    common.write_status_json(output)
 
 
 def main():
@@ -45,6 +57,7 @@ def main():
     if config['archive_older'] != 0:
         repodirs.append('archive')
 
+    signed = []
     for output_dir in repodirs:
         if not os.path.isdir(output_dir):
             raise FDroidException(_("Missing output directory") + " '" + output_dir + "'")
@@ -72,7 +85,9 @@ def main():
                 if p.returncode != 0:
                     raise FDroidException("Signing failed.")
 
+                signed.append(filename)
                 logging.info('Signed ' + filename)
+    status_update_json(signed)
 
 
 if __name__ == "__main__":
