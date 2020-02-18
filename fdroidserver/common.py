@@ -670,6 +670,14 @@ def get_build_dir(app):
     return os.path.join('build', app.id)
 
 
+def get_head_commit_id(git_repo):
+    """Get git commit ID for HEAD as a str
+
+    repo.head.commit.binsha is a bytearray stored in a str
+    """
+    return hexlify(bytearray(git_repo.head.commit.binsha)).decode()
+
+
 def setup_vcs(app):
     '''checkout code from VCS and return instance of vcs and the build dir'''
     build_dir = get_build_dir(app)

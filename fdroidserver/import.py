@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import binascii
 import git
 import glob
 import json
@@ -266,9 +265,7 @@ def main():
         raise FDroidException("Specify project url.")
 
     app.UpdateCheckMode = 'Tags'
-
-    # repo.head.commit.binsha is a bytearray stored in a str
-    build.commit = binascii.hexlify(bytearray(git_repo.head.commit.binsha)).decode()
+    build.commit = common.get_head_commit_id(git_repo)
 
     # Extract some information...
     paths = get_all_gradle_and_manifests(tmp_importer_dir)
