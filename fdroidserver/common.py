@@ -698,22 +698,29 @@ def setup_status_output(start_timestamp):
             'commitId': get_head_commit_id(git_repo),
             'isDirty': git_repo.is_dirty(),
         }
+    write_running_status_json(output)
     return output
 
 
-def write_status_json(output, pretty=False):
-    """Write status out as JSON, and rsync it to the repo server"""
+def write_running_status_json(output):
+    write_status_json(output, pretty=True, name='running')
 
-    subcommand = sys.argv[0].split()[1]
+
+def write_status_json(output, pretty=False, name=None):
+    """Write status out as JSON, and rsync it to the repo server"""
     status_dir = os.path.join('repo', 'status')
     if not os.path.exists(status_dir):
         os.mkdir(status_dir)
-    output['endTimestamp'] =  int(datetime.now(timezone.utc).timestamp() * 1000)
-    with open(os.path.join(status_dir, subcommand + '.json'), 'w') as fp:
+    if not name:
+        output['endTimestamp'] = int(datetime.now(timezone.utc).timestamp() * 1000)
+        name = sys.argv[0].split()[1]  # fdroid subcommand
+    path = os.path.join(status_dir, name + '.json')
+    with open(path, 'w') as fp:
         if pretty:
             json.dump(output, fp, sort_keys=True, cls=Encoder, indent=2)
         else:
             json.dump(output, fp, sort_keys=True, cls=Encoder, separators=(',', ':'))
+    rsync_status_file_to_repo(path, repo_subdir='status')
 
 
 def get_head_commit_id(git_repo):
@@ -3350,11 +3357,6 @@ def deploy_build_log_with_rsync(appid, vercode, log_content):
                         be decoded as 'utf-8')
     """
 
-    # check if deploying logs is enabled in config
-    if not config.get('deploy_process_logs', False):
-        logging.debug(_('skip deploying full build logs: not enabled in config'))
-        return
-
     if not log_content:
         logging.warning(_('skip deploying full build logs: log content is empty'))
         return
@@ -3372,13 +3374,17 @@ def deploy_build_log_with_rsync(appid, vercode, log_content):
             f.write(bytes(log_content, 'utf-8'))
         else:
             f.write(log_content)
+    rsync_status_file_to_repo(log_gz_path)
 
-    # TODO: sign compressed log file, if a signing key is configured
+
+def rsync_status_file_to_repo(path, repo_subdir=None):
+    """Copy a build log or status JSON to the repo using rsync"""
+
+    if not config.get('deploy_process_logs', False):
+        logging.debug(_('skip deploying full build logs: not enabled in config'))
+        return
 
     for webroot in config.get('serverwebroot', []):
-        dest_path = os.path.join(webroot, "repo")
-        if not dest_path.endswith('/'):
-            dest_path += '/'  # make sure rsync knows this is a directory
         cmd = ['rsync',
                '--archive',
                '--delete-after',
@@ -3389,15 +3395,21 @@ def deploy_build_log_with_rsync(appid, vercode, log_content):
             cmd += ['--quiet']
         if 'identity_file' in config:
             cmd += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file']]
-        cmd += [log_gz_path, dest_path]
 
-        # TODO: also deploy signature file if present
+        dest_path = os.path.join(webroot, "repo")
+        if repo_subdir is not None:
+            dest_path = os.path.join(dest_path, repo_subdir)
+        if not dest_path.endswith('/'):
+            dest_path += '/'  # make sure rsync knows this is a directory
+        cmd += [path, dest_path]
 
         retcode = subprocess.call(cmd)
         if retcode:
-            logging.warning(_("failed deploying build logs to '{path}'").format(path=webroot))
+            logging.error(_('process log deploy {path} to {dest} failed!')
+                          .format(path=path, dest=webroot))
         else:
-            logging.info(_("deployed build logs to '{path}'").format(path=webroot))
+            logging.debug(_('deployed process log {path} to {dest}')
+                          .format(path=path, dest=webroot))
 
 
 def get_per_app_repos():

@@ -55,6 +55,7 @@ fi
 gpg --import $GNUPGHOME/secring.gpg
 
 echo "build_server_always = True" >> config.py
+echo "deploy_process_logs = True" >> config.py
 echo "make_current_version_link = False" >> config.py
 echo "gpghome = '$GNUPGHOME'" >> config.py
 echo "gpgkey = 'CE71F7FB'" >> config.py
@@ -66,6 +67,7 @@ test -d repo || mkdir repo
 test -d archive || mkdir archive
 # when everything is copied over to run on SIGN machine
 ../fdroid publish
+
 ../fdroid gpgsign
 # when everything is copied over to run on BUILD machine,
 # which does not have a keyring, only a cached pubkey

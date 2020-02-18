@@ -173,10 +173,14 @@ The repository of older versions of applications from the main demo repository.
 #     'bar.info:/var/www/fdroid',
 #     }
 
-# Uncomment this option if you want to logs of builds and other processes to
-# your repository server(s). Logs get published to all servers configured in
-# 'serverwebroot'. The name scheme is: .../repo/$APPID_$VERCODE.log.gz
-# Only logs from build-jobs running inside a buildserver VM are supported.
+# When running fdroid processes on a remote server, it is possible to
+# publish extra information about the status.  Each fdroid sub-command
+# can create repo/status/running.json when it starts, then a
+# repo/status/<sub-command>.json when it completes.  The builds logs
+# and other processes will also get published, if they are running in
+# a buildserver VM.  The build logs name scheme is:
+# .../repo/$APPID_$VERCODE.log.gz.  These files are also pushed to all
+# servers configured in 'serverwebroot'.
 #
 # deploy_process_logs = True
 
