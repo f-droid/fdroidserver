@@ -19,6 +19,7 @@ import sys
 import unittest
 import tempfile
 import textwrap
+from unittest import mock
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -158,7 +159,8 @@ class PublishTest(unittest.TestCase):
                     os.path.join(testdir, 'unsigned', 'binaries', 'com.politedroid_6.binary.apk'))
 
         os.chdir(testdir)
-        publish.main()
+        with mock.patch.object(sys, 'argv', ['fdroid fakesubcommand']):
+            publish.main()
 
 
 if __name__ == "__main__":

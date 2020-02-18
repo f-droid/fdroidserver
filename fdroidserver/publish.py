@@ -28,6 +28,7 @@ from collections import OrderedDict
 import logging
 from gettext import ngettext
 import json
+import time
 import zipfile
 
 from . import _
@@ -38,6 +39,7 @@ from .exception import BuildException, FDroidException
 
 config = None
 options = None
+start_timestamp = time.gmtime()
 
 
 def publish_source_tarball(apkfilename, unsigned_dir, output_dir):
@@ -138,6 +140,20 @@ def store_stats_fdroid_signing_key_fingerprints(appids, indent=None):
     sign_sig_key_fingerprint_list(jar_file)
 
 
+def status_update_json(newKeyAliases, generatedKeys, signedApks):
+    """Output a JSON file with metadata about this run"""
+
+    logging.debug(_('Outputting JSON'))
+    output = common.setup_status_output(start_timestamp)
+    if newKeyAliases:
+        output['newKeyAliases'] = newKeyAliases
+    if generatedKeys:
+        output['generatedKeys'] = generatedKeys
+    if signedApks:
+        output['signedApks'] = signedApks
+    common.write_status_json(output)
+
+
 def main():
 
     global config, options
@@ -195,6 +211,9 @@ def main():
     # collisions, and refuse to do any publishing if that's the case...
     allapps = metadata.read_metadata()
     vercodes = common.read_pkg_args(options.appid, True)
+    signed_apks = dict()
+    new_key_aliases = []
+    generated_keys = dict()
     allaliases = []
     for appid in allapps:
         m = hashlib.md5()  # nosec just used to generate a keyalias
@@ -314,6 +333,7 @@ def main():
                     m = hashlib.md5()  # nosec just used to generate a keyalias
                     m.update(appid.encode('utf-8'))
                     keyalias = m.hexdigest()[:8]
+                    new_key_aliases.append(keyalias)
                 logging.info("Key alias: " + keyalias)
 
                 # See if we already have a key for this application, and
@@ -336,6 +356,9 @@ def main():
                                      '-dname', config['keydname']], envs=env_vars)
                     if p.returncode != 0:
                         raise BuildException("Failed to generate key", p.output)
+                    if appid not in generated_keys:
+                        generated_keys[appid] = set()
+                    generated_keys[appid].add(appid)
 
                 signed_apk_path = os.path.join(output_dir, apkfilename)
                 if os.path.exists(signed_apk_path):
@@ -353,6 +376,9 @@ def main():
                                  apkfile, keyalias], envs=env_vars)
                 if p.returncode != 0:
                     raise BuildException(_("Failed to sign application"), p.output)
+                if appid not in signed_apks:
+                    signed_apks[appid] = []
+                signed_apks[appid].append(apkfile)
 
                 # Zipalign it...
                 common._zipalign(apkfile, os.path.join(output_dir, apkfilename))
@@ -362,6 +388,7 @@ def main():
                 logging.info('Published ' + apkfilename)
 
     store_stats_fdroid_signing_key_fingerprints(allapps.keys())
+    status_update_json(new_key_aliases, generated_keys, signed_apks)
     logging.info('published list signing-key fingerprints')
 
 
