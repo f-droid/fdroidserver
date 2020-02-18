@@ -64,13 +64,6 @@ class Decoder(json.JSONDecoder):
         return set(values), end
 
 
-class Encoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, set):
-            return sorted(obj)
-        return super().default(obj)
-
-
 def write_json_report(url, remote_apk, unsigned_apk, compare_result):
     """write out the results of the verify run to JSON
 
@@ -118,7 +111,7 @@ def write_json_report(url, remote_apk, unsigned_apk, compare_result):
             data['packages'][packageName] = set()
         data['packages'][packageName].add(output)
         with open(jsonfile, 'w') as fp:
-            json.dump(data, fp, cls=Encoder, sort_keys=True)
+            json.dump(data, fp, cls=common.Encoder, sort_keys=True)
 
 
 def main():

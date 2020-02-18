@@ -20,6 +20,7 @@
 # common.py is imported by all modules, so do not import third-party
 # libraries here as they will become a requirement for all commands.
 
+import git
 import io
 import os
 import sys
@@ -47,7 +48,7 @@ except ImportError:
     import xml.etree.ElementTree as XMLElementTree  # nosec this is a fallback only
 
 from binascii import hexlify
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from distutils.version import LooseVersion
 from queue import Queue
 from zipfile import ZipFile
@@ -668,6 +669,51 @@ def get_build_dir(app):
         return os.path.join('build', 'srclib', app.Repo)
 
     return os.path.join('build', app.id)
+
+
+class Encoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, set):
+            return sorted(obj)
+        return super().default(obj)
+
+
+def setup_status_output(start_timestamp):
+    """Create the common output dictionary for public status updates"""
+    output = {
+        'commandLine': sys.argv,
+        'startTimestamp': int(time.mktime(start_timestamp) * 1000),
+        'subcommand': sys.argv[0].split()[1],
+    }
+    if os.path.isdir('.git'):
+        git_repo = git.repo.Repo(os.getcwd())
+        output['fdroiddata'] = {
+            'commitId': get_head_commit_id(git_repo),
+            'isDirty': git_repo.is_dirty(),
+        }
+    fdroidserver_dir = os.path.dirname(sys.argv[0])
+    if os.path.isdir(os.path.join(fdroidserver_dir, '.git')):
+        git_repo = git.repo.Repo(fdroidserver_dir)
+        output['fdroidserver'] = {
+            'commitId': get_head_commit_id(git_repo),
+            'isDirty': git_repo.is_dirty(),
+        }
+    return output
+
+
+def write_status_json(output, pretty=False):
+    """Write status out as JSON, and rsync it to the repo server"""
+
+    subcommand = sys.argv[0].split()[1]
+    status_dir = os.path.join('repo', 'status')
+    if not os.path.exists(status_dir):
+        os.mkdir(status_dir)
+    output['endTimestamp'] =  int(datetime.now(timezone.utc).timestamp() * 1000)
+    with open(os.path.join(status_dir, subcommand + '.json'), 'w') as fp:
+        if pretty:
+            json.dump(output, fp, sort_keys=True, cls=Encoder, indent=2)
+        else:
+            json.dump(output, fp, sort_keys=True, cls=Encoder, separators=(',', ':'))
 
 
 def get_head_commit_id(git_repo):
