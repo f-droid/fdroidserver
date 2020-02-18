@@ -83,6 +83,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
                 buildserverid = subprocess.check_output(['vagrant', 'ssh', '-c',
                                                          'cat /home/vagrant/buildserverid'],
                                                         cwd='builder').strip().decode()
+                status_output['buildserverid'] = buildserverid
                 logging.debug(_('Fetched buildserverid from VM: {buildserverid}')
                               .format(buildserverid=buildserverid))
             except Exception as e:
@@ -912,6 +913,7 @@ config = None
 buildserverid = None
 fdroidserverid = None
 start_timestamp = time.gmtime()
+status_output = None
 timeout_event = threading.Event()
 
 
@@ -978,6 +980,8 @@ def main():
     else:
         also_check_dir = None
 
+    status_output = common.setup_status_output(start_timestamp)
+
     repo_dir = 'repo'
 
     build_dir = 'build'
@@ -1029,6 +1033,8 @@ def main():
     # Build applications...
     failed_apps = {}
     build_succeeded = []
+    status_output['failedBuilds'] = failed_apps
+    status_output['successfulBuilds'] = build_succeeded
     # Only build for 36 hours, then stop gracefully.
     endtime = time.time() + 36 * 60 * 60
     max_build_time_reached = False
@@ -1201,10 +1207,12 @@ def main():
                 except Exception as e:
                     logging.error("Error while attempting to publish build log: %s" % e)
 
+            common.write_running_status_json(status_output)
             if timer:
                 timer.cancel()  # kill the watchdog timer
 
         if max_build_time_reached:
+            status_output['maxBuildTimeReached'] = True
             logging.info("Stopping after global build timeout...")
             break
 
@@ -1262,6 +1270,8 @@ def main():
         newpage.save(txt, summary='Run log')
         newpage = site.Pages['build']
         newpage.save('#REDIRECT [[' + wiki_page_path + ']]', summary='Update redirect')
+
+    common.write_status_json(status_output, options.pretty)
 
     # hack to ensure this exits, even is some threads are still running
     common.force_exit()
