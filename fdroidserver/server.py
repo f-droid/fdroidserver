@@ -809,6 +809,7 @@ def main():
     if config.get('wiki_server') and config.get('wiki_path'):
         update_wiki()
 
+    common.write_status_json(common.setup_status_output(start_timestamp))
     sys.exit(0)
 
 
