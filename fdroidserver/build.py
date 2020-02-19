@@ -324,6 +324,10 @@ def transform_first_char(string, method):
     return method(string[0]) + string[1:]
 
 
+def add_failed_builds_entry(failed_builds, appid, build, entry):
+    failed_builds.append([appid, int(build.versionCode), str(entry)])
+
+
 def get_metadata_from_apk(app, build, apkfile):
     """get the required metadata from the built APK
 
@@ -1031,9 +1035,9 @@ def main():
         site.login(config['wiki_user'], config['wiki_password'])
 
     # Build applications...
-    failed_apps = {}
+    failed_builds = []
     build_succeeded = []
-    status_output['failedBuilds'] = failed_apps
+    status_output['failedBuilds'] = failed_builds
     status_output['successfulBuilds'] = build_succeeded
     # Only build for 36 hours, then stop gracefully.
     endtime = time.time() + 36 * 60 * 60
@@ -1156,7 +1160,7 @@ def main():
                 if options.stop:
                     logging.debug("Error encoutered, stopping by user request.")
                     common.force_exit(1)
-                failed_apps[appid] = vcse
+                add_failed_builds_entry(failed_builds, appid, build, vcse)
                 wikilog = str(vcse)
             except FDroidException as e:
                 with open(os.path.join(log_dir, appid + '.log'), 'a+') as f:
@@ -1171,7 +1175,7 @@ def main():
                 if options.stop:
                     logging.debug("Error encoutered, stopping by user request.")
                     common.force_exit(1)
-                failed_apps[appid] = e
+                add_failed_builds_entry(failed_builds, appid, build, e)
                 wikilog = e.get_wikitext()
             except Exception as e:
                 logging.error("Could not build app %s due to unknown error: %s" % (
@@ -1179,7 +1183,7 @@ def main():
                 if options.stop:
                     logging.debug("Error encoutered, stopping by user request.")
                     common.force_exit(1)
-                failed_apps[appid] = e
+                add_failed_builds_entry(failed_builds, appid, build, e)
                 wikilog = str(e)
 
             if options.wiki and wikilog:
@@ -1220,16 +1224,16 @@ def main():
         logging.info("success: %s" % (app.id))
 
     if not options.verbose:
-        for fa in failed_apps:
-            logging.info("Build for app %s failed:\n%s" % (fa, failed_apps[fa]))
+        for fb in failed_builds:
+            logging.info('Build for app {}:{} failed:\n{}'.format(*fb))
 
     logging.info(_("Finished"))
     if len(build_succeeded) > 0:
         logging.info(ngettext("{} build succeeded",
                               "{} builds succeeded", len(build_succeeded)).format(len(build_succeeded)))
-    if len(failed_apps) > 0:
+    if len(failed_builds) > 0:
         logging.info(ngettext("{} build failed",
-                              "{} builds failed", len(failed_apps)).format(len(failed_apps)))
+                              "{} builds failed", len(failed_builds)).format(len(failed_builds)))
 
     if options.wiki:
         wiki_page_path = 'build_' + time.strftime('%s', start_timestamp)
@@ -1265,13 +1269,13 @@ def main():
                     if m:
                         txt += "* guest RAM: %s MB\n" % m.group(1)
         txt += "* successful builds: %d\n" % len(build_succeeded)
-        txt += "* failed builds: %d\n" % len(failed_apps)
+        txt += "* failed builds: %d\n" % len(failed_builds)
         txt += "\n\n"
         newpage.save(txt, summary='Run log')
         newpage = site.Pages['build']
         newpage.save('#REDIRECT [[' + wiki_page_path + ']]', summary='Update redirect')
 
-    common.write_status_json(status_output, options.pretty)
+    common.write_status_json(status_output)
 
     # hack to ensure this exits, even is some threads are still running
     common.force_exit()
