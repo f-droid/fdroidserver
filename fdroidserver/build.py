@@ -1275,7 +1275,7 @@ def main():
         newpage = site.Pages['build']
         newpage.save('#REDIRECT [[' + wiki_page_path + ']]', summary='Update redirect')
 
-    common.write_status_json(status_output, options.pretty)
+    common.write_status_json(status_output)
 
     # hack to ensure this exits, even is some threads are still running
     common.force_exit()
