@@ -121,6 +121,57 @@ def disabled_algorithms_allowed():
     return options.allow_disabled_algorithms or config['allow_disabled_algorithms']
 
 
+def status_update_json(apps, sortedids, apks):
+    """Output a JSON file with metadata about this `fdroid update` run
+
+    :param apps: fully populated list of all applications
+    :param apks: all to be published apks
+
+    """
+
+    logging.debug(_('Outputting JSON'))
+    output = common.setup_status_output(start_timestamp)
+    output['antiFeatures'] = dict()
+    output['disabled'] = []
+    output['failedBuilds'] = dict()
+    output['noPackages'] = []
+
+    for appid in sortedids:
+        app = apps[appid]
+        for af in app.get('AntiFeatures', []):
+            antiFeatures = output['antiFeatures']  # JSON camelCase
+            if af not in antiFeatures:
+                antiFeatures[af] = dict()
+            if appid not in antiFeatures[af]:
+                antiFeatures[af]['apps'] = set()
+            antiFeatures[af]['apps'].add(appid)
+
+        apklist = []
+        for apk in apks:
+            if apk['packageName'] == appid:
+                apklist.append(apk)
+        builds = app.get('builds', [])
+        validapks = 0
+        for build in builds:
+            if not build.get('disable'):
+                builtit = False
+                for apk in apklist:
+                    if apk['versionCode'] == int(build.versionCode):
+                        builtit = True
+                        validapks += 1
+                        break
+                if not builtit:
+                    failedBuilds = output['failedBuilds']
+                    if appid not in failedBuilds:
+                        failedBuilds[appid] = []
+                    failedBuilds[appid].append(build.versionCode)
+        if validapks == 0:
+            output['noPackages'].append(appid)
+        if app.get('Disabled'):
+            output['disabled'].append(appid)
+    common.write_status_json(output, options.pretty)
+
+
 def update_wiki(apps, sortedids, apks):
     """Update the wiki
 
@@ -2200,6 +2251,7 @@ def main():
     # Update the wiki...
     if options.wiki:
         update_wiki(apps, sortedids, apks + archapks)
+    status_update_json(apps, sortedids, apks + archapks)
 
     logging.info(_("Finished"))
 

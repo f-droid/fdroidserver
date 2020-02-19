@@ -20,6 +20,7 @@
 # common.py is imported by all modules, so do not import third-party
 # libraries here as they will become a requirement for all commands.
 
+import git
 import io
 import os
 import sys
@@ -47,7 +48,7 @@ except ImportError:
     import xml.etree.ElementTree as XMLElementTree  # nosec this is a fallback only
 
 from binascii import hexlify
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from distutils.version import LooseVersion
 from queue import Queue
 from zipfile import ZipFile
@@ -587,15 +588,11 @@ def read_app_args(appid_versionCode_pairs, allapps, allow_vercodes=False):
 
 
 def get_extension(filename):
+    """get name and extension of filename, with extension always lower case"""
     base, ext = os.path.splitext(filename)
     if not ext:
         return base, ''
     return base, ext.lower()[1:]
-
-
-def has_extension(filename, ext):
-    _ignored, f_ext = get_extension(filename)
-    return ext == f_ext
 
 
 publish_name_regex = re.compile(r"^(.+)_([0-9]+)\.(apk|zip)$")
@@ -672,6 +669,66 @@ def get_build_dir(app):
         return os.path.join('build', 'srclib', app.Repo)
 
     return os.path.join('build', app.id)
+
+
+class Encoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, set):
+            return sorted(obj)
+        return super().default(obj)
+
+
+def setup_status_output(start_timestamp):
+    """Create the common output dictionary for public status updates"""
+    output = {
+        'commandLine': sys.argv,
+        'startTimestamp': int(time.mktime(start_timestamp) * 1000),
+        'subcommand': sys.argv[0].split()[1],
+    }
+    if os.path.isdir('.git'):
+        git_repo = git.repo.Repo(os.getcwd())
+        output['fdroiddata'] = {
+            'commitId': get_head_commit_id(git_repo),
+            'isDirty': git_repo.is_dirty(),
+        }
+    fdroidserver_dir = os.path.dirname(sys.argv[0])
+    if os.path.isdir(os.path.join(fdroidserver_dir, '.git')):
+        git_repo = git.repo.Repo(fdroidserver_dir)
+        output['fdroidserver'] = {
+            'commitId': get_head_commit_id(git_repo),
+            'isDirty': git_repo.is_dirty(),
+        }
+    write_running_status_json(output)
+    return output
+
+
+def write_running_status_json(output):
+    write_status_json(output, pretty=True, name='running')
+
+
+def write_status_json(output, pretty=False, name=None):
+    """Write status out as JSON, and rsync it to the repo server"""
+    status_dir = os.path.join('repo', 'status')
+    if not os.path.exists(status_dir):
+        os.mkdir(status_dir)
+    if not name:
+        output['endTimestamp'] = int(datetime.now(timezone.utc).timestamp() * 1000)
+        name = sys.argv[0].split()[1]  # fdroid subcommand
+    path = os.path.join(status_dir, name + '.json')
+    with open(path, 'w') as fp:
+        if pretty:
+            json.dump(output, fp, sort_keys=True, cls=Encoder, indent=2)
+        else:
+            json.dump(output, fp, sort_keys=True, cls=Encoder, separators=(',', ':'))
+    rsync_status_file_to_repo(path, repo_subdir='status')
+
+
+def get_head_commit_id(git_repo):
+    """Get git commit ID for HEAD as a str
+
+    repo.head.commit.binsha is a bytearray stored in a str
+    """
+    return hexlify(bytearray(git_repo.head.commit.binsha)).decode()
 
 
 def setup_vcs(app):
@@ -1316,7 +1373,7 @@ def manifest_paths(app_dir, flavours):
 def fetch_real_name(app_dir, flavours):
     '''Retrieve the package name. Returns the name, or None if not found.'''
     for path in manifest_paths(app_dir, flavours):
-        if not has_extension(path, 'xml') or not os.path.isfile(path):
+        if not path.endswith('.xml') or not os.path.isfile(path):
             continue
         logging.debug("fetch_real_name: Checking manifest at " + path)
         xml = parse_xml(path)
@@ -1808,11 +1865,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         for path in manifest_paths(root_dir, flavours):
             if not os.path.isfile(path):
                 continue
-            if has_extension(path, 'xml'):
+            if path.endswith('.xml'):
                 regsub_file(r'android:versionName="[^"]*"',
                             r'android:versionName="%s"' % build.versionName,
                             path)
-            elif has_extension(path, 'gradle'):
+            elif path.endswith('.gradle'):
                 regsub_file(r"""(\s*)versionName[\s'"=]+.*""",
                             r"""\1versionName '%s'""" % build.versionName,
                             path)
@@ -1822,11 +1879,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         for path in manifest_paths(root_dir, flavours):
             if not os.path.isfile(path):
                 continue
-            if has_extension(path, 'xml'):
+            if path.endswith('.xml'):
                 regsub_file(r'android:versionCode="[^"]*"',
                             r'android:versionCode="%s"' % build.versionCode,
                             path)
-            elif has_extension(path, 'gradle'):
+            elif path.endswith('.gradle'):
                 regsub_file(r'versionCode[ =]+[0-9]+',
                             r'versionCode %s' % build.versionCode,
                             path)
@@ -3300,11 +3357,6 @@ def deploy_build_log_with_rsync(appid, vercode, log_content):
                         be decoded as 'utf-8')
     """
 
-    # check if deploying logs is enabled in config
-    if not config.get('deploy_process_logs', False):
-        logging.debug(_('skip deploying full build logs: not enabled in config'))
-        return
-
     if not log_content:
         logging.warning(_('skip deploying full build logs: log content is empty'))
         return
@@ -3322,13 +3374,17 @@ def deploy_build_log_with_rsync(appid, vercode, log_content):
             f.write(bytes(log_content, 'utf-8'))
         else:
             f.write(log_content)
+    rsync_status_file_to_repo(log_gz_path)
 
-    # TODO: sign compressed log file, if a signing key is configured
+
+def rsync_status_file_to_repo(path, repo_subdir=None):
+    """Copy a build log or status JSON to the repo using rsync"""
+
+    if not config.get('deploy_process_logs', False):
+        logging.debug(_('skip deploying full build logs: not enabled in config'))
+        return
 
     for webroot in config.get('serverwebroot', []):
-        dest_path = os.path.join(webroot, "repo")
-        if not dest_path.endswith('/'):
-            dest_path += '/'  # make sure rsync knows this is a directory
         cmd = ['rsync',
                '--archive',
                '--delete-after',
@@ -3339,15 +3395,21 @@ def deploy_build_log_with_rsync(appid, vercode, log_content):
             cmd += ['--quiet']
         if 'identity_file' in config:
             cmd += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file']]
-        cmd += [log_gz_path, dest_path]
 
-        # TODO: also deploy signature file if present
+        dest_path = os.path.join(webroot, "repo")
+        if repo_subdir is not None:
+            dest_path = os.path.join(dest_path, repo_subdir)
+        if not dest_path.endswith('/'):
+            dest_path += '/'  # make sure rsync knows this is a directory
+        cmd += [path, dest_path]
 
         retcode = subprocess.call(cmd)
         if retcode:
-            logging.warning(_("failed deploying build logs to '{path}'").format(path=webroot))
+            logging.error(_('process log deploy {path} to {dest} failed!')
+                          .format(path=path, dest=webroot))
         else:
-            logging.info(_("deployed build logs to '{path}'").format(path=webroot))
+            logging.debug(_('deployed process log {path} to {dest}')
+                          .format(path=path, dest=webroot))
 
 
 def get_per_app_repos():

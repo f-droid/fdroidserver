@@ -5,13 +5,16 @@
 import difflib
 import glob
 import inspect
+import json
 import logging
 import optparse
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
+import time
 import unittest
 import textwrap
 import yaml
@@ -1130,6 +1133,55 @@ class CommonTest(unittest.TestCase):
                 self.assertTrue(os.path.isfile(expected_log_path))
                 with gzip.open(expected_log_path, 'r') as f:
                     self.assertEqual(f.read(), mocklogcontent)
+
+    def test_deploy_status_json(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+
+        fakesubcommand = 'fakesubcommand'
+        fake_timestamp = 1234567890
+        fakeserver = 'example.com:/var/www/fbot/'
+        expected_dir = os.path.join(testdir, fakeserver.replace(':', ''), 'repo', 'status')
+
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.config = {}
+        fdroidserver.common.config['serverwebroot'] = [fakeserver]
+        fdroidserver.common.config['identity_file'] = 'ssh/id_rsa'
+
+        def assert_subprocess_call(cmd):
+            dest_path = os.path.join(testdir, cmd[-1].replace(':', ''))
+            if not os.path.exists(dest_path):
+                os.makedirs(dest_path)
+            return subprocess.run(cmd[:-1] + [dest_path]).returncode
+
+        with mock.patch('subprocess.call', side_effect=assert_subprocess_call):
+            with mock.patch.object(sys, 'argv', ['fdroid ' + fakesubcommand]):
+                output = fdroidserver.common.setup_status_output(time.localtime(fake_timestamp))
+                self.assertFalse(os.path.exists(os.path.join(expected_dir, 'running.json')))
+                with mock.patch.object(sys, 'argv', ['fdroid ' + fakesubcommand]):
+                    fdroidserver.common.write_status_json(output)
+                self.assertFalse(os.path.exists(os.path.join(expected_dir, fakesubcommand + '.json')))
+
+                fdroidserver.common.config['deploy_process_logs'] = True
+
+                output = fdroidserver.common.setup_status_output(time.localtime(fake_timestamp))
+                expected_path = os.path.join(expected_dir, 'running.json')
+                self.assertTrue(os.path.isfile(expected_path))
+                with open(expected_path) as fp:
+                    data = json.load(fp)
+                self.assertEqual(fake_timestamp * 1000, data['startTimestamp'])
+                self.assertFalse('endTimestamp' in data)
+
+                testvalue = 'asdfasd'
+                output['testvalue'] = testvalue
+
+                fdroidserver.common.write_status_json(output)
+                expected_path = os.path.join(expected_dir, fakesubcommand + '.json')
+                self.assertTrue(os.path.isfile(expected_path))
+                with open(expected_path) as fp:
+                    data = json.load(fp)
+                self.assertEqual(fake_timestamp * 1000, data['startTimestamp'])
+                self.assertTrue('endTimestamp' in data)
+                self.assertEqual(testvalue, output.get('testvalue'))
 
     def test_string_is_integer(self):
         self.assertTrue(fdroidserver.common.string_is_integer('0x10'))

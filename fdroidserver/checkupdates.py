@@ -543,6 +543,18 @@ def checkupdates_app(app):
                 raise FDroidException("Git commit failed")
 
 
+def status_update_json(processed, failed):
+    """Output a JSON file with metadata about this run"""
+
+    logging.debug(_('Outputting JSON'))
+    output = common.setup_status_output(start_timestamp)
+    if processed:
+        output['processed'] = processed
+    if failed:
+        output['failed'] = failed
+    common.write_status_json(output)
+
+
 def update_wiki(gplaylog, locallog):
     if config.get('wiki_server') and config.get('wiki_path'):
         try:
@@ -644,6 +656,8 @@ def main():
         return
 
     locallog = ''
+    processed = []
+    failed = dict()
     for appid, app in apps.items():
 
         if options.autoonly and app.AutoUpdateMode in ('None', 'Static'):
@@ -656,13 +670,15 @@ def main():
 
         try:
             checkupdates_app(app)
+            processed.append(appid)
         except Exception as e:
             msg = _("...checkupdate failed for {appid} : {error}").format(appid=appid, error=e)
             logging.error(msg)
             locallog += msg + '\n'
+            failed[appid] = str(e)
 
     update_wiki(None, locallog)
-
+    status_update_json(processed, failed)
     logging.info(_("Finished"))
 
 

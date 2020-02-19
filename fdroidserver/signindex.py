@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import time
 import zipfile
 from argparse import ArgumentParser
 import logging
@@ -27,6 +28,7 @@ from .exception import FDroidException
 
 config = None
 options = None
+start_timestamp = time.gmtime()
 
 
 def sign_jar(jar):
@@ -75,6 +77,16 @@ def sign_index_v1(repodir, json_name):
     sign_jar(jar_file)
 
 
+def status_update_json(signed):
+    """Output a JSON file with metadata about this run"""
+
+    logging.debug(_('Outputting JSON'))
+    output = common.setup_status_output(start_timestamp)
+    if signed:
+        output['signed'] = signed
+    common.write_status_json(output)
+
+
 def main():
 
     global config, options
@@ -94,7 +106,7 @@ def main():
     if config['archive_older'] != 0:
         repodirs.append('archive')
 
-    signed = 0
+    signed = []
     for output_dir in repodirs:
         if not os.path.isdir(output_dir):
             raise FDroidException("Missing output directory '" + output_dir + "'")
@@ -102,9 +114,10 @@ def main():
         unsigned = os.path.join(output_dir, 'index_unsigned.jar')
         if os.path.exists(unsigned):
             sign_jar(unsigned)
-            os.rename(unsigned, os.path.join(output_dir, 'index.jar'))
+            index_jar = os.path.join(output_dir, 'index.jar')
+            os.rename(unsigned, index_jar)
             logging.info('Signed index in ' + output_dir)
-            signed += 1
+            signed.append(index_jar)
 
         json_name = 'index-v1.json'
         index_file = os.path.join(output_dir, json_name)
@@ -112,10 +125,11 @@ def main():
             sign_index_v1(output_dir, json_name)
             os.remove(index_file)
             logging.info('Signed ' + index_file)
-            signed += 1
+            signed.append(index_file)
 
-    if signed == 0:
+    if not signed:
         logging.info(_("Nothing to do"))
+    status_update_json(signed)
 
 
 if __name__ == "__main__":
