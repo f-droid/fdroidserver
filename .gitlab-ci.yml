@@ -118,7 +118,7 @@ pip_install:
   only:
     - master@fdroid/fdroidserver
   script:
-    - pacman --sync --sysupgrade --refresh --noconfirm grep python-pip python-virtualenv tar
+    - pacman --sync --sysupgrade --refresh --noconfirm git grep python-pip python-virtualenv tar
     # setup venv to act as release build machine
     - python -m venv sdist-env
     - . sdist-env/bin/activate
