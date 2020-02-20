@@ -984,7 +984,10 @@ def main():
     else:
         also_check_dir = None
 
-    status_output = common.setup_status_output(start_timestamp)
+    if options.onserver:
+        status_output = dict()  # HACK dummy placeholder
+    else:
+        status_output = common.setup_status_output(start_timestamp)
 
     repo_dir = 'repo'
 
@@ -1069,6 +1072,7 @@ def main():
             tools_version_log = ''
             if not options.onserver:
                 tools_version_log = common.get_android_tools_version_log(build.ndk_path())
+                common.write_running_status_json(status_output)
             try:
 
                 # For the first build of a particular app, we need to set up
@@ -1211,7 +1215,6 @@ def main():
                 except Exception as e:
                     logging.error("Error while attempting to publish build log: %s" % e)
 
-            common.write_running_status_json(status_output)
             if timer:
                 timer.cancel()  # kill the watchdog timer
 
@@ -1275,7 +1278,8 @@ def main():
         newpage = site.Pages['build']
         newpage.save('#REDIRECT [[' + wiki_page_path + ']]', summary='Update redirect')
 
-    common.write_status_json(status_output)
+    if not options.onserver:
+        common.write_status_json(status_output)
 
     # hack to ensure this exits, even is some threads are still running
     common.force_exit()
