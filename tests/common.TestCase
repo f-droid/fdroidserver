@@ -983,6 +983,48 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(('1.0-free', '1', 'com.kunzisoft.fdroidtest.applicationidsuffix'),
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
+    def test_get_all_gradle_and_manifests(self):
+        a = fdroidserver.common.get_all_gradle_and_manifests(os.path.join('source-files', 'cn.wildfirechat.chat'))
+        paths = [
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'avenginekit', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'chat', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'client', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'client', 'src', 'main', 'AndroidManifest.xml'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'emojilibrary', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'gradle', 'build_libraries.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'imagepicker', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'mars-core-release', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'push', 'build.gradle'),
+            os.path.join('source-files', 'cn.wildfirechat.chat', 'settings.gradle'),
+        ]
+        self.assertEqual(sorted(paths), sorted(a))
+
+    def test_get_gradle_subdir(self):
+        subdirs = {
+            'cn.wildfirechat.chat': 'chat',
+            'com.anpmech.launcher': 'app',
+            'org.tasks': 'app',
+            'ut.ewh.audiometrytest': 'app',
+        }
+        for f in ('cn.wildfirechat.chat', 'com.anpmech.launcher', 'org.tasks', 'ut.ewh.audiometrytest'):
+            build_dir = os.path.join('source-files', f)
+            paths = fdroidserver.common.get_all_gradle_and_manifests(build_dir)
+            logging.info(paths)
+            subdir = fdroidserver.common.get_gradle_subdir(build_dir, paths)
+            self.assertEqual(subdirs[f], subdir)
+
+    def test_bad_urls(self):
+        for url in ('asdf',
+                    'file://thing.git',
+                    'https:///github.com/my/project',
+                    'git:///so/many/slashes',
+                    'ssh:/notabug.org/missing/a/slash',
+                    'git:notabug.org/missing/some/slashes',
+                    'https//github.com/bar/baz'):
+            with self.assertRaises(ValueError):
+                fdroidserver.common.get_app_from_url(url)
+
     def test_remove_signing_keys(self):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         print(testdir)
