@@ -778,7 +778,12 @@ def parse_yml_srclib(metadatapath):
             return thisinfo
         else:
             if key == 'Subdir':
-                thisinfo[key] = str(data[key] or '').split(',')
+                if isinstance(data[key], str):
+                    thisinfo[key] = data[key].split(',')
+                elif isinstance(data[key], list):
+                    thisinfo[key] = data[key]
+                elif data[key] is None:
+                    thisinfo[key] = ['']
             elif key == 'Prepare' and isinstance(data[key], list):
                 thisinfo[key] = ' && '.join(data[key])
             else:

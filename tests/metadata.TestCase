@@ -733,6 +733,44 @@ class MetadataTest(unittest.TestCase):
                                              "ant.properties && echo -e "
                                              "'android.library=true\\ntarget=android-19' > project.properties"})
 
+    def test_read_srclibs_yml_subdir_list(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        fdroidserver.metadata.srclibs = None
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.mkdir('srclibs')
+            with open('srclibs/with-list.yml', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    # this should be simple
+                    RepoType: git
+                    Repo: https://git.host/repo.git
+
+                    Subdir:
+                     - This is your last chance.
+                     - After this, there is no turning back.
+                     - You take the blue pill—the story ends,
+                     - you wake up in your bed
+                     - and believe whatever you want to believe.
+                     - You take the red pill—you stay in Wonderland
+                     - and I show you how deep the rabbit-hole goes.
+                    Prepare:
+                        There is a difference between knowing the path
+                        and walking the path.
+                    '''))
+            fdroidserver.metadata.read_srclibs()
+        self.maxDiff = None
+        self.assertDictEqual(fdroidserver.metadata.srclibs,
+                             {'with-list': {'RepoType': 'git',
+                                            'Repo': 'https://git.host/repo.git',
+                                            'Subdir': ['This is your last chance.',
+                                                       'After this, there is no turning back.',
+                                                       'You take the blue pill—the story ends,',
+                                                       'you wake up in your bed',
+                                                       'and believe whatever you want to believe.',
+                                                       'You take the red pill—you stay in Wonderland',
+                                                       'and I show you how deep the rabbit-hole goes.'],
+                                            'Prepare': 'There is a difference between knowing the path '
+                                                       'and walking the path.'}})
+
     def test_read_srclibs_yml_prepare_list(self):
         fdroidserver.metadata.warnings_action = 'error'
         fdroidserver.metadata.srclibs = None
