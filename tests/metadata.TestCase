@@ -733,6 +733,43 @@ class MetadataTest(unittest.TestCase):
                                              "ant.properties && echo -e "
                                              "'android.library=true\\ntarget=android-19' > project.properties"})
 
+    def test_read_srclibs_yml_prepare_list(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        fdroidserver.metadata.srclibs = None
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.mkdir('srclibs')
+            with open('srclibs/with-list.yml', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    # this should be simple
+                    RepoType: git
+                    Repo: https://git.host/repo.git
+
+                    Subdir:
+                    Prepare:
+                     - The Matrix is a system, Neo.
+                     - That system is our enemy.
+                     - But when you're inside, you look around, what do you see?
+                     - Businessmen, teachers, lawyers, carpenters.
+                     - The very minds of the people we are trying to save.
+                     - But until we do, these people are still a part of that system and that makes them our enemy.
+                     - You have to understand, most of these people are not ready to be unplugged.
+                     - And many of them are so inert, so hopelessly dependent on the system that they will fight to protect it.
+                    '''))
+            fdroidserver.metadata.read_srclibs()
+        self.maxDiff = None
+        self.assertDictEqual(fdroidserver.metadata.srclibs,
+                             {'with-list': {'RepoType': 'git',
+                                            'Repo': 'https://git.host/repo.git',
+                                            'Subdir': [''],
+                                            'Prepare': 'The Matrix is a system, Neo. && '
+                                                       'That system is our enemy. && '
+                                                       'But when you\'re inside, you look around, what do you see? && '
+                                                       'Businessmen, teachers, lawyers, carpenters. && '
+                                                       'The very minds of the people we are trying to save. && '
+                                                       'But until we do, these people are still a part of that system and that makes them our enemy. && '
+                                                       'You have to understand, most of these people are not ready to be unplugged. && '
+                                                       'And many of them are so inert, so hopelessly dependent on the system that they will fight to protect it.'}})
+
     def test_read_srclibs(self):
         fdroidserver.metadata.warnings_action = 'error'
         fdroidserver.metadata.srclibs = None
