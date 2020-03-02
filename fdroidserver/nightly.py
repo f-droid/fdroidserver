@@ -170,6 +170,7 @@ def main():
         git_mirror_path = os.path.join(repo_basedir, 'git-mirror')
         git_mirror_repodir = os.path.join(git_mirror_path, 'fdroid', 'repo')
         git_mirror_metadatadir = os.path.join(git_mirror_path, 'fdroid', 'metadata')
+        git_mirror_statsdir = os.path.join(git_mirror_path, 'fdroid', 'stats')
         if not os.path.isdir(git_mirror_repodir):
             logging.debug(_('cloning {url}').format(url=clone_url))
             try:
@@ -217,6 +218,8 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             common.local_rsync(options, git_mirror_repodir + '/', 'repo/')
         if os.path.isdir(git_mirror_metadatadir):
             common.local_rsync(options, git_mirror_metadatadir + '/', 'metadata/')
+        if os.path.isdir(git_mirror_statsdir):
+            common.local_rsync(options, git_mirror_statsdir + '/', 'stats/')
 
         ssh_private_key_file = _ssh_key_from_debug_keystore()
         # this is needed for GitPython to find the SSH key
@@ -246,7 +249,7 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         config += "keydname = '%s'\n" % DISTINGUISHED_NAME
         config += "make_current_version_link = False\n"
         config += "accepted_formats = ('txt', 'yml')\n"
-        # TODO add update_stats = True
+        config += "update_stats = True\n"
         with open('config.py', 'w') as fp:
             fp.write(config)
         os.chmod('config.py', 0o600)
@@ -293,6 +296,7 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         subprocess.check_call(['fdroid', 'update', '--rename-apks', '--create-metadata', '--verbose'],
                               cwd=repo_basedir)
         common.local_rsync(options, repo_basedir + '/metadata/', git_mirror_metadatadir + '/')
+        common.local_rsync(options, repo_basedir + '/stats/', git_mirror_statsdir + '/')
         mirror_git_repo.git.add(all=True)
         mirror_git_repo.index.commit("update app metadata")
 
