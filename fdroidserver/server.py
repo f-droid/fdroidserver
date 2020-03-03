@@ -19,6 +19,7 @@
 import sys
 import glob
 import hashlib
+import json
 import os
 import paramiko
 import pwd
@@ -447,9 +448,8 @@ def update_servergitmirrors(servergitmirrors, repo_section):
 
 
 def upload_to_android_observatory(repo_section):
-    # depend on requests and lxml only if users enable AO
     import requests
-    from lxml.html import fromstring
+    requests  # stop unused import warning
 
     if options.verbose:
         logging.getLogger("requests").setLevel(logging.INFO)
@@ -460,44 +460,53 @@ def upload_to_android_observatory(repo_section):
 
     if repo_section == 'repo':
         for f in sorted(glob.glob(os.path.join(repo_section, '*.apk'))):
-            fpath = f
-            fname = os.path.basename(f)
-            r = requests.post('https://androidobservatory.org/',
-                              data={'q': update.sha256sum(f), 'searchby': 'hash'})
-            if r.status_code == 200:
-                # from now on XPath will be used to retrieve the message in the HTML
-                # androidobservatory doesn't have a nice API to talk with
-                # so we must scrape the page content
-                tree = fromstring(r.text)
+            upload_apk_to_android_observatory(f)
 
-                href = None
-                for element in tree.xpath("//html/body/div/div/table/tbody/tr/td/a"):
-                    a = element.attrib.get('href')
-                    if a:
-                        m = re.match(r'^/app/[0-9A-F]{40}$', a)
-                        if m:
-                            href = m.group()
 
-                page = 'https://androidobservatory.org'
-                message = ''
-                if href:
-                    message = (_('Found {apkfilename} at {url}')
-                               .format(apkfilename=fname, url=(page + href)))
-                if message:
-                    logging.debug(message)
-                    continue
+def upload_apk_to_android_observatory(path):
+    # depend on requests and lxml only if users enable AO
+    import requests
+    from . import net
+    from lxml.html import fromstring
 
-            # upload the file with a post request
-            logging.info(_('Uploading {apkfilename} to androidobservatory.org')
-                         .format(apkfilename=fname))
-            r = requests.post('https://androidobservatory.org/upload',
-                              files={'apk': (fname, open(fpath, 'rb'))},
-                              allow_redirects=False)
+    apkfilename = os.path.basename(path)
+    r = requests.post('https://androidobservatory.org/',
+                      data={'q': update.sha256sum(path), 'searchby': 'hash'},
+                      headers=net.HEADERS)
+    if r.status_code == 200:
+        # from now on XPath will be used to retrieve the message in the HTML
+        # androidobservatory doesn't have a nice API to talk with
+        # so we must scrape the page content
+        tree = fromstring(r.text)
+
+        href = None
+        for element in tree.xpath("//html/body/div/div/table/tbody/tr/td/a"):
+            a = element.attrib.get('href')
+            if a:
+                m = re.match(r'^/app/[0-9A-F]{40}$', a)
+                if m:
+                    href = m.group()
+
+        page = 'https://androidobservatory.org'
+        message = ''
+        if href:
+            message = (_('Found {apkfilename} at {url}')
+                       .format(apkfilename=apkfilename, url=(page + href)))
+        if message:
+            logging.debug(message)
+
+    # upload the file with a post request
+    logging.info(_('Uploading {apkfilename} to androidobservatory.org')
+                 .format(apkfilename=apkfilename))
+    r = requests.post('https://androidobservatory.org/upload',
+                      files={'apk': (apkfilename, open(path, 'rb'))},
+                      headers=net.HEADERS,
+                      allow_redirects=False)
 
 
 def upload_to_virustotal(repo_section, virustotal_apikey):
-    import json
     import requests
+    requests  # stop unused import warning
 
     logging.getLogger("urllib3").setLevel(logging.WARNING)
     logging.getLogger("requests").setLevel(logging.WARNING)
@@ -514,82 +523,95 @@ def upload_to_virustotal(repo_section, virustotal_apikey):
 
         for packageName, packages in data['packages'].items():
             for package in packages:
-                outputfilename = os.path.join('virustotal',
-                                              packageName + '_' + str(package.get('versionCode'))
-                                              + '_' + package['hash'] + '.json')
-                if os.path.exists(outputfilename):
-                    logging.debug(package['apkName'] + ' results are in ' + outputfilename)
-                    continue
-                filename = package['apkName']
-                repofilename = os.path.join(repo_section, filename)
-                logging.info('Checking if ' + repofilename + ' is on virustotal')
+                upload_apk_to_virustotal(virustotal_apikey, **package)
 
-                headers = {
-                    "User-Agent": "F-Droid"
-                }
-                data = {
-                    'apikey': virustotal_apikey,
-                    'resource': package['hash'],
-                }
-                needs_file_upload = False
-                while True:
-                    r = requests.get('https://www.virustotal.com/vtapi/v2/file/report?'
-                                     + urllib.parse.urlencode(data), headers=headers)
-                    if r.status_code == 200:
-                        response = r.json()
-                        if response['response_code'] == 0:
-                            needs_file_upload = True
-                        else:
-                            response['filename'] = filename
-                            response['packageName'] = packageName
-                            response['versionCode'] = package.get('versionCode')
-                            response['versionName'] = package.get('versionName')
-                            with open(outputfilename, 'w') as fp:
-                                json.dump(response, fp, indent=2, sort_keys=True)
 
-                        if response.get('positives', 0) > 0:
-                            logging.warning(repofilename + ' has been flagged by virustotal '
-                                            + str(response['positives']) + ' times:'
-                                            + '\n\t' + response['permalink'])
-                        break
-                    elif r.status_code == 204:
-                        time.sleep(10)  # wait for public API rate limiting
+def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
+                             versionCode, **kwargs):
+    import requests
 
-                upload_url = None
-                if needs_file_upload:
-                    manual_url = 'https://www.virustotal.com/'
-                    size = os.path.getsize(repofilename)
-                    if size > 200000000:
-                        # VirusTotal API 200MB hard limit
-                        logging.error(_('{path} more than 200MB, manually upload: {url}')
-                                      .format(path=repofilename, url=manual_url))
-                    elif size > 32000000:
-                        # VirusTotal API requires fetching a URL to upload bigger files
-                        r = requests.get('https://www.virustotal.com/vtapi/v2/file/scan/upload_url?'
-                                         + urllib.parse.urlencode(data), headers=headers)
-                        if r.status_code == 200:
-                            upload_url = r.json().get('upload_url')
-                        elif r.status_code == 403:
-                            logging.error(_('VirusTotal API key cannot upload files larger than 32MB, '
-                                            + 'use {url} to upload {path}.')
-                                          .format(path=repofilename, url=manual_url))
-                        else:
-                            r.raise_for_status()
-                    else:
-                        upload_url = 'https://www.virustotal.com/vtapi/v2/file/scan'
+    outputfilename = os.path.join('virustotal',
+                                  packageName + '_' + str(versionCode)
+                                  + '_' + hash + '.json')
+    if os.path.exists(outputfilename):
+        logging.debug(apkName + ' results are in ' + outputfilename)
+        return outputfilename
+    repofilename = os.path.join('repo', apkName)
+    logging.info('Checking if ' + repofilename + ' is on virustotal')
 
-                if upload_url:
-                    logging.info(_('Uploading {apkfilename} to virustotal')
-                                 .format(apkfilename=repofilename))
-                    files = {
-                        'file': (filename, open(repofilename, 'rb'))
-                    }
-                    r = requests.post(upload_url, data=data, headers=headers, files=files)
-                    logging.debug(_('If this upload fails, try manually uploading to {url}')
-                                  .format(url=manual_url))
-                    r.raise_for_status()
-                    response = r.json()
-                    logging.info(response['verbose_msg'] + " " + response['permalink'])
+    headers = {
+        "User-Agent": "F-Droid"
+    }
+    if 'headers' in kwargs:
+        for k, v in kwargs['headers'].items():
+            headers[k] = v
+
+    data = {
+        'apikey': virustotal_apikey,
+        'resource': hash,
+    }
+    needs_file_upload = False
+    while True:
+        r = requests.get('https://www.virustotal.com/vtapi/v2/file/report?'
+                         + urllib.parse.urlencode(data), headers=headers)
+        if r.status_code == 200:
+            response = r.json()
+            if response['response_code'] == 0:
+                needs_file_upload = True
+            else:
+                response['filename'] = apkName
+                response['packageName'] = packageName
+                response['versionCode'] = versionCode
+                if kwargs.get('versionName'):
+                    response['versionName'] = kwargs.get('versionName')
+                with open(outputfilename, 'w') as fp:
+                    json.dump(response, fp, indent=2, sort_keys=True)
+
+            if response.get('positives', 0) > 0:
+                logging.warning(repofilename + ' has been flagged by virustotal '
+                                + str(response['positives']) + ' times:'
+                                + '\n\t' + response['permalink'])
+            break
+        elif r.status_code == 204:
+            time.sleep(10)  # wait for public API rate limiting
+
+    upload_url = None
+    if needs_file_upload:
+        manual_url = 'https://www.virustotal.com/'
+        size = os.path.getsize(repofilename)
+        if size > 200000000:
+            # VirusTotal API 200MB hard limit
+            logging.error(_('{path} more than 200MB, manually upload: {url}')
+                          .format(path=repofilename, url=manual_url))
+        elif size > 32000000:
+            # VirusTotal API requires fetching a URL to upload bigger files
+            r = requests.get('https://www.virustotal.com/vtapi/v2/file/scan/upload_url?'
+                             + urllib.parse.urlencode(data), headers=headers)
+            if r.status_code == 200:
+                upload_url = r.json().get('upload_url')
+            elif r.status_code == 403:
+                logging.error(_('VirusTotal API key cannot upload files larger than 32MB, '
+                                + 'use {url} to upload {path}.')
+                              .format(path=repofilename, url=manual_url))
+            else:
+                r.raise_for_status()
+        else:
+            upload_url = 'https://www.virustotal.com/vtapi/v2/file/scan'
+
+    if upload_url:
+        logging.info(_('Uploading {apkfilename} to virustotal')
+                     .format(apkfilename=repofilename))
+        files = {
+            'file': (apkName, open(repofilename, 'rb'))
+        }
+        r = requests.post(upload_url, data=data, headers=headers, files=files)
+        logging.debug(_('If this upload fails, try manually uploading to {url}')
+                      .format(url=manual_url))
+        r.raise_for_status()
+        response = r.json()
+        logging.info(response['verbose_msg'] + " " + response['permalink'])
+
+    return outputfilename
 
 
 def push_binary_transparency(git_repo_path, git_remote):
