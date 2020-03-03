@@ -17,8 +17,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-
 import requests
+
+HEADERS = {'User-Agent': 'F-Droid'}
 
 
 def download_file(url, local_filename=None, dldir='tmp'):
@@ -26,7 +27,7 @@ def download_file(url, local_filename=None, dldir='tmp'):
     if local_filename is None:
         local_filename = os.path.join(dldir, filename)
     # the stream=True parameter keeps memory usage low
-    r = requests.get(url, stream=True, allow_redirects=True)
+    r = requests.get(url, stream=True, allow_redirects=True, headers=HEADERS)
     r.raise_for_status()
     with open(local_filename, 'wb') as f:
         for chunk in r.iter_content(chunk_size=1024):
@@ -48,16 +49,15 @@ def http_get(url, etag=None, timeout=600):
         - The raw content that was downloaded or None if it did not change
         - The new eTag as returned by the HTTP request
     """
-    headers = {'User-Agent': 'F-Droid'}
     # TODO disable TLS Session IDs and TLS Session Tickets
     #      (plain text cookie visible to anyone who can see the network traffic)
     if etag:
-        r = requests.head(url, headers=headers, timeout=timeout)
+        r = requests.head(url, headers=HEADERS, timeout=timeout)
         r.raise_for_status()
         if 'ETag' in r.headers and etag == r.headers['ETag']:
             return None, etag
 
-    r = requests.get(url, headers=headers, timeout=timeout)
+    r = requests.get(url, headers=HEADERS, timeout=timeout)
     r.raise_for_status()
 
     new_etag = None
