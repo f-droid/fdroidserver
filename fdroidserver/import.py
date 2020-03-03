@@ -143,8 +143,10 @@ def main():
     build.versionCode = versionCode or '0'  # TODO heinous but this is still a str
     if options.subdir:
         build.subdir = options.subdir
+        build.gradle = ['yes']
     elif subdir:
         build.subdir = subdir
+        build.gradle = ['yes']
 
     if options.license:
         app.License = options.license
