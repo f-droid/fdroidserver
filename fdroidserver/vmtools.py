@@ -122,6 +122,7 @@ def get_build_vm(srvdir, provider=None):
     # try guessing provider from installed software
     kvm_installed = shutil.which('kvm') is not None
     kvm_installed |= shutil.which('qemu') is not None
+    kvm_installed |= shutil.which('qemu-kvm') is not None
     vbox_installed = shutil.which('VBoxHeadless') is not None
     if kvm_installed and vbox_installed:
         logging.debug('both kvm and vbox are installed.')
