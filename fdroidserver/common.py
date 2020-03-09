@@ -710,7 +710,7 @@ def write_status_json(output, pretty=False, name=None):
     """Write status out as JSON, and rsync it to the repo server"""
     status_dir = os.path.join('repo', 'status')
     if not os.path.exists(status_dir):
-        os.mkdir(status_dir)
+        os.makedirs(status_dir)
     if not name:
         output['endTimestamp'] = int(datetime.now(timezone.utc).timestamp() * 1000)
         name = sys.argv[0].split()[1]  # fdroid subcommand
