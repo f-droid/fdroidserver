@@ -46,6 +46,7 @@ Litecoin: null
 MaintainerNotes: ''
 Name: null
 NoSourceSince: ''
+OpenCollective: null
 Provides: org.sufficientlysecure.adaway
 Repo: https://github.com/dschuermann/ad-away.git
 RepoType: git

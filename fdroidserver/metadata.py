@@ -66,6 +66,7 @@ app_fields = set([
     'Donate',
     'FlattrID',
     'LiberapayID',
+    'OpenCollective',
     'Bitcoin',
     'Litecoin',
     'Name',
@@ -110,6 +111,7 @@ yaml_app_field_order = [
     'Donate',
     'FlattrID',
     'LiberapayID',
+    'OpenCollective',
     'Bitcoin',
     'Litecoin',
     '\n',
@@ -169,6 +171,7 @@ class App(dict):
         self.Donate = None
         self.FlattrID = None
         self.LiberapayID = None
+        self.OpenCollective = None
         self.Bitcoin = None
         self.Litecoin = None
         self.Name = None
@@ -443,6 +446,10 @@ valuetypes = {
     FieldValidator("Liberapay ID",
                    r'^[0-9]+$',
                    ['LiberapayID']),
+
+    FieldValidator("Open Collective",
+                   r'^[0-9a-z-]+$',
+                   ['OpenCollective']),
 
     FieldValidator("HTTP link",
                    r'^http[s]?://',
@@ -1481,6 +1488,7 @@ def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
     w_field_nonempty('Donate')
     w_field_nonempty('FlattrID')
     w_field_nonempty('LiberapayID')
+    w_field_nonempty('OpenCollective')
     w_field_nonempty('Bitcoin')
     w_field_nonempty('Litecoin')
     mf.write('\n')
