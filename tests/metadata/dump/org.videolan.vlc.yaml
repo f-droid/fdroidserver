@@ -45,6 +45,7 @@ MaintainerNotes: 'Instructions and dependencies here: http://wiki.videolan.org/A
   '
 Name: null
 NoSourceSince: ''
+OpenCollective: null
 Provides: null
 Repo: git://git.videolan.org/vlc-ports/android.git
 RepoType: git
