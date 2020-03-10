@@ -452,7 +452,7 @@ valuetypes = {
                    ['LiberapayID']),
 
     FieldValidator("Open Collective",
-                   r'^[0-9a-z-]+$',
+                   r'^[0-9a-zA-Z_-]+$',
                    ['OpenCollective']),
 
     FieldValidator("HTTP link",
