@@ -49,52 +49,10 @@ class ImportTest(unittest.TestCase):
             print('Skipping ImportTest!')
             return
 
-        app = import_proxy.get_app_from_url(url)
+        app = fdroidserver.common.get_app_from_url(url)
         import_proxy.clone_to_tmp_dir(app)
         self.assertEqual(app.RepoType, 'git')
         self.assertEqual(app.Repo, 'https://gitlab.com/fdroid/ci-test-app.git')
-
-    def test_get_all_gradle_and_manifests(self):
-        a = import_proxy.get_all_gradle_and_manifests(os.path.join('source-files', 'cn.wildfirechat.chat'))
-        paths = [
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'avenginekit', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'chat', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'client', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'client', 'src', 'main', 'AndroidManifest.xml'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'emojilibrary', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'gradle', 'build_libraries.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'imagepicker', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'mars-core-release', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'push', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'settings.gradle'),
-        ]
-        self.assertEqual(sorted(paths), sorted(a))
-
-    def test_get_gradle_subdir(self):
-        subdirs = {
-            'cn.wildfirechat.chat': 'chat',
-            'com.anpmech.launcher': 'app',
-            'org.tasks': 'app',
-            'ut.ewh.audiometrytest': 'app',
-        }
-        for f in ('cn.wildfirechat.chat', 'com.anpmech.launcher', 'org.tasks', 'ut.ewh.audiometrytest'):
-            build_dir = os.path.join('source-files', f)
-            paths = import_proxy.get_all_gradle_and_manifests(build_dir)
-            logging.info(paths)
-            subdir = import_proxy.get_gradle_subdir(build_dir, paths)
-            self.assertEqual(subdirs[f], subdir)
-
-    def test_bad_urls(self):
-        for url in ('asdf',
-                    'file://thing.git',
-                    'https:///github.com/my/project',
-                    'git:///so/many/slashes',
-                    'ssh:/notabug.org/missing/a/slash',
-                    'git:notabug.org/missing/some/slashes',
-                    'https//github.com/bar/baz'):
-            with self.assertRaises(ValueError):
-                import_proxy.get_app_from_url(url)
 
     def test_get_app_from_url(self):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
@@ -111,7 +69,7 @@ class ImportTest(unittest.TestCase):
             shutil.copytree(os.path.join(self.basedir, 'source-files', appid),
                             tmp_importer)
 
-            app = import_proxy.get_app_from_url(url)
+            app = fdroidserver.common.get_app_from_url(url)
             with mock.patch('fdroidserver.common.getvcs',
                             lambda a, b, c: fdroidserver.common.vcs(url, testdir)):
                 with mock.patch('fdroidserver.common.vcs.gotorevision',
@@ -122,7 +80,7 @@ class ImportTest(unittest.TestCase):
             self.assertEqual(url, app.Repo)
             self.assertEqual(url, app.SourceCode)
             logging.info(build_dir)
-            paths = import_proxy.get_all_gradle_and_manifests(build_dir)
+            paths = fdroidserver.common.get_all_gradle_and_manifests(build_dir)
             self.assertNotEqual(paths, [])
             versionName, versionCode, package = fdroidserver.common.parse_androidmanifests(paths, app)
             self.assertEqual(vn, versionName)

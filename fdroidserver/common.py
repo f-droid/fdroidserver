@@ -37,6 +37,8 @@ import logging
 import hashlib
 import socket
 import base64
+import urllib.parse
+import urllib.request
 import zipfile
 import tempfile
 import json
@@ -83,6 +85,9 @@ STRICT_APPLICATION_ID_REGEX = re.compile(r'''(?:^[a-zA-Z]+(?:\d*[a-zA-Z_]*)*)(?:
 VALID_APPLICATION_ID_REGEX = re.compile(r'''(?:^[a-z_]+(?:\d*[a-zA-Z_]*)*)(?:\.[a-z_]+(?:\d*[a-zA-Z_]*)*)*$''',
                                         re.IGNORECASE)
 ANDROID_PLUGIN_REGEX = re.compile(r'''\s*(:?apply plugin:|id)\(?\s*['"](android|com\.android\.application)['"]\s*\)?''')
+
+SETTINGS_GRADLE_REGEX = re.compile(r'settings\.gradle(?:\.kts)?')
+GRADLE_SUBPROJECT_REGEX = re.compile(r'''['"]:([^'"]+)['"]''')
 
 MAX_VERSION_CODE = 0x7fffffff  # Java's Integer.MAX_VALUE (2147483647)
 
@@ -1651,6 +1656,152 @@ def is_strict_application_id(name):
     """
     return STRICT_APPLICATION_ID_REGEX.match(name) is not None \
         and '.' in name
+
+
+def get_all_gradle_and_manifests(build_dir):
+    paths = []
+    for root, dirs, files in os.walk(build_dir):
+        for f in sorted(files):
+            if f == 'AndroidManifest.xml' \
+               or f.endswith('.gradle') or f.endswith('.gradle.kts'):
+                full = os.path.join(root, f)
+                paths.append(full)
+    return paths
+
+
+def get_gradle_subdir(build_dir, paths):
+    """get the subdir where the gradle build is based"""
+    first_gradle_dir = None
+    for path in paths:
+        if not first_gradle_dir:
+            first_gradle_dir = os.path.relpath(os.path.dirname(path), build_dir)
+        if os.path.exists(path) and SETTINGS_GRADLE_REGEX.match(os.path.basename(path)):
+            with open(path) as fp:
+                for m in GRADLE_SUBPROJECT_REGEX.finditer(fp.read()):
+                    for f in glob.glob(os.path.join(os.path.dirname(path), m.group(1), 'build.gradle*')):
+                        with open(f) as fp:
+                            while True:
+                                line = fp.readline()
+                                if not line:
+                                    break
+                                if ANDROID_PLUGIN_REGEX.match(line):
+                                    return os.path.relpath(os.path.dirname(f), build_dir)
+    if first_gradle_dir and first_gradle_dir != '.':
+        return first_gradle_dir
+
+    return ''
+
+
+def getrepofrompage(url):
+    """Get the repo type and address from the given web page.
+
+    The page is scanned in a rather naive manner for 'git clone xxxx',
+    'hg clone xxxx', etc, and when one of these is found it's assumed
+    that's the information we want.  Returns repotype, address, or
+    None, reason
+
+    """
+    if not url.startswith('http'):
+        return (None, _('{url} does not start with "http"!'.format(url=url)))
+    req = urllib.request.urlopen(url)  # nosec B310 non-http URLs are filtered out
+    if req.getcode() != 200:
+        return (None, 'Unable to get ' + url + ' - return code ' + str(req.getcode()))
+    page = req.read().decode(req.headers.get_content_charset())
+
+    # Works for BitBucket
+    m = re.search('data-fetch-url="(.*)"', page)
+    if m is not None:
+        repo = m.group(1)
+
+        if repo.endswith('.git'):
+            return ('git', repo)
+
+        return ('hg', repo)
+
+    # Works for BitBucket (obsolete)
+    index = page.find('hg clone')
+    if index != -1:
+        repotype = 'hg'
+        repo = page[index + 9:]
+        index = repo.find('<')
+        if index == -1:
+            return (None, _("Error while getting repo address"))
+        repo = repo[:index]
+        repo = repo.split('"')[0]
+        return (repotype, repo)
+
+    # Works for BitBucket (obsolete)
+    index = page.find('git clone')
+    if index != -1:
+        repotype = 'git'
+        repo = page[index + 10:]
+        index = repo.find('<')
+        if index == -1:
+            return (None, _("Error while getting repo address"))
+        repo = repo[:index]
+        repo = repo.split('"')[0]
+        return (repotype, repo)
+
+    return (None, _("No information found.") + page)
+
+
+def get_app_from_url(url):
+    """Guess basic app metadata from the URL.
+
+    The URL must include a network hostname, unless it is an lp:,
+    file:, or git/ssh URL.  This throws ValueError on bad URLs to
+    match urlparse().
+
+    """
+
+    parsed = urllib.parse.urlparse(url)
+    invalid_url = False
+    if not parsed.scheme or not parsed.path:
+        invalid_url = True
+
+    app = fdroidserver.metadata.App()
+    app.Repo = url
+    if url.startswith('git://') or url.startswith('git@'):
+        app.RepoType = 'git'
+    elif parsed.netloc == 'github.com':
+        app.RepoType = 'git'
+        app.SourceCode = url
+        app.IssueTracker = url + '/issues'
+    elif parsed.netloc == 'gitlab.com':
+        # git can be fussy with gitlab URLs unless they end in .git
+        if url.endswith('.git'):
+            url = url[:-4]
+        app.Repo = url + '.git'
+        app.RepoType = 'git'
+        app.SourceCode = url
+        app.IssueTracker = url + '/issues'
+    elif parsed.netloc == 'notabug.org':
+        if url.endswith('.git'):
+            url = url[:-4]
+        app.Repo = url + '.git'
+        app.RepoType = 'git'
+        app.SourceCode = url
+        app.IssueTracker = url + '/issues'
+    elif parsed.netloc == 'bitbucket.org':
+        if url.endswith('/'):
+            url = url[:-1]
+        app.SourceCode = url + '/src'
+        app.IssueTracker = url + '/issues'
+        # Figure out the repo type and adddress...
+        app.RepoType, app.Repo = getrepofrompage(url)
+    elif url.startswith('https://') and url.endswith('.git'):
+        app.RepoType = 'git'
+
+    if not parsed.netloc and parsed.scheme in ('git', 'http', 'https', 'ssh'):
+        invalid_url = True
+
+    if invalid_url:
+        raise ValueError(_('"{url}" is not a valid URL!'.format(url=url)))
+
+    if not app.RepoType:
+        raise FDroidException("Unable to determine vcs type. " + app.Repo)
+
+    return app
 
 
 def getsrclib(spec, srclib_dir, subdir=None, basepath=False,

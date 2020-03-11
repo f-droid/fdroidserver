@@ -142,6 +142,12 @@ class ServerTest(unittest.TestCase):
                                                      repo_section)
         self.assertEqual(call_iteration, 2, 'expected 2 invocations of subprocess.call')
 
+    @unittest.skipIf(not os.getenv('VIRUSTOTAL_API_KEY'), 'VIRUSTOTAL_API_KEY is not set')
+    def test_upload_to_virustotal(self):
+        fdroidserver.server.options.verbose = True
+        virustotal_apikey = os.getenv('VIRUSTOTAL_API_KEY')
+        fdroidserver.server.upload_to_virustotal('repo', virustotal_apikey)
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
