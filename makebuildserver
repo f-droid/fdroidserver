@@ -256,6 +256,8 @@ CACHE_FILES = [
      '7954956a40633c88f693d638cbc23f68e9e2499dc7a4b7dfdaf6a3e91387749a'),
     ('https://dl.google.com/android/repository/build-tools_r29.0.2-linux.zip',
      '1e9393cbfd4a4b82e30e7f55ab38db4a5a3259db93d5821c63597bc74522fa08'),
+    ('https://dl.google.com/android/repository/build-tools_r29.0.3-linux.zip',
+     '5652d8cd5eaaade0b853bfe0ae6cbfa0706a6f70a0ebb25ca24a6f484ec3d855'),
     ('https://services.gradle.org/distributions/gradle-2.2.1-bin.zip',
      '420aa50738299327b611c10b8304b749e8d3a579407ee9e755b15921d95ff418'),
     ('https://services.gradle.org/distributions/gradle-2.3-bin.zip',
