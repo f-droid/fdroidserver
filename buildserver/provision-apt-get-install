@@ -38,6 +38,7 @@ deb http://security.debian.org/debian-security stretch/updates main
 deb ${debian_mirror} stretch-updates main
 EOF
 echo "deb ${debian_mirror} stretch-backports main" > /etc/apt/sources.list.d/stretch-backports.list
+echo "deb ${debian_mirror} stretch-backports-sloppy main" > /etc/apt/sources.list.d/stretch-backports-sloppy.list
 echo "deb ${debian_mirror} testing main"           > /etc/apt/sources.list.d/testing.list
 printf "Package: *\nPin: release o=Debian,a=testing\nPin-Priority: -300\n" > /etc/apt/preferences.d/debian-testing
 
