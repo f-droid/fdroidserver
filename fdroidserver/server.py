@@ -492,12 +492,11 @@ def upload_apk_to_android_observatory(path):
                     href = m.group()
 
         page = 'https://androidobservatory.org'
-        message = ''
         if href:
             message = (_('Found {apkfilename} at {url}')
                        .format(apkfilename=apkfilename, url=(page + href)))
-        if message:
             logging.debug(message)
+            return
 
     # upload the file with a post request
     logging.info(_('Uploading {apkfilename} to androidobservatory.org')
