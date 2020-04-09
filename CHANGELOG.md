@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
   ([!656](https://gitlab.com/fdroid/fdroidserver/merge_requests/656))
 * add SHA256 to filename of repo graphics
   ([!669](https://gitlab.com/fdroid/fdroidserver/merge_requests/669))
+* support for srclibs metadata in YAML format
+  ([!700](https://gitlab.com/fdroid/fdroidserver/merge_requests/700))
 
 ### Fixed
 * fix build-logs dissapearing when deploying
