@@ -319,7 +319,7 @@ def main():
             # characters are significant, so we'll use the first 8 from
             # the MD5 of the app's ID and hope there are no collisions.
             # If a collision does occur later, we're going to have to
-            # come up with a new alogrithm, AND rename all existing keys
+            # come up with a new algorithm, AND rename all existing keys
             # in the keystore!
             if not skipsigning:
                 if appid in config['keyaliases']:
@@ -367,22 +367,11 @@ def main():
                                                                       unsigned_dir,
                                                                       output_dir))
 
-                # TODO replace below with common.sign_apk() once it has proven stable
-                # Sign the application...
-                p = FDroidPopen([config['jarsigner'], '-keystore', config['keystore'],
-                                 '-storepass:env', 'FDROID_KEY_STORE_PASS',
-                                 '-keypass:env', 'FDROID_KEY_PASS', '-sigalg',
-                                 'SHA1withRSA', '-digestalg', 'SHA1',
-                                 apkfile, keyalias], envs=env_vars)
-                if p.returncode != 0:
-                    raise BuildException(_("Failed to sign application"), p.output)
+                # Sign and zipalign the application...
+                common.sign_apk(apkfile, signed_apk_path, keyalias)
                 if appid not in signed_apks:
                     signed_apks[appid] = []
                 signed_apks[appid].append(apkfile)
-
-                # Zipalign it...
-                common._zipalign(apkfile, os.path.join(output_dir, apkfilename))
-                os.remove(apkfile)
 
                 publish_source_tarball(apkfilename, unsigned_dir, output_dir)
                 logging.info('Published ' + apkfilename)

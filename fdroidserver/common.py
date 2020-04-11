@@ -3064,7 +3064,7 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
 
     One of the inputs is signed, the other is unsigned. The signature metadata
     is transferred from the signed to the unsigned apk, and then jarsigner is
-    used to verify that the signature from the signed apk is also varlid for
+    used to verify that the signature from the signed apk is also valid for
     the unsigned one.  If the APK given as unsigned actually does have a
     signature, it will be stripped out and ignored.
 
