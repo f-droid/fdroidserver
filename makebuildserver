@@ -674,7 +674,9 @@ def main():
                          universal_newlines=True)
     buildserverid = p.communicate()[0].strip()
     logging.info("Writing buildserver ID ...ID is %s", buildserverid)
-    run_via_vagrant_ssh(v, 'sh -c "echo %s >/home/vagrant/buildserverid"' % buildserverid)
+    write_bsid_cmd = 'sh -c "echo \'{}\' >/home/vagrant/buildserverid"'.format(buildserverid)
+    run_via_vagrant_ssh(v, write_bsid_cmd)
+    logging.debug("+ {}".format(write_bsid_cmd))
 
     logging.info("Stopping build server VM")
     v.halt()
