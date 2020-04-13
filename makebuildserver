@@ -674,7 +674,8 @@ def main():
                          universal_newlines=True)
     buildserverid = p.communicate()[0].strip()
     logging.info("Writing buildserver ID ...ID is %s", buildserverid)
-    write_bsid_cmd = 'sh -c "echo \'{}\' >/home/vagrant/buildserverid"'.format(buildserverid)
+    # sync data before we halt() the machine, we had an empty buildserverid otherwise
+    write_bsid_cmd = 'sh -c "echo \'{}\' >/home/vagrant/buildserverid; sync"'.format(buildserverid)
     run_via_vagrant_ssh(v, write_bsid_cmd)
     logging.debug("+ {}".format(write_bsid_cmd))
 
