@@ -105,7 +105,7 @@ ubuntu_xenial_pip:
   only:
     - master@fdroid/fdroidserver
   script:
-    - apt-get install git default-jdk-headless python3-pip python3-venv rsync zipalign
+    - apt-get install git default-jdk-headless python3-pip python3-venv rsync zipalign libarchive13
     - rm -rf env
     - pyvenv env
     - . env/bin/activate
