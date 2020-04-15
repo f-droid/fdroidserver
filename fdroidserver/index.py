@@ -317,13 +317,17 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         parent.appendChild(el)
 
     def addElementCheckLocalized(name, app, key, doc, parent, default=''):
-        '''Fill in field from metadata or localized block
+        """Fill in field from metadata or localized block
 
         For name/summary/description, they can come only from the app source,
         or from a dir in fdroiddata.  They can be entirely missing from the
         metadata file if there is localized versions.  This will fetch those
         from the localized version if its not available in the metadata file.
-        '''
+
+        Attributes should be alpha-sorted, so they must be added in
+        alpha- sort order.
+
+        """
 
         el = doc.createElement(name)
         value = app.get(key)
@@ -349,21 +353,20 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
     doc.appendChild(root)
 
     repoel = doc.createElement("repo")
-
-    repoel.setAttribute("name", repodict['name'])
+    repoel.setAttribute("icon", os.path.basename(repodict['icon']))
     if 'maxage' in repodict:
         repoel.setAttribute("maxage", str(repodict['maxage']))
-    repoel.setAttribute("icon", os.path.basename(repodict['icon']))
+    repoel.setAttribute("name", repodict['name'])
+    pubkey, repo_pubkey_fingerprint = extract_pubkey()
+    repoel.setAttribute("pubkey", pubkey.decode('utf-8'))
+    repoel.setAttribute("timestamp", '%d' % repodict['timestamp'].timestamp())
     repoel.setAttribute("url", repodict['address'])
+    repoel.setAttribute("version", str(repodict['version']))
+
     addElement('description', repodict['description'], doc, repoel)
     for mirror in repodict.get('mirrors', []):
         addElement('mirror', mirror, doc, repoel)
 
-    repoel.setAttribute("version", str(repodict['version']))
-    repoel.setAttribute("timestamp", '%d' % repodict['timestamp'].timestamp())
-
-    pubkey, repo_pubkey_fingerprint = extract_pubkey()
-    repoel.setAttribute("pubkey", pubkey.decode('utf-8'))
     root.appendChild(repoel)
 
     for command in ('install', 'uninstall'):
@@ -542,16 +545,16 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
 
                 for permission in sorted_permissions:
                     permel = doc.createElement('uses-permission')
-                    permel.setAttribute('name', permission[0])
                     if permission[1] is not None:
                         permel.setAttribute('maxSdkVersion', '%d' % permission[1])
                         apkel.appendChild(permel)
+                    permel.setAttribute('name', permission[0])
                 for permission_sdk_23 in sorted(apk['uses-permission-sdk-23']):
                     permel = doc.createElement('uses-permission-sdk-23')
-                    permel.setAttribute('name', permission_sdk_23[0])
                     if permission_sdk_23[1] is not None:
                         permel.setAttribute('maxSdkVersion', '%d' % permission_sdk_23[1])
                         apkel.appendChild(permel)
+                    permel.setAttribute('name', permission_sdk_23[0])
                 if 'nativecode' in apk:
                     addElement('nativecode', ','.join(sorted(apk['nativecode'])), doc, apkel)
                 addElementNonEmpty('features', ','.join(sorted(apk['features'])), doc, apkel)
