@@ -1789,6 +1789,10 @@ def get_app_from_url(url):
         app.IssueTracker = url + '/issues'
         # Figure out the repo type and adddress...
         app.RepoType, app.Repo = getrepofrompage(url)
+    elif parsed.netloc == 'codeberg.org':
+        app.RepoType = 'git'
+        app.SourceCode = url
+        app.IssueTracker = url + '/issues'
     elif url.startswith('https://') and url.endswith('.git'):
         app.RepoType = 'git'
 
