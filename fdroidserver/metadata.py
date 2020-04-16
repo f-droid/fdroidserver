@@ -42,12 +42,15 @@ srclibs = None
 warnings_action = None
 
 
-def warn_or_exception(value):
+def warn_or_exception(value, cause=None):
     '''output warning or Exception depending on -W'''
     if warnings_action == 'ignore':
         pass
     elif warnings_action == 'error':
-        raise MetaDataException(value)
+        if cause:
+            raise MetaDataException(value) from cause
+        else:
+            raise MetaDataException(value)
     else:
         logging.warning(value)
 
@@ -704,12 +707,12 @@ def description_html(s, linkres):
     return ps.text_html
 
 
-def parse_srclib(metadatapath):
+def parse_txt_srclib(metadatapath):
 
     thisinfo = {}
 
     # Defaults for fields that come from metadata
-    thisinfo['Repo Type'] = ''
+    thisinfo['RepoType'] = ''
     thisinfo['Repo'] = ''
     thisinfo['Subdir'] = None
     thisinfo['Prepare'] = None
@@ -731,6 +734,9 @@ def parse_srclib(metadatapath):
         except ValueError:
             warn_or_exception(_("Invalid metadata in %s:%d") % (line, n))
 
+        # collapse whitespaces in field names
+        f = f.replace(' ', '')
+
         if f == "Subdir":
             thisinfo[f] = v.split(',')
         else:
@@ -741,12 +747,57 @@ def parse_srclib(metadatapath):
     return thisinfo
 
 
+def parse_yml_srclib(metadatapath):
+
+    thisinfo = {'RepoType': '',
+                'Repo': '',
+                'Subdir': None,
+                'Prepare': None}
+
+    if not os.path.exists(metadatapath):
+        warn_or_exception(_("Invalid scrlib metadata: '{file}' "
+                            "does not exist"
+                            .format(file=metadatapath)))
+        return thisinfo
+
+    with open(metadatapath, "r", encoding="utf-8") as f:
+        try:
+            data = yaml.load(f, Loader=SafeLoader)
+        except yaml.error.YAMLError as e:
+            warn_or_exception(_("Invalid srclib metadata: could not "
+                                "parse '{file}'"
+                              .format(file=metadatapath)),
+                              e)
+            return thisinfo
+
+    for key in data.keys():
+        if key not in thisinfo.keys():
+            warn_or_exception(_("Invalid srclib metadata: unknown key "
+                                "'{key}' in '{file}'")
+                              .format(key=key, file=metadatapath))
+            return thisinfo
+        else:
+            if key == 'Subdir':
+                if isinstance(data[key], str):
+                    thisinfo[key] = data[key].split(',')
+                elif isinstance(data[key], list):
+                    thisinfo[key] = data[key]
+                elif data[key] is None:
+                    thisinfo[key] = ['']
+            elif key == 'Prepare' and isinstance(data[key], list):
+                thisinfo[key] = ' && '.join(data[key])
+            else:
+                thisinfo[key] = str(data[key] or '')
+
+    return thisinfo
+
+
 def read_srclibs():
     """Read all srclib metadata.
 
     The information read will be accessible as metadata.srclibs, which is a
     dictionary, keyed on srclib name, with the values each being a dictionary
-    in the same format as that returned by the parse_srclib function.
+    in the same format as that returned by the parse_txt_srclib function.
 
     A MetaDataException is raised if there are any problems with the srclib
     metadata.
@@ -765,7 +816,11 @@ def read_srclibs():
 
     for metadatapath in sorted(glob.glob(os.path.join(srcdir, '*.txt'))):
         srclibname = os.path.basename(metadatapath[:-4])
-        srclibs[srclibname] = parse_srclib(metadatapath)
+        srclibs[srclibname] = parse_txt_srclib(metadatapath)
+
+    for metadatapath in sorted(glob.glob(os.path.join(srcdir, '*.yml'))):
+        srclibname = os.path.basename(metadatapath[:-4])
+        srclibs[srclibname] = parse_yml_srclib(metadatapath)
 
 
 def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):

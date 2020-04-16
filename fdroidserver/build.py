@@ -203,8 +203,18 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             send_dir(lib)
             # Copy the metadata file too...
             ftp.chdir(posixpath.join(homedir, 'srclibs'))
-            ftp.put(os.path.join('srclibs', name + '.txt'),
-                    name + '.txt')
+            if os.path.isfile(os.path.join('srclibs', name + '.yml')):
+                ftp.put(os.path.join('srclibs', name + '.yml'),
+                        name + '.yml')
+            elif os.path.isfile(os.path.join('srclibs', name + '.txt')):
+                ftp.put(os.path.join('srclibs', name + '.txt'),
+                        name + '.txt')
+            else:
+                raise BuildException("can not find metadata file for "
+                                     "'{name}', please make sure it is "
+                                     "present in your 'srclibs' folder."
+                                     "(supported formats: txt, yml)"
+                                     .format(name=name))
         # Copy the main app source code
         # (no need if it's a srclib)
         if (not basesrclib) and os.path.exists(build_dir):

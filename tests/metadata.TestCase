@@ -23,6 +23,8 @@ print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
+from testcommon import TmpCwd
+
 import fdroidserver.common
 import fdroidserver.metadata
 from fdroidserver.exception import MetaDataException
@@ -567,6 +569,274 @@ class MetadataTest(unittest.TestCase):
             AutoUpdateMode: None
             UpdateCheckMode: None
             """))
+
+    def test_parse_txt_srclib(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('JSoup.txt', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    # Source details (the only mandatory fields)
+                    Repo Type:git
+                    Repo:https://github.com/jhy/jsoup.git
+
+                    # Comma-separated list of subdirs to use. The first existing subdirectory
+                    # found between those given will be used. If none is found or provided, the
+                    # root of the repo directory will be used instead.
+                    Subdir:
+
+                    # Any extra commands to prepare the source library
+                    Prepare:
+                    '''))
+            srclib = fdroidserver.metadata.parse_txt_srclib('JSoup.txt')
+            self.assertDictEqual({'Repo': 'https://github.com/jhy/jsoup.git',
+                                  'RepoType': 'git',
+                                  'Subdir': [''],
+                                  'Prepare': ''},
+                                 srclib)
+
+    def test_parse_txt_srclib_simple(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('simple.txt', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    # this should be simple
+                    Repo Type:git
+                    Repo:https://git.host/repo.git
+                    '''))
+            srclib = fdroidserver.metadata.parse_txt_srclib('simple.txt')
+            self.assertDictEqual({'Repo': 'https://git.host/repo.git',
+                                  'RepoType': 'git',
+                                  'Subdir': None,
+                                  'Prepare': None},
+                                 srclib)
+
+    def test_parse_txt_srclib_simple_blanks(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('simple.txt', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    # this should be simple
+
+                    Repo Type:git
+
+                    Repo:https://git.host/repo.git
+
+                    Subdir:
+
+                    Prepare:
+                    '''))
+            srclib = fdroidserver.metadata.parse_txt_srclib('simple.txt')
+            self.assertDictEqual({'Repo': 'https://git.host/repo.git',
+                                  'RepoType': 'git',
+                                  'Subdir': [''],
+                                  'Prepare': ''},
+                                 srclib)
+
+    def test_parse_txt_srclib_Changelog_cketti(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('Changelog-cketti.txt', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    Repo Type:git
+                    Repo:https://github.com/cketti/ckChangeLog
+
+                    Subdir:library,ckChangeLog/src/main
+                    Prepare:[ -f project.properties ] || echo 'source.dir=java' > ant.properties && echo -e 'android.library=true\\ntarget=android-19' > project.properties
+                    '''))
+            srclib = fdroidserver.metadata.parse_txt_srclib('Changelog-cketti.txt')
+            self.assertDictEqual({'Repo': 'https://github.com/cketti/ckChangeLog',
+                                  'RepoType': 'git',
+                                  'Subdir': ['library', 'ckChangeLog/src/main'],
+                                  'Prepare': "[ -f project.properties ] || echo 'source.dir=java' > "
+                                             "ant.properties && echo -e "
+                                             "'android.library=true\\ntarget=android-19' > project.properties"},
+                                 srclib)
+
+    def test_parse_yml_srclib_unknown_key(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('test.yml', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    RepoType: git
+                    Repo: https://example.com/test.git
+                    Evil: I should not be here.
+                    '''))
+            with self.assertRaisesRegex(MetaDataException,
+                                        "Invalid srclib metadata: "
+                                        "unknown key 'Evil' in "
+                                        "'test.yml'"):
+                fdroidserver.metadata.parse_yml_srclib('test.yml')
+
+    def test_parse_yml_srclib_does_not_exists(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        with self.assertRaisesRegex(MetaDataException,
+                                    "Invalid scrlib metadata: "
+                                    "'non/existent-test-srclib.yml' "
+                                    "does not exist"):
+            fdroidserver.metadata.parse_yml_srclib('non/existent-test-srclib.yml')
+
+    def test_parse_yml_srclib_simple(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('simple.yml', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    # this should be simple
+                    RepoType: git
+                    Repo: https://git.host/repo.git
+                    '''))
+            srclib = fdroidserver.metadata.parse_yml_srclib('simple.yml')
+            self.assertDictEqual({'Repo': 'https://git.host/repo.git',
+                                  'RepoType': 'git',
+                                  'Subdir': None,
+                                  'Prepare': None},
+                                 srclib)
+
+    def test_parse_yml_srclib_simple_with_blanks(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('simple.yml', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    # this should be simple
+
+                    RepoType: git
+
+                    Repo: https://git.host/repo.git
+
+                    Subdir:
+
+                    Prepare:
+                    '''))
+            srclib = fdroidserver.metadata.parse_yml_srclib('simple.yml')
+            self.assertDictEqual({'Repo': 'https://git.host/repo.git',
+                                  'RepoType': 'git',
+                                  'Subdir': [''],
+                                  'Prepare': ''},
+                                 srclib)
+
+    def test_parse_yml_srclib_Changelog_cketti(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('Changelog-cketti.yml', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    RepoType: git
+                    Repo: https://github.com/cketti/ckChangeLog
+
+                    Subdir: library,ckChangeLog/src/main
+                    Prepare: "[ -f project.properties ] || echo 'source.dir=java' > ant.properties && echo -e 'android.library=true\\\\ntarget=android-19' > project.properties"
+                    '''))
+            srclib = fdroidserver.metadata.parse_yml_srclib('Changelog-cketti.yml')
+            self.assertDictEqual(srclib,
+                                 {'Repo': 'https://github.com/cketti/ckChangeLog',
+                                  'RepoType': 'git',
+                                  'Subdir': ['library', 'ckChangeLog/src/main'],
+                                  'Prepare': "[ -f project.properties ] || echo 'source.dir=java' > "
+                                             "ant.properties && echo -e "
+                                             "'android.library=true\\ntarget=android-19' > project.properties"})
+
+    def test_read_srclibs_yml_subdir_list(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        fdroidserver.metadata.srclibs = None
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.mkdir('srclibs')
+            with open('srclibs/with-list.yml', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    # this should be simple
+                    RepoType: git
+                    Repo: https://git.host/repo.git
+
+                    Subdir:
+                     - This is your last chance.
+                     - After this, there is no turning back.
+                     - You take the blue pill—the story ends,
+                     - you wake up in your bed
+                     - and believe whatever you want to believe.
+                     - You take the red pill—you stay in Wonderland
+                     - and I show you how deep the rabbit-hole goes.
+                    Prepare:
+                        There is a difference between knowing the path
+                        and walking the path.
+                    '''))
+            fdroidserver.metadata.read_srclibs()
+        self.maxDiff = None
+        self.assertDictEqual(fdroidserver.metadata.srclibs,
+                             {'with-list': {'RepoType': 'git',
+                                            'Repo': 'https://git.host/repo.git',
+                                            'Subdir': ['This is your last chance.',
+                                                       'After this, there is no turning back.',
+                                                       'You take the blue pill—the story ends,',
+                                                       'you wake up in your bed',
+                                                       'and believe whatever you want to believe.',
+                                                       'You take the red pill—you stay in Wonderland',
+                                                       'and I show you how deep the rabbit-hole goes.'],
+                                            'Prepare': 'There is a difference between knowing the path '
+                                                       'and walking the path.'}})
+
+    def test_read_srclibs_yml_prepare_list(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        fdroidserver.metadata.srclibs = None
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.mkdir('srclibs')
+            with open('srclibs/with-list.yml', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    # this should be simple
+                    RepoType: git
+                    Repo: https://git.host/repo.git
+
+                    Subdir:
+                    Prepare:
+                     - The Matrix is a system, Neo.
+                     - That system is our enemy.
+                     - But when you're inside, you look around, what do you see?
+                     - Businessmen, teachers, lawyers, carpenters.
+                     - The very minds of the people we are trying to save.
+                     - But until we do, these people are still a part of that system and that makes them our enemy.
+                     - You have to understand, most of these people are not ready to be unplugged.
+                     - And many of them are so inert, so hopelessly dependent on the system that they will fight to protect it.
+                    '''))
+            fdroidserver.metadata.read_srclibs()
+        self.maxDiff = None
+        self.assertDictEqual(fdroidserver.metadata.srclibs,
+                             {'with-list': {'RepoType': 'git',
+                                            'Repo': 'https://git.host/repo.git',
+                                            'Subdir': [''],
+                                            'Prepare': 'The Matrix is a system, Neo. && '
+                                                       'That system is our enemy. && '
+                                                       'But when you\'re inside, you look around, what do you see? && '
+                                                       'Businessmen, teachers, lawyers, carpenters. && '
+                                                       'The very minds of the people we are trying to save. && '
+                                                       'But until we do, these people are still a part of that system and that makes them our enemy. && '
+                                                       'You have to understand, most of these people are not ready to be unplugged. && '
+                                                       'And many of them are so inert, so hopelessly dependent on the system that they will fight to protect it.'}})
+
+    def test_read_srclibs(self):
+        fdroidserver.metadata.warnings_action = 'error'
+        fdroidserver.metadata.srclibs = None
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.mkdir('srclibs')
+            with open('srclibs/simple.yml', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    RepoType: git
+                    Repo: https://git.host/repo.git
+                    '''))
+            with open('srclibs/simple-wb.txt', 'w', encoding='utf-8') as f:
+                f.write(textwrap.dedent('''\
+                    # this should be simple
+                    Repo Type:git
+                    Repo:https://git.host/repo.git
+
+                    Subdir:
+                    Prepare:
+                    '''))
+            fdroidserver.metadata.read_srclibs()
+        self.assertDictEqual(fdroidserver.metadata.srclibs,
+                             {'simple-wb': {'RepoType': 'git',
+                                            'Repo': 'https://git.host/repo.git',
+                                            'Subdir': [''],
+                                            'Prepare': ''},
+                              'simple': {'RepoType': 'git',
+                                         'Repo': 'https://git.host/repo.git',
+                                         'Subdir': None,
+                                         'Prepare': None}})
 
 
 if __name__ == "__main__":
