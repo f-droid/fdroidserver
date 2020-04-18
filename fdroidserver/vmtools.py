@@ -435,7 +435,7 @@ class LibvirtBuildVm(FDroidBuildVm):
                 with libarchive.file_writer(output, 'gnutar', 'gzip') as tar:
                     logging.debug('adding files to box %s ...', output)
                     tar.add_files('metadata.json', 'Vagrantfile', 'box.img')
-            except (ModuleNotFoundError, AttributeError):
+            except (ImportError, AttributeError):
                 with tarfile.open(output, 'w:gz') as tar:
                     logging.debug('adding metadata.json to box %s ...', output)
                     tar.add('metadata.json')
