@@ -652,7 +652,7 @@ class MetadataTest(unittest.TestCase):
                                              "'android.library=true\\ntarget=android-19' > project.properties"},
                                  srclib)
 
-    def test_parse_yml_srclib_unknown_key(self):
+    def test_parse_yaml_srclib_unknown_key(self):
         fdroidserver.metadata.warnings_action = 'error'
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             with open('test.yml', 'w', encoding='utf-8') as f:
@@ -665,17 +665,17 @@ class MetadataTest(unittest.TestCase):
                                         "Invalid srclib metadata: "
                                         "unknown key 'Evil' in "
                                         "'test.yml'"):
-                fdroidserver.metadata.parse_yml_srclib('test.yml')
+                fdroidserver.metadata.parse_yaml_srclib('test.yml')
 
-    def test_parse_yml_srclib_does_not_exists(self):
+    def test_parse_yaml_srclib_does_not_exists(self):
         fdroidserver.metadata.warnings_action = 'error'
         with self.assertRaisesRegex(MetaDataException,
                                     "Invalid scrlib metadata: "
                                     "'non/existent-test-srclib.yml' "
                                     "does not exist"):
-            fdroidserver.metadata.parse_yml_srclib('non/existent-test-srclib.yml')
+            fdroidserver.metadata.parse_yaml_srclib('non/existent-test-srclib.yml')
 
-    def test_parse_yml_srclib_simple(self):
+    def test_parse_yaml_srclib_simple(self):
         fdroidserver.metadata.warnings_action = 'error'
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             with open('simple.yml', 'w', encoding='utf-8') as f:
@@ -684,14 +684,14 @@ class MetadataTest(unittest.TestCase):
                     RepoType: git
                     Repo: https://git.host/repo.git
                     '''))
-            srclib = fdroidserver.metadata.parse_yml_srclib('simple.yml')
+            srclib = fdroidserver.metadata.parse_yaml_srclib('simple.yml')
             self.assertDictEqual({'Repo': 'https://git.host/repo.git',
                                   'RepoType': 'git',
                                   'Subdir': None,
                                   'Prepare': None},
                                  srclib)
 
-    def test_parse_yml_srclib_simple_with_blanks(self):
+    def test_parse_yaml_srclib_simple_with_blanks(self):
         fdroidserver.metadata.warnings_action = 'error'
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             with open('simple.yml', 'w', encoding='utf-8') as f:
@@ -706,14 +706,14 @@ class MetadataTest(unittest.TestCase):
 
                     Prepare:
                     '''))
-            srclib = fdroidserver.metadata.parse_yml_srclib('simple.yml')
+            srclib = fdroidserver.metadata.parse_yaml_srclib('simple.yml')
             self.assertDictEqual({'Repo': 'https://git.host/repo.git',
                                   'RepoType': 'git',
                                   'Subdir': [''],
                                   'Prepare': ''},
                                  srclib)
 
-    def test_parse_yml_srclib_Changelog_cketti(self):
+    def test_parse_yaml_srclib_Changelog_cketti(self):
         fdroidserver.metadata.warnings_action = 'error'
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             with open('Changelog-cketti.yml', 'w', encoding='utf-8') as f:
@@ -724,7 +724,7 @@ class MetadataTest(unittest.TestCase):
                     Subdir: library,ckChangeLog/src/main
                     Prepare: "[ -f project.properties ] || echo 'source.dir=java' > ant.properties && echo -e 'android.library=true\\\\ntarget=android-19' > project.properties"
                     '''))
-            srclib = fdroidserver.metadata.parse_yml_srclib('Changelog-cketti.yml')
+            srclib = fdroidserver.metadata.parse_yaml_srclib('Changelog-cketti.yml')
             self.assertDictEqual(srclib,
                                  {'Repo': 'https://github.com/cketti/ckChangeLog',
                                   'RepoType': 'git',

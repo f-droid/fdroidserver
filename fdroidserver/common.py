@@ -42,6 +42,8 @@ import urllib.request
 import zipfile
 import tempfile
 import json
+import yamllint.config
+import yamllint.linter
 
 # TODO change to only import defusedxml once its installed everywhere
 try:
@@ -3734,3 +3736,18 @@ def force_exit(exitvalue=0):
     sys.stdout.flush()
     sys.stderr.flush()
     os._exit(exitvalue)
+
+
+YAML_LINT_CONFIG = {'extends': 'default',
+                    'rules': {'document-start': 'disable',
+                              'line-length': 'disable',
+                              'truthy': 'disable'}}
+
+
+def run_yamllint(path, indent=0):
+    result = []
+    with open(path, 'r', encoding='utf-8') as f:
+        problems = yamllint.linter.run(f, yamllint.config.YamlLintConfig(json.dumps(YAML_LINT_CONFIG)))
+    for problem in problems:
+        result.append(' ' * indent + path + ':' + str(problem.line) + ': ' + problem.message)
+    return '\n'.join(result)

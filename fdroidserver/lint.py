@@ -600,6 +600,13 @@ def main():
         if app.Disabled:
             continue
 
+        if len(options.appid) > 0:
+            ymlpath = os.path.join('metadata', appid + '.yml')
+            if os.path.isfile(ymlpath):
+                yamllintresult = common.run_yamllint(ymlpath)
+                if yamllintresult != '':
+                    print(yamllintresult)
+
         app_check_funcs = [
             check_app_field_types,
             check_regexes,
