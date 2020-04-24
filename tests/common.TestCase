@@ -1298,6 +1298,32 @@ class CommonTest(unittest.TestCase):
                         dfm.assert_called_once_with('srclib/ACRA')
                         self.assertEqual(ret, ('ACRA', None, 'srclib/ACRA'))
 
+    def test_run_yamllint_wellformed(self):
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('wellformed.yml', 'w') as f:
+                f.write(textwrap.dedent('''\
+                    yaml:
+                        file:
+                            - for
+                            - test
+                        purposeses: true
+                    '''))
+            result = fdroidserver.common.run_yamllint('wellformed.yml')
+            self.assertEqual(result, '')
+
+    def test_run_yamllint_malformed(self):
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('malformed.yml', 'w') as f:
+                f.write(textwrap.dedent('''\
+                    yaml:
+                          - that
+                     fails
+                          - test
+                    '''))
+            result = fdroidserver.common.run_yamllint('malformed.yml')
+            self.assertIsNotNone(result)
+            self.assertNotEqual(result, '')
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
