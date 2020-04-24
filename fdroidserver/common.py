@@ -42,8 +42,6 @@ import urllib.request
 import zipfile
 import tempfile
 import json
-import yamllint.config
-import yamllint.linter
 
 # TODO change to only import defusedxml once its installed everywhere
 try:
@@ -3745,6 +3743,13 @@ YAML_LINT_CONFIG = {'extends': 'default',
 
 
 def run_yamllint(path, indent=0):
+
+    try:
+        import yamllint.config
+        import yamllint.linter
+    except ImportError:
+        return ''
+
     result = []
     with open(path, 'r', encoding='utf-8') as f:
         problems = yamllint.linter.run(f, yamllint.config.YamlLintConfig(json.dumps(YAML_LINT_CONFIG)))
