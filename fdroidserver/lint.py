@@ -574,6 +574,9 @@ def main():
     common.setup_global_opts(parser)
     parser.add_argument("-f", "--format", action="store_true", default=False,
                         help=_("Also warn about formatting issues, like rewritemeta -l"))
+    parser.add_argument('--force-yamllint', action="store_true", default=False,
+                        help=_("When linting the entire repository yamllint is disabled by default. "
+                               "This option forces yamllint regardless."))
     parser.add_argument("appid", nargs='*', help=_("applicationId in the form APPID"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
@@ -601,7 +604,7 @@ def main():
             continue
 
         # only run yamllint when linting individual apps.
-        if len(options.appid) > 0:
+        if len(options.appid) > 0 or options.force_yamllint:
 
             # run yamllint on app metadata
             ymlpath = os.path.join('metadata', appid + '.yml')
