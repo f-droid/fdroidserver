@@ -600,12 +600,28 @@ def main():
         if app.Disabled:
             continue
 
+        # only run yamllint when linting individual apps.
         if len(options.appid) > 0:
+
+            # run yamllint on app metadata
             ymlpath = os.path.join('metadata', appid + '.yml')
             if os.path.isfile(ymlpath):
                 yamllintresult = common.run_yamllint(ymlpath)
                 if yamllintresult != '':
                     print(yamllintresult)
+
+            # run yamllint on srclib metadata
+            srclibs = set()
+            for build in app.builds:
+                for srclib in build.srclibs:
+                    srclibs.add(srclib)
+            for srclib in srclibs:
+                name, numer, libdir = common.getsrclib(srclib, 'srclibs', prepare=False, refresh=False)
+                srclibpath = os.path.join('srclibs', name + '.yml')
+                if os.path.isfile(srclibpath):
+                    yamllintresult = common.run_yamllint(srclibpath)
+                    if yamllintresult != '':
+                        print(yamllintresult)
 
         app_check_funcs = [
             check_app_field_types,
