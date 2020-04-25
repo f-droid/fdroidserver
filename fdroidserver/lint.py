@@ -616,7 +616,7 @@ def main():
                 for srclib in build.srclibs:
                     srclibs.add(srclib)
             for srclib in srclibs:
-                name, numer, libdir = common.getsrclib(srclib, 'srclibs', prepare=False, refresh=False)
+                name, ref, number, subdir = common.parse_srclib_spec(srclib)
                 srclibpath = os.path.join('srclibs', name + '.yml')
                 if os.path.isfile(srclibpath):
                     yamllintresult = common.run_yamllint(srclibpath)

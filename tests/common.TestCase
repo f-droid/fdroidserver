@@ -34,7 +34,7 @@ import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
 from testcommon import TmpCwd
-from fdroidserver.exception import FDroidException, VCSException
+from fdroidserver.exception import FDroidException, VCSException, MetaDataException
 
 
 class CommonTest(unittest.TestCase):
@@ -1013,6 +1013,22 @@ class CommonTest(unittest.TestCase):
             logging.info(paths)
             subdir = fdroidserver.common.get_gradle_subdir(build_dir, paths)
             self.assertEqual(subdirs[f], subdir)
+
+    def test_parse_srclib_spec_good(self):
+        self.assertEqual(fdroidserver.common.parse_srclib_spec('osmand-external-skia@android/oreo'),
+                         ('osmand-external-skia', 'android/oreo', None, None))
+        self.assertEqual(fdroidserver.common.parse_srclib_spec('1:appcompat@v7'),
+                         ('appcompat', 'v7', '1', None))
+        self.assertEqual(fdroidserver.common.parse_srclib_spec('1:Support/v7/appcompat@android-4.4_r1.1'),
+                         ('Support', 'android-4.4_r1.1', '1', 'v7/appcompat'))
+
+    def test_parse_srclib_spec_bad(self):
+        with self.assertRaises(MetaDataException):
+            self.assertEqual(fdroidserver.common.parse_srclib_spec(None))
+        with self.assertRaises(MetaDataException):
+            self.assertEqual(fdroidserver.common.parse_srclib_spec('no-ref'))
+        with self.assertRaises(MetaDataException):
+            self.assertEqual(fdroidserver.common.parse_srclib_spec('@multi@at-signs@'))
 
     def test_bad_urls(self):
         for url in ('asdf',
