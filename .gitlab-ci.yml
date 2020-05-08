@@ -142,14 +142,15 @@ lint_format_safety_bandit_checks:
     - python3 -m ensurepip
     - $pip install Babel 'bandit<1.6.0' pycodestyle pyflakes 'pylint<2.0' safety
     - export EXITVALUE=0
-    - ./hooks/pre-commit || export EXITVALUE=1
-    - ./tests/test-gradlew-fdroid || export EXITVALUE=1
+    - function set_error() { export EXITVALUE=1; printf "\x1b[31mERROR `history|tail -2|head -1|cut -b 6-500`\x1b[0m\n"; }
+    - ./hooks/pre-commit || set_error
+    - ./tests/test-gradlew-fdroid || set_error
     - bandit
         -ii
         -s B110,B322,B404,B408,B410,B603,B607
         -r $CI_PROJECT_DIR fdroid
-        || export EXITVALUE=1
-    - safety check --full-report || export EXITVALUE=1
+        || set_error
+    - safety check --full-report || set_error
     - pylint --rcfile=.pylint-rcfile --output-format=colorized --reports=n
             fdroid
             makebuildserver
@@ -157,9 +158,9 @@ lint_format_safety_bandit_checks:
             fdroidserver/*.py
             tests/*.py
             tests/*.TestCase
-        || export EXITVALUE=1
+        || set_error
     - apk add --no-cache gettext make
-    - make -C locale compile || export EXITVALUE=1
+    - make -C locale compile || set_error
     - rm -f locale/*/*/*.mo
     - pybabel compile --domain=fdroidserver --directory locale 2>&1 | (grep -F "error:" && exit 1) || true
     - exit $EXITVALUE
