@@ -102,7 +102,7 @@ def main():
                         help=_('The file to be included in the repo (path or glob)'))
     parser.add_argument("--no-checksum", action="store_true", default=False,
                         help=_("Don't use rsync checksums"))
-    parser.add_argument("--archive-older", default=20,
+    parser.add_argument("--archive-older", type=int, default=20,
                         help=_("Set maximum releases in repo before older ones are archived"))
     # TODO add --with-btlog
     options = parser.parse_args()
