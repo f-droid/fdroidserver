@@ -512,9 +512,6 @@ def upload_to_virustotal(repo_section, virustotal_apikey):
     import requests
     requests  # stop unused import warning
 
-    logging.getLogger("urllib3").setLevel(logging.WARNING)
-    logging.getLogger("requests").setLevel(logging.WARNING)
-
     if repo_section == 'repo':
         if not os.path.exists('virustotal'):
             os.mkdir('virustotal')
@@ -533,6 +530,9 @@ def upload_to_virustotal(repo_section, virustotal_apikey):
 def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
                              versionCode, **kwargs):
     import requests
+
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
+    logging.getLogger("requests").setLevel(logging.WARNING)
 
     outputfilename = os.path.join('virustotal',
                                   packageName + '_' + str(versionCode)
