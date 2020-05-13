@@ -73,7 +73,7 @@ def main():
                         help=_("Comma separated list of categories."))
     parser.add_argument("-l", "--license", default=None,
                         help=_("Overall license of the project."))
-    parser.add_argument("--omit-disable", default=False,
+    parser.add_argument("--omit-disable", action="store_true", default=False,
                         help=_("Do not add 'disable:' to the generated build entries"))
     parser.add_argument("--rev", default=None,
                         help=_("Allows a different revision (or git branch) to be specified for the initial import"))
