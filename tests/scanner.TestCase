@@ -6,7 +6,10 @@ import logging
 import optparse
 import os
 import sys
+import tempfile
+import textwrap
 import unittest
+from unittest import mock
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -14,6 +17,7 @@ print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
+import fdroidserver.build
 import fdroidserver.common
 import fdroidserver.metadata
 import fdroidserver.scanner
@@ -24,8 +28,14 @@ class ScannerTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.INFO)
         self.basedir = os.path.join(localmodule, 'tests')
+        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
+        if not os.path.exists(self.tmpdir):
+            os.makedirs(self.tmpdir)
+        os.chdir(self.basedir)
 
     def test_scan_source_files(self):
+        fdroidserver.scanner.options = type('', (), {})()
+        fdroidserver.scanner.options.json = False
         source_files = os.path.join(self.basedir, 'source-files')
         projects = {
             'cn.wildfirechat.chat': 4,
@@ -42,6 +52,63 @@ class ScannerTest(unittest.TestCase):
             should = projects.get(os.path.basename(d), 0)
             self.assertEqual(should, fatal_problems,
                              "%s should have %d errors!" % (d, should))
+
+    def test_build_local_scanner(self):
+        """`fdroid build` calls scanner functions, test them here"""
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.build.options = mock.Mock()
+        fdroidserver.build.options.json = False
+        fdroidserver.build.options.notarball = True
+        fdroidserver.build.options.skipscan = False
+        fdroidserver.scanner.options = fdroidserver.build.options
+
+        app = fdroidserver.metadata.App()
+        app.id = 'mocked.app.id'
+        build = fdroidserver.metadata.Build()
+        build.commit = '1.0'
+        build.output = app.id + '.apk'
+        build.scanignore = ['baz.so']
+        build.versionCode = '1'
+        build.versionName = '1.0'
+        vcs = mock.Mock()
+
+        for f in ('baz.so', 'foo.aar', 'gradle-wrapper.jar'):
+            with open(f, 'w') as fp:
+                fp.write('placeholder')
+            self.assertTrue(os.path.exists(f))
+
+        with open('build.xml', 'w') as fp:
+            fp.write(textwrap.dedent(
+                """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                <project basedir="." default="clean" name="mockapp">
+                <target name="release"/>
+                <target name="clean"/>
+                </project>"""))
+
+        def make_fake_apk(output, build):
+            with open(build.output, 'w') as fp:
+                fp.write('APK PLACEHOLDER')
+            return output
+
+        with mock.patch('fdroidserver.common.replace_build_vars', wraps=make_fake_apk):
+            with mock.patch('fdroidserver.common.get_native_code', return_value='x86'):
+                with mock.patch('fdroidserver.common.get_apk_id',
+                                return_value=(app.id, build.versionCode, build.versionName)):
+                    with mock.patch('fdroidserver.common.is_apk_and_debuggable', return_value=False):
+                        fdroidserver.build.build_local(
+                            app, build, vcs,
+                            build_dir=testdir, output_dir=testdir,
+                            log_dir=None, srclib_dir=None, extlib_dir=None, tmp_dir=None,
+                            force=False, onserver=False, refresh=False
+                        )
+        self.assertTrue(os.path.exists('baz.so'))
+        self.assertTrue(os.path.exists('foo.aar'))
+        self.assertFalse(os.path.exists('gradle-wrapper.jar'))
 
 
 if __name__ == "__main__":
