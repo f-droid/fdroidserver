@@ -574,6 +574,9 @@ def main():
     common.setup_global_opts(parser)
     parser.add_argument("-f", "--format", action="store_true", default=False,
                         help=_("Also warn about formatting issues, like rewritemeta -l"))
+    parser.add_argument('--force-yamllint', action="store_true", default=False,
+                        help=_("When linting the entire repository yamllint is disabled by default. "
+                               "This option forces yamllint regardless."))
     parser.add_argument("appid", nargs='*', help=_("applicationId in the form APPID"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
@@ -599,6 +602,29 @@ def main():
     for appid, app in apps.items():
         if app.Disabled:
             continue
+
+        # only run yamllint when linting individual apps.
+        if len(options.appid) > 0 or options.force_yamllint:
+
+            # run yamllint on app metadata
+            ymlpath = os.path.join('metadata', appid + '.yml')
+            if os.path.isfile(ymlpath):
+                yamllintresult = common.run_yamllint(ymlpath)
+                if yamllintresult != '':
+                    print(yamllintresult)
+
+            # run yamllint on srclib metadata
+            srclibs = set()
+            for build in app.builds:
+                for srclib in build.srclibs:
+                    srclibs.add(srclib)
+            for srclib in srclibs:
+                name, ref, number, subdir = common.parse_srclib_spec(srclib)
+                srclibpath = os.path.join('srclibs', name + '.yml')
+                if os.path.isfile(srclibpath):
+                    yamllintresult = common.run_yamllint(srclibpath)
+                    if yamllintresult != '':
+                        print(yamllintresult)
 
         app_check_funcs = [
             check_app_field_types,

@@ -34,7 +34,7 @@ import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
 from testcommon import TmpCwd
-from fdroidserver.exception import FDroidException, VCSException
+from fdroidserver.exception import FDroidException, VCSException, MetaDataException
 
 
 class CommonTest(unittest.TestCase):
@@ -1014,6 +1014,22 @@ class CommonTest(unittest.TestCase):
             subdir = fdroidserver.common.get_gradle_subdir(build_dir, paths)
             self.assertEqual(subdirs[f], subdir)
 
+    def test_parse_srclib_spec_good(self):
+        self.assertEqual(fdroidserver.common.parse_srclib_spec('osmand-external-skia@android/oreo'),
+                         ('osmand-external-skia', 'android/oreo', None, None))
+        self.assertEqual(fdroidserver.common.parse_srclib_spec('1:appcompat@v7'),
+                         ('appcompat', 'v7', '1', None))
+        self.assertEqual(fdroidserver.common.parse_srclib_spec('1:Support/v7/appcompat@android-4.4_r1.1'),
+                         ('Support', 'android-4.4_r1.1', '1', 'v7/appcompat'))
+
+    def test_parse_srclib_spec_bad(self):
+        with self.assertRaises(MetaDataException):
+            self.assertEqual(fdroidserver.common.parse_srclib_spec(None))
+        with self.assertRaises(MetaDataException):
+            self.assertEqual(fdroidserver.common.parse_srclib_spec('no-ref'))
+        with self.assertRaises(MetaDataException):
+            self.assertEqual(fdroidserver.common.parse_srclib_spec('@multi@at-signs@'))
+
     def test_bad_urls(self):
         for url in ('asdf',
                     'file://thing.git',
@@ -1297,6 +1313,32 @@ class CommonTest(unittest.TestCase):
                         skm.assert_called_once_with('srclib/ACRA')
                         dfm.assert_called_once_with('srclib/ACRA')
                         self.assertEqual(ret, ('ACRA', None, 'srclib/ACRA'))
+
+    def test_run_yamllint_wellformed(self):
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('wellformed.yml', 'w') as f:
+                f.write(textwrap.dedent('''\
+                    yaml:
+                        file:
+                            - for
+                            - test
+                        purposeses: true
+                    '''))
+            result = fdroidserver.common.run_yamllint('wellformed.yml')
+            self.assertEqual(result, '')
+
+    def test_run_yamllint_malformed(self):
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            with open('malformed.yml', 'w') as f:
+                f.write(textwrap.dedent('''\
+                    yaml:
+                          - that
+                     fails
+                          - test
+                    '''))
+            result = fdroidserver.common.run_yamllint('malformed.yml')
+            self.assertIsNotNone(result)
+            self.assertNotEqual(result, '')
 
 
 if __name__ == "__main__":

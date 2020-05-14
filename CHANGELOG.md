@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
   ([!669](https://gitlab.com/fdroid/fdroidserver/merge_requests/669))
 * support for srclibs metadata in YAML format
   ([!700](https://gitlab.com/fdroid/fdroidserver/merge_requests/700))
+* check srclibs and app-metadata files with yamllint
+  ([!721](https://gitlab.com/fdroid/fdroidserver/merge_requests/721))
 
 ### Fixed
 * fix build-logs dissapearing when deploying

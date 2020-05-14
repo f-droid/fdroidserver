@@ -63,7 +63,7 @@ import fdroidserver.metadata
 import fdroidserver.lint
 from fdroidserver import _
 from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesException,\
-    BuildException, VerificationException
+    BuildException, VerificationException, MetaDataException
 from .asynchronousfilereader import AsynchronousFileReader
 
 # The path to this fdroidserver distribution
@@ -1807,6 +1807,36 @@ def get_app_from_url(url):
         raise FDroidException("Unable to determine vcs type. " + app.Repo)
 
     return app
+
+
+def parse_srclib_spec(spec):
+
+    if type(spec) != str:
+        raise MetaDataException(_("can not parse scrlib spec "
+                                  "(not a string): '{}'")
+                                .format(spec))
+
+    tokens = spec.split('@')
+    if len(tokens) > 2:
+        raise MetaDataException(_("could not parse srclib spec "
+                                  "(too many '@' signs): '{}'")
+                                .format(spec))
+    elif len(tokens) < 2:
+        raise MetaDataException(_("could not parse srclib spec "
+                                  "(no ref specified): '{}'")
+                                .format(spec))
+
+    name = tokens[0]
+    ref = tokens[1]
+    number = None
+    subdir = None
+
+    if ':' in name:
+        number, name = name.split(':', 1)
+    if '/' in name:
+        name, subdir = name.split('/', 1)
+
+    return (name, ref, number, subdir)
 
 
 def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
@@ -3735,3 +3765,25 @@ def force_exit(exitvalue=0):
     sys.stdout.flush()
     sys.stderr.flush()
     os._exit(exitvalue)
+
+
+YAML_LINT_CONFIG = {'extends': 'default',
+                    'rules': {'document-start': 'disable',
+                              'line-length': 'disable',
+                              'truthy': 'disable'}}
+
+
+def run_yamllint(path, indent=0):
+
+    try:
+        import yamllint.config
+        import yamllint.linter
+    except ImportError:
+        return ''
+
+    result = []
+    with open(path, 'r', encoding='utf-8') as f:
+        problems = yamllint.linter.run(f, yamllint.config.YamlLintConfig(json.dumps(YAML_LINT_CONFIG)))
+    for problem in problems:
+        result.append(' ' * indent + path + ':' + str(problem.line) + ': ' + problem.message)
+    return '\n'.join(result)

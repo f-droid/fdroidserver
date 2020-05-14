@@ -747,7 +747,7 @@ def parse_txt_srclib(metadatapath):
     return thisinfo
 
 
-def parse_yml_srclib(metadatapath):
+def parse_yaml_srclib(metadatapath):
 
     thisinfo = {'RepoType': '',
                 'Repo': '',
@@ -765,9 +765,11 @@ def parse_yml_srclib(metadatapath):
             data = yaml.load(f, Loader=SafeLoader)
         except yaml.error.YAMLError as e:
             warn_or_exception(_("Invalid srclib metadata: could not "
-                                "parse '{file}'"
-                              .format(file=metadatapath)),
-                              e)
+                                "parse '{file}'")
+                              .format(file=metadatapath) + '\n'
+                              + fdroidserver.common.run_yamllint(metadatapath,
+                                                                 indent=4),
+                              cause=e)
             return thisinfo
 
     for key in data.keys():
@@ -820,7 +822,7 @@ def read_srclibs():
 
     for metadatapath in sorted(glob.glob(os.path.join(srcdir, '*.yml'))):
         srclibname = os.path.basename(metadatapath[:-4])
-        srclibs[srclibname] = parse_yml_srclib(metadatapath)
+        srclibs[srclibname] = parse_yaml_srclib(metadatapath)
 
 
 def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
@@ -1102,7 +1104,14 @@ def parse_json_metadata(mf, app):
 
 
 def parse_yaml_metadata(mf, app):
-    yamldata = yaml.load(mf, Loader=SafeLoader)
+    try:
+        yamldata = yaml.load(mf, Loader=SafeLoader)
+    except yaml.YAMLError as e:
+        warn_or_exception(_("could not parse '{path}'")
+                          .format(path=mf.name) + '\n'
+                          + fdroidserver.common.run_yamllint(mf.name,
+                                                             indent=4),
+                          cause=e)
 
     deprecated_in_yaml = ['Provides']
 
