@@ -119,7 +119,6 @@ packages="
  unzip
  xsltproc
  yasm
- yamllint
  zip
  zlib1g:i386
 "
