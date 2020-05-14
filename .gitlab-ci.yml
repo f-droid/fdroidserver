@@ -92,8 +92,10 @@ ubuntu_lts_ppa:
     - echo "deb http://ppa.launchpad.net/fdroid/fdroidserver/ubuntu $RELEASE main" >> /etc/apt/sources.list
     - apt-get update
     - apt-get dist-upgrade
+    - mount | grep binfmt_misc || mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc
     - apt-get install --install-recommends binfmt-support fdroidserver git python3-defusedxml python3-setuptools
-    - grep binfmt /proc/modules || apt -qy purge apksigner
+    - ls -l /proc/sys/fs/binfmt_misc || true
+    - test -e /proc/sys/fs/binfmt_misc/jarwrapper || apt -qy purge apksigner
     - cd tests
     - ./run-tests
 

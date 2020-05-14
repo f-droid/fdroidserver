@@ -492,12 +492,11 @@ def upload_apk_to_android_observatory(path):
                     href = m.group()
 
         page = 'https://androidobservatory.org'
-        message = ''
         if href:
             message = (_('Found {apkfilename} at {url}')
                        .format(apkfilename=apkfilename, url=(page + href)))
-        if message:
             logging.debug(message)
+            return
 
     # upload the file with a post request
     logging.info(_('Uploading {apkfilename} to androidobservatory.org')
@@ -511,9 +510,6 @@ def upload_apk_to_android_observatory(path):
 def upload_to_virustotal(repo_section, virustotal_apikey):
     import requests
     requests  # stop unused import warning
-
-    logging.getLogger("urllib3").setLevel(logging.WARNING)
-    logging.getLogger("requests").setLevel(logging.WARNING)
 
     if repo_section == 'repo':
         if not os.path.exists('virustotal'):
@@ -533,6 +529,9 @@ def upload_to_virustotal(repo_section, virustotal_apikey):
 def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
                              versionCode, **kwargs):
     import requests
+
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
+    logging.getLogger("requests").setLevel(logging.WARNING)
 
     outputfilename = os.path.join('virustotal',
                                   packageName + '_' + str(versionCode)

@@ -189,9 +189,9 @@ def check_regexes(app):
             v = app.get(f)
             t = metadata.fieldtype(f)
             if t == metadata.TYPE_MULTILINE:
-                for l in v.splitlines():
-                    if m.match(l):
-                        yield "%s at line '%s': %s" % (f, l, r)
+                for line in v.splitlines():
+                    if m.match(line):
+                        yield "%s at line '%s': %s" % (f, line, r)
             else:
                 if v is None:
                     continue
@@ -345,12 +345,12 @@ def check_duplicates(app):
             yield _("Description '%s' is just the app's summary") % app.Summary
 
     seenlines = set()
-    for l in app.Description.splitlines():
-        if len(l) < 1:
+    for line in app.Description.splitlines():
+        if len(line) < 1:
             continue
-        if l in seenlines:
+        if line in seenlines:
             yield _("Description has a duplicate line")
-        seenlines.add(l)
+        seenlines.add(line)
 
 
 desc_url = re.compile(r'(^|[^[])\[([^ ]+)( |\]|$)')
@@ -369,18 +369,18 @@ def check_bulleted_lists(app):
     validchars = ['*', '#']
     lchar = ''
     lcount = 0
-    for l in app.Description.splitlines():
-        if len(l) < 1:
+    for line in app.Description.splitlines():
+        if len(line) < 1:
             lcount = 0
             continue
 
-        if l[0] == lchar and l[1] == ' ':
+        if line[0] == lchar and line[1] == ' ':
             lcount += 1
             if lcount > 2 and lchar not in validchars:
                 yield _("Description has a list (%s) but it isn't bulleted (*) nor numbered (#)") % lchar
                 break
         else:
-            lchar = l[0]
+            lchar = line[0]
             lcount = 1
 
 
