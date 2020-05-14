@@ -53,10 +53,11 @@ fi
 # * E501: line too long (82 > 79 characters)
 #   - Recommended for readability but not enforced
 #   - Some lines are awkward to wrap around a char limit
+# * E741: ambiguous variable name 'l'
 # * W503: line break before binary operator
 #   - Quite pedantic
 
-PEP8_IGNORE="E123,E501,W503"
+PEP8_IGNORE="E123,E501,E741,W503"
 
 err() {
 	echo >&2 ERROR: "$@"

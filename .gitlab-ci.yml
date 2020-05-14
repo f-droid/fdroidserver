@@ -37,16 +37,14 @@ metadata_v0:
           metadata/dump_*/*.yaml
     - diff -uw metadata/dump_*
 
-debian_testing:
-  image: debian:testing
-  only:
-    - master@fdroid/fdroidserver
+debian_buster:
+  image: debian:buster
   script:
     - apt-get -qy update
     - apt-get -qy dist-upgrade
     - apt-get -qy install --no-install-recommends
         fdroidserver git gnupg python3-defusedxml python3-setuptools
-    - sed -i -e 's,testing,sid,g' -e  's,testing,sid,g' /etc/apt/sources.list
+    - echo "deb http://deb.debian.org/debian sid main" >> /etc/apt/sources.list
     - apt-get -qy update
     - apt-get install -y --no-install-recommends aapt androguard android-platform-tools-base zipalign
     - python3 -c 'import fdroidserver'
@@ -135,7 +133,7 @@ lint_format_safety_bandit_checks:
         -x fdroidserver/dscanner.py,docker/install_agent.py,docker/drozer.py
         -r $CI_PROJECT_DIR fdroid
         || export EXITVALUE=1
-    - safety check --full-report || export EXITVALUE=1
+    - safety check --full-report --ignore=38224 || export EXITVALUE=1
     - pylint --rcfile=.pylint-rcfile --output-format=colorized --reports=n
             fdroid
             makebuildserver
