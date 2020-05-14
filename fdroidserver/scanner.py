@@ -250,7 +250,7 @@ def scan_source(build_dir, build=metadata.Build()):
                     if is_used_by_gradle(line):
                         for name in suspects_found(line):
                             count += handleproblem('usual suspect \'%s\' at line %d' % (name, i + 1), path_in_build_dir, filepath)
-                noncomment_lines = [l for l in lines if not common.gradle_comment.match(l)]
+                noncomment_lines = [line for line in lines if not common.gradle_comment.match(line)]
                 joined = re.sub(r'[\n\r\s]+', ' ', ' '.join(noncomment_lines))
                 for m in gradle_mavenrepo.finditer(joined):
                     url = m.group(2)
