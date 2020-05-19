@@ -227,6 +227,19 @@ class MetadataTest(unittest.TestCase):
             with self.assertRaises(MetaDataException):
                 fdroidserver.metadata.parse_yaml_metadata(mf, {})
 
+    def test_parse_yaml_srclib_corrupt_file(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        srclibfile = os.path.join(testdir, 'srclib', 'mock.yml')
+        os.mkdir(os.path.dirname(srclibfile))
+        with open(srclibfile, 'w') as fp:
+            fp.write(textwrap.dedent("""
+            - RepoType: git
+            - Repo: https://github.com/realm/realm-js.git
+            """))
+        with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
+            with self.assertRaises(MetaDataException):
+                fdroidserver.metadata.parse_yaml_srclib(srclibfile)
+
     def test_write_yaml_with_placeholder_values(self):
         mf = io.StringIO()
 

@@ -26,6 +26,8 @@ class ScannerTest(unittest.TestCase):
         self.basedir = os.path.join(localmodule, 'tests')
 
     def test_scan_source_files(self):
+        fdroidserver.scanner.options = type('', (), {})()
+        fdroidserver.scanner.options.json = False
         source_files = os.path.join(self.basedir, 'source-files')
         projects = {
             'cn.wildfirechat.chat': 4,

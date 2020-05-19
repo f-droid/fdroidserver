@@ -763,6 +763,9 @@ def parse_yaml_srclib(metadatapath):
     with open(metadatapath, "r", encoding="utf-8") as f:
         try:
             data = yaml.load(f, Loader=SafeLoader)
+            if type(data) is not dict:
+                raise yaml.error.YAMLError(_('{file} is blank or corrupt!')
+                                           .format(file=metadatapath))
         except yaml.error.YAMLError as e:
             warn_or_exception(_("Invalid srclib metadata: could not "
                                 "parse '{file}'")
