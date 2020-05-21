@@ -475,8 +475,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
         def del_dirs(dl):
             for d in dl:
-                if d in dirs:
-                    shutil.rmtree(os.path.join(root, d))
+                shutil.rmtree(os.path.join(root, d), ignore_errors=True)
 
         def del_files(fl):
             for f in fl:
