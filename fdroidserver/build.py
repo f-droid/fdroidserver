@@ -493,6 +493,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
                       os.path.join('build', 'outputs'),
                       os.path.join('build', 'reports'),
                       os.path.join('build', 'tmp'),
+                      os.path.join('buildSrc', 'build'),
                       '.gradle'])
             del_files(['gradlew', 'gradlew.bat'])
 
