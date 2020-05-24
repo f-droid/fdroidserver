@@ -16,10 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import json
 import os
 import re
-import sys
 import traceback
 from argparse import ArgumentParser
 import logging
@@ -32,8 +30,6 @@ from .exception import BuildException, VCSException
 
 config = None
 options = None
-
-json_per_build = None
 
 
 def get_gradle_compile_commands(build):
@@ -145,12 +141,10 @@ def scan_source(build_dir, build=metadata.Build()):
 
     def ignoreproblem(what, path_in_build_dir):
         logging.info('Ignoring %s at %s' % (what, path_in_build_dir))
-        json_per_build['infos'].append([what, path_in_build_dir])
         return 0
 
     def removeproblem(what, path_in_build_dir, filepath):
         logging.info('Removing %s at %s' % (what, path_in_build_dir))
-        json_per_build['infos'].append([what, path_in_build_dir])
         os.remove(filepath)
         return 0
 
@@ -158,17 +152,13 @@ def scan_source(build_dir, build=metadata.Build()):
         if toignore(path_in_build_dir):
             return
         logging.warn('Found %s at %s' % (what, path_in_build_dir))
-        json_per_build['warnings'].append([what, path_in_build_dir])
 
     def handleproblem(what, path_in_build_dir, filepath):
         if toignore(path_in_build_dir):
             return ignoreproblem(what, path_in_build_dir)
         if todelete(path_in_build_dir):
             return removeproblem(what, path_in_build_dir, filepath)
-        if options.json:
-            json_per_build['errors'].append([what, path_in_build_dir])
-        if not options.json or options.verbose:
-            logging.error('Found %s at %s' % (what, path_in_build_dir))
+        logging.error('Found %s at %s' % (what, path_in_build_dir))
         return 1
 
     def is_executable(path):
@@ -259,8 +249,7 @@ def scan_source(build_dir, build=metadata.Build()):
                 for i, line in enumerate(lines):
                     if is_used_by_gradle(line):
                         for name in suspects_found(line):
-                            count += handleproblem("usual suspect \'%s\'" % (name),
-                                                   path_in_build_dir, filepath)
+                            count += handleproblem('usual suspect \'%s\' at line %d' % (name, i + 1), path_in_build_dir, filepath)
                 noncomment_lines = [line for line in lines if not common.gradle_comment.match(line)]
                 joined = re.sub(r'[\n\r\s]+', ' ', ' '.join(noncomment_lines))
                 for m in gradle_mavenrepo.finditer(joined):
@@ -291,7 +280,7 @@ def scan_source(build_dir, build=metadata.Build()):
 
 def main():
 
-    global config, options, json_per_build
+    global config, options
 
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
@@ -299,18 +288,9 @@ def main():
     parser.add_argument("appid", nargs='*', help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))
     parser.add_argument("-f", "--force", action="store_true", default=False,
                         help=_("Force scan of disabled apps and builds."))
-    parser.add_argument("--json", action="store_true", default=False,
-                        help=_("Output JSON to stdout."))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
-
-    json_output = dict()
-    if options.json:
-        if options.verbose:
-            logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
-        else:
-            logging.getLogger().setLevel(logging.ERROR)
 
     config = common.read_config(options)
 
@@ -329,11 +309,8 @@ def main():
 
     for appid, app in apps.items():
 
-        json_per_appid = dict()
-
         if app.Disabled and not options.force:
             logging.info(_("Skipping {appid}: disabled").format(appid=appid))
-            json_per_appid = json_per_appid['infos'].append('Skipping: disabled')
             continue
 
         try:
@@ -344,23 +321,20 @@ def main():
 
             if app.builds:
                 logging.info(_("Processing {appid}").format(appid=appid))
-                # Set up vcs interface and make sure we have the latest code...
-                vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
             else:
                 logging.info(_("{appid}: no builds specified, running on current source state")
                              .format(appid=appid))
-                json_per_build = {'errors': [], 'warnings': [], 'infos': []}
-                json_per_appid['current-source-state'] = json_per_build
                 count = scan_source(build_dir)
                 if count > 0:
                     logging.warn(_('Scanner found {count} problems in {appid}:')
                                  .format(count=count, appid=appid))
                     probcount += count
-                app.builds = []
+                continue
+
+            # Set up vcs interface and make sure we have the latest code...
+            vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
 
             for build in app.builds:
-                json_per_build = {'errors': [], 'warnings': [], 'infos': []}
-                json_per_appid[build.versionCode] = json_per_build
 
                 if build.disable and not options.force:
                     logging.info("...skipping version %s - %s" % (
@@ -391,16 +365,8 @@ def main():
                 appid, traceback.format_exc()))
             probcount += 1
 
-        for k, v in json_per_appid.items():
-            if len(v['errors']) or len(v['warnings']) or len(v['infos']):
-                json_output[appid] = json_per_appid
-                break
-
     logging.info(_("Finished"))
-    if options.json:
-        print(json.dumps(json_output))
-    else:
-        print(_("%d problems found") % probcount)
+    print(_("%d problems found") % probcount)
 
 
 if __name__ == "__main__":
