@@ -117,7 +117,7 @@ def get_build_vm(srvdir, provider=None):
             logging.debug('build vm provider \'virtualbox\' selected')
             return VirtualboxBuildVm(abssrvdir)
         else:
-            logging.warn('build vm provider not supported: \'%s\'', provider)
+            logging.warning('build vm provider not supported: \'%s\'', provider)
 
     # try guessing provider from installed software
     kvm_installed = shutil.which('kvm') is not None
@@ -451,8 +451,8 @@ class LibvirtBuildVm(FDroidBuildVm):
                 os.remove('box.img')
 
         else:
-            logging.warn("could not connect to storage-pool 'default', "
-                         "skip packaging buildserver box")
+            logging.warning("could not connect to storage-pool 'default', "
+                            "skip packaging buildserver box")
 
     def box_add(self, boxname, boxfile, force=True):
         boximg = '%s_vagrant_box_image_0.img' % (boxname)

@@ -207,7 +207,7 @@ def update_awsbucket_libcloud(repo_section):
                         s3url = 's3://' + awsbucket + '/' + obj.name
                         logging.info(' deleting ' + s3url)
                         if not driver.delete_object(obj):
-                            logging.warn('Could not delete ' + s3url)
+                            logging.warning('Could not delete ' + s3url)
                         upload = True
 
             if upload:
@@ -229,7 +229,7 @@ def update_awsbucket_libcloud(repo_section):
         object_name, obj = objs.popitem()
         s3url = 's3://' + awsbucket + '/' + object_name
         if object_name.startswith(upload_dir):
-            logging.warn(' deleting ' + s3url)
+            logging.warning(' deleting ' + s3url)
             driver.delete_object(obj)
         else:
             logging.info(' skipping ' + s3url)
@@ -773,8 +773,9 @@ def main():
             and not config.get('binary_transparency_remote') \
             and not config.get('virustotal_apikey') \
             and local_copy_dir is None:
-        logging.warn(_('No option set! Edit your config.py to set at least one of these:')
-                     + '\nserverwebroot, servergitmirrors, local_copy_dir, awsbucket, virustotal_apikey, androidobservatory, or binary_transparency_remote')
+        logging.warning(_('No option set! Edit your config.py to set at least one of these:')
+                        + '\nserverwebroot, servergitmirrors, local_copy_dir, awsbucket, '
+                        + 'virustotal_apikey, androidobservatory, or binary_transparency_remote')
         sys.exit(1)
 
     repo_sections = ['repo']

@@ -76,7 +76,9 @@ def extract(options):
                         if tmp_apk and os.path.exists(tmp_apk):
                             os.remove(tmp_apk)
                 else:
-                    logging.warn(_('refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}').format(apkfilename=apk))
+                    logging.warning(_('refuse downloading via insecure HTTP connection '
+                                      '(use HTTPS or specify --no-https-check): {apkfilename}')
+                                    .format(apkfilename=apk))
         except FDroidException as e:
             logging.warning(_("Failed fetching signatures for '{apkfilename}': {error}")
                             .format(apkfilename=apk, error=e))

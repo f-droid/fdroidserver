@@ -278,7 +278,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             ftp.get(toolsversion_log, os.path.join(log_dir, toolsversion_log))
             logging.debug('retrieved %s', toolsversion_log)
         except Exception as e:
-            logging.warn('could not get %s from builder vm: %s' % (toolsversion_log, e))
+            logging.warning('could not get %s from builder vm: %s' % (toolsversion_log, e))
 
         # Retrieve the built files...
         logging.info("Retrieving build output...")

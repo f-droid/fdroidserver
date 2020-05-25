@@ -109,8 +109,8 @@ def main():
                 continue
 
             if fail == "INSTALL_FAILED_ALREADY_EXISTS":
-                logging.warn(_("'{apkfilename}' is already installed on {dev}.")
-                             .format(apkfilename=apk, dev=dev))
+                logging.warning(_('"{apkfilename}" is already installed on {dev}.')
+                                .format(apkfilename=apk, dev=dev))
             else:
                 raise FDroidException(_("Failed to install '{apkfilename}' on {dev}: {error}")
                                       .format(apkfilename=apk, dev=dev, error=fail))
