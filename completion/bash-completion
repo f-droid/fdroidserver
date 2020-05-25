@@ -26,16 +26,15 @@ __fdroid_init() {
 	(( $# >= 1 )) && __complete_${1}
 }
 
-__by_ext() {
-	local ext="$1"
-	files=( metadata/*.$ext )
+__get_appid() {
+	files=( metadata/*.yml )
 	files=( ${files[@]#metadata/} )
-	files=${files[@]%.$ext}
+	files=${files[@]%.yml}
 	echo "$files"
 }
 
 __package() {
-	files="$(__by_ext txt) $(__by_ext yml) $(__by_ext json)"
+	files="$(__get_appid)"
 	COMPREPLY=( $( compgen -W "$files" -- $cur ) )
 }
 
