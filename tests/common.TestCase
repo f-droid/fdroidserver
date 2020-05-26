@@ -1315,6 +1315,11 @@ class CommonTest(unittest.TestCase):
                         self.assertEqual(ret, ('ACRA', None, 'srclib/ACRA'))
 
     def test_run_yamllint_wellformed(self):
+        try:
+            import yamllint.config
+            yamllint.config  # make pyflakes ignore this
+        except ImportError:
+            self.skipTest('yamllint not installed')
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             with open('wellformed.yml', 'w') as f:
                 f.write(textwrap.dedent('''\
@@ -1328,6 +1333,11 @@ class CommonTest(unittest.TestCase):
             self.assertEqual(result, '')
 
     def test_run_yamllint_malformed(self):
+        try:
+            import yamllint.config
+            yamllint.config  # make pyflakes ignore this
+        except ImportError:
+            self.skipTest('yamllint not installed')
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             with open('malformed.yml', 'w') as f:
                 f.write(textwrap.dedent('''\
