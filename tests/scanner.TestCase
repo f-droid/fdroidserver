@@ -53,6 +53,33 @@ class ScannerTest(unittest.TestCase):
             self.assertEqual(should, fatal_problems,
                              "%s should have %d errors!" % (d, should))
 
+    def test_get_gradle_compile_commands(self):
+        test_files = [
+            ('source-files/fdroid/fdroidclient/build.gradle', 'yes', 17),
+            ('source-files/com.nextcloud.client/build.gradle', 'generic', 24),
+            ('source-files/com.kunzisoft.testcase/build.gradle', 'libre', 4),
+            ('source-files/cn.wildfirechat.chat/chat/build.gradle', 'yes', 33),
+            ('source-files/org.tasks/app/build.gradle.kts', 'generic', 39),
+            ('source-files/at.bitfire.davdroid/build.gradle', 'standard', 16),
+            ('source-files/se.manyver/android/app/build.gradle', 'indie', 29),
+            ('source-files/osmandapp/osmand/build.gradle', 'free', 5),
+            ('source-files/eu.siacs.conversations/build.gradle', 'free', 23),
+            ('source-files/org.mozilla.rocket/app/build.gradle', 'focus', 42),
+        ]
+
+        for f, flavor, count in test_files:
+            i = 0
+            build = fdroidserver.metadata.Build()
+            build.gradle = [flavor]
+            regexs = fdroidserver.scanner.get_gradle_compile_commands(build)
+            with open(f) as fp:
+                for line in fp.readlines():
+                    for regex in regexs:
+                        m = regex.match(line)
+                        if m:
+                            i += 1
+            self.assertEqual(count, i)
+
     def test_build_local_scanner(self):
         """`fdroid build` calls scanner functions, test them here"""
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
