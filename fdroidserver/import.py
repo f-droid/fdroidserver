@@ -131,9 +131,9 @@ def main():
         if not package:
             raise FDroidException(_("Couldn't find package ID"))
         if not versionName:
-            logging.warn(_("Couldn't find latest version name"))
+            logging.warning(_('Could not find latest version name'))
         if not versionCode:
-            logging.warn(_("Couldn't find latest version code"))
+            logging.warning(_('Could not find latest version code'))
     else:
         raise FDroidException(_("No gradle project could be found. Specify --subdir?"))
 

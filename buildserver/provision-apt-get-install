@@ -115,6 +115,7 @@ packages="
  scons
  sqlite3
  subversion
+ sudo
  swig
  unzip
  xsltproc

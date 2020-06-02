@@ -60,20 +60,14 @@ __apk_vercode() {
 }
 
 __vercode() {
-	local p v
-	echo $cur | IFS=':' read p v
-
-	COMPREPLY=( $( compgen -P "${p}:" -W "$( while read line; do
-		if [[ "$line" == "Build Version:"* ]]
-		then
-			line="${line#*,}"
-			printf "${line%%,*} "
-		elif [[ "$line" == "Build:"* ]]
-		then
-			line="${line#*,}"
-			printf "${line%%,*} "
-		fi
-		done < "metadata/${p}.yml" )" -- $cur ) )
+	if [ $prev = ":" ]; then
+	    appid="${COMP_WORDS[COMP_CWORD-2]}"
+	elif [ $cur = ":" ]; then
+	    appid=$prev
+	    cur=""
+	fi
+	versionCodes=`sed -En 's,^ +versionCode: +([0-9]+) *$,\1,p' metadata/${appid}.yml`
+	COMPREPLY=( $( compgen -W "$versionCodes" -- $cur ) )
 }
 
 __complete_options() {
@@ -91,11 +85,16 @@ __complete_build() {
 	opts="-v -q -l -s -t -f -a -w"
 
 	lopts="--verbose --quiet --latest --stop --test --server --reset-server --skip-scan --no-tarball --force --all --wiki --no-refresh"
+	case "${prev}" in
+		:)
+			__vercode
+			return 0;;
+	esac
 	case "${cur}" in
 		-*)
 			__complete_options
 			return 0;;
-		*:*)
+		:)
 			__vercode
 			return 0;;
 		*)

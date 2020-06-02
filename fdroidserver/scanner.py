@@ -159,7 +159,7 @@ def scan_source(build_dir, build=metadata.Build()):
     def warnproblem(what, path_in_build_dir):
         if toignore(path_in_build_dir):
             return
-        logging.warn('Found %s at %s' % (what, path_in_build_dir))
+        logging.warning('Found %s at %s' % (what, path_in_build_dir))
         if json_per_build is not None:
             json_per_build['warnings'].append([what, path_in_build_dir])
 
@@ -356,8 +356,8 @@ def main():
                 json_per_appid['current-source-state'] = json_per_build
                 count = scan_source(build_dir)
                 if count > 0:
-                    logging.warn(_('Scanner found {count} problems in {appid}:')
-                                 .format(count=count, appid=appid))
+                    logging.warning(_('Scanner found {count} problems in {appid}:')
+                                    .format(count=count, appid=appid))
                     probcount += count
                 app.builds = []
 
@@ -378,19 +378,19 @@ def main():
 
                 count = scan_source(build_dir, build)
                 if count > 0:
-                    logging.warn(_('Scanner found {count} problems in {appid}:{versionCode}:')
-                                 .format(count=count, appid=appid, versionCode=build.versionCode))
+                    logging.warning(_('Scanner found {count} problems in {appid}:{versionCode}:')
+                                    .format(count=count, appid=appid, versionCode=build.versionCode))
                     probcount += count
 
         except BuildException as be:
-            logging.warn("Could not scan app %s due to BuildException: %s" % (
+            logging.warning('Could not scan app %s due to BuildException: %s' % (
                 appid, be))
             probcount += 1
         except VCSException as vcse:
-            logging.warn("VCS error while scanning app %s: %s" % (appid, vcse))
+            logging.warning('VCS error while scanning app %s: %s' % (appid, vcse))
             probcount += 1
         except Exception:
-            logging.warn("Could not scan app %s due to unknown error: %s" % (
+            logging.warning('Could not scan app %s due to unknown error: %s' % (
                 appid, traceback.format_exc()))
             probcount += 1
 

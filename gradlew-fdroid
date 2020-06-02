@@ -168,6 +168,7 @@ for f in {.,..}/gradle/wrapper/gradle-wrapper.properties; do
         if [[ $line == 'distributionUrl='* ]]; then
             wrapper_ver=${line#*/gradle-}
             wrapper_ver=${wrapper_ver%-*.zip}
+            wrapper_ver=$(printf $wrapper_ver | tr -d '\r') # strip Windows linefeeds
             break 2
         fi
     done < $f
@@ -186,9 +187,11 @@ for f in {.,..}/build.gradle{,.kts}; do
         if [[ -z "$plugin_pver" && $line == *'com.android.tools.build:gradle:'* ]]; then
             plugin_pver=${line#*[\'\"]com.android.tools.build:gradle:}
             plugin_pver=${plugin_pver%[\'\"]*}
+            plugin_pver=$(printf $plugin_pver | tr -d '\r') # strip Windows linefeeds
         elif [[ -z "$wrapper_ver" && $line == *'gradleVersion = '* ]]; then
             wrapper_ver=${line#*gradleVersion*=*[\'\"]}
             wrapper_ver=${wrapper_ver%[\'\"]*}
+            wrapper_ver=$(printf $wrapper_ver | tr -d '\r') # strip Windows linefeeds
         fi
     done < $f
 done

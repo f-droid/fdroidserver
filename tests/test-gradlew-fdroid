@@ -19,8 +19,13 @@ exit_value=0
 basedir=$(cd $(dirname $0)/..; pwd)
 export https_proxy=127.7.7.7:7 # fake proxy to block downloading
 
+# force test file to have Windows linefeeds
+sed -i -e $'s/\r$//' -e  $'s/$/\r/' \
+    $basedir/tests/source-files/yuriykulikov/AlarmClock/gradle/wrapper/gradle-wrapper.properties
+
 run_test osmandapp/osmand 2.2.1
 run_test com.integreight.onesheeld 3.3
 run_test se.manyver/android 5.5
+run_test yuriykulikov/AlarmClock 5.1.1
 
 exit $exit_value

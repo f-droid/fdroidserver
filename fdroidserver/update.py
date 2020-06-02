@@ -366,7 +366,7 @@ def update_wiki(apps, sortedids, apks):
                 else:
                     logging.debug("Page " + page.name + " is unchanged")
             else:
-                logging.warn("Deleting page " + page.name)
+                logging.warning('Deleting page ' + page.name)
                 page.delete('No longer published')
         for pagename, text in genp.items():
             logging.debug("Checking " + pagename)
@@ -2162,15 +2162,15 @@ def main():
                 msg = _("{apkfilename} ({appid}) has no metadata!") \
                     .format(apkfilename=apk['apkName'], appid=apk['packageName'])
                 if options.delete_unknown:
-                    logging.warn(msg + '\n\t' + _("deleting: repo/{apkfilename}")
-                                 .format(apkfilename=apk['apkName']))
+                    logging.warning(msg + '\n\t' + _("deleting: repo/{apkfilename}")
+                                    .format(apkfilename=apk['apkName']))
                     rmf = os.path.join(repodirs[0], apk['apkName'])
                     if not os.path.exists(rmf):
                         logging.error(_("Could not find {path} to remove it").format(path=rmf))
                     else:
                         os.remove(rmf)
                 else:
-                    logging.warn(msg + '\n\t' + _("Use `fdroid update -c` to create it."))
+                    logging.warning(msg + '\n\t' + _('Use `fdroid update -c` to create it.'))
 
     copy_triple_t_store_metadata(apps)
     insert_obbs(repodirs[0], apps, apks)

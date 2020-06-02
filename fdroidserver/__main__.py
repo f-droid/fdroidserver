@@ -137,9 +137,9 @@ def main():
 
     system_langcode, system_encoding = locale.getdefaultlocale()
     if system_encoding is None or system_encoding.lower() not in ('utf-8', 'utf8'):
-        logging.warn(_("Encoding is set to '{enc}' fdroid might run "
-                       "into encoding issues. Please set it to 'UTF-8' "
-                       "for best results.".format(enc=system_encoding)))
+        logging.warning(_("Encoding is set to '{enc}' fdroid might run "
+                          "into encoding issues. Please set it to 'UTF-8' "
+                          "for best results.".format(enc=system_encoding)))
 
     try:
         mod.main()
