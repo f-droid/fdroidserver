@@ -200,8 +200,8 @@ __complete_rewritemeta() {
 }
 
 __complete_lint() {
-	opts="-v -q"
-	lopts="--verbose --quiet"
+	opts="-v -q -f"
+	lopts="--verbose --quiet --force-yamllint --format"
 	case "${cur}" in
 		-*)
 			__complete_options
