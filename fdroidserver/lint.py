@@ -605,6 +605,7 @@ def main():
 
         if options.force_yamllint:
             import yamllint  # throw error if it is not installed
+            yamllint  # make pyflakes ignore this
 
         # only run yamllint when linting individual apps.
         if len(options.appid) > 0 or options.force_yamllint:
