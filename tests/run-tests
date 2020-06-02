@@ -607,6 +607,19 @@ grep -F 'info.guardianproject.urzip_100.apk' repo/index-v1.json repo/index.xml
 grep -F 'info.guardianproject.urzip_100_b4964fd.apk' repo/index-v1.json
 ! grep -F 'info.guardianproject.urzip_100_b4964fd.apk' repo/index.xml
 
+#------------------------------------------------------------------------------#
+echo_header "test whatsnew from fastlane without CVC set"
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+fdroid_init_with_prebuilt_keystore
+echo "accepted_formats = ['txt', 'yml']" >> config.py
+mkdir -p metadata/com.politedroid/en-US/changelogs/
+cp $WORKSPACE/tests/repo/com.politedroid_6.apk repo
+cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata
+echo "whatsnew test" > metadata/com.politedroid/en-US/changelogs/6.txt
+sed -i -e '/Current Version/d' metadata/com.politedroid.txt
+$fdroid update --pretty --nosign
+grep -F 'whatsnew' repo/index-v1.json
 
 #------------------------------------------------------------------------------#
 echo_header "test metadata checks"
