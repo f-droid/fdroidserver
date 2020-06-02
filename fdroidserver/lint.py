@@ -603,6 +603,9 @@ def main():
         if app.Disabled:
             continue
 
+        if options.force_yamllint:
+            import yamllint  # throw error if it is not installed
+
         # only run yamllint when linting individual apps.
         if len(options.appid) > 0 or options.force_yamllint:
 
