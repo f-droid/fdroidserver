@@ -25,6 +25,7 @@ README.rst
 tmp/
 /tests/repo/icons*
 /tests/repo/latestapps.dat
+/tests/repo/status
 
 # files used in manual testing
 /config.py
