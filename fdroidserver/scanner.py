@@ -228,16 +228,16 @@ def scan_source(build_dir, build=metadata.Build()):
             path_in_build_dir = os.path.relpath(filepath, build_dir)
             _ignored, ext = common.get_extension(path_in_build_dir)
 
-            if ext == 'so':
-                count += handleproblem('shared library', path_in_build_dir, filepath)
-            elif ext == 'a':
-                count += handleproblem('static library', path_in_build_dir, filepath)
+            if ext == 'a':
+                count += handleproblem(_('static library'), path_in_build_dir, filepath)
             elif ext == 'aar':
                 count += handleproblem(_('Android AAR library'), path_in_build_dir, filepath)
             elif ext == 'class':
-                count += handleproblem('Java compiled class', path_in_build_dir, filepath)
+                count += handleproblem(_('Java compiled class'), path_in_build_dir, filepath)
+            elif ext == 'so':
+                count += handleproblem(_('shared library'), path_in_build_dir, filepath)
             elif ext == 'apk':
-                removeproblem('APK file', path_in_build_dir, filepath)
+                removeproblem(_('Android APK file'), path_in_build_dir, filepath)
 
             elif ext == 'jar':
                 for name in suspects_found(curfile):
@@ -279,16 +279,16 @@ def scan_source(build_dir, build=metadata.Build()):
 
             elif is_executable(filepath):
                 if is_binary(filepath) and not safe_path(path_in_build_dir):
-                    warnproblem('executable binary, possibly code', path_in_build_dir)
+                    warnproblem(_('executable binary, possibly code'), path_in_build_dir)
 
     for p in scanignore:
         if p not in scanignore_worked:
-            logging.error('Unused scanignore path: %s' % p)
+            logging.error(_('Unused scanignore path: %s') % p)
             count += 1
 
     for p in scandelete:
         if p not in scandelete_worked:
-            logging.error('Unused scandelete path: %s' % p)
+            logging.error(_('Unused scandelete path: %s') % p)
             count += 1
 
     return count
