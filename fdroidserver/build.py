@@ -512,6 +512,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
     else:
         # Scan before building...
         logging.info("Scanning source for common problems...")
+        scanner.options = options  # pass verbose through
         count = scanner.scan_source(build_dir, build)
         if count > 0:
             if force:
