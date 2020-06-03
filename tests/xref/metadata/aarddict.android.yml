@@ -1,0 +1,104 @@
+Categories:
+  - Reading
+License: GPL-3.0-only
+WebSite: http://aarddict.org
+SourceCode: https://github.com/aarddict/android
+IssueTracker: https://github.com/aarddict/android/issues
+Donate: http://aarddict.org/android
+FlattrID: '80944'
+
+AutoName: Aard
+Description: |-
+    '''Note:''' This app is no longer maintained.
+
+    * looks up words fast even with huge dictionaries like English Wikipedia
+    * looks up words in multiple dictionaries in multiple languages without switching
+    * works great as an offline Wikipedia reader
+    * uses same the efficient, highly compressed dictionary data storage format as the desktop version
+    * it can integrate with both [[org.geometerplus.zlibrary.ui.android]] and [[org.coolreader]]
+
+    Ready-made dictionaries can be found on the website, or you can roll your own
+    with the tools on the website.
+
+RepoType: git
+Repo: https://github.com/aarddict/android.git
+
+Builds:
+  - versionName: 1.3.1
+    versionCode: 10
+    commit: 1.3.1
+    prebuild: mv lib libs
+
+  - versionName: 1.4.0
+    versionCode: 12
+    commit: 7df930161256324e31b2c720281629f58446b6d6
+    prebuild: mv lib libs
+
+  - versionName: 1.4.1
+    versionCode: 13
+    commit: b81c9c8c52de5f65b550e3c608a610962582e5cd
+    prebuild: mv lib libs
+
+  - versionName: 1.6.1
+    versionCode: 16
+    commit: 1.6.1
+    target: android-17
+
+  - versionName: 1.6.2
+    versionCode: 17
+    commit: 1.6.2
+    target: android-17
+
+  - versionName: 1.6.3
+    versionCode: 18
+    commit: 1.6.3
+    target: android-17
+
+  - versionName: 1.6.4
+    versionCode: 19
+    commit: 1.6.4
+    target: android-17
+
+  - versionName: 1.6.5
+    versionCode: 20
+    commit: 1.6.5
+    target: android-17
+
+  - versionName: 1.6.6
+    versionCode: 21
+    commit: 1.6.6
+    target: android-17
+
+  - versionName: 1.6.7
+    versionCode: 22
+    commit: 1.6.7
+    target: android-17
+
+  - versionName: 1.6.8
+    versionCode: 23
+    commit: 1.6.8
+    target: android-17
+
+  - versionName: 1.6.9
+    versionCode: 24
+    commit: 1.6.9
+    target: android-17
+
+  - versionName: 1.6.10
+    versionCode: 25
+    commit: 1.6.10
+    target: android-17
+
+  - versionName: 1.6.11
+    versionCode: 26
+    commit: 1.6.11
+    target: android-17
+
+MaintainerNotes: |-
+    Github site points to https://github.com/itkach/aard2-android (itkach.aard2) as successor.
+    We cannot point to this app as all its builds are disabled (as of 2018-10-16).
+
+AutoUpdateMode: Version %v
+UpdateCheckMode: Tags
+CurrentVersion: 1.6.11
+CurrentVersionCode: 26

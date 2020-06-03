@@ -1,0 +1,551 @@
+Categories:
+  - Reading
+License: GPL-2.0-only
+AuthorName: Vadim Lopatin
+AuthorEmail: coolreader.org@gmail.com
+WebSite: https://sourceforge.net/projects/crengine/
+SourceCode: https://github.com/buggins/coolreader
+IssueTracker: https://github.com/buggins/coolreader/issues
+Donate: https://sourceforge.net/p/crengine/donate
+
+AutoName: Cool Reader
+Description: |-
+    An e-book reader. Supported formats: FB2, TXT, RTF, TCR, HTML, EPUB, CHM. Browse
+    free books online and add your own OPDS shares.
+
+    The default dictionary app is non-free. However, you can choose
+    [[aarddict.android]] as a dictionary from the Dictionary section of the
+    Settings.
+
+RepoType: git
+Repo: https://github.com/buggins/coolreader
+
+Builds:
+  - versionName: 3.0.39-35
+    versionCode: 60
+    commit: 68ad007ac1272ef322fd61cb6591618723422380
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.40-1
+    versionCode: 64
+    commit: cr3.0.40-1
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.40-6
+    versionCode: 69
+    commit: cr3.0.40-6
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.41-3
+    versionCode: 75
+    commit: cr3.0.41-3
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.41-9
+    versionCode: 81
+    commit: cr3.0.41-9
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.42-6
+    versionCode: 86
+    commit: cr3.0.42-6
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.43-4
+    versionCode: 94
+    commit: cr3.0.43-4
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.43-6
+    versionCode: 96
+    commit: cr3.0.43-6
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.44-03
+    versionCode: 103
+    commit: cr3.0.44-3
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.44-09
+    versionCode: 109
+    commit: cr3.0.44-9
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.45-04
+    versionCode: 114
+    disable: tag points to wrong version
+    commit: unknown - see disabled
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.45-09
+    versionCode: 119
+    disable: tag points to wrong version
+    commit: unknown - see disabled
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.45-11
+    versionCode: 121
+    commit: 6c42a9b65090da9640ccb6ee317bb32de24201fb
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.45-14
+    versionCode: 124
+    commit: cr3.0.45-14
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.46-1
+    versionCode: 131
+    commit: cr3.0.46-1
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.46-5
+    versionCode: 135
+    commit: cr3.0.46-5
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.46-11
+    versionCode: 141
+    commit: cr3.0.46-11
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.48-5
+    versionCode: 155
+    commit: cr3.0.48-5
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.49-2
+    versionCode: 162
+    commit: cr3.0.49-2
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.49-5
+    versionCode: 165
+    commit: cr3.0.49-5
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.49-9
+    versionCode: 169
+    commit: cr3.0.49-9
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.49-16
+    versionCode: 176
+    commit: cr3.0.49-16
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.51-7
+    versionCode: 197
+    commit: cr3.0.51-7
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.52-1
+    versionCode: 241
+    commit: cr3.0.52-1
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.52-4
+    versionCode: 244
+    commit: cr3.0.52-4
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.53-3
+    versionCode: 247
+    commit: cr3.0.53-3
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.53-10
+    versionCode: 255
+    commit: cr3.0.53-10
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.53-14
+    versionCode: 259
+    commit: cr3.0.53-14
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.53-18
+    versionCode: 263
+    commit: c555ecd66d18b218fb255733c8b33a0825992f76
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.53-19
+    versionCode: 264
+    commit: cr3.0.53-19
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.54-5
+    versionCode: 275
+    commit: cr3.0.54-5
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.54-9
+    versionCode: 279
+    commit: cr3.0.54-9
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.54-33
+    versionCode: 303
+    commit: cr3.0.54-33
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.54-38
+    versionCode: 308
+    commit: cr3.0.54-38
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.54-47
+    versionCode: 447
+    commit: cr3.0.54-47
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.55-5
+    versionCode: 505
+    commit: cr3.0.55-5
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.55-9
+    versionCode: 509
+    commit: cr3.0.55-9
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.55-14
+    versionCode: 514
+    commit: cr3.0.55-14
+    subdir: android
+    rm:
+      - android/build.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.55-30
+    versionCode: 530
+    commit: cr3.0.55-30
+    subdir: android
+    rm:
+      - android/ant.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.55-32
+    versionCode: 532
+    commit: cr3.0.55-32
+    subdir: android
+    rm:
+      - android/ant.properties
+    buildjni:
+      - yes
+
+  - versionName: 3.0.56-5
+    versionCode: 565
+    disable: builds ok but crashes at cr3.0.56-5
+    commit: cr3.0.56-5
+    subdir: android
+    rm:
+      - android/ant.properties
+    target: android-14
+    buildjni:
+      - yes
+
+  - versionName: 3.0.57-15
+    versionCode: 625
+    disable: builds ok but crashes at cr3.0.57-15
+    commit: cr3.0.57-15
+    subdir: android
+    rm:
+      - android/ant.properties
+    target: android-14
+    buildjni:
+      - yes
+
+  - versionName: 3.0.57-16
+    versionCode: 626
+    disable: builds ok but crashes at 2f3d5fb86df316d
+    commit: 2f3d5fb86df316d
+    subdir: android
+    rm:
+      - android/ant.properties
+    target: android-14
+    buildjni:
+      - yes
+
+  - versionName: 3.1.2-27
+    versionCode: 847
+    commit: cr3-3.1.2-27
+    subdir: android
+    rm:
+      - android/ant.properties
+    target: android-16
+    buildjni:
+      - yes
+
+  - versionName: 3.1.2-38
+    versionCode: 858
+    disable: ndk build errors
+    commit: cr3-3.1.2-38
+    subdir: android
+    buildjni:
+      - yes
+
+  - versionName: 3.1.2-39
+    versionCode: 859
+    commit: cr3-3.1.2-39-market
+    subdir: android
+    rm:
+      - android/build.properties
+    target: android-19
+    buildjni:
+      - yes
+
+  - versionName: 3.1.2-48
+    versionCode: 868
+    commit: cr3.1.2-48
+    subdir: android
+    rm:
+      - android/build.properties
+    target: android-19
+    buildjni:
+      - yes
+
+  - versionName: 3.1.2-50
+    versionCode: 870
+    commit: cr3.1.2-50
+    subdir: android
+    rm:
+      - android/build.properties
+    target: android-19
+    buildjni:
+      - yes
+
+  - versionName: 3.1.2-51
+    versionCode: 871
+    commit: cr3-3.1.2-51
+    subdir: android
+    rm:
+      - android/build.properties
+    target: android-19
+    buildjni:
+      - yes
+
+  - versionName: 3.1.2-55
+    versionCode: 875
+    commit: cr3-3.1.2-55
+    subdir: android
+    rm:
+      - android/build.properties
+    target: android-19
+    buildjni:
+      - yes
+
+  - versionName: 3.1.2-68
+    versionCode: 888
+    commit: cr3.1.2-68
+    subdir: android
+    rm:
+      - android/build.properties
+    target: android-22
+    buildjni:
+      - yes
+
+  - versionName: 3.1.2-72
+    versionCode: 892
+    commit: cr3.1.2-71
+    subdir: android
+    rm:
+      - android/build.properties
+    prebuild: sed -i -e 's/^APP_ABI\s*:=.*/APP_ABI := all/' jni/Application.mk
+    target: android-22
+    buildjni:
+      - yes
+
+  - versionName: 3.1.2-87
+    versionCode: 907
+    commit: 1e07d15d4644c690
+    subdir: android
+    rm:
+      - android/build.properties
+    prebuild: sed -i -e 's/^APP_ABI\s*:=.*/APP_ABI := all/' jni/Application.mk
+    target: android-22
+    scanignore:
+      - cr3wx
+    buildjni:
+      - yes
+
+  - versionName: 3.2.9-1
+    versionCode: 2091
+    commit: bf48e5b7a5e89e5fc8b1f971573b5046e6b27bd3
+    subdir: android
+    gradle:
+      - yes
+    output: app/build/outputs/apk/release/app-universal-release-unsigned.apk
+    rm:
+      - android/build.properties
+    prebuild: sed -i -e 's/^APP_ABI\s*:=.*/APP_ABI := all/' jni/Application.mk
+    scanignore:
+      - cr3wx
+    ndk: r16b
+
+  - versionName: 3.2.38-1
+    versionCode: 32380
+    commit: cr3.2.38
+    subdir: android/app
+    gradle:
+      - yes
+    rm:
+      - cr3wx/src/resources/crrcconv.exe
+    prebuild:
+      - sed -i -e 's/\r//' ../gradle/wrapper/gradle-wrapper.properties
+      - sed -i -e 's/enable true/enable false/' build.gradle
+    ndk: r21
+
+AutoUpdateMode: None
+UpdateCheckMode: Tags
+CurrentVersion: 3.2.39-1
+CurrentVersionCode: 32390

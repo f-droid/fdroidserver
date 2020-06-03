@@ -58,11 +58,6 @@ def make(apps, sortedids, apks, repodir, archive):
     """
     from fdroidserver.update import METADATA_VERSION
 
-    def _resolve_description_link(appid):
-        if appid in apps:
-            return "fdroid.app:" + appid, apps[appid].Name
-        raise MetaDataException("Cannot resolve app id " + appid)
-
     if not common.options.nosign:
         common.assert_config_keystore(common.config)
 
@@ -117,7 +112,7 @@ def make(apps, sortedids, apks, repodir, archive):
             if apk['packageName'] == packageName:
                 newapp = copy.copy(app)  # update wiki needs unmodified description
                 newapp['Description'] = metadata.description_html(app['Description'],
-                                                                  _resolve_description_link)
+                                                                  metadata.DescriptionResolver(apps))
                 appsWithPackages[packageName] = newapp
                 break
 
@@ -310,11 +305,6 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
             return
         value = str(apk[key])
         addElement(name, value, doc, parent)
-
-    def addElementCDATA(name, value, doc, parent):
-        el = doc.createElement(name)
-        el.appendChild(doc.createCDATASection(value))
-        parent.appendChild(el)
 
     def addElementCheckLocalized(name, app, key, doc, parent, default=''):
         """Fill in field from metadata or localized block
