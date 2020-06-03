@@ -103,7 +103,7 @@ class UpdateTest(unittest.TestCase):
         build_conversations.gradle = ['free']
         apps['eu.siacs.conversations']['builds'] = [build_conversations]
 
-        fdroidserver.update.insert_localized_app_metadata(apps)
+        fdroidserver.update.insert_localized_app_metadata(apps, 'repo')
 
         appdir = os.path.join('repo', 'info.guardianproject.urzip', 'en-US')
         self.assertTrue(os.path.isfile(os.path.join(
@@ -183,7 +183,7 @@ class UpdateTest(unittest.TestCase):
         os.chdir(tmptestsdir)
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
-        fdroidserver.update.copy_triple_t_store_metadata(apps)
+        fdroidserver.update.copy_triple_t_store_metadata(apps, 'repo')
 
         # TODO ideally, this would compare the whole dict like in metadata.TestCase's test_read_metadata()
         correctlocales = [
@@ -211,7 +211,7 @@ class UpdateTest(unittest.TestCase):
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
         self.assertTrue(packageName in apps)
-        fdroidserver.update.copy_triple_t_store_metadata(apps)
+        fdroidserver.update.copy_triple_t_store_metadata(apps, 'repo')
         correctlocales = ['de-DE', 'en-US', 'fr-FR', 'kn-IN']
         app = apps[packageName]
         self.assertEqual('android@piwigo.org', app['authorEmail'])
