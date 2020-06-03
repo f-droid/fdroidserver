@@ -172,9 +172,9 @@ def scan_source(build_dir, build=metadata.Build()):
             return ignoreproblem(what, path_in_build_dir)
         if todelete(path_in_build_dir):
             return removeproblem(what, path_in_build_dir, filepath)
-        if options.json:
+        if options and options.json:
             json_per_build['errors'].append([what, path_in_build_dir])
-        if not options.json or options.verbose:
+        if options and (options.verbose or not options.json):
             logging.error('Found %s at %s' % (what, path_in_build_dir))
         return 1
 

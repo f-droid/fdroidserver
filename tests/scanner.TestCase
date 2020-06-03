@@ -36,7 +36,7 @@ class ScannerTest(unittest.TestCase):
         os.chdir(self.basedir)
 
     def test_scan_source_files(self):
-        fdroidserver.scanner.options = type('', (), {})()
+        fdroidserver.scanner.options = mock.Mock()
         fdroidserver.scanner.options.json = False
         source_files = os.path.join(self.basedir, 'source-files')
         projects = {
