@@ -146,15 +146,17 @@ def scan_source(build_dir, build=metadata.Build()):
         return False
 
     def ignoreproblem(what, path_in_build_dir):
-        logging.info('Ignoring %s at %s' % (what, path_in_build_dir))
+        msg = ('Ignoring %s at %s' % (what, path_in_build_dir))
+        logging.info(msg)
         if json_per_build is not None:
-            json_per_build['infos'].append([what, path_in_build_dir])
+            json_per_build['infos'].append([msg, path_in_build_dir])
         return 0
 
     def removeproblem(what, path_in_build_dir, filepath):
-        logging.info('Removing %s at %s' % (what, path_in_build_dir))
+        msg = ('Removing %s at %s' % (what, path_in_build_dir))
+        logging.info(msg)
         if json_per_build is not None:
-            json_per_build['infos'].append([what, path_in_build_dir])
+            json_per_build['infos'].append([msg, path_in_build_dir])
         os.remove(filepath)
         return 0
 
@@ -229,7 +231,12 @@ def scan_source(build_dir, build=metadata.Build()):
             path_in_build_dir = os.path.relpath(filepath, build_dir)
             _ignored, ext = common.get_extension(path_in_build_dir)
 
-            if ext == 'a':
+            if curfile in ('gradle-wrapper.jar', 'gradlew', 'gradlew.bat'):
+                removeproblem(curfile, path_in_build_dir, filepath)
+            elif ext == 'apk':
+                removeproblem(_('Android APK file'), path_in_build_dir, filepath)
+
+            elif ext == 'a':
                 count += handleproblem(_('static library'), path_in_build_dir, filepath)
             elif ext == 'aar':
                 count += handleproblem(_('Android AAR library'), path_in_build_dir, filepath)
@@ -237,16 +244,10 @@ def scan_source(build_dir, build=metadata.Build()):
                 count += handleproblem(_('Java compiled class'), path_in_build_dir, filepath)
             elif ext == 'so':
                 count += handleproblem(_('shared library'), path_in_build_dir, filepath)
-            elif ext == 'apk':
-                removeproblem(_('Android APK file'), path_in_build_dir, filepath)
-
             elif ext == 'jar':
                 for name in suspects_found(curfile):
                     count += handleproblem('usual suspect \'%s\'' % name, path_in_build_dir, filepath)
-                if curfile == 'gradle-wrapper.jar':
-                    removeproblem('gradle-wrapper.jar', path_in_build_dir, filepath)
-                else:
-                    count += handleproblem('JAR file', path_in_build_dir, filepath)
+                count += handleproblem(_('Java JAR file'), path_in_build_dir, filepath)
 
             elif ext == 'java':
                 if not os.path.isfile(filepath):

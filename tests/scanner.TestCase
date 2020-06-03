@@ -5,10 +5,12 @@ import inspect
 import logging
 import optparse
 import os
+import shutil
 import sys
 import tempfile
 import textwrap
 import unittest
+import uuid
 from unittest import mock
 
 localmodule = os.path.realpath(
@@ -79,6 +81,82 @@ class ScannerTest(unittest.TestCase):
                         if m:
                             i += 1
             self.assertEqual(count, i)
+
+    def test_scan_source_file_types(self):
+        """Build product files are not allowed, test they are detected"""
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+
+        fdroidserver.scanner.config = None
+        fdroidserver.scanner.options = mock.Mock()
+        fdroidserver.scanner.options.json = True
+
+        keep = [
+            'arg.jar',
+            'ascii.out',
+            'baz.so',
+            'sqlcipher.aar',
+            'static.a',
+        ]
+        remove = [
+            'gradle-wrapper.jar',
+            'gradlew',
+            'gradlew.bat',
+        ]
+        for f in keep + remove:
+            with open(f, 'w') as fp:
+                fp.write('placeholder')
+            self.assertTrue(os.path.exists(f))
+        binaries = [
+            'binary.out',
+            'fake.png',
+            'snippet.png',
+        ]
+        with open('binary.out', 'wb') as fp:
+            fp.write(b'\x00\x00')
+            fp.write(uuid.uuid4().bytes)
+        shutil.copyfile('binary.out', 'fake.png')
+        os.chmod('fake.png', 0o755)
+        os.system('ls -l binary.out')
+        with open('snippet.png', 'wb') as fp:
+            fp.write(b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x000\x00\x00'
+                     b'\x000\x08\x06\x00\x00\x00W\x02\xf9\x87\x00\x00\x00\x04sB'
+                     b'IT\x08\x08\x08\x08|\x08d\x88\x00\x00\x00\tpHYs\x00\x00\n'
+                     b'a\x00\x00\na\x01\xfc\xccJ%\x00\x00\x00\x19tEXtSoftware')
+        os.chmod('snippet.png', 0o755)
+        os.system('ls -l fake.png')
+
+        count = fdroidserver.scanner.scan_source(testdir)
+        self.assertEqual(5, count, 'there should be this many errors')
+
+        for f in keep + binaries:
+            self.assertTrue(os.path.exists(f), f + ' should still be there')
+        for f in remove:
+            self.assertFalse(os.path.exists(f), f + ' should have been removed')
+
+        files = dict()
+        for section in ('errors', 'infos', 'warnings'):
+            files[section] = []
+            for msg, f in fdroidserver.scanner.json_per_build[section]:
+                files[section].append(f)
+
+        self.assertFalse('ascii.out' in files['errors'],
+                         'an ASCII .out file is not an error')
+        self.assertFalse('snippet.png' in files['errors'],
+                         'an executable valid image is not an error')
+
+        self.assertTrue('arg.jar' in files['errors'], 'all JAR files are errors')
+        self.assertTrue('baz.so' in files['errors'], 'all .so files are errors')
+        self.assertTrue('binary.out' in files['errors'], 'a binary .out file is an error')
+        self.assertTrue('sqlcipher.aar' in files['errors'], 'all AAR files are errors')
+        self.assertTrue('static.a' in files['errors'], 'all .a files are errors')
+
+        self.assertTrue('fake.png' in files['warnings'],
+                        'a random binary that is executable that is not an image is a warning')
+
+        for f in remove:
+            self.assertTrue(f in files['infos'],
+                            f + ' should be removed with an info message')
 
     def test_build_local_scanner(self):
         """`fdroid build` calls scanner functions, test them here"""
