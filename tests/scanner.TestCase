@@ -11,6 +11,7 @@ import tempfile
 import textwrap
 import unittest
 import uuid
+import yaml
 from unittest import mock
 
 localmodule = os.path.realpath(
@@ -81,6 +82,27 @@ class ScannerTest(unittest.TestCase):
                         if m:
                             i += 1
             self.assertEqual(count, i)
+
+    def test_scan_source_files_sneaky_maven(self):
+        """Check for sneaking in banned maven repos"""
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        fdroidserver.scanner.config = None
+        fdroidserver.scanner.options = mock.Mock()
+        fdroidserver.scanner.options.json = True
+        with open('build.gradle', 'w') as fp:
+            fp.write(textwrap.dedent("""
+                 maven {
+                    "https://jitpack.io"
+                    url 'https://maven.fabric.io/public'
+                 }
+                 maven {
+                    "https://maven.google.com"
+                    setUrl('https://evilcorp.com/maven')
+                 }
+            """))
+        count = fdroidserver.scanner.scan_source(testdir)
+        self.assertEqual(2, count, 'there should be this many errors')
 
     def test_scan_source_file_types(self):
         """Build product files are not allowed, test they are detected"""
@@ -220,6 +242,20 @@ class ScannerTest(unittest.TestCase):
         self.assertTrue(os.path.exists('baz.so'))
         self.assertTrue(os.path.exists('foo.aar'))
         self.assertFalse(os.path.exists('gradle-wrapper.jar'))
+
+    def test_gradle_maven_url_regex(self):
+        """Check the regex can find all the cases"""
+        with open(os.path.join(self.basedir, 'gradle-maven-blocks.yaml')) as fp:
+            data = yaml.safe_load(fp)
+
+        urls = []
+        for entry in data:
+            found = False
+            for m in fdroidserver.scanner.MAVEN_URL_REGEX.findall(entry):
+                urls.append(m)
+                found = True
+            self.assertTrue(found, 'this block should produce a URL:\n' + entry)
+        self.assertEqual(len(data), len(urls), 'each data example should produce a URL')
 
 
 if __name__ == "__main__":

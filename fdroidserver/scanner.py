@@ -37,6 +37,9 @@ options = None
 DEFAULT_JSON_PER_BUILD = {'errors': [], 'warnings': [], 'infos': []}
 json_per_build = DEFAULT_JSON_PER_BUILD
 
+MAVEN_URL_REGEX = re.compile(r"""\smaven\s*{.*?(?:setUrl|url)\s*=?\s*(?:uri)?\(?\s*["']?([^\s"']+)["']?[^}]*}""",
+                             re.DOTALL)
+
 
 def get_gradle_compile_commands(build):
     compileCommands = ['compile',
@@ -100,8 +103,6 @@ def scan_source(build_dir, build=metadata.Build()):
         for n, r in usual_suspects.items():
             if r.match(s) and not is_whitelisted(s):
                 yield n
-
-    gradle_mavenrepo = re.compile(r'maven *{ *(url)? *[\'"]?([^ \'"]*)[\'"]?')
 
     allowed_repos = [re.compile(r'^https://' + re.escape(repo) + r'/*') for repo in [
         'repo1.maven.org/maven2',  # mavenCentral()
@@ -278,9 +279,8 @@ def scan_source(build_dir, build=metadata.Build()):
                             count += handleproblem("usual suspect \'%s\'" % (name),
                                                    path_in_build_dir, filepath)
                 noncomment_lines = [line for line in lines if not common.gradle_comment.match(line)]
-                joined = re.sub(r'[\n\r\s]+', ' ', ' '.join(noncomment_lines))
-                for m in gradle_mavenrepo.finditer(joined):
-                    url = m.group(2)
+                no_comments = re.sub(r'/\*.*?\*/', '', ''.join(noncomment_lines), flags=re.DOTALL)
+                for url in MAVEN_URL_REGEX.findall(no_comments):
                     if not any(r.match(url) for r in allowed_repos):
                         count += handleproblem('unknown maven repo \'%s\'' % url, path_in_build_dir, filepath)
 

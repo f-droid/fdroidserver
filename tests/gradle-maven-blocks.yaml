@@ -1,0 +1,778 @@
+- "\tmaven {\n\t\t\turl \"$rootDir/../node_modules/react-native-background-fetch/android/libs\"\
+  \n\t\t}"
+- "\tmaven {\n\t\t\turl \"https://plugins.gradle.org/m2/\"\n\t\t}"
+- "\tmaven {\n\t\t\turl 'http://4thline.org/m2'\n\t\t}"
+- "\tmaven {\n\t\t\turl 'https://maven.google.com/'\n\t\t\tname 'Google'\n\t\t}"
+- "\tmaven {\n\t\turl \"file://$pwd/.m2repo\"\n\t}"
+- "\tmaven {\n\t\turl \"https://jitpack.io\"\n\t}"
+- "\tmaven {\n\t\turl 'https://maven.google.com/'\n\t\tname 'Google'\n\t}"
+- "\tmaven {\n\t    url 'https://maven.google.com'\n\t}"
+- "\tmaven { url \"http://JRAF.org/static/maven/2\" }"
+- "\tmaven { url \"http://dl.bintray.com/populov/maven\" }"
+- "\tmaven { url \"https://jitpack.io\" }"
+- "\tmaven { url 'http://maven.ghostscript.com/' }"
+- "\tmaven { url 'https://jitpack.io' }"
+- "\tmaven { url 'https://maven.fabric.io/public' }"
+- "\tmaven { url MAVEN_REPO }"
+- " maven {\n\t    url 'https://jitpack.io'\n        }"
+- " maven {\n                    url rootProject.ext.mavenRepo\n                 \
+  \   if (!rootProject.ext.mavenRepo.startsWith(\"file\")) {\n                   \
+  \     credentials {\n                            username rootProject.ext.mavenUser\n\
+  \                            password rootProject.ext.mavenPassword\n          \
+  \              }"
+- " maven {\n                // All of React Native (JS, Obj-C sources, Android binaries)\
+  \ is installed from npm\n                url \"$rootDir/libs/gutenberg-mobile/node_modules/react-native/android\"\
+  \n            }"
+- " maven {\n                url \"file:~/.m2/\"\n                artifactUrls \"\
+  file:~/.m2/\"\n            }"
+- " maven {\n                url \"https://maven-central-asia.storage-download.googleapis.com/repos/central/data/\"\
+  \n                content {\n                    excludeGroup(\"Kotlin/Native\"\
+  )\n                }"
+- " maven {\n                url \"https://maven-central-asia.storage-download.googleapis.com/repos/central/data/\"\
+  \n            }"
+- " maven {\n                url \"https://plugins.gradle.org/m2/\"\n            }"
+- " maven {\n                url \"https://repo.commonsware.com.s3.amazonaws.com\"\
+  \n            }"
+- " maven {\n                url 'https://maven.fabric.io/public'\n            }"
+- " maven {\n            // All of React Native (JS, Android binaries) is installed\
+  \ from npm\n            url \"$rootDir/react/node_modules/react-native/android\"\
+  \n        }"
+- " maven {\n            // All of React Native (JS, Obj-C sources, Android binaries)\
+  \ is installed from npm\n            // url \"$rootDir/../node_modules/react-native/android\"\
+  \n\n            // Replace AAR from original RN with AAR from react-native-v8\n\
+  \            url(\"$rootDir/../node_modules/react-native-v8/dist\")\n        }"
+- " maven {\n            // All of React Native (JS, Obj-C sources, Android binaries)\
+  \ is installed from npm\n            url \"$rootDir/../node_modules/react-native/android\"\
+  \n        }"
+- " maven {\n            // All of React Native (JS, Obj-C sources, Android binaries)\
+  \ is installed from npm\n            url(\"$rootDir/../node_modules/react-native/android\"\
+  )\n        }"
+- " maven {\n            // Android JSC is installed from npm\n            url(\"\
+  $rootDir/../node_modules/jsc-android/dist\")\n        }"
+- " maven {\n            // Android JSC is installed from npm\n            url(\"\
+  $rootDir/react/node_modules/jsc-android/dist\")\n        }"
+- " maven {\n            // Local Maven repo containing AARs with JSC library built\
+  \ for Android\n            // url \"$rootDir/../node_modules/jsc-android/dist\"\n\
+  \n            // prebuilt libv8android.so\n            url(\"$rootDir/../node_modules/v8-android/dist\"\
+  )\n        }"
+- " maven {\n            // Local Maven repo containing AARs with JSC library built\
+  \ for Android\n            url \"$rootDir/../node_modules/jsc-android/dist\"\n \
+  \       }"
+- " maven {\n            //noinspection GroovyAssignabilityCheck\n            url\
+  \ 'https://jitpack.io'\n        }"
+- " maven {\n            //noinspection GroovyAssignabilityCheck\n            url\
+  \ 'https://s3.amazonaws.com/moat-sdk-builds'\n        }"
+- " maven {\n            //url 'https://maven.google.com/'\n            url 'https://jitpack.io'\n\
+  \            name 'Google'\n        }"
+- " maven {\n            name 'glide-snapshot'\n            url 'http://oss.sonatype.org/content/repositories/snapshots'\n\
+  \        }"
+- " maven {\n            name 'glide-snapshot'\n            url 'https://oss.sonatype.org/content/repositories/snapshots'\n\
+  \        }"
+- " maven {\n            name = \"sonatype\"\n\n            def releasesRepoUrl =\
+  \ \"https://oss.sonatype.org/service/local/staging/deploy/maven2/\"\n          \
+  \  def snapshotsRepoUrl = \"https://oss.sonatype.org/content/repositories/snapshots/\"\
+  \n            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl\n\
+  \n            credentials {\n                username ossrhUsername\n          \
+  \      password ossrhPassword\n            }"
+- " maven {\n            url \"http://developer.huawei.com/repo/\"\n        }"
+- " maven {\n            url \"http://dl.bintray.com/dasar/maven\"\n        }"
+- " maven {\n            url \"http://dl.bintray.com/jenzz/maven\"\n        }"
+- " maven {\n            url \"http://dl.bintray.com/journeyapps/maven\"\n       \
+  \ }"
+- " maven {\n            url \"http://dl.bintray.com/lukaville/maven\"\n        }"
+- " maven {\n            url \"http://dl.bintray.com/ona/kujaku\"\n        }"
+- " maven {\n            url \"http://dl.bintray.com/piasy/maven\"\n            content\
+  \ {\n                includeGroupByRegex \"com\\\\.github\\\\.piasy\"\n        \
+  \    }"
+- " maven {\n            url \"http://kotlin.bintray.com/kotlin-dev\"\n          \
+  \  content {\n                excludeGroup(\"Kotlin/Native\")\n            }"
+- " maven {\n            url \"http://oss.sonatype.org/content/repositories/snapshots\"\
+  \n        }"
+- " maven {\n            url \"https://clojars.org/repo/\"\n        }"
+- " maven {\n            url \"https://dl.bintray.com/kotlin/ktor\"\n            content\
+  \ {\n                excludeGroup(\"Kotlin/Native\")\n            }"
+- " maven {\n            url \"https://dl.bintray.com/soywiz/soywiz\"\n          \
+  \  content {\n                excludeGroup(\"Kotlin/Native\")\n            }"
+- " maven {\n            url \"https://dl.bintray.com/wire-android/third-party\"\n\
+  \        }"
+- " maven {\n            url \"https://github.com/vector-im/jitsi_libre_maven/raw/master/releases\"\
+  \n        }"
+- " maven {\n            url \"https://jitpack.io\"\n\n        }"
+- " maven {\n            url \"https://jitpack.io\"\n            content {\n     \
+  \           // For some reason gradle attempts to get bugsnag from here, which returns\
+  \ 522\n                // after which gradle just drops jitpack. Exclude so it doesn't\
+  \ bother trying.\n                excludeGroupByRegex \".*bugsnag.*\"\n        \
+  \    }"
+- " maven {\n            url \"https://jitpack.io\"\n            content {\n     \
+  \           excludeGroup(\"Kotlin/Native\")\n            }"
+- " maven {\n            url \"https://jitpack.io\"\n        }"
+- " maven {\n            url \"https://jitpack.io/\"\n        }"
+- " maven {\n            url \"https://kotlin.bintray.com/kotlinx\"\n            content\
+  \ {\n                excludeGroup(\"Kotlin/Native\")\n            }"
+- " maven {\n            url \"https://maven-central-asia.storage-download.googleapis.com/repos/central/data/\"\
+  \n        }"
+- " maven {\n            url \"https://maven.fabric.io/public\"\n        }"
+- " maven {\n            url \"https://maven.google.com\"\n            name 'Google'\n\
+  \        }"
+- " maven {\n            url \"https://maven.google.com\"\n        }"
+- " maven {\n            url \"https://maven.google.com/\"\n        }"
+- " maven {\n            url \"https://maven.mozilla.org/maven2\"\n        }"
+- " maven {\n            url \"https://oss.sonatype.org/content/repositories/snapshots\"\
+  \n        }"
+- " maven {\n            url \"https://oss.sonatype.org/content/repositories/snapshots/\"\
+  \n        }"
+- " maven {\n            url \"https://plugins.gradle.org/m2/\"\n        }"
+- " maven {\n            url \"https://repo1.maven.org/maven2\"\n            jcenter()\n\
+  \        }"
+- " maven {\n            url \"https://s3.amazonaws.com/repo.commonsware.com\"\n \
+  \           }"
+- " maven {\n            url \"https://s3.amazonaws.com/repo.commonsware.com\"\n \
+  \       }"
+- " maven {\n            url \"https://snapshots.maven.mozilla.org/maven2\"\n    \
+  \    }"
+- " maven {\n            url '${mavenUrl}"
+- " maven {\n            url 'http://maven.aliyun.com/nexus/content/repositories/releases/'\n\
+  \        }"
+- " maven {\n            url 'http://oss.sonatype.org/content/repositories/snapshots'\n\
+  \        }"
+- " maven {\n            url 'http://oss.sonatype.org/content/repositories/snapshots/'\n\
+  \        }"
+- " maven {\n            url 'http://www.idescout.com/maven/repo/'\n            name\
+  \ 'IDEScout, Inc.'\n        }"
+- " maven {\n            url 'http://www.idescout.com/maven/repo/'\n        }"
+- " maven {\n            url 'https://clojars.org/repo'\n        }"
+- " maven {\n            url 'https://dl.bintray.com/alexeydanilov/maven'\n      \
+  \  }"
+- " maven {\n            url 'https://dl.bintray.com/drummer-aidan/maven'\n      \
+  \  }"
+- " maven {\n            url 'https://dl.bintray.com/kotlin/kotlin-eap'\n        \
+  \    content {\n                excludeGroup(\"Kotlin/Native\")\n            }"
+- " maven {\n            url 'https://github.com/suckgamony/RapidDecoder/raw/master/repository'\n\
+  \        }"
+- " maven {\n            url 'https://github.com/uPhyca/stetho-realm/raw/master/maven-repo'\n\
+  \        }"
+- " maven {\n            url 'https://jitpack.io'\n            content {\n       \
+  \         // Use this repo only for matrix SDK library\n                includeGroupByRegex\
+  \ \"com\\\\.github\\\\.Bubu\"\n                // Also add subgroups, due to SDK\
+  \ split into modules\n                includeGroupByRegex \"com\\\\.github\\\\.Bubu\\\
+  \\.matrix-android-sdk\"\n                // And Olm library\n                includeGroupByRegex\
+  \ \"org\\\\.matrix\\\\.gitlab\\\\.matrix-org\"\n                // And PhotoView\n\
+  \                includeGroupByRegex \"com\\\\.github\\\\.chrisbanes\"\n       \
+  \     }"
+- " maven {\n            url 'https://jitpack.io'\n            content {\n       \
+  \         // Use this repo only for olm library\n                includeGroupByRegex\
+  \ \"org\\\\.matrix\\\\.gitlab\\\\.matrix-org\"\n                // And also for\
+  \ FilePicker\n                includeGroupByRegex \"com\\\\.github\\\\.jaiselrahman\"\
+  \n                // And monarchy\n                includeGroupByRegex \"com\\\\\
+  .github\\\\.Zhuinden\"\n                // And ucrop\n                includeGroupByRegex\
+  \ \"com\\\\.github\\\\.yalantis\"\n                // JsonViewer\n             \
+  \   includeGroupByRegex 'com\\\\.github\\\\.BillCarsonFr'\n            }"
+- " maven {\n            url 'https://jitpack.io'\n        }"
+- " maven {\n            url 'https://jitpack.io/'\n        }"
+- " maven {\n            url 'https://maven.aliyun.com/repository/google'\n      \
+  \      name 'replace google()'\n        }"
+- " maven {\n            url 'https://maven.aliyun.com/repository/jcenter'\n     \
+  \       name 'replace jcenter()'\n        }"
+- " maven {\n            url 'https://maven.aliyun.com/repository/public'\n      \
+  \      name 'replace jcenter() and mavenCentral()'\n        }"
+- " maven {\n            url 'https://maven.fabric.io/public'\n        }"
+- " maven {\n            url 'https://maven.google.com'\n            // Alternative\
+  \ URL is 'https://dl.google.com/dl/android/maven2/'\n        }"
+- " maven {\n            url 'https://maven.google.com'\n        }"
+- " maven {\n            url 'https://maven.google.com/'\n            name 'Google'\n\
+  \        }"
+- " maven {\n            url 'https://maven.google.com/'\n        }"
+- " maven {\n            url 'https://oss.sonatype.org/content/groups/public'\n  \
+  \      }"
+- " maven {\n            url 'https://oss.sonatype.org/content/repositories/snapshots'\n\
+  \        }"
+- " maven {\n            url 'https://oss.sonatype.org/content/repositories/snapshots/'\n\
+  \            content {\n                excludeGroup(\"Kotlin/Native\")\n      \
+  \      }"
+- " maven {\n            url 'https://oss.sonatype.org/content/repositories/snapshots/'\n\
+  \        }"
+- " maven {\n            url 'https://plugins.gradle.org/m2'\n        }"
+- " maven {\n            url 'https://plugins.gradle.org/m2/'\n        }"
+- " maven {\n            url 'https://www.jitpack.io'\n        }"
+- " maven {\n            url rootProject.ext.mavenRepo\n            if (!rootProject.ext.mavenRepo.startsWith(\"\
+  file\")) {\n                credentials {\n                    username rootProject.ext.mavenUser\n\
+  \                    password rootProject.ext.mavenPassword\n                }"
+- " maven {\n           url 'https://maven.fabric.io/public'\n        }"
+- " maven {\n           url 'https://maven.google.com/'\n       }"
+- " maven {\n          credentials {\n            username System.env.ANDVIANE_USERNAME\n            password System.env.ANDVIANE_PASSWORD\n          }\n          //url 'https://oss.sonatype.org/content/repositories/snapshots'\n          url 'https://oss.sonatype.org/service/local/staging/deploy/maven2'\n        }"
+- " maven {\n        // CUTR Releases\n        url \"https://github.com/CUTR-at-USF/cutr-mvn-repo/raw/master/snapshots\"\
+  \n    }"
+- " maven {\n        // Git project library as local library project (ucrop) - see\
+  \ https://jitpack.io/docs/\n        url 'https://jitpack.io'\n    }"
+- " maven {\n        // Need manual cleanup for new SNAPSHOT update if same name with\
+  \ date change only:\n        // Smack official SNAPSHOT repository accepted by F-Droid\n\
+  \        url 'https://oss.sonatype.org/content/repositories/snapshots'\n\n     \
+  \   // Smack custom library for org.igniterealtime - not recognize by F-Droid\n\
+  \        // url 'https://igniterealtime.org/repo/'\n\n        // Custom library\
+  \ for org.jitsi - maven-metadata.xml not compatible\n        // Unable to load Maven\
+  \ meta-data from https://github.com/jitsi/jitsi-maven-repository/tree/master/snapshots/org/jitsi/ice4j/2.0.0-SNAPSHOT/maven-metadata.xml.\n\
+  \        // org.xml.sax.SAXParseException; lineNumber: 44; columnNumber: 91; Attribute\
+  \ name \"data-pjax-transient\" associated with an element type \"meta\" must be\
+  \ followed by the ' = ' character.\n        // url 'https://github.com/jitsi/jitsi-maven-repository/tree/master/snapshots'\n\
+  \    }"
+- " maven {\n        // OBA Releases - for comparator to sort alphanumeric routes\n\
+  \        url \"http://nexus.onebusaway.org/nexus/content/repositories/releases\"\
+  \n    }"
+- " maven {\n        // TODO: Remove this after support library v24 public release.\n\
+  \        url \"$rootDir/prebuilts/fullsdk/extras/android/m2repository\"\n    }"
+- " maven {\n        // This maven repo contains artifacts for Flutter's Android embedding.\n\
+  \        url 'http://download.flutter.io'\n    }"
+- " maven {\n        // This maven repo is created when you run `flutter build aar`.\
+  \ It contains compiled code\n        // and resources for flutter_module itself.\n\
+  \        url '../../flutter_module/build/host/outputs/repo'\n    }"
+- " maven {\n        // Used only for PhotoView\n        url \"https://jitpack.io\"\
+  \n        name 'JitPack Github wrapper'\n    }"
+- " maven {\n        // for Amazon Maps\n        url uri('../.m2/repository')\n  \
+  \  }"
+- " maven {\n        // for testlib\n        url \"http://dl.bintray.com/acrowntest/ES_SDK\"\
+  \n    }"
+- " maven {\n        //url 'https://maven.google.com/'\n        url 'https://jitpack.io'\n\
+  \        name 'Google'\n    }"
+- " maven {\n        url \"http://4thline.org/m2\"\n    }"
+- " maven {\n        url \"http://maven.chunyu.mobi/content/groups/public/\"\n   \
+  \     credentials {\n            username maven_user\n            password maven_password\n\
+  \        }"
+- " maven {\n        url \"https://dl.google.com/dl/android/maven2/\"\n    }"
+- " maven {\n        url \"https://jitpack.io\"\n    }"
+- " maven {\n        url \"https://maven.fabric.io/public\"\n    }"
+- " maven {\n        url \"https://maven.google.com\"\n    }"
+- " maven {\n        url \"https://oss.sonatype.org/content/repositories/releases\"\
+  \n    }"
+- " maven {\n        url \"https://oss.sonatype.org/content/repositories/snapshots\"\
+  \n    }"
+- " maven {\n        url \"https://repo.eclipse.org/content/repositories/paho-releases/\"\
+  \n    }"
+- " maven {\n        url '../..'\n    }"
+- " maven {\n        url 'https://dl.bintray.com/amulyakhare/maven'\n    }"
+- " maven {\n        url 'https://github.com/Goddchen/mvn-repo/raw/master/'\n    }"
+- " maven {\n        url 'https://jitpack.io'\n    }"
+- " maven {\n        url 'https://maven.fabric.io/public'\n    }"
+- " maven {\n        url 'https://maven.google.com'\n        // Alternative URL is\
+  \ 'https://dl.google.com/dl/android/maven2/'\n        url \"https://jitpack.io\"\
+  \n    }"
+- " maven {\n        url 'https://maven.google.com'\n    }"
+- " maven {\n        url 'https://maven.google.com/'\n        name 'Google'\n    }"
+- " maven {\n        url 'https://oss.sonatype.org/content/repositories/snapshots'\n\
+  \    }"
+- " maven {\n        url 'https://oss.sonatype.org/content/repositories/snapshots/'\n\
+  \    }"
+- " maven {\n        url 'https://raw.githubusercontent.com/felixb/mvn-repo/master'\n\
+  \    }"
+- " maven {\n        url 'third_party/m2'\n    }"
+- " maven {\n        url xwalkMavenRepo\n      }"
+- " maven {\n        url(\"https://maven.fabric.io/public\")\n    }"
+- " maven {\n        url(\"https://oss.sonatype.org/content/repositories/snapshots\"\
+  )\n    }"
+- " maven {\n      url \"$buildDir/repo\"\n    }"
+- " maven {\n      url \"https://jitpack.io\"\n    }"
+- " maven {\n      url \"https://maven.google.com\"\n    }"
+- " maven {\n      url \"https://oss.sonatype.org/content/repositories/snapshots/\"\
+  \n    }"
+- " maven {\n      url \"https://plugins.gradle.org/m2/\"\n    }"
+- " maven {\n      url 'http://download.crashlytics.com/maven'\n    }"
+- " maven {\n      url 'https://clojars.org/repo/'\n    }"
+- " maven {\n      url 'https://maven.fabric.io/public'\n    }"
+- " maven {\n      url 'https://oss.sonatype.org/content/repositories/snapshots/'\n\
+  \    }"
+- " maven {\n      url 'https://raw.github.com/ark/ark/master/releases/'\n    }"
+- " maven {\n      url 'https://raw.github.com/iFixit/ark/master/releases/'\n   }"
+- " maven {\n    setUrl(\"https://plugins.gradle.org/m2/\")\n  }"
+- " maven {\n    url 'https://maven.google.com'\n  }"
+- ' maven {
+
+  //            url "https://jitpack.io"
+
+  //            url "https://maven-central.storage.googleapis.com"
+
+  //            url "http://repo.spring.io/plugins-release/"
+
+  //        }'
+- ' maven {   url "https://maven.google.com"  }'
+- ' maven { setUrl("https://www.jitpack.io") }'
+- ' maven { url  "https://dl.bintray.com/bjoernq/maven" }'
+- ' maven { url  "https://dl.bintray.com/ligi/maven" }'
+- ' maven { url  "https://dl.bintray.com/lukaville/maven" }'
+- ' maven { url  "https://jetbrains.bintray.com/trove4j" }'
+- ' maven { url "$rootDir/../node_modules/react-native/android" }'
+- ' maven { url "file:///home/snowdream/workspace/git/mvn-repo/releases/" }'
+- ' maven { url "file:///home/snowdream/workspace/git/mvn-repo/snapshots/" }'
+- ' maven { url "http://dl.bintray.com/arturbosch/code-analysis" }'
+- ' maven { url "http://dl.bintray.com/countly/maven" }'
+- ' maven { url "http://dl.bintray.com/drummer-aidan/maven" }'
+- ' maven { url "http://dl.bintray.com/drummer-aidan/maven/com/afollestad" }'
+- ' maven { url "http://dl.bintray.com/lukaville/maven" }'
+- ' maven { url "http://dl.bintray.com/mobisystech/maven" }'
+- ' maven { url "http://dl.bintray.com/populov/maven" }'
+- ' maven { url "http://kotlin.bintray.com/kotlin-dev" }'
+- ' maven { url "http://maven.batch.com/release" }'
+- ' maven { url "http://objectbox.net/beta-repo/" }'
+- ' maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }'
+- ' maven { url "http://repo.commonsware.com.s3.amazonaws.com" }'
+- ' maven { url "http://repo1.maven.org/maven2" }'
+- ' maven { url "http://repository.apache.org/snapshots/" }'
+- ' maven { url "http://snowdream.github.io/mvn-repo/releases/" }'
+- ' maven { url "http://snowdream.github.io/mvn-repo/snapshots/" }'
+- ' maven { url "http://storage.googleapis.com/r8-releases/raw/master" }'
+- ' maven { url "https://clojars.org/repo" }'
+- ' maven { url "https://clojars.org/repo/" }'
+- ' maven { url "https://dl.bintray.com/acra/maven" }'
+- ' maven { url "https://dl.bintray.com/asf/asf" }'
+- ' maven { url "https://dl.bintray.com/badoo/maven" }'
+- ' maven { url "https://dl.bintray.com/dasar/maven" }'
+- ' maven { url "https://dl.bintray.com/drummer-aidan/maven" }'
+- ' maven { url "https://dl.bintray.com/florent37/maven" }'
+- ' maven { url "https://dl.bintray.com/gericop/maven" }'
+- ' maven { url "https://dl.bintray.com/kotlin/ktor" }'
+- ' maven { url "https://dl.bintray.com/markusamshove/maven" }'
+- ' maven { url "https://dl.bintray.com/mockito/maven" }'
+- ' maven { url "https://dl.bintray.com/robstoll/tutteli-jars" }'
+- ' maven { url "https://dl.bintray.com/videolan/Android" }'
+- ' maven { url "https://dl.bintray.com/wire-android/releases" }'
+- ' maven { url "https://dl.bintray.com/wire-android/releases/" }'
+- ' maven { url "https://dl.bintray.com/wire-android/snapshots" }'
+- ' maven { url "https://dl.bintray.com/wire-android/snapshots/" }'
+- ' maven { url "https://dl.bintray.com/wire-android/third-party" }'
+- ' maven { url "https://dl.bintray.com/wire-android/third-party/" }'
+- ' maven { url "https://dl.bintray.com/wordpress-mobile/maven" }'
+- ' maven { url "https://dl.bintray.com/wordpress-mobile/react-native-mirror/" }'
+- ' maven { url "https://fusesource.github.io/jansi/" }'
+- ' maven { url "https://giphy.bintray.com/giphy-sdk" }'
+- ' maven { url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
+  }'
+- ' maven { url "https://jcenter.bintray.com" }'
+- " maven { url \"https://jitpack.io\"\n    }"
+- ' maven { url "https://jitpack.io" }'
+- ' maven { url "https://jitpack.io"}'
+- ' maven { url "https://kotlin.bintray.com/kotlinx" }'
+- ' maven { url "https://mapbox.bintray.com/mapbox" }'
+- ' maven { url "https://maven-central-asia.storage-download.googleapis.com/repos/central/data/"
+  }'
+- ' maven { url "https://maven.fabric.io/public" }'
+- " maven { url \"https://maven.google.com\"\n    }"
+- ' maven { url "https://maven.google.com" }'
+- ' maven { url "https://maven.google.com"}'
+- ' maven { url "https://maven.google.com/" }'
+- ' maven { url "https://oss.sonatype.org/content/groups/public" }'
+- ' maven { url "https://oss.sonatype.org/content/groups/public/" }'
+- ' maven { url "https://oss.sonatype.org/content/repositories/releases/" }'
+- ' maven { url "https://oss.sonatype.org/content/repositories/snapshots" }'
+- ' maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }'
+- ' maven { url "https://plugins.gradle.org/m2" }'
+- ' maven { url "https://plugins.gradle.org/m2/" }'
+- ' maven { url "https://plugins.gradle.org/m2/"}'
+- ' maven { url "https://raw.githubusercontent.com/guardianproject/gpmaven/master"
+  }'
+- ' maven { url "https://repo.commonsware.com.s3.amazonaws.com" }'
+- ' maven { url "https://repo.eclipse.org/content/groups/releases" }'
+- ' maven { url "https://repo.maven.apache.org/maven2" }'
+- ' maven { url "https://repo1.maven.org/maven2/" }'
+- ' maven { url "https://s3.amazonaws.com/moat-sdk-builds" }'
+- ' maven { url "https://s3.amazonaws.com/repo.commonsware.com" }'
+- ' maven { url "https://www.jitpack.io" }'
+- ' maven { url ''file:///usr/share/maven-repo'' }'
+- ' maven { url ''http://dl.bintray.com/amulyakhare/maven'' }'
+- ' maven { url ''http://download.crashlytics.com/maven'' }'
+- ' maven { url ''http://guardian.github.com/maven/repo-releases'' }'
+- ' maven { url ''http://igniterealtime.org/repo'' }'
+- ' maven { url ''http://maven.ghostscript.com/'' }'
+- ' maven { url ''http://nexus.testobject.org/nexus/content/repositories/testobject-public-alpha-repo''
+  }'
+- ' maven { url ''http://oss.sonatype.org/content/repositories/snapshots'' }'
+- ' maven { url ''http://repo1.maven.org/maven2'' }'
+- ' maven { url ''http://wordpress-mobile.github.io/WordPress-Android'' }'
+- ' maven { url ''https://dl.bintray.com/badoo/maven'' }'
+- ' maven { url ''https://dl.bintray.com/content/simonpoole/android'' }'
+- ' maven { url ''https://dl.bintray.com/content/simonpoole/div'' }'
+- ' maven { url ''https://dl.bintray.com/content/simonpoole/osm'' }'
+- ' maven { url ''https://dl.bintray.com/florent37/maven'' }'
+- ' maven { url ''https://dl.bintray.com/intercom/intercom-maven'' }'
+- ' maven { url ''https://dl.bintray.com/jenly/maven'' }'
+- ' maven { url ''https://dl.bintray.com/jetbrains/anko'' }'
+- ' maven { url ''https://dl.bintray.com/kotlin/kotlin-eap'' }'
+- ' maven { url ''https://dl.bintray.com/twofortyfouram/maven'' }'
+- ' maven { url ''https://dl.bintray.com/umsdk/release'' }'
+- ' maven { url ''https://dl.google.com/dl/android/maven2/'' }'
+- ' maven { url ''https://github.com/FireZenk/maven-repo/raw/master/'' }'
+- ' maven { url ''https://github.com/uPhyca/stetho-realm/raw/master/maven-repo'' }'
+- ' maven { url ''https://guardian.github.com/maven/repo-releases'' }'
+- ' maven { url ''https://igniterealtime.org/repo'' }'
+- ' maven { url ''https://jitpack.io'' }'
+- ' maven { url ''https://jitpack.io/'' }'
+- ' maven { url ''https://maven.fabric.io/public'' }'
+- ' maven { url ''https://maven.fabric.io/repo'' }'
+- ' maven { url ''https://maven.google.com'' }'
+- ' maven { url ''https://maven.google.com/'' }'
+- ' maven { url ''https://oss.jfrog.org/artifactory/oss-snapshot-local/'' }'
+- ' maven { url ''https://oss.sonatype.org/content/repositories/releases/'' }'
+- ' maven { url ''https://oss.sonatype.org/content/repositories/snapshots'' }'
+- ' maven { url ''https://oss.sonatype.org/content/repositories/snapshots/'' }'
+- ' maven { url ''https://plugins.gradle.org/m2/'' }'
+- ' maven { url ''https://plugins.gradle.org/m2/''}'
+- ' maven { url ''https://repo1.maven.org/maven2'' }'
+- ' maven { url ''https://repos.zeroturnaround.com/nexus/content/repositories/zt-public-releases''
+  }'
+- ' maven { url ''https://repository-achartengine.forge.cloudbees.com/snapshot/''
+  }'
+- ' maven { url ''https://s3.amazonaws.com/repo.commonsware.com'' }'
+- ' maven { url ''https://www.jitpack.io'' }'
+- ' maven { url ''https://zendesk.jfrog.io/zendesk/repo'' }'
+- ' maven { url ''libs'' }'
+- ' maven { url = "https://storage.googleapis.com/r8-releases/raw" }'
+- ' maven { url = uri("https://jitpack.io") }'
+- ' maven { url = uri("https://maven.fabric.io/public") }'
+- ' maven { url MAVEN_REPO_CACHE }'
+- ' maven { url(''http://releases.marmeladburk.fidesmo.com/'') }'
+- ' maven {url "http://dl.bintray.com/tbruyelle/tbruyelle" }'
+- ' maven {url "https://jitpack.io"}'
+- ' maven {url ''http://maven.aliyun.com/nexus/content/groups/public/''}'
+- " maven{\n            url 'https://maven.fabric.io/public'\n        }"
+- " maven{\n            url'https://plugins.gradle.org/m2/'\n        }"
+- " maven{\n        url \"https://maven.google.com\"\n    }"
+- " maven{\n        url 'https://maven.google.com'\n    }"
+- ' maven{ url "https://oss.sonatype.org/content/repositories/releases/" }'
+- ' maven{ url "https://oss.sonatype.org/content/repositories/snapshots/" }'
+- ' maven{ url ''http://maven.aliyun.com/nexus/content/groups/public/''}'
+- ' maven{ url ''https://jitpack.io'' }'
+- ' maven{ url ''https://maven.aliyun.com/repository/google'' }'
+- ' maven{ url ''https://maven.aliyun.com/repository/google''}'
+- ' maven{ url ''https://maven.aliyun.com/repository/gradle-plugin''}'
+- ' maven{ url ''https://maven.aliyun.com/repository/jcenter'' }'
+- ' maven{ url ''https://maven.aliyun.com/repository/jcenter''}'
+- ' maven{ url ''https://maven.aliyun.com/repository/public''}'
+- ' maven{url "https://plugins.gradle.org/m2/"}'
+- ' maven{url ''http://maven.aliyun.com/nexus/content/groups/public''}'
+- "\tmaven {\n\t\t\t\turl \"https://oss.sonatype.org/content/repositories/snapshots\"\
+  \n\t\t\t}"
+- "\tmaven {\n\t\t\turl \"$rootDir/../node_modules/react-native-background-fetch/android/libs\"\
+  \n\t\t}"
+- "\tmaven {\n\t\t\turl \"https://jitpack.io\"\n\t\t}"
+- "\tmaven {\n\t\t\turl \"https://plugins.gradle.org/m2/\"\n\t\t}"
+- "\tmaven {\n\t\t\turl 'http://4thline.org/m2'\n\t\t}"
+- "\tmaven {\n\t\t\turl 'https://maven.google.com/'\n\t\t\tname 'Google'\n\t\t}"
+- "\tmaven {\n\t\t\turl 'https://plugins.gradle.org/m2/'\n\t\t}"
+- "\tmaven {\n\t\turl \"file://$pwd/.m2repo\"\n\t}"
+- "\tmaven {\n\t\turl \"https://jitpack.io\"\n\t}"
+- "\tmaven {\n\t\turl 'https://maven.google.com/'\n\t\tname 'Google'\n\t}"
+- "\tmaven {\n            // Google Maven Repository\n            url 'https://maven.google.com'\n\
+  \        }"
+- "\tmaven { url \"http://dl.bintray.com/populov/maven\" }"
+- "\tmaven { url \"https://jitpack.io\" }"
+- "\tmaven { url 'http://download.crashlytics.com/maven' }"
+- "\tmaven { url 'http://maven.ghostscript.com/' }"
+- "\tmaven { url 'https://jitpack.io' }"
+- "\tmaven { url 'https://maven.fabric.io/public' }"
+- "\tmaven { url MAVEN_REPO }"
+- ' maven  { url "http://repo1.maven.org/maven2" }'
+- " maven {\n\t    url 'https://jitpack.io'\n        }"
+- " maven {\n\t  url System.getenv()['ANDROID_HOME'] + \"/extras/android/m2repository\"\
+  \n    }"
+- " maven {\n                url \"$buildDir/repo\"\n            }"
+- " maven {\n                url \"file:~/.m2/\"\n                artifactUrls \"\
+  file:~/.m2/\"\n            }"
+- " maven {\n                url \"https://oss.sonatype.org/content/repositories/snapshots\"\
+  \n            }"
+- " maven {\n                url \"https://plugins.gradle.org/m2/\"\n            }"
+- " maven {\n                url 'https://maven.fabric.io/public'\n            }"
+- " maven {\n                url repository\n            }"
+- " maven {\n            // All of React Native (JS, Obj-C sources, Android binaries)\
+  \ is installed from npm\n            // url \"$rootDir/../node_modules/react-native/android\"\
+  \n\n            // Replace AAR from original RN with AAR from react-native-v8\n\
+  \            url(\"$rootDir/../node_modules/react-native-v8/dist\")\n        }"
+- " maven {\n            // All of React Native (JS, Obj-C sources, Android binaries)\
+  \ is installed from npm\n            url \"$projectDir/../../node_modules/react-native/android\"\
+  \n        }"
+- " maven {\n            // All of React Native (JS, Obj-C sources, Android binaries)\
+  \ is installed from npm\n            url \"$projectDir/../../tests/react-test-app/node_modules/react-native/android\"\
+  \n        }"
+- " maven {\n            // All of React Native (JS, Obj-C sources, Android binaries)\
+  \ is installed from npm\n            url \"$rootDir/../node_modules/react-native/android\"\
+  \n        }"
+- " maven {\n            // All of React Native (JS, Obj-C sources, Android binaries)\
+  \ is installed from npm\n            url(\"$rootDir/../node_modules/react-native/android\"\
+  )\n        }"
+- " maven {\n            // Android JSC is installed from npm\n            url(\"\
+  $rootDir/../node_modules/jsc-android/dist\")\n        }"
+- " maven {\n            // Local Maven repo containing AARs with JSC library built\
+  \ for Android\n            // url \"$rootDir/../node_modules/jsc-android/dist\"\n\
+  \n            // prebuilt libv8android.so\n            url(\"$rootDir/../node_modules/v8-android/dist\"\
+  )\n        }"
+- " maven {\n            //noinspection GroovyAssignabilityCheck\n            url\
+  \ 'https://jitpack.io'\n        }"
+- " maven {\n            //noinspection GroovyAssignabilityCheck\n            url\
+  \ 'https://s3.amazonaws.com/moat-sdk-builds'\n        }"
+- " maven {\n            //url 'https://maven.google.com/'\n            url 'https://jitpack.io'\n\
+  \            name 'Google'\n        }"
+- " maven {\n            name 'glide-snapshot'\n            url 'http://oss.sonatype.org/content/repositories/snapshots'\n\
+  \        }"
+- " maven {\n            url  \"http://dl.bintray.com/countly/maven\"\n        }"
+- " maven {\n            url \"./maven_repository/\"\n        }"
+- " maven {\n            url \"http://dl.bintray.com/dasar/maven\"\n        }"
+- " maven {\n            url \"http://dl.bintray.com/jenzz/maven\"\n        }"
+- " maven {\n            url \"http://dl.bintray.com/journeyapps/maven\"\n       \
+  \ }"
+- " maven {\n            url \"http://dl.bintray.com/lukaville/maven\"\n        }"
+- " maven {\n            url \"https://clojars.org/repo/\"\n        }"
+- " maven {\n            url \"https://dl.bintray.com/videolan/Android\"\n       \
+  \ }"
+- " maven {\n            url \"https://github.com/jitsi/jitsi-maven-repository/raw/master/releases\"\
+  \n        }"
+- " maven {\n            url \"https://github.com/vector-im/jitsi_libre_maven/raw/master/releases\"\
+  \n        }"
+- " maven {\n            url \"https://jcenter.bintray.com\"\n        }"
+- " maven {\n            url \"https://jitpack.io\"\n\n        }"
+- " maven {\n            url \"https://jitpack.io\"\n            content {\n     \
+  \           // For some reason gradle attempts to get bugsnag from here, which returns\
+  \ 522\n                // after which gradle just drops jitpack. Exclude so it doesn't\
+  \ bother trying.\n                excludeGroupByRegex \".*bugsnag.*\"\n        \
+  \    }"
+- " maven {\n            url \"https://jitpack.io\"\n        }"
+- " maven {\n            url \"https://jitpack.io/\"\n        }"
+- " maven {\n            url \"https://maven.fabric.io/public\"\n        }"
+- " maven {\n            url \"https://maven.google.com\"\n            name 'Google'\n\
+  \        }"
+- " maven {\n            url \"https://maven.google.com\"\n        }"
+- " maven {\n            url \"https://maven.google.com/\"\n            name 'Google'\n\
+  \        }"
+- " maven {\n            url \"https://maven.mozilla.org/maven2\"\n        }"
+- " maven {\n            url \"https://oss.sonatype.org/content/repositories/snapshots\"\
+  \n        }"
+- " maven {\n            url \"https://oss.sonatype.org/content/repositories/snapshots/\"\
+  \n        }"
+- " maven {\n            url \"https://plugins.gradle.org/m2/\"\n        }"
+- " maven {\n            url \"https://repo1.maven.org/maven2\"\n            jcenter()\n\
+  \        }"
+- " maven {\n            url \"https://repo1.maven.org/maven2\"\n        }"
+- " maven {\n            url \"https://s3.amazonaws.com/repo.commonsware.com\"\n \
+  \           }"
+- " maven {\n            url \"https://s3.amazonaws.com/repo.commonsware.com\"\n \
+  \       }"
+- " maven {\n            url 'http://oss.sonatype.org/content/repositories/snapshots'\n\
+  \        }"
+- " maven {\n            url 'http://oss.sonatype.org/content/repositories/snapshots/'\n\
+  \        }"
+- " maven {\n            url 'http://www.idescout.com/maven/repo/'\n            name\
+  \ 'IDEScout, Inc.'\n        }"
+- " maven {\n            url 'https://github.com/suckgamony/RapidDecoder/raw/master/repository'\n\
+  \        }"
+- " maven {\n            url 'https://jitpack.io'\n            content {\n       \
+  \         // Use this repo only for matrix SDK library\n                includeGroupByRegex\
+  \ \"com\\\\.github\\\\.Bubu\"\n                // Also add subgroups, due to SDK\
+  \ split into modules\n                includeGroupByRegex \"com\\\\.github\\\\.Bubu\\\
+  \\.matrix-android-sdk\"\n                // And Olm library\n                includeGroupByRegex\
+  \ \"org\\\\.matrix\\\\.gitlab\\\\.matrix-org\"\n                // And PhotoView\n\
+  \                includeGroupByRegex \"com\\\\.github\\\\.chrisbanes\"\n       \
+  \     }"
+- " maven {\n            url 'https://jitpack.io'\n            content {\n       \
+  \         // Use this repo only for matrix SDK library\n                includeGroupByRegex\
+  \ \"com\\\\.github\\\\.matrix-org\"\n                // Also add subgroups, due\
+  \ to SDK split into modules\n                includeGroupByRegex \"com\\\\.github\\\
+  \\.matrix-org\\\\.matrix-android-sdk\"\n                // And Olm library\n   \
+  \             includeGroupByRegex \"org\\\\.matrix\\\\.gitlab\\\\.matrix-org\"\n\
+  \                // And PhotoView\n                includeGroupByRegex \"com\\\\\
+  .github\\\\.chrisbanes\"\n            }"
+- " maven {\n            url 'https://jitpack.io'\n        }"
+- " maven {\n            url 'https://maven.fabric.io/public'\n        }"
+- " maven {\n            url 'https://maven.google.com'\n        }"
+- " maven {\n            url 'https://maven.google.com/'\n            name 'Google'\n\
+  \        }"
+- " maven {\n            url 'https://maven.google.com/'\n        }"
+- " maven {\n            url 'https://mint.splunk.com/gradle/'\n        }"
+- " maven {\n            url 'https://oss.sonatype.org/content/groups/public'\n  \
+  \      }"
+- " maven {\n            url 'https://oss.sonatype.org/content/repositories/snapshots'\n\
+  \        }"
+- " maven {\n            url 'https://oss.sonatype.org/content/repositories/snapshots/'\n\
+  \        }"
+- " maven {\n            url 'https://plugins.gradle.org/m2/'\n        }"
+- " maven {\n            url 'https://www.jitpack.io'\n        }"
+- " maven {\n            url = \"${project.buildDir}"
+- " maven {\n            url(\"$rootDir/../node_modules/jsc-android/dist\")\n    \
+  \    }"
+- " maven {\n            url(\"$rootDir/../node_modules/react-native/android\")\n\
+  \        }"
+- " maven {\n        // For the latest version of GeckoView (moving target!) use:\n\
+  \        //   https://index.taskcluster.net/v1/task/gecko.v2.mozilla-central.nightly.latest.mobile.android-api-16-opt/artifacts/public/android/maven\n\
+  \        //\n        // For discovering available versions go to:\n        //  \
+  \ https://tools.taskcluster.net/index/gecko.v2.mozilla-central.nightly\n\n     \
+  \   // ARM GeckoView builds\n        url \"https://index.taskcluster.net/v1/task/gecko.v2.mozilla-central.nightly\"\
+  \ +\n                \".${geckoview_nightly_date}"
+- " maven {\n        // Replace snapshots by releases for releases !\n        url\
+  \ \"https://linphone.org/snapshots/maven_repository\"\n    }"
+- " maven {\n        // Switch to release for releases !\n        url \"https://gitlab.linphone.org/BC/public/maven_repository/raw/master\"\
+  \n    }"
+- " maven {\n        // TODO: Remove this after support library v24 public release.\n\
+  \        url \"$rootDir/prebuilts/fullsdk/extras/android/m2repository\"\n    }"
+- " maven {\n        // Used only for PhotoView\n        url \"https://jitpack.io\"\
+  \n        name 'JitPack Github wrapper'\n    }"
+- " maven {\n        // aarch64 builds\n        url \"https://index.taskcluster.net/v1/task/gecko.v2.mozilla-central.nightly\"\
+  \ +\n                \".${geckoview_nightly_date}"
+- " maven {\n        // x86 GeckoView builds\n        url \"https://index.taskcluster.net/v1/task/gecko.v2.mozilla-central.nightly\"\
+  \ +\n                \".${geckoview_nightly_date}"
+- " maven {\n        //url 'https://maven.google.com/'\n        url 'https://jitpack.io'\n\
+  \        name 'Google'\n    }"
+- " maven {\n        url \"http://4thline.org/m2\"\n    }"
+- " maven {\n        url \"http://dl.bintray.com/lukaville/maven\"\n    }"
+- " maven {\n        url \"https://dl.google.com/dl/android/maven2/\"\n    }"
+- " maven {\n        url \"https://jitpack.io\"\n    }"
+- " maven {\n        url \"https://linphone.org/maven_repository\"\n    }"
+- " maven {\n        url \"https://maven.fabric.io/public\"\n    }"
+- " maven {\n        url \"https://maven.google.com\"\n    }"
+- " maven {\n        url \"https://oss.sonatype.org/content/repositories/snapshots\"\
+  \n    }"
+- " maven {\n        url \"https://repo.commonsware.com.s3.amazonaws.com\"\n    }"
+- " maven {\n        url \"https://repo1.maven.org/maven2/\"\n    }"
+- " maven {\n        url 'http://4thline.org/m2'\n    }"
+- " maven {\n        url 'http://dl.bintray.com/amulyakhare/maven'\n    }"
+- " maven {\n        url 'https://dl.bintray.com/amulyakhare/maven'\n    }"
+- " maven {\n        url 'https://github.com/Goddchen/mvn-repo/raw/master/'\n    }"
+- " maven {\n        url 'https://github.com/toxbee/mvn-repo/raw/master/maven-deploy'\n\
+  \    }"
+- " maven {\n        url 'https://jitpack.io'\n    }"
+- " maven {\n        url 'https://maven.fabric.io/public'\n    }"
+- " maven {\n        url 'https://maven.google.com'\n        // Alternative URL is\
+  \ 'https://dl.google.com/dl/android/maven2/'\n        url \"https://jitpack.io\"\
+  \n    }"
+- " maven {\n        url 'https://maven.google.com'\n    }"
+- " maven {\n        url 'https://maven.google.com/'\n        name 'Google'\n    }"
+- " maven {\n        url 'https://oss.sonatype.org/content/repositories/snapshots'\n\
+  \    }"
+- " maven {\n        url 'https://oss.sonatype.org/content/repositories/snapshots/'\n\
+  \    }"
+- " maven {\n        url 'https://raw.github.com/nicolasjafelle/maven-repo/master/'\n\
+  \    }"
+- " maven {\n        url 'https://raw.githubusercontent.com/felixb/mvn-repo/master'\n\
+  \    }"
+- " maven {\n        url xwalkMavenRepo\n      }"
+- " maven {\n      url \"https://github.com/Goddchen/mvn-repo/raw/master/\"\n    }"
+- " maven {\n      url \"https://github.com/dahlgren/abs-aar/raw/master\"\n    }"
+- " maven {\n      url \"https://jcenter.bintray.com\"\n    }"
+- " maven {\n      url \"https://repo.commonsware.com.s3.amazonaws.com\"\n    }"
+- " maven {\n      url 'http://download.crashlytics.com/maven'\n    }"
+- " maven {\n      url 'https://maven.google.com/'\n      name 'Google'\n    }"
+- " maven {\n      url 'https://raw.github.com/ark/ark/master/releases/'\n    }"
+- " maven {\n      url 'https://raw.github.com/iFixit/ark/master/releases/'\n   }"
+- " maven {\n    setUrl(\"https://plugins.gradle.org/m2/\")\n  }"
+- " maven {\n    url 'https://maven.google.com'\n  }"
+- ' maven {
+
+  //            url "https://jitpack.io"
+
+  //            url "https://maven-central.storage.googleapis.com"
+
+  //            url "http://repo.spring.io/plugins-release/"
+
+  //        }'
+- ' maven {   url "https://maven.google.com"  }'
+- ' maven { setUrl("https://plugins.gradle.org/m2/") }'
+- ' maven { setUrl("https://www.jitpack.io") }'
+- ' maven { url  "http://dl.bintray.com/dasar/maven" }'
+- ' maven { url  "https://dl.bintray.com/bjoernq/maven" }'
+- ' maven { url  "https://dl.bintray.com/ligi/maven" }'
+- ' maven { url  "https://dl.bintray.com/lukaville/maven" }'
+- ' maven { url  "https://jetbrains.bintray.com/trove4j" }'
+- ' maven { url "$rootDir/../node_modules/react-native/android" }'
+- ' maven { url "file:${rootProject.projectDir}'
+- ' maven { url "http://dl.bintray.com/amulyakhare/maven" }'
+- ' maven { url "http://dl.bintray.com/arturbosch/code-analysis" }'
+- ' maven { url "http://dl.bintray.com/countly/maven" }'
+- ' maven { url "http://dl.bintray.com/davideas/maven" }'
+- ' maven { url "http://dl.bintray.com/drummer-aidan/maven" }'
+- ' maven { url "http://dl.bintray.com/drummer-aidan/maven/com/afollestad" }'
+- ' maven { url "http://dl.bintray.com/lukaville/maven" }'
+- ' maven { url "http://dl.bintray.com/populov/maven" }'
+- ' maven { url "http://objectbox.net/beta-repo/" }'
+- ' maven { url "http://repo.commonsware.com.s3.amazonaws.com" }'
+- ' maven { url "http://repo.maven.apache.org/maven2" }'
+- ' maven { url "https://clojars.org/repo" }'
+- ' maven { url "https://clojars.org/repo/" }'
+- ' maven { url "https://dl.bintray.com/android/android-tools/" }'
+- ' maven { url "https://dl.bintray.com/drummer-aidan/maven" }'
+- ' maven { url "https://dl.bintray.com/markusamshove/maven" }'
+- ' maven { url "https://dl.bintray.com/mockito/maven/" }'
+- ' maven { url "https://dl.bintray.com/osborn/Android" }'
+- ' maven { url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
+  }'
+- ' maven { url "https://jcenter.bintray.com" }'
+- " maven { url \"https://jitpack.io\"\n    }"
+- ' maven { url "https://jitpack.io" }'
+- ' maven { url "https://jitpack.io"}'
+- ' maven { url "https://kotlin.bintray.com/kotlinx" }'
+- ' maven { url "https://maven.fabric.io/public" }'
+- " maven { url \"https://maven.google.com\"\n    }"
+- ' maven { url "https://maven.google.com" }'
+- ' maven { url "https://maven.google.com"}'
+- ' maven { url "https://maven.google.com/" }'
+- ' maven { url "https://oss.sonatype.org/content/groups/public" }'
+- ' maven { url "https://oss.sonatype.org/content/groups/public/" }'
+- ' maven { url "https://oss.sonatype.org/content/repositories/releases/" }'
+- ' maven { url "https://oss.sonatype.org/content/repositories/snapshots" }'
+- ' maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }'
+- ' maven { url "https://plugins.gradle.org/m2" }'
+- ' maven { url "https://plugins.gradle.org/m2/" }'
+- ' maven { url "https://plugins.gradle.org/m2/"}'
+- ' maven { url "https://repo.commonsware.com.s3.amazonaws.com" }'
+- ' maven { url "https://repo.commonsware.com.s3.amazonaws.com"}'
+- ' maven { url "https://repo.eclipse.org/content/groups/releases" }'
+- ' maven { url "https://repo.maven.apache.org/maven2" }'
+- ' maven { url "https://repository.aspose.com/repo/" }'
+- ' maven { url "https://s3.amazonaws.com/repo.commonsware.com" }'
+- ' maven { url "https://www.jitpack.io" }'
+- ' maven { url ''../../prebuilts/gradle-plugin'' }'
+- ' maven { url ''../../prebuilts/tools/common/m2/internal'' }'
+- ' maven { url ''../../prebuilts/tools/common/m2/repository'' }'
+- ' maven { url ''file:///usr/share/maven-repo'' }'
+- ' maven { url ''http://dl.bintray.com/amulyakhare/maven'' }'
+- ' maven { url ''http://download.crashlytics.com/maven'' }'
+- ' maven { url ''http://guardian.github.com/maven/repo-releases'' }'
+- ' maven { url ''http://igniterealtime.org/repo'' }'
+- ' maven { url ''http://repo1.maven.org/maven2'' }'
+- ' maven { url ''http://wordpress-mobile.github.io/WordPress-Android'' }'
+- ' maven { url ''https://dl.bintray.com/content/simonpoole/android'' }'
+- ' maven { url ''https://dl.bintray.com/content/simonpoole/div'' }'
+- ' maven { url ''https://dl.bintray.com/content/simonpoole/osm'' }'
+- ' maven { url ''https://dl.bintray.com/twofortyfouram/maven'' }'
+- ' maven { url ''https://dl.google.com/dl/android/maven2/'' }'
+- ' maven { url ''https://guardian.github.com/maven/repo-releases'' }'
+- ' maven { url ''https://igniterealtime.org/repo'' }'
+- ' maven { url ''https://jitpack.io'' }'
+- ' maven { url ''https://jitpack.io/'' }'
+- ' maven { url ''https://maven.fabric.io/public'' }'
+- ' maven { url ''https://maven.fabric.io/repo'' }'
+- ' maven { url ''https://maven.google.com'' }'
+- ' maven { url ''https://maven.google.com''}'
+- ' maven { url ''https://maven.google.com/'' }'
+- ' maven { url ''https://oss.jfrog.org/artifactory/oss-snapshot-local/'' }'
+- ' maven { url ''https://oss.sonatype.org/content/repositories/snapshots'' }'
+- ' maven { url ''https://oss.sonatype.org/content/repositories/snapshots/'' }'
+- ' maven { url ''https://plugins.gradle.org/m2/'' }'
+- ' maven { url ''https://repo1.maven.org/maven2'' /*maven-central with HTTPS*/}'
+- ' maven { url ''https://repo1.maven.org/maven2'' }'
+- ' maven { url ''https://repository-achartengine.forge.cloudbees.com/snapshot/''
+  }'
+- ' maven { url ''https://s3.amazonaws.com/repo.commonsware.com'' }'
+- ' maven { url ''https://www.jitpack.io'' }'
+- ' maven { url ''libs'' }'
+- ' maven { url = uri("https://jitpack.io") }'
+- ' maven { url = uri("https://maven.fabric.io/public") }'
+- ' maven { url MAVEN_REPO_CACHE }'
+- ' maven { url(''http://releases.marmeladburk.fidesmo.com/'') }'
+- ' maven {url "http://dl.bintray.com/tbruyelle/tbruyelle" }'
+- ' maven {url "https://clojars.org/repo/"}'
+- ' maven {url "https://jitpack.io"}'
+- " maven{\n            url 'https://maven.fabric.io/public'\n        }"
+- " maven{\n            url'https://plugins.gradle.org/m2/'\n        }"
+- " maven{\n        url \"https://maven.google.com\"\n    }"
+- ' maven{ url "https://oss.sonatype.org/content/repositories/releases/" }'
+- ' maven{ url "https://oss.sonatype.org/content/repositories/snapshots/" }'
+- ' maven{ url ''https://jitpack.io'' }'
+- ' maven{ url ''https://maven.aliyun.com/repository/google''}'
+- ' maven{ url ''https://maven.aliyun.com/repository/gradle-plugin''}'
+- ' maven{ url ''https://maven.aliyun.com/repository/jcenter''}'
+- ' maven{ url ''https://maven.aliyun.com/repository/public''}'
+- ' maven{url "https://jitpack.io"}'
+- ' maven{url "https://plugins.gradle.org/m2/"}'
