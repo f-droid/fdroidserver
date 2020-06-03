@@ -126,7 +126,7 @@ def disabled_algorithms_allowed():
     return options.allow_disabled_algorithms or config['allow_disabled_algorithms']
 
 
-def status_update_json(apps, sortedids, apks):
+def status_update_json(apps, apks):
     """Output a JSON file with metadata about this `fdroid update` run
 
     :param apps: fully populated list of all applications
@@ -141,7 +141,7 @@ def status_update_json(apps, sortedids, apks):
     output['failedBuilds'] = dict()
     output['noPackages'] = []
 
-    for appid in sortedids:
+    for appid in apps:
         app = apps[appid]
         for af in app.get('AntiFeatures', []):
             antiFeatures = output['antiFeatures']  # JSON camelCase
@@ -177,7 +177,7 @@ def status_update_json(apps, sortedids, apks):
     common.write_status_json(output, options.pretty)
 
 
-def update_wiki(apps, sortedids, apks):
+def update_wiki(apps, apks):
     """Update the wiki
 
     :param apps: fully populated list of all applications
@@ -193,7 +193,7 @@ def update_wiki(apps, sortedids, apks):
     generated_pages = {}
     generated_redirects = {}
 
-    for appid in sortedids:
+    for appid in apps:
         app = metadata.App(apps[appid])
 
         wikidata = ''
@@ -2319,11 +2319,6 @@ def main():
     # Apply information from latest apks to the application and update dates
     apply_info_from_latest_apk(apps, apks + archapks)
 
-    # Sort the app list by name, then the web site doesn't have to by default.
-    # (we had to wait until we'd scanned the apks to do this, because mostly the
-    # name comes from there!)
-    sortedids = sorted(apps.keys(), key=lambda appid: apps[appid].Name.upper())
-
     # APKs are placed into multiple repos based on the app package, providing
     # per-app subscription feeds for nightly builds and things like it
     if config['per_app_repos']:
@@ -2333,7 +2328,7 @@ def main():
             appdict = dict()
             appdict[appid] = app
             if os.path.isdir(repodir):
-                index.make(appdict, [appid], apks, repodir, False)
+                index.make(appdict, apks, repodir, False)
             else:
                 logging.info(_('Skipping index generation for {appid}').format(appid=appid))
         return
@@ -2342,7 +2337,7 @@ def main():
         archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])
 
     # Make the index for the main repo...
-    index.make(apps, sortedids, apks, repodirs[0], False)
+    index.make(apps, apks, repodirs[0], False)
     make_categories_txt(repodirs[0], categories)
 
     # If there's an archive repo,  make the index for it. We already scanned it
@@ -2350,7 +2345,7 @@ def main():
     if len(repodirs) > 1:
         archived_apps = copy.deepcopy(apps)
         apply_info_from_latest_apk(archived_apps, archapks)
-        index.make(archived_apps, sortedids, archapks, repodirs[1], True)
+        index.make(archived_apps, archapks, repodirs[1], True)
 
     git_remote = config.get('binary_transparency_remote')
     if git_remote or os.path.isdir(os.path.join('binary_transparency', '.git')):
@@ -2381,8 +2376,8 @@ def main():
 
     # Update the wiki...
     if options.wiki:
-        update_wiki(apps, sortedids, apks + archapks)
-    status_update_json(apps, sortedids, apks + archapks)
+        update_wiki(apps, apks + archapks)
+    status_update_json(apps, apks + archapks)
 
     logging.info(_("Finished"))
 

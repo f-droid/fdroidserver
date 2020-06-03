@@ -44,13 +44,12 @@ from fdroidserver.common import FDroidPopen, FDroidPopenBytes, load_stats_fdroid
 from fdroidserver.exception import FDroidException, VerificationException, MetaDataException
 
 
-def make(apps, sortedids, apks, repodir, archive):
+def make(apps, apks, repodir, archive):
     """Generate the repo index files.
 
     This requires properly initialized options and config objects.
 
     :param apps: fully populated apps list
-    :param sortedids: app package IDs, sorted
     :param apks: full populated apks list
     :param repodir: the repo directory
     :param archive: True if this is the archive repo, False if it's the
@@ -100,6 +99,9 @@ def make(apps, sortedids, apks, repodir, archive):
         raise FDroidException(_("Malformed repository mirrors."))
     if mirrors:
         repodict['mirrors'] = mirrors
+
+    # Historically the index has been sorted by App Name, so we enforce this ordering here
+    sortedids = sorted(apps, key=lambda appid: apps[appid].Name.upper())
 
     appsWithPackages = collections.OrderedDict()
     for packageName in sortedids:
