@@ -2009,19 +2009,19 @@ def make_categories_txt(repodir, categories):
 
 
 def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversions):
-
     def filter_apk_list_sorted(apk_list):
-        res = []
+        apkList = []
         currentVersionApk = None
         for apk in apk_list:
             if apk['packageName'] == appid:
-                if apk['versionCode'] == common.version_code_string_to_int(app.CurrentVersionCode):
-                    currentVersionApk = apk
-                    continue
-                res.append(apk)
+                if app.CurrentVersionCode is not None:
+                    if apk['versionCode'] == common.version_code_string_to_int(app.CurrentVersionCode):
+                        currentVersionApk = apk
+                        continue
+                apkList.append(apk)
 
         # Sort the apk list by version code. First is highest/newest.
-        sorted_list = sorted(res, key=lambda apk: apk['versionCode'], reverse=True)
+        sorted_list = sorted(apkList, key=lambda apk: apk['versionCode'], reverse=True)
         if currentVersionApk:
             # Insert apk which corresponds to currentVersion at the front
             sorted_list.insert(0, currentVersionApk)
