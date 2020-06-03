@@ -2166,6 +2166,71 @@ def create_metadata_from_template(apk):
     logging.info(_("Generated skeleton metadata for {appid}").format(appid=apk['packageName']))
 
 
+def read_names_from_apks(apps, apks):
+    """This is a stripped down copy of apply_info_from_latest_apk that only parses app names"""
+    for appid, app in apps.items():
+        bestver = UNSET_VERSION_CODE
+        for apk in apks:
+            if apk['packageName'] == appid:
+                if apk['versionCode'] > bestver:
+                    bestver = apk['versionCode']
+                    bestapk = apk
+
+        if bestver == UNSET_VERSION_CODE:
+            if app.Name is None:
+                app.Name = app.AutoName or appid
+            app.icon = None
+        else:
+            if app.Name is None:
+                app.Name = bestapk['name']
+
+
+def render_app_descriptions(apps, all_apps):
+    """
+    Renders the app html description.
+    For resolving inter-app links it needs the full list of apps, even if they end up in
+    separate repos (i.e. archive or per app repos).
+    """
+    for app in apps.values():
+        app['Description'] = metadata.description_html(app['Description'], metadata.DescriptionResolver(all_apps))
+
+
+def get_apps_with_packages(apps, apks):
+    """Returns a deepcopy of that subset apps that actually has any associated packages. Skips disabled apps."""
+    appsWithPackages = collections.OrderedDict()
+    for packageName in apps:
+        app = apps[packageName]
+        if app['Disabled']:
+            continue
+
+        # only include apps with packages
+        for apk in apks:
+            if apk['packageName'] == packageName:
+                newapp = copy.copy(app)
+                appsWithPackages[packageName] = newapp
+                break
+    return appsWithPackages
+
+
+def prepare_apps(apps, apks, repodir):
+    """Encapsulates all necessary preparation steps before we can build an index out of apps and apks.
+
+    :param apps: All apps as read from metadata
+    :param apks: list of apks that belong into repo, this gets modified in place
+    :param repodir: the target repository directory, metadata files will be copied here
+    :return: the relevant subset of apps (as a deepcopy)
+    """
+    apps_with_packages = get_apps_with_packages(apps, apks)
+    apply_info_from_latest_apk(apps_with_packages, apks)
+    render_app_descriptions(apps_with_packages, apps)
+    insert_funding_yml_donation_links(apps)
+    copy_triple_t_store_metadata(apps_with_packages, repodir)
+    insert_obbs(repodir, apps_with_packages, apks)
+    translate_per_build_anti_features(apps_with_packages, apks)
+    insert_localized_app_metadata(apps_with_packages, repodir)
+    return apps_with_packages
+
+
 config = None
 options = None
 start_timestamp = time.gmtime()
@@ -2302,12 +2367,6 @@ def main():
                 else:
                     logging.warning(msg + '\n\t' + _('Use `fdroid update -c` to create it.'))
 
-    insert_funding_yml_donation_links(apps)
-    copy_triple_t_store_metadata(apps, repodirs[0])
-    insert_obbs(repodirs[0], apps, apks)
-    insert_localized_app_metadata(apps, repodirs[0])
-    translate_per_build_anti_features(apps, apks)
-
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
         archapks, cc = process_apks(apkcache, repodirs[1], knownapks, options.use_date_from_apk)
@@ -2316,8 +2375,18 @@ def main():
     else:
         archapks = []
 
-    # Apply information from latest apks to the application and update dates
-    apply_info_from_latest_apk(apps, apks + archapks)
+    # We need app.Name populated for all apps regardless of which repo they end up in
+    # for the old-style inter-app links, so let's do it before we do anything else.
+    # This will be done again (as part of apply_info_from_latest_apk) for repo and archive
+    # separately later on, but it's fairly cheap anyway.
+    read_names_from_apks(apps, apks + archapks)
+
+    if len(repodirs) > 1:
+        archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])
+        archived_apps = prepare_apps(apps, archapks, repodirs[1])
+        index.make(archived_apps, archapks, repodirs[1], True)
+
+    repoapps = prepare_apps(apps, apks, repodirs[0])
 
     # APKs are placed into multiple repos based on the app package, providing
     # per-app subscription feeds for nightly builds and things like it
@@ -2333,19 +2402,9 @@ def main():
                 logging.info(_('Skipping index generation for {appid}').format(appid=appid))
         return
 
-    if len(repodirs) > 1:
-        archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])
-
     # Make the index for the main repo...
-    index.make(apps, apks, repodirs[0], False)
+    index.make(repoapps, apks, repodirs[0], False)
     make_categories_txt(repodirs[0], categories)
-
-    # If there's an archive repo,  make the index for it. We already scanned it
-    # earlier on.
-    if len(repodirs) > 1:
-        archived_apps = copy.deepcopy(apps)
-        apply_info_from_latest_apk(archived_apps, archapks)
-        index.make(archived_apps, archapks, repodirs[1], True)
 
     git_remote = config.get('binary_transparency_remote')
     if git_remote or os.path.isdir(os.path.join('binary_transparency', '.git')):

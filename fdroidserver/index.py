@@ -21,7 +21,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import collections
-import copy
 import json
 import logging
 import os
@@ -41,7 +40,7 @@ from . import metadata
 from . import net
 from . import signindex
 from fdroidserver.common import FDroidPopen, FDroidPopenBytes, load_stats_fdroid_signing_key_fingerprints
-from fdroidserver.exception import FDroidException, VerificationException, MetaDataException
+from fdroidserver.exception import FDroidException, VerificationException
 
 
 def make(apps, apks, repodir, archive):
@@ -49,8 +48,9 @@ def make(apps, apks, repodir, archive):
 
     This requires properly initialized options and config objects.
 
-    :param apps: fully populated apps list
-    :param apks: full populated apks list
+    :param apps: OrderedDict of apps to go into the index, each app should have
+                 at least one associated apk
+    :param apks: list of apks to go into the index
     :param repodir: the repo directory
     :param archive: True if this is the archive repo, False if it's the
                     main one.
@@ -59,6 +59,12 @@ def make(apps, apks, repodir, archive):
 
     if not common.options.nosign:
         common.assert_config_keystore(common.config)
+
+    # Historically the index has been sorted by App Name, so we enforce this ordering here
+    sortedids = sorted(apps, key=lambda appid: apps[appid].Name.upper())
+    sortedapps = collections.OrderedDict()
+    for appid in sortedids:
+        sortedapps[appid] = apps[appid]
 
     repodict = collections.OrderedDict()
     repodict['timestamp'] = datetime.utcnow().replace(tzinfo=timezone.utc)
@@ -100,24 +106,6 @@ def make(apps, apks, repodir, archive):
     if mirrors:
         repodict['mirrors'] = mirrors
 
-    # Historically the index has been sorted by App Name, so we enforce this ordering here
-    sortedids = sorted(apps, key=lambda appid: apps[appid].Name.upper())
-
-    appsWithPackages = collections.OrderedDict()
-    for packageName in sortedids:
-        app = apps[packageName]
-        if app['Disabled']:
-            continue
-
-        # only include apps with packages
-        for apk in apks:
-            if apk['packageName'] == packageName:
-                newapp = copy.copy(app)  # update wiki needs unmodified description
-                newapp['Description'] = metadata.description_html(app['Description'],
-                                                                  metadata.DescriptionResolver(apps))
-                appsWithPackages[packageName] = newapp
-                break
-
     requestsdict = collections.OrderedDict()
     for command in ('install', 'uninstall'):
         packageNames = []
@@ -133,9 +121,9 @@ def make(apps, apks, repodir, archive):
 
     fdroid_signing_key_fingerprints = load_stats_fdroid_signing_key_fingerprints()
 
-    make_v0(appsWithPackages, apks, repodir, repodict, requestsdict,
+    make_v0(sortedapps, apks, repodir, repodict, requestsdict,
             fdroid_signing_key_fingerprints)
-    make_v1(appsWithPackages, apks, repodir, repodict, requestsdict,
+    make_v1(sortedapps, apks, repodir, repodict, requestsdict,
             fdroid_signing_key_fingerprints)
 
 
