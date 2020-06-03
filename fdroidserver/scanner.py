@@ -162,16 +162,19 @@ def scan_source(build_dir, build=metadata.Build()):
 
     def warnproblem(what, path_in_build_dir):
         if toignore(path_in_build_dir):
-            return
+            return 0
         logging.warning('Found %s at %s' % (what, path_in_build_dir))
         if json_per_build is not None:
             json_per_build['warnings'].append([what, path_in_build_dir])
+        return 0
 
     def handleproblem(what, path_in_build_dir, filepath):
         if toignore(path_in_build_dir):
             return ignoreproblem(what, path_in_build_dir)
         if todelete(path_in_build_dir):
             return removeproblem(what, path_in_build_dir, filepath)
+        if 'src/test' in filepath or '/test/' in filepath:
+            return warnproblem(what, path_in_build_dir)
         if options and options.json:
             json_per_build['errors'].append([what, path_in_build_dir])
         if options and (options.verbose or not options.json):
@@ -242,8 +245,14 @@ def scan_source(build_dir, build=metadata.Build()):
                 count += handleproblem(_('Android AAR library'), path_in_build_dir, filepath)
             elif ext == 'class':
                 count += handleproblem(_('Java compiled class'), path_in_build_dir, filepath)
+            elif ext == 'dex':
+                count += handleproblem(_('Android DEX code'), path_in_build_dir, filepath)
+            elif ext == 'gz':
+                count += handleproblem(_('gzip file archive'), path_in_build_dir, filepath)
             elif ext == 'so':
                 count += handleproblem(_('shared library'), path_in_build_dir, filepath)
+            elif ext == 'zip':
+                count += handleproblem(_('ZIP file archive'), path_in_build_dir, filepath)
             elif ext == 'jar':
                 for name in suspects_found(curfile):
                     count += handleproblem('usual suspect \'%s\'' % name, path_in_build_dir, filepath)

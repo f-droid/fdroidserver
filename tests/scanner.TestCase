@@ -95,14 +95,17 @@ class ScannerTest(unittest.TestCase):
             'arg.jar',
             'ascii.out',
             'baz.so',
+            'classes.dex',
             'sqlcipher.aar',
             'static.a',
+            'src/test/resources/classes.dex',
         ]
         remove = [
             'gradle-wrapper.jar',
             'gradlew',
             'gradlew.bat',
         ]
+        os.makedirs('src/test/resources', exist_ok=True)
         for f in keep + remove:
             with open(f, 'w') as fp:
                 fp.write('placeholder')
@@ -127,7 +130,7 @@ class ScannerTest(unittest.TestCase):
         os.system('ls -l fake.png')
 
         count = fdroidserver.scanner.scan_source(testdir)
-        self.assertEqual(5, count, 'there should be this many errors')
+        self.assertEqual(6, count, 'there should be this many errors')
 
         for f in keep + binaries:
             self.assertTrue(os.path.exists(f), f + ' should still be there')
@@ -148,11 +151,14 @@ class ScannerTest(unittest.TestCase):
         self.assertTrue('arg.jar' in files['errors'], 'all JAR files are errors')
         self.assertTrue('baz.so' in files['errors'], 'all .so files are errors')
         self.assertTrue('binary.out' in files['errors'], 'a binary .out file is an error')
+        self.assertTrue('classes.dex' in files['errors'], 'all classes.dex files are errors')
         self.assertTrue('sqlcipher.aar' in files['errors'], 'all AAR files are errors')
         self.assertTrue('static.a' in files['errors'], 'all .a files are errors')
 
         self.assertTrue('fake.png' in files['warnings'],
                         'a random binary that is executable that is not an image is a warning')
+        self.assertTrue('src/test/resources/classes.dex' in files['warnings'],
+                        'suspicious file but in a test dir is a warning')
 
         for f in remove:
             self.assertTrue(f in files['infos'],
