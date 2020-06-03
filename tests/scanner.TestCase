@@ -99,7 +99,7 @@ class ScannerTest(unittest.TestCase):
         build = fdroidserver.metadata.Build()
         build.commit = '1.0'
         build.output = app.id + '.apk'
-        build.scanignore = ['baz.so']
+        build.scanignore = ['baz.so', 'foo.aar']
         build.versionCode = '1'
         build.versionName = '1.0'
         vcs = mock.Mock()

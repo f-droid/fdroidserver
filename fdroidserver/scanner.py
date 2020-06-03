@@ -232,6 +232,8 @@ def scan_source(build_dir, build=metadata.Build()):
                 count += handleproblem('shared library', path_in_build_dir, filepath)
             elif ext == 'a':
                 count += handleproblem('static library', path_in_build_dir, filepath)
+            elif ext == 'aar':
+                count += handleproblem(_('Android AAR library'), path_in_build_dir, filepath)
             elif ext == 'class':
                 count += handleproblem('Java compiled class', path_in_build_dir, filepath)
             elif ext == 'apk':
@@ -243,10 +245,7 @@ def scan_source(build_dir, build=metadata.Build()):
                 if curfile == 'gradle-wrapper.jar':
                     removeproblem('gradle-wrapper.jar', path_in_build_dir, filepath)
                 else:
-                    warnproblem('JAR file', path_in_build_dir)
-
-            elif ext == 'aar':
-                warnproblem('AAR file', path_in_build_dir)
+                    count += handleproblem('JAR file', path_in_build_dir, filepath)
 
             elif ext == 'java':
                 if not os.path.isfile(filepath):
