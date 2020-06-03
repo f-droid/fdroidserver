@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import imghdr
 import json
 import os
 import re
@@ -196,6 +197,8 @@ def scan_source(build_dir, build=metadata.Build()):
         for sp in safe_paths:
             if sp.match(path):
                 return True
+        if imghdr.what(path) is not None:
+            return True
         return False
 
     gradle_compile_commands = get_gradle_compile_commands(build)
@@ -277,7 +280,7 @@ def scan_source(build_dir, build=metadata.Build()):
 
             elif is_executable(filepath):
                 if is_binary(filepath) and not safe_path(path_in_build_dir):
-                    warnproblem('possible binary', path_in_build_dir)
+                    warnproblem('executable binary, possibly code', path_in_build_dir)
 
     for p in scanignore:
         if p not in scanignore_worked:
