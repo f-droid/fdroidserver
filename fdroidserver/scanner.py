@@ -34,7 +34,8 @@ from .exception import BuildException, VCSException
 config = None
 options = None
 
-json_per_build = None
+DEFAULT_JSON_PER_BUILD = {'errors': [], 'warnings': [], 'infos': []}
+json_per_build = DEFAULT_JSON_PER_BUILD
 
 
 def get_gradle_compile_commands(build):
@@ -338,7 +339,7 @@ def main():
 
         if app.Disabled and not options.force:
             logging.info(_("Skipping {appid}: disabled").format(appid=appid))
-            json_per_appid = json_per_appid['infos'].append('Skipping: disabled')
+            json_per_appid['disabled'] = json_per_build['infos'].append('Skipping: disabled')
             continue
 
         try:
@@ -354,7 +355,7 @@ def main():
             else:
                 logging.info(_("{appid}: no builds specified, running on current source state")
                              .format(appid=appid))
-                json_per_build = {'errors': [], 'warnings': [], 'infos': []}
+                json_per_build = DEFAULT_JSON_PER_BUILD
                 json_per_appid['current-source-state'] = json_per_build
                 count = scan_source(build_dir)
                 if count > 0:
@@ -364,7 +365,7 @@ def main():
                 app.builds = []
 
             for build in app.builds:
-                json_per_build = {'errors': [], 'warnings': [], 'infos': []}
+                json_per_build = DEFAULT_JSON_PER_BUILD
                 json_per_appid[build.versionCode] = json_per_build
 
                 if build.disable and not options.force:
