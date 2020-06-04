@@ -797,6 +797,13 @@ def _strip_and_copy_image(in_file, outpath):
     """
     logging.debug('copying ' + in_file + ' ' + outpath)
 
+    if not os.path.exists(in_file):
+        if os.path.islink(in_file):
+            logging.warning(_("Broken symlink: {path}").format(path=in_file))
+        else:
+            logging.warning(_("File disappeared while processing it: {path}").format(path=in_file))
+        return
+
     if os.path.isdir(outpath):
         out_file = os.path.join(outpath, os.path.basename(in_file))
     else:
