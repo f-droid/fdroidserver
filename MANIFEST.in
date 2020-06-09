@@ -541,7 +541,6 @@ include tests/description-parsing.py
 include tests/dummy-keystore.jks
 include tests/dump_internal_metadata_format.py
 include tests/exception.TestCase
-include tests/extra/convert_metadata_to_yaml_then_txt.sh
 include tests/extra/manual-vmtools-test.py
 include tests/getsig/getsig.java
 include tests/getsig/make.sh

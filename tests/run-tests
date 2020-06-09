@@ -628,19 +628,6 @@ mkdir $REPOROOT/metadata/
 cp $WORKSPACE/tests/metadata/org.smssecure.smssecure.yml $REPOROOT/metadata/
 $fdroid readmeta
 
-# now make a fake duplicate
-touch $REPOROOT/metadata/org.smssecure.smssecure.yml
-
-set +e
-$fdroid readmeta
-if [ $? -eq 0 ]; then
-    echo "This should have failed because there is a duplicate metadata file!"
-    exit 1
-else
-    echo "testing duplicate metadata checks passed"
-fi
-set -e
-
 
 #------------------------------------------------------------------------------#
 echo_header "ensure commands that don't need the JDK work without a JDK configed"
