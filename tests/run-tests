@@ -226,15 +226,18 @@ REPOROOT=`create_test_dir`
 cd $REPOROOT
 cp $WORKSPACE/examples/fdroid-icon.png $REPOROOT/
 mkdir metadata
-echo "Auto Name:Just A Test" > metadata/org.fdroid.ci.test.app.txt
-echo "Web Site:" >> metadata/org.fdroid.ci.test.app.txt
-echo "Build:0.3,300" >> metadata/org.fdroid.ci.test.app.txt
-echo "    commit=0.3" >> metadata/org.fdroid.ci.test.app.txt
-echo "    subdir=app" >> metadata/org.fdroid.ci.test.app.txt
-echo "    gradle=yes" >> metadata/org.fdroid.ci.test.app.txt
-echo "" >> metadata/org.fdroid.ci.test.app.txt
-echo "Repo:https://gitlab.com/fdroid/ci-test-app.git" >> metadata/org.fdroid.ci.test.app.txt
-echo "Repo Type:git" >> metadata/org.fdroid.ci.test.app.txt
+echo "AutoName: Just A Test" > metadata/org.fdroid.ci.test.app.yml
+echo "WebSite: " >> metadata/org.fdroid.ci.test.app.yml
+echo "Builds:" >> metadata/org.fdroid.ci.test.app.yml
+echo " - versionName: 0.3" >> metadata/org.fdroid.ci.test.app.yml
+echo "   versionCode: 300" >> metadata/org.fdroid.ci.test.app.yml
+echo "   commit: 0.3" >> metadata/org.fdroid.ci.test.app.yml
+echo "   subdir: app" >> metadata/org.fdroid.ci.test.app.yml
+echo "   gradle:" >> metadata/org.fdroid.ci.test.app.yml
+echo "     - yes" >> metadata/org.fdroid.ci.test.app.yml
+echo "" >> metadata/org.fdroid.ci.test.app.yml
+echo "Repo: https://gitlab.com/fdroid/ci-test-app.git" >> metadata/org.fdroid.ci.test.app.yml
+echo "RepoType: git" >> metadata/org.fdroid.ci.test.app.yml
 mkdir build
 cp -a $WORKSPACE/tests/tmp/importer build/org.fdroid.ci.test.app
 ls -l build/org.fdroid.ci.test.app
@@ -293,10 +296,10 @@ cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
 $sed -i.tmp '/allow_disabled_algorithms/d' config.py
 test -d metadata || mkdir metadata
-cp $WORKSPACE/tests/metadata/*.txt metadata/
-echo 'Summary:good test version of urzip' > metadata/info.guardianproject.urzip.txt
-echo 'Summary:good MD5 sig, which is disabled algorithm' > metadata/org.bitbucket.tickytacky.mirrormirror.txt
-$sed -i.tmp '/Archive Policy:/d' metadata/*.txt
+cp $WORKSPACE/tests/metadata/*.yml metadata/
+echo 'Summary: good test version of urzip' > metadata/info.guardianproject.urzip.yml
+echo 'Summary: good MD5 sig, which is disabled algorithm' > metadata/org.bitbucket.tickytacky.mirrormirror.yml
+$sed -i.tmp '/ArchivePolicy:/d' metadata/*.yml
 test -d repo || mkdir repo
 cp $WORKSPACE/tests/urzip.apk \
    $WORKSPACE/tests/org.bitbucket.tickytacky.mirrormirror_[0-9].apk \
@@ -341,7 +344,7 @@ if ! which apksigner; then
     test -e repo/com.politedroid_6.apk
 
     echo "enable one app in the repo"
-    $sed -i.tmp 's,^Archive Policy:4,Archive Policy:1,' metadata/com.politedroid.txt
+    $sed -i.tmp 's,^ArchivePolicy: 4,ArchivePolicy: 1,' metadata/com.politedroid.yml
     $fdroid update --pretty --nosign
     test `grep '<package>' archive/index.xml | wc -l` -eq 3
     test `grep '<package>' repo/index.xml | wc -l` -eq 1
@@ -355,7 +358,7 @@ if ! which apksigner; then
     test -e repo/com.politedroid_6.apk
 
     echo "remove all apps from the repo"
-    $sed -i.tmp 's,^Archive Policy:1,Archive Policy:0,' metadata/com.politedroid.txt
+    $sed -i.tmp 's,^ArchivePolicy: 1,ArchivePolicy: 0,' metadata/com.politedroid.yml
     $fdroid update --pretty --nosign
     test `grep '<package>' archive/index.xml | wc -l` -eq 4
     test `grep '<package>' repo/index.xml | wc -l` -eq 0
@@ -370,7 +373,7 @@ if ! which apksigner; then
     ! test -e repo/com.politedroid_6.apk
 
     echo "move back one from archive to the repo"
-    $sed -i.tmp 's,^Archive Policy:0,Archive Policy:1,' metadata/com.politedroid.txt
+    $sed -i.tmp 's,^ArchivePolicy: 0,ArchivePolicy: 1,' metadata/com.politedroid.yml
     $fdroid update --pretty --nosign
     test `grep '<package>' archive/index.xml | wc -l` -eq 3
     test `grep '<package>' repo/index.xml | wc -l` -eq 1
@@ -385,7 +388,7 @@ if ! which apksigner; then
     test -e repo/com.politedroid_6.apk
 
     echo "set an earlier version as CVC and test that it's the only one not archived"
-    $sed -i.tmp 's,^Current Version Code:6,Current Version Code:5,' metadata/com.politedroid.txt
+    $sed -i.tmp 's,^CurrentVersionCode: 6,CurrentVersionCode: 5,' metadata/com.politedroid.yml
     $fdroid update --pretty --nosign
     test `grep '<package>' archive/index.xml | wc -l` -eq 3
     test `grep '<package>' repo/index.xml | wc -l` -eq 1
@@ -409,7 +412,7 @@ cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
 test -d metadata || mkdir metadata
 cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata/
-$sed -i.tmp '/Archive Policy:/d' metadata/com.politedroid.txt
+$sed -i.tmp '/ArchivePolicy:/d' metadata/com.politedroid.yml
 test -d repo || mkdir repo
 cp $WORKSPACE/tests/repo/com.politedroid_[0-9].apk repo/
 $sed -i.tmp 's,archive_older = [0-9],archive_older = 3,' config.py
@@ -440,7 +443,7 @@ test -e archive/com.politedroid_5.apk
 test -e repo/com.politedroid_6.apk
 
 # disabling deletes from the archive
-$sed -i.tmp 's/Build:1.3,4/Build:1.3,4\n    disable=testing deletion/' metadata/com.politedroid.txt
+$sed -i.tmp 's/\(versionCode: 4\)/\1\n    disable: testing deletion/' metadata/com.politedroid.yml
 $fdroid update --pretty --nosign
 test `grep '<package>' archive/index.xml | wc -l` -eq 2
 test `grep '<package>' repo/index.xml | wc -l` -eq 1
@@ -454,7 +457,7 @@ test -e archive/com.politedroid_5.apk
 test -e repo/com.politedroid_6.apk
 
 # disabling deletes from the repo, and promotes one from the archive
-$sed -i.tmp 's/Build:1.5,6/Build:1.5,6\n    disable=testing deletion/' metadata/com.politedroid.txt
+$sed -i.tmp 's/\(versionCode: 6\)/\1\n    disable: testing deletion/' metadata/com.politedroid.yml
 $fdroid update --pretty --nosign
 test `grep '<package>' archive/index.xml | wc -l` -eq 1
 test `grep '<package>' repo/index.xml | wc -l` -eq 1
@@ -491,9 +494,9 @@ echo 'allow_disabled_algorithms = True' >> config.py
 $sed -i.tmp 's,archive_older = [0-9],archive_older = 3,' config.py
 test -d metadata || mkdir metadata
 cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata/
-echo 'Summary:good test version of urzip' > metadata/info.guardianproject.urzip.txt
-echo 'Summary:good MD5 sig, disabled algorithm' > metadata/org.bitbucket.tickytacky.mirrormirror.txt
-$sed -i.tmp '/Archive Policy:/d' metadata/*.txt
+echo 'Summary: good test version of urzip' > metadata/info.guardianproject.urzip.yml
+echo 'Summary: good MD5 sig, disabled algorithm' > metadata/org.bitbucket.tickytacky.mirrormirror.yml
+$sed -i.tmp '/ArchivePolicy:/d' metadata/*.yml
 test -d repo || mkdir repo
 cp $WORKSPACE/tests/repo/com.politedroid_[0-9].apk \
    $WORKSPACE/tests/org.bitbucket.tickytacky.mirrormirror_[0-9].apk \
@@ -636,12 +639,11 @@ REPOROOT=`create_test_dir`
 cd $REPOROOT
 mkdir repo
 mkdir metadata
-echo "License:GPL-2.0-only" >> metadata/fake.txt
-echo "Summary:Yup still fake" >> metadata/fake.txt
-echo "Categories:Internet" >> metadata/fake.txt
-echo "Description:" >> metadata/fake.txt
-echo "this is fake" >> metadata/fake.txt
-echo "." >> metadata/fake.txt
+echo "License: GPL-2.0-only" >> metadata/fake.yml
+echo "Summary: Yup still fake" >> metadata/fake.yml
+echo "Categories: [Internet]" >> metadata/fake.yml
+echo "Description: |" >> metadata/fake.yml
+echo " this is fake" >> metadata/fake.yml
 
 # fake that no JDKs are available
 echo 'java_paths = {}' > config.py
