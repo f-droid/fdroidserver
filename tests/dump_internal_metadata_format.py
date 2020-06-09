@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 #
+# Test that the parsing of the .yml metadata format didn't change from last
+# released version. This uses the commit ID of the release tags,
+# rather than the release tag itself so that contributor forks do not
+# need to include the tags in them for this test to work.
+#
 # This is for running manual tests when changing the metadata format.
 # The idea is to test changes using all of the files in
 # fdroiddata.git.  To run it, do:
@@ -71,7 +76,7 @@ if not os.path.isdir('metadata'):
 config = dict()
 config['sdk_path'] = os.getenv('ANDROID_HOME') or '/opt/android-sdk'
 config['ndk_paths'] = dict()
-config['accepted_formats'] = ['txt']
+config['accepted_formats'] = ['yml']
 fdroidserver.common.config = config
 
 repo = git.Repo(localmodule)

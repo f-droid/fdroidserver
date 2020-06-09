@@ -34,11 +34,6 @@ class LintTest(unittest.TestCase):
         os.chdir(self.basedir)
 
     def test_check_for_unsupported_metadata_files(self):
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        config['accepted_formats'] = ('txt', 'yml')
-        fdroidserver.common.config = config
-        fdroidserver.lint.config = config
         self.assertTrue(fdroidserver.lint.check_for_unsupported_metadata_files())
 
         tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,

@@ -167,7 +167,6 @@ if which zipalign || ls -1 $ANDROID_HOME/build-tools/*/zipalign; then
     $fdroid init --keystore keystore.jks --repo-keyalias=sova
     echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
     echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
-    echo "accepted_formats = ['txt', 'yml']" >> config.py
     echo 'keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.py
     test -d archive || mkdir archive
     test -d metadata || mkdir metadata
@@ -252,7 +251,6 @@ fdroid_init_with_prebuilt_keystore
 cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $REPOROOT/
 cp -a $WORKSPACE/tests/gnupghome $GNUPGHOME
 chmod 0700 $GNUPGHOME
-echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
 echo "install_list = 'org.adaway'" >> config.py
 echo "uninstall_list = ('com.android.vending', 'com.facebook.orca',)" >> config.py
 echo "gpghome = '$GNUPGHOME'" >> config.py
@@ -293,7 +291,6 @@ echo_header 'test moving lots of APKs to the archive'
 REPOROOT=`create_test_dir`
 cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
-echo "accepted_formats = ['txt']" >> config.py
 $sed -i.tmp '/allow_disabled_algorithms/d' config.py
 test -d metadata || mkdir metadata
 cp $WORKSPACE/tests/metadata/*.txt metadata/
@@ -325,7 +322,6 @@ if ! which apksigner; then
     REPOROOT=`create_test_dir`
     cd $REPOROOT
     fdroid_init_with_prebuilt_keystore
-    echo "accepted_formats = ['txt']" >> config.py
     test -d metadata || mkdir metadata
     cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata/
     test -d repo || mkdir repo
@@ -411,7 +407,6 @@ echo_header 'test moving old APKs to and from the archive'
 REPOROOT=`create_test_dir`
 cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
-echo "accepted_formats = ['txt']" >> config.py
 test -d metadata || mkdir metadata
 cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata/
 $sed -i.tmp '/Archive Policy:/d' metadata/com.politedroid.txt
@@ -492,7 +487,6 @@ echo_header 'test allowing disabled signatures in repo and archive'
 REPOROOT=`create_test_dir`
 cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
-echo "accepted_formats = ['txt']" >> config.py
 echo 'allow_disabled_algorithms = True' >> config.py
 $sed -i.tmp 's,archive_older = [0-9],archive_older = 3,' config.py
 test -d metadata || mkdir metadata
@@ -586,7 +580,6 @@ echo_header 'rename apks with `fdroid update --rename-apks`, --nosign for speed'
 REPOROOT=`create_test_dir`
 cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
-echo "accepted_formats = ['txt', 'yml']" >> config.py
 echo 'keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.py
 test -d metadata || mkdir metadata
 cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.yml metadata/
@@ -873,7 +866,6 @@ cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
 mkdir $REPOROOT/metadata
 cp -a $WORKSPACE/tests/metadata/obb.mainpatch.current.yml $REPOROOT/metadata
-echo "accepted_formats = ['txt']" >> config.py
 cp $WORKSPACE/tests/repo/obb.mainpatch.current_1619.apk $REPOROOT/repo/
 cp $WORKSPACE/tests/repo/obb.mainpatch.current_1619_another-release-key.apk $REPOROOT/repo/
 $fdroid update --pretty
@@ -1029,7 +1021,6 @@ cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
 cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $REPOROOT/
 echo "binary_transparency_remote = '$GIT_REMOTE'" >> config.py
-echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
 $fdroid update --verbose
 if have_git_2_3; then
     $fdroid server update --verbose
@@ -1182,7 +1173,6 @@ if have_git_2_3; then
     echo "mirrors = ['http://foo.bar/fdroid', 'http://asdflkdsfjafdsdfhkjh.onion/fdroid']" >> config.py
     echo "servergitmirrors = '$SERVER_GIT_MIRROR'" >> config.py
     echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
-    echo "accepted_formats = ['json', 'txt', 'yml']" >> config.py
     $fdroid update --pretty
     grep -F '<application id=' repo/index.xml > /dev/null
     grep -F '/fdroid/repo</mirror>' repo/index.xml
@@ -1215,7 +1205,6 @@ echo_header 'test extracting and publishing with developer signature'
 REPOROOT=`create_test_dir`
 cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
-echo "accepted_formats = ['txt']" >> config.py
 echo 'keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.py
 test -d metadata || mkdir metadata
 cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata/

@@ -10,7 +10,7 @@ test:
     - cd tests
     - ./complete-ci-tests
 
-# Test that the parsing of the .txt format didn't change from last
+# Test that the parsing of the .yml metadata format didn't change from last
 # released version. This uses the commit ID of the release tags,
 # rather than the release tag itself so that contributor forks do not
 # need to include the tags in them for this test to work.
@@ -22,19 +22,18 @@ metadata_v0:
   variables:
     RELEASE_COMMIT_ID: 4655e2e24ebd043be6faa4adf552db391caf2be9  # 1.1a~
   script:
-    - git fetch https://gitlab.com/fdroid/fdroidserver $RELEASE_COMMIT_ID
+    - git fetch https://gitlab.com/fdroid/fdroidserver.git $RELEASE_COMMIT_ID
     - cd tests
     - export GITCOMMIT=`git describe`
     - git checkout $RELEASE_COMMIT_ID
     - cd ..
-    - git clone --depth 1 https://gitlab.com/fdroid/fdroiddata
+    - git clone --depth 1 https://gitlab.com/fdroid/fdroiddata.git
     - cd fdroiddata
     - ../tests/dump_internal_metadata_format.py
     - cd ..
     - git reset --hard
     - git checkout $GITCOMMIT
     - cd fdroiddata
-    - echo "accepted_formats = ('txt', 'yml')" >> config.py
     - ../tests/dump_internal_metadata_format.py
     - sed -i
           -e '/kivy:\sfalse/d'

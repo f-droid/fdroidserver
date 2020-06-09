@@ -47,7 +47,6 @@ class UpdateTest(unittest.TestCase):
     def testInsertStoreMetadata(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
-        config['accepted_formats'] = ('txt', 'yml')
         fdroidserver.update.config = config
         fdroidserver.update.options = fdroidserver.common.options
         os.chdir(os.path.join(localmodule, 'tests'))
@@ -170,7 +169,6 @@ class UpdateTest(unittest.TestCase):
 
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
-        config['accepted_formats'] = ('yml')
         fdroidserver.common.config = config
         fdroidserver.update.config = config
         fdroidserver.update.options = fdroidserver.common.options
@@ -201,11 +199,6 @@ class UpdateTest(unittest.TestCase):
         shutil.copytree(os.path.join(self.basedir, 'triple-t-2'), tmptestsdir)
         os.chdir(tmptestsdir)
 
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        config['accepted_formats'] = ('yml')
-        fdroidserver.common.config = config
-        fdroidserver.update.config = config
         fdroidserver.update.options = fdroidserver.common.options
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
@@ -344,7 +337,6 @@ class UpdateTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
-        config['accepted_formats'] = ['json', 'txt', 'yml']
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 
@@ -402,7 +394,6 @@ class UpdateTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
-        config['accepted_formats'] = ['json', 'txt', 'yml']
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 
@@ -592,7 +583,6 @@ class UpdateTest(unittest.TestCase):
             raise Exception('This test must be run in the "tests/" subdir')
 
         config['ndk_paths'] = dict()
-        config['accepted_formats'] = ['json', 'txt', 'yml']
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 
@@ -646,7 +636,6 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.config = config
 
         config['ndk_paths'] = dict()
-        config['accepted_formats'] = ['json', 'txt', 'yml']
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 
@@ -765,7 +754,6 @@ class UpdateTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
-        config['accepted_formats'] = ['json', 'txt', 'yml']
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 
@@ -801,7 +789,6 @@ class UpdateTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
-        config['accepted_formats'] = ['json', 'txt', 'yml']
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 
