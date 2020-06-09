@@ -48,8 +48,8 @@ class LintTest(unittest.TestCase):
                         os.path.join(tmptestsdir, 'metadata'),
                         ignore=shutil.ignore_patterns('apk', 'dump', '*.json'))
         self.assertFalse(fdroidserver.lint.check_for_unsupported_metadata_files(tmptestsdir + '/'))
-        shutil.copy(os.path.join(localmodule, 'tests', 'metadata', 'org.adaway.json'),
-                    os.path.join(tmptestsdir, 'metadata'))
+        with open(os.path.join(tmptestsdir, 'metadata', 'org.adaway.json'), 'w') as fp:
+            fp.write('placeholder')
         self.assertTrue(fdroidserver.lint.check_for_unsupported_metadata_files(tmptestsdir + '/'))
 
     def test_forbidden_html_tags(self):

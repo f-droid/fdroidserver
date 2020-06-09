@@ -1,0 +1,99 @@
+AntiFeatures:
+  - UpstreamNonFree
+Categories:
+  - System
+License: GPL-3.0-only
+SourceCode: https://github.com/loadrunner/Facebook-Contact-Sync
+IssueTracker: https://github.com/loadrunner/Facebook-Contact-Sync/issues
+
+AutoName: UberSync for Facebook
+Summary: Sync your Facebook Contacts
+Description: |-
+    To configure, go to "Settings => Accounts & Sync => Add Account". Depending on
+    how many friends you have, the first import might take a while, so be patient.
+
+    * Facebook does not allow to export phone numbers or emails: only names, pictures and statuses are synced.
+    * Facebook users have the option to block one or all apps: if they opt for that, they will be EXCLUDED from your friends list.
+
+    Appbrain SDK was removed before building.
+
+RepoType: git
+Repo: https://github.com/loadrunner/Facebook-Contact-Sync.git
+
+Builds:
+  - versionName: 1.0.0
+    versionCode: 32
+    commit: b3879c973e7cac3a3319
+
+  - versionName: 1.0.1
+    versionCode: 33
+    commit: 252c8dd4c9
+
+  - versionName: 1.2.0
+    versionCode: 39
+    commit: v1.2.0
+    patch:
+      - appbrain.patch
+    srclibs:
+      - FacebookSDK@sdk-version-3.0.1
+    rm:
+      - libs/appbrain-sdk-android.jar
+    prebuild:
+      - sed -i 's@\(reference.1=\).*@\1$$FacebookSDK$$@' project.properties
+      - sed -i 's/Class\[\]/Class\<?\>\[\]/g' $$FacebookSDK$$/src/com/facebook/model/GraphObject.java
+
+  - versionName: 1.2.2
+    versionCode: 42
+    commit: v1.2.2
+    patch:
+      - appbrain.patch
+    srclibs:
+      - FacebookSDK@sdk-version-3.0.2
+    rm:
+      - libs/appbrain-sdk-android.jar
+    extlibs:
+      - android/android-support-v4.jar
+    prebuild:
+      - mv libs/android-support-v4.jar $$FacebookSDK$$/libs/
+      - sed -i 's@\(reference.1=\).*@\1$$FacebookSDK$$@' project.properties
+      - sed -i 's/Class\[\]/Class\<?\>\[\]/g'          $$FacebookSDK$$/src/com/facebook/model/GraphObject.java
+
+  - versionName: 2.1.1
+    versionCode: 48
+    commit: 2.1.1
+    patch:
+      - manifest-ads.patch
+      - mobilecore.patch
+    maven: 'yes'
+    srclibs:
+      - FacebookSDK@sdk-version-3.0.2
+
+  - versionName: 2.1.1-b
+    versionCode: 49
+    commit: 2.1.1
+    patch:
+      - manifest-ads.patch
+      - mobilecore.patch
+    maven: yes@..
+    srclibs:
+      - FacebookSDK@sdk-version-3.0.2
+
+  - versionName: 2.1.1-c
+    versionCode: 50
+    commit: 2.1.1
+    patch:
+      - manifest-ads.patch
+      - mobilecore.patch
+    maven: '2'
+    srclibs:
+      - FacebookSDK@sdk-version-3.0.2
+
+  - versionName: 2.1.2
+    versionCode: 51
+    disable: Labelled as pre-release, so skipped
+
+ArchivePolicy: 0 versions
+AutoUpdateMode: None
+UpdateCheckMode: None
+CurrentVersion: 2.1.2
+CurrentVersionCode: 49

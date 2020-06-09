@@ -327,7 +327,7 @@ if ! which apksigner; then
     fdroid_init_with_prebuilt_keystore
     echo "accepted_formats = ['txt']" >> config.py
     test -d metadata || mkdir metadata
-    cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
+    cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata/
     test -d repo || mkdir repo
     cp $WORKSPACE/tests/repo/com.politedroid_[0-9].apk repo/
     $sed -i.tmp 's,archive_older = [0-9],archive_older = 3,' config.py
@@ -413,7 +413,7 @@ cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
 echo "accepted_formats = ['txt']" >> config.py
 test -d metadata || mkdir metadata
-cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
+cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata/
 $sed -i.tmp '/Archive Policy:/d' metadata/com.politedroid.txt
 test -d repo || mkdir repo
 cp $WORKSPACE/tests/repo/com.politedroid_[0-9].apk repo/
@@ -496,7 +496,7 @@ echo "accepted_formats = ['txt']" >> config.py
 echo 'allow_disabled_algorithms = True' >> config.py
 $sed -i.tmp 's,archive_older = [0-9],archive_older = 3,' config.py
 test -d metadata || mkdir metadata
-cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
+cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata/
 echo 'Summary:good test version of urzip' > metadata/info.guardianproject.urzip.txt
 echo 'Summary:good MD5 sig, disabled algorithm' > metadata/org.bitbucket.tickytacky.mirrormirror.txt
 $sed -i.tmp '/Archive Policy:/d' metadata/*.txt
@@ -632,7 +632,7 @@ fi
 set -e
 
 mkdir $REPOROOT/metadata/
-cp $WORKSPACE/tests/metadata/org.smssecure.smssecure.txt $REPOROOT/metadata/
+cp $WORKSPACE/tests/metadata/org.smssecure.smssecure.yml $REPOROOT/metadata/
 $fdroid readmeta
 
 # now make a fake duplicate
@@ -872,7 +872,7 @@ REPOROOT=`create_test_dir`
 cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
 mkdir $REPOROOT/metadata
-cp -a $WORKSPACE/tests/metadata/obb.mainpatch.current.txt $REPOROOT/metadata
+cp -a $WORKSPACE/tests/metadata/obb.mainpatch.current.yml $REPOROOT/metadata
 echo "accepted_formats = ['txt']" >> config.py
 cp $WORKSPACE/tests/repo/obb.mainpatch.current_1619.apk $REPOROOT/repo/
 cp $WORKSPACE/tests/repo/obb.mainpatch.current_1619_another-release-key.apk $REPOROOT/repo/
@@ -1218,7 +1218,7 @@ fdroid_init_with_prebuilt_keystore
 echo "accepted_formats = ['txt']" >> config.py
 echo 'keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.py
 test -d metadata || mkdir metadata
-cp $WORKSPACE/tests/metadata/com.politedroid.txt metadata/
+cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata/
 test -d repo || mkdir repo
 test -d unsigned || mkdir unsigned
 cp $WORKSPACE/tests/repo/com.politedroid_6.apk unsigned/

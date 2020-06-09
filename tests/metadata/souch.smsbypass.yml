@@ -1,0 +1,61 @@
+Categories:
+  - Phone & SMS
+License: GPL-3.0-only
+WebSite: https://gitlab.com/souch/SMSbypass
+SourceCode: https://gitlab.com/souch/SMSbypass/tree/HEAD
+IssueTracker: https://gitlab.com/souch/SMSbypass/issues
+Donate: http://rodolphe.souchaud.free.fr/donate
+FlattrID: cad90e036b975ed129a3ce80a0750466
+
+AutoName: Battery level
+Summary: Filter SMS and show them in a fake app
+Description: |-
+    In order to keep away curious eyes, SMS-bypass filters incoming SMS messages
+    before they reach your inbox. Based on bughunter2.smsfilter.
+
+    Features:
+
+    * Discrete fake app "Battery level": Long tap on Battery percentage will show SMS.
+    * Filter incoming SMS specified address: redirect the SMS to SMS-bypass messages list; remove SMS arrival sound or vibration; show a discreet notification icon (battery level); vibrate if checked in settings
+    * Add contact from contact list
+    * Export messages to a text file
+
+RepoType: git
+Repo: https://gitlab.com/souch/SMSbypass.git
+
+Builds:
+  - versionName: '0.8'
+    versionCode: 5
+    commit: v0.8
+    subdir: app
+    gradle:
+      - yes
+    prebuild: sed -i -e '/minSdkVersion/amaxSdkVersion 19\n' build.gradle
+
+  - versionName: 0.8b
+    versionCode: 6
+    disable: don't build, just use as template for AUM, correct VC is 8
+    commit: 2bd6164ff6391906af2af2b484de69a4ff926a01
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.8.1
+    versionCode: 8
+    disable: mistagged
+    commit: v0.8.1
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: '0.9'
+    versionCode: 9
+    commit: v0.9
+    subdir: app
+    gradle:
+      - yes
+
+AutoUpdateMode: Version v%v
+UpdateCheckMode: Tags
+CurrentVersion: '0.9'
+CurrentVersionCode: 9

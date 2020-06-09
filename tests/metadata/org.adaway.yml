@@ -1,0 +1,330 @@
+Categories:
+  - System
+  - Security
+License: GPL-3.0-only
+WebSite: http://sufficientlysecure.org/index.php/adaway
+SourceCode: https://github.com/dschuermann/ad-away
+IssueTracker: https://github.com/dschuermann/ad-away/issues
+Translation: https://www.transifex.com/dominikschuermann/adaway
+Donate: http://sufficientlysecure.org/index.php/adaway
+FlattrID: '369138'
+
+AutoName: AdAway
+Summary: Block advertisements
+Description: |-
+    An ad blocker that uses the hosts file. The hosts file
+    contains a list of mappings between hostnames and IP addresses. When
+    an app requests an ad, that request is directed to 127.0.0.1 which does
+    nothing. There are options to run a web server
+    to respond to blocked hostnames and to direct requests to the IP
+    address of your choosing. You can download hosts files from the
+    app but it is possible to use your own and to add certain sites
+    to the white- and black-lists.
+
+    [https://github.com/dschuermann/ad-away/raw/HEAD/CHANGELOG Changelog]
+
+    Requires root: Yes. The hosts files is located in /system which is normally
+    read-only.
+
+RepoType: git
+Repo: https://github.com/dschuermann/ad-away.git
+
+Builds:
+  - versionName: '1.12'
+    versionCode: 13
+    commit: ea5378a94ee0dc1d99d2cec95fae7e6d81afb2b9
+    subdir: org_adaway/
+    buildjni:
+      - yes
+
+  - versionName: '1.15'
+    versionCode: 16
+    commit: 4128e59da2eac5c2904c7c7568d298ca51e79540
+    subdir: org_adaway/
+    patch:
+      - defprop.patch
+    buildjni:
+      - yes
+
+  - versionName: '1.18'
+    versionCode: 19
+    commit: 0b9985398b9eef7baf6aadd0dbb12002bc199d2e
+    subdir: org_adaway/
+    patch:
+      - defprop.patch
+    buildjni:
+      - yes
+
+  - versionName: '1.19'
+    versionCode: 20
+    commit: ab27f4dab5f3ea5e228cfb4a6b0e1fbf53695f22
+    subdir: org_adaway/
+    patch:
+      - defprop.patch
+    buildjni:
+      - yes
+
+  - versionName: '1.20'
+    versionCode: 21
+    commit: 695e3801e4081026c8f7213a2345fc451d5eb89c
+    subdir: org_adaway/
+    patch:
+      - defprop.patch
+    buildjni:
+      - yes
+
+  - versionName: '1.21'
+    versionCode: 22
+    commit: 65138c11cc8b6affd28b68e125fbc1dff0886a4e
+    subdir: org_adaway/
+    patch:
+      - defprop.patch
+    buildjni:
+      - yes
+
+  - versionName: '1.23'
+    versionCode: 24
+    disable: no source in repo
+    commit: unknown - see disabled
+
+  - versionName: '1.24'
+    versionCode: 25
+    commit: f811e53e1e1d2ee047b18715fd7d2072b90ae76b
+    subdir: org_adaway/
+    prebuild: android update project -p ../com_actionbarsherlock
+    buildjni:
+      - yes
+
+  - versionName: '1.25'
+    versionCode: 26
+    commit: ff97932761cdee68638dc2550751a64b2cbe18e7
+    subdir: org_adaway/
+    prebuild: android update project -p ../com_actionbarsherlock
+    buildjni:
+      - yes
+
+  - versionName: '1.26'
+    versionCode: 27
+    commit: 33d4d80998f30bafc88c04c80cbae00b03916f99
+    subdir: org_adaway/
+    prebuild: android update project -p ../com_actionbarsherlock
+    buildjni:
+      - yes
+
+  - versionName: '1.27'
+    versionCode: 28
+    commit: 743d25a7e287505461f33f4b8e57e4cf988fffea
+    subdir: org_adaway/
+    prebuild: android update project -p ../com_actionbarsherlock
+    buildjni:
+      - yes
+
+  - versionName: '1.29'
+    versionCode: 30
+    commit: eaa07f4
+    subdir: org_adaway/
+    prebuild:
+      - android update project -p ../com_actionbarsherlock
+      - rm -rf libs/armeabi/*
+    buildjni:
+      - yes
+
+  - versionName: '1.32'
+    versionCode: 33
+    commit: 71ced3f
+    subdir: org_adaway/
+    prebuild:
+      - android update project -p ../com_actionbarsherlock
+      - rm -rf libs/armeabi/*
+      - rm libs/android-support-v4.jar
+
+  - versionName: '1.33'
+    versionCode: 34
+    commit: 9d63c18
+    subdir: org_adaway/
+    prebuild:
+      - android update project -p ../com_actionbarsherlock
+      - rm -rf libs/armeabi/*
+
+  - versionName: '1.34'
+    versionCode: 35
+    commit: f2568b1
+    subdir: org_adaway/
+    prebuild:
+      - android update project -p ../com_actionbarsherlock
+      - rm -rf libs/armeabi/*
+      - android update project -p ../org_donations
+
+  - versionName: '1.35'
+    versionCode: 36
+    commit: 7442d5d
+    subdir: org_adaway/
+    prebuild:
+      - android update project -p ../com_actionbarsherlock
+      - rm -rf libs/armeabi/*
+      - android update project -p ../org_donations
+
+  - versionName: '1.36'
+    versionCode: 37
+    commit: 83fc713
+    subdir: org_adaway/
+    prebuild:
+      - android update project -p ../com_actionbarsherlock
+      - rm -rf libs/armeabi/*
+      - android update project -p ../org_donations
+
+  - versionName: '1.37'
+    versionCode: 38
+    commit: 70da32b567122b701cdcb1609b780eb85732028f
+    subdir: org_adaway/
+    prebuild:
+      - android update project -p ../com_actionbarsherlock
+      - rm -rf libs/armeabi/*
+      - android update project -p ../org_donations
+
+  - versionName: '2.1'
+    versionCode: 40
+    commit: v2.1
+    subdir: AdAway
+    init:
+      - rm android-libs/Donations/custom_rules.xml
+      - git clone https://github.com/dschuermann/HtmlSpanner android-libs/HtmlSpanner
+    srclibs:
+      - RootCommands@c940b0e503
+    extlibs:
+      - htmlcleaner/htmlcleaner-2.2.jar
+    prebuild:
+      - rm -rf ../update_zip libs/root-commands-1.2.jar libs/htmlspanner-0.2-fork.jar
+      - cp -f libs/htmlcleaner-2.2.jar android-libs/HtmlSpanner/htmlspanner/libs/
+      - echo "android.library.reference.3=$$RootCommands$$" >> project.properties
+      - echo "android.library.reference.4=android-libs/HtmlSpanner/htmlspanner" >>
+        project.properties
+      - find . -type f -print0 | xargs -0 sed -i 's/org.rootcommands/org.sufficientlysecure.rootcommands/g'
+      - cp android-libs/Donations/ant-templates/other/DonationsConfig.java android-libs/Donations/src/org/donations/
+    androidupdate:
+      - .
+      - android-libs/Donations
+      - android-libs/ActionBarSherlock
+      - android-libs/HtmlSpanner/htmlspanner
+    buildjni:
+      - yes
+
+  - versionName: '2.3'
+    versionCode: 42
+    commit: v2.3
+    subdir: AdAway
+    init:
+      - rm android-libs/Donations/custom_rules.xml
+      - git clone https://github.com/dschuermann/HtmlSpanner android-libs/HtmlSpanner
+    srclibs:
+      - RootCommands@c940b0e503
+    extlibs:
+      - htmlcleaner/htmlcleaner-2.2.jar
+    prebuild:
+      - rm -rf ../update_zip libs/root-commands-1.2.jar libs/htmlspanner-0.2-fork.jar
+      - cp -f libs/htmlcleaner-2.2.jar android-libs/HtmlSpanner/htmlspanner/libs/
+      - echo "android.library.reference.3=$$RootCommands$$" >> project.properties
+      - echo "android.library.reference.4=android-libs/HtmlSpanner/htmlspanner" >>
+        project.properties
+      - find . -type f -print0 | xargs -0 sed -i 's/org.rootcommands/org.sufficientlysecure.rootcommands/g'
+      - cp android-libs/Donations/ant-templates/other/DonationsConfig.java android-libs/Donations/src/org/donations/
+    androidupdate:
+      - .
+      - android-libs/Donations
+      - android-libs/ActionBarSherlock
+      - android-libs/HtmlSpanner/htmlspanner
+    buildjni:
+      - yes
+
+  - versionName: '2.6'
+    versionCode: 45
+    commit: v2.6
+    subdir: AdAway
+    gradle:
+      - yes
+    buildjni:
+      - yes
+    preassemble:
+      - renameExecutables
+
+  - versionName: '2.7'
+    versionCode: 46
+    commit: v2.7
+    subdir: AdAway
+    gradle:
+      - yes
+    buildjni:
+      - yes
+    preassemble:
+      - renameExecutables
+
+  - versionName: '2.8'
+    versionCode: 47
+    commit: v2.8
+    subdir: AdAway
+    gradle:
+      - yes
+    buildjni:
+      - yes
+    preassemble:
+      - renameExecutables
+
+  - versionName: 2.8.1
+    versionCode: 48
+    commit: v2.8.1
+    subdir: AdAway
+    gradle:
+      - yes
+    buildjni:
+      - yes
+    preassemble:
+      - renameExecutables
+
+  - versionName: '2.9'
+    versionCode: 49
+    commit: v2.9
+    subdir: AdAway
+    gradle:
+      - yes
+    buildjni:
+      - yes
+    preassemble:
+      - renameExecutables
+
+  - versionName: 2.9.1
+    versionCode: 50
+    commit: v2.9.1
+    subdir: AdAway
+    gradle:
+      - yes
+    buildjni:
+      - yes
+    preassemble:
+      - renameExecutables
+
+  - versionName: 2.9.2
+    versionCode: 51
+    commit: v2.9.2
+    subdir: AdAway
+    gradle:
+      - yes
+    buildjni:
+      - yes
+    preassemble:
+      - renameExecutables
+
+  - versionName: '3.0'
+    versionCode: 52
+    commit: v3.0
+    subdir: AdAway
+    gradle:
+      - yes
+    buildjni:
+      - yes
+    preassemble:
+      - renameExecutables
+
+AutoUpdateMode: Version v%v
+UpdateCheckMode: Tags
+CurrentVersion: '3.0'
+CurrentVersionCode: 52

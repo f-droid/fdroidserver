@@ -47,10 +47,10 @@ MaintainerNotes: ''
 Name: null
 NoSourceSince: ''
 OpenCollective: null
-Provides: org.sufficientlysecure.adaway
+Provides: null
 Repo: https://github.com/dschuermann/ad-away.git
 RepoType: git
-RequiresRoot: true
+RequiresRoot: false
 SourceCode: https://github.com/dschuermann/ad-away
 Summary: Block advertisements
 Translation: https://www.transifex.com/dominikschuermann/adaway
@@ -1085,11 +1085,7 @@ builds:
   timeout: null
   versionCode: '52'
   versionName: '3.0'
-comments:
-  build:40:
-  - '#RootCommands srclib needs changing on fdroidserver'
-  build:42:
-  - '#RootCommands srclib needs changing on fdroidserver'
+comments: {}
 id: org.adaway
 lastUpdated: null
-metadatapath: metadata/org.adaway.json
+metadatapath: metadata/org.adaway.yml

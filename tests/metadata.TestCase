@@ -232,7 +232,7 @@ class MetadataTest(unittest.TestCase):
         fdroidserver.common.config = {'accepted_formats': ['txt']}
 
         randomlist = []
-        randomapps = glob.glob(os.path.join(self.basedir, 'metadata', '*.txt'))
+        randomapps = glob.glob(os.path.join(self.basedir, 'metadata', '*.yml'))
         random.shuffle(randomapps)
         i = 1
         for f in randomapps:

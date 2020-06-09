@@ -364,4 +364,4 @@ builds:
 comments: {}
 id: org.smssecure.smssecure
 lastUpdated: null
-metadatapath: metadata/org.smssecure.smssecure.txt
+metadatapath: metadata/org.smssecure.smssecure.yml

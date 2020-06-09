@@ -1,0 +1,951 @@
+Categories:
+  - System
+License: GPL-3.0-or-later
+WebSite: https://f-droid.org
+SourceCode: https://gitlab.com/fdroid/fdroidclient
+IssueTracker: https://gitlab.com/fdroid/fdroidclient/issues
+Translation: https://hosted.weblate.org/projects/f-droid/f-droid
+Changelog: https://gitlab.com/fdroid/fdroidclient/raw/HEAD/CHANGELOG.md
+Donate: https://f-droid.org/about
+FlattrID: '343053'
+Bitcoin: 15u8aAPK4jJ5N8wpWJ5gutAyyeHtKX5i18
+
+AutoName: F-Droid
+Summary: Application manager
+Description: |-
+    Connects to F-Droid compatible repositories. The default repo is hosted at
+    f-droid.org, which contains only bona fide FOSS.
+
+    Android is open in the sense that you are free to install apks from anywhere you
+    wish, but there are many good reasons for using a client/repository setup:
+
+    * Be notified when updates are available
+    * Keep track of older and beta versions
+    * Filter apps that aren't compatible with the device
+    * Find apps via categories and searchable descriptions
+    * Access associated urls for donations, source code etc.
+    * Stay safe by checking repo index signatures and apk hashes
+
+RepoType: srclib
+Repo: fdroidclient
+
+Builds:
+  - versionName: '0.17'
+    versionCode: 8
+    commit: c626ce5f6d3e10ae15942f01ff028be310cc695a
+    init: rm -f build.xml
+
+  - versionName: '0.18'
+    versionCode: 9
+    commit: a6c9ed8d06b19315df9ba9041324f78139f7d238
+    init: rm -f build.xml
+
+  - versionName: '0.19'
+    versionCode: 10
+    commit: 540b7d0522f4d67a4896697f7342e4c75b4cbf59
+    init: rm -f build.xml
+
+  - versionName: '0.20'
+    versionCode: 11
+    commit: ddacfb856ad66c1c367e20c9cbecbfb15fe00813
+    init: rm -f build.xml
+
+  - versionName: '0.21'
+    versionCode: 12
+    commit: 49fa56aa6626a190f2d711120b69e435e9e615b1
+    init: rm -f build.xml
+
+  - versionName: '0.22'
+    versionCode: 13
+    commit: a6a33c942495cc4c74a7cb6e968efe0e00815e68
+    init: rm -f build.xml
+
+  - versionName: '0.23'
+    versionCode: 14
+    commit: aa58a8aad1a1c3832eafb9f1bdd6db8292d2c172
+    init: rm -f build.xml
+
+  - versionName: '0.24'
+    versionCode: 15
+    commit: 9b5fe2976443255b95027abd412f1c1e7f3d27b2
+    init: rm -f build.xml
+
+  - versionName: '0.25'
+    versionCode: 16
+    commit: 43977cc493e47a4dc841c4192ae8a40fb14b639b
+    init: rm -f build.xml
+
+  - versionName: '0.28'
+    versionCode: 19
+    commit: f881aabe5bd0ac94771b03f1318a6e0972ab4128
+    target: android-15
+
+  - versionName: '0.29'
+    versionCode: 20
+    commit: 87b229b95d0909bfd05c65c5670794e743626f6c
+    target: android-15
+
+  - versionName: '0.30'
+    versionCode: 21
+    commit: 497cb19840f79b31ae9590f5abd9e4df832b34ee
+    target: android-15
+
+  - versionName: '0.31'
+    versionCode: 22
+    commit: f99f8a544c7cb4d4a48ad09da00ad281af05f2ac
+    target: android-15
+
+  - versionName: '0.32'
+    versionCode: 23
+    commit: cc3970cc243e345416bfc62781ece6eeefd11495
+    target: android-15
+
+  - versionName: '0.33'
+    versionCode: 24
+    commit: 58eb580159aa4d54767f0af1736cad233fec2475
+    target: android-15
+
+  - versionName: 0.34-test
+    versionCode: 25
+    commit: 335d27b725b0f92e9e8804ae09518cd47bc7b021
+    target: android-15
+
+  - versionName: 0.35-test
+    versionCode: 26
+    commit: a06d18b029392669e98359f86c07e442a04e6a13
+    target: android-15
+
+  - versionName: 0.36-test
+    versionCode: 27
+    commit: 647e230c9e888c04bb0554078c5aa81da63548a0
+    target: android-15
+
+  - versionName: 0.37-test
+    versionCode: 28
+    commit: 3c02e3ccc147a34af42cedf7d85f18dc75c8efa8
+    target: android-15
+
+  - versionName: '0.38'
+    versionCode: 38
+    commit: 99b52c988d203811f434d6ac40675a63d5ae41ab
+    target: android-15
+
+  - versionName: 0.39-test
+    versionCode: 39
+    commit: 9a7d0b9f10710105d51d8206a7faa4408c60c20d
+    target: android-15
+
+  - versionName: '0.40'
+    versionCode: 40
+    commit: 51a67efdf1ee2819bee99d9263b2980dafaf761d
+    target: android-15
+
+  - versionName: '0.42'
+    versionCode: 42
+    commit: 36b815095ef51ca4f21887d973dbc0a50575cd65
+    target: android-15
+
+  - versionName: '0.43'
+    versionCode: 43
+    disable: sdk doesn't like tzm (at f2109e4e0bf1597c625221d8d2d10050f146ba5a)
+    commit: f2109e4e0bf1597c625221d8d2d10050f146ba5a
+    target: android-15
+
+  - versionName: '0.44'
+    versionCode: 44
+    disable: nasty upgrade bug
+    commit: '0.44'
+    target: android-15
+
+  - versionName: '0.45'
+    versionCode: 45
+    commit: '0.45'
+    target: android-15
+
+  - versionName: '0.46'
+    versionCode: 46
+    commit: '0.46'
+    target: android-15
+
+  - versionName: 0.47-test
+    versionCode: 47
+    commit: 0.47-test
+    target: android-17
+
+  - versionName: 0.48-test
+    versionCode: 48
+    commit: 0.48-test
+    target: android-17
+
+  - versionName: '0.50'
+    versionCode: 50
+    commit: '0.50'
+
+  - versionName: 0.51-test
+    versionCode: 51
+    commit: 0.51-test
+
+  - versionName: 0.52-test
+    versionCode: 52
+    commit: 0.52-test
+    submodules: true
+    prebuild: rm -rf extern/Universal-Image-Loader/downloads
+    androidupdate:
+      - .
+      - extern/Universal-Image-Loader/library
+
+  - versionName: 0.53-test
+    versionCode: 53
+    commit: 0.53-test
+    submodules: true
+    scandelete:
+      - yes
+
+  - versionName: '0.54'
+    versionCode: 540
+    commit: '0.54'
+    submodules: true
+    scandelete:
+      - yes
+
+  - versionName: '0.55'
+    versionCode: 550
+    commit: '0.55'
+    submodules: true
+
+  - versionName: 0.56-test
+    versionCode: 560
+    commit: 0.56-test
+    submodules: true
+
+  - versionName: 0.57-test
+    versionCode: 570
+    commit: 0.57-test
+    submodules: true
+
+  - versionName: '0.58'
+    versionCode: 580
+    commit: '0.58'
+    submodules: true
+
+  - versionName: 0.59-test
+    versionCode: 590
+    commit: 0.59-test
+    submodules: true
+
+  - versionName: 0.61-test
+    versionCode: 610
+    commit: 0.61-test
+    submodules: true
+
+  - versionName: '0.62'
+    versionCode: 620
+    commit: '0.62'
+    submodules: true
+
+  - versionName: '0.63'
+    versionCode: 630
+    commit: '0.63'
+    submodules: true
+
+  - versionName: 0.64-test
+    versionCode: 640
+    commit: 0.64-test
+    submodules: true
+
+  - versionName: '0.65'
+    versionCode: 650
+    commit: '0.65'
+    submodules: true
+
+  - versionName: '0.66'
+    versionCode: 660
+    commit: '0.66'
+    submodules: true
+
+  - versionName: 0.67-test
+    versionCode: 670
+    commit: 0.67-test
+    submodules: true
+
+  - versionName: 0.68-test
+    versionCode: 680
+    commit: 0.68-test
+    submodules: true
+
+  - versionName: 0.69-test
+    versionCode: 690
+    commit: 0.69-test
+    submodules: true
+
+  - versionName: 0.70-test
+    versionCode: 700
+    commit: 0.70-test
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: '0.71'
+    versionCode: 710
+    disable: Broken MTM/AndroidPinning
+    commit: '0.71'
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: '0.72'
+    versionCode: 720
+    disable: proguard issues
+    commit: '0.72'
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: '0.73'
+    versionCode: 730
+    disable: local repos broken
+    commit: '0.73'
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: '0.74'
+    versionCode: 740
+    disable: still some proguard issues
+    commit: '0.74'
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: '0.75'
+    versionCode: 750
+    disable: repo update progress crasher
+    commit: '0.75'
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: '0.76'
+    versionCode: 760
+    commit: '0.76'
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: 0.77-test
+    versionCode: 770
+    commit: 0.77-test
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: '0.78'
+    versionCode: 780
+    commit: '0.78'
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: 0.79-test
+    versionCode: 790
+    commit: 0.79-test
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: 0.80-test
+    versionCode: 800
+    commit: 0.80-test
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: 0.81-test
+    versionCode: 810
+    commit: 0.81-test
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: '0.82'
+    versionCode: 820
+    commit: '0.82'
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: '0.83'
+    versionCode: 830
+    commit: '0.83'
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: 0.84-test
+    versionCode: 840
+    commit: 0.84-test
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: 0.85-test
+    versionCode: 850
+    commit: 0.85-test
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: 0.86-test
+    versionCode: 860
+    commit: 0.86-test
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: 0.87-test
+    versionCode: 870
+    commit: 0.87-test
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: '0.88'
+    versionCode: 880
+    commit: '0.88'
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: 0.89-test
+    versionCode: 890
+    commit: 0.89-test
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: 0.90-test
+    versionCode: 900
+    commit: 0.90-test
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: '0.91'
+    versionCode: 910
+    commit: '0.91'
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: '0.92'
+    versionCode: 920
+    commit: '0.92'
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: 0.93-test
+    versionCode: 930
+    commit: 0.93-test
+    subdir: F-Droid
+    submodules: true
+    prebuild: ./ant-prepare.sh
+    androidupdate:
+      - .
+
+  - versionName: 0.94-test
+    versionCode: 940
+    commit: 0.94-test
+    subdir: F-Droid
+    submodules: true
+    gradle:
+      - yes
+
+  - versionName: 0.95-alpha1
+    versionCode: 95001
+    commit: 0.95-alpha1
+    subdir: F-Droid
+    submodules: true
+    gradle:
+      - yes
+
+  - versionName: 0.95-alpha2
+    versionCode: 95002
+    commit: v0.95-alpha2
+    subdir: F-Droid
+    submodules: true
+    gradle:
+      - yes
+
+  - versionName: '0.95'
+    versionCode: 95050
+    commit: v0.95
+    subdir: F-Droid
+    submodules: true
+    gradle:
+      - yes
+
+  - versionName: 0.95.1
+    versionCode: 95150
+    commit: v0.95.1
+    subdir: F-Droid
+    submodules: true
+    gradle:
+      - yes
+
+  - versionName: 0.96-alpha1
+    versionCode: 96001
+    commit: v0.96-alpha1
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.96-alpha2
+    versionCode: 96002
+    commit: v0.96-alpha2
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.96-alpha3
+    versionCode: 96003
+    commit: v0.96-alpha3
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.96-alpha4
+    versionCode: 96004
+    commit: v0.96-alpha4
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.96-alpha5
+    versionCode: 96005
+    commit: v0.96-alpha5
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.96-alpha6
+    versionCode: 96006
+    commit: v0.96-alpha6
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: '0.96'
+    versionCode: 96050
+    commit: v0.96
+    subdir: F-Droid
+    gradle:
+      - yes
+    scanignore:
+      - extern/AndroidPinning/res/raw/cacerts
+
+  - versionName: 0.96.1
+    versionCode: 96150
+    commit: v0.96.1
+    subdir: F-Droid
+    gradle:
+      - yes
+    scanignore:
+      - extern/AndroidPinning/res/raw/cacerts
+
+  - versionName: 0.97-alpha1
+    versionCode: 97001
+    commit: v0.97-alpha1
+    subdir: F-Droid
+    gradle:
+      - yes
+    scanignore:
+      - extern/AndroidPinning/res/raw/cacerts
+
+  - versionName: 0.97-alpha2
+    versionCode: 97002
+    commit: v0.97-alpha2
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.97-alpha3
+    versionCode: 97003
+    commit: v0.97-alpha3
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.97-alpha4
+    versionCode: 97004
+    commit: v0.97-alpha4
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.97-alpha5
+    versionCode: 97005
+    commit: v0.97-alpha5
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.97-alpha6
+    versionCode: 97006
+    commit: v0.97-alpha6
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.97-alpha7
+    versionCode: 97007
+    commit: v0.97-alpha7
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.97-alpha8
+    versionCode: 97008
+    commit: v0.97-alpha8
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: '0.97'
+    versionCode: 97050
+    commit: v0.97
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.98-alpha1
+    versionCode: 98001
+    commit: v0.98-alpha1
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.98-alpha2
+    versionCode: 98002
+    commit: v0.98-alpha2
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.98-alpha3
+    versionCode: 98003
+    commit: v0.98-alpha3
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.98-alpha4
+    versionCode: 98004
+    commit: v0.98-alpha4
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.98-alpha5
+    versionCode: 98005
+    commit: v0.98-alpha5
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.98-alpha6
+    versionCode: 98006
+    commit: v0.98-alpha6
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.98-alpha7
+    versionCode: 98007
+    commit: v0.98-alpha7
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: '0.98'
+    versionCode: 98050
+    commit: v0.98
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.98.1
+    versionCode: 98150
+    commit: v0.98.1
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.99-alpha1
+    versionCode: 99001
+    commit: v0.99-alpha1
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.99-alpha2
+    versionCode: 99002
+    commit: v0.99-alpha2
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: '0.99'
+    versionCode: 99050
+    commit: v0.99
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.99.1
+    versionCode: 99150
+    commit: v0.99.1
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.99.2
+    versionCode: 99250
+    commit: v0.99.2
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.100-alpha1
+    versionCode: 100001
+    commit: v0.100-alpha1
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.100-alpha2
+    versionCode: 100002
+    commit: v0.100-alpha2
+    subdir: F-Droid
+    gradle:
+      - yes
+
+  - versionName: 0.100-alpha3
+    versionCode: 100003
+    commit: v0.100-alpha3
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.100-alpha4
+    versionCode: 100004
+    commit: v0.100-alpha4
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.100-alpha5
+    versionCode: 100005
+    commit: v0.100-alpha5
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.100-alpha6
+    versionCode: 100006
+    commit: v0.100-alpha6
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.100-alpha7
+    versionCode: 100007
+    commit: v0.100-alpha7
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.100-alpha8
+    versionCode: 100008
+    commit: v0.100-alpha8
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: '0.100'
+    versionCode: 100050
+    commit: v0.100
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.100.1
+    versionCode: 100150
+    commit: v0.100.1
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.101-alpha1
+    versionCode: 101001
+    commit: v0.101-alpha1
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.101-alpha2
+    versionCode: 101002
+    commit: v0.101-alpha2
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.101-alpha3
+    versionCode: 101003
+    commit: v0.101-alpha3
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.101-alpha4
+    versionCode: 101004
+    commit: v0.101-alpha4
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.101-alpha5
+    versionCode: 101005
+    commit: v0.101-alpha5
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.101-alpha6
+    versionCode: 101006
+    commit: v0.101-alpha6
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: '0.101'
+    versionCode: 101050
+    commit: v0.101
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.102-alpha1
+    versionCode: 102001
+    commit: v0.102-alpha1
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.102-alpha2
+    versionCode: 102002
+    commit: v0.102-alpha2
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.102-alpha3
+    versionCode: 102003
+    commit: v0.102-alpha3
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: '0.102'
+    versionCode: 102050
+    commit: v0.102
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.102.1
+    versionCode: 102150
+    commit: v0.102.1
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.102.2
+    versionCode: 102250
+    commit: v0.102.2
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.102.3
+    versionCode: 102350
+    commit: v0.102.3
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.103-alpha1
+    versionCode: 103001
+    commit: v0.103-alpha1
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.103-alpha2
+    versionCode: 103002
+    commit: v0.103-alpha2
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 0.103-alpha3
+    versionCode: 103003
+    commit: v0.103-alpha3
+    subdir: app
+    gradle:
+      - yes
+
+ArchivePolicy: 12 versions
+AutoUpdateMode: None
+UpdateCheckMode: Static
+CurrentVersion: 0.102.3
+CurrentVersionCode: 102350

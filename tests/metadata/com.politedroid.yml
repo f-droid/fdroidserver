@@ -1,0 +1,47 @@
+Categories:
+  - Time
+License: GPL-3.0-only
+SourceCode: https://github.com/miguelvps/PoliteDroid
+IssueTracker: https://github.com/miguelvps/PoliteDroid/issues
+
+AutoName: Polite Droid
+Summary: Calendar tool
+Description: Activates silent mode during calendar events.
+
+RepoType: git
+Repo: https://github.com/miguelvps/PoliteDroid.git
+
+Builds:
+  - versionName: '1.2'
+    versionCode: 3
+    commit: 6a548e4b19
+    target: android-10
+    antifeatures:
+      - KnownVuln
+      - UpstreamNonFree
+      - NonFreeAssets
+
+  - versionName: '1.3'
+    versionCode: 4
+    commit: ad865b57bf3ac59580f38485608a9b1dda4fa7dc
+    target: android-15
+
+  - versionName: '1.4'
+    versionCode: 5
+    commit: 456bd615f3fbe6dff06433928cf7ea20073601fb
+    target: android-10
+
+  - versionName: '1.5'
+    versionCode: 6
+    commit: v1.5
+    sudo: echo 'this is just a test'
+    gradle:
+      - yes
+
+ArchivePolicy: 4 versions
+AutoUpdateMode: Version v%v
+UpdateCheckMode: Tags
+CurrentVersion: '1.5'
+CurrentVersionCode: 6
+
+NoSourceSince: '1.5'
