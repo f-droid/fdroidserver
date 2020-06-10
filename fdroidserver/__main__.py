@@ -18,12 +18,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
 import sys
 import os
 import locale
 import pkgutil
 import logging
-import importlib
 
 import fdroidserver.common
 import fdroidserver.metadata
@@ -70,16 +70,51 @@ def print_help(fdroid_modules=None):
     print("")
 
 
+def preparse_plugin(module_name, module_dir):
+    """simple regex based parsing for plugin scripts,
+       so we don't have to import them when we just need the summary,
+       but not plan on executing this particular plugin."""
+    if '.' in module_name:
+        raise ValueError("No '.' allowed in fdroid plugin modules: '{}'"
+                         .format(module_name))
+    path = os.path.join(module_dir, module_name + '.py')
+    if not os.path.isfile(path):
+        path = os.path.join(module_dir, module_name, '__main__.py')
+        if not os.path.isfile(path):
+            raise ValueError("unable to find main plugin script "
+                             "for module '{n}' ('{d}')"
+                             .format(n=module_name,
+                                     d=module_dir))
+    summary = None
+    main = None
+    with open(path, 'r', encoding='utf-8') as f:
+        re_main = re.compile(r'^(\s*def\s+main\s*\(.*\)\s*:'
+                             r'|\s*main\s*=\s*lambda\s*:.+)$')
+        re_summary = re.compile(r'^\s*fdroid_summary\s*=\s["\'](?P<text>.+)["\']$')
+        for line in f:
+            m_summary = re_summary.match(line)
+            if m_summary:
+                summary = m_summary.group('text')
+            if re_main.match(line):
+                main = True
+
+    if summary is None:
+        raise NameError("could not find 'fdroid_summary' in: '{}' plugin"
+                        .format(module_name))
+    if main is None:
+        raise NameError("could not find 'main' function in: '{}' plugin"
+                        .format(module_name))
+    return {'name': module_name, 'summary': summary}
+
+
 def find_plugins():
-    fdroid_modules = [x[1] for x in pkgutil.iter_modules() if x[1].startswith('fdroid_')]
+    found_plugins = [{'name': x[1], 'dir': x[0].path} for x in pkgutil.iter_modules() if x[1].startswith('fdroid_')]
     commands = {}
-    for module_name in fdroid_modules:
-        command_name = module_name[7:]
+    for plugin_def in found_plugins:
+        command_name = plugin_def['name'][7:]
         try:
-            module = importlib.import_module(module_name)
-            if hasattr(module, 'fdroid_summary') and hasattr(module, 'main'):
-                commands[command_name] = {'summary': module.fdroid_summary,
-                                          'module': module}
+            commands[command_name] = preparse_plugin(plugin_def['name'],
+                                                     plugin_def['dir'])
         except Exception as e:
             # We need to keep module lookup fault tolerant because buggy
             # modules must not prevent fdroidserver from functioning
@@ -164,7 +199,7 @@ def main():
     if command in commands.keys():
         mod = __import__('fdroidserver.' + command, None, None, [command])
     else:
-        mod = fdroid_modules[command]['module']
+        mod = __import__(fdroid_modules[command]['name'], None, None, [command])
 
     system_langcode, system_encoding = locale.getdefaultlocale()
     if system_encoding is None or system_encoding.lower() not in ('utf-8', 'utf8'):
