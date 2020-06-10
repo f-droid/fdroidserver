@@ -115,7 +115,7 @@ public class RandomPackageNames {
 
         for (File f : new File("/home/hans/code/fdroid/fdroiddata/metadata").listFiles()) {
             String name = f.getName();
-            if (name.endsWith(".yml") || name.endsWith(".txt")) {
+            if (name.endsWith(".yml")) {
                 compare(name.substring(0, name.length() - 4));
             }
         }

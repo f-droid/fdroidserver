@@ -149,9 +149,9 @@ class PublishTest(unittest.TestCase):
         os.mkdir(os.path.join(testdir, 'repo'))
         metadata_dir = os.path.join(testdir, 'metadata')
         os.mkdir(metadata_dir)
-        shutil.copy(os.path.join('metadata', 'com.politedroid.txt'), metadata_dir)
-        with open(os.path.join(metadata_dir, 'com.politedroid.txt'), 'a') as fp:
-            fp.write('\nBinaries:https://placeholder/foo%v.apk\n')
+        shutil.copy(os.path.join('metadata', 'com.politedroid.yml'), metadata_dir)
+        with open(os.path.join(metadata_dir, 'com.politedroid.yml'), 'a') as fp:
+            fp.write('\nBinaries: https://placeholder/foo%v.apk\n')
         os.mkdir(os.path.join(testdir, 'unsigned'))
         shutil.copy('repo/com.politedroid_6.apk', os.path.join(testdir, 'unsigned'))
         os.mkdir(os.path.join(testdir, 'unsigned', 'binaries'))

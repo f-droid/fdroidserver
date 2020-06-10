@@ -31,7 +31,6 @@ mirrors = (
 )
 
 update_stats = True
-accepted_formats = ('json', 'txt', 'yml')
 
 install_list = 'org.adaway'
 uninstall_list = ('com.android.vending', 'com.facebook.orca', )

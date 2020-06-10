@@ -1,0 +1,15 @@
+Categories:
+  - Development
+  - GuardianProject
+License: GPL-3.0-only
+WebSite: https://dev.guardianproject.info/projects/checkey
+SourceCode: https://github.com/guardianproject/checkey
+IssueTracker: https://dev.guardianproject.info/projects/checkey/issues
+Translation: https://www.transifex.com/otf/checkey
+Bitcoin: 1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk
+
+AutoName: Checkey
+
+AutoUpdateMode: None
+UpdateCheckMode: None
+CurrentVersionCode: 9999999

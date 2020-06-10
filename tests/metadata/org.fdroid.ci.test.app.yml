@@ -1,0 +1,7 @@
+License: Unknown
+
+RepoType: git
+Repo: https://gitlab.com/eighthave/ci-test-app
+
+AutoUpdateMode: None
+UpdateCheckMode: None

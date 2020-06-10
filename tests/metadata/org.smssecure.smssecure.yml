@@ -1,0 +1,164 @@
+Categories:
+  - Phone & SMS
+License: GPL-3.0-only
+WebSite: http://www.smssecure.org
+SourceCode: https://github.com/SMSSecure/SMSSecure
+IssueTracker: https://github.com/SMSSecure/SMSSecure/issues
+Translation: https://www.transifex.com/silence/silence
+
+AutoName: SMSSecure
+Summary: Send encrypted text messages (SMS)
+Description: |-
+    SMSSecure is an SMS/MMS application that allows you to protect your privacy while communicating with friends.
+    Using SMSSecure, you can send SMS messages and share media or attachments with complete privacy.
+
+    * Easy. SMSSecure works like any other SMS application. There's nothing to sign up for and no new service your friends need to join.
+    * Reliable. SMSSecure communicates using encrypted SMS messages. No servers or internet connection required.
+    * Private. SMSSecure uses the TextSecure encryption protocol to provide privacy for every message, every time.
+    * Safe. All messages are encrypted locally, so if your phone is lost or stolen, your messages are protected.
+    * Open Source. SMSSecure is Free and Open Source, enabling anyone to verify its security by auditing the code.
+
+RepoType: git
+Repo: https://github.com/SMSSecure/SMSSecure
+
+Builds:
+  - versionName: 0.3.3
+    versionCode: 5
+    disable: builds, merge changes into upstream
+    commit: 66367479a4f57f347b5cbe8f6f8f632adaae7727
+    gradle:
+      - yes
+    srclibs:
+      - GradleWitness@10f1269c0aafdc1d478efc005ed48f3a47d44278
+      - PreferenceFragment@717a45433b927d2f0dfc5328f79e77c9682c37bc
+      - ShortcutBadger@3815ce2ec0c66acd7d7c0b4f2479df8fa70fed87
+      - AospMms@android-5.1.0_r3
+    forcevercode: true
+    rm:
+      - libs/*
+    prebuild:
+      - touch signing.properties
+      - pushd $$GradleWitness$$
+      - gradle jar
+      - popd
+      - cp $$GradleWitness$$/build/libs/GradleWitness.jar libs/gradle-witness.jar
+      - sed -i -e '20,22d' build.gradle
+      - pushd $$PreferenceFragment$$
+      - gradle uploadArchives
+      - popd
+      - sed -i -e '/5470f5872514a6226fa1fc6f4e000991f38805691c534cf0bd2778911fc773ad/d'
+        build.gradle
+      - mkdir smil
+      - pushd smil
+      - wget -c http://www.w3.org/TR/smil-boston-dom/java-binding.zip
+      - unzip java-binding.zip
+      - popd
+      - cp -fR smil/java/org src/
+      - rm -fR smil
+      - sed -i -e '/org.w3c.smil/d' build.gradle
+      - cp -fR $$AospMms$$/src/org src/
+
+  - versionName: 0.3.3
+    versionCode: 6
+    disable: builds, wait for upstream
+    commit: 9675ce5eecb929dcaddb43b3d9486fdb88b9ae1a
+    submodules: true
+    gradle:
+      - yes
+    srclibs:
+      - GradleWitness@10f1269c0aafdc1d478efc005ed48f3a47d44278
+    rm:
+      - libs/*.jar
+    prebuild:
+      - touch signing.properties
+      - pushd $$GradleWitness$$
+      - gradle jar
+      - popd
+      - cp $$GradleWitness$$/build/libs/GradleWitness.jar libs/gradle-witness.jar
+
+  - versionName: 0.4.2
+    versionCode: 9
+    disable: builds locally, but not on BS
+    commit: v0.4.2
+    submodules: true
+    gradle:
+      - yes
+    rm:
+      - libs/*.jar
+    prebuild:
+      - touch signing.properties
+      - ./build-witness.sh
+      - rm -rf libs/gradle-witness/build
+      - echo "org.gradle.jvmargs=-Xms512m -Xmx512m -XX:MaxPermSize=512m" >> gradle.properties
+
+  - versionName: 0.5.1
+    versionCode: 11
+    commit: v0.5.1
+    submodules: true
+    gradle:
+      - yes
+    rm:
+      - libs/*.jar
+    prebuild:
+      - touch signing.properties
+      - ./build-witness.sh
+      - rm -rf libs/gradle-witness/build
+      - echo "org.gradle.jvmargs=-Xms512m -Xmx512m -XX:MaxPermSize=512m" >> gradle.properties
+
+  - versionName: 0.5.2
+    versionCode: 12
+    disable: broken in upstream
+    commit: v0.5.2
+    submodules: true
+    gradle:
+      - yes
+    rm:
+      - libs/*.jar
+    prebuild:
+      - touch signing.properties
+      - ./scripts/build-witness.sh
+      - rm -rf libs/gradle-witness/build
+
+  - versionName: 0.5.3
+    versionCode: 100
+    commit: v0.5.3
+    submodules: true
+    gradle:
+      - yes
+    rm:
+      - libs/*.jar
+    prebuild:
+      - touch signing.properties
+      - ./scripts/build-witness.sh
+      - rm -rf libs/gradle-witness/build
+
+  - versionName: 0.5.4
+    versionCode: 101
+    commit: v0.5.4
+    submodules: true
+    gradle:
+      - yes
+    rm:
+      - libs/*.jar
+    prebuild:
+      - touch signing.properties
+      - ./scripts/build-witness.sh
+      - rm -rf libs/gradle-witness/build
+
+  - versionName: 0.6.0
+    versionCode: 102
+    commit: v0.6.0
+    submodules: true
+    gradle:
+      - yes
+    rm:
+      - libs/*.jar
+    prebuild:
+      - touch signing.properties
+      - ./scripts/build-witness.sh
+      - rm -rf libs/gradle-witness/build
+
+AutoUpdateMode: Version v%v
+UpdateCheckMode: Tags
+CurrentVersion: 0.6.0
+CurrentVersionCode: 102

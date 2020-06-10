@@ -41,7 +41,6 @@ class UpdateTest(unittest.TestCase):
             raise Exception('This test must be run in the "tests/" subdir')
 
         config['ndk_paths'] = dict()
-        config['accepted_formats'] = ['json', 'txt', 'yml']
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 

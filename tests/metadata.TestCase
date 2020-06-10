@@ -108,12 +108,8 @@ class MetadataTest(unittest.TestCase):
 
         self.maxDiff = None
 
-        # these need to be set to prevent code running on None, only
-        # 'accepted_formats' is actually used in metadata.py
         config = dict()
-        config['sdk_path'] = '/opt/android-sdk'
-        config['ndk_paths'] = dict()
-        config['accepted_formats'] = ['json', 'txt', 'yml']
+        fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.metadata.warnings_action = None
 
@@ -134,7 +130,7 @@ class MetadataTest(unittest.TestCase):
 
     def test_rewrite_yaml_fakeotaupdate(self):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
-        fdroidserver.common.config = {'accepted_formats': ['txt', 'yml']}
+        fdroidserver.common.config = {'accepted_formats': ['yml']}
         fdroidserver.metadata.warnings_action = None
 
         # rewrite metadata
@@ -151,7 +147,7 @@ class MetadataTest(unittest.TestCase):
 
     def test_rewrite_yaml_fdroidclient(self):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
-        fdroidserver.common.config = {'accepted_formats': ['txt', 'yml']}
+        fdroidserver.common.config = {'accepted_formats': ['yml']}
 
         # rewrite metadata
         allapps = fdroidserver.metadata.read_metadata(xref=True)
@@ -167,7 +163,6 @@ class MetadataTest(unittest.TestCase):
 
     def test_rewrite_yaml_special_build_params(self):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
-        fdroidserver.common.config = {'accepted_formats': ['txt', 'yml']}
 
         # rewrite metadata
         allapps = fdroidserver.metadata.read_metadata(xref=True)
@@ -229,10 +224,9 @@ class MetadataTest(unittest.TestCase):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         metadatadir = os.path.join(testdir, 'metadata')
         os.makedirs(metadatadir)
-        fdroidserver.common.config = {'accepted_formats': ['txt']}
 
         randomlist = []
-        randomapps = glob.glob(os.path.join(self.basedir, 'metadata', '*.txt'))
+        randomapps = glob.glob(os.path.join(self.basedir, 'metadata', '*.yml'))
         random.shuffle(randomapps)
         i = 1
         for f in randomapps:
