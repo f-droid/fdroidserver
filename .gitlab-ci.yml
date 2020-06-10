@@ -20,7 +20,7 @@ test:
 metadata_v0:
   image: registry.gitlab.com/fdroid/ci-images-server:latest
   variables:
-    RELEASE_COMMIT_ID: 4655e2e24ebd043be6faa4adf552db391caf2be9  # 1.1a~
+    RELEASE_COMMIT_ID: 37f37ebd88e79ebe93239b72ed5503d5bde13f4b  # 2.0a~
   script:
     - git fetch https://gitlab.com/fdroid/fdroidserver.git $RELEASE_COMMIT_ID
     - cd tests
