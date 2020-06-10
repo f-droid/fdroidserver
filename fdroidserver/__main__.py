@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #
 # fdroidserver/__main__.py - part of the FDroid server tools
+# Copyright (C) 2020 Michael Pöhn <michael.poehn@fsfe.org>
 # Copyright (C) 2010-2015, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Marti <mvdan@mvdan.cc>
 #
@@ -17,9 +18,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
 import sys
 import os
 import locale
+import pkgutil
 import logging
 
 import fdroidserver.common
@@ -29,7 +32,7 @@ from argparse import ArgumentError
 from collections import OrderedDict
 
 
-commands = OrderedDict([
+COMMANDS = OrderedDict([
     ("build", _("Build a package from source")),
     ("init", _("Quickly start a new repository")),
     ("publish", _("Sign and place packages in the repo")),
@@ -54,25 +57,85 @@ commands = OrderedDict([
 ])
 
 
-def print_help():
+def print_help(available_plugins=None):
     print(_("usage: ") + _("fdroid [<command>] [-h|--help|--version|<args>]"))
     print("")
     print(_("Valid commands are:"))
-    for cmd, summary in commands.items():
+    for cmd, summary in COMMANDS.items():
         print("   " + cmd + ' ' * (15 - len(cmd)) + summary)
+    if available_plugins:
+        print(_('commands from plugin modules:'))
+        for command in sorted(available_plugins.keys()):
+            print('   {:15}{}'.format(command, available_plugins[command]['summary']))
     print("")
 
 
+def preparse_plugin(module_name, module_dir):
+    """simple regex based parsing for plugin scripts,
+       so we don't have to import them when we just need the summary,
+       but not plan on executing this particular plugin."""
+    if '.' in module_name:
+        raise ValueError("No '.' allowed in fdroid plugin modules: '{}'"
+                         .format(module_name))
+    path = os.path.join(module_dir, module_name + '.py')
+    if not os.path.isfile(path):
+        path = os.path.join(module_dir, module_name, '__main__.py')
+        if not os.path.isfile(path):
+            raise ValueError("unable to find main plugin script "
+                             "for module '{n}' ('{d}')"
+                             .format(n=module_name,
+                                     d=module_dir))
+    summary = None
+    main = None
+    with open(path, 'r', encoding='utf-8') as f:
+        re_main = re.compile(r'^(\s*def\s+main\s*\(.*\)\s*:'
+                             r'|\s*main\s*=\s*lambda\s*:.+)$')
+        re_summary = re.compile(r'^\s*fdroid_summary\s*=\s["\'](?P<text>.+)["\']$')
+        for line in f:
+            m_summary = re_summary.match(line)
+            if m_summary:
+                summary = m_summary.group('text')
+            if re_main.match(line):
+                main = True
+
+    if summary is None:
+        raise NameError("could not find 'fdroid_summary' in: '{}' plugin"
+                        .format(module_name))
+    if main is None:
+        raise NameError("could not find 'main' function in: '{}' plugin"
+                        .format(module_name))
+    return {'name': module_name, 'summary': summary}
+
+
+def find_plugins():
+    found_plugins = [{'name': x[1], 'dir': x[0].path} for x in pkgutil.iter_modules() if x[1].startswith('fdroid_')]
+    plugin_infos = {}
+    for plugin_def in found_plugins:
+        command_name = plugin_def['name'][7:]
+        try:
+            plugin_infos[command_name] = preparse_plugin(plugin_def['name'],
+                                                         plugin_def['dir'])
+        except Exception as e:
+            # We need to keep module lookup fault tolerant because buggy
+            # modules must not prevent fdroidserver from functioning
+            if len(sys.argv) > 1 and sys.argv[1] == command_name:
+                # only raise exeption when a user specifies the broken
+                # plugin in explicitly in command line
+                raise e
+    return plugin_infos
+
+
 def main():
+    available_plugins = find_plugins()
 
     if len(sys.argv) <= 1:
-        print_help()
+        print_help(available_plugins=available_plugins)
         sys.exit(0)
 
     command = sys.argv[1]
-    if command not in commands:
+    if command not in COMMANDS and command not in available_plugins.keys():
         if command in ('-h', '--help'):
-            print_help()
+            print_help(available_plugins=available_plugins)
             sys.exit(0)
         elif command == '--version':
             output = _('no version info found!')
@@ -99,11 +162,11 @@ def main():
             else:
                 from pkg_resources import get_distribution
                 output = get_distribution('fdroidserver').version + '\n'
-            print(output),
+            print(output)
             sys.exit(0)
         else:
             print(_("Command '%s' not recognised.\n" % command))
-            print_help()
+            print_help(available_plugins=available_plugins)
             sys.exit(1)
 
     verbose = any(s in sys.argv for s in ['-v', '--verbose'])
@@ -133,7 +196,10 @@ def main():
     sys.argv[0] += ' ' + command
 
     del sys.argv[1]
-    mod = __import__('fdroidserver.' + command, None, None, [command])
+    if command in COMMANDS.keys():
+        mod = __import__('fdroidserver.' + command, None, None, [command])
+    else:
+        mod = __import__(available_plugins[command]['name'], None, None, [command])
 
     system_langcode, system_encoding = locale.getdefaultlocale()
     if system_encoding is None or system_encoding.lower() not in ('utf-8', 'utf8'):
