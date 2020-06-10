@@ -32,7 +32,7 @@ from argparse import ArgumentError
 from collections import OrderedDict
 
 
-commands = OrderedDict([
+COMMANDS = OrderedDict([
     ("build", _("Build a package from source")),
     ("init", _("Quickly start a new repository")),
     ("publish", _("Sign and place packages in the repo")),
@@ -57,16 +57,16 @@ commands = OrderedDict([
 ])
 
 
-def print_help(fdroid_modules=None):
+def print_help(available_plugins=None):
     print(_("usage: ") + _("fdroid [<command>] [-h|--help|--version|<args>]"))
     print("")
     print(_("Valid commands are:"))
-    for cmd, summary in commands.items():
+    for cmd, summary in COMMANDS.items():
         print("   " + cmd + ' ' * (15 - len(cmd)) + summary)
-    if fdroid_modules:
+    if available_plugins:
         print(_('commands from plugin modules:'))
-        for command in sorted(fdroid_modules.keys()):
-            print('   {:15}{}'.format(command, fdroid_modules[command]['summary']))
+        for command in sorted(available_plugins.keys()):
+            print('   {:15}{}'.format(command, available_plugins[command]['summary']))
     print("")
 
 
@@ -109,12 +109,12 @@ def preparse_plugin(module_name, module_dir):
 
 def find_plugins():
     found_plugins = [{'name': x[1], 'dir': x[0].path} for x in pkgutil.iter_modules() if x[1].startswith('fdroid_')]
-    commands = {}
+    plugin_infos = {}
     for plugin_def in found_plugins:
         command_name = plugin_def['name'][7:]
         try:
-            commands[command_name] = preparse_plugin(plugin_def['name'],
-                                                     plugin_def['dir'])
+            plugin_infos[command_name] = preparse_plugin(plugin_def['name'],
+                                                         plugin_def['dir'])
         except Exception as e:
             # We need to keep module lookup fault tolerant because buggy
             # modules must not prevent fdroidserver from functioning
@@ -122,20 +122,20 @@ def find_plugins():
                 # only raise exeption when a user specifies the broken
                 # plugin in explicitly in command line
                 raise e
-    return commands
+    return plugin_infos
 
 
 def main():
-    fdroid_modules = find_plugins()
+    available_plugins = find_plugins()
 
     if len(sys.argv) <= 1:
-        print_help(fdroid_modules=fdroid_modules)
+        print_help(available_plugins=available_plugins)
         sys.exit(0)
 
     command = sys.argv[1]
-    if command not in commands and command not in fdroid_modules.keys():
+    if command not in COMMANDS and command not in available_plugins.keys():
         if command in ('-h', '--help'):
-            print_help(fdroid_modules=fdroid_modules)
+            print_help(available_plugins=available_plugins)
             sys.exit(0)
         elif command == '--version':
             output = _('no version info found!')
@@ -162,11 +162,11 @@ def main():
             else:
                 from pkg_resources import get_distribution
                 output = get_distribution('fdroidserver').version + '\n'
-            print(output),
+            print(output)
             sys.exit(0)
         else:
             print(_("Command '%s' not recognised.\n" % command))
-            print_help(fdroid_modules=fdroid_modules)
+            print_help(available_plugins=available_plugins)
             sys.exit(1)
 
     verbose = any(s in sys.argv for s in ['-v', '--verbose'])
@@ -196,10 +196,10 @@ def main():
     sys.argv[0] += ' ' + command
 
     del sys.argv[1]
-    if command in commands.keys():
+    if command in COMMANDS.keys():
         mod = __import__('fdroidserver.' + command, None, None, [command])
     else:
-        mod = __import__(fdroid_modules[command]['name'], None, None, [command])
+        mod = __import__(available_plugins[command]['name'], None, None, [command])
 
     system_langcode, system_encoding = locale.getdefaultlocale()
     if system_encoding is None or system_encoding.lower() not in ('utf-8', 'utf8'):
