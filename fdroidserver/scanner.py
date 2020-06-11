@@ -176,9 +176,9 @@ def scan_source(build_dir, build=metadata.Build()):
             return removeproblem(what, path_in_build_dir, filepath)
         if 'src/test' in filepath or '/test/' in filepath:
             return warnproblem(what, path_in_build_dir)
-        if options and options.json:
+        if options and 'json' in vars(options) and options.json:
             json_per_build['errors'].append([what, path_in_build_dir])
-        if options and (options.verbose or not options.json):
+        if options and (options.verbose or not ('json' in vars(options) and options.json)):
             logging.error('Found %s at %s' % (what, path_in_build_dir))
         return 1
 
