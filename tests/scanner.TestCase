@@ -5,10 +5,13 @@ import inspect
 import logging
 import optparse
 import os
+import shutil
 import sys
 import tempfile
 import textwrap
 import unittest
+import uuid
+import yaml
 from unittest import mock
 
 localmodule = os.path.realpath(
@@ -34,7 +37,7 @@ class ScannerTest(unittest.TestCase):
         os.chdir(self.basedir)
 
     def test_scan_source_files(self):
-        fdroidserver.scanner.options = type('', (), {})()
+        fdroidserver.scanner.options = mock.Mock()
         fdroidserver.scanner.options.json = False
         source_files = os.path.join(self.basedir, 'source-files')
         projects = {
@@ -80,6 +83,109 @@ class ScannerTest(unittest.TestCase):
                             i += 1
             self.assertEqual(count, i)
 
+    def test_scan_source_files_sneaky_maven(self):
+        """Check for sneaking in banned maven repos"""
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        fdroidserver.scanner.config = None
+        fdroidserver.scanner.options = mock.Mock()
+        fdroidserver.scanner.options.json = True
+        with open('build.gradle', 'w') as fp:
+            fp.write(textwrap.dedent("""
+                 maven {
+                    "https://jitpack.io"
+                    url 'https://maven.fabric.io/public'
+                 }
+                 maven {
+                    "https://maven.google.com"
+                    setUrl('https://evilcorp.com/maven')
+                 }
+            """))
+        count = fdroidserver.scanner.scan_source(testdir)
+        self.assertEqual(2, count, 'there should be this many errors')
+
+    def test_scan_source_file_types(self):
+        """Build product files are not allowed, test they are detected"""
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+
+        fdroidserver.scanner.config = None
+        fdroidserver.scanner.options = mock.Mock()
+        fdroidserver.scanner.options.json = True
+
+        keep = [
+            'arg.jar',
+            'ascii.out',
+            'baz.so',
+            'classes.dex',
+            'sqlcipher.aar',
+            'static.a',
+            'src/test/resources/classes.dex',
+        ]
+        remove = [
+            'gradle-wrapper.jar',
+            'gradlew',
+            'gradlew.bat',
+        ]
+        os.makedirs('src/test/resources', exist_ok=True)
+        for f in keep + remove:
+            with open(f, 'w') as fp:
+                fp.write('placeholder')
+            self.assertTrue(os.path.exists(f))
+        binaries = [
+            'binary.out',
+            'fake.png',
+            'snippet.png',
+        ]
+        with open('binary.out', 'wb') as fp:
+            fp.write(b'\x00\x00')
+            fp.write(uuid.uuid4().bytes)
+        shutil.copyfile('binary.out', 'fake.png')
+        os.chmod('fake.png', 0o755)
+        os.system('ls -l binary.out')
+        with open('snippet.png', 'wb') as fp:
+            fp.write(b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x000\x00\x00'
+                     b'\x000\x08\x06\x00\x00\x00W\x02\xf9\x87\x00\x00\x00\x04sB'
+                     b'IT\x08\x08\x08\x08|\x08d\x88\x00\x00\x00\tpHYs\x00\x00\n'
+                     b'a\x00\x00\na\x01\xfc\xccJ%\x00\x00\x00\x19tEXtSoftware')
+        os.chmod('snippet.png', 0o755)
+        os.system('ls -l fake.png')
+
+        count = fdroidserver.scanner.scan_source(testdir)
+        self.assertEqual(6, count, 'there should be this many errors')
+
+        for f in keep + binaries:
+            self.assertTrue(os.path.exists(f), f + ' should still be there')
+        for f in remove:
+            self.assertFalse(os.path.exists(f), f + ' should have been removed')
+
+        files = dict()
+        for section in ('errors', 'infos', 'warnings'):
+            files[section] = []
+            for msg, f in fdroidserver.scanner.json_per_build[section]:
+                files[section].append(f)
+
+        self.assertFalse('ascii.out' in files['errors'],
+                         'an ASCII .out file is not an error')
+        self.assertFalse('snippet.png' in files['errors'],
+                         'an executable valid image is not an error')
+
+        self.assertTrue('arg.jar' in files['errors'], 'all JAR files are errors')
+        self.assertTrue('baz.so' in files['errors'], 'all .so files are errors')
+        self.assertTrue('binary.out' in files['errors'], 'a binary .out file is an error')
+        self.assertTrue('classes.dex' in files['errors'], 'all classes.dex files are errors')
+        self.assertTrue('sqlcipher.aar' in files['errors'], 'all AAR files are errors')
+        self.assertTrue('static.a' in files['errors'], 'all .a files are errors')
+
+        self.assertTrue('fake.png' in files['warnings'],
+                        'a random binary that is executable that is not an image is a warning')
+        self.assertTrue('src/test/resources/classes.dex' in files['warnings'],
+                        'suspicious file but in a test dir is a warning')
+
+        for f in remove:
+            self.assertTrue(f in files['infos'],
+                            f + ' should be removed with an info message')
+
     def test_build_local_scanner(self):
         """`fdroid build` calls scanner functions, test them here"""
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
@@ -99,7 +205,7 @@ class ScannerTest(unittest.TestCase):
         build = fdroidserver.metadata.Build()
         build.commit = '1.0'
         build.output = app.id + '.apk'
-        build.scanignore = ['baz.so']
+        build.scanignore = ['baz.so', 'foo.aar']
         build.versionCode = '1'
         build.versionName = '1.0'
         vcs = mock.Mock()
@@ -136,6 +242,20 @@ class ScannerTest(unittest.TestCase):
         self.assertTrue(os.path.exists('baz.so'))
         self.assertTrue(os.path.exists('foo.aar'))
         self.assertFalse(os.path.exists('gradle-wrapper.jar'))
+
+    def test_gradle_maven_url_regex(self):
+        """Check the regex can find all the cases"""
+        with open(os.path.join(self.basedir, 'gradle-maven-blocks.yaml')) as fp:
+            data = yaml.safe_load(fp)
+
+        urls = []
+        for entry in data:
+            found = False
+            for m in fdroidserver.scanner.MAVEN_URL_REGEX.findall(entry):
+                urls.append(m)
+                found = True
+            self.assertTrue(found, 'this block should produce a URL:\n' + entry)
+        self.assertEqual(len(data), len(urls), 'each data example should produce a URL')
 
 
 if __name__ == "__main__":

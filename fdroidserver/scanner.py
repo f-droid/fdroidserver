@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import imghdr
 import json
 import os
 import re
@@ -33,7 +34,11 @@ from .exception import BuildException, VCSException
 config = None
 options = None
 
-json_per_build = None
+DEFAULT_JSON_PER_BUILD = {'errors': [], 'warnings': [], 'infos': []}
+json_per_build = DEFAULT_JSON_PER_BUILD
+
+MAVEN_URL_REGEX = re.compile(r"""\smaven\s*{.*?(?:setUrl|url)\s*=?\s*(?:uri)?\(?\s*["']?([^\s"']+)["']?[^}]*}""",
+                             re.DOTALL)
 
 
 def get_gradle_compile_commands(build):
@@ -99,8 +104,6 @@ def scan_source(build_dir, build=metadata.Build()):
             if r.match(s) and not is_whitelisted(s):
                 yield n
 
-    gradle_mavenrepo = re.compile(r'maven *{ *(url)? *[\'"]?([^ \'"]*)[\'"]?')
-
     allowed_repos = [re.compile(r'^https://' + re.escape(repo) + r'/*') for repo in [
         'repo1.maven.org/maven2',  # mavenCentral()
         'jcenter.bintray.com',     # jcenter()
@@ -144,33 +147,38 @@ def scan_source(build_dir, build=metadata.Build()):
         return False
 
     def ignoreproblem(what, path_in_build_dir):
-        logging.info('Ignoring %s at %s' % (what, path_in_build_dir))
+        msg = ('Ignoring %s at %s' % (what, path_in_build_dir))
+        logging.info(msg)
         if json_per_build is not None:
-            json_per_build['infos'].append([what, path_in_build_dir])
+            json_per_build['infos'].append([msg, path_in_build_dir])
         return 0
 
     def removeproblem(what, path_in_build_dir, filepath):
-        logging.info('Removing %s at %s' % (what, path_in_build_dir))
+        msg = ('Removing %s at %s' % (what, path_in_build_dir))
+        logging.info(msg)
         if json_per_build is not None:
-            json_per_build['infos'].append([what, path_in_build_dir])
+            json_per_build['infos'].append([msg, path_in_build_dir])
         os.remove(filepath)
         return 0
 
     def warnproblem(what, path_in_build_dir):
         if toignore(path_in_build_dir):
-            return
+            return 0
         logging.warning('Found %s at %s' % (what, path_in_build_dir))
         if json_per_build is not None:
             json_per_build['warnings'].append([what, path_in_build_dir])
+        return 0
 
     def handleproblem(what, path_in_build_dir, filepath):
         if toignore(path_in_build_dir):
             return ignoreproblem(what, path_in_build_dir)
         if todelete(path_in_build_dir):
             return removeproblem(what, path_in_build_dir, filepath)
-        if options.json:
+        if 'src/test' in filepath or '/test/' in filepath:
+            return warnproblem(what, path_in_build_dir)
+        if options and options.json:
             json_per_build['errors'].append([what, path_in_build_dir])
-        if not options.json or options.verbose:
+        if options and (options.verbose or not options.json):
             logging.error('Found %s at %s' % (what, path_in_build_dir))
         return 1
 
@@ -196,6 +204,8 @@ def scan_source(build_dir, build=metadata.Build()):
         for sp in safe_paths:
             if sp.match(path):
                 return True
+        if imghdr.what(path) is not None:
+            return True
         return False
 
     gradle_compile_commands = get_gradle_compile_commands(build)
@@ -225,25 +235,29 @@ def scan_source(build_dir, build=metadata.Build()):
             path_in_build_dir = os.path.relpath(filepath, build_dir)
             _ignored, ext = common.get_extension(path_in_build_dir)
 
-            if ext == 'so':
-                count += handleproblem('shared library', path_in_build_dir, filepath)
-            elif ext == 'a':
-                count += handleproblem('static library', path_in_build_dir, filepath)
-            elif ext == 'class':
-                count += handleproblem('Java compiled class', path_in_build_dir, filepath)
+            if curfile in ('gradle-wrapper.jar', 'gradlew', 'gradlew.bat'):
+                removeproblem(curfile, path_in_build_dir, filepath)
             elif ext == 'apk':
-                removeproblem('APK file', path_in_build_dir, filepath)
+                removeproblem(_('Android APK file'), path_in_build_dir, filepath)
 
+            elif ext == 'a':
+                count += handleproblem(_('static library'), path_in_build_dir, filepath)
+            elif ext == 'aar':
+                count += handleproblem(_('Android AAR library'), path_in_build_dir, filepath)
+            elif ext == 'class':
+                count += handleproblem(_('Java compiled class'), path_in_build_dir, filepath)
+            elif ext == 'dex':
+                count += handleproblem(_('Android DEX code'), path_in_build_dir, filepath)
+            elif ext == 'gz':
+                count += handleproblem(_('gzip file archive'), path_in_build_dir, filepath)
+            elif ext == 'so':
+                count += handleproblem(_('shared library'), path_in_build_dir, filepath)
+            elif ext == 'zip':
+                count += handleproblem(_('ZIP file archive'), path_in_build_dir, filepath)
             elif ext == 'jar':
                 for name in suspects_found(curfile):
                     count += handleproblem('usual suspect \'%s\'' % name, path_in_build_dir, filepath)
-                if curfile == 'gradle-wrapper.jar':
-                    removeproblem('gradle-wrapper.jar', path_in_build_dir, filepath)
-                else:
-                    warnproblem('JAR file', path_in_build_dir)
-
-            elif ext == 'aar':
-                warnproblem('AAR file', path_in_build_dir)
+                count += handleproblem(_('Java JAR file'), path_in_build_dir, filepath)
 
             elif ext == 'java':
                 if not os.path.isfile(filepath):
@@ -265,9 +279,8 @@ def scan_source(build_dir, build=metadata.Build()):
                             count += handleproblem("usual suspect \'%s\'" % (name),
                                                    path_in_build_dir, filepath)
                 noncomment_lines = [line for line in lines if not common.gradle_comment.match(line)]
-                joined = re.sub(r'[\n\r\s]+', ' ', ' '.join(noncomment_lines))
-                for m in gradle_mavenrepo.finditer(joined):
-                    url = m.group(2)
+                no_comments = re.sub(r'/\*.*?\*/', '', ''.join(noncomment_lines), flags=re.DOTALL)
+                for url in MAVEN_URL_REGEX.findall(no_comments):
                     if not any(r.match(url) for r in allowed_repos):
                         count += handleproblem('unknown maven repo \'%s\'' % url, path_in_build_dir, filepath)
 
@@ -277,16 +290,16 @@ def scan_source(build_dir, build=metadata.Build()):
 
             elif is_executable(filepath):
                 if is_binary(filepath) and not safe_path(path_in_build_dir):
-                    warnproblem('possible binary', path_in_build_dir)
+                    warnproblem(_('executable binary, possibly code'), path_in_build_dir)
 
     for p in scanignore:
         if p not in scanignore_worked:
-            logging.error('Unused scanignore path: %s' % p)
+            logging.error(_('Unused scanignore path: %s') % p)
             count += 1
 
     for p in scandelete:
         if p not in scandelete_worked:
-            logging.error('Unused scandelete path: %s' % p)
+            logging.error(_('Unused scandelete path: %s') % p)
             count += 1
 
     return count
@@ -336,7 +349,7 @@ def main():
 
         if app.Disabled and not options.force:
             logging.info(_("Skipping {appid}: disabled").format(appid=appid))
-            json_per_appid = json_per_appid['infos'].append('Skipping: disabled')
+            json_per_appid['disabled'] = json_per_build['infos'].append('Skipping: disabled')
             continue
 
         try:
@@ -352,7 +365,7 @@ def main():
             else:
                 logging.info(_("{appid}: no builds specified, running on current source state")
                              .format(appid=appid))
-                json_per_build = {'errors': [], 'warnings': [], 'infos': []}
+                json_per_build = DEFAULT_JSON_PER_BUILD
                 json_per_appid['current-source-state'] = json_per_build
                 count = scan_source(build_dir)
                 if count > 0:
@@ -362,7 +375,7 @@ def main():
                 app.builds = []
 
             for build in app.builds:
-                json_per_build = {'errors': [], 'warnings': [], 'infos': []}
+                json_per_build = DEFAULT_JSON_PER_BUILD
                 json_per_appid[build.versionCode] = json_per_build
 
                 if build.disable and not options.force:
