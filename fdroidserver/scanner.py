@@ -86,7 +86,7 @@ def scan_source(build_dir, build=metadata.Build()):
             r'''["']com.facebook.android['":]''',
             r'cloudrail',
             r'com.tencent.bugly',
-            r'com.microsoft.appcenter',
+            r'appcenter-push',
         ]
     }
 
