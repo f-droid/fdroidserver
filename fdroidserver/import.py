@@ -191,6 +191,10 @@ def main():
             '$$flutter$$/bin/flutter build apk',
         ]
 
+    git_modules = os.path.join(tmp_importer_dir, '.gitmodules')
+    if os.path.exists(git_modules):
+        build.submodules = True
+
     metadata.post_metadata_parse(app)
 
     app.builds.append(build)
