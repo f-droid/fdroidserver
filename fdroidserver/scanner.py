@@ -200,12 +200,14 @@ def scan_source(build_dir, build=metadata.Build()):
         ]
     ]
 
-    def safe_path(path):
-        for sp in safe_paths:
-            if sp.match(path):
-                return True
+    def is_image_file(path):
         if imghdr.what(path) is not None:
             return True
+
+    def safe_path(path_in_build_dir):
+        for sp in safe_paths:
+            if sp.match(path_in_build_dir):
+                return True
         return False
 
     gradle_compile_commands = get_gradle_compile_commands(build)
@@ -289,7 +291,7 @@ def scan_source(build_dir, build=metadata.Build()):
                     count += handleproblem('binary', path_in_build_dir, filepath)
 
             elif is_executable(filepath):
-                if is_binary(filepath) and not safe_path(path_in_build_dir):
+                if is_binary(filepath) and not (safe_path(path_in_build_dir) or is_image_file(filepath)):
                     warnproblem(_('executable binary, possibly code'), path_in_build_dir)
 
     for p in scanignore:
