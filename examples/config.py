@@ -50,6 +50,9 @@
 # Defaults to using an internal gradle wrapper (gradlew-fdroid).
 # gradle = "gradle"
 
+# Always scan the APKs produced by `fdroid build` for known non-free classes
+# scan_binary = True
+
 # Set the maximum age (in days) of an index that a client should accept from
 # this repo. Setting it to 0 or not setting it at all disables this
 # functionality. If you do set this to a non-zero value, you need to ensure

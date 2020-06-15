@@ -131,7 +131,9 @@ class BuildTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
+        fdroidserver.build.config = config
         fdroidserver.build.options = mock.Mock()
+        fdroidserver.build.options.scan_binary = False
         fdroidserver.build.options.notarball = True
         fdroidserver.build.options.skipscan = False
 

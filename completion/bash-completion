@@ -83,7 +83,7 @@ __complete_options() {
 __complete_build() {
 	opts="-v -q -l -s -t -f -a -w"
 
-	lopts="--verbose --quiet --latest --stop --test --server --reset-server --skip-scan --no-tarball --force --all --wiki --no-refresh"
+	lopts="--verbose --quiet --latest --stop --test --server --reset-server --skip-scan --scan-binary --no-tarball --force --all --wiki --no-refresh"
 	case "${prev}" in
 		:)
 			__vercode

@@ -114,6 +114,7 @@ default_config = {
     'build_tools': MINIMUM_AAPT_VERSION,
     'force_build_tools': False,
     'java_paths': None,
+    'scan_binary': False,
     'ant': "ant",
     'mvn3': "mvn",
     'gradle': os.path.join(FDROID_PATH, 'gradlew-fdroid'),
@@ -432,6 +433,7 @@ def find_sdk_tools_cmd(cmd):
         sdk_tools = os.path.join(config['sdk_path'], 'tools')
         if os.path.exists(sdk_tools):
             tooldirs.append(sdk_tools)
+            tooldirs.append(os.path.join(sdk_tools, 'bin'))
         sdk_platform_tools = os.path.join(config['sdk_path'], 'platform-tools')
         if os.path.exists(sdk_platform_tools):
             tooldirs.append(sdk_platform_tools)

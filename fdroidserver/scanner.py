@@ -58,6 +58,36 @@ def get_gradle_compile_commands(build):
     return [re.compile(r'\s*' + c, re.IGNORECASE) for c in commands]
 
 
+def scan_binary(apkfile):
+    usual_suspects = {
+        # The `apkanalyzer dex packages` output looks like this:
+        # M d 1   1       93      <packagename> <other stuff>
+        # The first column has P/C/M/F for package, class, methos or field
+        # The second column has x/k/r/d for removed, kept, referenced and defined.
+        # We already filter for defined only in the apkanalyzer call. 'r' will be
+        # for things referenced but not distributed in the apk.
+        exp: re.compile(r'.[\s]*d[\s]*[0-9]*[\s]*[0-9*][\s]*[0-9]*[\s]*' + exp, re.IGNORECASE) for exp in [
+            r'(com\.google\.firebase[^\s]*)',
+            r'(com\.google\.android\.gms[^\s]*)',
+            r'(com\.google\.tagmanager[^\s]*)',
+            r'(com\.google\.analytics[^\s]*)',
+            r'(com\.android\.billing[^\s]*)',
+        ]
+    }
+    logging.info("Scanning APK for known non-free classes.")
+    result = common.SdkToolsPopen(["apkanalyzer", "dex", "packages", "--defined-only", apkfile], output=False)
+    problems = 0
+    for suspect, regexp in usual_suspects.items():
+        matches = regexp.findall(result.output)
+        if matches:
+            for m in set(matches):
+                logging.debug("Found class '%s'" % m)
+            problems += 1
+    if problems:
+        logging.critical("Found problems in %s" % apkfile)
+    return problems
+
+
 def scan_source(build_dir, build=metadata.Build()):
     """Scan the source code in the given directory (and all subdirectories)
     and return the number of fatal problems encountered
@@ -308,7 +338,6 @@ def scan_source(build_dir, build=metadata.Build()):
 
 
 def main():
-
     global config, options, json_per_build
 
     # Parse command line...
