@@ -806,6 +806,9 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
                                   " Expected: '%s' / '%s'")
                                  % (version, str(vercode), build.versionName,
                                     str(build.versionCode)))
+        if (options.scan_binary or config.get('scan_binary')) and not options.skipscan:
+            if scanner.scan_binary(src):
+                raise BuildException("Found blacklisted packages in final apk!")
 
     # Copy the unsigned apk to our destination directory for further
     # processing (by publish.py)...
@@ -899,6 +902,8 @@ def parse_commandline():
                         help=argparse.SUPPRESS)
     parser.add_argument("--skip-scan", dest="skipscan", action="store_true", default=False,
                         help=_("Skip scanning the source code for binaries and other problems"))
+    parser.add_argument("--scan-binary", action="store_true", default=False,
+                        help=_("Scan the resulting APK(s) for known non-free classes."))
     parser.add_argument("--no-tarball", dest="notarball", action="store_true", default=False,
                         help=_("Don't create a source tarball, useful when testing a build"))
     parser.add_argument("--no-refresh", dest="refresh", action="store_false", default=True,
