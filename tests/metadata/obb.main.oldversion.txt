@@ -2,6 +2,7 @@ Categories:Development
 License:GPL-3.0-only
 Source Code:https://github.com/eighthave/urzip
 Bitcoin:1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk
+Liberapay:12334
 
 Auto Name:OBB Main Old Version
 
