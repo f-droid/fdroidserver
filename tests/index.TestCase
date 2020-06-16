@@ -395,6 +395,15 @@ class IndexTest(unittest.TestCase):
             self.maxDiff = None
             self.assertEquals(css, pretty_css)
 
+    def test_v1_sort_packages_with_invalid(self):
+        i = [{'packageName': 'org.smssecure.smssecure',
+              'apkName': 'smssecure-custom.fake',
+              'signer': None,
+              'versionCode': 11111}]
+
+        fdroidserver.index.v1_sort_packages(
+            i, fdroidserver.common.load_stats_fdroid_signing_key_fingerprints())
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))

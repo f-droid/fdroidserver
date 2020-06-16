@@ -2324,7 +2324,13 @@ def main():
                                            options.use_date_from_apk)
     cachechanged = cachechanged or fcachechanged
     apks += files
+    appid_has_apks = set()
+    appid_has_repo_files = set()
     for apk in apks:
+        if apk['apkName'].endswith('.apk'):
+            appid_has_apks.add(apk['packageName'])
+        else:
+            appid_has_repo_files.add(apk['packageName'])
         if apk['packageName'] not in apps:
             if options.create_metadata:
                 create_metadata_from_template(apk)
@@ -2342,6 +2348,15 @@ def main():
                         os.remove(rmf)
                 else:
                     logging.warning(msg + '\n\t' + _('Use `fdroid update -c` to create it.'))
+
+    mismatch_errors = ''
+    for appid in appid_has_apks:
+        if appid in appid_has_repo_files:
+            appid_files = ', '.join(glob.glob(os.path.join('repo', appid + '_[0-9]*.*')))
+            mismatch_errors += (_('{appid} has both APKs and files: {files}')
+                                .format(appid=appid, files=appid_files)) + '\n'
+    if mismatch_errors:
+        raise FDroidException(mismatch_errors)
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
