@@ -927,6 +927,10 @@ def insert_funding_yml_donation_links(apps):
                 logging.error(e)
             if not data or type(data) != dict:
                 continue
+            if not app.get('Liberapay') and 'liberapay' in data:
+                s = sanitize_funding_yml_name(data['liberapay'])
+                if s:
+                    app['Liberapay'] = s
             if not app.get('OpenCollective') and 'open_collective' in data:
                 s = sanitize_funding_yml_name(data['open_collective'])
                 if s:

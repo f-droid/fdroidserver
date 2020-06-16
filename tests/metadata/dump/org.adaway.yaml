@@ -40,7 +40,8 @@ Disabled: null
 Donate: http://sufficientlysecure.org/index.php/adaway
 FlattrID: '369138'
 IssueTracker: https://github.com/dschuermann/ad-away/issues
-LiberapayID: null
+Liberapay: null
+LiberapayID: '1234567890'
 License: GPL-3.0-only
 Litecoin: null
 MaintainerNotes: ''

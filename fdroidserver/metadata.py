@@ -77,6 +77,7 @@ app_fields = set([
     'Changelog',
     'Donate',
     'FlattrID',
+    'Liberapay',
     'LiberapayID',
     'OpenCollective',
     'Bitcoin',
@@ -121,6 +122,7 @@ yaml_app_field_order = [
     'Changelog',
     'Donate',
     'FlattrID',
+    'Liberapay',
     'LiberapayID',
     'OpenCollective',
     'Bitcoin',
@@ -181,6 +183,7 @@ class App(dict):
         self.Changelog = ''
         self.Donate = None
         self.FlattrID = None
+        self.Liberapay = None
         self.LiberapayID = None
         self.OpenCollective = None
         self.Bitcoin = None
@@ -453,6 +456,10 @@ valuetypes = {
     FieldValidator("Flattr ID",
                    r'^[0-9a-z]+$',
                    ['FlattrID']),
+
+    FieldValidator("Liberapay",
+                   VALID_USERNAME_REGEX,
+                   ['Liberapay']),
 
     FieldValidator("Liberapay ID",
                    r'^[0-9]+$',

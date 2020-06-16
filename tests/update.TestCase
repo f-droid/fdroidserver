@@ -36,6 +36,7 @@ from fdroidserver.common import FDroidPopen
 
 DONATION_FIELDS = (
     'Donate',
+    'Liberapay',
     'OpenCollective',
 )
 
@@ -1008,9 +1009,11 @@ class UpdateTest(unittest.TestCase):
         for field in DONATION_FIELDS:
             self.assertIsNotNone(app.get(field), field)
         self.assertEqual('LINK1', app.get('Donate'))
+        self.assertEqual('USERNAME', app.get('Liberapay'))
         self.assertEqual('USERNAME', app.get('OpenCollective'))
 
         app['Donate'] = 'keepme'
+        app['Liberapay'] = 'keepme'
         app['OpenCollective'] = 'keepme'
         fdroidserver.update.insert_funding_yml_donation_links(apps)
         for field in DONATION_FIELDS:
