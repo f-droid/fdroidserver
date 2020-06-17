@@ -105,9 +105,17 @@ class ScannerTest(unittest.TestCase):
         self.assertEqual(2, count, 'there should be this many errors')
 
     def test_scan_source_file_types(self):
-        """Build product files are not allowed, test they are detected"""
+        """Build product files are not allowed, test they are detected
+
+        This test runs as if `fdroid build` running to test the
+        difference between absolute and relative paths.
+
+        """
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
-        os.chdir(testdir)
+        build_dir = os.path.join('build', 'fake.app')
+        abs_build_dir = os.path.join(testdir, build_dir)
+        os.makedirs(abs_build_dir, exist_ok=True)
+        os.chdir(abs_build_dir)
 
         fdroidserver.scanner.config = None
         fdroidserver.scanner.options = mock.Mock()
@@ -151,8 +159,11 @@ class ScannerTest(unittest.TestCase):
         os.chmod('snippet.png', 0o755)
         os.system('ls -l fake.png')
 
-        count = fdroidserver.scanner.scan_source(testdir)
+        # run scanner as if from `fdroid build`
+        os.chdir(testdir)
+        count = fdroidserver.scanner.scan_source(build_dir)
         self.assertEqual(6, count, 'there should be this many errors')
+        os.chdir(build_dir)
 
         for f in keep + binaries:
             self.assertTrue(os.path.exists(f), f + ' should still be there')
