@@ -41,6 +41,10 @@ from fdroidserver.exception import MetaDataException, FDroidException
 srclibs = None
 warnings_action = None
 
+# validates usernames based on a loose collection of rules from GitHub, GitLab,
+# Liberapay and issuehunt.  This is mostly to block abuse.
+VALID_USERNAME_REGEX = re.compile(r'^[a-z\d](?:[a-z\d/._-]){0,38}$', re.IGNORECASE)
+
 
 def warn_or_exception(value, cause=None):
     '''output warning or Exception depending on -W'''
@@ -73,6 +77,7 @@ app_fields = set([
     'Changelog',
     'Donate',
     'FlattrID',
+    'Liberapay',
     'LiberapayID',
     'OpenCollective',
     'Bitcoin',
@@ -117,6 +122,7 @@ yaml_app_field_order = [
     'Changelog',
     'Donate',
     'FlattrID',
+    'Liberapay',
     'LiberapayID',
     'OpenCollective',
     'Bitcoin',
@@ -177,6 +183,7 @@ class App(dict):
         self.Changelog = ''
         self.Donate = None
         self.FlattrID = None
+        self.Liberapay = None
         self.LiberapayID = None
         self.OpenCollective = None
         self.Bitcoin = None
@@ -450,12 +457,16 @@ valuetypes = {
                    r'^[0-9a-z]+$',
                    ['FlattrID']),
 
+    FieldValidator("Liberapay",
+                   VALID_USERNAME_REGEX,
+                   ['Liberapay']),
+
     FieldValidator("Liberapay ID",
                    r'^[0-9]+$',
                    ['LiberapayID']),
 
     FieldValidator("Open Collective",
-                   r'^[0-9a-zA-Z_-]+$',
+                   VALID_USERNAME_REGEX,
                    ['OpenCollective']),
 
     FieldValidator("HTTP link",

@@ -36,7 +36,7 @@ metadata_v0:
     - cd fdroiddata
     - ../tests/dump_internal_metadata_format.py
     - sed -i
-          -e '/kivy:\sfalse/d'
+          -e '/Liberapay:/d'
           -e '/OpenCollective/d'
           metadata/dump_*/*.yaml
     - diff -uw metadata/dump_*

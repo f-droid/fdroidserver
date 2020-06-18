@@ -8,6 +8,7 @@ import inspect
 import logging
 import optparse
 import os
+import random
 import shutil
 import subprocess
 import sys
@@ -31,6 +32,13 @@ import fdroidserver.exception
 import fdroidserver.metadata
 import fdroidserver.update
 from fdroidserver.common import FDroidPopen
+
+
+DONATION_FIELDS = (
+    'Donate',
+    'Liberapay',
+    'OpenCollective',
+)
 
 
 class UpdateTest(unittest.TestCase):
@@ -971,6 +979,86 @@ class UpdateTest(unittest.TestCase):
                                       'UpdateCheckName': '',
                                       'VercodeOperation': '',
                                       'WebSite': ''})
+
+    def test_insert_funding_yml_donation_links(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        os.mkdir('build')
+        content = textwrap.dedent("""
+            community_bridge: ''
+            custom: [LINK1, LINK2]
+            github: USERNAME
+            issuehunt: USERNAME
+            ko_fi: USERNAME
+            liberapay: USERNAME
+            open_collective: USERNAME
+            otechie: USERNAME
+            patreon: USERNAME
+        """)
+        app = fdroidserver.metadata.App()
+        app.id = 'fake.app.id'
+        apps = {app.id: app}
+        os.mkdir(os.path.join('build', app.id))
+        fdroidserver.update.insert_funding_yml_donation_links(apps)
+        for field in DONATION_FIELDS:
+            self.assertFalse(app.get(field))
+        with open(os.path.join('build', app.id, 'FUNDING.yml'), 'w') as fp:
+            fp.write(content)
+
+        fdroidserver.update.insert_funding_yml_donation_links(apps)
+        for field in DONATION_FIELDS:
+            self.assertIsNotNone(app.get(field), field)
+        self.assertEqual('LINK1', app.get('Donate'))
+        self.assertEqual('USERNAME', app.get('Liberapay'))
+        self.assertEqual('USERNAME', app.get('OpenCollective'))
+
+        app['Donate'] = 'keepme'
+        app['Liberapay'] = 'keepme'
+        app['OpenCollective'] = 'keepme'
+        fdroidserver.update.insert_funding_yml_donation_links(apps)
+        for field in DONATION_FIELDS:
+            self.assertEqual('keepme', app.get(field))
+
+    def test_insert_funding_yml_donation_links_with_corrupt_file(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        os.mkdir('build')
+        app = fdroidserver.metadata.App()
+        app.id = 'fake.app.id'
+        apps = {app.id: app}
+        os.mkdir(os.path.join('build', app.id))
+        with open(os.path.join('build', app.id, 'FUNDING.yml'), 'w') as fp:
+            fp.write(textwrap.dedent("""
+                opencollective: foo
+                custom: []
+                liberapay: :
+            """))
+        fdroidserver.update.insert_funding_yml_donation_links(apps)
+        for field in DONATION_FIELDS:
+            self.assertIsNone(app.get(field))
+
+    def test_sanitize_funding_yml(self):
+        with open(os.path.join(self.basedir, 'funding-usernames.yaml')) as fp:
+            data = yaml.safe_load(fp)
+        for k, entries in data.items():
+            for entry in entries:
+                if k in 'custom':
+                    m = fdroidserver.update.sanitize_funding_yml_entry(entry)
+                else:
+                    m = fdroidserver.update.sanitize_funding_yml_name(entry)
+                if k == 'bad':
+                    self.assertIsNone(m)
+                else:
+                    self.assertIsNotNone(m)
+        self.assertIsNone(fdroidserver.update.sanitize_funding_yml_entry('foo\nbar'))
+        self.assertIsNone(fdroidserver.update.sanitize_funding_yml_entry(
+            ''.join(chr(random.randint(65, 90)) for _ in range(2049))))
+
+        # not recommended but valid entries
+        self.assertIsNotNone(fdroidserver.update.sanitize_funding_yml_entry(12345))
+        self.assertIsNotNone(fdroidserver.update.sanitize_funding_yml_entry(5.0))
+        self.assertIsNotNone(fdroidserver.update.sanitize_funding_yml_entry(' WhyIncludeWhitespace '))
+        self.assertIsNotNone(fdroidserver.update.sanitize_funding_yml_entry(['first', 'second']))
 
 
 if __name__ == "__main__":

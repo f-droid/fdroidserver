@@ -100,6 +100,21 @@ class MetadataTest(unittest.TestCase):
         self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
                           'tb1qw5r8drrejxrrg4y5rrrrrraryrrrrwrkxrjrsx', 'fake.app.id')
 
+    def test_valid_funding_yml_regex(self):
+        """Check the regex can find all the cases"""
+        with open(os.path.join(self.basedir, 'funding-usernames.yaml')) as fp:
+            data = yaml.safe_load(fp)
+
+        for k, entries in data.items():
+            for entry in entries:
+                m = fdroidserver.metadata.VALID_USERNAME_REGEX.match(entry)
+                if k == 'custom':
+                    pass
+                elif k == 'bad':
+                    self.assertIsNone(m, 'this is an invalid %s username: {%s}' % (k, entry))
+                else:
+                    self.assertIsNotNone(m, 'this is a valid %s username: {%s}' % (k, entry))
+
     def test_read_metadata(self):
 
         def _build_yaml_representer(dumper, data):
