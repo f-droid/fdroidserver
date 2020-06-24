@@ -1019,6 +1019,47 @@ class UpdateTest(unittest.TestCase):
         for field in DONATION_FIELDS:
             self.assertEqual('keepme', app.get(field))
 
+    def test_insert_funding_yml_donation_links_one_at_a_time(self):
+        """Exercise the FUNDING.yml code one entry at a time"""
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        os.mkdir('build')
+
+        app = fdroidserver.metadata.App()
+        app.id = 'fake.app.id'
+        apps = {app.id: app}
+        os.mkdir(os.path.join('build', app.id))
+        fdroidserver.update.insert_funding_yml_donation_links(apps)
+        for field in DONATION_FIELDS:
+            self.assertIsNone(app.get(field))
+
+        content = textwrap.dedent("""
+            community_bridge: 'blah-de-blah'
+            github: USERNAME
+            issuehunt: USERNAME
+            ko_fi: USERNAME
+            liberapay: USERNAME
+            open_collective: USERNAME
+            patreon: USERNAME
+        """)
+        for line in content.split('\n'):
+            if not line:
+                continue
+            app = fdroidserver.metadata.App()
+            app.id = 'fake.app.id'
+            apps = {app.id: app}
+            with open(os.path.join('build', app.id, 'FUNDING.yml'), 'w') as fp:
+                fp.write(line)
+            data = yaml.load(line)
+            fdroidserver.update.insert_funding_yml_donation_links(apps)
+            if 'liberapay' in data:
+                self.assertEqual(data['liberapay'], app.get('Liberapay'))
+            elif 'open_collective' in data:
+                self.assertEqual(data['open_collective'], app.get('OpenCollective'))
+            else:
+                for v in data.values():
+                    self.assertEqual(app.get('Donate', '').split('/')[-1], v)
+
     def test_insert_funding_yml_donation_links_with_corrupt_file(self):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         os.chdir(testdir)
