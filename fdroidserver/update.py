@@ -977,7 +977,7 @@ def insert_funding_yml_donation_links(apps):
                             break
 
 
-def copy_triple_t_store_metadata(apps, repodir):
+def copy_triple_t_store_metadata(apps):
     """Include store metadata from the app's source repo
 
     The Triple-T Gradle Play Publisher is a plugin that has a standard
@@ -1091,14 +1091,14 @@ def copy_triple_t_store_metadata(apps, repodir):
                                 dirname = SCREENSHOT_DIRS[tt_screenshot_dirs.index(dirname)]
                         else:
                             locale = segments[-2]
-                        destdir = os.path.join(repodir, packageName, locale, dirname)
+                        destdir = os.path.join('repo', packageName, locale, dirname)
                         os.makedirs(destdir, mode=0o755, exist_ok=True)
                         sourcefile = os.path.join(root, f)
                         destfile = os.path.join(destdir, repofilename)
                         _strip_and_copy_image(sourcefile, destfile)
 
 
-def insert_localized_app_metadata(apps, repodir):
+def insert_localized_app_metadata(apps):
     """scans standard locations for graphics and localized text
 
     Scans for localized description files, changelogs, store graphics, and
@@ -1142,7 +1142,7 @@ def insert_localized_app_metadata(apps, repodir):
                 logging.debug(packageName + ' does not have app metadata, skipping l18n scan.')
                 continue
             locale = segments[-1]
-            destdir = os.path.join(repodir, packageName, locale)
+            destdir = os.path.join('repo', packageName, locale)
 
             # flavours specified in build receipt
             build_flavours = ""
@@ -1180,7 +1180,7 @@ def insert_localized_app_metadata(apps, repodir):
                 base, extension = common.get_extension(f)
                 if locale == 'images':
                     locale = segments[-2]
-                    destdir = os.path.join(repodir, packageName, locale)
+                    destdir = os.path.join('repo', packageName, locale)
                 if base in GRAPHIC_NAMES and extension in ALLOWED_EXTENSIONS:
                     os.makedirs(destdir, mode=0o755, exist_ok=True)
                     _strip_and_copy_image(os.path.join(root, f), destdir)
@@ -1188,7 +1188,7 @@ def insert_localized_app_metadata(apps, repodir):
                 if d in SCREENSHOT_DIRS:
                     if locale == 'images':
                         locale = segments[-2]
-                        destdir = os.path.join(repodir, packageName, locale)
+                        destdir = os.path.join('repo', packageName, locale)
                     for f in glob.glob(os.path.join(root, d, '*.*')):
                         _ignored, extension = common.get_extension(f)
                         if extension in ALLOWED_EXTENSIONS:
@@ -1196,7 +1196,7 @@ def insert_localized_app_metadata(apps, repodir):
                             os.makedirs(screenshotdestdir, mode=0o755, exist_ok=True)
                             _strip_and_copy_image(f, screenshotdestdir)
 
-    repodirs = sorted(glob.glob(os.path.join(repodir, '[A-Za-z]*', '[a-z][a-z]*')))
+    repodirs = sorted(glob.glob(os.path.join('repo', '[A-Za-z]*', '[a-z][a-z]*')))
     for d in repodirs:
         if not os.path.isdir(d):
             continue
@@ -2224,10 +2224,14 @@ def prepare_apps(apps, apks, repodir):
     apply_info_from_latest_apk(apps_with_packages, apks)
     render_app_descriptions(apps_with_packages, apps)
     insert_funding_yml_donation_links(apps)
-    copy_triple_t_store_metadata(apps_with_packages, repodir)
+    # This is only currently done for /repo because doing it for the archive
+    # will take a lot of time and bloat the archive mirrors and index
+    if repodir == 'repo':
+        copy_triple_t_store_metadata(apps_with_packages)
     insert_obbs(repodir, apps_with_packages, apks)
     translate_per_build_anti_features(apps_with_packages, apks)
-    insert_localized_app_metadata(apps_with_packages, repodir)
+    if repodir == 'repo':
+        insert_localized_app_metadata(apps_with_packages)
     return apps_with_packages
 
 
