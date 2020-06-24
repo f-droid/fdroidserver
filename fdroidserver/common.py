@@ -1841,7 +1841,7 @@ def parse_srclib_spec(spec):
     return (name, ref, number, subdir)
 
 
-def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
+def getsrclib(spec, srclib_dir, basepath=False,
               raw=False, prepare=True, preponly=False, refresh=True,
               build=None):
     """Get the specified source library.
@@ -1976,7 +1976,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build.srclibs:
         logging.info("Collecting source libraries")
         for lib in build.srclibs:
-            srclibpaths.append(getsrclib(lib, srclib_dir, build, preponly=onserver,
+            srclibpaths.append(getsrclib(lib, srclib_dir, preponly=onserver,
                                          refresh=refresh, build=build))
 
     for name, number, libpath in srclibpaths:
