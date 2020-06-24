@@ -906,7 +906,6 @@ class MetadataTest(unittest.TestCase):
                                          'Prepare': None}})
 
     def test_read_xref_metadata(self):
-        fdroidserver.common.config = {'accepted_formats': ['yml']}
         os.chdir('xref')
         fdroidserver.metadata.warnings_action = 'error'
         apps = fdroidserver.metadata.read_metadata(xref=True)
