@@ -2038,7 +2038,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             build_gradle_kts = build_gradle + ".kts"
             if os.path.exists(build_gradle):
                 gradlefile = build_gradle
-            elif os.path.exist(build_gradle_kts):
+            elif os.path.exists(build_gradle_kts):
                 gradlefile = build_gradle_kts
             regsub_file(r'compileSdkVersion[ =]+[0-9]+',
                         r'compileSdkVersion %s' % n,
