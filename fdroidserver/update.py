@@ -126,7 +126,7 @@ def disabled_algorithms_allowed():
     return options.allow_disabled_algorithms or config['allow_disabled_algorithms']
 
 
-def status_update_json(apps, sortedids, apks):
+def status_update_json(apps, apks):
     """Output a JSON file with metadata about this `fdroid update` run
 
     :param apps: fully populated list of all applications
@@ -141,7 +141,7 @@ def status_update_json(apps, sortedids, apks):
     output['failedBuilds'] = dict()
     output['noPackages'] = []
 
-    for appid in sortedids:
+    for appid in apps:
         app = apps[appid]
         for af in app.get('AntiFeatures', []):
             antiFeatures = output['antiFeatures']  # JSON camelCase
@@ -177,7 +177,7 @@ def status_update_json(apps, sortedids, apks):
     common.write_status_json(output, options.pretty)
 
 
-def update_wiki(apps, sortedids, apks):
+def update_wiki(apps, apks):
     """Update the wiki
 
     :param apps: fully populated list of all applications
@@ -193,7 +193,7 @@ def update_wiki(apps, sortedids, apks):
     generated_pages = {}
     generated_redirects = {}
 
-    for appid in sortedids:
+    for appid in apps:
         app = metadata.App(apps[appid])
 
         wikidata = ''
@@ -1113,7 +1113,7 @@ def insert_localized_app_metadata(apps):
     ...as well as the /metadata/<packageName>/<locale> directory.
 
     If it finds them, they will be added to the dict of all packages, with the
-    versions in the /metadata/ folder taking precendence over the what
+    versions in the /metadata/ folder taking precedence over the what
     is in the app's source repo.
 
     The <locale> is the locale of the files supplied in that directory, using
@@ -2009,19 +2009,19 @@ def make_categories_txt(repodir, categories):
 
 
 def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversions):
-
     def filter_apk_list_sorted(apk_list):
-        res = []
+        apkList = []
         currentVersionApk = None
         for apk in apk_list:
             if apk['packageName'] == appid:
-                if apk['versionCode'] == common.version_code_string_to_int(app.CurrentVersionCode):
-                    currentVersionApk = apk
-                    continue
-                res.append(apk)
+                if app.CurrentVersionCode is not None:
+                    if apk['versionCode'] == common.version_code_string_to_int(app.CurrentVersionCode):
+                        currentVersionApk = apk
+                        continue
+                apkList.append(apk)
 
         # Sort the apk list by version code. First is highest/newest.
-        sorted_list = sorted(res, key=lambda apk: apk['versionCode'], reverse=True)
+        sorted_list = sorted(apkList, key=lambda apk: apk['versionCode'], reverse=True)
         if currentVersionApk:
             # Insert apk which corresponds to currentVersion at the front
             sorted_list.insert(0, currentVersionApk)
@@ -2166,6 +2166,75 @@ def create_metadata_from_template(apk):
     logging.info(_("Generated skeleton metadata for {appid}").format(appid=apk['packageName']))
 
 
+def read_names_from_apks(apps, apks):
+    """This is a stripped down copy of apply_info_from_latest_apk that only parses app names"""
+    for appid, app in apps.items():
+        bestver = UNSET_VERSION_CODE
+        for apk in apks:
+            if apk['packageName'] == appid:
+                if apk['versionCode'] > bestver:
+                    bestver = apk['versionCode']
+                    bestapk = apk
+
+        if bestver == UNSET_VERSION_CODE:
+            if app.Name is None:
+                app.Name = app.AutoName or appid
+            app.icon = None
+        else:
+            if app.Name is None:
+                app.Name = bestapk['name']
+
+
+def render_app_descriptions(apps, all_apps):
+    """
+    Renders the app html description.
+    For resolving inter-app links it needs the full list of apps, even if they end up in
+    separate repos (i.e. archive or per app repos).
+    """
+    for app in apps.values():
+        app['Description'] = metadata.description_html(app['Description'], metadata.DescriptionResolver(all_apps))
+
+
+def get_apps_with_packages(apps, apks):
+    """Returns a deepcopy of that subset apps that actually has any associated packages. Skips disabled apps."""
+    appsWithPackages = collections.OrderedDict()
+    for packageName in apps:
+        app = apps[packageName]
+        if app['Disabled']:
+            continue
+
+        # only include apps with packages
+        for apk in apks:
+            if apk['packageName'] == packageName:
+                newapp = copy.copy(app)
+                appsWithPackages[packageName] = newapp
+                break
+    return appsWithPackages
+
+
+def prepare_apps(apps, apks, repodir):
+    """Encapsulates all necessary preparation steps before we can build an index out of apps and apks.
+
+    :param apps: All apps as read from metadata
+    :param apks: list of apks that belong into repo, this gets modified in place
+    :param repodir: the target repository directory, metadata files will be copied here
+    :return: the relevant subset of apps (as a deepcopy)
+    """
+    apps_with_packages = get_apps_with_packages(apps, apks)
+    apply_info_from_latest_apk(apps_with_packages, apks)
+    render_app_descriptions(apps_with_packages, apps)
+    insert_funding_yml_donation_links(apps)
+    # This is only currently done for /repo because doing it for the archive
+    # will take a lot of time and bloat the archive mirrors and index
+    if repodir == 'repo':
+        copy_triple_t_store_metadata(apps_with_packages)
+    insert_obbs(repodir, apps_with_packages, apks)
+    translate_per_build_anti_features(apps_with_packages, apks)
+    if repodir == 'repo':
+        insert_localized_app_metadata(apps_with_packages)
+    return apps_with_packages
+
+
 config = None
 options = None
 start_timestamp = time.gmtime()
@@ -2302,12 +2371,6 @@ def main():
                 else:
                     logging.warning(msg + '\n\t' + _('Use `fdroid update -c` to create it.'))
 
-    insert_funding_yml_donation_links(apps)
-    copy_triple_t_store_metadata(apps)
-    insert_obbs(repodirs[0], apps, apks)
-    insert_localized_app_metadata(apps)
-    translate_per_build_anti_features(apps, apks)
-
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
         archapks, cc = process_apks(apkcache, repodirs[1], knownapks, options.use_date_from_apk)
@@ -2316,13 +2379,18 @@ def main():
     else:
         archapks = []
 
-    # Apply information from latest apks to the application and update dates
-    apply_info_from_latest_apk(apps, apks + archapks)
+    # We need app.Name populated for all apps regardless of which repo they end up in
+    # for the old-style inter-app links, so let's do it before we do anything else.
+    # This will be done again (as part of apply_info_from_latest_apk) for repo and archive
+    # separately later on, but it's fairly cheap anyway.
+    read_names_from_apks(apps, apks + archapks)
 
-    # Sort the app list by name, then the web site doesn't have to by default.
-    # (we had to wait until we'd scanned the apks to do this, because mostly the
-    # name comes from there!)
-    sortedids = sorted(apps.keys(), key=lambda appid: apps[appid].Name.upper())
+    if len(repodirs) > 1:
+        archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])
+        archived_apps = prepare_apps(apps, archapks, repodirs[1])
+        index.make(archived_apps, archapks, repodirs[1], True)
+
+    repoapps = prepare_apps(apps, apks, repodirs[0])
 
     # APKs are placed into multiple repos based on the app package, providing
     # per-app subscription feeds for nightly builds and things like it
@@ -2333,24 +2401,14 @@ def main():
             appdict = dict()
             appdict[appid] = app
             if os.path.isdir(repodir):
-                index.make(appdict, [appid], apks, repodir, False)
+                index.make(appdict, apks, repodir, False)
             else:
                 logging.info(_('Skipping index generation for {appid}').format(appid=appid))
         return
 
-    if len(repodirs) > 1:
-        archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])
-
     # Make the index for the main repo...
-    index.make(apps, sortedids, apks, repodirs[0], False)
+    index.make(repoapps, apks, repodirs[0], False)
     make_categories_txt(repodirs[0], categories)
-
-    # If there's an archive repo,  make the index for it. We already scanned it
-    # earlier on.
-    if len(repodirs) > 1:
-        archived_apps = copy.deepcopy(apps)
-        apply_info_from_latest_apk(archived_apps, archapks)
-        index.make(archived_apps, sortedids, archapks, repodirs[1], True)
 
     git_remote = config.get('binary_transparency_remote')
     if git_remote or os.path.isdir(os.path.join('binary_transparency', '.git')):
@@ -2381,8 +2439,8 @@ def main():
 
     # Update the wiki...
     if options.wiki:
-        update_wiki(apps, sortedids, apks + archapks)
-    status_update_json(apps, sortedids, apks + archapks)
+        update_wiki(apps, apks + archapks)
+    status_update_json(apps, apks + archapks)
 
     logging.info(_("Finished"))
 

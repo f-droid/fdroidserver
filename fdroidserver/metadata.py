@@ -616,7 +616,7 @@ class DescriptionFormatter:
                     warn_or_exception(_("Unterminated ]]"))
                 url = txt[2:index]
                 if self.linkResolver:
-                    url, urltext = self.linkResolver(url)
+                    url, urltext = self.linkResolver.resolve_description_link(url)
                 else:
                     urltext = url
                 res_html += '<a href="' + url + '">' + html.escape(urltext, quote=False) + '</a>'
@@ -899,14 +899,9 @@ def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
     if xref:
         # Parse all descriptions at load time, just to ensure cross-referencing
         # errors are caught early rather than when they hit the build server.
-        def linkres(appid):
-            if appid in apps:
-                return ("fdroid.app:" + appid, "Dummy name - don't know yet")
-            warn_or_exception(_("Cannot resolve app id {appid}").format(appid=appid))
-
         for appid, app in apps.items():
             try:
-                description_html(app.Description, linkres)
+                description_html(app.Description, DummyDescriptionResolver(apps))
             except MetaDataException as e:
                 warn_or_exception(_("Problem with description of {appid}: {error}")
                                   .format(appid=appid, error=str(e)))
@@ -1679,3 +1674,21 @@ def add_metadata_arguments(parser):
     '''add common command line flags related to metadata processing'''
     parser.add_argument("-W", choices=['error', 'warn', 'ignore'], default='error',
                         help=_("force metadata errors (default) to be warnings, or to be ignored."))
+
+
+class DescriptionResolver:
+    def __init__(self, apps):
+        self.apps = apps
+
+    def resolve_description_link(self, appid):
+        if appid in self.apps:
+            if self.apps[appid].Name:
+                return "fdroid.app:" + appid, self.apps[appid].Name
+        raise MetaDataException("Cannot resolve app id " + appid)
+
+
+class DummyDescriptionResolver(DescriptionResolver):
+    def resolve_description_link(self, appid):
+        if appid in self.apps:
+            return "fdroid.app:" + appid, "Dummy name - don't know yet"
+        warn_or_exception(_("Cannot resolve app id {appid}").format(appid=appid))

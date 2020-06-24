@@ -905,6 +905,13 @@ class MetadataTest(unittest.TestCase):
                                          'Subdir': None,
                                          'Prepare': None}})
 
+    def test_read_xref_metadata(self):
+        os.chdir('xref')
+        fdroidserver.metadata.warnings_action = 'error'
+        apps = fdroidserver.metadata.read_metadata(xref=True)
+        self.assertListEqual(list(apps.keys()),
+                             ['aarddict.android', 'org.coolreader', 'org.geometerplus.zlibrary.ui.android'])
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))

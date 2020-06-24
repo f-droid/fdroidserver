@@ -1,0 +1,556 @@
+AntiFeatures:
+  - NonFreeAdd
+  - UpstreamNonFree
+Categories:
+  - Reading
+License: GPL-2.0-or-later
+AuthorName: Nikolay Pultsin
+AuthorEmail: geometer@fbreader.org
+AuthorWebSite: https://fbreader.org/
+WebSite: https://fbreader.org/FBReaderJ
+SourceCode: https://github.com/geometer/FBReaderJ
+IssueTracker: https://github.com/geometer/FBReaderJ/issues
+Changelog: https://raw.githubusercontent.com/geometer/FBReaderJ/HEAD/ChangeLog
+Donate: https://fbreader.org/donation/make.php
+
+AutoName: FBReader
+Description: |-
+    '''N.B'''There are three different apks to cover the different versions of
+    Android. Donut covers 1.5-1.6; Froyo covers 2.0-2.3 and Honeycomb covers 3.0+.
+    x86 and MIPS are supported natively in all apks.
+
+    An e-book reader. Features include the ability to stock up on books from online
+    OPDS libraries like Project Gutenberg straight from the app. F-Droid.org has two
+    other addon apps that provide text-to-speech functionality and one to support
+    ''local'' OPDS shares.
+
+    Anti-features: Addons. While there are some addons for this app that are free,
+    the dictionaries that are suggested are not. However, it does support
+    [[aarddict.android]], as long as that is installed beforehand '''and''' you
+    choose it via the Dictionary section of the settings.
+
+RepoType: git
+Repo: https://github.com/geometer/FBReaderJ.git
+
+Builds:
+  - versionName: 0.99.11
+    versionCode: 9911
+    commit: 0.99.11
+    antcommands:
+      - package
+
+  - versionName: 0.99.12
+    versionCode: 9912
+    commit: 0.99.12
+    antcommands:
+      - package
+
+  - versionName: 0.99.15
+    versionCode: 9915
+    commit: 0.99.15
+    antcommands:
+      - package
+
+  - versionName: 0.99.18
+    versionCode: 9918
+    commit: 0.99.18
+    antcommands:
+      - package
+
+  - versionName: 1.0.9
+    versionCode: 10011
+    commit: 1.0.9
+    antcommands:
+      - package
+
+  - versionName: 1.0.11
+    versionCode: 10013
+    commit: 1.0.11
+    antcommands:
+      - package
+
+  - versionName: 1.0.12
+    versionCode: 10014
+    commit: fd349108eff9caa9152a
+    antcommands:
+      - package
+
+  - versionName: 1.1.0
+    versionCode: 10100
+    commit: 5eb993e1fac2898d2361
+    antcommands:
+      - package
+
+  - versionName: 1.1.1
+    versionCode: 10101
+    commit: 1.1.1
+    antcommands:
+      - package
+
+  - versionName: 1.1.2
+    versionCode: 10102
+    commit: 1.1.2
+    antcommands:
+      - package
+
+  - versionName: 1.1.8
+    versionCode: 101081
+    commit: 1.1.8
+    antcommands:
+      - package
+
+  - versionName: 1.1.9
+    versionCode: 101091
+    commit: 1.1.9
+    antcommands:
+      - package
+
+  - versionName: 1.1.10
+    versionCode: 101101
+    commit: 13ee5d79431815dd694e
+    antcommands:
+      - package
+
+  - versionName: 1.2.2
+    versionCode: 102021
+    commit: e63c553aeb032da828b270a735f0171d8d22c54c
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    target: android-10
+    buildjni:
+      - yes
+
+  - versionName: 1.2.3
+    versionCode: 102031
+    commit: 46d83bb4351c2f6ec51e0d9aa6202c86c1297e7f
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    target: android-10
+    buildjni:
+      - yes
+
+  - versionName: 1.2.4
+    versionCode: 102041
+    commit: 6426bcf131d4
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    target: android-10
+    buildjni:
+      - yes
+
+  - versionName: 1.2.6
+    versionCode: 102061
+    commit: 1.2.6
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    target: android-10
+    buildjni:
+      - yes
+
+  - versionName: 1.3.3
+    versionCode: 103031
+    commit: 1.3.3
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    target: android-10
+    buildjni:
+      - yes
+
+  - versionName: 1.3.6
+    versionCode: 103061
+    commit: a16e3eb7ff731edea99248f8a7c1633148a26236
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    target: android-10
+    buildjni:
+      - yes
+
+  - versionName: 1.5.5
+    versionCode: 105051
+    commit: 1.5.5
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    target: android-10
+    buildjni:
+      - yes
+
+  - versionName: 1.6.1
+    versionCode: 106011
+    commit: 1.6.1
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    buildjni:
+      - yes
+
+  - versionName: 1.6.4-Donut
+    versionCode: 106040
+    commit: af881fe37
+    forceversion: true
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    buildjni:
+      - yes
+
+  - versionName: 1.6.4-Froyo
+    versionCode: 106041
+    commit: 696ed7704
+    forceversion: true
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    buildjni:
+      - yes
+
+  - versionName: 1.6.4
+    versionCode: 106042
+    commit: b3b4667ccb
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    buildjni:
+      - yes
+
+  - versionName: 1.7.2-Donut
+    versionCode: 107019
+    commit: a4a5e506b
+    forceversion: true
+    forcevercode: true
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    buildjni:
+      - yes
+
+  - versionName: 1.7.2-Froyo
+    versionCode: 107020
+    commit: 33ffc7e5b
+    forceversion: true
+    forcevercode: true
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    buildjni:
+      - yes
+
+  - versionName: 1.7.2-Honeycomb
+    versionCode: 107021
+    commit: 0520159677
+    forceversion: true
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    buildjni:
+      - yes
+
+  - versionName: 1.7.3-Donut
+    versionCode: 107040
+    commit: 2c6253dd
+    forceversion: true
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    buildjni:
+      - yes
+
+  - versionName: 1.7.3-Froyo
+    versionCode: 107041
+    commit: 934bf7f5
+    forceversion: true
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    buildjni:
+      - yes
+
+  - versionName: 1.7.3-Honeycomb
+    versionCode: 107042
+    commit: c4a3c7a9a
+    forceversion: true
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    buildjni:
+      - yes
+
+  - versionName: 1.7.8-Donut
+    versionCode: 107080
+    commit: c1470c9be1
+    forceversion: true
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    buildjni:
+      - yes
+
+  - versionName: 1.7.8-Froyo
+    versionCode: 107084
+    commit: 1.7.8
+    forceversion: true
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    buildjni:
+      - yes
+
+  - versionName: 1.7.8-Honeycomb
+    versionCode: 107085
+    commit: 1.7.8-ics
+    forceversion: true
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    buildjni:
+      - yes
+
+  - versionName: 1.8.2-Donut
+    versionCode: 108020
+    commit: 9bec0ff445e66a
+    forceversion: true
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    androidupdate:
+      - third-party/AmbilWarna
+      - .
+    buildjni:
+      - yes
+
+  - versionName: 1.8.2-Froyo
+    versionCode: 108021
+    commit: 0f02d4e9232227
+    forceversion: true
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    androidupdate:
+      - third-party/AmbilWarna
+      - .
+    buildjni:
+      - yes
+
+  - versionName: 1.8.2-Honeycomb+
+    versionCode: 108022
+    commit: 1112df415d
+    forceversion: true
+    prebuild:
+      - mkdir res/drawable
+      - find icons -iname "*.*" -exec cp {} res/drawable \;
+    androidupdate:
+      - third-party/AmbilWarna
+      - .
+    buildjni:
+      - yes
+
+  - versionName: 2.0.6-gb
+    versionCode: 2000610
+    disable: missing res with android-9
+    commit: 2.0.6
+    patch:
+      - fbreader-2.0.6.patch
+    srclibs:
+      - PDFParseLib@36d7479ce85638eb4f0ff9c875ec77680177da5d
+      - ApacheHttpClient@4.2.5
+      - NanoHttpd@Release-2.0.5
+      - JsonSimple@tag_release_1_1_1
+    forceversion: true
+    rm:
+      - libs/*jar
+      - obsolete/lib/*.jar
+    prebuild:
+      - echo -e "sdk.dir=$$SDK$$\nndk.dir=$$NDK$$\n" >> local.properties
+      - cp local.properties third-party/AmbilWarna/
+      - cp local.properties third-party/android-filechooser/code/
+      - cp local.properties third-party/drag-sort-listview/library/
+      - pushd $$ApacheHttpClient$$/httpmime/
+      - $$MVN3$$ package
+      - popd
+      - cp $$ApacheHttpClient$$/httpmime/target/httpmime-4.2.5.jar libs/
+      - pushd $$NanoHttpd$$
+      - $$MVN3$$ package
+      - popd
+      - cp $$NanoHttpd$$/core/target/nanohttpd-2.0.5.jar libs/
+      - cp -fR $$JsonSimple$$/src/main/java/org src/
+      - cp -fR $$PDFParseLib$$/pdfparse-lib/src/main/java/org src/
+      - rm -fR src/com/paragon
+    androidupdate:
+      - third-party/AmbilWarna
+      - third-party/android-filechooser/code
+      - third-party/drag-sort-listview/library
+      - .
+    target: android-14
+    buildjni:
+      - yes
+
+  - versionName: 2.0.6-ics
+    versionCode: 2000620
+    commit: b1dd70ff149560889e7548762046da4933e51e94
+    patch:
+      - fbreader-2.0.6.patch
+    srclibs:
+      - FBReaderJ@2.0.6
+      - PDFParseLib@36d7479ce85638eb4f0ff9c875ec77680177da5d
+      - ApacheHttpClient@4.2.5
+      - NanoHttpd@Release-2.0.5
+      - JsonSimple@tag_release_1_1_1
+    forceversion: true
+    rm:
+      - libs/*jar
+      - obsolete/lib/*.jar
+    prebuild:
+      - echo -e "sdk.dir=$$SDK$$\nndk.dir=$$NDK$$\n" >> local.properties
+      - cp local.properties third-party/AmbilWarna/
+      - cp local.properties third-party/android-filechooser/code/
+      - cp local.properties third-party/drag-sort-listview/library/
+      - pushd $$ApacheHttpClient$$/httpmime/
+      - $$MVN3$$ package
+      - popd
+      - cp $$ApacheHttpClient$$/httpmime/target/httpmime-4.2.5.jar libs/
+      - pushd $$NanoHttpd$$
+      - $$MVN3$$ package
+      - popd
+      - cp $$NanoHttpd$$/core/target/nanohttpd-2.0.5.jar libs/
+      - cp -fR $$JsonSimple$$/src/main/java/org src/
+      - cp -fR $$PDFParseLib$$/pdfparse-lib/src/main/java/org src/
+      - rm -fR src/com/paragon
+      - sed -i -e '/com.google.android.gms.version/d' -e '/google_play_services/d'  AndroidManifest.xml
+      - sed -i -e '/google.services.lib.dir/d' project.properties
+      - rm -fR src/org/geometerplus/android/fbreader/network/auth
+      - cp -fR $$FBReaderJ$$/src/org/geometerplus/android/fbreader/network/auth src/org/geometerplus/android/fbreader/network/
+    androidupdate:
+      - third-party/AmbilWarna
+      - third-party/android-filechooser/code
+      - third-party/drag-sort-listview/library
+      - .
+    target: android-14
+    buildjni:
+      - yes
+
+  - versionName: 2.1-ics
+    versionCode: 2010020
+    commit: 33139e2b04ae36388956a57373ba74e8cc0ef23c
+    patch:
+      - fbreader-2.0.6.patch
+    srclibs:
+      - FBReaderJ@2.1
+      - PDFParseLib@36d7479ce85638eb4f0ff9c875ec77680177da5d
+      - ApacheHttpClient@4.2.5
+      - NanoHttpd@Release-2.0.5
+      - JsonSimple@tag_release_1_1_1
+    forceversion: true
+    rm:
+      - libs/*jar
+      - obsolete/lib/*.jar
+    prebuild:
+      - echo -e "sdk.dir=$$SDK$$\nndk.dir=$$NDK$$\n" >> local.properties
+      - cp local.properties third-party/AmbilWarna/
+      - cp local.properties third-party/android-filechooser/code/
+      - cp local.properties third-party/drag-sort-listview/library/
+      - pushd $$ApacheHttpClient$$/httpmime/
+      - $$MVN3$$ package
+      - popd
+      - cp $$ApacheHttpClient$$/httpmime/target/httpmime-4.2.5.jar libs/
+      - pushd $$NanoHttpd$$
+      - $$MVN3$$ package
+      - popd
+      - cp $$NanoHttpd$$/core/target/nanohttpd-2.0.5.jar libs/
+      - cp -fR $$JsonSimple$$/src/main/java/org src/
+      - cp -fR $$PDFParseLib$$/pdfparse-lib/src/main/java/org src/
+      - rm -fR src/com/paragon
+      - sed -i -e '/com.google.android.gms.version/d' -e '/google_play_services/d'  AndroidManifest.xml
+      - sed -i -e '/google.services.lib.dir/d' project.properties
+      - rm -fR src/org/geometerplus/android/fbreader/network/auth
+      - cp -fR $$FBReaderJ$$/src/org/geometerplus/android/fbreader/network/auth src/org/geometerplus/android/fbreader/network/
+    androidupdate:
+      - third-party/AmbilWarna
+      - third-party/android-filechooser/code
+      - third-party/drag-sort-listview/library
+      - .
+    target: android-14
+    buildjni:
+      - yes
+
+  - versionName: 2.5.9-ics
+    versionCode: 2050920
+    commit: 43e14feedf10ad53ec68bf42b1644f488889381c
+    srclibs:
+      - FBReaderJ@2.5.9
+      - PDFParseLib@36d7479ce85638eb4f0ff9c875ec77680177da5d
+      - ApacheHttpClient@4.2.5
+      - NanoHttpd@Release-2.0.5
+      - JsonSimple@tag_release_1_1_1
+    forceversion: true
+    rm:
+      - libs/*jar
+      - obsolete/lib/*.jar
+      - src/org/geometerplus/android/fbreader/dict/OpenDictionary.java
+      - src/org/geometerplus/android/fbreader/dict/Lingvo.java
+    extlibs:
+      - android/android-support-v4.jar
+    prebuild:
+      - echo -e "sdk.dir=$$SDK$$\nndk.dir=$$NDK$$\n" >> local.properties
+      - cp local.properties third-party/AmbilWarna/
+      - cp local.properties third-party/android-filechooser/code/
+      - cp local.properties third-party/drag-sort-listview/library/
+      - echo 'APP_PLATFORM := android-11' >> jni/Application.mk
+      - pushd $$ApacheHttpClient$$/httpmime/
+      - $$MVN3$$ package -Dmaven.javadoc.skip=true
+      - popd
+      - cp $$ApacheHttpClient$$/httpmime/target/httpmime-4.2.5.jar libs/
+      - pushd $$NanoHttpd$$
+      - $$MVN3$$ package
+      - popd
+      - cp $$NanoHttpd$$/core/target/nanohttpd-2.0.5.jar libs/
+      - cp -fR $$JsonSimple$$/src/main/java/org src/
+      - cp -fR $$PDFParseLib$$/pdfparse-lib/src/main/java/org src/
+      - rm -fR src/com/paragon
+      - sed -i -e '/com.google.android.gms.version/d' -e '/google_play_services/d'  AndroidManifest.xml
+      - sed -i -e '/google.services.lib.dir/d' project.properties
+      - mkdir third-party/drag-sort-listview/library/libs
+      - cp libs/android-support-v4.jar third-party/drag-sort-listview/library/libs/&&
+        sed -i -e '/Lingvo/d' src/org/geometerplus/android/fbreader/dict/DictionaryUtil.java
+      - rm -fR src/org/geometerplus/android/fbreader/network/auth
+      - cp -fR $$FBReaderJ$$/src/org/geometerplus/android/fbreader/network/auth src/org/geometerplus/android/fbreader/network/
+      - sed -i -e '/^\s*OpenDictionary.collect/d' src/org/geometerplus/android/fbreader/dict/DictionaryUtil.java
+    androidupdate:
+      - third-party/AmbilWarna
+      - third-party/android-filechooser/code
+      - third-party/drag-sort-listview/library
+      - .
+    target: android-21
+    buildjni:
+      - yes
+
+MaintainerNotes: |-
+    * LingvoIntegration and OpenDictionary APIs are non-free. Remove jars and patch
+      depending code.  Currently done with rm and sed in prebuilds.
+    * %v tags are currently targeting gingerbread, but have ressource conflicts
+      with target=android-9; they build with target=android-14
+    * %v-ics tags are actually based on the yotaphone branch, so we have to
+      use raw commits for the ice-cream-sandwich branch (look for "Merge
+      branch 'master' into ice-cream-sandwich" after a commit with "version
+      => ...")
+    * ics branch uses google play, so we have to sed AM.xml and ant files.
+      /fbreader/network/ depends on Google Play Services, so these are
+      removed and replaced with the master branch which does not depend on
+      these.
+    * UCM is set to master branch, we don't care for target or device specific
+      releases.
+
+    TODO:
+    * make gingerbread/master available for android-9!
+
+ArchivePolicy: 6 versions
+AutoUpdateMode: None
+UpdateCheckMode: Tags ^[0-9.]*$
+VercodeOperation: '%c + 10'
+CurrentVersion: 2.5.9
+CurrentVersionCode: 2050920
