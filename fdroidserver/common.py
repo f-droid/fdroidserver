@@ -2111,6 +2111,13 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             if not os.path.exists(libsrc):
                 raise BuildException("Missing extlib file {0}".format(libsrc))
             shutil.copyfile(libsrc, os.path.join(libsdir, libf))
+            # Add extlibs to scanignore (this is relative to the build dir root, *sigh*)
+            if build.subdir:
+                scanignorepath = os.path.join(build.subdir, 'libs', libf)
+            else:
+                scanignorepath = os.path.join('libs', libf)
+            if scanignorepath not in build.scanignore:
+                build.scanignore.append(scanignorepath)
 
     # Run a pre-build command if one is required
     if build.prebuild:
