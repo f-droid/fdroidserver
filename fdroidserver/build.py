@@ -541,8 +541,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
         # Substitute source library paths into commands...
         for name, number, libpath in srclibpaths:
-            libpath = os.path.relpath(libpath, root_dir)
-            cmd = cmd.replace('$$' + name + '$$', libpath)
+            cmd = cmd.replace('$$' + name + '$$', os.path.join(os.getcwd(), libpath))
 
         p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
 

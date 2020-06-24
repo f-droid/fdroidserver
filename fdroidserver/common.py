@@ -1841,7 +1841,7 @@ def parse_srclib_spec(spec):
     return (name, ref, number, subdir)
 
 
-def getsrclib(spec, srclib_dir, subdir=None, basepath=False,
+def getsrclib(spec, srclib_dir, basepath=False,
               raw=False, prepare=True, preponly=False, refresh=True,
               build=None):
     """Get the specified source library.
@@ -1976,7 +1976,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build.srclibs:
         logging.info("Collecting source libraries")
         for lib in build.srclibs:
-            srclibpaths.append(getsrclib(lib, srclib_dir, build, preponly=onserver,
+            srclibpaths.append(getsrclib(lib, srclib_dir, preponly=onserver,
                                          refresh=refresh, build=build))
 
     for name, number, libpath in srclibpaths:
@@ -2116,8 +2116,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
         # Substitute source library paths into prebuild commands
         for name, number, libpath in srclibpaths:
-            libpath = os.path.relpath(libpath, root_dir)
-            cmd = cmd.replace('$$' + name + '$$', libpath)
+            cmd = cmd.replace('$$' + name + '$$', os.path.join(os.getcwd(), libpath))
 
         p = FDroidPopen(['bash', '-x', '-c', '--', cmd], cwd=root_dir)
         if p.returncode != 0:
@@ -2744,7 +2743,7 @@ def set_FDroidPopen_env(build=None):
 def replace_build_vars(cmd, build):
     cmd = cmd.replace('$$COMMIT$$', build.commit)
     cmd = cmd.replace('$$VERSION$$', build.versionName)
-    cmd = cmd.replace('$$VERCODE$$', build.versionCode)
+    cmd = cmd.replace('$$VERCODE$$', str(build.versionCode))
     return cmd
 
 

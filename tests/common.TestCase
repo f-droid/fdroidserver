@@ -288,6 +288,58 @@ class CommonTest(unittest.TestCase):
         self.assertIsNotNone(re.search('android:versionName="%s"' % build.versionName, filedata))
         self.assertIsNotNone(re.search('android:versionCode="%s"' % build.versionCode, filedata))
 
+    def test_prepare_sources_with_prebuild_subdir(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        app_build_dir = os.path.join(testdir, 'build', 'com.example')
+        shutil.copytree(os.path.join(self.basedir, 'source-files', 'fdroid', 'fdroidclient'),
+                        app_build_dir)
+
+        subdir = 'baz/bar'
+        subdir_path = os.path.join(app_build_dir, subdir)
+        os.makedirs(subdir_path)
+        with open(os.path.join(subdir_path, 'build.gradle'), 'w') as fp:
+            fp.write('// just a test placeholder')
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+
+        srclibname = 'FakeSrcLib'
+        srclib_testdir = os.path.join(testdir, 'build', 'srclib')
+        os.makedirs(os.path.join(srclib_testdir, srclibname, 'testdirshouldexist'))
+        fdroidserver.metadata.srclibs = {
+            srclibname: {
+                'RepoType': 'git',
+                'Repo': 'https://example.com/foo/fakesrclib',
+                'Subdir': None,
+                'Prepare': None,
+            }
+        }
+
+        app = fdroidserver.metadata.App()
+        app.id = 'app.has.srclibs'
+        build = fdroidserver.metadata.Build()
+        build.commit = 'master'
+        build.gradle = ['yes']
+        build.prebuild = 'test -d $$FakeSrcLib$$/testdirshouldexist'  # actual test condition
+        build.srclibs = [srclibname + '@1.2.3']
+        build.subdir = subdir
+        build.versionCode = 0xcafe
+        build.versionName = 'vCAFE'
+
+        class FakeVcs():
+            # no need to change to the correct commit here
+            def gotorevision(self, rev, refresh=True):
+                pass
+
+            # no srclib info needed, but it could be added...
+            def getsrclib(self):
+                return None
+
+        fdroidserver.common.prepare_source(FakeVcs(), app, build,
+                                           app_build_dir, srclib_testdir, app_build_dir,
+                                           onserver=True, refresh=False)  # do not clone in this test
+
     def test_prepare_sources_refresh(self):
         packageName = 'org.fdroid.ci.test.app'
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
