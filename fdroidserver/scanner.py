@@ -188,7 +188,13 @@ def scan_source(build_dir, build=metadata.Build()):
         logging.info(msg)
         if json_per_build is not None:
             json_per_build['infos'].append([msg, path_in_build_dir])
-        os.remove(filepath)
+        try:
+            os.remove(filepath)
+        except FileNotFoundError:
+            # File is already gone, nothing to do.
+            # This can happen if we find multiple problems in one file that is setup for scandelete
+            # I.e. build.gradle files containig multiple unknown maven repos.
+            pass
         return 0
 
     def warnproblem(what, path_in_build_dir):
