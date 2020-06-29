@@ -1974,12 +1974,6 @@ def apply_info_from_latest_apk(apps, apks):
                 if app.NoSourceSince:
                     apk['antiFeatures'].add('NoSourceSince')
 
-                if 'added' in apk:
-                    if not app.added or apk['added'] < app.added:
-                        app.added = apk['added']
-                    if not app.lastUpdated or apk['added'] > app.lastUpdated:
-                        app.lastUpdated = apk['added']
-
         if not app.added:
             logging.debug("Don't know when " + appid + " was added")
         if not app.lastUpdated:
@@ -2164,6 +2158,27 @@ def create_metadata_from_template(apk):
         with open(os.path.join('metadata', apk['packageName'] + '.yml'), 'w') as f:
             yaml.dump(app, f, default_flow_style=False)
     logging.info(_("Generated skeleton metadata for {appid}").format(appid=apk['packageName']))
+
+
+def read_added_date_from_all_apks(apps, apks):
+    """
+    Added dates come from the stats/known_apks.txt file but are
+    read when scanning apks and thus need to be applied form apk
+    level to app level for _all_ apps and not only form non-archived
+    ones
+
+    TODO: read the added dates directly from known_apks.txt instead of
+          going through apks that way it also works for for repos that
+          don't keep an archive of apks.
+    """
+    for appid, app in apps.items():
+        for apk in apks:
+            if apk['packageName'] == appid:
+                if 'added' in apk:
+                    if not app.added or apk['added'] < app.added:
+                        app.added = apk['added']
+                    if not app.lastUpdated or apk['added'] > app.lastUpdated:
+                        app.lastUpdated = apk['added']
 
 
 def read_names_from_apks(apps, apks):
@@ -2384,6 +2399,10 @@ def main():
     # This will be done again (as part of apply_info_from_latest_apk) for repo and archive
     # separately later on, but it's fairly cheap anyway.
     read_names_from_apks(apps, apks + archapks)
+    # The added date currently comes from the oldest apk which might be in the archive.
+    # So we need this populated at app level before continuing with only processing /repo
+    # or /archive
+    read_added_date_from_all_apks(apps, apks + archapks)
 
     if len(repodirs) > 1:
         archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])
