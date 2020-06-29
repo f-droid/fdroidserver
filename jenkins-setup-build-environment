@@ -112,6 +112,6 @@ fi
 # if it can't build fdroid, then its really broken
 ../fdroid build --verbose --stop --latest org.fdroid.fdroid
 # Gradle, JNI, preassemble
-../fdroid build --verbose -stop --skip-scan org.adaway:55
+../fdroid build --verbose --stop --skip-scan org.adaway:55
 # building old versions should still work
 ../fdroid build --verbose --stop --skip-scan org.fdroid.fdroid:102350
