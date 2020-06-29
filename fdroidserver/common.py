@@ -994,12 +994,14 @@ class vcs_git(vcs):
                 if p.returncode != 0:
                     lines = p.output.splitlines()
                     if 'Multiple remote HEAD branches' not in lines[0]:
-                        raise VCSException(_("Git remote set-head failed"), p.output)
-                    branch = lines[1].split(' ')[-1]
-                    p2 = FDroidPopen(['git', 'remote', 'set-head', 'origin', '--', branch],
-                                     cwd=self.local, output=False)
-                    if p2.returncode != 0:
-                        raise VCSException(_("Git remote set-head failed"), p.output + '\n' + p2.output)
+                        logging.warning(_("Git remote set-head failed: \"%s\"") % p.output.strip())
+                    else:
+                        branch = lines[1].split(' ')[-1]
+                        p2 = FDroidPopen(['git', 'remote', 'set-head', 'origin', '--', branch],
+                                         cwd=self.local, output=False)
+                        if p2.returncode != 0:
+                            logging.warning(_("Git remote set-head failed: \"%s\"")
+                                            % p.output.strip() + '\n' + p2.output.strip())
                 self.refreshed = True
         # origin/HEAD is the HEAD of the remote, e.g. the "default branch" on
         # a github repo. Most of the time this is the same as origin/master.
