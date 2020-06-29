@@ -62,7 +62,7 @@ def scan_binary(apkfile):
     usual_suspects = {
         # The `apkanalyzer dex packages` output looks like this:
         # M d 1   1       93      <packagename> <other stuff>
-        # The first column has P/C/M/F for package, class, methos or field
+        # The first column has P/C/M/F for package, class, method or field
         # The second column has x/k/r/d for removed, kept, referenced and defined.
         # We already filter for defined only in the apkanalyzer call. 'r' will be
         # for things referenced but not distributed in the apk.
@@ -177,6 +177,11 @@ def scan_source(build_dir, build=metadata.Build()):
         return False
 
     def ignoreproblem(what, path_in_build_dir):
+        """
+        :param what: string describing the problem, will be printed in log messages
+        :param path_in_build_dir: path to the file relative to `build`-dir
+        "returns: 0 as we explicitly ignore the file, so don't count an error
+        """
         msg = ('Ignoring %s at %s' % (what, path_in_build_dir))
         logging.info(msg)
         if json_per_build is not None:
@@ -184,6 +189,12 @@ def scan_source(build_dir, build=metadata.Build()):
         return 0
 
     def removeproblem(what, path_in_build_dir, filepath):
+        """
+        :param what: string describing the problem, will be printed in log messages
+        :param path_in_build_dir: path to the file relative to `build`-dir
+        :param filepath: Path (relative to our current path) to the file
+        "returns: 0 as we deleted the offending file
+        """
         msg = ('Removing %s at %s' % (what, path_in_build_dir))
         logging.info(msg)
         if json_per_build is not None:
@@ -198,6 +209,11 @@ def scan_source(build_dir, build=metadata.Build()):
         return 0
 
     def warnproblem(what, path_in_build_dir):
+        """
+        :param what: string describing the problem, will be printed in log messages
+        :param path_in_build_dir: path to the file relative to `build`-dir
+        :returns: 0, as warnings don't count as errors
+        """
         if toignore(path_in_build_dir):
             return 0
         logging.warning('Found %s at %s' % (what, path_in_build_dir))
@@ -206,6 +222,14 @@ def scan_source(build_dir, build=metadata.Build()):
         return 0
 
     def handleproblem(what, path_in_build_dir, filepath):
+        """Dispatches to problem handlers (ignore, delete, warn) or returns 1
+         for increasing the error count
+
+        :param what: string describing the problem, will be printed in log messages
+        :param path_in_build_dir: path to the file relative to `build`-dir
+        :param filepath: Path (relative to our current path) to the file
+        :returns: 0 if the problem was ignored/deleted/is only a warning, 1 otherwise
+        """
         if toignore(path_in_build_dir):
             return ignoreproblem(what, path_in_build_dir)
         if todelete(path_in_build_dir):
