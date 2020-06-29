@@ -270,6 +270,26 @@ class ScannerTest(unittest.TestCase):
             self.assertTrue(found, 'this block should produce a URL:\n' + entry)
         self.assertEqual(len(data), len(urls), 'each data example should produce a URL')
 
+    def test_scan_gradle_file_with_multiple_problems(self):
+        """Check that the scanner can handle scandelete with gradle files with multiple problems"""
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        fdroidserver.scanner.config = None
+        fdroidserver.scanner.options = mock.Mock()
+        build = fdroidserver.metadata.Build()
+        build.scandelete = ['build.gradle']
+        with open('build.gradle', 'w') as fp:
+            fp.write(textwrap.dedent("""
+                 maven {
+                    url 'https://maven.fabric.io/public'
+                 }
+                 maven {
+                    url 'https://evilcorp.com/maven'
+                 }
+            """))
+        count = fdroidserver.scanner.scan_source(testdir, build)
+        self.assertFalse(os.path.exists("build.gradle"))
+        self.assertEqual(0, count, 'there should be this many errors')
 
 
 if __name__ == "__main__":
