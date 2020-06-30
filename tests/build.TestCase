@@ -23,6 +23,7 @@ if localmodule not in sys.path:
 import fdroidserver.build
 import fdroidserver.common
 import fdroidserver.metadata
+import fdroidserver.scanner
 
 
 class BuildTest(unittest.TestCase):
@@ -197,6 +198,40 @@ class BuildTest(unittest.TestCase):
         self.assertFalse(os.path.exists('build/reports'))
         self.assertFalse(os.path.exists('gen'))
         self.assertFalse(os.path.exists('gradle-wrapper.jar'))
+
+    def test_scan_with_extlib(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        os.mkdir("build")
+
+        config = dict()
+        config['sdk_path'] = os.getenv('ANDROID_HOME')
+        config['ndk_paths'] = {'r10d': os.getenv('ANDROID_NDK_HOME')}
+        config['build_tools'] = 'FAKE_BUILD_TOOLS_VERSION'
+        fdroidserver.common.config = config
+        app = fdroidserver.metadata.App()
+        app.id = 'com.gpl.rpg.AndorsTrail'
+        build = fdroidserver.metadata.Build()
+        build.commit = 'master'
+        build.androidupdate = ['no']
+        build.extlibs = ['android/android-support-v4r11.jar']
+        os.makedirs("extlib/android")
+        # write a fake binary jar file the scanner should definitely error on
+        with open('extlib/android/android-support-v4r11.jar', 'wb') as file:
+            file.write(b'PK\x03\x04\x14\x00\x08\x00\x08\x00-\x0eiA\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\t\x00\x04\x00META-INF/\xfe\xca\x00\x00\x03\x00PK\x07\x08\x00\x00\x00\x00\x02\x00\x00\x00\x00\x00\x00\x00')
+
+        class FakeVcs():
+            # no need to change to the correct commit here
+            def gotorevision(self, rev, refresh=True):
+                pass
+
+            def getsrclib(self):
+                return None
+
+        fdroidserver.common.prepare_source(FakeVcs(), app, build,
+                                           "build", "ignore", "extlib")
+        count = fdroidserver.scanner.scan_source("build", build)
+        self.assertEqual(0, count, "Shouldn't error on jar from extlib")
 
 
 if __name__ == "__main__":

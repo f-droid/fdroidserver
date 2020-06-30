@@ -271,6 +271,7 @@ class ScannerTest(unittest.TestCase):
         self.assertEqual(len(data), len(urls), 'each data example should produce a URL')
 
 
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
