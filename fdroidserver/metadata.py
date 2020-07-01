@@ -58,54 +58,6 @@ def warn_or_exception(value, cause=None):
         logging.warning(value)
 
 
-# To filter which ones should be written to the metadata files if
-# present
-app_fields = set([
-    'Disabled',
-    'AntiFeatures',
-    'Provides',  # deprecated, txt only
-    'Categories',
-    'License',
-    'Author Name',
-    'Author Email',
-    'Author Web Site',
-    'Web Site',
-    'Source Code',
-    'Issue Tracker',
-    'Translation',
-    'Changelog',
-    'Donate',
-    'FlattrID',
-    'Liberapay',
-    'LiberapayID',
-    'OpenCollective',
-    'Bitcoin',
-    'Litecoin',
-    'Name',
-    'Auto Name',
-    'Summary',
-    'Description',
-    'Requires Root',
-    'Repo Type',
-    'Repo',
-    'Binaries',
-    'Maintainer Notes',
-    'Archive Policy',
-    'Auto Update Mode',
-    'Update Check Mode',
-    'Update Check Ignore',
-    'Vercode Operation',
-    'Update Check Name',
-    'Update Check Data',
-    'Current Version',
-    'Current Version Code',
-    'No Source Since',
-    'Build',
-
-    'comments',  # For formats that don't do inline comments
-    'builds',    # For formats that do builds as a list
-])
-
 yaml_app_field_order = [
     'Disabled',
     'AntiFeatures',
@@ -265,7 +217,9 @@ def fieldtype(name):
 
 
 # In the order in which they are laid out on files
-build_flags_order = [
+build_flags = [
+    'versionName',
+    'versionCode',
     'disable',
     'commit',
     'timeout',
@@ -299,10 +253,6 @@ build_flags_order = [
     'novcheck',
     'antifeatures',
 ]
-
-# old .txt format has version name/code inline in the 'Build:' line
-# but YAML and JSON have a explicit key for them
-build_flags = ['versionName', 'versionCode'] + build_flags_order
 
 
 class Build(dict):
@@ -691,16 +641,6 @@ class DescriptionFormatter:
 
 
 # Parse multiple lines of description as written in a metadata file, returning
-# a single string in text format and wrapped to 80 columns.
-def description_txt(s):
-    ps = DescriptionFormatter(None)
-    for line in s.splitlines():
-        ps.parseline(line)
-    ps.end()
-    return ps.text_txt
-
-
-# Parse multiple lines of description as written in a metadata file, returning
 # a single string in wiki format. Used for the Maintainer Notes field as well,
 # because it's the same format.
 def description_wiki(s):
@@ -846,11 +786,6 @@ def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
     sorted based on creation time, newest first.  Most of the time,
     the newer files are the most interesting.
 
-    If there are multiple metadata files for a single appid, then the first
-    file that is parsed wins over all the others, and the rest throw an
-    exception. So the original .txt format is parsed first, at least until
-    newer formats stabilize.
-
     check_vcs is the list of appids to check for .fdroid.yml in source
 
     """
@@ -865,9 +800,7 @@ def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
         if not os.path.exists(basedir):
             os.makedirs(basedir)
 
-    metadatafiles = (glob.glob(os.path.join('metadata', '*.txt'))
-                     + glob.glob(os.path.join('metadata', '*.yml'))
-                     + glob.glob('.fdroid.txt')
+    metadatafiles = (glob.glob(os.path.join('metadata', '*.yml'))
                      + glob.glob('.fdroid.yml'))
 
     if sort_by_time:
@@ -880,8 +813,6 @@ def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
         metadatafiles = sorted(metadatafiles)
 
     for metadatapath in metadatafiles:
-        if metadatapath == '.fdroid.txt':
-            warn_or_exception(_('.fdroid.txt is not supported!  Convert to .fdroid.yml'))
         appid, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
         if appid != '.fdroid' and not fdroidserver.common.is_valid_package_name(appid):
             warn_or_exception(_("{appid} from {path} is not a valid Java Package Name!")
@@ -1054,14 +985,12 @@ def parse_metadata(metadatapath, check_vcs=False, refresh=True):
     else:
         app.id = name
 
-    with open(metadatapath, 'r') as mf:
-        if ext == 'txt':
-            parse_txt_metadata(mf, app)
-        elif ext == 'yml':
+    if ext == 'yml':
+        with open(metadatapath, 'r') as mf:
             parse_yaml_metadata(mf, app)
-        else:
-            warn_or_exception(_('Unknown metadata format: {path}')
-                              .format(path=metadatapath))
+    else:
+        warn_or_exception(_('Unknown metadata format: {path}')
+                          .format(path=metadatapath))
 
     if check_vcs and app.Repo:
         build_dir = fdroidserver.common.get_build_dir(app)
@@ -1235,7 +1164,7 @@ def write_yaml(mf, app):
                 insert_newline = True
             else:
                 if app.get(field) or field == 'Builds':
-                    # .txt calls it 'builds' internally, everywhere else its 'Builds'
+                    # .txt called it 'builds' internally, everywhere else its 'Builds'
                     if field == 'Builds':
                         if app.get('builds'):
                             cm.update({field: _builds_to_yaml(app)})
@@ -1285,352 +1214,6 @@ build_line_sep = re.compile(r'(?<!\\),')
 build_cont = re.compile(r'^[ \t]')
 
 
-def parse_txt_metadata(mf, app):
-
-    linedesc = None
-
-    def add_buildflag(p, build):
-        if not p.strip():
-            warn_or_exception(_("Empty build flag at {linedesc}")
-                              .format(linedesc=linedesc))
-        bv = p.split('=', 1)
-        if len(bv) != 2:
-            warn_or_exception(_("Invalid build flag at {line} in {linedesc}")
-                              .format(line=buildlines[0], linedesc=linedesc))
-
-        pk, pv = bv
-        pk = pk.lstrip()
-        if pk == 'update':
-            pk = 'androidupdate'  # avoid conflicting with Build(dict).update()
-        t = flagtype(pk)
-        if t == TYPE_LIST:
-            pv = split_list_values(pv)
-            build[pk] = pv
-        elif t == TYPE_STRING or t == TYPE_SCRIPT:
-            build[pk] = pv
-        elif t == TYPE_BOOL:
-            build[pk] = _decode_bool(pv)
-        elif t == TYPE_INT:
-            build[pk] = int(pv)
-
-    def parse_buildline(lines):
-        v = "".join(lines)
-        parts = [p.replace("\\,", ",") for p in re.split(build_line_sep, v)]
-        if len(parts) < 3:
-            warn_or_exception(_("Invalid build format: {value} in {name}")
-                              .format(value=v, name=mf.name))
-        build = Build()
-        build.versionName = parts[0]
-        build.versionCode = parts[1]
-        check_versionCode(build.versionCode)
-
-        if parts[2].startswith('!'):
-            # For backwards compatibility, handle old-style disabling,
-            # including attempting to extract the commit from the message
-            build.disable = parts[2][1:]
-            commit = 'unknown - see disabled'
-            index = parts[2].rfind('at ')
-            if index != -1:
-                commit = parts[2][index + 3:]
-                if commit.endswith(')'):
-                    commit = commit[:-1]
-            build.commit = commit
-        else:
-            build.commit = parts[2]
-        for p in parts[3:]:
-            add_buildflag(p, build)
-
-        return build
-
-    def check_versionCode(versionCode):
-        try:
-            int(versionCode)
-        except ValueError:
-            warn_or_exception(_('Invalid versionCode: "{versionCode}" is not an integer!')
-                              .format(versionCode=versionCode))
-
-    def add_comments(key):
-        if not curcomments:
-            return
-        app.comments[key] = list(curcomments)
-        del curcomments[:]
-
-    mode = 0
-    buildlines = []
-    multiline_lines = []
-    curcomments = []
-    build = None
-    vc_seen = set()
-
-    app.builds = []
-
-    c = 0
-    for line in mf:
-        c += 1
-        linedesc = "%s:%d" % (mf.name, c)
-        line = line.rstrip('\r\n')
-        if mode == 3:
-            if build_cont.match(line):
-                if line.endswith('\\'):
-                    buildlines.append(line[:-1].lstrip())
-                else:
-                    buildlines.append(line.lstrip())
-                    bl = ''.join(buildlines)
-                    add_buildflag(bl, build)
-                    del buildlines[:]
-            else:
-                if not build.commit and not build.disable:
-                    warn_or_exception(_("No commit specified for {versionName} in {linedesc}")
-                                      .format(versionName=build.versionName, linedesc=linedesc))
-
-                app.builds.append(build)
-                add_comments('build:' + build.versionCode)
-                mode = 0
-
-        if mode == 0:
-            if not line:
-                continue
-            if line.startswith("#"):
-                curcomments.append(line[1:].strip())
-                continue
-            try:
-                f, v = line.split(':', 1)
-            except ValueError:
-                warn_or_exception(_("Invalid metadata in: ") + linedesc)
-
-            if f not in app_fields:
-                warn_or_exception(_('Unrecognised app field: ') + f)
-
-            # Translate obsolete fields...
-            if f == 'Market Version':
-                f = 'Current Version'
-            if f == 'Market Version Code':
-                f = 'Current Version Code'
-
-            f = f.replace(' ', '')
-
-            ftype = fieldtype(f)
-            if ftype not in [TYPE_BUILD]:
-                add_comments(f)
-            if ftype == TYPE_MULTILINE:
-                mode = 1
-                if v:
-                    warn_or_exception(_("Unexpected text on same line as {field} in {linedesc}")
-                                      .format(field=f, linedesc=linedesc))
-            elif ftype == TYPE_STRING:
-                app[f] = v
-            elif ftype == TYPE_LIST:
-                app[f] = split_list_values(v)
-            elif ftype == TYPE_BUILD:
-                vv = v.split(',')
-                if len(vv) != 2:
-                    warn_or_exception(_('Build should have comma-separated '
-                                        'versionName and versionCode, '
-                                        'not "{value}", in {linedesc}')
-                                      .format(value=v, linedesc=linedesc))
-                build = Build()
-                build.versionName = vv[0]
-                build.versionCode = vv[1]
-                check_versionCode(build.versionCode)
-
-                if build.versionCode in vc_seen:
-                    warn_or_exception(_('Duplicate build recipe found for versionCode {versionCode} in {linedesc}')
-                                      .format(versionCode=build.versionCode, linedesc=linedesc))
-                vc_seen.add(build.versionCode)
-                del buildlines[:]
-                mode = 3
-            elif ftype == TYPE_OBSOLETE:
-                warn_or_exception(_("'{field}' in {linedesc} is obsolete, see docs for current fields:")
-                                  .format(field=f, linedesc=linedesc)
-                                  + '\nhttps://f-droid.org/docs/')
-            else:
-                warn_or_exception(_("Unrecognised field '{field}' in {linedesc}")
-                                  .format(field=f, linedesc=linedesc))
-        elif mode == 1:     # Multiline field
-            if line == '.':
-                mode = 0
-                app[f] = '\n'.join(multiline_lines)
-                del multiline_lines[:]
-            else:
-                multiline_lines.append(line)
-        elif mode == 2:     # Line continuation mode in Build Version
-            if line.endswith("\\"):
-                buildlines.append(line[:-1])
-            else:
-                buildlines.append(line)
-                build = parse_buildline(buildlines)
-                app.builds.append(build)
-                add_comments('build:' + app.builds[-1].versionCode)
-                mode = 0
-    add_comments(None)
-
-    # Mode at end of file should always be 0
-    if mode == 1:
-        warn_or_exception(_("{field} not terminated in {name}")
-                          .format(field=f, name=mf.name))
-    if mode == 2:
-        warn_or_exception(_("Unterminated continuation in {name}")
-                          .format(name=mf.name))
-    if mode == 3:
-        warn_or_exception(_("Unterminated build in {name}")
-                          .format(name=mf.name))
-
-    return app
-
-
-def write_plaintext_metadata(mf, app, w_comment, w_field, w_build):
-
-    def field_to_attr(f):
-        """
-        Translates human-readable field names to attribute names, e.g.
-        'Auto Name' to 'AutoName'
-        """
-        return f.replace(' ', '')
-
-    def attr_to_field(k):
-        """
-        Translates attribute names to human-readable field names, e.g.
-        'AutoName' to 'Auto Name'
-        """
-        if k in app_fields:
-            return k
-        f = re.sub(r'([a-z])([A-Z])', r'\1 \2', k)
-        return f
-
-    def w_comments(key):
-        if key not in app.comments:
-            return
-        for line in app.comments[key]:
-            w_comment(line)
-
-    def w_field_always(f, v=None):
-        key = field_to_attr(f)
-        if v is None:
-            v = app.get(key)
-        w_comments(key)
-        w_field(f, v)
-
-    def w_field_nonempty(f, v=None):
-        key = field_to_attr(f)
-        if v is None:
-            v = app.get(key)
-        w_comments(key)
-        if v:
-            w_field(f, v)
-
-    w_field_nonempty('Disabled')
-    w_field_nonempty('AntiFeatures')
-    w_field_nonempty('Provides')
-    w_field_always('Categories')
-    w_field_always('License')
-    w_field_nonempty('Author Name')
-    w_field_nonempty('Author Email')
-    w_field_nonempty('Author Web Site')
-    w_field_always('Web Site')
-    w_field_always('Source Code')
-    w_field_always('Issue Tracker')
-    w_field_nonempty('Translation')
-    w_field_nonempty('Changelog')
-    w_field_nonempty('Donate')
-    w_field_nonempty('FlattrID')
-    w_field_nonempty('LiberapayID')
-    w_field_nonempty('OpenCollective')
-    w_field_nonempty('Bitcoin')
-    w_field_nonempty('Litecoin')
-    mf.write('\n')
-    w_field_nonempty('Name')
-    w_field_nonempty('Auto Name')
-    w_field_nonempty('Summary')
-    w_field_nonempty('Description', description_txt(app.Description))
-    mf.write('\n')
-    if app.RequiresRoot:
-        w_field_always('Requires Root', 'yes')
-        mf.write('\n')
-    if app.RepoType:
-        w_field_always('Repo Type')
-        w_field_always('Repo')
-        if app.Binaries:
-            w_field_always('Binaries')
-        mf.write('\n')
-
-    for build in app.builds:
-
-        if build.versionName == "Ignore":
-            continue
-
-        w_comments('build:%s' % build.versionCode)
-        w_build(build)
-        mf.write('\n')
-
-    if app.MaintainerNotes:
-        w_field_always('Maintainer Notes', app.MaintainerNotes)
-        mf.write('\n')
-
-    w_field_nonempty('Archive Policy')
-    w_field_always('Auto Update Mode')
-    w_field_always('Update Check Mode')
-    w_field_nonempty('Update Check Ignore')
-    w_field_nonempty('Vercode Operation')
-    w_field_nonempty('Update Check Name')
-    w_field_nonempty('Update Check Data')
-    if app.CurrentVersion:
-        w_field_always('Current Version')
-        w_field_always('Current Version Code')
-    if app.NoSourceSince:
-        mf.write('\n')
-        w_field_always('No Source Since')
-    w_comments(None)
-
-
-# Write a metadata file in txt format.
-#
-# 'mf'      - Writer interface (file, StringIO, ...)
-# 'app'     - The app data
-def write_txt(mf, app):
-
-    def w_comment(line):
-        mf.write("# %s\n" % line)
-
-    def w_field(f, v):
-        t = fieldtype(f)
-        if t == TYPE_LIST:
-            v = ','.join(v)
-        elif t == TYPE_MULTILINE:
-            v = '\n' + v + '\n.'
-        mf.write("%s:%s\n" % (f, v))
-
-    def w_build(build):
-        mf.write("Build:%s,%s\n" % (build.versionName, build.versionCode))
-
-        for f in build_flags_order:
-            v = build.get(f)
-            if not v:
-                continue
-
-            t = flagtype(f)
-            if f == 'androidupdate':
-                f = 'update'  # avoid conflicting with Build(dict).update()
-            mf.write('    %s=' % f)
-            if t == TYPE_STRING or t == TYPE_INT:
-                mf.write(v)
-            elif t == TYPE_BOOL:
-                mf.write('yes')
-            elif t == TYPE_SCRIPT:
-                first = True
-                for s in v.split(' && '):
-                    if first:
-                        first = False
-                    else:
-                        mf.write(' && \\\n        ')
-                    mf.write(s.strip())
-            elif t == TYPE_LIST:
-                mf.write(','.join(v))
-
-            mf.write('\n')
-
-    write_plaintext_metadata(mf, app, w_comment, w_field, w_build)
-
-
 def write_metadata(metadatapath, app):
     _ignored, ext = fdroidserver.common.get_extension(metadatapath)
     accepted = fdroidserver.common.config['accepted_formats']
@@ -1638,10 +1221,7 @@ def write_metadata(metadatapath, app):
         warn_or_exception(_('Cannot write "{path}", not an accepted format, use: {formats}')
                           .format(path=metadatapath, formats=', '.join(accepted)))
 
-    if ext == 'txt':
-        with open(metadatapath, 'w') as mf:
-            return write_txt(mf, app)
-    elif ext == 'yml':
+    if ext == 'yml':
         if importlib.util.find_spec('ruamel.yaml'):
             with open(metadatapath, 'w') as mf:
                 return write_yaml(mf, app)
