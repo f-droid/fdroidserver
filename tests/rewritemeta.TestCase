@@ -49,45 +49,10 @@ class RewriteMetaTest(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             os.mkdir('metadata')
-            with open('metadata/a.txt', 'w') as f:
-                f.write('Auto Name:a')
+            with open('metadata/a.yml', 'w') as f:
+                f.write('AutoName: a')
             with open('metadata/b.yml', 'w') as f:
                 f.write('AutoName: b')
-
-            rewritemeta.main()
-
-            with open('metadata/a.txt') as f:
-                self.assertEqual(f.read(), textwrap.dedent('''\
-                    Categories:
-                    License:Unknown
-                    Web Site:
-                    Source Code:
-                    Issue Tracker:
-
-                    Auto Name:a
-
-                    Auto Update Mode:None
-                    Update Check Mode:None
-                    '''))
-
-            with open('metadata/b.yml') as f:
-                self.assertEqual(f.read(), textwrap.dedent('''\
-                    License: Unknown
-
-                    AutoName: b
-
-                    AutoUpdateMode: None
-                    UpdateCheckMode: None
-                    '''))
-
-    def test_rewrite_scenario_txt_to_yml(self):
-
-        sys.argv = ['rewritemeta', '--to', 'yml', 'a']
-
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            os.mkdir('metadata')
-            with open('metadata/a.txt', 'w') as f:
-                f.write('Auto Name:a')
 
             rewritemeta.main()
 
@@ -101,25 +66,15 @@ class RewriteMetaTest(unittest.TestCase):
                     UpdateCheckMode: None
                     '''))
 
-    def test_rewrite_scenario_txt_to_yml_no_ruamel(self):
-
-        sys.argv = ['rewritemeta', '--to', 'yml', 'a']
-
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            os.mkdir('metadata')
-            with open('metadata/a.txt', 'w') as f:
-                f.write('Auto Name:a')
-
-            def boom(*args):
-                raise FDroidException(' '.join((str(x) for x in args)))
-
-            with mock.patch('fdroidserver.metadata.write_yaml', boom):
-                with self.assertRaises(FDroidException):
-                    rewritemeta.main()
-
-            with open('metadata/a.txt') as f:
+            with open('metadata/b.yml') as f:
                 self.assertEqual(f.read(), textwrap.dedent('''\
-                    Auto Name:a'''))
+                    License: Unknown
+
+                    AutoName: b
+
+                    AutoUpdateMode: None
+                    UpdateCheckMode: None
+                    '''))
 
     def test_rewrite_scenario_yml_no_ruamel(self):
         sys.argv = ['rewritemeta', 'a']

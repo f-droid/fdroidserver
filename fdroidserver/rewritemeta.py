@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 # rewritemeta.py - part of the FDroid server tools
-# This cleans up the original .txt metadata file format.
+# This cleans up the original .yml metadata file format.
 # Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@ config = None
 options = None
 
 
-SUPPORTED_FORMATS = ['txt', 'yml']
+SUPPORTED_FORMATS = ['yml']
 
 
 def proper_format(app):
@@ -42,8 +42,6 @@ def proper_format(app):
     _ignored, extension = common.get_extension(app.metadatapath)
     if extension == 'yml':
         metadata.write_yaml(s, app)
-    elif extension == 'txt':
-        metadata.write_txt(s, app)
     content = s.getvalue()
     s.close()
     return content == cur_content
