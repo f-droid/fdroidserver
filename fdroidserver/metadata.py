@@ -657,46 +657,6 @@ def description_html(s, linkres):
     return ps.text_html
 
 
-def parse_txt_srclib(metadatapath):
-
-    thisinfo = {}
-
-    # Defaults for fields that come from metadata
-    thisinfo['RepoType'] = ''
-    thisinfo['Repo'] = ''
-    thisinfo['Subdir'] = None
-    thisinfo['Prepare'] = None
-
-    if not os.path.exists(metadatapath):
-        return thisinfo
-
-    metafile = open(metadatapath, "r")
-
-    n = 0
-    for line in metafile:
-        n += 1
-        line = line.rstrip('\r\n')
-        if not line or line.startswith("#"):
-            continue
-
-        try:
-            f, v = line.split(':', 1)
-        except ValueError:
-            warn_or_exception(_("Invalid metadata in %s:%d") % (line, n))
-
-        # collapse whitespaces in field names
-        f = f.replace(' ', '')
-
-        if f == "Subdir":
-            thisinfo[f] = v.split(',')
-        else:
-            thisinfo[f] = v
-
-    metafile.close()
-
-    return thisinfo
-
-
 def parse_yaml_srclib(metadatapath):
 
     thisinfo = {'RepoType': '',
@@ -752,7 +712,7 @@ def read_srclibs():
 
     The information read will be accessible as metadata.srclibs, which is a
     dictionary, keyed on srclib name, with the values each being a dictionary
-    in the same format as that returned by the parse_txt_srclib function.
+    in the same format as that returned by the parse_yaml_srclib function.
 
     A MetaDataException is raised if there are any problems with the srclib
     metadata.
@@ -768,10 +728,6 @@ def read_srclibs():
     srcdir = 'srclibs'
     if not os.path.exists(srcdir):
         os.makedirs(srcdir)
-
-    for metadatapath in sorted(glob.glob(os.path.join(srcdir, '*.txt'))):
-        srclibname = os.path.basename(metadatapath[:-4])
-        srclibs[srclibname] = parse_txt_srclib(metadatapath)
 
     for metadatapath in sorted(glob.glob(os.path.join(srcdir, '*.yml'))):
         srclibname = os.path.basename(metadatapath[:-4])
