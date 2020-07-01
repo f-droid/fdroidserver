@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import json
 import os
 import re
 import glob
@@ -867,10 +866,8 @@ def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
             os.makedirs(basedir)
 
     metadatafiles = (glob.glob(os.path.join('metadata', '*.txt'))
-                     + glob.glob(os.path.join('metadata', '*.json'))
                      + glob.glob(os.path.join('metadata', '*.yml'))
                      + glob.glob('.fdroid.txt')
-                     + glob.glob('.fdroid.json')
                      + glob.glob('.fdroid.yml'))
 
     if sort_by_time:
@@ -884,7 +881,7 @@ def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
 
     for metadatapath in metadatafiles:
         if metadatapath == '.fdroid.txt':
-            warn_or_exception(_('.fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json.'))
+            warn_or_exception(_('.fdroid.txt is not supported!  Convert to .fdroid.yml'))
         appid, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
         if appid != '.fdroid' and not fdroidserver.common.is_valid_package_name(appid):
             warn_or_exception(_("{appid} from {path} is not a valid Java Package Name!")
@@ -1060,8 +1057,6 @@ def parse_metadata(metadatapath, check_vcs=False, refresh=True):
     with open(metadatapath, 'r') as mf:
         if ext == 'txt':
             parse_txt_metadata(mf, app)
-        elif ext == 'json':
-            parse_json_metadata(mf, app)
         elif ext == 'yml':
             parse_yaml_metadata(mf, app)
         else:
@@ -1095,20 +1090,6 @@ def parse_metadata(metadatapath, check_vcs=False, refresh=True):
             paths = fdroidserver.common.manifest_paths(root_dir, build.gradle)
             _ignored, _ignored, app.id = fdroidserver.common.parse_androidmanifests(paths, app)
 
-    return app
-
-
-def parse_json_metadata(mf, app):
-
-    # fdroid metadata is only strings and booleans, no floats or ints.
-    # TODO create schema using https://pypi.python.org/pypi/jsonschema
-    jsoninfo = json.load(mf, parse_int=lambda s: s,
-                         parse_float=lambda s: s)
-    app.update(jsoninfo)
-    for f in ['Description', 'Maintainer Notes']:
-        v = app.get(f)
-        if v:
-            app[f] = '\n'.join(v)
     return app
 
 
