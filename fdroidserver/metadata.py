@@ -809,6 +809,18 @@ def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
                      + glob.glob('.fdroid.json')
                      + glob.glob('.fdroid.yml'))
 
+    for f in metadatafiles:
+        if not f.endswith('.yml'):
+            print(textwrap.dedent("""\
+
+                WARNING: Some of your metadata files are stored in a deprecated format!
+                         Future versions of fdroid will exclusively support YAML metadata.
+
+                         You can convert all your metadata to YAML by running:
+                            `fdroid rewritemeta --to yml`
+            """))
+            break
+
     if sort_by_time:
         entries = ((os.stat(path).st_mtime, path) for path in metadatafiles)
         metadatafiles = []
