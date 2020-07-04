@@ -173,7 +173,7 @@ def main():
     quiet = any(s in sys.argv for s in ['-q', '--quiet'])
 
     # Helpful to differentiate warnings from errors even when on quiet
-    logformat = '%(levelname)s: %(message)s'
+    logformat = '%(asctime)s %(levelname)s: %(message)s'
     loglevel = logging.INFO
     if verbose:
         loglevel = logging.DEBUG
