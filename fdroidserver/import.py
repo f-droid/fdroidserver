@@ -127,9 +127,9 @@ def main():
     paths = common.get_all_gradle_and_manifests(tmp_importer_dir)
     subdir = common.get_gradle_subdir(tmp_importer_dir, paths)
     if paths:
-        versionName, versionCode, package = common.parse_androidmanifests(paths, app)
-        if not package:
-            raise FDroidException(_("Couldn't find package ID"))
+        versionName, versionCode, appid = common.parse_androidmanifests(paths, app)
+        if not appid:
+            raise FDroidException(_("Couldn't find Application ID"))
         if not versionName:
             logging.warning(_('Could not find latest version name'))
         if not versionCode:
@@ -138,8 +138,8 @@ def main():
         raise FDroidException(_("No gradle project could be found. Specify --subdir?"))
 
     # Make sure it's actually new...
-    if package in apps:
-        raise FDroidException("Package " + package + " already exists")
+    if appid in apps:
+        raise FDroidException(_('Package "{appid}" already exists').format(appid=appid))
 
     # Create a build line...
     build.versionName = versionName or 'Unknown'
@@ -205,17 +205,17 @@ def main():
         # Keep the repo directory to save bandwidth...
         if not os.path.exists('build'):
             os.mkdir('build')
-        build_dir = os.path.join('build', package)
+        build_dir = os.path.join('build', appid)
         if os.path.exists(build_dir):
             logging.warning(_('{path} already exists, ignoring import results!')
                             .format(path=build_dir))
             sys.exit(1)
         elif tmp_importer_dir is not None:
             shutil.move(tmp_importer_dir, build_dir)
-        with open('build/.fdroidvcs-' + package, 'w') as f:
+        with open('build/.fdroidvcs-' + appid, 'w') as f:
             f.write(app.RepoType + ' ' + app.Repo)
 
-        metadatapath = os.path.join('metadata', package + '.yml')
+        metadatapath = os.path.join('metadata', appid + '.yml')
         metadata.write_metadata(metadatapath, app)
         logging.info("Wrote " + metadatapath)
 
