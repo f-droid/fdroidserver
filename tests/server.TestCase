@@ -148,6 +148,19 @@ class ServerTest(unittest.TestCase):
         virustotal_apikey = os.getenv('VIRUSTOTAL_API_KEY')
         fdroidserver.server.upload_to_virustotal('repo', virustotal_apikey)
 
+    def test_remote_hostname_regex(self):
+        for remote_url, name in (
+                ('git@github.com:guardianproject/fdroid-repo', 'github'),
+                ('git@gitlab.com:guardianproject/fdroid-repo', 'gitlab'),
+                ('https://github.com:guardianproject/fdroid-repo', 'github'),
+                ('https://gitlab.com/guardianproject/fdroid-repo', 'gitlab'),
+                ('https://salsa.debian.org/foo/repo', 'salsa'),
+        ):
+            self.assertEqual(
+                name,
+                fdroidserver.server.REMOTE_HOSTNAME_REGEX.sub(r'\1', remote_url)
+            )
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
