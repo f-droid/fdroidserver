@@ -46,6 +46,19 @@ tail = None
 BASEBOX_DEFAULT = 'fdroid/basebox-stretch64'
 BASEBOX_VERSION_DEFAULT = '0.5.1'
 BASEBOX_CHECKSUMS = {
+    '0.6.0': {
+        'libvirt': {
+            'box.img': '82c2c3548cf48f0f4c6601f40f8bec36ff37e9a74d6f717067a526250ad790ad',
+            'metadata.json': '9b5f62362ce3cd25c50881d8ae124879fc21ed4fdb16cc78d57058f116680f25',
+            'Vagrantfile': '4435901624f21dad201c3bd7f0d8d4ece842bc9fbbb70e312eee54f07173f24e',
+        },
+        'vritualbox': {
+            'box-disk1.vmdk': '6b536f26dcee137aca9a3f5f6f20aef795193ef2e8c387a0ffbdb7c5fe2ec0fb',
+            'box.ovf': 'cbdd6315187d4ce8ff15ed5a00a2c8b0d33abe6b0356439ce4d8d9ac3724f875',
+            'metadata.json': '098439524f76cafe026140b787ca419297a055a3f6006b9d60e6d5326d18ba99',
+            'Vagrantfile': '95c64a0e82a6420845c05038c4c97b3aba629b09eb2b78e879423d06f6b54a54',
+        }
+    },
     '0.5.1': {
         'libvirt': {
             'box.img': 'ad015940b866e36a593ef5fa0035ec6703f74a7f082ab76a1d2bd9463714cd4a',
