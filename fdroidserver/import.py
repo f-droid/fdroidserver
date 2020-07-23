@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import configparser
 import git
 import json
 import os
@@ -56,6 +57,44 @@ def clone_to_tmp_dir(app):
     vcs.gotorevision(options.rev)
 
     return tmp_dir
+
+
+def check_for_kivy_buildozer(tmp_importer_dir, app, build):
+    versionCode = None
+    buildozer_spec = os.path.join(tmp_importer_dir, 'buildozer.spec')
+    if os.path.exists(buildozer_spec):
+        config = configparser.ConfigParser()
+        config.read(buildozer_spec)
+        import pprint
+        pprint.pprint(sorted(config['app'].keys()))
+        app.id = config['app'].get('package.domain')
+        print(app.id)
+        app.AutoName = config['app'].get('package.name', app.AutoName)
+        app.License = config['app'].get('license', app.License)
+        app.Description = config['app'].get('description', app.Description)
+        build.versionName = config['app'].get('version')
+        build.output = 'bin/%s-$$VERSION$$-release-unsigned.apk' % app.AutoName
+        build.ndk = 'r17c'
+        build.srclibs = [
+            'buildozer@586152c',
+            'python-for-android@ccb0f8e1',
+        ]
+        build.sudo = [
+            'apt-get update',
+            'apt-get install -y build-essential libffi-dev libltdl-dev',
+        ]
+        build.prebuild = [
+            'sed -iE "/^[# ]*android\\.(ant|ndk|sdk)_path[ =]/d" buildozer.spec',
+            'sed -iE "/^[# ]*android.accept_sdk_license[ =]+.*/d" buildozer.spec',
+            'sed -iE "/^[# ]*android.skip_update[ =]+.*/d" buildozer.spec',
+            'sed -iE "/^[# ]*p4a.source_dir[ =]+.*/d" buildozer.spec',
+            'sed -i "s,\\[app\\],[app]\\n\\nandroid.sdk_path = $$SDK$$\\nandroid.ndk_path = $$NDK$$\\np4a.source_dir = $$python-for-android$$\\nandroid.accept_sdk_license = False\\nandroid.skip_update = True\\nandroid.ant_path = /usr/bin/ant\\n," buildozer.spec',
+            'pip3 install --user --upgrade $$buildozer$$ Cython==0.28.6',
+        ]
+        build.build = [
+            'PATH="$HOME/.local/bin:$PATH" buildozer android release',
+        ]
+    return build.get('versionName'), versionCode, app.get('id')
 
 
 def main():
@@ -123,6 +162,8 @@ def main():
     app.UpdateCheckMode = 'Tags'
     build.commit = common.get_head_commit_id(git_repo)
 
+    versionName, versionCode, appid = check_for_kivy_buildozer(tmp_importer_dir, app, build)
+
     # Extract some information...
     paths = common.get_all_gradle_and_manifests(tmp_importer_dir)
     subdir = common.get_gradle_subdir(tmp_importer_dir, paths)
@@ -134,7 +175,7 @@ def main():
             logging.warning(_('Could not find latest version name'))
         if not versionCode:
             logging.warning(_('Could not find latest version code'))
-    else:
+    elif not appid:
         raise FDroidException(_("No gradle project could be found. Specify --subdir?"))
 
     # Make sure it's actually new...
