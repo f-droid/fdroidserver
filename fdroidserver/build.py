@@ -684,9 +684,17 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
         bindir = os.path.join(root_dir, 'bin')
 
+    if os.path.isdir(os.path.join(build_dir, '.git')):
+        import git
+        commit_id = common.get_head_commit_id(git.repo.Repo(build_dir))
+    else:
+        commit_id = build.commit
+
     if p is not None and p.returncode != 0:
-        raise BuildException("Build failed for %s:%s" % (app.id, build.versionName), p.output)
-    logging.info("Successfully built version " + build.versionName + ' of ' + app.id)
+        raise BuildException("Build failed for %s:%s@%s" % (app.id, build.versionName, commit_id),
+                             p.output)
+    logging.info("Successfully built version {versionName} of {appid} from {commit_id}"
+                 .format(versionName=build.versionName, appid=app.id, commit_id=commit_id))
 
     omethod = build.output_method()
     if omethod == 'maven':
