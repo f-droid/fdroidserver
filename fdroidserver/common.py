@@ -317,9 +317,10 @@ def read_config(opts, config_file='config.py'):
                     .format(field=k))
 
     # smartcardoptions must be a list since its command line args for Popen
-    if 'smartcardoptions' in config:
-        config['smartcardoptions'] = config['smartcardoptions'].split(' ')
-    elif 'keystore' in config and config['keystore'] == 'NONE':
+    smartcardoptions = config.get('smartcardoptions')
+    if isinstance(smartcardoptions, str):
+        config['smartcardoptions'] = re.sub(r'\s+', r' ', config['smartcardoptions']).split(' ')
+    elif not smartcardoptions and 'keystore' in config and config['keystore'] == 'NONE':
         # keystore='NONE' means use smartcard, these are required defaults
         config['smartcardoptions'] = ['-storetype', 'PKCS11', '-providerName',
                                       'SunPKCS11-OpenSC', '-providerClass',
@@ -398,6 +399,10 @@ def assert_config_keystore(config):
     if 'keystore' not in config:
         nosigningkey = True
         logging.critical(_("'keystore' not found in config.py!"))
+    elif config['keystore'] == 'NONE':
+        if not config.get('smartcardoptions'):
+            nosigningkey = True
+            logging.critical(_("'keystore' is NONE and 'smartcardoptions' is blank!"))
     elif not os.path.exists(config['keystore']):
         nosigningkey = True
         logging.critical("'" + config['keystore'] + "' does not exist!")
