@@ -409,7 +409,7 @@ def assert_config_keystore(config):
     if 'keystorepass' not in config:
         nosigningkey = True
         logging.critical(_("'keystorepass' not found in config.py!"))
-    if 'keypass' not in config:
+    if 'keypass' not in config and config.get('keystore') != 'NONE':
         nosigningkey = True
         logging.critical(_("'keypass' not found in config.py!"))
     if nosigningkey:
