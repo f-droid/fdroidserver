@@ -45,6 +45,7 @@ BINARY_TRANSPARENCY_DIR = 'binary_transparency'
 
 AUTO_S3CFG = '.fdroid-server-update-s3cfg'
 USER_S3CFG = 's3cfg'
+REMOTE_HOSTNAME_REGEX = re.compile(r'\W*\w+\W+(\w+).*')
 
 
 def update_awsbucket(repo_section):
@@ -384,15 +385,17 @@ def update_servergitmirrors(servergitmirrors, repo_section):
 
         repo = git.Repo.init(git_mirror_path)
 
+        enabled_remotes = []
         for remote_url in servergitmirrors:
-            hostname = re.sub(r'\W*\w+\W+(\w+).*', r'\1', remote_url)
-            r = git.remote.Remote(repo, hostname)
+            name = REMOTE_HOSTNAME_REGEX.sub(r'\1', remote_url)
+            enabled_remotes.append(name)
+            r = git.remote.Remote(repo, name)
             if r in repo.remotes:
-                r = repo.remote(hostname)
+                r = repo.remote(name)
                 if 'set_url' in dir(r):  # force remote URL if using GitPython 2.x
                     r.set_url(remote_url)
             else:
-                repo.create_remote(hostname, remote_url)
+                repo.create_remote(name, remote_url)
             logging.info('Mirroring to: ' + remote_url)
 
         # sadly index.add don't allow the --all parameter
@@ -414,6 +417,9 @@ def update_servergitmirrors(servergitmirrors, repo_section):
 
         # push for every remote. This will overwrite the git history
         for remote in repo.remotes:
+            if remote.name not in enabled_remotes:
+                repo.delete_remote(remote)
+                continue
             if remote.name == 'gitlab':
                 logging.debug('Writing .gitlab-ci.yml to deploy to GitLab Pages')
                 with open(os.path.join(git_mirror_path, ".gitlab-ci.yml"), "wt") as out_file:
