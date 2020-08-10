@@ -81,7 +81,7 @@ def _ssh_key_from_debug_keystore(keystore=KEYSTORE_FILE):
     with open(ssh_private_key_file + '.pub', 'w') as fp:
         fp.write(pub)
 
-    logging.info(_('\nSSH Public Key to be used as Deploy Key:') + '\n' + pub)
+    logging.info(_('\nSSH public key to be used as deploy key:') + '\n' + pub)
 
     return ssh_private_key_file
 
@@ -263,7 +263,7 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             for f in files:
                 if f.endswith('-debug.apk'):
                     apkfilename = os.path.join(root, f)
-                    logging.debug(_('Striping mystery signature from {apkfilename}')
+                    logging.debug(_('Stripping mystery signature from {apkfilename}')
                                   .format(apkfilename=apkfilename))
                     destapk = os.path.join(repodir, os.path.basename(f))
                     os.chmod(apkfilename, 0o644)
@@ -273,7 +273,7 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
                     common.sign_apk(apkfilename, destapk, KEY_ALIAS)
 
         if options.verbose:
-            logging.debug(_('attempting bare ssh connection to test deploy key:'))
+            logging.debug(_('attempting bare SSH connection to test deploy key:'))
             try:
                 subprocess.check_call(['ssh', '-Tvi', ssh_private_key_file,
                                        '-oIdentitiesOnly=yes', '-oStrictHostKeyChecking=no',
