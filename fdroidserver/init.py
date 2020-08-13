@@ -211,12 +211,10 @@ def main():
                     opensc_so = '/usr/lib/opensc-pkcs11.so'
                     logging.warning('No OpenSC PKCS#11 module found, '
                                     + 'install OpenSC then edit "opensc-fdroid.cfg"!')
-            with open(os.path.join(examplesdir, 'opensc-fdroid.cfg'), 'r') as f:
-                opensc_fdroid = f.read()
-            opensc_fdroid = re.sub('^library.*', 'library = ' + opensc_so, opensc_fdroid,
-                                   flags=re.MULTILINE)
             with open('opensc-fdroid.cfg', 'w') as f:
-                f.write(opensc_fdroid)
+                f.write('name = OpenSC\nlibrary = ')
+                f.write(opensc_so)
+                f.write('\n')
     elif os.path.exists(keystore):
         to_set = ['keystorepass', 'keypass', 'repo_keyalias', 'keydname']
         if repo_keyalias:

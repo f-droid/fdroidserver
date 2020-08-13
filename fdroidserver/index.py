@@ -610,7 +610,7 @@ def extract_pubkey():
                               '-alias', common.config['repo_keyalias'],
                               '-keystore', common.config['keystore'],
                               '-storepass:env', 'FDROID_KEY_STORE_PASS']
-                             + common.config['smartcardoptions'],
+                             + list(common.config['smartcardoptions']),
                              envs=env_vars, output=False, stderr_to_stdout=False)
         if p.returncode != 0 or len(p.output) < 20:
             msg = "Failed to get repo pubkey!"
