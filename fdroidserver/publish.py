@@ -196,7 +196,7 @@ def main():
         sys.exit(1)
     binaries_dir = os.path.join(unsigned_dir, 'binaries')
 
-    if not os.path.exists(config['keystore']):
+    if not config['keystore'] == "NONE" and not os.path.exists(config['keystore']):
         logging.error("Config error - missing '{0}'".format(config['keystore']))
         sys.exit(1)
 
