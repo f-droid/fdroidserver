@@ -3345,26 +3345,33 @@ def genkeystore(localconfig):
 
     env_vars = {'LC_ALL': 'C.UTF-8',
                 'FDROID_KEY_STORE_PASS': localconfig['keystorepass'],
-                'FDROID_KEY_PASS': localconfig['keypass']}
-    p = FDroidPopen([config['keytool'], '-genkey',
-                     '-keystore', localconfig['keystore'],
-                     '-alias', localconfig['repo_keyalias'],
-                     '-keyalg', 'RSA', '-keysize', '4096',
-                     '-sigalg', 'SHA256withRSA',
-                     '-validity', '10000',
-                     '-storepass:env', 'FDROID_KEY_STORE_PASS',
-                     '-keypass:env', 'FDROID_KEY_PASS',
-                     '-dname', localconfig['keydname'],
-                     '-J-Duser.language=en'], envs=env_vars)
+                'FDROID_KEY_PASS': localconfig.get('keypass', "")}
+
+    cmd = [config['keytool'], '-genkey',
+           '-keystore', localconfig['keystore'],
+           '-alias', localconfig['repo_keyalias'],
+           '-keyalg', 'RSA', '-keysize', '4096',
+           '-sigalg', 'SHA256withRSA',
+           '-validity', '10000',
+           '-storepass:env', 'FDROID_KEY_STORE_PASS',
+           '-dname', localconfig['keydname'],
+           '-J-Duser.language=en']
+    if localconfig['keystore'] == "NONE":
+        cmd += localconfig['smartcardoptions']
+    else:
+        cmd += '-keypass:env', 'FDROID_KEY_PASS'
+    p = FDroidPopen(cmd, envs=env_vars)
     if p.returncode != 0:
         raise BuildException("Failed to generate key", p.output)
-    os.chmod(localconfig['keystore'], 0o0600)
+    if localconfig['keystore'] != "NONE":
+        os.chmod(localconfig['keystore'], 0o0600)
     if not options.quiet:
         # now show the lovely key that was just generated
         p = FDroidPopen([config['keytool'], '-list', '-v',
                          '-keystore', localconfig['keystore'],
                          '-alias', localconfig['repo_keyalias'],
-                         '-storepass:env', 'FDROID_KEY_STORE_PASS', '-J-Duser.language=en'], envs=env_vars)
+                         '-storepass:env', 'FDROID_KEY_STORE_PASS', '-J-Duser.language=en']
+                        + config['smartcardoptions'], envs=env_vars)
         logging.info(p.output.strip() + '\n\n')
     # get the public key
     p = FDroidPopenBytes([config['keytool'], '-exportcert',

@@ -2323,7 +2323,7 @@ def main():
         if 'keystorepass' not in config:
             config['keystorepass'] = password
             common.write_to_config(config, 'keystorepass', config['keystorepass'])
-        if 'keypass' not in config:
+        if 'keypass' not in config and not config['keystore'] == "NONE":
             config['keypass'] = password
             common.write_to_config(config, 'keypass', config['keypass'])
         common.genkeystore(config)
