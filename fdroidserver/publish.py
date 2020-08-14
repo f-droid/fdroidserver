@@ -77,12 +77,13 @@ def read_fingerprints_from_keystore():
     are managed by F-Droid, grouped by appid.
     """
     env_vars = {'LC_ALL': 'C.UTF-8',
-                'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                'FDROID_KEY_PASS': config['keypass']}
-    p = FDroidPopen([config['keytool'], '-list',
-                     '-v', '-keystore', config['keystore'],
-                     '-storepass:env', 'FDROID_KEY_STORE_PASS'],
-                    envs=env_vars, output=False)
+                'FDROID_KEY_STORE_PASS': config['keystorepass']}
+    cmd = [config['keytool'], '-list',
+           '-v', '-keystore', config['keystore'],
+           '-storepass:env', 'FDROID_KEY_STORE_PASS']
+    if config['keystore'] == 'NONE':
+        cmd += config['smartcardoptions']
+    p = FDroidPopen(cmd, envs=env_vars, output=False)
     if p.returncode != 0:
         raise FDroidException('could not read keystore {}'.format(config['keystore']))
 
@@ -115,7 +116,7 @@ def sign_sig_key_fingerprint_list(jar_file):
     else:  # smardcards never use -keypass
         cmd += '-keypass:env', 'FDROID_KEY_PASS'
     env_vars = {'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                'FDROID_KEY_PASS': config['keypass']}
+                'FDROID_KEY_PASS': config.get('keypass', "")}
     p = common.FDroidPopen(cmd, envs=env_vars)
     if p.returncode != 0:
         raise FDroidException("Failed to sign '{}'!".format(jar_file))
@@ -340,20 +341,27 @@ def main():
                 # if not generate one...
                 env_vars = {'LC_ALL': 'C.UTF-8',
                             'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                            'FDROID_KEY_PASS': config['keypass']}
-                p = FDroidPopen([config['keytool'], '-list',
-                                 '-alias', keyalias, '-keystore', config['keystore'],
-                                 '-storepass:env', 'FDROID_KEY_STORE_PASS'], envs=env_vars)
+                            'FDROID_KEY_PASS': config.get('keypass', "")}
+                cmd = [config['keytool'], '-list',
+                       '-alias', keyalias, '-keystore', config['keystore'],
+                       '-storepass:env', 'FDROID_KEY_STORE_PASS']
+                if config['keystore'] == 'NONE':
+                    cmd += config['smartcardoptions']
+                p = FDroidPopen(cmd, envs=env_vars)
                 if p.returncode != 0:
                     logging.info("Key does not exist - generating...")
-                    p = FDroidPopen([config['keytool'], '-genkey',
-                                     '-keystore', config['keystore'],
-                                     '-alias', keyalias,
-                                     '-keyalg', 'RSA', '-keysize', '2048',
-                                     '-validity', '10000',
-                                     '-storepass:env', 'FDROID_KEY_STORE_PASS',
-                                     '-keypass:env', 'FDROID_KEY_PASS',
-                                     '-dname', config['keydname']], envs=env_vars)
+                    cmd = [config['keytool'], '-genkey',
+                           '-keystore', config['keystore'],
+                           '-alias', keyalias,
+                           '-keyalg', 'RSA', '-keysize', '2048',
+                           '-validity', '10000',
+                           '-storepass:env', 'FDROID_KEY_STORE_PASS',
+                           '-dname', config['keydname']]
+                    if config['keystore'] == 'NONE':
+                        cmd += config['smartcardoptions']
+                    else:
+                        cmd += '-keypass:env', 'FDROID_KEY_PASS'
+                    p = FDroidPopen(cmd, envs=env_vars)
                     if p.returncode != 0:
                         raise BuildException("Failed to generate key", p.output)
                     if appid not in generated_keys:

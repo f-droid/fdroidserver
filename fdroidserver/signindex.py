@@ -52,7 +52,7 @@ def sign_jar(jar):
         args += ['-keypass:env', 'FDROID_KEY_PASS']
     env_vars = {
         'FDROID_KEY_STORE_PASS': config['keystorepass'],
-        'FDROID_KEY_PASS': config['keypass'],
+        'FDROID_KEY_PASS': config.get('keypass', ""),
     }
     p = common.FDroidPopen(args, envs=env_vars)
     if p.returncode != 0:

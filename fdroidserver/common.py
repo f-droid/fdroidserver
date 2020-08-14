@@ -3045,13 +3045,16 @@ def sign_apk(unsigned_path, signed_path, keyalias):
     else:
         signature_algorithm = ['-sigalg', 'SHA256withRSA', '-digestalg', 'SHA-256']
 
-    p = FDroidPopen([config['jarsigner'], '-keystore', config['keystore'],
-                     '-storepass:env', 'FDROID_KEY_STORE_PASS',
-                     '-keypass:env', 'FDROID_KEY_PASS']
-                    + signature_algorithm + [unsigned_path, keyalias],
+    cmd = [config['jarsigner'], '-keystore', config['keystore'],
+           '-storepass:env', 'FDROID_KEY_STORE_PASS']
+    if config['keystore'] == 'NONE':
+        cmd += config['smartcardoptions']
+    else:
+        cmd += '-keypass:env', 'FDROID_KEY_PASS'
+    p = FDroidPopen(cmd + signature_algorithm + [unsigned_path, keyalias],
                     envs={
                         'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                        'FDROID_KEY_PASS': config['keypass'], })
+                        'FDROID_KEY_PASS': config.get('keypass', "")})
     if p.returncode != 0:
         raise BuildException(_("Failed to sign application"), p.output)
 
