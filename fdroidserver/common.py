@@ -3045,13 +3045,16 @@ def sign_apk(unsigned_path, signed_path, keyalias):
     else:
         signature_algorithm = ['-sigalg', 'SHA256withRSA', '-digestalg', 'SHA-256']
 
-    p = FDroidPopen([config['jarsigner'], '-keystore', config['keystore'],
-                     '-storepass:env', 'FDROID_KEY_STORE_PASS',
-                     '-keypass:env', 'FDROID_KEY_PASS']
-                    + signature_algorithm + [unsigned_path, keyalias],
+    cmd = [config['jarsigner'], '-keystore', config['keystore'],
+           '-storepass:env', 'FDROID_KEY_STORE_PASS']
+    if config['keystore'] == 'NONE':
+        cmd += config['smartcardoptions']
+    else:
+        cmd += '-keypass:env', 'FDROID_KEY_PASS'
+    p = FDroidPopen(cmd + signature_algorithm + [unsigned_path, keyalias],
                     envs={
                         'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                        'FDROID_KEY_PASS': config['keypass'], })
+                        'FDROID_KEY_PASS': config.get('keypass', "")})
     if p.returncode != 0:
         raise BuildException(_("Failed to sign application"), p.output)
 
@@ -3064,7 +3067,7 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
 
     One of the inputs is signed, the other is unsigned. The signature metadata
     is transferred from the signed to the unsigned apk, and then jarsigner is
-    used to verify that the signature from the signed apk is also varlid for
+    used to verify that the signature from the signed apk is also valid for
     the unsigned one.  If the APK given as unsigned actually does have a
     signature, it will be stripped out and ignored.
 
@@ -3342,26 +3345,33 @@ def genkeystore(localconfig):
 
     env_vars = {'LC_ALL': 'C.UTF-8',
                 'FDROID_KEY_STORE_PASS': localconfig['keystorepass'],
-                'FDROID_KEY_PASS': localconfig['keypass']}
-    p = FDroidPopen([config['keytool'], '-genkey',
-                     '-keystore', localconfig['keystore'],
-                     '-alias', localconfig['repo_keyalias'],
-                     '-keyalg', 'RSA', '-keysize', '4096',
-                     '-sigalg', 'SHA256withRSA',
-                     '-validity', '10000',
-                     '-storepass:env', 'FDROID_KEY_STORE_PASS',
-                     '-keypass:env', 'FDROID_KEY_PASS',
-                     '-dname', localconfig['keydname'],
-                     '-J-Duser.language=en'], envs=env_vars)
+                'FDROID_KEY_PASS': localconfig.get('keypass', "")}
+
+    cmd = [config['keytool'], '-genkey',
+           '-keystore', localconfig['keystore'],
+           '-alias', localconfig['repo_keyalias'],
+           '-keyalg', 'RSA', '-keysize', '4096',
+           '-sigalg', 'SHA256withRSA',
+           '-validity', '10000',
+           '-storepass:env', 'FDROID_KEY_STORE_PASS',
+           '-dname', localconfig['keydname'],
+           '-J-Duser.language=en']
+    if localconfig['keystore'] == "NONE":
+        cmd += localconfig['smartcardoptions']
+    else:
+        cmd += '-keypass:env', 'FDROID_KEY_PASS'
+    p = FDroidPopen(cmd, envs=env_vars)
     if p.returncode != 0:
         raise BuildException("Failed to generate key", p.output)
-    os.chmod(localconfig['keystore'], 0o0600)
+    if localconfig['keystore'] != "NONE":
+        os.chmod(localconfig['keystore'], 0o0600)
     if not options.quiet:
         # now show the lovely key that was just generated
         p = FDroidPopen([config['keytool'], '-list', '-v',
                          '-keystore', localconfig['keystore'],
                          '-alias', localconfig['repo_keyalias'],
-                         '-storepass:env', 'FDROID_KEY_STORE_PASS', '-J-Duser.language=en'], envs=env_vars)
+                         '-storepass:env', 'FDROID_KEY_STORE_PASS', '-J-Duser.language=en']
+                        + config['smartcardoptions'], envs=env_vars)
         logging.info(p.output.strip() + '\n\n')
     # get the public key
     p = FDroidPopenBytes([config['keytool'], '-exportcert',

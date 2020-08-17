@@ -77,12 +77,13 @@ def read_fingerprints_from_keystore():
     are managed by F-Droid, grouped by appid.
     """
     env_vars = {'LC_ALL': 'C.UTF-8',
-                'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                'FDROID_KEY_PASS': config['keypass']}
-    p = FDroidPopen([config['keytool'], '-list',
-                     '-v', '-keystore', config['keystore'],
-                     '-storepass:env', 'FDROID_KEY_STORE_PASS'],
-                    envs=env_vars, output=False)
+                'FDROID_KEY_STORE_PASS': config['keystorepass']}
+    cmd = [config['keytool'], '-list',
+           '-v', '-keystore', config['keystore'],
+           '-storepass:env', 'FDROID_KEY_STORE_PASS']
+    if config['keystore'] == 'NONE':
+        cmd += config['smartcardoptions']
+    p = FDroidPopen(cmd, envs=env_vars, output=False)
     if p.returncode != 0:
         raise FDroidException('could not read keystore {}'.format(config['keystore']))
 
@@ -115,7 +116,7 @@ def sign_sig_key_fingerprint_list(jar_file):
     else:  # smardcards never use -keypass
         cmd += '-keypass:env', 'FDROID_KEY_PASS'
     env_vars = {'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                'FDROID_KEY_PASS': config['keypass']}
+                'FDROID_KEY_PASS': config.get('keypass', "")}
     p = common.FDroidPopen(cmd, envs=env_vars)
     if p.returncode != 0:
         raise FDroidException("Failed to sign '{}'!".format(jar_file))
@@ -196,7 +197,7 @@ def main():
         sys.exit(1)
     binaries_dir = os.path.join(unsigned_dir, 'binaries')
 
-    if not os.path.exists(config['keystore']):
+    if not config['keystore'] == "NONE" and not os.path.exists(config['keystore']):
         logging.error("Config error - missing '{0}'".format(config['keystore']))
         sys.exit(1)
 
@@ -319,7 +320,7 @@ def main():
             # characters are significant, so we'll use the first 8 from
             # the MD5 of the app's ID and hope there are no collisions.
             # If a collision does occur later, we're going to have to
-            # come up with a new alogrithm, AND rename all existing keys
+            # come up with a new algorithm, AND rename all existing keys
             # in the keystore!
             if not skipsigning:
                 if appid in config['keyaliases']:
@@ -340,20 +341,27 @@ def main():
                 # if not generate one...
                 env_vars = {'LC_ALL': 'C.UTF-8',
                             'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                            'FDROID_KEY_PASS': config['keypass']}
-                p = FDroidPopen([config['keytool'], '-list',
-                                 '-alias', keyalias, '-keystore', config['keystore'],
-                                 '-storepass:env', 'FDROID_KEY_STORE_PASS'], envs=env_vars)
+                            'FDROID_KEY_PASS': config.get('keypass', "")}
+                cmd = [config['keytool'], '-list',
+                       '-alias', keyalias, '-keystore', config['keystore'],
+                       '-storepass:env', 'FDROID_KEY_STORE_PASS']
+                if config['keystore'] == 'NONE':
+                    cmd += config['smartcardoptions']
+                p = FDroidPopen(cmd, envs=env_vars)
                 if p.returncode != 0:
                     logging.info("Key does not exist - generating...")
-                    p = FDroidPopen([config['keytool'], '-genkey',
-                                     '-keystore', config['keystore'],
-                                     '-alias', keyalias,
-                                     '-keyalg', 'RSA', '-keysize', '2048',
-                                     '-validity', '10000',
-                                     '-storepass:env', 'FDROID_KEY_STORE_PASS',
-                                     '-keypass:env', 'FDROID_KEY_PASS',
-                                     '-dname', config['keydname']], envs=env_vars)
+                    cmd = [config['keytool'], '-genkey',
+                           '-keystore', config['keystore'],
+                           '-alias', keyalias,
+                           '-keyalg', 'RSA', '-keysize', '2048',
+                           '-validity', '10000',
+                           '-storepass:env', 'FDROID_KEY_STORE_PASS',
+                           '-dname', config['keydname']]
+                    if config['keystore'] == 'NONE':
+                        cmd += config['smartcardoptions']
+                    else:
+                        cmd += '-keypass:env', 'FDROID_KEY_PASS'
+                    p = FDroidPopen(cmd, envs=env_vars)
                     if p.returncode != 0:
                         raise BuildException("Failed to generate key", p.output)
                     if appid not in generated_keys:
@@ -367,22 +375,11 @@ def main():
                                                                       unsigned_dir,
                                                                       output_dir))
 
-                # TODO replace below with common.sign_apk() once it has proven stable
-                # Sign the application...
-                p = FDroidPopen([config['jarsigner'], '-keystore', config['keystore'],
-                                 '-storepass:env', 'FDROID_KEY_STORE_PASS',
-                                 '-keypass:env', 'FDROID_KEY_PASS', '-sigalg',
-                                 'SHA1withRSA', '-digestalg', 'SHA1',
-                                 apkfile, keyalias], envs=env_vars)
-                if p.returncode != 0:
-                    raise BuildException(_("Failed to sign application"), p.output)
+                # Sign and zipalign the application...
+                common.sign_apk(apkfile, signed_apk_path, keyalias)
                 if appid not in signed_apks:
                     signed_apks[appid] = []
                 signed_apks[appid].append(apkfile)
-
-                # Zipalign it...
-                common._zipalign(apkfile, os.path.join(output_dir, apkfilename))
-                os.remove(apkfile)
 
                 publish_source_tarball(apkfilename, unsigned_dir, output_dir)
                 logging.info('Published ' + apkfilename)

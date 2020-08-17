@@ -215,6 +215,9 @@ def main():
                 f.write('name = OpenSC\nlibrary = ')
                 f.write(opensc_so)
                 f.write('\n')
+        logging.info("Repo setup using a smartcard HSM. Please edit keystorepass and repo_keyalias in config.py.")
+        logging.info("If you want to generate a new repo signing key in the HSM you can do that with 'fdroid update "
+                     "--create-key'.")
     elif os.path.exists(keystore):
         to_set = ['keystorepass', 'keypass', 'repo_keyalias', 'keydname']
         if repo_keyalias:
