@@ -2164,7 +2164,7 @@ def read_added_date_from_all_apks(apps, apks):
     """
     Added dates come from the stats/known_apks.txt file but are
     read when scanning apks and thus need to be applied form apk
-    level to app level for _all_ apps and not only form non-archived
+    level to app level for _all_ apps and not only from non-archived
     ones
 
     TODO: read the added dates directly from known_apks.txt instead of
