@@ -214,7 +214,6 @@ class BuildTest(unittest.TestCase):
         build = fdroidserver.metadata.Build()
         build.commit = 'master'
         build.androidupdate = ['no']
-        build.extlibs = ['android/android-support-v4r11.jar']
         os.makedirs("extlib/android")
         # write a fake binary jar file the scanner should definitely error on
         with open('extlib/android/android-support-v4r11.jar', 'wb') as file:
@@ -228,10 +227,22 @@ class BuildTest(unittest.TestCase):
             def getsrclib(self):
                 return None
 
+        # Test we trigger a scanner error without extlibs
+        build.extlibs = []
+        os.makedirs('build/libs')
+        shutil.copy('extlib/android/android-support-v4r11.jar', 'build/libs')
+        fdroidserver.common.prepare_source(FakeVcs(), app, build,
+                                           "build", "ignore", "extlib")
+        count = fdroidserver.scanner.scan_source("build", build)
+        self.assertEqual(1, count, "Should produce a scanner error without extlib")
+
+        # Now try again as an extlib
+        build.extlibs = ['android/android-support-v4r11.jar']
         fdroidserver.common.prepare_source(FakeVcs(), app, build,
                                            "build", "ignore", "extlib")
         count = fdroidserver.scanner.scan_source("build", build)
         self.assertEqual(0, count, "Shouldn't error on jar from extlib")
+
 
 
 if __name__ == "__main__":
