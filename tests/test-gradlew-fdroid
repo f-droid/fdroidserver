@@ -4,7 +4,7 @@ run_test() {
     red='\033[0;31m'
     green='\033[0;32m'
     nocolor='\033[0m'
-    cd $basedir/tests/source-files/$1
+    cd $source_files/$1
     printf "\n${1}:\n"
     if ($basedir/gradlew-fdroid 2>/dev/null || true) | grep -Fo "$2"; then
 	printf "${green}passed: $1\n"
@@ -17,15 +17,26 @@ run_test() {
 
 exit_value=0
 basedir=$(cd $(dirname $0)/..; pwd)
+source_files=$basedir/tests/source-files
 export https_proxy=127.7.7.7:7 # fake proxy to block downloading
-
-# force test file to have Windows linefeeds
-sed -i -e $'s/\r$//' -e  $'s/$/\r/' \
-    $basedir/tests/source-files/yuriykulikov/AlarmClock/gradle/wrapper/gradle-wrapper.properties
 
 run_test osmandapp/osmand 2.2.1
 run_test com.integreight.onesheeld 3.3
 run_test se.manyver/android 5.5
 run_test yuriykulikov/AlarmClock 5.1.1
+
+printf "\n\nforce test files to have Windows linefeeds:\n"
+tmpdir=`mktemp -d`
+cp -a $source_files/osmandapp $source_files/yuriykulikov $tmpdir/
+awk 'sub("$", "\r")' \
+    $source_files/yuriykulikov/AlarmClock/gradle/wrapper/gradle-wrapper.properties \
+    > $tmpdir/yuriykulikov/AlarmClock/gradle/wrapper/gradle-wrapper.properties
+awk 'sub("$", "\r")' \
+    $source_files/osmandapp/osmand/build.gradle \
+    > $tmpdir/osmandapp/osmand/build.gradle
+source_files=$tmpdir
+
+run_test yuriykulikov/AlarmClock 5.1.1
+run_test osmandapp/osmand 2.2.1
 
 exit $exit_value
