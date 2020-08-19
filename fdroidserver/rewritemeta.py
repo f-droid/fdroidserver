@@ -30,9 +30,6 @@ config = None
 options = None
 
 
-SUPPORTED_FORMATS = ['yml']
-
-
 def proper_format(app):
     s = io.StringIO()
     # TODO: currently reading entire file again, should reuse first
@@ -56,8 +53,6 @@ def main():
     common.setup_global_opts(parser)
     parser.add_argument("-l", "--list", action="store_true", default=False,
                         help=_("List files that would be reformatted"))
-    parser.add_argument("-t", "--to", default=None,
-                        help=_("Rewrite to a specific format: ") + ', '.join(SUPPORTED_FORMATS))
     parser.add_argument("appid", nargs='*', help=_("applicationId in the form APPID"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
@@ -69,27 +64,14 @@ def main():
     allapps = metadata.read_metadata(xref=True)
     apps = common.read_app_args(options.appid, allapps, False)
 
-    if options.list and options.to is not None:
-        parser.error(_("Cannot use --list and --to at the same time"))
-
-    if options.to is not None and options.to not in SUPPORTED_FORMATS:
-        parser.error(_("Unsupported metadata format, use: --to [{supported}]")
-                     .format(supported=' '.join(SUPPORTED_FORMATS)))
-
     for appid, app in apps.items():
         path = app.metadatapath
         base, ext = common.get_extension(path)
-        if not options.to and ext not in SUPPORTED_FORMATS:
+        if ext != "yml":
             logging.info(_("Ignoring {ext} file at '{path}'").format(ext=ext, path=path))
             continue
-        elif options.to is not None:
-            logging.info(_("Rewriting '{appid}' to '{path}'").format(appid=appid, path=options.to))
         else:
             logging.info(_("Rewriting '{appid}'").format(appid=appid))
-
-        to_ext = ext
-        if options.to is not None:
-            to_ext = options.to
 
         if options.list:
             if not proper_format(app):
@@ -108,11 +90,7 @@ def main():
         app.builds = newbuilds
 
         try:
-            metadata.write_metadata(base + '.' + to_ext, app)
-            # remove old format metadata if there was  a format change
-            # and rewriting to the new format worked
-            if ext != to_ext:
-                os.remove(path)
+            metadata.write_metadata(path, app)
         finally:
             pass
 
