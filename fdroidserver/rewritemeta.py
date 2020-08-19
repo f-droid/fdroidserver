@@ -21,6 +21,8 @@ from argparse import ArgumentParser
 import os
 import logging
 import io
+import tempfile
+import shutil
 
 from . import _
 from . import common
@@ -89,10 +91,12 @@ def main():
             newbuilds.append(new)
         app.builds = newbuilds
 
-        try:
-            metadata.write_metadata(path, app)
-        finally:
-            pass
+        # rewrite to temporary file before overwriting existsing
+        # file in case there's a bug in write_metadata
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = os.path.join(tmpdir, os.path.basename(path))
+            metadata.write_metadata(tmp_path, app)
+            shutil.move(tmp_path, path)
 
     logging.debug(_("Finished"))
 
