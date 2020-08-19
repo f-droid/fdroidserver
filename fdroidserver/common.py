@@ -119,7 +119,6 @@ default_config = {
     'mvn3': "mvn",
     'gradle': os.path.join(FDROID_PATH, 'gradlew-fdroid'),
     'gradle_version_dir': os.path.join(os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'), 'gradle'),
-    'accepted_formats': ['yml'],
     'sync_from_local_copy_dir': False,
     'allow_disabled_algorithms': False,
     'per_app_repos': False,

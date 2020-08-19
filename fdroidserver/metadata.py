@@ -928,10 +928,6 @@ def parse_metadata(metadatapath, check_vcs=False, refresh=True):
     '''parse metadata file, optionally checking the git repo for metadata first'''
 
     _ignored, ext = fdroidserver.common.get_extension(metadatapath)
-    accepted = fdroidserver.common.config['accepted_formats']
-    if ext not in accepted:
-        warn_or_exception(_('"{path}" is not an accepted format, convert to: {formats}')
-                          .format(path=metadatapath, formats=', '.join(accepted)))
 
     app = App()
     app.metadatapath = metadatapath
@@ -1172,10 +1168,6 @@ build_cont = re.compile(r'^[ \t]')
 
 def write_metadata(metadatapath, app):
     _ignored, ext = fdroidserver.common.get_extension(metadatapath)
-    accepted = fdroidserver.common.config['accepted_formats']
-    if ext not in accepted:
-        warn_or_exception(_('Cannot write "{path}", not an accepted format, use: {formats}')
-                          .format(path=metadatapath, formats=', '.join(accepted)))
 
     if ext == 'yml':
         if importlib.util.find_spec('ruamel.yaml'):

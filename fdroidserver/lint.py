@@ -515,16 +515,12 @@ def check_for_unsupported_metadata_files(basedir=""):
     global config
 
     return_value = False
-    formats = config['accepted_formats']
     for f in glob.glob(basedir + 'metadata/*') + glob.glob(basedir + 'metadata/.*'):
         if os.path.isdir(f):
-            exists = False
-            for t in formats:
-                exists = exists or os.path.exists(f + '.' + t)
-            if not exists:
+            if not os.path.exists(f + '.yml'):
                 print(_('"%s/" has no matching metadata file!') % f)
                 return_value = True
-        elif os.path.splitext(f)[1][1:] in formats:
+        elif os.path.splitext(f)[1][1:] == "yml":
             packageName = os.path.splitext(os.path.basename(f))[0]
             if not common.is_valid_package_name(packageName):
                 print('"' + packageName + '" is an invalid package name!\n'
@@ -532,7 +528,7 @@ def check_for_unsupported_metadata_files(basedir=""):
                 return_value = True
         else:
             print('"' + f.replace(basedir, '')
-                  + '" is not a supported file format: (' + ','.join(formats) + ')')
+                  + '" is not a supported file format (use: .yml)')
             return_value = True
 
     return return_value
