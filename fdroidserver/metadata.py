@@ -941,7 +941,7 @@ def parse_metadata(metadatapath, check_vcs=False, refresh=True):
         with open(metadatapath, 'r') as mf:
             parse_yaml_metadata(mf, app)
     else:
-        warn_or_exception(_('Unknown metadata format: {path}')
+        warn_or_exception(_('Unknown metadata format: {path} (use: .yml)')
                           .format(path=metadatapath))
 
     if check_vcs and app.Repo:
