@@ -563,10 +563,23 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
             json.dump(output, fp, default=_index_encoder_default)
 
     if common.options.nosign:
+        _copy_to_local_copy_dir(repodir, index_file)
         logging.debug(_('index-v1 must have a signature, use `fdroid signindex` to create it!'))
     else:
         signindex.config = common.config
         signindex.sign_index_v1(repodir, json_name)
+
+
+def _copy_to_local_copy_dir(repodir, f):
+    local_copy_dir = common.config.get('local_copy_dir', '')
+    if os.path.exists(local_copy_dir):
+        destdir = os.path.join(local_copy_dir, repodir)
+        if not os.path.exists(destdir):
+            os.mkdir(destdir)
+        shutil.copy2(f, destdir, follow_symlinks=False)
+    elif local_copy_dir:
+        raise FDroidException(_('"local_copy_dir" {path} does not exist!')
+                              .format(path=local_copy_dir))
 
 
 def v1_sort_packages(packages, fdroid_signing_key_fingerprints):
@@ -926,6 +939,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         # Sign the index...
         signed = os.path.join(repodir, 'index.jar')
         if common.options.nosign:
+            _copy_to_local_copy_dir(repodir, os.path.join(repodir, jar_output))
             # Remove old signed index if not signing
             if os.path.exists(signed):
                 os.remove(signed)
