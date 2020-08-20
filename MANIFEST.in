@@ -9,7 +9,12 @@ include buildserver/Vagrantfile
 include CHANGELOG.md
 include completion/bash-completion
 include examples/config.yml
+include examples/fdroid_exportkeystore.py
+include examples/fdroid_export_keystore_to_nitrokey.py
+include examples/fdroid_extract_repo_pubkey.py
+include examples/fdroid_fetchsrclibs.py
 include examples/fdroid-icon.png
+include examples/fdroid_nitrokeyimport.py
 include examples/makebuildserver.config.py
 include examples/opensc-fdroid.cfg
 include examples/public-read-only-s3-bucket-policy.json
