@@ -57,7 +57,10 @@ def make(apps, apks, repodir, archive):
     """
     from fdroidserver.update import METADATA_VERSION
 
-    if not common.options.nosign:
+    if hasattr(common.options, 'nosign') and common.options.nosign:
+        if 'keystore' not in common.config and 'repo_pubkey' not in common.config:
+            raise FDroidException(_('"repo_pubkey" must be present in config.py when using --nosign!'))
+    else:
         common.assert_config_keystore(common.config)
 
     # Historically the index has been sorted by App Name, so we enforce this ordering here
