@@ -2502,20 +2502,19 @@ def get_native_code(apkfile):
     return sorted(list(archset))
 
 
-def get_minSdkVersion_aapt(apkfile):
-    """Extract the minimum supported Android SDK from an APK using aapt
+def get_minSdkVersion(apkfile):
+    """Extract the minimum supported Android SDK from an APK using androguard
 
     :param apkfile: path to an APK file.
     :returns: the integer representing the SDK version
     """
-    r = re.compile(r"^sdkVersion:'([0-9]+)'")
-    p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
-    for line in p.output.splitlines():
-        m = r.match(line)
-        if m:
-            return int(m.group(1))
-    raise FDroidException(_('Reading minSdkVersion failed: "{apkfilename}"')
-                          .format(apkfilename=apkfile))
+
+    try:
+        apk = _get_androguard_APK(apkfile)
+    except FileNotFoundError:
+        raise FDroidException(_('Reading minSdkVersion failed: "{apkfilename}"')
+                              .format(apkfilename=apkfile))
+    return int(apk.get_min_sdk_version())
 
 
 class PopenResult:
@@ -3040,7 +3039,7 @@ def sign_apk(unsigned_path, signed_path, keyalias):
 
     """
 
-    if get_minSdkVersion_aapt(unsigned_path) < 18:
+    if get_minSdkVersion(unsigned_path) < 18:
         signature_algorithm = ['-sigalg', 'SHA1withRSA', '-digestalg', 'SHA1']
     else:
         signature_algorithm = ['-sigalg', 'SHA256withRSA', '-digestalg', 'SHA-256']
