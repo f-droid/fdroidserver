@@ -180,6 +180,43 @@ def check_for_key_collisions(allapps):
     return allaliases
 
 
+def create_key_if_not_existing(keyalias):
+    """
+    Ensures a signing key with the given keyalias exists
+    :return: boolean, True if a new key was created, false otherwise
+    """
+    # See if we already have a key for this application, and
+    # if not generate one...
+    env_vars = {'LC_ALL': 'C.UTF-8',
+                'FDROID_KEY_STORE_PASS': config['keystorepass'],
+                'FDROID_KEY_PASS': config.get('keypass', "")}
+    cmd = [config['keytool'], '-list',
+           '-alias', keyalias, '-keystore', config['keystore'],
+           '-storepass:env', 'FDROID_KEY_STORE_PASS']
+    if config['keystore'] == 'NONE':
+        cmd += config['smartcardoptions']
+    p = FDroidPopen(cmd, envs=env_vars)
+    if p.returncode != 0:
+        logging.info("Key does not exist - generating...")
+        cmd = [config['keytool'], '-genkey',
+               '-keystore', config['keystore'],
+               '-alias', keyalias,
+               '-keyalg', 'RSA', '-keysize', '2048',
+               '-validity', '10000',
+               '-storepass:env', 'FDROID_KEY_STORE_PASS',
+               '-dname', config['keydname']]
+        if config['keystore'] == 'NONE':
+            cmd += config['smartcardoptions']
+        else:
+            cmd += '-keypass:env', 'FDROID_KEY_PASS'
+        p = FDroidPopen(cmd, envs=env_vars)
+        if p.returncode != 0:
+            raise BuildException("Failed to generate key", p.output)
+        return True
+    else:
+        return False
+
+
 def main():
     global config, options
 
@@ -326,33 +363,7 @@ def main():
                 keyalias = key_alias(appid)
                 logging.info("Key alias: " + keyalias)
 
-                # See if we already have a key for this application, and
-                # if not generate one...
-                env_vars = {'LC_ALL': 'C.UTF-8',
-                            'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                            'FDROID_KEY_PASS': config.get('keypass', "")}
-                cmd = [config['keytool'], '-list',
-                       '-alias', keyalias, '-keystore', config['keystore'],
-                       '-storepass:env', 'FDROID_KEY_STORE_PASS']
-                if config['keystore'] == 'NONE':
-                    cmd += config['smartcardoptions']
-                p = FDroidPopen(cmd, envs=env_vars)
-                if p.returncode != 0:
-                    logging.info("Key does not exist - generating...")
-                    cmd = [config['keytool'], '-genkey',
-                           '-keystore', config['keystore'],
-                           '-alias', keyalias,
-                           '-keyalg', 'RSA', '-keysize', '2048',
-                           '-validity', '10000',
-                           '-storepass:env', 'FDROID_KEY_STORE_PASS',
-                           '-dname', config['keydname']]
-                    if config['keystore'] == 'NONE':
-                        cmd += config['smartcardoptions']
-                    else:
-                        cmd += '-keypass:env', 'FDROID_KEY_PASS'
-                    p = FDroidPopen(cmd, envs=env_vars)
-                    if p.returncode != 0:
-                        raise BuildException("Failed to generate key", p.output)
+                if create_key_if_not_existing(keyalias):
                     generated_keys[appid] = keyalias
 
                 signed_apk_path = os.path.join(output_dir, apkfilename)
