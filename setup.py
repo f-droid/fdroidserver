@@ -52,7 +52,6 @@ def get_data_files():
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-
 setup(name='fdroidserver',
       version='1.2a',
       description='F-Droid Server Tools',
@@ -88,6 +87,9 @@ setup(name='fdroidserver',
           'requests >= 2.5.2, != 2.11.0, != 2.12.2, != 2.18.0',
           'yamllint',
       ],
+      extras_require={
+          'test': ['pyjks'],
+      },
       classifiers=[
           'Development Status :: 4 - Beta',
           'Intended Audience :: Developers',

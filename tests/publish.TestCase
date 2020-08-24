@@ -11,7 +11,6 @@
 #
 
 import inspect
-import jks, jks.util
 import logging
 import optparse
 import os
@@ -192,6 +191,11 @@ class PublishTest(unittest.TestCase):
         self.assertEqual(len(randomappids), len(allaliases))
 
     def test_create_key_if_not_existing(self):
+        try:
+            import jks
+            import jks.util
+        except ImportError:
+            self.skipTest("pyjks not installed")
         common.config = {}
         common.fill_config_defaults(common.config)
         publish.config = common.config
