@@ -520,15 +520,15 @@ def check_for_unsupported_metadata_files(basedir=""):
             if not os.path.exists(f + '.yml'):
                 print(_('"%s/" has no matching metadata file!') % f)
                 return_value = True
-        elif os.path.splitext(f)[1][1:] == "yml":
+        elif f.endswith('.yml'):
             packageName = os.path.splitext(os.path.basename(f))[0]
             if not common.is_valid_package_name(packageName):
                 print('"' + packageName + '" is an invalid package name!\n'
                       + 'https://developer.android.com/studio/build/application-id')
                 return_value = True
         else:
-            print('"' + f.replace(basedir, '')
-                  + '" is not a supported file format (use: .yml)')
+            print(_('"{path}" is not a supported file format (use: metadata/*.yml)')
+                  .format(path=f.replace(basedir, '')))
             return_value = True
 
     return return_value

@@ -38,8 +38,7 @@ def proper_format(app):
     # read in metadata.py
     with open(app.metadatapath, 'r') as f:
         cur_content = f.read()
-    _ignored, extension = common.get_extension(app.metadatapath)
-    if extension == 'yml':
+    if app.metadatapath.endswith('.yml'):
         metadata.write_yaml(s, app)
     content = s.getvalue()
     s.close()
@@ -68,12 +67,11 @@ def main():
 
     for appid, app in apps.items():
         path = app.metadatapath
-        base, ext = common.get_extension(path)
-        if ext != "yml":
-            logging.info(_("Ignoring {ext} file at '{path}'").format(ext=ext, path=path))
-            continue
-        else:
+        if path.endswith('.yml'):
             logging.info(_("Rewriting '{appid}'").format(appid=appid))
+        else:
+            logging.warning(_('Cannot rewrite "{path}"').format(path=path))
+            continue
 
         if options.list:
             if not proper_format(app):

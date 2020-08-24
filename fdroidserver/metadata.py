@@ -927,8 +927,6 @@ def _decode_bool(s):
 def parse_metadata(metadatapath, check_vcs=False, refresh=True):
     '''parse metadata file, optionally checking the git repo for metadata first'''
 
-    _ignored, ext = fdroidserver.common.get_extension(metadatapath)
-
     app = App()
     app.metadatapath = metadatapath
     name, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
@@ -937,11 +935,11 @@ def parse_metadata(metadatapath, check_vcs=False, refresh=True):
     else:
         app.id = name
 
-    if ext == 'yml':
+    if metadatapath.endswith('.yml'):
         with open(metadatapath, 'r') as mf:
             parse_yaml_metadata(mf, app)
     else:
-        warn_or_exception(_('Unknown metadata format: {path} (use: .yml)')
+        warn_or_exception(_('Unknown metadata format: {path} (use: *.yml)')
                           .format(path=metadatapath))
 
     if check_vcs and app.Repo:
@@ -1167,14 +1165,12 @@ build_cont = re.compile(r'^[ \t]')
 
 
 def write_metadata(metadatapath, app):
-    _ignored, ext = fdroidserver.common.get_extension(metadatapath)
-
-    if ext == 'yml':
+    if metadatapath.endswith('.yml'):
         if importlib.util.find_spec('ruamel.yaml'):
             with open(metadatapath, 'w') as mf:
                 return write_yaml(mf, app)
         else:
-            raise FDroidException('ruamel.yaml not installed, can not write metadata.')
+            raise FDroidException(_('ruamel.yaml not installed, can not write metadata.'))
 
     warn_or_exception(_('Unknown metadata format: %s') % metadatapath)
 
