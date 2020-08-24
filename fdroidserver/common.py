@@ -119,7 +119,6 @@ default_config = {
     'mvn3': "mvn",
     'gradle': os.path.join(FDROID_PATH, 'gradlew-fdroid'),
     'gradle_version_dir': os.path.join(os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'), 'gradle'),
-    'accepted_formats': ['txt', 'yml'],
     'sync_from_local_copy_dir': False,
     'allow_disabled_algorithms': False,
     'per_app_repos': False,
@@ -517,7 +516,7 @@ def get_local_metadata_files():
     '''get any metadata files local to an app's source repo
 
     This tries to ignore anything that does not count as app metdata,
-    including emacs cruft ending in ~ and the .fdroid.key*pass.txt files.
+    including emacs cruft ending in ~
 
     '''
     return glob.glob('.fdroid.[a-jl-z]*[a-rt-z]')

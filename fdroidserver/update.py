@@ -237,7 +237,7 @@ def update_wiki(apps, apks):
         wikidata += "=Maintainer Notes=\n"
         if app.MaintainerNotes:
             wikidata += metadata.description_wiki(app.MaintainerNotes) + "\n"
-        wikidata += "\nMetadata: [https://gitlab.com/fdroid/fdroiddata/blob/master/metadata/{0}.txt current] [https://gitlab.com/fdroid/fdroiddata/commits/master/metadata/{0}.txt history]\n".format(appid)
+        wikidata += "\nMetadata: [https://gitlab.com/fdroid/fdroiddata/blob/master/metadata/{0}.yml current] [https://gitlab.com/fdroid/fdroiddata/commits/master/metadata/{0}.yml history]\n".format(appid)
 
         # Get a list of all packages for this application...
         apklist = []

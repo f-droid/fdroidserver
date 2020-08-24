@@ -637,88 +637,6 @@ class MetadataTest(unittest.TestCase):
             UpdateCheckMode: None
             """))
 
-    def test_parse_txt_srclib(self):
-        fdroidserver.metadata.warnings_action = 'error'
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            with open('JSoup.txt', 'w', encoding='utf-8') as f:
-                f.write(textwrap.dedent('''\
-                    # Source details (the only mandatory fields)
-                    Repo Type:git
-                    Repo:https://github.com/jhy/jsoup.git
-
-                    # Comma-separated list of subdirs to use. The first existing subdirectory
-                    # found between those given will be used. If none is found or provided, the
-                    # root of the repo directory will be used instead.
-                    Subdir:
-
-                    # Any extra commands to prepare the source library
-                    Prepare:
-                    '''))
-            srclib = fdroidserver.metadata.parse_txt_srclib('JSoup.txt')
-            self.assertDictEqual({'Repo': 'https://github.com/jhy/jsoup.git',
-                                  'RepoType': 'git',
-                                  'Subdir': [''],
-                                  'Prepare': ''},
-                                 srclib)
-
-    def test_parse_txt_srclib_simple(self):
-        fdroidserver.metadata.warnings_action = 'error'
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            with open('simple.txt', 'w', encoding='utf-8') as f:
-                f.write(textwrap.dedent('''\
-                    # this should be simple
-                    Repo Type:git
-                    Repo:https://git.host/repo.git
-                    '''))
-            srclib = fdroidserver.metadata.parse_txt_srclib('simple.txt')
-            self.assertDictEqual({'Repo': 'https://git.host/repo.git',
-                                  'RepoType': 'git',
-                                  'Subdir': None,
-                                  'Prepare': None},
-                                 srclib)
-
-    def test_parse_txt_srclib_simple_blanks(self):
-        fdroidserver.metadata.warnings_action = 'error'
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            with open('simple.txt', 'w', encoding='utf-8') as f:
-                f.write(textwrap.dedent('''\
-                    # this should be simple
-
-                    Repo Type:git
-
-                    Repo:https://git.host/repo.git
-
-                    Subdir:
-
-                    Prepare:
-                    '''))
-            srclib = fdroidserver.metadata.parse_txt_srclib('simple.txt')
-            self.assertDictEqual({'Repo': 'https://git.host/repo.git',
-                                  'RepoType': 'git',
-                                  'Subdir': [''],
-                                  'Prepare': ''},
-                                 srclib)
-
-    def test_parse_txt_srclib_Changelog_cketti(self):
-        fdroidserver.metadata.warnings_action = 'error'
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            with open('Changelog-cketti.txt', 'w', encoding='utf-8') as f:
-                f.write(textwrap.dedent('''\
-                    Repo Type:git
-                    Repo:https://github.com/cketti/ckChangeLog
-
-                    Subdir:library,ckChangeLog/src/main
-                    Prepare:[ -f project.properties ] || echo 'source.dir=java' > ant.properties && echo -e 'android.library=true\\ntarget=android-19' > project.properties
-                    '''))
-            srclib = fdroidserver.metadata.parse_txt_srclib('Changelog-cketti.txt')
-            self.assertDictEqual({'Repo': 'https://github.com/cketti/ckChangeLog',
-                                  'RepoType': 'git',
-                                  'Subdir': ['library', 'ckChangeLog/src/main'],
-                                  'Prepare': "[ -f project.properties ] || echo 'source.dir=java' > "
-                                             "ant.properties && echo -e "
-                                             "'android.library=true\\ntarget=android-19' > project.properties"},
-                                 srclib)
-
     def test_parse_yaml_srclib_unknown_key(self):
         fdroidserver.metadata.warnings_action = 'error'
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
@@ -885,11 +803,11 @@ class MetadataTest(unittest.TestCase):
                     RepoType: git
                     Repo: https://git.host/repo.git
                     '''))
-            with open('srclibs/simple-wb.txt', 'w', encoding='utf-8') as f:
+            with open('srclibs/simple-wb.yml', 'w', encoding='utf-8') as f:
                 f.write(textwrap.dedent('''\
                     # this should be simple
-                    Repo Type:git
-                    Repo:https://git.host/repo.git
+                    RepoType: git
+                    Repo: https://git.host/repo.git
 
                     Subdir:
                     Prepare:

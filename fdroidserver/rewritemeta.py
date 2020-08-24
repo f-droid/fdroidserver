@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 # rewritemeta.py - part of the FDroid server tools
-# This cleans up the original .txt metadata file format.
+# This cleans up the original .yml metadata file format.
 # Copyright (C) 2010-12, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,6 +21,8 @@ from argparse import ArgumentParser
 import os
 import logging
 import io
+import tempfile
+import shutil
 
 from . import _
 from . import common
@@ -28,9 +30,6 @@ from . import metadata
 
 config = None
 options = None
-
-
-SUPPORTED_FORMATS = ['txt', 'yml']
 
 
 def proper_format(app):
@@ -42,8 +41,6 @@ def proper_format(app):
     _ignored, extension = common.get_extension(app.metadatapath)
     if extension == 'yml':
         metadata.write_yaml(s, app)
-    elif extension == 'txt':
-        metadata.write_txt(s, app)
     content = s.getvalue()
     s.close()
     return content == cur_content
@@ -58,8 +55,6 @@ def main():
     common.setup_global_opts(parser)
     parser.add_argument("-l", "--list", action="store_true", default=False,
                         help=_("List files that would be reformatted"))
-    parser.add_argument("-t", "--to", default=None,
-                        help=_("Rewrite to a specific format: ") + ', '.join(SUPPORTED_FORMATS))
     parser.add_argument("appid", nargs='*', help=_("applicationId in the form APPID"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
@@ -71,27 +66,14 @@ def main():
     allapps = metadata.read_metadata(xref=True)
     apps = common.read_app_args(options.appid, allapps, False)
 
-    if options.list and options.to is not None:
-        parser.error(_("Cannot use --list and --to at the same time"))
-
-    if options.to is not None and options.to not in SUPPORTED_FORMATS:
-        parser.error(_("Unsupported metadata format, use: --to [{supported}]")
-                     .format(supported=' '.join(SUPPORTED_FORMATS)))
-
     for appid, app in apps.items():
         path = app.metadatapath
         base, ext = common.get_extension(path)
-        if not options.to and ext not in SUPPORTED_FORMATS:
+        if ext != "yml":
             logging.info(_("Ignoring {ext} file at '{path}'").format(ext=ext, path=path))
             continue
-        elif options.to is not None:
-            logging.info(_("Rewriting '{appid}' to '{path}'").format(appid=appid, path=options.to))
         else:
             logging.info(_("Rewriting '{appid}'").format(appid=appid))
-
-        to_ext = ext
-        if options.to is not None:
-            to_ext = options.to
 
         if options.list:
             if not proper_format(app):
@@ -109,14 +91,12 @@ def main():
             newbuilds.append(new)
         app.builds = newbuilds
 
-        try:
-            metadata.write_metadata(base + '.' + to_ext, app)
-            # remove old format metadata if there was  a format change
-            # and rewriting to the new format worked
-            if ext != to_ext:
-                os.remove(path)
-        finally:
-            pass
+        # rewrite to temporary file before overwriting existsing
+        # file in case there's a bug in write_metadata
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = os.path.join(tmpdir, os.path.basename(path))
+            metadata.write_metadata(tmp_path, app)
+            shutil.move(tmp_path, path)
 
     logging.debug(_("Finished"))
 

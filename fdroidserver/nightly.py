@@ -248,7 +248,6 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         config += "keypass = '%s'\n" % PASSWORD
         config += "keydname = '%s'\n" % DISTINGUISHED_NAME
         config += "make_current_version_link = False\n"
-        config += "accepted_formats = ('txt', 'yml')\n"
         config += "update_stats = True\n"
         with open('config.py', 'w') as fp:
             fp.write(config)
