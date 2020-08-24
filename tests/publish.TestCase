@@ -50,6 +50,9 @@ class PublishTest(unittest.TestCase):
         self.assertEqual('dc3b169e', publish.key_alias('org.test.testy'))
         self.assertEqual('78688a0f', publish.key_alias('org.org.org'))
 
+        self.assertEqual('ee8807d2', publish.key_alias("org.schabi.newpipe"))
+        self.assertEqual('b53c7e11', publish.key_alias("de.grobox.liberario"))
+
         publish.config = {'keyaliases': {'yep.app': '@org.org.org',
                                          'com.example.app': '1a2b3c4d'}}
         self.assertEqual('78688a0f', publish.key_alias('yep.app'))
@@ -161,6 +164,31 @@ class PublishTest(unittest.TestCase):
         os.chdir(testdir)
         with mock.patch.object(sys, 'argv', ['fdroid fakesubcommand']):
             publish.main()
+
+    def test_check_for_key_collisions(self):
+        from fdroidserver.metadata import App
+        common.config = {}
+        common.fill_config_defaults(common.config)
+        publish.config = common.config
+
+        # We cannot really test the negative case here as there doesn't seem
+        # to be a md5 collision with text input around.
+        # So we just test we don't trigger an exception here and get back the same number
+        # of aliases as we put in apps.
+        randomappids = [
+            "org.fdroid.fdroid",
+            "a.b.c",
+            "u.v.w.x.y.z",
+            "lpzpkgqwyevnmzvrlaazhgardbyiyoybyicpmifkyrxkobljoz",
+            "vuslsm.jlrevavz.qnbsenmizhur.lprwbjiujtu.ekiho",
+            "w.g.g.w.p.v.f.v.gvhyz",
+            "nlozuqer.ufiinmrbjqboogsjgmpfks.dywtpcpnyssjmqz",
+        ]
+        allapps = {}
+        for appid in randomappids:
+            allapps[appid] = App()
+        allaliases = publish.check_for_key_collisions(allapps)
+        self.assertEqual(len(randomappids), len(allaliases))
 
 
 if __name__ == "__main__":

@@ -153,6 +153,33 @@ def status_update_json(generatedKeys, signedApks):
     common.write_status_json(output)
 
 
+def check_for_key_collisions(allapps):
+    """
+    Make sure there's no collision in keyaliases from apps.
+    It was suggested at
+    https://dev.guardianproject.info/projects/bazaar/wiki/FDroid_Audit
+    that a package could be crafted, such that it would use the same signing
+    key as an existing app. While it may be theoretically possible for such a
+    colliding package ID to be generated, it seems virtually impossible that
+    the colliding ID would be something that would be a) a valid package ID,
+    and b) a sane-looking ID that would make its way into the repo.
+    Nonetheless, to be sure, before publishing we check that there are no
+    collisions, and refuse to do any publishing if that's the case...
+    :param allapps a dict of all apps to process
+    :return: a list of all aliases corresponding to allapps
+    """
+    allaliases = []
+    for appid in allapps:
+        m = hashlib.md5()  # nosec just used to generate a keyalias
+        m.update(appid.encode('utf-8'))
+        keyalias = m.hexdigest()[:8]
+        if keyalias in allaliases:
+            logging.error(_("There is a keyalias collision - publishing halted"))
+            sys.exit(1)
+        allaliases.append(keyalias)
+    return allaliases
+
+
 def main():
     global config, options
 
@@ -199,29 +226,11 @@ def main():
         logging.error("Config error - missing '{0}'".format(config['keystore']))
         sys.exit(1)
 
-    # It was suggested at
-    #    https://dev.guardianproject.info/projects/bazaar/wiki/FDroid_Audit
-    # that a package could be crafted, such that it would use the same signing
-    # key as an existing app. While it may be theoretically possible for such a
-    # colliding package ID to be generated, it seems virtually impossible that
-    # the colliding ID would be something that would be a) a valid package ID,
-    # and b) a sane-looking ID that would make its way into the repo.
-    # Nonetheless, to be sure, before publishing we check that there are no
-    # collisions, and refuse to do any publishing if that's the case...
     allapps = metadata.read_metadata()
     vercodes = common.read_pkg_args(options.appid, True)
     signed_apks = dict()
-    new_key_aliases = []
     generated_keys = dict()
-    allaliases = []
-    for appid in allapps:
-        m = hashlib.md5()  # nosec just used to generate a keyalias
-        m.update(appid.encode('utf-8'))
-        keyalias = m.hexdigest()[:8]
-        if keyalias in allaliases:
-            logging.error(_("There is a keyalias collision - publishing halted"))
-            sys.exit(1)
-        allaliases.append(keyalias)
+    allaliases = check_for_key_collisions(allapps)
     logging.info(ngettext('{0} app, {1} key aliases',
                           '{0} apps, {1} key aliases', len(allapps)).format(len(allapps), len(allaliases)))
 
@@ -313,26 +322,8 @@ def main():
                     skipsigning = True
 
             # Now we sign with the F-Droid key.
-
-            # Figure out the key alias name we'll use. Only the first 8
-            # characters are significant, so we'll use the first 8 from
-            # the MD5 of the app's ID and hope there are no collisions.
-            # If a collision does occur later, we're going to have to
-            # come up with a new algorithm, AND rename all existing keys
-            # in the keystore!
             if not skipsigning:
-                if appid in config['keyaliases']:
-                    # For this particular app, the key alias is overridden...
-                    keyalias = config['keyaliases'][appid]
-                    if keyalias.startswith('@'):
-                        m = hashlib.md5()  # nosec just used to generate a keyalias
-                        m.update(keyalias[1:].encode('utf-8'))
-                        keyalias = m.hexdigest()[:8]
-                else:
-                    m = hashlib.md5()  # nosec just used to generate a keyalias
-                    m.update(appid.encode('utf-8'))
-                    keyalias = m.hexdigest()[:8]
-                    new_key_aliases.append(keyalias)
+                keyalias = key_alias(appid)
                 logging.info("Key alias: " + keyalias)
 
                 # See if we already have a key for this application, and
