@@ -141,13 +141,11 @@ def store_stats_fdroid_signing_key_fingerprints(appids, indent=None):
     sign_sig_key_fingerprint_list(jar_file)
 
 
-def status_update_json(newKeyAliases, generatedKeys, signedApks):
+def status_update_json(generatedKeys, signedApks):
     """Output a JSON file with metadata about this run"""
 
     logging.debug(_('Outputting JSON'))
     output = common.setup_status_output(start_timestamp)
-    if newKeyAliases:
-        output['newKeyAliases'] = newKeyAliases
     if generatedKeys:
         output['generatedKeys'] = generatedKeys
     if signedApks:
@@ -364,9 +362,7 @@ def main():
                     p = FDroidPopen(cmd, envs=env_vars)
                     if p.returncode != 0:
                         raise BuildException("Failed to generate key", p.output)
-                    if appid not in generated_keys:
-                        generated_keys[appid] = set()
-                    generated_keys[appid].add(appid)
+                    generated_keys[appid] = keyalias
 
                 signed_apk_path = os.path.join(output_dir, apkfilename)
                 if os.path.exists(signed_apk_path):
@@ -379,13 +375,14 @@ def main():
                 common.sign_apk(apkfile, signed_apk_path, keyalias)
                 if appid not in signed_apks:
                     signed_apks[appid] = []
-                signed_apks[appid].append(apkfile)
+                signed_apks[appid].append({"keyalias": keyalias,
+                                           "filename": apkfile})
 
                 publish_source_tarball(apkfilename, unsigned_dir, output_dir)
                 logging.info('Published ' + apkfilename)
 
     store_stats_fdroid_signing_key_fingerprints(allapps.keys())
-    status_update_json(new_key_aliases, generated_keys, signed_apks)
+    status_update_json(generated_keys, signed_apks)
     logging.info('published list signing-key fingerprints')
 
 
