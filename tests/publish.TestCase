@@ -171,10 +171,6 @@ class PublishTest(unittest.TestCase):
         common.fill_config_defaults(common.config)
         publish.config = common.config
 
-        # We cannot really test the negative case here as there doesn't seem
-        # to be a md5 collision with text input around.
-        # So we just test we don't trigger an exception here and get back the same number
-        # of aliases as we put in apps.
         randomappids = [
             "org.fdroid.fdroid",
             "a.b.c",
@@ -189,6 +185,10 @@ class PublishTest(unittest.TestCase):
             allapps[appid] = App()
         allaliases = publish.check_for_key_collisions(allapps)
         self.assertEqual(len(randomappids), len(allaliases))
+
+        allapps = {'tof.cv.mpp': App(), 'j6mX276h': App()}
+        self.assertEqual(publish.key_alias('tof.cv.mpp'), publish.key_alias('j6mX276h'))
+        self.assertRaises(SystemExit, publish.check_for_key_collisions, allapps)
 
     def test_create_key_if_not_existing(self):
         try:
