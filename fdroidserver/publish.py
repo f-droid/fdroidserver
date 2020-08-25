@@ -141,13 +141,11 @@ def store_stats_fdroid_signing_key_fingerprints(appids, indent=None):
     sign_sig_key_fingerprint_list(jar_file)
 
 
-def status_update_json(newKeyAliases, generatedKeys, signedApks):
+def status_update_json(generatedKeys, signedApks):
     """Output a JSON file with metadata about this run"""
 
     logging.debug(_('Outputting JSON'))
     output = common.setup_status_output(start_timestamp)
-    if newKeyAliases:
-        output['newKeyAliases'] = newKeyAliases
     if generatedKeys:
         output['generatedKeys'] = generatedKeys
     if signedApks:
@@ -155,15 +153,79 @@ def status_update_json(newKeyAliases, generatedKeys, signedApks):
     common.write_status_json(output)
 
 
-def main():
+def check_for_key_collisions(allapps):
+    """
+    Make sure there's no collision in keyaliases from apps.
+    It was suggested at
+    https://dev.guardianproject.info/projects/bazaar/wiki/FDroid_Audit
+    that a package could be crafted, such that it would use the same signing
+    key as an existing app. While it may be theoretically possible for such a
+    colliding package ID to be generated, it seems virtually impossible that
+    the colliding ID would be something that would be a) a valid package ID,
+    and b) a sane-looking ID that would make its way into the repo.
+    Nonetheless, to be sure, before publishing we check that there are no
+    collisions, and refuse to do any publishing if that's the case...
+    :param allapps a dict of all apps to process
+    :return: a list of all aliases corresponding to allapps
+    """
+    allaliases = []
+    for appid in allapps:
+        m = hashlib.md5()  # nosec just used to generate a keyalias
+        m.update(appid.encode('utf-8'))
+        keyalias = m.hexdigest()[:8]
+        if keyalias in allaliases:
+            logging.error(_("There is a keyalias collision - publishing halted"))
+            sys.exit(1)
+        allaliases.append(keyalias)
+    return allaliases
 
+
+def create_key_if_not_existing(keyalias):
+    """
+    Ensures a signing key with the given keyalias exists
+    :return: boolean, True if a new key was created, false otherwise
+    """
+    # See if we already have a key for this application, and
+    # if not generate one...
+    env_vars = {'LC_ALL': 'C.UTF-8',
+                'FDROID_KEY_STORE_PASS': config['keystorepass'],
+                'FDROID_KEY_PASS': config.get('keypass', "")}
+    cmd = [config['keytool'], '-list',
+           '-alias', keyalias, '-keystore', config['keystore'],
+           '-storepass:env', 'FDROID_KEY_STORE_PASS']
+    if config['keystore'] == 'NONE':
+        cmd += config['smartcardoptions']
+    p = FDroidPopen(cmd, envs=env_vars)
+    if p.returncode != 0:
+        logging.info("Key does not exist - generating...")
+        cmd = [config['keytool'], '-genkey',
+               '-keystore', config['keystore'],
+               '-alias', keyalias,
+               '-keyalg', 'RSA', '-keysize', '2048',
+               '-validity', '10000',
+               '-storepass:env', 'FDROID_KEY_STORE_PASS',
+               '-dname', config['keydname']]
+        if config['keystore'] == 'NONE':
+            cmd += config['smartcardoptions']
+        else:
+            cmd += '-keypass:env', 'FDROID_KEY_PASS'
+        p = FDroidPopen(cmd, envs=env_vars)
+        if p.returncode != 0:
+            raise BuildException("Failed to generate key", p.output)
+        return True
+    else:
+        return False
+
+
+def main():
     global config, options
 
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] "
-                            "[APPID[:VERCODE] [APPID[:VERCODE] ...]]")
+                                  "[APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))
+    parser.add_argument("appid", nargs='*',
+                        help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -201,29 +263,11 @@ def main():
         logging.error("Config error - missing '{0}'".format(config['keystore']))
         sys.exit(1)
 
-    # It was suggested at
-    #    https://dev.guardianproject.info/projects/bazaar/wiki/FDroid_Audit
-    # that a package could be crafted, such that it would use the same signing
-    # key as an existing app. While it may be theoretically possible for such a
-    # colliding package ID to be generated, it seems virtually impossible that
-    # the colliding ID would be something that would be a) a valid package ID,
-    # and b) a sane-looking ID that would make its way into the repo.
-    # Nonetheless, to be sure, before publishing we check that there are no
-    # collisions, and refuse to do any publishing if that's the case...
     allapps = metadata.read_metadata()
     vercodes = common.read_pkg_args(options.appid, True)
     signed_apks = dict()
-    new_key_aliases = []
     generated_keys = dict()
-    allaliases = []
-    for appid in allapps:
-        m = hashlib.md5()  # nosec just used to generate a keyalias
-        m.update(appid.encode('utf-8'))
-        keyalias = m.hexdigest()[:8]
-        if keyalias in allaliases:
-            logging.error(_("There is a keyalias collision - publishing halted"))
-            sys.exit(1)
-        allaliases.append(keyalias)
+    allaliases = check_for_key_collisions(allapps)
     logging.info(ngettext('{0} app, {1} key aliases',
                           '{0} apps, {1} key aliases', len(allapps)).format(len(allapps), len(allaliases)))
 
@@ -315,58 +359,12 @@ def main():
                     skipsigning = True
 
             # Now we sign with the F-Droid key.
-
-            # Figure out the key alias name we'll use. Only the first 8
-            # characters are significant, so we'll use the first 8 from
-            # the MD5 of the app's ID and hope there are no collisions.
-            # If a collision does occur later, we're going to have to
-            # come up with a new algorithm, AND rename all existing keys
-            # in the keystore!
             if not skipsigning:
-                if appid in config['keyaliases']:
-                    # For this particular app, the key alias is overridden...
-                    keyalias = config['keyaliases'][appid]
-                    if keyalias.startswith('@'):
-                        m = hashlib.md5()  # nosec just used to generate a keyalias
-                        m.update(keyalias[1:].encode('utf-8'))
-                        keyalias = m.hexdigest()[:8]
-                else:
-                    m = hashlib.md5()  # nosec just used to generate a keyalias
-                    m.update(appid.encode('utf-8'))
-                    keyalias = m.hexdigest()[:8]
-                    new_key_aliases.append(keyalias)
+                keyalias = key_alias(appid)
                 logging.info("Key alias: " + keyalias)
 
-                # See if we already have a key for this application, and
-                # if not generate one...
-                env_vars = {'LC_ALL': 'C.UTF-8',
-                            'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                            'FDROID_KEY_PASS': config.get('keypass', "")}
-                cmd = [config['keytool'], '-list',
-                       '-alias', keyalias, '-keystore', config['keystore'],
-                       '-storepass:env', 'FDROID_KEY_STORE_PASS']
-                if config['keystore'] == 'NONE':
-                    cmd += config['smartcardoptions']
-                p = FDroidPopen(cmd, envs=env_vars)
-                if p.returncode != 0:
-                    logging.info("Key does not exist - generating...")
-                    cmd = [config['keytool'], '-genkey',
-                           '-keystore', config['keystore'],
-                           '-alias', keyalias,
-                           '-keyalg', 'RSA', '-keysize', '2048',
-                           '-validity', '10000',
-                           '-storepass:env', 'FDROID_KEY_STORE_PASS',
-                           '-dname', config['keydname']]
-                    if config['keystore'] == 'NONE':
-                        cmd += config['smartcardoptions']
-                    else:
-                        cmd += '-keypass:env', 'FDROID_KEY_PASS'
-                    p = FDroidPopen(cmd, envs=env_vars)
-                    if p.returncode != 0:
-                        raise BuildException("Failed to generate key", p.output)
-                    if appid not in generated_keys:
-                        generated_keys[appid] = set()
-                    generated_keys[appid].add(appid)
+                if create_key_if_not_existing(keyalias):
+                    generated_keys[appid] = keyalias
 
                 signed_apk_path = os.path.join(output_dir, apkfilename)
                 if os.path.exists(signed_apk_path):
@@ -379,13 +377,14 @@ def main():
                 common.sign_apk(apkfile, signed_apk_path, keyalias)
                 if appid not in signed_apks:
                     signed_apks[appid] = []
-                signed_apks[appid].append(apkfile)
+                signed_apks[appid].append({"keyalias": keyalias,
+                                           "filename": apkfile})
 
                 publish_source_tarball(apkfilename, unsigned_dir, output_dir)
                 logging.info('Published ' + apkfilename)
 
     store_stats_fdroid_signing_key_fingerprints(allapps.keys())
-    status_update_json(new_key_aliases, generated_keys, signed_apks)
+    status_update_json(generated_keys, signed_apks)
     logging.info('published list signing-key fingerprints')
 
 

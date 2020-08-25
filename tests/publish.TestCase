@@ -50,6 +50,9 @@ class PublishTest(unittest.TestCase):
         self.assertEqual('dc3b169e', publish.key_alias('org.test.testy'))
         self.assertEqual('78688a0f', publish.key_alias('org.org.org'))
 
+        self.assertEqual('ee8807d2', publish.key_alias("org.schabi.newpipe"))
+        self.assertEqual('b53c7e11', publish.key_alias("de.grobox.liberario"))
+
         publish.config = {'keyaliases': {'yep.app': '@org.org.org',
                                          'com.example.app': '1a2b3c4d'}}
         self.assertEqual('78688a0f', publish.key_alias('yep.app'))
@@ -161,6 +164,62 @@ class PublishTest(unittest.TestCase):
         os.chdir(testdir)
         with mock.patch.object(sys, 'argv', ['fdroid fakesubcommand']):
             publish.main()
+
+    def test_check_for_key_collisions(self):
+        from fdroidserver.metadata import App
+        common.config = {}
+        common.fill_config_defaults(common.config)
+        publish.config = common.config
+
+        randomappids = [
+            "org.fdroid.fdroid",
+            "a.b.c",
+            "u.v.w.x.y.z",
+            "lpzpkgqwyevnmzvrlaazhgardbyiyoybyicpmifkyrxkobljoz",
+            "vuslsm.jlrevavz.qnbsenmizhur.lprwbjiujtu.ekiho",
+            "w.g.g.w.p.v.f.v.gvhyz",
+            "nlozuqer.ufiinmrbjqboogsjgmpfks.dywtpcpnyssjmqz",
+        ]
+        allapps = {}
+        for appid in randomappids:
+            allapps[appid] = App()
+        allaliases = publish.check_for_key_collisions(allapps)
+        self.assertEqual(len(randomappids), len(allaliases))
+
+        allapps = {'tof.cv.mpp': App(), 'j6mX276h': App()}
+        self.assertEqual(publish.key_alias('tof.cv.mpp'), publish.key_alias('j6mX276h'))
+        self.assertRaises(SystemExit, publish.check_for_key_collisions, allapps)
+
+    def test_create_key_if_not_existing(self):
+        try:
+            import jks
+            import jks.util
+        except ImportError:
+            self.skipTest("pyjks not installed")
+        common.config = {}
+        common.fill_config_defaults(common.config)
+        publish.config = common.config
+        publish.config['keystorepass'] = '123456'
+        publish.config['keypass'] = '654321'
+        publish.config['keystore'] = "keystore.jks"
+        publish.config['keydname'] = 'CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US'
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        keystore = jks.KeyStore.new("jks", [])
+        keystore.save(publish.config['keystore'], publish.config['keystorepass'])
+
+        self.assertTrue(publish.create_key_if_not_existing("newalias"))
+        # The second time we try that, a new key should not be created
+        self.assertFalse(publish.create_key_if_not_existing("newalias"))
+        self.assertTrue(publish.create_key_if_not_existing("anotheralias"))
+
+        keystore = jks.KeyStore.load(publish.config['keystore'], publish.config['keystorepass'])
+        self.assertCountEqual(keystore.private_keys, ["newalias", "anotheralias"])
+        for alias, pk in keystore.private_keys.items():
+            self.assertFalse(pk.is_decrypted())
+            pk.decrypt(publish.config['keypass'])
+            self.assertTrue(pk.is_decrypted())
+            self.assertEqual(jks.util.RSA_ENCRYPTION_OID, pk.algorithm_oid)
 
 
 if __name__ == "__main__":

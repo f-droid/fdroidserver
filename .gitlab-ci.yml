@@ -6,7 +6,7 @@ variables:
 test:
   image: registry.gitlab.com/fdroid/ci-images-server:latest
   script:
-    - $pip install -e .
+    - $pip install -e .[test]
     - cd tests
     - ./complete-ci-tests
 
