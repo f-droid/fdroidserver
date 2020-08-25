@@ -134,7 +134,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
             return sorted(list(obj))
         if isinstance(obj, datetime):
             # Java prefers milliseconds
-            # we also need to accound for time zone/daylight saving time
+            # we also need to account for time zone/daylight saving time
             return int(calendar.timegm(obj.timetuple()) * 1000)
         if isinstance(obj, dict):
             d = collections.OrderedDict()

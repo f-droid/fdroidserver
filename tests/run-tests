@@ -608,6 +608,29 @@ grep -F 'info.guardianproject.urzip_100_b4964fd.apk' repo/index-v1.json
 ! grep -F 'info.guardianproject.urzip_100_b4964fd.apk' repo/index.xml
 
 #------------------------------------------------------------------------------#
+echo_header "test for added date being set correctly for repo and archive"
+REPOROOT=`create_test_dir`
+cd $REPOROOT
+fdroid_init_with_prebuilt_keystore
+mkdir -p {repo,archive,metadata,stats}
+cp $WORKSPACE/tests/repo/com.politedroid_5.apk archive
+cp $WORKSPACE/tests/repo/com.politedroid_6.apk repo
+cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata
+#TODO: the timestamp of the oldest apk in the file should be used, even if that
+# doesn't exist anymore
+echo "com.politedroid_4.apk com.politedroid 2016-01-01" > stats/known_apks.txt
+echo "com.politedroid_5.apk com.politedroid 2017-01-01" >> stats/known_apks.txt
+echo "com.politedroid_6.apk com.politedroid 2018-01-01" >> stats/known_apks.txt
+sed -i -e 's/ArchivePolicy:.*/ArchivePolicy: 1 versions/' metadata/com.politedroid.yml
+# Get the java ms timestamp from UTC time
+timestamp=$(date -u --date=2017-01-01 +%s)000
+
+$fdroid update --pretty --nosign
+grep -F "\"added\": $timestamp" repo/index-v1.json
+# the archive will have the added timestamp for the app and for the apk, both need to be there
+if [ $(grep -F "\"added\": $timestamp" archive/index-v1.json | wc -l) == 2 ]; then true; else false;fi
+
+#------------------------------------------------------------------------------#
 echo_header "test whatsnew from fastlane without CVC set"
 REPOROOT=`create_test_dir`
 cd $REPOROOT
