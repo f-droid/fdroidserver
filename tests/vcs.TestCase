@@ -57,7 +57,7 @@ class VCSTest(unittest.TestCase):
         # and now we want to use this clone as a source repo for fdroid build
         config = {}
         os.mkdir("build")
-        config['sdk_path'] = os.getenv('ANDROID_HOME')
+        config['sdk_path'] = 'MOCKPATH'
         config['ndk_paths'] = {'r10d': os.getenv('ANDROID_NDK_HOME')}
         config['build_tools'] = 'FAKE_BUILD_TOOLS_VERSION'
         config['java_paths'] = {'fake': 'fake'}
