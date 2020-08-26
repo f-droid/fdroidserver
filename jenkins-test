@@ -77,9 +77,4 @@ sed -i '/^repo_pubkey = /d' config.py
 # when everything is copied over to run on SIGN machine
 ../fdroid signindex --verbose
 
-../fdroid rewritemeta --quiet
-git --no-pager diff
-git status
-ls -lR cache || true
-
 ../fdroid checkupdates --auto --autoonly --commit
