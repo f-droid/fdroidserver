@@ -234,7 +234,7 @@ def scan_source(build_dir, build=metadata.Build()):
             return ignoreproblem(what, path_in_build_dir)
         if todelete(path_in_build_dir):
             return removeproblem(what, path_in_build_dir, filepath)
-        if 'src/test' in filepath or '/test/' in filepath:
+        if 'src/test' in filepath or '/test/' in path_in_build_dir:
             return warnproblem(what, path_in_build_dir)
         if options and 'json' in vars(options) and options.json:
             json_per_build['errors'].append([what, path_in_build_dir])
