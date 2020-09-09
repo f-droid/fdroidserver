@@ -778,7 +778,7 @@ $fdroid server update --local-copy-dir=$LOCALCOPYDIR
 # check that --android-home fails when dir does not exist or is not a dir
 
 REPOROOT=`create_test_dir`
-KEYSTORE=$REPOROOT/keystore.jks
+KEYSTORE=$REPOROOT/keystore.p12
 cd $REPOROOT
 set +e
 $fdroid init --keystore $KEYSTORE --android-home /opt/fakeandroidhome
@@ -805,7 +805,7 @@ echo_header "check that fake android home passes 'fdroid init'"
 REPOROOT=`create_test_dir`
 FAKE_ANDROID_HOME=`create_test_dir`
 create_fake_android_home $FAKE_ANDROID_HOME
-KEYSTORE=$REPOROOT/keystore.jks
+KEYSTORE=$REPOROOT/keystore.p12
 cd $REPOROOT
 $fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME
 
@@ -820,7 +820,7 @@ else
     FAKE_ANDROID_HOME=`create_test_dir`
     create_fake_android_home $FAKE_ANDROID_HOME
     rm -f $FAKE_ANDROID_HOME/build-tools/*/aapt
-    KEYSTORE=$REPOROOT/keystore.jks
+    KEYSTORE=$REPOROOT/keystore.p12
     cd $REPOROOT
     set +e
     $fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME
@@ -835,7 +835,7 @@ echo_header "check that --android-home overrides ANDROID_HOME"
 REPOROOT=`create_test_dir`
 FAKE_ANDROID_HOME=`create_test_dir`
 create_fake_android_home $FAKE_ANDROID_HOME
-KEYSTORE=$REPOROOT/keystore.jks
+KEYSTORE=$REPOROOT/keystore.p12
 cd $REPOROOT
 $fdroid init --keystore $KEYSTORE --android-home $FAKE_ANDROID_HOME
 set +e
@@ -859,7 +859,7 @@ else
     echo_header "setup a new repo from scratch with keystore and android-home set on cmd line"
 
     REPOROOT=`create_test_dir`
-    KEYSTORE=$REPOROOT/keystore.jks
+    KEYSTORE=$REPOROOT/keystore.p12
     FAKE_ANDROID_HOME=`create_test_dir`
     create_fake_android_home $FAKE_ANDROID_HOME
     STORED_ANDROID_HOME=$ANDROID_HOME
@@ -916,7 +916,7 @@ grep -F '<application id=' repo/index.xml > /dev/null
 echo_header "setup a new repo from scratch and generate a keystore"
 
 REPOROOT=`create_test_dir`
-KEYSTORE=$REPOROOT/keystore.jks
+KEYSTORE=$REPOROOT/keystore.p12
 cd $REPOROOT
 $fdroid init --keystore $KEYSTORE
 test -e $KEYSTORE
@@ -935,7 +935,7 @@ grep -F '<application id=' repo/index.xml > /dev/null
 echo_header "setup a new repo manually and generate a keystore"
 
 REPOROOT=`create_test_dir`
-KEYSTORE=$REPOROOT/keystore.jks
+KEYSTORE=$REPOROOT/keystore.p12
 cd $REPOROOT
 cp $WORKSPACE/examples/fdroid-icon.png $REPOROOT/
 ! test -e $KEYSTORE
@@ -965,7 +965,7 @@ grep -F '<application id=' repo/index.xml > /dev/null
 echo_header "setup a new repo from scratch, generate a keystore, then add APK and update"
 
 REPOROOT=`create_test_dir`
-KEYSTORE=$REPOROOT/keystore.jks
+KEYSTORE=$REPOROOT/keystore.p12
 cd $REPOROOT
 $fdroid init --keystore $KEYSTORE
 test -e $KEYSTORE
@@ -1001,7 +1001,7 @@ test ! -e NONE
 echo_header "setup a new repo with no keystore, add APK, and update"
 
 REPOROOT=`create_test_dir`
-KEYSTORE=$REPOROOT/keystore.jks
+KEYSTORE=$REPOROOT/keystore.p12
 cd $REPOROOT
 touch fdroid-icon.png
 mkdir repo
@@ -1167,7 +1167,7 @@ echo_header "sign binary repo in offline box, then publishing from online box"
 
 if have_git_2_3; then
     OFFLINE_ROOT=`create_test_dir`
-    KEYSTORE=$WORKSPACE/tests/keystore.jks
+    KEYSTORE=$WORKSPACE/tests/keystore.p12
     LOCAL_COPY_DIR=`create_test_dir`/fdroid
     mkdir $LOCAL_COPY_DIR
     ONLINE_ROOT=`create_test_dir`

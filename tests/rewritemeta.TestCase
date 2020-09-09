@@ -1,15 +1,5 @@
 #!/usr/bin/env python3
 
-#
-#  command which created the keystore used in this test case:
-#
-#  $ for ALIAS in 'repokey a163ec9b d2d51ff2 dc3b169e 78688a0f'; \
-#        do keytool -genkey -keystore dummy-keystore.jks \
-#        -alias $ALIAS -keyalg 'RSA' -keysize '2048' \
-#        -validity '10000' -storepass 123456 \
-#        -keypass 123456 -dname 'CN=test, OU=F-Droid'; done
-#
-
 import inspect
 import logging
 import optparse
