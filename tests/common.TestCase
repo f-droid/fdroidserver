@@ -633,15 +633,13 @@ class CommonTest(unittest.TestCase):
                              fdroidserver.common.apk_signer_fingerprint_short(apkfile))
 
     def test_sign_apk(self):
-        try:
-            fdroidserver.common.find_sdk_tools_cmd('aapt')
-            fdroidserver.common.find_sdk_tools_cmd('zipalign')
-        except fdroidserver.exception.FDroidException:
-            print('\n\nSKIPPING test_sign_apk, zipalign is not installed!\n')
-            return
-
         fdroidserver.common.config = None
         config = fdroidserver.common.read_config(fdroidserver.common.options)
+        try:
+            fdroidserver.common.find_sdk_tools_cmd('zipalign')
+        except fdroidserver.exception.FDroidException:
+            self.skipTest('SKIPPING test_sign_apk, zipalign not installed!')
+
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         config['keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
@@ -653,10 +651,10 @@ class CommonTest(unittest.TestCase):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         unsigned = os.path.join(testdir, 'urzip-release-unsigned.apk')
         signed = os.path.join(testdir, 'urzip-release.apk')
+        shutil.copy(os.path.join(self.basedir, 'urzip-release-unsigned.apk'), testdir)
 
         self.assertFalse(fdroidserver.common.verify_apk_signature(unsigned))
 
-        shutil.copy(os.path.join(self.basedir, 'urzip-release-unsigned.apk'), testdir)
         fdroidserver.common.sign_apk(unsigned, signed, config['keyalias'])
         self.assertTrue(os.path.isfile(signed))
         self.assertFalse(os.path.isfile(unsigned))
@@ -667,20 +665,37 @@ class CommonTest(unittest.TestCase):
         signed = os.path.join(testdir, 'duplicate.permisssions_9999999.apk')
         shutil.copy(os.path.join(self.basedir, 'repo', 'duplicate.permisssions_9999999.apk'),
                     os.path.join(unsigned))
-        fdroidserver.common.apk_strip_signatures(unsigned, strip_manifest=True)
+        fdroidserver.common.apk_strip_v1_signatures(unsigned, strip_manifest=True)
         fdroidserver.common.sign_apk(unsigned, signed, config['keyalias'])
         self.assertTrue(os.path.isfile(signed))
         self.assertFalse(os.path.isfile(unsigned))
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
-        try:
-            fdroidserver.common.find_sdk_tools_cmd('aapt')
-            self.assertEqual(18, fdroidserver.common.get_minSdkVersion(signed))
-        except fdroidserver.exception.FDroidException:
-            print('\n\nSKIPPING test_sign_apk min SDK check, aapt is not installed!\n')
-            return
+        self.assertEqual('18', fdroidserver.common._get_androguard_APK(signed).get_min_sdk_version())
+
+    def test_sign_apk_targetsdk_30(self):
+        fdroidserver.common.config = None
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
+        config['keyalias'] = 'sova'
+        config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+
+        shutil.copy(os.path.join(self.basedir, 'minimal_targetsdk_30_unsigned.apk'), testdir)
+        unsigned = os.path.join(testdir, 'minimal_targetsdk_30_unsigned.apk')
+        signed = os.path.join(testdir, 'minimal_targetsdk_30.apk')
+
+        self.assertFalse(fdroidserver.common.verify_apk_signature(unsigned))
+        fdroidserver.common.sign_apk(unsigned, signed, config['keyalias'])
+
+        self.assertTrue(os.path.isfile(signed))
+        self.assertFalse(os.path.isfile(unsigned))
+        self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
+        # verify it has a v2 signature
+        self.assertTrue(fdroidserver.common._get_androguard_APK(signed).is_signed_v2())
 
     def test_get_apk_id(self):
-
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -775,54 +790,40 @@ class CommonTest(unittest.TestCase):
             nc = fdroidserver.common.get_native_code(apkfilename)
             self.assertEqual(native_code, nc)
 
-    def test_get_minSdkVersion_androguard(self):
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('bad-unicode-πÇÇ现代通用字-български-عربي1.apk')
-        self.assertEqual(4, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_1.apk')
-        self.assertEqual(14, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_2.apk')
-        self.assertEqual(14, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_3.apk')
-        self.assertEqual(14, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_4.apk')
-        self.assertEqual(14, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('org.dyndns.fules.ck_20.apk')
-        self.assertEqual(7, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('urzip.apk')
-        self.assertEqual(4, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('urzip-badcert.apk')
-        self.assertEqual(4, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('urzip-badsig.apk')
-        self.assertEqual(4, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('urzip-release.apk')
-        self.assertEqual(4, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('urzip-release-unsigned.apk')
-        self.assertEqual(4, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('repo/com.politedroid_3.apk')
-        self.assertEqual(3, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('repo/com.politedroid_4.apk')
-        self.assertEqual(3, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('repo/com.politedroid_5.apk')
-        self.assertEqual(3, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('repo/com.politedroid_6.apk')
-        self.assertEqual(14, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('repo/obb.main.oldversion_1444412523.apk')
-        self.assertEqual(4, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('repo/obb.mainpatch.current_1619_another-release-key.apk')
-        self.assertEqual(4, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('repo/obb.mainpatch.current_1619.apk')
-        self.assertEqual(4, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('repo/obb.main.twoversions_1101613.apk')
-        self.assertEqual(4, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('repo/obb.main.twoversions_1101615.apk')
-        self.assertEqual(4, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('repo/obb.main.twoversions_1101617.apk')
-        self.assertEqual(4, minSdkVersion)
-        minSdkVersion = fdroidserver.common.get_minSdkVersion('repo/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk')
-        self.assertEqual(4, minSdkVersion)
+    def test_get_sdkversions_androguard(self):
+        """This is a sanity test that androguard isn't broken"""
+        def get_minSdkVersion(apkfile):
+            apk = fdroidserver.common._get_androguard_APK(apkfile)
+            return int(apk.get_min_sdk_version())
 
-        with self.assertRaises(FDroidException):
-            fdroidserver.common.get_minSdkVersion('nope')
+        def get_targetSdkVersion(apkfile):
+            apk = fdroidserver.common._get_androguard_APK(apkfile)
+            return int(apk.get_target_sdk_version())
+
+        self.assertEqual(4, get_minSdkVersion('bad-unicode-πÇÇ现代通用字-български-عربي1.apk'))
+        self.assertEqual(14, get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_1.apk'))
+        self.assertEqual(14, get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_2.apk'))
+        self.assertEqual(14, get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_3.apk'))
+        self.assertEqual(14, get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_4.apk'))
+        self.assertEqual(7, get_minSdkVersion('org.dyndns.fules.ck_20.apk'))
+        self.assertEqual(4, get_minSdkVersion('urzip.apk'))
+        self.assertEqual(4, get_minSdkVersion('urzip-badcert.apk'))
+        self.assertEqual(4, get_minSdkVersion('urzip-badsig.apk'))
+        self.assertEqual(4, get_minSdkVersion('urzip-release.apk'))
+        self.assertEqual(4, get_minSdkVersion('urzip-release-unsigned.apk'))
+        self.assertEqual(3, get_minSdkVersion('repo/com.politedroid_3.apk'))
+        self.assertEqual(3, get_minSdkVersion('repo/com.politedroid_4.apk'))
+        self.assertEqual(3, get_minSdkVersion('repo/com.politedroid_5.apk'))
+        self.assertEqual(14, get_minSdkVersion('repo/com.politedroid_6.apk'))
+        self.assertEqual(4, get_minSdkVersion('repo/obb.main.oldversion_1444412523.apk'))
+        self.assertEqual(4, get_minSdkVersion('repo/obb.mainpatch.current_1619_another-release-key.apk'))
+        self.assertEqual(4, get_minSdkVersion('repo/obb.mainpatch.current_1619.apk'))
+        self.assertEqual(4, get_minSdkVersion('repo/obb.main.twoversions_1101613.apk'))
+        self.assertEqual(4, get_minSdkVersion('repo/obb.main.twoversions_1101615.apk'))
+        self.assertEqual(4, get_minSdkVersion('repo/obb.main.twoversions_1101617.apk'))
+        self.assertEqual(4, get_minSdkVersion('repo/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk'))
+
+        self.assertEqual(30, get_targetSdkVersion('minimal_targetsdk_30_unsigned.apk'))
 
     def test_apk_release_name(self):
         appid, vercode, sigfp = fdroidserver.common.apk_parse_release_filename('com.serwylo.lexica_905.apk')

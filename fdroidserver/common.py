@@ -69,9 +69,8 @@ from .asynchronousfilereader import AsynchronousFileReader
 # The path to this fdroidserver distribution
 FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
-# this is the build-tools version, aapt has a separate version that
-# has to be manually set in test_aapt_version()
-MINIMUM_AAPT_VERSION = '26.0.0'
+# We need 26.0.0 for aapt but that doesn't ship with apksigner, so take the next higher version
+MINIMUM_BUILD_TOOLS_VERSION = '26.0.1'
 
 VERCODE_OPERATION_RE = re.compile(r'^([ 0-9/*+-]|%c)+$')
 
@@ -111,7 +110,7 @@ default_config = {
         'r16b': None,
     },
     'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
-    'build_tools': MINIMUM_AAPT_VERSION,
+    'build_tools': MINIMUM_BUILD_TOOLS_VERSION,
     'force_build_tools': False,
     'java_paths': None,
     'scan_binary': False,
@@ -466,13 +465,13 @@ def test_aapt_version(aapt):
             # the Debian package has the version string like "v0.2-23.0.2"
             too_old = False
             if '.' in bugfix:
-                if LooseVersion(bugfix) < LooseVersion(MINIMUM_AAPT_VERSION):
+                if LooseVersion(bugfix) < LooseVersion(MINIMUM_BUILD_TOOLS_VERSION):
                     too_old = True
             elif LooseVersion('.'.join((major, minor, bugfix))) < LooseVersion('0.2.4062713'):
                 too_old = True
             if too_old:
                 logging.warning(_("'{aapt}' is too old, fdroid requires build-tools-{version} or newer!")
-                                .format(aapt=aapt, version=MINIMUM_AAPT_VERSION))
+                                .format(aapt=aapt, version=MINIMUM_BUILD_TOOLS_VERSION))
         else:
             logging.warning(_('Unknown version of aapt, might cause problems: ') + output)
 
@@ -2333,7 +2332,7 @@ def _get_androguard_APK(apkfile):
     try:
         from androguard.core.bytecodes.apk import APK
     except ImportError:
-        raise FDroidException("androguard library is not installed and aapt not present")
+        raise FDroidException("androguard library is not installed")
 
     return APK(apkfile)
 
@@ -2508,21 +2507,6 @@ def get_native_code(apkfile):
             if m:
                 archset.add(m.group(1))
     return sorted(list(archset))
-
-
-def get_minSdkVersion(apkfile):
-    """Extract the minimum supported Android SDK from an APK using androguard
-
-    :param apkfile: path to an APK file.
-    :returns: the integer representing the SDK version
-    """
-
-    try:
-        apk = _get_androguard_APK(apkfile)
-    except FileNotFoundError:
-        raise FDroidException(_('Reading minSdkVersion failed: "{apkfilename}"')
-                              .format(apkfilename=apkfile))
-    return int(apk.get_min_sdk_version())
 
 
 class PopenResult:
@@ -2954,7 +2938,7 @@ def metadata_find_developer_signing_files(appid, vercode):
         return None
 
 
-def apk_strip_signatures(signed_apk, strip_manifest=False):
+def apk_strip_v1_signatures(signed_apk, strip_manifest=False):
     """Removes signatures from APK.
 
     :param signed_apk: path to apk file.
@@ -3037,36 +3021,73 @@ def apk_extract_signatures(apkpath, outdir, manifest=True):
 def sign_apk(unsigned_path, signed_path, keyalias):
     """Sign and zipalign an unsigned APK, then save to a new file, deleting the unsigned
 
-    android-18 (4.3) finally added support for reasonable hash
-    algorithms, like SHA-256, before then, the only options were MD5
-    and SHA1 :-/ This aims to use SHA-256 when the APK does not target
+    Use apksigner for making v2 and v3 signature for apks with targetSDK >=30 as
+    otherwise they won't be installable on Android 11/R.
+
+    Otherwise use jarsigner for v1 only signatures until we have apksig v2/v3
+    signature transplantig support.
+
+    When using jarsigner we need to manually select the hash algorithm,
+    apksigner does this automatically. Apksigner also does the zipalign for us.
+
+    SHA-256 support was added in android-18 (4.3), before then, the only options were MD5
+    and SHA1. This aims to use SHA-256 when the APK does not target
     older Android versions, and is therefore safe to do so.
 
     https://issuetracker.google.com/issues/36956587
     https://android-review.googlesource.com/c/platform/libcore/+/44491
 
     """
-
-    if get_minSdkVersion(unsigned_path) < 18:
-        signature_algorithm = ['-sigalg', 'SHA1withRSA', '-digestalg', 'SHA1']
+    apk = _get_androguard_APK(unsigned_path)
+    if int(apk.get_target_sdk_version()) >= 30:
+        if config['keystore'] == 'NONE':
+            replacements = {'-storetype': '--ks-type',
+                            '-providerName': '--ks-provider-name',
+                            '-providerClass': '--ks-provider-class',
+                            '-providerArg': '--ks-provider-arg'}
+            signing_args = [replacements.get(n, n) for n in config['smartcardoptions']]
+        else:
+            signing_args = ['--key-pass', 'env:FDROID_KEY_PASS']
+        if not set_command_in_config('apksigner'):
+            config['apksigner'] = find_sdk_tools_cmd('apksigner')
+        cmd = [config['apksigner'], 'sign',
+               '--ks', config['keystore'],
+               '--ks-pass', 'env:FDROID_KEY_STORE_PASS']
+        cmd += signing_args
+        cmd += ['--ks-key-alias', keyalias,
+                '--in', unsigned_path,
+                '--out', signed_path]
+        p = FDroidPopen(cmd, envs={
+            'FDROID_KEY_STORE_PASS': config['keystorepass'],
+            'FDROID_KEY_PASS': config.get('keypass', "")})
+        if p.returncode != 0:
+            raise BuildException(_("Failed to sign application"), p.output)
+        os.remove(unsigned_path)
     else:
-        signature_algorithm = ['-sigalg', 'SHA256withRSA', '-digestalg', 'SHA-256']
 
-    cmd = [config['jarsigner'], '-keystore', config['keystore'],
-           '-storepass:env', 'FDROID_KEY_STORE_PASS']
-    if config['keystore'] == 'NONE':
-        cmd += config['smartcardoptions']
-    else:
-        cmd += '-keypass:env', 'FDROID_KEY_PASS'
-    p = FDroidPopen(cmd + signature_algorithm + [unsigned_path, keyalias],
-                    envs={
-                        'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                        'FDROID_KEY_PASS': config.get('keypass', "")})
-    if p.returncode != 0:
-        raise BuildException(_("Failed to sign application"), p.output)
+        if int(apk.get_min_sdk_version()) < 18:
+            signature_algorithm = ['-sigalg', 'SHA1withRSA', '-digestalg', 'SHA1']
+        else:
+            signature_algorithm = ['-sigalg', 'SHA256withRSA', '-digestalg', 'SHA-256']
+        if config['keystore'] == 'NONE':
+            signing_args = config['smartcardoptions']
+        else:
+            signing_args = ['-keypass:env', 'FDROID_KEY_PASS']
 
-    _zipalign(unsigned_path, signed_path)
-    os.remove(unsigned_path)
+        cmd = [config['jarsigner'], '-keystore', config['keystore'],
+               '-storepass:env', 'FDROID_KEY_STORE_PASS']
+        cmd += signing_args
+        cmd += signature_algorithm
+        cmd += [unsigned_path, keyalias]
+        print(cmd)
+        p = FDroidPopen(cmd, envs={
+            'FDROID_KEY_STORE_PASS': config['keystorepass'],
+            'FDROID_KEY_PASS': config.get('keypass', "")})
+        if p.returncode != 0:
+            raise BuildException(_("Failed to sign application"), p.output)
+
+        _zipalign(unsigned_path, signed_path)
+        os.remove(unsigned_path)
 
 
 def verify_apks(signed_apk, unsigned_apk, tmp_dir):
