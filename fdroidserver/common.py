@@ -3064,9 +3064,14 @@ def sign_apk(unsigned_path, signed_path, keyalias):
     apk = _get_androguard_APK(unsigned_path)
     if int(apk.get_target_sdk_version()) >= 30:
         if config['keystore'] == 'NONE':
+            # NOTE: apksigner doesn't like -providerName/--provider-name at all, don't use
+            #       apksigner documents the options as --ks-provider-class and --ks-provider-arg
+            #       those seem to be accepted but fail when actually making a signature with
+            #       weird internal exceptions. Those options actually work.
+            #       From: https://geoffreymetais.github.io/code/key-signing/#scripting
             replacements = {'-storetype': '--ks-type',
-                            '-providerClass': '--ks-provider-class',
-                            '-providerArg': '--ks-provider-arg'}
+                            '-providerClass': '--provider-class',
+                            '-providerArg': '--provider-arg'}
             signing_args = [replacements.get(n, n) for n in config['smartcardoptions']]
         else:
             signing_args = ['--key-pass', 'env:FDROID_KEY_PASS']
