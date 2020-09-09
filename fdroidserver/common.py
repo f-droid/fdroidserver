@@ -69,8 +69,10 @@ from .asynchronousfilereader import AsynchronousFileReader
 # The path to this fdroidserver distribution
 FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
-# We need 26.0.0 for aapt but that doesn't ship with apksigner, so take the next higher version
-MINIMUM_BUILD_TOOLS_VERSION = '26.0.1'
+# this is the build-tools version, aapt has a separate version that
+# has to be manually set in test_aapt_version()
+MINIMUM_AAPT_BUILD_TOOLS_VERSION = '26.0.0'
+MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION = '26.0.1'
 
 VERCODE_OPERATION_RE = re.compile(r'^([ 0-9/*+-]|%c)+$')
 
@@ -110,7 +112,7 @@ default_config = {
         'r16b': None,
     },
     'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
-    'build_tools': MINIMUM_BUILD_TOOLS_VERSION,
+    'build_tools': MINIMUM_AAPT_BUILD_TOOLS_VERSION,
     'force_build_tools': False,
     'java_paths': None,
     'scan_binary': False,
@@ -320,8 +322,7 @@ def read_config(opts, config_file='config.py'):
         config['smartcardoptions'] = re.sub(r'\s+', r' ', config['smartcardoptions']).split(' ')
     elif not smartcardoptions and 'keystore' in config and config['keystore'] == 'NONE':
         # keystore='NONE' means use smartcard, these are required defaults
-        config['smartcardoptions'] = ['-storetype', 'PKCS11', '-providerName',
-                                      'SunPKCS11-OpenSC', '-providerClass',
+        config['smartcardoptions'] = ['-storetype', 'PKCS11', '-providerClass',
                                       'sun.security.pkcs11.SunPKCS11',
                                       '-providerArg', 'opensc-fdroid.cfg']
 
@@ -415,6 +416,28 @@ def assert_config_keystore(config):
                               + "you can create one using: fdroid update --create-key")
 
 
+def find_apksigner():
+    """
+    Returns the best version of apksigner following this algorithm:
+    * use config['apksigner'] if set
+    * try to find apksigner in path
+    * find apksigner in build-tools starting from newest installed going down to MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION
+    :return: path to apksigner or None if no version is found
+    """
+    if set_command_in_config('apksigner'):
+        return config['apksigner']
+    build_tools_path = os.path.join(config['sdk_path'], 'build-tools')
+    for f in sorted(os.listdir(build_tools_path), reverse=True):
+        if LooseVersion(f) < LooseVersion(MINIMUM_AAPT_BUILD_TOOLS_VERSION):
+            return None
+        if os.path.exists(os.path.join(build_tools_path, f, 'apksigner')):
+            apksigner = os.path.join(build_tools_path, f, 'apksigner')
+            logging.info("Using %s " % apksigner)
+            # memoize result
+            config['apksigner'] = apksigner
+            return config['apksigner']
+
+
 def find_sdk_tools_cmd(cmd):
     '''find a working path to a tool from the Android SDK'''
 
@@ -465,13 +488,13 @@ def test_aapt_version(aapt):
             # the Debian package has the version string like "v0.2-23.0.2"
             too_old = False
             if '.' in bugfix:
-                if LooseVersion(bugfix) < LooseVersion(MINIMUM_BUILD_TOOLS_VERSION):
+                if LooseVersion(bugfix) < LooseVersion(MINIMUM_AAPT_BUILD_TOOLS_VERSION):
                     too_old = True
             elif LooseVersion('.'.join((major, minor, bugfix))) < LooseVersion('0.2.4062713'):
                 too_old = True
             if too_old:
                 logging.warning(_("'{aapt}' is too old, fdroid requires build-tools-{version} or newer!")
-                                .format(aapt=aapt, version=MINIMUM_BUILD_TOOLS_VERSION))
+                                .format(aapt=aapt, version=MINIMUM_AAPT_BUILD_TOOLS_VERSION))
         else:
             logging.warning(_('Unknown version of aapt, might cause problems: ') + output)
 
@@ -3042,15 +3065,14 @@ def sign_apk(unsigned_path, signed_path, keyalias):
     if int(apk.get_target_sdk_version()) >= 30:
         if config['keystore'] == 'NONE':
             replacements = {'-storetype': '--ks-type',
-                            '-providerName': '--ks-provider-name',
                             '-providerClass': '--ks-provider-class',
                             '-providerArg': '--ks-provider-arg'}
             signing_args = [replacements.get(n, n) for n in config['smartcardoptions']]
         else:
             signing_args = ['--key-pass', 'env:FDROID_KEY_PASS']
-        if not set_command_in_config('apksigner'):
-            config['apksigner'] = find_sdk_tools_cmd('apksigner')
-        cmd = [config['apksigner'], 'sign',
+        if not find_apksigner():
+            raise BuildException(_("apksigner not found, it's required for signing!"))
+        cmd = [find_apksigner(), 'sign',
                '--ks', config['keystore'],
                '--ks-pass', 'env:FDROID_KEY_STORE_PASS']
         cmd += signing_args
@@ -3079,7 +3101,6 @@ def sign_apk(unsigned_path, signed_path, keyalias):
         cmd += signing_args
         cmd += signature_algorithm
         cmd += [unsigned_path, keyalias]
-        print(cmd)
         p = FDroidPopen(cmd, envs={
             'FDROID_KEY_STORE_PASS': config['keystorepass'],
             'FDROID_KEY_PASS': config.get('keypass', "")})

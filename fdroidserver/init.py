@@ -194,7 +194,7 @@ def main():
         common.write_to_config(test_config, 'repo_keyalias', '1')  # seems to be the default
         disable_in_config('keypass', 'never used with smartcard')
         common.write_to_config(test_config, 'smartcardoptions',
-                               ('-storetype PKCS11 -providerName SunPKCS11-OpenSC '
+                               ('-storetype PKCS11 '
                                 + '-providerClass sun.security.pkcs11.SunPKCS11 '
                                 + '-providerArg opensc-fdroid.cfg'))
         # find opensc-pkcs11.so
