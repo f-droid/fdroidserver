@@ -140,8 +140,8 @@ class MetadataTest(unittest.TestCase):
             frommeta = dict(apps[appid])
             self.assertTrue(appid in apps)
             with open(savepath, 'r') as f:
-                frompickle = yaml.load(f, Loader=SafeLoader)
-            self.assertEqual(frommeta, frompickle)
+                from_yaml = yaml.load(f, Loader=SafeLoader)
+            self.assertEqual(frommeta, from_yaml)
             # comment above assert and uncomment below to update test
             # files when new metadata fields are added
             # with open(savepath, 'w') as f:
