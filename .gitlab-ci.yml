@@ -202,7 +202,7 @@ fedora_latest:
     - wget --no-verbose -O tools.zip https://dl.google.com/android/repository/tools_r25.2.5-linux.zip
     - unzip -q tools.zip
     - rm tools.zip
-    - export AAPT_VERSION=`sed -n "s,^MINIMUM_AAPT_VERSION\s*=\s*['\"]\(.*\)[['\"],\1,p" fdroidserver/common.py`
+    - export BUILD_TOOLS_VERSION=`sed -n "s,^MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION\s*=\s*['\"]\(.*\)[['\"],\1,p" fdroidserver/common.py`
     - export JAVA_HOME=/etc/alternatives/jre
     - export ANDROID_HOME=`pwd`/android-sdk
     - mkdir $ANDROID_HOME
@@ -214,7 +214,7 @@ fedora_latest:
     - mkdir ~/.android
     - touch ~/.android/repositories.cfg
     - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platform-tools"
-    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;$AAPT_VERSION"
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;$BUILD_TOOLS_VERSION"
     - chown -R testuser .
     - cd tests
     - su testuser --login --command
