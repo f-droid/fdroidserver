@@ -26,6 +26,11 @@ try:
 except ImportError:
     from yaml import SafeLoader
 
+try:
+    from yaml import CFullLoader as FullLoader
+except ImportError:
+    from yaml import FullLoader
+
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
 print('localmodule: ' + localmodule)
@@ -408,7 +413,7 @@ class UpdateTest(unittest.TestCase):
         os.chdir(os.path.join(localmodule, 'tests'))
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
         os.chdir(testdir)
-        shutil.copytree(os.path.join(self.basedir,'repo'), 'repo')
+        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
@@ -594,13 +599,10 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.update.config = config
         os.chdir(os.path.join(localmodule, 'tests'))
-        if os.path.basename(os.getcwd()) != 'tests':
-            raise Exception('This test must be run in the "tests/" subdir')
 
         config['ndk_paths'] = dict()
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-
         fdroidserver.update.options = type('', (), {})()
         fdroidserver.update.options.clean = True
         fdroidserver.update.options.rename_apks = False
@@ -641,7 +643,7 @@ class UpdateTest(unittest.TestCase):
             #     yaml.dump(apk, f, default_flow_style=False)
 
             with open(savepath, 'r') as f:
-                from_yaml = yaml.load(f, Loader=SafeLoader)
+                from_yaml = yaml.load(f, Loader=FullLoader)
             self.maxDiff = None
             self.assertEqual(apk, from_yaml)
 
