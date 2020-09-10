@@ -66,12 +66,17 @@ debian_testing:
     - apt-get install
         aapt
         androguard
+        apksigner
         fdroidserver
         git
         gnupg
         python3-defusedxml
         python3-setuptools
         zipalign
+    # Debian has apksigner depend on binfmt support which isn't very docker friendly
+    # We create a shell wrapper instead
+    - echo -e '#!/bin/sh\njava -jar /usr/lib/android-sdk/build-tools/debian/apksigner.jar "$@"' > /usr/local/bin/apksigner
+    - chmod +x /usr/local/bin/apksigner
     - python3 -c 'import fdroidserver'
     - python3 -c 'import androguard'
     - cd tests
