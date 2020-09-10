@@ -212,6 +212,10 @@ class UpdateTest(unittest.TestCase):
         shutil.copytree(os.path.join(self.basedir, 'triple-t-2'), tmptestsdir)
         os.chdir(tmptestsdir)
 
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
         fdroidserver.update.options = fdroidserver.common.options
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
@@ -344,9 +348,10 @@ class UpdateTest(unittest.TestCase):
 
     def testScanApksAndObbs(self):
         os.chdir(os.path.join(localmodule, 'tests'))
-        if os.path.basename(os.getcwd()) != 'tests':
-            raise Exception('This test must be run in the "tests/" subdir')
-
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
+        shutil.copytree(os.path.join(self.basedir, 'metadata'), 'metadata')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
@@ -401,9 +406,9 @@ class UpdateTest(unittest.TestCase):
     def test_apkcache_json(self):
         """test the migration from pickle to json"""
         os.chdir(os.path.join(localmodule, 'tests'))
-        if os.path.basename(os.getcwd()) != 'tests':
-            raise Exception('This test must be run in the "tests/" subdir')
-
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        shutil.copytree(os.path.join(self.basedir,'repo'), 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
@@ -442,9 +447,6 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.update.config = config
         os.chdir(os.path.join(localmodule, 'tests'))
-        if os.path.basename(os.getcwd()) != 'tests':
-            raise Exception('This test must be run in the "tests/" subdir')
-
         try:
             config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
         except fdroidserver.exception.FDroidException:
@@ -748,6 +750,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
+        fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.delete_unknown = False
 
         knownapks = fdroidserver.common.KnownApks()
@@ -761,9 +764,10 @@ class UpdateTest(unittest.TestCase):
 
     def test_translate_per_build_anti_features(self):
         os.chdir(os.path.join(localmodule, 'tests'))
-        if os.path.basename(os.getcwd()) != 'tests':
-            raise Exception('This test must be run in the "tests/" subdir')
-
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
+        shutil.copytree(os.path.join(self.basedir, 'metadata'), 'metadata')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
