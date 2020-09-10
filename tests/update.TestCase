@@ -21,6 +21,22 @@ from binascii import unhexlify
 from distutils.version import LooseVersion
 from testcommon import TmpCwd
 
+try:
+    from yaml import CSafeLoader as SafeLoader
+except ImportError:
+    from yaml import SafeLoader
+
+try:
+    from yaml import CFullLoader as FullLoader
+except ImportError:
+    try:
+        # FullLoader is available from PyYaml 5.1+, as we don't load user
+        # controlled data here, it's okay to fall back the unsafe older
+        # Loader
+        from yaml import FullLoader
+    except ImportError:
+        from yaml import Loader as FullLoader
+
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
 print('localmodule: ' + localmodule)
@@ -207,6 +223,10 @@ class UpdateTest(unittest.TestCase):
         shutil.copytree(os.path.join(self.basedir, 'triple-t-2'), tmptestsdir)
         os.chdir(tmptestsdir)
 
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
         fdroidserver.update.options = fdroidserver.common.options
 
         apps = fdroidserver.metadata.read_metadata(xref=True)
@@ -339,9 +359,10 @@ class UpdateTest(unittest.TestCase):
 
     def testScanApksAndObbs(self):
         os.chdir(os.path.join(localmodule, 'tests'))
-        if os.path.basename(os.getcwd()) != 'tests':
-            raise Exception('This test must be run in the "tests/" subdir')
-
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
+        shutil.copytree(os.path.join(self.basedir, 'metadata'), 'metadata')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
@@ -396,9 +417,9 @@ class UpdateTest(unittest.TestCase):
     def test_apkcache_json(self):
         """test the migration from pickle to json"""
         os.chdir(os.path.join(localmodule, 'tests'))
-        if os.path.basename(os.getcwd()) != 'tests':
-            raise Exception('This test must be run in the "tests/" subdir')
-
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
@@ -437,9 +458,6 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.update.config = config
         os.chdir(os.path.join(localmodule, 'tests'))
-        if os.path.basename(os.getcwd()) != 'tests':
-            raise Exception('This test must be run in the "tests/" subdir')
-
         try:
             config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
         except fdroidserver.exception.FDroidException:
@@ -466,17 +484,16 @@ class UpdateTest(unittest.TestCase):
 
             print('USE_ANDROGUARD', use_androguard)
 
-            try:
-                apksigner = fdroidserver.common.find_sdk_tools_cmd('apksigner')
-                if use_androguard and apksigner:  # v2 parsing needs both
+            apksigner = fdroidserver.common.find_apksigner()
+            if apksigner:
+                if use_androguard:  # v2 parsing needs both
                     config['apksigner'] = apksigner
                     apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
                     self.assertIsNone(apk_info.get('maxSdkVersion'))
                     self.assertEqual(apk_info.get('versionName'), 'v2-only')
                     self.assertEqual(apk_info.get('versionCode'), 2)
-            except fdroidserver.exception.FDroidException:
+            else:
                 print('WARNING: skipping v2-only test since apksigner cannot be found')
-
             apk_info = fdroidserver.update.scan_apk('repo/v1.v2.sig_1020.apk')
             self.assertIsNone(apk_info.get('maxSdkVersion'))
             self.assertEqual(apk_info.get('versionName'), 'v1+2')
@@ -587,13 +604,10 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.update.config = config
         os.chdir(os.path.join(localmodule, 'tests'))
-        if os.path.basename(os.getcwd()) != 'tests':
-            raise Exception('This test must be run in the "tests/" subdir')
 
         config['ndk_paths'] = dict()
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-
         fdroidserver.update.options = type('', (), {})()
         fdroidserver.update.options.clean = True
         fdroidserver.update.options.rename_apks = False
@@ -634,7 +648,7 @@ class UpdateTest(unittest.TestCase):
             #     yaml.dump(apk, f, default_flow_style=False)
 
             with open(savepath, 'r') as f:
-                from_yaml = yaml.load(f)
+                from_yaml = yaml.load(f, Loader=FullLoader)
             self.maxDiff = None
             self.assertEqual(apk, from_yaml)
 
@@ -743,6 +757,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
+        fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.delete_unknown = False
 
         knownapks = fdroidserver.common.KnownApks()
@@ -756,9 +771,10 @@ class UpdateTest(unittest.TestCase):
 
     def test_translate_per_build_anti_features(self):
         os.chdir(os.path.join(localmodule, 'tests'))
-        if os.path.basename(os.getcwd()) != 'tests':
-            raise Exception('This test must be run in the "tests/" subdir')
-
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
+        shutil.copytree(os.path.join(self.basedir, 'metadata'), 'metadata')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
@@ -844,7 +860,7 @@ class UpdateTest(unittest.TestCase):
             self.assertEqual('Internet', app['Categories'][0])
             break
         with open(testfile) as fp:
-            data = yaml.load(fp)
+            data = yaml.load(fp, Loader=SafeLoader)
         self.assertEqual('urzip', data['Name'])
         self.assertEqual('urzip', data['Summary'])
 
@@ -943,7 +959,7 @@ class UpdateTest(unittest.TestCase):
                     '''))
             fdroidserver.update.create_metadata_from_template(apk)
             with open(os.path.join('metadata', 'rocks.janicerand.yml')) as f:
-                metadata_content = yaml.load(f)
+                metadata_content = yaml.load(f, Loader=SafeLoader)
                 self.maxDiff = None
                 self.assertDictEqual(metadata_content,
                                      {'ArchivePolicy': '',
@@ -1050,7 +1066,7 @@ class UpdateTest(unittest.TestCase):
             apps = {app.id: app}
             with open(os.path.join('build', app.id, 'FUNDING.yml'), 'w') as fp:
                 fp.write(line)
-            data = yaml.load(line)
+            data = yaml.load(line, Loader=SafeLoader)
             fdroidserver.update.insert_funding_yml_donation_links(apps)
             if 'liberapay' in data:
                 self.assertEqual(data['liberapay'], app.get('Liberapay'))
@@ -1080,7 +1096,7 @@ class UpdateTest(unittest.TestCase):
 
     def test_sanitize_funding_yml(self):
         with open(os.path.join(self.basedir, 'funding-usernames.yaml')) as fp:
-            data = yaml.safe_load(fp)
+            data = yaml.load(fp, Loader=SafeLoader)
         for k, entries in data.items():
             for entry in entries:
                 if k in 'custom':

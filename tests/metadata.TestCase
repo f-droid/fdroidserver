@@ -18,6 +18,11 @@ import textwrap
 from collections import OrderedDict
 from unittest import mock
 
+try:
+    from yaml import CSafeLoader as SafeLoader
+except ImportError:
+    from yaml import SafeLoader
+
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
 print('localmodule: ' + localmodule)
@@ -103,7 +108,7 @@ class MetadataTest(unittest.TestCase):
     def test_valid_funding_yml_regex(self):
         """Check the regex can find all the cases"""
         with open(os.path.join(self.basedir, 'funding-usernames.yaml')) as fp:
-            data = yaml.safe_load(fp)
+            data = yaml.load(fp, Loader=SafeLoader)
 
         for k, entries in data.items():
             for entry in entries:
@@ -135,8 +140,8 @@ class MetadataTest(unittest.TestCase):
             frommeta = dict(apps[appid])
             self.assertTrue(appid in apps)
             with open(savepath, 'r') as f:
-                frompickle = yaml.load(f)
-            self.assertEqual(frommeta, frompickle)
+                from_yaml = yaml.load(f, Loader=SafeLoader)
+            self.assertEqual(frommeta, from_yaml)
             # comment above assert and uncomment below to update test
             # files when new metadata fields are added
             # with open(savepath, 'w') as f:

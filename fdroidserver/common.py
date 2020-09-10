@@ -429,7 +429,11 @@ def find_apksigner():
     if set_command_in_config('apksigner'):
         return config['apksigner']
     build_tools_path = os.path.join(config['sdk_path'], 'build-tools')
+    if not os.path.isdir(build_tools_path):
+        return None
     for f in sorted(os.listdir(build_tools_path), reverse=True):
+        if not os.path.isdir(os.path.join(build_tools_path, f)):
+            continue
         if LooseVersion(f) < LooseVersion(MINIMUM_AAPT_BUILD_TOOLS_VERSION):
             return None
         if os.path.exists(os.path.join(build_tools_path, f, 'apksigner')):
