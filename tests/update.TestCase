@@ -21,6 +21,11 @@ from binascii import unhexlify
 from distutils.version import LooseVersion
 from testcommon import TmpCwd
 
+try:
+    from yaml import CSafeLoader as SafeLoader
+except ImportError:
+    from yaml import SafeLoader
+
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
 print('localmodule: ' + localmodule)
@@ -634,7 +639,7 @@ class UpdateTest(unittest.TestCase):
             #     yaml.dump(apk, f, default_flow_style=False)
 
             with open(savepath, 'r') as f:
-                from_yaml = yaml.load(f)
+                from_yaml = yaml.load(f, Loader=SafeLoader)
             self.maxDiff = None
             self.assertEqual(apk, from_yaml)
 
@@ -844,7 +849,7 @@ class UpdateTest(unittest.TestCase):
             self.assertEqual('Internet', app['Categories'][0])
             break
         with open(testfile) as fp:
-            data = yaml.load(fp)
+            data = yaml.load(fp, Loader=SafeLoader)
         self.assertEqual('urzip', data['Name'])
         self.assertEqual('urzip', data['Summary'])
 
@@ -943,7 +948,7 @@ class UpdateTest(unittest.TestCase):
                     '''))
             fdroidserver.update.create_metadata_from_template(apk)
             with open(os.path.join('metadata', 'rocks.janicerand.yml')) as f:
-                metadata_content = yaml.load(f)
+                metadata_content = yaml.load(f, Loader=SafeLoader)
                 self.maxDiff = None
                 self.assertDictEqual(metadata_content,
                                      {'ArchivePolicy': '',
@@ -1050,7 +1055,7 @@ class UpdateTest(unittest.TestCase):
             apps = {app.id: app}
             with open(os.path.join('build', app.id, 'FUNDING.yml'), 'w') as fp:
                 fp.write(line)
-            data = yaml.load(line)
+            data = yaml.load(line, Loader=SafeLoader)
             fdroidserver.update.insert_funding_yml_donation_links(apps)
             if 'liberapay' in data:
                 self.assertEqual(data['liberapay'], app.get('Liberapay'))
@@ -1080,7 +1085,7 @@ class UpdateTest(unittest.TestCase):
 
     def test_sanitize_funding_yml(self):
         with open(os.path.join(self.basedir, 'funding-usernames.yaml')) as fp:
-            data = yaml.safe_load(fp)
+            data = yaml.load(fp, Loader=SafeLoader)
         for k, entries in data.items():
             for entry in entries:
                 if k in 'custom':
