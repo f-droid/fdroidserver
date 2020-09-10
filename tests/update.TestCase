@@ -484,17 +484,16 @@ class UpdateTest(unittest.TestCase):
 
             print('USE_ANDROGUARD', use_androguard)
 
-            try:
-                apksigner = fdroidserver.common.find_sdk_tools_cmd('apksigner')
-                if use_androguard and apksigner:  # v2 parsing needs both
+            apksigner = fdroidserver.common.find_apksigner()
+            if apksigner:
+                if use_androguard:  # v2 parsing needs both
                     config['apksigner'] = apksigner
                     apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
                     self.assertIsNone(apk_info.get('maxSdkVersion'))
                     self.assertEqual(apk_info.get('versionName'), 'v2-only')
                     self.assertEqual(apk_info.get('versionCode'), 2)
-            except fdroidserver.exception.FDroidException:
+            else:
                 print('WARNING: skipping v2-only test since apksigner cannot be found')
-
             apk_info = fdroidserver.update.scan_apk('repo/v1.v2.sig_1020.apk')
             self.assertIsNone(apk_info.get('maxSdkVersion'))
             self.assertEqual(apk_info.get('versionName'), 'v1+2')
