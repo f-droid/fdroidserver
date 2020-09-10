@@ -675,6 +675,8 @@ class CommonTest(unittest.TestCase):
     def test_sign_apk_targetsdk_30(self):
         fdroidserver.common.config = None
         config = fdroidserver.common.read_config(fdroidserver.common.options)
+        if not fdroidserver.common.find_apksigner():
+            self.skipTest('SKIPPING as apksigner is not installed!')
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         config['keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
