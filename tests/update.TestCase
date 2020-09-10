@@ -29,7 +29,13 @@ except ImportError:
 try:
     from yaml import CFullLoader as FullLoader
 except ImportError:
-    from yaml import FullLoader
+    try:
+        # FullLoader is available from PyYaml 5.1+, as we don't load user
+        # controlled data here, it's okay to fall back the unsafe older
+        # Loader
+        from yaml import FullLoader
+    except ImportError:
+        from yaml import Loader as FullLoader
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
