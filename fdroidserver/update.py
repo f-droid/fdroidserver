@@ -2438,21 +2438,6 @@ def main():
         # Update known apks info...
         knownapks.writeifchanged()
 
-        # Generate latest apps data for widget
-        if os.path.exists(os.path.join('stats', 'latestapps.txt')):
-            data = ''
-            with open(os.path.join('stats', 'latestapps.txt'), 'r') as f:
-                for line in f:
-                    appid = line.rstrip()
-                    data += appid + "\t"
-                    app = apps[appid]
-                    data += app.Name + "\t"
-                    if app.icon is not None:
-                        data += app.icon + "\t"
-                    data += app.License + "\n"
-            with open(os.path.join(repodirs[0], 'latestapps.dat'), 'w') as f:
-                f.write(data)
-
     if cachechanged:
         write_cache(apkcache)
 
