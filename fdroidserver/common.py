@@ -3047,6 +3047,19 @@ def apk_extract_signatures(apkpath, outdir, manifest=True):
                     out_file.write(in_apk.read(f.filename))
 
 
+def get_min_sdk_version(apk):
+    """
+    This wraps the androguard function to always return and int and fall back to 1
+    if we can't get a valid minsdk version
+    :param apk: androguard apk object
+    :return: minsdk as int
+    """
+    try:
+        return int(apk.get_min_sdk_version())
+    except TypeError:
+        return 1
+
+
 def sign_apk(unsigned_path, signed_path, keyalias):
     """Sign and zipalign an unsigned APK, then save to a new file, deleting the unsigned
 
@@ -3068,7 +3081,7 @@ def sign_apk(unsigned_path, signed_path, keyalias):
 
     """
     apk = _get_androguard_APK(unsigned_path)
-    if int(apk.get_target_sdk_version()) >= 30:
+    if apk.get_effective_target_sdk_version() >= 30:
         if config['keystore'] == 'NONE':
             # NOTE: apksigner doesn't like -providerName/--provider-name at all, don't use
             #       apksigner documents the options as --ks-provider-class and --ks-provider-arg
@@ -3098,7 +3111,7 @@ def sign_apk(unsigned_path, signed_path, keyalias):
         os.remove(unsigned_path)
     else:
 
-        if int(apk.get_min_sdk_version()) < 18:
+        if get_min_sdk_version(apk) < 18:
             signature_algorithm = ['-sigalg', 'SHA1withRSA', '-digestalg', 'SHA1']
         else:
             signature_algorithm = ['-sigalg', 'SHA256withRSA', '-digestalg', 'SHA-256']
