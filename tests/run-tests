@@ -212,8 +212,6 @@ git clean -fdx
 # stick with known working commit, in case future commits break things for this code
 git reset --hard fea54e1161d5eb9eb1a54e26253ef84d3ab63705
 if [ -d $ANDROID_HOME/platforms/android-23 && -d $ANDROID_HOME/build-tools/23.0.3 ]; then
-    echo "build_tools = '`ls -1 $ANDROID_HOME/build-tools/ | sort -n | tail -1`'" > config.py
-    echo "force_build_tools = True" >> config.py
     $fdroid build --verbose org.fdroid.ci.test.app:300
 else
     echo 'WARNING: Skipping "fdroid build" test since android-23 is missing!'
