@@ -7,6 +7,8 @@ test:
   image: registry.gitlab.com/fdroid/ci-images-server:latest
   script:
     - $pip install -e .[test]
+    # the `fdroid build` test in tests/run-tests needs android-23
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-23"
     - cd tests
     - ./complete-ci-tests
 
