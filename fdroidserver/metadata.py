@@ -45,7 +45,7 @@ warnings_action = None
 VALID_USERNAME_REGEX = re.compile(r'^[a-z\d](?:[a-z\d/._-]){0,38}$', re.IGNORECASE)
 
 
-def warn_or_exception(value, cause=None):
+def _warn_or_exception(value, cause=None):
     '''output warning or Exception depending on -W'''
     if warnings_action == 'ignore':
         pass
@@ -396,8 +396,8 @@ class FieldValidator():
             values = [v]
         for v in values:
             if not self.compiled.match(v):
-                warn_or_exception(_("'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}")
-                                  .format(value=v, field=self.name, appid=appid, pattern=self.matching))
+                _warn_or_exception(_("'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}")
+                                   .format(value=v, field=self.name, appid=appid, pattern=self.matching))
 
 
 # Generic value types
@@ -562,7 +562,7 @@ class DescriptionFormatter:
             if txt.startswith("[["):
                 index = txt.find("]]")
                 if index == -1:
-                    warn_or_exception(_("Unterminated ]]"))
+                    _warn_or_exception(_("Unterminated ]]"))
                 url = txt[2:index]
                 if self.linkResolver:
                     url, urltext = self.linkResolver.resolve_description_link(url)
@@ -574,7 +574,7 @@ class DescriptionFormatter:
             else:
                 index = txt.find("]")
                 if index == -1:
-                    warn_or_exception(_("Unterminated ]"))
+                    _warn_or_exception(_("Unterminated ]"))
                 url = txt[1:index]
                 index2 = url.find(' ')
                 if index2 == -1:
@@ -583,7 +583,7 @@ class DescriptionFormatter:
                     urltxt = url[index2 + 1:]
                     url = url[:index2]
                     if url == urltxt:
-                        warn_or_exception(_("URL title is just the URL, use brackets: [URL]"))
+                        _warn_or_exception(_("URL title is just the URL, use brackets: [URL]"))
                 res_html += '<a href="' + url + '">' + html.escape(urltxt, quote=False) + '</a>'
                 res_plain += urltxt
                 if urltxt != url:
@@ -665,9 +665,9 @@ def parse_yaml_srclib(metadatapath):
                 'Prepare': None}
 
     if not os.path.exists(metadatapath):
-        warn_or_exception(_("Invalid scrlib metadata: '{file}' "
-                            "does not exist"
-                            .format(file=metadatapath)))
+        _warn_or_exception(_("Invalid scrlib metadata: '{file}' "
+                             "does not exist"
+                             .format(file=metadatapath)))
         return thisinfo
 
     with open(metadatapath, "r", encoding="utf-8") as f:
@@ -677,19 +677,19 @@ def parse_yaml_srclib(metadatapath):
                 raise yaml.error.YAMLError(_('{file} is blank or corrupt!')
                                            .format(file=metadatapath))
         except yaml.error.YAMLError as e:
-            warn_or_exception(_("Invalid srclib metadata: could not "
-                                "parse '{file}'")
-                              .format(file=metadatapath) + '\n'
-                              + fdroidserver.common.run_yamllint(metadatapath,
-                                                                 indent=4),
-                              cause=e)
+            _warn_or_exception(_("Invalid srclib metadata: could not "
+                                 "parse '{file}'")
+                               .format(file=metadatapath) + '\n'
+                               + fdroidserver.common.run_yamllint(metadatapath,
+                                                                  indent=4),
+                               cause=e)
             return thisinfo
 
     for key in data.keys():
         if key not in thisinfo.keys():
-            warn_or_exception(_("Invalid srclib metadata: unknown key "
-                                "'{key}' in '{file}'")
-                              .format(key=key, file=metadatapath))
+            _warn_or_exception(_("Invalid srclib metadata: unknown key "
+                                 "'{key}' in '{file}'")
+                               .format(key=key, file=metadatapath))
             return thisinfo
         else:
             if key == 'Subdir':
@@ -771,11 +771,11 @@ def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
     for metadatapath in metadatafiles:
         appid, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
         if appid != '.fdroid' and not fdroidserver.common.is_valid_package_name(appid):
-            warn_or_exception(_("{appid} from {path} is not a valid Java Package Name!")
-                              .format(appid=appid, path=metadatapath))
+            _warn_or_exception(_("{appid} from {path} is not a valid Java Package Name!")
+                               .format(appid=appid, path=metadatapath))
         if appid in apps:
-            warn_or_exception(_("Found multiple metadata files for {appid}")
-                              .format(appid=appid))
+            _warn_or_exception(_("Found multiple metadata files for {appid}")
+                               .format(appid=appid))
         app = parse_metadata(metadatapath, appid in check_vcs, refresh)
         check_metadata(app)
         apps[app.id] = app
@@ -787,8 +787,8 @@ def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
             try:
                 description_html(app.Description, DummyDescriptionResolver(apps))
             except MetaDataException as e:
-                warn_or_exception(_("Problem with description of {appid}: {error}")
-                                  .format(appid=appid, error=str(e)))
+                _warn_or_exception(_("Problem with description of {appid}: {error}")
+                                   .format(appid=appid, error=str(e)))
 
     return apps
 
@@ -921,7 +921,7 @@ def _decode_bool(s):
         return True
     if bool_false.match(s):
         return False
-    warn_or_exception(_("Invalid boolean '%s'") % s)
+    _warn_or_exception(_("Invalid boolean '%s'") % s)
 
 
 def parse_metadata(metadatapath, check_vcs=False, refresh=True):
@@ -939,8 +939,8 @@ def parse_metadata(metadatapath, check_vcs=False, refresh=True):
         with open(metadatapath, 'r') as mf:
             parse_yaml_metadata(mf, app)
     else:
-        warn_or_exception(_('Unknown metadata format: {path} (use: *.yml)')
-                          .format(path=metadatapath))
+        _warn_or_exception(_('Unknown metadata format: {path} (use: *.yml)')
+                           .format(path=metadatapath))
 
     if check_vcs and app.Repo:
         build_dir = fdroidserver.common.get_build_dir(app)
@@ -976,11 +976,11 @@ def parse_yaml_metadata(mf, app):
     try:
         yamldata = yaml.load(mf, Loader=SafeLoader)
     except yaml.YAMLError as e:
-        warn_or_exception(_("could not parse '{path}'")
-                          .format(path=mf.name) + '\n'
-                          + fdroidserver.common.run_yamllint(mf.name,
-                                                             indent=4),
-                          cause=e)
+        _warn_or_exception(_("could not parse '{path}'")
+                           .format(path=mf.name) + '\n'
+                           + fdroidserver.common.run_yamllint(mf.name,
+                                                              indent=4),
+                           cause=e)
 
     deprecated_in_yaml = ['Provides']
 
@@ -988,10 +988,10 @@ def parse_yaml_metadata(mf, app):
         for field in yamldata:
             if field not in yaml_app_fields:
                 if field not in deprecated_in_yaml:
-                    warn_or_exception(_("Unrecognised app field "
-                                        "'{fieldname}' in '{path}'")
-                                      .format(fieldname=field,
-                                              path=mf.name))
+                    _warn_or_exception(_("Unrecognised app field "
+                                         "'{fieldname}' in '{path}'")
+                                       .format(fieldname=field,
+                                               path=mf.name))
 
         for deprecated_field in deprecated_in_yaml:
             if deprecated_field in yamldata:
@@ -1010,7 +1010,7 @@ def parse_yaml_metadata(mf, app):
                     build_flag_set.add(build_flag)
                 for build_flag in build_flag_set:
                     if build_flag not in build_flags:
-                        warn_or_exception(
+                        _warn_or_exception(
                             _("Unrecognised build flag '{build_flag}' "
                               "in '{path}'").format(build_flag=build_flag,
                                                     path=mf.name))
@@ -1036,8 +1036,8 @@ def post_parse_yaml_metadata(yamldata):
             elif _flagtype is TYPE_INT:
                 # versionCode must be int
                 if not isinstance(build[flag], int):
-                    warn_or_exception(_('{build_flag} must be an integer, found: {value}')
-                                      .format(build_flag=flag, value=build[flag]))
+                    _warn_or_exception(_('{build_flag} must be an integer, found: {value}')
+                                       .format(build_flag=flag, value=build[flag]))
 
 
 def write_yaml(mf, app):
@@ -1172,7 +1172,7 @@ def write_metadata(metadatapath, app):
         else:
             raise FDroidException(_('ruamel.yaml not installed, can not write metadata.'))
 
-    warn_or_exception(_('Unknown metadata format: %s') % metadatapath)
+    _warn_or_exception(_('Unknown metadata format: %s') % metadatapath)
 
 
 def add_metadata_arguments(parser):
@@ -1196,4 +1196,4 @@ class DummyDescriptionResolver(DescriptionResolver):
     def resolve_description_link(self, appid):
         if appid in self.apps:
             return "fdroid.app:" + appid, "Dummy name - don't know yet"
-        warn_or_exception(_("Cannot resolve app id {appid}").format(appid=appid))
+        _warn_or_exception(_("Cannot resolve app id {appid}").format(appid=appid))
