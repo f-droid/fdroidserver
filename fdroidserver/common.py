@@ -115,7 +115,6 @@ default_config = {
     },
     'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
     'build_tools': MINIMUM_AAPT_BUILD_TOOLS_VERSION,
-    'force_build_tools': False,
     'java_paths': None,
     'scan_binary': False,
     'ant': "ant",

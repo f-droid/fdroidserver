@@ -36,10 +36,6 @@
 # Build tools version to be used
 # build_tools = "28.0.3"
 
-# Force all build to use the above version of build -tools, good for testing
-# builds without having all of the possible build-tools installed.
-# force_build_tools = True
-
 # Command or path to binary for running Ant
 # ant = "ant"
 

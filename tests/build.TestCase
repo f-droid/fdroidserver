@@ -6,7 +6,6 @@ import inspect
 import logging
 import optparse
 import os
-import re
 import shutil
 import sys
 import tempfile
@@ -58,22 +57,6 @@ class BuildTest(unittest.TestCase):
         if not os.path.exists(self.tmpdir):
             os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
-
-    def test_force_gradle_build_tools(self):
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
-        shutil.copytree(os.path.join('source-files'),
-                        os.path.join(testdir, 'source-files'))
-        teststring = 'FAKE_VERSION_FOR_TESTING'
-        fdroidserver.build.force_gradle_build_tools(testdir, teststring)
-        pattern = re.compile(r"buildToolsVersion[\s=]+'%s'\s+" % teststring)
-        for p in ('source-files/fdroid/fdroidclient/build.gradle',
-                  'source-files/Zillode/syncthing-silk/build.gradle',
-                  'source-files/open-keychain/open-keychain/build.gradle',
-                  'source-files/osmandapp/osmand/build.gradle',
-                  'source-files/open-keychain/open-keychain/OpenKeychain/build.gradle'):
-            with open(os.path.join(testdir, p), 'r') as f:
-                filedata = f.read()
-            self.assertIsNotNone(pattern.search(filedata))
 
     def test_get_apk_metadata(self):
         config = dict()

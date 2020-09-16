@@ -442,11 +442,6 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
         gradletasks += ['assemble' + flavours_cmd + 'Release']
 
-        if config['force_build_tools']:
-            force_gradle_build_tools(build_dir, config['build_tools'])
-            for name, number, libpath in srclibpaths:
-                force_gradle_build_tools(libpath, config['build_tools'])
-
         cmd = [config['gradle']]
         if build.gradleprops:
             cmd += ['-P' + kv for kv in build.gradleprops]
