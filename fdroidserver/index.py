@@ -566,7 +566,8 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
     with open(os.path.join(repodir, 'index.xml'), 'wb') as f:
         f.write(output)
 
-    if 'repo_keyalias' in common.config:
+    if 'repo_keyalias' in common.config \
+       or (common.options.nosign and 'repo_pubkey' in common.config):
 
         if common.options.nosign:
             logging.info(_("Creating unsigned index in preparation for signing"))

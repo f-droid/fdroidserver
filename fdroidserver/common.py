@@ -134,7 +134,7 @@ default_config = {
     'stats_to_carbon': False,
     'repo_maxage': 0,
     'build_server_always': False,
-    'keystore': 'keystore.jks',
+    'keystore': 'keystore.p12',
     'smartcardoptions': [],
     'char_limits': {
         'author': 256,
@@ -3425,6 +3425,7 @@ def genkeystore(localconfig):
            '-keyalg', 'RSA', '-keysize', '4096',
            '-sigalg', 'SHA256withRSA',
            '-validity', '10000',
+           '-storetype', 'pkcs12',
            '-storepass:env', 'FDROID_KEY_STORE_PASS',
            '-dname', localconfig['keydname'],
            '-J-Duser.language=en']

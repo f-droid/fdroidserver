@@ -1,12 +1,16 @@
 
 variables:
   pip: pip3 --timeout 100 --retries 10
+# speed up git checkout phase
+  GIT_DEPTH: 1
 
 
 test:
   image: registry.gitlab.com/fdroid/ci-images-server:latest
   script:
     - $pip install -e .[test]
+    # the `fdroid build` test in tests/run-tests needs android-23
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-23"
     - cd tests
     - ./complete-ci-tests
 
@@ -20,6 +24,7 @@ test:
 metadata_v0:
   image: registry.gitlab.com/fdroid/ci-images-server:latest
   variables:
+    GIT_DEPTH: 1000
     RELEASE_COMMIT_ID: 37f37ebd88e79ebe93239b72ed5503d5bde13f4b  # 2.0a~
   script:
     - git fetch https://gitlab.com/fdroid/fdroidserver.git $RELEASE_COMMIT_ID
