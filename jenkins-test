@@ -44,7 +44,7 @@ fi
 # this is set up and managed by jenkins-build-all
 cd $WORKSPACE/fdroiddata
 
-rm -f config.py keystore.jks
+rm -f config.py keystore.jks keystore.p12
 ../fdroid init --verbose
 
 export GNUPGHOME=$WORKSPACE/tests/gnupghome
