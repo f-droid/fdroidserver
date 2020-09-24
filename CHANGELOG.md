@@ -31,6 +31,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
   ([!657](https://gitlab.com/fdroid/fdroidserver/merge_requests/657))
 * build: deploying buildlogs with rsync
   ([!651](https://gitlab.com/fdroid/fdroidserver/merge_requests/651))
+* `fdroid init` generates PKCS12 keystores, drop Java < 8 support
+  ([!801](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/801))
 
 ### Removed
 * removed support for txt and json metadata
