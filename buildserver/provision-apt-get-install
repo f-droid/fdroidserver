@@ -111,6 +111,8 @@ packages="
  python3-smmap
  python3-yaml
  python3-ruamel.yaml
+ python3-pil
+ python3-paramiko
  quilt
  rsync
  scons
