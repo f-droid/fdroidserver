@@ -3178,7 +3178,14 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
                         return "duplicate filename found: " + info.filename
                     tmp.writestr(info, unsigned.read(info.filename))
 
-    verified = verify_apk_signature(tmp_apk)
+    # Use jarsigner to verify the v1 signature on the reproduced APK, as
+    # apksigner will reject the reproduced APK if the original also had a v2
+    # signature
+    try:
+        verify_jar_signature(tmp_apk)
+        verified = True
+    except Exception:
+        verified = False
 
     if not verified:
         logging.info("...NOT verified - {0}".format(tmp_apk))
