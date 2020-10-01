@@ -1,13 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # Golubev Alexander <fatzer2@gmail.com>, 2020.
+# Mingun <Alexander_Sergey@mail.ru>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-04-03 12:43+0000\n"
-"Last-Translator: Golubev Alexander <fatzer2@gmail.com>\n"
+"PO-Revision-Date: 2020-04-05 15:56+0000\n"
+"Last-Translator: Mingun <Alexander_Sergey@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -479,7 +480,7 @@ msgstr "Создание неподписанного индекса (подго
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "CurrentVersionCode {cv} is less than oldest build entry {versionCode}"
-msgstr ""
+msgstr "CurrentVersionCode {cv} меньше значения старейшей сборки {versionCode}"
 
 #: ../fdroidserver/nightly.py
 msgid "DEBUG_KEYSTORE is not set or the value is incomplete"
@@ -928,7 +929,7 @@ msgstr "Отобразить список файлов, формат котор�
 
 #: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
-msgstr ""
+msgstr "В URL f-droid.org включена локаль"
 
 #: ../fdroidserver/build.py
 msgid "Make the build stop on exceptions"
@@ -1085,7 +1086,7 @@ msgstr "Параметры"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
-msgstr ""
+msgstr "Вывод отчёта в формате JSON под именем файла APK."
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
@@ -1533,20 +1534,18 @@ msgid "Unnecessary trailing space"
 msgstr "Лишний пробел в конце строки"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-#| msgid "Unrecognised field '{field}' in {linedesc}"
+#, python-brace-format
 msgid "Unrecognised app field '{fieldname}' in '{path}'"
-msgstr "Неизвестное поле '{field}' в '{linedesc}'"
+msgstr "Неизвестное поле приложения '{fieldname}' в '{path}'"
 
 #: ../fdroidserver/metadata.py
 msgid "Unrecognised app field: "
 msgstr "Неизвестное поле в файле метаданных приложения: "
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-#| msgid "Unrecognised field '{field}' in {linedesc}"
+#, python-brace-format
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
-msgstr "Неизвестное поле '{field}' в '{linedesc}'"
+msgstr "Неизвестный флаг сборки '{build_flag}' в '{path}'"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2182,12 +2181,12 @@ msgstr "У {appid} нет имени! Будет использовано имя
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android Package Name!"
-msgstr ""
+msgstr "{appid} из {path} не годится в качестве имени Android Package!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Java Package Name!"
-msgstr ""
+msgstr "{appid} из {path} не годится в качестве имени пакета Java!"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -2208,12 +2207,12 @@ msgstr "{appid}: ревизия сборки не указана, сборка �
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'"
-msgstr ""
+msgstr "{appid}: {field} должно быть '{type}', а не '{fieldtype}'!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
-msgstr ""
+msgstr "{appid}: {field} должно быть '{type}', а не '{fieldtype}'!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
