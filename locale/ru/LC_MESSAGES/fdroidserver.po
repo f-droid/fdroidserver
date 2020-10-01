@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-04-05 15:56+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2020-04-06 07:19+0000\n"
+"Last-Translator: Golubev Alexander <fatzer2@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -2182,7 +2182,7 @@ msgstr "У {appid} нет имени! Будет использовано имя
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android Package Name!"
-msgstr "{appid} из {path} не годится в качестве имени Android Package!"
+msgstr "{appid} из {path} не годится в качестве имени пакета Android!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
 #, python-brace-format
