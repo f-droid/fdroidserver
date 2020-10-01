@@ -3,20 +3,21 @@
 # Julien Gontier <emeuraudeman@protonmail.com>, 2020.
 # anonymous <noreply@weblate.org>, 2020.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
+# Jeannette L <j.lavoie@net-c.ca>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-04-15 12:27+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2020-04-29 11:11+0000\n"
+"Last-Translator: Jeannette L <j.lavoie@net-c.ca>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.0.2\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -640,7 +641,7 @@ msgstr "Impossible d'aligner les applications"
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
-msgstr "La création du S3 Bucket a échoué: {url}"
+msgstr "La création du S3 Bucket a échoué : {url}"
 
 #: ../fdroidserver/common.py
 msgid "Failed to get APK manifest information"
@@ -659,7 +660,7 @@ msgstr "Échoument lors de la récupération des informations de l'APK, saut de 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Failed to install '{apkfilename}' on {dev}: {error}"
-msgstr "Impossible d'installer '{apkfilename}' sur {dev}: {error}"
+msgstr "Impossible d'installer « {apkfilename} » sur {dev} : {error}"
 
 #: ../fdroidserver/publish.py ../fdroidserver/common.py
 msgid "Failed to sign application"
@@ -672,7 +673,7 @@ msgstr "Impossible d'optimiser avec zipalign cette application"
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Fetched buildserverid from VM: {buildserverid}"
-msgstr "Récupération de l'ID du serveur de construction depuis la VM: {buildserverid}"
+msgstr "Récupération de l'ID du serveur de construction depuis la VM : {buildserverid}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
@@ -701,12 +702,12 @@ msgstr "Forcer la construction des application désactiver, et opérateur indép
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Force halting build after {0} sec timeout!"
-msgstr "Arrêt forcer de la construction apès {0} secondes de timeout!"
+msgstr "Arrêt forcer de la construction après {0} secondes de délai d'attente !"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
-msgstr "\"{path}\" graphique trouvée sans metadonnées pour l'application \"{name}\"!"
+msgstr "« {path} » graphique trouvée sans métadonnées pour l'application « {name} » !"
 
 #: ../fdroidserver/common.py
 msgid "Found invalid appids in arguments"
@@ -1269,7 +1270,7 @@ msgstr "Réécrire dans un format spécifique : "
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}'"
-msgstr ""
+msgstr "Réécriture de « {appid} »"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1314,8 +1315,8 @@ msgstr ""
 #: ../fdroidserver/build.py
 msgid "Scanner found {} problem"
 msgid_plural "Scanner found {} problems"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Le scanneur a trouvé {} problème"
+msgstr[1] "Le scanneur a trouvé {} problèmes"
 
 #: ../fdroidserver/common.py
 msgid "Set clock to that time using:"
