@@ -2,13 +2,14 @@
 # This file is put in the public domain.
 # Golubev Alexander <fatzer2@gmail.com>, 2020.
 # Mingun <Alexander_Sergey@mail.ru>, 2020.
+# anonymous <noreply@weblate.org>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
 "PO-Revision-Date: 2020-04-05 15:56+0000\n"
-"Last-Translator: Mingun <Alexander_Sergey@mail.ru>\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -235,7 +236,7 @@ msgstr "В установленной Android SDK '{path}' нет '{dirname}'!"
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
-msgstr "Android SDK не обнаружена!"
+msgstr "Android SDK не обнаружен!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
