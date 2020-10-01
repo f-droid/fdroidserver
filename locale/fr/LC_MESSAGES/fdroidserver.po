@@ -6,13 +6,14 @@
 # Jeannette L <j.lavoie@net-c.ca>, 2020.
 # Nathan <bonnemainsnathan@gmail.com>, 2020.
 # Virgile L. <virgilelefevre313@gmail.com>, 2020.
+# Lucas Brizzi <lucas.brizzi@hotmail.fr>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-05-13 22:41+0000\n"
-"Last-Translator: Virgile L. <virgilelefevre313@gmail.com>\n"
+"PO-Revision-Date: 2020-06-02 11:58+0000\n"
+"Last-Translator: Lucas Brizzi <lucas.brizzi@hotmail.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1259,7 +1260,7 @@ msgstr "Redimensionner toutes les icônes excédant la taille maximale en pixels
 
 #: ../fdroidserver/common.py
 msgid "Restrict output to warnings and errors"
-msgstr "Restreindre les résultats aux avertissements et erreurs"
+msgstr "Limiter la sortie aux avertissements et aux erreurs"
 
 #: ../fdroid
 msgid "Rewrite all the metadata files"
@@ -1277,11 +1278,11 @@ msgstr "Réécriture de « {appid} »"
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}' to '{path}'"
-msgstr ""
+msgstr "Réécriture de '{appid}' dans '{path}'"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
-msgstr ""
+msgstr "Exécuter sur le dépôt git qui a des modifications non validées"
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
@@ -1289,7 +1290,7 @@ msgstr "Exécuter rewritemeta pour corriger le formatage"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 msgid "Running first pass with MD5 checking disabled"
-msgstr ""
+msgstr "Exécution de la première passe avec la vérification MD5 désactivée"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -1307,7 +1308,7 @@ msgstr "Scanner le code source d'un paquet"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:"
-msgstr ""
+msgstr "Le scan a détecté {count} problèmes dans {appid} :"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
