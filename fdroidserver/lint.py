@@ -242,7 +242,7 @@ def check_ucm_tags(app):
             and lastbuild.versionCode == app.CurrentVersionCode
             and not lastbuild.forcevercode
             and any(s in lastbuild.commit for s in '.,_-/')):
-        yield _("Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'")\
+        yield _("Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'")\
             .format(commit=lastbuild.commit, ucm=app.UpdateCheckMode)
 
 
@@ -287,7 +287,7 @@ filling_ucms = re.compile(r'^(Tags.*|RepoManifest.*)')
 def check_checkupdates_ran(app):
     if filling_ucms.match(app.UpdateCheckMode):
         if not app.AutoName and not app.CurrentVersion and app.CurrentVersionCode == '0':
-            yield _("UCM is set but it looks like checkupdates hasn't been run yet")
+            yield _("UpdateCheckMode is set but it looks like checkupdates hasn't been run yet")
 
 
 def check_empty_fields(app):

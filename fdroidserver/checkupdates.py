@@ -487,12 +487,12 @@ def checkupdates_app(app):
         name = _getappname(app)
         ver = _getcvname(app)
         logging.info('...updating to version %s' % ver)
-        commitmsg = 'Update CV of %s to %s' % (name, ver)
+        commitmsg = 'Update CurrentVersion of %s to %s' % (name, ver)
 
     if options.auto:
         mode = app.AutoUpdateMode
         if not app.CurrentVersionCode:
-            logging.warning("Can't auto-update app with no current version code: " + app.id)
+            logging.warning("Can't auto-update app with no CurrentVersionCode: " + app.id)
         elif mode in ('None', 'Static'):
             pass
         elif mode.startswith('Version '):
@@ -502,7 +502,7 @@ def checkupdates_app(app):
                 try:
                     suffix, pattern = pattern[1:].split(' ', 1)
                 except ValueError:
-                    raise MetaDataException("Invalid AUM: " + mode)
+                    raise MetaDataException("Invalid AutoUpdateMode: " + mode)
 
             gotcur = False
             latest = None

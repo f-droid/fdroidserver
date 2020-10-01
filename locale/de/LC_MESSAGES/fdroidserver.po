@@ -1737,8 +1737,8 @@ msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in con
 msgstr "Um awsbucket zu benutzen, müssen awssecretkey und awsaccesskeyid auch in der config.py gesetzt sein!"
 
 #: ../fdroidserver/lint.py
-msgid "UCM is set but it looks like checkupdates hasn't been run yet"
-msgstr "UCM ist gesetzt, aber es sieht so aus, als ob checkupdates noch nicht ausgeführt wurde"
+msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet"
+msgstr "UpdateCheckMode ist gesetzt, aber es sieht so aus, als ob checkupdates noch nicht ausgeführt wurde"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
