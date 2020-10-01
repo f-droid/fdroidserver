@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-05-16 20:31+0000\n"
-"Last-Translator: André Marcelo Alvarenga <andrealvarenga@gmx.net>\n"
+"PO-Revision-Date: 2020-05-27 06:45+0000\n"
+"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -384,7 +384,7 @@ msgstr "Limpar todos os containers e então sair"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
-msgstr "Atualização limpa - não usa cache, reprocessa todos os APKs"
+msgstr "Atualização limpa - não utiliza o cache, reprocessa todos os APKs"
 
 #: ../fdroidserver/import.py
 msgid "Comma separated list of categories."
@@ -1596,7 +1596,7 @@ msgstr "Arquivo não utilizado em %s"
 
 #: ../fdroidserver/lint.py
 msgid "Update Check Name is set to the known app id - it can be removed"
-msgstr "O nome da verificação de atualização (Update Check Name) é definido como o ID comun do app - pode ser removido"
+msgstr "O nome da verificação da atualização (Update Check Name) é definido como o ID comun do app - pode ser removido"
 
 #: ../fdroid
 msgid "Update repo information for new packages"
