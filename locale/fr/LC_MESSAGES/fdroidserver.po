@@ -9,13 +9,14 @@
 # Lucas Brizzi <lucas.brizzi@hotmail.fr>, 2020.
 # Jose <mail.jose.n@gmail.com>, 2020.
 # DGO <d@geon.fr>, 2020.
+# Yannick A. <yannick.armand@protonmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-07-04 12:07+0000\n"
-"Last-Translator: DGO <d@geon.fr>\n"
+"PO-Revision-Date: 2020-07-07 02:50+0000\n"
+"Last-Translator: Yannick A. <yannick.armand@protonmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1145,7 +1146,7 @@ msgstr "Préparer Drozer pour lancer un scanne"
 
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
-msgstr ""
+msgstr "Afficher la variable secrète dans le terminal pour un copier/coller facilité"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1244,12 +1245,13 @@ msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "Renomme les fichiers APK dont le nom ne ressemble pas à nom.paquet_123.apk"
 
 #: ../fdroidserver/update.py
+#, fuzzy
 msgid "Report on build data status"
-msgstr ""
+msgstr "Rapport sur l'état des données de construction"
 
 #: ../fdroidserver/build.py
 msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
-msgstr ""
+msgstr "Réinitialiser et créer un tout nouveau serveur de construction, même si le serveur existant semble correct."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1346,8 +1348,9 @@ msgid "Setting {0} sec timeout for this build"
 msgstr ""
 
 #: ../fdroidserver/build.py
+#, fuzzy
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
-msgstr ""
+msgstr "Installez un émulateur, installez l'APK dessus et effectuez un scan Drozer"
 
 msgid "Setup an emulator, install the apk on it and perform a drozer scan"
 msgstr ""
