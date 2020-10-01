@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-07-07 02:50+0000\n"
-"Last-Translator: Yannick A. <yannick.armand@protonmail.com>\n"
+"PO-Revision-Date: 2020-07-14 08:11+0000\n"
+"Last-Translator: DGO <d@geon.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1340,7 +1340,7 @@ msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Setting open file limit failed: "
-msgstr ""
+msgstr "Définition de la limite du nombre de fichiers ouverts en échec:"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
