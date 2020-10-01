@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
+# riveravaldez <riveravaldezmail@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-10-01 09:00+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2020-10-01 10:31+0000\n"
+"Last-Translator: riveravaldez <riveravaldezmail@gmail.com>\n"
 "Language-Team: Spanish (Argentina) <https://hosted.weblate.org/projects/f-droid/fdroidserver/es_AR/>\n"
 "Language: es_AR\n"
 "MIME-Version: 1.0\n"
@@ -1136,7 +1137,7 @@ msgid "Prepare Drozer to run a scan"
 msgstr ""
 
 msgid "Prepare drozer to run a scan"
-msgstr ""
+msgstr "Preparar drozer para que ejecute un escaneo"
 
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
@@ -1714,7 +1715,7 @@ msgstr "Advertir sobre posibles errores en los metadatos"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
-msgstr ""
+msgstr "Si está configurado para índices firmados, crear sólo índices sin firma en este punto"
 
 msgid "X.509 'Distiguished Name' used when generating keys"
 msgstr "X.509 'Nombre Distinguido' usado cuando se generaron las llaves"
@@ -1942,17 +1943,18 @@ msgid "invalid option string %(option)r: must start with a character %(prefix_ch
 msgstr ""
 
 #: ../fdroidserver/server.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
-msgstr ""
+msgstr "directorio_copia_local no termina en \"fdroid\", quizá quiso escribir: \"{ruta}\""
 
 #: ../fdroidserver/server.py
+#, fuzzy
 msgid "local_copy_dir must be an absolute path!"
-msgstr ""
+msgstr "directorio_copia_local ¡tiene que ser una ruta absoluta!"
 
 #: ../fdroidserver/server.py
 msgid "local_copy_dir must be directory, not a file!"
-msgstr ""
+msgstr "directorio_copia_local tiene que ser un directorio, ¡no un archivo!"
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -2161,7 +2163,7 @@ msgstr "uso: fdroid [-h|--help|--version] <comando> [<args>]"
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "using Apache libcloud to sync with {url}"
-msgstr ""
+msgstr "usando libcloud de Apache para sincronizar con {url}"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
