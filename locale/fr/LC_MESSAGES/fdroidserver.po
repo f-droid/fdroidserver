@@ -17,15 +17,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-07-14 17:29+0000\n"
-"Last-Translator: rational <rationaldecay@gmail.com>\n"
+"PO-Revision-Date: 2020-10-01 09:00+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -86,7 +86,7 @@ msgstr "%(prog)s [options] url"
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "%(prog)s: erreur: %(message)s\n"
+msgstr "%(prog)s : erreur : %(message)s\n"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -161,7 +161,7 @@ msgstr "'{apkfilename}' est déjà installé sur '{dev}'."
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{field}' in {linedesc} is obsolete, see docs for current fields:"
-msgstr "'{field}' dans {linedesc} est obselète, regarder la documentation pour ces champs:"
+msgstr "'{field}' dans {linedesc} est obselète, regarder la documentation pour ces champs :"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -320,7 +320,7 @@ msgstr "Compiler uniquement la dernière version de chaque paquet"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Build should have comma-separated versionName and versionCode, not \"{value}\", in {linedesc}"
-msgstr "Le build devrait avoir un versionName et  un versionCode séparés par des virgules, et non pas \"{value}\", dans {linedesc}"
+msgstr "Le build devrait avoir un versionName et un versionCode séparés par des virgules, et non pas \"{value}\", dans {linedesc}"
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -640,7 +640,7 @@ msgstr "Erreur de lecture {path} : {error}"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed resizing {path}: {error}"
-msgstr "Échec au redimensionement de {path}: {error}"
+msgstr "Échec au redimensionement de {path} : {error}"
 
 #: ../fdroidserver/publish.py
 msgid "Failed to align application"
@@ -2119,7 +2119,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr "les arguments suivants sont requis  %s"
+msgstr "les arguments suivants sont requis %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py

@@ -2,20 +2,21 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2020.
 # André Marcelo Alvarenga <andrealvarenga@gmx.net>, 2020.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-05-27 06:45+0000\n"
-"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
+"PO-Revision-Date: 2020-10-01 09:00+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -156,7 +157,7 @@ msgstr "O '{field}' em {linedesc} é obsoleto, veja a documentação para conhec
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{field}' will be in random order! Use () or [] brackets if order is important!"
-msgstr "'{field}' será em ordem aleatória! Use () ou []  se a ordem for importante!"
+msgstr "'{field}' será em ordem aleatória! Use () ou [] se a ordem for importante!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -166,7 +167,7 @@ msgstr "'{path}' falhou ao executar!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
-msgstr "'{value}' não é um{field} válido  em {appid}. Regex padrão: {pattern}"
+msgstr "'{value}' não é um{field} válido em {appid}. Regex padrão: {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -411,7 +412,7 @@ msgstr "Impossível encontrar {path} para removê-lo"
 
 #: ../fdroidserver/update.py
 msgid "Could not open apk file for analysis"
-msgstr "Impossível abrir o arquivo de APK  para analisá-lo"
+msgstr "Impossível abrir o arquivo de APK para analisá-lo"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
@@ -1753,7 +1754,7 @@ msgstr "applicationId para verificar se há atualizações"
 #: ../fdroidserver/dscanner.py ../fdroidserver/build.py
 #: ../fdroidserver/scanner.py ../fdroidserver/install.py
 msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
-msgstr "applicationId com versionCode  opcional na forma APPID[:VERCODE]"
+msgstr "applicationId com versionCode opcional na forma APPID[:VERCODE]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
