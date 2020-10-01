@@ -10,13 +10,14 @@
 # Jose <mail.jose.n@gmail.com>, 2020.
 # DGO <d@geon.fr>, 2020.
 # Yannick A. <yannick.armand@protonmail.com>, 2020.
+# Renaud Perrai <renaud.perrai@protonmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-07-14 08:11+0000\n"
-"Last-Translator: DGO <d@geon.fr>\n"
+"PO-Revision-Date: 2020-07-14 13:03+0000\n"
+"Last-Translator: Renaud Perrai <renaud.perrai@protonmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1195,12 +1196,12 @@ msgstr "Envoyer les logs dans ce dépôt git distant"
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Pushing binary transparency log to {url}"
-msgstr ""
+msgstr "Envoyer les logs de transparence de la compilation vers {url}"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Pushing to {url}"
-msgstr "Pousser vers {url}"
+msgstr "Envoyer vers {url}"
 
 #: ../fdroid
 msgid "Quickly start a new repository"
@@ -1218,14 +1219,14 @@ msgstr "Lecture de '{config_file}'"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading minSdkVersion failed: \"{apkfilename}\""
-msgstr "Lecture de minSdkVersion échouée: \"{apkfilename}\""
+msgstr "La lecture de minSdkVersion a échoué : \"{apkfilename}\""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #. https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
-msgstr "Lecture de packageName/versionCode/versionName échouée, APK invalide: '{apkfilename}'"
+msgstr "La lecture de packageName/versionCode/versionName a échoué, APK invalide : '{apkfilename}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1234,7 +1235,7 @@ msgstr "Lecture de {apkfilename} à partir du cache"
 
 #: ../fdroidserver/stats.py
 msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr ""
+msgstr "Recalculer les statistiques agrégées - à utiliser quand les modifications faites peuvent invalider les anciennes données en cache."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1245,7 +1246,6 @@ msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "Renomme les fichiers APK dont le nom ne ressemble pas à nom.paquet_123.apk"
 
 #: ../fdroidserver/update.py
-#, fuzzy
 msgid "Report on build data status"
 msgstr "Rapport sur l'état des données de construction"
 
@@ -1317,7 +1317,7 @@ msgstr "Le scan a détecté {count} problèmes dans {appid} :"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:{versionCode}:"
-msgstr "Le scanner a trouvé {count} problèmes dans {appid}:{versionCode}:"
+msgstr "Le scanner a trouvé {count} problèmes dans {appid} :{versionCode} :"
 
 #: ../fdroidserver/build.py
 msgid "Scanner found {} problem"
@@ -1336,11 +1336,11 @@ msgstr "Définition de la limite de fichiers ouverts à {integer}"
 
 #: ../fdroid
 msgid "Set up an app build for a nightly build repo"
-msgstr ""
+msgstr "Programmer une compilation de l'application pour le dépôt des versions de test"
 
 #: ../fdroidserver/build.py
 msgid "Setting open file limit failed: "
-msgstr "Définition de la limite du nombre de fichiers ouverts en échec:"
+msgstr "Définir la limite d'échec du nombre de fichiers ouvert : "
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -1370,22 +1370,22 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping '{apkfilename}' with invalid signature!"
-msgstr ""
+msgstr "Sauter '{apkfilename}' avec une signature non valide !"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping index generation for {appid}"
-msgstr ""
+msgstr "Sauter la génération de l'index pour {appid}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping {apkfilename} with invalid signature!"
-msgstr ""
+msgstr "Sauter {apkfilename} avec une signature non valide !"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Skipping {appid}: disabled"
-msgstr ""
+msgstr "Sauter {appid} : désactivé"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1444,7 +1444,7 @@ msgstr ""
 
 #: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
-msgstr "URL de base du dépôt à journaliser (par défaut: https://f-droid.org)"
+msgstr "URL de base du dépôt à journaliser (par défaut : https://f-droid.org)"
 
 #: ../fdroidserver/mirror.py
 msgid "The directory to write the mirror to"
