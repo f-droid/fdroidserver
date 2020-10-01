@@ -1,13 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Julien Gontier <emeuraudeman@protonmail.com>, 2020.
+# anonymous <noreply@weblate.org>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
 "PO-Revision-Date: 2020-04-07 18:05+0000\n"
-"Last-Translator: Julien Gontier <emeuraudeman@protonmail.com>\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -591,7 +592,7 @@ msgstr "ERREUR : type de CI non supporté, les corrections sont bienvenues !"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Empty build flag at {linedesc}"
-msgstr ""
+msgstr "Drapeau de construction vide à {linedesc}"
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -638,7 +639,7 @@ msgstr "Impossible d'aligner les applications"
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
-msgstr ""
+msgstr "La création du S3 Bucket a échoué: {url}"
 
 #: ../fdroidserver/common.py
 msgid "Failed to get APK manifest information"
@@ -647,7 +648,7 @@ msgstr "Échoument lors de la récupération de l'information manifest de l'APK"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get apk information, deleting {path}"
-msgstr ""
+msgstr "Impossible d'obtenir les informations de l'APK, suppression {path}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
