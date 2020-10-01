@@ -40,6 +40,47 @@ json_per_build = DEFAULT_JSON_PER_BUILD
 MAVEN_URL_REGEX = re.compile(r"""\smaven\s*{.*?(?:setUrl|url)\s*=?\s*(?:uri)?\(?\s*["']?([^\s"']+)["']?[^}]*}""",
                              re.DOTALL)
 
+CODE_SIGNATURES = {
+    # The `apkanalyzer dex packages` output looks like this:
+    # M d 1   1       93      <packagename> <other stuff>
+    # The first column has P/C/M/F for package, class, method or field
+    # The second column has x/k/r/d for removed, kept, referenced and defined.
+    # We already filter for defined only in the apkanalyzer call. 'r' will be
+    # for things referenced but not distributed in the apk.
+    exp: re.compile(r'.[\s]*d[\s]*[0-9]*[\s]*[0-9*][\s]*[0-9]*[\s]*' + exp, re.IGNORECASE) for exp in [
+        r'(com\.google\.firebase[^\s]*)',
+        r'(com\.google\.android\.gms[^\s]*)',
+        r'(com\.google\.tagmanager[^\s]*)',
+        r'(com\.google\.analytics[^\s]*)',
+        r'(com\.android\.billing[^\s]*)',
+    ]
+}
+
+# Common known non-free blobs (always lower case):
+NON_FREE_GRADLE_LINES = {
+    exp: re.compile(r'.*' + exp, re.IGNORECASE) for exp in [
+        r'flurryagent',
+        r'paypal.*mpl',
+        r'admob.*sdk.*android',
+        r'google.*ad.*view',
+        r'google.*admob',
+        r'google.*play.*services',
+        r'crittercism',
+        r'heyzap',
+        r'jpct.*ae',
+        r'youtube.*android.*player.*api',
+        r'bugsense',
+        r'crashlytics',
+        r'ouya.*sdk',
+        r'libspen23',
+        r'firebase',
+        r'''["']com.facebook.android['":]''',
+        r'cloudrail',
+        r'com.tencent.bugly',
+        r'appcenter-push',
+    ]
+}
+
 
 def get_gradle_compile_commands(build):
     compileCommands = ['compile',
@@ -59,25 +100,10 @@ def get_gradle_compile_commands(build):
 
 
 def scan_binary(apkfile):
-    usual_suspects = {
-        # The `apkanalyzer dex packages` output looks like this:
-        # M d 1   1       93      <packagename> <other stuff>
-        # The first column has P/C/M/F for package, class, method or field
-        # The second column has x/k/r/d for removed, kept, referenced and defined.
-        # We already filter for defined only in the apkanalyzer call. 'r' will be
-        # for things referenced but not distributed in the apk.
-        exp: re.compile(r'.[\s]*d[\s]*[0-9]*[\s]*[0-9*][\s]*[0-9]*[\s]*' + exp, re.IGNORECASE) for exp in [
-            r'(com\.google\.firebase[^\s]*)',
-            r'(com\.google\.android\.gms[^\s]*)',
-            r'(com\.google\.tagmanager[^\s]*)',
-            r'(com\.google\.analytics[^\s]*)',
-            r'(com\.android\.billing[^\s]*)',
-        ]
-    }
     logging.info("Scanning APK for known non-free classes.")
     result = common.SdkToolsPopen(["apkanalyzer", "dex", "packages", "--defined-only", apkfile], output=False)
     problems = 0
-    for suspect, regexp in usual_suspects.items():
+    for suspect, regexp in CODE_SIGNATURES.items():
         matches = regexp.findall(result.output)
         if matches:
             for m in set(matches):
@@ -95,31 +121,6 @@ def scan_source(build_dir, build=metadata.Build()):
 
     count = 0
 
-    # Common known non-free blobs (always lower case):
-    usual_suspects = {
-        exp: re.compile(r'.*' + exp, re.IGNORECASE) for exp in [
-            r'flurryagent',
-            r'paypal.*mpl',
-            r'admob.*sdk.*android',
-            r'google.*ad.*view',
-            r'google.*admob',
-            r'google.*play.*services',
-            r'crittercism',
-            r'heyzap',
-            r'jpct.*ae',
-            r'youtube.*android.*player.*api',
-            r'bugsense',
-            r'crashlytics',
-            r'ouya.*sdk',
-            r'libspen23',
-            r'firebase',
-            r'''["']com.facebook.android['":]''',
-            r'cloudrail',
-            r'com.tencent.bugly',
-            r'appcenter-push',
-        ]
-    }
-
     whitelisted = [
         'firebase-jobdispatcher',  # https://github.com/firebase/firebase-jobdispatcher-android/blob/master/LICENSE
         'com.firebaseui',          # https://github.com/firebase/FirebaseUI-Android/blob/master/LICENSE
@@ -130,7 +131,7 @@ def scan_source(build_dir, build=metadata.Build()):
         return any(wl in s for wl in whitelisted)
 
     def suspects_found(s):
-        for n, r in usual_suspects.items():
+        for n, r in NON_FREE_GRADLE_LINES.items():
             if r.match(s) and not is_whitelisted(s):
                 yield n
 
