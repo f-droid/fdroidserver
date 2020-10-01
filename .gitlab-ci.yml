@@ -145,7 +145,7 @@ pip_install:
     - fdroid update --help
 
 lint_format_safety_bandit_checks:
-  image: alpine:3.7
+  image: alpine:3.10 # cannot upgrade until bandit supports Python 3.8
   variables:
     LANG: C.UTF-8
   script:
