@@ -3,20 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # random r <epsilin@yopmail.com>, 2020.
 # Luca Zambarda <luke.zambarda@gmail.com>, 2020.
+# IvanDan <ivandanza@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-07-18 09:41+0000\n"
-"Last-Translator: Luca Zambarda <luke.zambarda@gmail.com>\n"
+"PO-Revision-Date: 2020-09-19 17:03+0000\n"
+"Last-Translator: IvanDan <ivandanza@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -515,7 +516,7 @@ msgstr "La descrizione di lunghezza {length} supera il limite di {limit} caratte
 
 #: ../fdroidserver/nightly.py
 msgid "Do not deploy the new files to the repo"
-msgstr ""
+msgstr "Non distribuire i nuovi file nel repository"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -528,7 +529,7 @@ msgstr "Non chiedere il path di Android SDK, esci subito con un errore"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not remove the private keys generated from the keystore"
-msgstr ""
+msgstr "Non rimuovere le chiavi private generate dal keystore"
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
@@ -583,6 +584,8 @@ msgid ""
 "ERROR: this command should never be used to mirror f-droid.org!\n"
 "A full mirror of f-droid.org requires more than 200GB."
 msgstr ""
+"ERRORE: questo comando non deve mai essere utilizzato per il mirror f-droid.org!\n"
+"L’intero mirror di f-droid.org richiede più di 200GB."
 
 #: ../fdroidserver/nightly.py
 msgid "ERROR: unsupported CI type, patches welcome!"
@@ -591,7 +594,7 @@ msgstr ""
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Empty build flag at {linedesc}"
-msgstr ""
+msgstr "Flag build vuoto a {linedesc}"
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -619,45 +622,45 @@ msgstr "Estrai le firme dagli APK"
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Failed fetching signatures for '{apkfilename}': {error}"
-msgstr ""
+msgstr "Impossibile recuperare le firme per '{apkfilename}': {error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed reading {path}: {error}"
-msgstr ""
+msgstr "Impossibile leggere {path}: {error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed resizing {path}: {error}"
-msgstr ""
+msgstr "Impossibile ridimensionare {path}: {error}"
 
 #: ../fdroidserver/publish.py
 msgid "Failed to align application"
-msgstr ""
+msgstr "Impossibile allineare l’applicazione"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
-msgstr ""
+msgstr "Impossibile creare il bucket S3: {url}"
 
 #: ../fdroidserver/common.py
 msgid "Failed to get APK manifest information"
-msgstr ""
+msgstr "Impossibile ottenere informazioni del manifest dell’APK"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get apk information, deleting {path}"
-msgstr ""
+msgstr "Impossibile ottenere informazioni dell’apk, eliminando {path}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get apk information, skipping {path}"
-msgstr ""
+msgstr "Impossibile ottenere informazioni dell’apk, saltando {path}"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Failed to install '{apkfilename}' on {dev}: {error}"
-msgstr ""
+msgstr "Impossibile installare '{apkfilename}' su {dev}: {error}"
 
 #: ../fdroidserver/publish.py ../fdroidserver/common.py
 msgid "Failed to sign application"
