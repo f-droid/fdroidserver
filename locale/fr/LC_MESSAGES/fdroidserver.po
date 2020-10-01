@@ -7,13 +7,14 @@
 # Nathan <bonnemainsnathan@gmail.com>, 2020.
 # Virgile L. <virgilelefevre313@gmail.com>, 2020.
 # Lucas Brizzi <lucas.brizzi@hotmail.fr>, 2020.
+# Jose <mail.jose.n@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-06-02 11:58+0000\n"
-"Last-Translator: Lucas Brizzi <lucas.brizzi@hotmail.fr>\n"
+"PO-Revision-Date: 2020-06-13 11:03+0000\n"
+"Last-Translator: Jose <mail.jose.n@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1132,7 +1133,7 @@ msgstr "Chemin vers un dépôt git à utiliser comme journal"
 
 #: ../fdroidserver/init.py
 msgid "Path to the keystore for the repo signing key"
-msgstr ""
+msgstr "Chemin vers le keystore pour la clé de signature du dépôt"
 
 #: ../fdroidserver/dscanner.py
 msgid "Prepare Drozer to run a scan"
