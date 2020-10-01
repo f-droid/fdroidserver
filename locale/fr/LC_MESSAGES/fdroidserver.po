@@ -11,13 +11,14 @@
 # DGO <d@geon.fr>, 2020.
 # Yannick A. <yannick.armand@protonmail.com>, 2020.
 # Renaud Perrai <renaud.perrai@protonmail.com>, 2020.
+# rational <rationaldecay@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-07-14 13:03+0000\n"
-"Last-Translator: Renaud Perrai <renaud.perrai@protonmail.com>\n"
+"PO-Revision-Date: 2020-07-14 17:29+0000\n"
+"Last-Translator: rational <rationaldecay@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1370,22 +1371,22 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping '{apkfilename}' with invalid signature!"
-msgstr "Sauter '{apkfilename}' avec une signature non valide !"
+msgstr "Omission de '{apkfilename}' qui a une signature non valide !"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping index generation for {appid}"
-msgstr "Sauter la génération de l'index pour {appid}"
+msgstr "Omission de la génération de l'index pour {appid}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping {apkfilename} with invalid signature!"
-msgstr "Sauter {apkfilename} avec une signature non valide !"
+msgstr "Omission de {apkfilename} qui a une signature non valide !"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Skipping {appid}: disabled"
-msgstr "Sauter {appid} : désactivé"
+msgstr "Omission de {appid} : désactivé"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
