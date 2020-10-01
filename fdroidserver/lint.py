@@ -568,7 +568,7 @@ def main():
     global config, options
 
     # Parse command line...
-    parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
+    parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument("-f", "--format", action="store_true", default=False,
                         help=_("Also warn about formatting issues, like rewritemeta -l"))

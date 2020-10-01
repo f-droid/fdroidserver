@@ -25,7 +25,7 @@ options = None
 
 def main():
 
-    parser = ArgumentParser(usage="%(prog)s")
+    parser = ArgumentParser()
     common.setup_global_opts(parser)
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()

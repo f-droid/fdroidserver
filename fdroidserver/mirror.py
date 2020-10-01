@@ -41,7 +41,7 @@ def _run_wget(path, urls):
 def main():
     global options
 
-    parser = ArgumentParser(usage=_("%(prog)s [options] url"))
+    parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument("url", nargs='?',
                         help=_('Base URL to mirror, can include the index signing key '

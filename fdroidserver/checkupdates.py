@@ -597,7 +597,7 @@ def main():
     global config, options
 
     # Parse command line...
-    parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
+    parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help=_("application ID of file to operate on"))
     parser.add_argument("--auto", action="store_true", default=False,
