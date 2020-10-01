@@ -1,21 +1,20 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Julien Gontier <emeuraudeman@protonmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2019-01-29 07:59+0000\n"
-"Last-Translator: Ldm Public <ldmpub@gmail.com>\n"
+"PO-Revision-Date: 2020-04-07 18:05+0000\n"
+"Last-Translator: Julien Gontier <emeuraudeman@protonmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.5-dev\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -151,7 +150,7 @@ msgstr "'{apkfilename}' est déjà installé sur '{dev}'."
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{field}' in {linedesc} is obsolete, see docs for current fields:"
-msgstr ""
+msgstr "'{field}' dans {linedesc} est obselète, regarder la documentation pour ces champs:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -478,7 +477,7 @@ msgstr "Création d'un index non signé pour préparer la signature"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "CurrentVersionCode {cv} is less than oldest build entry {versionCode}"
-msgstr ""
+msgstr "Le code de la version actuel {cv] est moins récent que la dernier build {versionCode}"
 
 #: ../fdroidserver/nightly.py
 msgid "DEBUG_KEYSTORE is not set or the value is incomplete"
@@ -630,7 +629,7 @@ msgstr "Erreur de lecture {path} : {error}"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed resizing {path}: {error}"
-msgstr ""
+msgstr "Échec au redimensionement de {path}: {error}"
 
 #: ../fdroidserver/publish.py
 msgid "Failed to align application"
@@ -643,7 +642,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Failed to get APK manifest information"
-msgstr ""
+msgstr "Échoument lors de la récupération de l'information manifest de l'APK"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1929,15 +1928,15 @@ msgstr ""
 #: ../fdroidserver/server.py
 #, python-brace-format
 msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
-msgstr ""
+msgstr "local_copy_dir ne semble pas se terminer avec \"fdroid\", peut être voulez-vous dire : \"{path}\""
 
 #: ../fdroidserver/server.py
 msgid "local_copy_dir must be an absolute path!"
-msgstr ""
+msgstr "local_copy_dir doir être un chemin absolut !"
 
 #: ../fdroidserver/server.py
 msgid "local_copy_dir must be directory, not a file!"
-msgstr ""
+msgstr "local_copy_dir doit être absolument un dossier, pas un fichier !"
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -2145,7 +2144,7 @@ msgstr "utilisation : fdroid [-h|--help|--version] <commande> [<args>]"
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "using Apache libcloud to sync with {url}"
-msgstr ""
+msgstr "utilisation de Apache libcloud pour syncronizer avec {url}"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
