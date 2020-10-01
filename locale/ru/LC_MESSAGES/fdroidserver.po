@@ -3,13 +3,14 @@
 # Golubev Alexander <fatzer2@gmail.com>, 2020.
 # Mingun <Alexander_Sergey@mail.ru>, 2020.
 # anonymous <noreply@weblate.org>, 2020.
+# Andrey <andrey@mailbox.org>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-04-06 07:19+0000\n"
-"Last-Translator: Golubev Alexander <fatzer2@gmail.com>\n"
+"PO-Revision-Date: 2020-04-08 02:03+0000\n"
+"Last-Translator: Andrey <andrey@mailbox.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -891,7 +892,7 @@ msgstr "Неверно указан versionCode: \"{versionCode}\". Это до�
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "JAR signature failed to verify: {path}"
-msgstr "Не удаётся проверить подпись JAR: {path}"
+msgstr "Не удается проверить подпись JAR: {path}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -901,7 +902,7 @@ msgstr "Подпись JAR прошла проверку: {path}"
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #: ../fdroidserver/mirror.py
 msgid "Java JDK not found! Install in standard location or set java_paths!"
-msgstr "Не обнаружена Java JDK! Установите её по стандартному пути или настройте переменную java_paths!"
+msgstr "Не обнаружена Java JDK! Установите ее по стандартному пути или настройте переменную java_paths!"
 
 #: ../fdroidserver/signindex.py
 msgid "Java jarsigner not found! Install in standard location or set java_paths!"
@@ -1087,7 +1088,7 @@ msgstr "Параметры"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
-msgstr "Вывод отчёта в формате JSON под именем файла APK."
+msgstr "Вывод отчета в формате JSON под именем файла APK."
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
@@ -1422,11 +1423,11 @@ msgstr "Короткое описание приложения ({length} зна�
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
-msgstr "Системное время отстаёт от date в {path}!"
+msgstr "Системное время отстает от date в {path}!"
 
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
-msgstr "Тестовый режим. Всё собранное попадает во временную директорию; сборка запускается снова в любом случае."
+msgstr "Тестовый режим. Все собранное попадает во временную директорию; сборка запускается снова в любом случае."
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -1456,7 +1457,7 @@ msgstr "Идентификационная метка (fingerprint) репози
 
 #: ../fdroidserver/common.py
 msgid "The repository's index could not be verified."
-msgstr "Индекс репозитория не прошёл проверку."
+msgstr "Индекс репозитория не прошел проверку."
 
 #: ../fdroidserver/server.py
 #, python-brace-format
