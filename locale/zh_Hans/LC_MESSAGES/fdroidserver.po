@@ -1,22 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# ERDwaYbR <weblate.uu@vvvvv5.uu.me>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2018-10-22 05:24+0000\n"
-"Last-Translator: kak mi <wavelake@outlook.com>\n"
+"PO-Revision-Date: 2020-04-18 02:37+0000\n"
+"Last-Translator: ERDwaYbR <weblate.uu@vvvvv5.uu.me>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.3-dev\n"
+"X-Generator: Weblate 4.0.2-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -81,9 +80,8 @@ msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
-#, fuzzy
 msgid "%prog [options]"
-msgstr "100%prog [options]"
+msgstr "100%prog [选项]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -1738,13 +1736,13 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "模糊选项：%(option)s 可以相配 %(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
-msgstr ""
+msgstr "不明确的选项：%s(%s?)"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #, fuzzy
@@ -1778,7 +1776,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "无法打开 '%s': %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -1939,15 +1937,16 @@ msgstr ""
 #: ../fdroidserver/server.py
 #, python-brace-format
 msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
-msgstr ""
+msgstr "local_copy_dir未以“ fdroid”结尾，也许你指的是：“ {path}”"
 
 #: ../fdroidserver/server.py
 msgid "local_copy_dir must be an absolute path!"
-msgstr ""
+msgstr "local_copy_dir必须为绝对路径！"
 
 #: ../fdroidserver/server.py
+#, fuzzy
 msgid "local_copy_dir must be directory, not a file!"
-msgstr ""
+msgstr "local_copy_dir为目录，不是档案！"
 
 #: ../fdroidserver/index.py
 #, python-format
