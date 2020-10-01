@@ -8,20 +8,21 @@
 # Virgile L. <virgilelefevre313@gmail.com>, 2020.
 # Lucas Brizzi <lucas.brizzi@hotmail.fr>, 2020.
 # Jose <mail.jose.n@gmail.com>, 2020.
+# DGO <d@geon.fr>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-06-13 11:03+0000\n"
-"Last-Translator: Jose <mail.jose.n@gmail.com>\n"
+"PO-Revision-Date: 2020-07-04 12:07+0000\n"
+"Last-Translator: DGO <d@geon.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1196,9 +1197,9 @@ msgid "Pushing binary transparency log to {url}"
 msgstr ""
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Pushing to {url}"
-msgstr ""
+msgstr "Pousser vers {url}"
 
 #: ../fdroid
 msgid "Quickly start a new repository"
@@ -1216,14 +1217,14 @@ msgstr "Lecture de '{config_file}'"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading minSdkVersion failed: \"{apkfilename}\""
-msgstr ""
+msgstr "Lecture de minSdkVersion échouée: \"{apkfilename}\""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #. https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
-msgstr ""
+msgstr "Lecture de packageName/versionCode/versionName échouée, APK invalide: '{apkfilename}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1236,7 +1237,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
-msgstr ""
+msgstr "Suppression des fichiers spécifiés"
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
@@ -1253,7 +1254,7 @@ msgstr ""
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
-msgstr ""
+msgstr "Re-signature de {apkfilename} avec le debug.keystore fournit"
 
 #: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
@@ -1314,7 +1315,7 @@ msgstr "Le scan a détecté {count} problèmes dans {appid} :"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:{versionCode}:"
-msgstr ""
+msgstr "Le scanner a trouvé {count} problèmes dans {appid}:{versionCode}:"
 
 #: ../fdroidserver/build.py
 msgid "Scanner found {} problem"
@@ -1329,7 +1330,7 @@ msgstr "Réglez l'horloge à cette heure à l'aide de :"
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Set open file limit to {integer}"
-msgstr ""
+msgstr "Définition de la limite de fichiers ouverts à {integer}"
 
 #: ../fdroid
 msgid "Set up an app build for a nightly build repo"
