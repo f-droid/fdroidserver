@@ -1,21 +1,20 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2018-08-26 12:47+0000\n"
-"Last-Translator: AB <ao7nro+6ltrjuwxelfo4@sharklasers.com>\n"
+"PO-Revision-Date: 2020-04-07 13:43+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.2-dev\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -721,9 +720,9 @@ msgid "Found invalid versionCodes for some apps"
 msgstr "Знайдено недійсні версії коду для деяких застосунків"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found multiple metadata files for {appid}"
-msgstr "Створення скелетів файлів метаданих, які відсутні"
+msgstr "Знайдено кілька файлів метаданих для {appid}"
 
 #: ../fdroidserver/index.py
 msgid "Found multiple signing certificates for repository."
@@ -744,9 +743,9 @@ msgid "Found non-file at %s"
 msgstr "Знайдено не файл у %s"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Generated skeleton metadata for {appid}"
-msgstr "Створення скелетів файлів метаданих, які відсутні"
+msgstr "Створено основні метадані для {appid}"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -1199,7 +1198,7 @@ msgstr "Натисніть вхід цього віддаленого схови
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, fuzzy, python-brace-format
 msgid "Pushing binary transparency log to {url}"
-msgstr "Оновити бінарний журнал прозорості для URL-адреси"
+msgstr "Оновити бінарний журнал прозорості для {url}"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -1292,9 +1291,8 @@ msgid "Run on git repo that has uncommitted changes"
 msgstr ""
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Run rewritemeta to fix formatting"
-msgstr "Переписати в певний формат: "
+msgstr "Запустити rewritemeta виправити форматування"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 msgid "Running first pass with MD5 checking disabled"
@@ -1528,9 +1526,9 @@ msgid "Unknown metadata format: %s"
 msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown metadata format: {path}"
-msgstr "Створення скелетів файлів метаданих, які відсутні"
+msgstr "Створення скелетів файлів метаданих: {path}"
 
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
