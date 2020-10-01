@@ -1,21 +1,20 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# WaldiS <sto@tutanota.de>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2019-01-31 20:25+0000\n"
-"Last-Translator: WaldiS <admin@sto.ugu.pl>\n"
+"PO-Revision-Date: 2020-07-02 20:41+0000\n"
+"Last-Translator: WaldiS <sto@tutanota.de>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.5-dev\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -275,7 +274,7 @@ msgstr "Archiwizacja {apkfilename} z nieprawidłowym podpisem!"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
-msgstr "Podstawowy adres URL do dublowania, może zawierać klucz podpisywania indeksu za pomocą ciągu zapytania:  ?fingerprint="
+msgstr "Bazowy adres URL do serwera lustrzanego, może zawierać klucz do podpisywania indeksu za pomocą łańcucha zapytania: ?fingerprint="
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
