@@ -1,13 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Allan Nordhøy <epost@anotheragency.no>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2019-01-29 07:59+0000\n"
+"PO-Revision-Date: 2020-08-15 21:32+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/f-droid/fdroidserver/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -15,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5-dev\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #: ../fdroidserver/nightly.py
 #, fuzzy
@@ -1451,9 +1450,9 @@ msgid "Spew out even more information than normal"
 msgstr "Gulp opp enda mer info enn normalt"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Striping mystery signature from {apkfilename}"
-msgstr "Klarte ikke å hente signaturer for '{apkfilename}': {error}"
+msgstr "Stripper mystisk signatur fra {apkfilename}"
 
 #: ../fdroidserver/lint.py
 #, fuzzy, python-format
@@ -1586,20 +1585,18 @@ msgid "Unnecessary trailing space"
 msgstr "Unødvendig etterfølgende mellomrom"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-#| msgid "Unrecognised field '{field}' in {linedesc}"
+#, python-brace-format
 msgid "Unrecognised app field '{fieldname}' in '{path}'"
-msgstr "Ugjenkjent felt \"{field}\" i {linedesc}"
+msgstr "Ugjenkjent felt «{fieldname}» i «{path}»"
 
 #: ../fdroidserver/metadata.py
 msgid "Unrecognised app field: "
 msgstr "Ugjenkjent programfelt: "
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-#| msgid "Unrecognised field '{field}' in {linedesc}"
+#, python-brace-format
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
-msgstr "Ugjenkjent felt \"{field}\" i {linedesc}"
+msgstr "Ugjenkjent felt «{build_flag}» i «{path}»"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1875,7 +1872,7 @@ msgstr[1] "konflikterende valgstrenger: %s"
 #: ../fdroidserver/nightly.py
 #, fuzzy, python-brace-format
 msgid "copying {apkfilename} into {path}"
-msgstr "Behandler {apkfilename}"
+msgstr "kopierer {apkfilename} inn i {path}"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
