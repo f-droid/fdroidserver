@@ -1,20 +1,20 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Hinaloe <hina@hinaloe.net>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-09-02 16:10+0000\n"
+"Last-Translator: Hinaloe <hina@hinaloe.net>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -75,7 +75,7 @@ msgstr ""
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "%d problems found"
-msgstr ""
+msgstr "%d個の問題が見つかりました"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -130,17 +130,17 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
-msgstr ""
+msgstr "'{aapt}' は古すぎます、froid は build-tools-23.0.0 またはそれ以降が必要です！"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
-msgstr ""
+msgstr "'{aapt}' は古すぎます、froid は build-tools-{version} またはそれ以降が必要です！"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "'{apkfilename}' is already installed on {dev}."
-msgstr ""
+msgstr "'{apkfilename}'はすでに{dev}にインストールされています。"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -238,7 +238,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' is not a directory!"
-msgstr ""
+msgstr "Android SDK パス '{path}' はディレクトリではありません！"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -1915,15 +1915,15 @@ msgstr ""
 #: ../fdroidserver/server.py
 #, python-brace-format
 msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
-msgstr ""
+msgstr "local_copy_dir は「froid」で終わっていません、もしかして: 「{path}」"
 
 #: ../fdroidserver/server.py
 msgid "local_copy_dir must be an absolute path!"
-msgstr ""
+msgstr "local_copy_dir は絶対パスの必要があります！"
 
 #: ../fdroidserver/server.py
 msgid "local_copy_dir must be directory, not a file!"
-msgstr ""
+msgstr "local_copy_dir はファイルではなくディレクトリにする必要があります！"
 
 #: ../fdroidserver/index.py
 #, python-format

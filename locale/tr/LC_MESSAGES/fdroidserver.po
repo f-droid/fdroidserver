@@ -1,21 +1,20 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Oğuz Ersen <oguzersen@protonmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2019-01-31 13:32+0000\n"
-"Last-Translator: Mesut Akcan <makcan@gmail.com>\n"
+"PO-Revision-Date: 2020-07-20 20:29+0000\n"
+"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5-dev\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -57,7 +56,7 @@ msgstr "\"{path}\" var ancak s3cmd kurulu değil!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "\"{path}\" is not an accepted format, convert to: {formats}"
-msgstr "\"{path}\" kabul edilebilir bir tür değil, şuna dönüştürün: {formats}"
+msgstr "\"{path}\" kabul edilebilir bir biçim değil, şuna dönüştürün: {formats}"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -204,7 +203,7 @@ msgstr "İmzalanmamış bir depoya, depo imzalama anahtarı ekleyin"
 
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
-msgstr "İskelet meta veri dosyaları olmayan APKlar için onları yarat"
+msgstr "İskelet üst veri dosyaları olmayan APK'lar için onları ekle"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -274,7 +273,7 @@ msgstr "Geçersiz imza ile {apkfilename} arşivleme!"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
-msgstr "Yansıtılacak temel URL, sorgu dizesini kullanarak indeks imzalama anahtarını içerebilir: ?fingerprint="
+msgstr "Yansının temel URL'si, 'şu sorgu dizgisini kullanarak indeks imzalama anahtarını içerebilir: ?fingerprint="
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
@@ -600,7 +599,7 @@ msgid ""
 "Enter the path to the Android SDK (%s) here:\n"
 "> "
 msgstr ""
-"Burada Android SDK  (%s) konumunu girin:\n"
+"Android SDK (%s) konumunu buraya girin:\n"
 "> "
 
 #: ../fdroidserver/server.py ../fdroidserver/checkupdates.py
@@ -714,7 +713,7 @@ msgstr "Argümanda geçersiz appid'ler bulundu"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Found invalid versionCodes for some apps"
-msgstr "Bazı uygulamalar için geçersiz  versionCode'lar bulundu"
+msgstr "Bazı uygulamalar için geçersiz versionCodes bulundu"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -856,7 +855,7 @@ msgstr "Geçersiz lisans etiketi \"%s\"! Yalnızca https://spdx.org/license-list
 
 #: ../fdroidserver/lint.py
 msgid "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr "Geçersiz bağlantı -  [http://foo.bar Bağlantı başlığı] veya [http://foo.bar] kullanın"
+msgstr "Geçersiz bağlantı - [http://foo.bar Bağlantı başlığı] veya [http://foo.bar] kullanın"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -954,7 +953,7 @@ msgstr "Ad '%s' yalnızca kendiliğinden bir ad - kaldırın"
 
 #: ../fdroidserver/common.py
 msgid "No 'config.py' found, using defaults."
-msgstr "Öntanımlı değerlerle 'config.py' bulunamadı."
+msgstr "'config.py' bulunamadı, öntanımlılar kullanılıyor."
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
@@ -987,7 +986,7 @@ msgstr "Bilgi bulunamadı."
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
-msgstr "Uygulamanın Ücretsiz Yazılım olduğunu belirtmeye gerek yok"
+msgstr "Uygulamanın Özgür Yazılım olduğunu belirtmeye gerek yok"
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is for Android"
@@ -1094,7 +1093,7 @@ msgstr "Projenin genel lisansı."
 
 #: ../fdroidserver/dscanner.py
 msgid "Override path for repo APKs (default: ./repo)"
-msgstr "Depo APKları için konumu geçersiz kıl (öntanımlı: ./repo)"
+msgstr "Depo APK'ları için konumu geçersiz kıl (öntanımlı olarak: ./repo)"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -1192,7 +1191,7 @@ msgstr "İkili şeffaflık günlüğü {url} konumuna gönderiliyor"
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Pushing to {url}"
-msgstr "{url} adresine  itiliyor"
+msgstr "{url} adresine itiliyor"
 
 #: ../fdroid
 msgid "Quickly start a new repository"
@@ -1405,7 +1404,7 @@ msgstr "Olağandan daha da çok bilgi çıkart"
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Striping mystery signature from {apkfilename}"
-msgstr "Gizemli imza {apkfilename} dosyasından  soyuluyor"
+msgstr "Gizemli imza {apkfilename} dosyasından kaldırılıyor"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -1434,7 +1433,7 @@ msgstr "OBB sürüm kodu \"{name}.\" adından sonra gelmelidir:"
 
 #: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
-msgstr "Günlüklenecek depo için taban URLsi (öntanımlı: https://f-droid.org)"
+msgstr "Günlüğe kaydedilecek depo için temel URL (öntanımlı olarak: https://f-droid.org)"
 
 #: ../fdroidserver/mirror.py
 msgid "The directory to write the mirror to"
@@ -1982,7 +1981,7 @@ msgstr "%s argümanlarından biri gerekli"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "only accepts strings, lists, and tuples"
-msgstr "yalnızca satırları, listeleri ve dizileri kabul eder"
+msgstr "yalnızca dizgileri, listeleri ve demetleri (tuple) kabul eder"
 
 #: ../fdroidserver/install.py
 #, python-format
@@ -2157,7 +2156,7 @@ msgstr[1] "{0} uygulama, {1} anahtar adı"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename} ({appid}) has no metadata!"
-msgstr "{apkfilename}{appid} üst verisiz!"
+msgstr "{apkfilename}{appid} üst verisi yok!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format

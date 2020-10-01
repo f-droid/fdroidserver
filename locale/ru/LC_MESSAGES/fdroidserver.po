@@ -1,21 +1,24 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Golubev Alexander <fatzer2@gmail.com>, 2020.
+# Mingun <Alexander_Sergey@mail.ru>, 2020.
+# anonymous <noreply@weblate.org>, 2020.
+# Andrey <andrey@mailbox.org>, 2020.
+# gardenapple <gardenapple@posteo.net>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2018-09-26 12:37+0000\n"
-"Last-Translator: mesnevi <shams@airpost.net>\n"
+"PO-Revision-Date: 2020-07-08 21:41+0000\n"
+"Last-Translator: gardenapple <gardenapple@posteo.net>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.2-dev\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -64,9 +67,9 @@ msgstr "формат пути \"{path}\" не принимается, преоб
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] "Параметру  %(option)s нужен аргумент %(number)d"
-msgstr[1] "Параметру %(option)s нужно несколько аргументов %(number)d"
-msgstr[2] "Параметру %(option)s нужны аргументы %(number)d"
+msgstr[0] "Параметр %(option)s требует %(number)d аргумент"
+msgstr[1] "Параметр %(option)s требует %(number)d аргумента"
+msgstr[2] "Параметр %(option)s требует %(number)d аргументов"
 
 #: ../fdroidserver/mirror.py
 #, python-format
@@ -152,7 +155,7 @@ msgstr "'{apkfilename}' уже установлен на {dev}."
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{field}' in {linedesc} is obsolete, see docs for current fields:"
-msgstr ""
+msgstr "Поле '{field}' в {linedesc} устарело, смотрите список полей достпных на данный момент в документации:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -214,7 +217,7 @@ msgstr "Добавление нового репозитория только д
 
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
-msgstr "Алиас для ключа для подписи репозитория  в хранилище ключей"
+msgstr "Алиас для ключа для подписи репозитория в хранилище ключей"
 
 #: ../fdroidserver/import.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
@@ -235,7 +238,7 @@ msgstr "В установленной Android SDK '{path}' нет '{dirname}'!"
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
-msgstr "Android SDK не обнаружена!"
+msgstr "Android SDK не обнаружен!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -302,7 +305,7 @@ msgstr "Билд подготовлен командой `fdroid import`, пер
 
 #: ../fdroidserver/checkupdates.py
 msgid "Build metadata git repo has uncommited changes!"
-msgstr "В репозитории с метаданными билда есть несохраненные изменения!"
+msgstr "В репозитории с метаданными билдов есть незакоммиченные изменения!"
 
 #: ../fdroidserver/build.py
 msgid "Build only the latest version of each package"
@@ -480,7 +483,7 @@ msgstr "Создание неподписанного индекса (подго
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "CurrentVersionCode {cv} is less than oldest build entry {versionCode}"
-msgstr ""
+msgstr "CurrentVersionCode {cv} меньше значения старейшей сборки {versionCode}"
 
 #: ../fdroidserver/nightly.py
 msgid "DEBUG_KEYSTORE is not set or the value is incomplete"
@@ -601,7 +604,9 @@ msgstr "У флага сборки в {linedesc} нет значения"
 msgid ""
 "Enter the path to the Android SDK (%s) here:\n"
 "> "
-msgstr "Укажите путь к Android SDK (%s): "
+msgstr ""
+"Укажите путь к Android SDK (%s): \n"
+"> "
 
 #: ../fdroidserver/server.py ../fdroidserver/checkupdates.py
 #: ../fdroidserver/upload.py
@@ -929,7 +934,7 @@ msgstr "Отобразить список файлов, формат котор�
 
 #: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
-msgstr ""
+msgstr "В URL f-droid.org включена локаль"
 
 #: ../fdroidserver/build.py
 msgid "Make the build stop on exceptions"
@@ -1086,7 +1091,7 @@ msgstr "Параметры"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
-msgstr ""
+msgstr "Вывод отчёта в формате JSON под именем файла APK."
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
@@ -1259,7 +1264,7 @@ msgstr "Показывать в выводе только предупрежде
 
 #: ../fdroid
 msgid "Rewrite all the metadata files"
-msgstr "Перезаписать  все метаданные"
+msgstr "Перезаписать все метаданные"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Rewrite to a specific format: "
@@ -1273,7 +1278,7 @@ msgstr "Перезапись '{appid}'"
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}' to '{path}'"
-msgstr "Перезапись '{appid}' в  '{path}'"
+msgstr "Перезапись '{appid}' в '{path}'"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
@@ -1534,20 +1539,18 @@ msgid "Unnecessary trailing space"
 msgstr "Лишний пробел в конце строки"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-#| msgid "Unrecognised field '{field}' in {linedesc}"
+#, python-brace-format
 msgid "Unrecognised app field '{fieldname}' in '{path}'"
-msgstr "Неизвестное поле '{field}' в '{linedesc}'"
+msgstr "Неизвестное поле приложения '{fieldname}' в '{path}'"
 
 #: ../fdroidserver/metadata.py
 msgid "Unrecognised app field: "
 msgstr "Неизвестное поле в файле метаданных приложения: "
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-#| msgid "Unrecognised field '{field}' in {linedesc}"
+#, python-brace-format
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
-msgstr "Неизвестное поле '{field}' в '{linedesc}'"
+msgstr "Неизвестный флаг сборки '{build_flag}' в '{path}'"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2183,12 +2186,12 @@ msgstr "У {appid} нет имени! Будет использовано имя
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android Package Name!"
-msgstr ""
+msgstr "{appid} из {path} не годится в качестве имени пакета Android!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Java Package Name!"
-msgstr ""
+msgstr "{appid} из {path} не годится в качестве имени пакета Java!"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -2209,12 +2212,12 @@ msgstr "{appid}: ревизия сборки не указана, сборка �
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'"
-msgstr ""
+msgstr "{appid}: {field} должно быть '{type}', а не '{fieldtype}'!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
-msgstr ""
+msgstr "{appid}: {field} должно быть '{type}', а не '{fieldtype}'!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format

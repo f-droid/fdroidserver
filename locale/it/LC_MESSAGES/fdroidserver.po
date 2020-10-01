@@ -1,22 +1,23 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# random r <epsilin@yopmail.com>, 2020.
+# Luca Zambarda <luke.zambarda@gmail.com>, 2020.
+# IvanDan <ivandanza@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2018-12-31 23:09+0000\n"
-"Last-Translator: Matteo Fumagalli <f.mustang@protonmail.com>\n"
+"PO-Revision-Date: 2020-09-19 17:03+0000\n"
+"Last-Translator: IvanDan <ivandanza@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.4-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -152,7 +153,7 @@ msgstr "\"{apkfilename}\" è già installato su {dev}."
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{field}' in {linedesc} is obsolete, see docs for current fields:"
-msgstr ""
+msgstr "'{field}' in {linedesc} è obsoleto, leggi la documentazione per i campi attuali:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -222,7 +223,7 @@ msgstr "Permetti di specificare una revisione (o branch git) diversa per l'impor
 
 #: ../fdroidserver/mirror.py
 msgid "Also mirror the full archive section"
-msgstr ""
+msgstr "Esegui il mirroring anche per l'intera sezione archivi"
 
 #: ../fdroidserver/lint.py
 msgid "Also warn about formatting issues, like rewritemeta -l"
@@ -275,7 +276,7 @@ msgstr "Archiviando {apkfilename} con una firma invalida!"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
-msgstr ""
+msgstr "Indirizzo URL base per il mirror, può includere la chiave di firma dell'indice utilizzando la query string: ?fingerprint="
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
@@ -515,7 +516,7 @@ msgstr "La descrizione di lunghezza {length} supera il limite di {limit} caratte
 
 #: ../fdroidserver/nightly.py
 msgid "Do not deploy the new files to the repo"
-msgstr ""
+msgstr "Non distribuire i nuovi file nel repository"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -528,7 +529,7 @@ msgstr "Non chiedere il path di Android SDK, esci subito con un errore"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not remove the private keys generated from the keystore"
-msgstr ""
+msgstr "Non rimuovere le chiavi private generate dal keystore"
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
@@ -583,6 +584,8 @@ msgid ""
 "ERROR: this command should never be used to mirror f-droid.org!\n"
 "A full mirror of f-droid.org requires more than 200GB."
 msgstr ""
+"ERRORE: questo comando non deve mai essere utilizzato per il mirror f-droid.org!\n"
+"L’intero mirror di f-droid.org richiede più di 200GB."
 
 #: ../fdroidserver/nightly.py
 msgid "ERROR: unsupported CI type, patches welcome!"
@@ -591,7 +594,7 @@ msgstr ""
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Empty build flag at {linedesc}"
-msgstr ""
+msgstr "Flag build vuoto a {linedesc}"
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -619,45 +622,45 @@ msgstr "Estrai le firme dagli APK"
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Failed fetching signatures for '{apkfilename}': {error}"
-msgstr ""
+msgstr "Impossibile recuperare le firme per '{apkfilename}': {error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed reading {path}: {error}"
-msgstr ""
+msgstr "Impossibile leggere {path}: {error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed resizing {path}: {error}"
-msgstr ""
+msgstr "Impossibile ridimensionare {path}: {error}"
 
 #: ../fdroidserver/publish.py
 msgid "Failed to align application"
-msgstr ""
+msgstr "Impossibile allineare l’applicazione"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
-msgstr ""
+msgstr "Impossibile creare il bucket S3: {url}"
 
 #: ../fdroidserver/common.py
 msgid "Failed to get APK manifest information"
-msgstr ""
+msgstr "Impossibile ottenere informazioni del manifest dell’APK"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get apk information, deleting {path}"
-msgstr ""
+msgstr "Impossibile ottenere informazioni dell’apk, eliminando {path}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get apk information, skipping {path}"
-msgstr ""
+msgstr "Impossibile ottenere informazioni dell’apk, saltando {path}"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Failed to install '{apkfilename}' on {dev}: {error}"
-msgstr ""
+msgstr "Impossibile installare '{apkfilename}' su {dev}: {error}"
 
 #: ../fdroidserver/publish.py ../fdroidserver/common.py
 msgid "Failed to sign application"
@@ -1133,7 +1136,7 @@ msgid "Prepare Drozer to run a scan"
 msgstr ""
 
 msgid "Prepare drozer to run a scan"
-msgstr ""
+msgstr "Preparare drozer per eseguire una scansione"
 
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
@@ -1244,9 +1247,9 @@ msgid "Reset and create a brand new build server, even if the existing one appea
 msgstr ""
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
-msgstr "Archiviando {apkfilename} con il debug.keystore fornito"
+msgstr "Firmando di nuovo {apkfilename} con il debug.keystore fornito"
 
 #: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
@@ -1680,7 +1683,7 @@ msgstr ""
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Using s3cmd to sync with: {url}"
-msgstr ""
+msgstr "Utilizzando s3cmd per sincronizzare con: {url}"
 
 #: ../fdroid
 msgid "Valid commands are:"
@@ -1928,11 +1931,11 @@ msgstr ""
 #: ../fdroidserver/server.py
 #, python-brace-format
 msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
-msgstr ""
+msgstr "local_copy_dir not finisce con \"fdroid\", forse intendevi: \"{path}\""
 
 #: ../fdroidserver/server.py
 msgid "local_copy_dir must be an absolute path!"
-msgstr ""
+msgstr "local_copy_dir deve essere un percorso assoluto!"
 
 #: ../fdroidserver/server.py
 msgid "local_copy_dir must be directory, not a file!"
@@ -2144,7 +2147,7 @@ msgstr "utilizzo: fdroid [-h|--help|--version] <comando> [<argomenti>]"
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "using Apache libcloud to sync with {url}"
-msgstr ""
+msgstr "utilizzando Apache libcloud per sincronizzare con {url}"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format

@@ -1,21 +1,20 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Balázs Meskó <meskobalazs@mailbox.org>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2018-10-03 11:28+0000\n"
-"Last-Translator: Balázs Meskó <meskobalazs@gmail.com>\n"
+"PO-Revision-Date: 2020-04-07 13:43+0000\n"
+"Last-Translator: Balázs Meskó <meskobalazs@mailbox.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/f-droid/fdroidserver/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.2-dev\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -37,7 +36,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr "A(z) „%s/” nem rendelkezik megfelelő metaadat-fájllal."
+msgstr "A(z) „%s/” nem rendelkezik megfelelő metaadatfájllal."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -47,7 +46,7 @@ msgstr "A(z) „{path}” elavult {name} csomagot tartalmaz ({version})"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
-msgstr "A(z) „{path}” friss {name} ({version}) csomagot tartalmaz"
+msgstr "A(z) „{path}” friss {name} csomagot tartalmaz ({version})"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format

@@ -1,21 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2020.
+# André Marcelo Alvarenga <andrealvarenga@gmx.net>, 2020.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2018-12-04 21:09+0000\n"
-"Last-Translator: Lunovox Heavenfinder <lunovox@disroot.org>\n"
+"PO-Revision-Date: 2020-10-01 09:00+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.4-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -151,12 +152,12 @@ msgstr "'{apkfilename}' já está instalado no {dev}."
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{field}' in {linedesc} is obsolete, see docs for current fields:"
-msgstr ""
+msgstr "O '{field}' em {linedesc} é obsoleto, veja a documentação para conhecer os campos atuais:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{field}' will be in random order! Use () or [] brackets if order is important!"
-msgstr "'{field}' será em ordem aleatória! Use () ou []  se a ordem for importante!"
+msgstr "'{field}' será em ordem aleatória! Use () ou [] se a ordem for importante!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -166,7 +167,7 @@ msgstr "'{path}' falhou ao executar!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
-msgstr "'{value}' não é um{field} válido  em {appid}. Regex padrão: {pattern}"
+msgstr "'{value}' não é um{field} válido em {appid}. Regex padrão: {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -384,7 +385,7 @@ msgstr "Limpar todos os containers e então sair"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
-msgstr "Atualização limpa - não usa cache, reprocessa todos os APKs"
+msgstr "Atualização limpa - não utiliza o cache, reprocessa todos os APKs"
 
 #: ../fdroidserver/import.py
 msgid "Comma separated list of categories."
@@ -411,7 +412,7 @@ msgstr "Impossível encontrar {path} para removê-lo"
 
 #: ../fdroidserver/update.py
 msgid "Could not open apk file for analysis"
-msgstr "Impossível abrir o arquivo de APK  para analisá-lo"
+msgstr "Impossível abrir o arquivo de APK para analisá-lo"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
@@ -478,7 +479,7 @@ msgstr "Criando índice não assinado em preparação para assinatura"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "CurrentVersionCode {cv} is less than oldest build entry {versionCode}"
-msgstr ""
+msgstr "O CurrentVersionCode {cv} é menor que a entrada da versão mais antiga {versionCode}"
 
 #: ../fdroidserver/nightly.py
 msgid "DEBUG_KEYSTORE is not set or the value is incomplete"
@@ -719,7 +720,7 @@ msgstr "Encontrado versões de códigos inválidas para alguns aplicativos"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Found multiple metadata files for {appid}"
-msgstr "Encontrados vários ficheiros de metadados para {appid}"
+msgstr "Encontrados vários arquivos de metadados para {appid}"
 
 #: ../fdroidserver/index.py
 msgid "Found multiple signing certificates for repository."
@@ -929,7 +930,7 @@ msgstr "Listar arquivos que devem ser reformatados"
 
 #: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
-msgstr ""
+msgstr "A localização foi incluída na URL f-droid.org"
 
 #: ../fdroidserver/build.py
 msgid "Make the build stop on exceptions"
@@ -1086,7 +1087,7 @@ msgstr "Opções"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
-msgstr ""
+msgstr "Exporte a saída do relatório JSON para um nome de arquivo após APK."
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
@@ -1313,8 +1314,8 @@ msgstr "O scanner encontrou {count} problemas em {appid}: {versionCode}:"
 #: ../fdroidserver/build.py
 msgid "Scanner found {} problem"
 msgid_plural "Scanner found {} problems"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "O Scanner encontrou {} problema"
+msgstr[1] "O Scanner encontrou {} problemas"
 
 #: ../fdroidserver/common.py
 msgid "Set clock to that time using:"
@@ -1442,7 +1443,7 @@ msgstr "O diretório para escrever o espelho para"
 
 #: ../fdroidserver/nightly.py
 msgid "The file to be included in the repo (path or glob)"
-msgstr "O ficherio a ser incluído no repo (caminho ou glob)"
+msgstr "O arquivo a ser incluído no repositório (caminho ou glob)"
 
 #: ../fdroidserver/server.py
 msgid "The only commands currently supported are 'init' and 'update'"
@@ -1498,13 +1499,13 @@ msgstr "Texto inesperado na mesma linha como {field} em {linedesc}"
 
 #: ../fdroid
 msgid "Unknown exception found!"
-msgstr "Uma exceção desconhecida foi encrontrada!"
+msgstr "Exceção desconhecida encontrada!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
-msgstr "Ficheiro desconhecido '{filename}' na compilação '{versionName}'"
+msgstr "Arquivo desconhecido '{filename}' na compilação '{versionName}'"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1533,20 +1534,18 @@ msgid "Unnecessary trailing space"
 msgstr "Espaço desnecessário ao fim"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-#| msgid "Unrecognised field '{field}' in {linedesc}"
+#, python-brace-format
 msgid "Unrecognised app field '{fieldname}' in '{path}'"
-msgstr "Campo '{field}' não reconhecido em {linedesc}"
+msgstr "O campo '{fieldname}' não foi reconhecido em '{path}'"
 
 #: ../fdroidserver/metadata.py
 msgid "Unrecognised app field: "
 msgstr "Campo da app não reconhecido: "
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-#| msgid "Unrecognised field '{field}' in {linedesc}"
+#, python-brace-format
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
-msgstr "Campo '{field}' não reconhecido em {linedesc}"
+msgstr "O sinalizador de construção '{build_flag}' desconhecido em '{path}'"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1556,12 +1555,12 @@ msgstr "Campo '{field}' não reconhecido em {linedesc}"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported file type \"{extension}\" for repo graphic"
-msgstr "Tipo de ficheiro \"{extension}\" não suportado para o gráfico de repo"
+msgstr "Tipo de arquivo \"{extension}\" não suportado para o gráfico de repo"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported graphics file found: {path}"
-msgstr "Ficheiro gráfico não suportado encontrado: {path}"
+msgstr "Arquivo gráfico não suportado encontrado: {path}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1594,11 +1593,11 @@ msgstr "Extlib não utilizado em %s"
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Unused file at %s"
-msgstr "Ficheiro não utilizado em %s"
+msgstr "Arquivo não utilizado em %s"
 
 #: ../fdroidserver/lint.py
 msgid "Update Check Name is set to the known app id - it can be removed"
-msgstr "O nome da verificação de atualização (Update Check Name) é definido como o ID comun do app - pode ser removido"
+msgstr "O nome da verificação da atualização (Update Check Name) é definido como o ID comun do app - pode ser removido"
 
 #: ../fdroid
 msgid "Update repo information for new packages"
@@ -1644,7 +1643,7 @@ msgstr "Uso: %s\n"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
-msgstr "Use /HEAD em vez de /master para apontar em um ficheiro na ramificação predefinida"
+msgstr "Use /HEAD em vez de /master para apontar em um arquivo na ramificação predefinida"
 
 #: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
@@ -1755,7 +1754,7 @@ msgstr "applicationId para verificar se há atualizações"
 #: ../fdroidserver/dscanner.py ../fdroidserver/build.py
 #: ../fdroidserver/scanner.py ../fdroidserver/install.py
 msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
-msgstr "applicationId com versionCode  opcional na forma APPID[:VERCODE]"
+msgstr "applicationId com versionCode opcional na forma APPID[:VERCODE]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -1807,8 +1806,8 @@ msgstr "complexo"
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "opção conflitante na string: %s"
+msgstr[1] "opções conflitantes nas strings: %s"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1841,8 +1840,8 @@ msgstr "dest = é necessário para opções como %r"
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "foi previsto %s argumento"
+msgstr[1] "foi previsto %s argumentos"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -1939,7 +1938,7 @@ msgstr "local_copy_dir deve ser um caminho absoluto!"
 
 #: ../fdroidserver/server.py
 msgid "local_copy_dir must be directory, not a file!"
-msgstr "local_copy_dir deve ser directory, não um ficheiro!"
+msgstr "local_copy_dir deve ser directory, não um arquivo!"
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -2153,8 +2152,8 @@ msgstr "usando o Apache libcloud para sincronizar com {url}"
 #, python-brace-format
 msgid "{0} app, {1} key aliases"
 msgid_plural "{0} apps, {1} key aliases"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} apl, {1} codinome de chave"
+msgstr[1] "{0} apls, {1} codinome de chaves"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2179,12 +2178,12 @@ msgstr "{appid} não tem um nome! Usando o nome do pacote em vez disso."
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android Package Name!"
-msgstr ""
+msgstr "O {appid} do {path} não é um Nome de Pacote Android válido!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Java Package Name!"
-msgstr ""
+msgstr "O {appid} do {path} não é um Nome de Pacote Java válido!"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -2200,17 +2199,17 @@ msgstr "{appid}: extlib {path} desconhecido na compilação '{versionName}'"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "{appid}: no builds specified, running on current source state"
-msgstr "{appid}: nehnuma compilação especificada, em execução no estado de origem atual"
+msgstr "{appid}: nenhuma compilação especificada, em execução no estado de origem atual"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'"
-msgstr ""
+msgstr "O {appid}: {field} deve ser um '{type}', porém é um '{fieldtype}!'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
-msgstr ""
+msgstr "O {appid}: {field} deve ser um '{type}', porém é um '{fieldtype}'!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2245,14 +2244,14 @@ msgstr "{url} não termina com \"fdroid\", verifique o caminho na URL!"
 #: ../fdroidserver/build.py
 msgid "{} build failed"
 msgid_plural "{} builds failed"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{} compilação falhou"
+msgstr[1] "{} compilações falharam"
 
 #: ../fdroidserver/build.py
 msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{} compilação foi bem sucedida"
+msgstr[1] "{} compilações foram bem sucedidas"
 
 #~ msgid "Interactively ask about things that need updating."
 #~ msgstr "Perguntar interativamente sobre elementos que precisam de atualização."
