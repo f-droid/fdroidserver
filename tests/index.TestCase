@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import datetime
 import inspect
 import logging
 import optparse
@@ -29,17 +30,25 @@ from testcommon import TmpCwd
 GP_FINGERPRINT = 'B7C2EEFD8DAC7806AF67DFCD92EB18126BC08312A7F2D6F3862E46013C7A6135'
 
 
+class Options:
+    nosign = True
+    pretty = False
+    verbose = False
+
+
 class IndexTest(unittest.TestCase):
 
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = os.path.join(localmodule, 'tests')
+        os.chmod(os.path.join(self.basedir, 'config.py'), 0o600)
         self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
         if not os.path.exists(self.tmpdir):
             os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
 
         fdroidserver.common.config = None
+        fdroidserver.common.options = Options
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
@@ -215,6 +224,29 @@ class IndexTest(unittest.TestCase):
             self.maxDiff = None
             self.assertEqual(json.dumps(i, indent=2), json.dumps(o, indent=2))
 
+    def test_make_v0(self):
+        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
+                                       dir=self.tmpdir)
+        os.chdir(tmptestsdir)
+        os.mkdir('repo')
+        repo_icons_dir = os.path.join('repo', 'icons')
+        self.assertFalse(os.path.isdir(repo_icons_dir))
+        repodict = {
+            'address': 'https://example.com/fdroid/repo',
+            'description': 'This is just a test',
+            'icon': 'blahblah',
+            'name': 'test',
+            'timestamp': datetime.datetime.now(),
+            'version': 12,
+        }
+        requestsdict = {'install': [], 'uninstall': []}
+        fdroidserver.common.config['repo_pubkey'] = 'ffffffffffffffffffffffffffffffffff'
+        fdroidserver.index.make_v0({}, [], 'repo', repodict, requestsdict, [])
+        self.assertTrue(os.path.isdir(repo_icons_dir))
+        self.assertTrue(os.path.exists(os.path.join(repo_icons_dir,
+                                                    fdroidserver.common.default_config['repo_icon'])))
+        self.assertTrue(os.path.exists(os.path.join('repo', 'index.xml')))
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
@@ -222,7 +254,8 @@ if __name__ == "__main__":
     parser = optparse.OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", default=False,
                       help="Spew out even more information than normal")
-    (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
+    (options, args) = parser.parse_args()
+    Options.verbose = options.verbose
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(IndexTest))
