@@ -1,22 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Manuela Silva <mmsrs@sky.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2019-01-31 13:32+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
+"PO-Revision-Date: 2020-05-13 22:41+0000\n"
+"Last-Translator: Manuela Silva <mmsrs@sky.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_PT/>\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.5-dev\n"
+"X-Generator: Weblate 4.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -167,7 +166,7 @@ msgstr "'{path}' falhou ao executar!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
-msgstr "'{value}' não é um{field} válido  em {appid}. Regex padrão: {pattern}"
+msgstr "'{value}' não é um {field} válido em {appid}. Padrão Regex: {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -1158,12 +1157,12 @@ msgstr "Processar atualizações automáticas"
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #, python-brace-format
 msgid "Processing {apkfilename}"
-msgstr "Processando {apkfilename}"
+msgstr "A processar {apkfilename}"
 
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Processing {appid}"
-msgstr "Processando {appid}"
+msgstr "A processar {appid}"
 
 #: ../fdroidserver/update.py
 msgid "Produce human-readable XML/JSON for index files"
@@ -1183,35 +1182,35 @@ msgstr "A pontuação deve ser evitada"
 
 #: ../fdroidserver/btlog.py
 msgid "Push the log to this git remote repository"
-msgstr "Mandar o registro de mudanças para este repositório git remoto"
+msgstr "Submeter o registo de eventos para este repositório git remoto"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Pushing binary transparency log to {url}"
-msgstr "Atualizar o log de transparência de um binário para {url}"
+msgstr "A submeter o registo de transparência de binário para {url}"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Pushing to {url}"
-msgstr "Empurrando para {url}"
+msgstr "A submeter para {url}"
 
 #: ../fdroid
 msgid "Quickly start a new repository"
-msgstr "Criação de um novo repositório"
+msgstr "Criar rapidamente um novo repositório"
 
 #: ../fdroid
 msgid "Read all the metadata files and exit"
-msgstr "Lê todos os metadados dos ficheiros e sai"
+msgstr "Ler todos os ficheiros de metadados e sair"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading '{config_file}'"
-msgstr "Lendo '{config_file}'"
+msgstr "A ler '{config_file}'"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading minSdkVersion failed: \"{apkfilename}\""
-msgstr "Leitura de minSdkVersion falhou: \"{apkfilename}\""
+msgstr "A leitura de minSdkVersion falhou: \"{apkfilename}\""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #. https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
@@ -1235,7 +1234,7 @@ msgstr "Apagando ficheiros especificados"
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
-msgstr "Renomeia todos os nomes dos APKs que não têm o mesmo nome que package.name_123.apk"
+msgstr "Renomear todos os ficheiros APKs que não correspondem com package.name_123.apk"
 
 #: ../fdroidserver/update.py
 msgid "Report on build data status"
@@ -1260,7 +1259,7 @@ msgstr "Restringir a saída a erros e avisos"
 
 #: ../fdroid
 msgid "Rewrite all the metadata files"
-msgstr "Reescreve todos os ficheiros de metadados"
+msgstr "Regravar todos os ficheiros de metadados"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Rewrite to a specific format: "
@@ -1299,7 +1298,7 @@ msgstr "Escanear apenas a versão mais recente de cada pacote"
 
 #: ../fdroid
 msgid "Scan the source code of a package"
-msgstr "Analise do código fonte do pacote"
+msgstr "Analisar o código fonte de um pacote"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1348,11 +1347,11 @@ msgstr "Configure um emulador, instale o apk nele e execute um scan do drozer"
 
 #: ../fdroid
 msgid "Sign and place packages in the repo"
-msgstr "Assine e coloque pacotes no repositório"
+msgstr "Assinar e colocar os pacotes no repositório"
 
 #: ../fdroid
 msgid "Sign indexes created using update --nosign"
-msgstr "Assinar os índices criados usando update --nosign"
+msgstr "Assinar os índices criados com o uso de update --nosign"
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
@@ -1601,11 +1600,11 @@ msgstr "O nome da verificação de atualização (Update Check Name) é definido
 
 #: ../fdroid
 msgid "Update repo information for new packages"
-msgstr "Atualize as informações do repositório para novos pacotes"
+msgstr "Atualizar a informação do repositório para novos pacotes"
 
 #: ../fdroid
 msgid "Update the binary transparency log for a URL"
-msgstr "Atualizar o log de transparência de um binário para um URL"
+msgstr "Atualizar o registo de transparência de binário para um URL"
 
 #: ../fdroid
 msgid "Update the stats of the repo"
