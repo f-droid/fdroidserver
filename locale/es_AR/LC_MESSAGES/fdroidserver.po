@@ -1,22 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2019-01-27 13:19+0000\n"
-"Last-Translator: Andrés S <andres.segovia.dev@gmail.com>\n"
+"PO-Revision-Date: 2020-10-01 09:00+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Spanish (Argentina) <https://hosted.weblate.org/projects/f-droid/fdroidserver/es_AR/>\n"
 "Language: es_AR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -718,9 +717,9 @@ msgid "Found invalid versionCodes for some apps"
 msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found multiple metadata files for {appid}"
-msgstr "Crear plantilla de metadatos de los archivos faltantes"
+msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "Found multiple signing certificates for repository."
@@ -741,9 +740,9 @@ msgid "Found non-file at %s"
 msgstr ""
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Generated skeleton metadata for {appid}"
-msgstr "Crear plantilla de metadatos de los archivos faltantes"
+msgstr "Crear plantilla de metadatos de {appid}"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -1189,9 +1188,9 @@ msgid "Push the log to this git remote repository"
 msgstr "Subir el registro al repositorio remoto de git"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Pushing binary transparency log to {url}"
-msgstr "Actualizar el registro de transparencia binario de un URL"
+msgstr "Actualizar el registro de transparencia binario de {url}"
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -1231,7 +1230,7 @@ msgstr ""
 #: ../fdroidserver/stats.py
 #, fuzzy
 msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr "Recalcular las agregaciones - usar cuando haya cambios "
+msgstr "Recalcular las agregaciones - usar cuando haya cambios"
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1286,9 +1285,8 @@ msgid "Run on git repo that has uncommitted changes"
 msgstr ""
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Run rewritemeta to fix formatting"
-msgstr "Rescribir a un formato especifico: "
+msgstr ""
 
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 msgid "Running first pass with MD5 checking disabled"
@@ -1522,9 +1520,9 @@ msgid "Unknown metadata format: %s"
 msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown metadata format: {path}"
-msgstr "Crear plantilla de metadatos de los archivos faltantes"
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
@@ -1897,9 +1895,8 @@ msgid "force errors to be warnings, or ignore"
 msgstr "forzar errores al ser advertencias, o ignorar"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy
 msgid "force metadata errors (default) to be warnings, or to be ignored."
-msgstr "forzar errores al ser advertencias, o ignorar"
+msgstr "forzar errores al ser advertencias, o ignorar."
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
@@ -2022,9 +2019,9 @@ msgstr ""
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
-#, fuzzy, python-format
+#, python-format
 msgid "option -%s not recognized"
-msgstr "No se reconoce el comando \"%s\".\n"
+msgstr "No se reconoce el comando \"%s\""
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
@@ -2046,9 +2043,9 @@ msgstr ""
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
-#, fuzzy, python-format
+#, python-format
 msgid "option --%s not recognized"
-msgstr "No se reconoce el comando \"%s\".\n"
+msgstr "No se reconoce el comando --\"%s\""
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
