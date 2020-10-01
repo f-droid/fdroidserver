@@ -61,7 +61,7 @@ def make(apps, apks, repodir, archive):
         common.assert_config_keystore(common.config)
 
     # Historically the index has been sorted by App Name, so we enforce this ordering here
-    sortedids = sorted(apps, key=lambda appid: apps[appid].Name.upper())
+    sortedids = sorted(apps, key=lambda appid: apps[appid]['Name'].upper())
     sortedapps = collections.OrderedDict()
     for appid in sortedids:
         sortedapps[appid] = apps[appid]

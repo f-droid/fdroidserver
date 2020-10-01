@@ -1971,26 +1971,26 @@ def apply_info_from_latest_apk(apps, apks):
                     bestver = apk['versionCode']
                     bestapk = apk
 
-                if app.NoSourceSince:
+                if app['NoSourceSince']:
                     apk['antiFeatures'].add('NoSourceSince')
 
-        if not app.added:
+        if not app['added']:
             logging.debug("Don't know when " + appid + " was added")
-        if not app.lastUpdated:
+        if not app['lastUpdated']:
             logging.debug("Don't know when " + appid + " was last updated")
 
         if bestver == UNSET_VERSION_CODE:
 
-            if app.Name is None:
-                app.Name = app.AutoName or appid
-            app.icon = None
+            if app['Name'] is None:
+                app['Name'] = app['AutoName'] or appid
+            app['icon'] = None
             logging.debug("Application " + appid + " has no packages")
         else:
-            if app.Name is None:
-                app.Name = bestapk['name']
-            app.icon = bestapk['icon'] if 'icon' in bestapk else None
-            if app.CurrentVersionCode is None:
-                app.CurrentVersionCode = str(bestver)
+            if app['Name'] is None:
+                app['Name'] = bestapk['name']
+            app['icon'] = bestapk['icon'] if 'icon' in bestapk else None
+            if app['CurrentVersionCode'] is None:
+                app['CurrentVersionCode'] = str(bestver)
 
 
 def make_categories_txt(repodir, categories):
