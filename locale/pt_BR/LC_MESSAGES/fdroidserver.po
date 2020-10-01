@@ -1,20 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2020.
+# André Marcelo Alvarenga <andrealvarenga@gmx.net>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2019-01-28 13:31+0000\n"
-"PO-Revision-Date: 2020-04-03 03:55+0000\n"
-"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
+"PO-Revision-Date: 2020-05-16 20:31+0000\n"
+"Last-Translator: André Marcelo Alvarenga <andrealvarenga@gmx.net>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -718,7 +719,7 @@ msgstr "Encontrado versões de códigos inválidas para alguns aplicativos"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Found multiple metadata files for {appid}"
-msgstr "Encontrados vários ficheiros de metadados para {appid}"
+msgstr "Encontrados vários arquivos de metadados para {appid}"
 
 #: ../fdroidserver/index.py
 msgid "Found multiple signing certificates for repository."
@@ -1441,7 +1442,7 @@ msgstr "O diretório para escrever o espelho para"
 
 #: ../fdroidserver/nightly.py
 msgid "The file to be included in the repo (path or glob)"
-msgstr "O ficherio a ser incluído no repo (caminho ou glob)"
+msgstr "O arquivo a ser incluído no repositório (caminho ou glob)"
 
 #: ../fdroidserver/server.py
 msgid "The only commands currently supported are 'init' and 'update'"
@@ -1497,13 +1498,13 @@ msgstr "Texto inesperado na mesma linha como {field} em {linedesc}"
 
 #: ../fdroid
 msgid "Unknown exception found!"
-msgstr "Uma exceção desconhecida foi encrontrada!"
+msgstr "Exceção desconhecida encontrada!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
-msgstr "Ficheiro desconhecido '{filename}' na compilação '{versionName}'"
+msgstr "Arquivo desconhecido '{filename}' na compilação '{versionName}'"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1553,12 +1554,12 @@ msgstr "Campo '{field}' não reconhecido em {linedesc}"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported file type \"{extension}\" for repo graphic"
-msgstr "Tipo de ficheiro \"{extension}\" não suportado para o gráfico de repo"
+msgstr "Tipo de arquivo \"{extension}\" não suportado para o gráfico de repo"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported graphics file found: {path}"
-msgstr "Ficheiro gráfico não suportado encontrado: {path}"
+msgstr "Arquivo gráfico não suportado encontrado: {path}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1591,7 +1592,7 @@ msgstr "Extlib não utilizado em %s"
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Unused file at %s"
-msgstr "Ficheiro não utilizado em %s"
+msgstr "Arquivo não utilizado em %s"
 
 #: ../fdroidserver/lint.py
 msgid "Update Check Name is set to the known app id - it can be removed"
@@ -1641,7 +1642,7 @@ msgstr "Uso: %s\n"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
-msgstr "Use /HEAD em vez de /master para apontar em um ficheiro na ramificação predefinida"
+msgstr "Use /HEAD em vez de /master para apontar em um arquivo na ramificação predefinida"
 
 #: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
@@ -1936,7 +1937,7 @@ msgstr "local_copy_dir deve ser um caminho absoluto!"
 
 #: ../fdroidserver/server.py
 msgid "local_copy_dir must be directory, not a file!"
-msgstr "local_copy_dir deve ser directory, não um ficheiro!"
+msgstr "local_copy_dir deve ser directory, não um arquivo!"
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -2197,7 +2198,7 @@ msgstr "{appid}: extlib {path} desconhecido na compilação '{versionName}'"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "{appid}: no builds specified, running on current source state"
-msgstr "{appid}: nehnuma compilação especificada, em execução no estado de origem atual"
+msgstr "{appid}: nenhuma compilação especificada, em execução no estado de origem atual"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
