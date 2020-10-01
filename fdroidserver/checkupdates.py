@@ -599,7 +599,7 @@ def main():
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help=_("applicationId to check for updates"))
+    parser.add_argument("appid", nargs='*', help=_("application ID of file to operate on"))
     parser.add_argument("--auto", action="store_true", default=False,
                         help=_("Process auto-updates"))
     parser.add_argument("--autoonly", action="store_true", default=False,

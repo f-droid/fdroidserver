@@ -1356,7 +1356,7 @@ def scan_apk(apk_file):
         raise BuildException(_("{appid} from {path} is not a valid Java Package Name!")
                              .format(appid=apk['packageName'], path=apk_file))
     elif not common.is_strict_application_id(apk['packageName']):
-        logging.warning(_("{appid} from {path} is not a valid Android Package Name!")
+        logging.warning(_("{appid} from {path} is not a valid Android application ID!")
                         .format(appid=apk['packageName'], path=apk_file))
 
     # Get the signature, or rather the signing key fingerprints
@@ -2126,7 +2126,7 @@ def create_metadata_from_template(apk):
                              metatxt,
                              flags=re.IGNORECASE | re.MULTILINE)
         else:
-            logging.warning(_('{appid} does not have a name! Using package name instead.')
+            logging.warning(_('{appid} does not have a name! Using application ID instead.')
                             .format(appid=apk['packageName']))
             metatxt = re.sub(r'^(((Auto)?Name|Summary):).*$',
                              r'\1 ' + apk['packageName'],
@@ -2152,7 +2152,7 @@ def create_metadata_from_template(apk):
         if 'name' in apk and apk['name'] != '':
             app['Name'] = apk['name']
         else:
-            logging.warning(_('{appid} does not have a name! Using package name instead.')
+            logging.warning(_('{appid} does not have a name! Using application ID instead.')
                             .format(appid=apk['packageName']))
             app['Name'] = apk['packageName']
         with open(os.path.join('metadata', apk['packageName'] + '.yml'), 'w') as f:

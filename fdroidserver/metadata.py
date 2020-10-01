@@ -1189,11 +1189,13 @@ class DescriptionResolver:
         if appid in self.apps:
             if self.apps[appid].Name:
                 return "fdroid.app:" + appid, self.apps[appid].Name
-        raise MetaDataException("Cannot resolve app id " + appid)
+        raise MetaDataException(_('Cannot resolve application ID {appid}')
+                                .format(appid=appid))
 
 
 class DummyDescriptionResolver(DescriptionResolver):
     def resolve_description_link(self, appid):
         if appid in self.apps:
             return "fdroid.app:" + appid, "Dummy name - don't know yet"
-        _warn_or_exception(_("Cannot resolve app id {appid}").format(appid=appid))
+        _warn_or_exception(_('Cannot resolve application ID {appid}')
+                           .format(appid=appid))

@@ -278,7 +278,7 @@ def check_old_links(app):
 
 def check_useless_fields(app):
     if app.UpdateCheckName == app.id:
-        yield _("Update Check Name is set to the known app id - it can be removed")
+        yield _("UpdateCheckName is set to the known application ID, it can be removed")
 
 
 filling_ucms = re.compile(r'^(Tags.*|RepoManifest.*)')
@@ -575,7 +575,7 @@ def main():
     parser.add_argument('--force-yamllint', action="store_true", default=False,
                         help=_("When linting the entire repository yamllint is disabled by default. "
                                "This option forces yamllint regardless."))
-    parser.add_argument("appid", nargs='*', help=_("applicationId in the form APPID"))
+    parser.add_argument("appid", nargs='*', help=_("application ID of file to operate on"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W

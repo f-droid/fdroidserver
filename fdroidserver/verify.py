@@ -121,7 +121,7 @@ def main():
     # Parse command line...
     parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))
+    parser.add_argument("appid", nargs='*', help=_("application ID with optional versionCode in the form APPID[:VERCODE]"))
     parser.add_argument("--reuse-remote-apk", action="store_true", default=False,
                         help=_("Verify against locally cached copy rather than redownloading."))
     parser.add_argument("--output-json", action="store_true", default=False,

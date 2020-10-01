@@ -54,7 +54,7 @@ def main():
     common.setup_global_opts(parser)
     parser.add_argument("-l", "--list", action="store_true", default=False,
                         help=_("List files that would be reformatted"))
-    parser.add_argument("appid", nargs='*', help=_("applicationId in the form APPID"))
+    parser.add_argument("appid", nargs='*', help=_("application ID of file to operate on"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
