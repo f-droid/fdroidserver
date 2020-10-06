@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import argparse
 import sys
 import os
 import shutil
@@ -2273,7 +2274,7 @@ def main():
     parser.add_argument("-I", "--icons", action="store_true", default=False,
                         help=_("Resize all the icons exceeding the max pixel size and exit"))
     parser.add_argument("-w", "--wiki", default=False, action="store_true",
-                        help=_("Update the wiki"))
+                        help=argparse.SUPPRESS)
     parser.add_argument("--pretty", action="store_true", default=False,
                         help=_("Produce human-readable XML/JSON for index files"))
     parser.add_argument("--clean", action="store_true", default=False,
@@ -2443,6 +2444,7 @@ def main():
 
     # Update the wiki...
     if options.wiki:
+        logging.warning(_('wiki support is deprecated and will be removed in the next release!'))
         update_wiki(apps, apks + archapks)
     status_update_json(apps, apks + archapks)
 

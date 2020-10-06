@@ -81,9 +81,9 @@ __complete_options() {
 }
 
 __complete_build() {
-	opts="-v -q -l -s -t -f -a -w"
+	opts="-v -q -l -s -t -f -a"
 
-	lopts="--verbose --quiet --latest --stop --test --server --reset-server --skip-scan --scan-binary --no-tarball --force --all --wiki --no-refresh"
+	lopts="--verbose --quiet --latest --stop --test --server --reset-server --skip-scan --scan-binary --no-tarball --force --all --no-refresh"
 	case "${prev}" in
 		:)
 			__vercode
@@ -125,9 +125,9 @@ __complete_install() {
 }
 
 __complete_update() {
-	opts="-c -v -q -i -I -e -w"
+	opts="-c -v -q -i -I -e"
 	lopts="--create-metadata --verbose --quiet
- --icons --wiki --pretty --clean --delete-unknown
+ --icons --pretty --clean --delete-unknown
  --nosign --rename-apks --use-date-from-apk"
 	case "${prev}" in
 		-e|--editor)
