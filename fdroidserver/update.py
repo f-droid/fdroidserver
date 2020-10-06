@@ -2270,8 +2270,6 @@ def main():
                         help=_("Add skeleton metadata files for APKs that are missing them"))
     parser.add_argument("--delete-unknown", action="store_true", default=False,
                         help=_("Delete APKs and/or OBBs without metadata from the repo"))
-    parser.add_argument("-b", "--buildreport", action="store_true", default=False,
-                        help=_("Report on build data status"))
     parser.add_argument("-I", "--icons", action="store_true", default=False,
                         help=_("Resize all the icons exceeding the max pixel size and exit"))
     parser.add_argument("-w", "--wiki", default=False, action="store_true",
