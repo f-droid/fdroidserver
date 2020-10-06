@@ -124,7 +124,7 @@ default_config = {
     'sync_from_local_copy_dir': False,
     'allow_disabled_algorithms': False,
     'per_app_repos': False,
-    'make_current_version_link': True,
+    'make_current_version_link': False,
     'current_version_name_source': 'Name',
     'deploy_process_logs': False,
     'update_stats': False,

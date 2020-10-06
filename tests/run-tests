@@ -165,6 +165,7 @@ if which zipalign || ls -1 $ANDROID_HOME/build-tools/*/zipalign; then
     cd $REPOROOT
     cp $WORKSPACE/tests/keystore.jks $REPOROOT/
     $fdroid init --keystore keystore.jks --repo-keyalias=sova
+    echo 'make_current_version_link = True' >> config.py
     echo 'keystorepass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
     echo 'keypass = "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI="' >> config.py
     echo 'keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.py
