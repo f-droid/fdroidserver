@@ -323,7 +323,8 @@ def read_config(opts, config_file='config.py'):
         config['smartcardoptions'] = re.sub(r'\s+', r' ', config['smartcardoptions']).split(' ')
     elif not smartcardoptions and 'keystore' in config and config['keystore'] == 'NONE':
         # keystore='NONE' means use smartcard, these are required defaults
-        config['smartcardoptions'] = ['-storetype', 'PKCS11', '-providerClass',
+        config['smartcardoptions'] = ['-storetype', 'PKCS11', '-providerName',
+                                      'SunPKCS11-OpenSC', '-providerClass',
                                       'sun.security.pkcs11.SunPKCS11',
                                       '-providerArg', 'opensc-fdroid.cfg']
 
@@ -3082,15 +3083,21 @@ def sign_apk(unsigned_path, signed_path, keyalias):
     apk = _get_androguard_APK(unsigned_path)
     if apk.get_effective_target_sdk_version() >= 30:
         if config['keystore'] == 'NONE':
-            # NOTE: apksigner doesn't like -providerName/--provider-name at all, don't use
+            # NOTE: apksigner doesn't like -providerName/--provider-name at all, don't use that.
             #       apksigner documents the options as --ks-provider-class and --ks-provider-arg
             #       those seem to be accepted but fail when actually making a signature with
             #       weird internal exceptions. Those options actually work.
             #       From: https://geoffreymetais.github.io/code/key-signing/#scripting
+            apksigner_smartcardoptions = config['smartcardoptions'].copy()
+            if '-providerName' in apksigner_smartcardoptions:
+                pos = config['smartcardoptions'].index('-providerName')
+                # remove -providerName and it's argument
+                del apksigner_smartcardoptions[pos]
+                del apksigner_smartcardoptions[pos]
             replacements = {'-storetype': '--ks-type',
                             '-providerClass': '--provider-class',
                             '-providerArg': '--provider-arg'}
-            signing_args = [replacements.get(n, n) for n in config['smartcardoptions']]
+            signing_args = [replacements.get(n, n) for n in apksigner_smartcardoptions]
         else:
             signing_args = ['--key-pass', 'env:FDROID_KEY_PASS']
         if not find_apksigner():
