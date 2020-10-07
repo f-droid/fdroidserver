@@ -148,7 +148,7 @@ For more info on this idea:
 def main():
     global options
 
-    parser = ArgumentParser(usage="%(prog)s [options]")
+    parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument("--git-repo",
                         default=os.path.join(os.getcwd(), 'binary_transparency'),

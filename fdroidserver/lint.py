@@ -242,7 +242,7 @@ def check_ucm_tags(app):
             and lastbuild.versionCode == app.CurrentVersionCode
             and not lastbuild.forcevercode
             and any(s in lastbuild.commit for s in '.,_-/')):
-        yield _("Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'")\
+        yield _("Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'")\
             .format(commit=lastbuild.commit, ucm=app.UpdateCheckMode)
 
 
@@ -278,7 +278,7 @@ def check_old_links(app):
 
 def check_useless_fields(app):
     if app.UpdateCheckName == app.id:
-        yield _("Update Check Name is set to the known app id - it can be removed")
+        yield _("UpdateCheckName is set to the known application ID, it can be removed")
 
 
 filling_ucms = re.compile(r'^(Tags.*|RepoManifest.*)')
@@ -287,7 +287,7 @@ filling_ucms = re.compile(r'^(Tags.*|RepoManifest.*)')
 def check_checkupdates_ran(app):
     if filling_ucms.match(app.UpdateCheckMode):
         if not app.AutoName and not app.CurrentVersion and app.CurrentVersionCode == '0':
-            yield _("UCM is set but it looks like checkupdates hasn't been run yet")
+            yield _("UpdateCheckMode is set but it looks like checkupdates hasn't been run yet")
 
 
 def check_empty_fields(app):
@@ -568,14 +568,14 @@ def main():
     global config, options
 
     # Parse command line...
-    parser = ArgumentParser(usage="%(prog)s [options] [APPID [APPID ...]]")
+    parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument("-f", "--format", action="store_true", default=False,
                         help=_("Also warn about formatting issues, like rewritemeta -l"))
     parser.add_argument('--force-yamllint', action="store_true", default=False,
                         help=_("When linting the entire repository yamllint is disabled by default. "
                                "This option forces yamllint regardless."))
-    parser.add_argument("appid", nargs='*', help=_("applicationId in the form APPID"))
+    parser.add_argument("appid", nargs='*', help=_("application ID of file to operate on"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W

@@ -87,9 +87,7 @@ def extract(options):
 
 
 def main():
-
-    # Parse command line...
-    parser = ArgumentParser(usage="%(prog)s [options] APK [APK...]")
+    parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument("APK", nargs='*',
                         help=_("signed APK, either a file-path or HTTPS URL."))

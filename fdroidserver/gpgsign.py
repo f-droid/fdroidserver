@@ -47,7 +47,7 @@ def main():
     global config, options
 
     # Parse command line...
-    parser = ArgumentParser(usage="%(prog)s [options]")
+    parser = ArgumentParser()
     common.setup_global_opts(parser)
     options = parser.parse_args()
 

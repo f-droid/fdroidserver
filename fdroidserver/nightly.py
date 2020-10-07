@@ -88,7 +88,7 @@ def _ssh_key_from_debug_keystore(keystore=KEYSTORE_FILE):
 
 def main():
 
-    parser = ArgumentParser(usage="%(prog)s")
+    parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument("--keystore", default=KEYSTORE_FILE,
                         help=_("Specify which debug keystore file to use."))
