@@ -149,7 +149,7 @@ def status_update_json(apps, apks):
             antiFeatures = output['antiFeatures']  # JSON camelCase
             if af not in antiFeatures:
                 antiFeatures[af] = dict()
-            if appid not in antiFeatures[af]:
+            if 'apps' not in antiFeatures[af]:
                 antiFeatures[af]['apps'] = set()
             antiFeatures[af]['apps'].add(appid)
 
