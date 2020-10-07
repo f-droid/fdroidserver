@@ -131,7 +131,7 @@ The repository of older versions of applications from the main demo repository.
 
 # You should not need to change these at all, unless you have a very
 # customized setup for using smartcards in Java with keytool/jarsigner
-# smartcardoptions = "-storetype PKCS11 \
+# smartcardoptions = "-storetype PKCS11 -providerName SunPKCS11-OpenSC \
 #    -providerClass sun.security.pkcs11.SunPKCS11 \
 #    -providerArg opensc-fdroid.cfg"
 
