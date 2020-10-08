@@ -123,7 +123,9 @@ def get_all_icon_dirs(repodir):
 
 
 def disabled_algorithms_allowed():
-    return options.allow_disabled_algorithms or config['allow_disabled_algorithms']
+    return ((options is not None and options.allow_disabled_algorithms)
+            or (config is not None and config['allow_disabled_algorithms'])
+            or common.default_config['allow_disabled_algorithms'])
 
 
 def status_update_json(apps, apks):
@@ -147,7 +149,7 @@ def status_update_json(apps, apks):
             antiFeatures = output['antiFeatures']  # JSON camelCase
             if af not in antiFeatures:
                 antiFeatures[af] = dict()
-            if appid not in antiFeatures[af]:
+            if 'apps' not in antiFeatures[af]:
                 antiFeatures[af]['apps'] = set()
             antiFeatures[af]['apps'].add(appid)
 
@@ -521,7 +523,7 @@ def get_cache():
     """
     apkcachefile = get_cache_file()
     ada = disabled_algorithms_allowed()
-    if not options.clean and os.path.exists(apkcachefile):
+    if options is not None and not options.clean and os.path.exists(apkcachefile):
         with open(apkcachefile) as fp:
             apkcache = json.load(fp, object_pairs_hook=collections.OrderedDict)
         if apkcache.get("METADATA_VERSION") != METADATA_VERSION \
@@ -1778,7 +1780,7 @@ def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
 
     for icon_dir in get_all_icon_dirs(repodir):
         if os.path.exists(icon_dir):
-            if options.clean:
+            if options is not None and options.clean:
                 shutil.rmtree(icon_dir)
                 os.makedirs(icon_dir)
         else:
@@ -1971,26 +1973,26 @@ def apply_info_from_latest_apk(apps, apks):
                     bestver = apk['versionCode']
                     bestapk = apk
 
-                if app.NoSourceSince:
+                if app['NoSourceSince']:
                     apk['antiFeatures'].add('NoSourceSince')
 
-        if not app.added:
+        if not app['added']:
             logging.debug("Don't know when " + appid + " was added")
-        if not app.lastUpdated:
+        if not app['lastUpdated']:
             logging.debug("Don't know when " + appid + " was last updated")
 
         if bestver == UNSET_VERSION_CODE:
 
-            if app.Name is None:
-                app.Name = app.AutoName or appid
-            app.icon = None
+            if app['Name'] is None:
+                app['Name'] = app['AutoName'] or appid
+            app['icon'] = None
             logging.debug("Application " + appid + " has no packages")
         else:
-            if app.Name is None:
-                app.Name = bestapk['name']
-            app.icon = bestapk['icon'] if 'icon' in bestapk else None
-            if app.CurrentVersionCode is None:
-                app.CurrentVersionCode = str(bestver)
+            if app['Name'] is None:
+                app['Name'] = bestapk['name']
+            app['icon'] = bestapk['icon'] if 'icon' in bestapk else None
+            if app['CurrentVersionCode'] is None:
+                app['CurrentVersionCode'] = str(bestver)
 
 
 def make_categories_txt(repodir, categories):

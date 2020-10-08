@@ -61,7 +61,7 @@ def make(apps, apks, repodir, archive):
         common.assert_config_keystore(common.config)
 
     # Historically the index has been sorted by App Name, so we enforce this ordering here
-    sortedids = sorted(apps, key=lambda appid: apps[appid].Name.upper())
+    sortedids = sorted(apps, key=lambda appid: apps[appid]['Name'].upper())
     sortedapps = collections.OrderedDict()
     for appid in sortedids:
         sortedapps[appid] = apps[appid]
@@ -593,8 +593,21 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
 
     # Copy the repo icon into the repo directory...
     icon_dir = os.path.join(repodir, 'icons')
-    iconfilename = os.path.join(icon_dir, os.path.basename(common.config['repo_icon']))
-    shutil.copyfile(common.config['repo_icon'], iconfilename)
+    repo_icon = common.config.get('repo_icon', common.default_config['repo_icon'])
+    iconfilename = os.path.join(icon_dir, os.path.basename(repo_icon))
+    if os.path.exists(repo_icon):
+        shutil.copyfile(common.config['repo_icon'], iconfilename)
+    else:
+        logging.warning(_('repo_icon %s does not exist, generating placeholder.')
+                        % repo_icon)
+        os.makedirs(os.path.dirname(iconfilename), exist_ok=True)
+        try:
+            import qrcode
+            qrcode.make(common.config['repo_url']).save(iconfilename)
+        except Exception:
+            exampleicon = os.path.join(common.get_examples_dir(),
+                                       common.default_config['repo_icon'])
+            shutil.copy(exampleicon, iconfilename)
 
 
 def extract_pubkey():
