@@ -209,7 +209,22 @@ class FDroidBuildVm():
                 self.vgrnt.up(provision=provision, provider=self.provider)
                 self.srvuuid = self._vagrant_fetch_uuid()
             except subprocess.CalledProcessError as e:
-                raise FDroidBuildVmException("could not bring up vm '%s'" % self.srvname) from e
+                statusline = ""
+                try:
+                    # try to get some additional info about the vagrant vm
+                    status = self.vgrnt.status()
+                    if len(status) > 0:
+                        statusline = "VM status: name={n}, state={s}, provider={p}"\
+                            .format(n=status[0].name,
+                                    s=status[0].state,
+                                    p=status[0].provider)
+                except subprocess.CalledProcessError:
+                    pass
+                raise FDroidBuildVmException(value="could not bring up vm '{vmname}'"
+                                                   .format(vmname=self.srvname),
+                                             detail="{err}\n{statline}"
+                                                    .format(err=str(e), statline=statusline)
+                                             ) from e
 
     def suspend(self):
         global lock
