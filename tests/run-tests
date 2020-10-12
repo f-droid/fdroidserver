@@ -24,8 +24,13 @@ copy_apks_into_repo() {
             echo "$f --> repo/$apk"
             ln "$f" $1/repo/$apk || \
                 rsync -axv "$f" $1/repo/$apk # rsync if hard link is not possible
+	    touch $1/.found-apks
         fi
     done
+    if [ ! -e $1/.found-apks ]; then
+	echo "ERROR: The dir APKDIR must have APKs in it! $APKDIR does not."
+	exit 1
+    fi
     set -x
 }
 
