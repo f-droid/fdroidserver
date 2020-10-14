@@ -2431,15 +2431,12 @@ def get_apk_id(apkfile):
     :returns: triplet (appid, version code, version name)
 
     """
-    if use_androguard():
-        try:
-            return get_apk_id_androguard(apkfile)
-        except zipfile.BadZipFile as e:
-            logging.error(apkfile + ': ' + str(e))
-            if 'aapt' in config:
-                return get_apk_id_aapt(apkfile)
-    else:
-        return get_apk_id_aapt(apkfile)
+    try:
+        return get_apk_id_androguard(apkfile)
+    except zipfile.BadZipFile as e:
+        logging.error(apkfile + ': ' + str(e))
+        if 'aapt' in config:
+            return get_apk_id_aapt(apkfile)
 
 
 def get_apk_id_androguard(apkfile):
