@@ -49,7 +49,6 @@ from . import _
 from . import common
 from . import index
 from . import metadata
-from .common import SdkToolsPopen
 from .exception import BuildException, FDroidException
 
 from PIL import Image, PngImagePlugin
@@ -1350,10 +1349,7 @@ def scan_apk(apk_file):
         'antiFeatures': set(),
     }
 
-    if common.use_androguard():
-        scan_apk_androguard(apk, apk_file)
-    else:
-        scan_apk_aapt(apk, apk_file)
+    scan_apk_androguard(apk, apk_file)
 
     if not common.is_valid_package_name(apk['packageName']):
         raise BuildException(_("{appid} from {path} is not a valid Java Package Name!")
@@ -1412,83 +1408,6 @@ def _get_apk_icons_src(apkfile, icon_name):
     return icons_src
 
 
-def scan_apk_aapt(apk, apkfile):
-    p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
-    if p.returncode != 0:
-        if options.delete_unknown:
-            if os.path.exists(apkfile):
-                logging.error(_("Failed to get apk information, deleting {path}").format(path=apkfile))
-                os.remove(apkfile)
-            else:
-                logging.error("Could not find {0} to remove it".format(apkfile))
-        else:
-            logging.error(_("Failed to get apk information, skipping {path}").format(path=apkfile))
-        raise BuildException(_("Invalid APK"))
-    icon_name = None
-    for line in p.output.splitlines():
-        if line.startswith("package:"):
-            try:
-                apk['packageName'] = re.match(APK_NAME_PAT, line).group(1)
-                apk['versionCode'] = int(re.match(APK_VERCODE_PAT, line).group(1))
-                apk['versionName'] = re.match(APK_VERNAME_PAT, line).group(1)
-            except Exception as e:
-                raise FDroidException("Package matching failed: " + str(e) + "\nLine was: " + line)
-        elif line.startswith("application:"):
-            m = re.match(APK_LABEL_ICON_PAT, line)
-            if m:
-                apk['name'] = m.group(1)
-                icon_name = os.path.splitext(os.path.basename(m.group(2)))[0]
-        elif not apk.get('name') and line.startswith("launchable-activity:"):
-            # Only use launchable-activity as fallback to application
-            apk['name'] = re.match(APK_LABEL_ICON_PAT, line).group(1)
-        elif line.startswith("sdkVersion:"):
-            m = re.match(APK_SDK_VERSION_PAT, line)
-            if m is None:
-                logging.error(line.replace('sdkVersion:', '')
-                              + ' is not a valid minSdkVersion!')
-            else:
-                apk['minSdkVersion'] = int(m.group(1))
-        elif line.startswith("targetSdkVersion:"):
-            m = re.match(APK_SDK_VERSION_PAT, line)
-            if m is None:
-                logging.error(line.replace('targetSdkVersion:', '')
-                              + ' is not a valid targetSdkVersion!')
-            else:
-                apk['targetSdkVersion'] = int(m.group(1))
-        elif line.startswith("maxSdkVersion:"):
-            apk['maxSdkVersion'] = int(re.match(APK_SDK_VERSION_PAT, line).group(1))
-        elif line.startswith("native-code:"):
-            apk['nativecode'] = []
-            for arch in line[13:].split(' '):
-                apk['nativecode'].append(arch[1:-1])
-        elif line.startswith('uses-permission:'):
-            perm_match = re.match(APK_PERMISSION_PAT, line).groups()
-            permission = UsesPermission(
-                perm_match[0],  # name
-                None if perm_match[1] is None else int(perm_match[1]),  # maxSdkVersion
-            )
-            apk['uses-permission'].append(permission)
-
-        elif line.startswith('uses-permission-sdk-23:'):
-            perm_match = re.match(APK_PERMISSION_PAT, line).groups()
-            permission_sdk_23 = UsesPermissionSdk23(
-                perm_match[0],  # name
-                None if perm_match[1] is None else int(perm_match[1]),  # maxSdkVersion
-            )
-            apk['uses-permission-sdk-23'].append(permission_sdk_23)
-
-        elif line.startswith('uses-feature:'):
-            feature = re.match(APK_FEATURE_PAT, line).group(1)
-            # Filter out this, it's only added with the latest SDK tools and
-            # causes problems for lots of apps.
-            if feature != "android.hardware.screen.portrait" \
-                    and feature != "android.hardware.screen.landscape":
-                if feature.startswith("android.feature."):
-                    feature = feature[16:]
-                apk['features'].add(feature)
-    apk['icons_src'] = _get_apk_icons_src(apkfile, icon_name)
-
-
 def _sanitize_sdk_version(value):
     """Sanitize the raw values from androguard to handle bad values
 
@@ -1529,8 +1448,6 @@ def scan_apk_androguard(apk, apkfile):
                 logging.error(_("Failed to get apk information, skipping {path}")
                               .format(path=apkfile))
             raise BuildException(_("Invalid APK"))
-    except ImportError:
-        raise FDroidException("androguard library is not installed and aapt not present")
     except FileNotFoundError:
         logging.error(_("Could not open apk file for analysis"))
         raise BuildException(_("Invalid APK"))
