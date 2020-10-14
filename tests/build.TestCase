@@ -43,13 +43,6 @@ class BuildTest(unittest.TestCase):
             print('no build-tools found: ' + build_tools)
             return False
 
-    def _find_all(self):
-        for cmd in ('aapt', 'adb', 'android', 'zipalign'):
-            path = fdroidserver.common.find_sdk_tools_cmd(cmd)
-            if path is not None:
-                self.assertTrue(os.path.exists(path))
-                self.assertTrue(os.path.isfile(path))
-
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = os.path.join(localmodule, 'tests')
