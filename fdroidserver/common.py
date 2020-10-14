@@ -114,7 +114,7 @@ default_config = {
         'r16b': None,
     },
     'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
-    'build_tools': MINIMUM_AAPT_BUILD_TOOLS_VERSION,
+    'build_tools': MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION,
     'java_paths': None,
     'scan_binary': False,
     'ant': "ant",
@@ -508,6 +508,7 @@ def test_aapt_version(aapt):
 
 def test_sdk_exists(thisconfig):
     if 'sdk_path' not in thisconfig:
+        # TODO convert this to apksigner once it is required
         if 'aapt' in thisconfig and os.path.isfile(thisconfig['aapt']):
             test_aapt_version(thisconfig['aapt'])
             return True
