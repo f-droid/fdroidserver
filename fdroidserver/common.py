@@ -1804,7 +1804,7 @@ def get_app_from_url(url):
         app.RepoType = 'git'
         app.SourceCode = url
         app.IssueTracker = url + '/issues'
-    elif parsed.netloc == 'gitlab.com':
+    elif parsed.netloc == 'gitlab.com' or parsed.netloc == 'framagit.org':
         # git can be fussy with gitlab URLs unless they end in .git
         if url.endswith('.git'):
             url = url[:-4]
