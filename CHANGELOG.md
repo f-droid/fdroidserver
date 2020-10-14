@@ -37,6 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Removed
 * removed support for txt and json metadata
   ([!772](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/772))
+* `make_current_version_link` is now off by default
 
 ## [1.1.4] - 2019-08-15
 ### Fixed
