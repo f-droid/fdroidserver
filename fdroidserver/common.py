@@ -423,7 +423,8 @@ def find_apksigner():
     Returns the best version of apksigner following this algorithm:
     * use config['apksigner'] if set
     * try to find apksigner in path
-    * find apksigner in build-tools starting from newest installed going down to MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION
+    * find apksigner in build-tools starting from newest installed
+      going down to MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION
     :return: path to apksigner or None if no version is found
     """
     if set_command_in_config('apksigner'):
@@ -434,7 +435,7 @@ def find_apksigner():
     for f in sorted(os.listdir(build_tools_path), reverse=True):
         if not os.path.isdir(os.path.join(build_tools_path, f)):
             continue
-        if LooseVersion(f) < LooseVersion(MINIMUM_AAPT_BUILD_TOOLS_VERSION):
+        if LooseVersion(f) < LooseVersion(MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION):
             return None
         if os.path.exists(os.path.join(build_tools_path, f, 'apksigner')):
             apksigner = os.path.join(build_tools_path, f, 'apksigner')
