@@ -2389,19 +2389,15 @@ def ensure_final_value(packageName, arsc, value):
     return ''
 
 
-def is_apk_and_debuggable_aapt(apkfile):
-    p = SdkToolsPopen(['aapt', 'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
-                      output=False)
-    if p.returncode != 0:
-        raise FDroidException(_("Failed to get APK manifest information"))
-    for line in p.output.splitlines():
-        if 'android:debuggable' in line and not line.endswith('0x0'):
-            return True
-    return False
+def is_apk_and_debuggable(apkfile):
+    """Returns True if the given file is an APK and is debuggable
 
+    Parse only <application android:debuggable=""> from the APK.
 
-def is_apk_and_debuggable_androguard(apkfile):
-    """Parse only <application android:debuggable=""> from the APK"""
+    :param apkfile: full path to the apk to check"""
+
+    if get_file_extension(apkfile) != 'apk':
+        return False
     from androguard.core.bytecodes.axml import AXMLParser, format_value, START_TAG
     with ZipFile(apkfile) as apk:
         with apk.open('AndroidManifest.xml') as manifest:
@@ -2421,20 +2417,6 @@ def is_apk_and_debuggable_androguard(apkfile):
                                 return False
                     break
     return False
-
-
-def is_apk_and_debuggable(apkfile):
-    """Returns True if the given file is an APK and is debuggable
-
-    :param apkfile: full path to the apk to check"""
-
-    if get_file_extension(apkfile) != 'apk':
-        return False
-
-    if use_androguard():
-        return is_apk_and_debuggable_androguard(apkfile)
-    else:
-        return is_apk_and_debuggable_aapt(apkfile)
 
 
 def get_apk_id(apkfile):

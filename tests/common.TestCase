@@ -148,11 +148,6 @@ class CommonTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        self._set_build_tools()
-        try:
-            config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
-        except fdroidserver.exception.FDroidException:
-            pass  # aapt is not required if androguard is present
 
         # these are set debuggable
         testfiles = []
@@ -160,15 +155,8 @@ class CommonTest(unittest.TestCase):
         testfiles.append(os.path.join(self.basedir, 'urzip-badsig.apk'))
         testfiles.append(os.path.join(self.basedir, 'urzip-badcert.apk'))
         for apkfile in testfiles:
-            debuggable = fdroidserver.common.is_apk_and_debuggable(apkfile)
-            self.assertTrue(debuggable,
+            self.assertTrue(fdroidserver.common.is_apk_and_debuggable(apkfile),
                             "debuggable APK state was not properly parsed!")
-            if 'aapt' in config:
-                self.assertTrue(fdroidserver.common.is_apk_and_debuggable_aapt(apkfile),
-                                'aapt parsing missed <application android:debuggable="">!')
-            if fdroidserver.common.use_androguard():
-                self.assertTrue(fdroidserver.common.is_apk_and_debuggable_androguard(apkfile),
-                                'androguard missed <application android:debuggable="">!')
 
         # these are set NOT debuggable
         testfiles = []
@@ -176,15 +164,8 @@ class CommonTest(unittest.TestCase):
         testfiles.append(os.path.join(self.basedir, 'urzip-release-unsigned.apk'))
         testfiles.append(os.path.join(self.basedir, 'v2.only.sig_2.apk'))
         for apkfile in testfiles:
-            debuggable = fdroidserver.common.is_apk_and_debuggable(apkfile)
-            self.assertFalse(debuggable,
+            self.assertFalse(fdroidserver.common.is_apk_and_debuggable(apkfile),
                              "debuggable APK state was not properly parsed!")
-            if 'aapt' in config:
-                self.assertFalse(fdroidserver.common.is_apk_and_debuggable_aapt(apkfile),
-                                 'aapt parsing missed <application android:debuggable="">!')
-            if fdroidserver.common.use_androguard():
-                self.assertFalse(fdroidserver.common.is_apk_and_debuggable_androguard(apkfile),
-                                 'androguard missed <application android:debuggable="">!')
 
     VALID_STRICT_PACKAGE_NAMES = [
         "An.stop",
