@@ -3,13 +3,14 @@
 # Oliver <websites@posteo.de>, 2020.
 # Fynn Godau <fynngodau@mailbox.org>, 2020.
 # melusine <melusine@mailbox.org>, 2020.
+# marzzzello <anmeldezeugs@top-email.net>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:22+0200\n"
-"PO-Revision-Date: 2020-10-02 19:15+0000\n"
-"Last-Translator: melusine <melusine@mailbox.org>\n"
+"PO-Revision-Date: 2020-10-15 17:12+0000\n"
+"Last-Translator: marzzzello <anmeldezeugs@top-email.net>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -153,7 +154,7 @@ msgstr "„keypass” nicht in config.py vorhanden!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
-msgstr ""
+msgstr "'keystore' ist NONE und 'smartcardoptions' ist leer!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystore' not found in config.py!"
@@ -582,7 +583,7 @@ msgstr "Archiv löschen, Repo ist zu groß ({size} max {limit})"
 #: ../fdroidserver/server.py
 #, python-brace-format
 msgid "Deleting git-mirror history, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "Git-Mirror-Verlauf löschen, Repository ist zu groß ({size} max {limit})"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -697,7 +698,7 @@ msgstr "Build-Flag bei {linedesc} leeren"
 #: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
-msgstr ""
+msgstr "Die Kodierung ist auf '{enc}' gesetzt. Dies könnte zu Kodierungsproblemen führen. Bitte setze sie auf ''UTF-8'' für beste Ergebnisse."
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -791,7 +792,7 @@ msgstr "Signaturen für {apkfilename} -> {sigdir} abgerufen"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "File disappeared while processing it: {path}"
-msgstr ""
+msgstr "Datei verschwand während der Verarbeitung: {path}"
 
 #: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
@@ -824,7 +825,7 @@ msgstr "Erzwingt das Anhalten des Builds nach {0} Sek. Zeitüberschreitung!"
 
 #: ../fdroidserver/scanner.py
 msgid "Force scan of disabled apps and builds."
-msgstr ""
+msgstr "Scannen von deaktivierten Anwendungen und Builds erzwingen."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -832,9 +833,9 @@ msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
 msgstr "Grafik \"{path}\" ohne Metadaten für App \"{name}\" gefunden!"
 
 #: ../fdroidserver/update.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
-msgstr ""
+msgstr "Schlechte Finanzierungsdatei \"{path}\" für \"{name}\" gefunden:"
 
 #: ../fdroidserver/common.py
 msgid "Found invalid appids in arguments"
@@ -922,8 +923,9 @@ msgid "HTTPS must be used with Subversion URLs!"
 msgstr "HTTPS muss bei Subversion-URLs verwendet werden!"
 
 #: ../fdroidserver/server.py
+#, fuzzy
 msgid "If a git mirror gets to big, allow the archive to be deleted"
-msgstr ""
+msgstr "Wenn ein Git-Mirror zu groß wird, kann das Archiv gelöscht werden"
 
 #: ../fdroidserver/server.py
 #, fuzzy, python-brace-format
@@ -933,12 +935,12 @@ msgstr "Wenn dieser Upload fehlschlägt, versuchen Sie ihn manuell auf {url} hoc
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
-msgstr ""
+msgstr "'{field}' in '{metapath}' Metadaten wird ignoriert, da es veraltet ist."
 
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring FUNDING.yml entry longer than 2048: %s"
-msgstr ""
+msgstr "Ignoriere FUNDING.yml Einträge länger als 2048: %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
