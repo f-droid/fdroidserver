@@ -12,13 +12,14 @@
 # Yannick A. <yannick.armand@protonmail.com>, 2020.
 # Renaud Perrai <renaud.perrai@protonmail.com>, 2020.
 # rational <rationaldecay@gmail.com>, 2020.
+# Coucouf <coucouf@coucouf.fr>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:34+0200\n"
-"PO-Revision-Date: 2020-10-01 09:00+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2020-10-06 08:26+0000\n"
+"Last-Translator: Coucouf <coucouf@coucouf.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -36,6 +37,12 @@ msgid ""
 "        tools on https://gitlab.com/fdroid.\n"
 "        "
 msgstr ""
+"\n"
+"        Ceci est un dépôt d’apps à utiliser avec FDroid. Les applications publiées\n"
+"        dans ce dépôt sont soit les binaires officiels construits par les développeurs\n"
+"        de ces applications, soit des binaires construits par f-droid.org à partir des\n"
+"        sources en utilisant les outils disponibles sur https://gitlab.com/fdroid.\n"
+"        "
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -351,7 +358,7 @@ msgstr "Branche « {branch} » utilisée comme commit dans srclib « {srclib} »
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Broken symlink: {path}"
-msgstr ""
+msgstr "Lien symbolique cassé : {path}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Build a package from source"
@@ -732,9 +739,9 @@ msgid "Extract signatures from APKs"
 msgstr "Extraction des signatures à partir des APKs"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Failed copying {path}: {error}"
-msgstr "Erreur de lecture {path} : {error}"
+msgstr "Erreur durant la copie de {path} : {error}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
@@ -800,7 +807,7 @@ msgstr "Récupération de la signature pour '{apkfilename}' -> '{sigdir}'"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "File disappeared while processing it: {path}"
-msgstr ""
+msgstr "Le fichier a été supprimé au cours du traitement : {path}"
 
 #: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
@@ -814,9 +821,8 @@ msgid "Flattr donation methods belong in the FlattrID flag"
 msgstr "La méthode de donnation Flattr reviens au flag FlatttrID"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Flattr donation methods belong in the FlattrID: field"
-msgstr "La méthode de donnation Flattr reviens au flag FlatttrID"
+msgstr "Les informations de dons via Flattr doivent être renseignées dans le champ FlattrID:"
 
 #: ../fdroidserver/lint.py
 msgid "Forbidden HTML tags"
